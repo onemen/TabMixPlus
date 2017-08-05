@@ -415,10 +415,11 @@
               return;
             }
 
+            const scrollByPixels = Tabmix.isVersion(570) ? "scrollByPixels" : "_smoothScrollByPixels";
             if (TabmixTabbar.isMultiRow)
-              this.mTabstrip._smoothScrollByPixels(selected.top - scrollRect.top);
+              this.mTabstrip[scrollByPixels](selected.top - scrollRect.top);
             else
-              this.mTabstrip._smoothScrollByPixels(this.mTabstrip._isRTLScrollbox ?
+              this.mTabstrip[scrollByPixels](this.mTabstrip._isRTLScrollbox ?
                 selected.right - scrollRect.right : selected.left - scrollRect.left);
           }
 

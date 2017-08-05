@@ -1073,7 +1073,7 @@ var TMP_eventListener = {
         }
 
         if (scrollByPixels) {
-          let useSmoothScroll = Tabmix.isVersion(530) &&
+          let useSmoothScroll = Tabmix.isVersion(530) && !Tabmix.isVersion(570) &&
             aEvent.deltaMode != aEvent.DOM_DELTA_PIXEL && tabStrip.smoothScroll;
           if (useSmoothScroll) {
             tabStrip._smoothScrollByPixels(scrollAmount);

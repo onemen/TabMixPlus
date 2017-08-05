@@ -177,45 +177,47 @@
           this.offsetAmountToScroll = Tabmix.prefs.getBoolPref("offsetAmountToScroll");
           this.offsetRatio = Tabmix.tabsUtils.closeButtonsEnabled ? 0.70 : 0.50;
           this.minOffset = TabmixSvc.australis ? 25 : 50;
-          Tabmix.changeCode(this, "scrollbox.ensureElementIsVisible")._replace(
-            'var amountToScroll',
-            '$&, offset = true'
-          )._replace(
-            'STOP_DISTANCE = 15;',
-            'STOP_DISTANCE = this.isMultiRow ? 3 : 15;'
-          )._replace(
-            'amountToScroll = this._isScrolling * STOP_DISTANCE;',
-            '{$& \
-             offset = false;}'
-          )._replace(
-            'this._stopSmoothScroll();',
-            '$& \
-             if (offset) {\
-               amountToScroll += this.getOffsetAmountToScroll(element, amountToScroll);}'
-          ).toCode();
+          if (!Tabmix.isVersion(570)) {
+            Tabmix.changeCode(this, "scrollbox.ensureElementIsVisible")._replace(
+              'var amountToScroll',
+              '$&, offset = true'
+            )._replace(
+              'STOP_DISTANCE = 15;',
+              'STOP_DISTANCE = this.isMultiRow ? 3 : 15;'
+            )._replace(
+              'amountToScroll = this._isScrolling * STOP_DISTANCE;',
+              '{$& \
+               offset = false;}'
+            )._replace(
+              'this._stopSmoothScroll();',
+              '$& \
+               if (offset) {\
+                 amountToScroll += this.getOffsetAmountToScroll(element, amountToScroll);}'
+            ).toCode();
+
+            Tabmix.changeCode(this, "scrollbox._smoothScrollByPixels")._replace(
+              '{',
+              '$& \
+               amountToScroll = this._distanceToRow(amountToScroll);'
+            ).toCode();
+
+            // we divide scrollDelta by the ratio between tab width and tab height
+            Tabmix.changeCode(this._arrowScrollAnim, "scrollbox._arrowScrollAnim.sample")._replace(
+              '0.5 * timePassed * scrollIndex',
+              'this.scrollbox.isMultiRow ? $& / this.scrollbox._verticalAnimation : $&'
+            ).toCode();
+
+            // the ratio between tab width and tab height is approximately 6
+            // we multiply here the distance to get same animation effect.
+            Tabmix.changeCode(this._scrollAnim, "scrollbox._scrollAnim.start")._replace(
+              'Math.abs(distance)',
+              'Math.abs(distance * (this.scrollbox.isMultiRow ? this.scrollbox._verticalAnimation : 1))'
+            ).toCode();
+          }
 
           Tabmix.changeCode(this, "scrollbox._distanceScroll")._replace(
             '{',
             '{ if (aEvent.button && aEvent.button == 2) return;'
-          ).toCode();
-
-          Tabmix.changeCode(this, "scrollbox._smoothScrollByPixels")._replace(
-            '{',
-            '$& \
-             amountToScroll = this._distanceToRow(amountToScroll);'
-          ).toCode();
-
-          // we divide scrollDelta by the ratio between tab width and tab height
-          Tabmix.changeCode(this._arrowScrollAnim, "scrollbox._arrowScrollAnim.sample")._replace(
-            '0.5 * timePassed * scrollIndex',
-            'this.scrollbox.isMultiRow ? $& / this.scrollbox._verticalAnimation : $&'
-          ).toCode();
-
-          // the ratio between tab width and tab height is approximately 6
-          // we multiply here the distance to get same animation effect.
-          Tabmix.changeCode(this._scrollAnim, "scrollbox._scrollAnim.start")._replace(
-            'Math.abs(distance)',
-            'Math.abs(distance * (this.scrollbox.isMultiRow ? this.scrollbox._verticalAnimation : 1))'
           ).toCode();
 
           if (Tabmix.isVersion(560)) {
