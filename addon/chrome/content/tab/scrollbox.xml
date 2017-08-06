@@ -275,7 +275,14 @@
             ).toCode();
           }
 
-          if (Tabmix.isVersion(530)) {
+          if (Tabmix.isVersion(570)) {
+            Tabmix.changeCode(this, "scrollbox.lineScrollAmount", {getter: true})._replace(
+              '{', `{
+              if (this.isMultiRow) {
+                return this.scrollSize / Tabmix.tabsUtils.lastTabRowNumber;
+              }`
+            ).defineProperty();
+          } else if (Tabmix.isVersion(530)) {
             Tabmix.changeCode(this, "scrollbox.lineScrollAmount", {getter: true})._replace(
               'totalWidth / elements.length',
               'this.isMultiRow ? totalWidth / Tabmix.tabsUtils.lastTabRowNumber : $&'
