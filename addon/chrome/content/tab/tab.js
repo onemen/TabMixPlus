@@ -104,7 +104,9 @@ var TabmixTabbar = {
       Tabmix.setItem(tabmixScrollBox, "collapsed", null);
 
       if (gBrowser._numPinnedTabs && tabBar._pinnedTabsLayoutCache) {
-        tabBar._pinnedTabsLayoutCache.paddingStart = tabstrip.scrollboxPaddingStart;
+        if (!Tabmix.isVersion(570)) {
+          tabBar._pinnedTabsLayoutCache.paddingStart = tabstrip.scrollboxPaddingStart;
+        }
         tabBar._pinnedTabsLayoutCache.scrollButtonWidth = tabscroll != this.SCROLL_BUTTONS_LEFT_RIGHT ?
           0 : tabstrip._scrollButtonDown.getBoundingClientRect().width;
       }
@@ -689,6 +691,7 @@ Tabmix.tabsUtils = {
     // initialize first tab
     Tabmix._nextSelectedID = 1;
     TMP_eventListener.setTabAttribute(tab);
+    setTimeout(() => TMP_eventListener.setTabAttribute(tab), 500);
     tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
     tab.setAttribute("visited", true);
     Tabmix.setTabStyle(tab);
@@ -1880,8 +1883,28 @@ gTMPprefObserver = {
       this.insertRule(newRule, "pb-indicator-height");
     }
 
-    if (TabmixSvc.isMac && !TabmixSvc.australis)
+    if (!Tabmix.isVersion(570) && TabmixSvc.isMac && !TabmixSvc.australis) {
       Tabmix._buttonsHeight = 24;
+    }
+
+    if (Tabmix.isVersion(570) && !TabmixSvc.australis) {
+      newRule = `.tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab {
+        height: ${Tabmix._buttonsHeight}px;
+      }`;
+      this.insertRule(newRule);
+
+      newRule = `.tab-stack > .tab-background > .tab-background-start,
+                 .tab-stack > .tab-background > .tab-background-middle,
+                 .tab-stack > .tab-background > .tab-background-end {
+                    display: none;
+                 }`;
+      this.insertRule(newRule);
+    } else if (!Tabmix.isVersion(570)) {
+      newRule = `.tab-stack > .tab-background > .tab-line {
+                    display: none;
+                 }`;
+      this.insertRule(newRule);
+    }
 
     newRule = '#tabmixScrollBox[flowing="multibar"] > toolbarbutton {' +
       '  height: #px;}'.replace("#", Tabmix._buttonsHeight);
@@ -1972,9 +1995,10 @@ gTMPprefObserver = {
     newRule = newRule.replace("#1", _min).replace("#2", _max);
     this.insertRule(newRule, "width");
 
-    // rule for controlling moz-margin-start when we have pinned tab in multi-row
+    // rule for controlling margin-inline-start when we have pinned tab in multi-row
+    let marginInlineStart = Tabmix.isVersion(570) ? "margin-inline-start" : "-moz-margin-start";
     let marginStart = '#tabbrowser-tabs[positionpinnedtabs] > ' +
-                      '.tabbrowser-tab[tabmix-firstTabInRow="true"]{-moz-margin-start: 0px;}';
+                      `.tabbrowser-tab[tabmix-firstTabInRow="true"]{${marginInlineStart}: 0px;}`;
     this.insertRule(marginStart, "tabmix-firstTabInRow");
 
     // for ColorfulTabs 8.0+

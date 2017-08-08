@@ -420,6 +420,8 @@ Tabmix.tablib = {
          $&'
       ).toCode();
 
+      let marginInlineStart = Tabmix.isVersion(570) ? "marginInlineStart" : "MozMarginStart";
+      let paddingInlineStart = Tabmix.isVersion(570) ? "paddingInlineStart" : "MozPaddingStart";
       let $LF = '\n          ';
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
         'this.removeAttribute("positionpinnedtabs");',
@@ -444,19 +446,19 @@ Tabmix.tablib = {
         '      this._pinnedTabsLayoutCache = layoutData;' + $LF +
         '    }' + $LF +
         '  }' + $LF +
-        '    let width = TabmixSvc.australis ? 0 : this.mTabstrip.scrollboxPaddingStart;' +
+        '    let width = TabmixSvc.australis ? 0 : this.mTabstrip.scrollboxPaddingStart || 0;' + $LF +
         '    for (let i = 0; i < numPinned; i++) {' +
         '      let tab = this.childNodes[i];' +
-        '      tab.style.MozMarginStart = width + "px";' +
+        `      tab.style.${marginInlineStart} = width + "px";` + $LF +
         '      width += layoutData.pinnedTabWidth;' +
         '    }' +
         '    if (width != this.mTabstrip.firstTabInRowMargin) {' +
         '      this.mTabstrip.firstTabInRowMargin = width;' +
         '      this.mTabstrip.firstVisible =  {tab: null, x: 0, y: 0};' +
         '      gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]' +
-        '        .style.setProperty("-moz-margin-start", width + "px", null);' +
+        `        .style.${marginInlineStart} =  width + "px";` + $LF +
         '    }' +
-        '    this.style.MozPaddingStart = "";' +
+        `    this.style.${paddingInlineStart} = "";` + $LF +
         '    TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(this, "paddingLeft");' +
         '    this.mTabstrip.setFirstTabInRow();' +
         '  }' +
@@ -464,7 +466,7 @@ Tabmix.tablib = {
       )._replace(
         /(})(\)?)$/,
         'if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {' +
-        '  TMP_tabDNDObserver.paddingLeft = parseInt(this.style.MozPaddingStart || 0);' +
+        `  TMP_tabDNDObserver.paddingLeft = parseInt(this.style.${paddingInlineStart} || 0);` +
         '}' +
         '$1$2'
       ).toCode();

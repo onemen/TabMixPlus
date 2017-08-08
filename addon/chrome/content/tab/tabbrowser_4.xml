@@ -35,6 +35,8 @@
       <xul:stack class="tab-stack" flex="1">
         <xul:hbox xbl:inherits="pinned,selected=visuallyselected,fadein"
                   class="tab-background">
+          <xul:hbox xbl:inherits="selected=visuallyselected"
+                    class="tab-line"/>
           <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
                     class="tab-background-start"/>
           <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
@@ -381,7 +383,9 @@
 
           var scrollRect = this.mTabstrip.scrollClientRect;
           var tab = aTab.getBoundingClientRect();
-          this.mTabstrip._calcTabMargins(aTab);
+          if (!Tabmix.isVersion(570)) {
+            this.mTabstrip._calcTabMargins(aTab);
+          }
 
           // DOMRect left/right properties are immutable.
           tab = {left: tab.left, right: tab.right, top: tab.top, bottom: tab.bottom};
@@ -390,7 +394,7 @@
             let selected = !this.selectedItem.pinned &&
                            this.selectedItem.getBoundingClientRect();
 
-            if (Tabmix.isVersion(310) && !TabmixTabbar.isMultiRow) {
+            if (!Tabmix.isVersion(570) && Tabmix.isVersion(310) && !TabmixTabbar.isMultiRow) {
               if (selected) {
                 selected = {left: selected.left, right: selected.right};
                 // Need to take in to account the width of the left/right margins on tabs.

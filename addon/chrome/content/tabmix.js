@@ -1181,6 +1181,9 @@ var TMP_eventListener = {
     }
     updateAttrib("class", "tab-icon-image", "role", "presentation");
     updateAttrib("class", "tab-text", "role", "presentation");
+    if (Tabmix.isVersion(570)) {
+      updateAttrib("class", "tab-background", "orient", "vertical");
+    }
   }
 
 };

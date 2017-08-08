@@ -228,21 +228,25 @@
               'Tabmix.setItem(box, "scrolledtostart", true);'
             )._replace(
               'this.scrollboxPaddingLeft',
-              'this.isMultiRow ? this.scrollboxPaddingTop : $&'
+              'this.isMultiRow ? this.scrollboxPaddingTop : $&',
+              {check: !Tabmix.isVersion(570)}
             )._replace(
               'this.scrollboxPaddingRight',
-              'this.isMultiRow ? this.scrollboxPaddingBottom : $&'
+              'this.isMultiRow ? this.scrollboxPaddingBottom : $&',
+              {check: !Tabmix.isVersion(570)}
             )._replace(
               'this._isRTLScrollbox',
               '$& && !this.isMultiRow'
             )._replace(
               'if (leftOrTopElement',
               `if (this.isMultiRow) {
+                  const _scrollboxPaddingLeft = typeof scrollboxPaddingLeft == "number" ? scrollboxPaddingLeft : 0;
+                  const _scrollboxPaddingRight = typeof scrollboxPaddingRight == "number" ? scrollboxPaddingRight : 0;
                   if (leftOrTopElement &&
-                      leftOrTopEdge(leftOrTopElement) >= leftOrTopEdge(this._scrollbox) + scrollboxPaddingLeft) {
+                      leftOrTopEdge(leftOrTopElement) >= leftOrTopEdge(this._scrollbox) + _scrollboxPaddingLeft) {
                     scrolledToStart = true;
                   } else if (rightOrBottomElement &&
-                             rightOrBottomEdge(rightOrBottomElement) <= rightOrBottomEdge(this._scrollbox) - scrollboxPaddingRight + 2) {
+                             rightOrBottomEdge(rightOrBottomElement) <= rightOrBottomEdge(this._scrollbox) - _scrollboxPaddingRight + 2) {
                     scrolledToEnd = true;
                   }
                 } else $&`
