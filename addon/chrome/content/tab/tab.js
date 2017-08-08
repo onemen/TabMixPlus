@@ -1900,7 +1900,9 @@ gTMPprefObserver = {
                  }`;
       this.insertRule(newRule);
     } else if (!Tabmix.isVersion(570)) {
-      newRule = `.tab-stack > .tab-background > .tab-line {
+      newRule = `.tab-stack > .tab-background > .tab-line, 
+                 .tab-stack > .tab-background > .tabmix-tab-line-spacer,
+                 .tab-stack > .tab-background > .tab-bottom-line {
                     display: none;
                  }`;
       this.insertRule(newRule);
