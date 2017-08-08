@@ -450,8 +450,10 @@
         <parameter name="aIndex"/>
         <parameter name="aSmoothScroll"/>
         <body><![CDATA[
-          if (!this.isTabVisible(aIndex))
-            this.mTabstrip.ensureElementIsVisible(this.childNodes.item(aIndex), aSmoothScroll);
+          if (!this.isTabVisible(aIndex)) {
+            const instantScroll = Tabmix.isVersion(570) ? !aSmoothScroll : aSmoothScroll;
+            this.mTabstrip.ensureElementIsVisible(this.childNodes.item(aIndex), instantScroll);
+          }
         ]]></body>
       </method>
       <property name="lastTabVisible" readonly="true">

@@ -915,8 +915,10 @@ var TMP_eventListener = {
 
     // workaround when we remove last visible tab
     if (tabBar.firstChild.pinned && TabmixTabbar.isMultiRow && Tabmix.tabsUtils.overflow &&
-        aTab._tPos >= Tabmix.visibleTabs.last._tPos)
-      tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
+        aTab._tPos >= Tabmix.visibleTabs.last._tPos) {
+      const instantScroll = Tabmix.isVersion(570);
+      tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, instantScroll);
+    }
 
     if (Tabmix.tabsUtils.disAllowNewtabbutton)
       Tabmix.tabsUtils.adjustNewtabButtonVisibility();
@@ -1054,14 +1056,16 @@ var TMP_eventListener = {
       // this code is based on scrollbox.xml wheel/DOMMouseScroll event handler
       let scrollByDelta = function(delta) {
         let scrollByPixels = true;
+        let instant;
         let scrollAmount = 0;
         if (Tabmix.isVersion(480) &&
             aEvent.deltaMode == aEvent.DOM_DELTA_PIXEL) {
           scrollAmount = delta;
+          instant = true;
         } else if (Tabmix.isVersion(490) &&
             aEvent.deltaMode == aEvent.DOM_DELTA_PAGE) {
           scrollAmount = delta * tabStrip.scrollClientSize;
-        } else if (Tabmix.isVersion(530) && !TabmixTabbar.isMultiRow) {
+        } else if (Tabmix.isVersion(570) || Tabmix.isVersion(530) && !TabmixTabbar.isMultiRow) {
           scrollAmount = delta * tabStrip.lineScrollAmount;
         } else {
           // scroll the tabbar by one tab
@@ -1077,6 +1081,8 @@ var TMP_eventListener = {
             aEvent.deltaMode != aEvent.DOM_DELTA_PIXEL && tabStrip.smoothScroll;
           if (useSmoothScroll) {
             tabStrip._smoothScrollByPixels(scrollAmount);
+          } else if (Tabmix.isVersion(570)) {
+            tabStrip.scrollByPixels(scrollAmount, instant);
           } else {
             tabStrip.scrollByPixels(scrollAmount);
           }

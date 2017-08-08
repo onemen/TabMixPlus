@@ -389,7 +389,8 @@ var TMP_tabDNDObserver = {
       if (_scroll) {
         let scrollIncrement = TabmixTabbar.isMultiRow ?
           Math.round(tabStrip._singleRowHeight / 6) : tabStrip.scrollIncrement;
-        tabStrip.scrollByPixels((ltr ? _scroll : -_scroll) * scrollIncrement, true);
+        const instantScroll = !Tabmix.isVersion(570);
+        tabStrip.scrollByPixels((ltr ? _scroll : -_scroll) * scrollIncrement, instantScroll);
         hideIndicator = true;
       }
     }

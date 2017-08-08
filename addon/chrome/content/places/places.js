@@ -510,8 +510,13 @@ var TMP_Places = {
       let tabstrip = gBrowser.tabContainer.mTabstrip;
       if (!TabmixTabbar.isMultiRow) {
         let scrollPosition = tabstrip.scrollPosition;
-        if (scrollPosition < 100)
-          tabstrip.scrollPosition = 0;
+        if (scrollPosition < 100) {
+          if (tabstrip.orient == "vertical") {
+            tabstrip._scrollbox.scrollTop = 0;
+          } else {
+            tabstrip._scrollbox.scrollLeft = 0;
+          }
+        }
       }
       gBrowser.ensureTabIsVisible(this.currentTab, false);
       this.currentTab = null;

@@ -177,7 +177,15 @@
           this.offsetAmountToScroll = Tabmix.prefs.getBoolPref("offsetAmountToScroll");
           this.offsetRatio = Tabmix.tabsUtils.closeButtonsEnabled ? 0.70 : 0.50;
           this.minOffset = TabmixSvc.australis ? 25 : 50;
-          if (!Tabmix.isVersion(570)) {
+          if (Tabmix.isVersion(570)) {
+            Object.defineProperty(this, 'scrollPosition', {
+              get: () => {
+                return this.orient == "vertical" ?
+                  this._scrollbox.scrollTop :
+                  this._scrollbox.scrollLeft;
+              },
+            });
+          } else {
             Tabmix.changeCode(this, "scrollbox.ensureElementIsVisible")._replace(
               'var amountToScroll',
               '$&, offset = true'
@@ -213,6 +221,15 @@
               'Math.abs(distance)',
               'Math.abs(distance * (this.scrollbox.isMultiRow ? this.scrollbox._verticalAnimation : 1))'
             ).toCode();
+
+            // replace the original method
+            this.scrollByPixels = (px, aSmoothScroll) => {
+              if (this._isScrolling || aSmoothScroll) {
+                this.scrollPosition += px;
+              } else {
+                this.scrollPosition += this._distanceToRow(px);
+              }
+            };
           }
 
           Tabmix.changeCode(this, "scrollbox._distanceScroll")._replace(
@@ -330,19 +347,7 @@
         });
       ]]></field>
 
-      <!-- replace the original method -->
-      <method name="scrollByPixels">
-        <parameter name="px"/>
-        <parameter name="aSmoothScroll"/>
-        <body><![CDATA[
-          if (this._isScrolling || aSmoothScroll) {
-            this.scrollPosition += px;
-          } else {
-            this.scrollPosition += this._distanceToRow(px);
-          }
-        ]]></body>
-      </method>
-
+      <!-- not in use in Firefox 57+ -->
       <method name="getOffsetAmountToScroll">
         <parameter name="element"/>
         <parameter name="amountToScroll"/>
@@ -386,6 +391,7 @@
         ]]></getter>
       </property>
 
+      <!-- not in use in Firefox 57+ -->
       <property name="isScrolledToEnd" readonly="true">
         <getter><![CDATA[
           let scrollPosition = this.scrollClientSize + this.scrollPosition;
@@ -521,8 +527,10 @@
 
           // if a smoothScroll is in progress call ensureElementIsVisible again
           // the amountToScroll changed when we changed firstTabInRow
-          if (this._scrollTarget)
-            this.ensureElementIsVisible(this._scrollTarget, true);
+          if (this._scrollTarget) {
+            const instantScroll = !Tabmix.isVersion(570);
+            this.ensureElementIsVisible(this._scrollTarget, instantScroll);
+          }
         ]]></body>
       </method>
 
@@ -561,8 +569,10 @@
 
             if (!overflow) {
               let childNodes = this._getScrollableElements();
-              if (childNodes && childNodes.length)
-                this.ensureElementIsVisible(childNodes[0], false);
+              if (childNodes && childNodes.length) {
+                const instantScroll = Tabmix.isVersion(570);
+                this.ensureElementIsVisible(childNodes[0], instantScroll);
+              }
             }
           } catch (e) {
             Tabmix.setItem(this, "notoverflowing", overflow || null);
