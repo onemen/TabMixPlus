@@ -92,6 +92,14 @@ var TMP_tabDNDObserver = {
       const observer = function(subject) {
         if (subject == window) {
           Services.obs.removeObserver(observer, topic);
+          // update for multiple-tab-handler version 0.8.2017061501
+          if (!newCode.value.includes("draggingRight = screenX")) {
+            newCode.value = newCode.value.replace(
+              'draggedTab._dragData.animLastScreenX = screenX;',
+              'let draggingRight = screenX > draggedTab._dragData.animLastScreenX;\n          ' +
+              '$&'
+            );
+          }
           newCode.toCode();
         }
       };
