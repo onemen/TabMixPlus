@@ -163,7 +163,8 @@ var TMP_tabDNDObserver = {
   onDragStart(event, tabmixDragstart) {
     // we get here on capturing phase before "tabbrowser-close-tab-button"
     // binding stop the event propagation
-    if (event.originalTarget.getAttribute("anonid") == "tmp-close-button") {
+    if (event.originalTarget && typeof event.originalTarget.getAttribute == "function" &&
+        event.originalTarget.getAttribute("anonid") == "tmp-close-button") {
       event.stopPropagation();
       return;
     }
