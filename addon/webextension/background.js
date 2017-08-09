@@ -5,7 +5,7 @@ const MIGRATE = 'tabmix.session.migrate.';
 const port = browser.runtime.connect({name: 'tabmix-storage-port'});
 
 function updateSessionsData(message) {
-  const {add, remove} = message;
+  const {add, remove, messageID, saveBackup} = message;
   const asyncResult = [Promise.resolve()];
 
   if (remove) {
@@ -16,6 +16,13 @@ function updateSessionsData(message) {
   if (add) {
     add.messageID = message.messageID + '.add';
     asyncResult.push(storageMethods('set', add));
+  }
+
+  if (saveBackup) {
+    const postMessage = () => {
+      port.postMessage({messageID, saveBackup});
+    };
+    Promise.all(asyncResult).then(postMessage).catch(postMessage);
   }
 }
 

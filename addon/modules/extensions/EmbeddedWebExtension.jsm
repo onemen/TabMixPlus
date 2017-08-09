@@ -9,6 +9,10 @@ Cu.import('resource://gre/modules/XPCOMUtils.jsm', this);
 XPCOMUtils.defineLazyModuleGetter(this, 'Services',
   'resource://gre/modules/Services.jsm');
 
+XPCOMUtils.defineLazyGetter(this, "OS", () => {
+  return Cu.import("resource://gre/modules/osfile.jsm", {}).OS;
+});
+
 XPCOMUtils.defineLazyModuleGetter(this, 'TabmixSvc',
   'resource://tabmixplus/TabmixSvc.jsm');
 
@@ -147,6 +151,10 @@ this.EmbeddedWebExtension = {
       throw new Error('Unexpected messageID: ' + ID);
     }
 
+    if (message.saveBackup) {
+      this.saveBackupFile();
+    }
+
     if (message.error) {
       // Unexpectedly, an error occurred.
       TabmixSvc.console.reportError(message.error);
@@ -232,11 +240,11 @@ this.EmbeddedWebExtension = {
 
     if (this.hashList) {
       const data = this.getCurrentSessionsData(this.hashList);
-      this.sendSessionToStorage(data);
+      this.sendSessionToStorage(data, shutDown);
     } else {
       this.getCurrentHashList()
           .then(result => this.getCurrentSessionsData(result || []))
-          .then(data => this.sendSessionToStorage(data))
+          .then(data => this.sendSessionToStorage(data, shutDown))
           .catch(err => TabmixSvc.console.reportError(err));
     }
   },
@@ -297,7 +305,7 @@ this.EmbeddedWebExtension = {
     return strings[0] + count + strings[1];
   },
 
-  sendSessionToStorage({currentHashList, newHashList, sessionsData}) {
+  sendSessionToStorage({currentHashList, newHashList, sessionsData}, saveBackup) {
     let remove, add;
     const hashToRemove = currentHashList.filter(hash => !newHashList.includes(hash));
 
@@ -323,10 +331,28 @@ this.EmbeddedWebExtension = {
       this.handleStorageRequest({
         messageID: 'migration.sessions',
         type: 'update',
+        saveBackup,
         remove,
         add,
       });
+    } else if (saveBackup) {
+      this.saveBackupFile();
     }
+  },
+
+  // save backup of the storage.js file to webext@tabmixplus.org folder
+  // for the case we will use it as the new extension id
+  saveBackupFile() {
+    const dataFolder = OS.Path.join(OS.Constants.Path.profileDir, "browser-extension-data");
+    const storage = OS.Path.join(dataFolder, TABMIX_ID, "storage.js");
+    const backupFolder = OS.Path.join(dataFolder, "webext@tabmixplus.org");
+    const backupFile = OS.Path.join(backupFolder, "storage.js");
+
+    // since we are here only when browser-extension-data exist, we only need to
+    // create our backup folder
+    OS.File.makeDir(backupFolder).then(() => {
+      return OS.File.copy(storage, backupFile);
+    }).catch(error => TabmixSvc.console.reportError(error));
   },
 
   _lastSaveTime: 0,
