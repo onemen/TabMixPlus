@@ -44,7 +44,7 @@ this.LinkNodeUtils = {
         location: {href: doc.location ? doc.location.href : ""}
       },
       parentNode: {
-        baseURI: node.parentNode.baseURI,
+        baseURI: node.parentNode ? node.parentNode.baseURI : '',
         _attributes: getAttributes(node.parentNode, ["onclick"])
       },
       _focusedWindowHref: focusedWindow.top.location.href,
@@ -106,6 +106,9 @@ this.LinkNodeUtils = {
 };
 
 function getAttributes(node, attribs) {
+  if (!node) {
+    return {};
+  }
   let wrapper = {};
   for (let att of attribs) {
     if (node.hasAttribute(att)) {
