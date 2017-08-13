@@ -2391,7 +2391,9 @@ gTMPprefObserver = {
   // Show Reload Every menu on Reload button
   showReloadEveryOnReloadButton() {
     let show = Tabmix.prefs.getBoolPref("reloadEvery.onReloadButton");
-    Tabmix.setItem("reload-button", "type", show ? "menu-button" : null);
+    if (!Tabmix.isVersion(550)) {
+      Tabmix.setItem("reload-button", "type", show ? "menu-button" : null);
+    }
     Tabmix.setItem("urlbar-go-button", "context", show ? "autoreload_popup" : null);
 
     let setContext = function(command) {
