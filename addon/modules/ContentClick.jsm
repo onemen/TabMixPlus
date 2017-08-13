@@ -895,7 +895,8 @@ ContentClickInternal = {
     let current = this._data.currentURL.toLowerCase();
     let youtube = /www\.youtube\.com\/watch\?v=/;
     let isYoutube = _href => youtube.test(current) && youtube.test(_href);
-    let isSamePath = (_href, att) => makeURI(current).path.split(att)[0] == makeURI(_href).path.split(att)[0];
+    const pathProp = TabmixSvc.version(570) ? "pathQueryRef" : "path";
+    let isSamePath = (_href, att) => makeURI(current)[pathProp].split(att)[0] == makeURI(_href)[pathProp].split(att)[0];
     let isSame = (_href, att) => current.split(att)[0] == _href.split(att)[0];
 
     if (hrefFromOnClick) {
@@ -1120,7 +1121,8 @@ ContentClickInternal = {
         url = fixedURI || makeURI(url);
 
         // catch redirect
-        const path = url.path;
+        const pathProp = TabmixSvc.version(570) ? "pathQueryRef" : "path";
+        const path = url[pathProp];
         if (path.match(/^\/r\/\?http/)) {
           url = fixupURI(path.substr("/r/?".length));
         } else if (path.match(/^.*\?url=http/)) {

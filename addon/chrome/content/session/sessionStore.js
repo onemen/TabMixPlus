@@ -369,8 +369,9 @@ var TMP_ClosedTabs = {
         url = title = "about:blank";
       else {
         try {
+          const pathProp = TabmixSvc.version(570) ? "pathQueryRef" : "path";
           url = _uri.scheme == "about" ? _uri.spec :
-            _uri.scheme + "://" + _uri.hostPort + _uri.path;
+            _uri.scheme + "://" + _uri.hostPort + _uri[pathProp];
         } catch (e) {
           url = title;
         }
