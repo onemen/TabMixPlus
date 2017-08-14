@@ -101,7 +101,13 @@ var gAppearancePane = {
 
   tabmixCustomizeToolbar() {
     this._tabmixCustomizeToolbar = true;
-    Tabmix.getTopWin().BrowserCustomizeToolbar();
+    const win = Tabmix.getTopWin();
+    if (typeof win.gCustomizeMode == "object") {
+      // Firefox 57
+      win.gCustomizeMode.enter();
+    } else {
+      win.BrowserCustomizeToolbar();
+    }
   },
 
   toolbarButtons(aWindow) {
