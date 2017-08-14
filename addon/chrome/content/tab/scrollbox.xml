@@ -185,6 +185,14 @@
                   this._scrollbox.scrollLeft;
               },
             });
+
+            Tabmix.changeCode(this, "scrollbox.ensureElementIsVisible")._replace(
+              'element.scrollIntoView',
+              `if (this.isMultiRow && Tabmix.tabsUtils.isElementVisible(element)) {
+                 return;
+               }
+               $&`
+            ).toCode();
           } else {
             Tabmix.changeCode(this, "scrollbox.ensureElementIsVisible")._replace(
               'var amountToScroll',
