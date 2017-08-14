@@ -1058,14 +1058,17 @@ var TMP_eventListener = {
         let scrollByPixels = true;
         let instant;
         let scrollAmount = 0;
-        if (Tabmix.isVersion(480) &&
+        if (Tabmix.isVersion(530) && TabmixTabbar.isMultiRow) {
+          delta = delta > 0 ? 1 : -1;
+          scrollAmount = delta * tabStrip.lineScrollAmount;
+        } else if (Tabmix.isVersion(480) &&
             aEvent.deltaMode == aEvent.DOM_DELTA_PIXEL) {
           scrollAmount = delta;
           instant = true;
         } else if (Tabmix.isVersion(490) &&
             aEvent.deltaMode == aEvent.DOM_DELTA_PAGE) {
           scrollAmount = delta * tabStrip.scrollClientSize;
-        } else if (Tabmix.isVersion(570) || Tabmix.isVersion(530) && !TabmixTabbar.isMultiRow) {
+        } else if (Tabmix.isVersion(530)) {
           scrollAmount = delta * tabStrip.lineScrollAmount;
         } else {
           // scroll the tabbar by one tab
