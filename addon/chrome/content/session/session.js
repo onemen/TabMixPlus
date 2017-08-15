@@ -2851,7 +2851,9 @@ TabmixSessionManager = {
         aTab.hasAttribute("inrestore") || this.isTabPrivate(aTab))
       return;
     var aBrowser = gBrowser.getBrowserForTab(aTab);
-    if (gBrowser.isBlankBrowser(aBrowser)) return;
+    if (aTab.hasAttribute("pending") || gBrowser.isBlankBrowser(aBrowser)) {
+      return;
+    }
     if (Tabmix.isVersion(320))
       aBrowser.messageManager.sendAsyncMessage("Tabmix:collectScrollPosition");
     else
