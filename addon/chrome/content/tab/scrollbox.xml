@@ -193,6 +193,25 @@
                }
                $&`
             ).toCode();
+
+            Tabmix.changeCode(this, "scrollbox.scrollByIndex")._replace(
+              'this.ensureElementIsVisible',
+              'scrollIntoView', {flags: "g"}
+            )._replace(
+              '{', `{
+              const block = index > 0 ? "end" : "start";
+              const scrollIntoView = (element, aInstant) => {
+                if (!this.isMultiRow) {
+                  this.ensureElementIsVisible(element, aInstant);
+                  return;
+                }
+                if (!this._canScrollToElement(element)) {
+                  return;
+                }
+                const behavior = aInstant ? "instant" : "auto";
+                element.scrollIntoView({behavior, block});
+              };`
+            ).toCode();
           } else {
             Tabmix.changeCode(this, "scrollbox.ensureElementIsVisible")._replace(
               'var amountToScroll',
