@@ -71,6 +71,8 @@ this.EmbeddedWebExtension = {
     }
     this._initialized = true;
 
+    TabmixSvc.sm.deferredInitialized = PromiseUtils.defer();
+
     this.initPrefsObserver();
     this.startWebExtension();
   },
@@ -116,7 +118,7 @@ this.EmbeddedWebExtension = {
     port.onMessage.addListener(message => this.handleResponse(message));
 
     this.savePreferencesData();
-    this.saveSessionsData();
+    TabmixSvc.sm.deferredInitialized.promise.then(() => this.saveSessionsData());
   },
 
   messageID: 0,
@@ -263,8 +265,12 @@ this.EmbeddedWebExtension = {
   getCurrentSessionsData(currentHashList) {
     const newHashList = [];
     const sessionsData = {};
-    const sessions = this.getSessionList();
-    const {TabmixConvertSession} = TabmixSvc.topWin();
+    const window = this.getBrowserWindow();
+    if (!window) {
+      return Promise.reject("can't find a window with readyState complete");
+    }
+    const {TabmixSessionManager, TabmixConvertSession} = window;
+    const sessions = this.getSessionList(TabmixSessionManager);
 
     const changedSessions = sessions.filter(session => {
       const hash = session.info.hash;
@@ -359,8 +365,7 @@ this.EmbeddedWebExtension = {
 
   _currentHash: null,
 
-  getSessionList() {
-    const {TabmixSessionManager: SM} = TabmixSvc.topWin();
+  getSessionList(SM) {
     const sessions = SM.getSessionList() || {list: [], path: []};
 
     const crashedSession = SM.gSessionPath[3];
@@ -425,6 +430,16 @@ this.EmbeddedWebExtension = {
     }
 
     return {name, path, info};
+  },
+
+  getBrowserWindow() {
+    const windows = Services.wm.getEnumerator("navigator:browser");
+    while (windows.hasMoreElements()) {
+      const win = windows.getNext();
+      if (!win.closed && win.document.readyState == "complete")
+        return win;
+    }
+    return null;
   },
 };
 

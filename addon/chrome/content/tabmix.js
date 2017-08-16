@@ -54,6 +54,11 @@ Tabmix.beforeDelayedStartup = function() {
 
 // after TabmixSessionManager and SessionStore initialized
 Tabmix.sessionInitialized = function() {
+  // Let EmbeddedWebExtension know we're done.
+  if (this.firstWindowInSession && TabmixSvc.sm.deferredInitialized) {
+    TabmixSvc.sm.deferredInitialized.resolve();
+  }
+
   var SM = TabmixSessionManager;
   if (SM.enableManager) {
     window.restoreLastSession = function restoreLastSession() {
