@@ -798,7 +798,11 @@ Tabmix.onContentLoaded = {
       )._replace(
         'titlebarContentHeight = Math.max(titlebarContentHeight, fullTabsHeight)',
         'titlebarContentHeight = Math.max(titlebarContentHeight, TabmixTabbar.singleRowHeight + verticalMargins(tabsStyles))',
-        {check: Tabmix.isVersion(550)}
+        {check: !Tabmix.isVersion(570) && Tabmix.isVersion(550)}
+      )._replace(
+        'titlebarContentHeight = fullTabsHeight + 1',
+        'titlebarContentHeight = TabmixTabbar.singleRowHeight + verticalMargins(tabsStyles) + 1',
+        {check: Tabmix.isVersion(570)}
       ).toCode();
     }
 
