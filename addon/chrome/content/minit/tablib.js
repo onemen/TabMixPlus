@@ -745,7 +745,7 @@ Tabmix.tablib = {
 
     if (Tabmix.isVersion(260)) {
       _openURI.toCode();
-      fnName = "nsBrowserAccess.prototype." + (TSTopenURI || "openURI");
+      fnName = "nsBrowserAccess.prototype." + (TSTopenURI || (Tabmix.isVersion(570) ? "getContentWindowOrOpenURI" : "openURI"));
       _openURI = Tabmix.changeCode(fnObj, fnName);
     }
 
