@@ -815,6 +815,11 @@ Tabmix.tabsUtils = {
       TabmixTabbar.updateSettings(false);
       Tabmix.navToolbox.resetUI = true;
     }
+
+    if (Tabmix.extensions.verticalTabs) {
+      // when Vertical Tabs Reloaded installed TabsInTitlebar was not initialized
+      TabsInTitlebar.init();
+    }
   },
 
   updateVerticalTabStrip(aReset) {
