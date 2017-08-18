@@ -288,8 +288,12 @@ TabmixSessionManager = {
 
     let initializeSM = () => {
       this._init();
-      if (this.notifyObservers)
-        this._sendRestoreCompletedNotifications(false);
+      if (this.notifyObservers && this.waitForCallBack) {
+        Services.obs.notifyObservers(null, "sessionstore-browser-state-restored", "");
+      }
+      if (!this.waitForCallBack) {
+        this.restoreWindowArguments();
+      }
     };
 
     TabmixSvc.ss.promiseInitialized
@@ -411,12 +415,16 @@ TabmixSessionManager = {
       if (sanitized) {
         this.prefBranch.clearUserPref("sanitized");
         TabmixSvc.sm.sanitized = false;
+        TabmixSvc.sm.restoreCount = 1;
+        this._sendRestoreCompletedNotifications();
         this.loadHomePage();
         this.saveStateDelayed();
         return;
       }
 
       if (!this.enableManager && (!this.enableBackup || !crashed)) {
+        TabmixSvc.sm.restoreCount = 1;
+        this._sendRestoreCompletedNotifications();
         return;
       }
 
@@ -2242,6 +2250,7 @@ TabmixSessionManager = {
   },
 
   afterCrashPromptCallBack: function SM_afterCrashPromptCallBack(aResult) {
+    this.waitForCallBack = false;
     if (this.callBackData.label)
       aResult.label = this.callBackData.label;
     if (aResult.checked && !this.enableManager) {
@@ -2263,7 +2272,7 @@ TabmixSessionManager = {
     this.saveStateDelayed();
     delete this.callBackData;
 
-    this._sendRestoreCompletedNotifications(true);
+    this.restoreWindowArguments();
   },
 
   prepareSavedSessions: function SM_prepareSavedSessions() {
@@ -2338,6 +2347,8 @@ TabmixSessionManager = {
     var sessionList = this.getSessionList("onlyPath");
     var askifempty = restoreFlag > 1 ? false : this.prefBranch.getBoolPref("onStart.askifempty");
     if (sessionList === null) {
+      TabmixSvc.sm.restoreCount = 1;
+      this._sendRestoreCompletedNotifications();
       if (((askifempty && afterCrash) || restoreFlag == 1) && !this.corruptedFile) {
         msg = TabmixSvc.getSMString("sm.start.msg0") + "\n" +
           TabmixSvc.getSMString("sm.afterCrash.msg10");
@@ -2345,8 +2356,9 @@ TabmixSessionManager = {
           msg += "\n\n" + TabmixSvc.getSMString("sm.start.msg1");
         buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
         let callBack = aResult => {
+          this.waitForCallBack = false;
           this.enableCrashRecovery(aResult);
-          this._sendRestoreCompletedNotifications(true);
+          this.restoreWindowArguments();
         };
         this.waitForCallBack = true;
         this.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
@@ -2428,14 +2440,18 @@ TabmixSessionManager = {
   },
 
   onFirstWindowPromptCallBack: function SM_onFirstWindowPromptCallBack(aResult) {
+    this.waitForCallBack = false;
     this.enableCrashRecovery(aResult);
     if (aResult.button == Tabmix.BUTTON_OK)
       this.loadSession(aResult.label, "firstwindowopen", !this.firstNonPrivateWindow);
     else if (this.waitForCallBack)
       this.deferredRestore();
-    else
+    else {
       // we are here not after a callback only when the startup file is empty
+      TabmixSvc.sm.restoreCount = 1;
+      this._sendRestoreCompletedNotifications();
       this.loadHomePage();
+    }
 
     this.saveStateDelayed();
 
@@ -2443,7 +2459,7 @@ TabmixSessionManager = {
     if (this.tabViewInstalled)
       TabView.init();
 
-    this._sendRestoreCompletedNotifications(true);
+    this.restoreWindowArguments();
   },
 
   // Add delay when calling prompt on startup
@@ -2478,6 +2494,8 @@ TabmixSessionManager = {
         this.mergeWindows(iniState);
       }
       let overwrite = TabmixSvc.SessionStore._isCmdLineEmpty(window, iniState);
+      // determine how many windows are meant to be restored
+      TabmixSvc.SessionStore._restoreCount = iniState.windows ? iniState.windows.length : 0;
       if (Tabmix.isVersion(260)) {
         let options = {firstWindow: true, overwriteTabs: overwrite};
         const restoreFunction = Tabmix.isVersion(400) ? "restoreWindows" : "restoreWindow";
@@ -2515,21 +2533,23 @@ TabmixSessionManager = {
     state.windows = [win];
   },
 
-  _sendRestoreCompletedNotifications(waitForCallBack) {
-    // notify observers things are complete.
-    // we send sessionstore-windows-restored notification as soon as _init
-    // function finished, if there are pending call back from one of our
-    // dialog 2nd notification will be send once the call back function finished.
-    if (this.notifyObservers) {
-      if (!waitForCallBack)
-        Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
-      else if (this.waitForCallBack == waitForCallBack) {
-        Services.obs.notifyObservers(null, "sessionstore-browser-state-restored", "");
-        this.waitForCallBack = false;
-      }
+  _sendRestoreCompletedNotifications() {
+    // not all windows restored, yet
+    if (TabmixSvc.sm.restoreCount > 1) {
+      TabmixSvc.sm.restoreCount--;
+      return;
     }
-    if (!this.waitForCallBack)
-      this.restoreWindowArguments();
+
+    // observers were already notified
+    if (TabmixSvc.sm.observersWereNotified || TabmixSvc.sm.restoreCount == -1) {
+      return;
+    }
+
+    // This was the last window restored at startup, notify observers.
+    Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
+
+    TabmixSvc.sm.observersWereNotified = true;
+    TabmixSvc.sm.restoreCount = -1;
   },
 
   getSessionList: function SM_getSessionList(flag) {
@@ -3132,6 +3152,7 @@ TabmixSessionManager = {
     if (!state.selectedWindow || state.selectedWindow > state.windows.length) {
       state.selectedWindow = 0;
     }
+    TabmixSvc.sm.restoreCount = state.windows ? state.windows.length : 0;
     state.windows.forEach((winData, index) => {
       winData.tabsRemoved = tabsRemoved;
       sessionCount++;
@@ -3178,6 +3199,8 @@ TabmixSessionManager = {
       let overwriteTabs = this.prefBranch.getBoolPref("restore.overwritetabs");
       if (saveBeforeOverwrite && overwriteTabs)
         this.saveOneWindow(this.gSessionPath[0], "", true);
+      // SessionStore does not _sendRestoreCompletedNotifications after opening closed window
+      // TabmixSvc.sm.restoreCount = 1;
       this.loadOneWindow(winData, "openclosedwindow");
     } else {
       TabmixSvc.sm.windowToFocus = this.openNewWindow(winData, this.isPrivateWindow);
@@ -3508,6 +3531,8 @@ TabmixSessionManager = {
 
     // set smoothScroll back to the original value
     tabstrip.smoothScroll = smoothScroll;
+
+    this._sendRestoreCompletedNotifications();
   },
 
   // The restoreHistory code has run. SSTabRestoring fired.

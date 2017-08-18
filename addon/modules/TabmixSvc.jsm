@@ -263,6 +263,8 @@ this.TabmixSvc = {
     settingPreference: false,
     statesToRestore: {},
     deferredInitialized: null,
+    restoreCount: -1,
+    observersWereNotified: false,
   },
 
   isAustralisBgStyle(orient) {
