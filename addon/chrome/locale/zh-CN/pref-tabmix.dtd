@@ -38,7 +38,7 @@
 <!ENTITY tabMerge.label "标签页合并">
 <!ENTITY tabFeature.label "标签页特性">
 <!ENTITY newtab.label "在新建标签页打开：">
-<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY replaceLastTabWith1.label "关闭最后一个标签页时，替换为">
 <!ENTITY newtab.blank "空白页">
 <!ENTITY newtab.home "主页">
 <!ENTITY newtab.current "当前的页面">
@@ -56,11 +56,11 @@
 <!ENTITY openTabNextInverse.label "更改标签页打开次序">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "紧邻上次由当前页打开的页面（上次选中的标签页）处新建标签页">
-<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
-<!ENTITY loadTabsProgressively.label "Load tabs progressively">
-<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
-<!ENTITY openMoreThan.label "when you open more than">
-<!ENTITY tabs.label "tabs">
+<!ENTITY moveSwitchToTabNext.label "“切换到标签页”时将标签页移动到旁边">
+<!ENTITY loadTabsProgressively.label "逐渐加载标签页">
+<!ENTITY restoreOnDemand.label "选中前不加载标签页">
+<!ENTITY openMoreThan.label "当打开超过">
+<!ENTITY tabs.label "个标签页">
 <!ENTITY lockTabs.label "锁定标签页">
 <!ENTITY lockNewTabs.label "锁定新标签页">
 <!ENTITY lockAppTabs.label "锁定应用程序标签页">
@@ -82,11 +82,11 @@
 <!ENTITY contextMenuSearch.label "右键菜单搜索：">
 <!ENTITY selectTabBH.label "书签/历史">
 <!ENTITY duplicateTab.label "复制的标签页">
-<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY inversefocus2.label "中键单击或 Ctrl + 单击时反转焦点：">
 <!ENTITY warning.caption.label "警告">
-<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
-<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
-<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY warnOnCloseMultipleTabs.label "关闭多个标签页时警告您">
+<!ENTITY warnOnCloseProtected1.label "关闭有已保护标签页的窗口时警告您">
+<!ENTITY warnOnCloseWindow1.label "关闭有多个标签页的窗口时警告您">
 <!ENTITY lasttab.caption.label "关闭最后一个标签页">
 <!ENTITY keepWindow.label.3.1 "关闭最后一个标签页时不关闭窗口">
 <!ENTITY keeptab.label "阻止关闭最后一个标签页">
@@ -259,16 +259,16 @@
 <!ENTITY showtabBarContext.label "在标签页右键菜单显示:">
 <!ENTITY showContentAreaContext.label "在网页右键菜单显示:">
 <!ENTITY showToolsMenu.label "在工具菜单显示:">
-<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupHomePage1.label "显示您的首页">
 <!ENTITY startupBlankPage.label "显示空白页">
-<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY startupLastSession1.label "显示您上次的窗口和标签页">
 <!ENTITY sm.extension.description1 "Tab Mix Plus 检测到您已安装有 Session Manager 扩展">
 <!ENTITY sm.extension.description2 "Tab Mix Plus 浏览进程管理器将被禁用">
 <!ENTITY sm.extension.description3 "您可以点击右侧的按钮打开 Session Manager 选项对话框">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.description5 "将您的会话数据从 Tab Mix Plus 格式转换为 Session Manager 扩展的格式">
 <!ENTITY sm.extension.convert.label "转换">
 <!ENTITY sm.extension.chooseFile.label1 "转换当前配置下的 Tab Mix Plus 浏览进程">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY sm.extension.chooseFile.label2 "选择要转换的数据文件">
 <!ENTITY ss.enable.label "使用内建的浏览进程恢复特性">
 <!ENTITY ss.enable.tooltip "不勾选此项则允许使用 Tabmix 浏览进程管理器">
 <!ENTITY ss.advanced_setting "高级设置">
@@ -305,7 +305,7 @@
 <!ENTITY sm.restore.merge "合并多个窗口为一个窗口">
 <!ENTITY sm.restore.bypassCache "还原时跳过缓存">
 <!ENTITY sm.notrestore.label "当启动不恢复浏览进程时">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "恢复您上次的已固定标签页">
 <!ENTITY sm.preserve.options "保持标签页的：">
 <!ENTITY sm.preserve.history "历史">
 <!ENTITY sm.preserve.protect "保护原状态">

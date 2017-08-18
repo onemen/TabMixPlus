@@ -56,7 +56,7 @@
 <!ENTITY openTabNextInverse.label "Промяна на поредността на отваряне">
 <!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openTabNextInverse.tooltip1 "Отваряне на нов подпрозорец непосредствено до последния подпрозорец, отворен от текущия подпрозорец">
-<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY moveSwitchToTabNext.label "Преместване на подпрозореца от „Превключване към подпрозореца“ до текущия">
 <!ENTITY loadTabsProgressively.label "Поетапно зареждане на подпрозорците">
 <!ENTITY restoreOnDemand.label "Без зареждане на подпрозорците, докато не ги избера">
 <!ENTITY openMoreThan.label "при отваряне на повече от">
@@ -84,9 +84,9 @@
 <!ENTITY duplicateTab.label "Дублиран подпрозорец">
 <!ENTITY inversefocus2.label "Щракване със средния бутон (или CTRL+щракване) обръща фокуса на:">
 <!ENTITY warning.caption.label "Предупреждения">
-<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
-<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
-<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY warnOnCloseMultipleTabs.label "Предупреждаване при затваряне на няколко подпрозореца">
+<!ENTITY warnOnCloseProtected1.label "Предупреждаване при затваряне на прозорец със защитени подпрозорци">
+<!ENTITY warnOnCloseWindow1.label "Предупреждаване при затваряне на прозорец с няколко подпрозореца">
 <!ENTITY lasttab.caption.label "Затваряне на последния подпрозорец">
 <!ENTITY keepWindow.label.3.1 "Прозорецът да остане отворен дори и след затварянето на последния подпрозорец">
 <!ENTITY keeptab.label "Забрана за затваряне на последния подпрозорец">
@@ -259,16 +259,16 @@
 <!ENTITY showtabBarContext.label "Пунктове в контекстното меню на подпрозореца">
 <!ENTITY showContentAreaContext.label "Пунктове в основното контекстно меню">
 <!ENTITY showToolsMenu.label "Пунктове в меню &quot;Инструменти&quot;">
-<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupHomePage1.label "Показване на началната страница">
 <!ENTITY startupBlankPage.label "Показване на празна страница">
-<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY startupLastSession1.label "Показване на прозорците и подпрозорците от последния път">
 <!ENTITY sm.extension.description1 "Tab Mix Plus установи, че има инсталирана добавка Session Manager">
 <!ENTITY sm.extension.description2 "Мениджърът на сесии Tab Mix Plus ще бъде изключен">
 <!ENTITY sm.extension.description3 "Можете да натиснете бутона вдясно, за да отворите настройките на Session Manager">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.description5 "Преобразуване на сесиите от формат Тab Mix Plus във формат Session Manager">
 <!ENTITY sm.extension.convert.label "Преобразуване">
 <!ENTITY sm.extension.chooseFile.label1 "Преобразуване на сесиите Тab Mix Plus от текущия профил">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY sm.extension.chooseFile.label2 "Избор на файл за преобразуване">
 <!ENTITY ss.enable.label "Използване на вградената функция на Firefox за възстановяване на сесии">
 <!ENTITY ss.enable.tooltip "Премахнете тази отметка, за да позволите използването на Мениджъра на сесии Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Допълнителни настройки">
@@ -305,7 +305,7 @@
 <!ENTITY sm.restore.merge "Обединяване на няколко прозорци в един">
 <!ENTITY sm.restore.bypassCache "Игнориране на кеша при възстановяване">
 <!ENTITY sm.notrestore.label "Когато не се възстановява при стартирането">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.restorePinned1.label "Възстановяване на забодените от последния път подпрозорци">
 <!ENTITY sm.preserve.options "Запазване на следните параметри на подпрозорците:">
 <!ENTITY sm.preserve.history "Историята">
 <!ENTITY sm.preserve.protect "Статуса на защита">

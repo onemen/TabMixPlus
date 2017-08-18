@@ -1,11 +1,11 @@
 <!ENTITY searchTabFocus.label "Arkaplanda yükle">
 <!ENTITY searchTabFocus.accesskey "A">
-<!ENTITY renametab.panel.title "Edit Tab Title">
-<!ENTITY renametab.reset.label "Reset to default title">
+<!ENTITY renametab.panel.title "Sekme Başlığını Düzenle">
+<!ENTITY renametab.reset.label "Varsayılan başlığa döndür">
 <!ENTITY title.label "Başlık">
-<!ENTITY default.label "Default">
-<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
-<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
+<!ENTITY default.label "Varsayılan">
+<!ENTITY renametab.permanently.label "Adresine bakmaksızın bu sekmeyi yeniden adlandır">
+<!ENTITY renametab.permanently.tooltip "geçmişi olan sekme - adres değişikliği yapıldığında yeni ad kalacaktır">
 <!ENTITY forum.label "Forum">
 <!ENTITY faq.label "SSS">
 <!ENTITY help.label "Yardım">

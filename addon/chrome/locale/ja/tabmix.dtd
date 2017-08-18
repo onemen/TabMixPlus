@@ -32,7 +32,7 @@
 <!ENTITY autoReloadSite.label "このサイトを再読み込みする間隔">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "このタブの直後に">
-<!ENTITY bookmarktab.label "このタブをブックマーク...">
+<!ENTITY bookmarktab.label "このタブをブックマーク">
 <!ENTITY undoCloseListMenu.label "最近閉じたタブ">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "すべてのタブを閉じる">
@@ -49,9 +49,9 @@
 <!ENTITY protectTabMenu.tooltip "保護されたタブは閉じられなくなります">
 <!ENTITY protectTabMenu.accesskey "P">
 <!ENTITY lockTabMenu.label "タブをロック">
-<!ENTITY lockTabMenu.tooltip "ロックされたタブ中のリンクをクリックすると、常に新しいタブに開きます">
+<!ENTITY lockTabMenu.tooltip "ロックされたタブ内のリンクをクリックすると、常に新しいタブに開きます">
 <!ENTITY lockTabMenu.accesskey "K">
-<!ENTITY bookmarktabs.label "すべてのタブをブックマーク...">
+<!ENTITY bookmarktabs.label "すべてのタブをブックマーク">
 <!ENTITY linkhere.label "リンクを現在のタブで開く">
 <!ENTITY linkhere.accesskey "O">
 <!ENTITY linkBackgroundTab.label "リンクをバックグランドのタブで開く">
@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "タブバーの表示">
 <!ENTITY hideTabBar.never.label "常に表示する">
 <!ENTITY hideTabBar.never.key "N">
-<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.oneTab.label "タブが一つのときは隠す">
 <!ENTITY hideTabBar.onOneTab.key "E">
 <!ENTITY hideTabBar.always.label "常に隠す">
 <!ENTITY hideTabBar.always.key "A">
