@@ -168,6 +168,13 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
 };
 
 Tabmix.afterDelayedStartup = function() {
+  // focus content area if the selected tab is not blank when Firefox starts
+  setTimeout(() => {
+    if (gURLBar.focused && !gBrowser.isBlankNotBusyTab(gBrowser.selectedTab)) {
+      gBrowser.selectedBrowser.focus();
+    }
+  }, 250);
+
   TabmixTabbar._enablePositionCheck = true;
 
   TMP_TabView.init();
