@@ -111,7 +111,7 @@ PlacesUtilsInternal = {
         /let openGroupBookmarkBehavior =|TSTOpenGroupBookmarkBehavior =/,
         '$& behavior =', {check: treeStyleTab, silent: true}
       )._replace(
-        'browserWindow.gBrowser.loadTabs(urls, loadInBackground, false);',
+        /browserWindow\.gBrowser\.loadTabs\([^;]+;/,
         'var changeWhere = where == "tabshifted" && aEvent.target.localName != "menuitem";\n' +
         '    if (changeWhere)\n' +
         '      where = "current";\n' +

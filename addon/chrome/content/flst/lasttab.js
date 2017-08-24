@@ -63,6 +63,7 @@ var TMP_LastTab = {
     if (!Tabmix.isVersion(470)) {
       els.addSystemEventListener(window, "focus", this, true);
     }
+    els.addSystemEventListener(window, "blur", this, true);
 
     // if session manager select other tab then the first one we need to build
     // TabHistory in two steps to maintain natural Ctrl-Tab order.
@@ -90,6 +91,7 @@ var TMP_LastTab = {
     if (!Tabmix.isVersion(470)) {
       els.removeSystemEventListener(window, "focus", this, true);
     }
+    els.removeSystemEventListener(window, "blur", this, true);
   },
 
   handleEvent(event) {
@@ -100,7 +102,9 @@ var TMP_LastTab = {
         }
         break;
       case "blur":
-        this.updateDisallowDrag(false);
+        if (this.disallowDragState) {
+          this.updateDisallowDrag(false);
+        }
         break;
       case "keydown":
         this.OnKeyDown(event);
@@ -139,8 +143,6 @@ var TMP_LastTab = {
 
   disallowDragState: false,
   updateDisallowDrag(disallow) {
-    let el = disallow ? "addEventListener" : "removeEventListener";
-    window[el]("blur", this);
     this.disallowDragState = disallow;
     Tabmix.setItem("TabsToolbar", "tabmix-disallow-drag", disallow || null);
   },

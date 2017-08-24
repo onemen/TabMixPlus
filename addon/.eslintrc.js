@@ -10,7 +10,7 @@ module.exports = {
 
   // for eslint 2.0.0
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 8
   },
 
   "rules": {
@@ -211,7 +211,6 @@ module.exports = {
     "line-comment-position": 0,
     "linebreak-style": [2, "windows"],
     "lines-around-comment": [0, {"beforeBlockComment": true, "allowBlockStart": true, "allowBlockEnd": true}],
-    "lines-around-directive": [2, {"before": "never", "after": "always"}],
     "max-depth": [0, 4],
     "max-len": [0, 120, 4],
     "max-lines": 0,
@@ -222,8 +221,6 @@ module.exports = {
     "multiline-ternary": 0,
     "new-cap": 0,
     "new-parens": 2,
-    "newline-after-var": 0,
-    "newline-before-return": 0,
     "newline-per-chained-call": 0,
     "object-curly-newline": [2, {
       "ObjectExpression": {"multiline": true},
@@ -237,6 +234,11 @@ module.exports = {
     "operator-assignment": [2, "always"],
     "operator-linebreak": [2, "after"],
     "padded-blocks": [2, "never"],
+    "padding-line-between-statements": [
+      2,
+      {"blankLine": "never", "prev": "*", "next": "directive"},
+      {"blankLine": "always", "prev": "directive", "next": "*"},
+    ],
     "prefer-arrow-callback": [2, {"allowNamedFunctions": true}],
     "prefer-const": 0,  // TODO many errors in old code
     "prefer-numeric-literals": 0,
@@ -265,6 +267,7 @@ module.exports = {
       "markers": ["/", "/XXX", "XXX", "****", "***", "**"]
     }],
     "strict": [2, "global"],
+    "switch-colon-spacing": [2, {"after": true, "before": false}],
     "symbol-description": 2,
     "template-curly-spacing": [2, "never"],
     "unicode-bom": 0,

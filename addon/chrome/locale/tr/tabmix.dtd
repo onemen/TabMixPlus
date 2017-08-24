@@ -29,8 +29,8 @@
 <!ENTITY reloadright.accesskey "a">
 <!ENTITY autoReloadTab.label "Sekmeyi otomatik tazele">
 <!ENTITY autoReloadTab.accesskey "S">
-<!ENTITY autoReloadSite.label "Reload This Site Every">
-<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY autoReloadSite.label "Bu siteyi şu kadar sürede bir yeniden yükle:">
+<!ENTITY autoReloadSite.accesskey "H">
 <!ENTITY afterthis.label "Bu sekmeden sonra">
 <!ENTITY bookmarktab.label "Yer İmlerine ekle">
 <!ENTITY undoCloseListMenu.label "Kapatılmış sekmeler listesi">
@@ -39,7 +39,7 @@
 <!ENTITY closeall.accesskey "T">
 <!ENTITY closeSimilarTab.label "Benzer sekmeleri kapat">
 <!ENTITY closeSimilarTab.accesskey "B">
-<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeTabsToLeft.label "Soldaki Sekmeleri Kapat">
 <!ENTITY closeleft.accesskey "O">
 <!ENTITY docShellMenu.label "İzinler">
 <!ENTITY docShellMenu.accesskey "İ">
@@ -100,8 +100,8 @@
 <!ENTITY sm.context.save.key "S">
 <!ENTITY sm.context.rename "Yeniden adlandır">
 <!ENTITY sm.context.rename.key "Y">
-<!ENTITY sm.context.bookmarkSession "Bookmark Session">
-<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.bookmarkSession "Yer İmleri Oturumu">
+<!ENTITY sm.context.bookmarkSession.key "Y">
 <!ENTITY sm.context.delete "Sil">
 <!ENTITY sm.context.delete.key "S">
 <!ENTITY sm.context.deleteall "Tümünü sil">
@@ -125,7 +125,7 @@
 <!ENTITY hideTabBar.label "Sekme çubuğunu gizle">
 <!ENTITY hideTabBar.never.label "Asla">
 <!ENTITY hideTabBar.never.key "A">
-<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.oneTab.label "Yalnızca bir sekme olduğunda">
 <!ENTITY hideTabBar.onOneTab.key "Y">
 <!ENTITY hideTabBar.always.label "Her zaman">
 <!ENTITY hideTabBar.always.key "H">

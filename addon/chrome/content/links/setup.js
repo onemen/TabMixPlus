@@ -195,6 +195,12 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
   tabBrowser.isBlankBrowser = function TMP_isBlankBrowser(aBrowser, aboutBlank) {
     try {
+      if (Tabmix.isVersion(550)) {
+        let tab = this.getTabForBrowser(aBrowser);
+        if (tab.hasAttribute("pending")) {
+          return TMP_SessionStore.isBlankPendingTab(tab);
+        }
+      }
       if (!aBrowser || !aBrowser.currentURI)
         return true;
       if (aBrowser.canGoForward || aBrowser.canGoBack)
@@ -312,9 +318,11 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
       break;
     case 5:
       this.removeAttribute("closebuttons-hover");
-      if (tabsCount < 3)
+      if (Tabmix.isVersion(550)) {
+        this.tabmix_adjustTabstrip();
+      } else if (tabsCount < 3) {
         this.setAttribute("closebuttons", "alltabs");
-      else {
+      } else {
         // make sure not to check collapsed, hidden or pinned tabs for width
         let tab = TMP_TabView.checkTabs(tabs);
         if (tab && tab.getBoundingClientRect().width > this.mTabClipWidth)

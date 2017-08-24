@@ -288,8 +288,12 @@ TabmixSessionManager = {
 
     let initializeSM = () => {
       this._init();
-      if (this.notifyObservers)
-        this._sendRestoreCompletedNotifications(false);
+      if (this.notifyObservers && this.waitForCallBack) {
+        Services.obs.notifyObservers(null, "sessionstore-browser-state-restored", "");
+      }
+      if (!this.waitForCallBack) {
+        this.restoreWindowArguments();
+      }
     };
 
     TabmixSvc.ss.promiseInitialized
@@ -309,6 +313,9 @@ TabmixSessionManager = {
 
     XPCOMUtils.defineLazyModuleGetter(this, "TabmixGroupsMigrator",
       "resource://tabmixplus/TabGroupsMigrator.jsm");
+
+    XPCOMUtils.defineLazyModuleGetter(this, "EmbeddedWebExtension",
+      "resource://tabmixplus/extensions/EmbeddedWebExtension.jsm");
 
     // just in case Tabmix.tablib isn't init yet
     // when Webmail Notifier extension installed and user have master password
@@ -408,12 +415,16 @@ TabmixSessionManager = {
       if (sanitized) {
         this.prefBranch.clearUserPref("sanitized");
         TabmixSvc.sm.sanitized = false;
+        TabmixSvc.sm.restoreCount = 1;
+        this._sendRestoreCompletedNotifications();
         this.loadHomePage();
         this.saveStateDelayed();
         return;
       }
 
       if (!this.enableManager && (!this.enableBackup || !crashed)) {
+        TabmixSvc.sm.restoreCount = 1;
+        this._sendRestoreCompletedNotifications();
         return;
       }
 
@@ -1248,6 +1259,12 @@ TabmixSessionManager = {
       return;
 
     try {
+      this.EmbeddedWebExtension.saveSessionsData(this.sessionShutDown);
+    } catch (ex) {
+      Tabmix.reportError(ex);
+    }
+
+    try {
       this.DATASource.QueryInterface(Components.interfaces.nsIRDFRemoteDataSource).Flush();
       this._lastSaveTime = Date.now();
     } catch (ex) {
@@ -1518,7 +1535,7 @@ TabmixSessionManager = {
     switch (result.button) {
       case Tabmix.BUTTON_CANCEL: return {button: result.button};
       case Tabmix.BUTTON_OK:
-      case Tabmix.BUTTON_EXTRA1 :
+      case Tabmix.BUTTON_EXTRA1:
         var trimResult = result.label.replace(/^[\s]+/g, "").replace(/[\s]+$/g, "");
         return {
           button: result.button,
@@ -2233,6 +2250,7 @@ TabmixSessionManager = {
   },
 
   afterCrashPromptCallBack: function SM_afterCrashPromptCallBack(aResult) {
+    this.waitForCallBack = false;
     if (this.callBackData.label)
       aResult.label = this.callBackData.label;
     if (aResult.checked && !this.enableManager) {
@@ -2254,7 +2272,7 @@ TabmixSessionManager = {
     this.saveStateDelayed();
     delete this.callBackData;
 
-    this._sendRestoreCompletedNotifications(true);
+    this.restoreWindowArguments();
   },
 
   prepareSavedSessions: function SM_prepareSavedSessions() {
@@ -2329,6 +2347,8 @@ TabmixSessionManager = {
     var sessionList = this.getSessionList("onlyPath");
     var askifempty = restoreFlag > 1 ? false : this.prefBranch.getBoolPref("onStart.askifempty");
     if (sessionList === null) {
+      TabmixSvc.sm.restoreCount = 1;
+      this._sendRestoreCompletedNotifications();
       if (((askifempty && afterCrash) || restoreFlag == 1) && !this.corruptedFile) {
         msg = TabmixSvc.getSMString("sm.start.msg0") + "\n" +
           TabmixSvc.getSMString("sm.afterCrash.msg10");
@@ -2336,8 +2356,9 @@ TabmixSessionManager = {
           msg += "\n\n" + TabmixSvc.getSMString("sm.start.msg1");
         buttons = ["", TabmixSvc.setLabel("sm.button.continue")].join("\n");
         let callBack = aResult => {
+          this.waitForCallBack = false;
           this.enableCrashRecovery(aResult);
-          this._sendRestoreCompletedNotifications(true);
+          this.restoreWindowArguments();
         };
         this.waitForCallBack = true;
         this.promptService([Tabmix.BUTTON_CANCEL, Tabmix.HIDE_MENUANDTEXT, chkBoxState],
@@ -2419,14 +2440,18 @@ TabmixSessionManager = {
   },
 
   onFirstWindowPromptCallBack: function SM_onFirstWindowPromptCallBack(aResult) {
+    this.waitForCallBack = false;
     this.enableCrashRecovery(aResult);
     if (aResult.button == Tabmix.BUTTON_OK)
       this.loadSession(aResult.label, "firstwindowopen", !this.firstNonPrivateWindow);
     else if (this.waitForCallBack)
       this.deferredRestore();
-    else
+    else {
       // we are here not after a callback only when the startup file is empty
+      TabmixSvc.sm.restoreCount = 1;
+      this._sendRestoreCompletedNotifications();
       this.loadHomePage();
+    }
 
     this.saveStateDelayed();
 
@@ -2434,7 +2459,7 @@ TabmixSessionManager = {
     if (this.tabViewInstalled)
       TabView.init();
 
-    this._sendRestoreCompletedNotifications(true);
+    this.restoreWindowArguments();
   },
 
   // Add delay when calling prompt on startup
@@ -2469,6 +2494,8 @@ TabmixSessionManager = {
         this.mergeWindows(iniState);
       }
       let overwrite = TabmixSvc.SessionStore._isCmdLineEmpty(window, iniState);
+      // determine how many windows are meant to be restored
+      TabmixSvc.SessionStore._restoreCount = iniState.windows ? iniState.windows.length : 0;
       if (Tabmix.isVersion(260)) {
         let options = {firstWindow: true, overwriteTabs: overwrite};
         const restoreFunction = Tabmix.isVersion(400) ? "restoreWindows" : "restoreWindow";
@@ -2506,21 +2533,23 @@ TabmixSessionManager = {
     state.windows = [win];
   },
 
-  _sendRestoreCompletedNotifications(waitForCallBack) {
-    // notify observers things are complete.
-    // we send sessionstore-windows-restored notification as soon as _init
-    // function finished, if there are pending call back from one of our
-    // dialog 2nd notification will be send once the call back function finished.
-    if (this.notifyObservers) {
-      if (!waitForCallBack)
-        Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
-      else if (this.waitForCallBack == waitForCallBack) {
-        Services.obs.notifyObservers(null, "sessionstore-browser-state-restored", "");
-        this.waitForCallBack = false;
-      }
+  _sendRestoreCompletedNotifications() {
+    // not all windows restored, yet
+    if (TabmixSvc.sm.restoreCount > 1) {
+      TabmixSvc.sm.restoreCount--;
+      return;
     }
-    if (!this.waitForCallBack)
-      this.restoreWindowArguments();
+
+    // observers were already notified
+    if (TabmixSvc.sm.observersWereNotified || TabmixSvc.sm.restoreCount == -1) {
+      return;
+    }
+
+    // This was the last window restored at startup, notify observers.
+    Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
+
+    TabmixSvc.sm.observersWereNotified = true;
+    TabmixSvc.sm.restoreCount = -1;
   },
 
   getSessionList: function SM_getSessionList(flag) {
@@ -2689,11 +2718,13 @@ TabmixSessionManager = {
         }
       }
       var label = _tab.label;
-      // replace "Loading..." with the document title (with minimal side-effects)
-      let tabLoadingTitle = gBrowser.mStringBundle.getString("tabs.connecting");
-      if (label == tabLoadingTitle) {
-        gBrowser.setTabTitle(_tab);
-        [label, _tab.label] = [_tab.label, label];
+      if (!Tabmix.isVersion(550)) {
+        // replace "Loading..." with the document title (with minimal side-effects)
+        let tabLoadingTitle = gBrowser.mStringBundle.getString("tabs.connecting");
+        if (label == tabLoadingTitle) {
+          gBrowser.setTabTitle(_tab);
+          [label, _tab.label] = [_tab.label, label];
+        }
       }
       this.setLiteral(rdfNodeThisWindow, "name", encodeURI(label));
       this.setLiteral(rdfNodeThisWindow, "nameExt", this.getNameData(-1, savedTabs));
@@ -2840,7 +2871,9 @@ TabmixSessionManager = {
         aTab.hasAttribute("inrestore") || this.isTabPrivate(aTab))
       return;
     var aBrowser = gBrowser.getBrowserForTab(aTab);
-    if (gBrowser.isBlankBrowser(aBrowser)) return;
+    if (aTab.hasAttribute("pending") || gBrowser.isBlankBrowser(aBrowser)) {
+      return;
+    }
     if (Tabmix.isVersion(320))
       aBrowser.messageManager.sendAsyncMessage("Tabmix:collectScrollPosition");
     else
@@ -3119,6 +3152,7 @@ TabmixSessionManager = {
     if (!state.selectedWindow || state.selectedWindow > state.windows.length) {
       state.selectedWindow = 0;
     }
+    TabmixSvc.sm.restoreCount = state.windows ? state.windows.length : 0;
     state.windows.forEach((winData, index) => {
       winData.tabsRemoved = tabsRemoved;
       sessionCount++;
@@ -3165,6 +3199,8 @@ TabmixSessionManager = {
       let overwriteTabs = this.prefBranch.getBoolPref("restore.overwritetabs");
       if (saveBeforeOverwrite && overwriteTabs)
         this.saveOneWindow(this.gSessionPath[0], "", true);
+      // SessionStore does not _sendRestoreCompletedNotifications after opening closed window
+      // TabmixSvc.sm.restoreCount = 1;
       this.loadOneWindow(winData, "openclosedwindow");
     } else {
       TabmixSvc.sm.windowToFocus = this.openNewWindow(winData, this.isPrivateWindow);
@@ -3244,6 +3280,7 @@ TabmixSessionManager = {
     function TMP_addTab() {
       let newTab = gBrowser.addTab("about:blank", {
         skipAnimation: true,
+        noInitialLabel: true,
         skipBackgroundNotify: true,
         dontMove: true,
         isPending: pending
@@ -3407,6 +3444,7 @@ TabmixSessionManager = {
         let forceNotRemote = !data.pinned;
         tab = gBrowser.addTab("about:blank", {
           skipAnimation: true,
+          noInitialLabel: true,
           forceNotRemote,
           userContextId,
           skipBackgroundNotify: true,
@@ -3419,8 +3457,12 @@ TabmixSessionManager = {
       // flag. dont save tab that are in restore phase
       if (!tab.hasAttribute("inrestore"))
         tab.setAttribute("inrestore", "true");
-      if (data.pinned)
+      if (data.pinned) {
+        if (Tabmix.isVersion(550)) {
+          gBrowser._insertBrowser(tab);
+        }
         gBrowser.pinTab(tab);
+      }
 
       this._setTabviewTab(tab, data, activeGroupId);
 
@@ -3489,6 +3531,8 @@ TabmixSessionManager = {
 
     // set smoothScroll back to the original value
     tabstrip.smoothScroll = smoothScroll;
+
+    this._sendRestoreCompletedNotifications();
   },
 
   // The restoreHistory code has run. SSTabRestoring fired.
@@ -3514,7 +3558,9 @@ TabmixSessionManager = {
   // reset tab's attributes and history
   resetTab: function TMP_resetAttributes(aTab) {
     let browser = gBrowser.getBrowserForTab(aTab);
-    browser.stop();
+    if (!aTab.hasAttribute("pending")) {
+      browser.stop();
+    }
     // reset old history
     if (browser.getAttribute("remote") != "true") {
       let history = browser.webNavigation.sessionHistory;
@@ -3526,7 +3572,7 @@ TabmixSessionManager = {
     }
 
     if (TabmixTabbar.hideMode != 2 && TabmixTabbar.widthFitTitle && !aTab.hasAttribute("width"))
-      aTab.setAttribute("width", aTab.getBoundingClientRect().width);
+      aTab.setAttribute("width", Tabmix.getBoundsWithoutFlushing(aTab).width);
 
     // if we need to remove extra tabs make sure they are not protected
     let attributes = ["protected", "fixed-label", "label-uri", "tabmix_bookmarkId",
@@ -3552,6 +3598,10 @@ TabmixSessionManager = {
     // delete any sessionRestore data
     if (!Tabmix.isVersion(410))
       delete browser.__SS_data;
+
+    if (Tabmix.isVersion(550) && aTab.__SS_lazyData) {
+      delete aTab.__SS_lazyData;
+    }
 
     // clear TabStateCache
     if (Tabmix.isVersion(320)) {

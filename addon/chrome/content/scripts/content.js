@@ -8,9 +8,13 @@ var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("resource://gre/modules/Services.jsm", this);
 
+XPCOMUtils.defineLazyModuleGetter(this, "AppConstants",
+  "resource://gre/modules/AppConstants.jsm");
+
 // DocShellCapabilities exist since Firefox 27
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
   "resource:///modules/sessionstore/DocShellCapabilities.jsm");
+
 XPCOMUtils.defineLazyModuleGetter(this, "BrowserUtils",
   "resource://gre/modules/BrowserUtils.jsm");
 
@@ -192,43 +196,67 @@ var TabmixContentHandler = {
 TabmixClickEventHandler = {
   init: function init(global) {
     if (TabmixSvc.version(380)) {
-      global.addEventListener("click", this, true);
+      global.addEventListener("click", event => {
+        let linkData = this.getLinkData(event);
+        if (linkData) {
+          let [href, node] = linkData;
+          let currentHref = event.originalTarget.ownerDocument.documentURI;
+          const divertMiddleClick = event.button == 1 && TabmixSvc.prefBranch.getBoolPref("middlecurrent");
+          const ctrlKey = AppConstants.platform == "macosx" ? event.metaKey : event.ctrlKey;
+          if (divertMiddleClick || ctrlKey ||
+              LinkNodeUtils.isSpecialPage(href, node, currentHref)) {
+            this.contentAreaClick(event, linkData);
+          }
+        }
+      }, true);
+      Cc["@mozilla.org/eventlistenerservice;1"]
+          .getService(Ci.nsIEventListenerService)
+          .addSystemEventListener(global, "click", this, true);
     }
   },
 
   handleEvent(event) {
     switch (event.type) {
       case "click":
-        this.contentAreaClick(event);
+        this.contentAreaClick(event, this.getLinkData(event));
         break;
     }
   },
 
-  contentAreaClick(event) {
+  getLinkData(event) {
     // tabmix_isMultiProcessBrowser is undefined for remote browser when
     // window.gMultiProcessBrowser is true
     if (!event.isTrusted || event.defaultPrevented || event.button == 2 ||
         event.tabmix_isMultiProcessBrowser === false) {
-      return;
+      return null;
     }
 
-    let originalTarget = event.originalTarget;
-    let ownerDoc = originalTarget.ownerDocument;
+    let ownerDoc = event.originalTarget.ownerDocument;
 
     // let Firefox code handle click events from about pages
     if (!ownerDoc || /^about:(certerror|blocked|neterror)$/.test(ownerDoc.documentURI)) {
+      return null;
+    }
+
+    return this._hrefAndLinkNodeForClickEvent(event);
+  },
+
+  contentAreaClick(event, linkData) {
+    if (!linkData) {
       return;
     }
 
-    let [href, node, principal] = this._hrefAndLinkNodeForClickEvent(event);
+    let [href, node, principal] = linkData;
+    let ownerDoc = event.originalTarget.ownerDocument;
 
-    // get referrer attribute from clicked link and parse it
-    // if per element referrer is enabled, the element referrer overrules
-    // the document wide referrer
+    // first get document wide referrer policy, then
+    // get referrer attribute from clicked link and parse it and
+    // allow per element referrer to overrule the document wide referrer if enabled
     let referrerPolicy = TabmixSvc.version(380) ? ownerDoc.referrerPolicy : null;
-    if (TabmixSvc.version(420) &&
-        Services.prefs.getBoolPref("network.http.enablePerElementReferrer") &&
-        node) {
+    let setReferrerPolicy = node && (TabmixSvc.version(550) ||
+      TabmixSvc.version(420) &&
+      Services.prefs.getBoolPref("network.http.enablePerElementReferrer"));
+    if (setReferrerPolicy) {
       let value = node.getAttribute(TabmixSvc.version(450) ? "referrerpolicy" : "referrer");
       let referrerAttrValue = Services.netUtils.parseAttributePolicyString(value);
       let policy = TabmixSvc.version(490) ? "REFERRER_POLICY_UNSET" : "REFERRER_POLICY_DEFAULT";

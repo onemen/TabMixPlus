@@ -75,11 +75,11 @@ this.TMP_TabGroupsManager = {
 
     this.changeCode(sessionManager, "TabmixSessionManager.loadOneWindow")._replace(
       // get saved group data and replace ids with new one
-      'var lastSelectedIndex = restoreSelect ? this.getIntValue(rdfNodeWindow, "selectedIndex") : 0;',
+      'var lastSelectedIndex = restoreSelect ? winData.selected - 1 : 0;',
       '$&' +
       '  var [_restoreSelect, _lastSelectedIndex] = [restoreSelect, lastSelectedIndex];' +
       '  [restoreSelect, lastSelectedIndex] = [false, 0];' +
-      '  let jsonText = this.getLiteralValue(rdfNodeWindow, "tgm_jsonText");' +
+      '  let jsonText = winData.extData && winData.extData.TabGroupsManagerAllGroupsData;' +
       '  TabGroupsManager.session.groupRestored = 1;' +
       '  if (jsonText) {' +
       '    if ("__SSi" in window)' +
@@ -94,8 +94,7 @@ this.TMP_TabGroupsManager = {
       '  gBrowser.moveTabTo(newTab, gBrowser.tabs.length - 1);' +
       '  gBrowser.selectedTab = newTab;' +
       '  newIndex = newTab._tPos;' +
-      '  let group = TabGroupsManager.allGroups.openNewGroupActive(' +
-      '        newTab, -1);' +
+      '  TabGroupsManager.allGroups.openNewGroupActive(newTab, -1);' +
       '  for (let i = 1; i < newtabsCount; i++) {' +
       '    TMP_addTab();' +
       '  }' +
@@ -103,9 +102,11 @@ this.TMP_TabGroupsManager = {
       'if (false) {'
     )._replace(
       'TMP_ClosedTabs.setButtonDisableState();',
-      '  if (_restoreSelect && (overwrite || (!concatenate && !currentTabIsBlank)))' +
+      '  let isBlank = gBrowser.isBlankNotBusyTab(cTab);' +
+      '  if (_restoreSelect && (overwrite || !isBlank)) {' +
       '    this.updateSelected(newIndex + _lastSelectedIndex, overwrite ||' +
       '                        caller=="firstwindowopen" || caller=="windowopenedbytabmix");' +
+      '  }' +
       '  $&'
     )._replace(
       'TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);',

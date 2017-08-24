@@ -145,31 +145,31 @@ var TabmixTabClickOptions = {
   doCommand: function TMP_doCommand(command, aTab, clickOutTabs, event) {
     gBrowser.selectedBrowser.focus();
     switch (command) {
-      case 0 :
+      case 0:
         break;
-      case 1 :
+      case 1:
         BrowserOpenTab();
         break;
-      case 2 :
+      case 2:
         if (aTab && aTab.parentNode) {
           let byMouse = Tabmix.isVersion(520) ? event && event.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE : true;
           gBrowser.removeTab(aTab, {animate: true, byMouse});
         }
         break;
-      case 3 :
+      case 3:
         gBrowser.duplicateTab(aTab);
         break;
-      case 4 :
+      case 4:
         if (aTab.linkedBrowser.__SS_restoreState != 2)
           gBrowser.reloadTab(aTab);
         break;
-      case 5 :
+      case 5:
         gBrowser.protectTab(aTab);
         break;
-      case 6 :
+      case 6:
         gBrowser.lockTab(aTab);
         break;
-      case 7 :
+      case 7:
         Tabmix.tablib.reloadTabs(gBrowser.visibleTabs);
         break;
       case 8:
@@ -744,7 +744,7 @@ var TabmixContext = {
   },
 
   openMultipleLinks: function TMP_openMultipleLinks(check) {
-    let urls = Tabmix.isVersion(420) ? gContextMenu.tabmixLinks :
+    let urls = Tabmix.isVersion(420) ? gContextMenu.tabmixLinks || [] :
       Tabmix.ContextMenu.getSelectedLinks(window.content, check);
 
     if (!check && urls.length) {

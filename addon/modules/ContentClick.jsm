@@ -592,29 +592,10 @@ ContentClickInternal = {
       openNewTab = true;
 
     if (openNewTab) {
-      let blocked;
-      try {
-        // for the moment just do it for Google and Yahoo....
-        // tvguide.com    - added 2013-07-20
-        // duckduckgo.com - added 2014-12-24
-        // jetbrains.com - added 2016-05-01
-        let re = /duckduckgo.com|tvguide.com|google|yahoo.com|jetbrains.com/;
-        blocked = re.test(currentHref);
-        // youtube.com - added 2013-11-15
-        if (!blocked && /youtube.com/.test(currentHref) &&
-           (!this.isGMEnabled() || decodeURI(href).indexOf("return false;") == -1))
-          blocked = true;
-        else if (!blocked) {
-          // make sure external links in developer.mozilla.org open new tab
-          let host = this._browser.currentURI.host;
-          blocked = host == "developer.mozilla.org" && linkNode.host != host &&
-                   linkNode.classList.contains("external");
-        }
-      } catch (ex) {
-        blocked = false;
-      }
-      if (!blocked)
+      let blocked = LinkNodeUtils.isSpecialPage(href, linkNode, currentHref, this._window);
+      if (!blocked) {
         return "16";
+      }
 
       let where = this._window.whereToOpenLink(aEvent);
       aEvent.__where = where == "tabshifted" ? "tabshifted" : "tab";
@@ -646,7 +627,7 @@ ContentClickInternal = {
     if (typeof GM_function != "function")
       return;
 
-    this._GM_function.set(window, GM_function);
+    LinkNodeUtils._GM_function.set(window, GM_function);
   },
 
   miscellaneous(node) {
@@ -684,18 +665,10 @@ ContentClickInternal = {
    *
    */
   isGreasemonkeyScript: function TMP_isGreasemonkeyScript(href) {
-    if (this.isGMEnabled()) {
+    if (LinkNodeUtils.isGMEnabled(this._window)) {
       if (href && href.match(/\.user\.js(\?|$)/i))
         return true;
     }
-    return false;
-  },
-
-  _GM_function: new WeakMap(),
-
-  isGMEnabled() {
-    if (this._GM_function.has(this._window))
-      return this._GM_function.get(this._window)();
     return false;
   },
 
@@ -922,7 +895,8 @@ ContentClickInternal = {
     let current = this._data.currentURL.toLowerCase();
     let youtube = /www\.youtube\.com\/watch\?v=/;
     let isYoutube = _href => youtube.test(current) && youtube.test(_href);
-    let isSamePath = (_href, att) => makeURI(current).path.split(att)[0] == makeURI(_href).path.split(att)[0];
+    const pathProp = TabmixSvc.version(570) ? "pathQueryRef" : "path";
+    let isSamePath = (_href, att) => makeURI(current)[pathProp].split(att)[0] == makeURI(_href)[pathProp].split(att)[0];
     let isSame = (_href, att) => current.split(att)[0] == _href.split(att)[0];
 
     if (hrefFromOnClick) {
@@ -973,7 +947,12 @@ ContentClickInternal = {
     if (testPathname)
       return true;
 
-    let _host = ["profiles.google.com", "accounts.google.com", "groups.google.com"];
+    let _host = [
+      "profiles.google.com",
+      "accounts.google.com",
+      "groups.google.com",
+      "news.google.com",
+    ];
     return _host.indexOf(node.host) > -1;
   },
 
@@ -1064,7 +1043,7 @@ ContentClickInternal = {
           let window = this.windows.shift();
           tab = window.gBrowser.tabs[0];
         }
-        if (tab) {
+        if (tab && !tab.hasAttribute("pending")) {
           let browser = tab.linkedBrowser;
           if (browser.getAttribute("remote") == "true") {
             browser.messageManager
@@ -1142,7 +1121,8 @@ ContentClickInternal = {
         url = fixedURI || makeURI(url);
 
         // catch redirect
-        const path = url.path;
+        const pathProp = TabmixSvc.version(570) ? "pathQueryRef" : "path";
+        const path = url[pathProp];
         if (path.match(/^\/r\/\?http/)) {
           url = fixupURI(path.substr("/r/?".length));
         } else if (path.match(/^.*\?url=http/)) {

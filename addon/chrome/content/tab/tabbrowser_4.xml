@@ -35,6 +35,10 @@
       <xul:stack class="tab-stack" flex="1">
         <xul:hbox xbl:inherits="pinned,selected=visuallyselected,fadein"
                   class="tab-background">
+          <xul:hbox xbl:inherits="selected=visuallyselected"
+                    class="tab-line"/>
+          <xul:spacer flex="1" class="tabmix-tab-line-spacer"/>
+          <xul:hbox class="tab-bottom-line"/>
           <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
                     class="tab-background-start"/>
           <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
@@ -65,12 +69,12 @@
                      anonid="sharing-icon"
                      class="tab-sharing-icon-overlay"
                      role="presentation"/>
-          <xul:image xbl:inherits="crashed,busy,soundplaying,soundplaying-scheduledremoval,pinned,muted,blocked,selected=visuallyselected"
+          <xul:image xbl:inherits="crashed,busy,soundplaying,soundplaying-scheduledremoval,pinned,muted,blocked,selected=visuallyselected,activemedia-blocked"
                      anonid="overlay-icon"
                      class="tab-icon-overlay"
                      role="presentation"/>
           <xul:hbox class="tab-label-container"
-                    xbl:inherits="pinned,selected=visuallyselected"
+                    xbl:inherits="pinned,selected=visuallyselected,labeldirection"
                     onoverflow="this.setAttribute('textoverflow', 'true');"
                     onunderflow="this.removeAttribute('textoverflow');"
                     flex="1">
@@ -79,7 +83,7 @@
                        xbl:inherits="xbl:text=label,accesskey,fadein,pinned,selected=visuallyselected,attention"
                        role="presentation"/>
           </xul:hbox>
-          <xul:image xbl:inherits="soundplaying,soundplaying-scheduledremoval,pinned,muted,blocked,selected=visuallyselected"
+          <xul:image xbl:inherits="soundplaying,soundplaying-scheduledremoval,pinned,muted,blocked,selected=visuallyselected,activemedia-blocked"
                      anonid="soundplaying-icon"
                      class="tab-icon-sound"
                      role="presentation"/>
@@ -214,7 +218,7 @@
         if (aTab.mIsHover && aTab.getAttribute("showbutton") != "on" &&
             !aTab.hasAttribute("dragged")) {
           if (TabmixTabbar.widthFitTitle)
-            aTab.style.setProperty("width", aTab.getBoundingClientRect().width + "px", "important");
+            aTab.style.setProperty("width", Tabmix.getBoundsWithoutFlushing(aTab).width + "px", "important");
           aTab.setAttribute("showbutton", "on");
           aTab.parentNode.__showbuttonTab = aTab;
         }
@@ -381,7 +385,9 @@
 
           var scrollRect = this.mTabstrip.scrollClientRect;
           var tab = aTab.getBoundingClientRect();
-          this.mTabstrip._calcTabMargins(aTab);
+          if (!Tabmix.isVersion(570)) {
+            this.mTabstrip._calcTabMargins(aTab);
+          }
 
           // DOMRect left/right properties are immutable.
           tab = {left: tab.left, right: tab.right, top: tab.top, bottom: tab.bottom};
@@ -390,7 +396,7 @@
             let selected = !this.selectedItem.pinned &&
                            this.selectedItem.getBoundingClientRect();
 
-            if (Tabmix.isVersion(310) && !TabmixTabbar.isMultiRow) {
+            if (!Tabmix.isVersion(570) && Tabmix.isVersion(310) && !TabmixTabbar.isMultiRow) {
               if (selected) {
                 selected = {left: selected.left, right: selected.right};
                 // Need to take in to account the width of the left/right margins on tabs.
@@ -411,10 +417,11 @@
               return;
             }
 
+            const scrollByPixels = Tabmix.isVersion(570) ? "scrollByPixels" : "_smoothScrollByPixels";
             if (TabmixTabbar.isMultiRow)
-              this.mTabstrip._smoothScrollByPixels(selected.top - scrollRect.top);
+              this.mTabstrip[scrollByPixels](selected.top - scrollRect.top);
             else
-              this.mTabstrip._smoothScrollByPixels(this.mTabstrip._isRTLScrollbox ?
+              this.mTabstrip[scrollByPixels](this.mTabstrip._isRTLScrollbox ?
                 selected.right - scrollRect.right : selected.left - scrollRect.left);
           }
 
@@ -445,8 +452,10 @@
         <parameter name="aIndex"/>
         <parameter name="aSmoothScroll"/>
         <body><![CDATA[
-          if (!this.isTabVisible(aIndex))
-            this.mTabstrip.ensureElementIsVisible(this.childNodes.item(aIndex), aSmoothScroll);
+          if (!this.isTabVisible(aIndex)) {
+            const instantScroll = Tabmix.isVersion(570) ? !aSmoothScroll : aSmoothScroll;
+            this.mTabstrip.ensureElementIsVisible(this.childNodes.item(aIndex), instantScroll);
+          }
         ]]></body>
       </method>
       <property name="lastTabVisible" readonly="true">

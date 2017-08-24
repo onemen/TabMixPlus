@@ -68,6 +68,11 @@ var gAppearancePane = {
       hbox.setAttribute("align", "center");
     }
 
+    // Firefox 57+ uses both smooth scroll and scrollDelay (see tabstrip._startScroll)
+    if (Tabmix.isVersion(570)) {
+      gPrefWindow.removeChild("obs_smoothScroll");
+    }
+
     gPrefWindow.initPane("paneAppearance");
     // call this function after initPane
     // we update some broadcaster that initPane may reset
@@ -101,7 +106,13 @@ var gAppearancePane = {
 
   tabmixCustomizeToolbar() {
     this._tabmixCustomizeToolbar = true;
-    Tabmix.getTopWin().BrowserCustomizeToolbar();
+    const win = Tabmix.getTopWin();
+    if (typeof win.gCustomizeMode == "object") {
+      // Firefox 57
+      win.gCustomizeMode.enter();
+    } else {
+      win.BrowserCustomizeToolbar();
+    }
   },
 
   toolbarButtons(aWindow) {

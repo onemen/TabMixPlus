@@ -290,7 +290,14 @@ var TMP_Places = {
           const browser = aTab.linkedBrowser;
           try {
             browser.userTypedValue = url;
-            browser.loadURI(url);
+            if (Tabmix.isVersion(550)) {
+              browser.loadURIWithFlags(url, {
+                flags: Ci.nsIWebNavigation.LOAD_FLAGS_NONE,
+                triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
+              });
+            } else {
+              browser.loadURI(url);
+            }
           } catch (ex) { }
         }
         this.resetRestoreState(aTab);
@@ -302,13 +309,21 @@ var TMP_Places = {
         } else
           aTab.setAttribute("reloadcurrent", true);
       } else {
-        aTab = gBrowser.addTab(loadProgressively ? "about:blank" : url, {
+        let params = {
           skipAnimation: multiple,
+          noInitialLabel: true,
           dontMove: true,
           forceNotRemote: loadProgressively,
-        });
+        };
+        if (Tabmix.isVersion(550)) {
+          params.triggeringPrincipal = Services.scriptSecurityManager.getSystemPrincipal();
+        }
+        aTab = gBrowser.addTab(loadProgressively ? "about:blank" : url, params);
       }
       this.setTabTitle(aTab, url, bmIds[i]);
+      if (Tabmix.isVersion(550)) {
+        aTab._labelIsInitialTitle = true;
+      }
       if (loadProgressively) {
         tabs.push(aTab);
         let entry = {url, title: aTab.label};
@@ -316,6 +331,9 @@ var TMP_Places = {
           entry.triggeringPrincipal_base64 = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
         }
         tabsData.push({entries: [entry], index: 0});
+        if (!url.startsWith("file:") && url != "about:blank") {
+          aTab.setAttribute("_tabmix_load_bypass_cache", true);
+        }
       }
 
       if (!tabToSelect)
@@ -492,8 +510,13 @@ var TMP_Places = {
       let tabstrip = gBrowser.tabContainer.mTabstrip;
       if (!TabmixTabbar.isMultiRow) {
         let scrollPosition = tabstrip.scrollPosition;
-        if (scrollPosition < 100)
-          tabstrip.scrollPosition = 0;
+        if (scrollPosition < 100) {
+          if (tabstrip.orient == "vertical") {
+            tabstrip._scrollbox.scrollTop = 0;
+          } else {
+            tabstrip._scrollbox.scrollLeft = 0;
+          }
+        }
       }
       gBrowser.ensureTabIsVisible(this.currentTab, false);
       this.currentTab = null;
@@ -504,7 +527,11 @@ var TMP_Places = {
     // Start observing bookmarks if needed.
     if (!this._hasBookmarksObserver) {
       try {
-        PlacesUtils.addLazyBookmarkObserver(this);
+        if (Tabmix.isVersion(560)) {
+          PlacesUtils.bookmarks.addObserver(this);
+        } else {
+          PlacesUtils.addLazyBookmarkObserver(this);
+        }
         this._hasBookmarksObserver = true;
       } catch (ex) {
         Tabmix.reportError(ex, "Failed to add bookmarks observer:");
@@ -514,7 +541,11 @@ var TMP_Places = {
 
   stopObserver: function TMP_PC_stopObserver() {
     if (this._hasBookmarksObserver) {
-      PlacesUtils.removeLazyBookmarkObserver(this);
+      if (Tabmix.isVersion(560)) {
+        PlacesUtils.bookmarks.removeObserver(this);
+      } else {
+        PlacesUtils.removeLazyBookmarkObserver(this);
+      }
       this._hasBookmarksObserver = false;
     }
   },
@@ -764,6 +795,14 @@ Tabmix.onContentLoaded = {
         // titlebar and titlebarContent height
         '  TabmixTabbar.updateTabsInTitlebarAppearance();\n  ' +
         '$1$2'
+      )._replace(
+        'titlebarContentHeight = Math.max(titlebarContentHeight, fullTabsHeight)',
+        'titlebarContentHeight = Math.max(titlebarContentHeight, TabmixTabbar.singleRowHeight + verticalMargins(tabsStyles))',
+        {check: !Tabmix.isVersion(570) && Tabmix.isVersion(550)}
+      )._replace(
+        'titlebarContentHeight = fullTabsHeight + 1',
+        'titlebarContentHeight = TabmixTabbar.singleRowHeight + verticalMargins(tabsStyles) + 1',
+        {check: Tabmix.isVersion(570)}
       ).toCode();
     }
 

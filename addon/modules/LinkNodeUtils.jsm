@@ -2,6 +2,13 @@
 
 this.EXPORTED_SYMBOLS = ["LinkNodeUtils"];
 
+const Cu = Components.utils;
+
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+
+XPCOMUtils.defineLazyModuleGetter(this, "Services",
+  "resource://gre/modules/Services.jsm");
+
 const ATTRIBS = ["href", "onclick", "onmousedown", "rel", "role"];
 
 this.LinkNodeUtils = {
@@ -37,7 +44,7 @@ this.LinkNodeUtils = {
         location: {href: doc.location ? doc.location.href : ""}
       },
       parentNode: {
-        baseURI: node.parentNode.baseURI,
+        baseURI: node.parentNode ? node.parentNode.baseURI : '',
         _attributes: getAttributes(node.parentNode, ["onclick"])
       },
       _focusedWindowHref: focusedWindow.top.location.href,
@@ -58,10 +65,50 @@ this.LinkNodeUtils = {
     if (node && node.hasAttribute && node.hasAttribute("onclick"))
       return node;
     return null;
-  }
+  },
+
+  // catch link in special pages
+  isSpecialPage(href, linkNode, currentHref, window) {
+    let blocked;
+    try {
+      // for the moment just do it for Google and Yahoo....
+      // tvguide.com    - added 2013-07-20
+      // duckduckgo.com - added 2014-12-24
+      // jetbrains.com - added 2016-05-01
+      let re = /duckduckgo.com|tvguide.com|google|yahoo.com|jetbrains.com|github.io|github.com/;
+      blocked = re.test(currentHref);
+      // youtube.com - added 2013-11-15
+      if (!blocked && /youtube.com/.test(currentHref) &&
+          (!this.isGMEnabled(window) || decodeURI(href).indexOf("return false;") == -1)) {
+        blocked = true;
+      } else if (!blocked) {
+        // make sure external links in developer.mozilla.org open new tab
+        let uri = Services.io.newURI(currentHref);
+        let host = uri && uri.host;
+        blocked = host == "developer.mozilla.org" && linkNode.host != host &&
+            linkNode.classList.contains("external");
+      }
+    } catch (ex) {
+      blocked = false;
+    }
+    return blocked;
+  },
+
+  _GM_function: new WeakMap(),
+
+  isGMEnabled(window) {
+    window = window || Services.wm.getMostRecentWindow("navigator:browser");
+    if (this._GM_function.has(window)) {
+      return this._GM_function.get(window)();
+    }
+    return false;
+  },
 };
 
 function getAttributes(node, attribs) {
+  if (!node) {
+    return {};
+  }
   let wrapper = {};
   for (let att of attribs) {
     if (node.hasAttribute(att)) {

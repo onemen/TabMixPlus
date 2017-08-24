@@ -134,7 +134,7 @@ this.SingleWindowModeUtils = {
       postData: null,
       allowThirdPartyFixup: false
     };
-    if (uriToLoad instanceof Ci.nsISupportsArray) {
+    if (!TabmixSvc.version(520) && uriToLoad instanceof Ci.nsISupportsArray) {
       let count = uriToLoad.Count();
       for (let i = 0; i < count; i++) {
         let uriString = uriToLoad.GetElementAt(i).QueryInterface(Ci.nsISupportsString);

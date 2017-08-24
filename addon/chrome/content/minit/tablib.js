@@ -303,8 +303,8 @@ Tabmix.tablib = {
 
     Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
       'if (!docTitle)',
-      'let tab = this.getTabForBrowser(aBrowser);\
-       if (tab.hasAttribute("tabmix_changed_label"))\
+      (Tabmix.isVersion(550) ? '' : 'let tab = this.getTabForBrowser(aBrowser);\n') +
+      'if (tab.hasAttribute("tabmix_changed_label"))\
          docTitle = tab.getAttribute("tabmix_changed_label");\
        else\
          docTitle = TMP_Places.getTabTitle(tab, aBrowser.currentURI.spec, docTitle);\
@@ -329,7 +329,7 @@ Tabmix.tablib = {
       [obj, fnName] = [gBrowser, "setTabTitle"];
     }
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
-      'var title = browser.contentTitle;',
+      Tabmix.isVersion(550) ? 'let isContentTitle = false;' : 'var title = browser.contentTitle;',
       '$&\
        var urlTitle, title = Tabmix.tablib.getTabTitle(aTab, browser.currentURI.spec, title);'
     )._replace(
@@ -337,7 +337,7 @@ Tabmix.tablib = {
       '$&\
       urlTitle = title;'
     )._replace(
-      'if (aTab.label == title',
+      Tabmix.isVersion(550) ? 'return this._setTabLabel' : 'if (aTab.label == title',
       'if (aTab.hasAttribute("mergeselected"))\
          title = "(*) " + title;\
        const noChange = aTab.label == title && (Tabmix.isVersion(530) || aTab.crop == crop);\
@@ -352,14 +352,38 @@ Tabmix.tablib = {
     )._replace(
       'this._tabAttrModified',
       `Tabmix.tablib.onTabTitleChanged(aTab, browser, title == urlTitle);
-            $&`
+            $&`, {check: !Tabmix.isVersion(550)}
+    )._replace(
+      '{ isContentTitle }',
+      '{ isContentTitle, urlTitle }',
+      {check: Tabmix.isVersion(550)}
     ).toCode();
 
-    // after bug 347930 - change Tab strip to be a toolbar
-    Tabmix.changeCode(gBrowser, "gBrowser.setStripVisibilityTo")._replace(
-      'this.tabContainer.visible = aShow;',
-      'if (!aShow || TabmixTabbar.hideMode != 2) $&'
-    ).toCode();
+    if (Tabmix.isVersion(550)) {
+      Tabmix.originalFunctions.gBrowser_setInitialTabTitle = gBrowser.setInitialTabTitle;
+      gBrowser.setInitialTabTitle = function(aTab) {
+        if (aTab._labelIsInitialTitle &&
+            aTab.hasAttribute("tabmix_changed_label")) {
+          return;
+        }
+        Tabmix.originalFunctions.gBrowser_setInitialTabTitle.apply(this, arguments);
+      };
+
+      Tabmix.changeCode(gBrowser, "gBrowser._setTabLabel")._replace(
+        'this._tabAttrModified',
+        `let urlTitle = aOptions && aOptions.urlTitle;
+              Tabmix.tablib.onTabTitleChanged(aTab, aTab.linkedBrowser, aLabel == urlTitle);
+              $&`
+      ).toCode();
+    }
+
+    if (!Tabmix.isVersion(570)) {
+      // after bug 347930 - change Tab strip to be a toolbar
+      Tabmix.changeCode(gBrowser, "gBrowser.setStripVisibilityTo")._replace(
+        'this.tabContainer.visible = aShow;',
+        'if (!aShow || TabmixTabbar.hideMode != 2) $&'
+      ).toCode();
+    }
 
     if (Tabmix.isVersion(390) && gMultiProcessBrowser) {
       /*
@@ -396,6 +420,8 @@ Tabmix.tablib = {
          $&'
       ).toCode();
 
+      let marginInlineStart = Tabmix.isVersion(570) ? "marginInlineStart" : "MozMarginStart";
+      let paddingInlineStart = Tabmix.isVersion(570) ? "paddingInlineStart" : "MozPaddingStart";
       let $LF = '\n          ';
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
         'this.removeAttribute("positionpinnedtabs");',
@@ -420,19 +446,19 @@ Tabmix.tablib = {
         '      this._pinnedTabsLayoutCache = layoutData;' + $LF +
         '    }' + $LF +
         '  }' + $LF +
-        '    let width = TabmixSvc.australis ? 0 : this.mTabstrip.scrollboxPaddingStart;' +
+        '    let width = TabmixSvc.australis ? 0 : this.mTabstrip.scrollboxPaddingStart || 0;' + $LF +
         '    for (let i = 0; i < numPinned; i++) {' +
         '      let tab = this.childNodes[i];' +
-        '      tab.style.MozMarginStart = width + "px";' +
+        `      tab.style.${marginInlineStart} = width + "px";` + $LF +
         '      width += layoutData.pinnedTabWidth;' +
         '    }' +
         '    if (width != this.mTabstrip.firstTabInRowMargin) {' +
         '      this.mTabstrip.firstTabInRowMargin = width;' +
         '      this.mTabstrip.firstVisible =  {tab: null, x: 0, y: 0};' +
         '      gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]' +
-        '        .style.setProperty("-moz-margin-start", width + "px", null);' +
+        `        .style.${marginInlineStart} =  width + "px";` + $LF +
         '    }' +
-        '    this.style.MozPaddingStart = "";' +
+        `    this.style.${paddingInlineStart} = "";` + $LF +
         '    TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(this, "paddingLeft");' +
         '    this.mTabstrip.setFirstTabInRow();' +
         '  }' +
@@ -440,7 +466,7 @@ Tabmix.tablib = {
       )._replace(
         /(})(\)?)$/,
         'if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {' +
-        '  TMP_tabDNDObserver.paddingLeft = parseInt(this.style.MozPaddingStart || 0);' +
+        `  TMP_tabDNDObserver.paddingLeft = parseInt(this.style.${paddingInlineStart} || 0);` +
         '}' +
         '$1$2'
       ).toCode();
@@ -719,7 +745,7 @@ Tabmix.tablib = {
 
     if (Tabmix.isVersion(260)) {
       _openURI.toCode();
-      fnName = "nsBrowserAccess.prototype." + (TSTopenURI || "openURI");
+      fnName = "nsBrowserAccess.prototype." + (TSTopenURI || (Tabmix.isVersion(570) ? "getContentWindowOrOpenURI" : "openURI"));
       _openURI = Tabmix.changeCode(fnObj, fnName);
     }
 
@@ -791,7 +817,7 @@ Tabmix.tablib = {
         '$&' +
         'if (where == "current" && Tabmix.whereToOpen(false).inNew) where = "tab";'
       )._replace(
-        'loadOneOrMoreURIs(homePage);',
+        /loadOneOrMoreURIs\([^;]+;/,
         '$& \
         gBrowser.ensureTabIsVisible(gBrowser.selectedTab);'
       ).toCode();
@@ -807,10 +833,12 @@ Tabmix.tablib = {
        }'
     ).toCode();
 
-    Tabmix.changeCode(newWindowButtonObserver, "newWindowButtonObserver.onDrop")._replace(
-      '{',
-      '{if (Tabmix.singleWindowMode) return;'
-    ).toCode();
+    Tabmix.originalFunctions.newWindowButtonObserver_onDrop = newWindowButtonObserver.onDrop;
+    newWindowButtonObserver.onDrop = function onDrop(...args) {
+      if (!Tabmix.singleWindowMode) {
+        Tabmix.originalFunctions.newWindowButtonObserver_onDrop.apply(this, args);
+      }
+    };
 
     Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
       'gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL)',
@@ -1569,7 +1597,8 @@ Tabmix.tablib = {
         "extensions.tabmix.protectedtabs.warnOnClose",
         "browser.tabs.warnOnClose"];
       if (onExit) {
-        if (numTabs > 1 && Services.prefs.getBoolPref(prefs[2]))
+        let openTabs = numTabs - this._removingTabs.length;
+        if (openTabs > 1 && Services.prefs.getBoolPref(prefs[2]))
           shouldPrompt = 3;
         else if (numProtected > 0 && Services.prefs.getBoolPref(prefs[1]))
           shouldPrompt = 2;
@@ -1744,8 +1773,10 @@ Tabmix.tablib = {
     // Bug 752376 - Avoid calling scrollbox.ensureElementIsVisible()
     // if the tab strip doesn't overflow to prevent layout flushes
     gBrowser.ensureTabIsVisible = function tabmix_ensureTabIsVisible(aTab, aSmoothScroll) {
-      if (Tabmix.tabsUtils.overflow)
-        this.tabContainer.mTabstrip.ensureElementIsVisible(aTab, aSmoothScroll);
+      if (Tabmix.tabsUtils.overflow) {
+        const instantScroll = Tabmix.isVersion(570) ? !aSmoothScroll : aSmoothScroll;
+        this.tabContainer.mTabstrip.ensureElementIsVisible(aTab, instantScroll);
+      }
     };
 
     /** DEPRECATED **/
@@ -1773,9 +1804,11 @@ Tabmix.tablib = {
   get labels() {
     delete this.labels;
     this.labels = [
-      gBrowser.mStringBundle.getString("tabs.connecting"),
       gBrowser.mStringBundle.getString("tabs.emptyTabTitle"),
     ];
+    if (!Tabmix.isVersion(550)) {
+      this.labels.push(gBrowser.mStringBundle.getString("tabs.connecting"));
+    }
     return this.labels;
   },
 
@@ -1824,7 +1857,9 @@ Tabmix.tablib = {
     }
 
     try {
-      TabmixSessionManager.tabScrolled(tab);
+      if (!Tabmix.isVersion(320)) {
+        TabmixSessionManager.tabScrolled(tab);
+      }
     } catch (ex) {
       Tabmix.assert(ex, "ERROR in TabmixSessionManager.tabScrolled");
     }

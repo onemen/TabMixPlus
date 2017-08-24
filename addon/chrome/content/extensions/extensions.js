@@ -221,6 +221,14 @@ var TMP_extensionsCompatibility = {
   },
 
   onWindowOpen: function TMP_EC_onWindowOpen() {
+    // https://addons.mozilla.org/firefox/addon/tabgroups-manager-revived
+    // TabGroupsManager.OverrideMethod set TabmixSessionManager.loadOneWindow to string by error
+    if (Tabmix.extensions.tabGroupManager &&
+        typeof TabmixSessionManager.loadOneWindow == "string") {
+      Tabmix._makeCode("TabmixSessionManager.loadOneWindow", TabmixSessionManager.loadOneWindow);
+      Tabmix.log("typeof TabmixSessionManager.loadOneWindow " + typeof TabmixSessionManager.loadOneWindow);
+    }
+
     this.setVerticalTabs();
 
     // Look for RSS/Atom News Reader

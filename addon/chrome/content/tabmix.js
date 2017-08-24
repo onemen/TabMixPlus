@@ -54,6 +54,11 @@ Tabmix.beforeDelayedStartup = function() {
 
 // after TabmixSessionManager and SessionStore initialized
 Tabmix.sessionInitialized = function() {
+  // Let EmbeddedWebExtension know we're done.
+  if (this.firstWindowInSession && TabmixSvc.sm.deferredInitialized) {
+    TabmixSvc.sm.deferredInitialized.resolve();
+  }
+
   var SM = TabmixSessionManager;
   if (SM.enableManager) {
     window.restoreLastSession = function restoreLastSession() {
@@ -105,7 +110,7 @@ Tabmix.getButtonsHeight = function(setDefault) {
     let stripIsHidden = TabmixTabbar.hideMode !== 0 && !tabBar.visible;
     if (stripIsHidden)
       tabBar.visible = true;
-    this._buttonsHeight = Tabmix.visibleTabs.first.getBoundingClientRect().height;
+    this._buttonsHeight = Tabmix.getBoundsWithoutFlushing(Tabmix.visibleTabs.first).height;
     if (stripIsHidden)
       tabBar.visible = false;
 
@@ -134,7 +139,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     this.tabsNewtabButton =
       document.getAnonymousElementByAttribute(tabBar, "command", "cmd_newNavigatorTab");
     this.tabsNewtabButton.setAttribute("force-display", true);
-    let openNewTabRect = this.tabsNewtabButton.getBoundingClientRect();
+    let openNewTabRect = Tabmix.getBoundsWithoutFlushing(this.tabsNewtabButton);
     let style = window.getComputedStyle(this.tabsNewtabButton);
     let marginStart = style.getPropertyValue("margin-left");
     // it doesn't work when marginEnd add to buttonWidth
@@ -151,7 +156,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     // the right button
     let openNewPrivateTab = document.getElementById("privateTab-afterTabs-openNewPrivateTab");
     if (openNewPrivateTab) {
-      let openNewPrivateTabRect = openNewPrivateTab.getBoundingClientRect();
+      let openNewPrivateTabRect = Tabmix.getBoundsWithoutFlushing(openNewPrivateTab);
       this.afterTabsButtonsWidth.push(openNewPrivateTabRect.width);
       if (openNewPrivateTabRect.right > openNewTabRect.right)
         this.tabsNewtabButton = openNewPrivateTab;
@@ -163,6 +168,13 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
 };
 
 Tabmix.afterDelayedStartup = function() {
+  // focus content area if the selected tab is not blank when Firefox starts
+  setTimeout(() => {
+    if (gURLBar.focused && !gBrowser.isBlankNotBusyTab(gBrowser.selectedTab)) {
+      gBrowser.selectedBrowser.focus();
+    }
+  }, 250);
+
   TabmixTabbar._enablePositionCheck = true;
 
   TMP_TabView.init();
@@ -261,7 +273,7 @@ var TMP_eventListener = {
         TabmixSessionManager.onWindowClose(!Tabmix.numberOfWindows());
         break;
       case "SSTabRestoring":
-        this.onSSTabRestoring(aEvent);
+        this.onSSTabRestoring(aEvent.target);
         break;
       case "TabOpen":
         this.onTabOpen(aEvent);
@@ -583,6 +595,12 @@ var TMP_eventListener = {
     Tabmix.setItem("tmp_undocloseButton", "disabled", true);
     Tabmix.setItem("tmp_closedwindows", "disabled", true);
 
+    if (Tabmix.isVersion(550)) {
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.adjustTabstrip")._replace(
+        'this.tabbrowser.visibleTabs[this.tabbrowser._numPinnedTabs];',
+        'TMP_TabView.checkTabs(this.tabbrowser.visibleTabs);'
+      ).toCode(false, tabBar, "tabmix_adjustTabstrip");
+    }
     Tabmix.setNewFunction(tabBar, "adjustTabstrip", Tabmix.adjustTabstrip);
     delete Tabmix.adjustTabstrip;
   },
@@ -611,15 +629,14 @@ var TMP_eventListener = {
     setTimeout(() => TabmixTabbar.updateScrollStatus(), 2500);
   },
 
-  onSSTabRestoring: function TMP_EL_onSSTabRestoring(aEvent) {
-    var tab = aEvent.target;
+  onSSTabRestoring: function TMP_EL_onSSTabRestoring(tab) {
     Tabmix.restoreTabState(tab);
     TabmixSessionManager.restoreHistoryComplete(tab);
 
     gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
 
     // don't mark new tab as unread
-    var url = tab.linkedBrowser.currentURI.spec;
+    let url = tab.__SS_lazyData ? tab.__SS_lazyData.url : tab.linkedBrowser.currentURI.spec;
     if (url == TabmixSvc.aboutBlank || url == TabmixSvc.aboutNewtab)
       tab.setAttribute("visited", true);
   },
@@ -788,6 +805,13 @@ var TMP_eventListener = {
   // when more the one tabs opened at once
   lastTimeTabOpened: 0,
   onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
+    if (aTab.__SS_lazyData) {
+      this.onSSTabRestoring(aTab);
+      if (aTab.label == "about:blank") {
+        aTab.label = gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
+        gBrowser._tabAttrModified(aTab, ["label"]);
+      }
+    }
     // cache tab width, we use our own key since Pale Moon doesn't have permanentKey
     aTab.tabmixKey = {};
     this.tabWidthCache.set(aTab.tabmixKey, aTab.boxObject.width);
@@ -903,8 +927,10 @@ var TMP_eventListener = {
 
     // workaround when we remove last visible tab
     if (tabBar.firstChild.pinned && TabmixTabbar.isMultiRow && Tabmix.tabsUtils.overflow &&
-        aTab._tPos >= Tabmix.visibleTabs.last._tPos)
-      tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, false);
+        aTab._tPos >= Tabmix.visibleTabs.last._tPos) {
+      const instantScroll = Tabmix.isVersion(570);
+      tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, instantScroll);
+    }
 
     if (Tabmix.tabsUtils.disAllowNewtabbutton)
       Tabmix.tabsUtils.adjustNewtabButtonVisibility();
@@ -919,7 +945,7 @@ var TMP_eventListener = {
 
     if (TabmixTabbar.hideMode != 2 && TabmixTabbar.widthFitTitle &&
         !tab.hasAttribute("width") && tab.hasAttribute("pending")) {
-      tab.setAttribute("width", tab.getBoundingClientRect().width);
+      tab.setAttribute("width", Tabmix.getBoundsWithoutFlushing(tab).width);
     }
 
     // for ColorfulTabs 6.0+
@@ -1041,18 +1067,40 @@ var TMP_eventListener = {
     } else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
       // this code is based on scrollbox.xml wheel/DOMMouseScroll event handler
       let scrollByDelta = function(delta) {
-        if (Tabmix.isVersion(480) &&
+        let scrollByPixels = true;
+        let instant;
+        let scrollAmount = 0;
+        if (Tabmix.isVersion(530) && TabmixTabbar.isMultiRow) {
+          delta = delta > 0 ? 1 : -1;
+          scrollAmount = delta * tabStrip.lineScrollAmount;
+        } else if (Tabmix.isVersion(480) &&
             aEvent.deltaMode == aEvent.DOM_DELTA_PIXEL) {
-          tabStrip.scrollByPixels(delta);
+          scrollAmount = delta;
+          instant = true;
         } else if (Tabmix.isVersion(490) &&
             aEvent.deltaMode == aEvent.DOM_DELTA_PAGE) {
-          tabStrip.scrollByPixels(delta * tabStrip.scrollClientSize);
+          scrollAmount = delta * tabStrip.scrollClientSize;
+        } else if (Tabmix.isVersion(530)) {
+          scrollAmount = delta * tabStrip.lineScrollAmount;
         } else {
           // scroll the tabbar by one tab
           if (orient == "horizontal" || TabmixTabbar.isMultiRow) {
             delta = delta > 0 ? 1 : -1;
           }
+          scrollByPixels = false;
           tabStrip.scrollByIndex(delta);
+        }
+
+        if (scrollByPixels) {
+          let useSmoothScroll = Tabmix.isVersion(530) && !Tabmix.isVersion(570) &&
+            aEvent.deltaMode != aEvent.DOM_DELTA_PIXEL && tabStrip.smoothScroll;
+          if (useSmoothScroll) {
+            tabStrip._smoothScrollByPixels(scrollAmount);
+          } else if (Tabmix.isVersion(570)) {
+            tabStrip.scrollByPixels(scrollAmount, instant);
+          } else {
+            tabStrip.scrollByPixels(scrollAmount);
+          }
         }
       };
 
@@ -1154,6 +1202,9 @@ var TMP_eventListener = {
     }
     updateAttrib("class", "tab-icon-image", "role", "presentation");
     updateAttrib("class", "tab-text", "role", "presentation");
+    if (Tabmix.isVersion(570)) {
+      updateAttrib("class", "tab-background", "orient", "vertical");
+    }
   }
 
 };

@@ -37,7 +37,11 @@ var TMP_SessionStore = {
 
   getTitleFromTabState(aTab) {
     let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
-    return this.getActiveEntryData(tabData).title || null;
+    let data = this.getActiveEntryData(tabData);
+    if (data.url == TabmixSvc.aboutBlank) {
+      return gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
+    }
+    return data.title || null;
   },
 
   // check if pending tab has no history or is about:blank
@@ -345,7 +349,7 @@ var TMP_ClosedTabs = {
       return false;
 
     if (keepWidth && !aPopup.hasAttribute("width")) {
-      const width = aPopup.getBoundingClientRect().width;
+      const width = Tabmix.getBoundsWithoutFlushing(aPopup).width;
       aPopup.setAttribute("width", width);
     }
 
@@ -363,12 +367,15 @@ var TMP_ClosedTabs = {
       var _uri = makeURI(url);
       if (_uri.scheme == "about" && title === "")
         url = title = "about:blank";
-      else try {
+      else {
+        try {
+          const pathProp = TabmixSvc.version(570) ? "pathQueryRef" : "path";
           url = _uri.scheme == "about" ? _uri.spec :
-            _uri.scheme + "://" + _uri.hostPort + _uri.path;
+            _uri.scheme + "://" + _uri.hostPort + _uri[pathProp];
         } catch (e) {
           url = title;
         }
+      }
       var label = title ? title : url;
       let count = "";
       if (ltr) {
