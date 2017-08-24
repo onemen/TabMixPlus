@@ -35,10 +35,6 @@
       <xul:stack class="tab-stack" flex="1">
         <xul:hbox xbl:inherits="pinned,selected=visuallyselected,fadein"
                   class="tab-background">
-          <xul:hbox xbl:inherits="selected=visuallyselected"
-                    class="tab-line"/>
-          <xul:spacer flex="1" class="tabmix-tab-line-spacer"/>
-          <xul:hbox class="tab-bottom-line"/>
           <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
                     class="tab-background-start"/>
           <xul:hbox xbl:inherits="pinned,selected=visuallyselected"

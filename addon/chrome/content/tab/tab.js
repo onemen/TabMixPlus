@@ -2009,22 +2009,6 @@ gTMPprefObserver = {
         newRule.style.setProperty("padding-bottom", (padding + 1) + "px", "important");
       }, true);
     }
-
-    if (Tabmix.isVersion(570) && !TabmixSvc.australis) {
-      newRule = `.tab-stack > .tab-background > .tab-background-start,
-                 .tab-stack > .tab-background > .tab-background-middle,
-                 .tab-stack > .tab-background > .tab-background-end {
-                    display: none;
-                 }`;
-      this.insertRule(newRule);
-    } else if (!Tabmix.isVersion(570)) {
-      newRule = `.tab-stack > .tab-background > .tab-line, 
-                 .tab-stack > .tab-background > .tabmix-tab-line-spacer,
-                 .tab-stack > .tab-background > .tab-bottom-line {
-                    display: none;
-                 }`;
-      this.insertRule(newRule);
-    }
   },
 
   updateStyleAttributes() {

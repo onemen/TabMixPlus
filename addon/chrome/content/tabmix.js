@@ -341,6 +341,11 @@ var TMP_eventListener = {
   },
 
   onContentLoaded: function TMP_EL_onContentLoaded() {
+    if (Tabmix.isVersion(570)) {
+      let newRule = '.tabbrowser-tab {' +
+        '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tabbrowser-tab-v57") !important;}';
+      gTMPprefObserver.insertRule(newRule);
+    }
     if (Tabmix.isVersion(510) && !Tabmix.isVersion(530)) {
       let newRule = '.tabbrowser-tab {' +
           '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tabbrowser-tab-v51-52") !important;}';
@@ -1202,9 +1207,6 @@ var TMP_eventListener = {
     }
     updateAttrib("class", "tab-icon-image", "role", "presentation");
     updateAttrib("class", "tab-text", "role", "presentation");
-    if (Tabmix.isVersion(570)) {
-      updateAttrib("class", "tab-background", "orient", "vertical");
-    }
   }
 
 };
