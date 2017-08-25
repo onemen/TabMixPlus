@@ -161,10 +161,7 @@ Tabmix.tablib = {
       let dontMove, isPending, referrerURI, relatedToCurrent = null,
           callerTrace = Tabmix.callerTrace(),
           isRestoringTab = callerTrace.contain("ssi_restoreWindow"),
-          // new tab can trigger selection change by some extensions (divX HiQ)
-          // see use below
-          selectedTab = this.selectedTab,
-          lastRelatedTab = this._lastRelatedTab;
+          openerBrowser;
 
       // we prevents the original function from moving the new tab by setting
       // params.relatedToCurrent to false
@@ -178,7 +175,6 @@ Tabmix.tablib = {
           postData: args[3],
           ownerTab: args[4],
           allowThirdPartyFixup: args[5],
-          relatedToCurrent: false
         };
         let uri = args[0];
         args = [uri, params];
@@ -189,8 +185,16 @@ Tabmix.tablib = {
         isPending = params.isPending;
         referrerURI = params.referrerURI;
         relatedToCurrent = params.relatedToCurrent || null;
-        params.relatedToCurrent = false;
+        openerBrowser = params.openerBrowser;
         args[1] = params;
+      }
+
+      if (relatedToCurrent === null) {
+        relatedToCurrent = Boolean(referrerURI);
+      }
+      let insertRelatedAfterCurrent = Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent");
+      if (insertRelatedAfterCurrent) {
+        Services.prefs.setBoolPref("browser.tabs.insertRelatedAfterCurrent", false);
       }
 
       let openTabnext = Tabmix.prefs.getBoolPref("openTabNext");
@@ -199,35 +203,50 @@ Tabmix.tablib = {
             callerTrace.contain("ssi_restoreWindow", "ssi_duplicateTab");
         if (dontMoveNewTab) {
           openTabnext = false;
-        } else if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")) {
+        } else if (!insertRelatedAfterCurrent) {
           relatedToCurrent = true;
         }
-        let checkToOpenTabNext = (relatedToCurrent === null ? referrerURI : relatedToCurrent) && openTabnext;
+        let checkToOpenTabNext = openTabnext && relatedToCurrent;
         TMP_extensionsCompatibility.treeStyleTab.checkToOpenTabNext(this.selectedTab, checkToOpenTabNext);
       }
+
+      // new tab can trigger selection change by some extensions (divX HiQ)
+      // we save current state before adding the new tab
+      let selectedTab = this.selectedTab;
+      let openerTab = openerBrowser && this.getTabForBrowser(openerBrowser) ||
+        relatedToCurrent && selectedTab;
+      let lastRelatedTab = Tabmix.isVersion(570) ?
+        this._lastRelatedTabMap.get(openerTab) : this._lastRelatedTab;
 
       // we use var here to allow other extensions that wrap our code with
       // try-catch-finally to have access to 't' outside of the current scope
       // (see https://addons.mozilla.org/en-US/firefox/addon/mclickfocustab/)
       var t = Tabmix.originalFunctions.gBrowser_addTab.apply(this, args);
 
+      if (insertRelatedAfterCurrent) {
+        Services.prefs.setBoolPref("browser.tabs.insertRelatedAfterCurrent", true);
+      }
+
       if (isPending || isRestoringTab &&
           Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) {
         t.setAttribute("tabmix_pending", "true");
       }
 
-      if ((relatedToCurrent === null ? referrerURI : relatedToCurrent) &&
-          openTabnext) {
-        let newTabPos = (this._lastRelatedTab || selectedTab)._tPos + 1;
-        if (this._lastRelatedTab) {
-          this._lastRelatedTab.owner = null;
+      if (relatedToCurrent && openTabnext) {
+        let newTabPos = (lastRelatedTab || openerTab)._tPos + 1;
+        if (lastRelatedTab) {
+          lastRelatedTab.owner = null;
         } else {
-          t.owner = selectedTab;
+          t.owner = openerTab;
         }
-        this.moveTabTo(t, newTabPos);
+        this.moveTabTo(t, newTabPos, true);
         if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {
           TMP_LastTab.attachTab(t, lastRelatedTab);
-          this._lastRelatedTab = t;
+          if (Tabmix.isVersion(570)) {
+            this._lastRelatedTabMap.set(openerTab, t);
+          } else {
+            this._lastRelatedTab = t;
+          }
         }
       }
       return t;
