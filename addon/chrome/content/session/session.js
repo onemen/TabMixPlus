@@ -2547,6 +2547,9 @@ TabmixSessionManager = {
 
     // This was the last window restored at startup, notify observers.
     Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
+    if (Tabmix.isVersion(570)) {
+      TabmixSvc.SessionStore._deferredAllWindowsRestored.resolve();
+    }
 
     TabmixSvc.sm.observersWereNotified = true;
     TabmixSvc.sm.restoreCount = -1;
