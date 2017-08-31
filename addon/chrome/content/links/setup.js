@@ -109,9 +109,10 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       }
     }
 
+    Tabmix._callPrepareLoadOnStartup = this.isVersion(570) && prepareLoadOnStartup;
     if (prepareLoadOnStartup) {
-      Tabmix.prepareLoadOnStartup = function() {
-        let uriToLoad = gBrowserInit._getUriToLoad();
+      Tabmix.prepareLoadOnStartup = function(uriToLoad) {
+        uriToLoad = this.isVersion(570) ? uriToLoad : gBrowserInit._getUriToLoad();
         if (uriToLoad && uriToLoad != TabmixSvc.aboutBlank) {
           let tabs = gBrowser.tabs;
           for (let tab of tabs) {
@@ -143,8 +144,14 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         Tabmix.runningDelayedStartup = false;
       }
 
-      Tabmix.prepareLoadOnStartup();
-      TabmixSessionManager.init();
+      if (Tabmix._callPrepareLoadOnStartup) {
+        gBrowserInit._uriToLoadPromise
+            .then(uriToLoad => Tabmix.prepareLoadOnStartup(uriToLoad))
+            .then(() => TabmixSessionManager.init());
+      } else {
+        Tabmix.prepareLoadOnStartup();
+        TabmixSessionManager.init();
+      }
       Tabmix.initialization.run("afterDelayedStartup");
 
       return result;
