@@ -234,7 +234,8 @@ TabmixClickEventHandler = {
     let ownerDoc = event.originalTarget.ownerDocument;
 
     // let Firefox code handle click events from about pages
-    if (!ownerDoc || /^about:(certerror|blocked|neterror)$/.test(ownerDoc.documentURI)) {
+    if (!ownerDoc || (!TabmixSvc.version(570) || event.button == 0) &&
+        /^about:(certerror|blocked|neterror)$/.test(ownerDoc.documentURI)) {
       return null;
     }
 
