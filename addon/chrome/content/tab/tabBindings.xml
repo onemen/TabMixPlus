@@ -156,6 +156,9 @@
           <xul:progressmeter class="tab-progress" mode="normal"
                              xbl:inherits="value=tab-progress,fadein,pinned,selected=visuallyselected"/>
         </xul:vbox>
+        <xul:hbox xbl:inherits="pinned,bursting"
+                  anonid="tab-loading-burst"
+                  class="tab-loading-burst"/>
         <xul:hbox xbl:inherits="pinned,selected=visuallyselected,titlechanged,attention"
                   class="tab-content" align="center">
           <xul:stack class="tab-icon" xbl:inherits="fadein,pinned,selected=visuallyselected">
