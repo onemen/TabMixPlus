@@ -360,14 +360,16 @@ XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "resource://tabmixplus/log.jsm");
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", () => {
-  let tmp = {};
-  Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
-  return tmp.SessionStore;
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", () => {
+  const sessionStoreModule = Cu.import("resource:///modules/sessionstore/SessionStore.jsm", {});
+  if (isVersion(570)) {
+    return sessionStoreModule;
+  }
+  return Cu.getGlobalForObject(sessionStoreModule);
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", function() {
-  return Cu.getGlobalForObject(this.ss);
+XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", function() {
+  return this.SessionStoreGlobal.SessionStore;
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
