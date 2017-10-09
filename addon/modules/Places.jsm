@@ -24,6 +24,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "PlacesUIUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils",
   "resource://gre/modules/PlacesUtils.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
+  "resource:///modules/RecentWindow.jsm");
+
 XPCOMUtils.defineLazyModuleGetter(this,
   "TabmixSvc", "resource://tabmixplus/TabmixSvc.jsm");
 
@@ -73,6 +76,9 @@ PlacesUtilsInternal = {
       delete PlacesUIUtils["tabmix_" + aFn];
     });
     delete PlacesUIUtils.tabmix_getURLsForContainerNode;
+    if (TabmixSvc.version(580)) {
+      delete PlacesUIUtils._getTopBrowserWin;
+    }
   },
 
   functions: ["_openTabset", "openURINodesInTabs", "openContainerNodeInTabs", "openNodeWithEvent", "_openNodeIn"],
@@ -195,6 +201,12 @@ PlacesUtilsInternal = {
       'bookMarkId: aNode.itemId, initiatingDoc: null,\n' +
       '        $&'
     ).toCode();
+
+    if (TabmixSvc.version(580)) {
+      PlacesUIUtils._getTopBrowserWin = function PUIU__getTopBrowserWin() {
+        return RecentWindow.getMostRecentBrowserWindow();
+      };
+    }
   },
 
   // Lazy getter for titlefrombookmark preference
