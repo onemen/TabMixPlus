@@ -24,6 +24,11 @@
   width: 16px;
 }
 
+.tabs-closebutton.tabmix > .toolbarbutton-icon {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 /* :::: for miniT drag indicator :::: */
 .tab-drag-indicator-left, .tab-drag-indicator-right {
   visibility: hidden;
