@@ -168,10 +168,14 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
 };
 
 Tabmix.afterDelayedStartup = function() {
+  // focus address-bar area if the selected tab is blank when Firefox starts
   // focus content area if the selected tab is not blank when Firefox starts
   setTimeout(() => {
-    if (gURLBar.focused && !gBrowser.isBlankNotBusyTab(gBrowser.selectedTab)) {
+    const isBlank = gBrowser.isBlankNotBusyTab(gBrowser.selectedTab);
+    if (gURLBar.focused && !isBlank) {
       gBrowser.selectedBrowser.focus();
+    } else if (!gURLBar.focused && isBlank) {
+      gURLBar.focus();
     }
   }, 250);
 
