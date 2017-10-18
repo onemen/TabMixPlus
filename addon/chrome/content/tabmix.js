@@ -1067,12 +1067,12 @@ var TMP_eventListener = {
     }
 
     if (shouldMoveFocus) {
+      aEvent.stopPropagation();
+      aEvent.preventDefault();
       if (aEvent.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE) {
         direction = direction > 0 ? 1 : -1;
         tabBar.advanceSelectedTab(direction, true);
       }
-      aEvent.stopPropagation();
-      aEvent.preventDefault();
     } else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
       // this code is based on scrollbox.xml wheel/DOMMouseScroll event handler
       let scrollByDelta = function(delta) {
@@ -1113,6 +1113,9 @@ var TMP_eventListener = {
         }
       };
 
+      aEvent.stopPropagation();
+      aEvent.preventDefault();
+
       if (orient == "vertical") {
         if (!Tabmix.isVersion(480) && aEvent.axis == aEvent.HORIZONTAL_AXIS) {
           return;
@@ -1127,8 +1130,6 @@ var TMP_eventListener = {
           tabStrip._prevMouseScrolls.shift();
         tabStrip._prevMouseScrolls.push(isVertical);
       }
-      aEvent.stopPropagation();
-      aEvent.preventDefault();
     }
   },
 
