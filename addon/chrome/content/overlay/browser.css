@@ -15,8 +15,8 @@ vbox[shortcutsLabels="true"] {
 */
 
 /* use both selected and not selected to override specific rules from other extensions */
-.tabbrowser-tabs[closebuttons="noclose"] > .tabbrowser-tab:not([selected="true"]) .tab-close-button,
-.tabbrowser-tabs[closebuttons="noclose"] > .tabbrowser-tab[selected="true"] .tab-close-button {
+#tabbrowser-tabs[closebuttons="noclose"] > .tabbrowser-tab:not([selected="true"]) .tab-close-button,
+#tabbrowser-tabs[closebuttons="noclose"] > .tabbrowser-tab[selected="true"] .tab-close-button {
   display: none !important;
 }
 
@@ -24,87 +24,87 @@ vbox[shortcutsLabels="true"] {
   display: none !important;
 }
 
-.tabbrowser-tabs[favhideclose="true"] > .tabbrowser-tab[faviconized="true"] .tab-close-button {
+#tabbrowser-tabs[favhideclose="true"] > .tabbrowser-tab[faviconized="true"] .tab-close-button {
    display: none !important;
 }
 
-.tabbrowser-tabs:not([favhideclose="true"])[closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
-.tabbrowser-tabs:not([favhideclose="true"])[closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
+#tabbrowser-tabs:not([favhideclose="true"])[closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
+#tabbrowser-tabs:not([favhideclose="true"])[closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
   display: -moz-box !important;
 }
 
-.tabbrowser-tabs[favhideclose="true"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
-.tabbrowser-tabs[favhideclose="true"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
+#tabbrowser-tabs[favhideclose="true"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
+#tabbrowser-tabs[favhideclose="true"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
   display: -moz-box !important;
 }
 
-.tabbrowser-tabs[closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button,
-.tabbrowser-tabs[closebuttons-hover="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button {
+#tabbrowser-tabs[closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button,
+#tabbrowser-tabs[closebuttons-hover="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button {
   display: -moz-box !important;
 }
 
 /* button on the left side */
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon,
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon {
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon {
   -moz-box-ordinal-group: 1 !important;
 }
 
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons="activetab"] > .tabbrowser-tab[selected="true"] > .tab-stack > .tab-content > .tab-icon,
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-close-button,
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons="activetab"] > .tabbrowser-tab[selected="true"] > .tab-stack > .tab-content > .tab-icon,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-close-button,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
   -moz-box-ordinal-group: 2 !important;
 }
 
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-sharing-icon-overlay,
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-sharing-icon-overlay {
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-sharing-icon-overlay,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-sharing-icon-overlay {
   -moz-box-ordinal-group: 1 !important;
 }
 
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon-overlay,
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-overlay {
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon-overlay,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-overlay {
   -moz-box-ordinal-group: 1 !important;
 }
 
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-label-container,
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label-container,
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-label,
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label {
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-label-container,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label-container,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-label,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label {
   -moz-box-ordinal-group: 3 !important;
   pointer-events: none;
 }
 
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon-sound,
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-sound {
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon-sound,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-sound {
   -moz-box-ordinal-group: 3 !important;
 }
 
-.tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] > .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button) {
+#tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] > .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button) {
   -moz-box-ordinal-group: 5 !important;
 }
 
-.tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button):not(.tab-icon-sound):not(.tab-label):not(.tab-label-container):not(label) {
+#tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button):not(.tab-icon-sound):not(.tab-label):not(.tab-label-container):not(label) {
   -moz-box-ordinal-group: 1;
 }
 
-.tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label-container,
-.tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label {
+#tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label-container,
+#tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label {
   -moz-box-ordinal-group: 2;
 }
 
-.tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-sound {
+#tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-sound {
   -moz-box-ordinal-group: 3;
 }
 
-.tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > label {
+#tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > label {
   -moz-box-ordinal-group: 4;
 }
 
-.tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
+#tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
   -moz-box-ordinal-group: 5;
 }
 
-.tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab[selected="true"] > .tab-stack > .tab-content > .tab-close-button,
-.tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab[selected="true"] > .tab-stack > .tab-content > .tab-close-button,
+#tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
   direction: rtl;
   -moz-box-ordinal-group: 0 !important;
 }
@@ -120,11 +120,11 @@ vbox[shortcutsLabels="true"] {
   -moz-binding: url("chrome://tabmixplus/content/tab/scrollbox.xml#tabmix-right-scrollBox") !important;
 }
 
-.tabbrowser-tabs {
+#tabbrowser-tabs {
   -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tabs") !important;
 }
 
-.tabbrowser-tabs > .tabbrowser-arrowscrollbox {
+#tabbrowser-tabs > .tabbrowser-arrowscrollbox {
   -moz-binding: url("chrome://tabmixplus/content/tab/scrollbox.xml#tabmix-arrowscrollbox-clicktoscroll") !important;
 }
 
@@ -136,8 +136,8 @@ vbox[shortcutsLabels="true"] {
  -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabbrowser-close-tab-button")!important;
 }
 
-.tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-up,
-.tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-down {
+#tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-up,
+#tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-down {
   visibility: collapse !important;
 }
 
@@ -227,10 +227,10 @@ so display: none !important; does not hide the button */
  When the tabbar is in display:block hiding this items on a tab collapses the
  height when there is no close button on the tab
 */
-.tabbrowser-tabs[flowing=multibar] .tab-throbber:not([fadein]):not([pinned]),
-.tabbrowser-tabs[flowing=multibar] .tab-label:not([fadein]):not([pinned]),
-.tabbrowser-tabs[flowing=multibar] .tab-icon-image:not([fadein]):not([pinned]),
-.tabbrowser-tabs[flowing=multibar] .tab-close-button:not([fadein]):not([pinned]) {
+#tabbrowser-tabs[flowing=multibar] .tab-throbber:not([fadein]):not([pinned]),
+#tabbrowser-tabs[flowing=multibar] .tab-label:not([fadein]):not([pinned]),
+#tabbrowser-tabs[flowing=multibar] .tab-icon-image:not([fadein]):not([pinned]),
+#tabbrowser-tabs[flowing=multibar] .tab-close-button:not([fadein]):not([pinned]) {
   display: -moz-box !important;
   visibility: collapse !important;
   width: 0 !important;
@@ -261,7 +261,7 @@ so display: none !important; does not hide the button */
   display: none;
 }
 
-.tabbrowser-tabs[tabmix_progressMeter] .tabbrowser-tab:not([pinned])[busy] > .tab-stack > .tab-progress-container > .tab-progress[value] {
+#tabbrowser-tabs[tabmix_progressMeter] .tabbrowser-tab:not([pinned])[busy] > .tab-stack > .tab-progress-container > .tab-progress[value] {
   display: -moz-box;
 }
 
@@ -283,12 +283,12 @@ so display: none !important; does not hide the button */
 }
 
 /* :::: widthFitTitle :::: */
-.tabbrowser-tabs[orient="horizontal"][widthFitTitle] > .tabbrowser-tab:not([pinned]) {
+#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > .tabbrowser-tab:not([pinned]) {
   -moz-box-flex: 0 !important;
   width: auto !important;
 }
 
-.tabbrowser-tabs[orient="horizontal"]:not([widthFitTitle]) > .tabbrowser-tab:not([pinned]) {
+#tabbrowser-tabs[orient="horizontal"]:not([widthFitTitle]) > .tabbrowser-tab:not([pinned]) {
   -moz-box-flex: 100 !important;
   width: 0 !important;
 }
@@ -313,13 +313,13 @@ so display: none !important; does not hide the button */
 
 /* for the case user drag background tab
    when selectTabOnMouseDown is false, Firefox 17.0+ */
-.tabbrowser-tabs[movingBackgroundTab] > .tabbrowser-tab[dragged] {
+#tabbrowser-tabs[movingBackgroundTab] > .tabbrowser-tab[dragged] {
   position: relative;
   z-index: 3;
   pointer-events: none; /* avoid blocking dragover events on scroll buttons */
 }
 
-.tabbrowser-tabs[movingBackgroundTab] > .tabbrowser-tab[fadein]:not([dragged]) {
+#tabbrowser-tabs[movingBackgroundTab] > .tabbrowser-tab[fadein]:not([dragged]) {
   transition: transform 200ms ease-out;
 }
 

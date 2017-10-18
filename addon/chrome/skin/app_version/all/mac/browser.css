@@ -46,18 +46,18 @@
   background-image: linear-gradient(rgb(232, 232, 232), rgb(211, 211, 211));
 }
 
-.tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
+#tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;
 }
 
 /* for mac - look in pinstripe/browser/browser.css */
-.tabbrowser-tabs > .tabbrowser-tab > * > .tab-progress-container > .tab-progress:not([selected="true"]),
-.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-icon-image:not([selected="true"]),
-.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-protect-icon:not([selected="true"]),
-.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-lock-icon:not([selected="true"]),
-.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-reload-icon:not([selected="true"]),
-.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-label-container > .tab-label:not([selected="true"]):-moz-lwtheme,
-.tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]):-moz-lwtheme {
+#tabbrowser-tabs > .tabbrowser-tab > * > .tab-progress-container > .tab-progress:not([selected="true"]),
+#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-icon-image:not([selected="true"]),
+#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-protect-icon:not([selected="true"]),
+#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-lock-icon:not([selected="true"]),
+#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-reload-icon:not([selected="true"]),
+#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-label-container > .tab-label:not([selected="true"]):-moz-lwtheme,
+#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]):-moz-lwtheme {
   opacity: .8;
 }
 

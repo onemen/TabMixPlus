@@ -9,57 +9,57 @@
 **/
 
 /* :::: For current, unloaded, unread and other tab styles :::: */
-.tabbrowser-tabs[tabmix_currentStyle~="bold"] >
+#tabbrowser-tabs[tabmix_currentStyle~="bold"] >
     .tabbrowser-tab[visuallyselected="true"] .tab-text,
-.tabbrowser-tabs[tabmix_otherStyle~="bold"] >
+#tabbrowser-tabs[tabmix_otherStyle~="bold"] >
     .tabbrowser-tab:not([tabmix_tabState]):not([visuallyselected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_unloadedStyle~="bold"] >
+#tabbrowser-tabs[tabmix_unloadedStyle~="bold"] >
     .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"] .tab-text,
-.tabbrowser-tabs[tabmix_unreadStyle~="bold"] >
+#tabbrowser-tabs[tabmix_unreadStyle~="bold"] >
     .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"] .tab-text {
   font-weight: bold !important;
 }
 
-.tabbrowser-tabs[tabmix_currentStyle~="not-bold"] >
+#tabbrowser-tabs[tabmix_currentStyle~="not-bold"] >
     .tabbrowser-tab[visuallyselected="true"] .tab-text,
-.tabbrowser-tabs[tabmix_otherStyle~="not-bold"] >
+#tabbrowser-tabs[tabmix_otherStyle~="not-bold"] >
     .tabbrowser-tab:not([tabmix_tabState]):not([visuallyselected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_unloadedStyle~="not-bold"] >
+#tabbrowser-tabs[tabmix_unloadedStyle~="not-bold"] >
     .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"] .tab-text,
-.tabbrowser-tabs[tabmix_unreadStyle~="not-bold"] >
+#tabbrowser-tabs[tabmix_unreadStyle~="not-bold"] >
     .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"] .tab-text {
   font-weight: normal !important;
 }
 
-.tabbrowser-tabs[tabmix_currentStyle~="italic"] >
+#tabbrowser-tabs[tabmix_currentStyle~="italic"] >
     .tabbrowser-tab[visuallyselected="true"] .tab-text,
-.tabbrowser-tabs[tabmix_otherStyle~="italic"] >
+#tabbrowser-tabs[tabmix_otherStyle~="italic"] >
     .tabbrowser-tab:not([tabmix_tabState]):not([visuallyselected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_unloadedStyle~="italic"] >
+#tabbrowser-tabs[tabmix_unloadedStyle~="italic"] >
     .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"] .tab-text,
-.tabbrowser-tabs[tabmix_unreadStyle~="italic"] >
+#tabbrowser-tabs[tabmix_unreadStyle~="italic"] >
     .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"] .tab-text {
   font-style: italic !important;
 }
 
-.tabbrowser-tabs[tabmix_currentStyle~="not-italic"] >
+#tabbrowser-tabs[tabmix_currentStyle~="not-italic"] >
     .tabbrowser-tab[visuallyselected="true"] .tab-text,
-.tabbrowser-tabs[tabmix_otherStyle~="not-italic"] >
+#tabbrowser-tabs[tabmix_otherStyle~="not-italic"] >
     .tabbrowser-tab:not([tabmix_tabState]):not([visuallyselected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_unloadedStyle~="not-italic"] >
+#tabbrowser-tabs[tabmix_unloadedStyle~="not-italic"] >
     .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"] .tab-text,
-.tabbrowser-tabs[tabmix_unreadStyle~="not-italic"] >
+#tabbrowser-tabs[tabmix_unreadStyle~="not-italic"] >
     .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"] .tab-text {
   font-style: normal !important;
 }
 
-.tabbrowser-tabs[tabmix_currentStyle~="underline"] >
+#tabbrowser-tabs[tabmix_currentStyle~="underline"] >
     .tabbrowser-tab[visuallyselected="true"] .tab-text,
-.tabbrowser-tabs[tabmix_otherStyle~="underline"] >
+#tabbrowser-tabs[tabmix_otherStyle~="underline"] >
     .tabbrowser-tab:not([tabmix_tabState]):not([visuallyselected="true"]) .tab-text,
-.tabbrowser-tabs[tabmix_unloadedStyle~="underline"] >
+#tabbrowser-tabs[tabmix_unloadedStyle~="underline"] >
     .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"] .tab-text,
-.tabbrowser-tabs[tabmix_unreadStyle~="underline"] >
+#tabbrowser-tabs[tabmix_unreadStyle~="underline"] >
     .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"] .tab-text {
   text-decoration: underline !important;
 }

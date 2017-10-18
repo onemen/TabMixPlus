@@ -335,7 +335,7 @@ var TabmixTabbar = {
     if (TabmixSvc.isMac && !Tabmix.isVersion(280)) {
       tabsToolbar.style.setProperty("height", newTabbarHeight + "px", "important");
     }
-    // override fixed height set by theme to .tabbrowser-tabs class
+    // override fixed height set by theme to #tabbrowser-tabs
     if (tabBar.boxObject.height < newTabbarHeight || tabBar.style.getPropertyValue("height")) {
       tabBar.style.setProperty("max-height", newTabbarHeight + "px", "important");
       tabBar.style.setProperty("height", newTabbarHeight + "px", "important");
@@ -1739,10 +1739,10 @@ gTMPprefObserver = {
 
     /** at the moment we move the button over the title - see setCloseButtonMargin
     // move left button that show on hover closer to the tab icon
-    iconRule = '.tabbrowser-tabs[closebuttons-hover="notactivetab"][closebuttons-side="left"] > ' +
+    iconRule = '#tabbrowser-tabs[closebuttons-hover="notactivetab"][closebuttons-side="left"] > ' +
                '.tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"])' +
                ':not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-icon,' +
-               '.tabbrowser-tabs[closebuttons-hover="alltabs"][closebuttons-side="left"] > ' +
+               '#tabbrowser-tabs[closebuttons-hover="alltabs"][closebuttons-side="left"] > ' +
                '.tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"])' +
                ':not([protected])[showbutton=on] .tab-icon {' +
                '-moz-margin-end: %Spx;}'.replace("%S", - parseInt(marginEnd)/2);
@@ -1775,9 +1775,9 @@ gTMPprefObserver = {
       newRule = aRule.replace(/%S/g, "tab-lock-icon").replace("%PX", marginEnd);
       this.insertRule(newRule);
     };
-    iconRule = '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="alltabs"] > ' +
+    iconRule = '#tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="alltabs"] > ' +
                '.tabbrowser-tab:not([pinned]):not([protected])%faviconized% .%S ,' +
-               '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="activetab"] > ' +
+               '#tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="activetab"] > ' +
                '.tabbrowser-tab:not([pinned]):not([protected])[selected="true"]%faviconized% .%S {' +
                '-moz-margin-start: %PX !important;}';
     if ("faviconize" in window) {
@@ -1800,10 +1800,10 @@ gTMPprefObserver = {
 
     // move left button that show on hover over tab title
     icon.style.setProperty("display", "-moz-box", "important");
-    let iconMargin = '.tabbrowser-tabs[closebuttons-hover="notactivetab"][closebuttons-side="left"] > ' +
+    let iconMargin = '#tabbrowser-tabs[closebuttons-hover="notactivetab"][closebuttons-side="left"] > ' +
                      '.tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"])' +
                      ':not([isPermaTab="true"]):not([protected]) .tab-close-button,' +
-                     '.tabbrowser-tabs[closebuttons-hover="alltabs"][closebuttons-side="left"] > ' +
+                     '#tabbrowser-tabs[closebuttons-hover="alltabs"][closebuttons-side="left"] > ' +
                      '.tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"])' +
                      ':not([protected]) .tab-close-button {' +
                      '-moz-margin-start: 0px !important;' +
@@ -1817,11 +1817,11 @@ gTMPprefObserver = {
     let marginEnd = style.getPropertyValue(sMarginEnd);
     let textMarginEnd = parseInt(marginEnd) ? marginEnd : this._marginStart;
     delete this._marginStart;
-    let iconRule = '.tabbrowser-tabs%favhideclose%[closebuttons="noclose"] > ' +
+    let iconRule = '#tabbrowser-tabs%favhideclose%[closebuttons="noclose"] > ' +
         '.tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
-        '.tabbrowser-tabs%favhideclose%[closebuttons-side="left"] > ' +
+        '#tabbrowser-tabs%favhideclose%[closebuttons-side="left"] > ' +
         '.tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
-        '.tabbrowser-tabs%favhideclose%[closebuttons="activetab"]' +
+        '#tabbrowser-tabs%favhideclose%[closebuttons="activetab"]' +
         ':not([closebuttons-hover="notactivetab"])[closebuttons-side="right"] > ' +
         '.tabbrowser-tab%faviconized%:not([pinned]):not([selected="true"]) ' +
         '.tab-label[tabmix="true"],' +
@@ -1893,7 +1893,7 @@ gTMPprefObserver = {
     }
 
     if (Tabmix.isVersion(570) && !TabmixSvc.australis) {
-      newRule = `.tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab {
+      newRule = `#tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab {
         height: ${Tabmix._buttonsHeight}px;
       }`;
       this.insertRule(newRule);
@@ -1918,13 +1918,13 @@ gTMPprefObserver = {
 
     if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 270)) {
       this.insertRule('#tabmixScrollBox{ margin-top: -1px;}');
-      newRule = `#main-window[sizemode="maximized"][tabsontop=true] .tabbrowser-tabs[multibar] > .tabbrowser-tab,
-         #main-window[sizemode="fullscreen"][tabsontop=true] .tabbrowser-tabs[multibar] > .tabbrowser-tab {
+      newRule = `#main-window[sizemode="maximized"][tabsontop=true] #tabbrowser-tabs[multibar] > .tabbrowser-tab,
+         #main-window[sizemode="fullscreen"][tabsontop=true] #tabbrowser-tabs[multibar] > .tabbrowser-tab {
            margin-top: -1px;
          }`;
       this.insertRule(newRule);
-      newRule = `#main-window[sizemode="maximized"][tabsontop=true] .tabbrowser-tabs[multibar],
-         #main-window[sizemode="fullscreen"][tabsontop=true] .tabbrowser-tabs[multibar] {
+      newRule = `#main-window[sizemode="maximized"][tabsontop=true] #tabbrowser-tabs[multibar],
+         #main-window[sizemode="fullscreen"][tabsontop=true] #tabbrowser-tabs[multibar] {
            padding-top: 1px;
          }`;
       this.insertRule(newRule);

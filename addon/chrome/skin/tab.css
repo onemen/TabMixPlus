@@ -7,16 +7,16 @@
 
 @import url("chrome://tabmixplus/skin/general.css");
 
-.tabbrowser-tabs[flowing=multibar][multibar] .tabs-frame .tabs-right {
+#tabbrowser-tabs[flowing=multibar][multibar] .tabs-frame .tabs-right {
   display: none !important;
 }
 
 /*we need to make multirow work on all themes, this should help a bit*/
-.tabbrowser-tabs[flowing=multibar][multibar],
-.tabbrowser-tabs[flowing=multibar][multibar] .tabbrowser-strip,
-.tabbrowser-tabs:not([classic=v3])[flowing=multibar][multibar] .tabbrowser-tab,
-.tabbrowser-tabs[flowing=multibar][multibar] .tabs-left,
-.tabbrowser-tabs[flowing=multibar][multibar] .tabs-right {
+#tabbrowser-tabs[flowing=multibar][multibar],
+#tabbrowser-tabs[flowing=multibar][multibar] .tabbrowser-strip,
+#tabbrowser-tabs:not([classic=v3])[flowing=multibar][multibar] .tabbrowser-tab,
+#tabbrowser-tabs[flowing=multibar][multibar] .tabs-left,
+#tabbrowser-tabs[flowing=multibar][multibar] .tabs-right {
   max-height: none !important;
 }
 
@@ -24,13 +24,13 @@
   height: auto !important;
 }
 
-.tabbrowser-tabs[flowing=multibar][multibar=scrollbar] .tabbrowser-tab[collapsed=true] {
+#tabbrowser-tabs[flowing=multibar][multibar=scrollbar] .tabbrowser-tab[collapsed=true] {
   display: none !important;
 }
 
-.tabbrowser-tabs[flowing=singlebar] .tabs-frame[orient="horizontal"],
-.tabbrowser-tabs[flowing=scrollbutton] .tabs-frame[orient="horizontal"],
-.tabbrowser-tabs[flowing=multibar]:not([multibar]) .tabs-frame[orient="horizontal"] {
+#tabbrowser-tabs[flowing=singlebar] .tabs-frame[orient="horizontal"],
+#tabbrowser-tabs[flowing=scrollbutton] .tabs-frame[orient="horizontal"],
+#tabbrowser-tabs[flowing=multibar]:not([multibar]) .tabs-frame[orient="horizontal"] {
   overflow: hidden !important;
 }
 
@@ -41,17 +41,17 @@
 }
 
 /* some theme align text to center this make all tab align to center in multi-rows*/
-.tabbrowser-tabs[flowing=multibar] {
+#tabbrowser-tabs[flowing=multibar] {
   text-align: start !important;
 }
 
 /* fix background for multi-row*/
-.tabbrowser-tabs[flowing=multibar][backgroundrepeat] {
+#tabbrowser-tabs[flowing=multibar][backgroundrepeat] {
   background-repeat: repeat;
 }
 
 /* For Flowing tabs */
-.tabbrowser-tabs[flowing=multibar] .tabbrowser-tab {
+#tabbrowser-tabs[flowing=multibar] .tabbrowser-tab {
   vertical-align: bottom;
 }
 
@@ -77,15 +77,15 @@
   width: 16px;
 }
 
-.tabbrowser-tabs[tabmix_icons~="autoreload"] .tabbrowser-tab[_reload] .tab-reload-icon ,
-.tabbrowser-tabs[tabmix_icons~="protected"] .tabbrowser-tab[protected] .tab-protect-icon ,
-.tabbrowser-tabs[tabmix_icons~="locked"] .tabbrowser-tab[locked] .tab-lock-icon {
+#tabbrowser-tabs[tabmix_icons~="autoreload"] .tabbrowser-tab[_reload] .tab-reload-icon ,
+#tabbrowser-tabs[tabmix_icons~="protected"] .tabbrowser-tab[protected] .tab-protect-icon ,
+#tabbrowser-tabs[tabmix_icons~="locked"] .tabbrowser-tab[locked] .tab-lock-icon {
   display: -moz-box;
 }
 
-.tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-reload-icon,
-.tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-protect-icon,
-.tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-lock-icon {
+#tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-reload-icon,
+#tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-protect-icon,
+#tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-lock-icon {
   display: none;
 }
 
@@ -174,52 +174,52 @@ toolbar[mode="full"] .tabmix-button[type="menu"] {
  *                                non default theme
 */
 /* Chromifox Extreme */
-.tabbrowser-tabs[tabmix_skin="cfxec"]  > .tabbrowser-tab .tab-close-button {
+#tabbrowser-tabs[tabmix_skin="cfxec"]  > .tabbrowser-tab .tab-close-button {
   display: none !important;
 }
 
 /* Vfox3 */
-.tabbrowser-tabs[tabmix_skin="Vfox3"][multibar] > .tabbrowser-tab {
+#tabbrowser-tabs[tabmix_skin="Vfox3"][multibar] > .tabbrowser-tab {
   height: 24px;
 }
 
 /* Phoenity Aura -  Multi-row tabbar for Phoenity Aura theme */
-.tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab,
-.tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab {
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab,
+#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab {
   height: 22px;
   max-height: 22px;
   margin: 1px 0 1px;
 }
 
-.tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab:not([selected="true"]):hover,
-.tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab:not([selected="true"]):hover {
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab:not([selected="true"]):hover,
+#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab:not([selected="true"]):hover {
   height: 23px;
   max-height: 23px;
   margin: 0 0 1px;
 }
 
-.tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab[selected="true"],
-.tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab[selected="true"] {
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab[selected="true"],
+#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab[selected="true"] {
   height: 24px;
   max-height: 24px;
   margin: 0 0 0;
 }
 
-.tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] .tabs-frame,
-.tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] .tabs-frame {
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] .tabs-frame,
+#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] .tabs-frame {
   margin-top: 2px;
   margin-bottom: 3px;
 }
 
 /* CrystalFox_Qute-BigRedBrent */
-.tabbrowser-tabs[tabmix_skin="CrystalFox"]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > toolbarbutton,
-.tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] .tabbrowser-arrowscrollbox > toolbarbutton {
+#tabbrowser-tabs[tabmix_skin="CrystalFox"]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > toolbarbutton,
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: top;
 }
 
 /* BlackFox_V1-Blue */
-.tabbrowser-tabs[tabmix_skin="BlackFox"]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > toolbarbutton,
-.tabbrowser-tabs[tabmix_skin="BlackFox"][multibar] .tabbrowser-arrowscrollbox > toolbarbutton {
+#tabbrowser-tabs[tabmix_skin="BlackFox"]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > toolbarbutton,
+#tabbrowser-tabs[tabmix_skin="BlackFox"][multibar] .tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: top;
 }
 

@@ -35,7 +35,7 @@ Windows platform
 }
 
 /* for Firefox 57 style */
-.tabbrowser-tabs:not([tabmix_australis="true"]):not([treestyletab-mode="vertical"])
+#tabbrowser-tabs:not([tabmix_australis="true"]):not([treestyletab-mode="vertical"])
     > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
   margin: 1px;
 }

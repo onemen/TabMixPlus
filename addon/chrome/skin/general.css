@@ -64,7 +64,7 @@
 }
 
 /* :::: Space on tab bar :::: */
-.tabbrowser-tabs[tabBarSpace] > .tabbrowser-arrowscrollbox {
+#tabbrowser-tabs[tabBarSpace] > .tabbrowser-arrowscrollbox {
   -moz-margin-start: 0;
   -moz-margin-end: 0;
   -moz-padding-start: 15px;
