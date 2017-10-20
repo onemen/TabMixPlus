@@ -2721,7 +2721,7 @@ TabmixSessionManager = {
       var label = _tab.label;
       if (!Tabmix.isVersion(550)) {
         // replace "Loading..." with the document title (with minimal side-effects)
-        let tabLoadingTitle = gBrowser.mStringBundle.getString("tabs.connecting");
+        let tabLoadingTitle = Tabmix.getString("tabs.connecting");
         if (label == tabLoadingTitle) {
           gBrowser.setTabTitle(_tab);
           [label, _tab.label] = [_tab.label, label];

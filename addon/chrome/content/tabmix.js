@@ -817,7 +817,7 @@ var TMP_eventListener = {
     if (aTab.__SS_lazyData) {
       this.onSSTabRestoring(aTab);
       if (aTab.label == "about:blank") {
-        aTab.label = gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
+        aTab.label = Tabmix.getString("tabs.emptyTabTitle");
         gBrowser._tabAttrModified(aTab, ["label"]);
       }
     }

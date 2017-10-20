@@ -522,7 +522,7 @@ var TabmixContext = {
         let browser = gBrowser.getBrowserForTab(aTab);
         let url = browser.currentURI.spec;
         let docTitle = TMP_Places.getTitleFromBookmark(url, browser.contentTitle, null, aTab);
-        if (!docTitle || docTitle == gBrowser.mStringBundle.getString("tabs.emptyTabTitle"))
+        if (!docTitle || docTitle == Tabmix.getString("tabs.emptyTabTitle"))
           titleNotReady = true;
       }
       Tabmix.setItem("tm-renameTab", "disabled", titleNotReady);

@@ -1708,16 +1708,16 @@ Tabmix.tablib = {
 
       // default to true: if it were false, we wouldn't get this far
       var warnOnClose = {value: true};
-      var bundle = this.mStringBundle;
 
       var message, chkBoxLabel;
       if (shouldPrompt == 1 || numProtected === 0) {
-        if (Tabmix.isVersion(290))
-          message = PluralForm.get(tabsToClose, bundle.getString("tabs.closeWarningMultiple"))
+        if (Tabmix.isVersion(290)) {
+          message = PluralForm.get(tabsToClose, Tabmix.getString("tabs.closeWarningMultiple"))
               .replace("#1", tabsToClose);
-        else
-          message = bundle.getFormattedString("tabs.closeWarningMultipleTabs", [tabsToClose]);
-        chkBoxLabel = shouldPrompt == 1 ? bundle.getString("tabs.closeWarningPromptMe") :
+        } else {
+          message = Tabmix.getFormattedString("tabs.closeWarningMultipleTabs", [tabsToClose]);
+        }
+        chkBoxLabel = shouldPrompt == 1 ? Tabmix.getString("tabs.closeWarningPromptMe") :
           TabmixSvc.getString("window.closeWarning.2");
       } else {
         let messageKey = "protectedtabs.closeWarning.";
@@ -1727,13 +1727,13 @@ Tabmix.tablib = {
         chkBoxLabel = TabmixSvc.getString(chkBoxKey);
       }
 
-      var buttonLabel = shouldPrompt == 1 ? bundle.getString("tabs.closeButtonMultiple") :
+      var buttonLabel = shouldPrompt == 1 ? Tabmix.getString("tabs.closeButtonMultiple") :
         TabmixSvc.getString("closeWindow.label");
 
       window.focus();
       var promptService = Services.prompt;
       var buttonPressed = promptService.confirmEx(window,
-        bundle.getString("tabs.closeWarningTitle"),
+        Tabmix.getString("tabs.closeWarningTitle"),
         message,
         (promptService.BUTTON_TITLE_IS_STRING * promptService.BUTTON_POS_0) +
         (promptService.BUTTON_TITLE_CANCEL * promptService.BUTTON_POS_1),
@@ -1823,10 +1823,10 @@ Tabmix.tablib = {
   get labels() {
     delete this.labels;
     this.labels = [
-      gBrowser.mStringBundle.getString("tabs.emptyTabTitle"),
+      Tabmix.getString("tabs.emptyTabTitle"),
     ];
     if (!Tabmix.isVersion(550)) {
-      this.labels.push(gBrowser.mStringBundle.getString("tabs.connecting"));
+      this.labels.push(Tabmix.getString("tabs.connecting"));
     }
     return this.labels;
   },
@@ -2037,6 +2037,20 @@ Tabmix.tablib = {
   }
 
 }; // end Tabmix.tablib
+
+// Firefox 58 - Bug 1409784 - Remove mStringBundle from tabbrowser binding
+// and expose gTabBrowserBundle instead
+XPCOMUtils.defineLazyGetter(Tabmix, "getString", () => {
+  return typeof gTabBrowserBundle == "object" ?
+    gTabBrowserBundle.GetStringFromName.bind(gTabBrowserBundle) :
+    gBrowser.mStringBundle.getString.bind(gBrowser.mStringBundle);
+});
+
+XPCOMUtils.defineLazyGetter(Tabmix, "getFormattedString", () => {
+  return typeof gTabBrowserBundle == "object" ?
+    gTabBrowserBundle.formatStringFromName.bind(gTabBrowserBundle) :
+    gBrowser.mStringBundle.getFormattedString.bind(gBrowser.mStringBundle);
+});
 
 Tabmix.isNewTabUrls = function Tabmix_isNewTabUrls(aUrl) {
   return this.newTabUrls.indexOf(aUrl) > -1;

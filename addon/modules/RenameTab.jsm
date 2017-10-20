@@ -35,7 +35,7 @@ this.RenameTab = {
       docTitle, null, aTab);
     if (!this.data.docTitle)
       this.data.docTitle = this.window.isBlankPageURL(this.data.url) ?
-        gBrowser.mStringBundle.getString("tabs.emptyTabTitle") : this.data.url;
+        this.window.Tabmix.getString("tabs.emptyTabTitle") : this.data.url;
     this.data.modified = aTab.getAttribute("label-uri") || null;
     if (this.data.modified == this.data.url || this.data.modified == "*")
       this.data.value = aTab.getAttribute("fixed-label");

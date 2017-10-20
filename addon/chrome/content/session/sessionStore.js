@@ -23,7 +23,7 @@ var TMP_SessionStore = {
     else {
       aUndoItem.title = TMP_Places.getTitleFromBookmark(tabData.url, aUndoItem.title || tabData.title || tabData.url);
       if (aUndoItem.title == TabmixSvc.aboutBlank)
-        aUndoItem.title = gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
+        aUndoItem.title = Tabmix.getString("tabs.emptyTabTitle");
     }
   },
 
@@ -39,7 +39,7 @@ var TMP_SessionStore = {
     let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
     let data = this.getActiveEntryData(tabData);
     if (data.url == TabmixSvc.aboutBlank) {
-      return gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
+      return Tabmix.getString("tabs.emptyTabTitle");
     }
     return data.title || null;
   },
