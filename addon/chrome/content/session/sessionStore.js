@@ -562,8 +562,14 @@ var TMP_ClosedTabs = {
     if (TabmixSessionManager.enableBackup)
       TabmixSessionManager.deleteClosedtabAt(this.count - aIndex);
 
-    var closedTab = this.getClosedTabData.splice(aIndex, 1).shift();
-    TabmixSvc.ss.forgetClosedTab(window, aIndex);
+    let closedTab;
+    if (Tabmix.isVersion(400)) {
+      const closedTabs = TabmixSvc.SessionStore._windows[window.__SSi]._closedTabs;
+      closedTab = TabmixSvc.SessionStore.removeClosedTabData(closedTabs, aIndex);
+    } else {
+      closedTab = this.getClosedTabData.splice(aIndex, 1).shift();
+      TabmixSvc.ss.forgetClosedTab(window, aIndex);
+    }
     this.setButtonDisableState();
     return closedTab;
   },
@@ -629,28 +635,41 @@ var TMP_ClosedTabs = {
       tabToRemove.collapsed = true;
     }
 
+    let createLazyBrowser = Tabmix.isVersion(540) &&
+      Services.prefs.getBoolPref("browser.sessionstore.restore_tabs_lazily") &&
+      Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand") &&
+      !aSelectRestoredTab && !state.pinned;
+
     let userContextId = state.userContextId;
-    let reuseExisting = aBlankTabToReuse &&
+    let reuseExisting = !createLazyBrowser && aBlankTabToReuse &&
         (!Tabmix.isVersion(490) ||
         aBlankTabToReuse.getAttribute("usercontextid") == (userContextId || ""));
+
     let newTab = reuseExisting ? aBlankTabToReuse :
-      gBrowser.addTab("about:blank", {
+      gBrowser.addTab(null, Object.assign({
         skipAnimation: tabToRemove || skipAnimation,
         dontMove: true,
-        userContextId,
-      });
+        createLazyBrowser,
+      }, state));
     if (!reuseExisting && aBlankTabToReuse) {
       gBrowser.removeTab(aBlankTabToReuse, {animate: false});
     }
 
-    newTab.linkedBrowser.stop();
+    if (!createLazyBrowser) {
+      newTab.linkedBrowser.stop();
+    }
     // if tabbar is hidden when there is only one tab and
     // we replace that tab with new one close the current tab fast so the tab bar don't have time to reveals
     if (tabToRemove) {
       gBrowser.removeTab(tabToRemove, {animate: false});
     }
-    // add restored tab to current window
-    TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(state));
+
+    // restore tab content
+    if (Tabmix.isVersion(400)) {
+      TabmixSvc.SessionStore.restoreTab(newTab, state);
+    } else {
+      TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(state));
+    }
 
     if (TMP_TabView.exist("afterUndoCloseTab")) {
       TabView.afterUndoCloseTab();
