@@ -345,7 +345,11 @@ var TMP_eventListener = {
   },
 
   onContentLoaded: function TMP_EL_onContentLoaded() {
-    if (Tabmix.isVersion(570)) {
+    if (Tabmix.isVersion(580)) {
+      let newRule = '.tabbrowser-tab {' +
+        '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tabbrowser-tab-v58") !important;}';
+      gTMPprefObserver.insertRule(newRule);
+    } else if (Tabmix.isVersion(570)) {
       let newRule = '.tabbrowser-tab {' +
         '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tabbrowser-tab-v57") !important;}';
       gTMPprefObserver.insertRule(newRule);
