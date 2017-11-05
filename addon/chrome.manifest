@@ -1,4 +1,5 @@
 content   tabmixplus                 chrome/content/
+content   tabmix-prefs               defaults/preferences/
 resource  tabmixplus                 modules/
 
 locale    tabmixplus   ar            chrome/locale/ar/

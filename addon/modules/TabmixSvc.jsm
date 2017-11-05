@@ -14,6 +14,10 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "SyncedTabs",
   "resource://tabmixplus/SyncedTabs.jsm");
 
+// place holder for load default preferences function
+// eslint-disable-next-line no-unused-vars
+var pref;
+
 var tabStateCache;
 var _versions = {};
 function isVersion(aVersionNo) {
@@ -40,6 +44,39 @@ this.TabmixSvc = {
   aboutBlank: "about:blank",
   aboutNewtab: "about:#".replace("#", "newtab"),
   newtabUrl: "browser.#.url".replace("#", "newtab"),
+
+  // load Tabmix preference to the default branch
+  _defaultPreferencesLoaded: false,
+  loadDefaultPreferences() {
+    if (!isVersion(580) || this._defaultPreferencesLoaded) {
+      return;
+    }
+    this._defaultPreferencesLoaded = true;
+    const prefs = Services.prefs.getDefaultBranch("");
+    pref = function(prefName, prefValue) {
+      switch (prefValue.constructor.name) {
+        case "String":
+          prefs.setCharPref(prefName, prefValue);
+          break;
+        case "Number":
+          prefs.setIntPref(prefName, prefValue);
+          break;
+        case "Boolean":
+          prefs.setBoolPref(prefName, prefValue);
+          break;
+        default:
+          TabmixSvc.console.reportError(`can't set pref ${prefName} to value '${prefValue}'; ` +
+            `it isn't a String, Number, or Boolean`);
+      }
+    };
+    try {
+      const path = "chrome://tabmix-prefs/content/tabmix.js";
+      Services.scriptloader.loadSubScript(path, {});
+    } catch (ex) {
+      TabmixSvc.console.reportError(ex);
+    }
+    pref = null;
+  },
 
   debugMode() {
     return this.prefBranch.prefHasUserValue("enableDebug") &&
