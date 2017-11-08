@@ -62,7 +62,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
         let prefName = replaceLastTab ? "extensions.tabmix.replaceLastTabWith.newtab.url" :
           TabmixSvc.newtabUrl;
         try {
-          url = Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
+          url = TabmixSvc.getStringPref(prefName);
           if (newTabUrl == "about:privatebrowsing" && url == TabmixSvc.aboutNewtab)
             url = "about:privatebrowsing";
         } catch (ex) {

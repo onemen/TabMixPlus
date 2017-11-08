@@ -2551,14 +2551,13 @@ gTMPprefObserver = {
     // Changing our preference to use New Tab Page as default starting from Firefox 12
     function _setNewTabUrl(oldPref, newPref, controlPref) {
       if (Services.prefs.prefHasUserValue(oldPref)) {
-        let nsISupportsString = Ci.nsISupportsString;
-        let str = Cc["@mozilla.org/supports-string;1"].createInstance(nsISupportsString);
-        str.data = Services.prefs.getComplexValue(oldPref, nsISupportsString).data;
+        const prefValue = TabmixSvc.getStringPref(oldPref);
         // only update new preference value if the old control preference is New Tab Page
         let control = controlPref === undefined || Tabmix.prefs.prefHasUserValue(controlPref) &&
                       Tabmix.prefs.getIntPref(controlPref) == 4;
-        if (str.data !== "" && control)
-          Services.prefs.setComplexValue(newPref, nsISupportsString, str);
+        if (prefValue !== "" && control) {
+          TabmixSvc.setStringPref(newPref, prefValue);
+        }
         Services.prefs.clearUserPref(oldPref);
       }
     }

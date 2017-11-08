@@ -2,7 +2,7 @@
 
 this.EXPORTED_SYMBOLS = ["Shortcuts"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {interfaces: Ci, utils: Cu} = Components;
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("resource://gre/modules/Services.jsm", this);
@@ -550,13 +550,11 @@ KeyConfig = {
 };
 
 function getPref(name) {
-  return Services.prefs.getComplexValue(name, Ci.nsISupportsString).data;
+  return TabmixSvc.getStringPref(name);
 }
 
 function setPref(name, value) {
-  let str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
-  str.data = value;
-  Services.prefs.setComplexValue(name, Ci.nsISupportsString, str);
+  TabmixSvc.setStringPref(name, value);
 }
 
 function getFormattedKey(key) {

@@ -78,6 +78,24 @@ this.TabmixSvc = {
     pref = null;
   },
 
+  getStringPref(prefName) {
+    if (isVersion(580)) {
+      return Services.prefs.getStringPref(prefName);
+    }
+    return Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
+  },
+
+  setStringPref(prefName, prefValue) {
+    if (isVersion(580)) {
+      Services.prefs.setStringPref(prefName, prefValue);
+    } else {
+      let str = Cc["@mozilla.org/supports-string;1"]
+          .createInstance(Ci.nsISupportsString);
+      str.data = prefValue;
+      Services.prefs.setComplexValue(prefName, Ci.nsISupportsString, str);
+    }
+  },
+
   debugMode() {
     return this.prefBranch.prefHasUserValue("enableDebug") &&
       this.prefBranch.getBoolPref("enableDebug");

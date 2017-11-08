@@ -264,7 +264,7 @@ function getPrefByType(prefName) {
   try {
     var fn = PrefFn[Services.prefs.getPrefType(prefName)];
     if (fn == "CharPref")
-      return Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
+      return TabmixSvc.getStringPref(prefName);
 
     return Services.prefs["get" + fn](prefName);
   } catch (ex) {
@@ -291,9 +291,7 @@ function setPrefByType(prefName, newValue, atImport) {
 function setPref(aPref) {
   let fn = PrefFn[aPref.type];
   if (fn == "CharPref") {
-    let str = Cc["@mozilla.org/supports-string;1"].createInstance(Ci.nsISupportsString);
-    str.data = aPref.value;
-    Services.prefs.setComplexValue(aPref.name, Ci.nsISupportsString, str);
+    TabmixSvc.setStringPref(aPref.name, aPref.value);
   } else {
     Services.prefs["set" + fn](aPref.name, aPref.value);
   }
