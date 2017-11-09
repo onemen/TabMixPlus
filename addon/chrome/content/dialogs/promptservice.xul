@@ -16,7 +16,7 @@
    ondialogcancel="return prompt_deinit(1);"
    ondialogextra1="return prompt_extra1(2);"
    buttonpack="center"
-   style="-moz-user-focus: ignore;">
+   style="-moz-user-focus: ignore; padding: 8px 10px 10px 8px;">
 
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/dialogs/promptservice.js"/>
