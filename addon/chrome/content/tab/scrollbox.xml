@@ -38,6 +38,9 @@
 
       <constructor>
         <![CDATA[
+          if (Tabmix.isVersion(580)) {
+            gBrowser.tabContainer.mTabstrip = gBrowser.tabContainer.arrowScrollbox;
+          }
           var tabstrip = gBrowser.tabContainer.mTabstrip;
           tabstrip._scrollButtonDownRight = this._scrollButtonDown;
           tabstrip._scrollButtonUpRight = this._scrollButtonUp;

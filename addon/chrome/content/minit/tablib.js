@@ -448,7 +448,7 @@ Tabmix.tablib = {
            this.mTabstrip.resetFirstTabInRow();\
          $&'
       )._replace(
-        /(tabstrip|this.mTabstrip)\._scrollButtonDown\.getBoundingClientRect\(\)\.width/,
+        /(arrowScrollbox|tabstrip|this.mTabstrip)\._scrollButtonDown\.getBoundingClientRect\(\)\.width/,
         'TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 : $&'
       )._replace(
         'if (doPosition)',
