@@ -207,7 +207,7 @@ var TMP_extensionsCompatibility = {
     else if (typeof window.gIeTab == "object")
       Tabmix.extensions.gIeTab = {obj: "gIeTab", folder: "ietab"};
 
-    // prevent faviconize use its own adjustTabstrip
+    // prevent faviconize use its own adjustTabstrip/updateCloseButtons
     // in Firefox 4.0 we check for faviconized tabs in TMP_TabView.firstTab
     if ("faviconize" in window && "override" in window.faviconize) {
       Tabmix.changeCode(TMP_TabView, "TMP_TabView.checkTabs")._replace(

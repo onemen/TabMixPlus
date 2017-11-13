@@ -298,7 +298,7 @@ Tabmix.tablib = {
       'focusAndSelectUrlBar();',
       '{/* see TMP_BrowserOpenTab */}'
     )._replace(
-      'this.tabContainer.adjustTabstrip();',
+      `this.tabContainer.${Tabmix.updateCloseButtons}();`,
       'if (!wasPinned) TabmixTabbar.setFirstTabInRow();\
        $&'
     ).toCode();
@@ -434,7 +434,7 @@ Tabmix.tablib = {
     let tabBar = gBrowser.tabContainer;
     if (!Tabmix.extensions.verticalTabs) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer.handleEvent")._replace(
-        'this.adjustTabstrip',
+        `this.${Tabmix.updateCloseButtons}`,
         'TabmixTabbar._handleResize(); \
          $&'
       ).toCode();
@@ -1781,7 +1781,7 @@ Tabmix.tablib = {
         }
         Tabmix._afterTabduplicated = true;
         let url = aOtherTab.linkedBrowser.currentURI.spec;
-        gBrowser.tabContainer.adjustTabstrip(true, url);
+        gBrowser.tabContainer[Tabmix.updateCloseButtons](true, url);
       }
 
       Tabmix.copyTabData(aOurTab, aOtherTab);

@@ -147,7 +147,7 @@ var TabmixTabbar = {
     }
 
     if (tabBar.mCloseButtons == 5)
-      tabBar.adjustTabstrip(true);
+      tabBar[Tabmix.updateCloseButtons](true);
 
     // show on tabbar
     let tabstripClosebutton = Tabmix.isVersion(310) ?
@@ -1453,11 +1453,11 @@ gTMPprefObserver = {
       }
       case "browser.tabs.tabClipWidth":
         gBrowser.tabContainer.mTabClipWidth = Services.prefs.getIntPref(prefName);
-        gBrowser.tabContainer.adjustTabstrip();
+        gBrowser.tabContainer[Tabmix.updateCloseButtons]();
         break;
       case "extensions.tabmix.keepLastTab":
         Tabmix.tabsUtils._keepLastTab = Services.prefs.getBoolPref(prefName);
-        gBrowser.tabContainer.adjustTabstrip();
+        gBrowser.tabContainer[Tabmix.updateCloseButtons]();
         break;
       case "browser.tabs.closeButtons":
         value = Services.prefs.getIntPref(prefName);
@@ -1488,7 +1488,7 @@ gTMPprefObserver = {
           Services.prefs.setIntPref(prefName, 1);
         } else {
           gBrowser.tabContainer.mCloseButtons = Services.prefs.getIntPref(prefName);
-          gBrowser.tabContainer.adjustTabstrip();
+          gBrowser.tabContainer[Tabmix.updateCloseButtons]();
         }
         break;
       case "extensions.tabmix.tabs.closeButtons.onLeft":
@@ -1514,7 +1514,7 @@ gTMPprefObserver = {
         prefValue = Services.prefs.getBoolPref(prefName);
         Tabmix.tabsUtils.closeButtonsEnabled = prefValue;
         gBrowser.tabContainer.mTabstrip.offsetRatio = prefValue ? 0.70 : 0.50;
-        gBrowser.tabContainer.adjustTabstrip();
+        gBrowser.tabContainer[Tabmix.updateCloseButtons]();
         break;
       case "extensions.tabmix.tabBarPosition":
         if (this.tabBarPositionChanged(Services.prefs.getIntPref(prefName))) {
@@ -2820,7 +2820,7 @@ TabmixProgressListener = {
           if (this.mTabBrowser.tabContainer.getAttribute("closebuttons") == "noclose") {
             let tabsCount = this.mTabBrowser.visibleTabs.length;
             if (tabsCount == 1)
-              this.mTabBrowser.tabContainer.adjustTabstrip(true, url);
+              this.mTabBrowser.tabContainer[Tabmix.updateCloseButtons](true, url);
           }
           if (tab.hasAttribute("tabmix_bookmarkId"))
             TMP_Places.setTabTitle(tab, url);
@@ -2847,7 +2847,7 @@ TabmixProgressListener = {
 
         let tabsCount = this.mTabBrowser.visibleTabs.length;
         if (tabsCount == 1)
-          this.mTabBrowser.tabContainer.adjustTabstrip(true);
+          this.mTabBrowser.tabContainer[Tabmix.updateCloseButtons](true);
         tab.removeAttribute("tab-progress");
         if (!isBlankPageURL(uri) && uri.indexOf("newTab.xul") == -1) {
           aBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");

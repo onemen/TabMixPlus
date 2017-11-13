@@ -811,10 +811,10 @@ Tabmix.onContentLoaded = {
     }
 
     // we can't use TabPinned.
-    // gBrowser.pinTab call adjustTabstrip that call updateScrollStatus
+    // gBrowser.pinTab call adjustTabstrip/_updateCloseButtons that call updateScrollStatus
     // before it dispatch TabPinned event.
     Tabmix.changeCode(gBrowser, "gBrowser.pinTab")._replace(
-      'this.tabContainer.adjustTabstrip();',
+      `this.tabContainer.${Tabmix.updateCloseButtons}();`,
       '  if (TabmixTabbar.widthFitTitle && aTab.hasAttribute("width"))' +
       '    aTab.removeAttribute("width");' +
       '  if (Tabmix.prefs.getBoolPref("lockAppTabs") &&' +
@@ -822,7 +822,7 @@ Tabmix.onContentLoaded = {
       '    this.lockTab(aTab);' +
       '    aTab.setAttribute("_lockedAppTabs", "true");' +
       '  }' +
-      '  this.tabContainer.adjustTabstrip(true);' +
+      `  this.tabContainer.${Tabmix.updateCloseButtons}(true);` +
       '  TabmixTabbar.updateScrollStatus();' +
       '  TabmixTabbar.updateBeforeAndAfter();'
     ).toCode();

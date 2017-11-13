@@ -296,7 +296,8 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   TMP_extensionsCompatibility.preInit();
 };
 
-Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollStatus, aUrl) {
+Tabmix.updateCloseButtons = Tabmix.isVersion(580) ? "_updateCloseButtons" : "adjustTabstrip";
+Tabmix._updateCloseButtons = function tabContainer_updateCloseButtons(skipUpdateScrollStatus, aUrl) {
   // modes for close button on tabs - extensions.tabmix.tabs.closeButtons
   // 1 - alltabs    = close buttons on all tabs
   // 2 - hovertab   = close buttons on hover tab
@@ -332,7 +333,7 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
     case 5:
       this.removeAttribute("closebuttons-hover");
       if (Tabmix.isVersion(550)) {
-        this.tabmix_adjustTabstrip();
+        this.tabmix_updateCloseButtons();
       } else if (tabsCount < 3) {
         this.setAttribute("closebuttons", "alltabs");
       } else {
