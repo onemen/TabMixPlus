@@ -49,7 +49,7 @@ var TMP_LastTab = {
 
     this.TabList = document.getElementById("lasttabTabList");
 
-    let tabBox = gBrowser.mTabBox;
+    const tabBox = Tabmix.isVersion(590) ? gBrowser.tabbox : gBrowser.mTabBox;
     let els = Cc["@mozilla.org/eventlistenerservice;1"]
         .getService(Ci.nsIEventListenerService);
     if (Tabmix.isVersion(320, 270)) {
@@ -81,7 +81,7 @@ var TMP_LastTab = {
     if (!this._inited)
       return;
 
-    let tabBox = gBrowser.mTabBox;
+    const tabBox = Tabmix.isVersion(590) ? gBrowser.tabbox : gBrowser.mTabBox;
     let els = Cc["@mozilla.org/eventlistenerservice;1"]
         .getService(Ci.nsIEventListenerService);
     els.removeSystemEventListener(tabBox._eventNode, "keydown", this, false);
@@ -274,7 +274,8 @@ var TMP_LastTab = {
       if (this.TabListLock)
         this.TabList.hidePopup();
 
-      gBrowser.mTabBox.handleEvent(event);
+      const tabBox = Tabmix.isVersion(590) ? gBrowser.tabbox : gBrowser.mTabBox;
+      tabBox.handleEvent(event);
     }
   },
 
