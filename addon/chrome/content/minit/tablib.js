@@ -880,7 +880,7 @@ Tabmix.tablib = {
     ).toCode();
 
     Tabmix.changeCode(window, "goQuitApplication")._replace(
-      'var appStartup',
+      Tabmix.isVersion(590) ? 'Services.startup.quit' : 'var appStartup',
       'let closedByToolkit = Tabmix.callerTrace("toolkitCloseallOnUnload");' +
       'if (!TabmixSessionManager.canQuitApplication(closedByToolkit))' +
       '  return false;' +
