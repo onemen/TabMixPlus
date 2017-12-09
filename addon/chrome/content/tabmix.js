@@ -54,6 +54,11 @@ Tabmix.beforeDelayedStartup = function() {
 
 // after TabmixSessionManager and SessionStore initialized
 Tabmix.sessionInitialized = function() {
+  if (Tabmix.fixMultibarRowHeight) {
+    delete Tabmix._fixMultibarRowHeight;
+    TabmixTabbar._heights = [];
+    Tabmix.tabsUtils.updateVerticalTabStrip(true);
+  }
   // Let EmbeddedWebExtension know we're done.
   if (this.firstWindowInSession && TabmixSvc.sm.deferredInitialized) {
     TabmixSvc.sm.deferredInitialized.resolve();

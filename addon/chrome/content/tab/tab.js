@@ -293,6 +293,12 @@ var TabmixTabbar = {
         if (tabBar.getAttribute("multibar") == "scrollbar") {
           // We can get here if we switch to different tabs position while in multibar
           let rowHeight = height / Tabmix.tabsUtils.lastTabRowNumber;
+          // in Firefox 57, when SessionStore open many tabs we can get wrong
+          // height from tabstripInnerbox.
+          // we will check this flag in Tabmix.sessionInitialized
+          if (rowHeight < Tabmix._buttonsHeight) {
+            Tabmix.fixMultibarRowHeight = true;
+          }
           newHeight = rowHeight * aRows;
         } else {
           newHeight = height;
