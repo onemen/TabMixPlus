@@ -14,6 +14,7 @@
 
   <script type="application/javascript" src="preferencesOverlay.js"/>
   <script type="application/javascript">
+    gTabMix_preferencesOverlay.addAllPreferences();
     window.addEventListener("load", function TMP_onLoad_preverenceOverlay(aEvent) {
       aEvent.currentTarget.removeEventListener("load", TMP_onLoad_preverenceOverlay, true);
       gTabMix_preferencesOverlay.incontentInit();
@@ -31,10 +32,10 @@
       <preference id="extensions.tabmix.singleWindow"
                   name="extensions.tabmix.singleWindow"              type="bool"
                   onchange="gTabMix_preferencesOverlay.setSingleWindowUI();"/>
-      <preference id="tabmix.sm"
+      <preference id="extensions.tabmix.sessions.manager"
                   name="extensions.tabmix.sessions.manager"          type="bool"
                   onchange="gTabMix_preferencesOverlay.onStartupPrefChanged();"/>
-      <preference id="tabmix.cr"
+      <preference id="extensions.tabmix.sessions.crashRecovery"
                   name="extensions.tabmix.sessions.crashRecovery"    type="bool"
                   onchange="gTabMix_preferencesOverlay.onStartupPrefChanged();"/>
     </preferences>

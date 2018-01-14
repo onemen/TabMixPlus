@@ -19,10 +19,10 @@
   <prefpane id="paneMain">
 
     <preferences id="mainPreferences">
-      <preference id="tabmix.sm"
+      <preference id="extensions.tabmix.sessions.manager"
                   name="extensions.tabmix.sessions.manager"          type="bool"
                   onchange="gTabMix_preferencesOverlay.onStartupPrefChanged();"/>
-      <preference id="tabmix.cr"
+      <preference id="extensions.tabmix.sessions.crashRecovery"
                   name="extensions.tabmix.sessions.crashRecovery"    type="bool"
                   onchange="gTabMix_preferencesOverlay.onStartupPrefChanged();"/>
     </preferences>
