@@ -352,7 +352,11 @@ Tabmix.tablib = {
       '$&\
        var urlTitle, title = Tabmix.tablib.getTabTitle(aTab, browser.currentURI.spec, title);'
     )._replace(
-      'title = textToSubURI.unEscapeNonAsciiURI(characterSet, title);',
+      /title = title\.substring\(0, 500\).*;/,
+      '$&\
+      urlTitle = title;', {check: Tabmix.isVersion(600)}
+    )._replace(
+      'textToSubURI.unEscapeNonAsciiURI(characterSet, title);',
       '$&\
       urlTitle = title;'
     )._replace(
