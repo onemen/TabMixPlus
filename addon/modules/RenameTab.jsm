@@ -140,7 +140,7 @@ this.RenameTab = {
 
   handleEvent(aEvent) {
     if (aEvent.type == "keypress" &&
-         aEvent.keyCode == Components.interfaces.nsIDOMKeyEvent.DOM_VK_RETURN &&
+         aEvent.keyCode == aEvent.DOM_VK_RETURN &&
          aEvent.target.localName != "button")
       this.update();
   },

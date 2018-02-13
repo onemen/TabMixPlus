@@ -141,17 +141,16 @@
               .join(",").replace("ctrl", "control");
 
           if (!key.modifiers) {
-            let ns = Ci.nsIDOMKeyEvent;
             // Return and Esc blur the edit box
-            if (event.keyCode == ns.DOM_VK_RETURN ||
-                event.keyCode == ns.DOM_VK_ESCAPE) {
+            if (event.keyCode == event.DOM_VK_RETURN ||
+                event.keyCode == event.DOM_VK_ESCAPE) {
               this.editBox.blur();
               return;
             }
 
             // Delete and Backspace disable the key
-            if (event.keyCode == ns.DOM_VK_DELETE ||
-                event.keyCode == ns.DOM_VK_BACK_SPACE) {
+            if (event.keyCode == event.DOM_VK_DELETE ||
+                event.keyCode == event.DOM_VK_BACK_SPACE) {
               this.disableKey();
               return;
             }
@@ -161,7 +160,7 @@
             key.modifiers = key.modifiers.replace(Shortcuts.getPlatformAccel(), "accel");
           }
 
-          if (event.charCode == Ci.nsIDOMKeyEvent.DOM_VK_SPACE)
+          if (event.charCode == event.DOM_VK_SPACE)
             key.keycode = "VK_SPACE";
           else if (event.charCode)
             key.key = String.fromCharCode(event.charCode).toUpperCase();
@@ -169,8 +168,8 @@
             let eKeyCode = event.keyCode;
             if (eKeyCode == 8)
               key.keycode = "VK_BACK";
-            for (let keycode of Object.keys(Ci.nsIDOMKeyEvent)) {
-              let val = Ci.nsIDOMKeyEvent[keycode];
+            for (let keycode of Object.keys(KeyboardEvent)) {
+              let val = KeyboardEvent[keycode];
               if (val == eKeyCode) {
                 let str = ctrl_w ? "DOM_VK_" : "DOM_";
                 key.keycode = keycode.replace(str, "");

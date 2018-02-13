@@ -2,7 +2,7 @@
 
 this.EXPORTED_SYMBOLS = ["Shortcuts"];
 
-const {interfaces: Ci, utils: Cu} = Components;
+const {utils: Cu} = Components;
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("resource://gre/modules/Services.jsm", this);
@@ -72,6 +72,8 @@ this.Shortcuts = {
     if (this.initialized)
       return;
     this.initialized = true;
+
+    this.KeyboardEvent = Object.keys(aWindow.KeyboardEvent);
 
     // update keys initial value and label
     // get our key labels from shortcutsLabels.xml
@@ -364,9 +366,10 @@ this.Shortcuts = {
       [key.key, key.keycode] = ["", "VK_SPACE"];
     else {
       key.keycode = "VK_" + key.keycode.toUpperCase().replace(/^VK_/, "");
-      if (key.keycode != "VK_BACK" && !(("DOM_" + key.keycode) in Ci.nsIDOMKeyEvent))
-        // not all items in Ci.nsIDOMKeyEvent are valid as keyboard shortcuts
+      if (key.keycode != "VK_BACK" && !this.KeyboardEvent["DOM_" + key.keycode]) {
+        // not all items in KeyboardEvent are valid as keyboard shortcuts
         key.keycode = "";
+      }
     }
     return this.validateKey(key);
   },
