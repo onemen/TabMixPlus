@@ -3890,7 +3890,7 @@ TabmixSessionManager = {
   notifyAboutMissingTabView(showNotification) {
     // show notification when Tabview is missing and the session have hidden tabs
     if (TabmixSvc.isPaleMoon) {
-      let hiddenTabs = gBrowser.tabs.length > gBrowser.visibleTabs.length;
+      let hiddenTabs = gBrowser.tabs.length > Tabmix.visibleTabs.tabs.length;
       showNotification = this._groupCount > 1 && hiddenTabs;
     }
     if (showNotification) {

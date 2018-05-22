@@ -170,7 +170,7 @@ var TabmixTabClickOptions = {
         gBrowser.lockTab(aTab);
         break;
       case 7:
-        Tabmix.tablib.reloadTabs(gBrowser.visibleTabs);
+        Tabmix.tablib.reloadTabs(Tabmix.visibleTabs.tabs);
         break;
       case 8:
         gBrowser.removeAllTabsBut(aTab);
@@ -491,7 +491,7 @@ var TabmixContext = {
 
     //  ---------------- menuseparator ---------------- //
 
-    var tabsCount = gBrowser.visibleTabs.length;
+    var tabsCount = Tabmix.visibleTabs.tabs.length;
     var unpinnedTabsCount = tabsCount - TabmixTabbar._real_numPinnedTabs;
     var unpinnedTabs = unpinnedTabsCount > 0;
 
@@ -893,7 +893,7 @@ var TabmixAllTabs = {
 
     // for firefox 22+ when layout.css.devPixelsPerPx > 1
     // and user middle-click to close last visible tab
-    if (popup.id == "btn_tabslist_menu" && gBrowser.visibleTabs.length == 1) {
+    if (popup.id == "btn_tabslist_menu" && Tabmix.visibleTabs.tabs.length == 1) {
       popup.setAttribute("minheight", popup.boxObject.height);
       popup.setAttribute("minwidth", popup.boxObject.width);
     }
@@ -943,7 +943,7 @@ var TabmixAllTabs = {
         TabSorting.prototype.toString = function() {
           return this.Tab.label.toLowerCase();
         };
-        let visibleTabs = gBrowser.visibleTabs;
+        let visibleTabs = Tabmix.visibleTabs.tabs;
         tabs = new Array(visibleTabs.length);
         for (i = 0; i < visibleTabs.length; i++)
           tabs[i] = new TabSorting(visibleTabs[i], i);
@@ -953,7 +953,7 @@ var TabmixAllTabs = {
         break;
       }
       case 2: {
-        tabs = gBrowser.visibleTabs;
+        tabs = Tabmix.visibleTabs.tabs;
         let addToMenu = side != "right";
         for (let t = 0; t < tabs.length; t++) {
           let tab = tabs[t];

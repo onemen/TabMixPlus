@@ -176,7 +176,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 // this must run before all
 Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   if (typeof tabBrowser == "undefined")
-    tabBrowser = gBrowser;
+    tabBrowser = gBrowser || window._gBrowser;
 
   // return true if all tabs in the window are blank
   tabBrowser.isBlankWindow = function() {
@@ -306,9 +306,8 @@ Tabmix._updateCloseButtons = function tabContainer_updateCloseButtons(skipUpdate
   // 5 - alltabs wider then  = close buttons on all tabs wider then
 
   let oldValue = this.getAttribute("closebuttons");
-  var tabbrowser = this.tabbrowser;
-  var tabs = tabbrowser.visibleTabs;
-  var tabsCount = tabs.length - tabbrowser._removingTabs.length;
+  var tabs = Tabmix.visibleTabs.tabs;
+  var tabsCount = tabs.length - gBrowser._removingTabs.length;
   switch (Tabmix.tabsUtils.closeButtonsEnabled ? this.mCloseButtons : 0) {
     case 0:
       this.removeAttribute("closebuttons-hover");
@@ -355,13 +354,13 @@ Tabmix._updateCloseButtons = function tabContainer_updateCloseButtons(skipUpdate
   if (tabsCount == 1) {
     let tab = this.selectedItem;
     if (!aUrl) {
-      let currentURI = tabbrowser.currentURI;
+      let currentURI = gBrowser.currentURI;
       aUrl = currentURI ? currentURI.spec : null;
     }
     if (Tabmix.tabsUtils._keepLastTab ||
         isBlankPageURL(tab.__newLastTab || null) ||
         (!aUrl || isBlankPageURL(aUrl)) &&
-        tabbrowser.isBlankNotBusyTab(tab)) {
+        gBrowser.isBlankNotBusyTab(tab)) {
       this.setAttribute("closebuttons", "noclose");
       this.removeAttribute("closebuttons-hover");
     }

@@ -38,10 +38,11 @@
 
       <constructor>
         <![CDATA[
+          const _gBrowser = window.gBrowser || window._gBrowser;
           if (Tabmix.isVersion(580)) {
-            gBrowser.tabContainer.mTabstrip = gBrowser.tabContainer.arrowScrollbox;
+            _gBrowser.tabContainer.mTabstrip = _gBrowser.tabContainer.arrowScrollbox;
           }
-          var tabstrip = gBrowser.tabContainer.mTabstrip;
+          var tabstrip = _gBrowser.tabContainer.mTabstrip;
           tabstrip._scrollButtonDownRight = this._scrollButtonDown;
           tabstrip._scrollButtonUpRight = this._scrollButtonUp;
         ]]>

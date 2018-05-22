@@ -708,7 +708,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
        *  other places windows
        */
       Tabmix.changeCode(TMP_Places, "TMP_Places.openGroup")._replace(
-        'var tabs = gBrowser.visibleTabs;',
+        'var openTabs = Tabmix.visibleTabs.tabs;',
         'let TSTOpenGroupBookmarkBehavior = arguments.length > 3 && arguments[3] ||\n' +
         '        TreeStyleTabService.openGroupBookmarkBehavior();\n' +
         '    $&'

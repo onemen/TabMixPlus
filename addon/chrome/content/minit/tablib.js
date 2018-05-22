@@ -521,7 +521,7 @@ Tabmix.tablib = {
       )._replace(
         /(var|let) isEndTab =|faviconize.o_lockTabSizing/,
         '  if (TabmixTabbar.widthFitTitle) {' +
-        '    let tab, tabs = this.tabbrowser.visibleTabs;' +
+        '    let tab, tabs = Tabmix.visibleTabs.tabs;' +
         '    for (let t = aTab._tPos+1, l = this.childNodes.length; t < l; t++) {' +
         '      if (tabs.indexOf(this.childNodes[t]) > -1) {' +
         '        tab = this.childNodes[t];' +
@@ -533,7 +533,7 @@ Tabmix.tablib = {
         '      tab.style.setProperty("width", tabWidth, "important");' +
         '      tab.removeAttribute("width");' +
         '      this._hasTabTempWidth = true;' +
-        '      this.tabbrowser.addEventListener("mousemove", this, false);' +
+        '      gBrowser.addEventListener("mousemove", this, false);' +
         '      window.addEventListener("mouseout", this, false);' +
         '    }' +
         '    return;' +
@@ -560,7 +560,7 @@ Tabmix.tablib = {
         /(})(\)?)$/,
         '  if (this._hasTabTempWidth) {' +
         '    this._hasTabTempWidth = false;' +
-        '    let tabs = this.tabbrowser.visibleTabs;' +
+        '    let tabs = Tabmix.visibleTabs.tabs;' +
         '    for (let i = 0; i < tabs.length; i++)' +
         '      tabs[i].style.width = "";' +
         '  }' +

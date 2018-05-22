@@ -235,7 +235,7 @@ var TMP_Places = {
   // fixed: focus the first tab if "extensions.tabmix.openTabNext" is true
   // fixed: remove "selected" and "tabmix_selectedID" from reuse tab
   openGroup: function TMP_PC_openGroup(bmGroup, bmIds, aWhere) {
-    var openTabs = gBrowser.visibleTabs;
+    var openTabs = Tabmix.visibleTabs.tabs;
 
     var doReplace = (/^tab/).test(aWhere) ? false :
       Tabmix.prefs.getBoolPref("loadBookmarksAndReplace");

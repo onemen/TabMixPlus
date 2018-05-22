@@ -486,7 +486,7 @@ var TabmixTabbar = {
       gBrowser._switcher.visibleTab : tabBar.selectedItem;
     let prev = null, next = null;
     if (!selected.closing) {
-      let visibleTabs = gBrowser.visibleTabs;
+      let visibleTabs = Tabmix.visibleTabs.tabs;
       if (!visibleTabs.length)
         return;
       let selectedIndex = visibleTabs.indexOf(selected);
@@ -507,7 +507,7 @@ var TabmixTabbar = {
     if (this._rowHeight && this._rowHeight[tabsPosition])
       return this._rowHeight[tabsPosition];
 
-    var tabs = gBrowser.visibleTabs;
+    var tabs = Tabmix.visibleTabs.tabs;
 
     var firstTab = tabs[0];
     var lastTab = Tabmix.visibleTabs.last;
@@ -617,7 +617,8 @@ Tabmix.tabsUtils = {
 
   get tabBar() {
     delete this.tabBar;
-    return (this.tabBar = gBrowser.tabContainer);
+    const _gBrowser = window.gBrowser || window._gBrowser;
+    return (this.tabBar = _gBrowser.tabContainer);
   },
 
   get tabstripInnerbox() {
@@ -655,11 +656,10 @@ Tabmix.tabsUtils = {
     }
     this.initialized = true;
 
-    var tabbrowser = this.tabBar.tabbrowser;
     let tab = this.tabBar.firstChild;
 
     XPCOMUtils.defineLazyGetter(Tabmix, "rtl", () => {
-      return window.getComputedStyle(tabbrowser).direction == "rtl";
+      return window.getComputedStyle(this.tabBar).direction == "rtl";
     });
     XPCOMUtils.defineLazyGetter(Tabmix, "ltr", () => !Tabmix.rtl);
 
@@ -709,7 +709,7 @@ Tabmix.tabsUtils = {
     if ("linkedBrowser" in tab)
       Tabmix.tablib.setLoadURIWithFlags(tab.linkedBrowser);
 
-    Tabmix.initialization.run("beforeStartup", tabbrowser, this.tabBar);
+    Tabmix.initialization.run("beforeStartup", gBrowser, this.tabBar);
   },
 
   onUnload() {
@@ -797,7 +797,7 @@ Tabmix.tabsUtils = {
     }
 
     // tabbrowser-tabs constructor reset first tab label to New Tab
-    this.tabBar.tabbrowser.setTabTitle(this.tabBar.firstChild);
+    gBrowser.setTabTitle(this.tabBar.firstChild);
     let position = Tabmix.prefs.getIntPref("newTabButton.position");
     if (position !== 0)
       gTMPprefObserver.changeNewTabButtonSide(position);
@@ -1095,7 +1095,7 @@ Tabmix.tabsUtils = {
       return true;
     // we get here when we are about to go to single row
     // one tab before the last is in the first row and we are closing one tab
-    let tabs = visibleTabs || gBrowser.visibleTabs;
+    let tabs = visibleTabs || Tabmix.visibleTabs.tabs;
     return this.getTabRowNumber(tabs[tabs.length - 2], this.topTabY) == 1;
   },
 
@@ -1220,8 +1220,15 @@ Tabmix.bottomToolbarUtils = {
 };
 
 Tabmix.visibleTabs = {
+  get tabs() {
+    if (Tabmix.isVersion(600)) {
+      return gBrowser.tabContainer._getVisibleTabs();
+    }
+    return gBrowser.visibleTabs;
+  },
+
   get first() {
-    var tabs = gBrowser.tabs;
+    const tabs = gBrowser.tabs;
     for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
       if (!tab.hidden && !tab.closing)
@@ -1232,8 +1239,8 @@ Tabmix.visibleTabs = {
 
   get last() {
     // we only need the last visible tab,
-    // find it directly instead of using gBrowser.tabContainer.visibleTabs
-    var tabs = gBrowser.tabs;
+    // find it directly instead of using gBrowser.tabContainer visibleTabs
+    const tabs = gBrowser.tabs;
     for (let i = tabs.length - 1; i >= 0; i--) {
       let tab = tabs[i];
       if (!tab.hidden && !tab.closing)
@@ -1243,7 +1250,7 @@ Tabmix.visibleTabs = {
   },
 
   previous(aTab) {
-    var tabs = gBrowser.visibleTabs;
+    const tabs = this.tabs;
     var index = tabs.indexOf(aTab);
     if (--index > -1)
       return tabs[index];
@@ -1251,7 +1258,7 @@ Tabmix.visibleTabs = {
   },
 
   next(aTab) {
-    var tabs = gBrowser.visibleTabs;
+    const tabs = this.tabs;
     var index = tabs.indexOf(aTab);
     if (index > -1 && ++index < tabs.length)
       return tabs[index];
@@ -1260,7 +1267,7 @@ Tabmix.visibleTabs = {
 
   indexOf(aTab) {
     if (aTab)
-      return gBrowser.visibleTabs.indexOf(aTab);
+      return this.tabs.indexOf(aTab);
     return -1;
   }
 };

@@ -640,7 +640,7 @@ var TMP_tabDNDObserver = {
           params.triggeringPrincipal = dt.mozSourceNode ?
             dt.mozSourceNode.nodePrincipal : Services.scriptSecurityManager.getSystemPrincipal();
         }
-        gBrowser.tabContainer.tabbrowser.loadTabs(urls, params);
+        gBrowser.loadTabs(urls, params);
       } else if (!replaceCurrentTab) {
         // We're adding a new tab.
         let newTab = gBrowser.loadOneTab(url, {
@@ -824,7 +824,7 @@ var TMP_tabDNDObserver = {
   // get _tPos from group index
   _getDNDIndex(aEvent) {
     var indexInGroup = this.getNewIndex(aEvent);
-    var tabs = gBrowser.visibleTabs;
+    var tabs = Tabmix.visibleTabs.tabs;
     var lastIndex = tabs.length - 1;
     if (indexInGroup < 0 || indexInGroup > lastIndex)
       indexInGroup = lastIndex;
@@ -839,7 +839,7 @@ var TMP_tabDNDObserver = {
     // if no tab is match return gBrowser.tabs.length
     var mX = event.screenX, mY = event.screenY;
     var tabBar = gBrowser.tabContainer;
-    var tabs = gBrowser.visibleTabs;
+    var tabs = Tabmix.visibleTabs.tabs;
     var numTabs = tabs.length;
     if (!tabBar.hasAttribute("multibar")) {
       let i = event.target.localName == "tab" ?
@@ -1228,7 +1228,7 @@ var TMP_TabView = {
 
   getIndexInVisibleTabsFromTab(aTab) {
     if (aTab)
-      return gBrowser.visibleTabs.indexOf(aTab);
+      return Tabmix.visibleTabs.tabs.indexOf(aTab);
     return -1;
   }
 };

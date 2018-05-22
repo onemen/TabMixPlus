@@ -619,8 +619,10 @@ var TMP_eventListener = {
 
     if (Tabmix.isVersion(550)) {
       Tabmix.changeCode(tabBar, `gBrowser.tabContainer.${Tabmix.updateCloseButtons}`)._replace(
-        'this.tabbrowser.visibleTabs[this.tabbrowser._numPinnedTabs];',
-        'TMP_TabView.checkTabs(this.tabbrowser.visibleTabs);'
+        Tabmix.isVersion(600) ?
+          'this._getVisibleTabs()[gBrowser._numPinnedTabs];' :
+          'this.tabbrowser.visibleTabs[this.tabbrowser._numPinnedTabs];',
+        'TMP_TabView.checkTabs(Tabmix.visibleTabs.tabs);'
       ).toCode(false, tabBar, "tabmix_updateCloseButtons");
     }
     Tabmix.setNewFunction(tabBar, Tabmix.updateCloseButtons, Tabmix._updateCloseButtons);
@@ -1274,8 +1276,9 @@ Tabmix.initialization = {
   },
 
   run: function tabmix_initialization_run(aPhase) {
-    if (!this.isValidWindow)
+    if (!this.isValidWindow || Tabmix.isVersion(600) && !window.gBrowser) {
       return null;
+    }
     let result, currentPhase = this[aPhase].id;
     let getObj = function(list) {
       let obj = window;
