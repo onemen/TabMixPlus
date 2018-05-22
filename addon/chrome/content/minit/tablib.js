@@ -804,24 +804,29 @@ Tabmix.tablib = {
     // fix after Bug 606678
     // fix compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
     [fnObj, fnName] = Tabmix.onContentLoaded.getXnotifierFunction("openNewTabWith");
-    // inverse focus of middle/ctrl/meta clicked links
-    // Firefox check for "browser.tabs.loadInBackground" in openLinkIn
-    Tabmix.changeCode(fnObj, fnName)._replace(
-      'openLinkIn(',
-      'var loadInBackground = false;\n' +
-      '  if (aEvent) {\n' +
-      '    if (aEvent.shiftKey)\n' +
-      '      loadInBackground = !loadInBackground;\n' +
-      '    if (getBoolPref("extensions.tabmix.inversefocusLinks")\n' +
-      '        && (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey)))\n' +
-      '      loadInBackground = !loadInBackground;\n' +
-      '  }\n' +
-      '  var where = loadInBackground ? "tabshifted" : "tab";\n' +
-      '  $&'
-    )._replace(
-      'aEvent && aEvent.shiftKey ? "tabshifted" : "tab"',
-      'where'
-    ).toCode();
+
+    // from Firefox 60 openNewTabWith is called with shift argument instead of
+    // event argument.
+    if (!Tabmix.isVersion(600)) {
+      // inverse focus of middle/ctrl/meta clicked links
+      // Firefox check for "browser.tabs.loadInBackground" in openLinkIn
+      Tabmix.changeCode(fnObj, fnName)._replace(
+        'openLinkIn(',
+        'var loadInBackground = false;\n' +
+        '  if (aEvent) {\n' +
+        '    if (aEvent.shiftKey)\n' +
+        '      loadInBackground = !loadInBackground;\n' +
+        '    if (getBoolPref("extensions.tabmix.inversefocusLinks")\n' +
+        '        && (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey)))\n' +
+        '      loadInBackground = !loadInBackground;\n' +
+        '  }\n' +
+        '  var where = loadInBackground ? "tabshifted" : "tab";\n' +
+        '  $&'
+      )._replace(
+        'aEvent && aEvent.shiftKey ? "tabshifted" : "tab"',
+        'where'
+      ).toCode();
+    }
 
     Tabmix.originalFunctions.FillHistoryMenu = window.FillHistoryMenu;
     let fillHistoryMenu = function FillHistoryMenu(aParent) {
