@@ -152,8 +152,9 @@ PlacesUtilsInternal = {
 
       // we enter getURLsForContainerNode into PlacesUIUtils to prevent leaks from PlacesUtils
       Tabmix.changeCode(PlacesUtils, "PlacesUtils.getURLsForContainerNode")._replace(
-        '{uri: child.uri,',
-        '{id: child.itemId, uri: child.uri,', {flags: "g"}
+        'uri: child.uri,',
+        '$&\n          ' +
+        'id: child.itemId,', {flags: "g"}
       )._replace(
         'this.', 'PlacesUtils.', {flags: "g"}
       ).toCode(false, PlacesUIUtils, "tabmix_getURLsForContainerNode");
