@@ -2163,7 +2163,7 @@ gTMPprefObserver = {
     var iconicItems = document.getElementsByAttribute("tmp_iconic", "*");
     setClass(iconicItems);
 
-    iconicItems = gBrowser.tabContextMenu.getElementsByAttribute("tmp_iconic", "*");
+    iconicItems = gBrowser.tabContainer.contextMenu.getElementsByAttribute("tmp_iconic", "*");
     setClass(iconicItems);
   },
 
