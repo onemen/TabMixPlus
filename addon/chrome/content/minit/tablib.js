@@ -414,10 +414,12 @@ Tabmix.tablib = {
        functions from updateDisplay only after _visuallySelected was changed
       */
       Tabmix.updateSwitcher = function(switcher) {
-        switcher.original_updateDisplay = switcher.updateDisplay;
+        if (typeof Tabmix.originalFunctions.switcher_updateDisplay != 'function') {
+          Tabmix.originalFunctions.switcher_updateDisplay = switcher.updateDisplay;
+        }
         switcher.updateDisplay = function() {
           let visibleTab = this.visibleTab;
-          this.original_updateDisplay.apply(this, arguments);
+          Tabmix.originalFunctions.switcher_updateDisplay.apply(this, arguments);
           if (visibleTab !== this.visibleTab) {
             Tabmix.setTabStyle(visibleTab);
             TMP_eventListener.updateDisplay(this.visibleTab);
@@ -426,11 +428,19 @@ Tabmix.tablib = {
         };
       };
 
-      Tabmix.changeCode(gBrowser, "gBrowser._getSwitcher")._replace(
-        'this._switcher = switcher;',
-        'Tabmix.updateSwitcher(switcher);\n' +
-        '$&'
-      ).toCode();
+      if (Tabmix.isVersion(600)) {
+        Tabmix.changeCode(gBrowser, "gBrowser._getSwitcher")._replace(
+          'return this._switcher;',
+          'Tabmix.updateSwitcher(this._switcher);\n    ' +
+          '$&'
+        ).toCode();
+      } else {
+        Tabmix.changeCode(gBrowser, "gBrowser._getSwitcher")._replace(
+          'this._switcher = switcher;',
+          'Tabmix.updateSwitcher(switcher);\n' +
+          '$&'
+        ).toCode();
+      }
     }
   },
 
