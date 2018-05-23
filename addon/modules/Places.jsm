@@ -16,6 +16,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "PluralForm",
 
 XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "OpenInTabsUtils",
+  "resource:///modules/OpenInTabsUtils.jsm");
 /* eslint-enable tabmix/import-globals */
 
 XPCOMUtils.defineLazyModuleGetter(this, "PlacesUIUtils",

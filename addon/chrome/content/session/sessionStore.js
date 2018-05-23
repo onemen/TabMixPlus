@@ -584,8 +584,12 @@ var TMP_ClosedTabs = {
   SSS_restoreAllClosedTabs: function ct_SSS_restoreAllClosedTabs() {
     var closedTabCount = this.count;
     let confirmOpenInTabs = Tabmix.isVersion(510) ? "confirmOpenInTabs" : "_confirmOpenInTabs";
-    if (!PlacesUIUtils[confirmOpenInTabs](closedTabCount))
+    const isConfirmed = Tabmix.isVersion(600) ?
+      OpenInTabsUtils.confirmOpenInTabs(closedTabCount) :
+      PlacesUIUtils[confirmOpenInTabs](closedTabCount);
+    if (!isConfirmed) {
       return;
+    }
 
     this.setButtonDisableState(true);
 
