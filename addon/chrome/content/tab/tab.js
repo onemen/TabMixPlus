@@ -2835,8 +2835,13 @@ TabmixProgressListener = {
             if (tabsCount == 1)
               this.mTabBrowser.tabContainer[Tabmix.updateCloseButtons](true, url);
           }
-          if (tab.hasAttribute("tabmix_bookmarkId"))
-            TMP_Places.setTabTitle(tab, url);
+          if (tab.hasAttribute("tabmix_bookmarkId")) {
+            if (Tabmix.isVersion(600)) {
+              TMP_Places.asyncSetTabTitle(tab, url);
+            } else {
+              TMP_Places.setTabTitle(tab, url);
+            }
+          }
         }
       } else if (aStateFlags & nsIWebProgressListener.STATE_STOP &&
                aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK) {

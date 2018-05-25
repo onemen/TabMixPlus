@@ -309,9 +309,16 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
 
   let tabTitleChanged, boldChanged = {value: false};
   if (pending) {
-    tabTitleChanged = TMP_Places.setTabTitle(aTab);
-    aTab.removeAttribute("visited");
+    if (Tabmix.isVersion(600)) {
+      TMP_Places.asyncSetTabTitle(aTab, aTab.linkedBrowser.currentURI.spec).then(() => {
+        aTab._labelIsInitialTitle = true;
+      });
+    } else {
+      tabTitleChanged = TMP_Places.setTabTitle(aTab);
+      aTab._labelIsInitialTitle = true;
+    }
     aTab.removeAttribute("tabmix_selectedID");
+    aTab.removeAttribute("visited");
   }
   Tabmix.setTabStyle(aTab, boldChanged);
   if (tabTitleChanged || boldChanged.value) {

@@ -321,7 +321,12 @@ this.console = {
     return parent || {};
   },
 
-  reportError(ex = null, msg = "") {
+  reportError(ex = null, msg = "", filter) {
+    if (filter) {
+      if (!ex.message || !ex.message.includes(filter)) {
+        return;
+      }
+    }
     if (ex === null) {
       ex = "reportError was called with null";
     }

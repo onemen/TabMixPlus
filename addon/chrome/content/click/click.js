@@ -525,11 +525,15 @@ var TabmixContext = {
       if (aTab.hasAttribute("busy")) {
         let browser = gBrowser.getBrowserForTab(aTab);
         let url = browser.currentURI.spec;
-        let docTitle = TMP_Places.getTitleFromBookmark(url, browser.contentTitle, null, aTab);
-        if (!docTitle || docTitle == Tabmix.getString("tabs.emptyTabTitle"))
-          titleNotReady = true;
+        TMP_Places.asyncGetTitleFromBookmark(url, browser.contentTitle, null, aTab)
+            .then(docTitle => {
+              if (!docTitle || docTitle == Tabmix.getString("tabs.emptyTabTitle"))
+                titleNotReady = true;
+              Tabmix.setItem("tm-renameTab", "disabled", titleNotReady);
+            });
+      } else {
+        Tabmix.setItem("tm-renameTab", "disabled", titleNotReady);
       }
-      Tabmix.setItem("tm-renameTab", "disabled", titleNotReady);
     }
 
     var protectedTab = aTab.hasAttribute("protected");

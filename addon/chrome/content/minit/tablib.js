@@ -320,15 +320,40 @@ Tabmix.tablib = {
       Tabmix.originalFunctions.gBrowser_blurTab.apply(this, arguments);
     };
 
-    Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
-      'if (!docTitle)',
-      (Tabmix.isVersion(550) ? '' : 'let tab = this.getTabForBrowser(aBrowser);\n') +
-      'if (tab.hasAttribute("tabmix_changed_label"))\
-         docTitle = tab.getAttribute("tabmix_changed_label");\
-       else\
-         docTitle = TMP_Places.getTabTitle(tab, aBrowser.currentURI.spec, docTitle);\
-       $&'
-    ).toCode();
+    if (Tabmix.isVersion(600)) {
+      const $LF = '\n    ';
+      Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
+        'if (!docTitle)',
+        'let titlePromise;' + $LF +
+        'if (tab.hasAttribute("tabmix_changed_label")) {' + $LF +
+        '  titlePromise = Promise.resolve(tab.getAttribute("tabmix_changed_label"));' + $LF +
+        '} else {' + $LF +
+        '  titlePromise = TMP_Places.asyncGetTabTitle(tab, aBrowser.currentURI.spec, docTitle);' + $LF +
+        '}' + $LF +
+        'return titlePromise.then(docTitle => {' + $LF +
+        '$&'
+      )._replace(
+        /(})(\)?)$/,
+        '});\n' +
+        '$1$2'
+      ).toCode(false, gBrowser, "asyncGetWindowTitleForBrowser");
+
+      gBrowser.updateTitlebar = function() {
+        this.asyncGetWindowTitleForBrowser(this.mCurrentBrowser).then(title => {
+          document.title = title;
+        });
+      };
+    } else {
+      Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
+        'if (!docTitle)',
+        (Tabmix.isVersion(550) ? '' : 'let tab = this.getTabForBrowser(aBrowser);\n') +
+        'if (tab.hasAttribute("tabmix_changed_label"))\
+          docTitle = tab.getAttribute("tabmix_changed_label");\
+        else\
+          docTitle = TMP_Places.getTabTitle(tab, aBrowser.currentURI.spec, docTitle);\
+        $&'
+      ).toCode();
+    }
 
     if ("foxiFrame" in window) {
       Tabmix.changeCode(gBrowser, "gBrowser.updateTitlebar")._replace(
@@ -349,8 +374,10 @@ Tabmix.tablib = {
     }
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
       Tabmix.isVersion(550) ? 'let isContentTitle = false;' : 'var title = browser.contentTitle;',
-      '$&\
-       var urlTitle, title = Tabmix.tablib.getTabTitle(aTab, browser.currentURI.spec, title);'
+      '$&\n            ' +
+      'var urlTitle;\n            ' +
+      'const titleFromBookmark = Tabmix.tablib.getTabTitle(aTab, browser.currentURI.spec, title);\n            ' +
+      'if (typeof titleFromBookmark == "string") title = titleFromBookmark;'
     )._replace(
       /title = title\.substring\(0, 500\).*;/,
       '$&\
@@ -836,8 +863,9 @@ Tabmix.tablib = {
         let item = aParent.childNodes[i];
         let uri = item.getAttribute("uri");
         let label = item.getAttribute("label");
-        let title = TMP_Places.getTitleFromBookmark(uri, label);
-        Tabmix.setItem(item, "label", title);
+        TMP_Places.asyncGetTitleFromBookmark(uri, label).then(title => {
+          Tabmix.setItem(item, "label", title);
+        });
       }
       return rv;
     };
@@ -1011,13 +1039,14 @@ Tabmix.tablib = {
       let m = undoPopup.childNodes[i];
       let undoItem = undoItems[i];
       if (undoItem && m.hasAttribute("targetURI")) {
-        let otherTabsCount = undoItem.tabs.length - 1;
-        let label = (otherTabsCount === 0) ?
-          menuLabelStringSingleTab : PluralForm.get(otherTabsCount, menuLabelString);
-        TMP_SessionStore.getTitleForClosedWindow(undoItem);
-        let menuLabel = label.replace("#1", undoItem.title)
-            .replace("#2", otherTabsCount);
-        m.setAttribute("label", menuLabel);
+        TMP_SessionStore.asyncGetTabTitleForClosedWindow(undoItem).then(title => {
+          let otherTabsCount = undoItem.tabs.length - 1;
+          let label = (otherTabsCount === 0) ?
+            menuLabelStringSingleTab : PluralForm.get(otherTabsCount, menuLabelString);
+          const menuLabel = label.replace("#1", title)
+              .replace("#2", otherTabsCount);
+          m.setAttribute("label", menuLabel);
+        });
         m.setAttribute("value", i);
         m.fileName = "closedwindow";
         m.addEventListener("click", checkForMiddleClick);
@@ -1836,7 +1865,18 @@ Tabmix.tablib = {
       if (Tabmix.tabsUtils.isElementVisible(tab))
         TMP_Places.currentTab = tab;
     }
-    return TMP_Places.getTabTitle(aTab, url, title);
+
+    if (Tabmix.isVersion(600)) {
+      // try to find bookmark title by id without using async functions
+      const newTitle = TMP_Places.getTabTitle(aTab, url, null, true);
+      if (newTitle) {
+        return newTitle;
+      }
+      TMP_Places.asyncSetTabTitle(aTab, url);
+    } else {
+      return TMP_Places.getTabTitle(aTab, url, title);
+    }
+    return null;
   },
 
   get labels() {

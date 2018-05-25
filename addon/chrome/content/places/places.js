@@ -37,7 +37,7 @@ var TMP_Places = {
     // PlacesCommandHook exist on browser window
     if ("PlacesCommandHook" in window) {
       gBrowser.tabContainer.addEventListener("SSTabRestored", this);
-      if (Tabmix.isVersion(400)) {
+      if (Tabmix.isVersion(400) && !Tabmix.isVersion(600)) {
         if (!Tabmix.originalFunctions.placesBookmarkPage) {
           Tabmix.originalFunctions.placesBookmarkPage = PlacesCommandHook.bookmarkPage;
         }
@@ -57,7 +57,7 @@ var TMP_Places = {
             }
           }
         };
-      } else {
+      } else if (!Tabmix.isVersion(400)) {
         Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
           /(webNav\.document\.)*title \|\| (url|uri)\.spec;/,
           'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), url.spec) || $&'
@@ -109,9 +109,11 @@ var TMP_Places = {
     for (let i = 0; i < aMenuPopup.childNodes.length; i++) {
       let item = aMenuPopup.childNodes[i];
       if ("_placesNode" in item) {
-        let bookMarkName = this.getTitleFromBookmark(item._placesNode.uri);
-        if (bookMarkName)
-          item.setAttribute("label", bookMarkName);
+        const url = item._placesNode.uri;
+        this.asyncGetTitleFromBookmark(url).then(bookMarkName => {
+          if (bookMarkName)
+            item.setAttribute("label", bookMarkName);
+        });
       }
     }
   },
@@ -437,14 +439,16 @@ var TMP_Places = {
     }
   },
 
-  setTabTitle: function TMP_PC_setTabTitle(aTab, aUrl, aID) {
+  setTabTitle: function TMP_PC_setTabTitle(aTab, aUrl, aID, title) {
     if (!aTab || !aTab.parentNode)
       return false;
     if (aID && aID > -1)
       aTab.setAttribute("tabmix_bookmarkId", aID);
     if (!aUrl)
       aUrl = aTab.linkedBrowser.currentURI.spec;
-    let title = this.getTabTitle(aTab, aUrl, aTab.label);
+    if (!title) {
+      title = this.getTabTitle(aTab, aUrl, aTab.label);
+    }
     if (title != aTab.label) {
       aTab.label = title;
       aTab.setAttribute("tabmix_changed_label", title);
@@ -464,14 +468,39 @@ var TMP_Places = {
     return false;
   },
 
-  getTabTitle: function TMP_PC_getTabTitle(aTab, aUrl, title) {
+  asyncSetTabTitle(tab, url, id, title) {
+    if (id && id > -1) {
+      tab.setAttribute("tabmix_bookmarkId", id);
+    }
+    return this.asyncGetTabTitle(tab, url, title).then(newTitle => {
+      if (newTitle && newTitle != tab.label) {
+        this.setTabTitle(tab, url, -1, newTitle);
+      }
+    });
+  },
+
+  getTabTitle: function TMP_PC_getTabTitle(aTab, aUrl, title, byID) {
     if (this.isUserRenameTab(aTab, aUrl))
       return aTab.getAttribute("fixed-label");
 
-    let newTitle = this.getTitleFromBookmark(aUrl, null, -1, aTab);
+    // if the tab is bookmarked we use tabmix_bookmarkId attribute
+    // to get the title without using async functions
+    let newTitle = this.getTitleFromBookmark(aUrl, null, -1, aTab, byID);
     if (!newTitle && aTab.hasAttribute("pending"))
       newTitle = TMP_SessionStore.getTitleFromTabState(aTab);
     return newTitle || title;
+  },
+
+  // rename function to asyncGetTabTitle
+  asyncGetTabTitle(aTab, aUrl, title) {
+    if (this.isUserRenameTab(aTab, aUrl))
+      return Promise.resolve(aTab.getAttribute("fixed-label"));
+
+    return this.asyncGetTitleFromBookmark(aUrl, null, -1, aTab).then(newTitle => {
+      if (!newTitle && aTab.hasAttribute("pending"))
+        newTitle = TMP_SessionStore.getTitleFromTabState(aTab);
+      return newTitle || title;
+    });
   },
 
   get _titlefrombookmark() {
@@ -479,8 +508,12 @@ var TMP_Places = {
     return (this._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark"));
   },
 
-  getTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
-    return this.PlacesUtils.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab);
+  getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, byID) {
+    return this.PlacesUtils.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, byID);
+  },
+
+  asyncGetTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
+    return this.PlacesUtils.asyncGetTitleFromBookmark(aUrl, aTitle, aItemId, aTab);
   },
 
   isUserRenameTab(aTab, aUrl) {
@@ -914,7 +947,11 @@ Tabmix.onContentLoaded = {
       /(})(\)?)$/,
       '  const targetTab = where == "current" ?\n' +
       '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
-      '  w.TMP_Places.setTabTitle(targetTab, url, bookMarkId);\n' +
+      '  if (Tabmix.isVersion(600)) {\n' +
+      '    w.TMP_Places.asyncSetTabTitle(targetTab, url, bookMarkId);\n' +
+      '  } else {\n' +
+      '    w.TMP_Places.setTabTitle(targetTab, url, bookMarkId);\n' +
+      '  }\n' +
       '  if (where == "current") {\n' +
       '    w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);\n' +
       '  }\n' +

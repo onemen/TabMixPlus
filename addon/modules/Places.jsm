@@ -33,6 +33,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
 XPCOMUtils.defineLazyModuleGetter(this,
   "TabmixSvc", "resource://tabmixplus/TabmixSvc.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "AsyncPlacesUtils",
+  "resource://tabmixplus/AsyncPlacesUtils.jsm");
+
 var PlacesUtilsInternal;
 this.TabmixPlacesUtils = Object.freeze({
   init(aWindow) {
@@ -47,8 +50,21 @@ this.TabmixPlacesUtils = Object.freeze({
     return PlacesUtilsInternal.applyCallBackOnUrl(aUrl, aCallBack);
   },
 
-  getTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
-    return PlacesUtilsInternal.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab);
+  getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, byID) {
+    return PlacesUtilsInternal.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, byID);
+  },
+
+  asyncGetTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
+    if (TabmixSvc.version(600)) {
+      return PlacesUtilsInternal.asyncGetTitleFromBookmark(aUrl, aTitle, aItemId, aTab)
+          .catch(err => {
+            TabmixSvc.console.reportError(err, 'Error form asyncGetTitleFromBookmark');
+            return '';
+          });
+    }
+
+    const title = PlacesUtilsInternal.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab);
+    return Promise.resolve(title);
   },
 });
 
@@ -227,7 +243,7 @@ PlacesUtilsInternal = {
     return updateValue();
   },
 
-  getBookmarkTitle(aUrl, aID) {
+  getBookmarkTitle(aUrl, aID, byID) {
     let aItemId = aID.value || -1;
     try {
       if (aItemId > -1) {
@@ -235,13 +251,19 @@ PlacesUtilsInternal = {
         if (_URI && _URI.spec == aUrl)
           return PlacesUtils.bookmarks.getItemTitle(aItemId);
       }
-    } catch (ex) { }
-    try {
-      let uri = Services.io.newURI(aUrl, null, null);
-      aItemId = aID.value = PlacesUtils.getMostRecentBookmarkForURI(uri);
-      if (aItemId > -1)
-        return PlacesUtils.bookmarks.getItemTitle(aItemId);
-    } catch (ex) { }
+    } catch (ex) {
+      TabmixSvc.console.reportError(ex, 'Error function name changed', 'not a function');
+    }
+    if (!byID) {
+      try {
+        let uri = Services.io.newURI(aUrl, null, null);
+        aItemId = aID.value = PlacesUtils.getMostRecentBookmarkForURI(uri);
+        if (aItemId > -1)
+          return PlacesUtils.bookmarks.getItemTitle(aItemId);
+      } catch (ex) {
+        TabmixSvc.console.reportError(ex, 'Error function name changed', 'not a function');
+      }
+    }
     aID.value = null;
     return null;
   },
@@ -264,12 +286,12 @@ PlacesUtilsInternal = {
     return result;
   },
 
-  getTitleFromBookmark: function TMP_getTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
+  getTitleFromBookmark: function TMP_getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, byID) {
     if (!this.titlefrombookmark || !aUrl)
       return aTitle;
 
     var oID = {value: aTab ? aTab.getAttribute("tabmix_bookmarkId") : aItemId};
-    var getTitle = url => this.getBookmarkTitle(url, oID);
+    var getTitle = url => this.getBookmarkTitle(url, oID, byID);
     var title = this.applyCallBackOnUrl(aUrl, getTitle);
     // setItem check if aTab exist and remove the attribute if
     // oID.value is null
@@ -279,5 +301,12 @@ PlacesUtilsInternal = {
     }
 
     return title || aTitle;
+  },
+
+  asyncGetTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
+    if (!this.titlefrombookmark || !aUrl)
+      return Promise.resolve(aTitle);
+
+    return AsyncPlacesUtils.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, Tabmix.gIeTab);
   },
 };
