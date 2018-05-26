@@ -9,22 +9,29 @@
  */
 var TMP_SessionStore = {
   // get title for closed window from bookmark title or user tab title
-  getTitleForClosedWindow: function TMP_ss_getTitleForClosedWindow(aUndoItem) {
+  // this funcion return promise to work with Firefox 60 async bookmarks.fetch
+  asyncGetTabTitleForClosedWindow(aUndoItem) {
     // if user already rename this item wo don't use other title
     if (aUndoItem.renamed)
-      return;
+      return Promise.resolve(aUndoItem.title);
     let selectedTab = aUndoItem.selected && aUndoItem.tabs[aUndoItem.selected - 1];
     if (!selectedTab || !selectedTab.entries || selectedTab.entries.length === 0)
-      return;
+      return Promise.resolve(aUndoItem.title);
     let tabData = this.getActiveEntryData(selectedTab);
     let url = selectedTab.attributes["label-uri"];
     if (url == tabData.url || url == "*")
       aUndoItem.title = selectedTab.attributes["fixed-label"];
     else {
-      aUndoItem.title = TMP_Places.getTitleFromBookmark(tabData.url, aUndoItem.title || tabData.title || tabData.url);
-      if (aUndoItem.title == TabmixSvc.aboutBlank)
-        aUndoItem.title = gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
+      const dataTitle = aUndoItem.title || tabData.title || tabData.url;
+      return TMP_Places.asyncGetTitleFromBookmark(tabData.url, dataTitle)
+          .then(title => {
+            if (title == TabmixSvc.aboutBlank) {
+              title = Tabmix.getString("tabs.emptyTabTitle");
+            }
+            return title;
+          });
     }
+    return Promise.resolve(aUndoItem.title);
   },
 
   // get nsSessionStore active entry data.
@@ -39,7 +46,7 @@ var TMP_SessionStore = {
     let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
     let data = this.getActiveEntryData(tabData);
     if (data.url == TabmixSvc.aboutBlank) {
-      return gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
+      return Tabmix.getString("tabs.emptyTabTitle");
     }
     return data.title || null;
   },
@@ -256,12 +263,13 @@ var TMP_SessionStore = {
    *
    * @returns         tab title - string.
    */
-  _getTitle: function ct_getTitle(aData, aUri, aTitle) {
+  asyncGetTabTitle(aData, aUri, aTitle) {
     var fixedLabelUri = this._getAttribute(aData, "label-uri");
     if (fixedLabelUri == aUri || fixedLabelUri == "*")
-      return this._getAttribute(aData, "fixed-label");
+      return Promise.resolve(this._getAttribute(aData, "fixed-label"));
 
-    return TMP_Places.getTitleFromBookmark(aUri, aTitle, this._getAttribute(aData, "tabmix_bookmarkId"));
+    const itemId = this._getAttribute(aData, "tabmix_bookmarkId");
+    return TMP_Places.asyncGetTitleFromBookmark(aUri, aTitle, itemId);
   },
 
   /**
@@ -330,7 +338,7 @@ var TMP_ClosedTabs = {
   },
 
   getTitle: function ct_getTitle(aTabData, aUri) {
-    return TMP_SessionStore._getTitle(aTabData.state, aUri, aTabData.title);
+    return TMP_SessionStore.asyncGetTabTitle(aTabData.state, aUri, aTabData.title);
   },
 
   /* .......... functions for closedtabs list menu and context menu .......... */
@@ -355,46 +363,64 @@ var TMP_ClosedTabs = {
 
     TabmixAllTabs.beforeCommonList(aPopup, true);
 
+    let dwu, DIRECTION_RTL;
+    if (Tabmix.isVersion(600)) {
+      dwu = window.QueryInterface(Ci.nsIInterfaceRequestor)
+          .getInterface(Ci.nsIDOMWindowUtils);
+      DIRECTION_RTL = Ci.nsIDOMWindowUtils.DIRECTION_RTL;
+    }
+
     // populate menu
     var closedTabs = this.getClosedTabData;
-    var m, ltr = Tabmix.ltr;
-    for (let i = 0; i < closedTabs.length; i++) {
-      m = document.createElement("menuitem");
+    const ltr = Tabmix.ltr;
+    // Grab the title and uri (make the uri friendly text)
+    const asyncUpdateItemLabel = (m, i) => {
       var tabData = closedTabs[i];
-      // Grab the title and uri (make the uri friendly text)
       var url = this.getUrl(tabData);
-      var title = this.getTitle(tabData, url);
-      var _uri = makeURI(url);
-      if (_uri.scheme == "about" && title === "")
-        url = title = "about:blank";
-      else {
-        try {
-          const pathProp = TabmixSvc.version(570) ? "pathQueryRef" : "path";
-          url = _uri.scheme == "about" ? _uri.spec :
-            _uri.scheme + "://" + _uri.hostPort + _uri[pathProp];
-        } catch (e) {
-          url = title;
+      this.getTitle(tabData, url).then(title => {
+        var _uri = makeURI(url);
+        if (_uri.scheme == "about" && title === "")
+          url = title = "about:blank";
+        else {
+          try {
+            const pathProp = TabmixSvc.version(570) ? "pathQueryRef" : "path";
+            url = _uri.scheme == "about" ? _uri.spec :
+              _uri.scheme + "://" + _uri.hostPort + _uri[pathProp];
+          } catch (e) {
+            url = title;
+          }
         }
-      }
-      var label = title ? title : url;
-      let count = "";
-      if (ltr) {
-        count = (i < 9 ? "  " : "") + (i + 1) + ": ";
-        if (i + 1 < 10)
-          m.setAttribute("accesskey", i + 1);
-        else if (i + 1 == 10)
-          m.setAttribute("accesskey", 0);
-      }
-      m.setAttribute("label", count + label);
-      m.setAttribute("tooltiptext", label + "\n" + url);
-      m.setAttribute("statustext", url);
+        var label = title ? title : url;
+        let labelWithCount = label;
+        if (ltr) {
+          if (i + 1 < 10)
+            m.setAttribute("accesskey", i + 1);
+          else if (i + 1 == 10)
+            m.setAttribute("accesskey", 0);
+          if (dwu && dwu.getDirectionFromText(label) == DIRECTION_RTL) {
+            const count = " :" + (i + 1) + (i < 9 ? "  " : "");
+            labelWithCount = label + count;
+          } else {
+            const count = (i < 9 ? "  " : "") + (i + 1) + ": ";
+            labelWithCount = count + label;
+          }
+        }
+        m.setAttribute("label", labelWithCount);
+        m.setAttribute("tooltiptext", label + "\n" + url);
+        m.setAttribute("statustext", url);
 
-      var iconURL = tabData.image;
-      if (iconURL) {
-        if (/^https?:/.test(iconURL))
-          iconURL = "moz-anno:favicon:" + iconURL;
-        m.setAttribute("image", iconURL);
-      }
+        var iconURL = tabData.image;
+        if (iconURL) {
+          if (/^https?:/.test(iconURL))
+            iconURL = "moz-anno:favicon:" + iconURL;
+          m.setAttribute("image", iconURL);
+        }
+      });
+    };
+
+    for (let i = 0; i < closedTabs.length; i++) {
+      const m = document.createElement("menuitem");
+      asyncUpdateItemLabel(m, i);
       m.setAttribute("class", "menuitem-iconic bookmark-item menuitem-with-favicon");
       m.setAttribute("value", i);
       m.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
@@ -411,11 +437,11 @@ var TMP_ClosedTabs = {
 
     const addMenu = this.addMenuItem.bind(this, aPopup);
     // "Keep menu open"
-    m = addMenu("lockedClosedTabsList", TabmixSvc.getString("undoclosetab.keepOpen.label"), -3);
-    m.setAttribute("description", TabmixSvc.getString("undoclosetab.keepOpen.description"));
-    m.setAttribute("closemenu", "none");
+    const mi = addMenu("lockedClosedTabsList", TabmixSvc.getString("undoclosetab.keepOpen.label"), -3);
+    mi.setAttribute("description", TabmixSvc.getString("undoclosetab.keepOpen.description"));
+    mi.setAttribute("closemenu", "none");
     const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
-    m.setAttribute("image", image);
+    mi.setAttribute("image", image);
     // "Clear Closed Tabs List"
     addMenu("clearClosedTabsList", TabmixSvc.getString("undoclosetab.clear.label"), -1, "clearClosedTabs");
     // "Restore All Tabs"
@@ -504,8 +530,9 @@ var TMP_ClosedTabs = {
   addBookmarks: function ct_addBookmarks(index) {
     var tabData = this.getClosedTabData[index];
     var url = this.getUrl(tabData);
-    var title = this.getTitle(tabData, url);
-    PlacesCommandHook.bookmarkLink(PlacesUtils.bookmarksMenuFolderId, url, title);
+    this.getTitle(tabData, url).then(title => {
+      PlacesCommandHook.bookmarkLink(PlacesUtils.bookmarksMenuFolderId, url, title);
+    });
   },
 
   copyTabUrl: function ct_copyTabUrl(index) {
@@ -562,8 +589,14 @@ var TMP_ClosedTabs = {
     if (TabmixSessionManager.enableBackup)
       TabmixSessionManager.deleteClosedtabAt(this.count - aIndex);
 
-    var closedTab = this.getClosedTabData.splice(aIndex, 1).shift();
-    TabmixSvc.ss.forgetClosedTab(window, aIndex);
+    let closedTab;
+    if (Tabmix.isVersion(400)) {
+      const closedTabs = TabmixSvc.SessionStore._windows[window.__SSi]._closedTabs;
+      closedTab = TabmixSvc.SessionStore.removeClosedTabData(closedTabs, aIndex);
+    } else {
+      closedTab = this.getClosedTabData.splice(aIndex, 1).shift();
+      TabmixSvc.ss.forgetClosedTab(window, aIndex);
+    }
     this.setButtonDisableState();
     return closedTab;
   },
@@ -578,8 +611,12 @@ var TMP_ClosedTabs = {
   SSS_restoreAllClosedTabs: function ct_SSS_restoreAllClosedTabs() {
     var closedTabCount = this.count;
     let confirmOpenInTabs = Tabmix.isVersion(510) ? "confirmOpenInTabs" : "_confirmOpenInTabs";
-    if (!PlacesUIUtils[confirmOpenInTabs](closedTabCount))
+    const isConfirmed = Tabmix.isVersion(600) ?
+      OpenInTabsUtils.confirmOpenInTabs(closedTabCount) :
+      PlacesUIUtils[confirmOpenInTabs](closedTabCount);
+    if (!isConfirmed) {
       return;
+    }
 
     this.setButtonDisableState(true);
 
@@ -629,28 +666,41 @@ var TMP_ClosedTabs = {
       tabToRemove.collapsed = true;
     }
 
+    let createLazyBrowser = Tabmix.isVersion(540) &&
+      Services.prefs.getBoolPref("browser.sessionstore.restore_tabs_lazily") &&
+      Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand") &&
+      !aSelectRestoredTab && !state.pinned;
+
     let userContextId = state.userContextId;
-    let reuseExisting = aBlankTabToReuse &&
+    let reuseExisting = !createLazyBrowser && aBlankTabToReuse &&
         (!Tabmix.isVersion(490) ||
         aBlankTabToReuse.getAttribute("usercontextid") == (userContextId || ""));
+
     let newTab = reuseExisting ? aBlankTabToReuse :
-      gBrowser.addTab("about:blank", {
+      gBrowser.addTab(null, Object.assign({
         skipAnimation: tabToRemove || skipAnimation,
         dontMove: true,
-        userContextId,
-      });
+        createLazyBrowser,
+      }, state));
     if (!reuseExisting && aBlankTabToReuse) {
       gBrowser.removeTab(aBlankTabToReuse, {animate: false});
     }
 
-    newTab.linkedBrowser.stop();
+    if (!createLazyBrowser) {
+      newTab.linkedBrowser.stop();
+    }
     // if tabbar is hidden when there is only one tab and
     // we replace that tab with new one close the current tab fast so the tab bar don't have time to reveals
     if (tabToRemove) {
       gBrowser.removeTab(tabToRemove, {animate: false});
     }
-    // add restored tab to current window
-    TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(state));
+
+    // restore tab content
+    if (Tabmix.isVersion(400)) {
+      TabmixSvc.SessionStore.restoreTab(newTab, state);
+    } else {
+      TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(state));
+    }
 
     if (TMP_TabView.exist("afterUndoCloseTab")) {
       TabView.afterUndoCloseTab();

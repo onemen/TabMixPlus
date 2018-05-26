@@ -199,11 +199,13 @@ this.SingleWindowModeUtils = {
       newWindow.OfflineApps.uninit = function() {};
       newWindow.IndexedDBPromptHelper.init();
       if (TabmixSvc.version(420)) {
-        newWindow.gMenuButtonBadgeManager.uninit = function() {
-          if (typeof PanelUI == "object" && PanelUI.panel) {
-            PanelUI.panel.removeEventListener("popupshowing", this, true);
-          }
-        };
+        if ("gMenuButtonBadgeManager" in newWindow) {
+          newWindow.gMenuButtonBadgeManager.uninit = function() {
+            if (typeof PanelUI == "object" && PanelUI.panel) {
+              PanelUI.panel.removeEventListener("popupshowing", this, true);
+            }
+          };
+        }
       }
       if (!TabmixSvc.version(440)) {
         let obs = Services.obs;

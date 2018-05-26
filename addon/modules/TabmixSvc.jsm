@@ -14,6 +14,10 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "SyncedTabs",
   "resource://tabmixplus/SyncedTabs.jsm");
 
+// place holder for load default preferences function
+// eslint-disable-next-line no-unused-vars
+var pref;
+
 var tabStateCache;
 var _versions = {};
 function isVersion(aVersionNo) {
@@ -40,6 +44,57 @@ this.TabmixSvc = {
   aboutBlank: "about:blank",
   aboutNewtab: "about:#".replace("#", "newtab"),
   newtabUrl: "browser.#.url".replace("#", "newtab"),
+
+  // load Tabmix preference to the default branch
+  _defaultPreferencesLoaded: false,
+  loadDefaultPreferences() {
+    if (!isVersion(580) || this._defaultPreferencesLoaded) {
+      return;
+    }
+    this._defaultPreferencesLoaded = true;
+    const prefs = Services.prefs.getDefaultBranch("");
+    pref = function(prefName, prefValue) {
+      switch (prefValue.constructor.name) {
+        case "String":
+          prefs.setCharPref(prefName, prefValue);
+          break;
+        case "Number":
+          prefs.setIntPref(prefName, prefValue);
+          break;
+        case "Boolean":
+          prefs.setBoolPref(prefName, prefValue);
+          break;
+        default:
+          TabmixSvc.console.reportError(`can't set pref ${prefName} to value '${prefValue}'; ` +
+            `it isn't a String, Number, or Boolean`);
+      }
+    };
+    try {
+      const path = "chrome://tabmix-prefs/content/tabmix.js";
+      Services.scriptloader.loadSubScript(path, {});
+    } catch (ex) {
+      TabmixSvc.console.reportError(ex);
+    }
+    pref = null;
+  },
+
+  getStringPref(prefName) {
+    if (isVersion(580)) {
+      return Services.prefs.getStringPref(prefName);
+    }
+    return Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
+  },
+
+  setStringPref(prefName, prefValue) {
+    if (isVersion(580)) {
+      Services.prefs.setStringPref(prefName, prefValue);
+    } else {
+      let str = Cc["@mozilla.org/supports-string;1"]
+          .createInstance(Ci.nsISupportsString);
+      str.data = prefValue;
+      Services.prefs.setComplexValue(prefName, Ci.nsISupportsString, str);
+    }
+  },
 
   debugMode() {
     return this.prefBranch.prefHasUserValue("enableDebug") &&
@@ -360,14 +415,16 @@ XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "resource://tabmixplus/log.jsm");
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", () => {
-  let tmp = {};
-  Cu.import("resource:///modules/sessionstore/SessionStore.jsm", tmp);
-  return tmp.SessionStore;
+XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", () => {
+  const sessionStoreModule = Cu.import("resource:///modules/sessionstore/SessionStore.jsm", {});
+  if (isVersion(570)) {
+    return sessionStoreModule;
+  }
+  return Cu.getGlobalForObject(sessionStoreModule);
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", function() {
-  return Cu.getGlobalForObject(this.ss);
+XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", function() {
+  return this.SessionStoreGlobal.SessionStore;
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {

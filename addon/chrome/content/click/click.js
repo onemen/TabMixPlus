@@ -170,7 +170,7 @@ var TabmixTabClickOptions = {
         gBrowser.lockTab(aTab);
         break;
       case 7:
-        Tabmix.tablib.reloadTabs(gBrowser.visibleTabs);
+        Tabmix.tablib.reloadTabs(Tabmix.visibleTabs.tabs);
         break;
       case 8:
         gBrowser.removeAllTabsBut(aTab);
@@ -310,6 +310,10 @@ var TabmixTabClickOptions = {
 };
 
 var TabmixContext = {
+  get tabContextMenu() {
+    delete this.tabContextMenu;
+    return (this.tabContextMenu = gBrowser.tabContainer.contextMenu);
+  },
   // Create new items in the tab bar context menu
   buildTabContextMenu: function TMP_buildTabContextMenu() {
     var $id = id => document.getElementById(id);
@@ -373,7 +377,7 @@ var TabmixContext = {
     let tabBar = gBrowser.tabContainer;
     if (show) {
       this._originalTabbarContextMenu = tabBar.getAttribute("context");
-      tabBar.setAttribute("context", gBrowser.tabContextMenu.id);
+      tabBar.setAttribute("context", this.tabContextMenu.id);
     } else {
       Tabmix.setItem(tabBar, "context", this._originalTabbarContextMenu || null);
     }
@@ -382,8 +386,8 @@ var TabmixContext = {
   toggleEventListener(enable) {
     var eventListener = enable ? "addEventListener" : "removeEventListener";
     document.getElementById("contentAreaContextMenu")[eventListener]("popupshowing", this, false);
-    gBrowser.tabContextMenu[eventListener]("popupshowing", this, false);
-    gBrowser.tabContextMenu[eventListener]("popupshown", this, false);
+    this.tabContextMenu[eventListener]("popupshowing", this, false);
+    this.tabContextMenu[eventListener]("popupshown", this, false);
   },
 
   handleEvent(aEvent) {
@@ -412,12 +416,12 @@ var TabmixContext = {
 
   // Tab context menu popupshowing
   updateTabContextMenu: function TMP_updateTabContextMenu(event) {
-    if (event.originalTarget != gBrowser.tabContextMenu)
+    if (event.originalTarget != this.tabContextMenu)
       return true;
 
-    gBrowser.tabContextMenu.addEventListener("popuphidden", this);
+    this.tabContextMenu.addEventListener("popuphidden", this);
 
-    var item, triggerNode = gBrowser.tabContextMenu.triggerNode;
+    var item, triggerNode = this.tabContextMenu.triggerNode;
     if (triggerNode.parentNode)
       item = triggerNode.parentNode.id;
     if (item && (item == "btn_tabslist_menu" || item == "alltabs-popup"))
@@ -487,7 +491,7 @@ var TabmixContext = {
 
     //  ---------------- menuseparator ---------------- //
 
-    var tabsCount = gBrowser.visibleTabs.length;
+    var tabsCount = Tabmix.visibleTabs.tabs.length;
     var unpinnedTabsCount = tabsCount - TabmixTabbar._real_numPinnedTabs;
     var unpinnedTabs = unpinnedTabsCount > 0;
 
@@ -521,11 +525,15 @@ var TabmixContext = {
       if (aTab.hasAttribute("busy")) {
         let browser = gBrowser.getBrowserForTab(aTab);
         let url = browser.currentURI.spec;
-        let docTitle = TMP_Places.getTitleFromBookmark(url, browser.contentTitle, null, aTab);
-        if (!docTitle || docTitle == gBrowser.mStringBundle.getString("tabs.emptyTabTitle"))
-          titleNotReady = true;
+        TMP_Places.asyncGetTitleFromBookmark(url, browser.contentTitle, null, aTab)
+            .then(docTitle => {
+              if (!docTitle || docTitle == Tabmix.getString("tabs.emptyTabTitle"))
+                titleNotReady = true;
+              Tabmix.setItem("tm-renameTab", "disabled", titleNotReady);
+            });
+      } else {
+        Tabmix.setItem("tm-renameTab", "disabled", titleNotReady);
       }
-      Tabmix.setItem("tm-renameTab", "disabled", titleNotReady);
     }
 
     var protectedTab = aTab.hasAttribute("protected");
@@ -578,12 +586,11 @@ var TabmixContext = {
    * this is only for the case that other extensions popupshowing run after our TabmixContextMenu.updateTabContextMenu
    */
   tabContextMenuShown: function TMP_tabContextMenuShown(event) {
-    var tabContextMenu = gBrowser.tabContextMenu;
-    if (event.originalTarget != tabContextMenu)
+    if (event.originalTarget != this.tabContextMenu)
       return;
     // don't show 2 menuseparator together
     var hideNextSeparator = true, lastVisible, hideMenu = true;
-    for (var mi = tabContextMenu.firstChild; mi; mi = mi.nextSibling) {
+    for (var mi = this.tabContextMenu.firstChild; mi; mi = mi.nextSibling) {
       if (mi.localName == "menuseparator") {
         if (!lastVisible || !hideNextSeparator) {
           mi.hidden = hideNextSeparator;
@@ -612,7 +619,7 @@ var TabmixContext = {
 
     // if all the menu are hidden don't show the popup
     if (hideMenu)
-      tabContextMenu.hidePopup();
+      this.tabContextMenu.hidePopup();
   },
 
   // Main context menu popupshowing
@@ -880,16 +887,17 @@ var TabmixAllTabs = {
     if (this.isAfterCtrlClick(popup.parentNode))
       return false;
 
-    var tabContextMenu = gBrowser.tabContextMenu;
-    if (popup.hasAttribute("context") && popup.getAttribute("context") != tabContextMenu.id)
-      popup.setAttribute("context", tabContextMenu.id);
+    const contextMenuId = this.tabContextMenu.id;
+    if (popup.hasAttribute("context") && popup.getAttribute("context") != contextMenuId) {
+      popup.setAttribute("context", contextMenuId);
+    }
 
     this.beforeCommonList(popup);
     this.createCommonList(popup, aType);
 
     // for firefox 22+ when layout.css.devPixelsPerPx > 1
     // and user middle-click to close last visible tab
-    if (popup.id == "btn_tabslist_menu" && gBrowser.visibleTabs.length == 1) {
+    if (popup.id == "btn_tabslist_menu" && Tabmix.visibleTabs.tabs.length == 1) {
       popup.setAttribute("minheight", popup.boxObject.height);
       popup.setAttribute("minwidth", popup.boxObject.width);
     }
@@ -939,7 +947,7 @@ var TabmixAllTabs = {
         TabSorting.prototype.toString = function() {
           return this.Tab.label.toLowerCase();
         };
-        let visibleTabs = gBrowser.visibleTabs;
+        let visibleTabs = Tabmix.visibleTabs.tabs;
         tabs = new Array(visibleTabs.length);
         for (i = 0; i < visibleTabs.length; i++)
           tabs[i] = new TabSorting(visibleTabs[i], i);
@@ -949,7 +957,7 @@ var TabmixAllTabs = {
         break;
       }
       case 2: {
-        tabs = gBrowser.visibleTabs;
+        tabs = Tabmix.visibleTabs.tabs;
         let addToMenu = side != "right";
         for (let t = 0; t < tabs.length; t++) {
           let tab = tabs[t];

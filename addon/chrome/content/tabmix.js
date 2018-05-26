@@ -54,6 +54,11 @@ Tabmix.beforeDelayedStartup = function() {
 
 // after TabmixSessionManager and SessionStore initialized
 Tabmix.sessionInitialized = function() {
+  if (Tabmix.fixMultibarRowHeight) {
+    delete Tabmix._fixMultibarRowHeight;
+    TabmixTabbar._heights = [];
+    Tabmix.tabsUtils.updateVerticalTabStrip(true);
+  }
   // Let EmbeddedWebExtension know we're done.
   if (this.firstWindowInSession && TabmixSvc.sm.deferredInitialized) {
     TabmixSvc.sm.deferredInitialized.resolve();
@@ -168,10 +173,14 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
 };
 
 Tabmix.afterDelayedStartup = function() {
+  // focus address-bar area if the selected tab is blank when Firefox starts
   // focus content area if the selected tab is not blank when Firefox starts
   setTimeout(() => {
-    if (gURLBar.focused && !gBrowser.isBlankNotBusyTab(gBrowser.selectedTab)) {
+    const isBlank = gBrowser.isBlankNotBusyTab(gBrowser.selectedTab);
+    if (gURLBar.focused && !isBlank) {
       gBrowser.selectedBrowser.focus();
+    } else if (!gURLBar.focused && isBlank) {
+      gURLBar.focus();
     }
   }, 250);
 
@@ -341,6 +350,19 @@ var TMP_eventListener = {
   },
 
   onContentLoaded: function TMP_EL_onContentLoaded() {
+    if (Tabmix.isVersion(590)) {
+      let newRule = '.tabbrowser-tab {' +
+        '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tabbrowser-tab-v59") !important;}';
+      gTMPprefObserver.insertRule(newRule);
+    } else if (Tabmix.isVersion(580)) {
+      let newRule = '.tabbrowser-tab {' +
+        '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tabbrowser-tab-v58") !important;}';
+      gTMPprefObserver.insertRule(newRule);
+    } else if (Tabmix.isVersion(570)) {
+      let newRule = '.tabbrowser-tab {' +
+        '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tabbrowser-tab-v57") !important;}';
+      gTMPprefObserver.insertRule(newRule);
+    }
     if (Tabmix.isVersion(510) && !Tabmix.isVersion(530)) {
       let newRule = '.tabbrowser-tab {' +
           '-moz-binding: url("chrome://tabmixplus/content/tab/tabBindings.xml#tabmix-tabbrowser-tab-v51-52") !important;}';
@@ -596,13 +618,15 @@ var TMP_eventListener = {
     Tabmix.setItem("tmp_closedwindows", "disabled", true);
 
     if (Tabmix.isVersion(550)) {
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.adjustTabstrip")._replace(
-        'this.tabbrowser.visibleTabs[this.tabbrowser._numPinnedTabs];',
-        'TMP_TabView.checkTabs(this.tabbrowser.visibleTabs);'
-      ).toCode(false, tabBar, "tabmix_adjustTabstrip");
+      Tabmix.changeCode(tabBar, `gBrowser.tabContainer.${Tabmix.updateCloseButtons}`)._replace(
+        Tabmix.isVersion(600) ?
+          'this._getVisibleTabs()[gBrowser._numPinnedTabs];' :
+          'this.tabbrowser.visibleTabs[this.tabbrowser._numPinnedTabs];',
+        'TMP_TabView.checkTabs(Tabmix.visibleTabs.tabs);'
+      ).toCode(false, tabBar, "tabmix_updateCloseButtons");
     }
-    Tabmix.setNewFunction(tabBar, "adjustTabstrip", Tabmix.adjustTabstrip);
-    delete Tabmix.adjustTabstrip;
+    Tabmix.setNewFunction(tabBar, Tabmix.updateCloseButtons, Tabmix._updateCloseButtons);
+    delete Tabmix._updateCloseButtons;
   },
 
   tabWidthCache: new WeakMap(),
@@ -808,7 +832,7 @@ var TMP_eventListener = {
     if (aTab.__SS_lazyData) {
       this.onSSTabRestoring(aTab);
       if (aTab.label == "about:blank") {
-        aTab.label = gBrowser.mStringBundle.getString("tabs.emptyTabTitle");
+        aTab.label = Tabmix.getString("tabs.emptyTabTitle");
         gBrowser._tabAttrModified(aTab, ["label"]);
       }
     }
@@ -1058,12 +1082,12 @@ var TMP_eventListener = {
     }
 
     if (shouldMoveFocus) {
+      aEvent.stopPropagation();
+      aEvent.preventDefault();
       if (aEvent.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE) {
         direction = direction > 0 ? 1 : -1;
         tabBar.advanceSelectedTab(direction, true);
       }
-      aEvent.stopPropagation();
-      aEvent.preventDefault();
     } else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
       // this code is based on scrollbox.xml wheel/DOMMouseScroll event handler
       let scrollByDelta = function(delta) {
@@ -1104,6 +1128,9 @@ var TMP_eventListener = {
         }
       };
 
+      aEvent.stopPropagation();
+      aEvent.preventDefault();
+
       if (orient == "vertical") {
         if (!Tabmix.isVersion(480) && aEvent.axis == aEvent.HORIZONTAL_AXIS) {
           return;
@@ -1118,8 +1145,6 @@ var TMP_eventListener = {
           tabStrip._prevMouseScrolls.shift();
         tabStrip._prevMouseScrolls.push(isVertical);
       }
-      aEvent.stopPropagation();
-      aEvent.preventDefault();
     }
   },
 
@@ -1202,9 +1227,6 @@ var TMP_eventListener = {
     }
     updateAttrib("class", "tab-icon-image", "role", "presentation");
     updateAttrib("class", "tab-text", "role", "presentation");
-    if (Tabmix.isVersion(570)) {
-      updateAttrib("class", "tab-background", "orient", "vertical");
-    }
   }
 
 };
@@ -1223,6 +1245,7 @@ Tabmix.initialization = {
   afterDelayedStartup: {id: 5, obj: "Tabmix"},
 
   get isValidWindow() {
+    TabmixSvc.loadDefaultPreferences();
     /**
       * don't initialize Tabmix functions on this window if one of this is true:
       *  - the window is about to close by SingleWindowModeUtils
@@ -1253,8 +1276,9 @@ Tabmix.initialization = {
   },
 
   run: function tabmix_initialization_run(aPhase) {
-    if (!this.isValidWindow)
+    if (!this.isValidWindow || Tabmix.isVersion(600) && !window.gBrowser) {
       return null;
+    }
     let result, currentPhase = this[aPhase].id;
     let getObj = function(list) {
       let obj = window;

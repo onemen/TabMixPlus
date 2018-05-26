@@ -2,7 +2,7 @@
 
 this.EXPORTED_SYMBOLS = ["ContextMenu"];
 
-const {interfaces: Ci, utils: Cu} = Components;
+const {utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("resource://gre/modules/Services.jsm", this);
@@ -13,6 +13,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
 this.ContextMenu = {
   getSelectedLinks(content, check) {
     let doc = content.document;
+    const NodeFilter = doc.defaultView.NodeFilter;
     // get focused window selection
     let selectionObject = TabmixUtils.focusedWindow(content).getSelection();
     if (selectionObject.isCollapsed) // nothing selected
@@ -21,9 +22,9 @@ this.ContextMenu = {
     let filter = {
       acceptNode(n) {
         if (n.nodeName == 'A' || n.nodeName == 'li') {
-          return Ci.nsIDOMNodeFilter.FILTER_ACCEPT;
+          return NodeFilter.FILTER_ACCEPT;
         }
-        return Ci.nsIDOMNodeFilter.FILTER_SKIP;
+        return NodeFilter.FILTER_SKIP;
       }
     };
 
@@ -47,7 +48,7 @@ this.ContextMenu = {
 
     let range = selectionObject.getRangeAt(0).cloneContents();
     let treeWalker = doc.createTreeWalker(range,
-      Ci.nsIDOMNodeFilter.SHOW_ELEMENT, filter, true);
+      NodeFilter.SHOW_ELEMENT, filter, true);
     let nextEpisode = treeWalker.nextNode();
     let urls = [];
     while (nextEpisode !== null) {

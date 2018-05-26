@@ -49,7 +49,7 @@ this.Tabmix_NewTabURL = {
 
   // for Firefox 41 - 43
   _updateNewTabURL() {
-    let value = Services.prefs.getComplexValue(FIREFOX_PREF, Ci.nsISupportsString).data;
+    let value = TabmixSvc.getStringPref(FIREFOX_PREF);
     if (value == ABOUT_NEW_TAB)
       NewTabURL.reset();
     else
@@ -58,7 +58,7 @@ this.Tabmix_NewTabURL = {
 
   // for Firefox 44+
   updateNewTabURL() {
-    let value = Services.prefs.getComplexValue(FIREFOX_PREF, Ci.nsISupportsString).data;
+    let value = TabmixSvc.getStringPref(FIREFOX_PREF);
     if (value == ABOUT_NEW_TAB) {
       aboutNewTabService.resetNewTabURL();
     } else {

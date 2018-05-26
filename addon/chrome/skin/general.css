@@ -24,6 +24,11 @@
   width: 16px;
 }
 
+.tabs-closebutton.tabmix > .toolbarbutton-icon {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 /* :::: for miniT drag indicator :::: */
 .tab-drag-indicator-left, .tab-drag-indicator-right {
   visibility: hidden;
@@ -59,7 +64,7 @@
 }
 
 /* :::: Space on tab bar :::: */
-.tabbrowser-tabs[tabBarSpace] > .tabbrowser-arrowscrollbox {
+#tabbrowser-tabs[tabBarSpace] > .tabbrowser-arrowscrollbox {
   -moz-margin-start: 0;
   -moz-margin-end: 0;
   -moz-padding-start: 15px;

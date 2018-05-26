@@ -109,9 +109,10 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       }
     }
 
+    Tabmix._callPrepareLoadOnStartup = this.isVersion(570) && prepareLoadOnStartup;
     if (prepareLoadOnStartup) {
-      Tabmix.prepareLoadOnStartup = function() {
-        let uriToLoad = gBrowserInit._getUriToLoad();
+      Tabmix.prepareLoadOnStartup = function(uriToLoad) {
+        uriToLoad = this.isVersion(570) ? uriToLoad : gBrowserInit._getUriToLoad();
         if (uriToLoad && uriToLoad != TabmixSvc.aboutBlank) {
           let tabs = gBrowser.tabs;
           for (let tab of tabs) {
@@ -143,8 +144,14 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         Tabmix.runningDelayedStartup = false;
       }
 
-      Tabmix.prepareLoadOnStartup();
-      TabmixSessionManager.init();
+      if (Tabmix._callPrepareLoadOnStartup) {
+        gBrowserInit._uriToLoadPromise
+            .then(uriToLoad => Tabmix.prepareLoadOnStartup(uriToLoad))
+            .then(() => TabmixSessionManager.init());
+      } else {
+        Tabmix.prepareLoadOnStartup();
+        TabmixSessionManager.init();
+      }
       Tabmix.initialization.run("afterDelayedStartup");
 
       return result;
@@ -169,7 +176,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 // this must run before all
 Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   if (typeof tabBrowser == "undefined")
-    tabBrowser = gBrowser;
+    tabBrowser = gBrowser || window._gBrowser;
 
   // return true if all tabs in the window are blank
   tabBrowser.isBlankWindow = function() {
@@ -270,7 +277,13 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     tabscroll = 1;
   }
   TabmixTabbar.scrollButtonsMode = tabscroll;
-  TabmixTabbar.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
+
+  // setting flowing to "multibar" in Firefox 57 prevents Tabmix.getButtonsHeight
+  // to get proper height when the window opened by SessionStore._openWindowWithState
+  // with more than one rows of tabs
+  if (!this.isVersion(570) || TabmixSvc.SessionStore._isWindowLoaded(window)) {
+    TabmixTabbar.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
+  }
 
   // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore
   if ("SwitchThemesModule" in window) {
@@ -283,7 +296,8 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   TMP_extensionsCompatibility.preInit();
 };
 
-Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollStatus, aUrl) {
+Tabmix.updateCloseButtons = Tabmix.isVersion(580) ? "_updateCloseButtons" : "adjustTabstrip";
+Tabmix._updateCloseButtons = function tabContainer_updateCloseButtons(skipUpdateScrollStatus, aUrl) {
   // modes for close button on tabs - extensions.tabmix.tabs.closeButtons
   // 1 - alltabs    = close buttons on all tabs
   // 2 - hovertab   = close buttons on hover tab
@@ -292,9 +306,8 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   // 5 - alltabs wider then  = close buttons on all tabs wider then
 
   let oldValue = this.getAttribute("closebuttons");
-  var tabbrowser = this.tabbrowser;
-  var tabs = tabbrowser.visibleTabs;
-  var tabsCount = tabs.length - tabbrowser._removingTabs.length;
+  var tabs = Tabmix.visibleTabs.tabs;
+  var tabsCount = tabs.length - gBrowser._removingTabs.length;
   switch (Tabmix.tabsUtils.closeButtonsEnabled ? this.mCloseButtons : 0) {
     case 0:
       this.removeAttribute("closebuttons-hover");
@@ -319,7 +332,7 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
     case 5:
       this.removeAttribute("closebuttons-hover");
       if (Tabmix.isVersion(550)) {
-        this.tabmix_adjustTabstrip();
+        this.tabmix_updateCloseButtons();
       } else if (tabsCount < 3) {
         this.setAttribute("closebuttons", "alltabs");
       } else {
@@ -341,13 +354,13 @@ Tabmix.adjustTabstrip = function tabContainer_adjustTabstrip(skipUpdateScrollSta
   if (tabsCount == 1) {
     let tab = this.selectedItem;
     if (!aUrl) {
-      let currentURI = tabbrowser.currentURI;
+      let currentURI = gBrowser.currentURI;
       aUrl = currentURI ? currentURI.spec : null;
     }
     if (Tabmix.tabsUtils._keepLastTab ||
         isBlankPageURL(tab.__newLastTab || null) ||
         (!aUrl || isBlankPageURL(aUrl)) &&
-        tabbrowser.isBlankNotBusyTab(tab)) {
+        gBrowser.isBlankNotBusyTab(tab)) {
       this.setAttribute("closebuttons", "noclose");
       this.removeAttribute("closebuttons-hover");
     }

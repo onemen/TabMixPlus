@@ -24,8 +24,8 @@ XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "NetUtil",
   "resource://gre/modules/NetUtil.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/TabmixSvc.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "ContentSvc",
+  "resource://tabmixplus/ContentSvc.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
   "resource://tabmixplus/LinkNodeUtils.jsm");
@@ -39,7 +39,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixAboutNewTab",
   "resource://tabmixplus/AboutNewTab.jsm");
 
-var PROCESS_TYPE_CONTENT = TabmixSvc.version(380) &&
+var PROCESS_TYPE_CONTENT = ContentSvc.version(380) &&
     Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
 
 var TabmixClickEventHandler;
@@ -127,7 +127,7 @@ var TabmixContentHandler = {
           let entry = sh.getEntryAtIndex(sh.index, false);
           let postData = entry.postData;
           // RemoteWebNavigation accepting postdata or headers only from Firefox 42.
-          if (postData && TabmixSvc.version(420)) {
+          if (postData && ContentSvc.version(420)) {
             postData = postData.clone();
             json.postData = NetUtil.readInputStreamToString(postData, postData.available());
             let referrer = entry.referrerURI;
@@ -161,7 +161,7 @@ var TabmixContentHandler = {
         .getService(Ci.nsIDroppedLinkHandler);
     try {
       // Pass true to prevent the dropping of javascript:/data: URIs
-      if (TabmixSvc.version(520)) {
+      if (ContentSvc.version(520)) {
         links = linkHandler.dropLinks(event, true);
         // we can not send a message with array of wrapped nsIDroppedLinkItem
         links = links.map(link => {
@@ -195,13 +195,13 @@ var TabmixContentHandler = {
 
 TabmixClickEventHandler = {
   init: function init(global) {
-    if (TabmixSvc.version(380)) {
+    if (ContentSvc.version(380)) {
       global.addEventListener("click", event => {
         let linkData = this.getLinkData(event);
         if (linkData) {
           let [href, node] = linkData;
           let currentHref = event.originalTarget.ownerDocument.documentURI;
-          const divertMiddleClick = event.button == 1 && TabmixSvc.prefBranch.getBoolPref("middlecurrent");
+          const divertMiddleClick = event.button == 1 && ContentSvc.prefBranch.getBoolPref("middlecurrent");
           const ctrlKey = AppConstants.platform == "macosx" ? event.metaKey : event.ctrlKey;
           if (divertMiddleClick || ctrlKey ||
               LinkNodeUtils.isSpecialPage(href, node, currentHref)) {
@@ -234,7 +234,8 @@ TabmixClickEventHandler = {
     let ownerDoc = event.originalTarget.ownerDocument;
 
     // let Firefox code handle click events from about pages
-    if (!ownerDoc || /^about:(certerror|blocked|neterror)$/.test(ownerDoc.documentURI)) {
+    if (!ownerDoc || (!ContentSvc.version(570) || event.button == 0) &&
+        /^about:(certerror|blocked|neterror)$/.test(ownerDoc.documentURI)) {
       return null;
     }
 
@@ -252,21 +253,21 @@ TabmixClickEventHandler = {
     // first get document wide referrer policy, then
     // get referrer attribute from clicked link and parse it and
     // allow per element referrer to overrule the document wide referrer if enabled
-    let referrerPolicy = TabmixSvc.version(380) ? ownerDoc.referrerPolicy : null;
-    let setReferrerPolicy = node && (TabmixSvc.version(550) ||
-      TabmixSvc.version(420) &&
+    let referrerPolicy = ContentSvc.version(380) ? ownerDoc.referrerPolicy : null;
+    let setReferrerPolicy = node && (ContentSvc.version(550) ||
+      ContentSvc.version(420) &&
       Services.prefs.getBoolPref("network.http.enablePerElementReferrer"));
     if (setReferrerPolicy) {
-      let value = node.getAttribute(TabmixSvc.version(450) ? "referrerpolicy" : "referrer");
+      let value = node.getAttribute(ContentSvc.version(450) ? "referrerpolicy" : "referrer");
       let referrerAttrValue = Services.netUtils.parseAttributePolicyString(value);
-      let policy = TabmixSvc.version(490) ? "REFERRER_POLICY_UNSET" : "REFERRER_POLICY_DEFAULT";
+      let policy = ContentSvc.version(490) ? "REFERRER_POLICY_UNSET" : "REFERRER_POLICY_DEFAULT";
       if (referrerAttrValue !== Ci.nsIHttpChannel[policy]) {
         referrerPolicy = referrerAttrValue;
       }
     }
 
     let frameOuterWindowID;
-    if (TabmixSvc.version(540)) {
+    if (ContentSvc.version(540)) {
       frameOuterWindowID = ownerDoc.defaultView.QueryInterface(Ci.nsIInterfaceRequestor)
           .getInterface(Ci.nsIDOMWindowUtils)
           .outerWindowID;
@@ -285,7 +286,7 @@ TabmixClickEventHandler = {
       frameOuterWindowID,
       triggeringPrincipal: principal,
       originAttributes: principal ? principal.originAttributes : {},
-      isContentWindowPrivate: TabmixSvc.version(510) && PrivateBrowsingUtils.isContentWindowPrivate(ownerDoc.defaultView),
+      isContentWindowPrivate: ContentSvc.version(510) && PrivateBrowsingUtils.isContentWindowPrivate(ownerDoc.defaultView),
     };
 
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
@@ -320,7 +321,7 @@ TabmixClickEventHandler = {
     href = data._href;
 
     if (href) {
-      if (TabmixSvc.version(410)) {
+      if (ContentSvc.version(410)) {
         try {
           BrowserUtils.urlSecurityCheck(href, principal);
         } catch (e) {
@@ -339,9 +340,9 @@ TabmixClickEventHandler = {
           }
         }
       }
-      json.noReferrer = TabmixSvc.version(370) && BrowserUtils.linkHasNoReferrer(node);
+      json.noReferrer = ContentSvc.version(370) && BrowserUtils.linkHasNoReferrer(node);
 
-      if (TabmixSvc.version(480)) {
+      if (ContentSvc.version(480)) {
         // Check if the link needs to be opened with mixed content allowed.
         // Only when the owner doc has |mixedContentChannel| and the same origin
         // should we allow mixed content.
@@ -406,7 +407,7 @@ TabmixClickEventHandler = {
       if (node.nodeType == content.Node.ELEMENT_NODE &&
           (node.localName == "a" ||
            node.namespaceURI == "http://www.w3.org/1998/Math/MathML")) {
-        href = TabmixSvc.version(510) && node.getAttribute("href") ||
+        href = ContentSvc.version(510) && node.getAttribute("href") ||
             node.getAttributeNS("http://www.w3.org/1999/xlink", "href");
         if (href) {
           baseURI = node.ownerDocument.baseURIObject;
@@ -426,7 +427,8 @@ TabmixClickEventHandler = {
 
 var AboutNewTabHandler = {
   init(global) {
-    if (!TabmixSvc.version(420)) {
+    Cu.import("resource://gre/modules/Services.jsm", this);
+    if (!ContentSvc.version(420)) {
       return;
     }
 
@@ -439,8 +441,8 @@ var AboutNewTabHandler = {
       }
       let doc = content.document;
       // we don't need to update titles on first show if the pref is off
-      if (doc.documentURI.toLowerCase() == TabmixSvc.aboutNewtab &&
-          (contentLoaded || TabmixSvc.prefBranch.getBoolPref("titlefrombookmark"))) {
+      if (doc.documentURI.toLowerCase() == ContentSvc.aboutNewtab &&
+          (contentLoaded || ContentSvc.prefBranch.getBoolPref("titlefrombookmark"))) {
         contentLoaded = true;
         this.updateTitles();
       }
@@ -473,7 +475,7 @@ var ContextMenuHandler = {
     }
 
     let links;
-    if (TabmixSvc.prefBranch.getBoolPref("openAllLinks")) {
+    if (ContentSvc.prefBranch.getBoolPref("openAllLinks")) {
       links = ContextMenu.getSelectedLinks(content).join("\n");
     }
 
@@ -515,7 +517,7 @@ var TabmixPageHandler = {
     if (email && !doc.getElementById(this.buttonID)) {
       const bugReport = doc.createElement("a");
       bugReport.href = BITBUCKET;
-      bugReport.textContent = TabmixSvc.getString("bugReport.label");
+      bugReport.textContent = ContentSvc.getString("bugReport.label");
       bugReport.id = this.buttonID;
       bugReport.className = "button";
       bugReport.target = "_blank";

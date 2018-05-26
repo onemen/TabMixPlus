@@ -38,7 +38,11 @@
 
       <constructor>
         <![CDATA[
-          var tabstrip = gBrowser.tabContainer.mTabstrip;
+          const _gBrowser = window.gBrowser || window._gBrowser;
+          if (Tabmix.isVersion(580)) {
+            _gBrowser.tabContainer.mTabstrip = _gBrowser.tabContainer.arrowScrollbox;
+          }
+          var tabstrip = _gBrowser.tabContainer.mTabstrip;
           tabstrip._scrollButtonDownRight = this._scrollButtonDown;
           tabstrip._scrollButtonUpRight = this._scrollButtonUp;
         ]]>
@@ -236,12 +240,6 @@
                amountToScroll = this._distanceToRow(amountToScroll);'
             ).toCode();
 
-            // we divide scrollDelta by the ratio between tab width and tab height
-            Tabmix.changeCode(this._arrowScrollAnim, "scrollbox._arrowScrollAnim.sample")._replace(
-              '0.5 * timePassed * scrollIndex',
-              'this.scrollbox.isMultiRow ? $& / this.scrollbox._verticalAnimation : $&'
-            ).toCode();
-
             // the ratio between tab width and tab height is approximately 6
             // we multiply here the distance to get same animation effect.
             Tabmix.changeCode(this._scrollAnim, "scrollbox._scrollAnim.start")._replace(
@@ -257,6 +255,15 @@
                 this.scrollPosition += this._distanceToRow(px);
               }
             };
+          }
+
+          // Bug 1387130 (landed in Firefox 57) - Use original tabstrip scrolling behaviour when using scrollbuttons
+          if (this._arrowScrollAnim) {
+            // we divide scrollDelta by the ratio between tab width and tab height
+            Tabmix.changeCode(this._arrowScrollAnim, "scrollbox._arrowScrollAnim.sample")._replace(
+              '0.5 * timePassed * scrollIndex',
+              'this.scrollbox.isMultiRow ? $& / this.scrollbox._verticalAnimation : $&'
+            ).toCode();
           }
 
           Tabmix.changeCode(this, "scrollbox._distanceScroll")._replace(

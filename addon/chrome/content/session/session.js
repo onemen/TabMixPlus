@@ -288,8 +288,8 @@ TabmixSessionManager = {
 
     let initializeSM = () => {
       this._init();
-      if (this.notifyObservers && this.waitForCallBack) {
-        Services.obs.notifyObservers(null, "sessionstore-browser-state-restored", "");
+      if (this.waitForCallBack || TabmixSvc.sm.restoreCount == -1) {
+        this._sendRestoreCompletedNotifications();
       }
       if (!this.waitForCallBack) {
         this.restoreWindowArguments();
@@ -415,16 +415,12 @@ TabmixSessionManager = {
       if (sanitized) {
         this.prefBranch.clearUserPref("sanitized");
         TabmixSvc.sm.sanitized = false;
-        TabmixSvc.sm.restoreCount = 1;
-        this._sendRestoreCompletedNotifications();
         this.loadHomePage();
         this.saveStateDelayed();
         return;
       }
 
       if (!this.enableManager && (!this.enableBackup || !crashed)) {
-        TabmixSvc.sm.restoreCount = 1;
-        this._sendRestoreCompletedNotifications();
         return;
       }
 
@@ -2347,8 +2343,6 @@ TabmixSessionManager = {
     var sessionList = this.getSessionList("onlyPath");
     var askifempty = restoreFlag > 1 ? false : this.prefBranch.getBoolPref("onStart.askifempty");
     if (sessionList === null) {
-      TabmixSvc.sm.restoreCount = 1;
-      this._sendRestoreCompletedNotifications();
       if (((askifempty && afterCrash) || restoreFlag == 1) && !this.corruptedFile) {
         msg = TabmixSvc.getSMString("sm.start.msg0") + "\n" +
           TabmixSvc.getSMString("sm.afterCrash.msg10");
@@ -2448,8 +2442,6 @@ TabmixSessionManager = {
       this.deferredRestore();
     else {
       // we are here not after a callback only when the startup file is empty
-      TabmixSvc.sm.restoreCount = 1;
-      this._sendRestoreCompletedNotifications();
       this.loadHomePage();
     }
 
@@ -2534,19 +2526,28 @@ TabmixSessionManager = {
   },
 
   _sendRestoreCompletedNotifications() {
+    // notify observers things are complete in these cases:
+    // when all windows restored
+    // when we have nothing to restore
+    // when we are waiting for user responds to a prompt dialog
+
+    // observers were already notified
+    if (TabmixSvc.sm.observersWereNotified || !this.notifyObservers) {
+      TabmixSvc.sm.restoreCount = -1;
+      return;
+    }
+
     // not all windows restored, yet
     if (TabmixSvc.sm.restoreCount > 1) {
       TabmixSvc.sm.restoreCount--;
       return;
     }
 
-    // observers were already notified
-    if (TabmixSvc.sm.observersWereNotified || TabmixSvc.sm.restoreCount == -1) {
-      return;
-    }
-
     // This was the last window restored at startup, notify observers.
     Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
+    if (Tabmix.isVersion(570)) {
+      TabmixSvc.SessionStore._deferredAllWindowsRestored.resolve();
+    }
 
     TabmixSvc.sm.observersWereNotified = true;
     TabmixSvc.sm.restoreCount = -1;
@@ -2720,7 +2721,7 @@ TabmixSessionManager = {
       var label = _tab.label;
       if (!Tabmix.isVersion(550)) {
         // replace "Loading..." with the document title (with minimal side-effects)
-        let tabLoadingTitle = gBrowser.mStringBundle.getString("tabs.connecting");
+        let tabLoadingTitle = Tabmix.getString("tabs.connecting");
         if (label == tabLoadingTitle) {
           gBrowser.setTabTitle(_tab);
           [label, _tab.label] = [_tab.label, label];
@@ -3889,7 +3890,7 @@ TabmixSessionManager = {
   notifyAboutMissingTabView(showNotification) {
     // show notification when Tabview is missing and the session have hidden tabs
     if (TabmixSvc.isPaleMoon) {
-      let hiddenTabs = gBrowser.tabs.length > gBrowser.visibleTabs.length;
+      let hiddenTabs = gBrowser.tabs.length > Tabmix.visibleTabs.tabs.length;
       showNotification = this._groupCount > 1 && hiddenTabs;
     }
     if (showNotification) {

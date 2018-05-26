@@ -49,7 +49,7 @@ var TMP_LastTab = {
 
     this.TabList = document.getElementById("lasttabTabList");
 
-    let tabBox = gBrowser.mTabBox;
+    const tabBox = Tabmix.isVersion(590) ? gBrowser.tabbox : gBrowser.mTabBox;
     let els = Cc["@mozilla.org/eventlistenerservice;1"]
         .getService(Ci.nsIEventListenerService);
     if (Tabmix.isVersion(320, 270)) {
@@ -81,7 +81,7 @@ var TMP_LastTab = {
     if (!this._inited)
       return;
 
-    let tabBox = gBrowser.mTabBox;
+    const tabBox = Tabmix.isVersion(590) ? gBrowser.tabbox : gBrowser.mTabBox;
     let els = Cc["@mozilla.org/eventlistenerservice;1"]
         .getService(Ci.nsIEventListenerService);
     els.removeSystemEventListener(tabBox._eventNode, "keydown", this, false);
@@ -186,7 +186,7 @@ var TMP_LastTab = {
 
   isCtrlTab(event) {
     return (this.handleCtrlTab || this.showTabList) &&
-      event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_TAB &&
+      event.keyCode == event.DOM_VK_TAB &&
       event.ctrlKey && !event.altKey && !event.metaKey;
   },
 
@@ -267,19 +267,20 @@ var TMP_LastTab = {
       event.stopPropagation();
       event.preventDefault();
     } else if (this.TabListLock && this.CtrlKey &&
-             event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_SHIFT) {
+             event.keyCode == event.DOM_VK_SHIFT) {
       // don't hide the tabs list popup when user press shift
       // return;
     } else {
       if (this.TabListLock)
         this.TabList.hidePopup();
 
-      gBrowser.mTabBox.handleEvent(event);
+      const tabBox = Tabmix.isVersion(590) ? gBrowser.tabbox : gBrowser.mTabBox;
+      tabBox.handleEvent(event);
     }
   },
 
   OnKeyUp: function _LastTab_OnKeyUp(event) {
-    var keyReleased = event.keyCode == Ci.nsIDOMKeyEvent.DOM_VK_CONTROL;
+    var keyReleased = event.keyCode == event.DOM_VK_CONTROL;
     this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
     Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
     if (!keyReleased)

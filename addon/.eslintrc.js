@@ -249,6 +249,7 @@ module.exports = {
     "quote-props": [0, "as-needed", {"keywords": true}],
     "quotes": [0, "double"],
     "radix": 0,
+    "require-await": 2,
     "require-jsdoc": 0,
     "require-yield": 2,
     "rest-spread-spacing": 2,

@@ -35,10 +35,6 @@
       <xul:stack class="tab-stack" flex="1">
         <xul:hbox xbl:inherits="pinned,selected=visuallyselected,fadein"
                   class="tab-background">
-          <xul:hbox xbl:inherits="selected=visuallyselected"
-                    class="tab-line"/>
-          <xul:spacer flex="1" class="tabmix-tab-line-spacer"/>
-          <xul:hbox class="tab-bottom-line"/>
           <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
                     class="tab-background-start"/>
           <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
@@ -253,7 +249,9 @@
       <parameter name="aEvent"/>
       <parameter name="aOver"/>
       <body><![CDATA[
-        var anonid = aEvent.originalTarget && aEvent.originalTarget.getAttribute("anonid");
+        var anonid = aEvent.originalTarget &&
+            typeof aEvent.originalTarget.getAttribute == "function" &&
+            aEvent.originalTarget.getAttribute("anonid");
         if (anonid == "tmp-close-button") {
           this.mOverCloseButton = aOver;
         }

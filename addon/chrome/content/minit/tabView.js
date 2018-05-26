@@ -10,8 +10,9 @@ TMP_TabView.handleEvent = function(aEvent) {
     case "tabviewhidden":
       TabmixSessionManager.saveTabViewData(TabmixSessionManager.gThisWin, true);
       TMP_LastTab.tabs = null;
-      if (TabmixTabbar.hideMode != 2)
-        setTimeout(() => gBrowser.tabContainer.adjustTabstrip(), 0);
+      if (TabmixTabbar.hideMode != 2) {
+        setTimeout(() => gBrowser.tabContainer[Tabmix.updateCloseButtons](), 0);
+      }
       break;
     case "TabShow":
       if (!gBrowser.tabContainer._onDelayTabShow) {
