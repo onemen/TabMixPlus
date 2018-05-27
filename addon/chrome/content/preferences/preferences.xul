@@ -14,7 +14,7 @@
 %tabmixDTD;
 ]>
 
-<prefwindow type="prefwindow"
+<prefwindow type="prefwindow" class="prefwindow"
             id="TabMIxPreferences"
             windowtype="mozilla:tabmixopt"
             title="&page.header.title;"
@@ -35,21 +35,21 @@
   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/preferences.js"/>
 
-  <prefpane id="paneLinks" label="&tab.links;"
+  <prefpane id="paneLinks" label="&tab.links;" class="prefpane"
             src="chrome://tabmixplus/content/preferences/links.xul"/>
-  <prefpane id="paneEvents" label="&tab.events;"
+  <prefpane id="paneEvents" label="&tab.events;" class="prefpane"
             src="chrome://tabmixplus/content/preferences/events.xul"/>
-  <prefpane id="paneAppearance" label="&tab.appearance;"
+  <prefpane id="paneAppearance" label="&tab.appearance;" class="prefpane"
             src="chrome://tabmixplus/content/preferences/appearance.xul"/>
-  <prefpane id="paneMouse" label="&tab.mouse;"
+  <prefpane id="paneMouse" label="&tab.mouse;" class="prefpane"
             src="chrome://tabmixplus/content/preferences/mouse.xul"/>
-  <prefpane id="paneMenu" label="&tab.menu;"
+  <prefpane id="paneMenu" label="&tab.menu;" class="prefpane"
             src="chrome://tabmixplus/content/preferences/menu.xul"/>
-  <prefpane id="paneSession" label="&tab.session;"
+  <prefpane id="paneSession" label="&tab.session;" class="prefpane"
             src="chrome://tabmixplus/content/preferences/session.xul"/>
-  <prefpane id="paneIncompatible" label="Error"
+  <prefpane id="paneIncompatible" label="Error" class="prefpane"
             src="chrome://tabmixplus/content/preferences/incompatible.xul"/>
-  <prefpane id="broadcasters" hidden="true">
+  <prefpane id="broadcasters" hidden="true" class="prefpane">
     <preferences>
       <preference id="pref_singleWindow" name="extensions.tabmix.singleWindow" type="bool"
                   onchange="if (typeof gLinksPane == 'object') gLinksPane.singleWindow(this.value);"/>

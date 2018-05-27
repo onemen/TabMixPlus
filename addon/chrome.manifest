@@ -47,7 +47,8 @@ overlay   about:preferences                                         chrome://tab
 overlay   about:preferences#general                                 chrome://tabmixplus/content/preferences/overlay/incontentPreferences.xul  os=Linux
 overlay   chrome://browser/content/preferences/main.xul             chrome://tabmixplus/content/preferences/overlay/main.xul
 overlay   chrome://browser/content/preferences/tabs.xul             chrome://tabmixplus/content/preferences/overlay/tabs.xul
-style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/preferences/overlay/preferences.css
+# we don't need this style for in-content preferences in Firefox 60+
+style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/preferences/overlay/preferences.css appversion<60.0a1
 
 overlay   chrome://mozapps/content/extensions/extensions.xul        chrome://tabmixplus/content/links/links.xul
 overlay   about:newtab                                              chrome://tabmixplus/content/overlay/newTab.xul appversion<42.0
@@ -73,8 +74,10 @@ skin      tabmixplus   classic/1.0   chrome/skin/
 
 skin      tabmix-version tabmixplus  chrome/skin/app_version/before39.0/ appversion<39.0a1
 skin      tabmix-version tabmixplus  chrome/skin/app_version/39.0/       appversion>=39.0a1
+skin      tabmix-version tabmixplus  chrome/skin/app_version/60.0/       appversion>=60.0a1
 skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/win/   os=WINNT appversion<41.0a1
 skin      tabmix-os    classic/1.0   chrome/skin/app_version/41.0/win/   os=WINNT appversion>=41.0a1
+skin      tabmix-os    classic/1.0   chrome/skin/app_version/60.0/win/   os=WINNT appversion>=60.0a1
 skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/mac/   os=Darwin
 skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/linux/ os=Linux
 

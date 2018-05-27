@@ -50,4 +50,21 @@
     </implementation>
   </binding>
 
+  <binding id="preference-60"
+           extends="chrome://tabmixplus/content/preferences/preferences.xml#preference">
+    <implementation>
+      <constructor>
+        <![CDATA[
+          var update = Tabmix.isVersion(320, 270) ? "" : " && aUpdate";
+          Tabmix.changeCode(this, "_setValue")._replace(
+            'return aValue;',
+            'else if (!this.instantApply' + update + ' && this.value === aValue) {' +
+            '  gPrefWindow.updateApplyButton({target: this});}' +
+            '$&'
+          ).toCode();
+        ]]>
+      </constructor>
+    </implementation>
+  </binding>
+
 </bindings>
