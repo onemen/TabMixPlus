@@ -234,6 +234,10 @@ prefpane > tabbox {
   height: 464px;
 }
 
+prefwindow[in-tab] .paneSelector {
+  width: 530px;
+}
+
 tabbox {
   -moz-box-flex: 1;
   padding: 0 1px;

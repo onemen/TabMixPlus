@@ -828,7 +828,9 @@
                 if (!this._initialized && prefpanes.length > 1) {
                   if (this._shouldAnimate)
                     this.style.minHeight = 0;
-                  window.sizeToContent();
+                  if (window.toString() == '[object ChromeWindow]') {
+                    window.sizeToContent();
+                  }
                 }
 
                 var oldPane = this.lastSelected ? document.getElementById(this.lastSelected) : this.preferencePanes[0];
