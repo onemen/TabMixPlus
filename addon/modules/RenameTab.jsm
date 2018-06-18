@@ -31,18 +31,29 @@ this.RenameTab = {
       this.window.TMP_SessionStore.getTitleFromTabState(aTab) :
       browser.contentTitle;
     this.data.url = browser.currentURI.spec;
-    this.data.docTitle = TabmixPlacesUtils.getTitleFromBookmark(this.data.url,
-      docTitle, null, aTab);
-    if (!this.data.docTitle)
-      this.data.docTitle = this.window.isBlankPageURL(this.data.url) ?
-        this.window.Tabmix.getString("tabs.emptyTabTitle") : this.data.url;
-    this.data.modified = aTab.getAttribute("label-uri") || null;
-    if (this.data.modified == this.data.url || this.data.modified == "*")
-      this.data.value = aTab.getAttribute("fixed-label");
-    else
-      this.data.value = this.data.docTitle;
 
-    this.showPanel();
+    const prepareDataAndShowPanel = title => {
+      this.data.docTitle = title;
+      if (!this.data.docTitle)
+        this.data.docTitle = this.window.isBlankPageURL(this.data.url) ?
+          this.window.Tabmix.getString("tabs.emptyTabTitle") : this.data.url;
+      this.data.modified = aTab.getAttribute("label-uri") || null;
+      if (this.data.modified == this.data.url || this.data.modified == "*")
+        this.data.value = aTab.getAttribute("fixed-label");
+      else
+        this.data.value = this.data.docTitle;
+
+      this.showPanel();
+    };
+
+    if (TabmixSvc.version(600)) {
+      TabmixPlacesUtils.asyncGetTitleFromBookmark(this.data.url, docTitle, null, aTab)
+          .then(title => prepareDataAndShowPanel(title));
+    } else {
+      const title = TabmixPlacesUtils.getTitleFromBookmark(this.data.url,
+        docTitle, null, aTab);
+      prepareDataAndShowPanel(title);
+    }
   },
 
   showPanel: function TMP_renametab_showPanel() {
