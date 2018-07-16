@@ -446,7 +446,7 @@ var TMP_eventListener = {
     }
 
     var tabBar = gBrowser.tabContainer;
-    this._wheelEvent = Tabmix.isVersion(480) ? "wheel" : "DOMMouseScroll";
+    this._wheelEvent = Tabmix.isVersion(480, 280) ? "wheel" : "DOMMouseScroll";
     tabBar.addEventListener(this._wheelEvent, this, true);
 
     try {

@@ -254,7 +254,7 @@ var TMP_tabDNDObserver = {
     } else {
       // For the non e10s case we can just use PageThumbs
       // sync, so let's use the canvas for setDragImage.
-      let elm = Tabmix.isVersion(360) ? browser : browser.contentWindow;
+      let elm = Tabmix.isVersion(360, 280) ? browser : browser.contentWindow;
       PageThumbs.captureToCanvas(elm, canvas);
       dragImageOffsetX *= scale;
       dragImageOffsetY *= scale;
@@ -316,7 +316,7 @@ var TMP_tabDNDObserver = {
         // Pass true to disallow dropping javascript: or data: urls
         let links;
         try {
-          if (Tabmix.isVersion(520)) {
+          if (Tabmix.isVersion(520, 280)) {
             links = browserDragAndDrop.dropLinks(event, true);
           } else {
             links = [{url: browserDragAndDrop.drop(event, {}, true)}];
@@ -602,7 +602,7 @@ var TMP_tabDNDObserver = {
       // Pass true to disallow dropping javascript: or data: urls
       let links;
       try {
-        if (Tabmix.isVersion(520)) {
+        if (Tabmix.isVersion(520, 280)) {
           links = browserDragAndDrop.dropLinks(event, true);
         } else {
           links = [{url: browserDragAndDrop.drop(event, {}, true)}];
@@ -655,7 +655,7 @@ var TMP_tabDNDObserver = {
           let browser = tab.linkedBrowser;
           let webNav = Ci.nsIWebNavigation;
           let flags = webNav.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
-          if (Tabmix.isVersion(290))
+          if (Tabmix.isVersion(290, 280))
             flags |= webNav.LOAD_FLAGS_FIXUP_SCHEME_TYPOS;
           browser.loadURIWithFlags(url, flags);
           if (!bgLoad)
