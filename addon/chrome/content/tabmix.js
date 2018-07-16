@@ -763,6 +763,14 @@ var TMP_eventListener = {
     }
   },
 
+  get fullscreenAnimatePref() {
+    delete this.fullscreenAnimatePref;
+    const prefName = Tabmix.isVersion(550) ?
+      "toolkit.cosmeticAnimations.enabled" :
+      "browser.fullscreen.animate";
+    return (this.fullscreenAnimatePref = prefName);
+  },
+
   // for tabs bellow content
   toggleTabbarVisibility(aShow, aAnimate) {
     let fullScrToggler = document.getElementById("fullscr-bottom-toggler");
@@ -781,7 +789,7 @@ var TMP_eventListener = {
           bottombox.getBoundingClientRect().height) + "px";
 
       if (Tabmix.isVersion(400) && aAnimate &&
-          Services.prefs.getBoolPref("browser.fullscreen.animate")) {
+          Services.prefs.getBoolPref(this.fullscreenAnimatePref)) {
         // Hide the fullscreen toggler until the transition ends.
         let listener = function() {
           gNavToolbox.removeEventListener("transitionend", listener, true);
