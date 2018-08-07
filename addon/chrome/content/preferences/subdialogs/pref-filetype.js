@@ -28,7 +28,7 @@ function FillData() {
     return true;
   }
 
-  items = data.split(' ');
+  items = data.replace(/\\\\/g, '\\').split(' ');
   for (var i = 0; i < items.length; ++i) {
     if (items[i] !== "") {
       item = items[i].trim();
@@ -47,7 +47,8 @@ function Save() {
     filetype.push(list.getItemAtIndex(i).getAttribute("label").trim());
 
   try {
-    Services.prefs.setCharPref(list.getAttribute('prefstring'), filetype.join(" "));
+    const data = filetype.join(" ").replace(/\\/g, '\\\\');
+    Services.prefs.setCharPref(list.getAttribute('prefstring'), data);
   } catch (ex) {
     Tabmix.assert(ex, "error in filetype: " + filetype);
   }
