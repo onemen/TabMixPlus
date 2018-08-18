@@ -1079,7 +1079,7 @@ var TMP_eventListener = {
       shouldMoveFocus = !shouldMoveFocus;
 
     let direction, isVertical;
-    if (Tabmix.isVersion(480)) {
+    if (Tabmix.isVersion(480, 280)) {
       if (orient == "vertical") {
         direction = aEvent.deltaY;
       } else {
@@ -1107,6 +1107,9 @@ var TMP_eventListener = {
         tabBar.advanceSelectedTab(direction, true);
       }
     } else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
+      if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 280) && !TabmixTabbar.isMultiRow) {
+        return;
+      }
       // this code is based on scrollbox.xml wheel/DOMMouseScroll event handler
       let scrollByDelta = function(delta) {
         let scrollByPixels = true;
@@ -1150,7 +1153,7 @@ var TMP_eventListener = {
       aEvent.preventDefault();
 
       if (orient == "vertical") {
-        if (!Tabmix.isVersion(480) && aEvent.axis == aEvent.HORIZONTAL_AXIS) {
+        if (!Tabmix.isVersion(480, 280) && aEvent.axis == aEvent.HORIZONTAL_AXIS) {
           return;
         }
         scrollByDelta(direction);
