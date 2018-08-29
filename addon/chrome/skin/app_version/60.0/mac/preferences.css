@@ -1,0 +1,14 @@
+/**
+    Firefox version 60+
+
+    Mac platform
+
+**/
+
+/* bug 1379338 remove this style */
+prefwindow {
+  -moz-appearance: dialog;
+  background-color: #FFFFFF;
+  color: -moz-DialogText;
+  font: message-box;
+}

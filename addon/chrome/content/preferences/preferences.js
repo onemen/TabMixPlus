@@ -11,6 +11,14 @@ this.$ = id => document.getElementById(id);
 var gPrefWindow = {
   widthChanged: false,
   _initialized: false,
+  onContentLoaded() {
+    const prefWindow = $("TabMIxPreferences");
+    if (window.toString() != "[object ChromeWindow]") {
+      prefWindow.style.display = "flex";
+      prefWindow.setAttribute("in-tab", true);
+    }
+  },
+
   init() {
     this._initialized = true;
 
@@ -618,3 +626,5 @@ XPCOMUtils.defineLazyModuleGetter(this, "AsyncUtils",
   "resource://tabmixplus/AsyncUtils.jsm");
 
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
+
+gPrefWindow.onContentLoaded();

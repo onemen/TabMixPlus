@@ -56,6 +56,10 @@ var gEventsPane = {
       gPrefWindow.removeChild("disableTabsAnimate");
     }
 
+    if (Tabmix.isVersion(600)) {
+      $("restoreOnDemand").setAttribute("type", "number");
+    }
+
     this.alignTabOpeningBoxes();
 
     gPrefWindow.initPane("paneEvents");
@@ -182,7 +186,9 @@ var gEventsPane = {
       }
       const onDemand = $("restoreOnDemand");
       onDemand.min = item.valueNumber;
-      onDemand._enableDisableButtons();
+      if (!Tabmix.isVersion(600)) {
+        onDemand._enableDisableButtons();
+      }
       const restoreOnDemand = $("pref_restoreOnDemand");
       if (prefValue > Math.abs(restoreOnDemand.value)) {
         restoreOnDemand.value = $("chk_restoreOnDemand").checked ? prefValue : -prefValue;

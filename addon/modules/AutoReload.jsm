@@ -150,7 +150,7 @@ this.AutoReload = {
 
   enableAllTabs(aTabBrowser) {
     const win = aTabBrowser.ownerGlobal;
-    const tabs = win.Tabmix.visibleTabs;
+    const tabs = win.Tabmix.visibleTabs.tabs;
     for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
       if (tab.autoReloadEnabled === undefined)
@@ -163,7 +163,7 @@ this.AutoReload = {
 
   disableAllTabs(aTabBrowser) {
     const win = aTabBrowser.ownerGlobal;
-    const tabs = win.Tabmix.visibleTabs;
+    const tabs = win.Tabmix.visibleTabs.tabs;
     for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
       if (tab.autoReloadEnabled)

@@ -1,7 +1,6 @@
+/********** preferences ********/
 
-preference {
-  -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#preference") !important;
-}
+@import url("chrome://tabmix-version/skin/preferences.css");
 
 checkbox_tmp {
   -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#checkbox_tmp") !important;
@@ -233,6 +232,10 @@ prefpane {
 prefpane > tabbox {
   width: 525px;
   height: 464px;
+}
+
+prefwindow[in-tab] .paneSelector {
+  width: 530px;
 }
 
 tabbox {

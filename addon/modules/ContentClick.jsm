@@ -743,8 +743,14 @@ ContentClickInternal = {
     for (var l = 0; l < filetype.length; l++) {
       let doTest = true;
       if (filetype[l].indexOf("/") != -1) {
-      // add \ before first ?
-        testString = filetype[l].substring(1, filetype[l].length - 1).replace(/^\?/, "\\?");
+        // add \ before first ?
+        testString = filetype[l].replace(/^\/(.*)\/$/, "$1").replace(/^\?/, "\\?");
+        hrefExt = linkHref;
+      } else if (filetype[l].includes('?')) {
+        // escape any ? and make sure it starts with \.
+        testString = filetype[l].replace(/\?/g, "?").replace(/\?/g, "\\?")
+            .replace(/^\./, "").replace(/^\\\./, "");
+        testString = "\\." + testString;
         hrefExt = linkHref;
       } else {
         testString = "\\." + filetype[l];

@@ -774,6 +774,35 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
   },
 
+  getTabsAndBrowser(tab) {
+    let tst = gBrowser.treeStyleTab;
+    const tstOldVersion = typeof tst.getBrowserFromTabBrowserElements == 'function';
+    if (tstOldVersion) {
+      let browser = tst.getBrowserFromTabBrowserElements(tab);
+      if (!browser) {
+        return {};
+      }
+      let ownerBrowser = tst.getTabBrowserFromChild(browser);
+      let baseTab = tst.getTabFromBrowser(browser, ownerBrowser);
+      let parentTab = tst.getParentTab(baseTab);
+      return {ownerBrowser, baseTab, parentTab};
+    }
+
+    // code from treestyletabforpm@oinkoink version 0.0.4
+    const tstNewVersion = typeof tst.getFrameFromTabBrowserElements == 'function';
+    if (tstNewVersion) {
+      let frame = tst.getFrameFromTabBrowserElements(tab);
+      if (!frame)
+        return {};
+
+      let ownerBrowser = tst.getTabBrowserFromFrame(frame);
+      let baseTab = tst.getTabFromFrame(frame, ownerBrowser);
+      let parentTab = tst.getParentTab(baseTab);
+      return {ownerBrowser, baseTab, parentTab};
+    }
+    return {};
+  },
+
   // instruct treeStyleTab to use 'kNEWTAB_OPEN_AS_NEXT_SIBLING' when our preference
   // is to open the tab next
   openNewTabNext(tab, openTabNext, clean) {
@@ -782,13 +811,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
 
     let tst = gBrowser.treeStyleTab;
-    let browser = tst.getBrowserFromTabBrowserElements(tab);
-    if (!browser) {
-      return;
-    }
-    let ownerBrowser = tst.getTabBrowserFromChild(browser);
-    let baseTab = tst.getTabFromBrowser(browser, ownerBrowser);
-    let parentTab = tst.getParentTab(baseTab);
+    const {ownerBrowser, baseTab, parentTab} = this.getTabsAndBrowser(tab);
 
     // clean previously ready state set by treeStyleTab
     if (clean) {
@@ -823,7 +846,11 @@ TMP_extensionsCompatibility.treeStyleTab = {
         try {
           tst.stopToOpenChildTab(baseTab);
         } catch (ex) {
-          tst.defaultErrorHandler(ex);
+          if (typeof tst.defaultDeferredErrorHandler == 'function') {
+            tst.defaultDeferredErrorHandler(ex);
+          } else {
+            tst.defaultErrorHandler(ex);
+          }
         }
       }, 0);
     }

@@ -83,7 +83,7 @@ shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > * > .textbox-in
 
 .shortcut-notificationbox {
   border-bottom: 2px solid;
-  -moz-border-bottom-colors: rgba(28, 31, 37, 0.1) rgba(255, 255, 255, 0.1);
+  border-bottom-color: rgba(28, 31, 37, 0.1);
 }
 
 #shortcuts-panel[hide-shortcut-warning="true"] shortcut:not([focused=true]) > .shortcut-notificationbox,

@@ -1,0 +1,14 @@
+/**
+    Firefox version 60+
+
+    Linux platform
+
+**/
+
+/* bug 1379338 remove this style */
+prefwindow {
+  -moz-appearance: window;
+  background-color: -moz-Dialog;
+  color: -moz-DialogText;
+  font: message-box;
+}

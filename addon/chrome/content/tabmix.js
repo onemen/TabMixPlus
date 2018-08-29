@@ -314,8 +314,9 @@ var TMP_eventListener = {
         let enterFS = window.fullScreen;
         // Until Firefox 41 (Bug 1161802 part 2) we get the fullscreen event
         // before the window transitions into or out of FS mode.
-        if (!Tabmix.isVersion(410))
+        if (!Tabmix.isVersion(410, 280)) {
           enterFS = !enterFS;
+        }
         this.onFullScreen(enterFS);
         break;
       }
@@ -445,7 +446,7 @@ var TMP_eventListener = {
     }
 
     var tabBar = gBrowser.tabContainer;
-    this._wheelEvent = Tabmix.isVersion(480) ? "wheel" : "DOMMouseScroll";
+    this._wheelEvent = Tabmix.isVersion(480, 280) ? "wheel" : "DOMMouseScroll";
     tabBar.addEventListener(this._wheelEvent, this, true);
 
     try {
@@ -678,13 +679,13 @@ var TMP_eventListener = {
         let bottombox = document.getElementById("browser-bottombox");
         bottombox.appendChild(fullScrToggler);
 
-        if (Tabmix.isVersion(400)) {
+        if (Tabmix.isVersion(400, 280)) {
           let $LF = '\n    ';
           Tabmix.changeCode(FullScreen, "FullScreen.hideNavToolbox")._replace(
             'this._isChromeCollapsed = true;',
             'TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);' + $LF +
             '$&' + $LF +
-            'TMP_eventListener.toggleTabbarVisibility(false, aAnimate);'
+            'TMP_eventListener.toggleTabbarVisibility(false, arguments[0]);'
           ).toCode();
         } else {
           Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
@@ -731,7 +732,7 @@ var TMP_eventListener = {
    * visible. we call this function from tabBarHeightModified and showNavToolbox
    */
   updateMouseTargetRect() {
-    if (!Tabmix.isVersion(400)) {
+    if (!Tabmix.isVersion(400, 280)) {
       return;
     }
     if (!window.fullScreen || FullScreen._isChromeCollapsed) {
@@ -745,6 +746,9 @@ var TMP_eventListener = {
       left: rect.left,
       right: rect.right
     };
+    if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 280)) {
+      MousePosTracker.addListener(FullScreen);
+    }
   },
 
   _updateMarginBottom: function TMP_EL__updateMarginBottom(aMargin) {
@@ -756,11 +760,24 @@ var TMP_eventListener = {
 
   _expandCallback: function TMP_EL__expandCallback() {
     if (TabmixTabbar.hideMode === 0 || TabmixTabbar.hideMode == 1 && gBrowser.tabs.length > 1) {
-      if (Tabmix.isVersion(400))
-        FullScreen.showNavToolbox();
-      else
+      if (Tabmix.isVersion(400, 280)) {
+        // in Pale Moon we call showNavToolbox with trackMouse argument false
+        // to prevent MousePosTracker to call hideNavToolbox immidiatlly when
+        // the mouse is on the bottom of the screen.
+        // we call MousePosTracker.addListener in updateMouseTargetRect
+        FullScreen.showNavToolbox(!TabmixSvc.isPaleMoon);
+      } else {
         FullScreen.mouseoverToggle(true);
+      }
     }
+  },
+
+  get fullscreenAnimatePref() {
+    delete this.fullscreenAnimatePref;
+    const prefName = Tabmix.isVersion(550) ?
+      "toolkit.cosmeticAnimations.enabled" :
+      "browser.fullscreen.animate";
+    return (this.fullscreenAnimatePref = prefName);
   },
 
   // for tabs bellow content
@@ -780,8 +797,8 @@ var TMP_eventListener = {
           -(bottomToolbox.getBoundingClientRect().height +
           bottombox.getBoundingClientRect().height) + "px";
 
-      if (Tabmix.isVersion(400) && aAnimate &&
-          Services.prefs.getBoolPref("browser.fullscreen.animate")) {
+      if (Tabmix.isVersion(400, 280) && aAnimate &&
+          Services.prefs.getBoolPref(this.fullscreenAnimatePref)) {
         // Hide the fullscreen toggler until the transition ends.
         let listener = function() {
           gNavToolbox.removeEventListener("transitionend", listener, true);
@@ -794,8 +811,9 @@ var TMP_eventListener = {
 
       // Until Firefox 41 changing the margin trigger resize event that calls
       // updateTabbarBottomPosition
-      if (Tabmix.isVersion(410))
+      if (Tabmix.isVersion(410, 280)) {
         gTMPprefObserver.updateTabbarBottomPosition();
+      }
     }
   },
 
@@ -1061,7 +1079,7 @@ var TMP_eventListener = {
       shouldMoveFocus = !shouldMoveFocus;
 
     let direction, isVertical;
-    if (Tabmix.isVersion(480)) {
+    if (Tabmix.isVersion(480, 280)) {
       if (orient == "vertical") {
         direction = aEvent.deltaY;
       } else {
@@ -1089,6 +1107,9 @@ var TMP_eventListener = {
         tabBar.advanceSelectedTab(direction, true);
       }
     } else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
+      if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 280) && !TabmixTabbar.isMultiRow) {
+        return;
+      }
       // this code is based on scrollbox.xml wheel/DOMMouseScroll event handler
       let scrollByDelta = function(delta) {
         let scrollByPixels = true;
@@ -1132,7 +1153,7 @@ var TMP_eventListener = {
       aEvent.preventDefault();
 
       if (orient == "vertical") {
-        if (!Tabmix.isVersion(480) && aEvent.axis == aEvent.HORIZONTAL_AXIS) {
+        if (!Tabmix.isVersion(480, 280) && aEvent.axis == aEvent.HORIZONTAL_AXIS) {
           return;
         }
         scrollByDelta(direction);

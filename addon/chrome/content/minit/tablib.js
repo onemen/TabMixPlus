@@ -639,7 +639,7 @@ Tabmix.tablib = {
   change_utility: function change_utility() {
     // FullScreen code related to tabs bellow content initialize by first
     // fullScreen event, see TMP_eventListener.onFullScreen
-    if (Tabmix.isVersion(400)) {
+    if (Tabmix.isVersion(400, 280)) {
       Tabmix.originalFunctions.FullScreen_showNavToolbox = FullScreen.showNavToolbox;
       FullScreen.showNavToolbox = function() {
         let result = Tabmix.originalFunctions.FullScreen_showNavToolbox.apply(this, arguments);
@@ -664,20 +664,21 @@ Tabmix.tablib = {
 
     Tabmix.changeCode(window, "handleDroppedLink")._replace(
       'loadURI(uri, null, postData.value, false);',
-      'Tabmix.tablib.contentAreaOnDrop(event, url, postData.value);', {check: TabmixSvc.isPaleMoon}
+      'Tabmix.tablib.contentAreaOnDrop(event, url, postData.value);',
+      {check: TabmixSvc.isPaleMoon && !Tabmix.isVersion(0, 280)}
     )._replace(
       'loadURI(data.url, null, data.postData, false);',
       'Tabmix.tablib.contentAreaOnDrop(event, data.url, data.postData);',
-      {check: !Tabmix.isVersion(520) && !TabmixSvc.isPaleMoon}
+      {check: !Tabmix.isVersion(520, 280)}
     )._replace(
       'let lastLocationChange = gBrowser.selectedBrowser.lastLocationChange;',
       'let tabmixContentDrop = event ? event.tabmixContentDrop : links[0].tabmixContentDrop;\n  ' +
       '$&',
-      {check: Tabmix.isVersion(520) && !TabmixSvc.isPaleMoon}
+      {check: Tabmix.isVersion(520, 280)}
     )._replace(
       'replace: true',
       'replace: (tabmixContentDrop || Tabmix.tablib.whereToOpenDrop(event, urls[0])) != "tab"',
-      {check: Tabmix.isVersion(520) && !TabmixSvc.isPaleMoon}
+      {check: Tabmix.isVersion(520, 280)}
     ).toCode();
     // update current browser
     gBrowser.selectedBrowser.droppedLinkHandler = handleDroppedLink;
