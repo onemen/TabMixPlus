@@ -114,12 +114,24 @@ var SessionManager = {
   }
 };
 
+var Glitter = {
+  id: "glitterdrag@harytfw",
+  onEnabled() {
+    TabmixSvc.isGlitterInstalled = true;
+  },
+  onDisabled() {
+    TabmixSvc.isGlitterInstalled = false;
+  },
+};
+
 var TabmixListener = {
   init(id) {
     if (id == SessionManager.id) {
       SessionManager.init();
     } else if (id == GoogleNoTrackingUrl.id) {
       GoogleNoTrackingUrl.onEnabled();
+    } else if (id == Glitter.id) {
+      Glitter.onEnabled();
     } else {
       TabGroups.onEnabled();
     }
@@ -132,6 +144,8 @@ var TabmixListener = {
       PrivateTab[aAction]();
     } else if (id == GoogleNoTrackingUrl.id) {
       GoogleNoTrackingUrl[aAction]();
+    } else if (id == Glitter.id) {
+      Glitter[aAction]();
     } else {
       TabGroups[aAction]();
     }
