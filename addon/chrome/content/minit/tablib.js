@@ -2125,6 +2125,10 @@ Tabmix.newTabUrls = [
   "chrome://fastdial/content/fastdial.html"
 ];
 
+if (TabmixSvc.isPaleMoon) {
+  Tabmix.newTabUrls.push("about:logopage");
+}
+
 Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {
   return Tabmix.prefs.getBoolPref("openTabNext") &&
       (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") || aRelatedToCurrent);
