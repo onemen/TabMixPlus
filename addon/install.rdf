@@ -15,6 +15,7 @@
     <em:aboutURL>chrome://tabmixplus/content/dialogs/about.xul</em:aboutURL>
     <em:creator>ONEMEN (tabmix.onemen@gmail.com)</em:creator>
     <em:developer>ONEMEN</em:developer>
+    <em:updateURL>https://bitbucket.org/onemen/tabmixplus/downloads/updates.json</em:updateURL>
 
     <!-- Firefox -->
     <em:targetApplication>
