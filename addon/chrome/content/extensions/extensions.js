@@ -827,7 +827,6 @@ TMP_extensionsCompatibility.treeStyleTab = {
       if (!baseTab)
         return false;
       let nextTab = tst.getNextSiblingTab(baseTab);
-      Tabmix.log('nextTab ' + nextTab);
       if (parentTab) {
         const insertBefore = tstNewApi ? nextTab : {insertBefore: nextTab, insertAfter: baseTab};
         return tst.readyToOpenChildTab(parentTab, false, insertBefore);
