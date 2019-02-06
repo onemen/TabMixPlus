@@ -684,7 +684,9 @@ Tabmix.tablib = {
     gBrowser.selectedBrowser.droppedLinkHandler = handleDroppedLink;
 
     Tabmix.originalFunctions.duplicateTabIn = window.duplicateTabIn;
-    window.duplicateTabIn = function(aTab, where) {
+    // TreeStyleTab eval of this function use delta
+    // eslint-disable-next-line no-unused-vars
+    window.duplicateTabIn = function(aTab, where, delta) {
       if (where == "window" && Tabmix.getSingleWindowMode()) {
         where = "tab";
       }
