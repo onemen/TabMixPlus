@@ -366,7 +366,7 @@ this.Shortcuts = {
       [key.key, key.keycode] = ["", "VK_SPACE"];
     else {
       key.keycode = "VK_" + key.keycode.toUpperCase().replace(/^VK_/, "");
-      if (key.keycode != "VK_BACK" && !this.KeyboardEvent["DOM_" + key.keycode]) {
+      if (key.keycode != "VK_BACK" && !this.KeyboardEvent.includes("DOM_" + key.keycode)) {
         // not all items in KeyboardEvent are valid as keyboard shortcuts
         key.keycode = "";
       }

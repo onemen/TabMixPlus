@@ -1877,8 +1877,9 @@ gTMPprefObserver = {
     if (!Tabmix.isVersion(380))
       this.insertRule('.tab-icon-overlay {display: none;}');
 
-    /* tab-icon-sound added by Bug 486262, Firefox 42+ */
-    if (!Tabmix.isVersion(420)) {
+    // tab-icon-sound added by Bug 486262, Firefox 42+
+    // and pull/874, PaleMoon 28.3.0
+    if (!Tabmix.isVersion(420, 283)) {
       this.insertRule('.tab-icon-sound {display: none;}');
     }
 

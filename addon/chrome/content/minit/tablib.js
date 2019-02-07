@@ -684,7 +684,9 @@ Tabmix.tablib = {
     gBrowser.selectedBrowser.droppedLinkHandler = handleDroppedLink;
 
     Tabmix.originalFunctions.duplicateTabIn = window.duplicateTabIn;
-    window.duplicateTabIn = function(aTab, where) {
+    // TreeStyleTab eval of this function use delta
+    // eslint-disable-next-line no-unused-vars
+    window.duplicateTabIn = function(aTab, where, delta) {
       if (where == "window" && Tabmix.getSingleWindowMode()) {
         where = "tab";
       }
@@ -2124,6 +2126,10 @@ Tabmix.newTabUrls = [
   "chrome://google-toolbar/content/new-tab.html",
   "chrome://fastdial/content/fastdial.html"
 ];
+
+if (TabmixSvc.isPaleMoon) {
+  Tabmix.newTabUrls.push("about:logopage");
+}
 
 Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {
   return Tabmix.prefs.getBoolPref("openTabNext") &&

@@ -255,6 +255,14 @@
                 this.scrollPosition += this._distanceToRow(px);
               }
             };
+
+            if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 280)) {
+              Tabmix.changeCode(this, "scrollbox.scrollByIndex")._replace(
+                'var x = index > 0 ? rect[end] + 1 : rect[start] - 1;',
+                'var offset = this.isMultiRow ? 2 : 1;\n          ' +
+                'var x = index > 0 ? rect[end] + offset : rect[start] - offset;'
+              ).toCode();
+            }
           }
 
           // Bug 1387130 (landed in Firefox 57) - Use original tabstrip scrolling behaviour when using scrollbuttons

@@ -789,8 +789,8 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
 
     // code from treestyletabforpm@oinkoink version 0.0.4
-    const tstNewVersion = typeof tst.getFrameFromTabBrowserElements == 'function';
-    if (tstNewVersion) {
+    const tstNewApi = typeof tst.getFrameFromTabBrowserElements == 'function';
+    if (tstNewApi) {
       let frame = tst.getFrameFromTabBrowserElements(tab);
       if (!frame)
         return {};
@@ -798,7 +798,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
       let ownerBrowser = tst.getTabBrowserFromFrame(frame);
       let baseTab = tst.getTabFromFrame(frame, ownerBrowser);
       let parentTab = tst.getParentTab(baseTab);
-      return {ownerBrowser, baseTab, parentTab};
+      return {ownerBrowser, baseTab, parentTab, tstNewApi};
     }
     return {};
   },
@@ -811,7 +811,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }
 
     let tst = gBrowser.treeStyleTab;
-    const {ownerBrowser, baseTab, parentTab} = this.getTabsAndBrowser(tab);
+    const {ownerBrowser, baseTab, parentTab, tstNewApi} = this.getTabsAndBrowser(tab);
 
     // clean previously ready state set by treeStyleTab
     if (clean) {
@@ -828,10 +828,8 @@ TMP_extensionsCompatibility.treeStyleTab = {
         return false;
       let nextTab = tst.getNextSiblingTab(baseTab);
       if (parentTab) {
-        return tst.readyToOpenChildTab(parentTab, false, {
-          insertBefore: nextTab,
-          insertAfter: baseTab
-        });
+        const insertBefore = tstNewApi ? nextTab : {insertBefore: nextTab, insertAfter: baseTab};
+        return tst.readyToOpenChildTab(parentTab, false, insertBefore);
       } else if (nextTab) {
         ownerBrowser.treeStyleTab.readiedToAttachNewTab = true;
         ownerBrowser.treeStyleTab.parentTab = null;
