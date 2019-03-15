@@ -21,17 +21,37 @@ var pref;
 var tabStateCache;
 var _versions = {};
 function isVersion(aVersionNo) {
+  let firefox, waterfox, palemoon;
+  if (typeof aVersionNo === 'object') {
+    firefox = aVersionNo.ff || 0;
+    palemoon = aVersionNo.pm || 0;
+    waterfox = aVersionNo.wf || "";
+
+    if (!firefox && !palemoon && !waterfox) {
+      TabmixSvc.console.log('invalid version check ' + JSON.stringify(aVersionNo));
+      return true;
+    }
+    aVersionNo = firefox;
+  }
+
   if (TabmixSvc.isPaleMoonID) {
-    let paleMoonVer = arguments.length > 1 ? arguments[1] : -1;
+    let paleMoonVer = palemoon || (arguments.length > 1 ? arguments[1] : -1);
     if (aVersionNo > 240 && paleMoonVer == -1)
       return false;
     aVersionNo = paleMoonVer;
+  } else if (TabmixSvc.isWaterfox && waterfox) {
+    aVersionNo = waterfox;
   }
 
   if (typeof _versions[aVersionNo] == "boolean")
     return _versions[aVersionNo];
 
   let v = Services.appinfo.version;
+
+  if (TabmixSvc.isWaterfox && waterfox) {
+    return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo) >= 0);
+  }
+
   return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo / 10 + ".0a1") >= 0);
 }
 
@@ -407,6 +427,10 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", () => {
   } catch (ex) {
   }
   return false;
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isWaterfox", () => {
+  return Services.appinfo.name == "Waterfox";
 });
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",

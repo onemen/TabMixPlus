@@ -712,7 +712,12 @@ var TMP_ClosedTabs = {
     if (aWhere == "current" || (aWhere == "original" && restorePosition)) {
       gBrowser.moveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, pos));
     } else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) {
-      let tab = gBrowser._lastRelatedTab || gBrowser.selectedTab;
+      let tab;
+      if (Tabmix.isVersion({ff: 570, wf: "56.2.8"})) {
+        tab = gBrowser._lastRelatedTabMap.get(gBrowser.selectedTab) || gBrowser.selectedTab;
+      } else {
+        tab = gBrowser._lastRelatedTab || gBrowser.selectedTab;
+      }
       let offset = newTab._tPos > tab._tPos ? 1 : 0;
       gBrowser.moveTabTo(newTab, tab._tPos + offset);
     } else if (aBlankTabToReuse && !Tabmix.getOpenTabNextPref()) {
