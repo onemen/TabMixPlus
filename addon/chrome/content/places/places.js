@@ -313,7 +313,7 @@ var TMP_Places = {
       } else {
         let params = {
           skipAnimation: multiple,
-          noInitialLabel: true,
+          noInitialLabel: this._titlefrombookmark,
           dontMove: true,
           forceNotRemote: loadProgressively,
         };
