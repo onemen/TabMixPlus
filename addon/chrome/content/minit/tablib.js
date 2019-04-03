@@ -846,7 +846,7 @@ Tabmix.tablib = {
         '  if (aEvent) {\n' +
         '    if (aEvent.shiftKey)\n' +
         '      loadInBackground = !loadInBackground;\n' +
-        '    if (getBoolPref("extensions.tabmix.inversefocusLinks")\n' +
+        '    if (Services.prefs.getBoolPref("extensions.tabmix.inversefocusLinks")\n' +
         '        && (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey)))\n' +
         '      loadInBackground = !loadInBackground;\n' +
         '  }\n' +
