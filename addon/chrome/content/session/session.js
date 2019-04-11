@@ -3419,7 +3419,12 @@ TabmixSessionManager = {
       newIndex = newPos;
     }
 
-    gBrowser._lastRelatedTab = null;
+    if (Tabmix.isVersion({ff: 570, wf: "56.2.8"})) {
+      gBrowser._lastRelatedTabMap = new WeakMap();
+    } else {
+      gBrowser._lastRelatedTab = null;
+    }
+
     // call mTabstrip.ensureElementIsVisible before we restore the tab
     // we call from TMP_eventListener.onSSTabRestoring again
     gBrowser.ensureTabIsVisible(gBrowser.selectedTab);

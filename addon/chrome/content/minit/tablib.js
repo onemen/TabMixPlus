@@ -215,7 +215,7 @@ Tabmix.tablib = {
       let selectedTab = this.selectedTab;
       let openerTab = openerBrowser && this.getTabForBrowser(openerBrowser) ||
         relatedToCurrent && selectedTab;
-      let lastRelatedTab = Tabmix.isVersion(570) ?
+      let lastRelatedTab = Tabmix.isVersion({ff: 570, wf: "56.2.8"}) ?
         this._lastRelatedTabMap.get(openerTab) : this._lastRelatedTab;
 
       // we use var here to allow other extensions that wrap our code with
@@ -242,7 +242,7 @@ Tabmix.tablib = {
         this.moveTabTo(t, newTabPos, true);
         if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {
           TMP_LastTab.attachTab(t, lastRelatedTab);
-          if (Tabmix.isVersion(570)) {
+          if (Tabmix.isVersion({ff: 570, wf: "56.2.8"})) {
             this._lastRelatedTabMap.set(openerTab, t);
           } else {
             this._lastRelatedTab = t;
@@ -846,7 +846,7 @@ Tabmix.tablib = {
         '  if (aEvent) {\n' +
         '    if (aEvent.shiftKey)\n' +
         '      loadInBackground = !loadInBackground;\n' +
-        '    if (getBoolPref("extensions.tabmix.inversefocusLinks")\n' +
+        '    if (Services.prefs.getBoolPref("extensions.tabmix.inversefocusLinks")\n' +
         '        && (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey)))\n' +
         '      loadInBackground = !loadInBackground;\n' +
         '  }\n' +

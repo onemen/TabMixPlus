@@ -81,6 +81,9 @@ this.LinkNodeUtils = {
       if (!blocked && /youtube.com/.test(currentHref) &&
           (!this.isGMEnabled(window) || decodeURI(href).indexOf("return false;") == -1)) {
         blocked = true;
+      // amazon.com search - added 2019-04-09
+      } else if (!blocked && /amazon\.com\/s\?/.test(currentHref)) {
+        blocked = true;
       } else if (!blocked) {
         // make sure external links in developer.mozilla.org open new tab
         let uri = Services.io.newURI(currentHref);

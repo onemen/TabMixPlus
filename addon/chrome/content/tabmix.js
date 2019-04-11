@@ -197,7 +197,11 @@ Tabmix.afterDelayedStartup = function() {
         gBrowser.tabs[i].setAttribute("tabmix_bookmarkId", items[i]);
     }
     delete window.bookMarkIds;
-    gBrowser._lastRelatedTab = null;
+    if (Tabmix.isVersion({ff: 570, wf: "56.2.8"})) {
+      gBrowser._lastRelatedTabMap = new WeakMap();
+    } else {
+      gBrowser._lastRelatedTab = null;
+    }
   }
 
   TMP_Places.onDelayedStartup();

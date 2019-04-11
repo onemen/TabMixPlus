@@ -136,9 +136,14 @@ this.MergeWindows = {
       if (openerTab)
         index = openerTab._tPos + 1;
     }
-    let lastRelatedTab = tabbrowser._lastRelatedTab;
+    const isRelatedTabMap = TabmixSvc.version({ff: 570, wf: "56.2.8"});
+    let relatedTabBackup = isRelatedTabMap ? tabbrowser._lastRelatedTabMap : tabbrowser._lastRelatedTab;
     tabbrowser.moveTabTo(newTab, index);
-    tabbrowser._lastRelatedTab = lastRelatedTab;
+    if (isRelatedTabMap) {
+      tabbrowser._lastRelatedTabMap = relatedTabBackup;
+    } else {
+      tabbrowser._lastRelatedTab = relatedTabBackup;
+    }
     tabbrowser.swapBrowsersAndCloseOther(newTab, aTab);
   },
 

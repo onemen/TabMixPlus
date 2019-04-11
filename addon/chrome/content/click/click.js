@@ -310,10 +310,6 @@ var TabmixTabClickOptions = {
 };
 
 var TabmixContext = {
-  get tabContextMenu() {
-    delete this.tabContextMenu;
-    return (this.tabContextMenu = gBrowser.tabContainer.contextMenu);
-  },
   // Create new items in the tab bar context menu
   buildTabContextMenu: function TMP_buildTabContextMenu() {
     var $id = id => document.getElementById(id);
@@ -377,7 +373,7 @@ var TabmixContext = {
     let tabBar = gBrowser.tabContainer;
     if (show) {
       this._originalTabbarContextMenu = tabBar.getAttribute("context");
-      tabBar.setAttribute("context", this.tabContextMenu.id);
+      tabBar.setAttribute("context", gBrowser.tabContainer.contextMenu.id);
     } else {
       Tabmix.setItem(tabBar, "context", this._originalTabbarContextMenu || null);
     }
@@ -386,8 +382,8 @@ var TabmixContext = {
   toggleEventListener(enable) {
     var eventListener = enable ? "addEventListener" : "removeEventListener";
     document.getElementById("contentAreaContextMenu")[eventListener]("popupshowing", this, false);
-    this.tabContextMenu[eventListener]("popupshowing", this, false);
-    this.tabContextMenu[eventListener]("popupshown", this, false);
+    gBrowser.tabContainer.contextMenu[eventListener]("popupshowing", this, false);
+    gBrowser.tabContainer.contextMenu[eventListener]("popupshown", this, false);
   },
 
   handleEvent(aEvent) {
@@ -416,12 +412,12 @@ var TabmixContext = {
 
   // Tab context menu popupshowing
   updateTabContextMenu: function TMP_updateTabContextMenu(event) {
-    if (event.originalTarget != this.tabContextMenu)
+    if (event.originalTarget != gBrowser.tabContainer.contextMenu)
       return true;
 
-    this.tabContextMenu.addEventListener("popuphidden", this);
+    gBrowser.tabContainer.contextMenu.addEventListener("popuphidden", this);
 
-    var item, triggerNode = this.tabContextMenu.triggerNode;
+    var item, triggerNode = gBrowser.tabContainer.contextMenu.triggerNode;
     if (triggerNode.parentNode)
       item = triggerNode.parentNode.id;
     if (item && (item == "btn_tabslist_menu" || item == "alltabs-popup"))
@@ -586,11 +582,11 @@ var TabmixContext = {
    * this is only for the case that other extensions popupshowing run after our TabmixContextMenu.updateTabContextMenu
    */
   tabContextMenuShown: function TMP_tabContextMenuShown(event) {
-    if (event.originalTarget != this.tabContextMenu)
+    if (event.originalTarget != gBrowser.tabContainer.contextMenu)
       return;
     // don't show 2 menuseparator together
     var hideNextSeparator = true, lastVisible, hideMenu = true;
-    for (var mi = this.tabContextMenu.firstChild; mi; mi = mi.nextSibling) {
+    for (var mi = gBrowser.tabContainer.contextMenu.firstChild; mi; mi = mi.nextSibling) {
       if (mi.localName == "menuseparator") {
         if (!lastVisible || !hideNextSeparator) {
           mi.hidden = hideNextSeparator;
@@ -619,7 +615,7 @@ var TabmixContext = {
 
     // if all the menu are hidden don't show the popup
     if (hideMenu)
-      this.tabContextMenu.hidePopup();
+      gBrowser.tabContainer.contextMenu.hidePopup();
   },
 
   // Main context menu popupshowing
@@ -887,7 +883,7 @@ var TabmixAllTabs = {
     if (this.isAfterCtrlClick(popup.parentNode))
       return false;
 
-    const contextMenuId = this.tabContextMenu.id;
+    const contextMenuId = gBrowser.tabContainer.contextMenu.id;
     if (popup.hasAttribute("context") && popup.getAttribute("context") != contextMenuId) {
       popup.setAttribute("context", contextMenuId);
     }
