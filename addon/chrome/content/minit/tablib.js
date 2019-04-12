@@ -234,6 +234,11 @@ Tabmix.tablib = {
 
       if (relatedToCurrent && openTabnext) {
         let newTabPos = (lastRelatedTab || openerTab)._tPos + 1;
+        // update new position if the new tab already moved before
+        // lastRelatedTab/openerTab by other extension (TreeStyleTab)
+        if (newTabPos - 1 > t._tPos) {
+          newTabPos--;
+        }
         if (lastRelatedTab) {
           lastRelatedTab.owner = null;
         } else {
