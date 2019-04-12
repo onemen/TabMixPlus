@@ -278,8 +278,16 @@ var TMP_Places = {
     const [loadProgressively, restoreOnDemand] = this.getPreferences(tabCount);
 
     var tabToSelect = null;
-    var prevTab = (!doReplace && openTabNext && gBrowser.mCurrentTab._tPos < openTabs.length - 1) ?
-      gBrowser.mCurrentTab : Tabmix.visibleTabs.last;
+    let prevTab;
+    let relatedToCurrent = !doReplace && openTabNext && gBrowser.mCurrentTab._tPos < openTabs.length - 1;
+    if (relatedToCurrent) {
+      // open bookmarks after last related tab if exist
+      let lastRelatedTab = Tabmix.isVersion({ff: 570, wf: "56.2.8"}) ?
+        gBrowser._lastRelatedTabMap.get(gBrowser.selectedTab) : gBrowser._lastRelatedTab;
+      prevTab = lastRelatedTab || gBrowser.selectedTab;
+    } else {
+      prevTab = Tabmix.visibleTabs.last;
+    }
     var tabPos, index;
     var multiple = bmGroup.length > 1;
     let tabs = [], tabsData = [];
