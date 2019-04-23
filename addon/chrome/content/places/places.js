@@ -167,7 +167,7 @@ var TMP_Places = {
       let openNewTab = subscribe && Tabmix.whereToOpen(this.prefBookmark).inNew;
       if (openNewTab) {
         where = "tab";
-        params.inBackground = Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
+        params.inBackground = Tabmix.getBoolPref("browser.tabs.loadBookmarksInBackground");
       } else {
         win.gBrowser.selectedBrowser.tabmix_allowLoad = true;
       }
@@ -893,9 +893,9 @@ Tabmix.onContentLoaded = {
       '            "TMP_tabshifted", "TMP_whereToOpenLink", "TMP_contentLinkClick"];' + $LF +
       'let pref = callerTrace.contain(list) ?' + $LF +
       '    "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";' + $LF +
-      'let notOneClickSearch = !Services.prefs.getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
+      'let notOneClickSearch = !Tabmix.getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
       '                        !callerTrace.contain("onPopupClick");' + $LF +
-      'if (notOneClickSearch && Services.prefs.getBoolPref(pref, true))' + $LF +
+      'if (notOneClickSearch && Tabmix.getBoolPref(pref, true))' + $LF +
       '  shift = !shift;' + $LF +
       '$&' + $LF +
       '}'
@@ -912,7 +912,7 @@ Tabmix.onContentLoaded = {
       '{\n' +
       '  let callerTrace = Tabmix.callerTrace();\n' +
       '  if (callerTrace.contain("BG_observe", "loadHomepage")) {\n' +
-      '    params.inBackground = Services.prefs.getBoolPref("browser.tabs.loadInBackground");\n' +
+      '    params.inBackground = Tabmix.getBoolPref("browser.tabs.loadInBackground");\n' +
       '  } else if (where == "current" &&\n' +
       '      callerTrace.contain("ReaderParent.toggleReaderMode")) {\n' +
       '    gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
