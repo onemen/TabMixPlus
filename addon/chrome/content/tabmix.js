@@ -750,7 +750,7 @@ var TMP_eventListener = {
       left: rect.left,
       right: rect.right
     };
-    if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 280)) {
+    if (TabmixSvc.isPaleMoon && Tabmix.isVersion({pm: 280}) && !Tabmix.isVersion({pm: 284})) {
       MousePosTracker.addListener(FullScreen);
     }
   },
@@ -765,11 +765,11 @@ var TMP_eventListener = {
   _expandCallback: function TMP_EL__expandCallback() {
     if (TabmixTabbar.hideMode === 0 || TabmixTabbar.hideMode == 1 && gBrowser.tabs.length > 1) {
       if (Tabmix.isVersion(400, 280)) {
-        // in Pale Moon we call showNavToolbox with trackMouse argument false
-        // to prevent MousePosTracker to call hideNavToolbox immidiatlly when
-        // the mouse is on the bottom of the screen.
-        // we call MousePosTracker.addListener in updateMouseTargetRect
-        FullScreen.showNavToolbox(!TabmixSvc.isPaleMoon);
+        if (TabmixSvc.isPaleMoon && Tabmix.isVersion({pm: 284})) {
+          FullScreen.showNavToolbox();
+        } else {
+          FullScreen.showNavToolbox(!TabmixSvc.isPaleMoon);
+        }
       } else {
         FullScreen.mouseoverToggle(true);
       }
