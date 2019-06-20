@@ -288,7 +288,7 @@ so display: none !important; does not hide the button */
   width: auto !important;
 }
 
-#tabbrowser-tabs[orient="horizontal"]:not([widthFitTitle]) > .tabbrowser-tab:not([pinned]) {
+#tabbrowser-tabs[orient="horizontal"]:not([widthFitTitle]) > .tabbrowser-tab:not([pinned]):not([tiletabs-single="hidden"]) {
   -moz-box-flex: 100 !important;
   width: 0 !important;
 }
