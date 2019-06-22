@@ -234,6 +234,11 @@ Tabmix.tablib = {
 
       if (relatedToCurrent && openTabnext) {
         let newTabPos = (lastRelatedTab || openerTab)._tPos + 1;
+        // update new position if the new tab already moved before
+        // lastRelatedTab/openerTab by other extension (TreeStyleTab)
+        if (newTabPos - 1 > t._tPos) {
+          newTabPos--;
+        }
         if (lastRelatedTab) {
           lastRelatedTab.owner = null;
         } else {
@@ -846,7 +851,7 @@ Tabmix.tablib = {
         '  if (aEvent) {\n' +
         '    if (aEvent.shiftKey)\n' +
         '      loadInBackground = !loadInBackground;\n' +
-        '    if (Services.prefs.getBoolPref("extensions.tabmix.inversefocusLinks")\n' +
+        '    if (Tabmix.getBoolPref("extensions.tabmix.inversefocusLinks")\n' +
         '        && (aEvent.button == 1 || aEvent.button == 0 && (aEvent.ctrlKey || aEvent.metaKey)))\n' +
         '      loadInBackground = !loadInBackground;\n' +
         '  }\n' +

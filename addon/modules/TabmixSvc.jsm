@@ -21,13 +21,14 @@ var pref;
 var tabStateCache;
 var _versions = {};
 function isVersion(aVersionNo) {
-  let firefox, waterfox, palemoon;
+  let firefox, waterfox, palemoon, basilisk;
   if (typeof aVersionNo === 'object') {
     firefox = aVersionNo.ff || 0;
     palemoon = aVersionNo.pm || 0;
     waterfox = aVersionNo.wf || "";
+    basilisk = aVersionNo.bs || "";
 
-    if (!firefox && !palemoon && !waterfox) {
+    if (!firefox && !palemoon && !waterfox && !basilisk) {
       TabmixSvc.console.log('invalid version check ' + JSON.stringify(aVersionNo));
       return true;
     }
@@ -41,6 +42,8 @@ function isVersion(aVersionNo) {
     aVersionNo = paleMoonVer;
   } else if (TabmixSvc.isWaterfox && waterfox) {
     aVersionNo = waterfox;
+  } else if (TabmixSvc.isBasilisk && basilisk) {
+    aVersionNo = basilisk;
   }
 
   if (typeof _versions[aVersionNo] == "boolean")
@@ -48,7 +51,7 @@ function isVersion(aVersionNo) {
 
   let v = Services.appinfo.version;
 
-  if (TabmixSvc.isWaterfox && waterfox) {
+  if (TabmixSvc.isWaterfox && waterfox || TabmixSvc.isBasilisk && basilisk) {
     return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo) >= 0);
   }
 
@@ -239,7 +242,11 @@ this.TabmixSvc = {
   windowStartup: {
     QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver,
       Ci.nsISupportsWeakReference]),
+
     _initialized: false,
+
+    syncedTabsInitialized: false,
+
     init(aWindow) {
       // windowStartup must only be called once for each window
       if ("firstWindowInSession" in aWindow.Tabmix)
@@ -264,7 +271,8 @@ this.TabmixSvc = {
       Cu.import("resource://tabmixplus/DownloadLastDir.jsm", {});
 
       TabmixPlacesUtils.init(aWindow);
-      if (TabmixSvc.version(470)) {
+      if (TabmixSvc.version(470) && !(TabmixSvc.isBasilisk && TabmixSvc.version({bs: "52.9.2019.06.08"}))) {
+        this.syncedTabsInitialized = true;
         SyncedTabs.init(aWindow);
       }
 
@@ -305,7 +313,9 @@ this.TabmixSvc = {
       switch (aTopic) {
         case "quit-application":
           TabmixPlacesUtils.onQuitApplication();
-          SyncedTabs.onQuitApplication();
+          if (this.syncedTabsInitialized) {
+            SyncedTabs.onQuitApplication();
+          }
           for (let id of Object.keys(TabmixSvc.console._timers)) {
             let timer = TabmixSvc.console._timers[id];
             timer.cancel();
@@ -431,6 +441,10 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", () => {
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isWaterfox", () => {
   return Services.appinfo.name == "Waterfox";
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isBasilisk", () => {
+  return Services.appinfo.name == "Basilisk";
 });
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
