@@ -1693,13 +1693,3 @@ Tabmix.getPlacement = function(id) {
   let placement = CustomizableUI.getPlacementOfWidget(id);
   return placement ? placement.position : null;
 };
-
-// Pale moon 28.5.0a1 removed window.getBoolPref
-// https://github.com/MoonchildProductions/UXP/pull/1023
-Tabmix.getBoolPref = function(prefname, def) {
-  try {
-    return Services.prefs.getBoolPref(prefname);
-  } catch (er) {
-    return def;
-  }
-};
