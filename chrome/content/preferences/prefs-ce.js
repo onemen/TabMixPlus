@@ -598,16 +598,6 @@ class PrefPane extends MozXULElement {
       return;
     }
 
-    if(this.src){
-      Components.utils.import("chrome://tabmixplus/content/ChromeManifest.jsm");
-      Components.utils.import("chrome://tabmixplus/content/Overlays.jsm");
-
-      let ov = new Overlays(new ChromeManifest(),window.document.defaultView);
-      // let xhr = ov.fetchOverlay(this.src);
-      // let node = xhr.responseXML.documentElement.querySelector("prefpane#" + this.id);
-      ov.load(this.src);
-    }
-
     let fragment = this.fragment;
     let contentBox = fragment.querySelector('.content-box');
     let childNodes = [...this.childNodes];
@@ -1547,13 +1537,14 @@ class PrefWindow extends MozXULElement {
       };
 
       var obs = new OverlayLoadObserver(aPaneElement);
-      document.loadOverlay(aPaneElement.src, obs);
+      // document.loadOverlay(aPaneElement.src, obs);
 
       Components.utils.import("chrome://tabmixplus/content/ChromeManifest.jsm");
       Components.utils.import("chrome://tabmixplus/content/Overlays.jsm");
 
-      let ov = new Overlays(new ChromeManifest(),window.document.defaultView);
-      ov.load(this.src);
+      let ov = new Overlays(new ChromeManifest(),document.defaultView);
+      ov.load(aPaneElement.src);
+      obs.observe();
 
     } else
       this._selectPane(aPaneElement);
