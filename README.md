@@ -1,2 +1,4 @@
 # TabMixPlus
-New Tab mix plus for modern Firefox
+New Tab Mix Plus for modern Firefox
+
+Work in progress ....
