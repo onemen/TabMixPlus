@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Styles">
+<!ENTITY styles.label "Estilos personalizados">
+<!ENTITY currentTab.label "Separador actual">
+<!ENTITY unloadedTabs.label "Separadores não carregados">
+<!ENTITY unreadTab.label "Separadores não lidos">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
+<!ENTITY unreadAfterReload.label "definir o separador como não lido após atualizar">
+<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
+<!ENTITY otherTabs.label "Outros separadores">
+<!ENTITY italic.label "Itálico">
+<!ENTITY bold.label "Negrito">
+<!ENTITY underline.label "Sublinhado">
+<!ENTITY textcolor.label "Cor do texto">
+<!ENTITY bgColor.label "Cor de fundo">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
+<!ENTITY useThis.label "usar este estilo para">
+<!ENTITY opacity.label "opacidade">

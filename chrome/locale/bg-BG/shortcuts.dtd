@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Клавишни комбинации">
+<!ENTITY shortcuts.edit "Редактиране на клавишните комбинации">
+<!ENTITY shortcuts.showAll "Показване на всички">
+<!ENTITY shortcuts.hideUnused "Скриване на">
+<!ENTITY shortcuts.warning "Някои от клавишните комбинации се използват за други команди">
+<!ENTITY shortcuts.showDetails "Подробности">
+<!ENTITY shortcuts.hideDetails "Без подробности">
+<!ENTITY shortcuts.switchToLast "Превключване към последния активен подпрозорец">
+<!ENTITY shortcuts.slideshow "Включване/изключване на слайдшоуто на подпрозорци">
+<!ENTITY shortcuts.toggleFLST "Превключване на фокуса след затваряне на текущия подпрозорец">
+<!ENTITY shortcuts.toggleFLST.tooltip "превключвайте между фокусиране върху десния или върху последно избрания подпрозорец">
+<!ENTITY shortcuts.placeholder "Задайте модификатори и клавиш">
+<!ENTITY shortcuts.reset "Заводски настройки">
+<!ENTITY shortcuts.clear "Изчистване">
+<!ENTITY shortcuts.inuse "Клавишната комбинация вече се използва за:">

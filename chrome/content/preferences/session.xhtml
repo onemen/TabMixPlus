@@ -1,0 +1,284 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
+%pref-tabmixDTD;
+]>
+
+<overlay id="SessionPaneOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="paneSession" onpaneload="gSessionPane.init();">
+
+    <!-- scripts -->
+    <script type="application/javascript" src="chrome://tabmixplus/content/session/session.js"/>
+    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/session.js"/>
+
+    <!-- preferences - list all preferences in this pane -->
+    <preferences>
+      <preference id="pref_session"             name="extensions.tabmix.session.selectedTabIndex"
+                  type="int"/>
+      <preference id="pref_sessionManagerAddon"
+                  name="extensions.tabmix.sessionManagerAddon.isActive"      type="bool"
+                  onchange="gSessionPane.setVisibleContent(this.value);"/>
+      <preference id="pref_sessionManager"
+                  name="extensions.tabmix.sessions.manager"                  type="bool"
+                  onchange="gSessionPane.updateSessionShortcuts();"/>
+      <preference id="pref_sessionCrashRecovery"
+                  name="extensions.tabmix.sessions.crashRecovery"            type="bool"/>
+      <preference id="pref_browser.warnOnQuit"
+                  name="browser.warnOnQuit"                                  type="bool"/>
+      <preference id="pref_browserStartupPage"
+                  name="browser.startup.page"                                type="int"
+                  onchange="gSessionPane.isSessionStoreEnabled();"/>
+      <preference id="pref_resume_from_crash"
+                  name="browser.sessionstore.resume_from_crash"              type="bool"
+                  onchange="gSessionPane.isSessionStoreEnabled();"/>
+      <preference id="pref_ss_timeinterval"
+                  name="browser.sessionstore.interval"                       type="int"/>
+      <preference id="pref_ss_postdata"
+                  name="browser.sessionstore.privacy_level"                  type="int"
+                  onchange="gPrefWindow.setDisabled('obs_ss_postdata', this.value == 2);"/>
+      <preference id="pref_ss_postdatabytes"
+                  name="browser.sessionstore.postdata"                       type="int"/>
+      <preference id="pref_onStart"
+                  name="extensions.tabmix.sessions.onStart"                  type="int"/>
+      <preference id="pref_onClose"
+                  name="extensions.tabmix.sessions.onClose"                  type="int"/>
+      <preference id="pref_onStart.loadsession"
+                  name="extensions.tabmix.sessions.onStart.loadsession"      type="int"
+                  onchange="gSessionPane.setSessionpath(this.value);"/>
+      <preference id="pref_sessionpath"
+                  name="extensions.tabmix.sessions.onStart.sessionpath"      type="string"/>
+      <preference id="pref_onStart.empty"
+                  name="extensions.tabmix.sessions.onStart.askifempty"       type="bool"/>
+      <preference id="pref_onStart.restorePinned"
+                  name="extensions.tabmix.sessions.onStart.restorePinned"       type="bool"/>
+      <preference id="pref_onRestore.overwritewindows"
+                  name="extensions.tabmix.sessions.restore.overwritewindows" type="bool"/>
+      <preference id="pref_onRestore.overwritetabs"
+                  name="extensions.tabmix.sessions.restore.overwritetabs"    type="bool"/>
+      <preference id="pref_onOverwrite-Save"
+                  name="extensions.tabmix.sessions.restore.saveoverwrite"    type="bool"/>
+      <preference id="pref_onRestore.concatenate"
+                  name="extensions.tabmix.sessions.restore.concatenate"      type="bool"/>
+      <preference id="pref_onRestore.reloadall"
+                  name="extensions.tabmix.sessions.restore.reloadall"        type="bool"/>
+      <preference id="pref_session.History"
+                  name="extensions.tabmix.sessions.save.history"             type="bool"/>
+      <preference id="pref_session.Permissions"
+                  name="extensions.tabmix.sessions.save.permissions"         type="bool"/>
+      <preference id="pref_session.Protect"
+                  name="extensions.tabmix.sessions.save.protected"           type="bool"/>
+      <preference id="pref_session.Lock"
+                  name="extensions.tabmix.sessions.save.locked"              type="bool"/>
+      <preference id="pref_session.ScrollPosition"
+                  name="extensions.tabmix.sessions.save.scrollposition"      type="bool"/>
+      <preference id="pref_session.SelectedTab"
+                  name="extensions.tabmix.sessions.save.selectedtab"         type="bool"/>
+      <preference id="pref_session.closedtabs"
+                  name="extensions.tabmix.sessions.save.closedtabs"          type="bool"/>
+    </preferences>
+
+    <!-- pane content -->
+    <tabbox id="paneSession-tabbox" selectedIndex="1">
+      <tabs class="tabs-hidden">
+        <tab id="sessionmanager_ext_tab" hidden="true" label="tab" helpTopic=" "/>
+        <tab id="sessionStore_tab" label="tab" helpTopic="tabmix"/>
+      </tabs>
+      <tabpanels>
+        <!-- Session Manager Extension -->
+        <tabpanel>
+          <!-- Open Session Manager Extension Options -->
+          <groupbox id="sessionmanager_ext">
+            <hbox align="end">
+              <vbox style="width: 24em;">
+                <description> &sm.extension.description1;.</description>
+                <description> &sm.extension.description2;.</description>
+                <description> &sm.extension.description3;.</description>
+              </vbox>
+              <spacer flex="1"/>
+              <button style="min-width: 0;" id="sessionmanager_button"
+                      oncommand="gSessionPane.sessionManagerOptions();"/>
+            </hbox>
+            <separator class="groove"/>
+            <hbox id="exportsession" align="end">
+              <description style="width: 24em;"> &sm.extension.description5;.</description>
+              <spacer flex="1"/>
+              <button label="&sm.extension.convert.label;…"
+                      oncommand="gSessionPane.convertSession();"/>
+            </hbox>
+            <radiogroup id="chooseFile" align="start">
+              <radio value="0" label="&sm.extension.chooseFile.label2;"/>
+              <radio value="1" label="&sm.extension.chooseFile.label1;"/>
+            </radiogroup>
+          </groupbox>
+        </tabpanel>
+        <tabpanel id="sessionsPanel">
+          <groupbox align="start">
+            <checkbox_tmp id="sessionsOptions" label="&ss.enable.label;"
+                      tooltiptext="&ss.enable.tooltip;"
+                      oncommand="gSessionPane.setSessionsOptions(this);"/>
+            <separator class="thin"/>
+            <vbox>
+              <label value="&sm.start;" control="browserStartupPage" class="firefox"/>
+              <menulist id="browserStartupPage" class="indent firefox" preference="pref_browserStartupPage">
+                <menupopup>
+                  <menuitem label="&startupHomePage1.label;"     value="1"/>
+                  <menuitem label="&startupBlankPage.label;"    value="0"/>
+                  <menuitem label="&startupLastSession1.label;"  value="3"/>
+                </menupopup>
+              </menulist>
+              <checkbox_tmp id="sessionManager" label="&sessionManger.enable;" preference="pref_sessionManager"
+                        class="tabmix" style="margin-top: 15px;"/>
+            </vbox>
+            <checkbox_tmp id="resume_from_crash" label="&crashRecovery.enable;" preference="pref_resume_from_crash" class="firefox"/>
+            <checkbox_tmp id="sessionCrashRecovery" label="&crashRecovery.enable;" preference="pref_sessionCrashRecovery" class="tabmix"/>
+          </groupbox>
+          <tabbox class="groupbox-tabbox" flex="1">
+            <tabs id="session"
+                  onselect="gPrefWindow.tabSelectionChanged(event);">
+              <tab label="&sm.StartExit;" class="subtabs tabmix" helpTopic="Session_-_StartExit"/>
+              <tab label="&sm.restore;" class="subtabs tabmix" helpTopic="Session_-_StartExit#Restore"/>
+              <tab label="tab" disabled="true" class="firefox" helpTopic="Session_-_StartExit"/>
+              <tab label="&sm.preserve;" class="subtabs tabmix" helpTopic="Session_-_StartExit#Preserve"/>
+            </tabs>
+            <tabpanels id="sessionManager-panels" flex="1" class="groupbox-panels">
+              <!-- Tabmix Session manager - start/exit -->
+              <tabpanel>
+                <hbox>
+                  <groupbox style="min-width: 14.6em;">
+                    <caption label="&sm.start;"/>
+                    <radiogroup id="onStart" align="start" preference="pref_onStart">
+                      <radio value="0" id="onStart.restoresession" label="&sm.start.restore;"/>
+                      <radio value="1" id="onStart.askme" label="&sm.start.ask;"/>
+                      <radio value="2" id="onStart.donothing" label="&sm.start.nothing;"/>
+                    </radiogroup>
+                  </groupbox>
+                  <groupbox flex="1">
+                    <caption label="&sm.exit;"/>
+                    <radiogroup id="onClose" align="start" preference="pref_onClose"
+                                oncommand="if (this.selectedIndex == 2) alert(TabmixSvc.getString('tmp.sessionempty'));">
+                      <radio value="0" id="onClose.savesession" label="&sm.exit.save;"/>
+                      <radio value="1" id="onClose.askme" label="&sm.exit.ask;"/>
+                      <radio value="2" id="onClose.donothing" label="&sm.exit.nothing;"/>
+                    </radiogroup>
+                  </groupbox>
+                </hbox>
+                <groupbox>
+                  <hbox align="center">
+                    <label value="&sm.startup;"/>
+                    <menulist id="onStart.loadsession" sizetopopup="none" style="width: 15em;"
+                              preference="pref_onStart.loadsession">
+                      <menupopup id="onStart.popup"
+                                 onpopupshowing="TabmixSessionManager.createMenuForDialog(this);">
+                        <menuseparator id="onStart.loadsession-startSeparator" hidden="true"/>
+                        <menuseparator id="onStart.loadsession-endSeparator" hidden="true"/>
+                        <menuitem id="load-last-session" label="&sm.lastsession;" value="-1" session=""/>
+                        <menuitem id="load-previous-session" label="&sm.previouslast;" value="-2" session=""/>
+                      </menupopup>
+                    </menulist>
+                  </hbox>
+                  <checkbox_tmp id="onStart.empty" class="indent" label="&sm.chooseifempty;"
+                            preference="pref_onStart.empty"/>
+                  <separator class="thin"/>
+                  <hbox align="center">
+                    <label value="&sm.notrestore.label;:" control="browserStartupPage1"/>
+                    <menulist id="browserStartupPage1" preference="pref_browserStartupPage">
+                      <menupopup>
+                        <menuitem label="&startupHomePage1.label;"     value="1"/>
+                        <menuitem label="&startupBlankPage.label;"    value="0"/>
+                      </menupopup>
+                    </menulist>
+                  </hbox>
+                  <checkbox_tmp id="onStart.restorePinned" class="indent" label="&sm.restorePinned1.label;"
+                            preference="pref_onStart.restorePinned"/>
+                </groupbox>
+              </tabpanel>
+              <!-- Tabmix Session manager - restore -->
+              <tabpanel>
+                <groupbox>
+                  <caption label="&sm.restore.options;"/>
+                  <hbox>
+                    <checkbox_tmp id="onRestore.overwritewindows" label="&sm.restore.overwrite;"
+                              preference="pref_onRestore.overwritewindows"/>
+                    <checkbox_tmp id="onRestore.overwritetabs" label="&sm.restore.overwriteTabs;"
+                              preference="pref_onRestore.overwritetabs" observes="obs_onRestore.overwritewindows"/>
+                  </hbox>
+                  <checkbox_tmp id="onOverwrite-Save" class="indent" label="&sm.restore.closedWinList;"
+                            preference="pref_onOverwrite-Save" observes="obs_onRestore.overwritewindows"/>
+                  <checkbox_tmp id="onRestore.concatenate" label="&sm.restore.merge;" preference="pref_onRestore.concatenate"/>
+                  <checkbox_tmp id="onRestore.reloadall" label="&sm.restore.bypassCache;" preference="pref_onRestore.reloadall"/>
+                </groupbox>
+              </tabpanel>
+              <!-- Build-in SessionStore (we hide this panel, don't put it in first or last tab)-->
+              <tabpanel orient="horizontal" flex="1">
+                <vbox>
+                  <label value="&ss.advanced_setting;" class="header"
+                         style="text-decoration: underline;color: #CC0000;"/>
+                  <description class="header">&ss.advanced_setting.warning;</description>
+                  <label control="ss_timeinterval" value="&ss.interval;"/>
+                  <hbox align="center" pack="end">
+                    <label control="ss_timeinterval" value="&ss.interval.seconds;:"/>
+                    <textbox id="ss_timeinterval" preference="pref_ss_timeinterval"
+                             maxlength="6" size="6" type="number"/>
+                  </hbox>
+                  <label control="ss_postdata" value="&ss.privacy_level;:"/>
+                  <hbox pack="end">
+                    <menulist id="ss_postdata" preference="pref_ss_postdata">
+                      <menupopup>
+                        <menuitem label="&ss.privacy_level.allsites;"    value="0"/>
+                        <menuitem label="&ss.privacy_level.unencrypted;" value="1"/>
+                        <menuitem label="&ss.privacy_level.nosites;"     value="2"/>
+                      </menupopup>
+                    </menulist>
+                  </hbox>
+                  <label control="ss_postdatabytes" value="&ss.postdata.label1;" observes="obs_ss_postdata"/>
+                  <hbox align="center" pack="end">
+                    <label control="ss_postdatabytes" value="&ss.postdata.label2;:" observes="obs_ss_postdata"/>
+                    <textbox id="ss_postdatabytes"  preference="pref_ss_postdatabytes"
+                             maxlength="6" size="6" type="number" min="-1" observes="obs_ss_postdata"/>
+                  </hbox>
+                </vbox>
+              </tabpanel>
+              <!-- Tabmix Session manager - preserve -->
+              <tabpanel>
+                <groupbox>
+                  <caption label="&sm.preserve.options;"/>
+                  <hbox>
+                    <vbox align="start">
+                      <checkbox_tmp id="session.History" label="&sm.preserve.history;" preference="pref_session.History"/>
+                      <checkbox_tmp id="session.Permissions" label="&sm.preserve.permission;" preference="pref_session.Permissions"/>
+                      <checkbox_tmp id="session.ScrollPosition" label="&sm.preserve.scroll1;" preference="pref_session.ScrollPosition"/>
+                    </vbox>
+                    <vbox align="start">
+                      <checkbox_tmp id="session.Protect" label="&sm.preserve.protect;" preference="pref_session.Protect"/>
+                      <checkbox_tmp id="session.Lock" label="&sm.preserve.locked;" preference="pref_session.Lock"/>
+                    </vbox>
+                  </hbox>
+                </groupbox>
+                <groupbox>
+                  <caption label="&sm.restore.winOptions;"/>
+                  <hbox align="center">
+                    <checkbox_tmp id="session.SelectedTab" label="&sm.restore.selectedTab;" preference="pref_session.SelectedTab"/>
+                    <checkbox_tmp id="session.closedtabs" label="&sm.restore.closedTabs;" preference="pref_session.closedtabs" observes="obs_undoClose"/>
+                  </hbox>
+                </groupbox>
+              </tabpanel>
+            </tabpanels>
+          </tabbox>
+        </tabpanel>
+      </tabpanels>
+    </tabbox>
+
+    <broadcasterset id="paneSession:Broadcaster">
+      <broadcaster id="obs_onRestore.overwritewindows"/>
+    </broadcasterset>
+
+    <broadcasterset>
+      <broadcaster id="obs_ss_postdata"/>
+    </broadcasterset>
+
+  </prefpane>
+
+</overlay>

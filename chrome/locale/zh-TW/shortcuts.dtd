@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "快捷鍵">
+<!ENTITY shortcuts.edit "編輯快捷鍵">
+<!ENTITY shortcuts.showAll "顯示全部">
+<!ENTITY shortcuts.hideUnused "隱藏未使用的快捷鍵">
+<!ENTITY shortcuts.warning "您的某些快捷鍵已被其它命令使用中">
+<!ENTITY shortcuts.showDetails "顯示詳細資訊">
+<!ENTITY shortcuts.hideDetails "隱藏詳細資訊">
+<!ENTITY shortcuts.switchToLast "切換到上一個作用中的分頁">
+<!ENTITY shortcuts.slideshow "啟用/停用「自動輪換分頁」功能">
+<!ENTITY shortcuts.toggleFLST "啟用/停用「關閉分頁後自動切換分頁」功能">
+<!ENTITY shortcuts.toggleFLST.tooltip "切換至最右邊或是最後選取的分頁">
+<!ENTITY shortcuts.placeholder "組合鍵或是一般鍵">
+<!ENTITY shortcuts.reset "預設值">
+<!ENTITY shortcuts.clear "清除">
+<!ENTITY shortcuts.inuse "此快捷鍵已被使用">

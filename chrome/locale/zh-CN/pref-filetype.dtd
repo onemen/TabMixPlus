@@ -1,0 +1,5 @@
+<!ENTITY filetype.options "文件类型编辑器">
+<!ENTITY filetype.add "添加">
+<!ENTITY filetype.edit "修改">
+<!ENTITY filetype.delete "删除">
+<!ENTITY filetype.new "新建文件类型:">

@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Stiller">
+<!ENTITY styles.label "Stilleri Özelleştir">
+<!ENTITY currentTab.label "Geçerli sekme">
+<!ENTITY unloadedTabs.label "Yüklenmemiş Sekmeler">
+<!ENTITY unreadTab.label "Bakılmamış sekmeler">
+<!ENTITY hideRGB.label "RGB'yi gizle">
+<!ENTITY showRGB.label "RGB'yi göster">
+<!ENTITY unreadAfterReload.label "yeniden yüklenince okunmamış olarak göster">
+<!ENTITY disableBackground.label "Özel arka plan renklerini devre dışı bırak">
+<!ENTITY squaredTabs.label "Köşeli sekmeler için arka plan rengini uygula">
+<!ENTITY otherTabs.label "Diğer sekmeler">
+<!ENTITY italic.label "İtalik">
+<!ENTITY bold.label "Kalın">
+<!ENTITY underline.label "Altı çizili">
+<!ENTITY textcolor.label "Metin rengi">
+<!ENTITY bgColor.label "Arkaplan rengi">
+<!ENTITY bgTopColor.label "üst">
+<!ENTITY bgBottomColor.label "alt">
+<!ENTITY useThis.label "Stili bunun için kullan">
+<!ENTITY opacity.label "saydamlık">

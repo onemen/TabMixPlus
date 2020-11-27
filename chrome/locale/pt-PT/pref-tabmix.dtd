@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Ligações">
+<!ENTITY tab.events "Eventos">
+<!ENTITY tab.mouse "Rato">
+<!ENTITY tab.appearance "Ecrã">
+<!ENTITY tab.menu "Menu">
+<!ENTITY tab.session "Sessão">
+<!ENTITY tab.incompatible "Erro">
+<!ENTITY apply.label "Aplicar">
+<!ENTITY settings.export "Exportar definições">
+<!ENTITY settings.import "Importar definições">
+<!ENTITY settings.sync "Preferências do sync">
+<!ENTITY settings.default "restaurar pré-definições">
+<!ENTITY settings.revert "Revert">
+<!ENTITY generalWindowOpen.label "Abrir ligações que abren numa nova janela em:">
+<!ENTITY externalLink.useSeparate.label "Usar preferências separadas para ligações de outras aplicações">
+<!ENTITY externalLinkTarget.label "Abrir ligações de outras aplicações em:">
+<!ENTITY linkTarget.tab "Novo separador">
+<!ENTITY linkTarget.window "Nova janela">
+<!ENTITY linkTarget.current "Separador actual">
+<!ENTITY linkTarget.accesskey "c">
+<!ENTITY divertedWindowOpen.label "JavaScript popups:">
+<!ENTITY divertedWindowOpen.all "Abrir popups em separadores">
+<!ENTITY divertedWindowOpen.some "Permitir popups redimensionados">
+<!ENTITY divertedWindowOpen.none "Permitir todos os popups">
+<!ENTITY linkTarget.label "Abrir ligações com um atributo de destino no separador actual">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY download.label "Prevenir separadores em branco ao transferir ficheiros">
+<!ENTITY edit.label "Editar">
+<!ENTITY speLink.label "Forçar para abrir em novo separador:">
+<!ENTITY speLink.none "Nada">
+<!ENTITY speLink.allLinks "Todas as ligações">
+<!ENTITY speLink.external "Ligações para outros sítios">
+<!ENTITY singleWindow.label "Activar modo de janela única">
+<!ENTITY newTabs.label "Novos separadores">
+<!ENTITY tabOpen.label "Abertura de separador">
+<!ENTITY tabFocus.label "Focar separador">
+<!ENTITY tabClose.label "Encerramento de separador">
+<!ENTITY tabMerge.label "Juntar separador">
+<!ENTITY tabFeature.label "Funcionalidades do separador">
+<!ENTITY newtab.label "Carregar em novos separadores:">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "Página em branco">
+<!ENTITY newtab.home "Página inicial">
+<!ENTITY newtab.current "Página actual">
+<!ENTITY newtab.duplicate "Duplicar página">
+<!ENTITY newtab.location.1 "Novo separador">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY location.label.1 "Endereço">
+<!ENTITY focusContent.label "Focar conteúdo quando carregar uma página não vazia">
+<!ENTITY openTabNext.label "Abrir novos separadores a seguir ao actual">
+<!ENTITY openOtherTabNext.label "Abrir outros separadores a seguir ao actual">
+<!ENTITY relatedAfterCurrent.label "Apenas se relacionado com o separador actual">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Abrir separadores duplicados a seguir ao original">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Alterar ordem de abertura">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Abrir separador ao pé do último separador aberto (desde a última selecção)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabs">
+<!ENTITY lockTabs.label "Bloquear separadores">
+<!ENTITY lockNewTabs.label "Bloquear novos separadores">
+<!ENTITY lockAppTabs.label "Bloquear separadores de aplicações">
+<!ENTITY updateLockState.label "Aplicar alterações a separadores abertos">
+<!ENTITY openNewTab.label "Abrir separadores de:">
+<!ENTITY openBookmarks.label "Marcadores">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openHistory.label "Histórico">
+<!ENTITY openUrl.label "Barra de endereço">
+<!ENTITY openSearch.label "Barra de pesquisa">
+<!ENTITY middlecurrent1.label "Clique central ou Control clique abre os itens no separador actual">
+<!ENTITY middlecurrent.tooltip "Apenas para marcadores, histórico, ligações forçadas para abrir em novo separador">
+<!ENTITY tabFocus.caption "Focar/seleccionar separadores que abrem de:">
+<!ENTITY selectTab.label "Ligações">
+<!ENTITY selectDivertedTab.label "Janelas diversas">
+<!ENTITY selectTabFromExternal.label "Outras aplicações">
+<!ENTITY selectTabCommand.label "Comandos de novo separador">
+<!ENTITY contextMenuSearch.label "Pesquisa do menú de contexto para">
+<!ENTITY selectTabBH.label "Marcadores/histórico">
+<!ENTITY duplicateTab.label "Duplicar separador">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "Aviso">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "A fechar último separador">
+<!ENTITY keepWindow.label.3.1 "Não fechar janela ao fechar o último separador">
+<!ENTITY keeptab.label "Prevenir que o último separador feche">
+<!ENTITY closeOnMerge.label "Fechar janelas depois de se juntarem">
+<!ENTITY warnOnMerge.label "Avisar quando se fecham separadores que não estão a ser unidos">
+<!ENTITY currenttab.caption.label "A fechar separador actual">
+<!ENTITY focusTab.labelBegin "Ao encerrar o separador actual, focar o:">
+<!ENTITY focusTab.firstTab "Primeiro separador">
+<!ENTITY focusTab.leftTab "Separador esquerdo">
+<!ENTITY focusTab.rightTab "Separador direito">
+<!ENTITY focusTab.lastTab "Último separador">
+<!ENTITY focusTab.lastSelectedTab "Último separador seleccionado">
+<!ENTITY focusTab.openerTab "Abrir/separador direito">
+<!ENTITY focusTab.openerTab.rtl "Separador abertura/esquerda">
+<!ENTITY focusTab.lastOpenedTab "Último separador aberto">
+<!ENTITY undoClose.label "Activar anulação de encerrar separadores">
+<!ENTITY undoCloseCache.label "Número máx. de separadores fechados para lembrar:">
+<!ENTITY undoClosepos.label "Restaurar posição original dos separadores">
+<!ENTITY menuonlybutton.label "Fazer com que o botão da barra de ferramentas apenas apresente uma lista">
+<!ENTITY ctrltab.label "Ctrl-Tab navega nos separadores na ordem usada mais recentemente">
+<!ENTITY cmdtab.label "Cmd-Tab navega nos separadores na ordem usada mais recentemente">
+<!ENTITY ctrltab.tabPreviews "Mostra pré-visualizações dos separadores">
+<!ENTITY ctrltab.popup "Ctrl-Tab mostra um menu popup da lista de separadores">
+<!ENTITY cmdtab.popup "Cmd-Tab mostra um menu popup da lista de separadores">
+<!ENTITY tabpopup.mouse "Lista de separadores responde ao rato">
+<!ENTITY mergeNoTabSelection.label "Juntar janelas quando não são seleccionados separadores">
+<!ENTITY mergeTabSelection.label "Juntar depois de seleccionar separadores:">
+<!ENTITY mergeall.label "Juntar todas as janelas numa só">
+<!ENTITY mergelastfocused.label "Juntar apenas a última janela com a última apresentada">
+<!ENTITY mergePopups.label "Juntar também janelas de popup">
+<!ENTITY popupNextToOpener.label "Colocar popups ao pé das janelas que o abriram">
+<!ENTITY activateSlideshow.label "Pressionar #1 roda os separadores a cada">
+<!ENTITY toggleAnimation.label "Desactivar Abrir/Fechar a animação do separador">
+<!ENTITY reloadEvery.matchAddress.label "Recarregar um separador ignorando o seu endereço">
+<!ENTITY reloadEvery.onReloadButton.label "Mostrar recarregar todos os menus no botão recarregar">
+<!ENTITY seconds.label "segundos">
+<!ENTITY minutes.label "min">
+<!ENTITY tabBarAppearance.label "Barra de separadores">
+<!ENTITY tabAppearance.label "Separador">
+<!ENTITY toolBarAppearance.label "Barra de ferramentas">
+<!ENTITY show.ontabbar.label "Mostrar na barra de separadores">
+<!ENTITY show.ontab.label "Mostrar no separador">
+<!ENTITY dragNewTabButton.tooltip "Arraste o botão &quot;Novo separador&quot; na sua barra do separador para activar esta opção.">
+<!ENTITY hideTabBarButton.label "Botão de encerrar separador">
+<!ENTITY newTabButton.label "Botão de novo separador">
+<!ENTITY newTabButton.position.left.label "Lado esquerdo">
+<!ENTITY newTabButton.position.right.label "Lado direito">
+<!ENTITY newTabButton.position.afterlast.label "Depois do último separador">
+<!ENTITY allTabsButton.label "Botão todos os separadores">
+<!ENTITY tabBarSpace.label "Espaços extra em ambos os lados">
+<!ENTITY tabBarSpace.tooltip "Para clicar e deixar algo na barra de separadores">
+<!ENTITY tabbar.label "Ocultar barra de separadores apenas quando um separador está aberto">
+<!ENTITY moveTabOnDragging.label "Ao arrastar um separador movê-lo diretamente">
+<!ENTITY dropIndicator.label "Indicador">
+<!ENTITY dropIndicator-native.label "Estilo nativo">
+<!ENTITY dropIndicator-builtin.label "Estilo embutido">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY tabBarPosition.label "Posição:">
+<!ENTITY tabBarPosition.top.label "Topo (acima do conteúdo)">
+<!ENTITY tabBarPosition.bottom.label "Fundo (abaixo do conteúdo)">
+<!ENTITY tabScroll.label "Quando os separadores não cabem na largura:">
+<!ENTITY tabScroll.none "Deslizar sem botões">
+<!ENTITY tabScroll.leftRightButtons "Deslizar com botões do lado esquerdo e direito">
+<!ENTITY tabScroll.rightButtons "Deslizar com botões do lado direito">
+<!ENTITY tabScroll.rightButtons.rtl "Deslocável com botões no lateral esquerdo">
+<!ENTITY tabScroll.multibar "Múltiplas colunas">
+<!ENTITY maxrow.label "Número máximo de colunas a mostrar:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY offsetAmountToScroll.label "Ao deslocar mostrar a parte do próximo separador">
+<!ENTITY smoothScroll.label "Ativar deslocamento suave">
+<!ENTITY scrolldelay.label "Atrazo do deslizamento(tempo entre a repetição do deslizamento)">
+<!ENTITY currenttab.style.label "Separador actual">
+<!ENTITY unloadedtabs.style.label "Separadores não carregados">
+<!ENTITY unreadtabs.style.label "Separadores não lidos">
+<!ENTITY othertabs.style.label "Outros separadores">
+<!ENTITY setstyles.label "Personalizar estilos">
+<!ENTITY extraIcons.label1 "Ícones para">
+<!ENTITY extraIcons.locked "Bloqueado">
+<!ENTITY extraIcons.protected "Protegido">
+<!ENTITY extraIcons.autoreload "Recarregar auto">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY progressMeter.label "Medidor de progresso nos separadores">
+<!ENTITY showTabX.labelBegin "Botão de fechar separador">
+<!ENTITY showTabX.left "Colocar no lado direito">
+<!ENTITY showTabX.rtl "Colocar no sítio certo">
+<!ENTITY milliseconds.label "msec">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "em todos">
+<!ENTITY showTabX.current "no actual">
+<!ENTITY showTabX.hover "apontada a">
+<!ENTITY showTabX.alwaysExeption "em todos os separadores mais largos que">
+<!ENTITY showTabX.currentHover "no actual &amp; apontado para">
+<!ENTITY minWidth.label "Largura do separador:">
+<!ENTITY widthTo.label "para">
+<!ENTITY widthPixels.label "picéis">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY flexTabs.label "A largura do separador encaixa na largura">
+<!ENTITY bookastitle.label "USar nome do marcador como titulo do separador">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "25em">
+<!ENTITY toolbar.description "Pode personalizar os botões do Tabmix para serem mostrados na sua barra de ferramentas">
+<!ENTITY toolbar.button.label "Personalizar">
+<!ENTITY toolbar.visible.caption "Botões visíveis">
+<!ENTITY toolbar.novisible.label "Não existem botões visíveis">
+<!ENTITY toolbar.hidden.caption "Ocultar botões">
+<!ENTITY toolbar.nohidden.label "Não existem botões ocultos">
+<!ENTITY mouseGesture.label "Gestos do rato">
+<!ENTITY mouseClick.label "Clique do rato">
+<!ENTITY mouseHoverSelect.labelBegin "Seleccionar separador apontado para">
+<!ENTITY tabFlip.label "Ao clicar no actual trocar para o último separador seleccionado">
+<!ENTITY tabFlip.delay "Usar um atraso de">
+<!ENTITY clickFocus.label "Clique do rato (para baixo e deixar) para seleccionar um separador">
+<!ENTITY removeEntries.label "Remover a entrada da lista de menu do Tab Mix Plus usando o clique central">
+<!ENTITY lockTabSizingOnClose.label "Ao fechar o separador, outros separadores não devem redimensionar até o cursor deixar a região da barra de ferramentas">
+<!ENTITY removeEntries.tooltip "Inclui separadores fechados, janelas fechadas e sessões guardadas">
+<!ENTITY tabbarscrolling.caption "Ao deslocar sobre a barra de separadores">
+<!ENTITY tabbarscrolling.holdShift.label "Carregue em Shift ao deslocar para trocar entre estas opções">
+<!ENTITY tabbarscrolling.selectTab.label "mudar o separador selecionado">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Rolar todos os separadores">
+<!ENTITY tabbarscrolling.inverse.label "Inverter seleção ao rolar">
+<!ENTITY double.label "Duplo clique">
+<!ENTITY middle.label "Clique central">
+<!ENTITY ctrl.label "Ctrl-clique">
+<!ENTITY cmd.label "Cmd-clique">
+<!ENTITY shift.label "Shift-clique">
+<!ENTITY alt.label "Alt-clique">
+<!ENTITY ontab.label "num separador:">
+<!ENTITY ontabbar.label "numa barra de separadores:">
+<!ENTITY clicktab.label "Escolha o comando a executar quando clica num separador ou barra de separadores">
+<!ENTITY ontabbar.dblClick.label "Impede que um duplo clique na barra de separadores mude o tamanho da janela.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY clicktab.nothing "Não fazer nada">
+<!ENTITY clicktab.addtab "Abrir novo separador">
+<!ENTITY clicktab.duplicatetab "Duplica o separador">
+<!ENTITY clicktab.duplicatetabw "Duplica o separador numa nova janela">
+<!ENTITY clicktab.detachtab "Mover o separador para uma nova janela">
+<!ENTITY clicktab.protecttab "Protege o separador">
+<!ENTITY clicktab.locktab "Bloqueia o separador">
+<!ENTITY clicktab.freezetab "Protege e bloqueia o separador">
+<!ENTITY clicktab.renametab "Renomeia o separador">
+<!ENTITY clicktab.copyTabUrl "Copia o separador e URL para o clipboard">
+<!ENTITY clicktab.copyUrlFromClipboard "Carregar URL do clipboard">
+<!ENTITY clicktab.selectMerge "Selecciona o separador para juntar">
+<!ENTITY clicktab.mergeTabs "Juntar janelas">
+<!ENTITY clicktab.bookTab "Adicionar aos marcadores">
+<!ENTITY clicktab.bookTabs "Adicionar tudo aos marcadores">
+<!ENTITY clicktab.reloadtab "Recarrega o separador">
+<!ENTITY clicktab.reloadtabs "Recarrega todos os separadores">
+<!ENTITY clicktab.reloadothertabs "Recarrega outros separadores">
+<!ENTITY clicktab.reloadlefttabs "Recarrega separadores da esquerda">
+<!ENTITY clicktab.reloadrighttabs "Recarregar separadores da direita">
+<!ENTITY clicktab.autoReloadTab "Activar/desactivar auto recarregar separador">
+<!ENTITY clicktab.removeall "Encerrar todos os separadores">
+<!ENTITY clicktab.removeother "Encerar outros separadores">
+<!ENTITY clicktab.removesimilar "Fechar separadores de domínios semelhantes">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.uctab "Reabri último separador encerrado">
+<!ENTITY clicktab.ucatab "Reabre todos os separadores fechados">
+<!ENTITY clicktab.snapback "Separador SnapBack">
+<!ENTITY clicktab.ietab "Abre o separador no IE">
+<!ENTITY contentLoad "Clique central carrega url do clipboard">
+<!ENTITY context.tab "Menu de contexto do separador">
+<!ENTITY context.main "Menu de contexto principal">
+<!ENTITY context.tools "Menu Ferramentas">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showtabBarContext.label "Mostrar no menu de contexto do separador:">
+<!ENTITY showContentAreaContext.label "Mostrar no menu de contexto principal:">
+<!ENTITY showToolsMenu.label "Mostrar no">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "Mostrar uma página em branco">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "O Tab Mix Plus detectou que a extensão Session manager está instalada">
+<!ENTITY sm.extension.description2 "O gestor de sessão do Tab Mix Plus será desactivado">
+<!ENTITY sm.extension.description3 "Pode clicar no botão do lado direito para abrir o diálogo do gestor de sessão">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "Converter">
+<!ENTITY sm.extension.chooseFile.label1 "Converter as sessões do Tab Mix Plus do perfil actual">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "Usara funcionalidade de restauro de sessão do Firefox">
+<!ENTITY ss.enable.tooltip "De-seleccionar para permitir o uso do Gestor de sessões do Tabmix">
+<!ENTITY ss.advanced_setting "Definições avançadas">
+<!ENTITY ss.advanced_setting.warning "Não alterar, a menos que saiba o que está a fazer">
+<!ENTITY ss.interval "Intervalo de tempo para guardar dois estados">
+<!ENTITY ss.interval.seconds "(em milissegundos)">
+<!ENTITY ss.privacy_level "Guardar dados sensíveis (form data, POSTDATA e cookies) para">
+<!ENTITY ss.privacy_level.allsites "Todos os sítios">
+<!ENTITY ss.privacy_level.unencrypted "Apenas sítios não cifrados">
+<!ENTITY ss.privacy_level.nosites "Nenhum sítio">
+<!ENTITY ss.postdata.label1 "Tamanho máximo de POSTDATA a guardar">
+<!ENTITY ss.postdata.label2 "(em bytes, -1 = tudo)">
+<!ENTITY sessionManger.enable "Activar o gestor de sessões">
+<!ENTITY crashRecovery.enable "Activar recuperação">
+<!ENTITY sm.StartExit "Iniciar/Sair">
+<!ENTITY sm.restore "Restaurar">
+<!ENTITY sm.preserve "Preservar">
+<!ENTITY sm.start "Quando o navegador inicia:">
+<!ENTITY sm.start.restore "Restaurar">
+<!ENTITY sm.start.ask "Perguntar antes de restaurar">
+<!ENTITY sm.start.nothing "Não restaurar">
+<!ENTITY sm.exit "Quando o navegador sai:">
+<!ENTITY sm.exit.save "Guardar sessão">
+<!ENTITY sm.exit.ask "Perguntar antes de guardar">
+<!ENTITY sm.exit.nothing "Não guardar">
+<!ENTITY sm.startup "Sessão de abertura:">
+<!ENTITY sm.lastsession "Última sessão">
+<!ENTITY sm.previouslast "Anterior ao último">
+<!ENTITY sm.chooseifempty "Escolher outra se vazia">
+<!ENTITY sm.restore.options "Ao restaurar sessões:">
+<!ENTITY sm.restore.overwrite "Sobrescrever janelas">
+<!ENTITY sm.restore.overwriteTabs "E separadores">
+<!ENTITY sm.restore.closedWinList "Guardar janelas na lista de janelas encerradas">
+<!ENTITY sm.restore.merge "Juntar múltiplas janelas numa só">
+<!ENTITY sm.restore.bypassCache "Bypass cache ao restaurar">
+<!ENTITY sm.notrestore.label "Quando não restaurar ao iniciar">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "Preservar separadores:">
+<!ENTITY sm.preserve.history "Histórico">
+<!ENTITY sm.preserve.protect "Estado da protecção">
+<!ENTITY sm.preserve.locked "Bloquear estado">
+<!ENTITY sm.preserve.permission "Permissões">
+<!ENTITY sm.preserve.scroll1 "Deslocar posição">
+<!ENTITY sm.restore.winOptions "Preservar janelas:">
+<!ENTITY sm.restore.selectedTab "Separador seleccionado">
+<!ENTITY sm.restore.closedTabs "Lista de separadores fechados">
+<!ENTITY incompatible.extensions "Algumas das suas extensões são incompatíveis com o Tab Mix Plus, é recomendado que desactive ou desinstale essas extensões.">
+<!ENTITY incompatible.button.label "Mostrar lista">

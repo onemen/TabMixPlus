@@ -1,0 +1,319 @@
+<!ENTITY tab.links "קישורים">
+<!ENTITY tab.events "אירועים">
+<!ENTITY tab.mouse "עכבר">
+<!ENTITY tab.appearance "תצוגה">
+<!ENTITY tab.menu "תפריט">
+<!ENTITY tab.session "הפעלה">
+<!ENTITY tab.incompatible "שגיאה">
+<!ENTITY apply.label "החל">
+<!ENTITY settings.export "יצא הגדרות">
+<!ENTITY settings.import "יבא הגדרות">
+<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.default "שחזר ברירת מחדל">
+<!ENTITY settings.revert "Revert">
+<!ENTITY generalWindowOpen.label "פתח קישור שנפתח בחלון חדש ב:">
+<!ENTITY externalLink.useSeparate.label "השתמש בהגדרות נפרדות לקישורים מיישומים אחרים">
+<!ENTITY externalLinkTarget.label "פתח קישור מתוכנה אחרת ב:">
+<!ENTITY linkTarget.tab "לשונית חדשה">
+<!ENTITY linkTarget.window "חלון חדש">
+<!ENTITY linkTarget.current "לשונית נוכחית">
+<!ENTITY linkTarget.accesskey "ל">
+<!ENTITY divertedWindowOpen.label "חלונות קופצים של JavaScript:">
+<!ENTITY divertedWindowOpen.all "פתח את כל החלונות הקופצים בלשוניות">
+<!ENTITY divertedWindowOpen.some "אפשר שינוי גודל של חלונות קופצים">
+<!ENTITY divertedWindowOpen.none "אפשר את כל החלונות הקופצים">
+<!ENTITY linkTarget.label "פתח קישורים עם תכונות מטרה (target attribute) בלשונית נוכחית">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY download.label "מנע לשוניות ריקות כשאני מוריד קבצים">
+<!ENTITY edit.label "ערוך">
+<!ENTITY speLink.label "הכרח לפתוח בלשונית חדשה">
+<!ENTITY speLink.none "כלום">
+<!ENTITY speLink.allLinks "כל הקישורים">
+<!ENTITY speLink.external "קישורים לאתרים אחרים">
+<!ENTITY singleWindow.label "אפשר מצב חלון בודד">
+<!ENTITY newTabs.label "לושניות חדשות">
+<!ENTITY tabOpen.label "פתיחת לשונית">
+<!ENTITY tabFocus.label "מיקוד לשונית">
+<!ENTITY tabClose.label "סגירת לשונית">
+<!ENTITY tabMerge.label "מיזוג לשונית">
+<!ENTITY tabFeature.label "תכונות לשונית">
+<!ENTITY newtab.label "טען בלשונית חדשה">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "דף ריק">
+<!ENTITY newtab.home "דף הבית">
+<!ENTITY newtab.current "עמוד נוכחי">
+<!ENTITY newtab.duplicate "שכפל עמוד">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY location.label.1 "Address">
+<!ENTITY focusContent.label "התמקד בתוכן בעת טעינת דף לא ריק">
+<!ENTITY openTabNext.label "פתח לשוניות חדשות ליד הלשוניות הנוכחיות">
+<!ENTITY openOtherTabNext.label "פתח לשוניות ליד לשונית זו">
+<!ENTITY relatedAfterCurrent.label "רק אם קשור ללשונית הזו">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "פתח לשוניות משוכפלות ליד המקוריות">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "שנה סדר פתיחה">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "פתח לשונית חדשה סמוך ללשונית האחרונה שנוצרה מתוך לשונית זו">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabs">
+<!ENTITY lockTabs.label "נעל לשוניות">
+<!ENTITY lockNewTabs.label "נעל לשוניות חדשות">
+<!ENTITY lockAppTabs.label "נעל לשוניות יישום">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY openNewTab.label "פתח לשוניות מ:">
+<!ENTITY openBookmarks.label "סימניות">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openHistory.label "היסטוריה">
+<!ENTITY openUrl.label "שורת הכתובת">
+<!ENTITY openSearch.label "תיבת החיפוש">
+<!ENTITY middlecurrent1.label "לחצן אמצעי פותח פריטים בלשונית זו">
+<!ENTITY middlecurrent.tooltip "רק אם הסימניות, ההיסטוריה או הלינקים הוכרחו להיפתח בלשונית חדשה">
+<!ENTITY tabFocus.caption "התמקד בלשוניות שנפתחו מ:">
+<!ENTITY selectTab.label "קישורים">
+<!ENTITY selectDivertedTab.label "Diverted windows">
+<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabCommand.label "פקודת לשונית חדשה">
+<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY selectTabBH.label "סימניות/היסטוריה">
+<!ENTITY duplicateTab.label "שכפל לשונית">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "אזהרה">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "סוגר לשונית אחרונה">
+<!ENTITY keepWindow.label.3.1 "אל תסגור חלון כשנסגרת לשונית אחרונה">
+<!ENTITY keeptab.label "מנע מלשונית אחרונה מלהיסגר">
+<!ENTITY closeOnMerge.label "סגור חלון כשהוא ממוזג">
+<!ENTITY warnOnMerge.label "אזהר אותי כשנסגרות לשוניות שלא מוזגו">
+<!ENTITY currenttab.caption.label "סוגר לשונית נוכחית">
+<!ENTITY focusTab.labelBegin "כשנסגרת לשונית נוכחית, התמקד:">
+<!ENTITY focusTab.firstTab "לשונית ראשונה">
+<!ENTITY focusTab.leftTab "לשונית משמאל">
+<!ENTITY focusTab.rightTab "לשונית מימין">
+<!ENTITY focusTab.lastTab "לשונית אחרונה">
+<!ENTITY focusTab.lastSelectedTab "לשונית אחרונה שנבחרה">
+<!ENTITY focusTab.openerTab "הלשונית ממנה נפתחו הלשוניות/לשונית מימין">
+<!ENTITY focusTab.openerTab.rtl "הלשונית ממנה נפתחו הלשוניות/לשונית משמאל">
+<!ENTITY focusTab.lastOpenedTab "לשונית שנפתחה אחרונה">
+<!ENTITY undoClose.label "אפשר שחזור לשוניות שנסגרו">
+<!ENTITY undoCloseCache.label "מספר מקסימלי של לשוניות שנסגרו לזכירה:">
+<!ENTITY undoClosepos.label "שחזר את מקומם המקורי של הלשוניות">
+<!ENTITY menuonlybutton.label "אפשר ללחצן בסרגל הכלים להציג רק רשימה">
+<!ENTITY ctrltab.label "Ctrl-Tab מנווט בין לשוניות לפי סדר של שימוש לאחרונה">
+<!ENTITY cmdtab.label "Cmd-Tab מנווט בין לשוניות לפי סדר של שימוש לאחרונה">
+<!ENTITY ctrltab.tabPreviews "הצג תצוגה מקדימה של לשונית">
+<!ENTITY ctrltab.popup "Ctrl-Tab יציג רשימת לשוניות בתפריט קופץ">
+<!ENTITY cmdtab.popup "Cmd-Tab יציג רשימת לשוניות בתפריט קופץ">
+<!ENTITY tabpopup.mouse "רשימת הלשוניות מגיבות לעכבר">
+<!ENTITY mergeNoTabSelection.label "מזג חלונות כששום לשונית לא נבחרה">
+<!ENTITY mergeTabSelection.label "מזג לאחר בחירת לשונית:">
+<!ENTITY mergeall.label "מזג את כל החלונות לחלון לאחד">
+<!ENTITY mergelastfocused.label "מזג רק חלון נוכחי עם החלון שמוקד אחרון">
+<!ENTITY mergePopups.label "מזג גם חלונות קופצים">
+<!ENTITY popupNextToOpener.label "מקם חלונות קופצים ליד החלונות שפתחו אותן">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY toggleAnimation.label "נטרל פתיחה/סגור לשונית מונפשת">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "הצג תפריט &quot;טעינה חוזרת&quot; בכפתור טען">
+<!ENTITY seconds.label "שניות">
+<!ENTITY minutes.label "דקות">
+<!ENTITY tabBarAppearance.label "סרגל הלשוניות">
+<!ENTITY tabAppearance.label "לשונית">
+<!ENTITY toolBarAppearance.label "סרגל כלים">
+<!ENTITY show.ontabbar.label "הצג בסרגל הלשוניות">
+<!ENTITY show.ontab.label "הצג בלשונית">
+<!ENTITY dragNewTabButton.tooltip "גרור כפתור &apos;לשונית חדשה לסרגל הלשונית">
+<!ENTITY hideTabBarButton.label "לחצן סגור לשונית">
+<!ENTITY newTabButton.label "לחצן לשונית חדשה">
+<!ENTITY newTabButton.position.left.label "בצד שמאל">
+<!ENTITY newTabButton.position.right.label "בצד ימין">
+<!ENTITY newTabButton.position.afterlast.label "סמוך ללשונית האחרונה">
+<!ENTITY allTabsButton.label "כל לחצני הלשוניות">
+<!ENTITY tabBarSpace.label "רווח נוסף משני הצדדים">
+<!ENTITY tabBarSpace.tooltip "על מנת ללחוץ ולגרור משהו לסרגל הלשוניות">
+<!ENTITY tabbar.label "החבא את סרגל הלשוניות כשיש רק לשונית אחת פתוחה">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY dropIndicator.label "Drop indicator">
+<!ENTITY dropIndicator-native.label "Native style">
+<!ENTITY dropIndicator-builtin.label "Built-in style">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY tabBarPosition.label "מיקום">
+<!ENTITY tabBarPosition.top.label "למעלה (מעל תוכן)">
+<!ENTITY tabBarPosition.bottom.label "למטה (מתחת תוכן)">
+<!ENTITY tabScroll.label "כשלשונית לא תואמת לרוחב:">
+<!ENTITY tabScroll.none "גלול ללא לחצנים">
+<!ENTITY tabScroll.leftRightButtons "גלול עם לחצנים מימין ומשמאל">
+<!ENTITY tabScroll.rightButtons "גלול עם לחצנים מימין">
+<!ENTITY tabScroll.rightButtons.rtl "גלול עם הכפתורים בצד שמאל">
+<!ENTITY tabScroll.multibar "מספר שורות">
+<!ENTITY maxrow.label "מספר מקסימלי לשורות:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
+<!ENTITY currenttab.style.label "לשונית נוכחית">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unreadtabs.style.label "לשונית שלא נקראה">
+<!ENTITY othertabs.style.label "לשוניות אחרות">
+<!ENTITY setstyles.label "עיצוב">
+<!ENTITY extraIcons.label1 "סמלים ל">
+<!ENTITY extraIcons.locked "נעול">
+<!ENTITY extraIcons.protected "מוגן">
+<!ENTITY extraIcons.autoreload "טעינה אוטומטית">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY progressMeter.label "מד התקדמות בלשונית">
+<!ENTITY showTabX.labelBegin "לחצן סגור לשונית">
+<!ENTITY showTabX.left "מקם בצד שמאל (ימין למשתמשי ממשק עברי)">
+<!ENTITY showTabX.rtl "מקם בצד ימין">
+<!ENTITY milliseconds.label "מילי שניות">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "בהכל">
+<!ENTITY showTabX.current "בנוכחי">
+<!ENTITY showTabX.hover "כשמוצבע">
+<!ENTITY showTabX.alwaysExeption "בכל לשונית רחבה מ">
+<!ENTITY showTabX.currentHover "בנוכחי ובמוצבע">
+<!ENTITY minWidth.label "רוחב לשונית">
+<!ENTITY widthTo.label "על">
+<!ENTITY widthPixels.label "פיקסלים">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY flexTabs.label "רוחב לשונית תואם לכותרת הלשונית">
+<!ENTITY bookastitle.label "השתמש בשם הסימנייה ככותרת הלשונית">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "ברשותך לבחור איזה פריטים יוצגו בסרגל הכלים של TMP">
+<!ENTITY toolbar.button.label "בחר">
+<!ENTITY toolbar.visible.caption "פריטים מוצגים">
+<!ENTITY toolbar.novisible.label "אין פריטים מוצגים">
+<!ENTITY toolbar.hidden.caption "פריטים מוסתרים">
+<!ENTITY toolbar.nohidden.label "אין פריטים מוסתרים">
+<!ENTITY mouseGesture.label "מחוות העכבר">
+<!ENTITY mouseClick.label "לחיצות עכבר">
+<!ENTITY mouseHoverSelect.labelBegin "בחר בלשונית שמוצבעת">
+<!ENTITY tabFlip.label "החלף ללשונית שנבחרה לאחרונה כשלוחצים על הנוכחית">
+<!ENTITY tabFlip.delay "השתמש בהשהיה של">
+<!ENTITY clickFocus.label "לחיצה על העכבר לבחירת לשונית">
+<!ENTITY removeEntries.label "Remove Tab Mix Plus menu list entries using middle-click">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY removeEntries.tooltip "כלול לשוניות שנסגרו, חלונות שנסגרו והפעלות שנשמרו">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY double.label "לחיצה כפולה">
+<!ENTITY middle.label "לחצן אמצעי">
+<!ENTITY ctrl.label "Ctrl-click">
+<!ENTITY cmd.label "Cmd-Click">
+<!ENTITY shift.label "Shift-click">
+<!ENTITY alt.label "Alt-Click">
+<!ENTITY ontab.label "על לשונית:">
+<!ENTITY ontabbar.label "על סרגל הלשוניות:">
+<!ENTITY clicktab.label "בחר פעולה שתתבצע עם לחיצה על הלשונית או על סרגל הלשוניות">
+<!ENTITY ontabbar.dblClick.label "מנע משינוי גודל החלון בלחיצה כפולה">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY clicktab.nothing "לא עושה כלום">
+<!ENTITY clicktab.addtab "פתח לשונית חדשה">
+<!ENTITY clicktab.duplicatetab "שכפל לשונית">
+<!ENTITY clicktab.duplicatetabw "שכפל את הלשונית לחלון חדש">
+<!ENTITY clicktab.detachtab "העבר לשונית לחלון חדש">
+<!ENTITY clicktab.protecttab "הגן על לשונית">
+<!ENTITY clicktab.locktab "נעל לשונית">
+<!ENTITY clicktab.freezetab "הגן ונעל לשונית">
+<!ENTITY clicktab.renametab "שנה שם ללשונית">
+<!ENTITY clicktab.copyTabUrl "העתק את כתובת הלשונית">
+<!ENTITY clicktab.copyUrlFromClipboard "העתק כתובת">
+<!ENTITY clicktab.selectMerge "בחר את הלשונית לשם המיזוג">
+<!ENTITY clicktab.mergeTabs "מזג חלונות יחד">
+<!ENTITY clicktab.bookTab "הוסף לשונית לסימניות">
+<!ENTITY clicktab.bookTabs "הוסף כל הלשוניות לסימניות">
+<!ENTITY clicktab.reloadtab "טען הלשונית">
+<!ENTITY clicktab.reloadtabs "טען כל הלשוניות">
+<!ENTITY clicktab.reloadothertabs "טען את שאר הלשוניות">
+<!ENTITY clicktab.reloadlefttabs "טען לשונית משמאל (מימין לממשק עברי)">
+<!ENTITY clicktab.reloadrighttabs "טען לשונית מימין (שמאל לממשק עברי)">
+<!ENTITY clicktab.autoReloadTab "הפעל/נטרל טעינה אוטומטית של לשונית">
+<!ENTITY clicktab.removeall "סגור את על הלשוניות">
+<!ENTITY clicktab.removeother "סגור את שאר הלשוניות">
+<!ENTITY clicktab.removesimilar "סגור לשוניות מ">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.uctab "פתח מחדש לשונית שנסגרה">
+<!ENTITY clicktab.ucatab "פתח מחדש את כל הלשוניות שנסגרו">
+<!ENTITY clicktab.snapback "SnapBack Tab">
+<!ENTITY clicktab.ietab "פתח לשונית ב IE">
+<!ENTITY contentLoad "לחצן אמצעי טוען כתובת מלוח העריכה">
+<!ENTITY context.tab "תפריט הלשונית">
+<!ENTITY context.main "תפריט הדף הראשי">
+<!ENTITY context.tools "תפריט כלים">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showtabBarContext.label "הצג בתפריט הלשונית">
+<!ENTITY showContentAreaContext.label "הצג בתפריט הדף הראשי">
+<!ENTITY showToolsMenu.label "הצג בתפריט כלים">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "הצג דף ריק">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "Tab Mix Plus זיהה ש Session Manager מותקן">
+<!ENTITY sm.extension.description2 "מנהל ההפעלות של Tab Mix Plus ינוטרל">
+<!ENTITY sm.extension.description3 "הלחצן מימין יפתח את חלון האפשרויות ל Session Manager.">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "המר">
+<!ENTITY sm.extension.chooseFile.label1 "המר הפעלות מפרופיל נוכחי">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "השתמש בשחזור ההפעלות של פיירפוקס">
+<!ENTITY ss.enable.tooltip "אל תסמן על מנת לאפשר את מנהל ההפעלות של Tabmix.">
+<!ENTITY ss.advanced_setting "אפשרויות מתקדמות">
+<!ENTITY ss.advanced_setting.warning "אל תשנה כאן אלא אם כן אתה יודע מה אתה עושה">
+<!ENTITY ss.interval "מרווח זמן מינימלי בין שני מצבי שמירה">
+<!ENTITY ss.interval.seconds "(במילי שניות)">
+<!ENTITY ss.privacy_level "שמור מידע רגיש (עוגיות, מידע,POSTDATA)  ל">
+<!ENTITY ss.privacy_level.allsites "כל האתרים">
+<!ENTITY ss.privacy_level.unencrypted "אתרים לא מוצפנים בלבד">
+<!ENTITY ss.privacy_level.nosites "שום אתר">
+<!ENTITY ss.postdata.label1 "מספר מקסימלי של POSTDATA לשחזור">
+<!ENTITY ss.postdata.label2 "בבייטים, -1 הכל">
+<!ENTITY sessionManger.enable "אפשר מנהל ההפעלות">
+<!ENTITY crashRecovery.enable "אפשר שחזור קריסות">
+<!ENTITY sm.StartExit "התחלה/יציאה">
+<!ENTITY sm.restore "שחזר">
+<!ENTITY sm.preserve "שימור">
+<!ENTITY sm.start "כשהדפדפן מותחל:">
+<!ENTITY sm.start.restore "שחזר">
+<!ENTITY sm.start.ask "שאל לפני שחזור">
+<!ENTITY sm.start.nothing "אל תשחזר">
+<!ENTITY sm.exit "כשהדפדפן נסגר:">
+<!ENTITY sm.exit.save "שמור הפעלה">
+<!ENTITY sm.exit.ask "שאל לפני שמירה">
+<!ENTITY sm.exit.nothing "אל תשמור">
+<!ENTITY sm.startup "הפעלה התחלתית:">
+<!ENTITY sm.lastsession "הפעלה אחרונה">
+<!ENTITY sm.previouslast "ראשון לאחרון">
+<!ENTITY sm.chooseifempty "בחר אחר אם נוכחי ריק">
+<!ENTITY sm.restore.options "כשהפעלה משוחזרת:">
+<!ENTITY sm.restore.overwrite "החלף חלונות נוכחיים">
+<!ENTITY sm.restore.overwriteTabs "ולשוניות">
+<!ENTITY sm.restore.closedWinList "שמור חלון ברשימת חלונות שנסגרו">
+<!ENTITY sm.restore.merge "מזג מספר חלונות לחלון אחד">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.notrestore.label "When not restoring on start">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "שימור לשוניות:">
+<!ENTITY sm.preserve.history "היסטוריה">
+<!ENTITY sm.preserve.protect "מצב הגנה">
+<!ENTITY sm.preserve.locked "מצב נעילה">
+<!ENTITY sm.preserve.permission "הרשאה">
+<!ENTITY sm.preserve.scroll1 "מיקום גלילה">
+<!ENTITY sm.restore.winOptions "שימור חלונות:">
+<!ENTITY sm.restore.selectedTab "לשונית שנבחרה">
+<!ENTITY sm.restore.closedTabs "רשימת לשוניות שנסגרו">
+<!ENTITY incompatible.extensions "כמה תוספות לא תואמות עם Tab Mix Plus, מומלץ שתנטרל אותן.">
+<!ENTITY incompatible.button.label "הצג רשימה">

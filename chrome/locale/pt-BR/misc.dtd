@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Carregar no plano de fundo">
+<!ENTITY searchTabFocus.accesskey "P">
+<!ENTITY renametab.panel.title "Editar o títuo da aba">
+<!ENTITY renametab.reset.label "Voltar ao título padrão">
+<!ENTITY title.label "Título">
+<!ENTITY default.label "Padrão">
+<!ENTITY renametab.permanently.label "Renomear esta aba independente do seu endereço">
+<!ENTITY renametab.permanently.tooltip "aba com histórico - o novo nome permanecerá quando o endereço for alterado">
+<!ENTITY forum.label "Fórum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Ajuda">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Selecione um tempo da lista ou especifique um outro valor">
+<!ENTITY specifyreload.label "Especificar tempo de atualização">
+<!ENTITY sanitizer.entry "Histórico do Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Tem certeza que deseja apagar TODAS as sessões salvas incluindo os &quot;backups&quot;?">

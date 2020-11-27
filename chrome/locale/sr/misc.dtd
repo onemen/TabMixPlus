@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Учитај у позадини">
+<!ENTITY searchTabFocus.accesskey "п">
+<!ENTITY renametab.panel.title "Уреди наслов језичка">
+<!ENTITY renametab.reset.label "Врати подразумевани наслов">
+<!ENTITY title.label "Наслов">
+<!ENTITY default.label "Подразумевани">
+<!ENTITY renametab.permanently.label "Преименуј овај језичак, без обзира на његову адресу">
+<!ENTITY renametab.permanently.tooltip "језичак са историјом - нови назив ће остати и када се адреса промени">
+<!ENTITY forum.label "Форум">
+<!ENTITY faq.label "Честа питања">
+<!ENTITY help.label "Помоћ">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Изаберите време са списка или упишите своје време ---">
+<!ENTITY specifyreload.label "Унесите време поновног учитавања">
+<!ENTITY sanitizer.entry "Сачуване сесије Tab Mix Plus-а">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Желите ли да избришете СВЕ сачуване сесије, укључујући резервне копије?">

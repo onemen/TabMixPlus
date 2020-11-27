@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Загружать в фоне">
+<!ENTITY searchTabFocus.accesskey "ф">
+<!ENTITY renametab.panel.title "Редактировать заголовок вкладки">
+<!ENTITY renametab.reset.label "Вернуть заголовок по умолчанию">
+<!ENTITY title.label "Заголовок">
+<!ENTITY default.label "По умолчанию">
+<!ENTITY renametab.permanently.label "Переименовать эту вкладку, не обращая внимания на её адрес">
+<!ENTITY renametab.permanently.tooltip "вкладка с историей - новое имя останется, когда адрес изменится">
+<!ENTITY forum.label "Форум">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Справка">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Выберите время из списка или введите собственное">
+<!ENTITY specifyreload.label "Определение времени обновления">
+<!ENTITY sanitizer.entry "Журнал Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "у">
+<!ENTITY sanitizer.entry.confirm "Вы уверены, что хотите удалить ВСЕ сохранённые сессии, включая резервные копии?">

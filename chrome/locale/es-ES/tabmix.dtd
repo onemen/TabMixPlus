@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Pestañas cerradas">
+<!ENTITY closedtabsbtn.tooltip "Mostrar lista pestañas cerradas">
+<!ENTITY sessionbtn.tooltip "Mostrar y administrar sus sesiones">
+<!ENTITY tabslistbtn.label "Pestañas abiertas">
+<!ENTITY tabslistbtn.tooltip "Mostrar pestañas abiertas">
+<!ENTITY closedwindowsbtn.label "Ventanas cerradas">
+<!ENTITY closedwindowsbtn.tooltip "Mostrar lista ventanas cerradas">
+<!ENTITY page.header.title "Opciones de Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Administrador de sesiones de Tab Mix Plus">
+<!ENTITY session.Tools "Administrador de sesiones">
+<!ENTITY closedWin.label "Lista ventanas cerradas">
+<!ENTITY duplicateTabMenu.label "Duplicar pestaña">
+<!ENTITY duplicateTabMenu.accesskey "u">
+<!ENTITY duplicateinWin.label "Duplicar en nueva ventana">
+<!ENTITY duplicateinWin.accesskey "v">
+<!ENTITY detachTab.label "Mover a nueva ventana">
+<!ENTITY detachTab.accesskey "M">
+<!ENTITY mergeContext.label "Fusionar ventanas">
+<!ENTITY mergeContext.accesskey "F">
+<!ENTITY renametab.label "Renombrar pestaña">
+<!ENTITY renametab.accesskey "R">
+<!ENTITY copytaburl.label "Copiar URL de pestaña">
+<!ENTITY copytaburl.accesskey "U">
+<!ENTITY reloadother.label "Recargar otras pestañas">
+<!ENTITY reloadother.accesskey "o">
+<!ENTITY reloadleft.label "Recargar pestañas a la izquierda">
+<!ENTITY reloadleft.accesskey "i">
+<!ENTITY reloadright.label "Recargar pestañas a la derecha">
+<!ENTITY reloadright.accesskey "d">
+<!ENTITY autoReloadTab.label "Recargar pestaña cada">
+<!ENTITY autoReloadTab.accesskey "g">
+<!ENTITY autoReloadSite.label "Recargar sitio cada">
+<!ENTITY autoReloadSite.accesskey "s">
+<!ENTITY afterthis.label "Tras esta pestaña">
+<!ENTITY bookmarktab.label "Añadir pestaña a marcadores">
+<!ENTITY undoCloseListMenu.label "Lista pestañas cerradas">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "Cerrar todas las pestañas">
+<!ENTITY closeall.accesskey "t">
+<!ENTITY closeSimilarTab.label "Cerrar pestañas similares">
+<!ENTITY closeSimilarTab.accesskey "s">
+<!ENTITY closeTabsToLeft.label "Cerrar pestañas a la izquierda">
+<!ENTITY closeleft.accesskey "i">
+<!ENTITY docShellMenu.label "Permisos">
+<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY freezeTabMenu.label "Congelar pestaña">
+<!ENTITY freezeTabMenu.accesskey "g">
+<!ENTITY protectTabMenu.label "Proteger pestaña">
+<!ENTITY protectTabMenu.tooltip "Impide que se pueda cerrar esa pestaña">
+<!ENTITY protectTabMenu.accesskey "t">
+<!ENTITY lockTabMenu.label "Bloquear pestaña">
+<!ENTITY lockTabMenu.tooltip "Fuerza a abrir todos los enlaces en nuevas pestañas">
+<!ENTITY lockTabMenu.accesskey "B">
+<!ENTITY bookmarktabs.label "Añadir todas las pestañas a marcadores">
+<!ENTITY linkhere.label "Abrir enlace en esta pestaña">
+<!ENTITY linkhere.accesskey "e">
+<!ENTITY linkBackgroundTab.label "Abrir enlace en pestaña en segundo plano">
+<!ENTITY linkForegroundTab.label "Abrir enlace en pestaña en primer plano">
+<!ENTITY linkBackgroundTab.accesskey "s">
+<!ENTITY linkForegroundTab.accesskey "p">
+<!ENTITY openalllinks.label "Abrir enlaces en nuevas pestañas">
+<!ENTITY openalllinks.accesskey "n">
+<!ENTITY linkwithhistory.label "Abrir enlace en pestaña duplicada">
+<!ENTITY linkwithhistory.accesskey "d">
+<!ENTITY tabsList.label "Lista pestañas abiertas">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Imagen">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Redirigir">
+<!ENTITY allowPlugin.label "Plugin">
+<!ENTITY allowFrame.label "Marco (Frame)">
+<!ENTITY restoreincurrent.label "Reabrir en pestaña actual">
+<!ENTITY restoreincurrent.accesskey "a">
+<!ENTITY restoreinwin.label "Reabrir en nueva ventana">
+<!ENTITY restoreinwin.accesskey "v">
+<!ENTITY restoreintab.label "Reabrir en nueva pestaña">
+<!ENTITY restoreintab.accesskey "u">
+<!ENTITY restoretab.label "Reabrir pestaña">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "Añadir enlace a marcadores...">
+<!ENTITY bookmark.accesskey "m">
+<!ENTITY deletelist.label "Eliminar de la lista">
+<!ENTITY deletelist.accesskey "l">
+<!ENTITY settings.label "Predisposiciones">
+<!ENTITY saveWindow.label "Guardar esta ventana">
+<!ENTITY saveAllWindows.label "Guardar todas las ventanas">
+<!ENTITY sm.context.overwrite "Restaurar sobreescribiendo ventana(s) existente(s)">
+<!ENTITY sm.context.overwrite.key "o">
+<!ENTITY sm.context.restore.new "Restaurar en nueva(s) ventana(s)">
+<!ENTITY sm.context.restore.newkey "N">
+<!ENTITY sm.context.replacethis "Reemplazar esta ventana">
+<!ENTITY sm.context.replacethis.key "e">
+<!ENTITY sm.context.replaceall "Reemplazar todas las ventanas">
+<!ENTITY sm.context.replaceall.key "A">
+<!ENTITY sm.context.add "Añadir esta ventana">
+<!ENTITY sm.context.add.key "e">
+<!ENTITY sm.context.addall "Añadir todas las ventanas">
+<!ENTITY sm.context.addall.key "t">
+<!ENTITY sm.context.save "Guardar">
+<!ENTITY sm.context.save.key "G">
+<!ENTITY sm.context.rename "Renombrar">
+<!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Marcador de sesión">
+<!ENTITY sm.context.bookmarkSession.key "M">
+<!ENTITY sm.context.delete "Eliminar">
+<!ENTITY sm.context.delete.key "E">
+<!ENTITY sm.context.deleteall "Eliminar todo">
+<!ENTITY sm.context.deleteall.key "t">
+<!ENTITY sm.context.startup "Establecer como sesión de inicio">
+<!ENTITY sm.context.startup.key "i">
+<!ENTITY sm.context.details "Mostrar contadores, fecha y hora en menú de sesión">
+<!ENTITY sm.context.details.key "c">
+<!ENTITY tab.key "P">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "F">
+<!ENTITY sortedTabs.label "Pestañas ordenadas">
+<!ENTITY sortedTabs.tooltip "Comprobar para mostrar la lista ordenada alfabéticamente">
+<!ENTITY enable.label "Habilitar">
+<!ENTITY custom.label "Personalizar">
+<!ENTITY enableTabs.label "Habilitar en todas las pestañas">
+<!ENTITY disableTabs.label "Deshabilitar en todas las pestañas">
+<!ENTITY seconds.label "segundos">
+<!ENTITY minutes.label "minutos">
+<!ENTITY minute.label "minuto">
+<!ENTITY hideTabBar.label "Ocultar la barra de pestañas">
+<!ENTITY hideTabBar.never.label "Nunca">
+<!ENTITY hideTabBar.never.key "N">
+<!ENTITY hideTabBar.oneTab.label "Cuando tenga una sola pestaña">
+<!ENTITY hideTabBar.onOneTab.key "C">
+<!ENTITY hideTabBar.always.label "Siempre">
+<!ENTITY hideTabBar.always.key "S">

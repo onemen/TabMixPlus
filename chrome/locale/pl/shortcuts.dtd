@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Skróty">
+<!ENTITY shortcuts.edit "Edytowanie skrótów klawiszowych">
+<!ENTITY shortcuts.showAll "Wyświetl wszystkie">
+<!ENTITY shortcuts.hideUnused "Ukryj nieużywane">
+<!ENTITY shortcuts.warning "Niektóre skróty są używane przez inne polecenia">
+<!ENTITY shortcuts.showDetails "Wyświetl opis">
+<!ENTITY shortcuts.hideDetails "Ukryj opis">
+<!ENTITY shortcuts.switchToLast "Przejdź do ostatniej aktywnej karty">
+<!ENTITY shortcuts.slideshow "Włącz/wyłącz rotację kart">
+<!ENTITY shortcuts.toggleFLST "Zmiana aktywacji po zamknięciu aktywnej karty">
+<!ENTITY shortcuts.toggleFLST.tooltip "Zmienia aktywację karty po zamknięciu aktywnej karty pomiędzy kartą po prawej stronie od zamykanej, a ostatnio aktywną kartą.">
+<!ENTITY shortcuts.placeholder "Podaj modyfikator i klawisz">
+<!ENTITY shortcuts.reset "Resetuj">
+<!ENTITY shortcuts.clear "Wyczyść">
+<!ENTITY shortcuts.inuse "Ten skrót jest już używany przez">

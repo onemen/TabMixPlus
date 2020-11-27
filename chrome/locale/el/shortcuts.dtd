@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Συντομεύσεις πληκτρολογίου">
+<!ENTITY shortcuts.edit "Επεξεργασία συντομεύσεων πληκτρολογίου">
+<!ENTITY shortcuts.showAll "Εμφάνιση όλων">
+<!ENTITY shortcuts.hideUnused "Απόκρυψη μη χρησιμοποιούμενων">
+<!ENTITY shortcuts.warning "Μερικές από τις συντομεύσεις σας χρησιμοποιούνται από άλλες διεργασίες">
+<!ENTITY shortcuts.showDetails "Εμφάνιση λεπτομερειών">
+<!ENTITY shortcuts.hideDetails "Απόκρυψη λεπτομερειών">
+<!ENTITY shortcuts.switchToLast "Switch to last active tab">
+<!ENTITY shortcuts.slideshow "Εναλλαγή προβολής αλληλουχίας καρτελών">
+<!ENTITY shortcuts.toggleFLST "Εναλλαγή εστίασης μετά το κλείσιμο της τρέχουσας καρτέλας">
+<!ENTITY shortcuts.toggleFLST.tooltip "Εναλλαγή μεταξύ εστίασης στη δεξιά ή την τελευταία επιλεγμένη καρτέλα">
+<!ENTITY shortcuts.placeholder "Πλήκτρο και πλήκτρο τροποποίησης">
+<!ENTITY shortcuts.reset "Επαναφορά">
+<!ENTITY shortcuts.clear "Εκκαθάριση">
+<!ENTITY shortcuts.inuse "Αυτή η συντόμευση χρησιμοποιείται ήδη από">

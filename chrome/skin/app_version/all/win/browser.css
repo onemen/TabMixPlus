@@ -1,0 +1,56 @@
+/**
+    Firefox all versions
+
+    Windows platform
+
+
+    to apply rule only to default them add #tabbrowser-tabs[classic40]
+**/
+
+/* :::: tabbar on bottom :::: */
+#TabsToolbar[tabbaronbottom] {
+  background-image: none !important;
+}
+
+/* override some rules for toolbarbutton-1 and tabs-closebutton*/
+#TabsToolbar > .tabs-closebutton:not([class~="tabmix"]) {
+  list-style-image: url("chrome://global/skin/icons/close.png");
+}
+
+#TabsToolbar > .tabs-closebutton {
+  background-image: none !important;
+}
+
+#TabsToolbar[tabbaronbottom]:not(:-moz-lwtheme) {
+  border-top: 1px solid rgba(10, 31, 51, 0.35);
+}
+
+/*  scrollbutton arrow - fix borders  */
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-down:not([disabled]),
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-up:not([disabled]),
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-down:not([disabled]){
+  -moz-border-image: none;
+}
+
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:not([disabled]) {
+  -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 0 0 2px;
+}
+
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up[disabled] {
+  border-right: 0;
+}
+
+#TabsToolbar[multibar] .toolbarbutton-1:not([disabled]):hover,
+#TabsToolbar[multibar] .toolbarbutton-1[open],
+#TabsToolbar[multibar] .toolbarbutton-1 > .toolbarbutton-menubutton-button:not([disabled]):hover,
+#TabsToolbar > #tabmixScrollBox[flowing=multibar] > .scrollbutton-up:not([disabled]):hover,
+#TabsToolbar > #tabmixScrollBox[flowing=multibar] > .scrollbutton-down:not([disabled]):hover {
+  background-image: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,.5)),
+                    linear-gradient(transparent, rgba(0,0,0,.25) 30%),
+                    linear-gradient(transparent, rgba(0,0,0,.25) 30%),
+                    linear-gradient(transparent, rgba(0,0,0,.15) 100%),
+                    linear-gradient(transparent, rgba(0,0,0,.25) 30%);
+  background-position: 1px 1px, 0 0, 100% 0, 0 0, 0 100%;
+  background-size: calc(100% - 2px) calc(100% - 2px), 1px calc(100% - 1px), 1px calc(100% - 1px), 100% 1px, 100% 1px;
+  background-repeat: no-repeat;
+}

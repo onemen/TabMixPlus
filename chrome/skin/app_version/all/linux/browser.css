@@ -1,0 +1,78 @@
+/**
+    Firefox all versions
+
+    Linux platform
+
+**/
+
+/* :::: tabbar on bottom :::: */
+#TabsToolbar[tabbaronbottom] {
+  background-image: none !important;
+}
+
+#TabsToolbar > .tabs-closebutton:not([class~="tabmix"]) {
+  list-style-image: url("moz-icon://stock/gtk-close?size=menu");
+}
+
+/***  Tabstrip close button Firefox 31+ ***/
+.tabs-closebutton.tabmix:not(:hover) {
+  /*noinspection CssInvalidFunction*/
+  background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 64, 16, 48);
+}
+
+.tabs-closebutton.tabmix:not(:hover):-moz-lwtheme-brighttext {
+  /*noinspection CssInvalidFunction*/
+  background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 80, 16, 64);
+}
+
+.tabs-closebutton.tabmix:not(:hover):-moz-lwtheme-darktext {
+  /*noinspection CssInvalidFunction*/
+  background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 96, 16, 80);
+}
+
+#TabsToolbar[tabmix_skin][multibar] > #appmenu-toolbar-button {
+  height: 25px;
+}
+
+/* set on linux we need to set vertical align even if the button is hidden*/
+#tabbrowser-tabs[multibar] .tabbrowser-arrowscrollbox > toolbarbutton {
+  vertical-align: bottom;
+}
+
+#tabbrowser-tabs:not([tabmix_australis])[classic][multibar] .tabbrowser-tab {
+  height: 25px;
+}
+
+/*  Tab scrollbox arrow buttons - fix border */
+
+/* this rule make hover active on the button
+ * the default button don't change on hover, so we add the next rule to hide the effect
+ */
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:not([disabled]),
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-down:not([disabled]),
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-up:not([disabled]),
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-down:not([disabled]) {
+  -moz-border-image: none;
+}
+
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:hover,
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-down:hover,
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-up:hover,
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-down:hover {
+  border-color: transparent;
+  color: transparent;
+}
+
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-up,
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-down {
+  border-left: 2px solid transparent;
+  border-right: 2px solid transparent;
+}
+
+.tabmix_scrollbuttons_box:-moz-locale-dir(ltr)[flowing=scrollbutton] {
+  -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 0 0 2px;
+}
+
+.tabmix_scrollbuttons_box:-moz-locale-dir(rtl)[flowing=scrollbutton] {
+  -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 2px 0 0;
+}

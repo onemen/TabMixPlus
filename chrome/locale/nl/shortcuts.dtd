@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Sneltoetsen">
+<!ENTITY shortcuts.edit "Sneltoetsen wijzigen">
+<!ENTITY shortcuts.showAll "Alles weergeven">
+<!ENTITY shortcuts.hideUnused "Ongebruikte verbergen">
+<!ENTITY shortcuts.warning "Enkele sneltoetsen zijn door andere opdrachten in gebruik">
+<!ENTITY shortcuts.showDetails "Details weergeven">
+<!ENTITY shortcuts.hideDetails "Details verbergen">
+<!ENTITY shortcuts.switchToLast "Naar laatst actieve tabblad wisselen">
+<!ENTITY shortcuts.slideshow "Doorlopende weergave tabbladen schakelen">
+<!ENTITY shortcuts.toggleFLST "Focus na sluiten huidige tabblad schakelen">
+<!ENTITY shortcuts.toggleFLST.tooltip "schakelen tussen focus naar rechts of laatst geselecteerde tabblad">
+<!ENTITY shortcuts.placeholder "Soort wijziging en sleutel">
+<!ENTITY shortcuts.reset "Herstellen">
+<!ENTITY shortcuts.clear "Wissen">
+<!ENTITY shortcuts.inuse "Deze sneltoets is al in gebruik door">

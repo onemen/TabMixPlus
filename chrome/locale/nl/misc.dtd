@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "In de achtergrond laden">
+<!ENTITY searchTabFocus.accesskey "a">
+<!ENTITY renametab.panel.title "Tabbladtitel wijzigen">
+<!ENTITY renametab.reset.label "Herstellen naar standaardtitel">
+<!ENTITY title.label "Titel">
+<!ENTITY default.label "Standaard">
+<!ENTITY renametab.permanently.label "Dit tabblad hernoemen ongeacht het webadres">
+<!ENTITY renametab.permanently.tooltip "Tabblad met geschiedenis - de nieuwe naam zal gehandhaafd blijven indien het webadres wijzigt">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "Veelgestelde vragen">
+<!ENTITY help.label "Help">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Selecteer een tijd uit de lijst of voer zelf een tijd in">
+<!ENTITY specifyreload.label "Specificeer het tijdsinterval voor herladen">
+<!ENTITY sanitizer.entry "Tab Mix Plus geschiedenis">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "ALLE opgeslagen sessiegegevens inclusief back-ups werkelijk verwijderen?">

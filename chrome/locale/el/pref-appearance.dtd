@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Styles">
+<!ENTITY styles.label "Προσαρμογή στυλ">
+<!ENTITY currentTab.label "Τρέχουσα καρτέλα">
+<!ENTITY unloadedTabs.label "Μη φορτωμένες καρτέλες">
+<!ENTITY unreadTab.label "Μη αναγνωσμένες καρτέλες">
+<!ENTITY hideRGB.label "Απόκρυψη RGB">
+<!ENTITY showRGB.label "Προβολή RGB">
+<!ENTITY unreadAfterReload.label "Ορισμός καρτέλας ως μη αναγνωσμένης μετά την ανανέωση">
+<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY squaredTabs.label "Εφαρμογή χρώματος παρασκηνίου σε τετραγωνισμένες καρτέλες">
+<!ENTITY otherTabs.label "Άλλες καρτέλες">
+<!ENTITY italic.label "Πλάγια">
+<!ENTITY bold.label "Έντονα">
+<!ENTITY underline.label "Υπογεγραμμένα">
+<!ENTITY textcolor.label "Χρώμα κειμένου">
+<!ENTITY bgColor.label "Χρώμα φόντου">
+<!ENTITY bgTopColor.label "Κορυφή">
+<!ENTITY bgBottomColor.label "Βάση">
+<!ENTITY useThis.label "Χρήση αυτού του στυλ για">
+<!ENTITY opacity.label "διαφάνεια">

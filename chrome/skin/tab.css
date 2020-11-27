@@ -1,0 +1,229 @@
+/**
+    Firefox all versions
+
+    for ALL platforms
+
+**/
+
+@import url("chrome://tabmixplus/skin/general.css");
+
+#tabbrowser-tabs[flowing=multibar][multibar] .tabs-frame .tabs-right {
+  display: none !important;
+}
+
+/*we need to make multirow work on all themes, this should help a bit*/
+#tabbrowser-tabs[flowing=multibar][multibar],
+#tabbrowser-tabs[flowing=multibar][multibar] .tabbrowser-strip,
+#tabbrowser-tabs:not([classic=v3])[flowing=multibar][multibar] .tabbrowser-tab,
+#tabbrowser-tabs[flowing=multibar][multibar] .tabs-left,
+#tabbrowser-tabs[flowing=multibar][multibar] .tabs-right {
+  max-height: none !important;
+}
+
+#TabsToolbar[multibar] {
+  height: auto !important;
+}
+
+#tabbrowser-tabs[flowing=multibar][multibar=scrollbar] .tabbrowser-tab[collapsed=true] {
+  display: none !important;
+}
+
+#tabbrowser-tabs[flowing=singlebar] .tabs-frame[orient="horizontal"],
+#tabbrowser-tabs[flowing=scrollbutton] .tabs-frame[orient="horizontal"],
+#tabbrowser-tabs[flowing=multibar]:not([multibar]) .tabs-frame[orient="horizontal"] {
+  overflow: hidden !important;
+}
+
+.tabs-frame[orient="vertical"] {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -moz-box-flex: 1 !important;
+}
+
+/* some theme align text to center this make all tab align to center in multi-rows*/
+#tabbrowser-tabs[flowing=multibar] {
+  text-align: start !important;
+}
+
+/* fix background for multi-row*/
+#tabbrowser-tabs[flowing=multibar][backgroundrepeat] {
+  background-repeat: repeat;
+}
+
+/* For Flowing tabs */
+#tabbrowser-tabs[flowing=multibar] .tabbrowser-tab {
+  vertical-align: bottom;
+}
+
+/* for extra icons */
+.tab-protect-icon {
+  list-style-image: url("protected.png");
+  display: none;
+  height: 16px;
+  width: 16px;
+}
+
+.tab-lock-icon {
+  list-style-image: url("locked.png");
+  display: none;
+  height: 16px;
+  width: 16px;
+}
+
+.tab-reload-icon {
+  list-style-image: url("autoreload.png");
+  display: none;
+  height: 16px;
+  width: 16px;
+}
+
+#tabbrowser-tabs[tabmix_icons~="autoreload"] .tabbrowser-tab[_reload] .tab-reload-icon ,
+#tabbrowser-tabs[tabmix_icons~="protected"] .tabbrowser-tab[protected] .tab-protect-icon ,
+#tabbrowser-tabs[tabmix_icons~="locked"] .tabbrowser-tab[locked] .tab-lock-icon {
+  display: -moz-box;
+}
+
+#tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-reload-icon,
+#tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-protect-icon,
+#tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-lock-icon {
+  display: none;
+}
+
+/*  :::::: Tabmix toolbar button :::::: */
+#btn_undoclose, .closedtabs-icon {
+  list-style-image: url(undoclosetab.png);
+}
+
+#btn_undoclose { -moz-image-region: rect(0 24px 24px 0); }
+#btn_undoclose:hover { -moz-image-region: rect(24px 24px 48px 0); }
+#main-window:not([customizing]) #btn_undoclose[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+
+toolbar[iconsize=small] #btn_undoclose, .closedtabs-icon > .menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
+toolbar[iconsize=small] #btn_undoclose:hover, .closedtabs-icon:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
+#main-window:not([customizing]) toolbar[iconsize=small] #btn_undoclose[disabled=true], .closedtabs-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
+
+#btn_undoclose[type=menu-button] .toolbarbutton-icon {
+   margin-right: 0;
+}
+
+#btn_undoclose[type=menu-button] .toolbarbutton-menubutton-button{
+  padding-right: 2px;
+}
+
+#btn_closedwindows , .closedwindows-icon {
+  list-style-image: url(undoclosewindow.png);
+}
+
+#btn_closedwindows { -moz-image-region: rect(0 24px 24px 0); }
+#btn_closedwindows:hover { -moz-image-region: rect(24px 24px 48px 0); }
+#main-window:not([customizing]) #btn_closedwindows[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+
+toolbar[iconsize=small] #btn_closedwindows, .closedwindows-icon >.menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
+toolbar[iconsize=small] #btn_closedwindows:hover, .closedwindows-icon:hover >.menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px)!important; }
+#main-window:not([customizing]) toolbar[iconsize=small] #btn_closedwindows[disabled=true], .closedwindows-icon[disabled=true] >.menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px)!important; }
+
+#btn_tabslist, #tm-tabsList {
+  list-style-image: url(tabslist.png);
+}
+#btn_tabslist { -moz-image-region: rect(0 24px 24px 0); }
+#btn_tabslist:hover { -moz-image-region: rect(24px 24px 48px 0); }
+#btn_tabslist[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+toolbar[iconsize=small] #btn_tabslist, #tm-tabsList > .menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
+toolbar[iconsize=small] #btn_tabslist:hover, #tm-tabsList:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
+toolbar[iconsize=small] #btn_tabslist[disabled=true], #tm-tabsList[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
+
+
+#btn-sm-settings, .tabmix-menu-icon {
+   list-style-image: url(tmpsmall.png);
+}
+.tabmix-menu-icon .menu-iconic-left { -moz-image-region: rect(0 16px 16px 0)!important; }
+
+#btn_sessionmanager, .sessionmanager-icon {
+  list-style-image: url(sessionmanager.png);
+}
+#btn_sessionmanager { -moz-image-region: rect(0 24px 24px 0); }
+#btn_sessionmanager:hover { -moz-image-region: rect(24px 24px 48px 0); }
+#main-window:not([customizing]) #btn_sessionmanager[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+
+toolbar[iconsize=small] #btn_sessionmanager, .sessionmanager-icon > .menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
+toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
+#main-window:not([customizing]) toolbar[iconsize=small] #btn_sessionmanager[disabled=true], .sessionmanager-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
+
+/* fix dropmarker orient for toolbarbutton */
+.tabmix-button[type="menu"]:not([cui-areatype="menu-panel"]) {
+  -moz-box-orient: horizontal;
+}
+
+toolbar[mode="full"] .tabmix-button[type="menu"] {
+  -moz-binding: url("chrome://global/content/bindings/toolbarbutton.xml#menu-vertical");
+}
+
+/* for hashcoulouredtabs */
+#content[hashedtabs] .tabbrowser-tab:not([busy]) .tab-icon-image:not([src]) {
+  list-style-image: none !important;
+}
+
+/* ::::: Fullscreen pseudo-toolbar ::::: */
+#fullscr-bottom-toggler {
+  height: 1px;
+  background: black;
+}
+
+/*
+ *****************************************************************************
+ *                                non default theme
+*/
+/* Chromifox Extreme */
+#tabbrowser-tabs[tabmix_skin="cfxec"]  > .tabbrowser-tab .tab-close-button {
+  display: none !important;
+}
+
+/* Vfox3 */
+#tabbrowser-tabs[tabmix_skin="Vfox3"][multibar] > .tabbrowser-tab {
+  height: 24px;
+}
+
+/* Phoenity Aura -  Multi-row tabbar for Phoenity Aura theme */
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab,
+#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab {
+  height: 22px;
+  max-height: 22px;
+  margin: 1px 0 1px;
+}
+
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab:not([selected="true"]):hover,
+#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab:not([selected="true"]):hover {
+  height: 23px;
+  max-height: 23px;
+  margin: 0 0 1px;
+}
+
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab[selected="true"],
+#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab[selected="true"] {
+  height: 24px;
+  max-height: 24px;
+  margin: 0 0 0;
+}
+
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] .tabs-frame,
+#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] .tabs-frame {
+  margin-top: 2px;
+  margin-bottom: 3px;
+}
+
+/* CrystalFox_Qute-BigRedBrent */
+#tabbrowser-tabs[tabmix_skin="CrystalFox"]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > toolbarbutton,
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] .tabbrowser-arrowscrollbox > toolbarbutton {
+  vertical-align: top;
+}
+
+/* BlackFox_V1-Blue */
+#tabbrowser-tabs[tabmix_skin="BlackFox"]:not([multibar])[inline=true] .tabbrowser-arrowscrollbox > toolbarbutton,
+#tabbrowser-tabs[tabmix_skin="BlackFox"][multibar] .tabbrowser-arrowscrollbox > toolbarbutton {
+  vertical-align: top;
+}
+
+/* Vista-aero */
+#myTabBarRightBox[vista_aero] {
+  -moz-box-align: start;
+}

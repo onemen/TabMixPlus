@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Bezárt lapok">
+<!ENTITY closedtabsbtn.tooltip "Bezárt lapok listája">
+<!ENTITY sessionbtn.tooltip "Munkamenet-kezelő">
+<!ENTITY tabslistbtn.label "Megnyitott lapok">
+<!ENTITY tabslistbtn.tooltip "Megnyitott lapok listája">
+<!ENTITY closedwindowsbtn.label "Bezárt ablakok">
+<!ENTITY closedwindowsbtn.tooltip "Bezárt ablakok listája">
+<!ENTITY page.header.title "Tab Mix Plus Beállítások">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus Munkamenet-kezelő">
+<!ENTITY session.Tools "Munkamenet-kezelő">
+<!ENTITY closedWin.label "Bezárt lapok listája">
+<!ENTITY duplicateTabMenu.label "Lap megkettőzése">
+<!ENTITY duplicateTabMenu.accesskey "k">
+<!ENTITY duplicateinWin.label "Lap megkettőzése új ablakban">
+<!ENTITY duplicateinWin.accesskey "b">
+<!ENTITY detachTab.label "Új ablakba">
+<!ENTITY detachTab.accesskey "a">
+<!ENTITY mergeContext.label "Ablakok összefűzése">
+<!ENTITY mergeContext.accesskey "f">
+<!ENTITY renametab.label "Átnevezés">
+<!ENTITY renametab.accesskey "t">
+<!ENTITY copytaburl.label "Lap URL másolása">
+<!ENTITY copytaburl.accesskey "U">
+<!ENTITY reloadother.label "Többi lap újratöltése">
+<!ENTITY reloadother.accesskey "T">
+<!ENTITY reloadleft.label "Balra lévő lapok újratöltése">
+<!ENTITY reloadleft.accesskey "B">
+<!ENTITY reloadright.label "Jobbra lévő lapok újratöltése">
+<!ENTITY reloadright.accesskey "J">
+<!ENTITY autoReloadTab.label "Minden lap újratöltése">
+<!ENTITY autoReloadTab.accesskey "M">
+<!ENTITY autoReloadSite.label "Webhely újratöltése">
+<!ENTITY autoReloadSite.accesskey "e">
+<!ENTITY afterthis.label "ezen lapok után">
+<!ENTITY bookmarktab.label "Könyvjelzőt erre a lapra">
+<!ENTITY undoCloseListMenu.label "Bezárt lapok listája">
+<!ENTITY undoCloseListMenu.accesskey "l">
+<!ENTITY closeAllTabsMenu.label "Összes lap bezárása">
+<!ENTITY closeall.accesskey "s">
+<!ENTITY closeSimilarTab.label "Azonos lapok bezárása">
+<!ENTITY closeSimilarTab.accesskey "z">
+<!ENTITY closeTabsToLeft.label "Balra lévő lapok bezárása">
+<!ENTITY closeleft.accesskey "a">
+<!ENTITY docShellMenu.label "Engedélyek">
+<!ENTITY docShellMenu.accesskey "E">
+<!ENTITY freezeTabMenu.label "Lapfagyasztás">
+<!ENTITY freezeTabMenu.accesskey "f">
+<!ENTITY protectTabMenu.label "Lapvédelem">
+<!ENTITY protectTabMenu.tooltip "Védelem a lap bezárása ellen">
+<!ENTITY protectTabMenu.accesskey "v">
+<!ENTITY lockTabMenu.label "Lapzárolás">
+<!ENTITY lockTabMenu.tooltip "Minden link új lapon nyílik meg">
+<!ENTITY lockTabMenu.accesskey "p">
+<!ENTITY bookmarktabs.label "Könyvjelzőt az összes lapra">
+<!ENTITY linkhere.label "Linkek megnyitása ezen lapon">
+<!ENTITY linkhere.accesskey "e">
+<!ENTITY linkBackgroundTab.label "Link megnyitása lapon háttérben">
+<!ENTITY linkForegroundTab.label "Link megnyitása lapon előtérben">
+<!ENTITY linkBackgroundTab.accesskey "h">
+<!ENTITY linkForegroundTab.accesskey "e">
+<!ENTITY openalllinks.label "Linkek megnyitása új lapon">
+<!ENTITY openalllinks.accesskey "j">
+<!ENTITY linkwithhistory.label "Linkek megnyitása megkettőzött lapon">
+<!ENTITY linkwithhistory.accesskey "k">
+<!ENTITY tabsList.label "Megnyitott lapok listája">
+<!ENTITY tabsList.accesskey "l">
+<!ENTITY allowImage.label "Kép">
+<!ENTITY allowJavascript.label "JavaScript kód">
+<!ENTITY allowRedirect.label "Átirányítás">
+<!ENTITY allowPlugin.label "Bővítmények">
+<!ENTITY allowFrame.label "Keret">
+<!ENTITY restoreincurrent.label "Visszaállítás az aktuális lapra">
+<!ENTITY restoreincurrent.accesskey "k">
+<!ENTITY restoreinwin.label "Visszaállítás új ablakba">
+<!ENTITY restoreinwin.accesskey "a">
+<!ENTITY restoreintab.label "Visszaállítás új lapra">
+<!ENTITY restoreintab.accesskey "l">
+<!ENTITY restoretab.label "Lap visszaállítása">
+<!ENTITY restoretab.accesskey "v">
+<!ENTITY bookmark.label "Könyvjelzőt erre a linkre...">
+<!ENTITY bookmark.accesskey "B">
+<!ENTITY deletelist.label "Törlés a listáról">
+<!ENTITY deletelist.accesskey "T">
+<!ENTITY settings.label "Beállítások">
+<!ENTITY saveWindow.label "Aktuális ablak mentése">
+<!ENTITY saveAllWindows.label "Összes ablak mentése">
+<!ENTITY sm.context.overwrite "Visszaállítás, felülírva a meglévő ablakot...">
+<!ENTITY sm.context.overwrite.key "f">
+<!ENTITY sm.context.restore.new "Visszaállítás új ablakba">
+<!ENTITY sm.context.restore.newkey "i">
+<!ENTITY sm.context.replacethis "Visszaállítás ebbe az ablakba">
+<!ENTITY sm.context.replacethis.key "V">
+<!ENTITY sm.context.replaceall "Felcserélés az összes ablakban">
+<!ENTITY sm.context.replaceall.key "F">
+<!ENTITY sm.context.add "Hozzáadás ehhez az ablakhoz">
+<!ENTITY sm.context.add.key "e">
+<!ENTITY sm.context.addall "Hozzáadás az összes ablakhoz">
+<!ENTITY sm.context.addall.key "s">
+<!ENTITY sm.context.save "Mentés">
+<!ENTITY sm.context.save.key "M">
+<!ENTITY sm.context.rename "Átnevezés">
+<!ENTITY sm.context.rename.key "t">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Törlés">
+<!ENTITY sm.context.delete.key "r">
+<!ENTITY sm.context.deleteall "Összes törlése">
+<!ENTITY sm.context.deleteall.key "l">
+<!ENTITY sm.context.startup "Beállítás indító munkamenetként">
+<!ENTITY sm.context.startup.key "P">
+<!ENTITY sm.context.details "Számláló, dátum és idő megjelenítése a Munkamenet menüben">
+<!ENTITY sm.context.details.key "M">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "Rendezett lapok">
+<!ENTITY sortedTabs.tooltip "Lista megjelenítése ABC sorrendben">
+<!ENTITY enable.label "Engedélyezés">
+<!ENTITY custom.label "Egyedi">
+<!ENTITY enableTabs.label "Minden lap engedélyezése">
+<!ENTITY disableTabs.label "Minden lap letiltása">
+<!ENTITY seconds.label "másodperc">
+<!ENTITY minutes.label "perc">
+<!ENTITY minute.label "perc">
+<!ENTITY hideTabBar.label "Lapok eszköztár elrejtése">
+<!ENTITY hideTabBar.never.label "Soha">
+<!ENTITY hideTabBar.never.key "S">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "e">
+<!ENTITY hideTabBar.always.label "Mindig">
+<!ENTITY hideTabBar.always.key "M">

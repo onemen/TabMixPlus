@@ -1,0 +1,306 @@
+/********** preferences ********/
+
+@import url("chrome://tabmix-version/skin/preferences.css");
+
+checkbox_tmp {
+  -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#checkbox_tmp") !important;
+}
+
+/* Global Styles */
+radio[pane] {
+  list-style-image: url(tmpoptions.png);
+  padding: 5px 5px 1px 4px;
+}
+
+radio[pane=paneLinks] {
+  -moz-image-region: rect(0px 24px 24px 0);
+}
+radio[pane=paneEvents] {
+  -moz-image-region: rect(0px 48px 24px 24px);
+}
+radio[pane=paneAppearance] {
+  -moz-image-region: rect(0px 72px 24px 48px);
+}
+radio[pane=paneMouse] {
+  -moz-image-region: rect(0px 96px 24px 72px);
+}
+radio[pane=paneMenu] {
+  -moz-image-region: rect(0px 120px 24px 96px);
+}
+radio[pane=paneSession] {
+  list-style-image: url(sessionmanager.png);
+  -moz-image-region: rect(0px 24px 24px 0);
+}
+
+radio[pane=paneIncompatible] {
+  list-style-image: url("chrome://global/skin/icons/Error.png") !important;
+  -moz-image-region: auto; /* cut off inheritance */
+  visibility: collapse;
+}
+
+radio[pane=paneIncompatible][show=true] {
+  visibility: visible;
+}
+
+.content-help {
+  -moz-appearance: none;
+  margin: 0;
+  min-width: 20px;
+  border: 0 solid transparent;
+  background-color: transparent;
+  color: transparent;
+}
+
+.content-help,
+.content-help:hover:active {
+  opacity: 1;
+}
+
+.content-help:not(:active):hover {
+  opacity: 0.7;
+}
+
+.content-help,
+.dialog-button[icon="help"] {
+  list-style-image: url("chrome://global/skin/icons/question-16.png");
+}
+
+.dialog-button[icon="help"] .button-icon {
+  display: -moz-box !important; /* for Linux */
+  margin-right: 6px;
+}
+
+.dialog-button[icon="help"][disabled=true] .button-icon{
+  opacity: 0.4;
+}
+
+.dialog-button[dlgtype="extra2"] {
+  list-style-image: url(arrow.png);
+  -moz-box-direction: reverse;
+}
+
+.dialog-button[dlgtype="extra2"] .button-icon {
+  display: -moz-box; /* for Linux */
+}
+
+.dialog-button {
+  margin: 2px;
+}
+
+tabpanel {
+  -moz-box-orient: vertical;
+}
+
+.bottom-separator {
+  height: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.subtabs .tab-text {
+  min-width: 50px;
+  text-align: center;
+}
+
+/* Tabmix toolbar button icons */
+#_btn_sessionmanager {
+  list-style-image: url(sessionmanager.png);
+}
+
+#_btn_undoclose {
+  list-style-image: url(undoclosetab.png);
+}
+
+#_btn_closedwindows {
+  list-style-image: url(undoclosewindow.png);
+}
+
+#_btn_tabslist {
+  list-style-image: url(tabslist.png);
+}
+
+.tabmixbuttons {
+  -moz-box-align: center;
+  padding: 3px;
+}
+
+.tabmixbuttons > image {
+  -moz-image-region: rect(0 24px 24px 0);
+}
+
+/* Chromifox theme force button height to 25px */
+#TabMIxPreferences[chromifox=true] .spinbuttons-button {
+  max-height: 11px !important;
+}
+
+/***** for default theme *****/
+
+/* fix small bug in firefox tabbox.css
+   tabs moves left or right when selection changed
+   we change the border from 2px to none so
+   we need also to change the padding
+*/
+#TabMIxPreferences:-moz-locale-dir(ltr) tab[beforeselected="true"],
+#TabMIxPreferences:-moz-locale-dir(rtl) tab[selected="true"] + tab {
+  padding-right: 2px ;
+}
+
+#TabMIxPreferences:-moz-locale-dir(ltr) tab[selected="true"] + tab,
+#TabMIxPreferences:-moz-locale-dir(rtl) tab[beforeselected="true"] {
+  padding-left: 2px ;
+}
+
+.subtabs[selected=true][first-tab=true] {
+  padding-right: 6px ;
+  padding-left: 4px ;
+}
+
+.subtabs[selected=true][last-tab=true] {
+  padding-right: 4px;
+}
+
+#TabMIxPreferences:not([ubuntu]) .groupbox-panels {
+  -moz-appearance: groupbox;
+  padding: 3px 3px 6px 3px;
+}
+
+.groupbox-tabbox {
+  margin: 3px;
+}
+
+#TabMIxPreferences:not([linux]):not([mac]) .groupbox-tabbox > tabs {
+  margin-bottom: -2px;
+}
+
+/* hide top tabbox tabs for link and session panel */
+.tabs-hidden > tab {
+  visibility: hidden;
+}
+
+/* for locales with wide tabs, align right end with tabpanels */
+tabbox > tabs {
+  -moz-margin-end: 2px;
+}
+
+#extraIcons-locked .checkbox-icon {
+  list-style-image: url(locked.png);
+  -moz-image-region: rect(0 9px 9px 0);
+}
+
+#extraIcons-protected .checkbox-icon {
+  list-style-image: url(protected.png);
+  -moz-image-region: rect(5px 16px 16px 7px);
+}
+
+#extraIcons-autoreload .checkbox-icon {
+  list-style-image: url(autoreload.png);
+  -moz-image-region: rect(0px 16px 9px 7px);
+}
+
+.extraIcons .checkbox-icon {
+  padding: 2px 0 2px 0;
+  -moz-margin-end: 3px;
+}
+
+.clicktab-popup {
+  -moz-binding: url("chrome://global/content/bindings/popup.xml#popup");
+  -moz-box-orient: vertical;
+}
+
+.clicktab-popup > * > .arrowscrollbox-scrollbox {
+  overflow: auto !important;
+}
+
+.clicktab-popup > * > .autorepeatbutton-up,
+.clicktab-popup > * > .autorepeatbutton-down {
+  display: none !important;
+}
+
+groupbox[tstInstalled] label[TSTdisabled="true"] {
+  color: GrayText;
+}
+
+/* rules to make the new option window look the same as the old one */
+radio[pane] > image {
+  width: 24px;
+  height: 24px;
+}
+
+prefpane {
+  padding: 3px 1px 1px 1px;
+}
+
+prefpane > tabbox {
+  width: 525px;
+  height: 464px;
+}
+
+prefwindow[in-tab] .paneSelector {
+  width: 530px;
+}
+
+tabbox {
+  -moz-box-flex: 1;
+  padding: 0 1px;
+}
+
+tabbox > tabpanels {
+  -moz-box-flex: 1;
+}
+
+/* for Linux */
+#sessionManager-panels[linux] {
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+}
+
+#sessionManager-panels[linux] groupbox {
+  margin: 2px 5px;
+  padding: 0 5px;
+}
+
+/* for Mac */
+#TabMIxPreferences[mac] prefpane > tabbox {
+  height: 468px;
+}
+
+#TabMIxPreferences[mac] .groupbox-tabbox {
+  margin: 3px 5px;
+}
+
+#TabMIxPreferences[mac] groupbox {
+  margin-top: 3px;
+  margin-bottom: 1px;
+  padding-top: 2px;
+}
+
+#TabMIxPreferences[mac] prefpane .groupbox-title {
+  background-image: none;
+  padding-top: 2px;
+  margin-bottom: 2px;
+}
+
+/* session panel */
+#sessionsPanel:not([manager]),
+#sessionsPanel[manager=tabmix] .firefox,
+#sessionsPanel[manager=firefox] .tabmix {
+  display: none;
+}
+
+#sessionsPanel > groupbox > vbox {
+  height: 55px;
+}
+
+#TabMIxPreferences[mac] prefpane .groupbox-body {
+  -moz-appearance: groupbox;
+  padding-top: 2px;
+  margin-bottom: 2px;
+}
+
+#sessionsPanel[manager=firefox] tab.firefox {
+  visibility: hidden;
+}
+
+.menu checkbox {
+  padding-top: 0;
+}

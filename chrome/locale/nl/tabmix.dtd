@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Gesloten tabbladen">
+<!ENTITY closedtabsbtn.tooltip "Lijst met gesloten tabbladen weergeven">
+<!ENTITY sessionbtn.tooltip "De sessies weergeven en beheren">
+<!ENTITY tabslistbtn.label "Geopende tabbladen">
+<!ENTITY tabslistbtn.tooltip "Lijst met geopende tabbladen weergeven">
+<!ENTITY closedwindowsbtn.label "Gesloten vensters">
+<!ENTITY closedwindowsbtn.tooltip "Lijst met gesloten vensters weergeven">
+<!ENTITY page.header.title "Tab Mix Plus opties">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus Sessiebeheerder">
+<!ENTITY session.Tools "Sessiebeheerder">
+<!ENTITY closedWin.label "Lijst met gesloten vensters">
+<!ENTITY duplicateTabMenu.label "Tabblad dupliceren">
+<!ENTITY duplicateTabMenu.accesskey "T">
+<!ENTITY duplicateinWin.label "In nieuw venster dupliceren">
+<!ENTITY duplicateinWin.accesskey "v">
+<!ENTITY detachTab.label "Naar nieuw venster verplaatsen">
+<!ENTITY detachTab.accesskey "v">
+<!ENTITY mergeContext.label "Vensters samenvoegen">
+<!ENTITY mergeContext.accesskey "s">
+<!ENTITY renametab.label "Naam tabblad wijzigen">
+<!ENTITY renametab.accesskey "w">
+<!ENTITY copytaburl.label "Webadres van tabblad kopiëren">
+<!ENTITY copytaburl.accesskey "k">
+<!ENTITY reloadother.label "Overige tabbladen vernieuwen">
+<!ENTITY reloadother.accesskey "O">
+<!ENTITY reloadleft.label "Linker tabbladen vernieuwen">
+<!ENTITY reloadleft.accesskey "L">
+<!ENTITY reloadright.label "Rechter tabbladen vernieuwen">
+<!ENTITY reloadright.accesskey "R">
+<!ENTITY autoReloadTab.label "Tabblad vernieuwen na">
+<!ENTITY autoReloadTab.accesskey "N">
+<!ENTITY autoReloadSite.label "Deze site vernieuwen, elke">
+<!ENTITY autoReloadSite.accesskey "e">
+<!ENTITY afterthis.label "Na dit tabblad">
+<!ENTITY bookmarktab.label "Tabblad als bladwijzer opslaan">
+<!ENTITY undoCloseListMenu.label "Lijst van afgesloten tabbladen">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "Alle tabbladen sluiten">
+<!ENTITY closeall.accesskey "A">
+<!ENTITY closeSimilarTab.label "Gelijksoortige tabbladen sluiten">
+<!ENTITY closeSimilarTab.accesskey "G">
+<!ENTITY closeTabsToLeft.label "Tabbladen links afsluiten">
+<!ENTITY closeleft.accesskey "L">
+<!ENTITY docShellMenu.label "Toestemmingen">
+<!ENTITY docShellMenu.accesskey "T">
+<!ENTITY freezeTabMenu.label "Tabblad bevriezen">
+<!ENTITY freezeTabMenu.accesskey "V">
+<!ENTITY protectTabMenu.label "Tabblad beschermen">
+<!ENTITY protectTabMenu.tooltip "Tabbladen tegen afsluiten beschermen">
+<!ENTITY protectTabMenu.accesskey "B">
+<!ENTITY lockTabMenu.label "Tabblad op slot zetten">
+<!ENTITY lockTabMenu.tooltip "Alle koppelingen openen in nieuw tabblad">
+<!ENTITY lockTabMenu.accesskey "o">
+<!ENTITY bookmarktabs.label "Alle tabbladen opslaan als bladwijzer">
+<!ENTITY linkhere.label "Koppeling in dit tabblad openen">
+<!ENTITY linkhere.accesskey "D">
+<!ENTITY linkBackgroundTab.label "Koppeling in tabblad op de achtergrond openen">
+<!ENTITY linkForegroundTab.label "Koppeling in tabblad op de voorgrond openen">
+<!ENTITY linkBackgroundTab.accesskey "A">
+<!ENTITY linkForegroundTab.accesskey "V">
+<!ENTITY openalllinks.label "Koppelingen in nieuwe tabbladen openen">
+<!ENTITY openalllinks.accesskey "i">
+<!ENTITY linkwithhistory.label "Koppeling in gedupliceerd tabblad openen">
+<!ENTITY linkwithhistory.accesskey "d">
+<!ENTITY tabsList.label "Lijst van geopende tabbladen">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Afbeelding">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Omleiden">
+<!ENTITY allowPlugin.label "Plug-in">
+<!ENTITY allowFrame.label "Frame">
+<!ENTITY restoreincurrent.label "Naar huidig tabblad herstellen">
+<!ENTITY restoreincurrent.accesskey "H">
+<!ENTITY restoreinwin.label "Naar nieuw venster herstellen">
+<!ENTITY restoreinwin.accesskey "V">
+<!ENTITY restoreintab.label "Naar nieuw tabblad herstellen">
+<!ENTITY restoreintab.accesskey "T">
+<!ENTITY restoretab.label "Tabblad herstellen">
+<!ENTITY restoretab.accesskey "H">
+<!ENTITY bookmark.label "Bladwijzer van deze koppeling maken…">
+<!ENTITY bookmark.accesskey "B">
+<!ENTITY deletelist.label "Uit de lijst verwijderen">
+<!ENTITY deletelist.accesskey "V">
+<!ENTITY settings.label "Instellingen">
+<!ENTITY saveWindow.label "Dit venster bewaren">
+<!ENTITY saveAllWindows.label "Alle vensters bewaren">
+<!ENTITY sm.context.overwrite "Bestaand(e) venster(s) herstellen/overschrijven">
+<!ENTITY sm.context.overwrite.key "O">
+<!ENTITY sm.context.restore.new "Naar nieuw(e) venster(s) herstellen">
+<!ENTITY sm.context.restore.newkey "N">
+<!ENTITY sm.context.replacethis "Vervangen door dit venster">
+<!ENTITY sm.context.replacethis.key "t">
+<!ENTITY sm.context.replaceall "Vervangen door alle vensters">
+<!ENTITY sm.context.replaceall.key "A">
+<!ENTITY sm.context.add "Dit venster toevoegen">
+<!ENTITY sm.context.add.key "V">
+<!ENTITY sm.context.addall "Alle vensters toevoegen">
+<!ENTITY sm.context.addall.key "l">
+<!ENTITY sm.context.save "Opslaan">
+<!ENTITY sm.context.save.key "s">
+<!ENTITY sm.context.rename "Hernoemen">
+<!ENTITY sm.context.rename.key "r">
+<!ENTITY sm.context.bookmarkSession "Bladwijzersessie">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Verwijderen">
+<!ENTITY sm.context.delete.key "V">
+<!ENTITY sm.context.deleteall "Alles verwijderen">
+<!ENTITY sm.context.deleteall.key "l">
+<!ENTITY sm.context.startup "Instellen als opstartsessie">
+<!ENTITY sm.context.startup.key "p">
+<!ENTITY sm.context.details "Tellers, datum en tijd in sessiemenu laten zien">
+<!ENTITY sm.context.details.key "T">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "V">
+<!ENTITY merge.key "S">
+<!ENTITY sortedTabs.label "Gesorteerde tabbladen">
+<!ENTITY sortedTabs.tooltip "Vink dit aan om de lijst alfabetisch gesorteerd weer te geven">
+<!ENTITY enable.label "Inschakelen">
+<!ENTITY custom.label "Aanpassen">
+<!ENTITY enableTabs.label "Alle tabbladen inschakelen">
+<!ENTITY disableTabs.label "Alle tabbladen uitschakelen">
+<!ENTITY seconds.label "seconden">
+<!ENTITY minutes.label "minuten">
+<!ENTITY minute.label "minuut">
+<!ENTITY hideTabBar.label "De tabbladenbalk verbergen">
+<!ENTITY hideTabBar.never.label "Nooit">
+<!ENTITY hideTabBar.never.key "N">
+<!ENTITY hideTabBar.oneTab.label "Als slechts één tabblad geopend is">
+<!ENTITY hideTabBar.onOneTab.key "E">
+<!ENTITY hideTabBar.always.label "Altijd">
+<!ENTITY hideTabBar.always.key "A">

@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Δεσμοί">
+<!ENTITY tab.events "Συμβάντα">
+<!ENTITY tab.mouse "Ποντίκι">
+<!ENTITY tab.appearance "Εμφάνιση">
+<!ENTITY tab.menu "Μενού">
+<!ENTITY tab.session "Συνεδρία">
+<!ENTITY tab.incompatible "Σφάλμα">
+<!ENTITY apply.label "Εφαρμογή">
+<!ENTITY settings.export "Εξαγωγή ρυθμίσεων">
+<!ENTITY settings.import "Εισαγωγή ρυθμίσεων">
+<!ENTITY settings.sync "Επιλογές Sync">
+<!ENTITY settings.default "Επαναφορά αρχικών">
+<!ENTITY settings.revert "Revert">
+<!ENTITY generalWindowOpen.label "Άνοιγμα δεσμών που ανοίγουν σε νέο παράθυρο σε:">
+<!ENTITY externalLink.useSeparate.label "Χρήση ξεχωριστών προτιμήσεων για δεσμούς από άλλες εφαρμογές">
+<!ENTITY externalLinkTarget.label "Άνοιγμα δεσμών από άλλες εφαρμογές σε:">
+<!ENTITY linkTarget.tab "Νέα καρτέλα">
+<!ENTITY linkTarget.window "Νέο παράθυρο">
+<!ENTITY linkTarget.current "Στο τρέχον παράθυρο">
+<!ENTITY linkTarget.accesskey "Τ">
+<!ENTITY divertedWindowOpen.label "Αναδυόμενα JavaScript">
+<!ENTITY divertedWindowOpen.all "Άνοιγμα όλων των αναδυόμενων σε καρτέλες">
+<!ENTITY divertedWindowOpen.some "Να επιτρέπονται αναδυόμενα σταθερών διαστάσεων">
+<!ENTITY divertedWindowOpen.none "Να επιτρέπονται όλα τα αναδυόμενα">
+<!ENTITY linkTarget.label "Άνοιγμα δεσμών με καθορισμένη ιδιότητα προορισμού στην τρέχουσα καρτέλα">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY download.label "Αποτροπή ανοίγματος κενών καρτελών όταν λαμβάνονται αρχεία">
+<!ENTITY edit.label "Επεξεργασία">
+<!ENTITY speLink.label "Υποχρεωτικό άνοιγμα σε νέα καρτέλα:">
+<!ENTITY speLink.none "Για τίποτα">
+<!ENTITY speLink.allLinks "Όλοι οι δεσμοί">
+<!ENTITY speLink.external "Δεσμών για άλλες ιστοσελίδες">
+<!ENTITY singleWindow.label "Ενεργοποίηση κατάστασης ενός παραθύρου">
+<!ENTITY newTabs.label "Νέες καρτέλες">
+<!ENTITY tabOpen.label "Άνοιγμα καρτέλας">
+<!ENTITY tabFocus.label "Εστίαση καρτέλας">
+<!ENTITY tabClose.label "Κλείσιμο καρτέλας">
+<!ENTITY tabMerge.label "Σύμπτυξη καρτελών">
+<!ENTITY tabFeature.label "Χαρακτηριστικά καρτέλας">
+<!ENTITY newtab.label "Φόρτωση σε νέες καρτέλες:">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "Κενής σελίδας">
+<!ENTITY newtab.home "Αρχικής σελίδας">
+<!ENTITY newtab.current "Τρέχουσας σελίδας">
+<!ENTITY newtab.duplicate "Δημιουργία αντιγράφου σελίδας">
+<!ENTITY newtab.location.1 "Σελίδα νέας καρτέλας">
+<!ENTITY newtab.placeholder.label "Αρχική σελίδα νέας καρτέλας">
+<!ENTITY location.label.1 "Διεύθυνση">
+<!ENTITY focusContent.label "Εστίαση στο περιεχόμενο κατά την φόρτωση μη κενής σελίδας">
+<!ENTITY openTabNext.label "Άνοιγμα νέων καρτελών δίπλα στην τρέχουσα">
+<!ENTITY openOtherTabNext.label "Άνοιγμα άλλων καρτελών δίπλα στην τρέχουσα">
+<!ENTITY relatedAfterCurrent.label "Μόνο αν σχετίζονται με την τρέχουσα καρτέλα">
+<!ENTITY openTabNext.tooltip1 "[α][β][γ][1][2][3] -&gt; [α][1][2][3][β][γ]">
+<!ENTITY openDuplicateNext.label "Άνοιγμα αντιγράφων καρτελών δίπλα από τις πρωτότυπες">
+<!ENTITY openTabNext.tooltip "[α][β][γ][1][2][3] -&gt; [α][3][2][1][β][γ]">
+<!ENTITY openTabNextInverse.label "Αλλαγή σειράς ανοίγματος">
+<!ENTITY openTabNextInverse.tooltip "[α][3][2][1][β][γ] -&gt; [α][1][2][3][β][γ]">
+<!ENTITY openTabNextInverse.tooltip1 "Άνοιγμα νέας καρτέλας δίπλα από την τελευταία καρτέλα που ανοίχτηκε μέσα από την τρέχουσα (αφού ήταν η τελευταία επιλεγμένη)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabs">
+<!ENTITY lockTabs.label "Κλείδωμα καρτελών">
+<!ENTITY lockNewTabs.label "Κλείδωμα νέων καρτελών">
+<!ENTITY lockAppTabs.label "Κλείδωμα πρωτευόντων καρτελών">
+<!ENTITY updateLockState.label "Εφαρμογή των αλλαγών στις ανοιχτές καρτέλες">
+<!ENTITY openNewTab.label "Άνοιγμα καρτελών από:">
+<!ENTITY openBookmarks.label "Σελιδοδείκτες">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openHistory.label "Ιστορικό">
+<!ENTITY openUrl.label "Εργαλειοθήκη διευθύνσεων">
+<!ENTITY openSearch.label "Εργαλειοθήκη αναζήτησης">
+<!ENTITY middlecurrent1.label "Το μεσαίο κλικ και το Control-κλικ ανοίγουν στοιχεία στην τρέχουσα καρτέλα">
+<!ENTITY middlecurrent.tooltip "Μόνο για σελιδοδείκτες , ιστορικό και κλειδωμένες καρτέλες">
+<!ENTITY tabFocus.caption "Εστίαση/επιλογή καρτελών που ανοίγουν από:">
+<!ENTITY selectTab.label "Δεσμούς">
+<!ENTITY selectDivertedTab.label "Παράθυρα που έχουν παρακαμφθεί">
+<!ENTITY selectTabFromExternal.label "Άλλες εφαρμογές">
+<!ENTITY selectTabCommand.label "Εντολές νέων καρτελών">
+<!ENTITY contextMenuSearch.label "Αναζήτηση στο μενού περιεχομένου">
+<!ENTITY selectTabBH.label "Σελιδοδείκτες/Ιστορικό">
+<!ENTITY duplicateTab.label "Αντίγραφο καρτέλας">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "Προειδοποίηση">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "Κλείσιμο τελευταίας καρτέλας">
+<!ENTITY keepWindow.label.3.1 "Όταν κλείνει η τελευταία καρτέλα να μην κλείνει και το παράθυρο">
+<!ENTITY keeptab.label "Να μην επιτρέπεται το κλείσιμο της τελευταίας καρτέλας">
+<!ENTITY closeOnMerge.label "Κλείσιμο παραθύρων αφού συμπτυχθούν">
+<!ENTITY warnOnMerge.label "Προειδοποίηση στο κλείσιμο καρτελών που δεν έχουν συμπτυχθεί">
+<!ENTITY currenttab.caption.label "Κλείσιμο τελευταίας καρτέλας">
+<!ENTITY focusTab.labelBegin "Όταν κλείσει η τρέχουσα καρτέλα, η εστίαση να μεταφέρεται στην:">
+<!ENTITY focusTab.firstTab "Πρώτη καρτέλα">
+<!ENTITY focusTab.leftTab "Αριστερή καρτέλα">
+<!ENTITY focusTab.rightTab "Δεξιά καρτέλα">
+<!ENTITY focusTab.lastTab "Τελευταία καρτέλα">
+<!ENTITY focusTab.lastSelectedTab "Τελευταία επιλεγμένη καρτέλα">
+<!ENTITY focusTab.openerTab "Καρτέλα ανοίγματος/δεξιά καρτέλα">
+<!ENTITY focusTab.openerTab.rtl "Καρτέλα που ανοίχτηκε/αριστερή καρτέλα">
+<!ENTITY focusTab.lastOpenedTab "Τελευταία ανοιγμένη καρτέλα">
+<!ENTITY undoClose.label "Ενεργοποίηση αναίρεσης κλεισίματος καρτελών">
+<!ENTITY undoCloseCache.label "Μέγιστος αριθμός κλεισμένων καρτελών στη μνήμη">
+<!ENTITY undoClosepos.label "Επαναφορά αρχικής θέσης της καρτέλας">
+<!ENTITY menuonlybutton.label "Το κουμπί της εργαλειοθήκης να εμφανίζει μόνο μια λίστα">
+<!ENTITY ctrltab.label "Η περιήγηση με Ctrl-Tab στις καρτέλες να γίνεται με σειρά της πιο πρόσφατα χρησιμοποιημένης">
+<!ENTITY cmdtab.label "Η περιήγηση με Cmd-Tab στις καρτέλες να γίνεται με σειρά της πιο πρόσφατα χρησιμοποιημένης">
+<!ENTITY ctrltab.tabPreviews "Να εμφανίζονται εικόνες προεπισκόπησης καρτελών">
+<!ENTITY ctrltab.popup "Το ctrl-Tab εμφανίζει αναδυόμενο μενού με λίστα καρτελών">
+<!ENTITY cmdtab.popup "Το cmd-Tab εμφανίζει αναδυόμενο μενού με λίστα καρτελών">
+<!ENTITY tabpopup.mouse "Η λίστα καρτελών ανταποκρίνεται στο ποντίκι">
+<!ENTITY mergeNoTabSelection.label "Σύμπτυξη παραθύρων όταν δεν έχουν επιλεγεί καρτέλες">
+<!ENTITY mergeTabSelection.label "Σύμπτυξη μετά από επιλογή καρτελών:">
+<!ENTITY mergeall.label "Να συμπτύσσονται όλα τα παράθυρα σε ένα">
+<!ENTITY mergelastfocused.label "Σύμπτυξη μόνο του τρέχοντος παραθύρου με το πιο πρόσφατα εστιασμένο">
+<!ENTITY mergePopups.label "Σύμπτυξη και των αναδυόμενων παραθύρων">
+<!ENTITY popupNextToOpener.label "Τοποθέτηση αναδυόμενων δίπλα από τις πηγές τους">
+<!ENTITY activateSlideshow.label "Το πάτημα του #1 γυρνάει τις καρτέλες κάθε">
+<!ENTITY toggleAnimation.label "Απενεργοποίηση εφέ ανοίγματος/κλεισίματος καρτέλας">
+<!ENTITY reloadEvery.matchAddress.label "Ανανέωση καρτέλας άσχετα με τη διεύθυνση της.">
+<!ENTITY reloadEvery.onReloadButton.label "Προβολή μενού αυτόματης ανανέωσης στο κουμπί ανανέωσης">
+<!ENTITY seconds.label "δευτερόλεπτα">
+<!ENTITY minutes.label "λεπτά">
+<!ENTITY tabBarAppearance.label "Εργαλειοθήκη καρτελών">
+<!ENTITY tabAppearance.label "Καρτέλα">
+<!ENTITY toolBarAppearance.label "Εργαλειοθήκη">
+<!ENTITY show.ontabbar.label "Προβολή στην εργαλειοθήκη καρτελών">
+<!ENTITY show.ontab.label "Προβολή στην καρτέλα">
+<!ENTITY dragNewTabButton.tooltip "Σύρετε το κουμπί «Νέα καρτέλα» στην εργαλειοθήκη καρτελών για να ενεργοποιηθεί η επιλογή.">
+<!ENTITY hideTabBarButton.label "Κουμπί κλεισίματος καρτέλας">
+<!ENTITY newTabButton.label "Κουμπί νέας καρτέλας">
+<!ENTITY newTabButton.position.left.label "Στα αριστερά">
+<!ENTITY newTabButton.position.right.label "Στα δεξιά">
+<!ENTITY newTabButton.position.afterlast.label "Μετά την τελευταία καρτέλα">
+<!ENTITY allTabsButton.label "Κουμπί για όλες τις καρτέλες">
+<!ENTITY tabBarSpace.label "Επιπλέον διαστήματα και στις δύο πλευρές">
+<!ENTITY tabBarSpace.tooltip "Για κλικ και εναπόθεση στοιχείου στην εργαλειοθήκη καρτελών">
+<!ENTITY tabbar.label "Απόκρυψη της εργαλειοθήκης καρτελών όταν μόνο μια καρτέλα είναι ανοικτή">
+<!ENTITY moveTabOnDragging.label "Μετακίνησης καρτέλας κατά το σύρσιμο της">
+<!ENTITY dropIndicator.label "Δείκτης απόθεσης">
+<!ENTITY dropIndicator-native.label "Εγγενές στυλ">
+<!ENTITY dropIndicator-builtin.label "Ενσωματωμένο στυλ">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY tabBarPosition.label "Θέση:">
+<!ENTITY tabBarPosition.top.label "Πάνω (από το περιεχόμενο)">
+<!ENTITY tabBarPosition.bottom.label "Κάτω (από το περιεχόμενο)">
+<!ENTITY tabScroll.label "Όταν οι καρτέλες υπερβαίνουν το πλάτος:">
+<!ENTITY tabScroll.none "Κυλιόμενες χωρίς κουμπιά">
+<!ENTITY tabScroll.leftRightButtons "Κυλιόμενη με κουμπιά αριστερά και δεξιά">
+<!ENTITY tabScroll.rightButtons "Κυλιόμενη με κουμπιά δεξιά">
+<!ENTITY tabScroll.rightButtons.rtl "Κυλιόμενη  με κουμπιά αριστερά">
+<!ENTITY tabScroll.multibar "Με πολλές γραμμές">
+<!ENTITY maxrow.label "Μέγιστος αριθμός γραμμών που θα εμφανίζονται:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY offsetAmountToScroll.label "Κατά την κύλιση να εμφανίζεται τμήμα της επόμενης μη εμφανούς καρτέλας">
+<!ENTITY smoothScroll.label "Ενεργοποίηση ομαλής κύλισης">
+<!ENTITY scrolldelay.label "Καθυστέρηση κύλισης (χρόνος μεταξύ επαναλήψεων κύλισης)">
+<!ENTITY currenttab.style.label "Τρέχουσας καρτέλας">
+<!ENTITY unloadedtabs.style.label "Μη φορτωμένες καρτέλες">
+<!ENTITY unreadtabs.style.label "Μη αναγνωσμένων καρτελών">
+<!ENTITY othertabs.style.label "Άλλες καρτέλες">
+<!ENTITY setstyles.label "Προσαρμογή στυλ">
+<!ENTITY extraIcons.label1 "Εικονίδια για">
+<!ENTITY extraIcons.locked "Κλειδωμένες καρτέλες">
+<!ENTITY extraIcons.protected "Προστατευμένες καρτέλες">
+<!ENTITY extraIcons.autoreload "Αυτόματη ανανέωση">
+<!ENTITY extraIcons.hideonpinned "Απόκρυψη σε καρτέλες εφαρμογών">
+<!ENTITY progressMeter.label "Ένδειξη προόδου στις καρτέλες">
+<!ENTITY showTabX.labelBegin "Κουμπί κλεισίματος καρτέλας">
+<!ENTITY showTabX.left "Στην αριστερή πλευρά">
+<!ENTITY showTabX.rtl "Τοποθέτηση στη δεξιά πλευρά">
+<!ENTITY milliseconds.label "χιλ. δευτερολέπτου">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "σε όλες">
+<!ENTITY showTabX.current "στην τρέχουσα">
+<!ENTITY showTabX.hover "στην εστιασμένη">
+<!ENTITY showTabX.alwaysExeption "σε όλες τις καρτέλες που έχουν πλάτος μεγαλύτερο από">
+<!ENTITY showTabX.currentHover "στην τρέχουσα και εστιασμένη για">
+<!ENTITY minWidth.label "Πλάτος:">
+<!ENTITY widthTo.label "σε">
+<!ENTITY widthPixels.label "πίξελ">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY flexTabs.label "Το πλάτος καρτέλας να προσαρμόζεται στο πλάτος τίτλου">
+<!ENTITY bookastitle.label "Χρήση τίτλου σελιδοδείκτη ως τίτλου καρτέλας">
+<!-- LOCALIZATION NOTE:           change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Μπορείτε να ρυθμίσετε ποια κουμπιά του Tabmix θα εμφανίζονται στην εργαλειοθήκη">
+<!ENTITY toolbar.button.label "Προσαρμογή">
+<!ENTITY toolbar.visible.caption "Εμφανή κουμπιά">
+<!ENTITY toolbar.novisible.label "Δεν υπάρχουν εμφανή κουμπιά">
+<!ENTITY toolbar.hidden.caption "Κρυμμένα κουμπιά">
+<!ENTITY toolbar.nohidden.label "Δεν υπάρχουν κρυμμένα κουμπιά">
+<!ENTITY mouseGesture.label "Gestures ποντικιού">
+<!ENTITY mouseClick.label "Κλικ ποντικιού">
+<!ENTITY mouseHoverSelect.labelBegin "Επιλογή καρτέλας που έχει εστιαστεί">
+<!ENTITY tabFlip.label "Όταν γίνεται κλικ στην τρέχουσα καρτέλα να εναλλάσσεται με την προηγούμενη επιλεγμένη">
+<!ENTITY tabFlip.delay "χρονοκαθυστέρηση">
+<!ENTITY clickFocus.label "Επιλογή καρτέλας με απλό κλικ (πίεση κι απελευθέρωση)">
+<!ENTITY removeEntries.label "Αφαίρεση στοιχείων του μενού Tab Mix Plus με μεσαίο κλικ">
+<!ENTITY lockTabSizingOnClose.label "Να μην αλλάζουν μέγεθος οι καρτέλες μετά το κλείσιμο μιας αν δεν απομακρυνθεί ο κέρσορας από την εργαλειοθήκη">
+<!ENTITY removeEntries.tooltip "Συμπεριλαμβάνει κλεισμένες καρτέλες, κλεισμένα παράθυρα και αποθηκευμένες συνεδρίες">
+<!ENTITY tabbarscrolling.caption "Κατά την κύλιση πάνω από την εργαλειοθήκη καρτελών">
+<!ENTITY tabbarscrolling.holdShift.label "Κρατήστε πατημένο το shift κατά την κύλιση για εναλλαγή των επιλογών">
+<!ENTITY tabbarscrolling.selectTab.label "Αλλαγή επιλεγμένης καρτέλας">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Κύλιση όλων των καρτελών">
+<!ENTITY tabbarscrolling.inverse.label "Αντιστροφή κατεύθυνσης κύλισης">
+<!ENTITY double.label "Διπλό κλικ">
+<!ENTITY middle.label "Μεσαίο κλικ">
+<!ENTITY ctrl.label "Ctrl-κλικ">
+<!ENTITY cmd.label "Cmd-κλικ">
+<!ENTITY shift.label "Shift-κλικ">
+<!ENTITY alt.label "Alt-κλικ">
+<!ENTITY ontab.label "σε καρτέλα:">
+<!ENTITY ontabbar.label "στην εργαλειοθήκη καρτελών:">
+<!ENTITY clicktab.label "Επιλέξτε λειτουργία όταν γίνεται κλικ στην καρτέλα ή στην εργαλειοθήκη καρτελών">
+<!ENTITY ontabbar.dblClick.label "Να μην αλλάζει το μέγεθος παραθύρου με διπλό κλικ στην εργαλειοθήκη καρτελών.">
+<!ENTITY ontabbar.click.label "Να μην σύρεται το παράθυρο όταν γίνεται κλικ στην εργαλειοθήκη καρτελών.">
+<!ENTITY clicktab.default "Αρχική επιλογή του Firefox ή άλλης επέκτασης">
+<!ENTITY clicktab.nothing "Καμία λειτουργία">
+<!ENTITY clicktab.addtab "Ανοίγει νέα καρτέλα">
+<!ENTITY clicktab.duplicatetab "Δημιουργεί αντίγραφο της καρτέλας">
+<!ENTITY clicktab.duplicatetabw "Δημιουργεί αντίγραφο της καρτέλας σε νέο παράθυρο">
+<!ENTITY clicktab.detachtab "Μετακίνηση της καρτέλας σε νέο παράθυρο">
+<!ENTITY clicktab.protecttab "Προστατεύει την καρτέλα">
+<!ENTITY clicktab.locktab "Κλειδώνει την καρτέλα">
+<!ENTITY clicktab.freezetab "Προστατεύει και κλειδώνει την καρτέλα">
+<!ENTITY clicktab.renametab "Μετονομάζει την καρτέλα">
+<!ENTITY clicktab.copyTabUrl "Αντιγράφει το URL της καρτέλας στο πρόχειρο">
+<!ENTITY clicktab.copyUrlFromClipboard "Φόρτωση URL από το πρόχειρο">
+<!ENTITY clicktab.selectMerge "Επιλέγει τις καρτέλες που θα συμπτυχθούν">
+<!ENTITY clicktab.mergeTabs "Συμπτύσσει τα παράθυρα">
+<!ENTITY clicktab.bookTab "Προσθέτει στους σελιδοδείκτες την καρτέλα">
+<!ENTITY clicktab.bookTabs "Προσθέτει στους σελιδοδείκτες όλες τις καρτέλες">
+<!ENTITY clicktab.reloadtab "Ξαναφορτώνει την καρτέλα">
+<!ENTITY clicktab.reloadtabs "Ξαναφορτώνει όλες τις καρτέλες">
+<!ENTITY clicktab.reloadothertabs "Ξαναφορτώνει τις υπόλοιπες καρτέλες">
+<!ENTITY clicktab.reloadlefttabs "Ξαναφορτώνει τις καρτέλες από αριστερά">
+<!ENTITY clicktab.reloadrighttabs "Ξαναφορτώνει τις καρτέλες από δεξιά">
+<!ENTITY clicktab.autoReloadTab "Ενεργοποίηση/Απενεργοποίηση αυτόματης ανανέωσης καρτέλας">
+<!ENTITY clicktab.removeall "Κλείνει όλες τις καρτέλες">
+<!ENTITY clicktab.removeother "Κλείνει τις υπόλοιπες καρτέλες">
+<!ENTITY clicktab.removesimilar "Κλείνει καρτέλες από τον ίδιο ιστότοπο">
+<!ENTITY clicktab.removetoLeft "Κλείσιμο αριστερών καρτελών">
+<!ENTITY clicktab.removetoRight "Κλείσιμο δεξιών καρτελών">
+<!ENTITY clicktab.uctab "Ξανανοίγει την κλεισμένη καρτέλα">
+<!ENTITY clicktab.ucatab "Ξανανοίγει όλες τις κλεισμένες καρτέλες">
+<!ENTITY clicktab.snapback "Καρτέλα SnapBack">
+<!ENTITY clicktab.ietab "Ανοίγει την καρτέλα με ΙΕ">
+<!ENTITY contentLoad "Το μεσαίο κλικ φορτώνει url από το πρόχειρο">
+<!ENTITY context.tab "Μενού περιεχομένου καρτελών">
+<!ENTITY context.main "Βασικό μενού περιεχομένου">
+<!ENTITY context.tools "Μενού εργαλείων">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showtabBarContext.label "Προβολή στο μενού περιεχομένου καρτελών :">
+<!ENTITY showContentAreaContext.label "Προβολή στο βασικό μενού περιεχομένου :">
+<!ENTITY showToolsMenu.label "Προβολή στο μενού εργαλείων:">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "Προβολή κενής σελίδας">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "Το Tab Mix Plus ανίχνευσε ότι έχετε εγκαταστήσει το πρόσθετο Session Manager">
+<!ENTITY sm.extension.description2 "Ο διαχειριστής συνεδρίας του Tab Mix Plus θα απενεργοποιηθεί">
+<!ENTITY sm.extension.description3 "Μπορείτε να κάνετε κλικ στο κουμπί δεξιά για να ανοίξετε τον διάλογο επιλογών του Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "Μετατροπή">
+<!ENTITY sm.extension.chooseFile.label1 "Μετατροπή συνεδριών Tab Mix Plus του τρέχοντος προφίλ">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "Χρήση ενσωματωμένης αποκατάστασης συνεδρίας">
+<!ENTITY ss.enable.tooltip "Απεπιλέξτε για να επιτραπεί η χρήση του διαχειριστή συνεδρίας του Tabmix">
+<!ENTITY ss.advanced_setting "Ρυθμίσεις για προχωρημένους">
+<!ENTITY ss.advanced_setting.warning "Μην τις αλλάξετε, εκτός κι αν ξέρετε τι κάνετε">
+<!ENTITY ss.interval "Ελάχιστο μεσοδιάστημα χρόνου μεταξύ της αποθήκευσης δύο καταστάσεων">
+<!ENTITY ss.interval.seconds "(σε χιλιοστά δευτερολέπτου)">
+<!ENTITY ss.privacy_level "Αποθήκευση ευαίσθητων δεδομένων (δεδομένα σε φόρμες, δεδομένα αποστολής και cookies) για :">
+<!ENTITY ss.privacy_level.allsites "Όλες τις σελίδες">
+<!ENTITY ss.privacy_level.unencrypted "Μη κρυπτογραφημένες σελίδες μόνο">
+<!ENTITY ss.privacy_level.nosites "Καμία σελίδα">
+<!ENTITY ss.postdata.label1 "Μέγιστος όγκος αποθήκευσης δεδομένων αποστολής">
+<!ENTITY ss.postdata.label2 "(σε byte, -1 = όλα)">
+<!ENTITY sessionManger.enable "Ενεργοποίηση διαχειριστή συνεδρίας">
+<!ENTITY crashRecovery.enable "Ενεργοποίηση επαναφοράς μετά από κατάρρευση">
+<!ENTITY sm.StartExit "Εκκίνηση/Κλείσιμο">
+<!ENTITY sm.restore "Επαναφορά">
+<!ENTITY sm.preserve "Διατήρηση">
+<!ENTITY sm.start "Στην εκκίνηση του περιηγητή:">
+<!ENTITY sm.start.restore "Επαναφορά">
+<!ENTITY sm.start.ask "Ερώτηση πριν την επαναφορά">
+<!ENTITY sm.start.nothing "Να μην γίνεται επαναφορά">
+<!ENTITY sm.exit "Στο κλείσιμο του περιηγητή:">
+<!ENTITY sm.exit.save "Αποθήκευση συνεδρίας">
+<!ENTITY sm.exit.ask "Ερώτηση πριν την αποθήκευση">
+<!ENTITY sm.exit.nothing "Να μην γίνεται αποθήκευση">
+<!ENTITY sm.startup "Συνεδρία εκκίνησης:">
+<!ENTITY sm.lastsession "Τελευταία συνεδρία">
+<!ENTITY sm.previouslast "Προτελευταία">
+<!ENTITY sm.chooseifempty "Επιλογή άλλης αν είναι κενή">
+<!ENTITY sm.restore.options "Στην επαναφορά συνεδριών:">
+<!ENTITY sm.restore.overwrite "Αντικατάσταση ήδη υπαρχόντων παραθύρων">
+<!ENTITY sm.restore.overwriteTabs "και καρτελών">
+<!ENTITY sm.restore.closedWinList "Αποθήκευση παραθύρων της λίστας κλεισμένων παραθύρων">
+<!ENTITY sm.restore.merge "Συνένωση όλων των παραθύρων σε ένα">
+<!ENTITY sm.restore.bypassCache "Παράκαμψη λανθάνουσας κατά την επαναφορά">
+<!ENTITY sm.notrestore.label "Όταν δεν γίνεται επαναφορά κατά την εκκίνηση">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "Διατήρηση καρτελών:">
+<!ENTITY sm.preserve.history "Ιστορικό">
+<!ENTITY sm.preserve.protect "Κατάσταση προστασίας">
+<!ENTITY sm.preserve.locked "Κατάσταση κλειδώματος">
+<!ENTITY sm.preserve.permission "Δικαιώματα">
+<!ENTITY sm.preserve.scroll1 "Θέση κύλισης">
+<!ENTITY sm.restore.winOptions "Διατήρηση παραθύρων">
+<!ENTITY sm.restore.selectedTab "Επιλεγμένη καρτέλα">
+<!ENTITY sm.restore.closedTabs "Λίστα κλεισμένων καρτελών">
+<!ENTITY incompatible.extensions "Μερικές από τις επεκτάσεις σας είναι ασύμβατες με το Tab Mix Plus, προτείνεται να τις απενεργοποιήσετε ή απεγκαταστήσετε.">
+<!ENTITY incompatible.button.label "Προβολή λίστας">

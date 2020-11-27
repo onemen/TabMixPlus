@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Stijlen">
+<!ENTITY styles.label "Stijlen aanpassen">
+<!ENTITY currentTab.label "Huidig tabblad">
+<!ENTITY unloadedTabs.label "Niet geladen tabbladen">
+<!ENTITY unreadTab.label "Ongelezen tabbladen">
+<!ENTITY hideRGB.label "RGB verbergen">
+<!ENTITY showRGB.label "RGB weergeven">
+<!ENTITY unreadAfterReload.label "Tabblad als ongelezen instellen na herladen">
+<!ENTITY disableBackground.label "Aangepaste achtergrondkleuren uitschakelen">
+<!ENTITY squaredTabs.label "Achtergrondkleur voor vierkante tabbladen toepassen">
+<!ENTITY otherTabs.label "Overige tabbladen">
+<!ENTITY italic.label "Cursief">
+<!ENTITY bold.label "Vet">
+<!ENTITY underline.label "Onderstreept">
+<!ENTITY textcolor.label "Tekstkleur">
+<!ENTITY bgColor.label "Achtergrondkleur">
+<!ENTITY bgTopColor.label "boven">
+<!ENTITY bgBottomColor.label "onder">
+<!ENTITY useThis.label "deze stijl gebruiken voor">
+<!ENTITY opacity.label "Opaciteit">

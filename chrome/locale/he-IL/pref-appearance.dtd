@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Styles">
+<!ENTITY styles.label "התאם עיצוב">
+<!ENTITY currentTab.label "לשונית נוכחית">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
+<!ENTITY unreadTab.label "לשוניות שלא נקראו">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
+<!ENTITY otherTabs.label "לשוניות אחרות">
+<!ENTITY italic.label "נטוי">
+<!ENTITY bold.label "מודגש">
+<!ENTITY underline.label "קו תחתון">
+<!ENTITY textcolor.label "צבע גופן">
+<!ENTITY bgColor.label "צבע רקע">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
+<!ENTITY useThis.label "השתמש בסגנון זה">
+<!ENTITY opacity.label "אטימות">

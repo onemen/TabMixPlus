@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Comenzi rapide">
+<!ENTITY shortcuts.edit "Stabilire combinații de taste">
+<!ENTITY shortcuts.showAll "Se afișează toate combinațiile">
+<!ENTITY shortcuts.hideUnused "Se ascund combinațiile nefolosite">
+<!ENTITY shortcuts.warning "Unele dintre combinații sunt folosite de alte comenzi">
+<!ENTITY shortcuts.showDetails "Se afișează detalii">
+<!ENTITY shortcuts.hideDetails "Se ascund detaliile">
+<!ENTITY shortcuts.switchToLast "Se comută la ultima filă activată">
+<!ENTITY shortcuts.slideshow "Activează/dezactivează succedarea automată a filelor">
+<!ENTITY shortcuts.toggleFLST "Alege fila care se selectează după închiderea filei curente">
+<!ENTITY shortcuts.toggleFLST.tooltip "Se comută între selectarea filei din dreapta sau a celei selectate ultima dată">
+<!ENTITY shortcuts.placeholder "Tastați combinația dorită">
+<!ENTITY shortcuts.reset "Inițializează">
+<!ENTITY shortcuts.clear "Șterge">
+<!ENTITY shortcuts.inuse "Această combinație de taste este deja folosită de">

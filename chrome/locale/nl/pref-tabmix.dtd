@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Koppelingen">
+<!ENTITY tab.events "Gebeurtenissen">
+<!ENTITY tab.mouse "Muis">
+<!ENTITY tab.appearance "Weergave">
+<!ENTITY tab.menu "Menu">
+<!ENTITY tab.session "Sessie">
+<!ENTITY tab.incompatible "Fout">
+<!ENTITY apply.label "Toepassen">
+<!ENTITY settings.export "Instellingen exporteren">
+<!ENTITY settings.import "Instellingen importeren">
+<!ENTITY settings.sync "Sync-voorkeuren">
+<!ENTITY settings.default "Standaardwaarden herstellen">
+<!ENTITY settings.revert "Terugdraaien">
+<!ENTITY generalWindowOpen.label "Koppelingen die een nieuw venster openen, openen in:">
+<!ENTITY externalLink.useSeparate.label "Aparte voorkeuren gebruiken voor koppelingen vanuit andere applicaties">
+<!ENTITY externalLinkTarget.label "Koppelingen vanuit andere programma’s openen in:">
+<!ENTITY linkTarget.tab "Nieuw tabblad">
+<!ENTITY linkTarget.window "Nieuw venster">
+<!ENTITY linkTarget.current "Huidig tabblad">
+<!ENTITY linkTarget.accesskey "H">
+<!ENTITY divertedWindowOpen.label "JavaScript pop-ups:">
+<!ENTITY divertedWindowOpen.all "Alle pop-ups in tabbladen openen">
+<!ENTITY divertedWindowOpen.some "Pop-ups met gewijzigde afmetingen toestaan">
+<!ENTITY divertedWindowOpen.none "Alle pop-ups toestaan">
+<!ENTITY linkTarget.label "Koppelingen met een target attribuut in het huidige tabblad openen">
+<!ENTITY targetIsFrame.label "Koppelingen met doel naar bestaand frame in huidige tabblad openen">
+<!ENTITY download.label "Blanco tabbladen bij het downloaden van bestanden voorkomen">
+<!ENTITY edit.label "Bewerken">
+<!ENTITY speLink.label "Openen in een nieuw tabblad forceren:">
+<!ENTITY speLink.none "Niets">
+<!ENTITY speLink.allLinks "Alle koppelingen">
+<!ENTITY speLink.external "Koppelingen naar andere sites">
+<!ENTITY singleWindow.label "Eén-venstermodus inschakelen">
+<!ENTITY newTabs.label "Nieuwe tabbladen">
+<!ENTITY tabOpen.label "Tabbladen openen">
+<!ENTITY tabFocus.label "Tabbladfocus">
+<!ENTITY tabClose.label "Tabbladen sluiten">
+<!ENTITY tabMerge.label "Tabbladen samenvoegen">
+<!ENTITY tabFeature.label "Tabbladfuncties">
+<!ENTITY newtab.label "Laden in nieuwe tabbladen:">
+<!ENTITY replaceLastTabWith1.label "Bij sluiten laatste tabblad dit vervangen door">
+<!ENTITY newtab.blank "Lege pagina">
+<!ENTITY newtab.home "Startpagina">
+<!ENTITY newtab.current "Huidige pagina">
+<!ENTITY newtab.duplicate "Pagina dupliceren">
+<!ENTITY newtab.location.1 "Nieuwe tabblad pagina">
+<!ENTITY newtab.placeholder.label "Standaard pagina nieuw tabblad">
+<!ENTITY location.label.1 "Webadres">
+<!ENTITY focusContent.label "Inhoud op voorgrond weergeven bij het laden van een niet-lege pagina">
+<!ENTITY openTabNext.label "Nieuwe tabbladen naast het huidige tabblad openen">
+<!ENTITY openOtherTabNext.label "Andere tabbladen openen naast huidige">
+<!ENTITY relatedAfterCurrent.label "Alleen indien gerelateerd aan het huidige tabblad">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Gedupliceerde tabbladen naast het origineel openen">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Volgorde van openen wijzigen">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Nieuw tabblad openen naast laatste vanuit huidige tabblad geopende (laatst geselecteerde)">
+<!ENTITY moveSwitchToTabNext.label "Tabblad van ‘Naar tabblad wisselen’ naar positie naast huidige verplaatsen">
+<!ENTITY loadTabsProgressively.label "Tabbladen progressief laden">
+<!ENTITY restoreOnDemand.label "Tabbladen niet laden voor selectie">
+<!ENTITY openMoreThan.label "wanneer u meer opent dan">
+<!ENTITY tabs.label "tabbladen open">
+<!ENTITY lockTabs.label "Tabbladen op slot zetten">
+<!ENTITY lockNewTabs.label "Nieuwe tabbladen op slot zetten">
+<!ENTITY lockAppTabs.label "App tabbladen op slot zetten">
+<!ENTITY updateLockState.label "Wijzigingen op openstaande tabbladen toepassen">
+<!ENTITY openNewTab.label "Tabbladen openen vanuit:">
+<!ENTITY openBookmarks.label "Bladwijzers">
+<!ENTITY openPlacesGroups.label "Groepen bladwijzers/geschiedenis">
+<!ENTITY openPlacesGroups.tooltip "Tabbladen niet overschrijven bij openen van een groep bladwijzers/geschiedenis">
+<!ENTITY openHistory.label "Geschiedenis">
+<!ENTITY openUrl.label "Locatiebalk">
+<!ENTITY openSearch.label "Zoekbalk">
+<!ENTITY middlecurrent1.label "Middelklik of Ctrl-klik opent items in het huidige tabblad">
+<!ENTITY middlecurrent.tooltip "Uitsluitend voor bladwijzers, geschiedenis en geforceerd in nieuw tabblad geopende koppelingen">
+<!ENTITY tabFocus.caption "Focussen op/selecteren van tabbladen die openen vanuit:">
+<!ENTITY selectTab.label "Koppelingen">
+<!ENTITY selectDivertedTab.label "Omgeleide vensters">
+<!ENTITY selectTabFromExternal.label "Overige toepassingen">
+<!ENTITY selectTabCommand.label "Nieuwe tabbladopdrachten">
+<!ENTITY contextMenuSearch.label "Contextmenu zoeken naar">
+<!ENTITY selectTabBH.label "Bladwijzers/Geschiedenis">
+<!ENTITY duplicateTab.label "Tabblad dupliceren">
+<!ENTITY inversefocus2.label "Middelklik of Ctrl-klik wisselt de focus van:">
+<!ENTITY warning.caption.label "Waarschuwing">
+<!ENTITY warnOnCloseMultipleTabs.label "Waarschuwen bij sluiten meerdere tabbladen">
+<!ENTITY warnOnCloseProtected1.label "Waarschuwen bij sluiten venster met beschermde tabbladen">
+<!ENTITY warnOnCloseWindow1.label "Waarschuwen bij sluiten van venster met meerdere tabbladen">
+<!ENTITY lasttab.caption.label "Sluiten laatste tabblad">
+<!ENTITY keepWindow.label.3.1 "Venster niet sluiten indien laatste tabblad wordt gesloten">
+<!ENTITY keeptab.label "Sluiten van laatste tabblad voorkomen">
+<!ENTITY closeOnMerge.label "Vensters sluiten na samenvoegen">
+<!ENTITY warnOnMerge.label "Waarschuwen bij sluiten van tabbladen die niet samengevoegd worden">
+<!ENTITY currenttab.caption.label "Sluiten laatste tabblad">
+<!ENTITY focusTab.labelBegin "Als het huidige tabblad gesloten wordt, focussen op:">
+<!ENTITY focusTab.firstTab "Eerste tabblad">
+<!ENTITY focusTab.leftTab "Linker tabblad">
+<!ENTITY focusTab.rightTab "Rechter tabblad">
+<!ENTITY focusTab.lastTab "Laatste tabblad">
+<!ENTITY focusTab.lastSelectedTab "Laatst geselecteerde tabblad">
+<!ENTITY focusTab.openerTab "Rechts van geopende tabblad">
+<!ENTITY focusTab.openerTab.rtl "Opener / linkertabblad">
+<!ENTITY focusTab.lastOpenedTab "Laatst geopende tabblad">
+<!ENTITY undoClose.label "Tabbladen sluiten ongedaan maken inschakelen">
+<!ENTITY undoCloseCache.label "Maximum aantal te onthouden gesloten tabbladen:">
+<!ENTITY undoClosepos.label "De oorspronkelijke positie van het tabblad herstellen">
+<!ENTITY menuonlybutton.label "Werkbalkknop alleen een lijst laten weergeven">
+<!ENTITY ctrltab.label "Ctrl-Tab loopt door de tabbladen in de meest recent gebruikte volgorde">
+<!ENTITY cmdtab.label "Cmd-Tab loopt door de tabbladen in de meest recent gebruikte volgorde">
+<!ENTITY ctrltab.tabPreviews "Tabblad voorbeelden weergeven">
+<!ENTITY ctrltab.popup "Ctrl-Tab een pop-upmenu met een lijst van tabbladen laten weergeven">
+<!ENTITY cmdtab.popup "Cmd-Tab een pop-upmenu met een lijst van tabbladen laten weergeven">
+<!ENTITY tabpopup.mouse "Lijst met tabbladen op de muis laten reageren">
+<!ENTITY mergeNoTabSelection.label "Vensters samenvoegen wanneer er geen tabbladen zijn geselecteerd">
+<!ENTITY mergeTabSelection.label "Samenvoegen na selecteren van tabbladen:">
+<!ENTITY mergeall.label "Alle vensters tot één venster samenvoegen">
+<!ENTITY mergelastfocused.label "Alleen huidige venster met laatst geselecteerde samenvoegen">
+<!ENTITY mergePopups.label "Ook pop-upvensters meenemen">
+<!ENTITY popupNextToOpener.label "Pop-ups naast hun openers zetten">
+<!ENTITY activateSlideshow.label "Door #1 in te drukken, roteren de tabbladen elke">
+<!ENTITY toggleAnimation.label "Animatie bij openen/sluiten tabbladen uitschakelen">
+<!ENTITY reloadEvery.matchAddress.label "Een tabblad herladen ongeacht het webadres">
+<!ENTITY reloadEvery.onReloadButton.label "Menu ‘Tabblad vernieuwen na…’ op knop Vernieuwen weergeven">
+<!ENTITY seconds.label "seconden">
+<!ENTITY minutes.label "minu(u)t(en)">
+<!ENTITY tabBarAppearance.label "Tabbladenbalk">
+<!ENTITY tabAppearance.label "Tabblad">
+<!ENTITY toolBarAppearance.label "Werkbalk">
+<!ENTITY show.ontabbar.label "Op tabbladenbalk weergeven">
+<!ENTITY show.ontab.label "Op tabblad weergeven">
+<!ENTITY dragNewTabButton.tooltip "&apos;Nieuw tabblad&apos; knop naar tabbladenbalk slepen om deze optie in te schakelen.">
+<!ENTITY hideTabBarButton.label "Knop Tabblad sluiten">
+<!ENTITY newTabButton.label "Knop Nieuw tabblad">
+<!ENTITY newTabButton.position.left.label "Linkerkant">
+<!ENTITY newTabButton.position.right.label "Rechterkant">
+<!ENTITY newTabButton.position.afterlast.label "Na laatste tabblad">
+<!ENTITY allTabsButton.label "Knop Alle tabbladen">
+<!ENTITY tabBarSpace.label "Extra ruimte aan beide zijden">
+<!ENTITY tabBarSpace.tooltip "Om klikken en laten vallen van iets op de tabbladenbalk mogelijk te maken">
+<!ENTITY tabbar.label "Tabbladenbalk verbergen als maar één tabblad open staat">
+<!ENTITY moveTabOnDragging.label "Bij slepen van tabblad direct verplaatsen">
+<!ENTITY dropIndicator.label "Indicator laten vallen">
+<!ENTITY dropIndicator-native.label "Logische stijl">
+<!ENTITY dropIndicator-builtin.label "Ingebouwde stijl">
+<!ENTITY verticalTabbar.description1 "Deze voorkeuren worden beheerd door een andere extensie die verticale tabbladen toepast.">
+<!ENTITY tabBarPosition.label "Positie:">
+<!ENTITY tabBarPosition.top.label "Bovenkant (boven inhoud)">
+<!ENTITY tabBarPosition.bottom.label "Onderkant (onder inhoud)">
+<!ENTITY tabScroll.label "Tabbladen als ze niet binnen de vensterbreedte passen:">
+<!ENTITY tabScroll.none "schuifbaar zonder knoppen maken">
+<!ENTITY tabScroll.leftRightButtons "schuifbaar met knoppen aan de linker- en rechterzijde maken">
+<!ENTITY tabScroll.rightButtons "schuifbaar met knoppen aan de rechterzijde maken">
+<!ENTITY tabScroll.rightButtons.rtl "Scrollbaar met knoppen links">
+<!ENTITY tabScroll.multibar "in meerdere rijen zetten">
+<!ENTITY maxrow.label "Maximum aantal zichtbare rijen:">
+<!ENTITY pinnedTabScroll.label "Scrollen van vastgezette tabbladen toestaan">
+<!ENTITY offsetAmountToScroll.label "Tijdens het scrollen gedeelte van het volgende niet-zichtbare tabblad weergeven">
+<!ENTITY smoothScroll.label "Soepel scrollen inschakelen">
+<!ENTITY scrolldelay.label "Schuifvertraging (tijd tussen schuifherhaling)">
+<!ENTITY currenttab.style.label "Huidige tabblad">
+<!ENTITY unloadedtabs.style.label "Niet geladen tabbladen">
+<!ENTITY unreadtabs.style.label "Ongelezen tabbladen">
+<!ENTITY othertabs.style.label "Overige tabbladen">
+<!ENTITY setstyles.label "Stijlen aanpassen">
+<!ENTITY extraIcons.label1 "Pictogrammen voor">
+<!ENTITY extraIcons.locked "gesloten">
+<!ENTITY extraIcons.protected "beschermd">
+<!ENTITY extraIcons.autoreload "automatisch vernieuwen">
+<!ENTITY extraIcons.hideonpinned "Verbergen op vastgezette tabbladen">
+<!ENTITY progressMeter.label "Voortgangsmeter op tabbladen">
+<!ENTITY showTabX.labelBegin "Knop Tabblad sluiten">
+<!ENTITY showTabX.left "Aan de linkerkant plaatsen">
+<!ENTITY showTabX.rtl "Rechts plaatsen">
+<!ENTITY milliseconds.label "milliseconden">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "op alle tabbladen">
+<!ENTITY showTabX.current "op huidige tabblad">
+<!ENTITY showTabX.hover "waar de muis boven hangt na">
+<!ENTITY showTabX.alwaysExeption "op alle tabbladen die breder zijn dan">
+<!ENTITY showTabX.currentHover "op het huidige &amp; aangewezen">
+<!ENTITY minWidth.label "Breedte:">
+<!ENTITY widthTo.label "tot">
+<!ENTITY widthPixels.label "pixels">
+<!ENTITY onLeftDisabled.label "Kan met het huidige thema geen knop links plaatsen">
+<!ENTITY onLeftDisabled.tst.label "Kan knop niet links plaatsen wanneer treeStyleTab is geïnstalleerd.">
+<!ENTITY flexTabs.label "Tabbladbreedte aanpassen aan titellengte">
+<!ENTITY bookastitle.label "Bladwijzernaam als tabbladtitel gebruiken">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "De TabMix-knoppen die weergegeven worden op de werkbalk kunnen aangepast worden">
+<!ENTITY toolbar.button.label "Aanpassen">
+<!ENTITY toolbar.visible.caption "Zichtbare knoppen">
+<!ENTITY toolbar.novisible.label "Er zijn geen zichtbare knoppen">
+<!ENTITY toolbar.hidden.caption "Verborgen knoppen">
+<!ENTITY toolbar.nohidden.label "Er zijn geen verborgen knoppen">
+<!ENTITY mouseGesture.label "Muisbewegingen">
+<!ENTITY mouseClick.label "Muisklikken">
+<!ENTITY mouseHoverSelect.labelBegin "Tabblad waar muis boven hangt selecteren na">
+<!ENTITY tabFlip.label "Ga naar het laatst geselecteerde tabblad als op de huidige geklikt wordt">
+<!ENTITY tabFlip.delay "Vertraging gebruiken van">
+<!ENTITY clickFocus.label "Muisklik (klikken en loslaten) om tabblad te selecteren">
+<!ENTITY removeEntries.label "Tab Mix Plus menutoevoegingen met middelklikken verwijderen">
+<!ENTITY lockTabSizingOnClose.label "Bij sluiten tabblad mogen andere tabbladen niet van grootte veranderen totdat de cursor buiten de werkbalk komt">
+<!ENTITY removeEntries.tooltip "O.a. gesloten tabbladen, gesloten vensters en opgeslagen sessies">
+<!ENTITY tabbarscrolling.caption "Tijdens het scrollen van de tabbladenbalk">
+<!ENTITY tabbarscrolling.holdShift.label "Om tussen deze opties te wisselen, de Shift-toets tijdens het scrollen ingedrukt houden">
+<!ENTITY tabbarscrolling.selectTab.label "Geselecteerd tabblad wijzigen">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Door alle tabbladen scrollen">
+<!ENTITY tabbarscrolling.inverse.label "Scrol richting omkeren">
+<!ENTITY double.label "Dubbelklikken">
+<!ENTITY middle.label "Middelklikken">
+<!ENTITY ctrl.label "Ctrl-klikken">
+<!ENTITY cmd.label "Cmd-klikken">
+<!ENTITY shift.label "Shift-klikken">
+<!ENTITY alt.label "Alt-klikken">
+<!ENTITY ontab.label "op een tabblad:">
+<!ENTITY ontabbar.label "op de tabbladenbalk:">
+<!ENTITY clicktab.label "Kies de opdracht om uit te voeren wanneer op een tabblad of op de tabbladenbalk geklikt wordt">
+<!ENTITY ontabbar.dblClick.label "Voorkomen dat door dubbel-klikken op de tabbladenbalk de vensterafmetingen worden gewijzigd.">
+<!ENTITY ontabbar.click.label "Klikken op tabbladbalk voorkomen">
+<!ENTITY clicktab.default "Firefox standaard of andere extensie">
+<!ENTITY clicktab.nothing "Er gebeurt niets">
+<!ENTITY clicktab.addtab "Een nieuw tabblad openen">
+<!ENTITY clicktab.duplicatetab "Het tabblad dupliceren">
+<!ENTITY clicktab.duplicatetabw "Het tabblad in een nieuw venster dupliceren">
+<!ENTITY clicktab.detachtab "Het tabblad naar een nieuw venster verplaatsen">
+<!ENTITY clicktab.protecttab "Het tabblad beschermen">
+<!ENTITY clicktab.locktab "Het tabblad op slot zetten">
+<!ENTITY clicktab.freezetab "Het tabblad beschermen en op slot zetten">
+<!ENTITY clicktab.renametab "De tabbladnaam wijzigen">
+<!ENTITY clicktab.copyTabUrl "Het webadres van het tabblad naar het klembord kopiëren">
+<!ENTITY clicktab.copyUrlFromClipboard "Webadres vanaf klembord laden">
+<!ENTITY clicktab.selectMerge "Het tabblad voor samenvoegen selecteren">
+<!ENTITY clicktab.mergeTabs "Vensters samenvoegen">
+<!ENTITY clicktab.bookTab "Tabblad opslaan als bladwijzer">
+<!ENTITY clicktab.bookTabs "Alle tabbladen opslaan als bladwijzer">
+<!ENTITY clicktab.reloadtab "Het tabblad vernieuwen">
+<!ENTITY clicktab.reloadtabs "Alle tabbladen vernieuwen">
+<!ENTITY clicktab.reloadothertabs "De overige tabbladen vernieuwen">
+<!ENTITY clicktab.reloadlefttabs "Linker tabbladen vernieuwen">
+<!ENTITY clicktab.reloadrighttabs "Rechter tabbladen vernieuwen">
+<!ENTITY clicktab.autoReloadTab "Automatisch herladen tabblad in-/uitschakelen">
+<!ENTITY clicktab.removeall "Alle tabbladen sluiten">
+<!ENTITY clicktab.removeother "De overige tabbladen sluiten">
+<!ENTITY clicktab.removesimilar "Tabbladen van ditzelfde domein sluiten">
+<!ENTITY clicktab.removetoLeft "Linker tabbladen sluiten">
+<!ENTITY clicktab.removetoRight "Rechter tabbladen sluiten">
+<!ENTITY clicktab.uctab "Het laatst gesloten tabblad heropenen">
+<!ENTITY clicktab.ucatab "Alle gesloten tabbladen heropenen">
+<!ENTITY clicktab.snapback "SnapBack tabblad">
+<!ENTITY clicktab.ietab "Het tabblad in IE openen">
+<!ENTITY contentLoad "Middelklikken laadt webadres vanaf het klembord">
+<!ENTITY context.tab "Tabbladcontextmenu">
+<!ENTITY context.main "Hoofdcontextmenu">
+<!ENTITY context.tools "Menu Extra">
+<!ENTITY showOnTabbar.label "Tabblad-contextmenu op tabbalk weergeven">
+<!ENTITY showtabBarContext.label "In tabbladcontextmenu weergeven:">
+<!ENTITY showContentAreaContext.label "In hoofdcontextmenu weergeven:">
+<!ENTITY showToolsMenu.label "In het menu Extra weergeven:">
+<!ENTITY startupHomePage1.label "Startpagina weergeven">
+<!ENTITY startupBlankPage.label "Een blanco pagina weergeven">
+<!ENTITY startupLastSession1.label "Vensters en tabbladen van laatste sessie weergeven">
+<!ENTITY sm.extension.description1 "Tab Mix Plus heeft gedetecteerd dat de SessionManager-extensie is geïnstalleerd">
+<!ENTITY sm.extension.description2 "Tab Mix Plus sessiebeheerder zal worden uitgeschakeld">
+<!ENTITY sm.extension.description3 "Klik op de rechterknop om het Session Manager optiesvenster te openen">
+<!ENTITY sm.extension.description5 "Uw sessiegegevens van Tab Mix Plus-opmaak naar Sessiebeheerder-opmaak">
+<!ENTITY sm.extension.convert.label "Converteren">
+<!ENTITY sm.extension.chooseFile.label1 "Tab Mix Plus sessies van het huidige profiel converteren">
+<!ENTITY sm.extension.chooseFile.label2 "Kies welk gegevensbestand moet worden geconverteerd">
+<!ENTITY ss.enable.label "Ingebouwde sessieherstelmogelijkheid Firefox gebruiken">
+<!ENTITY ss.enable.tooltip "Vink dit uit om de Tab Mix Sessiebeheerder te gebruiken">
+<!ENTITY ss.advanced_setting "Geavanceerde instellingen">
+<!ENTITY ss.advanced_setting.warning "Wijzig hier niets, tenzij u weet wat u doet">
+<!ENTITY ss.interval "Minimale tijdsinterval tussen twee statusopslagen">
+<!ENTITY ss.interval.seconds "(in milliseconden)">
+<!ENTITY ss.privacy_level "Gevoelige informatie (formuliergegevens, POSTDATA en cookies) opslaan voor">
+<!ENTITY ss.privacy_level.allsites "Alle sites">
+<!ENTITY ss.privacy_level.unencrypted "Alleen onversleutelde sites">
+<!ENTITY ss.privacy_level.nosites "Geen enkele site">
+<!ENTITY ss.postdata.label1 "Maximaal opgeslagen hoeveelheid POSTDATA">
+<!ENTITY ss.postdata.label2 "(in bytes, -1 = alles)">
+<!ENTITY sessionManger.enable "Sessiebeheerder inschakelen">
+<!ENTITY crashRecovery.enable "Vastloopherstel inschakelen">
+<!ENTITY sm.StartExit "Starten/Afsluiten">
+<!ENTITY sm.restore "Herstellen">
+<!ENTITY sm.preserve "Bewaren">
+<!ENTITY sm.start "Wanneer de browser start:">
+<!ENTITY sm.start.restore "Herstellen">
+<!ENTITY sm.start.ask "Vragen voor herstellen">
+<!ENTITY sm.start.nothing "Niet herstellen">
+<!ENTITY sm.exit "Wanneer de browser wordt afgesloten:">
+<!ENTITY sm.exit.save "Sessie bewaren">
+<!ENTITY sm.exit.ask "Vragen voor bewaren">
+<!ENTITY sm.exit.nothing "Niet bewaren">
+<!ENTITY sm.startup "Opstartsessie:">
+<!ENTITY sm.lastsession "Laatste sessie">
+<!ENTITY sm.previouslast "Voorlaatste sessie">
+<!ENTITY sm.chooseifempty "Een andere kiezen indien leeg">
+<!ENTITY sm.restore.options "Bij het herstellen van sessies:">
+<!ENTITY sm.restore.overwrite "Bestaande vensters overschrijven">
+<!ENTITY sm.restore.overwriteTabs "ook tabbladen overschrijven">
+<!ENTITY sm.restore.closedWinList "Vensters in lijst met gesloten vensters bewaren">
+<!ENTITY sm.restore.merge "Meerdere vensters tot één samenvoegen">
+<!ENTITY sm.restore.bypassCache "Cache negeren bij herstellen">
+<!ENTITY sm.notrestore.label "Indien sessies niet hersteld worden bij starten">
+<!ENTITY sm.restorePinned1.label "Uw vastgezette tabbladen van laatste sessie herstellen">
+<!ENTITY sm.preserve.options "Bewaren van tabbladen:">
+<!ENTITY sm.preserve.history "Geschiedenis">
+<!ENTITY sm.preserve.protect "Status beschermen">
+<!ENTITY sm.preserve.locked "Status op slot zetten">
+<!ENTITY sm.preserve.permission "Toestemmingen">
+<!ENTITY sm.preserve.scroll1 "Schuifpositie">
+<!ENTITY sm.restore.winOptions "Bewaren van vensters:">
+<!ENTITY sm.restore.selectedTab "Geselecteerde tabblad">
+<!ENTITY sm.restore.closedTabs "Lijst met gesloten tabbladen">
+<!ENTITY incompatible.extensions "Enkele van de geïnstalleerde extensies werken niet samen met Tab Mix Plus. Het wordt aanbevolen deze extensies uit te schakelen of te deïnstalleren.">
+<!ENTITY incompatible.button.label "Lijst weergeven">

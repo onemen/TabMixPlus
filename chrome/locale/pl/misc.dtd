@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Otwórz w tle">
+<!ENTITY searchTabFocus.accesskey "T">
+<!ENTITY renametab.panel.title "Edytuj tytuł karty">
+<!ENTITY renametab.reset.label "Przywróć domyślny tytuł">
+<!ENTITY title.label "Tytuł">
+<!ENTITY default.label "Domyślny">
+<!ENTITY renametab.permanently.label "Zmień nazwę tej karty bez względu na jej adres">
+<!ENTITY renametab.permanently.tooltip "Karta z historii - nowa nazwa pozostanie, gdy adres zostanie zmieniony">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Pomoc">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Wybierz czas z listy lub wprowadź swój czas">
+<!ENTITY specifyreload.label "Czas odświeżania">
+<!ENTITY sanitizer.entry "Sesje Tab Mix Plusa">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Czy na pewno chcesz usunąć wszystkie zapisane dane sesji i kopie zapasowe?">

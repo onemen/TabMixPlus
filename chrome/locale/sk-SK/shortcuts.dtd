@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Klávesové skratky">
+<!ENTITY shortcuts.edit "Upraviť">
+<!ENTITY shortcuts.showAll "Zobraziť všetky">
+<!ENTITY shortcuts.hideUnused "Skryť nepoužívané">
+<!ENTITY shortcuts.warning "Niektoré z vašich skratiek sú používané inými príkazmi">
+<!ENTITY shortcuts.showDetails "Zobraziť podrobnosti">
+<!ENTITY shortcuts.hideDetails "Skryť podrobnosti">
+<!ENTITY shortcuts.switchToLast "Prepnúť na poslednú aktívnu kartu">
+<!ENTITY shortcuts.slideshow "Prepnúť prezentáciu kariet">
+<!ENTITY shortcuts.toggleFLST "Prepnúť zameranie po zatvorení aktuálnej karty">
+<!ENTITY shortcuts.toggleFLST.tooltip "prepínať medzi zameraním napravo alebo naposledy vybratej karty">
+<!ENTITY shortcuts.placeholder "Typ Modifikátora &amp; Kľúča">
+<!ENTITY shortcuts.reset "Obnoviť">
+<!ENTITY shortcuts.clear "Vyčistiť">
+<!ENTITY shortcuts.inuse "Klávesovú skratku už používa">

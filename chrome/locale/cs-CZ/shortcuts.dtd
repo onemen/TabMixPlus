@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Klávesové zkratky">
+<!ENTITY shortcuts.edit "Upravit klávesové zkratky">
+<!ENTITY shortcuts.showAll "Zobrazit vše">
+<!ENTITY shortcuts.hideUnused "Skrýt nepoužívané">
+<!ENTITY shortcuts.warning "Některé klávesové zkratky jsou již používány jinými příkazy">
+<!ENTITY shortcuts.showDetails "Zobrazit podrobnosti">
+<!ENTITY shortcuts.hideDetails "Skrýt podrobnosti">
+<!ENTITY shortcuts.switchToLast "Přepnout na naposledy aktivní panel">
+<!ENTITY shortcuts.slideshow "Přepínat panely">
+<!ENTITY shortcuts.toggleFLST "Při zavření aktuálního panelu přepnout na jiný panel">
+<!ENTITY shortcuts.toggleFLST.tooltip "Při zavření aktuálního panelu přepnout na panel napravo od něj nebo na naposledy vybraný panel">
+<!ENTITY shortcuts.placeholder "Zadat modifikátory a klíč">
+<!ENTITY shortcuts.reset "Obnovit">
+<!ENTITY shortcuts.clear "Vymazat">
+<!ENTITY shortcuts.inuse "Tato klávesová zkratka je již používána:">

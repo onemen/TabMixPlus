@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Legături">
+<!ENTITY tab.events "Evenimente">
+<!ENTITY tab.mouse "Maus">
+<!ENTITY tab.appearance "Afișare">
+<!ENTITY tab.menu "Meniu">
+<!ENTITY tab.session "Sesiuni">
+<!ENTITY tab.incompatible "Eroare">
+<!ENTITY apply.label "Aplică">
+<!ENTITY settings.export "Exportă…">
+<!ENTITY settings.import "Importă…">
+<!ENTITY settings.sync "Sincronizează">
+<!ENTITY settings.default "Inițializează…">
+<!ENTITY settings.revert "Anulează">
+<!ENTITY generalWindowOpen.label "Se deschid legăturile cu trimitere într-o fereastră nouă în:">
+<!ENTITY externalLink.useSeparate.label "Se folosesc opțiuni separate pentru legăturile din alte aplicații">
+<!ENTITY externalLinkTarget.label "Se deschid legăturile din alte aplicații în:">
+<!ENTITY linkTarget.tab "filă nouă">
+<!ENTITY linkTarget.window "fereastră nouă">
+<!ENTITY linkTarget.current "fila curentă">
+<!ENTITY linkTarget.accesskey "c">
+<!ENTITY divertedWindowOpen.label "Restricții JavaScript și ferestre instantanee:">
+<!ENTITY divertedWindowOpen.all "Se deschid toate ferestrele instantanee în file">
+<!ENTITY divertedWindowOpen.some "Se permite redimensionarea ferestrelor instantanee">
+<!ENTITY divertedWindowOpen.none "Se permit toate ferestrele instantanee">
+<!ENTITY linkTarget.label "Se deschid legăturile cu un atribut „țintă” (target) în fila curentă">
+<!ENTITY targetIsFrame.label "Se deschid legăturile cu țintă într-un cadru existent în fila curentă">
+<!ENTITY download.label "Se împiedică deschiderea filelor vide când se descarcă fișiere">
+<!ENTITY edit.label "Editează extensiile">
+<!ENTITY speLink.label "Se forțează deschiderea într-o filă nouă a:">
+<!ENTITY speLink.none "niciunei legături">
+<!ENTITY speLink.allLinks "tuturor legăturilor">
+<!ENTITY speLink.external "legăturilor către alte saituri">
+<!ENTITY singleWindow.label "Se activează modul „O singură fereastră”">
+<!ENTITY newTabs.label "File noi">
+<!ENTITY tabOpen.label "Deschidere file">
+<!ENTITY tabFocus.label "Activare file">
+<!ENTITY tabClose.label "Închidere file">
+<!ENTITY tabMerge.label "Îmbinare file">
+<!ENTITY tabFeature.label "Diverse">
+<!ENTITY newtab.label "Se deschide în filele noi:">
+<!ENTITY replaceLastTabWith1.label "Se înlocuiește ultima filă închisă cu">
+<!ENTITY newtab.blank "pagina vidă">
+<!ENTITY newtab.home "pagina de start">
+<!ENTITY newtab.current "pagina curentă">
+<!ENTITY newtab.duplicate "o pagină duplicat">
+<!ENTITY newtab.location.1 "o pagină cu adresă specificată">
+<!ENTITY newtab.placeholder.label "Pagina prestabilită pentru o filă nouă">
+<!ENTITY location.label.1 "Adresă">
+<!ENTITY focusContent.label "Se selectează conținutul când se încarcă o pagină nevidă">
+<!ENTITY openTabNext.label "Se deschid filele noi lângă fila curentă">
+<!ENTITY openOtherTabNext.label "Se deschid alte file lângă fila curentă">
+<!ENTITY relatedAfterCurrent.label "Se deschid numai dacă sunt în legătură cu aceasta">
+<!ENTITY openTabNext.tooltip1 "Se modifică ordinea deschiderii astfel: [a´][b][c][`1][`2][`3] -&gt; [a´][`1][`2][`3][b][c]">
+<!ENTITY openDuplicateNext.label "Se deschid filele duplicat alături de fila originală">
+<!ENTITY openTabNext.tooltip "Se modifică ordinea deschiderii astfel: [a´][b][c][`1][`2][`3] -&gt; [a´][`3][`2][`1][b][c]">
+<!ENTITY openTabNextInverse.label "Se modifică ordinea deschiderii acestora">
+<!ENTITY openTabNextInverse.tooltip "[a´][`3][`2][`1][b][c] -&gt; [a´][`1][`2][`3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Se deschide nouă filă alături de ultima filă deschisă din fila curentă (dacă aceasta a fost ultima selectată):">
+<!ENTITY moveSwitchToTabNext.label "Se mută fila selectată prin „Comută la fila” alături de fila curentă">
+<!ENTITY loadTabsProgressively.label "Se încarcă filele în mod progresiv">
+<!ENTITY restoreOnDemand.label "Nu se încarcă filele dacă nu au fost selectate">
+<!ENTITY openMoreThan.label "când se deschid mai mult de">
+<!ENTITY tabs.label "file">
+<!ENTITY lockTabs.label "File blocate">
+<!ENTITY lockNewTabs.label "Se blochează filele noi">
+<!ENTITY lockAppTabs.label "Se blochează filele cu aplicații">
+<!ENTITY updateLockState.label "Se aplică modificările la toate filele deschise">
+<!ENTITY openNewTab.label "Se deschid filele din:">
+<!ENTITY openBookmarks.label "Semne de carte">
+<!ENTITY openPlacesGroups.label "Grupuri de semne de carte / istoric">
+<!ENTITY openPlacesGroups.tooltip "La deschiderea grupurilor, nu se suprascriu alte file">
+<!ENTITY openHistory.label "Istoric">
+<!ENTITY openUrl.label "Bară de adrese">
+<!ENTITY openSearch.label "Bară de căutare">
+<!ENTITY middlecurrent1.label "Cu clic-mijloc sau Ctrl+clic se deschid elementele selectate mai sus în fila curentă">
+<!ENTITY middlecurrent.tooltip "Numai pentru semne de carte, istoric și legături forțate să se deschidă într-o filă nouă">
+<!ENTITY tabFocus.caption "Se activează/selectează filele care se deschid din:">
+<!ENTITY selectTab.label "Legături">
+<!ENTITY selectDivertedTab.label "Ferestre redirecționate">
+<!ENTITY selectTabFromExternal.label "Alte aplicații">
+<!ENTITY selectTabCommand.label "Comenzi cu parametru „filă nouă”">
+<!ENTITY contextMenuSearch.label "Căutari din meniul contextual">
+<!ENTITY selectTabBH.label "Semne de carte / istoric">
+<!ENTITY duplicateTab.label "Duplicări de file">
+<!ENTITY inversefocus2.label "Se inversează modul de activare/selectare cu clic-mijloc sau Ctrl+clic pentru:">
+<!ENTITY warning.caption.label "Atenționări">
+<!ENTITY warnOnCloseMultipleTabs.label "Se afișează o atenționare la închiderea simultană a mai multor file">
+<!ENTITY warnOnCloseProtected1.label "Se afișează o atenționare la închiderea unei ferestre cu file protejate">
+<!ENTITY warnOnCloseWindow1.label "Se afișează o atenționare la închiderea unei ferestre cu mai multe file">
+<!ENTITY lasttab.caption.label "Închiderea ultimei file">
+<!ENTITY keepWindow.label.3.1 "Nu se închide fereastra când se închide ultima filă">
+<!ENTITY keeptab.label "Se împiedică închiderea ultimei file">
+<!ENTITY closeOnMerge.label "Se închid ferestrele după ce au fost îmbinate">
+<!ENTITY warnOnMerge.label "Se afișează o atenționare când se închid filele care nu au fost îmbinate">
+<!ENTITY currenttab.caption.label "Închiderea filei curente">
+<!ENTITY focusTab.labelBegin "La închiderea filei curente se activează:">
+<!ENTITY focusTab.firstTab "prima filă">
+<!ENTITY focusTab.leftTab "fila din stânga">
+<!ENTITY focusTab.rightTab "fila din dreapta">
+<!ENTITY focusTab.lastTab "ultima filă">
+<!ENTITY focusTab.lastSelectedTab "ultima filă selectată">
+<!ENTITY focusTab.openerTab "fila declanșatoare">
+<!ENTITY focusTab.openerTab.rtl "fila declanșatoare">
+<!ENTITY focusTab.lastOpenedTab "ultima filă deschisă">
+<!ENTITY undoClose.label "Se permite redeschiderea filelor închise">
+<!ENTITY undoCloseCache.label "Numărul maxim memorat de file închise:">
+<!ENTITY undoClosepos.label "Se restaurează poziția originală a filei redeschise">
+<!ENTITY menuonlybutton.label "Se permite butonului din bara de unelte să afișeze doar o listă">
+<!ENTITY ctrltab.label "Cu tasta Ctrl+Tab se navighează în ordinea celor mai recent deschise file">
+<!ENTITY cmdtab.label "Cu tasta Cmd+Tab se navighează în ordinea celor mai recent deschise file">
+<!ENTITY ctrltab.tabPreviews "Se afișează imagini ale filelor">
+<!ENTITY ctrltab.popup "Cu tasta Ctrl+Tab se afișează o listă derulantă a filelor">
+<!ENTITY cmdtab.popup "Cu tasta Cmd+Tab se afișează o listă derulantă a filelor">
+<!ENTITY tabpopup.mouse "Lista filelor se poate controla cu mausul">
+<!ENTITY mergeNoTabSelection.label "Inițiere îmbinare (înaintea selectării filelor)">
+<!ENTITY mergeTabSelection.label "Finalizare îmbinare (după selectarea filelor)">
+<!ENTITY mergeall.label "Se îmbină toate ferestrele în una singură">
+<!ENTITY mergelastfocused.label "Se îmbină numai fereastra curentă cu ultimele ferestre selectate">
+<!ENTITY mergePopups.label "Se îmbină, de asemena, și ferestrele instantanee">
+<!ENTITY popupNextToOpener.label "Se plasează ferestrele instantanee lângă sursele lor">
+<!ENTITY activateSlideshow.label "Cu tasta #1 se activează succedarea automată a filelor la fiecare">
+<!ENTITY toggleAnimation.label "Se dezactivează animarea închiderii/deschiderii filelor">
+<!ENTITY reloadEvery.matchAddress.label "Se reîncarcă o filă indiferent de adresa sa">
+<!ENTITY reloadEvery.onReloadButton.label "Se afișează meniul „Reîncarcă fila la fiecare” sub butonul „Reîncarcă”">
+<!ENTITY seconds.label "secunde">
+<!ENTITY minutes.label "min">
+<!ENTITY tabBarAppearance.label "Bară de file">
+<!ENTITY tabAppearance.label "Filă">
+<!ENTITY toolBarAppearance.label "Bară de unelte">
+<!ENTITY show.ontabbar.label "Se afișează pe bara de file:">
+<!ENTITY show.ontab.label "Se afișează pe filă:">
+<!ENTITY dragNewTabButton.tooltip "Glisați butonul „Filă nouă” pe bara de file pentru a activa această opțiune">
+<!ENTITY hideTabBarButton.label "Butonul „Închidere filă”">
+<!ENTITY newTabButton.label "Butonul „Filă nouă”">
+<!ENTITY newTabButton.position.left.label "în marginea stângă">
+<!ENTITY newTabButton.position.right.label "în marginea dreaptă">
+<!ENTITY newTabButton.position.afterlast.label "după ultima filă">
+<!ENTITY allTabsButton.label "Butonul „Listă file deschise”">
+<!ENTITY tabBarSpace.label "Spațiu suplimentar la ambele margini">
+<!ENTITY tabBarSpace.tooltip "Spațiu pentru clic sau fixarea obiectelor pe bara de file">
+<!ENTITY tabbar.label "Se ascunde bara de file numai când există o singură filă deschisă">
+<!ENTITY moveTabOnDragging.label "Se deplasează fila în timp ce se glisează">
+<!ENTITY dropIndicator.label "Indicator de fixare (când fila nu se deplasează)">
+<!ENTITY dropIndicator-native.label "Stil nativ (Firefox)">
+<!ENTITY dropIndicator-builtin.label "Stil integrat (Tab Mix Plus)">
+<!ENTITY verticalTabbar.description1 "Aceste setări sunt controlate de alte extensii care implementează file verticale.">
+<!ENTITY tabBarPosition.label "Se poziționează bara de file:">
+<!ENTITY tabBarPosition.top.label "sus (deasupra conținutului)">
+<!ENTITY tabBarPosition.bottom.label "jos (dedesubtul conținutului)">
+<!ENTITY tabScroll.label "Când filele deschise nu încap pe bara de file:">
+<!ENTITY tabScroll.none "se derulează cu rozeta mausului">
+<!ENTITY tabScroll.leftRightButtons "se afișează butoane de derulare pe ambele margini">
+<!ENTITY tabScroll.rightButtons "se afișează butoane de derulare pe marginea dreaptă">
+<!ENTITY tabScroll.rightButtons.rtl "se afișează butoane de derulare pe marginea stângă">
+<!ENTITY tabScroll.multibar "se afișează pe mai multe linii">
+<!ENTITY maxrow.label "Numărul maxim de linii care se afișează:">
+<!ENTITY pinnedTabScroll.label "Se permite defilarea filelor fixate">
+<!ENTITY offsetAmountToScroll.label "La derulare, se afișează parțial următoarea filă nevizibilă">
+<!ENTITY smoothScroll.label "Se activează derularea lină">
+<!ENTITY scrolldelay.label "Întârzierea derulării (interval între pașii derulării):">
+<!ENTITY currenttab.style.label "Filă curentă">
+<!ENTITY unloadedtabs.style.label "File neîncărcate">
+<!ENTITY unreadtabs.style.label "File nevizualizate">
+<!ENTITY othertabs.style.label "Alte file">
+<!ENTITY setstyles.label "Personalizează stilurile">
+<!ENTITY extraIcons.label1 "Pictograme pentru starea">
+<!ENTITY extraIcons.locked "Blocat">
+<!ENTITY extraIcons.protected "Protejat">
+<!ENTITY extraIcons.autoreload "Reîncărcare automată">
+<!ENTITY extraIcons.hideonpinned "Se ascund pictogramele de pe filele fixate pe bară">
+<!ENTITY progressMeter.label "Indicatorul de progres">
+<!ENTITY showTabX.labelBegin "Butonul de închidere">
+<!ENTITY showTabX.left "Se plasează butonul în partea stângă">
+<!ENTITY showTabX.rtl "Se plasează butonul în partea dreaptă">
+<!ENTITY milliseconds.label "msec">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "21em">
+<!ENTITY showTabX.always "pe toate filele">
+<!ENTITY showTabX.current "pe fila curentă">
+<!ENTITY showTabX.hover "pe fila survolată timp de">
+<!ENTITY showTabX.alwaysExeption "pe toate filele mai lungi de">
+<!ENTITY showTabX.currentHover "pe fila curentă și pe cea survolată timp de">
+<!ENTITY minWidth.label "Lungime filă:  de la">
+<!ENTITY widthTo.label "la">
+<!ENTITY widthPixels.label "pixeli">
+<!ENTITY onLeftDisabled.label "Nu se poate plasa butonul în partea stângă în tema curentă">
+<!ENTITY onLeftDisabled.tst.label "Nu se poate plasa butonul în partea stângă dacă extensia „Tree Style Tab” este instalată">
+<!ENTITY flexTabs.label "Se adaptează lungimea filei la lungimea titlului ei">
+<!ENTITY bookastitle.label "Se folosește denumirea semnului de carte ca titlu al filei">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Se pot alege butoanele Tab Mix Plus care vor fi afișate pe bara de unelte">
+<!ENTITY toolbar.button.label "Personalizează bara">
+<!ENTITY toolbar.visible.caption "Butoane afișate:">
+<!ENTITY toolbar.novisible.label "(nu există butoane afișate)">
+<!ENTITY toolbar.hidden.caption "Butoane neafișate:">
+<!ENTITY toolbar.nohidden.label "(nu există butoane neafișate)">
+<!ENTITY mouseGesture.label "Mișcare maus">
+<!ENTITY mouseClick.label "Clic maus">
+<!ENTITY mouseHoverSelect.labelBegin "Se selectează fila dacă este survolată timp de:">
+<!ENTITY tabFlip.label "Se comută la fila selectată anterior când se face clic pe fila curentă">
+<!ENTITY tabFlip.delay "Se permite o întârziere de:">
+<!ENTITY clickFocus.label "Se selectează o filă cu clic complet (apăsare și eliberare)">
+<!ENTITY removeEntries.label "Se elimină elementele meniului Tab Mix Plus folosind clic-mijloc">
+<!ENTITY lockTabSizingOnClose.label "La închiderea unei file, nu se redimensionează celelalte file cît timp cursorul rămâne pe bara de file">
+<!ENTITY removeEntries.tooltip "Se includ filele închise, ferestrele închise și sesiunile salvate">
+<!ENTITY tabbarscrolling.caption "La derulare pe bara de file">
+<!ENTITY tabbarscrolling.holdShift.label "(ținând apăsată tasta Shift în timpul derulării se schimbă opțiunea prestabilită)">
+<!ENTITY tabbarscrolling.selectTab.label "Se schimbă fila selectată">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Se derulează toate filele">
+<!ENTITY tabbarscrolling.inverse.label "Se inversează sensul derulării">
+<!ENTITY double.label "Dublu-clic">
+<!ENTITY middle.label "Clic-mijloc">
+<!ENTITY ctrl.label "Ctrl+clic">
+<!ENTITY cmd.label "Cmd+clic">
+<!ENTITY shift.label "Shift+clic">
+<!ENTITY alt.label "Alt+clic">
+<!ENTITY ontab.label "pe o filă:">
+<!ENTITY ontabbar.label "pe bara de file:">
+<!ENTITY clicktab.label "Acțiuni efectuate cu mausul pe o filă sau pe bara de file">
+<!ENTITY ontabbar.dblClick.label "Nu se permite redimensionarea ferestrei cu dublu-clic pe bara de file">
+<!ENTITY ontabbar.click.label "Nu se permite tragerea ferestrei cu clic pe bara de file">
+<!ENTITY clicktab.default "Acțiune prestabilită a Firefox sau a altei extensii instalate">
+<!ENTITY clicktab.nothing "Nicio acțiune">
+<!ENTITY clicktab.addtab "Deschide o filă nouă">
+<!ENTITY clicktab.duplicatetab "Duplică fila">
+<!ENTITY clicktab.duplicatetabw "Duplică fila într-o fereastră nouă">
+<!ENTITY clicktab.detachtab "Mută fila într-o fereastră nouă">
+<!ENTITY clicktab.protecttab "Protejează fila">
+<!ENTITY clicktab.locktab "Blochează fila">
+<!ENTITY clicktab.freezetab "Protejează și blochează fila">
+<!ENTITY clicktab.renametab "Redenumește fila">
+<!ENTITY clicktab.copyTabUrl "Copiază adresa filei în memorie">
+<!ENTITY clicktab.copyUrlFromClipboard "Încarcă adresa din memoria tampon">
+<!ENTITY clicktab.selectMerge "Selectează fila pentru îmbinare">
+<!ENTITY clicktab.mergeTabs "Îmbină împreună ferestrele">
+<!ENTITY clicktab.bookTab "Plasează semn de carte pentru fila curentă">
+<!ENTITY clicktab.bookTabs "Plasează semne de carte pentru toate filele">
+<!ENTITY clicktab.reloadtab "Reîncarcă fila">
+<!ENTITY clicktab.reloadtabs "Reîncarcă toate filele">
+<!ENTITY clicktab.reloadothertabs "Reîncarcă celelalte file">
+<!ENTITY clicktab.reloadlefttabs "Reîncarcă filele din stânga">
+<!ENTITY clicktab.reloadrighttabs "Reîncarcă filele din dreapta">
+<!ENTITY clicktab.autoReloadTab "Activează/Dezactivează reîncărcarea automată a filei">
+<!ENTITY clicktab.removeall "Închide toate filele">
+<!ENTITY clicktab.removeother "Închide celelalte file">
+<!ENTITY clicktab.removesimilar "Închide filele din același domeniu">
+<!ENTITY clicktab.removetoLeft "Închide filele din stânga">
+<!ENTITY clicktab.removetoRight "Închide filele din dreapta">
+<!ENTITY clicktab.uctab "Redeschide ultima filă închisă">
+<!ENTITY clicktab.ucatab "Redeschide toate filele închise">
+<!ENTITY clicktab.snapback "Relansează fila">
+<!ENTITY clicktab.ietab "Deschide fila în IE">
+<!ENTITY contentLoad "La clic-mijloc, se încarcă adresa din memorie">
+<!ENTITY context.tab "Meniu contextual filă">
+<!ENTITY context.main "Meniu contextual principal">
+<!ENTITY context.tools "Meniu Unelte">
+<!ENTITY showOnTabbar.label "Se afișează meniul contextual al filei pe bara de file">
+<!ENTITY showtabBarContext.label "Comenzi afișate în meniul contextual al filei:">
+<!ENTITY showContentAreaContext.label "Comenzi afișate în meniul contextual principal:">
+<!ENTITY showToolsMenu.label "Elemente afișate în meniul Unelte:">
+<!ENTITY startupHomePage1.label "se afișează pagina de start">
+<!ENTITY startupBlankPage.label "se afișează o pagină vidă">
+<!ENTITY startupLastSession1.label "se afișează ferestrele și filele deschise ultima dată">
+<!ENTITY sm.extension.description1 "Tab Mix Plus a descoperit că extensia „Gestionar de sesiuni” este instalată.">
+<!ENTITY sm.extension.description2 "Gestionarul de sesiuni al Tab Mix Plus va fi dezactivat.">
+<!ENTITY sm.extension.description3 "Puteți da clic pe butonul din partea dreaptă pentru a deschide caseta de opțiuni a extensiei „Gestionar de sesiuni”.">
+<!ENTITY sm.extension.description5 "Conversie de sesiuni din formatul Tab Mix Plus în cel al gestionarului de sesiuni (extensia „Session Manager”)">
+<!ENTITY sm.extension.convert.label "Convertește">
+<!ENTITY sm.extension.chooseFile.label1 "Se convertesc sesiunile Tab Mix Plus din profilul curent">
+<!ENTITY sm.extension.chooseFile.label2 "Fișiere de convertit">
+<!ENTITY ss.enable.label "Se folosește facilitatea internă a Firefox de restaurare a sesiunilor">
+<!ENTITY ss.enable.tooltip "Se demarchează pentru a permite utilizarea gestionarului de sesiuni al Tab Mix Plus">
+<!ENTITY ss.advanced_setting "Opțiuni complexe">
+<!ENTITY ss.advanced_setting.warning "Nu modificați aceste opțiuni decât dacă știți sigur ce înseamnă!">
+<!ENTITY ss.interval "Intervalul minim dintre două salvări ale stării sesiunii">
+<!ENTITY ss.interval.seconds "(în milisecunde)">
+<!ENTITY ss.privacy_level "Se salvează datele personale (date din formulare, „POSTDATA” și module „cookie”) pentru">
+<!ENTITY ss.privacy_level.allsites "toate saiturile">
+<!ENTITY ss.privacy_level.unencrypted "numai saiturile necriptate">
+<!ENTITY ss.privacy_level.nosites "niciun sait">
+<!ENTITY ss.postdata.label1 "Cantitatea maximă de date „POSTDATA” ce se salvează">
+<!ENTITY ss.postdata.label2 "(în octeți; -1 pentru nelimitat)">
+<!ENTITY sessionManger.enable "Se activează Gestionarul de sesiuni">
+<!ENTITY crashRecovery.enable "Se activează recuperarea după o eșuare">
+<!ENTITY sm.StartExit "Lansare/Închidere">
+<!ENTITY sm.restore "Restaurare">
+<!ENTITY sm.preserve "Conservare">
+<!ENTITY sm.start "La lansarea navigatorului:">
+<!ENTITY sm.start.restore "Se restaurează o sesiune de pornire">
+<!ENTITY sm.start.ask "Se solicită confirmare înaintea restaurării">
+<!ENTITY sm.start.nothing "Nu se restaurează nimic">
+<!ENTITY sm.exit "La închiderea navigatorului:">
+<!ENTITY sm.exit.save "Se salvează sesiunea curentă">
+<!ENTITY sm.exit.ask "Se solicită confirmare înaintea salvării">
+<!ENTITY sm.exit.nothing "Nu se salvează nimic">
+<!ENTITY sm.startup "Se alege ca sesiune de pornire:">
+<!ENTITY sm.lastsession "ultima sesiune">
+<!ENTITY sm.previouslast "penultima sesiune">
+<!ENTITY sm.chooseifempty "Se alege altă sesiune dacă cea de pornire este vidă">
+<!ENTITY sm.restore.options "La restaurarea sesiunilor:">
+<!ENTITY sm.restore.overwrite "Se înlocuiesc ferestrele">
+<!ENTITY sm.restore.overwriteTabs "și filele existente">
+<!ENTITY sm.restore.closedWinList "Se salvează ferestrele în lista ferestrelor închise">
+<!ENTITY sm.restore.merge "Se combină mai multe ferestre într-una singură">
+<!ENTITY sm.restore.bypassCache "Se ignoră memoria „cache”">
+<!ENTITY sm.notrestore.label "Dacă nicio sesiune nu se restaurează la pornire">
+<!ENTITY sm.restorePinned1.label "Restaurează filele fixate ultima dată">
+<!ENTITY sm.preserve.options "Se memorează din file:">
+<!ENTITY sm.preserve.history "Istoricul">
+<!ENTITY sm.preserve.protect "Starea de protecție">
+<!ENTITY sm.preserve.locked "Starea de blocare">
+<!ENTITY sm.preserve.permission "Permisiunile">
+<!ENTITY sm.preserve.scroll1 "Poziția în pagină">
+<!ENTITY sm.restore.winOptions "Se memorează din ferestre:">
+<!ENTITY sm.restore.selectedTab "Filele selectate">
+<!ENTITY sm.restore.closedTabs "Lista filelor închise">
+<!ENTITY incompatible.extensions "Unele extensii sunt incompatibile cu Tab Mix Plus. Este recomandat să dezactivați sau să dezinstalați aceste extensii.">
+<!ENTITY incompatible.button.label "Afișează lista">

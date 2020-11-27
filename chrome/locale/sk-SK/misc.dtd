@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Načítať na pozadí">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "Upraviť názov karty">
+<!ENTITY renametab.reset.label "Resetovať na predvolený názov">
+<!ENTITY title.label "Názov">
+<!ENTITY default.label "Predvolený">
+<!ENTITY renametab.permanently.label "Premenovať túto kartu bez ohľadu na jej adresu">
+<!ENTITY renametab.permanently.tooltip "karta s históriou - nový názov zostane pri zmene adresy">
+<!ENTITY forum.label "Fórum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Pomocník">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Vybrať čas zo zoznamu alebo použiť vlastný">
+<!ENTITY specifyreload.label "Určiť čas znovunačítania">
+<!ENTITY sanitizer.entry "História Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Ste si istý, že chcete vymazať VŠETKY vaše uložené údaje relácií vrátane záloh?">

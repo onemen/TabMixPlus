@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Schede chiuse">
+<!ENTITY closedtabsbtn.tooltip "Visualizza la lista delle schede chiuse">
+<!ENTITY sessionbtn.tooltip "Mostra e gestisci le sessioni salvate">
+<!ENTITY tabslistbtn.label "Schede aperte">
+<!ENTITY tabslistbtn.tooltip "Visualizza la lista delle schede aperte">
+<!ENTITY closedwindowsbtn.label "Finestre chiuse">
+<!ENTITY closedwindowsbtn.tooltip "Visualizza la lista delle finestre chiuse">
+<!ENTITY page.header.title "Impostazioni di Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Gestione delle sessioni di Tab Mix Plus">
+<!ENTITY session.Tools "Gestione sessioni">
+<!ENTITY closedWin.label "Lista delle schede chiuse">
+<!ENTITY duplicateTabMenu.label "Duplica scheda">
+<!ENTITY duplicateTabMenu.accesskey "u">
+<!ENTITY duplicateinWin.label "Duplica in nuova finestra">
+<!ENTITY duplicateinWin.accesskey "f">
+<!ENTITY detachTab.label "Sposta in nuova finestra">
+<!ENTITY detachTab.accesskey "v">
+<!ENTITY mergeContext.label "Incorpora finestre">
+<!ENTITY mergeContext.accesskey "I">
+<!ENTITY renametab.label "Rinomina scheda…">
+<!ENTITY renametab.accesskey "m">
+<!ENTITY copytaburl.label "Copia URL della scheda">
+<!ENTITY copytaburl.accesskey "L">
+<!ENTITY reloadother.label "Ricarica altre schede">
+<!ENTITY reloadother.accesskey "c">
+<!ENTITY reloadleft.label "Ricarica schede a sinistra">
+<!ENTITY reloadleft.accesskey "n">
+<!ENTITY reloadright.label "Ricarica schede a destra">
+<!ENTITY reloadright.accesskey "e">
+<!ENTITY autoReloadTab.label "Ricarica scheda ogni">
+<!ENTITY autoReloadTab.accesskey "o">
+<!ENTITY autoReloadSite.label "Ricarica ogni">
+<!ENTITY autoReloadSite.accesskey "c">
+<!ENTITY afterthis.label "Dopo questa">
+<!ENTITY bookmarktab.label "Questa scheda in un segnalibro…">
+<!ENTITY undoCloseListMenu.label "Lista delle schede chiuse">
+<!ENTITY undoCloseListMenu.accesskey "h">
+<!ENTITY closeAllTabsMenu.label "Chiudi tutte le schede">
+<!ENTITY closeall.accesskey "t">
+<!ENTITY closeSimilarTab.label "Chiudi schede simili">
+<!ENTITY closeSimilarTab.accesskey "h">
+<!ENTITY closeTabsToLeft.label "Chiudi le schede a sinistra">
+<!ENTITY closeleft.accesskey "s">
+<!ENTITY docShellMenu.label "Permetti">
+<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY freezeTabMenu.label "Congela scheda">
+<!ENTITY freezeTabMenu.accesskey "o">
+<!ENTITY protectTabMenu.label "Proteggi scheda">
+<!ENTITY protectTabMenu.tooltip "Protegge le schede dalla chiusura accidentale">
+<!ENTITY protectTabMenu.accesskey "g">
+<!ENTITY lockTabMenu.label "Blocca scheda">
+<!ENTITY lockTabMenu.tooltip "I link selezionati in una scheda bloccata verranno sempre aperti in nuove schede">
+<!ENTITY lockTabMenu.accesskey "c">
+<!ENTITY bookmarktabs.label "Tutte le schede in un segnalibro…">
+<!ENTITY linkhere.label "Apri in questa scheda">
+<!ENTITY linkhere.accesskey "q">
+<!ENTITY linkBackgroundTab.label "Apri in scheda in secondo piano">
+<!ENTITY linkForegroundTab.label "Apri in scheda in primo piano">
+<!ENTITY linkBackgroundTab.accesskey "o">
+<!ENTITY linkForegroundTab.accesskey "e">
+<!ENTITY openalllinks.label "Apri tutti in nuove schede">
+<!ENTITY openalllinks.accesskey "s">
+<!ENTITY linkwithhistory.label "Apri nella scheda duplicata">
+<!ENTITY linkwithhistory.accesskey "d">
+<!ENTITY tabsList.label "Lista delle schede aperte">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Immagini">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Reindirizzamenti">
+<!ENTITY allowPlugin.label "Plugin">
+<!ENTITY allowFrame.label "Riquadri">
+<!ENTITY restoreincurrent.label "Riapri nella scheda attuale">
+<!ENTITY restoreincurrent.accesskey "a">
+<!ENTITY restoreinwin.label "Riapri in una nuova finestra">
+<!ENTITY restoreinwin.accesskey "v">
+<!ENTITY restoreintab.label "Riapri in una nuova scheda">
+<!ENTITY restoreintab.accesskey "n">
+<!ENTITY restoretab.label "Riapri la scheda">
+<!ENTITY restoretab.accesskey "p">
+<!ENTITY bookmark.label "Aggiungi link nei segnalibri…">
+<!ENTITY bookmark.accesskey "k">
+<!ENTITY deletelist.label "Elimina dalla lista">
+<!ENTITY deletelist.accesskey "E">
+<!ENTITY settings.label "Impostazioni">
+<!ENTITY saveWindow.label "Salva questa finestra">
+<!ENTITY saveAllWindows.label "Salva tutte le finestre">
+<!ENTITY sm.context.overwrite "Ripristina la sessione sostituendo schede/finestra attuali">
+<!ENTITY sm.context.overwrite.key "o">
+<!ENTITY sm.context.restore.new "Ripristina la sessione in una nuova finestra">
+<!ENTITY sm.context.restore.newkey "f">
+<!ENTITY sm.context.replacethis "Sostituisci la sessione con la finestra attuale">
+<!ENTITY sm.context.replacethis.key "c">
+<!ENTITY sm.context.replaceall "Sostituisci la sessione con tutte le finestre">
+<!ENTITY sm.context.replaceall.key "t">
+<!ENTITY sm.context.add "Aggiungi alla sessione la finestra attuale">
+<!ENTITY sm.context.add.key "u">
+<!ENTITY sm.context.addall "Aggiungi alla sessione tutte le finestre">
+<!ENTITY sm.context.addall.key "i">
+<!ENTITY sm.context.save "Salva">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "Rinomina">
+<!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Elimina">
+<!ENTITY sm.context.delete.key "E">
+<!ENTITY sm.context.deleteall "Elimina tutte">
+<!ENTITY sm.context.deleteall.key "l">
+<!ENTITY sm.context.startup "Imposta come sessione iniziale">
+<!ENTITY sm.context.startup.key "z">
+<!ENTITY sm.context.details "Visualizza contatore, data ed ora nel menu della sessione">
+<!ENTITY sm.context.details.key "C">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "Schede in ordine alfabetico">
+<!ENTITY sortedTabs.tooltip "Visualizza le schede in ordine alfabetico">
+<!ENTITY enable.label "Attiva, ricarica ogni">
+<!ENTITY custom.label "Personalizza">
+<!ENTITY enableTabs.label "Attiva per tutte le schede">
+<!ENTITY disableTabs.label "Disattiva per tutte le schede">
+<!ENTITY seconds.label "secondi">
+<!ENTITY minutes.label "minuti">
+<!ENTITY minute.label "minuto">
+<!ENTITY hideTabBar.label "Visualizzazione della barra delle schede">
+<!ENTITY hideTabBar.never.label "Attiva sempre">
+<!ENTITY hideTabBar.never.key "v">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "q">
+<!ENTITY hideTabBar.always.label "Disattiva">
+<!ENTITY hideTabBar.always.key "D">

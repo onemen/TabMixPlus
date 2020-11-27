@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "快捷键">
+<!ENTITY shortcuts.edit "编辑键盘快捷键">
+<!ENTITY shortcuts.showAll "全部显示">
+<!ENTITY shortcuts.hideUnused "隐藏未使用的">
+<!ENTITY shortcuts.warning "您的部分快捷键已被占用">
+<!ENTITY shortcuts.showDetails "显示详情">
+<!ENTITY shortcuts.hideDetails "隐藏详情">
+<!ENTITY shortcuts.switchToLast "切换到上次激活的标签页">
+<!ENTITY shortcuts.slideshow "切换标签页幻灯片显示">
+<!ENTITY shortcuts.toggleFLST "切换关闭当前标签页后的焦点">
+<!ENTITY shortcuts.toggleFLST.tooltip "切换激活右侧标签页或上次选中的标签页">
+<!ENTITY shortcuts.placeholder "输入辅助键及主按键">
+<!ENTITY shortcuts.reset "重置">
+<!ENTITY shortcuts.clear "清除">
+<!ENTITY shortcuts.inuse "该快捷键所占用的命令为：">

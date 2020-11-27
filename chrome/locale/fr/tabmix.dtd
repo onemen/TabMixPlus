@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Onglets récemment fermés">
+<!ENTITY closedtabsbtn.tooltip "Afficher la liste des onglets récemment fermés">
+<!ENTITY sessionbtn.tooltip "Afficher et gérer vos sessions">
+<!ENTITY tabslistbtn.label "Onglets ouverts">
+<!ENTITY tabslistbtn.tooltip "Afficher la liste des onglets ouverts">
+<!ENTITY closedwindowsbtn.label "Fenêtres récemment fermées">
+<!ENTITY closedwindowsbtn.tooltip "Afficher la liste des fenêtres récemment fermées">
+<!ENTITY page.header.title "Options de Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Gestionnaire de sessions de Tab Mix Plus">
+<!ENTITY session.Tools "Gestionnaire de sessions">
+<!ENTITY closedWin.label "Liste des fenêtres récemment fermées">
+<!ENTITY duplicateTabMenu.label "Dupliquer l&apos;onglet">
+<!ENTITY duplicateTabMenu.accesskey "D">
+<!ENTITY duplicateinWin.label "Dupliquer dans une nouvelle fenêtre">
+<!ENTITY duplicateinWin.accesskey "n">
+<!ENTITY detachTab.label "Déplacer vers une nouvelle fenêtre">
+<!ENTITY detachTab.accesskey "v">
+<!ENTITY mergeContext.label "Fusionner les fenêtres">
+<!ENTITY mergeContext.accesskey "F">
+<!ENTITY renametab.label "Renommer l&apos;onglet">
+<!ENTITY renametab.accesskey "R">
+<!ENTITY copytaburl.label "Copier l&apos;adresse de l&apos;onglet">
+<!ENTITY copytaburl.accesskey "a">
+<!ENTITY reloadother.label "Actualiser les autres onglets">
+<!ENTITY reloadother.accesskey "A">
+<!ENTITY reloadleft.label "Actualiser les onglets de gauche">
+<!ENTITY reloadleft.accesskey "g">
+<!ENTITY reloadright.label "Actualiser les onglets de droite">
+<!ENTITY reloadright.accesskey "d">
+<!ENTITY autoReloadTab.label "Actualiser l&apos;onglet toutes les...">
+<!ENTITY autoReloadTab.accesskey "o">
+<!ENTITY autoReloadSite.label "Actualiser ce site tous les">
+<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY afterthis.label "Après cet onglet">
+<!ENTITY bookmarktab.label "Mettre cet onglet en marque-page">
+<!ENTITY undoCloseListMenu.label "Liste des onglets récemment fermés">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "Fermer tous les onglets">
+<!ENTITY closeall.accesskey "t">
+<!ENTITY closeSimilarTab.label "Fermer les onglets identiques">
+<!ENTITY closeSimilarTab.accesskey "i">
+<!ENTITY closeTabsToLeft.label "Fermer les onglets à gauche">
+<!ENTITY closeleft.accesskey "g">
+<!ENTITY docShellMenu.label "Permissions">
+<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY freezeTabMenu.label "Geler l&apos;onglet">
+<!ENTITY freezeTabMenu.accesskey "G">
+<!ENTITY protectTabMenu.label "Protéger l&apos;onglet">
+<!ENTITY protectTabMenu.tooltip "Empêche la fermeture des onglets">
+<!ENTITY protectTabMenu.accesskey "P">
+<!ENTITY lockTabMenu.label "Verrouiller l&apos;onglet">
+<!ENTITY lockTabMenu.tooltip "Ouvre tous les liens dans un nouvel onglet">
+<!ENTITY lockTabMenu.accesskey "V">
+<!ENTITY bookmarktabs.label "Mettre tous les onglets en marque-pages">
+<!ENTITY linkhere.label "Ouvrir le lien dans cet onglet">
+<!ENTITY linkhere.accesskey "o">
+<!ENTITY linkBackgroundTab.label "Ouvrir le lien dans un onglet en arrière-plan">
+<!ENTITY linkForegroundTab.label "Ouvrir le lien dans un onglet en avant-plan">
+<!ENTITY linkBackgroundTab.accesskey "r">
+<!ENTITY linkForegroundTab.accesskey "v">
+<!ENTITY openalllinks.label "Ouvrir les liens dans de nouveaux onglets">
+<!ENTITY openalllinks.accesskey "n">
+<!ENTITY linkwithhistory.label "Ouvrir le lien dans un onglet dupliqué">
+<!ENTITY linkwithhistory.accesskey "d">
+<!ENTITY tabsList.label "Liste des onglets ouverts">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Images">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Redirections">
+<!ENTITY allowPlugin.label "Plugins">
+<!ENTITY allowFrame.label "Cadres">
+<!ENTITY restoreincurrent.label "Restaurer dans l&apos;onglet courant">
+<!ENTITY restoreincurrent.accesskey "c">
+<!ENTITY restoreinwin.label "Restaurer dans une nouvelle fenêtre">
+<!ENTITY restoreinwin.accesskey "f">
+<!ENTITY restoreintab.label "Restaurer dans un nouvel onglet">
+<!ENTITY restoreintab.accesskey "o">
+<!ENTITY restoretab.label "Restaurer l&apos;onglet">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "Mettre ce lien en marque-pages...">
+<!ENTITY bookmark.accesskey "M">
+<!ENTITY deletelist.label "Supprimer de la liste">
+<!ENTITY deletelist.accesskey "S">
+<!ENTITY settings.label "Réglages">
+<!ENTITY saveWindow.label "Enregistrer cette fenêtre">
+<!ENTITY saveAllWindows.label "Enregistrer toutes les fenêtres">
+<!ENTITY sm.context.overwrite "Restaurer, écraser la/les fenêtre(s) existante(s)">
+<!ENTITY sm.context.overwrite.key "e">
+<!ENTITY sm.context.restore.new "Restaurer dans une nouvelle fenêtre">
+<!ENTITY sm.context.restore.newkey "n">
+<!ENTITY sm.context.replacethis "Remplacer avec cette fenêtre">
+<!ENTITY sm.context.replacethis.key "R">
+<!ENTITY sm.context.replaceall "Remplacer avec toutes les fenêtres">
+<!ENTITY sm.context.replaceall.key "t">
+<!ENTITY sm.context.add "Ajouter cette fenêtre">
+<!ENTITY sm.context.add.key "f">
+<!ENTITY sm.context.addall "Ajouter toutes les fenêtres">
+<!ENTITY sm.context.addall.key "t">
+<!ENTITY sm.context.save "Enregistrer">
+<!ENTITY sm.context.save.key "E">
+<!ENTITY sm.context.rename "Renommer">
+<!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Marquer la session">
+<!ENTITY sm.context.bookmarkSession.key "M">
+<!ENTITY sm.context.delete "Effacer">
+<!ENTITY sm.context.delete.key "E">
+<!ENTITY sm.context.deleteall "Effacer tout">
+<!ENTITY sm.context.deleteall.key "t">
+<!ENTITY sm.context.startup "Choisir comme session de démarrage">
+<!ENTITY sm.context.startup.key "d">
+<!ENTITY sm.context.details "Afficher les compteurs, la date et le temps dans le menu des sessions">
+<!ENTITY sm.context.details.key "A">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "Onglets triés">
+<!ENTITY sortedTabs.tooltip "Cocher pour afficher la liste triée alphabétiquement">
+<!ENTITY enable.label "Activer">
+<!ENTITY custom.label "Personnaliser">
+<!ENTITY enableTabs.label "Activer tous les onglets">
+<!ENTITY disableTabs.label "Désactiver tous les onglets">
+<!ENTITY seconds.label "secondes">
+<!ENTITY minutes.label "minutes">
+<!ENTITY minute.label "minute">
+<!ENTITY hideTabBar.label "Cacher la barre d&apos;onglets">
+<!ENTITY hideTabBar.never.label "Jamais">
+<!ENTITY hideTabBar.never.key "J">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "s">
+<!ENTITY hideTabBar.always.label "Toujours">
+<!ENTITY hideTabBar.always.key "T">

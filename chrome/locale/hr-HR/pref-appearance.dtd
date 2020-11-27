@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Styles">
+<!ENTITY styles.label "Prilagodi stilove">
+<!ENTITY currentTab.label "Trenutna kartica">
+<!ENTITY unloadedTabs.label "Unloaded Tabs">
+<!ENTITY unreadTab.label "Nepročitane kartice">
+<!ENTITY hideRGB.label "Hide RGB">
+<!ENTITY showRGB.label "Show RGB">
+<!ENTITY unreadAfterReload.label "set tab as unread after reload">
+<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY squaredTabs.label "Apply background color for squared tabs">
+<!ENTITY otherTabs.label "Other Tabs">
+<!ENTITY italic.label "Nakošeno">
+<!ENTITY bold.label "Podebljano">
+<!ENTITY underline.label "Podvučeno">
+<!ENTITY textcolor.label "Boja teksta">
+<!ENTITY bgColor.label "Boja pozadine">
+<!ENTITY bgTopColor.label "top">
+<!ENTITY bgBottomColor.label "bottom">
+<!ENTITY useThis.label "use this style for">
+<!ENTITY opacity.label "opacity">

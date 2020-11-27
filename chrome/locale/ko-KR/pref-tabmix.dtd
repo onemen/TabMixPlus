@@ -1,0 +1,319 @@
+<!ENTITY tab.links "링크">
+<!ENTITY tab.events "동작">
+<!ENTITY tab.mouse "마우스">
+<!ENTITY tab.appearance "겉모양">
+<!ENTITY tab.menu "메뉴">
+<!ENTITY tab.session "세션">
+<!ENTITY tab.incompatible "오류">
+<!ENTITY apply.label "적용">
+<!ENTITY settings.export "설정 내보내기">
+<!ENTITY settings.import "설정 가져오기">
+<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.default "설정 초기화">
+<!ENTITY settings.revert "Revert">
+<!ENTITY generalWindowOpen.label "새 창으로 열리는 링크를 열 곳:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLinkTarget.label "다른 프로그램이 여는 링크를 열 곳:">
+<!ENTITY linkTarget.tab "새 탭">
+<!ENTITY linkTarget.window "새 창">
+<!ENTITY linkTarget.current "현재 탭">
+<!ENTITY linkTarget.accesskey "C">
+<!ENTITY divertedWindowOpen.label "자바스크립트 팝업:">
+<!ENTITY divertedWindowOpen.all "모든 팝업을 탭으로 열기">
+<!ENTITY divertedWindowOpen.some "크기가 정해진 팝업만 허용">
+<!ENTITY divertedWindowOpen.none "모든 팝업을 허용">
+<!ENTITY linkTarget.label "target 속성이 있는 링크를 현재 탭에 열기">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY download.label "파일을 다운로드할 때 빈 탭을 만들지 않기">
+<!ENTITY edit.label "편집">
+<!ENTITY speLink.label "늘 새 탭으로 열 것:">
+<!ENTITY speLink.none "없음">
+<!ENTITY speLink.allLinks "All links">
+<!ENTITY speLink.external "다른 사이트로 가는 링크">
+<!ENTITY singleWindow.label "싱글 윈도우 모드 사용">
+<!ENTITY newTabs.label "New Tabs">
+<!ENTITY tabOpen.label "탭을 열 때">
+<!ENTITY tabFocus.label "탭 활성화">
+<!ENTITY tabClose.label "탭을 닫을 때">
+<!ENTITY tabMerge.label "탭 합치기">
+<!ENTITY tabFeature.label "탭 기능">
+<!ENTITY newtab.label "새 탭에 불러올 것:">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "빈 페이지">
+<!ENTITY newtab.home "홈페이지">
+<!ENTITY newtab.current "현재 페이지">
+<!ENTITY newtab.duplicate "복제된 페이지">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY location.label.1 "Address">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY openTabNext.label "세 탭을 현재 탭 다음에 열기">
+<!ENTITY openOtherTabNext.label "다른 탭을 현재 탭 다음에 열기">
+<!ENTITY relatedAfterCurrent.label "현재 탭과 관련된 탭에만">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "복제된 탭을 원래 탭 다음에 열기">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "열리는 순서 바꾸기">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "새탭을 현재 탭으로부터 마지막으로 열렸던 탭 다음에 엽니다.">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabs">
+<!ENTITY lockTabs.label "Lock tabs">
+<!ENTITY lockNewTabs.label "Lock New tabs">
+<!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY openNewTab.label "새 탭으로 열 것:">
+<!ENTITY openBookmarks.label "북마크">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openHistory.label "방문 기록">
+<!ENTITY openUrl.label "주소창">
+<!ENTITY openSearch.label "검색창">
+<!ENTITY middlecurrent1.label "가운데 클릭이나 Ctrl 클릭하면 현재 탭에 열기">
+<!ENTITY middlecurrent.tooltip "북마크, 방문 기록, 링크만 새 탭으로 열립니다.">
+<!ENTITY tabFocus.caption "탭으로 열 때 탭을 활성화할 것:">
+<!ENTITY selectTab.label "링크">
+<!ENTITY selectDivertedTab.label "전환된 창">
+<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabCommand.label "&apos;새 탭 열기&apos;로 연 탭">
+<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY selectTabBH.label "북마크/방문 기록">
+<!ENTITY duplicateTab.label "복제된 탭">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "알려주기">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "마지막 탭을 닫을 때">
+<!ENTITY keepWindow.label.3.1 "마지막 탭을 닫을 때 창을 닫지 않기">
+<!ENTITY keeptab.label "마지막 탭을 닫지 않기">
+<!ENTITY closeOnMerge.label "창을 합친 후 닫기">
+<!ENTITY warnOnMerge.label "탭을 합치지 않고 닫을 때 알려주기">
+<!ENTITY currenttab.caption.label "현재 탭을 닫을 때">
+<!ENTITY focusTab.labelBegin "현재 탭을 닫으면 활성화할 것:">
+<!ENTITY focusTab.firstTab "처음 탭">
+<!ENTITY focusTab.leftTab "왼쪽 탭">
+<!ENTITY focusTab.rightTab "오른쪽 탭">
+<!ENTITY focusTab.lastTab "마지막 탭">
+<!ENTITY focusTab.lastSelectedTab "마지막으로 선택된 탭">
+<!ENTITY focusTab.openerTab "부모 페이지/오른쪽 탭">
+<!ENTITY focusTab.openerTab.rtl "Opener/left tab">
+<!ENTITY focusTab.lastOpenedTab "마지막으로 열렸던 탭">
+<!ENTITY undoClose.label "닫은 탭 다시 열기 쓰기">
+<!ENTITY undoCloseCache.label "닫은 탭 다시 열기의 닫힌 탭을 기억할 개수:">
+<!ENTITY undoClosepos.label "탭의 원래 위치에 다시 열기">
+<!ENTITY menuonlybutton.label "도구 모음 버튼에 목록만 보여주기">
+<!ENTITY ctrltab.label "Ctrl-Tab으로 탭을 최근에 사용한 순서대로 이동하기">
+<!ENTITY cmdtab.label "Cmd-Tab으로 탭을 최근에 사용한 순서대로 이동하기">
+<!ENTITY ctrltab.tabPreviews "탭 미리보기 보이기">
+<!ENTITY ctrltab.popup "Ctrl-Tab으로 탭 목록 팝업 메뉴 표시">
+<!ENTITY cmdtab.popup "Cmd-Tab으로 탭 목록 팝업 메뉴 표시">
+<!ENTITY tabpopup.mouse "탭 목록이 마우스에 반응하게 하기">
+<!ENTITY mergeNoTabSelection.label "아무 탭도 선택하지 않고 창 합치기를 하면">
+<!ENTITY mergeTabSelection.label "탭을 선택한 다음 창 합치기를 하면">
+<!ENTITY mergeall.label "모든 창을 하나로 합치기">
+<!ENTITY mergelastfocused.label "현재 창과 마지막으로 활성화된 창만 합치기">
+<!ENTITY mergePopups.label "팝업 창도 합치기">
+<!ENTITY popupNextToOpener.label "팝업을 부모 페이지의 옆에 두기">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "새로 고침 버튼에 자동으로 새로 고침 메뉴 보이기">
+<!ENTITY seconds.label "초">
+<!ENTITY minutes.label "분">
+<!ENTITY tabBarAppearance.label "탭 도구 모음">
+<!ENTITY tabAppearance.label "탭">
+<!ENTITY toolBarAppearance.label "도구 모음">
+<!ENTITY show.ontabbar.label "탭 도구 모음 위에 표시할 것">
+<!ENTITY show.ontab.label "탭 위에 표시할 것">
+<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
+<!ENTITY hideTabBarButton.label "탭 닫기 버튼">
+<!ENTITY newTabButton.label "새 탭 버튼">
+<!ENTITY newTabButton.position.left.label "왼쪽">
+<!ENTITY newTabButton.position.right.label "오른쪽">
+<!ENTITY newTabButton.position.afterlast.label "마지막 탭 다음">
+<!ENTITY allTabsButton.label "탭 목록 버튼">
+<!ENTITY tabBarSpace.label "양쪽 끝에 빈 공간">
+<!ENTITY tabBarSpace.tooltip "탭 도구 모음에 무언가를 떨어뜨리거나 탭 도구 모음을 클릭하기 위한 공간">
+<!ENTITY tabbar.label "탭이 하나만 열려 있을 때 탭 도구 모음을 숨기기">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY dropIndicator.label "떨어뜨릴 곳 표시기">
+<!ENTITY dropIndicator-native.label "원래 스타일">
+<!ENTITY dropIndicator-builtin.label "붙박이 스타일">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY tabBarPosition.label "위치:">
+<!ENTITY tabBarPosition.top.label "Top (above content)">
+<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabScroll.label "탭이 너무 많을 때:">
+<!ENTITY tabScroll.none "버튼 없이 스크롤하기">
+<!ENTITY tabScroll.leftRightButtons "양쪽 스크롤 버튼으로 스크롤하기">
+<!ENTITY tabScroll.rightButtons "오른쪽 스크롤 버튼으로 스크롤하기">
+<!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
+<!ENTITY tabScroll.multibar "여러 줄로 나누기">
+<!ENTITY maxrow.label "탭 도구 모음의 최대 표시 개수:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY scrolldelay.label "스크롤 지연시간(반복 스크롤 사이의 시간)">
+<!ENTITY currenttab.style.label "현재 탭">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unreadtabs.style.label "읽지 않은 탭">
+<!ENTITY othertabs.style.label "다른 탭">
+<!ENTITY setstyles.label "스타일 설정">
+<!ENTITY extraIcons.label1 "아이콘">
+<!ENTITY extraIcons.locked "잠김">
+<!ENTITY extraIcons.protected "보호됨">
+<!ENTITY extraIcons.autoreload "자동 새로 고침">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY progressMeter.label "탭의 진행 상황 표시 막대">
+<!ENTITY showTabX.labelBegin "탭 닫기 버튼">
+<!ENTITY showTabX.left "왼쪽에 놓기">
+<!ENTITY showTabX.rtl "Place on right side">
+<!ENTITY milliseconds.label "밀리초">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "14em">
+<!ENTITY showTabX.always "모든 탭">
+<!ENTITY showTabX.current "현재 탭">
+<!ENTITY showTabX.hover "커서가 닿은 탭">
+<!ENTITY showTabX.alwaysExeption "모든 탭이 다음보다 길 때">
+<!ENTITY showTabX.currentHover "현재 탭과 커서가 닿은 탭">
+<!ENTITY minWidth.label "탭 너비:">
+<!ENTITY widthTo.label "에서">
+<!ENTITY widthPixels.label "픽셀">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY flexTabs.label "텝 너비를 탭 제목에 맞추기">
+<!ENTITY bookastitle.label "북마크 이름을 탭 제목으로 사용">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "22em">
+<!ENTITY toolbar.description "도구 모음에서 보일 Tab Mix Plus 버튼 사용자 지정">
+<!ENTITY toolbar.button.label "사용자 지정">
+<!ENTITY toolbar.visible.caption "보이는 버튼">
+<!ENTITY toolbar.novisible.label "보이는 버튼 없음">
+<!ENTITY toolbar.hidden.caption "숨겨진 버튼">
+<!ENTITY toolbar.nohidden.label "숨겨진 버튼 없음">
+<!ENTITY mouseGesture.label "마우스 동작">
+<!ENTITY mouseClick.label "마우스 클릭">
+<!ENTITY mouseHoverSelect.labelBegin "커서가 닿은 탭을 활성화할 시간">
+<!ENTITY tabFlip.label "현재 탭을 클릭하면 마지막으로 선택된 탭을 열기">
+<!ENTITY tabFlip.delay "바로 전에 본 탭을 활성화할 시간">
+<!ENTITY clickFocus.label "마우스를 눌렀다 땐 후에 탭을 선택">
+<!ENTITY removeEntries.label "가운데 클릭으로 Tab Mix Plus 메뉴 목록의 항목을 지우기">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY removeEntries.tooltip "닫은 탭, 닫은 창 및 저장된 세션 목록을 포함합니다.">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY double.label "두번 클릭">
+<!ENTITY middle.label "가운데 클릭">
+<!ENTITY ctrl.label "Ctrl 클릭">
+<!ENTITY cmd.label "Cmd 클릭">
+<!ENTITY shift.label "Shift 클릭">
+<!ENTITY alt.label "Alt 클릭">
+<!ENTITY ontab.label "탭 위:">
+<!ENTITY ontabbar.label "탭 도구 모음 위:">
+<!ENTITY clicktab.label "탭이나 탭 도구 모음을 클릭하면 실행할 기능 선택">
+<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY clicktab.nothing "안 쓰기">
+<!ENTITY clicktab.addtab "새 탭 열기">
+<!ENTITY clicktab.duplicatetab "탭 복제하기">
+<!ENTITY clicktab.duplicatetabw "새 창에 탭 복사하기">
+<!ENTITY clicktab.detachtab "새 창에 열기">
+<!ENTITY clicktab.protecttab "탭 보호하기">
+<!ENTITY clicktab.locktab "탭 잠그기">
+<!ENTITY clicktab.freezetab "탭을 보호하고 잠급니다.">
+<!ENTITY clicktab.renametab "탭 이름 바꾸기">
+<!ENTITY clicktab.copyTabUrl "탭 URL을 클립보드에 복사">
+<!ENTITY clicktab.copyUrlFromClipboard "클립보드에서 URL 불러오기">
+<!ENTITY clicktab.selectMerge "합칠 탭을 선택하기">
+<!ENTITY clicktab.mergeTabs "창을 서로 합치기">
+<!ENTITY clicktab.bookTab "현재 탭 북마크 하기">
+<!ENTITY clicktab.bookTabs "전체 탭 북마크 하기">
+<!ENTITY clicktab.reloadtab "현재 탭 새로 고침">
+<!ENTITY clicktab.reloadtabs "전체 탭 새로 고침">
+<!ENTITY clicktab.reloadothertabs "다른 탭 새로 고침">
+<!ENTITY clicktab.reloadlefttabs "왼쪽 탭 새로 고침">
+<!ENTITY clicktab.reloadrighttabs "오른쪽 탭 새로 고침">
+<!ENTITY clicktab.autoReloadTab "탭 자동으로 새로 고침 켜기/끄기">
+<!ENTITY clicktab.removeall "탭 모두 닫기">
+<!ENTITY clicktab.removeother "다른 탭 모두 닫기">
+<!ENTITY clicktab.removesimilar "도메인이 비슷한 탭 닫기">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.uctab "닫은 탭 다시 열기">
+<!ENTITY clicktab.ucatab "모든 닫은 탭 다시 열기">
+<!ENTITY clicktab.snapback "바로 전에 본 탭 선택하기">
+<!ENTITY clicktab.ietab "탭을 IE로 열기">
+<!ENTITY contentLoad "가운데 클릭으로 클립보드의 URL 읽기">
+<!ENTITY context.tab "탭 문맥 메뉴">
+<!ENTITY context.main "페이지 문맥 메뉴">
+<!ENTITY context.tools "도구 메뉴">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showtabBarContext.label "탭 문맥 메뉴에서 보여줄 것:">
+<!ENTITY showContentAreaContext.label "페이지 문맥 메뉴에서 보여줄 것:">
+<!ENTITY showToolsMenu.label "도구 메뉴에서 보여줄 것:">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "빈 페이지 열기">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "Tab Mix Plus가 Session Manager 확장 기능이 설치된 것을 감지했습니다.">
+<!ENTITY sm.extension.description2 "Tab Mix Plus 세션 관리자는 비활성화 됩니다.">
+<!ENTITY sm.extension.description3 "오른쪽의 버튼으로 Session Manager 설정창을 열 수 있습니다.">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "변환">
+<!ENTITY sm.extension.chooseFile.label1 "현재 프로필의 Tab Mix Plus 세션을 변환하기">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "내장된 세션 복구 기능 쓰기">
+<!ENTITY ss.enable.tooltip "선택하지 않으면 Tab Mix Plus 세션 관리자를 씁니다.">
+<!ENTITY ss.advanced_setting "고급 설정">
+<!ENTITY ss.advanced_setting.warning "이 설정에 대해 정확히 알지 못하면 건드리지 마십시오.">
+<!ENTITY ss.interval "아래의 간격으로 브라우저 상태를 저장하기">
+<!ENTITY ss.interval.seconds "(밀리초 단위)">
+<!ENTITY ss.privacy_level "개인 정보(폼 데이터, POST데이터, 쿠키) 저장하기">
+<!ENTITY ss.privacy_level.allsites "모든 사이트에서">
+<!ENTITY ss.privacy_level.unencrypted "암호화되지 않은 사이트만">
+<!ENTITY ss.privacy_level.nosites "저장 안함">
+<!ENTITY ss.postdata.label1 "저장될 POST 데이터의 최대 크기">
+<!ENTITY ss.postdata.label2 "(바이트 단위, -1은 전부)">
+<!ENTITY sessionManger.enable "세션 관리자 쓰기">
+<!ENTITY crashRecovery.enable "충돌 후 복구 쓰기">
+<!ENTITY sm.StartExit "켤 때/끌 때">
+<!ENTITY sm.restore "복구">
+<!ENTITY sm.preserve "보존">
+<!ENTITY sm.start "브라우저를 시작할 때:">
+<!ENTITY sm.start.restore "세션 복구하기">
+<!ENTITY sm.start.ask "복구할지 물어 보기">
+<!ENTITY sm.start.nothing "세션 복구 안함">
+<!ENTITY sm.exit "브라우저를 닫을 때:">
+<!ENTITY sm.exit.save "세션 저장하기">
+<!ENTITY sm.exit.ask "저장할지 물어 보기">
+<!ENTITY sm.exit.nothing "저장 안함">
+<!ENTITY sm.startup "시작 세션:">
+<!ENTITY sm.lastsession "마지막 세션">
+<!ENTITY sm.previouslast "끝에서 두번째 세션">
+<!ENTITY sm.chooseifempty "비어 있으면 다른 것 선택하기">
+<!ENTITY sm.restore.options "세션을 복구할 때:">
+<!ENTITY sm.restore.overwrite "현재 창에 덮어 씌우기">
+<!ENTITY sm.restore.overwriteTabs "탭에 덮어 씌우기">
+<!ENTITY sm.restore.closedWinList "닫은 창 목록에 저장하기">
+<!ENTITY sm.restore.merge "하나의 창에 여러개의 창 연결하기">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.notrestore.label "시작할 때 복구 안하기">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "탭 상태 중 보존할 것:">
+<!ENTITY sm.preserve.history "방문 기록">
+<!ENTITY sm.preserve.protect "보호된 상태">
+<!ENTITY sm.preserve.locked "닫힌 상태">
+<!ENTITY sm.preserve.permission "기능 사용 여부">
+<!ENTITY sm.preserve.scroll1 "스크롤 위치">
+<!ENTITY sm.restore.winOptions "창 상태 중 보존할 것:">
+<!ENTITY sm.restore.selectedTab "선택된 탭">
+<!ENTITY sm.restore.closedTabs "닫은 탭 목록">
+<!ENTITY incompatible.extensions "몇몇 확장 기능이 Tab Mix Plus와 충돌합니다. 해당 확장 기능을 지우거나 끄는 것을 추천합니다.">
+<!ENTITY incompatible.button.label "목록 보이기">

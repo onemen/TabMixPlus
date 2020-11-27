@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Горячие клавиши">
+<!ENTITY shortcuts.edit "Редактирование горячих клавиш">
+<!ENTITY shortcuts.showAll "Показать все">
+<!ENTITY shortcuts.hideUnused "Скрыть неиспользуемые">
+<!ENTITY shortcuts.warning "Некоторые из горячих клавиш используются другими командами">
+<!ENTITY shortcuts.showDetails "Показать подробности">
+<!ENTITY shortcuts.hideDetails "Скрыть подробности">
+<!ENTITY shortcuts.switchToLast "Переключение на последнюю активную вкладку">
+<!ENTITY shortcuts.slideshow "Переключение режима слайд-шоу вкладок">
+<!ENTITY shortcuts.toggleFLST "Переключение фокуса при закрытии вкладки">
+<!ENTITY shortcuts.toggleFLST.tooltip "переключение между фокусировкой на вкладке справа и последней выбранной вкладкой">
+<!ENTITY shortcuts.placeholder "Нажмите модификатор и клавишу">
+<!ENTITY shortcuts.reset "Сбросить">
+<!ENTITY shortcuts.clear "Очистить">
+<!ENTITY shortcuts.inuse "Эта горячая клавиша уже используется">

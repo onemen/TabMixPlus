@@ -1,0 +1,471 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE bindings [
+<!ENTITY % identityDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+%identityDTD;
+<!ENTITY % globalDTD SYSTEM "chrome://global/locale/global.dtd">
+%globalDTD;
+]>
+
+<bindings id="tabmixbindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="tabbrowser-close-tab-button"
+           extends="chrome://global/content/bindings/toolbarbutton.xml#toolbarbutton">
+    <implementation>
+      <constructor>
+        <![CDATA[
+          this.classList.add("toolbarbutton-1");
+        ]]>
+      </constructor>
+    </implementation>
+    <handlers>
+      <handler event="click" button="1" action="TMP_ClosedTabs.undoCloseTab();"/>
+    </handlers>
+  </binding>
+
+  <binding id="tabmix-tabbrowser-tab" display="xul:hbox"
+            extends="chrome://tabmixplus/content/tab/tabbrowser_proxy.xml#tabmix-tabbrowser-tab-proxy">
+    <content context="tabContextMenu">
+      <xul:hbox xbl:inherits="selected=visuallyselected,hover"
+                class="tab-image-left tab-startcap tab-left tab-left-border"/>
+      <xul:hbox class="tab-drag-indicator-left"/>
+      <xul:stack class="tab-stack" flex="1">
+        <xul:hbox xbl:inherits="pinned,selected=visuallyselected,fadein"
+                  class="tab-background">
+          <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
+                    class="tab-background-start"/>
+          <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
+                    class="tab-background-middle"/>
+          <xul:hbox xbl:inherits="pinned,selected=visuallyselected"
+                    class="tab-background-end"/>
+        </xul:hbox>
+        <xul:vbox class="tab-progress-container">
+          <xul:progressmeter class="tab-progress" mode="normal"
+                             xbl:inherits="value=tab-progress,fadein,pinned,selected=visuallyselected"/>
+        </xul:vbox>
+        <xul:hbox xbl:inherits="pinned,selected=visuallyselected,titlechanged,attention"
+                  class="tab-content" align="center">
+          <xul:stack class="tab-icon" xbl:inherits="fadein,pinned,selected=visuallyselected">
+            <xul:image xbl:inherits="fadein,pinned,busy,progress,selected=visuallyselected"
+                       class="tab-throbber"
+                       role="presentation"/>
+            <xul:image xbl:inherits="src=image,loadingprincipal=iconLoadingPrincipal,fadein,pinned,selected=visuallyselected,busy,crashed,sharing"
+                       anonid="tab-icon-image"
+                       class="tab-icon-image"
+                       validate="never"
+                       role="presentation"/>
+            <xul:image class="tab-protect-icon"/>
+            <xul:image class="tab-lock-icon"/>
+            <xul:image class="tab-reload-icon"/>
+          </xul:stack>
+          <xul:image xbl:inherits="sharing,selected=visuallyselected"
+                     anonid="sharing-icon"
+                     class="tab-sharing-icon-overlay"
+                     role="presentation"/>
+          <xul:image xbl:inherits="crashed,busy,soundplaying,soundplaying-scheduledremoval,pinned,muted,blocked,selected=visuallyselected,activemedia-blocked"
+                     anonid="overlay-icon"
+                     class="tab-icon-overlay"
+                     role="presentation"/>
+          <xul:hbox class="tab-label-container"
+                    xbl:inherits="pinned,selected=visuallyselected,labeldirection"
+                    onoverflow="this.setAttribute('textoverflow', 'true');"
+                    onunderflow="this.removeAttribute('textoverflow');"
+                    flex="1">
+            <xul:label class="tab-text tab-label"
+                       tabmix="true"
+                       xbl:inherits="xbl:text=label,accesskey,fadein,pinned,selected=visuallyselected,attention"
+                       role="presentation"/>
+          </xul:hbox>
+          <xul:image xbl:inherits="soundplaying,soundplaying-scheduledremoval,pinned,muted,blocked,selected=visuallyselected,activemedia-blocked"
+                     anonid="soundplaying-icon"
+                     class="tab-icon-sound"
+                     role="presentation"/>
+          <xul:toolbarbutton anonid="tmp-close-button"
+                             xbl:inherits="fadein,pinned,selected=visuallyselected"
+                             class="tab-close-button close-icon"/>
+        </xul:hbox>
+      </xul:stack>
+      <xul:hbox class="tab-drag-indicator-right"/>
+      <xul:hbox xbl:inherits="selected=visuallyselected,hover"
+                class="tab-image-right tab-endcap tab-right tab-right-border"/>
+    </content>
+
+    <implementation>
+    <constructor>
+      <![CDATA[
+        if ('tabmix_inited' in this) {
+          return;
+        }
+        if (!Tabmix.isVersion(420)) {
+          let context = document.getElementById('context_closeTab');
+          this.setAttribute('closetabtext', context.getAttribute('label'));
+        }
+        this.tabmix_inited = true;
+      ]]>
+    </constructor>
+    <field name="mIsHover">
+      false
+    </field>
+    <field name="mButtonId">
+      0
+    </field>
+    <field name="mFocusId">
+      0
+    </field>
+    <field name="mSelect">
+      0
+    </field>
+    <field name="tabmix_mouseover">
+      0
+    </field>
+
+    <property name="_isProtected" readonly="true">
+      <getter><![CDATA[
+        return this.hasAttribute("protected") || this.pinned ||
+                  ("permaTabs" in window && this.hasAttribute("isPermaTab"));
+      ]]></getter>
+    </property>
+
+    <property name="mouseHoverSelect" readonly="true">
+      <getter><![CDATA[
+        try {
+          return Tabmix.prefs.getBoolPref("mouseOverSelect");
+        } catch (e) {
+          return false;
+        }
+      ]]></getter>
+    </property>
+    <property name="mouseDownSelect" readonly="true">
+      <getter><![CDATA[
+        try {
+          return Tabmix.prefs.getBoolPref("selectTabOnMouseDown");
+        } catch (e) {
+          return false;
+        }
+      ]]></getter>
+    </property>
+    <property name="mouseHoverSelectDelay" readonly="true">
+      <getter><![CDATA[
+        try {
+          return Tabmix.prefs.getIntPref("mouseOverSelectDelay");
+        } catch (e) {
+          return 250;
+        }
+      ]]></getter>
+    </property>
+    <property name="tabXDelay" readonly="true">
+      <getter><![CDATA[
+        try {
+          return Tabmix.prefs.getIntPref("tabs.closeButtons.delay");
+        } catch (e) {
+          return 0;
+        }
+      ]]></getter>
+    </property>
+
+    <property name="baseY"
+              readonly="true"
+              onget="return this.boxObject.y+this.boxObject.height;"/>
+
+    <method name="onMouseOver">
+      <parameter name="aEvent"/>
+      <body><![CDATA[
+        this.setHoverState(aEvent, true);
+        this.mButtonId = window.setTimeout(this.setShowButton, this.tabXDelay, this);
+        if (this.mouseHoverSelect)
+          this.mFocusId = window.setTimeout(this.doMouseHoverSelect, this.mouseHoverSelectDelay, this);
+
+        if (TabmixSvc.australis) {
+          this.tabmix_mouseover = window.setTimeout(() => {
+            clearTimeout(this.tabmix_mouseover);
+            TabmixTabbar.updateBeforeAndAfter(true);
+          }, 0);
+        }
+      ]]></body>
+    </method>
+
+    <method name="doMouseHoverSelect">
+      <parameter name="aTab"/>
+      <body><![CDATA[
+        if (!aTab || !aTab.parentNode)
+          return; // this tab already removed....
+
+        var b = aTab.parentNode.tabbrowser;
+        if (b.hasAttribute("preventMouseHoverSelect"))
+          b.removeAttribute("preventMouseHoverSelect");
+        else if (aTab.mIsHover)
+          aTab.parentNode.selectedItem = aTab;
+      ]]></body>
+    </method>
+
+    <method name="setShowButton">
+      <parameter name="aTab"/>
+      <body><![CDATA[
+        if (!aTab || !aTab.parentNode)
+          return; // this tab already removed....
+
+        var pref = Tabmix.prefs.getIntPref("tabs.closeButtons");
+        if (pref != 2 && pref != 4)
+          return;
+
+        if (aTab.mIsHover && aTab.getAttribute("showbutton") != "on" &&
+            !aTab.hasAttribute("dragged")) {
+          if (TabmixTabbar.widthFitTitle)
+            aTab.style.setProperty("width", Tabmix.getBoundsWithoutFlushing(aTab).width + "px", "important");
+          aTab.setAttribute("showbutton", "on");
+          aTab.parentNode.__showbuttonTab = aTab;
+        }
+      ]]></body>
+    </method>
+
+    <method name="onMouseOut">
+      <parameter name="aEvent"/>
+      <body><![CDATA[
+        this.setHoverState(aEvent, false);
+        clearTimeout(this.mButtonId);
+        this.mButtonId = window.setTimeout(this.removeShowButton, this.tabXDelay, this);
+        if (this.mouseHoverSelect && this.mFocusId)
+          clearTimeout(this.mFocusId);
+
+        if (TabmixSvc.australis) {
+          clearTimeout(this.tabmix_mouseover);
+          let positionalTabs = Tabmix.tabsUtils._tabmixPositionalTabs;
+          if (positionalTabs.beforeHoveredTab) {
+            positionalTabs.beforeHoveredTab.removeAttribute("tabmix-removed-beforehovered");
+            positionalTabs.beforeHoveredTab = null;
+          }
+          if (positionalTabs.afterHoveredTab) {
+            positionalTabs.afterHoveredTab.removeAttribute("tabmix-removed-afterhovered");
+            positionalTabs.afterHoveredTab = null;
+          }
+        }
+      ]]></body>
+    </method>
+
+    <method name="setHoverState">
+      <parameter name="aEvent"/>
+      <parameter name="aOver"/>
+      <body><![CDATA[
+        var anonid = aEvent.originalTarget &&
+            typeof aEvent.originalTarget.getAttribute == "function" &&
+            aEvent.originalTarget.getAttribute("anonid");
+        if (anonid == "tmp-close-button") {
+          this.mOverCloseButton = aOver;
+        }
+        this.mIsHover = aOver;
+      ]]></body>
+    </method>
+
+
+    <method name="removeShowButton">
+      <parameter name="aTab"/>
+      <body><![CDATA[
+        if (!aTab || !aTab.parentNode)
+          return; // this tab already removed....
+
+        if (!aTab.mIsHover && aTab.hasAttribute("showbutton")) {
+          aTab.removeAttribute("showbutton");
+          aTab.style.removeProperty("width");
+          // we use this in Linux to prevent underflow that triggered by hiding
+          // the close button
+          aTab.setAttribute("showbutton_removed", true);
+          setTimeout(tab => tab.removeAttribute("showbutton_removed"), 50, aTab);
+          if (aTab == aTab.parentNode.__showbuttonTab)
+            delete aTab.parentNode.__showbuttonTab;
+        }
+      ]]></body>
+    </method>
+
+    <method name="onMouseCommand">
+      <parameter name="aEvent"/>
+      <parameter name="aSelectNewTab"/>
+      <body><![CDATA[
+        var isSelected = this == this.parentNode.selectedItem;
+        Tabmix.setItem(this, "clickOnCurrent",
+          isSelected && aEvent.detail == 1 || null);
+        if (isSelected)
+          return;
+
+        // don't allow mouse click/down with modifiers to select tab
+        if (aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
+          aEvent.stopPropagation();
+        else if (aSelectNewTab) {
+          this.parentNode._selectNewTab(this);
+          let isTabFocused = false;
+          try {
+            isTabFocused = (document.commandDispatcher.focusedElement == this);
+          } catch (e) {}
+          if (!isTabFocused) {
+            this.setAttribute("ignorefocus", "true");
+            this.mSelect = setTimeout(() => this.removeAttribute("ignorefocus"), 0);
+          }
+        }
+        // on mousedown event fall through to default mousedown from tabbox.xml
+      ]]></body>
+    </method>
+
+    <method name="clearTimeouts">
+      <body><![CDATA[
+        var timeouts = ["mSelect", "mFocusId", "mButtonId", "autoReloadTimerID", "tabmix_mouseover"];
+        timeouts.forEach(function(aTimeout) {
+          if (aTimeout in this && this[aTimeout]) {
+            clearTimeout(this[aTimeout]);
+            this[aTimeout] = null;
+          }
+        }, this);
+      ]]></body>
+    </method>
+
+    <destructor>
+      <![CDATA[
+          this.clearTimeouts();
+      ]]>
+    </destructor>
+
+    </implementation>
+
+    <handlers>
+      <handler event="mouseover">
+      <![CDATA[
+        this.onMouseOver(event);
+      ]]>
+      </handler>
+
+      <handler event="mouseout">
+      <![CDATA[
+        this.onMouseOut(event);
+      ]]>
+      </handler>
+
+      <handler event="mousedown" button="0" phase="capturing">
+      <![CDATA[
+        if (this.selected) {
+          this.style.MozUserFocus = 'ignore';
+          void this.clientTop; // just using this to flush style updates
+        }
+        // prevent chrome://global/content/bindings/tabbox.xml#tab mousedown handler
+        if (this.mOverCloseButton || this._overPlayingIcon) {
+          event.stopPropagation();
+        } else if (this.mouseDownSelect) {
+          this.onMouseCommand(event);
+        } else {
+          event.stopPropagation();
+        }
+      ]]>
+      </handler>
+    </handlers>
+  </binding>
+
+  <!-- tabbrowser-tabs bindings for Firefox 4.0+ -->
+  <binding id="tabmix-tabbrowser-tabs"
+           extends="chrome://tabmixplus/content/tab/tabbrowser_proxy.xml#tabmix-tabbrowser-tabs-proxy">
+    <implementation implements="nsIDOMEventListener">
+
+      <constructor>
+        <![CDATA[
+          Tabmix.initialization.init.initialized = false;
+          Tabmix.initialization.run("init", this);
+        ]]>
+      </constructor>
+
+      <method name="_notifyBackgroundTab">
+        <parameter name="aTab"/>
+        <body><![CDATA[
+          if (aTab.pinned || aTab.hidden) {
+            return;
+          }
+          // Is the new tab already completely visible?
+          if (Tabmix.tabsUtils.isElementVisible(aTab))
+            return;
+
+          var scrollRect = this.mTabstrip.scrollClientRect;
+          var tab = aTab.getBoundingClientRect();
+          if (!Tabmix.isVersion(570)) {
+            this.mTabstrip._calcTabMargins(aTab);
+          }
+
+          // DOMRect left/right properties are immutable.
+          tab = {left: tab.left, right: tab.right, top: tab.top, bottom: tab.bottom};
+
+          if (this.mTabstrip.smoothScroll) {
+            let selected = !this.selectedItem.pinned &&
+                           this.selectedItem.getBoundingClientRect();
+
+            if (!Tabmix.isVersion(570) && Tabmix.isVersion(310) && !TabmixTabbar.isMultiRow) {
+              if (selected) {
+                selected = {left: selected.left, right: selected.right};
+                // Need to take in to account the width of the left/right margins on tabs.
+                selected.left += this.mTabstrip._tabMarginLeft;
+                selected.right -= this.mTabstrip._tabMarginRight;
+              }
+
+              tab.left += this.mTabstrip._tabMarginLeft;
+              tab.right -= this.mTabstrip._tabMarginRight;
+            }
+
+            // Can we make both the new tab and the selected tab completely visible?
+            if (!selected ||
+                !TabmixTabbar.isMultiRow && Math.max(tab.right - selected.left, selected.right - tab.left) <= scrollRect.width ||
+                 TabmixTabbar.isMultiRow && Math.max(tab.bottom - selected.top, selected.bottom - tab.top) <= scrollRect.height) {
+              if (Tabmix.tabsUtils.overflow)
+                this.mTabstrip.ensureElementIsVisible(aTab);
+              return;
+            }
+
+            const scrollByPixels = Tabmix.isVersion(570) ? "scrollByPixels" : "_smoothScrollByPixels";
+            if (TabmixTabbar.isMultiRow)
+              this.mTabstrip[scrollByPixels](selected.top - scrollRect.top);
+            else
+              this.mTabstrip[scrollByPixels](this.mTabstrip._isRTLScrollbox ?
+                selected.right - scrollRect.right : selected.left - scrollRect.left);
+          }
+
+          if (Tabmix.isVersion(540)) {
+            if (!this._animateElement.hasAttribute("highlight")) {
+              this._animateElement.setAttribute("highlight", "true");
+              setTimeout(ele => {
+                ele.removeAttribute("highlight");
+              }, 150, this._animateElement);
+            }
+          } else if (!this._animateElement.hasAttribute("notifybgtab")) {
+            this._animateElement.setAttribute("notifybgtab", "true");
+            setTimeout(ele => {
+              ele.removeAttribute("notifybgtab");
+            }, 150, this._animateElement);
+          }
+        ]]></body>
+      </method>
+
+      <!-- Deprecated stuff, implemented for backwards compatibility. -->
+      <method name="isTabVisible">
+        <parameter name="aIndex"/>
+        <body><![CDATA[
+          return Tabmix.tabsUtils.isElementVisible(this.childNodes.item(aIndex));
+        ]]></body>
+      </method>
+      <method name="ensureTabIsVisible">
+        <parameter name="aIndex"/>
+        <parameter name="aSmoothScroll"/>
+        <body><![CDATA[
+          if (!this.isTabVisible(aIndex)) {
+            const instantScroll = Tabmix.isVersion(570) ? !aSmoothScroll : aSmoothScroll;
+            this.mTabstrip.ensureElementIsVisible(this.childNodes.item(aIndex), instantScroll);
+          }
+        ]]></body>
+      </method>
+      <property name="lastTabVisible" readonly="true">
+        <getter><![CDATA[
+          return Tabmix.tabsUtils.isElementVisible(Tabmix.visibleTabs.last);
+        ]]></getter>
+      </property>
+
+      <property name="collapsedTabs" onget="return 0;" onset="return 0;"/>
+      <property name="realCollapsedTabs" readonly="true" onget="return 0;"/>
+
+    </implementation>
+  </binding>
+
+</bindings>

@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Stilar">
+<!ENTITY styles.label "Anpassa stilar">
+<!ENTITY currentTab.label "Aktuell flik">
+<!ENTITY unloadedTabs.label "Oinlästa flikar">
+<!ENTITY unreadTab.label "Olästa flikar">
+<!ENTITY hideRGB.label "Dölj RGB">
+<!ENTITY showRGB.label "Visa RGB">
+<!ENTITY unreadAfterReload.label "Gör flik oläst efter uppdatering">
+<!ENTITY disableBackground.label "Inaktivera anpassade bakgrundsfärger">
+<!ENTITY squaredTabs.label "Tillämpa bakgrundsfärg för fyrkantiga flikar">
+<!ENTITY otherTabs.label "Andra flikar">
+<!ENTITY italic.label "Kursiv">
+<!ENTITY bold.label "Fet">
+<!ENTITY underline.label "Understruken">
+<!ENTITY textcolor.label "Textfärg">
+<!ENTITY bgColor.label "Bakgrundsfärg">
+<!ENTITY bgTopColor.label "överkant">
+<!ENTITY bgBottomColor.label "nederkant">
+<!ENTITY useThis.label "Använd denna stil för">
+<!ENTITY opacity.label "opacitet">

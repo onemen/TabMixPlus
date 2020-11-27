@@ -1,0 +1,69 @@
+checkbox_tmp {
+  -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#checkbox_tmp") !important;
+}
+
+#stylespanels > tabpanel {
+  -moz-binding: url(chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xml#tabstylepanel);
+}
+
+.tabStyles_underline span {
+   text-decoration: underline;
+}
+
+#stylestabs > tab {
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+
+/* Chromifox theme force button height to 25px */
+#AppearanceTabBox[chromifox=true] .spinbuttons-button {
+  max-height: 11px !important;
+}
+
+checkbox[anonid="useThis"][disabled] .checkbox-check {
+  visibility: hidden;
+}
+
+checkbox[anonid="useThis"][disabled] {
+  color: black;
+}
+
+colorbox {
+  -moz-binding: url(chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xml#colorbox);
+}
+
+.rgbcontrol {
+  margin-left: -1px;
+  margin-right: 0;
+}
+
+.rgbcontrol > .textbox-input-box > .numberbox-input {
+  max-width: 3em;
+}
+
+.bgBottom, .bgTop {
+  -moz-margin-start: 35px;
+}
+
+.dialog-button[dlgtype="extra2"] {
+  -moz-appearance: none;
+  border: 1px solid transparent;
+}
+
+hbox[_hidebox="true"],
+colorbox[_hidebox="true"],
+label[_hidebox="true"] {
+  visibility: hidden;
+}
+
+dialog[hide-RGB="true"] colorbox > *:not([class="visible"]) {
+  visibility: hidden;
+}
+
+.colorpicker-button-colorbox[disabled] {
+  border-color: rgba(0,0,0,.2);
+}
+
+.dialog-button[icon="help"] {
+  list-style-image: url("chrome://global/skin/icons/question-16.png");
+}

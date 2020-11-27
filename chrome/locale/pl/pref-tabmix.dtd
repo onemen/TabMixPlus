@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Odnośniki">
+<!ENTITY tab.events "Karty">
+<!ENTITY tab.mouse "Mysz">
+<!ENTITY tab.appearance "Wygląd">
+<!ENTITY tab.menu "Menu">
+<!ENTITY tab.session "Sesja">
+<!ENTITY tab.incompatible "Błąd">
+<!ENTITY apply.label "Zastosuj">
+<!ENTITY settings.export "Eksportuj ustawienia">
+<!ENTITY settings.import "Importuj ustawienia">
+<!ENTITY settings.sync "Synchronizuj ustawienia">
+<!ENTITY settings.default "Przywróć ustawienia domyślne">
+<!ENTITY settings.revert "Odwróć">
+<!ENTITY generalWindowOpen.label "Odnośniki otwierające się w oknach otwieraj w">
+<!ENTITY externalLink.useSeparate.label "Używaj oddzielnych ustawień dla odnośników z innych aplikacji">
+<!ENTITY externalLinkTarget.label "Odnośniki z innych aplikacji otwieraj w">
+<!ENTITY linkTarget.tab "nowej karcie">
+<!ENTITY linkTarget.window "nowym oknie">
+<!ENTITY linkTarget.current "aktywnej karcie">
+<!ENTITY linkTarget.accesskey "A">
+<!ENTITY divertedWindowOpen.label "Wyskakujące okna">
+<!ENTITY divertedWindowOpen.all "Otwieraj wszystkie wyskakujące okna w kartach">
+<!ENTITY divertedWindowOpen.some "Zezwalaj skryptom na otwieranie wyskakujących okien o zmiennej wielkości">
+<!ENTITY divertedWindowOpen.none "Zezwalaj skryptom na otwieranie wszystkich wyskakujących okien">
+<!ENTITY linkTarget.label "Odnośniki z atrybutem „target” otwieraj w aktywnej karcie">
+<!ENTITY targetIsFrame.label "Odnośniki z atrybutem „target” otwieraj w istniejącej ramce aktywnej karty">
+<!ENTITY download.label "Nie zezwalaj na otwieranie pustych kart podczas pobierania plików">
+<!ENTITY edit.label "Typy plików">
+<!ENTITY speLink.label "Wymuszaj otwieranie w nowych kartach">
+<!ENTITY speLink.none "Nie wymuszaj">
+<!ENTITY speLink.allLinks "wszystkich odnośników">
+<!ENTITY speLink.external "odnośników do innych witryn">
+<!ENTITY singleWindow.label "Tryb pojedynczego okna - Single Window Mode">
+<!ENTITY newTabs.label "Nowe karty">
+<!ENTITY tabOpen.label "Otwieranie kart">
+<!ENTITY tabFocus.label "Zachowanie kart">
+<!ENTITY tabClose.label "Zamykanie kart">
+<!ENTITY tabMerge.label "Łączenie kart">
+<!ENTITY tabFeature.label "Właściwości kart">
+<!ENTITY newtab.label "Otwieraj w nowej karcie">
+<!ENTITY replaceLastTabWith1.label "Gdy jest zamykana ostatnia karta zamień ją na">
+<!ENTITY newtab.blank "pustą stronę">
+<!ENTITY newtab.home "stronę startową">
+<!ENTITY newtab.current "aktywną stronę">
+<!ENTITY newtab.duplicate "powielaną stronę">
+<!ENTITY newtab.location.1 "stronę o poniższym adresie">
+<!ENTITY newtab.placeholder.label "Zestaw stron przycisku Nowa karta">
+<!ENTITY location.label.1 "Adres">
+<!ENTITY focusContent.label "Strony z treścią uaktywniaj podczas wczytywania">
+<!ENTITY openTabNext.label "Otwieraj nowe karty za aktywną kartą">
+<!ENTITY openOtherTabNext.label "Otwieraj inne karty za aktywną kartą">
+<!ENTITY relatedAfterCurrent.label "Tylko jeśli są z nią powiązane">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Umieszczaj powielone karty za ich oryginałami">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Zmień kolejność otwierania">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Otwieraj nową kartę za ostatnio otwartą kartą z aktywnej karty">
+<!ENTITY moveSwitchToTabNext.label "Umieszczaj przełączaną kartę za aktywną kartą">
+<!ENTITY loadTabsProgressively.label "Wczytuj karty sukcesywnie">
+<!ENTITY restoreOnDemand.label "Nie wczytuj kart przed wybraniem">
+<!ENTITY openMoreThan.label "gdy jest otwierane więcej niż">
+<!ENTITY tabs.label "kart">
+<!ENTITY lockTabs.label "Blokowanie kart">
+<!ENTITY lockNewTabs.label "Blokuj nowe karty">
+<!ENTITY lockAppTabs.label "Blokuj karty programów">
+<!ENTITY updateLockState.label "Zastosuj zmiany w otwartych kartach">
+<!ENTITY openNewTab.label "Otwieraj w kartach witryny wywołane z:">
+<!ENTITY openBookmarks.label "zakładek">
+<!ENTITY openPlacesGroups.label "Grupy zakładek/historii">
+<!ENTITY openPlacesGroups.tooltip "Nie zastępuj kart, gdy jest otwierana grupa zakładek/historii">
+<!ENTITY openHistory.label "historii">
+<!ENTITY openUrl.label "paska adresu">
+<!ENTITY openSearch.label "paska wyszukiwania">
+<!ENTITY middlecurrent1.label "Kliknięcie ś.p lub Ctrl+kliknięcie otwiera elementy w aktywnej karcie">
+<!ENTITY middlecurrent.tooltip "Tylko dla zakładek, historii i odnośników wymuszających otwieranie w nowych kartach">
+<!ENTITY tabFocus.caption "Uaktywniaj karty otwierane z:">
+<!ENTITY selectTab.label "odnośników">
+<!ENTITY selectDivertedTab.label "przekierowanych okien">
+<!ENTITY selectTabFromExternal.label "innych aplikacji">
+<!ENTITY selectTabCommand.label "poleceń nowych kart">
+<!ENTITY contextMenuSearch.label "menu kontekstowego „Szukaj w…”">
+<!ENTITY selectTabBH.label "zakładek/historii">
+<!ENTITY duplicateTab.label "powielonych kart">
+<!ENTITY inversefocus2.label "Kliknięcie ś.p lub Ctrl+kliknięcie odwraca zachowanie:">
+<!ENTITY warning.caption.label "Ostrzeżenia">
+<!ENTITY warnOnCloseMultipleTabs.label "Ostrzegaj przed zamknięciem wielu kart">
+<!ENTITY warnOnCloseProtected1.label "Ostrzegaj przed zamknięciem okna z zabezpieczonymi kartami">
+<!ENTITY warnOnCloseWindow1.label "Ostrzegaj przed zamknięciem okna z wieloma kartami">
+<!ENTITY lasttab.caption.label "Zamykanie ostatniej karty">
+<!ENTITY keepWindow.label.3.1 "Nie zamykaj okna, gdy jest zamykana ostatnia karta">
+<!ENTITY keeptab.label "Nie zamykaj ostatniej karty">
+<!ENTITY closeOnMerge.label "Zamykaj łączone okna po połączeniu">
+<!ENTITY warnOnMerge.label "Ostrzegaj przed zamknięciem niepołączonych kart">
+<!ENTITY currenttab.caption.label "Zamykanie aktywnej karty">
+<!ENTITY focusTab.labelBegin "Gdy jest zamykana aktywna karta, uaktywniaj kartę">
+<!ENTITY focusTab.firstTab "pierwszą">
+<!ENTITY focusTab.leftTab "lewą">
+<!ENTITY focusTab.rightTab "prawą">
+<!ENTITY focusTab.lastTab "ostatnią">
+<!ENTITY focusTab.lastSelectedTab "poprzednio aktywną">
+<!ENTITY focusTab.openerTab "po prawej stronie zamykanej">
+<!ENTITY focusTab.openerTab.rtl "po lewej stronie zamykanej">
+<!ENTITY focusTab.lastOpenedTab "ostatnio otwieraną">
+<!ENTITY undoClose.label "Przywracaj zamknięte karty">
+<!ENTITY undoCloseCache.label "Pojemność schowka:">
+<!ENTITY undoClosepos.label "Odtwarzaj pierwotne położenie kart">
+<!ENTITY menuonlybutton.label "Przycisk „Lista zamkniętych kart” wyświetla tylko listę">
+<!ENTITY ctrltab.label "Skrót klawiszowy [Ctrl+Tab] przełącza w kolejności najczęściej oglądanych kart">
+<!ENTITY cmdtab.label "Skrót klawiszowy [command+Tab] przełącza w kolejności najczęściej oglądanych kart">
+<!ENTITY ctrltab.tabPreviews "Wyświetlaj podglądy kart">
+<!ENTITY ctrltab.popup "Skrót klawiszowy [Ctrl+Tab] wyświetla rozwijaną listę kart">
+<!ENTITY cmdtab.popup "Skrót klawiszowy [command+Tab] wyświetla rozwijaną listę kart">
+<!ENTITY tabpopup.mouse "Uaktywniaj kartę wskazaną kursorem">
+<!ENTITY mergeNoTabSelection.label "Łączenie okien, gdy nie zaznaczono żadnych kart">
+<!ENTITY mergeTabSelection.label "Łączenie okien po zaznaczeniu kart">
+<!ENTITY mergeall.label "Łącz wszystkie okna w jedno">
+<!ENTITY mergelastfocused.label "Łącz tylko aktywne okno z poprzednio aktywnym">
+<!ENTITY mergePopups.label "Dołączaj także wyskakujące okna">
+<!ENTITY popupNextToOpener.label "Umieszczaj wyskakujące okna za oknami, z których są one wywoływane">
+<!ENTITY activateSlideshow.label "Naciśnięcie klawisza 1 powoduje rotację kart co">
+<!ENTITY toggleAnimation.label "Wyłącz przełączanie animacji kart">
+<!ENTITY reloadEvery.matchAddress.label "Odświeżaj kartę bez względu na jej adres">
+<!ENTITY reloadEvery.onReloadButton.label "Wyświetlaj menu funkcji Odświeżaj co… w przycisku narzędziowym Odśwież">
+<!ENTITY seconds.label "s">
+<!ENTITY minutes.label "min">
+<!ENTITY tabBarAppearance.label "Pasek kart">
+<!ENTITY tabAppearance.label "Karta">
+<!ENTITY toolBarAppearance.label "Pasek narzędzi">
+<!ENTITY show.ontabbar.label "Wyświetlaj na pasku kart">
+<!ENTITY show.ontab.label "Wyświetlaj na etykiecie karty">
+<!ENTITY dragNewTabButton.tooltip "Przeciągnij przycisk „Nowa karta” na pasek kart, by włączyć te funkcję">
+<!ENTITY hideTabBarButton.label "Przycisk zamykania kart">
+<!ENTITY newTabButton.label "Przycisk Nowa karta">
+<!ENTITY newTabButton.position.left.label "po lewej stronie">
+<!ENTITY newTabButton.position.right.label "po prawej stronie">
+<!ENTITY newTabButton.position.afterlast.label "za ostatnią etykietą">
+<!ENTITY allTabsButton.label "Przycisk Wszystkie karty">
+<!ENTITY tabBarSpace.label "Dodatkową przestrzeń po obu stronach paska kart">
+<!ENTITY tabBarSpace.tooltip "Gdy jest otwartych dużo kart, przestrzeń ta służy dla przeciągania i kliknięć na pasku kart">
+<!ENTITY tabbar.label "Nie wyświetlaj paska kart, gdy jest otwarta tylko jedna karta">
+<!ENTITY moveTabOnDragging.label "Podczas przeciągania karty przenoś ją go bezpośrednio">
+<!ENTITY dropIndicator.label "Wskaźnik miejsca upuszczenia">
+<!ENTITY dropIndicator-native.label "natywny styl">
+<!ENTITY dropIndicator-builtin.label "wbudowany styl">
+<!ENTITY verticalTabbar.description1 "Te ustawienia są kontrolowane przez inne dodatki mające zastosowanie do pionowego ustawienia kart.">
+<!ENTITY tabBarPosition.label "Położenie paska kart:">
+<!ENTITY tabBarPosition.top.label "Na górze">
+<!ENTITY tabBarPosition.bottom.label "Na dole">
+<!ENTITY tabScroll.label "Gdy etykiety kart nie mieszczą się na pasku">
+<!ENTITY tabScroll.none "zastosuj domyślny sposób przewijania">
+<!ENTITY tabScroll.leftRightButtons "wyświetlaj przyciski przewijania po obu stronach paska">
+<!ENTITY tabScroll.rightButtons "wyświetlaj przyciski przewijania po prawej stronie paska">
+<!ENTITY tabScroll.rightButtons.rtl "wyświetlaj przyciski przewijania po lewej stronie paska">
+<!ENTITY tabScroll.multibar "wyświetlaj je w wielu rzędach">
+<!ENTITY maxrow.label "Maksymalna liczba wyświetlanych rzędów etykiet kart:">
+<!ENTITY pinnedTabScroll.label "Zezwalaj na przewijanie przypiętych kart">
+<!ENTITY offsetAmountToScroll.label "Podczas przewijania wyświetlaj część następnej poza zasięgiem wzroku karty">
+<!ENTITY smoothScroll.label "Włącz płynne przewijanie">
+<!ENTITY scrolldelay.label "Opóźnienie przewijania (czas pomiędzy powtórnym przewijaniem)">
+<!ENTITY currenttab.style.label "aktywną kartę">
+<!ENTITY unloadedtabs.style.label "niewczytane karty">
+<!ENTITY unreadtabs.style.label "nieobejrzane karty">
+<!ENTITY othertabs.style.label "inne karty">
+<!ENTITY setstyles.label "Określ style">
+<!ENTITY extraIcons.label1 "Ikony dla">
+<!ENTITY extraIcons.locked "zablokowana">
+<!ENTITY extraIcons.protected "zabezpieczona">
+<!ENTITY extraIcons.autoreload "automatyczne odświeżanie">
+<!ENTITY extraIcons.hideonpinned "Ukryj przypięte karty">
+<!ENTITY progressMeter.label "Pasek postępu na etykietach kart">
+<!ENTITY showTabX.labelBegin "Przycisk zamykania karty">
+<!ENTITY showTabX.left "umieszczaj po lewej stronie etykiety">
+<!ENTITY showTabX.rtl "umieszczaj po prawej stronie etykiety">
+<!ENTITY milliseconds.label "ms">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "22em">
+<!ENTITY showTabX.always "wyświetlaj na wszystkich etykietach kart">
+<!ENTITY showTabX.current "wyświetlaj tylko na etykiecie aktywnej karty">
+<!ENTITY showTabX.hover "wyświetlaj po wskazaniu kursorem myszy etykiety karty po">
+<!ENTITY showTabX.alwaysExeption "wyświetlaj na wszystkich etykietach kart szerszych niż">
+<!ENTITY showTabX.currentHover "wyświetlaj na aktywnej i wskazanej kursorem myszy etykiecie karty po">
+<!ENTITY minWidth.label "Szerokość etykiety karty:">
+<!ENTITY widthTo.label "do">
+<!ENTITY widthPixels.label "pikseli">
+<!ENTITY onLeftDisabled.label "W aktualnie używanym motywie nie można umieścić przycisku po lewej stronie">
+<!ENTITY onLeftDisabled.tst.label "Gdy dodatek treeStyleTab jest zainstalowany, nie można umieścić przycisku po lewej stronie">
+<!ENTITY flexTabs.label "Dopasuj szerokość etykiety karty do tytułu">
+<!ENTITY bookastitle.label "Używaj nazwy zakładki jako tytułu karty">
+<!-- LOCALIZATION NOTE:           change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Tutaj można wybrać przyciski Tabmix Plusa, które będą wyświetlane na pasku narzędzi">
+<!ENTITY toolbar.button.label "Dostosuj">
+<!ENTITY toolbar.visible.caption "Wyświetlane przyciski">
+<!ENTITY toolbar.novisible.label "Żadne przyciski nie są wyświetlane">
+<!ENTITY toolbar.hidden.caption "Ukryte przyciski">
+<!ENTITY toolbar.nohidden.label "Nie ma ukrytych przycisków">
+<!ENTITY mouseGesture.label "Gesty myszy">
+<!ENTITY mouseClick.label "Użycie przycisków myszy">
+<!ENTITY mouseHoverSelect.labelBegin "Po umieszczeniu wskaźnika myszy nad etykietą karty uaktywniaj kartę po">
+<!ENTITY tabFlip.label "Kliknięcie etykiety aktywnej karty przełącza do poprzednio aktywnej karty">
+<!ENTITY tabFlip.delay "Opóźnienie wykonania">
+<!ENTITY clickFocus.label "Uaktywniaj kartę po pełnym cyklu kliknięcia przyciskiem myszy (naciśnięcie i puszczenie przycisku)">
+<!ENTITY removeEntries.label "Kliknięcie ś.p.m. usuwa elementy z rozwijanych list Tab Mix Plusa">
+<!ENTITY lockTabSizingOnClose.label "Po zamknięciu karty etykiety innych kart nie zmieniają szerokości, gdy kursor jest na pasku kart">
+<!ENTITY removeEntries.tooltip "Pozwala na usuwanie takich elementów list jak: zamknięte karty, okna i zapisane sesje">
+<!ENTITY tabbarscrolling.caption "Gdy przewijasz nad paskiem kart">
+<!ENTITY tabbarscrolling.holdShift.label "Aby przełączać się pomiędzy tymi opcjami, wciśnij i przytrzymaj klawisz Shift.">
+<!ENTITY tabbarscrolling.selectTab.label "Zmień wybraną kartę">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Przewijaj wszystkie karty">
+<!ENTITY tabbarscrolling.inverse.label "Odwróć kierunek przewijania">
+<!ENTITY double.label "Dwukrotne kliknięcie">
+<!ENTITY middle.label "Kliknięcie ś.p.m.">
+<!ENTITY ctrl.label "Ctrl+kliknięcie">
+<!ENTITY cmd.label "Cmd+kliknięcie">
+<!ENTITY shift.label "Shift+kliknięcie">
+<!ENTITY alt.label "Alt+kliknięcie">
+<!ENTITY ontab.label "Etykieta karty">
+<!ENTITY ontabbar.label "Pasek kart">
+<!ENTITY clicktab.label "Wybierz działanie, jakie zostanie wykonane po kliknięciu etykiety karty/paska kart">
+<!ENTITY ontabbar.dblClick.label "Nie zezwalaj na zmianę rozmiaru okna poprzez dwukrotne kliknięcie paska kart">
+<!ENTITY ontabbar.click.label "Nie zezwalaj na przeciąganie okna po kliknięciu paska kart">
+<!ENTITY clicktab.default "Domyślne Firefoksa lub innego rozszerzenia">
+<!ENTITY clicktab.nothing "Brak reakcji">
+<!ENTITY clicktab.addtab "Otwórz nową kartę">
+<!ENTITY clicktab.duplicatetab "Powiel kartę">
+<!ENTITY clicktab.duplicatetabw "Powiel kartę w nowym oknie">
+<!ENTITY clicktab.detachtab "Przenieś kartę do nowego okna">
+<!ENTITY clicktab.protecttab "Zabezpiecz kartę">
+<!ENTITY clicktab.locktab "Blokuj kartę">
+<!ENTITY clicktab.freezetab "Zamroź kartę">
+<!ENTITY clicktab.renametab "Pozwól na zmianę nazwy karty">
+<!ENTITY clicktab.copyTabUrl "Kopiuj adres URL karty do schowka">
+<!ENTITY clicktab.copyUrlFromClipboard "Wczytaj adres URL ze schowka">
+<!ENTITY clicktab.selectMerge "Zaznacz kartę do połączenia">
+<!ENTITY clicktab.mergeTabs "Połącz okna">
+<!ENTITY clicktab.bookTab "Dodaj zakładkę do karty">
+<!ENTITY clicktab.bookTabs "Dodaj zakładki do wszystkich kart">
+<!ENTITY clicktab.reloadtab "Odśwież kartę">
+<!ENTITY clicktab.reloadtabs "Odśwież wszystkie karty">
+<!ENTITY clicktab.reloadothertabs "Odśwież pozostałe karty">
+<!ENTITY clicktab.reloadlefttabs "Odśwież karty po lewej stronie">
+<!ENTITY clicktab.reloadrighttabs "Odśwież karty po prawej stronie">
+<!ENTITY clicktab.autoReloadTab "Uaktywnij/dezaktywuj automatyczne odświeżanie kart">
+<!ENTITY clicktab.removeall "Zamknij wszystkie karty">
+<!ENTITY clicktab.removeother "Zamknij inne karty">
+<!ENTITY clicktab.removesimilar "Zamknij karty pochodzące z tej samej domeny">
+<!ENTITY clicktab.removetoLeft "Zamknij karty po lewej stronie">
+<!ENTITY clicktab.removetoRight "Zamknij karty po prawej stronie">
+<!ENTITY clicktab.uctab "Przywróć zamkniętą kartę">
+<!ENTITY clicktab.ucatab "Przywróć wszystkie zamknięte karty">
+<!ENTITY clicktab.snapback "Powróć do poprzednio aktywnej karty">
+<!ENTITY clicktab.ietab "Otwórz kartę w IE">
+<!ENTITY contentLoad "Kliknięcie ś.p.m. wczytuje adres URL ze schowka">
+<!ENTITY context.tab "Menu kontekstowe kart">
+<!ENTITY context.main "Główne menu kontekstowe">
+<!ENTITY context.tools "Menu Narzędzia">
+<!ENTITY showOnTabbar.label "Wyświetlaj menu kontekstowe kart na pasku kart">
+<!ENTITY showtabBarContext.label "Wyświetlaj w menu kontekstowym kart elementy:">
+<!ENTITY showContentAreaContext.label "Wyświetlaj w głównym menu kontekstowym elementy:">
+<!ENTITY showToolsMenu.label "Wyświetlaj w menu Narzędzia elementy:">
+<!ENTITY startupHomePage1.label "wyświetlaj stronę startową">
+<!ENTITY startupBlankPage.label "wyświetlaj pustą stronę">
+<!ENTITY startupLastSession1.label "wyświetlaj okna i karty z poprzedniej sesji">
+<!ENTITY sm.extension.description1 "Tab Mix Plus wykrył, że jest zainstalowane rozszerzenie Session Manager">
+<!ENTITY sm.extension.description2 "Menedżer sesji Tab Mix Plusa zostanie wyłączony">
+<!ENTITY sm.extension.description3 "Można kliknąć na przycisku po prawej stronie, aby otworzyć opcje rozszerzenia Session Manager">
+<!ENTITY sm.extension.description5 "Konwertuj dane sesji z formatu Tab Mix Plusa na format Session Managera">
+<!ENTITY sm.extension.convert.label "Konwertuj">
+<!ENTITY sm.extension.chooseFile.label1 "Konwertuj dane sesji Tab Mix Plusa z aktywnego profilu">
+<!ENTITY sm.extension.chooseFile.label2 "Wybierz dane do konwersji">
+<!ENTITY ss.enable.label "Używaj menedżera sesji Firefoksa">
+<!ENTITY ss.enable.tooltip "Odznacz tę opcję, aby używać menedżera sesji Tab Mix Plusa">
+<!ENTITY ss.advanced_setting "Ustawienia zaawansowane">
+<!ENTITY ss.advanced_setting.warning "Nie zmieniaj tych ustawień, jeżeli nie masz o nich odpowiedniej wiedzy!">
+<!ENTITY ss.interval "Minimalna przerwa pomiędzy kolejnymi zapisami">
+<!ENTITY ss.interval.seconds "(w milisekundach)">
+<!ENTITY ss.privacy_level "Zapisuj prywatne dane (dane formularzy, POSTDATA i ciasteczka) dla">
+<!ENTITY ss.privacy_level.allsites "wszystkich witryn">
+<!ENTITY ss.privacy_level.unencrypted "tylko witryn nieszyfrowanych">
+<!ENTITY ss.privacy_level.nosites "- nie zapisuj -">
+<!ENTITY ss.postdata.label1 "Maksymalna liczba zapisywanych danych typu POSTDATA">
+<!ENTITY ss.postdata.label2 "(w bajtach, -1 = wszystko)">
+<!ENTITY sessionManger.enable "Włącz menedżera sesji">
+<!ENTITY crashRecovery.enable "Włącz odzyskiwanie sesji">
+<!ENTITY sm.StartExit "Uruchamianie/Zamykanie">
+<!ENTITY sm.restore "Odtwarzanie">
+<!ENTITY sm.preserve "Zachowywanie danych">
+<!ENTITY sm.start "Gdy przeglądarka jest uruchamiana:">
+<!ENTITY sm.start.restore "odtwarzaj sesję">
+<!ENTITY sm.start.ask "pytaj czy odtworzyć sesję">
+<!ENTITY sm.start.nothing "nie odtwarzaj">
+<!ENTITY sm.exit "Gdy przeglądarka jest zamykana:">
+<!ENTITY sm.exit.save "zapisuj sesję">
+<!ENTITY sm.exit.ask "pytaj czy zapisać sesję">
+<!ENTITY sm.exit.nothing "nie zapisuj">
+<!ENTITY sm.startup "Sesja startowa:">
+<!ENTITY sm.lastsession "ostatnia sesja">
+<!ENTITY sm.previouslast "przedostatnia sesja">
+<!ENTITY sm.chooseifempty "Wybierz inną, jeśli sesja startowa jest pusta">
+<!ENTITY sm.restore.options "Podczas odtwarzania sesji:">
+<!ENTITY sm.restore.overwrite "Nadpisuj istniejące okna">
+<!ENTITY sm.restore.overwriteTabs "i karty">
+<!ENTITY sm.restore.closedWinList "Zapisuj istniejące okna na liście zamkniętych okien">
+<!ENTITY sm.restore.merge "Połącz wszystkie okna w jedno">
+<!ENTITY sm.restore.bypassCache "Podczas przywracania pomijaj bufor">
+<!ENTITY sm.notrestore.label "Gdy nieodtwarzane podczas uruchamiania">
+<!ENTITY sm.restorePinned1.label "Odtwarzaj przypięte karty z poprzedniej sesji">
+<!ENTITY sm.preserve.options "Dla kart zachowaj następujące dane:">
+<!ENTITY sm.preserve.history "historię">
+<!ENTITY sm.preserve.protect "status zabezpieczenia">
+<!ENTITY sm.preserve.locked "status blokady">
+<!ENTITY sm.preserve.permission "zezwolenia">
+<!ENTITY sm.preserve.scroll1 "Pozycja przewijania">
+<!ENTITY sm.restore.winOptions "Dla okien zachowaj następujące dane:">
+<!ENTITY sm.restore.selectedTab "aktywną kartę">
+<!ENTITY sm.restore.closedTabs "listę zamkniętych kart">
+<!ENTITY incompatible.extensions "Niektóre z zainstalowanych rozszerzeń są niekompatybilne z Tab Mix Plusem. Zaleca się odinstalowanie lub wyłączenie tych rozszerzeń.">
+<!ENTITY incompatible.button.label "Wyświetl listę">

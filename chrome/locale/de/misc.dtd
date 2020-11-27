@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Im Hintergrund laden">
+<!ENTITY searchTabFocus.accesskey "H">
+<!ENTITY renametab.panel.title "Tab-Titel bearbeiten">
+<!ENTITY renametab.reset.label "Auf Standardtitel zurücksetzen">
+<!ENTITY title.label "Name">
+<!ENTITY default.label "Standard">
+<!ENTITY renametab.permanently.label "Diesen Tab unabhängig der Adresse umbenennen">
+<!ENTITY renametab.permanently.tooltip "Tab mit Chronik - Der neue Name bleibt auch, wenn die Adresse sich ändert">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Hilfe (engl.)">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Aktualisierungsintervall aus der Liste auswählen oder eigenes angeben">
+<!ENTITY specifyreload.label "Aktualisierungsintervall">
+<!ENTITY sanitizer.entry "Chronik von Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Sind Sie sicher, dass Sie ALLE Ihre gesicherten Sitzungs-Daten einschließlich Backups löschen möchten?">

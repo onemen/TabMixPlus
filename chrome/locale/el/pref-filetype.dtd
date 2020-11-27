@@ -1,0 +1,5 @@
+<!ENTITY filetype.options "Επεξεργαστής τύπου αρχείων">
+<!ENTITY filetype.add "Προσθήκη">
+<!ENTITY filetype.edit "Μετατροπή">
+<!ENTITY filetype.delete "Διαγραφή">
+<!ENTITY filetype.new "Νέος τύπος αρχείου:">

@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Styles">
+<!ENTITY styles.label "Personnaliser les styles">
+<!ENTITY currentTab.label "Onglet courant">
+<!ENTITY unloadedTabs.label "Onglets non chargés">
+<!ENTITY unreadTab.label "Onglets non lus">
+<!ENTITY hideRGB.label "Masquer codes RVB">
+<!ENTITY showRGB.label "Afficher codes RVB">
+<!ENTITY unreadAfterReload.label "Marquer l'onglet comme non lu après rechargement">
+<!ENTITY disableBackground.label "Désactiver les couleurs de fond personnalisées">
+<!ENTITY squaredTabs.label "Appliquer la couleur d'arrière-plan sur les onglets rectangulaires">
+<!ENTITY otherTabs.label "Autres onglets">
+<!ENTITY italic.label "Italique">
+<!ENTITY bold.label "Gras">
+<!ENTITY underline.label "Souligné">
+<!ENTITY textcolor.label "Couleur du texte">
+<!ENTITY bgColor.label "Couleur d'arrière-plan">
+<!ENTITY bgTopColor.label "en haut">
+<!ENTITY bgBottomColor.label "en bas">
+<!ENTITY useThis.label "utiliser ce style pour">
+<!ENTITY opacity.label "l'opacité">

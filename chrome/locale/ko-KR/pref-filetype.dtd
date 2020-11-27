@@ -1,0 +1,5 @@
+<!ENTITY filetype.options "파일 형식 편집기">
+<!ENTITY filetype.add "추가">
+<!ENTITY filetype.edit "수정">
+<!ENTITY filetype.delete "삭제">
+<!ENTITY filetype.new "새 파일 형식:">

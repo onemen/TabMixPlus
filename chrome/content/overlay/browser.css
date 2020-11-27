@@ -1,0 +1,340 @@
+/**
+ * xml-stylesheet for tabmix.xul
+ *
+ * This file is for general use and intended for ALL Firefox version and Platform
+ * if some rule become obsolete move it to the proper file
+ *
+ **/
+
+vbox[shortcutsLabels="true"] {
+  -moz-binding: url("chrome://tabmixplus/content/preferences/shortcutsLabels.xml#shortcut-labels") !important;
+}
+
+/*  we don't use .tabbrowser-tab > .tab-close-button here
+    because in some theme the buttons are inside tab-middle
+*/
+
+/* use both selected and not selected to override specific rules from other extensions */
+#tabbrowser-tabs[closebuttons="noclose"] > .tabbrowser-tab:not([selected="true"]) .tab-close-button,
+#tabbrowser-tabs[closebuttons="noclose"] > .tabbrowser-tab[selected="true"] .tab-close-button {
+  display: none !important;
+}
+
+.tabbrowser-tab[protected] .tab-close-button {
+  display: none !important;
+}
+
+#tabbrowser-tabs[favhideclose="true"] > .tabbrowser-tab[faviconized="true"] .tab-close-button {
+   display: none !important;
+}
+
+#tabbrowser-tabs:not([favhideclose="true"])[closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
+#tabbrowser-tabs:not([favhideclose="true"])[closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
+  display: -moz-box !important;
+}
+
+#tabbrowser-tabs[favhideclose="true"][closebuttons="activetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
+#tabbrowser-tabs[favhideclose="true"][closebuttons="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
+  display: -moz-box !important;
+}
+
+#tabbrowser-tabs[closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button,
+#tabbrowser-tabs[closebuttons-hover="alltabs"] > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button {
+  display: -moz-box !important;
+}
+
+/* button on the left side */
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon {
+  -moz-box-ordinal-group: 1 !important;
+}
+
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons="activetab"] > .tabbrowser-tab[selected="true"] > .tab-stack > .tab-content > .tab-icon,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-close-button,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
+  -moz-box-ordinal-group: 2 !important;
+}
+
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-sharing-icon-overlay,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-sharing-icon-overlay {
+  -moz-box-ordinal-group: 1 !important;
+}
+
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon-overlay,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-overlay {
+  -moz-box-ordinal-group: 1 !important;
+}
+
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-label-container,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label-container,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-label,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label {
+  -moz-box-ordinal-group: 3 !important;
+  pointer-events: none;
+}
+
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon-sound,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-sound {
+  -moz-box-ordinal-group: 3 !important;
+}
+
+#tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] > .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button) {
+  -moz-box-ordinal-group: 5 !important;
+}
+
+#tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button):not(.tab-icon-sound):not(.tab-label):not(.tab-label-container):not(label) {
+  -moz-box-ordinal-group: 1;
+}
+
+#tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label-container,
+#tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label {
+  -moz-box-ordinal-group: 2;
+}
+
+#tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-sound {
+  -moz-box-ordinal-group: 3;
+}
+
+#tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > label {
+  -moz-box-ordinal-group: 4;
+}
+
+#tabbrowser-tabs:not([closebuttons-side="left"]) > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
+  -moz-box-ordinal-group: 5;
+}
+
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > .tabbrowser-tab[selected="true"] > .tab-stack > .tab-content > .tab-close-button,
+#tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
+  direction: rtl;
+  -moz-box-ordinal-group: 0 !important;
+}
+
+/* for themes that use old tabmix xml version */
+.tab-close-button[button_side="left"],
+.tabbrowser-tab .showhover-box,
+.tabbrowser-tab .showhover-flex {
+  display: none !important;
+}
+
+.tabbrowser-arrowscrollbox[type=tabmix-box] {
+  -moz-binding: url("chrome://tabmixplus/content/tab/scrollbox.xml#tabmix-right-scrollBox") !important;
+}
+
+#tabbrowser-tabs {
+  -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tabs") !important;
+}
+
+#tabbrowser-tabs > .tabbrowser-arrowscrollbox {
+  -moz-binding: url("chrome://tabmixplus/content/tab/scrollbox.xml#tabmix-arrowscrollbox-clicktoscroll") !important;
+}
+
+.tabbrowser-tab {
+  -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabmix-tabbrowser-tab") !important;
+}
+
+#TabsToolbar > .tabs-closebutton {
+ -moz-binding: url("chrome://tabmixplus/content/tab/tabbrowser_4.xml#tabbrowser-close-tab-button")!important;
+}
+
+#tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-up,
+#tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-down {
+  visibility: collapse !important;
+}
+
+#tabbrowser-tabs:not([overflow="true"]) ~ #tabmixScrollBox,
+#tabmixScrollBox[flowing="singlebar"],
+#tabmixScrollBox[defaultScrollButtons] {
+  visibility: collapse;
+}
+
+#tabmixScrollBox > toolbarbutton {
+  margin: 0;
+}
+
+
+/* we use this rule in tabmix.js Tabmix.getAfterTabsButtonsWidth */
+#TabsToolbar > #tabbrowser-tabs > .tabbrowser-arrowscrollbox > .tabs-newtab-button[force-display] {
+  display: -moz-box !important;
+}
+
+/*** hide tabs-newtab-button that we don't use ***/
+#TabsToolbar:not([currentset*="privateTab-toolbar-openNewPrivateTab"]) #privateTab-afterTabs-openNewPrivateTab,
+#tabbrowser-tabs[overflow="true"] > .tabbrowser-arrowscrollbox > .tabs-newtab-button,
+#TabsToolbar:not([tabmix-show-newtabbutton]) .tabbrowser-arrowscrollbox > .tabs-newtab-button[command="cmd_newNavigatorTab"],
+#TabsToolbar[tabmix-show-newtabbutton*="side"] .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+  display: none;
+  border: none;
+  margin: 0;
+  vertical-align: bottom;
+}
+
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"]) >
+   #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button[command="cmd_newNavigatorTab"] {
+  display: -moz-box;
+  visibility: visible;
+}
+
+#TabsToolbar[tabmix-show-newtabbutton*="side"] > #new-tab-button {
+  visibility: visible;
+}
+
+#TabsToolbar[tabmix-show-newtabbutton*="aftertabs"] > #new-tab-button,
+#TabsToolbar:not([tabmix-show-newtabbutton]) > #new-tab-button {
+  visibility: collapse;
+}
+
+/*** Private-tab compatibility ***/
+#privateTab-afterTabs-openNewPrivateTab {
+  vertical-align: bottom;
+}
+
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"]:not([tabmix-show-newtabbutton])
+    > #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button[command="cmd_newNavigatorTab"] {
+  display: none; /* override privateTab visibility: visible !important; */
+}
+
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="side"]
+    > #tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox > .tabs-newtab-button {
+  display: none; /* override privateTab visibility: visible !important; */
+}
+
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="aftertabs"]
+    > #privateTab-toolbar-openNewPrivateTab {
+  visibility: collapse; /* missing rule form privateTab */
+}
+
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="aftertabs"]:not([customizing="true"])
+    > #tabbrowser-tabs > .tabbrowser-arrowscrollbox > #privateTab-afterTabs-openNewPrivateTab,
+#TabsToolbar[tabmix-show-newtabbutton*="side"] > #privateTab-toolbar-openNewPrivateTab {
+  visibility: visible;
+}
+
+/***  Tab opening animation  ***/
+.tab-progress-container > .tab-progress:not([fadein]):not([pinned]),
+.tab-icon:not([fadein]):not([pinned]) > .tab-protect-icon,
+.tab-icon:not([fadein]):not([pinned]) > .tab-lock-icon,
+.tab-icon:not([fadein]):not([pinned]) > .tab-reload-icon {
+   display: none !important;
+}
+
+/* we use display: -moz-box !important;
+so display: none !important; does not hide the button */
+.tab-close-button:not([fadein]) {
+  visibility: hidden;
+}
+
+/*
+ When the tabbar is in display:block hiding this items on a tab collapses the
+ height when there is no close button on the tab
+*/
+#tabbrowser-tabs[flowing=multibar] .tab-throbber:not([fadein]):not([pinned]),
+#tabbrowser-tabs[flowing=multibar] .tab-label:not([fadein]):not([pinned]),
+#tabbrowser-tabs[flowing=multibar] .tab-icon-image:not([fadein]):not([pinned]),
+#tabbrowser-tabs[flowing=multibar] .tab-close-button:not([fadein]):not([pinned]) {
+  display: -moz-box !important;
+  visibility: collapse !important;
+  width: 0 !important;
+}
+
+/* we don't remove top and bottom borders to prevent tab height from shrinking */
+.tabbrowser-tab:not([fadein]):not([pinned]) {
+  border-left: none;
+  border-right: none;
+}
+
+/*** backward compatibility with theme that still use old tabmix tab binding ***/
+.tabbrowser-tab:not([fadein]):not([pinned]) .tab-text-stack > .tab-progress {
+  display: none !important;
+}
+
+/***  For progressmeter on tab Firefox 4.0+  ***/
+.tab-progress {
+  margin: 0;
+  min-width: 0;
+}
+
+.tabbrowser-tab > .tab-stack > .tab-progress-container {
+  pointer-events: none;
+}
+
+.tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
+  display: none;
+}
+
+#tabbrowser-tabs[tabmix_progressMeter] .tabbrowser-tab:not([pinned])[busy] > .tab-stack > .tab-progress-container > .tab-progress[value] {
+  display: -moz-box;
+}
+
+.tab-progress > .progress-bar:-moz-locale-dir(ltr) {
+  background-image: linear-gradient(to right, rgba(255,255,255,.1) 50%,
+                                        rgba(255,255,255,.4) 90%,
+                                        rgba(255,255,255,.8));
+}
+
+.tab-progress > .progress-bar:-moz-locale-dir(rtl) {
+  background-image: linear-gradient(to left, rgba(255,255,255,.1) 50%,
+                                        rgba(255,255,255,.4) 90%,
+                                        rgba(255,255,255,.8));
+}
+
+/* :::: multi-row :::: */
+.tabbrowser-arrowscrollbox[flowing=multibar][orient=vertical] > .arrowscrollbox-scrollbox > .scrollbox-innerbox {
+  display: block !important;
+}
+
+/* :::: widthFitTitle :::: */
+#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > .tabbrowser-tab:not([pinned]) {
+  -moz-box-flex: 0 !important;
+  width: auto !important;
+}
+
+#tabbrowser-tabs[orient="horizontal"]:not([widthFitTitle]) > .tabbrowser-tab:not([pinned]):not([tiletabs-single="hidden"]) {
+  -moz-box-flex: 100 !important;
+  width: 0 !important;
+}
+
+/* for tabbar on bottom with australis */
+#TabsToolbar[tabbaronbottom] .titlebar-placeholder {
+  display: none;
+}
+
+/* this will trigger resize if we exit hidden tabbar mode before
+   we set width or height to this box
+*/
+#tabmix-bottom-toolbox {
+  min-width: 1px;
+  min-height: 1px;
+}
+
+/* Firefox 12+ hide alltabs-button when it is after the tabbar and tabs are not overflow */
+#tabbrowser-tabs ~ #alltabs-button:not([collapsed="true"]) {
+ visibility: visible !important;
+}
+
+/* for the case user drag background tab
+   when selectTabOnMouseDown is false, Firefox 17.0+ */
+#tabbrowser-tabs[movingBackgroundTab] > .tabbrowser-tab[dragged] {
+  position: relative;
+  z-index: 3;
+  pointer-events: none; /* avoid blocking dragover events on scroll buttons */
+}
+
+#tabbrowser-tabs[movingBackgroundTab] > .tabbrowser-tab[fadein]:not([dragged]) {
+  transition: transform 200ms ease-out;
+}
+
+/* Firefox 32+ */
+.tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-start-indicator,
+.tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-end-indicator {
+  margin-bottom: 0;
+  visibility: collapse;
+}
+
+#main-window[inFullscreen][inDOMFullscreen] #tabmix-bottom-toolbox,
+#main-window[inFullscreen][inDOMFullscreen] #fullscr-bottom-toggler {
+  visibility: collapse;
+}
+
+#tabmix-rows-tooltip:not([flowing="multibar"]) {
+  display: none;
+}

@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Скорочення">
+<!ENTITY shortcuts.edit "Змінити клавіатурні скорочення">
+<!ENTITY shortcuts.showAll "Показати все">
+<!ENTITY shortcuts.hideUnused "Приховати невикористовувані">
+<!ENTITY shortcuts.warning "Деякі з ваших скорочень використовуються іншими командами">
+<!ENTITY shortcuts.showDetails "Показати подробиці">
+<!ENTITY shortcuts.hideDetails "Приховати подробиці">
+<!ENTITY shortcuts.switchToLast "Switch to last active tab">
+<!ENTITY shortcuts.slideshow "Перемкнути показ слайдів-вкладок">
+<!ENTITY shortcuts.toggleFLST "Перемкнути фокус після закриття поточної вкладки">
+<!ENTITY shortcuts.toggleFLST.tooltip "перемикати фокус між останньою обраною вкладкою або праворуч">
+<!ENTITY shortcuts.placeholder "Введіть Змінники та Ключ">
+<!ENTITY shortcuts.reset "Скинути">
+<!ENTITY shortcuts.clear "Очистити">
+<!ENTITY shortcuts.inuse "Це скорочення вже використовується">

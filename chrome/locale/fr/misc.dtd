@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Charger en arrière-plan">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "Renommer l'onglet">
+<!ENTITY renametab.reset.label "Renommer avec le titre d'origine">
+<!ENTITY title.label "Titre">
+<!ENTITY default.label "Titre d'origine">
+<!ENTITY renametab.permanently.label "Renommer cet onglet sans tenir compte de l'adresse">
+<!ENTITY renametab.permanently.tooltip "onglet avec un historique - le nouveau nom reste même lorsque l'adresse change">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Aide">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Choisir l&apos;intervalle de temps désiré dans la liste ou entrer une valeur particulière">
+<!ENTITY specifyreload.label "Spécifier le temps de rechargement">
+<!ENTITY sanitizer.entry "Historique de Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "H">
+<!ENTITY sanitizer.entry.confirm "Voulez-vous vraiment effacer la totalité de vos sessions enregistrées y compris les sauvegardes ?">

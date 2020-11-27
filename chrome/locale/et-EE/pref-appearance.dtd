@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Stiilid">
+<!ENTITY styles.label "Stiilide muutmine">
+<!ENTITY currentTab.label "Praegune kaart">
+<!ENTITY unloadedTabs.label "Laadimata kaardid">
+<!ENTITY unreadTab.label "Lugemata kaardid">
+<!ENTITY hideRGB.label "Peida RGB-mudeli osavärvid">
+<!ENTITY showRGB.label "Näita RGB-mudeli osavärve">
+<!ENTITY unreadAfterReload.label "pärast uuestilaadimist muuda kaart lugemata kaardiks">
+<!ENTITY disableBackground.label "Keela kasutajamääratud taustavärvid">
+<!ENTITY squaredTabs.label "Rakenda taustavärvi kandilistele kaartidele">
+<!ENTITY otherTabs.label "Teised kaardid">
+<!ENTITY italic.label "Kaldkiri">
+<!ENTITY bold.label "Paks">
+<!ENTITY underline.label "Allajoonitud">
+<!ENTITY textcolor.label "Teksti värv">
+<!ENTITY bgColor.label "Taustavärv">
+<!ENTITY bgTopColor.label "üleval">
+<!ENTITY bgBottomColor.label "all">
+<!ENTITY useThis.label "kasuta seda stiili nende puhul">
+<!ENTITY opacity.label "läbipaistmatus">

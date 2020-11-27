@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Cargar en segundo plano">
+<!ENTITY searchTabFocus.accesskey "s">
+<!ENTITY renametab.panel.title "Editar título de pestaña">
+<!ENTITY renametab.reset.label "Recuperar título predeterminado">
+<!ENTITY title.label "Título">
+<!ENTITY default.label "Predeterminado">
+<!ENTITY renametab.permanently.label "Renombrar esta pestaña sea cual sea su dirección">
+<!ENTITY renametab.permanently.tooltip "pestaña con historial - el nuevo nombre permanecerá cuando cambie la dirección">
+<!ENTITY forum.label "Foro">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Ayuda">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Elija zona horaria de la lista o introduzca la suya">
+<!ENTITY specifyreload.label "Especificar tiempo de recarga">
+<!ENTITY sanitizer.entry "Historial de Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "¿Está seguro de querer borrar TODOS los datos de sus sesiones guardadas, incluyendo copias de seguridad?">

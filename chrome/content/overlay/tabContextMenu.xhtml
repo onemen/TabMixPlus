@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
+%tabmixDTD;
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
+%browserDTD;
+]>
+
+<overlay id="tabmix-tabContextMenu-overlay"
+   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <popupset id="mainPopupSet">
+    <menupopup id="tabContextMenu">
+        <menuitem id="context_newTab" insertbefore="context_pinTab"
+                 label="&tabCmd.label;" _afterthis="(&afterthis.label;)" _newtab="&tabCmd.label;"
+                 tmp_iconic="menuitem-iconic tabmix-newtab-menu-icon menuitem-with-favicon"
+                 oncommand="BrowserOpenTab();"/>
+        <menuitem id="tm-duplicateTab" insertbefore="context_pinTab"
+                 key="key_tm_dupTab" label="&duplicateTabMenu.label;" accesskey="&duplicateTabMenu.accesskey;"
+                 oncommand="gBrowser.duplicateTab(TabContextMenu.contextTab);"/>
+        <menuitem id="tm-duplicateinWin" insertbefore="context_pinTab"
+                 key="key_tm_dupWin" label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"
+                 oncommand="gBrowser.duplicateTabToWindow(TabContextMenu.contextTab, false);"/>
+        <menuitem id="context_openTabInWindow"
+                 key="key_tm_detachTab" label="&detachTab.label;" accesskey="&detachTab.accesskey;"
+                 oncommand="gBrowser.duplicateTabToWindow(TabContextMenu.contextTab, true);"/>
+<!--
+        <menuitem id="context_pinTab">
+        <menuitem id="context_unpinTab"/>
+        <menuitem id="context_tabViewMenu"/>
+     or
+        <menuitem id="tabGroups-context_tabViewMenu"/>
+-->
+        <menuitem id="tm-mergeWindowsTab" insertbefore="context_openTabInWindow"
+                 key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;"
+                 oncommand="Tabmix.MergeWindows.mergeWindows(window);"/>
+        <menuitem id="tm-renameTab" insertbefore="context_openTabInWindow"
+                 label="&renametab.label;" accesskey="&renametab.accesskey;"
+                 oncommand="Tabmix.renameTab.editTitle(TabContextMenu.contextTab);"/>
+        <menuitem id="tm-copyTabUrl" insertbefore="context_openTabInWindow"
+                 label="&copytaburl.label;" accesskey="&copytaburl.accesskey;"
+                 oncommand="gBrowser.copyTabUrl(TabContextMenu.contextTab);"/>
+<!--
+        <menuseparator>
+        <menuitem id="context_reloadTab"/>
+-->
+        <menu id="tm-autoreloadTab_menu" insertbefore="context_reloadAllTabs"
+              labelTab="&autoReloadTab.label;" accesskeyTab="&autoReloadTab.accesskey;"
+              labelSite="&autoReloadSite.label;" accesskeySite="&autoReloadSite.accesskey;">
+           <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, TabContextMenu.contextTab);"/>
+        </menu>
+<!--
+        replace "context_reloadAllTabs" oncommand
+-->
+        <menuitem id="context_reloadAllTabs" oncommand="Tabmix.tablib.reloadTabs(Tabmix.visibleTabs.tabs);" />
+        <menuitem id="tm-reloadOther" insertafter="context_reloadAllTabs"
+                 label="&reloadother.label;" accesskey="&reloadother.accesskey;"
+                 oncommand="gBrowser.reloadAllTabsBut(TabContextMenu.contextTab);" />
+        <menuitem id="tm-reloadLeft" insertafter="tm-reloadOther"
+                 label="&reloadleft.label;" accesskey="&reloadleft.accesskey;"
+                 oncommand="gBrowser._reloadLeftTabs(TabContextMenu.contextTab);"/>
+        <menuitem id="tm-reloadRight" insertafter="tm-reloadLeft"
+                 label="&reloadright.label;" accesskey="&reloadright.accesskey;"
+                 oncommand="gBrowser._reloadRightTabs(TabContextMenu.contextTab);" />
+<!--
+        <menuseparator>
+-->
+        <menuitem id="context_undoCloseTab" key="key_undoCloseTab"
+                 oncommand="TMP_ClosedTabs.undoCloseTab();"/>
+        <menu id="tm-undoCloseList" insertbefore="context_closeTab"
+                 tmp_iconic="menu-iconic closedtabs-icon"
+                 label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;">
+          <menupopup id="tm-undoCloseList-menu"
+            onpopupshowing="TMP_ClosedTabs.populateUndoSubmenu(this); event.stopPropagation();"
+            onpopupshown="event.stopPropagation();"
+            onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
+        </menu>
+        <menuseparator id="tm-separator-1" insertbefore="context_closeTab" type="tabmix"/>
+<!--
+        <menuitem id="context_closeTab"/>
+-->
+        <menuitem id="tm-closeAllTabs" insertbefore="context_closeTab"
+                 label="&closeAllTabsMenu.label;" accesskey="&closeall.accesskey;"
+                 oncommand="gBrowser.closeAllTabs();"/>
+        <menuitem id="tm-closeSimilar" insertbefore="context_closeTab"
+                 label="&closeSimilarTab.label;" accesskey="&closeSimilarTab.accesskey;"
+                 oncommand="gBrowser.closeGroupTabs(TabContextMenu.contextTab);"/>
+<!--
+        <menuitem id="context_closeOtherTabs"/>
+-->
+        <menuitem id="tm-closeLeftTabs" insertbefore="context_closeTab"
+                 label="&closeTabsToLeft.label;" accesskey="&closeleft.accesskey;"
+                 oncommand="gBrowser._closeLeftTabs(TabContextMenu.contextTab);"/>
+<!--
+        <menuitem id="context_closeTabsToTheEnd"
+-->
+        <menuseparator id="tm-separator-2" insertbefore="context_closeTab" type="tabmix"/>
+        <menu id="tm-docShell" insertbefore="context_closeTab"
+                label="&docShellMenu.label;" accesskey="&docShellMenu.accesskey;">
+         <menupopup
+                onpopupshowing="Tabmix.docShellCapabilities.onGet(this.childNodes, TabContextMenu.contextTab);
+                                event.stopPropagation();"
+                onpopupshown="event.stopPropagation();"
+                oncommand="Tabmix.docShellCapabilities.onSet(TabContextMenu.contextTab,event.originalTarget);">
+           <menuitem label="&allowImage.label;" value="Images" class="menuitem-iconic" type="checkbox" checked="true" />
+           <menuitem label="&allowFrame.label;" value="Subframes" class="menuitem-iconic" type="checkbox" checked="true" />
+           <menuitem label="&allowRedirect.label;" value="MetaRedirects" class="menuitem-iconic" type="checkbox" checked="true" />
+           <menuitem label="&allowPlugin.label;" value="Plugins" class="menuitem-iconic" type="checkbox" checked="true" />
+           <menuitem label="&allowJavascript.label;" value="Javascript" class="menuitem-iconic" type="checkbox" checked="true" />
+         </menupopup>
+        </menu>
+        <menuitem id="tm-freezeTab" insertbefore="context_closeTab"
+                 label="&freezeTabMenu.label;" accesskey="&freezeTabMenu.accesskey;" type="checkbox"
+                 oncommand="gBrowser.freezeTab(TabContextMenu.contextTab);" />
+        <menuitem id="tm-protectTab" insertbefore="context_closeTab"
+                 label="&protectTabMenu.label;" accesskey="&protectTabMenu.accesskey;" type="checkbox"
+                 oncommand="gBrowser.protectTab(TabContextMenu.contextTab);"/>
+        <menuitem id="tm-lockTab" insertbefore="context_closeTab"
+                 label="&lockTabMenu.label;" accesskey="&lockTabMenu.accesskey;" type="checkbox"
+                 oncommand="gBrowser.lockTab(TabContextMenu.contextTab);"/>
+        <menuseparator id="tm-separator-3" insertbefore="context_closeTab" type="tabmix"/>
+        <menuitem id="context_bookmarkTab" label="&bookmarktab.label;" insertbefore="context_closeTab"
+                 oncommand="PlacesCommandHook.bookmarkPage(TabContextMenu.contextTab.linkedBrowser, PlacesUtils.bookmarksMenuFolderId, true);"/>
+<!--
+        <menuitem id="context_bookmarkAllTabs"/>
+-->
+    </menupopup>
+  </popupset>
+
+</overlay>

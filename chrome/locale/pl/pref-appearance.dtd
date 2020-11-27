@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Style">
+<!ENTITY styles.label "Określ styl">
+<!ENTITY currentTab.label "Aktywna karta">
+<!ENTITY unloadedTabs.label "Niewczytane karty">
+<!ENTITY unreadTab.label "Nieobejrzane karty">
+<!ENTITY hideRGB.label "Ukryj ustawienia RGB">
+<!ENTITY showRGB.label "Pokaż ustawienia RGB">
+<!ENTITY unreadAfterReload.label "Po odświeżeniu ustaw karty jako nieprzeczytane">
+<!ENTITY disableBackground.label "Wyłącz niestandardowe kolory tła">
+<!ENTITY squaredTabs.label "Zastosuj kolor tła dla kart starego typu">
+<!ENTITY otherTabs.label "Inne karty">
+<!ENTITY italic.label "Kursywa">
+<!ENTITY bold.label "Pogrubienie">
+<!ENTITY underline.label "Podkreślenie">
+<!ENTITY textcolor.label "Kolor tekstu">
+<!ENTITY bgColor.label "Kolor tła">
+<!ENTITY bgTopColor.label "górny">
+<!ENTITY bgBottomColor.label "dolny">
+<!ENTITY useThis.label "Zastosuj styl dla">
+<!ENTITY opacity.label "Krycie">

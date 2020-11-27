@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Завантажувати в фоні">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "Перейменувати вкладку">
+<!ENTITY renametab.reset.label "Скинути ім\'я до замовчування">
+<!ENTITY title.label "Заголовок">
+<!ENTITY default.label "За замовчуванням">
+<!ENTITY renametab.permanently.label "Перейменувати вкладку незалежно від її адреси">
+<!ENTITY renametab.permanently.tooltip "вкладка з історією - ім\'я залишиться коли адреса зміниться">
+<!ENTITY forum.label "Форум">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Довідка">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Виберіть час зі списку чи введіть власний">
+<!ENTITY specifyreload.label "Визначення часу оновлення">
+<!ENTITY sanitizer.entry "Журнал Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Ви впевнені, що хочете знищити ВСІ збережені сесії, включаючи резервні копії?">

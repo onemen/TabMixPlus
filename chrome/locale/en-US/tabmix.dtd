@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Closed Tabs">
+<!ENTITY closedtabsbtn.tooltip "Display Closed Tabs List">
+<!ENTITY sessionbtn.tooltip "Display and Manage your Sessions">
+<!ENTITY tabslistbtn.label "Opened Tabs">
+<!ENTITY tabslistbtn.tooltip "Display Opened Tabs List">
+<!ENTITY closedwindowsbtn.label "Closed Windows">
+<!ENTITY closedwindowsbtn.tooltip "Display Closed Windows List">
+<!ENTITY page.header.title "Tab Mix Plus Options">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus Session Manager">
+<!ENTITY session.Tools "Session Manager">
+<!ENTITY closedWin.label "Closed Windows List">
+<!ENTITY duplicateTabMenu.label "Duplicate Tab">
+<!ENTITY duplicateTabMenu.accesskey "D">
+<!ENTITY duplicateinWin.label "Duplicate to New Window">
+<!ENTITY duplicateinWin.accesskey "W">
+<!ENTITY detachTab.label "Move to New Window">
+<!ENTITY detachTab.accesskey "E">
+<!ENTITY mergeContext.label "Merge Windows">
+<!ENTITY mergeContext.accesskey "M">
+<!ENTITY renametab.label "Rename Tab">
+<!ENTITY renametab.accesskey "M">
+<!ENTITY copytaburl.label "Copy Tab URL">
+<!ENTITY copytaburl.accesskey "Y">
+<!ENTITY reloadother.label "Reload Other Tabs">
+<!ENTITY reloadother.accesskey "O">
+<!ENTITY reloadleft.label "Reload Left Tabs">
+<!ENTITY reloadleft.accesskey "L">
+<!ENTITY reloadright.label "Reload Right Tabs">
+<!ENTITY reloadright.accesskey "I">
+<!ENTITY autoReloadTab.label "Reload Tab Every">
+<!ENTITY autoReloadTab.accesskey "V">
+<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY afterthis.label "After This Tab">
+<!ENTITY bookmarktab.label "Bookmark This Tab">
+<!ENTITY undoCloseListMenu.label "Closed Tabs List">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "Close All Tabs">
+<!ENTITY closeall.accesskey "A">
+<!ENTITY closeSimilarTab.label "Close Similar Tabs">
+<!ENTITY closeSimilarTab.accesskey "S">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeleft.accesskey "L">
+<!ENTITY docShellMenu.label "Permissions">
+<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY freezeTabMenu.label "Freeze Tab">
+<!ENTITY freezeTabMenu.accesskey "F">
+<!ENTITY protectTabMenu.label "Protect Tab">
+<!ENTITY protectTabMenu.tooltip "Protect tabs from being closed">
+<!ENTITY protectTabMenu.accesskey "P">
+<!ENTITY lockTabMenu.label "Lock Tab">
+<!ENTITY lockTabMenu.tooltip "All links open in new tab">
+<!ENTITY lockTabMenu.accesskey "K">
+<!ENTITY bookmarktabs.label "Bookmark All Tabs">
+<!ENTITY linkhere.label "Open Link in This Tab">
+<!ENTITY linkhere.accesskey "O">
+<!ENTITY linkBackgroundTab.label "Open Link in Background Tab">
+<!ENTITY linkForegroundTab.label "Open Link in Foreground Tab">
+<!ENTITY linkBackgroundTab.accesskey "B">
+<!ENTITY linkForegroundTab.accesskey "F">
+<!ENTITY openalllinks.label "Open Links in New Tabs">
+<!ENTITY openalllinks.accesskey "S">
+<!ENTITY linkwithhistory.label "Open Link in Duplicated Tab">
+<!ENTITY linkwithhistory.accesskey "D">
+<!ENTITY tabsList.label "Opened Tabs List">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Image">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Redirect">
+<!ENTITY allowPlugin.label "Plug-in">
+<!ENTITY allowFrame.label "Frame">
+<!ENTITY restoreincurrent.label "Restore to Current Tab">
+<!ENTITY restoreincurrent.accesskey "C">
+<!ENTITY restoreinwin.label "Restore to New Window">
+<!ENTITY restoreinwin.accesskey "W">
+<!ENTITY restoreintab.label "Restore to New Tab">
+<!ENTITY restoreintab.accesskey "T">
+<!ENTITY restoretab.label "Restore Tab">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "Bookmark This Link...">
+<!ENTITY bookmark.accesskey "B">
+<!ENTITY deletelist.label "Delete from the list">
+<!ENTITY deletelist.accesskey "D">
+<!ENTITY settings.label "Preferences">
+<!ENTITY saveWindow.label "Save This Window">
+<!ENTITY saveAllWindows.label "Save All Windows">
+<!ENTITY sm.context.overwrite "Restore, Overwrite Existing Window(s)">
+<!ENTITY sm.context.overwrite.key "O">
+<!ENTITY sm.context.restore.new "Restore to New Window(s)">
+<!ENTITY sm.context.restore.newkey "N">
+<!ENTITY sm.context.replacethis "Replace, With This Window">
+<!ENTITY sm.context.replacethis.key "T">
+<!ENTITY sm.context.replaceall "Replace, With All Windows">
+<!ENTITY sm.context.replaceall.key "A">
+<!ENTITY sm.context.add "Add This Window">
+<!ENTITY sm.context.add.key "W">
+<!ENTITY sm.context.addall "Add All Windows">
+<!ENTITY sm.context.addall.key "I">
+<!ENTITY sm.context.save "Save">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "Rename">
+<!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Delete">
+<!ENTITY sm.context.delete.key "D">
+<!ENTITY sm.context.deleteall "Delete All">
+<!ENTITY sm.context.deleteall.key "L">
+<!ENTITY sm.context.startup "Set as Startup Session">
+<!ENTITY sm.context.startup.key "P">
+<!ENTITY sm.context.details "Show Counters, Date and Time in Session Menu">
+<!ENTITY sm.context.details.key "C">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "Sorted Tabs">
+<!ENTITY sortedTabs.tooltip "Check to show the list sorted alphabetically">
+<!ENTITY enable.label "Enable">
+<!ENTITY custom.label "Custom">
+<!ENTITY enableTabs.label "Enable All Tabs">
+<!ENTITY disableTabs.label "Disable All Tabs">
+<!ENTITY seconds.label "seconds">
+<!ENTITY minutes.label "minutes">
+<!ENTITY minute.label "minute">
+<!ENTITY hideTabBar.label "Hide the tab bar">
+<!ENTITY hideTabBar.never.label "Never">
+<!ENTITY hideTabBar.never.key "N">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "E">
+<!ENTITY hideTabBar.always.label "Always">
+<!ENTITY hideTabBar.always.key "A">

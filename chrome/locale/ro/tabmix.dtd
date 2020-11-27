@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "File închise">
+<!ENTITY closedtabsbtn.tooltip "Afișează lista filelor închise">
+<!ENTITY sessionbtn.tooltip "Afișează și gestionează sesiunea curentă">
+<!ENTITY tabslistbtn.label "File deschise">
+<!ENTITY tabslistbtn.tooltip "Afișează lista filelor deschise">
+<!ENTITY closedwindowsbtn.label "Ferestre închise">
+<!ENTITY closedwindowsbtn.tooltip "Afișează lista ferestrelor închise">
+<!ENTITY page.header.title "Opțiuni Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Gestionar de sesiuni Tab Mix Plus">
+<!ENTITY session.Tools "Gestionar de sesiuni">
+<!ENTITY closedWin.label "Lista ferestrelor închise">
+<!ENTITY duplicateTabMenu.label "Duplică fila">
+<!ENTITY duplicateTabMenu.accesskey "D">
+<!ENTITY duplicateinWin.label "Duplică fila într-o fereastră nouă">
+<!ENTITY duplicateinWin.accesskey "F">
+<!ENTITY detachTab.label "Mută fila într-o fereastră nouă">
+<!ENTITY detachTab.accesskey "M">
+<!ENTITY mergeContext.label "Îmbină ferestrele">
+<!ENTITY mergeContext.accesskey "b">
+<!ENTITY renametab.label "Redenumește fila">
+<!ENTITY renametab.accesskey "R">
+<!ENTITY copytaburl.label "Copiază URL-ul filei">
+<!ENTITY copytaburl.accesskey "U">
+<!ENTITY reloadother.label "Reîncarcă celelalte file">
+<!ENTITY reloadother.accesskey "c">
+<!ENTITY reloadleft.label "Reîncarcă filele din stânga">
+<!ENTITY reloadleft.accesskey "s">
+<!ENTITY reloadright.label "Reîncarcă filele din dreapta">
+<!ENTITY reloadright.accesskey "d">
+<!ENTITY autoReloadTab.label "Reîncarcă fila la fiecare">
+<!ENTITY autoReloadTab.accesskey "f">
+<!ENTITY autoReloadSite.label "Încarcă acest sait la fiecare">
+<!ENTITY autoReloadSite.accesskey "s">
+<!ENTITY afterthis.label "După această filă">
+<!ENTITY bookmarktab.label "Pune semn de carte la această filă">
+<!ENTITY undoCloseListMenu.label "Afișează lista filelor închise">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "Închide toate filele">
+<!ENTITY closeall.accesskey "t">
+<!ENTITY closeSimilarTab.label "Închide filele similare">
+<!ENTITY closeSimilarTab.accesskey "i">
+<!ENTITY closeTabsToLeft.label "Închide filele din stânga">
+<!ENTITY closeleft.accesskey "s">
+<!ENTITY docShellMenu.label "Permisiuni">
+<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY freezeTabMenu.label "Îngheață fila">
+<!ENTITY freezeTabMenu.accesskey "g">
+<!ENTITY protectTabMenu.label "Protejează fila">
+<!ENTITY protectTabMenu.tooltip "Protejează fila pentru a nu putea fi închisă">
+<!ENTITY protectTabMenu.accesskey "P">
+<!ENTITY lockTabMenu.label "Blochează fila">
+<!ENTITY lockTabMenu.tooltip "Dezactivează deschiderea altor legături în filă">
+<!ENTITY lockTabMenu.accesskey "z">
+<!ENTITY bookmarktabs.label "Pune semne de carte la toate filele">
+<!ENTITY linkhere.label "Deschide legătura în această filă">
+<!ENTITY linkhere.accesskey "H">
+<!ENTITY linkBackgroundTab.label "Deschide legătura într-o filă în fundal">
+<!ENTITY linkForegroundTab.label "Deschide legătura într-o filă în prim-plan">
+<!ENTITY linkBackgroundTab.accesskey "f">
+<!ENTITY linkForegroundTab.accesskey "p">
+<!ENTITY openalllinks.label "Deschide legătura într-o filă nouă">
+<!ENTITY openalllinks.accesskey "n">
+<!ENTITY linkwithhistory.label "Deschide legătura în fila duplicat">
+<!ENTITY linkwithhistory.accesskey "d">
+<!ENTITY tabsList.label "Deschide lista filelor">
+<!ENTITY tabsList.accesskey "l">
+<!ENTITY allowImage.label "Imagine">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Redirecționare">
+<!ENTITY allowPlugin.label "Plugin">
+<!ENTITY allowFrame.label "Cadru">
+<!ENTITY restoreincurrent.label "Restaurează în fila curentă">
+<!ENTITY restoreincurrent.accesskey "c">
+<!ENTITY restoreinwin.label "Restaurează într-o fereastră nouă">
+<!ENTITY restoreinwin.accesskey "f">
+<!ENTITY restoreintab.label "Restaurează într-o filă nouă">
+<!ENTITY restoreintab.accesskey "n">
+<!ENTITY restoretab.label "Restaurează fila">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "Pune semn de carte la această legătură…">
+<!ENTITY bookmark.accesskey "c">
+<!ENTITY deletelist.label "Șterge din listă">
+<!ENTITY deletelist.accesskey "t">
+<!ENTITY settings.label "Configurație">
+<!ENTITY saveWindow.label "Salvează această fereastră">
+<!ENTITY saveAllWindows.label "Salvează toate ferestrele">
+<!ENTITY sm.context.overwrite "Restaurează suprascriind fereastra existentă">
+<!ENTITY sm.context.overwrite.key "s">
+<!ENTITY sm.context.restore.new "Restaurează într-o fereastră nouă">
+<!ENTITY sm.context.restore.newkey "n">
+<!ENTITY sm.context.replacethis "Înlocuiește cu această fereastră">
+<!ENTITY sm.context.replacethis.key "l">
+<!ENTITY sm.context.replaceall "Înlocuiește cu toate ferestrele">
+<!ENTITY sm.context.replaceall.key "t">
+<!ENTITY sm.context.add "Adaugă această fereastră">
+<!ENTITY sm.context.add.key "A">
+<!ENTITY sm.context.addall "Adaugă toate ferestrele">
+<!ENTITY sm.context.addall.key "g">
+<!ENTITY sm.context.save "Salvează">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "Redenumește">
+<!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Sesiune de semne de carte">
+<!ENTITY sm.context.bookmarkSession.key "c">
+<!ENTITY sm.context.delete "Șterge">
+<!ENTITY sm.context.delete.key "t">
+<!ENTITY sm.context.deleteall "Șterge tot">
+<!ENTITY sm.context.deleteall.key "t">
+<!ENTITY sm.context.startup "Stabilește ca sesiune de pornire">
+<!ENTITY sm.context.startup.key "p">
+<!ENTITY sm.context.details "Afișează numărătoare, dată și oră în meniul sesiunilor">
+<!ENTITY sm.context.details.key "n">
+<!ENTITY tab.key "F">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "File sortate">
+<!ENTITY sortedTabs.tooltip "Afișează lista sortată alfabetic">
+<!ENTITY enable.label "Activează">
+<!ENTITY custom.label "Interval particular">
+<!ENTITY enableTabs.label "Activează pentru toate filele">
+<!ENTITY disableTabs.label "Dezactivează pentru toate filele">
+<!ENTITY seconds.label "secunde">
+<!ENTITY minutes.label "minute">
+<!ENTITY minute.label "minut">
+<!ENTITY hideTabBar.label "Se ascunde bara de file">
+<!ENTITY hideTabBar.never.label "niciodată">
+<!ENTITY hideTabBar.never.key "n">
+<!ENTITY hideTabBar.oneTab.label "când există o singură filă">
+<!ENTITY hideTabBar.onOneTab.key "f">
+<!ENTITY hideTabBar.always.label "întotdeauna">
+<!ENTITY hideTabBar.always.key "t">

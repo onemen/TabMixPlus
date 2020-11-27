@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Atalhos">
+<!ENTITY shortcuts.edit "Editar atalhos do teclado">
+<!ENTITY shortcuts.showAll "Mostrar tudo">
+<!ENTITY shortcuts.hideUnused "Ocultar não usados">
+<!ENTITY shortcuts.warning "Alguns dos seus atalhos estão em uso por outros comandos">
+<!ENTITY shortcuts.showDetails "Mostrar detalhes">
+<!ENTITY shortcuts.hideDetails "Ocultar detalhes">
+<!ENTITY shortcuts.switchToLast "Switch to last active tab">
+<!ENTITY shortcuts.slideshow "Trocar slideshow dos separadores">
+<!ENTITY shortcuts.toggleFLST "trocar foco após fechar o separador atual">
+<!ENTITY shortcuts.toggleFLST.tooltip "trocar entre focar à direita ou último separador selecionado">
+<!ENTITY shortcuts.placeholder "Tipo de modificador e Chave">
+<!ENTITY shortcuts.reset "Reinicar">
+<!ENTITY shortcuts.clear "Limpar">
+<!ENTITY shortcuts.inuse "O atalho já existe e é usado por">

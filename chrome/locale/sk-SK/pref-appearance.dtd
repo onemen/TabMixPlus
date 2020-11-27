@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Štýly">
+<!ENTITY styles.label "Prispôsobiť štýly">
+<!ENTITY currentTab.label "Aktuálna karta">
+<!ENTITY unloadedTabs.label "Nenačítané karty">
+<!ENTITY unreadTab.label "Neprečítané karty">
+<!ENTITY hideRGB.label "Skryť RGB">
+<!ENTITY showRGB.label "Zobraziť RGB">
+<!ENTITY unreadAfterReload.label "po znovu načítaní nastaviť kartu ako neprečítanú">
+<!ENTITY disableBackground.label "Vypnúť vlastné farby pozadia">
+<!ENTITY squaredTabs.label "Použiť farbu pozadia pre štvorcové karty">
+<!ENTITY otherTabs.label "Ostatné karty">
+<!ENTITY italic.label "Kurzíva">
+<!ENTITY bold.label "Tučné">
+<!ENTITY underline.label "Podčiarknúť">
+<!ENTITY textcolor.label "Farba textu">
+<!ENTITY bgColor.label "Farba pozadia">
+<!ENTITY bgTopColor.label "navrchu">
+<!ENTITY bgBottomColor.label "naspodku">
+<!ENTITY useThis.label "použiť tento štýl pre">
+<!ENTITY opacity.label "nepriesvitnosť">

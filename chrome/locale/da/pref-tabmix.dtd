@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Links">
+<!ENTITY tab.events "Handlinger">
+<!ENTITY tab.mouse "Mus">
+<!ENTITY tab.appearance "Vis">
+<!ENTITY tab.menu "Menu">
+<!ENTITY tab.session "Session">
+<!ENTITY tab.incompatible "Fejl">
+<!ENTITY apply.label "Anvend">
+<!ENTITY settings.export "Eksporter indstillinger">
+<!ENTITY settings.import "Importer indstillinger">
+<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.default "Genetabler standarder">
+<!ENTITY settings.revert "Revert">
+<!ENTITY generalWindowOpen.label "Åbn links der åbner i et nyt vindue i:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLinkTarget.label "Åbn links fra andre programmer i:">
+<!ENTITY linkTarget.tab "Nyt faneblad">
+<!ENTITY linkTarget.window "Nyt vindue">
+<!ENTITY linkTarget.current "Nuværende faneblad">
+<!ENTITY linkTarget.accesskey "N">
+<!ENTITY divertedWindowOpen.label "JavaScript popups:">
+<!ENTITY divertedWindowOpen.all "Åbn alle popups i faneblade">
+<!ENTITY divertedWindowOpen.some "Tillad popups med samme størrelse">
+<!ENTITY divertedWindowOpen.none "Tillad alle popups">
+<!ENTITY linkTarget.label "Åbn links med en målattribut i nuværende faneblad">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY download.label "Forhindre blanke faneblade ved hentning af filer">
+<!ENTITY edit.label "Rediger">
+<!ENTITY speLink.label "Tving til at åbne i nyt faneblad:">
+<!ENTITY speLink.none "Ingenting">
+<!ENTITY speLink.allLinks "All links">
+<!ENTITY speLink.external "Links til andre sider">
+<!ENTITY singleWindow.label "Slå enkeltvindue-modus til">
+<!ENTITY newTabs.label "New Tabs">
+<!ENTITY tabOpen.label "Faneblad-åbning">
+<!ENTITY tabFocus.label "Faneblad-fokus">
+<!ENTITY tabClose.label "Faneblad-lukning">
+<!ENTITY tabMerge.label "Faneblad-sammenlægning">
+<!ENTITY tabFeature.label "Faneblad-funktioner">
+<!ENTITY newtab.label "Indlæs på nye faneblade:">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "Blank side">
+<!ENTITY newtab.home "Hjemmeside">
+<!ENTITY newtab.current "Nuværende side">
+<!ENTITY newtab.duplicate "Duplikér side">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY location.label.1 "Address">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY openTabNext.label "Åbn nye faneblade ved siden af nuværende">
+<!ENTITY openOtherTabNext.label "Åbn andre faneblade ved siden af det nuværende">
+<!ENTITY relatedAfterCurrent.label "Kun hvis relateret til nuværende faneblad">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Åbn duplikerede faneblade ved siden af den originale">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Skift åbnings-sortering">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Åbn ny fane ved siden af det sidst åbnede faneblad fra nuværende (siden det sidst blev valgt)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabs">
+<!ENTITY lockTabs.label "Lock tabs">
+<!ENTITY lockNewTabs.label "Lock New tabs">
+<!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY openNewTab.label "Åbn faneblade fra:">
+<!ENTITY openBookmarks.label "Bogmærker">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openHistory.label "Historik">
+<!ENTITY openUrl.label "Adresselinjen">
+<!ENTITY openSearch.label "Søgelinjen">
+<!ENTITY middlecurrent1.label "Midterklik eller Ctrl-klik åbner i nuværende faneblad">
+<!ENTITY middlecurrent.tooltip "Kun til bogmærker, historik og låste faneblade">
+<!ENTITY tabFocus.caption "Fokuser/marker faneblade der åbner fra:">
+<!ENTITY selectTab.label "Links">
+<!ENTITY selectDivertedTab.label "Omdirigerede vinduer">
+<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabCommand.label "Nyt faneblad-kommandoer">
+<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY selectTabBH.label "Bogmærker/Historik">
+<!ENTITY duplicateTab.label "Dupliker faneblad">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "Advarsel">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "Lukning af sidste faneblad">
+<!ENTITY keepWindow.label.3.1 "Luk ikke vinduet når sidste faneblad lukkes">
+<!ENTITY keeptab.label "Forhindre sidste faneblad i at blive lukket">
+<!ENTITY closeOnMerge.label "Luk vinduer når de er lagt sammen">
+<!ENTITY warnOnMerge.label "Advar når der lukkes faneblade der ikke lægges sammen">
+<!ENTITY currenttab.caption.label "Lukning af nuværende faneblad">
+<!ENTITY focusTab.labelBegin "Ved lukning af nuværende faneblad, fokuser på:">
+<!ENTITY focusTab.firstTab "Første faneblad">
+<!ENTITY focusTab.leftTab "Venstre faneblad">
+<!ENTITY focusTab.rightTab "Højre faneblad">
+<!ENTITY focusTab.lastTab "Sidste faneblad">
+<!ENTITY focusTab.lastSelectedTab "Sidst valgte faneblad">
+<!ENTITY focusTab.openerTab "Åbner/højre faneblad">
+<!ENTITY focusTab.openerTab.rtl "Opener/left tab">
+<!ENTITY focusTab.lastOpenedTab "Sidst åbnede faneblad">
+<!ENTITY undoClose.label "Slå fortryd luk faneblade til">
+<!ENTITY undoCloseCache.label "Maks. antal lukkede faneblade der skal huskes:">
+<!ENTITY undoClosepos.label "Genetabler fanebladets originale position">
+<!ENTITY menuonlybutton.label "Gør at værktøjslinjeknappen kun viser en liste">
+<!ENTITY ctrltab.label "Ctrl-Tab sorterer fanebladene i senest brugte orden">
+<!ENTITY cmdtab.label "Cmd-Tab sorterer fanebladene i senest brugte orden">
+<!ENTITY ctrltab.tabPreviews "Vis faneblads-forhåndsvisning">
+<!ENTITY ctrltab.popup "Ctrl-Tab viser en fanebladsliste popup-menu">
+<!ENTITY cmdtab.popup "Cmd-Tab viser en fanebladsliste popup-menu">
+<!ENTITY tabpopup.mouse "Fanebladslisten reagerer på musen">
+<!ENTITY mergeNoTabSelection.label "Sammenlæg vinduer når der ikke er nogen valgte faneblade">
+<!ENTITY mergeTabSelection.label "Sammenlægning efter valg af faneblade:">
+<!ENTITY mergeall.label "Læg alle vinduer sammen i et">
+<!ENTITY mergelastfocused.label "Læg kun nuværende vindue sammen med sidst fokuserede">
+<!ENTITY mergePopups.label "Tag også popup-vinduer">
+<!ENTITY popupNextToOpener.label "Placér popups ved siden af deres oprindelsesvindue">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Vis Genindlæs hver-menu på Genindlæs-knap">
+<!ENTITY seconds.label "sek.">
+<!ENTITY minutes.label "min">
+<!ENTITY tabBarAppearance.label "Fanebladslinje">
+<!ENTITY tabAppearance.label "Faneblad">
+<!ENTITY toolBarAppearance.label "Værktøjslinje">
+<!ENTITY show.ontabbar.label "Vis på fanebladslinje">
+<!ENTITY show.ontab.label "Vis på faneblad">
+<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
+<!ENTITY hideTabBarButton.label "Luk faneblad-knap">
+<!ENTITY newTabButton.label "Nyt faneblad-knap">
+<!ENTITY newTabButton.position.left.label "på venstre side">
+<!ENTITY newTabButton.position.right.label "på højre side">
+<!ENTITY newTabButton.position.afterlast.label "Efter sidste faneblad">
+<!ENTITY allTabsButton.label "Alle faneblade knap">
+<!ENTITY tabBarSpace.label "Ekstra mellemrum til begge sider">
+<!ENTITY tabBarSpace.tooltip "For at klikke og slippe noget på fanebladslinje">
+<!ENTITY tabbar.label "Skjuler fanebladslinje når der kun er ét faneblad åbent">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY dropIndicator.label "Slip-indikator">
+<!ENTITY dropIndicator-native.label "Medfødt stil">
+<!ENTITY dropIndicator-builtin.label "Indbygget stil">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY tabBarPosition.label "Position:">
+<!ENTITY tabBarPosition.top.label "Top (above content)">
+<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabScroll.label "Når faneblade ikke passer i bredden:">
+<!ENTITY tabScroll.none "Scrollbart uden knapper">
+<!ENTITY tabScroll.leftRightButtons "Scrollbart med knapper på venstre og højre side">
+<!ENTITY tabScroll.rightButtons "Scrollbart med knapper på højre side">
+<!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
+<!ENTITY tabScroll.multibar "Multi-række">
+<!ENTITY maxrow.label "Maks antal rækker der skal vises:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY scrolldelay.label "Rulle-forsinkelse (tid mellem gentagne rul)">
+<!ENTITY currenttab.style.label "Nuværende faneblad">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unreadtabs.style.label "Ulæste faneblade">
+<!ENTITY othertabs.style.label "Andre faneblade">
+<!ENTITY setstyles.label "Brugerdefineret stil">
+<!ENTITY extraIcons.label1 "Ikoner for">
+<!ENTITY extraIcons.locked "Låst">
+<!ENTITY extraIcons.protected "Beskyttet">
+<!ENTITY extraIcons.autoreload "Auto-genindlæs">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY progressMeter.label "Fremskridts-måler på faneblade">
+<!ENTITY showTabX.labelBegin "Luk faneblad knap">
+<!ENTITY showTabX.left "Placer på venstre side">
+<!ENTITY showTabX.rtl "Place on right side">
+<!ENTITY milliseconds.label "msek.">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "på alle">
+<!ENTITY showTabX.current "på nuværende">
+<!ENTITY showTabX.hover "på udpeget til">
+<!ENTITY showTabX.alwaysExeption "på alle faneblade bredere end">
+<!ENTITY showTabX.currentHover "på nuværende &amp; peget på">
+<!ENTITY minWidth.label "Bredde:">
+<!ENTITY widthTo.label "til">
+<!ENTITY widthPixels.label "pixels">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY flexTabs.label "Fanebredde tilpasset fanebladstitlen">
+<!ENTITY bookastitle.label "Brug bogmærkenavn som fanebladstitel">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Du kan tilpasse hvilke Tab Mix Plus-knapper der vises i din værktøjslinje">
+<!ENTITY toolbar.button.label "Brugertilpas">
+<!ENTITY toolbar.visible.caption "Synlige knapper">
+<!ENTITY toolbar.novisible.label "Der er ingen synlige knapper">
+<!ENTITY toolbar.hidden.caption "Skjulte knapper">
+<!ENTITY toolbar.nohidden.label "Der er ingen skjulte knapper">
+<!ENTITY mouseGesture.label "Musebevægelser">
+<!ENTITY mouseClick.label "Museklikning">
+<!ENTITY mouseHoverSelect.labelBegin "Marker faneblad der peges på">
+<!ENTITY tabFlip.label "Skift til sidst valgte faneblad ved klik på nuværende">
+<!ENTITY tabFlip.delay "Brug en forsinkelse på">
+<!ENTITY clickFocus.label "Museklik (ned og slip) for at markere et faneblad">
+<!ENTITY removeEntries.label "Fjern Tab Mix Plus menufunktioner med midterklik">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY removeEntries.tooltip "Inkluder lukkede faneblade, lukkede vinduer og gemte sessioner">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY double.label "Dobbeltklik">
+<!ENTITY middle.label "Midterklik">
+<!ENTITY ctrl.label "Ctrl-klik">
+<!ENTITY cmd.label "Cmd-klik">
+<!ENTITY shift.label "Skift-klik">
+<!ENTITY alt.label "Alt-klik">
+<!ENTITY ontab.label "på et faneblad:">
+<!ENTITY ontabbar.label "på fanebladslinjen:">
+<!ENTITY clicktab.label "Vælg kommando der skal udføres ved klik på faneblad eller fanebladslinje">
+<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY clicktab.nothing "Gør ingenting">
+<!ENTITY clicktab.addtab "Åbner et nyt faneblad">
+<!ENTITY clicktab.duplicatetab "Duplikerer fanebladet">
+<!ENTITY clicktab.duplicatetabw "Duplikerer fanebladet i et nyt vindue">
+<!ENTITY clicktab.detachtab "Flyt fanebladet til et nyt vindue">
+<!ENTITY clicktab.protecttab "Beskytter fanebladet">
+<!ENTITY clicktab.locktab "Låser fanebladet">
+<!ENTITY clicktab.freezetab "Beskytter og låser fanebladet">
+<!ENTITY clicktab.renametab "Omdøber fanebladet">
+<!ENTITY clicktab.copyTabUrl "Kopierer fanebladets URL til klippebordet">
+<!ENTITY clicktab.copyUrlFromClipboard "Indlæs URL fra udklipsholder">
+<!ENTITY clicktab.selectMerge "Vælg faneblade der skal lægges sammen">
+<!ENTITY clicktab.mergeTabs "Lægger vinduer sammen">
+<!ENTITY clicktab.bookTab "Opretter bogmærke for fanebladet">
+<!ENTITY clicktab.bookTabs "Bogmærker alle faneblade">
+<!ENTITY clicktab.reloadtab "Genindlæser fanebladet">
+<!ENTITY clicktab.reloadtabs "Genindlæser alle faneblade">
+<!ENTITY clicktab.reloadothertabs "Genindlæser andre faneblade">
+<!ENTITY clicktab.reloadlefttabs "Genindlæser faneblade til venstre">
+<!ENTITY clicktab.reloadrighttabs "Genindlæser faneblade til højre">
+<!ENTITY clicktab.autoReloadTab "Aktiver/deaktiver auto-genindlæs faneblad">
+<!ENTITY clicktab.removeall "Lukker alle faneblade">
+<!ENTITY clicktab.removeother "Lukker andre faneblade">
+<!ENTITY clicktab.removesimilar "Lukker faneblade fra lignende domæne">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.uctab "Genåbner det lukkede faneblad">
+<!ENTITY clicktab.ucatab "Genåbner alle lukkede faneblade">
+<!ENTITY clicktab.snapback "SnapTilbage faneblad">
+<!ENTITY clicktab.ietab "Åbner fanebladet i IE">
+<!ENTITY contentLoad "Midterklik indlæser URL fra klippebord">
+<!ENTITY context.tab "Faneblad kontekstmenu">
+<!ENTITY context.main "Hoved kontekstmenu">
+<!ENTITY context.tools "Funktioner-menu">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showtabBarContext.label "Vis i faneblad kontekstmenu:">
+<!ENTITY showContentAreaContext.label "Vis i hoved kontekstmenu:">
+<!ENTITY showToolsMenu.label "Vis i Funktioner-menu:">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "Vis en blank side">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "Tab Mix Plus kan se at Session Manager-udvidelsen er installeret">
+<!ENTITY sm.extension.description2 "Tab Mix Plus sessionsadministration vil blive deaktiveret">
+<!ENTITY sm.extension.description3 "Du kan klikke knappen til højre for at åbne Session Managers Indstillinger-dialog">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "Konverter">
+<!ENTITY sm.extension.chooseFile.label1 "Konverter Tab Mix Plus-sessioner fra den nuværende profil">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "Brug indbygget sessions-genetablering">
+<!ENTITY ss.enable.tooltip "Fjern markering for at tillade brug af TabMix Sessionsadministration">
+<!ENTITY ss.advanced_setting "Avancerede indstillinger">
+<!ENTITY ss.advanced_setting.warning "Undlad at ændre disse med mindre du ved præcis hvad du laver">
+<!ENTITY ss.interval "Minimum tidsinterval mellem to tilstands-gem">
+<!ENTITY ss.interval.seconds "(i millisekunder)">
+<!ENTITY ss.privacy_level "Gem sensitive data (formulardata, POSTDATA og cookies) for">
+<!ENTITY ss.privacy_level.allsites "Alle sider">
+<!ENTITY ss.privacy_level.unencrypted "Kun ikke-krypterede sider">
+<!ENTITY ss.privacy_level.nosites "Slet ingen sider">
+<!ENTITY ss.postdata.label1 "Maksimal mængde POSTDATA der gemmes">
+<!ENTITY ss.postdata.label2 "(i bytes, -1 = alt)">
+<!ENTITY sessionManger.enable "Slå Sessionsadministration til">
+<!ENTITY crashRecovery.enable "Slå Genetablering af afbrudte til">
+<!ENTITY sm.StartExit "Start/afslut">
+<!ENTITY sm.restore "Genetabler">
+<!ENTITY sm.preserve "Bevar">
+<!ENTITY sm.start "Når browser starter:">
+<!ENTITY sm.start.restore "Genetabler">
+<!ENTITY sm.start.ask "Spørg før genetablering">
+<!ENTITY sm.start.nothing "Genetabler ikke">
+<!ENTITY sm.exit "Når browser afsluttes:">
+<!ENTITY sm.exit.save "Gem session">
+<!ENTITY sm.exit.ask "Spørg før der gemmes">
+<!ENTITY sm.exit.nothing "Gem ikke">
+<!ENTITY sm.startup "Opstartssession:">
+<!ENTITY sm.lastsession "Sidste session">
+<!ENTITY sm.previouslast "Foregående ift. sidste">
+<!ENTITY sm.chooseifempty "Vælg en anden hvis tom">
+<!ENTITY sm.restore.options "Ved genetablering af sessioner:">
+<!ENTITY sm.restore.overwrite "Overskriv eksisterende vinduer">
+<!ENTITY sm.restore.overwriteTabs "Og faneblade">
+<!ENTITY sm.restore.closedWinList "Gem vinduer i lukkede vinduer-listen">
+<!ENTITY sm.restore.merge "Foren flere vinduer til et">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.notrestore.label "Når der ikke genetableres ved start">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "Bevar faneblade:">
+<!ENTITY sm.preserve.history "Historik">
+<!ENTITY sm.preserve.protect "Beskyt status">
+<!ENTITY sm.preserve.locked "Lås status">
+<!ENTITY sm.preserve.permission "Tilladelser">
+<!ENTITY sm.preserve.scroll1 "Rulle-position på siden">
+<!ENTITY sm.restore.winOptions "Bevar vinduer:">
+<!ENTITY sm.restore.selectedTab "Valgte faneblad">
+<!ENTITY sm.restore.closedTabs "Lukkede faneblade-liste">
+<!ENTITY incompatible.extensions "Nogle af dine udvidelser er inkompatible med Tab Mix Plus, det anbefales at du deaktiverer eller afinstallerer de pågældende udvidelser.">
+<!ENTITY incompatible.button.label "Vis liste">

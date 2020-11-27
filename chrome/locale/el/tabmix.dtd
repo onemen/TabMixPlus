@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Κλεισμένες καρτέλες">
+<!ENTITY closedtabsbtn.tooltip "Εμφάνιση λίστας κλεισμένων καρτελών">
+<!ENTITY sessionbtn.tooltip "Εμφάνιση και διαχείριση των συνεδριών σας">
+<!ENTITY tabslistbtn.label "Ανοιγμένες καρτέλες">
+<!ENTITY tabslistbtn.tooltip "Εμφάνιση λίστας ανοιγμένων καρτελών">
+<!ENTITY closedwindowsbtn.label "Κλεισμένα παράθυρα">
+<!ENTITY closedwindowsbtn.tooltip "Εμφάνιση λίστας κλεισμένων παραθύρων">
+<!ENTITY page.header.title "Επιλογές Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Διαχειριστής συνεδρίας Tab Mix Plus">
+<!ENTITY session.Tools "Διαχειριστής συνεδρίας">
+<!ENTITY closedWin.label "Λίστα κλεισμένων παραθύρων">
+<!ENTITY duplicateTabMenu.label "Αντίγραφο καρτέλας">
+<!ENTITY duplicateTabMenu.accesskey "Α">
+<!ENTITY duplicateinWin.label "Αντίγραφο καρτέλας σε νέο παράθυρο">
+<!ENTITY duplicateinWin.accesskey "Π">
+<!ENTITY detachTab.label "Μετακίνηση σε νέο παράθυρο">
+<!ENTITY detachTab.accesskey "Μ">
+<!ENTITY mergeContext.label "Σύμπτυξη παραθύρων">
+<!ENTITY mergeContext.accesskey "Σ">
+<!ENTITY renametab.label "Μετονομασία καρτέλας">
+<!ENTITY renametab.accesskey "ο">
+<!ENTITY copytaburl.label "Αντιγραφή URL καρτέλας">
+<!ENTITY copytaburl.accesskey "τ">
+<!ENTITY reloadother.label "Ανανέωση των υπόλοιπων καρτελών">
+<!ENTITY reloadother.accesskey "υ">
+<!ENTITY reloadleft.label "Ανανέωση των αριστερών καρτελών">
+<!ENTITY reloadleft.accesskey "η">
+<!ENTITY reloadright.label "Ανανέωση των δεξιών καρτελών">
+<!ENTITY reloadright.accesskey "δ">
+<!ENTITY autoReloadTab.label "Ανανέωση καρτέλας κάθε">
+<!ENTITY autoReloadTab.accesskey "κ">
+<!ENTITY autoReloadSite.label "Ανανέωση σελίδας κάθε">
+<!ENTITY autoReloadSite.accesskey "θ">
+<!ENTITY afterthis.label "Μετά από αυτή την καρτέλα">
+<!ENTITY bookmarktab.label "Προσθήκη καρτέλας στους σελιδοδείκτες">
+<!ENTITY undoCloseListMenu.label "Λίστα κλεισμένων καρτελών">
+<!ENTITY undoCloseListMenu.accesskey "Λ">
+<!ENTITY closeAllTabsMenu.label "Κλείσιμο όλων των καρτελών">
+<!ENTITY closeall.accesskey "ο">
+<!ENTITY closeSimilarTab.label "Κλείσιμο παρεμφερών καρτελών">
+<!ENTITY closeSimilarTab.accesskey "π">
+<!ENTITY closeTabsToLeft.label "Κλείσιμο αριστερών καρτελών">
+<!ENTITY closeleft.accesskey "ρ">
+<!ENTITY docShellMenu.label "Δικαιώματα">
+<!ENTITY docShellMenu.accesskey "ι">
+<!ENTITY freezeTabMenu.label "Πάγωμα καρτέλας">
+<!ENTITY freezeTabMenu.accesskey "γ">
+<!ENTITY protectTabMenu.label "Προστασία καρτέλας">
+<!ENTITY protectTabMenu.tooltip "Προστασία κλεισίματος καρτελών">
+<!ENTITY protectTabMenu.accesskey "σ">
+<!ENTITY lockTabMenu.label "Κλείδωμα καρτέλας">
+<!ENTITY lockTabMenu.tooltip "Άνοιγμα όλων των δεσμών σε νέα καρτέλα">
+<!ENTITY lockTabMenu.accesskey "ς">
+<!ENTITY bookmarktabs.label "Προσθήκη όλων των καρτελών στους σελιδοδείκτες">
+<!ENTITY linkhere.label "Άνοιγμα δεσμού σε αυτή την καρτέλα">
+<!ENTITY linkhere.accesskey "ε">
+<!ENTITY linkBackgroundTab.label "Άνοιγμα δεσμού σε καρτέλα χωρίς εστίαση">
+<!ENTITY linkForegroundTab.label "Άνοιγμα δεσμού σε εστιασμένη καρτέλα">
+<!ENTITY linkBackgroundTab.accesskey "χ">
+<!ENTITY linkForegroundTab.accesskey "ε">
+<!ENTITY openalllinks.label "Άνοιγμα δεσμών σε νέες καρτέλες">
+<!ENTITY openalllinks.accesskey "ν">
+<!ENTITY linkwithhistory.label "Άνοιγμα δεσμού σε αντίγραφο της καρτέλας">
+<!ENTITY linkwithhistory.accesskey "α">
+<!ENTITY tabsList.label "Λίστα ανοιγμένων καρτελών">
+<!ENTITY tabsList.accesskey "λ">
+<!ENTITY allowImage.label "Εικόνα">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Αναδιεύθυνση">
+<!ENTITY allowPlugin.label "Πρόσθετο">
+<!ENTITY allowFrame.label "Πλαίσιο">
+<!ENTITY restoreincurrent.label "Επαναφορά αρχικών στο τρέχον παράθυρο">
+<!ENTITY restoreincurrent.accesskey "κ">
+<!ENTITY restoreinwin.label "Επαναφορά σε νέο παράθυρο">
+<!ENTITY restoreinwin.accesskey "φ">
+<!ENTITY restoreintab.label "Επαναφορά σε νέα καρτέλα">
+<!ENTITY restoreintab.accesskey "τ">
+<!ENTITY restoretab.label "Επαναφορά καρτέλας">
+<!ENTITY restoretab.accesskey "Ε">
+<!ENTITY bookmark.label "Προσθήκη δεσμού στους σελιδοδείκτες">
+<!ENTITY bookmark.accesskey "θ">
+<!ENTITY deletelist.label "Διαγραφή από τη λίστα">
+<!ENTITY deletelist.accesskey "Δ">
+<!ENTITY settings.label "Ρυθμίσεις">
+<!ENTITY saveWindow.label "Αποθήκευση αυτού του παραθύρου">
+<!ENTITY saveAllWindows.label "Αποθήκευση όλων των παραθύρων">
+<!ENTITY sm.context.overwrite "Επαναφορά με αντικατάσταση των ήδη ανοιγμένων παραθύρων">
+<!ENTITY sm.context.overwrite.key "ο">
+<!ENTITY sm.context.restore.new "Επαναφορά σε νέο/α παράθυρο/α">
+<!ENTITY sm.context.restore.newkey "ν">
+<!ENTITY sm.context.replacethis "Αντικατάσταση με αυτό το παράθυρο">
+<!ENTITY sm.context.replacethis.key "τ">
+<!ENTITY sm.context.replaceall "Αντικατάσταση με όλα τα παράθυρα">
+<!ENTITY sm.context.replaceall.key "Α">
+<!ENTITY sm.context.add "Προσθήκη αυτού του παραθύρου">
+<!ENTITY sm.context.add.key "Π">
+<!ENTITY sm.context.addall "Προσθήκη όλων των παραθύρων">
+<!ENTITY sm.context.addall.key "λ">
+<!ENTITY sm.context.save "Αποθήκευση">
+<!ENTITY sm.context.save.key "υ">
+<!ENTITY sm.context.rename "Μετονομασία">
+<!ENTITY sm.context.rename.key "ο">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Διαγραφή">
+<!ENTITY sm.context.delete.key "Δ">
+<!ENTITY sm.context.deleteall "Διαγραφή όλων">
+<!ENTITY sm.context.deleteall.key "γ">
+<!ENTITY sm.context.startup "Ορισμός ως συνεδρίας εκκίνησης">
+<!ENTITY sm.context.startup.key "σ">
+<!ENTITY sm.context.details "Προβολή μετρητών, ημερομηνίας και ώρας στο μενού συνεδρίας">
+<!ENTITY sm.context.details.key "λ">
+<!ENTITY tab.key "Κ">
+<!ENTITY window.key "Π">
+<!ENTITY merge.key "Σ">
+<!ENTITY sortedTabs.label "Ταξινομημένες καρτέλες">
+<!ENTITY sortedTabs.tooltip "Τσεκάρετε για προβολή της λίστας με αλφαβητική ταξινόμηση">
+<!ENTITY enable.label "Ενεργοποίηση">
+<!ENTITY custom.label "Προσαρμοσμένη">
+<!ENTITY enableTabs.label "Ενεργοποίηση όλων των καρτελών">
+<!ENTITY disableTabs.label "Απενεργοποίηση όλων των καρτελών">
+<!ENTITY seconds.label "δευτερόλεπτα">
+<!ENTITY minutes.label "λεπτά">
+<!ENTITY minute.label "λεπτό">
+<!ENTITY hideTabBar.label "Απόκρυψη της εργαλειοθήκης καρτελών">
+<!ENTITY hideTabBar.never.label "Ποτέ">
+<!ENTITY hideTabBar.never.key "τ">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "ι">
+<!ENTITY hideTabBar.always.label "Πάντα">
+<!ENTITY hideTabBar.always.key "α">

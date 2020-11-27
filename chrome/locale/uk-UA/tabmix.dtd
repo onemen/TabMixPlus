@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Закриті вкладки">
+<!ENTITY closedtabsbtn.tooltip "Показати список закритих вкладок">
+<!ENTITY sessionbtn.tooltip "Відображення і управління сесіями">
+<!ENTITY tabslistbtn.label "Відкриті вкладки">
+<!ENTITY tabslistbtn.tooltip "Показати список відкритих вкладок">
+<!ENTITY closedwindowsbtn.label "Закриті вікна">
+<!ENTITY closedwindowsbtn.tooltip "Показати список закритих вікон">
+<!ENTITY page.header.title "Налаштування Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Менеджер Сесій Tab Mix Plus">
+<!ENTITY session.Tools "Менеджер сесій">
+<!ENTITY closedWin.label "Список закритих вікон">
+<!ENTITY duplicateTabMenu.label "Клонувати вкладку">
+<!ENTITY duplicateTabMenu.accesskey "D">
+<!ENTITY duplicateinWin.label "Клонувати в новому вікні">
+<!ENTITY duplicateinWin.accesskey "W">
+<!ENTITY detachTab.label "Перемістити в нове вікно">
+<!ENTITY detachTab.accesskey "E">
+<!ENTITY mergeContext.label "Об&apos;єднання вікон">
+<!ENTITY mergeContext.accesskey "M">
+<!ENTITY renametab.label "Перейменувати вкладку">
+<!ENTITY renametab.accesskey "R">
+<!ENTITY copytaburl.label "Копіювати URL вкладки">
+<!ENTITY copytaburl.accesskey "U">
+<!ENTITY reloadother.label "Оновити інші вкладки">
+<!ENTITY reloadother.accesskey "O">
+<!ENTITY reloadleft.label "Оновити вкладки зліва">
+<!ENTITY reloadleft.accesskey "L">
+<!ENTITY reloadright.label "Оновити вкладки справа">
+<!ENTITY reloadright.accesskey "I">
+<!ENTITY autoReloadTab.label "Оновляти вкладки кожні">
+<!ENTITY autoReloadTab.accesskey "V">
+<!ENTITY autoReloadSite.label "Оновлювати Цей сайт кожні">
+<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY afterthis.label "Після цієї вкладки">
+<!ENTITY bookmarktab.label "Закладка для поточної вкладки">
+<!ENTITY undoCloseListMenu.label "Список закритих вкладок">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "Закрити всі вкладки">
+<!ENTITY closeall.accesskey "A">
+<!ENTITY closeSimilarTab.label "Закрити схожі вкладки">
+<!ENTITY closeSimilarTab.accesskey "S">
+<!ENTITY closeTabsToLeft.label "Закрити всі вкладки Ліворуч">
+<!ENTITY closeleft.accesskey "L">
+<!ENTITY docShellMenu.label "Дозволи">
+<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY freezeTabMenu.label "Заморозити вкладку">
+<!ENTITY freezeTabMenu.accesskey "F">
+<!ENTITY protectTabMenu.label "Захистити вкладку">
+<!ENTITY protectTabMenu.tooltip "Захист вкладок від закриття">
+<!ENTITY protectTabMenu.accesskey "P">
+<!ENTITY lockTabMenu.label "Заблокувати вкладку">
+<!ENTITY lockTabMenu.tooltip "Всі посилання відкривати в нових вкладках">
+<!ENTITY lockTabMenu.accesskey "K">
+<!ENTITY bookmarktabs.label "Закладки для всіх вкладок">
+<!ENTITY linkhere.label "Відкрити посилання в поточній вкладці">
+<!ENTITY linkhere.accesskey "H">
+<!ENTITY linkBackgroundTab.label "Відкрити посилання у новій фоновій вкладці">
+<!ENTITY linkForegroundTab.label "Відкрити посилання у новій активній вкладці">
+<!ENTITY linkBackgroundTab.accesskey "B">
+<!ENTITY linkForegroundTab.accesskey "F">
+<!ENTITY openalllinks.label "Відкрити посилання у нових вкладках">
+<!ENTITY openalllinks.accesskey "S">
+<!ENTITY linkwithhistory.label "Відкрити посилання у клонованих вкладках">
+<!ENTITY linkwithhistory.accesskey "D">
+<!ENTITY tabsList.label "Список відкритих вкладок">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Зображення">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Перенаправлення">
+<!ENTITY allowPlugin.label "Додаткові модулі">
+<!ENTITY allowFrame.label "Фрейми">
+<!ENTITY restoreincurrent.label "Відновити у поточній вкладці">
+<!ENTITY restoreincurrent.accesskey "C">
+<!ENTITY restoreinwin.label "Відновити у новому вікні">
+<!ENTITY restoreinwin.accesskey "W">
+<!ENTITY restoreintab.label "Відновити у новій вкладці">
+<!ENTITY restoreintab.accesskey "T">
+<!ENTITY restoretab.label "Відновити вкладку">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "Добавити сторінку в закладки">
+<!ENTITY bookmark.accesskey "B">
+<!ENTITY deletelist.label "Знищити зі списку">
+<!ENTITY deletelist.accesskey "D">
+<!ENTITY settings.label "Налаштування">
+<!ENTITY saveWindow.label "Зберегти дане вікно">
+<!ENTITY saveAllWindows.label "Зберегти всі вікна">
+<!ENTITY sm.context.overwrite "Відновити з заміною існуючих вікон">
+<!ENTITY sm.context.overwrite.key "O">
+<!ENTITY sm.context.restore.new "Відновити в нових вікнах">
+<!ENTITY sm.context.restore.newkey "N">
+<!ENTITY sm.context.replacethis "Відновити в поточному вікні">
+<!ENTITY sm.context.replacethis.key "T">
+<!ENTITY sm.context.replaceall "Замінити всі вікна">
+<!ENTITY sm.context.replaceall.key "A">
+<!ENTITY sm.context.add "Добавити дане вікно">
+<!ENTITY sm.context.add.key "W">
+<!ENTITY sm.context.addall "Добавити всі вікна">
+<!ENTITY sm.context.addall.key "I">
+<!ENTITY sm.context.save "Зберегти">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "Перейменувати">
+<!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Знищити">
+<!ENTITY sm.context.delete.key "D">
+<!ENTITY sm.context.deleteall "Знищити всі">
+<!ENTITY sm.context.deleteall.key "L">
+<!ENTITY sm.context.startup "Встановити початковою сесією">
+<!ENTITY sm.context.startup.key "P">
+<!ENTITY sm.context.details "Відображати нумерацію, дату і час в меню сесій">
+<!ENTITY sm.context.details.key "C">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "Сортувати вкладки">
+<!ENTITY sortedTabs.tooltip "Відмітьте, щоб показати відсортований по алфавіту список">
+<!ENTITY enable.label "Застосувати">
+<!ENTITY custom.label "Встановлене користувачем">
+<!ENTITY enableTabs.label "Застосувати для всіх вкладок">
+<!ENTITY disableTabs.label "Заборонити для всіх вкладок">
+<!ENTITY seconds.label "секунд">
+<!ENTITY minutes.label "хвилин">
+<!ENTITY minute.label "хвилина">
+<!ENTITY hideTabBar.label "Приховати панель вкладок">
+<!ENTITY hideTabBar.never.label "Ніколи">
+<!ENTITY hideTabBar.never.key "N">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "E">
+<!ENTITY hideTabBar.always.label "Завжди">
+<!ENTITY hideTabBar.always.key "A">

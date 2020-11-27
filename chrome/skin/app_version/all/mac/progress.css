@@ -1,0 +1,39 @@
+/**
+    Firefox all versions
+
+    Mac platform
+
+**/
+
+/* :::: progress bar on tabs :::: */
+.tab-progress {
+  -moz-appearance: none;
+  min-height: 0;
+  height: 4px;
+}
+
+#tabbrowser-tabs:not([tabmix_australis])[tabsontop="true"] .tab-progress {
+  margin: 3px 2px;
+}
+
+#tabbrowser-tabs:not([tabmix_australis]):not([tabsontop="true"]) .tab-progress {
+  margin: 1px 2px;
+}
+
+#tabbrowser-tabs[tabmix_australis="true"]:not([treestyletab-mode="vertical"])
+    > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
+  margin: 4px 7px 0 7px;
+}
+
+.tab-progress > .progress-bar {
+  -moz-appearance: none;
+  border: 0;
+  border-top: 1px solid rgba(0,0,0,.4);
+  border-bottom: 1px solid rgba(0,0,0,.3);
+  background-origin: border-box;
+  background-color: Highlight;
+}
+
+.tab-progress > .progress-bar:-moz-window-inactive {
+  opacity: 0.6 !important;
+}

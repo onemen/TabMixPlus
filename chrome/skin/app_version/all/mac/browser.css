@@ -1,0 +1,86 @@
+/**
+    Firefox all versions
+
+    Mac platform
+
+**/
+
+/* :::: tabbar on bottom ::::
+  we leave the default background-image on mac
+#TabsToolbar[tabbaronbottom] {
+  background-image: none !important;
+}
+*/
+
+/* prevent tabbrowser-tabs height from increasing by 2px when the tabs are
+   in display: block */
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] >
+    #tabbrowser-tabs[flowing="multibar"] > .tabbrowser-arrowscrollbox >
+    .tabs-newtab-button[command="cmd_newNavigatorTab"]  .toolbarbutton-icon {
+  margin: -2px 0;
+}
+
+/* override some rules for toolbarbutton-1 and tabs-closebutton */
+#TabsToolbar > .tabs-closebutton:not([class~="tabmix"]) {
+  list-style-image: url("chrome://global/skin/icons/close.png");
+}
+
+#TabsToolbar .tabs-closebutton:not([type="menu-button"]):not([disabled=true]):not([open]):hover {
+  background-image: none !important;
+}
+
+/* Tabstrip close button Firefox 31+ */
+@media (min-resolution: 2dppx) {
+  .tabs-closebutton.tabmix > .toolbarbutton-icon {
+    width: 16px;
+  }
+}
+
+#TabsToolbar[tabbaronbottom] > #tabbrowser-tabs > .tabbrowser-tab[selected="true"] {
+  position: static !important;
+}
+
+#TabsToolbar[multibar]:not(:-moz-lwtheme) {
+  background-repeat: repeat;
+  background-color: rgb(225, 225, 225);
+  background-image: linear-gradient(rgb(232, 232, 232), rgb(211, 211, 211));
+}
+
+#tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
+  vertical-align: bottom;
+}
+
+/* for mac - look in pinstripe/browser/browser.css */
+#tabbrowser-tabs > .tabbrowser-tab > * > .tab-progress-container > .tab-progress:not([selected="true"]),
+#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-icon-image:not([selected="true"]),
+#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-protect-icon:not([selected="true"]),
+#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-lock-icon:not([selected="true"]),
+#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-reload-icon:not([selected="true"]),
+#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-label-container > .tab-label:not([selected="true"]):-moz-lwtheme,
+#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]):-moz-lwtheme {
+  opacity: .8;
+}
+
+/* :::: scrollbutton arrow - fix borders :::: */
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up,
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-up {
+  -moz-border-end: none;
+}
+
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-down {
+  -moz-border-start: none;
+}
+
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-down:not([disabled]),
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-up:not([disabled]),
+#tabmixScrollBox[flowing=multibar] > .scrollbutton-down:not([disabled]){
+  -moz-border-image: none;
+}
+
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:-moz-locale-dir(ltr) {
+  -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 0 0 2px;
+}
+
+#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:-moz-locale-dir(rtl) {
+  -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 2px 0 0;
+}

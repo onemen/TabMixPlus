@@ -1,0 +1,357 @@
+<!ENTITY tab.links "Gestione dei link">
+<!ENTITY tab.events "Schede">
+<!ENTITY tab.mouse "Mouse">
+<!ENTITY tab.appearance "Aspetto">
+<!ENTITY tab.menu "Menu">
+<!ENTITY tab.session "Sessione">
+<!ENTITY tab.incompatible "Incompatibilità">
+<!ENTITY apply.label "Applica">
+<!ENTITY settings.export "Esportale in file txt">
+<!ENTITY settings.import "Importale da file txt">
+<!ENTITY settings.sync "Sincronizzale con Firefox Sync">
+<!ENTITY settings.default "Ripristina predefinite">
+<!ENTITY settings.revert "Revert">
+<!ENTITY generalWindowOpen.label "Forza i link che aprono nuove finestre ad aprirsi:">
+<!ENTITY externalLink.useSeparate.label "Utilizza impostazioni distinte per i link provenienti da altre applicazioni">
+<!ENTITY externalLinkTarget.label "Forza i link provenienti da altre applicazioni ad aprirsi:">
+<!ENTITY linkTarget.tab "in una nuova scheda">
+<!ENTITY linkTarget.window "in una nuova finestra">
+<!ENTITY linkTarget.current "nella scheda attuale">
+<!ENTITY linkTarget.accesskey "a">
+<!ENTITY divertedWindowOpen.label "Forza i pop-up JavaScript ad aprirsi:">
+<!ENTITY divertedWindowOpen.all "tutti in nuove schede">
+<!ENTITY divertedWindowOpen.some "quando non ridimensionati">
+<!ENTITY divertedWindowOpen.none "tutti">
+<!ENTITY linkTarget.label "I link con attributo TARGET si aprono nella scheda attuale">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY download.label "Non aprire nuove schede quando si scaricano determinati file">
+<!ENTITY edit.label "Modifica">
+<!ENTITY speLink.label "Forza ad aprirsi in nuove schede:">
+<!ENTITY speLink.none "nessun link">
+<!ENTITY speLink.allLinks "tutti i link">
+<!ENTITY speLink.external "i link provenienti da altri siti">
+<!ENTITY singleWindow.label "Attiva finestra singola">
+<!ENTITY newTabs.label "Apertura di nuove schede">
+<!ENTITY tabOpen.label "Apertura in secondo/primo piano">
+<!ENTITY tabFocus.label "Apertura in primo piano">
+<!ENTITY tabClose.label "Chiusura">
+<!ENTITY tabMerge.label "Incorporazione">
+<!ENTITY tabFeature.label "Varie">
+<!ENTITY newtab.label "Carica in una nuova scheda:">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "una pagina vuota">
+<!ENTITY newtab.home "la pagina iniziale">
+<!ENTITY newtab.current "la pagina attuale">
+<!ENTITY newtab.duplicate "la pagina duplicata">
+<!ENTITY newtab.location.1 "l&apos;URL definito dell&apos;utente">
+<!ENTITY newtab.placeholder.label "Inserire l&apos;URL definito dell&apos;utente">
+<!ENTITY location.label.1 "Indirizzo web">
+<!ENTITY focusContent.label "Non selezionare automaticamente la barra degli indirizzi al caricamento di pagine non vuote">
+<!ENTITY openTabNext.label "Apri le schede dopo quella attuale in primo piano">
+<!ENTITY openOtherTabNext.label "Apri le altre schede dopo quella attuale">
+<!ENTITY relatedAfterCurrent.label "Solo se relative alla scheda attuale">
+<!ENTITY openTabNext.tooltip1 "Effettua l&apos;apertura [a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Apri le schede duplicate accanto a quelle originali">
+<!ENTITY openTabNext.tooltip "Effettua l&apos;apertura [a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Modifica l&apos;ordine di apertura">
+<!ENTITY openTabNextInverse.tooltip "Effettua l&apos;apertura [a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 " ">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabs">
+<!ENTITY lockTabs.label "Schede da bloccare">
+<!ENTITY lockNewTabs.label "Blocca tutte le schede nuove">
+<!ENTITY lockAppTabs.label "Blocca le schede applicazione">
+<!ENTITY updateLockState.label "Applica le modifiche alle schede aperte">
+<!ENTITY openNewTab.label "Schede in secondo piano">
+<!ENTITY openBookmarks.label "Segnalibri">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openHistory.label "Cronologia">
+<!ENTITY openUrl.label "URL della barra degli indirizzi">
+<!ENTITY openSearch.label "Risultati della barra di ricerca">
+<!ENTITY middlecurrent1.label "Il clic centrale/Ctrl+clic apre i link nella scheda attuale">
+<!ENTITY middlecurrent.tooltip "Solo link di segnalibri, cronologia e schede bloccate">
+<!ENTITY tabFocus.caption "Selezionare gli elementi il cui caricamento avverrà in schede in primo piano">
+<!ENTITY selectTab.label "Altri link in generale">
+<!ENTITY selectDivertedTab.label "Link che aprono nuove finestre">
+<!ENTITY selectTabFromExternal.label "Altre applicazioni">
+<!ENTITY selectTabCommand.label "Comandi delle nuove schede">
+<!ENTITY contextMenuSearch.label "Risultati di ricerca della voce di menu contestuale Cerca con">
+<!ENTITY selectTabBH.label "Segnalibri o cronologia">
+<!ENTITY duplicateTab.label "Duplica scheda">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "Avvisi di Tab Mix Plus">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "Chiusura dell&apos;ultima scheda">
+<!ENTITY keepWindow.label.3.1 "Non chiudere la finestra del browser quando si chiude l&apos;ultima scheda">
+<!ENTITY keeptab.label "Non visualizzare una pagina vuota quando si chiude l&apos;ultima scheda">
+<!ENTITY closeOnMerge.label "Chiudi finestra dopo aver incorporato le schede">
+<!ENTITY warnOnMerge.label "Avvisa quando si chiudono finestre con alcune schede non incorporate">
+<!ENTITY currenttab.caption.label "Chiusura della scheda attuale">
+<!ENTITY focusTab.labelBegin "Quando si chiude la scheda attuale porta in primo piano:">
+<!ENTITY focusTab.firstTab "la prima scheda">
+<!ENTITY focusTab.leftTab "la scheda a sinistra">
+<!ENTITY focusTab.rightTab "la scheda a destra">
+<!ENTITY focusTab.lastTab "l&apos;ultima scheda">
+<!ENTITY focusTab.lastSelectedTab "l&apos;ultima scheda selezionata">
+<!ENTITY focusTab.openerTab "la scheda che apre link / a destra">
+<!ENTITY focusTab.openerTab.rtl "la scheda che apre link / a sinistra">
+<!ENTITY focusTab.lastOpenedTab "l&apos;ultima scheda aperta">
+<!ENTITY undoClose.label "Attiva opzione di riapertura schede">
+<!ENTITY undoCloseCache.label "Riapri il seguente numero di schede:">
+<!ENTITY undoClosepos.label "Ripristina la posizione originaria delle schede e vai all&apos;ultima scheda selezionata">
+<!ENTITY menuonlybutton.label "Attiva lo stile di funzione singola per il pulsante della lista delle schede chiuse">
+<!ENTITY ctrltab.label "Scorri le schede nell&apos;ultimo ordine usato con Ctrl+Tab">
+<!ENTITY cmdtab.label "Scorri le schede nell&apos;ultimo ordine usato con Cmd+Tab">
+<!ENTITY ctrltab.tabPreviews "Visualizza l&apos;anteprima delle schede">
+<!ENTITY ctrltab.popup "Visualizza il menu a pop-up della lista delle schede con Ctrl+Tab">
+<!ENTITY cmdtab.popup "Visualizza il menu a pop-up della lista delle schede con Cmd+Tab">
+<!ENTITY tabpopup.mouse "Il menu a pop-up della lista delle schede risponde al mouse">
+<!ENTITY mergeNoTabSelection.label "Azione da effettuare quando si incorporano finestre senza alcuna scheda selezionata">
+<!ENTITY mergeTabSelection.label "Azione da effettuare quando si incorporano finestre dopo aver selezionato le schede">
+<!ENTITY mergeall.label "Incorporare tutte le finestre insieme">
+<!ENTITY mergelastfocused.label "Incorporare tutte le finestre insieme anziché solo l&apos;ultima in primo piano">
+<!ENTITY mergePopups.label "Incorpora anche i pop-up">
+<!ENTITY popupNextToOpener.label "Posiziona i pop-up accanto alle schede che li aprono">
+<!ENTITY activateSlideshow.label "Avvia/ferma la rotazione delle schede premendo #1 ogni">
+<!ENTITY toggleAnimation.label "Disattiva l&apos;animazione di apertura/chiusura delle schede">
+<!ENTITY reloadEvery.matchAddress.label "Ricarica le schede indipendentemente dal loro indirizzo web">
+<!ENTITY reloadEvery.onReloadButton.label "Mostra il menu a discesa per ricaricare automaticamente le pagine web nel pulsante Ricarica">
+<!ENTITY seconds.label "secondi">
+<!ENTITY minutes.label "minuti">
+<!ENTITY tabBarAppearance.label "Barra delle schede">
+<!ENTITY tabAppearance.label "Schede">
+<!ENTITY toolBarAppearance.label "Barra degli strumenti">
+<!ENTITY show.ontabbar.label "Da mostrare nella barra delle schede">
+<!ENTITY show.ontab.label "Da mostrare nel cartellino delle schede">
+<!ENTITY dragNewTabButton.tooltip "Posizionare il pulsante &apos;Nuova scheda&apos; nelle barre degli strumenti per attivare l&apos;opzione">
+<!ENTITY hideTabBarButton.label "Pulsante di chiusura schede">
+<!ENTITY newTabButton.label "Pulsante di nuova scheda">
+<!ENTITY newTabButton.position.left.label "nella parte sinistra">
+<!ENTITY newTabButton.position.right.label "nella parte destra">
+<!ENTITY newTabButton.position.afterlast.label "dopo l&apos;ultima scheda">
+<!ENTITY allTabsButton.label "Pulsante di tutte le schede">
+<!ENTITY tabBarSpace.label "Spazio ai lati della barra delle schede">
+<!ENTITY tabBarSpace.tooltip "Lascia spazio su entrambi i lati della barra delle schede per trascinarvi le schede">
+<!ENTITY tabbar.label "Nascondi la barra delle schede quando solo una scheda rimane aperta">
+<!ENTITY moveTabOnDragging.label "Quando si trascina una scheda spostarla direttamente">
+<!ENTITY dropIndicator.label "Indicatori di trascinamento">
+<!ENTITY dropIndicator-native.label "stile predefinito del browser">
+<!ENTITY dropIndicator-builtin.label "stile incorporato">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY tabBarPosition.label "Sposta la barra delle schede:">
+<!ENTITY tabBarPosition.top.label "in alto (sopra al contenuto)">
+<!ENTITY tabBarPosition.bottom.label "in basso (sotto al contenuto)">
+<!ENTITY tabScroll.label "Quando ci sono troppe schede aperte:">
+<!ENTITY tabScroll.none "rendi scorrevole la barra delle schede">
+<!ENTITY tabScroll.leftRightButtons "rendi scorrevole la barra delle schede con pulsanti a destra e sinistra">
+<!ENTITY tabScroll.rightButtons "rendi scorrevole la barra delle schede con pulsanti a destra">
+<!ENTITY tabScroll.rightButtons.rtl "rendi scorrevole la barra delle schede con pulsanti a sinistra">
+<!ENTITY tabScroll.multibar "disponi su molteplici file la barra delle schede">
+<!ENTITY maxrow.label "Numero massimo di file da visualizzare:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY offsetAmountToScroll.label "Durante lo scorrimento mostra parte della prossima scheda non visibile">
+<!ENTITY smoothScroll.label "Attiva lo scorrimento continuo">
+<!ENTITY scrolldelay.label "Millisecondi di ritardo di scorrimento:">
+<!ENTITY currenttab.style.label "Scheda attuale">
+<!ENTITY unloadedtabs.style.label "Schede non caricate">
+<!ENTITY unreadtabs.style.label "Schede non lette">
+<!ENTITY othertabs.style.label "Altre schede">
+<!ENTITY setstyles.label "Personalizza gli stili">
+<!ENTITY extraIcons.label1 "Selezionare a quali schede sovrapporre il relativo simbolo sulle favicon">
+<!ENTITY extraIcons.locked "Schede bloccate">
+<!ENTITY extraIcons.protected "Schede protette">
+<!ENTITY extraIcons.autoreload "Schede con autoricaricamento">
+<!ENTITY extraIcons.hideonpinned "Nascondi sulle schede applicazione">
+<!ENTITY progressMeter.label "Progressione del caricamento">
+<!ENTITY showTabX.labelBegin "Pulsante di chiusura delle schede">
+<!ENTITY showTabX.left "sulla parte sinistra">
+<!ENTITY showTabX.rtl "sulla parte destra">
+<!ENTITY milliseconds.label " ">
+<!-- LOCALIZATION NOTE
+          change this only if you need to change the width 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "sempre">
+<!ENTITY showTabX.current "nella scheda attuale">
+<!ENTITY showTabX.hover "solo nelle schede selezionate dal mouse per ms">
+<!ENTITY showTabX.alwaysExeption "nelle schede più larghe di">
+<!ENTITY showTabX.currentHover "nella scheda attuale solo se selezionata dal mouse per ms">
+<!ENTITY minWidth.label "Larghezza cartellino delle schede (da 22 a 1000). Da">
+<!ENTITY widthTo.label "a">
+<!ENTITY widthPixels.label "pixel">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY flexTabs.label "Adatta le schede al titolo della pagina web">
+<!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
+<!-- LOCALIZATION NOTE          
+          change this only if you need to change the width 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "È possibile personalizzare quali pulsanti di Tab Mix Plus mostrare nelle barre degli strumenti">
+<!ENTITY toolbar.button.label "Personalizza">
+<!ENTITY toolbar.visible.caption "Pulsanti visibili">
+<!ENTITY toolbar.novisible.label "Non ci sono pulsanti visibili">
+<!ENTITY toolbar.hidden.caption "Pulsanti invisibili">
+<!ENTITY toolbar.nohidden.label "Non ci sono pulsanti invisibili">
+<!ENTITY mouseGesture.label "Movimenti">
+<!ENTITY mouseClick.label "Clic">
+<!ENTITY mouseHoverSelect.labelBegin "Millisecondi dopo cui selezionare la scheda al passaggio del mouse:">
+<!ENTITY tabFlip.label "Quando si fa clic sulla scheda attuale si passa all&apos;ultima scheda selezionata">
+<!ENTITY tabFlip.delay "Millisecondi dopo cui passare all&apos;ultima scheda selezionata:">
+<!ENTITY clickFocus.label "Fai clic su una scheda (giù e rilascia) per selezionarla">
+<!ENTITY removeEntries.label "Il clic centrale elimina dalla lista delle schede un sito per volta">
+<!ENTITY lockTabSizingOnClose.label "Quando si chiude una scheda non ridimensionare le altre fino a che il cursore rimane sulla barra degli strumenti">
+<!ENTITY removeEntries.tooltip "Incluse le schede chiuse, le finestre chiuse e le sessioni salvate">
+<!ENTITY tabbarscrolling.caption "Opzioni di scorrimento">
+<!ENTITY tabbarscrolling.holdShift.label "Tenere premuto il tasto Maiusc durante lo scorrimento per cambiare queste opzioni">
+<!ENTITY tabbarscrolling.selectTab.label "Cambia la scheda selezionata">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Permetti lo scorrimento di tutte le schede">
+<!ENTITY tabbarscrolling.inverse.label "Spostarsi sulla scheda a dx quando si ruota la rotellina del mouse indietro">
+<!ENTITY double.label "Doppio clic">
+<!ENTITY middle.label "Clic centrale">
+<!ENTITY ctrl.label "Ctrl+clic">
+<!ENTITY cmd.label "Cmd+Clic">
+<!ENTITY shift.label "Maiusc+clic">
+<!ENTITY alt.label "Alt+clic">
+<!ENTITY ontab.label "Su una scheda">
+<!ENTITY ontabbar.label "Sulla barra delle schede">
+<!ENTITY clicktab.label "Selezionare quali azioni associare al clic con il mouse su una scheda o sulla barra delle schede">
+<!ENTITY ontabbar.dblClick.label "Evita che il doppio clic sulla barra delle schede ridimensioni la finestra del browser">
+<!ENTITY ontabbar.click.label "e che il clic permetta il trascinamento della finestra del browser">
+<!ENTITY clicktab.default "Comportamento predefinito di Firefox o con un&apos;altra estensione">
+<!ENTITY clicktab.nothing "Non ha effetto alcuno">
+<!ENTITY clicktab.addtab "Apri una nuova scheda">
+<!ENTITY clicktab.duplicatetab "Duplica la scheda">
+<!ENTITY clicktab.duplicatetabw "Duplica la scheda in una nuova finestra">
+<!ENTITY clicktab.detachtab "Sposta la scheda in una nuova finestra">
+<!ENTITY clicktab.protecttab "Proteggi la scheda">
+<!ENTITY clicktab.locktab "Blocca la scheda">
+<!ENTITY clicktab.freezetab "Proteggi e blocca la scheda">
+<!ENTITY clicktab.renametab "Rinomina la scheda">
+<!ENTITY clicktab.copyTabUrl "Copia l&apos;indirizzo web della scheda negli appunti">
+<!ENTITY clicktab.copyUrlFromClipboard "Carica l&apos;indirizzo web dagli appunti">
+<!ENTITY clicktab.selectMerge "Seleziona la scheda da incorporare">
+<!ENTITY clicktab.mergeTabs "Incorpora sempre più finestre fra loro">
+<!ENTITY clicktab.bookTab "Questa scheda in un segnalibro…">
+<!ENTITY clicktab.bookTabs "Tutte le schede in un segnalibro…">
+<!ENTITY clicktab.reloadtab "Ricarica la scheda">
+<!ENTITY clicktab.reloadtabs "Ricarica tutte le schede">
+<!ENTITY clicktab.reloadothertabs "Ricarica le altre schede">
+<!ENTITY clicktab.reloadlefttabs "Ricarica schede a sinistra">
+<!ENTITY clicktab.reloadrighttabs "Ricarica schede a destra">
+<!ENTITY clicktab.autoReloadTab "Attiva/disattiva il ricaricamento automatico della scheda">
+<!ENTITY clicktab.removeall "Chiudi tutte le schede">
+<!ENTITY clicktab.removeother "Chiudi le altre schede">
+<!ENTITY clicktab.removesimilar "Chiudi le schede con un dominio simile">
+<!ENTITY clicktab.removetoLeft "Chiudi schede a sinistra">
+<!ENTITY clicktab.removetoRight "Chiudi schede a destra">
+<!ENTITY clicktab.uctab "Riapri la scheda chiusa">
+<!ENTITY clicktab.ucatab "Riapri tutte le schede chiuse">
+<!ENTITY clicktab.snapback "Riapri la scheda">
+<!ENTITY clicktab.ietab "Apri scheda in IE">
+<!ENTITY contentLoad "Il clic centrale carica gli indirizzi web dagli appunti">
+<!ENTITY context.tab "Contestuale schede">
+<!ENTITY context.main "Contestuale pagine web">
+<!ENTITY context.tools "&apos;Strumenti&apos; del browser">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showtabBarContext.label "Elementi da visualizzare nel menu contestuale della barra delle schede">
+<!ENTITY showContentAreaContext.label "Elementi da visualizzare nel menu contestuale delle pagine web">
+<!ENTITY showToolsMenu.label "Elementi da visualizzare nel menu &apos;Strumenti&apos; di Firefox">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "mostra una pagina vuota">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "Tab Mix Plus ha rilevato che è installata l&apos;estensione Session Manager, per cui la funzionalità di ripristino delle sessioni di Tab Mix Plus è stata disattivata">
+<!ENTITY sm.extension.description2 "(Per ripristinare tale funzionalità è necessario disinstallare Session Manager)">
+<!ENTITY sm.extension.description3 "Fare clic sul pulsante a destra per aprire la finestra delle opzioni di Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "Converti">
+<!ENTITY sm.extension.chooseFile.label1 "Converti il file dei dati della sessione di Tab Mix Plus dell&apos;attuale profilo">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "Attiva il ripristino delle sessioni nativo del browser">
+<!ENTITY ss.enable.tooltip "Deselezionare per permettere il ripristino delle sessioni di Tab Mix Plus">
+<!ENTITY ss.advanced_setting "Impostazioni avanzate">
+<!ENTITY ss.advanced_setting.warning "Non modificare queste impostazioni se non si è utenti avanzati">
+<!ENTITY ss.interval "Intervallo minimo di tempo fra due stati">
+<!ENTITY ss.interval.seconds "(in millisecondi)">
+<!ENTITY ss.privacy_level "Salva i dati sensibili (dati dei moduli, POSTDATA e cookie) per">
+<!ENTITY ss.privacy_level.allsites "tutti i siti">
+<!ENTITY ss.privacy_level.unencrypted "i siti non cifrati">
+<!ENTITY ss.privacy_level.nosites "nessun sito">
+<!ENTITY ss.postdata.label1 "Quantità massima di POSTDATA da memorizzare">
+<!ENTITY ss.postdata.label2 "(in byte, -1 = tutti)">
+<!ENTITY sessionManger.enable "Attiva il ripristino delle sessioni di Tab Mix Plus">
+<!ENTITY crashRecovery.enable "Attiva il ripristino delle sessioni dopo crash">
+<!ENTITY sm.StartExit "Avvio/Chiusura">
+<!ENTITY sm.restore "Fase di ripristino">
+<!ENTITY sm.preserve "Fase di preservazione">
+<!ENTITY sm.start "Azione da effettuare quando si avvia il browser">
+<!ENTITY sm.start.restore "Ripristina">
+<!ENTITY sm.start.ask "Chiedi prima di ripristinare">
+<!ENTITY sm.start.nothing "Non ripristinare">
+<!ENTITY sm.exit "Azione da effettuare quando si chiude il browser">
+<!ENTITY sm.exit.save "Salva la sessione">
+<!ENTITY sm.exit.ask "Chiedi prima di salvare">
+<!ENTITY sm.exit.nothing "Non salvare">
+<!ENTITY sm.startup "Quando si avvia il browser ripristina:">
+<!ENTITY sm.lastsession "l&apos;ultima sessione">
+<!ENTITY sm.previouslast "la penultima sessione">
+<!ENTITY sm.chooseifempty "Permetti di selezionare un&apos;altra sessione se quella scelta fosse vuota">
+<!ENTITY sm.restore.options "Azione da effettuare quando si ripristinano le sessioni">
+<!ENTITY sm.restore.overwrite "Sovrascrivi le finestre esistenti">
+<!ENTITY sm.restore.overwriteTabs "comprese le schede">
+<!ENTITY sm.restore.closedWinList "Salva le finestre esistenti nella lista delle schede chiuse">
+<!ENTITY sm.restore.merge "Avvia la sessione unendo le varie finestre in una sola">
+<!ENTITY sm.restore.bypassCache "Bypassa la cache">
+<!ENTITY sm.notrestore.label "Se all&apos;avvio del browser non viene ripristinata alcuna sessione">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "Dati da preservare per le schede">
+<!ENTITY sm.preserve.history "Cronologia">
+<!ENTITY sm.preserve.protect "Stato &apos;protetto&apos;">
+<!ENTITY sm.preserve.locked "Stato &apos;bloccato&apos;">
+<!ENTITY sm.preserve.permission "Permessi">
+<!ENTITY sm.preserve.scroll1 "Posizione di scorrimento e dimensione testo">
+<!ENTITY sm.restore.winOptions "Dati da preservare per le finestre">
+<!ENTITY sm.restore.selectedTab "Scheda selezionata">
+<!ENTITY sm.restore.closedTabs "Lista delle schede chiuse">
+<!ENTITY incompatible.extensions "Alcune delle estensioni installate sono incompatibili con Tab Mix Plus. Disattivare o disinstallare tali estensioni">
+<!ENTITY incompatible.button.label "Estensioni incompatibili">

@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "バックグラウンドで読み込む">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "タブのタイトル名を編集">
+<!ENTITY renametab.reset.label "既定のタイトル名に戻す">
+<!ENTITY title.label "タイトル">
+<!ENTITY default.label "既定値">
+<!ENTITY renametab.permanently.label "アドレスに依存しないタブ名に変更">
+<!ENTITY renametab.permanently.tooltip "タブ履歴 - アドレスが変化してもタブ名は変わりません">
+<!ENTITY forum.label "フォーラム">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "ヘルプ">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "リストから時間を選ぶか、自分の設定時間を入力">
+<!ENTITY specifyreload.label "再読み込み間隔の指定">
+<!ENTITY sanitizer.entry "Tab Mix Plus の保存セッション">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "すべての保存したセッションデータとバックアップが削除されますがよろしいですか？">

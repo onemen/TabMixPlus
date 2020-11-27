@@ -1,0 +1,313 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE bindings [
+<!ENTITY % dialogDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+%dialogDTD;
+<!ENTITY % appearanceDTD SYSTEM "chrome://tabmixplus/locale/pref-appearance.dtd" >
+%appearanceDTD;
+]>
+
+<bindings id="tmp_tabStylesbindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="tabstylepanel">
+    <content orient="vertical">
+      <xul:hbox align="center">
+        <xul:checkbox anonid="useThis" label="&useThis.label;: "
+                      oncommand="document.getBindingParent(this)._updateUseThisState(this.checked); event.stopPropagation();"/>
+        <xul:label style="font-weight: bold;"/>
+      </xul:hbox>
+      <xul:separator class="groove"/>
+      <xul:hbox align="center" style="height: 28px;" xbl:inherits="_hidebox">
+        <xul:checkbox anonid="italic" xbl:inherits="disabled" label="&italic.label;" style="font-style: italic;"/>
+        <xul:checkbox anonid="bold" xbl:inherits="disabled" label="&bold.label;" style="font-weight: bold;"/>
+        <xul:checkbox anonid="underline" class="tabStyles_underline" xbl:inherits="disabled" label="&underline.label;"/>
+      </xul:hbox>
+      <xul:hbox flex="1">
+        <xul:vbox>
+          <xul:colorbox anonid="textColor" xbl:inherits="disabled=text-disabled,_hidebox">
+            <xul:checkbox anonid="text" class="visible" xbl:inherits="disabled" label="&textcolor.label;:"
+                          oncommand="document.getBindingParent(this).updateDisableState(this.getAttribute('anonid'))"/>
+          </xul:colorbox>
+          <xul:checkbox_tmp anonid="bg" xbl:inherits="disabled" label="&bgColor.label;:"
+                        oncommand="document.getBindingParent(this).updateDisableState(this.getAttribute('anonid'))"/>
+          <xul:colorbox anonid="bgTopColor" class="bgTop" xbl:inherits="disabled=bg-disabled,hidden=_hidebox">
+            <xul:label value="&bgTopColor.label;:" class="visible" xbl:inherits="disabled=bg-disabled"/>
+          </xul:colorbox>
+          <xul:colorbox anonid="bgColor" class="bgBottom" xbl:inherits="disabled=bg-disabled">
+            <xul:label value="&bgBottomColor.label;:" class="visible" xbl:inherits="disabled=bg-disabled,_hidebox"/>
+          </xul:colorbox>
+        </xul:vbox>
+        <xul:spacer flex="1"/>
+      </xul:hbox>
+      <xul:separator class="groove"/>
+      <xul:hbox align="center">
+        <xul:button label="&settings.default;" oncommand="document.getBindingParent(this)._resetDefault();"/>
+      </xul:hbox>
+    </content>
+
+    <implementation>
+      <constructor>
+        <![CDATA[
+          var checked = Tabmix.prefs.getBoolPref(this.id);
+          this._initUseThisPref = {prefvalue: checked, optionvalue: checked};
+          this._initPrefValues = Tabmix.prefs.getCharPref(this.prefName);
+
+          if (!Services.prefs.getBoolPref("browser.preferences.instantApply")) {
+            this._item = window.opener &&
+                window.opener.document.getElementById("pref_" + this.id);
+            if (this._item) {
+              this._initUseThisPref.optionvalue = checked = this._item.value;
+              Tabmix.prefs.setBoolPref(this.id, checked);
+            }
+          }
+
+          var useThis = this._getElementById("useThis");
+          useThis.checked = checked;
+          this.disabled = !checked;
+
+          this.disableBgColor = Tabmix.prefs.getBoolPref("disableBackground") &&
+                                this.id != "progressMeter";
+
+          useThis.nextSibling.value = document.getElementById("_" + this.id).label;
+          // colorpicker need some time until its ready
+          window.setTimeout(() => this._getPrefs(this._initPrefValues), 0);
+        ]]>
+      </constructor>
+
+      <field name="_item">null</field>
+      <field name="_initUseThisPref">null</field>
+      <field name="_initPrefValue">null</field>
+      <field name="_prefValues">null</field>
+
+      <property name="prefName"
+                onget="return 'styles.' + this.id;"
+                readonly="true"/>
+
+      <property name="disabled"
+        onget="return this.getAttribute('disabled');">
+        <setter>
+          <![CDATA[
+            if (val) {
+              this.setAttribute("disabled", true);
+            } else {
+              this.removeAttribute("disabled");
+            }
+          ]]>
+        </setter>
+      </property>
+
+      <method name="_getElementById">
+        <parameter name="aID"/>
+        <body><![CDATA[
+          return document.getAnonymousElementByAttribute(this, "anonid", aID);
+        ]]></body>
+      </method>
+
+      <method name="_updateUseThisState">
+        <parameter name="aEnabled"/>
+        <body><![CDATA[
+          Tabmix.prefs.setBoolPref(this.id, aEnabled);
+          this.disabled = !aEnabled;
+          if ("text" in this._prefValues)
+            this.updateDisableState("text");
+          this.updateDisableState("bg");
+        ]]></body>
+      </method>
+
+      <method name="_resetDefault">
+        <parameter name="aResetOnlyStyle"/>
+        <body><![CDATA[
+          if (!aResetOnlyStyle && Tabmix.prefs.prefHasUserValue(this.id)) {
+            var useThis = this._getElementById("useThis");
+            useThis.checked = !useThis.checked;
+            this._updateUseThisState(useThis.checked);
+            this._initUseThisPref.prefvalue = this._initUseThisPref.optionvalue = useThis.checked;
+          }
+
+          Tabmix.prefs.clearUserPref(this.prefName);
+          this._initPrefValues = Tabmix.prefs.getCharPref(this.prefName);
+          this._getPrefs(this._initPrefValues);
+        ]]></body>
+      </method>
+
+      <method name="_getPrefs">
+        <parameter name="aPrefString"/>
+        <body><![CDATA[
+          try {
+            this._prefValues = TabmixSvc.JSON.parse(aPrefString);
+          } catch (er) {
+            this._resetDefault(true);
+            return;
+          }
+
+          for (let _id of Object.keys(this._prefValues)) {
+            var item = this._getElementById(_id);
+            switch (item && item.localName) {
+              case "checkbox":
+              case "checkbox_tmp":
+                item.checked = this._prefValues[_id];
+                break;
+              case "colorbox":
+                item.color = this._prefValues[_id];
+            }
+          }
+
+          if ("text" in this._prefValues)
+            this.updateDisableState("text");
+          this.updateDisableState("bg");
+        ]]></body>
+      </method>
+
+      <method name="_savePrefs">
+        <body><![CDATA[
+          var newPrefSValue = {};
+          for (let _id of Object.keys(this._prefValues)) {
+            var item = this._getElementById(_id);
+            switch (item.localName) {
+              case "checkbox":
+              case "checkbox_tmp":
+                newPrefSValue[_id] = item.checked;
+                break;
+              case "colorbox":
+                newPrefSValue[_id] = item.color;
+                break;
+            }
+          }
+          Tabmix.prefs.setCharPref(this.prefName, TabmixSvc.JSON.stringify(newPrefSValue));
+        ]]></body>
+      </method>
+
+      <method name="_ondialogcancel">
+        <body><![CDATA[
+          Tabmix.prefs.setCharPref(this.prefName, this._initPrefValues);
+          Tabmix.prefs.setBoolPref(this.id, this._initUseThisPref.prefvalue);
+          if (this._item)
+            this._item.value = this._initUseThisPref.optionvalue;
+        ]]></body>
+      </method>
+
+      <method name="updateDisableState">
+        <parameter name="aID"/>
+        <body><![CDATA[
+          var disableBg = this.disableBgColor && aID == "bg";
+          var disabled = this.disabled || disableBg ||
+                           !this._getElementById(aID).checked;
+          if (disableBg)
+            this._getElementById("bg").disabled = true;
+          Tabmix.setItem(this, aID + "-disabled", disabled || null);
+          this._getElementById(aID + "Color").updateColor();
+          if (aID == "bg")
+            this._getElementById("bgTopColor").updateColor();
+        ]]></body>
+      </method>
+
+    </implementation>
+    <handlers>
+      <handler event="command">
+        this._savePrefs();
+      </handler>
+    </handlers>
+  </binding>
+
+  <binding id="colorbox" display="xul:hbox">
+    <content align="center">
+        <children/>
+        <xul:spacer flex="1" class="visible"/>
+        <xul:colorpicker anonid="color" class="visible" palettename="standard" type="button" xbl:inherits="disabled"/>
+        <xul:label value="[RGB]:" xbl:inherits="disabled"/>
+        <xul:textbox anonid="red" class="rgbcontrol" xbl:inherits="disabled"
+                     maxlength="3" size="1" type="number" min="0" max="255"/>
+        <xul:textbox anonid="green" class="rgbcontrol" xbl:inherits="disabled"
+                     maxlength="3" size="1" type="number" min="0" max="255"/>
+        <xul:textbox anonid="blue" class="rgbcontrol" xbl:inherits="disabled"
+                     maxlength="3" size="1" type="number" min="0" max="255"/>
+        <xul:label control="opacity" value="&opacity.label;[%]:" class="opacity" xbl:inherits="disabled"/>
+        <xul:textbox anonid="opacity" class="opacity" xbl:inherits="disabled"
+                     maxlength="3" size="1" type="number" min="0" max="100"/>
+    </content>
+    <implementation>
+      <field name="_RGB">[]</field>
+      <field name="_colorpicker">null</field>
+      <field name="_parent">null</field>
+
+      <constructor>
+        <![CDATA[
+          ["red", "green", "blue", "opacity"].forEach(function(id) {
+            this._RGB.push(document.getAnonymousElementByAttribute(this, "anonid", id));
+          }, this);
+
+          this._colorpicker = document.getAnonymousElementByAttribute(this, "anonid", "color");
+          this._parent = document.getBindingParent(this);
+        ]]>
+      </constructor>
+
+      <method name="getColor">
+        <parameter name="format"/>
+        <body><![CDATA[
+          var rgba = this.rgba;
+          if (format) {
+            rgba[3] = this.getAttribute("disabled") ? 0.2 : Math.max(0.2, rgba[3]);
+          }
+          return "rgba(#1)".replace("#1", rgba.join(","));
+        ]]></body>
+      </method>
+
+      <property name="rgba" readonly="true">
+        <getter><![CDATA[
+          var rgba = this._RGB.map(c => parseInt(c.value));
+          rgba[3] /= 100;
+          return rgba;
+        ]]></getter>
+      </property>
+
+      <property name="color"
+                onget="return this.getColor();">
+        <setter><![CDATA[
+          var color = val.replace(/rgba|rgb|\(|\)/g, "").split(",");
+          for (let i = 0; i < 3; i++)
+            this._RGB[i].value = color[i];
+          this._RGB[3].value = (color[3] || 1) * 100;
+          this.updateColor();
+        ]]></setter>
+      </property>
+
+      <method name="updateColor">
+        <body><![CDATA[
+          this._colorpicker.color = this.getColor(true);
+        ]]></body>
+      </method>
+
+      <method name="update">
+        <parameter name="event"/>
+        <body><![CDATA[
+          this.updateColor();
+          this._parent._savePrefs();
+          event.stopPropagation();
+        ]]></body>
+      </method>
+
+    </implementation>
+
+    <handlers>
+      <handler event="change"><![CDATA[
+        var item = event.originalTarget;
+        if (item.localName == "colorpicker") {
+          // colorpicker use rgb hexadecimal format
+          let color = item.color.replace("#", "");
+          for (let i = 0; i < 3; i++) {
+            let subS = color.substr(i * 2, 2);
+            this._RGB[i].value = parseInt(subS, 16);
+          }
+        }
+        this.update(event);
+      ]]></handler>
+
+      <handler event="input" action="this.update(event);"/>
+
+    </handlers>
+  </binding>
+
+</bindings>
