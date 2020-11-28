@@ -49,9 +49,6 @@ function install() { }
 function uninstall() { }
 
 function startup(data, reason) {
-//   var temp = {};
-//   Services.scriptloader.loadSubScript("chrome://s3downbar/content/prefs.js", temp, 'UTF-8');
-//   delete temp;
 
   Components.utils.import("chrome://tabmixplus/content/ChromeManifest.jsm");
   Components.utils.import("chrome://tabmixplus/content/Overlays.jsm");
