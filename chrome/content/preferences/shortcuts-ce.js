@@ -36,9 +36,9 @@ class MozShortcut extends MozXULElement {
 
     this._key = null;
 
-    this.notificationbox = document.getAnonymousElementByAttribute(this, "anonid", "notificationbox");
+    this.notificationbox = this.getElementsByAttribute("anonid", "notificationbox")[0];
 
-    this.editBox = document.getAnonymousElementByAttribute(this, "anonid", "editBox");
+    this.editBox = this.getElementsByAttribute("anonid", "editBox")[0];
 
   }
 
@@ -92,7 +92,7 @@ class MozShortcut extends MozXULElement {
   get defaultPref() {
     var defaultVal = (Shortcuts.keys[this.id].default || "").replace(/^d&/, "");
     if (defaultVal) {
-      let resetButton = document.getAnonymousElementByAttribute(this, "anonid", "reset");
+      let resetButton = this.getElementsByAttribute("anonid", "reset")[0];
       resetButton.hidden = false;
       let defaultKey = getFormattedKey(Shortcuts.keyParse(defaultVal));
       resetButton.setAttribute("tooltiptext",
