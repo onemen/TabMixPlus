@@ -3294,7 +3294,7 @@ TabmixSessionManager = {
     this.initSession(this.gSessionPath[0], this.gThisWin);
 
     // disable smooth scrolling while adding, moving, removing and selecting tabs
-    var tabstrip = gBrowser.tabContainer.mTabstrip;
+    var tabstrip = gBrowser.tabContainer.arrowScrollbox;
     var smoothScroll = tabstrip.smoothScroll;
     tabstrip.smoothScroll = false;
 

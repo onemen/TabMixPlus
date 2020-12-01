@@ -897,7 +897,7 @@ var TabmixAllTabs = {
       popup.setAttribute("minwidth", popup.boxObject.width);
     }
 
-    gBrowser.tabContainer.mTabstrip.addEventListener("scroll", this);
+    gBrowser.tabContainer.arrowScrollbox.addEventListener("scroll", this);
     this._popup = popup;
     if (!this._popup._updateTabsVisibilityStatus)
       this._popup._updateTabsVisibilityStatus = this._updateTabsVisibilityStatus;
@@ -1100,7 +1100,7 @@ var TabmixAllTabs = {
     }
 
     gBrowser.tabContainer.removeEventListener("TabAttrModified", this);
-    gBrowser.tabContainer.mTabstrip.removeEventListener("scroll", this);
+    gBrowser.tabContainer.arrowScrollbox.removeEventListener("scroll", this);
     gBrowser.tabContainer.removeEventListener("TabClose", this);
     popup.removeEventListener("DOMMenuItemActive", this);
     popup.removeEventListener("DOMMenuItemInactive", this);

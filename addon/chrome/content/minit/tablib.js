@@ -426,7 +426,9 @@ Tabmix.tablib = {
 
       Tabmix.changeCode(gBrowser, "gBrowser._setTabLabel")._replace(
         'this._tabAttrModified',
-        `let urlTitle = aOptions && aOptions.urlTitle;
+        // `let urlTitle = aOptions && aOptions.urlTitle;
+        `if(aOptions) let urlTitle = aOptions.urlTitle;
+          else let urlTitle = false;
               Tabmix.tablib.onTabTitleChanged(aTab, aTab.linkedBrowser, aLabel == urlTitle);
               $&`
       ).toCode();
@@ -490,11 +492,11 @@ Tabmix.tablib = {
       let $LF = '\n          ';
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
         'this.removeAttribute("positionpinnedtabs");',
-        'if (typeof this.mTabstrip.resetFirstTabInRow == "function")\
-           this.mTabstrip.resetFirstTabInRow();\
+        'if (typeof this.arrowScrollbox.resetFirstTabInRow == "function")\
+           this.arrowScrollbox.resetFirstTabInRow();\
          $&'
       )._replace(
-        /(arrowScrollbox|tabstrip|this.mTabstrip)\._scrollButtonDown\.getBoundingClientRect\(\)\.width/,
+        /(arrowScrollbox|tabstrip|this.arrowScrollbox)\._scrollButtonDown\.getBoundingClientRect\(\)\.width/,
         'TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 : $&'
       )._replace(
         'if (doPosition)',
@@ -511,21 +513,21 @@ Tabmix.tablib = {
         '      this._pinnedTabsLayoutCache = layoutData;' + $LF +
         '    }' + $LF +
         '  }' + $LF +
-        '    let width = TabmixSvc.australis ? 0 : this.mTabstrip.scrollboxPaddingStart || 0;' + $LF +
+        '    let width = TabmixSvc.australis ? 0 : this.arrowScrollbox.scrollboxPaddingStart || 0;' + $LF +
         '    for (let i = 0; i < numPinned; i++) {' +
         '      let tab = this.childNodes[i];' +
         `      tab.style.${marginInlineStart} = width + "px";` + $LF +
         '      width += layoutData.pinnedTabWidth;' +
         '    }' +
-        '    if (width != this.mTabstrip.firstTabInRowMargin) {' +
-        '      this.mTabstrip.firstTabInRowMargin = width;' +
-        '      this.mTabstrip.firstVisible =  {tab: null, x: 0, y: 0};' +
+        '    if (width != this.arrowScrollbox.firstTabInRowMargin) {' +
+        '      this.arrowScrollbox.firstTabInRowMargin = width;' +
+        '      this.arrowScrollbox.firstVisible =  {tab: null, x: 0, y: 0};' +
         '      gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]' +
         `        .style.${marginInlineStart} =  width + "px";` + $LF +
         '    }' +
         `    this.style.${paddingInlineStart} = "";` + $LF +
         '    TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(this, "paddingLeft");' +
-        '    this.mTabstrip.setFirstTabInRow();' +
+        '    this.arrowScrollbox.setFirstTabInRow();' +
         '  }' +
         '  else $&'
       )._replace(
@@ -1848,7 +1850,7 @@ Tabmix.tablib = {
     gBrowser.ensureTabIsVisible = function tabmix_ensureTabIsVisible(aTab, aSmoothScroll) {
       if (Tabmix.tabsUtils.overflow) {
         const instantScroll = Tabmix.isVersion(570) ? !aSmoothScroll : aSmoothScroll;
-        this.tabContainer.mTabstrip.ensureElementIsVisible(aTab, instantScroll);
+        this.tabContainer.arrowScrollbox.ensureElementIsVisible(aTab, instantScroll);
       }
     };
 

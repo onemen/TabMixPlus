@@ -18,15 +18,15 @@
       }
       this.textContent = "";
       this.appendChild(MozXULElement.parseXULToFragment(`
-      <hbox align="start" class="shortcut-content">
-        <description inherits="disabled=blocked" flex="1"></description>
-        <textbox class="shortcut-edit-box" anonid="editBox" style="width:200px;" inherits="value,disabled=blocked" context=" " placeholder="FROM-DTD-shortcuts-placeholder" onkeydown="document.getBindingParent(this).onKeyDown(event);" onkeypress="document.getBindingParent(this).handleKeyEvents(event);" onfocus="document.getBindingParent(this).updateFocus(true);" onblur="document.getBindingParent(this).updateFocus(false);" onmousedown="event.stopPropagation(); event.preventDefault(); this.select();" onchange="event.stopPropagation();">
-          <image anonid="reset" class="shortcut-image" tooltiptext="FROM-DTD-shortcuts-reset" hidden="true" onclick="document.getBindingParent(this).resetKey();"></image>
-          <image anonid="disable" class="shortcut-image" tooltiptext="FROM-DTD-shortcuts-clear" onclick="document.getBindingParent(this).disableKey();"></image>
-        </textbox>
-      </hbox>
-      <vbox anonid="notificationbox" class="shortcut-notificationbox" inuse="FROM-DTD-shortcuts-inuse" flex="1"></vbox>
-    `));
+        <hbox align="start" class="shortcut-content">
+          <description inherits="disabled=blocked" flex="1"></description>
+          <textbox class="shortcut-edit-box" anonid="editBox" style="width:200px;" inherits="value,disabled=blocked" context=" " placeholder="FROM-DTD-shortcuts-placeholder" onkeydown="document.getBindingParent(this).onKeyDown(event);" onkeypress="document.getBindingParent(this).handleKeyEvents(event);" onfocus="document.getBindingParent(this).updateFocus(true);" onblur="document.getBindingParent(this).updateFocus(false);" onmousedown="event.stopPropagation(); event.preventDefault(); this.select();" onchange="event.stopPropagation();">
+            <image anonid="reset" class="shortcut-image" tooltiptext="FROM-DTD-shortcuts-reset" hidden="true" onclick="document.getBindingParent(this).resetKey();"></image>
+            <image anonid="disable" class="shortcut-image" tooltiptext="FROM-DTD-shortcuts-clear" onclick="document.getBindingParent(this).disableKey();"></image>
+          </textbox>
+        </hbox>
+        <vbox anonid="notificationbox" class="shortcut-notificationbox" inuse="FROM-DTD-shortcuts-inuse" flex="1"></vbox>
+      `));
       this.initializeAttributeInheritance();
       // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
 
@@ -165,7 +165,7 @@
     }
 
     onKeyDown(event) {
-    // handle Ctrl/Command + W
+      // handle Ctrl/Command + W
       const control = !event.shiftKey && (event.ctrlKey || event.metaKey);
       if (control && event.keyCode == 87)
         this.handleKeyEvents(event, true);
@@ -182,22 +182,22 @@
           .join(",").replace("ctrl", "control");
 
       if (!key.modifiers) {
-      // Return and Esc blur the edit box
+        // Return and Esc blur the edit box
         if (event.keyCode == event.DOM_VK_RETURN ||
-        event.keyCode == event.DOM_VK_ESCAPE) {
+          event.keyCode == event.DOM_VK_ESCAPE) {
           this.editBox.blur();
           return;
         }
 
         // Delete and Backspace disable the key
         if (event.keyCode == event.DOM_VK_DELETE ||
-        event.keyCode == event.DOM_VK_BACK_SPACE) {
+          event.keyCode == event.DOM_VK_BACK_SPACE) {
           this.disableKey();
           return;
         }
       } else if (this.key && this.key.modifiers.indexOf("accel") > -1) {
-      // when current modifier is accel replace new modifier with accel
-      // if it match ui.key.accelKey
+        // when current modifier is accel replace new modifier with accel
+        // if it match ui.key.accelKey
         key.modifiers = key.modifiers.replace(Shortcuts.getPlatformAccel(), "accel");
       }
 

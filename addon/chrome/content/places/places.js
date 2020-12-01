@@ -548,7 +548,7 @@ var TMP_Places = {
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();
     if (this.currentTab) {
-      let tabstrip = gBrowser.tabContainer.mTabstrip;
+      let tabstrip = gBrowser.tabContainer.arrowScrollbox;
       if (!TabmixTabbar.isMultiRow) {
         let scrollPosition = tabstrip.scrollPosition;
         if (scrollPosition < 100) {

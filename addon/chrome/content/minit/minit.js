@@ -273,7 +273,7 @@ var TMP_tabDNDObserver = {
     tab._dragData = {
       offsetX: event.screenX - window.screenX - tabOffsetX,
       offsetY: event.screenY - window.screenY,
-      scrollX: tabBar.mTabstrip.scrollPosition,
+      scrollX: tabBar.arrowScrollbox.scrollPosition,
       screenX: event.screenX
     };
 
@@ -373,8 +373,8 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.tabsUtils.overflow) {
-      let tabStrip = tabBar.mTabstrip;
-      let ltr = Tabmix.ltr || tabStrip.orient == "vertical";
+      let tabStrip = tabBar.arrowScrollbox;
+      let ltr = Tabmix.ltr || tabStrip.getAttribute('orient') == "vertical";
       let _scroll, targetAnonid;
       if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_HIDDEN) // scroll with button
         targetAnonid = event.originalTarget.getAttribute("anonid");
@@ -718,7 +718,7 @@ var TMP_tabDNDObserver = {
     if (eX > wX && eX < (wX + window.outerWidth)) {
       // also avoid detaching if the the tab was dropped too close to
       // the tabbar (half a tab)
-      var bo = tabBar.mTabstrip.scrollBoxObject;
+      var bo = tabBar.arrowScrollbox.scrollbox;
       var rowHeight = TabmixTabbar.singleRowHeight;
       var endScreenY = bo.screenY + bo.height + 0.5 * rowHeight;
       if (TabmixTabbar.position === 0) {// tabbar on the top
@@ -927,7 +927,7 @@ var TMP_tabDNDObserver = {
       var minMargin, maxMargin, newMargin;
       var tabRect;
       var ltr = Tabmix.ltr;
-      let scrollRect = gBrowser.tabContainer.mTabstrip.scrollClientRect;
+      let scrollRect = gBrowser.tabContainer.arrowScrollbox.scrollClientRect;
       let rect = gBrowser.tabContainer.getBoundingClientRect();
       minMargin = scrollRect.left - rect.left - this.paddingLeft;
       maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
