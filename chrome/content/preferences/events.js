@@ -5,9 +5,9 @@ var gEventsPane = {
   init() {
     // for locales with long labels
     var hbox = $("focusTab-box");
-    var label = $("focusTab-label").boxObject.width;
+    var label = $("focusTab-label").getBoundingClientRect().width;
     var menulist = $("focusTab");
-    if (hbox.boxObject.width > label + menulist.boxObject.width) {
+    if (hbox.getBoundingClientRect().width > label + menulist.getBoundingClientRect().width) {
       menulist.parentNode.removeAttribute("pack");
       hbox.setAttribute("orient", "horizontal");
       hbox.setAttribute("align", "center");
@@ -82,7 +82,7 @@ var gEventsPane = {
       }
     }
     updateGrid((col, id) => {
-      widths[id] = Math.max(widths[id] || 0, col.boxObject.width);
+      widths[id] = Math.max(widths[id] || 0, col.getBoundingClientRect().width);
     });
 
     updateGrid((col, id) => {

@@ -58,10 +58,10 @@ var gAppearancePane = {
 
     // for locales with long labels
     var hbox = $("tabsScroll-box");
-    var label = $("tabsScroll.label").boxObject.width;
+    var label = $("tabsScroll.label").getBoundingClientRect().width;
     var menulist = $("tabsScroll");
     var indent = 23; // we have class="indent"
-    if (hbox.boxObject.width > label + menulist.boxObject.width - indent) {
+    if (hbox.getBoundingClientRect().width > label + menulist.getBoundingClientRect().width - indent) {
       menulist.parentNode.removeAttribute("pack");
       menulist.parentNode.removeAttribute("class");
       hbox.setAttribute("orient", "horizontal");

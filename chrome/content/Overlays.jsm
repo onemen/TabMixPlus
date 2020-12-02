@@ -585,34 +585,34 @@ class Overlays {
   loadScript(node) {
     let deferredLoad = [];
 
-    let oldAddEventListener = this.window.addEventListener;
-    if (this.document.readyState == "complete") {
-      this.window.addEventListener = function(
-        type,
-        listener,
-        useCapture,
-        ...args
-      ) {
-        if (type == "load") {
-          if (typeof useCapture == "object") {
-            useCapture = useCapture.capture;
-          }
+    // let oldAddEventListener = this.window.addEventListener;
+    // if (this.document.readyState == "complete") {
+    //   this.window.addEventListener = function(
+    //     type,
+    //     listener,
+    //     useCapture,
+    //     ...args
+    //   ) {
+    //     if (type == "load") {
+    //       if (typeof useCapture == "object") {
+    //         useCapture = useCapture.capture;
+    //       }
 
-          if (typeof useCapture == "undefined") {
-            useCapture = true;
-          }
-          deferredLoad.push({ listener, useCapture });
-          return null;
-        }
-        return oldAddEventListener.call(
-          this,
-          type,
-          listener,
-          useCapture,
-          ...args
-        );
-      };
-    }
+    //       if (typeof useCapture == "undefined") {
+    //         useCapture = true;
+    //       }
+    //       deferredLoad.push({ listener, useCapture });
+    //       return null;
+    //     }
+    //     return oldAddEventListener.call(
+    //       this,
+    //       type,
+    //       listener,
+    //       useCapture,
+    //       ...args
+    //     );
+    //   };
+    // }
 
     if (node.hasAttribute("src")) {
       let url = new URL(node.getAttribute("src"), node.baseURI).href;
@@ -635,9 +635,9 @@ class Overlays {
       }
     }
 
-    if (this.document.readyState == "complete") {
-      this.window.addEventListener = oldAddEventListener;
-    }
+    // if (this.document.readyState == "complete") {
+    //   this.window.addEventListener = oldAddEventListener;
+    // }
 
     // This works because we only care about immediately executed addEventListener calls and
     // loadSubScript is synchronous. Everyone else should be checking readyState anyway.

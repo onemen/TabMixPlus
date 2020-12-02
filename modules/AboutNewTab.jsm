@@ -41,7 +41,7 @@ AboutNewTabInternal = {
   // browser if exist
   updateAllBrowsers(window) {
     let tabBrowser = window.gBrowser;
-    let tabPanels = tabBrowser.mPanelContainer.childNodes;
+    let tabPanels = tabBrowser.tabpanels.childNodes;
     let browsers = Array.prototype.map.call(tabPanels, tabPanel => tabBrowser.getBrowserForTabPanel(tabPanel))
         .filter(browser => browser.currentURI.spec == TabmixSvc.aboutNewtab);
     browsers.forEach(browser => this.updateBrowser(browser));
