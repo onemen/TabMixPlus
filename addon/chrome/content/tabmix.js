@@ -459,7 +459,7 @@ var TMP_eventListener = {
       Tabmix.assert(ex);
     }
 
-    gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
+    gBrowser.tabpanels.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     // init tabmix functions
     try {
@@ -743,7 +743,7 @@ var TMP_eventListener = {
       return;
     }
 
-    let rect = gBrowser.mPanelContainer.getBoundingClientRect();
+    let rect = gBrowser.tabpanels.getBoundingClientRect();
     FullScreen._mouseTargetRect = {
       top: rect.top + 50,
       bottom: rect.bottom - (TabmixTabbar.position == 1) * 50,
@@ -1213,7 +1213,7 @@ var TMP_eventListener = {
 
     if (TMP_TabView.installed)
       TMP_TabView._resetTabviewFrame();
-    gBrowser.mPanelContainer.removeEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
+    gBrowser.tabpanels.removeEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     gTMPprefObserver.removeObservers();
     gTMPprefObserver.dynamicRules = null;

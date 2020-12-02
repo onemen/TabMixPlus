@@ -241,7 +241,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   };
 
   tabBrowser.getTabForLastPanel = function() {
-    let notificationbox = this.mPanelContainer.lastChild;
+    let notificationbox = this.tabpanels.lastChild;
     let browser = this.getBrowserForTabPanel(notificationbox);
     if (browser == gBrowser._preloadedBrowser) {
       browser = this.getBrowserForTabPanel(notificationbox.previousSibling);

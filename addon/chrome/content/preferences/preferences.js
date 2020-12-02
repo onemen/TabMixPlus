@@ -24,16 +24,16 @@ var gPrefWindow = {
 
     var prefWindow = $("TabMIxPreferences");
     /* Chromifox theme force button height to 25px */
-    var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-    if (skin == "cfxec")
-      prefWindow.setAttribute("chromifox", true);
+    // var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
+    // if (skin == "cfxec")
+    //   prefWindow.setAttribute("chromifox", true);
 
     if (TabmixSvc.isMac)
       prefWindow.setAttribute("mac", true);
     else if (TabmixSvc.isLinux) {
       prefWindow.setAttribute("linux", true);
-      if (skin == "ftdeepdark")
-        prefWindow.setAttribute("ftdeepdark", true);
+      // if (skin == "ftdeepdark")
+      //   prefWindow.setAttribute("ftdeepdark", true);
     }
 
     /* we don't need to fix tabpanels border in ubuntu */
@@ -64,7 +64,7 @@ var gPrefWindow = {
 
     this.initBroadcasters("main");
     // hide broadcasters pane button
-    var paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "broadcasters");
+    var paneButton = docElt.getElementsByAttribute("pane", "broadcasters")[0];
     paneButton.collapsed = true;
 
     $("syncPrefs").setAttribute("checked", Tabmix.prefs.getBoolPref("syncPrefs"));
@@ -78,13 +78,13 @@ var gPrefWindow = {
       return;
     }
     let aPaneElement = $(aPaneID), diff = 0;
-    let content = document.getAnonymousElementByAttribute(aPaneElement, "class", "content-box");
+    let content = aPaneElement.getElementsByAttribute("class", "content-box")[0];
     let style = window.getComputedStyle(content);
     let contentWidth = parseInt(style.width) + parseInt(style.marginRight) +
                        parseInt(style.marginLeft);
     let tabboxes = aPaneElement.getElementsByTagName("tabbox");
     for (let tabbox of tabboxes) {
-      diff = Math.max(diff, tabbox.boxObject.width - contentWidth);
+      diff = Math.max(diff, tabbox.getBoundingClientRect().width - contentWidth);
     }
     window.innerWidth += diff;
   },
@@ -570,7 +570,7 @@ window.gIncompatiblePane = {
   lastSelected: "paneLinks",
 
   init(docElt) {
-    this.paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "paneIncompatible");
+    this.paneButton = docElt.getElementsByAttribute("pane", "paneIncompatible")[0];
     let radioGroup = this.paneButton.parentNode;
     radioGroup.addEventListener("command", this);
     this.checkForIncompatible(false);
