@@ -605,6 +605,16 @@ class PrefPane extends MozXULElement {
       return;
     }
 
+    // PrefPane overlay have to be move earlier to here otherwise tabs elements won't load properly. see ln 1551
+    // But this may be the cause of EMSG <Uncaught (in promise) undefined> shows up
+    if (this.src) {
+      Components.utils.import("chrome://tabmixplus/content/ChromeManifest.jsm");
+      Components.utils.import("chrome://tabmixplus/content/Overlays.jsm");
+
+      const ov = new Overlays(new ChromeManifest(), window.document.defaultView);
+      ov.load(this.src);
+    }
+
     const fragment = this.fragment;
     const contentBox = fragment.querySelector('.content-box');
     const childNodes = [...this.childNodes];
@@ -1547,13 +1557,15 @@ class PrefWindow extends MozXULElement {
       };
 
       const obs = new OverlayLoadObserver(aPaneElement);
+
+      // Pane overlay have to be move to earlier stage to load properly but not without issue see ln 601
       // document.loadOverlay(aPaneElement.src, obs);
 
-      Components.utils.import("chrome://tabmixplus/content/ChromeManifest.jsm");
-      Components.utils.import("chrome://tabmixplus/content/Overlays.jsm");
+      // Components.utils.import("chrome://tabmixplus/content/ChromeManifest.jsm");
+      // Components.utils.import("chrome://tabmixplus/content/Overlays.jsm");
 
-      const ov = new Overlays(new ChromeManifest(), document.defaultView);
-      ov.load(aPaneElement.src);
+      // const ov = new Overlays(new ChromeManifest(),document.defaultView);
+      // ov.load(aPaneElement.src);
       obs.observe();
     } else
       this._selectPane(aPaneElement);
@@ -1635,6 +1647,11 @@ class PrefWindow extends MozXULElement {
                 bottomPadding = parseInt(window.getComputedStyle(bottomBox).paddingBottom);
               window.innerHeight += bottomPadding + verticalPadding + aPaneElement.contentHeight - targetHeight;
             }
+
+            // XXX rstrong - extend the contents of the prefpane to
+            // prevent elements from being cutoff (see bug 349098).
+            if (aPaneElement.contentHeight + verticalPadding < targetHeight)
+              aPaneElement._content.style.height = targetHeight - verticalPadding + "px";
           }
         }
         break;
