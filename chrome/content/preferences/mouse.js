@@ -87,7 +87,7 @@ var gMousePane = {
     if (pref.value && !dblClickTabbar.value)
       dblClickTabbar.value = pref.value;
     let checkbox = $("dblclick_changesize")._checkbox;
-    let image = document.getAnonymousElementByAttribute(checkbox, "class", "checkbox-check");
+    let image = checkbox.getElementsByClassName("checkbox-check")[0];
     Tabmix.setItem(image, "disabled", pref.value || null);
   }
 
