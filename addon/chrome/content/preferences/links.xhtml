@@ -6,7 +6,8 @@
 ]>
 
 <overlay id="LinksPaneOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+         xmlns:html="http://www.w3.org/1999/xhtml">
 
   <prefpane id="paneLinks" onpaneload="gLinksPane.init();" helpTopic="Links">
 
@@ -36,7 +37,7 @@
       </tabs>
       <tabpanels>
         <tabpanel>
-          <groupbox flex="1">
+          <html:fieldset flex="1">
             <hbox align="center">
               <!-- General Open New Windows Setting -->
               <label flex="1" value="&generalWindowOpen.label;" control="generalWindowOpen"/>
@@ -105,7 +106,7 @@
             <!-- Enable Single Window Mode -->
             <checkbox_tmp id="singleWindow" label="&singleWindow.label;" preference="pref_singleWindow"/>
 
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
       </tabpanels>
     </tabbox>

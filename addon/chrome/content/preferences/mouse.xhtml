@@ -8,7 +8,8 @@
 ]>
 
 <overlay id="LinksPaneOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+         xmlns:html="http://www.w3.org/1999/xhtml">
 
   <prefpane id="paneMouse" onpaneload="gMousePane.init();">
     <link xmlns="http://www.w3.org/1999/xhtml" rel="localization" href="browser/tabContextMenu.ftl" />
@@ -62,7 +63,7 @@
       </tabs>
       <tabpanels>
         <tabpanel>
-          <groupbox flex="1">
+          <html:fieldset flex="1">
             <hbox align="center">
               <checkbox_tmp id="mouseHoverSelect" label="&mouseHoverSelect.labelBegin;"
                         preference="pref_mouseHoverSelect"/>
@@ -83,8 +84,8 @@
                       tooltiptext="&removeEntries.tooltip;" preference="pref_middleclickDelete"/>
             <checkbox_tmp id="lockTabSizingOnClose" label="&lockTabSizingOnClose.label;"
                       preference="pref_lockTabSizingOnClose"/>
-          </groupbox>
-          <groupbox flex="1">
+          </html:fieldset>
+          <html:fieldset flex="1">
             <!-- drop indicator -->
             <checkbox_tmp id="moveTabOnDragging" label="&moveTabOnDragging.label;" preference="pref_moveTabOnDragging"
                           style="width: 470px;"/>
@@ -99,16 +100,16 @@
                        src="chrome://tabmixplus/skin/dropmarker-leftright.png"/>
               </radiogroup>
             </hbox>
-          </groupbox>
+          </html:fieldset>
           <!-- Tabbar Scrolling -->
-          <groupbox flex="1">
-            <caption>
+          <html:fieldset flex="1">
+            <html:legend>
                <checkbox_tmp id="enableTabsScroll" label="&tabbarscrolling.caption;"
                              preference="pref_tabbarscrolling"
                              control="tabbarscrolling"
                              onsyncfrompreference="return gPrefWindow.syncfrompreference(this);"
                              onsynctopreference="return gPrefWindow.synctopreference(this, 1);"/>
-            </caption>
+            </html:legend>
             <separator class="thin"/>
             <label value="&tabbarscrolling.holdShift.label;" observes="obs_tabbarscrolling"/>
             <radiogroup id="tabbarscrolling" orient="horizontal"
@@ -120,7 +121,7 @@
             </radiogroup>
             <checkbox_tmp id="reversescrolling" label="&tabbarscrolling.inverse.label;"
                       preference="pref_reversescrolling" observes="obs_tabbarscrolling"/>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
         <tabpanel align="start">
           <label value="&clicktab.label;" style="-moz-margin-start: 2px; -moz-padding-start: 1px;"/>
