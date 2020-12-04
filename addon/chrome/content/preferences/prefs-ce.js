@@ -1066,9 +1066,15 @@ class PrefWindow extends MozXULElement {
     deck.append(...childrenPrefpane);
     fragmentLastChild.append(...otherChildren);
 
-    this.setAttribute("dlgbuttons", "accept,cancel");
-    this.setAttribute("persist", "lastSelected screenX screenY");
-    this.setAttribute("role", "dialog");
+    this.hasAttribute("dlgbuttons") ? '' : this.setAttribute("dlgbuttons", "accept,cancel");
+    this.hasAttribute("persist") ? '' : this.setAttribute("persist", "lastSelected screenX screenY");
+    // this.hasAttribute("closebuttonlabel") ? '' : this.setAttribute("closebuttonlabel", "&preferencesCloseButton.label;");
+    // this.hasAttribute("closebuttonaccesskey") ? '' : this.setAttribute("closebuttonaccesskey", "&preferencesCloseButton.accesskey;");
+    this.hasAttribute("closebuttonlabel") ? '' : this.setAttribute("closebuttonlabel", MozXULElement.parseXULToFragment(`<div attr="&uiTour.infoPanel.close;" />`,["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
+    this.hasAttribute("closebuttonaccesskey") ? '' : this.setAttribute("closebuttonaccesskey", "C");
+    this.hasAttribute("role") ? '' : this.setAttribute("role", "dialog");
+    // this.hasAttribute("title") ? '' : this.setAttribute("title", "&preferencesDefaultTitleWin.title;");
+    this.hasAttribute("title") ? '' : this.setAttribute("title", MozXULElement.parseXULToFragment(`<div attr="&preferencesCmd2.label;" />`,["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
 
     /**
      * Derived bindings can set this to true to cause us to skip

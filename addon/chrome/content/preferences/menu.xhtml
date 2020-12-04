@@ -12,7 +12,8 @@
 ]>
 
 <overlay id="MenuPaneOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+         xmlns:html="http://www.w3.org/1999/xhtml">
 
   <prefpane id="paneMenu" onpaneload="gMenuPane.init();">
     <link xmlns="http://www.w3.org/1999/xhtml" rel="localization" href="browser/menubar.ftl" />
@@ -108,8 +109,8 @@
       <tabpanels class="menu">
         <tabpanel>
           <checkbox_tmp id="showOnTabbar" label="&showOnTabbar.label;" preference="pref_showOnTabbar"/>
-          <groupbox flex="1">
-            <caption label="&showtabBarContext.label;"/>
+          <html:fieldset flex="1">
+            <html:legend>&showtabBarContext.label;</html:legend>
             <grid flex="1" style="overflow: auto; height:18em;">
               <columns>
                 <column flex="1"/>
@@ -186,11 +187,11 @@
                 </row>
               </rows>
             </grid>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
         <tabpanel>
-          <groupbox flex="1">
-            <caption label="&showContentAreaContext.label;"/>
+          <html:fieldset flex="1">
+            <html:legend>&showContentAreaContext.label;</html:legend>
             <grid flex="1" style="overflow: auto; height:18em;">
               <columns>
                 <column flex="1"/>
@@ -237,11 +238,11 @@
                 </row>
               </rows>
             </grid>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
         <tabpanel>
-          <groupbox flex="1">
-            <caption label="&showToolsMenu.label;"/>
+          <html:fieldset flex="1">
+            <html:legend>&showToolsMenu.label;</html:legend>
             <!-- tab mix options in Tools Menu -->
             <grid flex="1" style="overflow: auto; height:18em;">
               <columns>
@@ -261,7 +262,7 @@
                 </row>
               </rows>
             </grid>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
         <tabpanel id="shortcuts-panel" hide-shortcut-warning="true"
               hide-unused-shortcuts="false" usedKeys="false"
@@ -287,7 +288,7 @@
                    class="text-link" id="hide-shortcut-warning" persist="value"
                    onmousedown="gMenuPane.toggleLinkLabel(this);"/>
           </hbox>
-          <groupbox id="shortcut-group" style="overflow: auto; height:18em;" flex="1">
+          <html:fieldset id="shortcut-group" style="overflow: auto; height:18em;" flex="1">
             <shortcut id="newTab"          label="&clicktab.addtab;"/>
             <shortcut id="dupTab"          label="&clicktab.duplicatetab;"/>
             <shortcut id="dupTabToWin"     label="&clicktab.duplicatetabw;"/>
@@ -333,7 +334,7 @@
                        observes="obs_slideDelay" type="number"/>
               <label value="&seconds.label;" observes="obs_slideDelay" class="timelabel"/>
             </hbox>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
       </tabpanels>
     </tabbox>

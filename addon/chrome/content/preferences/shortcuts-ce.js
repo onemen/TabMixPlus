@@ -20,10 +20,10 @@
       this.appendChild(MozXULElement.parseXULToFragment(`
         <hbox align="start" class="shortcut-content">
           <description inherits="disabled=blocked" flex="1"></description>
-          <html:input class="shortcut-edit-box" anonid="editBox" style="width:200px;" inherits="value,disabled=blocked" context=" " placeholder="&shortcuts.placeholder;" onkeydown="document.getBindingParent(this).onKeyDown(event);" onkeypress="document.getBindingParent(this).handleKeyEvents(event);" onfocus="document.getBindingParent(this).updateFocus(true);" onblur="document.getBindingParent(this).updateFocus(false);" onmousedown="event.stopPropagation(); event.preventDefault(); this.select();" onchange="event.stopPropagation();">
+          <html:input class="shortcut-edit-box" anonid="editBox" style="width:200px;" inherits="value,disabled=blocked" context=" " placeholder="&shortcuts.placeholder;" onkeydown="this.parentNode.parentNode.onKeyDown(event);" onkeypress="this.parentNode.parentNode.handleKeyEvents(event);" onfocus="this.parentNode.parentNode.updateFocus(true);" onblur="this.parentNode.parentNode.updateFocus(false);" onmousedown="event.stopPropagation(); event.preventDefault(); this.select();" onchange="event.stopPropagation();">
           </html:input>
-            <image anonid="reset" class="shortcut-image" tooltiptext="&shortcuts.reset;" hidden="true" onclick="document.getBindingParent(this).resetKey();"></image>
-            <image anonid="disable" class="shortcut-image" tooltiptext="&shortcuts.clear;" onclick="document.getBindingParent(this).disableKey();"></image>
+            <image anonid="reset" class="shortcut-image" tooltiptext="&shortcuts.reset;" hidden="true" onclick="this.parentNode.parentNode.resetKey();"></image>
+            <image anonid="disable" class="shortcut-image" tooltiptext="&shortcuts.clear;" onclick="this.parentNode.parentNode.disableKey();"></image>
         </hbox>
         <vbox anonid="notificationbox" class="shortcut-notificationbox" inuse="&shortcuts.inuse;" flex="1"></vbox>
       `, ["chrome://tabmixplus/locale/shortcuts.dtd"]));
