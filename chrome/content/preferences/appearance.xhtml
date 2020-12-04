@@ -10,7 +10,8 @@
 ]>
 
 <overlay id="AppearancePaneOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+         xmlns:html="http://www.w3.org/1999/xhtml">
 
   <prefpane id="paneAppearance" onpaneload="gAppearancePane.init();">
 
@@ -78,8 +79,8 @@
       </tabs>
       <tabpanels>
         <tabpanel>
-          <groupbox flex="1">
-            <caption label="&show.ontabbar.label;"/>
+          <html:fieldset flex="1">
+            <html:legend>&show.ontabbar.label;</html:legend>
             <!-- new tab button on tabbar -->
             <hbox align="center">
               <checkbox_tmp id="newTabButton" label="&newTabButton.label;" preference="pref_newTabButton"/>
@@ -105,8 +106,8 @@
             <!-- Space on tabbar -->
             <checkbox_tmp id="tabBarSpace" label="&tabBarSpace.label;" preference="pref_tabBarSpace"
                       tooltiptext="&tabBarSpace.tooltip;"/>
-          </groupbox>
-          <groupbox flex="1" id="tabBarDisplay">
+          </html:fieldset>
+          <html:fieldset flex="1" id="tabBarDisplay">
             <!-- show/hide the tabbar -->
             <hbox align="center">
               <label value="&hideTabBar.label;:"/>
@@ -168,11 +169,11 @@
                         preference="pref_scrollDelay" type="number"/>
               <label value="&milliseconds.label;" class="timelabel" TSTdisabled="true" observes="obs_smoothScroll"/>
             </hbox>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
         <tabpanel>
-          <groupbox id="tabappearance" flex="1">
-            <caption label="&tabStyles.label;"/>
+          <html:fieldset id="tabappearance" flex="1">
+            <html:legend>&tabStyles.label;</html:legend>
             <hbox>
               <vbox flex="1">
                 <!-- Highlight Current tab -->
@@ -201,9 +202,9 @@
                           preference="pref_disableBackground"/>
             <checkbox_tmp id="squaredTabs" label="&squaredTabs.label;"
                           preference="pref_squaredTabs" observes="obs_disableBackground"/>
-          </groupbox>
-          <groupbox flex="1">
-            <caption label="&show.ontab.label;"/>
+          </html:fieldset>
+          <html:fieldset flex="1">
+            <html:legend>&show.ontab.label;</html:legend>
             <!-- Extra icons-->
             <label value="&extraIcons.label1;:"/>
             <hbox align="center" class="indent">
@@ -245,8 +246,8 @@
             <label id="onLeftDisabled" value="&onLeftDisabled.label;"
                    tst="&onLeftDisabled.tst.label;" hidden="true"
                    style="text-decoration: underline; color: #CC0000;"/>
-          </groupbox>
-          <groupbox flex="1">
+          </html:fieldset>
+          <html:fieldset flex="1">
             <!-- Tab width -->
             <hbox align="center">
               <label value="&minWidth.label;"/>
@@ -259,22 +260,22 @@
             </hbox>
             <checkbox_tmp id="flexTabs" label="&flexTabs.label;"  preference="pref_flexTabs"/>
             <checkbox_tmp id="bookastitle" label="&bookastitle.label;" preference="pref_bookastitle"/>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
         <tabpanel>
-          <groupbox flex="1">
+          <html:fieldset flex="1">
             <hbox align="start">
               <description class="header" style="width: &toolbar.description.width;;">&toolbar.description;</description>
               <button label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"/>
             </hbox>
             <spacer flex="1"/>
-            <groupbox id="onToolbar">
-              <caption label="&toolbar.visible.caption;"/>
+            <html:fieldset id="onToolbar">
+              <html:legend>&toolbar.visible.caption;</html:legend>
               <label value="&toolbar.novisible.label;" class="indent"/>
-            </groupbox>
+            </html:fieldset>
             <spacer flex="1"/>
-            <groupbox id="onPlate">
-              <caption label="&toolbar.hidden.caption;"/>
+            <html:fieldset id="onPlate">
+              <html:legend>&toolbar.hidden.caption;</html:legend>
               <label value="&toolbar.nohidden.label;" class="indent"/>
               <hbox class="tabmixbuttons">
                 <image id="_btn_sessionmanager"/>
@@ -292,9 +293,9 @@
                 <image id="_btn_tabslist"/>
                 <label value="&tabslistbtn.label;"/>
               </hbox>
-            </groupbox>
+            </html:fieldset>
             <spacer flex="1"/>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
       </tabpanels>
     </tabbox>
