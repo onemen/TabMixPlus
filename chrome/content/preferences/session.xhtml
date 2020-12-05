@@ -221,7 +221,7 @@
                   <label control="ss_timeinterval" value="&ss.interval;"/>
                   <hbox align="center" pack="end">
                     <label control="ss_timeinterval" value="&ss.interval.seconds;:"/>
-                    <textbox id="ss_timeinterval" preference="pref_ss_timeinterval"
+                    <html:input id="ss_timeinterval" preference="pref_ss_timeinterval"
                              maxlength="6" size="6" type="number"/>
                   </hbox>
                   <label control="ss_postdata" value="&ss.privacy_level;:"/>
@@ -237,7 +237,7 @@
                   <label control="ss_postdatabytes" value="&ss.postdata.label1;" observes="obs_ss_postdata"/>
                   <hbox align="center" pack="end">
                     <label control="ss_postdatabytes" value="&ss.postdata.label2;:" observes="obs_ss_postdata"/>
-                    <textbox id="ss_postdatabytes"  preference="pref_ss_postdatabytes"
+                    <html:input id="ss_postdatabytes"  preference="pref_ss_postdatabytes"
                              maxlength="6" size="6" type="number" min="-1" observes="obs_ss_postdata"/>
                   </hbox>
                 </vbox>

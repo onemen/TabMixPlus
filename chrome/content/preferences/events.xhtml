@@ -142,7 +142,7 @@
             </hbox>
             <hbox class="indent" align="center">
               <label id="newTabUrlLabel" value="&location.label.1;:" control="newTabUrl"/>
-              <textbox id="newTabUrl" class="padded uri-element" flex="1"
+              <html:input id="newTabUrl" class="padded uri-element" flex="1"
                        onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
                        onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
                        placeholder="&newtab.placeholder.label;"
@@ -179,7 +179,7 @@
                             preference="pref_loadProgressively" control="loadProgressively"
                             onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
                             onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"/>
-              <textbox id="loadProgressively" maxlength="3" size="2" preference="pref_loadProgressively"
+              <html:input id="loadProgressively" maxlength="3" size="2" preference="pref_loadProgressively"
                        onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
                        observes="obs_loadProgressively"
                        type="number" min="1" maxwidth="42"/>
@@ -191,7 +191,7 @@
                             onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
                             onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"
                             observes="obs_loadProgressively"/>
-              <textbox id="restoreOnDemand" maxlength="3" size="2" preference="pref_restoreOnDemand"
+              <html:input id="restoreOnDemand" maxlength="3" size="2" preference="pref_restoreOnDemand"
                        onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
                        type="number" min="1" maxwidth="42"/>
               <label value="&tabs.label;" observes="obs_loadProgressively"/>
@@ -332,7 +332,7 @@
               </hbox>
               <hbox class="indent" align="center">
                  <label id="newTabUrlLabel_1" value="&location.label.1;:" control="newTabUrl_1"/>
-                 <textbox id="newTabUrl_1" class="padded uri-element" flex="1"
+                 <html:input id="newTabUrl_1" class="padded uri-element" flex="1"
                           onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
                           onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
                           placeholder="&newtab.placeholder.label;"
@@ -396,7 +396,7 @@
               <vbox align="start" class="indent">
                 <hbox align="center">
                   <label control="undoCloseCache" value="&undoCloseCache.label;" observes="obs_undoClose"/>
-                  <textbox id="undoCloseCache" maxlength="3" size="2" preference="pref_undoCloseCache"
+                  <html:input id="undoCloseCache" maxlength="3" size="2" preference="pref_undoCloseCache"
                            type="number" observes="obs_undoClose"/>
                 </hbox>
                 <checkbox_tmp id="undoClosepos" label="&undoClosepos.label;" preference="pref_undoClosepos" observes="obs_undoClose"/>
