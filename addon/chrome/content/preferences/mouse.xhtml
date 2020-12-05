@@ -67,14 +67,14 @@
             <hbox align="center">
               <checkbox_tmp id="mouseHoverSelect" label="&mouseHoverSelect.labelBegin;"
                         preference="pref_mouseHoverSelect"/>
-              <textbox id="mouseOverSelectDelay" size="4" maxlength="4"
+              <html:input id="mouseOverSelectDelay" size="4" maxlength="4"
                         preference="pref_mouseOverSelectDelay" type="number" observes="obs_mouseHoverSelect"/>
               <label value="&milliseconds.label;" observes="obs_mouseHoverSelect" class="timelabel"/>
             </hbox>
             <checkbox_tmp id="tabFlip" label="&tabFlip.label;" preference="pref_tabFlip"/>
             <hbox align="center" class="indent">
               <label value="&tabFlip.delay;" observes="obs_tabFlip"/>
-              <textbox id="tabFlipDelay" size="4" maxlength="4" preference="pref_tabFlipDelay"
+              <html:input id="tabFlipDelay" size="4" maxlength="4" preference="pref_tabFlipDelay"
                         type="number" observes="obs_tabFlip"/>
               <label value="&milliseconds.label;" observes="obs_tabFlip" class="timelabel"/>
             </hbox>
