@@ -176,7 +176,7 @@ var gAppearancePane = {
   },
 
   openAdvanceAppearance() {
-    window.openDialog("chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xul",
+    window.openDialog("chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xhtml",
       "advanceAppearanceDialog", "modal,titlebar,toolbar,centerscreen");
   }
 

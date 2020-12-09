@@ -20,11 +20,11 @@ checkbox_tmp {
   max-height: 11px !important;
 }
 
-checkbox[anonid="useThis"][disabled] .checkbox-check {
+checkbox #useThis[disabled] .checkbox-check {
   visibility: hidden;
 }
 
-checkbox[anonid="useThis"][disabled] {
+checkbox #useThis[disabled] {
   color: black;
 }
 

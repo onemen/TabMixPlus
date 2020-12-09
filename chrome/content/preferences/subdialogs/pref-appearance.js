@@ -10,9 +10,9 @@ var tabstyles = {
       Tabmix.prefs.getIntPref(this.pref) : 0;
 
     /* Chromifox theme force button height to 25px */
-    var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-    if (skin == "cfxec")
-      $("AppearanceTabBox").setAttribute("chromifox", true);
+    // var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
+    // if (skin == "cfxec")
+    //   $("AppearanceTabBox").setAttribute("chromifox", true);
 
     if (!window.opener && !Tabmix.getTopWin())
       document.documentElement.getButton("help").disabled = true;

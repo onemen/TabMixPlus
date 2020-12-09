@@ -13,6 +13,7 @@
 <dialog id="pref-TMP-styles"
         windowtype="mozilla:tabmixopt-appearance"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
         buttons="accept,cancel,help,extra2"
         ondialoghelp="tabstyles.openHelp();"
         title="&styles.label;"
@@ -22,6 +23,8 @@
         ondialogaccept="tabstyles.save();"
         ondialogextra2="tabstyles.toggleRGB_visibility();">
 
+   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-appearance-ce.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/checkbox_tmp-ce.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.js"/>
 
@@ -34,11 +37,11 @@
       <tab label="&progressMeter.label;" id="_progressMeter" />
      </tabs>
      <tabpanels flex="1" id="stylespanels">
-       <tabpanel id="currentTab"/>
-       <tabpanel id="unloadedTab"/>
-       <tabpanel id="unreadTab"/>
-       <tabpanel id="otherTab"/>
-       <tabpanel id="progressMeter" _hidebox="true"/>
+       <tabstylepanel id="currentTab"/>
+       <tabstylepanel id="unloadedTab"/>
+       <tabstylepanel id="unreadTab"/>
+       <tabstylepanel id="otherTab"/>
+       <tabstylepanel id="progressMeter" _hidebox="true"/>
      </tabpanels>
    </tabbox>
    <label value="&hideRGB.label;" show="&showRGB.label;" hide="&hideRGB.label;" id="hide-RGB" persist="value" hidden="true"/>
