@@ -63,7 +63,7 @@ var gMousePane = {
   },
 
   ensureElementIsVisible(aPopup) {
-    var scrollBox = document.getAnonymousElementByAttribute(aPopup, "class", "popup-internal-box");
+    var scrollBox = aPopup.getElementsByClassName("popup-internal-box")[0];
     scrollBox.ensureElementIsVisible(aPopup.parentNode.selectedItem);
   },
 

@@ -79,11 +79,44 @@ this.Shortcuts = {
     // get our key labels from shortcutsLabels.xml
     let $ = id => id && aWindow.document.getElementById(id);
     let container = $("TabsToolbar");
-    if (container) {
-      let box = aWindow.document.createElement("vbox");
-      box.setAttribute("shortcutsLabels", true);
-      container.appendChild(box);
+    // if (container) {
+    //   let box = aWindow.document.createElement("vbox");
+    //   box.setAttribute("shortcutsLabels", true);
+    //   container.appendChild(box);
+    // }
+    let box = MozXULElement.parseXULToFragment(`
+      <div hidden="true"
+        dupTabToWin="&clicktab.duplicatetabw;"
+        protecttab="&clicktab.protecttab;"
+        locktab="&clicktab.locktab;"
+        freezetab="&clicktab.freezetab;"
+        renametab="&clicktab.renametab;"
+        copyTabUrl="&clicktab.copyTabUrl;"
+        pasteTabUrl="&clicktab.copyUrlFromClipboard;"
+        selectMerge="&clicktab.selectMerge;"
+        reload="&clicktab.reloadtab;"
+        reloadtabs="&clicktab.reloadtabs;"
+        reloadothertabs="&clicktab.reloadothertabs;"
+        reloadlefttabs="&clicktab.reloadlefttabs;"
+        reloadrighttabs="&clicktab.reloadrighttabs;"
+        autoReloadTab="&clicktab.autoReloadTab;"
+        removeall="&clicktab.removeall;"
+        removesimilar="&clicktab.removesimilar;"
+        removeother="&clicktab.removeother;"
+        removeleft="&clicktab.removetoLeft;"
+        removeright="&clicktab.removetoRight;"
+        undoClose="&clicktab.uctab;"
+        ucatab="&clicktab.ucatab;"
+        switchToLast="&shortcuts.switchToLast;"
+      />
+      ` ,["chrome://tabmixplus/locale/pref-tabmix.dtd","chrome://tabmixplus/locale/shortcuts.dtd"])
+      .childNodes[0];
+    for (let att of box.attributes) {
+      if (this.keys[att.name]) {
+        this.keys[att.name].label = att.value;
+      }
     }
+
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
       // get default value for all keys
