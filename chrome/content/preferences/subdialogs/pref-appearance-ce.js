@@ -12,16 +12,16 @@ class MozTabstylepanel extends customElements.get("tabpanels") {
   static get inheritedAttributes() {
     return {
       "hbox:nth-of-type(2)": "_hidebox",
-      "#italic": "disabled",
-      "#bold": "disabled",
-      "#underline": "disabled",
-      "#textColor": "disabled=text-disabled,_hidebox",
-      "#text": "disabled",
-      "#bg": "disabled",
-      "#bgTopColor": "disabled=bg-disabled,hidden=_hidebox",
-      "#bgTopColor > label": "disabled=bg-disabled",
-      "#bgColor": "disabled=bg-disabled",
-      "#bgColor > label": "disabled=bg-disabled,_hidebox",
+      "[anonid='italic']": "disabled",
+      "[anonid='bold']": "disabled",
+      "[anonid='underline']": "disabled",
+      "[anonid='textColor']": "disabled=text-disabled,_hidebox",
+      "[anonid='text']": "disabled",
+      "[anonid='bg']": "disabled",
+      "[anonid='bgTopColor']": "disabled=bg-disabled,hidden=_hidebox",
+      "[anonid='bgTopColor'] > label": "disabled=bg-disabled",
+      "[anonid='bgColor']": "disabled=bg-disabled",
+      "[anonid='bgColor'] > label": "disabled=bg-disabled,_hidebox",
     };
   }
   constructor() {
@@ -38,29 +38,28 @@ class MozTabstylepanel extends customElements.get("tabpanels") {
       return;
     }
     
-    this.attachShadow({ mode: "open" });
     this.textContent = "";
-    this.shadowRoot.appendChild(MozXULElement.parseXULToFragment(`
+    this.appendChild(MozXULElement.parseXULToFragment(`
       <hbox align="center">
-        <checkbox id="useThis" label="&useThis.label;: " oncommand="this.getRootNode().host._updateUseThisState(this.checked); event.stopPropagation();"></checkbox>
+        <checkbox anonid="useThis" label="&useThis.label;: " oncommand="this.parentNode.parentNode._updateUseThisState(this.checked); event.stopPropagation();"></checkbox>
         <label style="font-weight: bold;"></label>
       </hbox>
       <separator class="groove"></separator>
       <hbox align="center" style="height: 28px;" inherits="_hidebox">
-        <checkbox id="italic" inherits="disabled" label="&italic.label;" style="font-style: italic;"></checkbox>
-        <checkbox id="bold" inherits="disabled" label="&bold.label;" style="font-weight: bold;"></checkbox>
-        <checkbox id="underline" class="tabStyles_underline" inherits="disabled" label="&underline.label;"></checkbox>
+        <checkbox anonid="italic" inherits="disabled" label="&italic.label;" style="font-style: italic;"></checkbox>
+        <checkbox anonid="bold" inherits="disabled" label="&bold.label;" style="font-weight: bold;"></checkbox>
+        <checkbox anonid="underline" class="tabStyles_underline" inherits="disabled" label="&underline.label;"></checkbox>
       </hbox>
       <hbox flex="1">
         <vbox>
-          <colorbox id="textColor" inherits="disabled=text-disabled,_hidebox">
-            <checkbox id="text" class="visible" inherits="disabled" label="&textcolor.label;:" oncommand="this.getRootNode().host.updateDisableState(this.getAttribute('id'))"></checkbox>
+          <colorbox anonid="textColor" inherits="disabled=text-disabled,_hidebox">
+            <checkbox anonid="text" class="visible" inherits="disabled" label="&textcolor.label;:" oncommand="this.parentNode.parentNode.parentNode.parentNode.updateDisableState(this.getAttribute('id'))"></checkbox>
           </colorbox>
-          <checkbox_tmp id="bg" inherits="disabled" label="&bgColor.label;:" oncommand="this.getRootNode().host.updateDisableState(this.getAttribute('id'))"></checkbox_tmp>
-          <colorbox id="bgTopColor" class="bgTop" inherits="disabled=bg-disabled,hidden=_hidebox">
+          <checkbox_tmp anonid="bg" inherits="disabled" label="&bgColor.label;:" oncommand="this.parentNode.parentNode.parentNode.updateDisableState(this.getAttribute('id'))"></checkbox_tmp>
+          <colorbox anonid="bgTopColor" class="bgTop" inherits="disabled=bg-disabled,hidden=_hidebox">
             <label value="&bgTopColor.label;:" class="visible" inherits="disabled=bg-disabled"></label>
           </colorbox>
-          <colorbox id="bgColor" class="bgBottom" inherits="disabled=bg-disabled">
+          <colorbox anonid="bgColor" class="bgBottom" inherits="disabled=bg-disabled">
             <label value="&bgBottomColor.label;:" class="visible" inherits="disabled=bg-disabled,_hidebox"></label>
           </colorbox>
         </vbox>
@@ -68,10 +67,11 @@ class MozTabstylepanel extends customElements.get("tabpanels") {
       </hbox>
       <separator class="groove"></separator>
       <hbox align="center">
-        <button label="&settings.default;" oncommand="this.getRootNode().host._resetDefault();"></button>
+        <button label="&settings.default;" oncommand="this.parentNode.parentNode._resetDefault();"></button>
       </hbox>
     `,["chrome://tabmixplus/locale/pref-tabmix.dtd","chrome://tabmixplus/locale/pref-appearance.dtd"]));
     // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
+    this.initializeAttributeInheritance();
 
     this.setAttribute("orient","vertical");
 
@@ -126,7 +126,7 @@ class MozTabstylepanel extends customElements.get("tabpanels") {
   }
 
   _getElementById(aID) {
-    return this.shadowRoot.getElementById(aID);
+    return this.getElementsByAttribute("anonid", aID)[0];
   }
 
   _updateUseThisState(aEnabled) {
@@ -246,9 +246,8 @@ class MozColorbox extends MozXULElement {
     if (this.delayConnectedCallback()) {
       return;
     }
-    // this.textContent = "";
-    // let childNodes = [...this.childNodes];
-    // this.appendChild(...childNodes);
+
+    this.setAttribute("align","center");
     this.appendChild(MozXULElement.parseXULToFragment(`
       <spacer flex="1" class="visible"></spacer>
       <colorpicker anonid="color" class="visible" palettename="standard" type="button" inherits="disabled"></colorpicker>
@@ -260,6 +259,7 @@ class MozColorbox extends MozXULElement {
       <html:input anonid="opacity" class="opacity" inherits="disabled" maxlength="3" size="1" type="number" min="0" max="100"></html:input>
     `,["chrome://tabmixplus/locale/pref-tabmix.dtd","chrome://tabmixplus/locale/pref-appearance.dtd"]));
     // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
+    this.initializeAttributeInheritance();
 
     this._RGB = [];
 
