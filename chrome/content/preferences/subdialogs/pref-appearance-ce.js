@@ -53,9 +53,9 @@ class MozTabstylepanel extends customElements.get("tabpanels") {
       <hbox flex="1">
         <vbox>
           <colorbox anonid="textColor" inherits="disabled=text-disabled,_hidebox">
-            <checkbox anonid="text" class="visible" inherits="disabled" label="&textcolor.label;:" oncommand="this.parentNode.parentNode.parentNode.parentNode.updateDisableState(this.getAttribute('id'))"></checkbox>
+            <checkbox anonid="text" class="visible" inherits="disabled" label="&textcolor.label;:" oncommand="this.parentNode.parentNode.parentNode.parentNode.updateDisableState(this.getAttribute('anonid'))"></checkbox>
           </colorbox>
-          <checkbox_tmp anonid="bg" inherits="disabled" label="&bgColor.label;:" oncommand="this.parentNode.parentNode.parentNode.updateDisableState(this.getAttribute('id'))"></checkbox_tmp>
+          <checkbox_tmp anonid="bg" inherits="disabled" label="&bgColor.label;:" oncommand="this.parentNode.parentNode.parentNode.updateDisableState(this.getAttribute('anonid'))"></checkbox_tmp>
           <colorbox anonid="bgTopColor" class="bgTop" inherits="disabled=bg-disabled,hidden=_hidebox">
             <label value="&bgTopColor.label;:" class="visible" inherits="disabled=bg-disabled"></label>
           </colorbox>
