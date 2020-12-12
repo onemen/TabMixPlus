@@ -13,6 +13,8 @@ let options = {
 let man = `
 overlay   chrome://browser/content/browser.xhtml                 chrome://tabmixplus/content/tabmix.xhtml
 overlay   chrome://browser/content/browser.xhtml                 chrome://tabmixplus/content/overlay/tabstoolbar.xhtml appversion>=31.0b1
+
+overlay   about:addons                                           chrome://tabmixplus/content/preferences/overlay/aboutaddons.xhtml  appversion>=59.0a1
 `;
 
 function showRestartNotifcation(verb, window) {
