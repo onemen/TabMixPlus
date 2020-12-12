@@ -250,13 +250,13 @@ class MozColorbox extends MozXULElement {
     this.setAttribute("align","center");
     this.appendChild(MozXULElement.parseXULToFragment(`
       <spacer flex="1" class="visible"></spacer>
-      <colorpicker anonid="color" class="visible" palettename="standard" type="button" inherits="disabled"></colorpicker>
+      <html:input anonid="color" class="visible" palettename="standard" type="color" inherits="disabled"></html:input>
       <label value="[RGB]:" inherits="disabled"></label>
-      <html:input anonid="red" class="rgbcontrol" inherits="disabled" maxlength="3" size="1" type="number" min="0" max="255"></html:input>
-      <html:input anonid="green" class="rgbcontrol" inherits="disabled" maxlength="3" size="1" type="number" min="0" max="255"></html:input>
-      <html:input anonid="blue" class="rgbcontrol" inherits="disabled" maxlength="3" size="1" type="number" min="0" max="255"></html:input>
+      <html:input anonid="red" class="rgbcontrol" inherits="disabled" maxlength="3" size="5" type="number" min="0" max="255"></html:input>
+      <html:input anonid="green" class="rgbcontrol" inherits="disabled" maxlength="3" size="5" type="number" min="0" max="255"></html:input>
+      <html:input anonid="blue" class="rgbcontrol" inherits="disabled" maxlength="3" size="5" type="number" min="0" max="255"></html:input>
       <label control="opacity" value="&opacity.label;[%]:" class="opacity" inherits="disabled"></label>
-      <html:input anonid="opacity" class="opacity" inherits="disabled" maxlength="3" size="1" type="number" min="0" max="100"></html:input>
+      <html:input anonid="opacity" class="opacity" inherits="disabled" maxlength="3" size="5" type="number" min="0" max="100"></html:input>
     `,["chrome://tabmixplus/locale/pref-tabmix.dtd","chrome://tabmixplus/locale/pref-appearance.dtd"]));
     // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
     this.initializeAttributeInheritance();
@@ -272,7 +272,7 @@ class MozColorbox extends MozXULElement {
     }, this);
 
     this._colorpicker = this.getElementsByAttribute("anonid", "color")[0];
-    this._parent = this.getRootNode().host;
+    this._parent = this.parentNode.parentNode.parentNode;
 
   }
 

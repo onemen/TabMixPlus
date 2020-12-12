@@ -23,6 +23,12 @@
         ondialogaccept="tabstyles.save();"
         ondialogextra2="tabstyles.toggleRGB_visibility();">
 
+   <script type="text/javascript"><![CDATA[
+    this.addEventListener("dialogcancel",_=> tabstyles.cancel());
+    this.addEventListener("dialogaccept",_=> tabstyles.save());
+    this.addEventListener("dialogextra2",_=> tabstyles.toggleRGB_visibility());
+    this.addEventListener("dialoghelp",_=> tabstyles.openHelp());
+    ]]></script>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-appearance-ce.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/checkbox_tmp-ce.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>

@@ -1074,6 +1074,14 @@ class PrefWindow extends MozXULElement {
     // this.hasAttribute("title") ? '' : this.setAttribute("title", "&preferencesDefaultTitleWin.title;");
     this.hasAttribute("title") ? '' : this.setAttribute("title", MozXULElement.parseXULToFragment(`<div attr="&preferencesCmd2.label;" />`,["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
 
+    let global = Components.utils.getGlobalForObject(this);
+    let fn = global["ev" + "al"];
+    this.hasAttribute("ondialogaccept") ? this.addEventListener("dialogaccept",_=> fn(this.getAttribute("ondialogaccept"))) :'';
+    this.hasAttribute("ondialogcancel") ? this.addEventListener("dialogcancel",_=> fn(this.getAttribute("ondialogcancel"))) :'';
+    this.hasAttribute("ondialogextra1") ? this.addEventListener("dialogextra1",_=> fn(this.getAttribute("ondialogextra1"))) :'';
+    this.hasAttribute("ondialogextra2") ? this.addEventListener("dialogextra2",_=> fn(this.getAttribute("ondialogextra2"))) :'';
+    this.hasAttribute("ondialoghelp") ? this.addEventListener("dialoghelp",_=> fn(this.getAttribute("ondialoghelp"))) :'';
+    this.hasAttribute("ondialogdisclosure") ? this.addEventListener("dialogdisclosure",_=> fn(this.getAttribute("ondialogdisclosure"))) :'';
     /**
      * Derived bindings can set this to true to cause us to skip
      * reading the browser.preferences.instantApply pref in the constructor.

@@ -563,7 +563,7 @@ function openHelp(helpTopic) {
     }
   }
   helpTopic = helpTopic.toLowerCase().replace("mouse_-_", "").replace(/_-_|_/g, "-");
-  recentWindow.openUILinkIn(helpPage + helpTopic, where);
+  recentWindow.openUILinkIn(helpPage + helpTopic, where, {triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()});
 }
 
 window.gIncompatiblePane = {
