@@ -365,8 +365,9 @@ var TMP_ClosedTabs = {
 
     let dwu, DIRECTION_RTL;
     if (Tabmix.isVersion(600)) {
-      dwu = window.QueryInterface(Ci.nsIInterfaceRequestor)
-          .getInterface(Ci.nsIDOMWindowUtils);
+      // dwu = window.QueryInterface(Ci.nsIInterfaceRequestor)
+      //     .getInterface(Ci.nsIDOMWindowUtils);
+      dwu = window.windowUtils;
       DIRECTION_RTL = Ci.nsIDOMWindowUtils.DIRECTION_RTL;
     }
 
