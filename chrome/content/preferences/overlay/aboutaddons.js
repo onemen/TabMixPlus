@@ -37,21 +37,21 @@ function updateShowItemPreferences() {
 //   }
   const tabmixItem = getHtmlBrowser().contentDocument.querySelector(`addon-card[addon-id="${id}"]`)
   if (tabmixItem) {
-     tabmixItem.panel.querySelector(`panel-item[action="preferences"]`)
-     .setAttribute("onclick",
-  `if(this.parentElement.parentElement.parentElement.parentElement.attributes["addon-id"].value == "${id}") 
-     {event.stopPropagation(); 
-     try {windowRoot.ownerGlobal.Tabmix.openOptionsDialog(-1)}
-     catch (ex) { }}`
+     tabmixItem.querySelector(`panel-item[action="preferences"]`)
+      .button.addEventListener("click",(event)=>{
+       event.stopPropagation(); 
+       try {windowRoot.ownerGlobal.Tabmix.openOptionsDialog(-1)}
+       catch (ex) { }
+      }
    );
   }
-  const addonOptionsItem = getHtmlBrowser().contentDocument.querySelector(`template[name="addon-options"]`).content.querySelector(`[action="preferences"]`);
-  addonOptionsItem.setAttribute("onclick",
-  `if(this.parentElement.parentElement.parentElement.parentElement.attributes["addon-id"].value == "${id}") 
-     {event.stopPropagation(); 
-     try {windowRoot.ownerGlobal.Tabmix.openOptionsDialog(-1)}
-     catch (ex) { }}`
-  );
+  // const addonOptionsItem = getHtmlBrowser().contentDocument.querySelector(`template[name="addon-options"]`).content.querySelector(`[action="preferences"]`);
+  // addonOptionsItem.setAttribute("onclick",
+  // `if(this.parentElement.parentElement.parentElement.parentElement.attributes["addon-id"].value == "${id}") 
+  //    {event.stopPropagation(); 
+  //    try {windowRoot.ownerGlobal.Tabmix.openOptionsDialog(-1)}
+  //    catch (ex) { }}`
+  // );
 }
 
 window.addEventListener("load", () => {
@@ -62,3 +62,30 @@ window.addEventListener("load", () => {
   }
 }, {once: true});
 
+// window.addEventListener("popstate", () => setTimeout(
+//   () => {
+//     try {
+//       updateShowItemPreferences();
+//     } catch (ex) {
+//       Cu.reportError(ex);
+//     }
+//   }, 0)
+// );
+
+const id = "{dc572301-7619-498c-a57d-39143191b318}";
+const targetNode = getHtmlBrowser().contentDocument.getElementById('content');
+const config = { childList: true, subtree: true };
+const callback = function(mutationList, observer) {
+  for(const mutation of mutationList) {
+      if (mutation.type === 'childList') {
+        if (mutation?.addedNodes[0]?.nodeName == "DIV") if (mutation?.addedNodes[0]?.querySelector(`addon-card[addon-id="${id}"]`)) try {
+          updateShowItemPreferences();
+          break;
+        } catch (ex) {
+          Cu.reportError(ex);
+        }
+      }
+  }
+};
+const observer = new MutationObserver(callback);
+observer.observe(targetNode, config);
