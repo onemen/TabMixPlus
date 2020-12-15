@@ -218,7 +218,13 @@ customElements.define("tabstylepanel", MozTabstylepanel);
 class MozColorbox extends MozXULElement {
   static get inheritedAttributes() {
     return {
-      "[inherits='disabled']": "disabled",
+      "[anonid=\"color\"]": "disabled",
+      "label[value=\"[RGB]:\"]": "disabled",
+      "[anonid=\"red\"]": "disabled",
+      "[anonid=\"green\"]": "disabled",
+      "[anonid=\"blue\"]": "disabled",
+      "label.opacity": "disabled",
+      "[anonid=\"opacity\"]": "disabled",
     };
   }
 
@@ -227,9 +233,9 @@ class MozColorbox extends MozXULElement {
 
     this.addEventListener("change", (event) => {
       var item = event.originalTarget;
-      if (item.localName == "colorpicker") {
+      if (item.type == "color") {
         // colorpicker use rgb hexadecimal format
-        let color = item.color.replace("#", "");
+        let color = item.value.replace("#", "");
         for (let i = 0; i < 3; i++) {
           let subS = color.substr(i * 2, 2);
           this._RGB[i].value = parseInt(subS, 16);
@@ -238,7 +244,7 @@ class MozColorbox extends MozXULElement {
       this.update(event);
     });
 
-    this.addEventListener("input", (event) => { this.update(event); });
+    this.addEventListener("input", (event) => { if (event.originalTarget?.type != "color") this.update(event); });
 
   }
 
@@ -303,7 +309,16 @@ class MozColorbox extends MozXULElement {
   }
 
   updateColor() {
-    this._colorpicker.color = this.getColor(true);
+    var orig = this.getColor(true),
+      rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
+      a = (rgb && rgb[4] || "").trim(),
+      hex = rgb ?
+      (rgb[1] | 1 << 8).toString(16).slice(1) +
+      (rgb[2] | 1 << 8).toString(16).slice(1) +
+      (rgb[3] | 1 << 8).toString(16).slice(1) : orig;
+  
+    this._colorpicker.value =  "#" + hex;
+    this._colorpicker.style.opacity = a;
   }
 
   update(event) {
