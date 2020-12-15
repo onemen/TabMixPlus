@@ -33,12 +33,12 @@ var gMousePane = {
   },
 
   tabSelectionChanged(aEvent) {
-    if (aEvent.target.localName != "tabs")
+    if (aEvent.target.localName != "tabpanels")
       return;
     gPrefWindow.tabSelectionChanged(aEvent);
 
     if (this._inited)
-      this.updatePanelPrefs(aEvent.target.selectedIndex);
+      this.updatePanelPrefs(aEvent.target._tabbox.tabs.selectedIndex);
   },
 
   _options: ["dbl", "middle", "ctrl", "shift", "alt"],
@@ -63,7 +63,7 @@ var gMousePane = {
   },
 
   ensureElementIsVisible(aPopup) {
-    var scrollBox = aPopup.getElementsByClassName("popup-internal-box")[0];
+    var scrollBox = aPopup._scrollBox;
     scrollBox.ensureElementIsVisible(aPopup.parentNode.selectedItem);
   },
 

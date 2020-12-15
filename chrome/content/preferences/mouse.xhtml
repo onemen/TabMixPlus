@@ -55,9 +55,9 @@
     </preferences>
 
     <!-- pane content -->
-    <tabbox>
-      <tabs id="mouse"
+    <tabbox
             onselect="gPrefWindow.tabSelectionChanged(event);">
+      <tabs id="mouse">
         <tab label="&mouseGesture.label;" class="subtabs" helpTopic="Mouse_-_Mouse_Gestures"/>
         <tab label="&mouseClick.label;" class="subtabs" helpTopic="Mouse_-_Mouse_Clicking"/>
       </tabs>
@@ -126,16 +126,17 @@
         <tabpanel align="start">
           <label value="&clicktab.label;" style="-moz-margin-start: 2px; -moz-padding-start: 1px;"/>
           <spacer style="height: 1em;"/>
-          <tabbox id="mouseClick_tabbox" class="groupbox-tabbox" flex="0">
-            <tabs id="tabclick"
+          <tabbox id="mouseClick_tabbox" class="groupbox-tabbox" flex="0"
                   onselect="gMousePane.tabSelectionChanged(event);">
-              <tab label="&double.label;" linkedpanel="_tabpanel" class="subtabs"/>
-              <tab label="&middle.label;" linkedpanel="_tabpanel" class="subtabs"/>
-              <tab label="&ctrl.label;"   linkedpanel="_tabpanel" id="tabId" label2="&cmd.label;" class="subtabs"/>
-              <tab label="&shift.label;"  linkedpanel="_tabpanel" class="subtabs"/>
-              <tab label="&alt.label;"    linkedpanel="_tabpanel" class="subtabs"/>
+            <tabs id="tabclick">
+              <tab label="&double.label;" linkedpanel="pl" class="subtabs"/>
+              <tab label="&middle.label;" linkedpanel="pl" class="subtabs"/>
+              <tab label="&ctrl.label;"   linkedpanel="pl" id="tabId" label2="&cmd.label;" class="subtabs"/>
+              <tab label="&shift.label;"  linkedpanel="pl" class="subtabs"/>
+              <tab label="&alt.label;"    linkedpanel="pl" class="subtabs"/>
             </tabs>
-            <tabpanels class="groupbox-panels" flex="0">
+            <tabpanels class="groupbox-panels" flex="0" selectedIndex="1"
+                  onselect="if(event.target.selectedIndex == 1) event.stopPropagation(); this.selectedIndex = 0;">
               <tabpanel id="_tabpanel">
                 <spacer style="height: 8px;"/>
                 <!-- click on a tab -->
@@ -190,6 +191,7 @@
                 <!-- place holder to set tabbox width -->
                 <checkbox_tmp label="&ontabbar.dblClick.label;" style="visibility: hidden;"/>
               </tabpanel>
+              <tabpanel id="pl"></tabpanel>
             </tabpanels>
           </tabbox>
           <spacer style="height: 12px;"/>

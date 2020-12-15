@@ -226,8 +226,8 @@ var gPrefWindow = {
   },
 
   tabSelectionChanged(event) {
-    var tabs = event.target;
-    if (tabs.localName != "tabs" || !tabs.hasAttribute("onselect"))
+    var tabs = event.target?.tabbox?.tabs;
+    if (tabs?.localName != "tabs" || !tabs.tabbox.hasAttribute("onselect"))
       return;
     let preference = $("pref_" + tabs.id);
     if (!tabs._inited) {
