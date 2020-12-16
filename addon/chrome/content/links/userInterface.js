@@ -130,7 +130,8 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
     charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
     ownerTab: loadInBackground ? null : selectedTab,
     skipAnimation: replaceLastTab,
-    dontMove: true
+    dontMove: true,
+    triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()
   });
   if (replaceLastTab) {
     newTab.__newLastTab = url;
@@ -354,7 +355,7 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
     style = aTab.pinned || aTab.hasAttribute("visited") ||
       TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
   } else if (!isSelected && Tabmix.prefs.getBoolPref("unreadTab") &&
-      !aTab.hasAttribute("visited") && !isTabEmpty(aTab)) {
+      !aTab.hasAttribute("visited") && !aTab.isEmpty) {
     style = "unread";
   }
 

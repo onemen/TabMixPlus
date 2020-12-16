@@ -328,14 +328,14 @@ Tabmix.tablib = {
     if (Tabmix.isVersion(600)) {
       const $LF = '\n    ';
       Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
-        'if (!docTitle)',
+        'let dataSuffix =',
         'let titlePromise;' + $LF +
         'if (tab.hasAttribute("tabmix_changed_label")) {' + $LF +
         '  titlePromise = Promise.resolve(tab.getAttribute("tabmix_changed_label"));' + $LF +
         '} else {' + $LF +
-        '  titlePromise = TMP_Places.asyncGetTabTitle(tab, aBrowser.currentURI.spec, docTitle);' + $LF +
+        '  titlePromise = TMP_Places.asyncGetTabTitle(tab, aBrowser.currentURI.spec, title);' + $LF +
         '}' + $LF +
-        'return titlePromise.then(docTitle => {' + $LF +
+        'return titlePromise.then(title => {' + $LF +
         '$&'
       )._replace(
         /(})(\)?)$/,
@@ -344,7 +344,7 @@ Tabmix.tablib = {
       ).toCode(false, gBrowser, "asyncGetWindowTitleForBrowser");
 
       gBrowser.updateTitlebar = function() {
-        this.asyncGetWindowTitleForBrowser(this.mCurrentBrowser).then(title => {
+        this.asyncGetWindowTitleForBrowser(this.selectedBrowser).then(title => {
           document.title = title;
         });
       };

@@ -149,7 +149,7 @@ var TMP_tabDNDObserver = {
         window.requestAnimationFrame(() => {
           let t = Tabmix.getBoundsWithoutFlushing(document.getElementById("TabsToolbar").parentNode);
           let r = Tabmix.getBoundsWithoutFlushing(gBrowser.tabContainer);
-          let c = Tabmix.getBoundsWithoutFlushing(document.getElementById("content-deck"));
+          let c = Tabmix.getBoundsWithoutFlushing(document.getElementById("browser"));
           this.onLastToolbar = Math.abs(t.bottom - r.bottom) < 2 && Math.abs(r.bottom - c.top) < 2;
         });
       });
