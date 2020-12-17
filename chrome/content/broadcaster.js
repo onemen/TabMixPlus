@@ -19,9 +19,10 @@
             const callback = function (mutationList, observer) {
                 for (const mutation of mutationList) {
                     if (mutation.type === 'attributes') {
+                        let a = this.hasAttribute(mutation.attributeName);
                         for (let el of document.querySelectorAll("[observes=" + this.id + "]")) {
                             try {
-                                this.hasAttribute(mutation.attributeName) ? el.setAttribute(mutation.attributeName, this.getAttribute(mutation.attributeName))
+                                a ? el.setAttribute(mutation.attributeName, this.getAttribute(mutation.attributeName))
                                     : el.removeAttribute(mutation.attributeName);
                             } catch (ex) {
                                 Cu.reportError(ex);
