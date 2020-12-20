@@ -177,7 +177,7 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastT
     this.selectedTab = aTab;
     this.userTypedValue = aUrl;
     gBrowser.userTypedValue = "";
-    URLBarSetURI();
+    gURLBar.setURI();
   }
   // don't try to focus urlbar on popup
   if (aTab.selected && window.toolbar.visible) {
@@ -225,7 +225,7 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
 
   var url = gBrowser.currentURI.spec;
   if (url != gURLBar.value && !isBlankPageURL(url)) {
-    URLBarSetURI();
+    gURLBar.setURI();
   }
 };
 
