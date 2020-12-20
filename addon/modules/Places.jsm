@@ -26,7 +26,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils",
   "resource://gre/modules/PlacesUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
-  "resource:///modules/RecentWindow.jsm");
+  "chrome://tabmix-resource/content/RecentWindow.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this,
   "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");

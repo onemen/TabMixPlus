@@ -19,6 +19,8 @@
 <overlay id="tabmix-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
+   <script type="application/javascript" src="chrome://tabmixplus/content/broadcaster.js"/>
+
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/tabmix.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/minit/tablib.js"/>
@@ -403,7 +405,7 @@
     </toolbar>
 
   <!-- Tabmix Plus broadcasterset -->
-  <broadcasterset id="mainBroadcasterSet">
+  <broadcasterset id="mainBroadcasterSet" insertafter="mainKeyset">
     <broadcaster id="tmp_menu_AllWindows" hidden="true"/>
     <broadcaster id="tmp_contextmenu_ThisWindow" hidden="true"/>
     <broadcaster id="tmp_contextmenu_AllWindows" hidden="true"/>

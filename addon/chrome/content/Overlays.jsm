@@ -407,6 +407,10 @@ class Overlays {
         }
         return true;
       } else if (!target) {
+        if (node.hasAttribute("insertafter") || node.hasAttribute("insertbefore")) {
+          this._insertElement(this.document.documentElement, node);
+          return true;
+        }
         console.debug(
           `The node ${node.id} could not be found, deferring to later`
         );
@@ -461,8 +465,8 @@ class Overlays {
     if (pos) {
       for (const id of pos.split(",")) {
         const targetChild = this.document.getElementById(id);
-        if (targetChild && targetChild.parentNode == parent) {
-          parent.insertBefore(
+        if (targetChild && parent.contains(targetChild.parentNode)) {
+          targetChild.parentNode.insertBefore(
             node,
             after ? targetChild.nextElementSibling : targetChild
           );
