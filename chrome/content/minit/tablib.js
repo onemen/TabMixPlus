@@ -8,11 +8,11 @@ Tabmix.tablib = {
   init: function tabmix_tablib_init() {
     if (this._inited)
       return;
+    this._inited = true;
     this.change_gBrowser();
     this.change_tabContainer();
     this.change_utility();
     this.addNewFunctionsTo_gBrowser();
-    this._inited = true;
   },
 
   _loadURIWithFlagsInitialized: false,
@@ -772,7 +772,7 @@ Tabmix.tablib = {
         'openLinkIn(this.linkURL, "window",',
         'var [win, where] = [window, "window"];\
          if (Tabmix.singleWindowMode) {\
-           let pbWindow = Services.wm.getMostRecentBrowserWindow({ private: true });\
+           let pbWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({ private: true });\
            if (pbWindow) {\
              [win, where] = [pbWindow, "tab"];\
              pbWindow.focus();\
@@ -939,7 +939,7 @@ Tabmix.tablib = {
     };
 
     Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
-      'gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL)',
+      'gBrowser.warnAboutClosingTabs(closingTabs, gBrowser.closingTabsEnum.ALL)',
       'Tabmix.tablib.closeWindow(true)', {flags: "g"}
     )._replace(
       /os\.notifyObservers\(null, "browser-lastwindow-close-granted"(?:, null)?\);/,
@@ -972,7 +972,7 @@ Tabmix.tablib = {
       'window = #1.undoCloseWindow(aIndex || 0);'
           .replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
       '{if (Tabmix.singleWindowMode) {\
-          window = Services.wm.getMostRecentBrowserWindow({private: false});\
+          window = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});\
        }\
        if (window) {\
         window.focus();\
@@ -1316,7 +1316,7 @@ Tabmix.tablib = {
     };
 
     gBrowser.closeAllTabs = function TMP_closeAllTabs() {
-      if (this.warnAboutClosingTabs(this.closingTabsEnum.ALL)) {
+      if (this.TMP_warnAboutClosingTabs(this.TMP_closingTabsEnum.ALL)) {
         if (TabmixTabbar.visibleRows > 1)
           Tabmix.tabsUtils.updateVerticalTabStrip(true);
         let tabs = this.visibleTabs.slice();
@@ -1339,7 +1339,7 @@ Tabmix.tablib = {
       var matches = URL.match(/(^.*\/)(.*)/);
       var aDomain = matches ? matches[1] : URL;
 
-      if (this.warnAboutClosingTabs(this.closingTabsEnum.GROUP, null, aDomain)) {
+      if (this.TMP_warnAboutClosingTabs(this.TMP_closingTabsEnum.GROUP, null, aDomain)) {
         var childNodes = this.visibleTabs;
         for (var i = childNodes.length - 1; i > -1; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned &&
@@ -1371,7 +1371,7 @@ Tabmix.tablib = {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
-      if (this.warnAboutClosingTabs(this.closingTabsEnum.TO_END, aTab)) {
+      if (this.TMP_warnAboutClosingTabs(this.TMP_closingTabsEnum.TO_END, aTab)) {
         if (aTab._tPos < this.mCurrentTab._tPos)
           this.selectedTab = aTab;
 
@@ -1388,7 +1388,7 @@ Tabmix.tablib = {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
-      if (this.warnAboutClosingTabs(this.closingTabsEnum.TO_START, aTab)) {
+      if (this.TMP_warnAboutClosingTabs(this.TMP_closingTabsEnum.TO_START, aTab)) {
         if (aTab._tPos > this.mCurrentTab._tPos) {
           this.selectedTab = aTab;
         }
@@ -1407,7 +1407,7 @@ Tabmix.tablib = {
       if (aTab.localName != "tab")
         aTab = this.mCurrentTab;
 
-      if (this.warnAboutClosingTabs(this.closingTabsEnum.OTHER, aTab)) {
+      if (this.TMP_warnAboutClosingTabs(this.TMP_closingTabsEnum.OTHER, aTab)) {
         if (aTab != this.mCurrentTab)
           this.selectedTab = aTab;
         this.ensureTabIsVisible(this.selectedTab);
@@ -1654,182 +1654,182 @@ Tabmix.tablib = {
       }
     };
 
-    // Object.defineProperty(gBrowser, "closingTabsEnum",
-    //   {value: {ALL: 0, OTHER: 1, TO_END: 2, ALL_ONEXIT: 3, TO_START: 4, GROUP: 5}, writable: false});
+    Object.defineProperty(gBrowser, "TMP_closingTabsEnum",
+      {value: {ALL: 0, OTHER: 1, TO_END: 2, ALL_ONEXIT: 3, TO_START: 4, GROUP: 5}, writable: false});
 
-    // let warnAboutClosingTabs = function(whatToClose, aTab, aDomain) {
-    //   // see Tabmix.tablib.closeWindow comment
-    //   if (Tabmix.callerTrace("BG__onQuitRequest")) {
-    //     return true;
-    //   }
-    //   var closing = this.closingTabsEnum;
-    //   // try to catch call from other extensions to warnAboutClosingTabs (before Firefox 24)
-    //   if (typeof (whatToClose) == "boolean")
-    //     whatToClose = whatToClose ? closing.ALL_ONEXIT : closing.OTHER;
+    let warnAboutClosingTabs = function(whatToClose, aTab, aDomain) {
+      // see Tabmix.tablib.closeWindow comment
+      if (Tabmix.callerTrace("BG__onQuitRequest")) {
+        return true;
+      }
+      var closing = this.TMP_closingTabsEnum;
+      // try to catch call from other extensions to warnAboutClosingTabs (before Firefox 24)
+      if (typeof (whatToClose) == "boolean")
+        whatToClose = whatToClose ? closing.ALL_ONEXIT : closing.OTHER;
 
-    //   var onExit = whatToClose == closing.ALL_ONEXIT;
-    //   var tabs = !onExit ? this.visibleTabs : this.tabs;
-    //   var numTabs = tabs.length;
-    //   // calc the number of tab to close when there is protected tabs.
-    //   let protectedTabs = [];
-    //   function addProtected(aTabs) {
-    //     for (let i = 0; i < aTabs.length; i++) {
-    //       let tab = aTabs[i];
-    //       if (protectedTabs.indexOf(tab) == -1 &&
-    //           (onExit || !tab.hidden)) {
-    //         protectedTabs.push(aTabs[i]);
-    //       }
-    //     }
-    //   }
-    //   // we always restore pinned tabs no need to warn about closing
-    //   if (this._numPinnedTabs && !onExit) {
-    //     addProtected(this.tabContainer.getElementsByAttribute("pinned", true));
-    //   }
-    //   if ("permaTabs" in window) {
-    //     addProtected(this.tabContainer.getElementsByAttribute("isPermaTab", true));
-    //   }
-    //   addProtected(this.tabContainer.getElementsByAttribute("protected", true));
+      var onExit = whatToClose == closing.ALL_ONEXIT;
+      var tabs = !onExit ? this.visibleTabs : this.tabs;
+      var numTabs = tabs.length;
+      // calc the number of tab to close when there is protected tabs.
+      let protectedTabs = [];
+      function addProtected(aTabs) {
+        for (let i = 0; i < aTabs.length; i++) {
+          let tab = aTabs[i];
+          if (protectedTabs.indexOf(tab) == -1 &&
+              (onExit || !tab.hidden)) {
+            protectedTabs.push(aTabs[i]);
+          }
+        }
+      }
+      // we always restore pinned tabs no need to warn about closing
+      if (this._numPinnedTabs && !onExit) {
+        addProtected(this.tabContainer.getElementsByAttribute("pinned", true));
+      }
+      if ("permaTabs" in window) {
+        addProtected(this.tabContainer.getElementsByAttribute("isPermaTab", true));
+      }
+      addProtected(this.tabContainer.getElementsByAttribute("protected", true));
 
-    //   var numProtected = protectedTabs.length;
-    //   var shouldPrompt = 0;
-    //   var prefs = ["extensions.tabmix.tabs.warnOnClose",
-    //     "extensions.tabmix.protectedtabs.warnOnClose",
-    //     "browser.tabs.warnOnClose"];
-    //   if (onExit) {
-    //     let openTabs = numTabs - this._removingTabs.length;
-    //     if (openTabs > 1 && Services.prefs.getBoolPref(prefs[2]))
-    //       shouldPrompt = 3;
-    //     else if (numProtected > 0 && Services.prefs.getBoolPref(prefs[1]))
-    //       shouldPrompt = 2;
-    //   } else if (numTabs > 1) {
-    //     if (Services.prefs.getBoolPref(prefs[0]))
-    //       shouldPrompt = 1;
-    //     // when we close window with last tab and we don't have protected tabs
-    //     // we need to warn the user with the proper warning
-    //     if (Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
-    //         !Tabmix.prefs.getBoolPref("keepLastTab") &&
-    //         Services.prefs.getBoolPref(prefs[2])) {
-    //       if (whatToClose == closing.GROUP)
-    //         shouldPrompt = -1;
-    //       else if (whatToClose == closing.ALL && numProtected === 0 &&
-    //           numTabs == this.tabs.length) {
-    //         whatToClose = closing.ALL_ONEXIT;
-    //         shouldPrompt = 3;
-    //       }
-    //     }
-    //   }
+      var numProtected = protectedTabs.length;
+      var shouldPrompt = 0;
+      var prefs = ["extensions.tabmix.tabs.warnOnClose",
+        "extensions.tabmix.protectedtabs.warnOnClose",
+        "browser.tabs.warnOnClose"];
+      if (onExit) {
+        let openTabs = numTabs - this._removingTabs.length;
+        if (openTabs > 1 && Services.prefs.getBoolPref(prefs[2]))
+          shouldPrompt = 3;
+        else if (numProtected > 0 && Services.prefs.getBoolPref(prefs[1]))
+          shouldPrompt = 2;
+      } else if (numTabs > 1) {
+        if (Services.prefs.getBoolPref(prefs[0]))
+          shouldPrompt = 1;
+        // when we close window with last tab and we don't have protected tabs
+        // we need to warn the user with the proper warning
+        if (Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
+            !Tabmix.prefs.getBoolPref("keepLastTab") &&
+            Services.prefs.getBoolPref(prefs[2])) {
+          if (whatToClose == closing.GROUP)
+            shouldPrompt = -1;
+          else if (whatToClose == closing.ALL && numProtected === 0 &&
+              numTabs == this.tabs.length) {
+            whatToClose = closing.ALL_ONEXIT;
+            shouldPrompt = 3;
+          }
+        }
+      }
 
-    //   if (shouldPrompt === 0)
-    //     return true;
+      if (shouldPrompt === 0)
+        return true;
 
-    //   var tabPos, tabsToClose = 0;
-    //   switch (whatToClose) {
-    //     case closing.ALL:
-    //       tabsToClose = numTabs - numProtected;
-    //       break;
-    //     case closing.ALL_ONEXIT:
-    //       tabsToClose = numTabs - this._removingTabs.length;
-    //       break;
-    //     case closing.OTHER:
-    //       if (!aTab)
-    //         aTab = this.mCurrentTab;
-    //       if (aTab._isProtected)
-    //         --numProtected;
-    //       tabsToClose = numTabs - 1 - numProtected;
-    //       break;
-    //     case closing.GROUP:
-    //       for (let i = numTabs - 1; i > -1; --i) {
-    //         let tab = tabs[i];
-    //         if (this.getBrowserForTab(tab).currentURI.spec.indexOf(aDomain) != -1 &&
-    //             !tab._isProtected)
-    //           tabsToClose++;
-    //       }
-    //       if (shouldPrompt == -1) {
-    //         if (tabsToClose == this.tabs.length)
-    //           shouldPrompt = 3;
-    //         else if (Services.prefs.getBoolPref(prefs[0]))
-    //           shouldPrompt = 1;
-    //         else
-    //           return true;
-    //       }
-    //       break;
-    //     case closing.TO_END:
-    //       if (!aTab)
-    //         throw new Error("Required argument missing: aTab");
-    //       tabPos = tabs.indexOf(aTab);
-    //       for (let i = 0; i < protectedTabs.length; i++) {
-    //         let index = tabs.indexOf(protectedTabs[i]);
-    //         if (index <= tabPos)
-    //           --numProtected;
-    //       }
-    //       tabsToClose = numTabs - tabPos - 1 - numProtected;
-    //       break;
-    //     case closing.TO_START:
-    //       if (!aTab)
-    //         throw new Error("Required argument missing: aTab");
-    //       tabPos = tabs.indexOf(aTab);
-    //       for (let i = 0; i < protectedTabs.length; i++) {
-    //         let index = tabs.indexOf(protectedTabs[i]);
-    //         if (index >= tabPos)
-    //           --numProtected;
-    //       }
-    //       tabsToClose = tabPos - numProtected;
-    //       break;
-    //     default:
-    //       throw new Error("Invalid argument: " + whatToClose);
-    //   }
+      var tabPos, tabsToClose = 0;
+      switch (whatToClose) {
+        case closing.ALL:
+          tabsToClose = numTabs - numProtected;
+          break;
+        case closing.ALL_ONEXIT:
+          tabsToClose = numTabs - this._removingTabs.length;
+          break;
+        case closing.OTHER:
+          if (!aTab)
+            aTab = this.mCurrentTab;
+          if (aTab._isProtected)
+            --numProtected;
+          tabsToClose = numTabs - 1 - numProtected;
+          break;
+        case closing.GROUP:
+          for (let i = numTabs - 1; i > -1; --i) {
+            let tab = tabs[i];
+            if (this.getBrowserForTab(tab).currentURI.spec.indexOf(aDomain) != -1 &&
+                !tab._isProtected)
+              tabsToClose++;
+          }
+          if (shouldPrompt == -1) {
+            if (tabsToClose == this.tabs.length)
+              shouldPrompt = 3;
+            else if (Services.prefs.getBoolPref(prefs[0]))
+              shouldPrompt = 1;
+            else
+              return true;
+          }
+          break;
+        case closing.TO_END:
+          if (!aTab)
+            throw new Error("Required argument missing: aTab");
+          tabPos = tabs.indexOf(aTab);
+          for (let i = 0; i < protectedTabs.length; i++) {
+            let index = tabs.indexOf(protectedTabs[i]);
+            if (index <= tabPos)
+              --numProtected;
+          }
+          tabsToClose = numTabs - tabPos - 1 - numProtected;
+          break;
+        case closing.TO_START:
+          if (!aTab)
+            throw new Error("Required argument missing: aTab");
+          tabPos = tabs.indexOf(aTab);
+          for (let i = 0; i < protectedTabs.length; i++) {
+            let index = tabs.indexOf(protectedTabs[i]);
+            if (index >= tabPos)
+              --numProtected;
+          }
+          tabsToClose = tabPos - numProtected;
+          break;
+        default:
+          throw new Error("Invalid argument: " + whatToClose);
+      }
 
-    //   if (whatToClose != closing.ALL_ONEXIT && tabsToClose == numTabs &&
-    //       Tabmix.prefs.getBoolPref("keepLastTab"))
-    //     tabsToClose--;
+      if (whatToClose != closing.ALL_ONEXIT && tabsToClose == numTabs &&
+          Tabmix.prefs.getBoolPref("keepLastTab"))
+        tabsToClose--;
 
-    //   if (tabsToClose <= 1 && shouldPrompt < 2)
-    //     return true;
+      if (tabsToClose <= 1 && shouldPrompt < 2)
+        return true;
 
-    //   // default to true: if it were false, we wouldn't get this far
-    //   var warnOnClose = {value: true};
+      // default to true: if it were false, we wouldn't get this far
+      var warnOnClose = {value: true};
 
-    //   var message, chkBoxLabel;
-    //   if (shouldPrompt == 1 || numProtected === 0) {
-    //     if (Tabmix.isVersion(290)) {
-    //       message = PluralForm.get(tabsToClose, Tabmix.getString("tabs.closeWarningMultiple"))
-    //           .replace("#1", tabsToClose);
-    //     } else {
-    //       message = Tabmix.getFormattedString("tabs.closeWarningMultipleTabs", [tabsToClose]);
-    //     }
-    //     chkBoxLabel = shouldPrompt == 1 ? Tabmix.getString("tabs.closeWarningPromptMe") :
-    //       TabmixSvc.getString("window.closeWarning.2");
-    //   } else {
-    //     let messageKey = "protectedtabs.closeWarning.";
-    //     messageKey += (numProtected < tabsToClose) ? "3" : (numProtected == 1) ? "1" : "2";
-    //     message = TabmixSvc.getFormattedString(messageKey, [tabsToClose, numProtected]);
-    //     var chkBoxKey = shouldPrompt == 3 ? "window.closeWarning.2" : "protectedtabs.closeWarning.5";
-    //     chkBoxLabel = TabmixSvc.getString(chkBoxKey);
-    //   }
+      var message, chkBoxLabel;
+      if (shouldPrompt == 1 || numProtected === 0) {
+        if (Tabmix.isVersion(290)) {
+          message = PluralForm.get(tabsToClose, Tabmix.getString("tabs.closeWarningMultiple"))
+              .replace("#1", tabsToClose);
+        } else {
+          message = Tabmix.getFormattedString("tabs.closeWarningMultipleTabs", [tabsToClose]);
+        }
+        chkBoxLabel = shouldPrompt == 1 ? Tabmix.getString("tabs.closeWarningPromptMe") :
+          TabmixSvc.getString("window.closeWarning.2");
+      } else {
+        let messageKey = "protectedtabs.closeWarning.";
+        messageKey += (numProtected < tabsToClose) ? "3" : (numProtected == 1) ? "1" : "2";
+        message = TabmixSvc.getFormattedString(messageKey, [tabsToClose, numProtected]);
+        var chkBoxKey = shouldPrompt == 3 ? "window.closeWarning.2" : "protectedtabs.closeWarning.5";
+        chkBoxLabel = TabmixSvc.getString(chkBoxKey);
+      }
 
-    //   var buttonLabel = shouldPrompt == 1 ? Tabmix.getString("tabs.closeButtonMultiple") :
-    //     TabmixSvc.getString("closeWindow.label");
+      var buttonLabel = shouldPrompt == 1 ? Tabmix.getString("tabs.closeButtonMultiple") :
+        TabmixSvc.getString("closeWindow.label");
 
-    //   window.focus();
-    //   var promptService = Services.prompt;
-    //   var buttonPressed = promptService.confirmEx(window,
-    //     Tabmix.getString("tabs.closeWarningTitle"),
-    //     message,
-    //     (promptService.BUTTON_TITLE_IS_STRING * promptService.BUTTON_POS_0) +
-    //     (promptService.BUTTON_TITLE_CANCEL * promptService.BUTTON_POS_1),
-    //     buttonLabel,
-    //     null, null,
-    //     chkBoxLabel,
-    //     warnOnClose);
-    //   var reallyClose = (buttonPressed === 0);
-    //   // don't set the pref unless they press OK and it's false
-    //   if (reallyClose && !warnOnClose.value) {
-    //     Services.prefs.setBoolPref(prefs[shouldPrompt - 1], false);
-    //   }
+      window.focus();
+      var promptService = Services.prompt;
+      var buttonPressed = promptService.confirmEx(window,
+        Tabmix.getString("tabs.closeWarningTitle"),
+        message,
+        (promptService.BUTTON_TITLE_IS_STRING * promptService.BUTTON_POS_0) +
+        (promptService.BUTTON_TITLE_CANCEL * promptService.BUTTON_POS_1),
+        buttonLabel,
+        null, null,
+        chkBoxLabel,
+        warnOnClose);
+      var reallyClose = (buttonPressed === 0);
+      // don't set the pref unless they press OK and it's false
+      if (reallyClose && !warnOnClose.value) {
+        Services.prefs.setBoolPref(prefs[shouldPrompt - 1], false);
+      }
 
-    //   return reallyClose;
-    // };
-    // Tabmix.setNewFunction(gBrowser, "warnAboutClosingTabs", warnAboutClosingTabs);
+      return reallyClose;
+    };
+    Tabmix.setNewFunction(gBrowser, "TMP_warnAboutClosingTabs", warnAboutClosingTabs);
 
     gBrowser.TMP_selectNewForegroundTab = function(aTab, aLoadInBackground, aUrl, addOwner) {
       var bgLoad = typeof aLoadInBackground == "boolean" ? aLoadInBackground :
@@ -2031,7 +2031,7 @@ Tabmix.tablib = {
         return false;
 
       // try to find non-private window
-      let nonPrivateWindow = Services.wm.getMostRecentBrowserWindow({private: false});
+      let nonPrivateWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});
       if (!nonPrivateWindow)
         return false;
 
@@ -2070,7 +2070,7 @@ Tabmix.tablib = {
       var pref = "extensions.tabmix.warnAboutClosingTabs.timeout";
       var startTime = new Date().valueOf();
       var oldTime = Services.prefs.prefHasUserValue(pref) ? Services.prefs.getCharPref(pref) : 0;
-      canClose = gBrowser.warnAboutClosingTabs(gBrowser.closingTabsEnum.ALL_ONEXIT);
+      canClose = gBrowser.TMP_warnAboutClosingTabs(gBrowser.TMP_closingTabsEnum.ALL_ONEXIT);
       Services.prefs.setCharPref(pref, Number(oldTime) + (new Date().valueOf() - startTime));
     }
 

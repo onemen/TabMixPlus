@@ -27,8 +27,10 @@ XPCOMUtils.defineLazyModuleGetter(this, "PlacesUIUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils",
   "resource://gre/modules/PlacesUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
-  "chrome://tabmix-resource/content/RecentWindow.jsm");
+// XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
+//   "resource:///modules/RecentWindow.jsm");
+this.RecentWindow={};
+this.RecentWindow.getMostRecentBrowserWindow = Services.wm.getMostRecentBrowserWindow;
 
 XPCOMUtils.defineLazyModuleGetter(this,
   "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");

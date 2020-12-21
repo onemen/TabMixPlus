@@ -52,6 +52,6 @@
         }
     }
 
-    customElements.define("broadcaster", Broadcaster);
+    customElements.get("broadcaster") ? '': customElements.define("broadcaster", Broadcaster);
 
 }
