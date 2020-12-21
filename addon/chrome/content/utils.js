@@ -263,8 +263,10 @@ var Tabmix = {
   _init() {
     Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
     Components.utils.import("resource://gre/modules/Services.jsm");
-    XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
-      "chrome://tabmix-resource/content/RecentWindow.jsm");
+    // XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
+    //   "resource:///modules/RecentWindow.jsm");
+    this.RecentWindow={};
+    this.RecentWindow.getMostRecentBrowserWindow = Services.wm.getMostRecentBrowserWindow;
 
     const destroy = () => {
       window.removeEventListener("unload", destroy);
