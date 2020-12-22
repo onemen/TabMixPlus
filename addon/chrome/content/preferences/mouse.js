@@ -52,8 +52,10 @@ var gMousePane = {
     // Linux uses alt key down to trigger the top menu on Ubuntu or
     // start drag window on OpenSuSe
     let disabled = TabmixSvc.isLinux && panel == "alt";
-    Tabmix.setItem(this.clickTabbar, "disabled", disabled || null);
-    Tabmix.setItem(this.clickTabbar.previousSibling, "disabled", disabled || null);
+    if(disabled){
+      Tabmix.setItem(this.clickTabbar, "disabled", disabled);
+      Tabmix.setItem(this.clickTabbar.previousSibling, "disabled", disabled);
+    }
   },
 
   updatePref(element, prefID) {
@@ -70,7 +72,7 @@ var gMousePane = {
   resetPreference(checkbox) {
     let menulist = $(checkbox.getAttribute("control"));
     let prefID = menulist.getAttribute("preference");
-    $(prefID).valueFromPreferences = checkbox.checked ? (menulist[prefID] || undefined) : -1;
+    $(prefID).value = checkbox.checked ? (menulist[prefID] || 0) : -1;
   },
 
   setCheckedState(menulist) {
