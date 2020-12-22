@@ -103,9 +103,9 @@ class Preference extends MozXULElement {
   }
 
   connectedCallback() {
-    if (this._initialized) {
-      return;
-    }
+    // if (this._initialized) {
+    //   return;
+    // }
 
     this._constructed = false;
     this._value = null;
@@ -162,7 +162,7 @@ class Preference extends MozXULElement {
       this.preferences._constructAfterChildren();
     }
 
-    this._initialized = true;
+    // this._initialized = true;
   }
 
   disconnectedCallback() {
@@ -1075,13 +1075,31 @@ class PrefWindow extends MozXULElement {
     this.hasAttribute("title") ? '' : this.setAttribute("title", MozXULElement.parseXULToFragment(`<div attr="&preferencesCmd2.label;" />`,["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
 
     let global = Components.utils.getGlobalForObject(this);
-    let fn = global["ev" + "al"];
-    this.hasAttribute("ondialogaccept") ? this.addEventListener("dialogaccept",_=> fn(this.getAttribute("ondialogaccept"))) :'';
-    this.hasAttribute("ondialogcancel") ? this.addEventListener("dialogcancel",_=> fn(this.getAttribute("ondialogcancel"))) :'';
-    this.hasAttribute("ondialogextra1") ? this.addEventListener("dialogextra1",_=> fn(this.getAttribute("ondialogextra1"))) :'';
-    this.hasAttribute("ondialogextra2") ? this.addEventListener("dialogextra2",_=> fn(this.getAttribute("ondialogextra2"))) :'';
-    this.hasAttribute("ondialoghelp") ? this.addEventListener("dialoghelp",_=> fn(this.getAttribute("ondialoghelp"))) :'';
-    this.hasAttribute("ondialogdisclosure") ? this.addEventListener("dialogdisclosure",_=> fn(this.getAttribute("ondialogdisclosure"))) :'';
+
+    if(this.hasAttribute("ondialogaccept")) {
+      let f = new Function("event", this.getAttribute("ondialogaccept"));
+      this.addEventListener("dialogaccept",(event) => f.call(this, event));
+    }
+    if(this.hasAttribute("ondialogcancel")) {
+      let f = new Function("event", this.getAttribute("ondialogcancel"));
+      this.addEventListener("dialogcancel",(event) => f.call(this, event));
+    }
+    if(this.hasAttribute("ondialogextra1")) {
+      let f = new Function("event", this.getAttribute("ondialogextra1"));
+      this.addEventListener("dialogextra1",(event) => f.call(this, event));
+    }
+    if(this.hasAttribute("ondialogextra2")) {
+      let f = new Function("event", this.getAttribute("ondialogextra2"));
+      this.addEventListener("dialogextra2",(event) => f.call(this, event));
+    }
+    if(this.hasAttribute("ondialoghelp")) {
+      let f = new Function("event", this.getAttribute("ondialoghelp"));
+      this.addEventListener("dialoghelp",(event) => f.call(this, event));
+    }
+    if(this.hasAttribute("ondialogdisclosure")) {
+      let f = new Function("event", this.getAttribute("ondialogdisclosure"));
+      this.addEventListener("dialogdisclosure",(event) => f.call(this, event));
+    }
     /**
      * Derived bindings can set this to true to cause us to skip
      * reading the browser.preferences.instantApply pref in the constructor.
