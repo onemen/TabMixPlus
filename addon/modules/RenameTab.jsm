@@ -25,7 +25,7 @@ this.RenameTab = {
     this.window = aTab.ownerGlobal;
     var gBrowser = this.window.gBrowser;
 
-    this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser.mCurrentTab;
+    this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser._selectedTab;
     var browser = gBrowser.getBrowserForTab(aTab);
     let docTitle = aTab.hasAttribute("pending") ?
       this.window.TMP_SessionStore.getTitleFromTabState(aTab) :

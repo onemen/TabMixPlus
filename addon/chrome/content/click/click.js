@@ -47,7 +47,7 @@ var TabmixTabClickOptions = {
     }
 
     var clickOutTabs = aEvent.target.localName == "tabs";
-    var tab = clickOutTabs ? gBrowser.mCurrentTab : aEvent.target;
+    var tab = clickOutTabs ? gBrowser._selectedTab : aEvent.target;
 
     // we replace click handler from tab binding with this to make sure that we
     // always call onMouseCommand (if we need to) before we call tab flip.
@@ -125,7 +125,7 @@ var TabmixTabClickOptions = {
 
     var clickOutTabs = aEvent.target.localName == "tabs";
 
-    var tab = clickOutTabs ? gBrowser.mCurrentTab : aEvent.target;
+    var tab = clickOutTabs ? gBrowser._selectedTab : aEvent.target;
     this.clickAction("dbl", clickOutTabs, tab, aEvent);
   },
 
@@ -852,7 +852,7 @@ var TabmixAllTabs = {
 
     if (event.button == 1) {
       let aTab = event.originalTarget.tab;
-      if (popup.parentNode.id == "tm-tabsList" && (aTab.selected || gBrowser.isBlankTab(gBrowser.mCurrentTab))) {
+      if (popup.parentNode.id == "tm-tabsList" && (aTab.selected || gBrowser.isBlankTab(gBrowser._selectedTab))) {
         popup.hidePopup();
         gBrowser.removeTab(aTab, {animate: true});
         return;

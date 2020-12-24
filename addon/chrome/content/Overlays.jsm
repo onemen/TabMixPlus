@@ -156,23 +156,28 @@ class Overlays {
         }
       }
 
+      let t_unloadedOverlays = [];
       // Prepare loading further nested xul overlays from the overlay
-      unloadedOverlays.push(...this._collectOverlays(doc));
+      t_unloadedOverlays.push(...this._collectOverlays(doc));
 
       // Prepare loading further nested xul overlays from the registry
       for (const overlayUrl of this.overlayProvider.overlay.get(url, false)) {
-        unloadedOverlays.push(overlayUrl);
+        t_unloadedOverlays.push(overlayUrl);
       }
+
+      unloadedOverlays.unshift(...t_unloadedOverlays);
 
       // Run through all overlay nodes on the first level (hookup nodes). Scripts will be deferred
       // until later for simplicity (c++ code seems to process them earlier?).
+      let t_forwardReferences = [];
       for (const node of doc.documentElement.children) {
         if (node.localName == "script") {
           this.unloadedScripts.push(node);
         } else {
-          forwardReferences.push(node);
+          t_forwardReferences.push(node);
         }
       }
+      forwardReferences.unshift(...t_forwardReferences);
     }
 
     // We've resolved all the forward references we can, we can now go ahead and load the scripts

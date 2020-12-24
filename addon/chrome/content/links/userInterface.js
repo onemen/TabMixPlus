@@ -169,7 +169,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
 
 Tabmix.selectedTab = null;
 Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastTab) {
-  // Firefox always call focusAndSelectUrlBar when it replacing last tab
+  // Firefox always call gURLBar.select when it replacing last tab
   if (!replaceLastTab && /about:home|(www\.)*(google|bing)\./.test(aUrl))
     return;
   if (aTab.selected && !isBlankPageURL(aUrl)) {
@@ -184,9 +184,9 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastT
     if (this.isVersion(340) && gMultiProcessBrowser)
       aTab._skipContentFocus = true;
     if (aTimeOut)
-      setTimeout(() => focusAndSelectUrlBar(), 30);
+      setTimeout(() => gURLBar.select(), 30);
     else
-      focusAndSelectUrlBar();
+      gURLBar.select();
   }
 };
 
@@ -256,8 +256,8 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
 
 Tabmix.checkCurrent = function TMP_checkCurrent(url) {
   var opentabforLinks = Tabmix.prefs.getIntPref("opentabforLinks");
-  if (opentabforLinks == 1 || gBrowser.mCurrentTab.hasAttribute("locked")) {
-    let isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
+  if (opentabforLinks == 1 || gBrowser._selectedTab.hasAttribute("locked")) {
+    let isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser._selectedTab);
     if (!isBlankTab)
       return "tab";
   } else if (opentabforLinks == 2) {

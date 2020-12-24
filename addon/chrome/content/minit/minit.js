@@ -1124,7 +1124,7 @@ var TMP_undocloseTabButtonObserver = {
 
 Tabmix.goButtonClick = function TMP_goButtonClick(aEvent) {
   if (aEvent.button == 1 && gURLBar.value == gBrowser.currentURI.spec)
-    gBrowser.duplicateTab(gBrowser.mCurrentTab);
+    gBrowser.duplicateTab(gBrowser._selectedTab);
   else if (aEvent.button != 2)
     gURLBar.handleCommand(aEvent);
 };
@@ -1137,7 +1137,7 @@ Tabmix.loadTabs = function TMP_loadTabs(aURIs, aReplace) {
 };
 
 Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
-  var aTab = gBrowser.mCurrentTab;
+  var aTab = gBrowser._selectedTab;
   var isBlankTab = gBrowser.isBlankNotBusyTab(aTab);
   var isLockTab = !isBlankTab && aTab.hasAttribute("locked");
 
@@ -1385,7 +1385,36 @@ Tabmix.navToolbox = {
 
   handleCommand(event, openUILinkWhere, openUILinkParams = {}) {
     let prevTab, prevTabPos;
-    let action = this._parseActionUrl(this.value) || {};
+    let _parseActionUrl = function(aUrl) {
+      if (!aUrl.startsWith("mozaction:")) {
+        return null;
+      }
+
+      // URL is in the format mozaction:ACTION,PARAMS
+      // Where PARAMS is a JSON encoded object.
+      let [, type, params] = aUrl.match(/^mozaction:([^,]+),(.*)$/);
+
+      let action = {
+        type,
+      };
+
+      try {
+        action.params = JSON.parse(params);
+        for (let key in action.params) {
+          action.params[key] = decodeURIComponent(action.params[key]);
+        }
+      } catch (e) {
+        // If this failed, we assume that params is not a JSON object, and
+        // is instead just a flat string. This may happen for legacy
+        // search components.
+        action.params = {
+          url: params,
+        };
+      }
+
+      return action;
+    }
+    let action = _parseActionUrl(this.value) || {};
     if (Tabmix.prefs.getBoolPref("moveSwitchToTabNext") &&
         action.type == "switchtab" && this.hasAttribute("actiontype")) {
       prevTab = gBrowser.selectedTab;
@@ -1602,7 +1631,7 @@ Tabmix.navToolbox = {
       alltabsPopup.setAttribute("context", gBrowser.tabContainer.contextMenu.id);
       alltabsPopup.__ensureElementIsVisible = function() {
         let scrollBox = document.getAnonymousElementByAttribute(this, "class", "popup-internal-box");
-        scrollBox.ensureElementIsVisible(gBrowser.mCurrentTab.mCorrespondingMenuitem);
+        scrollBox.ensureElementIsVisible(gBrowser._selectedTab.mCorrespondingMenuitem);
       };
       alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
 

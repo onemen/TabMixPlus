@@ -66,7 +66,7 @@ var TabmixTabbar = {
     this.scrollButtonsMode = tabscroll;
     var isMultiRow = tabscroll == this.SCROLL_BUTTONS_MULTIROW;
 
-    var currentVisible = start ? true : Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab);
+    var currentVisible = start ? true : Tabmix.tabsUtils.isElementVisible(gBrowser._selectedTab);
 
     if (prevTabscroll != tabscroll) {
       // update pointer to the button object that we are going to use
@@ -75,8 +75,8 @@ var TabmixTabbar = {
 
       // from Firefox 4.0+ on we add dynamically scroll buttons on TabsToolbar.
       let tabmixScrollBox = document.getElementById("tabmixScrollBox");
-      if (tabmixScrollBox) // just in case our box is missing
-        Tabmix.tabsUtils.updateScrollButtons(useTabmixButtons);
+      // if (tabmixScrollBox) // just in case our box is missing
+      //   Tabmix.tabsUtils.updateScrollButtons(useTabmixButtons);
 
       if (isMultiRow || prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
         // temporarily hide vertical scroll button.
@@ -1429,7 +1429,7 @@ gTMPprefObserver = {
         break;
       case "browser.tabs.tabMaxWidth":
       case "browser.tabs.tabMinWidth": {
-        var currentVisible = Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab);
+        var currentVisible = Tabmix.tabsUtils.isElementVisible(gBrowser._selectedTab);
         let tabMaxWidth = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMaxWidth"));
         let tabMinWidth = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMinWidth"));
         if (tabMaxWidth < tabMinWidth) {
@@ -1628,7 +1628,7 @@ gTMPprefObserver = {
         }
         // maxRow changed
         if (TabmixTabbar.isMultiRow) {
-          let isVisible = Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab);
+          let isVisible = Tabmix.tabsUtils.isElementVisible(gBrowser._selectedTab);
           // we hide the button to see if tabs can fits to fewer rows without the scroll buttons
           if (Tabmix.tabsUtils.overflow && row > TabmixTabbar.visibleRows)
             Tabmix.tabsUtils.overflow = false;
@@ -1724,7 +1724,7 @@ gTMPprefObserver = {
 
   setTabIconMargin: function TMP_PO_setTabIconMargin() {
     var [sMarginStart, sMarginEnd] = Tabmix.rtl ? ["margin-right", "margin-left"] : ["margin-left", "margin-right"];
-    var icon = document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "class", "tab-icon-image");
+    var icon = document.getAnonymousElementByAttribute(gBrowser._selectedTab, "class", "tab-icon-image");
     if (!icon)
       return; // nothing to do....
 
@@ -1807,7 +1807,7 @@ gTMPprefObserver = {
 
   setCloseButtonMargin: function TMP_PO_setCloseButtonMargin() {
     var sMarginEnd = Tabmix.rtl ? "margin-left" : "margin-right";
-    var icon = document.getAnonymousElementByAttribute(gBrowser.mCurrentTab, "anonid", "tmp-close-button");
+    var icon = document.getAnonymousElementByAttribute(gBrowser._selectedTab, "anonid", "tmp-close-button");
     if (!icon)
       return; // nothing to do....
 

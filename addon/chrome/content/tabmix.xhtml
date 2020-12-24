@@ -122,19 +122,19 @@
       <menuseparator id="tm-content-miscSep" insertafter="context-stop"/>
       <menuitem id="tm-content-closetab" data-l10n-id="tab-context-close-tabs" oncommand="gBrowser.removeCurrentTab();" insertbefore="context-sep-stop,context-sep-viewbgimage"/>
       <menuitem id="tm-duplicateTabContext" key="key_tm_dupTab" label="&duplicateTabMenu.label;" accesskey="&duplicateTabMenu.accesskey;"
-         oncommand="gBrowser.duplicateTab(gBrowser.mCurrentTab);" insertbefore="context-sep-stop,context-sep-viewbgimage"/>
+         oncommand="gBrowser.duplicateTab(gBrowser._selectedTab);" insertbefore="context-sep-stop,context-sep-viewbgimage"/>
       <menuitem id="tm-duplicateinWinContext" key="key_tm_dupWin" label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"
-         oncommand="gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, false);" insertbefore="context-sep-stop,context-sep-viewbgimage"/>
+         oncommand="gBrowser.duplicateTabToWindow(gBrowser._selectedTab, false);" insertbefore="context-sep-stop,context-sep-viewbgimage"/>
       <menuitem id="tm-detachTabContext" key="key_tm_detachTab" label="&detachTab.label;" accesskey="&detachTab.accesskey;"
-         oncommand="gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, true);" insertbefore="context-sep-stop,context-sep-viewbgimage"/>
+         oncommand="gBrowser.duplicateTabToWindow(gBrowser._selectedTab, true);" insertbefore="context-sep-stop,context-sep-viewbgimage"/>
       <menuitem id="tm-mergeWindows" key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;" oncommand="Tabmix.MergeWindows.mergeWindows(window);" insertbefore="context-sep-stop,context-sep-viewbgimage" />
-      <menuitem id="tm-content-freezeTab" type="checkbox" oncommand="gBrowser.freezeTab(gBrowser.mCurrentTab);"
+      <menuitem id="tm-content-freezeTab" type="checkbox" oncommand="gBrowser.freezeTab(gBrowser._selectedTab);"
          insertbefore="context-sep-stop,context-sep-viewbgimage" label="&freezeTabMenu.label;" accesskey="&freezeTabMenu.accesskey;"/>
       <menuitem id="tm-content-protectTab" type="checkbox"
-         oncommand="gBrowser.protectTab(gBrowser.mCurrentTab);"
+         oncommand="gBrowser.protectTab(gBrowser._selectedTab);"
          insertbefore="context-sep-stop,context-sep-viewbgimage" label="&protectTabMenu.label;" accesskey="&protectTabMenu.accesskey;"/>
       <menuitem id="tm-content-lockTab" type="checkbox"
-         oncommand="gBrowser.lockTab(gBrowser.mCurrentTab);"
+         oncommand="gBrowser.lockTab(gBrowser._selectedTab);"
          insertbefore="context-sep-stop,context-sep-viewbgimage" label="&lockTabMenu.label;" accesskey="&lockTabMenu.accesskey;"/>
       <menu id="tm-tabsList" label="&tabsList.label;" accesskey="&tabsList.accesskey;" insertbefore="context-sep-stop,context-sep-viewbgimage" tmp_iconic="menu-iconic">
         <menupopup id="tm-tabsList-menu"
@@ -156,7 +156,7 @@
       <menu id="tm-autoreload_menu" insertafter="context-sep-navigation,context-reload"
             labelTab="&autoReloadTab.label;" accesskeyTab="&autoReloadTab.accesskey;"
             labelSite="&autoReloadSite.label;" accesskeySite="&autoReloadSite.accesskey;">
-        <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser.mCurrentTab);"/>
+        <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser._selectedTab);"/>
       </menu>
     </popup>
 
@@ -272,7 +272,7 @@
 
     <!-- add auto reload popup to reload button -->
     <toolbarbutton id="reload-button">
-      <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser.mCurrentTab);"/>
+      <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser._selectedTab);"/>
     </toolbarbutton>
 
     <toolbarbutton id="go-button" onclick="Tabmix.goButtonClick(event);"/>
@@ -280,7 +280,7 @@
     <popupset id="mainPopupSet">
       <!-- popup menu for autoreload -->
       <menupopup id="autoreload_popup" oncommand="Tabmix.autoReload.setTime(this._tab, event.originalTarget.value);"
-                 onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser.mCurrentTab);"
+                 onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser._selectedTab);"
                  onpopuphidden="this._tab = null;">
         <menuitem label="&autoReloadTab.label;"  disabled="true" style="font-weight: bold;color: #CC0000;"/>
         <menuseparator />
