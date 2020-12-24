@@ -68,7 +68,7 @@ var TMP_LastTab = {
     // if session manager select other tab then the first one we need to build
     // TabHistory in two steps to maintain natural Ctrl-Tab order.
     this.TabHistory = [];
-    var currentIndex = gBrowser.mCurrentTab._tPos;
+    var currentIndex = gBrowser._selectedTab._tPos;
     for (let i = currentIndex; i < gBrowser.tabs.length; i++)
       this.TabHistory.unshift(gBrowser.tabs[i]);
     for (let i = 0; i < currentIndex; i++)
@@ -221,7 +221,7 @@ var TMP_LastTab = {
         if (this.handleCtrlTab) {
           this.TabIndex = tabCount - 1;
         } else {
-          this.TabIndex = this.tabs.indexOf(gBrowser.mCurrentTab);
+          this.TabIndex = this.tabs.indexOf(gBrowser._selectedTab);
         }
         this.KeyLock = true;
       }

@@ -371,9 +371,9 @@ var TMP_extensionsCompatibility = {
 
       FireGestures.closeMultipleTabs = function(aLeftRight) {
         if (aLeftRight == "left")
-          gBrowser._closeLeftTabs(gBrowser.mCurrentTab);
+          gBrowser._closeLeftTabs(gBrowser._selectedTab);
         else
-          gBrowser._closeRightTabs(gBrowser.mCurrentTab);
+          gBrowser._closeRightTabs(gBrowser._selectedTab);
       };
     }
 
@@ -397,11 +397,11 @@ var TMP_extensionsCompatibility = {
     // override some of All-in-One Gestures function
     // override the duplicate tab function
     if (typeof aioDupTab == 'function')
-      window.aioDupTab = () => gBrowser.duplicateTab(gBrowser.mCurrentTab);
+      window.aioDupTab = () => gBrowser.duplicateTab(gBrowser._selectedTab);
 
     // override the duplicate in new window function
     if (typeof aioDupWindow == 'function')
-      window.aioDupWindow = () => gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab);
+      window.aioDupWindow = () => gBrowser.duplicateTabToWindow(gBrowser._selectedTab);
 
     // override the aioCloseWindow function
     if (typeof aioCloseWindow == 'function')
@@ -688,7 +688,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
         'gContextMenu.linkURL = url;'
       )._replace(
         'TreeStyleTabService.readyToOpenChildTab(aTab)',
-        'TreeStyleTabService.readyToOpenChildTab(gBrowser.mCurrentTab)'
+        'TreeStyleTabService.readyToOpenChildTab(gBrowser._selectedTab)'
       )._replace(
         /eval\(["|']gBrowser\.TMP_openTabNext/,
         'if (false) $&'

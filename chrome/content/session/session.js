@@ -487,8 +487,8 @@ TabmixSessionManager = {
       }
     }
 
-    if (window.toolbar.visible && gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab))
-      focusAndSelectUrlBar();
+    if (window.toolbar.visible && gBrowser.isBlankNotBusyTab(gBrowser._selectedTab))
+      gURLBar.select();
   },
 
   // calls from: Tabmix.tablib.closeWindow, this.onWindowClose and this.canQuitApplication
@@ -836,12 +836,12 @@ TabmixSessionManager = {
         afterLoad(browser);
       }
       this.restoreWindowArguments();
-    } else if (gBrowser.mCurrentTab.loadOnStartup) {
+    } else if (gBrowser._selectedTab.loadOnStartup) {
       for (var i = 0; i < gBrowser.tabs.length; i++)
         delete gBrowser.tabs[i].loadOnStartup;
     } else if (window.toolbar.visible &&
-               gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab)) {
-      focusAndSelectUrlBar();
+               gBrowser.isBlankNotBusyTab(gBrowser._selectedTab)) {
+      gURLBar.select();
     }
   },
 
@@ -1519,7 +1519,7 @@ TabmixSessionManager = {
         TabmixSvc.setLabel("sm.sessionName.button1")].join("\n");
       actionFlag = Tabmix.DLG_RENAME;
     } else {
-      label = action == "saveprevious" ? old : gBrowser.mCurrentTab.label;
+      label = action == "saveprevious" ? old : gBrowser._selectedTab.label;
       buttons = [TabmixSvc.setLabel("sm.askBeforeSave.button0"),
         TabmixSvc.setLabel("sm.askBeforeSave.button1"),
         TabmixSvc.setLabel("sm.replaceStartup.button0") + "..."].join("\n");
@@ -2708,7 +2708,7 @@ TabmixSessionManager = {
     if (path == this.gSessionPath[0]) {
       // save current tab title. we will use it later in closed windows list as menu entry label
       // if current tab is blank get label from first saved tab that isn't blank
-      var _tab = gBrowser.mCurrentTab;
+      var _tab = gBrowser._selectedTab;
       if (gBrowser.isBlankTab(_tab)) {
         for (var i = 0; i < gBrowser.tabs.length; i++) {
           var aTab = gBrowser.tabs[i];
@@ -2889,7 +2889,7 @@ TabmixSessionManager = {
   tabSelected(needFlush) {
     if (!this.enableBackup || this.windowClosed)
       return;
-    let tab = gBrowser.mCurrentTab;
+    let tab = gBrowser._selectedTab;
     if (tab.hasAttribute("inrestore") || this.isTabPrivate(tab))
       return;
     if (typeof (needFlush) == "undefined") needFlush = false;
@@ -2903,12 +2903,12 @@ TabmixSessionManager = {
   },
 
   getTabPosition() { // calc selected tab position if blank tab not restore
-    if (gBrowser.isBlankTab(gBrowser.mCurrentTab)) return 0; // if the current tab is blank we don't restore the index
+    if (gBrowser.isBlankTab(gBrowser._selectedTab)) return 0; // if the current tab is blank we don't restore the index
     var blankTab = 0;
-    for (var i = 0; i < gBrowser.mCurrentTab._tPos; i++) {
+    for (var i = 0; i < gBrowser._selectedTab._tPos; i++) {
       if (gBrowser.isBlankTab(gBrowser.tabs[i])) blankTab++;
     }
-    return gBrowser.mCurrentTab._tPos - blankTab;
+    return gBrowser._selectedTab._tPos - blankTab;
   },
 
   getNodeForTab(aTab) {
@@ -3261,7 +3261,7 @@ TabmixSessionManager = {
       4. if we open all closed windows to one window append tab to the end and select the selected tab from first window
          in the session.
     */
-    var cTab = gBrowser.mCurrentTab;
+    var cTab = gBrowser._selectedTab;
     if (!winData.tabs || winData.tabs.length === 0) {
       let msg = TabmixSvc.getSMString("sm.restoreError.msg0") + "\n" +
           TabmixSvc.getSMString("sm.restoreError.msg1");
@@ -3584,7 +3584,7 @@ TabmixSessionManager = {
     let attributes = ["protected", "fixed-label", "label-uri", "tabmix_bookmarkId",
       "pending", "hidden", "image"];
     // remove visited and tabmix_selectedID from all tabs but the current
-    if (aTab != gBrowser.mCurrentTab)
+    if (aTab != gBrowser._selectedTab)
       attributes = attributes.concat(["visited", "tabmix_selectedID"]);
 
     attributes.forEach(attrib => {

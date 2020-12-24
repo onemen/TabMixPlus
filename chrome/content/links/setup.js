@@ -29,7 +29,7 @@ Tabmix.linkHandling_init = function TMP_TBP_init() {
       this.changeCode(autoComplete, fn)._replace(
         /openUILink\(url, aEvent.*\);/,
         'var tabmixOptions = typeof options == "object" ? options : {};' + n +
-        'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' + n +
+        'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser._selectedTab);' + n +
         'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' + n +
         'var pref = "extensions.tabmix.loadUrlInBackground";' + n +
         'tabmixOptions.inBackground = Services.prefs.getBoolPref(pref);' + n +

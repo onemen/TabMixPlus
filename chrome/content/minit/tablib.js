@@ -298,9 +298,9 @@ Tabmix.tablib = {
        } \
        $&'
     )._replace(
-      // we call focusAndSelectUrlBar from Tabmix.clearUrlBar
+      // we call gURLBar.select from Tabmix.clearUrlBar
       // see TMP_BrowserOpenTab
-      'focusAndSelectUrlBar();',
+      'gURLBar.select();',
       '{/* see TMP_BrowserOpenTab */}'
     )._replace(
       `this.tabContainer.${Tabmix.updateCloseButtons}();`,
@@ -810,7 +810,7 @@ Tabmix.tablib = {
 
     _openURI = _openURI._replace(
       'if (#1 && (!aURI || aURI.spec == "'.replace("#1", arg) + TabmixSvc.aboutBlank + '")) {',
-      'let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser.mCurrentTab); \
+      'let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser._selectedTab); \
        $&'
     )._replace(
       'win.BrowserOpenTab()',
@@ -822,7 +822,7 @@ Tabmix.tablib = {
       {check: Tabmix.isVersion(260)}
     )._replace(
       'win.gBrowser.loadOneTab',
-      'currentIsBlank ? win.gBrowser.mCurrentTab : $&'
+      'currentIsBlank ? win.gBrowser._selectedTab : $&'
     )._replace(
       'win.gBrowser.getBrowserForTab(tab);',
       '$&' +
@@ -1100,7 +1100,7 @@ Tabmix.tablib = {
   addNewFunctionsTo_gBrowser: function addNewFunctionsTo_gBrowser() {
     let duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, disallowSelect, dontFocusUrlBar) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
 
       var newTab = null;
       let copyToNewWindow = window != aTab.ownerGlobal;
@@ -1207,7 +1207,7 @@ Tabmix.tablib = {
 
     gBrowser.duplicateTabToWindow = function(aTab, aMoveTab, aTabData) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
 
       if (Tabmix.singleWindowMode) {
         if (!aMoveTab)
@@ -1321,8 +1321,8 @@ Tabmix.tablib = {
           Tabmix.tabsUtils.updateVerticalTabStrip(true);
         let tabs = this.visibleTabs.slice();
         // remove current tab last
-        if (!this.mCurrentTab.pinned)
-          tabs.unshift(tabs.splice(tabs.indexOf(this.mCurrentTab), 1)[0]);
+        if (!this._selectedTab.pinned)
+          tabs.unshift(tabs.splice(tabs.indexOf(this._selectedTab), 1)[0]);
         tabs.reverse().forEach(function TMP_removeTab(tab) {
           if (!tab.pinned)
             this.removeTab(tab, {animate: false});
@@ -1333,7 +1333,7 @@ Tabmix.tablib = {
 
     gBrowser.closeGroupTabs = function TMP_closeGroupTabs(aTab) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
 
       var URL = this.getBrowserForTab(aTab).currentURI.spec;
       var matches = URL.match(/(^.*\/)(.*)/);
@@ -1369,10 +1369,10 @@ Tabmix.tablib = {
 
     gBrowser.closeRightTabs = function(aTab) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
 
       if (this.TMP_warnAboutClosingTabs(this.TMP_closingTabsEnum.TO_END, aTab)) {
-        if (aTab._tPos < this.mCurrentTab._tPos)
+        if (aTab._tPos < this._selectedTab._tPos)
           this.selectedTab = aTab;
 
         let childNodes = this.visibleTabs;
@@ -1386,10 +1386,10 @@ Tabmix.tablib = {
 
     gBrowser.closeLeftTabs = function TMP_closeLeftTabs(aTab) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
 
       if (this.TMP_warnAboutClosingTabs(this.TMP_closingTabsEnum.TO_START, aTab)) {
-        if (aTab._tPos > this.mCurrentTab._tPos) {
+        if (aTab._tPos > this._selectedTab._tPos) {
           this.selectedTab = aTab;
         }
         this.ensureTabIsVisible(this.selectedTab);
@@ -1405,10 +1405,10 @@ Tabmix.tablib = {
 
     Tabmix.setNewFunction(gBrowser, "removeAllTabsBut", function TMP_removeAllTabsBut(aTab) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
 
       if (this.TMP_warnAboutClosingTabs(this.TMP_closingTabsEnum.OTHER, aTab)) {
-        if (aTab != this.mCurrentTab)
+        if (aTab != this._selectedTab)
           this.selectedTab = aTab;
         this.ensureTabIsVisible(this.selectedTab);
         var childNodes = this.visibleTabs;
@@ -1437,9 +1437,9 @@ Tabmix.tablib = {
 
     gBrowser.reloadLeftTabs = function(aTab) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
       var childNodes = this.visibleTabs;
-      if (aTab._tPos > this.mCurrentTab._tPos)
+      if (aTab._tPos > this._selectedTab._tPos)
         this.selectedTab = aTab;
       let tabPos = childNodes.indexOf(aTab);
       Tabmix.tablib.reloadTabs(childNodes.slice(0, tabPos).reverse());
@@ -1447,9 +1447,9 @@ Tabmix.tablib = {
 
     gBrowser.reloadRightTabs = function(aTab) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
       var childNodes = this.visibleTabs;
-      if (aTab._tPos < this.mCurrentTab._tPos)
+      if (aTab._tPos < this._selectedTab._tPos)
         this.selectedTab = aTab;
       let tabPos = childNodes.indexOf(aTab);
       Tabmix.tablib.reloadTabs(childNodes.slice(tabPos + 1));
@@ -1457,7 +1457,7 @@ Tabmix.tablib = {
 
     gBrowser.reloadAllTabsBut = function(aTab) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
       else
         this.selectedTab = aTab;
       Tabmix.tablib.reloadTabs(this.visibleTabs, aTab);
@@ -1465,7 +1465,7 @@ Tabmix.tablib = {
 
     gBrowser.lockTab = function(aTab) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
       if (aTab.hasAttribute("locked")) {
         aTab.removeAttribute("_lockedAppTabs"); // we only have this if we locked AppTab
         aTab.removeAttribute("locked");
@@ -1481,7 +1481,7 @@ Tabmix.tablib = {
 
     gBrowser.protectTab = function(aTab) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
       if (aTab.hasAttribute("protected"))
         aTab.removeAttribute("protected");
       else
@@ -1496,7 +1496,7 @@ Tabmix.tablib = {
 
     gBrowser.freezeTab = function(aTab) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
       if (!aTab.hasAttribute("protected") || !aTab.hasAttribute("locked")) {
         aTab.setAttribute("protected", "true");
         aTab.setAttribute("locked", "true");
@@ -1520,7 +1520,7 @@ Tabmix.tablib = {
     gBrowser.SelectToMerge = function(aTab) {
       if (Tabmix.singleWindowMode && Tabmix.numberOfWindows() == 1) return;
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
       if (aTab.hasAttribute("mergeselected")) {
         aTab.removeAttribute("mergeselected");
         aTab.label = aTab.label.substr(4);
@@ -1537,7 +1537,7 @@ Tabmix.tablib = {
 
     gBrowser.copyTabUrl = function(aTab) {
       if (aTab.localName != "tab")
-        aTab = this.mCurrentTab;
+        aTab = this._selectedTab;
       var clipboard = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
           .getService(Components.interfaces.nsIClipboardHelper);
 
@@ -1588,8 +1588,8 @@ Tabmix.tablib = {
 
     gBrowser.selectIndexAfterRemove = function(oldTab) {
       var tabs = TMP_TabView.currentGroup();
-      var currentIndex = tabs.indexOf(this.mCurrentTab);
-      if (this.mCurrentTab != oldTab)
+      var currentIndex = tabs.indexOf(this._selectedTab);
+      if (this._selectedTab != oldTab)
         return currentIndex;
       var l = tabs.length;
       if (l == 1)
@@ -1732,7 +1732,7 @@ Tabmix.tablib = {
           break;
         case closing.OTHER:
           if (!aTab)
-            aTab = this.mCurrentTab;
+            aTab = this._selectedTab;
           if (aTab._isProtected)
             --numProtected;
           tabsToClose = numTabs - 1 - numProtected;
@@ -2086,7 +2086,7 @@ Tabmix.tablib = {
     let browser = gBrowser.selectedBrowser;
     let where = "current";
     if (aUri != browser.currentURI.spec) {
-      let tab = gBrowser.mCurrentTab;
+      let tab = gBrowser._selectedTab;
       let isCopy = "dataTransfer" in aEvent ?
         TMP_tabDNDObserver.isCopyDropEffect(aEvent.dataTransfer, aEvent, 0) :
         (aEvent.ctrlKey || aEvent.metaKey);

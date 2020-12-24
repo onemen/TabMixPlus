@@ -188,7 +188,7 @@ var TMP_Places = {
       return aWhere;
 
     var tabBrowser = w.gBrowser;
-    var aTab = tabBrowser.mCurrentTab;
+    var aTab = tabBrowser._selectedTab;
 
     if (typeof (aPref) == "undefined")
       aPref = this.getPrefByDocumentURI(window);
@@ -279,7 +279,7 @@ var TMP_Places = {
 
     var tabToSelect = null;
     let prevTab;
-    let relatedToCurrent = !doReplace && openTabNext && gBrowser.mCurrentTab._tPos < openTabs.length - 1;
+    let relatedToCurrent = !doReplace && openTabNext && gBrowser._selectedTab._tPos < openTabs.length - 1;
     if (relatedToCurrent) {
       // open bookmarks after last related tab if exist
       let lastRelatedTab = Tabmix.isVersion({ff: 570, wf: "56.2.8"}) ?
@@ -709,8 +709,8 @@ var TMP_Places = {
     this.inUpdateBatch = true;
 
     if (TabmixTabbar.widthFitTitle &&
-        Tabmix.tabsUtils.isElementVisible(gBrowser.mCurrentTab))
-      this.currentTab = gBrowser.mCurrentTab;
+        Tabmix.tabsUtils.isElementVisible(gBrowser._selectedTab))
+      this.currentTab = gBrowser._selectedTab;
   },
 
   onEndUpdateBatch: function TMP_PC_onEndUpdateBatch() {
