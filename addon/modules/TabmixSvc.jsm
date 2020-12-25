@@ -480,7 +480,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SERIALIZED_SYSTEMPRINCIPAL", function() 
 // Firefox 55
 // Bug 1352069 - Introduce a pref that allows for disabling cosmetic animations
 XPCOMUtils.defineLazyGetter(TabmixSvc, "tabAnimationsEnabled", () => {
-  return !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  return !Services.prefs.getIntPref("ui.prefersReducedMotion", 0) == 1;
 });
 
 tabStateCache = {

@@ -1628,7 +1628,7 @@ Tabmix.navToolbox = {
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && !alltabsPopup._tabmix_inited) {
       alltabsPopup._tabmix_inited = true;
-      alltabsPopup.setAttribute("context", gBrowser.tabContainer.contextMenu.id);
+      alltabsPopup.setAttribute("context", "tabContextMenu");
       alltabsPopup.__ensureElementIsVisible = function() {
         let scrollBox = document.getAnonymousElementByAttribute(this, "class", "popup-internal-box");
         scrollBox.ensureElementIsVisible(gBrowser._selectedTab.mCorrespondingMenuitem);

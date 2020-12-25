@@ -2171,7 +2171,7 @@ gTMPprefObserver = {
     var iconicItems = document.getElementsByAttribute("tmp_iconic", "*");
     setClass(iconicItems);
 
-    iconicItems = gBrowser.tabContainer.contextMenu.getElementsByAttribute("tmp_iconic", "*");
+    iconicItems = document.getElementById("tabContextMenu").getElementsByAttribute("tmp_iconic", "*");
     setClass(iconicItems);
   },
 
