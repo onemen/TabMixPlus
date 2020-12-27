@@ -24,7 +24,7 @@
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.js"/>
 
-   <groupbox>
+   <html:fieldset>
         <richlistbox id="filetypeList" rows="10" seltype="single" prefstring="extensions.tabmix.filetype" onselect="Select();"/>
         <hbox flex="1" align="center">
          <label value="&filetype.new;"/>
@@ -38,5 +38,5 @@
         <hbox>
          <button id="filetypeRestore" label="&settings.default;" oncommand="Restore();"/>
         </hbox>
-   </groupbox>
+   </html:fieldset>
 </dialog>
