@@ -14,12 +14,17 @@
         buttons="accept,cancel"
         ondialogaccept="accept();"
         onload="load();"
-        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml">
 
+  <script type="text/javascript"><![CDATA[
+    let f = new Function("event", this.getAttribute("ondialogaccept"));
+    this.addEventListener("dialogaccept",(event) => f.call(this, event));
+    ]]></script>
   <script type="application/javascript" src="chrome://tabmixplus/content/overlay/autoReload.js"/>
 
-  <groupbox orient="horizontal" align="center">
-    <caption label="&reloadtime.label1;" />
+  <html:fieldset orient="horizontal" align="center" style="display: flex; justify-content: center; align-items: center;">
+    <html:legend>&reloadtime.label1;</html:legend>
     <menulist id="autoreload_minutes" editable="true"
              oncommand="disable_OK();"
              oninput="onInput(this);">
@@ -47,6 +52,6 @@
              </menupopup>
     </menulist>
     <label control="autoreload_seconds" value="&seconds.label;"/>
-  </groupbox>
+  </html:fieldset>
 
 </dialog>

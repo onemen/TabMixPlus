@@ -141,7 +141,7 @@ this.AutoReload = {
       aTab = this._currentTab(aTab);
     let result = {ok: false};
     var win = aTab.ownerGlobal;
-    win.openDialog('chrome://tabmixplus/content/overlay/autoReload.xul', '_blank', 'chrome,modal,centerscreen', result);
+    win.openDialog('chrome://tabmixplus/content/overlay/autoReload.xhtml', '_blank', 'chrome,modal,centerscreen', result);
     if (result.ok) {
       aTab.autoReloadTime = TabmixSvc.prefBranch.getIntPref("reload_time");
       this._enable(aTab);
