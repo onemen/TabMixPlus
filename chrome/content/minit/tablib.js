@@ -1086,7 +1086,7 @@ Tabmix.tablib = {
     }
     let restoreAllWindows = undoPopup.lastChild;
     restoreAllWindows.setAttribute("value", -2);
-    let clearList = undoPopup.appendChild(document.createElement("menuitem"));
+    let clearList = undoPopup.appendChild(document.createXULElement("menuitem"));
     clearList.id = "menu_clearClosedWindowsList";
     clearList.setAttribute("label", TabmixSvc.getString("undoClosedWindows.clear.label"));
     clearList.setAttribute("value", -1);

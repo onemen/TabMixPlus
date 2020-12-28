@@ -997,7 +997,7 @@ var TabmixAllTabs = {
   },
 
   createMenuItems: function TMP_createMenuItems(popup, tab, value) {
-    let mi = document.createElement("menuitem");
+    let mi = document.createXULElement("menuitem");
     mi.setAttribute("class", "menuitem-iconic bookmark-item alltabs-item");
     let url = gBrowser.getBrowserForTab(tab).currentURI.spec;
     mi.setAttribute("statustext", url);

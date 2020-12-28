@@ -106,7 +106,7 @@ this.AutoReload = {
 
     let doc = aPopup.ownerGlobal.document;
     getList().sort((a, b) => parseInt(a) > parseInt(b)).forEach(val => {
-      let mi = doc.createElement("menuitem");
+      let mi = doc.createXULElement("menuitem");
       this.setLabel(mi, val);
       mi.setAttribute("type", "radio");
       mi.setAttribute("value", val);

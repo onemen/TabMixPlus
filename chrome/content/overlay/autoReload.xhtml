@@ -18,14 +18,16 @@
         xmlns:html="http://www.w3.org/1999/xhtml">
 
   <script type="text/javascript"><![CDATA[
-    let f = new Function("event", this.getAttribute("ondialogaccept"));
-    this.addEventListener("dialogaccept",(event) => f.call(this, event));
+    let t = document.getElementsByTagName("dialog")[0];
+    let f = new Function("event", t.getAttribute("ondialogaccept"));
+    t.addEventListener("dialogaccept",(event) => f.call(t, event));
     ]]></script>
   <script type="application/javascript" src="chrome://tabmixplus/content/overlay/autoReload.js"/>
 
   <html:fieldset orient="horizontal" align="center" style="display: flex; justify-content: center; align-items: center;">
     <html:legend>&reloadtime.label1;</html:legend>
-    <menulist id="autoreload_minutes" editable="true"
+    <!-- <menulist id="autoreload_minutes" editable="true"
+            <html:input list="min" type="number" min="0" size="3"/>
              oncommand="disable_OK();"
              oninput="onInput(this);">
              <menupopup>
@@ -37,10 +39,26 @@
                   <menuitem value="20" label="20"/>
                   <menuitem value="30" label="30"/>
              </menupopup>
-    </menulist>
+    </menulist> -->
+    <div style="position: relative;">
+      <html:input id="autoreload_minutes" type="number" min="0" size="3"
+        style="position: relative;z-index: 2;padding-right: 1px;margin: 0 17px 0 0;"
+        oncommand="disable_OK();"
+        oninput="onInput(this);"/>
+        <html:select style="position: absolute;z-index: 1;left: 0px;height: 100%;width: 100%;"
+          onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()">
+          <html:option value="0">0</html:option>
+          <html:option value="1">1</html:option>
+          <html:option value="5">5</html:option>
+          <html:option value="10">10</html:option>
+          <html:option value="15">15</html:option>
+          <html:option value="20">20</html:option>
+          <html:option value="30">30</html:option>
+        </html:select>
+    </div>
     <label control="autoreload_minutes" value="&minutes.label;"/>
 
-    <menulist id="autoreload_seconds" editable="true"
+    <!-- <menulist id="autoreload_seconds" editable="true"
              oncommand="disable_OK();"
              oninput="onInput(this);">
              <menupopup>
@@ -50,7 +68,21 @@
                   <menuitem value="30" label="30"/>
                   <menuitem value="45" label="45" />
              </menupopup>
-    </menulist>
+    </menulist> -->
+    <div style="position: relative;">
+      <html:input list="sec" id="autoreload_seconds" type="number" min="0" max="59" size="3"
+        style="position: relative;z-index: 2;padding-right: 1px;margin: 0 17px 0 0;"
+        oncommand="disable_OK();"
+        oninput="onInput(this);"/>
+        <html:select style="position: absolute;z-index: 1;left: 0px;height: 100%;width: 100%;"
+          onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()">
+          <html:option value="0">0</html:option>
+          <html:option value="10">10</html:option>
+          <html:option value="20">20</html:option>
+          <html:option value="30">30</html:option>
+          <html:option value="45">45</html:option>
+        </html:select>
+    </div>
     <label control="autoreload_seconds" value="&seconds.label;"/>
   </html:fieldset>
 
