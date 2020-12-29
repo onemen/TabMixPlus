@@ -1811,7 +1811,7 @@ Tabmix.tablib = {
       window.focus();
       var promptService = Services.prompt;
       var buttonPressed = promptService.confirmEx(window,
-        Tabmix.getString("tabs.closeWarningTitle"),
+        Tabmix.getString("tabs.closeTitleTabs"),
         message,
         (promptService.BUTTON_TITLE_IS_STRING * promptService.BUTTON_POS_0) +
         (promptService.BUTTON_TITLE_CANCEL * promptService.BUTTON_POS_1),
