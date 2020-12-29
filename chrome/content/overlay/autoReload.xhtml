@@ -41,12 +41,13 @@
              </menupopup>
     </menulist> -->
     <div style="position: relative;">
-      <html:input id="autoreload_minutes" type="number" min="0" size="3"
-        style="position: relative;z-index: 2;padding-right: 1px;margin: 0 17px 0 0;"
+      <html:input id="autoreload_minutes" type="number" min="0" size="4"
+        style="position: relative;z-index: 2;padding-right: 1px;margin: 0 16px 0 0;"
         oncommand="disable_OK();"
         oninput="onInput(this);"/>
         <html:select style="position: absolute;z-index: 1;left: 0px;height: 100%;width: 100%;"
-          onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()">
+          onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()"
+          onfocus="this.selectedIndex = -1;">
           <html:option value="0">0</html:option>
           <html:option value="1">1</html:option>
           <html:option value="5">5</html:option>
@@ -71,11 +72,12 @@
     </menulist> -->
     <div style="position: relative;">
       <html:input list="sec" id="autoreload_seconds" type="number" min="0" max="59" size="3"
-        style="position: relative;z-index: 2;padding-right: 1px;margin: 0 17px 0 0;"
+        style="position: relative;z-index: 2;padding-right: 1px;margin: 0 16px 0 0;"
         oncommand="disable_OK();"
         oninput="onInput(this);"/>
         <html:select style="position: absolute;z-index: 1;left: 0px;height: 100%;width: 100%;"
-          onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()">
+          onchange="this.previousElementSibling.value=this.value; this.previousElementSibling.focus()"
+          onfocus="this.selectedIndex = -1;">
           <html:option value="0">0</html:option>
           <html:option value="10">10</html:option>
           <html:option value="20">20</html:option>
