@@ -85,8 +85,7 @@ ContentClickInternal = {
     }
 
     
-    // let mm = Cc["@mozilla.org/globalmessagemanager;1"].getService(Ci.nsIMessageListenerManager);
-    let mm = Services.mm;
+    let mm = Cc["@mozilla.org/globalmessagemanager;1"].getService(Ci.nsIMessageListenerManager);
     mm.addMessageListener("TabmixContent:Click", this);
     mm.addMessageListener("Tabmix:isFrameInContentResult", this);
 
