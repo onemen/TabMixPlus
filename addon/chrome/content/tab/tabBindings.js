@@ -69,9 +69,8 @@
 
   delete tabbrowsertab._flippedInheritedAttributes;
 
-  Tabmix.changeCode(tabbrowsertab.prototype, "connectedCallback")._replace(
-    'this.initialize();',
-    '$&' +
+  Tabmix.changeCode(tabbrowsertab.prototype, "initialize")._replace(
+    /(})(\)?)$/,
     '\n    ' +
     `
   if ('tabmix_inited' in this) {
@@ -124,6 +123,8 @@
 
   this.tabmix_inited = true;
   `
+   +
+  '$1$2'
   ).toCode();
 
   Tabmix.setNewFunction(tabbrowsertab, "tabmix_init", function tabmix_init() {
@@ -308,10 +309,30 @@
     this.clearTimeouts();
   });
 
-  gBrowser.tabs.forEach(t => { t._initialized = false; t.connectedCallback(); })
+  if (gBrowser?.tabs?.forEach) {
+    gBrowser.tabs.forEach(t => {
+      if (t?.tabmix_inited != true) {
+        t._initialized = false;
+        t.connectedCallback();
+      }
+    });
+  }
 
-  Tabmix.initialization.init.initialized = false;
-  Tabmix.initialization.run("init", gBrowser.tabContainer);
+  (async function () {
+    await until(_ => Tabmix?.initialization?.init != undefined);
+    function until(conditionFunction) {
+      const poll = resolve => {
+        if (conditionFunction()) resolve();
+        else setTimeout(_ => {
+          console.log('waiting');
+          poll(resolve);
+        }, 25);
+      }
+      return new Promise(poll);
+    }
+    Tabmix.initialization.init.initialized = false;
+    Tabmix.initialization.run("init", gBrowser.tabContainer);
+  }(this));
 
   Tabmix.setNewFunction(gBrowser.tabContainer, "_notifyBackgroundTab", function _notifyBackgroundTab(aTab) {
     if (aTab.pinned || aTab.hidden) {
