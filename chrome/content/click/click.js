@@ -989,7 +989,7 @@ var TabmixAllTabs = {
   _ensureElementIsVisible: function TMP__ensureElementIsVisible(event) {
     var popup = event.target;
     popup.removeEventListener("popupshown", this);
-    let scrollBox = document.getAnonymousElementByAttribute(popup, "class", "popup-internal-box");
+    let scrollBox = popup.getElementsByClassName("popup-internal-box")[0];
     let items = Array.prototype.slice.call(popup.childNodes);
     let element = items.indexOf(this._selectedItem) < popup.childElementCount / 2 ? popup.firstChild : popup.lastChild;
     scrollBox.ensureElementIsVisible(element);

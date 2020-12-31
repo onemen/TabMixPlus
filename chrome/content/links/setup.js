@@ -237,7 +237,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   }
 
   tabBrowser.getBrowserForTabPanel = function(notificationbox) {
-    return document.getAnonymousElementByAttribute(notificationbox, "class", "browserStack").firstChild;
+    return notificationbox.getElementsByClassName("browserStack")[0].firstChild;
   };
 
   tabBrowser.getTabForLastPanel = function() {
@@ -250,7 +250,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   };
 
   var tabContainer = aTabContainer || tabBrowser.tabContainer ||
-      document.getAnonymousElementByAttribute(tabBrowser, "anonid", "tabcontainer");
+      document.getElementById("tabbrowser-tabs");
 
   // Firefox sessionStore and session manager extension start to add tab before our onWindowOpen run
   // so we initialize this before start

@@ -334,7 +334,7 @@ var TabmixTabbar = {
     var tabstrip = tabBar.arrowScrollbox.scrollbox;
     tabstrip.style.setProperty("max-height", newHeight + "px", "important");
     tabstrip.style.setProperty("height", newHeight + "px", "important");
-    let tabsBottom = document.getAnonymousElementByAttribute(tabBar, "class", "tabs-bottom");
+    let tabsBottom = tabBar.getElementsByClassName("tabs-bottom")[0];
     let tabsBottomHeight = tabsBottom && tabBar.getAttribute("classic") != "v3Linux" ? tabsBottom.boxObject.height : 0;
     let newTabbarHeight = newHeight + tabsBottomHeight;
     let tabsToolbar = document.getElementById("TabsToolbar");
@@ -627,9 +627,8 @@ Tabmix.tabsUtils = {
   },
 
   getInnerbox() {
-    return document.getAnonymousElementByAttribute(
-      this.tabBar.arrowScrollbox.scrollbox, "class", "box-inherit scrollbox-innerbox"
-    );
+    return this.tabBar.arrowScrollbox.scrollbox.getElementsByClassName("box-inherit scrollbox-innerbox"
+    )[0];
   },
 
   get inDOMFullscreen() {
@@ -664,8 +663,7 @@ Tabmix.tabsUtils = {
     XPCOMUtils.defineLazyGetter(Tabmix, "ltr", () => !Tabmix.rtl);
 
     // don't set button to left side if it is not inside tab-content
-    let button = document.getAnonymousElementByAttribute(tab, "anonid", "tmp-close-button") ||
-        document.getAnonymousElementByAttribute(tab, "anonid", "close-button");
+    let button = tab.getElementsByClassName("tab-close-button")[0];
     Tabmix.defaultCloseButtons = button && button.parentNode.className == "tab-content";
     let onLeft = Tabmix.defaultCloseButtons && Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft");
     this.tabBar.setAttribute("closebuttons-side", onLeft ? "left" : "right");
@@ -683,7 +681,7 @@ Tabmix.tabsUtils = {
 
     Tabmix.afterTabsButtonsWidth = [Tabmix.isVersion(280) ? 51.6 : 28];
     Tabmix.tabsNewtabButton =
-      document.getAnonymousElementByAttribute(this.tabBar, "command", "cmd_newNavigatorTab");
+      this.tabBar.getElementsByAttribute("command", "cmd_newNavigatorTab")[0];
     this._show_newtabbutton = "aftertabs";
 
     let attr = ["notpinned", "autoreload", "protected", "locked"].filter(att => {
@@ -1109,13 +1107,13 @@ Tabmix.tabsUtils = {
     tabstrip._scrollButtonDown = useTabmixButtons ?
       tabstrip._scrollButtonDownRight :
       tabstrip._scrollButtonDownLeft || // fall back to original
-      document.getAnonymousElementByAttribute(tabstrip, "anonid", "scrollbutton-down");
+      tabstrip.shadowRoot.getElementById("scrollbutton-down");
     this.tabBar._animateElement = tabstrip._scrollButtonDown;
 
     tabstrip._scrollButtonUp = useTabmixButtons ?
       tabstrip._scrollButtonUpRight :
       tabstrip._scrollButtonUpLeft || // fall back to original
-      document.getAnonymousElementByAttribute(tabstrip, "anonid", "scrollbutton-up");
+      tabstrip.shadowRoot.getElementById("scrollbutton-up");
     tabstrip._updateScrollButtonsDisabledState();
 
     if (!Tabmix.isVersion(320, 270)) {
@@ -1724,7 +1722,7 @@ gTMPprefObserver = {
 
   setTabIconMargin: function TMP_PO_setTabIconMargin() {
     var [sMarginStart, sMarginEnd] = Tabmix.rtl ? ["margin-right", "margin-left"] : ["margin-left", "margin-right"];
-    var icon = document.getAnonymousElementByAttribute(gBrowser._selectedTab, "class", "tab-icon-image");
+    var icon = gBrowser._selectedTab.getElementsByClassName("tab-icon-image")[0];
     if (!icon)
       return; // nothing to do....
 
@@ -1807,7 +1805,7 @@ gTMPprefObserver = {
 
   setCloseButtonMargin: function TMP_PO_setCloseButtonMargin() {
     var sMarginEnd = Tabmix.rtl ? "margin-left" : "margin-right";
-    var icon = document.getAnonymousElementByAttribute(gBrowser._selectedTab, "anonid", "tmp-close-button");
+    var icon = gBrowser._selectedTab.getElementsByClassName("tab-close-button")[0];
     if (!icon)
       return; // nothing to do....
 
@@ -1976,17 +1974,17 @@ gTMPprefObserver = {
     if (!visuallyselected) {
       tab.setAttribute("visuallyselected", true);
     }
-    let bgMiddle = document.getAnonymousElementByAttribute(tab, "class", "tab-background-middle");
-    let margin = (-parseFloat(window.getComputedStyle(bgMiddle).borderLeftWidth)) + "px";
-    let bgMiddleMargin = this.dynamicRules.bgMiddleMargin;
-    if (bgMiddleMargin) {
-      bgMiddleMargin.style.MozMarginStart = margin;
-      bgMiddleMargin.style.MozMarginEnd = margin;
-    } else {
-      newRule = '.tab-background-middle, .tab-background, .tabs-newtab-button {' +
-                '-moz-margin-end: %PX; -moz-margin-start: %PX;}';
-      this.insertRule(newRule.replace(/%PX/g, margin), "bgMiddleMargin");
-    }
+    // let bgMiddle = document.getAnonymousElementByAttribute(tab, "class", "tab-background-middle");
+    // let margin = (-parseFloat(window.getComputedStyle(bgMiddle).borderLeftWidth)) + "px";
+    // let bgMiddleMargin = this.dynamicRules.bgMiddleMargin;
+    // if (bgMiddleMargin) {
+    //   bgMiddleMargin.style.MozMarginStart = margin;
+    //   bgMiddleMargin.style.MozMarginEnd = margin;
+    // } else {
+    //   newRule = '.tab-background-middle, .tab-background, .tabs-newtab-button {' +
+    //             '-moz-margin-end: %PX; -moz-margin-start: %PX;}';
+    //   this.insertRule(newRule.replace(/%PX/g, margin), "bgMiddleMargin");
+    // }
     if (!visuallyselected) {
       tab.removeAttribute("visuallyselected");
     }
