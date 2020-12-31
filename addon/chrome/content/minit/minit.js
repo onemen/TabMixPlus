@@ -1630,7 +1630,7 @@ Tabmix.navToolbox = {
       alltabsPopup._tabmix_inited = true;
       alltabsPopup.setAttribute("context", "tabContextMenu");
       alltabsPopup.__ensureElementIsVisible = function() {
-        let scrollBox = document.getAnonymousElementByAttribute(this, "class", "popup-internal-box");
+        let scrollBox = this.getElementsByClassName("popup-internal-box")[0];
         scrollBox.ensureElementIsVisible(gBrowser._selectedTab.mCorrespondingMenuitem);
       };
       alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
