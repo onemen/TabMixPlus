@@ -1247,7 +1247,7 @@ var TMP_eventListener = {
     }
 
     function updateAttrib(aGetAtt, aGetValue, aAtt, aValue) {
-      let node = aTab.getElementsByAttribute(aGetAtt, aGetValue);
+      let node = aTab.getElementsByAttribute(aGetAtt, aGetValue)[0];
       Tabmix.setItem(node, aAtt, aValue);
     }
     updateAttrib("class", "tab-icon-image", "role", "presentation");
