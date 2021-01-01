@@ -47,7 +47,7 @@ var TabmixTabClickOptions = {
     }
 
     var clickOutTabs = aEvent.target.localName == "tabs";
-    var tab = clickOutTabs ? gBrowser._selectedTab : aEvent.target;
+    var tab = clickOutTabs ? gBrowser._selectedTab : aEvent.target.closest("tab.tabbrowser-tab");
 
     // we replace click handler from tab binding with this to make sure that we
     // always call onMouseCommand (if we need to) before we call tab flip.

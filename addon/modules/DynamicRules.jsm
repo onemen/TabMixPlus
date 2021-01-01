@@ -21,7 +21,7 @@ var TYPE;
 XPCOMUtils.defineLazyGetter(this, "SSS", () => {
   let sss = Cc['@mozilla.org/content/style-sheet-service;1']
       .getService(Ci.nsIStyleSheetService);
-  TYPE = sss.AGENT_SHEET;
+  TYPE = sss.USER_SHEET;
   return sss;
 });
 
@@ -55,7 +55,7 @@ this.DynamicRules = {
       return;
     this._initialized = true;
 
-    this.orient = aWindow.document.getElementById("tabbrowser-tabs").orient;
+    this.orient = aWindow.document.getElementById("tabbrowser-tabs").attributes['orient'].value;
     this.styleType = this.isAustralis ? "australis" : "classic";
     this.windows10 = aWindow.navigator.oscpu.startsWith("Windows NT 10.0");
 
@@ -89,7 +89,7 @@ this.DynamicRules = {
     const tabsMutate = aMutations => {
       for (let mutation of aMutations) {
         if (mutation.attributeName == "orient") {
-          this.orient = mutation.target.orient;
+          this.orient = mutation.target.orient || mutation.target.attributes['orient'].value;
           this.updateStyleType();
           return;
         }

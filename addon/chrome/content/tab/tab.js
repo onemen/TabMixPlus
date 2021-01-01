@@ -2045,7 +2045,7 @@ gTMPprefObserver = {
         attribValue.push("text");
       if (prefValues.bg && !Tabmix.prefs.getBoolPref("disableBackground")) {
         attribValue.push("bg");
-        if (TabmixSvc.isAustralisBgStyle(gBrowser.tabContainer.orient)) {
+        if (TabmixSvc.isAustralisBgStyle(gBrowser.tabContainer.attributes['orient'].value)) {
           attribValue.push("aus");
         }
       }
