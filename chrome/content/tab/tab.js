@@ -1951,7 +1951,7 @@ gTMPprefObserver = {
               'list-style-image: url("#URL");' +
               '-moz-image-region: #REGION;}';
     let url = "chrome://browser/skin/Toolbar.png", region;
-    skin = Services.prefs.getCharPref("general.skins.selectedSkin");
+    skin = Services.prefs.getCharPref("extensions.activeThemeID");
     if (skin == "classic/1.0") {
       if (TabmixSvc.isLinux)
         region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :
