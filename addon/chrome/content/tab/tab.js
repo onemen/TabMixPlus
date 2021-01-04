@@ -36,7 +36,7 @@ var TabmixTabbar = {
   },
 
   isButtonOnTabsToolBar(button) {
-    return button && button.parentNode == document.getElementById("TabsToolbar");
+    return button && document.getElementById("TabsToolbar").contains(button);
   },
 
   // get privateTab-toolbar-openNewPrivateTab, when the button is on the tabbar
