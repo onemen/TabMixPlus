@@ -282,7 +282,7 @@ Tabmix.tablib = {
     // changed by bug #563337
     if (!Tabmix.extensions.tabGroupManager) {
       let aboutBlank = 'this.addTab("about:blank", {skipAnimation: true})';
-      let aboutNewtab = /this\.addTab\(BROWSER_NEW_TAB_URL, {\s?skipAnimation: true\s?}\)/;
+      let aboutNewtab = /this\.addTrustedTab\(BROWSER_NEW_TAB_URL, {\s?skipAnimation: true\s?}\)/;
       let code = gBrowser._beginRemoveTab.toString().indexOf(aboutBlank) > -1 ?
         aboutBlank : aboutNewtab;
       Tabmix.changeCode(gBrowser, "gBrowser._beginRemoveTab")._replace(
@@ -388,7 +388,10 @@ Tabmix.tablib = {
       '$&\
       urlTitle = title;', {check: Tabmix.isVersion(600)}
     )._replace(
-      'textToSubURI.unEscapeNonAsciiURI(characterSet, title);',
+      `              title = Services.textToSubURI.unEscapeNonAsciiURI(
+        characterSet,
+        title
+      );`,
       '$&\
       urlTitle = title;'
     )._replace(

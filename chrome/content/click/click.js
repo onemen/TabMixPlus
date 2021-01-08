@@ -317,7 +317,7 @@ var TabmixContext = {
     var tabContextMenu = $id("tabContextMenu");
     tabContextMenu.insertBefore($id("context_reloadTab"), $id("tm-autoreloadTab_menu"));
     tabContextMenu.insertBefore($id("context_openTabInWindow"), $id("context_pinTab"));
-    tabContextMenu.insertBefore($id("context_bookmarkAllTabs"), $id("context_bookmarkTab").nextSibling);
+    tabContextMenu.insertBefore($id("context_bookmarkSelectedTabs"), $id("context_bookmarkTab").nextSibling);
     tabContextMenu.insertBefore($id("context_closeTab"), $id("tm-closeAllTabs"));
     let closeLeftTabs = $id("tm-closeLeftTabs");
     let closeTabsToTheEnd = $id("context_closeTabsToTheEnd");

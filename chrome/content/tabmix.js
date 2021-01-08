@@ -509,7 +509,7 @@ var TMP_eventListener = {
       tabBar.setAttribute("tabmix_australis", australis ? "true" : "classic");
     }
 
-    var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
+    var skin = Services.prefs.getCharPref("extensions.activeThemeID");
     if (skin == "classic/1.0") {
       if (TabmixSvc.isMac)
         tabBar.setAttribute("classic", "v4Mac");

@@ -2175,7 +2175,7 @@ gTMPprefObserver = {
 
   setAutoHidePref() {
     TabmixTabbar.hideMode = Tabmix.prefs.getIntPref("hideTabbar");
-    gBrowser.tabContainer.updateVisibility();
+    // gBrowser.tabContainer.updateVisibility();
   },
 
   setTabBarVisibility: function TMP_PO_setTabBarVisibility() {

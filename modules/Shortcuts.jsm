@@ -84,7 +84,7 @@ this.Shortcuts = {
     //   box.setAttribute("shortcutsLabels", true);
     //   container.appendChild(box);
     // }
-    let box = MozXULElement.parseXULToFragment(`
+    let box = aWindow.MozXULElement.parseXULToFragment(`
       <div hidden="true"
         dupTabToWin="&clicktab.duplicatetabw;"
         protecttab="&clicktab.protecttab;"
