@@ -24,7 +24,7 @@
     <hbox class="tab-bottom-line"/>
   </vbox>
   <vbox class="tab-progress-container">
-    <progress class="tab-progress" max="100" mode="normal"/>
+    <html:progress class="tab-progress" max="100" mode="normal"/>
   </vbox>
   <hbox class="tab-loading-burst"/>
   <hbox class="tab-content" align="center">
@@ -120,6 +120,17 @@
       event.stopPropagation();
     }
   }, true);
+
+  const callback = aMutations => {
+    for (let mutation of aMutations) {
+        this.attributeChangedCallback(mutation.attributeName, mutation.oldValue, mutation.target.getAttribute(mutation.attributeName));
+    }
+  };
+  const observer = new MutationObserver(callback);
+  observer.observe(this, {
+    attributeFilter: [ "tab-progress", "hover" ],
+    attributeOldValue: true
+  });
 
   this.tabmix_inited = true;
   `
