@@ -128,7 +128,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     }
 
     Tabmix.originalFunctions.gBrowserInit__delayedStartup = gBrowserInit._delayedStartup;
-    gBrowserInit._delayedStartup = async function() {
+    gBrowserInit._delayedStartup = function() {
       try {
         Tabmix.beforeDelayedStartup();
       } catch (ex) {
@@ -151,7 +151,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
             .then(uriToLoad => Tabmix.prepareLoadOnStartup(uriToLoad))
             .then(() => TabmixSessionManager.init());
       } else {
-        await Tabmix.prepareLoadOnStartup();
+        Tabmix.prepareLoadOnStartup();
         TabmixSessionManager.init();
       }
       Tabmix.initialization.run("afterDelayedStartup");
