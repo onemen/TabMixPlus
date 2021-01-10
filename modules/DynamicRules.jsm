@@ -215,7 +215,7 @@ this.DynamicRules = {
     }
     styleRules.progressMeter = {
       bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] .tabbrowser-tab > ' +
-          '.tab-stack > .tab-progress-container > .tab-progress ' +
+          '.tab-stack > .tab-progress-container > .tab-progress::-moz-progress-bar' +
           '{\n  background-color: #bottomColor !important;\n}\n'
     };
 
@@ -327,7 +327,7 @@ this.DynamicRules = {
     if (!style)
       return;
 
-    let cssText = NAMESPACE;
+    let cssText = /* NAMESPACE */'';
     for (let rule of Object.keys(style))
       cssText += "\n" + style[rule];
     let styleSheet = Services.io.newURI(
