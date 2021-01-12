@@ -1,0 +1,319 @@
+<!ENTITY tab.links "链接">
+<!ENTITY tab.events "事件">
+<!ENTITY tab.mouse "鼠标">
+<!ENTITY tab.appearance "外观">
+<!ENTITY tab.menu "菜单">
+<!ENTITY tab.session "浏览进程">
+<!ENTITY tab.incompatible "错误">
+<!ENTITY apply.label "应用">
+<!ENTITY settings.export "导出设置">
+<!ENTITY settings.import "导入设置">
+<!ENTITY settings.sync "同步首选项">
+<!ENTITY settings.default "恢复默认">
+<!ENTITY settings.revert "回退">
+<!ENTITY generalWindowOpen.label "新窗口链接打开于：">
+<!ENTITY externalLink.useSeparate.label "对其他应用程序的链接使用区别的首选项">
+<!ENTITY externalLinkTarget.label "来自其他程序的链接打开于：">
+<!ENTITY linkTarget.tab "当前窗口的新标签页">
+<!ENTITY linkTarget.window "新窗口">
+<!ENTITY linkTarget.current "当前标签页">
+<!ENTITY linkTarget.accesskey "C">
+<!ENTITY divertedWindowOpen.label "JavaScript 弹出窗口：">
+<!ENTITY divertedWindowOpen.all "在新标签页打开所有窗口">
+<!ENTITY divertedWindowOpen.some "允许尺寸固定的窗口">
+<!ENTITY divertedWindowOpen.none "允许所有窗口">
+<!ENTITY linkTarget.label "在当前标签页打开包含 target 属性的链接">
+<!ENTITY targetIsFrame.label "在当前标签页打开指向已有帧框架的链接">
+<!ENTITY download.label "阻止下载文件时弹出空白标签页">
+<!ENTITY edit.label "编辑">
+<!ENTITY speLink.label "强制在新标签页打开：">
+<!ENTITY speLink.none "无">
+<!ENTITY speLink.allLinks "所有链接">
+<!ENTITY speLink.external "连接到其他站点的链接">
+<!ENTITY singleWindow.label "启用单窗口模式">
+<!ENTITY newTabs.label "新建标签页">
+<!ENTITY tabOpen.label "标签页打开">
+<!ENTITY tabFocus.label "标签页切换">
+<!ENTITY tabClose.label "标签页关闭">
+<!ENTITY tabMerge.label "标签页合并">
+<!ENTITY tabFeature.label "标签页特性">
+<!ENTITY newtab.label "在新建标签页打开：">
+<!ENTITY replaceLastTabWith1.label "关闭最后一个标签页时，替换为">
+<!ENTITY newtab.blank "空白页">
+<!ENTITY newtab.home "主页">
+<!ENTITY newtab.current "当前的页面">
+<!ENTITY newtab.duplicate "复制的页面">
+<!ENTITY newtab.location.1 "新标签页面">
+<!ENTITY newtab.placeholder.label "默认的新标签页面">
+<!ENTITY location.label.1 "地址">
+<!ENTITY focusContent.label "打开非空白页面时焦点集中到内容区域">
+<!ENTITY openTabNext.label "紧邻当前标签页打开新标签页">
+<!ENTITY openOtherTabNext.label "紧邻当前标签页打开其他标签页">
+<!ENTITY relatedAfterCurrent.label "仅当与当前标签页有关">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "紧邻原来页面打开复制的标签页">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "更改标签页打开次序">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "紧邻上次由当前页打开的页面（上次选中的标签页）处新建标签页">
+<!ENTITY moveSwitchToTabNext.label "“切换到标签页”时将标签页移动到旁边">
+<!ENTITY loadTabsProgressively.label "逐渐加载标签页">
+<!ENTITY restoreOnDemand.label "选中前不加载标签页">
+<!ENTITY openMoreThan.label "当打开超过">
+<!ENTITY tabs.label "个标签页">
+<!ENTITY lockTabs.label "锁定标签页">
+<!ENTITY lockNewTabs.label "锁定新标签页">
+<!ENTITY lockAppTabs.label "锁定应用程序标签页">
+<!ENTITY updateLockState.label "更改应用到打开的标签页">
+<!ENTITY openNewTab.label "在新建标签页打开来自以下位置的链接：">
+<!ENTITY openBookmarks.label "书签">
+<!ENTITY openPlacesGroups.label "书签/历史记录分组">
+<!ENTITY openPlacesGroups.tooltip "打开书签/历史记录分组时不覆盖标签页">
+<!ENTITY openHistory.label "历史">
+<!ENTITY openUrl.label "地址栏">
+<!ENTITY openSearch.label "搜索栏">
+<!ENTITY middlecurrent1.label "中键点击或 Ctrl-点击在当前标签页打开项目">
+<!ENTITY middlecurrent.tooltip "仅用于书签、历史和锁定的标签页">
+<!ENTITY tabFocus.caption "激活/选择来自以下位置的链接所新建的标签页">
+<!ENTITY selectTab.label "链接">
+<!ENTITY selectDivertedTab.label "更改方式的窗口">
+<!ENTITY selectTabFromExternal.label "其他应用程序">
+<!ENTITY selectTabCommand.label "新建的标签页">
+<!ENTITY contextMenuSearch.label "右键菜单搜索：">
+<!ENTITY selectTabBH.label "书签/历史">
+<!ENTITY duplicateTab.label "复制的标签页">
+<!ENTITY inversefocus2.label "中键单击或 Ctrl + 单击时反转焦点：">
+<!ENTITY warning.caption.label "警告">
+<!ENTITY warnOnCloseMultipleTabs.label "关闭多个标签页时警告您">
+<!ENTITY warnOnCloseProtected1.label "关闭有已保护标签页的窗口时警告您">
+<!ENTITY warnOnCloseWindow1.label "关闭有多个标签页的窗口时警告您">
+<!ENTITY lasttab.caption.label "关闭最后一个标签页">
+<!ENTITY keepWindow.label.3.1 "关闭最后一个标签页时不关闭窗口">
+<!ENTITY keeptab.label "阻止关闭最后一个标签页">
+<!ENTITY closeOnMerge.label "合并所有窗口后关闭其他窗口">
+<!ENTITY warnOnMerge.label "关闭包含未合并标签页的窗口时警告我">
+<!ENTITY currenttab.caption.label "关闭当前标签页">
+<!ENTITY focusTab.labelBegin "关闭当前标签页后激活：">
+<!ENTITY focusTab.firstTab "第一个标签页">
+<!ENTITY focusTab.leftTab "左侧的标签页">
+<!ENTITY focusTab.rightTab "右侧的标签页">
+<!ENTITY focusTab.lastTab "最后一个标签页">
+<!ENTITY focusTab.lastSelectedTab "上次选中的标签页">
+<!ENTITY focusTab.openerTab "父/右侧的标签页">
+<!ENTITY focusTab.openerTab.rtl "父标签页/左侧标签页">
+<!ENTITY focusTab.lastOpenedTab "上次打开的标签页">
+<!ENTITY undoClose.label "启用撤销关闭标签页功能">
+<!ENTITY undoCloseCache.label "最大可恢复数：">
+<!ENTITY undoClosepos.label "恢复标签页的原始位置">
+<!ENTITY menuonlybutton.label "工具栏按钮只显示已关闭的标签页列表">
+<!ENTITY ctrltab.label "Ctrl-Tab 以最近被浏览的顺序切换标签页">
+<!ENTITY cmdtab.label "Cmd-Tab 以最近被浏览的顺序切换标签页">
+<!ENTITY ctrltab.tabPreviews "显示标签页缩略图">
+<!ENTITY ctrltab.popup "Ctrl-Tab 显示标签页列表弹出菜单">
+<!ENTITY cmdtab.popup "Cmd-Tab 显示标签页列表弹出菜单">
+<!ENTITY tabpopup.mouse "鼠标指向列表时显示标签页列表">
+<!ENTITY mergeNoTabSelection.label "未选择标签页时合并窗口">
+<!ENTITY mergeTabSelection.label "选择标签页时合并窗口">
+<!ENTITY mergeall.label "合并所有窗口为一个窗口">
+<!ENTITY mergelastfocused.label "只合并当前窗口和最后被选中的窗口">
+<!ENTITY mergePopups.label "同时合并弹出窗口">
+<!ENTITY popupNextToOpener.label "弹出窗口紧邻其父窗口">
+<!ENTITY activateSlideshow.label "按 #1 循环滚动标签页，每隔">
+<!ENTITY toggleAnimation.label "禁用打开/关闭标签页动态效果">
+<!ENTITY reloadEvery.matchAddress.label "忽略地址重新载入标签页">
+<!ENTITY reloadEvery.onReloadButton.label "在重新载入按钮上显示设定刷新时间间隔的菜单">
+<!ENTITY seconds.label "秒自动轮换一个标签页">
+<!ENTITY minutes.label "分钟">
+<!ENTITY tabBarAppearance.label "标签栏外观">
+<!ENTITY tabAppearance.label "标签页外观">
+<!ENTITY toolBarAppearance.label "工具栏">
+<!ENTITY show.ontabbar.label "在标签栏显示">
+<!ENTITY show.ontab.label "在标签页显示">
+<!ENTITY dragNewTabButton.tooltip "拖动&apos;新建标签页&apos;按钮到标签栏来启用该选项。">
+<!ENTITY hideTabBarButton.label "标签页关闭按钮">
+<!ENTITY newTabButton.label "新建标签页按钮">
+<!ENTITY newTabButton.position.left.label "左侧">
+<!ENTITY newTabButton.position.right.label "右侧">
+<!ENTITY newTabButton.position.afterlast.label "最后一个标签页之后">
+<!ENTITY allTabsButton.label "所有标签页按钮">
+<!ENTITY tabBarSpace.label "两侧额外空间">
+<!ENTITY tabBarSpace.tooltip "是用于在标签栏点击或拖放某项">
+<!ENTITY tabbar.label "只打开单个标签页时隐藏标签栏">
+<!ENTITY moveTabOnDragging.label "拖动标签页时直接移动到">
+<!ENTITY dropIndicator.label "拖放指示器">
+<!ENTITY dropIndicator-native.label "原始的样式">
+<!ENTITY dropIndicator-builtin.label "内建的样式">
+<!ENTITY verticalTabbar.description1 "这些应用于垂直标签页的选项由其它扩展控制">
+<!ENTITY tabBarPosition.label "标签栏位置：">
+<!ENTITY tabBarPosition.top.label "顶部（内容区域上方）">
+<!ENTITY tabBarPosition.bottom.label "底部（内容区域下方）">
+<!ENTITY tabScroll.label "当所有标签页占用宽度超过标签栏时,启用：">
+<!ENTITY tabScroll.none "不使用滚动按钮">
+<!ENTITY tabScroll.leftRightButtons "在标签栏左右两侧都显示滚动按钮">
+<!ENTITY tabScroll.rightButtons "在标签栏右侧显示滚动按钮">
+<!ENTITY tabScroll.rightButtons.rtl "在左侧显示允许滚动的按钮">
+<!ENTITY tabScroll.multibar "多行标签页">
+<!ENTITY maxrow.label "最多显示的行数：">
+<!ENTITY pinnedTabScroll.label "允许固定 (pinned) 的标签页滚动">
+<!ENTITY offsetAmountToScroll.label "滚动鼠标时显示隐藏的下一个标签页">
+<!ENTITY smoothScroll.label "启用平滑滚动">
+<!ENTITY scrolldelay.label "滚动延迟（两次滚动重复的间隔）">
+<!ENTITY currenttab.style.label "当前标签页">
+<!ENTITY unloadedtabs.style.label "未加载的标签页">
+<!ENTITY unreadtabs.style.label "未读标签页">
+<!ENTITY othertabs.style.label "其他标签页">
+<!ENTITY setstyles.label "定制样式">
+<!ENTITY extraIcons.label1 "特殊图标：">
+<!ENTITY extraIcons.locked "已锁定标签">
+<!ENTITY extraIcons.protected "受保护标签">
+<!ENTITY extraIcons.autoreload "自动重新载入">
+<!ENTITY extraIcons.hideonpinned "在固定的标签页中隐藏">
+<!ENTITY progressMeter.label "在标签页上显示载入进度">
+<!ENTITY showTabX.labelBegin "标签页关闭按钮">
+<!ENTITY showTabX.left "在左侧显示">
+<!ENTITY showTabX.rtl "放置于右侧">
+<!ENTITY milliseconds.label "毫秒">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "在所有标签页">
+<!ENTITY showTabX.current "在当前标签页">
+<!ENTITY showTabX.hover "鼠标指向标签页并延时">
+<!ENTITY showTabX.alwaysExeption "当所有标签页宽度超过">
+<!ENTITY showTabX.currentHover "在当前标签页且鼠标指向并延时">
+<!ENTITY minWidth.label "标签页宽度:">
+<!ENTITY widthTo.label "至">
+<!ENTITY widthPixels.label "像素">
+<!ENTITY onLeftDisabled.label "无法在当前主题下降按钮放置在左侧">
+<!ENTITY onLeftDisabled.tst.label "当TreeStyleTab扩展安装时将按钮置于左侧">
+<!ENTITY flexTabs.label "标签页宽度适合其标题长度">
+<!ENTITY bookastitle.label "使用书签名作为标签页标题">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "您可以自定义要显示在工具栏上的 Tabmix 按钮">
+<!ENTITY toolbar.button.label "定制">
+<!ENTITY toolbar.visible.caption "可见的按钮">
+<!ENTITY toolbar.novisible.label "找不到可见的按钮">
+<!ENTITY toolbar.hidden.caption "隐藏的按钮">
+<!ENTITY toolbar.nohidden.label "找不到隐藏的按钮">
+<!ENTITY mouseGesture.label "鼠标手势">
+<!ENTITY mouseClick.label "鼠标点击">
+<!ENTITY mouseHoverSelect.labelBegin "选中鼠标指向的标签页">
+<!ENTITY tabFlip.label "点击当前标签页时切换到上次被选中的标签页">
+<!ENTITY tabFlip.delay "并延迟">
+<!ENTITY clickFocus.label "鼠标点击并释放时才选择标签页">
+<!ENTITY removeEntries.label "鼠标中键点击时清除 Tab Mix Plus 菜单列表项">
+<!ENTITY lockTabSizingOnClose.label "标签页关闭时，其他标签页需在鼠标离开工具栏区域后更改宽度">
+<!ENTITY removeEntries.tooltip "包括已关闭的标签页、窗口和已保存的浏览进程">
+<!ENTITY tabbarscrolling.caption "在标签栏滚动鼠标时">
+<!ENTITY tabbarscrolling.holdShift.label "按住 Shift 并滚动鼠标可在这些选项之间切换">
+<!ENTITY tabbarscrolling.selectTab.label "切换所选的标签页">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "在全部标签页中滚动切换">
+<!ENTITY tabbarscrolling.inverse.label "以反方向滚动">
+<!ENTITY double.label "双击左键">
+<!ENTITY middle.label "单击鼠标中键">
+<!ENTITY ctrl.label "Ctrl键+鼠标单击">
+<!ENTITY cmd.label "Cmd键+鼠标单击">
+<!ENTITY shift.label "Shift键+鼠标单击">
+<!ENTITY alt.label "Alt+鼠标单击">
+<!ENTITY ontab.label "标签页上:">
+<!ENTITY ontabbar.label "标签栏上:">
+<!ENTITY clicktab.label "选择一个点击标签页或标签栏时要执行的命令">
+<!ENTITY ontabbar.dblClick.label "双击标签栏时不更改窗口尺寸。">
+<!ENTITY ontabbar.click.label "不允许点击标签栏来拖动窗口。">
+<!ENTITY clicktab.default "Firefox 默认值或其他扩展">
+<!ENTITY clicktab.nothing "无动作">
+<!ENTITY clicktab.addtab "打开新标签页">
+<!ENTITY clicktab.duplicatetab "复制当前标签页">
+<!ENTITY clicktab.duplicatetabw "在新窗口复制当前标签页">
+<!ENTITY clicktab.detachtab "移动标签页到新窗口">
+<!ENTITY clicktab.protecttab "保护标签页">
+<!ENTITY clicktab.locktab "锁定标签页">
+<!ENTITY clicktab.freezetab "保护并锁定标签页">
+<!ENTITY clicktab.renametab "重命名标签页">
+<!ENTITY clicktab.copyTabUrl "复制标签页 URL 到剪贴板">
+<!ENTITY clicktab.copyUrlFromClipboard "载入剪贴板的 URL">
+<!ENTITY clicktab.selectMerge "选择要合并的标签页">
+<!ENTITY clicktab.mergeTabs "合并所有窗口">
+<!ENTITY clicktab.bookTab "将当前标签页加入书签">
+<!ENTITY clicktab.bookTabs "将所有标签页加入书签">
+<!ENTITY clicktab.reloadtab "重新载入标签页">
+<!ENTITY clicktab.reloadtabs "重新载入所有标签页">
+<!ENTITY clicktab.reloadothertabs "重新载入其它标签页">
+<!ENTITY clicktab.reloadlefttabs "重新载入左边的标签页">
+<!ENTITY clicktab.reloadrighttabs "重新载入右边的标签页">
+<!ENTITY clicktab.autoReloadTab "启用/禁用标签页自动刷新功能">
+<!ENTITY clicktab.removeall "关闭所有标签页">
+<!ENTITY clicktab.removeother "关闭其它标签页">
+<!ENTITY clicktab.removesimilar "关闭来自相似域的标签页">
+<!ENTITY clicktab.removetoLeft "关闭标签页的左边">
+<!ENTITY clicktab.removetoRight "关闭右侧标签页">
+<!ENTITY clicktab.uctab "重新打开已关闭的标签页">
+<!ENTITY clicktab.ucatab "重新打开所有已关闭的标签页">
+<!ENTITY clicktab.snapback "回现标签页">
+<!ENTITY clicktab.ietab "在 IE 中打开当前标签页">
+<!ENTITY contentLoad "鼠标中键单击打开剪贴板中的 URL">
+<!ENTITY context.tab "标签页右键菜单">
+<!ENTITY context.main "网页右键菜单">
+<!ENTITY context.tools "工具菜单">
+<!ENTITY showOnTabbar.label "在标签栏显示标签页右键菜单">
+<!ENTITY showtabBarContext.label "在标签页右键菜单显示:">
+<!ENTITY showContentAreaContext.label "在网页右键菜单显示:">
+<!ENTITY showToolsMenu.label "在工具菜单显示:">
+<!ENTITY startupHomePage1.label "显示您的首页">
+<!ENTITY startupBlankPage.label "显示空白页">
+<!ENTITY startupLastSession1.label "显示您上次的窗口和标签页">
+<!ENTITY sm.extension.description1 "Tab Mix Plus 检测到您已安装有 Session Manager 扩展">
+<!ENTITY sm.extension.description2 "Tab Mix Plus 浏览进程管理器将被禁用">
+<!ENTITY sm.extension.description3 "您可以点击右侧的按钮打开 Session Manager 选项对话框">
+<!ENTITY sm.extension.description5 "将您的会话数据从 Tab Mix Plus 格式转换为 Session Manager 扩展的格式">
+<!ENTITY sm.extension.convert.label "转换">
+<!ENTITY sm.extension.chooseFile.label1 "转换当前配置下的 Tab Mix Plus 浏览进程">
+<!ENTITY sm.extension.chooseFile.label2 "选择要转换的数据文件">
+<!ENTITY ss.enable.label "使用内建的浏览进程恢复特性">
+<!ENTITY ss.enable.tooltip "不勾选此项则允许使用 Tabmix 浏览进程管理器">
+<!ENTITY ss.advanced_setting "高级设置">
+<!ENTITY ss.advanced_setting.warning "除非您知道您在做什么，否则不要更改这些设置">
+<!ENTITY ss.interval "两次状态保存的最小时间间隔">
+<!ENTITY ss.interval.seconds "（单位：毫秒）">
+<!ENTITY ss.privacy_level "保存下列站点的敏感数据（表单数据、POSTDATA 和 cookies）">
+<!ENTITY ss.privacy_level.allsites "所有站点">
+<!ENTITY ss.privacy_level.unencrypted "仅非加密的站点">
+<!ENTITY ss.privacy_level.nosites "无任何站点">
+<!ENTITY ss.postdata.label1 "保存 POSTDATA 的最大数量">
+<!ENTITY ss.postdata.label2 "（单位：字节，-1＝全部保存）">
+<!ENTITY sessionManger.enable "启用浏览进程管理器">
+<!ENTITY crashRecovery.enable "启用崩溃进程恢复">
+<!ENTITY sm.StartExit "启动/退出">
+<!ENTITY sm.restore "恢复">
+<!ENTITY sm.preserve "网页保持">
+<!ENTITY sm.start "启动浏览器时:">
+<!ENTITY sm.start.restore "恢复原浏览进程">
+<!ENTITY sm.start.ask "在恢复前询问">
+<!ENTITY sm.start.nothing "不恢复">
+<!ENTITY sm.exit "退出浏览器时:">
+<!ENTITY sm.exit.save "保存当前浏览进程">
+<!ENTITY sm.exit.ask "在保存前询问">
+<!ENTITY sm.exit.nothing "不保存">
+<!ENTITY sm.startup "起始浏览进程:">
+<!ENTITY sm.lastsession "上一次的浏览进程">
+<!ENTITY sm.previouslast "再上一次的浏览进程">
+<!ENTITY sm.chooseifempty "如果浏览进程为空允许选择另一个进程">
+<!ENTITY sm.restore.options "恢复浏览进程时:">
+<!ENTITY sm.restore.overwrite "覆盖现有的窗口">
+<!ENTITY sm.restore.overwriteTabs "和标签页">
+<!ENTITY sm.restore.closedWinList "把关闭的窗口保存在已关闭的窗口列表中">
+<!ENTITY sm.restore.merge "合并多个窗口为一个窗口">
+<!ENTITY sm.restore.bypassCache "还原时跳过缓存">
+<!ENTITY sm.notrestore.label "当启动不恢复浏览进程时">
+<!ENTITY sm.restorePinned1.label "恢复您上次的已固定标签页">
+<!ENTITY sm.preserve.options "保持标签页的：">
+<!ENTITY sm.preserve.history "历史">
+<!ENTITY sm.preserve.protect "保护原状态">
+<!ENTITY sm.preserve.locked "锁定原状态">
+<!ENTITY sm.preserve.permission "网页许可">
+<!ENTITY sm.preserve.scroll1 "滚动条的位置">
+<!ENTITY sm.restore.winOptions "保持窗口的：">
+<!ENTITY sm.restore.selectedTab "选中的标签页">
+<!ENTITY sm.restore.closedTabs "已关闭的标签页列表">
+<!ENTITY incompatible.extensions "您的某些扩展与 Tab Mix Plus 不兼容，建议您禁用或卸载这些扩展。">
+<!ENTITY incompatible.button.label "显示不兼容扩展列表">

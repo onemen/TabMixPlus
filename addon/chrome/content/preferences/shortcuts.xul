@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd">
+%tabmixDTD;
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd">
+%browserDTD;
+<!ENTITY % shortcutsDTD SYSTEM "chrome://tabmixplus/locale/shortcuts.dtd">
+%shortcutsDTD;
+]>
+
+<overlay id="tabmix-shortcuts-overlay"
+   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <!-- Tabmix Plus KEYS -->
+  <keyset id="mainKeyset">
+    <key id="key_tm_undoClose" label="&undoCloseTab.label;" modifiers="accel" keycode="VK_F12" oncommand="TMP_ClosedTabs.undoCloseTab();"/>
+    <key id="key_tm_dupTab" label="&duplicateTabMenu.label;" modifiers="accel,alt" key="&tab.key;" oncommand="gBrowser.duplicateTab(gBrowser.mCurrentTab);"/>
+    <key id="key_tm_detachTab" label="&detachTab.label;" modifiers="accel, alt" key="&window.key;" oncommand="gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, true);"/>
+    <key id="key_tm_mergeWin" label="&mergeContext.label;" modifiers="accel,shift" key="&merge.key;" oncommand="Tabmix.MergeWindows.mergeWindows(window);"/>
+    <key id="key_tm-sm-saveone" label="&saveWindow.label;" modifiers="accel" keycode="VK_F1" command="TabmixSessionUtils:SaveThisWindow"/>
+    <key id="key_tm-sm-saveall" label="&saveAllWindows.label;" modifiers="accel" keycode="VK_F9" command="TabmixSessionUtils:SaveAllWindow"/>
+    <key id="key_tm_slideShow" label="&shortcuts.slideshow;" keycode="VK_F8" oncommand="Tabmix.flst.toggleSlideshow();" disabled="true"/>
+    <key id="key_tm_toggleFLST" label="&shortcuts.toggleFLST;" keycode="VK_F9" oncommand="Tabmix.flst.toggle();" disabled="true"/>
+  </keyset>
+
+</overlay>

@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Links">
+<!ENTITY tab.events "Events">
+<!ENTITY tab.mouse "Mouse">
+<!ENTITY tab.appearance "Display">
+<!ENTITY tab.menu "Menu">
+<!ENTITY tab.session "Session">
+<!ENTITY tab.incompatible "Error">
+<!ENTITY apply.label "Apply">
+<!ENTITY settings.export "Export Preferences">
+<!ENTITY settings.import "Import Preferences">
+<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.default "Restore Defaults">
+<!ENTITY settings.revert "Revert">
+<!ENTITY generalWindowOpen.label "Open links that open in a new window in:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLinkTarget.label "Open links from other applications in:">
+<!ENTITY linkTarget.tab "New Tab">
+<!ENTITY linkTarget.window "New Window">
+<!ENTITY linkTarget.current "Current Tab">
+<!ENTITY linkTarget.accesskey "C">
+<!ENTITY divertedWindowOpen.label "JavaScript &amp; Popup restriction:">
+<!ENTITY divertedWindowOpen.all "Open all popups in tabs">
+<!ENTITY divertedWindowOpen.some "Allows resize popups">
+<!ENTITY divertedWindowOpen.none "Allows all popups">
+<!ENTITY linkTarget.label "Open links with a target attribute in current tab">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY download.label "Prevent blank tabs when downloading files">
+<!ENTITY edit.label "Edit">
+<!ENTITY speLink.label "Force to open in new tab:">
+<!ENTITY speLink.none "Nothing">
+<!ENTITY speLink.allLinks "All links">
+<!ENTITY speLink.external "Links to other sites">
+<!ENTITY singleWindow.label "Enable Single Window Mode">
+<!ENTITY newTabs.label "New Tabs">
+<!ENTITY tabOpen.label "Tab Opening">
+<!ENTITY tabFocus.label "Tab Focus">
+<!ENTITY tabClose.label "Tab Closing">
+<!ENTITY tabMerge.label "Tab Merging">
+<!ENTITY tabFeature.label "Tab Features">
+<!ENTITY newtab.label "Load on New Tab:">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "Blank Page">
+<!ENTITY newtab.home "Home Page">
+<!ENTITY newtab.current "Current Page">
+<!ENTITY newtab.duplicate "Duplicate Tab with history">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY location.label.1 "Address">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY openTabNext.label "Open New Tab next to current one">
+<!ENTITY openOtherTabNext.label "Open other tabs next to current one">
+<!ENTITY relatedAfterCurrent.label "Only if related to current tab">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Open duplicated tabs next to original">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Change opening order">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Open new tab next to the tab last opened from the current tab (since it was last selected)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabs">
+<!ENTITY lockTabs.label "Lock tabs">
+<!ENTITY lockNewTabs.label "Lock New tabs">
+<!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY openNewTab.label "Open tabs from:">
+<!ENTITY openBookmarks.label "Bookmarks">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openHistory.label "History">
+<!ENTITY openUrl.label "Address bar">
+<!ENTITY openSearch.label "Search bar">
+<!ENTITY middlecurrent1.label "Middle-click or Control-click opens items in current tab">
+<!ENTITY middlecurrent.tooltip "Only for bookmarks, history, links forced to open in new tab">
+<!ENTITY tabFocus.caption "Focus/Select tabs that open from:">
+<!ENTITY selectTab.label "Links">
+<!ENTITY selectDivertedTab.label "Diverted windows">
+<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabCommand.label "New tab commands">
+<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY selectTabBH.label "Bookmarks/History">
+<!ENTITY duplicateTab.label "Duplicate Tab">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "Warning">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "Closing last tab">
+<!ENTITY keepWindow.label.3.1 "Do not close window when closing last tab">
+<!ENTITY keeptab.label "Prevent last tab from closing">
+<!ENTITY closeOnMerge.label "Close windows once they have merged">
+<!ENTITY warnOnMerge.label "Warn when closing tabs that aren&apos;t being merged">
+<!ENTITY currenttab.caption.label "Closing current tab">
+<!ENTITY focusTab.labelBegin "When closing current tab, focus:">
+<!ENTITY focusTab.firstTab "First tab">
+<!ENTITY focusTab.leftTab "Left tab">
+<!ENTITY focusTab.rightTab "Right tab">
+<!ENTITY focusTab.lastTab "Last tab">
+<!ENTITY focusTab.lastSelectedTab "Last selected tab">
+<!ENTITY focusTab.openerTab "Opener/right tab">
+<!ENTITY focusTab.openerTab.rtl "Opener/left tab">
+<!ENTITY focusTab.lastOpenedTab "Last opened tab">
+<!ENTITY undoClose.label "Enable undo close tabs">
+<!ENTITY undoCloseCache.label "Max number of closed tabs to remember:">
+<!ENTITY undoClosepos.label "Restore the tab&apos;s original position">
+<!ENTITY menuonlybutton.label "Make the toolbar button display only a list">
+<!ENTITY ctrltab.label "Ctrl-Tab navigates tabs in the most recently used order">
+<!ENTITY cmdtab.label "Cmd-Tab navigates tabs in the most recently used order">
+<!ENTITY ctrltab.tabPreviews "Show tab previews">
+<!ENTITY ctrltab.popup "Ctrl-Tab displays a tab list popup menu">
+<!ENTITY cmdtab.popup "Cmd-Tab displays a tab list popup menu">
+<!ENTITY tabpopup.mouse "Tab list responds to the mouse">
+<!ENTITY mergeNoTabSelection.label "Merge windows when no tabs are selected">
+<!ENTITY mergeTabSelection.label "Merging after selecting tabs">
+<!ENTITY mergeall.label "Merge all windows into one">
+<!ENTITY mergelastfocused.label "Merge only current window with last focused">
+<!ENTITY mergePopups.label "Also take popup windows">
+<!ENTITY popupNextToOpener.label "Place popups next to their openers">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
+<!ENTITY seconds.label "seconds">
+<!ENTITY minutes.label "min">
+<!ENTITY tabBarAppearance.label "Tab Bar">
+<!ENTITY tabAppearance.label "Tab">
+<!ENTITY toolBarAppearance.label "ToolBar">
+<!ENTITY show.ontabbar.label "Show on Tab bar">
+<!ENTITY show.ontab.label "Show on Tab">
+<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
+<!ENTITY hideTabBarButton.label "Close tab button">
+<!ENTITY newTabButton.label "New tab button">
+<!ENTITY newTabButton.position.left.label "on Left side">
+<!ENTITY newTabButton.position.right.label "on Right side">
+<!ENTITY newTabButton.position.afterlast.label "After last tab">
+<!ENTITY allTabsButton.label "All tabs button">
+<!ENTITY tabBarSpace.label "Extra spaces on both sides">
+<!ENTITY tabBarSpace.tooltip "For clicking and dropping something on tab bar">
+<!ENTITY tabbar.label "Hide tab bar when only one tab is open">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY dropIndicator.label "Drop indicator">
+<!ENTITY dropIndicator-native.label "Native style">
+<!ENTITY dropIndicator-builtin.label "Built-in style">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY tabBarPosition.label "Position:">
+<!ENTITY tabBarPosition.top.label "Top (above content)">
+<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabScroll.label "When tabs don&apos;t fit width:">
+<!ENTITY tabScroll.none "Scrollable without buttons">
+<!ENTITY tabScroll.leftRightButtons "Scrollable with buttons on both sides">
+<!ENTITY tabScroll.rightButtons "Scrollable with buttons on right side">
+<!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
+<!ENTITY tabScroll.multibar "Multi-row">
+<!ENTITY maxrow.label "Max number of rows to display:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
+<!ENTITY currenttab.style.label "Current tab">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unreadtabs.style.label "Unread tabs">
+<!ENTITY othertabs.style.label "Other tabs">
+<!ENTITY setstyles.label "Customize Styles">
+<!ENTITY extraIcons.label1 "Icons for">
+<!ENTITY extraIcons.locked "Locked">
+<!ENTITY extraIcons.protected "Protected">
+<!ENTITY extraIcons.autoreload "Auto Reload">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY progressMeter.label "Progress meter on tabs">
+<!ENTITY showTabX.labelBegin "Close tab button">
+<!ENTITY showTabX.left "Place on left side">
+<!ENTITY showTabX.rtl "Place on right side">
+<!ENTITY milliseconds.label "msec">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "on all">
+<!ENTITY showTabX.current "on current">
+<!ENTITY showTabX.hover "on pointed for">
+<!ENTITY showTabX.alwaysExeption "on all tabs wider than">
+<!ENTITY showTabX.currentHover "on current &amp; pointed for">
+<!ENTITY minWidth.label "Tab Width:">
+<!ENTITY widthTo.label "to">
+<!ENTITY widthPixels.label "pixels">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY flexTabs.label "Tab width fits to tab title">
+<!ENTITY bookastitle.label "Use bookmark name as tab title">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "You can customize which Tab Mix Plus buttons to show in your Toolbar">
+<!ENTITY toolbar.button.label "Customize">
+<!ENTITY toolbar.visible.caption "Visible buttons">
+<!ENTITY toolbar.novisible.label "There are no visible buttons">
+<!ENTITY toolbar.hidden.caption "Hidden buttons">
+<!ENTITY toolbar.nohidden.label "There are no hidden buttons">
+<!ENTITY mouseGesture.label "Mouse Gestures">
+<!ENTITY mouseClick.label "Mouse Clicking">
+<!ENTITY mouseHoverSelect.labelBegin "Select tab pointed for">
+<!ENTITY tabFlip.label "Switch to last selected tab when clicking current one">
+<!ENTITY tabFlip.delay "Use a delay of">
+<!ENTITY clickFocus.label "Mouse click (down and release) to select a tab">
+<!ENTITY removeEntries.label "Remove Tab Mix Plus menu list entries using middle-click">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY removeEntries.tooltip "Includes closed tabs, closed windows, and saved sessions">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY double.label "Double-click">
+<!ENTITY middle.label "Middle-click">
+<!ENTITY ctrl.label "Ctrl-click">
+<!ENTITY cmd.label "Cmd-Click">
+<!ENTITY shift.label "Shift-click">
+<!ENTITY alt.label "Alt-Click">
+<!ENTITY ontab.label "on a tab:">
+<!ENTITY ontabbar.label "on the tabbar:">
+<!ENTITY clicktab.label "Choose command to perform when clicking on tab or tabbar">
+<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY clicktab.nothing "Does nothing">
+<!ENTITY clicktab.addtab "Open a new tab">
+<!ENTITY clicktab.duplicatetab "Duplicates the tab">
+<!ENTITY clicktab.duplicatetabw "Duplicates the tab in a new window">
+<!ENTITY clicktab.detachtab "Move the tab to a new window">
+<!ENTITY clicktab.protecttab "Protects the tab">
+<!ENTITY clicktab.locktab "Locks the tab">
+<!ENTITY clicktab.freezetab "Protects and Locks the tab">
+<!ENTITY clicktab.renametab "Renames the tab">
+<!ENTITY clicktab.copyTabUrl "Copies the tab&apos;s URL to the clipboard">
+<!ENTITY clicktab.copyUrlFromClipboard "Load URL from clipboard">
+<!ENTITY clicktab.selectMerge "Selects the tab for merging">
+<!ENTITY clicktab.mergeTabs "Merges windows together">
+<!ENTITY clicktab.bookTab "Bookmarks the tab">
+<!ENTITY clicktab.bookTabs "Bookmarks all tabs">
+<!ENTITY clicktab.reloadtab "Reloads the tab">
+<!ENTITY clicktab.reloadtabs "Reloads all tabs">
+<!ENTITY clicktab.reloadothertabs "Reloads other tabs">
+<!ENTITY clicktab.reloadlefttabs "Reloads left tabs">
+<!ENTITY clicktab.reloadrighttabs "Reloads right tabs">
+<!ENTITY clicktab.autoReloadTab "Activate/Deactivate tab auto reload">
+<!ENTITY clicktab.removeall "Close all tabs">
+<!ENTITY clicktab.removeother "Close other tabs">
+<!ENTITY clicktab.removesimilar "Close tabs from similar domain">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.uctab "Reopens last closed tab">
+<!ENTITY clicktab.ucatab "Reopens all closed tabs">
+<!ENTITY clicktab.snapback "SnapBack Tab">
+<!ENTITY clicktab.ietab "Opens the tab in IE">
+<!ENTITY contentLoad "Middle-click loads url from clipboard">
+<!ENTITY context.tab "Tab Context Menu">
+<!ENTITY context.main "Main Context Menu">
+<!ENTITY context.tools "Tools Menu">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showtabBarContext.label "Show in Tab Context Menu">
+<!ENTITY showContentAreaContext.label "Show in Main Context Menu">
+<!ENTITY showToolsMenu.label "Show in Tools Menu">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "Show a blank page">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "Tab Mix Plus detect that Session Manager Extension is installed">
+<!ENTITY sm.extension.description2 "Tab Mix Plus session manager will be disabled">
+<!ENTITY sm.extension.description3 "You can click the button on the right to open Session Manager Options dialog">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "Convert">
+<!ENTITY sm.extension.chooseFile.label1 "Convert Tab Mix Plus sessions from the current profile">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "Use Firefox&apos;s built-in Session Restore feature">
+<!ENTITY ss.enable.tooltip "Uncheck to allow the use with Tab Mix Plus Session Manager">
+<!ENTITY ss.advanced_setting "Advanced Setting">
+<!ENTITY ss.advanced_setting.warning "Don&apos;t change these, unless you know what you&apos;re doing">
+<!ENTITY ss.interval "Minimum time interval between two state saves">
+<!ENTITY ss.interval.seconds "(in milliseconds)">
+<!ENTITY ss.privacy_level "Save sensitive data (form data, POSTDATA and cookies) for">
+<!ENTITY ss.privacy_level.allsites "All sites">
+<!ENTITY ss.privacy_level.unencrypted "Unencrypted sites only">
+<!ENTITY ss.privacy_level.nosites "No sites at all">
+<!ENTITY ss.postdata.label1 "Maximum amount of POSTDATA to be stored">
+<!ENTITY ss.postdata.label2 "(in bytes, -1 = all of it)">
+<!ENTITY sessionManger.enable "Enable Session Manager">
+<!ENTITY crashRecovery.enable "Enable Crash Recovery">
+<!ENTITY sm.StartExit "Start/Exit">
+<!ENTITY sm.restore "Restore">
+<!ENTITY sm.preserve "Preserve">
+<!ENTITY sm.start "When Browser Starts:">
+<!ENTITY sm.start.restore "Restore">
+<!ENTITY sm.start.ask "Ask Before Restoring">
+<!ENTITY sm.start.nothing "Don&apos;t Restore">
+<!ENTITY sm.exit "When Browser Exits:">
+<!ENTITY sm.exit.save "Save Session">
+<!ENTITY sm.exit.ask "Ask Before Saving">
+<!ENTITY sm.exit.nothing "Don&apos;t Save">
+<!ENTITY sm.startup "Startup Session:">
+<!ENTITY sm.lastsession "Last Session">
+<!ENTITY sm.previouslast "Previous to Last">
+<!ENTITY sm.chooseifempty "Choose another if empty">
+<!ENTITY sm.restore.options "When Restoring Sessions:">
+<!ENTITY sm.restore.overwrite "Overwrite existing windows">
+<!ENTITY sm.restore.overwriteTabs "And tabs">
+<!ENTITY sm.restore.closedWinList "Save windows in closed windows list">
+<!ENTITY sm.restore.merge "Join multiple windows into one">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.notrestore.label "When not restoring on start">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "Preserve Tabs:">
+<!ENTITY sm.preserve.history "History">
+<!ENTITY sm.preserve.protect "Protect Status">
+<!ENTITY sm.preserve.locked "Lock Status">
+<!ENTITY sm.preserve.permission "Permissions">
+<!ENTITY sm.preserve.scroll1 "Scroll Position">
+<!ENTITY sm.restore.winOptions "Preserve Windows:">
+<!ENTITY sm.restore.selectedTab "Selected tab">
+<!ENTITY sm.restore.closedTabs "Closed tabs list">
+<!ENTITY incompatible.extensions "Some of your extensions are incompatible with Tab Mix Plus, it is recommended that you will disable or uninstall those extensions.">
+<!ENTITY incompatible.button.label "Show List">

@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "배경에 불러오기">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "Edit Tab Title">
+<!ENTITY renametab.reset.label "Reset to default title">
+<!ENTITY title.label "제목">
+<!ENTITY default.label "Default">
+<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
+<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
+<!ENTITY forum.label "포럼">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "도움말">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "목록에서 시간을 선택하거나 원하는 시간을 직접 입력">
+<!ENTITY specifyreload.label "새로 고침 시간 설정">
+<!ENTITY sanitizer.entry "Tab Mix Plus 저장된 세션들">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "정말로 백업 데이터를 포함한 모든 세션 데이터를 모두 지우시겠습니까?">

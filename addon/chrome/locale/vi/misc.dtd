@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Tải trong hậu cảnh">
+<!ENTITY searchTabFocus.accesskey "u">
+<!ENTITY renametab.panel.title "Chỉnh sửa tiêu đề thẻ">
+<!ENTITY renametab.reset.label "Thiết lập lại tiêu đề mặc định">
+<!ENTITY title.label "Tiêu đề">
+<!ENTITY default.label "Mặc định">
+<!ENTITY renametab.permanently.label "Sửa lại thẻ này mà không cần quan tâm tới địa chỉ trang của nó">
+<!ENTITY renametab.permanently.tooltip "thẻ với lịch sử - tên mới sẽ vẫn được giữ lại khi địa chỉ trang thay đổi">
+<!ENTITY forum.label "Diễn đàn">
+<!ENTITY faq.label "Hỏi Đáp">
+<!ENTITY help.label "Trợ giúp">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Chọn thời gian từ danh sách hoặc tự nhập thời gian">
+<!ENTITY specifyreload.label "Chỉ định Thời gian Tải lại">
+<!ENTITY sanitizer.entry "“Phiên làm việc Đã lưu” Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Bạn có chắc rằng mình muốn xóa TẤT CẢ dữ liệu (bao gồm cả sao lưu) của các phiên làm việc đã lưu?">

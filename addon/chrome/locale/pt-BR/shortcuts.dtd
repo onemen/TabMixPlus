@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Atalhos">
+<!ENTITY shortcuts.edit "Editar atalhos do teclado">
+<!ENTITY shortcuts.showAll "Mostrar tudo">
+<!ENTITY shortcuts.hideUnused "Esconder as não utilizadas">
+<!ENTITY shortcuts.warning "Alguns de seus atalhos estão em uso por outros comandos">
+<!ENTITY shortcuts.showDetails "Mostrar detalhes">
+<!ENTITY shortcuts.hideDetails "Ocultar detalhes">
+<!ENTITY shortcuts.switchToLast "Alternar para a última aba ativa">
+<!ENTITY shortcuts.slideshow "Alternar abas">
+<!ENTITY shortcuts.toggleFLST "Alternar o foco após fechar a aba atual">
+<!ENTITY shortcuts.toggleFLST.tooltip "alternar entre foco para a aba direita ou o último selecionado">
+<!ENTITY shortcuts.placeholder "Modificadores e atalhos">
+<!ENTITY shortcuts.reset "Reajustar">
+<!ENTITY shortcuts.clear "Limpar">
+<!ENTITY shortcuts.inuse "Este atalho já está em uso.">

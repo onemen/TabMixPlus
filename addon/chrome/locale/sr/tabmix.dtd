@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Затворене картице">
+<!ENTITY closedtabsbtn.tooltip "Прикажи листу затворених картица">
+<!ENTITY sessionbtn.tooltip "Прикажи и уреди сесије">
+<!ENTITY tabslistbtn.label "Отворене картице">
+<!ENTITY tabslistbtn.tooltip "Прикажи листу отворених картица">
+<!ENTITY closedwindowsbtn.label "Затворени прозори">
+<!ENTITY closedwindowsbtn.tooltip "Прикажи листу затворених прозора">
+<!ENTITY page.header.title "Tab Mix Plus опције">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus управљач сесијама">
+<!ENTITY session.Tools "Управљач сесијама">
+<!ENTITY closedWin.label "Листа затворених прозора">
+<!ENTITY duplicateTabMenu.label "Дуплирај картицу">
+<!ENTITY duplicateTabMenu.accesskey "ј">
+<!ENTITY duplicateinWin.label "Дуплирај у новом прозору">
+<!ENTITY duplicateinWin.accesskey "Н">
+<!ENTITY detachTab.label "Пребаци у нови прозор">
+<!ENTITY detachTab.accesskey "п">
+<!ENTITY mergeContext.label "Споји прозоре">
+<!ENTITY mergeContext.accesskey "С">
+<!ENTITY renametab.label "Преименуј картицу">
+<!ENTITY renametab.accesskey "р">
+<!ENTITY copytaburl.label "Копирај URL карице">
+<!ENTITY copytaburl.accesskey "К">
+<!ENTITY reloadother.label "Поново учитај остале картице">
+<!ENTITY reloadother.accesskey "у">
+<!ENTITY reloadleft.label "Поново учитај картице са леве стране">
+<!ENTITY reloadleft.accesskey "л">
+<!ENTITY reloadright.label "Поново учитај картице са десне стране">
+<!ENTITY reloadright.accesskey "д">
+<!ENTITY autoReloadTab.label "Поново учитај картицу сваких">
+<!ENTITY autoReloadTab.accesskey "в">
+<!ENTITY autoReloadSite.label "Поново учитај ову страницу сваких">
+<!ENTITY autoReloadSite.accesskey "П">
+<!ENTITY afterthis.label "После ове картице">
+<!ENTITY bookmarktab.label "Обележи ову картицу">
+<!ENTITY undoCloseListMenu.label "Листа затворених картица">
+<!ENTITY undoCloseListMenu.accesskey "Л">
+<!ENTITY closeAllTabsMenu.label "Затвори све картице">
+<!ENTITY closeall.accesskey "к">
+<!ENTITY closeSimilarTab.label "Затвори сличне картице">
+<!ENTITY closeSimilarTab.accesskey "с">
+<!ENTITY closeTabsToLeft.label "Затвори картице са леве стране">
+<!ENTITY closeleft.accesskey "л">
+<!ENTITY docShellMenu.label "Дозволе">
+<!ENTITY docShellMenu.accesskey "в">
+<!ENTITY freezeTabMenu.label "Замрзни картицу">
+<!ENTITY freezeTabMenu.accesskey "З">
+<!ENTITY protectTabMenu.label "Заштити картицу">
+<!ENTITY protectTabMenu.tooltip "Заштити картице од случајног затварања">
+<!ENTITY protectTabMenu.accesskey "т">
+<!ENTITY lockTabMenu.label "Закључај картицу">
+<!ENTITY lockTabMenu.tooltip "Све везе се отварају у новој картици">
+<!ENTITY lockTabMenu.accesskey "к">
+<!ENTITY bookmarktabs.label "Обележи све картице">
+<!ENTITY linkhere.label "Отвори везу у овој картици">
+<!ENTITY linkhere.accesskey "о">
+<!ENTITY linkBackgroundTab.label "Отвори везу у картици у позадини">
+<!ENTITY linkForegroundTab.label "Отвори везу у картици у првом плану">
+<!ENTITY linkBackgroundTab.accesskey "п">
+<!ENTITY linkForegroundTab.accesskey "в">
+<!ENTITY openalllinks.label "Отвори везе у новим картицама">
+<!ENTITY openalllinks.accesskey "р">
+<!ENTITY linkwithhistory.label "Отвори везу у дуплираној картици">
+<!ENTITY linkwithhistory.accesskey "д">
+<!ENTITY tabsList.label "Листа отворених картица">
+<!ENTITY tabsList.accesskey "Л">
+<!ENTITY allowImage.label "Слика">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Преусмери">
+<!ENTITY allowPlugin.label "Додатак">
+<!ENTITY allowFrame.label "Оквир">
+<!ENTITY restoreincurrent.label "Обнови у текућој картици">
+<!ENTITY restoreincurrent.accesskey "б">
+<!ENTITY restoreinwin.label "Обнови у новом прозору">
+<!ENTITY restoreinwin.accesskey "п">
+<!ENTITY restoreintab.label "Обнови у новој картици">
+<!ENTITY restoreintab.accesskey "к">
+<!ENTITY restoretab.label "Обнови картицу">
+<!ENTITY restoretab.accesskey "р">
+<!ENTITY bookmark.label "Обележи ову везу...">
+<!ENTITY bookmark.accesskey "О">
+<!ENTITY deletelist.label "Избриши из листе">
+<!ENTITY deletelist.accesskey "И">
+<!ENTITY settings.label "Подешавања">
+<!ENTITY saveWindow.label "Сачувај овај прозор">
+<!ENTITY saveAllWindows.label "Сачувај све прозоре">
+<!ENTITY sm.context.overwrite "Обнови, пиши преко текућег/-их прозора">
+<!ENTITY sm.context.overwrite.key "г">
+<!ENTITY sm.context.restore.new "Обнови у новом/-им прозору/-има">
+<!ENTITY sm.context.restore.newkey "н">
+<!ENTITY sm.context.replacethis "Замени, са овим прозором">
+<!ENTITY sm.context.replacethis.key "м">
+<!ENTITY sm.context.replaceall "Замени, са свим прозорима">
+<!ENTITY sm.context.replaceall.key "з">
+<!ENTITY sm.context.add "Додај овај прозор">
+<!ENTITY sm.context.add.key "ј">
+<!ENTITY sm.context.addall "Додај све прозоре">
+<!ENTITY sm.context.addall.key "е">
+<!ENTITY sm.context.save "Сачувај">
+<!ENTITY sm.context.save.key "С">
+<!ENTITY sm.context.rename "Преименуј">
+<!ENTITY sm.context.rename.key "р">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Обриши">
+<!ENTITY sm.context.delete.key "О">
+<!ENTITY sm.context.deleteall "Обриши све">
+<!ENTITY sm.context.deleteall.key "в">
+<!ENTITY sm.context.startup "Постави као почетну сесију при покретању">
+<!ENTITY sm.context.startup.key "п">
+<!ENTITY sm.context.details "Прикажи бројаче, датум и време у менију сесије">
+<!ENTITY sm.context.details.key "Т">
+<!ENTITY tab.key "К">
+<!ENTITY window.key "П">
+<!ENTITY merge.key "С">
+<!ENTITY sortedTabs.label "Сортиране картице">
+<!ENTITY sortedTabs.tooltip "Штиклирајте да би се листа приказивала сортирана алфабетски ----">
+<!ENTITY enable.label "Омогући">
+<!ENTITY custom.label "Приилагођено ---">
+<!ENTITY enableTabs.label "Омогући све картице">
+<!ENTITY disableTabs.label "Онемогући све картице">
+<!ENTITY seconds.label "секунди">
+<!ENTITY minutes.label "минута">
+<!ENTITY minute.label "минут">
+<!ENTITY hideTabBar.label "Сакриј линију с картицама">
+<!ENTITY hideTabBar.never.label "Никад">
+<!ENTITY hideTabBar.never.key "Н">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "ј">
+<!ENTITY hideTabBar.always.label "Увек">
+<!ENTITY hideTabBar.always.key "У">

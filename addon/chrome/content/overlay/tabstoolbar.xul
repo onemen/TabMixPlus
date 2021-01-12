@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd" >
+%browserDTD;
+]>
+
+<overlay id="tabmix-tabstoolbar-overlay"
+   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <toolbar id="TabsToolbar">
+      <toolbarbutton id="tabmix-tabs-closebutton"
+                     class="tabs-closebutton close-icon tabmix"
+                     command="cmd_close"
+                     cui-areatype="toolbar"
+                     label="&closeTab.label;"
+                     tooltiptext="&closeTab.label;"
+                     removable="false"/>
+    </toolbar>
+
+</overlay>

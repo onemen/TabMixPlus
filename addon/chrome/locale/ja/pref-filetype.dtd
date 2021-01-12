@@ -1,0 +1,5 @@
+<!ENTITY filetype.options "ファイルタイプエディタ">
+<!ENTITY filetype.add "追加">
+<!ENTITY filetype.edit "修正">
+<!ENTITY filetype.delete "削除">
+<!ENTITY filetype.new "新規ファイルタイプ:">

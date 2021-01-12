@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.css" type="text/css"?>
+
+<!DOCTYPE dialog [
+<!ENTITY % dialogDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
+%dialogDTD;
+<!ENTITY % appearanceDTD SYSTEM "chrome://tabmixplus/locale/pref-appearance.dtd" >
+%appearanceDTD;
+]>
+
+<dialog id="pref-TMP-styles"
+        windowtype="mozilla:tabmixopt-appearance"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        buttons="accept,cancel,help,extra2"
+        ondialoghelp="tabstyles.openHelp();"
+        title="&styles.label;"
+        persist="screenX screenY hide-RGB"
+        onload="tabstyles.init();"
+        ondialogcancel="tabstyles.cancel();"
+        ondialogaccept="tabstyles.save();"
+        ondialogextra2="tabstyles.toggleRGB_visibility();">
+
+   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.js"/>
+
+   <tabbox id="AppearanceTabBox">
+     <tabs id="stylestabs">
+      <tab label="&currentTab.label;" id="_currentTab" />
+      <tab label="&unloadedTabs.label;" id="_unloadedTab" />
+      <tab label="&unreadTab.label;" id="_unreadTab" />
+      <tab label="&otherTabs.label;" id="_otherTab" />
+      <tab label="&progressMeter.label;" id="_progressMeter" />
+     </tabs>
+     <tabpanels flex="1" id="stylespanels">
+       <tabpanel id="currentTab"/>
+       <tabpanel id="unloadedTab"/>
+       <tabpanel id="unreadTab"/>
+       <tabpanel id="otherTab"/>
+       <tabpanel id="progressMeter" _hidebox="true"/>
+     </tabpanels>
+   </tabbox>
+   <label value="&hideRGB.label;" show="&showRGB.label;" hide="&hideRGB.label;" id="hide-RGB" persist="value" hidden="true"/>
+
+</dialog>

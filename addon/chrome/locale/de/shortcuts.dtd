@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Tastaturkürzel">
+<!ENTITY shortcuts.edit "Tastaturkürzel bearbeiten">
+<!ENTITY shortcuts.showAll "Alles anzeigen">
+<!ENTITY shortcuts.hideUnused "Nicht verwendete ausblenden">
+<!ENTITY shortcuts.warning "Einige Ihrer Tastaturkürzel werden bereits anderweitig verwendet">
+<!ENTITY shortcuts.showDetails "Details anzeigen">
+<!ENTITY shortcuts.hideDetails "Details ausblenden">
+<!ENTITY shortcuts.switchToLast "Zum letzten aktiven Tab wechseln">
+<!ENTITY shortcuts.slideshow "Automatischen Tabwechsel deaktivieren">
+<!ENTITY shortcuts.toggleFLST "Fokussierung nach schließen des aktuellen Tabs entfernen">
+<!ENTITY shortcuts.toggleFLST.tooltip "Tab-Fokussierung umschalten zwischen, Tab auf rechten Seite oder den zuletzt gewählten Tab">
+<!ENTITY shortcuts.placeholder "Typ Modifizierung &amp; Schlüsselworte">
+<!ENTITY shortcuts.reset "Zurücksetzen">
+<!ENTITY shortcuts.clear "Löschen">
+<!ENTITY shortcuts.inuse "Dieses Tastaturkürzel wird bereits verwendet!">

@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Ссылки">
+<!ENTITY tab.events "События">
+<!ENTITY tab.mouse "Мышь">
+<!ENTITY tab.appearance "Просмотр">
+<!ENTITY tab.menu "Меню">
+<!ENTITY tab.session "Сессии">
+<!ENTITY tab.incompatible "Ошибка">
+<!ENTITY apply.label "Применить">
+<!ENTITY settings.export "Экспорт настроек">
+<!ENTITY settings.import "Импорт настроек">
+<!ENTITY settings.sync "Настройки синхронизации">
+<!ENTITY settings.default "По умолчанию">
+<!ENTITY settings.revert "Вернуть">
+<!ENTITY generalWindowOpen.label "Открывать ссылки, создающие новые окна:">
+<!ENTITY externalLink.useSeparate.label "Использовать отдельные настройки для ссылок из других приложений">
+<!ENTITY externalLinkTarget.label "Открывать ссылки из внешних приложений:">
+<!ENTITY linkTarget.tab "В новой вкладке текущего окна">
+<!ENTITY linkTarget.window "В новом окне">
+<!ENTITY linkTarget.current "В текущей вкладке">
+<!ENTITY linkTarget.accesskey "т">
+<!ENTITY divertedWindowOpen.label "Всплывающие окна JavaScript:">
+<!ENTITY divertedWindowOpen.all "Все всплывающие открывать во вкладках">
+<!ENTITY divertedWindowOpen.some "С изменяемым размером — в новых окнах">
+<!ENTITY divertedWindowOpen.none "Все всплывающие открывать в новых окнах">
+<!ENTITY linkTarget.label "Открывать ссылки с атрибутом 'target' в текущей вкладке">
+<!ENTITY targetIsFrame.label "Открывать ссылки текущего фрейма в текущей вкладке">
+<!ENTITY download.label "Не открывать пустые вкладки при закачке файлов">
+<!ENTITY edit.label "Типы файлов">
+<!ENTITY speLink.label "Принудительно открывать в новых вкладках:">
+<!ENTITY speLink.none "Ничего">
+<!ENTITY speLink.allLinks "Все ссылки">
+<!ENTITY speLink.external "Ссылки на внешние сайты">
+<!ENTITY singleWindow.label "Разрешить использование принудительного однооконного режима браузера">
+<!ENTITY newTabs.label "Новые вкладки">
+<!ENTITY tabOpen.label "Открытие вкладок">
+<!ENTITY tabFocus.label "Фокус вкладок">
+<!ENTITY tabClose.label "Закрытие вкладок">
+<!ENTITY tabMerge.label "Объединение вкладок">
+<!ENTITY tabFeature.label "Настройки вкладок">
+<!ENTITY newtab.label "Открывать в новых вкладках:">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "Пустые страницы">
+<!ENTITY newtab.home "Домашнюю страницу">
+<!ENTITY newtab.current "Текущую страницу">
+<!ENTITY newtab.duplicate "Клонированную страницу">
+<!ENTITY newtab.location.1 "Страница новой вкладки">
+<!ENTITY newtab.placeholder.label "Страница новой вкладки по умолчанию">
+<!ENTITY location.label.1 "Адрес">
+<!ENTITY focusContent.label "Фокусироваться на вкладке, когда она не пустая">
+<!ENTITY openTabNext.label "Размещать новые вкладки сразу после текущей">
+<!ENTITY openOtherTabNext.label "Открывать другие вкладки после текущей">
+<!ENTITY relatedAfterCurrent.label "Только если связано с текущей вкладкой">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Открывать клонированные вкладки сразу после оригинальных">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Изменять порядок открытия">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Открывать новую вкладку сразу после последней вкладки, открытой с этой же страницы">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Загружать вкладки прогрессивно,">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "вкладок">
+<!ENTITY lockTabs.label "Блокирование вкладок">
+<!ENTITY lockNewTabs.label "Блокировать новые вкладки">
+<!ENTITY lockAppTabs.label "Блокировать прикреплённые вкладки">
+<!ENTITY updateLockState.label "Применить изменения к открытым вкладкам">
+<!ENTITY openNewTab.label "Открывать в новых вкладках:">
+<!ENTITY openBookmarks.label "Закладки">
+<!ENTITY openPlacesGroups.label "Группы закладок/журнала">
+<!ENTITY openPlacesGroups.tooltip "Не замещать вкладки при открытии группы закладок/журнала">
+<!ENTITY openHistory.label "Ссылки из журнала">
+<!ENTITY openUrl.label "Из адресной строки">
+<!ENTITY openSearch.label "Из панели поиска">
+<!ENTITY middlecurrent1.label "Клик СКМ или Ctrl+ЛКМ открывает элементы в текущей вкладке">
+<!ENTITY middlecurrent.tooltip "Только для закладок, журнала и заблокированных вкладок">
+<!ENTITY tabFocus.caption "Делать активными вкладки, открываемые:">
+<!ENTITY selectTab.label "Ссылки">
+<!ENTITY selectDivertedTab.label "Вместо окон">
+<!ENTITY selectTabFromExternal.label "Другие приложения">
+<!ENTITY selectTabCommand.label "По команде создания новой вкладки">
+<!ENTITY contextMenuSearch.label "Поиск по контекстному меню">
+<!ENTITY selectTabBH.label "Закладки / Журнал посещений">
+<!ENTITY duplicateTab.label "Клонировать вкладку">
+<!ENTITY inversefocus2.label "СКМ или Ctrl+ЛКМ инвертирует фокус:">
+<!ENTITY warning.caption.label "Предупреждения">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "Закрытие последней вкладки">
+<!ENTITY keepWindow.label.3.1 "Не закрывать окно, когда закрывается последняя вкладка">
+<!ENTITY keeptab.label "Не закрывать последнюю вкладку, если панель вкладок всегда отображается">
+<!ENTITY closeOnMerge.label "Закрывать окна после объединения вкладок">
+<!ENTITY warnOnMerge.label "Выдавать предупреждение о закрытии необъединённых вкладок">
+<!ENTITY currenttab.caption.label "Закрытие текущей вкладки">
+<!ENTITY focusTab.labelBegin "При её закрытии:">
+<!ENTITY focusTab.firstTab "переключаться на первую вкладку">
+<!ENTITY focusTab.leftTab "переключаться на вкладку слева">
+<!ENTITY focusTab.rightTab "переключаться на вкладку справа">
+<!ENTITY focusTab.lastTab "переключаться на последнюю вкладку">
+<!ENTITY focusTab.lastSelectedTab "переключаться на последнюю выбранную вкладку">
+<!ENTITY focusTab.openerTab "переключаться на вкладку, из которой была открыта текущая/вкладку справа">
+<!ENTITY focusTab.openerTab.rtl "переключаться на вкладку, из которой была открыта текущая/вкладку слева">
+<!ENTITY focusTab.lastOpenedTab "переключаться на последнюю открытую вкладку">
+<!ENTITY undoClose.label "Запоминать в специальном кэше последние закрытые вкладки">
+<!ENTITY undoCloseCache.label "Помнить не более:">
+<!ENTITY undoClosepos.label "Восстанавливать вкладки в их исходной позиции">
+<!ENTITY menuonlybutton.label "Кнопка на панели инструментов отображает только список">
+<!ENTITY ctrltab.label "Листать вкладки по CTRL+Tab в порядке их последнего просмотра">
+<!ENTITY cmdtab.label "Листать вкладки по CMD+Tab в порядке последнего просмотра">
+<!ENTITY ctrltab.tabPreviews "Показывать превью вкладки">
+<!ENTITY ctrltab.popup "CTRL+Tab отображает всплывающее меню со списком вкладок">
+<!ENTITY cmdtab.popup "CMD+Tab отображает всплывающее меню со списком вкладок">
+<!ENTITY tabpopup.mouse "Список вкладок реагирует на мышь">
+<!ENTITY mergeNoTabSelection.label "Объединение окон, когда не выделено ни одной вкладки">
+<!ENTITY mergeTabSelection.label "Объединение окон после выделения вкладок">
+<!ENTITY mergeall.label "Объединение всех окон в одно">
+<!ENTITY mergelastfocused.label "Объединение только текущего окна с последним активным">
+<!ENTITY mergePopups.label "Также объединять всплывающие окна">
+<!ENTITY popupNextToOpener.label "Размещать всплывающие окна рядом с окнами, которые их открывали">
+<!ENTITY activateSlideshow.label "Нажатие на клавишу #1 переключает вкладки каждые">
+<!ENTITY toggleAnimation.label "Отключить анимацию открытия/закрытия вкладки">
+<!ENTITY reloadEvery.matchAddress.label "Обновлять вкладку независимо от её адреса">
+<!ENTITY reloadEvery.onReloadButton.label "Показывать меню &apos;Обновлять вкладку каждые...&apos; для кнопки Обновить">
+<!ENTITY seconds.label "сек.">
+<!ENTITY minutes.label "мин.">
+<!ENTITY tabBarAppearance.label "Панель вкладок">
+<!ENTITY tabAppearance.label "Параметры вкладок">
+<!ENTITY toolBarAppearance.label "Панель инструментов">
+<!ENTITY show.ontabbar.label "Отображать на панели вкладок">
+<!ENTITY show.ontab.label "Отображать на вкладке">
+<!ENTITY dragNewTabButton.tooltip "Перетащите кнопку &apos;Новая вкладка&apos; на панель вкладок, чтобы использовать этот параметр.">
+<!ENTITY hideTabBarButton.label "Общая кнопка закрытия вкладок">
+<!ENTITY newTabButton.label "Кнопка добавления новой вкладки">
+<!ENTITY newTabButton.position.left.label "Слева">
+<!ENTITY newTabButton.position.right.label "Справа">
+<!ENTITY newTabButton.position.afterlast.label "После последней вкладки">
+<!ENTITY allTabsButton.label "Кнопка всех вкладок">
+<!ENTITY tabBarSpace.label "Пустые поля по краям панели вкладок">
+<!ENTITY tabBarSpace.tooltip "Пустые поля для перетаскивания вкладок по панели и щелчков мышью">
+<!ENTITY tabbar.label "Прятать панель вкладок, если открыта только одна вкладка">
+<!ENTITY moveTabOnDragging.label "Немедленно выполнять перетаскивание вкладки">
+<!ENTITY dropIndicator.label "Индикатор перетаскивания">
+<!ENTITY dropIndicator-native.label "Встроенный стиль">
+<!ENTITY dropIndicator-builtin.label "Стиль Tab Mix Plus">
+<!ENTITY verticalTabbar.description1 "Эти настройки контролируются другим расширением, управляющим вертикальными вкладками.">
+<!ENTITY tabBarPosition.label "Расположение панели:">
+<!ENTITY tabBarPosition.top.label "Сверху (над контентом)">
+<!ENTITY tabBarPosition.bottom.label "Снизу (под контентом)">
+<!ENTITY tabScroll.label "Если много вкладок:">
+<!ENTITY tabScroll.none "Прокручивать вкладки колесом мыши">
+<!ENTITY tabScroll.leftRightButtons "Прокручивать с помощью кнопок с правой и левой сторон">
+<!ENTITY tabScroll.rightButtons "Прокручивать с помощью кнопок с правой стороны">
+<!ENTITY tabScroll.rightButtons.rtl "Прокручивать с помощью кнопок с левой стороны">
+<!ENTITY tabScroll.multibar "Располагать вкладки в несколько строк">
+<!ENTITY maxrow.label "Максимальное число строк:">
+<!ENTITY pinnedTabScroll.label "Разрешить прокручивать прикрепленные вкладки">
+<!ENTITY offsetAmountToScroll.label "Во время прокрутки показывать часть следующей вкладки">
+<!ENTITY smoothScroll.label "Использовать плавную прокрутку">
+<!ENTITY scrolldelay.label "Задержка при прокрутке (время до перехода к следующей вкладке)">
+<!ENTITY currenttab.style.label "Текущая вкладка">
+<!ENTITY unloadedtabs.style.label "Незагруженные вкладки">
+<!ENTITY unreadtabs.style.label "Непрочитанные вкладки">
+<!ENTITY othertabs.style.label "Другие вкладки">
+<!ENTITY setstyles.label "Настройка стилей">
+<!ENTITY extraIcons.label1 "Значки для">
+<!ENTITY extraIcons.locked "Заблокированных">
+<!ENTITY extraIcons.protected "Защищённых">
+<!ENTITY extraIcons.autoreload "Автообновляемых">
+<!ENTITY extraIcons.hideonpinned "Прикреплённых">
+<!ENTITY progressMeter.label "Индикатор процесса открытия страницы">
+<!ENTITY showTabX.labelBegin "Кнопка закрытия на каждой вкладке">
+<!ENTITY showTabX.left "... слева">
+<!ENTITY showTabX.rtl "... справа">
+<!ENTITY milliseconds.label "мсек.">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "На всех вкладках">
+<!ENTITY showTabX.current "Только на текущей вкладке">
+<!ENTITY showTabX.hover "Только при наведении курсора мыши:">
+<!ENTITY showTabX.alwaysExeption "На всех вкладках шире чем">
+<!ENTITY showTabX.currentHover "На текущей вкладке и вкладке при наведении курсора мыши">
+<!ENTITY minWidth.label "Ширина вкладок: от">
+<!ENTITY widthTo.label "до">
+<!ENTITY widthPixels.label "пикселей (30-1000)">
+<!ENTITY onLeftDisabled.label "Невозможно разместить кнопку слева при использовании текущей темы оформления">
+<!ENTITY onLeftDisabled.tst.label "Нельзя разместить кнопку слева, когда treeStyleTab установлено">
+<!ENTITY flexTabs.label "Выравнивать ширину вкладок по длине их заголовков">
+<!ENTITY bookastitle.label "Использовать имя закладки в качестве заголовка вкладки">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Вы можете настроить какие кнопки будут отображаться на панели инструментов">
+<!ENTITY toolbar.button.label "Настроить">
+<!ENTITY toolbar.visible.caption "Отображаемые кнопки">
+<!ENTITY toolbar.novisible.label "Это не отображаемые кнопки">
+<!ENTITY toolbar.hidden.caption "Скрытые кнопки">
+<!ENTITY toolbar.nohidden.label "Это не сокрытые кнопки">
+<!ENTITY mouseGesture.label "Настройки мыши">
+<!ENTITY mouseClick.label "Кнопки мыши">
+<!ENTITY mouseHoverSelect.labelBegin "Активизировать вкладку наведением курсора мыши:">
+<!ENTITY tabFlip.label "Переключение щелчком с задержкой по текущей вкладке:">
+<!ENTITY tabFlip.delay "Задержка">
+<!ENTITY clickFocus.label "Выбирать вкладки полным щелчком мыши (нажать — отпустить)">
+<!ENTITY removeEntries.label "Удалять пункты меню Tab Mix Plus при помощи средней кнопки мыши">
+<!ENTITY lockTabSizingOnClose.label "При закрытии вкладки другие не изменяют свою ширину, пока курсор мыши не покинет область панели вкладок">
+<!ENTITY removeEntries.tooltip "Включая закрытые вкладки, окна и сохранённые сессии">
+<!ENTITY tabbarscrolling.caption "При прокрутке над панелью вкладок">
+<!ENTITY tabbarscrolling.holdShift.label "Удерживайте Shift во время прокрутки для переключения между этими параметрами">
+<!ENTITY tabbarscrolling.selectTab.label "Изменять выбранную вкладку">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Прокручивать все вкладки">
+<!ENTITY tabbarscrolling.inverse.label "Инвертировать направление прокрутки">
+<!ENTITY double.label "Двойной щелчок">
+<!ENTITY middle.label "Средняя кнопка">
+<!ENTITY ctrl.label "CTRL+ЛКМ">
+<!ENTITY cmd.label "CMD+ЛКМ">
+<!ENTITY shift.label "SHIFT+ЛКМ">
+<!ENTITY alt.label "ALT+ЛКМ">
+<!ENTITY ontab.label "По вкладке:">
+<!ENTITY ontabbar.label "По панели вкладок:">
+<!ENTITY clicktab.label "Выберите действие при щелчке по вкладке или панели">
+<!ENTITY ontabbar.dblClick.label "Предотвращать изменение размера окна при двойном клике на панели вкладок.">
+<!ENTITY ontabbar.click.label "Предотвращать перетаскивание окна при клике на панели вкладок.">
+<!ENTITY clicktab.default "Firefox по умолчанию или с расширениями">
+<!ENTITY clicktab.nothing "Ничего не предпринимать">
+<!ENTITY clicktab.addtab "Открыть новую вкладку">
+<!ENTITY clicktab.duplicatetab "Клонировать вкладку">
+<!ENTITY clicktab.duplicatetabw "Клонировать вкладку в новом окне">
+<!ENTITY clicktab.detachtab "Переместить вкладку в новое окно">
+<!ENTITY clicktab.protecttab "Защитить вкладку">
+<!ENTITY clicktab.locktab "Заблокировать вкладку">
+<!ENTITY clicktab.freezetab "Защитить и заблокировать вкладку">
+<!ENTITY clicktab.renametab "Переименовать вкладку">
+<!ENTITY clicktab.copyTabUrl "Копировать URL вкладки в буфер обмена">
+<!ENTITY clicktab.copyUrlFromClipboard "Загрузить ссылку из буфера обмена">
+<!ENTITY clicktab.selectMerge "Выбрать вкладки для объединения">
+<!ENTITY clicktab.mergeTabs "Объединение отдельных окон в одно">
+<!ENTITY clicktab.bookTab "Вкладку в закладки">
+<!ENTITY clicktab.bookTabs "Все вкладки в закладки">
+<!ENTITY clicktab.reloadtab "Обновить вкладку">
+<!ENTITY clicktab.reloadtabs "Обновить все вкладки">
+<!ENTITY clicktab.reloadothertabs "Обновить другие вкладки">
+<!ENTITY clicktab.reloadlefttabs "Обновить вкладки слева">
+<!ENTITY clicktab.reloadrighttabs "Обновить вкладки справа">
+<!ENTITY clicktab.autoReloadTab "Включить/Выключить автоматическое обновление вкладки">
+<!ENTITY clicktab.removeall "Закрыть все вкладки">
+<!ENTITY clicktab.removeother "Закрыть другие вкладки">
+<!ENTITY clicktab.removesimilar "Закрыть вкладки этого домена">
+<!ENTITY clicktab.removetoLeft "Закрыть вкладки слева">
+<!ENTITY clicktab.removetoRight "Закрыть вкладки справа">
+<!ENTITY clicktab.uctab "Восстановить закрытую вкладку">
+<!ENTITY clicktab.ucatab "Восстановить все закрытые вкладки">
+<!ENTITY clicktab.snapback "Восстановить вкладку">
+<!ENTITY clicktab.ietab "Открыть вкладку в IE">
+<!ENTITY contentLoad "Щелчком средней кнопки мыши загружать URL из буфера обмена">
+<!ENTITY context.tab "Вкладки">
+<!ENTITY context.main "Страницы">
+<!ENTITY context.tools "Инструменты">
+<!ENTITY showOnTabbar.label "Показывать контекстное меню вкладки на панели вкладок">
+<!ENTITY showtabBarContext.label "Состав контекстного меню панели вкладок:">
+<!ENTITY showContentAreaContext.label "Состав контекстного меню веб-страниц:">
+<!ENTITY showToolsMenu.label "Добавить в меню &apos;Инструменты&apos;:">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "Показывать пустую страницу">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "Tab Mix Plus обнаружил, что установлено расширение Session Manager">
+<!ENTITY sm.extension.description2 "Менеджер сессий Tab Mix Plus будет отключён">
+<!ENTITY sm.extension.description3 "Вы можете нажать на кнопку справа, чтобы открыть окно настроек Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "Конвертировать">
+<!ENTITY sm.extension.chooseFile.label1 "Конвертировать сессии Tab Mix Plus из текущего профиля">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "Использовать встроенную функцию восстановления сессий">
+<!ENTITY ss.enable.tooltip "Уберите галочку, чтобы использовать менеджер сессий Tab Mix Plus">
+<!ENTITY ss.advanced_setting "Расширенные настройки">
+<!ENTITY ss.advanced_setting.warning "Не изменяйте эти параметры, если Вы не знаете, что делаете">
+<!ENTITY ss.interval "Минимальный интервал между сохранениями сессий">
+<!ENTITY ss.interval.seconds "(в миллисекундах)">
+<!ENTITY ss.privacy_level "Сохранять введённые данные, отправляемые данные и cookies для">
+<!ENTITY ss.privacy_level.allsites "Все сайты">
+<!ENTITY ss.privacy_level.unencrypted "Только незашифрованные сайты">
+<!ENTITY ss.privacy_level.nosites "Ни для каких сайтов">
+<!ENTITY ss.postdata.label1 "Максимальный размер хранимых отправляемых данных">
+<!ENTITY ss.postdata.label2 "(в байтах, -1 = все)">
+<!ENTITY sessionManger.enable "Включить менеджер сессий">
+<!ENTITY crashRecovery.enable "Включить защиту от вылетов">
+<!ENTITY sm.StartExit "Запуск/Выход">
+<!ENTITY sm.restore "Восстановление">
+<!ENTITY sm.preserve "Сохранение">
+<!ENTITY sm.start "При запуске браузера:">
+<!ENTITY sm.start.restore "Восстанавливать сессию">
+<!ENTITY sm.start.ask "Запрос на восстановление">
+<!ENTITY sm.start.nothing "Не восстанавливать сессию">
+<!ENTITY sm.exit "При выходе из браузера:">
+<!ENTITY sm.exit.save "Сохранять сессию">
+<!ENTITY sm.exit.ask "Запрос на сохранение">
+<!ENTITY sm.exit.nothing "Не сохранять сессию">
+<!ENTITY sm.startup "При запуске браузера открывать:">
+<!ENTITY sm.lastsession "Последнюю сессию">
+<!ENTITY sm.previouslast "Сессию, предшествующую последней">
+<!ENTITY sm.chooseifempty "Другую, если выбранная сессия пуста">
+<!ENTITY sm.restore.options "При восстановлении сессий:">
+<!ENTITY sm.restore.overwrite "Заменять существующие окна">
+<!ENTITY sm.restore.overwriteTabs "... и вкладки">
+<!ENTITY sm.restore.closedWinList "Сохранять окна в списке закрытых">
+<!ENTITY sm.restore.merge "Объединять несколько окон в одно">
+<!ENTITY sm.restore.bypassCache "Игнорировать кэш при восстановлении">
+<!ENTITY sm.notrestore.label "Когда не восстанавливается при старте">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "Сохранять следующие параметры вкладок:">
+<!ENTITY sm.preserve.history "Журнал">
+<!ENTITY sm.preserve.protect "Статус защиты">
+<!ENTITY sm.preserve.locked "Статус блокировки">
+<!ENTITY sm.preserve.permission "Разрешения">
+<!ENTITY sm.preserve.scroll1 "Позиция прокрутки">
+<!ENTITY sm.restore.winOptions "Сохранять следующие параметры окон:">
+<!ENTITY sm.restore.selectedTab "Активная вкладка">
+<!ENTITY sm.restore.closedTabs "Список закрытых вкладок">
+<!ENTITY incompatible.extensions "Некоторые из ваших расширений не совместимы с Tab Mix Plus. Рекомендуется отключить или удалить эти расширения.">
+<!ENTITY incompatible.button.label "Показать список">

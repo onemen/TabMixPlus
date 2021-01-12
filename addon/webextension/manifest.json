@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "Tab Mix Plus - Extension storage migration helper",
+  "version": "1.0.0",
+  "description": "Temporary storage for legacy preferences system, Tab mix plus WebExtensions will use this data when it will be ready. Currently the schedule is unknown",
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": [
+    "storage"
+  ],
+
+  "default_locale": "en"
+}

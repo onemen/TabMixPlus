@@ -1,0 +1,10 @@
+/**
+    Firefox versions 39+
+
+    All platform
+
+**/
+
+preference {
+  -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#preference") !important;
+}

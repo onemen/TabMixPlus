@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Odkazy">
+<!ENTITY tab.events "Udalosti">
+<!ENTITY tab.mouse "Myš">
+<!ENTITY tab.appearance "Vzhľad">
+<!ENTITY tab.menu "Ponuka">
+<!ENTITY tab.session "Relácia">
+<!ENTITY tab.incompatible "Chyba">
+<!ENTITY apply.label "Potvrdiť">
+<!ENTITY settings.export "Exportovanie nastavení">
+<!ENTITY settings.import "Importovanie nastavení">
+<!ENTITY settings.sync "Nastavenia Synch">
+<!ENTITY settings.default "Pôvodné nastavenie">
+<!ENTITY settings.revert "Vrátiť">
+<!ENTITY generalWindowOpen.label "Odkazy otvárajúce nové okno otvoriť do:">
+<!ENTITY externalLink.useSeparate.label "Použiť rozdielne nastavenia pre odkazy z iných aplikácií">
+<!ENTITY externalLinkTarget.label "Otvoriť odkazy iných aplikácií do:">
+<!ENTITY linkTarget.tab "Nová karta">
+<!ENTITY linkTarget.window "Nové okno">
+<!ENTITY linkTarget.current "Aktuálna karta">
+<!ENTITY linkTarget.accesskey "A">
+<!ENTITY divertedWindowOpen.label "Vyskakovacie okná JavaScriptu:">
+<!ENTITY divertedWindowOpen.all "Otvoriť všetky vyskakovacie okná na kartách">
+<!ENTITY divertedWindowOpen.some "Povoliť zmeny u vyskakovacích okien">
+<!ENTITY divertedWindowOpen.none "Povoliť všetky vyskakovacie okná">
+<!ENTITY linkTarget.label "Odkazy s atribútom &apos;target&apos; otvoriť na aktuálnej karte">
+<!ENTITY targetIsFrame.label "Otvoriť odkazy s cieľom na existujúce okno na aktuálnej karte">
+<!ENTITY download.label "Blokovať prázdne karty pri sťahovaní súborov">
+<!ENTITY edit.label "Upraviť">
+<!ENTITY speLink.label "Prinútiť otvoriť na novej karte:">
+<!ENTITY speLink.none "Nič">
+<!ENTITY speLink.allLinks "Všetky odkazy">
+<!ENTITY speLink.external "Odkazy na iné stránky">
+<!ENTITY singleWindow.label "Zapnúť mód jedného okna">
+<!ENTITY newTabs.label "Nové karty">
+<!ENTITY tabOpen.label "Otvorenie karty">
+<!ENTITY tabFocus.label "Zameranie karty">
+<!ENTITY tabClose.label "Zatvorenie karty">
+<!ENTITY tabMerge.label "Zlúčenie karty">
+<!ENTITY tabFeature.label "Vlastnosti karty">
+<!ENTITY newtab.label "Otvoriť na novú kartu:">
+<!ENTITY replaceLastTabWith1.label "Po zatvorení poslednej karty nahradiť ju">
+<!ENTITY newtab.blank "Prázdna stránka">
+<!ENTITY newtab.home "Domovská stránka">
+<!ENTITY newtab.current "Aktuálna stránka">
+<!ENTITY newtab.duplicate "Duplikovaná stránka">
+<!ENTITY newtab.location.1 "Nová karta">
+<!ENTITY newtab.placeholder.label "Predvolená stránka Nová karta">
+<!ENTITY location.label.1 "Adresa">
+<!ENTITY focusContent.label "Zamerať obsah pri načítaní nie prázdnej stránky">
+<!ENTITY openTabNext.label "Otvoriť nové karty vedľa aktuálnej karty">
+<!ENTITY openOtherTabNext.label "Otvoriť ostatné karty vedľa aktuálnej">
+<!ENTITY relatedAfterCurrent.label "Len ak súvisí s aktuálnou kartou">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Otvoriť duplikované karty vedľa pôvodnej">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Zmeniť poradie otvárania">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Otvoriť ďalšiu kartu vedľa naposledy otvorenej z aktuálnej karty (odvtedy, čo bola naposledy vybratá)">
+<!ENTITY moveSwitchToTabNext.label "Presunúť kartu z &quot;Prepnúť sa na záložku&quot; vedľa aktuálnej">
+<!ENTITY loadTabsProgressively.label "Načítať karty progresívne">
+<!ENTITY restoreOnDemand.label "Nenačítať karty pokiaľ nie sú vybraté">
+<!ENTITY openMoreThan.label "ak otvoríte viac než jednu">
+<!ENTITY tabs.label "karty">
+<!ENTITY lockTabs.label "Zamknúť karty">
+<!ENTITY lockNewTabs.label "Zamknúť nové karty">
+<!ENTITY lockAppTabs.label "Zamknúť karty aplikácie">
+<!ENTITY updateLockState.label "Aplikovať zmeny na otvorených záložkách">
+<!ENTITY openNewTab.label "Otvoriť karty z:">
+<!ENTITY openBookmarks.label "Záložky">
+<!ENTITY openPlacesGroups.label "Skupiny záložiek/histórie">
+<!ENTITY openPlacesGroups.tooltip "Neprepisovať karty pri otváraní skupiny záložiek/histórie">
+<!ENTITY openHistory.label "História">
+<!ENTITY openUrl.label "Adresný riadok">
+<!ENTITY openSearch.label "Panel vyhľadávania">
+<!ENTITY middlecurrent1.label "Kliknutie prostredným alebo kliknutie Control otvára položky v aktuálnej karte">
+<!ENTITY middlecurrent.tooltip "Platí len pre záložky, históriu a uzamknuté karty">
+<!ENTITY tabFocus.caption "Prepnúť/Vybrať karty ak sa otvárajú z:">
+<!ENTITY selectTab.label "Odkazy">
+<!ENTITY selectDivertedTab.label "Rozptýlené okná">
+<!ENTITY selectTabFromExternal.label "Ostatné aplikácie">
+<!ENTITY selectTabCommand.label "Príkazy nová karta">
+<!ENTITY contextMenuSearch.label "Kontextová ponuka vyhľadávania pre">
+<!ENTITY selectTabBH.label "Záložky/História">
+<!ENTITY duplicateTab.label "Duplikovať kartu">
+<!ENTITY inversefocus2.label "Kliknutie prostredným tlačidlom alebo Ctrl-kliknutie inverzné zameranie:">
+<!ENTITY warning.caption.label "Upozornenie">
+<!ENTITY warnOnCloseMultipleTabs.label "Upozorniť pri zatváraní viacerých kariet">
+<!ENTITY warnOnCloseProtected1.label "Upozorniť pri zatváraní okna s chránenou kartou">
+<!ENTITY warnOnCloseWindow1.label "Upozorniť pri zatváraní okna s viacerými kartami">
+<!ENTITY lasttab.caption.label "Zatváranie poslednej karty">
+<!ENTITY keepWindow.label.3.1 "Nezatvoriť okno pri zatvorení poslednej karty">
+<!ENTITY keeptab.label "Nepovoliť zatvorenie poslednej karty">
+<!ENTITY closeOnMerge.label "Po zlúčení kariet zatvoriť okno">
+<!ENTITY warnOnMerge.label "Pri zatváraní upozorniť">
+<!ENTITY currenttab.caption.label "Zatváranie aktuálnej karty">
+<!ENTITY focusTab.labelBegin "Pri zatváraní karty prepnúť na:">
+<!ENTITY focusTab.firstTab "Prvá karta">
+<!ENTITY focusTab.leftTab "Ľavá karta">
+<!ENTITY focusTab.rightTab "Pravá karta">
+<!ENTITY focusTab.lastTab "Posledná karta">
+<!ENTITY focusTab.lastSelectedTab "Naposledy vybratá">
+<!ENTITY focusTab.openerTab "Otvárač/pravá karta">
+<!ENTITY focusTab.openerTab.rtl "Otvárač/ľavá karta">
+<!ENTITY focusTab.lastOpenedTab "Naposledy otvorená">
+<!ENTITY undoClose.label "Vrátiť zatvorené karty">
+<!ENTITY undoCloseCache.label "Maximálny počet zatvorených kariet v pamäti:">
+<!ENTITY undoClosepos.label "Obnoviť pôvodnú pozíciu karty">
+<!ENTITY menuonlybutton.label "Zapnúť tlačidlo Jednoduchý štýl pre zoznam zatvorených kariet">
+<!ENTITY ctrltab.label "Prepínať medzi kartami pomocou Ctrl+Tab">
+<!ENTITY cmdtab.label "Prepínať medzi kartami pomocou Cmd+Tab">
+<!ENTITY ctrltab.tabPreviews "Zobraziť náhľad kariet">
+<!ENTITY ctrltab.popup "Ctrl+Tab zobrazuje vyskakovacie okno zoznamu kariet">
+<!ENTITY cmdtab.popup "Cmd+Tab zobrazuje vyskakovacie okno zoznamu kariet">
+<!ENTITY tabpopup.mouse "Zoznam kariet reaguje na myš">
+<!ENTITY mergeNoTabSelection.label "Zlúčiť okná ak nie sú vybrané karty">
+<!ENTITY mergeTabSelection.label "Zlúčenie po vybratí kariet:">
+<!ENTITY mergeall.label "Zlúčiť všetky okná do jedného">
+<!ENTITY mergelastfocused.label "Zlúčiť len aktuálne okno">
+<!ENTITY mergePopups.label "Tiež zachytiť vyskakovacie okná">
+<!ENTITY popupNextToOpener.label "Umiestniť vyskakovacie okná vedľa ich otváračov">
+<!ENTITY activateSlideshow.label "Stlačením #1 mení karty každé">
+<!ENTITY toggleAnimation.label "Vypnúť animáciu Otvoriť/Zatvoriť kartu">
+<!ENTITY reloadEvery.matchAddress.label "Načítať znovu kartu bez ohľadu na jej adresu">
+<!ENTITY reloadEvery.onReloadButton.label "Zobraziť ponuku Opäť načítať každých na tlačidle Opäť načítať">
+<!ENTITY seconds.label "sek">
+<!ENTITY minutes.label "min">
+<!ENTITY tabBarAppearance.label "Panel kariet">
+<!ENTITY tabAppearance.label "Karta">
+<!ENTITY toolBarAppearance.label "Panel nástrojov">
+<!ENTITY show.ontabbar.label "Zobraziť na paneli karty">
+<!ENTITY show.ontab.label "Zobraziť na karte">
+<!ENTITY dragNewTabButton.tooltip "Presunúť tlačidlo &apos;Nová karta&apos; na panel kariet pre zapnutie tejto možnosti.">
+<!ENTITY hideTabBarButton.label "Tlačidlo zatvoriť kartu">
+<!ENTITY newTabButton.label "Tlačidlo nová karta">
+<!ENTITY newTabButton.position.left.label "Naľavo">
+<!ENTITY newTabButton.position.right.label "Napravo">
+<!ENTITY newTabButton.position.afterlast.label "Za poslednou kartou">
+<!ENTITY allTabsButton.label "Tlačidlo všetkých kariet">
+<!ENTITY tabBarSpace.label "Miesto naviac na oboch stranách">
+<!ENTITY tabBarSpace.tooltip "Pre kliknutie a zhodenie niečoho na lištu s kartami">
+<!ENTITY tabbar.label "Skryť panel karty ak je otvorená len jedna karta">
+<!ENTITY moveTabOnDragging.label "Pri preťahovaní kartu presunúť priamo">
+<!ENTITY dropIndicator.label "Klapka">
+<!ENTITY dropIndicator-native.label "Pôvodný štýl">
+<!ENTITY dropIndicator-builtin.label "Zabudovaný štýl">
+<!ENTITY verticalTabbar.description1 "Tieto preferencie sú riadené iným rozšírením, ktoré sa vzťahujú na vertikálne karty.">
+<!ENTITY tabBarPosition.label "Poloha:">
+<!ENTITY tabBarPosition.top.label "Začiatok (nad obsahom)">
+<!ENTITY tabBarPosition.bottom.label "Spodok (pod obsahom)">
+<!ENTITY tabScroll.label "Ak karty nemenia šírku:">
+<!ENTITY tabScroll.none "Posuvná lišta kariet bez tlačidiel">
+<!ENTITY tabScroll.leftRightButtons "Posuvná lišta s tlačidlami na ľavej a pravej strane">
+<!ENTITY tabScroll.rightButtons "Posuvná lišta s tlačidlami na pravej strane">
+<!ENTITY tabScroll.rightButtons.rtl "Posuvná lišta s tlačidlami na ľavej strane">
+<!ENTITY tabScroll.multibar "Viacradá lišta kariet">
+<!ENTITY maxrow.label "Maximálny počet riadkov:">
+<!ENTITY pinnedTabScroll.label "Povoliť pripnutým záložkám posúvanie">
+<!ENTITY offsetAmountToScroll.label "Pri rolovaní zobraziť časť ďalšej karty mimo pohľadu">
+<!ENTITY smoothScroll.label "Zapnúť plynulé rolovanie">
+<!ENTITY scrolldelay.label "Oneskorenie skrolovania (čas medzi opakovaním skrolovania)">
+<!ENTITY currenttab.style.label "Aktuálna karta">
+<!ENTITY unloadedtabs.style.label "Nenačítané karty">
+<!ENTITY unreadtabs.style.label "Neprečítané karty">
+<!ENTITY othertabs.style.label "Ostatné karty">
+<!ENTITY setstyles.label "Prispôsobiť štýly">
+<!ENTITY extraIcons.label1 "Ikony pre">
+<!ENTITY extraIcons.locked "Uzamknuté">
+<!ENTITY extraIcons.protected "Chránené">
+<!ENTITY extraIcons.autoreload "Automaticky načítané">
+<!ENTITY extraIcons.hideonpinned "Skryť na pripnutej karte">
+<!ENTITY progressMeter.label "Ukazovateľ priebehu na kartách">
+<!ENTITY showTabX.labelBegin "Tlačidlo zatvoriť kartu">
+<!ENTITY showTabX.left "Naľavo">
+<!ENTITY showTabX.rtl "Napravo">
+<!ENTITY milliseconds.label "milisekúnd">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "na všetkých kartách">
+<!ENTITY showTabX.current "na aktuálnej karte">
+<!ENTITY showTabX.hover "pri prejdení myšou cez kartu">
+<!ENTITY showTabX.alwaysExeption "na všetkých kartách širšie než">
+<!ENTITY showTabX.currentHover "na aktuálnej &amp; presne">
+<!ENTITY minWidth.label "Šírka kariet:">
+<!ENTITY widthTo.label "až">
+<!ENTITY widthPixels.label "pixelov">
+<!ENTITY onLeftDisabled.label "Nepridať tlačidlo naľavo s aktuálnou témou">
+<!ENTITY onLeftDisabled.tst.label "Nemôžete tlačidlo umiestniť na ľavej strane pri nainštalovaní treeStyleTab">
+<!ENTITY flexTabs.label "Karty sú široké podľa svojho obsahu">
+<!ENTITY bookastitle.label "Použiť názov záložky ako názov karty">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Môžete upraviť zobrazovanie Tabmix tlačidiel na Panely nástrojov">
+<!ENTITY toolbar.button.label "Prispôsobiť">
+<!ENTITY toolbar.visible.caption "Viditeľné tlačidlá">
+<!ENTITY toolbar.novisible.label "Žiadne viditeľné tlačidlá">
+<!ENTITY toolbar.hidden.caption "Skryté tlačidlá">
+<!ENTITY toolbar.nohidden.label "Žiadne skryté tlačidlá">
+<!ENTITY mouseGesture.label "Pohyby myšou">
+<!ENTITY mouseClick.label "Tlačidlá myši">
+<!ENTITY mouseHoverSelect.labelBegin "Zobraziť kartu pri prejdení myšou cez ňu">
+<!ENTITY tabFlip.label "Pri kliknutí na aktuálnu kartu prepnúť na naposledy používanú">
+<!ENTITY tabFlip.delay "Použiť prepínane kariet s oneskorením">
+<!ENTITY clickFocus.label "Tlačením smerom dole okamžite vybrať karty">
+<!ENTITY removeEntries.label "Zmazať položky ponuky Tab Mix Plus použitím prostredného tlačidla">
+<!ENTITY lockTabSizingOnClose.label "Pri zatváraní karty, ostatné karty by nemali meniť svoju veľkosť, kým kurzor opustí oblasť panela nástrojov">
+<!ENTITY removeEntries.tooltip "Zahrnúť zatvorené karty, zatvorené okná uložené relácie">
+<!ENTITY tabbarscrolling.caption "Pri rolovaní na lište">
+<!ENTITY tabbarscrolling.holdShift.label "Podržať kláves Shift pri rolovaní pre prepínanie medzi týmito možnosťami">
+<!ENTITY tabbarscrolling.selectTab.label "Zmeniť vybranú kartu">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Rolovať všetky karty">
+<!ENTITY tabbarscrolling.inverse.label "Otočiť smer rolovania">
+<!ENTITY double.label "Dvojkliknutie">
+<!ENTITY middle.label "Prostredné tlačidlo">
+<!ENTITY ctrl.label "Ctrl+kliknutie">
+<!ENTITY cmd.label "Cmd+kliknutie">
+<!ENTITY shift.label "Shift+kliknutie">
+<!ENTITY alt.label "Alt+kliknutie">
+<!ENTITY ontab.label "na kartu:">
+<!ENTITY ontabbar.label "na panel karty:">
+<!ENTITY clicktab.label "Vyberte príkaz pre kliknutie na kartu alebo panel karty">
+<!ENTITY ontabbar.dblClick.label "Zabránit dvojkliknutiu na paneli záložiek pri zmene veľkosti okna.">
+<!ENTITY ontabbar.click.label "Zabráiť kliknutiu na paneli kariet pretiahnutím okna.">
+<!ENTITY clicktab.default "Predvolené alebo ostatné rozšírenia Firefoxu">
+<!ENTITY clicktab.nothing "Bez akcie">
+<!ENTITY clicktab.addtab "Otvoriť novú kartu">
+<!ENTITY clicktab.duplicatetab "Duplikovať kartu">
+<!ENTITY clicktab.duplicatetabw "Duplikovať kartu v novom okne">
+<!ENTITY clicktab.detachtab "Presuň kartu na nové okno">
+<!ENTITY clicktab.protecttab "Chrániť kartu">
+<!ENTITY clicktab.locktab "Uzamknúť kartu">
+<!ENTITY clicktab.freezetab "Chrániť a uzamknúť kartu">
+<!ENTITY clicktab.renametab "Premenovať kartu">
+<!ENTITY clicktab.copyTabUrl "Kopírovať URL karty do schránky">
+<!ENTITY clicktab.copyUrlFromClipboard "Načítať URL zo schránky">
+<!ENTITY clicktab.selectMerge "Vybrať kartu na zlúčenie">
+<!ENTITY clicktab.mergeTabs "Zlúčiť okná">
+<!ENTITY clicktab.bookTab "Vytvoriť záložku pre kartu">
+<!ENTITY clicktab.bookTabs "Vytvoriť záložku pre všetky karty">
+<!ENTITY clicktab.reloadtab "Obnoviť kartu">
+<!ENTITY clicktab.reloadtabs "Obnoviť všetky karty">
+<!ENTITY clicktab.reloadothertabs "Obnoviť ostatné karty">
+<!ENTITY clicktab.reloadlefttabs "Obnoviť karty naľavo">
+<!ENTITY clicktab.reloadrighttabs "Obnoviť karty napravo">
+<!ENTITY clicktab.autoReloadTab "Aktivovať/Deaktivovať autonačítanie karty">
+<!ENTITY clicktab.removeall "Zatvoriť všetky karty">
+<!ENTITY clicktab.removeother "Zatvoriť ostatné karty">
+<!ENTITY clicktab.removesimilar "Zatvoriť karty z podobnej domény">
+<!ENTITY clicktab.removetoLeft "Zatvoriť karty naľavo">
+<!ENTITY clicktab.removetoRight "Zatvoriť karty napravo">
+<!ENTITY clicktab.uctab "Vrátiť zatvorenú kartu">
+<!ENTITY clicktab.ucatab "Vrátiť všetky zatvorené karty">
+<!ENTITY clicktab.snapback "Karta SnapBack">
+<!ENTITY clicktab.ietab "Otvoriť kartu v IE">
+<!ENTITY contentLoad "Prostredné tlačidlo nahrá url zo schránky">
+<!ENTITY context.tab "Panel Kontextová ponuka">
+<!ENTITY context.main "Hlavná kontextová ponuka">
+<!ENTITY context.tools "Nástroje">
+<!ENTITY showOnTabbar.label "Zobraziť kontextovú ponuku na paneli nástrojov">
+<!ENTITY showtabBarContext.label "Zobraziť v panel Kontextová ponuka:">
+<!ENTITY showContentAreaContext.label "Zobraziť v Hlavná kontextová ponuka:">
+<!ENTITY showToolsMenu.label "Zobraziť v Nástroje:">
+<!ENTITY startupHomePage1.label "Zobraziť domovskú stránku">
+<!ENTITY startupBlankPage.label "Zobraziť prázdnu stránku">
+<!ENTITY startupLastSession1.label "Ukázať okná a karty z poslednej doby">
+<!ENTITY sm.extension.description1 "Tab Mix Plus zistil, že máte nainštalované rozšírenie Session Manager">
+<!ENTITY sm.extension.description2 "Správca relácií Tab Mix Plus bude vypnutý">
+<!ENTITY sm.extension.description3 "Môžete klinúť na tlačidlo vpravo pre otvorenie okna možnosti Session Manager">
+<!ENTITY sm.extension.description5 "Preveďte dáta relácie z formátu Tab Mix Plus do formátu rozšírenia Správca relácií">
+<!ENTITY sm.extension.convert.label "Previesť">
+<!ENTITY sm.extension.chooseFile.label1 "Previesť relácie Tab Mix Plus z aktuálneho profilu">
+<!ENTITY sm.extension.chooseFile.label2 "Vybrať dáta na konverziu">
+<!ENTITY ss.enable.label "Použiť zabudovanú obnovu relácie">
+<!ENTITY ss.enable.tooltip "Odznačiť pre použitie s Tabmix Manažér relácie">
+<!ENTITY ss.advanced_setting "Pokročilé nastavenia">
+<!ENTITY ss.advanced_setting.warning "Nemeniť, len ak viete, čo robíte">
+<!ENTITY ss.interval "Minimálny časový interval medzi dvoma stavmi uložený">
+<!ENTITY ss.interval.seconds "(v milisekundách)">
+<!ENTITY ss.privacy_level "Uložiť súkromné údaje (správa formulárov, POSTDATA a cookies) pre">
+<!ENTITY ss.privacy_level.allsites "Všetky stránky">
+<!ENTITY ss.privacy_level.unencrypted "Len nezabezpečené stránky">
+<!ENTITY ss.privacy_level.nosites "Vôbec žiadne stránky">
+<!ENTITY ss.postdata.label1 "Maximálne množstvo POSTDATA bolo uložených">
+<!ENTITY ss.postdata.label2 "(v bytoch, -1 = všetko)">
+<!ENTITY sessionManger.enable "Zapnúť Manažér relácie">
+<!ENTITY crashRecovery.enable "Zapnúť Zotavenie po páde">
+<!ENTITY sm.StartExit "Štart/Zatvoriť">
+<!ENTITY sm.restore "Obnoviť">
+<!ENTITY sm.preserve "Zachovať">
+<!ENTITY sm.start "Pri spustení prehliadača:">
+<!ENTITY sm.start.restore "Obnoviť">
+<!ENTITY sm.start.ask "Opýtať sa pred obnovením">
+<!ENTITY sm.start.nothing "Neobnovovať">
+<!ENTITY sm.exit "Pri zatvorení prehliadača:">
+<!ENTITY sm.exit.save "Uložiť reláciu">
+<!ENTITY sm.exit.ask "Opýtať sa pred uložením">
+<!ENTITY sm.exit.nothing "Neukladať">
+<!ENTITY sm.startup "Začiatok relácie:">
+<!ENTITY sm.lastsession "Posledná relácia">
+<!ENTITY sm.previouslast "Predchádzajúca">
+<!ENTITY sm.chooseifempty "Vybrať inú ak nie je">
+<!ENTITY sm.restore.options "Pri obnovení relácie:">
+<!ENTITY sm.restore.overwrite "Nahradiť stávajúce okno">
+<!ENTITY sm.restore.overwriteTabs "a karty">
+<!ENTITY sm.restore.closedWinList "Uložiť okno do zoznamu zatvorených okien">
+<!ENTITY sm.restore.merge "Zlúčiť všetky okná do jedného">
+<!ENTITY sm.restore.bypassCache "Obísť vyrovnávaciu pamäť pri obnove">
+<!ENTITY sm.notrestore.label "Keď sa neobnoví pri spustení">
+<!ENTITY sm.restorePinned1.label "Obnoviť pripnuté karty z poslednej doby">
+<!ENTITY sm.preserve.options "Zachovať karty:">
+<!ENTITY sm.preserve.history "História">
+<!ENTITY sm.preserve.protect "Chrániť stav">
+<!ENTITY sm.preserve.locked "Zamknúť stav">
+<!ENTITY sm.preserve.permission "Povolenia">
+<!ENTITY sm.preserve.scroll1 "Poloha skrolovania">
+<!ENTITY sm.restore.winOptions "Zachovať okná:">
+<!ENTITY sm.restore.selectedTab "Zvolené karty">
+<!ENTITY sm.restore.closedTabs "Zoznam zatvorených kariet">
+<!ENTITY incompatible.extensions "Niektoré vaše rozšírenia sú nekompatibilné s Tab Mix Plus, odporúčame ich zakázať alebo odinštalovať.">
+<!ENTITY incompatible.button.label "Zobraziť zoznam">

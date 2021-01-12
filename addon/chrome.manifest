@@ -1,0 +1,85 @@
+content   tabmixplus                 chrome/content/
+content   tabmix-prefs               defaults/preferences/
+resource  tabmixplus                 modules/
+
+locale    tabmixplus   bg            chrome/locale/bg-BG/
+locale    tabmixplus   ca            chrome/locale/ca/
+locale    tabmixplus   cs            chrome/locale/cs-CZ/
+locale    tabmixplus   da            chrome/locale/da/
+locale    tabmixplus   de            chrome/locale/de/
+locale    tabmixplus   el            chrome/locale/el/
+locale    tabmixplus   en-US         chrome/locale/en-US/
+locale    tabmixplus   es-ES         chrome/locale/es-ES/
+locale    tabmixplus   et            chrome/locale/et-EE/
+locale    tabmixplus   fa            chrome/locale/fa-IR/
+locale    tabmixplus   fr            chrome/locale/fr/
+locale    tabmixplus   he            chrome/locale/he-IL/
+locale    tabmixplus   hr            chrome/locale/hr-HR/
+locale    tabmixplus   hu            chrome/locale/hu-HU/
+locale    tabmixplus   it            chrome/locale/it/
+locale    tabmixplus   ja            chrome/locale/ja/
+locale    tabmixplus   ko            chrome/locale/ko-KR/
+locale    tabmixplus   nl            chrome/locale/nl/
+locale    tabmixplus   pl            chrome/locale/pl/
+locale    tabmixplus   pt-BR         chrome/locale/pt-BR/
+locale    tabmixplus   pt-PT         chrome/locale/pt-PT/
+locale    tabmixplus   ro            chrome/locale/ro/
+locale    tabmixplus   ru            chrome/locale/ru-RU/
+locale    tabmixplus   sk            chrome/locale/sk-SK/
+locale    tabmixplus   sr            chrome/locale/sr/
+locale    tabmixplus   sv-SE         chrome/locale/sv-SE/
+locale    tabmixplus   tr            chrome/locale/tr/
+locale    tabmixplus   uk            chrome/locale/uk-UA/
+locale    tabmixplus   vi            chrome/locale/vi/
+locale    tabmixplus   zh-CN         chrome/locale/zh-CN/
+locale    tabmixplus   zh-TW         chrome/locale/zh-TW/
+
+
+overlay   chrome://browser/content/browser.xul                      chrome://tabmixplus/content/tabmix.xul
+overlay   chrome://browser/content/browser.xul                      chrome://tabmixplus/content/overlay/tabstoolbar.xul appversion>=31.0b1
+
+overlay   about:addons                                              chrome://tabmixplus/content/preferences/overlay/aboutaddons.xul  appversion>=59.0a1
+overlay   about:preferences                                         chrome://tabmixplus/content/preferences/overlay/incontentPreferences.xul  os=WINNT
+overlay   about:preferences                                         chrome://tabmixplus/content/preferences/overlay/incontentPreferences.xul  os=Darwin
+overlay   about:preferences#general                                 chrome://tabmixplus/content/preferences/overlay/incontentPreferences.xul  os=Linux
+overlay   chrome://browser/content/preferences/main.xul             chrome://tabmixplus/content/preferences/overlay/main.xul
+overlay   chrome://browser/content/preferences/tabs.xul             chrome://tabmixplus/content/preferences/overlay/tabs.xul
+# we don't need this style for in-content preferences in Firefox 60+
+style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/content/preferences/overlay/preferences.css appversion<60.0a1
+
+overlay   chrome://mozapps/content/extensions/extensions.xul        chrome://tabmixplus/content/links/links.xul
+overlay   about:newtab                                              chrome://tabmixplus/content/overlay/newTab.xul appversion<42.0
+overlay   chrome://mozapps/content/downloads/unknownContentType.xul chrome://tabmixplus/content/overlay/removeBlankTab.xul
+overlay   chrome://mozapps/content/handling/dialog.xul              chrome://tabmixplus/content/overlay/removeBlankTab.xul
+
+overlay   chrome://browser/content/bookmarks/bookmarksPanel.xul     chrome://tabmixplus/content/places/places.xul
+overlay   chrome://browser/content/history/history-panel.xul        chrome://tabmixplus/content/places/places.xul
+overlay   chrome://browser/content/places/places.xul                chrome://tabmixplus/content/places/places.xul
+# bookmarkProperties.xul is not in use since Firefox 49 (bug 446171)
+overlay   chrome://browser/content/places/bookmarkProperties.xul    chrome://tabmixplus/content/places/bookmarkProperties.xul appversion<49.0
+overlay   chrome://browser/content/places/bookmarkProperties2.xul   chrome://tabmixplus/content/places/bookmarkProperties.xul appversion<49.0
+
+overlay   chrome://browser/content/preferences/sanitize.xul         chrome://tabmixplus/content/preferences/overlay/overlaySanitizeUI.xul
+overlay   chrome://browser/content/sanitize.xul                     chrome://tabmixplus/content/preferences/overlay/overlaySanitizeUI.xul
+
+overlay   chrome://sage/content/sage.xul                            chrome://tabmixplus/content/extensions/sage.xul
+overlay   chrome://sage/content/sidebar.xul                         chrome://tabmixplus/content/extensions/sage.xul
+overlay   chrome://wizzrss/content/wizzrss.xul                      chrome://tabmixplus/content/extensions/wizzrss.xul
+overlay   chrome://wizzrss/content/feedster.xul                     chrome://tabmixplus/content/extensions/wizzrss.xul
+
+skin      tabmixplus   classic/1.0   chrome/skin/
+
+skin      tabmix-version tabmixplus  chrome/skin/app_version/before39.0/ appversion<39.0a1
+skin      tabmix-version tabmixplus  chrome/skin/app_version/39.0/       appversion>=39.0a1
+skin      tabmix-version tabmixplus  chrome/skin/app_version/60.0/       appversion>=60.0a1
+skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/win/   os=WINNT appversion<41.0a1
+skin      tabmix-os    classic/1.0   chrome/skin/app_version/41.0/win/   os=WINNT appversion>=41.0a1
+skin      tabmix-os    classic/1.0   chrome/skin/app_version/60.0/win/   os=WINNT appversion>=60.0a1
+skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/mac/   os=Darwin
+skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/linux/ os=Linux
+
+style     chrome://global/content/customizeToolbar.xul              chrome://tabmixplus/skin/tab.css
+style     chrome://browser/content/preferences/preferences.xul      chrome://tabmixplus/skin/preferencesOverlay.css
+
+style     chrome://browser/content/browser.xul chrome://tabmixplus/content/overlay/firefox.css  application={ec8030f7-c20a-464f-9b0e-13a3a9e97384}
+style     chrome://browser/content/browser.xul chrome://tabmixplus/content/overlay/palemoon.css application={8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}

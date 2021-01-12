@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Zatvorené karty">
+<!ENTITY closedtabsbtn.tooltip "Zobraziť zoznam zatvorených kariet">
+<!ENTITY sessionbtn.tooltip "Zobraziť a upraviť relácie">
+<!ENTITY tabslistbtn.label "Otvorené karty">
+<!ENTITY tabslistbtn.tooltip "Zobraziť zoznam otvorených kariet">
+<!ENTITY closedwindowsbtn.label "Zatvorené okná">
+<!ENTITY closedwindowsbtn.tooltip "Zobraziť zoznam zatvorených okien">
+<!ENTITY page.header.title "Možnosti Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Správca relácií Tab Mix Plus">
+<!ENTITY session.Tools "Manažér relácií">
+<!ENTITY closedWin.label "Zoznam zatvorených okien">
+<!ENTITY duplicateTabMenu.label "Duplikovať kartu">
+<!ENTITY duplicateTabMenu.accesskey "D">
+<!ENTITY duplicateinWin.label "Duplikovať v novom okne">
+<!ENTITY duplicateinWin.accesskey "W">
+<!ENTITY detachTab.label "Presunúť do nového okna">
+<!ENTITY detachTab.accesskey "E">
+<!ENTITY mergeContext.label "Zlúčiť okná">
+<!ENTITY mergeContext.accesskey "M">
+<!ENTITY renametab.label "Premenovať kartu">
+<!ENTITY renametab.accesskey "R">
+<!ENTITY copytaburl.label "Kopírovať URL karty">
+<!ENTITY copytaburl.accesskey "U">
+<!ENTITY reloadother.label "Obnoviť ostatné karty">
+<!ENTITY reloadother.accesskey "O">
+<!ENTITY reloadleft.label "Obnoviť karty naľavo">
+<!ENTITY reloadleft.accesskey "L">
+<!ENTITY reloadright.label "Obnoviť karty napravo">
+<!ENTITY reloadright.accesskey "I">
+<!ENTITY autoReloadTab.label "Obnoviť kartu každých">
+<!ENTITY autoReloadTab.accesskey "V">
+<!ENTITY autoReloadSite.label "Obnoviť túto stránku každých">
+<!ENTITY autoReloadSite.accesskey "O">
+<!ENTITY afterthis.label "Po tejto karte">
+<!ENTITY bookmarktab.label "Vytvoriť záložku pre túto kartu">
+<!ENTITY undoCloseListMenu.label "Zoznam zatvorených kariet">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "Zatvoriť všetky karty">
+<!ENTITY closeall.accesskey "A">
+<!ENTITY closeSimilarTab.label "Zatvoriť rovnaké karty">
+<!ENTITY closeSimilarTab.accesskey "S">
+<!ENTITY closeTabsToLeft.label "Zatvoriť karty naľavo">
+<!ENTITY closeleft.accesskey "L">
+<!ENTITY docShellMenu.label "Oprávnenia">
+<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY freezeTabMenu.label "Zmraziť kartu">
+<!ENTITY freezeTabMenu.accesskey "F">
+<!ENTITY protectTabMenu.label "Chrániť kartu">
+<!ENTITY protectTabMenu.tooltip "Chrániť karty pred zatvorením">
+<!ENTITY protectTabMenu.accesskey "P">
+<!ENTITY lockTabMenu.label "Zamknúť kartu">
+<!ENTITY lockTabMenu.tooltip "Všetky odkazy otvárať na novej karte">
+<!ENTITY lockTabMenu.accesskey "K">
+<!ENTITY bookmarktabs.label "Vytvoriť záložku pre všetky karty">
+<!ENTITY linkhere.label "Otvoriť odkaz na tejto karte">
+<!ENTITY linkhere.accesskey "H">
+<!ENTITY linkBackgroundTab.label "Otvoriť odkaz na pozadí">
+<!ENTITY linkForegroundTab.label "Otvoriť odkaz v popredí">
+<!ENTITY linkBackgroundTab.accesskey "B">
+<!ENTITY linkForegroundTab.accesskey "F">
+<!ENTITY openalllinks.label "Otvoriť odkazy na nových kartách">
+<!ENTITY openalllinks.accesskey "S">
+<!ENTITY linkwithhistory.label "Otvoriť odkaz na duplikovanej karte">
+<!ENTITY linkwithhistory.accesskey "D">
+<!ENTITY tabsList.label "Zoznam otvorených kariet">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Obrázok">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Presmerovať">
+<!ENTITY allowPlugin.label "Doplnok">
+<!ENTITY allowFrame.label "Rámec">
+<!ENTITY restoreincurrent.label "Obnoviť na aktuálu kartu">
+<!ENTITY restoreincurrent.accesskey "C">
+<!ENTITY restoreinwin.label "Obnoviť do nového okna">
+<!ENTITY restoreinwin.accesskey "W">
+<!ENTITY restoreintab.label "Obnoviť na novú kartu">
+<!ENTITY restoreintab.accesskey "T">
+<!ENTITY restoretab.label "Obnoviť kartu">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "Vytvoriť záložku pre tento odkaz...">
+<!ENTITY bookmark.accesskey "B">
+<!ENTITY deletelist.label "Zmazať zo zoznamu">
+<!ENTITY deletelist.accesskey "D">
+<!ENTITY settings.label "Nastavenia">
+<!ENTITY saveWindow.label "Uložiť toto okno">
+<!ENTITY saveAllWindows.label "Uložiť všetky okná">
+<!ENTITY sm.context.overwrite "Obnoviť, prepísať existujúce okno(á)">
+<!ENTITY sm.context.overwrite.key "O">
+<!ENTITY sm.context.restore.new "Obnoviť do nového okna(okien)">
+<!ENTITY sm.context.restore.newkey "N">
+<!ENTITY sm.context.replacethis "Nahradiť s týmto oknom">
+<!ENTITY sm.context.replacethis.key "T">
+<!ENTITY sm.context.replaceall "Nahradiť so všetkými oknami">
+<!ENTITY sm.context.replaceall.key "A">
+<!ENTITY sm.context.add "Pridať toto okno">
+<!ENTITY sm.context.add.key "W">
+<!ENTITY sm.context.addall "Pridať všetky okná">
+<!ENTITY sm.context.addall.key "I">
+<!ENTITY sm.context.save "Uložiť">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "Premenovať">
+<!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Záložka relácie">
+<!ENTITY sm.context.bookmarkSession.key "Z">
+<!ENTITY sm.context.delete "Zmazať">
+<!ENTITY sm.context.delete.key "D">
+<!ENTITY sm.context.deleteall "Zmazať všetko">
+<!ENTITY sm.context.deleteall.key "L">
+<!ENTITY sm.context.startup "Nastaviť ako spúšťaciu reláciu">
+<!ENTITY sm.context.startup.key "P">
+<!ENTITY sm.context.details "Zobraziť počítadlá, dátum a čas v ponuke Relácie">
+<!ENTITY sm.context.details.key "C">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "Triedené karty">
+<!ENTITY sortedTabs.tooltip "Kontrola zobrazenia zoznamu triedeného abecedne">
+<!ENTITY enable.label "Zapnúť">
+<!ENTITY custom.label "Vlastné">
+<!ENTITY enableTabs.label "Zapnúť všetky karty">
+<!ENTITY disableTabs.label "Vypnúť všetky karty">
+<!ENTITY seconds.label "sekúnd">
+<!ENTITY minutes.label "minút">
+<!ENTITY minute.label "minúta">
+<!ENTITY hideTabBar.label "Skryť panel karty">
+<!ENTITY hideTabBar.never.label "Nikdy">
+<!ENTITY hideTabBar.never.key "N">
+<!ENTITY hideTabBar.oneTab.label "Ak je otvorená len jedna karta">
+<!ENTITY hideTabBar.onOneTab.key "A">
+<!ENTITY hideTabBar.always.label "Vždy">
+<!ENTITY hideTabBar.always.key "V">

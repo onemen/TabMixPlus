@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Load in background">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "Edit Tab Title">
+<!ENTITY renametab.reset.label "Reset to default title">
+<!ENTITY title.label "Title">
+<!ENTITY default.label "Default">
+<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
+<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Help">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Choose time from the list or enter your own time">
+<!ENTITY specifyreload.label "Specify Reload Time">
+<!ENTITY sanitizer.entry "Tab Mix Plus Saved Sessions">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Are you sure you want to erase ALL your saved sessions data including backups ?">

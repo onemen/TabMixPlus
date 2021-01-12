@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "לשוניות שנסגרו">
+<!ENTITY closedtabsbtn.tooltip "הצג רשימת לשוניות שנסגרו">
+<!ENTITY sessionbtn.tooltip "הצג ונהל את הפעלותיך">
+<!ENTITY tabslistbtn.label "לשוניות שנפתחו">
+<!ENTITY tabslistbtn.tooltip "הצג רשימת לשוניות שנפתחו">
+<!ENTITY closedwindowsbtn.label "חלונות שנסגרו">
+<!ENTITY closedwindowsbtn.tooltip "הצג רשימת חלונות שנסגרו">
+<!ENTITY page.header.title "אפשרויות Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "מנהל ההפעלות של Tab Mix Plus">
+<!ENTITY session.Tools "מנהל ההפעלות">
+<!ENTITY closedWin.label "רשימת חלונות שנסגרו">
+<!ENTITY duplicateTabMenu.label "שכפל לשונית">
+<!ENTITY duplicateTabMenu.accesskey "ל">
+<!ENTITY duplicateinWin.label "שכפל לחלון חדש">
+<!ENTITY duplicateinWin.accesskey "ח">
+<!ENTITY detachTab.label "העבר לחלון חדש">
+<!ENTITY detachTab.accesskey "ה">
+<!ENTITY mergeContext.label "מזג לשוניות">
+<!ENTITY mergeContext.accesskey "מ">
+<!ENTITY renametab.label "שנה שם ללשונית">
+<!ENTITY renametab.accesskey "ש">
+<!ENTITY copytaburl.label "העתק את שורת הכתובת של הלשונית">
+<!ENTITY copytaburl.accesskey "כ">
+<!ENTITY reloadother.label "טען מחדש את הלשוניות האחרות">
+<!ENTITY reloadother.accesskey "ט">
+<!ENTITY reloadleft.label "טען לשונית שמאלית">
+<!ENTITY reloadleft.accesskey "א">
+<!ENTITY reloadright.label "טען לשונית ימנית">
+<!ENTITY reloadright.accesskey "י">
+<!ENTITY autoReloadTab.label "טען לשונית כל...">
+<!ENTITY autoReloadTab.accesskey "נ">
+<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY afterthis.label "אחרי לשונית זו">
+<!ENTITY bookmarktab.label "הוסף לשונית זו לסימניות">
+<!ENTITY undoCloseListMenu.label "רשימת לשוניות שנסגרו">
+<!ENTITY undoCloseListMenu.accesskey "ר">
+<!ENTITY closeAllTabsMenu.label "סגור כל הלשוניות">
+<!ENTITY closeall.accesskey "ס">
+<!ENTITY closeSimilarTab.label "סגור לשוניות זהות">
+<!ENTITY closeSimilarTab.accesskey "ז">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeleft.accesskey "ש">
+<!ENTITY docShellMenu.label "הרשאות">
+<!ENTITY docShellMenu.accesskey "ה">
+<!ENTITY freezeTabMenu.label "הקפא לשונית">
+<!ENTITY freezeTabMenu.accesskey "ק">
+<!ENTITY protectTabMenu.label "הגן על לשונית">
+<!ENTITY protectTabMenu.tooltip "מגן על הלשונית מסגירה">
+<!ENTITY protectTabMenu.accesskey "ג">
+<!ENTITY lockTabMenu.label "נעל לשונית">
+<!ENTITY lockTabMenu.tooltip "כל הקישורים נפתחים בלשונית חדשה">
+<!ENTITY lockTabMenu.accesskey "נ">
+<!ENTITY bookmarktabs.label "הוסף כל הלשוניות למועדפים">
+<!ENTITY linkhere.label "פתח קישורים בלשונית הנוכחית">
+<!ENTITY linkhere.accesskey "ז">
+<!ENTITY linkBackgroundTab.label "פתח קישור בלשונית ברקע">
+<!ENTITY linkForegroundTab.label "פתח קישור בלשונית חדשה">
+<!ENTITY linkBackgroundTab.accesskey "ר">
+<!ENTITY linkForegroundTab.accesskey "ח">
+<!ENTITY openalllinks.label "פתח קישורים בלשוניות חדשות">
+<!ENTITY openalllinks.accesskey "י">
+<!ENTITY linkwithhistory.label "פתח קישור בלשונית משוכפלת">
+<!ENTITY linkwithhistory.accesskey "מ">
+<!ENTITY tabsList.label "רשימת לשוניות פתוחות">
+<!ENTITY tabsList.accesskey "ר">
+<!ENTITY allowImage.label "תמונה">
+<!ENTITY allowJavascript.label "תסריט">
+<!ENTITY allowRedirect.label "הפניה">
+<!ENTITY allowPlugin.label "תוסף">
+<!ENTITY allowFrame.label "מסגרת">
+<!ENTITY restoreincurrent.label "שחזר ללשונית נוכחית">
+<!ENTITY restoreincurrent.accesskey "נ">
+<!ENTITY restoreinwin.label "שחזר לחלון חדש">
+<!ENTITY restoreinwin.accesskey "ח">
+<!ENTITY restoreintab.label "שחזר ללשונית חדשה">
+<!ENTITY restoreintab.accesskey "ח">
+<!ENTITY restoretab.label "שחזר לשונית">
+<!ENTITY restoretab.accesskey "ש">
+<!ENTITY bookmark.label "הוסף קישור למועדפים">
+<!ENTITY bookmark.accesskey "מ">
+<!ENTITY deletelist.label "מחק מהרשימה">
+<!ENTITY deletelist.accesskey "מ">
+<!ENTITY settings.label "הגדרות">
+<!ENTITY saveWindow.label "שמור חלון זה">
+<!ENTITY saveAllWindows.label "שמור את כל החלונות">
+<!ENTITY sm.context.overwrite "שחזר על חלונות קיימים">
+<!ENTITY sm.context.overwrite.key "ע">
+<!ENTITY sm.context.restore.new "שחזר לחלונות חדשים">
+<!ENTITY sm.context.restore.newkey "ח">
+<!ENTITY sm.context.replacethis "החלף עם חלון זה">
+<!ENTITY sm.context.replacethis.key "ז">
+<!ENTITY sm.context.replaceall "החלף עם כל החלונות">
+<!ENTITY sm.context.replaceall.key "כ">
+<!ENTITY sm.context.add "הוסף חלון זה">
+<!ENTITY sm.context.add.key "ז">
+<!ENTITY sm.context.addall "הוסף כל החלונות">
+<!ENTITY sm.context.addall.key "כ">
+<!ENTITY sm.context.save "שמור">
+<!ENTITY sm.context.save.key "ש">
+<!ENTITY sm.context.rename "שנה שם">
+<!ENTITY sm.context.rename.key "נ">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "מחק">
+<!ENTITY sm.context.delete.key "מ">
+<!ENTITY sm.context.deleteall "מחר הכל">
+<!ENTITY sm.context.deleteall.key "ה">
+<!ENTITY sm.context.startup "קבע הפעלה אתחלתית">
+<!ENTITY sm.context.startup.key "ק">
+<!ENTITY sm.context.details "הצג מונה, תאריך וזמן בחלון ההפעלה">
+<!ENTITY sm.context.details.key "ה">
+<!ENTITY tab.key "ל">
+<!ENTITY window.key "ח">
+<!ENTITY merge.key "מ">
+<!ENTITY sortedTabs.label "לשוניות משוחזרות">
+<!ENTITY sortedTabs.tooltip "סמן ע&quot;מ להציג את הרשימה בצורה א-ב">
+<!ENTITY enable.label "אפשר">
+<!ENTITY custom.label "מותאם">
+<!ENTITY enableTabs.label "אפשר בכל הלשוניות">
+<!ENTITY disableTabs.label "בטל בכל הלשוניות">
+<!ENTITY seconds.label "שניות">
+<!ENTITY minutes.label "דקות">
+<!ENTITY minute.label "דקה">
+<!ENTITY hideTabBar.label "הסתר את סרגל הלשוניות">
+<!ENTITY hideTabBar.never.label "לעולם לא">
+<!ENTITY hideTabBar.never.key "ל">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "א">
+<!ENTITY hideTabBar.always.label "תמיד">
+<!ENTITY hideTabBar.always.key "ת">

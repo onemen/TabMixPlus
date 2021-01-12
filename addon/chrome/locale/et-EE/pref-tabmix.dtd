@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Lingid">
+<!ENTITY tab.events "Sündmused">
+<!ENTITY tab.mouse "Hiir">
+<!ENTITY tab.appearance "Välimus">
+<!ENTITY tab.menu "Menüü">
+<!ENTITY tab.session "Seanss">
+<!ENTITY tab.incompatible "Viga">
+<!ENTITY apply.label "Rakenda">
+<!ENTITY settings.export "Ekspordi sätted">
+<!ENTITY settings.import "Impordi sätted">
+<!ENTITY settings.sync "Sätted sünkroonitakse">
+<!ENTITY settings.default "Taasta vaikimisi sätted">
+<!ENTITY settings.revert "Võta tagasi">
+<!ENTITY generalWindowOpen.label "Uues aknas avanevate linkide avamise asukoht:">
+<!ENTITY externalLink.useSeparate.label "Kasuta teistest rakendustest pärit linkide jaoks eraldi eelistust">
+<!ENTITY externalLinkTarget.label "Teistest rakendustest pärit linkide avamise asukoht:">
+<!ENTITY linkTarget.tab "Uus kaart">
+<!ENTITY linkTarget.window "Uus aken">
+<!ENTITY linkTarget.current "Praegune kaart">
+<!ENTITY linkTarget.accesskey "C">
+<!ENTITY divertedWindowOpen.label "JavaScript hüpikaknad:">
+<!ENTITY divertedWindowOpen.all "Ava kõik hüpikaknad kaartidel">
+<!ENTITY divertedWindowOpen.some "Luba muudetud suurusega hüpikaknad">
+<!ENTITY divertedWindowOpen.none "Luba kõik hüpikaknad">
+<!ENTITY linkTarget.label "Ava 'target'-omadusega lingid praegusel kaardil">
+<!ENTITY targetIsFrame.label "Ava olemasolevale paneelile suunatud lingid praegusel kaardil">
+<!ENTITY download.label "Failide allalaadimisel ära näita tühje kaarte">
+<!ENTITY edit.label "Muuda">
+<!ENTITY speLink.label "Alati ava uuel kaardil:">
+<!ENTITY speLink.none "mitte midagi">
+<!ENTITY speLink.allLinks "kõik lingid">
+<!ENTITY speLink.external "lingid teistele saitidele">
+<!ENTITY singleWindow.label "Kasuta ühe akna režiimi">
+<!ENTITY newTabs.label "Uued kaardid">
+<!ENTITY tabOpen.label "Kaartide avamine">
+<!ENTITY tabFocus.label "Kaartide näitamine">
+<!ENTITY tabClose.label "Kaartide sulgemine">
+<!ENTITY tabMerge.label "Kaartide ühendamine">
+<!ENTITY tabFeature.label "Kaartide funktsioonid">
+<!ENTITY newtab.label "Uue kaardi avamisel näita:">
+<!ENTITY replaceLastTabWith1.label "Viimase kaardi sulgemisel näidatakse selle asemel">
+<!ENTITY newtab.blank "tühja lehte">
+<!ENTITY newtab.home "avalehte">
+<!ENTITY newtab.current "praegust lehte">
+<!ENTITY newtab.duplicate "lehe koopiat">
+<!ENTITY newtab.location.1 "uue kaardi lehte">
+<!ENTITY newtab.placeholder.label "Vaikimisi uue kaardi leht">
+<!ENTITY location.label.1 "Aadress">
+<!ENTITY focusContent.label "Mitte-tühja lehe avamisel suuna fookus lehe sisule">
+<!ENTITY openTabNext.label "Ava uued kaardid praeguse kõrval">
+<!ENTITY openOtherTabNext.label "Ava teised kaardid praeguse kõrval">
+<!ENTITY relatedAfterCurrent.label "Ainult siis, kui need on seotud praeguse kaardiga">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Ava kopeeritud kaardid originaalide kõrval">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Muuda avanemise järjekorda">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Ava uus kaart praegusest kaardist viimati avatud kaardi kõrval (kuna seda valiti viimasena)">
+<!ENTITY moveSwitchToTabNext.label "Funktsiooni 'Vaheta kaarti' kasutamisel teisalda sihtkaart praeguse kõrvale">
+<!ENTITY loadTabsProgressively.label "Laadi kaardid järk-järgult">
+<!ENTITY restoreOnDemand.label "Ära laadi kaarte enne nende valimist">
+<!ENTITY openMoreThan.label "kui avatakse rohkem kui">
+<!ENTITY tabs.label "kaarti">
+<!ENTITY lockTabs.label "Lukusta kaardid">
+<!ENTITY lockNewTabs.label "Lukusta uued kaardid">
+<!ENTITY lockAppTabs.label "Lukusta püsikaardid">
+<!ENTITY updateLockState.label "Rakenda muudatused avatud kaartidele">
+<!ENTITY openNewTab.label "Ava uuel kaardil järgnevate kaudu avatud leht:">
+<!ENTITY openBookmarks.label "Järjehoidjad">
+<!ENTITY openPlacesGroups.label "Järjehoidja-/ajaloogrupid">
+<!ENTITY openPlacesGroups.tooltip "Järjehoidja-/ajaloogruppide avamisel ära kirjuta kaarte üle">
+<!ENTITY openHistory.label "Ajalugu">
+<!ENTITY openUrl.label "Aadressiriba">
+<!ENTITY openSearch.label "Otsinguriba">
+<!ENTITY middlecurrent1.label "Hiire keskmise nupuga klõpsamine või Control-klõpsamine avab lingi praegusel kaardil">
+<!ENTITY middlecurrent.tooltip "Kehtib ainult järjehoidjate, ajaloo ja uuel kaardil avanema sunnitud linkide puhul">
+<!ENTITY tabFocus.caption "Näita kohe kaarte, mis avati järgnevate kaudu:">
+<!ENTITY selectTab.label "Lingid">
+<!ENTITY selectDivertedTab.label "Mujale suunatud aknad">
+<!ENTITY selectTabFromExternal.label "Teised rakendused">
+<!ENTITY selectTabCommand.label "Uue kaardi käsud">
+<!ENTITY contextMenuSearch.label "Kontekstimenüü kaudu otsimine">
+<!ENTITY selectTabBH.label "Järjehoidjad/Ajalugu">
+<!ENTITY duplicateTab.label "Tee kaardist koopia">
+<!ENTITY inversefocus2.label "Hiire keskmise nupuga või Control-klõpsamine pöörab nende fookuse:">
+<!ENTITY warning.caption.label "Hoiatus">
+<!ENTITY warnOnCloseMultipleTabs.label "Hoiatatakse, kui olen sulgemas mitut kaarti">
+<!ENTITY warnOnCloseProtected1.label "Hoiatatakse, kui olen sulgemas kaitstud kaartidega akent">
+<!ENTITY warnOnCloseWindow1.label "Hoiatatakse, kui olen sulgemas mitme kaardiga akent">
+<!ENTITY lasttab.caption.label "Viimase kaardi sulgemine">
+<!ENTITY keepWindow.label.3.1 "Viimase kaardi sulgemisel ära sulge akent">
+<!ENTITY keeptab.label "Ära luba viimast kaarti sulgeda">
+<!ENTITY closeOnMerge.label "Sulge aknad pärast nende ühendamist">
+<!ENTITY warnOnMerge.label "Hoiata mitte-ühendatavate kaartide sulgemisel">
+<!ENTITY currenttab.caption.label "Praeguse kaardi sulgemine">
+<!ENTITY focusTab.labelBegin "Kaardi sulgemisel näita seda:">
+<!ENTITY focusTab.firstTab "Esimene kaart">
+<!ENTITY focusTab.leftTab "Vasakule jääv kaart">
+<!ENTITY focusTab.rightTab "Paremale jääv kaart">
+<!ENTITY focusTab.lastTab "Viimane kaart">
+<!ENTITY focusTab.lastSelectedTab "Viimati valitud kaart">
+<!ENTITY focusTab.openerTab "Emakaart/paremale jääv kaart">
+<!ENTITY focusTab.openerTab.rtl "Emakaart/vasakule jääv kaart">
+<!ENTITY focusTab.lastOpenedTab "Viimati avatud kaart">
+<!ENTITY undoClose.label "Luba kaartide sulgemise tagasivõtmine">
+<!ENTITY undoCloseCache.label "Suurim meeldejäetavate suletud kaartide arv:">
+<!ENTITY undoClosepos.label "Taasta kaardid nende esialgsele kohale">
+<!ENTITY menuonlybutton.label "Pane tööriistariba nupp näitama ainult loendit">
+<!ENTITY ctrltab.label "Ctrl-Tab vahetab kaarte viimati kasutatud järjekorras">
+<!ENTITY cmdtab.label "Cmd-Tab vahetab kaarte viimati kasutatud järjekorras">
+<!ENTITY ctrltab.tabPreviews "Näita kaartide eelvaateid">
+<!ENTITY ctrltab.popup "Ctrl-Tab näitab kaartide loendi hüpikmenüüd">
+<!ENTITY cmdtab.popup "Cmd-Tab näitab kaartide loendi hüpikmenüüd">
+<!ENTITY tabpopup.mouse "Kaartide loend reageerib hiirele">
+<!ENTITY mergeNoTabSelection.label "Kaartide ühendamine, kui ühtki kaarti pole märgistatud">
+<!ENTITY mergeTabSelection.label "Pärast kaartide märgistamist ühendamine">
+<!ENTITY mergeall.label "Ühenda kõik aknad üheks aknaks">
+<!ENTITY mergelastfocused.label "Ühenda ainult praegune aken viimati näidatud aknaga">
+<!ENTITY mergePopups.label "Võta kaasa ka hüpikaknad">
+<!ENTITY popupNextToOpener.label "Aseta hüpikaknad nende peremees-akende kõrvale">
+<!ENTITY activateSlideshow.label "Klahvi #1 vajutamine vahetab kaarte ajavahega">
+<!ENTITY toggleAnimation.label "Keela kaardi avamise/sulgemise animatsioon">
+<!ENTITY reloadEvery.matchAddress.label "Laadi kaart uuesti, sõltumata selle aadressist">
+<!ENTITY reloadEvery.onReloadButton.label "Näita uuestilaadimise nupul Automaatse Uuestilaadimise menüüd">
+<!ENTITY seconds.label "sekundit">
+<!ENTITY minutes.label "min">
+<!ENTITY tabBarAppearance.label "Kaartide riba">
+<!ENTITY tabAppearance.label "Kaart">
+<!ENTITY toolBarAppearance.label "Tööriistariba">
+<!ENTITY show.ontabbar.label "Näita kaartide ribal">
+<!ENTITY show.ontab.label "Näita kaardil">
+<!ENTITY dragNewTabButton.tooltip "Selle sätte lubamiseks lohista uue kaardi avamise nupp kaartide ribale.">
+<!ENTITY hideTabBarButton.label "Kaardi sulgemise nuppu">
+<!ENTITY newTabButton.label "Uue kaardi nuppu">
+<!ENTITY newTabButton.position.left.label "Vasakul pool">
+<!ENTITY newTabButton.position.right.label "Paremal pool">
+<!ENTITY newTabButton.position.afterlast.label "Viimase kaardi järel">
+<!ENTITY allTabsButton.label "Kõikide kaartide nuppu">
+<!ENTITY tabBarSpace.label "Lisaruumi mõlemal pool">
+<!ENTITY tabBarSpace.tooltip "Klõpsamiseks ja millegi lohistamiseks kaartide ribale">
+<!ENTITY tabbar.label "Peida kaartide riba, kui lahti on ainult üks kaart">
+<!ENTITY moveTabOnDragging.label "Kaardi lohistamisel kasuta liigutamise animatsiooni">
+<!ENTITY dropIndicator.label "Lahtilaskmise tähis">
+<!ENTITY dropIndicator-native.label "Algupärane">
+<!ENTITY dropIndicator-builtin.label "Sisseehitatud">
+<!ENTITY verticalTabbar.description1 "Neid eelistusi juhib teine vertikaalseid kaarte näitav lisa.">
+<!ENTITY tabBarPosition.label "Asukoht:">
+<!ENTITY tabBarPosition.top.label "Üleval (sisu kohal)">
+<!ENTITY tabBarPosition.bottom.label "All (sisu all)">
+<!ENTITY tabScroll.label "Kui kaardid ei mahu ühele reale:">
+<!ENTITY tabScroll.none "Keritav riba ilma nuppudeta">
+<!ENTITY tabScroll.leftRightButtons "Keritav riba nuppudega vasakul ja paremal">
+<!ENTITY tabScroll.rightButtons "Keritav riba nuppudega paremal">
+<!ENTITY tabScroll.rightButtons.rtl "Keritav riba nuppudega vasakul">
+<!ENTITY tabScroll.multibar "Mitmerealine">
+<!ENTITY maxrow.label "Maksimaalne näidatavate ridade arv:">
+<!ENTITY pinnedTabScroll.label "Luba püsikaartide kerimine">
+<!ENTITY offsetAmountToScroll.label "Kerimisel näita osa järgmisest peidusolevast kaardist">
+<!ENTITY smoothScroll.label "Kasuta sujuvat kerimist">
+<!ENTITY scrolldelay.label "Kerimise viivitus (kerimise korduste vaheline aeg)">
+<!ENTITY currenttab.style.label "Praegune kaart">
+<!ENTITY unloadedtabs.style.label "Laadimata kaardid">
+<!ENTITY unreadtabs.style.label "Lugemata kaardid">
+<!ENTITY othertabs.style.label "Teised kaardid">
+<!ENTITY setstyles.label "Muuda stiile">
+<!ENTITY extraIcons.label1 "Nende olekute ikooni">
+<!ENTITY extraIcons.locked "Lukustatud">
+<!ENTITY extraIcons.protected "Kaitstud">
+<!ENTITY extraIcons.autoreload "Automaatne uuestilaadimine">
+<!ENTITY extraIcons.hideonpinned "Peida püsikaartidel">
+<!ENTITY progressMeter.label "Edenemise riba kaartidel">
+<!ENTITY showTabX.labelBegin "Kaardi sulgemise nuppu">
+<!ENTITY showTabX.left "Aseta kaardi vasakule poolele">
+<!ENTITY showTabX.rtl "Aseta kaardi paremale poolele">
+<!ENTITY milliseconds.label "ms">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "23em">
+<!ENTITY showTabX.always "kõikidel kaartidel">
+<!ENTITY showTabX.current "praegusel kaardil">
+<!ENTITY showTabX.hover "kaardil, millele on osutatud">
+<!ENTITY showTabX.alwaysExeption "kõikidel kaartidel, mis on laiemad kui">
+<!ENTITY showTabX.currentHover "praegusel kaardil ja sellel, millele on osutatud">
+<!ENTITY minWidth.label "Kaardi laius:">
+<!ENTITY widthTo.label "kuni">
+<!ENTITY widthPixels.label "pikslit">
+<!ENTITY onLeftDisabled.label "Praeguse teemaga ei saa nuppu vasakule poole paigutada">
+<!ENTITY onLeftDisabled.tst.label "Ei saa nuppu vasakule küljele paigutada, kui treeStyleTab on installitud">
+<!ENTITY flexTabs.label "Kaardi laius vastab kaardi pealkirja pikkusele">
+<!ENTITY bookastitle.label "Kasuta kaardi pealkirjana järjehoidja nime">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Sa saad muuta, milliseid Tab Mix Plusi nuppe soovid Tööriistaribal näha">
+<!ENTITY toolbar.button.label "Muuda">
+<!ENTITY toolbar.visible.caption "Nähtavad nupud">
+<!ENTITY toolbar.novisible.label "Nähtavaid nuppe pole">
+<!ENTITY toolbar.hidden.caption "Peidetud nupud">
+<!ENTITY toolbar.nohidden.label "Peidetud nuppe pole">
+<!ENTITY mouseGesture.label "Hiire žestid">
+<!ENTITY mouseClick.label "Klõpsamine">
+<!ENTITY mouseHoverSelect.labelBegin "Vali kaart, kui sellele on hiirega osutatud">
+<!ENTITY tabFlip.label "Praegusel kaardil klõpsates näita viimati vaadatud kaarti">
+<!ENTITY tabFlip.delay "Viivitus:">
+<!ENTITY clickFocus.label "Hiirega klõpsamine (vajutamine ja lahtilaskmine) valib kaardi">
+<!ENTITY removeEntries.label "Tab Mix Plus'i menüüelementidel hiire keskmise nupuga klõpsamine kustutab selle sisestuse">
+<!ENTITY lockTabSizingOnClose.label "Kaardi sulgemisel ei tohiks teiste kaartide suurus muutuda enne kursori lahkumist tööriistariba alalt">
+<!ENTITY removeEntries.tooltip "Hõlmab suletud kaarte, suletud aknaid ja salvestatud seansse">
+<!ENTITY tabbarscrolling.caption "Kaartide ribal kerimine">
+<!ENTITY tabbarscrolling.holdShift.label "Nende valikute vahel lülitumiseks hoia kerimise ajal all klahvi Shift">
+<!ENTITY tabbarscrolling.selectTab.label "Muuda valitud kaarti">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Keri kõiki kaarte">
+<!ENTITY tabbarscrolling.inverse.label "Kerimise suund on vastupidine">
+<!ENTITY double.label "Topeltklõps">
+<!ENTITY middle.label "Hiire keskmine nupp">
+<!ENTITY ctrl.label "Ctrl+klõps">
+<!ENTITY cmd.label "Cmd+klõps">
+<!ENTITY shift.label "Shift+klõps">
+<!ENTITY alt.label "Alt+klõps">
+<!ENTITY ontab.label "kaardil:">
+<!ENTITY ontabbar.label "kaartide ribal:">
+<!ENTITY clicktab.label "Vali käsk, mis käivitatakse kaardil või kaartide ribal klõpsates">
+<!ENTITY ontabbar.dblClick.label "Kaartide ribal topeltklõpsates ära muuda akna suurust.">
+<!ENTITY ontabbar.click.label "Keelab kaartide ribal klõpsates akna lohistamise.">
+<!ENTITY clicktab.default "Firefoxi vaikesäte või mõne teise laienduse säte">
+<!ENTITY clicktab.nothing "Ei tee midagi">
+<!ENTITY clicktab.addtab "Avab uue kaardi">
+<!ENTITY clicktab.duplicatetab "Teeb kaardist koopia">
+<!ENTITY clicktab.duplicatetabw "Teeb kaardist koopia uude aknasse">
+<!ENTITY clicktab.detachtab "Teisaldab kaardi uude aknasse">
+<!ENTITY clicktab.protecttab "Kaitseb kaardi">
+<!ENTITY clicktab.locktab "Lukustab kaardi">
+<!ENTITY clicktab.freezetab "Kaitseb ja lukustab kaardi">
+<!ENTITY clicktab.renametab "Muudab kaardi nime">
+<!ENTITY clicktab.copyTabUrl "Kopeerib kaardi URL-i lõikelauale">
+<!ENTITY clicktab.copyUrlFromClipboard "Laadib URL'i lõikelaualt">
+<!ENTITY clicktab.selectMerge "Valib kaardi ühendamiseks">
+<!ENTITY clicktab.mergeTabs "Ühendab aknad">
+<!ENTITY clicktab.bookTab "Lisab kaardi järjehoidjatesse">
+<!ENTITY clicktab.bookTabs "Lisab kõik kaardid järjehoidjatesse">
+<!ENTITY clicktab.reloadtab "Laadib kaardi uuesti">
+<!ENTITY clicktab.reloadtabs "Laadib uuesti kõik kaardid">
+<!ENTITY clicktab.reloadothertabs "Laadib uuesti teised kaardid">
+<!ENTITY clicktab.reloadlefttabs "Laadib uuesti vasakule jäävad kaardid">
+<!ENTITY clicktab.reloadrighttabs "Laadib uuesti paremale jäävad kaardid">
+<!ENTITY clicktab.autoReloadTab "Lubab/Keelab kaardi automaatse uuestilaadimise">
+<!ENTITY clicktab.removeall "Sulgeb kõik kaardid">
+<!ENTITY clicktab.removeother "Sulgeb teised kaardid">
+<!ENTITY clicktab.removesimilar "Sulgeb sarnase domeeniga kaardid">
+<!ENTITY clicktab.removetoLeft "Sulge vasakule jäävad kaardid">
+<!ENTITY clicktab.removetoRight "Sulge paremale jäävad kaardid">
+<!ENTITY clicktab.uctab "Taasavab suletud kaardi">
+<!ENTITY clicktab.ucatab "Taasavab kõik suletud kaardid">
+<!ENTITY clicktab.snapback "Lisab kaardile SnapBack'i">
+<!ENTITY clicktab.ietab "Avab kaardi brauseris IE">
+<!ENTITY contentLoad "Hiire keskmise nupuga klõpsamine laadib lõikelaual oleva veebiaadressi">
+<!ENTITY context.tab "Kaardi hüpikmenüü">
+<!ENTITY context.main "Peamine hüpikmenüü">
+<!ENTITY context.tools "Tööriistade menüü">
+<!ENTITY showOnTabbar.label "Näita kaartide ribal kaardi kontekstimenüüd">
+<!ENTITY showtabBarContext.label "Kaardi hüpikmenüüs näidatakse:">
+<!ENTITY showContentAreaContext.label "Peamises hüpikmenüüs näidatakse:">
+<!ENTITY showToolsMenu.label "Menüüs 'Tööriistad' näidatakse:">
+<!ENTITY startupHomePage1.label "Kuvatakse avalehte">
+<!ENTITY startupBlankPage.label "Kuvatakse tühja lehte">
+<!ENTITY startupLastSession1.label "Kuvatakse viimati lahti olnud aknaid ja kaarte">
+<!ENTITY sm.extension.description1 "Tab Mix Plus tuvastas, et paigaldatud on lisa Session Manager">
+<!ENTITY sm.extension.description2 "Tab Mix Plus'i Seansside halduri kasutamine keelatakse">
+<!ENTITY sm.extension.description3 "Sa võid Seansside halduri sätete dialoogiakna avamiseks klõpsata paremal oleval nupul">
+<!ENTITY sm.extension.description5 "Teisenda oma seansside andmed Tab Mix Plusi formaadist laienduse Session Manager formaati">
+<!ENTITY sm.extension.convert.label "Teisenda">
+<!ENTITY sm.extension.chooseFile.label1 "Teisenda praeguse kasutajaprofiili Tab Mix Plus'i seansid">
+<!ENTITY sm.extension.chooseFile.label2 "Vali, millist andmefaili teisendada">
+<!ENTITY ss.enable.label "Kasuta Firefoxi sisseehitatud seansi taastamise funktsiooni">
+<!ENTITY ss.enable.tooltip "Tab Mix Plus'i Seansside halduri kasutamiseks eemalda märgistus">
+<!ENTITY ss.advanced_setting "Täpsemad sätted">
+<!ENTITY ss.advanced_setting.warning "Ära neid sätteid muuda, kui sa pole kindel, mida sa teed">
+<!ENTITY ss.interval "Väikseim ajavahe kahe salvestamise vahel">
+<!ENTITY ss.interval.seconds "(millisekundites)">
+<!ENTITY ss.privacy_level "Salvesta tundlikud andmed (vormidele trükkimised, POSTDATA andmed ja küpsised) nendel saitidel">
+<!ENTITY ss.privacy_level.allsites "Kõik saidid">
+<!ENTITY ss.privacy_level.unencrypted "Ainult krüptimata saidid">
+<!ENTITY ss.privacy_level.nosites "Mitte ükski sait">
+<!ENTITY ss.postdata.label1 "Maksimaalne salvestatavate POSTDATA andmete maht">
+<!ENTITY ss.postdata.label2 "(baitides, -1 = kõik)">
+<!ENTITY sessionManger.enable "Luba Seansside halduri kasutamine">
+<!ENTITY crashRecovery.enable "Luba krahhieelse olukorra taastamine">
+<!ENTITY sm.StartExit "Käivitumine/Väljumine">
+<!ENTITY sm.restore "Taastamine">
+<!ENTITY sm.preserve "Meelde jätmine">
+<!ENTITY sm.start "Brauseri käivitumisel:">
+<!ENTITY sm.start.restore "Taasta">
+<!ENTITY sm.start.ask "Küsi enne taastamist">
+<!ENTITY sm.start.nothing "Ära taasta">
+<!ENTITY sm.exit "Brauserist väljumisel:">
+<!ENTITY sm.exit.save "Salvesta seanss">
+<!ENTITY sm.exit.ask "Küsi enne salvestamist">
+<!ENTITY sm.exit.nothing "Ära salvesta">
+<!ENTITY sm.startup "Käivitus-seanss">
+<!ENTITY sm.lastsession "Viimane seanss">
+<!ENTITY sm.previouslast "Eelviimane">
+<!ENTITY sm.chooseifempty "Vali mõni muu, kui see on tühi">
+<!ENTITY sm.restore.options "Seansside taastamisel:">
+<!ENTITY sm.restore.overwrite "Kirjuta üle olemasolevad aknad">
+<!ENTITY sm.restore.overwriteTabs "Ja kaardid">
+<!ENTITY sm.restore.closedWinList "Salvesta suletud akende loendis olevad aknad">
+<!ENTITY sm.restore.merge "Ühenda kõik aknad">
+<!ENTITY sm.restore.bypassCache "Taastamisel ära kasuta vahemälu">
+<!ENTITY sm.notrestore.label "Kui käivitumisel seanssi ei taastata, siis">
+<!ENTITY sm.restorePinned1.label "Taasta oma viimase seansi püsikaardid">
+<!ENTITY sm.preserve.options "Jäta meelde kaartide:">
+<!ENTITY sm.preserve.history "Ajalugu">
+<!ENTITY sm.preserve.protect "Kaitstuse olek">
+<!ENTITY sm.preserve.locked "Lukustatuse olek">
+<!ENTITY sm.preserve.permission "Kasutada lubamised">
+<!ENTITY sm.preserve.scroll1 "Kerimise olek">
+<!ENTITY sm.restore.winOptions "Jäta meelde akende:">
+<!ENTITY sm.restore.selectedTab "Valitud kaart">
+<!ENTITY sm.restore.closedTabs "Suletud kaartide loend">
+<!ENTITY incompatible.extensions "Mõni sinu lisa ei ühildu Tab Max Plusiga; on soovitatav, et sa kas keelad või eemaldad need lisad.">
+<!ENTITY incompatible.button.label "Näita nimekirja">

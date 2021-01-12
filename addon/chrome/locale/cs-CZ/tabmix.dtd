@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Zavřené panely">
+<!ENTITY closedtabsbtn.tooltip "Zobrazit seznam zavřených panelů">
+<!ENTITY sessionbtn.tooltip "Zobrazit a spravovat relace">
+<!ENTITY tabslistbtn.label "Otevřené panely">
+<!ENTITY tabslistbtn.tooltip "Zobrazit seznam otevřených panelů">
+<!ENTITY closedwindowsbtn.label "Zavřená okna">
+<!ENTITY closedwindowsbtn.tooltip "Zobrazit seznam zavřených oken">
+<!ENTITY page.header.title "Možnosti rozšíření Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Správce relací rozšíření Tab Mix Plus">
+<!ENTITY session.Tools "Správce relací">
+<!ENTITY closedWin.label "Seznam zavřených oken">
+<!ENTITY duplicateTabMenu.label "Duplikovat panel">
+<!ENTITY duplicateTabMenu.accesskey "D">
+<!ENTITY duplicateinWin.label "Duplikovat v novém okně">
+<!ENTITY duplicateinWin.accesskey "N">
+<!ENTITY detachTab.label "Přesunout do nového okna">
+<!ENTITY detachTab.accesskey "O">
+<!ENTITY mergeContext.label "Sloučit okna">
+<!ENTITY mergeContext.accesskey "S">
+<!ENTITY renametab.label "Přejmenovat panel">
+<!ENTITY renametab.accesskey "P">
+<!ENTITY copytaburl.label "Kopírovat adresu URL panelu">
+<!ENTITY copytaburl.accesskey "K">
+<!ENTITY reloadother.label "Znovu načíst ostatní panely">
+<!ENTITY reloadother.accesskey "O">
+<!ENTITY reloadleft.label "Znovu načíst panely nalevo">
+<!ENTITY reloadleft.accesskey "L">
+<!ENTITY reloadright.label "Znovu načíst panely napravo">
+<!ENTITY reloadright.accesskey "P">
+<!ENTITY autoReloadTab.label "Načítat panel každých">
+<!ENTITY autoReloadTab.accesskey "T">
+<!ENTITY autoReloadSite.label "Načítat tuto stránku každých">
+<!ENTITY autoReloadSite.accesskey "S">
+<!ENTITY afterthis.label "Vedle tohoto panelu">
+<!ENTITY bookmarktab.label "Přidat panel do záložek">
+<!ENTITY undoCloseListMenu.label "Seznam zavřených panelů">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "Zavřít všechny panely">
+<!ENTITY closeall.accesskey "Z">
+<!ENTITY closeSimilarTab.label "Zavřít podobné panely">
+<!ENTITY closeSimilarTab.accesskey "A">
+<!ENTITY closeTabsToLeft.label "Zavřít panely nalevo">
+<!ENTITY closeleft.accesskey "L">
+<!ENTITY docShellMenu.label "Oprávnění">
+<!ENTITY docShellMenu.accesskey "O">
+<!ENTITY freezeTabMenu.label "Zmrazit panel">
+<!ENTITY freezeTabMenu.accesskey "M">
+<!ENTITY protectTabMenu.label "Chránit panel">
+<!ENTITY protectTabMenu.tooltip "Chránit panel před zavřením">
+<!ENTITY protectTabMenu.accesskey "C">
+<!ENTITY lockTabMenu.label "Zamknout panel">
+<!ENTITY lockTabMenu.tooltip "Všechny odkazy otevírat do nového panelu">
+<!ENTITY lockTabMenu.accesskey "Z">
+<!ENTITY bookmarktabs.label "Přidat všechny panely do záložek">
+<!ENTITY linkhere.label "Otevřít odkaz v tomto panelu">
+<!ENTITY linkhere.accesskey "T">
+<!ENTITY linkBackgroundTab.label "Otevřít odkaz v panelu na pozadí">
+<!ENTITY linkForegroundTab.label "Otevřít odkaz v panelu a přejít do tohoto panelu">
+<!ENTITY linkBackgroundTab.accesskey "P">
+<!ENTITY linkForegroundTab.accesskey "D">
+<!ENTITY openalllinks.label "Otevírat odkazy do nových panelů">
+<!ENTITY openalllinks.accesskey "N">
+<!ENTITY linkwithhistory.label "Otevřít odkaz v duplikovaném panelu">
+<!ENTITY linkwithhistory.accesskey "D">
+<!ENTITY tabsList.label "Seznam otevřených panelů">
+<!ENTITY tabsList.accesskey "S">
+<!ENTITY allowImage.label "Obrázek">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Přesměrování">
+<!ENTITY allowPlugin.label "Plugin">
+<!ENTITY allowFrame.label "Rám">
+<!ENTITY restoreincurrent.label "Obnovit do aktuálního panelu">
+<!ENTITY restoreincurrent.accesskey "A">
+<!ENTITY restoreinwin.label "Obnovit do nového okna">
+<!ENTITY restoreinwin.accesskey "O">
+<!ENTITY restoreintab.label "Obnovit do nového panelu">
+<!ENTITY restoreintab.accesskey "P">
+<!ENTITY restoretab.label "Obnovit panel">
+<!ENTITY restoretab.accesskey "V">
+<!ENTITY bookmark.label "Uložit tento odkaz do záložek...">
+<!ENTITY bookmark.accesskey "Z">
+<!ENTITY deletelist.label "Smazat ze seznamu">
+<!ENTITY deletelist.accesskey "S">
+<!ENTITY settings.label "Nastavení">
+<!ENTITY saveWindow.label "Uložit toto okno">
+<!ENTITY saveAllWindows.label "Uložit všechna okna">
+<!ENTITY sm.context.overwrite "Obnovit, přepsat současná okna">
+<!ENTITY sm.context.overwrite.key "P">
+<!ENTITY sm.context.restore.new "Obnovit do nových oken">
+<!ENTITY sm.context.restore.newkey "N">
+<!ENTITY sm.context.replacethis "Nahradit, tímto oknem">
+<!ENTITY sm.context.replacethis.key "T">
+<!ENTITY sm.context.replaceall "Nahradit, všemi okny">
+<!ENTITY sm.context.replaceall.key "V">
+<!ENTITY sm.context.add "Přidat toto okno">
+<!ENTITY sm.context.add.key "D">
+<!ENTITY sm.context.addall "Přidat všechna okna">
+<!ENTITY sm.context.addall.key "I">
+<!ENTITY sm.context.save "Uložit">
+<!ENTITY sm.context.save.key "U">
+<!ENTITY sm.context.rename "Přejmenovat">
+<!ENTITY sm.context.rename.key "P">
+<!ENTITY sm.context.bookmarkSession "Relace záložek">
+<!ENTITY sm.context.bookmarkSession.key "Z">
+<!ENTITY sm.context.delete "Smazat">
+<!ENTITY sm.context.delete.key "S">
+<!ENTITY sm.context.deleteall "Smazat vše">
+<!ENTITY sm.context.deleteall.key "V">
+<!ENTITY sm.context.startup "Nastavit jako relaci po spuštění">
+<!ENTITY sm.context.startup.key "R">
+<!ENTITY sm.context.details "Zobrazit počítadla, datum a čas v nabídce relace">
+<!ENTITY sm.context.details.key "C">
+<!ENTITY tab.key "P">
+<!ENTITY window.key "O">
+<!ENTITY merge.key "S">
+<!ENTITY sortedTabs.label "Seřazené panely">
+<!ENTITY sortedTabs.tooltip "Chcete-li seznam řadit podle abecedy, zaškrtněte tuto volbu.">
+<!ENTITY enable.label "Povolit">
+<!ENTITY custom.label "Vlastní">
+<!ENTITY enableTabs.label "Povolit všechny panely">
+<!ENTITY disableTabs.label "Zakázat všechny panely">
+<!ENTITY seconds.label "s">
+<!ENTITY minutes.label "min">
+<!ENTITY minute.label "min">
+<!ENTITY hideTabBar.label "Skrýt lištu s panely">
+<!ENTITY hideTabBar.never.label "Nikdy">
+<!ENTITY hideTabBar.never.key "N">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "J">
+<!ENTITY hideTabBar.always.label "Vždy">
+<!ENTITY hideTabBar.always.key "V">

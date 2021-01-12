@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Stiluri">
+<!ENTITY styles.label "Personalizează stilurile">
+<!ENTITY currentTab.label "Filă curentă">
+<!ENTITY unloadedTabs.label "File neîncărcate">
+<!ENTITY unreadTab.label "File nevizualizate">
+<!ENTITY hideRGB.label "Ascunde profilul cromatic">
+<!ENTITY showRGB.label "Afișează profilul cromatic">
+<!ENTITY unreadAfterReload.label "Se marchează fila ca necitită după reîncărcare">
+<!ENTITY disableBackground.label "Se dezactivează culorile personalizate de fundal">
+<!ENTITY squaredTabs.label "Se aplică culoarea de fundal filelor cu colțuri drepte">
+<!ENTITY otherTabs.label "Alte file">
+<!ENTITY italic.label "Cursiv">
+<!ENTITY bold.label "Aldin">
+<!ENTITY underline.label "Subliniat">
+<!ENTITY textcolor.label "Culoare text">
+<!ENTITY bgColor.label "Culoare fundal">
+<!ENTITY bgTopColor.label "deasupra">
+<!ENTITY bgBottomColor.label "dedesubt">
+<!ENTITY useThis.label "Se folosește stilul pentru">
+<!ENTITY opacity.label "opacitate">

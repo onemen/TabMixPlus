@@ -1,0 +1,23 @@
+/**
+    Firefox
+
+    All platform
+**/
+
+/* :::: tabbar on bottom :::: */
+/* we don't need rule for toolbar-drag - when tabbar on bottom */
+#TabsToolbar[tabbaronbottom] {
+  -moz-binding: url("chrome://tabmixplus/content/tab/scrollbox.xml#firefox-bottom-toolbar") !important;
+  position: fixed !important;
+  -moz-appearance: none !important;
+  /* look at browser.css for each platform
+  background-image: none !important;
+  */
+  margin-top: 1px !important;
+}
+
+/* -moz-window-dragging is not recognize by Pale Moon */
+#main-window[tabsintitlebar][tabmix-tabbaronbottom] .tabbrowser-tabbox,
+#main-window[tabsintitlebar] #TabsToolbar[tabmix-disallow-drag] {
+  -moz-window-dragging: no-drag;
+}

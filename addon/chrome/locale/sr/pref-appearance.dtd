@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Styles">
+<!ENTITY styles.label "Прилагоди стилове">
+<!ENTITY currentTab.label "Текућа картица">
+<!ENTITY unloadedTabs.label "Неучитане картице">
+<!ENTITY unreadTab.label "Непрочитане картице">
+<!ENTITY hideRGB.label "Сакриј RGB">
+<!ENTITY showRGB.label "Прикажи RGB">
+<!ENTITY unreadAfterReload.label "означи картицу као непрочитану након поновног учитавања">
+<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY squaredTabs.label "Примени боју позадине за квадратне картице">
+<!ENTITY otherTabs.label "Остале картице">
+<!ENTITY italic.label "искошено">
+<!ENTITY bold.label "подебљано">
+<!ENTITY underline.label "подвучено">
+<!ENTITY textcolor.label "Боја слова">
+<!ENTITY bgColor.label "Боја позадине">
+<!ENTITY bgTopColor.label "врх">
+<!ENTITY bgBottomColor.label "дно">
+<!ENTITY useThis.label "користи овај стил за">
+<!ENTITY opacity.label "провидност">

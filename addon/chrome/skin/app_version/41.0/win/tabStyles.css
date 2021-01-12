@@ -1,0 +1,29 @@
+/* for windows 7 and up */
+@media not all and (-moz-os-version: windows-xp) {
+  @media not all and (-moz-os-version: windows-vista) {
+    #tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
+      vertical-align: bottom;
+    }
+
+    #tabmix-bottom-toolbox {
+      -moz-appearance: none;
+      border-top: none;
+      background-color: transparent;
+    }
+
+    #TabsToolbar[tabbaronbottom]:not(:-moz-lwtheme) {
+      -moz-appearance: none;
+    }
+  }
+}
+
+#TabsToolbar[tabbaronbottom]::before,
+#TabsToolbar[tabbaronbottom]::after {
+  box-shadow: none !important;
+}
+
+/* for Firefox 57 style */
+#tabbrowser-tabs:not([tabmix_australis="true"]):not([treestyletab-mode="vertical"])
+    > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
+  margin: 1px;
+}

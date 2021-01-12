@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Carregar em segundo plano">
+<!ENTITY searchTabFocus.accesskey "p">
+<!ENTITY renametab.panel.title "Editar nome do separador">
+<!ENTITY renametab.reset.label "Reiniciar para o nome pré-definido">
+<!ENTITY title.label "Titulo">
+<!ENTITY default.label "Padrão">
+<!ENTITY renametab.permanently.label "Renomear este separador independentemente do seu endereço">
+<!ENTITY renametab.permanently.tooltip "separador com histórico - o novo nome mantém-se quando o endereço muda">
+<!ENTITY forum.label "Fórum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Ajuda">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Escolha a hora da lista ou escreva a sua própria hora">
+<!ENTITY specifyreload.label "Especificar Tempo de Actualização">
+<!ENTITY sanitizer.entry "Tab Mix Plus Sessões Guardadas">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Tem a certeza que deseja eliminar TODAS as suas sessões guardadas incluindo backups?">

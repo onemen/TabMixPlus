@@ -1,0 +1,5 @@
+<!ENTITY filetype.options "Editor de tipo de ficheiro">
+<!ENTITY filetype.add "Adicionar">
+<!ENTITY filetype.edit "Modificar">
+<!ENTITY filetype.delete "Eliminar">
+<!ENTITY filetype.new "Novo tipo de ficheiro:">

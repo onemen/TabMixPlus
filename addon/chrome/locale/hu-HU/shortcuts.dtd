@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Gyorsbillentyűk">
+<!ENTITY shortcuts.edit "Gyorsbillentyűk szerkesztése">
+<!ENTITY shortcuts.showAll "Összes megjelenítése">
+<!ENTITY shortcuts.hideUnused "Nem használtak elrejtése">
+<!ENTITY shortcuts.warning "Néhány gyorsbillentyűt már más parancsok használnak">
+<!ENTITY shortcuts.showDetails "Részletek megjelenítése">
+<!ENTITY shortcuts.hideDetails "Részletek elrejtése">
+<!ENTITY shortcuts.switchToLast "Váltás az utolsó aktív lapra">
+<!ENTITY shortcuts.slideshow "Lapok körkapcsolásának váltása">
+<!ENTITY shortcuts.toggleFLST "Fókuszváltás az aktuális lap bezárásakor">
+<!ENTITY shortcuts.toggleFLST.tooltip "fókusz a jobb oldali vagy az utoljára kiválasztott lapra">
+<!ENTITY shortcuts.placeholder "Billentyűkombináció">
+<!ENTITY shortcuts.reset "Visszaállítás">
+<!ENTITY shortcuts.clear "Törlés">
+<!ENTITY shortcuts.inuse "Ezt a gyorsbillentyűt már használja:">

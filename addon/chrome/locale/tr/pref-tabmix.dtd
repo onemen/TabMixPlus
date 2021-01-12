@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Bağlantılar">
+<!ENTITY tab.events "Olaylar">
+<!ENTITY tab.mouse "Fare">
+<!ENTITY tab.appearance "Görünüm">
+<!ENTITY tab.menu "Menü">
+<!ENTITY tab.session "Oturum">
+<!ENTITY tab.incompatible "Hata">
+<!ENTITY apply.label "Uygula">
+<!ENTITY settings.export "Ayarları dosyaya kaydet">
+<!ENTITY settings.import "Ayarları dosyadan al">
+<!ENTITY settings.sync "Sync Tercihleri">
+<!ENTITY settings.default "Varsayılanlara dön">
+<!ENTITY settings.revert "Eski haline çevir">
+<!ENTITY generalWindowOpen.label "Yeni pencerede açılacak bağlatıları burada aç:">
+<!ENTITY externalLink.useSeparate.label "Diğer uygulamalardan gelen bağlantılar için ayrı tercih kullan">
+<!ENTITY externalLinkTarget.label "Diğer uygulamalardan gelen bağlantıları burada aç:">
+<!ENTITY linkTarget.tab "Yeni sekmede">
+<!ENTITY linkTarget.window "Yeni pencerede">
+<!ENTITY linkTarget.current "Geçerli sekmede">
+<!ENTITY linkTarget.accesskey "e">
+<!ENTITY divertedWindowOpen.label "JavaScript açılır pencereleri:">
+<!ENTITY divertedWindowOpen.all "Tüm açılır pencereleri sekmelerde aç">
+<!ENTITY divertedWindowOpen.some "Yeniden boyutlandırılmış açılır pencerelere izin ver">
+<!ENTITY divertedWindowOpen.none "Tüm açılır pencerelere izin ver">
+<!ENTITY linkTarget.label "Bir hedefe sahip bağlantıları geçerli sekmede aç">
+<!ENTITY targetIsFrame.label "Mevcut çerçeveyi hedef alan bağlantıları geçerli sekmede aç">
+<!ENTITY download.label "Dosya indirirken oluşan boş sekmeleri önle">
+<!ENTITY edit.label "Düzenle">
+<!ENTITY speLink.label "Yeni bir sekmede açılmaya zorla:">
+<!ENTITY speLink.none "Hiçbir şeyi">
+<!ENTITY speLink.allLinks "Tüm bağlantılar">
+<!ENTITY speLink.external "Diğer sitelere bağlantıları">
+<!ENTITY singleWindow.label "Tek pencere modunu etkinleştir">
+<!ENTITY newTabs.label "Yeni sekmeler">
+<!ENTITY tabOpen.label "Sekme Açma">
+<!ENTITY tabFocus.label "Sekmeye Odaklanma">
+<!ENTITY tabClose.label "Sekme Kapatma">
+<!ENTITY tabMerge.label "Sekme Birleştirme">
+<!ENTITY tabFeature.label "Sekme Özellikleri">
+<!ENTITY newtab.label "Yeni sekmelerde bunu yükle:">
+<!ENTITY replaceLastTabWith1.label "Son sekme kapatıldığında yerine bunu koy:">
+<!ENTITY newtab.blank "Boş sayfa">
+<!ENTITY newtab.home "Başlangıç sayfası">
+<!ENTITY newtab.current "Geçerli sayfa">
+<!ENTITY newtab.duplicate "Sayfayı çiftle">
+<!ENTITY newtab.location.1 "Yeni Sekme Sayfası">
+<!ENTITY newtab.placeholder.label "Varsayılan Yeni Sekme Sayfası">
+<!ENTITY location.label.1 "Adres">
+<!ENTITY focusContent.label "Boş olmayan bir sayfa yüklerken içeriğe odaklan">
+<!ENTITY openTabNext.label "Yeni sekmeleri geçerli olana bitişik aç">
+<!ENTITY openOtherTabNext.label "Diğer sekmeleri geçerli olanın bitişiğinde aç">
+<!ENTITY relatedAfterCurrent.label "Yalnızca mevcut sekmeyle ilişkili ise">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Çiftlenen sekmeleri orijinalin bitişiğinde aç">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Açılma sırasını değiştir">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Yeni sekmeyi, geçerli olanın son açtığı sekmenin bitişiğinde aç">
+<!ENTITY moveSwitchToTabNext.label "Sekmeyi 'Sekmeye geç'ten geçerli olanın yanına taşı">
+<!ENTITY loadTabsProgressively.label "Sekmeleri kademeli olarak yükle">
+<!ENTITY restoreOnDemand.label "Seçilene dek sekmeleri yükleme">
+<!ENTITY openMoreThan.label "bundan daha fazlasını açtığınızda:">
+<!ENTITY tabs.label "sekmeler">
+<!ENTITY lockTabs.label "Sekmeleri kilitle">
+<!ENTITY lockNewTabs.label "Yeni sekmeleri kilitle">
+<!ENTITY lockAppTabs.label "Uygulama sekmelerini kilitlme">
+<!ENTITY updateLockState.label "Değişiklikleri açık sekmelere uygula">
+<!ENTITY openNewTab.label "Bunlardan bağlantıları yeni sekmelerde aç:">
+<!ENTITY openBookmarks.label "Yer imleri">
+<!ENTITY openPlacesGroups.label "Yer imleri/geçmiş grupları">
+<!ENTITY openPlacesGroups.tooltip "Bir yerimi/geçmiş grubunu açarken mevcut sekmeleri kaybetmeyin">
+<!ENTITY openHistory.label "Geçmiş">
+<!ENTITY openUrl.label "Adres çubuğu">
+<!ENTITY openSearch.label "Arama çubuğu">
+<!ENTITY middlecurrent1.label "Orta-tıklama ya da Control+tıklama öğeleri mevcut sekmede açar">
+<!ENTITY middlecurrent.tooltip "Yalnızca, yeni sekmede açılmaya zorlanan yer imleri, geçmiş ve bağlantılar için">
+<!ENTITY tabFocus.caption "Buralardan açılan sekmelere odaklan/seç:">
+<!ENTITY selectTab.label "Bağlantılardan">
+<!ENTITY selectDivertedTab.label "Ayrılmış pencerelerden">
+<!ENTITY selectTabFromExternal.label "Diğer uygulamalar">
+<!ENTITY selectTabCommand.label "Yeni sekme komutundan">
+<!ENTITY contextMenuSearch.label "Bunun için bağlam menüsü araması:">
+<!ENTITY selectTabBH.label "Yer imi/Geçmişten">
+<!ENTITY duplicateTab.label "Sekmeyi çiftle">
+<!ENTITY inversefocus2.label "Orta-tıklama veya CTRL+tıklama bunun işlevini ters çevirsin:">
+<!ENTITY warning.caption.label "Uyarı">
+<!ENTITY warnOnCloseMultipleTabs.label "Çok sayıda sekme kapatılırken uyar">
+<!ENTITY warnOnCloseProtected1.label "Korunmuş sekmeler barındıran pencere kapatılırken uyar">
+<!ENTITY warnOnCloseWindow1.label "Çok sayıda sekme barındıran pencere kapatılırken uyar">
+<!ENTITY lasttab.caption.label "Son sekmeyi kapatma">
+<!ENTITY keepWindow.label.3.1 "Son sekme kapatıldığında pencereyi kapatma">
+<!ENTITY keeptab.label "Son sekmeyi kapanmaktan koru">
+<!ENTITY closeOnMerge.label "Birleştirildiğinde pencereleri kapat">
+<!ENTITY warnOnMerge.label "Pencerede birleştirilmemiş sekmeler varsa uyar">
+<!ENTITY currenttab.caption.label "Geçerli sekmeyi kapatma">
+<!ENTITY focusTab.labelBegin "Geçerli sekme kapatıldığında, buna odaklan:">
+<!ENTITY focusTab.firstTab "İlk sekmeye">
+<!ENTITY focusTab.leftTab "Sol sekmeye">
+<!ENTITY focusTab.rightTab "Sağ sekmeye">
+<!ENTITY focusTab.lastTab "Son sekmeye">
+<!ENTITY focusTab.lastSelectedTab "Seçilen son sekmeye">
+<!ENTITY focusTab.openerTab "Açan/sağ sekmeye">
+<!ENTITY focusTab.openerTab.rtl "Açan/sol sekmeye">
+<!ENTITY focusTab.lastOpenedTab "Açılan son sekmeye">
+<!ENTITY undoClose.label "Kapatılmış sekmeleri geri yükleme devrede">
+<!ENTITY undoCloseCache.label "Hatırlanacak kapatılmış sekme sayısı:">
+<!ENTITY undoClosepos.label "Sekmeyi orijinal pozisyonunda geri yükle">
+<!ENTITY menuonlybutton.label "Araç çubuğu düğmesine tıklandığında yalnızca liste çıksın">
+<!ENTITY ctrltab.label "Ctrl+Tab sekmeler arasında son kullanma sırasına göre dolaşsın">
+<!ENTITY cmdtab.label "Cmd+Tab sekmeler arasında son kullanma sırasına göre dolaşsın">
+<!ENTITY ctrltab.tabPreviews "Sekme önizlemelerini göster">
+<!ENTITY ctrltab.popup "Ctrl+Tab bir sekme listesi menüsü görüntülesin">
+<!ENTITY cmdtab.popup "Cmd+Tab bir sekme listesi menüsü görüntülesin">
+<!ENTITY tabpopup.mouse "Sekmeler listeden fareyle de seçilebilsin">
+<!ENTITY mergeNoTabSelection.label "Sekme seçilmediğinde pencerelerin birleştirilmesi:">
+<!ENTITY mergeTabSelection.label "Sekmeler seçildiğinde birleştirme:">
+<!ENTITY mergeall.label "Tüm pencereleri tek pencerede birleştir">
+<!ENTITY mergelastfocused.label "Yalnızca geçerli pencereyi önceki pencereyle birleştir">
+<!ENTITY mergePopups.label "Açılır pencereleri de içer">
+<!ENTITY popupNextToOpener.label "Açılır pencereleri açanın sağına yerleştir">
+<!ENTITY activateSlideshow.label "#1'e basarak her">
+<!ENTITY toggleAnimation.label "Sekme aç/kapa animasyonunu kaldır">
+<!ENTITY reloadEvery.matchAddress.label "Adresine bakılmaksızın bir sekmeyi tekrar yükle">
+<!ENTITY reloadEvery.onReloadButton.label "Tazele butonunda otomatik tazeleme menüsünü göster">
+<!ENTITY seconds.label "saniyede bir sekmeler arasında dolaş">
+<!ENTITY minutes.label "dak">
+<!ENTITY tabBarAppearance.label "Sekme Çubuğu">
+<!ENTITY tabAppearance.label "Sekme">
+<!ENTITY toolBarAppearance.label "Araç Çubuğu">
+<!ENTITY show.ontabbar.label "Sekme çubuğunda göster">
+<!ENTITY show.ontab.label "Sekmede göster">
+<!ENTITY dragNewTabButton.tooltip "Bu seçeneği aktifleştirmek için 'Yeni Sekme' butonunu sekme çubuğuna sürükleyin.">
+<!ENTITY hideTabBarButton.label "Sekmeyi kapat düğmesi">
+<!ENTITY newTabButton.label "Yeni sekme düğmesi">
+<!ENTITY newTabButton.position.left.label "Sol tarafta">
+<!ENTITY newTabButton.position.right.label "Sağ tarafta">
+<!ENTITY newTabButton.position.afterlast.label "Son sekmeden sonra">
+<!ENTITY allTabsButton.label "Tüm sekmeler düğmesi">
+<!ENTITY tabBarSpace.label "İki yanda fazladan boşluklar">
+<!ENTITY tabBarSpace.tooltip "Tıklama ve sekme çubuğuna herhangi bir şey bırakmak için boşluklar">
+<!ENTITY tabbar.label "Tek sekme açıksa sekme çubuğunu gizle">
+<!ENTITY moveTabOnDragging.label "Bir sekmeyi sürüklerken onu doğrudan taşı">
+<!ENTITY dropIndicator.label "Bırakma göstergesi">
+<!ENTITY dropIndicator-native.label "Yerel stil">
+<!ENTITY dropIndicator-builtin.label "Dahili stil">
+<!ENTITY verticalTabbar.description1 "Bu tercihler, dikey sekmeler uygulayan diğer uzantılar tarafından kontrol edilir.">
+<!ENTITY tabBarPosition.label "Konum:">
+<!ENTITY tabBarPosition.top.label "Üst (içerikten üstte)">
+<!ENTITY tabBarPosition.bottom.label "Alt (içerikten altta)">
+<!ENTITY tabScroll.label "Sekmeler sığmadığında:">
+<!ENTITY tabScroll.none "Düğmeler olmadan kaydırılabilir">
+<!ENTITY tabScroll.leftRightButtons "Sol ve sağ kenarlardaki düğmelerle kaydırılabilir">
+<!ENTITY tabScroll.rightButtons "Sağ kenardaki düğmelerle kaydırılabilir">
+<!ENTITY tabScroll.rightButtons.rtl "Sol taraftaki düğmelerle kaydırılabilir">
+<!ENTITY tabScroll.multibar "Çoklu-satır">
+<!ENTITY maxrow.label "Görüntülenecek en fazla satır sayısı:">
+<!ENTITY pinnedTabScroll.label "Sabitlenmiş sekmeleri kaydırmaya izin ver">
+<!ENTITY offsetAmountToScroll.label "Kaydırma yaparken görüş alanı dışındaki sekmenin bir bölümünü göster">
+<!ENTITY smoothScroll.label "Akıcı kaydırmayı etkinleştir">
+<!ENTITY scrolldelay.label "Kaydırma gecikmesi (kaydırmalar arasında geçecek zaman)">
+<!ENTITY currenttab.style.label "Geçerli sekmeyi">
+<!ENTITY unloadedtabs.style.label "Yüklenmemiş sekmeler">
+<!ENTITY unreadtabs.style.label "Bakılmamış sekmeleri">
+<!ENTITY othertabs.style.label "Diğer sekmeleri">
+<!ENTITY setstyles.label "Stilleri özelleştir">
+<!ENTITY extraIcons.label1 "İkonlar">
+<!ENTITY extraIcons.locked "Kilitli">
+<!ENTITY extraIcons.protected "Korunmuş">
+<!ENTITY extraIcons.autoreload "Otomatik yenilenen">
+<!ENTITY extraIcons.hideonpinned "Sabitlenmiş sekmeleri gizle">
+<!ENTITY progressMeter.label "Sekmelerde ilerleme göstergesi">
+<!ENTITY showTabX.labelBegin "Sekmeyi kapat düğmesi">
+<!ENTITY showTabX.left "Sol tarafta">
+<!ENTITY showTabX.rtl "Sağ tarafa yerleştir">
+<!ENTITY milliseconds.label "milisaniye">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "Tümünde">
+<!ENTITY showTabX.current "Geçerli olanda">
+<!ENTITY showTabX.hover "Bu süre kadar üzerinde durulunca:">
+<!ENTITY showTabX.alwaysExeption "Bundan geniş tüm sekmelerde:">
+<!ENTITY showTabX.currentHover "Geçerli olan ve bu süre kadar durulunca">
+<!ENTITY minWidth.label "Sekme genişliği:">
+<!ENTITY widthTo.label "ile">
+<!ENTITY widthPixels.label "piksel">
+<!ENTITY onLeftDisabled.label "Geçerli temayla sol tarafa düğme yerleştirilemiyor">
+<!ENTITY onLeftDisabled.tst.label "TreeStyleTab yüklü olduğunda sol tarafa düğme yerleştirilemiyor">
+<!ENTITY flexTabs.label "Sekme genişliği başlığına uysun">
+<!ENTITY bookastitle.label "Yer imi ismini sekme başlığı olarak kullan">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Hangi Tabmix düğmelerinin Araç Çubuğunuzda görüntüleneceğini belirleyebilirsiniz">
+<!ENTITY toolbar.button.label "Özelleştir">
+<!ENTITY toolbar.visible.caption "Görünen düğmeler">
+<!ENTITY toolbar.novisible.label "Görünen düğme yok">
+<!ENTITY toolbar.hidden.caption "Gizli düğmeler">
+<!ENTITY toolbar.nohidden.label "Gizli düğme yok">
+<!ENTITY mouseGesture.label "Fare Hareketleri">
+<!ENTITY mouseClick.label "Fare Tıklamaları">
+<!ENTITY mouseHoverSelect.labelBegin "Bu süre kadar işaretlenen sekmeleri seç:">
+<!ENTITY tabFlip.label "Geçerli olana tıklandığında öncekine geç">
+<!ENTITY tabFlip.delay "Bu süre kadar gecikme uygula:">
+<!ENTITY clickFocus.label "Sekmeyi seçmek için fare tıklaması (indir ve bırak)">
+<!ENTITY removeEntries.label "Orta-tıklama, Tab Mix Plus menü ve listelerindeki girdileri kaldırsın">
+<!ENTITY lockTabSizingOnClose.label "Bir sekmeyi kapatırken, imleç araç çubuğu bölgesinden çıkana kadar diğer sekmeler yeniden boyutlandırılmamalıdır">
+<!ENTITY removeEntries.tooltip "Kapatılan sekmeler, pencereler ve kaydedilen oturumlar listelerindeki öğeler için">
+<!ENTITY tabbarscrolling.caption "Sekme çubuğunun üzerinde gezinirken">
+<!ENTITY tabbarscrolling.holdShift.label "Bu seçenekler arasında geçiş yapmak için kaydırma yaparken Shift tuşunu basılı tutun">
+<!ENTITY tabbarscrolling.selectTab.label "Seçilmiş sekmeyi değiştir">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Tüm sekmeleri kaydır">
+<!ENTITY tabbarscrolling.inverse.label "Kaydırma yönünü tersine çevir">
+<!ENTITY double.label "Çift-tıklama">
+<!ENTITY middle.label "Orta-tıklama">
+<!ENTITY ctrl.label "Ctrl+tıklama">
+<!ENTITY cmd.label "Cmd+tıklama">
+<!ENTITY shift.label "Shift+tıklama">
+<!ENTITY alt.label "Alt+tıklama">
+<!ENTITY ontab.label "Sekme üzerine:">
+<!ENTITY ontabbar.label "Sekme çubuğu üzerine:">
+<!ENTITY clicktab.label "Sekme ya da sekme çubuğuna tıkladığınızda yapılacaklar">
+<!ENTITY ontabbar.dblClick.label "Pencere boyutu değiştirmekten gelen Sekme-çubuğunda çift tıklamayı engelle">
+<!ENTITY ontabbar.click.label "Pencere sürüklemekten gelen Sekme-çubuğu tıklatmayı engelle">
+<!ENTITY clicktab.default "Firefox varsayılanı veya diğer uzantı">
+<!ENTITY clicktab.nothing "Hiçbir şey yapma">
+<!ENTITY clicktab.addtab "Yeni sekme aç">
+<!ENTITY clicktab.duplicatetab "Sekmeyi çiftle">
+<!ENTITY clicktab.duplicatetabw "Sekmeyi yeni pencerede çiftle">
+<!ENTITY clicktab.detachtab "Sekmeyi yeni pencereye taşı">
+<!ENTITY clicktab.protecttab "Sekmeyi koru">
+<!ENTITY clicktab.locktab "Sekmeyi kilitle">
+<!ENTITY clicktab.freezetab "Sekmeyi koru ve kilitle">
+<!ENTITY clicktab.renametab "Sekmeyi yeniden adlandır">
+<!ENTITY clicktab.copyTabUrl "Sekme bağlantısını panoya kopyala">
+<!ENTITY clicktab.copyUrlFromClipboard "Panodan adres yükle">
+<!ENTITY clicktab.selectMerge "Sekmeyi birleştirme için seç">
+<!ENTITY clicktab.mergeTabs "Pencereleri birlikte birleştir">
+<!ENTITY clicktab.bookTab "Sekmeyi yer imlerine ekle">
+<!ENTITY clicktab.bookTabs "Tüm sekmeleri yer imlerine ekle">
+<!ENTITY clicktab.reloadtab "Sekmeyi tazele">
+<!ENTITY clicktab.reloadtabs "Tüm sekmeleri tazele">
+<!ENTITY clicktab.reloadothertabs "Diğer sekmeleri tazele">
+<!ENTITY clicktab.reloadlefttabs "Soldaki sekmeleri tazele">
+<!ENTITY clicktab.reloadrighttabs "Sağdaki sekmeleri tazele">
+<!ENTITY clicktab.autoReloadTab "Sekme otomatik tazelemeyi aç/kapat">
+<!ENTITY clicktab.removeall "Tüm sekmeleri kapat">
+<!ENTITY clicktab.removeother "Diğer sekmeleri kapat">
+<!ENTITY clicktab.removesimilar "Aynı siteye ait sekmeleri kapat">
+<!ENTITY clicktab.removetoLeft "Soldaki Sekmeleri Kapat">
+<!ENTITY clicktab.removetoRight "Sağdaki Sekmeleri Kapat">
+<!ENTITY clicktab.uctab "Kapatılan son sekmeyi geri aç">
+<!ENTITY clicktab.ucatab "Kapatılan tüm sekmeleri yeniden aç">
+<!ENTITY clicktab.snapback "Sekmeyi geri ayır">
+<!ENTITY clicktab.ietab "Sekmeyi IE'de aç">
+<!ENTITY contentLoad "Orta-tıklama panoya kopyalanmış bağlantıyı yüklesin">
+<!ENTITY context.tab "Sekme Açılır Menüsü">
+<!ENTITY context.main "Ana Açılır Menü">
+<!ENTITY context.tools "Araçlar Menüsü">
+<!ENTITY showOnTabbar.label "Tabbar'da Sekme Bağlam Menüsünü Göster">
+<!ENTITY showtabBarContext.label "Sekme açılır menüsünde göster:">
+<!ENTITY showContentAreaContext.label "Ana açılır menüde göster:">
+<!ENTITY showToolsMenu.label "Araçlar menüsünde göster:">
+<!ENTITY startupHomePage1.label "Başlangıç sayfasını göster">
+<!ENTITY startupBlankPage.label "Boş sayfa göster">
+<!ENTITY startupLastSession1.label "Son seferdeki pencere ve sekmeleri göster">
+<!ENTITY sm.extension.description1 "Tab Mix Plus, Oturum Yöneticisi Eklentisinin kurulu olduğunu algıladı">
+<!ENTITY sm.extension.description2 "Tab Mix Plus Oturum Yöneticisi etkisizleştirilecek">
+<!ENTITY sm.extension.description3 "Oturum Yöneticisi Tercihleri penceresini açmak için sağdaki düğmeye tıklayabilirsiniz">
+<!ENTITY sm.extension.description5 "Oturum verilerinizi Tab Mix Plus biçiminden Oturum Yöneticisi uzantısı biçimine dönüştürün">
+<!ENTITY sm.extension.convert.label "Dönüştür">
+<!ENTITY sm.extension.chooseFile.label1 "Tab Mix Plus oturumlarını şu anki profilden dönüştür">
+<!ENTITY sm.extension.chooseFile.label2 "Dönüştürülecek veri dosyasını seçin">
+<!ENTITY ss.enable.label "Firefox'un dahili Oturum Geri Yükleme özelliğini kullan">
+<!ENTITY ss.enable.tooltip "Tab Mix Oturum Yöneticisini kullanmak için işareti kaldırın">
+<!ENTITY ss.advanced_setting "Gelişmiş Ayarlar">
+<!ENTITY ss.advanced_setting.warning "Ne yaptığınızı bilmiyorsanız, bunları değiştirmeyin">
+<!ENTITY ss.interval "İki durum kaydı arasındaki en az süre">
+<!ENTITY ss.interval.seconds "(milisaniye olarak)">
+<!ENTITY ss.privacy_level "Hassas bilgileri de kaydet (form bilgisi, POSTDATA ve çerezler)">
+<!ENTITY ss.privacy_level.allsites "Tüm sitelerde">
+<!ENTITY ss.privacy_level.unencrypted "Şifrelenmemiş sitelerde">
+<!ENTITY ss.privacy_level.nosites "Hiçbir sitede">
+<!ENTITY ss.postdata.label1 "Kaydedilecek en fazla POSTDATA bilgisi miktarı">
+<!ENTITY ss.postdata.label2 "(bayt olarak, tamamı için -1 kullanın)">
+<!ENTITY sessionManger.enable "Oturum Yöneticisi etkin">
+<!ENTITY crashRecovery.enable "Çökme Kurtarma etkin">
+<!ENTITY sm.StartExit "Başlatma/Kapatma">
+<!ENTITY sm.restore "Geri Yükleme">
+<!ENTITY sm.preserve "Muhafaza Etme">
+<!ENTITY sm.start "Tarayıcı başladığında:">
+<!ENTITY sm.start.restore "Geri yükle">
+<!ENTITY sm.start.ask "Geri yüklemeden önce sor">
+<!ENTITY sm.start.nothing "Geri yükleme">
+<!ENTITY sm.exit "Tarayıcı kapatıldığında:">
+<!ENTITY sm.exit.save "Oturumu kaydet">
+<!ENTITY sm.exit.ask "Kaydetmeden önce sor">
+<!ENTITY sm.exit.nothing "Kaydetme">
+<!ENTITY sm.startup "Başlangıç oturumu:">
+<!ENTITY sm.lastsession "Son oturum">
+<!ENTITY sm.previouslast "Sondan bir önceki">
+<!ENTITY sm.chooseifempty "Boşsa başka birini seç">
+<!ENTITY sm.restore.options "Oturumlar geri yüklenirken:">
+<!ENTITY sm.restore.overwrite "Geçerli pencerelerin üzerine yaz">
+<!ENTITY sm.restore.overwriteTabs "Sekmelerin de">
+<!ENTITY sm.restore.closedWinList "Pencereleri kapatılan pencereler listesine kaydet">
+<!ENTITY sm.restore.merge "Pencereleri tek pencerede birleştir">
+<!ENTITY sm.restore.bypassCache "Geri yüklerken önbelleği atla">
+<!ENTITY sm.notrestore.label "Başlangıçta geri yüklenmediğinde">
+<!ENTITY sm.restorePinned1.label "Son seferdeki sabitlenmiş sekmeleri geri yükle">
+<!ENTITY sm.preserve.options "Sekmelerde muhafaza et:">
+<!ENTITY sm.preserve.history "Geçmişi">
+<!ENTITY sm.preserve.protect "Korunma durumunu">
+<!ENTITY sm.preserve.locked "Kilit durumunu">
+<!ENTITY sm.preserve.permission "İzinleri">
+<!ENTITY sm.preserve.scroll1 "Kaydırma pozisyonunu">
+<!ENTITY sm.restore.winOptions "Pencerelerde muhafaza et:">
+<!ENTITY sm.restore.selectedTab "Seçili sekmeyi">
+<!ENTITY sm.restore.closedTabs "Kapanan sekmeler listesini">
+<!ENTITY incompatible.extensions "Eklentilerinizden bazıları Tab Mix Plus ile uyumsuz, bu eklentileri etkisizleştirmeniz ya da kaldırmanız önerilir.">
+<!ENTITY incompatible.button.label "Listeyi göster">

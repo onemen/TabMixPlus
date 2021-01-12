@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Carica in secondo piano">
+<!ENTITY searchTabFocus.accesskey "s">
+<!ENTITY renametab.panel.title "Rinomina scheda">
+<!ENTITY renametab.reset.label "Reimposta il titolo predefinito">
+<!ENTITY title.label "Titolo">
+<!ENTITY default.label "Titolo predefinito">
+<!ENTITY renametab.permanently.label "Rinomina la scheda sempre per tutti gli indirizzi">
+<!ENTITY renametab.permanently.tooltip "Il nome della scheda rimarrà invariato anche se l'indirizzo web cambia">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Contenuti guida">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Tempo di ricarica da specificare">
+<!ENTITY specifyreload.label "Personalizzazione del tempo di ricarica">
+<!ENTITY sanitizer.entry "Cronologia di Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Eliminare tutti i dati di sessioni salvate inclusi i backup?">

@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Stile">
+<!ENTITY styles.label "Aussehen anpassen">
+<!ENTITY currentTab.label "Aktiver Tab">
+<!ENTITY unloadedTabs.label "Nichtgeladene Tabs">
+<!ENTITY unreadTab.label "Ungelesene Tabs">
+<!ENTITY hideRGB.label "RGB ausblenden">
+<!ENTITY showRGB.label "RGB anzeigen">
+<!ENTITY unreadAfterReload.label "Tab nach dem Neu-laden, als ungelesen markieren">
+<!ENTITY disableBackground.label "Standard-Hintergrundfarben deaktivieren">
+<!ENTITY squaredTabs.label "Hintergrundfarbe für rechteckige Tabs  anwenden">
+<!ENTITY otherTabs.label "Andere Tabs">
+<!ENTITY italic.label "Kursiv">
+<!ENTITY bold.label "Fett">
+<!ENTITY underline.label "Unterstrichen">
+<!ENTITY textcolor.label "Textfarbe">
+<!ENTITY bgColor.label "Hintergrundfarbe">
+<!ENTITY bgTopColor.label "oben">
+<!ENTITY bgBottomColor.label "unten">
+<!ENTITY useThis.label "Diesen Stil verwenden für">
+<!ENTITY opacity.label "Deckkraft">

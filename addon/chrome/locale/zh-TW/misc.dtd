@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "開啟於背景分頁">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "編輯分頁標題">
+<!ENTITY renametab.reset.label "重置為網頁標題">
+<!ENTITY title.label "標題">
+<!ENTITY default.label "預設">
+<!ENTITY renametab.permanently.label "重新命名此分頁且不再變動">
+<!ENTITY renametab.permanently.tooltip "分頁歷史：分頁標題不會隨網址變動">
+<!ENTITY forum.label "討論區">
+<!ENTITY faq.label "常見問題">
+<!ENTITY help.label "幫助">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "由清單選擇時間或是輸入自訂的時間">
+<!ENTITY specifyreload.label "自訂頁面自動更新頻率">
+<!ENTITY sanitizer.entry "Tab Mix Plus 瀏覽狀態記錄">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "確定要刪除所有儲存的分頁資料（包含備份）嗎？">

@@ -1,0 +1,319 @@
+<!ENTITY tab.links "لینک ها">
+<!ENTITY tab.events "رویدادها">
+<!ENTITY tab.mouse "ماوس">
+<!ENTITY tab.appearance "نمایش">
+<!ENTITY tab.menu "منو">
+<!ENTITY tab.session "نشست">
+<!ENTITY tab.incompatible "Error">
+<!ENTITY apply.label "اعمال کردن">
+<!ENTITY settings.export "اکسپورت تنظیمات">
+<!ENTITY settings.import "ایمپورت تنظیمات">
+<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.default "بازگردانی پیشفرض ها">
+<!ENTITY settings.revert "Revert">
+<!ENTITY generalWindowOpen.label "لینک هایی را که در پنجره جدید باز می شوند را باز کن در">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLinkTarget.label "لینک سایر برنامه ها را باز کن در">
+<!ENTITY linkTarget.tab "تب جدید">
+<!ENTITY linkTarget.window "پنجره جدید">
+<!ENTITY linkTarget.current "تب جاری">
+<!ENTITY linkTarget.accesskey "C">
+<!ENTITY divertedWindowOpen.label "پنجره های جاوا اسکریپت">
+<!ENTITY divertedWindowOpen.all "تمام پنجره های تبلیغاتی را در تب های جدید باز کن">
+<!ENTITY divertedWindowOpen.some "اجازه دادن به پنجره های با اندازه ثابت">
+<!ENTITY divertedWindowOpen.none "اجازه به تمام پنجره های تبلیغاتی">
+<!ENTITY linkTarget.label "باز کردن لینک ها در تب فعلی بهمراه یک ویژگی خاص">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY download.label "متوقف کردن تب های خالی هنگام دریافت فایل">
+<!ENTITY edit.label "ویرایش">
+<!ENTITY speLink.label "اجبار ... برای باز شدن در تب جدید">
+<!ENTITY speLink.none "هیچ">
+<!ENTITY speLink.allLinks "All links">
+<!ENTITY speLink.external "لینک به سایت های دیگر">
+<!ENTITY singleWindow.label "فعال کردن حالت پنجره تنها">
+<!ENTITY newTabs.label "New Tabs">
+<!ENTITY tabOpen.label "باز شدن تب">
+<!ENTITY tabFocus.label "تمرکز تب">
+<!ENTITY tabClose.label "بسته شدن تب">
+<!ENTITY tabMerge.label "ترکیب تب">
+<!ENTITY tabFeature.label "ویژگی های تب">
+<!ENTITY newtab.label "باز کردن ... در تب جدید">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "صفحه خالی">
+<!ENTITY newtab.home "صفحه خانگی">
+<!ENTITY newtab.current "صفحه فعلی">
+<!ENTITY newtab.duplicate "تکثیر صفحه">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY location.label.1 "Address">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY openTabNext.label "باز کردن تب جدید بعد از تب های فعال">
+<!ENTITY openOtherTabNext.label "Open other tabs next to current one">
+<!ENTITY relatedAfterCurrent.label "Only if related to current tab">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "باز کردن تب تکثیر شده بعد از تب اصلی">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Change opening order">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Open new tab next to the tab last opened from the current tab (since it was last selected)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabs">
+<!ENTITY lockTabs.label "Lock tabs">
+<!ENTITY lockNewTabs.label "Lock New tabs">
+<!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY openNewTab.label "باز کردن تب ها از">
+<!ENTITY openBookmarks.label "نشانه گذاری شده ها">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openHistory.label "تاریخچه">
+<!ENTITY openUrl.label "نوار آدرس">
+<!ENTITY openSearch.label "نوار جستجو">
+<!ENTITY middlecurrent1.label "Middle-click or Control-click opens items in current tab">
+<!ENTITY middlecurrent.tooltip "فقط برای نشانه گذاری شده ها،تاریخچه و تب های قفل شده">
+<!ENTITY tabFocus.caption "متمرکز کردن/انتخاب تب هایی که از ... باز می شوند">
+<!ENTITY selectTab.label "لینک ها">
+<!ENTITY selectDivertedTab.label "پنجره های منتقل شده">
+<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabCommand.label "دستورهای تب جدید">
+<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY selectTabBH.label "نشانه گذاری شده ها/تاریخچه">
+<!ENTITY duplicateTab.label "Duplicate Tab">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "Warning">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "Closing last tab">
+<!ENTITY keepWindow.label.3.1 "Do not close window when closing last tab">
+<!ENTITY keeptab.label "محافظت کردن آخرین تب در برابر بسته شدن">
+<!ENTITY closeOnMerge.label "پنجره ها را پس از اینکه ترکیب شدند ببند">
+<!ENTITY warnOnMerge.label "هشدار هنگام بسته شدن تب هایی که ترکیب نشده اند">
+<!ENTITY currenttab.caption.label "Closing current tab">
+<!ENTITY focusTab.labelBegin "برو">
+<!ENTITY focusTab.firstTab "First tab">
+<!ENTITY focusTab.leftTab "Left tab">
+<!ENTITY focusTab.rightTab "Right tab">
+<!ENTITY focusTab.lastTab "Last tab">
+<!ENTITY focusTab.lastSelectedTab "Last selected tab">
+<!ENTITY focusTab.openerTab "Opener/right tab">
+<!ENTITY focusTab.openerTab.rtl "Opener/left tab">
+<!ENTITY focusTab.lastOpenedTab "Last opened tab">
+<!ENTITY undoClose.label "حالت بازگردانی تب های بسته شده را فعال کن">
+<!ENTITY undoCloseCache.label "حداکثر تعداد ذخیره تب های بسته شده">
+<!ENTITY undoClosepos.label "تب ها را در مکان اولیه بازگردانی کن">
+<!ENTITY menuonlybutton.label "تغییر کلید نوار ابزار به طوری که فقط یک لیست را نمایش بدهد">
+<!ENTITY ctrltab.label "تب ها را در آخرین وضعیت استفاده شده مرتب می کند Ctrl-Tab">
+<!ENTITY cmdtab.label "تب ها را در آخرین وضعیت استفاده شده مرتب می کند Cmd-Tab">
+<!ENTITY ctrltab.tabPreviews "Show tab previews">
+<!ENTITY ctrltab.popup "یک لیست از تب ها را نمایش می دهد Ctrl-Tab">
+<!ENTITY cmdtab.popup "یک لیست از تب ها را نمایش می دهد Cmd-Tab">
+<!ENTITY tabpopup.mouse "لیست تب ها به ماوس پاسخ می دهد">
+<!ENTITY mergeNoTabSelection.label "ترکیب پنجره ها وقتی تب انتخاب شده ای وجود ندارد">
+<!ENTITY mergeTabSelection.label "ترکیب پس از انتخاب پنجره ها :">
+<!ENTITY mergeall.label "ترکیب تمام پنجره ها در یک پنجره">
+<!ENTITY mergelastfocused.label "ترکیب پنجره فعلی با آخرین پنجره">
+<!ENTITY mergePopups.label "همراه با پنجره های باز شدنی">
+<!ENTITY popupNextToOpener.label "قرار دادن پنجره های باز شدنی در کنار پنجره اصلی آنها">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
+<!ENTITY seconds.label "تب ها را هر F8 فشردن کلید">
+<!ENTITY minutes.label "دقیقه">
+<!ENTITY tabBarAppearance.label "نوار تب ها">
+<!ENTITY tabAppearance.label "تب">
+<!ENTITY toolBarAppearance.label "ToolBar">
+<!ENTITY show.ontabbar.label "Show on Tab bar">
+<!ENTITY show.ontab.label "Show on Tab">
+<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
+<!ENTITY hideTabBarButton.label "کلید تب بسته شده">
+<!ENTITY newTabButton.label "کلید تب جدید">
+<!ENTITY newTabButton.position.left.label "on Left side">
+<!ENTITY newTabButton.position.right.label "on Right side">
+<!ENTITY newTabButton.position.afterlast.label "After last tab">
+<!ENTITY allTabsButton.label "کلید تمام تب ها">
+<!ENTITY tabBarSpace.label "فضای اضافی در دو طرف">
+<!ENTITY tabBarSpace.tooltip "برای کلیک و رها کردن چیزی روی نوار تب ها">
+<!ENTITY tabbar.label "وقتی فقط یک پنجره باز است نوار تب ها را مخفی کن">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY dropIndicator.label "رها کردن نشانگر">
+<!ENTITY dropIndicator-native.label "استایل اصلی">
+<!ENTITY dropIndicator-builtin.label "استایل از قبل تعریف شده">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY tabBarPosition.label "موقعیت">
+<!ENTITY tabBarPosition.top.label "Top (above content)">
+<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabScroll.label "وقتی تب عرض مناسبی ندارد:">
+<!ENTITY tabScroll.none "بدون کلید ها قابل لغزش شود">
+<!ENTITY tabScroll.leftRightButtons "Scrollable with buttons on both sides">
+<!ENTITY tabScroll.rightButtons "Scrollable with buttons on right side">
+<!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
+<!ENTITY tabScroll.multibar "چند ردیفی شود">
+<!ENTITY maxrow.label "حداکثر تعداد ردیف های قابل نمایش">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
+<!ENTITY currenttab.style.label "تب فعلی">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unreadtabs.style.label "تب های خوانده نشده">
+<!ENTITY othertabs.style.label "Other tabs">
+<!ENTITY setstyles.label "سفارشی سازی استایل ها">
+<!ENTITY extraIcons.label1 "Icons for">
+<!ENTITY extraIcons.locked "Locked">
+<!ENTITY extraIcons.protected "Protected">
+<!ENTITY extraIcons.autoreload "Auto Reload">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY progressMeter.label "نمایش وضعیت پیشرفت روی تب ها">
+<!ENTITY showTabX.labelBegin "کلید بستن تب">
+<!ENTITY showTabX.left "نمایش در سمت چپ">
+<!ENTITY showTabX.rtl "Place on right side">
+<!ENTITY milliseconds.label "میلی ثانیه">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "روی همه">
+<!ENTITY showTabX.current "روی تب فعلی">
+<!ENTITY showTabX.hover "روی تب های جاری بیش از">
+<!ENTITY showTabX.alwaysExeption "روی تمام تب ها عریض تر از">
+<!ENTITY showTabX.currentHover "روی تب فعلی و تب های جاری بیش از">
+<!ENTITY minWidth.label "عرض:">
+<!ENTITY widthTo.label "در">
+<!ENTITY widthPixels.label "پیکسل">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY flexTabs.label "عرض تب با اندازه عنوان تب متناسب شود">
+<!ENTITY bookastitle.label "از نام نشانه گذاری شده برای عنوان تب استفاده کن">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "You can customize which Tab Mix Plus buttons to show in your Toolbar">
+<!ENTITY toolbar.button.label "Customize">
+<!ENTITY toolbar.visible.caption "Visible buttons">
+<!ENTITY toolbar.novisible.label "There are no visible buttons">
+<!ENTITY toolbar.hidden.caption "Hidden buttons">
+<!ENTITY toolbar.nohidden.label "There are no hidden buttons">
+<!ENTITY mouseGesture.label "حرکات ماوس">
+<!ENTITY mouseClick.label "کلیک کردن با ماوس">
+<!ENTITY mouseHoverSelect.labelBegin "انتخاب تب اشاره شده">
+<!ENTITY tabFlip.label "پرش به آخرین تب انتخاب شده هنگام کلیک روی تب فعلی">
+<!ENTITY tabFlip.delay "استفاده از تاخیر">
+<!ENTITY clickFocus.label "کلیک ماوس (فشردن و رها کردن) برای انتخاب تب">
+<!ENTITY removeEntries.label "با استفاده از کلیک وسط ماوس Tab Mix Plus پاک کردن لیست منو">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY removeEntries.tooltip "شامل تب و پنجره های بسته شده و نشست های ذخیره شده">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY double.label "دو بار کلیک">
+<!ENTITY middle.label "کلیک وسط">
+<!ENTITY ctrl.label "Ctrl-کلیک">
+<!ENTITY cmd.label "Cmd-کلیک">
+<!ENTITY shift.label "Shift-کلیک">
+<!ENTITY alt.label "َAlt-کلیک">
+<!ENTITY ontab.label "روی یک تب:">
+<!ENTITY ontabbar.label "روی نوار تب ها:">
+<!ENTITY clicktab.label "یک دستور را برای اجرا هنگام کلیک کردن روی تب یا نوار تب ها انتخاب کنید">
+<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY clicktab.nothing "هیچ کاری انجام نده">
+<!ENTITY clicktab.addtab "باز کردن یک تب جدید">
+<!ENTITY clicktab.duplicatetab "کپی کردن تب">
+<!ENTITY clicktab.duplicatetabw "کپی کردن تب در پنجره جدید">
+<!ENTITY clicktab.detachtab "فرستادن تب به یک پنجره جدید">
+<!ENTITY clicktab.protecttab "محافظت کردن از تب">
+<!ENTITY clicktab.locktab "قفل کردن تب">
+<!ENTITY clicktab.freezetab "قفل کردن و محافظت از تب">
+<!ENTITY clicktab.renametab "تغییر نام تب">
+<!ENTITY clicktab.copyTabUrl "کپی کردن آدرس تب در کلیپ بورد">
+<!ENTITY clicktab.copyUrlFromClipboard "Load URL from clipboard">
+<!ENTITY clicktab.selectMerge "انتخاب تب برای ترکیب کردن">
+<!ENTITY clicktab.mergeTabs "ترکیب پنجره ها با یکدیگر">
+<!ENTITY clicktab.bookTab "نشانه گذاری تب">
+<!ENTITY clicktab.bookTabs "نشانه گذاری تمام تب ها">
+<!ENTITY clicktab.reloadtab "بارگذاری مجدد تب">
+<!ENTITY clicktab.reloadtabs "بارگذاری مجدد تمام تب ها">
+<!ENTITY clicktab.reloadothertabs "بارگذاری مجدد سایر تب ها">
+<!ENTITY clicktab.reloadlefttabs "بارگذاری مجدد تب های سمت چپ">
+<!ENTITY clicktab.reloadrighttabs "بارگذاری مجدد تب های سمت راست">
+<!ENTITY clicktab.autoReloadTab "Activate/Deactivate tab auto reload">
+<!ENTITY clicktab.removeall "بستن تمام تب ها">
+<!ENTITY clicktab.removeother "بستن سایر تب ها">
+<!ENTITY clicktab.removesimilar "بستن پنجره های یک سایت">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.uctab "باز کردن مجدد تب بسته شده">
+<!ENTITY clicktab.ucatab "باز کردن مجدد تمام تب های بسته شده">
+<!ENTITY clicktab.snapback "بهبودی سریع تب">
+<!ENTITY clicktab.ietab "باز کردن تب در اینترنت اکسپلورر">
+<!ENTITY contentLoad "کلیک وسط آدرس سایت را از کلیپ بورد بارگذاری کند">
+<!ENTITY context.tab "منو">
+<!ENTITY context.main "منو اصلی کلیک راست">
+<!ENTITY context.tools "منوی ابزارها">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showtabBarContext.label "نمایش در کلیک راست روی تب">
+<!ENTITY showContentAreaContext.label "نمایش در منو اصلی کلیک راست">
+<!ENTITY showToolsMenu.label "نمایش در منوی ابزارها:">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "نمایش یک صفحه خالی">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "Tab Mix Plus detect that Session Manager Extension is installed">
+<!ENTITY sm.extension.description2 "Tab Mix Plus session manager will be disabled">
+<!ENTITY sm.extension.description3 "You can click the button on the right to open Session Manager Options dialog">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "Convert">
+<!ENTITY sm.extension.chooseFile.label1 "Convert Tab Mix Plus sessions from the current profile">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "استفاده از برنامه بازگردانی نشست داخلی فایرفاکس">
+<!ENTITY ss.enable.tooltip "با انتخاب نکردن این گزینه هر دو مدیر نشست هزمان استفاده خواهند شد">
+<!ENTITY ss.advanced_setting "تنظیمات پیشرفته">
+<!ENTITY ss.advanced_setting.warning "فقط در صورتی این گزینه را تغییر دهید که از کار خود مطمئن باشید">
+<!ENTITY ss.interval "حداقل زمان بین دو ذخیره">
+<!ENTITY ss.interval.seconds "(به میلی ثانیه)">
+<!ENTITY ss.privacy_level "ذخیره اطلاعات مهم برای">
+<!ENTITY ss.privacy_level.allsites "تمام سایت ها">
+<!ENTITY ss.privacy_level.unencrypted "فقط سایت های رمزبندی نشده">
+<!ENTITY ss.privacy_level.nosites "هیچ سایتی">
+<!ENTITY ss.postdata.label1 "POSTDATA بالاترین میزان ذخیره">
+<!ENTITY ss.postdata.label2 "(in bytes, -1 = all of it)">
+<!ENTITY sessionManger.enable "فعال کردن مدیریت نشست">
+<!ENTITY crashRecovery.enable "فعال کردن بازیافت نشست قفل شده">
+<!ENTITY sm.StartExit "شروع/خروج">
+<!ENTITY sm.restore "بازگردانی">
+<!ENTITY sm.preserve "محافظت کردن">
+<!ENTITY sm.start "هنگام اجرای مروگر:">
+<!ENTITY sm.start.restore "بازگردانی">
+<!ENTITY sm.start.ask "پرسیدن سوال قبل از بازگردانی">
+<!ENTITY sm.start.nothing "بازگردانی نکن">
+<!ENTITY sm.exit "هنگام بستن مرورگر:">
+<!ENTITY sm.exit.save "ذخیره نشست">
+<!ENTITY sm.exit.ask "پرسیدن سوال قبل از ذخیره کردن">
+<!ENTITY sm.exit.nothing "ذخیره نکن">
+<!ENTITY sm.startup "نشست اولیه:">
+<!ENTITY sm.lastsession "آخرین نشست">
+<!ENTITY sm.previouslast "یکی مانده به آخر">
+<!ENTITY sm.chooseifempty "انتخاب یکی دیگر در صورت خالی بودن">
+<!ENTITY sm.restore.options "هنگام بازگردانی نشست ها:">
+<!ENTITY sm.restore.overwrite "باز نویسی روی پنجره ها و تب های">
+<!ENTITY sm.restore.overwriteTabs "فعلی">
+<!ENTITY sm.restore.closedWinList "پنجره های موجود در لیست پنجره های بسته شده را ذخیره کن">
+<!ENTITY sm.restore.merge "ترکیب کردن پنجره های">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.notrestore.label "When not restoring on start">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "نگاه داشتن تب ها:">
+<!ENTITY sm.preserve.history "تاریخچه">
+<!ENTITY sm.preserve.protect "وضعیت محافظت شده">
+<!ENTITY sm.preserve.locked "وضعیت قفل">
+<!ENTITY sm.preserve.permission "مجوزها">
+<!ENTITY sm.preserve.scroll1 "Scroll Position">
+<!ENTITY sm.restore.winOptions "نگاه داشتن پنجره ها:">
+<!ENTITY sm.restore.selectedTab "تب های انتخاب شده">
+<!ENTITY sm.restore.closedTabs "لیست تب های بسته شده">
+<!ENTITY incompatible.extensions "سازگار نیستند.بهتر است آنها را پاک یا غیرفعال کنید Tab Mix Plus بعضی از اکستنشن های شما با">
+<!ENTITY incompatible.button.label "نمایش لیست">

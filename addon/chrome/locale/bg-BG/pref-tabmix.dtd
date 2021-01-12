@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Връзки">
+<!ENTITY tab.events "Събития">
+<!ENTITY tab.mouse "Мишка">
+<!ENTITY tab.appearance "Изглед">
+<!ENTITY tab.menu "Меню">
+<!ENTITY tab.session "Сесия">
+<!ENTITY tab.incompatible "Грешка">
+<!ENTITY apply.label "Прилагане">
+<!ENTITY settings.export "Експортиране на настройките">
+<!ENTITY settings.import "Импортиране на настройките">
+<!ENTITY settings.sync "Настройка на Sync">
+<!ENTITY settings.default "Възстановяване на настройките по подразбиране">
+<!ENTITY settings.revert "Отмяна на промените">
+<!ENTITY generalWindowOpen.label "Връзките, които се отварят в нов прозорец, да се отварят в:">
+<!ENTITY externalLink.useSeparate.label "Използване на отделни настройки за връзки от други приложения">
+<!ENTITY externalLinkTarget.label "Отваряне на връзките от външни приложения в:">
+<!ENTITY linkTarget.tab "Нов подпрозорец">
+<!ENTITY linkTarget.window "Нов прозорец">
+<!ENTITY linkTarget.current "Текущия подпрозорец">
+<!ENTITY linkTarget.accesskey "Т">
+<!ENTITY divertedWindowOpen.label "Изскачащи прозорци JavaScript:">
+<!ENTITY divertedWindowOpen.all "Отваряне на всички в подпрозорци">
+<!ENTITY divertedWindowOpen.some "Разрешаване на изскачащи прозорци с изменен размер">
+<!ENTITY divertedWindowOpen.none "Разрешаване на всички изскачащи прозорци">
+<!ENTITY linkTarget.label "Отваряне на връзки с атрибут &quot;target&quot; в текущия подпрозорец">
+<!ENTITY targetIsFrame.label "Отваряне в текущия подпрозорец на връзките, предназначени за текущия фрейм">
+<!ENTITY download.label "Забрана на празни подпрозорци при изтегляне на файлове">
+<!ENTITY edit.label "Типове файлове">
+<!ENTITY speLink.label "Принудително отваряне в нови подпрозорци:">
+<!ENTITY speLink.none "Нищо">
+<!ENTITY speLink.allLinks "Всички връзки">
+<!ENTITY speLink.external "Връзки към външни сайтове">
+<!ENTITY singleWindow.label "Включване на режим на браузъра за работа само в един прозорец">
+<!ENTITY newTabs.label "Нови подпрозорци">
+<!ENTITY tabOpen.label "Отваряне на подпрозорци">
+<!ENTITY tabFocus.label "Фокусиране на подпрозорци">
+<!ENTITY tabClose.label "Затваряне на подпрозорци">
+<!ENTITY tabMerge.label "Обединяване на подпрозорци">
+<!ENTITY tabFeature.label "Настройки на подпрозорците">
+<!ENTITY newtab.label "Отваряне в нови подпрозорци:">
+<!ENTITY replaceLastTabWith1.label "При затваряне на последния подпрозорец, заместване с">
+<!ENTITY newtab.blank "Празна страница">
+<!ENTITY newtab.home "Началната страница">
+<!ENTITY newtab.current "Текущата страница">
+<!ENTITY newtab.duplicate "Дублирана страница">
+<!ENTITY newtab.location.1 "Нов подпрозорец">
+<!ENTITY newtab.placeholder.label "Нов подпрозорец по подразбиране">
+<!ENTITY location.label.1 "Адрес">
+<!ENTITY focusContent.label "Фокусиране на съдържанието при зареждане на не-празна страница">
+<!ENTITY openTabNext.label "Отваряне на нови подпрозорци непосредствено до текущия">
+<!ENTITY openOtherTabNext.label "Отваряне на други подпрозорци непосредствено до текущия">
+<!ENTITY relatedAfterCurrent.label "Само ако са свързани с текущия подпрозорец">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Отваряне на дублираните подпрозорци непосредствено до оригиналните">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Промяна на поредността на отваряне">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Отваряне на нов подпрозорец непосредствено до последния подпрозорец, отворен от текущия подпрозорец">
+<!ENTITY moveSwitchToTabNext.label "Преместване на подпрозореца от „Превключване към подпрозореца“ до текущия">
+<!ENTITY loadTabsProgressively.label "Поетапно зареждане на подпрозорците">
+<!ENTITY restoreOnDemand.label "Без зареждане на подпрозорците, докато не ги избера">
+<!ENTITY openMoreThan.label "при отваряне на повече от">
+<!ENTITY tabs.label "подпрозорци">
+<!ENTITY lockTabs.label "Заключване на подпрозорци">
+<!ENTITY lockNewTabs.label "Заключване на нови подпрозорци">
+<!ENTITY lockAppTabs.label "Заключване на прикрепени подпрозорци">
+<!ENTITY updateLockState.label "Прилагане на измененията за текущите отворени подпрозорци">
+<!ENTITY openNewTab.label "Отваряне в нови подпрозорци на:">
+<!ENTITY openBookmarks.label "Отметки">
+<!ENTITY openPlacesGroups.label "Групи от отметки/история">
+<!ENTITY openPlacesGroups.tooltip "При отваряне на група от отметки/история, подпрозорците не се заменят">
+<!ENTITY openHistory.label "История">
+<!ENTITY openUrl.label "Адресната лента">
+<!ENTITY openSearch.label "Лентата за търсене">
+<!ENTITY middlecurrent1.label "Щракването със средния бутон или CTRL+ляв бутон отваря елементите в текущия подпрозорец">
+<!ENTITY middlecurrent.tooltip "Само за отметки, история и връзки, които принудително се отварят в нов подпрозорец">
+<!ENTITY tabFocus.caption "Фокусиране/активиране на подпрозорците, които се отварят от:">
+<!ENTITY selectTab.label "Връзки">
+<!ENTITY selectDivertedTab.label "Вместо прозорци">
+<!ENTITY selectTabFromExternal.label "Други приложения">
+<!ENTITY selectTabCommand.label "При команда за създаване на нов подпрозорец">
+<!ENTITY contextMenuSearch.label "Търсене чрез контекстното меню">
+<!ENTITY selectTabBH.label "Отметки/История">
+<!ENTITY duplicateTab.label "Дублиран подпрозорец">
+<!ENTITY inversefocus2.label "Щракване със средния бутон (или CTRL+щракване) обръща фокуса на:">
+<!ENTITY warning.caption.label "Предупреждения">
+<!ENTITY warnOnCloseMultipleTabs.label "Предупреждаване при затваряне на няколко подпрозореца">
+<!ENTITY warnOnCloseProtected1.label "Предупреждаване при затваряне на прозорец със защитени подпрозорци">
+<!ENTITY warnOnCloseWindow1.label "Предупреждаване при затваряне на прозорец с няколко подпрозореца">
+<!ENTITY lasttab.caption.label "Затваряне на последния подпрозорец">
+<!ENTITY keepWindow.label.3.1 "Прозорецът да остане отворен дори и след затварянето на последния подпрозорец">
+<!ENTITY keeptab.label "Забрана за затваряне на последния подпрозорец">
+<!ENTITY closeOnMerge.label "Затваряне на прозорците след обединяването им">
+<!ENTITY warnOnMerge.label "Предупреждение при затваряне на подпрозорци, които не са маркирани за обединяване">
+<!ENTITY currenttab.caption.label "Затваряне на текущия подпрозорец">
+<!ENTITY focusTab.labelBegin "При затварянето му, фокусът се измества върху:">
+<!ENTITY focusTab.firstTab "първия подпрозорец">
+<!ENTITY focusTab.leftTab "подпрозореца отляво">
+<!ENTITY focusTab.rightTab "подпрозореца отдясно">
+<!ENTITY focusTab.lastTab "последния подпрозорец">
+<!ENTITY focusTab.lastSelectedTab "последно маркирания подпрозорец">
+<!ENTITY focusTab.openerTab "подпрозореца, от който е бил отворен текущия/подпрозореца отдясно">
+<!ENTITY focusTab.openerTab.rtl "подпрозореца, от който е бил отворен текущия/подпрозореца отляво">
+<!ENTITY focusTab.lastOpenedTab "последно отворения подпрозорец">
+<!ENTITY undoClose.label "Възстановяване на последно затворените подпрозорци">
+<!ENTITY undoCloseCache.label "Броят на запомнените подпрозорци е най-много:">
+<!ENTITY undoClosepos.label "Възстановяване на първоначалното разположение на подпрозорците">
+<!ENTITY menuonlybutton.label "Бутонът на панела с инструменти показва само списък">
+<!ENTITY ctrltab.label "CTRL+Tab прелиства подпрозорците по реда на последното им използване">
+<!ENTITY cmdtab.label "CMD+Tab прелиства подпрозорците по реда на последното им използване">
+<!ENTITY ctrltab.tabPreviews "Показване на миниатюри на подпрозорците">
+<!ENTITY ctrltab.popup "CTRL+Tab показва изскачащо меню със списък на подпрозорците">
+<!ENTITY cmdtab.popup "CMD+Tab показва изскачащо меню със списък на подпрозорците">
+<!ENTITY tabpopup.mouse "Списъкът с подпрозорци реагира на мишката">
+<!ENTITY mergeNoTabSelection.label "Обединяване на прозорци, когато няма маркирани подпрозорци">
+<!ENTITY mergeTabSelection.label "Обединяване след маркиране на подпрозорци">
+<!ENTITY mergeall.label "Обединяване на всички прозорци в един">
+<!ENTITY mergelastfocused.label "Обединяване само на текущия и на последно активния прозорци">
+<!ENTITY mergePopups.label "Обединяване също така и на изскачащи прозорци">
+<!ENTITY popupNextToOpener.label "Разполагане на изскачащите прозорци непосредствено до подпрозорците, които са ги отворили">
+<!ENTITY activateSlideshow.label "Натискането на #1 превърта подпрозорците на всеки">
+<!ENTITY toggleAnimation.label "Изключване на анимацията при отваряне/затваряне на подпрозорци">
+<!ENTITY reloadEvery.matchAddress.label "Презареждане на подпрозорец независимо от адреса му">
+<!ENTITY reloadEvery.onReloadButton.label "Показване в бутона Презареждане на меню &quot;Презареждане на подпрозореца на всеки...&quot;">
+<!ENTITY seconds.label "сек.">
+<!ENTITY minutes.label "мин.">
+<!ENTITY tabBarAppearance.label "Лента с подпрозорци">
+<!ENTITY tabAppearance.label "Подпрозорец">
+<!ENTITY toolBarAppearance.label "Лента с инструменти">
+<!ENTITY show.ontabbar.label "Елементи, показвани върху лентата с подпрозорци">
+<!ENTITY show.ontab.label "Елементи, показвани върху подпрозореца">
+<!ENTITY dragNewTabButton.tooltip "Включването става чрез плъзгане на бутона &quot;Нов подпрозорец&quot; върху лентата с подпрозорци.">
+<!ENTITY hideTabBarButton.label "Бутон за затваряне на подпрозореца">
+<!ENTITY newTabButton.label "Бутон за добавяне на нов подпрозорец">
+<!ENTITY newTabButton.position.left.label "Отляво">
+<!ENTITY newTabButton.position.right.label "Отдясно">
+<!ENTITY newTabButton.position.afterlast.label "След последния подпрозорец">
+<!ENTITY allTabsButton.label "Бутон &quot;Всички подпрозорци&quot;">
+<!ENTITY tabBarSpace.label "Празни полета по краищата на лентата с подпрозорци">
+<!ENTITY tabBarSpace.tooltip "Използват се за щракване и за пускане на различни елементи върху лентата с подпрозорци">
+<!ENTITY tabbar.label "Скриване на лентата с подпрозорци, когато има само един отворен">
+<!ENTITY moveTabOnDragging.label "Незабавно преместване на подпрозорец при плъзгането му">
+<!ENTITY dropIndicator.label "Индикатор за пускане">
+<!ENTITY dropIndicator-native.label "Стандартен стил">
+<!ENTITY dropIndicator-builtin.label "Вграден стил">
+<!ENTITY verticalTabbar.description1 "Настройките се контролират от друго разширение, използващо вертикални подпрозорци.">
+<!ENTITY tabBarPosition.label "Разположение на лентата:">
+<!ENTITY tabBarPosition.top.label "Подпрозорците отгоре">
+<!ENTITY tabBarPosition.bottom.label "Подпрозорците отдолу">
+<!ENTITY tabScroll.label "Ако има много подпрозорци:">
+<!ENTITY tabScroll.none "Прелистване с колелото на мишката">
+<!ENTITY tabScroll.leftRightButtons "Прелистване чрез бутони, разположени отляво и отдясно">
+<!ENTITY tabScroll.rightButtons "Прелистване чрез бутони, разположени отдясно">
+<!ENTITY tabScroll.rightButtons.rtl "Прелистване чрез бутони, разположени отляво">
+<!ENTITY tabScroll.multibar "Разполагане на подпрозорците на няколко реда">
+<!ENTITY maxrow.label "Максимален брой редове:">
+<!ENTITY pinnedTabScroll.label "Прелистване на забодените подпрозорци">
+<!ENTITY offsetAmountToScroll.label "При прелистване да се показва част от следващия все още непоказан подпрозорец">
+<!ENTITY smoothScroll.label "Включване на плавно превъртане">
+<!ENTITY scrolldelay.label "Забавяне на прелистването (време до преминаването към следващия подпрозорец)">
+<!ENTITY currenttab.style.label "Текущия подпрозорец">
+<!ENTITY unloadedtabs.style.label "Незаредените подпрозорци">
+<!ENTITY unreadtabs.style.label "Непрочетените подпрозорци">
+<!ENTITY othertabs.style.label "Другите подпрозорци">
+<!ENTITY setstyles.label "Настройка на стиловете">
+<!ENTITY extraIcons.label1 "Икони за">
+<!ENTITY extraIcons.locked "Заключен">
+<!ENTITY extraIcons.protected "Защитен">
+<!ENTITY extraIcons.autoreload "Автоматично презареждащ се">
+<!ENTITY extraIcons.hideonpinned "Скриване ако подпрозорците са забодени">
+<!ENTITY progressMeter.label "Индикатор за активност">
+<!ENTITY showTabX.labelBegin "Бутон за затваряне">
+<!ENTITY showTabX.left "бутонът е отляво">
+<!ENTITY showTabX.rtl "бутонът е отдясно">
+<!ENTITY milliseconds.label "мсек.">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "на всички подпрозорци">
+<!ENTITY showTabX.current "само на текущия подпрозорец">
+<!ENTITY showTabX.hover "само при посочване с курсора на мишката">
+<!ENTITY showTabX.alwaysExeption "на всички подпрозорци, които са по-широки от">
+<!ENTITY showTabX.currentHover "на текущия подпрозорец и на подпрозореца, посочен с курсора на мишката">
+<!ENTITY minWidth.label "Ширина на подпрозореца от">
+<!ENTITY widthTo.label "до">
+<!ENTITY widthPixels.label "пиксела">
+<!ENTITY onLeftDisabled.label "При сега използваната тема, бутонът не може да бъде разположен отляво">
+<!ENTITY onLeftDisabled.tst.label "При инсталиран дървовиден StyleTab, вляво не може да бъде поставян бутон">
+<!ENTITY flexTabs.label "Ширината е съобразно дължината на заглавието">
+<!ENTITY bookastitle.label "Използване името на отметката като заглавие на подпрозореца">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Можете да настроите кои бутони от Tab Mix Plus да се показват върху лентата с инструменти">
+<!ENTITY toolbar.button.label "Настройка">
+<!ENTITY toolbar.visible.caption "Видими бутони">
+<!ENTITY toolbar.novisible.label "Няма видими бутони">
+<!ENTITY toolbar.hidden.caption "Скрити бутони">
+<!ENTITY toolbar.nohidden.label "Няма скрити бутони">
+<!ENTITY mouseGesture.label "Настройки на мишката">
+<!ENTITY mouseClick.label "Щраквания с мишката">
+<!ENTITY mouseHoverSelect.labelBegin "Показване на подпрозореца при задържане курсора на мишката върху него за">
+<!ENTITY tabFlip.label "Превключване към последно избрания подпрозорец при щракване върху текущия">
+<!ENTITY tabFlip.delay "Забавяне:">
+<!ENTITY clickFocus.label "Избиране на подпрозорец чрез щракване върху него">
+<!ENTITY removeEntries.label "Изтриване на пунктове от списъците на Тab Mix Plus посредством щракване със среден бутон">
+<!ENTITY lockTabSizingOnClose.label "При затваряне на един подпрозорец, останалите не трябва да изменят ширината си, докато показалецът на мишката не напусне областта на лентата с инструменти">
+<!ENTITY removeEntries.tooltip "Това включва затворени подпрозорци, затворени прозорци и записани сесии">
+<!ENTITY tabbarscrolling.caption "При прелистване върху лентата с подпрозорци">
+<!ENTITY tabbarscrolling.holdShift.label "Задържането на Shift при прелистване превключва между тези опции:">
+<!ENTITY tabbarscrolling.selectTab.label "Промяна на избрания подпрозорец">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Прелистване на всички подпрозорци">
+<!ENTITY tabbarscrolling.inverse.label "Промяна посоката на прелистване">
+<!ENTITY double.label "Двукратно щракване">
+<!ENTITY middle.label "Щракване със среден бутон">
+<!ENTITY ctrl.label "CTRL+щракване">
+<!ENTITY cmd.label "CMD+щракване">
+<!ENTITY shift.label "SHIFT+щракване">
+<!ENTITY alt.label "ALT+щракване">
+<!ENTITY ontab.label "върху подпрозорец:">
+<!ENTITY ontabbar.label "върху лентата с подпрозорци:">
+<!ENTITY clicktab.label "Изберете действие при щракване върху подпрозорец/лентата с подпрозорци">
+<!ENTITY ontabbar.dblClick.label "Двукратното щракване върху лентата с подпрозорците НЕ променя размера на прозореца">
+<!ENTITY ontabbar.click.label "и НЕ позволява преместването му.">
+<!ENTITY clicktab.default "Използване на стандартната команда или на друга добавка">
+<!ENTITY clicktab.nothing "Без никакви последици">
+<!ENTITY clicktab.addtab "Отваряне на нов подпрозорец">
+<!ENTITY clicktab.duplicatetab "Дублиране на подпрозореца">
+<!ENTITY clicktab.duplicatetabw "Дублиране на подпрозореца в нов прозорец">
+<!ENTITY clicktab.detachtab "Преместване на подпрозореца в нов прозорец">
+<!ENTITY clicktab.protecttab "Защита на подпрозореца">
+<!ENTITY clicktab.locktab "Заключване на подпрозореца">
+<!ENTITY clicktab.freezetab "Защита и заключване на подпрозореца">
+<!ENTITY clicktab.renametab "Преименуване на подпрозореца">
+<!ENTITY clicktab.copyTabUrl "Копиране на адреса на подпрозореца в клипборда">
+<!ENTITY clicktab.copyUrlFromClipboard "Зареждане на адреса от клипборда">
+<!ENTITY clicktab.selectMerge "Маркиране на подпрозореца за обединяване">
+<!ENTITY clicktab.mergeTabs "Обединяване на отделните прозорци в един">
+<!ENTITY clicktab.bookTab "Отмятане на подпрозореца">
+<!ENTITY clicktab.bookTabs "Отмятане на всички подпрозорци">
+<!ENTITY clicktab.reloadtab "Презареждане на подпрозореца">
+<!ENTITY clicktab.reloadtabs "Презареждане на всички подпрозорци">
+<!ENTITY clicktab.reloadothertabs "Презареждане на останалите подпрозорци">
+<!ENTITY clicktab.reloadlefttabs "Презареждане на подпрозорците отляво">
+<!ENTITY clicktab.reloadrighttabs "Презареждане на подпрозорците отдясно">
+<!ENTITY clicktab.autoReloadTab "Включване/изключване на автоматичното презареждане на подпрозорци">
+<!ENTITY clicktab.removeall "Затваряне на всички подпрозорци">
+<!ENTITY clicktab.removeother "Затваряне на останалите подпрозорци">
+<!ENTITY clicktab.removesimilar "Затваряне на подпрозорците от този домейн">
+<!ENTITY clicktab.removetoLeft "Затваряне на левите подпрозорци">
+<!ENTITY clicktab.removetoRight "Затваряне на десните подпрозорци">
+<!ENTITY clicktab.uctab "Възстановяване на последно затворения подпрозорец">
+<!ENTITY clicktab.ucatab "Възстановяване на всички затворени подпрозорци">
+<!ENTITY clicktab.snapback "Възстановяване на подпрозорец">
+<!ENTITY clicktab.ietab "Отваряне на подпрозореца в Internet Explorer">
+<!ENTITY contentLoad "Зареждане на адреса от клипборда посредством щракване със среден бутон">
+<!ENTITY context.tab "Контекстно меню на подпрозореца">
+<!ENTITY context.main "Основно контекстно меню">
+<!ENTITY context.tools "Меню &quot;Инструменти&quot;">
+<!ENTITY showOnTabbar.label "Показване контекстното меню на подпрозореца върху лентата с подпрозорци">
+<!ENTITY showtabBarContext.label "Пунктове в контекстното меню на подпрозореца">
+<!ENTITY showContentAreaContext.label "Пунктове в основното контекстно меню">
+<!ENTITY showToolsMenu.label "Пунктове в меню &quot;Инструменти&quot;">
+<!ENTITY startupHomePage1.label "Показване на началната страница">
+<!ENTITY startupBlankPage.label "Показване на празна страница">
+<!ENTITY startupLastSession1.label "Показване на прозорците и подпрозорците от последния път">
+<!ENTITY sm.extension.description1 "Tab Mix Plus установи, че има инсталирана добавка Session Manager">
+<!ENTITY sm.extension.description2 "Мениджърът на сесии Tab Mix Plus ще бъде изключен">
+<!ENTITY sm.extension.description3 "Можете да натиснете бутона вдясно, за да отворите настройките на Session Manager">
+<!ENTITY sm.extension.description5 "Преобразуване на сесиите от формат Тab Mix Plus във формат Session Manager">
+<!ENTITY sm.extension.convert.label "Преобразуване">
+<!ENTITY sm.extension.chooseFile.label1 "Преобразуване на сесиите Тab Mix Plus от текущия профил">
+<!ENTITY sm.extension.chooseFile.label2 "Избор на файл за преобразуване">
+<!ENTITY ss.enable.label "Използване на вградената функция на Firefox за възстановяване на сесии">
+<!ENTITY ss.enable.tooltip "Премахнете тази отметка, за да позволите използването на Мениджъра на сесии Tab Mix Plus">
+<!ENTITY ss.advanced_setting "Допълнителни настройки">
+<!ENTITY ss.advanced_setting.warning "Не променяйте тези параметри, ако не знаете какво точно правите">
+<!ENTITY ss.interval "Минимален интервал между запазване на сесии">
+<!ENTITY ss.interval.seconds "(в милисекунди)">
+<!ENTITY ss.privacy_level "Записване на поверителни данни (данни от попълнени формуляри, POSTDATA и бисквитки):">
+<!ENTITY ss.privacy_level.allsites "За всички сайтове">
+<!ENTITY ss.privacy_level.unencrypted "Само за нешифровани сайтове">
+<!ENTITY ss.privacy_level.nosites "Без записване">
+<!ENTITY ss.postdata.label1 "Максимален размер на POSTDATA данни за съхранение">
+<!ENTITY ss.postdata.label2 "(в байтове, -1 = всичко)">
+<!ENTITY sessionManger.enable "Включване на Мениджъра на сесии">
+<!ENTITY crashRecovery.enable "Възстановяване на сесия след крах на Firefox">
+<!ENTITY sm.StartExit "Пускане/Изход">
+<!ENTITY sm.restore "Възстановяване">
+<!ENTITY sm.preserve "Запазване">
+<!ENTITY sm.start "При пускането на браузъра:">
+<!ENTITY sm.start.restore "Възстановяване на сесията">
+<!ENTITY sm.start.ask "Потвърждение преди възстановяването">
+<!ENTITY sm.start.nothing "Без възстановяване на сесията">
+<!ENTITY sm.exit "При изход от браузъра:">
+<!ENTITY sm.exit.save "Запис на сесията">
+<!ENTITY sm.exit.ask "Потвърждение преди записа">
+<!ENTITY sm.exit.nothing "Без запис">
+<!ENTITY sm.startup "Избор на начална сесия:">
+<!ENTITY sm.lastsession "Последната сесия">
+<!ENTITY sm.previouslast "Сесията преди последната">
+<!ENTITY sm.chooseifempty "Избор на друга, ако избраната сесия е празна">
+<!ENTITY sm.restore.options "При възстановяването на сесии:">
+<!ENTITY sm.restore.overwrite "Замяна на съществуващите прозорци">
+<!ENTITY sm.restore.overwriteTabs "и подпрозорци">
+<!ENTITY sm.restore.closedWinList "Запис на прозорците в списъка на затворени прозорци">
+<!ENTITY sm.restore.merge "Обединяване на няколко прозорци в един">
+<!ENTITY sm.restore.bypassCache "Игнориране на кеша при възстановяване">
+<!ENTITY sm.notrestore.label "Когато не се възстановява при стартирането">
+<!ENTITY sm.restorePinned1.label "Възстановяване на забодените от последния път подпрозорци">
+<!ENTITY sm.preserve.options "Запазване на следните параметри на подпрозорците:">
+<!ENTITY sm.preserve.history "Историята">
+<!ENTITY sm.preserve.protect "Статуса на защита">
+<!ENTITY sm.preserve.locked "Статуса на заключване">
+<!ENTITY sm.preserve.permission "Разрешенията">
+<!ENTITY sm.preserve.scroll1 "Позицията при прелистването">
+<!ENTITY sm.restore.winOptions "Запазване на следните параметри на прозорците:">
+<!ENTITY sm.restore.selectedTab "Активен подпрозорец">
+<!ENTITY sm.restore.closedTabs "Списък на затворени подпрозорци">
+<!ENTITY incompatible.extensions "Някои от добавките Ви са несъвместими с Таб Mix Plus. Препоръчително е да изключите или деинсталирате тези добавки.">
+<!ENTITY incompatible.button.label "Показване на списъка">

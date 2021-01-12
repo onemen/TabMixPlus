@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Закрытые вкладки">
+<!ENTITY closedtabsbtn.tooltip "Показать список закрытых вкладок">
+<!ENTITY sessionbtn.tooltip "Отображение и управление сессиями">
+<!ENTITY tabslistbtn.label "Открытые вкладки">
+<!ENTITY tabslistbtn.tooltip "Показать список открытых вкладок">
+<!ENTITY closedwindowsbtn.label "Закрытые окна">
+<!ENTITY closedwindowsbtn.tooltip "Показать список закрытых окон">
+<!ENTITY page.header.title "Настройки Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Менеджер сессий Tab Mix Plus">
+<!ENTITY session.Tools "Менеджер сессий">
+<!ENTITY closedWin.label "Список закрытых окон">
+<!ENTITY duplicateTabMenu.label "Клонировать вкладку">
+<!ENTITY duplicateTabMenu.accesskey "К">
+<!ENTITY duplicateinWin.label "Клонировать в новом окне">
+<!ENTITY duplicateinWin.accesskey "н">
+<!ENTITY detachTab.label "Переместить в новое окно">
+<!ENTITY detachTab.accesskey "е">
+<!ENTITY mergeContext.label "Объединение окон">
+<!ENTITY mergeContext.accesskey "О">
+<!ENTITY renametab.label "Переименовать вкладку">
+<!ENTITY renametab.accesskey "и">
+<!ENTITY copytaburl.label "Копировать URL вкладки">
+<!ENTITY copytaburl.accesskey "ь">
+<!ENTITY reloadother.label "Обновить другие вкладки">
+<!ENTITY reloadother.accesskey "г">
+<!ENTITY reloadleft.label "Обновить вкладки слева">
+<!ENTITY reloadleft.accesskey "е">
+<!ENTITY reloadright.label "Обновить вкладки справа">
+<!ENTITY reloadright.accesskey "а">
+<!ENTITY autoReloadTab.label "Обновлять вкладку каждые...">
+<!ENTITY autoReloadTab.accesskey "б">
+<!ENTITY autoReloadSite.label "Обновлять этот сайт каждые">
+<!ENTITY autoReloadSite.accesskey "б">
+<!ENTITY afterthis.label "После этой вкладки">
+<!ENTITY bookmarktab.label "Закладка для текущей вкладки">
+<!ENTITY undoCloseListMenu.label "Список закрытых вкладок">
+<!ENTITY undoCloseListMenu.accesskey "х">
+<!ENTITY closeAllTabsMenu.label "Закрыть все вкладки">
+<!ENTITY closeall.accesskey "ы">
+<!ENTITY closeSimilarTab.label "Закрыть схожие вкладки">
+<!ENTITY closeSimilarTab.accesskey "ж">
+<!ENTITY closeTabsToLeft.label "Закрыть вкладки слева">
+<!ENTITY closeleft.accesskey "л">
+<!ENTITY docShellMenu.label "Установить разрешения">
+<!ENTITY docShellMenu.accesskey "р">
+<!ENTITY freezeTabMenu.label "Заморозить вкладку">
+<!ENTITY freezeTabMenu.accesskey "м">
+<!ENTITY protectTabMenu.label "Защитить вкладку">
+<!ENTITY protectTabMenu.tooltip "Защита вкладок от закрытия">
+<!ENTITY protectTabMenu.accesskey "щ">
+<!ENTITY lockTabMenu.label "Заблокировать вкладку">
+<!ENTITY lockTabMenu.tooltip "Все ссылки открывать в новых вкладках">
+<!ENTITY lockTabMenu.accesskey "б">
+<!ENTITY bookmarktabs.label "Закладки для всех вкладок">
+<!ENTITY linkhere.label "Открыть ссылку в текущей вкладке">
+<!ENTITY linkhere.accesskey "щ">
+<!ENTITY linkBackgroundTab.label "Открыть ссылку в новой вкладке в фоне">
+<!ENTITY linkForegroundTab.label "Открыть ссылку в новой активной вкладке">
+<!ENTITY linkBackgroundTab.accesskey "ф">
+<!ENTITY linkForegroundTab.accesskey "у">
+<!ENTITY openalllinks.label "Открыть выбранное в новых вкладках">
+<!ENTITY openalllinks.accesskey "ы">
+<!ENTITY linkwithhistory.label "Открыть ссылку в новой вкладке">
+<!ENTITY linkwithhistory.accesskey "в">
+<!ENTITY tabsList.label "Список открытых вкладок">
+<!ENTITY tabsList.accesskey "С">
+<!ENTITY allowImage.label "Изображения">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Перенаправление">
+<!ENTITY allowPlugin.label "Дополнительные модули">
+<!ENTITY allowFrame.label "Фреймы">
+<!ENTITY restoreincurrent.label "Восстановить в текущей вкладке">
+<!ENTITY restoreincurrent.accesskey "т">
+<!ENTITY restoreinwin.label "Восстановить в новом окне">
+<!ENTITY restoreinwin.accesskey "ь">
+<!ENTITY restoreintab.label "Восстановить в новой вкладке">
+<!ENTITY restoreintab.accesskey "н">
+<!ENTITY restoretab.label "Восстановить вкладку">
+<!ENTITY restoretab.accesskey "В">
+<!ENTITY bookmark.label "Добавить страницу в закладки...">
+<!ENTITY bookmark.accesskey "ц">
+<!ENTITY deletelist.label "Удалить из списка">
+<!ENTITY deletelist.accesskey "У">
+<!ENTITY settings.label "Настройки ">
+<!ENTITY saveWindow.label "Сохранить данное окно">
+<!ENTITY saveAllWindows.label "Сохранить все окна">
+<!ENTITY sm.context.overwrite "Восстановить с заменой существующих окон">
+<!ENTITY sm.context.overwrite.key "з">
+<!ENTITY sm.context.restore.new "Восстановить в новые окна">
+<!ENTITY sm.context.restore.newkey "н">
+<!ENTITY sm.context.replacethis "Восстановить в текущее окно">
+<!ENTITY sm.context.replacethis.key "т">
+<!ENTITY sm.context.replaceall "Заменить все окна">
+<!ENTITY sm.context.replaceall.key "а">
+<!ENTITY sm.context.add "Добавить данное окно">
+<!ENTITY sm.context.add.key "Д">
+<!ENTITY sm.context.addall "Добавить все окна">
+<!ENTITY sm.context.addall.key "б">
+<!ENTITY sm.context.save "Сохранить">
+<!ENTITY sm.context.save.key "х">
+<!ENTITY sm.context.rename "Переименовать">
+<!ENTITY sm.context.rename.key "П">
+<!ENTITY sm.context.bookmarkSession "Сессия закладок">
+<!ENTITY sm.context.bookmarkSession.key "е">
+<!ENTITY sm.context.delete "Удалить">
+<!ENTITY sm.context.delete.key "У">
+<!ENTITY sm.context.deleteall "Удалить все">
+<!ENTITY sm.context.deleteall.key "в">
+<!ENTITY sm.context.startup "Сделать стартовой сессией">
+<!ENTITY sm.context.startup.key "с">
+<!ENTITY sm.context.details "Показывать нумерацию, дату и время в меню сессий">
+<!ENTITY sm.context.details.key "н">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "Отсортированные вкладки">
+<!ENTITY sortedTabs.tooltip "Отметьте, чтобы показать отсортированный по алфавиту список">
+<!ENTITY enable.label "Использовать">
+<!ENTITY custom.label "Установленное пользователем время">
+<!ENTITY enableTabs.label "Включить для всех вкладок">
+<!ENTITY disableTabs.label "Отключить для всех вкладок">
+<!ENTITY seconds.label "секунд">
+<!ENTITY minutes.label "минут">
+<!ENTITY minute.label "минута">
+<!ENTITY hideTabBar.label "Скрывать панель вкладок">
+<!ENTITY hideTabBar.never.label "Никогда">
+<!ENTITY hideTabBar.never.key "Н">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "К">
+<!ENTITY hideTabBar.always.label "Всегда">
+<!ENTITY hideTabBar.always.key "В">

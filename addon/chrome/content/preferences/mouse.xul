@@ -1,0 +1,209 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
+%pref-tabmixDTD;
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd">
+%browserDTD;
+]>
+
+<overlay id="LinksPaneOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="paneMouse" onpaneload="gMousePane.init();">
+
+    <!-- scripts -->
+    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/mouse.js"/>
+
+    <!-- preferences - list all preferences in this pane -->
+    <preferences>
+      <preference id="pref_mouse"             name="extensions.tabmix.mouse.selectedTabIndex"
+                  type="int"/>
+      <preference id="pref_tabclick"          name="extensions.tabmix.tabclick.selectedTabIndex"
+                  type="int"/>
+      <preference id="pref_mouseHoverSelect"  name="extensions.tabmix.mouseOverSelect"    type="bool"/>
+      <preference id="pref_mouseOverSelectDelay"
+                  name="extensions.tabmix.mouseOverSelectDelay" type="int"/>
+      <preference id="pref_tabFlip"           name="extensions.tabmix.tabFlip"            type="bool"/>
+      <preference id="pref_tabFlipDelay"      name="extensions.tabmix.tabFlipDelay"       type="int"/>
+      <preference id="pref_tabbarscrolling"   name="extensions.tabmix.scrollTabs"         type="int"
+                  notChecked="2"/>
+      <preference id="pref_reversescrolling"  name="extensions.tabmix.reversedScroll"     type="bool"/>
+      <preference id="pref_mouseDownSelect"   name="extensions.tabmix.selectTabOnMouseDown"
+                  type="bool" inverted="true"/>
+      <preference id="pref_middleclickDelete" name="extensions.tabmix.middleclickDelete"  type="bool"/>
+      <preference id="pref_lockTabSizingOnClose" name="extensions.tabmix.lockTabSizingOnClose"  type="bool"/>
+      <preference id="pref_moveTabOnDragging" name="extensions.tabmix.moveTabOnDragging"  type="bool"/>
+      <preference id="pref_dropIndicator"     name="extensions.tabmix.useFirefoxDragmark" type="bool"/>
+      <preference id="pref_dblClickTab"       name="extensions.tabmix.dblClickTab"        type="int"/>
+      <preference id="pref_dblClickTabbar"    name="extensions.tabmix.dblClickTabbar"     type="int"/>
+      <preference id="pref_middleClickTab"    name="extensions.tabmix.middleClickTab"     type="int"/>
+      <preference id="pref_middleClickTabbar" name="extensions.tabmix.middleClickTabbar"  type="int"/>
+      <preference id="pref_ctrlClickTab"      name="extensions.tabmix.ctrlClickTab"       type="int"/>
+      <preference id="pref_ctrlClickTabbar"   name="extensions.tabmix.ctrlClickTabbar"    type="int"/>
+      <preference id="pref_shiftClickTab"     name="extensions.tabmix.shiftClickTab"      type="int"/>
+      <preference id="pref_shiftClickTabbar"  name="extensions.tabmix.shiftClickTabbar"   type="int"/>
+      <preference id="pref_altClickTab"       name="extensions.tabmix.altClickTab"        type="int"/>
+      <preference id="pref_altClickTabbar"    name="extensions.tabmix.altClickTabbar"     type="int"/>
+      <preference id="pref_click_dragwindow"       name="extensions.tabmix.tabbar.click_dragwindow"
+                  type="bool" inverted="true"
+                  onchange="gMousePane.updateDblClickTabbar(this);"/>
+      <preference id="pref_dblclick_changesize"    name="extensions.tabmix.tabbar.dblclick_changesize"
+                  type="bool" inverted="true"/>
+    </preferences>
+
+    <!-- pane content -->
+    <tabbox>
+      <tabs id="mouse"
+            onselect="gPrefWindow.tabSelectionChanged(event);">
+        <tab label="&mouseGesture.label;" class="subtabs" helpTopic="Mouse_-_Mouse_Gestures"/>
+        <tab label="&mouseClick.label;" class="subtabs" helpTopic="Mouse_-_Mouse_Clicking"/>
+      </tabs>
+      <tabpanels>
+        <tabpanel>
+          <groupbox flex="1">
+            <hbox align="center">
+              <checkbox_tmp id="mouseHoverSelect" label="&mouseHoverSelect.labelBegin;"
+                        preference="pref_mouseHoverSelect"/>
+              <textbox id="mouseOverSelectDelay" size="4" maxlength="4"
+                        preference="pref_mouseOverSelectDelay" type="number" observes="obs_mouseHoverSelect"/>
+              <label value="&milliseconds.label;" observes="obs_mouseHoverSelect" class="timelabel"/>
+            </hbox>
+            <checkbox_tmp id="tabFlip" label="&tabFlip.label;" preference="pref_tabFlip"/>
+            <hbox align="center" class="indent">
+              <label value="&tabFlip.delay;" observes="obs_tabFlip"/>
+              <textbox id="tabFlipDelay" size="4" maxlength="4" preference="pref_tabFlipDelay"
+                        type="number" observes="obs_tabFlip"/>
+              <label value="&milliseconds.label;" observes="obs_tabFlip" class="timelabel"/>
+            </hbox>
+            <!-- Drag tabs -->
+            <checkbox_tmp id="mouseDownSelect" label="&clickFocus.label;" preference="pref_mouseDownSelect"/>
+            <checkbox_tmp id="middleclickDelete" label="&removeEntries.label;"
+                      tooltiptext="&removeEntries.tooltip;" preference="pref_middleclickDelete"/>
+            <checkbox_tmp id="lockTabSizingOnClose" label="&lockTabSizingOnClose.label;"
+                      preference="pref_lockTabSizingOnClose"/>
+          </groupbox>
+          <groupbox flex="1">
+            <!-- drop indicator -->
+            <checkbox_tmp id="moveTabOnDragging" label="&moveTabOnDragging.label;" preference="pref_moveTabOnDragging"
+                          style="width: 470px;"/>
+            <!-- drop indicator -->
+            <hbox id="dropIndicator">
+              <label value="&dropIndicator.label;:"/>
+              <radiogroup id="dropIndicatorType"
+                          preference="pref_dropIndicator">
+                <radio value="true" id="dropIndicator-native" label="&dropIndicator-native.label;"
+                       src="chrome://browser/skin/tabbrowser/tabDragIndicator.png"/>
+                <radio value="false" id="dropIndicator-builtin" label="&dropIndicator-builtin.label;"
+                       src="chrome://tabmixplus/skin/dropmarker-leftright.png"/>
+              </radiogroup>
+            </hbox>
+          </groupbox>
+          <!-- Tabbar Scrolling -->
+          <groupbox flex="1">
+            <caption>
+               <checkbox_tmp id="enableTabsScroll" label="&tabbarscrolling.caption;"
+                             preference="pref_tabbarscrolling"
+                             control="tabbarscrolling"
+                             onsyncfrompreference="return gPrefWindow.syncfrompreference(this);"
+                             onsynctopreference="return gPrefWindow.synctopreference(this, 1);"/>
+            </caption>
+            <separator class="thin"/>
+            <label value="&tabbarscrolling.holdShift.label;" observes="obs_tabbarscrolling"/>
+            <radiogroup id="tabbarscrolling" orient="horizontal"
+                        preference="pref_tabbarscrolling">
+              <radio value="1" id="tabbarscrolling-select" label="&tabbarscrolling.selectTab.label;"
+                     observes="obs_tabbarscrolling"/>
+              <radio value="0" id="tabbarscrolling-default" label="&tabbarscrolling.scrollAllTabs.label;"
+                     observes="obs_tabbarscrolling"/>
+            </radiogroup>
+            <checkbox_tmp id="reversescrolling" label="&tabbarscrolling.inverse.label;"
+                      preference="pref_reversescrolling" observes="obs_tabbarscrolling"/>
+          </groupbox>
+        </tabpanel>
+        <tabpanel align="start">
+          <label value="&clicktab.label;" style="-moz-margin-start: 2px; -moz-padding-start: 1px;"/>
+          <spacer style="height: 1em;"/>
+          <tabbox id="mouseClick_tabbox" class="groupbox-tabbox" flex="0">
+            <tabs id="tabclick"
+                  onselect="gMousePane.tabSelectionChanged(event);">
+              <tab label="&double.label;" linkedpanel="_tabpanel" class="subtabs"/>
+              <tab label="&middle.label;" linkedpanel="_tabpanel" class="subtabs"/>
+              <tab label="&ctrl.label;"   linkedpanel="_tabpanel" id="tabId" label2="&cmd.label;" class="subtabs"/>
+              <tab label="&shift.label;"  linkedpanel="_tabpanel" class="subtabs"/>
+              <tab label="&alt.label;"    linkedpanel="_tabpanel" class="subtabs"/>
+            </tabs>
+            <tabpanels class="groupbox-panels" flex="0">
+              <tabpanel id="_tabpanel">
+                <spacer style="height: 8px;"/>
+                <!-- click on a tab -->
+                <checkbox_tmp label="&ontab.label;" control="ClickTab" align="center" flex="1" oncommand="gMousePane.resetPreference(this);"/>
+                <menulist id="ClickTab" class="indent" onsyncfrompreference="gMousePane.setCheckedState(this);">
+                  <menupopup class="clicktab-popup" onpopupshown="gMousePane.ensureElementIsVisible(this);">
+                    <menuitem value="-1" label="&clicktab.default;" hidden="true"/>
+                    <menuitem value="0" label="&clicktab.nothing;"/>
+                      <menuseparator/>
+                    <menuitem value="1" label="&clicktab.addtab;"/>
+                    <menuitem value="3" label="&clicktab.duplicatetab;"/>
+                    <menuitem value="14" label="&clicktab.duplicatetabw;" observes="obs_singleWindow"/>
+                    <menuitem value="27" label="&clicktab.detachtab;" observes="obs_singleWindow"/>
+                    <menuitem value="31" id="ClickTabPinTab"/>
+                      <menuseparator/>
+                    <menuitem value="5" label="&clicktab.protecttab;"/>
+                    <menuitem value="6" label="&clicktab.locktab;"/>
+                    <menuitem value="15" label="&clicktab.freezetab;"/>
+                    <menuitem value="11" label="&clicktab.renametab;"/>
+                    <menuitem value="28" label="&clicktab.copyTabUrl;"/>
+                    <menuitem value="29" label="&clicktab.copyUrlFromClipboard;"/>
+                    <menuitem value="22" label="&clicktab.selectMerge;"/>
+                    <menuitem value="23" label="&clicktab.mergeTabs;"/>
+                    <menuitem value="25" label="&clicktab.bookTab;"/>
+                    <menuitem value="26" label="&clicktab.bookTabs;"/>
+                      <menuseparator/>
+                    <menuitem value="4" label="&clicktab.reloadtab;"/>
+                    <menuitem value="7" label="&clicktab.reloadtabs;"/>
+                    <menuitem value="16" label="&clicktab.reloadothertabs;"/>
+                    <menuitem value="19" label="&clicktab.reloadlefttabs;"/>
+                    <menuitem value="20" label="&clicktab.reloadrighttabs;"/>
+                    <menuitem value="30" label="&clicktab.autoReloadTab;"/>
+                      <menuseparator/>
+                    <menuitem value="2" label="&closeTab.label;"/>
+                    <menuitem value="9" label="&clicktab.removeall;"/>
+                    <menuitem value="24" label="&clicktab.removesimilar;"/>
+                    <menuitem value="8" label="&clicktab.removeother;"/>
+                    <menuitem value="17" label="&clicktab.removetoLeft;"/>
+                    <menuitem value="18" label="&clicktab.removetoRight;"/>
+                      <menuseparator/>
+                    <menuitem value="10" label="&clicktab.uctab;" observes="obs_undoClose"/>
+                    <menuitem value="13" label="&clicktab.ucatab;" observes="obs_undoClose"/>
+                    <menuitem value="12" label="&clicktab.snapback;"/>
+                    <menuitem value="21" label="&clicktab.ietab;"/>
+                  </menupopup>
+                </menulist>
+                <spacer style="height: 16px;"/>
+                <!-- click on a tabbar -->
+                <checkbox_tmp label="&ontabbar.label;" control="ClickTabbar" oncommand="gMousePane.resetPreference(this);"/>
+                <!-- we will clone the menupopup from ClickTab on startup -->
+                <menulist id="ClickTabbar" class="indent" onsyncfrompreference="gMousePane.setCheckedState(this);"/>
+                <!-- place holder to set tabbox width -->
+                <checkbox_tmp label="&ontabbar.dblClick.label;" style="visibility: hidden;"/>
+              </tabpanel>
+            </tabpanels>
+          </tabbox>
+          <spacer style="height: 12px;"/>
+          <checkbox_tmp id="click_dragwindow" label="&ontabbar.click.label;"
+                        preference="pref_click_dragwindow"/>
+          <checkbox_tmp id="dblclick_changesize" label="&ontabbar.dblClick.label;"
+                        preference="pref_dblclick_changesize"/>
+        </tabpanel>
+      </tabpanels>
+    </tabbox>
+
+    <broadcasterset id="paneMouse:Broadcaster">
+      <broadcaster id="obs_mouseHoverSelect"/>
+      <broadcaster id="obs_tabFlip"/>
+      <broadcaster id="obs_tabbarscrolling"/>
+    </broadcasterset>
+
+  </prefpane>
+</overlay>

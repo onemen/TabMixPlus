@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Poveznice">
+<!ENTITY tab.events "Događaji">
+<!ENTITY tab.mouse "Miš">
+<!ENTITY tab.appearance "Prikaz">
+<!ENTITY tab.menu "Izbornik">
+<!ENTITY tab.session "Prijava">
+<!ENTITY tab.incompatible "Error">
+<!ENTITY apply.label "Prihvati">
+<!ENTITY settings.export "Izvezi postavke">
+<!ENTITY settings.import "Uvezi postavke">
+<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.default "Vrati zadano">
+<!ENTITY settings.revert "Revert">
+<!ENTITY generalWindowOpen.label "Otvori poveznice koje se otvaraju u novom prozoru u:">
+<!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
+<!ENTITY externalLinkTarget.label "Otvori poveznice iz drugih programa u:">
+<!ENTITY linkTarget.tab "Novoj kartici">
+<!ENTITY linkTarget.window "Novom prozoru">
+<!ENTITY linkTarget.current "Trenutnoj kartici">
+<!ENTITY linkTarget.accesskey "T">
+<!ENTITY divertedWindowOpen.label "JavaScript skočni prozori:">
+<!ENTITY divertedWindowOpen.all "Otvori sve skočne prozore u karticama">
+<!ENTITY divertedWindowOpen.some "Dozvoli skočne prozore prilagođenih veličina">
+<!ENTITY divertedWindowOpen.none "Dozvoli sve skočne prozore">
+<!ENTITY linkTarget.label "Otvori poveznice sa ciljanim svojstvima u trenutnoj kartici">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY download.label "Spriječi prazne kartice kod preuzimanja datoteka">
+<!ENTITY edit.label "Uredi">
+<!ENTITY speLink.label "Nametni otvaranje u novoj kartici:">
+<!ENTITY speLink.none "Ništa">
+<!ENTITY speLink.allLinks "All links">
+<!ENTITY speLink.external "Poveznice prema drugim web adresama">
+<!ENTITY singleWindow.label "Omogući mod jednog prozora">
+<!ENTITY newTabs.label "New Tabs">
+<!ENTITY tabOpen.label "Otvaranje kartica">
+<!ENTITY tabFocus.label "Fokusiranje kartica">
+<!ENTITY tabClose.label "Zatvaranje kartica">
+<!ENTITY tabMerge.label "Spajanje kartica">
+<!ENTITY tabFeature.label "Mogućnosti kartica">
+<!ENTITY newtab.label "Učitaj u novoj kartici:">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "Praznu stranicu">
+<!ENTITY newtab.home "Početnu stranicu">
+<!ENTITY newtab.current "Trenutnu stranicu">
+<!ENTITY newtab.duplicate "Dupliciranu stranicu">
+<!ENTITY newtab.location.1 "New Tab Page">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY location.label.1 "Address">
+<!ENTITY focusContent.label "Focus content when loading non blank page">
+<!ENTITY openTabNext.label "Otvori nove kartice do trenutno otvorene">
+<!ENTITY openOtherTabNext.label "Open other tabs next to current one">
+<!ENTITY relatedAfterCurrent.label "Only if related to current tab">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Otvori duplicirane kartice odmah do izvornih">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Change opening order">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Open new tab next to the tab last opened from the current tab (since it was last selected)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabs">
+<!ENTITY lockTabs.label "Lock tabs">
+<!ENTITY lockNewTabs.label "Lock New tabs">
+<!ENTITY lockAppTabs.label "Lock App tabs">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY openNewTab.label "Otvori kartice iz:">
+<!ENTITY openBookmarks.label "Zabilješki">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openHistory.label "Povijesti">
+<!ENTITY openUrl.label "Adresne trake">
+<!ENTITY openSearch.label "Trake za pretragu">
+<!ENTITY middlecurrent1.label "Middle-click or Control-click opens items in current tab">
+<!ENTITY middlecurrent.tooltip "Samo za zabilješke, povijest i zaključane kartice">
+<!ENTITY tabFocus.caption "Fokusiraj/Odaberi kartice koji se otvaraju iz:">
+<!ENTITY selectTab.label "Poveznica">
+<!ENTITY selectDivertedTab.label "Preusmjerenih prozora">
+<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabCommand.label "Naredbe Nova kartica">
+<!ENTITY contextMenuSearch.label "Context menu search for">
+<!ENTITY selectTabBH.label "Zabilješke/Povijest">
+<!ENTITY duplicateTab.label "Duplicate Tab">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "Warning">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "Closing last tab">
+<!ENTITY keepWindow.label.3.1 "Do not close window when closing last tab">
+<!ENTITY keeptab.label "Onemogući zatvaranje zadnje kartice">
+<!ENTITY closeOnMerge.label "Zatvori prozore nakon što se spoje">
+<!ENTITY warnOnMerge.label "Upozori prilikom zatvaranja kartica koje nisu spojene">
+<!ENTITY currenttab.caption.label "Closing current tab">
+<!ENTITY focusTab.labelBegin "Prilikom zatvaranja trenutne kartice, fokusiraj:">
+<!ENTITY focusTab.firstTab "First tab">
+<!ENTITY focusTab.leftTab "Left tab">
+<!ENTITY focusTab.rightTab "Right tab">
+<!ENTITY focusTab.lastTab "Last tab">
+<!ENTITY focusTab.lastSelectedTab "Last selected tab">
+<!ENTITY focusTab.openerTab "Opener/right tab">
+<!ENTITY focusTab.openerTab.rtl "Opener/left tab">
+<!ENTITY focusTab.lastOpenedTab "Last opened tab">
+<!ENTITY undoClose.label "Omogući poništavanje zatvorenih kartica">
+<!ENTITY undoCloseCache.label "Najveći broj zapamćenih zatvorenih kartica:">
+<!ENTITY undoClosepos.label "Vrati originalnu poziciju kartice">
+<!ENTITY menuonlybutton.label "Neka gumb u alatnoj traci prikazuje samo popis">
+<!ENTITY ctrltab.label "Ctrl-Tab prolazi kroz kartice prema redu od zadnjeg korištenja">
+<!ENTITY cmdtab.label "Cmd-Tab prolazi kroz kartice prema redu od zadnjeg korištenja">
+<!ENTITY ctrltab.tabPreviews "Show tab previews">
+<!ENTITY ctrltab.popup "Ctrl-Tab prikazuje popis kartica u skočnom izborniku">
+<!ENTITY cmdtab.popup "Cmd-Tab prikazuje popis kartica u skočnom izborniku">
+<!ENTITY tabpopup.mouse "Popis kartica reagira na miša">
+<!ENTITY mergeNoTabSelection.label "Spoji prozore kada nema odabranih kartica">
+<!ENTITY mergeTabSelection.label "Spajanje nakon odabiranja kartica:">
+<!ENTITY mergeall.label "Spoji sve prozore u jedan">
+<!ENTITY mergelastfocused.label "Spoji samo trenutni prozor sa zadnje fokusiranim">
+<!ENTITY mergePopups.label "Također povuci i skočne prozore">
+<!ENTITY popupNextToOpener.label "Smjesti skočne prozore do onih koji su ih otvorili">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY toggleAnimation.label "Disable Open/Close tab animation">
+<!ENTITY reloadEvery.matchAddress.label "Reload a tab regardless of its address">
+<!ENTITY reloadEvery.onReloadButton.label "Show Reload Every menu on Reload button">
+<!ENTITY seconds.label "sekundi">
+<!ENTITY minutes.label "min">
+<!ENTITY tabBarAppearance.label "Traka kartica">
+<!ENTITY tabAppearance.label "Kartica">
+<!ENTITY toolBarAppearance.label "ToolBar">
+<!ENTITY show.ontabbar.label "Show on Tab bar">
+<!ENTITY show.ontab.label "Show on Tab">
+<!ENTITY dragNewTabButton.tooltip "Drag &apos;New Tab&apos; button to your tab-bar to enable this option.">
+<!ENTITY hideTabBarButton.label "Gumb Zatvori karticu">
+<!ENTITY newTabButton.label "Gumb Nova kartica">
+<!ENTITY newTabButton.position.left.label "on Left side">
+<!ENTITY newTabButton.position.right.label "on Right side">
+<!ENTITY newTabButton.position.afterlast.label "After last tab">
+<!ENTITY allTabsButton.label "Gumb svih kartica">
+<!ENTITY tabBarSpace.label "Višak mjesta na obje strane">
+<!ENTITY tabBarSpace.tooltip "Za klikanje i ispuštanje nečega na traku kartica">
+<!ENTITY tabbar.label "Sakrij traku kartica kada je otvorena samo jedna kartica">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY dropIndicator.label "Pokazivač ispuštanja">
+<!ENTITY dropIndicator-native.label "Prirodan način">
+<!ENTITY dropIndicator-builtin.label "Ugrađeni način">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY tabBarPosition.label "Položaj:">
+<!ENTITY tabBarPosition.top.label "Top (above content)">
+<!ENTITY tabBarPosition.bottom.label "Bottom (below content)">
+<!ENTITY tabScroll.label "Kada kartice ne stanu u širinu:">
+<!ENTITY tabScroll.none "Omogući skrolanje bez gumba">
+<!ENTITY tabScroll.leftRightButtons "Scrollable with buttons on both sides">
+<!ENTITY tabScroll.rightButtons "Scrollable with buttons on right side">
+<!ENTITY tabScroll.rightButtons.rtl "Scrollable with buttons on left side">
+<!ENTITY tabScroll.multibar "Više redova">
+<!ENTITY maxrow.label "Najveći broj redova koji se mogu prikazati:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
+<!ENTITY smoothScroll.label "Enable smooth scroll">
+<!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
+<!ENTITY currenttab.style.label "Trenutnu karticu">
+<!ENTITY unloadedtabs.style.label "Unloaded tabs">
+<!ENTITY unreadtabs.style.label "Nepročitane kartice">
+<!ENTITY othertabs.style.label "Other tabs">
+<!ENTITY setstyles.label "Prilagodi stilove">
+<!ENTITY extraIcons.label1 "Icons for">
+<!ENTITY extraIcons.locked "Locked">
+<!ENTITY extraIcons.protected "Protected">
+<!ENTITY extraIcons.autoreload "Auto Reload">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY progressMeter.label "Oznaku napretka na karticama">
+<!ENTITY showTabX.labelBegin "Gumb Zatvori karticu">
+<!ENTITY showTabX.left "Smjesti ga na lijevu stranu">
+<!ENTITY showTabX.rtl "Place on right side">
+<!ENTITY milliseconds.label "msec">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "na svima">
+<!ENTITY showTabX.current "na trenutnoj">
+<!ENTITY showTabX.hover "na označenoj">
+<!ENTITY showTabX.alwaysExeption "na svim karticam širim od">
+<!ENTITY showTabX.currentHover "na trenutnoj &amp; označenoj">
+<!ENTITY minWidth.label "Širina kartice:">
+<!ENTITY widthTo.label "sa">
+<!ENTITY widthPixels.label "piksela">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY flexTabs.label "Širina kartice se prilagođava širini naslova kartice">
+<!ENTITY bookastitle.label "Koristi naziv iz zabilješki kao naslov kartice">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "You can customize which Tab Mix Plus buttons to show in your Toolbar">
+<!ENTITY toolbar.button.label "Customize">
+<!ENTITY toolbar.visible.caption "Visible buttons">
+<!ENTITY toolbar.novisible.label "There are no visible buttons">
+<!ENTITY toolbar.hidden.caption "Hidden buttons">
+<!ENTITY toolbar.nohidden.label "There are no hidden buttons">
+<!ENTITY mouseGesture.label "Kretnje mišem">
+<!ENTITY mouseClick.label "Klikanje mišem">
+<!ENTITY mouseHoverSelect.labelBegin "Odaberi označenu karticu nakon">
+<!ENTITY tabFlip.label "Prebaci na zadnje odabranu karticu nakon klikanja na trenutnu">
+<!ENTITY tabFlip.delay "Sa odgodom od">
+<!ENTITY clickFocus.label "Klik miša (stiskanje i puštanje) da bi se odabrala kartica">
+<!ENTITY removeEntries.label "Ukloni stavke s liste izbornika Tab Mix Plus koristeći srednji klik">
+<!ENTITY lockTabSizingOnClose.label "When closing a tab, other tabs should not resize until cursor leaves toolbar region">
+<!ENTITY removeEntries.tooltip "Uključujući zatvorene kartice, zatvorene prozore i sačuvane prijave">
+<!ENTITY tabbarscrolling.caption "When scrolling over the tab-bar">
+<!ENTITY tabbarscrolling.holdShift.label "Hold Shift while scrolling to switch between these options">
+<!ENTITY tabbarscrolling.selectTab.label "Change selected tab">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Scroll all tabs">
+<!ENTITY tabbarscrolling.inverse.label "Inverse scroll direction">
+<!ENTITY double.label "Dvoklik">
+<!ENTITY middle.label "Srednji klik">
+<!ENTITY ctrl.label "Ctrl-klik">
+<!ENTITY cmd.label "Cmd-klik">
+<!ENTITY shift.label "Shift-klik">
+<!ENTITY alt.label "Alt-klik">
+<!ENTITY ontab.label "na kartici:">
+<!ENTITY ontabbar.label "na traci kartica:">
+<!ENTITY clicktab.label "Izaberite naredbu koju želite izvršiti klikanjem na karticu ili traku kartica">
+<!ENTITY ontabbar.dblClick.label "Prevent double click on Tab-bar from changing window size.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY clicktab.nothing "Ne radi ništa">
+<!ENTITY clicktab.addtab "Otvara novu karticu">
+<!ENTITY clicktab.duplicatetab "Duplicira karticu">
+<!ENTITY clicktab.duplicatetabw "Duplicira karticu u novi prozor">
+<!ENTITY clicktab.detachtab "Pomiće karticu u novi prozor">
+<!ENTITY clicktab.protecttab "Štiti karticu">
+<!ENTITY clicktab.locktab "Zaključava karticu">
+<!ENTITY clicktab.freezetab "Štiti i zaključava karticu">
+<!ENTITY clicktab.renametab "Preimenuje karticu">
+<!ENTITY clicktab.copyTabUrl "Kopira web adresu kartice u međuspremnik">
+<!ENTITY clicktab.copyUrlFromClipboard "Load URL from clipboard">
+<!ENTITY clicktab.selectMerge "Odabire karticu za spajanje">
+<!ENTITY clicktab.mergeTabs "Spaja prozore zajedno">
+<!ENTITY clicktab.bookTab "Dodaje karticu u Zabilješke">
+<!ENTITY clicktab.bookTabs "Dodaje sve kartice u Zabilješke">
+<!ENTITY clicktab.reloadtab "Ponovno učitava karticu">
+<!ENTITY clicktab.reloadtabs "Ponovno učitava sve kartice">
+<!ENTITY clicktab.reloadothertabs "Ponovno učitava druge kartice">
+<!ENTITY clicktab.reloadlefttabs "Ponovno učitava kartice ulijevo">
+<!ENTITY clicktab.reloadrighttabs "Ponovno učitava kartice udesno">
+<!ENTITY clicktab.autoReloadTab "Activate/Deactivate tab auto reload">
+<!ENTITY clicktab.removeall "Zatvara sve kartice">
+<!ENTITY clicktab.removeother "Zatvara druge kartice">
+<!ENTITY clicktab.removesimilar "Zatvara kartice sa sličnih domena">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.uctab "Ponovno otvara zatvorenu karticu">
+<!ENTITY clicktab.ucatab "Ponovno otvara sve zatvorene kartice">
+<!ENTITY clicktab.snapback "Vraća karticu">
+<!ENTITY clicktab.ietab "Otvara karticu u IE">
+<!ENTITY contentLoad "Srednji klik učitava web adresu iz međuspremnika">
+<!ENTITY context.tab "Kontekstni izbornik kartice">
+<!ENTITY context.main "Glavni kontekstni izbornik">
+<!ENTITY context.tools "Izbornik alata">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showtabBarContext.label "Prikaži u kontekstnom izborniku kartice:">
+<!ENTITY showContentAreaContext.label "Prikaži u glavnom kontekstnom izborniku:">
+<!ENTITY showToolsMenu.label "Prikaži u izborniku alata:">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "Prikaži praznu stranicu">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "Tab Mix Plus detect that Session Manager Extension is installed">
+<!ENTITY sm.extension.description2 "Tab Mix Plus session manager will be disabled">
+<!ENTITY sm.extension.description3 "You can click the button on the right to open Session Manager Options dialog">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "Convert">
+<!ENTITY sm.extension.chooseFile.label1 "Convert Tab Mix Plus sessions from the current profile">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "Koristi ugrađenu osobinu Vraćanja Prijava">
+<!ENTITY ss.enable.tooltip "Odznačite da biste dopustili korištenje s Tabmix Upraviteljem Prijava">
+<!ENTITY ss.advanced_setting "Napredne postavke">
+<!ENTITY ss.advanced_setting.warning "Nemojte ih mijenjati, osim ako znate što radite">
+<!ENTITY ss.interval "Minimalni vremenski razmaci prije spremanja dva stanja">
+<!ENTITY ss.interval.seconds "(u milisekundama)">
+<!ENTITY ss.privacy_level "Spremi osjetljive podatke (podaci obrazaca, POSTDATA i kolačići) za">
+<!ENTITY ss.privacy_level.allsites "Sve stranice">
+<!ENTITY ss.privacy_level.unencrypted "Samo nekodirane stranice">
+<!ENTITY ss.privacy_level.nosites "Niti jednu stranicu">
+<!ENTITY ss.postdata.label1 "Maksimalna količina POSTDATA koja se sprema">
+<!ENTITY ss.postdata.label2 "(u bajtovima, -1 = sve od njih)">
+<!ENTITY sessionManger.enable "Omogući Upravitelja Prijavama">
+<!ENTITY crashRecovery.enable "Omogući Vraćanje nakon rušenja">
+<!ENTITY sm.StartExit "Pokreni/Izađi">
+<!ENTITY sm.restore "Vrati">
+<!ENTITY sm.preserve "Sačuvaj">
+<!ENTITY sm.start "Prilikom pokretanja preglednika:">
+<!ENTITY sm.start.restore "Vrati">
+<!ENTITY sm.start.ask "Pitaj prije vraćanja">
+<!ENTITY sm.start.nothing "Ne vraćaj">
+<!ENTITY sm.exit "Prilikom izlaska iz preglednika:">
+<!ENTITY sm.exit.save "Spremi Prijave">
+<!ENTITY sm.exit.ask "Pitaj prije spremanja">
+<!ENTITY sm.exit.nothing "Ne spremaj">
+<!ENTITY sm.startup "Početna Prijava:">
+<!ENTITY sm.lastsession "Zadnja Prijava">
+<!ENTITY sm.previouslast "Predzadnja Prijava">
+<!ENTITY sm.chooseifempty "Izaberi drugu ako je prazna">
+<!ENTITY sm.restore.options "Prilikom vraćanja Prijava:">
+<!ENTITY sm.restore.overwrite "Prebriši postojeći prozor">
+<!ENTITY sm.restore.overwriteTabs "I kartice">
+<!ENTITY sm.restore.closedWinList "Sačuvaj prozore u popisu zatvorenih prozora">
+<!ENTITY sm.restore.merge "Spoji više prozora u jedan">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.notrestore.label "When not restoring on start">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "Sačuvaj kartice:">
+<!ENTITY sm.preserve.history "Povijesti">
+<!ENTITY sm.preserve.protect "Zaštićenog statusa">
+<!ENTITY sm.preserve.locked "Zaključanog statusa">
+<!ENTITY sm.preserve.permission "Dopuštenja">
+<!ENTITY sm.preserve.scroll1 "Scroll Position">
+<!ENTITY sm.restore.winOptions "Sačuvaj prozore:">
+<!ENTITY sm.restore.selectedTab "Odabrane kartice">
+<!ENTITY sm.restore.closedTabs "Popisa zatvorenih kartica">
+<!ENTITY incompatible.extensions "Neka Vaša proširenja nisu kopaktibilna s Tab Mix Plus, preporučljivo je da onemogućite ili deinstalirate ta proširenja..">
+<!ENTITY incompatible.button.label "Prikaži popis">

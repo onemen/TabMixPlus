@@ -1,0 +1,5 @@
+
+prefwindow,
+prefwindow:root {
+  -moz-binding: url("chrome://tabmixplus/content/preferences/overlay/preferences.xml#tabmix-prefwindow") !important;
+}

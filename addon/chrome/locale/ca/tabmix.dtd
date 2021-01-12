@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Pestanyes tancades">
+<!ENTITY closedtabsbtn.tooltip "Mostra la llista de pestanyes tancades">
+<!ENTITY sessionbtn.tooltip "Mostra i gestiona les sessions">
+<!ENTITY tabslistbtn.label "Pestanyes obertes">
+<!ENTITY tabslistbtn.tooltip "Mostra la llista de pestanyes obertes">
+<!ENTITY closedwindowsbtn.label "Finestres tancades">
+<!ENTITY closedwindowsbtn.tooltip "Mostra la llista de finestres tancades">
+<!ENTITY page.header.title "Opcions del Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Gestor de sessions del Tab Mix Plus">
+<!ENTITY session.Tools "Gestor de sessions">
+<!ENTITY closedWin.label "Llista de finestres tancades">
+<!ENTITY duplicateTabMenu.label "Duplica la pestanya">
+<!ENTITY duplicateTabMenu.accesskey "D">
+<!ENTITY duplicateinWin.label "Duplica en una finestra nova">
+<!ENTITY duplicateinWin.accesskey "F">
+<!ENTITY detachTab.label "Mou a una finestra nova">
+<!ENTITY detachTab.accesskey "E">
+<!ENTITY mergeContext.label "Fusiona les finestres">
+<!ENTITY mergeContext.accesskey "F">
+<!ENTITY renametab.label "Reanomena la pestanya">
+<!ENTITY renametab.accesskey "R">
+<!ENTITY copytaburl.label "Copia l&apos;adreça URL de la pestanya">
+<!ENTITY copytaburl.accesskey "U">
+<!ENTITY reloadother.label "Torna a carregar les altres pestanyes">
+<!ENTITY reloadother.accesskey "O">
+<!ENTITY reloadleft.label "Torna a carregar les pestanyes de l&apos;esquerra">
+<!ENTITY reloadleft.accesskey "L">
+<!ENTITY reloadright.label "Torna a carregar les pestanyes de la dreta">
+<!ENTITY reloadright.accesskey "D">
+<!ENTITY autoReloadTab.label "Torna a carregar la pestanya cada">
+<!ENTITY autoReloadTab.accesskey "C">
+<!ENTITY autoReloadSite.label "Torna a carregar aquest lloc cada">
+<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY afterthis.label "Després d&apos;aquesta pestanya">
+<!ENTITY bookmarktab.label "Afegeix a les adreces d&apos;interès aquesta pestanya">
+<!ENTITY undoCloseListMenu.label "Llista de pestanyes tancades">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "Tanca totes les pestanyes">
+<!ENTITY closeall.accesskey "A">
+<!ENTITY closeSimilarTab.label "Tanca les pestanyes semblants">
+<!ENTITY closeSimilarTab.accesskey "S">
+<!ENTITY closeTabsToLeft.label "Tanca les pestanyes de l'esquerra">
+<!ENTITY closeleft.accesskey "L">
+<!ENTITY docShellMenu.label "Permisos">
+<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY freezeTabMenu.label "Congela la pestanya">
+<!ENTITY freezeTabMenu.accesskey "C">
+<!ENTITY protectTabMenu.label "Protegeix la pestanya">
+<!ENTITY protectTabMenu.tooltip "Protegeix la pestanya per tal que no es pugui tancar">
+<!ENTITY protectTabMenu.accesskey "P">
+<!ENTITY lockTabMenu.label "Bloca la pestanya">
+<!ENTITY lockTabMenu.tooltip "Tots els enllaços s&apos;obren en una pestanya nova">
+<!ENTITY lockTabMenu.accesskey "B">
+<!ENTITY bookmarktabs.label "Afegeix a les adreces d&apos;interès totes les pestanyes">
+<!ENTITY linkhere.label "Obre l&apos;enllaç en aquesta pestanya">
+<!ENTITY linkhere.accesskey "Q">
+<!ENTITY linkBackgroundTab.label "Obre l&apos;enllaç en segon pla">
+<!ENTITY linkForegroundTab.label "Obre l&apos;enllaç en primer pla">
+<!ENTITY linkBackgroundTab.accesskey "S">
+<!ENTITY linkForegroundTab.accesskey "P">
+<!ENTITY openalllinks.label "Obre els enllaços en pestanyes noves">
+<!ENTITY openalllinks.accesskey "S">
+<!ENTITY linkwithhistory.label "Obre l&apos;enllaç en una pestanya duplicada">
+<!ENTITY linkwithhistory.accesskey "D">
+<!ENTITY tabsList.label "Llista de pestanyes obertes">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Imatge">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Redirecció">
+<!ENTITY allowPlugin.label "Connector">
+<!ENTITY allowFrame.label "Marc">
+<!ENTITY restoreincurrent.label "Restaura a la pestanya actual">
+<!ENTITY restoreincurrent.accesskey "C">
+<!ENTITY restoreinwin.label "Restaura en una finestra nova">
+<!ENTITY restoreinwin.accesskey "F">
+<!ENTITY restoreintab.label "Restaura en una pestanya nova">
+<!ENTITY restoreintab.accesskey "P">
+<!ENTITY restoretab.label "Restaura la pestanya">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "Afegeix l&apos;enllaç a les adreces d&apos;interès...">
+<!ENTITY bookmark.accesskey "A">
+<!ENTITY deletelist.label "Suprimeix de la llista">
+<!ENTITY deletelist.accesskey "S">
+<!ENTITY settings.label "Paràmetres">
+<!ENTITY saveWindow.label "Desa aquesta finestra">
+<!ENTITY saveAllWindows.label "Desa totes les finestres">
+<!ENTITY sm.context.overwrite "Restaura substituint les finestres existents">
+<!ENTITY sm.context.overwrite.key "S">
+<!ENTITY sm.context.restore.new "Restaura en noves finestres">
+<!ENTITY sm.context.restore.newkey "N">
+<!ENTITY sm.context.replacethis "Substitueix per aquesta finestra">
+<!ENTITY sm.context.replacethis.key "T">
+<!ENTITY sm.context.replaceall "Substitueix per totes les finestres">
+<!ENTITY sm.context.replaceall.key "T">
+<!ENTITY sm.context.add "Afegeix aquesta finestra">
+<!ENTITY sm.context.add.key "F">
+<!ENTITY sm.context.addall "Afegeix totes les finestres">
+<!ENTITY sm.context.addall.key "I">
+<!ENTITY sm.context.save "Desa">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "Reanomena">
+<!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Suprimeix">
+<!ENTITY sm.context.delete.key "S">
+<!ENTITY sm.context.deleteall "Suprimeix-ho tot">
+<!ENTITY sm.context.deleteall.key "T">
+<!ENTITY sm.context.startup "Defineix com a sessió d&apos;inici">
+<!ENTITY sm.context.startup.key "S">
+<!ENTITY sm.context.details "Mostra els comptadors, la data i l&apos;hora al menú de sessions">
+<!ENTITY sm.context.details.key "C">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "F">
+<!ENTITY sortedTabs.label "Pestanyes ordenades">
+<!ENTITY sortedTabs.tooltip "Seleccioneu aquesta opció per veure la llista per ordre alfabètic">
+<!ENTITY enable.label "Habilita">
+<!ENTITY custom.label "Personalitzat">
+<!ENTITY enableTabs.label "Habilita per a totes les pestanyes">
+<!ENTITY disableTabs.label "Inhabilita per a totes les pestanyes">
+<!ENTITY seconds.label "segons">
+<!ENTITY minutes.label "minuts">
+<!ENTITY minute.label "minut">
+<!ENTITY hideTabBar.label "Amaga la barra de pestanyes">
+<!ENTITY hideTabBar.never.label "Mai">
+<!ENTITY hideTabBar.never.key "M">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "P">
+<!ENTITY hideTabBar.always.label "Sempre">
+<!ENTITY hideTabBar.always.key "S">

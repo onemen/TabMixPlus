@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Abas fechadas">
+<!ENTITY closedtabsbtn.tooltip "Mostra lista de abas fechadas">
+<!ENTITY sessionbtn.tooltip "Mostra e gerencia suas sessões">
+<!ENTITY tabslistbtn.label "Abas abertas">
+<!ENTITY tabslistbtn.tooltip "Mostra lista de abas abertas">
+<!ENTITY closedwindowsbtn.label "Janelas fechadas">
+<!ENTITY closedwindowsbtn.tooltip "Mostra lista de abas fechadas">
+<!ENTITY page.header.title "Opções do Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Gerenciador de Sessões do Tab Mix Plus">
+<!ENTITY session.Tools "Gerenciador de Sessões">
+<!ENTITY closedWin.label "Lista de janelas fechadas">
+<!ENTITY duplicateTabMenu.label "Duplicar aba">
+<!ENTITY duplicateTabMenu.accesskey "D">
+<!ENTITY duplicateinWin.label "Duplicar em nova janela">
+<!ENTITY duplicateinWin.accesskey "J">
+<!ENTITY detachTab.label "Mover para nova janela">
+<!ENTITY detachTab.accesskey "M">
+<!ENTITY mergeContext.label "Unir janelas">
+<!ENTITY mergeContext.accesskey "U">
+<!ENTITY renametab.label "Renomear aba">
+<!ENTITY renametab.accesskey "R">
+<!ENTITY copytaburl.label "Copiar endereço da aba">
+<!ENTITY copytaburl.accesskey "E">
+<!ENTITY reloadother.label "Atualizar outras abas">
+<!ENTITY reloadother.accesskey "O">
+<!ENTITY reloadleft.label "Atualizar abas à esquerda">
+<!ENTITY reloadleft.accesskey "E">
+<!ENTITY reloadright.label "Atualizar abas à direita">
+<!ENTITY reloadright.accesskey "D">
+<!ENTITY autoReloadTab.label "Recarregar aba a cada">
+<!ENTITY autoReloadTab.accesskey "B">
+<!ENTITY autoReloadSite.label "Recarregar esse site a cada">
+<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY afterthis.label "Depois dessa aba">
+<!ENTITY bookmarktab.label "Adicionar aba aos favoritos">
+<!ENTITY undoCloseListMenu.label "Lista de abas fechadas">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "Fechar todas as abas">
+<!ENTITY closeall.accesskey "A">
+<!ENTITY closeSimilarTab.label "Fechar abas semelhantes">
+<!ENTITY closeSimilarTab.accesskey "S">
+<!ENTITY closeTabsToLeft.label "Fechar abas para a esquerda">
+<!ENTITY closeleft.accesskey "Q">
+<!ENTITY docShellMenu.label "Permissões">
+<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY freezeTabMenu.label "Congelar aba">
+<!ENTITY freezeTabMenu.accesskey "C">
+<!ENTITY protectTabMenu.label "Proteger aba">
+<!ENTITY protectTabMenu.tooltip "Protege as abas de serem fechadas">
+<!ENTITY protectTabMenu.accesskey "P">
+<!ENTITY lockTabMenu.label "Trancar aba">
+<!ENTITY lockTabMenu.tooltip "Abre sempre novas abas ao clicar em links em uma aba trancada">
+<!ENTITY lockTabMenu.accesskey "T">
+<!ENTITY bookmarktabs.label "Adicionar todas as abas aos favoritos">
+<!ENTITY linkhere.label "Abrir link nesta aba">
+<!ENTITY linkhere.accesskey "N">
+<!ENTITY linkBackgroundTab.label "Abrir link em aba no plano de fundo">
+<!ENTITY linkForegroundTab.label "Abrir link em aba no plano da frente">
+<!ENTITY linkBackgroundTab.accesskey "F">
+<!ENTITY linkForegroundTab.accesskey "R">
+<!ENTITY openalllinks.label "Abrir links em novas abas">
+<!ENTITY openalllinks.accesskey "S">
+<!ENTITY linkwithhistory.label "Abrir Link em aba duplicada">
+<!ENTITY linkwithhistory.accesskey "D">
+<!ENTITY tabsList.label "Lista de abas abertas">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Imagem">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Redirecionamento">
+<!ENTITY allowPlugin.label "Plug-in">
+<!ENTITY allowFrame.label "Frame">
+<!ENTITY restoreincurrent.label "Restaurar na aba atual">
+<!ENTITY restoreincurrent.accesskey "A">
+<!ENTITY restoreinwin.label "Restaurar em nova janela">
+<!ENTITY restoreinwin.accesskey "J">
+<!ENTITY restoreintab.label "Restaurar em nova aba">
+<!ENTITY restoreintab.accesskey "N">
+<!ENTITY restoretab.label "Restaurar aba">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "Adicionar esse link aos favoritos...">
+<!ENTITY bookmark.accesskey "F">
+<!ENTITY deletelist.label "Excluir da lista">
+<!ENTITY deletelist.accesskey "D">
+<!ENTITY settings.label "Configurações">
+<!ENTITY saveWindow.label "Salvar essa janela">
+<!ENTITY saveAllWindows.label "Salvar todas as janelas">
+<!ENTITY sm.context.overwrite "Restaurar, substituir janela(s) existente(s)">
+<!ENTITY sm.context.overwrite.key "S">
+<!ENTITY sm.context.restore.new "Restaurar em nova(s) janela(s)">
+<!ENTITY sm.context.restore.newkey "N">
+<!ENTITY sm.context.replacethis "Substituir, com esta janela">
+<!ENTITY sm.context.replacethis.key "E">
+<!ENTITY sm.context.replaceall "Substituir, com todas as janelas">
+<!ENTITY sm.context.replaceall.key "T">
+<!ENTITY sm.context.add "Adicionar essa janela">
+<!ENTITY sm.context.add.key "J">
+<!ENTITY sm.context.addall "Adicionar todas as janelas">
+<!ENTITY sm.context.addall.key "O">
+<!ENTITY sm.context.save "Salvar">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "Renomear">
+<!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Sessão de Favoritos">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Excluir">
+<!ENTITY sm.context.delete.key "E">
+<!ENTITY sm.context.deleteall "Excluir todas">
+<!ENTITY sm.context.deleteall.key "X">
+<!ENTITY sm.context.startup "Definir como Sessão Inicial">
+<!ENTITY sm.context.startup.key "D">
+<!ENTITY sm.context.details "Mostrar contadores, data e hora no Menu Sessões">
+<!ENTITY sm.context.details.key "C">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "Ordenar abas">
+<!ENTITY sortedTabs.tooltip "Seleciona para mostrar lista ordenada alfabeticamente">
+<!ENTITY enable.label "Ativar">
+<!ENTITY custom.label "Personalizar">
+<!ENTITY enableTabs.label "Ativar em todas as abas">
+<!ENTITY disableTabs.label "Desativar em todas as abas">
+<!ENTITY seconds.label "segundos">
+<!ENTITY minutes.label "minutos">
+<!ENTITY minute.label "minuto">
+<!ENTITY hideTabBar.label "Esconder a barra de abas">
+<!ENTITY hideTabBar.never.label "Nunca">
+<!ENTITY hideTabBar.never.key "N">
+<!ENTITY hideTabBar.oneTab.label "Quando você tem apenas uma aba">
+<!ENTITY hideTabBar.onOneTab.key "U">
+<!ENTITY hideTabBar.always.label "Sempre">
+<!ENTITY hideTabBar.always.key "S">

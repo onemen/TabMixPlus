@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Estilos">
+<!ENTITY styles.label "Personalizar estilos">
+<!ENTITY currentTab.label "Aba atual">
+<!ENTITY unloadedTabs.label "Abas descarregadas">
+<!ENTITY unreadTab.label "Abas não lidas">
+<!ENTITY hideRGB.label "Ocultar RGB">
+<!ENTITY showRGB.label "Mostra RGB">
+<!ENTITY unreadAfterReload.label "definir aba como não lida após atualizar">
+<!ENTITY disableBackground.label "Desativar cores de fundo personalizadas">
+<!ENTITY squaredTabs.label "Aplicar a cor de fundo para abas quadradas.">
+<!ENTITY otherTabs.label "Outras abas">
+<!ENTITY italic.label "Itálico">
+<!ENTITY bold.label "Negrito">
+<!ENTITY underline.label "Sublinhado">
+<!ENTITY textcolor.label "Cor do texto">
+<!ENTITY bgColor.label "Cor do fundo">
+<!ENTITY bgTopColor.label "parte superior">
+<!ENTITY bgBottomColor.label "parte inferior">
+<!ENTITY useThis.label "use esse estilo para">
+<!ENTITY opacity.label "opacidade">

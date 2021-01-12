@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Separadores fechados">
+<!ENTITY closedtabsbtn.tooltip "Mostrar lista dos separadores fechados">
+<!ENTITY sessionbtn.tooltip "Mostrar e gerir as suas sessões">
+<!ENTITY tabslistbtn.label "Separadores abertos">
+<!ENTITY tabslistbtn.tooltip "Mostrar lista dos separadores abertos">
+<!ENTITY closedwindowsbtn.label "Janelas fechadas">
+<!ENTITY closedwindowsbtn.tooltip "Mostrar lista das janelas fechadas">
+<!ENTITY page.header.title "Opções do Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Gestor de sessão do Tab Mix Plus">
+<!ENTITY session.Tools "Gestor de sessões">
+<!ENTITY closedWin.label "Lista de janelas fechadas">
+<!ENTITY duplicateTabMenu.label "Duplicar separador">
+<!ENTITY duplicateTabMenu.accesskey "D">
+<!ENTITY duplicateinWin.label "Duplicar em nova janela">
+<!ENTITY duplicateinWin.accesskey "j">
+<!ENTITY detachTab.label "Mover para nova janela">
+<!ENTITY detachTab.accesskey "e">
+<!ENTITY mergeContext.label "Juntar janelas">
+<!ENTITY mergeContext.accesskey "n">
+<!ENTITY renametab.label "Renomear separador">
+<!ENTITY renametab.accesskey "m">
+<!ENTITY copytaburl.label "Copiar URL do separador">
+<!ENTITY copytaburl.accesskey "U">
+<!ENTITY reloadother.label "Recarregar outros separadores">
+<!ENTITY reloadother.accesskey "u">
+<!ENTITY reloadleft.label "Recarregar separadores da esquerda">
+<!ENTITY reloadleft.accesskey "q">
+<!ENTITY reloadright.label "Recarregar separadores da direita">
+<!ENTITY reloadright.accesskey "i">
+<!ENTITY autoReloadTab.label "Recarregar separador a cada">
+<!ENTITY autoReloadTab.accesskey "d">
+<!ENTITY autoReloadSite.label "Recarregar este sítio a cada">
+<!ENTITY autoReloadSite.accesskey "e">
+<!ENTITY afterthis.label "Depois deste separador">
+<!ENTITY bookmarktab.label "Adicionar este separador aos marcadores">
+<!ENTITY undoCloseListMenu.label "Lista de separadores fechados">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "Fechar todos os separadores">
+<!ENTITY closeall.accesskey "t">
+<!ENTITY closeSimilarTab.label "Fechar separadores parecidos">
+<!ENTITY closeSimilarTab.accesskey "h">
+<!ENTITY closeTabsToLeft.label "Fechar os separadores à esquerda">
+<!ENTITY closeleft.accesskey "q">
+<!ENTITY docShellMenu.label "Permissões">
+<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY freezeTabMenu.label "Congelar separador">
+<!ENTITY freezeTabMenu.accesskey "g">
+<!ENTITY protectTabMenu.label "Proteger separador">
+<!ENTITY protectTabMenu.tooltip "Proteger os separadores de serem fechados">
+<!ENTITY protectTabMenu.accesskey "p">
+<!ENTITY lockTabMenu.label "Bloquear separador">
+<!ENTITY lockTabMenu.tooltip "Todas as ligações abrem num novo separador">
+<!ENTITY lockTabMenu.accesskey "ç">
+<!ENTITY bookmarktabs.label "Adicionar todos os separadores aos marcadores">
+<!ENTITY linkhere.label "Abrir ligação neste separador">
+<!ENTITY linkhere.accesskey "s">
+<!ENTITY linkBackgroundTab.label "Abrir ligação no separador de fundo">
+<!ENTITY linkForegroundTab.label "Abrir ligação noutro separador">
+<!ENTITY linkBackgroundTab.accesskey "f">
+<!ENTITY linkForegroundTab.accesskey "g">
+<!ENTITY openalllinks.label "Abrir ligações em novos separadores">
+<!ENTITY openalllinks.accesskey "v">
+<!ENTITY linkwithhistory.label "Abrir ligação em separador duplicado">
+<!ENTITY linkwithhistory.accesskey "d">
+<!ENTITY tabsList.label "Lista de separadores abertos">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Imagem">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Redireccionar">
+<!ENTITY allowPlugin.label "Plug-in">
+<!ENTITY allowFrame.label "Frame">
+<!ENTITY restoreincurrent.label "Restaurar para o separador actual">
+<!ENTITY restoreincurrent.accesskey "c">
+<!ENTITY restoreinwin.label "Restaurar para nova janela">
+<!ENTITY restoreinwin.accesskey "j">
+<!ENTITY restoreintab.label "Restaurar para novo separador">
+<!ENTITY restoreintab.accesskey "p">
+<!ENTITY restoretab.label "Restaurar separador">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "Adicionar ligação aos marcadores...">
+<!ENTITY bookmark.accesskey "m">
+<!ENTITY deletelist.label "Eliminar da lista">
+<!ENTITY deletelist.accesskey "i">
+<!ENTITY settings.label "Definições">
+<!ENTITY saveWindow.label "Guardar esta janela">
+<!ENTITY saveAllWindows.label "Guardar todas as janelas">
+<!ENTITY sm.context.overwrite "Restaurar, sobrescrever janela(s) existente(s)">
+<!ENTITY sm.context.overwrite.key "o">
+<!ENTITY sm.context.restore.new "Restaurar para nova(s) janela(s)">
+<!ENTITY sm.context.restore.newkey "n">
+<!ENTITY sm.context.replacethis "Substituir, por esta janela">
+<!ENTITY sm.context.replacethis.key "t">
+<!ENTITY sm.context.replaceall "Substituir, em todas as janelas">
+<!ENTITY sm.context.replaceall.key "a">
+<!ENTITY sm.context.add "Adicionar esta janela">
+<!ENTITY sm.context.add.key "j">
+<!ENTITY sm.context.addall "Adicionar todas as janelas">
+<!ENTITY sm.context.addall.key "j">
+<!ENTITY sm.context.save "Guardar">
+<!ENTITY sm.context.save.key "G">
+<!ENTITY sm.context.rename "Renomear">
+<!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Eliminar">
+<!ENTITY sm.context.delete.key "E">
+<!ENTITY sm.context.deleteall "Eliminar tudo">
+<!ENTITY sm.context.deleteall.key "t">
+<!ENTITY sm.context.startup "Definir como sessão de início">
+<!ENTITY sm.context.startup.key "D">
+<!ENTITY sm.context.details "Mostrar contadores, data e hora no menu de sessão">
+<!ENTITY sm.context.details.key "c">
+<!ENTITY tab.key "s">
+<!ENTITY window.key "j">
+<!ENTITY merge.key "u">
+<!ENTITY sortedTabs.label "Separadores ordenados">
+<!ENTITY sortedTabs.tooltip "Verificar para mostrar a lista ordenada alfabeticamente">
+<!ENTITY enable.label "Activar">
+<!ENTITY custom.label "Personalizar">
+<!ENTITY enableTabs.label "Activar todos os separadores">
+<!ENTITY disableTabs.label "Desactivar todos os separadores">
+<!ENTITY seconds.label "segundos">
+<!ENTITY minutes.label "minutos">
+<!ENTITY minute.label "minuto">
+<!ENTITY hideTabBar.label "Ocultar a barra do separador">
+<!ENTITY hideTabBar.never.label "Nunca">
+<!ENTITY hideTabBar.never.key "N">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "e">
+<!ENTITY hideTabBar.always.label "Sempre">
+<!ENTITY hideTabBar.always.key "m">

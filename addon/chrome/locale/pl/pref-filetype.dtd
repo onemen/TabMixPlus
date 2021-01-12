@@ -1,0 +1,5 @@
+<!ENTITY filetype.options "Edytor typów plików">
+<!ENTITY filetype.add "Dodaj">
+<!ENTITY filetype.edit "Modyfikuj">
+<!ENTITY filetype.delete "Usuń">
+<!ENTITY filetype.new "Nowy typ pliku:">

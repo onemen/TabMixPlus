@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Kortkommandon">
+<!ENTITY shortcuts.edit "Redigera kortkommandon">
+<!ENTITY shortcuts.showAll "Visa alla">
+<!ENTITY shortcuts.hideUnused "Dölj oanvända">
+<!ENTITY shortcuts.warning "En del av dina kortkommandon används av andra kommandon">
+<!ENTITY shortcuts.showDetails "Visa detaljer">
+<!ENTITY shortcuts.hideDetails "Dölj detaljer">
+<!ENTITY shortcuts.switchToLast "Byt till senast aktiva flik">
+<!ENTITY shortcuts.slideshow "Bläddra bland flikar">
+<!ENTITY shortcuts.toggleFLST "Ändra fokus efter nuvarande flik har stängts">
+<!ENTITY shortcuts.toggleFLST.tooltip "växla mellan fokus till höger eller senast valda flik">
+<!ENTITY shortcuts.placeholder "Ange modifierare och tangent">
+<!ENTITY shortcuts.reset "Återställ">
+<!ENTITY shortcuts.clear "Rensa">
+<!ENTITY shortcuts.inuse "Detta kortkommando används redan av">

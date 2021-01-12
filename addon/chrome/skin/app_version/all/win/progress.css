@@ -1,0 +1,29 @@
+/**
+    Firefox all versions
+
+    windows and Linux platform
+
+**/
+
+/* :::: progress bar on tabs :::: */
+#tabbrowser-tabs[tabmix_australis="true"]:not([treestyletab-mode="vertical"])
+    > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
+  margin: 4px 7px 0 7px;
+}
+
+.tab-progress {
+  -moz-appearance: none;
+  min-height: 0;
+  height: 4px;
+  border: 0;
+  margin-top: -4px;
+  background-color: transparent;
+}
+
+.tab-progress > .progress-bar {
+  -moz-appearance: none;
+  min-width: 3px;
+  border-top: 1px solid rgba(100,100,100,.1);
+  border-bottom: 1px solid rgba(0,0,0,.2);
+  background-color: Highlight;
+}

@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Liên kết">
+<!ENTITY tab.events "Sự kiện">
+<!ENTITY tab.mouse "Chuột">
+<!ENTITY tab.appearance "Hiển thị">
+<!ENTITY tab.menu "Trình đơn">
+<!ENTITY tab.session "Phiên">
+<!ENTITY tab.incompatible "Lỗi">
+<!ENTITY apply.label "Áp dụng">
+<!ENTITY settings.export "Xuất các Thiết lập">
+<!ENTITY settings.import "Nhập các Thiết lập">
+<!ENTITY settings.sync "Sync Preferences">
+<!ENTITY settings.default "Khôi phục Mặc định">
+<!ENTITY settings.revert "Revert">
+<!ENTITY generalWindowOpen.label "Mở liên kết vốn sẽ được mở trong một cửa sổ mới trong:">
+<!ENTITY externalLink.useSeparate.label "Sử dụng thiết đặt riêng cho các liên kết từ các ứng dụng khác">
+<!ENTITY externalLinkTarget.label "Mở liên kết từ chương trình khác trong:">
+<!ENTITY linkTarget.tab "Thẻ mới">
+<!ENTITY linkTarget.window "Cửa sổ mới">
+<!ENTITY linkTarget.current "Thẻ hiện tại">
+<!ENTITY linkTarget.accesskey "T">
+<!ENTITY divertedWindowOpen.label "Popup JavaScript:">
+<!ENTITY divertedWindowOpen.all "Mở tất cả popup trong thẻ">
+<!ENTITY divertedWindowOpen.some "Cho phép popup đã chỉnh kích thước">
+<!ENTITY divertedWindowOpen.none "Cho phép tất cả popup">
+<!ENTITY linkTarget.label "Mở liên kết có thuộc tính đích trong thẻ hiện tại">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY download.label "Không mở thẻ trống khi đang tải xuống tập tin">
+<!ENTITY edit.label "Chỉnh sửa">
+<!ENTITY speLink.label "Bắt buộc mở trong thẻ mới:">
+<!ENTITY speLink.none "Không có">
+<!ENTITY speLink.allLinks "Tất cả các liên kết">
+<!ENTITY speLink.external "Liên kết tới trang khác">
+<!ENTITY singleWindow.label "Bật chế độ “Một cửa sổ”">
+<!ENTITY newTabs.label "Các thẻ mới">
+<!ENTITY tabOpen.label "Mở Thẻ">
+<!ENTITY tabFocus.label "Chú ý Thẻ">
+<!ENTITY tabClose.label "Đóng Thẻ">
+<!ENTITY tabMerge.label "Trộn Thẻ">
+<!ENTITY tabFeature.label "Tính năng Thẻ">
+<!ENTITY newtab.label "Thẻ mới sẽ mở:">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "Trang trống">
+<!ENTITY newtab.home "Trang nhà">
+<!ENTITY newtab.current "Trang hiện tại">
+<!ENTITY newtab.duplicate "Trang bản sao">
+<!ENTITY newtab.location.1 "Mở một thẻ mới">
+<!ENTITY newtab.placeholder.label "Default New Tab Page">
+<!ENTITY location.label.1 "Địa chỉ">
+<!ENTITY focusContent.label "Chuyển trỏ chuột tới nội dung khi tải trang trắng">
+<!ENTITY openTabNext.label "Mở thẻ mới kế bên thẻ hiện tại">
+<!ENTITY openOtherTabNext.label "Mở thẻ khác kế bên thẻ hiện tại">
+<!ENTITY relatedAfterCurrent.label "Chỉ khi có liên quan với thẻ hiện tại">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Mở thẻ bản sao kế bên thẻ gốc">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Thay đổi thứ tự mở">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Mở thẻ mới kế bên thẻ được mở cuối cùng từ thẻ hiện tại (kể từ lúc nó được chọn cuối cùng)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabs">
+<!ENTITY lockTabs.label "Khóa thẻ">
+<!ENTITY lockNewTabs.label "Khóa các thẻ mới">
+<!ENTITY lockAppTabs.label "Khóa các thẻ ứng dụng">
+<!ENTITY updateLockState.label "Apply changes to open tabs">
+<!ENTITY openNewTab.label "Mở thẻ từ:">
+<!ENTITY openBookmarks.label "Trang đánh dấu">
+<!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
+<!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">
+<!ENTITY openHistory.label "Lược sử">
+<!ENTITY openUrl.label "Thanh địa chỉ">
+<!ENTITY openSearch.label "Thanh tìm kiếm">
+<!ENTITY middlecurrent1.label "Chuột giữa hoặc Ctrl-nhấp chuột sẽ mở các mục trong thẻ hiện tại">
+<!ENTITY middlecurrent.tooltip "Chỉ các trang đánh dấu, lược sử, liên kết mới bắt buộc phải mở trong thẻ mới">
+<!ENTITY tabFocus.caption "Chú ý / Chọn các thẻ mở từ:">
+<!ENTITY selectTab.label "Liên kết">
+<!ENTITY selectDivertedTab.label "Cửa sổ chuyển hướng">
+<!ENTITY selectTabFromExternal.label "Other applications">
+<!ENTITY selectTabCommand.label "Lệnh mở thẻ mới">
+<!ENTITY contextMenuSearch.label "Tìm kiếm trình đơn ngữ cành">
+<!ENTITY selectTabBH.label "Trang đánh dấu / Lược sử">
+<!ENTITY duplicateTab.label "Tạo bản sao của Thẻ">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "Cảnh báo">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "Đóng thẻ cuối cùng">
+<!ENTITY keepWindow.label.3.1 "Không đóng cửa sổ khi đóng thẻ cuối cùng">
+<!ENTITY keeptab.label "Không để thẻ cuối cùng bị đóng">
+<!ENTITY closeOnMerge.label "Đóng các cửa sổ một khi chúng vừa được trộn">
+<!ENTITY warnOnMerge.label "Cảnh báo khi đóng các thẻ không được trộn">
+<!ENTITY currenttab.caption.label "Đóng thẻ hiện tại">
+<!ENTITY focusTab.labelBegin "Khi đóng thẻ hiện tại, chú ý vào:">
+<!ENTITY focusTab.firstTab "Thẻ đầu tiên">
+<!ENTITY focusTab.leftTab "Thẻ bên trái">
+<!ENTITY focusTab.rightTab "Thẻ bên phải">
+<!ENTITY focusTab.lastTab "Thẻ cuối cùng">
+<!ENTITY focusTab.lastSelectedTab "Thẻ được chọn cuối cùng">
+<!ENTITY focusTab.openerTab "Thẻ cha mẹ / thẻ bên phải">
+<!ENTITY focusTab.openerTab.rtl "Mở/để lại thẻ">
+<!ENTITY focusTab.lastOpenedTab "Thẻ được mở cuối cùng">
+<!ENTITY undoClose.label "Bật tính năng xem lại thẻ đã đóng">
+<!ENTITY undoCloseCache.label "Số lượng thẻ đã đóng được ghi nhớ tối đa:">
+<!ENTITY undoClosepos.label "Khôi phục vị trí gốc của thẻ">
+<!ENTITY menuonlybutton.label "Làm cho nút trên thanh công cụ chỉ hiển thị một danh sách">
+<!ENTITY ctrltab.label "Ctrl-Tab điều hướng các thẻ theo thứ tự được sử dụng gần nhất">
+<!ENTITY cmdtab.label "Cmd-Tab điều hướng các thẻ theo thứ tự được sử dụng gần nhất">
+<!ENTITY ctrltab.tabPreviews "Hiển thị xem trước thẻ">
+<!ENTITY ctrltab.popup "Ctrl-Tab hiển thị một trình đơn popup danh sách thẻ">
+<!ENTITY cmdtab.popup "Cmd-Tab hiển thị một trình đơn popup danh sách thẻ">
+<!ENTITY tabpopup.mouse "Danh sách thẻ tương tác với chuột">
+<!ENTITY mergeNoTabSelection.label "Trộn các cửa sổ khi không có thẻ nào được chọn">
+<!ENTITY mergeTabSelection.label "Trộn sau khi chọn thẻ:">
+<!ENTITY mergeall.label "Trộn các cửa sổ thành một">
+<!ENTITY mergelastfocused.label "Chỉ trộn cửa sổ hiện tại với cửa sổ được chú ý cuối cùng">
+<!ENTITY mergePopups.label "Cũng trộn luôn cửa sổ popup">
+<!ENTITY popupNextToOpener.label "Đặt popup kế bên trang đã mở chúng">
+<!ENTITY activateSlideshow.label "Pressing #1 rotates tabs every">
+<!ENTITY toggleAnimation.label "Tắt hiệu ứng động khi mở/đóng thẻ">
+<!ENTITY reloadEvery.matchAddress.label "Tải lại một thẻ bất chấp địa chỉ của nó">
+<!ENTITY reloadEvery.onReloadButton.label "Hiện trình đơn “Tải lại Mỗi” trên nút Tải lại">
+<!ENTITY seconds.label "giây">
+<!ENTITY minutes.label "phút">
+<!ENTITY tabBarAppearance.label "Thanh Thẻ">
+<!ENTITY tabAppearance.label "Thẻ">
+<!ENTITY toolBarAppearance.label "Thanh Công Cụ">
+<!ENTITY show.ontabbar.label "Hiện trên Thanh Thẻ">
+<!ENTITY show.ontab.label "Hiện trên Thẻ">
+<!ENTITY dragNewTabButton.tooltip "Kéo nút &quot;Tạo thẻ mới&quot; vào thanh chứa thẻ để bật tính năng này.">
+<!ENTITY hideTabBarButton.label "Nút đóng thẻ">
+<!ENTITY newTabButton.label "Nút thẻ mới">
+<!ENTITY newTabButton.position.left.label "ở bên Trái">
+<!ENTITY newTabButton.position.right.label "ở bên Phải">
+<!ENTITY newTabButton.position.afterlast.label "Sau thẻ cuối cùng">
+<!ENTITY allTabsButton.label "Nút tất cả thẻ">
+<!ENTITY tabBarSpace.label "Thêm khoảng trống ở cả hai bên">
+<!ENTITY tabBarSpace.tooltip "Khi nhấn và thả thứ nào đó trên thanh thẻ">
+<!ENTITY tabbar.label "Ẩn thanh thẻ khi chỉ có một thẻ được mở">
+<!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
+<!ENTITY dropIndicator.label "Dấu chỉ báo việc thả">
+<!ENTITY dropIndicator-native.label "Kiểu địa phương">
+<!ENTITY dropIndicator-builtin.label "Kiểu cài sẵn">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY tabBarPosition.label "Vị trí:">
+<!ENTITY tabBarPosition.top.label "Trên (trên nội dung)">
+<!ENTITY tabBarPosition.bottom.label "Dưới (dưới nội dung)">
+<!ENTITY tabScroll.label "Khi các thẻ không vừa chiều rộng:">
+<!ENTITY tabScroll.none "Cuộn được và không có nút">
+<!ENTITY tabScroll.leftRightButtons "Cuộn được với nút ở hai bên trái và phải">
+<!ENTITY tabScroll.rightButtons "Cuộn được với nút ở bên phải">
+<!ENTITY tabScroll.rightButtons.rtl "Có thể cuộn với các nút ở phía bên trái">
+<!ENTITY tabScroll.multibar "Nhiều hàng">
+<!ENTITY maxrow.label "Số lượng hàng tối đa:">
+<!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
+<!ENTITY offsetAmountToScroll.label "Hiển thị phần không nhìn thấy của thẻ tiếp theo khi cuộn">
+<!ENTITY smoothScroll.label "Bật tính năng cuộn mượt mà">
+<!ENTITY scrolldelay.label "Thời gian trễ khi Cuộn (thời gian giữa 2 lần cuộn lặp lại)">
+<!ENTITY currenttab.style.label "Thẻ hiện tại">
+<!ENTITY unloadedtabs.style.label "Các Thẻ chưa tải">
+<!ENTITY unreadtabs.style.label "Thẻ chưa đọc">
+<!ENTITY othertabs.style.label "Thẻ khác">
+<!ENTITY setstyles.label "Tùy biến Kiểu">
+<!ENTITY extraIcons.label1 "Biểu tượng cho">
+<!ENTITY extraIcons.locked "Đã khóa">
+<!ENTITY extraIcons.protected "Đã bảo vệ">
+<!ENTITY extraIcons.autoreload "Tự động Tải lại">
+<!ENTITY extraIcons.hideonpinned "Hide on pinned tabs">
+<!ENTITY progressMeter.label "Thanh đo tiến trình trên thẻ">
+<!ENTITY showTabX.labelBegin "Nút đóng thẻ">
+<!ENTITY showTabX.left "Đặt ở bên trái">
+<!ENTITY showTabX.rtl "Đặt ở phía bên phải">
+<!ENTITY milliseconds.label "miligiây">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "trên tất cả">
+<!ENTITY showTabX.current "trên hiện tại">
+<!ENTITY showTabX.hover "khi rê chuột trên">
+<!ENTITY showTabX.alwaysExeption "trên tất cả thẻ rộng hơn">
+<!ENTITY showTabX.currentHover "trên hiện tại &amp; khi rê chuột trên">
+<!ENTITY minWidth.label "Độ rộng Thẻ:">
+<!ENTITY widthTo.label "tới">
+<!ENTITY widthPixels.label "pixels">
+<!ENTITY onLeftDisabled.label "Can&apos;t place button on left side with the current theme">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY flexTabs.label "Độ rộng thẻ vừa khít với tiêu đề thẻ">
+<!ENTITY bookastitle.label "Sử dụng tên trang đánh dấu như là tiêu đề thẻ">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Bạn có thể tùy biến nút Tabmix nào sẽ hiện trong Thanh Công Cụ">
+<!ENTITY toolbar.button.label "Tùy biến">
+<!ENTITY toolbar.visible.caption "Nút hiện ra">
+<!ENTITY toolbar.novisible.label "Không có nút nào hiện ra">
+<!ENTITY toolbar.hidden.caption "Nút ẩn">
+<!ENTITY toolbar.nohidden.label "Không có nút nào ẩn">
+<!ENTITY mouseGesture.label "Điệu bộ Chuột">
+<!ENTITY mouseClick.label "Nhấn chuột">
+<!ENTITY mouseHoverSelect.labelBegin "Chọn thẻ khi rê chuột trên thẻ đó trong">
+<!ENTITY tabFlip.label "Chuyển qua thẻ được chọn khi nhấn lên thẻ hiện tại">
+<!ENTITY tabFlip.delay "Sử dụng độ trễ">
+<!ENTITY clickFocus.label "Nhấn chuột (xuống và thả ra) để chọn một thẻ">
+<!ENTITY removeEntries.label "Xóa các mục trong danh sách trình đơn Tab Mix Plus bằng chuột giữa">
+<!ENTITY lockTabSizingOnClose.label "Khi đóng một thẻ, các thẻ khác không được thay đổi kích thước cho tới khi trỏ chuột rời khỏi thanh công cụ">
+<!ENTITY removeEntries.tooltip "Bao gồm thẻ đã đóng, cửa sổ đã đóng, và phiên làm việc đã lưu">
+<!ENTITY tabbarscrolling.caption "Khi cuộn trên thanh chứa thẻ">
+<!ENTITY tabbarscrolling.holdShift.label "Giữ phím SHIFT khi cuộn để chuyển đổi giữa những tùy chọn này.">
+<!ENTITY tabbarscrolling.selectTab.label "Chuyển thẻ được chọn">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Cuộn tất cả các thẻ">
+<!ENTITY tabbarscrolling.inverse.label "Đảo ngược hướng cuộn">
+<!ENTITY double.label "Nhấp đôi">
+<!ENTITY middle.label "Chuột giữa">
+<!ENTITY ctrl.label "Ctrl-nhấn chuột">
+<!ENTITY cmd.label "Cmd-nhấn chuột">
+<!ENTITY shift.label "Shift-nhấn chuột">
+<!ENTITY alt.label "Alt-nhấn chuột">
+<!ENTITY ontab.label "trên một thẻ:">
+<!ENTITY ontabbar.label "trên thanh thẻ:">
+<!ENTITY clicktab.label "Chọn lệnh để thực hiện khi nhấn chuột lên thẻ hoặc thanh thẻ">
+<!ENTITY ontabbar.dblClick.label "Nhấp đôi trên Thanh Thẻ sẽ không làm thay đổi kích cỡ cửa sổ.">
+<!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
+<!ENTITY clicktab.default "Firefox default or other extension">
+<!ENTITY clicktab.nothing "Không làm gì">
+<!ENTITY clicktab.addtab "Mở một thẻ mới">
+<!ENTITY clicktab.duplicatetab "Tạo bản sao của thẻ">
+<!ENTITY clicktab.duplicatetabw "Tạo bản sao của thẻ trong một cửa sổ mới">
+<!ENTITY clicktab.detachtab "Di chuyển thẻ sang một cửa sổ mới">
+<!ENTITY clicktab.protecttab "Bảo vệ thẻ">
+<!ENTITY clicktab.locktab "Khóa thẻ">
+<!ENTITY clicktab.freezetab "Bảo vệ và Khóa thẻ">
+<!ENTITY clicktab.renametab "Đổi tên thẻ">
+<!ENTITY clicktab.copyTabUrl "Chép URL của thẻ vào clipboard">
+<!ENTITY clicktab.copyUrlFromClipboard "Tải URL từ clipboard">
+<!ENTITY clicktab.selectMerge "Chọn thẻ để trộn">
+<!ENTITY clicktab.mergeTabs "Trộn các cửa sổ lại">
+<!ENTITY clicktab.bookTab "Đánh dấu thẻ">
+<!ENTITY clicktab.bookTabs "Đánh dấu tất cả các thẻ">
+<!ENTITY clicktab.reloadtab "Tải lại thẻ">
+<!ENTITY clicktab.reloadtabs "Tải lại tất cả các thẻ">
+<!ENTITY clicktab.reloadothertabs "Tải lại các thẻ khác">
+<!ENTITY clicktab.reloadlefttabs "Tải lại các thẻ bên trái">
+<!ENTITY clicktab.reloadrighttabs "Tải lại các thẻ bên phải">
+<!ENTITY clicktab.autoReloadTab "Kích hoạt / Dừng việc tự động tải lại thẻ">
+<!ENTITY clicktab.removeall "Đóng tất cả các thẻ">
+<!ENTITY clicktab.removeother "Đóng các thẻ khác">
+<!ENTITY clicktab.removesimilar "Đóng các thẻ cùng tên miền">
+<!ENTITY clicktab.removetoLeft "Close Tabs to the Left">
+<!ENTITY clicktab.removetoRight "Close Tabs to the Right">
+<!ENTITY clicktab.uctab "Mở lại các thẻ đã đóng">
+<!ENTITY clicktab.ucatab "Mở lại tất cả các thẻ đã đóng">
+<!ENTITY clicktab.snapback "QuayLại Thẻ">
+<!ENTITY clicktab.ietab "Mở thẻ trong IE">
+<!ENTITY contentLoad "Chuột giữa sẽ tải url từ clipboard">
+<!ENTITY context.tab "Trình đơn Ngữ cảnh của Thẻ">
+<!ENTITY context.main "Trình đơn Ngữ cảnh Chính">
+<!ENTITY context.tools "Trình đơn Công cụ">
+<!ENTITY showOnTabbar.label "Show Tab Context Menu on tabbar">
+<!ENTITY showtabBarContext.label "Hiện trong Trình đơn Ngữ cảnh của Thẻ">
+<!ENTITY showContentAreaContext.label "Hiện trong Trình đơn Ngữ cảnh Chính">
+<!ENTITY showToolsMenu.label "Hiện trong Trình đơn Công cụ">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "Hiện một trang trống">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "Tab Mix Plus phát hiện phần mở rộng Session Manager đã được cài">
+<!ENTITY sm.extension.description2 "Trình quản lí phiên của Tab Mix Plus sẽ bị vô hiệu hóa">
+<!ENTITY sm.extension.description3 "Bạn có thể nhấn nút bên phải để mở hộp thoại Tùy chọn Quản lí Phiên">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "Chuyển đổi">
+<!ENTITY sm.extension.chooseFile.label1 "Chuyển đổi phiên làm việc Tab Mix Plus của hồ sơ hiện tại">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "Sử dụng tính năng “Khôi phục Phiên” có sẵn trong Firefox">
+<!ENTITY ss.enable.tooltip "Không chọn để cho phép sử dụng với Quản lí Phiên của Tabmix">
+<!ENTITY ss.advanced_setting "Thiết lập Nâng cao">
+<!ENTITY ss.advanced_setting.warning "Đừng thay đổi những mục này, trừ khi bạn biết mình đang làm gì">
+<!ENTITY ss.interval "Khoảng thời gian tối thiểu giữa hai lần lưu trạng thái">
+<!ENTITY ss.interval.seconds "(theo miligiây)">
+<!ENTITY ss.privacy_level "Lưu dữ liệu nhạy cảm (dữ liệu biểu mẫu, POSTDATA và cookie) cho">
+<!ENTITY ss.privacy_level.allsites "Tất cả các trang">
+<!ENTITY ss.privacy_level.unencrypted "Chỉ các trang không được mã hóa">
+<!ENTITY ss.privacy_level.nosites "Không trang nào cả">
+<!ENTITY ss.postdata.label1 "Lượng POSTDATA được lưu trữ tối đa">
+<!ENTITY ss.postdata.label2 "(theo byte, -1 = tất cả)">
+<!ENTITY sessionManger.enable "Bật “Quản lí Phiên”">
+<!ENTITY crashRecovery.enable "Bật “Khôi phục Đổ vỡ”">
+<!ENTITY sm.StartExit "Khởi động/Thoát">
+<!ENTITY sm.restore "Khôi phục">
+<!ENTITY sm.preserve "Bảo toàn">
+<!ENTITY sm.start "Khi Trình Duyệt Khởi Động:">
+<!ENTITY sm.start.restore "Khôi phục">
+<!ENTITY sm.start.ask "Hỏi trước khi Khôi phục">
+<!ENTITY sm.start.nothing "Không khôi phục">
+<!ENTITY sm.exit "Khi Trình Duyệt Thoát:">
+<!ENTITY sm.exit.save "Lưu phiên">
+<!ENTITY sm.exit.ask "Hỏi trước khi Lưu">
+<!ENTITY sm.exit.nothing "Không lưu">
+<!ENTITY sm.startup "Phiên khởi động:">
+<!ENTITY sm.lastsession "Phiên cuối">
+<!ENTITY sm.previouslast "Trước tới Cuối">
+<!ENTITY sm.chooseifempty "Chọn cái khác nếu trống">
+<!ENTITY sm.restore.options "Khi Khôi Phục Phiên:">
+<!ENTITY sm.restore.overwrite "Ghi đè các cửa sổ hiện tại">
+<!ENTITY sm.restore.overwriteTabs "Và thẻ">
+<!ENTITY sm.restore.closedWinList "Lưu cửa sổ trong danh sách cửa sổ đã đóng">
+<!ENTITY sm.restore.merge "Trộn nhiều cửa sổ lại thành một">
+<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
+<!ENTITY sm.notrestore.label "Khi không khôi phục lúc khởi động">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "Bảo toàn các Thẻ:">
+<!ENTITY sm.preserve.history "Lược sử">
+<!ENTITY sm.preserve.protect "Bảo vệ Trạng thái">
+<!ENTITY sm.preserve.locked "Khóa trạng thái">
+<!ENTITY sm.preserve.permission "Quyền hạn">
+<!ENTITY sm.preserve.scroll1 "Vị trí Cuộn">
+<!ENTITY sm.restore.winOptions "Bảo toàn Cửa sổ:">
+<!ENTITY sm.restore.selectedTab "Thẻ được chọn">
+<!ENTITY sm.restore.closedTabs "Danh sách các thẻ đã đóng">
+<!ENTITY incompatible.extensions "Một số phần mở rộng của bạn không tương thích với Tab Mix Plus, bạn nên vô hiệu hóa hoặc gỡ bỏ các phần mở rộng đó.">
+<!ENTITY incompatible.button.label "Hiện danh sách">

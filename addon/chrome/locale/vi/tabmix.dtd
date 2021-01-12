@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Thẻ đã đóng">
+<!ENTITY closedtabsbtn.tooltip "Hiển thị Danh sách Thẻ đã đóng">
+<!ENTITY sessionbtn.tooltip "Hiển thị và Quản lí các Phiên của bạn.">
+<!ENTITY tabslistbtn.label "Thẻ đã mở">
+<!ENTITY tabslistbtn.tooltip "Hiển thị Danh sách Thẻ đã mở">
+<!ENTITY closedwindowsbtn.label "Cửa sổ Đã đóng">
+<!ENTITY closedwindowsbtn.tooltip "Hiển thị Danh sách Cửa sổ Đã đóng">
+<!ENTITY page.header.title "Tùy chọn Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Trình quản lí Phiên của Tab Mix Plus">
+<!ENTITY session.Tools "Quản lí Phiên">
+<!ENTITY closedWin.label "Danh sách Cửa sổ Đã đóng">
+<!ENTITY duplicateTabMenu.label "Tạo Bản Sao của Thẻ">
+<!ENTITY duplicateTabMenu.accesskey "S">
+<!ENTITY duplicateinWin.label "Tạo Bản Sao sang Cửa Sổ Mới">
+<!ENTITY duplicateinWin.accesskey "a">
+<!ENTITY detachTab.label "Di Chuyển sang Cửa Sổ Mới">
+<!ENTITY detachTab.accesskey "y">
+<!ENTITY mergeContext.label "Ghép Cửa Sổ">
+<!ENTITY mergeContext.accesskey "G">
+<!ENTITY renametab.label "Đổi tên Thẻ">
+<!ENTITY renametab.accesskey "i">
+<!ENTITY copytaburl.label "Chép URL Thẻ">
+<!ENTITY copytaburl.accesskey "U">
+<!ENTITY reloadother.label "Tải lại Các thẻ Khác">
+<!ENTITY reloadother.accesskey "K">
+<!ENTITY reloadleft.label "Tải lại Các thẻ Bên trái">
+<!ENTITY reloadleft.accesskey "r">
+<!ENTITY reloadright.label "Tải lại Các thẻ Bên phải">
+<!ENTITY reloadright.accesskey "P">
+<!ENTITY autoReloadTab.label "Tải lại Thẻ mỗi">
+<!ENTITY autoReloadTab.accesskey "l">
+<!ENTITY autoReloadSite.label "Tải lại trang này sau mỗi">
+<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY afterthis.label "Sau thẻ này">
+<!ENTITY bookmarktab.label "Đánh dấu Thẻ Này">
+<!ENTITY undoCloseListMenu.label "Danh sách Các thẻ đã Đóng">
+<!ENTITY undoCloseListMenu.accesskey "D">
+<!ENTITY closeAllTabsMenu.label "Đóng Tất cả Các thẻ">
+<!ENTITY closeall.accesskey "n">
+<!ENTITY closeSimilarTab.label "Đóng Các thẻ Giống nhau">
+<!ENTITY closeSimilarTab.accesskey "u">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeleft.accesskey "r">
+<!ENTITY docShellMenu.label "Quyền hạn">
+<!ENTITY docShellMenu.accesskey "Q">
+<!ENTITY freezeTabMenu.label "Đông cứng Thẻ">
+<!ENTITY freezeTabMenu.accesskey "g">
+<!ENTITY protectTabMenu.label "Bảo vệ Thẻ">
+<!ENTITY protectTabMenu.tooltip "Bảo vệ để thẻ không bị đóng">
+<!ENTITY protectTabMenu.accesskey "B">
+<!ENTITY lockTabMenu.label "Khóa Thẻ">
+<!ENTITY lockTabMenu.tooltip "Tất cả liên kết mở trong thẻ mới">
+<!ENTITY lockTabMenu.accesskey "K">
+<!ENTITY bookmarktabs.label "Đánh dấu Tất cả Các thẻ">
+<!ENTITY linkhere.label "Mở Liên Kết trong Thẻ Này">
+<!ENTITY linkhere.accesskey "y">
+<!ENTITY linkBackgroundTab.label "Mở Liên Kết trong Thẻ Hậu Cảnh">
+<!ENTITY linkForegroundTab.label "Mở Liên Kết trong Thẻ Tiền Cảnh">
+<!ENTITY linkBackgroundTab.accesskey "u">
+<!ENTITY linkForegroundTab.accesskey "i">
+<!ENTITY openalllinks.label "Mở Liên Kết trong Thẻ Mới">
+<!ENTITY openalllinks.accesskey "o">
+<!ENTITY linkwithhistory.label "Mở Liên Kết trong Thẻ Bản Sao">
+<!ENTITY linkwithhistory.accesskey "B">
+<!ENTITY tabsList.label "Danh sách Các thẻ đã Mở">
+<!ENTITY tabsList.accesskey "D">
+<!ENTITY allowImage.label "Hình ảnh">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Chuyển hướng">
+<!ENTITY allowPlugin.label "Phần bổ trợ">
+<!ENTITY allowFrame.label "Khung">
+<!ENTITY restoreincurrent.label "Khôi Phục sang Thẻ Hiện Tại">
+<!ENTITY restoreincurrent.accesskey "H">
+<!ENTITY restoreinwin.label "Khôi Phục sang Cửa Sổ Mới">
+<!ENTITY restoreinwin.accesskey "S">
+<!ENTITY restoreintab.label "Khôi Phục sang Thẻ Mới">
+<!ENTITY restoreintab.accesskey "T">
+<!ENTITY restoretab.label "Khôi phục Thẻ">
+<!ENTITY restoretab.accesskey "K">
+<!ENTITY bookmark.label "Đánh dấu Liên kết Này...">
+<!ENTITY bookmark.accesskey "L">
+<!ENTITY deletelist.label "Xóa khỏi danh sách">
+<!ENTITY deletelist.accesskey "X">
+<!ENTITY settings.label "Thiết lập">
+<!ENTITY saveWindow.label "Lưu Cửa Sổ Này">
+<!ENTITY saveAllWindows.label "Lưu Tất cả Cửa sổ">
+<!ENTITY sm.context.overwrite "Khôi phục, Ghi đè Cửa sổ Đang mở">
+<!ENTITY sm.context.overwrite.key "O">
+<!ENTITY sm.context.restore.new "Khôi Phục sang Cửa Sổ Mới">
+<!ENTITY sm.context.restore.newkey "M">
+<!ENTITY sm.context.replacethis "Thay thế, bằng Cửa sổ Này">
+<!ENTITY sm.context.replacethis.key "T">
+<!ENTITY sm.context.replaceall "Thay thế, bằng Tất cả Cửa sổ">
+<!ENTITY sm.context.replaceall.key "A">
+<!ENTITY sm.context.add "Thêm Cửa Sổ Này">
+<!ENTITY sm.context.add.key "C">
+<!ENTITY sm.context.addall "Thêm Tất cả Cửa sổ">
+<!ENTITY sm.context.addall.key "a">
+<!ENTITY sm.context.save "Lưu">
+<!ENTITY sm.context.save.key "L">
+<!ENTITY sm.context.rename "Đổi tên">
+<!ENTITY sm.context.rename.key "i">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Xóa">
+<!ENTITY sm.context.delete.key "X">
+<!ENTITY sm.context.deleteall "Xóa tất cả">
+<!ENTITY sm.context.deleteall.key "a">
+<!ENTITY sm.context.startup "Thiết lập là Phiên Khởi Động">
+<!ENTITY sm.context.startup.key "P">
+<!ENTITY sm.context.details "Hiện Bộ Đếm, Ngày và Giờ trong Trình đơn Phiên">
+<!ENTITY sm.context.details.key "B">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "Thẻ đã xếp">
+<!ENTITY sortedTabs.tooltip "Chọn để hiện danh sách được xếp theo thứ tự ABC">
+<!ENTITY enable.label "Kích hoạt">
+<!ENTITY custom.label "Tùy biến">
+<!ENTITY enableTabs.label "Kích hoạt Tất cả Các thẻ">
+<!ENTITY disableTabs.label "Vô hiệu hóa Tất cả Các thẻ">
+<!ENTITY seconds.label "giây">
+<!ENTITY minutes.label "phút">
+<!ENTITY minute.label "phút">
+<!ENTITY hideTabBar.label "Ẩn thanh thẻ">
+<!ENTITY hideTabBar.never.label "Không bao giờ">
+<!ENTITY hideTabBar.never.key "K">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "t">
+<!ENTITY hideTabBar.always.label "Luôn luôn">
+<!ENTITY hideTabBar.always.key "L">

@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Зареждане във фонов режим">
+<!ENTITY searchTabFocus.accesskey "ф">
+<!ENTITY renametab.panel.title "Промяна на заглавието на подпрозореца">
+<!ENTITY renametab.reset.label "Връщане на заглавието по подразбиране">
+<!ENTITY title.label "Заглавие">
+<!ENTITY default.label "По подразбиране">
+<!ENTITY renametab.permanently.label "Преименуване независимо от адреса на подпрозореца">
+<!ENTITY renametab.permanently.tooltip "подпрозорец с история - новото име ще се запази дори и при промяна на адреса">
+<!ENTITY forum.label "Форум">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Помощ">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Избиране на време от списъка или въвеждане на собствено време">
+<!ENTITY specifyreload.label "Определяне на времето за презареждане">
+<!ENTITY sanitizer.entry "Записани сесии">
+<!ENTITY sanitizer.entry.accesskey "З">
+<!ENTITY sanitizer.entry.confirm "Сигурни ли сте, че искате да изтриете ВСИЧКИ запазени сесии, включително и архивираните?">

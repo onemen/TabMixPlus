@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Enlaces">
+<!ENTITY tab.events "Eventos">
+<!ENTITY tab.mouse "Ratón">
+<!ENTITY tab.appearance "Apariencia">
+<!ENTITY tab.menu "Menú">
+<!ENTITY tab.session "Sesión">
+<!ENTITY tab.incompatible "Error">
+<!ENTITY apply.label "Aplicar">
+<!ENTITY settings.export "Exportar predisposiciones">
+<!ENTITY settings.import "Importar predisposiciones">
+<!ENTITY settings.sync "Sincronizar preferencias">
+<!ENTITY settings.default "Restaurar predeterminadas">
+<!ENTITY settings.revert "Deshacer">
+<!ENTITY generalWindowOpen.label "Abrir enlaces que abren nueva ventana en:">
+<!ENTITY externalLink.useSeparate.label "Usar preferencia separada para enlaces de otras aplicaciones">
+<!ENTITY externalLinkTarget.label "Abrir enlaces de otros programas en:">
+<!ENTITY linkTarget.tab "Nueva pestaña">
+<!ENTITY linkTarget.window "Nueva ventana">
+<!ENTITY linkTarget.current "Pestaña actual">
+<!ENTITY linkTarget.accesskey "a">
+<!ENTITY divertedWindowOpen.label "Ventanas emergentes JavaScript:">
+<!ENTITY divertedWindowOpen.all "Abrir siempre ventanas emergentes en pestañas">
+<!ENTITY divertedWindowOpen.some "Permitir redimensionar ventanas emergentes">
+<!ENTITY divertedWindowOpen.none "Permitir todas las ventanas emergentes">
+<!ENTITY linkTarget.label "Abrir enlaces con atributos de archivo en pestaña actual">
+<!ENTITY targetIsFrame.label "Abrir enlaces que apuntan al marco existente en la pestaña actual">
+<!ENTITY download.label "Evitar abrir pestañas en blanco al descargar archivos">
+<!ENTITY edit.label "Editar">
+<!ENTITY speLink.label "Obligar a abrir en nueva pestaña:">
+<!ENTITY speLink.none "Nada">
+<!ENTITY speLink.allLinks "Todos los enlaces">
+<!ENTITY speLink.external "Enlaces a otro sitio web">
+<!ENTITY singleWindow.label "Activar Modo ventana simple">
+<!ENTITY newTabs.label "Nuevas pestañas">
+<!ENTITY tabOpen.label "Apertura pestañas">
+<!ENTITY tabFocus.label "Enfoque pestañas">
+<!ENTITY tabClose.label "Cierre pestañas">
+<!ENTITY tabMerge.label "Fusión de pestañas">
+<!ENTITY tabFeature.label "Funciones de pestañas">
+<!ENTITY newtab.label "Cargar en nuevas pestañas:">
+<!ENTITY replaceLastTabWith1.label "Al cerrar la última pestaña reemplazar por">
+<!ENTITY newtab.blank "Página en blanco">
+<!ENTITY newtab.home "Página inicio">
+<!ENTITY newtab.current "Página actual">
+<!ENTITY newtab.duplicate "Duplicar página">
+<!ENTITY newtab.location.1 "Página de nueva pestaña">
+<!ENTITY newtab.placeholder.label "Página de pestaña nueva predeterminada">
+<!ENTITY location.label.1 "Dirección">
+<!ENTITY focusContent.label "Enfocar al cargar página con contenido">
+<!ENTITY openTabNext.label "Abrir nueva pestaña junto a la actual">
+<!ENTITY openOtherTabNext.label "Abrir otras pestañas junto a la actual">
+<!ENTITY relatedAfterCurrent.label "Sólo las relacionadas con la actual">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Abrir pestañas duplicadas junto a la original">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Cambiar orden de apertura">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Abrir nueva pestaña junto a la última abierta desde la pestaña actual (desde que se seleccionó por última vez)">
+<!ENTITY moveSwitchToTabNext.label "Mover pestaña desde &quot;Cambiar a pestaña&quot; a continuación de la actual">
+<!ENTITY loadTabsProgressively.label "Cargar pestañas progresivamente">
+<!ENTITY restoreOnDemand.label "No cargar pestañas antes de seleccionarlas">
+<!ENTITY openMoreThan.label "cuando abra más de">
+<!ENTITY tabs.label "pestañas">
+<!ENTITY lockTabs.label "Bloquear pestañas">
+<!ENTITY lockNewTabs.label "Bloquear nuevas pestañas">
+<!ENTITY lockAppTabs.label "Bloquear pestañas de aplicación">
+<!ENTITY updateLockState.label "Aplicar cambios a pestañas abiertas">
+<!ENTITY openNewTab.label "Abrir pestañas desde:">
+<!ENTITY openBookmarks.label "Marcadores">
+<!ENTITY openPlacesGroups.label "Grupos de marcadores/historial">
+<!ENTITY openPlacesGroups.tooltip "No sustituir pestañas al abrir un grupo de marcadores/historial">
+<!ENTITY openHistory.label "Historial">
+<!ENTITY openUrl.label "Barra direcciones">
+<!ENTITY openSearch.label "Barra búsquedas">
+<!ENTITY middlecurrent1.label "Clic-central o Ctrl-clic abren los elementos en pestaña actual">
+<!ENTITY middlecurrent.tooltip "Solamente para marcadores, historial y pestañas bloqueadas">
+<!ENTITY tabFocus.caption "Enfocar/seleccionar pestañas abiertas por:">
+<!ENTITY selectTab.label "Enlaces">
+<!ENTITY selectDivertedTab.label "Otras ventanas">
+<!ENTITY selectTabFromExternal.label "Otras aplicaciones">
+<!ENTITY selectTabCommand.label "Comando nueva pestaña">
+<!ENTITY contextMenuSearch.label "Búsqueda en menú contextual">
+<!ENTITY selectTabBH.label "Marcadores/Historial">
+<!ENTITY duplicateTab.label "Duplicar pestaña">
+<!ENTITY inversefocus2.label "Clic intermedio o Control+clic invierte el enfoque de:">
+<!ENTITY warning.caption.label "Aviso">
+<!ENTITY warnOnCloseMultipleTabs.label "Avisar antes de cerrar varias pestañas">
+<!ENTITY warnOnCloseProtected1.label "Avisar antes de cerrar una ventana con pestañas protegidas">
+<!ENTITY warnOnCloseWindow1.label "Avisar antes de cerrar una ventana con varias pestañas">
+<!ENTITY lasttab.caption.label "Cerrar última pestaña">
+<!ENTITY keepWindow.label.3.1 "No cerrar la ventana al cerrar la última pestaña">
+<!ENTITY keeptab.label "No permitir que se cierre la última pestaña">
+<!ENTITY closeOnMerge.label "Cerrar ventanas tras fusionarlas">
+<!ENTITY warnOnMerge.label "Avisar antes de cerrar pestañas no fusionadas">
+<!ENTITY currenttab.caption.label "Cerrar pestaña actual">
+<!ENTITY focusTab.labelBegin "Tras cerrar la pestaña actual, enfocar la:">
+<!ENTITY focusTab.firstTab "Primera pestaña">
+<!ENTITY focusTab.leftTab "Pestaña izquierda">
+<!ENTITY focusTab.rightTab "Pestaña derecha">
+<!ENTITY focusTab.lastTab "Última pestaña">
+<!ENTITY focusTab.lastSelectedTab "Última pestaña seleccionada">
+<!ENTITY focusTab.openerTab "Pestaña de apertura/derecha">
+<!ENTITY focusTab.openerTab.rtl "Pestaña de apertura/izquierda">
+<!ENTITY focusTab.lastOpenedTab "Última pestaña abierta">
+<!ENTITY undoClose.label "Activar reabrir pestañas">
+<!ENTITY undoCloseCache.label "Número de pestañas cerradas a recordar:">
+<!ENTITY undoClosepos.label "Devolver pestaña a su posición original">
+<!ENTITY menuonlybutton.label "Botón de la barra de herramientas sólo muestra una lista">
+<!ENTITY ctrltab.label "Ctrl-Tab se mueve por las pestañas según el último orden usado">
+<!ENTITY cmdtab.label "Cmd-Tab se mueve por las pestañas según el último orden usado">
+<!ENTITY ctrltab.tabPreviews "Mostrar vista previa de pestañas">
+<!ENTITY ctrltab.popup "Ctrl-Tab muestra un lista emergente de pestañas">
+<!ENTITY cmdtab.popup "Cmd-Tab muestra un lista emergente de pestañas">
+<!ENTITY tabpopup.mouse "Permitir seleccionar de la lista con ratón">
+<!ENTITY mergeNoTabSelection.label "Fusionar ventanas cuando no haya pestañas seleccionadas">
+<!ENTITY mergeTabSelection.label "Fusionar tras seleccionar pestañas:">
+<!ENTITY mergeall.label "Fusionar todas las ventanas en una">
+<!ENTITY mergelastfocused.label "Sólo fusionar la ventana actual con la última enfocada">
+<!ENTITY mergePopups.label "También fusionar ventanas emergentes">
+<!ENTITY popupNextToOpener.label "Situar las ventanas emergentes junto a las de apertura">
+<!ENTITY activateSlideshow.label "Pulsando #1 las pestañas rotan cada">
+<!ENTITY toggleAnimation.label "Desactivar animación de Abrir/Cerrar pestaña">
+<!ENTITY reloadEvery.matchAddress.label "Recargar pestaña sin importar su dirección">
+<!ENTITY reloadEvery.onReloadButton.label "Mostrar menú de Recargar cada… en botón de recarga">
+<!ENTITY seconds.label "seg">
+<!ENTITY minutes.label "min">
+<!ENTITY tabBarAppearance.label "Barra pestañas">
+<!ENTITY tabAppearance.label "Pestaña">
+<!ENTITY toolBarAppearance.label "Barra herramientas">
+<!ENTITY show.ontabbar.label "Mostrar en barra de pestañas">
+<!ENTITY show.ontab.label "Mostrar en pestaña">
+<!ENTITY dragNewTabButton.tooltip "Arrastre el botón de Nueva pestaña a la barra de pestañas para activar esta opción.">
+<!ENTITY hideTabBarButton.label "Botón cerrar pestaña">
+<!ENTITY newTabButton.label "Botón nueva pestaña">
+<!ENTITY newTabButton.position.left.label "Izquierda">
+<!ENTITY newTabButton.position.right.label "Derecha">
+<!ENTITY newTabButton.position.afterlast.label "Tras última pestaña">
+<!ENTITY allTabsButton.label "Botón en todas las pestañas">
+<!ENTITY tabBarSpace.label "Espacios extra a ambos lados">
+<!ENTITY tabBarSpace.tooltip "Para hacer clic y arrastrar algo a la barra de pestañas">
+<!ENTITY tabbar.label "Esconder la barra de pestañas cuando hay sólo una abierta">
+<!ENTITY moveTabOnDragging.label "Al arrastrar una pestaña moverla directamente">
+<!ENTITY dropIndicator.label "Indicador de arrastre">
+<!ENTITY dropIndicator-native.label "Estilo original">
+<!ENTITY dropIndicator-builtin.label "Estilo añadido">
+<!ENTITY verticalTabbar.description1 "Estas preferencias las controla otra extensión que usa pestañas verticales.">
+<!ENTITY tabBarPosition.label "Posición:">
+<!ENTITY tabBarPosition.top.label "Arriba (sobre el contenido)">
+<!ENTITY tabBarPosition.bottom.label "Abajo (debajo del contenido)">
+<!ENTITY tabScroll.label "Cuando las pestañas no quepan en la barra:">
+<!ENTITY tabScroll.none "se pueden rotar sin botones">
+<!ENTITY tabScroll.leftRightButtons "se pueden rotar con botones a derecha e izquierda">
+<!ENTITY tabScroll.rightButtons "se pueden rotar con botones a la derecha">
+<!ENTITY tabScroll.rightButtons.rtl "se pueden rotar con botones a la izquierda">
+<!ENTITY tabScroll.multibar "se muestran en filas">
+<!ENTITY maxrow.label "Máximo de filas a mostrar:">
+<!ENTITY pinnedTabScroll.label "Permitir rotar pestañas fijas">
+<!ENTITY offsetAmountToScroll.label "Al rotar mostrar parte de la siguiente pestaña no visible">
+<!ENTITY smoothScroll.label "Activar rotación suave">
+<!ENTITY scrolldelay.label "Retardo de rotación (tiempo entre repeticiones al rotar)">
+<!ENTITY currenttab.style.label "Pestaña actual">
+<!ENTITY unloadedtabs.style.label "Pestañas no cargadas">
+<!ENTITY unreadtabs.style.label "Pestañas no leídas">
+<!ENTITY othertabs.style.label "Otras pestañas">
+<!ENTITY setstyles.label "Personalizar estilos">
+<!ENTITY extraIcons.label1 "Iconos para">
+<!ENTITY extraIcons.locked "Bloqueada">
+<!ENTITY extraIcons.protected "Protegida">
+<!ENTITY extraIcons.autoreload "Recarga automática">
+<!ENTITY extraIcons.hideonpinned "Ocultar en pestañas fijas">
+<!ENTITY progressMeter.label "Indicador de progreso en pestañas">
+<!ENTITY showTabX.labelBegin "Botón de cerrar pestaña">
+<!ENTITY showTabX.left "Situado a la izquierda">
+<!ENTITY showTabX.rtl "Situado a la derecha">
+<!ENTITY milliseconds.label "mseg">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "23em">
+<!ENTITY showTabX.always "en todas">
+<!ENTITY showTabX.current "en la enfocada">
+<!ENTITY showTabX.hover "en la señalada con ratón">
+<!ENTITY showTabX.alwaysExeption "en todas las pestañas con anchura mayor que">
+<!ENTITY showTabX.currentHover "en la seleccionada y la señalada por puntero">
+<!ENTITY minWidth.label "Ancho de:">
+<!ENTITY widthTo.label "hasta">
+<!ENTITY widthPixels.label "píxeles">
+<!ENTITY onLeftDisabled.label "No puede poner el botón a la izquierda con el tema actual">
+<!ENTITY onLeftDisabled.tst.label "No puede situar el icono a la izquieda si está instalado treeStyle Tab">
+<!ENTITY flexTabs.label "Ajustar ancho pestaña al título">
+<!ENTITY bookastitle.label "Usar nombre marcador como título de pestaña">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Puede personalizar los botones de Tabmix que aparezcan en la barra de herramientas">
+<!ENTITY toolbar.button.label "Personalizar">
+<!ENTITY toolbar.visible.caption "Botones visibles">
+<!ENTITY toolbar.novisible.label "No hay botones visibles">
+<!ENTITY toolbar.hidden.caption "Botones ocultos">
+<!ENTITY toolbar.nohidden.label "No hay botones ocultos">
+<!ENTITY mouseGesture.label "Gestos de ratón">
+<!ENTITY mouseClick.label "Clics de ratón">
+<!ENTITY mouseHoverSelect.labelBegin "Seleccionar pestaña señalada con puntero para">
+<!ENTITY tabFlip.label "Cambiar a última pestaña seleccionada al hacer clic en la actual">
+<!ENTITY tabFlip.delay "Usar una retardo de">
+<!ENTITY clickFocus.label "Hacer clic de ratón (pulsar y liberar) para seleccionar una pestaña">
+<!ENTITY removeEntries.label "Para eliminar elementos del menú de Tab Mix Plus use clic central">
+<!ENTITY lockTabSizingOnClose.label "Al cerrar una pestaña las otras no cambian de tamaño hasta que el cursor no se aleja de la barra de herramientas.">
+<!ENTITY removeEntries.tooltip "Incluye ventanas y pestañas cerradas y sesiones guardadas">
+<!ENTITY tabbarscrolling.caption "Al rotar la barra de pestañas">
+<!ENTITY tabbarscrolling.holdShift.label "Pulse Mayúsculas al desplazar la rueda para cambiar de opción">
+<!ENTITY tabbarscrolling.selectTab.label "Cambiar la pestaña seleccionada">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Rotar todas las pestañas">
+<!ENTITY tabbarscrolling.inverse.label "Invertir la dirección de rotación">
+<!ENTITY double.label "Doble-clic">
+<!ENTITY middle.label "Clic-central">
+<!ENTITY ctrl.label "Ctrl-clic">
+<!ENTITY cmd.label "Cmd-clic">
+<!ENTITY shift.label "Mayus-clic">
+<!ENTITY alt.label "Alt-clic">
+<!ENTITY ontab.label "en una pestaña:">
+<!ENTITY ontabbar.label "en la barra de pestañas:">
+<!ENTITY clicktab.label "Elegir comando a ejecutar al hacer clic en pestaña / barra pestañas">
+<!ENTITY ontabbar.dblClick.label "Impedir que el doble clic en la barra de pestañas cambie el tamaño de ventana.">
+<!ENTITY ontabbar.click.label "Impedir que el clic en la barra de pestañas arrastre la ventana.">
+<!ENTITY clicktab.default "Predeterminado de Firefox u otra extensión">
+<!ENTITY clicktab.nothing "No hace nada">
+<!ENTITY clicktab.addtab "Abre nueva pestaña">
+<!ENTITY clicktab.duplicatetab "Duplica pestaña">
+<!ENTITY clicktab.duplicatetabw "Duplica pestaña en una nueva ventana">
+<!ENTITY clicktab.detachtab "Mover la pestaña a una nueva ventana">
+<!ENTITY clicktab.protecttab "Protege pestaña">
+<!ENTITY clicktab.locktab "Bloquea pestaña">
+<!ENTITY clicktab.freezetab "Protege y bloquea pestaña">
+<!ENTITY clicktab.renametab "Renombra pestaña">
+<!ENTITY clicktab.copyTabUrl "Copiar la URL de la pestaña al portapapeles">
+<!ENTITY clicktab.copyUrlFromClipboard "Cargar URL del portapapeles">
+<!ENTITY clicktab.selectMerge "Selecciona pestaña para ser fusionada">
+<!ENTITY clicktab.mergeTabs "Fusiona ventanas">
+<!ENTITY clicktab.bookTab "Añade pestaña a marcadores">
+<!ENTITY clicktab.bookTabs "Añade todas las pestañas a marcadores">
+<!ENTITY clicktab.reloadtab "Recarga la pestaña">
+<!ENTITY clicktab.reloadtabs "Recarga todas las pestañas">
+<!ENTITY clicktab.reloadothertabs "Recarga otras pestañas">
+<!ENTITY clicktab.reloadlefttabs "Recarga pestañas izquierda">
+<!ENTITY clicktab.reloadrighttabs "Recarga pestañas derecha">
+<!ENTITY clicktab.autoReloadTab "Activar/desactivar recarga automática de pestaña">
+<!ENTITY clicktab.removeall "Cierra todas las pestañas">
+<!ENTITY clicktab.removeother "Cierra las otras pestañas">
+<!ENTITY clicktab.removesimilar "Cierra pestañas de ese dominio web">
+<!ENTITY clicktab.removetoLeft "Cerrar pestañas a la izquierda">
+<!ENTITY clicktab.removetoRight "Cerrar pestañas a la derecha">
+<!ENTITY clicktab.uctab "Reabre pestaña cerrada">
+<!ENTITY clicktab.ucatab "Reabre todas las pestañas cerradas">
+<!ENTITY clicktab.snapback "Pestaña SnapBack">
+<!ENTITY clicktab.ietab "Abre pestaña con IE">
+<!ENTITY contentLoad "Clic central carga URL del portapapeles">
+<!ENTITY context.tab "Menú contextual de pestañas">
+<!ENTITY context.main "Menú contextual principal">
+<!ENTITY context.tools "Menú herramientas">
+<!ENTITY showOnTabbar.label "Mostar menú contextual de pestaña en barra de pestañas">
+<!ENTITY showtabBarContext.label "Mostrar en menú contextual de pestañas:">
+<!ENTITY showContentAreaContext.label "Mostrar en menú contextual principal:">
+<!ENTITY showToolsMenu.label "Mostrar en menú Herramientas:">
+<!ENTITY startupHomePage1.label "Mostrar su página de inicio">
+<!ENTITY startupBlankPage.label "Mostrar página en blanco">
+<!ENTITY startupLastSession1.label "Mostrar ventana y pestañas de última sesión">
+<!ENTITY sm.extension.description1 "Tab Mix Plus ha detectado que está instalada la extensión Session Manager">
+<!ENTITY sm.extension.description2 "Se deshabilitará el administrador de sesiones de Tab Mix Plus">
+<!ENTITY sm.extension.description3 "Pulse en el botón de la derecha si desea abrir el diálogo de Opciones de Session Manager">
+<!ENTITY sm.extension.description5 "Formatear sus datos de sesión del formato de Tab Mix Plus al de la extensión Session Manager">
+<!ENTITY sm.extension.convert.label "Formatear">
+<!ENTITY sm.extension.chooseFile.label1 "Formatear las sesiones de Tab Mix Plus del perfil actual">
+<!ENTITY sm.extension.chooseFile.label2 "Elegir el fichero de datos a convertir">
+<!ENTITY ss.enable.label "Utilizar la funcionalidad interna de restaurar sesión de Firefox">
+<!ENTITY ss.enable.tooltip "Deseleccionar si se quiere utilizar el Administrador de sesiones de Tabmix">
+<!ENTITY ss.advanced_setting "Predisposiciones avanzadas">
+<!ENTITY ss.advanced_setting.warning "No debe cambiarlas salvo que realmente sepa lo que está haciendo">
+<!ENTITY ss.interval "Mínimo intervalo de tiempo entre guardado de dos estados consecutivos">
+<!ENTITY ss.interval.seconds "(en milisegundos)">
+<!ENTITY ss.privacy_level "Guardar datos sensibles (de datos, POSTADATA y cookies) para">
+<!ENTITY ss.privacy_level.allsites "Todos los sitios">
+<!ENTITY ss.privacy_level.unencrypted "Sólo sitios no encriptados">
+<!ENTITY ss.privacy_level.nosites "Ningún sitio">
+<!ENTITY ss.postdata.label1 "Máxima cantidad de POSTDATA a almacenar">
+<!ENTITY ss.postdata.label2 "(en bytes, -1=todas)">
+<!ENTITY sessionManger.enable "Activar Administrador de sesiones">
+<!ENTITY crashRecovery.enable "Activar Restaurar tras cierre anómalo">
+<!ENTITY sm.StartExit "Inicio/cierre">
+<!ENTITY sm.restore "Restaurar">
+<!ENTITY sm.preserve "Conservar">
+<!ENTITY sm.start "Al iniciarse el navegador:">
+<!ENTITY sm.start.restore "Restaurar">
+<!ENTITY sm.start.ask "Preguntar antes de restaurar">
+<!ENTITY sm.start.nothing "No restaurar">
+<!ENTITY sm.exit "Al cerrar el navegador:">
+<!ENTITY sm.exit.save "Guardar sesión">
+<!ENTITY sm.exit.ask "Preguntar antes de guardar">
+<!ENTITY sm.exit.nothing "No guardar">
+<!ENTITY sm.startup "Sesión de inicio:">
+<!ENTITY sm.lastsession "Última sesión">
+<!ENTITY sm.previouslast "Penúltima sesión">
+<!ENTITY sm.chooseifempty "Elegir otra si está vacía">
+<!ENTITY sm.restore.options "Al restaurar sesiones:">
+<!ENTITY sm.restore.overwrite "Sobrescribir ventanas existentes">
+<!ENTITY sm.restore.overwriteTabs "y pestañas">
+<!ENTITY sm.restore.closedWinList "Guardar ventanas en lista de ventanas cerradas">
+<!ENTITY sm.restore.merge "Combinar varias ventanas en una">
+<!ENTITY sm.restore.bypassCache "Evitar la caché al restaurar">
+<!ENTITY sm.notrestore.label "Cuando no se restaura al iniciar">
+<!ENTITY sm.restorePinned1.label "Restaurar sus pestañas fijas de la última sesión">
+<!ENTITY sm.preserve.options "Conservar pestañas:">
+<!ENTITY sm.preserve.history "Historial">
+<!ENTITY sm.preserve.protect "Estatus de protección">
+<!ENTITY sm.preserve.locked "Estatus de bloqueo">
+<!ENTITY sm.preserve.permission "Permisos">
+<!ENTITY sm.preserve.scroll1 "Posición de rotación">
+<!ENTITY sm.restore.winOptions "Conservar para ventanas:">
+<!ENTITY sm.restore.selectedTab "Pestaña seleccionada">
+<!ENTITY sm.restore.closedTabs "Lista de pestañas cerradas">
+<!ENTITY incompatible.extensions "Algunas de sus extensiones son incompatibles con Tab Mix Plus, le recomendamos desactivarlas o desinstalarlas.">
+<!ENTITY incompatible.button.label "Mostrar la lista">

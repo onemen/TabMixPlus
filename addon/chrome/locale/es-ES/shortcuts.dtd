@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Atajos">
+<!ENTITY shortcuts.edit "Editar atajos de teclado">
+<!ENTITY shortcuts.showAll "Mostrar todos">
+<!ENTITY shortcuts.hideUnused "Ocultar lo no usados">
+<!ENTITY shortcuts.warning "Algunos de sus atajos los usan otros comandos">
+<!ENTITY shortcuts.showDetails "Mostrar detalles">
+<!ENTITY shortcuts.hideDetails "Ocultar detalles">
+<!ENTITY shortcuts.switchToLast "Cambiar a última pestaña activa">
+<!ENTITY shortcuts.slideshow "Conmutar barra de pestañas">
+<!ENTITY shortcuts.toggleFLST "Conmutar foco tras cerrar pestaña actual">
+<!ENTITY shortcuts.toggleFLST.tooltip "conmutar foco en pestaña derecha o en última seleccionada">
+<!ENTITY shortcuts.placeholder "Introduzca modificador y tecla">
+<!ENTITY shortcuts.reset "Reiniciar">
+<!ENTITY shortcuts.clear "Borrar">
+<!ENTITY shortcuts.inuse "Este atajo está siendo usado por">

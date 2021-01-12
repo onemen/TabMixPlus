@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Zamknięte karty">
+<!ENTITY closedtabsbtn.tooltip "Wyświetla listę zamkniętych kart">
+<!ENTITY sessionbtn.tooltip "Wyświetla zapisane sesje i pomaga zarządzać nimi">
+<!ENTITY tabslistbtn.label "Otwarte karty">
+<!ENTITY tabslistbtn.tooltip "Wyświetla listę otwartych kart">
+<!ENTITY closedwindowsbtn.label "Zamknięte okna">
+<!ENTITY closedwindowsbtn.tooltip "Wyświetla listę zamkniętych okien">
+<!ENTITY page.header.title "Tab Mix Plus - ustawienia">
+<!ENTITY options.main.sessionbutton.label "Menedżer sesji Tab Mix Plusa">
+<!ENTITY session.Tools "Menedżer sesji">
+<!ENTITY closedWin.label "Lista zamkniętych okien">
+<!ENTITY duplicateTabMenu.label "Powiel kartę">
+<!ENTITY duplicateTabMenu.accesskey "P">
+<!ENTITY duplicateinWin.label "Powiel w nowym oknie">
+<!ENTITY duplicateinWin.accesskey "W">
+<!ENTITY detachTab.label "Przenieś do nowego okna">
+<!ENTITY detachTab.accesskey "G">
+<!ENTITY mergeContext.label "Połącz okna">
+<!ENTITY mergeContext.accesskey "P">
+<!ENTITY renametab.label "Zmień nazwę karty">
+<!ENTITY renametab.accesskey "M">
+<!ENTITY copytaburl.label "Kopiuj adres URL karty">
+<!ENTITY copytaburl.accesskey "U">
+<!ENTITY reloadother.label "Odśwież pozostałe karty">
+<!ENTITY reloadother.accesskey "Z">
+<!ENTITY reloadleft.label "Odśwież karty po lewej stronie">
+<!ENTITY reloadleft.accesskey "L">
+<!ENTITY reloadright.label "Odśwież karty po prawej stronie">
+<!ENTITY reloadright.accesskey "R">
+<!ENTITY autoReloadTab.label "Odświeżaj kartę co">
+<!ENTITY autoReloadTab.accesskey "D">
+<!ENTITY autoReloadSite.label "Odśwież tę witrynę co">
+<!ENTITY autoReloadSite.accesskey "W">
+<!ENTITY afterthis.label "za tą kartą">
+<!ENTITY bookmarktab.label "Dodaj zakładkę do tej karty">
+<!ENTITY undoCloseListMenu.label "Lista zamkniętych kart">
+<!ENTITY undoCloseListMenu.accesskey "H">
+<!ENTITY closeAllTabsMenu.label "Zamknij wszystkie karty">
+<!ENTITY closeall.accesskey "Y">
+<!ENTITY closeSimilarTab.label "Zamknij podobne karty">
+<!ENTITY closeSimilarTab.accesskey "P">
+<!ENTITY closeTabsToLeft.label "Zamknij karty po lewej stronie">
+<!ENTITY closeleft.accesskey "L">
+<!ENTITY docShellMenu.label "Zezwolenia">
+<!ENTITY docShellMenu.accesskey "E">
+<!ENTITY freezeTabMenu.label "Zamroź kartę">
+<!ENTITY freezeTabMenu.accesskey "M">
+<!ENTITY protectTabMenu.label "Zabezpiecz kartę">
+<!ENTITY protectTabMenu.tooltip "Zabezpiecza kartę przed jej zamknięciem">
+<!ENTITY protectTabMenu.accesskey "C">
+<!ENTITY lockTabMenu.label "Zablokuj kartę">
+<!ENTITY lockTabMenu.tooltip "Wszystkie odnośniki z zablokowanej karty będą otwierane w nowych kartach">
+<!ENTITY lockTabMenu.accesskey "B">
+<!ENTITY bookmarktabs.label "Dodaj zakładki do wszystkich stron">
+<!ENTITY linkhere.label "Otwórz odnośnik w tej karcie">
+<!ENTITY linkhere.accesskey "T">
+<!ENTITY linkBackgroundTab.label "Otwórz odnośnik w nowej karcie w tle">
+<!ENTITY linkForegroundTab.label "Otwórz odnośnik w nowej aktywnej karcie">
+<!ENTITY linkBackgroundTab.accesskey "W">
+<!ENTITY linkForegroundTab.accesskey "E">
+<!ENTITY openalllinks.label "Otwórz odnośniki w nowych kartach">
+<!ENTITY openalllinks.accesskey "R">
+<!ENTITY linkwithhistory.label "Otwórz odnośnik w powielonej karcie">
+<!ENTITY linkwithhistory.accesskey "P">
+<!ENTITY tabsList.label "Lista otwartych kart">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Grafika">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Przekierowania">
+<!ENTITY allowPlugin.label "Wtyczki">
+<!ENTITY allowFrame.label "Ramki">
+<!ENTITY restoreincurrent.label "Odtwórz w aktywnej karcie">
+<!ENTITY restoreincurrent.accesskey "A">
+<!ENTITY restoreinwin.label "Odtwórz w nowym oknie">
+<!ENTITY restoreinwin.accesskey "N">
+<!ENTITY restoreintab.label "Odtwórz w nowej karcie">
+<!ENTITY restoreintab.accesskey "K">
+<!ENTITY restoretab.label "Odtwórz kartę">
+<!ENTITY restoretab.accesskey "O">
+<!ENTITY bookmark.label "Dodaj zakładkę do tego odnośnika">
+<!ENTITY bookmark.accesskey "Z">
+<!ENTITY deletelist.label "Usuń z listy">
+<!ENTITY deletelist.accesskey "U">
+<!ENTITY settings.label "Ustawienia">
+<!ENTITY saveWindow.label "Zapisz to okno">
+<!ENTITY saveAllWindows.label "Zapisz wszystkie okna">
+<!ENTITY sm.context.overwrite "Odtwórz, nadpisując istniejące okna">
+<!ENTITY sm.context.overwrite.key "O">
+<!ENTITY sm.context.restore.new "Odtwórz w nowych oknach">
+<!ENTITY sm.context.restore.newkey "N">
+<!ENTITY sm.context.replacethis "Zamień z tym oknem">
+<!ENTITY sm.context.replacethis.key "T">
+<!ENTITY sm.context.replaceall "Zamień ze wszystkimi oknami">
+<!ENTITY sm.context.replaceall.key "A">
+<!ENTITY sm.context.add "Dodaj to okno">
+<!ENTITY sm.context.add.key "D">
+<!ENTITY sm.context.addall "Dodaj wszystkie okna">
+<!ENTITY sm.context.addall.key "E">
+<!ENTITY sm.context.save "Zapisz">
+<!ENTITY sm.context.save.key "Z">
+<!ENTITY sm.context.rename "Zmień nazwę">
+<!ENTITY sm.context.rename.key "M">
+<!ENTITY sm.context.bookmarkSession "Dodaj zakładkę do sesji">
+<!ENTITY sm.context.bookmarkSession.key "D">
+<!ENTITY sm.context.delete "Usuń">
+<!ENTITY sm.context.delete.key "U">
+<!ENTITY sm.context.deleteall "Usuń wszystko">
+<!ENTITY sm.context.deleteall.key "K">
+<!ENTITY sm.context.startup "Ustaw jako sesję startową">
+<!ENTITY sm.context.startup.key "S">
+<!ENTITY sm.context.details "Wyświetlaj w menu sesji licznik kart i okien, datę i czas">
+<!ENTITY sm.context.details.key "W">
+<!ENTITY tab.key "K">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "P">
+<!ENTITY sortedTabs.label "Sortuj karty">
+<!ENTITY sortedTabs.tooltip "Opcja ta powoduje wyświetlanie listy kart w porządku alfabetycznym">
+<!ENTITY enable.label "Odświeżaj tę kartę co">
+<!ENTITY custom.label "Określ czas">
+<!ENTITY enableTabs.label "Odświeżaj wszystkie karty">
+<!ENTITY disableTabs.label "Wyłącz odświeżanie">
+<!ENTITY seconds.label "s">
+<!ENTITY minutes.label "min">
+<!ENTITY minute.label "min">
+<!ENTITY hideTabBar.label "Wyświetlanie paska kart">
+<!ENTITY hideTabBar.never.label "Zawsze">
+<!ENTITY hideTabBar.never.key "W">
+<!ENTITY hideTabBar.oneTab.label "Gdy jest tylko jedna karta">
+<!ENTITY hideTabBar.onOneTab.key "N">
+<!ENTITY hideTabBar.always.label "Nie wyświetlaj">
+<!ENTITY hideTabBar.always.key "E">

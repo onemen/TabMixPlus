@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Odkazy">
+<!ENTITY tab.events "Události">
+<!ENTITY tab.mouse "Myš">
+<!ENTITY tab.appearance "Vzhled">
+<!ENTITY tab.menu "Nabídka">
+<!ENTITY tab.session "Relace">
+<!ENTITY tab.incompatible "Chyba">
+<!ENTITY apply.label "Použít">
+<!ENTITY settings.export "Exportovat nastavení">
+<!ENTITY settings.import "Importovat nastavení">
+<!ENTITY settings.sync "Synchronizovat nastavení">
+<!ENTITY settings.default "Obnovit výchozí nastavení">
+<!ENTITY settings.revert "Vrátit zpět">
+<!ENTITY generalWindowOpen.label "Odkazy otevírající nové okno otevírat v:">
+<!ENTITY externalLink.useSeparate.label "Použít zvlášť nastavení pro odkazy z jiných aplikací">
+<!ENTITY externalLinkTarget.label "Odkazy jiných aplikací otevírat v:">
+<!ENTITY linkTarget.tab "Novém panelu">
+<!ENTITY linkTarget.window "Novém okně">
+<!ENTITY linkTarget.current "Současném panelu">
+<!ENTITY linkTarget.accesskey "A">
+<!ENTITY divertedWindowOpen.label "Vyskakovací okna a okna JavaScriptu:">
+<!ENTITY divertedWindowOpen.all "Otevírat všechna vyskakovací okna v panelech">
+<!ENTITY divertedWindowOpen.some "Povolit vyskakovací okna s pevně danými rozměry">
+<!ENTITY divertedWindowOpen.none "Povolit všechna vyskakovací okna">
+<!ENTITY linkTarget.label "Odkazy s atributem 'target' otevírat v aktuálním panelu">
+<!ENTITY targetIsFrame.label "Odkazy s atributem 'target' do existujícího rámce otevírat v aktuálním panelu">
+<!ENTITY download.label "Při stahování souborů neotevírat prázdný panel">
+<!ENTITY edit.label "Úpravy">
+<!ENTITY speLink.label "Vždy otevírat v novém panelu:">
+<!ENTITY speLink.none "Nic">
+<!ENTITY speLink.allLinks "Všechny odkazy">
+<!ENTITY speLink.external "Odkazy na jiné stránky">
+<!ENTITY singleWindow.label "Povolit režim jednoho okna">
+<!ENTITY newTabs.label "Nové panely">
+<!ENTITY tabOpen.label "Otevírání panelů">
+<!ENTITY tabFocus.label "Přepínání panelů">
+<!ENTITY tabClose.label "Zavírání panelů">
+<!ENTITY tabMerge.label "Slučování panelů">
+<!ENTITY tabFeature.label "Vlastnosti panelů">
+<!ENTITY newtab.label "V novém panelu bude načtena:">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "Prázdná stránka">
+<!ENTITY newtab.home "Domovská stránka">
+<!ENTITY newtab.current "Současná stránka">
+<!ENTITY newtab.duplicate "Duplikovaný panel včetně historie">
+<!ENTITY newtab.location.1 "Vybraná stránka">
+<!ENTITY newtab.placeholder.label "Výchozí stránka nového panelu">
+<!ENTITY location.label.1 "Adresa URL">
+<!ENTITY focusContent.label "Při otevírání neprázdné stránky přepnout na její obsah">
+<!ENTITY openTabNext.label "Otevřít nový panel vedle současného panelu">
+<!ENTITY openOtherTabNext.label "Otevírat další panely vedle toho současného">
+<!ENTITY relatedAfterCurrent.label "Pouze pokud se současným panelem souvisí">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Otevírat duplikované panely vedle panelů původních">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Změnit pořadí otevíraných panelů">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Otevře nový panel vedle panelu, který byl otevřen z aktuálního panelu (naposledy vybraného)">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabs">
+<!ENTITY lockTabs.label "Zamykání panelů">
+<!ENTITY lockNewTabs.label "Zamknout nové panely">
+<!ENTITY lockAppTabs.label "Zamknout panely aplikací">
+<!ENTITY updateLockState.label "Aplikovat změny na již otevřené panely">
+<!ENTITY openNewTab.label "Otevírat panely z:">
+<!ENTITY openBookmarks.label "Záložky">
+<!ENTITY openPlacesGroups.label "Seskupit záložky/historii">
+<!ENTITY openPlacesGroups.tooltip "Při otevírání skupiny záložek či historie nepřepsat karty">
+<!ENTITY openHistory.label "Historie">
+<!ENTITY openUrl.label "Adresní řádek">
+<!ENTITY openSearch.label "Lišta vyhledávání">
+<!ENTITY middlecurrent1.label "Kliknutí prostředním tlačítkem myši nebo stisknutí tlačítka Ctrl a zároveň kliknutí otevře položky v současném panelu">
+<!ENTITY middlecurrent.tooltip "Platí pouze pro záložky, historii a odkazy, které vyžadují otevření v novém panelu.">
+<!ENTITY tabFocus.caption "Přepnout nebo vybrat panely, které jsou otevírány z:">
+<!ENTITY selectTab.label "Odkazy">
+<!ENTITY selectDivertedTab.label "Přesměrovaná okna">
+<!ENTITY selectTabFromExternal.label "Ostatní aplikace">
+<!ENTITY selectTabCommand.label "Příkaz nového panelu">
+<!ENTITY contextMenuSearch.label "Vyhledávání z kontextové nabídky">
+<!ENTITY selectTabBH.label "Záložky/Historie">
+<!ENTITY duplicateTab.label "Duplikovaný panel">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "Upozornění">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "Zavírání posledního panelu">
+<!ENTITY keepWindow.label.3.1 "Nezavřít okno, je-li zavírán poslední panel">
+<!ENTITY keeptab.label "Nepovolit zavření posledního panelu">
+<!ENTITY closeOnMerge.label "Po sloučení zavřít okna">
+<!ENTITY warnOnMerge.label "Upozornit při zavírání panelů, které nebyly sloučeny">
+<!ENTITY currenttab.caption.label "Zavírání současného panelu">
+<!ENTITY focusTab.labelBegin "Při zavírání současného panelu přepnout na:">
+<!ENTITY focusTab.firstTab "první panel">
+<!ENTITY focusTab.leftTab "panel vlevo">
+<!ENTITY focusTab.rightTab "panel vpravo">
+<!ENTITY focusTab.lastTab "poslední panel">
+<!ENTITY focusTab.lastSelectedTab "naposledy vybraný panel">
+<!ENTITY focusTab.openerTab "panel, ze kterého byl daný panel otevřen / panel napravo">
+<!ENTITY focusTab.openerTab.rtl "panel, ze kterého byl daný panel otevřen / panel nalevo">
+<!ENTITY focusTab.lastOpenedTab "naposledy otevřený panel">
+<!ENTITY undoClose.label "Povolit znovuotevření zavřených panelů">
+<!ENTITY undoCloseCache.label "Maximální počet panelů, které lze znovu otevřít:">
+<!ENTITY undoClosepos.label "Obnovit původní pozici panelu">
+<!ENTITY menuonlybutton.label "Povolit jednofunkční styl pro tlačítko Seznam zavřených panelů">
+<!ENTITY ctrltab.label "Pomocí kláves Ctrl+Tab přepínat panely v pořadí použitém naposledy">
+<!ENTITY cmdtab.label "Pomocí kláves Cmd+Tab přepínat panely v pořadí použitém naposledy">
+<!ENTITY ctrltab.tabPreviews "Zobrazit náhledy panelů">
+<!ENTITY ctrltab.popup "Pomocí kláves Ctrl+Tab zobrazit vyskakovací nabídku se seznamem panelů">
+<!ENTITY cmdtab.popup "Pomocí kláves Cmd+Tab zobrazit vyskakovací nabídku se seznamem panelů">
+<!ENTITY tabpopup.mouse "Seznam panelů reaguje na pohyb myši">
+<!ENTITY mergeNoTabSelection.label "Není-li vybrán žádný panel, sloučit okna:">
+<!ENTITY mergeTabSelection.label "Po sloučení vybraných panelů:">
+<!ENTITY mergeall.label "Sloučit všechna okna do jednoho">
+<!ENTITY mergelastfocused.label "Sloučit aktuální okno s naposledy používaným">
+<!ENTITY mergePopups.label "Přidat také vyskakovací okna">
+<!ENTITY popupNextToOpener.label "Umístit vyskakovací okna vedle oken, ze kterých byla otevřena">
+<!ENTITY activateSlideshow.label "Stisknutím #1 se budou panely přepínat vždy po">
+<!ENTITY toggleAnimation.label "Zakázat animaci otevírání či zavírání panelu">
+<!ENTITY reloadEvery.matchAddress.label "Znovu načíst panel bez ohledu na adresu">
+<!ENTITY reloadEvery.onReloadButton.label "Zobrazit nabídku „Znovu načíst vždy po“ u tlačítka Znovu načíst">
+<!ENTITY seconds.label "s">
+<!ENTITY minutes.label "min">
+<!ENTITY tabBarAppearance.label "Lišta panelů">
+<!ENTITY tabAppearance.label "Panel">
+<!ENTITY toolBarAppearance.label "Nástrojová lišta">
+<!ENTITY show.ontabbar.label "Zobrazit na liště panelů">
+<!ENTITY show.ontab.label "Zobrazit na panelu">
+<!ENTITY dragNewTabButton.tooltip "Přetažením tlačítka Nový panel na lištu panelů tuto možnost povolíte.">
+<!ENTITY hideTabBarButton.label "Tlačítko Zavřít panel">
+<!ENTITY newTabButton.label "Tlačítko Nový panel">
+<!ENTITY newTabButton.position.left.label "nalevo">
+<!ENTITY newTabButton.position.right.label "napravo">
+<!ENTITY newTabButton.position.afterlast.label "za posledním panelem">
+<!ENTITY allTabsButton.label "Tlačítko Všechny panely">
+<!ENTITY tabBarSpace.label "Místo navíc na obou stranách">
+<!ENTITY tabBarSpace.tooltip "Pro umístění na lištu s panely v případě velkého množství panelů">
+<!ENTITY tabbar.label "Skrýt lištu panelů, pokud je otevřen jen jeden panel">
+<!ENTITY moveTabOnDragging.label "Při přetažení panelu jej přesunout přímo">
+<!ENTITY dropIndicator.label "Značka umístění přesouvaného panelu">
+<!ENTITY dropIndicator-native.label "Původní styl">
+<!ENTITY dropIndicator-builtin.label "Vestavěný styl">
+<!ENTITY verticalTabbar.description1 "Toto nastavení je převzato z jiného rozšíření za použití vertikálních panelů.">
+<!ENTITY tabBarPosition.label "Umístit lištu s panely:">
+<!ENTITY tabBarPosition.top.label "Nahoře (nad obsah)">
+<!ENTITY tabBarPosition.bottom.label "Dole (pod obsah)">
+<!ENTITY tabScroll.label "Je-li otevřeno velké množství panelů">
+<!ENTITY tabScroll.none "Posuvná lišta panelů">
+<!ENTITY tabScroll.leftRightButtons "Posuvná lišta panelů s tlačítky nalevo i napravo">
+<!ENTITY tabScroll.rightButtons "Posuvná lišta panelů s tlačítky napravo">
+<!ENTITY tabScroll.rightButtons.rtl "Posuvná lišta s tlačítky nalevo">
+<!ENTITY tabScroll.multibar "Víceřadá lišta panelů">
+<!ENTITY maxrow.label "Maximální počet řádků:">
+<!ENTITY pinnedTabScroll.label "Umožnit skrolování na připnutých kartách">
+<!ENTITY offsetAmountToScroll.label "Při posouvání stránky zobrazit část dalšího panelu">
+<!ENTITY smoothScroll.label "Povolit plynulé posouvání">
+<!ENTITY scrolldelay.label "Zpoždění posuvníku">
+<!ENTITY currenttab.style.label "Aktuální panel">
+<!ENTITY unloadedtabs.style.label "Nenačtené panely">
+<!ENTITY unreadtabs.style.label "Nepřečtené panely">
+<!ENTITY othertabs.style.label "Ostatní panely">
+<!ENTITY setstyles.label "Přizpůsobit styly">
+<!ENTITY extraIcons.label1 "Ikony pro">
+<!ENTITY extraIcons.locked "Uzamčeno">
+<!ENTITY extraIcons.protected "Chráněno">
+<!ENTITY extraIcons.autoreload "Automaticky znovu načíst">
+<!ENTITY extraIcons.hideonpinned "Skrýt na připnutém panelu">
+<!ENTITY progressMeter.label "Ukazatel průběhu na panelu">
+<!ENTITY showTabX.labelBegin "Tlačítko Zavřít panel">
+<!ENTITY showTabX.left "Umístit nalevo">
+<!ENTITY showTabX.rtl "Umístit napravo">
+<!ENTITY milliseconds.label "ms">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "na všechny">
+<!ENTITY showTabX.current "na současný">
+<!ENTITY showTabX.hover "při přejetí myši přes panel">
+<!ENTITY showTabX.alwaysExeption "na všechny panely širší než">
+<!ENTITY showTabX.currentHover "na současný a při přejetí myši přes panel">
+<!ENTITY minWidth.label "Šířka panelu:">
+<!ENTITY widthTo.label "až">
+<!ENTITY widthPixels.label "pixelů">
+<!ENTITY onLeftDisabled.label "V použitém motivu nelze umístit tlačítko doleva.">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY flexTabs.label "Šířku panelu určí jeho název">
+<!ENTITY bookastitle.label "Zobrazit název záložky v názvu panelu">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Zobrazení tlačítek rozšíření Tab Mix Plus na nástrojové liště si můžete přizpůsobit.">
+<!ENTITY toolbar.button.label "Přizpůsobit">
+<!ENTITY toolbar.visible.caption "Viditelná tlačítka">
+<!ENTITY toolbar.novisible.label "Nemáte žádná viditelná tlačítka">
+<!ENTITY toolbar.hidden.caption "Skrytá tlačítka">
+<!ENTITY toolbar.nohidden.label "Nemáte žádná skrytá tlačítka">
+<!ENTITY mouseGesture.label "Gesta myší">
+<!ENTITY mouseClick.label "Kliknutí myši">
+<!ENTITY mouseHoverSelect.labelBegin "Zobrazit panel při přejetí myši přes něj">
+<!ENTITY tabFlip.label "Přepnout na naposledy používaný panel kliknutím na panel současný">
+<!ENTITY tabFlip.delay "Se zpožděním">
+<!ENTITY clickFocus.label "Kliknutím myší okamžitě vyberete panel">
+<!ENTITY removeEntries.label "Kliknutím prostředním tlačíkem odeberete položky z nabídky rozšíření Tab Mix Plus">
+<!ENTITY lockTabSizingOnClose.label "Při zavírání panelu nezměnit velikost ostatních panelů, dokud kurzor myši neopustí panel nástrojů.">
+<!ENTITY removeEntries.tooltip "Včetně zavřených panelů, oken a uložených relací">
+<!ENTITY tabbarscrolling.caption "Při posouvání na liště panelů">
+<!ENTITY tabbarscrolling.holdShift.label "Chcete-li přepínat mezi těmito volbami, posouvejte stránku se stisknutým tlačítkem Shift.">
+<!ENTITY tabbarscrolling.selectTab.label "Změnit vybraný panel">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Přepínat mezi všemi panely">
+<!ENTITY tabbarscrolling.inverse.label "Opačný směr přepínání">
+<!ENTITY double.label "Dvojité poklepání">
+<!ENTITY middle.label "Kliknutí prostředním tlačítkem">
+<!ENTITY ctrl.label "Kliknutí se stisknutím tlačítkem Ctrl">
+<!ENTITY cmd.label "Kliknutí se stisknutím tlačítkem Cmd">
+<!ENTITY shift.label "Kliknutí se stisknutím tlačítkem Shift">
+<!ENTITY alt.label "Kliknutí se stisknutím tlačítkem Alt">
+<!ENTITY ontab.label "na panel:">
+<!ENTITY ontabbar.label "na lištu panelů:">
+<!ENTITY clicktab.label "Vyberte příkaz, který se provede po kliknutí na panel nebo lištu panelů">
+<!ENTITY ontabbar.dblClick.label "Při dvojitém poklepání na lištu panelů nezměnit velikost okna.">
+<!ENTITY ontabbar.click.label "Při kliknutí na lištu panelů nepřetáhnout okno.">
+<!ENTITY clicktab.default "Výchozí nastavení prohlížeče Firefox nebo jiného rozšíření">
+<!ENTITY clicktab.nothing "Bez akce">
+<!ENTITY clicktab.addtab "Otevřít nový panel">
+<!ENTITY clicktab.duplicatetab "Duplikovat panel">
+<!ENTITY clicktab.duplicatetabw "Duplikovat panel v novém okně">
+<!ENTITY clicktab.detachtab "Přesunout panel do nového okna">
+<!ENTITY clicktab.protecttab "Chránit panel">
+<!ENTITY clicktab.locktab "Zamknout panel">
+<!ENTITY clicktab.freezetab "Chránit a zamknout panel">
+<!ENTITY clicktab.renametab "Přejmenovat panel">
+<!ENTITY clicktab.copyTabUrl "Zkopírovat adresu URL panelu do schránky">
+<!ENTITY clicktab.copyUrlFromClipboard "Načíst adresu URL ze schránky">
+<!ENTITY clicktab.selectMerge "Vybrat panel pro sloučení">
+<!ENTITY clicktab.mergeTabs "Sloučit okna dohromady">
+<!ENTITY clicktab.bookTab "Přidat panel do záložek">
+<!ENTITY clicktab.bookTabs "Přidat všechny panely do záložek">
+<!ENTITY clicktab.reloadtab "Znovu načíst panel">
+<!ENTITY clicktab.reloadtabs "Znovu načíst všechny">
+<!ENTITY clicktab.reloadothertabs "Znovu načíst ostatní panely">
+<!ENTITY clicktab.reloadlefttabs "Znovu načíst panely nalevo">
+<!ENTITY clicktab.reloadrighttabs "Znovu načíst panely napravo">
+<!ENTITY clicktab.autoReloadTab "Zapnout/Vypnout automatické načítání panelu">
+<!ENTITY clicktab.removeall "Zavřít všechny panely">
+<!ENTITY clicktab.removeother "Zavřít ostatní panely">
+<!ENTITY clicktab.removesimilar "Zavřít panely z podobné domény">
+<!ENTITY clicktab.removetoLeft "Zavřít panely nalevo">
+<!ENTITY clicktab.removetoRight "Zavřít panely napravo">
+<!ENTITY clicktab.uctab "Znovu otevřít naposledy zavřený panel">
+<!ENTITY clicktab.ucatab "Znovu otevřít všechny zavřené panely">
+<!ENTITY clicktab.snapback "Panel SnapBack">
+<!ENTITY clicktab.ietab "Otevřít panel v prohlížeči Internet Explorer">
+<!ENTITY contentLoad "Kliknutím prostředním tlačítkem načtete adresu URL ze schránky">
+<!ENTITY context.tab "Kontextová nabídka panelu">
+<!ENTITY context.main "Hlavní kontextová nabídka">
+<!ENTITY context.tools "Nabídka Nástroje">
+<!ENTITY showOnTabbar.label "Na liště panelů zobrazit kontextovou nabídku panelu.">
+<!ENTITY showtabBarContext.label "Zobrazit v kontextové nabídce panelu">
+<!ENTITY showContentAreaContext.label "Zobrazit v hlavní kontextové nabídce">
+<!ENTITY showToolsMenu.label "Zobrazit v nabídce Nástroje">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "Zobrazit prázdnou stránku">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "Rozšíření Tab Mix Plus zjistilo, že je nainstalováno rozšíření Session Manager.">
+<!ENTITY sm.extension.description2 "Správce relací rozšíření Tab Mix Plus bude zakázán">
+<!ENTITY sm.extension.description3 "Kliknutím na tlačítko napravo otevřete dialogové okno s možnostmi rozšíření Session Manager">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "Převést">
+<!ENTITY sm.extension.chooseFile.label1 "Převést relace rozšíření Tab Mix Plus ze současného profilu">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "Použít vestavěnou funkci obnovy relací prohlížeče Firefox">
+<!ENTITY ss.enable.tooltip "Pokud zrušíte zaškrtnutí tohoto pole, povolíte správce relací rozšíření Tab Mix Plus.">
+<!ENTITY ss.advanced_setting "Rozšířené nastavení">
+<!ENTITY ss.advanced_setting.warning "Neměňte, pokud si nejste jisti, co děláte.">
+<!ENTITY ss.interval "Minimální časový interval mezi dvěma stavy uložení">
+<!ENTITY ss.interval.seconds "(v ms)">
+<!ENTITY ss.privacy_level "Ukládat citlivá data (formulářová data, POSTDATA a soubory cookie) pro">
+<!ENTITY ss.privacy_level.allsites "Všechny stránky">
+<!ENTITY ss.privacy_level.unencrypted "Pouze nezabezpečené stránky">
+<!ENTITY ss.privacy_level.nosites "Žádné stránky">
+<!ENTITY ss.postdata.label1 "Maximální množství dat typu POSTDATA, které bude uloženo">
+<!ENTITY ss.postdata.label2 "(v bytech, -1 = vše)">
+<!ENTITY sessionManger.enable "Povolit Správce relací">
+<!ENTITY crashRecovery.enable "Povolit obnovu po pádu">
+<!ENTITY sm.StartExit "Spouštění/Zavírání">
+<!ENTITY sm.restore "Obnovit">
+<!ENTITY sm.preserve "Zachovat">
+<!ENTITY sm.start "Při spouštění prohlížeče:">
+<!ENTITY sm.start.restore "Obnovit">
+<!ENTITY sm.start.ask "Před obnovením se zeptat">
+<!ENTITY sm.start.nothing "Neobnovovat">
+<!ENTITY sm.exit "Při zavírání prohlížeče:">
+<!ENTITY sm.exit.save "Uložit relaci">
+<!ENTITY sm.exit.ask "Před uložením se zeptat">
+<!ENTITY sm.exit.nothing "Neukládat">
+<!ENTITY sm.startup "Relace po spuštění:">
+<!ENTITY sm.lastsession "Poslední relace">
+<!ENTITY sm.previouslast "Předposlední relace">
+<!ENTITY sm.chooseifempty "Vybrat jinou, není-li k dispozici žádná relace">
+<!ENTITY sm.restore.options "Při obnovování relací:">
+<!ENTITY sm.restore.overwrite "Přepsat stávající okna">
+<!ENTITY sm.restore.overwriteTabs "A panely">
+<!ENTITY sm.restore.closedWinList "Uložit okna do seznamu zavřených oken">
+<!ENTITY sm.restore.merge "Sloučit více oken do jednoho">
+<!ENTITY sm.restore.bypassCache "Při obnově relace obejít vyrovnávací paměť">
+<!ENTITY sm.notrestore.label "Pokud nedojde k obnově po spuštění">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "Zachovat panely:">
+<!ENTITY sm.preserve.history "Historie">
+<!ENTITY sm.preserve.protect "Stav Chránit">
+<!ENTITY sm.preserve.locked "Stav Zamknout">
+<!ENTITY sm.preserve.permission "Oprávnění">
+<!ENTITY sm.preserve.scroll1 "Pozice posuvníku">
+<!ENTITY sm.restore.winOptions "Zachovat okna:">
+<!ENTITY sm.restore.selectedTab "Vybraný panel">
+<!ENTITY sm.restore.closedTabs "Seznam zavřených panelů">
+<!ENTITY incompatible.extensions "Některá z rozšíření nejsou kompatibilní s rozšířením Tab Mix Plus, tato rozšíření doporučujeme zakázat nebo odinstalovat.">
+<!ENTITY incompatible.button.label "Zobrazit seznam">

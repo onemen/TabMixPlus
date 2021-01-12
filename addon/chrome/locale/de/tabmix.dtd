@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Geschlossene Tabs">
+<!ENTITY closedtabsbtn.tooltip "Liste geschlossener Tabs anzeigen und Tab wiederherstellen (Linksklick auf Schaltfläche)">
+<!ENTITY sessionbtn.tooltip "Sitzungen anzeigen und verwalten">
+<!ENTITY tabslistbtn.label "Offene Tabs">
+<!ENTITY tabslistbtn.tooltip "Liste offener Tabs anzeigen">
+<!ENTITY closedwindowsbtn.label "Geschlossene Fenster">
+<!ENTITY closedwindowsbtn.tooltip "Liste kürzlich geschlossener Fenster anzeigen">
+<!ENTITY page.header.title "Tab Mix Plus - Einstellungen">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus - Sitzungs-Manager">
+<!ENTITY session.Tools "Sitzungs-Manager">
+<!ENTITY closedWin.label "Kürzlich geschlossene Fenster">
+<!ENTITY duplicateTabMenu.label "Tab duplizieren">
+<!ENTITY duplicateTabMenu.accesskey "d">
+<!ENTITY duplicateinWin.label "Tab in neuem Fenster duplizieren">
+<!ENTITY duplicateinWin.accesskey "F">
+<!ENTITY detachTab.label "Tab in neues Fenster verschieben">
+<!ENTITY detachTab.accesskey "v">
+<!ENTITY mergeContext.label "Fenster zusammenführen">
+<!ENTITY mergeContext.accesskey "z">
+<!ENTITY renametab.label "Tab umbenennen">
+<!ENTITY renametab.accesskey "m">
+<!ENTITY copytaburl.label "Tab-Adresse kopieren">
+<!ENTITY copytaburl.accesskey "o">
+<!ENTITY reloadother.label "Andere Tabs neu laden">
+<!ENTITY reloadother.accesskey "u">
+<!ENTITY reloadleft.label "Linke Tabs neu laden">
+<!ENTITY reloadleft.accesskey "k">
+<!ENTITY reloadright.label "Rechte Tabs neu laden">
+<!ENTITY reloadright.accesskey "c">
+<!ENTITY autoReloadTab.label "Tab automatisch neu laden">
+<!ENTITY autoReloadTab.accesskey "u">
+<!ENTITY autoReloadSite.label "Seite automatisch neu laden">
+<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY afterthis.label "nach diesem Tab">
+<!ENTITY bookmarktab.label "Lesezeichen für diesen Tab hinzufügen">
+<!ENTITY undoCloseListMenu.label "Kürzlich geschlossene Tabs">
+<!ENTITY undoCloseListMenu.accesskey "h">
+<!ENTITY closeAllTabsMenu.label "Alle Tabs schließen">
+<!ENTITY closeall.accesskey "b">
+<!ENTITY closeSimilarTab.label "Ähnliche Tabs schließen">
+<!ENTITY closeSimilarTab.accesskey "h">
+<!ENTITY closeTabsToLeft.label "Linke Tabs schließen">
+<!ENTITY closeleft.accesskey "i">
+<!ENTITY docShellMenu.label "Berechtigungen für diesen Tab">
+<!ENTITY docShellMenu.accesskey "B">
+<!ENTITY freezeTabMenu.label "Tab einfrieren">
+<!ENTITY freezeTabMenu.accesskey "r">
+<!ENTITY protectTabMenu.label "Tab schützen">
+<!ENTITY protectTabMenu.tooltip "Schützt Tabs davor, geschlossen zu werden">
+<!ENTITY protectTabMenu.accesskey "z">
+<!ENTITY lockTabMenu.label "Tab sperren">
+<!ENTITY lockTabMenu.tooltip "Links in gesperrten Tabs öffnen immer in einem neuen Tab">
+<!ENTITY lockTabMenu.accesskey "p">
+<!ENTITY bookmarktabs.label "Lesezeichen für alle Tabs hinzufügen">
+<!ENTITY linkhere.label "Link in diesem Tab öffnen">
+<!ENTITY linkhere.accesskey "f">
+<!ENTITY linkBackgroundTab.label "Link in neuem Tab im Hintergrund öffnen">
+<!ENTITY linkForegroundTab.label "Link in neuem Tab im Vordergrund öffnen">
+<!ENTITY linkBackgroundTab.accesskey "H">
+<!ENTITY linkForegroundTab.accesskey "V">
+<!ENTITY openalllinks.label "Markierte Links in neuen Tabs öffnen">
+<!ENTITY openalllinks.accesskey "M">
+<!ENTITY linkwithhistory.label "Link in dupliziertem Tab öffnen">
+<!ENTITY linkwithhistory.accesskey "d">
+<!ENTITY tabsList.label "Offene Tabs">
+<!ENTITY tabsList.accesskey "O">
+<!ENTITY allowImage.label "Grafiken laden">
+<!ENTITY allowJavascript.label "JavaScript erlauben">
+<!ENTITY allowRedirect.label "Weiterleitungen erlauben">
+<!ENTITY allowPlugin.label "Plugins erlauben">
+<!ENTITY allowFrame.label "Frames erlauben">
+<!ENTITY restoreincurrent.label "Im aktiven Tab wiederherstellen">
+<!ENTITY restoreincurrent.accesskey "a">
+<!ENTITY restoreinwin.label "In neuem Fenster wiederherstellen">
+<!ENTITY restoreinwin.accesskey "F">
+<!ENTITY restoreintab.label "In neuem Tab wiederherstellen">
+<!ENTITY restoreintab.accesskey "T">
+<!ENTITY restoretab.label "Geschlossenen Tab wiederherstellen">
+<!ENTITY restoretab.accesskey "G">
+<!ENTITY bookmark.label "Lesezeichen für diesen Link hinzufügen...">
+<!ENTITY bookmark.accesskey "L">
+<!ENTITY deletelist.label "Aus der Liste entfernen">
+<!ENTITY deletelist.accesskey "e">
+<!ENTITY settings.label "Einstellungen">
+<!ENTITY saveWindow.label "Dieses Fenster sichern">
+<!ENTITY saveAllWindows.label "Alle Fenster sichern">
+<!ENTITY sm.context.overwrite "Wiederherstellen und bestehende(s) Fenster überschreiben">
+<!ENTITY sm.context.overwrite.key "W">
+<!ENTITY sm.context.restore.new "In neuem Fenster wiederherstellen">
+<!ENTITY sm.context.restore.newkey "F">
+<!ENTITY sm.context.replacethis "Durch aktuelles Fenster ersetzen">
+<!ENTITY sm.context.replacethis.key "k">
+<!ENTITY sm.context.replaceall "Durch alle offenen Fenster ersetzen">
+<!ENTITY sm.context.replaceall.key "a">
+<!ENTITY sm.context.add "Aktuelles Fenster hinzufügen">
+<!ENTITY sm.context.add.key "h">
+<!ENTITY sm.context.addall "Alle offenen Fenster hinzufügen">
+<!ENTITY sm.context.addall.key "o">
+<!ENTITY sm.context.save "Sichern">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "Umbenennen">
+<!ENTITY sm.context.rename.key "U">
+<!ENTITY sm.context.bookmarkSession "Sitzungslesezeichen">
+<!ENTITY sm.context.bookmarkSession.key "S">
+<!ENTITY sm.context.delete "Löschen">
+<!ENTITY sm.context.delete.key "L">
+<!ENTITY sm.context.deleteall "Alle löschen">
+<!ENTITY sm.context.deleteall.key "ö">
+<!ENTITY sm.context.startup "Als Startsitzung festlegen">
+<!ENTITY sm.context.startup.key "z">
+<!ENTITY sm.context.details "Zähler, Datum und Zeit im Sitzungsmenü anzeigen">
+<!ENTITY sm.context.details.key "ä">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "Z">
+<!ENTITY sortedTabs.label "Alphabetisch sortieren">
+<!ENTITY sortedTabs.tooltip "Zeigt die Liste in alphabetischer Reihenfolge an">
+<!ENTITY enable.label "Aktivieren">
+<!ENTITY custom.label "Benutzerdefiniert">
+<!ENTITY enableTabs.label "Für alle Tabs aktivieren">
+<!ENTITY disableTabs.label "Für alle Tabs deaktivieren">
+<!ENTITY seconds.label "Sekunden">
+<!ENTITY minutes.label "Minuten">
+<!ENTITY minute.label "Minute">
+<!ENTITY hideTabBar.label "Tab-Leiste ausblenden">
+<!ENTITY hideTabBar.never.label "nie">
+<!ENTITY hideTabBar.never.key "n">
+<!ENTITY hideTabBar.oneTab.label "Bei nur einem geöffneten Tab">
+<!ENTITY hideTabBar.onOneTab.key "e">
+<!ENTITY hideTabBar.always.label "immer">
+<!ENTITY hideTabBar.always.key "i">

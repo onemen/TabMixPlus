@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Stängda flikar">
+<!ENTITY closedtabsbtn.tooltip "Visa listan över stängda flikar">
+<!ENTITY sessionbtn.tooltip "Visa och hantera dina sessioner">
+<!ENTITY tabslistbtn.label "Öppnade flikar">
+<!ENTITY tabslistbtn.tooltip "Visa listan över öppnade flikar">
+<!ENTITY closedwindowsbtn.label "Stängda fönster">
+<!ENTITY closedwindowsbtn.tooltip "Visa listan över stängda fönster">
+<!ENTITY page.header.title "Tab Mix Plus-alternativ">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus-sessionshanterare">
+<!ENTITY session.Tools "Sessionshanteraren">
+<!ENTITY closedWin.label "Lista över stängda fönster">
+<!ENTITY duplicateTabMenu.label "Duplicera flik">
+<!ENTITY duplicateTabMenu.accesskey "D">
+<!ENTITY duplicateinWin.label "Duplicera i nytt fönster">
+<!ENTITY duplicateinWin.accesskey "f">
+<!ENTITY detachTab.label "Flytta till nytt fönster">
+<!ENTITY detachTab.accesskey "ö">
+<!ENTITY mergeContext.label "Slå ihop fönster">
+<!ENTITY mergeContext.accesskey "S">
+<!ENTITY renametab.label "Byt namn på flik">
+<!ENTITY renametab.accesskey "B">
+<!ENTITY copytaburl.label "Kopiera flikens URL">
+<!ENTITY copytaburl.accesskey "R">
+<!ENTITY reloadother.label "Uppdatera andra flikar">
+<!ENTITY reloadother.accesskey "U">
+<!ENTITY reloadleft.label "Uppdatera flikar till vänster">
+<!ENTITY reloadleft.accesskey "v">
+<!ENTITY reloadright.label "Uppdatera flikar till höger">
+<!ENTITY reloadright.accesskey "h">
+<!ENTITY autoReloadTab.label "Uppdatera flik automatiskt">
+<!ENTITY autoReloadTab.accesskey "o">
+<!ENTITY autoReloadSite.label "Uppdatera denna webbplats varje">
+<!ENTITY autoReloadSite.accesskey "e">
+<!ENTITY afterthis.label "Efter denna flik">
+<!ENTITY bookmarktab.label "Bokmärk denna flik">
+<!ENTITY undoCloseListMenu.label "Lista över stängda flikar">
+<!ENTITY undoCloseListMenu.accesskey "n">
+<!ENTITY closeAllTabsMenu.label "Stäng alla flikar">
+<!ENTITY closeall.accesskey "A">
+<!ENTITY closeSimilarTab.label "Stäng liknande flikar">
+<!ENTITY closeSimilarTab.accesskey "l">
+<!ENTITY closeTabsToLeft.label "Stäng flikar till vänster">
+<!ENTITY closeleft.accesskey "v">
+<!ENTITY docShellMenu.label "Behörigheter">
+<!ENTITY docShellMenu.accesskey "r">
+<!ENTITY freezeTabMenu.label "Frys flik">
+<!ENTITY freezeTabMenu.accesskey "y">
+<!ENTITY protectTabMenu.label "Skydda flik">
+<!ENTITY protectTabMenu.tooltip "Skydda flik från att stängas">
+<!ENTITY protectTabMenu.accesskey "i">
+<!ENTITY lockTabMenu.label "Lås flik">
+<!ENTITY lockTabMenu.tooltip "Alla länkar öppnas i ny flik">
+<!ENTITY lockTabMenu.accesskey "k">
+<!ENTITY bookmarktabs.label "Lägg till bokmärken för alla flikar">
+<!ENTITY linkhere.label "Öppna länk i denna flik">
+<!ENTITY linkhere.accesskey "Ö">
+<!ENTITY linkBackgroundTab.label "Öppna länk i ny flik i bakgrunden">
+<!ENTITY linkForegroundTab.label "Öppna länk i ny flik i förgrunden">
+<!ENTITY linkBackgroundTab.accesskey "b">
+<!ENTITY linkForegroundTab.accesskey "f">
+<!ENTITY openalllinks.label "Öppna länkar i nya flikar">
+<!ENTITY openalllinks.accesskey "i">
+<!ENTITY linkwithhistory.label "Öppna länk i duplicerad flik">
+<!ENTITY linkwithhistory.accesskey "d">
+<!ENTITY tabsList.label "Lista över öppnade flikar">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Bild">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Omdirigera">
+<!ENTITY allowPlugin.label "Insticksmodul">
+<!ENTITY allowFrame.label "Ram">
+<!ENTITY restoreincurrent.label "Återställ till nuvarande flik">
+<!ENTITY restoreincurrent.accesskey "n">
+<!ENTITY restoreinwin.label "Återställ till nytt fönster">
+<!ENTITY restoreinwin.accesskey "ö">
+<!ENTITY restoreintab.label "Återställ till ny flik">
+<!ENTITY restoreintab.accesskey "y">
+<!ENTITY restoretab.label "Återställ flik">
+<!ENTITY restoretab.accesskey "Å">
+<!ENTITY bookmark.label "Bokmärk denna länk...">
+<!ENTITY bookmark.accesskey "b">
+<!ENTITY deletelist.label "Radera från listan">
+<!ENTITY deletelist.accesskey "b">
+<!ENTITY settings.label "Inställningar">
+<!ENTITY saveWindow.label "Spara detta fönster">
+<!ENTITY saveAllWindows.label "Spara alla fönster">
+<!ENTITY sm.context.overwrite "Återställ och skriv över befintliga fönster">
+<!ENTITY sm.context.overwrite.key "Å">
+<!ENTITY sm.context.restore.new "Återställ till nya fönster">
+<!ENTITY sm.context.restore.newkey "n">
+<!ENTITY sm.context.replacethis "Ersätt med detta fönster">
+<!ENTITY sm.context.replacethis.key "ö">
+<!ENTITY sm.context.replaceall "Ersätt med alla fönster">
+<!ENTITY sm.context.replaceall.key "a">
+<!ENTITY sm.context.add "Lägg till detta fönster">
+<!ENTITY sm.context.add.key "L">
+<!ENTITY sm.context.addall "Lägg till alla fönster">
+<!ENTITY sm.context.addall.key "a">
+<!ENTITY sm.context.save "Spara">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "Byt namn">
+<!ENTITY sm.context.rename.key "B">
+<!ENTITY sm.context.bookmarkSession "Bokmärk session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Radera">
+<!ENTITY sm.context.delete.key "R">
+<!ENTITY sm.context.deleteall "Radera alla">
+<!ENTITY sm.context.deleteall.key "l">
+<!ENTITY sm.context.startup "Ange som uppstartssession">
+<!ENTITY sm.context.startup.key "u">
+<!ENTITY sm.context.details "Visa räknare, datum och tid i sessionsmenyn">
+<!ENTITY sm.context.details.key "r">
+<!ENTITY tab.key "F">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "S">
+<!ENTITY sortedTabs.label "Sortera flikar">
+<!ENTITY sortedTabs.tooltip "Markera för att visa listan i alfabetisk ordning">
+<!ENTITY enable.label "Aktivera">
+<!ENTITY custom.label "Anpassad">
+<!ENTITY enableTabs.label "Aktivera för alla flikar">
+<!ENTITY disableTabs.label "Inaktivera för alla flikar">
+<!ENTITY seconds.label "sekunder">
+<!ENTITY minutes.label "minuter">
+<!ENTITY minute.label "minut">
+<!ENTITY hideTabBar.label "Göm flikfältet">
+<!ENTITY hideTabBar.never.label "Aldrig">
+<!ENTITY hideTabBar.never.key "A">
+<!ENTITY hideTabBar.oneTab.label "När endast en flik finns">
+<!ENTITY hideTabBar.onOneTab.key "e">
+<!ENTITY hideTabBar.always.label "Alltid">
+<!ENTITY hideTabBar.always.key "l">

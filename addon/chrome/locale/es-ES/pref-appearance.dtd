@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Estilos">
+<!ENTITY styles.label "Personalizar apariencia">
+<!ENTITY currentTab.label "Pestaña seleccionada">
+<!ENTITY unloadedTabs.label "Pestañas no cargadas">
+<!ENTITY unreadTab.label "Pestañas no leídas">
+<!ENTITY hideRGB.label "Ocultar RGB">
+<!ENTITY showRGB.label "Mostrar RGB">
+<!ENTITY unreadAfterReload.label "establecer como no leída tras recargar">
+<!ENTITY disableBackground.label "Desactivar colores de fondo personalizados">
+<!ENTITY squaredTabs.label "Aplicar color de fondo a pestañas cuadradas">
+<!ENTITY otherTabs.label "Otras pestañas">
+<!ENTITY italic.label "Cursiva">
+<!ENTITY bold.label "Negrita">
+<!ENTITY underline.label "Subrayado">
+<!ENTITY textcolor.label "Color texto">
+<!ENTITY bgColor.label "Color fondo">
+<!ENTITY bgTopColor.label "arriba">
+<!ENTITY bgBottomColor.label "abajo">
+<!ENTITY useThis.label "usar este estilo para">
+<!ENTITY opacity.label "opacidad">

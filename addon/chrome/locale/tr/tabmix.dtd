@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Kapatılmış sekmeler">
+<!ENTITY closedtabsbtn.tooltip "Kapatılmış sekmeler listesini göster">
+<!ENTITY sessionbtn.tooltip "Oturumları göster ve yönet">
+<!ENTITY tabslistbtn.label "Açık sekmeler">
+<!ENTITY tabslistbtn.tooltip "Açık sekmeler listesini göster">
+<!ENTITY closedwindowsbtn.label "Kapatılmış pencereler">
+<!ENTITY closedwindowsbtn.tooltip "Kapatılmış pencereler listesini göster">
+<!ENTITY page.header.title "Tab Mix Plus Tercihleri">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus Oturum Yöneticisi">
+<!ENTITY session.Tools "Oturum Yöneticisi">
+<!ENTITY closedWin.label "Kapatılmış pencereler listesi">
+<!ENTITY duplicateTabMenu.label "Sekmeyi çiftle">
+<!ENTITY duplicateTabMenu.accesskey "ç">
+<!ENTITY duplicateinWin.label "Yeni pencerede çiftle">
+<!ENTITY duplicateinWin.accesskey "Y">
+<!ENTITY detachTab.label "Yeni pencereye taşı">
+<!ENTITY detachTab.accesskey "t">
+<!ENTITY mergeContext.label "Pencereleri birleştir">
+<!ENTITY mergeContext.accesskey "b">
+<!ENTITY renametab.label "Sekmeyi yeniden adlandır">
+<!ENTITY renametab.accesskey "a">
+<!ENTITY copytaburl.label "Sekme adresini kopyala">
+<!ENTITY copytaburl.accesskey "k">
+<!ENTITY reloadother.label "Diğer sekmeleri tazele">
+<!ENTITY reloadother.accesskey "t">
+<!ENTITY reloadleft.label "Soldaki sekmeleri tazele">
+<!ENTITY reloadleft.accesskey "S">
+<!ENTITY reloadright.label "Sağdaki sekmeleri tazele">
+<!ENTITY reloadright.accesskey "a">
+<!ENTITY autoReloadTab.label "Sekmeyi otomatik tazele">
+<!ENTITY autoReloadTab.accesskey "S">
+<!ENTITY autoReloadSite.label "Bu siteyi şu kadar sürede bir yeniden yükle:">
+<!ENTITY autoReloadSite.accesskey "H">
+<!ENTITY afterthis.label "Bu sekmeden sonra">
+<!ENTITY bookmarktab.label "Yer İmlerine ekle">
+<!ENTITY undoCloseListMenu.label "Kapatılmış sekmeler listesi">
+<!ENTITY undoCloseListMenu.accesskey "K">
+<!ENTITY closeAllTabsMenu.label "Tüm sekmeleri kapat">
+<!ENTITY closeall.accesskey "T">
+<!ENTITY closeSimilarTab.label "Benzer sekmeleri kapat">
+<!ENTITY closeSimilarTab.accesskey "B">
+<!ENTITY closeTabsToLeft.label "Soldaki Sekmeleri Kapat">
+<!ENTITY closeleft.accesskey "O">
+<!ENTITY docShellMenu.label "İzinler">
+<!ENTITY docShellMenu.accesskey "İ">
+<!ENTITY freezeTabMenu.label "Sekmeyi dondur">
+<!ENTITY freezeTabMenu.accesskey "D">
+<!ENTITY protectTabMenu.label "Sekmeyi koru">
+<!ENTITY protectTabMenu.tooltip "Sekmeleri kapanmaktan korur">
+<!ENTITY protectTabMenu.accesskey "K">
+<!ENTITY lockTabMenu.label "Sekmeyi kilitle">
+<!ENTITY lockTabMenu.tooltip "Tüm bağlantılar yeni bir sekmede açılır">
+<!ENTITY lockTabMenu.accesskey "K">
+<!ENTITY bookmarktabs.label "Tüm sekmeleri yer imlerine kaydet">
+<!ENTITY linkhere.label "Bağlantıyı bu sekmede aç">
+<!ENTITY linkhere.accesskey "B">
+<!ENTITY linkBackgroundTab.label "Bağlantıyı arka planda aç">
+<!ENTITY linkForegroundTab.label "Bağlantıyı önde aç">
+<!ENTITY linkBackgroundTab.accesskey "a">
+<!ENTITY linkForegroundTab.accesskey "ö">
+<!ENTITY openalllinks.label "Bağlantıları yeni sekmelerde aç">
+<!ENTITY openalllinks.accesskey "y">
+<!ENTITY linkwithhistory.label "Bağlantıyı çiftlenmiş sekmede aç">
+<!ENTITY linkwithhistory.accesskey "ç">
+<!ENTITY tabsList.label "Açık sekmeler listesi">
+<!ENTITY tabsList.accesskey "A">
+<!ENTITY allowImage.label "Resim">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Yönlendirme">
+<!ENTITY allowPlugin.label "Eklenti">
+<!ENTITY allowFrame.label "Çerçeve">
+<!ENTITY restoreincurrent.label "Mevcut sekmeye geri yükle">
+<!ENTITY restoreincurrent.accesskey "G">
+<!ENTITY restoreinwin.label "Yeni pencereye geri yükle">
+<!ENTITY restoreinwin.accesskey "P">
+<!ENTITY restoreintab.label "Yeni sekmeye geri yükle">
+<!ENTITY restoreintab.accesskey "Y">
+<!ENTITY restoretab.label "Sekmeye geri yükle">
+<!ENTITY restoretab.accesskey "S">
+<!ENTITY bookmark.label "Yer İmlerine kaydet...">
+<!ENTITY bookmark.accesskey "İ">
+<!ENTITY deletelist.label "Listeden sil">
+<!ENTITY deletelist.accesskey "S">
+<!ENTITY settings.label "Ayarlar">
+<!ENTITY saveWindow.label "Bu pencereyi kaydet">
+<!ENTITY saveAllWindows.label "Tüm pencereleri kaydet">
+<!ENTITY sm.context.overwrite "Geçerli pencere(lere) geri yükle">
+<!ENTITY sm.context.overwrite.key "M">
+<!ENTITY sm.context.restore.new "Yeni pencere(lere) geri yükle">
+<!ENTITY sm.context.restore.newkey "Y">
+<!ENTITY sm.context.replacethis "Bu pencere ile değiştir">
+<!ENTITY sm.context.replacethis.key "D">
+<!ENTITY sm.context.replaceall "Tüm pencerelerle değiştir">
+<!ENTITY sm.context.replaceall.key "ü">
+<!ENTITY sm.context.add "Bu pencereye ekle">
+<!ENTITY sm.context.add.key "B">
+<!ENTITY sm.context.addall "Tüm pencerelere ekle">
+<!ENTITY sm.context.addall.key "M">
+<!ENTITY sm.context.save "Kaydet">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "Yeniden adlandır">
+<!ENTITY sm.context.rename.key "Y">
+<!ENTITY sm.context.bookmarkSession "Yer İmleri Oturumu">
+<!ENTITY sm.context.bookmarkSession.key "Y">
+<!ENTITY sm.context.delete "Sil">
+<!ENTITY sm.context.delete.key "S">
+<!ENTITY sm.context.deleteall "Tümünü sil">
+<!ENTITY sm.context.deleteall.key "T">
+<!ENTITY sm.context.startup "Başlangıç oturumu olarak ayarla">
+<!ENTITY sm.context.startup.key "B">
+<!ENTITY sm.context.details "Oturum menüsünde, sayaçları, tarihi ve saati göster">
+<!ENTITY sm.context.details.key "O">
+<!ENTITY tab.key "S">
+<!ENTITY window.key "P">
+<!ENTITY merge.key "B">
+<!ENTITY sortedTabs.label "Sıralanmış sekmeler">
+<!ENTITY sortedTabs.tooltip "Listenin alfabetik olarak sıralanmış halini gör">
+<!ENTITY enable.label "Etkin">
+<!ENTITY custom.label "Özelleştir">
+<!ENTITY enableTabs.label "Tüm sekmelerde etkinleştir">
+<!ENTITY disableTabs.label "Tüm sekmelerde etkisizleştir">
+<!ENTITY seconds.label "saniye">
+<!ENTITY minutes.label "dakika">
+<!ENTITY minute.label "dakika">
+<!ENTITY hideTabBar.label "Sekme çubuğunu gizle">
+<!ENTITY hideTabBar.never.label "Asla">
+<!ENTITY hideTabBar.never.key "A">
+<!ENTITY hideTabBar.oneTab.label "Yalnızca bir sekme olduğunda">
+<!ENTITY hideTabBar.onOneTab.key "Y">
+<!ENTITY hideTabBar.always.label "Her zaman">
+<!ENTITY hideTabBar.always.key "H">

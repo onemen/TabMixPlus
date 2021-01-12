@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+    <em:id>{dc572301-7619-498c-a57d-39143191b318}</em:id>
+    <em:name>Tab Mix Plus</em:name>
+    <em:version>0.5.8.1</em:version>
+    <em:type>2</em:type>
+    <em:multiprocessCompatible>true</em:multiprocessCompatible>
+    <em:description>Tab browsing with an added boost.</em:description>
+    <em:iconURL>chrome://tabmixplus/skin/tmp.png</em:iconURL>
+    <em:homepageURL>http://tabmixplus.org</em:homepageURL>
+    <em:optionsURL>chrome://tabmixplus/content/preferences/preferences.xul</em:optionsURL>
+    <em:aboutURL>chrome://tabmixplus/content/dialogs/about.xul</em:aboutURL>
+    <em:creator>ONEMEN (tabmix.onemen@gmail.com)</em:creator>
+    <em:developer>ONEMEN</em:developer>
+    <em:updateURL>https://bitbucket.org/onemen/tabmixplus/downloads/updates.json</em:updateURL>
+
+    <!-- Firefox -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>38.0</em:minVersion>
+        <em:maxVersion>56.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+    <!-- PaleMoon -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}</em:id>
+        <em:minVersion>27.0</em:minVersion>
+        <em:maxVersion>28.*</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+
+  </Description>
+</RDF>

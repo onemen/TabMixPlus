@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Пречице">
+<!ENTITY shortcuts.edit "Уреди пречице на тастатури">
+<!ENTITY shortcuts.showAll "Прикажи све">
+<!ENTITY shortcuts.hideUnused "Сакриј неискоришћене">
+<!ENTITY shortcuts.warning "Неке од ваших наредби се већ користе">
+<!ENTITY shortcuts.showDetails "Прикажи детаље">
+<!ENTITY shortcuts.hideDetails "Сакриј детаље">
+<!ENTITY shortcuts.switchToLast "Пређи на последњу активну картицу">
+<!ENTITY shortcuts.slideshow "Почни/заустави пројекцију језичака">
+<!ENTITY shortcuts.toggleFLST "Промени фокус након затварања тренутног језичка">
+<!ENTITY shortcuts.toggleFLST.tooltip "Промени фокусирање на десно или последњи изабрани језичак">
+<!ENTITY shortcuts.placeholder "Унесите модификаторе и кључ">
+<!ENTITY shortcuts.reset "Врати почетно">
+<!ENTITY shortcuts.clear "Очисти">
+<!ENTITY shortcuts.inuse "Ова пречица се већ користи за">

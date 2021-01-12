@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "برگه های بسته شده">
+<!ENTITY closedtabsbtn.tooltip "نمایش لیست برگه های بسته شده">
+<!ENTITY sessionbtn.tooltip "نمایش و مدیریت نشست ها">
+<!ENTITY tabslistbtn.label "برگه های باز شده">
+<!ENTITY tabslistbtn.tooltip "نمایش لیست برگه های باز شده">
+<!ENTITY closedwindowsbtn.label "پنجره های بسته شده">
+<!ENTITY closedwindowsbtn.tooltip "نمایش پنجره های بسته شده">
+<!ENTITY page.header.title "تنظیمات Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus Session Manager">
+<!ENTITY session.Tools "مدیریت نشست ها">
+<!ENTITY closedWin.label "لیست پنجره های بسته شده">
+<!ENTITY duplicateTabMenu.label "تکثیر برگه">
+<!ENTITY duplicateTabMenu.accesskey "ر">
+<!ENTITY duplicateinWin.label "تکثیر برگه در پنجره جدید">
+<!ENTITY duplicateinWin.accesskey "ر">
+<!ENTITY detachTab.label "فرستادن به پنجره جدید">
+<!ENTITY detachTab.accesskey "د">
+<!ENTITY mergeContext.label "ترکیب کردن پنجره ها">
+<!ENTITY mergeContext.accesskey "د">
+<!ENTITY renametab.label "تغییر نام برگه">
+<!ENTITY renametab.accesskey "م">
+<!ENTITY copytaburl.label "رونوشت آدرس برگه">
+<!ENTITY copytaburl.accesskey "ر">
+<!ENTITY reloadother.label "بارگذاری دوباره سایر برگه ها">
+<!ENTITY reloadother.accesskey "ر">
+<!ENTITY reloadleft.label "بارگذاری دوباره برگه های سمت چپ">
+<!ENTITY reloadleft.accesskey "ر">
+<!ENTITY reloadright.label "بارگذاری دوباره برگه های سمت راست">
+<!ENTITY reloadright.accesskey "ر">
+<!ENTITY autoReloadTab.label "بارگذاری دوباره برگه هر">
+<!ENTITY autoReloadTab.accesskey "ه">
+<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY afterthis.label "پس از این برگه">
+<!ENTITY bookmarktab.label "نشانه گذاری این برگه">
+<!ENTITY undoCloseListMenu.label "لیست برگه های بسته شده">
+<!ENTITY undoCloseListMenu.accesskey "ی">
+<!ENTITY closeAllTabsMenu.label "بستن تمام برگه ها">
+<!ENTITY closeall.accesskey "م">
+<!ENTITY closeSimilarTab.label "بستن برگه های مشابه">
+<!ENTITY closeSimilarTab.accesskey "ی">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeleft.accesskey "ی">
+<!ENTITY docShellMenu.label "مجوزها">
+<!ENTITY docShellMenu.accesskey "ز">
+<!ENTITY freezeTabMenu.label "فریز کردن برگه">
+<!ENTITY freezeTabMenu.accesskey "د">
+<!ENTITY protectTabMenu.label "محافظت از برگه">
+<!ENTITY protectTabMenu.tooltip "جلوگیری از بسته شدن برگه ها">
+<!ENTITY protectTabMenu.accesskey "ز">
+<!ENTITY lockTabMenu.label "قفل کردن برگه">
+<!ENTITY lockTabMenu.tooltip "باز کردن لینک ها در برگه های جدید">
+<!ENTITY lockTabMenu.accesskey "ز">
+<!ENTITY bookmarktabs.label "نشانه گذاری تمام برگه ها">
+<!ENTITY linkhere.label "باز کردن لینک در این برگه">
+<!ENTITY linkhere.accesskey "ر">
+<!ENTITY linkBackgroundTab.label "باز کردن لینک در برگه پس زمینه">
+<!ENTITY linkForegroundTab.label "باز کردن لینک در یک برگه جاری">
+<!ENTITY linkBackgroundTab.accesskey "ز">
+<!ENTITY linkForegroundTab.accesskey "ر">
+<!ENTITY openalllinks.label "باز کردن لینک ها در برگه های جدید">
+<!ENTITY openalllinks.accesskey "ر">
+<!ENTITY linkwithhistory.label "باز کردن لینک در برگه تکثیر شده">
+<!ENTITY linkwithhistory.accesskey "ز">
+<!ENTITY tabsList.label "لیست برگه های باز شده">
+<!ENTITY tabsList.accesskey "ز">
+<!ENTITY allowImage.label "تصویر">
+<!ENTITY allowJavascript.label "جاوا اسکریپت">
+<!ENTITY allowRedirect.label "تغییر مسیر">
+<!ENTITY allowPlugin.label "پلاگین">
+<!ENTITY allowFrame.label "فریم">
+<!ENTITY restoreincurrent.label "بازگردانی به برگه فعلی">
+<!ENTITY restoreincurrent.accesskey "ز">
+<!ENTITY restoreinwin.label "بازگردانی به پنجره جدید">
+<!ENTITY restoreinwin.accesskey "ز">
+<!ENTITY restoreintab.label "بازگردانی به برگه جدید">
+<!ENTITY restoreintab.accesskey "ز">
+<!ENTITY restoretab.label "بازگردانی برگه">
+<!ENTITY restoretab.accesskey "ز">
+<!ENTITY bookmark.label "نشانه کذاری این لینک">
+<!ENTITY bookmark.accesskey "ر">
+<!ENTITY deletelist.label "پاک کردن از لیست">
+<!ENTITY deletelist.accesskey "ز">
+<!ENTITY settings.label "تنظیمات">
+<!ENTITY saveWindow.label "ذخیره کردن این پنجره">
+<!ENTITY saveAllWindows.label "ذخیره کردن تمام پنجره ها">
+<!ENTITY sm.context.overwrite "بازگردانی،بازنویسی پنجره(های) فعلی">
+<!ENTITY sm.context.overwrite.key "ر">
+<!ENTITY sm.context.restore.new "بازگردانی در پنجره(های) جدید">
+<!ENTITY sm.context.restore.newkey "ر">
+<!ENTITY sm.context.replacethis "جا به جایی٬با این پنجره">
+<!ENTITY sm.context.replacethis.key "ا">
+<!ENTITY sm.context.replaceall "جا به جایی٬با تمام پنجره ها">
+<!ENTITY sm.context.replaceall.key "ه">
+<!ENTITY sm.context.add "افزودن این پنجره">
+<!ENTITY sm.context.add.key "ز">
+<!ENTITY sm.context.addall "افزودن تمام پنجره ها">
+<!ENTITY sm.context.addall.key "ز">
+<!ENTITY sm.context.save "ذخیره کردن">
+<!ENTITY sm.context.save.key "ذ">
+<!ENTITY sm.context.rename "تغییر نام">
+<!ENTITY sm.context.rename.key "م">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "پاک کردن">
+<!ENTITY sm.context.delete.key "ک">
+<!ENTITY sm.context.deleteall "پاک کردن همه">
+<!ENTITY sm.context.deleteall.key "ف">
+<!ENTITY sm.context.startup "تنظیم بعنوان نشست اولیه">
+<!ENTITY sm.context.startup.key "ا">
+<!ENTITY sm.context.details "نمایش شمارشگر،تاریخ و زمان در منوی نشست">
+<!ENTITY sm.context.details.key "ر">
+<!ENTITY tab.key "ر">
+<!ENTITY window.key "ر">
+<!ENTITY merge.key "ر">
+<!ENTITY sortedTabs.label "برگه های مرتب شده">
+<!ENTITY sortedTabs.tooltip "بررسی برای نمایش این که لیست بر اساس حروف الفبا مرتب شده">
+<!ENTITY enable.label "فعالسازی">
+<!ENTITY custom.label "سفارشی">
+<!ENTITY enableTabs.label "فعال کردن تمام برگه ها">
+<!ENTITY disableTabs.label "غیر فعال کردن تمام برگه ها">
+<!ENTITY seconds.label "ثانیه">
+<!ENTITY minutes.label "دقیقه">
+<!ENTITY minute.label "دقیقه">
+<!ENTITY hideTabBar.label "پنهان کردن نوار برگه ها">
+<!ENTITY hideTabBar.never.label "هیچ وقت">
+<!ENTITY hideTabBar.never.key "و">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "ز">
+<!ENTITY hideTabBar.always.label "همیشه">
+<!ENTITY hideTabBar.always.key "ه">

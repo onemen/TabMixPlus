@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "닫은 탭">
+<!ENTITY closedtabsbtn.tooltip "닫은 탭 목록을 보여줍니다.">
+<!ENTITY sessionbtn.tooltip "세션을 보여주고 관리합니다.">
+<!ENTITY tabslistbtn.label "열린 탭">
+<!ENTITY tabslistbtn.tooltip "열린 탭 목록을 보여줍니다.">
+<!ENTITY closedwindowsbtn.label "닫은 창">
+<!ENTITY closedwindowsbtn.tooltip "닫은 창 목록을 보여줍니다.">
+<!ENTITY page.header.title "Tab Mix Plus 설정">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus 세션 관리자">
+<!ENTITY session.Tools "세션 관리자">
+<!ENTITY closedWin.label "닫은 창 목록">
+<!ENTITY duplicateTabMenu.label "탭 복사하기">
+<!ENTITY duplicateTabMenu.accesskey "D">
+<!ENTITY duplicateinWin.label "새 창에 복사하기">
+<!ENTITY duplicateinWin.accesskey "W">
+<!ENTITY detachTab.label "새 창에 열기">
+<!ENTITY detachTab.accesskey "E">
+<!ENTITY mergeContext.label "창 합치기">
+<!ENTITY mergeContext.accesskey "M">
+<!ENTITY renametab.label "탭 이름 바꾸기">
+<!ENTITY renametab.accesskey "R">
+<!ENTITY copytaburl.label "탭 주소 복사">
+<!ENTITY copytaburl.accesskey "U">
+<!ENTITY reloadother.label "다른 탭 새로 고침">
+<!ENTITY reloadother.accesskey "O">
+<!ENTITY reloadleft.label "왼쪽 탭 새로 고침">
+<!ENTITY reloadleft.accesskey "L">
+<!ENTITY reloadright.label "오른쪽 탭 새로 고침">
+<!ENTITY reloadright.accesskey "I">
+<!ENTITY autoReloadTab.label "탭을 자동으로 새로 고침">
+<!ENTITY autoReloadTab.accesskey "V">
+<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY afterthis.label "이 탭의 옆에 열기">
+<!ENTITY bookmarktab.label "현재 탭 북마크 하기">
+<!ENTITY undoCloseListMenu.label "닫은 탭 목록">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "탭 모두 닫기">
+<!ENTITY closeall.accesskey "A">
+<!ENTITY closeSimilarTab.label "비슷한 탭 닫기">
+<!ENTITY closeSimilarTab.accesskey "S">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeleft.accesskey "L">
+<!ENTITY docShellMenu.label "기능 사용 여부">
+<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY freezeTabMenu.label "탭 얼리기">
+<!ENTITY freezeTabMenu.accesskey "F">
+<!ENTITY protectTabMenu.label "탭 보호하기">
+<!ENTITY protectTabMenu.tooltip "탭을 닫을 수 없게 합니다.">
+<!ENTITY protectTabMenu.accesskey "P">
+<!ENTITY lockTabMenu.label "탭 잠그기">
+<!ENTITY lockTabMenu.tooltip "모든 링크를 새 탭에 엽니다.">
+<!ENTITY lockTabMenu.accesskey "K">
+<!ENTITY bookmarktabs.label "전체 탭 북마크 하기">
+<!ENTITY linkhere.label "링크를 이 탭에 열기">
+<!ENTITY linkhere.accesskey "O">
+<!ENTITY linkBackgroundTab.label "링크를 비활성화된 탭에 열기">
+<!ENTITY linkForegroundTab.label "링크를 활성화된 탭에 열기">
+<!ENTITY linkBackgroundTab.accesskey "B">
+<!ENTITY linkForegroundTab.accesskey "F">
+<!ENTITY openalllinks.label "링크들을 새 탭에 열기">
+<!ENTITY openalllinks.accesskey "S">
+<!ENTITY linkwithhistory.label "링크를 복제된 탭에 열기">
+<!ENTITY linkwithhistory.accesskey "D">
+<!ENTITY tabsList.label "열린 탭 목록">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "그림">
+<!ENTITY allowJavascript.label "자바스크립트">
+<!ENTITY allowRedirect.label "리다이렉트">
+<!ENTITY allowPlugin.label "플러그인">
+<!ENTITY allowFrame.label "프레임">
+<!ENTITY restoreincurrent.label "현재 탭에 다시 열기">
+<!ENTITY restoreincurrent.accesskey "C">
+<!ENTITY restoreinwin.label "새 창에 다시 열기">
+<!ENTITY restoreinwin.accesskey "W">
+<!ENTITY restoreintab.label "새 탭에 다시 열기">
+<!ENTITY restoreintab.accesskey "T">
+<!ENTITY restoretab.label "탭 다시 열기">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "링크를 북마크에 추가...">
+<!ENTITY bookmark.accesskey "B">
+<!ENTITY deletelist.label "목록에서 지우기">
+<!ENTITY deletelist.accesskey "D">
+<!ENTITY settings.label "설정">
+<!ENTITY saveWindow.label "이 창을 저장하기">
+<!ENTITY saveAllWindows.label "모든 창을 저장하기">
+<!ENTITY sm.context.overwrite "복구하기, 현재 창에 덮어쓰기">
+<!ENTITY sm.context.overwrite.key "O">
+<!ENTITY sm.context.restore.new "새 창으로 복구하기">
+<!ENTITY sm.context.restore.newkey "N">
+<!ENTITY sm.context.replacethis "이 창과 바꾸기">
+<!ENTITY sm.context.replacethis.key "T">
+<!ENTITY sm.context.replaceall "모든 창과 바꾸기">
+<!ENTITY sm.context.replaceall.key "A">
+<!ENTITY sm.context.add "이 창을 추가하기">
+<!ENTITY sm.context.add.key "W">
+<!ENTITY sm.context.addall "모든 창 추가 하기">
+<!ENTITY sm.context.addall.key "I">
+<!ENTITY sm.context.save "저장">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "이름 바꾸기">
+<!ENTITY sm.context.rename.key "R">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "지우기">
+<!ENTITY sm.context.delete.key "D">
+<!ENTITY sm.context.deleteall "모두 지우기">
+<!ENTITY sm.context.deleteall.key "L">
+<!ENTITY sm.context.startup "시작 세션으로 설정">
+<!ENTITY sm.context.startup.key "P">
+<!ENTITY sm.context.details "세션 메뉴 안에 카운터, 날짜 및 시간 표시">
+<!ENTITY sm.context.details.key "C">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "탭 정렬">
+<!ENTITY sortedTabs.tooltip "선택하면 목록을 이름 순으로 정렬합니다.">
+<!ENTITY enable.label "쓰기">
+<!ENTITY custom.label "사용자 설정">
+<!ENTITY enableTabs.label "모든 탭에 사용">
+<!ENTITY disableTabs.label "모든 탭에 사용 안함">
+<!ENTITY seconds.label "초">
+<!ENTITY minutes.label "분">
+<!ENTITY minute.label "분">
+<!ENTITY hideTabBar.label "탭 도구 모음 숨기기">
+<!ENTITY hideTabBar.never.label "사용 안함">
+<!ENTITY hideTabBar.never.key "N">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "E">
+<!ENTITY hideTabBar.always.label "항상">
+<!ENTITY hideTabBar.always.key "A">

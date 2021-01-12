@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Dreceres">
+<!ENTITY shortcuts.edit "Editeu les tecles de drecera">
+<!ENTITY shortcuts.showAll "Mostra-ho tot">
+<!ENTITY shortcuts.hideUnused "Oculta les no utilitzades">
+<!ENTITY shortcuts.warning "Hi ha altres ordres que ja fan servir algunes de les dreceres">
+<!ENTITY shortcuts.showDetails "Mostra els detalls">
+<!ENTITY shortcuts.hideDetails "Oculta els detalls">
+<!ENTITY shortcuts.switchToLast "Canvia a l'última pestanya activa">
+<!ENTITY shortcuts.slideshow "Commuta la rotació entre pestanyes">
+<!ENTITY shortcuts.toggleFLST "Canvia el focus en tancar la pestanya actual">
+<!ENTITY shortcuts.toggleFLST.tooltip "canvia entre enfocar la pestanya de la dreta o l'última seleccionada">
+<!ENTITY shortcuts.placeholder "Premeu els modificadors i la tecla">
+<!ENTITY shortcuts.reset "Reinicialitza">
+<!ENTITY shortcuts.clear "Esborra">
+<!ENTITY shortcuts.inuse "Aquesta drecera ja s'utilitza per a">

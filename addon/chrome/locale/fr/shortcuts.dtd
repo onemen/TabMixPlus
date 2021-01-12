@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Raccourcis clavier">
+<!ENTITY shortcuts.edit "Éditer les raccourcis clavier">
+<!ENTITY shortcuts.showAll "Afficher tous les raccourcis">
+<!ENTITY shortcuts.hideUnused "Masquer les raccourcis inutilisés">
+<!ENTITY shortcuts.warning "Certains de vos raccourcis sont utilisés par d'autres commandes">
+<!ENTITY shortcuts.showDetails "Afficher les détails">
+<!ENTITY shortcuts.hideDetails "Masquer les détails">
+<!ENTITY shortcuts.switchToLast "Revenir au dernier onglet actif">
+<!ENTITY shortcuts.slideshow "Activer/désactiver la rotation des onglets">
+<!ENTITY shortcuts.toggleFLST "Choix de l'onglet sélectionné après la fermeture de l'onglet courant">
+<!ENTITY shortcuts.toggleFLST.tooltip "bascule entre l'onglet de droite ou le dernier onglet sélectionné">
+<!ENTITY shortcuts.placeholder "Tapez une touche (avec ou sans touche contrôle)">
+<!ENTITY shortcuts.reset "Réinitialiser">
+<!ENTITY shortcuts.clear "Effacer">
+<!ENTITY shortcuts.inuse "Ce raccourci est déjà utilisé par">

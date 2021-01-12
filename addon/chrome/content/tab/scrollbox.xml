@@ -1,0 +1,749 @@
+<?xml version="1.0"?>
+
+<bindings id="tabmix-arrowscrollboxBindings"
+   xmlns="http://www.mozilla.org/xbl"
+   xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="tabmix-right-scrollBox"
+           extends="chrome://global/content/bindings/scrollbox.xml#scrollbox-base">
+    <content _side="right">
+        <xul:toolbarbutton class="scrollbutton-up"
+                           xbl:inherits="orient,disabled=scrolledtostart"
+                           oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'left');"
+                           anonid="scrollbutton-up-right"
+                           onclick="if (!this.disabled) gBrowser.tabContainer.mTabstrip._distanceScroll(event);"
+                           onmousedown="if (event.button === 0 &amp;&amp; !this.disabled) gBrowser.tabContainer.mTabstrip._startScroll(-1);"
+                           onmouseup="if (event.button === 0) gBrowser.tabContainer.mTabstrip._stopScroll();"
+                           onmouseover="if (!this.disabled) gBrowser.tabContainer.mTabstrip._continueScroll(-1);"
+                           onmouseout="gBrowser.tabContainer.mTabstrip._pauseScroll();"/>
+        <xul:toolbarbutton class="scrollbutton-down"
+                           xbl:inherits="orient,disabled=scrolledtoend"
+                           oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'right');"
+                           anonid="scrollbutton-down-right"
+                           onclick="if (!this.disabled) gBrowser.tabContainer.mTabstrip._distanceScroll(event);"
+                           onmousedown="if (event.button === 0 &amp;&amp; !this.disabled) gBrowser.tabContainer.mTabstrip._startScroll(1);"
+                           onmouseup="if (event.button === 0) gBrowser.tabContainer.mTabstrip._stopScroll();"
+                           onmouseover="if (!this.disabled) gBrowser.tabContainer.mTabstrip._continueScroll(1);"
+                           onmouseout="gBrowser.tabContainer.mTabstrip._pauseScroll();"/>
+    </content>
+    <implementation>
+      <field name="_scrollButtonUp">
+        document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-up-right");
+      </field>
+
+      <field name="_scrollButtonDown">
+        document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-down-right");
+      </field>
+
+      <constructor>
+        <![CDATA[
+          const _gBrowser = window.gBrowser || window._gBrowser;
+          if (Tabmix.isVersion(580)) {
+            _gBrowser.tabContainer.mTabstrip = _gBrowser.tabContainer.arrowScrollbox;
+          }
+          var tabstrip = _gBrowser.tabContainer.mTabstrip;
+          tabstrip._scrollButtonDownRight = this._scrollButtonDown;
+          tabstrip._scrollButtonUpRight = this._scrollButtonUp;
+        ]]>
+      </constructor>
+
+      <method name="finishScroll">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          var tabBar = gBrowser.tabContainer;
+          if (!tabBar.useTabmixDnD(aEvent))
+            return;
+          TMP_tabDNDObserver.clearDragmark();
+          var index, target = aEvent.originalTarget.getAttribute("anonid");
+          if (target == "scrollbutton-up-right")
+            index = -1;
+          else if (target == "scrollbutton-down-right")
+            index = 1;
+          if (index) {
+            let tabstrip = gBrowser.tabContainer.mTabstrip;
+            let amountToScroll, distanceToRow = tabstrip._distanceToRow(0);
+            if (distanceToRow * index < 0)
+              amountToScroll = tabstrip.singleRowHeight * index + distanceToRow;
+            else
+              amountToScroll = distanceToRow;
+            tabstrip.scrollByPixels(amountToScroll);
+          }
+        ]]></body>
+      </method>
+    </implementation>
+
+    <handlers>
+      <handler event="dragover"><![CDATA[
+        var tabBar = gBrowser.tabContainer;
+        if (tabBar.useTabmixDnD(event))
+          TMP_tabDNDObserver.onDragOver(event);
+      ]]></handler>
+
+      <handler event="drop"><![CDATA[
+        this.finishScroll(event);
+      ]]></handler>
+
+      <handler event="dragexit"><![CDATA[
+        this.finishScroll(event);
+      ]]></handler>
+    </handlers>
+
+  </binding>
+
+  <binding id="tabmix-arrowscrollbox-clicktoscroll"
+                  extends="chrome://global/content/bindings/scrollbox.xml#arrowscrollbox-clicktoscroll">
+    <implementation>
+
+      <!-- for Vertical Tabs extension -->
+      <property name="_verticalTabs" readonly="true"
+                onget="return this.orient == 'vertical';"/>
+
+      <field name="blockUnderflow">false</field>
+      <field name="blockOverflow">false</field>
+
+      <field name="_scrollButtonUpLeft">
+        document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-up");
+      </field>
+
+      <field name="_scrollButtonDownLeft">
+        document.getAnonymousElementByAttribute(this, "anonid", "scrollbutton-down");
+      </field>
+
+      <field name="innerbox" readonly="true">
+        document.getAnonymousElementByAttribute(this._scrollbox, "class", "box-inherit scrollbox-innerbox");
+      </field>
+
+      <field name="scrollboxPaddingTop"><![CDATA[
+        parseFloat(window.getComputedStyle(this._scrollbox).paddingTop);
+      ]]></field>
+      <field name="scrollboxPaddingBottom"><![CDATA[
+        parseFloat(window.getComputedStyle(this._scrollbox).paddingBottom);
+      ]]></field>
+
+      <!-- we replace tabbrowser.xml "tabbrowser-arrowscrollbox" binding with this one
+           Override scrollbox.xml method, since our scrollbox's children are
+           inherited from the binding parent -->
+      <method name="_getScrollableElements">
+        <body><![CDATA[
+          return Array.prototype.filter.call(document.getBindingParent(this).childNodes,
+            this._canScrollToElement, this);
+        ]]></body>
+      </method>
+
+      <method name="_canScrollToElement">
+        <parameter name="tab"/>
+        <body><![CDATA[
+          return !tab.pinned && !tab.hidden;
+        ]]></body>
+      </method>
+
+      <field name="_tabMarginLeft">null</field>
+      <field name="_tabMarginRight">null</field>
+      <method name="_calcTabMargins">
+        <parameter name="aTab"/>
+        <body><![CDATA[
+          if (this._tabMarginLeft === null || this._tabMarginRight === null) {
+            let tabMiddle = document.getAnonymousElementByAttribute(aTab, "class", "tab-background-middle");
+            let tabMiddleStyle = window.getComputedStyle(tabMiddle);
+            this._tabMarginLeft = parseFloat(tabMiddleStyle.marginLeft);
+            this._tabMarginRight = parseFloat(tabMiddleStyle.marginRight);
+          }
+        ]]></body>
+      </method>
+
+      <method name="_adjustElementStartAndEnd">
+        <parameter name="aTab"/>
+        <parameter name="tabStart"/>
+        <parameter name="tabEnd"/>
+        <body><![CDATA[
+          if (this.isMultiRow)
+            return [tabStart, tabEnd];
+
+          this._calcTabMargins(aTab);
+          if (this._tabMarginLeft < 0) {
+            tabStart += this._tabMarginLeft;
+          }
+          if (this._tabMarginRight < 0) {
+            tabEnd -= this._tabMarginRight;
+          }
+          return [tabStart, tabEnd];
+        ]]></body>
+      </method>
+
+      <constructor>
+        <![CDATA[
+          if (this.tabmix_inited)
+            return;
+
+          this.tabmix_inited = true;
+
+          this.offsetAmountToScroll = Tabmix.prefs.getBoolPref("offsetAmountToScroll");
+          this.offsetRatio = Tabmix.tabsUtils.closeButtonsEnabled ? 0.70 : 0.50;
+          this.minOffset = TabmixSvc.australis ? 25 : 50;
+          if (Tabmix.isVersion(570)) {
+            Object.defineProperty(this, 'scrollPosition', {
+              get: () => {
+                return this.orient == "vertical" ?
+                  this._scrollbox.scrollTop :
+                  this._scrollbox.scrollLeft;
+              },
+            });
+
+            Tabmix.changeCode(this, "scrollbox.ensureElementIsVisible")._replace(
+              'element.scrollIntoView',
+              `if (this.isMultiRow && Tabmix.tabsUtils.isElementVisible(element)) {
+                 return;
+               }
+               $&`
+            ).toCode();
+
+            Tabmix.changeCode(this, "scrollbox.scrollByIndex")._replace(
+              'this.ensureElementIsVisible',
+              'scrollIntoView', {flags: "g"}
+            )._replace(
+              '{', `{
+              const block = index > 0 ? "end" : "start";
+              const scrollIntoView = (element, aInstant) => {
+                if (!this.isMultiRow) {
+                  this.ensureElementIsVisible(element, aInstant);
+                  return;
+                }
+                if (!this._canScrollToElement(element)) {
+                  return;
+                }
+                const behavior = aInstant ? "instant" : "auto";
+                element.scrollIntoView({behavior, block});
+              };`
+            ).toCode();
+          } else {
+            Tabmix.changeCode(this, "scrollbox.ensureElementIsVisible")._replace(
+              'var amountToScroll',
+              '$&, offset = true'
+            )._replace(
+              'STOP_DISTANCE = 15;',
+              'STOP_DISTANCE = this.isMultiRow ? 3 : 15;'
+            )._replace(
+              'amountToScroll = this._isScrolling * STOP_DISTANCE;',
+              '{$& \
+               offset = false;}'
+            )._replace(
+              'this._stopSmoothScroll();',
+              '$& \
+               if (offset) {\
+                 amountToScroll += this.getOffsetAmountToScroll(element, amountToScroll);}'
+            ).toCode();
+
+            Tabmix.changeCode(this, "scrollbox._smoothScrollByPixels")._replace(
+              '{',
+              '$& \
+               amountToScroll = this._distanceToRow(amountToScroll);'
+            ).toCode();
+
+            // the ratio between tab width and tab height is approximately 6
+            // we multiply here the distance to get same animation effect.
+            Tabmix.changeCode(this._scrollAnim, "scrollbox._scrollAnim.start")._replace(
+              'Math.abs(distance)',
+              'Math.abs(distance * (this.scrollbox.isMultiRow ? this.scrollbox._verticalAnimation : 1))'
+            ).toCode();
+
+            // replace the original method
+            this.scrollByPixels = (px, aSmoothScroll) => {
+              if (this._isScrolling || aSmoothScroll) {
+                this.scrollPosition += px;
+              } else {
+                this.scrollPosition += this._distanceToRow(px);
+              }
+            };
+
+            if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 280)) {
+              Tabmix.changeCode(this, "scrollbox.scrollByIndex")._replace(
+                'var x = index > 0 ? rect[end] + 1 : rect[start] - 1;',
+                'var offset = this.isMultiRow ? 2 : 1;\n          ' +
+                'var x = index > 0 ? rect[end] + offset : rect[start] - offset;'
+              ).toCode();
+            }
+          }
+
+          // Bug 1387130 (landed in Firefox 57) - Use original tabstrip scrolling behaviour when using scrollbuttons
+          if (this._arrowScrollAnim) {
+            // we divide scrollDelta by the ratio between tab width and tab height
+            Tabmix.changeCode(this._arrowScrollAnim, "scrollbox._arrowScrollAnim.sample")._replace(
+              '0.5 * timePassed * scrollIndex',
+              'this.scrollbox.isMultiRow ? $& / this.scrollbox._verticalAnimation : $&'
+            ).toCode();
+          }
+
+          Tabmix.changeCode(this, "scrollbox._distanceScroll")._replace(
+            '{',
+            '{ if (aEvent.button && aEvent.button == 2) return;'
+          ).toCode();
+
+          if (Tabmix.isVersion(560)) {
+            let $LF = '\n            ';
+            Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")._replace(
+              'if (this.hasAttribute("notoverflowing")) {',
+              '$&' + $LF +
+              'let box = document.getElementById("tabmixScrollBox");' + $LF +
+              'Tabmix.setItem(box, "scrolledtoend", true);' + $LF +
+              'Tabmix.setItem(box, "scrolledtostart", true);'
+            )._replace(
+              'this.scrollboxPaddingLeft',
+              'this.isMultiRow ? this.scrollboxPaddingTop : $&',
+              {check: !Tabmix.isVersion(570)}
+            )._replace(
+              'this.scrollboxPaddingRight',
+              'this.isMultiRow ? this.scrollboxPaddingBottom : $&',
+              {check: !Tabmix.isVersion(570)}
+            )._replace(
+              'this._isRTLScrollbox',
+              '$& && !this.isMultiRow'
+            )._replace(
+              'if (leftOrTopElement',
+              `if (this.isMultiRow) {
+                  const _scrollboxPaddingLeft = typeof scrollboxPaddingLeft == "number" ? scrollboxPaddingLeft : 0;
+                  const _scrollboxPaddingRight = typeof scrollboxPaddingRight == "number" ? scrollboxPaddingRight : 0;
+                  if (leftOrTopElement &&
+                      leftOrTopEdge(leftOrTopElement) >= leftOrTopEdge(this._scrollbox) + _scrollboxPaddingLeft) {
+                    scrolledToStart = true;
+                  } else if (rightOrBottomElement &&
+                             rightOrBottomEdge(rightOrBottomElement) <= rightOrBottomEdge(this._scrollbox) - _scrollboxPaddingRight + 2) {
+                    scrolledToEnd = true;
+                  }
+                } else $&`
+            )._replace(
+              'if (scrolledToEnd) {',
+              'let box = document.getElementById("tabmixScrollBox");' + $LF +
+              '  Tabmix.setItem(box, "scrolledtoend", scrolledToEnd || null);' + $LF +
+              '  Tabmix.setItem(box, "scrolledtostart", scrolledToStart || null);' + $LF +
+              '  $&'
+            ).toCode();
+          } else if (Tabmix.isVersion(320, 270)) {
+            Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")._replace(
+              // when theme or extension add negative margin-bottom to the tab or
+              // tab content the scrollHeight can be larger than the actual
+              // inner-box height
+              'this.scrollClientSize + this.scrollPosition == this.scrollSize',
+              'this.isScrolledToEnd'
+            )._replace(
+              /(})(\)?)$/,
+              '          var box = document.getElementById("tabmixScrollBox");\n' +
+              '          Tabmix.setItem(box, "scrolledtoend", scrolledToEnd || null);\n' +
+              '          Tabmix.setItem(box, "scrolledtostart", scrolledToStart || null);\n' +
+              '$1$2'
+            ).toCode();
+          }
+
+          if (Tabmix.isVersion(570)) {
+            Tabmix.changeCode(this, "scrollbox.lineScrollAmount", {getter: true})._replace(
+              '{', `{
+              if (this.isMultiRow) {
+                return this.scrollSize / Tabmix.tabsUtils.lastTabRowNumber;
+              }`
+            ).defineProperty();
+          } else if (Tabmix.isVersion(530)) {
+            Tabmix.changeCode(this, "scrollbox.lineScrollAmount", {getter: true})._replace(
+              'totalWidth / elements.length',
+              'this.isMultiRow ? totalWidth / Tabmix.tabsUtils.lastTabRowNumber : $&'
+            ).defineProperty();
+          }
+
+          this._scrollButtonUpLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
+          this._scrollButtonDownLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
+
+          Services.prefs.addObserver("toolkit.scrollbox.", this.tabmixPrefObserver, false);
+          this.firstVisible = {tab: null, x: 0, y: 0};
+        ]]>
+      </constructor>
+
+      <destructor>
+        <![CDATA[
+          this._scrollButtonUpLeft.removeEventListener("contextmenu", this._createScrollButtonContextMenu, true);
+          this._scrollButtonDownLeft.removeEventListener("contextmenu", this._createScrollButtonContextMenu, true);
+
+          Services.prefs.removeObserver("toolkit.scrollbox.", this.tabmixPrefObserver);
+        ]]>
+      </destructor>
+
+      <method name="_createScrollButtonContextMenu">
+        <parameter name="aEvent"/>
+        <body><![CDATA[
+          var side = aEvent.target.className == "scrollbutton-up" ? "left" : "right";
+          TabmixAllTabs.createScrollButtonTabsList(aEvent, side);
+        ]]></body>
+      </method>
+
+      <field name="tabmixPrefObserver"><![CDATA[
+        ({
+          scrollbox: this,
+          observe(subject, topic, data) {
+            switch (data) {
+              case "toolkit.scrollbox.clickToScroll.scrollDelay":
+                this.scrollbox._scrollDelay = Services.prefs.getIntPref(data);
+                break;
+              case "toolkit.scrollbox.smoothScroll":
+                this.scrollbox.smoothScroll = Services.prefs.getBoolPref(data);
+                break;
+            }
+          }
+        });
+      ]]></field>
+
+      <!-- not in use in Firefox 57+ -->
+      <method name="getOffsetAmountToScroll">
+        <parameter name="element"/>
+        <parameter name="amountToScroll"/>
+        <body><![CDATA[
+          var offset = 0, isScrollingLeft = amountToScroll > 0;
+          if (amountToScroll !== 0 && this.offsetAmountToScroll &&
+              !this.isMultiRow) {
+            let tab;
+            if (isScrollingLeft)
+              tab = Tabmix.visibleTabs.next(element);
+            else
+              tab = Tabmix.visibleTabs.previous(element);
+            if (tab) {
+              offset = Math.min(this.minOffset, this.offsetRatio * Tabmix.getBoundsWithoutFlushing(tab).width);
+              if (!isScrollingLeft)
+                offset = Math.min(this.scrollPosition, offset);
+            }
+          }
+          return isScrollingLeft ? offset : -offset;
+        ]]></body>
+      </method>
+
+      <method name="_distanceToRow">
+        <parameter name="amountToScroll"/>
+        <body><![CDATA[
+          if (!this.isMultiRow)
+            return amountToScroll;
+          var rowHeight = this.singleRowHeight;
+          var position = this.scrollPosition;
+          return Math.round((amountToScroll + position) / rowHeight) * rowHeight - position;
+        ]]></body>
+      </method>
+
+      <field name="_verticalAnimation">4</field>
+      <field name="_smoothVerticalScroll">6</field>
+      <field name="_singleRowHeight">null</field>
+
+      <property name="isMultiRow" readonly="true">
+        <getter><![CDATA[
+          return this.getAttribute("flowing") == "multibar";
+        ]]></getter>
+      </property>
+
+      <!-- not in use in Firefox 57+ -->
+      <property name="isScrolledToEnd" readonly="true">
+        <getter><![CDATA[
+          let scrollPosition = this.scrollClientSize + this.scrollPosition;
+          if (this.orient == "vertical" && this.isMultiRow) {
+            const height = this.innerbox.getBoundingClientRect().height;
+            if (Math.round(height) - scrollPosition < 2) {
+              return true;
+            }
+          }
+          return scrollPosition == this.scrollSize;
+        ]]></getter>
+      </property>
+
+      <property name="singleRowHeight" readonly="true">
+        <getter><![CDATA[
+          if (this._singleRowHeight)
+            return this._singleRowHeight;
+
+          if (TabmixTabbar.visibleRows > 1) {
+            this._singleRowHeight = TabmixTabbar.singleRowHeight;
+            this._smoothVerticalScroll = Math.round(this._singleRowHeight / 4);
+            return this._singleRowHeight;
+          }
+
+          // still in one row
+          var tabs = document.getBindingParent(this);
+          var height = tabs.selectedItem.boxObject.height;
+          if (height)
+            return height;
+
+          // if selectedItem don't have height find other tab that does
+          for (let i = 0; i < tabs.childNodes.length; i++) {
+            let tab = tabs.childNodes[i];
+            let tabHeight = tab.boxObject.height;
+            if (tabHeight) {
+              return tabHeight;
+            }
+          }
+
+          return this._scrollbox.boxObject.height;
+        ]]></getter>
+      </property>
+
+      <method name="_enterVerticalMode">
+        <parameter name="blockUnderflow"/>
+        <body><![CDATA[
+          // when widthFitTitle is false we enter vertical mode only after we are in overflow
+          // if first or last tab is not visible enter vertical mode
+          // we can get here from new tabs, window resize tabs change width
+          // so we call this function after 3 events TabOpen, overflow and scroll
+          this.__needToSetVerticalOrient = false;
+          if (this.orient == "vertical")
+            return;
+
+          Tabmix.tabsUtils.adjustNewtabButtonVisibility();
+          var tabs = this._getScrollableElements();
+          if (!tabs.length)
+            return;
+          var isFirstTabVisible = Tabmix.tabsUtils.isElementVisible(tabs[0]);
+          var isLastTabVisible = Tabmix.tabsUtils.isElementVisible(tabs[tabs.length - 1]);
+          if (!isFirstTabVisible || !isLastTabVisible) {
+            // show Newtabbutton for the first time
+            // for the case last tab in row fill the all strip and the button
+            // is on the next row
+            Tabmix.tabsUtils.disAllowNewtabbutton = false;
+            this.orient = "vertical";
+            let tabBar = document.getBindingParent(this);
+            Tabmix.setItem(tabBar, "multibar", true);
+            Tabmix.setItem("TabsToolbar", "multibar", true);
+            if (Tabmix.tabsUtils.updateVerticalTabStrip() === null)
+              TabmixTabbar._failedToEnterVerticalMode = true;
+            if (blockUnderflow && this.orient == "vertical")
+              this.blockUnderflow = true;
+            this.updateOverflow(Tabmix.tabsUtils.overflow);
+          }
+        ]]></body>
+      </method>
+
+      <field name="firstVisibleRow">null</field>
+
+      <method name="setFirstTabInRow">
+        <parameter name="scroll"/>
+        <body><![CDATA[
+          var firstVisibleRow = Math.round(this.scrollPosition / this.singleRowHeight) + 1;
+          if (scroll) {
+            if (this.firstVisibleRow == firstVisibleRow)
+              return;
+          } else if (this.firstVisible.tab) {
+            let rect = this.firstVisible.tab.getBoundingClientRect();
+            if (this.firstVisible.x == rect.left && this.firstVisible.y == rect.top)
+              return;
+          }
+
+          this.firstVisibleRow = firstVisibleRow;
+
+          ///XXX check if we can set the margin with animation when we scroll
+          var end = Tabmix.ltr ? "right" : "left";
+          var containerEnd = this.scrollClientRect[end];
+          var topY = Tabmix.tabsUtils.topTabY;
+          var tabs = this._getScrollableElements();
+          var index, current = 0;
+          for (let i = 0; i < tabs.length; i++) {
+            let tab = tabs[i];
+            let row = tab.closing ? -1 : Tabmix.tabsUtils.getTabRowNumber(tab, topY);
+            if (row > current) {
+              current = row;
+              if (!tab.hasAttribute("tabmix-firstTabInRow"))
+                tab.setAttribute("tabmix-firstTabInRow", true);
+              else if (i > 0) {
+                // remove the margin when the tab have place in the previous row
+                let tabEnd = tabs[i - 1].getBoundingClientRect()[end] +
+                  (Tabmix.ltr ? tab.getBoundingClientRect().width : 0);
+                if (!Tabmix.compare(tabEnd, containerEnd, Tabmix.rtl)) {
+                  tab.removeAttribute("tabmix-firstTabInRow");
+                  // continue
+                  row = -1;
+                }
+              }
+              if (row == firstVisibleRow) {
+                let rect = tab.getBoundingClientRect();
+                this.firstVisible = {tab, x: rect.left, y: rect.top};
+                index = ++i;
+                break;
+              }
+            } else if (tab.hasAttribute("tabmix-firstTabInRow"))
+              tab.removeAttribute("tabmix-firstTabInRow");
+          }
+          for (let i = index; i < tabs.length; i++) {
+            let tab = tabs[i];
+            if (tab.hasAttribute("tabmix-firstTabInRow"))
+              tab.removeAttribute("tabmix-firstTabInRow");
+          }
+
+          // if a smoothScroll is in progress call ensureElementIsVisible again
+          // the amountToScroll changed when we changed firstTabInRow
+          if (this._scrollTarget) {
+            const instantScroll = !Tabmix.isVersion(570);
+            this.ensureElementIsVisible(this._scrollTarget, instantScroll);
+          }
+        ]]></body>
+      </method>
+
+      <field name="firstTabInRowMargin">0</field>
+      <method name="resetFirstTabInRow">
+        <body><![CDATA[
+          if (this.firstTabInRowMargin === 0) {
+            return;
+          }
+          this.firstTabInRowMargin = 0;
+          // getElementsByAttribute return a live nodList
+          // each time we remove the attribute we remove node from the list
+          var tabBar = document.getBindingParent(this);
+          var tabs = tabBar.getElementsByAttribute("tabmix-firstTabInRow", "*");
+          for (let i = 0, num = tabs.length; i < num; i++) {
+            tabs[0].removeAttribute("tabmix-firstTabInRow");
+          }
+          this.firstVisible = {tab: null, x: 0, y: 0};
+        ]]></body>
+      </method>
+
+      <method name="updateOverflow">
+        <parameter name="overflow"/>
+        <body><![CDATA[
+          // we get here after we update overflow from updateVerticalTabStrip
+          if (this.orient == "horizontal" ||
+              this.hasAttribute("notoverflowing") == !overflow)
+            return;
+
+          Tabmix.setItem(this, "notoverflowing", !overflow || null);
+
+          try {
+            // See bug 341047 and comments in overflow handler as to why
+            // try..catch is needed here
+            this._updateScrollButtonsDisabledState();
+
+            if (!overflow) {
+              let childNodes = this._getScrollableElements();
+              if (childNodes && childNodes.length) {
+                const instantScroll = Tabmix.isVersion(570);
+                this.ensureElementIsVisible(childNodes[0], instantScroll);
+              }
+            }
+          } catch (e) {
+            Tabmix.setItem(this, "notoverflowing", overflow || null);
+          }
+        ]]></body>
+      </method>
+
+    </implementation>
+
+    <handlers>
+      <handler event="underflow" phase="capturing"><![CDATA[
+        // filter underflow events which were dispatched on nested scrollboxes
+        if (event.originalTarget != this._scrollbox)
+          return;
+
+        if (this.orient == "vertical") {
+          // vertical scrollbox - Ignore horizontal events
+          if (event.detail == 1 || this.blockUnderflow) {
+            this.blockUnderflow = false;
+            return;
+          }
+        } else if (event.detail === 0) {
+          // horizontal scrollbox - Ignore vertical events
+          return;
+        }
+
+        var tabs = document.getBindingParent(this);
+        if (tabs.hasAttribute("multibar") && Tabmix.tabsUtils.overflow) {
+          //XXX don't do anything on Linux when hovering last tab and
+          // we show close button on tab on hover
+          if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
+              (!Tabmix.visibleTabs.last.hasAttribute("showbutton") &&
+               !Tabmix.visibleTabs.last.hasAttribute("showbutton_removed")))
+            Tabmix.tabsUtils.updateVerticalTabStrip();
+        } else {
+          Tabmix.tabsUtils.overflow = false;
+        }
+      ]]></handler>
+
+      <handler event="overflow"><![CDATA[
+        // filter overflow events which were dispatched on nested scrollboxes
+        if (event.originalTarget != this._scrollbox)
+          return;
+
+        if (this.orient == "vertical") {
+          // vertical scrollbox - Ignore horizontal events
+          if (event.detail == 1 || this.blockOverflow) {
+            this.blockOverflow = false;
+            return;
+          }
+        } else {
+          // horizontal scrollbox - Ignore vertical events
+          if (event.detail === 0) {
+            return;
+          }
+          if (this.isMultiRow && !this._enterVerticalModeTimeout) {
+            this.__needToSetVerticalOrient = true;
+            // when widthFitTitle is false we enter vertical mode only after we are in overflow
+            // if first or last tab is not visible enter vertical mode
+            this._enterVerticalModeTimeout = setTimeout(() => {
+              this._enterVerticalModeTimeout = null;
+              this._enterVerticalMode(true);
+            }, 25);
+            return;
+          }
+        }
+
+        if (this.isMultiRow) {
+          //XXX don't do anything on Linux when hovering last tab and
+          // we show close button on tab on hover
+          if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows == 1 ||
+              !Tabmix.visibleTabs.last.hasAttribute("showbutton"))
+            Tabmix.tabsUtils.updateVerticalTabStrip();
+        } else {
+          Tabmix.tabsUtils.overflow = true;
+        }
+      ]]></handler>
+
+      <handler event="scroll"><![CDATA[
+        if (this.__needToSetVerticalOrient)
+          this._enterVerticalMode();
+
+        var tabBar = document.getBindingParent(this);
+        tabBar._unlockTabSizing();
+
+        if (this.isMultiRow && tabBar.firstChild.pinned)
+          this.setFirstTabInRow(true);
+      ]]></handler>
+
+    </handlers>
+  </binding>
+
+  <!-- for tabbar on the bottom of the screen -->
+  <binding id="firefox-bottom-toolbar"
+           extends="chrome://browser/content/customizableui/toolbar.xml#toolbar">
+    <content>
+        <xul:hbox flex="1"
+                  xbl:inherits="orient,width"
+                  anonid="toolbar-innerbox"
+                  class="tabmixplus-toolbar-inner-box">
+          <xbl:children/>
+        </xul:hbox>
+    </content>
+    <implementation implements="nsIDOMEventListener">
+      <constructor>
+        <![CDATA[
+          Tabmix.bottomToolbarUtils.init();
+        ]]>
+      </constructor>
+    </implementation>
+  </binding>
+
+  <binding id="palemoon-bottom-toolbar"
+           extends="chrome://global/content/bindings/toolbar.xml#toolbar">
+    <content>
+      <xul:hbox flex="1"
+                xbl:inherits="orient,width"
+                anonid="toolbar-innerbox"
+                class="tabmixplus-toolbar-inner-box">
+        <xbl:children/>
+      </xul:hbox>
+    </content>
+    <implementation implements="nsIDOMEventListener">
+      <constructor>
+        <![CDATA[
+          Tabmix.bottomToolbarUtils.init();
+        ]]>
+      </constructor>
+    </implementation>
+  </binding>
+
+</bindings>

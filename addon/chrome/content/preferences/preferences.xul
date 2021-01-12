@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/global.css"?>
+<?xml-stylesheet href="chrome://mozapps/content/preferences/preferences.css"?>
+<?xml-stylesheet href="chrome://browser/skin/preferences/preferences.css"?>
+
+<?xml-stylesheet href="chrome://tabmixplus/skin/preferences.css"?>
+<?xml-stylesheet href="chrome://tabmixplus/skin/shortcuts.css"?>
+
+<!DOCTYPE prefwindow [
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
+%pref-tabmixDTD;
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd">
+%tabmixDTD;
+]>
+
+<prefwindow type="prefwindow" class="prefwindow"
+            id="TabMIxPreferences"
+            windowtype="mozilla:tabmixopt"
+            title="&page.header.title;"
+            xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            autosize="true"
+            onload="if (window.toString() == '[object ChromeWindow]') window.sizeToContent();"
+            ondialogaccept="gPrefWindow.deinit();"
+            ondialogcancel="gPrefWindow.deinit();"
+            ondialogextra1="gPrefWindow.onApply();"
+            ondialoghelp="openHelp();"
+            buttons="accept,cancel,extra1,extra2"
+            buttonlabelextra1="&apply.label;"
+            buttonlabelextra2="&settings.label;"
+            minwidth="527"
+            persist="screenX screenY">
+
+  <!-- scripts -->
+  <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+  <script type="application/javascript" src="chrome://tabmixplus/content/preferences/preferences.js"/>
+
+  <prefpane id="paneLinks" label="&tab.links;" class="prefpane"
+            src="chrome://tabmixplus/content/preferences/links.xul"/>
+  <prefpane id="paneEvents" label="&tab.events;" class="prefpane"
+            src="chrome://tabmixplus/content/preferences/events.xul"/>
+  <prefpane id="paneAppearance" label="&tab.appearance;" class="prefpane"
+            src="chrome://tabmixplus/content/preferences/appearance.xul"/>
+  <prefpane id="paneMouse" label="&tab.mouse;" class="prefpane"
+            src="chrome://tabmixplus/content/preferences/mouse.xul"/>
+  <prefpane id="paneMenu" label="&tab.menu;" class="prefpane"
+            src="chrome://tabmixplus/content/preferences/menu.xul"/>
+  <prefpane id="paneSession" label="&tab.session;" class="prefpane"
+            src="chrome://tabmixplus/content/preferences/session.xul"/>
+  <prefpane id="paneIncompatible" label="Error" class="prefpane"
+            src="chrome://tabmixplus/content/preferences/incompatible.xul"/>
+  <prefpane id="broadcasters" hidden="true" class="prefpane">
+    <preferences>
+      <preference id="pref_singleWindow" name="extensions.tabmix.singleWindow" type="bool"
+                  onchange="if (typeof gLinksPane == 'object') gLinksPane.singleWindow(this.value);"/>
+      <preference id="pref_undoClose"    name="extensions.tabmix.undoClose"    type="bool"/>
+    </preferences>
+    <broadcasterset id="main:Broadcaster">
+      <broadcaster id="obs_singleWindow" inverseDependency="true"/>
+      <broadcaster id="obs_undoClose"/>
+    </broadcasterset>
+  </prefpane>
+
+  <popupset>
+    <menupopup id="tm-settings" position="before_start">
+      <menuitem id="tm-defaults" label="&settings.default;" oncommand="defaultSetting();"/>
+      <menuitem id="tm-import" label="&settings.import;" oncommand="importData();"/>
+      <menuitem id="tm-export" label="&settings.export;" oncommand="exportData();"/>
+      <menuitem id="syncPrefs" label="&settings.sync;" oncommand="toggleSyncPreference(); this.checked=!this.checked;" type="checkbox"/>
+    </menupopup>
+  </popupset>
+
+</prefwindow>

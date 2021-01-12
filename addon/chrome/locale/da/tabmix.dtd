@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Lukkede faneblade">
+<!ENTITY closedtabsbtn.tooltip "Vis Lukkede faneblade-liste">
+<!ENTITY sessionbtn.tooltip "Vis og administrer dine sessioner">
+<!ENTITY tabslistbtn.label "Åbnede faneblade">
+<!ENTITY tabslistbtn.tooltip "Vis Åbnede faneblade-liste">
+<!ENTITY closedwindowsbtn.label "Lukkede vinduer">
+<!ENTITY closedwindowsbtn.tooltip "Vis Lukkede vinduer-liste">
+<!ENTITY page.header.title "Tab Mix Plus indstillinger">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus Sessions-styring">
+<!ENTITY session.Tools "Sessions-styring">
+<!ENTITY closedWin.label "Lukkede vinduer-liste">
+<!ENTITY duplicateTabMenu.label "Dupliker faneblad">
+<!ENTITY duplicateTabMenu.accesskey "D">
+<!ENTITY duplicateinWin.label "Dupliker i nyt vindue">
+<!ENTITY duplicateinWin.accesskey "p">
+<!ENTITY detachTab.label "Flyt til nyt vindue">
+<!ENTITY detachTab.accesskey "e">
+<!ENTITY mergeContext.label "Læg vinduer sammen">
+<!ENTITY mergeContext.accesskey "m">
+<!ENTITY renametab.label "Omdøb faneblad">
+<!ENTITY renametab.accesskey "b">
+<!ENTITY copytaburl.label "Kopier faneblads URL">
+<!ENTITY copytaburl.accesskey "U">
+<!ENTITY reloadother.label "Genindlæs andre faneblade">
+<!ENTITY reloadother.accesskey "r">
+<!ENTITY reloadleft.label "Genindlæs faneblade til venstre">
+<!ENTITY reloadleft.accesskey "l">
+<!ENTITY reloadright.label "Genindlæs faneblade til højre">
+<!ENTITY reloadright.accesskey "h">
+<!ENTITY autoReloadTab.label "Genindlæs faneblad hver">
+<!ENTITY autoReloadTab.accesskey "v">
+<!ENTITY autoReloadSite.label "Reload This Site Every">
+<!ENTITY autoReloadSite.accesskey "E">
+<!ENTITY afterthis.label "Efter dette faneblad">
+<!ENTITY bookmarktab.label "Bogmærk dette faneblad">
+<!ENTITY undoCloseListMenu.label "Lukkede faneblade-liste">
+<!ENTITY undoCloseListMenu.accesskey "L">
+<!ENTITY closeAllTabsMenu.label "Luk alle faneblade">
+<!ENTITY closeall.accesskey "a">
+<!ENTITY closeSimilarTab.label "Luk ens faneblade">
+<!ENTITY closeSimilarTab.accesskey "k">
+<!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
+<!ENTITY closeleft.accesskey "L">
+<!ENTITY docShellMenu.label "Tilladelser">
+<!ENTITY docShellMenu.accesskey "i">
+<!ENTITY freezeTabMenu.label "Frys faneblad">
+<!ENTITY freezeTabMenu.accesskey "f">
+<!ENTITY protectTabMenu.label "Beskyt faneblad">
+<!ENTITY protectTabMenu.tooltip "Beskytter faneblade mod lukning">
+<!ENTITY protectTabMenu.accesskey "y">
+<!ENTITY lockTabMenu.label "Lås faneblad">
+<!ENTITY lockTabMenu.tooltip "Alle links åbner i nyt faneblad">
+<!ENTITY lockTabMenu.accesskey "å">
+<!ENTITY bookmarktabs.label "Bogmærk alle faneblade">
+<!ENTITY linkhere.label "Åbn link i dette faneblad">
+<!ENTITY linkhere.accesskey "h">
+<!ENTITY linkBackgroundTab.label "Åbn link i faneblad i baggrunden">
+<!ENTITY linkForegroundTab.label "Åbn link i faneblad i forgrunden">
+<!ENTITY linkBackgroundTab.accesskey "b">
+<!ENTITY linkForegroundTab.accesskey "f">
+<!ENTITY openalllinks.label "Åbn links i nye faneblade">
+<!ENTITY openalllinks.accesskey "s">
+<!ENTITY linkwithhistory.label "Åbn links i dublet-faneblad">
+<!ENTITY linkwithhistory.accesskey "d">
+<!ENTITY tabsList.label "Åbne faneblade-liste">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Billede">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Omdiriger">
+<!ENTITY allowPlugin.label "Plugin">
+<!ENTITY allowFrame.label "Ramme">
+<!ENTITY restoreincurrent.label "Genetabler til nuværende faneblad">
+<!ENTITY restoreincurrent.accesskey "u">
+<!ENTITY restoreinwin.label "Genetabler til nyt vindue">
+<!ENTITY restoreinwin.accesskey "v">
+<!ENTITY restoreintab.label "Genetabler til nyt faneblad">
+<!ENTITY restoreintab.accesskey "t">
+<!ENTITY restoretab.label "Genetabler faneblad">
+<!ENTITY restoretab.accesskey "r">
+<!ENTITY bookmark.label "Bogmærk dette link...">
+<!ENTITY bookmark.accesskey "B">
+<!ENTITY deletelist.label "Slet fra listen">
+<!ENTITY deletelist.accesskey "e">
+<!ENTITY settings.label "Indstillinger">
+<!ENTITY saveWindow.label "Gem dette vindue">
+<!ENTITY saveAllWindows.label "Gem alle vinduer">
+<!ENTITY sm.context.overwrite "Genetabler, overskriv eksisterende vindue(r)">
+<!ENTITY sm.context.overwrite.key "o">
+<!ENTITY sm.context.restore.new "Genetabler til ny(e) vindue(r)">
+<!ENTITY sm.context.restore.newkey "n">
+<!ENTITY sm.context.replacethis "Erstat med dette vindue">
+<!ENTITY sm.context.replacethis.key "t">
+<!ENTITY sm.context.replaceall "Erstat med alle vinduer">
+<!ENTITY sm.context.replaceall.key "a">
+<!ENTITY sm.context.add "Tilføj dette vindue">
+<!ENTITY sm.context.add.key "v">
+<!ENTITY sm.context.addall "Tilføj alle vinduer">
+<!ENTITY sm.context.addall.key "i">
+<!ENTITY sm.context.save "Gem">
+<!ENTITY sm.context.save.key "G">
+<!ENTITY sm.context.rename "Omdøb">
+<!ENTITY sm.context.rename.key "b">
+<!ENTITY sm.context.bookmarkSession "Bookmark Session">
+<!ENTITY sm.context.bookmarkSession.key "B">
+<!ENTITY sm.context.delete "Slet">
+<!ENTITY sm.context.delete.key "s">
+<!ENTITY sm.context.deleteall "Slet alle">
+<!ENTITY sm.context.deleteall.key "l">
+<!ENTITY sm.context.startup "Sæt som opstarts-session">
+<!ENTITY sm.context.startup.key "p">
+<!ENTITY sm.context.details "Vis tællere, dato og tid i sessionsmenu">
+<!ENTITY sm.context.details.key "æ">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "Sorterede faneblade">
+<!ENTITY sortedTabs.tooltip "Markér for at vise listen sorteret alfabetisk">
+<!ENTITY enable.label "Aktiveret">
+<!ENTITY custom.label "Brugertilpasset">
+<!ENTITY enableTabs.label "Slå alle faneblade til">
+<!ENTITY disableTabs.label "Slå alle faneblade fra">
+<!ENTITY seconds.label "sekunder">
+<!ENTITY minutes.label "minutter">
+<!ENTITY minute.label "minut">
+<!ENTITY hideTabBar.label "Skjul fanebladslinjen">
+<!ENTITY hideTabBar.never.label "Aldrig">
+<!ENTITY hideTabBar.never.key "l">
+<!ENTITY hideTabBar.oneTab.label "When you have only one tab">
+<!ENTITY hideTabBar.onOneTab.key "N">
+<!ENTITY hideTabBar.always.label "Altid">
+<!ENTITY hideTabBar.always.key "A">

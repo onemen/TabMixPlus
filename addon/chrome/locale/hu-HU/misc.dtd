@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Betöltés a háttérben">
+<!ENTITY searchTabFocus.accesskey "B">
+<!ENTITY renametab.panel.title "Lap címének szerkesztése">
+<!ENTITY renametab.reset.label "Alapértelmezett cím visszaállítása">
+<!ENTITY title.label "Cím">
+<!ENTITY default.label "Alapértelmezett">
+<!ENTITY renametab.permanently.label "Lap átnevezése a webcímtől függetlenül">
+<!ENTITY renametab.permanently.tooltip "Laptörténet - a új név megmarad, amikor a webcím változik">
+<!ENTITY forum.label "Fórum">
+<!ENTITY faq.label "GYIK (FAQ)">
+<!ENTITY help.label "Súgó">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Válassza ki az időközt a listáról vagy írjon be egyet">
+<!ENTITY specifyreload.label "Újratöltési idő megadása">
+<!ENTITY sanitizer.entry "Személyes adatok törlése">
+<!ENTITY sanitizer.entry.accesskey "S">
+<!ENTITY sanitizer.entry.confirm "Valóban le kívánja törölni az összes elmentett munkamenetet és a biztonsági másolatokat is?">

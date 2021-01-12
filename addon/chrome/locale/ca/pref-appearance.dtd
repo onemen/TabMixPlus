@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Styles">
+<!ENTITY styles.label "Personalitza els estils">
+<!ENTITY currentTab.label "Pestanya actual">
+<!ENTITY unloadedTabs.label "Pestanyes no carregades">
+<!ENTITY unreadTab.label "Pestanyes pendents de llegir">
+<!ENTITY hideRGB.label "Amaga RGB">
+<!ENTITY showRGB.label "Mostra RGB">
+<!ENTITY unreadAfterReload.label "marca les pestanyes com a pendents de llegir en tornar a carregar">
+<!ENTITY disableBackground.label "Disable custom background colors">
+<!ENTITY squaredTabs.label "Aplica el color de fons en les pestanyes quadrades">
+<!ENTITY otherTabs.label "Altres pestanyes">
+<!ENTITY italic.label "Cursiva">
+<!ENTITY bold.label "Negreta">
+<!ENTITY underline.label "Subratllat">
+<!ENTITY textcolor.label "Color del text">
+<!ENTITY bgColor.label "Color de fons">
+<!ENTITY bgTopColor.label "superior">
+<!ENTITY bgBottomColor.label "inferior">
+<!ENTITY useThis.label "utilitza aquest estil per a">
+<!ENTITY opacity.label "opacitat">

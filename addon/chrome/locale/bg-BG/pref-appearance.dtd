@@ -1,0 +1,20 @@
+<!ENTITY tabStyles.label "Стилове">
+<!ENTITY styles.label "Настройка на стилове">
+<!ENTITY currentTab.label "Текущ подпрозорец">
+<!ENTITY unloadedTabs.label "Незаредени подпрозорци">
+<!ENTITY unreadTab.label "Непрочетени подпрозорци">
+<!ENTITY hideRGB.label "Скриване на RGB">
+<!ENTITY showRGB.label "Показване на RGB">
+<!ENTITY unreadAfterReload.label "след презареждане, подпрозорецът да се маркира като непрочетен">
+<!ENTITY disableBackground.label "Изключване на потребителските цветове на фона">
+<!ENTITY squaredTabs.label "Стилът на фона да се приложи върху квадратни подпрозорци">
+<!ENTITY otherTabs.label "Други подпрозорци">
+<!ENTITY italic.label "Курсив">
+<!ENTITY bold.label "Удебелен">
+<!ENTITY underline.label "Подчертан">
+<!ENTITY textcolor.label "Цвят на текста">
+<!ENTITY bgColor.label "Цвят на фона">
+<!ENTITY bgTopColor.label "отгоре">
+<!ENTITY bgBottomColor.label "отдолу">
+<!ENTITY useThis.label "Използване на стил за">
+<!ENTITY opacity.label "непрозрачност">

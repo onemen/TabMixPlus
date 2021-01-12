@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
+%pref-tabmixDTD;
+]>
+
+<overlay id="LinksPaneOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="paneLinks" onpaneload="gLinksPane.init();" helpTopic="Links">
+
+    <!-- scripts -->
+    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/links.js"/>
+
+    <!-- preferences - list all preferences in this pane -->
+    <preferences>
+      <preference id="pref_generalWindowOpen"  name="browser.link.open_newwindow"      type="int"/>
+      <preference id="pref_externalLinkTarget" name="browser.link.open_newwindow.override.external"
+                                                                                       type="int"/>
+      <preference id="pref_divertedWindowOpen"
+                  name="browser.link.open_newwindow.restriction"                       type="int"/>
+      <preference id="pref_linkTarget"         name="extensions.tabmix.linkTarget"     type="bool"/>
+      <preference id="pref_targetIsFrame"      name="extensions.tabmix.targetIsFrame"  type="bool"/>
+      <preference id="pref_filetypeEnable"     name="extensions.tabmix.enablefiletype" type="bool"/>
+      <preference id="pref_opentabforLinks"    name="extensions.tabmix.opentabforLinks" type="int"
+                  notChecked="0"
+                  onchange="gPrefWindow.setDisabled('obs_opentabforAllLinks', this.value == 1);"/>
+    </preferences>
+
+    <tabbox>
+      <tabs class="tabs-hidden">
+        <!-- dummy label for Ubuntu default theme -->
+        <tab label="tab"/>
+        <tab label="tab"/>
+      </tabs>
+      <tabpanels>
+        <tabpanel>
+          <groupbox flex="1">
+            <hbox align="center">
+              <!-- General Open New Windows Setting -->
+              <label flex="1" value="&generalWindowOpen.label;" control="generalWindowOpen"/>
+              <menulist id="generalWindowOpen" preference="pref_generalWindowOpen">
+                <menupopup>
+                  <menuitem value="2" label="&linkTarget.window;" observes="obs_singleWindow"/>
+                  <menuitem value="3" label="&linkTarget.tab;"/>
+                  <menuitem value="1" label="&linkTarget.current;"/>
+                </menupopup>
+              </menulist>
+            </hbox>
+            <checkbox_tmp id="externalLink" label="&externalLink.useSeparate.label;"
+                      oncommand="gLinksPane.externalLinkValue(this.checked);"/>
+            <hbox align="center" class="indent">
+              <!-- Open external links in: New Window, New Tab, Current Browser -->
+              <label flex="1" value="&externalLinkTarget.label;" control="externalLinkTarget" observes="obs_externalLink"/>
+              <menulist id="externalLinkTarget" preference="pref_externalLinkTarget" observes="obs_externalLink"
+                        onsyncfrompreference="gLinksPane.updateExternalLinkCheckBox(this);">
+                <menupopup>
+                  <menuitem value="-1" label="&linkTarget.tab;">
+                    <observes element="generalWindowOpen" attribute="label"/>
+                  </menuitem>
+                  <menuitem value="2" label="&linkTarget.window;" observes="obs_singleWindow"/>
+                  <menuitem value="3" label="&linkTarget.tab;"/>
+                  <menuitem value="1" label="&linkTarget.current;"/>
+                </menupopup>
+              </menulist>
+            </hbox>
+            <hbox align="center">
+              <!-- Open only these JavaScript popups in new tabs: All Popups, Popups That Create resize Windows, No Popups. -->
+              <label flex="1" value="&divertedWindowOpen.label;" control="divertedWindowOpen"/>
+                <menulist id="divertedWindowOpen" preference="pref_divertedWindowOpen">
+                  <menupopup>
+                    <menuitem value="0" label="&divertedWindowOpen.all;"/>
+                    <menuitem value="2" label="&divertedWindowOpen.some;" observes="obs_singleWindow"/>
+                    <menuitem value="1" label="&divertedWindowOpen.none;" observes="obs_singleWindow"/>
+                  </menupopup>
+                </menulist>
+            </hbox>
+            <separator/>
+            <separator/>
+            <hbox align="center">
+              <checkbox_tmp id="filetypeEnable" label="&download.label;" preference="pref_filetypeEnable"/>
+              <spacer flex="1"/>
+              <button class="content-help"
+                      oncommand="openHelp('links#file-type-editor');"/>
+              <button id="advancedSetting" label="&edit.label;…" observes="obs_filetypeEnable"
+                      oncommand="gLinksPane.openFiletypeEditor();"/>
+            </hbox>
+            <!-- Special control of links -->
+            <separator/>
+            <checkbox_tmp id="forceLinkToTab" label="&speLink.label;"
+                          preference="pref_opentabforLinks"
+                          control="opentabforLinks"
+                          onsyncfrompreference="return gPrefWindow.syncfrompreference(this);"
+                          onsynctopreference="return gPrefWindow.synctopreference(this, 1);"/>
+            <radiogroup id="opentabforLinks" align="start" preference="pref_opentabforLinks" class="indent">
+              <radio value="1" label="&speLink.allLinks;" observes="obs_opentabforLinks"/>
+              <radio value="2" label="&speLink.external;" observes="obs_opentabforLinks"/>
+            </radiogroup>
+            <!-- Force link with target attribute to open in current tab -->
+            <checkbox_tmp id="linkTarget" label="&linkTarget.label;" preference="pref_linkTarget"
+                          observes="obs_opentabforAllLinks"/>
+            <checkbox_tmp id="targetIsFrame" label="&targetIsFrame.label;" preference="pref_targetIsFrame"/>
+            <separator/>
+            <!-- Enable Single Window Mode -->
+            <checkbox_tmp id="singleWindow" label="&singleWindow.label;" preference="pref_singleWindow"/>
+
+          </groupbox>
+        </tabpanel>
+      </tabpanels>
+    </tabbox>
+
+    <broadcasterset id="paneLinks:Broadcaster">
+      <broadcaster id="obs_filetypeEnable"/>
+      <broadcaster id="obs_opentabforLinks"/>
+    </broadcasterset>
+
+    <broadcasterset>
+      <broadcaster id="obs_externalLink"/>
+      <broadcaster id="obs_opentabforAllLinks"/>
+    </broadcasterset>
+
+  </prefpane>
+</overlay>

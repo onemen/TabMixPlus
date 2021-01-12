@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Suletud kaardid">
+<!ENTITY closedtabsbtn.tooltip "Näita suletud kaartide loendit">
+<!ENTITY sessionbtn.tooltip "Vaata ja halda oma seansse">
+<!ENTITY tabslistbtn.label "Avatud kaardid">
+<!ENTITY tabslistbtn.tooltip "Näita avatud kaartide loendit">
+<!ENTITY closedwindowsbtn.label "Suletud aknad">
+<!ENTITY closedwindowsbtn.tooltip "Näita suletud akende loendit">
+<!ENTITY page.header.title "Tab Mix Plus - Sätted">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus seansside haldur">
+<!ENTITY session.Tools "Seansside haldur">
+<!ENTITY closedWin.label "Suletud akende loend">
+<!ENTITY duplicateTabMenu.label "Tee kaardist koopia">
+<!ENTITY duplicateTabMenu.accesskey "O">
+<!ENTITY duplicateinWin.label "Tee kaardist koopia uude aknasse">
+<!ENTITY duplicateinWin.accesskey "U">
+<!ENTITY detachTab.label "Teisalda uude aknasse">
+<!ENTITY detachTab.accesskey "E">
+<!ENTITY mergeContext.label "Ühenda aknad">
+<!ENTITY mergeContext.accesskey "Ü">
+<!ENTITY renametab.label "Muuda kaardi nimi">
+<!ENTITY renametab.accesskey "N">
+<!ENTITY copytaburl.label "Kopeeri kaardi URL">
+<!ENTITY copytaburl.accesskey "O">
+<!ENTITY reloadother.label "Laadi teised kaardid uuesti">
+<!ENTITY reloadother.accesskey "U">
+<!ENTITY reloadleft.label "Laadi uuesti vasakule jäävad kaardid">
+<!ENTITY reloadleft.accesskey "V">
+<!ENTITY reloadright.label "Laadi uuesti paremale jäävad kaardid">
+<!ENTITY reloadright.accesskey "P">
+<!ENTITY autoReloadTab.label "Kaardi automaatne uuestilaadimine">
+<!ENTITY autoReloadTab.accesskey "D">
+<!ENTITY autoReloadSite.label "Selle saidi automaatne uuestilaadimine">
+<!ENTITY autoReloadSite.accesskey "M">
+<!ENTITY afterthis.label "Praeguse kaardi järele">
+<!ENTITY bookmarktab.label "Lisa see kaart järjehoidjatesse">
+<!ENTITY undoCloseListMenu.label "Suletud kaardid">
+<!ENTITY undoCloseListMenu.accesskey "D">
+<!ENTITY closeAllTabsMenu.label "Sulge kõik kaardid">
+<!ENTITY closeall.accesskey "Õ">
+<!ENTITY closeSimilarTab.label "Sulge sarnased kaardid">
+<!ENTITY closeSimilarTab.accesskey "S">
+<!ENTITY closeTabsToLeft.label "Sulge vasakule jäävad kaardid">
+<!ENTITY closeleft.accesskey "V">
+<!ENTITY docShellMenu.label "Luba kasutada">
+<!ENTITY docShellMenu.accesskey "B">
+<!ENTITY freezeTabMenu.label "Külmuta kaart">
+<!ENTITY freezeTabMenu.accesskey "M">
+<!ENTITY protectTabMenu.label "Kaitse kaarti">
+<!ENTITY protectTabMenu.tooltip "Kaitse kaarte sulgemise eest">
+<!ENTITY protectTabMenu.accesskey "K">
+<!ENTITY lockTabMenu.label "Lukusta kaart">
+<!ENTITY lockTabMenu.tooltip "Kõik lingid avatakse uuel kaardil">
+<!ENTITY lockTabMenu.accesskey "R">
+<!ENTITY bookmarktabs.label "Lisa kõik kaardid järjehoidjatesse">
+<!ENTITY linkhere.label "Ava link sellel kaardil">
+<!ENTITY linkhere.accesskey "V">
+<!ENTITY linkBackgroundTab.label "Ava link taustal oleval kaardil">
+<!ENTITY linkForegroundTab.label "Ava link esiplaanil oleval kaardil">
+<!ENTITY linkBackgroundTab.accesskey "A">
+<!ENTITY linkForegroundTab.accesskey "E">
+<!ENTITY openalllinks.label "Ava lingid uutel kaartidel">
+<!ENTITY openalllinks.accesskey "U">
+<!ENTITY linkwithhistory.label "Ava link kopeeritud kaardil">
+<!ENTITY linkwithhistory.accesskey "K">
+<!ENTITY tabsList.label "Avatud kaartide loend">
+<!ENTITY tabsList.accesskey "L">
+<!ENTITY allowImage.label "Pilt">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Ümbersuunamine">
+<!ENTITY allowPlugin.label "Plugin">
+<!ENTITY allowFrame.label "Paneelid">
+<!ENTITY restoreincurrent.label "Taasta praegusele kaardile">
+<!ENTITY restoreincurrent.accesskey "P">
+<!ENTITY restoreinwin.label "Taasta uude aknasse">
+<!ENTITY restoreinwin.accesskey "U">
+<!ENTITY restoreintab.label "Taasta uuele kaardile">
+<!ENTITY restoreintab.accesskey "U">
+<!ENTITY restoretab.label "Taasta kaart">
+<!ENTITY restoretab.accesskey "R">
+<!ENTITY bookmark.label "Pane see link järjehoidjatesse…">
+<!ENTITY bookmark.accesskey "N">
+<!ENTITY deletelist.label "Kustuta loendist">
+<!ENTITY deletelist.accesskey "D">
+<!ENTITY settings.label "Sätted">
+<!ENTITY saveWindow.label "Salvesta see aken">
+<!ENTITY saveAllWindows.label "Salvesta kõik aknad">
+<!ENTITY sm.context.overwrite "Taasta, kirjutades olemasoleva(d) akna(d) üle">
+<!ENTITY sm.context.overwrite.key "Ü">
+<!ENTITY sm.context.restore.new "Taasta uude aknasse (uutesse akendesse)">
+<!ENTITY sm.context.restore.newkey "U">
+<!ENTITY sm.context.replacethis "Asenda, selle aknaga">
+<!ENTITY sm.context.replacethis.key "N">
+<!ENTITY sm.context.replaceall "Asenda, kõikide akendega">
+<!ENTITY sm.context.replaceall.key "D">
+<!ENTITY sm.context.add "Lisa see aken">
+<!ENTITY sm.context.add.key "E">
+<!ENTITY sm.context.addall "Lisa kõik aknad">
+<!ENTITY sm.context.addall.key "D">
+<!ENTITY sm.context.save "Salvesta">
+<!ENTITY sm.context.save.key "S">
+<!ENTITY sm.context.rename "Muuda nimi">
+<!ENTITY sm.context.rename.key "M">
+<!ENTITY sm.context.bookmarkSession "Lisa seanss järjehoidjatesse">
+<!ENTITY sm.context.bookmarkSession.key "s">
+<!ENTITY sm.context.delete "Kustuta">
+<!ENTITY sm.context.delete.key "K">
+<!ENTITY sm.context.deleteall "Kustuta kõik">
+<!ENTITY sm.context.deleteall.key "T">
+<!ENTITY sm.context.startup "Määra käivitus-seansiks">
+<!ENTITY sm.context.startup.key "K">
+<!ENTITY sm.context.details "Näita Seansside menüüs loendureid, kuupäevi ja kellaaegu">
+<!ENTITY sm.context.details.key "Ü">
+<!ENTITY tab.key "K">
+<!ENTITY window.key "A">
+<!ENTITY merge.key "Ü">
+<!ENTITY sortedTabs.label "Sorteeritud kaardid">
+<!ENTITY sortedTabs.tooltip "Märgista, et näidata tähestikuliselt järjestatud loendit">
+<!ENTITY enable.label "Luba">
+<!ENTITY custom.label "Kasutajamääratud">
+<!ENTITY enableTabs.label "Luba kõikidel kaartidel">
+<!ENTITY disableTabs.label "Keela kõikidel kaartidel">
+<!ENTITY seconds.label "sekundit">
+<!ENTITY minutes.label "minutit">
+<!ENTITY minute.label "minut">
+<!ENTITY hideTabBar.label "Peida kaartide riba">
+<!ENTITY hideTabBar.never.label "Mitte kunagi">
+<!ENTITY hideTabBar.never.key "M">
+<!ENTITY hideTabBar.oneTab.label "Kui avatud on ainult üks kaart">
+<!ENTITY hideTabBar.onOneTab.key "K">
+<!ENTITY hideTabBar.always.label "Alati">
+<!ENTITY hideTabBar.always.key "A">

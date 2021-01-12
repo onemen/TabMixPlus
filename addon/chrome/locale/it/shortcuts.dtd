@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "Scorciatoie da tastiera">
+<!ENTITY shortcuts.edit "Modifica delle scorciatoie da tastiera">
+<!ENTITY shortcuts.showAll "Mostra tutte">
+<!ENTITY shortcuts.hideUnused "Nascondi le scorciatoie da tastiera non utilizzate">
+<!ENTITY shortcuts.warning "Alcune scorciatoie da tastiera vengono utilizzate da altri comandi">
+<!ENTITY shortcuts.showDetails "Mostra i dettagli">
+<!ENTITY shortcuts.hideDetails "Nascondi i dettagli">
+<!ENTITY shortcuts.switchToLast "Switch to last active tab">
+<!ENTITY shortcuts.slideshow "Attiva/disattiva la rotazione delle schede">
+<!ENTITY shortcuts.toggleFLST "Attiva/disattiva il portar in primo piano dopo la chiusura della scheda attuale">
+<!ENTITY shortcuts.toggleFLST.tooltip "Attiva/disattiva il portar in primo piano scheda a destra / ultima selezionata">
+<!ENTITY shortcuts.placeholder "Premere i tasti della scorciatoia">
+<!ENTITY shortcuts.reset "Ripristina">
+<!ENTITY shortcuts.clear "Elimina">
+<!ENTITY shortcuts.inuse "La scorciatoia da tastiera viene già utilizzata da">

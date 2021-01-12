@@ -1,0 +1,319 @@
+<!ENTITY tab.links "リンク">
+<!ENTITY tab.events "イベント">
+<!ENTITY tab.mouse "マウス">
+<!ENTITY tab.appearance "表示">
+<!ENTITY tab.menu "メニュー">
+<!ENTITY tab.session "セッション">
+<!ENTITY tab.incompatible "エラー">
+<!ENTITY apply.label "適用">
+<!ENTITY settings.export "設定をエクスポート">
+<!ENTITY settings.import "設定をインポート">
+<!ENTITY settings.sync "Sync 設定">
+<!ENTITY settings.default "既定値に戻す">
+<!ENTITY settings.revert "元に戻す">
+<!ENTITY generalWindowOpen.label "[新しいウィンドウに開く] リンクの開く場所:">
+<!ENTITY externalLink.useSeparate.label "他のアプリケーションから開くリンクは以下の設定を適用">
+<!ENTITY externalLinkTarget.label "外部から読み込まれたリンクを開く場所:">
+<!ENTITY linkTarget.tab "新しいタブ">
+<!ENTITY linkTarget.window "新しいウィンドウ">
+<!ENTITY linkTarget.current "現在のタブ">
+<!ENTITY linkTarget.accesskey "C">
+<!ENTITY divertedWindowOpen.label "JavaScript ポップアップの設定:">
+<!ENTITY divertedWindowOpen.all "すべてのポップアップをタブで開く">
+<!ENTITY divertedWindowOpen.some "サイズ指定されたポップアップを許可">
+<!ENTITY divertedWindowOpen.none "すべてのポップアップを許可">
+<!ENTITY linkTarget.label "Target 属性が設定されているリンクを現在のタブで開く">
+<!ENTITY targetIsFrame.label "既存のフレームに Target 設定されているリンクを現在のタブで開く">
+<!ENTITY download.label "ファイルをダウンロードするときに空白タブが開かないようにする">
+<!ENTITY edit.label "編集">
+<!ENTITY speLink.label "強制的に新しいタブで開くリンクの種類:">
+<!ENTITY speLink.none "なし">
+<!ENTITY speLink.allLinks "すべてのリンク">
+<!ENTITY speLink.external "他サイトへのリンク">
+<!ENTITY singleWindow.label "シングルウィンドウモードを有効にする">
+<!ENTITY newTabs.label "新しいタブ">
+<!ENTITY tabOpen.label "タブを開く">
+<!ENTITY tabFocus.label "タブのフォーカス">
+<!ENTITY tabClose.label "タブを閉じる">
+<!ENTITY tabMerge.label "タブのマージ">
+<!ENTITY tabFeature.label "タブ機能">
+<!ENTITY newtab.label "新しいタブに:">
+<!ENTITY replaceLastTabWith1.label "最後のタブを閉じたときに置き換える">
+<!ENTITY newtab.blank "空白ページを表示">
+<!ENTITY newtab.home "ホームページを表示">
+<!ENTITY newtab.current "現在のページを表示">
+<!ENTITY newtab.duplicate "現在のページを複製して表示">
+<!ENTITY newtab.location.1 "指定ページを表示">
+<!ENTITY newtab.placeholder.label "新しいタブの既定ページ">
+<!ENTITY location.label.1 "アドレス">
+<!ENTITY focusContent.label "空白ページ以外を読み込むときはコンテンツにフォーカスする">
+<!ENTITY openTabNext.label "新しいタブを現在のタブの直後に開く">
+<!ENTITY openOtherTabNext.label "他のタブを現在のタブの直後に開く">
+<!ENTITY relatedAfterCurrent.label "現在のタブに関連する場合のみ">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "複製したタブを元のタブの直後に開く">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "タブを開く順番を変更する">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "新しいタブを現在のタブから最後に開いたタブの直後に開く(最後にフォーカスしたタブに続いて)">
+<!ENTITY moveSwitchToTabNext.label "現在のタブの直後に入れ替えて開く">
+<!ENTITY loadTabsProgressively.label "次の指定以上のタブを開くときは順番に読み込む">
+<!ENTITY restoreOnDemand.label "次の指定以上のタブを開くときは選択されるまで読み込まない">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "タブ">
+<!ENTITY lockTabs.label "タブのロック">
+<!ENTITY lockNewTabs.label "新しいタブをロックする">
+<!ENTITY lockAppTabs.label "ピン留めしたアプリケーションタブをロックする">
+<!ENTITY updateLockState.label "タブを開くときは上の設定を適用する">
+<!ENTITY openNewTab.label "以下を新しいタブに読み込む:">
+<!ENTITY openBookmarks.label "ブックマーク">
+<!ENTITY openPlacesGroups.label "ブックマークや履歴のグループ">
+<!ENTITY openPlacesGroups.tooltip "ブックマークや履歴のグループを開くとき、既存のタブを上書きしない">
+<!ENTITY openHistory.label "履歴">
+<!ENTITY openUrl.label "ロケーションバー">
+<!ENTITY openSearch.label "検索バー">
+<!ENTITY middlecurrent1.label "中クリックまたは Ctrl + クリックしたアイテムを現在のタブで開く">
+<!ENTITY middlecurrent.tooltip "ブックマーク、履歴、ロックされたタブにのみ適用されます">
+<!ENTITY tabFocus.caption "以下のタブにフォーカス:">
+<!ENTITY selectTab.label "リンクから開いたタブ">
+<!ENTITY selectDivertedTab.label "新しいウィンドウに開くはずだったタブ">
+<!ENTITY selectTabFromExternal.label "他のアプリケーション">
+<!ENTITY selectTabCommand.label "[新しいタブ] コマンドで開いたタブ">
+<!ENTITY contextMenuSearch.label "コンテキストメニューから検索">
+<!ENTITY selectTabBH.label "ブックマーク／履歴から開いたタブ">
+<!ENTITY duplicateTab.label "複製したタブ">
+<!ENTITY inversefocus2.label "以下は中クリックまたは Ctrl + クリックで逆フォーカスする:">
+<!ENTITY warning.caption.label "確認">
+<!ENTITY warnOnCloseMultipleTabs.label "複数のタブを閉じるときは確認する">
+<!ENTITY warnOnCloseProtected1.label "保護されたタブのあるウィンドウを閉じるときは確認する">
+<!ENTITY warnOnCloseWindow1.label "複数のタブがあるウィンドウを閉じるときは確認する">
+<!ENTITY lasttab.caption.label "最後のタブを閉じるとき：">
+<!ENTITY keepWindow.label.3.1 "最後のタブを閉じたとき、ウィンドウ自体は閉じない">
+<!ENTITY keeptab.label "タブバーを常に表示するよう設定している場合、最後のタブを閉じられないようにする">
+<!ENTITY closeOnMerge.label "タブのマージ後、ウィンドウを閉じる">
+<!ENTITY warnOnMerge.label "そのとき、マージされないタブがある場合は警告を表示する">
+<!ENTITY currenttab.caption.label "現在のタブを閉じるとき：">
+<!ENTITY focusTab.labelBegin "現在のタブを閉じたときのフォーカスの移動場所:">
+<!ENTITY focusTab.firstTab "先頭のタブ">
+<!ENTITY focusTab.leftTab "左側のタブ">
+<!ENTITY focusTab.rightTab "右側のタブ">
+<!ENTITY focusTab.lastTab "最後のタブ">
+<!ENTITY focusTab.lastSelectedTab "最後に選択したタブ">
+<!ENTITY focusTab.openerTab "リンク元／右側のタブ">
+<!ENTITY focusTab.openerTab.rtl "リンク元／左側のタブ">
+<!ENTITY focusTab.lastOpenedTab "最後に開いたタブ">
+<!ENTITY undoClose.label "[閉じたタブを復元]の機能を有効にする">
+<!ENTITY undoCloseCache.label "記憶するタブの数:">
+<!ENTITY undoClosepos.label "タブを元の位置に戻す">
+<!ENTITY menuonlybutton.label "ツールバーボタンにリストだけ表示させる">
+<!ENTITY ctrltab.label "Ctrl + Tab で最近表示した順にフォーカスを移す">
+<!ENTITY cmdtab.label "Cmd + Tab で最近表示した順にフォーカスを移す">
+<!ENTITY ctrltab.tabPreviews "タブのプレビューを表示する">
+<!ENTITY ctrltab.popup "Ctrl + Tab で [表示中のタブ] ポップアップメニューを表示する">
+<!ENTITY cmdtab.popup "Cmd + Tab で [表示中のタブ] ポップアップメニューを表示する">
+<!ENTITY tabpopup.mouse "[表示中のタブ] リスト上でのマウス選択を有効にする">
+<!ENTITY mergeNoTabSelection.label "タブを選択してない状態でウィンドウをマージする場合:">
+<!ENTITY mergeTabSelection.label "タブを選択後、ウィンドウをマージする場合:">
+<!ENTITY mergeall.label "すべてのウィンドウを一つにマージする">
+<!ENTITY mergelastfocused.label "現在のウィンドウと直前にフォーカスされたウィンドウだけをマージする">
+<!ENTITY mergePopups.label "ポップアップウィンドウもマージする">
+<!ENTITY popupNextToOpener.label "ポップアップウィンドウを開いたタブの直後にタブを開く">
+<!ENTITY activateSlideshow.label "#1 キーでタブをローテーション表示させる">
+<!ENTITY toggleAnimation.label "タブの開閉アニメーションを無効にする">
+<!ENTITY reloadEvery.matchAddress.label "アドレスに依存せずタブを再読み込みする">
+<!ENTITY reloadEvery.onReloadButton.label "[更新] ボタンに [自動再読み込み] メニューを表示する">
+<!ENTITY seconds.label "秒間隔で切り替える">
+<!ENTITY minutes.label "分">
+<!ENTITY tabBarAppearance.label "タブバー">
+<!ENTITY tabAppearance.label "タブ">
+<!ENTITY toolBarAppearance.label "ツールバー">
+<!ENTITY show.ontabbar.label "タブバー表示">
+<!ENTITY show.ontab.label "タブ表示">
+<!ENTITY dragNewTabButton.tooltip "タブバーに [新しいタブ] ボタンをドラッグするとこのオプションが有効になります">
+<!ENTITY hideTabBarButton.label "[タブを閉じる] ボタンを表示">
+<!ENTITY newTabButton.label "[新しいタブ] ボタンを表示">
+<!ENTITY newTabButton.position.left.label "左側">
+<!ENTITY newTabButton.position.right.label "右側">
+<!ENTITY newTabButton.position.afterlast.label "最後のタブの隣">
+<!ENTITY allTabsButton.label "[タブの一覧] ボタンを表示">
+<!ENTITY tabBarSpace.label "両端にスペースを表示">
+<!ENTITY tabBarSpace.tooltip "多くのタブが開いていてもクリックやドラッグ＆ドロップが出来るように">
+<!ENTITY tabbar.label "タブが一つしか開いていない場合、タブバーを隠す">
+<!ENTITY moveTabOnDragging.label "タブをドラッグした時（ドロップインジケータを動かすのではなく）タブそのものを直接移動させる">
+<!ENTITY dropIndicator.label "ドロップインジケータ">
+<!ENTITY dropIndicator-native.label "既定のスタイル">
+<!ENTITY dropIndicator-builtin.label "Tab Mix Plus のスタイル">
+<!ENTITY verticalTabbar.description1 "これらの設定は他の垂直タブ用の拡張機能によってコントロールされます">
+<!ENTITY tabBarPosition.label "タブバーの位置:">
+<!ENTITY tabBarPosition.top.label "上部 (コンテンツの上)">
+<!ENTITY tabBarPosition.bottom.label "下部 (コンテンツの下)">
+<!ENTITY tabScroll.label "一段に収まらない数のタブを開いた場合、タブバーを:">
+<!ENTITY tabScroll.none "スクロール可能にする">
+<!ENTITY tabScroll.leftRightButtons "スクロール可能にし、左右にボタンを表示">
+<!ENTITY tabScroll.rightButtons "スクロール可能にし、右にボタンを表示">
+<!ENTITY tabScroll.rightButtons.rtl "スクロール可能にし、左にボタンを表示">
+<!ENTITY tabScroll.multibar "多段表示にする">
+<!ENTITY maxrow.label "バーの最大表示段数:">
+<!ENTITY pinnedTabScroll.label "ピン留めしたタブもスクロール">
+<!ENTITY offsetAmountToScroll.label "スクロール時、両端で次のタブが部分的に見えるようにする">
+<!ENTITY smoothScroll.label "スムーズスクロールを有効にする">
+<!ENTITY scrolldelay.label "スクロール遅延時間（スクロール反復間の時間）:">
+<!ENTITY currenttab.style.label "現在のタブ">
+<!ENTITY unloadedtabs.style.label "未読込のタブ">
+<!ENTITY unreadtabs.style.label "未読のタブ">
+<!ENTITY othertabs.style.label "他のタブ">
+<!ENTITY setstyles.label "スタイルをカスタマイズ">
+<!ENTITY extraIcons.label1 "アイコン">
+<!ENTITY extraIcons.locked "ロック">
+<!ENTITY extraIcons.protected "保護">
+<!ENTITY extraIcons.autoreload "自動再読み込み">
+<!ENTITY extraIcons.hideonpinned "ピン留めしているタブでは隠す">
+<!ENTITY progressMeter.label "プログレスメーター（タブ）">
+<!ENTITY showTabX.labelBegin "タブを閉じるボタンを表示（下のドロップダウンで表示条件を指定）">
+<!ENTITY showTabX.left "左端に表示">
+<!ENTITY showTabX.rtl "右端に表示">
+<!ENTITY milliseconds.label "ミリ秒">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "28em">
+<!ENTITY showTabX.always "すべてのタブ">
+<!ENTITY showTabX.current "現在のタブ">
+<!ENTITY showTabX.hover "設定以上の時間マウスオーバーしたタブ">
+<!ENTITY showTabX.alwaysExeption "設定以上の幅のタブ">
+<!ENTITY showTabX.currentHover "現在のタブと設定以上の時間マウスオーバーしたタブ">
+<!ENTITY minWidth.label "タブ幅:">
+<!ENTITY widthTo.label "から">
+<!ENTITY widthPixels.label "ピクセル">
+<!ENTITY onLeftDisabled.label "このテーマではボタンを左サイドに配置できません">
+<!ENTITY onLeftDisabled.tst.label "treeStyleTab がインストールされている場合は、左サイドにボタンの配置はできません">
+<!ENTITY flexTabs.label "タブ幅をページタイトルの長さに合わせて調節する">
+<!ENTITY bookastitle.label "タブのタイトルをブックマークの登録名と置き換える">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "25em">
+<!ENTITY toolbar.description "Tab Mix Plus のボタンをツールバーにカスタマイズして表示できます">
+<!ENTITY toolbar.button.label "カスタマイズ">
+<!ENTITY toolbar.visible.caption "表示ボタン">
+<!ENTITY toolbar.novisible.label "表示ボタンなし">
+<!ENTITY toolbar.hidden.caption "非表示ボタン">
+<!ENTITY toolbar.nohidden.label "非表示ボタンなし">
+<!ENTITY mouseGesture.label "マウスジェスチャー">
+<!ENTITY mouseClick.label "マウスクリック">
+<!ENTITY mouseHoverSelect.labelBegin "マウスオーバーでタブを選択　ディレイ時間:">
+<!ENTITY tabFlip.label "現在のタブをクリックしたとき、直前にフォーカスしていたタブにフォーカスを移す">
+<!ENTITY tabFlip.delay "ディレイ時間:">
+<!ENTITY clickFocus.label "クリックでタブを選択する場合、ボタンを離すまで選択しない">
+<!ENTITY removeEntries.label "中クリックで Tab Mix Plus のメニューリスト項目を削除する">
+<!ENTITY lockTabSizingOnClose.label "タブを閉じてもカーソルがツールバー上にある間は他のタブをリサイズしない">
+<!ENTITY removeEntries.tooltip "[最近閉じたタブ][最近閉じたウィンドウ][保存されたセッション] の各リストを含む">
+<!ENTITY tabbarscrolling.caption "タブバー上でのスクロール動作">
+<!ENTITY tabbarscrolling.holdShift.label "Shift キーを併用することで、オプションを一時的に切り替えることができる">
+<!ENTITY tabbarscrolling.selectTab.label "タブ選択をスクロール">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "全タブをスクロール">
+<!ENTITY tabbarscrolling.inverse.label "スクロール方向を反転">
+<!ENTITY double.label "ダブルクリック">
+<!ENTITY middle.label "中クリック">
+<!ENTITY ctrl.label "Ctrl + クリック">
+<!ENTITY cmd.label "Cmd + クリック">
+<!ENTITY shift.label "Shift + クリック">
+<!ENTITY alt.label "Alt + クリック">
+<!ENTITY ontab.label "タブ:">
+<!ENTITY ontabbar.label "タブバー:">
+<!ENTITY clicktab.label "タブ／タブバーをクリックしたときに実行するコマンドを選択">
+<!ENTITY ontabbar.dblClick.label "タブバーでダブルクリックしてもウィンドウサイズを変更しない。">
+<!ENTITY ontabbar.click.label "タブバーでクリックしてもウィンドウをドラッグしない。">
+<!ENTITY clicktab.default "Firefox や他の拡張機能の既定値">
+<!ENTITY clicktab.nothing "何もしない">
+<!ENTITY clicktab.addtab "新しいタブを開く">
+<!ENTITY clicktab.duplicatetab "タブを複製する">
+<!ENTITY clicktab.duplicatetabw "タブを新しいウィンドウに複製する">
+<!ENTITY clicktab.detachtab "タブを新しいウィンドウに移動する">
+<!ENTITY clicktab.protecttab "タブを保護">
+<!ENTITY clicktab.locktab "タブをロック">
+<!ENTITY clicktab.freezetab "タブを保護＆ロック">
+<!ENTITY clicktab.renametab "タブをリネーム">
+<!ENTITY clicktab.copyTabUrl "タブの URL をコピー">
+<!ENTITY clicktab.copyUrlFromClipboard "クリップボードの URL を開く">
+<!ENTITY clicktab.selectMerge "マージするタブとして選択する">
+<!ENTITY clicktab.mergeTabs "ウィンドウ同士をマージする">
+<!ENTITY clicktab.bookTab "このタブをブックマーク...">
+<!ENTITY clicktab.bookTabs "すべてのタブをブックマーク...">
+<!ENTITY clicktab.reloadtab "タブを再読み込み">
+<!ENTITY clicktab.reloadtabs "すべてのタブを再読み込み">
+<!ENTITY clicktab.reloadothertabs "他のタブを再読み込み">
+<!ENTITY clicktab.reloadlefttabs "左側のタブをすべて再読み込み">
+<!ENTITY clicktab.reloadrighttabs "右側のタブをすべて再読み込み">
+<!ENTITY clicktab.autoReloadTab "自動再読み込みの有効／無効">
+<!ENTITY clicktab.removeall "すべてのタブを閉じる">
+<!ENTITY clicktab.removeother "他のタブをすべて閉じる">
+<!ENTITY clicktab.removesimilar "類似したドメインのタブをすべて閉じる">
+<!ENTITY clicktab.removetoLeft "左側のタブをすべて閉じる">
+<!ENTITY clicktab.removetoRight "右側のタブをすべて閉じる">
+<!ENTITY clicktab.uctab "最後に閉じたタブを開く">
+<!ENTITY clicktab.ucatab "[最近閉じたタブ] をすべて開く">
+<!ENTITY clicktab.snapback "直前にフォーカスしていたタブにフォーカス">
+<!ENTITY clicktab.ietab "このタブを IE で開く">
+<!ENTITY contentLoad "中クリックでクリップボードから URL を読み込む">
+<!ENTITY context.tab "タブのコンテキストメニュー">
+<!ENTITY context.main "ページのコンテキストメニュー">
+<!ENTITY context.tools "[ツール] メニュー">
+<!ENTITY showOnTabbar.label "タブのコンテキストメニューをタブバーで表示する">
+<!ENTITY showtabBarContext.label "タブのコンテキストメニューに表示する項目:">
+<!ENTITY showContentAreaContext.label "ページのコンテキストメニューに表示する項目:">
+<!ENTITY showToolsMenu.label "[ツール] メニューに表示する項目:">
+<!ENTITY startupHomePage1.label "ホームページを表示する">
+<!ENTITY startupBlankPage.label "空白ページを表示する">
+<!ENTITY startupLastSession1.label "前回終了時のウィンドウとタブを表示する">
+<!ENTITY sm.extension.description1 "Session Manager がインストールされています">
+<!ENTITY sm.extension.description2 "Tab Mix Plus のセッションマネージャは無効になります">
+<!ENTITY sm.extension.description3 "右のボタンをクリックすると、セッションマネージャオプションのウィンドウが開きます">
+<!ENTITY sm.extension.description5 "セッションデータを Tab Mix Plus 形式から Session Manager 形式へ変換します">
+<!ENTITY sm.extension.convert.label "変換">
+<!ENTITY sm.extension.chooseFile.label1 "現在のプロファイルの Tab Mix Plus のセッションデータを変換">
+<!ENTITY sm.extension.chooseFile.label2 "変換するファイルの選択">
+<!ENTITY ss.enable.label "Firefox 内蔵のセッション復元機能を使用する">
+<!ENTITY ss.enable.tooltip "チェックを外すと、Tab Mix Plus のセッションマネージャを使用します">
+<!ENTITY ss.advanced_setting "拡張設定">
+<!ENTITY ss.advanced_setting.warning "よくわからない場合は、以下の設定を変更しないでください">
+<!ENTITY ss.interval "セッション状態の最小保存間隔">
+<!ENTITY ss.interval.seconds "(ミリ秒):">
+<!ENTITY ss.privacy_level "機密データ(フォームデータ、POSTDATA、Cookie)を">
+<!ENTITY ss.privacy_level.allsites "すべてのサイトに対して保存">
+<!ENTITY ss.privacy_level.unencrypted "暗号化されていないサイトに対して保存">
+<!ENTITY ss.privacy_level.nosites "すべてのサイトに対して保存しない">
+<!ENTITY ss.postdata.label1 "POSTDATA の最大保存バイト数">
+<!ENTITY ss.postdata.label2 "(-1 を設定すると無制限)">
+<!ENTITY sessionManger.enable "セッションマネージャを有効にする">
+<!ENTITY crashRecovery.enable "クラッシュリカバリーを有効にする">
+<!ENTITY sm.StartExit "起動／終了時">
+<!ENTITY sm.restore "復元">
+<!ENTITY sm.preserve "状態の保持">
+<!ENTITY sm.start "ブラウザ起動時:">
+<!ENTITY sm.start.restore "復元する">
+<!ENTITY sm.start.ask "復元する前にたずねる">
+<!ENTITY sm.start.nothing "復元しない">
+<!ENTITY sm.exit "ブラウザ終了時:">
+<!ENTITY sm.exit.save "セッションを保存する">
+<!ENTITY sm.exit.ask "保存する前にたずねる">
+<!ENTITY sm.exit.nothing "保存しない">
+<!ENTITY sm.startup "起動時のセッション:">
+<!ENTITY sm.lastsession "最後のセッション">
+<!ENTITY sm.previouslast "最後の一つ前のセッション">
+<!ENTITY sm.chooseifempty "空の場合はもう一方セッションを選択">
+<!ENTITY sm.restore.options "セッションを復元する場合:">
+<!ENTITY sm.restore.overwrite "現在のウィンドウに上書きする">
+<!ENTITY sm.restore.overwriteTabs "タブも上書きする">
+<!ENTITY sm.restore.closedWinList "上書きされたウィンドウを[最近閉じたウィンドウ]リストに保存する">
+<!ENTITY sm.restore.merge "複数のウィンドウを一つにする">
+<!ENTITY sm.restore.bypassCache "復元時にキャッシュを使わない">
+<!ENTITY sm.notrestore.label "起動時に復元しない時">
+<!ENTITY sm.restorePinned1.label "前回ピン留めしていたタブを復元する">
+<!ENTITY sm.preserve.options "タブで状態保持する項目:">
+<!ENTITY sm.preserve.history "履歴">
+<!ENTITY sm.preserve.protect "[タブを保護] の状態">
+<!ENTITY sm.preserve.locked "[タブをロック] の状態">
+<!ENTITY sm.preserve.permission "[機能の許可] の状態">
+<!ENTITY sm.preserve.scroll1 "スクロール位置">
+<!ENTITY sm.restore.winOptions "ウィンドウで状態保持する項目:">
+<!ENTITY sm.restore.selectedTab "選択されたタブ">
+<!ENTITY sm.restore.closedTabs "最近閉じたタブ">
+<!ENTITY incompatible.extensions "いくつかの拡張機能が Tab Mix Plus と不整合を起こします。これらの拡張機能を無効にするか削除することを推奨します">
+<!ENTITY incompatible.button.label "リストを表示">

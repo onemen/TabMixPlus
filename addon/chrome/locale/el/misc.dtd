@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Φόρτωση στο παρασκήνιο">
+<!ENTITY searchTabFocus.accesskey "ω">
+<!ENTITY renametab.panel.title "Επεξεργασία τίτλου καρτέλας">
+<!ENTITY renametab.reset.label "Επαναφορά αρχικού τίτλου">
+<!ENTITY title.label "Τίτλος">
+<!ENTITY default.label "Αρχικός">
+<!ENTITY renametab.permanently.label "Μετονομασία καρτέλας ανεξάρτητα από τη διεύθυνση της">
+<!ENTITY renametab.permanently.tooltip "Καρτέλα με ιστορικό - το νέο όνομα θα παραμείνει και όταν αλλάξει η διεύθυνση">
+<!ENTITY forum.label "Φόρουμ">
+<!ENTITY faq.label "Συχνές Ερωτήσεις">
+<!ENTITY help.label "Βοήθεια">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Επιλέξτε χρόνο από τη λίστα ή εισάγετε την προσωπική σας επιλογή.">
+<!ENTITY specifyreload.label "Καθορίστε τον χρόνο ανανέωσης">
+<!ENTITY sanitizer.entry "Αποθηκευμένες συνεδρίες Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "Τ">
+<!ENTITY sanitizer.entry.confirm "Θέλετε σίγουρα να διαγραφούν όλα τα δεδομένα συνεδριών, συμπεριλαμβανομένων και των αντιγράφων ασφαλείας;">

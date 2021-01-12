@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Nahrát na pozadí">
+<!ENTITY searchTabFocus.accesskey "P">
+<!ENTITY renametab.panel.title "Upravit název panelu">
+<!ENTITY renametab.reset.label "Obnovit výchozí název">
+<!ENTITY title.label "Název">
+<!ENTITY default.label "Výchozí">
+<!ENTITY renametab.permanently.label "Přejmenovat panel bez ohledu na jeho adresu">
+<!ENTITY renametab.permanently.tooltip "panel s historií – nový název panelu zůstane i po změně adresy">
+<!ENTITY forum.label "Fórum">
+<!ENTITY faq.label "Časté dotazy">
+<!ENTITY help.label "Nápověda">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Vyberte čas ze seznamu nebo zadejte vlastní">
+<!ENTITY specifyreload.label "Určit frekvenci opětovného načtení">
+<!ENTITY sanitizer.entry "Uložené relace rozšíření Tab Mix Plus">
+<!ENTITY sanitizer.entry.accesskey "H">
+<!ENTITY sanitizer.entry.confirm "Opravdu chcete vymazat všechny uložené relace včetně zálohovaných dat?">

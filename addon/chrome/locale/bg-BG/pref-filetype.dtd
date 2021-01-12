@@ -1,0 +1,5 @@
+<!ENTITY filetype.options "Редактор на типовете файлове">
+<!ENTITY filetype.add "Добавяне">
+<!ENTITY filetype.edit "Промяна">
+<!ENTITY filetype.delete "Изтриване">
+<!ENTITY filetype.new "Нов тип файл:">

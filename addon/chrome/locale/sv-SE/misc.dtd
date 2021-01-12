@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Ladda i bakgrunden">
+<!ENTITY searchTabFocus.accesskey "b">
+<!ENTITY renametab.panel.title "Redigera flikrubrik">
+<!ENTITY renametab.reset.label "Återställ till standardrubrik">
+<!ENTITY title.label "Namn">
+<!ENTITY default.label "Standard">
+<!ENTITY renametab.permanently.label "Byt namn på denna flik oavsett adress">
+<!ENTITY renametab.permanently.tooltip "flik med historik - det nya namnet kommer att ändras när adressen ändras">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "FAQ">
+<!ENTITY help.label "Hjälp">
+<!ENTITY tabmix.label "Tab Mix Plus">
+<!ENTITY reloadtime.label1 "Välj tid från listan eller ange egen tid">
+<!ENTITY specifyreload.label "Ange tid mellan varje uppdatering">
+<!ENTITY sanitizer.entry "Tab Mix Plus sparade historiker">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Vill du verkligen radera ALLA dina sparade sessioner, inklusive säkerhetskopior?">

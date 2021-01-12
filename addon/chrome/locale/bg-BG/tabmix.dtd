@@ -1,0 +1,131 @@
+<!ENTITY closedtabsbtn.label "Затворени подпрозорци">
+<!ENTITY closedtabsbtn.tooltip "Показване на списък на затворените подпрозорци">
+<!ENTITY sessionbtn.tooltip "Показване и управляване на сесиите Ви">
+<!ENTITY tabslistbtn.label "Отворени подпрозорци">
+<!ENTITY tabslistbtn.tooltip "Показване на списък на отворените подпрозорци">
+<!ENTITY closedwindowsbtn.label "Затворени прозорци">
+<!ENTITY closedwindowsbtn.tooltip "Показване на списък на затворените прозорци">
+<!ENTITY page.header.title "Настройки на Tab Mix Plus">
+<!ENTITY options.main.sessionbutton.label "Мениждър на сесиите">
+<!ENTITY session.Tools "Мениждър на сесиите">
+<!ENTITY closedWin.label "Списък на затворени прозорци">
+<!ENTITY duplicateTabMenu.label "Дублиране на подпрозорецa">
+<!ENTITY duplicateTabMenu.accesskey "Д">
+<!ENTITY duplicateinWin.label "Дублиране в нов прозорец">
+<!ENTITY duplicateinWin.accesskey "в">
+<!ENTITY detachTab.label "Преместване в нов прозорец">
+<!ENTITY detachTab.accesskey "е">
+<!ENTITY mergeContext.label "Обединяване на прозорци">
+<!ENTITY mergeContext.accesskey "О">
+<!ENTITY renametab.label "Преименуване на подпрозореца">
+<!ENTITY renametab.accesskey "П">
+<!ENTITY copytaburl.label "Копиране на адреса на подпрозореца">
+<!ENTITY copytaburl.accesskey "К">
+<!ENTITY reloadother.label "Презареждане на другите подпрозорци">
+<!ENTITY reloadother.accesskey "р">
+<!ENTITY reloadleft.label "Презареждане на подпрозорците отляво">
+<!ENTITY reloadleft.accesskey "л">
+<!ENTITY reloadright.label "Презареждане на подпрозорците отдясно">
+<!ENTITY reloadright.accesskey "д">
+<!ENTITY autoReloadTab.label "Презареждане на подпрозореца на всеки">
+<!ENTITY autoReloadTab.accesskey "в">
+<!ENTITY autoReloadSite.label "Презареждане на сайта на всеки">
+<!ENTITY autoReloadSite.accesskey "Е">
+<!ENTITY afterthis.label "След този подпрозорец">
+<!ENTITY bookmarktab.label "Отмятане на този подпрозорец">
+<!ENTITY undoCloseListMenu.label "Списък на затворени подпрозорци">
+<!ENTITY undoCloseListMenu.accesskey "т">
+<!ENTITY closeAllTabsMenu.label "Затваряне на всички подпрозорци">
+<!ENTITY closeall.accesskey "в">
+<!ENTITY closeSimilarTab.label "Затваряне на подобните подпрозорци">
+<!ENTITY closeSimilarTab.accesskey "б">
+<!ENTITY closeTabsToLeft.label "Затваряне на разположените вляво подпрозорци">
+<!ENTITY closeleft.accesskey "л">
+<!ENTITY docShellMenu.label "Разрешения">
+<!ENTITY docShellMenu.accesskey "Р">
+<!ENTITY freezeTabMenu.label "Замразяване на подпрозореца">
+<!ENTITY freezeTabMenu.accesskey "З">
+<!ENTITY protectTabMenu.label "Защита на подпрозореца">
+<!ENTITY protectTabMenu.tooltip "Защита на подпрозорците от затваряне">
+<!ENTITY protectTabMenu.accesskey "З">
+<!ENTITY lockTabMenu.label "Заключване на подпрозореца">
+<!ENTITY lockTabMenu.tooltip "Всички връзки се отварят в нов подпрозорец">
+<!ENTITY lockTabMenu.accesskey "в">
+<!ENTITY bookmarktabs.label "Отмятане на всички подпрозорци">
+<!ENTITY linkhere.label "Отваряне на връзката в текущия подпрозорец">
+<!ENTITY linkhere.accesskey "щ">
+<!ENTITY linkBackgroundTab.label "Отваряне на връзката в нов подпрозорец във фонов режим">
+<!ENTITY linkForegroundTab.label "Отваряне на връзката в нов подпрозорец в активен режим">
+<!ENTITY linkBackgroundTab.accesskey "ф">
+<!ENTITY linkForegroundTab.accesskey "а">
+<!ENTITY openalllinks.label "Отваряне на връзките в нови подпрозорци">
+<!ENTITY openalllinks.accesskey "н">
+<!ENTITY linkwithhistory.label "Отваряне на връзката в дублиран подпрозорец">
+<!ENTITY linkwithhistory.accesskey "д">
+<!ENTITY tabsList.label "Списък на отворени подпрозорци">
+<!ENTITY tabsList.accesskey "о">
+<!ENTITY allowImage.label "Изображение">
+<!ENTITY allowJavascript.label "JavaScript">
+<!ENTITY allowRedirect.label "Пренасочване">
+<!ENTITY allowPlugin.label "Допълнителни модули">
+<!ENTITY allowFrame.label "Фреймове">
+<!ENTITY restoreincurrent.label "Възстановяване в текущия подпрозорец">
+<!ENTITY restoreincurrent.accesskey "щ">
+<!ENTITY restoreinwin.label "Възстановяване в нов прозорец">
+<!ENTITY restoreinwin.accesskey "н">
+<!ENTITY restoreintab.label "Възстановяване в нов подпрозорец">
+<!ENTITY restoreintab.accesskey "ъ">
+<!ENTITY restoretab.label "Възстановяване на подпрозореца">
+<!ENTITY restoretab.accesskey "В">
+<!ENTITY bookmark.label "Отмятане на тази връзка...">
+<!ENTITY bookmark.accesskey "О">
+<!ENTITY deletelist.label "Изтриване от списъка">
+<!ENTITY deletelist.accesskey "И">
+<!ENTITY settings.label "Настройки">
+<!ENTITY saveWindow.label "Запазване на този прозорец">
+<!ENTITY saveAllWindows.label "Запазване на всички прозорци">
+<!ENTITY sm.context.overwrite "Възстановяване чрез замяна на съществуващия(те) прозорец(и)">
+<!ENTITY sm.context.overwrite.key "ъ">
+<!ENTITY sm.context.restore.new "Възстановяване в нов(и) прозорец(и)">
+<!ENTITY sm.context.restore.newkey "н">
+<!ENTITY sm.context.replacethis "Замяна (с този прозорец)">
+<!ENTITY sm.context.replacethis.key "т">
+<!ENTITY sm.context.replaceall "Замяна на всички прозорци">
+<!ENTITY sm.context.replaceall.key "в">
+<!ENTITY sm.context.add "Добавяне на този прозорец">
+<!ENTITY sm.context.add.key "т">
+<!ENTITY sm.context.addall "Добавяне на всички прозорци">
+<!ENTITY sm.context.addall.key "и">
+<!ENTITY sm.context.save "Запис">
+<!ENTITY sm.context.save.key "З">
+<!ENTITY sm.context.rename "Преименуване">
+<!ENTITY sm.context.rename.key "П">
+<!ENTITY sm.context.bookmarkSession "Сесия на отметките">
+<!ENTITY sm.context.bookmarkSession.key "С">
+<!ENTITY sm.context.delete "Изтриване">
+<!ENTITY sm.context.delete.key "И">
+<!ENTITY sm.context.deleteall "Изтриване на всички">
+<!ENTITY sm.context.deleteall.key "ч">
+<!ENTITY sm.context.startup "Избиране за начална сесия">
+<!ENTITY sm.context.startup.key "с">
+<!ENTITY sm.context.details "Показване на броячите, датата и времето в менюто на сесията">
+<!ENTITY sm.context.details.key "П">
+<!ENTITY tab.key "T">
+<!ENTITY window.key "N">
+<!ENTITY merge.key "U">
+<!ENTITY sortedTabs.label "Сортирани подпрозорци">
+<!ENTITY sortedTabs.tooltip "Изберете, за да виждате списъка по азбучен ред">
+<!ENTITY enable.label "Включено:">
+<!ENTITY custom.label "По избор">
+<!ENTITY enableTabs.label "Включване за всички подпрозорци">
+<!ENTITY disableTabs.label "Изключване за всички подпрозорци">
+<!ENTITY seconds.label "секунди">
+<!ENTITY minutes.label "минути">
+<!ENTITY minute.label "минута">
+<!ENTITY hideTabBar.label "Скриване на лентата с подпрозорци">
+<!ENTITY hideTabBar.never.label "Никога">
+<!ENTITY hideTabBar.never.key "Н">
+<!ENTITY hideTabBar.oneTab.label "При само един подпрозорец">
+<!ENTITY hideTabBar.onOneTab.key "е">
+<!ENTITY hideTabBar.always.label "Винаги">
+<!ENTITY hideTabBar.always.key "В">

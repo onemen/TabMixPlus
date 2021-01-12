@@ -1,0 +1,17 @@
+<!ENTITY searchTabFocus.label "Indlæs i baggrunden">
+<!ENTITY searchTabFocus.accesskey "b">
+<!ENTITY renametab.panel.title "Edit Tab Title">
+<!ENTITY renametab.reset.label "Reset to default title">
+<!ENTITY title.label "Titel">
+<!ENTITY default.label "Default">
+<!ENTITY renametab.permanently.label "Rename this tab regardless of its address">
+<!ENTITY renametab.permanently.tooltip "tab with history - the new name will remain when address changes">
+<!ENTITY forum.label "Forum">
+<!ENTITY faq.label "OSS">
+<!ENTITY help.label "Hjælp">
+<!ENTITY tabmix.label "Tab Mix">
+<!ENTITY reloadtime.label1 "Vælg tid fra listen eller indtast din egen tid">
+<!ENTITY specifyreload.label "Angiv genindlæsningstid">
+<!ENTITY sanitizer.entry "Tab Mix Plus historik">
+<!ENTITY sanitizer.entry.accesskey "T">
+<!ENTITY sanitizer.entry.confirm "Er du sikker på at du vil slette ALLE dine gemte sessionsdata inklusive backups ?">

@@ -1,0 +1,345 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
+%pref-tabmixDTD;
+<!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd">
+%tabmixDTD;
+<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd">
+%browserDTD;
+<!ENTITY % shortcutsDTD SYSTEM "chrome://tabmixplus/locale/shortcuts.dtd">
+%shortcutsDTD;
+]>
+
+<overlay id="MenuPaneOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <prefpane id="paneMenu" onpaneload="gMenuPane.init();">
+
+    <!-- scripts -->
+    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/menu.js"/>
+    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/shortcuts.js"/>
+
+    <!-- preferences - list all preferences in this pane -->
+    <preferences>
+      <preference id="pref_menu"               name="extensions.tabmix.menu.selectedTabIndex"
+                                                                                            type="int"/>
+      <preference id="pref_showOnTabbar"       name="extensions.tabmix.showTabContextMenuOnTabbar"
+                                                                                            type="bool"/>
+      <preference id="pref_showMoveToGroup"    name="extensions.tabmix.moveToGroup"         type="bool"/>
+      <preference id="pref_showNewTab"         name="extensions.tabmix.newTabMenu"          type="bool"/>
+      <preference id="pref_showDuplicate"      name="extensions.tabmix.duplicateMenu"       type="bool"/>
+      <preference id="pref_showDuplicateinWin" name="extensions.tabmix.duplicateinWinMenu"  type="bool"/>
+      <preference id="pref_showDetachTab"      name="extensions.tabmix.detachTabMenu"       type="bool"/>
+      <preference id="pref_openNonRemoteWindow"
+                           name="extensions.tabmix.tabcontext.openNonRemoteWindow"       type="bool"/>
+      <preference id="pref_showMergeWin"       name="extensions.tabmix.showMergeWindow"     type="bool"/>
+      <preference id="pref_muteTab"            name="extensions.tabmix.muteTabMenu"         type="bool"/>
+      <preference id="pref_pinTab"             name="extensions.tabmix.pinTabMenu"          type="bool"/>
+      <preference id="pref_showRenametab"      name="extensions.tabmix.renameTabMenu"       type="bool"/>
+      <preference id="pref_showCopyTabUrl"     name="extensions.tabmix.copyTabUrlMenu"      type="bool"/>
+      <preference id="pref_showReloadTab"      name="extensions.tabmix.reloadTabMenu"       type="bool"/>
+      <preference id="pref_showAutoReload"     name="extensions.tabmix.autoReloadMenu"      type="bool"/>
+      <preference id="pref_showReloadAll"      name="extensions.tabmix.reloadAllMenu"       type="bool"/>
+      <preference id="pref_showReloadOther"    name="extensions.tabmix.reloadOtherMenu"     type="bool"/>
+      <preference id="pref_showReloadLeft"     name="extensions.tabmix.reloadLeftMenu"      type="bool"/>
+      <preference id="pref_showReloadRight"    name="extensions.tabmix.reloadRightMenu"     type="bool"/>
+      <preference id="pref_showBmkTab"         name="extensions.tabmix.bookmarkTabMenu"     type="bool"/>
+      <preference id="pref_showUndoClose"      name="extensions.tabmix.undoCloseTabMenu"    type="bool"/>
+      <preference id="pref_showUndoCloseList"  name="extensions.tabmix.undoCloseListMenu"   type="bool"/>
+      <preference id="pref_showCloseTab"       name="extensions.tabmix.closeTabMenu"        type="bool"/>
+      <preference id="pref_showCloseAll"       name="extensions.tabmix.closeAllMenu"        type="bool"/>
+      <preference id="pref_showCloseOther"     name="extensions.tabmix.closeOtherMenu"      type="bool"/>
+      <preference id="pref_showCloseSimilar"   name="extensions.tabmix.closeSimilarTabs"    type="bool"/>
+      <preference id="pref_showCloseLeft"      name="extensions.tabmix.closeLeftMenu"       type="bool"/>
+      <preference id="pref_showCloseRight"     name="extensions.tabmix.closeRightMenu"      type="bool"/>
+      <preference id="pref_showDocShell"       name="extensions.tabmix.docShellMenu"        type="bool"/>
+      <preference id="pref_freezeTabMenu"      name="extensions.tabmix.freezeTabMenu"       type="bool"/>
+      <preference id="pref_protectTabMenu"     name="extensions.tabmix.protectTabMenu"      type="bool"/>
+      <preference id="pref_lockTabMenu"        name="extensions.tabmix.lockTabMenu"         type="bool"/>
+      <preference id="pref_showBmkTabs"        name="extensions.tabmix.bookmarkTabsMenu"    type="bool"/>
+      <preference id="pref_showLinkHere"       name="extensions.tabmix.openLinkHere"        type="bool"/>
+      <preference id="pref_selectTab1"         name="browser.tabs.loadInBackground"
+                                                                           inverted="true"  type="bool"
+                  onchange="if (typeof gEventsPane == 'undefined') gMenuPane.setInverseLinkLabel();"/>
+      <preference id="pref_showInverseLink"    name="extensions.tabmix.openInverseLink"     type="bool"/>
+      <preference id="pref_openAllLinks"       name="extensions.tabmix.openAllLinks"        type="bool"/>
+      <preference id="pref_linkWithHist"       name="extensions.tabmix.linkWithHistory"     type="bool"/>
+      <preference id="pref_autoreloadTab"      name="extensions.tabmix.autoReloadContent"   type="bool"/>
+      <preference id="pref_closetab"           name="extensions.tabmix.closeTabContent"     type="bool"/>
+      <preference id="pref_duplicateTabContent"
+                  name="extensions.tabmix.duplicateTabContent"                              type="bool"/>
+      <preference id="pref_duplicateWinContent"
+                  name="extensions.tabmix.duplicateWinContent"                              type="bool"/>
+      <preference id="pref_detachTabContent"   name="extensions.tabmix.detachTabContent"    type="bool"/>
+      <preference id="pref_mergeContent"       name="extensions.tabmix.mergeWindowContent"  type="bool"/>
+      <preference id="pref_freezeTabContent"   name="extensions.tabmix.freezeTabContent"    type="bool"/>
+      <preference id="pref_protectTabContent"  name="extensions.tabmix.protectTabContent"   type="bool"/>
+      <preference id="pref_lockTabContent"     name="extensions.tabmix.lockTabContent"      type="bool"/>
+      <preference id="pref_tabsList"           name="extensions.tabmix.tabsList"            type="bool"/>
+      <preference id="pref_showUndoCloseListContent"
+                  name="extensions.tabmix.undoCloseListContent"                             type="bool"/>
+      <preference id="pref_showUndoCloseContent"
+                  name="extensions.tabmix.undoCloseTabContent"                              type="bool"/>
+      <preference id="pref_optionsToolsMenu"   name="extensions.tabmix.optionsToolMenu"     type="bool"/>
+      <preference id="pref_sessionToolsMenu"   name="extensions.tabmix.sessionToolsMenu"    type="bool"/>
+      <preference id="pref_closedWinToolsMenu" name="extensions.tabmix.closedWinToolsMenu"  type="bool"/>
+      <preference id="pref_shortcuts"          name="extensions.tabmix.shortcuts"           type="string"
+                  onchange="gMenuPane.initializeShortcuts();"/>
+      <preference id="pref_slideshow"          name="extensions.tabmix.slideDelay"          type="int"/>
+      <preference id="pref_sessionManager1"
+                  name="extensions.tabmix.sessions.manager"                                 type="bool"
+                  onchange="if (typeof gSessionPane == 'undefined') gMenuPane.updateSessionShortcuts();"/>
+   </preferences>
+
+
+    <!-- pane content -->
+    <tabbox>
+      <tabs id="menu"
+            onselect="gPrefWindow.tabSelectionChanged(event);">
+        <tab label="&context.tab;" class="subtabs" helpTopic="Menu_-_Tab_Context_Menu"/>
+        <tab label="&context.main;" class="subtabs" helpTopic="Menu_-_Main_Context_Menu"/>
+        <tab label="&context.tools;" class="subtabs" helpTopic="Menu_-_Tools_Menu"/>
+        <tab label="&shortcuts.label;" class="subtabs" helpTopic="Menu_-_Shortcuts"/>
+      </tabs>
+      <tabpanels class="menu">
+        <tabpanel>
+          <checkbox_tmp id="showOnTabbar" label="&showOnTabbar.label;" preference="pref_showOnTabbar"/>
+          <groupbox flex="1">
+            <caption label="&showtabBarContext.label;"/>
+            <grid flex="1" style="overflow: auto; height:18em;">
+              <columns>
+                <column flex="1"/>
+                <column flex="1"/>
+              </columns>
+              <rows>
+                <row>
+                  <vbox align="start">
+                    <!-- New tab -->
+                    <checkbox_tmp id="showNewTab" label="&tabCmd.label;" preference="pref_showNewTab"/>
+                    <!-- Duplicate tab -->
+                    <checkbox_tmp id="showDuplicate" label="&duplicateTabMenu.label;" preference="pref_showDuplicate"/>
+                    <!-- Duplicate in Window -->
+                    <checkbox_tmp id="showDuplicateinWin" label="&duplicateinWin.label;" preference="pref_showDuplicateinWin" observes="obs_singleWindow"/>
+                    <!-- Detach Tab -->
+                    <checkbox_tmp id="showDetachTab" label="&detachTab.label;" preference="pref_showDetachTab" observes="obs_singleWindow"/>
+                    <!-- open Non Remote Window -->
+                    <checkbox_tmp id="openNonRemoteWindow" preference="pref_openNonRemoteWindow" observes="obs_singleWindow" hidden="true"/>
+                    <!-- Merge Windows -->
+                    <checkbox_tmp id="showMergeWin" label="&mergeContext.label;" preference="pref_showMergeWin"/>
+                    <!-- mute/unmute tabs -->
+                    <checkbox_tmp id="muteTab" preference="pref_muteTab"/>
+                    <!-- pin/unpin tabs -->
+                    <checkbox_tmp id="pinTab" preference="pref_pinTab"/>
+                    <!-- move to group -->
+                    <checkbox_tmp id="moveToGroup" preference="pref_showMoveToGroup"/>
+                    <!-- Rename tab -->
+                    <checkbox_tmp id="showRenametab" label="&renametab.label;" preference="pref_showRenametab"/>
+                    <!-- Copy tab Url -->
+                    <checkbox_tmp id="showCopyTabUrl" label="&copytaburl.label;" preference="pref_showCopyTabUrl"/>
+                    <!-- Reload tab -->
+                    <checkbox_tmp id="showReloadTab" label="&reloadTab.label;"  preference="pref_showReloadTab"/>
+                    <!-- Reload Tab Every-->
+                    <checkbox_tmp id="showAutoReload" label="&autoReloadTab.label;" preference="pref_showAutoReload"/>
+                    <!-- Reload all tab -->
+                    <checkbox_tmp id="showReloadAll" label="&reloadAllTabs.label;" preference="pref_showReloadAll"/>
+                    <!-- Reload left tab -->
+                    <checkbox_tmp id="showReloadLeft" label="&reloadleft.label;" preference="pref_showReloadLeft"/>
+                    <!-- Reload right tab -->
+                    <checkbox_tmp id="showReloadRight" label="&reloadright.label;" preference="pref_showReloadRight"/>
+                    <!-- Reload other tab -->
+                    <checkbox_tmp id="showReloadOther" label="&reloadother.label;" preference="pref_showReloadOther"/>
+                  </vbox>
+                  <vbox align="start">
+                    <!-- Undo close tabs -->
+                    <checkbox_tmp id="showUndoClose" label="&undoCloseTab.label;" preference="pref_showUndoClose" observes="obs_undoClose"/>
+                    <!-- Closed tabs list -->
+                    <checkbox_tmp id="showUndoCloseList" label="&undoCloseListMenu.label;" preference="pref_showUndoCloseList" observes="obs_undoClose"/>
+                    <!-- Close tabs -->
+                    <checkbox_tmp id="showCloseTab" label="&closeTab.label;" preference="pref_showCloseTab"/>
+                    <!-- Close all tabs -->
+                    <checkbox_tmp id="showCloseAll" label="&closeAllTabsMenu.label;" preference="pref_showCloseAll"/>
+                    <!-- Close similar tabs -->
+                    <checkbox_tmp id="showCloseSimilar" label="&closeSimilarTab.label;" preference="pref_showCloseSimilar"/>
+                    <!-- Close other tabs -->
+                    <checkbox_tmp id="showCloseOther" label="&closeOtherTabs.label;" preference="pref_showCloseOther"/>
+                    <!-- Close left tabs -->
+                    <checkbox_tmp id="showCloseLeft" label="&closeTabsToLeft.label;" preference="pref_showCloseLeft"/>
+                    <!-- Close right tabs -->
+                    <checkbox_tmp id="showCloseRight" label="&closeTabsToTheEnd.label;" preference="pref_showCloseRight"/>
+                    <!-- docShell -->
+                    <checkbox_tmp id="showDocShell" label="&docShellMenu.label;" preference="pref_showDocShell"/>
+                    <!-- freeze tab -->
+                    <checkbox_tmp id="freezeTabMenu" label="&freezeTabMenu.label;" tooltiptext="&clicktab.freezetab;" preference="pref_freezeTabMenu"/>
+                    <!-- protect tab -->
+                    <checkbox_tmp id="protectTabMenu" label="&protectTabMenu.label;" tooltiptext="&protectTabMenu.tooltip;" preference="pref_protectTabMenu"/>
+                    <!-- lock tab -->
+                    <checkbox_tmp id="lockTabMenu" label="&lockTabMenu.label;" tooltiptext="&lockTabMenu.tooltip;" preference="pref_lockTabMenu"/>
+                    <!-- Bookmark tab -->
+                    <checkbox_tmp id="showBmkTab" label="&bookmarktab.label;" preference="pref_showBmkTab" observes="bmMenu"/>
+                    <!-- bookmark tabs -->
+                    <checkbox_tmp id="showBmkTabs" label="&bookmarktabs.label;" preference="pref_showBmkTabs" observes="bmMenu"/>
+                  </vbox>
+                </row>
+              </rows>
+            </grid>
+          </groupbox>
+        </tabpanel>
+        <tabpanel>
+          <groupbox flex="1">
+            <caption label="&showContentAreaContext.label;"/>
+            <grid flex="1" style="overflow: auto; height:18em;">
+              <columns>
+                <column flex="1"/>
+                <column flex="1"/>
+              </columns>
+              <rows>
+                <row>
+                  <vbox align="start">
+                    <!-- links in current tab -->
+                    <checkbox_tmp id="showLinkHere" label="&linkhere.label;" preference="pref_showLinkHere"/>
+                    <!-- links in inverse tab -->
+                    <checkbox_tmp id="showInverseLink" fglabel="&linkForegroundTab.label;" bglabel="&linkBackgroundTab.label;" preference="pref_showInverseLink"/>
+                    <!-- multiple links -->
+                    <checkbox_tmp id="openAllLinks" label="&openalllinks.label;" preference="pref_openAllLinks"/>
+                    <!-- link in duplicate tab -->
+                    <checkbox_tmp id="linkWithHist" label="&linkwithhistory.label;" preference="pref_linkWithHist"/>
+                    <!-- reload every -->
+                    <checkbox_tmp id="autoreloadTab" label="&autoReloadTab.label;" preference="pref_autoreloadTab"/>
+                    <!-- Close tab -->
+                    <checkbox_tmp id="closetab" label="&closeTab.label;" preference="pref_closetab"/>
+                    <!-- Duplicate tab -->
+                    <checkbox_tmp id="duplicateTabContent" label="&duplicateTabMenu.label;" preference="pref_duplicateTabContent"/>
+                    <!-- Duplicate tab in Win-->
+                    <checkbox_tmp id="duplicateWinContent" label="&duplicateinWin.label;" preference="pref_duplicateWinContent" observes="obs_singleWindow"/>
+                  </vbox>
+                  <vbox align="start">
+                    <!-- Detach Tab-->
+                    <checkbox_tmp id="detachTabContent" label="&detachTab.label;" preference="pref_detachTabContent" observes="obs_singleWindow"/>
+                    <!-- Merge Content-->
+                    <checkbox_tmp id="mergeContent" label="&mergeContext.label;" preference="pref_mergeContent"/>
+                    <!-- freeze tab -->
+                    <checkbox_tmp id="freezeTabContent" label="&freezeTabMenu.label;" tooltiptext="&clicktab.freezetab;" preference="pref_freezeTabContent"/>
+                    <!-- protect tab -->
+                    <checkbox_tmp id="protectTabContent" label="&protectTabMenu.label;" tooltiptext="&protectTabMenu.tooltip;" preference="pref_protectTabContent"/>
+                    <!-- lock tab -->
+                    <checkbox_tmp id="lockTabContent" label="&lockTabMenu.label;" tooltiptext="&lockTabMenu.tooltip;" preference="pref_lockTabContent"/>
+                    <!-- Opened tabs list -->
+                    <checkbox_tmp id="tabsList" label="&tabsList.label;" preference="pref_tabsList"/>
+                    <!-- Closed tabs list -->
+                    <checkbox_tmp id="showUndoCloseListContent" label="&undoCloseListMenu.label;" preference="pref_showUndoCloseListContent" observes="obs_undoClose"/>
+                    <!-- Undo close tabs -->
+                    <checkbox_tmp id="showUndoCloseContent" label="&undoCloseTab.label;" preference="pref_showUndoCloseContent" observes="obs_undoClose"/>
+                  </vbox>
+                </row>
+              </rows>
+            </grid>
+          </groupbox>
+        </tabpanel>
+        <tabpanel>
+          <groupbox flex="1">
+            <caption label="&showToolsMenu.label;"/>
+            <!-- tab mix options in Tools Menu -->
+            <grid flex="1" style="overflow: auto; height:18em;">
+              <columns>
+                <column flex="1"/>
+                <column flex="1"/>
+              </columns>
+              <rows>
+                <row>
+                  <vbox align="start">
+                    <checkbox_tmp id="optionsToolsMenu" preference="pref_optionsToolsMenu"
+                              label="&page.header.title;…"/>
+                    <checkbox_tmp id="sessionToolsMenu" preference="pref_sessionToolsMenu"
+                              label="&session.Tools;"/>
+                    <checkbox_tmp id="closedWinToolsMenu" preference="pref_closedWinToolsMenu"
+                              label="&closedWin.label;"/>
+                  </vbox>
+                </row>
+              </rows>
+            </grid>
+          </groupbox>
+        </tabpanel>
+        <tabpanel id="shortcuts-panel" hide-shortcut-warning="true"
+              hide-unused-shortcuts="false" usedKeys="false"
+              persist="hide-shortcut-warning hide-unused-shortcuts"
+              onmousedown="if (event.originalTarget.className == 'shortcut-image') return;
+                  var editBox = this.editBox || null;
+                  if (editBox) {editBox.blur(); this.editBox = null;}">
+          <hbox>
+            <label value="&shortcuts.edit;" flex="1"/>
+            <spacer flex="1"/>
+            <label value="&shortcuts.hideUnused;" show="&shortcuts.showAll;" hide="&shortcuts.hideUnused;"
+                   class="text-link" id="hide-unused-shortcuts" persist="value"
+                   onmousedown="gMenuPane.toggleLinkLabel(this);"/>
+          </hbox>
+          <hbox class="global-warning shortcut-warning-container">
+            <vbox>
+              <image class="warning-icon"/>
+            </vbox>
+            <description style="width: 24em;" class="global-warning-text" flex="1">
+              &shortcuts.warning;.
+            </description>
+            <label value="&shortcuts.showDetails;" show="&shortcuts.showDetails;" hide="&shortcuts.hideDetails;"
+                   class="text-link" id="hide-shortcut-warning" persist="value"
+                   onmousedown="gMenuPane.toggleLinkLabel(this);"/>
+          </hbox>
+          <groupbox id="shortcut-group" style="overflow: auto; height:18em;" flex="1">
+            <shortcut id="newTab"          label="&clicktab.addtab;"/>
+            <shortcut id="dupTab"          label="&clicktab.duplicatetab;"/>
+            <shortcut id="dupTabToWin"     label="&clicktab.duplicatetabw;"/>
+            <shortcut id="detachTab"       label="&clicktab.detachtab;"/>
+            <shortcut id="togglePinTab"/>
+            <shortcut id="protecttab"      label="&clicktab.protecttab;"/>
+            <shortcut id="locktab"         label="&clicktab.locktab;"/>
+            <shortcut id="freezetab"       label="&clicktab.freezetab;"/>
+            <shortcut id="renametab"       label="&clicktab.renametab;"/>
+            <shortcut id="copyTabUrl"      label="&clicktab.copyTabUrl;"/>
+            <shortcut id="pasteTabUrl"     label="&clicktab.copyUrlFromClipboard;"/>
+            <shortcut id="selectMerge"     label="&clicktab.selectMerge;"/>
+            <shortcut id="mergeWin"        label="&clicktab.mergeTabs;"/>
+            <shortcut id="addBookmark"     label="&clicktab.bookTab;"/>
+            <shortcut id="bookmarkAllTabs" label="&clicktab.bookTabs;"/>
+            <shortcut id="reload"          label="&clicktab.reloadtab;"/>
+            <shortcut id="browserReload"   label="&clicktab.reloadtab;*"/>
+            <shortcut id="reloadtabs"      label="&clicktab.reloadtabs;"/>
+            <shortcut id="reloadothertabs" label="&clicktab.reloadothertabs;"/>
+            <shortcut id="reloadlefttabs"  label="&clicktab.reloadlefttabs;"/>
+            <shortcut id="reloadrighttabs" label="&clicktab.reloadrighttabs;"/>
+            <shortcut id="autoReloadTab"   label="&clicktab.autoReloadTab;"/>
+            <shortcut id="close"           label="&closeTab.label;"/>
+            <shortcut id="removeall"       label="&clicktab.removeall;"/>
+            <shortcut id="removesimilar"   label="&clicktab.removesimilar;"/>
+            <shortcut id="removeother"     label="&clicktab.removeother;"/>
+            <shortcut id="removeleft"      label="&clicktab.removetoLeft;"/>
+            <shortcut id="removeright"     label="&clicktab.removetoRight;"/>
+            <shortcut id="undoClose"       label="&clicktab.uctab;"/>
+            <shortcut id="undoCloseTab"    label="&clicktab.uctab;*"/>
+            <shortcut id="clearClosedTabs"/>
+            <shortcut id="ucatab"          label="&clicktab.ucatab;"/>
+            <shortcut id="saveWindow"      label="&saveWindow.label;"/>
+            <shortcut id="saveSession"     label="&saveAllWindows.label;"/>
+            <shortcut id="switchToLast"    label="&shortcuts.switchToLast;"/>
+            <shortcut id="toggleFLST"      label="&shortcuts.toggleFLST;"
+                      tooltiptext="&shortcuts.toggleFLST.tooltip;"/>
+            <shortcut id="slideShow"       label="&shortcuts.slideshow;"
+                                          _label="&activateSlideshow.label;"/>
+            <hbox align="center" class="indent">
+              <label id="slideDelayLabel" observes="obs_slideDelay"/>
+              <textbox id="slideshow.time" maxlength="3" size="3" preference="pref_slideshow"
+                       observes="obs_slideDelay" type="number"/>
+              <label value="&seconds.label;" observes="obs_slideDelay" class="timelabel"/>
+            </hbox>
+          </groupbox>
+        </tabpanel>
+      </tabpanels>
+    </tabbox>
+
+    <broadcasterset >
+      <broadcaster id="bmMenu" hidden="false"/>
+      <broadcaster id="obs_slideDelay"/>
+    </broadcasterset >
+
+  </prefpane>
+
+</overlay>

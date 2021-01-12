@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<overlay id="TMP_placesOverlay"
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+    <script type="application/javascript" src="chrome://tabmixplus/content/places/places.js"/>
+    <script type="application/javascript">
+       TMP_Places.addEvent();
+    </script>
+</overlay>

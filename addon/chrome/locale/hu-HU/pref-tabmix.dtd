@@ -1,0 +1,319 @@
+<!ENTITY tab.links "Linkek">
+<!ENTITY tab.events "Események">
+<!ENTITY tab.mouse "Egér">
+<!ENTITY tab.appearance "Megjelenés">
+<!ENTITY tab.menu "Menü">
+<!ENTITY tab.session "Munkamenet">
+<!ENTITY tab.incompatible "Hiba">
+<!ENTITY apply.label "Alkalmaz">
+<!ENTITY settings.export "Beállítások exportálása">
+<!ENTITY settings.import "Beállítások importálása">
+<!ENTITY settings.sync "Sync beállítások">
+<!ENTITY settings.default "Alapállapot">
+<!ENTITY settings.revert "Visszaállítás">
+<!ENTITY generalWindowOpen.label "Új ablakban megnyíló link megnyitása a következő módon:">
+<!ENTITY externalLink.useSeparate.label "Külön beállítás más alkalmazásból származó hivatkozásokhoz">
+<!ENTITY externalLinkTarget.label "Más programból a linket nyissa meg:">
+<!ENTITY linkTarget.tab "új lapon az aktuális ablakban">
+<!ENTITY linkTarget.window "új ablakban">
+<!ENTITY linkTarget.current "aktuális lapon">
+<!ENTITY linkTarget.accesskey "a">
+<!ENTITY divertedWindowOpen.label "JavaScript felugró ablakok:">
+<!ENTITY divertedWindowOpen.all "további beállítás nem szükséges">
+<!ENTITY divertedWindowOpen.some "átméretezett felugró ablakok megnyitása új ablakban">
+<!ENTITY divertedWindowOpen.none "minden felugró ablak megnyitása új ablakban">
+<!ENTITY linkTarget.label "Cél tulajdonsággal rendelkező linkek vagy a fájlok az aktuális lapon nyíljanak meg">
+<!ENTITY targetIsFrame.label "Open links with target to existing frame in the current tab">
+<!ENTITY download.label "Fájlletöltési üres lap megakadályozása">
+<!ENTITY edit.label "Szerkesztés">
+<!ENTITY speLink.label "Új lapon való megnyitás:">
+<!ENTITY speLink.none "ne legyen (ajánlott)">
+<!ENTITY speLink.allLinks "Összes hivatkozás">
+<!ENTITY speLink.external "minden külső linket">
+<!ENTITY singleWindow.label "Egy Ablak Mód engedélyezése">
+<!ENTITY newTabs.label "Új lapok">
+<!ENTITY tabOpen.label "Lap megnyitás">
+<!ENTITY tabFocus.label "Lap fókusz">
+<!ENTITY tabClose.label "Lap bezárás">
+<!ENTITY tabMerge.label "Lap összefűzés">
+<!ENTITY tabFeature.label "Lap szolgáltatások">
+<!ENTITY newtab.label "Betöltés új lapra:">
+<!ENTITY replaceLastTabWith1.label "When you close last tab replace it with">
+<!ENTITY newtab.blank "Üres oldal">
+<!ENTITY newtab.home "Kezdőlap">
+<!ENTITY newtab.current "Aktuális oldal">
+<!ENTITY newtab.duplicate "Lap megkettőzése">
+<!ENTITY newtab.location.1 "Új lapok oldal">
+<!ENTITY newtab.placeholder.label "Alapértelmezett új lap oldal">
+<!ENTITY location.label.1 "Webcím">
+<!ENTITY focusContent.label "Fókusz a tartalomra nem üres oldal esetén">
+<!ENTITY openTabNext.label "Új lap megnyitása az aktuális után">
+<!ENTITY openOtherTabNext.label "Lapok megnyitása az aktuális után">
+<!ENTITY relatedAfterCurrent.label "Csak ha az aktuális laphoz kapcsolódik">
+<!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openDuplicateNext.label "Lap megkettőzése az eredetit követően">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c] Copy">
+<!ENTITY openTabNextInverse.label "Lapnyitási sorrend megváltoztatása">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c] Copy">
+<!ENTITY openTabNextInverse.tooltip1 "Új lapok megnyitása az aktuális lapból legutóbb megnyitott után">
+<!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
+<!ENTITY loadTabsProgressively.label "Load tabs progressively">
+<!ENTITY restoreOnDemand.label "Don't load tabs until selected">
+<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY tabs.label "tabs">
+<!ENTITY lockTabs.label "Lapok zárolása">
+<!ENTITY lockNewTabs.label "Új lapok zárolása">
+<!ENTITY lockAppTabs.label "Alkalmazás lapok zárolása">
+<!ENTITY updateLockState.label "Változtatások alkalmazása a nyitott lapokra">
+<!ENTITY openNewTab.label "Új lap megnyitása az alábbiakból:">
+<!ENTITY openBookmarks.label "Könyvjelzők">
+<!ENTITY openPlacesGroups.label "Könyvjelzők és Előzmények csoportjai">
+<!ENTITY openPlacesGroups.tooltip "Ne kezelje máshogy a lapokat, ha Könyvjelzők és Előzmények csoportot nyit meg">
+<!ENTITY openHistory.label "Előzmények">
+<!ENTITY openUrl.label "Hely mező">
+<!ENTITY openSearch.label "Keresés mező">
+<!ENTITY middlecurrent1.label "Középső kattintás vagy a Control-kattintás az aktuális lapon nyitja meg">
+<!ENTITY middlecurrent.tooltip "Csak a Könyvjelzőknek, az Előzményeknek és a zárolt lapoknak">
+<!ENTITY tabFocus.caption "Megnyitott lapra fókuszálás és kiválasztás, ha megnyitva:">
+<!ENTITY selectTab.label "Linkek">
+<!ENTITY selectDivertedTab.label "Eltérített ablakok">
+<!ENTITY selectTabFromExternal.label "További alkalmazások">
+<!ENTITY selectTabCommand.label "Új lap parancsai">
+<!ENTITY contextMenuSearch.label "Keresés a helyi menüben">
+<!ENTITY selectTabBH.label "Könyvjelzők/Előzmények">
+<!ENTITY duplicateTab.label "Lap megkettőzése">
+<!ENTITY inversefocus2.label "Middle-click or Control-click inverse focus of:">
+<!ENTITY warning.caption.label "Figyelmeztetés">
+<!ENTITY warnOnCloseMultipleTabs.label "Warn you when closing multiple tabs">
+<!ENTITY warnOnCloseProtected1.label "Warn you when closing window with protected tabs">
+<!ENTITY warnOnCloseWindow1.label "Warn you when closing window with multiple tabs">
+<!ENTITY lasttab.caption.label "Utolsó lap bezárása">
+<!ENTITY keepWindow.label.3.1 "Ne zárja be az ablakot, ha az az utolsó lap be lett zárva">
+<!ENTITY keeptab.label "Ne zárja be a lapot, ha a Lapok eszköztár állandó megjelenítése be van kapcsolva">
+<!ENTITY closeOnMerge.label "Összefűzött ablakok bezárása">
+<!ENTITY warnOnMerge.label "Figyelmeztetés lapok bezárásakor, ha nincsenek összefűzve">
+<!ENTITY currenttab.caption.label "Aktuális lap bezárása">
+<!ENTITY focusTab.labelBegin "Az aktuális lap bezárásával kerüljön a fókusz:">
+<!ENTITY focusTab.firstTab "Első lap">
+<!ENTITY focusTab.leftTab "Balra lévő lap">
+<!ENTITY focusTab.rightTab "Jobbra lévő lap">
+<!ENTITY focusTab.lastTab "Utolsó lap">
+<!ENTITY focusTab.lastSelectedTab "Utoljára kiválasztott lap">
+<!ENTITY focusTab.openerTab "Megnyitó lap">
+<!ENTITY focusTab.openerTab.rtl "Megnyitó, bal oldali lap">
+<!ENTITY focusTab.lastOpenedTab "Utoljára megnyitott lap">
+<!ENTITY undoClose.label "Lap bezárásának visszavonása engedélyezése">
+<!ENTITY undoCloseCache.label "Lap bezárásának visszavonása, ennyi bezárt lapot tud visszavonni:">
+<!ENTITY undoClosepos.label "A lap eredeti helyzetének visszaállítása">
+<!ENTITY menuonlybutton.label "Csak a listán jelenjenek meg az Eszköztár gombok">
+<!ENTITY ctrltab.label "Ctrl-Tab a lapok között a használat sorrendjében vált">
+<!ENTITY cmdtab.label "Ctrl-Tab a lapok között a használat sorrendjében vált">
+<!ENTITY ctrltab.tabPreviews "Lapok előnézete">
+<!ENTITY ctrltab.popup "Ctrl-Tab megjeleníti a lapok listáját egy előugró ablakban">
+<!ENTITY cmdtab.popup "Ctrl-Tab megjeleníti a lapok listáját egy előugró ablakban">
+<!ENTITY tabpopup.mouse "Lapok listájának kezelése egérrel">
+<!ENTITY mergeNoTabSelection.label "Ablakok összefűzése, ha nincsenek lapok kijelölve">
+<!ENTITY mergeTabSelection.label "Összefűzés a lapok kiválasztása után:">
+<!ENTITY mergeall.label "Összes ablak összefűzése eggyé">
+<!ENTITY mergelastfocused.label "Csak az aktuális balak összefűzése az utoljára kiválasztottal">
+<!ENTITY mergePopups.label "Előugró ablakokat is">
+<!ENTITY popupNextToOpener.label "Előugró ablakok elhelyezése a megnyitó lap után">
+<!ENTITY activateSlideshow.label "#1 lenyomásával lapok körkapcsolása">
+<!ENTITY toggleAnimation.label "Lapmegnyitás és -zárás animáció letiltása">
+<!ENTITY reloadEvery.matchAddress.label "Lapok újratöltése a címtől függetlenül">
+<!ENTITY reloadEvery.onReloadButton.label "Újratöltés rendszeresen menü megjelenítése az Újratöltés gombon">
+<!ENTITY seconds.label "másodpercenként">
+<!ENTITY minutes.label "percenként">
+<!ENTITY tabBarAppearance.label "Lapok eszköztár">
+<!ENTITY tabAppearance.label "Lap">
+<!ENTITY toolBarAppearance.label "Eszköztár">
+<!ENTITY show.ontabbar.label "Megjelenítés a Lapok eszköztáron">
+<!ENTITY show.ontab.label "Megjelenítés lapon">
+<!ENTITY dragNewTabButton.tooltip "Az beállítás engedélyezéséhez húzza az „Új lap” gombbot a lapok eszköztárra.">
+<!ENTITY hideTabBarButton.label "Lap bezárása gomb">
+<!ENTITY newTabButton.label "Új lap gomb">
+<!ENTITY newTabButton.position.left.label "Bal oldal">
+<!ENTITY newTabButton.position.right.label "Jobb oldal">
+<!ENTITY newTabButton.position.afterlast.label "Legutolsó lap után">
+<!ENTITY allTabsButton.label "Gomb minden lapon">
+<!ENTITY tabBarSpace.label "Nagyobb hely mindkét oldalon">
+<!ENTITY tabBarSpace.tooltip "A Lapok eszköztáron történő kattintás és ejtés megkönnyítésére, amikor már túl sok lap van megnyitva">
+<!ENTITY tabbar.label "Mindig jelenjen meg a Lapok eszköztár">
+<!ENTITY moveTabOnDragging.label "Áthelyezés a lap húzásakor">
+<!ENTITY dropIndicator.label "Ejtés jelző">
+<!ENTITY dropIndicator-native.label "Egyedi stílus">
+<!ENTITY dropIndicator-builtin.label "Beépített stílus">
+<!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
+<!ENTITY tabBarPosition.label "Pozíció:">
+<!ENTITY tabBarPosition.top.label "Fent (a tartalom felett)">
+<!ENTITY tabBarPosition.bottom.label "Lent (a tartalom alatt)">
+<!ENTITY tabScroll.label "Ha a lapok nem férnek el egy sorban, legyen:">
+<!ENTITY tabScroll.none "görgethető gombok nélkül">
+<!ENTITY tabScroll.leftRightButtons "görgethető a két oldalon elhelyezett gombokkal">
+<!ENTITY tabScroll.rightButtons "görgethető a jobb oldalon elhelyezett gombokkal">
+<!ENTITY tabScroll.rightButtons.rtl "Gombokkal görgethető a bal oldalon">
+<!ENTITY tabScroll.multibar "többsoros">
+<!ENTITY maxrow.label "Sorok maximális száma:">
+<!ENTITY pinnedTabScroll.label "Rögzített lapok görgetésének engedélyezése">
+<!ENTITY offsetAmountToScroll.label "Gördítéskor a következő lapok részeinek megjelenítése">
+<!ENTITY smoothScroll.label "Finom görgetés">
+<!ENTITY scrolldelay.label "Görgetés késleltetése (időintervallum a görgetések között)">
+<!ENTITY currenttab.style.label "Aktuális lap">
+<!ENTITY unloadedtabs.style.label "Kiürített lapok">
+<!ENTITY unreadtabs.style.label "Olvasatlan lapok">
+<!ENTITY othertabs.style.label "Egyéb lapok">
+<!ENTITY setstyles.label "Testreszabott stílusok">
+<!ENTITY extraIcons.label1 "Ikon">
+<!ENTITY extraIcons.locked "Zárolva">
+<!ENTITY extraIcons.protected "Védve">
+<!ENTITY extraIcons.autoreload "Automatikus újratöltés">
+<!ENTITY extraIcons.hideonpinned "Elrejtés a rögzített lapokon">
+<!ENTITY progressMeter.label "Állapotjelző">
+<!ENTITY showTabX.labelBegin "Lap bezárása gomb">
+<!ENTITY showTabX.left "Elhelyezés bal oldalon">
+<!ENTITY showTabX.rtl "Elhelyezés jobb oldalon">
+<!ENTITY milliseconds.label "milliszekundum">
+<!-- LOCALIZATION NOTE          change this only if you need to change the width -->
+<!ENTITY showTabX.popup.width "13em">
+<!ENTITY showTabX.always "összesen">
+<!ENTITY showTabX.current "az aktuálison">
+<!ENTITY showTabX.hover "csak a mutatotton, ennyi idő után:">
+<!ENTITY showTabX.alwaysExeption "minden lapon amely szélesebb, mint:">
+<!ENTITY showTabX.currentHover "aktuálison és mutatotton">
+<!ENTITY minWidth.label "Szélesség (30~250) minimum:">
+<!ENTITY widthTo.label "maximum:">
+<!ENTITY widthPixels.label "képpont">
+<!ENTITY onLeftDisabled.label "A jelenlegi témánál nem helyezhet el bal oldalra gombokat">
+<!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
+<!ENTITY flexTabs.label "Lap optimális kitöltése">
+<!ENTITY bookastitle.label "Könyvjelző nevének felhasználása a lap neveként">
+<!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
+<!ENTITY toolbar.description.width "21em">
+<!ENTITY toolbar.description "Testreszabhatja az eszköztáron megjelenő TabMix gombokat">
+<!ENTITY toolbar.button.label "Testreszabás">
+<!ENTITY toolbar.visible.caption "Látható gombok">
+<!ENTITY toolbar.novisible.label "Nincs több látható gomb">
+<!ENTITY toolbar.hidden.caption "Rejtett gombok">
+<!ENTITY toolbar.nohidden.label "Nincs több rejtett gomb">
+<!ENTITY mouseGesture.label "Egér mozdulatok">
+<!ENTITY mouseClick.label "Egér kattintások">
+<!ENTITY mouseHoverSelect.labelBegin "Mutatott lap kiválasztása, ennyi idő után:">
+<!ENTITY tabFlip.label "Visszaváltás a legutolsó lapra, ha az aktuálisra kattint">
+<!ENTITY tabFlip.delay "Késleltetéssel">
+<!ENTITY clickFocus.label "Egérkattintás kiválasztja a lapot">
+<!ENTITY removeEntries.label "Középső kattintással a Tab Mix Plus menüelemek nem jelennek meg">
+<!ENTITY lockTabSizingOnClose.label "Lap bezárásakor, a további lapokat nem méretezi át, amíg a kurzor a eszköztár területét el nem hagyja">
+<!ENTITY removeEntries.tooltip "Nem jelennek meg továbbá a Bezárt lapok listája, a Bezárt ablakok és az elmentett munkamenetek sem">
+<!ENTITY tabbarscrolling.caption "Gördítés a Lapok eszköztáron">
+<!ENTITY tabbarscrolling.holdShift.label "Görgetés közben a Shift gombot lenyomva válthat ezen lehetőségek között">
+<!ENTITY tabbarscrolling.selectTab.label "Kiválasztott lap megváltoztatása">
+<!ENTITY tabbarscrolling.scrollAllTabs.label "Összes lap görgetése">
+<!ENTITY tabbarscrolling.inverse.label "Inverz görgetés">
+<!ENTITY double.label "Dupla kattintás">
+<!ENTITY middle.label "Középső gombbal kattintás">
+<!ENTITY ctrl.label "Ctrl-kattintás">
+<!ENTITY cmd.label "Parancs-kattintás">
+<!ENTITY shift.label "Shift-kattintás">
+<!ENTITY alt.label "Alt-kattintás">
+<!ENTITY ontab.label "a lapon:">
+<!ENTITY ontabbar.label "a Lapok eszköztáron:">
+<!ENTITY clicktab.label "Válasszon egy végrehajtandó műveletet, ha egy lapra vagy a Lapok eszköztárra kattint">
+<!ENTITY ontabbar.dblClick.label "Dupla kattintás a lapokon ne változtassa meg az ablak méretét.">
+<!ENTITY ontabbar.click.label "A lapok eszköztárral ne lehessen elhúzni az ablakot">
+<!ENTITY clicktab.default "Firefox alapértelmezés vagy más kiterjesztés">
+<!ENTITY clicktab.nothing "ne tegyen semmit">
+<!ENTITY clicktab.addtab "új lap megnyitása">
+<!ENTITY clicktab.duplicatetab "lap megkettőzése">
+<!ENTITY clicktab.duplicatetabw "Lap megkettőzése új ablakba">
+<!ENTITY clicktab.detachtab "Lap áthelyezése új ablakba">
+<!ENTITY clicktab.protecttab "lap védelme">
+<!ENTITY clicktab.locktab "lap zárolása">
+<!ENTITY clicktab.freezetab "Védi és zárolja a lapot">
+<!ENTITY clicktab.renametab "átnevezi a lapot">
+<!ENTITY clicktab.copyTabUrl "Lap URL másolása a vágólapra">
+<!ENTITY clicktab.copyUrlFromClipboard "URL betöltése a vágólapról">
+<!ENTITY clicktab.selectMerge "Válassza ki az összefűzni kívánt lapokat">
+<!ENTITY clicktab.mergeTabs "Ablakok összefűzése egymással">
+<!ENTITY clicktab.bookTab "Könyvjelzőt a lapra">
+<!ENTITY clicktab.bookTabs "Könyvjelzőt az összes lapra">
+<!ENTITY clicktab.reloadtab "lap újratöltése">
+<!ENTITY clicktab.reloadtabs "Minden lap újratöltése">
+<!ENTITY clicktab.reloadothertabs "Nem kijelölt lapok újratöltése">
+<!ENTITY clicktab.reloadlefttabs "Bal oldali lapok újratöltése">
+<!ENTITY clicktab.reloadrighttabs "Jobb oldali lapok újratöltése">
+<!ENTITY clicktab.autoReloadTab "Lap automatikus betöltésének ki- és bekapcsolása">
+<!ENTITY clicktab.removeall "bezárja az összes lapot">
+<!ENTITY clicktab.removeother "bezárja a többi lapot">
+<!ENTITY clicktab.removesimilar "Azonos webhelyrol származó lapok bezárása">
+<!ENTITY clicktab.removetoLeft "Balra lévő lapok bezárása">
+<!ENTITY clicktab.removetoRight "Jobbra lévő lapok bezárása">
+<!ENTITY clicktab.uctab "újranyitja az összes bezárt lapot">
+<!ENTITY clicktab.ucatab "Bezárt lapok újranyitása">
+<!ENTITY clicktab.snapback "lap visszazárása">
+<!ENTITY clicktab.ietab "Lap megnyitása Internet Explorerben">
+<!ENTITY contentLoad "Középső gombbal kattintás betölti az URL-t a vágólapról">
+<!ENTITY context.tab "Lap helyi menü">
+<!ENTITY context.main "Fő helyi menü">
+<!ENTITY context.tools "Eszközök menü">
+<!ENTITY showOnTabbar.label "Lapok helyi menü megjelenítése">
+<!ENTITY showtabBarContext.label "Lapok eszköztáron megjelenő menü:">
+<!ENTITY showContentAreaContext.label "Weboldal-területen megjelenő menü:">
+<!ENTITY showToolsMenu.label "Megjelenítés az Eszközök menüben">
+<!ENTITY startupHomePage1.label "Show your home page">
+<!ENTITY startupBlankPage.label "Üres oldal megjelenítése">
+<!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
+<!ENTITY sm.extension.description1 "A Tab Mix Plus úgy érzékeli, hogy a Munkamenet-kezelő kiterjesztés telepítve van">
+<!ENTITY sm.extension.description2 "A Tab Mix Plus munkamenet-kezelője ilyen esetben letiltásra kerül">
+<!ENTITY sm.extension.description3 "A jobb oldali gombra kattintva megnyithatja a Munkamenet-kezelő Beállítások párbeszédablakot">
+<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
+<!ENTITY sm.extension.convert.label "Átalakítás">
+<!ENTITY sm.extension.chooseFile.label1 "Az aktuális profil munkamenet adatainak átalakítása">
+<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
+<!ENTITY ss.enable.label "Beépített munkamenet-visszaállító használata">
+<!ENTITY ss.enable.tooltip "Kijelölés nélkül a TabMix Munkamenet-kezelője kerül engedélyezésre">
+<!ENTITY ss.advanced_setting "Haladó beállítások">
+<!ENTITY ss.advanced_setting.warning "Ne változtassa meg ezeket a beállításokat, csak ha biztosan tudja mit jelentenek ezek a beállítások.">
+<!ENTITY ss.interval "Időintervallum két állapotmentés között">
+<!ENTITY ss.interval.seconds "(ezredmásodpercben)">
+<!ENTITY ss.privacy_level "Személyes adatok mentése (űrlapadatok, küldött adatok és sütik)">
+<!ENTITY ss.privacy_level.allsites "Minden oldalnál">
+<!ENTITY ss.privacy_level.unencrypted "Nem titkosított oldalaknál">
+<!ENTITY ss.privacy_level.nosites "Semmilyen oldalnál">
+<!ENTITY ss.postdata.label1 "Küldött adatok mentésének maximális mérete">
+<!ENTITY ss.postdata.label2 "(bájtokban, -1 = nincs limit)">
+<!ENTITY sessionManger.enable "Munkamenet-kezelő engedélyezése">
+<!ENTITY crashRecovery.enable "Hiba-helyreállító engedélyezése">
+<!ENTITY sm.StartExit "Indítás/Kilépés">
+<!ENTITY sm.restore "Visszaállítás">
+<!ENTITY sm.preserve "Védelem">
+<!ENTITY sm.start "Amikor a böngésző elindul">
+<!ENTITY sm.start.restore "Visszaállítás">
+<!ENTITY sm.start.ask "Kérdezzen visszaállítás előtt">
+<!ENTITY sm.start.nothing "Ne állítsa vissza">
+<!ENTITY sm.exit "Ha a böngésző kilép:">
+<!ENTITY sm.exit.save "Munkamenet mentése">
+<!ENTITY sm.exit.ask "Kérdezzen mentés előtt">
+<!ENTITY sm.exit.nothing "Ne mentse el">
+<!ENTITY sm.startup "Indítási munkamenet:">
+<!ENTITY sm.lastsession "Utolsó munkamenet">
+<!ENTITY sm.previouslast "Előzőtől az utolsóig">
+<!ENTITY sm.chooseifempty "Másikat választ, ha üres">
+<!ENTITY sm.restore.options "Munkamenetek visszaállításakor">
+<!ENTITY sm.restore.overwrite "Felülírja a létező ablakokat">
+<!ENTITY sm.restore.overwriteTabs "és lapokat">
+<!ENTITY sm.restore.closedWinList "Bezárt ablakok listájának mentése">
+<!ENTITY sm.restore.merge "Több ablak összefűzése eggyé">
+<!ENTITY sm.restore.bypassCache "Gyorsítótár figyelmen kívül hagyása visszaállításkor">
+<!ENTITY sm.notrestore.label "Ha nem állítható vissza induláskor">
+<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
+<!ENTITY sm.preserve.options "Védett lapok">
+<!ENTITY sm.preserve.history "Előzmények">
+<!ENTITY sm.preserve.protect "Védelem állapota">
+<!ENTITY sm.preserve.locked "Zárolás állapota">
+<!ENTITY sm.preserve.permission "Engedélyek">
+<!ENTITY sm.preserve.scroll1 "Gördítősáv helye">
+<!ENTITY sm.restore.winOptions "Védett ablak">
+<!ENTITY sm.restore.selectedTab "Kiválasztott lap">
+<!ENTITY sm.restore.closedTabs "Bezárt lapok listája">
+<!ENTITY incompatible.extensions "Néhány telepített Kiterjesztés nem kompatibilis Tab Mix Plus kiterjesztéssel. Ajánlatos ezeket a Kiterjesztéseket letiltani vagy eltávolítani.">
+<!ENTITY incompatible.button.label "Listázás">

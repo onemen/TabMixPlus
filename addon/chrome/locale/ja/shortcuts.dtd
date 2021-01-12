@@ -1,0 +1,15 @@
+<!ENTITY shortcuts.label "ショートカット">
+<!ENTITY shortcuts.edit "ショートカットを編集">
+<!ENTITY shortcuts.showAll "すべて表示">
+<!ENTITY shortcuts.hideUnused "未設定項目を隠す">
+<!ENTITY shortcuts.warning "重複しているショートカットがあります">
+<!ENTITY shortcuts.showDetails "詳細表示">
+<!ENTITY shortcuts.hideDetails "簡易表示">
+<!ENTITY shortcuts.switchToLast "一つ前アクティブだったタブにフォーカスする">
+<!ENTITY shortcuts.slideshow "タブのローテーション状態を切り替える">
+<!ENTITY shortcuts.toggleFLST "現在のタブを閉じた後のフォーカス設定を切り替える">
+<!ENTITY shortcuts.toggleFLST.tooltip "タブをフォーカスする設定（右側のタブ／最後に選択していたタブ）を切り替える">
+<!ENTITY shortcuts.placeholder "キー">
+<!ENTITY shortcuts.reset "リセット">
+<!ENTITY shortcuts.clear "クリア">
+<!ENTITY shortcuts.inuse "ショートカットが以下と重複しています">
