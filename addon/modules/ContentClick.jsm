@@ -1,4 +1,3 @@
-/* eslint "tabmix/use-ownerGlobal": 0 */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["TabmixContentClick"];

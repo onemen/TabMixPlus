@@ -35,7 +35,6 @@ var gTabMix_preferencesOverlay = {
   },
 
   incontentInit: function gTabMix_preferencesOverlay_incontentInit() {
-    /* eslint-disable tabmix/balanced-listeners */
     if (this.usePreferencesClass) {
       let singleWindow = Preferences.get("extensions.tabmix.singleWindow");
       singleWindow.on("change", this.setSingleWindowUI.bind(this));
@@ -44,7 +43,6 @@ var gTabMix_preferencesOverlay = {
       let crashRecovery = Preferences.get("extensions.tabmix.sessions.crashRecovery");
       crashRecovery.on("change", this.onStartupPrefChanged.bind(this));
     }
-    /* eslint-enable tabmix/balanced-listeners */
 
     var box = this.id("linkTargeting");
     box.collapsed = true;

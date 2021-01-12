@@ -3,8 +3,7 @@
 module.exports = {
   plugins: ["tabmix"],
   env: {
-    "tabmix/content": true,
-    "tabmix/firefox": false,
-    "tabmix/tabmix": false,
+    "tabmix/modules": true,
+    //
   },
 };

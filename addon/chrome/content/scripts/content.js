@@ -1,4 +1,3 @@
-/* eslint tabmix/balanced-listeners:0 */
 /* globals content, docShell, addMessageListener, sendSyncMessage,
            sendAsyncMessage, sendRpcMessage */
 "use strict";

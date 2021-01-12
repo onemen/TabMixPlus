@@ -1,3 +1,4 @@
+/* globals OS */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ['EmbeddedWebExtension'];

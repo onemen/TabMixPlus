@@ -226,7 +226,6 @@ var TabmixTabClickOptions = {
             if (!aTab.selected)
               gBrowser.selectedTab = aTab;
             // IeTab2.getBoolPref accept default value
-            // eslint-disable-next-line tabmix/no-useless-parameters
             gIeTabObj.switchTabEngine(aTab, gIeTabObj.getBoolPref(ieTab.folder + ".alwaysNewTab", false));
           }
         } else if (window.ieview && window.ieview.launch) {

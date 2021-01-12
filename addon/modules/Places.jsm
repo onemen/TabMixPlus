@@ -10,7 +10,6 @@ XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
 // these imports are used by PlacesUIUtils and PlacesUtils that we eval here
-/* eslint-disable tabmix/import-globals */
 XPCOMUtils.defineLazyModuleGetter(this, "PluralForm",
   "resource://gre/modules/PluralForm.jsm");
 
@@ -19,7 +18,6 @@ XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
 
 XPCOMUtils.defineLazyModuleGetter(this, "OpenInTabsUtils",
   "resource:///modules/OpenInTabsUtils.jsm");
-/* eslint-enable tabmix/import-globals */
 
 XPCOMUtils.defineLazyModuleGetter(this, "PlacesUIUtils",
   "resource:///modules/PlacesUIUtils.jsm");

@@ -1,0 +1,24 @@
+{
+  "name": "tab-mix-plus",
+  "version": "1.0.0",
+  "description": "New Tab Mix Plus for modern Firefox",
+  "scripts": {
+    "lint": "eslint --cache --cache-location config\\.eslintcache --ignore-path config\\.eslintignore --ext .js,.jsm ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onemen/TabMixPlus.git"
+  },
+  "keywords": [],
+  "author": "tabmix.onemen@gmail.com",
+  "license": "MPL",
+  "bugs": {
+    "url": "https://github.com/onemen/TabMixPlus/issues"
+  },
+  "homepage": "https://github.com/onemen/TabMixPlus#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.0.0",
+    "eslint-plugin-tabmix": "^1.0.0"
+  }
+}

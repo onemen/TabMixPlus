@@ -8,19 +8,12 @@ module.exports = {
     "tabmix/browser": true,
   },
 
-  // for eslint 2.0.0
   parserOptions: {
-    ecmaVersion: 8,
+    ecmaVersion: 2020,
+    sourceType: "script",
   },
 
   rules: {
-    "tabmix/avoid-removeChild": 2,
-    "tabmix/balanced-listeners": 2,
-    "tabmix/import-globals": 2,
-    "tabmix/no-single-arg-cu-import": 2,
-    "tabmix/no-import-into-var-and-global": 2,
-    "tabmix/no-useless-parameters": 2,
-    "tabmix/use-ownerGlobal": 2,
     "no-alert": 2,
     "no-array-constructor": 2,
     "no-bitwise": 0,
@@ -103,7 +96,7 @@ module.exports = {
     "no-process-exit": 2, // node
     "no-proto": 2,
     "no-prototype-builtins": 0,
-    "no-redeclare": 2,
+    "no-redeclare": [2, { builtinGlobals: false }],
     "no-regex-spaces": 2,
     "no-restricted-globals": 0,
     "no-restricted-imports": 0,
@@ -216,7 +209,7 @@ module.exports = {
     "key-spacing": [2, { beforeColon: false, afterColon: true }],
     "keyword-spacing": 2,
     "line-comment-position": 0,
-    "linebreak-style": [2, "windows"],
+    "linebreak-style": [2, "unix"],
     "lines-around-comment": [
       0,
       { beforeBlockComment: true, allowBlockStart: true, allowBlockEnd: true },
@@ -299,5 +292,7 @@ module.exports = {
     yoda: [2, "never"],
   },
 
-  globals: {},
+  globals: {
+    /**/
+  },
 };

@@ -1,3 +1,4 @@
+/* globals  Prefs isMac SSS */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["DynamicRules"];

@@ -1,0 +1,15 @@
+.hg
+**/*~/*
+**/*~*.xul
+**/*~*.xml
+**/*~*.js
+**/*~*.jsm
+**/*׳¢׳•׳×׳§*.js
+**/*׳¢׳•׳×׳§*.jsm
+**/*עותק*.js
+**/*עותק*.jsm
+**/private/*
+**/config/*
+eslint_result.js
+.eslintrc.js
+manifest.json

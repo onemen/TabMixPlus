@@ -424,10 +424,8 @@ var TMP_ClosedTabs = {
       m.setAttribute("class", "menuitem-iconic bookmark-item menuitem-with-favicon");
       m.setAttribute("value", i);
       m.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
-      /* eslint-disable tabmix/balanced-listeners */
       m.addEventListener("command", this);
       m.addEventListener("click", this);
-      /* eslint-enable tabmix/balanced-listeners */
       if (i === 0)
         m.setAttribute("key", "key_undoCloseTab");
       aPopup.appendChild(m);
@@ -459,7 +457,6 @@ var TMP_ClosedTabs = {
     if (keyId && document.getElementById("key_tm_" + keyId)) {
       m.setAttribute("key", "key_tm_" + keyId);
     }
-    /* eslint-disable tabmix/balanced-listeners */
     m.addEventListener("command", this);
     return m;
   },

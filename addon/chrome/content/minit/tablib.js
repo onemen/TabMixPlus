@@ -1033,7 +1033,6 @@ Tabmix.tablib = {
   },
 
   populateUndoWindowSubmenu(undoPopup) {
-    /* eslint-disable tabmix/balanced-listeners */
     if (!undoPopup.hasAttribute("context"))
       undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
     let undoItems = JSON.parse(TabmixSvc.ss.getClosedWindowData());
@@ -1070,7 +1069,6 @@ Tabmix.tablib = {
       TabmixSessionManager.forgetClosedWindow(-1);
     });
     undoPopup.insertBefore(clearList, restoreAllWindows);
-    /* eslint-enable tabmix/balanced-listeners */
   },
 
   addNewFunctionsTo_gBrowser: function addNewFunctionsTo_gBrowser() {
