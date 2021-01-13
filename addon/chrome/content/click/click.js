@@ -2,7 +2,7 @@
 "use strict";
 
 XPCOMUtils.defineLazyModuleGetter(Tabmix, "ContextMenu",
-  "resource://tabmixplus/ContextMenu.jsm");
+  "chrome://tabmix-resource/content/ContextMenu.jsm");
 
 var TabmixTabClickOptions = {
   _tabFlipTimeOut: null,

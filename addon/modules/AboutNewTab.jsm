@@ -16,10 +16,10 @@ XPCOMUtils.defineLazyGetter(this, "gAllPages", () => {
 });
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/TabmixSvc.jsm");
+  "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
-  "resource://tabmixplus/Places.jsm");
+  "chrome://tabmix-resource/content/Places.jsm");
 
 var AboutNewTabInternal;
 this.TabmixAboutNewTab = Object.freeze({

@@ -24,19 +24,19 @@ XPCOMUtils.defineLazyModuleGetter(this, "NetUtil",
   "resource://gre/modules/NetUtil.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "ContentSvc",
-  "resource://tabmixplus/ContentSvc.jsm");
+  "chrome://tabmix-resource/content/ContentSvc.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
-  "resource://tabmixplus/LinkNodeUtils.jsm");
+  "chrome://tabmix-resource/content/LinkNodeUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "ContextMenu",
-  "resource://tabmixplus/ContextMenu.jsm");
+  "chrome://tabmix-resource/content/ContextMenu.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
-  "resource://tabmixplus/Utils.jsm");
+  "chrome://tabmix-resource/content/Utils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixAboutNewTab",
-  "resource://tabmixplus/AboutNewTab.jsm");
+  "chrome://tabmix-resource/content/AboutNewTab.jsm");
 
 var PROCESS_TYPE_CONTENT = ContentSvc.version(380) &&
     Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
@@ -267,9 +267,10 @@ TabmixClickEventHandler = {
 
     let frameOuterWindowID;
     if (ContentSvc.version(540)) {
-      frameOuterWindowID = ownerDoc.defaultView.QueryInterface(Ci.nsIInterfaceRequestor)
-          .getInterface(Ci.nsIDOMWindowUtils)
-          .outerWindowID;
+      // frameOuterWindowID = ownerDoc.defaultView.QueryInterface(Ci.nsIInterfaceRequestor)
+      //     .getInterface(Ci.nsIDOMWindowUtils)
+      //     .outerWindowID;
+      frameOuterWindowID = ownerDoc.defaultView.docShell.outerWindowID;
     }
 
     let json = {

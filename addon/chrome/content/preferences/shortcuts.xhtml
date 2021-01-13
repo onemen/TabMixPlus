@@ -11,10 +11,11 @@
 
 <overlay id="tabmix-shortcuts-overlay"
    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <link xmlns="http://www.w3.org/1999/xhtml" rel="localization" href="browser/tabContextMenu.ftl" />
 
   <!-- Tabmix Plus KEYS -->
   <keyset id="mainKeyset">
-    <key id="key_tm_undoClose" label="&undoCloseTab.label;" modifiers="accel" keycode="VK_F12" oncommand="TMP_ClosedTabs.undoCloseTab();"/>
+    <key id="key_tm_undoClose" data-l10n-id="tab-context-undo-close-tabs" label="undoCloseTab.label;" modifiers="accel" keycode="VK_F12" oncommand="TMP_ClosedTabs.undoCloseTab();"/>
     <key id="key_tm_dupTab" label="&duplicateTabMenu.label;" modifiers="accel,alt" key="&tab.key;" oncommand="gBrowser.duplicateTab(gBrowser.mCurrentTab);"/>
     <key id="key_tm_detachTab" label="&detachTab.label;" modifiers="accel, alt" key="&window.key;" oncommand="gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, true);"/>
     <key id="key_tm_mergeWin" label="&mergeContext.label;" modifiers="accel,shift" key="&merge.key;" oncommand="Tabmix.MergeWindows.mergeWindows(window);"/>

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "New Tab Mix Plus for modern Firefox",
   "scripts": {
-    "lint": "eslint --cache --cache-location config\\.eslintcache --ignore-path config\\.eslintignore --ext .js,.jsm ."
+    "lint": "eslint --fix --cache --cache-location config\\.eslintcache --ignore-path config\\.eslintignore --ext .js,.jsm ."
   },
   "repository": {
     "type": "git",

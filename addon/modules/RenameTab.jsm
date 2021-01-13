@@ -5,10 +5,10 @@ this.EXPORTED_SYMBOLS = ["RenameTab"];
 const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
+Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
-  "resource://tabmixplus/Places.jsm");
+  "chrome://tabmix-resource/content/Places.jsm");
 
 this.RenameTab = {
   window: null,

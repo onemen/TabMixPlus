@@ -29,10 +29,10 @@ XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
   "resource:///modules/RecentWindow.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this,
-  "TabmixSvc", "resource://tabmixplus/TabmixSvc.jsm");
+  "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "AsyncPlacesUtils",
-  "resource://tabmixplus/AsyncPlacesUtils.jsm");
+  "chrome://tabmix-resource/content/AsyncPlacesUtils.jsm");
 
 var PlacesUtilsInternal;
 this.TabmixPlacesUtils = Object.freeze({

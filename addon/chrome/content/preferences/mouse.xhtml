@@ -3,14 +3,15 @@
 <!DOCTYPE overlay [
 <!ENTITY % pref-tabmixDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd">
 %pref-tabmixDTD;
-<!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd">
-%browserDTD;
+<!-- <!ENTITY % browserDTD SYSTEM "chrome://browser/locale/browser.dtd">
+%browserDTD; -->
 ]>
 
 <overlay id="LinksPaneOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <prefpane id="paneMouse" onpaneload="gMousePane.init();">
+    <link xmlns="http://www.w3.org/1999/xhtml" rel="localization" href="browser/tabContextMenu.ftl" />
 
     <!-- scripts -->
     <script type="application/javascript" src="chrome://tabmixplus/content/preferences/mouse.js"/>
@@ -167,7 +168,7 @@
                     <menuitem value="20" label="&clicktab.reloadrighttabs;"/>
                     <menuitem value="30" label="&clicktab.autoReloadTab;"/>
                       <menuseparator/>
-                    <menuitem value="2" label="&closeTab.label;"/>
+                    <menuitem value="2" data-l10n-id="tab-context-close-tabs" label="closeTab.label"/>
                     <menuitem value="9" label="&clicktab.removeall;"/>
                     <menuitem value="24" label="&clicktab.removesimilar;"/>
                     <menuitem value="8" label="&clicktab.removeother;"/>

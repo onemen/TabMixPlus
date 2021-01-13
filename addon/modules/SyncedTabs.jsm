@@ -11,7 +11,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this,
-  "TabmixSvc", "resource://tabmixplus/TabmixSvc.jsm");
+  "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const {getChromeWindow} = Cu.import("resource:///modules/syncedtabs/util.js", {});
 const {TabListView} = Cu.import("resource:///modules/syncedtabs/TabListView.js", {});

@@ -7,7 +7,7 @@ const {utils: Cu} = Components;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this,
-  "TabmixSvc", "resource://tabmixplus/TabmixSvc.jsm");
+  "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 let internal = {
   tabmix: {

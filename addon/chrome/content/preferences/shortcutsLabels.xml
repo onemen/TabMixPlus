@@ -43,7 +43,7 @@
     <implementation>
       <constructor>
         <![CDATA[
-          let {keys} = Cu.import("resource://tabmixplus/Shortcuts.jsm", {}).Shortcuts;
+          let {keys} = Cu.import("chrome://tabmix-resource/content/Shortcuts.jsm", {}).Shortcuts;
           for (let att of this.attributes) {
             if (keys[att.name]) {
               keys[att.name].label = att.value;

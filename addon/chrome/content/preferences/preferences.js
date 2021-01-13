@@ -591,7 +591,7 @@ window.gIncompatiblePane = {
 
   checkForIncompatible(aShowList) {
     let tmp = {};
-    Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
+    Components.utils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm", tmp);
     tmp = new tmp.CompatibilityCheck(window, aShowList, true);
   },
 
@@ -623,7 +623,7 @@ XPCOMUtils.defineLazyGetter(this, "OS", () => {
 });
 
 XPCOMUtils.defineLazyModuleGetter(this, "AsyncUtils",
-  "resource://tabmixplus/AsyncUtils.jsm");
+  "chrome://tabmix-resource/content/AsyncUtils.jsm");
 
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
 

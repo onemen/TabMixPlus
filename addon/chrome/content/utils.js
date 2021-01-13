@@ -104,7 +104,7 @@ var Tabmix = {
     var self = this;
     XPCOMUtils.defineLazyGetter(aObject, aName, () => {
       let tmp = {};
-      Components.utils.import("resource://tabmixplus/" + aModule + ".jsm", tmp);
+      Components.utils.import("chrome://tabmix-resource/content/" + aModule + ".jsm", tmp);
       let Obj = tmp[aSymbol];
       if ("prototype" in tmp[aSymbol])
         Obj = new Obj();

@@ -312,10 +312,10 @@ TabmixSessionManager = {
     }
 
     XPCOMUtils.defineLazyModuleGetter(this, "TabmixGroupsMigrator",
-      "resource://tabmixplus/TabGroupsMigrator.jsm");
+      "chrome://tabmix-resource/content/TabGroupsMigrator.jsm");
 
     XPCOMUtils.defineLazyModuleGetter(this, "EmbeddedWebExtension",
-      "resource://tabmixplus/extensions/EmbeddedWebExtension.jsm");
+      "chrome://tabmix-resource/content/extensions/EmbeddedWebExtension.jsm");
 
     // just in case Tabmix.tablib isn't init yet
     // when Webmail Notifier extension installed and user have master password

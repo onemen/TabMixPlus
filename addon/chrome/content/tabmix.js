@@ -39,7 +39,7 @@ Tabmix.startup = function TMP_startup() {
 Tabmix.beforeDelayedStartup = function() {
   if (this.isFirstWindow) {
     let tmp = {};
-    Cu.import("resource://tabmixplus/extensions/AddonManager.jsm", tmp);
+    Cu.import("chrome://tabmix-resource/content/extensions/AddonManager.jsm", tmp);
     TMP_SessionStore.setService(1, true);
   }
 
@@ -1281,7 +1281,7 @@ Tabmix.initialization = {
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
     if (Tabmix.singleWindowMode) {
       let tmp = {};
-      Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
+      Components.utils.import("chrome://tabmix-resource/content/SingleWindowModeUtils.jsm", tmp);
       stopInitialization = tmp.SingleWindowModeUtils.newWindow(window);
     }
 

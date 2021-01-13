@@ -1,6 +1,6 @@
 content   tabmixplus                 chrome/content/
 content   tabmix-prefs               defaults/preferences/
-resource  tabmixplus                 modules/
+content   tabmix-resource                modules/
 
 locale    tabmixplus   bg            chrome/locale/bg-BG/
 locale    tabmixplus   ca            chrome/locale/ca/

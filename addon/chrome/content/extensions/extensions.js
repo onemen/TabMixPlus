@@ -49,7 +49,7 @@ var TMP_extensionsCompatibility = {
         window.TMP_TabGroupsManager = {};
         window.TMP_TabGroupsManager.tabmixSessionsManager = function() {};
         let tmp = {};
-        Components.utils.import("resource://tabmixplus/extensions/TabGroupsManager.jsm", tmp);
+        Components.utils.import("chrome://tabmix-resource/content/extensions/TabGroupsManager.jsm", tmp);
         tmp.TMP_TabGroupsManager.changeCode = Tabmix.changeCode;
         tmp.TMP_TabGroupsManager.init(window, gBrowser.tabContainer);
       }

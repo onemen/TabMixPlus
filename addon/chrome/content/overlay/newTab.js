@@ -7,7 +7,7 @@
   if (Services.prefs.getBoolPref(PREF)) {
     window.addEventListener("load", function loadGrid() {
       window.removeEventListener("load", loadGrid);
-      let {updateTitles} = Cu.import("resource://tabmixplus/AboutNewTab.jsm", {}).TabmixAboutNewTab;
+      let {updateTitles} = Cu.import("chrome://tabmix-resource/content/AboutNewTab.jsm", {}).TabmixAboutNewTab;
       if (gGrid.cells) {
         updateTitles(gGrid.cells);
       }

@@ -292,7 +292,5 @@ module.exports = {
     yoda: [2, "never"],
   },
 
-  globals: {
-    /**/
-  },
+  globals: {},
 };

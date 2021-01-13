@@ -627,7 +627,7 @@ var TMP_Places = {
 
   // nsINavBookmarkObserver
 
-  QueryInterface: XPCOMUtils.generateQI([
+  QueryInterface: ChromeUtils.generateQI([
     Ci.nsINavBookmarkObserver
   ]),
 

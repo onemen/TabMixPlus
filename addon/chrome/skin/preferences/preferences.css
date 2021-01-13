@@ -1,0 +1,64 @@
+/* toolkit/content/xul.css */
+/********** preferences ********/
+
+prefwindow,
+prefwindow:root /* override :root from above */, prefpane {
+  -moz-box-orient: vertical;
+}
+
+prefwindow > .paneDeckContainer {
+  overflow: hidden;
+}
+
+prefpane > .content-box {
+  overflow: hidden;
+}
+
+prefwindow[type="child"] > .paneDeckContainer {
+  overflow: -moz-hidden-unscrollable;
+}
+
+prefwindow[type="child"] > prefpane > .content-box {
+  -moz-box-flex: 1;
+  overflow: -moz-hidden-unscrollable;
+}
+
+preferences, preference {
+  visibility: collapse;
+}
+
+radio[pane] .radio-check {
+  display: none;
+}
+
+radio[pane] .radio-label-box {
+  -moz-box-orient: vertical;
+  outline: none;
+  margin-inline: 5px;
+  margin-bottom: 2px;
+}
+
+radio[pane] .radio-icon {
+  margin-inline-end: 0;
+}
+
+radio[pane] .radio-label {
+  margin-top: 1px;
+}
+
+prefwindow[chromehidden~="toolbar"] .chromeclass-toolbar {
+  display: none;
+}
+
+.button-menu-dropmarker {
+  direction: rtl;
+  -moz-appearance: button !important;
+}
+
+.button-menu-dropmarker .button-icon {
+  margin-left: 5px;
+}
+
+windowdragbox {
+  width: 100%;
+}

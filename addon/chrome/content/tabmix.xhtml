@@ -4,8 +4,8 @@
 <?xml-stylesheet href="chrome://tabmixplus/skin/tab.css" type="text/css"?>
 <?xml-stylesheet href="chrome://tabmix-os/skin/browser.css" type="text/css"?>
 
-<?xul-overlay href="chrome://tabmixplus/content/overlay/tabContextMenu.xul"?>
-<?xul-overlay href="chrome://tabmixplus/content/preferences/shortcuts.xul"?>
+<?xul-overlay href="chrome://tabmixplus/content/overlay/tabContextMenu.xhtml"?>
+<?xul-overlay href="chrome://tabmixplus/content/preferences/shortcuts.xhtml"?>
 
 <!DOCTYPE overlay [
 <!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
@@ -118,7 +118,7 @@
       <menuitem id="tm-linkWithhistory" label="&linkwithhistory.label;" accesskey="&linkwithhistory.accesskey;"
          insertafter="context-openlinkintab" oncommand="gBrowser.openLinkWithHistory();"/>
       <menuseparator id="tm-content-miscSep" insertafter="context-stop"/>
-      <menuitem id="tm-content-closetab" label="&closeTab.label;" oncommand="gBrowser.removeCurrentTab();" insertbefore="context-sep-stop,context-sep-viewbgimage"/>
+      <menuitem id="tm-content-closetab" data-l10n-id="tab-context-close-tabs" oncommand="gBrowser.removeCurrentTab();" insertbefore="context-sep-stop,context-sep-viewbgimage"/>
       <menuitem id="tm-duplicateTabContext" key="key_tm_dupTab" label="&duplicateTabMenu.label;" accesskey="&duplicateTabMenu.accesskey;"
          oncommand="gBrowser.duplicateTab(gBrowser.mCurrentTab);" insertbefore="context-sep-stop,context-sep-viewbgimage"/>
       <menuitem id="tm-duplicateinWinContext" key="key_tm_dupWin" label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"
@@ -143,7 +143,7 @@
        </menu>
       <menuseparator id="tm-content-undoCloseSep" insertbefore="context-sep-stop,context-sep-viewbgimage"/>
       <menuitem id="tm-content-undoCloseTab" oncommand="TMP_ClosedTabs.undoCloseTab();" insertbefore="context-sep-stop,context-sep-viewbgimage"
-         key="key_undoCloseTab" label="&undoCloseTab.label;" accesskey="&undoCloseTab.accesskey;"/>
+         key="key_undoCloseTab" data-l10n-id="tab-context-close-tabs"/>
       <menu id="tm-content-undoCloseList" label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;" tmp_iconic="menu-iconic closedtabs-icon"
          insertbefore="context-sep-stop,context-sep-viewbgimage">
         <menupopup id="tm-content-undoCloseList-menu"

@@ -161,7 +161,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     if (this.firstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {
         let tmp = {};
-        Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
+        Components.utils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm", tmp);
         tmp = new tmp.CompatibilityCheck(aWindow, true);
       }, 0, window);
     }

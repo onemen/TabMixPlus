@@ -19,10 +19,10 @@ XPCOMUtils.defineLazyModuleGetter(this, "BrowserUtils",
   "resource://gre/modules/BrowserUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
-  "resource://tabmixplus/LinkNodeUtils.jsm");
+  "chrome://tabmix-resource/content/LinkNodeUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/TabmixSvc.jsm");
+  "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 var ContentClickInternal;
 this.TabmixContentClick = {

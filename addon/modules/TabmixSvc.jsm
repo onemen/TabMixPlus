@@ -9,10 +9,10 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("resource://gre/modules/Services.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
-  "resource://tabmixplus/Places.jsm");
+  "chrome://tabmix-resource/content/Places.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "SyncedTabs",
-  "resource://tabmixplus/SyncedTabs.jsm");
+  "chrome://tabmix-resource/content/SyncedTabs.jsm");
 
 // place holder for load default preferences function
 // eslint-disable-next-line no-unused-vars
@@ -241,7 +241,7 @@ this.TabmixSvc = {
   },
 
   windowStartup: {
-    QueryInterface: XPCOMUtils.generateQI([Ci.nsIObserver,
+    QueryInterface: ChromeUtils.generateQI([Ci.nsIObserver,
       Ci.nsISupportsWeakReference]),
 
     _initialized: false,
@@ -269,7 +269,7 @@ this.TabmixSvc = {
 
       Services.obs.addObserver(this, "quit-application", true);
 
-      Cu.import("resource://tabmixplus/DownloadLastDir.jsm", {});
+      Cu.import("chrome://tabmix-resource/content/DownloadLastDir.jsm", {});
 
       TabmixPlacesUtils.init(aWindow);
       if (TabmixSvc.version(470) && !(TabmixSvc.isBasilisk && TabmixSvc.version({bs: "52.9.2019.06.08"}))) {
@@ -279,14 +279,14 @@ this.TabmixSvc = {
 
       TabmixSvc.tabStylePrefs = {};
       let tmp = {};
-      Cu.import("resource://tabmixplus/DynamicRules.jsm", tmp);
+      Cu.import("chrome://tabmix-resource/content/DynamicRules.jsm", tmp);
       tmp.DynamicRules.init(aWindow);
 
-      Cu.import("resource://tabmixplus/TabRestoreQueue.jsm", {});
+      Cu.import("chrome://tabmix-resource/content/TabRestoreQueue.jsm", {});
 
       if (TabmixSvc.version(510)) {
         try {
-          Cu.import("resource://tabmixplus/extensions/EmbeddedWebExtension.jsm", {});
+          Cu.import("chrome://tabmix-resource/content/extensions/EmbeddedWebExtension.jsm", {});
         } catch (ex) {
           TabmixSvc.console.reportError(ex);
         }
@@ -306,7 +306,7 @@ this.TabmixSvc = {
 
       if (isVersion(410) && !TabmixSvc.isCyberfox) {
         prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
-        Cu.import("resource://tabmixplus/NewTabURL.jsm", {});
+        Cu.import("chrome://tabmix-resource/content/NewTabURL.jsm", {});
       }
     },
 
@@ -452,7 +452,7 @@ XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
   "resource://gre/modules/FileUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
-  "resource://tabmixplus/log.jsm");
+  "chrome://tabmix-resource/content/log.jsm");
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", () => {
   const sessionStoreModule = Cu.import("resource:///modules/sessionstore/SessionStore.jsm", {});
