@@ -340,37 +340,6 @@ class Overlays {
     if (node.id) {
       let target = this.document.getElementById(node.id);
       if (node.localName == "toolbarpalette") {
-        // let box;
-        // if(node.id == "BrowserToolbarPalette"){
-        //   target = this.window.gNavToolbox.palette;
-        //   box =  this.window.gNavToolbox;
-        // }else{
-        //   if (target) {
-        //     box = target.closest("toolbox");
-        //     } else {
-        //       // These vanish from the document but still exist via the palette property
-        //       let boxes = [...this.document.getElementsByTagName("toolbox")];
-        //       box = boxes.find(box => box.palette && box.palette.id == node.id);
-        //       let palette = box ? box.palette : null;
-            
-        //       if (!palette) {
-        //         console.debug(
-        //           `The palette for ${
-        //             node.id
-        //           } could not be found, deferring to later`
-        //         );
-        //         return false;
-        //       }
-            
-        //       target = palette;
-        //     }
-        // } 
-
-        // this._toolbarsToResolve.push(...box.querySelectorAll("toolbar"));
-        // this._toolbarsToResolve.push(
-        //   ...this.document.querySelectorAll(`toolbar[toolboxid="${box.id}"]`)
-        // );
-
         var toolboxes = this.window.document.querySelectorAll('toolbox');
 				for(let toolbox of toolboxes) {
 					var palette = toolbox.palette;

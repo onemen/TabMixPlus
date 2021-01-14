@@ -1,10 +1,5 @@
 const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
-
-// connectedCallback do tabs cria um elemento spacer de cada lado e se tiver mais de um antes das tab faz o tabbox não conseguir
-// identificar o selectedIndex. Para evitar múltiplas execuções do connectedCallback, resultado do carregamento via overlay seguido
-// de inserção no content binding, é só pular enquanto não detectar que o binding root (prefwindow) foi definido, pois ele é quem
-// estrutura o content binding.
 customElements.get('tabs').prototype.delayConnectedCallback = function () {
   return customElements.get('prefwindow') ? false : true;
 };
