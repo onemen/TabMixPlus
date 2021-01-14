@@ -365,8 +365,9 @@ var TMP_ClosedTabs = {
 
     let dwu, DIRECTION_RTL;
     if (Tabmix.isVersion(600)) {
-      dwu = window.QueryInterface(Ci.nsIInterfaceRequestor)
-          .getInterface(Ci.nsIDOMWindowUtils);
+      // dwu = window.QueryInterface(Ci.nsIInterfaceRequestor)
+      //     .getInterface(Ci.nsIDOMWindowUtils);
+      dwu = window.windowUtils;
       DIRECTION_RTL = Ci.nsIDOMWindowUtils.DIRECTION_RTL;
     }
 
@@ -602,7 +603,7 @@ var TMP_ClosedTabs = {
     var tabData = this.getClosedTabAtIndex(aIndex);
     // we pass the current tab as a place holder for tabData
     var state = TabmixSvc.JSON.stringify(tabData ? tabData.state : {});
-    return gBrowser.duplicateTabToWindow(gBrowser.mCurrentTab, null, state);
+    return gBrowser.duplicateTabToWindow(gBrowser._selectedTab, null, state);
   },
 
   SSS_restoreAllClosedTabs: function ct_SSS_restoreAllClosedTabs() {
@@ -646,7 +647,7 @@ var TMP_ClosedTabs = {
     let {state, pos} = this.getClosedTabAtIndex(aIndex);
 
     var tabToRemove = null;
-    var cTab = gBrowser.mCurrentTab;
+    var cTab = gBrowser._selectedTab;
     var isCurrentBlank = gBrowser.isBlankNotBusyTab(cTab);
     if (aWhere == "current" && !isCurrentBlank) {
       tabToRemove = cTab;

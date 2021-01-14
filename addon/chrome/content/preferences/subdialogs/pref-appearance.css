@@ -65,5 +65,6 @@ dialog[hide-RGB="true"] colorbox > *:not([class="visible"]) {
 }
 
 .dialog-button[icon="help"] {
-  list-style-image: url("chrome://global/skin/icons/question-16.png");
+  /* list-style-image: url("chrome://global/skin/icons/question-64.png"); */
+  list-style-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACu0lEQVQ4ja1T20tTcRw/Dzs/zj/QjOWl1Cw3JpGg+BRErYvXaekUibZ5QoReulBKgaERRk/RSxScHprD1NTZztzchqXmvCwwStuaYcfpdrYcsZRje/n0IDZLX4I+z9/r50JROyGnabqAEKJlGMbIMIyREKKlabqAoij5LvVJEELULMt28DxvFQTBL0nSuiRJ64Ig+Hmet7Is20EIUe/aLJPJijiOM38JhqNP7EHo2qaQ3+hCfqMLuvZpPHWuYCm0GuU4ziyTyYp2bOY4zjz6MZrQ3HiLwiY3Hvb6MTn3DZPzq+gbXUZhkxuaZg/mluIJjuPM2y+RsyzbsbgcjmiaJ6DUO+Ce/opYLIa1tTVsbGwgkUhgeCYEld4BTcskgqFIhGXZDoqi5BRN0wU8z1s5VxBKvQPKi0NYWFjA/OdFnLj2Gievv0YsFkM8HofK4IDKMAzzaBg8z1tpmi6gCCFaQRD8unteKPUOqPR2qBucUDc4kce6cOXRNAKBAHwBAenlL5Baaob29jgEQfATQrQUwzBGSZLWj7BOqAyOzWajE9k1Fhhah+HxeOD1esG2uZFyqhN7NM9xsKobkiStMwxjTA645Ia6wYmc2kEoznZBUdyNAasDNpsNxlYX9pX0QlHcjb1nunC4ZiA5YOuF2vuzyCjfLFAU9yBT+xImkwnPOgeQUTGIjAoL0sr6kVrSi+p2b/KFLRL7x1eQctoMRXEP0sr6kVHRj7y6QRy98ApZ54aQWWXDgUor0sstsHsjSRK3ZAyFRbG8ZQKppX3Yrx1ElrYPY2NjcI1M4JDOiZwaJ7LP21F99z1WQmHxt4zbjRRa/ZGouvMOmZU8cmss8Pl8mP3gh7L+DXLrRlD/YB5B8fvPv430h5XFSFQc/xTH5ccBHLs6g+M3Z3HLJGAqEIcoRsRdrfxfwrQN/xTnX0Uj54ihaZPuAAAAAElFTkSuQmCC");
 }

@@ -25,14 +25,16 @@ XPCOMUtils.defineLazyModuleGetter(this, "PlacesUIUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils",
   "resource://gre/modules/PlacesUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
-  "resource:///modules/RecentWindow.jsm");
+// XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
+//   "resource:///modules/RecentWindow.jsm");
+this.RecentWindow = {};
+this.RecentWindow.getMostRecentBrowserWindow = Services.wm.getMostRecentBrowserWindow;
 
 XPCOMUtils.defineLazyModuleGetter(this,
-  "TabmixSvc", "resource://tabmixplus/TabmixSvc.jsm");
+  "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "AsyncPlacesUtils",
-  "resource://tabmixplus/AsyncPlacesUtils.jsm");
+  "chrome://tabmix-resource/content/AsyncPlacesUtils.jsm");
 
 var PlacesUtilsInternal;
 this.TabmixPlacesUtils = Object.freeze({
@@ -98,10 +100,10 @@ PlacesUtilsInternal = {
     }
   },
 
-  functions: ["_openTabset", "openURINodesInTabs", "openContainerNodeInTabs", "openNodeWithEvent", "_openNodeIn"],
+  functions: ["openTabset", "openURINodesInTabs", "openMultipleLinksInTabs", "openNodeWithEvent", "openNodeIn"],
   initPlacesUIUtils: function TMP_PC_initPlacesUIUtils(aWindow) {
     try {
-      PlacesUIUtils._openTabset.toString();
+      PlacesUIUtils.openTabset.toString();
     } catch (ex) {
       if (aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser") {
         TabmixSvc.console.log("Starting with Firefox 21 Imacros 8.3.0 break toString on PlacesUIUtils functions." +
@@ -146,21 +148,21 @@ PlacesUtilsInternal = {
         typeof PlacesUIUtils.__treestyletab__openTabset == "function") {
       updateOpenTabset("__treestyletab__openTabset");
     } else if (treeStyleTabInstalled) {
-      // wait until TreeStyleTab changed PlacesUIUtils._openTabset
+      // wait until TreeStyleTab changed PlacesUIUtils.openTabset
       let timer = this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
       this.__index = 0;
       timer.initWithCallback(() => {
-        let str = PlacesUIUtils._openTabset.toString();
+        let str = PlacesUIUtils.openTabset.toString();
         if (++this.__index > 10 || str.indexOf("TreeStyleTabBookmarksService") > -1 ||
             str.indexOf("GroupBookmarkBehavior") > -1) {
           timer.cancel();
           this._timer = null;
           this.__index = null;
-          updateOpenTabset("_openTabset", true);
+          updateOpenTabset("openTabset", true);
         }
       }, 50, Ci.nsITimer.TYPE_REPEATING_SLACK);
     } else { // TreeStyleTab not installed
-      updateOpenTabset("_openTabset");
+      updateOpenTabset("openTabset");
 
       Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openURINodesInTabs")._replace(
         'push({uri: aNodes[i].uri,',
@@ -176,7 +178,7 @@ PlacesUtilsInternal = {
         'this.', 'PlacesUtils.', {flags: "g"}
       ).toCode(false, PlacesUIUtils, "tabmix_getURLsForContainerNode");
 
-      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openContainerNodeInTabs")._replace(
+      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openMultipleLinksInTabs")._replace(
         'PlacesUtils.getURLsForContainerNode(aNode)',
         'PlacesUIUtils.tabmix_getURLsForContainerNode(aNode)'
       ).toCode();
@@ -191,7 +193,7 @@ PlacesUtilsInternal = {
     // Don't change "current" when user click context menu open (callee is PC_doCommand and aWhere is current)
     // we disable the open menu when the tab is lock
     // the 2nd check for aWhere == "current" is for non Firefox code that may call this function
-    Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openNodeIn")._replace(
+    Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openNodeIn")._replace(
       '{', '$&\n' +
       '    var TMP_Event;\n' +
       '    if (arguments.length > 1 && typeof aWhere == "object") {\n' +

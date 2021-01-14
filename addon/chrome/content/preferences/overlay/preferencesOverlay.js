@@ -2,7 +2,7 @@
 /* exported gTabMix_preferencesOverlay */
 "use strict";
 
-Components.utils.import("resource://tabmixplus/TabmixSvc.jsm");
+Components.utils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 var gTabMix_preferencesOverlay = {
   usePreferencesClass: false,

@@ -29,7 +29,7 @@ Tabmix.linkHandling_init = function TMP_TBP_init() {
       this.changeCode(autoComplete, fn)._replace(
         /openUILink\(url, aEvent.*\);/,
         'var tabmixOptions = typeof options == "object" ? options : {};' + n +
-        'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);' + n +
+        'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser._selectedTab);' + n +
         'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' + n +
         'var pref = "extensions.tabmix.loadUrlInBackground";' + n +
         'tabmixOptions.inBackground = Services.prefs.getBoolPref(pref);' + n +
@@ -136,10 +136,12 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       }
 
       let result;
-      try {
+      if (!gBrowserInit.delayedStartupFinished) try {
         // we use runningDelayedStartup in gBrowser.swapBrowsersAndCloseOther
         Tabmix.runningDelayedStartup = true;
         result = Tabmix.originalFunctions.gBrowserInit__delayedStartup.apply(this, arguments);
+      } catch (ex) {
+        Tabmix.assert(ex);
       } finally {
         Tabmix.runningDelayedStartup = false;
       }
@@ -156,12 +158,13 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
       return result;
     };
+    if (gBrowserInit.delayedStartupFinished) gBrowserInit._delayedStartup();
 
     // look for installed extensions that are incompatible with tabmix
     if (this.firstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {
         let tmp = {};
-        Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
+        Components.utils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm", tmp);
         tmp = new tmp.CompatibilityCheck(aWindow, true);
       }, 0, window);
     }
@@ -237,11 +240,11 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   }
 
   tabBrowser.getBrowserForTabPanel = function(notificationbox) {
-    return document.getAnonymousElementByAttribute(notificationbox, "class", "browserStack").firstChild;
+    return notificationbox.getElementsByClassName("browserStack")[0].firstChild;
   };
 
   tabBrowser.getTabForLastPanel = function() {
-    let notificationbox = this.mPanelContainer.lastChild;
+    let notificationbox = this.tabpanels.lastChild;
     let browser = this.getBrowserForTabPanel(notificationbox);
     if (browser == gBrowser._preloadedBrowser) {
       browser = this.getBrowserForTabPanel(notificationbox.previousSibling);
@@ -250,7 +253,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   };
 
   var tabContainer = aTabContainer || tabBrowser.tabContainer ||
-      document.getAnonymousElementByAttribute(tabBrowser, "anonid", "tabcontainer");
+      document.getElementById("tabbrowser-tabs");
 
   // Firefox sessionStore and session manager extension start to add tab before our onWindowOpen run
   // so we initialize this before start

@@ -33,12 +33,12 @@ var gMousePane = {
   },
 
   tabSelectionChanged(aEvent) {
-    if (aEvent.target.localName != "tabs")
+    if (aEvent.target.localName != "tabpanels")
       return;
     gPrefWindow.tabSelectionChanged(aEvent);
 
     if (this._inited)
-      this.updatePanelPrefs(aEvent.target.selectedIndex);
+      this.updatePanelPrefs(aEvent.target._tabbox.tabs.selectedIndex);
   },
 
   _options: ["dbl", "middle", "ctrl", "shift", "alt"],
@@ -52,8 +52,10 @@ var gMousePane = {
     // Linux uses alt key down to trigger the top menu on Ubuntu or
     // start drag window on OpenSuSe
     let disabled = TabmixSvc.isLinux && panel == "alt";
-    Tabmix.setItem(this.clickTabbar, "disabled", disabled || null);
-    Tabmix.setItem(this.clickTabbar.previousSibling, "disabled", disabled || null);
+    if (disabled) {
+      Tabmix.setItem(this.clickTabbar, "disabled", disabled);
+      Tabmix.setItem(this.clickTabbar.previousSibling, "disabled", disabled);
+    }
   },
 
   updatePref(element, prefID) {
@@ -63,14 +65,14 @@ var gMousePane = {
   },
 
   ensureElementIsVisible(aPopup) {
-    var scrollBox = document.getAnonymousElementByAttribute(aPopup, "class", "popup-internal-box");
+    var scrollBox = aPopup._scrollBox;
     scrollBox.ensureElementIsVisible(aPopup.parentNode.selectedItem);
   },
 
   resetPreference(checkbox) {
     let menulist = $(checkbox.getAttribute("control"));
     let prefID = menulist.getAttribute("preference");
-    $(prefID).valueFromPreferences = checkbox.checked ? (menulist[prefID] || undefined) : -1;
+    $(prefID).value = checkbox.checked ? (menulist[prefID] || 0) : -1;
   },
 
   setCheckedState(menulist) {
@@ -87,7 +89,7 @@ var gMousePane = {
     if (pref.value && !dblClickTabbar.value)
       dblClickTabbar.value = pref.value;
     let checkbox = $("dblclick_changesize")._checkbox;
-    let image = document.getAnonymousElementByAttribute(checkbox, "class", "checkbox-check");
+    let image = checkbox.getElementsByClassName("checkbox-check")[0];
     Tabmix.setItem(image, "disabled", pref.value || null);
   }
 

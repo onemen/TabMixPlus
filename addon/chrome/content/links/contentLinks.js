@@ -6,7 +6,7 @@ Tabmix.contentAreaClick = {
     // TMP_extensionsCompatibility.onDelayedStartup
     XPCOMUtils.defineLazyGetter(Tabmix, "ContentClick", () => {
       let tmp = {};
-      Cu.import("resource://tabmixplus/ContentClick.jsm", tmp);
+      Cu.import("chrome://tabmix-resource/content/ContentClick.jsm", tmp);
       return tmp.TabmixContentClick;
     });
 

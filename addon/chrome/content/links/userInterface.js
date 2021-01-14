@@ -27,7 +27,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
 
     (appearanceWin || filetypeWin || promptWin || tabmixOptionsWin).focus();
   } else {
-    window.openDialog("chrome://tabmixplus/content/preferences/preferences.xul", "Tab Mix Plus",
+    window.openDialog("chrome://tabmixplus/content/preferences/preferences.xhtml", "Tab Mix Plus",
       "chrome,titlebar,toolbar,close,dialog=no,centerscreen", panel || null);
   }
 };
@@ -130,7 +130,8 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
     charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
     ownerTab: loadInBackground ? null : selectedTab,
     skipAnimation: replaceLastTab,
-    dontMove: true
+    dontMove: true,
+    triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()
   });
   if (replaceLastTab) {
     newTab.__newLastTab = url;
@@ -168,7 +169,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
 
 Tabmix.selectedTab = null;
 Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastTab) {
-  // Firefox always call focusAndSelectUrlBar when it replacing last tab
+  // Firefox always call gURLBar.select when it replacing last tab
   if (!replaceLastTab && /about:home|(www\.)*(google|bing)\./.test(aUrl))
     return;
   if (aTab.selected && !isBlankPageURL(aUrl)) {
@@ -176,16 +177,16 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastT
     this.selectedTab = aTab;
     this.userTypedValue = aUrl;
     gBrowser.userTypedValue = "";
-    URLBarSetURI();
+    gURLBar.setURI();
   }
   // don't try to focus urlbar on popup
   if (aTab.selected && window.toolbar.visible) {
     if (this.isVersion(340) && gMultiProcessBrowser)
       aTab._skipContentFocus = true;
     if (aTimeOut)
-      setTimeout(() => focusAndSelectUrlBar(), 30);
+      setTimeout(() => gURLBar.select(), 30);
     else
-      focusAndSelectUrlBar();
+      gURLBar.select();
   }
 };
 
@@ -224,7 +225,7 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
 
   var url = gBrowser.currentURI.spec;
   if (url != gURLBar.value && !isBlankPageURL(url)) {
-    URLBarSetURI();
+    gURLBar.setURI();
   }
 };
 
@@ -255,8 +256,8 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
 
 Tabmix.checkCurrent = function TMP_checkCurrent(url) {
   var opentabforLinks = Tabmix.prefs.getIntPref("opentabforLinks");
-  if (opentabforLinks == 1 || gBrowser.mCurrentTab.hasAttribute("locked")) {
-    let isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.mCurrentTab);
+  if (opentabforLinks == 1 || gBrowser._selectedTab.hasAttribute("locked")) {
+    let isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser._selectedTab);
     if (!isBlankTab)
       return "tab";
   } else if (opentabforLinks == 2) {
@@ -354,7 +355,7 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
     style = aTab.pinned || aTab.hasAttribute("visited") ||
       TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
   } else if (!isSelected && Tabmix.prefs.getBoolPref("unreadTab") &&
-      !aTab.hasAttribute("visited") && !isTabEmpty(aTab)) {
+      !aTab.hasAttribute("visited") && !aTab.isEmpty) {
     style = "unread";
   }
 

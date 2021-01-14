@@ -39,7 +39,7 @@ Tabmix.startup = function TMP_startup() {
 Tabmix.beforeDelayedStartup = function() {
   if (this.isFirstWindow) {
     let tmp = {};
-    Cu.import("resource://tabmixplus/extensions/AddonManager.jsm", tmp);
+    Cu.import("chrome://tabmix-resource/content/extensions/AddonManager.jsm", tmp);
     TMP_SessionStore.setService(1, true);
   }
 
@@ -142,7 +142,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     // save tabsNewtabButton width
     let lwtheme = !this.isVersion(280) && document.getElementById("main-window").getAttribute("lwtheme");
     this.tabsNewtabButton =
-      document.getAnonymousElementByAttribute(tabBar, "command", "cmd_newNavigatorTab");
+      tabBar.getElementsByAttribute("command", "cmd_newNavigatorTab");
     this.tabsNewtabButton.setAttribute("force-display", true);
     let openNewTabRect = Tabmix.getBoundsWithoutFlushing(this.tabsNewtabButton);
     let style = window.getComputedStyle(this.tabsNewtabButton);
@@ -235,7 +235,7 @@ Tabmix.afterDelayedStartup = function() {
 
   if ("_failedToEnterVerticalMode" in TabmixTabbar) {
     delete TabmixTabbar._failedToEnterVerticalMode;
-    gBrowser.tabContainer.mTabstrip._enterVerticalMode();
+    gBrowser.tabContainer.arrowScrollbox._enterVerticalMode();
   }
 
   try {
@@ -459,7 +459,7 @@ var TMP_eventListener = {
       Tabmix.assert(ex);
     }
 
-    gBrowser.mPanelContainer.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
+    gBrowser.tabpanels.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     // init tabmix functions
     try {
@@ -505,11 +505,11 @@ var TMP_eventListener = {
     var tabsToolbar = document.getElementById("TabsToolbar");
 
     if (TabmixSvc.australis) {
-      let australis = TabmixSvc.isAustralisBgStyle(tabBar.orient);
+      let australis = TabmixSvc.isAustralisBgStyle(tabBar.attributes.orient.value);
       tabBar.setAttribute("tabmix_australis", australis ? "true" : "classic");
     }
 
-    var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
+    var skin = Services.prefs.getCharPref("extensions.activeThemeID");
     if (skin == "classic/1.0") {
       if (TabmixSvc.isMac)
         tabBar.setAttribute("classic", "v4Mac");
@@ -647,7 +647,7 @@ var TMP_eventListener = {
       return;
     }
 
-    var width = tab.boxObject.width;
+    var width = tab.getBoundingClientRect().width;
     if (this.tabWidthCache.get(key) == width) {
       return;
     }
@@ -697,7 +697,7 @@ var TMP_eventListener = {
             'TMP_eventListener._updateMarginBottom("");\
              $&'
           )._replace(
-            'gNavToolbox.style.marginTop = (gNavToolbox.boxObject.height * pos * -1) + "px";',
+            'gNavToolbox.style.marginTop = (gNavToolbox.getBoundingClientRect().height * pos * -1) + "px";',
             '$&\
              TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
           ).toCode();
@@ -743,7 +743,7 @@ var TMP_eventListener = {
       return;
     }
 
-    let rect = gBrowser.mPanelContainer.getBoundingClientRect();
+    let rect = gBrowser.tabpanels.getBoundingClientRect();
     FullScreen._mouseTargetRect = {
       top: rect.top + 50,
       bottom: rect.bottom - (TabmixTabbar.position == 1) * 50,
@@ -860,7 +860,7 @@ var TMP_eventListener = {
     }
     // cache tab width, we use our own key since Pale Moon doesn't have permanentKey
     aTab.tabmixKey = {};
-    this.tabWidthCache.set(aTab.tabmixKey, aTab.boxObject.width);
+    this.tabWidthCache.set(aTab.tabmixKey, aTab.getBoundingClientRect().width);
 
     let newTime = Date.now();
     if (Tabmix.tabsUtils.overflow || newTime - this.lastTimeTabOpened > 200) {
@@ -890,8 +890,8 @@ var TMP_eventListener = {
     if (!Tabmix.tabsUtils.overflow) {
       // we use it as a backup for overflow event and for the case that we have
       // pinned tabs in multi-row
-      if (TabmixTabbar.isMultiRow && tabBar.mTabstrip.orient != "vertical")
-        tabBar.mTabstrip._enterVerticalMode();
+      if (TabmixTabbar.isMultiRow && tabBar.arrowScrollbox.getAttribute('orient') != "vertical")
+        tabBar.arrowScrollbox._enterVerticalMode();
       else
         TabmixTabbar.updateScrollStatus();
       // make sure selected new tabs stay visible
@@ -924,7 +924,7 @@ var TMP_eventListener = {
     // when tab animations enabled is true gBrowser._endRemoveTab calls
     // onTabClose_updateTabBar.
     // we would like to get early respond when row height is going to change.
-    var updateNow = !TabmixSvc.tabAnimationsEnabled;
+    var updateNow = gReduceMotion;
     if (!updateNow && tabBar.hasAttribute("multibar")) {
       let lastTab = Tabmix.visibleTabs.last;
       if (!TabmixTabbar.inSameRow(lastTab, Tabmix.visibleTabs.previous(lastTab))) {
@@ -975,7 +975,7 @@ var TMP_eventListener = {
     if (tabBar.firstChild.pinned && TabmixTabbar.isMultiRow && Tabmix.tabsUtils.overflow &&
         aTab._tPos >= Tabmix.visibleTabs.last._tPos) {
       const instantScroll = Tabmix.isVersion(570);
-      tabBar.mTabstrip.ensureElementIsVisible(gBrowser.selectedTab, instantScroll);
+      tabBar.arrowScrollbox.ensureElementIsVisible(gBrowser.selectedTab, instantScroll);
     }
 
     if (Tabmix.tabsUtils.disAllowNewtabbutton)
@@ -1074,7 +1074,7 @@ var TMP_eventListener = {
       return;
     }
     let tabBar = gBrowser.tabContainer;
-    let tabStrip = tabBar.mTabstrip;
+    let tabStrip = tabBar.arrowScrollbox;
     let orient = tabStrip.orient;
     TabmixTabbar.removeShowButtonAttr();
 
@@ -1213,7 +1213,7 @@ var TMP_eventListener = {
 
     if (TMP_TabView.installed)
       TMP_TabView._resetTabviewFrame();
-    gBrowser.mPanelContainer.removeEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
+    gBrowser.tabpanels.removeEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     gTMPprefObserver.removeObservers();
     gTMPprefObserver.dynamicRules = null;
@@ -1235,9 +1235,9 @@ var TMP_eventListener = {
   // some theme not using up to date Tabmix tab binding
   // we check here that all of our attribute exist
   setTabAttribute: function TMP_EL_setTabAttribute(aTab) {
-    let reloadIcon = document.getAnonymousElementByAttribute(aTab, "class", "tab-reload-icon");
+    let reloadIcon = aTab.getElementsByAttribute("class", "tab-reload-icon");
     if (!reloadIcon) {
-      let lockIcon = document.getAnonymousElementByAttribute(aTab, "class", "tab-lock-icon");
+      let lockIcon = aTab.getElementsByAttribute("class", "tab-lock-icon");
       if (lockIcon) {
         let XULNS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
         let image = document.createElementNS(XULNS, "image");
@@ -1247,7 +1247,7 @@ var TMP_eventListener = {
     }
 
     function updateAttrib(aGetAtt, aGetValue, aAtt, aValue) {
-      let node = document.getAnonymousElementByAttribute(aTab, aGetAtt, aGetValue);
+      let node = aTab.getElementsByAttribute(aGetAtt, aGetValue)[0];
       Tabmix.setItem(node, aAtt, aValue);
     }
     updateAttrib("class", "tab-icon-image", "role", "presentation");
@@ -1281,7 +1281,7 @@ Tabmix.initialization = {
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
     if (Tabmix.singleWindowMode) {
       let tmp = {};
-      Components.utils.import("resource://tabmixplus/SingleWindowModeUtils.jsm", tmp);
+      Components.utils.import("chrome://tabmix-resource/content/SingleWindowModeUtils.jsm", tmp);
       stopInitialization = tmp.SingleWindowModeUtils.newWindow(window);
     }
 

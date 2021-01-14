@@ -5,10 +5,10 @@ this.EXPORTED_SYMBOLS = ["RenameTab"];
 const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
+Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
-  "resource://tabmixplus/Places.jsm");
+  "chrome://tabmix-resource/content/Places.jsm");
 
 this.RenameTab = {
   window: null,
@@ -25,7 +25,7 @@ this.RenameTab = {
     this.window = aTab.ownerGlobal;
     var gBrowser = this.window.gBrowser;
 
-    this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser.mCurrentTab;
+    this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser._selectedTab;
     var browser = gBrowser.getBrowserForTab(aTab);
     let docTitle = aTab.hasAttribute("pending") ?
       this.window.TMP_SessionStore.getTitleFromTabState(aTab) :

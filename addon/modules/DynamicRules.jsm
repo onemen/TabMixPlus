@@ -11,7 +11,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/TabmixSvc.jsm");
+  "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 XPCOMUtils.defineLazyGetter(this, "Prefs", () => {
   return Services.prefs.getBranch("extensions.tabmix.styles.");
@@ -21,7 +21,7 @@ var TYPE;
 XPCOMUtils.defineLazyGetter(this, "SSS", () => {
   let sss = Cc['@mozilla.org/content/style-sheet-service;1']
       .getService(Ci.nsIStyleSheetService);
-  TYPE = sss.AGENT_SHEET;
+  TYPE = sss.USER_SHEET;
   return sss;
 });
 
@@ -55,7 +55,7 @@ this.DynamicRules = {
       return;
     this._initialized = true;
 
-    this.orient = aWindow.document.getElementById("tabbrowser-tabs").orient;
+    this.orient = aWindow.document.getElementById("tabbrowser-tabs").attributes.orient.value;
     this.styleType = this.isAustralis ? "australis" : "classic";
     this.windows10 = aWindow.navigator.oscpu.startsWith("Windows NT 10.0");
 
@@ -89,7 +89,7 @@ this.DynamicRules = {
     const tabsMutate = aMutations => {
       for (let mutation of aMutations) {
         if (mutation.attributeName == "orient") {
-          this.orient = mutation.target.orient;
+          this.orient = mutation.target.orient || mutation.target.attributes.orient.value;
           this.updateStyleType();
           return;
         }
@@ -145,9 +145,10 @@ this.DynamicRules = {
     ///XXX move -moz-appearance: to general rule when style have bg
     let backgroundRule = " {\n  -moz-appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
     if (isMac) {
-      backgroundRule = ' > .tab-stack > .tab-background >\n' +
+      backgroundRule = ' >\n' +
         '      :-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end)' + backgroundRule;
     }
+    backgroundRule = ' > .tab-stack > .tab-background' + backgroundRule;
     let tabTextRule = " .tab-text {\n  color: #textColor !important;\n}\n";
 
     let _selected = TabmixSvc.version(390) ? '[visuallyselected="true"]' : '[selected="true"]';
@@ -161,20 +162,20 @@ this.DynamicRules = {
 
     let styleRules = {
       currentTab: {
-        text: '#tabbrowser-tabs[tabmix_currentStyle~="text"] > .tabbrowser-tab' + tabState.current + tabTextRule,
-        bg: '#tabbrowser-tabs[tabmix_currentStyle~="bg"] > .tabbrowser-tab' + tabState.current + backgroundRule
+        text: '#tabbrowser-tabs[tabmix_currentStyle~="text"] .tabbrowser-tab' + tabState.current + tabTextRule,
+        bg: '#tabbrowser-tabs[tabmix_currentStyle~="bg"] .tabbrowser-tab' + tabState.current + backgroundRule
       },
       unloadedTab: {
-        text: '#tabbrowser-tabs[tabmix_unloadedStyle~="text"] > .tabbrowser-tab' + tabState.unloaded + tabTextRule,
-        bg: '#tabbrowser-tabs[tabmix_unloadedStyle~="bg"] > .tabbrowser-tab' + tabState.unloaded + backgroundRule
+        text: '#tabbrowser-tabs[tabmix_unloadedStyle~="text"] .tabbrowser-tab' + tabState.unloaded + tabTextRule,
+        bg: '#tabbrowser-tabs[tabmix_unloadedStyle~="bg"] .tabbrowser-tab' + tabState.unloaded + backgroundRule
       },
       unreadTab: {
-        text: '#tabbrowser-tabs[tabmix_unreadStyle~="text"] > .tabbrowser-tab' + tabState.unread + tabTextRule,
-        bg: '#tabbrowser-tabs[tabmix_unreadStyle~="bg"] > .tabbrowser-tab' + tabState.unread + backgroundRule
+        text: '#tabbrowser-tabs[tabmix_unreadStyle~="text"] .tabbrowser-tab' + tabState.unread + tabTextRule,
+        bg: '#tabbrowser-tabs[tabmix_unreadStyle~="bg"] .tabbrowser-tab' + tabState.unread + backgroundRule
       },
       otherTab: {
-        text: '#tabbrowser-tabs[tabmix_otherStyle~="text"] > .tabbrowser-tab' + tabState.other + tabTextRule,
-        bg: '#tabbrowser-tabs[tabmix_otherStyle~="bg"] > .tabbrowser-tab' + tabState.other + backgroundRule
+        text: '#tabbrowser-tabs[tabmix_otherStyle~="text"] .tabbrowser-tab' + tabState.other + tabTextRule,
+        bg: '#tabbrowser-tabs[tabmix_otherStyle~="bg"] .tabbrowser-tab' + tabState.other + backgroundRule
       },
     };
 
@@ -214,9 +215,9 @@ this.DynamicRules = {
       }
     }
     styleRules.progressMeter = {
-      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > .tabbrowser-tab > ' +
-          '.tab-stack > .tab-progress-container > .tab-progress > ' +
-          '.progress-bar {\n  background-color: #bottomColor !important;\n}\n'
+      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] .tabbrowser-tab > ' +
+          '.tab-stack > .tab-progress-container > .tab-progress::-moz-progress-bar' +
+          '{\n  background-color: #bottomColor !important;\n}\n'
     };
 
     this.cssTemplates = styleRules;

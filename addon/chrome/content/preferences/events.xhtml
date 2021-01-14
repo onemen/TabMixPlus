@@ -8,7 +8,8 @@
 ]>
 
 <overlay id="EventsPaneOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+         xmlns:html="http://www.w3.org/1999/xhtml">
 
   <prefpane id="paneEvents" onpaneload="gEventsPane.init();">
 
@@ -113,9 +114,9 @@
     </preferences>
 
     <!-- pane content -->
-    <tabbox>
-      <tabs id="events"
+    <tabbox
             onselect="gPrefWindow.tabSelectionChanged(event);">
+      <tabs id="events">
         <tab label="&newTabs.label;"    class="subtabs" helpTopic="Events_-_New_Tabs"/>
         <tab label="&tabOpen.label;"    class="subtabs" helpTopic="Events_-_tab_opening"/>
         <tab label="&tabClose.label;"   class="subtabs" helpTopic="Events_-_Tab_Closing"/>
@@ -125,7 +126,7 @@
       <tabpanels>
 <!-- ======================================================== -->
         <tabpanel>
-          <groupbox flex="1">
+          <html:fieldset flex="1">
             <!-- Load on new tab -->
             <hbox align="center">
               <label value="&newtab.label;" control="loadOnNewTab"/>
@@ -141,7 +142,7 @@
             </hbox>
             <hbox class="indent" align="center">
               <label id="newTabUrlLabel" value="&location.label.1;:" control="newTabUrl"/>
-              <textbox id="newTabUrl" class="padded uri-element" flex="1"
+              <html:input id="newTabUrl" class="padded uri-element" flex="1"
                        onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
                        onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
                        placeholder="&newtab.placeholder.label;"
@@ -153,8 +154,8 @@
             <checkbox_tmp id="openNewTabNext" label="&openTabNext.label;"
                       tooltiptext="&openTabNext.tooltip1;"
                       preference="pref_openNewTabNext"/>
-          </groupbox>
-          <groupbox flex="1">
+          </html:fieldset>
+          <html:fieldset flex="1">
             <!-- Open links next to current tab -->
             <checkbox_tmp id="openTabNext" label="&openOtherTabNext.label;"
                       tooltiptext="&openTabNext.tooltip;"
@@ -169,16 +170,16 @@
                       preference="pref_openDuplicateNext"/>
             <checkbox_tmp id="moveSwitchToTabNext" label="&moveSwitchToTabNext.label;"
                       preference="pref_moveSwitchToTabNext"/>
-          </groupbox>
-          <groupbox flex="1">
+          </html:fieldset>
+          <html:fieldset flex="1">
             <!-- Load Bookmarks/History progressively -->
-            <caption label="&openPlacesGroups.label;"/>
+            <html:legend>&openPlacesGroups.label;</html:legend>
             <hbox align="center">
               <checkbox_tmp id="chk_loadProgressively" label="&loadTabsProgressively.label; &openMoreThan.label;"
                             preference="pref_loadProgressively" control="loadProgressively"
                             onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
                             onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"/>
-              <textbox id="loadProgressively" maxlength="3" size="2" preference="pref_loadProgressively"
+              <html:input id="loadProgressively" maxlength="3" size="2" preference="pref_loadProgressively"
                        onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
                        observes="obs_loadProgressively"
                        type="number" min="1" maxwidth="42"/>
@@ -190,14 +191,14 @@
                             onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
                             onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"
                             observes="obs_loadProgressively"/>
-              <textbox id="restoreOnDemand" maxlength="3" size="2" preference="pref_restoreOnDemand"
+              <html:input id="restoreOnDemand" maxlength="3" size="2" preference="pref_restoreOnDemand"
                        onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
                        type="number" min="1" maxwidth="42"/>
               <label value="&tabs.label;" observes="obs_loadProgressively"/>
             </hbox>
-          </groupbox>
-          <groupbox flex="1" orient="horizontal">
-            <caption label="&lockTabs.label;"/>
+          </html:fieldset>
+          <html:fieldset flex="1" orient="horizontal">
+            <html:legend>&lockTabs.label;</html:legend>
             <vbox flex="1" pack="end">
               <!-- Look All Tabs -->
               <checkbox_tmp id="lockallTabs" pack="start" label="&lockNewTabs.label;" preference="pref_lockallTabs"/>
@@ -209,12 +210,12 @@
               <checkbox_tmp id="updateLockState" align="center" label="&updateLockState.label;"
                           preference="pref_updateLockState"/>
             </vbox>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
 <!-- ======================================================== -->
         <tabpanel id="tabopening">
-          <groupbox flex="1">
-            <caption label="&openNewTab.label;"/>
+          <html:fieldset flex="1">
+            <html:legend>&openNewTab.label;</html:legend>
             <hbox>
               <vbox align="start" setWidth="true">
                 <!-- Bookmarks open in new tab -->
@@ -246,9 +247,9 @@
             <separator class="groove"/>
             <checkbox_tmp id="midcurrent" label="&middlecurrent1.label;"
                       tooltiptext="&middlecurrent.tooltip;" preference="pref_midcurrent"/>
-          </groupbox>
-          <groupbox flex="1">
-            <caption label="&tabFocus.caption;"/>
+          </html:fieldset>
+          <html:fieldset flex="1">
+            <html:legend>&tabFocus.caption;</html:legend>
             <hbox>
               <vbox align="start" setWidth="true">
                 <!-- select Links -->
@@ -293,12 +294,12 @@
                               style="width: 19em;" align="start" preference="pref_inverseother"/>
               </vbox>
             </hbox>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
 <!-- ======================================================== -->
         <tabpanel>
-          <groupbox flex="1">
-            <caption label="&warning.caption.label;"/>
+          <html:fieldset flex="1">
+            <html:legend>&warning.caption.label;</html:legend>
             <vbox align="start">
               <!-- Warn when closing multiple tabs -->
               <checkbox_tmp id="warnOnClose" label="&warnOnCloseMultipleTabs.label;" preference="pref_warnOnClose"/>
@@ -307,9 +308,9 @@
               <!-- Warn when closing window with protected tabs -->
               <checkbox_tmp id="warnOnCloseProtected" label="&warnOnCloseProtected1.label;" preference="pref_warnOnCloseProtected"/>
             </vbox>
-          </groupbox>
-          <groupbox flex="1">
-            <caption label="&lasttab.caption.label;"/>
+          </html:fieldset>
+          <html:fieldset flex="1">
+            <html:legend>&lasttab.caption.label;</html:legend>
             <checkbox_tmp id="keepWindow" label="&keepWindow.label.3.1;"
                       preference="pref_keepWindow"/>
             <!-- Don't close the last tab -->
@@ -331,7 +332,7 @@
               </hbox>
               <hbox class="indent" align="center">
                  <label id="newTabUrlLabel_1" value="&location.label.1;:" control="newTabUrl_1"/>
-                 <textbox id="newTabUrl_1" class="padded uri-element" flex="1"
+                 <html:input id="newTabUrl_1" class="padded uri-element" flex="1"
                           onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
                           onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
                           placeholder="&newtab.placeholder.label;"
@@ -341,9 +342,9 @@
               <checkbox_tmp class="indent" align="center" id="afterLastTabClosed" label="&focusContent.label;"
                         preference="pref_afterLastTabClosed" observes="obs_replaceLastTabWith"/>
             </vbox>
-          </groupbox>
-          <groupbox flex="1">
-            <caption label="&currenttab.caption.label;"/>
+          </html:fieldset>
+          <html:fieldset flex="1">
+            <html:legend>&currenttab.caption.label;</html:legend>
             <!-- focus after closing a tab -->
             <box id="focusTab-box" orient="vertical">
               <hbox>
@@ -363,12 +364,12 @@
                 </menulist>
               </hbox>
             </box>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
 <!-- ======================================================== -->
         <tabpanel>
-          <groupbox>
-            <caption label="&mergeNoTabSelection.label;"/>
+          <html:fieldset>
+            <html:legend>&mergeNoTabSelection.label;</html:legend>
             <radiogroup id="mergewindows" preference="pref_mergewindows" align="start">
               <radio value="true" id="merge-allwindows" label="&mergeall.label;"/>
               <radio value="false" id="merge-lastwindow" label="&mergelastfocused.label;"/>
@@ -376,18 +377,18 @@
             <checkbox_tmp id="mergePopups" label="&mergePopups.label;" preference="pref_mergePopups"/>
             <checkbox_tmp id="popupNextToOpener" label="&popupNextToOpener.label;"
                       preference="pref_popupNextToOpener" class="indent" observes="obs_mergePopups"/>
-          </groupbox>
-          <groupbox>
-            <caption label="&mergeTabSelection.label;"/>
+          </html:fieldset>
+          <html:fieldset>
+            <html:legend>&mergeTabSelection.label;</html:legend>
               <!-- Close on Merge -->
               <checkbox_tmp id="closeOnMerge" label="&closeOnMerge.label;" preference="pref_closeOnMerge"/>
               <!-- Warn when closing non merged tabs -->
               <checkbox_tmp id="warnOnMerge" class="indent" label="&warnOnMerge.label;" preference="pref_warnOnMerge" observes="obs_closeOnMerge"/>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
 <!-- ======================================================== -->
         <tabpanel>
-          <groupbox flex="1">
+          <html:fieldset flex="1">
             <vbox align="start">
               <!-- Enable Undo Close Tab
                    gTMPprefObserver.observe control changes in these preference -->
@@ -395,7 +396,7 @@
               <vbox align="start" class="indent">
                 <hbox align="center">
                   <label control="undoCloseCache" value="&undoCloseCache.label;" observes="obs_undoClose"/>
-                  <textbox id="undoCloseCache" maxlength="3" size="2" preference="pref_undoCloseCache"
+                  <html:input id="undoCloseCache" maxlength="3" size="2" preference="pref_undoCloseCache"
                            type="number" observes="obs_undoClose"/>
                 </hbox>
                 <checkbox_tmp id="undoClosepos" label="&undoClosepos.label;" preference="pref_undoClosepos" observes="obs_undoClose"/>
@@ -415,14 +416,14 @@
               <label value="&shortcuts.slideshow;" class="indent text-link" onclick="gEventsPane.editSlideShowKey();"/>
               <checkbox_tmp id="disableTabsAnimate" label="&toggleAnimation.label;" preference="pref_disableTabsAnimate"/>
             </vbox>
-         </groupbox>
-         <groupbox flex="1">
-           <caption label="&extraIcons.autoreload;"/>
+         </html:fieldset>
+         <html:fieldset flex="1">
+           <html:legend>&extraIcons.autoreload;</html:legend>
            <checkbox_tmp id="reloadEvery.matchAddress" label="&reloadEvery.matchAddress.label;"
                      preference="pref_reloadEvery.matchAddress" inverted="true"/>
            <checkbox_tmp id="reloadEvery.onReloadButton" label="&reloadEvery.onReloadButton.label;"
                      preference="pref_reloadEvery.onReloadButton"/>
-         </groupbox>
+         </html:fieldset>
         </tabpanel>
       </tabpanels>
    </tabbox>

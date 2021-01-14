@@ -58,10 +58,10 @@ var gAppearancePane = {
 
     // for locales with long labels
     var hbox = $("tabsScroll-box");
-    var label = $("tabsScroll.label").boxObject.width;
+    var label = $("tabsScroll.label").getBoundingClientRect().width;
     var menulist = $("tabsScroll");
     var indent = 23; // we have class="indent"
-    if (hbox.boxObject.width > label + menulist.boxObject.width - indent) {
+    if (hbox.getBoundingClientRect().width > label + menulist.getBoundingClientRect().width - indent) {
       menulist.parentNode.removeAttribute("pack");
       menulist.parentNode.removeAttribute("class");
       hbox.setAttribute("orient", "horizontal");
@@ -134,7 +134,7 @@ var gAppearancePane = {
     // Display > Tab bar
     function updateDisabledState(buttonID, itemID, aEnable) {
       let button = aWindow.document.getElementById(buttonID);
-      let enablePosition = button && button.parentNode == aWindow.document.getElementById("TabsToolbar");
+      let enablePosition = button && aWindow.document.getElementById("TabsToolbar").contains(button);
       gPrefWindow.setDisabled(itemID, !enablePosition || null);
       gPrefWindow.setDisabled("obs_" + itemID, !aEnable || !enablePosition || null);
     }
@@ -176,7 +176,7 @@ var gAppearancePane = {
   },
 
   openAdvanceAppearance() {
-    window.openDialog("chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xul",
+    window.openDialog("chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xhtml",
       "advanceAppearanceDialog", "modal,titlebar,toolbar,centerscreen");
   }
 

@@ -24,16 +24,16 @@ var gPrefWindow = {
 
     var prefWindow = $("TabMIxPreferences");
     /* Chromifox theme force button height to 25px */
-    var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-    if (skin == "cfxec")
-      prefWindow.setAttribute("chromifox", true);
+    // var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
+    // if (skin == "cfxec")
+    //   prefWindow.setAttribute("chromifox", true);
 
     if (TabmixSvc.isMac)
       prefWindow.setAttribute("mac", true);
     else if (TabmixSvc.isLinux) {
       prefWindow.setAttribute("linux", true);
-      if (skin == "ftdeepdark")
-        prefWindow.setAttribute("ftdeepdark", true);
+      // if (skin == "ftdeepdark")
+      //   prefWindow.setAttribute("ftdeepdark", true);
     }
 
     /* we don't need to fix tabpanels border in ubuntu */
@@ -64,7 +64,7 @@ var gPrefWindow = {
 
     this.initBroadcasters("main");
     // hide broadcasters pane button
-    var paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "broadcasters");
+    var paneButton = docElt.getElementsByAttribute("pane", "broadcasters")[0];
     paneButton.collapsed = true;
 
     $("syncPrefs").setAttribute("checked", Tabmix.prefs.getBoolPref("syncPrefs"));
@@ -78,13 +78,13 @@ var gPrefWindow = {
       return;
     }
     let aPaneElement = $(aPaneID), diff = 0;
-    let content = document.getAnonymousElementByAttribute(aPaneElement, "class", "content-box");
+    let content = aPaneElement.getElementsByAttribute("class", "content-box")[0];
     let style = window.getComputedStyle(content);
     let contentWidth = parseInt(style.width) + parseInt(style.marginRight) +
                        parseInt(style.marginLeft);
     let tabboxes = aPaneElement.getElementsByTagName("tabbox");
     for (let tabbox of tabboxes) {
-      diff = Math.max(diff, tabbox.boxObject.width - contentWidth);
+      diff = Math.max(diff, tabbox.getBoundingClientRect().width - contentWidth);
     }
     window.innerWidth += diff;
   },
@@ -226,8 +226,8 @@ var gPrefWindow = {
   },
 
   tabSelectionChanged(event) {
-    var tabs = event.target;
-    if (tabs.localName != "tabs" || !tabs.hasAttribute("onselect"))
+    var tabs = event.target?.tabbox?.tabs;
+    if (tabs?.localName != "tabs" || !tabs.tabbox.hasAttribute("onselect"))
       return;
     let preference = $("pref_" + tabs.id);
     if (!tabs._inited) {
@@ -553,7 +553,7 @@ function openHelp(helpTopic) {
     return false;
   }
   var where = selectHelpPage() ||
-    recentWindow.isTabEmpty(tabBrowser.selectedTab) ? "current" : "tab";
+    tabBrowser.selectedTab.isEmpty ? "current" : "tab";
 
   if (!helpTopic) {
     var currentPane = document.documentElement.currentPane;
@@ -563,14 +563,14 @@ function openHelp(helpTopic) {
     }
   }
   helpTopic = helpTopic.toLowerCase().replace("mouse_-_", "").replace(/_-_|_/g, "-");
-  recentWindow.openUILinkIn(helpPage + helpTopic, where);
+  recentWindow.openUILinkIn(helpPage + helpTopic, where, {triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()});
 }
 
 window.gIncompatiblePane = {
   lastSelected: "paneLinks",
 
   init(docElt) {
-    this.paneButton = document.getAnonymousElementByAttribute(docElt, "pane", "paneIncompatible");
+    this.paneButton = docElt.getElementsByAttribute("pane", "paneIncompatible")[0];
     let radioGroup = this.paneButton.parentNode;
     radioGroup.addEventListener("command", this);
     this.checkForIncompatible(false);
@@ -591,7 +591,7 @@ window.gIncompatiblePane = {
 
   checkForIncompatible(aShowList) {
     let tmp = {};
-    Components.utils.import("resource://tabmixplus/extensions/CompatibilityCheck.jsm", tmp);
+    Components.utils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm", tmp);
     tmp = new tmp.CompatibilityCheck(window, aShowList, true);
   },
 
@@ -623,7 +623,7 @@ XPCOMUtils.defineLazyGetter(this, "OS", () => {
 });
 
 XPCOMUtils.defineLazyModuleGetter(this, "AsyncUtils",
-  "resource://tabmixplus/AsyncUtils.jsm");
+  "chrome://tabmix-resource/content/AsyncUtils.jsm");
 
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
 

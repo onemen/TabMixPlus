@@ -5,9 +5,9 @@ this.EXPORTED_SYMBOLS = ["flst"];
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
+Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
 XPCOMUtils.defineLazyModuleGetter(this, "Shortcuts",
-  "resource://tabmixplus/Shortcuts.jsm");
+  "chrome://tabmix-resource/content/Shortcuts.jsm");
 
 function flst() {
   this.flstOn = TabmixSvc.getString("flstOn.label");

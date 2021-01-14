@@ -6,7 +6,8 @@
 ]>
 
 <overlay id="SessionPaneOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+         xmlns:html="http://www.w3.org/1999/xhtml">
 
   <prefpane id="paneSession" onpaneload="gSessionPane.init();">
 
@@ -90,7 +91,7 @@
         <!-- Session Manager Extension -->
         <tabpanel>
           <!-- Open Session Manager Extension Options -->
-          <groupbox id="sessionmanager_ext">
+          <html:fieldset id="sessionmanager_ext">
             <hbox align="end">
               <vbox style="width: 24em;">
                 <description> &sm.extension.description1;.</description>
@@ -112,10 +113,10 @@
               <radio value="0" label="&sm.extension.chooseFile.label2;"/>
               <radio value="1" label="&sm.extension.chooseFile.label1;"/>
             </radiogroup>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
         <tabpanel id="sessionsPanel">
-          <groupbox align="start">
+          <html:fieldset align="start">
             <checkbox_tmp id="sessionsOptions" label="&ss.enable.label;"
                       tooltiptext="&ss.enable.tooltip;"
                       oncommand="gSessionPane.setSessionsOptions(this);"/>
@@ -134,10 +135,10 @@
             </vbox>
             <checkbox_tmp id="resume_from_crash" label="&crashRecovery.enable;" preference="pref_resume_from_crash" class="firefox"/>
             <checkbox_tmp id="sessionCrashRecovery" label="&crashRecovery.enable;" preference="pref_sessionCrashRecovery" class="tabmix"/>
-          </groupbox>
-          <tabbox class="groupbox-tabbox" flex="1">
-            <tabs id="session"
+          </html:fieldset>
+          <tabbox class="groupbox-tabbox" flex="1"
                   onselect="gPrefWindow.tabSelectionChanged(event);">
+            <tabs id="session">
               <tab label="&sm.StartExit;" class="subtabs tabmix" helpTopic="Session_-_StartExit"/>
               <tab label="&sm.restore;" class="subtabs tabmix" helpTopic="Session_-_StartExit#Restore"/>
               <tab label="tab" disabled="true" class="firefox" helpTopic="Session_-_StartExit"/>
@@ -147,15 +148,15 @@
               <!-- Tabmix Session manager - start/exit -->
               <tabpanel>
                 <hbox>
-                  <groupbox style="min-width: 14.6em;">
+                  <html:fieldset style="min-width: 14.6em;">
                     <caption label="&sm.start;"/>
                     <radiogroup id="onStart" align="start" preference="pref_onStart">
                       <radio value="0" id="onStart.restoresession" label="&sm.start.restore;"/>
                       <radio value="1" id="onStart.askme" label="&sm.start.ask;"/>
                       <radio value="2" id="onStart.donothing" label="&sm.start.nothing;"/>
                     </radiogroup>
-                  </groupbox>
-                  <groupbox flex="1">
+                  </html:fieldset>
+                  <html:fieldset flex="1">
                     <caption label="&sm.exit;"/>
                     <radiogroup id="onClose" align="start" preference="pref_onClose"
                                 oncommand="if (this.selectedIndex == 2) alert(TabmixSvc.getString('tmp.sessionempty'));">
@@ -163,9 +164,9 @@
                       <radio value="1" id="onClose.askme" label="&sm.exit.ask;"/>
                       <radio value="2" id="onClose.donothing" label="&sm.exit.nothing;"/>
                     </radiogroup>
-                  </groupbox>
+                  </html:fieldset>
                 </hbox>
-                <groupbox>
+                <html:fieldset>
                   <hbox align="center">
                     <label value="&sm.startup;"/>
                     <menulist id="onStart.loadsession" sizetopopup="none" style="width: 15em;"
@@ -193,11 +194,11 @@
                   </hbox>
                   <checkbox_tmp id="onStart.restorePinned" class="indent" label="&sm.restorePinned1.label;"
                             preference="pref_onStart.restorePinned"/>
-                </groupbox>
+                </html:fieldset>
               </tabpanel>
               <!-- Tabmix Session manager - restore -->
               <tabpanel>
-                <groupbox>
+                <html:fieldset>
                   <caption label="&sm.restore.options;"/>
                   <hbox>
                     <checkbox_tmp id="onRestore.overwritewindows" label="&sm.restore.overwrite;"
@@ -209,7 +210,7 @@
                             preference="pref_onOverwrite-Save" observes="obs_onRestore.overwritewindows"/>
                   <checkbox_tmp id="onRestore.concatenate" label="&sm.restore.merge;" preference="pref_onRestore.concatenate"/>
                   <checkbox_tmp id="onRestore.reloadall" label="&sm.restore.bypassCache;" preference="pref_onRestore.reloadall"/>
-                </groupbox>
+                </html:fieldset>
               </tabpanel>
               <!-- Build-in SessionStore (we hide this panel, don't put it in first or last tab)-->
               <tabpanel orient="horizontal" flex="1">
@@ -220,7 +221,7 @@
                   <label control="ss_timeinterval" value="&ss.interval;"/>
                   <hbox align="center" pack="end">
                     <label control="ss_timeinterval" value="&ss.interval.seconds;:"/>
-                    <textbox id="ss_timeinterval" preference="pref_ss_timeinterval"
+                    <html:input id="ss_timeinterval" preference="pref_ss_timeinterval"
                              maxlength="6" size="6" type="number"/>
                   </hbox>
                   <label control="ss_postdata" value="&ss.privacy_level;:"/>
@@ -236,14 +237,14 @@
                   <label control="ss_postdatabytes" value="&ss.postdata.label1;" observes="obs_ss_postdata"/>
                   <hbox align="center" pack="end">
                     <label control="ss_postdatabytes" value="&ss.postdata.label2;:" observes="obs_ss_postdata"/>
-                    <textbox id="ss_postdatabytes"  preference="pref_ss_postdatabytes"
+                    <html:input id="ss_postdatabytes"  preference="pref_ss_postdatabytes"
                              maxlength="6" size="6" type="number" min="-1" observes="obs_ss_postdata"/>
                   </hbox>
                 </vbox>
               </tabpanel>
               <!-- Tabmix Session manager - preserve -->
               <tabpanel>
-                <groupbox>
+                <html:fieldset>
                   <caption label="&sm.preserve.options;"/>
                   <hbox>
                     <vbox align="start">
@@ -256,14 +257,14 @@
                       <checkbox_tmp id="session.Lock" label="&sm.preserve.locked;" preference="pref_session.Lock"/>
                     </vbox>
                   </hbox>
-                </groupbox>
-                <groupbox>
+                </html:fieldset>
+                <html:fieldset>
                   <caption label="&sm.restore.winOptions;"/>
                   <hbox align="center">
                     <checkbox_tmp id="session.SelectedTab" label="&sm.restore.selectedTab;" preference="pref_session.SelectedTab"/>
                     <checkbox_tmp id="session.closedtabs" label="&sm.restore.closedTabs;" preference="pref_session.closedtabs" observes="obs_undoClose"/>
                   </hbox>
-                </groupbox>
+                </html:fieldset>
               </tabpanel>
             </tabpanels>
           </tabbox>

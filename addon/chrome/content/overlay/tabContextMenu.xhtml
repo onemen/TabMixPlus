@@ -11,6 +11,7 @@
    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
   <popupset id="mainPopupSet">
+		<link xmlns="http://www.w3.org/1999/xhtml" rel="localization" href="browser/preferences/preferences.ftl" />
     <menupopup id="tabContextMenu">
         <menuitem id="context_newTab" insertbefore="context_pinTab"
                  label="&tabCmd.label;" _afterthis="(&afterthis.label;)" _newtab="&tabCmd.label;"
@@ -53,7 +54,7 @@
 <!--
         replace "context_reloadAllTabs" oncommand
 -->
-        <menuitem id="context_reloadAllTabs" oncommand="Tabmix.tablib.reloadTabs(Tabmix.visibleTabs.tabs);" />
+        <menuitem id="context_reloadAllTabs" data-l10n-id="content-blocking-reload-tabs-button" oncommand="Tabmix.tablib.reloadTabs(Tabmix.visibleTabs.tabs);" />
         <menuitem id="tm-reloadOther" insertafter="context_reloadAllTabs"
                  label="&reloadother.label;" accesskey="&reloadother.accesskey;"
                  oncommand="gBrowser.reloadAllTabsBut(TabContextMenu.contextTab);" />

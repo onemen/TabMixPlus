@@ -15,14 +15,14 @@ XPCOMUtils.defineLazyModuleGetter(this, "NewTabURL",
   "resource:///modules/NewTabURL.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/TabmixSvc.jsm");
+  "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const FIREFOX_PREF = "browser.#.url".replace("#", "newtab");
 const ABOUT_NEW_TAB = "about:#".replace("#", "newtab");
 
 // browser. newtab.url preference was removed by bug 1118285 (Firefox 41+)
 this.Tabmix_NewTabURL = {
-  QueryInterface: XPCOMUtils.generateQI([
+  QueryInterface: ChromeUtils.generateQI([
     Ci.nsIObserver,
     Ci.nsISupportsWeakReference
   ]),

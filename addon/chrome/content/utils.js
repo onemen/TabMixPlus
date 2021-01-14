@@ -104,7 +104,7 @@ var Tabmix = {
     var self = this;
     XPCOMUtils.defineLazyGetter(aObject, aName, () => {
       let tmp = {};
-      Components.utils.import("resource://tabmixplus/" + aModule + ".jsm", tmp);
+      Components.utils.import("chrome://tabmix-resource/content/" + aModule + ".jsm", tmp);
       let Obj = tmp[aSymbol];
       if ("prototype" in tmp[aSymbol])
         Obj = new Obj();
@@ -182,7 +182,7 @@ var Tabmix = {
 
     // we add dependent to features to make this dialog float over the window on start
     var dialog = Services.ww.openWindow(aWindow,
-      "chrome://tabmixplus/content/dialogs/promptservice.xul", "", "centerscreen" +
+      "chrome://tabmixplus/content/dialogs/promptservice.xhtml", "", "centerscreen" +
            (modal ? ",modal" : ",dependent"), dpb);
     if (!modal)
       dialog._callBackFunction = aCallBack;
@@ -263,8 +263,10 @@ var Tabmix = {
   _init() {
     Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
     Components.utils.import("resource://gre/modules/Services.jsm");
-    XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
-      "resource:///modules/RecentWindow.jsm");
+    // XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
+    //   "resource:///modules/RecentWindow.jsm");
+    this.RecentWindow = {};
+    this.RecentWindow.getMostRecentBrowserWindow = Services.wm.getMostRecentBrowserWindow;
 
     const destroy = () => {
       window.removeEventListener("unload", destroy);

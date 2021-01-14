@@ -149,7 +149,7 @@ var TMP_tabDNDObserver = {
         window.requestAnimationFrame(() => {
           let t = Tabmix.getBoundsWithoutFlushing(document.getElementById("TabsToolbar").parentNode);
           let r = Tabmix.getBoundsWithoutFlushing(gBrowser.tabContainer);
-          let c = Tabmix.getBoundsWithoutFlushing(document.getElementById("content-deck"));
+          let c = Tabmix.getBoundsWithoutFlushing(document.getElementById("browser"));
           this.onLastToolbar = Math.abs(t.bottom - r.bottom) < 2 && Math.abs(r.bottom - c.top) < 2;
         });
       });
@@ -273,7 +273,7 @@ var TMP_tabDNDObserver = {
     tab._dragData = {
       offsetX: event.screenX - window.screenX - tabOffsetX,
       offsetY: event.screenY - window.screenY,
-      scrollX: tabBar.mTabstrip.scrollPosition,
+      scrollX: tabBar.arrowScrollbox.scrollPosition,
       screenX: event.screenX
     };
 
@@ -373,8 +373,8 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.tabsUtils.overflow) {
-      let tabStrip = tabBar.mTabstrip;
-      let ltr = Tabmix.ltr || tabStrip.orient == "vertical";
+      let tabStrip = tabBar.arrowScrollbox;
+      let ltr = Tabmix.ltr || tabStrip.getAttribute('orient') == "vertical";
       let _scroll, targetAnonid;
       if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_HIDDEN) // scroll with button
         targetAnonid = event.originalTarget.getAttribute("anonid");
@@ -718,7 +718,7 @@ var TMP_tabDNDObserver = {
     if (eX > wX && eX < (wX + window.outerWidth)) {
       // also avoid detaching if the the tab was dropped too close to
       // the tabbar (half a tab)
-      var bo = tabBar.mTabstrip.scrollBoxObject;
+      var bo = tabBar.arrowScrollbox.scrollbox;
       var rowHeight = TabmixTabbar.singleRowHeight;
       var endScreenY = bo.screenY + bo.height + 0.5 * rowHeight;
       if (TabmixTabbar.position === 0) {// tabbar on the top
@@ -927,7 +927,7 @@ var TMP_tabDNDObserver = {
       var minMargin, maxMargin, newMargin;
       var tabRect;
       var ltr = Tabmix.ltr;
-      let scrollRect = gBrowser.tabContainer.mTabstrip.scrollClientRect;
+      let scrollRect = gBrowser.tabContainer.arrowScrollbox.scrollClientRect;
       let rect = gBrowser.tabContainer.getBoundingClientRect();
       minMargin = scrollRect.left - rect.left - this.paddingLeft;
       maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
@@ -1124,7 +1124,7 @@ var TMP_undocloseTabButtonObserver = {
 
 Tabmix.goButtonClick = function TMP_goButtonClick(aEvent) {
   if (aEvent.button == 1 && gURLBar.value == gBrowser.currentURI.spec)
-    gBrowser.duplicateTab(gBrowser.mCurrentTab);
+    gBrowser.duplicateTab(gBrowser._selectedTab);
   else if (aEvent.button != 2)
     gURLBar.handleCommand(aEvent);
 };
@@ -1137,7 +1137,7 @@ Tabmix.loadTabs = function TMP_loadTabs(aURIs, aReplace) {
 };
 
 Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
-  var aTab = gBrowser.mCurrentTab;
+  var aTab = gBrowser._selectedTab;
   var isBlankTab = gBrowser.isBlankNotBusyTab(aTab);
   var isLockTab = !isBlankTab && aTab.hasAttribute("locked");
 
@@ -1385,7 +1385,32 @@ Tabmix.navToolbox = {
 
   handleCommand(event, openUILinkWhere, openUILinkParams = {}) {
     let prevTab, prevTabPos;
-    let action = this._parseActionUrl(this.value) || {};
+    let _parseActionUrl = function(aUrl) {
+      if (!aUrl.startsWith("mozaction:")) {
+        return null;
+      }
+
+      // URL is in the format mozaction:ACTION,PARAMS
+      // Where PARAMS is a JSON encoded object.
+      let [, type, params] = aUrl.match(/^mozaction:([^,]+),(.*)$/);
+
+      let newAction = {type};
+
+      try {
+        newAction.params = JSON.parse(params);
+        for (const [key, value] of Object.entries(newAction.params)) {
+          newAction.params[key] = decodeURIComponent(value);
+        }
+      } catch (e) {
+        // If this failed, we assume that params is not a JSON object, and
+        // is instead just a flat string. This may happen for legacy
+        // search components.
+        newAction.params = {url: params};
+      }
+
+      return newAction;
+    };
+    let action = _parseActionUrl(this.value) || {};
     if (Tabmix.prefs.getBoolPref("moveSwitchToTabNext") &&
         action.type == "switchtab" && this.hasAttribute("actiontype")) {
       prevTab = gBrowser.selectedTab;
@@ -1395,7 +1420,7 @@ Tabmix.navToolbox = {
     if (!openUILinkWhere) {
       let isMouseEvent = event instanceof MouseEvent;
       let altEnter = !isMouseEvent && event &&
-          event.altKey && !isTabEmpty(gBrowser.selectedTab);
+          event.altKey && !gBrowser.selectedTab.isEmpty;
       let where = "current";
       let url = action.params ? action.params.url : this.value;
       let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar",
@@ -1599,10 +1624,10 @@ Tabmix.navToolbox = {
     let alltabsPopup = document.getElementById("alltabs-popup");
     if (alltabsPopup && !alltabsPopup._tabmix_inited) {
       alltabsPopup._tabmix_inited = true;
-      alltabsPopup.setAttribute("context", gBrowser.tabContainer.contextMenu.id);
+      alltabsPopup.setAttribute("context", "tabContextMenu");
       alltabsPopup.__ensureElementIsVisible = function() {
-        let scrollBox = document.getAnonymousElementByAttribute(this, "class", "popup-internal-box");
-        scrollBox.ensureElementIsVisible(gBrowser.mCurrentTab.mCorrespondingMenuitem);
+        let scrollBox = this.getElementsByClassName("popup-internal-box")[0];
+        scrollBox.ensureElementIsVisible(gBrowser._selectedTab.mCorrespondingMenuitem);
       };
       alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
 

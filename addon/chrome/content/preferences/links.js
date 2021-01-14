@@ -53,7 +53,7 @@ var gLinksPane = {
   },
 
   openFiletypeEditor() {
-    window.openDialog("chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.xul",
+    window.openDialog("chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.xhtml",
       "filetypePrefsDialog", "modal,titlebar,toolbar,centerscreen");
   }
 };

@@ -10,7 +10,8 @@
 ]>
 
 <overlay id="AppearancePaneOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+         xmlns:html="http://www.w3.org/1999/xhtml">
 
   <prefpane id="paneAppearance" onpaneload="gAppearancePane.init();">
 
@@ -69,17 +70,17 @@
     </preferences>
 
     <!-- pane content -->
-    <tabbox>
-      <tabs id="appearance"
+    <tabbox
             onselect="gPrefWindow.tabSelectionChanged(event);">
+      <tabs id="appearance">
         <tab label="&tabBarAppearance.label;" class="subtabs" helpTopic="Display_-_Tab_bar"/>
         <tab label="&tabAppearance.label;" class="subtabs" helpTopic="Display_-_Tab"/>
         <tab label="&toolBarAppearance.label;" class="subtabs" helpTopic="Display_-_ToolBar"/>
       </tabs>
       <tabpanels>
         <tabpanel>
-          <groupbox flex="1">
-            <caption label="&show.ontabbar.label;"/>
+          <html:fieldset flex="1">
+            <html:legend>&show.ontabbar.label;</html:legend>
             <!-- new tab button on tabbar -->
             <hbox align="center">
               <checkbox_tmp id="newTabButton" label="&newTabButton.label;" preference="pref_newTabButton"/>
@@ -105,8 +106,8 @@
             <!-- Space on tabbar -->
             <checkbox_tmp id="tabBarSpace" label="&tabBarSpace.label;" preference="pref_tabBarSpace"
                       tooltiptext="&tabBarSpace.tooltip;"/>
-          </groupbox>
-          <groupbox flex="1" id="tabBarDisplay">
+          </html:fieldset>
+          <html:fieldset flex="1" id="tabBarDisplay">
             <!-- show/hide the tabbar -->
             <hbox align="center">
               <label value="&hideTabBar.label;:"/>
@@ -152,7 +153,7 @@
             <vbox id="multi-rows" class="indent" style="height: 50px;">
               <hbox align="center" id="maxbar">
                 <label value="&maxrow.label;" TSTdisabled="true"/>
-                <textbox id="maxrow" size="2" maxlength="2" preference="pref_maxrow" type="number" min="2"/>
+                <html:input id="maxrow" size="2" maxlength="2" preference="pref_maxrow" type="number" min="2"/>
               </hbox>
               <checkbox_tmp id="pinnedTabScroll" label="&pinnedTabScroll.label;"
                             preference="pref_pinnedTabScroll"/>
@@ -164,15 +165,15 @@
             <checkbox_tmp id="smoothScroll" label="&smoothScroll.label;" preference="pref_smoothScroll"/>
             <hbox align="center" id="clickToScroll.scrollDelay">
               <label value="&scrolldelay.label;" TSTdisabled="true" observes="obs_smoothScroll"/>
-              <textbox id="scrollDelay" size="4" maxlength="4" observes="obs_smoothScroll"
+              <html:input id="scrollDelay" size="4" maxlength="4" observes="obs_smoothScroll"
                         preference="pref_scrollDelay" type="number"/>
               <label value="&milliseconds.label;" class="timelabel" TSTdisabled="true" observes="obs_smoothScroll"/>
             </hbox>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
         <tabpanel>
-          <groupbox id="tabappearance" flex="1">
-            <caption label="&tabStyles.label;"/>
+          <html:fieldset id="tabappearance" flex="1">
+            <html:legend>&tabStyles.label;</html:legend>
             <hbox>
               <vbox flex="1">
                 <!-- Highlight Current tab -->
@@ -201,9 +202,9 @@
                           preference="pref_disableBackground"/>
             <checkbox_tmp id="squaredTabs" label="&squaredTabs.label;"
                           preference="pref_squaredTabs" observes="obs_disableBackground"/>
-          </groupbox>
-          <groupbox flex="1">
-            <caption label="&show.ontab.label;"/>
+          </html:fieldset>
+          <html:fieldset flex="1">
+            <html:legend>&show.ontab.label;</html:legend>
             <!-- Extra icons-->
             <label value="&extraIcons.label1;:"/>
             <hbox align="center" class="indent">
@@ -232,12 +233,12 @@
                 </menupopup>
               </menulist>
               <hbox id="tabDelayCheck" align="center">
-                <textbox id="tabXDelay" size="4" maxlength="4" preference="pref_tabXDelay"
+                <html:input id="tabXDelay" size="4" maxlength="4" preference="pref_tabXDelay"
                          observes="obs_showTabX" type="number"/>
                 <label value="&milliseconds.label;" observes="obs_showTabX" class="timelabel"/>
               </hbox>
               <hbox id="tabWidthBox" align="center">
-                <textbox id="tabXwidth" size="4" maxlength="4" preference="pref_tabClipWidth"
+                <html:input id="tabXwidth" size="4" maxlength="4" preference="pref_tabClipWidth"
                          observes="obs_showTabX" type="number"/>
                 <label value="&widthPixels.label;" observes="obs_showTabX"/>
               </hbox>
@@ -245,36 +246,36 @@
             <label id="onLeftDisabled" value="&onLeftDisabled.label;"
                    tst="&onLeftDisabled.tst.label;" hidden="true"
                    style="text-decoration: underline; color: #CC0000;"/>
-          </groupbox>
-          <groupbox flex="1">
+          </html:fieldset>
+          <html:fieldset flex="1">
             <!-- Tab width -->
             <hbox align="center">
               <label value="&minWidth.label;"/>
-              <textbox id="minWidth" size="3" maxlength="3" preference="pref_minWidth" type="number"
+              <html:input id="minWidth" size="3" maxlength="3" preference="pref_minWidth" type="number"
                        onsynctopreference="return gAppearancePane.userChangedWidth(this);"/>
               <label value="&widthTo.label;"/>
-              <textbox id="maxWidth" size="4" maxlength="4" preference="pref_maxWidth" type="number"
+              <html:input id="maxWidth" size="4" maxlength="4" preference="pref_maxWidth" type="number"
                        onsynctopreference="return gAppearancePane.userChangedWidth(this);"/>
               <label value="&widthPixels.label;"/>
             </hbox>
             <checkbox_tmp id="flexTabs" label="&flexTabs.label;"  preference="pref_flexTabs"/>
             <checkbox_tmp id="bookastitle" label="&bookastitle.label;" preference="pref_bookastitle"/>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
         <tabpanel>
-          <groupbox flex="1">
+          <html:fieldset flex="1">
             <hbox align="start">
               <description class="header" style="width: &toolbar.description.width;;">&toolbar.description;</description>
               <button label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"/>
             </hbox>
             <spacer flex="1"/>
-            <groupbox id="onToolbar">
-              <caption label="&toolbar.visible.caption;"/>
+            <html:fieldset id="onToolbar">
+              <html:legend>&toolbar.visible.caption;</html:legend>
               <label value="&toolbar.novisible.label;" class="indent"/>
-            </groupbox>
+            </html:fieldset>
             <spacer flex="1"/>
-            <groupbox id="onPlate">
-              <caption label="&toolbar.hidden.caption;"/>
+            <html:fieldset id="onPlate">
+              <html:legend>&toolbar.hidden.caption;</html:legend>
               <label value="&toolbar.nohidden.label;" class="indent"/>
               <hbox class="tabmixbuttons">
                 <image id="_btn_sessionmanager"/>
@@ -292,9 +293,9 @@
                 <image id="_btn_tabslist"/>
                 <label value="&tabslistbtn.label;"/>
               </hbox>
-            </groupbox>
+            </html:fieldset>
             <spacer flex="1"/>
-          </groupbox>
+          </html:fieldset>
         </tabpanel>
       </tabpanels>
     </tabbox>

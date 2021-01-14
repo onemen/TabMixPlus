@@ -13,6 +13,7 @@
 <dialog id="pref-TMP-filetype"
         windowtype="mozilla:tabmixopt-filetype"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html="http://www.w3.org/1999/xhtml"
         buttons="accept,cancel,help"
         ondialoghelp="window.opener.openHelp('links#file-type-editor');"
         title="&filetype.options;"
@@ -23,11 +24,11 @@
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.js"/>
 
-   <groupbox>
-        <listbox id="filetypeList" rows="10" seltype="single" prefstring="extensions.tabmix.filetype" onselect="Select();"/>
+   <html:fieldset>
+        <richlistbox id="filetypeList" rows="10" seltype="single" prefstring="extensions.tabmix.filetype" onselect="Select();"/>
         <hbox flex="1" align="center">
          <label value="&filetype.new;"/>
-         <textbox id="filetypeEntry" oninput="Input();"/>
+         <html:input id="filetypeEntry" oninput="Input();"/>
         </hbox>
         <hbox flex="1" pack="center">
          <button id="filetypeAdd" label="&filetype.add;" disabled="true" oncommand="Add();"/>
@@ -37,5 +38,5 @@
         <hbox>
          <button id="filetypeRestore" label="&settings.default;" oncommand="Restore();"/>
         </hbox>
-   </groupbox>
+   </html:fieldset>
 </dialog>

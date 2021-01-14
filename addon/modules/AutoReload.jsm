@@ -5,7 +5,7 @@ this.EXPORTED_SYMBOLS = ["AutoReload"];
 const {interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/Services.jsm", this);
-Cu.import("resource://tabmixplus/TabmixSvc.jsm", this);
+Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
 
 var _setItem = function() {};
 
@@ -106,7 +106,7 @@ this.AutoReload = {
 
     let doc = aPopup.ownerGlobal.document;
     getList().sort((a, b) => parseInt(a) > parseInt(b)).forEach(val => {
-      let mi = doc.createElement("menuitem");
+      let mi = doc.createXULElement("menuitem");
       this.setLabel(mi, val);
       mi.setAttribute("type", "radio");
       mi.setAttribute("value", val);
@@ -141,7 +141,7 @@ this.AutoReload = {
       aTab = this._currentTab(aTab);
     let result = {ok: false};
     var win = aTab.ownerGlobal;
-    win.openDialog('chrome://tabmixplus/content/overlay/autoReload.xul', '_blank', 'chrome,modal,centerscreen', result);
+    win.openDialog('chrome://tabmixplus/content/overlay/autoReload.xhtml', '_blank', 'chrome,modal,centerscreen', result);
     if (result.ok) {
       aTab.autoReloadTime = TabmixSvc.prefBranch.getIntPref("reload_time");
       this._enable(aTab);

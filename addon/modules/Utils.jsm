@@ -19,15 +19,15 @@ Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "resource://tabmixplus/TabmixSvc.jsm");
+  "chrome://tabmix-resource/content/TabmixSvc.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
-  "resource://tabmixplus/DocShellCapabilities.jsm");
+  "chrome://tabmix-resource/content/DocShellCapabilities.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "AutoReload",
-  "resource://tabmixplus/AutoReload.jsm");
+  "chrome://tabmix-resource/content/AutoReload.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "MergeWindows",
-  "resource://tabmixplus/MergeWindows.jsm");
+  "chrome://tabmix-resource/content/MergeWindows.jsm");
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixAboutNewTab",
-  "resource://tabmixplus/AboutNewTab.jsm");
+  "chrome://tabmix-resource/content/AboutNewTab.jsm");
 
 this.TabmixUtils = {
   initMessageManager(window) {
