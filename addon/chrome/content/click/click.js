@@ -614,7 +614,7 @@ var TabmixContext = {
 
     // if all the menu are hidden don't show the popup
     if (hideMenu)
-    document.getElementById("tabContextMenu").hidePopup();
+      document.getElementById("tabContextMenu").hidePopup();
   },
 
   // Main context menu popupshowing

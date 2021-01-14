@@ -71,7 +71,7 @@ module.exports = {
     "no-magic-numbers": 0,
     "no-mixed-operators": 0,
     "no-mixed-requires": [0, false], // node
-    "no-mixed-spaces-and-tabs": [2, false],
+    "no-mixed-spaces-and-tabs": [2, "smart-tabs"],
     "no-multi-spaces": 2,
     // TODO need to fix this...
     "no-multi-str": 0,

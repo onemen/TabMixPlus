@@ -1,7 +1,6 @@
 "use strict";
 
-{
-
+(function() {
   Tabmix.initialization.init.initialized = false;
   Tabmix.initialization.run("init", gBrowser.tabContainer);
 
@@ -20,7 +19,7 @@
     }
 
     // DOMRect left/right properties are immutable.
-    tab = { left: tab.left, right: tab.right, top: tab.top, bottom: tab.bottom };
+    tab = {left: tab.left, right: tab.right, top: tab.top, bottom: tab.bottom};
 
     if (this.arrowScrollbox.smoothScroll) {
       let selected = !this.selectedItem.pinned &&
@@ -28,7 +27,7 @@
 
       if (!Tabmix.isVersion(570) && Tabmix.isVersion(310) && !TabmixTabbar.isMultiRow) {
         if (selected) {
-          selected = { left: selected.left, right: selected.right };
+          selected = {left: selected.left, right: selected.right};
           // Need to take in to account the width of the left/right margins on tabs.
           selected.left += this.arrowScrollbox._tabMarginLeft;
           selected.right -= this.arrowScrollbox._tabMarginRight;
@@ -69,5 +68,4 @@
       }, 150, this._animateElement);
     }
   });
-
-}
+}());

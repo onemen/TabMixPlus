@@ -1,6 +1,6 @@
 "use strict";
 
-{
+(function() {
   // Tabmix.changeCode(customElements.get("tabbrowser-tab"), "markup", {getter: true})._replace(
   //             '<image class=\"tab-icon-image\" validate=\"never\" role=\"presentation\"/>',
   //             '$&' + '\n    ' +
@@ -54,7 +54,7 @@
     tabbrowsertab.entities
   );
 
-  Tabmix.changeCode(tabbrowsertab, "inheritedAttributes", { getter: true })._replace(
+  Tabmix.changeCode(tabbrowsertab, "inheritedAttributes", {getter: true})._replace(
     '};',
     '\n    ' +
     `
@@ -62,8 +62,7 @@
   ".tab-progress":"value=tab-progress,fadein,pinned,selected=visuallyselected",
   ".tab-icon":"fadein,pinned,selected=visuallyselected",
   ".tab-image-right":"selected=visuallyselected,hover",
-  `
-    +
+  ` +
     '$&'
   ).defineProperty();
 
@@ -133,14 +132,11 @@
   });
 
   this.tabmix_inited = true;
-  `
-   +
+  ` +
   '$1$2'
   ).toCode();
 
   Tabmix.setNewFunction(tabbrowsertab, "tabmix_init", function tabmix_init() {
-
-
     Object.defineProperties(this, {
       '_isProtected': {
         get() {
@@ -189,9 +185,9 @@
           return this.boxObject.y + this.boxObject.height;
         }
       }
-    })
+    });
 
-    this.onMouseOver = function (aEvent) {
+    this.onMouseOver = function(aEvent) {
       this.setHoverState(aEvent, true);
       this.mButtonId = window.setTimeout(this.setShowButton, this.tabXDelay, this);
       if (this.mouseHoverSelect)
@@ -203,9 +199,9 @@
           TabmixTabbar.updateBeforeAndAfter(true);
         }, 0);
       }
-    }
+    };
 
-    this.doMouseHoverSelect = function (aTab) {
+    this.doMouseHoverSelect = function(aTab) {
       if (!aTab || !aTab.parentNode)
         return; // this tab already removed....
 
@@ -214,9 +210,9 @@
         b.removeAttribute("preventMouseHoverSelect");
       else if (aTab.mIsHover)
         aTab.parentNode.selectedItem = aTab;
-    }
+    };
 
-    this.setShowButton = function (aTab) {
+    this.setShowButton = function(aTab) {
       if (!aTab || !aTab.parentNode)
         return; // this tab already removed....
 
@@ -231,9 +227,9 @@
         aTab.setAttribute("showbutton", "on");
         aTab.parentNode.__showbuttonTab = aTab;
       }
-    }
+    };
 
-    this.onMouseOut = function (aEvent) {
+    this.onMouseOut = function(aEvent) {
       this.setHoverState(aEvent, false);
       clearTimeout(this.mButtonId);
       this.mButtonId = window.setTimeout(this.removeShowButton, this.tabXDelay, this);
@@ -252,9 +248,9 @@
           positionalTabs.afterHoveredTab = null;
         }
       }
-    }
+    };
 
-    this.setHoverState = function (aEvent, aOver) {
+    this.setHoverState = function(aEvent, aOver) {
       var anonid = aEvent.originalTarget &&
         typeof aEvent.originalTarget.getAttribute == "function" &&
         aEvent.originalTarget.getAttribute("anonid");
@@ -262,9 +258,9 @@
         this.mOverCloseButton = aOver;
       }
       this.mIsHover = aOver;
-    }
+    };
 
-    this.removeShowButton = function (aTab) {
+    this.removeShowButton = function(aTab) {
       if (!aTab || !aTab.parentNode)
         return; // this tab already removed....
 
@@ -278,9 +274,9 @@
         if (aTab == aTab.parentNode.__showbuttonTab)
           delete aTab.parentNode.__showbuttonTab;
       }
-    }
+    };
 
-    this.onMouseCommand = function (aEvent, aSelectNewTab) {
+    this.onMouseCommand = function(aEvent, aSelectNewTab) {
       var isSelected = this == this.parentNode.selectedItem;
       Tabmix.setItem(this, "clickOnCurrent",
         isSelected && aEvent.detail == 1 || null);
@@ -302,18 +298,17 @@
         }
       }
       // on mousedown event fall through to default mousedown from tabbox.xml
-    }
+    };
 
-    this.clearTimeouts = function () {
+    this.clearTimeouts = function() {
       var timeouts = ["mSelect", "mFocusId", "mButtonId", "autoReloadTimerID", "tabmix_mouseover"];
-      timeouts.forEach(function (aTimeout) {
+      timeouts.forEach(function(aTimeout) {
         if (aTimeout in this && this[aTimeout]) {
           clearTimeout(this[aTimeout]);
           this[aTimeout] = null;
         }
       }, this);
-    }
-
+    };
   });
 
   Tabmix.setNewFunction(tabbrowsertab.prototype, "disconnectedCallback", function disconnectedCallback() {
@@ -328,5 +323,4 @@
       }
     });
   }
-
-}
+}());

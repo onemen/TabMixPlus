@@ -134,9 +134,9 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       } catch (ex) {
         Tabmix.assert(ex);
       }
-  
+
       let result;
-      if(!gBrowserInit.delayedStartupFinished) try {
+      if (!gBrowserInit.delayedStartupFinished) try {
         // we use runningDelayedStartup in gBrowser.swapBrowsersAndCloseOther
         Tabmix.runningDelayedStartup = true;
         result = Tabmix.originalFunctions.gBrowserInit__delayedStartup.apply(this, arguments);
@@ -145,7 +145,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       } finally {
         Tabmix.runningDelayedStartup = false;
       }
-  
+
       if (Tabmix._callPrepareLoadOnStartup) {
         gBrowserInit._uriToLoadPromise
             .then(uriToLoad => Tabmix.prepareLoadOnStartup(uriToLoad))
@@ -155,11 +155,11 @@ Tabmix.beforeBrowserInitOnLoad = function() {
         TabmixSessionManager.init();
       }
       Tabmix.initialization.run("afterDelayedStartup");
-  
+
       return result;
     };
-    if(gBrowserInit.delayedStartupFinished) gBrowserInit._delayedStartup();
-  
+    if (gBrowserInit.delayedStartupFinished) gBrowserInit._delayedStartup();
+
     // look for installed extensions that are incompatible with tabmix
     if (this.firstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {

@@ -55,7 +55,7 @@ this.DynamicRules = {
       return;
     this._initialized = true;
 
-    this.orient = aWindow.document.getElementById("tabbrowser-tabs").attributes['orient'].value;
+    this.orient = aWindow.document.getElementById("tabbrowser-tabs").attributes.orient.value;
     this.styleType = this.isAustralis ? "australis" : "classic";
     this.windows10 = aWindow.navigator.oscpu.startsWith("Windows NT 10.0");
 
@@ -89,7 +89,7 @@ this.DynamicRules = {
     const tabsMutate = aMutations => {
       for (let mutation of aMutations) {
         if (mutation.attributeName == "orient") {
-          this.orient = mutation.target.orient || mutation.target.attributes['orient'].value;
+          this.orient = mutation.target.orient || mutation.target.attributes.orient.value;
           this.updateStyleType();
           return;
         }
@@ -328,7 +328,7 @@ this.DynamicRules = {
     if (!style)
       return;
 
-    let cssText = /* NAMESPACE */'';
+    let cssText = NAMESPACE;
     for (let rule of Object.keys(style))
       cssText += "\n" + style[rule];
     let styleSheet = Services.io.newURI(

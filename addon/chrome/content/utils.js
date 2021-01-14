@@ -265,7 +265,7 @@ var Tabmix = {
     Components.utils.import("resource://gre/modules/Services.jsm");
     // XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
     //   "resource:///modules/RecentWindow.jsm");
-    this.RecentWindow={};
+    this.RecentWindow = {};
     this.RecentWindow.getMostRecentBrowserWindow = Services.wm.getMostRecentBrowserWindow;
 
     const destroy = () => {

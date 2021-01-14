@@ -505,7 +505,7 @@ var TMP_eventListener = {
     var tabsToolbar = document.getElementById("TabsToolbar");
 
     if (TabmixSvc.australis) {
-      let australis = TabmixSvc.isAustralisBgStyle(tabBar.attributes['orient'].value);
+      let australis = TabmixSvc.isAustralisBgStyle(tabBar.attributes.orient.value);
       tabBar.setAttribute("tabmix_australis", australis ? "true" : "classic");
     }
 

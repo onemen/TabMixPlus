@@ -1057,6 +1057,12 @@ class PrefWindow extends MozXULElement {
       return;
     }
 
+    function updateAttribute(name, value) {
+      if (this.hasAttribute(name)) {
+        this.setAttribute(name, value);
+      }
+    }
+
     const childrenPrefpane = [...this.children].filter(child => child.tagName == 'prefpane');
     const otherChildren = [...this.children].filter(child => child.tagName != 'prefpane');
     const fragment = this.fragment;
@@ -1066,41 +1072,39 @@ class PrefWindow extends MozXULElement {
     deck.append(...childrenPrefpane);
     fragmentLastChild.append(...otherChildren);
 
-    this.hasAttribute("dlgbuttons") ? '' : this.setAttribute("dlgbuttons", "accept,cancel");
-    this.hasAttribute("persist") ? '' : this.setAttribute("persist", "lastSelected screenX screenY");
-    // this.hasAttribute("closebuttonlabel") ? '' : this.setAttribute("closebuttonlabel", "&preferencesCloseButton.label;");
-    // this.hasAttribute("closebuttonaccesskey") ? '' : this.setAttribute("closebuttonaccesskey", "&preferencesCloseButton.accesskey;");
-    this.hasAttribute("closebuttonlabel") ? '' : this.setAttribute("closebuttonlabel", MozXULElement.parseXULToFragment(`<div attr="&uiTour.infoPanel.close;" />`,["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
-    this.hasAttribute("closebuttonaccesskey") ? '' : this.setAttribute("closebuttonaccesskey", "C");
-    this.hasAttribute("role") ? '' : this.setAttribute("role", "dialog");
-    // this.hasAttribute("title") ? '' : this.setAttribute("title", "&preferencesDefaultTitleWin.title;");
-    this.hasAttribute("title") ? '' : this.setAttribute("title", MozXULElement.parseXULToFragment(`<div attr="&preferencesCmd2.label;" />`,["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
+    updateAttribute("dlgbuttons", "accept,cancel");
+    updateAttribute("persist", "lastSelected screenX screenY");
+    // updateAttribute("closebuttonlabel", "&preferencesCloseButton.label;")
+    // updateAttribute("closebuttonaccesskey", "&preferencesCloseButton.accesskey;")
+    updateAttribute("closebuttonlabel", MozXULElement.parseXULToFragment(`<div attr="&uiTour.infoPanel.close;" />`, ["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
+    updateAttribute("closebuttonaccesskey", "C");
+    updateAttribute("role", "dialog");
+    // updateAttribute("title", "&preferencesDefaultTitleWin.title;");
+    updateAttribute("title", MozXULElement.parseXULToFragment(`<div attr="&preferencesCmd2.label;" />`, ["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
 
-    let global = Components.utils.getGlobalForObject(this);
-
-    if(this.hasAttribute("ondialogaccept")) {
-      let f = new Function("event", this.getAttribute("ondialogaccept"));
-      this.addEventListener("dialogaccept",(event) => f.call(this, event));
+    if (this.hasAttribute("ondialogaccept")) {
+      const f = new Function("event", this.getAttribute("ondialogaccept"));
+      this.addEventListener("dialogaccept", event => f.call(this, event));
     }
-    if(this.hasAttribute("ondialogcancel")) {
-      let f = new Function("event", this.getAttribute("ondialogcancel"));
-      this.addEventListener("dialogcancel",(event) => f.call(this, event));
+    if (this.hasAttribute("ondialogcancel")) {
+      const f = new Function("event", this.getAttribute("ondialogcancel"));
+      this.addEventListener("dialogcancel", event => f.call(this, event));
     }
-    if(this.hasAttribute("ondialogextra1")) {
-      let f = new Function("event", this.getAttribute("ondialogextra1"));
-      this.addEventListener("dialogextra1",(event) => f.call(this, event));
+    if (this.hasAttribute("ondialogextra1")) {
+      const f = new Function("event", this.getAttribute("ondialogextra1"));
+      this.addEventListener("dialogextra1", event => f.call(this, event));
     }
-    if(this.hasAttribute("ondialogextra2")) {
-      let f = new Function("event", this.getAttribute("ondialogextra2"));
-      this.addEventListener("dialogextra2",(event) => f.call(this, event));
+    if (this.hasAttribute("ondialogextra2")) {
+      const f = new Function("event", this.getAttribute("ondialogextra2"));
+      this.addEventListener("dialogextra2", event => f.call(this, event));
     }
-    if(this.hasAttribute("ondialoghelp")) {
-      let f = new Function("event", this.getAttribute("ondialoghelp"));
-      this.addEventListener("dialoghelp",(event) => f.call(this, event));
+    if (this.hasAttribute("ondialoghelp")) {
+      const f = new Function("event", this.getAttribute("ondialoghelp"));
+      this.addEventListener("dialoghelp", event => f.call(this, event));
     }
-    if(this.hasAttribute("ondialogdisclosure")) {
-      let f = new Function("event", this.getAttribute("ondialogdisclosure"));
-      this.addEventListener("dialogdisclosure",(event) => f.call(this, event));
+    if (this.hasAttribute("ondialogdisclosure")) {
+      const f = new Function("event", this.getAttribute("ondialogdisclosure"));
+      this.addEventListener("dialogdisclosure", event => f.call(this, event));
     }
     /**
      * Derived bindings can set this to true to cause us to skip
@@ -1357,7 +1361,6 @@ class PrefWindow extends MozXULElement {
         for (let i = 0; i < list.length; ++i)
           shown[list[i].replace(/ /g, "")] = true;
         // hide/show the buttons we want
-        // for (dlgtype in buttons)
         for (const dlgtype of Object.keys(buttons)) {
           buttons[dlgtype].hidden = !shown[dlgtype];
         }

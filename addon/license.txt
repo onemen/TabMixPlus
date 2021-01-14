@@ -22,6 +22,7 @@ The following license applies to all files:
  * * Gary Reyes [CPU].
  * * SUN Chun-Yen.
  * *
+ * * 117649 <lhw.1012@gmail.com>
  * * Timothy Humphrey - (Original Author for lasttab.js)
  * * Piotr Sielski - graphics.
  *   &

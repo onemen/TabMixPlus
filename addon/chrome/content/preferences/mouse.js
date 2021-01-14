@@ -52,7 +52,7 @@ var gMousePane = {
     // Linux uses alt key down to trigger the top menu on Ubuntu or
     // start drag window on OpenSuSe
     let disabled = TabmixSvc.isLinux && panel == "alt";
-    if(disabled){
+    if (disabled) {
       Tabmix.setItem(this.clickTabbar, "disabled", disabled);
       Tabmix.setItem(this.clickTabbar.previousSibling, "disabled", disabled);
     }

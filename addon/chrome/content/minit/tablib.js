@@ -637,28 +637,26 @@ Tabmix.tablib = {
     //   '    gTMPprefObserver.updateTabbarBottomPosition();' +
     //   '  }'
     // ).defineProperty();
-    Object.defineProperty(gBrowser.tabContainer,"visible",{
-      get() { return !this.collapsed; },
+    Object.defineProperty(gBrowser.tabContainer, "visible", {
+      get() {return !this.collapsed;},
       set(val) {
-
         if (val == this.visible)
-            return val;
-    
+          return val;
+
         if (TabmixTabbar.hideMode == 2)
-            val = false;
+          val = false;
         this.collapsed = !val;
         let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
         if (bottomToolbox) {
-            bottomToolbox.collapsed = !val;
-            gTMPprefObserver.updateTabbarBottomPosition();
+          bottomToolbox.collapsed = !val;
+          gTMPprefObserver.updateTabbarBottomPosition();
         }
-    
+
         return val;
-    
       },
       enumerable: true,
       configurable: true
-    })
+    });
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")._replace(
       /(})(\)?)$/,

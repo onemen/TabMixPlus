@@ -70,7 +70,7 @@ var TabmixTabbar = {
 
     if (prevTabscroll != tabscroll) {
       // update pointer to the button object that we are going to use
-      let useTabmixButtons = tabscroll > this.SCROLL_BUTTONS_LEFT_RIGHT;
+      // let useTabmixButtons = tabscroll > this.SCROLL_BUTTONS_LEFT_RIGHT;
       let overflow = Tabmix.tabsUtils.overflow;
 
       // from Firefox 4.0+ on we add dynamically scroll buttons on TabsToolbar.
@@ -2045,7 +2045,7 @@ gTMPprefObserver = {
         attribValue.push("text");
       if (prefValues.bg && !Tabmix.prefs.getBoolPref("disableBackground")) {
         attribValue.push("bg");
-        if (TabmixSvc.isAustralisBgStyle(gBrowser.tabContainer.attributes['orient'].value)) {
+        if (TabmixSvc.isAustralisBgStyle(gBrowser.tabContainer.attributes.orient.value)) {
           attribValue.push("aus");
         }
       }

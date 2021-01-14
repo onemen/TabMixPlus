@@ -1,6 +1,6 @@
 /**
-  * Load overlays in a similar way as XUL did for legacy XUL add-ons.
-  */
+* Load overlays in a similar way as XUL did for legacy XUL add-ons.
+*/
 
 /* eslint no-var: 2, prefer-const: 2 class-methods-use-this: 0*/
 /* exported Overlays */
@@ -156,7 +156,7 @@ class Overlays {
         }
       }
 
-      let t_unloadedOverlays = [];
+      const t_unloadedOverlays = [];
       // Prepare loading further nested xul overlays from the overlay
       t_unloadedOverlays.push(...this._collectOverlays(doc));
 
@@ -169,7 +169,7 @@ class Overlays {
 
       // Run through all overlay nodes on the first level (hookup nodes). Scripts will be deferred
       // until later for simplicity (c++ code seems to process them earlier?).
-      let t_forwardReferences = [];
+      const t_forwardReferences = [];
       for (const node of doc.documentElement.children) {
         if (node.localName == "script") {
           this.unloadedScripts.push(node);
@@ -376,9 +376,9 @@ class Overlays {
           let palette = toolbox.palette;
 
           if (palette &&
-          this.window.gCustomizeMode._stowedPalette &&
-          this.window.gCustomizeMode._stowedPalette.id == node.id &&
-          palette == this.window.gCustomizeMode.visiblePalette) {
+					this.window.gCustomizeMode._stowedPalette &&
+					this.window.gCustomizeMode._stowedPalette.id == node.id &&
+					palette == this.window.gCustomizeMode.visiblePalette) {
             palette = this.window.gCustomizeMode._stowedPalette;
           }
 
@@ -732,8 +732,8 @@ class Overlays {
     }
 
     // this.traceBack(aWindow, {
-    //   action: 'appendButton',
-    //   node: node
+    // 	action: 'appendButton',
+    // 	node: node
     // });
     return node;
   }

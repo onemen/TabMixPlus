@@ -1394,26 +1394,22 @@ Tabmix.navToolbox = {
       // Where PARAMS is a JSON encoded object.
       let [, type, params] = aUrl.match(/^mozaction:([^,]+),(.*)$/);
 
-      let action = {
-        type,
-      };
+      let newAction = {type};
 
       try {
-        action.params = JSON.parse(params);
-        for (let key in action.params) {
-          action.params[key] = decodeURIComponent(action.params[key]);
+        newAction.params = JSON.parse(params);
+        for (const [key, value] of Object.entries(newAction.params)) {
+          newAction.params[key] = decodeURIComponent(value);
         }
       } catch (e) {
         // If this failed, we assume that params is not a JSON object, and
         // is instead just a flat string. This may happen for legacy
         // search components.
-        action.params = {
-          url: params,
-        };
+        newAction.params = {url: params};
       }
 
-      return action;
-    }
+      return newAction;
+    };
     let action = _parseActionUrl(this.value) || {};
     if (Tabmix.prefs.getBoolPref("moveSwitchToTabNext") &&
         action.type == "switchtab" && this.hasAttribute("actiontype")) {

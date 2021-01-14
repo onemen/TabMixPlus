@@ -27,7 +27,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils",
 
 // XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
 //   "resource:///modules/RecentWindow.jsm");
-this.RecentWindow={};
+this.RecentWindow = {};
 this.RecentWindow.getMostRecentBrowserWindow = Services.wm.getMostRecentBrowserWindow;
 
 XPCOMUtils.defineLazyModuleGetter(this,

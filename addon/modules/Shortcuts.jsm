@@ -109,8 +109,8 @@ this.Shortcuts = {
         ucatab="&clicktab.ucatab;"
         switchToLast="&shortcuts.switchToLast;"
       />
-      ` ,["chrome://tabmixplus/locale/pref-tabmix.dtd","chrome://tabmixplus/locale/shortcuts.dtd"])
-      .childNodes[0];
+      `, ["chrome://tabmixplus/locale/pref-tabmix.dtd", "chrome://tabmixplus/locale/shortcuts.dtd"])
+        .childNodes[0];
     for (let att of box.attributes) {
       if (this.keys[att.name]) {
         this.keys[att.name].label = att.value;
