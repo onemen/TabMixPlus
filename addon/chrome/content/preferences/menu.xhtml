@@ -156,11 +156,11 @@
                   </vbox>
                   <vbox align="start">
                     <!-- Undo close tabs -->
-                    <checkbox_tmp id="showUndoClose" data-l10n-id="tab-context-undo-close-tabs" label="undoCloseTab.label;" preference="pref_showUndoClose" observes="obs_undoClose"/>
+                    <checkbox_tmp id="showUndoClose" data-l10n-id="tab-context-undo-close-tabs" data-l10n-args='{"tabCount": 1}' label="undoCloseTab.label;" preference="pref_showUndoClose" observes="obs_undoClose"/>
                     <!-- Closed tabs list -->
                     <checkbox_tmp id="showUndoCloseList" label="&undoCloseListMenu.label;" preference="pref_showUndoCloseList" observes="obs_undoClose"/>
                     <!-- Close tabs -->
-                    <checkbox_tmp id="showCloseTab" data-l10n-id="tab-context-close-tabs" label="closeTab.label;" preference="pref_showCloseTab"/>
+                    <checkbox_tmp id="showCloseTab" data-l10n-id="tab-context-close-tabs" data-l10n-args='{"tabCount": 1}' label="closeTab.label;" preference="pref_showCloseTab"/>
                     <!-- Close all tabs -->
                     <checkbox_tmp id="showCloseAll" label="&closeAllTabsMenu.label;" preference="pref_showCloseAll"/>
                     <!-- Close similar tabs -->
@@ -211,7 +211,7 @@
                     <!-- reload every -->
                     <checkbox_tmp id="autoreloadTab" label="&autoReloadTab.label;" preference="pref_autoreloadTab"/>
                     <!-- Close tab -->
-                    <checkbox_tmp id="closetab" data-l10n-id="tab-context-close-tabs" label="closeTab.label;" preference="pref_closetab"/>
+                    <checkbox_tmp id="closetab" data-l10n-id="tab-context-close-tabs" data-l10n-args='{"tabCount": 1}' label="closeTab.label;" preference="pref_closetab"/>
                     <!-- Duplicate tab -->
                     <checkbox_tmp id="duplicateTabContent" label="&duplicateTabMenu.label;" preference="pref_duplicateTabContent"/>
                     <!-- Duplicate tab in Win-->
@@ -233,7 +233,7 @@
                     <!-- Closed tabs list -->
                     <checkbox_tmp id="showUndoCloseListContent" label="&undoCloseListMenu.label;" preference="pref_showUndoCloseListContent" observes="obs_undoClose"/>
                     <!-- Undo close tabs -->
-                    <checkbox_tmp id="showUndoCloseContent" data-l10n-id="tab-context-undo-close-tabs" label="undoCloseTab.label;" preference="pref_showUndoCloseContent" observes="obs_undoClose"/>
+                    <checkbox_tmp id="showUndoCloseContent" data-l10n-id="tab-context-undo-close-tabs" data-l10n-args='{"tabCount": 1}' label="undoCloseTab.label;" preference="pref_showUndoCloseContent" observes="obs_undoClose"/>
                   </vbox>
                 </row>
               </rows>
@@ -311,7 +311,7 @@
             <shortcut id="reloadlefttabs"  label="&clicktab.reloadlefttabs;"/>
             <shortcut id="reloadrighttabs" label="&clicktab.reloadrighttabs;"/>
             <shortcut id="autoReloadTab"   label="&clicktab.autoReloadTab;"/>
-            <shortcut id="close"           data-l10n-id="tab-context-close-tabs" label="closeTab.label;"/>
+            <shortcut id="close"           data-l10n-id="tab-context-close-tabs" data-l10n-args='{"tabCount": 1}' label="closeTab.label;"/>
             <shortcut id="removeall"       label="&clicktab.removeall;"/>
             <shortcut id="removesimilar"   label="&clicktab.removesimilar;"/>
             <shortcut id="removeother"     label="&clicktab.removeother;"/>
