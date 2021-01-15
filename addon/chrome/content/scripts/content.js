@@ -208,9 +208,7 @@ TabmixClickEventHandler = {
           }
         }
       }, true);
-      Cc["@mozilla.org/eventlistenerservice;1"]
-          .getService(Ci.nsIEventListenerService)
-          .addSystemEventListener(global, "click", this, true);
+      Services.els.addSystemEventListener(global, "click", this, true);
     }
   },
 
@@ -464,9 +462,7 @@ var AboutNewTabHandler = {
 
 var ContextMenuHandler = {
   init(global) {
-    Cc["@mozilla.org/eventlistenerservice;1"]
-        .getService(Ci.nsIEventListenerService)
-        .addSystemEventListener(global, "contextmenu", this.prepareContextMenu, true);
+    Services.els.addSystemEventListener(global, "contextmenu", this.prepareContextMenu, true);
   },
 
   prepareContextMenu(event) {

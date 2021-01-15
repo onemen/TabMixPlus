@@ -49,21 +49,11 @@ var TMP_LastTab = {
 
     this.TabList = document.getElementById("lasttabTabList");
 
-    const tabBox = Tabmix.isVersion(590) ? gBrowser.tabbox : gBrowser.mTabBox;
-    let els = Cc["@mozilla.org/eventlistenerservice;1"]
-        .getService(Ci.nsIEventListenerService);
-    if (Tabmix.isVersion(320, 270)) {
-      els.removeSystemEventListener(tabBox._eventNode, "keydown", tabBox, false);
-    } else {
-      tabBox._eventNode.removeEventListener("keypress", tabBox);
-      els.addSystemEventListener(tabBox._eventNode, "keypress", this, false);
-    }
-    els.addSystemEventListener(tabBox._eventNode, "keydown", this, false);
-    els.addSystemEventListener(tabBox._eventNode, "keyup", this, false);
-    if (!Tabmix.isVersion(470)) {
-      els.addSystemEventListener(window, "focus", this, true);
-    }
-    els.addSystemEventListener(window, "blur", this, true);
+    Services.els.removeSystemEventListener(document, "keydown", gBrowser.tabbox, false);
+    Services.els.addSystemEventListener(document, "keydown", this, false);
+    Services.els.addSystemEventListener(document, "keyup", this, false);
+
+    Services.els.addSystemEventListener(window, "blur", this, true);
 
     // if session manager select other tab then the first one we need to build
     // TabHistory in two steps to maintain natural Ctrl-Tab order.
@@ -81,17 +71,9 @@ var TMP_LastTab = {
     if (!this._inited)
       return;
 
-    const tabBox = Tabmix.isVersion(590) ? gBrowser.tabbox : gBrowser.mTabBox;
-    let els = Cc["@mozilla.org/eventlistenerservice;1"]
-        .getService(Ci.nsIEventListenerService);
-    els.removeSystemEventListener(tabBox._eventNode, "keydown", this, false);
-    els.removeSystemEventListener(tabBox._eventNode, "keyup", this, false);
-    if (!Tabmix.isVersion(320, 270))
-      els.removeSystemEventListener(tabBox._eventNode, "keypress", this, false);
-    if (!Tabmix.isVersion(470)) {
-      els.removeSystemEventListener(window, "focus", this, true);
-    }
-    els.removeSystemEventListener(window, "blur", this, true);
+    Services.els.removeSystemEventListener(document, "keydown", this, false);
+    Services.els.removeSystemEventListener(document, "keyup", this, false);
+    Services.els.removeSystemEventListener(window, "blur", this, true);
   },
 
   handleEvent(event) {
@@ -131,9 +113,6 @@ var TMP_LastTab = {
    * of the key modifiers is down
    */
   disallowDragwindow(keyDown) {
-    if (!Tabmix.isVersion(470)) {
-      return;
-    }
     if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
         keyDown == Tabmix.keyModifierDown &&
         keyDown != this.disallowDragState) {
@@ -193,8 +172,7 @@ var TMP_LastTab = {
   OnKeyDown(event) {
     this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
     Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
-    if (Tabmix.isVersion(320, 270))
-      this.OnKeyPress(event);
+    this.OnKeyPress(event);
   },
 
   set tabs(val) {
@@ -274,8 +252,7 @@ var TMP_LastTab = {
       if (this.TabListLock)
         this.TabList.hidePopup();
 
-      const tabBox = Tabmix.isVersion(590) ? gBrowser.tabbox : gBrowser.mTabBox;
-      tabBox.handleEvent(event);
+      gBrowser.tabbox.handleEvent(event);
     }
   },
 
