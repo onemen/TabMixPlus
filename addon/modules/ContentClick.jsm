@@ -1,3 +1,4 @@
+/* globals ClickHandlerParent  */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["TabmixContentClick"];
@@ -6,11 +7,14 @@ const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
-XPCOMUtils.defineLazyModuleGetter(this, "ContentClick",
-  "resource:///modules/ContentClick.jsm");
+XPCOMUtils.defineLazyModuleGetter(this, "ClickHandlerParent",
+  "resource:///actors/ClickHandlerParent.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "E10SUtils",
+  "resource://gre/modules/E10SUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
@@ -65,25 +69,24 @@ ContentClickInternal = {
   _initialized: false,
 
   init() {
-    if (!TabmixSvc.version(380) || this._initialized)
+    if (this._initialized) {
       return;
+    }
     this._initialized = true;
 
-    // ContentClick.jsm is not included in some Firefox forks:
-    // Cyberfox before version 42
     try {
-      if (typeof ContentClick.contentAreaClick !== "function") {
-        TabmixSvc.console.log("ContentClick.contentAreaClick is not a function");
+      if (typeof ClickHandlerParent.prototype.contentAreaClick !== "function") {
+        TabmixSvc.console.log("ClickHandlerParent.contentAreaClick is not a function");
         this.functions = [];
         return;
       }
     } catch (ex) {
-      TabmixSvc.console.log("ContentClick.jsm is not included");
+      TabmixSvc.console.log("ClickHandlerParent.jsm is not included");
       this.functions = [];
       return;
     }
 
-    let mm = Cc["@mozilla.org/globalmessagemanager;1"].getService(Ci.nsIMessageListenerManager);
+    let mm = Services.mm;
     mm.addMessageListener("TabmixContent:Click", this);
     mm.addMessageListener("Tabmix:isFrameInContentResult", this);
 
@@ -98,27 +101,29 @@ ContentClickInternal = {
       return;
 
     this.functions.forEach(aFn => {
-      ContentClick[aFn] = ContentClick["tabmix_" + aFn];
-      delete ContentClick["tabmix_" + aFn];
+      ClickHandlerParent.prototype[aFn] = ClickHandlerParent.prototype["tabmix_" + aFn];
+      delete ClickHandlerParent.prototype["tabmix_" + aFn];
     });
   },
 
   functions: ["contentAreaClick"],
   initContentAreaClick: function TMP_initContentAreaClick() {
     this.functions.forEach(aFn => {
-      ContentClick["tabmix_" + aFn] = ContentClick[aFn];
+      ClickHandlerParent.prototype["tabmix_" + aFn] = ClickHandlerParent.prototype[aFn];
     });
 
-    ContentClick.contentAreaClick = function contentAreaClick(json, browser) {
+    ClickHandlerParent.prototype.contentAreaClick = function contentAreaClick(json) {
       this.tabmix_contentAreaClick.apply(this, arguments);
 
       // we add preventDefault in our content.js when 'where' is not the
-      // 'default', original ContentClick.contentAreaClick handle all cases
+      // 'default', original ClickHandlerParent.prototype.contentAreaClick handle all cases
       // except when 'where' equals 'current'
       if (!json.tabmixContentClick || !json.href || json.bookmark) {
         return;
       }
 
+      // based on ClickHandlerParent.prototype.contentAreaClick
+      let browser = this.manager.browsingContext.top.embedderElement;
       let window = browser.ownerGlobal;
       var where = window.whereToOpenLink(json);
       if (where != "current") {
@@ -130,20 +135,24 @@ ContentClickInternal = {
       let params = {
         charset: browser.characterSet,
         suppressTabsOnFileDownload,
-        referrerURI: browser.documentURI,
-        referrerPolicy: json.referrerPolicy,
-        noReferrer: json.noReferrer,
-        allowMixedContent: json.allowMixedContent || null,
+        referrerInfo: E10SUtils.deserializeReferrerInfo(json.referrerInfo),
+        allowMixedContent: json.allowMixedContent,
         isContentWindowPrivate: json.isContentWindowPrivate,
+        originPrincipal: json.originPrincipal,
+        originStoragePrincipal: json.originStoragePrincipal,
+        triggeringPrincipal: json.triggeringPrincipal,
+        csp: json.csp ? E10SUtils.deserializeCSP(json.csp) : null,
+        frameID: json.frameID,
       };
       if (json.originAttributes.userContextId) {
         params.userContextId = json.originAttributes.userContextId;
       }
+      params.allowInheritPrincipal = true;
       window.openLinkIn(json.href, where, params);
 
       try {
         if (!PrivateBrowsingUtils.isWindowPrivate(window)) {
-          // this function is bound to ContentClick that import PlacesUIUtils
+          // this function is bound to ClickHandlerParent that import PlacesUIUtils
           // eslint-disable-next-line no-undef
           PlacesUIUtils.markPageAsFollowedLink(json.href);
         }
@@ -193,14 +202,15 @@ ContentClickInternal = {
 
     let win = browser.ownerGlobal;
     win.openLinkIn(href, result.where, {
-      referrerURI: browser.documentURI,
-      referrerPolicy: event.referrerPolicy,
-      noReferrer: event.noReferrer,
-      originPrincipal: event.nodePrincipal,
-      triggeringPrincipal: event.triggeringPrincipal,
-      frameOuterWindowID: event.frameOuterWindowID,
-      isContentWindowPrivate: event.isContentWindowPrivate,
       charset: browser.characterSet,
+      referrerInfo: E10SUtils.deserializeReferrerInfo(event.referrerInfo),
+      allowMixedContent: event.allowMixedContent,
+      isContentWindowPrivate: event.isContentWindowPrivate,
+      originPrincipal: event.originPrincipal,
+      originStoragePrincipal: event.originStoragePrincipal,
+      triggeringPrincipal: event.triggeringPrincipal,
+      csp: event.csp ? E10SUtils.deserializeCSP(event.csp) : null,
+      frameID: event.frameID,
       suppressTabsOnFileDownload: result.suppressTabsOnFileDownload
     });
 
@@ -502,12 +512,6 @@ ContentClickInternal = {
     if (!href) {
       let node = LinkNodeUtils.getNodeWithOnClick(aEvent.target);
       let wrappedOnClickNode = this.getWrappedNode(node, aFocusedWindow, aEvent.button === 0);
-      if (TabmixSvc.version(380)) {
-        aEvent.referrerPolicy = ownerDoc.referrerPolicy;
-      }
-      if (TabmixSvc.version(370)) {
-        aEvent.noReferrer = BrowserUtils.linkHasNoReferrer(node);
-      }
       if (this.getHrefFromNodeOnClick(aEvent, aBrowser, wrappedOnClickNode))
         aEvent.preventDefault();
       return "2.1";
@@ -900,7 +904,7 @@ ContentClickInternal = {
     let current = this._data.currentURL.toLowerCase();
     let youtube = /www\.youtube\.com\/watch\?v=/;
     let isYoutube = _href => youtube.test(current) && youtube.test(_href);
-    const pathProp = TabmixSvc.version(570) ? "pathQueryRef" : "path";
+    const pathProp = "pathQueryRef";
     let isSamePath = (_href, att) => makeURI(current)[pathProp].split(att)[0] == makeURI(_href)[pathProp].split(att)[0];
     let isSame = (_href, att) => current.split(att)[0] == _href.split(att)[0];
 
@@ -975,18 +979,15 @@ ContentClickInternal = {
       // window is valid only if both source and destination are in the same
       // privacy state and multiProcess state
       return PrivateBrowsingUtils.isWindowPrivate(window) ==
-          PrivateBrowsingUtils.isWindowPrivate(aWindow) &&
-          (!TabmixSvc.version(320) ||
-          window.gMultiProcessBrowser == aWindow.gMultiProcessBrowser);
+        PrivateBrowsingUtils.isWindowPrivate(aWindow) &&
+        window.gMultiProcessBrowser == aWindow.gMultiProcessBrowser;
     };
 
     let isMultiProcess;
     let windows = [];
     let addValidWindow = aWindow => {
       windows.push(aWindow);
-      if (TabmixSvc.version(320)) {
-        isMultiProcess = isMultiProcess || aWindow.gMultiProcessBrowser;
-      }
+      isMultiProcess = isMultiProcess || aWindow.gMultiProcessBrowser;
     };
 
     if (window.gBrowser && isValidWindow(window)) {
@@ -1126,7 +1127,7 @@ ContentClickInternal = {
         url = fixedURI || makeURI(url);
 
         // catch redirect
-        const pathProp = TabmixSvc.version(570) ? "pathQueryRef" : "path";
+        const pathProp = "pathQueryRef";
         const path = url[pathProp];
         if (path.match(/^\/r\/\?http/)) {
           url = fixupURI(path.substr("/r/?".length));

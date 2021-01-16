@@ -1,5 +1,5 @@
 /* globals content, docShell, addMessageListener, sendSyncMessage,
-           sendAsyncMessage, sendRpcMessage */
+           sendAsyncMessage */
 "use strict";
 
 var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
@@ -20,6 +20,12 @@ XPCOMUtils.defineLazyModuleGetter(this, "BrowserUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "WebNavigationFrames",
+  "resource://gre/modules/WebNavigationFrames.jsm");
+
+XPCOMUtils.defineLazyModuleGetter(this, "E10SUtils",
+  "resource://gre/modules/E10SUtils.jsm");
+
 XPCOMUtils.defineLazyModuleGetter(this, "NetUtil",
   "resource://gre/modules/NetUtil.jsm");
 
@@ -38,8 +44,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixAboutNewTab",
   "chrome://tabmix-resource/content/AboutNewTab.jsm");
 
-var PROCESS_TYPE_CONTENT = ContentSvc.version(380) &&
-    Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
+var PROCESS_TYPE_CONTENT = Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
 
 var TabmixClickEventHandler;
 var TabmixContentHandler = {
@@ -125,8 +130,7 @@ var TabmixContentHandler = {
         if (sh) {
           let entry = sh.getEntryAtIndex(sh.index, false);
           let postData = entry.postData;
-          // RemoteWebNavigation accepting postdata or headers only from Firefox 42.
-          if (postData && ContentSvc.version(420)) {
+          if (postData) {
             postData = postData.clone();
             json.postData = NetUtil.readInputStreamToString(postData, postData.available());
             let referrer = entry.referrerURI;
@@ -160,16 +164,12 @@ var TabmixContentHandler = {
         .getService(Ci.nsIDroppedLinkHandler);
     try {
       // Pass true to prevent the dropping of javascript:/data: URIs
-      if (ContentSvc.version(520)) {
-        links = linkHandler.dropLinks(event, true);
-        // we can not send a message with array of wrapped nsIDroppedLinkItem
-        links = links.map(link => {
-          const {url, name, type} = link;
-          return {url, name, type};
-        });
-      } else {
-        links = [{url: linkHandler.dropLink(event, linkName, true)}];
-      }
+      links = linkHandler.dropLinks(event, true);
+      // we can not send a message with array of wrapped nsIDroppedLinkItem
+      links = links.map(link => {
+        const {url, name, type} = link;
+        return {url, name, type};
+      });
     } catch (ex) {
       return;
     }
@@ -194,22 +194,20 @@ var TabmixContentHandler = {
 
 TabmixClickEventHandler = {
   init: function init(global) {
-    if (ContentSvc.version(380)) {
-      global.addEventListener("click", event => {
-        let linkData = this.getLinkData(event);
-        if (linkData) {
-          let [href, node] = linkData;
-          let currentHref = event.originalTarget.ownerDocument.documentURI;
-          const divertMiddleClick = event.button == 1 && ContentSvc.prefBranch.getBoolPref("middlecurrent");
-          const ctrlKey = AppConstants.platform == "macosx" ? event.metaKey : event.ctrlKey;
-          if (divertMiddleClick || ctrlKey ||
-              LinkNodeUtils.isSpecialPage(href, node, currentHref)) {
-            this.contentAreaClick(event, linkData);
-          }
+    global.addEventListener("click", event => {
+      let linkData = this.getLinkData(event);
+      if (linkData) {
+        let [href, node] = linkData;
+        let currentHref = event.originalTarget.ownerDocument.documentURI;
+        const divertMiddleClick = event.button == 1 && ContentSvc.prefBranch.getBoolPref("middlecurrent");
+        const ctrlKey = AppConstants.platform == "macosx" ? event.metaKey : event.ctrlKey;
+        if (divertMiddleClick || ctrlKey ||
+        LinkNodeUtils.isSpecialPage(href, node, currentHref)) {
+          this.contentAreaClick(event, linkData);
         }
-      }, true);
-      Services.els.addSystemEventListener(global, "click", this, true);
-    }
+      }
+    }, true);
+    Services.els.addSystemEventListener(global, "click", this, true);
   },
 
   handleEvent(event) {
@@ -231,7 +229,7 @@ TabmixClickEventHandler = {
     let ownerDoc = event.originalTarget.ownerDocument;
 
     // let Firefox code handle click events from about pages
-    if (!ownerDoc || (!ContentSvc.version(570) || event.button == 0) &&
+    if (!ownerDoc || event.button == 0 &&
         /^about:(certerror|blocked|neterror)$/.test(ownerDoc.documentURI)) {
       return null;
     }
@@ -247,29 +245,22 @@ TabmixClickEventHandler = {
     let [href, node, principal] = linkData;
     let ownerDoc = event.originalTarget.ownerDocument;
 
-    // first get document wide referrer policy, then
-    // get referrer attribute from clicked link and parse it and
-    // allow per element referrer to overrule the document wide referrer if enabled
-    let referrerPolicy = ContentSvc.version(380) ? ownerDoc.referrerPolicy : null;
-    let setReferrerPolicy = node && (ContentSvc.version(550) ||
-      ContentSvc.version(420) &&
-      Services.prefs.getBoolPref("network.http.enablePerElementReferrer"));
-    if (setReferrerPolicy) {
-      let value = node.getAttribute(ContentSvc.version(450) ? "referrerpolicy" : "referrer");
-      let referrerAttrValue = Services.netUtils.parseAttributePolicyString(value);
-      let policy = ContentSvc.version(490) ? "REFERRER_POLICY_UNSET" : "REFERRER_POLICY_DEFAULT";
-      if (referrerAttrValue !== Ci.nsIHttpChannel[policy]) {
-        referrerPolicy = referrerAttrValue;
-      }
+    let csp = ownerDoc.csp;
+    if (csp) {
+      csp = E10SUtils.serializeCSP(csp);
     }
 
-    let frameOuterWindowID;
-    if (ContentSvc.version(540)) {
-      // frameOuterWindowID = ownerDoc.defaultView.QueryInterface(Ci.nsIInterfaceRequestor)
-      //     .getInterface(Ci.nsIDOMWindowUtils)
-      //     .outerWindowID;
-      frameOuterWindowID = ownerDoc.defaultView.docShell.outerWindowID;
+    let referrerInfo = Cc["@mozilla.org/referrer-info;1"].createInstance(
+      Ci.nsIReferrerInfo
+    );
+    if (node) {
+      referrerInfo.initWithElement(node);
+    } else {
+      referrerInfo.initWithDocument(ownerDoc);
     }
+
+    referrerInfo = E10SUtils.serializeReferrerInfo(referrerInfo);
+    let frameID = WebNavigationFrames.getFrameId(ownerDoc.defaultView);
 
     let json = {
       button: event.button,
@@ -279,12 +270,14 @@ TabmixClickEventHandler = {
       altKey: event.altKey,
       href: null,
       title: null,
-      bookmark: false,
-      referrerPolicy,
-      frameOuterWindowID,
+      frameID,
       triggeringPrincipal: principal,
+      csp,
+      referrerInfo,
       originAttributes: principal ? principal.originAttributes : {},
-      isContentWindowPrivate: ContentSvc.version(510) && PrivateBrowsingUtils.isContentWindowPrivate(ownerDoc.defaultView),
+      isContentWindowPrivate: PrivateBrowsingUtils.isContentWindowPrivate(
+        ownerDoc.defaultView
+      ),
     };
 
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
@@ -296,6 +289,7 @@ TabmixClickEventHandler = {
     if (linkNode) {
       if (!href) {
         json.originPrincipal = ownerDoc.nodePrincipal;
+        json.originStoragePrincipal = ownerDoc.effectiveStoragePrincipal;
         json.triggeringPrincipal = ownerDoc.nodePrincipal;
       }
       linkNode = LinkNodeUtils.wrap(linkNode, TabmixUtils.focusedWindow(content),
@@ -319,49 +313,52 @@ TabmixClickEventHandler = {
     href = data._href;
 
     if (href) {
-      if (ContentSvc.version(410)) {
-        try {
-          BrowserUtils.urlSecurityCheck(href, principal);
-        } catch (e) {
-          return;
-        }
+      try {
+        BrowserUtils.urlSecurityCheck(href, principal);
+      } catch (e) {
+        return;
       }
 
       json.href = href;
       if (node) {
         json.title = node.getAttribute("title");
-        if (event.button === 0 && !event.ctrlKey && !event.shiftKey &&
-            !event.altKey && !event.metaKey) {
-          json.bookmark = node.getAttribute("rel") == "sidebar";
-          if (json.bookmark) {
-            event.preventDefault(); // Need to prevent the pageload.
-          }
-        }
       }
-      json.noReferrer = ContentSvc.version(370) && BrowserUtils.linkHasNoReferrer(node);
 
-      if (ContentSvc.version(480)) {
-        // Check if the link needs to be opened with mixed content allowed.
-        // Only when the owner doc has |mixedContentChannel| and the same origin
-        // should we allow mixed content.
-        json.allowMixedContent = false;
-        let docshell = ownerDoc.defaultView.QueryInterface(Ci.nsIInterfaceRequestor)
-            .getInterface(Ci.nsIWebNavigation)
-            .QueryInterface(Ci.nsIDocShell);
-        if (docShell.mixedContentChannel) {
-          const sm = Services.scriptSecurityManager;
-          try {
-            let targetURI = BrowserUtils.makeURI(href);
-            sm.checkSameOriginURI(docshell.mixedContentChannel.URI, targetURI, false);
-            json.allowMixedContent = true;
-          } catch (ex) {
-          }
-        }
+      // Check if the link needs to be opened with mixed content allowed.
+      // Only when the owner doc has |mixedContentChannel| and the same origin
+      // should we allow mixed content.
+      json.allowMixedContent = false;
+      let docshell = ownerDoc.defaultView.docShell;
+      if (this.docShell.mixedContentChannel) {
+        const sm = Services.scriptSecurityManager;
+        try {
+          let targetURI = Services.io.newURI(href);
+          let isPrivateWin =
+            ownerDoc.nodePrincipal.originAttributes.privateBrowsingId > 0;
+          sm.checkSameOriginURI(
+            docshell.mixedContentChannel.URI,
+            targetURI,
+            false,
+            isPrivateWin
+          );
+          json.allowMixedContent = true;
+        } catch (e) {}
       }
       json.originPrincipal = ownerDoc.nodePrincipal;
+      json.originStoragePrincipal = ownerDoc.effectiveStoragePrincipal;
       json.triggeringPrincipal = ownerDoc.nodePrincipal;
 
-      sendAsyncMessage("Content:Click", json);
+      // If a link element is clicked with middle button, user wants to open
+      // the link somewhere rather than pasting clipboard content.  Therefore,
+      // when it's clicked with middle button, we should prevent multiple
+      // actions here to avoid leaking clipboard content unexpectedly.
+      // Note that whether the link will work actually or not does not matter
+      // because in this case, user does not intent to paste clipboard content.
+      if (event.button === 1) {
+        event.preventMultipleActions();
+      }
+
+      this.sendAsyncMessage("Content:Click", json);
       return;
     }
 
@@ -405,7 +402,7 @@ TabmixClickEventHandler = {
       if (node.nodeType == content.Node.ELEMENT_NODE &&
           (node.localName == "a" ||
            node.namespaceURI == "http://www.w3.org/1998/Math/MathML")) {
-        href = ContentSvc.version(510) && node.getAttribute("href") ||
+        href = node.getAttribute("href") ||
             node.getAttributeNS("http://www.w3.org/1999/xlink", "href");
         if (href) {
           baseURI = node.ownerDocument.baseURIObject;
@@ -426,10 +423,6 @@ TabmixClickEventHandler = {
 var AboutNewTabHandler = {
   init(global) {
     Cu.import("resource://gre/modules/Services.jsm", this);
-    if (!ContentSvc.version(420)) {
-      return;
-    }
-
     addMessageListener("Tabmix:updateTitlefrombookmark", this);
 
     let contentLoaded = false;
@@ -475,7 +468,7 @@ var ContextMenuHandler = {
       links = ContextMenu.getSelectedLinks(content).join("\n");
     }
 
-    sendRpcMessage("Tabmix:contextmenu", {links});
+    sendSyncMessage("Tabmix:contextmenu", {links});
   }
 };
 
