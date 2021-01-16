@@ -52,7 +52,6 @@ var TMP_LastTab = {
     Services.els.removeSystemEventListener(document, "keydown", gBrowser.tabbox, false);
     Services.els.addSystemEventListener(document, "keydown", this, false);
     Services.els.addSystemEventListener(document, "keyup", this, false);
-
     Services.els.addSystemEventListener(window, "blur", this, true);
 
     // if session manager select other tab then the first one we need to build
@@ -352,7 +351,7 @@ var TMP_LastTab = {
 
   ReadPreferences() {
     // when Build-in tabPreviews is on we disable our own function
-    var mostRecentlyUsed = Services.prefs.getBoolPref("browser.ctrlTab.previews");
+    var mostRecentlyUsed = Services.prefs.getBoolPref("browser.ctrlTab.recentlyUsedOrder");
     var tabPreviews = document.getElementById("ctrlTab-panel") && "ctrlTab" in window;
     if (tabPreviews) {
       var tabPreviewsCurrentStatus = Boolean(ctrlTab._recentlyUsedTabs);

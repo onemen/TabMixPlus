@@ -23,7 +23,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "PromiseUtils",
 const PrefFn = {0: '', 32: 'CharPref', 64: 'IntPref', 128: 'BoolPref'};
 // other settings not in extensions.tabmix. branch that we save
 const otherPrefs = [
-  'browser.allTabs.previews', 'browser.ctrlTab.previews',
+  'browser.allTabs.previews', 'browser.ctrlTab.recentlyUsedOrder',
   'browser.link.open_newwindow', 'browser.link.open_newwindow.override.external',
   'browser.link.open_newwindow.restriction', TabmixSvc.newtabUrl,
   'browser.search.context.loadInBackground', 'browser.search.openintab',

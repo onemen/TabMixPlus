@@ -1308,7 +1308,7 @@ gTMPprefObserver = {
     "browser.link.open_newwindow.override.external",
     "browser.link.open_newwindow.restriction",
     "browser.link.open_newwindow",
-    "browser.ctrlTab.previews"],
+    "browser.ctrlTab.recentlyUsedOrder"],
 
   // removes the observer-object from service -- called when the window is no longer open
   removeObservers() {
@@ -1608,7 +1608,7 @@ gTMPprefObserver = {
       case "extensions.tabmix.newTabButton.position":
         this.changeNewTabButtonSide(Services.prefs.getIntPref(prefName));
         break;
-      case "browser.ctrlTab.previews":
+      case "browser.ctrlTab.recentlyUsedOrder":
       case "extensions.tabmix.lasttab.tabPreviews":
       case "extensions.tabmix.lasttab.respondToMouseInTabList":
       case "extensions.tabmix.lasttab.showTabList":
@@ -2453,13 +2453,13 @@ gTMPprefObserver = {
     }
     // 2008-09-23
     if (Services.prefs.prefHasUserValue("browser.ctrlTab.mostRecentlyUsed")) {
-      Services.prefs.setBoolPref("browser.ctrlTab.previews",
+      Services.prefs.setBoolPref("browser.ctrlTab.recentlyUsedOrder",
         Services.prefs.getBoolPref("browser.ctrlTab.mostRecentlyUsed"));
       Services.prefs.clearUserPref("browser.ctrlTab.mostRecentlyUsed");
     }
     // 2008-09-28
     if (Tabmix.prefs.prefHasUserValue("lasttab.handleCtrlTab")) {
-      Services.prefs.setBoolPref("browser.ctrlTab.previews",
+      Services.prefs.setBoolPref("browser.ctrlTab.recentlyUsedOrder",
         Tabmix.prefs.getBoolPref("lasttab.handleCtrlTab"));
       Tabmix.prefs.clearUserPref("lasttab.handleCtrlTab");
     }
@@ -2659,6 +2659,12 @@ gTMPprefObserver = {
     }
     // 2011-01-22 - verify sessionstore enabled
     Services.prefs.clearUserPref("browser.sessionstore.enabled");
+    // 2021-01-16
+    if (Services.prefs.prefHasUserValue("browser.ctrlTab.previews")) {
+      Services.prefs.setBoolPref("browser.ctrlTab.recentlyUsedOrder",
+        Services.prefs.getBoolPref("browser.ctrlTab.previews"));
+      Services.prefs.clearUserPref("browser.ctrlTab.previews");
+    }
 
     let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {
       let oldVersion = TabmixSvc.prefs.get("extensions.tabmix.version", "");

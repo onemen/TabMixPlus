@@ -358,7 +358,7 @@ var sessionPrefs = ["browser.sessionstore.resume_from_crash",
 XPCOMUtils.defineLazyGetter(window, "gPreferenceList", () => {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = [
-    "browser.allTabs.previews", "browser.ctrlTab.previews",
+    "browser.allTabs.previews", "browser.ctrlTab.recentlyUsedOrder",
     "browser.link.open_newwindow", "browser.link.open_newwindow.override.external",
     "browser.link.open_newwindow.restriction", TabmixSvc.newtabUrl,
     "browser.search.context.loadInBackground", "browser.search.openintab",
