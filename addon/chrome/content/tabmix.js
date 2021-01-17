@@ -272,7 +272,6 @@ Tabmix.afterDelayedStartup = function() {
 
 var TMP_eventListener = {
   init: function TMP_EL_init() {
-    window.addEventListener("DOMContentLoaded", this);
     window.addEventListener("load", this);
   },
 
@@ -307,7 +306,6 @@ var TMP_eventListener = {
       case "wheel":
         this.onTabBarScroll(aEvent);
         break;
-      case "DOMContentLoaded":
       case "load":
         this._onLoad(aEvent.type);
         break;
@@ -1287,7 +1285,6 @@ Tabmix.initialization = {
 
     if (stopInitialization) {
       this.run = function() {};
-      window.removeEventListener("DOMContentLoaded", TMP_eventListener);
       window.removeEventListener("load", TMP_eventListener);
     }
 
