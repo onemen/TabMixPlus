@@ -798,12 +798,6 @@ Tabmix.onContentLoaded = {
   },
 
   change_miscellaneous() {
-    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
-      /allowMixedContent:|charset:/,
-      'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n' +
-      '      $&'
-    ).toCode(false, Tabmix.originalFunctions, "openInverseLink");
-
     if ("_update" in TabsInTitlebar) {
       // set option to Prevent double click on Tab-bar from changing window size.
       Tabmix.changeCode(TabsInTitlebar, "TabsInTitlebar._update")._replace(

@@ -699,28 +699,6 @@ Tabmix.tablib = {
       'Tabmix.tablib.closeLastTab();'
     ).toCode();
 
-    // hide open link in window in single window mode
-    if ("nsContextMenu" in window && "initOpenItems" in nsContextMenu.prototype) {
-      Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems")._replace(
-        /context-openlink",/, '$& !Tabmix.singleWindowMode &&'
-      )._replace(
-        /context-openlinkprivate",/, '$& (!Tabmix.singleWindowMode || !isWindowPrivate) &&'
-      ).toCode();
-
-      Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInPrivateWindow")._replace(
-        'openLinkIn(this.linkURL, "window",',
-        'var [win, where] = [window, "window"];\
-         if (Tabmix.singleWindowMode) {\
-           let pbWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({ private: true });\
-           if (pbWindow) {\
-             [win, where] = [pbWindow, "tab"];\
-             pbWindow.focus();\
-           }\
-         }\
-         win.openLinkIn(this.linkURL, where,'
-      ).toCode();
-    }
-
     /**
      * don't open link from external application in new window when in single window mode
      * don't open link from external application in current tab if the tab is locked
@@ -1189,17 +1167,6 @@ Tabmix.tablib = {
       }
 
       this.duplicateTab(gBrowser.selectedTab, url);
-    };
-
-    gBrowser.openInverseLink = function(event) {
-      var url = Tabmix.tablib.getValidUrl();
-      if (!url)
-        return;
-
-      gContextMenu.linkURL = url;
-      // originalFunctions.openInverseLink is a copy of original
-      // nsContextMenu.prototype.openLinkInTab
-      Tabmix.originalFunctions.openInverseLink.call(gContextMenu, event);
     };
 
     Tabmix.tablib.openLinkInCurrent = function() {

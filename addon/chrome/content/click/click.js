@@ -622,6 +622,43 @@ var TabmixContext = {
     if (!gContextMenu || event.originalTarget != document.getElementById("contentAreaContextMenu"))
       return true;
 
+    // hide open link in window in single window mode
+    Tabmix.changeCode(gContextMenu, "gContextMenu.initOpenItems")._replace(
+      /context-openlink",/, '$& !Tabmix.singleWindowMode &&'
+    )._replace(
+      /context-openlinkprivate",/, '$& (!Tabmix.singleWindowMode || !isWindowPrivate) &&'
+    ).toCode();
+
+    Tabmix.changeCode(gContextMenu, "gContextMenu.openLinkInPrivateWindow")._replace(
+      /openLinkIn\(\n*\s*this\.linkURL,\n*\s*"window",/,
+      'var [win, where] = [window, "window"];\
+             if (Tabmix.singleWindowMode) {\
+               let pbWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({ private: true });\
+               if (pbWindow) {\
+                 [win, where] = [pbWindow, "tab"];\
+                 pbWindow.focus();\
+               }\
+             }\
+             win.openLinkIn(this.linkURL, where,'
+    ).toCode();
+
+    Tabmix.changeCode(gContextMenu, "gContextMenu.openLinkInTab")._replace(
+      /allowMixedContent:|charset:/,
+      'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n' +
+            '      $&'
+    ).toCode(false, Tabmix.originalFunctions, "openInverseLink");
+
+    Tabmix.openInverseLink = function(ev) {
+      var url = Tabmix.tablib.getValidUrl();
+      if (!url)
+        return;
+
+      gContextMenu.linkURL = url;
+      // originalFunctions.openInverseLink is a copy of original
+      // nsContextMenu.prototype.openLinkInTab
+      Tabmix.originalFunctions.openInverseLink.call(gContextMenu, ev);
+    };
+
     gContextMenu.tabmixLinks = Tabmix.contextMenuLinks;
     Tabmix.contextMenuLinks = null;
 
