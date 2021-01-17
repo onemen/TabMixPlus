@@ -837,7 +837,7 @@ var TMP_eventListener = {
     this.setTabAttribute(tab);
     TMP_LastTab.tabs = null;
     TMP_LastTab.attachTab(tab);
-    Tabmix.tablib.setLoadURIWithFlags(tab.linkedBrowser);
+    Tabmix.tablib.setLoadURI(tab.linkedBrowser);
     if (TabmixTabbar.lockallTabs) {
       tab.setAttribute("locked", "true");
       tab.tabmix_allowLoad = false;

@@ -705,7 +705,7 @@ Tabmix.tabsUtils = {
       tab.tabmix_allowLoad = false;
     }
     if ("linkedBrowser" in tab)
-      Tabmix.tablib.setLoadURIWithFlags(tab.linkedBrowser);
+      Tabmix.tablib.setLoadURI(tab.linkedBrowser);
 
     Tabmix.initialization.run("beforeStartup", gBrowser, this.tabBar);
   },

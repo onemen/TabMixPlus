@@ -307,7 +307,7 @@ function _reloadTab(aTab) {
     if (sh) {
       let entry = sh.getEntryAtIndex(sh.index, false);
       data.postData = entry.QueryInterface(Ci.nsISHEntry).postData;
-      data.referrer = entry.QueryInterface(Ci.nsISHEntry).referrerURI;
+      data.referrerInfo = browser.ownerDocument.referrerInfo;
       if (data.postData && !AutoReload.confirm(window, aTab))
         return;
     }
@@ -325,25 +325,23 @@ function doReloadTab(window, browser, data) {
     y: data.scrollY
   };
   var loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY |
-                              Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_PROXY |
-                              Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE;
+                  Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_PROXY |
+                  Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE;
 
   // This part is based on BrowserReloadWithFlags.
   let url = browser.currentURI.spec;
-  let {postData, referrer} = data;
-  let loadURIWithFlags = TabmixSvc.version(330) &&
+  let {postData, referrerInfo} = data;
+  let loadURI =
       window.gBrowser.updateBrowserRemotenessByURL(browser, url) || postData;
-  if (loadURIWithFlags) {
+  if (loadURI) {
     if (!postData)
-      postData = referrer = null;
-    browser.loadURIWithFlags(url, loadFlags, referrer, null, postData);
-    return;
-  }
-
-  if (!TabmixSvc.version(330)) {
-    let webNav = browser.webNavigation.sessionHistory
-        .QueryInterface(Ci.nsIWebNavigation);
-    webNav.reload(loadFlags);
+      postData = referrerInfo = null;
+    browser.loadURI(url, {
+      loadFlags,
+      referrerInfo,
+      triggeringPrincipal: browser.contentPrincipal,
+      postData
+    });
     return;
   }
 
@@ -353,7 +351,7 @@ function doReloadTab(window, browser, data) {
   browser.messageManager.sendAsyncMessage("Browser:Reload", {
     flags: loadFlags,
     handlingUserInput: windowUtils.isHandlingUserInput
-  });
+  }, "BrowserTab");
 }
 
 function _observe(aSubject, aTopic) {

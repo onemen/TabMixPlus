@@ -300,14 +300,10 @@ var TMP_Places = {
           const browser = aTab.linkedBrowser;
           try {
             browser.userTypedValue = url;
-            if (Tabmix.isVersion(550)) {
-              browser.loadURIWithFlags(url, {
-                flags: Ci.nsIWebNavigation.LOAD_FLAGS_NONE,
-                triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
-              });
-            } else {
-              browser.loadURI(url);
-            }
+            browser.loadURI(url, {
+              flags: Ci.nsIWebNavigation.LOAD_FLAGS_NONE,
+              triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
+            });
           } catch (ex) { }
         }
         this.resetRestoreState(aTab);

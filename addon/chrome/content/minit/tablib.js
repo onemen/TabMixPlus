@@ -15,39 +15,26 @@ Tabmix.tablib = {
     this.addNewFunctionsTo_gBrowser();
   },
 
-  _loadURIWithFlagsInitialized: false,
-  setLoadURIWithFlags: function tabmix_tablib_setLoadURIWithFlags(aBrowser) {
+  _loadURIInitialized: false,
+  setLoadURI: function tabmix_tablib_setLoadURI(aBrowser) {
     // set init value according to lockallTabs state
     // we update this value in TabmixProgressListener.listener.onStateChange
     aBrowser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
-
-    // Bug 1075658 - Enable remaining session store tests that are disabled in e10s.
-    // added _loadURIWithFlags to browser.js (Firefox 36+)
-    var obj, name;
-    if (Tabmix.isVersion(360)) {
-      if (this._loadURIWithFlagsInitialized)
-        return;
-      this._loadURIWithFlagsInitialized = true;
-      [obj, name] = [window, "_loadURIWithFlags"];
-    } else {
-      [obj, name] = [aBrowser, "loadURIWithFlags"];
+    if (this._loadURIInitialized) {
+      return;
     }
+    this._loadURIInitialized = true;
 
-    Tabmix.originalFunctions._loadURIWithFlags = obj[name];
-    obj[name] = function(...args) {
+    Tabmix.originalFunctions._loadURI = window._loadURI;
+    window._loadURI = function(...args) {
       try {
-        const arg0 = [];
-        if (!Tabmix.isVersion(360)) {
-          arg0.push(this);
-        }
-
         // if we redirected the load request to a new tab return it
-        const tabmixResult = Tabmix.tablib._loadURIWithFlags.apply(null, arg0.concat(args));
+        const tabmixResult = Tabmix.tablib._loadURI.apply(null, args);
         if (tabmixResult) {
           return tabmixResult;
         }
 
-        Tabmix.originalFunctions._loadURIWithFlags.apply(this, args);
+        Tabmix.originalFunctions._loadURI.apply(this, args);
       } catch (ex) {
         Tabmix.reportError(ex);
       }
@@ -55,23 +42,12 @@ Tabmix.tablib = {
     };
   },
 
-  _loadURIWithFlags(browser, uri, params) {
+  _loadURI(browser, uri, params) {
     if (Tabmix.tablib.allowLoad(browser, uri)) {
       return null;
     }
     // redirect load request to a new tab
-    let flags;
-    if (!Tabmix.isVersion(380)) {
-      flags = params;
-      params = {
-        referrerURI: arguments[3] || null,
-        charset: arguments[4] || null,
-        postdata: arguments[5] || null,
-      };
-    } else {
-      flags = params.flags;
-    }
-
+    let flags = params.flags;
     let isFlagged = flag => Boolean(flags & Ci.nsIWebNavigation[flag]);
     params.inBackground = false;
     params.allowThirdPartyFixup = isFlagged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
@@ -787,15 +763,14 @@ Tabmix.tablib = {
       [TSTopenURI || "openURI", "isExternal"];
     var _openURI = Tabmix.changeCode(fnObj, "nsBrowserAccess.prototype." + fnName);
 
-    var loadURIWithFlags = Tabmix.isVersion(380) ?
-      '      gBrowser.loadURIWithFlags(aURI.spec, {\n' +
+    var loadURI =
+      '      gBrowser.loadURI(aURI.spec, {\n' +
       '        triggeringPrincipal: typeof aTriggeringPrincipal == "undefined" ? 0 : aTriggeringPrincipal,\n' +
       '        flags: loadflags,\n' +
       '        referrerURI: aReferrer,\n' +
       '        referrerPolicy: aReferrerPolicy,\n' +
       '        userContextId: typeof aUserContextId == "undefined" ? 0 : aUserContextId,\n' +
-      '      });' :
-      '      browser.loadURIWithFlags(aURI.spec, loadflags, referrer, null, null);'
+      '      });'
           .replace("referrer", (Tabmix.isVersion(360) ? "aReferrer" : "referrer"));
 
     _openURI = _openURI._replace(
@@ -820,7 +795,7 @@ Tabmix.tablib = {
       '  let loadflags = #1 ?'.replace("#1", arg) +
       '      Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL :' +
       '      Ci.nsIWebNavigation.LOAD_FLAGS_NONE;' +
-      '\n' + loadURIWithFlags + '\n    ' +
+      '\n' + loadURI + '\n    ' +
       '  browser.focus();' +
       '}'
     );

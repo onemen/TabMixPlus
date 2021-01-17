@@ -654,10 +654,9 @@ var TMP_tabDNDObserver = {
         try {
           let browser = tab.linkedBrowser;
           let webNav = Ci.nsIWebNavigation;
-          let flags = webNav.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
-          if (Tabmix.isVersion(290, 280))
-            flags |= webNav.LOAD_FLAGS_FIXUP_SCHEME_TYPOS;
-          browser.loadURIWithFlags(url, flags);
+          let flags = webNav.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP |
+                      webNav.LOAD_FLAGS_FIXUP_SCHEME_TYPOS;
+          browser.loadURI(url, {flags});
           if (!bgLoad)
             gBrowser.tabContainer.selectedItem = tab;
         } catch (ex) {
