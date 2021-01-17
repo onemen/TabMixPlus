@@ -62,22 +62,23 @@ var TMP_tabDNDObserver = {
     )._replace(
       'draggedTab._dragData.animLastScreenX = screenX;',
       'let draggingRight = screenX > draggedTab._dragData.animLastScreenX;\n          ' +
-      '$&', {check: Tabmix.isVersion(520) && !tabsDragUtils}
+      '$&', {check: !tabsDragUtils}
     )._replace(
-      'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
-      'let tabCenter = tabScreenX + translateX + (tabmixHandleMove ? draggingRight * tabWidth : tabWidth / 2);'
-    )._replace(
+    // TODO: need more testing
+    //   'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
+    //   'let tabCenter = tabScreenX + translateX + (tabmixHandleMove ? draggingRight * tabWidth : tabWidth / 2);'
+    // )._replace(
       tabsDragUtils ? /screenX = boxObject\[TDUContext.*;/ :
-        /screenX = boxObject.*;/,
+        /screenX = tabs\[mid\].*;/,
       '$&\n            ' +
       `let halfWidth;
             if (tabmixHandleMove) {
-              halfWidth = boxObject.width / 2;
+              halfWidth = tabs[mid].getBoundingClientRect().width / 2;
               screenX += draggingRight * halfWidth;
             }`
     )._replace(
       tabsDragUtils ? /screenX \+ boxObject\[TDUContext.* < tabCenter/ :
-        /screenX \+ boxObject.* < tabCenter/,
+        /screenX \+ tabs\[mid\][^<]*<\n*\s*tabCenter/,
       'tabmixHandleMove ? screenX + halfWidth < tabCenter : $&'
     )._replace(
       'screenX > TDUContext.lastTabCenter',
@@ -85,7 +86,7 @@ var TMP_tabDNDObserver = {
       {check: tabsDragUtils}
     )._replace(
       'newIndex >= oldIndex',
-      'rtl || !tabmixHandleMove ? $& : draggingRight && newIndex > -1'
+      'RTL_UI || !tabmixHandleMove ? $& : draggingRight && newIndex > -1'
     );
     if (tabsDragUtils) {
       const topic = "browser-delayed-startup-finished";

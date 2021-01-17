@@ -83,7 +83,11 @@ PlacesUtilsInternal = {
     Tabmix.gIeTab = aWindow.Tabmix.extensions.gIeTab;
     Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js");
 
-    this.initPlacesUIUtils(aWindow);
+    try {
+      this.initPlacesUIUtils(aWindow);
+    } catch (ex) {
+      TabmixSvc.console.reportError(ex);
+    }
   },
 
   onQuitApplication() {
@@ -100,7 +104,7 @@ PlacesUtilsInternal = {
     }
   },
 
-  functions: ["openTabset", "openURINodesInTabs", "openMultipleLinksInTabs", "openNodeWithEvent", "openNodeIn"],
+  functions: ["openTabset", "openMultipleLinksInTabs", "openNodeWithEvent", "_openNodeIn"],
   initPlacesUIUtils: function TMP_PC_initPlacesUIUtils(aWindow) {
     try {
       PlacesUIUtils.openTabset.toString();
@@ -129,7 +133,7 @@ PlacesUtilsInternal = {
         '$&\n' +
         '      ids.push(item.id);', {check: !treeStyleTab}
       )._replace(
-        '"chrome,dialog=no,all", args);',
+        /"chrome,dialog=no,all",\n*\s*args\n*\s*\);/,
         '$&\n' +
         '      browserWindow.bookMarkIds = ids.join("|");'
       )._replace(
@@ -164,11 +168,6 @@ PlacesUtilsInternal = {
     } else { // TreeStyleTab not installed
       updateOpenTabset("openTabset");
 
-      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openURINodesInTabs")._replace(
-        'push({uri: aNodes[i].uri,',
-        'push({id: aNodes[i].itemId, uri: aNodes[i].uri,'
-      ).toCode();
-
       // we enter getURLsForContainerNode into PlacesUIUtils to prevent leaks from PlacesUtils
       Tabmix.changeCode(PlacesUtils, "PlacesUtils.getURLsForContainerNode")._replace(
         'uri: child.uri,',
@@ -179,8 +178,12 @@ PlacesUtilsInternal = {
       ).toCode(false, PlacesUIUtils, "tabmix_getURLsForContainerNode");
 
       Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openMultipleLinksInTabs")._replace(
-        'PlacesUtils.getURLsForContainerNode(aNode)',
-        'PlacesUIUtils.tabmix_getURLsForContainerNode(aNode)'
+        'PlacesUtils.getURLsForContainerNode(nodeOrNodes)',
+        'PlacesUIUtils.tabmix_getURLsForContainerNode(nodeOrNodes)'
+      )._replace(
+        'uri: nodeOrNodes[i].uri,',
+        '$&\n            ' +
+        'id: nodeOrNodes[i].itemId,'
       ).toCode();
     }
 
@@ -193,7 +196,7 @@ PlacesUtilsInternal = {
     // Don't change "current" when user click context menu open (callee is PC_doCommand and aWhere is current)
     // we disable the open menu when the tab is lock
     // the 2nd check for aWhere == "current" is for non Firefox code that may call this function
-    Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openNodeIn")._replace(
+    Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openNodeIn")._replace(
       '{', '$&\n' +
       '    var TMP_Event;\n' +
       '    if (arguments.length > 1 && typeof aWhere == "object") {\n' +
@@ -201,7 +204,7 @@ PlacesUtilsInternal = {
       '      aWhere = aWhere.where;\n' +
       '    }\n'
     )._replace(
-      'aWindow.openUILinkIn',
+      'aWindow.openTrustedLinkIn',
       'let browserWindow = this._getTopBrowserWin();\n' +
       '      if (browserWindow && typeof aWindow.TMP_Places == "object") {\n' +
       '        let TMP_Places = aWindow.TMP_Places;\n' +

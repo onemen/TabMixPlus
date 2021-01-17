@@ -832,26 +832,14 @@ Tabmix.onContentLoaded = {
         // titlebar and titlebarContent height
         '  TabmixTabbar.updateTabsInTitlebarAppearance();\n  ' +
         '$1$2'
-      )._replace(
-        'titlebarContentHeight = Math.max(titlebarContentHeight, fullTabsHeight)',
-        'titlebarContentHeight = Math.max(titlebarContentHeight, TabmixTabbar.singleRowHeight + verticalMargins(tabsStyles))',
-        {check: !Tabmix.isVersion(570) && Tabmix.isVersion(550)}
-      )._replace(
-        'titlebarContentHeight = fullTabsHeight + 1',
-        'titlebarContentHeight = TabmixTabbar.singleRowHeight + verticalMargins(tabsStyles) + 1',
-        {check: !Tabmix.isVersion(580) && Tabmix.isVersion(570)}
-      )._replace(
-        'titlebarContentHeight = fullTabsHeight;',
-        'titlebarContentHeight = TabmixTabbar.singleRowHeight + verticalMargins(tabsStyles);',
-        {check: Tabmix.isVersion(580)}
       ).toCode();
     }
 
     // we can't use TabPinned.
-    // gBrowser.pinTab call adjustTabstrip/_updateCloseButtons that call updateScrollStatus
+    // gBrowser.pinTab call _updateCloseButtons that call updateScrollStatus
     // before it dispatch TabPinned event.
     Tabmix.changeCode(gBrowser, "gBrowser.pinTab")._replace(
-      `this.tabContainer.${Tabmix.updateCloseButtons}();`,
+      'this._updateTabBarForPinnedTabs();',
       '  if (TabmixTabbar.widthFitTitle && aTab.hasAttribute("width"))' +
       '    aTab.removeAttribute("width");' +
       '  if (Tabmix.prefs.getBoolPref("lockAppTabs") &&' +
@@ -859,7 +847,7 @@ Tabmix.onContentLoaded = {
       '    this.lockTab(aTab);' +
       '    aTab.setAttribute("_lockedAppTabs", "true");' +
       '  }' +
-      `  this.tabContainer.${Tabmix.updateCloseButtons}(true);` +
+      '  $&' +
       '  TabmixTabbar.updateScrollStatus();' +
       '  TabmixTabbar.updateBeforeAndAfter();'
     ).toCode();
@@ -879,8 +867,8 @@ Tabmix.onContentLoaded = {
       '  return suppressTabsOnFileDownload ? "current" : where;\n' +
       '}\n'
     )._replace(
-      'var middle = !ignoreButton && e.button == 1;',
-      'var middle = !ignoreButton && e.button && e.button == 1;'
+      'let middle = !ignoreButton && e.button == 1;',
+      'let middle = !ignoreButton && e.button && e.button == 1;'
     )._replace(
       'return shift ? "tabshifted" : "tab";',
       '{' + $LF +

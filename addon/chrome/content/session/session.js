@@ -1216,7 +1216,7 @@ TabmixSessionManager = {
     this.restoreWindow(where, index);
     var popup = aEvent.originalTarget.parentNode;
     if (TabmixSvc.ss.getClosedWindowCount() > 0)
-      HistoryMenu.prototype.populateUndoWindowSubmenu(popup.parentNode.id);
+      HistoryMenu.prototype.populateUndoWindowSubmenu('Tabmix', popup.parentNode.id);
     else {
       popup.hidePopup();
       if (popup.parentNode.localName != "toolbarbutton")
@@ -1932,7 +1932,7 @@ TabmixSessionManager = {
       let contextmenu = !this.enableManager ? "tm_undocloseWindowContextMenu" : "tm_sessionmanagerContextMenu";
       document.getElementById("btn_closedwindows_menu").setAttribute("context", contextmenu);
       if (!this.enableManager) {
-        HistoryMenu.prototype.populateUndoWindowSubmenu("btn_closedwindows");
+        HistoryMenu.prototype.populateUndoWindowSubmenu('Tabmix', "btn_closedwindows");
         return;
       }
     }

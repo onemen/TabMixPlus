@@ -11,14 +11,14 @@ Tabmix.contentAreaClick = {
     });
 
     Tabmix.changeCode(window, "contentAreaClick")._replace(
-      'if (linkNode &&',
+      /if \(\n*\s*linkNode &&/,
       'var {where, _href, suppressTabsOnFileDownload, targetAttr} =\n' +
       '      Tabmix.ContentClick.getParamsForLink(event, linkNode, href,\n' +
       '          gBrowser.selectedBrowser, document.commandDispatcher.focusedWindow);\n' +
       '  href = _href;\n\n' +
       '  $&'
     )._replace(
-      'if (linkNode.getAttribute("onclick")',
+      /if \(\n*\s*linkNode\.getAttribute\("onclick"\)/,
       'if (where == "default") $&'
     )._replace(
       'loadURI(',

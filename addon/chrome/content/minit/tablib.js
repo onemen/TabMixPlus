@@ -255,14 +255,10 @@ Tabmix.tablib = {
       return Tabmix.originalFunctions.gBrowser_removeTab.apply(this, [aTab, aParams, ...args]);
     };
 
-    // changed by bug #563337
     if (!Tabmix.extensions.tabGroupManager) {
-      let aboutBlank = 'this.addTab("about:blank", {skipAnimation: true})';
-      let aboutNewtab = /this\.addTrustedTab\(BROWSER_NEW_TAB_URL, {\s?skipAnimation: true\s?}\)/;
-      let code = gBrowser._beginRemoveTab.toString().indexOf(aboutBlank) > -1 ?
-        aboutBlank : aboutNewtab;
       Tabmix.changeCode(gBrowser, "gBrowser._beginRemoveTab")._replace(
-        code, 'TMP_BrowserOpenTab(null, null, true)'
+        /this\.addTrustedTab\(BROWSER_NEW_TAB_URL, {\s*skipAnimation: true,?\s*}\)/,
+        'TMP_BrowserOpenTab(null, null, true)'
       ).toCode();
     }
 
@@ -354,24 +350,22 @@ Tabmix.tablib = {
       [obj, fnName] = [gBrowser, "setTabTitle"];
     }
     Tabmix.changeCode(obj, "gBrowser." + fnName)._replace(
-      Tabmix.isVersion(550) ? 'let isContentTitle = false;' : 'var title = browser.contentTitle;',
+      /let isContentTitle =[^;]*;/,
       '$&\n            ' +
-      'var urlTitle;\n            ' +
+      'let urlTitle;\n            ' +
       'const titleFromBookmark = Tabmix.tablib.getTabTitle(aTab, browser.currentURI.spec, title);\n            ' +
-      'if (typeof titleFromBookmark == "string") title = titleFromBookmark;'
+      'if (typeof titleFromBookmark == "string") title = titleFromBookmark;',
+      {flag: 'g'}
     )._replace(
       /title = title\.substring\(0, 500\).*;/,
       '$&\
-      urlTitle = title;', {check: Tabmix.isVersion(600)}
+      urlTitle = title;'
     )._replace(
-      `              title = Services.textToSubURI.unEscapeNonAsciiURI(
-        characterSet,
-        title
-      );`,
+      /title = Services.textToSubURI.unEscapeNonAsciiURI\([^;]*;/,
       '$&\
       urlTitle = title;'
     )._replace(
-      Tabmix.isVersion(550) ? 'return this._setTabLabel' : 'if (aTab.label == title',
+      'return this._setTabLabel',
       'if (aTab.hasAttribute("mergeselected"))\
          title = "(*) " + title;\
        const noChange = aTab.label == title && (Tabmix.isVersion(530) || aTab.crop == crop);\
@@ -384,42 +378,27 @@ Tabmix.tablib = {
          TMP_Places.currentTab = null;\
        $&'
     )._replace(
-      'this._tabAttrModified',
-      `Tabmix.tablib.onTabTitleChanged(aTab, browser, title == urlTitle);
-            $&`, {check: !Tabmix.isVersion(550)}
-    )._replace(
       '{ isContentTitle }',
       '{ isContentTitle, urlTitle }',
-      {check: Tabmix.isVersion(550)}
     ).toCode();
 
-    if (Tabmix.isVersion(550)) {
-      Tabmix.originalFunctions.gBrowser_setInitialTabTitle = gBrowser.setInitialTabTitle;
-      gBrowser.setInitialTabTitle = function(aTab) {
-        if (aTab._labelIsInitialTitle &&
+    Tabmix.originalFunctions.gBrowser_setInitialTabTitle = gBrowser.setInitialTabTitle;
+    gBrowser.setInitialTabTitle = function(aTab) {
+      if (aTab._labelIsInitialTitle &&
             aTab.hasAttribute("tabmix_changed_label")) {
-          return;
-        }
-        Tabmix.originalFunctions.gBrowser_setInitialTabTitle.apply(this, arguments);
-      };
+        return;
+      }
+      Tabmix.originalFunctions.gBrowser_setInitialTabTitle.apply(this, arguments);
+    };
 
-      Tabmix.changeCode(gBrowser, "gBrowser._setTabLabel")._replace(
-        'this._tabAttrModified',
-        // `let urlTitle = aOptions && aOptions.urlTitle;
-        `if(aOptions) let urlTitle = aOptions.urlTitle;
-          else let urlTitle = false;
-              Tabmix.tablib.onTabTitleChanged(aTab, aTab.linkedBrowser, aLabel == urlTitle);
-              $&`
-      ).toCode();
-    }
-
-    if (!Tabmix.isVersion(570)) {
-      // after bug 347930 - change Tab strip to be a toolbar
-      Tabmix.changeCode(gBrowser, "gBrowser.setStripVisibilityTo")._replace(
-        'this.tabContainer.visible = aShow;',
-        'if (!aShow || TabmixTabbar.hideMode != 2) $&'
-      ).toCode();
-    }
+    Tabmix.changeCode(gBrowser, "gBrowser._setTabLabel")._replace(
+      '{ beforeTabOpen, isContentTitle }',
+      '{ beforeTabOpen, isContentTitle, urlTitle }'
+    )._replace(
+      'this._tabAttrModified',
+      ` Tabmix.tablib.onTabTitleChanged(aTab, aTab.linkedBrowser, aLabel == urlTitle);
+         $&`
+    ).toCode();
 
     if (Tabmix.isVersion(390) && gMultiProcessBrowser) {
       /*
@@ -475,8 +454,8 @@ Tabmix.tablib = {
            this.arrowScrollbox.resetFirstTabInRow();\
          $&'
       )._replace(
-        /(arrowScrollbox|tabstrip|this.arrowScrollbox)\._scrollButtonDown\.getBoundingClientRect\(\)\.width/,
-        'TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 : $&'
+        'scrollButtonWidth:',
+        '$& TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 :'
       )._replace(
         'if (doPosition)',
         'if (doPosition && TabmixTabbar.isMultiRow &&' + $LF +
@@ -609,12 +588,13 @@ Tabmix.tablib = {
       ).toCode();
     }
 
+    // TODO: test if this still a problem
     // when selecting different tab fast with the mouse sometimes original onxblmousedown can call this function
     // before our mousedown handler can prevent it
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._selectNewTab")._replace(
-      '{',
-      '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.callerTrace("onxblmousedown")) return;'
-    ).toCode();
+    // Tabmix.changeCode(tabBar, "gBrowser.tabContainer._selectNewTab")._replace(
+    //   '{',
+    //   '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.callerTrace("onxblmousedown")) return;'
+    // ).toCode();
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")._replace(
       /(})(\)?)$/,
@@ -715,7 +695,7 @@ Tabmix.tablib = {
       'closeWindow(true);', // Mac
       'Tabmix.tablib.closeLastTab();', {check: TabmixSvc.isMac, flags: "g"}
     )._replace(
-      'gBrowser.removeCurrentTab({animate: true})',
+      /gBrowser.removeCurrentTab\([^;]+;/,
       'Tabmix.tablib.closeLastTab();'
     ).toCode();
 
@@ -969,12 +949,9 @@ Tabmix.tablib = {
     ).toCode();
 
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoWindowSubmenu")._replace(
-      'this._ss',
-      'TabmixSvc.ss', {check: !Tabmix.isVersion(260), flags: "g"}
-    )._replace(
-      'this._rootElt.getElementsByClassName("recentlyClosedWindowsMenu")[0];',
-      'this._rootElt ? this._rootElt.getElementsByClassName("recentlyClosedWindowsMenu")[0] :\n' +
-      '                                   document.getElementById(arguments[0]);'
+      'let undoPopup = this.undoWindowMenu.menupopup;',
+      'let undoPopup = arguments[0] === "Tabmix" ? document.getElementById(arguments[1]) :\n' +
+      '                                   this.undoWindowMenu.menupopup;'
     )._replace(
       /(})(\)?)$/,
       '  Tabmix.tablib.populateUndoWindowSubmenu(undoPopup);\n' +
