@@ -59,10 +59,6 @@ Tabmix.sessionInitialized = function() {
     TabmixTabbar._heights = [];
     Tabmix.tabsUtils.updateVerticalTabStrip(true);
   }
-  // Let EmbeddedWebExtension know we're done.
-  if (this.firstWindowInSession && TabmixSvc.sm.deferredInitialized) {
-    TabmixSvc.sm.deferredInitialized.resolve();
-  }
 
   var SM = TabmixSessionManager;
   if (SM.enableManager) {

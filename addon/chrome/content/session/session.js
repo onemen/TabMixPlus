@@ -314,9 +314,6 @@ TabmixSessionManager = {
     XPCOMUtils.defineLazyModuleGetter(this, "TabmixGroupsMigrator",
       "chrome://tabmix-resource/content/TabGroupsMigrator.jsm");
 
-    XPCOMUtils.defineLazyModuleGetter(this, "EmbeddedWebExtension",
-      "chrome://tabmix-resource/content/extensions/EmbeddedWebExtension.jsm");
-
     // just in case Tabmix.tablib isn't init yet
     // when Webmail Notifier extension installed and user have master password
     // we can get here before the browser window is loaded
@@ -1253,12 +1250,6 @@ TabmixSessionManager = {
     // if we're in private session, do nothing
     if (this.isPrivateSession)
       return;
-
-    try {
-      this.EmbeddedWebExtension.saveSessionsData(this.sessionShutDown);
-    } catch (ex) {
-      Tabmix.reportError(ex);
-    }
 
     try {
       this.DATASource.QueryInterface(Components.interfaces.nsIRDFRemoteDataSource).Flush();

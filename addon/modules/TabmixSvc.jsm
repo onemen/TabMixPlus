@@ -283,14 +283,6 @@ this.TabmixSvc = {
       tmp.DynamicRules.init(aWindow);
 
       Cu.import("chrome://tabmix-resource/content/TabRestoreQueue.jsm", {});
-
-      if (TabmixSvc.version(510)) {
-        try {
-          Cu.import("chrome://tabmix-resource/content/extensions/EmbeddedWebExtension.jsm", {});
-        } catch (ex) {
-          TabmixSvc.console.reportError(ex);
-        }
-      }
     },
 
     addMissingPrefs() {
@@ -348,7 +340,6 @@ this.TabmixSvc = {
     private: true,
     settingPreference: false,
     statesToRestore: {},
-    deferredInitialized: null,
     restoreCount: -1,
     observersWereNotified: false,
   },
