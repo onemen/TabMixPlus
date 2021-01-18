@@ -111,13 +111,18 @@ Tabmix.sessionInitialized = function() {
 // from Tabmix.afterDelayedStartup
 Tabmix.getButtonsHeight = function(setDefault) {
   if (gBrowser.tabContainer.orient == "horizontal") {
-    let tabBar = gBrowser.tabContainer;
-    let stripIsHidden = TabmixTabbar.hideMode !== 0 && !tabBar.visible;
-    if (stripIsHidden)
-      tabBar.visible = true;
+    const {toolbar, tabBar, collapsed, tabBarCollapsed, toolbarCollapsed} =
+      Tabmix.tabsUtils.getCollapsedState;
+    let stripIsHidden = TabmixTabbar.hideMode !== 0 && collapsed;
+    if (stripIsHidden) {
+      toolbar.collapsed = false;
+      tabBar.collapsed = false;
+    }
     this._buttonsHeight = Tabmix.getBoundsWithoutFlushing(Tabmix.visibleTabs.first).height;
-    if (stripIsHidden)
-      tabBar.visible = false;
+    if (stripIsHidden) {
+      toolbar.collapsed = toolbarCollapsed;
+      tabBar.collapsed = tabBarCollapsed;
+    }
 
     if (setDefault && !this._buttonsHeight) {
       this._buttonsHeight = TabmixSvc.australis ? 31 : 24;
@@ -135,10 +140,13 @@ Tabmix.getButtonsHeight = function(setDefault) {
 
 Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
   if (gBrowser.tabContainer.orient == "horizontal") {
-    let tabBar = gBrowser.tabContainer;
-    let stripIsHidden = TabmixTabbar.hideMode !== 0 && !tabBar.visible;
-    if (stripIsHidden)
-      tabBar.visible = true;
+    const {toolbar, tabBar, collapsed, tabBarCollapsed, toolbarCollapsed} =
+  Tabmix.tabsUtils.getCollapsedState;
+    let stripIsHidden = TabmixTabbar.hideMode !== 0 && collapsed;
+    if (stripIsHidden) {
+      toolbar.collapsed = false;
+      tabBar.collapsed = false;
+    }
     // save tabsNewtabButton width
     let lwtheme = !this.isVersion(280) && document.getElementById("main-window").getAttribute("lwtheme");
     this.tabsNewtabButton =
@@ -167,8 +175,10 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
         this.tabsNewtabButton = openNewPrivateTab;
     }
     this.tabsNewtabButton.removeAttribute("force-display", true);
-    if (stripIsHidden)
-      tabBar.visible = false;
+    if (stripIsHidden) {
+      toolbar.collapsed = toolbarCollapsed;
+      tabBar.collapsed = tabBarCollapsed;
+    }
   }
 };
 
@@ -588,8 +598,9 @@ var TMP_eventListener = {
      */
     gTMPprefObserver.setAutoHidePref();
 
-    if (TabmixTabbar.hideMode == 2)
-      gBrowser.tabContainer.visible = false;
+    if (TabmixTabbar.hideMode == 2) {
+      TabBarVisibility.update();
+    }
 
     if (Tabmix.prefs.getIntPref("tabBarPosition") == 1)
       gTMPprefObserver.tabBarPositionChanged(1);

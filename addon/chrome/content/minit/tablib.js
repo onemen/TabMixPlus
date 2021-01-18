@@ -532,9 +532,23 @@ Tabmix.tablib = {
       ).toCode();
     }
 
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer.updateVisibility")._replace(
-      'window.toolbar.visible',
-      '$& && TabmixTabbar.hideMode == 0'
+    Tabmix.changeCode(TabBarVisibility, "TabBarVisibility.update")._replace(
+      'if (collapse ==',
+      `if (TabmixTabbar.hideMode === 2) {
+        collapse = true;
+      } else if (!gBrowser ||
+        gBrowser.tabs.length - gBrowser._removingTabs.length == 1) {
+        collapse = !window.toolbar.visible || TabmixTabbar.hideMode === 1;
+      }
+      $&`
+    )._replace(
+      /(})(\)?)$/,
+      `const bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
+      if (bottomToolbox) {
+        bottomToolbox.collapsed = collapse;
+        gTMPprefObserver.updateTabbarBottomPosition();
+      }
+      $1$2`
     ).toCode();
 
     if (!Tabmix.extensions.verticalTabs) {
@@ -601,27 +615,6 @@ Tabmix.tablib = {
       '{',
       '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.callerTrace("onxblmousedown")) return;'
     ).toCode();
-
-    Object.defineProperty(gBrowser.tabContainer, "visible", {
-      get() {return !this.collapsed;},
-      set(val) {
-        if (val == this.visible)
-          return val;
-
-        if (TabmixTabbar.hideMode == 2)
-          val = false;
-        this.collapsed = !val;
-        let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
-        if (bottomToolbox) {
-          bottomToolbox.collapsed = !val;
-          gTMPprefObserver.updateTabbarBottomPosition();
-        }
-
-        return val;
-      },
-      enumerable: true,
-      configurable: true
-    });
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")._replace(
       /(})(\)?)$/,

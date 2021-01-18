@@ -3629,12 +3629,9 @@ TabmixSessionManager = {
     }
   },
 
-  setStripVisibility(tabCount) {
+  setStripVisibility() {
     // un-hide the tab bar
-    if (tabCount > 1 && Tabmix.prefs.getIntPref("hideTabbar") != 2 &&
-        !gBrowser.tabContainer.visible) {
-      gBrowser.tabContainer.visible = true;
-    }
+    // TODO: check if we need it when TabBarVisibility.update exist
   },
 
   copyClosedTabsToSessionStore(winData, aOverwrite) {

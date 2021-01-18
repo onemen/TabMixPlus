@@ -251,7 +251,7 @@ var TabmixTabbar = {
   setHeight: function TMP_setHeight(aRows, aReset) {
     // don't do anything when the tabbar is hidden
     // by Print preview or others...
-    if (gInPrintPreviewMode || !gBrowser.tabContainer.visible ||
+    if (gInPrintPreviewMode || !Tabmix.tabsUtils.visible ||
         Tabmix.tabsUtils.inDOMFullscreen || FullScreen._isChromeCollapsed) {
       return;
     }
@@ -635,6 +635,19 @@ Tabmix.tabsUtils = {
     return document.documentElement.hasAttribute("inDOMFullscreen");
   },
 
+  get visible() {
+    return !this.getCollapsedState.collapsed;
+  },
+
+  getCollapsedState() {
+    const toolbar = document.getElementById("TabsToolbar");
+    const tabBar = gBrowser.tabContainer;
+    const toolbarCollapsed = toolbar.collapsed;
+    const tabBarCollapsed = tabBar.collapsed;
+    const collapsed = toolbarCollapsed || tabBarCollapsed;
+    return {collapsed, toolbar, tabBar, toolbarCollapsed, tabBarCollapsed};
+  },
+
   events: ["dblclick", "click", "dragstart", "drop", "dragend", "dragexit"],
 
   init() {
@@ -830,7 +843,7 @@ Tabmix.tabsUtils = {
     if (Tabmix.extensions.verticalTabBar || gInPrintPreviewMode ||
         this.inDOMFullscreen || FullScreen._isChromeCollapsed ||
         TabmixTabbar._waitAfterMaximized ||
-        !this.tabBar.visible && TabmixTabbar.visibleRows == 1)
+        !Tabmix.tabsUtils.visible && TabmixTabbar.visibleRows == 1)
       return null;
     if (this._inUpdateVerticalTabStrip)
       return this.tabBar.getAttribute("multibar");
@@ -1180,7 +1193,7 @@ Tabmix.bottomToolbarUtils = {
     if (!bottomToolbox) {
       bottomToolbox = document.createElement("toolbox");
       bottomToolbox.setAttribute("id", "tabmix-bottom-toolbox");
-      bottomToolbox.collapsed = !gBrowser.tabContainer.visible;
+      bottomToolbox.collapsed = gBrowser.tabContainer.collapsed;
       // if we decide to move this box into browser-bottombox
       // remember to fix background css rules for all platform
       let referenceNode = document.getElementById("content-deck");
@@ -1189,9 +1202,9 @@ Tabmix.bottomToolbarUtils = {
       referenceNode.parentNode.insertBefore(bottomToolbox, referenceNode);
       updateFullScreen = window.fullScreen;
     }
-    if (tabBar.visible)
+    if (Tabmix.tabsUtils.visible) {
       gTMPprefObserver.updateTabbarBottomPosition();
-    else {
+    } else {
       // the tabbar is hidden on startup
       let height = tabBar.arrowScrollbox.scrollClientRect.height;
       bottomToolbox.style.setProperty("height", height + "px", "important");
@@ -2175,19 +2188,14 @@ gTMPprefObserver = {
 
   setAutoHidePref() {
     TabmixTabbar.hideMode = Tabmix.prefs.getIntPref("hideTabbar");
-    // gBrowser.tabContainer.updateVisibility();
+    TabBarVisibility.update();
   },
 
   setTabBarVisibility: function TMP_PO_setTabBarVisibility() {
-    if (TabmixTabbar.hideMode == 2)
-      gBrowser.tabContainer.visible = false;
-    else if (!gBrowser.tabContainer.visible) {
-      let moreThenOneTab = gBrowser.tabs.length > 1;
-      gBrowser.tabContainer.visible = moreThenOneTab || TabmixTabbar.hideMode === 0;
-      if (moreThenOneTab) {
-        gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
-        TabmixTabbar.updateBeforeAndAfter();
-      }
+    if (TabmixTabbar.hideMode !== 2 &&
+        gBrowser.tabs.length - gBrowser._removingTabs.length > 1) {
+      gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
+      TabmixTabbar.updateBeforeAndAfter();
     }
   },
 
@@ -2353,7 +2361,7 @@ gTMPprefObserver = {
   _bottomRect: {top: null, width: null, height: null},
   updateTabbarBottomPosition: function TMP_PO_updateTabbarBottomPosition(aEvent) {
     let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
-    if (!bottomToolbox || TabmixTabbar.position != 1 || !gBrowser.tabContainer.visible) {
+    if (!bottomToolbox || TabmixTabbar.position != 1 || !Tabmix.tabsUtils.visible) {
       return;
     }
 
