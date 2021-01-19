@@ -233,9 +233,8 @@ Tabmix.afterDelayedStartup = function() {
   gTMPprefObserver.setTabIconMargin();
   gTMPprefObserver.setCloseButtonMargin();
   gTMPprefObserver.miscellaneousRules();
-  if (!gTMPprefObserver._tabStyleSheet ||
-      gTMPprefObserver._tabStyleSheet.href != "chrome://tabmixplus/skin/tab.css") {
-    this.log("can't load dynamic styles into tabmixplus/skin/tab.css");
+  if (!gTMPprefObserver._tabStyleSheet) {
+    this.log("can't load dynamic styles for tabmixplus");
   }
   gTMPprefObserver._tabStyleSheet = null;
 

@@ -1714,10 +1714,11 @@ gTMPprefObserver = {
 
   _tabStyleSheet: null,
   get tabStyleSheet() {
+    // cna't find where our file is try to use: chrome://browser/content/tabbrowser.css
     var href = "chrome://tabmixplus/skin/tab.css";
     // find tab.css to insert our dynamic rules into it.
     // insert our rules into document.styleSheets[0] cause problem with other extensions
-    if (!this._tabStyleSheet || this._tabStyleSheet.href != href) {
+    if (!this._tabStyleSheet) {
       let ss = this.getStyleSheets(href, true);
       this._tabStyleSheet = ss.length ? ss[0] : document.styleSheets[1];
     }
