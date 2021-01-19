@@ -1054,11 +1054,11 @@ class PrefWindow extends MozXULElement {
       return;
     }
 
-    function updateAttribute(name, value) {
-      if (this.hasAttribute(name)) {
+    const updateAttribute = (name, value) => {
+      if (!this.hasAttribute(name)) {
         this.setAttribute(name, value);
       }
-    }
+    };
 
     const childrenPrefpane = [...this.children].filter(child => child.tagName == 'prefpane');
     const otherChildren = [...this.children].filter(child => child.tagName != 'prefpane');
@@ -1071,12 +1071,9 @@ class PrefWindow extends MozXULElement {
 
     updateAttribute("dlgbuttons", "accept,cancel");
     updateAttribute("persist", "lastSelected screenX screenY");
-    // updateAttribute("closebuttonlabel", "&preferencesCloseButton.label;")
-    // updateAttribute("closebuttonaccesskey", "&preferencesCloseButton.accesskey;")
     updateAttribute("closebuttonlabel", MozXULElement.parseXULToFragment(`<div attr="&uiTour.infoPanel.close;" />`, ["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
     updateAttribute("closebuttonaccesskey", "C");
     updateAttribute("role", "dialog");
-    // updateAttribute("title", "&preferencesDefaultTitleWin.title;");
     updateAttribute("title", MozXULElement.parseXULToFragment(`<div attr="&preferencesCmd2.label;" />`, ["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
 
     if (this.hasAttribute("ondialogaccept")) {
@@ -1590,14 +1587,8 @@ class PrefWindow extends MozXULElement {
 
       const obs = new OverlayLoadObserver(aPaneElement);
 
-      // Pane overlay have to be move to earlier stage to load properly but not without issue see ln 601
+      // Pane overlay have to be move to earlier stage to load properly 
       // document.loadOverlay(aPaneElement.src, obs);
-
-      // Components.utils.import("chrome://tabmixplus/content/ChromeManifest.jsm");
-      // Components.utils.import("chrome://tabmixplus/content/Overlays.jsm");
-
-      // const ov = new Overlays(new ChromeManifest(),document.defaultView);
-      // ov.load(aPaneElement.src);
       obs.observe();
     } else
       this._selectPane(aPaneElement);
