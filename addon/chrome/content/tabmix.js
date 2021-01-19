@@ -637,6 +637,13 @@ var TMP_eventListener = {
     }
     Tabmix.setNewFunction(tabBar, Tabmix.updateCloseButtons, Tabmix._updateCloseButtons);
     delete Tabmix._updateCloseButtons;
+
+    // update tooltip for tabmix-tabs-closebutton
+    document.getElementById("tabmix-tabs-closebutton").setAttribute('tooltiptext',
+      PluralForm.get(
+        1,
+        gTabBrowserBundle.GetStringFromName("tabs.closeTabs.tooltip")
+      ));
   },
 
   tabWidthCache: new WeakMap(),
@@ -1319,6 +1326,7 @@ Tabmix.initialization = {
       if (phase.id > currentPhase)
         break;
       if (!phase.initialized) {
+        console.debug("Tabmix initializer:", {key, phase});
         phase.initialized = true;
         try {
           let obj = getObj(phase.obj);

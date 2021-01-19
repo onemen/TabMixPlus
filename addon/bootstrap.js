@@ -16,8 +16,6 @@ const options = {
 
 const man = `
 overlay   chrome://browser/content/browser.xhtml                 chrome://tabmixplus/content/tabmix.xhtml
-overlay   chrome://browser/content/browser.xhtml                 chrome://tabmixplus/content/overlay/tabstoolbar.xhtml
-
 overlay   about:addons                                           chrome://tabmixplus/content/preferences/overlay/aboutaddons.xhtml
 `;
 
