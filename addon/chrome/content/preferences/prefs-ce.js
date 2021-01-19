@@ -1291,8 +1291,7 @@ class PrefWindow extends MozXULElement {
         }
       }
       // add the label and oncommand handler to each button
-      for (const dlgtype of Object.keys(buttons)) {
-        const button = buttons[dlgtype];
+      for (const [dlgtype, button] of Object.entries(buttons)) {
         button.addEventListener("command", this._handleButtonCommand, true);
         // don't override custom labels with pre-defined labels on explicit buttons
         if (!button.hasAttribute("label")) {
