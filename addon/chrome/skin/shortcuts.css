@@ -4,11 +4,14 @@ shortcut {
 }
 
 .shortcut-edit-box {
-  margin: 0 4px;
+  margin: 0 0 0 4px;
   padding-top: 1px;
   padding-bottom: 1px;
   font-weight: normal;
-  height: 24px;
+  height: 20px;
+  position: absolute;
+  right: 0;
+  padding-right: 36px;
 }
 
 .shortcut-image {
@@ -17,6 +20,8 @@ shortcut {
   cursor: default;
   width: 20px;
   height: 20px;
+  z-index: 2;
+  position: relative;
 }
 
 .shortcut-edit-box:not([focused]) > .shortcut-image {
@@ -61,6 +66,7 @@ shortcut:not([value]) .shortcut-image[anonid="disable"] {
 .shortcut-content {
   height: 24px;
   margin: 1px 0;
+  position: relative;
 }
 
 .shortcut-notificationbox,
