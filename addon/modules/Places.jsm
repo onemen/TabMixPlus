@@ -25,16 +25,22 @@ XPCOMUtils.defineLazyModuleGetter(this, "PlacesUIUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils",
   "resource://gre/modules/PlacesUtils.jsm");
 
-// XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
-//   "resource:///modules/RecentWindow.jsm");
-this.RecentWindow = {};
-this.RecentWindow.getMostRecentBrowserWindow = Services.wm.getMostRecentBrowserWindow;
-
 XPCOMUtils.defineLazyModuleGetter(this,
   "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "AsyncPlacesUtils",
   "chrome://tabmix-resource/content/AsyncPlacesUtils.jsm");
+
+// this function is use by PlacesUIUtils functions that we evaluate here
+// eslint-disable-next-line no-unused-vars
+function getBrowserWindow(aWindow) {
+  return aWindow &&
+      aWindow.document.documentElement.getAttribute("windowtype") ==
+        "navigator:browser" ?
+    aWindow :
+    // eslint-disable-next-line no-undef
+    BrowserWindowTracker.getTopWindow();
+}
 
 var PlacesUtilsInternal;
 this.TabmixPlacesUtils = Object.freeze({
@@ -70,6 +76,13 @@ this.TabmixPlacesUtils = Object.freeze({
 
 var Tabmix = {};
 
+function makeCode({value: code}) {
+  if (!code.startsWith("function")) {
+    code = "function " + code;
+  }
+  return eval("(" + code + ")");
+}
+
 PlacesUtilsInternal = {
   _timer: null,
   _initialized: false,
@@ -99,9 +112,6 @@ PlacesUtilsInternal = {
       delete PlacesUIUtils["tabmix_" + aFn];
     });
     delete PlacesUIUtils.tabmix_getURLsForContainerNode;
-    if (TabmixSvc.version(580)) {
-      delete PlacesUIUtils._getTopBrowserWin;
-    }
   },
 
   functions: ["openTabset", "openMultipleLinksInTabs", "openNodeWithEvent", "_openNodeIn"],
@@ -120,9 +130,11 @@ PlacesUtilsInternal = {
       PlacesUIUtils["tabmix_" + aFn] = PlacesUIUtils[aFn];
     });
 
+    let code;
+
     function updateOpenTabset(name, treeStyleTab) {
       let openGroup = "    browserWindow.TMP_Places.openGroup(urls, ids, where$1);";
-      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + name)._replace(
+      code = Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + name)._replace(
         'urls = []',
         'behavior, $&', {check: treeStyleTab}
       )._replace(
@@ -145,7 +157,8 @@ PlacesUtilsInternal = {
         '    if (changeWhere)\n' +
         '      where = "current";\n' +
         openGroup.replace("$1", treeStyleTab ? ", behavior" : "")
-      ).toCode();
+      );
+      PlacesUIUtils[name] = makeCode(code);
     }
     var treeStyleTabInstalled = "TreeStyleTabBookmarksService" in aWindow;
     if (treeStyleTabInstalled &&
@@ -169,34 +182,37 @@ PlacesUtilsInternal = {
       updateOpenTabset("openTabset");
 
       // we enter getURLsForContainerNode into PlacesUIUtils to prevent leaks from PlacesUtils
-      Tabmix.changeCode(PlacesUtils, "PlacesUtils.getURLsForContainerNode")._replace(
+      code = Tabmix.changeCode(PlacesUtils, "PlacesUtils.getURLsForContainerNode")._replace(
         'uri: child.uri,',
         '$&\n          ' +
         'id: child.itemId,', {flags: "g"}
       )._replace(
         'this.', 'PlacesUtils.', {flags: "g"}
-      ).toCode(false, PlacesUIUtils, "tabmix_getURLsForContainerNode");
+      );
+      PlacesUIUtils.tabmix_getURLsForContainerNode = makeCode(code);
 
-      Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openMultipleLinksInTabs")._replace(
+      code = Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openMultipleLinksInTabs")._replace(
         'PlacesUtils.getURLsForContainerNode(nodeOrNodes)',
         'PlacesUIUtils.tabmix_getURLsForContainerNode(nodeOrNodes)'
       )._replace(
         'uri: nodeOrNodes[i].uri,',
         '$&\n            ' +
         'id: nodeOrNodes[i].itemId,'
-      ).toCode();
+      );
+      PlacesUIUtils.openMultipleLinksInTabs = makeCode(code);
     }
 
     let fnName = treeStyleTabInstalled && PlacesUIUtils.__treestyletab__openNodeWithEvent ?
       "__treestyletab__openNodeWithEvent" : "openNodeWithEvent";
-    Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
+    code = Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
       /window.whereToOpenLink\(aEvent[,\s\w]*\)/, '{where: $&, event: aEvent}'
-    ).toCode();
+    );
+    PlacesUIUtils[fnName] = makeCode(code);
 
     // Don't change "current" when user click context menu open (callee is PC_doCommand and aWhere is current)
     // we disable the open menu when the tab is lock
     // the 2nd check for aWhere == "current" is for non Firefox code that may call this function
-    Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openNodeIn")._replace(
+    code = Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openNodeIn")._replace(
       '{', '$&\n' +
       '    var TMP_Event;\n' +
       '    if (arguments.length > 1 && typeof aWhere == "object") {\n' +
@@ -205,7 +221,7 @@ PlacesUtilsInternal = {
       '    }\n'
     )._replace(
       'aWindow.openTrustedLinkIn',
-      'let browserWindow = this._getTopBrowserWin();\n' +
+      'let browserWindow = getBrowserWindow(aWindow);\n' +
       '      if (browserWindow && typeof aWindow.TMP_Places == "object") {\n' +
       '        let TMP_Places = aWindow.TMP_Places;\n' +
       '        if (TMP_Event) aWhere = TMP_Places.isBookmarklet(aNode.uri) ? "current" :\n' +
@@ -223,13 +239,8 @@ PlacesUtilsInternal = {
       'inBackground:',
       'bookMarkId: aNode.itemId, initiatingDoc: null,\n' +
       '        $&'
-    ).toCode();
-
-    if (TabmixSvc.version(580)) {
-      PlacesUIUtils._getTopBrowserWin = function PUIU__getTopBrowserWin() {
-        return RecentWindow.getMostRecentBrowserWindow();
-      };
-    }
+    );
+    PlacesUIUtils._openNodeIn = makeCode(code);
   },
 
   // Lazy getter for titlefrombookmark preference
