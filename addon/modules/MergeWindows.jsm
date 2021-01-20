@@ -175,7 +175,7 @@ this.MergeWindows = {
           params.userContextId = tab.getAttribute("usercontextid");
         }
       }
-      let newTab = tabbrowser.addTab("about:blank", params);
+      let newTab = tabbrowser.addTrustedTab("about:blank", params);
       let newBrowser = newTab.linkedBrowser;
       if (TabmixSvc.version(330)) {
         let newURL = tab.linkedBrowser.currentURI.spec;

@@ -31,7 +31,7 @@ var TMP_Sage = {
     if ("bookmarksOpen" in window) {
       Tabmix.changeCode(window, "bookmarksOpen")._replace(
         'getContentBrowser().loadURI(lastResource.url);',
-        'if (CreateHTML._tabbed) getContentBrowser().addTab(lastResource.url); \
+        'if (CreateHTML._tabbed) getContentBrowser().addTrustedTab(lastResource.url); \
          else $&'
       ).toCode();
     }

@@ -3272,7 +3272,7 @@ TabmixSessionManager = {
 
     let pending = Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand");
     function TMP_addTab() {
-      let newTab = gBrowser.addTab("about:blank", {
+      let newTab = gBrowser.addTrustedTab("about:blank", {
         skipAnimation: true,
         noInitialLabel: true,
         skipBackgroundNotify: true,
@@ -3441,7 +3441,7 @@ TabmixSessionManager = {
       if (!reuseExisting) {
         let tabToRemove = tab;
         let forceNotRemote = !data.pinned;
-        tab = gBrowser.addTab("about:blank", {
+        tab = gBrowser.addTrustedTab("about:blank", {
           skipAnimation: true,
           noInitialLabel: true,
           forceNotRemote,
@@ -3741,7 +3741,7 @@ TabmixSessionManager = {
     // add blank tab before removing last tab to prevent browser closing with last tab
     // and the default replacing last tab option
     if (gBrowser.tabs.length == 1)
-      gBrowser.selectedTab = gBrowser.addTab("about:blank");
+      gBrowser.selectedTab = gBrowser.addTrustedTab("about:blank");
     gBrowser.removeTab(aTab);
   },
 

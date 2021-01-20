@@ -570,7 +570,7 @@ var TMP_tabDNDObserver = {
           params.userContextId = draggedTab.getAttribute("usercontextid");
         }
       }
-      let newTab = gBrowser.addTab("about:blank", params);
+      let newTab = gBrowser.addTrustedTab("about:blank", params);
       var newBrowser = gBrowser.getBrowserForTab(newTab);
       if (Tabmix.isVersion(330)) {
         let draggedBrowserURL = draggedTab.linkedBrowser.currentURI.spec;

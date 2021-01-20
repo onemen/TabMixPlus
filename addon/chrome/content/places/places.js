@@ -265,10 +265,10 @@ var TMP_Places = {
           skipAnimation: multiple,
           noInitialLabel: this._titlefrombookmark,
           dontMove: true,
-          forceNotRemote: loadProgressively,
-          triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()
+          forceNotRemote: loadProgressively
         };
-        aTab = gBrowser.addTab(loadProgressively ? "about:blank" : url, params);
+        // PlacesUIUtils.openTabset use SystemPrincipal
+        aTab = gBrowser.addTrustedTab(loadProgressively ? "about:blank" : url, params);
       }
       this.asyncSetTabTitle(aTab, url);
       aTab._labelIsInitialTitle = true;

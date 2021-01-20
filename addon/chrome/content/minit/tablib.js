@@ -1083,7 +1083,7 @@ Tabmix.tablib = {
       }
       try {
         tabState = aTabData ? aTabData.state : TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
-        newTab = this.addTab("about:blank", {dontMove: true});
+        newTab = this.addTrustedTab("about:blank", {dontMove: true});
         newTab.linkedBrowser.stop();
         if (aHref) {
           if (Tabmix.ContentClick.isUrlForDownload(aHref))

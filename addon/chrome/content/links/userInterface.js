@@ -126,12 +126,11 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
     }
   }
   TMP_extensionsCompatibility.treeStyleTab.onBeforeNewTabCommand(baseTab || selectedTab, openTabNext);
-  var newTab = gBrowser.addTab(url, {
+  var newTab = gBrowser.addTrustedTab(url, {
     charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
     ownerTab: loadInBackground ? null : selectedTab,
     skipAnimation: replaceLastTab,
-    dontMove: true,
-    triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()
+    dontMove: true
   });
   if (replaceLastTab) {
     newTab.__newLastTab = url;

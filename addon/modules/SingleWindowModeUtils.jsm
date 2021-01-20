@@ -186,9 +186,9 @@ this.SingleWindowModeUtils = {
         if (isBlankTab)
           existingWindow.openLinkIn(urls[0], "current", params);
         else
-          firstTabAdded = existingBrowser.addTab(urls[0], params);
+          firstTabAdded = existingBrowser.addTrustedTab(urls[0], params);
         for (let i = 1; i < urls.length; ++i)
-          existingBrowser.addTab(urls[i]);
+          existingBrowser.addTrustedTab(urls[i]);
       }
     } catch (ex) { }
     try {

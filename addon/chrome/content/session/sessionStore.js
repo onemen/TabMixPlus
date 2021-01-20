@@ -679,7 +679,7 @@ var TMP_ClosedTabs = {
         aBlankTabToReuse.getAttribute("usercontextid") == (userContextId || ""));
 
     let newTab = reuseExisting ? aBlankTabToReuse :
-      gBrowser.addTab(null, Object.assign({
+      gBrowser.addTrustedTab(null, Object.assign({
         skipAnimation: tabToRemove || skipAnimation,
         dontMove: true,
         createLazyBrowser,
@@ -698,11 +698,7 @@ var TMP_ClosedTabs = {
     }
 
     // restore tab content
-    if (Tabmix.isVersion(400)) {
-      TabmixSvc.SessionStore.restoreTab(newTab, state);
-    } else {
-      TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(state));
-    }
+    TabmixSvc.SessionStore.restoreTab(newTab, state);
 
     if (TMP_TabView.exist("afterUndoCloseTab")) {
       TabView.afterUndoCloseTab();
