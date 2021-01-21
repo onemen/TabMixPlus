@@ -8,10 +8,11 @@ shortcut {
   padding-top: 1px;
   padding-bottom: 1px;
   font-weight: normal;
-  height: 20px;
+  height: 24px;
   position: absolute;
   right: 0;
   padding-right: 36px;
+  box-sizing: inherit;
 }
 
 .shortcut-image {
