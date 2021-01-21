@@ -350,21 +350,6 @@ var TabmixTabbar = {
       tabsToolbar.style.setProperty("max-height", newTabbarHeight + "px", "important");
       tabsToolbar.style.setProperty("height", newTabbarHeight + "px", "important");
     }
-
-    // experimental - for theme that put tabbar above the menus
-    // currently its only work with Vfox3 theme
-    if (tabstrip.boxObject.y <= gNavToolbox.boxObject.y) {
-      let skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-      let themes = /^(Vfox3)/;
-      if (themes.test(skin)) {
-        let mWin = document.getElementById("main-window");
-        if (!this._windowStyle.exist) {
-          this._windowStyle.exist = true;
-          this._windowStyle.value = mWin.hasAttribute("style") ? mWin.getAttribute("style") : null;
-        }
-        mWin.style.setProperty("padding-top", newTabbarHeight + "px", "important");
-      }
-    }
     this.tabBarHeightModified();
   },
 
@@ -658,8 +643,6 @@ Tabmix.tabsUtils = {
     // add dragover event handler to TabsToolbar to capture dragging over
     // tabbar margin area, filter out events that are out of the tabbar
     this.tabBar.parentNode.addEventListener("dragover", this, true);
-    if (!Tabmix.isVersion(310))
-      Services.prefs.removeObserver("browser.tabs.closeButtons", this.tabBar._prefObserver);
 
     if (this.initialized) {
       Tabmix.log("initializeTabmixUI - some extension initialize tabbrowser-tabs binding again");
@@ -1298,7 +1281,6 @@ gTMPprefObserver = {
     addObserver("layout.css.devPixelsPerPx", TabmixSvc.australis);
     addObserver("browser.tabs.onTop", !Tabmix.isVersion(290));
     addObserver("browser.tabs.closeButtons", !Tabmix.isVersion(310));
-    addObserver("extensions.classicthemerestorer.closeonleft", Tabmix.extensions.ctr);
 
     try {
       // add Observer
@@ -1453,11 +1435,6 @@ gTMPprefObserver = {
         gBrowser.tabContainer.mTabMinWidth = tabMinWidth;
         this.dynamicRules.width.style.setProperty("max-width", tabMaxWidth + "px", "important");
         this.dynamicRules.width.style.setProperty("min-width", tabMinWidth + "px", "important");
-        // fix bug in classiccompact
-        if (typeof classiccompactoptions == "object" &&
-            Services.prefs.getCharPref("general.skins.selectedSkin") == "classiccompact") {
-          window.classiccompactoptions.setTabWidths(document);
-        }
         TabmixTabbar.updateSettings(false);
         // we need this timeout when there are many tabs
         if (typeof this._tabWidthChanged == "undefined") {
@@ -1515,21 +1492,7 @@ gTMPprefObserver = {
           gBrowser.tabContainer[Tabmix.updateCloseButtons]();
         }
         break;
-      case "extensions.tabmix.tabs.closeButtons.onLeft":
-      case "extensions.classicthemerestorer.closeonleft": {
-        // let Classic theme restorer control close tab button placement when
-        // the default theme is in use.
-        if (Tabmix.extensions.ctr &&
-            Services.prefs.getCharPref("general.skins.selectedSkin") == "classic/1.0") {
-          let otherPref = prefName == "extensions.tabmix.tabs.closeButtons.onLeft" ?
-            "extensions.classicthemerestorer.closeonleft" :
-            "extensions.tabmix.tabs.closeButtons.onLeft";
-          value = Services.prefs.getBoolPref(prefName);
-          if (Services.prefs.getBoolPref(otherPref) != value)
-            Services.prefs.setBoolPref(otherPref, Services.prefs.getBoolPref(prefName));
-          Tabmix.setItem(gBrowser.tabContainer, "closebuttons-side", "right");
-          break;
-        }
+      case "extensions.tabmix.tabs.closeButtons.onLeft": {
         let onLeft = Tabmix.defaultCloseButtons && Services.prefs.getBoolPref(prefName);
         gBrowser.tabContainer.setAttribute("closebuttons-side", onLeft ? "left" : "right");
         break;
@@ -1879,12 +1842,6 @@ gTMPprefObserver = {
     }
 
     let skin;
-    // with Walnut theme we get wrong height on Firefox 36
-    if (Tabmix._buttonsHeight > 50) {
-      skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-      Tabmix._buttonsHeight = skin == "walnut" ? 19 : 23;
-    }
-
     /* tab-icon-overlay added by Bug 1112304, Firefox 38+ */
     if (!Tabmix.isVersion(380))
       this.insertRule('.tab-icon-overlay {display: none;}');
@@ -1965,7 +1922,7 @@ gTMPprefObserver = {
               'list-style-image: url("#URL");' +
               '-moz-image-region: #REGION;}';
     let url = "chrome://browser/skin/Toolbar.png", region;
-    skin = Services.prefs.getCharPref("extensions.activeThemeID");
+    skin = Services.prefs.getCharPref("extensions.activeThemeID", "");
     if (skin == "classic/1.0") {
       if (TabmixSvc.isLinux)
         region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :

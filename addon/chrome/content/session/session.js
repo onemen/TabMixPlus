@@ -1141,7 +1141,6 @@ TabmixSessionManager = {
       case "browser-lastwindow-close-requested":
         this.savedPrefs["browser.startup.page"] = Services.prefs.getIntPref("browser.startup.page");
         this.savedPrefs["browser.tabs.warnOnClose"] = Services.prefs.getBoolPref("browser.tabs.warnOnClose");
-        this.savedPrefs["browser.showQuitWarning"] = Services.prefs.getBoolPref("browser.showQuitWarning");
         break;
       case "timer-callback": // timer call back for delayed saving
         this._saveTimer = null;
@@ -3204,7 +3203,7 @@ TabmixSessionManager = {
       features += ",private";
     }
     var newWindow =
-        Services.ww.openWindow(null, Services.prefs.getCharPref("browser.chromeURL"),
+        Services.ww.openWindow(null, AppConstants.BROWSER_CHROME_URL,
           "_blank", features, argString);
 
     let ID;

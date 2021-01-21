@@ -119,22 +119,7 @@ var TMP_Places = {
       return where;
     }
 
-    let isLoadFeed = Tabmix.callerTrace("FeedHandler.loadFeed", "loadFeed");
-    if (isLoadFeed) {
-      // since Firefox 42 clicking 'Subscribe to This Page' always show
-      // 'Subscribe to this feed' page
-      let subscribe = Tabmix.isVersion(420) ||
-          Services.prefs.getCharPref("browser.feeds.handler") == "ask";
-      let openNewTab = subscribe && Tabmix.whereToOpen(this.prefBookmark).inNew;
-      if (openNewTab) {
-        where = "tab";
-        params.inBackground = Tabmix.getBoolPref("browser.tabs.loadBookmarksInBackground");
-      } else {
-        win.gBrowser.selectedBrowser.tabmix_allowLoad = true;
-      }
-    } else {
-      where = win.Tabmix.checkCurrent(url);
-    }
+    where = win.Tabmix.checkCurrent(url);
     return where;
   },
 

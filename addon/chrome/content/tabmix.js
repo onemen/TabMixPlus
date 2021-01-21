@@ -500,7 +500,7 @@ var TMP_eventListener = {
       tabBar.setAttribute("tabmix_australis", australis ? "true" : "classic");
     }
 
-    var skin = Services.prefs.getCharPref("extensions.activeThemeID");
+    const skin = Services.prefs.getCharPref("extensions.activeThemeID", "");
     if (skin == "classic/1.0") {
       if (TabmixSvc.isMac)
         tabBar.setAttribute("classic", "v4Mac");
@@ -974,9 +974,7 @@ var TMP_eventListener = {
       if (multibar) {
         let lastTabRowNumber = Tabmix.tabsUtils.lastTabRowNumber;
         if (multibar == "true" &&
-            lastTabRowNumber < TabmixTabbar.visibleRows ||
-            multibar == "scrollbar" && Tabmix.extensions.ctr &&
-            lastTabRowNumber <= Tabmix.prefs.getIntPref("tabBarMaxRow")) {
+            lastTabRowNumber < TabmixTabbar.visibleRows) {
           Tabmix.tabsUtils.updateVerticalTabStrip();
         }
       }

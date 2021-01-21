@@ -23,18 +23,7 @@ var TMP_extensionsCompatibility = {
       verticalTabBar: false,
       ieTab2: false,
       gIeTab: false, /* for ieTab and ieTab2 */
-      ctr: false/* classic theme restorer */
     };
-
-    if (typeof classicthemerestorerjs == "object") {
-      Tabmix.extensions.ctr = true;
-      let onLeft = Tabmix.prefs.getBoolPref("tabs.closeButtons.onLeft");
-      Services.prefs.setBoolPref("extensions.classicthemerestorer.closeonleft", onLeft);
-      // let Classic theme restorer control close tab button placement when the
-      // default theme is in use.
-      if (Services.prefs.getCharPref("general.skins.selectedSkin") == "classic/1.0")
-        gBrowser.tabContainer.setAttribute("closebuttons-side", "right");
-    }
 
     // sessionManager extension is restartless since version 0.8
     Tabmix.extensions.__defineGetter__("sessionManager", () => {

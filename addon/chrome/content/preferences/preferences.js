@@ -23,17 +23,11 @@ var gPrefWindow = {
     this._initialized = true;
 
     var prefWindow = $("TabMIxPreferences");
-    /* Chromifox theme force button height to 25px */
-    // var skin = Services.prefs.getCharPref("general.skins.selectedSkin");
-    // if (skin == "cfxec")
-    //   prefWindow.setAttribute("chromifox", true);
 
     if (TabmixSvc.isMac)
       prefWindow.setAttribute("mac", true);
     else if (TabmixSvc.isLinux) {
       prefWindow.setAttribute("linux", true);
-      // if (skin == "ftdeepdark")
-      //   prefWindow.setAttribute("ftdeepdark", true);
     }
 
     /* we don't need to fix tabpanels border in ubuntu */

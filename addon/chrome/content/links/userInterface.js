@@ -135,10 +135,6 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
   });
   if (replaceLastTab) {
     newTab.__newLastTab = url;
-    if (Services.prefs.getCharPref("general.skins.selectedSkin") == "Vista-aero") {
-      gBrowser.selectedTab = newTab;
-      gBrowser.updateCurrentBrowser();
-    }
     if (loadBlank) {
       gBrowser.tabContainer.setAttribute("closebuttons", "noclose");
       gBrowser.tabContainer.removeAttribute("closebuttons-hover");
