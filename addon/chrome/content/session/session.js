@@ -150,10 +150,7 @@ TabmixSessionData = {
       tabProperties += " reload-data=" + encodeURI(aTab.getAttribute("reload-data"));
     }
 
-    // save data for bookmark tab title
-    if (aTab.getAttribute("tabmix_bookmarkId")) {
-      tabProperties += " tabmix_bookmarkId=" + encodeURI(aTab.getAttribute("tabmix_bookmarkId"));
-    }
+    // TODO: add boolean flag when tabtile is from bookmark
 
     // save faviconized attribute
     if (aTab.getAttribute("faviconized") == "true") {
@@ -3570,7 +3567,7 @@ TabmixSessionManager = {
       aTab.setAttribute("width", Tabmix.getBoundsWithoutFlushing(aTab).width);
 
     // if we need to remove extra tabs make sure they are not protected
-    let attributes = ["protected", "fixed-label", "label-uri", "tabmix_bookmarkId",
+    let attributes = ["protected", "fixed-label", "label-uri",
       "pending", "hidden", "image"];
     // remove visited and tabmix_selectedID from all tabs but the current
     if (aTab != gBrowser._selectedTab)
@@ -3594,6 +3591,7 @@ TabmixSessionManager = {
     if (!Tabmix.isVersion(410))
       delete browser.__SS_data;
 
+    // TODO: need to call TAB_LAZY_STATES.delete(tab)
     if (Tabmix.isVersion(550) && aTab.__SS_lazyData) {
       delete aTab.__SS_lazyData;
     }

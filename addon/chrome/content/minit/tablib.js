@@ -297,11 +297,10 @@ Tabmix.tablib = {
       Tabmix.originalFunctions.gBrowser_blurTab.apply(this, arguments);
     };
 
-    if (Tabmix.isVersion(600)) {
-      const $LF = '\n    ';
-      Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
-        'let dataSuffix =',
-        'let titlePromise;' + $LF +
+    const $LF = '\n    ';
+    Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
+      'let dataSuffix =',
+      'let titlePromise;' + $LF +
         'if (tab.hasAttribute("tabmix_changed_label")) {' + $LF +
         '  titlePromise = Promise.resolve(tab.getAttribute("tabmix_changed_label"));' + $LF +
         '} else {' + $LF +
@@ -309,28 +308,17 @@ Tabmix.tablib = {
         '}' + $LF +
         'return titlePromise.then(title => {' + $LF +
         '$&'
-      )._replace(
-        /(})(\)?)$/,
-        '});\n' +
+    )._replace(
+      /(})(\)?)$/,
+      '});\n' +
         '$1$2'
-      ).toCode(false, gBrowser, "asyncGetWindowTitleForBrowser");
+    ).toCode(false, gBrowser, "asyncGetWindowTitleForBrowser");
 
-      gBrowser.updateTitlebar = function() {
-        this.asyncGetWindowTitleForBrowser(this.selectedBrowser).then(title => {
-          document.title = title;
-        });
-      };
-    } else {
-      Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
-        'if (!docTitle)',
-        (Tabmix.isVersion(550) ? '' : 'let tab = this.getTabForBrowser(aBrowser);\n') +
-        'if (tab.hasAttribute("tabmix_changed_label"))\
-          docTitle = tab.getAttribute("tabmix_changed_label");\
-        else\
-          docTitle = TMP_Places.getTabTitle(tab, aBrowser.currentURI.spec, docTitle);\
-        $&'
-      ).toCode();
-    }
+    gBrowser.updateTitlebar = function() {
+      this.asyncGetWindowTitleForBrowser(this.selectedBrowser).then(title => {
+        document.title = title;
+      });
+    };
 
     if ("foxiFrame" in window) {
       Tabmix.changeCode(gBrowser, "gBrowser.updateTitlebar")._replace(
@@ -353,8 +341,7 @@ Tabmix.tablib = {
       /let isContentTitle =[^;]*;/,
       '$&\n            ' +
       'let urlTitle;\n            ' +
-      'const titleFromBookmark = Tabmix.tablib.getTabTitle(aTab, browser.currentURI.spec, title);\n            ' +
-      'if (typeof titleFromBookmark == "string") title = titleFromBookmark;',
+      'if (Tabmix.tablib.getTabTitle(aTab, browser.currentURI.spec)) return false;',
       {flag: 'g'}
     )._replace(
       /title = title\.substring\(0, 500\).*;/,
@@ -811,7 +798,7 @@ Tabmix.tablib = {
         let item = aParent.childNodes[i];
         let uri = item.getAttribute("uri");
         let label = item.getAttribute("label");
-        TMP_Places.asyncGetTitleFromBookmark(uri, label).then(title => {
+        TMP_Places.getTitleFromBookmark(uri, label).then(title => {
           Tabmix.setItem(item, "label", title);
         });
       }
@@ -1789,7 +1776,14 @@ Tabmix.tablib = {
     gBrowser.renameTab = aTab => Tabmix.renameTab.editTitle(aTab);
   },
 
-  getTabTitle: function TMP_getTabTitle(aTab, url, title) {
+  getTabTitle: function TMP_getTabTitle(aTab, url) {
+    if (aTab.getAttribute("tabmix_bookmarkUrl") === url) {
+      return true;
+    }
+    if (aTab?._tabmixState?.noBookmart) {
+      aTab._tabmixState = {};
+      return false;
+    }
     // return the current tab only if it is visible
     if (TabmixTabbar.widthFitTitle &&
         (!TMP_Places.inUpdateBatch || !TMP_Places.currentTab)) {
@@ -1798,17 +1792,15 @@ Tabmix.tablib = {
         TMP_Places.currentTab = tab;
     }
 
-    if (Tabmix.isVersion(600)) {
-      // try to find bookmark title by id without using async functions
-      const newTitle = TMP_Places.getTabTitle(aTab, url, null, true);
-      if (newTitle) {
-        return newTitle;
+    TMP_Places.asyncSetTabTitle(aTab, url).then(foundTitle => {
+      if (!foundTitle) {
+        // call setTabTile again to get the default title
+        aTab._tabmixState = {noBookmart: true};
+        gBrowser.setTabTitle(aTab);
       }
-      TMP_Places.asyncSetTabTitle(aTab, url);
-    } else {
-      return TMP_Places.getTabTitle(aTab, url, title);
-    }
-    return null;
+    });
+
+    return true;
   },
 
   get labels() {

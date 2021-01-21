@@ -274,7 +274,7 @@ Tabmix.checkCurrent = function TMP_checkCurrent(url) {
  *        we use it before swapBrowsersAndCloseOther
  */
 Tabmix.copyTabData = function TMP_copyTabData(newTab, oldTab) {
-  let _xulAttributes = ["protected", "_locked", "fixed-label", "label-uri", "reload-data", "tabmix_bookmarkId"];
+  let _xulAttributes = ["protected", "_locked", "fixed-label", "label-uri", "reload-data"];
 
   var self = this;
   _xulAttributes.forEach(function _setData(attr) {
@@ -308,21 +308,21 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
       this.autoReload.onTabReloaded(aTab, aTab.linkedBrowser);
   }
 
-  let tabTitleChanged, boldChanged = {value: false};
+  let boldChanged = {value: false};
   if (pending) {
-    if (Tabmix.isVersion(600)) {
-      TMP_Places.asyncSetTabTitle(aTab, aTab.linkedBrowser.currentURI.spec).then(() => {
-        aTab._labelIsInitialTitle = true;
-      });
-    } else {
-      tabTitleChanged = TMP_Places.setTabTitle(aTab);
+    TMP_Places.asyncSetTabTitle(aTab, aTab.linkedBrowser.currentURI.spec).then(tabTitleChanged => {
       aTab._labelIsInitialTitle = true;
-    }
+      if (tabTitleChanged) {
+        TabmixTabbar.updateScrollStatus();
+        TabmixTabbar.updateBeforeAndAfter();
+      }
+    });
+
     aTab.removeAttribute("tabmix_selectedID");
     aTab.removeAttribute("visited");
   }
   Tabmix.setTabStyle(aTab, boldChanged);
-  if (tabTitleChanged || boldChanged.value) {
+  if (boldChanged.value) {
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();
   }

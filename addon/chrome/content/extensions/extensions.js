@@ -406,31 +406,6 @@ var TMP_extensionsCompatibility = {
     // override the aioCloseWindow function
     if (typeof aioCloseWindow == 'function')
       window.aioCloseWindow = BrowserTryToCloseWindow;
-
-    // Tile Tabs 11.12
-    // https://addons.mozilla.org/en-US/firefox/addon/tile-tabs/
-    if (typeof tileTabs == "object") {
-      let newCode = 'title = TMP_Places.getTabTitle(tab, tab.linkedBrowser.currentURI.spec, title);' +
-        'if (tab.hasAttribute("mergeselected"))' +
-        '  title = "(*) " + title;' +
-        '$&';
-
-      let func = {
-        styleTiledTabs: /if\s+\(tab\.hasAttribute\("tiletabs-assigned"\)\)/,
-        showProperties: 'if (tab.hasAttribute("image"))',
-        onTabAttrModified: /if\s+\(tab\.hasAttribute\("tiletabs-assigned"\)\)/,
-        showTabList: /menuItem\.setAttribute\("label",\s*title\);/,
-        showTabListCurrent: /menuItem\.setAttribute\("label",\s*title\);/
-      };
-
-      for (let fnName of Object.keys(func)) {
-        if (typeof tileTabs[fnName] == "function") {
-          Tabmix.changeCode(tileTabs, "tileTabs." + fnName)._replace(
-            func[fnName], newCode
-          ).toCode();
-        }
-      }
-    }
   },
 
   onDelayedStartup: function TMP_EC_onDelayedStartup() {

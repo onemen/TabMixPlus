@@ -37,45 +37,6 @@ var TMP_Places = {
     // PlacesCommandHook exist on browser window
     if ("PlacesCommandHook" in window) {
       gBrowser.tabContainer.addEventListener("SSTabRestored", this);
-      if (Tabmix.isVersion(400) && !Tabmix.isVersion(600)) {
-        if (!Tabmix.originalFunctions.placesBookmarkPage) {
-          Tabmix.originalFunctions.placesBookmarkPage = PlacesCommandHook.bookmarkPage;
-        }
-        PlacesCommandHook.bookmarkPage = function(aBrowser) {
-          let origTitle;
-          let tab = gBrowser.getTabForBrowser(aBrowser);
-          let title = TMP_Places.getTabTitle(tab, aBrowser.currentURI.spec);
-          if (typeof title == "string") {
-            origTitle = aBrowser.contentTitle;
-            aBrowser._contentTitle = title;
-          }
-          try {
-            return Tabmix.originalFunctions.placesBookmarkPage.apply(this, arguments);
-          } finally {
-            if (origTitle) {
-              setTimeout(() => (aBrowser._contentTitle = origTitle), 100);
-            }
-          }
-        };
-      } else if (!Tabmix.isVersion(400)) {
-        Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
-          /(webNav\.document\.)*title \|\| (url|uri)\.spec;/,
-          'TMP_Places.getTabTitle(gBrowser.getTabForBrowser(aBrowser), url.spec) || $&'
-        ).toCode();
-      }
-
-      if (!Tabmix.isVersion(490)) {
-        let $LF = '\n        ';
-        Tabmix.changeCode(PlacesCommandHook, "uniqueCurrentPages", {getter: true})._replace(
-          'URIs.push(tab.linkedBrowser.currentURI);',
-          'if (Tabmix.callerTrace("PCH_updateBookmarkAllTabsCommand")) {' + $LF +
-          '  $&' + $LF +
-          '} else {' + $LF +
-          '  let uri = tab.linkedBrowser.currentURI;' + $LF +
-          '  URIs.push({uri: uri, title: TMP_Places.getTabTitle(tab, uri.spec)});' + $LF +
-          '}'
-        ).defineProperty();
-      }
     }
 
     // prevent error when closing window with sidebar open
@@ -110,7 +71,7 @@ var TMP_Places = {
       let item = aMenuPopup.childNodes[i];
       if ("_placesNode" in item) {
         const url = item._placesNode.uri;
-        this.asyncGetTitleFromBookmark(url).then(bookMarkName => {
+        this.getTitleFromBookmark(url).then(bookMarkName => {
           if (bookMarkName)
             item.setAttribute("label", bookMarkName);
         });
@@ -236,7 +197,7 @@ var TMP_Places = {
   //        locked and protected tabs open bookmark after those tabs
   // fixed: focus the first tab if "extensions.tabmix.openTabNext" is true
   // fixed: remove "selected" and "tabmix_selectedID" from reuse tab
-  openGroup: function TMP_PC_openGroup(bmGroup, bmIds, aWhere) {
+  openGroup: function TMP_PC_openGroup(bmGroup, aWhere) {
     var openTabs = Tabmix.visibleTabs.tabs;
 
     var doReplace = (/^tab/).test(aWhere) ? false :
@@ -320,16 +281,12 @@ var TMP_Places = {
           noInitialLabel: this._titlefrombookmark,
           dontMove: true,
           forceNotRemote: loadProgressively,
+          triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()
         };
-        if (Tabmix.isVersion(550)) {
-          params.triggeringPrincipal = Services.scriptSecurityManager.getSystemPrincipal();
-        }
         aTab = gBrowser.addTab(loadProgressively ? "about:blank" : url, params);
       }
-      this.setTabTitle(aTab, url, bmIds[i]);
-      if (Tabmix.isVersion(550)) {
-        aTab._labelIsInitialTitle = true;
-      }
+      this.asyncSetTabTitle(aTab, url);
+      aTab._labelIsInitialTitle = true;
       if (loadProgressively) {
         tabs.push(aTab);
         let entry = {url, title: aTab.label};
@@ -443,25 +400,15 @@ var TMP_Places = {
     }
   },
 
-  setTabTitle: function TMP_PC_setTabTitle(aTab, aUrl, aID, title) {
+  setTabTitle: function TMP_PC_setTabTitle(aTab, aUrl, title) {
     if (!aTab || !aTab.parentNode)
       return false;
-    if (aID && aID > -1)
-      aTab.setAttribute("tabmix_bookmarkId", aID);
     if (!aUrl)
       aUrl = aTab.linkedBrowser.currentURI.spec;
-    if (!title) {
-      title = this.getTabTitle(aTab, aUrl, aTab.label);
-    }
     if (title != aTab.label) {
       aTab.label = title;
       aTab.setAttribute("tabmix_changed_label", title);
-      if (Tabmix.isVersion(530)) {
-        gBrowser._tabAttrModified(aTab, ["label"]);
-      } else {
-        aTab.crop = title != aUrl || aUrl == TabmixSvc.aboutBlank ? "end" : "center";
-        gBrowser._tabAttrModified(aTab, ["label", "crop"]);
-      }
+      gBrowser._tabAttrModified(aTab, ["label"]);
       if (aTab.selected)
         gBrowser.updateTitlebar();
       if (!aTab.hasAttribute("faviconized"))
@@ -472,35 +419,29 @@ var TMP_Places = {
     return false;
   },
 
-  asyncSetTabTitle(tab, url, id, title) {
-    if (id && id > -1) {
-      tab.setAttribute("tabmix_bookmarkId", id);
+  asyncSetTabTitle(tab, url) {
+    if (!url) {
+      url = tab.linkedBrowser.currentURI.spec;
     }
-    return this.asyncGetTabTitle(tab, url, title).then(newTitle => {
+    return this.asyncGetTabTitle(tab, url).then(newTitle => {
+      // only call setTabTitle if we found one to avoid loop
       if (newTitle && newTitle != tab.label) {
-        this.setTabTitle(tab, url, -1, newTitle);
+        this.setTabTitle(tab, url, newTitle);
+        return true;
       }
+      return false;
     });
   },
 
-  getTabTitle: function TMP_PC_getTabTitle(aTab, aUrl, title, byID) {
-    if (this.isUserRenameTab(aTab, aUrl))
-      return aTab.getAttribute("fixed-label");
-
-    // if the tab is bookmarked we use tabmix_bookmarkId attribute
-    // to get the title without using async functions
-    let newTitle = this.getTitleFromBookmark(aUrl, null, -1, aTab, byID);
-    if (!newTitle && aTab.hasAttribute("pending"))
-      newTitle = TMP_SessionStore.getTitleFromTabState(aTab);
-    return newTitle || title;
-  },
-
-  // rename function to asyncGetTabTitle
   asyncGetTabTitle(aTab, aUrl, title) {
+    aTab.removeAttribute("tabmix_bookmarkUrl");
     if (this.isUserRenameTab(aTab, aUrl))
       return Promise.resolve(aTab.getAttribute("fixed-label"));
 
-    return this.asyncGetTitleFromBookmark(aUrl, null, -1, aTab).then(newTitle => {
+    return this.getTitleFromBookmark(aUrl).then(newTitle => {
+      if (aTab && newTitle) {
+        aTab.setAttribute("tabmix_bookmarkUrl", aUrl);
+      }
       if (!newTitle && aTab.hasAttribute("pending"))
         newTitle = TMP_SessionStore.getTitleFromTabState(aTab);
       return newTitle || title;
@@ -512,12 +453,12 @@ var TMP_Places = {
     return (this._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark"));
   },
 
-  getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, byID) {
-    return this.PlacesUtils.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, byID);
+  getTitleFromBookmark(aUrl, aTitle) {
+    return this.PlacesUtils.asyncGetTitleFromBookmark(aUrl, aTitle);
   },
 
-  asyncGetTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
-    return this.PlacesUtils.asyncGetTitleFromBookmark(aUrl, aTitle, aItemId, aTab);
+  asyncGetTitleFromBookmark(aUrl, aTitle) {
+    return this.PlacesUtils.asyncGetTitleFromBookmark(aUrl, aTitle);
   },
 
   isUserRenameTab(aTab, aUrl) {
@@ -564,11 +505,12 @@ var TMP_Places = {
     // Start observing bookmarks if needed.
     if (!this._hasBookmarksObserver) {
       try {
-        if (Tabmix.isVersion(560)) {
-          PlacesUtils.bookmarks.addObserver(this);
-        } else {
-          PlacesUtils.addLazyBookmarkObserver(this);
-        }
+        PlacesUtils.bookmarks.addObserver(this);
+        this.handlePlacesEvents = this.handlePlacesEvents.bind(this);
+        PlacesUtils.observers.addListener(
+          ["bookmark-added", "bookmark-removed"],
+          this.handlePlacesEvents
+        );
         this._hasBookmarksObserver = true;
       } catch (ex) {
         Tabmix.reportError(ex, "Failed to add bookmarks observer:");
@@ -578,11 +520,11 @@ var TMP_Places = {
 
   stopObserver: function TMP_PC_stopObserver() {
     if (this._hasBookmarksObserver) {
-      if (Tabmix.isVersion(560)) {
-        PlacesUtils.bookmarks.removeObserver(this);
-      } else {
-        PlacesUtils.removeLazyBookmarkObserver(this);
-      }
+      PlacesUtils.bookmarks.removeObserver(this);
+      PlacesUtils.observers.removeListener(
+        ["bookmark-added", "bookmark-removed"],
+        this.handlePlacesEvents
+      );
       this._hasBookmarksObserver = false;
     }
   },
@@ -590,30 +532,34 @@ var TMP_Places = {
   onDelayedStartup() {
     if (!this._titlefrombookmark || !gBrowser.tabs)
       return;
-
     this.startObserver();
   },
 
   // extensions.tabmix.titlefrombookmark changed
   onPreferenceChanged(aPrefValue) {
     this._titlefrombookmark = aPrefValue;
+    const promises = [];
 
     if (aPrefValue) {
       for (let tab of gBrowser.tabs) {
-        this.setTabTitle(tab);
+        promises.push(this.asyncSetTabTitle(tab));
       }
       this.startObserver();
     } else {
-      let tabs = gBrowser.tabContainer.getElementsByAttribute("tabmix_bookmarkId", "*");
+      let tabs = gBrowser.tabContainer.getElementsByAttribute("tabmix_bookmarkUrl", "*");
       Array.prototype.slice.call(tabs).forEach(function(tab) {
-        if (tab.hasAttribute("pending"))
-          this.setTabTitle(tab);
-        else
+        tab.removeAttribute("tabmix_bookmarkUrl");
+        if (tab.hasAttribute("pending")) {
+          promises.push(this.asyncSetTabTitle(tab));
+        } else {
           gBrowser.setTabTitle(tab);
+        }
       }, this);
       this.stopObserver();
     }
-    this.afterTabTitleChanged();
+    Promise.all(promises).then(() => {
+      this.afterTabTitleChanged();
+    });
   },
 
   _hasBookmarksObserver: false,
@@ -627,81 +573,94 @@ var TMP_Places = {
     Ci.nsINavBookmarkObserver
   ]),
 
-  addItemIdToTabsWithUrl: function TMP_PC_addItemIdToTabsWithUrl(aItemId, aUrl) {
+  addItemUrlToTabs: function TMP_PC_addItemUrlToTabs(aUrl) {
     if (this.inUpdateBatch) {
-      this._batchData.add.ids.push(aItemId);
-      this._batchData.add.urls.push(aUrl);
+      this._batchData.add.push(aUrl);
       return;
-    } else if (!Array.isArray(aItemId)) {
-      [aItemId, aUrl] = [[aItemId], [aUrl]];
+    } else if (!Array.isArray(aUrl)) {
+      aUrl = [aUrl];
     }
 
+    const promises = [];
     let getIndex = url => aUrl.indexOf(url) + 1;
     for (let tab of gBrowser.tabs) {
       let url = tab.linkedBrowser.currentURI.spec;
-      if (this.isUserRenameTab(tab, url))
-        return;
-      let index = this.PlacesUtils.applyCallBackOnUrl(url, getIndex);
-      if (index) {
-        tab.setAttribute("tabmix_bookmarkId", aItemId[index - 1]);
-        this.setTabTitle(tab, url);
-      }
-    }
-    this.afterTabTitleChanged();
-  },
-
-  updateTabsTitleForId: function TMP_PC_updateTabsTitleForId(aItemId) {
-    if (this.inUpdateBatch) {
-      this._batchData.updateIDs.push(aItemId);
-      return;
-    }
-    const ID = "tabmix_bookmarkId";
-    let batch = Array.isArray(aItemId);
-    let tabs = gBrowser.tabContainer.getElementsByAttribute(ID, batch ? "*" : aItemId);
-    Array.prototype.slice.call(tabs).forEach(function(tab) {
-      if (!batch ||
-          aItemId.indexOf(parseInt(tab.getAttribute(ID))) > -1) {
-        tab.removeAttribute(ID);
-        let url = tab.linkedBrowser.currentURI.spec;
-        if (!this.isUserRenameTab(tab, url)) {
-          if (tab.hasAttribute("pending"))
-            this.setTabTitle(tab, url);
-          else
-            gBrowser.setTabTitle(tab);
+      if (!this.isUserRenameTab(tab, url)) {
+        let index = this.PlacesUtils.applyCallBackOnUrl(url, getIndex);
+        if (index) {
+          tab.setAttribute("tabmix_bookmarkUrl", aUrl[index - 1]);
+          promises.push(this.asyncSetTabTitle(tab, url));
         }
       }
-    }, this);
-    this.afterTabTitleChanged();
+    }
+    Promise.all(promises).then(() => {
+      this.afterTabTitleChanged();
+    });
   },
 
-  onItemAdded: function TMP_PC_onItemAdded(aItemId, aFolder, aIndex, aItemType, aURI) {
-    if (aItemId == -1 || aItemType != Ci.nsINavBookmarksService.TYPE_BOOKMARK)
+  removeItemUrlFromTabs: function TMP_PC_removeItemUrlFromTabs(aUrl) {
+    if (this.inUpdateBatch) {
+      this._batchData.remove.push(aUrl);
       return;
-    var url = aURI ? aURI.spec : null;
-    if (url && !isBlankPageURL(url))
-      this.addItemIdToTabsWithUrl(aItemId, url);
+    }
+    const promises = [];
+    const attrib = "tabmix_bookmarkUrl";
+    const batch = Array.isArray(aUrl);
+    const urls = batch ? aUrl : [aUrl];
+    const tabs = gBrowser.tabContainer.getElementsByAttribute(attrib, batch ? "*" : aUrl);
+    Array.from(tabs).forEach(tab => {
+      let url = tab.linkedBrowser.currentURI.spec;
+      if (urls.includes(url)) {
+        tab.removeAttribute(attrib);
+        if (!this.isUserRenameTab(tab, url)) {
+          if (tab.hasAttribute("pending")) {
+            promises.push(this.asyncSetTabTitle(tab, url));
+          } else {
+            gBrowser.setTabTitle(tab);
+          }
+        }
+      }
+    });
+    Promise.all(promises).then(() => {
+      this.afterTabTitleChanged();
+    });
   },
 
-  onItemRemoved: function TMP_PC_onItemRemoved(aItemId, aFolder, aIndex, aItemType) {
-    if (aItemId == -1 || aItemType != Ci.nsINavBookmarksService.TYPE_BOOKMARK)
-      return;
-    this.updateTabsTitleForId(aItemId);
+  handlePlacesEvents(aEvents) {
+    const events = aEvents.filter(ev => ev.id !== -1 ||
+      ev.itemType === Ci.nsINavBookmarksService.TYPE_BOOKMARK);
+    for (const ev of events) {
+      switch (ev.type) {
+        case "bookmark-added":
+          if (ev.url && !isBlankPageURL(ev.url)) {
+            this.addItemUrlToTabs(ev.url);
+          }
+          break;
+        case "bookmark-removed":
+          this.removeItemUrlFromTabs(ev.url);
+          break;
+      }
+    }
   },
 
   // onItemChanged also fired when page is loaded (visited count changed ?)
-  onItemChanged: function TMP_PC_onItemChanged(aItemId, aProperty, aIsAnnotationProperty,
-                                               aNewValue, aLastModified, aItemType) {
-    if (aItemId == -1 || aItemType != Ci.nsINavBookmarksService.TYPE_BOOKMARK ||
-        (aProperty != "uri" && aProperty != "title"))
+  onItemChanged: function TMP_PC_onItemChanged(itemId, property, isAnnotationProperty,
+                                               newValue, lastModified, itemType,
+                                               parentId, guid) {
+    if (itemId == -1 || itemType != Ci.nsINavBookmarksService.TYPE_BOOKMARK ||
+        (property != "uri" && property != "title"))
       return;
 
-    if (aProperty == "uri" && aNewValue && !isBlankPageURL(aNewValue))
-      this.addItemIdToTabsWithUrl(aItemId, aNewValue);
-    this.updateTabsTitleForId(aItemId);
+    if (property == "uri" && newValue && !isBlankPageURL(newValue)) {
+      this.addItemUrlToTabs(newValue);
+    } else if (property == "title") {
+      PlacesUtils.bookmarks.fetch({guid}, null, {})
+          .then(({url}) => this.addItemUrlToTabs(url.href));
+    }
   },
 
   onBeginUpdateBatch: function TMP_PC_onBeginUpdateBatch() {
-    this._batchData = {updateIDs: [], add: {ids: [], urls: []}};
+    this._batchData = {remove: [], add: []};
     this.inUpdateBatch = true;
 
     if (TabmixTabbar.widthFitTitle &&
@@ -712,13 +671,13 @@ var TMP_Places = {
   onEndUpdateBatch: function TMP_PC_onEndUpdateBatch() {
     var data = this._batchData;
     this.inUpdateBatch = false;
-    var [updateIDs, addIDs, addURLs] = [data.updateIDs, data.add.ids, data.add.urls];
-    if (addIDs.length)
-      this.addItemIdToTabsWithUrl(addIDs, addURLs);
-    if (updateIDs.length)
-      this.updateTabsTitleForId(updateIDs);
+    var [removeURLs, addURLs] = [data.remove, data.add];
+    if (addURLs.length)
+      this.addItemUrlToTabs(addURLs);
+    if (removeURLs.length)
+      this.removeItemUrlFromTabs(removeURLs);
 
-    this._batchData = {updateIDs: [], add: {ids: [], urls: []}};
+    this._batchData = {remove: [], add: []};
 
     this.afterTabTitleChanged();
     this.currentTab = null;
@@ -896,18 +855,8 @@ Tabmix.onContentLoaded = {
       '    gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
       '  }\n'
     )._replace(
-      /aRelatedToCurrent\s*= params.relatedToCurrent;/,
-      '$&\n' +
-      '  var bookMarkId            = params.bookMarkId;'
-    )._replace(
-      'where == "current" && #1.pinned'
-          .replace("#1", Tabmix.isVersion(520) ? "tab" : "w.gBrowser.selectedTab"),
-      '$& && !params.suppressTabsOnFileDownload',
-      {check: !Tabmix.isVersion(530)}
-    )._replace(
       '(targetBrowser).pinned',
       '$& && !params.suppressTabsOnFileDownload',
-      {check: Tabmix.isVersion(530)}
     )._replace(
       'if ((where == "tab" ||',
       'if (w && where == "window" &&\n' +
@@ -916,28 +865,10 @@ Tabmix.onContentLoaded = {
       '  }\n' +
       '  $&'
     )._replace(
-      /Services.ww.openWindow[^;]*;/,
-      'let newWin = $&\n' +
-      '    if (newWin && bookMarkId) {\n' +
-      '        newWin.bookMarkIds = bookMarkId;\n' +
-      '    }',
-      {check: !Tabmix.isVersion(540)}
-    )._replace(
-      /win = Services.ww.openWindow[^;]*;/,
-      '$&\n' +
-      '    if (win && bookMarkId) {\n' +
-      '        win.bookMarkIds = bookMarkId;\n' +
-      '    }',
-      {check: Tabmix.isVersion(540)}
-    )._replace(
       /(})(\)?)$/,
       '  const targetTab = where == "current" ?\n' +
       '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
-      '  if (Tabmix.isVersion(600)) {\n' +
-      '    w.TMP_Places.asyncSetTabTitle(targetTab, url, bookMarkId);\n' +
-      '  } else {\n' +
-      '    w.TMP_Places.setTabTitle(targetTab, url, bookMarkId);\n' +
-      '  }\n' +
+      '  w.TMP_Places.asyncSetTabTitle(targetTab, url);\n' +
       '  if (where == "current") {\n' +
       '    w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);\n' +
       '  }\n' +
@@ -974,7 +905,6 @@ Tabmix.getBoolPref = function(prefname, def) {
 };
 
 /** DEPRECATED **/
-TMP_Places.getTabFixedTitle = function(aBrowser, aUri) {
-  let win = aBrowser.ownerGlobal;
-  return win.TMP_Places.getTabTitle(win.gBrowser.getTabForBrowser(aBrowser), aUri.spec);
+TMP_Places.getTabFixedTitle = function() {
+  Tabmix.log('this function was DEPRECATED and removed since 2013');
 };

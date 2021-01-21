@@ -23,7 +23,7 @@ var TMP_SessionStore = {
       aUndoItem.title = selectedTab.attributes["fixed-label"];
     else {
       const dataTitle = aUndoItem.title || tabData.title || tabData.url;
-      return TMP_Places.asyncGetTitleFromBookmark(tabData.url, dataTitle)
+      return TMP_Places.getTitleFromBookmark(tabData.url, dataTitle)
           .then(title => {
             if (title == TabmixSvc.aboutBlank) {
               title = Tabmix.getString("tabs.emptyTabTitle");
@@ -80,7 +80,7 @@ var TMP_SessionStore = {
          * XUL Tab attributes to (re)store
          * Restored in nsSessionStore restoreHistory()
          */
-      var _xulAttributes = ["protected", "_locked", "fixed-label", "label-uri", "reload-data", "tabmix_bookmarkId"];
+      var _xulAttributes = ["protected", "_locked", "fixed-label", "label-uri", "reload-data"];
 
       // make TreeStyleTab extension compatible with Tabmix Plus
       if ("TreeStyleTabBrowser" in window)
@@ -268,8 +268,7 @@ var TMP_SessionStore = {
     if (fixedLabelUri == aUri || fixedLabelUri == "*")
       return Promise.resolve(this._getAttribute(aData, "fixed-label"));
 
-    const itemId = this._getAttribute(aData, "tabmix_bookmarkId");
-    return TMP_Places.asyncGetTitleFromBookmark(aUri, aTitle, itemId);
+    return TMP_Places.asyncGetTitleFromBookmark(aUri, aTitle);
   },
 
   /**

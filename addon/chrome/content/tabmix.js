@@ -194,22 +194,6 @@ Tabmix.afterDelayedStartup = function() {
 
   TMP_TabView.init();
 
-  // when we open bookmark in new window
-  // get bookmark itemId and url - for use in getBookmarkTitle
-  if ("bookMarkIds" in window) {
-    let items = String(window.bookMarkIds).split("|");
-    for (let i = 0; i < items.length; i++) {
-      if (items[i] && items[i] > -1)
-        gBrowser.tabs[i].setAttribute("tabmix_bookmarkId", items[i]);
-    }
-    delete window.bookMarkIds;
-    if (Tabmix.isVersion({ff: 570, wf: "56.2.8"})) {
-      gBrowser._lastRelatedTabMap = new WeakMap();
-    } else {
-      gBrowser._lastRelatedTab = null;
-    }
-  }
-
   TMP_Places.onDelayedStartup();
 
   this.navToolbox.init();
@@ -278,6 +262,7 @@ Tabmix.afterDelayedStartup = function() {
 var TMP_eventListener = {
   init: function TMP_EL_init() {
     window.addEventListener("load", this);
+    window.addEventListener("SSWindowRestored", this);
   },
 
   handleEvent: function TMP_EL_handleEvent(aEvent) {
@@ -288,6 +273,9 @@ var TMP_eventListener = {
       case "SSWindowClosing":
         window.removeEventListener("SSWindowClosing", this);
         TabmixSessionManager.onWindowClose(!Tabmix.numberOfWindows());
+        break;
+      case "SSWindowRestored":
+        this.onSSWindowRestored();
         break;
       case "SSTabRestoring":
         this.onSSTabRestoring(aEvent.target);
@@ -669,6 +657,19 @@ var TMP_eventListener = {
     setTimeout(() => TabmixTabbar.updateScrollStatus(), 2500);
   },
 
+  async onSSWindowRestored() {
+    if (Services.prefs.getBoolPref("browser.sessionstore.restore_tabs_lazily", false)) {
+      // make sure we are fulli initialized
+      await Tabmix._deferredInitialized.promise;
+      gBrowser.tabs.forEach(tab => {
+        if (tab.hasAttribute("pending")) {
+          const url = TabmixSvc.ss.getLazyTabValue(tab, "url");
+          TMP_Places.asyncSetTabTitle(tab, url);
+        }
+      });
+    }
+  },
+
   onSSTabRestoring: function TMP_EL_onSSTabRestoring(tab) {
     Tabmix.restoreTabState(tab);
     TabmixSessionManager.restoreHistoryComplete(tab);
@@ -676,7 +677,7 @@ var TMP_eventListener = {
     gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
 
     // don't mark new tab as unread
-    let url = tab.__SS_lazyData ? tab.__SS_lazyData.url : tab.linkedBrowser.currentURI.spec;
+    let url = TabmixSvc.ss.getLazyTabValue(tab, "url") || tab.linkedBrowser.currentURI.spec;
     if (url == TabmixSvc.aboutBlank || url == TabmixSvc.aboutNewtab)
       tab.setAttribute("visited", true);
   },
@@ -862,7 +863,7 @@ var TMP_eventListener = {
   // when more the one tabs opened at once
   lastTimeTabOpened: 0,
   onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
-    if (aTab.__SS_lazyData) {
+    if (!aTab.linkedBrowser.isConnected) {
       this.onSSTabRestoring(aTab);
       if (aTab.label == "about:blank") {
         aTab.label = Tabmix.getString("tabs.emptyTabTitle");
@@ -1187,6 +1188,7 @@ var TMP_eventListener = {
   onWindowClose: function TMP_EL_onWindowClose() {
     window.removeEventListener("unload", this);
     window.removeEventListener("SSWindowClosing", this);
+    window.removeEventListener("SSWindowRestored", this);
 
     // notice that windows enumerator don't count this window
     var isLastWindow = Tabmix.numberOfWindows() === 0;
@@ -1307,6 +1309,8 @@ Tabmix.initialization = {
       value: !stopInitialization,
       enumerable: false
     });
+    const value = Math.max(...Object.values(Tabmix.initialization).map(({id}) => id));
+    Object.defineProperty(this, "_lastPhase", {enumerable: false, value});
     return this.isValidWindow;
   },
 
@@ -1330,6 +1334,9 @@ Tabmix.initialization = {
         try {
           let obj = getObj(phase.obj);
           result = obj[key].apply(obj, Array.prototype.slice.call(arguments, 1));
+          if (phase.id === this._lastPhase) {
+            Tabmix._deferredInitialized.resolve();
+          }
         } catch (ex) {
           Tabmix.assert(ex, phase.obj + "." + key + " failed");
         }
@@ -1338,5 +1345,17 @@ Tabmix.initialization = {
     return result;
   }
 };
+
+// A promise resolved once initialization is complete
+Tabmix._deferredInitialized = (function() {
+  let deferred = {};
+
+  deferred.promise = new Promise((resolve, reject) => {
+    deferred.resolve = resolve;
+    deferred.reject = reject;
+  });
+
+  return deferred;
+}());
 
 TMP_eventListener.init();

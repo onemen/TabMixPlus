@@ -24,29 +24,11 @@ this.AsyncPlacesUtils = {
     return PlacesUtils.bookmarks.fetch(guidOrInfo, onResult, options);
   },
 
-  async getBookmarkTitle(url, itemId) {
-    itemId = itemId || -1;
-    try {
-      if (itemId > -1) {
-        const _URI = PlacesUtils.bookmarks.getBookmarkURI(itemId);
-        if (_URI && _URI.spec == url) {
-          return {
-            itemId,
-            title: PlacesUtils.bookmarks.getItemTitle(itemId),
-          };
-        }
-      }
-    } catch (ex) {
-      TabmixSvc.console.reportError(ex, 'Error function name changed', 'not a function');
-    }
+  async getBookmarkTitle(url) {
     try {
       const {guid, title} = await this.fetch({url});
       if (guid) {
-        itemId = await this.promiseItemId(guid);
-        return {
-          itemId,
-          title,
-        };
+        return title;
       }
     } catch (ex) {
       TabmixSvc.console.reportError(ex, 'Error function name changed', 'not a function');
@@ -71,17 +53,9 @@ this.AsyncPlacesUtils = {
     return result;
   },
 
-  async getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, ietab) {
-    aItemId = aTab ? aTab.getAttribute("tabmix_bookmarkId") : aItemId;
-    const getTitle = url => this.getBookmarkTitle(url, aItemId);
-    const result = await this.applyCallBackOnUrl(aUrl, ietab, getTitle);
-    const {itemId, title} = result || {};
-    if (aTab) {
-      let win = aTab.ownerGlobal;
-      // setItem check if aTab exist and remove the attribute if it is null
-      win.Tabmix.setItem(aTab, "tabmix_bookmarkId", itemId || null);
-    }
-
+  async getTitleFromBookmark(aUrl, aTitle, ietab) {
+    const getTitle = url => this.getBookmarkTitle(url);
+    const title = await this.applyCallBackOnUrl(aUrl, ietab, getTitle);
     return title || aTitle;
   },
 

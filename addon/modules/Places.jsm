@@ -53,24 +53,23 @@ this.TabmixPlacesUtils = Object.freeze({
   },
 
   applyCallBackOnUrl(aUrl, aCallBack) {
+    // TabmixSvc.console.log('TabmixPlacesUtils.applyCallBackOnUrl use AsyncPlacesUtils.applyCallBackOnUrl');
     return PlacesUtilsInternal.applyCallBackOnUrl(aUrl, aCallBack);
   },
 
-  getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, byID) {
-    return PlacesUtilsInternal.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, byID);
+  // getTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
+  getTitleFromBookmark(aUrl, aTitle) {
+    // TabmixSvc.console.log('TabmixPlacesUtils.getTitleFromBookmark use TabmixPlacesUtils.asyncGetTitleFromBookmark');
+    // return PlacesUtilsInternal.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, byID);
+    return PlacesUtilsInternal.asyncGetTitleFromBookmark(aUrl, aTitle);
   },
 
-  asyncGetTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
-    if (TabmixSvc.version(600)) {
-      return PlacesUtilsInternal.asyncGetTitleFromBookmark(aUrl, aTitle, aItemId, aTab)
-          .catch(err => {
-            TabmixSvc.console.reportError(err, 'Error form asyncGetTitleFromBookmark');
-            return '';
-          });
-    }
-
-    const title = PlacesUtilsInternal.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab);
-    return Promise.resolve(title);
+  asyncGetTitleFromBookmark(aUrl, aTitle) {
+    return PlacesUtilsInternal.asyncGetTitleFromBookmark(aUrl, aTitle)
+        .catch(err => {
+          TabmixSvc.console.reportError(err, 'Error form asyncGetTitleFromBookmark');
+          return '';
+        });
   },
 });
 
@@ -111,10 +110,9 @@ PlacesUtilsInternal = {
       PlacesUIUtils[aFn] = PlacesUIUtils["tabmix_" + aFn];
       delete PlacesUIUtils["tabmix_" + aFn];
     });
-    delete PlacesUIUtils.tabmix_getURLsForContainerNode;
   },
 
-  functions: ["openTabset", "openMultipleLinksInTabs", "openNodeWithEvent", "_openNodeIn"],
+  functions: ["openTabset", "openNodeWithEvent", "_openNodeIn"],
   initPlacesUIUtils: function TMP_PC_initPlacesUIUtils(aWindow) {
     try {
       PlacesUIUtils.openTabset.toString();
@@ -133,21 +131,10 @@ PlacesUtilsInternal = {
     let code;
 
     function updateOpenTabset(name, treeStyleTab) {
-      let openGroup = "    browserWindow.TMP_Places.openGroup(urls, ids, where$1);";
+      let openGroup = "    browserWindow.TMP_Places.openGroup(urls, where$1);";
       code = Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + name)._replace(
         'urls = []',
         'behavior, $&', {check: treeStyleTab}
-      )._replace(
-        'var urls = []',
-        '$&, ids = []', {check: !treeStyleTab}
-      )._replace(
-        'urls.push(item.uri);',
-        '$&\n' +
-        '      ids.push(item.id);', {check: !treeStyleTab}
-      )._replace(
-        /"chrome,dialog=no,all",\n*\s*args\n*\s*\);/,
-        '$&\n' +
-        '      browserWindow.bookMarkIds = ids.join("|");'
       )._replace(
         /let openGroupBookmarkBehavior =|TSTOpenGroupBookmarkBehavior =/,
         '$& behavior =', {check: treeStyleTab, silent: true}
@@ -180,26 +167,6 @@ PlacesUtilsInternal = {
       }, 50, Ci.nsITimer.TYPE_REPEATING_SLACK);
     } else { // TreeStyleTab not installed
       updateOpenTabset("openTabset");
-
-      // we enter getURLsForContainerNode into PlacesUIUtils to prevent leaks from PlacesUtils
-      code = Tabmix.changeCode(PlacesUtils, "PlacesUtils.getURLsForContainerNode")._replace(
-        'uri: child.uri,',
-        '$&\n          ' +
-        'id: child.itemId,', {flags: "g"}
-      )._replace(
-        'this.', 'PlacesUtils.', {flags: "g"}
-      );
-      PlacesUIUtils.tabmix_getURLsForContainerNode = makeCode(code);
-
-      code = Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils.openMultipleLinksInTabs")._replace(
-        'PlacesUtils.getURLsForContainerNode(nodeOrNodes)',
-        'PlacesUIUtils.tabmix_getURLsForContainerNode(nodeOrNodes)'
-      )._replace(
-        'uri: nodeOrNodes[i].uri,',
-        '$&\n            ' +
-        'id: nodeOrNodes[i].itemId,'
-      );
-      PlacesUIUtils.openMultipleLinksInTabs = makeCode(code);
     }
 
     let fnName = treeStyleTabInstalled && PlacesUIUtils.__treestyletab__openNodeWithEvent ?
@@ -235,10 +202,6 @@ PlacesUtilsInternal = {
       '      if (browserWindow && aWhere == "current")\n' +
       '        browserWindow.gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
       '      $&'
-    )._replace(
-      'inBackground:',
-      'bookMarkId: aNode.itemId, initiatingDoc: null,\n' +
-      '        $&'
     );
     PlacesUIUtils._openNodeIn = makeCode(code);
   },
@@ -255,31 +218,6 @@ PlacesUtilsInternal = {
 
     Services.prefs.addObserver(PREF, updateValue, false);
     return updateValue();
-  },
-
-  getBookmarkTitle(aUrl, aID, byID) {
-    let aItemId = aID.value || -1;
-    try {
-      if (aItemId > -1) {
-        var _URI = PlacesUtils.bookmarks.getBookmarkURI(aItemId);
-        if (_URI && _URI.spec == aUrl)
-          return PlacesUtils.bookmarks.getItemTitle(aItemId);
-      }
-    } catch (ex) {
-      TabmixSvc.console.reportError(ex, 'Error function name changed', 'not a function');
-    }
-    if (!byID) {
-      try {
-        let uri = Services.io.newURI(aUrl, null, null);
-        aItemId = aID.value = PlacesUtils.getMostRecentBookmarkForURI(uri);
-        if (aItemId > -1)
-          return PlacesUtils.bookmarks.getItemTitle(aItemId);
-      } catch (ex) {
-        TabmixSvc.console.reportError(ex, 'Error function name changed', 'not a function');
-      }
-    }
-    aID.value = null;
-    return null;
   },
 
   applyCallBackOnUrl(aUrl, aCallBack) {
@@ -300,27 +238,10 @@ PlacesUtilsInternal = {
     return result;
   },
 
-  getTitleFromBookmark: function TMP_getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, byID) {
-    if (!this.titlefrombookmark || !aUrl)
-      return aTitle;
-
-    var oID = {value: aTab ? aTab.getAttribute("tabmix_bookmarkId") : aItemId};
-    var getTitle = url => this.getBookmarkTitle(url, oID, byID);
-    var title = this.applyCallBackOnUrl(aUrl, getTitle);
-    // setItem check if aTab exist and remove the attribute if
-    // oID.value is null
-    if (aTab) {
-      let win = aTab.ownerGlobal;
-      win.Tabmix.setItem(aTab, "tabmix_bookmarkId", oID.value);
-    }
-
-    return title || aTitle;
-  },
-
-  asyncGetTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
+  asyncGetTitleFromBookmark(aUrl, aTitle) {
     if (!this.titlefrombookmark || !aUrl)
       return Promise.resolve(aTitle);
 
-    return AsyncPlacesUtils.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, Tabmix.gIeTab);
+    return AsyncPlacesUtils.getTitleFromBookmark(aUrl, aTitle, Tabmix.gIeTab);
   },
 };
