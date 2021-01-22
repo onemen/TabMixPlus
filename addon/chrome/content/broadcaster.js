@@ -13,7 +13,6 @@
       window.addEventListener("load", () => {
         try {
           const obs = Array.from(window.document.querySelectorAll(`[observes="${this.id}"]`));
-          window.document.querySelectorAll(`observes[element="${this.id}"]`).forEach(node => obs.push(node.parentNode));
           obs.forEach(el => {
             for (let i = 0; i < this.attributes.length; i++) {
               if (this.attributes[i].name == "id") break;
@@ -23,14 +22,13 @@
         } catch (ex) {
           Cu.reportError(ex);
         }
-      }, {once: true});
-      const config = {attributes: true};
-      const callback = function(mutationList) {
+      }, { once: true });
+      const config = { attributes: true };
+      const callback = function (mutationList) {
         for (const mutation of mutationList) {
           if (mutation.type === 'attributes') {
             const name = mutation.target.hasAttribute(mutation.attributeName);
             const obs = Array.from(window.document.querySelectorAll(`[observes="${mutation.target.id}"]`));
-            window.document.querySelectorAll(`observes[element="${mutation.target.id}"]`).forEach(node => obs.push(node.parentNode));
             for (const el of obs) {
               try {
                 if (name) {
@@ -50,7 +48,48 @@
     }
   }
 
-  if (customElements.get("broadcaster")) {
+  class Observes extends MozXULElement {
+    connectedCallback() {
+      // super();
+      this.textContent = "";
+      let obs = window.document.getElementById(this.getAttribute("element"));
+      let attr = this.attributes['attribute'].value;
+      let el = this.parentNode;
+      window.addEventListener("load", () => {
+        try {
+          if (obs.hasAttribute(attr))
+            el.setAttribute(attr, obs.attributes[attr].value);
+        } catch (ex) {
+          Cu.reportError(ex);
+        }
+      }, { once: true });
+      const config = { attributes: true };
+      const callback = function (mutationList) {
+        for (const mutation of mutationList) {
+          if (mutation.type === 'attributes') {
+            try {
+              if (mutation.target.hasAttribute(attr)) {
+                if (mutation.target.getAttribute(attr) != el.getAttribute(attr))
+                  el.setAttribute(attr, mutation.target.getAttribute(attr));
+              } else {
+                el.removeAttribute(attr);
+              }
+            } catch (ex) {
+              Cu.reportError(ex);
+            }
+          }
+        }
+      };
+      const observer = new MutationObserver(callback);
+      observer.observe(obs, config);
+    }
+  }
+
+  if (!customElements.get("broadcaster")) {
     customElements.define("broadcaster", Broadcaster);
+  }
+
+  if (!customElements.get("observes")) {
+    customElements.define("observes", Observes);
   }
 }

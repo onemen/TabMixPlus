@@ -10,9 +10,10 @@
     }
 
     connectedCallback() {
-      if (this.delayConnectedCallback()) {
+      if (this._initialized) {
         return;
       }
+      
       this.textContent = "";
       this.appendChild(MozXULElement.parseXULToFragment(`
       <checkbox class="checkbox" ></checkbox>
@@ -26,6 +27,8 @@
       // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
 
       this._checkbox = this.getElementsByClassName("checkbox")[0];
+    
+      this._initialized = true;
     }
 
     set label(val) {
