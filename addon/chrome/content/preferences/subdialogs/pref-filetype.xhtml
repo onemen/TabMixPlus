@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<?xml-stylesheet href="chrome://browser/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://tabmixplus/skin/preferences.css"?>
 
 <!DOCTYPE dialog [
@@ -17,7 +17,7 @@
         buttons="accept,cancel,help"
         ondialoghelp="window.opener.openHelp('links#file-type-editor');"
         title="&filetype.options;"
-        onload="Init();"
+        onload="Init(); let t = document.getElementsByTagName('dialog')[0]._buttons.help; t.icon.style.marginRight='6px'; t.image='chrome://tabmixplus/skin/question-16.png';"
         ondialogaccept="Save();"
         persist="screenX screenY">
 
@@ -25,7 +25,7 @@
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.js"/>
 
    <html:fieldset>
-        <richlistbox id="filetypeList" rows="10" seltype="single" prefstring="extensions.tabmix.filetype" onselect="Select();"/>
+        <richlistbox id="filetypeList" rows="10" style="height: 18em;" seltype="single" prefstring="extensions.tabmix.filetype" onselect="Select();"/>
         <hbox flex="1" align="center">
          <label value="&filetype.new;"/>
          <html:input id="filetypeEntry" oninput="Input();"/>
