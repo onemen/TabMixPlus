@@ -28,9 +28,6 @@ XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils",
 XPCOMUtils.defineLazyModuleGetter(this,
   "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "AsyncPlacesUtils",
-  "chrome://tabmix-resource/content/AsyncPlacesUtils.jsm");
-
 // this function is use by PlacesUIUtils functions that we evaluate here
 // eslint-disable-next-line no-unused-vars
 function getBrowserWindow(aWindow) {
@@ -53,23 +50,15 @@ this.TabmixPlacesUtils = Object.freeze({
   },
 
   applyCallBackOnUrl(aUrl, aCallBack) {
-    // TabmixSvc.console.log('TabmixPlacesUtils.applyCallBackOnUrl use AsyncPlacesUtils.applyCallBackOnUrl');
     return PlacesUtilsInternal.applyCallBackOnUrl(aUrl, aCallBack);
   },
 
-  // getTitleFromBookmark(aUrl, aTitle, aItemId, aTab) {
   getTitleFromBookmark(aUrl, aTitle) {
-    // TabmixSvc.console.log('TabmixPlacesUtils.getTitleFromBookmark use TabmixPlacesUtils.asyncGetTitleFromBookmark');
-    // return PlacesUtilsInternal.getTitleFromBookmark(aUrl, aTitle, aItemId, aTab, byID);
     return PlacesUtilsInternal.asyncGetTitleFromBookmark(aUrl, aTitle);
   },
 
   asyncGetTitleFromBookmark(aUrl, aTitle) {
-    return PlacesUtilsInternal.asyncGetTitleFromBookmark(aUrl, aTitle)
-        .catch(err => {
-          TabmixSvc.console.reportError(err, 'Error form asyncGetTitleFromBookmark');
-          return '';
-        });
+    return PlacesUtilsInternal.asyncGetTitleFromBookmark(aUrl, aTitle);
   },
 });
 
@@ -220,28 +209,54 @@ PlacesUtilsInternal = {
     return updateValue();
   },
 
-  applyCallBackOnUrl(aUrl, aCallBack) {
+  /* :::::::::::::::   AsyncPlacesUtils   ::::::::::::::: */
+
+  fetch(guidOrInfo, onResult = null, options = {}) {
+    return PlacesUtils.bookmarks.fetch(guidOrInfo, onResult, options);
+  },
+
+  async getBookmarkTitle(url) {
+    try {
+      const {guid, title} = await this.fetch({url});
+      if (guid) {
+        return title;
+      }
+    } catch (ex) {
+      TabmixSvc.console.reportError(ex, 'Error function name changed', 'not a function');
+    }
+    return null;
+  },
+
+  async applyCallBackOnUrl(aUrl, aCallBack) {
     let hasHref = aUrl.indexOf("#") > -1;
-    let result = aCallBack.apply(this, [aUrl]) ||
-        hasHref && aCallBack.apply(this, aUrl.split("#"));
+    let result = await aCallBack.apply(this, [aUrl]) ||
+        hasHref && await aCallBack.apply(this, aUrl.split("#"));
     // when IE Tab is installed try to find url with or without the prefix
-    let ietab = Tabmix.gIeTab;
+    const ietab = Tabmix.gIeTab;
     if (!result && ietab) {
       let prefix = "chrome://" + ietab.folder + "/content/reloaded.html?url=";
       if (aUrl != prefix) {
         let url = aUrl.startsWith(prefix) ?
           aUrl.replace(prefix, "") : prefix + aUrl;
-        result = aCallBack.apply(this, [url]) ||
-          hasHref && aCallBack.apply(this, url.split("#"));
+        result = await aCallBack.apply(this, [url]) ||
+          hasHref && await aCallBack.apply(this, url.split("#"));
       }
     }
     return result;
   },
 
-  asyncGetTitleFromBookmark(aUrl, aTitle) {
-    if (!this.titlefrombookmark || !aUrl)
-      return Promise.resolve(aTitle);
+  async asyncGetTitleFromBookmark(aUrl, aTitle) {
+    if (!this.titlefrombookmark || !aUrl) {
+      return aTitle;
+    }
 
-    return AsyncPlacesUtils.getTitleFromBookmark(aUrl, aTitle, Tabmix.gIeTab);
+    try {
+      const getTitle = url => this.getBookmarkTitle(url);
+      const title = await this.applyCallBackOnUrl(aUrl, getTitle);
+      return title || aTitle;
+    } catch (err) {
+      TabmixSvc.console.reportError(err, 'Error form asyncGetTitleFromBookmark');
+      return '';
+    }
   },
 };

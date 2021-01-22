@@ -573,7 +573,7 @@ var TMP_Places = {
     Ci.nsINavBookmarkObserver
   ]),
 
-  addItemUrlToTabs: function TMP_PC_addItemUrlToTabs(aUrl) {
+  async addItemUrlToTabs(aUrl) {
     if (this.inUpdateBatch) {
       this._batchData.add.push(aUrl);
       return;
@@ -582,23 +582,26 @@ var TMP_Places = {
     }
 
     const promises = [];
-    let getIndex = url => aUrl.indexOf(url) + 1;
+    const getIndex = url => aUrl.indexOf(url) + 1;
+    const updateTabs = async(tab, url) => {
+      let index = await this.PlacesUtils.applyCallBackOnUrl(url, getIndex);
+      if (index) {
+        tab.setAttribute("tabmix_bookmarkUrl", aUrl[index - 1]);
+        promises.push(this.asyncSetTabTitle(tab, url));
+      }
+    };
+
     for (let tab of gBrowser.tabs) {
       let url = tab.linkedBrowser.currentURI.spec;
       if (!this.isUserRenameTab(tab, url)) {
-        let index = this.PlacesUtils.applyCallBackOnUrl(url, getIndex);
-        if (index) {
-          tab.setAttribute("tabmix_bookmarkUrl", aUrl[index - 1]);
-          promises.push(this.asyncSetTabTitle(tab, url));
-        }
+        updateTabs(tab, url);
       }
     }
-    Promise.all(promises).then(() => {
-      this.afterTabTitleChanged();
-    });
+    await Promise.all(promises);
+    this.afterTabTitleChanged();
   },
 
-  removeItemUrlFromTabs: function TMP_PC_removeItemUrlFromTabs(aUrl) {
+  async removeItemUrlFromTabs(aUrl) {
     if (this.inUpdateBatch) {
       this._batchData.remove.push(aUrl);
       return;
@@ -621,9 +624,8 @@ var TMP_Places = {
         }
       }
     });
-    Promise.all(promises).then(() => {
-      this.afterTabTitleChanged();
-    });
+    await Promise.all(promises);
+    this.afterTabTitleChanged();
   },
 
   handlePlacesEvents(aEvents) {
