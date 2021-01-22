@@ -1,0 +1,54 @@
+/**
+    Firefox version 60+
+
+    All platform
+
+**/
+
+/* bug 1379338 remove these styles */
+@import url("chrome://tabmix-os/skin/preferences.css");
+
+/********** preferences ********/
+
+prefwindow,
+prefwindow:root {
+  -moz-box-orient: vertical;
+}
+
+prefpane {
+  -moz-box-orient: vertical;
+}
+
+prefwindow > .paneDeckContainer {
+  overflow: hidden;
+}
+
+prefpane > .content-box {
+  overflow: hidden;
+}
+
+prefwindow[type="child"] > .paneDeckContainer {
+  overflow: -moz-hidden-unscrollable;
+}
+
+prefwindow[type="child"] > prefpane > .content-box {
+  -moz-box-flex: 1;
+  overflow: -moz-hidden-unscrollable;
+}
+
+preferences {
+  visibility: collapse;
+}
+
+preference {
+  visibility: collapse;
+}
+
+radio[pane] {
+  -moz-box-orient: vertical;
+  -moz-box-align: center;
+}
+
+prefwindow[chromehidden~="toolbar"] .chromeclass-toolbar {
+  display: none;
+}
