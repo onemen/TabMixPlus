@@ -156,8 +156,10 @@ var TabmixTabbar = {
     if (this.isButtonOnTabsToolBar(tabstripClosebutton))
       tabstripClosebutton.collapsed = Tabmix.prefs.getBoolPref("hideTabBarButton");
     let allTabsButton = document.getElementById("alltabs-button");
-    if (this.isButtonOnTabsToolBar(allTabsButton))
-      allTabsButton.collapsed = Tabmix.prefs.getBoolPref("hideAllTabsButton");
+    if (this.isButtonOnTabsToolBar(allTabsButton)) {
+      allTabsButton.collapsed = !Services.prefs.getBoolPref("browser.tabs.tabmanager.enabled");
+      Tabmix.setItem("tabbrowser-tabs", "showalltabsbutton", !allTabsButton.collapsed || null);
+    }
     Tabmix.setItem(tabBar, "tabBarSpace", Tabmix.prefs.getBoolPref("tabBarSpace") || null);
     this.setShowNewTabButtonAttr();
 
@@ -1279,8 +1281,7 @@ gTMPprefObserver = {
         this.OBSERVING.push(pref);
     };
     addObserver("layout.css.devPixelsPerPx", TabmixSvc.australis);
-    addObserver("browser.tabs.onTop", !Tabmix.isVersion(290));
-    addObserver("browser.tabs.closeButtons", !Tabmix.isVersion(310));
+    addObserver("browser.tabs.tabmanager.enabled", true);
 
     try {
       // add Observer
@@ -1639,7 +1640,7 @@ gTMPprefObserver = {
       case "extensions.tabmix.hideTabBarButton":
       case "extensions.tabmix.tabBarMode":
       case "extensions.tabmix.tabBarSpace":
-      case "extensions.tabmix.hideAllTabsButton":
+      case "browser.tabs.tabmanager.enabled":
       case "extensions.tabmix.newTabButton":
       case "extensions.tabmix.flexTabs":
       case "extensions.tabmix.setDefault":
@@ -2632,6 +2633,12 @@ gTMPprefObserver = {
       Services.prefs.setBoolPref("browser.ctrlTab.recentlyUsedOrder",
         Services.prefs.getBoolPref("browser.ctrlTab.previews"));
       Services.prefs.clearUserPref("browser.ctrlTab.previews");
+    }
+    // 2021-01-22
+    if (Services.prefs.prefHasUserValue("extensions.tabmix.hideAllTabsButton")) {
+      Services.prefs.setBoolPref("browser.tabs.tabmanager.enabled",
+        Services.prefs.getBoolPref("extensions.tabmix.hideAllTabsButton"));
+      Services.prefs.clearUserPref("extensions.tabmix.hideAllTabsButton");
     }
 
     let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {

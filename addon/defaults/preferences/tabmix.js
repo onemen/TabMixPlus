@@ -66,7 +66,9 @@ pref("extensions.tabmix.pinnedTabScroll", false);
 pref("extensions.tabmix.offsetAmountToScroll", false);
 pref("extensions.tabmix.tabBarSpace", false);
 pref("extensions.tabmix.hideTabBarButton", true);
-pref("extensions.tabmix.hideAllTabsButton", false);
+// form 2021-01-22 we replaced this pref
+// with firefox pref - browser.tabs.tabmanager.enabled
+// pref("extensions.tabmix.hideAllTabsButton", false);
 pref("extensions.tabmix.newTabButton", true);
 /*
 2009-01-31
