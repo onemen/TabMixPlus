@@ -1828,9 +1828,9 @@ Tabmix.tablib = {
     }
 
     if (aTab.hasAttribute("width")) {
-      let width = aTab.boxObject.width;
+      const {width} = aTab.getBoundingClientRect();
       aTab.removeAttribute("width");
-      if (width != aTab.boxObject.width)
+      if (width != aTab.getBoundingClientRect().width)
         TMP_Places.afterTabTitleChanged(false);
     } else if (aTab.hasAttribute("fadein")) {
       TMP_Places.afterTabTitleChanged(false);

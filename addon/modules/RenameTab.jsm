@@ -103,13 +103,13 @@ this.RenameTab = {
       popup.openPopup(this.data.tab, "bottomcenter topleft");
     else {
       let screen = this.window.screen;
-      let width = popup.boxObject.width || 330;
-      let height = popup.boxObject.height || 215;
+      const {height = 215, width = 330} = popup.getBoundingClientRect();
       popup.openPopupAtScreen(screen.availLeft + (screen.availWidth - width) / 2,
         screen.availTop + (screen.availHeight - height) / 2, false);
-      if (popup.boxObject.width != width) {
-        popup.moveTo(screen.availLeft + (screen.availWidth - popup.boxObject.width) / 2,
-          screen.availTop + (screen.availHeight - popup.boxObject.height) / 2);
+      const {height: newHeight, width: newWidth} = popup.getBoundingClientRect();
+      if (newWidth != width) {
+        popup.moveTo(screen.availLeft + (screen.availWidth - newWidth) / 2,
+          screen.availTop + (screen.availHeight - newHeight) / 2);
       }
     }
 

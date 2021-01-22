@@ -727,8 +727,8 @@ var TMP_tabDNDObserver = {
           return;
         }
       } else {// bottom
-        var tb = gNavToolbox.boxObject;
-        var toolboxEndScreenY = tb.screenY + tb.height;
+        const {height} = gNavToolbox.getBoundingClientRect();
+        var toolboxEndScreenY = gNavToolbox.screenY + height;
         var startScreenY = bo.screenY - 0.5 * rowHeight;
         if ((eY > startScreenY && eY < endScreenY) || eY < toolboxEndScreenY) {
           aEvent.stopPropagation();
@@ -854,7 +854,8 @@ var TMP_tabDNDObserver = {
       for (let i = 0; i < numTabs; i++) {
         let tab = tabs[i];
         let thisRow = getTabRowNumber(tab, topY);
-        if (mY >= tab.boxObject.screenY + tab.boxObject.height) {
+        const {height} = tab.getBoundingClientRect();
+        if (mY >= tab.screenY + height) {
           while (i < numTabs - 1 && getTabRowNumber(tabs[i + 1], topY) == thisRow)
             i++;
         } else if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr)) {
@@ -871,7 +872,7 @@ var TMP_tabDNDObserver = {
     var mX = event.screenX;
     var left_right;
     var tab = gBrowser.tabs[newIndex];
-    var tabBo = tab.boxObject;
+    const {width} = tab.getBoundingClientRect();
     var ltr = Tabmix.ltr;
     var _left = ltr ? 0 : 1;
     var _right = ltr ? 1 : 0;
@@ -879,11 +880,11 @@ var TMP_tabDNDObserver = {
     var isCtrlKey = ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey);
     var lockedTab = tab.getAttribute("locked") && !gBrowser.isBlankNotBusyTab(tab);
     if ((dragType == this.DRAG_LINK && lockedTab) || (dragType == this.DRAG_LINK && !lockedTab && !isCtrlKey)) {
-      left_right = (mX < tabBo.screenX + tabBo.width / 4) ? _left : _right;
-      if (left_right == _right && mX < tabBo.screenX + tabBo.width * 3 / 4)
+      left_right = (mX < tab.screenX + width / 4) ? _left : _right;
+      if (left_right == _right && mX < tab.screenX + width * 3 / 4)
         left_right = -1;
     } else {
-      left_right = (mX < tabBo.screenX + tabBo.width / 2) ? _left : _right;
+      left_right = (mX < tab.screenX + width / 2) ? _left : _right;
       if (!isCtrlKey && dragType == this.DRAG_TAB_IN_SAME_WINDOW) {
         if (newIndex == oldIndex - 1)
           left_right = ltr ? _left : _right;

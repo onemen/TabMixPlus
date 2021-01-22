@@ -831,7 +831,7 @@ var TabmixAllTabs = {
 
     for (var i = 0; i < this.childNodes.length; i++) {
       let curTab = this.childNodes[i].tab;
-      if (curTab && curTab.boxObject) {
+      if (curTab) {
         if (Tabmix.tabsUtils.isElementVisible(curTab))
           this.childNodes[i].setAttribute("tabIsVisible", "true");
         else
@@ -930,8 +930,9 @@ var TabmixAllTabs = {
     // for firefox 22+ when layout.css.devPixelsPerPx > 1
     // and user middle-click to close last visible tab
     if (popup.id == "btn_tabslist_menu" && Tabmix.visibleTabs.tabs.length == 1) {
-      popup.setAttribute("minheight", popup.boxObject.height);
-      popup.setAttribute("minwidth", popup.boxObject.width);
+      const {height, width} = popup.getBoundingClientRect();
+      popup.setAttribute("minheight", height);
+      popup.setAttribute("minwidth", width);
     }
 
     gBrowser.tabContainer.arrowScrollbox.addEventListener("scroll", this);

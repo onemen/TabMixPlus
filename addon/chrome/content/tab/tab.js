@@ -337,18 +337,19 @@ var TabmixTabbar = {
     tabstrip.style.setProperty("max-height", newHeight + "px", "important");
     tabstrip.style.setProperty("height", newHeight + "px", "important");
     let tabsBottom = tabBar.getElementsByClassName("tabs-bottom")[0];
-    let tabsBottomHeight = tabsBottom && tabBar.getAttribute("classic") != "v3Linux" ? tabsBottom.boxObject.height : 0;
+    let tabsBottomHeight = tabsBottom && tabBar.getAttribute("classic") != "v3Linux" ?
+      tabsBottom.getBoundingClientRect().height : 0;
     let newTabbarHeight = newHeight + tabsBottomHeight;
     let tabsToolbar = document.getElementById("TabsToolbar");
     if (TabmixSvc.isMac && !Tabmix.isVersion(280)) {
       tabsToolbar.style.setProperty("height", newTabbarHeight + "px", "important");
     }
     // override fixed height set by theme to #tabbrowser-tabs
-    if (tabBar.boxObject.height < newTabbarHeight || tabBar.style.getPropertyValue("height")) {
+    if (tabBar.getBoundingClientRect().height < newTabbarHeight || tabBar.style.getPropertyValue("height")) {
       tabBar.style.setProperty("max-height", newTabbarHeight + "px", "important");
       tabBar.style.setProperty("height", newTabbarHeight + "px", "important");
     }
-    if (tabsToolbar.boxObject.height < newTabbarHeight || tabsToolbar.style.getPropertyValue("height")) {
+    if (tabsToolbar.getBoundingClientRect().height < newTabbarHeight || tabsToolbar.style.getPropertyValue("height")) {
       tabsToolbar.style.setProperty("max-height", newTabbarHeight + "px", "important");
       tabsToolbar.style.setProperty("height", newTabbarHeight + "px", "important");
     }
@@ -491,6 +492,7 @@ var TabmixTabbar = {
   },
 
   getRowHeight: function TMP_getRowHeight(tabsPosition) {
+    const getTabHeight = tab => tab.getBoundingClientRect().height;
     if (this._rowHeight && this._rowHeight[tabsPosition])
       return this._rowHeight[tabsPosition];
 
@@ -501,26 +503,29 @@ var TabmixTabbar = {
     var topY = Tabmix.tabsUtils.topTabY;
     var lastTabRow = Tabmix.tabsUtils.lastTabRowNumber;
     if (lastTabRow == 1) { // one row
-      if (firstTab.getAttribute("selected") == "true")
-        return lastTab.boxObject.height;
+      if (firstTab.getAttribute("selected") == "true") {
+        return getTabHeight(lastTab);
+      }
 
-      return firstTab.boxObject.height;
+      return getTabHeight(firstTab);
     } else if (lastTabRow == 2) { // multi-row
       let newRowHeight;
       if (lastTab.getAttribute("selected") == "true") {
         // check if previous to last tab in the 1st row
         // this happen when the selected tab is the first tab in the 2nd row
         var prev = Tabmix.visibleTabs.previous(lastTab);
-        if (prev && Tabmix.tabsUtils.getTabRowNumber(prev, topY) == 1)
-          return lastTab.boxObject.height;
+        if (prev && Tabmix.tabsUtils.getTabRowNumber(prev, topY) == 1) {
+          return getTabHeight(lastTab);
+        }
 
         newRowHeight = prev.baseY - firstTab.baseY;
       } else if (firstTab.getAttribute("selected") == "true") {
         // check if 2nd visible tab is in the 2nd row
         // (not likely that user set tab width to more then half screen width)
         var next = Tabmix.visibleTabs.next(firstTab);
-        if (next && Tabmix.tabsUtils.getTabRowNumber(next, topY) == 2)
-          return lastTab.boxObject.height;
+        if (next && Tabmix.tabsUtils.getTabRowNumber(next, topY) == 2) {
+          return getTabHeight(lastTab);
+        }
 
         newRowHeight = lastTab.baseY - next.baseY;
       } else {
@@ -540,16 +545,18 @@ var TabmixTabbar = {
       i++;
 
     if (!tabs[i]) {// only one row
-      if (tabs[j])
-        return tabs[j].boxObject.height;
+      if (tabs[j]) {
+        return getTabHeight(tabs[j]);
+      }
 
-      return tabs[0].boxObject.height;
+      return getTabHeight(tabs[0]);
     }
 
     if (tabs[i].getAttribute("selected") == "true")
       i++;
-    if (!tabs[i])
-      return tabs[i - 1].boxObject.height;
+    if (!tabs[i]) {
+      return getTabHeight(tabs[i - 1]);
+    }
 
     this._rowHeight[tabsPosition] = tabs[i].baseY - tabs[j].baseY;
     return this._rowHeight[tabsPosition];
@@ -940,8 +947,9 @@ Tabmix.tabsUtils = {
       if (sameRow) {
         let tabstripEnd = this.tabBar.arrowScrollbox.scrollbox.screenX +
             this.tabBar.arrowScrollbox.scrollbox.width;
-        let buttonEnd = Tabmix.tabsNewtabButton.boxObject.screenX +
-            Tabmix.tabsNewtabButton.boxObject.width;
+
+        const {width} = Tabmix.tabsNewtabButton.getBoundingClientRect();
+        let buttonEnd = Tabmix.tabsNewtabButton.screenX + width;
         this.disAllowNewtabbutton = buttonEnd > tabstripEnd;
       } else {
         this.disAllowNewtabbutton = true;
@@ -961,15 +969,16 @@ Tabmix.tabsUtils = {
       return;
     }
 
+    const getWidth = item => item.getBoundingClientRect().width;
+
     // buttons that are not on TabsToolbar or not visible are null
     let newTabButtonWidth = function(aOnSide) {
       let width = 0, privateTabButton = TabmixTabbar.newPrivateTabButton();
       if (privateTabButton) {
-        width += aOnSide ? privateTabButton.boxObject.width :
-          Tabmix.afterTabsButtonsWidth[1];
+        width += aOnSide ? getWidth(privateTabButton) : Tabmix.afterTabsButtonsWidth[1];
       }
       if (Tabmix.sideNewTabButton) {
-        width += aOnSide ? Tabmix.sideNewTabButton.boxObject.width :
+        width += aOnSide ? getWidth(Tabmix.sideNewTabButton) :
           Tabmix.afterTabsButtonsWidth[0];
       }
       return width;
@@ -977,13 +986,13 @@ Tabmix.tabsUtils = {
     let tsbo = this.tabBar.arrowScrollbox.scrollbox;
     let tsboEnd = tsbo.screenX + tsbo.width + newTabButtonWidth(true);
     if (TabmixTabbar.inSameRow(lastTab, previousTab)) {
-      let buttonEnd = lastTab.boxObject.screenX + lastTab.boxObject.width +
+      let buttonEnd = lastTab.screenX + getWidth(lastTab) +
           newTabButtonWidth();
       this.disAllowNewtabbutton = buttonEnd > tsboEnd;
       return;
     }
-    let lastTabEnd = previousTab.boxObject.screenX +
-        previousTab.boxObject.width + lastTab.boxObject.width;
+    let lastTabEnd = previousTab.screenX +
+    getWidth(previousTab) + getWidth(lastTab);
     // both last tab and new tab button are in the next row
     if (lastTabEnd > tsboEnd)
       this.disAllowNewtabbutton = false;
@@ -1055,8 +1064,7 @@ Tabmix.tabsUtils = {
   },
 
   getTabRowNumber(aTab, aTop) {
-    var {top, height} = aTab ? aTab.getBoundingClientRect() : {};
-    height = aTab ? aTab.boxObject.height : 0;
+    let {top, height = 0} = aTab ? aTab.getBoundingClientRect() : {};
     if (!height) // don't panic
       return 1;
     // some theme add marginTop/marginBottom to tabs

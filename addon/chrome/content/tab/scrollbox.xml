@@ -460,20 +460,20 @@
 
           // still in one row
           var tabs = document.getBindingParent(this);
-          var height = tabs.selectedItem.boxObject.height;
+          const {height} = tabs.selectedItem.getBoundingClientRect();
           if (height)
             return height;
 
           // if selectedItem don't have height find other tab that does
           for (let i = 0; i < tabs.childNodes.length; i++) {
             let tab = tabs.childNodes[i];
-            let tabHeight = tab.boxObject.height;
+            let tabHeight = tab.getBoundingClientRect().height;
             if (tabHeight) {
               return tabHeight;
             }
           }
 
-          return this._scrollbox.boxObject.height;
+          return this._scrollbox.getBoundingClientRect().height;
         ]]></getter>
       </property>
 

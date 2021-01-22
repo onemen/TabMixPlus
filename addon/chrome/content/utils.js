@@ -234,7 +234,7 @@ var Tabmix = {
   },
 
   itemEnd: function TMP_utils_itemEnd(item, end) {
-    return item.boxObject.screenX + (end ? item.getBoundingClientRect().width : 0);
+    return item.screenX + (end ? item.getBoundingClientRect().width : 0);
   },
 
   show(aMethod, aDelay, aWindow) {

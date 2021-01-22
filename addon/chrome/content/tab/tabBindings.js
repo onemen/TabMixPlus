@@ -182,7 +182,8 @@
       },
       'baseY': {
         get() {
-          return this.boxObject.y + this.boxObject.height;
+          const {height, y} = this.getBoundingClientRect();
+          return height + y;
         }
       }
     });

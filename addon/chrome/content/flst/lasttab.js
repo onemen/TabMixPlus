@@ -29,9 +29,9 @@ var TMP_LastTab = {
     TabmixAllTabs.updateMenuItemActive(null, item);
 
     // show the list at the center of the screen
-    let box = tablist.boxObject;
-    let left = () => screen.availLeft + (screen.availWidth - box.width) / 2;
-    let top = () => screen.availTop + (screen.availHeight - box.height) / 2;
+    const {height, width} = tablist.getBoundingClientRect();
+    let left = () => screen.availLeft + (screen.availWidth - width) / 2;
+    let top = () => screen.availTop + (screen.availHeight - height) / 2;
     tablist.style.visibility = "hidden";
     tablist.openPopupAtScreen(left(), top(), true);
     tablist.moveTo(left(), top());
