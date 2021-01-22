@@ -1940,12 +1940,15 @@ Tabmix.tablib = {
 
       // we never get to this function by restart
       // if we are still here we know that we are the last window
+      // before Firefox 63 the return value was based on "browser.showQuitWarning"
       // if "browser.showQuitWarning" is true firefox show "Save & Quit"
       // when we quit or close last browser window.
       // if "browser.showQuitWarning" is false and we close last window firefox design
       // to show warnAboutClosingTabs dialog but we block it in order to call warnAboutClosingTabs
       // from here and catch display time here.
-      return getSavedPref("browser.showQuitWarning").value;
+
+      // from Firefox 63 always return true
+      return true;
     }
 
     // we always show our prompt on Mac

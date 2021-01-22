@@ -609,7 +609,8 @@ var TMP_eventListener = {
     document.getElementById("tabmix-menu").hidden = !Tabmix.prefs.getBoolPref("optionsToolMenu");
 
     gTMPprefObserver.addDynamicRules();
-    TabmixSessionManager.updateSettings();
+    // ##### disable Session Manager #####
+    // TabmixSessionManager.updateSettings();
     // turn both broadcasters off, we will set the proper value later
     Tabmix.setItem("tmp_undocloseButton", "disabled", true);
     Tabmix.setItem("tmp_closedwindows", "disabled", true);

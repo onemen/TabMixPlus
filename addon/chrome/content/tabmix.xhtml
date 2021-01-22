@@ -49,7 +49,7 @@
    <menupopup id="menu_ToolsPopup">
       <menuitem id="tabmix-menu" label="&page.header.title;…" insertbefore="prefSep" tmp_iconic="menuitem-iconic tabmix-menu-icon"
          oncommand="Tabmix.openOptionsDialog();"/>
-      <menu id="tm-sessionmanager" label="&session.Tools;" insertbefore="prefSep" sessionmanager-menu="true" tmp_iconic="menu-iconic sessionmanager-icon">
+      <menu hidden="true" id="tm-sessionmanager" label="&session.Tools;" insertbefore="prefSep" sessionmanager-menu="true" tmp_iconic="menu-iconic sessionmanager-icon">
          <menupopup id="tm-sessionmanager_menu"
                   context="tm_sessionmanagerContextMenu"
                   onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows');"
@@ -174,7 +174,7 @@
               onpopupshowing="return TMP_ClosedTabs.populateUndoSubmenu(this);"
               onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
       </toolbarbutton>
-
+      <!--
       <toolbarbutton id="btn_sessionmanager" type="menu" sessionmanager-menu="true"
                               class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
               observes="tmp_sessionmanagerButton"
@@ -225,7 +225,7 @@
             <menuseparator id="btn_sessionmanager-endSeparator"/>
          </menupopup>
       </toolbarbutton>
-
+      -->
       <toolbarbutton id="btn_tabslist" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
                onmousedown="TabmixAllTabs.checkForCtrlClick(event);"
                onclick="if (event.target == this) if (event.button == 1) gBrowser.closeAllTabs();"
@@ -323,7 +323,7 @@
                   oncommand="TabmixSessionManager.restoreWindow('delete', this.parentNode.triggerNode.value);"/>
       </menupopup>
       <!-- context menu for session manager menupopup -->
-      <menupopup id="tm_sessionmanagerContextMenu"
+      <menupopup hidden="true" id="tm_sessionmanagerContextMenu"
                   onpopupshowing="return TabmixSessionManager.updateSessionMenu(this);"
                   onpopuphidden="Tabmix.hidePopup(this);">
         <menuitem id="tm-sm-OpenInCurrentWindow" label="&sm.context.overwrite;" accesskey="&sm.context.overwrite.key;"

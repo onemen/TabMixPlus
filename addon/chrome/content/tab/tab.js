@@ -1530,6 +1530,8 @@ gTMPprefObserver = {
         TMP_ClosedTabs.setButtonDisableState(state);
         break;
       }
+      /*
+      // ##### disable Session Manager #####
       case "browser.warnOnQuit":
       case "browser.sessionstore.resume_from_crash":
         if (!Services.prefs.getBoolPref(prefName))

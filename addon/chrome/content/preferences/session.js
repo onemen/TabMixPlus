@@ -37,6 +37,8 @@ var gSessionPane = {
   },
 
   setSessionsOptions(item) {
+    // ##### disable Session Manager #####
+    item.checked = true;
     let instantApply = document.documentElement.instantApply;
     var useSessionManager = !item.checked;
     $("sessionsPanel").setAttribute("manager", useSessionManager ? "tabmix" : "firefox");

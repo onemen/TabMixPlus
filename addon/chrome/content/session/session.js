@@ -277,9 +277,12 @@ TabmixSessionManager = {
     return (this.prefBranch = Services.prefs.getBranch("extensions.tabmix.sessions."));
   },
 
+  // need to disable session manager and do a complete rewrite
+  disableSessionManager: true,
+
   // call by Tabmix.beforeDelayedStartup
   init: function SM_init() {
-    if (this._inited)
+    if (this.disableSessionManager || this._inited)
       return;
     this._inited = true;
 
@@ -570,6 +573,9 @@ TabmixSessionManager = {
 
   windowIsClosing: function SM_WindowIsClosing(aCanClose, aLastWindow,
                                                aSaveSession, aRemoveClosedTabs, aKeepClosedWindows) {
+    if (!this._inited) {
+      return;
+    }
     if (this.isPrivateWindow) {
       this.removeSession(this.gThisWin, this.gSessionPath[0]);
     }
@@ -599,8 +605,9 @@ TabmixSessionManager = {
   sessionShutDown: false,
   shutDown(aCanClose, aLastWindow, aSaveSession, aRemoveClosedTabs,
            aKeepClosedWindows, _flush) {
-    if (this.sessionShutDown)
+    if (this.sessionShutDown || !this._inited) {
       return;
+    }
     if (aLastWindow && aCanClose) {
       this.sessionShutDown = true;
       if (this.enableManager) {
@@ -644,7 +651,7 @@ TabmixSessionManager = {
   canQuitApplication: function SM_canQuitApplication(aBackup, aKeepClosedWindows) {
     // some extension can call goQuitApplication 2nd time (like ToolKit)
     // we make sure not to run this more the one time
-    if (this.windowClosed || this.isPrivateSession)
+    if (this.windowClosed || this.isPrivateSession || !this._inited)
       return true;
     /*
         1. save all windows
@@ -1881,6 +1888,7 @@ TabmixSessionManager = {
   },
 
   createMenuForDialog(popup, contents) {
+    if (this.disableSessionManager) return;
     if (contents == Tabmix.SHOW_CLOSED_WINDOW_LIST) {
       // create closed window list popup menu
       this.createMenu(popup, window.opener.this.gSessionPath[0], contents);

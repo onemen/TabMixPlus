@@ -107,6 +107,11 @@ var TMP_SessionStore = {
    * @returns       Nothing.
    */
   setService: function TMP_ss_setSessionService(msgNo, start) {
+    // ##### disable Session Manager #####
+    Services.prefs.lockPref("extensions.tabmix.sessions.manager");
+    Services.prefs.lockPref("extensions.tabmix.sessions.crashRecovery");
+    TabmixSvc.sm.settingPreference = true;
+
     if (TabmixSvc.sm.settingPreference || Tabmix.prefs.prefHasUserValue("setDefault"))
       return;
     /*
