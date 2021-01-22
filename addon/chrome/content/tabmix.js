@@ -86,7 +86,7 @@ Tabmix.sessionInitialized = function() {
     }
   }
 
-  var tab = gBrowser.tabContainer.firstChild;
+  const tab = gBrowser.tabContainer.allTabs[0];
   if (!tab.selected) {
     tab.removeAttribute("visited");
     tab.removeAttribute("tabmix_selectedID");
@@ -983,7 +983,7 @@ var TMP_eventListener = {
     }
 
     // workaround when we remove last visible tab
-    if (tabBar.firstChild.pinned && TabmixTabbar.isMultiRow && Tabmix.tabsUtils.overflow &&
+    if (tabBar.allTabs[0].pinned && TabmixTabbar.isMultiRow && Tabmix.tabsUtils.overflow &&
         aTab._tPos >= Tabmix.visibleTabs.last._tPos) {
       const instantScroll = Tabmix.isVersion(570);
       tabBar.arrowScrollbox.ensureElementIsVisible(gBrowser.selectedTab, instantScroll);

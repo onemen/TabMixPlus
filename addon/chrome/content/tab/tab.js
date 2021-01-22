@@ -575,8 +575,9 @@ var TabmixTabbar = {
     var tabBar = gBrowser.tabContainer;
     // call our tabstrip function only when we are in multi-row and
     // in overflow with pinned tabs
-    if (this.isMultiRow && Tabmix.tabsUtils.overflow && tabBar.firstChild.pinned)
+    if (this.isMultiRow && Tabmix.tabsUtils.overflow && tabBar.allTabs[0].pinned) {
       tabBar.arrowScrollbox.setFirstTabInRow();
+    }
   },
 
   removeShowButtonAttr() {
@@ -660,7 +661,7 @@ Tabmix.tabsUtils = {
     }
     this.initialized = true;
 
-    let tab = this.tabBar.firstChild;
+    const tab = this.tabBar.allTabs[0];
 
     XPCOMUtils.defineLazyGetter(Tabmix, "rtl", () => {
       return window.getComputedStyle(this.tabBar).direction == "rtl";
@@ -800,7 +801,7 @@ Tabmix.tabsUtils = {
     }
 
     // tabbrowser-tabs constructor reset first tab label to New Tab
-    gBrowser.setTabTitle(this.tabBar.firstChild);
+    gBrowser.setTabTitle(this.tabBar.allTabs[0]);
     let position = Tabmix.prefs.getIntPref("newTabButton.position");
     if (position !== 0)
       gTMPprefObserver.changeNewTabButtonSide(position);
