@@ -29,7 +29,7 @@ XPCOMUtils.defineLazyGetter(this, "isMac", () => {
   return TabmixSvc.isMac && !TabmixSvc.isPaleMoon;
 });
 
-const NAMESPACE = '@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");\n';
+//const NAMESPACE = '@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");\n'; //set namespace now preventing style been apply to elements which are nolonger of xul. pending to remove
 const STYLENAMES = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
 const EXTRAPREFS = ["squaredTabsStyle"];
 
@@ -328,7 +328,7 @@ this.DynamicRules = {
     if (!style)
       return;
 
-    let cssText = NAMESPACE;
+    let cssText = '';
     for (let rule of Object.keys(style))
       cssText += "\n" + style[rule];
     let styleSheet = Services.io.newURI(

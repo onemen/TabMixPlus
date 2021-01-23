@@ -154,9 +154,6 @@ toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > 
   -moz-box-orient: horizontal;
 }
 
-toolbar[mode="full"] .tabmix-button[type="menu"] {
-  -moz-binding: url("chrome://global/content/bindings/toolbarbutton.xml#menu-vertical");
-}
 
 /* for hashcoulouredtabs */
 #content[hashedtabs] .tabbrowser-tab:not([busy]) .tab-icon-image:not([src]) {
