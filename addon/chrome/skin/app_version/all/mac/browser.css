@@ -36,7 +36,7 @@
   }
 }
 
-#TabsToolbar[tabbaronbottom] > #tabbrowser-tabs > .tabbrowser-tab[selected="true"] {
+#TabsToolbar[tabbaronbottom] > #tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab[selected="true"] {
   position: static !important;
 }
 
@@ -51,13 +51,13 @@
 }
 
 /* for mac - look in pinstripe/browser/browser.css */
-#tabbrowser-tabs > .tabbrowser-tab > * > .tab-progress-container > .tab-progress:not([selected="true"]),
-#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-icon-image:not([selected="true"]),
-#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-protect-icon:not([selected="true"]),
-#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-lock-icon:not([selected="true"]),
-#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-reload-icon:not([selected="true"]),
-#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-label-container > .tab-label:not([selected="true"]):-moz-lwtheme,
-#tabbrowser-tabs > .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]):-moz-lwtheme {
+#tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab > * > .tab-progress-container > .tab-progress:not([selected="true"]),
+#tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-icon-image:not([selected="true"]),
+#tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-protect-icon:not([selected="true"]),
+#tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-lock-icon:not([selected="true"]),
+#tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-reload-icon:not([selected="true"]),
+#tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not(:hover) > * > * > .tab-label-container > .tab-label:not([selected="true"]):-moz-lwtheme,
+#tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]):-moz-lwtheme {
   opacity: .8;
 }
 
