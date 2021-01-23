@@ -30,46 +30,6 @@
             buttonlabelextra2="&settings.label;"
             minwidth="527"
             persist="screenX screenY">
-            <script type="text/javascript">
-            <![CDATA[
-              // avoid opening prefs in tab, workaround to bug 1414406
-              var {
-                classes: Cc,
-                interfaces: Ci,
-                utils: Cu
-              } = Components;
-              var chromewin = window.docShell.rootTreeItem.domWindow;
-              if (chromewin.location.href !== 'chrome://tabmixplus/content/preferences/preferences.xhtml') {
-                var gBrowser = chromewin.gBrowser;
-                let kcTab = gBrowser.selectedTab;
-                let previousTab;
-                let lastAccessed  = 0;
-                for (let tab of gBrowser.tabs) {
-                  if (!tab._notselectedsinceload && !tab.getAttribute('pending') && tab._lastAccessed > lastAccessed && tab != kcTab) {
-                    lastAccessed = tab._lastAccessed;
-                    previousTab = tab;
-                  }
-                }
-                gBrowser.selectedTab = previousTab;
-
-                chromewin.setTimeout(() => {
-                  //chromewin.openDialog('chrome://tabmixplus/content/preferences/preferences.xhtml', 'tabmixplus_prefs', 'chrome,centerscreen,toolbar');
-                  gBrowser.ownerGlobal.Tabmix.openOptionsDialog(-1);
-                }, 0);
-
-                gBrowser.removeTab(kcTab);
-              } else {
-                setTimeout(function () {
-                  var navwin = Cc['@mozilla.org/appshell/window-mediator;1']
-                                   .getService(Ci.nsIWindowMediator).getMostRecentWindow('navigator:browser');
-                  var {SessionStoreInternal} = Cu.import('resource:///modules/sessionstore/SessionStore.jsm', navwin);
-                  var data = SessionStoreInternal._windows[navwin.__SSi];
-                  if (data._closedTabs && data._closedTabs.length && data._closedTabs[0].state.entries[0].url === 'chrome://tabmixplus/content/preferences/preferences.xhtml')
-                    data._closedTabs.shift();
-                }, 0);
-              }
-            ]]>
-            </script>
 
   <!-- scripts -->
   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/prefs-ce.js"/>

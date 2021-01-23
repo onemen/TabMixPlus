@@ -622,3 +622,38 @@ XPCOMUtils.defineLazyModuleGetter(this, "AsyncUtils",
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
 
 gPrefWindow.onContentLoaded();
+
+// avoid opening prefs in tab, workaround to bug 1414406
+(function x() {
+  /* eslint no-var: 2, prefer-const: 2 */
+  const chromewin = window.docShell.rootTreeItem.domWindow;
+  if (chromewin.location.href !== 'chrome://tabmixplus/content/preferences/preferences.xhtml') {
+    const gBrowser = chromewin.gBrowser;
+    const kcTab = gBrowser.selectedTab;
+    let previousTab;
+    let lastAccessed = 0;
+    for (const tab of gBrowser.tabs) {
+      if (!tab._notselectedsinceload && !tab.getAttribute('pending') && tab._lastAccessed > lastAccessed && tab != kcTab) {
+        lastAccessed = tab._lastAccessed;
+        previousTab = tab;
+      }
+    }
+    gBrowser.selectedTab = previousTab;
+
+    chromewin.setTimeout(() => {
+      gBrowser.ownerGlobal.Tabmix.openOptionsDialog(-1);
+    }, 0);
+
+    gBrowser.removeTab(kcTab);
+  } else {
+    setTimeout(() => {
+      const navwin = Cc['@mozilla.org/appshell/window-mediator;1']
+          .getService(Ci.nsIWindowMediator).getMostRecentWindow('navigator:browser');
+      const {SessionStoreInternal} = Cu.import('resource:///modules/sessionstore/SessionStore.jsm', navwin);
+      const data = SessionStoreInternal._windows[navwin.__SSi];
+      if (data._closedTabs && data._closedTabs.length && data._closedTabs[0].state.entries[0].url === 'chrome://tabmixplus/content/preferences/preferences.xhtml')
+        data._closedTabs.shift();
+    }, 0);
+  }
+  /* eslint no-var: 0, prefer-const: 0 */
+}());

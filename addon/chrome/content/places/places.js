@@ -405,6 +405,9 @@ var TMP_Places = {
   },
 
   asyncSetTabTitle(tab, url) {
+    if (!tab) {
+      return false;
+    }
     if (!url) {
       url = tab.linkedBrowser.currentURI.spec;
     }
