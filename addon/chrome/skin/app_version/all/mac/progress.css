@@ -21,7 +21,7 @@
 }
 
 #tabbrowser-tabs[tabmix_australis="true"]:not([treestyletab-mode="vertical"])
-    > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
+    > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
   margin: 4px 7px 0 7px;
 }
 

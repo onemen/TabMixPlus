@@ -1,0 +1,63 @@
+/**
+    Firefox version 78+
+    Bug 1066531 replaced selected attribute with visuallyselected
+
+    :::: use visuallyselected instead of selected ::::
+
+    Windows platform
+
+**/
+
+#main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
+    #tabbrowser-tabs[tabmix_unloadedStyle~="aus"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"] > .tab-stack > .tab-background > .tab-background-middle,
+#main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
+    #tabbrowser-tabs[tabmix_unreadStyle~="aus"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"] > .tab-stack > .tab-background > .tab-background-middle,
+#main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
+    #tabbrowser-tabs[tabmix_otherStyle~="aus"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected="true"]):not([tabmix_tabState]) > .tab-stack > .tab-background > .tab-background-middle {
+  clip-path: none !important;
+}
+
+/* Override Windows 10 rules */
+@media not all and (-moz-os-version: windows-xp) {
+  @media not all and (-moz-os-version: windows-vista) {
+    @media not all and (-moz-os-version: windows-win7) {
+      @media not all and (-moz-os-version: windows-win8) {
+        #tabbrowser-tabs[tabmix_currentStyle~="bg"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[visuallyselected="true"] > .tab-stack > .tab-background > .tab-background-middle {
+          background-size: auto 100%, auto 100%, auto 100%;
+          background-clip: content-box;
+        }
+      }
+    }
+  }
+}
+
+/* for windows 7 and up */
+@media not all and (-moz-os-version: windows-xp) {
+  @media not all and (-moz-os-version: windows-vista) {
+    #tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
+      vertical-align: bottom;
+    }
+
+    #tabmix-bottom-toolbox {
+      -moz-appearance: none;
+      border-top: none;
+      background-color: transparent;
+    }
+
+    #TabsToolbar[tabbaronbottom]:not(:-moz-lwtheme) {
+      -moz-appearance: none;
+    }
+  }
+}
+
+#TabsToolbar[tabbaronbottom]::before,
+#TabsToolbar[tabbaronbottom]::after {
+  box-shadow: none !important;
+}
+
+/* for Firefox 57 style */
+#tabbrowser-tabs:not([tabmix_australis="true"]):not([treestyletab-mode="vertical"])
+    > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
+  margin: 2px;
+}
+

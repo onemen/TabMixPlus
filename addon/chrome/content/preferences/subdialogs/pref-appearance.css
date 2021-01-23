@@ -1,11 +1,3 @@
-checkbox_tmp {
-  -moz-binding: url("chrome://tabmixplus/content/preferences/bindings.xml#checkbox_tmp") !important;
-}
-
-#stylespanels > tabpanel {
-  -moz-binding: url(chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xml#tabstylepanel);
-}
-
 .tabStyles_underline span {
    text-decoration: underline;
 }
@@ -26,10 +18,6 @@ checkbox[anonid="useThis"][disabled] .checkbox-check {
 
 checkbox[anonid="useThis"][disabled] {
   color: black;
-}
-
-colorbox {
-  -moz-binding: url(chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xml#colorbox);
 }
 
 .rgbcontrol {
