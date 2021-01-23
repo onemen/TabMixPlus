@@ -30,13 +30,6 @@ var gAppearancePane = {
       comment.value = comment.getAttribute("tst");
     }
 
-    // browser.allTabs.previews
-    if (!TabmixSvc.isPaleMoon) {
-      gPrefWindow.removeChild("pref_allTabsPreviews");
-      gPrefWindow.removeChild("obs_hideAllTabsButton");
-      gPrefWindow.removeChild("allTabsPreviews");
-    }
-
     // rtl update position
     var direction = window.getComputedStyle($("appearance")).direction;
     if (direction == "rtl") {
@@ -139,7 +132,6 @@ var gAppearancePane = {
       gPrefWindow.setDisabled("obs_" + itemID, !aEnable || !enablePosition || null);
     }
     updateDisabledState("new-tab-button", "newTabButton", $("pref_newTabButton").value);
-    updateDisabledState("alltabs-button", "hideAllTabsButton", true);
 
     if (this._tabmixCustomizeToolbar) {
       delete this._tabmixCustomizeToolbar;

@@ -145,7 +145,7 @@
   vertical-align: bottom;
 }
 
-#TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"]) 
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"])
    #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"] {
   display: -moz-box;
   visibility: visible;
@@ -283,9 +283,14 @@ so display: none !important; does not hide the button */
   min-height: 1px;
 }
 
-/* Firefox 12+ hide alltabs-button when it is after the tabbar and tabs are not overflow */
-#tabbrowser-tabs ~ #alltabs-button:not([collapsed="true"]) {
- visibility: visible !important;
+/* we add #TabsToolbar to get higher specificity, in order to override Firefox rule */
+#TabsToolbar > #tabbrowser-tabs:not([overflow="true"], [hashiddentabs], [showalltabsbutton]) ~ #alltabs-button {
+  display: none;
+}
+#TabsToolbar > #tabbrowser-tabs:not([overflow="true"], [showalltabsbutton])[using-closing-tabs-spacer] ~ #alltabs-button {
+  /* temporary space to keep a tab's close button under the cursor */
+  display: -moz-box;
+  visibility: hidden;
 }
 
 /* for the case user drag background tab

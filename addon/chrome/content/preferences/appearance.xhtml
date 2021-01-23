@@ -27,9 +27,7 @@
                   name="extensions.tabmix.newTabButton.position"                                type="int"/>
       <preference id="pref_hideTabBarButton"  name="extensions.tabmix.hideTabBarButton"         type="bool"
                   inverted="true"/>
-      <preference id="pref_hideAllTabsButton" name="browser.tabs.tabmanager.enabled"            type="bool"
-                  inverted="true"/>
-      <preference id="pref_allTabsPreviews"  name="browser.allTabs.previews"                   type="bool"/>
+      <preference id="pref_showAllTabsButton" name="browser.tabs.tabmanager.enabled"            type="bool"/>
       <preference id="pref_tabBarSpace"       name="extensions.tabmix.tabBarSpace"              type="bool"/>
       <preference id="pref_hideTabbar"        name="extensions.tabmix.hideTabbar"               type="int"/>
       <preference id="pref_tabBarPosition"    name="extensions.tabmix.tabBarPosition"           type="int"/>
@@ -100,8 +98,7 @@
             <checkbox_tmp id="hideTabBarButton" label="&hideTabBarButton.label;" preference="pref_hideTabBarButton"/>
             <!-- all-tabs-button on tabbar -->
             <hbox align="center">
-              <checkbox_tmp id="hideAllTabsButton" label="&allTabsButton.label;" preference="pref_hideAllTabsButton"/>
-              <checkbox_tmp id="allTabsPreviews" label="&ctrltab.tabPreviews;" preference="pref_allTabsPreviews" observes="obs_hideAllTabsButton"/>
+              <checkbox_tmp id="showAllTabsButton" label="&allTabsButton.label;" preference="pref_showAllTabsButton"/>
             </hbox>
             <!-- Space on tabbar -->
             <checkbox_tmp id="tabBarSpace" label="&tabBarSpace.label;" preference="pref_tabBarSpace"
@@ -302,7 +299,6 @@
 
     <broadcasterset id="paneAppearance:Broadcaster">
       <broadcaster id="obs_newTabButton"/>
-      <broadcaster id="obs_hideAllTabsButton"/>
       <broadcaster id="obs_smoothScroll" inverseDependency="true"/>
       <broadcaster id="obs_unreadTab"/>
       <broadcaster id="obs_disableBackground" inverseDependency="true"/>
