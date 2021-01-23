@@ -1,5 +1,5 @@
 /**
-    Firefox version 39+
+    Firefox version 78+
     Bug 1066531 replaced selected attribute with visuallyselected
 
     :::: use visuallyselected instead of selected ::::
@@ -9,11 +9,11 @@
 **/
 
 #main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
-    #tabbrowser-tabs[tabmix_unloadedStyle~="aus"]  .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"] > .tab-stack > .tab-background > .tab-background-middle,
+    #tabbrowser-tabs[tabmix_unloadedStyle~="aus"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"] > .tab-stack > .tab-background > .tab-background-middle,
 #main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
-    #tabbrowser-tabs[tabmix_unreadStyle~="aus"]  .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"] > .tab-stack > .tab-background > .tab-background-middle,
+    #tabbrowser-tabs[tabmix_unreadStyle~="aus"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"] > .tab-stack > .tab-background > .tab-background-middle,
 #main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
-    #tabbrowser-tabs[tabmix_otherStyle~="aus"]  .tabbrowser-tab:not([visuallyselected="true"]):not([tabmix_tabState]) > .tab-stack > .tab-background > .tab-background-middle {
+    #tabbrowser-tabs[tabmix_otherStyle~="aus"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected="true"]):not([tabmix_tabState]) > .tab-stack > .tab-background > .tab-background-middle {
   clip-path: none !important;
 }
 
@@ -22,7 +22,7 @@
   @media not all and (-moz-os-version: windows-vista) {
     @media not all and (-moz-os-version: windows-win7) {
       @media not all and (-moz-os-version: windows-win8) {
-        #tabbrowser-tabs[tabmix_currentStyle~="bg"]  .tabbrowser-tab[visuallyselected="true"] > .tab-stack > .tab-background > .tab-background-middle {
+        #tabbrowser-tabs[tabmix_currentStyle~="bg"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[visuallyselected="true"] > .tab-stack > .tab-background > .tab-background-middle {
           background-size: auto 100%, auto 100%, auto 100%;
           background-clip: content-box;
         }
@@ -57,7 +57,7 @@
 
 /* for Firefox 57 style */
 #tabbrowser-tabs:not([tabmix_australis="true"]):not([treestyletab-mode="vertical"])
-     .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
+    > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
   margin: 2px;
 }
 
