@@ -7,6 +7,11 @@ const {interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/Services.jsm", this);
 Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
 
+Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+
+XPCOMUtils.defineLazyModuleGetter(this, "E10SUtils",
+  "resource://gre/modules/E10SUtils.jsm");
+
 var _setItem = function() {};
 
 this.AutoReload = {
@@ -280,6 +285,7 @@ this.AutoReload = {
     if (data.isPostData && !this.confirm(window, tab, !TabmixSvc.version(420)))
       return;
 
+    data.referrerInfo = E10SUtils.deserializeReferrerInfo(data.referrerInfo);
     doReloadTab(window, browser, data);
   }
 };
@@ -345,12 +351,9 @@ function doReloadTab(window, browser, data) {
     return;
   }
 
-  let windowUtils = window.QueryInterface(Ci.nsIInterfaceRequestor)
-      .getInterface(Ci.nsIDOMWindowUtils);
-
-  browser.messageManager.sendAsyncMessage("Browser:Reload", {
+  browser.sendMessageToActor("Browser:Reload", {
     flags: loadFlags,
-    handlingUserInput: windowUtils.isHandlingUserInput
+    handlingUserInput: window.windowUtils.isHandlingUserInput
   }, "BrowserTab");
 }
 

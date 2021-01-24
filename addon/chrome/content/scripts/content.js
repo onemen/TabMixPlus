@@ -125,16 +125,15 @@ var TabmixContentHandler = {
           scrollY: content.scrollY,
           postData: null
         };
-        let sh = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory
-            .QueryInterface(Ci.nsISHistoryInternal);
-        if (sh) {
-          let entry = sh.getEntryAtIndex(sh.index, false);
-          let postData = entry.postData;
+        const sessionHistoryEntry = docShell
+            .QueryInterface(Ci.nsIWebPageDescriptor)
+            .currentDescriptor.QueryInterface(Ci.nsISHEntry);
+        if (sessionHistoryEntry) {
+          let postData = sessionHistoryEntry.postData;
           if (postData) {
             postData = postData.clone();
             json.postData = NetUtil.readInputStreamToString(postData, postData.available());
-            let referrer = entry.referrerURI;
-            json.referrer = referrer ? referrer.spec : null;
+            json.referrerInfo = E10SUtils.serializeReferrerInfo(sessionHistoryEntry.referrerInfo);
           }
           json.isPostData = Boolean(json.postData);
         }
