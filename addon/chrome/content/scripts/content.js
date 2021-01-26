@@ -126,7 +126,7 @@ var TabmixContentHandler = {
           postData: null
         };
         let sh = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory
-            .QueryInterface(Ci.nsISHistoryInternal);
+            .legacySHistory;
         if (sh) {
           let entry = sh.getEntryAtIndex(sh.index, false);
           let postData = entry.postData;

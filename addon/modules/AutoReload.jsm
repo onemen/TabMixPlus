@@ -345,10 +345,9 @@ function doReloadTab(window, browser, data) {
     return;
   }
 
-  let windowUtils = window.QueryInterface(Ci.nsIInterfaceRequestor)
-      .getInterface(Ci.nsIDOMWindowUtils);
+  let windowUtils = window.windowUtils;
 
-  browser.messageManager.sendAsyncMessage("Browser:Reload", {
+  browser.sendMessageToActor("Browser:Reload", {
     flags: loadFlags,
     handlingUserInput: windowUtils.isHandlingUserInput
   }, "BrowserTab");
