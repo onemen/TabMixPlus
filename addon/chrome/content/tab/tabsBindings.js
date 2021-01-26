@@ -6,11 +6,6 @@
   Tabmix.initialization.init.initialized = false;
   Tabmix.initialization.run("onContentLoaded", gBrowser.tabContainer);
 
-  // temporary workaround until we fix multi-row feture
-  if (!gBrowser.tabContainer.arrowScrollbox._scrollbox) {
-    gBrowser.tabContainer.arrowScrollbox._scrollbox = {};
-  }
-
   Tabmix.setNewFunction(gBrowser.tabContainer, "_notifyBackgroundTab", function _notifyBackgroundTab(aTab) {
     if (aTab.pinned || aTab.hidden) {
       return;

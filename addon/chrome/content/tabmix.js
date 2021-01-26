@@ -106,7 +106,7 @@ Tabmix.sessionInitialized = function() {
 // we call gTMPprefObserver.miscellaneousRules to add some dynamic rules
 // from Tabmix.afterDelayedStartup
 Tabmix.getButtonsHeight = function(setDefault) {
-  if (gBrowser.tabContainer.orient == "horizontal") {
+  if (gBrowser.tabContainer.getAttribute("orient") == "horizontal") {
     const {toolbar, tabBar, collapsed, tabBarCollapsed, toolbarCollapsed} =
       Tabmix.tabsUtils.getCollapsedState;
     let stripIsHidden = TabmixTabbar.hideMode !== 0 && collapsed;
@@ -135,7 +135,7 @@ Tabmix.getButtonsHeight = function(setDefault) {
 };
 
 Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
-  if (gBrowser.tabContainer.orient == "horizontal") {
+  if (gBrowser.tabContainer.getAttribute("orient") == "horizontal") {
     const {toolbar, tabBar, collapsed, tabBarCollapsed, toolbarCollapsed} =
   Tabmix.tabsUtils.getCollapsedState;
     let stripIsHidden = TabmixTabbar.hideMode !== 0 && collapsed;
@@ -146,7 +146,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     // save tabsNewtabButton width
     let lwtheme = !this.isVersion(280) && document.getElementById("main-window").getAttribute("lwtheme");
     this.tabsNewtabButton =
-      tabBar.getElementsByAttribute("command", "cmd_newNavigatorTab");
+      tabBar.getElementsByAttribute("command", "cmd_newNavigatorTab")[0];
     this.tabsNewtabButton.setAttribute("force-display", true);
     let openNewTabRect = Tabmix.getBoundsWithoutFlushing(this.tabsNewtabButton);
     let style = window.getComputedStyle(this.tabsNewtabButton);
@@ -979,7 +979,7 @@ var TMP_eventListener = {
     // for ColorfulTabs 6.0+
     // ColorfulTabs traps TabSelect event after we do
     // we need to set standout class before we check for getTabRowNumber
-    // and mTabstrip.ensureElementIsVisible
+    // and arrowScrollbox.ensureElementIsVisible
     // this class change tab height (by changing the borders)
     if (typeof window.colorfulTabs == "object" && window.colorfulTabs.standout &&
         !tab.classList.contains("standout")) {
@@ -1057,7 +1057,7 @@ var TMP_eventListener = {
     }
     let tabBar = gBrowser.tabContainer;
     let tabStrip = tabBar.arrowScrollbox;
-    let orient = tabStrip.orient;
+    let orient = tabStrip.getAttribute("orient");
     TabmixTabbar.removeShowButtonAttr();
 
     let shouldMoveFocus = scrollTabs == 1;
@@ -1218,9 +1218,9 @@ var TMP_eventListener = {
   // some theme not using up to date Tabmix tab binding
   // we check here that all of our attribute exist
   setTabAttribute: function TMP_EL_setTabAttribute(aTab) {
-    let reloadIcon = aTab.getElementsByAttribute("class", "tab-reload-icon");
+    let reloadIcon = aTab.getElementsByAttribute("class", "tab-reload-icon")[0];
     if (!reloadIcon) {
-      let lockIcon = aTab.getElementsByAttribute("class", "tab-lock-icon");
+      let lockIcon = aTab.getElementsByAttribute("class", "tab-lock-icon")[0];
       if (lockIcon) {
         let XULNS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
         let image = document.createElementNS(XULNS, "image");

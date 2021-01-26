@@ -97,7 +97,6 @@ var TabmixTabbar = {
         // if we are in overflow in one line we will have more then one line
         // in multi-row. we try to prevent extra over/underflow events by setting
         // the height in front.
-        tabstrip.orient = "vertical";
         if (Tabmix.tabsUtils.updateVerticalTabStrip() == "scrollbar")
           Tabmix.tabsUtils.overflow = true;
       }
@@ -117,16 +116,6 @@ var TabmixTabbar = {
 
     this.widthFitTitle = Tabmix.prefs.getBoolPref("flexTabs") &&
                     (tabBar.mTabMaxWidth != tabBar.mTabMinWidth);
-    if (!Tabmix.extensions.verticalTabBar) {
-      if (start) {
-        // Don't change tabstrip orient on start before sessionStore ends.
-        // if we set orient to vertical before sessionStore finish
-        // sessionStore don't select the selected tab from last session.
-        setTimeout(() => Tabmix.tabsUtils.setTabStripOrient(), 0);
-      } else {
-        Tabmix.tabsUtils.setTabStripOrient();
-      }
-    }
     Tabmix.setItem(tabBar, "widthFitTitle", this.widthFitTitle || null);
 
     if (Tabmix.prefs.getIntPref("tabs.closeButtons") == 5 && this.widthFitTitle)
@@ -622,8 +611,7 @@ Tabmix.tabsUtils = {
   },
 
   getInnerbox() {
-    return this.tabBar.arrowScrollbox.scrollbox.getElementsByClassName("box-inherit scrollbox-innerbox"
-    )[0];
+    return document.getElementById("tabbrowser-arrowscrollbox").scrollbox;
   },
 
   get inDOMFullscreen() {
@@ -634,7 +622,7 @@ Tabmix.tabsUtils = {
     return !this.getCollapsedState.collapsed;
   },
 
-  getCollapsedState() {
+  get getCollapsedState() {
     const toolbar = document.getElementById("TabsToolbar");
     const tabBar = gBrowser.tabContainer;
     const toolbarCollapsed = toolbar.collapsed;
@@ -814,7 +802,6 @@ Tabmix.tabsUtils = {
     }
 
     TabmixTabbar.flowing = this.tabBar.getAttribute("flowing");
-    this.setTabStripOrient();
     Tabmix.navToolbox.setScrollButtons(true);
 
     // fix incompatibility with Personal Titlebar extension
@@ -904,28 +891,15 @@ Tabmix.tabsUtils = {
     return multibar;
   },
 
-  setTabStripOrient() {
-    // we can't set display:block and orient=vertical when widthFitTitle is false
-    // and we are in one row.
-    let vertical = TabmixTabbar.isMultiRow &&
-        (TabmixTabbar.widthFitTitle || this.tabBar.hasAttribute("multibar"));
-    let tabstrip = this.tabBar.arrowScrollbox;
-    Tabmix.setItem(tabstrip, "orient", vertical ? "vertical" : "horizontal");
-    if (Tabmix.isVersion(550)) {
-      // arrowscrollbox._startEndProps is field since Firefox 55 (Bug 1371604)
-      tabstrip._startEndProps = vertical ? ["top", "bottom"] : ["left", "right"];
-    }
-    tabstrip._isRTLScrollbox = !vertical && Tabmix.rtl;
-  },
-
   /**
    * check that we have enough room to show new tab button after the last tab
    * in the current row. we don't want the button to be on the next row when the
    * tab is on the current row
    */
   adjustNewtabButtonVisibility() {
-    if (!TabmixTabbar.isMultiRow && this.tabBar.arrowScrollbox.getAttribute('orient') == "vertical")
+    if (!TabmixTabbar.isMultiRow || this.tabBar.arrowScrollbox.getAttribute('orient') == "vertical") {
       return;
+    }
 
     if (!this.checkNewtabButtonVisibility) {
       this.showNewTabButtonOnSide(this.overflow, "right-side");
@@ -1018,9 +992,9 @@ Tabmix.tabsUtils = {
 
   set overflow(val) {
     // don't do anything if other extensions set orient to vertical
-    // when we aren't use it.
-    if (!TabmixTabbar.isMultiRow && this.tabBar.arrowScrollbox.getAttribute('orient') == "vertical")
+    if (this.tabBar.arrowScrollbox.getAttribute('orient') == "vertical") {
       return val;
+    }
 
     if (val != this.overflow) {
       let tabBar = this.tabBar;
@@ -1032,7 +1006,7 @@ Tabmix.tabsUtils = {
       this.showNewTabButtonOnSide(val, "right-side");
 
       if (typeof tabstrip.updateOverflow == "function") {
-        tabstrip.updateOverflow(val);
+      tabstrip.updateOverflow(val);
         // overflow/underflow handler from tabbrowser-arrowscrollbox binding
         if (val) {
           tabBar._positionPinnedTabs();
@@ -1104,10 +1078,10 @@ Tabmix.tabsUtils = {
     return this.getTabRowNumber(tabs[tabs.length - 2], this.topTabY) == 1;
   },
 
-  /**** gBrowser.tabContainer.mTabstrip helpers ****/
+  /**** gBrowser.tabContainer.arrowScrollbox helpers ****/
   /**
    * this function is here for the case restart-less extension override our
-   * mTabstrip binding when Tabmix's uses its own scroll buttons
+   * arrowScrollbox binding when Tabmix's uses its own scroll buttons
    */
   updateScrollButtons(useTabmixButtons) {
     let tabstrip = this.tabBar.arrowScrollbox;
@@ -1122,12 +1096,6 @@ Tabmix.tabsUtils = {
       tabstrip._scrollButtonUpLeft || // fall back to original
       tabstrip.shadowRoot.getElementById("scrollbutton-up");
     tabstrip._updateScrollButtonsDisabledState();
-
-    if (!Tabmix.isVersion(320, 270)) {
-      let overflow = this.overflow;
-      tabstrip._scrollButtonUp.collapsed = !overflow;
-      tabstrip._scrollButtonDown.collapsed = !overflow;
-    }
   },
 
   isElementVisible(element) {
@@ -2350,7 +2318,7 @@ gTMPprefObserver = {
     }
 
     let tabsToolbar = document.getElementById("TabsToolbar");
-    // when we here after many tabs closed fast mTabstrip height can larger
+    // when we here after many tabs closed fast arrowScrollbox height can larger
     // then one row.
     let newHeight = TabmixTabbar.visibleRows == 1 ? TabmixTabbar.singleRowHeight :
       gBrowser.tabContainer.arrowScrollbox.scrollClientRect.height;

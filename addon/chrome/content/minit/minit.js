@@ -34,7 +34,7 @@ var TMP_tabDNDObserver = {
     const tabsDragUtils = "piro.sakura.ne.jp" in window &&
       "tabsDragUtils" in window["piro.sakura.ne.jp"];
     Tabmix.handleAnimateTabMove = function(dragContext) {
-      if (gBrowser.tabContainer.orient != "horizontal") {
+      if (gBrowser.tabContainer.getAttribute("orient") != "horizontal") {
         return false;
       }
       return !dragContext || !dragContext.draggedTabs ||
@@ -123,7 +123,7 @@ var TMP_tabDNDObserver = {
         delete TMP_tabDNDObserver.draggedTab.__tabmixDragStart;
         TMP_tabDNDObserver.draggedTab = null;
       }
-      return this.orient == "horizontal" &&
+      return this.getAttribute("orient") == "horizontal" &&
         (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
         aEvent.altKey);
     };
@@ -134,7 +134,7 @@ var TMP_tabDNDObserver = {
           TMP_tabDNDObserver.getDragType(tab) == TMP_tabDNDObserver.DRAG_TAB_TO_NEW_WINDOW;
       }
 
-      return this.orient == "horizontal" &&
+      return this.getAttribute("orient") == "horizontal" &&
         (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
         checkTab(aEvent.dataTransfer));
     };
@@ -380,9 +380,9 @@ var TMP_tabDNDObserver = {
       if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_HIDDEN) // scroll with button
         targetAnonid = event.originalTarget.getAttribute("anonid");
       // scroll without button
-      else if (event.screenX <= tabStrip.scrollBoxObject.screenX)
+      else if (event.screenX <= tabStrip.scrollbox.screenX)
         targetAnonid = ltr ? "scrollbutton-up" : "scrollbutton-down";
-      else if (event.screenX >= (tabStrip.scrollBoxObject.screenX + tabStrip.scrollBoxObject.width))
+      else if (event.screenX >= (tabStrip.scrollbox.screenX + tabStrip.scrollbox.getBoundingClientRect().width))
         targetAnonid = ltr ? "scrollbutton-down" : "scrollbutton-up";
       switch (targetAnonid) {
         case "scrollbutton-up":

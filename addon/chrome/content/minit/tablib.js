@@ -520,7 +520,7 @@ Tabmix.tablib = {
     if (!Tabmix.extensions.verticalTabs) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._lockTabSizing")._replace(
         '{',
-        '{if (this.orient != "horizontal" || !Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
+        '{if (this.getAttribute("orient") != "horizontal" || !Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
       )._replace(
         /(var|let) isEndTab =|faviconize.o_lockTabSizing/,
         '  if (TabmixTabbar.widthFitTitle) {' +
@@ -1214,7 +1214,7 @@ Tabmix.tablib = {
           if (!tab.pinned)
             this.removeTab(tab, {animate: false});
         }, this);
-        // _handleTabSelect will call mTabstrip.ensureElementIsVisible
+        // _handleTabSelect will call arrowScrollbox.ensureElementIsVisible
       }
     };
 

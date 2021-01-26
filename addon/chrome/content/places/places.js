@@ -477,10 +477,10 @@ var TMP_Places = {
       if (!TabmixTabbar.isMultiRow) {
         let scrollPosition = tabstrip.scrollPosition;
         if (scrollPosition < 100) {
-          if (tabstrip.orient == "vertical") {
-            tabstrip._scrollbox.scrollTop = 0;
+          if (tabstrip.getAttribute("orient") == "vertical") {
+            tabstrip.scrollbox.scrollTop = 0;
           } else {
-            tabstrip._scrollbox.scrollLeft = 0;
+            tabstrip.scrollbox.scrollLeft = 0;
           }
         }
       }

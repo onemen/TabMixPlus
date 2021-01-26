@@ -29,7 +29,6 @@ XPCOMUtils.defineLazyGetter(this, "isMac", () => {
   return TabmixSvc.isMac && !TabmixSvc.isPaleMoon;
 });
 
-//const NAMESPACE = '@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");\n'; //set namespace now preventing style been apply to elements which are nolonger of xul. pending to remove
 const STYLENAMES = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
 const EXTRAPREFS = ["squaredTabsStyle"];
 
@@ -303,7 +302,7 @@ this.DynamicRules = {
       updateButtonHeight(Tabmix, gTMPprefObserver.dynamicRules);
 
       // update multi-row heights
-      gBrowser.tabContainer.mTabstrip._singleRowHeight = null;
+      gBrowser.tabContainer.arrowScrollbox._singleRowHeight = null;
       TabmixTabbar._heights = [];
       TabmixTabbar.visibleRows = 1;
       Tabmix.tabsUtils.updateVerticalTabStrip();

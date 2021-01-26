@@ -1112,7 +1112,7 @@ var TabmixAllTabs = {
     if (aTab.selected)
       gBrowser.ensureTabIsVisible(aTab);
     else
-      // if we select another tab _handleTabSelect will call mTabstrip.ensureElementIsVisible
+      // if we select another tab _handleTabSelect will call arrowScrollbox.ensureElementIsVisible
       gBrowser.selectedTab = aTab;
   },
 

@@ -3424,7 +3424,7 @@ TabmixSessionManager = {
       gBrowser._lastRelatedTab = null;
     }
 
-    // call mTabstrip.ensureElementIsVisible before we restore the tab
+    // call arrowScrollbox.ensureElementIsVisible before we restore the tab
     // we call from TMP_eventListener.onSSTabRestoring again
     gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
 
