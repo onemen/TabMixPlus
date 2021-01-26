@@ -497,21 +497,21 @@ Tabmix.multiRow = {
                 inherits="orient,disabled=scrolledtostart"
                 oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'left');"
                 anonid="scrollbutton-up-right"
-                onclick="if (!this.disabled) gBrowser.tabContainer.mTabstrip._distanceScroll(event);"
-                onmousedown="if (event.button === 0) if (!this.disabled) gBrowser.tabContainer.mTabstrip._startScroll(-1);"
-                onmouseup="if (event.button === 0) gBrowser.tabContainer.mTabstrip._stopScroll();"
-                onmouseover="if (!this.disabled) gBrowser.tabContainer.mTabstrip._continueScroll(-1);"
-                onmouseout="gBrowser.tabContainer.mTabstrip._pauseScroll();">
+                onclick="if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._distanceScroll(event);"
+                onmousedown="if (event.button === 0) if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._startScroll(-1);"
+                onmouseup="if (event.button === 0) gBrowser.tabContainer.arrowScrollbox._stopScroll();"
+                onmouseover="if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._continueScroll(-1);"
+                onmouseout="gBrowser.tabContainer.arrowScrollbox._pauseScroll();">
         </toolbarbutton>
         <toolbarbutton class="scrollbutton-down" id="scrollbutton-down" part="scrollbutton-down"
                 inherits="orient,disabled=scrolledtoend"
                 oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'right');"
                 anonid="scrollbutton-down-right"
-                onclick="if (!this.disabled) gBrowser.tabContainer.mTabstrip._distanceScroll(event);"
-                onmousedown="if (event.button === 0) if (!this.disabled) gBrowser.tabContainer.mTabstrip._startScroll(1);"
-                onmouseup="if (event.button === 0) gBrowser.tabContainer.mTabstrip._stopScroll();"
-                onmouseover="if (!this.disabled) gBrowser.tabContainer.mTabstrip._continueScroll(1);"
-                onmouseout="gBrowser.tabContainer.mTabstrip._pauseScroll();">
+                onclick="if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._distanceScroll(event);"
+                onmousedown="if (event.button === 0) if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._startScroll(1);"
+                onmouseup="if (event.button === 0) gBrowser.tabContainer.arrowScrollbox._stopScroll();"
+                onmouseover="if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._continueScroll(1);"
+                onmouseout="gBrowser.tabContainer.arrowScrollbox._pauseScroll();">
         </toolbarbutton>
         `;
       }
@@ -532,9 +532,7 @@ Tabmix.multiRow = {
         this.hasConnected = true;
 
         const _gBrowser = window.gBrowser || window._gBrowser;
-        // TODO - fix this and replace all mTabstrip
-        _gBrowser.tabContainer.mTabstrip = _gBrowser.tabContainer.arrowScrollbox;
-        const tabstrip = _gBrowser.tabContainer.mTabstrip;
+        const tabstrip = _gBrowser.tabContainer.arrowScrollbox;
         tabstrip._scrollButtonDownRight = this._scrollButtonDown;
         tabstrip._scrollButtonUpRight = this._scrollButtonUp;
         tabstrip._scrollButtonUp = tabstrip.shadowRoot.getElementById("scrollbutton-up");
@@ -554,7 +552,7 @@ Tabmix.multiRow = {
         else if (target === "scrollbutton-down-right")
           index = 1;
         if (index) {
-          const tabstrip = gBrowser.tabContainer.mTabstrip;
+          const tabstrip = gBrowser.tabContainer.arrowScrollbox;
           const distanceToRow = tabstrip._distanceToRow(0);
           let amountToScroll;
           if (distanceToRow * index < 0)
