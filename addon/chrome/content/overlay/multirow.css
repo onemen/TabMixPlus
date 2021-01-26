@@ -1,0 +1,90 @@
+/****************************************************************************************/
+/* multirow / multiple tab lines - modified for Tab Mix Plus ****************************/
+/* all credits go to the original authors: **********************************************/
+/* https://www.reddit.com/r/FirefoxCSS/comments/7dclp7/multirow_tabs_in_ff57/ ***********/
+/* https://github.com/MrOtherGuy/firefox-csshacks/blob/master/chrome/multi-row_tabs.css */
+/****************************************************************************************/
+
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+:root {
+  --tabs-lines: 2;
+  --tab_min_width_mlt: 100px;
+  --tab_max_width_mlt: 200px;
+  --tab-min-height_mlt: var(--tab-min-height, 33px);
+}
+
+#tabbrowser-tabs {
+  min-height: unset !important;
+  padding-inline-start: 0px !important;
+}
+
+#tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal] {
+  overflow: -moz-hidden-unscrollable;
+  display: block;
+  --scrollbutton-display-model: none;
+}
+
+.tabbrowser-tab {
+  height: var(--tab-min-height_mlt);
+}
+
+.tabs-newtab-button,
+#tabs-newtab-button {
+  height: var(--tab-min-height_mlt) !important;
+}
+
+#tabbrowser-tabs .tabbrowser-tab[pinned] {
+  position: static !important;
+  margin-inline-start: 0px !important;
+}
+
+#tabbrowser-arrowscrollbox[flowing=multibar]::part(overflow-start-indicator),
+#tabbrowser-arrowscrollbox[flowing=multibar]::part(scrollbutton-up),
+#tabbrowser-arrowscrollbox[flowing=multibar]::part(scrollbutton-down) {
+  display: var(--scrollbutton-display-model, initial);
+}
+
+#tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox-clip) {
+  overflow: -moz-hidden-unscrollable;
+  display: block;
+}
+
+#tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox) {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: calc(var(--tab-min-height_mlt) * var(--tabs-lines));
+}
+
+/*
+  apply #tabbrowser-arrowscrollbox button style to our buttons
+  based on browser/themes/shared/toolbarbuttons.inc.css
+*/
+#tabmix-scrollbox[scrolledtostart=true]::part(scrollbutton-up),
+#tabmix-scrollbox[scrolledtoend=true]::part(scrollbutton-down) {
+  opacity: 0.4;
+}
+
+#tabmix-scrollbox::part(scrollbutton-up),
+#tabmix-scrollbox::part(scrollbutton-down) {
+  margin: 0 0 var(--tabs-navbar-shadow-size) !important;
+}
+
+#tabmix-scrollbox::part(scrollbutton-up),
+#tabmix-scrollbox::part(scrollbutton-down) {
+  appearance: none;
+  padding: 0 var(--toolbarbutton-inner-padding) !important;
+}
+
+#tabmix-scrollbox:not([scrolledtostart=true])::part(scrollbutton-up):hover,
+#tabmix-scrollbox:not([scrolledtoend=true])::part(scrollbutton-down):hover {
+  background-color: var(--toolbarbutton-hover-background);
+  color: inherit;
+}
+
+/* based on browser/themes/shared/tabs.inc.css */
+#tabmix-scrollbox::part(scrollbutton-up),
+#tabmix-scrollbox::part(scrollbutton-down) {
+  fill: var(--lwt-toolbarbutton-icon-fill, currentColor);
+  fill-opacity: var(--toolbarbutton-icon-fill-opacity);
+}

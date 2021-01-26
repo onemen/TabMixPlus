@@ -355,6 +355,8 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.tabsUtils.overflow) {
+      // TODO  change anonid to id...
+      // TODO  check how to find if we are on tabmix button or build-in button
       let tabStrip = tabBar.arrowScrollbox;
       let ltr = Tabmix.ltr || tabStrip.getAttribute('orient') == "vertical";
       let _scroll, targetAnonid;
@@ -1181,15 +1183,15 @@ Tabmix.navToolbox = {
     gNavToolbox.removeEventListener("aftercustomization", this);
 
     // remove tabmix-tabs-closebutton when its position is immediately after
-    // tabmixScrollBox and save its position in preference for future use.
-    let boxPosition = Tabmix.getPlacement("tabmixScrollBox");
+    // tabmix-scrollbox and save its position in preference for future use.
+    let boxPosition = Tabmix.getPlacement("tabmix-scrollbox");
     let buttonPosition = Tabmix.getPlacement("tabmix-tabs-closebutton");
     if (buttonPosition == boxPosition + 1) {
       Tabmix.prefs.setIntPref("tabs-closeButton-position", buttonPosition);
       CustomizableUI.removeWidgetFromArea("tabmix-tabs-closebutton");
     }
 
-    CustomizableUI.removeWidgetFromArea("tabmixScrollBox");
+    CustomizableUI.removeWidgetFromArea("tabmix-scrollbox");
     CustomizableUI.removeListener(this.listener);
 
     let alltabsPopup = document.getElementById("allTabsMenu-allTabsView");
@@ -1201,8 +1203,8 @@ Tabmix.navToolbox = {
   cleanCurrentset() {
     let tabsToolbar = document.getElementById("TabsToolbar");
     let cSet = tabsToolbar.getAttribute("currentset");
-    if (cSet.indexOf("tabmixScrollBox") > -1) {
-      cSet = cSet.replace("tabmixScrollBox", "").replace(",,", ",");
+    if (cSet.indexOf("tabmix-scrollbox") > -1) {
+      cSet = cSet.replace("tabmix-scrollbox", "").replace(",,", ",");
       tabsToolbar.setAttribute("currentset", cSet);
       document.persist("TabsToolbar", "currentset");
     }
@@ -1511,9 +1513,9 @@ Tabmix.navToolbox = {
   tabStripAreaChanged() {
     /**
      * we need to position three elements in TabsToolbar :
-     * tabmixScrollBox, new-tab-button, and tabmix-tabs-closebutton.
-     * we restore tabmixScrollBox position first since its position is fixed,
-     * to be on the safe side we check tabmixScrollBox position again after we
+     * tabmix-scrollbox, new-tab-button, and tabmix-tabs-closebutton.
+     * we restore tabmix-scrollbox position first since its position is fixed,
+     * to be on the safe side we check tabmix-scrollbox position again after we
      * restore tabmix-tabs-closebutton and new-tab-button position.
      */
     this.setScrollButtons();
@@ -1529,7 +1531,7 @@ Tabmix.navToolbox = {
   },
 
   setScrollButtons(reset, onlyPosition) {
-    let box = document.getElementById("tabmixScrollBox");
+    let box = document.getElementById("tabmix-scrollbox");
     if (!box)
       return;
 
@@ -1537,7 +1539,7 @@ Tabmix.navToolbox = {
       return;
 
     let tabsPosition = Tabmix.getPlacement("tabbrowser-tabs");
-    CustomizableUI.moveWidgetWithinArea("tabmixScrollBox", tabsPosition + 1);
+    CustomizableUI.moveWidgetWithinArea("tabmix-scrollbox", tabsPosition + 1);
 
     if (!onlyPosition) {
       let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
@@ -1551,7 +1553,7 @@ Tabmix.navToolbox = {
       return;
 
     // if tabmix-tabs-closebutton was positioned immediately after
-    // tabmixScrollBox we removed the button on exit, to avoid bug 1034394.
+    // tabmix-scrollbox we removed the button on exit, to avoid bug 1034394.
     let pref = "tabs-closeButton-position";
     if (Tabmix.prefs.prefHasUserValue(pref)) {
       let position = Tabmix.prefs.getIntPref(pref);

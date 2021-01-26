@@ -113,18 +113,19 @@
   display: none !important;
 }
 
-#tabbrowser-tabs:not([defaultScrollButtons]) > #tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-up,
-#tabbrowser-tabs:not([defaultScrollButtons]) > #tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-down {
+/* hide default scroll buttons */
+#tabbrowser-tabs:not([defaultScrollButtons]) > #tabbrowser-arrowscrollbox::part(scrollbutton-up),
+#tabbrowser-tabs:not([defaultScrollButtons]) > #tabbrowser-arrowscrollbox::part(scrollbutton-down) {
   visibility: collapse !important;
 }
 
-#tabbrowser-tabs:not([overflow="true"]) ~ #tabmixScrollBox,
-#tabmixScrollBox[flowing="singlebar"],
-#tabmixScrollBox[defaultScrollButtons] {
+#tabbrowser-tabs:not([overflow="true"]) ~ #tabmix-scrollbox,
+#tabmix-scrollbox[flowing="singlebar"],
+#tabmix-scrollbox[defaultScrollButtons] {
   visibility: collapse;
 }
 
-#tabmixScrollBox > toolbarbutton {
+#tabmix-scrollbox > toolbarbutton {
   margin: 0;
 }
 
@@ -258,11 +259,6 @@ so display: none !important; does not hide the button */
   background-image: linear-gradient(to left, rgba(255,255,255,.1) 50%,
                                         rgba(255,255,255,.4) 90%,
                                         rgba(255,255,255,.8));
-}
-
-/* :::: multi-row :::: */
-#tabbrowser-arrowscrollbox[flowing=multibar][orient=vertical] > .arrowscrollbox-scrollbox > .scrollbox-innerbox {
-  display: block !important;
 }
 
 /* :::: widthFitTitle :::: */

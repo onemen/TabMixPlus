@@ -23,7 +23,7 @@ var TabmixTabbar = {
     Tabmix.setItem("tabmix_flowing", "flowing", val);
     // we have to set orient attribute for Linux theme,
     // maybe other themes need it for display the scroll arrow
-    Tabmix.setItem("tabmixScrollBox", "orient", val == "multibar" ? "vertical" : "horizontal");
+    Tabmix.setItem("tabmix-scrollbox", "orient", val == "multibar" ? "vertical" : "horizontal");
     return val;
   },
 
@@ -70,13 +70,13 @@ var TabmixTabbar = {
 
     if (prevTabscroll != tabscroll) {
       // update pointer to the button object that we are going to use
-      // let useTabmixButtons = tabscroll > this.SCROLL_BUTTONS_LEFT_RIGHT;
+      let useTabmixButtons = tabscroll > this.SCROLL_BUTTONS_LEFT_RIGHT;
       let overflow = Tabmix.tabsUtils.overflow;
 
       // from Firefox 4.0+ on we add dynamically scroll buttons on TabsToolbar.
-      let tabmixScrollBox = document.getElementById("tabmixScrollBox");
-      // if (tabmixScrollBox) // just in case our box is missing
-      //   Tabmix.tabsUtils.updateScrollButtons(useTabmixButtons);
+      let tabmixScrollBox = document.getElementById("tabmix-scrollbox");
+      if (tabmixScrollBox) // just in case our box is missing
+        Tabmix.tabsUtils.updateScrollButtons(useTabmixButtons);
 
       if (isMultiRow || prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
         // temporarily hide vertical scroll button.
@@ -195,7 +195,7 @@ var TabmixTabbar = {
       //XXX we only need setFirstTabInRow from here when tab width changed
       // so if widthFitTitle is false we need to call it if we actually change the width
       // for other chases we need to call it when we change title
-      if (tabBar.arrowScrollbox.getAttribute('orient') == "vertical") {
+      if (tabBar.hasAttribute("multibar")) {
         this.setFirstTabInRow();
         Tabmix.tabsUtils.updateVerticalTabStrip();
       } else if (TabmixSvc.australis && !this.widthFitTitle) {
@@ -293,7 +293,7 @@ var TabmixTabbar = {
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
       this.setFirstTabInRow();
-      if (tabBar.arrowScrollbox.getAttribute('orient') != "vertical") {
+      if (!tabBar.hasAttribute("multibar")) {
         tabBar.arrowScrollbox._enterVerticalMode();
         this.updateBeforeAndAfter();
       } else {
@@ -519,7 +519,7 @@ Tabmix.tabsUtils = {
   },
 
   getInnerbox() {
-    return this.tabBar.arrowScrollbox.scrollbox;
+    return this.tabBar.arrowScrollbox.scrollbox.firstChild;
   },
 
   get inDOMFullscreen() {
@@ -606,6 +606,7 @@ Tabmix.tabsUtils = {
     if ("linkedBrowser" in tab)
       Tabmix.tablib.setLoadURI(tab.linkedBrowser);
 
+    Tabmix.multiRow.init();
     Tabmix.initialization.run("beforeStartup", gBrowser, this.tabBar);
   },
 
@@ -763,11 +764,12 @@ Tabmix.tabsUtils = {
       Tabmix.setItem("TabsToolbar", "multibar", multibar);
     }
 
-    this.setTabStripOrient();
+    // XXX TODO : check if we need this
     TabmixTabbar.setHeight(rows, aReset);
 
-    if (this.tabBar.arrowScrollbox.getAttribute('orient') == "vertical")
+    if (TabmixTabbar.isMultiRow) {
       this.overflow = multibar == "scrollbar";
+    }
 
     if (!this.overflow) {
       // prevent new-tab-button on the right from flickering when new tabs animate is on.
@@ -907,21 +909,11 @@ Tabmix.tabsUtils = {
         tabBar.setAttribute("overflow", "true");
       else
         tabBar.removeAttribute("overflow");
+
+      Tabmix.setItem("tabmix-scrollbox", "overflowing", val || null);
       this.showNewTabButtonOnSide(val, "right-side");
 
-      if (typeof tabstrip.updateOverflow == "function") {
-        tabstrip.updateOverflow(val);
-        // overflow/underflow handler from tabbrowser-arrowscrollbox binding
-        if (val) {
-          tabBar._positionPinnedTabs();
-          tabBar._handleTabSelect(false);
-        } else {
-          if (tabBar._lastTabClosedByMouse)
-            tabBar._expandSpacerBy(tabstrip._scrollButtonDown.clientWidth);
-          gBrowser._removingTabs.forEach(gBrowser.removeTab, gBrowser);
-          tabBar._positionPinnedTabs();
-        }
-      }
+      tabstrip.updateOverflow(val);
     }
     return val;
   },
@@ -1719,7 +1711,7 @@ gTMPprefObserver = {
       this.insertRule(newRule);
     }
 
-    newRule = '#tabmixScrollBox[flowing="multibar"] > toolbarbutton {' +
+    newRule = '#tabmix-scrollbox[flowing="multibar"] > toolbarbutton {' +
       '  height: #px;}'.replace("#", Tabmix._buttonsHeight);
     this.insertRule(newRule, "scrollbutton-height");
 
@@ -1982,7 +1974,7 @@ gTMPprefObserver = {
       // move button within TabsToolbar
       let buttonPosition = Tabmix.getPlacement("new-tab-button");
       let tabsPosition = Tabmix.getPlacement("tabbrowser-tabs");
-      let boxPosition = Tabmix.getPlacement("tabmixScrollBox");
+      let boxPosition = Tabmix.getPlacement("tabmix-scrollbox");
       let after = boxPosition == tabsPosition + 1 ? boxPosition : tabsPosition;
       let changePosition = (aPosition === 0 && buttonPosition > tabsPosition) ||
                              (aPosition == 1 && buttonPosition < after) ||
