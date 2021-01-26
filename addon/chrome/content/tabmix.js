@@ -1083,7 +1083,7 @@ var TMP_eventListener = {
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, false);
 
     gBrowser.tabContainer.removeEventListener("wheel", this, true);
-    gBrowser.tabContainer.arrowScrollbox.disconnecteTabmix();
+    gBrowser.tabContainer.arrowScrollbox.disconnectTabmix();
 
     if (TMP_TabView.installed)
       TMP_TabView._resetTabviewFrame();

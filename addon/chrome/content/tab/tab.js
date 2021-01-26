@@ -21,8 +21,8 @@ var TabmixTabbar = {
 
     // update our broadcaster
     Tabmix.setItem("tabmix_flowing", "flowing", val);
-    // we have to set orient attribute for Linux theme,
-    // maybe other themes need it for display the scroll arrow
+
+    Tabmix.setItem("TabsToolbar", "multibar", val == "multibar" || null);
     Tabmix.setItem("tabmix-scrollbox", "orient", val == "multibar" ? "vertical" : "horizontal");
     return val;
   },
@@ -225,7 +225,7 @@ var TabmixTabbar = {
   get singleRowHeight() {
     let heights = this._heights[this._tabsPosition];
     if (typeof (heights) == "undefined")
-      return Tabmix.tabsUtils.tabstripInnerbox.getBoundingClientRect().height;
+      return Tabmix.tabsUtils.scrollClientRect.height;
     return heights[2] / 2;
   },
 
@@ -513,13 +513,12 @@ Tabmix.tabsUtils = {
     return (this.tabBar = _gBrowser.tabContainer);
   },
 
-  get tabstripInnerbox() {
-    delete this.tabstripInnerbox;
-    return (this.tabstripInnerbox = this.getInnerbox());
+  get scrollClientRect() {
+    return this.tabBar.arrowScrollbox.scrollClientRect;
   },
 
   getInnerbox() {
-    return this.tabBar.arrowScrollbox.scrollbox.firstChild;
+    return this.tabBar.arrowScrollbox.scrollbox;
   },
 
   get inDOMFullscreen() {
@@ -616,7 +615,6 @@ Tabmix.tabsUtils = {
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, false, this);
     if (this.tabBar.parentNode)
       this.tabBar.parentNode.removeEventListener("dragover", this, true);
-    delete this.tabstripInnerbox;
     this._tabmixPositionalTabs = null;
   },
 
@@ -678,11 +676,12 @@ Tabmix.tabsUtils = {
   },
 
   initializeTabmixUI() {
-    // tabstripInnerbox is not valid after Toolbar Position Changer add-on
-    // moves the toolbar
+    // something reset the toolbars...
     const resetSettings = this.topTabY == 0;
-    delete this.tabstripInnerbox;
-    this.tabstripInnerbox = this.getInnerbox();
+
+    if (typeof this.tabBar.arrowScrollbox.connectTabmix !== "function") {
+      Tabmix.multiRow.init();
+    }
 
     // https://addons.mozilla.org/EN-US/firefox/addon/vertical-tabs/
     // verticalTabs 0.9.1+ is restartless.
@@ -760,8 +759,8 @@ Tabmix.tabsUtils = {
       multibar = "true";
 
     if (currentMultibar != multibar) {
+      console.log("set multibar to", multibar, "rows", rows);
       Tabmix.setItem(this.tabBar, "multibar", multibar);
-      Tabmix.setItem("TabsToolbar", "multibar", multibar);
     }
 
     // XXX TODO : check if we need this
@@ -926,8 +925,8 @@ Tabmix.tabsUtils = {
   },
 
   get topTabY() {
-    return this.tabstripInnerbox.getBoundingClientRect().top +
-      Tabmix.getStyle(this.tabstripInnerbox, "paddingTop");
+    return this.scrollClientRect.top +
+      Tabmix.getStyle(this.tabBar.scrollbox, "paddingTop");
   },
 
   get lastTabRowNumber() {
