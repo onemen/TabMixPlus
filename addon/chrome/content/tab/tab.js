@@ -229,65 +229,6 @@ var TabmixTabbar = {
     return heights[2] / 2;
   },
 
-  setHeight: function TMP_setHeight(aRows, aReset) {
-  },
-
-  setHeightByPixels: function TMP_setHeightByPixels(newHeight) {
-    var tabBar = gBrowser.tabContainer;
-    var tabstrip = tabBar.arrowScrollbox.scrollbox;
-    tabstrip.style.setProperty("max-height", newHeight + "px", "important");
-    tabstrip.style.setProperty("height", newHeight + "px", "important");
-    let tabsBottom = tabBar.getElementsByClassName("tabs-bottom")[0];
-    let tabsBottomHeight = tabsBottom && tabBar.getAttribute("classic") != "v3Linux" ?
-      tabsBottom.getBoundingClientRect().height : 0;
-    let newTabbarHeight = newHeight + tabsBottomHeight;
-    let tabsToolbar = document.getElementById("TabsToolbar");
-    // override fixed height set by theme to #tabbrowser-tabs
-    if (tabBar.getBoundingClientRect().height < newTabbarHeight || tabBar.style.getPropertyValue("height")) {
-      tabBar.style.setProperty("max-height", newTabbarHeight + "px", "important");
-      tabBar.style.setProperty("height", newTabbarHeight + "px", "important");
-    }
-    if (tabsToolbar.getBoundingClientRect().height < newTabbarHeight || tabsToolbar.style.getPropertyValue("height")) {
-      tabsToolbar.style.setProperty("max-height", newTabbarHeight + "px", "important");
-      tabsToolbar.style.setProperty("height", newTabbarHeight + "px", "important");
-    }
-    this.tabBarHeightModified();
-  },
-
-  resetHeight: function TMP_resetHeight() {
-    var tabBar = gBrowser.tabContainer;
-    var tabstrip = tabBar.arrowScrollbox.scrollbox;
-    let tabsToolbar = document.getElementById("TabsToolbar");
-    if (tabsToolbar.hasAttribute("style")) {
-      tabsToolbar.style.removeProperty("max-height");
-      tabsToolbar.style.removeProperty("height");
-    }
-    if (tabstrip.hasAttribute("style")) {
-      tabstrip.style.removeProperty("max-height");
-      tabstrip.style.removeProperty("height");
-    }
-    if (tabBar.hasAttribute("style")) {
-      tabBar.style.removeProperty("max-height");
-      tabBar.style.removeProperty("height");
-    }
-    if (this._windowStyle.exist)
-      Tabmix.setItem(document.getElementById("main-window"), "style", this._windowStyle.value);
-    if (TabmixSvc.isMac) {
-      document.getElementById("TabsToolbar").style.removeProperty("height");
-    }
-    this.tabBarHeightModified();
-  },
-
-  tabBarHeightModified() {
-    gTMPprefObserver.updateTabbarBottomPosition();
-    TMP_eventListener.updateMouseTargetRect();
-
-    // dispatch event
-    let event = document.createEvent("Events");
-    event.initEvent("Tabmix.TabBarHeightModified", true, false);
-    document.getElementById("TabsToolbar").dispatchEvent(event);
-  },
-
   _waitAfterMaximized: false,
   _handleResize: function TMP__handleResize() {
     var tabBar = gBrowser.tabContainer;
@@ -759,12 +700,8 @@ Tabmix.tabsUtils = {
       multibar = "true";
 
     if (currentMultibar != multibar) {
-      console.log("set multibar to", multibar, "rows", rows);
       Tabmix.setItem(this.tabBar, "multibar", multibar);
     }
-
-    // XXX TODO : check if we need this
-    TabmixTabbar.setHeight(rows, aReset);
 
     if (TabmixTabbar.isMultiRow) {
       this.overflow = multibar == "scrollbar";
@@ -926,7 +863,7 @@ Tabmix.tabsUtils = {
 
   get topTabY() {
     return this.scrollClientRect.top +
-      Tabmix.getStyle(this.tabBar.scrollbox, "paddingTop");
+      Tabmix.getStyle(this.tabBar.arrowScrollbox.scrollbox, "paddingTop");
   },
 
   get lastTabRowNumber() {
@@ -1069,7 +1006,8 @@ Tabmix.bottomToolbarUtils = {
       tabsToolbar.style.setProperty("top", screen.availHeight + "px", "important");
       tabsToolbar.setAttribute("width", screen.availWidth);
     }
-    // force TabmixTabbar.setHeight to set tabbar height
+    // force reset tabbar height
+    // TODO" check if we need this
     TabmixTabbar.visibleRows = 1;
     if (updateFullScreen) {
       TMP_eventListener.toggleTabbarVisibility(false);
@@ -1503,7 +1441,6 @@ gTMPprefObserver = {
         }
         // multi-rows total heights can be different when tabs are on top
         if (TabmixTabbar.visibleRows > 1) {
-          TabmixTabbar.setHeight(1, true);
           Tabmix.tabsUtils.updateVerticalTabStrip();
         }
         break;
@@ -2056,7 +1993,8 @@ gTMPprefObserver = {
       bottomToolbox.style.removeProperty("height");
       tabsToolbar.style.removeProperty("top");
       tabsToolbar.removeAttribute("width");
-      // force TabmixTabbar.setHeight to set tabbar height
+      // force to reset tabbar height
+      // TODO" check if we need this
       TabmixTabbar.visibleRows = 1;
     }
     return true;

@@ -677,7 +677,7 @@ var TMP_eventListener = {
   /**
    * for use in Firefox 40+.
    * update FullScreen._mouseTargetRect when in full screen and the tabbar is
-   * visible. we call this function from tabBarHeightModified and showNavToolbox
+   * visible. we call this function from and showNavToolbox
    */
   updateMouseTargetRect() {
     if (!window.fullScreen || FullScreen._isChromeCollapsed) {
@@ -833,7 +833,6 @@ var TMP_eventListener = {
     if (TabmixTabbar.hideMode == 1) {
       let tabsCount = tabBar.allTabs.length - gBrowser._removingTabs.length;
       if (tabsCount == 2) {
-        TabmixTabbar.setHeight(1);
         tabBar.removeAttribute("multibar");
       }
     }
