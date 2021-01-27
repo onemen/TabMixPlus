@@ -478,7 +478,7 @@ Tabmix.multiRow = {
         return `
         <html:link rel="stylesheet" href="chrome://global/skin/toolbarbutton.css"/>
         <html:link rel="stylesheet" href="chrome://global/skin/arrowscrollbox.css"/>
-        <toolbarbutton class="scrollbutton-up" id="scrollbutton-up" part="scrollbutton-up"
+        <toolbarbutton id="scrollbutton-up" part="scrollbutton-up"
                 inherits="orient,disabled=scrolledtostart"
                 oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'left');"
                 anonid="scrollbutton-up-right"
@@ -488,7 +488,7 @@ Tabmix.multiRow = {
                 onmouseover="if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._continueScroll(-1);"
                 onmouseout="gBrowser.tabContainer.arrowScrollbox._pauseScroll();">
         </toolbarbutton>
-        <toolbarbutton class="scrollbutton-down" id="scrollbutton-down" part="scrollbutton-down"
+        <toolbarbutton id="scrollbutton-down" part="scrollbutton-down"
                 inherits="orient,disabled=scrolledtoend"
                 oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'right');"
                 anonid="scrollbutton-down-right"

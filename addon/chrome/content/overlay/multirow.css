@@ -12,6 +12,8 @@
   --tab_min_width_mlt: 100px;
   --tab_max_width_mlt: 200px;
   --tab-min-height_mlt: var(--tab-min-height, 33px);
+  --tabmix-scrollbutton-padding:
+      calc(var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding))
 }
 
 #tabbrowser-tabs {
@@ -67,13 +69,9 @@
 
 #tabmix-scrollbox::part(scrollbutton-up),
 #tabmix-scrollbox::part(scrollbutton-down) {
-  margin: 0 0 var(--tabs-navbar-shadow-size) !important;
-}
-
-#tabmix-scrollbox::part(scrollbutton-up),
-#tabmix-scrollbox::part(scrollbutton-down) {
   appearance: none;
-  padding: 0 var(--toolbarbutton-inner-padding) !important;
+  margin: 0 0 var(--tabs-navbar-shadow-size) !important;
+  padding: var(--tabmix-scrollbutton-padding) !important;
 }
 
 #tabmix-scrollbox:not([scrolledtostart=true])::part(scrollbutton-up):hover,
@@ -87,4 +85,20 @@
 #tabmix-scrollbox::part(scrollbutton-down) {
   fill: var(--lwt-toolbarbutton-icon-fill, currentColor);
   fill-opacity: var(--toolbarbutton-icon-fill-opacity);
+}
+
+#tabmix-scrollbox[orient=vertical]::part(scrollbutton-up),
+#tabmix-scrollbox[orient=vertical]::part(scrollbutton-down) {
+  list-style-image: url(chrome://global/skin/icons/arrow-dropdown-16.svg);
+}
+
+/* :::: make sure all buttons align to the top row :::: */
+#TabsToolbar[multibar] > .tabmixplus-toolbar-inner-box,
+#TabsToolbar[multibar] .toolbarbutton-1,
+#TabsToolbar[multibar] {
+  -moz-box-align: start;
+}
+
+#TabsToolbar[multibar] .toolbarbutton-1 {
+  padding-top: 2px;
 }
