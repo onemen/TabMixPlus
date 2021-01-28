@@ -32,7 +32,7 @@
 
 .tabs-newtab-button,
 #tabs-newtab-button {
-  height: var(--tab-min-height_mlt) !important;
+  height: calc(var(--tab-min-height_mlt) - var(--tabs-navbar-shadow-size)) !important;
 }
 
 #tabbrowser-tabs .tabbrowser-tab[pinned] {
