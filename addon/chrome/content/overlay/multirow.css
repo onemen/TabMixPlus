@@ -56,6 +56,7 @@
 #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox-clip) {
   overflow: -moz-hidden-unscrollable;
   display: block;
+  margin-top: -1px;
   margin-bottom: -1px;
 }
 
@@ -100,12 +101,11 @@
 }
 
 /* :::: make sure all buttons align to the top row :::: */
-#TabsToolbar[multibar] > .tabmixplus-toolbar-inner-box,
-#TabsToolbar[multibar] .toolbarbutton-1,
-#TabsToolbar[multibar] {
+#TabsToolbar[multibar] #TabsToolbar-customization-target {
   -moz-box-align: start;
 }
 
 #TabsToolbar[multibar] .toolbarbutton-1 {
+  -moz-box-align: start;
   padding-top: 2px;
 }
