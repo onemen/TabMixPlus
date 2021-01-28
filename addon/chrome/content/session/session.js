@@ -282,13 +282,14 @@ TabmixSessionManager = {
 
   // call by Tabmix.beforeDelayedStartup
   init: function SM_init() {
-    if (this.disableSessionManager || this._inited)
+    if (this.initialized) {
       return;
-    this._inited = true;
+    }
+    this.initialized = true;
 
     let initializeSM = () => {
       this._init();
-      if (this.waitForCallBack || TabmixSvc.sm.restoreCount == -1) {
+      if (this._inited && (this.waitForCallBack || TabmixSvc.sm.restoreCount == -1)) {
         this._sendRestoreCompletedNotifications();
       }
       if (!this.waitForCallBack) {
@@ -304,6 +305,11 @@ TabmixSessionManager = {
   },
 
   _init: function SM__init() {
+    if (this.disableSessionManager || this._inited) {
+      return;
+    }
+    this._inited = true;
+
     if (Tabmix.isVersion(320)) {
       XPCOMUtils.defineLazyModuleGetter(this, "TabState",
         "resource:///modules/sessionstore/TabState.jsm");
