@@ -113,23 +113,6 @@
   display: none !important;
 }
 
-/* hide default scroll buttons */
-#tabbrowser-tabs:not([defaultScrollButtons]) > #tabbrowser-arrowscrollbox::part(scrollbutton-up),
-#tabbrowser-tabs:not([defaultScrollButtons]) > #tabbrowser-arrowscrollbox::part(scrollbutton-down) {
-  visibility: collapse !important;
-}
-
-#tabbrowser-tabs:not([overflow="true"]) ~ #tabmix-scrollbox,
-#tabmix-scrollbox[flowing="singlebar"],
-#tabmix-scrollbox[defaultScrollButtons] {
-  visibility: collapse;
-}
-
-#tabmix-scrollbox > toolbarbutton {
-  margin: 0;
-}
-
-
 /* we use this rule in tabmix.js Tabmix.getAfterTabsButtonsWidth */
 #tabbrowser-arrowscrollbox > #tabs-newtab-button[force-display] {
   display: -moz-box !important;

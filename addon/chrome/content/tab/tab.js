@@ -87,7 +87,7 @@ var TabmixTabbar = {
 
       this.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
       let isDefault = tabscroll == this.SCROLL_BUTTONS_LEFT_RIGHT || null;
-      Tabmix.setItem(tabBar, "defaultScrollButtons", isDefault);
+      Tabmix.setItem(tabBar.arrowScrollbox, "defaultScrollButtons", isDefault);
       Tabmix.setItem(tabmixScrollBox, "defaultScrollButtons", isDefault);
 
       if (prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
@@ -841,15 +841,32 @@ Tabmix.tabsUtils = {
     if (val != this.overflow) {
       let tabBar = this.tabBar;
       let tabstrip = tabBar.arrowScrollbox;
-      if (val)
-        tabBar.setAttribute("overflow", "true");
-      else
-        tabBar.removeAttribute("overflow");
-
       Tabmix.setItem("tabmix-scrollbox", "overflowing", val || null);
       this.showNewTabButtonOnSide(val, "right-side");
 
+      // arrowScrollbox and tabbrowser-tabs overflow/underflow listners skip vertical event
+      // when event.detail is 0
+
+      // update arrowScrollbox
       tabstrip.updateOverflow(val);
+
+      // update tabbrowser-tabs
+      if (TabmixTabbar.isMultiRow) {
+        if (val) {
+          tabBar.setAttribute("overflow", "true");
+          tabBar._positionPinnedTabs();
+          tabBar._handleTabSelect(true);
+        } else {
+          tabBar.removeAttribute("overflow");
+          if (tabBar._lastTabClosedByMouse) {
+            tabBar._expandSpacerBy(tabBar._scrollButtonWidth);
+          }
+          for (let tab of Array.from(gBrowser._removingTabs)) {
+            gBrowser.removeTab(tab);
+          }
+          tabBar._positionPinnedTabs();
+        }
+      }
     }
     return val;
   },

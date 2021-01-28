@@ -24,7 +24,6 @@
 #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal] {
   overflow: -moz-hidden-unscrollable;
   display: block;
-  --scrollbutton-display-model: none;
 }
 
 .tabbrowser-tab {
@@ -41,15 +40,23 @@
   margin-inline-start: 0px !important;
 }
 
-#tabbrowser-arrowscrollbox[flowing=multibar]::part(overflow-start-indicator),
-#tabbrowser-arrowscrollbox[flowing=multibar]::part(scrollbutton-up),
-#tabbrowser-arrowscrollbox[flowing=multibar]::part(scrollbutton-down) {
-  display: var(--scrollbutton-display-model, initial);
+/* hide default scroll buttons */
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(overflow-start-indicator),
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-up),
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-down) {
+  visibility: collapse !important;
+}
+
+#tabmix-scrollbox:not([overflowing="true"]),
+#tabmix-scrollbox[flowing="singlebar"],
+#tabmix-scrollbox[defaultScrollButtons] {
+  visibility: collapse;
 }
 
 #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox-clip) {
   overflow: -moz-hidden-unscrollable;
   display: block;
+  margin-bottom: -1px;
 }
 
 #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox) {
