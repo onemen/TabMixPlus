@@ -146,22 +146,8 @@ Tabmix.multiRow = {
         ).toCode();
 
         Tabmix.changeCode(this, "scrollbox.scrollByIndex")._replace(
-          'this.ensureElementIsVisible',
-          'scrollIntoView', {flags: "g"}
-        )._replace(
-          '{', `{
-                  const block = index > 0 ? "end" : "start";
-                  const scrollIntoView = (element, aInstant) => {
-                    if (!this.isMultiRow) {
-                      this.ensureElementIsVisible(element, aInstant);
-                      return;
-                    }
-                    if (!this._canScrollToElement(element)) {
-                      return;
-                    }
-                    const behavior = aInstant ? "instant" : "auto";
-                    element.scrollIntoView({behavior, block});
-                  };`
+          /this.ensureElementIsVisible\(.*\);/,
+          'this._ensureElementIsVisibleByIndex(targetElement, aInstant, index);'
         ).toCode();
 
         // we divide scrollDelta by the ratio between tab width and tab height
@@ -216,6 +202,8 @@ Tabmix.multiRow = {
         this._scrollButtonUpLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
         this._scrollButtonDownLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
         Services.prefs.addObserver("toolkit.scrollbox.", this.tabmixPrefObserver, false);
+
+        this.original_canScrollToElement = this._canScrollToElement;
       }
 
       disconnectTabmix() {
@@ -236,6 +224,25 @@ Tabmix.multiRow = {
 
       get isMultiRow() {
         return this.getAttribute("flowing") === "multibar";
+      }
+
+      get scrollSize() {
+        return this.isMultiRow || this.getAttribute("orient") === "vertical" ?
+          this.scrollbox.scrollHeight :
+          this.scrollbox.scrollWidth;
+      }
+
+      get scrollPosition() {
+        return this.isMultiRow || this.getAttribute("orient") === "vertical" ?
+          this.scrollbox.scrollTop :
+          this.scrollbox.scrollLeft;
+      }
+
+      _canScrollToElement(tab) {
+        if (tab.hidden) {
+          return false;
+        }
+        return this.original_canScrollToElement(tab);
       }
 
       get singleRowHeight() {
@@ -266,10 +273,6 @@ Tabmix.multiRow = {
         return this.scrollbox.getBoundingClientRect().height;
       }
 
-      _canScrollToElement(tab) {
-        return !tab.pinned && !tab.hidden;
-      }
-
       _calcTabMargins(aTab) {
         if (this._tabMarginLeft === null || this._tabMarginRight === null) {
           const tabMiddle = document.getAnonymousElementByAttribute(aTab, "class", "tab-background-middle");
@@ -279,18 +282,26 @@ Tabmix.multiRow = {
         }
       }
 
-      _adjustElementStartAndEnd(aTab, tabStart, tabEnd) {
-        if (this.isMultiRow)
-          return [tabStart, tabEnd];
-
-        this._calcTabMargins(aTab);
-        if (this._tabMarginLeft < 0) {
-          tabStart += this._tabMarginLeft;
+      _ensureElementIsVisibleByIndex(element, instant, index) {
+        if (!this.isMultiRow) {
+          this.ensureElementIsVisible(element, instant);
+          return;
         }
-        if (this._tabMarginRight < 0) {
-          tabEnd -= this._tabMarginRight;
+        if (!this._canScrollToElement(element)) {
+          return;
         }
-        return [tabStart, tabEnd];
+        if (this._ensureElementIsVisibleAnimationFrame) {
+          window.cancelAnimationFrame(this._ensureElementIsVisibleAnimationFrame);
+        }
+        this._ensureElementIsVisibleAnimationFrame = window.requestAnimationFrame(
+          () => {
+            element.scrollIntoView({
+              block: index > 0 ? "end" : "start",
+              behavior: instant ? "instant" : "auto",
+            });
+            this._ensureElementIsVisibleAnimationFrame = 0;
+          }
+        );
       }
 
       _createScrollButtonContextMenu(aEvent) {
