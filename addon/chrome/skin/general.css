@@ -6,27 +6,22 @@
 **/
 
 /* for privateTab extensions */
-#TabsToolbar[privateTab-fixAfterTabsButtonsAccessibility] >
+#TabsToolbar[privateTab-fixAfterTabsButtonsAccessibility]
     #tabbrowser-tabs[flowing="multibar"][widthFitTitle="true"] .tabs-newtab-button {
   vertical-align: bottom;
 }
 
-/* override some rules for toolbarbutton-1 and tabs-closebutton*/
-#TabsToolbar > .tabs-closebutton > .toolbarbutton-icon {
-  -moz-padding-end: 0 !important;
-  -moz-padding-start: 0 !important;
-}
-
-/* for tabs close button on Firefox 31+ */
-.tabs-closebutton.tabmix {
+/* :::: for tabs close button on TabsToolbar :::: */
+#tabmix-tabs-closebutton {
   -moz-appearance: none;
-  height: 16px;
-  width: 16px;
+  fill-opacity: 0;
+  opacity: 0.8
 }
 
-.tabs-closebutton.tabmix > .toolbarbutton-icon {
-  padding-top: 0;
-  padding-bottom: 0;
+ #tabmix-tabs-closebutton > .toolbarbutton-icon {
+  height: 100%;
+  width: 100%;
+  padding: 4px;
 }
 
 /* :::: for miniT drag indicator :::: */
@@ -50,12 +45,6 @@
   visibility: visible;
   width: 7px;
   height: 12px;
-}
-
-/* :::: make sure all buttons align to the top row :::: */
-#TabsToolbar[multibar] > .tabmixplus-toolbar-inner-box,
-#TabsToolbar[multibar] {
-  -moz-box-align: start;
 }
 
 /* ::::  for light weight themes :::: */

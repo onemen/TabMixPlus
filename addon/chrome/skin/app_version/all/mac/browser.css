@@ -14,29 +14,13 @@
 
 /* prevent tabbrowser-tabs height from increasing by 2px when the tabs are
    in display: block */
-#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] >
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"]
     #tabbrowser-tabs[flowing="multibar"] > .tabbrowser-arrowscrollbox >
     .tabs-newtab-button[command="cmd_newNavigatorTab"]  .toolbarbutton-icon {
   margin: -2px 0;
 }
 
-/* override some rules for toolbarbutton-1 and tabs-closebutton */
-#TabsToolbar > .tabs-closebutton:not([class~="tabmix"]) {
-  list-style-image: url("chrome://global/skin/icons/close.png");
-}
-
-#TabsToolbar .tabs-closebutton:not([type="menu-button"]):not([disabled=true]):not([open]):hover {
-  background-image: none !important;
-}
-
-/* Tabstrip close button Firefox 31+ */
-@media (min-resolution: 2dppx) {
-  .tabs-closebutton.tabmix > .toolbarbutton-icon {
-    width: 16px;
-  }
-}
-
-#TabsToolbar[tabbaronbottom] > #tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab[selected="true"] {
+#TabsToolbar[tabbaronbottom] #tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab[selected="true"] {
   position: static !important;
 }
 

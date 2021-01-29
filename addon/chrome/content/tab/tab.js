@@ -727,8 +727,7 @@ Tabmix.tabsUtils = {
         if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
             Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") &&
             !TabmixSvc.isMac && aEvent.target.localName == "tabs") {
-          let displayAppButton = !(document.getElementById("titlebar") ||
-                                   document.getElementById("appmenu-toolbar-button")).hidden;
+          let displayAppButton = !(document.getElementById("titlebar")).hidden;
           let tabsOnTop = !window.TabsOnTop || TabsOnTop.enabled;
           if (TabsInTitlebar.enabled ||
               (displayAppButton && tabsOnTop && this.tabBar.parentNode._dragBindingAlive))
@@ -1705,18 +1704,6 @@ gTMPprefObserver = {
                                .replace("%S", marginStart).replace("%S", marginEnd);
     this.insertRule(iconRule);
 
-    /** at the moment we move the button over the title - see setCloseButtonMargin
-    // move left button that show on hover closer to the tab icon
-    iconRule = '#tabbrowser-tabs[closebuttons-hover="notactivetab"][closebuttons-side="left"] > ' +
-               '.tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"])' +
-               ':not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-icon,' +
-               '#tabbrowser-tabs[closebuttons-hover="alltabs"][closebuttons-side="left"] > ' +
-               '.tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"])' +
-               ':not([protected])[showbutton=on] .tab-icon {' +
-               '-moz-margin-end: %Spx;}'.replace("%S", - parseInt(marginEnd)/2);
-    this.insertRule(iconRule);
-    */
-
     icon.setAttribute("pinned", true);
     let _marginStart = style.getPropertyValue(sMarginStart);
     let _marginEnd = style.getPropertyValue(sMarginEnd);
@@ -1744,9 +1731,9 @@ gTMPprefObserver = {
       this.insertRule(newRule);
     };
     iconRule = '#tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="alltabs"] > ' +
-               '.tabbrowser-tab:not([pinned]):not([protected])%faviconized% .%S ,' +
+               '#tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([protected])%faviconized% .%S ,' +
                '#tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="activetab"] > ' +
-               '.tabbrowser-tab:not([pinned]):not([protected])[selected="true"]%faviconized% .%S {' +
+               '#tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([protected])[selected="true"]%faviconized% .%S {' +
                '-moz-margin-start: %PX !important;}';
     if ("faviconize" in window) {
       let newRule = iconRule.replace(/%favhideclose%/g, ':not([favhideclose="true"])').replace(/%faviconized%/g, '');
@@ -1769,10 +1756,10 @@ gTMPprefObserver = {
     // move left button that show on hover over tab title
     icon.style.setProperty("display", "-moz-box", "important");
     let iconMargin = '#tabbrowser-tabs[closebuttons-hover="notactivetab"][closebuttons-side="left"] > ' +
-                     '.tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"])' +
+                     '#tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"])' +
                      ':not([isPermaTab="true"]):not([protected]) .tab-close-button,' +
                      '#tabbrowser-tabs[closebuttons-hover="alltabs"][closebuttons-side="left"] > ' +
-                     '.tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"])' +
+                     '#tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"])' +
                      ':not([protected]) .tab-close-button {' +
                      '-moz-margin-start: 0px !important;' +
                      '-moz-margin-end: %Spx !important;}'.replace("%S", -icon.getBoundingClientRect().width);
@@ -1786,12 +1773,12 @@ gTMPprefObserver = {
     let textMarginEnd = parseInt(marginEnd) ? marginEnd : this._marginStart;
     delete this._marginStart;
     let iconRule = '#tabbrowser-tabs%favhideclose%[closebuttons="noclose"] > ' +
-        '.tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
+        '#tabbrowser-arrowscrollbox > .tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
         '#tabbrowser-tabs%favhideclose%[closebuttons-side="left"] > ' +
-        '.tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
+        '#tabbrowser-arrowscrollbox > .tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
         '#tabbrowser-tabs%favhideclose%[closebuttons="activetab"]' +
         ':not([closebuttons-hover="notactivetab"])[closebuttons-side="right"] > ' +
-        '.tabbrowser-tab%faviconized%:not([pinned]):not([selected="true"]) ' +
+        '#tabbrowser-arrowscrollbox > .tabbrowser-tab%faviconized%:not([pinned]):not([selected="true"]) ' +
         '.tab-label[tabmix="true"],' +
         '.tabbrowser-tab%faviconized1%[protected]:not([pinned]) .tab-label[tabmix="true"] {' +
         '-moz-margin-end: %PX !important;}'.replace("%PX", textMarginEnd);
@@ -1837,13 +1824,7 @@ gTMPprefObserver = {
       this.insertRule('.tab-sharing-icon-overlay {display: none;}');
     }
 
-    // height shrink to actual size when the tabbar is in display: block (multi-row)
-    let newRule = '#TabsToolbar[tabmix-show-newtabbutton*="aftertabs"] >' +
-                  '#tabbrowser-tabs:not([overflow="true"]) > .tabbrowser-arrowscrollbox[flowing="multibar"]' +
-                  ' > .tabs-newtab-button[command="cmd_newNavigatorTab"] {height: #px;}'
-                      .replace("#", Tabmix._buttonsHeight);
-    this.insertRule(newRule, "new-tab-height");
-
+    let newRule;
     if (TabmixSvc.australis && !Tabmix.isVersion(310) && !TabmixSvc.isLinux && !TabmixSvc.isMac) {
       newRule = '#main-window[privatebrowsingmode=temporary] #private-browsing-indicator {' +
                 '  height: #px;'.replace("#", Tabmix._buttonsHeight) +
@@ -1856,7 +1837,7 @@ gTMPprefObserver = {
     }
 
     if (Tabmix.isVersion(570) && !TabmixSvc.australis) {
-      newRule = `#tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab {
+      newRule = `#tabbrowser-tabs[flowing="multibar"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab {
         height: ${Tabmix._buttonsHeight}px;
       }`;
       this.insertRule(newRule);
@@ -1867,7 +1848,7 @@ gTMPprefObserver = {
     this.insertRule(newRule, "scrollbutton-height");
 
     let _buttonsHeight = Tabmix._buttonsHeight - Number(Tabmix.isVersion(310) && !Tabmix.isVersion(420) || Tabmix.isVersion(570));
-    newRule = '#TabsToolbar[multibar] > .toolbarbutton-1 {' +
+    newRule = '#TabsToolbar[multibar] .toolbarbutton-1 {' +
       '  height: #px;}'.replace("#", _buttonsHeight);
     this.insertRule(newRule, "toolbarbutton-height");
     delete Tabmix._buttonsHeight;
@@ -1881,8 +1862,8 @@ gTMPprefObserver = {
 
     if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 270)) {
       this.insertRule('#tabmixScrollBox{ margin-top: -1px;}');
-      newRule = `#main-window[sizemode="maximized"][tabsontop=true] #tabbrowser-tabs[multibar] > .tabbrowser-tab,
-         #main-window[sizemode="fullscreen"][tabsontop=true] #tabbrowser-tabs[multibar] > .tabbrowser-tab {
+      newRule = `#main-window[sizemode="maximized"][tabsontop=true] #tabbrowser-tabs[multibar] > #tabbrowser-arrowscrollbox > .tabbrowser-tab,
+         #main-window[sizemode="fullscreen"][tabsontop=true] #tabbrowser-tabs[multibar] > #tabbrowser-arrowscrollbox > .tabbrowser-tab {
            margin-top: -1px;
          }`;
       this.insertRule(newRule);
@@ -1954,7 +1935,7 @@ gTMPprefObserver = {
     // rule for controlling margin-inline-start when we have pinned tab in multi-row
     let marginInlineStart = Tabmix.isVersion(570) ? "margin-inline-start" : "-moz-margin-start";
     let marginStart = '#tabbrowser-tabs[positionpinnedtabs] > ' +
-                      `.tabbrowser-tab[tabmix-firstTabInRow="true"]{${marginInlineStart}: 0px;}`;
+                      `#tabbrowser-arrowscrollbox > .tabbrowser-tab[tabmix-firstTabInRow="true"]{${marginInlineStart}: 0px;}`;
     this.insertRule(marginStart, "tabmix-firstTabInRow");
 
     // for ColorfulTabs 8.0+
@@ -1962,7 +1943,7 @@ gTMPprefObserver = {
     // we add the rule after the first tab added
     if (typeof colorfulTabs == "object") {
       let padding = Tabmix.getStyle(gBrowser.tabs[0], "paddingBottom");
-      newRule = '#tabbrowser-tabs[flowing="multibar"] > .tabbrowser-tab[selected=true]' +
+      newRule = '#tabbrowser-tabs[flowing="multibar"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[selected=true]' +
                     ' {margin-bottom: -1px !important; padding-bottom: ' + (padding + 1) + 'px !important;}';
       let index = this.insertRule(newRule);
       newRule = this._tabStyleSheet.cssRules[index];

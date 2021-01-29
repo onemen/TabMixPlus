@@ -171,32 +171,32 @@ toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > 
  *                                non default theme
 */
 /* Chromifox Extreme */
-#tabbrowser-tabs[tabmix_skin="cfxec"]  > .tabbrowser-tab .tab-close-button {
+#tabbrowser-tabs[tabmix_skin="cfxec"]  > #tabbrowser-arrowscrollbox > .tabbrowser-tab .tab-close-button {
   display: none !important;
 }
 
 /* Vfox3 */
-#tabbrowser-tabs[tabmix_skin="Vfox3"][multibar] > .tabbrowser-tab {
+#tabbrowser-tabs[tabmix_skin="Vfox3"][multibar] > #tabbrowser-arrowscrollbox > .tabbrowser-tab {
   height: 24px;
 }
 
 /* Phoenity Aura -  Multi-row tabbar for Phoenity Aura theme */
-#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab,
-#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab {
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > #tabbrowser-arrowscrollbox > .tabbrowser-tab,
+#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > #tabbrowser-arrowscrollbox > .tabbrowser-tab {
   height: 22px;
   max-height: 22px;
   margin: 1px 0 1px;
 }
 
-#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab:not([selected="true"]):hover,
-#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab:not([selected="true"]):hover {
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([selected="true"]):hover,
+#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([selected="true"]):hover {
   height: 23px;
   max-height: 23px;
   margin: 0 0 1px;
 }
 
-#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > .tabbrowser-tab[selected="true"],
-#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > .tabbrowser-tab[selected="true"] {
+#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[selected="true"],
+#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[selected="true"] {
   height: 24px;
   max-height: 24px;
   margin: 0 0 0;

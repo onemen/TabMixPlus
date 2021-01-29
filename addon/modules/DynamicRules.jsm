@@ -194,7 +194,7 @@ this.DynamicRules = {
             space26 + 'rgba(254, 254, 254, 0.72) 4px, rgba(254, 254, 254, 0.72) 4px, #bottomColor)';
       bgImage.startEndhover = bgImage.bghover;
       let _selector = '#tabbrowser-tabs[tabmix_#RULEStyle~="bg"] > ' +
-                      '.tabbrowser-tab#HOVER#STATE > .tab-stack > .tab-background >';
+                      '#tabbrowser-arrowscrollbox > .tabbrowser-tab#HOVER#STATE > .tab-stack > .tab-background >';
       for (let rule of Object.keys(styleRules)) {
         let style = styleRules[rule];
         delete style.bg;
@@ -214,7 +214,7 @@ this.DynamicRules = {
       }
     }
     styleRules.progressMeter = {
-      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] .tabbrowser-tab > ' +
+      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > ' +
           '.tab-stack > .tab-progress-container > .tab-progress::-moz-progress-bar' +
           '{\n  background-color: #bottomColor !important;\n}\n'
     };
