@@ -65,7 +65,7 @@ flst.prototype = {
   },
 
   get moreThenOneTab() {
-    let tabs = this.tabContainer.childNodes;
+    let tabs = this.tabContainer.allTabs;
     for (let count = 0, i = 0; i < tabs.length; i++) {
       if (!tabs[i].hidden && ++count == 2)
         return true;

@@ -129,8 +129,8 @@ var TabmixTabbar = {
     // for light weight themes
     Tabmix.setItem("main-window", "tabmix_lwt", isMultiRow || this.position == 1 || null);
 
-    for (let i = 0; i < tabBar.childNodes.length; i++) {
-      let aTab = tabBar.childNodes[i];
+    for (let i = 0; i < tabBar.allTabs.length; i++) {
+      let aTab = tabBar.allTabs[i];
       // treeStyleTab code come after SessionManager... look in extensions.js
       TabmixSessionManager.updateTabProp(aTab);
     }
@@ -831,7 +831,7 @@ Tabmix.tabsUtils = {
     // we must adjustNewtabButtonVisibility before get lastTabRowNumber
     this.adjustNewtabButtonVisibility();
     // this.lastTabRowNumber is null when we hide the tabbar
-    let rows = aReset || this.tabBar.childNodes.length == 1 ? 1 : (this.lastTabRowNumber || 1);
+    let rows = aReset || this.tabBar.allTabs.length == 1 ? 1 : (this.lastTabRowNumber || 1);
 
     let currentMultibar = this.tabBar.getAttribute("multibar") || null;
     let maxRow = Tabmix.prefs.getIntPref("tabBarMaxRow");
@@ -1005,7 +1005,7 @@ Tabmix.tabsUtils = {
       this.showNewTabButtonOnSide(val, "right-side");
 
       if (typeof tabstrip.updateOverflow == "function") {
-      tabstrip.updateOverflow(val);
+        tabstrip.updateOverflow(val);
         // overflow/underflow handler from tabbrowser-arrowscrollbox binding
         if (val) {
           tabBar._positionPinnedTabs();

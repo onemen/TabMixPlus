@@ -453,14 +453,14 @@ Tabmix.tablib = {
         '  this.setAttribute("positionpinnedtabs", "true");' + $LF +
         '  let layoutData = this._pinnedTabsLayoutCache;' + $LF +
         '  if (!layoutData) {' + $LF +
-        '    layoutData = {pinnedTabWidth: this.childNodes[0].getBoundingClientRect().width};' + $LF +
+        '    layoutData = {pinnedTabWidth: tabs[0].getBoundingClientRect().width};' + $LF +
         '    if (Tabmix.isVersion(550)) {' + $LF +
         '      this._pinnedTabsLayoutCache = layoutData;' + $LF +
         '    }' + $LF +
         '  }' + $LF +
         '    let width = TabmixSvc.australis ? 0 : this.arrowScrollbox.scrollboxPaddingStart || 0;' + $LF +
         '    for (let i = 0; i < numPinned; i++) {' +
-        '      let tab = this.childNodes[i];' +
+        '      let tab = tabs[i];' +
         `      tab.style.${marginInlineStart} = width + "px";` + $LF +
         '      width += layoutData.pinnedTabWidth;' +
         '    }' +
@@ -524,13 +524,7 @@ Tabmix.tablib = {
       )._replace(
         /(var|let) isEndTab =|faviconize.o_lockTabSizing/,
         '  if (TabmixTabbar.widthFitTitle) {' +
-        '    let tab, tabs = Tabmix.visibleTabs.tabs;' +
-        '    for (let t = aTab._tPos+1, l = this.childNodes.length; t < l; t++) {' +
-        '      if (tabs.indexOf(this.childNodes[t]) > -1) {' +
-        '        tab = this.childNodes[t];' +
-        '        break;' +
-        '      }' +
-        '    }' +
+        '    let tab = tabs.find(t => t._tPos === aTab._tPos + 1);' +
         '    if (tab && !tab.pinned && !tab.collapsed) {' +
         '      let tabWidth = aTab.getBoundingClientRect().width + "px";' +
         '      tab.style.setProperty("width", tabWidth, "important");' +
@@ -567,7 +561,7 @@ Tabmix.tablib = {
         '    for (let i = 0; i < tabs.length; i++)' +
         '      tabs[i].style.width = "";' +
         '  }' +
-        '  if (updateScrollStatus && this.childNodes.length > 1) {' +
+        '  if (updateScrollStatus && this.allTabs.length > 1) {' +
         '    TabmixTabbar.updateScrollStatus();' +
         '    TabmixTabbar.updateBeforeAndAfter();' +
         '  }' +

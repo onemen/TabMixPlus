@@ -3317,7 +3317,7 @@ TabmixSessionManager = {
       gBrowser.moveTabTo(cTab, lastSelectedIndex);
       // remove extra tabs
       while (newtabsCount < gBrowser.tabs.length) {
-        let tab = gBrowser.tabContainer.lastChild;
+        let tab = gBrowser.tabContainer.allTabs[gBrowser.tabContainer.allTabs.length - 1];
         gBrowser.removeTab(tab);
       }
       this.copyClosedTabsToSessionStore(winData, true);
