@@ -119,8 +119,9 @@ Tabmix.multiRow = {
           const tabBar = this.parentNode;
           tabBar._unlockTabSizing();
 
-          if (this.isMultiRow && tabBar.firstChild.pinned)
+          if (this.isMultiRow && tabBar.allTabs[0].pinned) {
             this.setFirstTabInRow(true);
+          }
         });
 
         this.tabmixPrefObserver = {
@@ -256,14 +257,14 @@ Tabmix.multiRow = {
         }
 
         // still in one row
-        const tabs = this.parentNode;
-        const {height} = tabs.selectedItem.getBoundingClientRect();
+        const tabs = this.parentNode.allTabs;
+        const {height} = this.parentNode.selectedItem.getBoundingClientRect();
         if (height)
           return height;
 
         // if selectedItem don't have height find other tab that does
-        for (let i = 0; i < tabs.childNodes.length; i++) {
-          const tab = tabs.childNodes[i];
+        for (let i = 0; i < tabs.length; i++) {
+          const tab = tabs[i];
           const tabHeight = tab.getBoundingClientRect().height;
           if (tabHeight) {
             return tabHeight;

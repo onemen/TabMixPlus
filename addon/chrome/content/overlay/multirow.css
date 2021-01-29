@@ -35,11 +35,6 @@
   height: calc(var(--tab-min-height_mlt) - var(--tabs-navbar-shadow-size)) !important;
 }
 
-#tabbrowser-tabs .tabbrowser-tab[pinned] {
-  position: static !important;
-  margin-inline-start: 0px !important;
-}
-
 /* hide default scroll buttons */
 #tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(overflow-start-indicator),
 #tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-up),
