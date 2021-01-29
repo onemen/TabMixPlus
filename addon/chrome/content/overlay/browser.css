@@ -113,8 +113,8 @@
   display: none !important;
 }
 
-#tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-up,
-#tabbrowser-tabs:not([defaultScrollButtons]) > .tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-down {
+#tabbrowser-tabs:not([defaultScrollButtons]) > #tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-up,
+#tabbrowser-tabs:not([defaultScrollButtons]) > #tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-down {
   visibility: collapse !important;
 }
 
@@ -261,7 +261,7 @@ so display: none !important; does not hide the button */
 }
 
 /* :::: multi-row :::: */
-.tabbrowser-arrowscrollbox[flowing=multibar][orient=vertical] > .arrowscrollbox-scrollbox > .scrollbox-innerbox {
+#tabbrowser-arrowscrollbox[flowing=multibar][orient=vertical] > .arrowscrollbox-scrollbox > .scrollbox-innerbox {
   display: block !important;
 }
 
@@ -312,8 +312,8 @@ so display: none !important; does not hide the button */
 }
 
 /* Firefox 32+ */
-.tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-start-indicator,
-.tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-end-indicator {
+#tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-start-indicator,
+#tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-end-indicator {
   margin-bottom: 0;
   visibility: collapse;
 }

@@ -34,7 +34,7 @@
 /* for windows 7 and up */
 @media not all and (-moz-os-version: windows-xp) {
   @media not all and (-moz-os-version: windows-vista) {
-    #tabbrowser-tabs[multibar=true] .tabbrowser-arrowscrollbox > toolbarbutton {
+    #tabbrowser-tabs[multibar=true] #tabbrowser-arrowscrollbox > toolbarbutton {
       vertical-align: bottom;
     }
 
@@ -60,4 +60,3 @@
     > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
   margin: 2px;
 }
-
