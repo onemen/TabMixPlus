@@ -356,8 +356,9 @@ var TMP_tabDNDObserver = {
     if (dragType == this.DRAG_LINK) {
       this.gMsg = event.originalTarget.getAttribute("command") == "cmd_newNavigatorTab" ?
         this.gBackupLabel : this.draglink;
-      if (event.target.localName != "tab" && event.target.localName != "tabs")
+      if (!tabBar.contains(event.target)) {
         this.gMsg = this.gBackupLabel;
+      }
       var statusTextFld = document.getElementById("statusbar-display");
       if (statusTextFld && statusTextFld.getAttribute("label") != this.gMsg) {
         if (this.gBackupLabel === "")
@@ -382,7 +383,7 @@ var TMP_tabDNDObserver = {
       // scroll without button
       else if (event.screenX <= tabStrip.scrollbox.screenX)
         targetAnonid = ltr ? "scrollbutton-up" : "scrollbutton-down";
-      else if (event.screenX >= (tabStrip.scrollbox.screenX + tabStrip.scrollbox.getBoundingClientRect().width))
+      else if (event.screenX >= (tabStrip.scrollbox.screenX + tabStrip.scrollClientRect.width))
         targetAnonid = ltr ? "scrollbutton-down" : "scrollbutton-up";
       switch (targetAnonid) {
         case "scrollbutton-up":
@@ -441,11 +442,11 @@ var TMP_tabDNDObserver = {
     }
 
     // fall back to build-in drop method
-    if (!draggedTab || dropEffect == "copy" || draggedTab.parentNode != tabBar) {
+    if (!draggedTab || dropEffect == "copy" || draggedTab.container != tabBar) {
       return;
     }
 
-    tabBar._tabDropIndicator.collapsed = true;
+    tabBar._tabDropIndicator.hidden = true;
     event.stopPropagation();
     let oldTranslateX = draggedTab._dragData && draggedTab._dragData.translateX;
     let dropIndex = "animDropIndex" in draggedTab._dragData &&
@@ -596,7 +597,7 @@ var TMP_tabDNDObserver = {
       gBrowser.moveTabTo(newTab, newIndex);
 
       gBrowser.selectedTab = newTab;
-      draggedTab.parentNode._finishAnimateTabMove();
+      draggedTab.container._finishAnimateTabMove();
       gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
       gBrowser.updateCurrentBrowser(true);
     } else {
@@ -623,7 +624,7 @@ var TMP_tabDNDObserver = {
       const replaceCurrentTab = left_right == -1 || Tabmix.ContentClick.isUrlForDownload(url);
       let tab;
       if (replaceCurrentTab) {
-        tab = event.target.localName == "tab" ? event.target : gBrowser.tabs[newIndex];
+        tab = event.target.closest("tab.tabbrowser-tab") || gBrowser.tabs[newIndex];
         // allow to load in locked tab
         tab.linkedBrowser.tabmix_allowLoad = true;
       }
@@ -796,7 +797,7 @@ var TMP_tabDNDObserver = {
     this._dragTime = 0;
 
     var target = event.relatedTarget;
-    while (target && target.localName != "tabs")
+    while (target && target.localName != "arrowscrollbox")
       target = target.parentNode;
     if (target)
       return;
@@ -842,8 +843,8 @@ var TMP_tabDNDObserver = {
     var tabs = Tabmix.visibleTabs.tabs;
     var numTabs = tabs.length;
     if (!tabBar.hasAttribute("multibar")) {
-      let i = event.target.localName == "tab" ?
-        Tabmix.visibleTabs.indexOf(event.target) : 0;
+      const target = event.target.closest("tab.tabbrowser-tab");
+      let i = target ? Tabmix.visibleTabs.indexOf(target) : 0;
       for (; i < numTabs; i++) {
         let tab = tabs[i];
         if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr))
@@ -898,9 +899,9 @@ var TMP_tabDNDObserver = {
 
   getDragType: function minit_getDragType(aSourceNode) {
     if (aSourceNode && aSourceNode instanceof XULElement && aSourceNode.localName == "tab") {
-      if (aSourceNode.parentNode == gBrowser.tabContainer)
+      if (aSourceNode.container == aSourceNode.ownerGlobal.gBrowser.tabContainer)
         return this.DRAG_TAB_IN_SAME_WINDOW; // 2
-      if (aSourceNode.ownerGlobal instanceof ChromeWindow &&
+      if (aSourceNode.ownerGlobal.isChromeWindow &&
            aSourceNode.ownerDocument.documentElement.getAttribute("windowtype") == "navigator:browser")
         return this.DRAG_TAB_TO_NEW_WINDOW; // 1
     }
@@ -999,7 +1000,7 @@ var TMP_tabDNDObserver = {
   },
 
   setFirefoxDropIndicator(val) {
-    gBrowser.tabContainer._tabDropIndicator.collapsed = !val;
+    gBrowser.tabContainer._tabDropIndicator.hidden = !val;
   },
 
   removeDragmarkAttribute(tab) {

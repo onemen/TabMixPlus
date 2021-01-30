@@ -459,8 +459,7 @@ var TabmixTabbar = {
     if (onlyHoverAtt)
       return;
 
-    let selected = Tabmix.isVersion(390) && gBrowser._switcher ?
-      gBrowser._switcher.visibleTab : tabBar.selectedItem;
+    let selected = gBrowser._switcher ? gBrowser._switcher.visibleTab : gBrowser.selectedTab;
     let prev = null, next = null;
     if (!selected.closing) {
       let visibleTabs = Tabmix.visibleTabs.tabs;
@@ -611,7 +610,7 @@ Tabmix.tabsUtils = {
   },
 
   getInnerbox() {
-    return document.getElementById("tabbrowser-arrowscrollbox").scrollbox;
+    return this.tabBar.arrowScrollbox.scrollbox;
   },
 
   get inDOMFullscreen() {
@@ -726,7 +725,7 @@ Tabmix.tabsUtils = {
       case "dblclick":
         if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
             Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") &&
-            !TabmixSvc.isMac && aEvent.target.localName == "tabs") {
+            !TabmixSvc.isMac && aEvent.target.localName === "arrowscrollbox") {
           let displayAppButton = !(document.getElementById("titlebar")).hidden;
           let tabsOnTop = !window.TabsOnTop || TabsOnTop.enabled;
           if (TabsInTitlebar.enabled ||
@@ -746,9 +745,9 @@ Tabmix.tabsUtils = {
         break;
       }
       case "dragover": {
-        let target = aEvent.target.localName;
-        if (target != "tab" && target != "tabs")
+        if (!this.tabBar.contains(aEvent.target)) {
           return;
+        }
         if (this.tabBar.useTabmixDnD(aEvent))
           TMP_tabDNDObserver.onDragOver(aEvent);
         break;

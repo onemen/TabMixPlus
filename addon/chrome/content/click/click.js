@@ -46,8 +46,8 @@ var TabmixTabClickOptions = {
       return;
     }
 
-    var clickOutTabs = aEvent.target.localName == "tabs";
-    var tab = clickOutTabs ? gBrowser._selectedTab : aEvent.target.closest("tab.tabbrowser-tab");
+    const clickOutTabs = aEvent.target.localName == "arrowscrollbox";
+    const tab = clickOutTabs ? gBrowser._selectedTab : aEvent.target.closest("tab.tabbrowser-tab");
 
     // we replace click handler from tab binding with this to make sure that we
     // always call onMouseCommand (if we need to) before we call tab flip.
@@ -123,9 +123,9 @@ var TabmixTabClickOptions = {
       return;
     }
 
-    var clickOutTabs = aEvent.target.localName == "tabs";
+    const clickOutTabs = aEvent.target.localName == "arrowscrollbox";
 
-    var tab = clickOutTabs ? gBrowser._selectedTab : aEvent.target;
+    const tab = clickOutTabs ? gBrowser._selectedTab : aEvent.target.closest("tab.tabbrowser-tab");
     this.clickAction("dbl", clickOutTabs, tab, aEvent);
   },
 
@@ -299,7 +299,7 @@ var TabmixTabClickOptions = {
    * and tabbar.click_dragwindow is true
    */
   blockDblclick(aEvent) {
-    if (aEvent.button !== 0 || aEvent.target.localName == "tabs" ||
+    if (aEvent.button !== 0 || aEvent.target.localName == "arrowscrollbox" ||
         Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") ||
         !Tabmix.prefs.getBoolPref("tabbar.click_dragwindow"))
       return;

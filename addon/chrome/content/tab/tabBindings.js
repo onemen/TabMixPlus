@@ -206,11 +206,10 @@
       if (!aTab || !aTab.parentNode)
         return; // this tab already removed....
 
-      var b = aTab.parentNode.tabbrowser;
-      if (b.hasAttribute("preventMouseHoverSelect"))
-        b.removeAttribute("preventMouseHoverSelect");
+      if (gBrowser.hasAttribute("preventMouseHoverSelect"))
+        gBrowser.removeAttribute("preventMouseHoverSelect");
       else if (aTab.mIsHover)
-        aTab.parentNode.selectedItem = aTab;
+        aTab.container.selectedItem = aTab;
     };
 
     this.setShowButton = function(aTab) {
@@ -226,7 +225,7 @@
         if (TabmixTabbar.widthFitTitle)
           aTab.style.setProperty("width", Tabmix.getBoundsWithoutFlushing(aTab).width + "px", "important");
         aTab.setAttribute("showbutton", "on");
-        aTab.parentNode.__showbuttonTab = aTab;
+        aTab.container.__showbuttonTab = aTab;
       }
     };
 
@@ -272,13 +271,13 @@
         // the close button
         aTab.setAttribute("showbutton_removed", true);
         setTimeout(tab => tab.removeAttribute("showbutton_removed"), 50, aTab);
-        if (aTab == aTab.parentNode.__showbuttonTab)
-          delete aTab.parentNode.__showbuttonTab;
+        if (aTab == aTab.container.__showbuttonTab)
+          delete aTab.container.__showbuttonTab;
       }
     };
 
     this.onMouseCommand = function(aEvent, aSelectNewTab) {
-      var isSelected = this == this.parentNode.selectedItem;
+      var isSelected = this == this.container.selectedItem;
       Tabmix.setItem(this, "clickOnCurrent",
         isSelected && aEvent.detail == 1 || null);
       if (isSelected)
@@ -288,7 +287,7 @@
       if (aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
         aEvent.stopPropagation();
       else if (aSelectNewTab) {
-        this.parentNode._selectNewTab(this);
+        this.container._selectNewTab(this);
         let isTabFocused = false;
         try {
           isTabFocused = (document.commandDispatcher.focusedElement == this);
