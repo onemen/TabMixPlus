@@ -2,7 +2,8 @@
 /* exported install uninstall startup shutdown */
 "use strict";
 
-Components.utils.import("resource://gre/modules/Services.jsm");
+const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+Cu.import("resource://gre/modules/Services.jsm");
 
 const appinfo = Services.appinfo;
 const options = {
@@ -19,6 +20,36 @@ overlay   chrome://browser/content/browser.xhtml                 chrome://tabmix
 overlay   about:addons                                           chrome://tabmixplus/content/preferences/overlay/aboutaddons.xhtml
 `;
 
+/**
+ * restartApplication: Restarts the application, keeping it in
+ * safe mode if it is already in safe mode.
+ */
+function restartApplication() {
+  const cancelQuit = Cc["@mozilla.org/supports-PRBool;1"].createInstance(
+    Ci.nsISupportsPRBool
+  );
+  Services.obs.notifyObservers(
+    cancelQuit,
+    "quit-application-requested",
+    "restart"
+  );
+  if (cancelQuit.data) {
+    // The quit request has been canceled.
+    return false;
+  }
+  // if already in safe mode restart in safe mode
+  if (Services.appinfo.inSafeMode) {
+    Services.startup.restartInSafeMode(
+      Ci.nsIAppStartup.eAttemptQuit | Ci.nsIAppStartup.eRestart
+    );
+    return undefined;
+  }
+  Services.startup.quit(
+    Ci.nsIAppStartup.eAttemptQuit | Ci.nsIAppStartup.eRestart
+  );
+  return undefined;
+}
+
 function showRestartNotification(verb, window) {
   window.PopupNotifications._currentNotifications.shift();
   window.PopupNotifications.show(
@@ -30,7 +61,7 @@ function showRestartNotification(verb, window) {
       label: 'Restart Now',
       accessKey: 'R',
       callback() {
-        window.BrowserUtils.restartApplication();
+        restartApplication();
       }
     },
     [{

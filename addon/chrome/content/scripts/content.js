@@ -313,7 +313,10 @@ TabmixClickEventHandler = {
 
     if (href) {
       try {
-        BrowserUtils.urlSecurityCheck(href, principal);
+        Services.scriptSecurityManager.checkLoadURIStrWithPrincipal(
+          principal,
+          href
+        );
       } catch (e) {
         return;
       }
