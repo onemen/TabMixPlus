@@ -134,39 +134,13 @@ Tabmix.tablib = {
   change_gBrowser: function change_gBrowser() {
     Tabmix.originalFunctions.gBrowser_addTab = gBrowser.addTab;
     gBrowser.addTab = function(...args) {
-      let dontMove, isPending, referrerURI, relatedToCurrent = null,
-          callerTrace = Tabmix.callerTrace(),
-          isRestoringTab = callerTrace.contain("ssi_restoreWindow"),
-          openerBrowser;
+      let callerTrace = Tabmix.callerTrace(),
+          isRestoringTab = callerTrace.contain("ssi_restoreWindow");
 
-      // we prevents the original function from moving the new tab by setting
-      // params.relatedToCurrent to false
-      let params = args[1];
-      if (args.length <= 6 && params &&
-          (typeof params != "object" || params instanceof Ci.nsIURI)) {
-        referrerURI = params;
-        params = {
-          referrerURI,
-          charset: args[2],
-          postData: args[3],
-          ownerTab: args[4],
-          allowThirdPartyFixup: args[5],
-        };
-        let uri = args[0];
-        args = [uri, params];
-      } else if (args.length == 2 &&
-          typeof params == "object" &&
-          !(params instanceof Ci.nsIURI)) {
-        dontMove = params.dontMove;
-        isPending = params.isPending;
-        referrerURI = params.referrerURI;
-        relatedToCurrent = params.relatedToCurrent || null;
-        openerBrowser = params.openerBrowser;
-        args[1] = params;
-      }
+      let {dontMove, isPending, referrerInfo, relatedToCurrent = null, openerBrowser} = args[1] || {};
 
       if (relatedToCurrent === null) {
-        relatedToCurrent = Boolean(referrerURI);
+        relatedToCurrent = Boolean(referrerInfo && referrerInfo.originalReferrer);
       }
       let insertRelatedAfterCurrent = Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent");
       if (insertRelatedAfterCurrent) {
