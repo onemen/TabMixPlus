@@ -835,7 +835,7 @@ var TMP_eventListener = {
   // when more the one tabs opened at once
   lastTimeTabOpened: 0,
   onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
-    if (!aTab.linkedBrowser.isConnected) {
+    if (aTab.hasAttribute("pending")) {
       this.onSSTabRestoring(aTab);
       if (aTab.label == "about:blank") {
         aTab.label = Tabmix.getString("tabs.emptyTabTitle");

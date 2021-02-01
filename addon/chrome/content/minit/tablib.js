@@ -1761,7 +1761,7 @@ Tabmix.tablib = {
     }
 
     TMP_Places.asyncSetTabTitle(aTab, url).then(foundTitle => {
-      if (!foundTitle) {
+      if (!foundTitle && aTab.linkedBrowser) {
         // call setTabTile again to get the default title
         aTab._tabmixState = {noBookmart: true};
         gBrowser.setTabTitle(aTab);

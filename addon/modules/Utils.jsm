@@ -2,7 +2,7 @@
 
 this.EXPORTED_SYMBOLS = ["TabmixUtils"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {classes: Cc, interfaces: Ci} = Components;
 
 // Messages that will be received via the Frame Message Manager.
 const FMM_MESSAGES = [
@@ -14,20 +14,19 @@ const FMM_MESSAGES = [
   "Tabmix:contextmenu",
 ];
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
+const {XPCOMUtils} = ChromeUtils.import(
+  "resource://gre/modules/XPCOMUtils.jsm"
+);
 
-XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
-  "resource://gre/modules/PrivateBrowsingUtils.jsm");
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "chrome://tabmix-resource/content/TabmixSvc.jsm");
-XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
-  "chrome://tabmix-resource/content/DocShellCapabilities.jsm");
-XPCOMUtils.defineLazyModuleGetter(this, "AutoReload",
-  "chrome://tabmix-resource/content/AutoReload.jsm");
-XPCOMUtils.defineLazyModuleGetter(this, "MergeWindows",
-  "chrome://tabmix-resource/content/MergeWindows.jsm");
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixAboutNewTab",
-  "chrome://tabmix-resource/content/AboutNewTab.jsm");
+XPCOMUtils.defineLazyModuleGetters(this, {
+  AutoReload: "chrome://tabmix-resource/content/AutoReload.jsm",
+  DocShellCapabilities: "chrome://tabmix-resource/content/DocShellCapabilities.jsm",
+  MergeWindows: "chrome://tabmix-resource/content/MergeWindows.jsm",
+  NewTabPagePreloading: "resource:///modules/NewTabPagePreloading.jsm",
+  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
+  TabmixAboutNewTab: "chrome://tabmix-resource/content/AboutNewTab.jsm",
+  TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.jsm",
+});
 
 this.TabmixUtils = {
   initMessageManager(window) {
@@ -37,16 +36,14 @@ this.TabmixUtils = {
     // Load the frame script after registering listeners.
     mm.loadFrameScript("chrome://tabmixplus/content/scripts/content.js", true);
 
-    // call TabmixAboutNewTab.updateBrowser for gBrowser._preloadedBrowser,
+    // call TabmixAboutNewTab.updateBrowser for gBrowser.preloadedBrowser,
     // if it already exist before we loaded our frame script
-    if (TabmixSvc.version(420)) {
-      let gBrowser = window.gBrowser;
-      if (TabmixSvc.prefBranch.getBoolPref("titlefrombookmark") &&
+    let gBrowser = window.gBrowser;
+    if (TabmixSvc.prefBranch.getBoolPref("titlefrombookmark") &&
           window.BROWSER_NEW_TAB_URL == TabmixSvc.aboutNewtab &&
-          gBrowser._preloadedBrowser && gBrowser._isPreloadingEnabled() &&
+          gBrowser.preloadedBrowser && NewTabPagePreloading.enabled &&
           !PrivateBrowsingUtils.isWindowPrivate(window)) {
-        TabmixAboutNewTab.updateBrowser(gBrowser._preloadedBrowser);
-      }
+      TabmixAboutNewTab.updateBrowser(gBrowser.preloadedBrowser);
     }
   },
 

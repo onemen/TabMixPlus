@@ -214,12 +214,11 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
   tabBrowser.isBlankBrowser = function TMP_isBlankBrowser(aBrowser, aboutBlank) {
     try {
-      if (Tabmix.isVersion(550)) {
-        let tab = this.getTabForBrowser(aBrowser);
-        if (tab.hasAttribute("pending")) {
-          return TMP_SessionStore.isBlankPendingTab(tab);
-        }
+      let tab = this.getTabForBrowser(aBrowser);
+      if (tab.hasAttribute("pending")) {
+        return TMP_SessionStore.isBlankPendingTab(tab);
       }
+
       if (!aBrowser || !aBrowser.currentURI)
         return true;
       if (aBrowser.canGoForward || aBrowser.canGoBack)
@@ -232,22 +231,6 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     }
   };
 
-  /**
-   * add gBrowser.getTabForBrowser if it is not exist
-   * gBrowser.getTabForBrowser exist since Firefox 35 (Bug 1039500)
-   * gBrowser._getTabForBrowser exist since Firefox 23 (Bug 662008)
-   */
-  if (typeof tabBrowser.getTabForBrowser != "function") {
-    // this is _getTabForBrowser version from Firefox 23
-    tabBrowser.getTabForBrowser = function(aBrowser) {
-      for (let i = 0; i < this.tabs.length; i++) {
-        if (this.tabs[i].linkedBrowser == aBrowser)
-          return this.tabs[i];
-      }
-      return null;
-    };
-  }
-
   tabBrowser.getBrowserForTabPanel = function(notificationbox) {
     return notificationbox.getElementsByClassName("browserStack")[0].firstChild;
   };
@@ -255,7 +238,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   tabBrowser.getTabForLastPanel = function() {
     let notificationbox = this.tabpanels.lastChild;
     let browser = this.getBrowserForTabPanel(notificationbox);
-    if (browser == gBrowser._preloadedBrowser) {
+    if (browser === gBrowser.preloadedBrowser) {
       browser = this.getBrowserForTabPanel(notificationbox.previousSibling);
     }
     return this.getTabForBrowser(browser);
