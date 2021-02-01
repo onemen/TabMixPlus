@@ -897,13 +897,19 @@ var TMP_tabDNDObserver = {
     return left_right;
   },
 
-  getDragType: function minit_getDragType(aSourceNode) {
-    if (aSourceNode && aSourceNode instanceof XULElement && aSourceNode.localName == "tab") {
-      if (aSourceNode.container == aSourceNode.ownerGlobal.gBrowser.tabContainer)
+  getDragType(sourceNode) {
+    if (
+      sourceNode instanceof XULElement &&
+      sourceNode.localName == "tab" &&
+      sourceNode.ownerGlobal.isChromeWindow &&
+      sourceNode.ownerDocument.documentElement.getAttribute("windowtype") ==
+      "navigator:browser" &&
+      sourceNode.ownerGlobal.gBrowser.tabContainer == sourceNode.container
+    ) {
+      if (sourceNode.container === gBrowser.tabContainer) {
         return this.DRAG_TAB_IN_SAME_WINDOW; // 2
-      if (aSourceNode.ownerGlobal.isChromeWindow &&
-           aSourceNode.ownerDocument.documentElement.getAttribute("windowtype") == "navigator:browser")
-        return this.DRAG_TAB_TO_NEW_WINDOW; // 1
+      }
+      return this.DRAG_TAB_TO_NEW_WINDOW; // 1
     }
     return this.DRAG_LINK; // 0
   },
