@@ -14,9 +14,6 @@ XPCOMUtils.defineLazyModuleGetter(this, "AppConstants",
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
   "resource:///modules/sessionstore/DocShellCapabilities.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "BrowserUtils",
-  "resource://gre/modules/BrowserUtils.jsm");
-
 XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
@@ -311,6 +308,8 @@ TabmixClickEventHandler = {
     json.tabmixContentClick = data;
     href = data._href;
 
+    const actor = docShell.domWindow.windowGlobalChild.getActor("ClickHandler");
+
     if (href) {
       try {
         Services.scriptSecurityManager.checkLoadURIStrWithPrincipal(
@@ -331,7 +330,7 @@ TabmixClickEventHandler = {
       // should we allow mixed content.
       json.allowMixedContent = false;
       let docshell = ownerDoc.defaultView.docShell;
-      if (this.docShell.mixedContentChannel) {
+      if (docShell.mixedContentChannel) {
         const sm = Services.scriptSecurityManager;
         try {
           let targetURI = Services.io.newURI(href);
@@ -360,13 +359,13 @@ TabmixClickEventHandler = {
         event.preventMultipleActions();
       }
 
-      this.sendAsyncMessage("Content:Click", json);
+      actor.sendAsyncMessage("Content:Click", json);
       return;
     }
 
     // This might be middle mouse navigation.
     if (event.button == 1) {
-      sendAsyncMessage("Content:Click", json);
+      actor.sendAsyncMessage("Content:Click", json);
     }
   },
 
@@ -417,14 +416,13 @@ TabmixClickEventHandler = {
     // In case of XLink, we don't return the node we got href from since
     // callers expect <a>-like elements.
     // Note: makeURI() will throw if aUri is not a valid URI.
-    return [href ? BrowserUtils.makeURI(href, null, baseURI).spec : null, null,
+    return [href ? Services.io.newURI(href, null, baseURI).spec : null, null,
       node && node.ownerDocument.nodePrincipal];
   },
 };
 
 var AboutNewTabHandler = {
   init(global) {
-    Cu.import("resource://gre/modules/Services.jsm", this);
     addMessageListener("Tabmix:updateTitlefrombookmark", this);
 
     let contentLoaded = false;
