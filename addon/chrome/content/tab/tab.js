@@ -1636,9 +1636,8 @@ gTMPprefObserver = {
   },
 
   setTabbarDragging(allowDrag) {
-    let TabsToolbar = document.getElementById("TabsToolbar");
-    TabsToolbar._dragBindingAlive = allowDrag;
-    Tabmix.setItem(TabsToolbar, "tabmix-disallow-drag", !allowDrag || null);
+    Tabmix.setItem("TabsToolbar-customization-target",
+      "tabmix-disallow-drag", !allowDrag || null);
   },
 
   getStyleSheets: function TMP_PO_getStyleSheet(aHref, aFirst) {

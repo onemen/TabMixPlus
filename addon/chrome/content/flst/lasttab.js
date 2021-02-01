@@ -122,7 +122,8 @@ var TMP_LastTab = {
   disallowDragState: false,
   updateDisallowDrag(disallow) {
     this.disallowDragState = disallow;
-    Tabmix.setItem("TabsToolbar", "tabmix-disallow-drag", disallow || null);
+    Tabmix.setItem("TabsToolbar-customization-target",
+      "tabmix-disallow-drag", disallow || null);
   },
 
   ItemActive(event) {
