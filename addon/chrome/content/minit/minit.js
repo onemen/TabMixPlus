@@ -39,9 +39,15 @@ var TMP_tabDNDObserver = {
       return !dragContext || !dragContext.draggedTabs ||
           dragContext.draggedTabs.length == 1;
     };
+
+    Tabmix.getMovingTabsWidth = movingTabs => {
+      return movingTabs.reduce((width, tab) => {
+        return width + tab.getBoundingClientRect().width;
+      }, 0);
+    };
     // Determine what tab we're dragging over.
     // * In tabmix tabs can have different width
-    // * Point of reference is the start of the dragged tab when
+    // * Point of reference is the start of the dragged tab/tabs when
     //   dragging left and the end when dragging right. If that point
     //   is before (for dragging left) or after (for dragging right)
     //   the middle of a background tab, the dragged tab would take that
@@ -63,10 +69,19 @@ var TMP_tabDNDObserver = {
       'let draggingRight = screenX > draggedTab._dragData.animLastScreenX;\n          ' +
       '$&', {check: !tabsDragUtils}
     )._replace(
-    // TODO: need more testing
-    //   'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
-    //   'let tabCenter = tabScreenX + translateX + (tabmixHandleMove ? draggingRight * tabWidth : tabWidth / 2);'
-    // )._replace(
+      'let shiftWidth = tabWidth * movingTabs.length;',
+      'let shiftWidth = Tabmix.getMovingTabsWidth(movingTabs);'
+    )._replace(
+      'let tabCenter = ltrMove ? rightTabCenter : leftTabCenter;',
+      `$&
+      if (tabmixHandleMove) {
+        if (ltrMove) {
+          tabCenter = rightMovingTabScreenX + translateX + movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
+        } else {
+          tabCenter = leftMovingTabScreenX + translateX;
+        }
+      }`
+    )._replace(
       tabsDragUtils ? /screenX = boxObject\[TDUContext.*;/ :
         /screenX = tabs\[mid\].*;/,
       '$&\n            ' +
