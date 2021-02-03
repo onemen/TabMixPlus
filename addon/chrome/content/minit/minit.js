@@ -122,9 +122,8 @@ var TMP_tabDNDObserver = {
   },
 
   onDragStart(event, tabmixDragstart) {
-    // we get here on capturing phase before "tabbrowser-close-tab-button"
-    // binding stop the event propagation
-    if (event.originalTarget?.classList?.contains("tab-close-button")) {
+    // we get here on capturing phase before our mousedown handler stop the event propagation
+    if (event.originalTarget.classList?.contains("tab-close-button")) {
       event.stopPropagation();
       return;
     }
@@ -238,6 +237,7 @@ var TMP_tabDNDObserver = {
   },
 
   onDragOver: function minit_onDragOver(event) {
+    console.log("onDragOver");
     var dt = event.dataTransfer;
     var tabBar = gBrowser.tabContainer;
 
@@ -382,11 +382,14 @@ var TMP_tabDNDObserver = {
     var dt = event.dataTransfer;
     var dropEffect = dt.dropEffect;
     var draggedTab;
+    let movingTabs;
     if (dt.mozTypesAt(0)[0] == TAB_DROP_TYPE) { // tab copy or move
       draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
       // not our drop then
       if (!draggedTab)
         return;
+      movingTabs = draggedTab._dragData.movingTabs;
+      draggedTab.container._finishGroupSelectedTabs(draggedTab);
     }
 
     // fall back to build-in drop method
@@ -396,11 +399,13 @@ var TMP_tabDNDObserver = {
 
     tabBar._tabDropIndicator.hidden = true;
     event.stopPropagation();
-    let oldTranslateX = draggedTab._dragData && draggedTab._dragData.translateX;
-    let dropIndex = "animDropIndex" in draggedTab._dragData &&
-        draggedTab._dragData.animDropIndex;
-    if (dropIndex && dropIndex > draggedTab._tPos)
+    let oldTranslateX = draggedTab._dragData && Math.round(draggedTab._dragData.translateX);
+    let dropIndex = "animDropIndex" in draggedTab._dragData && draggedTab._dragData.animDropIndex;
+    let incrementDropIndex = true;
+    if (dropIndex && dropIndex > movingTabs[0]._tPos) {
       dropIndex--;
+      incrementDropIndex = false;
+    }
 
     let newTranslateX = 0;
     if (oldTranslateX && dropIndex !== false) {
@@ -416,27 +421,42 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    if (oldTranslateX && oldTranslateX != newTranslateX) {
-      draggedTab.setAttribute("tabdrop-samewindow", "true");
-      draggedTab.style.transform = "translateX(" + newTranslateX + "px)";
-      let onTransitionEnd = transitionendEvent => {
-        if (transitionendEvent.propertyName != "transform" ||
-            transitionendEvent.originalTarget != draggedTab) {
-          return;
-        }
-        draggedTab.removeEventListener("transitionend", onTransitionEnd);
+    if (oldTranslateX && oldTranslateX != newTranslateX && !gReduceMotion) {
+      for (let tab of movingTabs) {
+        tab.setAttribute("tabdrop-samewindow", "true");
+        tab.style.transform = "translateX(" + newTranslateX + "px)";
+        // eslint-disable-next-line no-loop-func
+        let onTransitionEnd = transitionendEvent => {
+          if (transitionendEvent.propertyName != "transform" ||
+            transitionendEvent.originalTarget != tab) {
+            return;
+          }
+          tab.removeEventListener("transitionend", onTransitionEnd);
 
-        draggedTab.removeAttribute("tabdrop-samewindow");
+          tab.removeAttribute("tabdrop-samewindow");
 
-        tabBar._finishAnimateTabMove();
-        if (dropIndex !== false)
-          gBrowser.moveTabTo(draggedTab, dropIndex);
-      };
-      draggedTab.addEventListener("transitionend", onTransitionEnd);
+          tabBar._finishAnimateTabMove();
+          if (dropIndex !== false) {
+            gBrowser.moveTabTo(tab, dropIndex);
+            if (incrementDropIndex) {
+              dropIndex++;
+            }
+          }
+
+          gBrowser.syncThrobberAnimations(tab);
+        };
+        draggedTab.addEventListener("transitionend", onTransitionEnd);
+      }
     } else {
       tabBar._finishAnimateTabMove();
-      if (dropIndex !== false)
-        gBrowser.moveTabTo(draggedTab, dropIndex);
+      if (dropIndex !== false) {
+        for (let tab of movingTabs) {
+          gBrowser.moveTabTo(tab, dropIndex);
+          if (incrementDropIndex) {
+            dropIndex++;
+          }
+        }
+      }
     }
 
     if (draggedTab) {
