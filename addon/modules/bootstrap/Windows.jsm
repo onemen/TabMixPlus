@@ -1,84 +1,103 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-
 // VERSION 2.4.1
 // Modules.UTILS = true;
 // Modules.BASEUTILS = true;
+
+/* eslint curly: 2 */
+"use strict";
+
 this.EXPORTED_SYMBOLS = ["Windows"];
 Cu.import("resource://gre/modules/Services.jsm", this);
 
 function callOnLoad(aSubject, aCallback, beforeComplete) {
-	if(aSubject.document.readyState == 'complete' || beforeComplete) {
-		try { aCallback(aSubject); }
-		catch(ex) { Cu.reportError(ex); }
-		return;
-	}
+  if (aSubject.document.readyState == "complete" || beforeComplete) {
+    try {
+      aCallback(aSubject);
+    } catch (ex) {
+      Cu.reportError(ex);
+    }
+    return;
+  }
 
-	listenOnce(aSubject, "load", function() {
-		try { aCallback(aSubject); }
-		catch(ex) { Cu.reportError(ex); }
-	}, false);
+  listenOnce(
+    aSubject,
+    "load",
+    () => {
+      try {
+        aCallback(aSubject);
+      } catch (ex) {
+        Cu.reportError(ex);
+      }
+    },
+    false
+  );
 }
 
-var onceListeners = [];
+let onceListeners = [];
 
 function listenOnce(aSubject, type, handler, capture) {
-	if(!aSubject || !aSubject.addEventListener) { return; }
+  if (!aSubject || !aSubject.addEventListener) {
+    return;
+  }
 
-	var runOnce = function(event) {
-		try { aSubject.removeEventListener(type, runOnce, capture); }
-		catch(ex) { handleDeadObject(ex); } // Prevents some can't access dead object errors
-		if(event !== undefined) {
-			removeOnceListener(runOnce);
-			try { handler(event, aSubject); }
-			catch(ex) { Cu.reportError(ex); }
-		}
-	};
+  const runOnce = function(event) {
+    try {
+      aSubject.removeEventListener(type, runOnce, capture);
+    } catch (ex) {
+      handleDeadObject(ex);
+    } // Prevents some can't access dead object errors
+    if (event !== undefined) {
+      removeOnceListener(runOnce);
+      try {
+        handler(event, aSubject);
+      } catch (ex) {
+        Cu.reportError(ex);
+      }
+    }
+  };
 
-	aSubject.addEventListener(type, runOnce, capture);
+  aSubject.addEventListener(type, runOnce, capture);
 
-	let weak = Cu.getWeakReference(runOnce);
-	onceListeners.push(weak);
+  const weak = Cu.getWeakReference(runOnce);
+  onceListeners.push(weak);
 }
 
 function handleDeadObject(ex) {
-	if(ex.message == "can't access dead object") {
-		let scriptError = Cc["@mozilla.org/scripterror;1"].createInstance(Ci.nsIScriptError);
-		scriptError.init("Can't access dead object. This shouldn't cause any problems.", ex.sourceName || ex.fileName || null, ex.sourceLine || null, ex.lineNumber || null, ex.columnNumber || null, scriptError.warningFlag, 'XPConnect JavaScript');
-		Services.console.logMessage(scriptError);
-		return true;
-	} else {
-		Cu.reportError(ex);
-		return false;
-	}
+  if (ex.message == "can't access dead object") {
+    const scriptError = Cc["@mozilla.org/scripterror;1"].createInstance(Ci.nsIScriptError);
+    scriptError.init(
+      "Can't access dead object. This shouldn't cause any problems.",
+      ex.sourceName || ex.fileName || null,
+      ex.sourceLine || null,
+      ex.lineNumber || null,
+      ex.columnNumber || null,
+      scriptError.warningFlag,
+      "XPConnect JavaScript"
+    );
+    Services.console.logMessage(scriptError);
+    return true;
+  }
+  Cu.reportError(ex);
+  return false;
 }
 
 function removeOnceListener(oncer) {
-	for(var i=0; i<onceListeners.length; i++) {
-		let unwrapped = onceListeners[i].get();
+  for (let i = 0; i < onceListeners.length; i++) {
+    const unwrapped = onceListeners[i].get();
 
-		// clean up dead weak ref
-		if(!unwrapped) {
-			onceListeners.splice(i, 1);
-			i--;
-			continue;
-		}
+    // clean up dead weak ref
+    if (!unwrapped) {
+      onceListeners.splice(i, 1);
+      i--;
+    } else if (!oncer) {
+      unwrapped();
+    } else if (unwrapped == oncer) {
+      onceListeners.splice(i, 1);
+    }
+  }
 
-		if(!oncer) {
-			unwrapped();
-			continue;
-		}
-
-		if(unwrapped == oncer) {
-			onceListeners.splice(i, 1);
-			return;
-		}
-	}
-
-	if(!oncer) {
-		onceListeners = [];
-	}
+  if (!oncer) {
+    onceListeners = [];
+  }
 }
 
 // Windows - Aid object to help with window tasks involving window-mediator and window-watcher
@@ -104,125 +123,122 @@ function removeOnceListener(oncer) {
 //								returns (bool) false otherwise
 //	see register()
 this.Windows = {
-	watchers: [],
+  watchers: [],
 
-	getEnumerator: function(aType) {
-		return Services.wm.getEnumerator(aType || null);
-	},
+  getEnumerator(aType) {
+    return Services.wm.getEnumerator(aType || null);
+  },
 
-	callOnMostRecent: function(aCallback, aType, aURI) {
-		var type = aType || null;
-		if(aURI) {
-			var browserEnumerator = this.getEnumerator(type);
-			while(browserEnumerator.hasMoreElements()) {
-				var window = browserEnumerator.getNext();
-				if(window.document.documentURI.startsWith(aURI) && window.document.readyState == 'complete') {
-					return aCallback(window);
-				}
-			}
-			return null;
-		}
+  callOnMostRecent(aCallback, aType, aURI) {
+    const type = aType || null;
+    if (aURI) {
+      const browserEnumerator = this.getEnumerator(type);
+      while (browserEnumerator.hasMoreElements()) {
+        const win = browserEnumerator.getNext();
+        if (
+          win.document.documentURI.startsWith(aURI) &&
+          win.document.readyState == "complete"
+        ) {
+          return aCallback(win);
+        }
+      }
+      return null;
+    }
 
-		var window = Services.wm.getMostRecentWindow(type);
-		if(window) {
-			return aCallback(window);
-		}
-		return null;
-	},
+    const window = Services.wm.getMostRecentWindow(type);
+    if (window) {
+      return aCallback(window);
+    }
+    return null;
+  },
 
-	// expects aCallback() and sets its this as the window
-	callOnAll: function(aCallback, aType, aURI, beforeComplete) {
-		var browserEnumerator = this.getEnumerator(aType);
-		while(browserEnumerator.hasMoreElements()) {
-			var window = browserEnumerator.getNext();
-			if(!aURI || window.document.documentURI.startsWith(aURI)) {
-				callOnLoad(window, aCallback, beforeComplete);
-			}
-		}
-	},
+  // expects aCallback() and sets its this as the window
+  callOnAll(aCallback, aType, aURI, beforeComplete) {
+    const browserEnumerator = this.getEnumerator(aType);
+    while (browserEnumerator.hasMoreElements()) {
+      const window = browserEnumerator.getNext();
+      if (!aURI || window.document.documentURI.startsWith(aURI)) {
+        callOnLoad(window, aCallback, beforeComplete);
+      }
+    }
+  },
 
-	register: function(aHandler, aTopic, aType, aURI, beforeComplete) {
-		if(this.watching(aHandler, aTopic, aType, aURI, beforeComplete) === false) {
-			this.watchers.push({
-				handler: aHandler,
-				topic: aTopic,
-				type: aType || null,
-				uri: aURI || null,
-				beforeComplete: beforeComplete || false
-			});
-		}
-	},
+  register(aHandler, aTopic, aType, aURI, beforeComplete) {
+    if (this.watching(aHandler, aTopic, aType, aURI, beforeComplete) === false) {
+      this.watchers.push({
+        handler: aHandler,
+        topic: aTopic,
+        type: aType || null,
+        uri: aURI || null,
+        beforeComplete: beforeComplete || false,
+      });
+    }
+  },
 
-	unregister: function(aHandler, aTopic, aType, aURI, beforeComplete) {
-		var i = this.watching(aHandler, aTopic, aType, aURI, beforeComplete);
-		if(i !== false) {
-			this.watchers.splice(i, 1);
-		}
-	},
+  unregister(aHandler, aTopic, aType, aURI, beforeComplete) {
+    const i = this.watching(aHandler, aTopic, aType, aURI, beforeComplete);
+    if (i !== false) {
+      this.watchers.splice(i, 1);
+    }
+  },
 
-	watching: function(aHandler, aTopic, aType, aURI, beforeComplete) {
-		var type = aType || null;
-		var uri = aURI || null;
-		var before = beforeComplete || false;
+  watching(aHandler, aTopic, aType, aURI, beforeComplete) {
+    const type = aType || null;
+    const uri = aURI || null;
+    const before = beforeComplete || false;
 
-		for(var i = 0; i < this.watchers.length; i++) {
-			if(this.watchers[i].handler == aHandler
-			&& this.watchers[i].topic == aTopic
-			&& this.watchers[i].type == type
-			&& this.watchers[i].uri == uri
-			&& this.watchers[i].beforeComplete == before) {
-				return i;
-			}
-		}
-		return false;
-	},
+    for (let i = 0; i < this.watchers.length; i++) {
+      if (
+        this.watchers[i].handler == aHandler &&
+        this.watchers[i].topic == aTopic &&
+        this.watchers[i].type == type &&
+        this.watchers[i].uri == uri &&
+        this.watchers[i].beforeComplete == before
+      ) {
+        return i;
+      }
+    }
+    return false;
+  },
 
-	observe: function(aSubject, aTopic, noBefore) {
-		var scheduleOnLoad = false;
+  observe(aSubject, aTopic, noBefore) {
+    let scheduleOnLoad = false;
 
-		for(let watcher of this.watchers) {
-			// 'windowtype' attr is undefined until the window loads
-			if(!noBefore && aSubject.document.readyState != 'complete' && watcher.type) {
-				scheduleOnLoad = true;
-			}
+    for (const watcher of this.watchers) {
+      // 'windowtype' attr is undefined until the window loads
+      if (!noBefore && aSubject.document.readyState != "complete" && watcher.type) {
+        scheduleOnLoad = true;
+      }
 
-			if(watcher.topic == aTopic
-			&& (!watcher.type || aSubject.document.documentElement.getAttribute('windowtype') == watcher.type)
-			&& (!watcher.uri || aSubject.document.documentURI.startsWith(watcher.uri))) {
-				if(noBefore) {
-					// don't run this handler if it's been run before
-					if(!watcher.beforeComplete) {
-						if(watcher.handler.observe) {
-							watcher.handler.observe(aSubject, aTopic);
-						} else {
-							watcher.handler(aSubject);
-						}
-					}
-					continue;
-				}
+      if (
+        watcher.topic == aTopic &&
+        (!watcher.type ||
+          aSubject.document.documentElement.getAttribute("windowtype") == watcher.type) &&
+        (!watcher.uri || aSubject.document.documentURI.startsWith(watcher.uri))
+      ) {
+        if (noBefore) {
+          // don't run this handler if it's been run before
+          if (!watcher.beforeComplete) {
+            if (watcher.handler.observe) {
+              watcher.handler.observe(aSubject, aTopic);
+            } else {
+              watcher.handler(aSubject);
+            }
+          }
+        } else if (aSubject.document.readyState == "complete" || watcher.beforeComplete) {
+          if (watcher.handler.observe) {
+            watcher.handler.observe(aSubject, aTopic);
+          } else {
+            watcher.handler(aSubject);
+          }
+        }
+      }
+    }
 
-				if(aSubject.document.readyState == 'complete' || watcher.beforeComplete) {
-					if(watcher.handler.observe) {
-						watcher.handler.observe(aSubject, aTopic);
-					} else {
-						watcher.handler(aSubject);
-					}
-				}
-			}
-		}
-
-		if(scheduleOnLoad) {
-			callOnLoad(aSubject, (aWindow) => {
-				this.observe(aWindow, aTopic, true);
-			});
-		}
-	}
+    if (scheduleOnLoad) {
+      callOnLoad(aSubject, aWindow => {
+        this.observe(aWindow, aTopic, true);
+      });
+    }
+  },
 };
-
-// Modules.LOADMODULE = function() {
-// 	Services.ww.registerNotification(Windows);
-// };
-
-// Modules.UNLOADMODULE = function() {
-// 	Services.ww.unregisterNotification(Windows);
-// };
