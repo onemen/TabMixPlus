@@ -350,7 +350,20 @@ var TabmixTabClickOptions = {
       return;
 
     aEvent.preventDefault();
-  }
+  },
+
+  /**
+   * block mouse down with modifiers if the modifier is used by our clicking option
+   */
+  blockMouseDown(event) {
+    if (event.shiftKey && Tabmix.prefs.getIntPref("shiftClickTab") != -1 ||
+      event.altKey && Tabmix.prefs.getIntPref("altClickTab") != -1 ||
+      (event.ctrlKey || event.metaKey) && Tabmix.prefs.getIntPref("ctrlClickTab") != -1
+    ) {
+      return true;
+    }
+    return false;
+  },
 };
 
 var TabmixContext = {

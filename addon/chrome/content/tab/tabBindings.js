@@ -233,9 +233,9 @@
         return;
 
       // don't allow mouse click/down with modifiers to select tab
-      if (aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey)
+      if (TabmixTabClickOptions.blockMouseDown(aEvent)) {
         aEvent.stopPropagation();
-      else if (aSelectNewTab) {
+      } else if (aSelectNewTab) {
         this.container._selectNewTab(this);
         let isTabFocused = false;
         try {
