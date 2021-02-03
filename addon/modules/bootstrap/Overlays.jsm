@@ -2,7 +2,6 @@
 * Load overlays in a similar way as XUL did for legacy XUL add-ons.
 */
 
-/* eslint no-var: 2, prefer-const: 2 class-methods-use-this: 0*/
 /* exported Overlays */
 
 "use strict";
@@ -29,6 +28,17 @@ const oconsole = new ConsoleAPI({
 });
 
 Components.utils.import("resource:///modules/CustomizableUI.jsm");
+
+Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+
+function setAttribute(obj, attr, val) {
+  if (!obj || !obj.setAttribute) {
+    return;
+  }
+  obj.setAttribute(attr, val);
+}
+
+XPCOMUtils.defineLazyModuleGetter(this, 'Windows', "chrome://tabmix-resource/content/bootstrap/Windows.jsm");
 
 const Globals = {};
 Globals.widgets = {};
@@ -773,6 +783,18 @@ class Overlays {
         } else {
           data[attr.name] = attr.value;
         }
+      }
+    }
+
+    const WT = ['button', 'view', 'button-and-view', 'custom'];
+
+    if (!(data.type in WT)) data.type = 'custom';
+    else {
+      // here we should have code to handle the <toolbarbutton> in overlay that use widget types making widge out of them
+      // by convert 'on*' attributeis to function.
+      for (const key of Object.keys(data).filter(t => t.startsWith('on'))) {
+        const f = new Function("args", data[key]);
+        data[key] = f;
       }
     }
 
