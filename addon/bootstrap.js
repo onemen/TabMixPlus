@@ -84,8 +84,8 @@ function install() { }
 function uninstall() { }
 
 function startup(data, reason) {
-  Components.utils.import("chrome://tabmixplus/content/ChromeManifest.jsm");
-  Components.utils.import("chrome://tabmixplus/content/Overlays.jsm");
+  Components.utils.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
+  Components.utils.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
   Components.utils.import("resource:///modules/CustomizableUI.jsm");
 
   const window = Services.wm.getMostRecentWindow('navigator:browser');

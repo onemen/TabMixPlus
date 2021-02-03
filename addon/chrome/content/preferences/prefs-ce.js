@@ -605,8 +605,8 @@ class PrefPane extends MozXULElement {
     // PrefPane overlay have to be move earlier to here otherwise tabs elements won't load properly. see ln 1551
     // But this may be the cause of EMSG <Uncaught (in promise) undefined> shows up
     if (this.src) {
-      Components.utils.import("chrome://tabmixplus/content/ChromeManifest.jsm");
-      Components.utils.import("chrome://tabmixplus/content/Overlays.jsm");
+      Components.utils.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
+      Components.utils.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
 
       const ov = new Overlays(new ChromeManifest(), window.document.defaultView);
       ov.load(this.src);
