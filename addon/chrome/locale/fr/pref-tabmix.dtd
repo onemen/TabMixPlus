@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Pour cliquer ou déplacer quelque chose sur la barre d'onglets">
 <!ENTITY tabbar.label "Cacher la barre d'onglets quand un seul onglet est ouvert">
 <!ENTITY moveTabOnDragging.label "Lors d'un glisser d'onglet, faire le déplacement immédiatement">
-<!ENTITY dropIndicator.label "Indicateur de déplacement">
-<!ENTITY dropIndicator-native.label "Style natif">
-<!ENTITY dropIndicator-builtin.label "Style intégré">
 <!ENTITY verticalTabbar.description1 "Ces préférences sont contrôlées par une autre extension qui utilise des onglets verticaux.">
 <!ENTITY tabBarPosition.label "Position :">
 <!ENTITY tabBarPosition.top.label "En haut (au-dessus du contenu)">

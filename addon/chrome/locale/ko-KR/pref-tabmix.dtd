@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "탭 도구 모음에 무언가를 떨어뜨리거나 탭 도구 모음을 클릭하기 위한 공간">
 <!ENTITY tabbar.label "탭이 하나만 열려 있을 때 탭 도구 모음을 숨기기">
 <!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
-<!ENTITY dropIndicator.label "떨어뜨릴 곳 표시기">
-<!ENTITY dropIndicator-native.label "원래 스타일">
-<!ENTITY dropIndicator-builtin.label "붙박이 스타일">
 <!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "위치:">
 <!ENTITY tabBarPosition.top.label "Top (above content)">

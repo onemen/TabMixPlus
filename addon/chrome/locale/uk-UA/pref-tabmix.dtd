@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Порожні поля для перетаскування вкладок по панелі й клацань мишею">
 <!ENTITY tabbar.label "Ховати панель вкладок, якщо відкрита тільки одна вкладка">
 <!ENTITY moveTabOnDragging.label "Перетягуючи вкладку переміщати її прямо">
-<!ENTITY dropIndicator.label "Індикатор перетаскування">
-<!ENTITY dropIndicator-native.label "Вбудований стиль">
-<!ENTITY dropIndicator-builtin.label "Стиль TabMix">
 <!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Розташування панелі:">
 <!ENTITY tabBarPosition.top.label "Зверху (над вмістом)">

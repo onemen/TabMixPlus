@@ -15,8 +15,6 @@
 
   tabbrowsertab._fragment = MozXULElement.parseXULToFragment(
     `
-<hbox class="tab-image-left tab-startcap tab-left tab-left-border"/>
-<hbox class="tab-drag-indicator-left"/>
 <stack class="tab-stack" flex="1">
   <vbox class="tab-background">
     <hbox class="tab-line"/>
@@ -48,8 +46,6 @@
     <image class="tab-close-button close-icon" role="presentation"/>
   </hbox>
 </stack>
-<hbox class="tab-drag-indicator-right"/>
-<hbox class="tab-image-right tab-endcap tab-right tab-right-border"/>
   `,
     tabbrowsertab.entities
   );

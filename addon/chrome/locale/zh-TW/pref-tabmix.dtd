@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "當分頁數量很多時，方便滑鼠拖曳或點擊分頁標籤列之用">
 <!ENTITY tabbar.label "僅有一個分頁時隱藏分頁標籤列">
 <!ENTITY moveTabOnDragging.label "拖曳分頁時立即移動分頁位置">
-<!ENTITY dropIndicator.label "分頁標籤拖曳指標">
-<!ENTITY dropIndicator-native.label "原始樣式">
-<!ENTITY dropIndicator-builtin.label "內建樣式">
 <!ENTITY verticalTabbar.description1 "這些設定是由其它採用垂直分頁的擴充套件控制。">
 <!ENTITY tabBarPosition.label "分頁標籤列位置：">
 <!ENTITY tabBarPosition.top.label "頂部（內容上方）">

@@ -36,7 +36,6 @@
       <preference id="pref_middleclickDelete" name="extensions.tabmix.middleclickDelete"  type="bool"/>
       <preference id="pref_lockTabSizingOnClose" name="extensions.tabmix.lockTabSizingOnClose"  type="bool"/>
       <preference id="pref_moveTabOnDragging" name="extensions.tabmix.moveTabOnDragging"  type="bool"/>
-      <preference id="pref_dropIndicator"     name="extensions.tabmix.useFirefoxDragmark" type="bool"/>
       <preference id="pref_dblClickTab"       name="extensions.tabmix.dblClickTab"        type="int"/>
       <preference id="pref_dblClickTabbar"    name="extensions.tabmix.dblClickTabbar"     type="int"/>
       <preference id="pref_middleClickTab"    name="extensions.tabmix.middleClickTab"     type="int"/>
@@ -84,22 +83,9 @@
                       tooltiptext="&removeEntries.tooltip;" preference="pref_middleclickDelete"/>
             <checkbox_tmp id="lockTabSizingOnClose" label="&lockTabSizingOnClose.label;"
                       preference="pref_lockTabSizingOnClose"/>
-          </html:fieldset>
-          <html:fieldset flex="1">
             <!-- drop indicator -->
             <checkbox_tmp id="moveTabOnDragging" label="&moveTabOnDragging.label;" preference="pref_moveTabOnDragging"
                           style="width: 470px;"/>
-            <!-- drop indicator -->
-            <hbox id="dropIndicator">
-              <label value="&dropIndicator.label;:"/>
-              <radiogroup id="dropIndicatorType"
-                          preference="pref_dropIndicator">
-                <radio value="true" id="dropIndicator-native" label="&dropIndicator-native.label;"
-                       src="chrome://browser/skin/tabbrowser/tab-drag-indicator.svg"/>
-                <radio value="false" id="dropIndicator-builtin" label="&dropIndicator-builtin.label;"
-                       src="chrome://tabmixplus/skin/dropmarker-leftright.png"/>
-              </radiogroup>
-            </hbox>
           </html:fieldset>
           <!-- Tabbar Scrolling -->
           <html:fieldset flex="1">

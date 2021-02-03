@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "За клик и испуштање на линију картица">
 <!ENTITY tabbar.label "Сакриј линију картица кад је отворена само једна картица">
 <!ENTITY moveTabOnDragging.label "Када померам језичак, премести га директно">
-<!ENTITY dropIndicator.label "Индикатор испуштања">
-<!ENTITY dropIndicator-native.label "Изворни стил">
-<!ENTITY dropIndicator-builtin.label "Уграђени стил">
 <!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Позиција:">
 <!ENTITY tabBarPosition.top.label "на врху (изнад садржаја)">

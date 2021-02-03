@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Für Klicks sowie Ziehen &amp; Ablegen auf die Tab-Leiste">
 <!ENTITY tabbar.label "Die Tab-Leiste ausblenden, wenn nur ein Tab offen ist">
 <!ENTITY moveTabOnDragging.label "Tab beim Verschieben direkt bewegen">
-<!ENTITY dropIndicator.label "Platzierungsanzeige beim Verschieben von Tabs">
-<!ENTITY dropIndicator-native.label "Firefox-Stil">
-<!ENTITY dropIndicator-builtin.label "TMP-Stil">
 <!ENTITY verticalTabbar.description1 "Diese Einstellungen werden von einer anderen Erweiterung, wie Vertical Tabs, gesteuert.">
 <!ENTITY tabBarPosition.label "Position der Tab-Leiste:">
 <!ENTITY tabBarPosition.top.label "oberhalb des Inhaltsbereichs">

@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "多くのタブが開いていてもクリックやドラッグ＆ドロップが出来るように">
 <!ENTITY tabbar.label "タブが一つしか開いていない場合、タブバーを隠す">
 <!ENTITY moveTabOnDragging.label "タブをドラッグした時（ドロップインジケータを動かすのではなく）タブそのものを直接移動させる">
-<!ENTITY dropIndicator.label "ドロップインジケータ">
-<!ENTITY dropIndicator-native.label "既定のスタイル">
-<!ENTITY dropIndicator-builtin.label "Tab Mix Plus のスタイル">
 <!ENTITY verticalTabbar.description1 "これらの設定は他の垂直タブ用の拡張機能によってコントロールされます">
 <!ENTITY tabBarPosition.label "タブバーの位置:">
 <!ENTITY tabBarPosition.top.label "上部 (コンテンツの上)">

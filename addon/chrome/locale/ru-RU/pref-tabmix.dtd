@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Пустые поля для перетаскивания вкладок по панели и щелчков мышью">
 <!ENTITY tabbar.label "Прятать панель вкладок, если открыта только одна вкладка">
 <!ENTITY moveTabOnDragging.label "Немедленно выполнять перетаскивание вкладки">
-<!ENTITY dropIndicator.label "Индикатор перетаскивания">
-<!ENTITY dropIndicator-native.label "Встроенный стиль">
-<!ENTITY dropIndicator-builtin.label "Стиль Tab Mix Plus">
 <!ENTITY verticalTabbar.description1 "Эти настройки контролируются другим расширением, управляющим вертикальными вкладками.">
 <!ENTITY tabBarPosition.label "Расположение панели:">
 <!ENTITY tabBarPosition.top.label "Сверху (над контентом)">

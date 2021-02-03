@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Za klikanje i ispuštanje nečega na traku kartica">
 <!ENTITY tabbar.label "Sakrij traku kartica kada je otvorena samo jedna kartica">
 <!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
-<!ENTITY dropIndicator.label "Pokazivač ispuštanja">
-<!ENTITY dropIndicator-native.label "Prirodan način">
-<!ENTITY dropIndicator-builtin.label "Ugrađeni način">
 <!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Položaj:">
 <!ENTITY tabBarPosition.top.label "Top (above content)">

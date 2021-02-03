@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Vid klickning eller när något släpps på flikfältet">
 <!ENTITY tabbar.label "Göm flikfält när bara en flik är öppen">
 <!ENTITY moveTabOnDragging.label "Flytta flikar direkt när de dras">
-<!ENTITY dropIndicator.label "Symbol för dra-och-släpp">
-<!ENTITY dropIndicator-native.label "Standardstil">
-<!ENTITY dropIndicator-builtin.label "Inbyggd stil">
 <!ENTITY verticalTabbar.description1 "Dessa inställningar styrs av andra tillägg som gäller vertikala flikar.">
 <!ENTITY tabBarPosition.label "Position:">
 <!ENTITY tabBarPosition.top.label "Överkant (ovanför innehållet)">

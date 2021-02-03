@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "A Lapok eszköztáron történő kattintás és ejtés megkönnyítésére, amikor már túl sok lap van megnyitva">
 <!ENTITY tabbar.label "Mindig jelenjen meg a Lapok eszköztár">
 <!ENTITY moveTabOnDragging.label "Áthelyezés a lap húzásakor">
-<!ENTITY dropIndicator.label "Ejtés jelző">
-<!ENTITY dropIndicator-native.label "Egyedi stílus">
-<!ENTITY dropIndicator-builtin.label "Beépített stílus">
 <!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Pozíció:">
 <!ENTITY tabBarPosition.top.label "Fent (a tartalom felett)">

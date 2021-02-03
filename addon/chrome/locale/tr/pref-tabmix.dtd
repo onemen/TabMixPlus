@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Tıklama ve sekme çubuğuna herhangi bir şey bırakmak için boşluklar">
 <!ENTITY tabbar.label "Tek sekme açıksa sekme çubuğunu gizle">
 <!ENTITY moveTabOnDragging.label "Bir sekmeyi sürüklerken onu doğrudan taşı">
-<!ENTITY dropIndicator.label "Bırakma göstergesi">
-<!ENTITY dropIndicator-native.label "Yerel stil">
-<!ENTITY dropIndicator-builtin.label "Dahili stil">
 <!ENTITY verticalTabbar.description1 "Bu tercihler, dikey sekmeler uygulayan diğer uzantılar tarafından kontrol edilir.">
 <!ENTITY tabBarPosition.label "Konum:">
 <!ENTITY tabBarPosition.top.label "Üst (içerikten üstte)">

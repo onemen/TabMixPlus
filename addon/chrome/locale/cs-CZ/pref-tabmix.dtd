@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Pro umístění na lištu s panely v případě velkého množství panelů">
 <!ENTITY tabbar.label "Skrýt lištu panelů, pokud je otevřen jen jeden panel">
 <!ENTITY moveTabOnDragging.label "Při přetažení panelu jej přesunout přímo">
-<!ENTITY dropIndicator.label "Značka umístění přesouvaného panelu">
-<!ENTITY dropIndicator-native.label "Původní styl">
-<!ENTITY dropIndicator-builtin.label "Vestavěný styl">
 <!ENTITY verticalTabbar.description1 "Toto nastavení je převzato z jiného rozšíření za použití vertikálních panelů.">
 <!ENTITY tabBarPosition.label "Umístit lištu s panely:">
 <!ENTITY tabBarPosition.top.label "Nahoře (nad obsah)">

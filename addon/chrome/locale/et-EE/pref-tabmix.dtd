@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Klõpsamiseks ja millegi lohistamiseks kaartide ribale">
 <!ENTITY tabbar.label "Peida kaartide riba, kui lahti on ainult üks kaart">
 <!ENTITY moveTabOnDragging.label "Kaardi lohistamisel kasuta liigutamise animatsiooni">
-<!ENTITY dropIndicator.label "Lahtilaskmise tähis">
-<!ENTITY dropIndicator-native.label "Algupärane">
-<!ENTITY dropIndicator-builtin.label "Sisseehitatud">
 <!ENTITY verticalTabbar.description1 "Neid eelistusi juhib teine vertikaalseid kaarte näitav lisa.">
 <!ENTITY tabBarPosition.label "Asukoht:">
 <!ENTITY tabBarPosition.top.label "Üleval (sisu kohal)">

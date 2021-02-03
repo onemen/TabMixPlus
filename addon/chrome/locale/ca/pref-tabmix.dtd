@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Per poder-hi fer clic i deixar anar pestanyes a la barra de pestanyes">
 <!ENTITY tabbar.label "Amaga la barra quan només hi hagi una pestanya oberta">
 <!ENTITY moveTabOnDragging.label "En arrossegar una pestanya, mou-la directament">
-<!ENTITY dropIndicator.label "Indicador de deixar anar">
-<!ENTITY dropIndicator-native.label "Estil nadiu">
-<!ENTITY dropIndicator-builtin.label "Estil integrat">
 <!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Posició:">
 <!ENTITY tabBarPosition.top.label "Superior (sobre el contingut)">

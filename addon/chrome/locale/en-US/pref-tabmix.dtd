@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "For clicking and dropping something on tab bar">
 <!ENTITY tabbar.label "Hide tab bar when only one tab is open">
 <!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
-<!ENTITY dropIndicator.label "Drop indicator">
-<!ENTITY dropIndicator-native.label "Native style">
-<!ENTITY dropIndicator-builtin.label "Built-in style">
 <!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Position:">
 <!ENTITY tabBarPosition.top.label "Top (above content)">

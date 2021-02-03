@@ -283,24 +283,6 @@ var TMP_extensionsCompatibility = {
       ).toCode();
     }
 
-    // make ChromaTabs extension compatible with Tabmix Plus
-    // we can drop this soon version 2.3 from 2010-01 not use this code anymore
-    if ("CHROMATABS" in window) {
-      Tabmix.changeCode(CHROMATABS, "CHROMATABS.colorizeTab")._replace(
-        'node = doc.getAnonymousElementByAttribute(tab, "class", "tab-image-left");',
-        'node = doc.getAnonymousElementByAttribute(tab, "class", "tab-image-left tab-startcap tab-left tab-left-border");', {silent: true}
-      )._replace(
-        'node = doc.getAnonymousElementByAttribute(tab, "class", "tab-image-middle");',
-        'node = doc.getAnonymousElementByAttribute(tab, "class", "tab-middle box-inherit tab-image-middle tab-body");', {silent: true}
-      )._replace(
-        'node = doc.getAnonymousElementByAttribute(tab, "class", "tab-close-button");',
-        'node = doc.getAnonymousElementByAttribute(tab, "anonid", "tmp-close-button");', {silent: true}
-      )._replace(
-        'node = doc.getAnonymousElementByAttribute(tab, "class", "tab-image-right");',
-        'node = doc.getAnonymousElementByAttribute(tab, "class", "tab-image-right tab-endcap tab-right tab-right-border");', {silent: true}
-      ).toCode();
-    }
-
     // fix bug in superDargandGo https://addons.mozilla.org/he/firefox/addon/super-dragandgo/
     try {
       if ("superDrag" in window && "contentAreaDNDObserver" in window) {

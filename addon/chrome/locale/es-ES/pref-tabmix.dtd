@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Para hacer clic y arrastrar algo a la barra de pestañas">
 <!ENTITY tabbar.label "Esconder la barra de pestañas cuando hay sólo una abierta">
 <!ENTITY moveTabOnDragging.label "Al arrastrar una pestaña moverla directamente">
-<!ENTITY dropIndicator.label "Indicador de arrastre">
-<!ENTITY dropIndicator-native.label "Estilo original">
-<!ENTITY dropIndicator-builtin.label "Estilo añadido">
 <!ENTITY verticalTabbar.description1 "Estas preferencias las controla otra extensión que usa pestañas verticales.">
 <!ENTITY tabBarPosition.label "Posición:">
 <!ENTITY tabBarPosition.top.label "Arriba (sobre el contenido)">

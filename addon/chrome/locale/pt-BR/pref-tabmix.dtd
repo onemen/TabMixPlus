@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Para clicar e arrastar alguma coisa na barra de abas">
 <!ENTITY tabbar.label "Ocultar a barra de abas se houver apenas uma aba">
 <!ENTITY moveTabOnDragging.label "Quando arrastar uma guia, movendo-o diretamente">
-<!ENTITY dropIndicator.label "Indicação ao soltar aba">
-<!ENTITY dropIndicator-native.label "Estilo nativo">
-<!ENTITY dropIndicator-builtin.label "Estilo interno">
 <!ENTITY verticalTabbar.description1 "Estas preferências são controladas por outra extensão que se aplicam a abas verticais.">
 <!ENTITY tabBarPosition.label "Posição:">
 <!ENTITY tabBarPosition.top.label "Topo (acima do conteúdo)">

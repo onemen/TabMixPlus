@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "על מנת ללחוץ ולגרור משהו לסרגל הלשוניות">
 <!ENTITY tabbar.label "החבא את סרגל הלשוניות כשיש רק לשונית אחת פתוחה">
 <!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
-<!ENTITY dropIndicator.label "Drop indicator">
-<!ENTITY dropIndicator-native.label "Native style">
-<!ENTITY dropIndicator-builtin.label "Built-in style">
 <!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "מיקום">
 <!ENTITY tabBarPosition.top.label "למעלה (מעל תוכן)">

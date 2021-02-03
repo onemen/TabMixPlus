@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "برای کلیک و رها کردن چیزی روی نوار تب ها">
 <!ENTITY tabbar.label "وقتی فقط یک پنجره باز است نوار تب ها را مخفی کن">
 <!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
-<!ENTITY dropIndicator.label "رها کردن نشانگر">
-<!ENTITY dropIndicator-native.label "استایل اصلی">
-<!ENTITY dropIndicator-builtin.label "استایل از قبل تعریف شده">
 <!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "موقعیت">
 <!ENTITY tabBarPosition.top.label "Top (above content)">

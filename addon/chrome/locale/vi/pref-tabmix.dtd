@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Khi nhấn và thả thứ nào đó trên thanh thẻ">
 <!ENTITY tabbar.label "Ẩn thanh thẻ khi chỉ có một thẻ được mở">
 <!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
-<!ENTITY dropIndicator.label "Dấu chỉ báo việc thả">
-<!ENTITY dropIndicator-native.label "Kiểu địa phương">
-<!ENTITY dropIndicator-builtin.label "Kiểu cài sẵn">
 <!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Vị trí:">
 <!ENTITY tabBarPosition.top.label "Trên (trên nội dung)">

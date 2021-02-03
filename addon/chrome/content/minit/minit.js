@@ -18,7 +18,6 @@ var TMP_tabDNDObserver = {
   TAB_DROP_TYPE: "application/x-moz-tabbrowser-tab",
   draggedTab: null,
   paddingLeft: 0,
-  onLastToolbar: false,
 
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
@@ -144,17 +143,6 @@ var TMP_tabDNDObserver = {
 
     // without this the Indicator is not visible on the first drag
     tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
-
-    if (Tabmix.isVersion(280)) {
-      window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
-          let t = Tabmix.getBoundsWithoutFlushing(document.getElementById("TabsToolbar").parentNode);
-          let r = Tabmix.getBoundsWithoutFlushing(gBrowser.tabContainer);
-          let c = Tabmix.getBoundsWithoutFlushing(document.getElementById("browser"));
-          this.onLastToolbar = Math.abs(t.bottom - r.bottom) < 2 && Math.abs(r.bottom - c.top) < 2;
-        });
-      });
-    }
   },
 
   get _isCustomizing() {
@@ -922,68 +910,52 @@ var TMP_tabDNDObserver = {
 
     this.clearDragmark();// clear old dragmark if one exist
 
-    if (!Tabmix.prefs.getBoolPref("useFirefoxDragmark")) {
-      var sameRow = newIndex !== 0 && newIndex != gBrowser.tabs.length &&
-          TabmixTabbar.inSameRow(gBrowser.tabs[newIndex - 1], gBrowser.tabs[newIndex]);
-      if (sameRow || left_right === 0)
-        this.setDragmarkAttribute(gBrowser.tabs[newIndex], "atLeft");
-      if (sameRow || left_right == 1)
-        this.setDragmarkAttribute(gBrowser.tabs[newIndex - 1], "atRight");
-    } else {
-      // code for firefox indicator
-      var ind = gBrowser.tabContainer._tabDropIndicator;
-      var minMargin, maxMargin, newMargin;
-      var tabRect;
-      var ltr = Tabmix.ltr;
-      let scrollRect = gBrowser.tabContainer.arrowScrollbox.scrollClientRect;
-      let rect = gBrowser.tabContainer.getBoundingClientRect();
-      minMargin = scrollRect.left - rect.left - this.paddingLeft;
-      maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
-      if (!ltr)
-        [minMargin, maxMargin] = [gBrowser.clientWidth - maxMargin, gBrowser.clientWidth - minMargin];
+    // code for firefox indicator
+    var ind = gBrowser.tabContainer._tabDropIndicator;
+    var minMargin, maxMargin, newMargin;
+    var tabRect;
+    var ltr = Tabmix.ltr;
+    let scrollRect = gBrowser.tabContainer.arrowScrollbox.scrollClientRect;
+    let rect = gBrowser.tabContainer.getBoundingClientRect();
+    minMargin = scrollRect.left - rect.left - this.paddingLeft;
+    maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
+    if (!ltr)
+      [minMargin, maxMargin] = [gBrowser.clientWidth - maxMargin, gBrowser.clientWidth - minMargin];
 
-      tabRect = gBrowser.tabs[index].getBoundingClientRect();
-      if (ltr)
-        newMargin = tabRect.left - rect.left +
+    tabRect = gBrowser.tabs[index].getBoundingClientRect();
+    if (ltr)
+      newMargin = tabRect.left - rect.left +
           (left_right == 1 ? tabRect.width + this.LinuxMarginEnd : 0) -
           this.paddingLeft;
-      else
-        newMargin = rect.right - tabRect.left -
+    else
+      newMargin = rect.right - tabRect.left -
           (left_right === 0 ? tabRect.width + this.LinuxMarginEnd : 0) -
           this.paddingLeft;
 
-      ///XXX fix min/max x margin when in one row the drag mark is visible after
-      ///XXX the arrow when the last tab is partly visible
-      ///XXX look like the same is happen with Firefox
-      var newMarginY, fixMargin;
-      if (TabmixTabbar.position == 1) {
-        newMarginY = tabRect.bottom - ind.parentNode.getBoundingClientRect().bottom;
-        let addOnBar = document.getElementById("addon-bar");
-        fixMargin = (Tabmix.isVersion(280) || addOnBar && addOnBar.collapsed) &&
-          (Math.abs(newMarginY) < 0.5);
-      } else {
-        newMarginY = tabRect.bottom - rect.bottom;
-        fixMargin = this.onLastToolbar && (Math.abs(newMarginY) < 0.5);
-        // fix for PaleMoon on Mac OS X
-        if (TabmixTabbar.visibleRows > 1 &&
+    ///XXX fix min/max x margin when in one row the drag mark is visible after
+    ///XXX the arrow when the last tab is partly visible
+    ///XXX look like the same is happen with Firefox
+    var newMarginY;
+    if (TabmixTabbar.position == 1) {
+      newMarginY = tabRect.bottom - ind.parentNode.getBoundingClientRect().bottom;
+    } else {
+      newMarginY = tabRect.bottom - rect.bottom;
+      // fix for PaleMoon on Mac OS X
+      if (TabmixTabbar.visibleRows > 1 &&
             ind.parentNode.getBoundingClientRect().height === 0) {
-          newMarginY += tabRect.height;
-        }
+        newMarginY += tabRect.height;
       }
-      // make indicator visible
-      if (fixMargin)
-        ind.style.marginBottom = "1px";
-      else
-        ind.style.removeProperty("margin-bottom");
-
-      this.setFirefoxDropIndicator(true);
-      newMargin += ind.clientWidth / 2;
-      if (!ltr)
-        newMargin *= -1;
-
-      ind.style.MozTransform = "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";
-      ind.style.MozMarginStart = (-ind.clientWidth) + "px";
     }
+    // make indicator visible
+    ind.style.removeProperty("margin-bottom");
+
+    this.setFirefoxDropIndicator(true);
+    newMargin += ind.clientWidth / 2;
+    if (!ltr)
+      newMargin *= -1;
+
+    ind.style.MozTransform = "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";
+    ind.style.MozMarginStart = (-ind.clientWidth) + "px";
 
     this.dragmarkindex = {newIndex, index};
   },
@@ -992,16 +964,7 @@ var TMP_tabDNDObserver = {
     if (this.dragmarkindex === null)
       return;
 
-    if (!Tabmix.prefs.getBoolPref("useFirefoxDragmark")) {
-      var index = this.dragmarkindex.newIndex;
-      if (index != gBrowser.tabs.length && gBrowser.tabs[index].hasAttribute("dragmark"))
-        this.removeDragmarkAttribute(gBrowser.tabs[index]);
-      if (index !== 0 && gBrowser.tabs[index - 1].hasAttribute("dragmark"))
-        this.removeDragmarkAttribute(gBrowser.tabs[index - 1]);
-    } else {
-      this.setFirefoxDropIndicator(false);
-    }
-
+    this.setFirefoxDropIndicator(false);
     this.dragmarkindex = null;
   },
 

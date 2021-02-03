@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Para clicar e deixar algo na barra de separadores">
 <!ENTITY tabbar.label "Ocultar barra de separadores apenas quando um separador está aberto">
 <!ENTITY moveTabOnDragging.label "Ao arrastar um separador movê-lo diretamente">
-<!ENTITY dropIndicator.label "Indicador">
-<!ENTITY dropIndicator-native.label "Estilo nativo">
-<!ENTITY dropIndicator-builtin.label "Estilo embutido">
 <!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Posição:">
 <!ENTITY tabBarPosition.top.label "Topo (acima do conteúdo)">

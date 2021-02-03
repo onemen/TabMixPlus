@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Om klikken en laten vallen van iets op de tabbladenbalk mogelijk te maken">
 <!ENTITY tabbar.label "Tabbladenbalk verbergen als maar één tabblad open staat">
 <!ENTITY moveTabOnDragging.label "Bij slepen van tabblad direct verplaatsen">
-<!ENTITY dropIndicator.label "Indicator laten vallen">
-<!ENTITY dropIndicator-native.label "Logische stijl">
-<!ENTITY dropIndicator-builtin.label "Ingebouwde stijl">
 <!ENTITY verticalTabbar.description1 "Deze voorkeuren worden beheerd door een andere extensie die verticale tabbladen toepast.">
 <!ENTITY tabBarPosition.label "Positie:">
 <!ENTITY tabBarPosition.top.label "Bovenkant (boven inhoud)">

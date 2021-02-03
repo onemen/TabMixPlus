@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Spațiu pentru clic sau fixarea obiectelor pe bara de file">
 <!ENTITY tabbar.label "Se ascunde bara de file numai când există o singură filă deschisă">
 <!ENTITY moveTabOnDragging.label "Se deplasează fila în timp ce se glisează">
-<!ENTITY dropIndicator.label "Indicator de fixare (când fila nu se deplasează)">
-<!ENTITY dropIndicator-native.label "Stil nativ (Firefox)">
-<!ENTITY dropIndicator-builtin.label "Stil integrat (Tab Mix Plus)">
 <!ENTITY verticalTabbar.description1 "Aceste setări sunt controlate de alte extensii care implementează file verticale.">
 <!ENTITY tabBarPosition.label "Se poziționează bara de file:">
 <!ENTITY tabBarPosition.top.label "sus (deasupra conținutului)">

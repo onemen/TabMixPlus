@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "是用于在标签栏点击或拖放某项">
 <!ENTITY tabbar.label "只打开单个标签页时隐藏标签栏">
 <!ENTITY moveTabOnDragging.label "拖动标签页时直接移动到">
-<!ENTITY dropIndicator.label "拖放指示器">
-<!ENTITY dropIndicator-native.label "原始的样式">
-<!ENTITY dropIndicator-builtin.label "内建的样式">
 <!ENTITY verticalTabbar.description1 "这些应用于垂直标签页的选项由其它扩展控制">
 <!ENTITY tabBarPosition.label "标签栏位置：">
 <!ENTITY tabBarPosition.top.label "顶部（内容区域上方）">

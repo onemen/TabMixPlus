@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "For at klikke og slippe noget på fanebladslinje">
 <!ENTITY tabbar.label "Skjuler fanebladslinje når der kun er ét faneblad åbent">
 <!ENTITY moveTabOnDragging.label "When dragging a tab move it directly">
-<!ENTITY dropIndicator.label "Slip-indikator">
-<!ENTITY dropIndicator-native.label "Medfødt stil">
-<!ENTITY dropIndicator-builtin.label "Indbygget stil">
 <!ENTITY verticalTabbar.description1 "These preferences are controlled by other extension that apply vertical tabs.">
 <!ENTITY tabBarPosition.label "Position:">
 <!ENTITY tabBarPosition.top.label "Top (above content)">

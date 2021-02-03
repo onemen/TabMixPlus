@@ -140,9 +140,6 @@
 <!ENTITY tabBarSpace.tooltip "Gdy jest otwartych dużo kart, przestrzeń ta służy dla przeciągania i kliknięć na pasku kart">
 <!ENTITY tabbar.label "Nie wyświetlaj paska kart, gdy jest otwarta tylko jedna karta">
 <!ENTITY moveTabOnDragging.label "Podczas przeciągania karty przenoś ją go bezpośrednio">
-<!ENTITY dropIndicator.label "Wskaźnik miejsca upuszczenia">
-<!ENTITY dropIndicator-native.label "natywny styl">
-<!ENTITY dropIndicator-builtin.label "wbudowany styl">
 <!ENTITY verticalTabbar.description1 "Te ustawienia są kontrolowane przez inne dodatki mające zastosowanie do pionowego ustawienia kart.">
 <!ENTITY tabBarPosition.label "Położenie paska kart:">
 <!ENTITY tabBarPosition.top.label "Na górze">
