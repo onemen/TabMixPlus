@@ -270,8 +270,7 @@ var TMP_Places = {
         // PlacesUIUtils.openTabset use SystemPrincipal
         aTab = gBrowser.addTrustedTab(loadProgressively ? "about:blank" : url, params);
       }
-      this.asyncSetTabTitle(aTab, url);
-      aTab._labelIsInitialTitle = true;
+      this.asyncSetTabTitle(aTab, url, true);
       if (loadProgressively) {
         tabs.push(aTab);
         let entry = {url, title: aTab.label};
@@ -404,7 +403,7 @@ var TMP_Places = {
     return false;
   },
 
-  asyncSetTabTitle(tab, url) {
+  asyncSetTabTitle(tab, url, initial) {
     if (!tab) {
       return false;
     }
@@ -415,6 +414,9 @@ var TMP_Places = {
       // only call setTabTitle if we found one to avoid loop
       if (newTitle && newTitle != tab.label) {
         this.setTabTitle(tab, url, newTitle);
+        if (initial) {
+          tab._labelIsInitialTitle = true;
+        }
         return true;
       }
       return false;
@@ -858,7 +860,7 @@ Tabmix.onContentLoaded = {
       /(})(\)?)$/,
       '  const targetTab = where == "current" ?\n' +
       '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
-      '  w.TMP_Places.asyncSetTabTitle(targetTab, url);\n' +
+      '  w.TMP_Places.asyncSetTabTitle(targetTab, url, true);\n' +
       '  if (where == "current") {\n' +
       '    w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);\n' +
       '  }\n' +

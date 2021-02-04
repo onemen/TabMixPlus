@@ -305,8 +305,8 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
 
   let boldChanged = {value: false};
   if (pending) {
-    TMP_Places.asyncSetTabTitle(aTab, aTab.linkedBrowser.currentURI.spec).then(tabTitleChanged => {
-      aTab._labelIsInitialTitle = true;
+    const url = aTab.linkedBrowser.currentURI.spec;
+    TMP_Places.asyncSetTabTitle(aTab, url, true).then(tabTitleChanged => {
       if (tabTitleChanged) {
         TabmixTabbar.updateScrollStatus();
         TabmixTabbar.updateBeforeAndAfter();
