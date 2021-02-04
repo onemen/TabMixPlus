@@ -29,17 +29,6 @@ var TMP_tabDNDObserver = {
 
     tabBar.moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
 
-    // https://addons.mozilla.org/en-US/firefox/addon/multiple-tab-handler/
-    const tabsDragUtils = "piro.sakura.ne.jp" in window &&
-      "tabsDragUtils" in window["piro.sakura.ne.jp"];
-    Tabmix.handleAnimateTabMove = function(dragContext) {
-      if (gBrowser.tabContainer.getAttribute("orient") != "horizontal") {
-        return false;
-      }
-      return !dragContext || !dragContext.draggedTabs ||
-          dragContext.draggedTabs.length == 1;
-    };
-
     Tabmix.getMovingTabsWidth = movingTabs => {
       return movingTabs.reduce((width, tab) => {
         return width + tab.getBoundingClientRect().width;
@@ -52,10 +41,10 @@ var TMP_tabDNDObserver = {
     //   is before (for dragging left) or after (for dragging right)
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
-    let newCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
       'if (this.getAttribute("movingtab")',
-      `let tabmixHandleMove = Tabmix.handleAnimateTabMove(typeof TDUContext == "object" ? TDUContext : null);
-          $&`
+      `let tabmixHandleMove = this.getAttribute("orient") === "horizontal" && TabmixTabbar.widthFitTitle;
+      $&`
     )._replace(
       'this.selectedItem = draggedTab;',
       'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
@@ -65,63 +54,31 @@ var TMP_tabDNDObserver = {
             draggedTab.setAttribute("dragged", true);\n\
           }'
     )._replace(
-      'draggedTab._dragData.animLastScreenX = screenX;',
-      'let draggingRight = screenX > draggedTab._dragData.animLastScreenX;\n          ' +
-      '$&', {check: !tabsDragUtils}
-    )._replace(
       'let shiftWidth = tabWidth * movingTabs.length;',
-      'let shiftWidth = Tabmix.getMovingTabsWidth(movingTabs);'
+      `let shiftWidth = Tabmix.getMovingTabsWidth(movingTabs);
+      let draggedTabWidth = draggedTab.getBoundingClientRect().width;`
     )._replace(
-      'let tabCenter = ltrMove ? rightTabCenter : leftTabCenter;',
-      `$&
-      if (tabmixHandleMove) {
-        if (ltrMove) {
-          tabCenter = rightMovingTabScreenX + translateX + movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
-        } else {
-          tabCenter = leftMovingTabScreenX + translateX;
+      'if (screenX > tabCenter) {',
+      `let midWidth = tabs[mid].getBoundingClientRect().width;
+        if (tabmixHandleMove && draggedTabWidth > midWidth) {
+          screenX += midWidth / 2;
+          if (screenX > tabCenter + draggedTabWidth / 2) {
+            high = mid - 1;
+          } else if (
+            screenX < tabCenter - draggedTabWidth / 2
+          ) {
+            low = mid + 1;
+          } else {
+            newIndex = tabs[mid]._tPos;
+            break;
+          }
+          continue;
         }
-      }`
-    )._replace(
-      tabsDragUtils ? /screenX = boxObject\[TDUContext.*;/ :
-        /screenX = tabs\[mid\].*;/,
-      '$&\n            ' +
-      `let halfWidth;
-            if (tabmixHandleMove) {
-              halfWidth = tabs[mid].getBoundingClientRect().width / 2;
-              screenX += draggingRight * halfWidth;
-            }`
-    )._replace(
-      tabsDragUtils ? /screenX \+ boxObject\[TDUContext.* < tabCenter/ :
-        /screenX \+ tabs\[mid\][^<]*<\n*\s*tabCenter/,
-      'tabmixHandleMove ? screenX + halfWidth < tabCenter : $&'
-    )._replace(
-      'screenX > TDUContext.lastTabCenter',
-      'tabmixHandleMove ? screenX > tabCenter : $&',
-      {check: tabsDragUtils}
+        $&`
     )._replace(
       'newIndex >= oldIndex',
-      'RTL_UI || !tabmixHandleMove ? $& : draggingRight && newIndex > -1'
-    );
-    if (tabsDragUtils) {
-      const topic = "browser-delayed-startup-finished";
-      const observer = function(subject) {
-        if (subject == window) {
-          Services.obs.removeObserver(observer, topic);
-          // update for multiple-tab-handler version 0.8.2017061501
-          if (!newCode.value.includes("draggingRight = screenX")) {
-            newCode.value = newCode.value.replace(
-              'draggedTab._dragData.animLastScreenX = screenX;',
-              'let draggingRight = screenX > draggedTab._dragData.animLastScreenX;\n          ' +
-              '$&'
-            );
-          }
-          newCode.toCode();
-        }
-      };
-      Services.obs.addObserver(observer, topic);
-    } else {
-      newCode.toCode();
-    }
+      'RTL_UI || !tabmixHandleMove ? $& : ltrMove && newIndex > -1'
+    ).toCode();
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
       /(})(\)?)$/,
