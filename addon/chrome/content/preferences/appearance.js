@@ -110,7 +110,7 @@ var gAppearancePane = {
 
   toolbarButtons(aWindow) {
     // Display > Toolbar
-    var buttons = ["btn_sessionmanager", "btn_undoclose", "btn_closedwindows", "btn_tabslist"];
+    var buttons = ["btn_undoclose", "btn_closedwindows", "tabmix-alltabs-button"];
     var onToolbar = $("onToolbar");
     var onPlate = $("onPlate");
     for (let i = 0; i < buttons.length; ++i) {

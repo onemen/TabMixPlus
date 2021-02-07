@@ -603,6 +603,8 @@ var TMP_eventListener = {
         1,
         gTabBrowserBundle.GetStringFromName("tabs.closeTabs.tooltip")
       ));
+
+    Tabmix.allTabs.init();
   },
 
   tabWidthCache: new WeakMap(),

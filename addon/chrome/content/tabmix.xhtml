@@ -226,26 +226,14 @@
          </menupopup>
       </toolbarbutton>
       -->
-      <toolbarbutton id="btn_tabslist" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
-               onmousedown="TabmixAllTabs.checkForCtrlClick(event);"
-               onclick="if (event.target == this) if (event.button == 1) gBrowser.closeAllTabs();"
-               context="hideTabbar_context"
-               label="&tabslistbtn.label;"
-               _tooltiptext="&tabslistbtn.tooltip;"
-               tooltiptext="&tabslistbtn.tooltip;">
-         <menupopup id="btn_tabslist_menu"
-               context="menuedit-tabContextMenu"
-               onpopupshowing="return TabmixAllTabs.createTabsList(this, document.getElementById('btn_tabslistSorted').getAttribute('checked') ? 1 : 2);"
-               onpopuphidden="TabmixAllTabs.hideCommonList(this);"
-               onclick="TabmixAllTabs.removeTabFromList(event, this, 2);"
-               oncommand="TabmixAllTabs._tabsListOncommand(event);">
-               <menuseparator id="btn_tabslist_sep"/>
-               <menuitem id="btn_tabslistSorted" label="&sortedTabs.label;" context=""
-                         class="menuitem-iconic" type="checkbox"
-                         tooltiptext="&sortedTabs.tooltip;"
-                         oncommand="TabmixAllTabs.showTabsListPopup(event);"/>
-         </menupopup>
-      </toolbarbutton>
+      <toolbarbutton id="tabmix-alltabs-button"
+            class="toolbarbutton-1 chromeclass-toolbar-additional tabs-alltabs-button"
+            context="hideTabbar_context"
+            badged="true"
+            oncommand="Tabmix.allTabs.showAllTabsPanel(event);"
+            label="&listAllTabs.label;"
+            tooltiptext="&listAllTabs.label;"
+            removable="true"/>
 
       <toolbarbutton id="btn_closedwindows" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
                observes="tmp_closedwindows"
@@ -264,6 +252,15 @@
          </menupopup>
       </toolbarbutton>
     </toolbarpalette>
+
+    <toolbarbutton id="allTabsMenu_sortTabbsButton"
+      class="subviewbutton subviewbutton-iconic"
+      closemenu="none"
+      context=""
+      oncommand="Tabmix.allTabs.sortTabsInList();"
+      label="&sortedTabs.label;"
+      insertbefore="allTabsMenu-tabsSeparator"
+      type="checkbox"/>
 
     <!-- add auto reload popup to reload button -->
     <toolbarbutton id="reload-button">

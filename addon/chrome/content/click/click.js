@@ -793,6 +793,72 @@ var TabmixContext = {
   }
 };
 
+Tabmix.allTabs = {
+  init() {
+    const allTabsButton = document.getElementById("alltabs-button");
+    allTabsButton.addEventListener("click", () => {
+      setTimeout(this.insertSortButton, 0);
+    }, {once: true});
+  },
+
+  insertSortButton() {
+    const sortTabbsButton = document.getElementById("allTabsMenu_sortTabbsButton");
+    const tabsSeparator = document.getElementById("allTabsMenu-tabsSeparator");
+    if (sortTabbsButton.nextSibling !== tabsSeparator) {
+      tabsSeparator.parentNode.insertBefore(sortTabbsButton, tabsSeparator);
+
+      const panel = gTabsPanel.allTabsPanel;
+
+      panel._removeTabFromList = function(event) {
+        if (event.button === 1 && Tabmix.prefs.getBoolPref("middleclickDelete")) {
+          this.gBrowser.removeTab(event.target.tab, {animate: true});
+        }
+      };
+
+      panel._original_createRow = panel._createRow;
+      panel._createRow = function(...args) {
+        const row = this._original_createRow.apply(this, args);
+        row.addEventListener("click", this._removeTabFromList.bind(this));
+        return row;
+      };
+
+      // eslint-disable-next-line no-unused-vars
+      panel._populate = function(event) {
+        let fragment = this.doc.createDocumentFragment();
+
+        const sortTabs = () => [...this.gBrowser.tabs]
+            .sort((a, b) => (a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1));
+        const tabs = typeof sortTabbsButton === "object" && sortTabbsButton.checked ?
+          sortTabs() : this.gBrowser.tabs;
+
+        for (let tab of tabs) {
+          if (this.filterFn(tab)) {
+            fragment.appendChild(this._createRow(tab));
+          }
+        }
+
+        this._addElement(fragment);
+        this._setupListeners();
+      };
+    }
+  },
+
+  sortTabsInList() {
+    gTabsPanel.allTabsPanel._cleanup();
+    gTabsPanel.allTabsPanel._populate();
+  },
+
+  showAllTabsPanel(event) {
+    gTabsPanel.init();
+    this.insertSortButton();
+    PanelUI.showSubView(
+      gTabsPanel.kElements.allTabsView,
+      event.target,
+      event
+    );
+  },
+};
+
 // for all tabs popup lists
 var TabmixAllTabs = {
   _selectedItem: null,
@@ -876,8 +942,12 @@ var TabmixAllTabs = {
     this.beforeCommonList(tablist);
     this.createCommonList(tablist, 2, side);
 
-    if (tablist.hasChildNodes())
-      tablist.showPopup(event.target, -1, -1, "popup", "bottomleft", "topleft");
+    if (tablist.hasChildNodes()) {
+      tablist.openPopup(event.target, {
+        position: "bottomleft topleft",
+        triggerEvent: event,
+      });
+    }
   },
 
   removeTabFromList: function TMP_removeTabFromList(event, popup, aType) {
@@ -910,9 +980,13 @@ var TabmixAllTabs = {
   // show sort/unsort tabs list popup after click on sorted tab menu
   showTabsListPopup: function TMP_showTabsListPopup(event) {
     event.stopPropagation();
-    setTimeout(popup => {
-      popup.showPopup(popup.parentNode, -1, -1, "popup", "bottomleft", "topleft");
-    }, 0, event.target.parentNode);
+    setTimeout(e => {
+      const popup = event.target.parentNode;
+      popup.openPopup(popup.parentNode, {
+        position: "bottomleft topleft",
+        triggerEvent: e,
+      });
+    }, 0, event);
   },
 
   createTabsList: function TMP_createTabsList(popup, aType) {
@@ -1026,7 +1100,7 @@ var TabmixAllTabs = {
   _ensureElementIsVisible: function TMP__ensureElementIsVisible(event) {
     var popup = event.target;
     popup.removeEventListener("popupshown", this);
-    let scrollBox = popup.getElementsByClassName("popup-internal-box")[0];
+    const scrollBox = popup.scrollBox;
     let items = Array.prototype.slice.call(popup.childNodes);
     let element = items.indexOf(this._selectedItem) < popup.childElementCount / 2 ? popup.firstChild : popup.lastChild;
     scrollBox.ensureElementIsVisible(element);
