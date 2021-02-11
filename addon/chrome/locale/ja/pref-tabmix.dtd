@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "ホームページを表示する">
 <!ENTITY startupBlankPage.label "空白ページを表示する">
 <!ENTITY startupLastSession1.label "前回終了時のウィンドウとタブを表示する">
-<!ENTITY sm.extension.description1 "Session Manager がインストールされています">
-<!ENTITY sm.extension.description2 "Tab Mix Plus のセッションマネージャは無効になります">
-<!ENTITY sm.extension.description3 "右のボタンをクリックすると、セッションマネージャオプションのウィンドウが開きます">
-<!ENTITY sm.extension.description5 "セッションデータを Tab Mix Plus 形式から Session Manager 形式へ変換します">
-<!ENTITY sm.extension.convert.label "変換">
-<!ENTITY sm.extension.chooseFile.label1 "現在のプロファイルの Tab Mix Plus のセッションデータを変換">
-<!ENTITY sm.extension.chooseFile.label2 "変換するファイルの選択">
 <!ENTITY ss.enable.label "Firefox 内蔵のセッション復元機能を使用する">
 <!ENTITY ss.enable.tooltip "チェックを外すと、Tab Mix Plus のセッションマネージャを使用します">
 <!ENTITY ss.advanced_setting "拡張設定">

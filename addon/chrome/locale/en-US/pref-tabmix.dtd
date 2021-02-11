@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Show a blank page">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY sm.extension.description1 "Tab Mix Plus detect that Session Manager Extension is installed">
-<!ENTITY sm.extension.description2 "Tab Mix Plus session manager will be disabled">
-<!ENTITY sm.extension.description3 "You can click the button on the right to open Session Manager Options dialog">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
-<!ENTITY sm.extension.convert.label "Convert">
-<!ENTITY sm.extension.chooseFile.label1 "Convert Tab Mix Plus sessions from the current profile">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Use Firefox&apos;s built-in Session Restore feature">
 <!ENTITY ss.enable.tooltip "Uncheck to allow the use with Tab Mix Plus Session Manager">
 <!ENTITY ss.advanced_setting "Advanced Setting">

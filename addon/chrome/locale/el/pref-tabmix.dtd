@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Προβολή κενής σελίδας">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY sm.extension.description1 "Το Tab Mix Plus ανίχνευσε ότι έχετε εγκαταστήσει το πρόσθετο Session Manager">
-<!ENTITY sm.extension.description2 "Ο διαχειριστής συνεδρίας του Tab Mix Plus θα απενεργοποιηθεί">
-<!ENTITY sm.extension.description3 "Μπορείτε να κάνετε κλικ στο κουμπί δεξιά για να ανοίξετε τον διάλογο επιλογών του Session Manager">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
-<!ENTITY sm.extension.convert.label "Μετατροπή">
-<!ENTITY sm.extension.chooseFile.label1 "Μετατροπή συνεδριών Tab Mix Plus του τρέχοντος προφίλ">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Χρήση ενσωματωμένης αποκατάστασης συνεδρίας">
 <!ENTITY ss.enable.tooltip "Απεπιλέξτε για να επιτραπεί η χρήση του διαχειριστή συνεδρίας του Tabmix">
 <!ENTITY ss.advanced_setting "Ρυθμίσεις για προχωρημένους">

@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "顯示首頁">
 <!ENTITY startupBlankPage.label "顯示空白頁">
 <!ENTITY startupLastSession1.label "顯示上次瀏覽的視窗和分頁">
-<!ENTITY sm.extension.description1 "偵測到 Session Manager 套件已安裝">
-<!ENTITY sm.extension.description2 "Tab Mix Plus 的瀏覽狀態管理功能已經停用">
-<!ENTITY sm.extension.description3 "請點擊右方按鈕開啟 Session Manager 選項設定">
-<!ENTITY sm.extension.description5 "將瀏覽狀態資料轉換為 Session Manager 支援之格式">
-<!ENTITY sm.extension.convert.label "執行轉換">
-<!ENTITY sm.extension.chooseFile.label1 "直接讀取目前使用中的瀏覽狀態資料檔">
-<!ENTITY sm.extension.chooseFile.label2 "讓我手動選擇欲轉換的瀏覽狀態資料檔">
 <!ENTITY ss.enable.label "使用 Firefox 內建的瀏覽狀態回復功能">
 <!ENTITY ss.enable.tooltip "取消勾選，可啟用 Tab Mix Plus 瀏覽狀態管理">
 <!ENTITY ss.advanced_setting "進階設定">

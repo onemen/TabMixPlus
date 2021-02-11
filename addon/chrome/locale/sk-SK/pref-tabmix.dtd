@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Zobraziť domovskú stránku">
 <!ENTITY startupBlankPage.label "Zobraziť prázdnu stránku">
 <!ENTITY startupLastSession1.label "Ukázať okná a karty z poslednej doby">
-<!ENTITY sm.extension.description1 "Tab Mix Plus zistil, že máte nainštalované rozšírenie Session Manager">
-<!ENTITY sm.extension.description2 "Správca relácií Tab Mix Plus bude vypnutý">
-<!ENTITY sm.extension.description3 "Môžete klinúť na tlačidlo vpravo pre otvorenie okna možnosti Session Manager">
-<!ENTITY sm.extension.description5 "Preveďte dáta relácie z formátu Tab Mix Plus do formátu rozšírenia Správca relácií">
-<!ENTITY sm.extension.convert.label "Previesť">
-<!ENTITY sm.extension.chooseFile.label1 "Previesť relácie Tab Mix Plus z aktuálneho profilu">
-<!ENTITY sm.extension.chooseFile.label2 "Vybrať dáta na konverziu">
 <!ENTITY ss.enable.label "Použiť zabudovanú obnovu relácie">
 <!ENTITY ss.enable.tooltip "Odznačiť pre použitie s Tabmix Manažér relácie">
 <!ENTITY ss.advanced_setting "Pokročilé nastavenia">

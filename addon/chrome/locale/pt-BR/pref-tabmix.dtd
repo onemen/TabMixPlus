@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Mostrar a sua página inicial">
 <!ENTITY startupBlankPage.label "Mostrar página em branco">
 <!ENTITY startupLastSession1.label "Mostrar suas janelas e abas pela última vez">
-<!ENTITY sm.extension.description1 "Tab Mix Plus detectou que a Extensão Session Manager está instalada">
-<!ENTITY sm.extension.description2 "O gerenciador de sessão do Tab Mix Plus será desativado">
-<!ENTITY sm.extension.description3 "Você pode clicar à direita para abrir a janela de opções do Session Manager.">
-<!ENTITY sm.extension.description5 "Converter seus dados de sessões do formato Tab Mix Plus para o formato de extensão do Gerenciador de Sessões">
-<!ENTITY sm.extension.convert.label "Converter">
-<!ENTITY sm.extension.chooseFile.label1 "Converter sessões do Tab Mix Plus do perfil atual">
-<!ENTITY sm.extension.chooseFile.label2 "Escolher qual arquivo de dados a converter">
 <!ENTITY ss.enable.label "Usar Restaurador de Sessão nativo">
 <!ENTITY ss.enable.tooltip "Desmarque para permitir o uso com o Restaurador de Sessão do Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Configuração Avançada">

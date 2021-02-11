@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Başlangıç sayfasını göster">
 <!ENTITY startupBlankPage.label "Boş sayfa göster">
 <!ENTITY startupLastSession1.label "Son seferdeki pencere ve sekmeleri göster">
-<!ENTITY sm.extension.description1 "Tab Mix Plus, Oturum Yöneticisi Eklentisinin kurulu olduğunu algıladı">
-<!ENTITY sm.extension.description2 "Tab Mix Plus Oturum Yöneticisi etkisizleştirilecek">
-<!ENTITY sm.extension.description3 "Oturum Yöneticisi Tercihleri penceresini açmak için sağdaki düğmeye tıklayabilirsiniz">
-<!ENTITY sm.extension.description5 "Oturum verilerinizi Tab Mix Plus biçiminden Oturum Yöneticisi uzantısı biçimine dönüştürün">
-<!ENTITY sm.extension.convert.label "Dönüştür">
-<!ENTITY sm.extension.chooseFile.label1 "Tab Mix Plus oturumlarını şu anki profilden dönüştür">
-<!ENTITY sm.extension.chooseFile.label2 "Dönüştürülecek veri dosyasını seçin">
 <!ENTITY ss.enable.label "Firefox'un dahili Oturum Geri Yükleme özelliğini kullan">
 <!ENTITY ss.enable.tooltip "Tab Mix Oturum Yöneticisini kullanmak için işareti kaldırın">
 <!ENTITY ss.advanced_setting "Gelişmiş Ayarlar">

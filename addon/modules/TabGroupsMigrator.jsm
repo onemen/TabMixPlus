@@ -75,13 +75,8 @@ this.TabmixGroupsMigrator = {
       return false;
     };
 
-    let bookmarkGroups = session => {
-      let state = window.TabmixConvertSession.getSessionState(session, true);
-      let {hiddenTabState, groupData} = this.removeHiddenTabGroupsFromState(state);
-      if (hiddenTabState.windows.length) {
-        sm.showTabGroupRestorationPage = true;
-        this.bookmarkAllGroupsFromState(groupData);
-      }
+    let bookmarkGroups = () => {
+      // obsolete
     };
 
     let string = s => TabmixSvc.getSMString("sm.tabview.backup." + s);

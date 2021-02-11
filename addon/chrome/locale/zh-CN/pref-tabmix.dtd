@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "显示您的首页">
 <!ENTITY startupBlankPage.label "显示空白页">
 <!ENTITY startupLastSession1.label "显示您上次的窗口和标签页">
-<!ENTITY sm.extension.description1 "Tab Mix Plus 检测到您已安装有 Session Manager 扩展">
-<!ENTITY sm.extension.description2 "Tab Mix Plus 浏览进程管理器将被禁用">
-<!ENTITY sm.extension.description3 "您可以点击右侧的按钮打开 Session Manager 选项对话框">
-<!ENTITY sm.extension.description5 "将您的会话数据从 Tab Mix Plus 格式转换为 Session Manager 扩展的格式">
-<!ENTITY sm.extension.convert.label "转换">
-<!ENTITY sm.extension.chooseFile.label1 "转换当前配置下的 Tab Mix Plus 浏览进程">
-<!ENTITY sm.extension.chooseFile.label2 "选择要转换的数据文件">
 <!ENTITY ss.enable.label "使用内建的浏览进程恢复特性">
 <!ENTITY ss.enable.tooltip "不勾选此项则允许使用 Tabmix 浏览进程管理器">
 <!ENTITY ss.advanced_setting "高级设置">

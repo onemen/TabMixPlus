@@ -98,9 +98,6 @@ Tabmix.sessionInitialized = function() {
   TMP_ClosedTabs.setButtonDisableState();
   if (this.firstWindowInSession)
     SM.toggleRecentlyClosedWindowsButton();
-
-  // convert session.rdf to SessionManager extension format
-  TabmixConvertSession.startup();
 };
 
 // we call gTMPprefObserver.miscellaneousRules to add some dynamic rules

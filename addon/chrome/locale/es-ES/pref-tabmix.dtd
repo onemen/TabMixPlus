@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Mostrar su página de inicio">
 <!ENTITY startupBlankPage.label "Mostrar página en blanco">
 <!ENTITY startupLastSession1.label "Mostrar ventana y pestañas de última sesión">
-<!ENTITY sm.extension.description1 "Tab Mix Plus ha detectado que está instalada la extensión Session Manager">
-<!ENTITY sm.extension.description2 "Se deshabilitará el administrador de sesiones de Tab Mix Plus">
-<!ENTITY sm.extension.description3 "Pulse en el botón de la derecha si desea abrir el diálogo de Opciones de Session Manager">
-<!ENTITY sm.extension.description5 "Formatear sus datos de sesión del formato de Tab Mix Plus al de la extensión Session Manager">
-<!ENTITY sm.extension.convert.label "Formatear">
-<!ENTITY sm.extension.chooseFile.label1 "Formatear las sesiones de Tab Mix Plus del perfil actual">
-<!ENTITY sm.extension.chooseFile.label2 "Elegir el fichero de datos a convertir">
 <!ENTITY ss.enable.label "Utilizar la funcionalidad interna de restaurar sesión de Firefox">
 <!ENTITY ss.enable.tooltip "Deseleccionar si se quiere utilizar el Administrador de sesiones de Tabmix">
 <!ENTITY ss.advanced_setting "Predisposiciones avanzadas">

@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "wyświetlaj stronę startową">
 <!ENTITY startupBlankPage.label "wyświetlaj pustą stronę">
 <!ENTITY startupLastSession1.label "wyświetlaj okna i karty z poprzedniej sesji">
-<!ENTITY sm.extension.description1 "Tab Mix Plus wykrył, że jest zainstalowane rozszerzenie Session Manager">
-<!ENTITY sm.extension.description2 "Menedżer sesji Tab Mix Plusa zostanie wyłączony">
-<!ENTITY sm.extension.description3 "Można kliknąć na przycisku po prawej stronie, aby otworzyć opcje rozszerzenia Session Manager">
-<!ENTITY sm.extension.description5 "Konwertuj dane sesji z formatu Tab Mix Plusa na format Session Managera">
-<!ENTITY sm.extension.convert.label "Konwertuj">
-<!ENTITY sm.extension.chooseFile.label1 "Konwertuj dane sesji Tab Mix Plusa z aktywnego profilu">
-<!ENTITY sm.extension.chooseFile.label2 "Wybierz dane do konwersji">
 <!ENTITY ss.enable.label "Używaj menedżera sesji Firefoksa">
 <!ENTITY ss.enable.tooltip "Odznacz tę opcję, aby używać menedżera sesji Tab Mix Plusa">
 <!ENTITY ss.advanced_setting "Ustawienia zaawansowane">

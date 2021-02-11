@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Visa startsidan">
 <!ENTITY startupBlankPage.label "Visa en tom sida">
 <!ENTITY startupLastSession1.label "Visa fönstren och flikarna från senaste gången">
-<!ENTITY sm.extension.description1 "Tab Mix Plus har upptäckt att tillägget Session Manager är installerat">
-<!ENTITY sm.extension.description2 "Tab Mix Plus egen sessionshanterare kommer att inaktiveras">
-<!ENTITY sm.extension.description3 "Du kan klicka på knappen till höger för att öppna alternativdialogen för Session Manager">
-<!ENTITY sm.extension.description5 "Konvertera sessionsdata från Tab Mix Plus-format till Session Manager-format">
-<!ENTITY sm.extension.convert.label "Konvertera">
-<!ENTITY sm.extension.chooseFile.label1 "Konvertera Tab Mix Plus-sessioner från aktuell profil">
-<!ENTITY sm.extension.chooseFile.label2 "Välj vilken datafil att konvertera">
 <!ENTITY ss.enable.label "Använd Firefoxs inbyggda sessionsåterställare">
 <!ENTITY ss.enable.tooltip "Avmarkera för att använda Tab Mix Plus egen sessionshanterare">
 <!ENTITY ss.advanced_setting "Avancerade inställningar">

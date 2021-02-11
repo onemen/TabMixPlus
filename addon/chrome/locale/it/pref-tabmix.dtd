@@ -297,13 +297,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "mostra una pagina vuota">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY sm.extension.description1 "Tab Mix Plus ha rilevato che è installata l&apos;estensione Session Manager, per cui la funzionalità di ripristino delle sessioni di Tab Mix Plus è stata disattivata">
-<!ENTITY sm.extension.description2 "(Per ripristinare tale funzionalità è necessario disinstallare Session Manager)">
-<!ENTITY sm.extension.description3 "Fare clic sul pulsante a destra per aprire la finestra delle opzioni di Session Manager">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
-<!ENTITY sm.extension.convert.label "Converti">
-<!ENTITY sm.extension.chooseFile.label1 "Converti il file dei dati della sessione di Tab Mix Plus dell&apos;attuale profilo">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Attiva il ripristino delle sessioni nativo del browser">
 <!ENTITY ss.enable.tooltip "Deselezionare per permettere il ripristino delle sessioni di Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Impostazioni avanzate">

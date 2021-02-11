@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "빈 페이지 열기">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY sm.extension.description1 "Tab Mix Plus가 Session Manager 확장 기능이 설치된 것을 감지했습니다.">
-<!ENTITY sm.extension.description2 "Tab Mix Plus 세션 관리자는 비활성화 됩니다.">
-<!ENTITY sm.extension.description3 "오른쪽의 버튼으로 Session Manager 설정창을 열 수 있습니다.">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
-<!ENTITY sm.extension.convert.label "변환">
-<!ENTITY sm.extension.chooseFile.label1 "현재 프로필의 Tab Mix Plus 세션을 변환하기">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "내장된 세션 복구 기능 쓰기">
 <!ENTITY ss.enable.tooltip "선택하지 않으면 Tab Mix Plus 세션 관리자를 씁니다.">
 <!ENTITY ss.advanced_setting "고급 설정">

@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Kuvatakse avalehte">
 <!ENTITY startupBlankPage.label "Kuvatakse tühja lehte">
 <!ENTITY startupLastSession1.label "Kuvatakse viimati lahti olnud aknaid ja kaarte">
-<!ENTITY sm.extension.description1 "Tab Mix Plus tuvastas, et paigaldatud on lisa Session Manager">
-<!ENTITY sm.extension.description2 "Tab Mix Plus'i Seansside halduri kasutamine keelatakse">
-<!ENTITY sm.extension.description3 "Sa võid Seansside halduri sätete dialoogiakna avamiseks klõpsata paremal oleval nupul">
-<!ENTITY sm.extension.description5 "Teisenda oma seansside andmed Tab Mix Plusi formaadist laienduse Session Manager formaati">
-<!ENTITY sm.extension.convert.label "Teisenda">
-<!ENTITY sm.extension.chooseFile.label1 "Teisenda praeguse kasutajaprofiili Tab Mix Plus'i seansid">
-<!ENTITY sm.extension.chooseFile.label2 "Vali, millist andmefaili teisendada">
 <!ENTITY ss.enable.label "Kasuta Firefoxi sisseehitatud seansi taastamise funktsiooni">
 <!ENTITY ss.enable.tooltip "Tab Mix Plus'i Seansside halduri kasutamiseks eemalda märgistus">
 <!ENTITY ss.advanced_setting "Täpsemad sätted">

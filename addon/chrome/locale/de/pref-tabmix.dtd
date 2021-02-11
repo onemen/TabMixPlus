@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Startseite anzeigen">
 <!ENTITY startupBlankPage.label "Leere Seite anzeigen">
 <!ENTITY startupLastSession1.label "Fenster und Tabs der letzten Sitzung anzeigen">
-<!ENTITY sm.extension.description1 "Tab Mix Plus hat festgestellt, dass die Erweiterung Session Manager installiert ist.">
-<!ENTITY sm.extension.description2 "Der Sitzungs-Manager von Tab Mix Plus wurde deaktiviert.">
-<!ENTITY sm.extension.description3 "Über die Schaltfläche auf der rechten Seite können Sie den Einstellungen-Dialog von Session Manager öffnen.">
-<!ENTITY sm.extension.description5 "Konvertieren Sie Ihre Sitzungsdaten aus dem Tab Mix Plus-Format in das Session Manager-Erweiterungsformat">
-<!ENTITY sm.extension.convert.label "Konvertieren">
-<!ENTITY sm.extension.chooseFile.label1 "TMP-Sitzungen aus dem aktuellen Profil konvertieren">
-<!ENTITY sm.extension.chooseFile.label2 "Datendatei zum Konvertieren auswählen">
 <!ENTITY ss.enable.label "Integrierte Sitzungswiederherstellung von Firefox verwenden">
 <!ENTITY ss.enable.tooltip "Deaktivieren, um den TMP-Sitzungs-Manager zu verwenden">
 <!ENTITY ss.advanced_setting "Erweiterte Einstellungen">

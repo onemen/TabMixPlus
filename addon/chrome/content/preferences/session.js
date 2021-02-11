@@ -1,4 +1,3 @@
-/* globals TabmixSessionManager */
 /* exported gSessionPane */
 "use strict";
 
@@ -7,8 +6,6 @@ var gSessionPane = {
   init() {
     if (TabmixSvc.isLinux)
       $("sessionManager-panels").setAttribute("linux", "true");
-
-    this.setVisibleContent(Boolean(this.sessionManagerAddon), true);
 
     gPrefWindow.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
     this.isSessionStoreEnabled(true);
@@ -91,49 +88,5 @@ var gSessionPane = {
     var menuItem = $("onStart.popup").getElementsByAttribute("value", val)[0];
     $("pref_sessionpath").value = menuItem.getAttribute("session");
   },
-
-  get sessionManagerAddon() {
-    if (TabmixSvc.sessionManagerAddonInstalled) {
-      let tmp = {};
-      Components.utils.import("chrome://sessionmanager/content/modules/session_manager.jsm", tmp);
-      return tmp.gSessionManager;
-    }
-    let win = Tabmix.getTopWin();
-    let sm = win.com && win.com.morac && win.com.morac.SessionManagerAddon;
-    return sm && sm.gSessionManager || sm;
-  },
-
-  setVisibleContent(sessionManagerInstalled, onStart) {
-    if (typeof sessionManagerInstalled != "boolean")
-      return;
-
-    // disable TMP session manager setting if session manager extension is install
-    $("sessionmanager_ext_tab").hidden = !sessionManagerInstalled;
-    $("sessionStore_tab").hidden = sessionManagerInstalled;
-    $("paneSession-tabbox").selectedIndex = sessionManagerInstalled ? 0 : 1;
-    if (sessionManagerInstalled) {
-      $("sessionmanager_button").setAttribute("image", "chrome://sessionmanager/skin/icon.png");
-      if (onStart)
-        $("chooseFile").selectedIndex = 1;
-    } else {
-      this.isSessionStoreEnabled(onStart);
-      TabmixSessionManager.createMenuForDialog($("onStart.popup"));
-      $("onStart.loadsession").value = $("pref_onStart.loadsession").value;
-    }
-  },
-
-  sessionManagerOptions() {
-    this.sessionManagerAddon.openOptions();
-  },
-
-  convertSession() {
-    var browserWindow = Tabmix.getTopWin();
-    if ($("chooseFile").selectedItem.value == "0")
-      browserWindow.TabmixConvertSession.selectFile(window);
-    else
-      browserWindow.TabmixConvertSession.convertFile();
-
-    window.focus();
-  }
 
 };

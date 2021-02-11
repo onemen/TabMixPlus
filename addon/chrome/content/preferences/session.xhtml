@@ -19,9 +19,6 @@
     <preferences>
       <preference id="pref_session"             name="extensions.tabmix.session.selectedTabIndex"
                   type="int"/>
-      <preference id="pref_sessionManagerAddon"
-                  name="extensions.tabmix.sessionManagerAddon.isActive"      type="bool"
-                  onchange="gSessionPane.setVisibleContent(this.value);"/>
       <preference id="pref_sessionManager"
                   name="extensions.tabmix.sessions.manager"                  type="bool"
                   onchange="gSessionPane.updateSessionShortcuts();"/>
@@ -84,37 +81,9 @@
     <!-- pane content -->
     <tabbox id="paneSession-tabbox" selectedIndex="1">
       <tabs class="tabs-hidden">
-        <tab id="sessionmanager_ext_tab" hidden="true" label="tab" helpTopic=" "/>
         <tab id="sessionStore_tab" label="tab" helpTopic="tabmix"/>
       </tabs>
       <tabpanels>
-        <!-- Session Manager Extension -->
-        <tabpanel>
-          <!-- Open Session Manager Extension Options -->
-          <html:fieldset id="sessionmanager_ext">
-            <hbox align="end">
-              <vbox style="width: 24em;">
-                <description> &sm.extension.description1;.</description>
-                <description> &sm.extension.description2;.</description>
-                <description> &sm.extension.description3;.</description>
-              </vbox>
-              <spacer flex="1"/>
-              <button style="min-width: 0;" id="sessionmanager_button"
-                      oncommand="gSessionPane.sessionManagerOptions();"/>
-            </hbox>
-            <separator class="groove"/>
-            <hbox id="exportsession" align="end">
-              <description style="width: 24em;"> &sm.extension.description5;.</description>
-              <spacer flex="1"/>
-              <button label="&sm.extension.convert.label;…"
-                      oncommand="gSessionPane.convertSession();"/>
-            </hbox>
-            <radiogroup id="chooseFile" align="start">
-              <radio value="0" label="&sm.extension.chooseFile.label2;"/>
-              <radio value="1" label="&sm.extension.chooseFile.label1;"/>
-            </radiogroup>
-          </html:fieldset>
-        </tabpanel>
         <tabpanel id="sessionsPanel">
           <vbox class="work-in-progress">
             <label value="Tabmix Session Manager is not ready yet, use Build in Session Manager" />

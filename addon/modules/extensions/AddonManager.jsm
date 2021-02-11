@@ -80,38 +80,14 @@ const SMID = "{1280606b-2510-4fe0-97ef-9b5a22eafe30}";
 var SessionManager = {
   id: SMID,
   init() {
-    this._saveTabmixPrefs();
     TabmixSvc.sessionManagerAddonInstalled = true;
-  },
-  _saveTabmixPrefs() {
-    this.manager_enabled = TabmixSvc.prefBranch.getBoolPref("sessions.manager");
-    this.crashRecovery_enabled = TabmixSvc.prefBranch.getBoolPref("sessions.crashRecovery");
   },
   onEnabled() {
     TabmixSvc.sessionManagerAddonInstalled = true;
-    this._saveTabmixPrefs();
-    let win = TabmixSvc.topWin();
-    if (win)
-      win.TMP_SessionStore.setService(-1);
-    this._notify(true);
   },
   onDisabled() {
     TabmixSvc.sessionManagerAddonInstalled = false;
-    if (this.manager_enabled || this.crashRecovery_enabled) {
-      let win = TabmixSvc.topWin();
-      if (win)
-        win.TMP_SessionStore.setSessionRestore(false);
-      TabmixSvc.prefBranch.setBoolPref("sessions.manager", this.manager_enabled);
-      TabmixSvc.prefBranch.setBoolPref("sessions.crashRecovery", this.crashRecovery_enabled);
-    }
-    this._notify(false);
   },
-  _notify(isActive) {
-    // in preference/session.js we only care when the preference is boolean
-    let pref = "sessionManagerAddon.isActive";
-    TabmixSvc.prefBranch.setBoolPref(pref, isActive);
-    TabmixSvc.prefBranch.clearUserPref(pref);
-  }
 };
 
 var Glitter = {

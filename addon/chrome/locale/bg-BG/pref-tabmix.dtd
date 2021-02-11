@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Показване на началната страница">
 <!ENTITY startupBlankPage.label "Показване на празна страница">
 <!ENTITY startupLastSession1.label "Показване на прозорците и подпрозорците от последния път">
-<!ENTITY sm.extension.description1 "Tab Mix Plus установи, че има инсталирана добавка Session Manager">
-<!ENTITY sm.extension.description2 "Мениджърът на сесии Tab Mix Plus ще бъде изключен">
-<!ENTITY sm.extension.description3 "Можете да натиснете бутона вдясно, за да отворите настройките на Session Manager">
-<!ENTITY sm.extension.description5 "Преобразуване на сесиите от формат Тab Mix Plus във формат Session Manager">
-<!ENTITY sm.extension.convert.label "Преобразуване">
-<!ENTITY sm.extension.chooseFile.label1 "Преобразуване на сесиите Тab Mix Plus от текущия профил">
-<!ENTITY sm.extension.chooseFile.label2 "Избор на файл за преобразуване">
 <!ENTITY ss.enable.label "Използване на вградената функция на Firefox за възстановяване на сесии">
 <!ENTITY ss.enable.tooltip "Премахнете тази отметка, за да позволите използването на Мениджъра на сесии Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Допълнителни настройки">

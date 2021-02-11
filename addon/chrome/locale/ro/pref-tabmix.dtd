@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "se afișează pagina de start">
 <!ENTITY startupBlankPage.label "se afișează o pagină vidă">
 <!ENTITY startupLastSession1.label "se afișează ferestrele și filele deschise ultima dată">
-<!ENTITY sm.extension.description1 "Tab Mix Plus a descoperit că extensia „Gestionar de sesiuni” este instalată.">
-<!ENTITY sm.extension.description2 "Gestionarul de sesiuni al Tab Mix Plus va fi dezactivat.">
-<!ENTITY sm.extension.description3 "Puteți da clic pe butonul din partea dreaptă pentru a deschide caseta de opțiuni a extensiei „Gestionar de sesiuni”.">
-<!ENTITY sm.extension.description5 "Conversie de sesiuni din formatul Tab Mix Plus în cel al gestionarului de sesiuni (extensia „Session Manager”)">
-<!ENTITY sm.extension.convert.label "Convertește">
-<!ENTITY sm.extension.chooseFile.label1 "Se convertesc sesiunile Tab Mix Plus din profilul curent">
-<!ENTITY sm.extension.chooseFile.label2 "Fișiere de convertit">
 <!ENTITY ss.enable.label "Se folosește facilitatea internă a Firefox de restaurare a sesiunilor">
 <!ENTITY ss.enable.tooltip "Se demarchează pentru a permite utilizarea gestionarului de sesiuni al Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Opțiuni complexe">

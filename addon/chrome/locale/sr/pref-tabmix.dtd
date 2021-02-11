@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Прикажи празну страницу">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY sm.extension.description1 "Tab Mix Plus је детектовао да је инсталиран додатак Session Manager">
-<!ENTITY sm.extension.description2 "Tab Mix Plus управљач сесијама ће бити онемогућен">
-<!ENTITY sm.extension.description3 "Кликните на дугме са десне стране да бисте отворили дијалог опција управљача сесијама">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
-<!ENTITY sm.extension.convert.label "Конвертуј">
-<!ENTITY sm.extension.chooseFile.label1 "Конвертуј Tab Mix Plus сесије из текућег профила">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Користи Фајерфоксову уграђену могућност обнављања сесија">
 <!ENTITY ss.enable.tooltip "Одштиклирајте да бисте омогућили употребу са Tab Mix Plus управљачем сесија">
 <!ENTITY ss.advanced_setting "Напредна подешавања">

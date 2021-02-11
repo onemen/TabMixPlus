@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Startpagina weergeven">
 <!ENTITY startupBlankPage.label "Een blanco pagina weergeven">
 <!ENTITY startupLastSession1.label "Vensters en tabbladen van laatste sessie weergeven">
-<!ENTITY sm.extension.description1 "Tab Mix Plus heeft gedetecteerd dat de SessionManager-extensie is geïnstalleerd">
-<!ENTITY sm.extension.description2 "Tab Mix Plus sessiebeheerder zal worden uitgeschakeld">
-<!ENTITY sm.extension.description3 "Klik op de rechterknop om het Session Manager optiesvenster te openen">
-<!ENTITY sm.extension.description5 "Uw sessiegegevens van Tab Mix Plus-opmaak naar Sessiebeheerder-opmaak">
-<!ENTITY sm.extension.convert.label "Converteren">
-<!ENTITY sm.extension.chooseFile.label1 "Tab Mix Plus sessies van het huidige profiel converteren">
-<!ENTITY sm.extension.chooseFile.label2 "Kies welk gegevensbestand moet worden geconverteerd">
 <!ENTITY ss.enable.label "Ingebouwde sessieherstelmogelijkheid Firefox gebruiken">
 <!ENTITY ss.enable.tooltip "Vink dit uit om de Tab Mix Sessiebeheerder te gebruiken">
 <!ENTITY ss.advanced_setting "Geavanceerde instellingen">

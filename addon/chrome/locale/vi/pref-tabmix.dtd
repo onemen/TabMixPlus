@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Hiện một trang trống">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY sm.extension.description1 "Tab Mix Plus phát hiện phần mở rộng Session Manager đã được cài">
-<!ENTITY sm.extension.description2 "Trình quản lí phiên của Tab Mix Plus sẽ bị vô hiệu hóa">
-<!ENTITY sm.extension.description3 "Bạn có thể nhấn nút bên phải để mở hộp thoại Tùy chọn Quản lí Phiên">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
-<!ENTITY sm.extension.convert.label "Chuyển đổi">
-<!ENTITY sm.extension.chooseFile.label1 "Chuyển đổi phiên làm việc Tab Mix Plus của hồ sơ hiện tại">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Sử dụng tính năng “Khôi phục Phiên” có sẵn trong Firefox">
 <!ENTITY ss.enable.tooltip "Không chọn để cho phép sử dụng với Quản lí Phiên của Tabmix">
 <!ENTITY ss.advanced_setting "Thiết lập Nâng cao">

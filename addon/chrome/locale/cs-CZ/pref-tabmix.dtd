@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Zobrazit prázdnou stránku">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY sm.extension.description1 "Rozšíření Tab Mix Plus zjistilo, že je nainstalováno rozšíření Session Manager.">
-<!ENTITY sm.extension.description2 "Správce relací rozšíření Tab Mix Plus bude zakázán">
-<!ENTITY sm.extension.description3 "Kliknutím na tlačítko napravo otevřete dialogové okno s možnostmi rozšíření Session Manager">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
-<!ENTITY sm.extension.convert.label "Převést">
-<!ENTITY sm.extension.chooseFile.label1 "Převést relace rozšíření Tab Mix Plus ze současného profilu">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Použít vestavěnou funkci obnovy relací prohlížeče Firefox">
 <!ENTITY ss.enable.tooltip "Pokud zrušíte zaškrtnutí tohoto pole, povolíte správce relací rozšíření Tab Mix Plus.">
 <!ENTITY ss.advanced_setting "Rozšířené nastavení">

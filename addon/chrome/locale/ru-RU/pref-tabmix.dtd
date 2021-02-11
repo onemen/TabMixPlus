@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Показывать пустую страницу">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY sm.extension.description1 "Tab Mix Plus обнаружил, что установлено расширение Session Manager">
-<!ENTITY sm.extension.description2 "Менеджер сессий Tab Mix Plus будет отключён">
-<!ENTITY sm.extension.description3 "Вы можете нажать на кнопку справа, чтобы открыть окно настроек Session Manager">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
-<!ENTITY sm.extension.convert.label "Конвертировать">
-<!ENTITY sm.extension.chooseFile.label1 "Конвертировать сессии Tab Mix Plus из текущего профиля">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Использовать встроенную функцию восстановления сессий">
 <!ENTITY ss.enable.tooltip "Уберите галочку, чтобы использовать менеджер сессий Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Расширенные настройки">

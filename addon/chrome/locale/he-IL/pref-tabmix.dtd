@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "הצג דף ריק">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY sm.extension.description1 "Tab Mix Plus זיהה ש Session Manager מותקן">
-<!ENTITY sm.extension.description2 "מנהל ההפעלות של Tab Mix Plus ינוטרל">
-<!ENTITY sm.extension.description3 "הלחצן מימין יפתח את חלון האפשרויות ל Session Manager.">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
-<!ENTITY sm.extension.convert.label "המר">
-<!ENTITY sm.extension.chooseFile.label1 "המר הפעלות מפרופיל נוכחי">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "השתמש בשחזור ההפעלות של פיירפוקס">
 <!ENTITY ss.enable.tooltip "אל תסמן על מנת לאפשר את מנהל ההפעלות של Tabmix.">
 <!ENTITY ss.advanced_setting "אפשרויות מתקדמות">

@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Vis en blank side">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY sm.extension.description1 "Tab Mix Plus kan se at Session Manager-udvidelsen er installeret">
-<!ENTITY sm.extension.description2 "Tab Mix Plus sessionsadministration vil blive deaktiveret">
-<!ENTITY sm.extension.description3 "Du kan klikke knappen til højre for at åbne Session Managers Indstillinger-dialog">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
-<!ENTITY sm.extension.convert.label "Konverter">
-<!ENTITY sm.extension.chooseFile.label1 "Konverter Tab Mix Plus-sessioner fra den nuværende profil">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Brug indbygget sessions-genetablering">
 <!ENTITY ss.enable.tooltip "Fjern markering for at tillade brug af TabMix Sessionsadministration">
 <!ENTITY ss.advanced_setting "Avancerede indstillinger">

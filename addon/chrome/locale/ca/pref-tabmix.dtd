@@ -259,13 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Mostra una pàgina en blanc">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY sm.extension.description1 "El Tab Mix Plus ha detectat que teniu instal·lat el complement Session Manager">
-<!ENTITY sm.extension.description2 "El gestor de sessions del Tab Mix Plus s&apos;inhabilitarà">
-<!ENTITY sm.extension.description3 "Podeu fer clic al botó de la dreta per obrir el diàleg d&apos;opcions del Session Manager">
-<!ENTITY sm.extension.description5 "Convert your sessions data from Tab Mix Plus format to Session Manager extension format">
-<!ENTITY sm.extension.convert.label "Converteix">
-<!ENTITY sm.extension.chooseFile.label1 "Converteix les sessions del Tab Mix Plus del perfil actual">
-<!ENTITY sm.extension.chooseFile.label2 "Choose which data file to convert">
 <!ENTITY ss.enable.label "Utilitza la funció de restauració de sessió integrada al Firefox">
 <!ENTITY ss.enable.tooltip "Desmarqueu aquesta opció per permetre l&apos;ús del Gestor de sessions del Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Paràmetres avançats">
