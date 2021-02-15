@@ -103,11 +103,11 @@ tabpanel {
   list-style-image: url(sessionmanager.png);
 }
 
-#_btn_undoclose {
+#_tabmix-closedTabsButton {
   list-style-image: url(undoclosetab.png);
 }
 
-#_btn_closedwindows {
+#_tabmix-closedWindowsButton {
   list-style-image: url(undoclosewindow.png);
 }
 

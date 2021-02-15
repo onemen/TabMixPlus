@@ -1261,7 +1261,7 @@ Tabmix.navToolbox = {
     if (Tabmix.isVersion(290))
       CustomizableUI.removeListener(this.listener);
 
-    let alltabsPopup = document.getElementById("alltabs-popup");
+    let alltabsPopup = document.getElementById("allTabsMenu-allTabsView");
     if (alltabsPopup && alltabsPopup._tabmix_inited) {
       alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
     }
@@ -1589,10 +1589,11 @@ Tabmix.navToolbox = {
 
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
     gTMPprefObserver.showReloadEveryOnReloadButton();
+    TMP_ClosedTabs.setButtonType(Tabmix.prefs.getBoolPref("undoCloseButton.menuonly"));
   },
 
   initializeAlltabsPopup: function TMP_navToolbox_initializeAlltabsPopup() {
-    let alltabsPopup = document.getElementById("alltabs-popup");
+    let alltabsPopup = document.getElementById("allTabsMenu-allTabsView");
     if (alltabsPopup && !alltabsPopup._tabmix_inited) {
       alltabsPopup._tabmix_inited = true;
       alltabsPopup.setAttribute("context", "tabContextMenu");
@@ -1602,7 +1603,7 @@ Tabmix.navToolbox = {
       };
       alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
 
-      // alltabs-popup fix visibility for multi-row
+      // allTabsMenu-allTabsView fix visibility for multi-row
       Tabmix.setNewFunction(alltabsPopup, "_updateTabsVisibilityStatus",
         TabmixAllTabs._updateTabsVisibilityStatus);
     }

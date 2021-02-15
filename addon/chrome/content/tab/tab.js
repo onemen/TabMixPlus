@@ -123,7 +123,7 @@ var TabmixTabbar = {
 
     // fix bug in positioning the popup off screen or on the button when window
     // is not maximize or when tab bar is in the bottom
-    Tabmix.setItem("alltabs-popup", "position",
+    Tabmix.setItem("allTabsMenu-allTabsView", "position",
       (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
 
     // for light weight themes
@@ -397,7 +397,7 @@ var TabmixTabbar = {
       }
     }
     /// maybe we cad add this to the popupshowing / or as css rule ?
-    Tabmix.setItem("alltabs-popup", "position",
+    Tabmix.setItem("allTabsMenu-allTabsView", "position",
       (window.windowState != window.STATE_MAXIMIZED || this.position == 1) ? "start_before" : "after_end");
   },
 
@@ -1502,8 +1502,6 @@ gTMPprefObserver = {
         prefValue = Services.prefs.getIntPref(prefName);
         if (Tabmix.prefs.getBoolPref("undoClose") != (prefValue > 0))
           Tabmix.prefs.setBoolPref("undoClose", prefValue > 0);
-        let state = prefValue === 0 || undefined;
-        TMP_ClosedTabs.setButtonDisableState(state);
         break;
       }
       /*
@@ -1530,12 +1528,16 @@ gTMPprefObserver = {
       case "extensions.tabmix.sessions.manager":
       case "extensions.tabmix.sessions.crashRecovery":
         TMP_SessionStore.setService(2, false);
-        /* falls through */
+        /* falls through * /
       case "extensions.tabmix.sessions.save.closedtabs":
       case "extensions.tabmix.sessions.save.history":
       case "extensions.tabmix.sessionToolsMenu":
       case "extensions.tabmix.closedWinToolsMenu":
         TabmixSessionManager.updateSettings();
+        break;
+      */
+      case "extensions.tabmix.closedWinToolsMenu":
+        document.getElementById("tabmix-historyUndoWindowMenu").hidden = !Services.prefs.getBoolPref(prefName);
         break;
       case "extensions.tabmix.sessions.save.permissions":
         for (let i = 0; i < gBrowser.tabs.length; i++)

@@ -101,7 +101,7 @@ this.TMP_TabGroupsManager = {
       '}' +
       'if (false) {'
     )._replace(
-      'TMP_ClosedTabs.setButtonDisableState();',
+      'if ("tabmixdata" in window) {',
       '  let isBlank = gBrowser.isBlankNotBusyTab(cTab);' +
       '  if (_restoreSelect && (overwrite || !isBlank)) {' +
       '    this.updateSelected(newIndex + _lastSelectedIndex, overwrite ||' +

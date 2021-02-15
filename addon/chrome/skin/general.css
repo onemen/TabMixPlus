@@ -36,3 +36,17 @@
   -moz-padding-start: 15px;
   -moz-padding-end: 15px;
 }
+
+/* same width as history > Recently Closed Windows   */
+.tabmix-subview {
+  max-width: 32em !important;
+}
+
+/* override panelUI.css */
+.tabmix-subview toolbarbutton.subviewbutton:not([disabled],[open],:active):is(:hover,:focus) {
+  background-color:  #9bcdff;
+}
+
+.tabmix-subview toolbarbutton.subviewbutton:not([disabled]):is([open], :hover:active) {
+  background-color:  #9bcdff;
+}

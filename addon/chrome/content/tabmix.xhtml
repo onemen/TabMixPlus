@@ -17,6 +17,7 @@
 <!-- original code from TBP Lite //-->
 
 <overlay id="tabmix-overlay"
+         xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
    <script type="application/javascript" src="chrome://tabmixplus/content/broadcaster.js"/>
@@ -91,15 +92,15 @@
             <menuseparator id="tm-sessionmanager-endSeparator"/>
          </menupopup>
       </menu>
-      <menu id="tm-sm-closedwindows" label="&closedWin.label;" insertbefore="prefSep" observes="tmp_closedwindows" tmp_iconic="menu-iconic closedwindows-icon">
-         <menupopup id="tm-sm-closedwindows_menu"
+      <menu id="tabmix-historyUndoWindowMenu"
+            insertbefore="prefSep"
+            label="&closedWin.label;"
+            observes="tmp_closedwindows"
+            tmp_iconic="menu-iconic closedwindows-icon">
+         <menupopup id="tabmix-historyUndoWindowPopup"
             context="tm_sessionmanagerContextMenu"
-            onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager.gSessionPath[0]);"
-            oncommand="TabmixSessionManager.restoreSession(event.originalTarget);"
-            onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager.gSessionPath[0]);">
-            <menuseparator id="tm-sm-closedwindows-startSeparator" hidden="true"/>
-            <menuseparator id="tm-sm-closedwindows-endSeparator" hidden="true"/>
-         </menupopup>
+            placespopup="true"
+            onpopupshowing="Tabmix.closedObjectsUtils.populateClosedWindowsMenu(this.parentNode);"/>
       </menu>
    </menupopup>
 
@@ -144,7 +145,7 @@
       <menu id="tm-content-undoCloseList" label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;" tmp_iconic="menu-iconic closedtabs-icon"
          insertbefore="context-sep-viewbgimage">
         <menupopup id="tm-content-undoCloseList-menu"
-          onpopupshowing="TMP_ClosedTabs.populateUndoSubmenu(this);"
+          onpopupshowing="Tabmix.closedObjectsUtils.populateClosedTabsMenu(this.parentNode);"
           onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
       </menu>
       <menuseparator id="tm-content-textSep" insertbefore="context-sep-undo"/>
@@ -156,76 +157,30 @@
     </popup>
 
     <toolbarpalette id="BrowserToolbarPalette">
-      <toolbarbutton id="btn_undoclose" class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
+      <toolbaritem id="tabmix-closedTabs-toolbaritem"
+              badged="true"
+              label="&closedtabsbtn.label;"
+              removable="true"
+              tooltiptext="&closedtabsbtn.tooltip;">
+        <toolbarbutton id="tabmix-closedTabsButton"
+              class="toolbarbutton-1 chromeclass-toolbar-additional"
               observes="tmp_undocloseButton"
               oncommand="if (event.target == this &amp;&amp; !TabmixAllTabs.isAfterCtrlClick(event.target)) TMP_ClosedTabs.undoCloseTab();"
-              onclick="if (event.target == this &amp;&amp; event.button == 1) TMP_ClosedTabs.restoreTab('original', -2);"
-              onmousedown="TabmixAllTabs.checkForCtrlClick(event);"
+              onclick="TMP_ClosedTabs.handleEvent(event);"
+              onmousedown=";TabmixAllTabs.checkForCtrlClick(event);"
               onmouseup="if (event.target == this) setTimeout(function(b) {b.removeAttribute('afterctrlclick')}, 0, this);"
               ondragover="TMP_undocloseTabButtonObserver.onDragOver(event);"
               ondragenter="TMP_undocloseTabButtonObserver.onDragOver(event);"
               ondrop="TMP_undocloseTabButtonObserver.onDrop(event);"
               ondragexit="TMP_undocloseTabButtonObserver.onDragExit(event);"
-              label="&closedtabsbtn.label;"
-              _tooltiptext="&closedtabsbtn.tooltip;"
-              tooltiptext="&closedtabsbtn.tooltip;">
-        <menupopup id="btn_undoclose_menu"
-              context="tm_undocloseContextMenu"
-              onpopupshowing="return TMP_ClosedTabs.populateUndoSubmenu(this);"
-              onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
-      </toolbarbutton>
-      <!--
-      <toolbarbutton id="btn_sessionmanager" type="menu" sessionmanager-menu="true"
-                              class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
-              observes="tmp_sessionmanagerButton"
-              _tooltiptext="&sessionbtn.tooltip;"
-              tooltiptext="&sessionbtn.tooltip;"
-              label="&session.Tools;" >
-         <menupopup id="btn_sessionmanager_menu"
-                  context="tm_sessionmanagerContextMenu"
-                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows');
-                                  this.childNodes[2].hidden = document.getElementById('btn_closedwindows') ? true : false;"
-                  onpopuphidden="this.parentNode.setAttribute('tooltiptext', this.parentNode.getAttribute('_tooltiptext'));"
-                  oncommand="TabmixSessionManager.restoreSession(event.originalTarget);"
-                  onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager._rdfRoot+'/windows');">
-            <menuitem id="btn-sm-settings" label="&settings.label;…" tmp_iconic="menuitem-iconic"
-                  oncommand="Tabmix.openOptionsDialog('paneSession'); event.stopPropagation();"/>
-            <menuseparator/>
-            <menu id="tm-sm-closedwindows1" label="&closedWin.label;" observes="tmp_closedwindows" tmp_iconic="menu-iconic closedwindows-icon">
-               <menupopup id="tm-sm-closedwindows_menu1"
-                  context="tm_sessionmanagerContextMenu"
-                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager.gSessionPath[0]);"
-                  onpopuphidden="event.stopPropagation();"
-                  oncommand="TabmixSessionManager.restoreSession(event.originalTarget);event.stopPropagation();"
-                  onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager.gSessionPath[0]);event.stopPropagation();">
-                  <menuseparator id="tm-sm-closedwindows1-startSeparator" hidden="true"/>
-                  <menuseparator id="tm-sm-closedwindows1-endSeparator" hidden="true"/>
-               </menupopup>
-            </menu>
-            <menuitem id="btn-sm-saveone" label="&saveWindow.label;…" key="key_tm-sm-saveone"
-                  command="TabmixSessionUtils:SaveThisWindow"/>
-            <menuitem id="btn-sm-saveall" label="&saveAllWindows.label;…" key="key_tm-sm-saveall"  observes="tmp_menu_AllWindows"
-                  command="TabmixSessionUtils:SaveAllWindow"/>
-            <menuseparator/>
-            <menu anonid="rename" label="&sm.context.rename;" accesskey="&sm.context.rename.key;">
-               <menupopup
-                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows', 0, true);"
-                  oncommand="TabmixSessionManager.renameSession(event.originalTarget.session);event.stopPropagation();">
-               </menupopup>
-            </menu>
-            <menu anonid="delete" label="&sm.context.delete;" accesskey="&sm.context.delete.key;">
-               <menupopup
-                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows');"
-                  oncommand="TabmixSessionManager.removeSavedSession(event.originalTarget, true);event.stopPropagation();">
-                  <menuseparator id="tm-sm-delete-startSeparator" hidden="true"/>
-                  <menuseparator id="tm-sm-delete-endSeparator" hidden="true"/>
-               </menupopup>
-            </menu>
-            <menuseparator id="btn_sessionmanager-startSeparator"/>
-            <menuseparator id="btn_sessionmanager-endSeparator"/>
-         </menupopup>
-      </toolbarbutton>
-      -->
+              _tooltiptext="Reopen last closed tab"
+              tooltiptext="Reopen last closed tab">
+        </toolbarbutton>
+        <toolbarbutton id="tabmix-closedTabs-menu"
+              observes="tmp_undocloseButton"
+              oncommand="Tabmix.closedObjectsUtils.showSubView(event)"/>
+      </toolbaritem>
+
       <toolbarbutton id="tabmix-alltabs-button"
             class="toolbarbutton-1 chromeclass-toolbar-additional tabs-alltabs-button"
             context="hideTabbar_context"
@@ -235,23 +190,23 @@
             tooltiptext="&listAllTabs.label;"
             removable="true"/>
 
-      <toolbarbutton id="btn_closedwindows" type="menu" class="toolbarbutton-1 chromeclass-toolbar-additional tabmix-button"
-               observes="tmp_closedwindows"
-               label="&closedwindowsbtn.label;"
-               _tooltiptext="&closedwindowsbtn.tooltip;"
-               tooltiptext="&closedwindowsbtn.tooltip;">
-         <menupopup id="btn_closedwindows_menu"
-               placespopup="true" tooltip="bhTooltip"
-               context="tm_sessionmanagerContextMenu"
-               onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager.gSessionPath[0]);"
-               onpopuphidden="this.parentNode.setAttribute('tooltiptext', this.parentNode.getAttribute('_tooltiptext'));"
-               oncommand="TabmixSessionManager.restoreSession(event.originalTarget);"
-               onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager.gSessionPath[0]);">
-               <menuseparator id="btn_closedwindows-startSeparator" hidden="true"/>
-               <menuseparator id="btn_closedwindows-endSeparator" hidden="true"/>
-         </menupopup>
-      </toolbarbutton>
+      <toolbarbutton id="tabmix-closedWindowsButton"
+            class="toolbarbutton-1 chromeclass-toolbar-additional"
+            badged="true"
+            observes="tmp_closedwindows"
+            oncommand="Tabmix.closedObjectsUtils.showSubView(event)"
+            label="&closedwindowsbtn.label;"
+            tooltiptext="&closedwindowsbtn.tooltip;"
+            removable="true"/>
     </toolbarpalette>
+
+    <html:template id="tabmix-closedWindows-container">
+      <panelview id="tabmix-closedWindowsView" class="PanelUI-subView tabmix-subview"/>
+    </html:template>
+
+    <html:template id="tabmix-closedTabs-container">
+      <panelview id="tabmix-closedTabsView" class="PanelUI-subView tabmix-subview"/>
+    </html:template>
 
     <toolbarbutton id="allTabsMenu_sortTabbsButton"
       class="subviewbutton subviewbutton-iconic"
@@ -317,7 +272,7 @@
       <menupopup id="tm_undocloseWindowContextMenu"
                   onpopupshowing="return this.triggerNode.value >= 0;">
         <menuitem id="tm_delete-window" label="&deletelist.label;" accesskey="&deletelist.accesskey;"
-                  oncommand="TabmixSessionManager.restoreWindow('delete', this.parentNode.triggerNode.value);"/>
+                  oncommand="Tabmix.closedObjectsUtils.on_delete(this.parentNode.triggerNode);"/>
       </menupopup>
       <!-- context menu for session manager menupopup -->
       <menupopup hidden="true" id="tm_sessionmanagerContextMenu"

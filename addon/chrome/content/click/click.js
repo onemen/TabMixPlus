@@ -417,10 +417,12 @@ var TabmixContext = {
     document.getElementById("tabContextMenu").addEventListener("popuphidden", this);
 
     var item, triggerNode = document.getElementById("tabContextMenu").triggerNode;
-    if (triggerNode.parentNode)
+    if (triggerNode.parentNode) {
       item = triggerNode.parentNode.id;
-    if (item && (item == "btn_tabslist_menu" || item == "alltabs-popup"))
-      TabContextMenu.contextTab = triggerNode.tab;
+      if (item === "allTabsMenu-allTabsView") {
+        TabContextMenu.contextTab = triggerNode.tab;
+      }
+    }
 
     var clickOutTabs = triggerNode.localName == "tabs";
     var aTab = clickOutTabs ? gBrowser.selectedTab : TabContextMenu.contextTab;
@@ -909,11 +911,11 @@ var TabmixAllTabs = {
   checkForCtrlClick: function TMP_checkForCtrlClick(aEvent) {
     var aButton = aEvent.target;
     if (!aButton.disabled && aEvent.button === 0 && (aEvent.ctrlKey || aEvent.metaKey)) {
-      if (aButton.id == "btn_undoclose") {
+      if (aButton.id == "tabmix-closedTabsButton") {
         TMP_ClosedTabs.undoCloseTab();
         aButton.setAttribute("afterctrlclick", true);
-      } else if (aButton.id == "btn_tabslist" ||
-          aButton.parentNode && aButton.parentNode.id == "btn_tabslist_menu") {
+      } else if (aButton.id == "tabmix-alltabs-button" ||
+          aButton.parentNode && aButton.parentNode.id == "allTabsMenu-allTabsView") {
         BrowserCloseTabOrWindow();
         aButton.setAttribute("afterctrlclick", true);
       }
@@ -954,9 +956,6 @@ var TabmixAllTabs = {
     if (!Tabmix.prefs.getBoolPref("middleclickDelete"))
       return;
 
-    if (event.target.id == "btn_tabslistSorted")
-      return;
-
     if (event.button == 1) {
       let aTab = event.originalTarget.tab;
       if (popup.parentNode.id == "tm-tabsList" && (aTab.selected || gBrowser.isBlankTab(gBrowser._selectedTab))) {
@@ -968,9 +967,6 @@ var TabmixAllTabs = {
       gBrowser.removeTab(aTab, {animate: true});
       if (gBrowser.tabs.length > 0) {
         this.createTabsList(popup, aType);
-        let item = popup.parentNode.parentNode;
-        if (item.parentNode.id == "btn_tabslist")
-          this.createTabsList(item, aType);
       } else {
         popup.hidePopup();
       }
@@ -1001,14 +997,6 @@ var TabmixAllTabs = {
     this.beforeCommonList(popup);
     this.createCommonList(popup, aType);
 
-    // for firefox 22+ when layout.css.devPixelsPerPx > 1
-    // and user middle-click to close last visible tab
-    if (popup.id == "btn_tabslist_menu" && Tabmix.visibleTabs.tabs.length == 1) {
-      const {height, width} = popup.getBoundingClientRect();
-      popup.setAttribute("minheight", height);
-      popup.setAttribute("minwidth", width);
-    }
-
     gBrowser.tabContainer.arrowScrollbox.addEventListener("scroll", this);
     this._popup = popup;
     if (!this._popup._updateTabsVisibilityStatus)
@@ -1019,15 +1007,9 @@ var TabmixAllTabs = {
   },
 
   beforeCommonList: function TMP_beforeCommonList(popup, aCloseTabsPopup) {
-    var item = popup.parentNode;
-    if (item.id == "btn_tabslist" || item.id == "btn_undoclose")
-      item.removeAttribute("tooltiptext");
-
     // clear out the menu popup if we show the popup after middle click
     while (popup.hasChildNodes()) {
       var menuItem = popup.firstChild;
-      if (menuItem.id.indexOf("btn_tabslist") != -1)
-        break;
       menuItem.removeEventListener("command", TMP_ClosedTabs);
       menuItem.removeEventListener("click", TMP_ClosedTabs);
       menuItem.remove();
@@ -1126,10 +1108,7 @@ var TabmixAllTabs = {
     tab.mCorrespondingMenuitem = mi;
     mi.tab = tab;
 
-    if (popup.id == "btn_tabslist_menu")
-      popup.insertBefore(mi, document.getElementById("btn_tabslist_sep"));
-    else
-      popup.appendChild(mi);
+    popup.appendChild(mi);
 
     // for ColorfulTabs 6.0+
     if (typeof colorfulTabs == "object") {
@@ -1194,21 +1173,10 @@ var TabmixAllTabs = {
     // clear out the menu popup and remove the listeners
     while (popup.hasChildNodes()) {
       var menuItem = popup.firstChild;
-      if (menuItem.id.indexOf("btn_tabslist") != -1)
-        break;
       if ("tab" in menuItem) {
         menuItem.tab.mCorrespondingMenuitem = null;
       }
       menuItem.remove();
-    }
-
-    var item = popup.parentNode;
-    if (item.id == "btn_tabslist" || item.id == "btn_undoclose")
-      item.setAttribute('tooltiptext', item.getAttribute('_tooltiptext'));
-
-    if (popup.id == "btn_tabslist_menu") {
-      popup.removeAttribute("minheight");
-      popup.removeAttribute("minwidth");
     }
 
     gBrowser.tabContainer.removeEventListener("TabAttrModified", this);

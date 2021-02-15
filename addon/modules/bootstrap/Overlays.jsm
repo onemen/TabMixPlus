@@ -349,7 +349,10 @@ class Overlays {
   _resolveForwardReference(node) {
     if (node.id) {
       const target = this.document.getElementById(node.id);
-      if (node.localName == "toolbarpalette") {
+      if (node.localName == "template") {
+        this._insertElement(this.document.documentElement, node);
+        return true;
+      } else if (node.localName == "toolbarpalette") {
         const toolboxes = this.window.document.querySelectorAll('toolbox');
         for (const toolbox of toolboxes) {
           let palette = toolbox.palette;
@@ -840,11 +843,12 @@ class Overlays {
         return node;
       };
 
+      const self = this;
       // unregisterArea()'ing the toolbar can nuke the nodes, we need to make sure ours are moved to the palette
       data.onWidgetAfterDOMChange = function(aNode) {
         if (aNode.id == this.id &&
         !aNode.parentNode &&
-        !this.trueAttribute(aNode.ownerDocument.documentElement, 'customizing') && // it always ends up in the palette in this case
+        !self.trueAttribute(aNode.ownerDocument.documentElement, 'customizing') && // it always ends up in the palette in this case
         this.palette) {
           this.palette.appendChild(aNode);
         }

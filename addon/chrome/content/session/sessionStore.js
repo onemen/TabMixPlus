@@ -100,7 +100,7 @@ var TMP_SessionStore = {
    * @brief         make sure that we don't enable both sessionStore and session manager
    *
    * @param msgNo   a Integer value - msg no. to show.
-   *                -1 when session manager extension enabled (see SessionManagerExtension.jsm)
+   *                -1 when session manager extension enabled (see AddonManager.jsm)
    *
    * @param start   a Boolean value - true if we call this function before startup.
    *
@@ -310,11 +310,21 @@ var TMP_ClosedTabs = {
     return this._buttonBroadcaster;
   },
 
-  // make btn_undoclose single-functionality or dual-functionality
+  // make tabmix-closedTabsButton single-functionality or dual-functionality
   setButtonType(menuOnly) {
-    var buttonType = menuOnly ? "menu" : "menu-button";
-    if (this.buttonBroadcaster.getAttribute("type") != buttonType)
+    const buttonType = menuOnly ? "menu" : "menu-button";
+    if (this.buttonBroadcaster.getAttribute("type") != buttonType) {
       this.buttonBroadcaster.setAttribute("type", buttonType);
+    }
+
+    const closedTabsButton = document.getElementById("tabmix-closedTabsButton");
+    if (closedTabsButton) {
+      if (buttonType === "menu-button") {
+        closedTabsButton.setAttribute("tooltiptext", closedTabsButton.getAttribute("_tooltiptext"));
+      } else {
+        closedTabsButton.removeAttribute("tooltiptext");
+      }
+    }
   },
 
   setButtonDisableState: function ct_setButtonDisableState(aState) {
@@ -334,7 +344,7 @@ var TMP_ClosedTabs = {
    * Get closed tabs data
    */
   get getClosedTabData() {
-    return window.__SSi ? TabmixSvc.JSON.parse(TabmixSvc.ss.getClosedTabData(window)) : {};
+    return window.__SSi ? TabmixSvc.ss.getClosedTabData(window, false) : {};
   },
 
   getUrl: function ct_getUrl(aTabData) {
@@ -356,120 +366,82 @@ var TMP_ClosedTabs = {
     return val;
   },
 
-  populateUndoSubmenu: function ct_populateUndoSubmenu(aPopup, keepWidth) {
-    if (TabmixAllTabs.isAfterCtrlClick(aPopup.parentNode))
-      return false;
-
-    if (keepWidth && !aPopup.hasAttribute("width")) {
-      const width = Tabmix.getBoundsWithoutFlushing(aPopup).width;
-      aPopup.setAttribute("width", width);
-    }
-
-    TabmixAllTabs.beforeCommonList(aPopup, true);
-
-    let dwu, DIRECTION_RTL;
-    if (Tabmix.isVersion(600)) {
-      // dwu = window.QueryInterface(Ci.nsIInterfaceRequestor)
-      //     .getInterface(Ci.nsIDOMWindowUtils);
-      dwu = window.windowUtils;
-      DIRECTION_RTL = Ci.nsIDOMWindowUtils.DIRECTION_RTL;
-    }
-
-    // populate menu
-    var closedTabs = this.getClosedTabData;
-    const ltr = Tabmix.ltr;
-    // Grab the title and uri (make the uri friendly text)
-    const asyncUpdateItemLabel = (m, i) => {
-      var tabData = closedTabs[i];
-      var url = this.getUrl(tabData);
-      this.getTitle(tabData, url).then(title => {
-        var _uri = makeURI(url);
-        if (_uri.scheme == "about" && title === "")
-          url = title = "about:blank";
-        else {
-          try {
-            const pathProp = TabmixSvc.version(570) ? "pathQueryRef" : "path";
-            url = _uri.scheme == "about" ? _uri.spec :
-              _uri.scheme + "://" + _uri.hostPort + _uri[pathProp];
-          } catch (e) {
-            url = title;
-          }
-        }
-        var label = title ? title : url;
-        let labelWithCount = label;
-        if (ltr) {
-          if (i + 1 < 10)
-            m.setAttribute("accesskey", i + 1);
-          else if (i + 1 == 10)
-            m.setAttribute("accesskey", 0);
-          if (dwu && dwu.getDirectionFromText(label) == DIRECTION_RTL) {
-            const count = " :" + (i + 1) + (i < 9 ? "  " : "");
-            labelWithCount = label + count;
-          } else {
-            const count = (i < 9 ? "  " : "") + (i + 1) + ": ";
-            labelWithCount = count + label;
-          }
-        }
-        m.setAttribute("label", labelWithCount);
-        m.setAttribute("tooltiptext", label + "\n" + url);
-        m.setAttribute("statustext", url);
-
-        var iconURL = tabData.image;
-        if (iconURL) {
-          if (/^https?:/.test(iconURL))
-            iconURL = "moz-anno:favicon:" + iconURL;
-          m.setAttribute("image", iconURL);
-        }
-      });
-    };
-
-    for (let i = 0; i < closedTabs.length; i++) {
-      const m = document.createElement("menuitem");
-      asyncUpdateItemLabel(m, i);
-      m.setAttribute("class", "menuitem-iconic bookmark-item menuitem-with-favicon");
+  populateUndoSubmenu(aPopup) {
+    const closedTabs = this.getClosedTabData;
+    const isSubviewbutton = aPopup.__tagName === "toolbarbutton";
+    for (let i = 0; i < aPopup.childNodes.length - 1; i++) {
+      let m = aPopup.childNodes[i];
+      let tabData = closedTabs[i];
+      if (tabData && m.hasAttribute("targetURI")) {
+        this.getTitle(tabData, m.getAttribute("targetURI")).then(title => {
+          m.setAttribute("label", title);
+        });
+      }
       m.setAttribute("value", i);
       m.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
-      m.addEventListener("command", this);
       m.addEventListener("click", this);
-      if (i === 0)
-        m.setAttribute("key", "key_undoCloseTab");
-      aPopup.appendChild(m);
+      m.removeEventListener(
+        "click",
+        RecentlyClosedTabsAndWindowsMenuUtils._undoCloseMiddleClick
+      );
+      if (isSubviewbutton) {
+        m.value = i;
+        m.setAttribute("class", "bookmark-item subviewbutton subviewbutton-iconic");
+      }
     }
 
-    aPopup.appendChild(document.createElement("menuseparator"));
+    // Reopen All Tabs
+    let reopenAllTabs = aPopup.lastChild;
+    reopenAllTabs.setAttribute("value", -2);
+    reopenAllTabs.removeAttribute("oncommand");
+    reopenAllTabs.addEventListener("command", this);
+    if (isSubviewbutton) {
+      reopenAllTabs.classList.add("subviewbutton", "subviewbutton-iconic");
+    }
 
-    const addMenu = this.addMenuItem.bind(this, aPopup);
+    const addMenu = this.addMenuItem.bind(this, aPopup, isSubviewbutton);
     // "Keep menu open"
     const mi = addMenu("lockedClosedTabsList", TabmixSvc.getString("undoclosetab.keepOpen.label"), -3);
-    mi.setAttribute("description", TabmixSvc.getString("undoclosetab.keepOpen.description"));
+    mi.setAttribute("tooltiptext", TabmixSvc.getString("undoclosetab.keepOpen.description"));
     mi.setAttribute("closemenu", "none");
     const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
     mi.setAttribute("image", image);
     // "Clear Closed Tabs List"
     addMenu("clearClosedTabsList", TabmixSvc.getString("undoclosetab.clear.label"), -1, "clearClosedTabs");
-    // "Restore All Tabs"
-    addMenu("restoreAllClosedTabs", gNavigatorBundle.getString("menuRestoreAllTabs.label"), -2, "ucatab");
 
     return true;
   },
 
-  addMenuItem(popup, id, label, val, keyId) {
-    const m = popup.appendChild(document.createElement("menuitem"));
+  addMenuItem(popup, isSubviewbutton, id, label, val, keyId) {
+    const m = document.createXULElement(popup.__tagName || "menuitem");
     m.setAttribute("id", id);
     m.setAttribute("label", label);
     m.setAttribute("value", val);
-    m.setAttribute("class", "menuitem-iconic");
+    if (isSubviewbutton) {
+      m.setAttribute("class", "subviewbutton subviewbutton-iconic");
+    } else {
+      m.setAttribute("class", "menuitem-iconic");
+    }
     if (keyId && document.getElementById("key_tm_" + keyId)) {
       m.setAttribute("key", "key_tm_" + keyId);
     }
     m.addEventListener("command", this);
+    popup.insertBefore(m, popup.lastChild);
     return m;
   },
 
   handleEvent(event) {
     switch (event.type) {
       case "click":
-        this.checkForMiddleClick(event);
+        if (event.target.id === "tabmix-closedTabsButton") {
+          if (event.button === 1) {
+            this.restoreTab("original", -2);
+          } else if (event.target.getAttribute("type") === "menu") {
+            Tabmix.closedObjectsUtils.showSubView(event);
+          }
+        } else {
+          this.checkForMiddleClick(event);
+        }
         break;
       case "command":
         this.restoreCommand(event);
@@ -484,11 +456,19 @@ var TMP_ClosedTabs = {
       this.keepMenuOpen = !this.keepMenuOpen;
       const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
       item.setAttribute("image", image);
-      this.populateUndoSubmenu(item.parentNode, true);
+      this.setPopupWidth(item.parentNode);
+      Tabmix.closedObjectsUtils.populateClosedTabsMenu(item.parentNode.parentNode);
       return;
     }
 
     this.doCommand("restoreTab", "original", item);
+  },
+
+  setPopupWidth(popup) {
+    if (!popup.hasAttribute("width")) {
+      const width = Tabmix.getBoundsWithoutFlushing(popup).width;
+      popup.setAttribute("width", width);
+    }
   },
 
   checkForMiddleClick: function ct_checkForMiddleClick(aEvent) {
@@ -522,8 +502,11 @@ var TMP_ClosedTabs = {
     const rePopulate = (keepMenuOpen || this.keepMenuOpen) && this.count > 0;
     if (rePopulate) {
       if (popup && command == "restoreTab") {
-        this.populateUndoSubmenu(popup, true);
+        this.setPopupWidth(popup);
+        Tabmix.closedObjectsUtils.populateClosedTabsMenu(popup.parentNode);
       }
+    } else if (popup.parentNode.tagName === "panelview") {
+      popup.hidePopup();
     } else if (!this.count || item.getAttribute("closemenu") == "none") {
       closeMenus(popup);
     }
@@ -533,7 +516,7 @@ var TMP_ClosedTabs = {
     var tabData = this.getClosedTabData[index];
     var url = this.getUrl(tabData);
     this.getTitle(tabData, url).then(title => {
-      PlacesCommandHook.bookmarkLink(PlacesUtils.bookmarksMenuFolderId, url, title);
+      PlacesCommandHook.bookmarkLink(url, title);
     });
   },
 
@@ -549,34 +532,30 @@ var TMP_ClosedTabs = {
   restoreTab: function ct_restoreTab(aWhere, aIndex) {
     switch (aWhere) {
       case "window":
-        this.SSS_restoreToNewWindow(aIndex);
+        this.restoreToNewWindow(aIndex);
         break;
       case "delete":
-        this.getClosedTabAtIndex(aIndex);
+        TabmixSvc.ss.forgetClosedTab(window, aIndex);
         break;
       case "original":
         if (aIndex == -1) {
           this.removeAllClosedTabs();
           break;
         } else if (aIndex == -2) {
-          this.SSS_restoreAllClosedTabs();
+          this.restoreAllClosedTabs();
           break;
         }
         // else do the default
         /* falls through */
       default:
-        this.SSS_undoCloseTab(aIndex, aWhere, true);
+        this._undoCloseTab(aIndex, aWhere, true);
     }
   },
 
   removeAllClosedTabs() {
-    // update our session data
-    var updateRDF = TabmixSessionManager.enableBackup && Tabmix.prefs.getBoolPref("sessions.save.closedtabs");
-    if (updateRDF)
-      TabmixSessionManager.deleteWinClosedtabs(TabmixSessionManager.gThisWin);
-    while (this.count)
+    while (this.count) {
       TabmixSvc.ss.forgetClosedTab(window, 0);
-    this.setButtonDisableState(true);
+    }
   },
 
   /**
@@ -587,52 +566,34 @@ var TMP_ClosedTabs = {
   getClosedTabAtIndex: function ct_getClosedTabAtIndex(aIndex) {
     if (aIndex < 0 || aIndex >= this.count)
       return null;
-    // update our session data
-    if (TabmixSessionManager.enableBackup)
-      TabmixSessionManager.deleteClosedtabAt(this.count - aIndex);
 
-    let closedTab;
-    if (Tabmix.isVersion(400)) {
-      const closedTabs = TabmixSvc.SessionStore._windows[window.__SSi]._closedTabs;
-      closedTab = TabmixSvc.SessionStore.removeClosedTabData(closedTabs, aIndex);
-    } else {
-      closedTab = this.getClosedTabData.splice(aIndex, 1).shift();
-      TabmixSvc.ss.forgetClosedTab(window, aIndex);
-    }
-    this.setButtonDisableState();
+    const closedTabs = TabmixSvc.SessionStore._windows[window.__SSi]._closedTabs;
+    const closedTab = TabmixSvc.SessionStore.removeClosedTabData(closedTabs, aIndex);
+    TabmixSvc.SessionStore._notifyOfClosedObjectsChange();
     return closedTab;
   },
 
-  SSS_restoreToNewWindow: function ct_restoreToNewWindow(aIndex) {
+  restoreToNewWindow(aIndex) {
     var tabData = this.getClosedTabAtIndex(aIndex);
     // we pass the current tab as a place holder for tabData
     var state = TabmixSvc.JSON.stringify(tabData ? tabData.state : {});
     return gBrowser.duplicateTabToWindow(gBrowser._selectedTab, null, state);
   },
 
-  SSS_restoreAllClosedTabs: function ct_SSS_restoreAllClosedTabs() {
-    var closedTabCount = this.count;
-    let confirmOpenInTabs = Tabmix.isVersion(510) ? "confirmOpenInTabs" : "_confirmOpenInTabs";
-    const isConfirmed = Tabmix.isVersion(600) ?
-      OpenInTabsUtils.confirmOpenInTabs(closedTabCount) :
-      PlacesUIUtils[confirmOpenInTabs](closedTabCount);
+  restoreAllClosedTabs() {
+    const closedTabCount = this.count;
+    const isConfirmed = OpenInTabsUtils.confirmOpenInTabs(closedTabCount);
     if (!isConfirmed) {
       return;
     }
 
-    this.setButtonDisableState(true);
-
     // catch blank tabs
-    var blankTabs = [];
-    for (let i = 0; i < gBrowser.tabs.length; i++) {
-      if (gBrowser.isBlankNotBusyTab(gBrowser.tabs[i]))
-        blankTabs.push(gBrowser.tabs[i]);
-    }
+    const blankTabs = gBrowser.tabs.filter(tab => gBrowser.isBlankNotBusyTab(tab));
 
     var multiple = closedTabCount > 1;
     for (let i = 0; i < closedTabCount; i++) {
       let blankTab = blankTabs.pop() || null;
-      this.SSS_undoCloseTab(0, "original", i === 0, blankTab, multiple);
+      this._undoCloseTab(0, "original", i === 0, blankTab, multiple);
     }
 
     // remove unused blank tabs
@@ -643,7 +604,7 @@ var TMP_ClosedTabs = {
     }
   },
 
-  SSS_undoCloseTab(aIndex, aWhere, aSelectRestoredTab, aBlankTabToReuse, skipAnimation) {
+  _undoCloseTab(aIndex, aWhere, aSelectRestoredTab, aBlankTabToReuse, skipAnimation) {
     if (!Tabmix.prefs.getBoolPref("undoClose") || this.count === 0)
       return null;
 
@@ -668,21 +629,23 @@ var TMP_ClosedTabs = {
       tabToRemove.collapsed = true;
     }
 
-    let createLazyBrowser = Tabmix.isVersion(540) &&
+    let createLazyBrowser =
       Services.prefs.getBoolPref("browser.sessionstore.restore_tabs_lazily") &&
       Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand") &&
       !aSelectRestoredTab && !state.pinned;
 
-    let userContextId = state.userContextId;
+    let userContextId = state.userContextId ?? "";
     let reuseExisting = !createLazyBrowser && aBlankTabToReuse &&
-        (!Tabmix.isVersion(490) ||
-        aBlankTabToReuse.getAttribute("usercontextid") == (userContextId || ""));
+        aBlankTabToReuse.getAttribute("usercontextid") === userContextId;
 
     let newTab = reuseExisting ? aBlankTabToReuse :
       gBrowser.addTrustedTab(null, Object.assign({
-        skipAnimation: tabToRemove || skipAnimation,
-        dontMove: true,
         createLazyBrowser,
+        skipAnimation: tabToRemove || skipAnimation,
+        allowInheritPrincipal: true,
+        noInitialLabel: true,
+        userContextId,
+        dontMove: true,
       }, state));
     if (!reuseExisting && aBlankTabToReuse) {
       gBrowser.removeTab(aBlankTabToReuse, {animate: false});
@@ -704,18 +667,13 @@ var TMP_ClosedTabs = {
       TabView.afterUndoCloseTab();
     }
 
-    // after we open new tab we only need to fix position if this is true
-    // we don't call moveTabTo from add tab if it called from sss_undoCloseTab
+    // after we open new tab we only need to fix position if this condition is true
+    // we prevent gBrowser.addTab from moving new tab when we call it from here
     var restorePosition = Tabmix.prefs.getBoolPref("undoClosePosition");
     if (aWhere == "current" || (aWhere == "original" && restorePosition)) {
       gBrowser.moveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, pos));
     } else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) {
-      let tab;
-      if (Tabmix.isVersion({ff: 570, wf: "56.2.8"})) {
-        tab = gBrowser._lastRelatedTabMap.get(gBrowser.selectedTab) || gBrowser.selectedTab;
-      } else {
-        tab = gBrowser._lastRelatedTab || gBrowser.selectedTab;
-      }
+      let tab = gBrowser._lastRelatedTabMap.get(gBrowser.selectedTab) || gBrowser.selectedTab;
       let offset = newTab._tPos > tab._tPos ? 1 : 0;
       gBrowser.moveTabTo(newTab, tab._tPos + offset);
     } else if (aBlankTabToReuse && !Tabmix.getOpenTabNextPref()) {
@@ -731,7 +689,168 @@ var TMP_ClosedTabs = {
   },
 
   undoCloseTab: function ct_undoCloseTab(aIndex, aWhere) {
-    return this.SSS_undoCloseTab(aIndex || 0, aWhere || "original", true);
+    return this._undoCloseTab(aIndex || 0, aWhere || "original", true);
   }
+
+};
+
+Tabmix.closedObjectsUtils = {
+  init() {
+    if (this.initialized) {
+      return;
+    }
+    this.initialized = true;
+
+    Services.obs.addObserver(this, "sessionstore-closed-objects-changed");
+
+    this.toggleRecentlyClosedWindowsButton();
+  },
+
+  initObjectPanel(viewType) {
+    const wasInitialized = `_initialized_closed${viewType}`;
+    if (this[wasInitialized]) {
+      return;
+    }
+    this[wasInitialized] = true;
+
+    const template = document.getElementById(`tabmix-closed${viewType}-container`);
+    template.replaceWith(template.content);
+
+    const panelview = document.getElementById(`tabmix-closed${viewType}View`);
+
+    const body = document.createXULElement("vbox");
+    body.className = "panel-subview-body";
+    body.__tagName = "toolbarbutton";
+    body.hidePopup = () => panelview.closest("panel")?.hidePopup();
+
+    panelview.appendChild(body);
+    panelview.menupopup = body;
+
+    panelview.addEventListener("ViewShowing", () => {
+      const method = `populateClosed${viewType}Menu`;
+      this[method](panelview);
+    });
+  },
+
+  /**
+   * @brief           catch middle click from closed windows list,
+   *                  delete window from the list or restore according to the pref
+   * @param event     a valid event union.
+   * @returns         noting.
+   *
+   */
+  checkForMiddleClick(event) {
+    if (event.button != 1) {
+      return;
+    }
+
+    event.stopPropagation();
+    const index = event.originalTarget.value ?? -1;
+    if (index < 0) {
+      return;
+    }
+
+    const where = Tabmix.prefs.getBoolPref("middleclickDelete") ? 'delete' : 'window';
+    this.restoreWindow(where, index);
+
+    const popup = event.originalTarget.parentNode;
+    this.updateView(popup);
+  },
+
+  forgetClosedWindow(index) {
+    if (index < 0) {
+      while (TabmixSvc.ss.getClosedWindowCount() > 0)
+        TabmixSvc.ss.forgetClosedWindow(0);
+    } else {
+      TabmixSvc.ss.forgetClosedWindow(index);
+    }
+  },
+
+  observe(subject, topic) {
+    switch (topic) {
+      case "sessionstore-closed-objects-changed":
+        TMP_ClosedTabs.setButtonDisableState();
+        this.toggleRecentlyClosedWindowsButton();
+        break;
+    }
+  },
+
+  on_delete(node) {
+    const index = node.value;
+    this.restoreWindow('delete', index);
+    this.updateView(node.parentNode);
+  },
+
+  populateClosedTabsMenu(undoTabMenu) {
+    if (TabmixAllTabs.isAfterCtrlClick(undoTabMenu)) {
+      return false;
+    }
+
+    const _getClosedTabCount = HistoryMenu.prototype._getClosedTabCount;
+    HistoryMenu.prototype.populateUndoSubmenu.apply({undoTabMenu, _getClosedTabCount});
+
+    // Bug 1689378 removed keyboard shortcut indicator for Firefox 87+
+    if (undoTabMenu.localName === "panelview") {
+      undoTabMenu.removeAttribute("added-shortcuts");
+      PanelUI._ensureShortcutsShown(undoTabMenu);
+    }
+
+    return true;
+  },
+
+  populateClosedWindowsMenu(undoWindowMenu) {
+    HistoryMenu.prototype.populateUndoWindowSubmenu.apply({undoWindowMenu});
+
+    // Bug 1689378 removed keyboard shortcut indicator for Firefox 87+
+    if (undoWindowMenu.localName === "panelview") {
+      undoWindowMenu.removeAttribute("added-shortcuts");
+      PanelUI._ensureShortcutsShown(undoWindowMenu);
+    }
+  },
+
+  removeObservers() {
+    if (!this.initialized) {
+      return;
+    }
+    Services.obs.removeObserver(this, "sessionstore-closed-objects-changed");
+  },
+
+  restoreWindow(where, index) {
+    switch (where) {
+      case "delete":
+        this.forgetClosedWindow(index);
+        break;
+      case "window":
+      /* falls through */
+      default:
+        undoCloseWindow(index);
+    }
+  },
+
+  showSubView(event) {
+    const viewType = event.target.id == "tabmix-closedWindowsButton" ? "Windows" : "Tabs";
+    this.initObjectPanel(viewType);
+    PanelUI.showSubView(
+      `tabmix-closed${viewType}View`,
+      event.target,
+      event
+    );
+  },
+
+  // enable/disable the Recently Closed Windows button
+  toggleRecentlyClosedWindowsButton() {
+    Tabmix.setItem("tmp_closedwindows", "disabled", TabmixSvc.ss.getClosedWindowCount() === 0 || null);
+  },
+
+  updateView(popup) {
+    if (TabmixSvc.ss.getClosedWindowCount() > 0) {
+      this.populateClosedWindowsMenu(popup.parentNode);
+    } else {
+      popup.hidePopup();
+      if (popup.parentNode.localName != "panelview") {
+        popup.parentNode.parentNode.hidePopup();
+      }
+    }
+  },
 
 };

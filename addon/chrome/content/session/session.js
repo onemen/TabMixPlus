@@ -93,7 +93,6 @@ Tabmix.Sanitizer = {
       if ((TabmixSessionManager.enableManager || TabmixSessionManager.enableBackup) &&
           TabmixSessionManager.saveClosedTabs) {
         wnd.TMP_ClosedTabs.restoreTab("original", -1);
-        wnd.TMP_ClosedTabs.setButtonDisableState();
       }
     }
     // for the case Tabmix session manager is off
@@ -349,12 +348,8 @@ TabmixSessionManager = {
       this.initService();
 
     let obs = Services.obs;
-    obs.addObserver(this, "browser-window-change-state", true);
-    obs.addObserver(this, "sessionstore-windows-restored", true);
-    obs.addObserver(this, "sessionstore-browser-state-restored", true);
     obs.addObserver(this, "quit-application-requested", true);
     obs.addObserver(this, "browser-lastwindow-close-requested", true);
-    obs.addObserver(this, "browser:purge-session-history", true);
     if (Tabmix.isVersion(270)) {
       if (!isFirstWindow && this.enableBackup && this.canRestoreLastSession)
         window.__SS_lastSessionWindowID = String(Date.now()) + Math.random();
@@ -707,11 +702,8 @@ TabmixSessionManager = {
 
     if (this._inited) {
       let obs = Services.obs;
-      obs.removeObserver(this, "sessionstore-windows-restored");
-      obs.removeObserver(this, "sessionstore-browser-state-restored");
       obs.removeObserver(this, "quit-application-requested");
       obs.removeObserver(this, "browser-lastwindow-close-requested");
-      obs.removeObserver(this, "browser:purge-session-history");
       if (Tabmix.isVersion(270))
         obs.removeObserver(this, "sessionstore-last-session-cleared");
     }
@@ -1159,100 +1151,10 @@ TabmixSessionManager = {
         this._saveTimer = null;
         this.saveState();
         break;
-      case "sessionstore-windows-restored":
-      case "sessionstore-browser-state-restored":
-        // session restored update buttons state
-        TMP_ClosedTabs.setButtonDisableState();
-        gBrowser.ensureTabIsVisible(gBrowser.selectedTab, true);
-        /* falls through */
-      case "browser-window-change-state":
-        this.toggleRecentlyClosedWindowsButton();
-        break;
       case "sessionstore-last-session-cleared":
         TabmixSvc.sm.lastSessionPath = null;
         break;
-      case "browser:purge-session-history":
-        // currently we don't do anything on exit
-        // if user set privacy.clearOnShutdown.history
-        // we have an option not to save on exit
-        if (this.enableManager || this.enableBackup) {
-          // remove closed windows and tabs
-          this.deleteWinClosedtabs(this.gThisWin);
-          this.removeAllClosedWindows();
-          this.saveState();
-        }
-        setTimeout(() => {
-          TMP_ClosedTabs.setButtonDisableState();
-          this.toggleRecentlyClosedWindowsButton();
-        }, 0);
-        break;
     }
-  },
-
-  restoreWindow: function SM_restoreWindow(aWhere, aIndex) {
-    switch (aWhere) {
-      case "delete":
-        this.forgetClosedWindow(aIndex);
-        break;
-      case "window":
-        /* falls through */
-      default:
-        undoCloseWindow(aIndex);
-        this.notifyClosedWindowsChanged();
-    }
-  },
-
-  /**
-   * @brief           catch middle click from closed windows list,
-   *                  delete window from the list or restore according to the pref
-   * @param aEvent    a valid event union.
-   * @returns         noting.
-   *
-   */
-  checkForMiddleClick: function SM_checkForMiddleClick(aEvent) {
-    if (aEvent.button != 1)
-      return;
-
-    aEvent.stopPropagation();
-    var index = "value" in aEvent.originalTarget ? aEvent.originalTarget.value : -1;
-    if (index < 0)
-      return;
-
-    var where = Tabmix.prefs.getBoolPref("middleclickDelete") ? 'delete' : 'tab';
-    this.restoreWindow(where, index);
-    var popup = aEvent.originalTarget.parentNode;
-    if (TabmixSvc.ss.getClosedWindowCount() > 0)
-      HistoryMenu.prototype.populateUndoWindowSubmenu('Tabmix', popup.parentNode.id);
-    else {
-      popup.hidePopup();
-      if (popup.parentNode.localName != "toolbarbutton")
-        popup.parentNode.parentNode.hidePopup();
-    }
-  },
-
-  forgetClosedWindow: function SM_forgetClosedWindow(aIndex) {
-    if (aIndex < 0) {
-      while (TabmixSvc.ss.getClosedWindowCount() > 0)
-        TabmixSvc.ss.forgetClosedWindow(0);
-    } else {
-      TabmixSvc.ss.forgetClosedWindow(aIndex);
-    }
-    this.notifyClosedWindowsChanged();
-  },
-
-  notifyClosedWindowsChanged: function SM_notifyClosedWindowsChanged(onClose) {
-    if (!this._inited)
-      return;
-    Services.obs.notifyObservers(null, "browser-window-change-state", onClose ? "closed" : "changed");
-    if (onClose)
-      Services.obs.removeObserver(this, "browser-window-change-state");
-  },
-
-  // enable/disable the Recently Closed Windows button
-  toggleRecentlyClosedWindowsButton: function SM_toggleRecentlyClosedWindowsButton() {
-    if (this.enableManager || this.enableBackup)
-      return;
-    Tabmix.setItem("tmp_closedwindows", "disabled", TabmixSvc.ss.getClosedWindowCount() === 0 || null);
   },
 
   saveState: function SM_saveState() {
@@ -3526,8 +3428,6 @@ TabmixSessionManager = {
       }
     }
 
-    TMP_ClosedTabs.setButtonDisableState();
-
     if ("tabmixdata" in window) {
       let {restoreID} = window.tabmixdata;
       delete this._statesToRestore[restoreID];
@@ -3645,7 +3545,6 @@ TabmixSessionManager = {
       closedTabsData = closedTabsData.concat(TMP_ClosedTabs.getClosedTabData);
     closedTabsData.splice(Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo"));
     TabmixSvc.SessionStore._windows[window.__SSi]._closedTabs = closedTabsData;
-    TMP_ClosedTabs.setButtonDisableState();
   },
 
   copyClosedTabsToRDF: function SM_copyClosedTabsToRDF(winPath) {

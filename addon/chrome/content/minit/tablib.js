@@ -840,34 +840,33 @@ Tabmix.tablib = {
     // if user changed mode to single window mode while having closed window
     // make sure that undoCloseWindow will open the closed window in the most recent non-private window
     Tabmix.changeCode(window, "undoCloseWindow")._replace(
-      'window = #1.undoCloseWindow(aIndex || 0);'
-          .replace("#1", Tabmix.isVersion(260) ? "SessionStore" : "ss"),
-      '{if (Tabmix.singleWindowMode) {\
-          window = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});\
-       }\
-       if (window) {\
-        window.focus();\
-        let index = aIndex || 0;\
-        let closedWindows = TabmixSvc.JSON.parse(#1.getClosedWindowData());\
-        #1.forgetClosedWindow(index);\
-        let state = closedWindows.splice(index, 1).shift();\
-        state = TabmixSvc.JSON.stringify({windows: [state]});\
-        #1.setWindowState(window, state, false);\
-       }\
-       else $&}'.replace(/#1/g, Tabmix.isVersion(260) ? "SessionStore" : "ss")
-    )._replace(
-      'return window;',
-      'TabmixSessionManager.notifyClosedWindowsChanged();\
-       $&'
+      'window = SessionStore.undoCloseWindow(aIndex || 0);',
+      `{if (Tabmix.singleWindowMode) {
+          window = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});
+       }
+       if (window) {
+        window.focus();
+        let index = aIndex || 0;
+        let closedWindows = TabmixSvc.JSON.parse(SessionStore.getClosedWindowData());
+        SessionStore.forgetClosedWindow(index);
+        let state = closedWindows.splice(index, 1).shift();
+        state = TabmixSvc.JSON.stringify({windows: [state]});
+        SessionStore.setWindowState(window, state, false);
+       }
+       else $&}`
     ).toCode();
 
-    HistoryMenu.prototype.populateUndoSubmenu = function PHM_populateUndoSubmenu() {
-      var undoMenu = this._rootElt.getElementsByClassName("recentlyClosedTabsMenu")[0];
-      var undoPopup = undoMenu.firstChild;
-      if (!undoPopup.hasAttribute("context"))
+    Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoSubmenu")._replace(
+      '"menuitem"',
+      'undoPopup.__tagName || "menuitem"'
+    )._replace(
+      /(})(\)?)$/,
+      `if (!undoPopup.hasAttribute("context")) {
         undoPopup.setAttribute("context", "tm_undocloseContextMenu");
+      }
       TMP_ClosedTabs.populateUndoSubmenu(undoPopup);
-    };
+      $1$2`
+    ).toCode();
 
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype._onPopupShowing")._replace(
       'this.toggleRecentlyClosedWindows();',
@@ -882,9 +881,8 @@ Tabmix.tablib = {
     ).toCode();
 
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoWindowSubmenu")._replace(
-      'let undoPopup = this.undoWindowMenu.menupopup;',
-      'let undoPopup = arguments[0] === "Tabmix" ? document.getElementById(arguments[1]) :\n' +
-      '                                   this.undoWindowMenu.menupopup;'
+      '"menuitem"',
+      'undoPopup.__tagName || "menuitem"'
     )._replace(
       /(})(\)?)$/,
       '  Tabmix.tablib.populateUndoWindowSubmenu(undoPopup);\n' +
@@ -925,16 +923,16 @@ Tabmix.tablib = {
   },
 
   populateUndoWindowSubmenu(undoPopup) {
-    if (!undoPopup.hasAttribute("context"))
-      undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
-    let undoItems = JSON.parse(TabmixSvc.ss.getClosedWindowData());
+    const isSubviewbutton = undoPopup.__tagName === "toolbarbutton";
+    undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
+    let undoItems = TabmixSvc.ss.getClosedWindowData(false);
     let menuLabelString = gNavigatorBundle.getString("menuUndoCloseWindowLabel");
     let menuLabelStringSingleTab =
       gNavigatorBundle.getString("menuUndoCloseWindowSingleTabLabel");
     let checkForMiddleClick = function(e) {
       this.checkForMiddleClick(e);
-    }.bind(TabmixSessionManager);
-    for (let i = 0; i < undoPopup.childNodes.length; i++) {
+    }.bind(Tabmix.closedObjectsUtils);
+    for (let i = 0; i < undoPopup.childNodes.length - 1; i++) {
       let m = undoPopup.childNodes[i];
       let undoItem = undoItems[i];
       if (undoItem && m.hasAttribute("targetURI")) {
@@ -946,19 +944,27 @@ Tabmix.tablib = {
               .replace("#2", otherTabsCount);
           m.setAttribute("label", menuLabel);
         });
-        m.setAttribute("value", i);
-        m.fileName = "closedwindow";
-        m.addEventListener("click", checkForMiddleClick);
+      }
+      m.setAttribute("value", i);
+      m.fileName = "closedwindow";
+      m.addEventListener("click", checkForMiddleClick);
+      if (isSubviewbutton) {
+        m.value = i;
+        m.setAttribute("class", "bookmark-item subviewbutton subviewbutton-iconic");
       }
     }
     let restoreAllWindows = undoPopup.lastChild;
     restoreAllWindows.setAttribute("value", -2);
-    let clearList = undoPopup.appendChild(document.createXULElement("menuitem"));
+    let clearList = document.createXULElement(undoPopup.__tagName || "menuitem");
     clearList.id = "menu_clearClosedWindowsList";
     clearList.setAttribute("label", TabmixSvc.getString("undoClosedWindows.clear.label"));
     clearList.setAttribute("value", -1);
+    if (isSubviewbutton) {
+      restoreAllWindows.setAttribute("class", "subviewbutton subviewbutton-iconic");
+      clearList.setAttribute("class", "subviewbutton subviewbutton-iconic");
+    }
     clearList.addEventListener("command", () => {
-      TabmixSessionManager.forgetClosedWindow(-1);
+      Tabmix.closedObjectsUtils.forgetClosedWindow(-1);
     });
     undoPopup.insertBefore(clearList, restoreAllWindows);
   },
@@ -1818,12 +1824,6 @@ Tabmix.tablib = {
         if (!Tabmix.isVersion(270))
           gBrowser.tabContainer._blockDblClick = false;
       }, 0);
-    }
-
-    try {
-      TMP_ClosedTabs.setButtonDisableState();
-    } catch (ex) {
-      Tabmix.assert(ex, "ERROR in saveClosedTab");
     }
 
     try {

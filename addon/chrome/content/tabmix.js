@@ -96,8 +96,9 @@ Tabmix.sessionInitialized = function() {
   TMP_SessionStore.persistTabAttribute();
 
   TMP_ClosedTabs.setButtonDisableState();
-  if (this.firstWindowInSession)
-    SM.toggleRecentlyClosedWindowsButton();
+  if (this.firstWindowInSession) {
+    Tabmix.closedObjectsUtils.toggleRecentlyClosedWindowsButton();
+  }
 };
 
 // we call gTMPprefObserver.miscellaneousRules to add some dynamic rules
@@ -575,13 +576,11 @@ var TMP_eventListener = {
 
     // tabmix Options in Tools menu
     document.getElementById("tabmix-menu").hidden = !Tabmix.prefs.getBoolPref("optionsToolMenu");
+    document.getElementById("tabmix-historyUndoWindowMenu").hidden = !Tabmix.prefs.getBoolPref("closedWinToolsMenu");
 
     gTMPprefObserver.addDynamicRules();
     // ##### disable Session Manager #####
     // TabmixSessionManager.updateSettings();
-    // turn both broadcasters off, we will set the proper value later
-    Tabmix.setItem("tmp_undocloseButton", "disabled", true);
-    Tabmix.setItem("tmp_closedwindows", "disabled", true);
 
     if (Tabmix.isVersion(550)) {
       Tabmix.changeCode(tabBar, `gBrowser.tabContainer.${Tabmix.updateCloseButtons}`)._replace(
@@ -1167,7 +1166,7 @@ var TMP_eventListener = {
     }
 
     TabmixSessionManager.shutDown(true, isLastWindow, true);
-    TabmixSessionManager.notifyClosedWindowsChanged(true);
+    Tabmix.closedObjectsUtils.removeObservers();
     TabmixTabClickOptions.toggleEventListener(false);
     TabmixContext.toggleEventListener(false);
 

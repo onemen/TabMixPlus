@@ -255,7 +255,7 @@ var TMP_extensionsCompatibility = {
     if ("gFxWeaveGlue" in window) {
       Tabmix.changeCode(gFxWeaveGlue, "gFxWeaveGlue.handleEvent")._replace(
         'else if (this.getPageIndex() == -1)',
-        'else if ((event.target.id == "alltabs-popup" || event.target.getAttribute("anonid") == "alltabs-popup") && this.getPageIndex() == -1)',
+        'else if ((event.target.id == "allTabsMenu-allTabsView" || event.target.getAttribute("anonid") == "allTabsMenu-allTabsView") && this.getPageIndex() == -1)',
         {check: gFxWeaveGlue.handleEvent.toString().indexOf("else if (this.getPageIndex() == -1)") != -1}
       ).toCode();
     }

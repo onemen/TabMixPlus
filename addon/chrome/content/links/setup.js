@@ -58,6 +58,12 @@ Tabmix.beforeBrowserInitOnLoad = function() {
   }
 
   try {
+    Tabmix.closedObjectsUtils.init();
+  } catch (ex) {
+    this.assert(ex);
+  }
+
+  try {
     var SM = TabmixSessionManager;
     SM.initializePrivateStateVars();
 

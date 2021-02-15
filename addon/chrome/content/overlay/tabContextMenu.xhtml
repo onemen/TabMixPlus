@@ -73,7 +73,7 @@
                  tmp_iconic="menu-iconic closedtabs-icon"
                  label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;">
           <menupopup id="tm-undoCloseList-menu"
-            onpopupshowing="TMP_ClosedTabs.populateUndoSubmenu(this); event.stopPropagation();"
+            onpopupshowing="Tabmix.closedObjectsUtils.populateClosedTabsMenu(this.parentNode); event.stopPropagation();"
             onpopupshown="event.stopPropagation();"
             onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
         </menu>
