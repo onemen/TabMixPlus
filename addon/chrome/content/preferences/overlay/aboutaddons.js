@@ -5,8 +5,13 @@ const ID = "{dc572301-7619-498c-a57d-39143191b318}";
 // update gViewController.commands.cmd_showItemPreferences to open Tabmix
 // options in dialog window
 function updateShowItemPreferences() {
-  const tabmixItem = getHtmlBrowser().contentDocument.querySelector(`addon-card[addon-id="${ID}"]`);
+  const tabmixItem = window.docShell.chromeEventHandler.contentDocument
+      .querySelector(`addon-card[addon-id="${ID}"]`);
   if (tabmixItem) {
+    const messageBox = tabmixItem.querySelector(".addon-card-message");
+    if (messageBox.getAttribute("type") === "warning") {
+      messageBox.style.display = "none";
+    }
     const optionsButton = tabmixItem.querySelector(`panel-item[action="preferences"]`).button;
     optionsButton.removeAttribute("action");
     if (!optionsButton._tabmix_command_installed) {
@@ -31,7 +36,8 @@ window.addEventListener("load", () => {
   }
 }, {once: true});
 
-const targetNode = getHtmlBrowser().contentDocument.getElementById('content');
+const targetNode = window.docShell.chromeEventHandler.contentDocument
+    .getElementById('content');
 const config = {childList: true, subtree: true};
 const callback = function(mutationList) {
   for (const mutation of mutationList) {
