@@ -247,10 +247,7 @@
     };
 
     this.setHoverState = function(aEvent, aOver) {
-      var anonid = aEvent.originalTarget &&
-        typeof aEvent.originalTarget.getAttribute == "function" &&
-        aEvent.originalTarget.getAttribute("anonid");
-      if (anonid == "tmp-close-button") {
+      if (aEvent.target.classList.contains("tab-close-button")) {
         this.mOverCloseButton = aOver;
       }
       this.mIsHover = aOver;

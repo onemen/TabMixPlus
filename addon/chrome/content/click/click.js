@@ -25,24 +25,20 @@ var TabmixTabClickOptions = {
       return; // double click (with left button)
     }
 
-    var target = aEvent.originalTarget;
-    var anonid = target.getAttribute("anonid");
-    // since Firefox 27 (bug 897751) we use tabbrowser binding handler to block
-    // double click on tab close button
-    this._blockDblClick = target.classList.contains("tabs-newtab-button") ||
-      !Tabmix.isVersion(270) && leftClick && anonid == "tmp-close-button";
+    const target = aEvent.originalTarget;
+    const isCloseButton = aEvent.target.classList.contains("tab-close-button");
+    this._blockDblClick = target.classList.contains("tabs-newtab-button");
 
     // don't do anything if user left click on tab or tabbar button
     if (leftClick &&
-        (anonid == "tmp-close-button" || aEvent.target._overPlayingIcon ||
+        (isCloseButton || aEvent.target._overPlayingIcon ||
          target.localName == "toolbarbutton")) {
       return;
     }
 
     // only allow middle-click on close tab button on tab to go throw as
     // middle-click on the tab
-    if (aEvent.button == 1 && target.localName == "toolbarbutton" &&
-        anonid != "tmp-close-button") {
+    if (aEvent.button == 1 && target.localName == "toolbarbutton" && isCloseButton) {
       return;
     }
 
@@ -108,10 +104,10 @@ var TabmixTabClickOptions = {
       return;
     }
 
-    var target = aEvent.originalTarget;
-    var anonid = target.getAttribute("anonid");
+    const target = aEvent.originalTarget;
+    const isCloseButton = aEvent.target.classList.contains("tab-close-button");
     // don't do anything if user left click on tab or tabbar button
-    if (anonid == "tmp-close-button" || aEvent.target._overPlayingIcon ||
+    if (isCloseButton || aEvent.target._overPlayingIcon ||
         target.localName == "toolbarbutton") {
       return;
     }
