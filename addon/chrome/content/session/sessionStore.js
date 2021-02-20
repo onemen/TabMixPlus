@@ -379,6 +379,8 @@ var TMP_ClosedTabs = {
       }
       m.setAttribute("value", i);
       m.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
+      m.removeAttribute("oncommand");
+      m.addEventListener("command", this);
       m.addEventListener("click", this);
       m.removeEventListener(
         "click",
@@ -433,18 +435,30 @@ var TMP_ClosedTabs = {
   handleEvent(event) {
     switch (event.type) {
       case "click":
-        if (event.target.id === "tabmix-closedTabsButton") {
-          if (event.button === 1) {
-            this.restoreTab("original", -2);
-          } else if (event.target.getAttribute("type") === "menu") {
-            Tabmix.closedObjectsUtils.showSubView(event);
-          }
-        } else {
-          this.checkForMiddleClick(event);
-        }
+        this.checkForMiddleClick(event);
         break;
       case "command":
         this.restoreCommand(event);
+        break;
+    }
+  },
+
+  handleButtonEvent(event) {
+    const showSubView = event.target.getAttribute("type") === "menu" ||
+      event.target.parentNode.getAttribute("cui-areatype") === "menu-panel";
+    switch (event.type) {
+      case "click":
+        if (event.button === 1) {
+          this.restoreTab("original", -2);
+        } else if (event.button === 0 && showSubView) {
+          Tabmix.closedObjectsUtils.showSubView(event);
+        }
+        break;
+      case "command":
+        if (event.target.id === "tabmix-closedTabsButton" && !showSubView &&
+            !TabmixAllTabs.isAfterCtrlClick(event.target)) {
+          TMP_ClosedTabs.undoCloseTab();
+        }
         break;
     }
   },

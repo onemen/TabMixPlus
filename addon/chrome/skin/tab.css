@@ -109,26 +109,15 @@ toolbar[iconsize=small] #tabmix-closedTabsButton:hover, .closedtabs-icon:hover >
   width: calc(1 * var(--toolbarbutton-inner-padding) + 16px + 3px);
 }
 
-#tabmix-closedTabs-menu {
-  width: 16px;
-  height: 12px;
-  list-style-image: url(chrome://global/skin/icons/arrow-dropdown-12.svg);
-  -moz-context-properties: fill;
-  fill: -moz-DialogText;
-  margin-inline-start: -2px;
-  padding: 3px 5px;
+#wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabsButton[type=menu-button] {
+  -moz-box-align: end;
 }
 
-#tabmix-closedTabs-menu .toolbarbutton-icon {
-  padding: 8px 0;
+#wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabs-dropmarker[type=menu-button] {
+  -moz-box-align: start;
 }
 
-#tabmix-closedTabs-menu[disabled] {
-	opacity: 0.15;
-}
-
-#tabmix-closedTabs-menu:not([type=menu-button]),
-#tabmix-closedTabs-toolbaritem:not([cui-areatype="toolbar"]) #tabmix-closedTabs-menu {
+#tabmix-closedTabs-dropmarker:not([type=menu-button]) {
   display: none;
 }
 

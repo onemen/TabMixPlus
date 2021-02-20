@@ -159,15 +159,19 @@
     <toolbarpalette id="BrowserToolbarPalette">
       <toolbaritem id="tabmix-closedTabs-toolbaritem"
               badged="true"
+              class="toolbaritem-combined-buttons chromeclass-toolbar-additional"
               label="&closedtabsbtn.label;"
               removable="true"
-              tooltiptext="&closedtabsbtn.tooltip;">
+              tooltiptext="&closedtabsbtn.tooltip;"
+              widget-id="tabmix-closedTabs-toolbaritem"
+              widget-type="button-and-view">
         <toolbarbutton id="tabmix-closedTabsButton"
-              class="toolbarbutton-1 chromeclass-toolbar-additional"
+              class="toolbarbutton-1 subviewbutton-nav"
+              label="&closedtabsbtn.label;"
               observes="tmp_undocloseButton"
-              oncommand="if (event.target == this &amp;&amp; !TabmixAllTabs.isAfterCtrlClick(event.target)) TMP_ClosedTabs.undoCloseTab();"
-              onclick="TMP_ClosedTabs.handleEvent(event);"
-              onmousedown=";TabmixAllTabs.checkForCtrlClick(event);"
+              oncommand="TMP_ClosedTabs.handleButtonEvent(event);"
+              onclick="TMP_ClosedTabs.handleButtonEvent(event);"
+              onmousedown="TabmixAllTabs.checkForCtrlClick(event);"
               onmouseup="if (event.target == this) setTimeout(function(b) {b.removeAttribute('afterctrlclick')}, 0, this);"
               ondragover="TMP_undocloseTabButtonObserver.onDragOver(event);"
               ondragenter="TMP_undocloseTabButtonObserver.onDragOver(event);"
@@ -176,28 +180,41 @@
               _tooltiptext="Reopen last closed tab"
               tooltiptext="Reopen last closed tab">
         </toolbarbutton>
-        <toolbarbutton id="tabmix-closedTabs-menu"
+        <toolbarbutton id="tabmix-closedTabs-dropmarker"
+              class="toolbarbutton-1 toolbarbutton-combined-buttons-dropmarker"
               observes="tmp_undocloseButton"
               oncommand="Tabmix.closedObjectsUtils.showSubView(event)"/>
       </toolbaritem>
 
-      <toolbarbutton id="tabmix-alltabs-button"
-            class="toolbarbutton-1 chromeclass-toolbar-additional tabs-alltabs-button"
-            context="hideTabbar_context"
-            badged="true"
-            oncommand="Tabmix.allTabs.showAllTabsPanel(event);"
-            label="&listAllTabs.label;"
-            tooltiptext="&listAllTabs.label;"
-            removable="true"/>
+      <toolbaritem id="tabmix-alltabs-toolbaritem"
+              class="toolbaritem-combined-buttons chromeclass-toolbar-additional"
+              context="hideTabbar_context"
+              badged="true"
+              label="&listAllTabs.label;"
+              removable="true"
+              tooltiptext="&listAllTabs.label;"
+              widget-id="tabmix-alltabs-toolbaritem"
+              widget-type="button-and-view">
+        <toolbarbutton id="tabmix-alltabs-button"
+              class="toolbarbutton-1 subviewbutton-nav tabs-alltabs-button"
+              oncommand="Tabmix.allTabs.showAllTabsPanel(event);"
+              label="&listAllTabs.label;"/>
+      </toolbaritem>
 
-      <toolbarbutton id="tabmix-closedWindowsButton"
-            class="toolbarbutton-1 chromeclass-toolbar-additional"
-            badged="true"
-            observes="tmp_closedwindows"
-            oncommand="Tabmix.closedObjectsUtils.showSubView(event)"
-            label="&closedwindowsbtn.label;"
-            tooltiptext="&closedwindowsbtn.tooltip;"
-            removable="true"/>
+      <toolbaritem id="tabmix-closedWindows-toolbaritem"
+              badged="true"
+              class="toolbaritem-combined-buttons chromeclass-toolbar-additional"
+              label="&closedwindowsbtn.label;"
+              removable="true"
+              tooltiptext="&closedtabsbtn.tooltip;"
+              widget-id="tabmix-closedTabs-toolbaritem"
+              widget-type="button-and-view">
+        <toolbarbutton id="tabmix-closedWindowsButton"
+              class="toolbarbutton-1 subviewbutton-nav"
+              observes="tmp_closedwindows"
+              oncommand="Tabmix.closedObjectsUtils.showSubView(event)"
+              label="&closedwindowsbtn.label;"/>
+      </toolbaritem>
     </toolbarpalette>
 
     <html:template id="tabmix-closedWindows-container">

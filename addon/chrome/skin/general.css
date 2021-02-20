@@ -50,3 +50,8 @@
 .tabmix-subview toolbarbutton.subviewbutton:not([disabled]):is([open], :hover:active) {
   background-color:  #9bcdff;
 }
+
+.tabmix-subview menuseparator.subviewbutton {
+  min-height: 0;
+  padding: 0;
+}
