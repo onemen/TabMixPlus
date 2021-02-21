@@ -52,6 +52,7 @@
 }
 
 .tabmix-subview menuseparator.subviewbutton {
+  border-top: 1px solid var(--panel-separator-color);
   min-height: 0;
   padding: 0;
 }
