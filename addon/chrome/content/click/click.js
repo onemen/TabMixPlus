@@ -70,6 +70,34 @@ var TabmixTabClickOptions = {
       }
     }
 
+    // handle multi-select
+    if (!clickOutTabs) {
+      const keyPress = [
+        (aEvent.ctrlKey && !aEvent.metaKey || !aEvent.ctrlKey && aEvent.metaKey),
+        aEvent.shiftKey,
+        aEvent.altKey,
+      ];
+      const keyPrefs = [
+        Tabmix.prefs.getIntPref("ctrlClickTab"),
+        Tabmix.prefs.getIntPref("shiftClickTab"),
+        Tabmix.prefs.getIntPref("altClickTab")
+      ];
+      const press2Key = leftClick && keyPress[0] + keyPress[1] + keyPress[2] === 2 &&
+        keyPrefs.some((x, i) => x === 33 && keyPress[i]) &&
+        keyPrefs.some((x, i) => x === 34 && keyPress[i]);
+      let middleMul;
+      if (aEvent.button === 1 && keyPress[0] + keyPress[1] + keyPress[2] === 1) {
+        const middleAndModifier = `${Tabmix.prefs.getIntPref("middleClickTab")},${keyPrefs[keyPress.findIndex(x => x)]}`;
+        middleMul = middleAndModifier === '33,34' || middleAndModifier === '34,33';
+      }
+      if (press2Key || middleMul) {
+        this._tabRangeSelecte(tab, true);
+        aEvent.stopPropagation();
+        aEvent.preventDefault();
+        return;
+      }
+    }
+
     var prefName;
     if (aEvent.button == 1) {
       prefName = "middle"; /* middle click*/
@@ -279,10 +307,32 @@ var TabmixTabClickOptions = {
       case 32:
         gBrowser.previousTab(gBrowser.selectedTab);
         break;
+      case 33:
+        this._tabMultiSelecte(aTab);
+        break;
+      case 34:
+        this._tabRangeSelecte(aTab, false);
+        break;
       default:
         return false;
     }
     return true;
+  },
+
+  // taken from MozTabbrowserTab.prototype.on_mousedown()
+  _tabMultiSelecte(aTab) {
+    if (aTab.multiselected) {
+      gBrowser.removeFromMultiSelectedTabs(aTab, {isLastMultiSelectChange: true});
+    } else if (aTab != gBrowser.selectedTab) {
+      gBrowser.addToMultiSelectedTabs(aTab, {isLastMultiSelectChange: true});
+      gBrowser.lastMultiSelectedTab = aTab;
+    }
+  },
+
+  _tabRangeSelecte(aTab, cumul) {
+    const lastSelectedTab = gBrowser.lastMultiSelectedTab;
+    if (!cumul) gBrowser.clearMultiSelectedTabs({isLastMultiSelectChange: false});
+    gBrowser.addRangeToMultiSelectedTabs(lastSelectedTab, aTab);
   },
 
   toggleEventListener(enable) {

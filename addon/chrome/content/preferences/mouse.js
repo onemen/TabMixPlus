@@ -6,8 +6,6 @@ var gMousePane = {
   clickTab: null,
   clickTabbar: null,
   init() {
-    this._inited = true;
-
     if (TabmixSvc.isMac) {
       let label = $("tabId").getAttribute("label2");
       $("tabId").setAttribute("label", label);
@@ -30,6 +28,8 @@ var gMousePane = {
     this.updateDblClickTabbar($("pref_click_dragwindow"));
 
     gPrefWindow.initPane("paneMouse");
+
+    this._inited = true;
   },
 
   tabSelectionChanged(aEvent) {

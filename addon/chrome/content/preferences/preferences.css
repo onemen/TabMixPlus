@@ -78,3 +78,8 @@
   html|fieldset[flex="1"] {
     -moz-box-flex: 1;
   }
+
+#ClickTabbar .multiselectitem,
+#mouseClick_tabbox[selectedIndex="0"] #ClickTab .multiselectitem {
+  display: none;
+}
