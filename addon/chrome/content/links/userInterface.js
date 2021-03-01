@@ -58,11 +58,11 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
       return dupTab;
     }
     case 4: {// user url
-      if (replaceLastTab || !Tabmix.isVersion(410) || TabmixSvc.isCyberfox) {
+      if (replaceLastTab || TabmixSvc.isCyberfox) {
         let prefName = replaceLastTab ? "extensions.tabmix.replaceLastTabWith.newtab.url" :
           TabmixSvc.newtabUrl;
         try {
-          url = TabmixSvc.getStringPref(prefName);
+          url = Services.prefs.getStringPref(prefName);
           if (newTabUrl == "about:privatebrowsing" && url == TabmixSvc.aboutNewtab)
             url = "about:privatebrowsing";
         } catch (ex) {
@@ -104,7 +104,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
   let openTabNext = baseTab || !replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext");
   // Let accel-click and middle-click on the new tab button toggle openTabNext preference
   // see bug 528005
-  if (Tabmix.isVersion(510) && aEvent && !aTab && !replaceLastTab &&
+  if (aEvent && !aTab && !replaceLastTab &&
       (aEvent instanceof MouseEvent || aEvent instanceof XULCommandEvent)) {
     // don't replace 'window' to 'tab' in whereToOpenLink when singleWindowMode is on
     Tabmix.skipSingleWindowModeCheck = true;
@@ -176,12 +176,14 @@ Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastT
   }
   // don't try to focus urlbar on popup
   if (aTab.selected && window.toolbar.visible) {
-    if (this.isVersion(340) && gMultiProcessBrowser)
+    if (gMultiProcessBrowser) {
       aTab._skipContentFocus = true;
-    if (aTimeOut)
+    }
+    if (aTimeOut) {
       setTimeout(() => gURLBar.select(), 30);
-    else
+    } else {
       gURLBar.select();
+    }
   }
 };
 
@@ -343,7 +345,7 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
   if (!aTab)
     return;
   let style = "null";
-  let isSelected = aTab.getAttribute(TabmixSvc.selectedAtt) == "true";
+  let isSelected = aTab.getAttribute("visuallyselected") == "true";
   // if pending tab is blank we don't style it as unload or unread
   if (!isSelected && Tabmix.prefs.getBoolPref("unloadedTab") &&
       this.isPendingTab(aTab)) {

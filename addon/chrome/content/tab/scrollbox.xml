@@ -255,14 +255,6 @@
                 this.scrollPosition += this._distanceToRow(px);
               }
             };
-
-            if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 280)) {
-              Tabmix.changeCode(this, "scrollbox.scrollByIndex")._replace(
-                'var x = index > 0 ? rect[end] + 1 : rect[start] - 1;',
-                'var offset = this.isMultiRow ? 2 : 1;\n          ' +
-                'var x = index > 0 ? rect[end] + offset : rect[start] - offset;'
-              ).toCode();
-            }
           }
 
           // Bug 1387130 (landed in Firefox 57) - Use original tabstrip scrolling behaviour when using scrollbuttons
@@ -287,14 +279,6 @@
               'let box = document.getElementById("tabmixScrollBox");' + $LF +
               'Tabmix.setItem(box, "scrolledtoend", true);' + $LF +
               'Tabmix.setItem(box, "scrolledtostart", true);'
-            )._replace(
-              'this.scrollboxPaddingLeft',
-              'this.isMultiRow ? this.scrollboxPaddingTop : $&',
-              {check: !Tabmix.isVersion(570)}
-            )._replace(
-              'this.scrollboxPaddingRight',
-              'this.isMultiRow ? this.scrollboxPaddingBottom : $&',
-              {check: !Tabmix.isVersion(570)}
             )._replace(
               'this._isRTLScrollbox',
               '$& && !this.isMultiRow'
@@ -570,8 +554,7 @@
           // if a smoothScroll is in progress call ensureElementIsVisible again
           // the amountToScroll changed when we changed firstTabInRow
           if (this._scrollTarget) {
-            const instantScroll = !Tabmix.isVersion(570);
-            this.ensureElementIsVisible(this._scrollTarget, instantScroll);
+            this.ensureElementIsVisible(this._scrollTarget, false);
           }
         ]]></body>
       </method>
@@ -717,25 +700,6 @@
                   class="tabmixplus-toolbar-inner-box">
           <xbl:children/>
         </xul:hbox>
-    </content>
-    <implementation implements="nsIDOMEventListener">
-      <constructor>
-        <![CDATA[
-          Tabmix.bottomToolbarUtils.init();
-        ]]>
-      </constructor>
-    </implementation>
-  </binding>
-
-  <binding id="palemoon-bottom-toolbar"
-           extends="chrome://global/content/bindings/toolbar.xml#toolbar">
-    <content>
-      <xul:hbox flex="1"
-                xbl:inherits="orient,width"
-                anonid="toolbar-innerbox"
-                class="tabmixplus-toolbar-inner-box">
-        <xbl:children/>
-      </xul:hbox>
     </content>
     <implementation implements="nsIDOMEventListener">
       <constructor>

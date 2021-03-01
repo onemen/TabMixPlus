@@ -214,7 +214,7 @@ this.AutoReload = {
   _update(aTab, aValue) {
     _setItem(aTab, "reload-data", aValue);
     let win = aTab.ownerGlobal;
-    TabmixSvc.saveTabAttributes(aTab, "reload-data");
+    TabmixSvc.ss.setCustomTabValue(aTab, "reload-data", aValue);
     win.TabmixSessionManager.updateTabProp(aTab);
   },
 
@@ -241,14 +241,9 @@ this.AutoReload = {
     if (!TabmixSvc.prefBranch.getBoolPref("reload_match_address") ||
         aTab.autoReloadURI == aBrowser.currentURI.spec) {
       if (aBrowser.__tabmixScrollPosition || null) {
-        if (TabmixSvc.version(330)) {
-          aBrowser.messageManager
-              .sendAsyncMessage("Tabmix:setScrollPosition",
-                aBrowser.__tabmixScrollPosition);
-        } else {
-          let {x, y} = aBrowser.__tabmixScrollPosition;
-          aBrowser.contentWindow.scrollTo(x, y);
-        }
+        aBrowser.messageManager
+            .sendAsyncMessage("Tabmix:setScrollPosition",
+              aBrowser.__tabmixScrollPosition);
         aBrowser.__tabmixScrollPosition = null;
       }
 
@@ -281,8 +276,7 @@ this.AutoReload = {
   reloadRemoteTab(browser, data) {
     var window = browser.ownerGlobal;
     let tab = window.gBrowser.getTabForBrowser(browser);
-    // RemoteWebNavigation accepting postdata or headers only from Firefox 42.
-    if (data.isPostData && !this.confirm(window, tab, !TabmixSvc.version(420)))
+    if (data.isPostData && !this.confirm(window, tab, false))
       return;
 
     data.referrerInfo = E10SUtils.deserializeReferrerInfo(data.referrerInfo);
@@ -300,7 +294,7 @@ function _reloadTab(aTab) {
   }
 
   var browser = aTab.linkedBrowser;
-  if (TabmixSvc.version(330) && browser.getAttribute("remote")) {
+  if (browser.getAttribute("remote")) {
     browser.messageManager.sendAsyncMessage("Tabmix:collectReloadData");
     return;
   }

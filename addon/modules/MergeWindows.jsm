@@ -136,14 +136,10 @@ this.MergeWindows = {
       if (openerTab)
         index = openerTab._tPos + 1;
     }
-    const isRelatedTabMap = TabmixSvc.version({ff: 570, wf: "56.2.8"});
-    let relatedTabBackup = isRelatedTabMap ? tabbrowser._lastRelatedTabMap : tabbrowser._lastRelatedTab;
+
+    let relatedTabBackup = tabbrowser._lastRelatedTabMap;
     tabbrowser.moveTabTo(newTab, index);
-    if (isRelatedTabMap) {
-      tabbrowser._lastRelatedTabMap = relatedTabBackup;
-    } else {
-      tabbrowser._lastRelatedTab = relatedTabBackup;
-    }
+    tabbrowser._lastRelatedTabMap = relatedTabBackup;
     tabbrowser.swapBrowsersAndCloseOther(newTab, aTab);
   },
 
@@ -169,18 +165,14 @@ this.MergeWindows = {
       let tab = tabs[i];
       let isPopup = !tab.ownerGlobal.toolbar.visible;
       let params = {dontMove: isPopup};
-      if (TabmixSvc.version(470)) {
-        params = {eventDetail: {adoptedTab: tab}};
-        if (tab.hasAttribute("usercontextid")) {
-          params.userContextId = tab.getAttribute("usercontextid");
-        }
+      params = {eventDetail: {adoptedTab: tab}};
+      if (tab.hasAttribute("usercontextid")) {
+        params.userContextId = tab.getAttribute("usercontextid");
       }
       let newTab = tabbrowser.addTrustedTab("about:blank", params);
       let newBrowser = newTab.linkedBrowser;
-      if (TabmixSvc.version(330)) {
-        let newURL = tab.linkedBrowser.currentURI.spec;
-        tabbrowser.updateBrowserRemotenessByURL(newBrowser, newURL);
-      }
+      let newURL = tab.linkedBrowser.currentURI.spec;
+      tabbrowser.updateBrowserRemotenessByURL(newBrowser, newURL);
       newBrowser.stop();
       void newBrowser.docShell;
       if (tab.pinned) {
@@ -194,7 +186,7 @@ this.MergeWindows = {
         let openerWindow;
         if (placePopupNextToOpener) {
           let browser = tab.linkedBrowser;
-          if (TabmixSvc.version(330) && browser.getAttribute("remote") == "true") {
+          if (browser.getAttribute("remote") == "true") {
             browser.messageManager.sendAsyncMessage("Tabmix:collectOpener");
             tab.__tabmixNewTab = newTab;
             return;

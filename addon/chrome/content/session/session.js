@@ -309,15 +309,10 @@ TabmixSessionManager = {
     }
     this._inited = true;
 
-    if (Tabmix.isVersion(320)) {
-      XPCOMUtils.defineLazyModuleGetter(this, "TabState",
-        "resource:///modules/sessionstore/TabState.jsm");
-      XPCOMUtils.defineLazyModuleGetter(this, "TabStateCache",
-        "resource:///modules/sessionstore/TabStateCache.jsm");
-    }
-
-    XPCOMUtils.defineLazyModuleGetter(this, "TabmixGroupsMigrator",
-      "chrome://tabmix-resource/content/TabGroupsMigrator.jsm");
+    XPCOMUtils.defineLazyModuleGetter(this, "TabState",
+      "resource:///modules/sessionstore/TabState.jsm");
+    XPCOMUtils.defineLazyModuleGetter(this, "TabStateCache",
+      "resource:///modules/sessionstore/TabStateCache.jsm");
 
     // just in case Tabmix.tablib isn't init yet
     // when Webmail Notifier extension installed and user have master password
@@ -350,11 +345,9 @@ TabmixSessionManager = {
     let obs = Services.obs;
     obs.addObserver(this, "quit-application-requested", true);
     obs.addObserver(this, "browser-lastwindow-close-requested", true);
-    if (Tabmix.isVersion(270)) {
-      if (!isFirstWindow && this.enableBackup && this.canRestoreLastSession)
-        window.__SS_lastSessionWindowID = String(Date.now()) + Math.random();
-      obs.addObserver(this, "sessionstore-last-session-cleared", true);
-    }
+    if (!isFirstWindow && this.enableBackup && this.canRestoreLastSession)
+      window.__SS_lastSessionWindowID = String(Date.now()) + Math.random();
+    obs.addObserver(this, "sessionstore-last-session-cleared", true);
 
     if (this.isPrivateWindow) {
       // disable saving or changing any data on the disk in private window
@@ -363,9 +356,7 @@ TabmixSessionManager = {
       document.getElementById("tmp_disableSave").setAttribute("disabled", true);
     }
 
-    if (!Tabmix.isVersion(450) || Tabmix.isVersion(520)) {
-      document.getElementById("tm-sm-bookmark").hidden = true;
-    }
+    document.getElementById("tm-sm-bookmark").hidden = true;
 
     // check if last session was crashed
     let crashed, sm_status;
@@ -373,13 +364,6 @@ TabmixSessionManager = {
       let path = this._rdfRoot + "/closedSession/thisSession";
       sm_status = TabmixSvc.sm.status = this.getLiteralValue(path, "status");
       crashed = TabmixSvc.sm.crashed = sm_status.indexOf("crash") != -1;
-    }
-
-    if (Tabmix.isVersion(450) && !this.tabViewInstalled &&
-        !TabmixSvc.isPaleMoon && Tabmix.firstWindowInSession && !sanitized &&
-        !this.nodeHasArc("rdf:backupSessionWithGroups", "status")) {
-      this.setLiteral("rdf:backupSessionWithGroups", "status", "saved");
-      this.TabmixGroupsMigrator.backupSessions(window, crashed);
     }
 
     // If sessionStore restore the session after restart we do not need to do anything
@@ -432,10 +416,6 @@ TabmixSessionManager = {
 
       Tabmix.prefs.clearUserPref("warnAboutClosingTabs.timeout");
     } else if (this.enableManager && "tabmixdata" in window) {
-      let show = TabmixSvc.sm.showMissingTabViewNotification;
-      if (show) {
-        this.TabmixGroupsMigrator.missingTabViewNotification(window, show.msg);
-      }
       if (TabmixSvc.sm.windowToFocus) {
         TabmixSvc.sm.windowToFocus.focus();
       }
@@ -704,8 +684,7 @@ TabmixSessionManager = {
       let obs = Services.obs;
       obs.removeObserver(this, "quit-application-requested");
       obs.removeObserver(this, "browser-lastwindow-close-requested");
-      if (Tabmix.isVersion(270))
-        obs.removeObserver(this, "sessionstore-last-session-cleared");
+      obs.removeObserver(this, "sessionstore-last-session-cleared");
     }
     if ("tabmixdata" in window) {
       let {restoreID} = window.tabmixdata;
@@ -1595,39 +1574,6 @@ TabmixSessionManager = {
     }
   },
 
-  bookmarkSession(node) {
-    if (!Tabmix.isVersion(450) || Tabmix.isVersion(520)) {
-      return;
-    }
-    let {command, session, history} = node;
-    let state, name;
-    let data = () => {
-      let nameExt = this.getLiteralValue(session, "nameExt");
-      let re = /\((\d+\sW)*[,\s]*(\d+\sT)\)\s\((\d{4}\/\d{2}\/\d{2})\s(\d{2}:\d{2}:\d{2})/;
-      let matches = nameExt.match(re);
-      let timestamp = matches ? Date.parse(new Date(matches[3] + " " + matches[4])) : Date.now();
-      return (new Date(timestamp)).toLocaleFormat("%Y/%m/%d %H:%M:%S");
-    };
-    if (command == "openclosedwindow") {
-      let winData = TabmixConvertSession.getWindowState(session, true);
-      state = {windows: [winData]};
-      name = TabmixSvc.getSMString("sm.bookmarks.closedWindow") + ", " + data();
-    } else {
-      state = TabmixConvertSession.getSessionState(session, true);
-      if (history) {
-        name = TabmixSvc.getSMString("sm.bookmarks.historySession") + ", " + data();
-      } else {
-        name = this.getDecodedLiteralValue(session, "name");
-      }
-    }
-    let groupData = this.TabmixGroupsMigrator.gatherGroupData(state);
-    if (groupData) {
-      let oldGuid = this.getLiteralValue("rdf:backupSessionWithGroups", "guid");
-      let promise = this.TabmixGroupsMigrator.bookmarkAllGroupsFromState(groupData, oldGuid, name);
-      this.saveGuid(promise, oldGuid);
-    }
-  },
-
   saveGuid(promise, oldGuid) {
     promise.then(({guid}) => {
       if (oldGuid != guid) {
@@ -2389,14 +2335,8 @@ TabmixSessionManager = {
       let overwrite = TabmixSvc.SessionStore._isCmdLineEmpty(window, iniState);
       // determine how many windows are meant to be restored
       TabmixSvc.SessionStore._restoreCount = iniState.windows ? iniState.windows.length : 0;
-      if (Tabmix.isVersion(260)) {
-        let options = {firstWindow: true, overwriteTabs: overwrite};
-        const restoreFunction = Tabmix.isVersion(400) ? "restoreWindows" : "restoreWindow";
-        TabmixSvc.SessionStore[restoreFunction](window, iniState, options);
-      } else {
-        iniState._firstTabs = true;
-        TabmixSvc.SessionStore.restoreWindow(window, iniState, overwrite);
-      }
+      let options = {firstWindow: true, overwriteTabs: overwrite};
+      TabmixSvc.SessionStore.restoreWindows(window, iniState, options);
     }
     this.loadHomePage(pinnedExist);
   },
@@ -2446,9 +2386,7 @@ TabmixSessionManager = {
 
     // This was the last window restored at startup, notify observers.
     Services.obs.notifyObservers(null, "sessionstore-windows-restored", "");
-    if (Tabmix.isVersion(570)) {
-      TabmixSvc.SessionStore._deferredAllWindowsRestored.resolve();
-    }
+    TabmixSvc.SessionStore._deferredAllWindowsRestored.resolve();
 
     TabmixSvc.sm.observersWereNotified = true;
     TabmixSvc.sm.restoreCount = -1;
@@ -2620,14 +2558,6 @@ TabmixSessionManager = {
         }
       }
       var label = _tab.label;
-      if (!Tabmix.isVersion(550)) {
-        // replace "Loading..." with the document title (with minimal side-effects)
-        let tabLoadingTitle = Tabmix.getString("tabs.connecting");
-        if (label == tabLoadingTitle) {
-          gBrowser.setTabTitle(_tab);
-          [label, _tab.label] = [_tab.label, label];
-        }
-      }
       this.setLiteral(rdfNodeThisWindow, "name", encodeURI(label));
       this.setLiteral(rdfNodeThisWindow, "nameExt", this.getNameData(-1, savedTabs));
       let pref = "warnAboutClosingTabs.timeout";
@@ -2776,10 +2706,8 @@ TabmixSessionManager = {
     if (aTab.hasAttribute("pending") || gBrowser.isBlankBrowser(aBrowser)) {
       return;
     }
-    if (Tabmix.isVersion(320))
-      aBrowser.messageManager.sendAsyncMessage("Tabmix:collectScrollPosition");
-    else
-      this.updateScrollPosition(aTab, aBrowser.contentWindow);
+
+    aBrowser.messageManager.sendAsyncMessage("Tabmix:collectScrollPosition");
   },
 
   updateScrollPosition(tab, scroll) {
@@ -2863,10 +2791,7 @@ TabmixSessionManager = {
     var tabState;
     try {
       tabState = JSON.parse(TabmixSvc.ss.getTabState(aTab));
-    } catch (ex) {
-      if (!Tabmix.isVersion(280) && browser.userTypedValue == "about:config" && browser.__SS_data)
-        tabState = browser.__SS_data;
-    }
+    } catch (ex) { }
     var data = this.serializeHistory(tabState);
     if (!data)
       return false;
@@ -2986,11 +2911,8 @@ TabmixSessionManager = {
     // to open new window
     if (restoring)
       window.__SS_lastSessionWindowID = String(Date.now()) + Math.random();
-    if (Tabmix.isVersion(270)) {
-      TabmixSvc.SessionStoreGlobal.LastSession.setState(state);
-    } else {
-      TabmixSvc.SessionStore._lastSessionState = state;
-    }
+
+    TabmixSvc.SessionStoreGlobal.LastSession.setState(state);
     return state;
   },
 
@@ -3021,17 +2943,7 @@ TabmixSessionManager = {
     if (Tabmix.singleWindowMode)
       concatenate = true;
 
-    let tabsRemoved;
     let state = TabmixConvertSession.getSessionState(path, true);
-    if (!this.tabViewInstalled) {
-      // strips out the hidden tab groups and all tabview metadata
-      let {hiddenTabState} = this.TabmixGroupsMigrator.removeHiddenTabGroupsFromState(state);
-      tabsRemoved = hiddenTabState.windows.length > 0;
-      if (caller == "firstwindowopen" && hiddenTabState &&
-          this.showTabGroupRestorationPage) {
-        this.TabmixGroupsMigrator.showBackgroundTabGroupRestorationPage(state, hiddenTabState);
-      }
-    }
     if (concatenate) {
       // move all tabs & closed tabs into one window
       this.mergeWindows(state);
@@ -3056,7 +2968,6 @@ TabmixSessionManager = {
     }
     TabmixSvc.sm.restoreCount = state.windows ? state.windows.length : 0;
     state.windows.forEach((winData, index) => {
-      winData.tabsRemoved = tabsRemoved;
       sessionCount++;
       let win = windowsList.pop();
       let canOverwriteWindow = win && (overwriteWindows ||
@@ -3320,11 +3231,7 @@ TabmixSessionManager = {
       newIndex = newPos;
     }
 
-    if (Tabmix.isVersion({ff: 570, wf: "56.2.8"})) {
-      gBrowser._lastRelatedTabMap = new WeakMap();
-    } else {
-      gBrowser._lastRelatedTab = null;
-    }
+    gBrowser._lastRelatedTabMap = new WeakMap();
 
     // call arrowScrollbox.ensureElementIsVisible before we restore the tab
     // we call from TMP_eventListener.onSSTabRestoring again
@@ -3344,8 +3251,7 @@ TabmixSessionManager = {
       let tab = gBrowser.tabs[newIndex + t];
 
       let userContextId = data.userContextId;
-      let reuseExisting = !Tabmix.isVersion(490) ||
-          tab.getAttribute("usercontextid") == (userContextId || "");
+      let reuseExisting = tab.getAttribute("usercontextid") == (userContextId || "");
       if (!reuseExisting) {
         let tabToRemove = tab;
         let forceNotRemote = !data.pinned;
@@ -3365,9 +3271,7 @@ TabmixSessionManager = {
       if (!tab.hasAttribute("inrestore"))
         tab.setAttribute("inrestore", "true");
       if (data.pinned) {
-        if (Tabmix.isVersion(550)) {
-          gBrowser._insertBrowser(tab);
-        }
+        gBrowser._insertBrowser(tab);
         gBrowser.pinTab(tab);
       }
 
@@ -3412,13 +3316,11 @@ TabmixSessionManager = {
           TabmixSvc.SessionStore._resetTabRestoringState(tab);
       }
     }
-    let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
-      "restoreHistoryPrecursor";
-    TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);
+    TabmixSvc.SessionStore.restoreTabs(window, tabs, tabsData, 0);
 
     // show notification and clean up our data
     var showNotification = caller != "firstwindowopen" || this.prefBranch.getIntPref("onStart") == 1;
-    this._setWindowStateReady(overwrite, showNotification, winData.tabsRemoved);
+    this._setWindowStateReady(overwrite, showNotification);
 
     // when resuming at startup: add additionally requested pages to the end
     if (caller == "firstwindowopen" && loadOnStartup.length) {
@@ -3500,23 +3402,18 @@ TabmixSessionManager = {
     // Make sure that set/getTabValue will set/read the correct data by
     // wiping out any current value in tab.__SS_extdata.
     delete aTab.__SS_extdata;
-    // delete any sessionRestore data
-    if (!Tabmix.isVersion(410))
-      delete browser.__SS_data;
 
     // TODO: need to call TAB_LAZY_STATES.delete(tab)
-    if (Tabmix.isVersion(550) && aTab.__SS_lazyData) {
+    if (aTab.__SS_lazyData) {
       delete aTab.__SS_lazyData;
     }
 
     // clear TabStateCache
-    if (Tabmix.isVersion(320)) {
-      let data = this.TabStateCache.get(browser) || {};
-      for (let key of Object.keys(data)) {
-        data[key] = null;
-      }
-      this.TabStateCache.update(browser, data);
+    let data = this.TabStateCache.get(browser) || {};
+    for (let key of Object.keys(data)) {
+      data[key] = null;
     }
+    this.TabStateCache.update(browser, data);
   },
 
   updateSelected(newIndex, removeAttribute) {
@@ -3788,20 +3685,9 @@ TabmixSessionManager = {
     return TMP_TabView.installed;
   },
 
-  notifyAboutMissingTabView(showNotification) {
-    // show notification when Tabview is missing and the session have hidden tabs
-    if (TabmixSvc.isPaleMoon) {
-      let hiddenTabs = gBrowser.tabs.length > Tabmix.visibleTabs.tabs.length;
-      showNotification = this._groupCount > 1 && hiddenTabs;
-    }
-    if (showNotification) {
-      this.TabmixGroupsMigrator.missingTabViewNotification(window);
-    }
-  },
-
   _beforeRestore(winData) {
     TabmixSvc.SessionStore._setWindowStateBusy(window);
-    if (this.tabViewInstalled || TabmixSvc.isPaleMoon) {
+    if (this.tabViewInstalled) {
       // save group count before we start the restore
       let extData = winData.extData || {};
       let data = extData["tabview-groups"] || "{}";
@@ -3815,11 +3701,8 @@ TabmixSessionManager = {
     this._beforeRestore(winData);
   },
 
-  _setWindowStateReady(aOverwriteTabs, showNotification, tabsRemoved) {
-    if (Tabmix.isVersion(350)) {
-      TabmixSvc.SessionStore._setWindowStateReady(window);
-    }
-    this.notifyAboutMissingTabView(tabsRemoved);
+  _setWindowStateReady() {
+    TabmixSvc.SessionStore._setWindowStateReady(window);
   },
 
   _saveTabviewData() { },

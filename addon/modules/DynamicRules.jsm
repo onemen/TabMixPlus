@@ -26,7 +26,7 @@ XPCOMUtils.defineLazyGetter(this, "SSS", () => {
 });
 
 XPCOMUtils.defineLazyGetter(this, "isMac", () => {
-  return TabmixSvc.isMac && !TabmixSvc.isPaleMoon;
+  return TabmixSvc.isMac;
 });
 
 const STYLENAMES = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
@@ -71,9 +71,7 @@ this.DynamicRules = {
   observe(subject, topic, data) {
     switch (topic) {
       case "browser-window-before-show":
-        if (!TabmixSvc.isPaleMoon) {
-          this.registerMutationObserver(subject);
-        }
+        this.registerMutationObserver(subject);
         break;
       case "nsPref:changed":
         this.onPrefChange(data);
@@ -150,10 +148,9 @@ this.DynamicRules = {
     backgroundRule = ' > .tab-stack > .tab-background' + backgroundRule;
     let tabTextRule = " .tab-text {\n  color: #textColor !important;\n}\n";
 
-    let _selected = TabmixSvc.version(390) ? '[visuallyselected="true"]' : '[selected="true"]';
-    let _notSelected = TabmixSvc.version(390) ? ':not([visuallyselected="true"])' : ':not([selected="true"])';
+    let _notSelected = ':not([visuallyselected="true"])';
     let tabState = {
-      current: _selected,
+      current: '[visuallyselected="true"]',
       unloaded: '[tabmix_tabState="unloaded"]' + _notSelected,
       unread: '[tabmix_tabState="unread"]' + _notSelected,
       other: ':not([tabmix_tabState])' + _notSelected,

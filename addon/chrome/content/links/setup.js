@@ -15,30 +15,6 @@
  * @returns   Nothing.
  */
 Tabmix.linkHandling_init = function TMP_TBP_init() {
-  // Since bug 1180944 onPopupClick always call urlbar.handleCommand
-  if (!Tabmix.isVersion(500)) {
-    // for normal click this function calls urlbar.handleCommand
-    // for middle click or click with modifiers whereToOpenLink can't be "current"
-    // so we don't need to check for locked tabs only for blanks tabs
-    var autoComplete = document.getElementById("PopupAutoCompleteRichResult");
-    if (autoComplete) {
-      // https://addons.mozilla.org/en-US/firefox/addon/quieturl/
-      let fn = typeof autoComplete._QuietUrlPopupClickOld == "function" ?
-        "_QuietUrlPopupClickOld" : "PopupAutoCompleteRichResult.onPopupClick";
-      let n = '\n            ';
-      this.changeCode(autoComplete, fn)._replace(
-        /openUILink\(url, aEvent.*\);/,
-        'var tabmixOptions = typeof options == "object" ? options : {};' + n +
-        'var isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser._selectedTab);' + n +
-        'var where = isBlankTab ? "current" : whereToOpenLink(aEvent);' + n +
-        'var pref = "extensions.tabmix.loadUrlInBackground";' + n +
-        'tabmixOptions.inBackground = Services.prefs.getBoolPref(pref);' + n +
-        'tabmixOptions.initiatingDoc = aEvent ? aEvent.target.ownerDocument : null;' + n +
-        'openUILinkIn(url, where, tabmixOptions);'
-      ).toCode();
-    }
-  }
-
   window.BrowserOpenTab = TMP_BrowserOpenTab;
 
   this.openUILink_init();
@@ -115,10 +91,9 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       }
     }
 
-    Tabmix._callPrepareLoadOnStartup = this.isVersion(570) && prepareLoadOnStartup;
+    Tabmix._callPrepareLoadOnStartup = prepareLoadOnStartup;
     if (prepareLoadOnStartup) {
       Tabmix.prepareLoadOnStartup = function(uriToLoad) {
-        uriToLoad = this.isVersion(570) ? uriToLoad : gBrowserInit._getUriToLoad();
         if (uriToLoad && uriToLoad != TabmixSvc.aboutBlank) {
           let tabs = gBrowser.tabs;
           for (let tab of tabs) {
@@ -282,7 +257,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   // setting flowing to "multibar" in Firefox 57 prevents Tabmix.getButtonsHeight
   // to get proper height when the window opened by SessionStore._openWindowWithState
   // with more than one rows of tabs
-  if (!this.isVersion(570) || TabmixSvc.SessionStore._isWindowLoaded(window)) {
+  if (TabmixSvc.SessionStore._isWindowLoaded(window)) {
     TabmixTabbar.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
   }
 
@@ -297,7 +272,6 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   TMP_extensionsCompatibility.preInit();
 };
 
-Tabmix.updateCloseButtons = Tabmix.isVersion(580) ? "_updateCloseButtons" : "adjustTabstrip";
 Tabmix._updateCloseButtons = function tabContainer_updateCloseButtons(skipUpdateScrollStatus, aUrl) {
   // modes for close button on tabs - extensions.tabmix.tabs.closeButtons
   // 1 - alltabs    = close buttons on all tabs
@@ -332,18 +306,7 @@ Tabmix._updateCloseButtons = function tabContainer_updateCloseButtons(skipUpdate
       break;
     case 5:
       this.removeAttribute("closebuttons-hover");
-      if (Tabmix.isVersion(550)) {
-        this.tabmix_updateCloseButtons();
-      } else if (tabsCount < 3) {
-        this.setAttribute("closebuttons", "alltabs");
-      } else {
-        // make sure not to check collapsed, hidden or pinned tabs for width
-        let tab = TMP_TabView.checkTabs(tabs);
-        if (tab && tab.getBoundingClientRect().width > this.mTabClipWidth)
-          this.setAttribute("closebuttons", "alltabs");
-        else
-          this.setAttribute("closebuttons", "activetab");
-      }
+      this.tabmix_updateCloseButtons();
       break;
   }
 

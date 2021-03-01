@@ -28,10 +28,6 @@ this.Tabmix_NewTabURL = {
   ]),
 
   init() {
-    if (!TabmixSvc.version(440)) {
-      this.updateNewTabURL = this._updateNewTabURL;
-    }
-
     if (Services.prefs.prefHasUserValue(FIREFOX_PREF))
       this.updateNewTabURL();
 
@@ -47,18 +43,9 @@ this.Tabmix_NewTabURL = {
     }
   },
 
-  // for Firefox 41 - 43
-  _updateNewTabURL() {
-    let value = TabmixSvc.getStringPref(FIREFOX_PREF);
-    if (value == ABOUT_NEW_TAB)
-      NewTabURL.reset();
-    else
-      NewTabURL.override(value);
-  },
-
   // for Firefox 44+
   updateNewTabURL() {
-    let value = TabmixSvc.getStringPref(FIREFOX_PREF);
+    let value = Services.prefs.getStringPref(FIREFOX_PREF);
     if (value == ABOUT_NEW_TAB) {
       aboutNewTabService.resetNewTabURL();
     } else {

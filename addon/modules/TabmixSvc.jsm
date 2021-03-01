@@ -18,29 +18,22 @@ XPCOMUtils.defineLazyModuleGetter(this, "SyncedTabs",
 // eslint-disable-next-line no-unused-vars
 var pref;
 
-var tabStateCache;
 var _versions = {};
 function isVersion(aVersionNo) {
-  let firefox, waterfox, palemoon, basilisk;
+  let firefox, waterfox, basilisk;
   if (typeof aVersionNo === 'object') {
     firefox = aVersionNo.ff || 0;
-    palemoon = aVersionNo.pm || 0;
     waterfox = aVersionNo.wf || "";
     basilisk = aVersionNo.bs || "";
 
-    if (!firefox && !palemoon && !waterfox && !basilisk) {
+    if (!firefox && !waterfox && !basilisk) {
       TabmixSvc.console.log('invalid version check ' + JSON.stringify(aVersionNo));
       return true;
     }
     aVersionNo = firefox;
   }
 
-  if (TabmixSvc.isPaleMoonID) {
-    let paleMoonVer = palemoon || (arguments.length > 1 ? arguments[1] : -1);
-    if (aVersionNo > 240 && paleMoonVer == -1)
-      return false;
-    aVersionNo = paleMoonVer;
-  } else if (TabmixSvc.isWaterfox && waterfox) {
+  if (TabmixSvc.isWaterfox && waterfox) {
     aVersionNo = waterfox;
   } else if (TabmixSvc.isBasilisk && basilisk) {
     aVersionNo = basilisk;
@@ -59,11 +52,6 @@ function isVersion(aVersionNo) {
 }
 
 this.TabmixSvc = {
-  get selectedAtt() {
-    delete this.selectedAtt;
-    return (this.selectedAtt = isVersion(390) ? "visuallyselected" : "selected");
-  },
-
   aboutBlank: "about:blank",
   aboutNewtab: "about:#".replace("#", "newtab"),
   newtabUrl: "browser.#.url".replace("#", "newtab"),
@@ -71,7 +59,7 @@ this.TabmixSvc = {
   // load Tabmix preference to the default branch
   _defaultPreferencesLoaded: false,
   loadDefaultPreferences() {
-    if (!isVersion(580) || this._defaultPreferencesLoaded) {
+    if (this._defaultPreferencesLoaded) {
       return;
     }
     this._defaultPreferencesLoaded = true;
@@ -100,24 +88,6 @@ this.TabmixSvc = {
     }
     // eslint-disable-next-line no-unused-vars
     pref = null;
-  },
-
-  getStringPref(prefName) {
-    if (isVersion(580)) {
-      return Services.prefs.getStringPref(prefName);
-    }
-    return Services.prefs.getComplexValue(prefName, Ci.nsISupportsString).data;
-  },
-
-  setStringPref(prefName, prefValue) {
-    if (isVersion(580)) {
-      Services.prefs.setStringPref(prefName, prefValue);
-    } else {
-      let str = Cc["@mozilla.org/supports-string;1"]
-          .createInstance(Ci.nsISupportsString);
-      str.data = prefValue;
-      Services.prefs.setComplexValue(prefName, Ci.nsISupportsString, str);
-    }
   },
 
   debugMode() {
@@ -272,7 +242,7 @@ this.TabmixSvc = {
       Cu.import("chrome://tabmix-resource/content/DownloadLastDir.jsm", {});
 
       TabmixPlacesUtils.init(aWindow);
-      if (TabmixSvc.version(470) && !(TabmixSvc.isBasilisk && TabmixSvc.version({bs: "52.9.2019.06.08"}))) {
+      if (!(TabmixSvc.isBasilisk && TabmixSvc.version({bs: "52.9.2019.06.08"}))) {
         this.syncedTabsInitialized = true;
         SyncedTabs.init(aWindow);
       }
@@ -293,10 +263,9 @@ this.TabmixSvc = {
         prefs.setBoolPref("extensions.tabmix.squaredTabsStyle", false);
       }
 
-      if (isVersion(320))
-        prefs.setBoolPref("extensions.tabmix.tabcontext.openNonRemoteWindow", true);
+      prefs.setBoolPref("extensions.tabmix.tabcontext.openNonRemoteWindow", true);
 
-      if (isVersion(410) && !TabmixSvc.isCyberfox) {
+      if (!TabmixSvc.isCyberfox) {
         prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
         Cu.import("chrome://tabmix-resource/content/NewTabURL.jsm", {});
       }
@@ -318,10 +287,6 @@ this.TabmixSvc = {
           break;
       }
     }
-  },
-
-  saveTabAttributes(tab, attrib, save) {
-    tabStateCache.saveTabAttributes(tab, attrib, save);
   },
 
   sm: {
@@ -387,19 +352,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", () => {
 });
 
 XPCOMUtils.defineLazyGetter(this, "Platform", () => {
-  if (isVersion(390)) {
-    return (Cu.import("resource://gre/modules/AppConstants.jsm", {})).AppConstants.platform;
-  }
-  let platform,
-      os = Services.appinfo.OS.toLowerCase();
-  if (os.startsWith("win")) {
-    platform = "win";
-  } else if (os == "darwin") {
-    platform = "macosx";
-  } else if (os == "linux") {
-    platform = "linux";
-  }
-  return platform;
+  return (Cu.import("resource://gre/modules/AppConstants.jsm", {})).AppConstants.platform;
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isWindows", () => {
@@ -418,19 +371,6 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isCyberfox", () => {
   return Services.appinfo.name == "Cyberfox";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoon", () => {
-  return Services.appinfo.name == "Pale Moon";
-});
-
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isPaleMoonID", () => {
-  try {
-    // noinspection SpellCheckingInspection
-    return Services.appinfo.ID == "{8de7fcbb-c55c-4fbe-bfc5-fc555c87dbc4}";
-  } catch (ex) {
-  }
-  return false;
-});
-
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isWaterfox", () => {
   return Services.appinfo.name == "Waterfox";
 });
@@ -446,11 +386,7 @@ XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
   "chrome://tabmix-resource/content/log.jsm");
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", () => {
-  const sessionStoreModule = Cu.import("resource:///modules/sessionstore/SessionStore.jsm", {});
-  if (isVersion(570)) {
-    return sessionStoreModule;
-  }
-  return Cu.getGlobalForObject(sessionStoreModule);
+  return Cu.import("resource:///modules/sessionstore/SessionStore.jsm", {});
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", function() {
@@ -473,37 +409,3 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SERIALIZED_SYSTEMPRINCIPAL", function() 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "tabAnimationsEnabled", () => {
   return !Services.prefs.getIntPref("ui.prefersReducedMotion", 0) == 1;
 });
-
-tabStateCache = {
-  saveTabAttributes(tab, attrib, save = true) {
-    if (TabmixSvc.isPaleMoon) {
-      return;
-    }
-
-    // force Sessionstore to save our persisted tab attributes
-    if (save) {
-      TabmixSvc.SessionStore.saveStateDelayed(tab.ownerGlobal);
-    }
-
-    // After bug 1166757 - Remove browser.__SS_data, we have nothing more to do.
-    if (isVersion(410))
-      return;
-
-    let attribs = attrib.split(",");
-    function update(attributes) {
-      attribs.forEach(key => {
-        if (tab.hasAttribute(key))
-          attributes[key] = tab.getAttribute(key);
-        else if (key in attributes)
-          delete attributes[key];
-      });
-    }
-
-    let browser = tab.linkedBrowser;
-    if (browser.__SS_data) {
-      if (!browser.__SS_data.attributes)
-        browser.__SS_data.attributes = {};
-      update(browser.__SS_data.attributes);
-    }
-  }
-};

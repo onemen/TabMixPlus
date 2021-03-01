@@ -84,11 +84,6 @@
 
   this.constructor.tabmix_init.call(this);
 
-  if (!Tabmix.isVersion(420)) {
-    let context = document.getElementById('context_closeTab');
-    this.setAttribute('closetabtext', context.getAttribute('label'));
-  }
-
   this.addEventListener("mouseover", (event) => {
     this.onMouseOver(event);
   });

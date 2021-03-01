@@ -265,8 +265,9 @@ var gPrefWindow = {
 function getPrefByType(prefName) {
   try {
     var fn = PrefFn[Services.prefs.getPrefType(prefName)];
-    if (fn == "CharPref")
-      return TabmixSvc.getStringPref(prefName);
+    if (fn == "CharPref") {
+      return Services.prefs.getStringPref(prefName);
+    }
 
     return Services.prefs["get" + fn](prefName);
   } catch (ex) {
@@ -293,7 +294,7 @@ function setPrefByType(prefName, newValue, atImport) {
 function setPref(aPref) {
   let fn = PrefFn[aPref.type];
   if (fn == "CharPref") {
-    TabmixSvc.setStringPref(aPref.name, aPref.value);
+    Services.prefs.setStringPref(aPref.name, aPref.value);
   } else {
     Services.prefs["set" + fn](aPref.name, aPref.value);
   }
@@ -368,10 +369,8 @@ XPCOMUtils.defineLazyGetter(window, "gPreferenceList", () => {
     "toolkit.scrollbox.clickToScroll.scrollDelay", "toolkit.scrollbox.smoothScroll"
   ];
 
-  if (Tabmix.isVersion(550)) {
-    const index = otherPrefs.indexOf("browser.tabs.animate");
-    otherPrefs.splice(index, 1);
-  }
+  const index = otherPrefs.indexOf("browser.tabs.animate");
+  otherPrefs.splice(index, 1);
 
   let prefs = Services.prefs.getDefaultBranch("");
   let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();

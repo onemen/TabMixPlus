@@ -100,8 +100,6 @@
 <!ENTITY sm.context.save.key "S">
 <!ENTITY sm.context.rename "Yeniden adlandır">
 <!ENTITY sm.context.rename.key "Y">
-<!ENTITY sm.context.bookmarkSession "Yer İmleri Oturumu">
-<!ENTITY sm.context.bookmarkSession.key "Y">
 <!ENTITY sm.context.delete "Sil">
 <!ENTITY sm.context.delete.key "S">
 <!ENTITY sm.context.deleteall "Tümünü sil">

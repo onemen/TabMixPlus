@@ -27,10 +27,8 @@ Tabmix.contentAreaClick = {
       '        let params = { charset: doc.characterSet, initiatingDoc: doc,\n' +
       '                       suppressTabsOnFileDownload: suppressTabsOnFileDownload,\n' +
       '                       referrerURI: doc.documentURIObject };\n' +
-      '        if (Tabmix.isVersion(370)) {\n' +
-      '          params.referrerPolicy = doc.referrerPolicy;\n' +
-      '          params.noReferrer = BrowserUtils.linkHasNoReferrer(linkNode);\n' +
-      '        }\n' +
+      '        params.referrerPolicy = doc.referrerPolicy;\n' +
+      '        params.noReferrer = BrowserUtils.linkHasNoReferrer(linkNode);\n' +
       '        openLinkIn(href, where, params);\n' +
       '      }\n' +
       '      else\n        $&'

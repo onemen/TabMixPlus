@@ -586,11 +586,11 @@ KeyConfig = {
 };
 
 function getPref(name) {
-  return TabmixSvc.getStringPref(name);
+  return Services.prefs.getStringPref(name);
 }
 
 function setPref(name, value) {
-  TabmixSvc.setStringPref(name, value);
+  Services.prefs.setStringPref(name, value);
 }
 
 function getFormattedKey(key) {

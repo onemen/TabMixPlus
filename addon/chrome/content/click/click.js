@@ -175,8 +175,8 @@ var TabmixTabClickOptions = {
         BrowserOpenTab();
         break;
       case 2:
-        if (aTab && aTab.parentNode) {
-          let byMouse = Tabmix.isVersion(520) ? event && event.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE : true;
+        if (aTab?.parentNode) {
+          let byMouse = event?.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE;
           gBrowser.removeTab(aTab, {animate: true, byMouse});
         }
         break;
@@ -373,17 +373,13 @@ var TabmixContext = {
     // we can't disable menus with command attribute
     $id("context_undoCloseTab").removeAttribute("command");
 
-    if (Tabmix.isVersion(320)) {
-      let openNonRemote = $id("context_openNonRemoteWindow");
-      if (openNonRemote)
-        tabContextMenu.insertBefore(openNonRemote, $id("context_openTabInWindow").nextSibling);
-    }
+    let openNonRemote = $id("context_openNonRemoteWindow");
+    if (openNonRemote)
+      tabContextMenu.insertBefore(openNonRemote, $id("context_openTabInWindow").nextSibling);
 
-    if (Tabmix.isVersion(430)) {
-      let toggleMuteTab = $id("context_toggleMuteTab");
-      if (toggleMuteTab) {
-        tabContextMenu.insertBefore(toggleMuteTab, $id("context_pinTab"));
-      }
+    let toggleMuteTab = $id("context_toggleMuteTab");
+    if (toggleMuteTab) {
+      tabContextMenu.insertBefore(toggleMuteTab, $id("context_pinTab"));
     }
 
     // insert IE Tab menu-items before Bookmarks menu-items
@@ -489,15 +485,12 @@ var TabmixContext = {
     Tabmix.showItem("tm-duplicateTab", Tabmix.prefs.getBoolPref("duplicateMenu"));
     Tabmix.showItem("tm-duplicateinWin", Tabmix.prefs.getBoolPref("duplicateinWinMenu") && !Tabmix.singleWindowMode);
     Tabmix.showItem("context_openTabInWindow", Tabmix.prefs.getBoolPref("detachTabMenu") && !Tabmix.singleWindowMode);
-    if (Tabmix.isVersion(320)) {
-      Tabmix.showItem("context_openNonRemoteWindow",
-        Tabmix.prefs.getBoolPref("tabcontext.openNonRemoteWindow") &&
-        !Tabmix.singleWindowMode && gMultiProcessBrowser);
-    }
 
-    if (Tabmix.isVersion(430)) {
-      Tabmix.showItem("context_toggleMuteTab", Tabmix.prefs.getBoolPref("muteTabMenu"));
-    }
+    Tabmix.showItem("context_openNonRemoteWindow",
+      Tabmix.prefs.getBoolPref("tabcontext.openNonRemoteWindow") &&
+        !Tabmix.singleWindowMode && gMultiProcessBrowser);
+
+    Tabmix.showItem("context_toggleMuteTab", Tabmix.prefs.getBoolPref("muteTabMenu"));
 
     var show = Tabmix.prefs.getBoolPref("pinTabMenu");
     Tabmix.showItem("context_pinTab", show && !aTab.pinned);
@@ -831,9 +824,7 @@ var TabmixContext = {
   },
 
   openMultipleLinks: function TMP_openMultipleLinks(check) {
-    let urls = Tabmix.isVersion(420) ? gContextMenu.tabmixLinks || [] :
-      Tabmix.ContextMenu.getSelectedLinks(window.content, check);
-
+    let urls = gContextMenu.tabmixLinks || [];
     if (!check && urls.length) {
       Tabmix.loadTabs(urls, false);
     }
@@ -1174,7 +1165,7 @@ var TabmixAllTabs = {
       return;
 
     aMenuitem.setAttribute("label", aMenuitem.getAttribute("count") + aTab.label);
-    aMenuitem.setAttribute("crop", Tabmix.isVersion(530) ? "end" : aTab.getAttribute("crop"));
+    aMenuitem.setAttribute("crop", "end");
 
     if (aTab.hasAttribute("busy")) {
       aMenuitem.setAttribute("busy", aTab.getAttribute("busy"));

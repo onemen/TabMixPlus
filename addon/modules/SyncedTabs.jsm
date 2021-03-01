@@ -69,18 +69,16 @@ this.SyncedTabs = {
       configurable: true
     });
 
-    if (TabmixSvc.version(510)) {
-      const fnName = typeof TabListView.prototype._openAllClientTabs == "function" ?
-        "TabListView.prototype._openAllClientTabs" : "TabListView.prototype.onClick";
-      Tabmix.changeCode(TabListView.prototype, fnName)._replace(
-        'this.props.onOpenTabs(urls, where);',
-        `if (/^tab/.test(where)) {
+    const fnName = typeof TabListView.prototype._openAllClientTabs == "function" ?
+      "TabListView.prototype._openAllClientTabs" : "TabListView.prototype.onClick";
+    Tabmix.changeCode(TabListView.prototype, fnName)._replace(
+      'this.props.onOpenTabs(urls, where);',
+      `if (/^tab/.test(where)) {
           // reverse the background here since props.onOpenTabs reverse it again
           where = where == 'tab' ^ this.tabmix_inBackground ? "tab" : "tabshifted";
         }
         $&`
-      ).toCode();
-    }
+    ).toCode();
 
     TabListView.prototype.onOpenSelected = function(url, event) {
       let {where, inBackground} = this.tabmix_whereToOpen(event);

@@ -19,7 +19,7 @@ var gTabMix_preferencesOverlay = {
   },
 
   addAllPreferences() {
-    if (!TabmixSvc.version(590) || typeof Preferences != "object" ||
+    if (typeof Preferences != "object" ||
       typeof Preferences.addAll != "function") {
       return;
     }
@@ -60,17 +60,15 @@ var gTabMix_preferencesOverlay = {
     if (showTabBar)
       showTabBar.collapsed = true;
 
-    if (TabmixSvc.version(260)) {
-      let boxes = ["tabmixplusBox", "btn_tabmixplus", "generalWindowOpenBox",
-        "warnOnCloseWindow", "warnOnCloseProtected", "hideTabbarBox"];
-      boxes.forEach(function(id) {
-        let item = this.id(id);
-        item.removeAttribute("data-category");
-        item.hidden = false;
-        item.classList.remove("indent");
-        item.classList.add("incontent_paneGeneral");
-      }, this);
-    }
+    let boxes = ["tabmixplusBox", "btn_tabmixplus", "generalWindowOpenBox",
+      "warnOnCloseWindow", "warnOnCloseProtected", "hideTabbarBox"];
+    boxes.forEach(function(id) {
+      let item = this.id(id);
+      item.removeAttribute("data-category");
+      item.hidden = false;
+      item.classList.remove("indent");
+      item.classList.add("incontent_paneGeneral");
+    }, this);
 
     this.initMainPane();
     setTimeout(() => this.initPaneTabsOptions(), 0);

@@ -10,12 +10,8 @@ var gMenuPane = {
     var browserWindow = Tabmix.getTopWin();
     let $$ = id => browserWindow.document.getElementById(id);
 
-    if (Tabmix.isVersion(430)) {
-      $("muteTab").label = browserWindow.gNavigatorBundle.getString("muteTab.label") + "/" +
+    $("muteTab").label = browserWindow.gNavigatorBundle.getString("muteTab.label") + "/" +
         browserWindow.gNavigatorBundle.getString("unmuteTab.label");
-    } else {
-      $("muteTab").hidden = true;
-    }
 
     // if Tabview exist copy its menu label
     let tabViewMenu = browserWindow.TMP_TabView.installed &&
@@ -27,17 +23,15 @@ var gMenuPane = {
       gPrefWindow.removeChild("moveToGroup");
     }
 
-    if (Tabmix.isVersion(320)) {
-      let openNonRemote = $$("context_openNonRemoteWindow");
-      if (openNonRemote) {
-        let item = $("openNonRemoteWindow");
-        item.setAttribute("label", openNonRemote.getAttribute("label"));
-        item.hidden = false;
-        let beforeItem = $("showUndoClose");
-        item = $("showReloadOther");
-        beforeItem.parentNode.insertBefore(item, beforeItem);
-        item.checked = $("pref_showReloadOther").value;
-      }
+    let openNonRemote = $$("context_openNonRemoteWindow");
+    if (openNonRemote) {
+      let item = $("openNonRemoteWindow");
+      item.setAttribute("label", openNonRemote.getAttribute("label"));
+      item.hidden = false;
+      let beforeItem = $("showUndoClose");
+      item = $("showReloadOther");
+      beforeItem.parentNode.insertBefore(item, beforeItem);
+      item.checked = $("pref_showReloadOther").value;
     }
 
     // check if bookmark item in tab context menu

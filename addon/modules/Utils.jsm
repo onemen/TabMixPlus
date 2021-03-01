@@ -83,16 +83,9 @@ this.TabmixUtils = {
         const where = !TabmixSvc.isGlitterInstalled &&
           win.Tabmix.tablib.whereToOpenDrop(json, url);
         if (where == "tab") {
-          if (TabmixSvc.version(520)) {
-            links[0].tabmixContentDrop = "tab";
-            // see browser.xml dropLinks method
-            browser.droppedLinkHandler(null, links);
-          } else {
-            // handleDroppedLink call preventDefault
-            json.preventDefault = function() {};
-            json.tabmixContentDrop = "tab";
-            browser.droppedLinkHandler(json, url, name);
-          }
+          links[0].tabmixContentDrop = "tab";
+          // see browser.xml dropLinks method
+          browser.droppedLinkHandler(null, links);
           // prevent default
           return true;
         }

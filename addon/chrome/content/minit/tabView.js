@@ -11,7 +11,7 @@ TMP_TabView.handleEvent = function(aEvent) {
       TabmixSessionManager.saveTabViewData(TabmixSessionManager.gThisWin, true);
       TMP_LastTab.tabs = null;
       if (TabmixTabbar.hideMode != 2) {
-        setTimeout(() => gBrowser.tabContainer[Tabmix.updateCloseButtons](), 0);
+        setTimeout(() => gBrowser.tabContainer._updateCloseButtons(), 0);
       }
       break;
     case "TabShow":
@@ -204,12 +204,9 @@ TabmixSessionManager._setWindowStateBusy = function(winData) {
   this._updateUIpageBounds = false;
 };
 
-TabmixSessionManager._setWindowStateReady = function(aOverwriteTabs, showNotification, tabsRemoved) {
-  if (Tabmix.isVersion(350)) {
-    TabmixSvc.SessionStore._setWindowStateReady(window);
-  }
+TabmixSessionManager._setWindowStateReady = function(aOverwriteTabs, showNotification) {
+  TabmixSvc.SessionStore._setWindowStateReady(window);
   if (!this.tabViewInstalled) {
-    this.notifyAboutMissingTabView(tabsRemoved);
     return;
   }
 

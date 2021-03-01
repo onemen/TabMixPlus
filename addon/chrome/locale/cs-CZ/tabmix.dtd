@@ -100,8 +100,6 @@
 <!ENTITY sm.context.save.key "U">
 <!ENTITY sm.context.rename "Přejmenovat">
 <!ENTITY sm.context.rename.key "P">
-<!ENTITY sm.context.bookmarkSession "Relace záložek">
-<!ENTITY sm.context.bookmarkSession.key "Z">
 <!ENTITY sm.context.delete "Smazat">
 <!ENTITY sm.context.delete.key "S">
 <!ENTITY sm.context.deleteall "Smazat vše">

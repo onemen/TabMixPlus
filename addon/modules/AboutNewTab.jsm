@@ -48,16 +48,7 @@ AboutNewTabInternal = {
   },
 
   updateBrowser(browser) {
-    if (TabmixSvc.version(420)) {
-      browser.messageManager.sendAsyncMessage("Tabmix:updateTitlefrombookmark");
-    } else {
-      try {
-        let doc = browser.contentDocument || browser.contentDocumentAsCPOW;
-        this.updateTitles(doc.defaultView.gGrid.cells);
-      } catch (ex) {
-        TabmixSvc.console.reportError(ex);
-      }
-    }
+    browser.messageManager.sendAsyncMessage("Tabmix:updateTitlefrombookmark");
   },
 
   updateTitles(cells = []) {
@@ -68,33 +59,22 @@ AboutNewTabInternal = {
       }
 
       let enhancedTitle;
-      if (TabmixSvc.version(340)) {
-        let enhanced = gAllPages.enhanced &&
+
+      let enhanced = gAllPages.enhanced &&
             DirectoryLinksProvider.getEnhancedLink(site.link);
-        enhancedTitle = enhanced && enhanced.title;
-      }
+      enhancedTitle = enhanced && enhanced.title;
 
       let url = site.url;
       let title, tooltip;
-      if (TabmixSvc.version(400)) {
-        let tabmixTitle = TabmixPlacesUtils.getTitleFromBookmark(url, site.title);
-        title = enhancedTitle ? enhancedTitle :
-          site.link.type == "history" ? site.link.baseDomain :
-            tabmixTitle;
-        tooltip = (tabmixTitle == url ? tabmixTitle : tabmixTitle + "\n" + url);
-      } else {
-        title = enhancedTitle ||
-                TabmixPlacesUtils.getTitleFromBookmark(url, site.title || url);
-        tooltip = (title == url ? title : title + "\n" + url);
-      }
+      let tabmixTitle = TabmixPlacesUtils.getTitleFromBookmark(url, site.title);
+      title = enhancedTitle ? enhancedTitle :
+        site.link.type == "history" ? site.link.baseDomain :
+          tabmixTitle;
+      tooltip = (tabmixTitle == url ? tabmixTitle : tabmixTitle + "\n" + url);
 
       let link = site._querySelector(".newtab-link");
       link.setAttribute("title", tooltip);
       site._querySelector(".newtab-title").textContent = title;
-      // Pale Moon dot't have a refreshThumbnail function
-      if (typeof site.refreshThumbnail == "function") {
-        site.refreshThumbnail();
-      }
     });
   },
 };

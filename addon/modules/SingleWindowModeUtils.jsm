@@ -22,7 +22,7 @@ this.SingleWindowModeUtils = {
   getBrowserWindow(aExclude) {
     // on per-window private browsing mode,
     // allow to open one normal window and one private window in single window mode
-    var isPrivate = PrivateBrowsingUtils.isWindowPrivate(aExclude);
+    const isPrivate = PrivateBrowsingUtils.isWindowPrivate(aExclude);
 
     function isSuitableBrowserWindow(win) {
       return (!win.closed && win.document.readyState == "complete" &&
@@ -30,9 +30,9 @@ this.SingleWindowModeUtils = {
               PrivateBrowsingUtils.isWindowPrivate(win) == isPrivate);
     }
 
-    var windows = Services.wm.getEnumerator("navigator:browser");
+    const windows = Services.wm.getEnumerator("navigator:browser");
     while (windows.hasMoreElements()) {
-      let win = windows.getNext();
+      const win = windows.getNext();
       if (isSuitableBrowserWindow(win))
         return win;
     }
@@ -47,9 +47,9 @@ this.SingleWindowModeUtils = {
       return false;
 
     const onLoad = aEvent => {
-      let window = aEvent.currentTarget;
+      const window = aEvent.currentTarget;
       window.removeEventListener("load", onLoad);
-      let docElement = window.document.documentElement;
+      const docElement = window.document.documentElement;
       if (docElement.getAttribute("windowtype") == "navigator:browser")
         this.onLoad(window);
     };
@@ -57,14 +57,14 @@ this.SingleWindowModeUtils = {
 
     aWindow.gTMPprefObserver.setLink_openPrefs();
 
-    var existingWindow = this.getBrowserWindow(aWindow);
+    const existingWindow = this.getBrowserWindow(aWindow);
     // no navigator:browser window open yet?
     if (!existingWindow)
       return false;
 
     existingWindow.focus();
     // save dimensions
-    var win = aWindow.document.documentElement;
+    const win = aWindow.document.documentElement;
     aWindow.__winRect = {
       sizemode: win.getAttribute("sizemode"),
       width: win.getAttribute("width"),
@@ -90,7 +90,7 @@ this.SingleWindowModeUtils = {
       return;
     }
     const doc = newWindow.document.documentElement;
-    for (let attr of Object.keys(rect)) {
+    for (const attr of Object.keys(rect)) {
       doc.setAttribute(attr, rect[attr]);
     }
     if (restorePosition) {
@@ -102,14 +102,14 @@ this.SingleWindowModeUtils = {
   },
 
   onLoad(newWindow) {
-    var existingWindow = this.getBrowserWindow(newWindow);
+    const existingWindow = this.getBrowserWindow(newWindow);
     // no navigator:browser window open yet?
     if (!existingWindow)
       return;
 
     if (!newWindow.arguments || newWindow.arguments.length === 0)
       return;
-    var args = newWindow.arguments;
+    const args = newWindow.arguments;
 
     // don't close windows that was probably opened by extension
     if (args.length == 1 && args[0] === null) {
@@ -117,72 +117,64 @@ this.SingleWindowModeUtils = {
       return;
     }
 
-    var existingBrowser = existingWindow.gBrowser;
+    const existingBrowser = existingWindow.gBrowser;
     existingWindow.Tabmix.tablib.init(); // just in case Tabmix.tablib isn't init yet
-    var uriToLoad = args[0];
+    const uriToLoad = args[0];
 
-    var urls = [];
-    var params = {
-      referrerURI: null,
-      referrerPolicy: (function() {
-        if (TabmixSvc.version(390)) {
-          let policy = TabmixSvc.version(490) ? "REFERRER_POLICY_UNSET" : "REFERRER_POLICY_DEFAULT";
-          return Ci.nsIHttpChannel[policy];
-        }
-        return null;
-      }()),
-      postData: null,
-      allowThirdPartyFixup: false
-    };
-    if (!TabmixSvc.version(520) && uriToLoad instanceof Ci.nsISupportsArray) {
-      let count = uriToLoad.Count();
+    let urls = [];
+    let params = { };
+    if (uriToLoad instanceof Ci.nsIArray) {
+      const count = uriToLoad.length;
       for (let i = 0; i < count; i++) {
-        let uriString = uriToLoad.GetElementAt(i).QueryInterface(Ci.nsISupportsString);
+        const uriString = uriToLoad.queryElementAt(i, Ci.nsISupportsString);
         urls.push(uriString.data);
       }
-    } else if (uriToLoad instanceof Ci.nsIArray) {
-      let count = uriToLoad.length;
-      for (let i = 0; i < count; i++) {
-        let uriString = uriToLoad.queryElementAt(i, Ci.nsISupportsString);
-        urls.push(uriString.data);
-      }
+      params = {
+        userContextId: args[5],
+        triggeringPrincipal: args[8] || Services.scriptSecurityManager.getSystemPrincipal(),
+        allowInheritPrincipal: args[9],
+        csp: args[10],
+        fromExternal: true,
+      };
     } else if (uriToLoad instanceof newWindow.XULElement || uriToLoad instanceof Ci.nsIDOMXULElement) {
       // some extension try to swap a tab to new window
       // we don't do anything in this case.
       // just close the new window
     } else if (args.length >= 3) {
-      params.referrerURI = args[2];
-      if (TabmixSvc.version(390)) {
-        if (typeof (params.referrerURI) == "string") {
-          try {
-            params.referrerURI = existingWindow.makeURI(params.referrerURI);
-          } catch (e) {
-            params.referrerURI = null;
-          }
-        }
-        if (args[5] !== undefined)
-          params.referrerPolicy = args[5];
-      }
-      params.postData = args[3] || null;
-      params.allowThirdPartyFixup = args[4] || false;
-      if (TabmixSvc.version(500)) {
-        params.userContextId = args[6] != undefined ? args[6] :
-          Ci.nsIScriptSecurityManager.DEFAULT_USER_CONTEXT_ID;
-        params.originPrincipal = args[7];
-        params.forceAboutBlankViewerInCurrent = Boolean(args[7]);
-        params.triggeringPrincipal = args[8];
-      }
+      // from browser.js _handleURIToLoad
+      // window.arguments[1]: unused (bug 871161)
+      //  [2]: referrerInfo (nsIReferrerInfo)
+      //  [3]: postData (nsIInputStream)
+      //  [4]: allowThirdPartyFixup (bool)
+      //  [5]: userContextId (int)
+      //  [6]: originPrincipal (nsIPrincipal)
+      //  [7]: originStoragePrincipal (nsIPrincipal)
+      //  [8]: triggeringPrincipal (nsIPrincipal)
+      //  [9]: allowInheritPrincipal (bool)
+      //  [10]: csp (nsIContentSecurityPolicy)
+      params = {
+        referrerInfo: args[2] || null,
+        postData: args[3] || null,
+        allowThirdPartyFixup: args[4] || false,
+        userContextId: args[5] ?? Ci.nsIScriptSecurityManager.DEFAULT_USER_CONTEXT_ID,
+        originPrincipal: args[6],
+        originStoragePrincipal: args[7],
+        forceAboutBlankViewerInCurrent: Boolean(args[6]),
+        triggeringPrincipal: args[8],
+        allowInheritPrincipal: args[9] !== false,
+        csp: args[10],
+      };
       urls = [uriToLoad];
     } else {
       urls = uriToLoad ? uriToLoad.split("|") : ["about:blank"];
     }
 
-    var firstTabAdded;
+    let firstTabAdded;
     try {
       // open the tabs in current window
       if (urls.length) {
         firstTabAdded = existingBrowser.selectedTab;
-        let isBlankTab = existingBrowser.isBlankNotBusyTab(firstTabAdded);
+        const isBlankTab = existingBrowser.isBlankNotBusyTab(firstTabAdded);
         if (isBlankTab)
           existingWindow.openLinkIn(urls[0], "current", params);
         else
@@ -198,25 +190,12 @@ this.SingleWindowModeUtils = {
       newWindow.FullZoom.destroy = function() {};
       newWindow.OfflineApps.uninit = function() {};
       newWindow.IndexedDBPromptHelper.init();
-      if (TabmixSvc.version(420)) {
-        if ("gMenuButtonBadgeManager" in newWindow) {
-          newWindow.gMenuButtonBadgeManager.uninit = function() {
-            if (typeof PanelUI == "object" && PanelUI.panel) {
-              PanelUI.panel.removeEventListener("popupshowing", this, true);
-            }
-          };
-        }
-      }
-      if (!TabmixSvc.version(440)) {
-        let obs = Services.obs;
-        obs.addObserver(newWindow.gSessionHistoryObserver, "browser:purge-session-history", false);
-        if (!TabmixSvc.version(340))
-          obs.addObserver(newWindow.gFormSubmitObserver, "invalidformsubmit", false);
-        obs.addObserver(newWindow.gXPInstallObserver, "addon-install-blocked", false);
-        obs.addObserver(newWindow.gXPInstallObserver, "addon-install-failed", false);
-        obs.addObserver(newWindow.gXPInstallObserver, "addon-install-complete", false);
-        let pluginCrashed = TabmixSvc.version(400) ? "NPAPIPluginCrashed" : "pluginCrashed";
-        obs.addObserver(newWindow.gPluginHandler[pluginCrashed], "plugin-crashed", false);
+      if ("gMenuButtonBadgeManager" in newWindow) {
+        newWindow.gMenuButtonBadgeManager.uninit = function() {
+          if (typeof PanelUI == "object" && PanelUI.panel) {
+            PanelUI.panel.removeEventListener("popupshowing", this, true);
+          }
+        };
       }
       newWindow.gPrivateBrowsingUI.uninit = function() {};
     } catch (ex) {

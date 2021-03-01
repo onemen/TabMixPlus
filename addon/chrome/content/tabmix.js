@@ -47,9 +47,6 @@ Tabmix.beforeDelayedStartup = function() {
   // XUL box for _moz_generated_content_before element contained an inline #text child
   // by calling getBoundingClientRect
   Tabmix.getButtonsHeight();
-  // with Australis build the button is not ready yet at this time
-  if (!this.isVersion(280))
-    this.getAfterTabsButtonsWidth();
 };
 
 // after TabmixSessionManager and SessionStore initialized
@@ -68,22 +65,6 @@ Tabmix.sessionInitialized = function() {
 
     this.setItem("Browser:RestoreLastSession", "disabled",
       !SM.canRestoreLastSession || SM.isPrivateWindow);
-
-    if (TabmixSvc.isPaleMoon) {
-      this.changeCode(window, "window.BrowserOnAboutPageLoad")._replace(
-        'function updateSearchEngine',
-        'let updateSearchEngine = function _updateSearchEngine', {silent: true}
-      )._replace(
-        'ss.canRestoreLastSession',
-        'TabmixSessionManager.canRestoreLastSession'
-      ).toCode();
-
-      this.changeCode(BrowserOnClick, "BrowserOnClick.onAboutHome")._replace(
-        'if (ss.canRestoreLastSession)',
-        'ss = TabmixSessionManager;\
-         $&'
-      ).toCode();
-    }
   }
 
   const tab = gBrowser.tabContainer.allTabs[0];
@@ -125,10 +106,6 @@ Tabmix.getButtonsHeight = function(setDefault) {
     this._buttonsHeight = 24;
   }
 
-  if (TabmixSvc.isPaleMoon && this.isVersion(0, 270)) {
-    this._buttonsHeight = Math.round(this._buttonsHeight);
-  }
-
   return this._buttonsHeight;
 };
 
@@ -142,7 +119,6 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
       tabBar.collapsed = false;
     }
     // save tabsNewtabButton width
-    let lwtheme = !this.isVersion(280) && document.getElementById("main-window").getAttribute("lwtheme");
     this.tabsNewtabButton =
       tabBar.getElementsByAttribute("command", "cmd_newNavigatorTab")[0];
     this.tabsNewtabButton.setAttribute("force-display", true);
@@ -155,7 +131,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     let buttonWidth = openNewTabRect.width + parseFloat(marginStart);
     if (buttonWidth > 0) {
       this.afterTabsButtonsWidth = [];
-      this.afterTabsButtonsWidth.push(lwtheme ? 31 : buttonWidth);
+      this.afterTabsButtonsWidth.push(buttonWidth);
     }
 
     // when privateTab extension installed add its new tab button width
@@ -206,8 +182,7 @@ Tabmix.afterDelayedStartup = function() {
 
   TMP_extensionsCompatibility.onDelayedStartup();
 
-  if (this.isVersion(280))
-    setTimeout(() => Tabmix.getAfterTabsButtonsWidth(), 100);
+  setTimeout(() => Tabmix.getAfterTabsButtonsWidth(), 100);
 
   gTMPprefObserver.setMenuIcons();
 
@@ -305,11 +280,6 @@ var TMP_eventListener = {
         break;
       case "fullscreen": {
         let enterFS = window.fullScreen;
-        // Until Firefox 41 (Bug 1161802 part 2) we get the fullscreen event
-        // before the window transitions into or out of FS mode.
-        if (!Tabmix.isVersion(410, 280)) {
-          enterFS = !enterFS;
-        }
         this.onFullScreen(enterFS);
         break;
       }
@@ -405,13 +375,10 @@ var TMP_eventListener = {
     window.addEventListener("SSWindowClosing", this);
     window.addEventListener("fullscreen", this, true);
 
-    if (Tabmix.isVersion(320)) {
-      Tabmix.Utils.initMessageManager(window);
-    }
+    Tabmix.Utils.initMessageManager(window);
 
     var tabBar = gBrowser.tabContainer;
-    this._wheelEvent = Tabmix.isVersion(480, 280) ? "wheel" : "DOMMouseScroll";
-    tabBar.addEventListener(this._wheelEvent, this, true);
+    tabBar.addEventListener("wheel", this, true);
 
     try {
       TabmixProgressListener.startup(gBrowser);
@@ -582,15 +549,12 @@ var TMP_eventListener = {
     // ##### disable Session Manager #####
     // TabmixSessionManager.updateSettings();
 
-    if (Tabmix.isVersion(550)) {
-      Tabmix.changeCode(tabBar, `gBrowser.tabContainer.${Tabmix.updateCloseButtons}`)._replace(
-        Tabmix.isVersion(600) ?
-          'this._getVisibleTabs()[gBrowser._numPinnedTabs];' :
-          'this.tabbrowser.visibleTabs[this.tabbrowser._numPinnedTabs];',
-        'TMP_TabView.checkTabs(Tabmix.visibleTabs.tabs);'
-      ).toCode(false, tabBar, "tabmix_updateCloseButtons");
-    }
-    Tabmix.setNewFunction(tabBar, Tabmix.updateCloseButtons, Tabmix._updateCloseButtons);
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._updateCloseButtons")._replace(
+      'this._getVisibleTabs()[gBrowser._numPinnedTabs];',
+      'TMP_TabView.checkTabs(Tabmix.visibleTabs.tabs);'
+    ).toCode(false, tabBar, "tabmix_updateCloseButtons");
+
+    Tabmix.setNewFunction(tabBar, "_updateCloseButtons", Tabmix._updateCloseButtons);
     delete Tabmix._updateCloseButtons;
 
     // update tooltip for tabmix-tabs-closebutton
@@ -665,29 +629,15 @@ var TMP_eventListener = {
         let bottombox = document.getElementById("browser-bottombox");
         bottombox.appendChild(fullScrToggler);
 
-        if (Tabmix.isVersion(400, 280)) {
-          let $LF = '\n    ';
-          Tabmix.changeCode(FullScreen, "FullScreen.hideNavToolbox")._replace(
-            'this._isChromeCollapsed = true;',
-            'TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);' + $LF +
+        let $LF = '\n    ';
+        Tabmix.changeCode(FullScreen, "FullScreen.hideNavToolbox")._replace(
+          'this._isChromeCollapsed = true;',
+          'TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);' + $LF +
             '$&' + $LF +
             'TMP_eventListener.toggleTabbarVisibility(false, arguments[0]);'
-          ).toCode();
-        } else {
-          Tabmix.changeCode(FullScreen, "FullScreen.sample")._replace(
-            'gNavToolbox.style.marginTop = "";',
-            'TMP_eventListener._updateMarginBottom("");\
-             $&'
-          )._replace(
-            'gNavToolbox.style.marginTop = (gNavToolbox.getBoundingClientRect().height * pos * -1) + "px";',
-            '$&\
-             TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);'
-          ).toCode();
-        }
+        ).toCode();
       }
-      let fullScreen = Tabmix.isVersion(470) ?
-        document.fullscreenElement : document.mozFullScreen;
-      if (!fullScreen) {
+      if (!document.fullscreenElement) {
         fullScrToggler.hidden = false;
       }
     } else if (fullScrToggler && !enterFS) {
@@ -718,9 +668,6 @@ var TMP_eventListener = {
    * visible. we call this function from tabBarHeightModified and showNavToolbox
    */
   updateMouseTargetRect() {
-    if (!Tabmix.isVersion(400, 280)) {
-      return;
-    }
     if (!window.fullScreen || FullScreen._isChromeCollapsed) {
       return;
     }
@@ -732,9 +679,6 @@ var TMP_eventListener = {
       left: rect.left,
       right: rect.right
     };
-    if (TabmixSvc.isPaleMoon && Tabmix.isVersion({pm: 280}) && !Tabmix.isVersion({pm: 284})) {
-      MousePosTracker.addListener(FullScreen);
-    }
   },
 
   _updateMarginBottom: function TMP_EL__updateMarginBottom(aMargin) {
@@ -746,24 +690,8 @@ var TMP_eventListener = {
 
   _expandCallback: function TMP_EL__expandCallback() {
     if (TabmixTabbar.hideMode === 0 || TabmixTabbar.hideMode == 1 && gBrowser.tabs.length > 1) {
-      if (Tabmix.isVersion(400, 280)) {
-        if (TabmixSvc.isPaleMoon && Tabmix.isVersion({pm: 284})) {
-          FullScreen.showNavToolbox();
-        } else {
-          FullScreen.showNavToolbox(!TabmixSvc.isPaleMoon);
-        }
-      } else {
-        FullScreen.mouseoverToggle(true);
-      }
+      FullScreen.mouseoverToggle(true);
     }
-  },
-
-  get fullscreenAnimatePref() {
-    delete this.fullscreenAnimatePref;
-    const prefName = Tabmix.isVersion(550) ?
-      "toolkit.cosmeticAnimations.enabled" :
-      "browser.fullscreen.animate";
-    return (this.fullscreenAnimatePref = prefName);
   },
 
   // for tabs bellow content
@@ -783,8 +711,8 @@ var TMP_eventListener = {
           -(bottomToolbox.getBoundingClientRect().height +
           bottombox.getBoundingClientRect().height) + "px";
 
-      if (Tabmix.isVersion(400, 280) && aAnimate &&
-          Services.prefs.getBoolPref(this.fullscreenAnimatePref)) {
+      if (aAnimate &&
+          Services.prefs.getBoolPref("toolkit.cosmeticAnimations.enabled")) {
         // Hide the fullscreen toggler until the transition ends.
         let listener = function() {
           gNavToolbox.removeEventListener("transitionend", listener, true);
@@ -794,12 +722,7 @@ var TMP_eventListener = {
         gNavToolbox.addEventListener("transitionend", listener, true);
         fullScrToggler.hidden = true;
       }
-
-      // Until Firefox 41 changing the margin trigger resize event that calls
-      // updateTabbarBottomPosition
-      if (Tabmix.isVersion(410, 280)) {
-        gTMPprefObserver.updateTabbarBottomPosition();
-      }
+      gTMPprefObserver.updateTabbarBottomPosition();
     }
   },
 
@@ -840,7 +763,7 @@ var TMP_eventListener = {
         gBrowser._tabAttrModified(aTab, ["label"]);
       }
     }
-    // cache tab width, we use our own key since Pale Moon doesn't have permanentKey
+
     aTab.tabmixKey = {};
     this.tabWidthCache.set(aTab.tabmixKey, aTab.getBoundingClientRect().width);
 
@@ -954,8 +877,7 @@ var TMP_eventListener = {
     // workaround when we remove last visible tab
     if (tabBar.allTabs[0].pinned && TabmixTabbar.isMultiRow && Tabmix.tabsUtils.overflow &&
         aTab._tPos >= Tabmix.visibleTabs.last._tPos) {
-      const instantScroll = Tabmix.isVersion(570);
-      tabBar.arrowScrollbox.ensureElementIsVisible(gBrowser.selectedTab, instantScroll);
+      tabBar.arrowScrollbox.ensureElementIsVisible(gBrowser.selectedTab, true);
     }
 
     if (Tabmix.tabsUtils.disAllowNewtabbutton)
@@ -994,7 +916,7 @@ var TMP_eventListener = {
     // update this functions after new tab select
     tab.setAttribute("tabmix_selectedID", Tabmix._nextSelectedID++);
 
-    if (!Tabmix.isVersion(390) || !gMultiProcessBrowser) {
+    if (!gMultiProcessBrowser) {
       this.updateDisplay(tab);
     }
 
@@ -1055,20 +977,13 @@ var TMP_eventListener = {
       shouldMoveFocus = !shouldMoveFocus;
 
     let direction, isVertical;
-    if (Tabmix.isVersion(480, 280)) {
-      if (orient == "vertical") {
-        direction = aEvent.deltaY;
-      } else {
-        isVertical = Math.abs(aEvent.deltaY) > Math.abs(aEvent.deltaX);
-        let delta = isVertical ? aEvent.deltaY : aEvent.deltaX;
-        direction = isVertical && tabStrip._isRTLScrollbox ? -delta : delta;
-      }
+
+    if (orient == "vertical") {
+      direction = aEvent.deltaY;
     } else {
-      direction = aEvent.detail;
-      if (orient != "vertical") {
-        isVertical = aEvent.axis == aEvent.VERTICAL_AXIS;
-        direction = isVertical && tabStrip._isRTLScrollbox ? -direction : direction;
-      }
+      isVertical = Math.abs(aEvent.deltaY) > Math.abs(aEvent.deltaX);
+      let delta = isVertical ? aEvent.deltaY : aEvent.deltaX;
+      direction = isVertical && tabStrip._isRTLScrollbox ? -delta : delta;
     }
 
     if (Tabmix.prefs.getBoolPref("reversedScroll")) {
@@ -1083,59 +998,32 @@ var TMP_eventListener = {
         tabBar.advanceSelectedTab(direction, true);
       }
     } else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
-      if (TabmixSvc.isPaleMoon && Tabmix.isVersion(0, 280) && !TabmixTabbar.isMultiRow) {
-        return;
-      }
-      // this code is based on scrollbox.xml wheel/DOMMouseScroll event handler
-      let scrollByDelta = function(delta) {
-        let scrollByPixels = true;
+      // this code is based on arrowscrollbox.js on_wheel event handler
+      let scrollByDelta = function(delta, useInstant) {
         let instant;
         let scrollAmount = 0;
-        if (Tabmix.isVersion(530) && TabmixTabbar.isMultiRow) {
+        if (TabmixTabbar.isMultiRow) {
           delta = delta > 0 ? 1 : -1;
           scrollAmount = delta * tabStrip.lineScrollAmount;
-        } else if (Tabmix.isVersion(480) &&
-            aEvent.deltaMode == aEvent.DOM_DELTA_PIXEL) {
+        } else if (aEvent.deltaMode == aEvent.DOM_DELTA_PIXEL) {
           scrollAmount = delta;
           instant = true;
-        } else if (Tabmix.isVersion(490) &&
-            aEvent.deltaMode == aEvent.DOM_DELTA_PAGE) {
+        } else if (aEvent.deltaMode == aEvent.DOM_DELTA_PAGE) {
           scrollAmount = delta * tabStrip.scrollClientSize;
-        } else if (Tabmix.isVersion(530)) {
-          scrollAmount = delta * tabStrip.lineScrollAmount;
         } else {
-          // scroll the tabbar by one tab
-          if (orient == "horizontal" || TabmixTabbar.isMultiRow) {
-            delta = delta > 0 ? 1 : -1;
-          }
-          scrollByPixels = false;
-          tabStrip.scrollByIndex(delta);
+          scrollAmount = delta * tabStrip.lineScrollAmount;
         }
-
-        if (scrollByPixels) {
-          let useSmoothScroll = Tabmix.isVersion(530) && !Tabmix.isVersion(570) &&
-            aEvent.deltaMode != aEvent.DOM_DELTA_PIXEL && tabStrip.smoothScroll;
-          if (useSmoothScroll) {
-            tabStrip._smoothScrollByPixels(scrollAmount);
-          } else if (Tabmix.isVersion(570)) {
-            tabStrip.scrollByPixels(scrollAmount, instant);
-          } else {
-            tabStrip.scrollByPixels(scrollAmount);
-          }
-        }
+        tabStrip.scrollByPixels(scrollAmount, useInstant && instant);
       };
 
       aEvent.stopPropagation();
       aEvent.preventDefault();
 
       if (orient == "vertical") {
-        if (!Tabmix.isVersion(480, 280) && aEvent.axis == aEvent.HORIZONTAL_AXIS) {
-          return;
-        }
-        scrollByDelta(direction);
+        scrollByDelta(direction, false);
       } else {
         if (tabStrip._prevMouseScrolls.every(prev => prev == isVertical)) {
-          scrollByDelta(direction);
+          scrollByDelta(direction, true);
         }
 
         if (tabStrip._prevMouseScrolls.length > 1)
@@ -1182,7 +1070,7 @@ var TMP_eventListener = {
 
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, false);
 
-    gBrowser.tabContainer.removeEventListener(this._wheelEvent, this, true);
+    gBrowser.tabContainer.removeEventListener("wheel", this, true);
 
     if (TMP_TabView.installed)
       TMP_TabView._resetTabviewFrame();
@@ -1196,11 +1084,7 @@ var TMP_eventListener = {
 
     Tabmix.slideshow.cancel();
     Tabmix.navToolbox.deinit();
-
-    if (Tabmix.isVersion(320)) {
-      Tabmix.Utils.deinit(window);
-    }
-
+    Tabmix.Utils.deinit(window);
     Tabmix.tabsUtils.onUnload();
     Tabmix.bottomToolbarUtils.onUnload();
   },
@@ -1275,7 +1159,7 @@ Tabmix.initialization = {
   },
 
   run: function tabmix_initialization_run(aPhase) {
-    if (!this.isValidWindow || Tabmix.isVersion(600) && !window.gBrowser) {
+    if (!this.isValidWindow || !window.gBrowser) {
       return null;
     }
     let result, currentPhase = this[aPhase].id;

@@ -39,26 +39,14 @@ var gEventsPane = {
       focusTab[5].label = focusTab[5].getAttribute("rtlLabel");
     }
 
-    // bug 1210586 - Create a Synced tabs sidebar
-    if (Tabmix.isVersion(470)) {
-      const {label: syncedTabs} = browserWindow.document.getElementById("menu_tabsSidebar");
-      $("syncedTabs").label = syncedTabs;
-      $("selectSyncedTabs").label = syncedTabs;
-    } else {
-      $("syncedTabs").hidden = true;
-      $("selectSyncedTabs").hidden = true;
-    }
+    const {label: syncedTabs} = browserWindow.document.getElementById("menu_tabsSidebar");
+    $("syncedTabs").label = syncedTabs;
+    $("selectSyncedTabs").label = syncedTabs;
 
-    // Bug 1352069 - Introduce a pref that allows for disabling cosmetic animations
-    // remove the UI for the old 'browser.tabs.animate'
-    if (Tabmix.isVersion(550)) {
-      gPrefWindow.removeChild("pref_disableTabsAnimate");
-      gPrefWindow.removeChild("disableTabsAnimate");
-    }
+    gPrefWindow.removeChild("pref_disableTabsAnimate");
+    gPrefWindow.removeChild("disableTabsAnimate");
 
-    if (Tabmix.isVersion(600)) {
-      $("restoreOnDemand").setAttribute("type", "number");
-    }
+    $("restoreOnDemand").setAttribute("type", "number");
 
     this.alignTabOpeningBoxes();
 
@@ -186,9 +174,6 @@ var gEventsPane = {
       }
       const onDemand = $("restoreOnDemand");
       onDemand.min = item.valueNumber;
-      if (!Tabmix.isVersion(600)) {
-        onDemand._enableDisableButtons();
-      }
       const restoreOnDemand = $("pref_restoreOnDemand");
       if (prefValue > Math.abs(restoreOnDemand.value)) {
         restoreOnDemand.value = $("chk_restoreOnDemand").checked ? prefValue : -prefValue;

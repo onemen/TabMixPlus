@@ -10,7 +10,6 @@ Cu.import("resource://gre/modules/Services.jsm", this);
 XPCOMUtils.defineLazyModuleGetter(this, "AppConstants",
   "resource://gre/modules/AppConstants.jsm");
 
-// DocShellCapabilities exist since Firefox 27
 XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
   "resource:///modules/sessionstore/DocShellCapabilities.jsm");
 

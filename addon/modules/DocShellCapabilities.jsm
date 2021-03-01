@@ -15,7 +15,7 @@ XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
 
 this.DocShellCapabilities = {
   init() {
-    this.useFrameScript = TabmixSvc.version(320);
+    //
   },
 
   update(browser, data) {
@@ -29,11 +29,6 @@ this.DocShellCapabilities = {
 
   collect(tab) {
     let browser = tab.linkedBrowser;
-
-    if (!this.useFrameScript) {
-      return this.caps.filter(cap => !browser.docShell["allow" + cap]);
-    }
-
     let window = tab.ownerGlobal;
     if (window && window.__SSi) {
       let tabState = TabState.collect(tab);
@@ -47,16 +42,6 @@ this.DocShellCapabilities = {
     let browser = tab.linkedBrowser;
     if (reload && tab.getAttribute("pending") == "true")
       reload = false;
-
-    if (!this.useFrameScript) {
-      let browserDocShell = browser.docShell;
-      disallow = new Set(disallow);
-      for (let cap of this.caps)
-        browserDocShell["allow" + cap] = !disallow.has(cap);
-      if (reload)
-        browser.reload();
-      return;
-    }
 
     browser.messageManager.sendAsyncMessage("Tabmix:restorePermissions",
       {disallow: disallow.join(","), reload: reload || false});

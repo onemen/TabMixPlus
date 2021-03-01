@@ -146,7 +146,7 @@ var TMP_tabDNDObserver = {
   },
 
   get _isCustomizing() {
-    return Tabmix.isVersion(280) && gBrowser.tabContainer._isCustomizing;
+    return gBrowser.tabContainer._isCustomizing;
   },
 
   onDragStart(event, tabmixDragstart) {
@@ -179,11 +179,9 @@ var TMP_tabDNDObserver = {
     // Set the cursor to an arrow during tab drags.
     dt.mozCursor = "default";
 
-    if (Tabmix.isVersion(550)) {
-      // Set the tab as the source of the drag, which ensures we have a stable
-      // node to deliver the `dragend` event.  See bug 1345473.
-      dt.addElement(tab);
-    }
+    // Set the tab as the source of the drag, which ensures we have a stable
+    // node to deliver the `dragend` event.  See bug 1345473.
+    dt.addElement(tab);
 
     // Create a canvas to which we capture the current tab.
     // Until canvas is HiDPI-aware (bug 780362), we need to scale the desired
@@ -214,7 +212,7 @@ var TMP_tabDNDObserver = {
       let platform = AppConstants.platform;
       // On Windows and Mac we can update the drag image during a drag
       // using updateDragImage. On Linux, we can use a panel.
-      if (Tabmix.isVersion(530) && (platform == "win" || platform == "macosx")) {
+      if (platform == "win" || platform == "macosx") {
         captureListener = function() {
           dt.updateDragImage(canvas, dragImageOffsetX, dragImageOffsetY);
         };
@@ -242,8 +240,7 @@ var TMP_tabDNDObserver = {
     } else {
       // For the non e10s case we can just use PageThumbs
       // sync, so let's use the canvas for setDragImage.
-      let elm = Tabmix.isVersion(360, 280) ? browser : browser.contentWindow;
-      PageThumbs.captureToCanvas(elm, canvas);
+      PageThumbs.captureToCanvas(browser, canvas);
       dragImageOffsetX *= scale;
       dragImageOffsetY *= scale;
     }
@@ -289,7 +286,7 @@ var TMP_tabDNDObserver = {
     }
 
     var isCopy = this.isCopyDropEffect(dt, event, dragType);
-    var effects = this._getDropEffectForTabDrag(event);
+    var effects = gBrowser.tabContainer._getDropEffectForTabDrag(event);
 
     var replaceTab = (left_right == -1);
     /* we don't allow to drop link on lock tab.
@@ -304,11 +301,7 @@ var TMP_tabDNDObserver = {
         // Pass true to disallow dropping javascript: or data: urls
         let links;
         try {
-          if (Tabmix.isVersion(520, 280)) {
-            links = browserDragAndDrop.dropLinks(event, true);
-          } else {
-            links = [{url: browserDragAndDrop.drop(event, {}, true)}];
-          }
+          links = browserDragAndDrop.dropLinks(event, true);
           const url = links && links.length ? links[0].url : null;
           disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
         } catch (ex) {}
@@ -387,8 +380,7 @@ var TMP_tabDNDObserver = {
       if (_scroll) {
         let scrollIncrement = TabmixTabbar.isMultiRow ?
           Math.round(tabStrip._singleRowHeight / 6) : tabStrip.scrollIncrement;
-        const instantScroll = !Tabmix.isVersion(570);
-        tabStrip.scrollByPixels((ltr ? _scroll : -_scroll) * scrollIncrement, instantScroll);
+        tabStrip.scrollByPixels((ltr ? _scroll : -_scroll) * scrollIncrement, false);
         hideIndicator = true;
       }
     }
@@ -413,10 +405,6 @@ var TMP_tabDNDObserver = {
 
   // built-in drop method doesn't take into account different tab width
   drop(event) {
-    if (!Tabmix.isVersion(550)) {
-      return;
-    }
-
     var tabBar = gBrowser.tabContainer;
     var dt = event.dataTransfer;
     var dropEffect = dt.dropEffect;
@@ -551,25 +539,19 @@ var TMP_tabDNDObserver = {
       // it in the other window (making it seem to have moved between
       // windows)
       let params = {};
-      if (Tabmix.isVersion(470)) {
-        params = {eventDetail: {adoptedTab: draggedTab}};
-        if (draggedTab.hasAttribute("usercontextid")) {
-          // new tab must have the same usercontextid as the old one
-          params.userContextId = draggedTab.getAttribute("usercontextid");
-        }
+      params = {eventDetail: {adoptedTab: draggedTab}};
+      if (draggedTab.hasAttribute("usercontextid")) {
+        // new tab must have the same usercontextid as the old one
+        params.userContextId = draggedTab.getAttribute("usercontextid");
       }
       let newTab = gBrowser.addTrustedTab("about:blank", params);
       var newBrowser = gBrowser.getBrowserForTab(newTab);
-      if (Tabmix.isVersion(330)) {
-        let draggedBrowserURL = draggedTab.linkedBrowser.currentURI.spec;
-
-        // If we're an e10s browser window, an exception will be thrown
-        // if we attempt to drag a non-remote browser in, so we need to
-        // ensure that the remoteness of the newly created browser is
-        // appropriate for the URL of the tab being dragged in.
-        gBrowser.updateBrowserRemotenessByURL(newBrowser,
-          draggedBrowserURL);
-      }
+      let draggedBrowserURL = draggedTab.linkedBrowser.currentURI.spec;
+      // If we're an e10s browser window, an exception will be thrown
+      // if we attempt to drag a non-remote browser in, so we need to
+      // ensure that the remoteness of the newly created browser is
+      // appropriate for the URL of the tab being dragged in.
+      gBrowser.updateBrowserRemotenessByURL(newBrowser, draggedBrowserURL);
 
       // Stop the about:blank load
       newBrowser.stop();
@@ -591,11 +573,7 @@ var TMP_tabDNDObserver = {
       // Pass true to disallow dropping javascript: or data: urls
       let links;
       try {
-        if (Tabmix.isVersion(520, 280)) {
-          links = browserDragAndDrop.dropLinks(event, true);
-        } else {
-          links = [{url: browserDragAndDrop.drop(event, {}, true)}];
-        }
+        links = browserDragAndDrop.dropLinks(event, true);
       } catch (ex) {}
 
       if (!links || links.length === 0) {
@@ -615,44 +593,20 @@ var TMP_tabDNDObserver = {
         // allow to load in locked tab
         tab.linkedBrowser.tabmix_allowLoad = true;
       }
-      if (Tabmix.isVersion(520)) {
-        let urls = links.map(link => link.url);
-        let params = {
-          inBackground: bgLoad,
-          replace: replaceCurrentTab,
-          allowThirdPartyFixup: true,
-          targetTab: tab,
-          newIndex: newIndex + left_right,
-          userContextId: gBrowser.tabContainer.selectedItem.getAttribute("usercontextid"),
-        };
-        if (Tabmix.isVersion(550)) {
-          params.triggeringPrincipal = dt.mozSourceNode ?
-            dt.mozSourceNode.nodePrincipal : Services.scriptSecurityManager.getSystemPrincipal();
-        }
-        gBrowser.loadTabs(urls, params);
-      } else if (!replaceCurrentTab) {
-        // We're adding a new tab.
-        let newTab = gBrowser.loadOneTab(url, {
-          inBackground: bgLoad,
-          allowThirdPartyFixup: true,
-          userContextId: gBrowser.tabContainer.selectedItem.getAttribute("usercontextid")
-        });
-        gBrowser.moveTabTo(newTab, newIndex + left_right);
-      } else {
-        // Load in an existing tab.
-        try {
-          let browser = tab.linkedBrowser;
-          let webNav = Ci.nsIWebNavigation;
-          let flags = webNav.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP |
-                      webNav.LOAD_FLAGS_FIXUP_SCHEME_TYPOS;
-          browser.loadURI(url, {flags});
-          if (!bgLoad)
-            gBrowser.tabContainer.selectedItem = tab;
-        } catch (ex) {
-          // Just ignore invalid urls
-          Tabmix.log("load\n" + ex);
-        }
-      }
+
+      let urls = links.map(link => link.url);
+      let params = {
+        inBackground: bgLoad,
+        replace: replaceCurrentTab,
+        allowThirdPartyFixup: true,
+        targetTab: tab,
+        newIndex: newIndex + left_right,
+        userContextId: gBrowser.tabContainer.selectedItem.getAttribute("usercontextid"),
+        triggeringPrincipal: dt.mozSourceNode ?
+          dt.mozSourceNode.nodePrincipal : Services.scriptSecurityManager.getSystemPrincipal()
+      };
+
+      gBrowser.loadTabs(urls, params);
     }
     if (draggedTab) {
       delete draggedTab._dragData;
@@ -939,7 +893,7 @@ var TMP_tabDNDObserver = {
       newMarginY = tabRect.bottom - ind.parentNode.getBoundingClientRect().bottom;
     } else {
       newMarginY = tabRect.bottom - rect.bottom;
-      // fix for PaleMoon on Mac OS X
+      // fix for some theme on Mac OS X
       if (TabmixTabbar.visibleRows > 1 &&
             ind.parentNode.getBoundingClientRect().height === 0) {
         newMarginY += tabRect.height;
@@ -977,17 +931,6 @@ var TMP_tabDNDObserver = {
 
   setDragmarkAttribute(tab, markSide) {
     tab.setAttribute("dragmark", markSide);
-  },
-
-  /*
-   *  helper functions
-   */
-  _getDropEffectForTabDrag(event) {
-    let tabBar = gBrowser.tabContainer;
-    if (Tabmix.isVersion(440)) {
-      return tabBar._getDropEffectForTabDrag(event);
-    }
-    return tabBar._setEffectAllowedForDataTransfer(event);
   },
 
   getSourceNode: function TMP_getSourceNode(aDataTransfer) {
@@ -1214,9 +1157,6 @@ Tabmix.navToolbox = {
     gNavToolbox.addEventListener("beforecustomization", this);
     gNavToolbox.addEventListener("aftercustomization", this);
 
-    if (!Tabmix.isVersion(290))
-      return;
-
     this.listener = {
       onWidgetAfterDOMChange: function(aNode, aNextNode, aContainer, aWasRemoval) {
         if (this.customizeStarted)
@@ -1240,25 +1180,17 @@ Tabmix.navToolbox = {
     gNavToolbox.removeEventListener("beforecustomization", this);
     gNavToolbox.removeEventListener("aftercustomization", this);
 
-    // fix bug 1034394 - tab mix plus's tabmixScrollBox is not cleaned up after
-    // uninstalling tab mix plus
-    if (!Tabmix.isVersion(290)) {
-      this.cleanCurrentset();
-      return;
+    // remove tabmix-tabs-closebutton when its position is immediately after
+    // tabmixScrollBox and save its position in preference for future use.
+    let boxPosition = Tabmix.getPlacement("tabmixScrollBox");
+    let buttonPosition = Tabmix.getPlacement("tabmix-tabs-closebutton");
+    if (buttonPosition == boxPosition + 1) {
+      Tabmix.prefs.setIntPref("tabs-closeButton-position", buttonPosition);
+      CustomizableUI.removeWidgetFromArea("tabmix-tabs-closebutton");
     }
-    if (Tabmix.isVersion(310)) {
-      // remove tabmix-tabs-closebutton when its position is immediately after
-      // tabmixScrollBox and save its position in preference for future use.
-      let boxPosition = Tabmix.getPlacement("tabmixScrollBox");
-      let buttonPosition = Tabmix.getPlacement("tabmix-tabs-closebutton");
-      if (buttonPosition == boxPosition + 1) {
-        Tabmix.prefs.setIntPref("tabs-closeButton-position", buttonPosition);
-        CustomizableUI.removeWidgetFromArea("tabmix-tabs-closebutton");
-      }
-    }
+
     CustomizableUI.removeWidgetFromArea("tabmixScrollBox");
-    if (Tabmix.isVersion(290))
-      CustomizableUI.removeListener(this.listener);
+    CustomizableUI.removeListener(this.listener);
 
     let alltabsPopup = document.getElementById("allTabsMenu-allTabsView");
     if (alltabsPopup && alltabsPopup._tabmix_inited) {
@@ -1342,14 +1274,10 @@ Tabmix.navToolbox = {
     if (blur.indexOf("Tabmix.urlBarOnBlur") == -1)
       Tabmix.setItem(gURLBar, "onblur", blur + "Tabmix.urlBarOnBlur();");
 
-    if (Tabmix.isVersion(500)) {
-      if (!this.urlBarInitialized) {
-        Tabmix.originalFunctions.gURLBar_handleCommand = gURLBar.handleCommand;
-        gURLBar.handleCommand = this.handleCommand.bind(gURLBar);
-        this.urlBarInitialized = true;
-      }
-    } else {
-      this.handleCommand_beforeV50();
+    if (!this.urlBarInitialized) {
+      Tabmix.originalFunctions.gURLBar_handleCommand = gURLBar.handleCommand;
+      gURLBar.handleCommand = this.handleCommand.bind(gURLBar);
+      this.urlBarInitialized = true;
     }
   },
 
@@ -1514,22 +1442,12 @@ Tabmix.navToolbox = {
       return;
 
     let obj, fn, $LF;
-    // https://addons.palemoon.org/extensions/search-tools/searchload-options-revived/
-    // searchLoadExt will be null when searchload-options extension is restartless
-    let searchLoadExt = (est => {
-      return est && typeof est.searchLoad_Options == "object" &&
-        est.searchLoad_Options;
-    })(window.esteban_torres || window);
-
-    let _handleSearchCommand = searchLoadExt ? searchLoadExt.MOZhandleSearch.toString() :
-      searchbar.handleSearchCommand.toString();
+    let _handleSearchCommand = searchbar.handleSearchCommand.toString();
     // we check browser.search.openintab also for search button click
     if (_handleSearchCommand.indexOf("whereToOpenLink") > -1 &&
           _handleSearchCommand.indexOf("forceNewTab") == -1) {
-      [obj, fn] = searchLoadExt ? [searchLoadExt, "MOZhandleSearch"] :
-        [searchbar, "handleSearchCommand"];
       $LF = '\n            ';
-      Tabmix.changeCode(obj, "searchbar." + fn)._replace(
+      Tabmix.changeCode(searchbar, "searchbar.handleSearchCommand")._replace(
         'where = whereToOpenLink(aEvent, false, true);',
         '$&' + $LF +
         'let forceNewTab = where == "current" && Services.prefs.getBoolPref("browser.search.openintab");' + $LF +
@@ -1540,8 +1458,7 @@ Tabmix.navToolbox = {
     }
 
     let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
-    [obj, fn] = searchLoadExt ? [searchLoadExt, "MOZdoSearch"] :
-      [organizeSE ? window.organizeSE : searchbar, "doSearch"];
+    [obj, fn] = [organizeSE ? window.organizeSE : searchbar, "doSearch"];
     if ("__treestyletab__original_doSearch" in searchbar)
       [obj, fn] = [searchbar, "__treestyletab__original_doSearch"];
     let fnString = obj[fn].toString();
@@ -1557,26 +1474,9 @@ Tabmix.navToolbox = {
       'aWhere = Tabmix.navToolbox.whereToOpenSearch(aWhere);' + $LF +
       '$&'
     )._replace(
-      /openUILinkIn\(.*\);/,
-      'let params = {' + $LF +
-      '  postData: submission.postData,' + $LF +
-      '  inBackground: Tabmix.prefs.getBoolPref("loadSearchInBackground")' + $LF +
-      '};' + $LF +
-      'openUILinkIn(submission.uri.spec, aWhere, params);',
-      {check: !Tabmix.isVersion(350)}
-    )._replace(
-      'inBackground: aWhere == "tab-background"',
-      '$& ||' + $LF +
-      '                Tabmix.prefs.getBoolPref("loadSearchInBackground")',
-      {check: Tabmix.isVersion(350) && !Tabmix.isVersion(510)}
-    )._replace(
-      'var loadInBackground = prefs.getBoolPref("loadBookmarksInBackground");',
-      'var loadInBackground = aWhere == "tab-background" || Tabmix.prefs.getBoolPref("loadSearchInBackground");',
-      {check: !searchLoadExt && organizeSE && !Tabmix.isVersion(510)}
-    )._replace(
       'openUILinkIn',
       'params.inBackground = params.inBackground || Tabmix.prefs.getBoolPref("loadSearchInBackground");' + $LF +
-      '$&', {check: Tabmix.isVersion(510)}
+      '$&'
     )._replace(
       /searchbar\.currentEngine/g,
       'this.currentEngine', {check: pIte}
@@ -1636,16 +1536,6 @@ Tabmix.navToolbox = {
     if (!reset && box == gBrowser.tabContainer.nextSibling)
       return;
 
-    // Make sure our scroll buttons box is after tabbrowser-tabs
-    if (!Tabmix.isVersion(290)) {
-      let next = gBrowser.tabContainer.nextSibling;
-      next.parentNode.insertBefore(box, next);
-      if (!onlyPosition) {
-        let useTabmixButtons = TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
-        Tabmix.tabsUtils.updateScrollButtons(useTabmixButtons);
-      }
-      return;
-    }
     let tabsPosition = Tabmix.getPlacement("tabbrowser-tabs");
     CustomizableUI.moveWidgetWithinArea("tabmixScrollBox", tabsPosition + 1);
 
@@ -1660,8 +1550,6 @@ Tabmix.navToolbox = {
     if (this._closeButtonInitialized)
       return;
 
-    if (!Tabmix.isVersion(310))
-      return;
     // if tabmix-tabs-closebutton was positioned immediately after
     // tabmixScrollBox we removed the button on exit, to avoid bug 1034394.
     let pref = "tabs-closeButton-position";

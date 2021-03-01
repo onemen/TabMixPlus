@@ -228,8 +228,7 @@ var TMP_Places = {
     let relatedToCurrent = !doReplace && openTabNext && gBrowser._selectedTab._tPos < openTabs.length - 1;
     if (relatedToCurrent) {
       // open bookmarks after last related tab if exist
-      let lastRelatedTab = Tabmix.isVersion({ff: 570, wf: "56.2.8"}) ?
-        gBrowser._lastRelatedTabMap.get(gBrowser.selectedTab) : gBrowser._lastRelatedTab;
+      let lastRelatedTab = gBrowser._lastRelatedTabMap.get(gBrowser.selectedTab);
       prevTab = lastRelatedTab || gBrowser.selectedTab;
     } else {
       prevTab = Tabmix.visibleTabs.last;
@@ -343,9 +342,7 @@ var TMP_Places = {
   restoreTabs(tabs, tabsData, restoreOnDemand) {
     this.restoringTabs.push(...tabs);
     this.bookmarksOnDemand = restoreOnDemand;
-    let fnName = Tabmix.isVersion(280) ? "restoreTabs" :
-      "restoreHistoryPrecursor";
-    TabmixSvc.SessionStore[fnName](window, tabs, tabsData, 0);
+    TabmixSvc.SessionStore.restoreTabs(window, tabs, tabsData, 0);
     // set icon on pending tabs
     const pendingData = tabs.map(tab => ({tab, url: tabsData.shift().entries[0].url}))
         .filter(({tab, url}) => tab.hasAttribute("pending") && url != "about:blank");
@@ -752,24 +749,9 @@ Tabmix.onContentLoaded = {
     if ("_update" in TabsInTitlebar) {
       // set option to Prevent double click on Tab-bar from changing window size.
       Tabmix.changeCode(TabsInTitlebar, "TabsInTitlebar._update")._replace(
-        'function $(id)',
-        'let $ = $&', {check: Tabmix._debugMode && !Tabmix.isVersion(440)}
-      )._replace(
-        'this._dragBindingAlive',
-        '$& && Tabmix.prefs.getBoolPref("tabbar.click_dragwindow")',
-        {check: !Tabmix.isVersion(470)}
-      )._replace(
-        'function rect(ele)',
-        'let rect = function _rect(ele)', // for strict mode
-        {check: !Tabmix.isVersion(440)}
-      )._replace(
-        'function verticalMargins(',
-        'let verticalMargins = $&',
-        {check: Tabmix._debugMode && Tabmix.isVersion(280) && !Tabmix.isVersion(440)}
-      )._replace(
         'let tabAndMenuHeight = fullTabsHeight + fullMenuHeight;',
         'fullTabsHeight = fullTabsHeight / TabmixTabbar.visibleRows;\n      $&',
-        {check: TabmixSvc.isMac && Tabmix.isVersion(280)}
+        {check: TabmixSvc.isMac}
       )._replace(
         /(})(\)?)$/,
         // when we get in and out of tabsintitlebar mode call updateScrollStatus
@@ -886,8 +868,6 @@ Tabmix.onContentLoaded = {
 
 };
 
-// Pale moon 28.5.0a1 removed window.getBoolPref
-// https://github.com/MoonchildProductions/UXP/pull/1023
 Tabmix.getBoolPref = function(prefname, def) {
   try {
     return Services.prefs.getBoolPref(prefname);
