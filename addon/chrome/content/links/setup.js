@@ -108,46 +108,10 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       Tabmix.prepareLoadOnStartup = function() { };
     }
 
-    Tabmix.originalFunctions.gBrowserInit__delayedStartup = gBrowserInit._delayedStartup;
-    gBrowserInit._delayedStartup = function() {
-      try {
-        Tabmix.beforeDelayedStartup();
-      } catch (ex) {
-        Tabmix.assert(ex);
-      }
-
-      let result;
-      if (!gBrowserInit.delayedStartupFinished) {
-        try {
-          // we use runningDelayedStartup in gBrowser.swapBrowsersAndCloseOther
-          Tabmix.runningDelayedStartup = true;
-          result = Tabmix.originalFunctions.gBrowserInit__delayedStartup.apply(this, arguments);
-        } catch (ex) {
-          Tabmix.assert(ex);
-        } finally {
-          Tabmix.runningDelayedStartup = false;
-        }
-      }
-
-      if (Tabmix._callPrepareLoadOnStartup) {
-        gBrowserInit._uriToLoadPromise
-            .then(uriToLoad => Tabmix.prepareLoadOnStartup(uriToLoad))
-            .then(() => TabmixSessionManager.init());
-      } else {
-        Tabmix.prepareLoadOnStartup();
-        TabmixSessionManager.init();
-      }
-      Tabmix.initialization.run("afterDelayedStartup");
-
-      return result;
-    };
-    if (gBrowserInit.delayedStartupFinished) {
-      gBrowserInit._delayedStartup();
+    if (gBrowserInit.tabmix_delayedStartupStarted) {
+      Tabmix.beforeDelayedStartup();
     } else {
-      // replace _boundDelayedStartup with updated _delayedStartup version
-      gBrowserInit._cancelDelayedStartup();
-      gBrowserInit._boundDelayedStartup = gBrowserInit._delayedStartup.bind(gBrowserInit);
-      window.addEventListener("MozAfterPaint", gBrowserInit._boundDelayedStartup);
+      window.addEventListener("MozAfterPaint", Tabmix.beforeDelayedStartup);
     }
 
     // look for installed extensions that are incompatible with tabmix

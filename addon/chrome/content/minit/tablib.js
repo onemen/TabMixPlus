@@ -1592,7 +1592,7 @@ Tabmix.tablib = {
         return;
       }
 
-      if (Tabmix.runningDelayedStartup) {
+      if (gBrowserInit.tabmix_delayedStartupStarted && !gBrowserInit.delayedStartupFinished) {
         // we probably will never get here in single window mode
         if (Tabmix.singleWindowMode) {
           return;

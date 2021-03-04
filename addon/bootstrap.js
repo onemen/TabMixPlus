@@ -123,6 +123,11 @@ function startup(data, reason) {
     const documentObserver = {
       observe(document) {
         if (document.createXULElement) {
+          if (document.documentElement.getAttribute("windowtype") === "navigator:browser") {
+            document.defaultView.addEventListener("MozAfterPaint", () => {
+              document.defaultView.gBrowserInit.tabmix_delayedStartupStarted = true;
+            }, {once: true});
+          }
           Overlays.load(chromeManifest, document.defaultView);
         }
       }

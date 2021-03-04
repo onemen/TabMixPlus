@@ -153,6 +153,15 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
 };
 
 Tabmix.afterDelayedStartup = function() {
+  if (this._callPrepareLoadOnStartup) {
+    gBrowserInit._uriToLoadPromise
+        .then(uriToLoad => this.prepareLoadOnStartup(uriToLoad))
+        .then(() => TabmixSessionManager.init());
+  } else {
+    this.prepareLoadOnStartup();
+    TabmixSessionManager.init();
+  }
+
   // focus address-bar area if the selected tab is blank when Firefox starts
   // focus content area if the selected tab is not blank when Firefox starts
   setTimeout(() => {
@@ -236,6 +245,9 @@ var TMP_eventListener = {
   init: function TMP_EL_init() {
     window.addEventListener("load", this);
     window.addEventListener("SSWindowRestored", this);
+    window.delayedStartupPromise.then(() => {
+      Tabmix.initialization.run("afterDelayedStartup");
+    });
   },
 
   handleEvent: function TMP_EL_handleEvent(aEvent) {
