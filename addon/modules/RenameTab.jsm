@@ -6,6 +6,8 @@ const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
+Cu.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
+Cu.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
   "chrome://tabmix-resource/content/Places.jsm");
@@ -60,13 +62,14 @@ this.RenameTab = {
       return;
     }
 
-    popup = this.panel = this.window.document.createElement("panel");
+    popup = this.panel = this.window.document.createXULElement("panel");
     popup._overlayLoaded = false;
     popup.id = "tabmixRenametab_panel";
+    popup.hidden = true; // prevent panel initialize. initialize before overlay break it.
     this._element("mainPopupSet").appendChild(popup);
-    this.window.document.loadOverlay(
-      "chrome://tabmixplus/content/overlay/renameTab.xul", this
-    );
+    const ov = new Overlays(new ChromeManifest(), this.window);
+    ov.load("chrome://tabmixplus/content/overlay/renameTab.xhtml");
+    this.observe(null,"xul-overlay-merged");
   },
 
   observe(aSubject, aTopic) {
@@ -129,12 +132,12 @@ this.RenameTab = {
     var tab = data.tab;
     var label = data.value;
     var resetDefault = aReset || (label == data.docTitle && !data.permanently);
-    var url = resetDefault ? null : data.permanently ? "*" : data.url;
+    var url = resetDefault ? '' : data.permanently ? "*" : data.url;
 
     var win = this.window;
-    win.Tabmix.setItem(tab, "fixed-label", resetDefault ? null : label);
+    win.Tabmix.setItem(tab, "fixed-label", resetDefault ? '' : label);
     win.Tabmix.setItem(tab, "label-uri", url);
-    TabmixSvc.ss.setCustomTabValue(tab, "fixed-label", resetDefault ? null : label);
+    TabmixSvc.ss.setCustomTabValue(tab, "fixed-label", resetDefault ? '' : label);
     TabmixSvc.ss.setCustomTabValue(tab, "label-uri", url);
     win.TabmixSessionManager.updateTabProp(tab);
 
