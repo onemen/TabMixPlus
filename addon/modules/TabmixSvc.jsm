@@ -227,6 +227,9 @@ this.TabmixSvc = {
         return;
       this._initialized = true;
 
+      TabmixSvc.sortByRecentlyUsed = isVersion(890) ?
+        "browser.ctrlTab.sortByRecentlyUsed" : "browser.ctrlTab.recentlyUsedOrder";
+
       try {
         // replace old Settings.
         // we must call this before any other tabmix function

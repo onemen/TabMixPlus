@@ -46,6 +46,18 @@ var gEventsPane = {
     gPrefWindow.removeChild("pref_disableTabsAnimate");
     gPrefWindow.removeChild("disableTabsAnimate");
 
+    if (!Tabmix.isVersion(890)) {
+      gPrefWindow.removeChild("pref_ctrltab");
+      const preferences = document.getElementById("paneEvents").querySelector("preferences");
+      const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
+      const preference = document.createElementNS(NS_XUL, "preference");
+      preference.id = "pref_ctrltab";
+      preference.setAttribute("name", "browser.ctrlTab.recentlyUsedOrder");
+      preference.setAttribute("type", "bool");
+      preference.setAttribute("onchange", "gEventsPane.disableShowTabList();");
+      preferences.appendChild(preference);
+    }
+
     $("restoreOnDemand").setAttribute("type", "number");
 
     this.alignTabOpeningBoxes();

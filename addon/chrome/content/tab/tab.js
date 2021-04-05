@@ -1182,7 +1182,7 @@ gTMPprefObserver = {
     "browser.link.open_newwindow.override.external",
     "browser.link.open_newwindow.restriction",
     "browser.link.open_newwindow",
-    "browser.ctrlTab.recentlyUsedOrder"],
+    TabmixSvc.sortByRecentlyUsed],
 
   // removes the observer-object from service -- called when the window is no longer open
   removeObservers() {
@@ -1466,7 +1466,7 @@ gTMPprefObserver = {
       case "extensions.tabmix.newTabButton.position":
         this.changeNewTabButtonSide(Services.prefs.getIntPref(prefName));
         break;
-      case "browser.ctrlTab.recentlyUsedOrder":
+      case TabmixSvc.sortByRecentlyUsed:
       case "extensions.tabmix.lasttab.tabPreviews":
       case "extensions.tabmix.lasttab.respondToMouseInTabList":
       case "extensions.tabmix.lasttab.showTabList":
@@ -2192,18 +2192,6 @@ gTMPprefObserver = {
       Services.prefs.setBoolPref("browser.tabs.closeWindowWithLastTab", !Tabmix.prefs.getBoolPref("keepWindow"));
       Tabmix.prefs.clearUserPref("keepWindow");
     }
-    // 2008-09-23
-    if (Services.prefs.prefHasUserValue("browser.ctrlTab.mostRecentlyUsed")) {
-      Services.prefs.setBoolPref("browser.ctrlTab.recentlyUsedOrder",
-        Services.prefs.getBoolPref("browser.ctrlTab.mostRecentlyUsed"));
-      Services.prefs.clearUserPref("browser.ctrlTab.mostRecentlyUsed");
-    }
-    // 2008-09-28
-    if (Tabmix.prefs.prefHasUserValue("lasttab.handleCtrlTab")) {
-      Services.prefs.setBoolPref("browser.ctrlTab.recentlyUsedOrder",
-        Tabmix.prefs.getBoolPref("lasttab.handleCtrlTab"));
-      Tabmix.prefs.clearUserPref("lasttab.handleCtrlTab");
-    }
     // 2008-11-29
     if (Tabmix.prefs.prefHasUserValue("maxWidth")) {
       let val = getPrefByType("extensions.tabmix.maxWidth", 250, "IntPref");
@@ -2400,17 +2388,41 @@ gTMPprefObserver = {
     }
     // 2011-01-22 - verify sessionstore enabled
     Services.prefs.clearUserPref("browser.sessionstore.enabled");
-    // 2021-01-16
-    if (Services.prefs.prefHasUserValue("browser.ctrlTab.previews")) {
-      Services.prefs.setBoolPref("browser.ctrlTab.recentlyUsedOrder",
-        Services.prefs.getBoolPref("browser.ctrlTab.previews"));
-      Services.prefs.clearUserPref("browser.ctrlTab.previews");
-    }
     // 2021-01-22
     if (Services.prefs.prefHasUserValue("extensions.tabmix.hideAllTabsButton")) {
       Services.prefs.setBoolPref("browser.tabs.tabmanager.enabled",
         Services.prefs.getBoolPref("extensions.tabmix.hideAllTabsButton"));
       Services.prefs.clearUserPref("extensions.tabmix.hideAllTabsButton");
+    }
+    // 2021-04-05
+    // Bug 1692303 - Migrate old ctrlTab pref to new ctrlTab pref
+    function migrateCtrlTab(oldPrefName) {
+      if (Services.prefs.prefHasUserValue(oldPrefName)) {
+        let newPrefValue = Services.prefs.getBoolPref(oldPrefName);
+        if (Tabmix.isVersion(890)) {
+          if (Services.prefs.getBoolPref("browser.engagement.ctrlTab.has-used")) {
+            Services.prefs.setBoolPref(
+              "browser.ctrlTab.sortByRecentlyUsed",
+              newPrefValue
+            );
+          } else {
+            Services.prefs.setBoolPref(
+              "browser.ctrlTab.sortByRecentlyUsed",
+              false
+            );
+          }
+        } else {
+          Services.prefs.setBoolPref("browser.ctrlTab.recentlyUsedOrder",
+            newPrefValue);
+        }
+        Services.prefs.clearUserPref(oldPrefName);
+      }
+    }
+    migrateCtrlTab("browser.ctrlTab.mostRecentlyUsed");
+    migrateCtrlTab("extensions.tabmix.lasttab.handleCtrlTab");
+    migrateCtrlTab("browser.ctrlTab.previews");
+    if (Tabmix.isVersion(890)) {
+      migrateCtrlTab("browser.ctrlTab.recentlyUsedOrder");
     }
 
     let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {
