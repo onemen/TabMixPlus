@@ -1807,6 +1807,11 @@ gTMPprefObserver = {
         newRule.style.setProperty("padding-bottom", (padding + 1) + "px", "important");
       }, true);
     }
+
+    // tabmix-tabs-closebutton toolbarbutton
+    if (!Tabmix.isVersion(880)) {
+      document.getElementById("tabmix-tabs-closebutton").setAttribute("tabmix-fill-opacity", true);
+    }
   },
 
   updateStyleAttributes() {

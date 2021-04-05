@@ -12,7 +12,7 @@
 }
 
 /* :::: for tabs close button on TabsToolbar :::: */
-#tabmix-tabs-closebutton {
+#tabmix-tabs-closebutton[tabmix-fill-opacity] {
   -moz-appearance: none;
   fill-opacity: 0;
   opacity: 0.8
