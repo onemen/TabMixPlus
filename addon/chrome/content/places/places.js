@@ -409,14 +409,14 @@ var TMP_Places = {
     }
     return this.asyncGetTabTitle(tab, url).then(newTitle => {
       // only call setTabTitle if we found one to avoid loop
-      if (newTitle && newTitle != tab.label) {
+      if (!newTitle) return false;
+      if (newTitle != tab.label) {
         this.setTabTitle(tab, url, newTitle);
         if (initial) {
           tab._labelIsInitialTitle = true;
         }
-        return true;
       }
-      return false;
+      return true;
     });
   },
 
