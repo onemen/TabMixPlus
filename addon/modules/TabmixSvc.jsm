@@ -312,6 +312,14 @@ this.TabmixSvc = {
     observersWereNotified: false,
   },
 
+  setCustomTabValue(tab, key, value) {
+    if (value === null || value === undefined) {
+      this.ss.deleteCustomTabValue(tab, key);
+    } else {
+      this.ss.setCustomTabValue(tab, key, value);
+    }
+  },
+
   isAustralisBgStyle(orient) {
     if (typeof orient != "string") {
       throw Components.Exception("orient is not valid", Components.results.NS_ERROR_INVALID_ARG);

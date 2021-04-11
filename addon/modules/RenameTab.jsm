@@ -134,8 +134,8 @@ this.RenameTab = {
     var win = this.window;
     win.Tabmix.setItem(tab, "fixed-label", resetDefault ? null : label);
     win.Tabmix.setItem(tab, "label-uri", url);
-    TabmixSvc.ss.setCustomTabValue(tab, "fixed-label", resetDefault ? null : label);
-    TabmixSvc.ss.setCustomTabValue(tab, "label-uri", url);
+    TabmixSvc.setCustomTabValue(tab, "fixed-label", resetDefault ? null : label);
+    TabmixSvc.setCustomTabValue(tab, "label-uri", url);
     win.TabmixSessionManager.updateTabProp(tab);
 
     if (tab.label != label)

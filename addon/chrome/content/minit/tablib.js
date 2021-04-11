@@ -1217,7 +1217,7 @@ Tabmix.tablib = {
         aTab.setAttribute("_locked", "true");
       }
       aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
-      SessionStore.setCustomTabValue(aTab, "_locked", aTab.getAttribute("_locked"));
+      TabmixSvc.setCustomTabValue(aTab, "_locked", aTab.getAttribute("_locked"));
       TabmixSessionManager.updateTabProp(aTab);
     };
 
@@ -1228,7 +1228,7 @@ Tabmix.tablib = {
         aTab.removeAttribute("protected");
       else
         aTab.setAttribute("protected", "true");
-      SessionStore.setCustomTabValue(aTab, "protected", aTab.hasAttribute("protected"));
+      TabmixSvc.setCustomTabValue(aTab, "protected", aTab.hasAttribute("protected"));
       TabmixSessionManager.updateTabProp(aTab);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();
@@ -1251,8 +1251,8 @@ Tabmix.tablib = {
       // don't keep this flag after user change lock state manually
       aTab.removeAttribute("_lockedAppTabs");
       aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
-      SessionStore.setCustomTabValue(aTab, "_locked", aTab.getAttribute("_locked"));
-      SessionStore.setCustomTabValue(aTab, "protected", aTab.getAttribute("protected"));
+      TabmixSvc.setCustomTabValue(aTab, "_locked", aTab.getAttribute("_locked"));
+      TabmixSvc.setCustomTabValue(aTab, "protected", aTab.getAttribute("protected"));
       TabmixSessionManager.updateTabProp(aTab);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();
