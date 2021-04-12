@@ -132,12 +132,12 @@ this.RenameTab = {
     var tab = data.tab;
     var label = data.value;
     var resetDefault = aReset || (label == data.docTitle && !data.permanently);
-    var url = resetDefault ? '' : data.permanently ? "*" : data.url;
+    var url = resetDefault ? null : data.permanently ? "*" : data.url;
 
     var win = this.window;
-    win.Tabmix.setItem(tab, "fixed-label", resetDefault ? '' : label);
+    win.Tabmix.setItem(tab, "fixed-label", resetDefault ? null : label);
     win.Tabmix.setItem(tab, "label-uri", url);
-    TabmixSvc.ss.setCustomTabValue(tab, "fixed-label", resetDefault ? '' : label);
+    TabmixSvc.ss.setCustomTabValue(tab, "fixed-label", resetDefault ? null : label);
     TabmixSvc.ss.setCustomTabValue(tab, "label-uri", url);
     win.TabmixSessionManager.updateTabProp(tab);
 
