@@ -203,8 +203,6 @@ Tabmix.multiRow = {
         this._scrollButtonUpLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
         this._scrollButtonDownLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
         Services.prefs.addObserver("toolkit.scrollbox.", this.tabmixPrefObserver, false);
-
-        this.original_canScrollToElement = this._canScrollToElement;
       }
 
       disconnectTabmix() {
@@ -237,13 +235,6 @@ Tabmix.multiRow = {
         return this.isMultiRow || this.getAttribute("orient") === "vertical" ?
           this.scrollbox.scrollTop :
           this.scrollbox.scrollLeft;
-      }
-
-      _canScrollToElement(tab) {
-        if (tab.hidden) {
-          return false;
-        }
-        return this.original_canScrollToElement(tab);
       }
 
       get singleRowHeight() {

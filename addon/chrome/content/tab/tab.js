@@ -763,7 +763,7 @@ Tabmix.tabsUtils = {
       let sameRow = TabmixTabbar.inSameRow(lastTab, Tabmix.tabsNewtabButton);
       if (sameRow) {
         let tabstripEnd = this.tabBar.arrowScrollbox.scrollbox.screenX +
-            this.tabBar.arrowScrollbox.scrollbox.width;
+            this.tabBar.arrowScrollbox.scrollbox.getBoundingClientRect().width;
 
         const {width} = Tabmix.tabsNewtabButton.getBoundingClientRect();
         let buttonEnd = Tabmix.tabsNewtabButton.screenX + width;
@@ -801,7 +801,7 @@ Tabmix.tabsUtils = {
       return width;
     };
     let tsbo = this.tabBar.arrowScrollbox.scrollbox;
-    let tsboEnd = tsbo.screenX + tsbo.width + newTabButtonWidth(true);
+    let tsboEnd = tsbo.screenX + tsbo.getBoundingClientRect().width + newTabButtonWidth(true);
     if (TabmixTabbar.inSameRow(lastTab, previousTab)) {
       let buttonEnd = lastTab.screenX + getWidth(lastTab) +
           newTabButtonWidth();
@@ -880,7 +880,7 @@ Tabmix.tabsUtils = {
 
   get topTabY() {
     return this.scrollClientRect.top +
-      Tabmix.getStyle(this.tabBar.arrowScrollbox.scrollbox, "paddingTop");
+      Tabmix.getStyle(this.tabBar.arrowScrollbox.scrollbox, "paddingTop") - this.tabBar.arrowScrollbox.scrollPosition;
   },
 
   get lastTabRowNumber() {
@@ -1428,6 +1428,7 @@ gTMPprefObserver = {
           Tabmix.prefs.setIntPref("tabBarMaxRow", 2);
           return;
         }
+        this.dynamicRules["max-rows"].style.setProperty('--tabs-lines', row);
         // maxRow changed
         if (TabmixTabbar.isMultiRow) {
           let isVisible = Tabmix.tabsUtils.isElementVisible(gBrowser._selectedTab);
@@ -1737,6 +1738,8 @@ gTMPprefObserver = {
                       `#tabbrowser-arrowscrollbox > .tabbrowser-tab[tabmix-firstTabInRow="true"]{margin-inline-start: 0px;}`;
     this.insertRule(marginStart, "tabmix-firstTabInRow");
 
+    this.insertRule(`:root { --tabs-lines: ` + Tabmix.prefs.getIntPref("tabBarMaxRow") + `;}`, 'max-rows');
+
     // for ColorfulTabs 8.0+
     // add new rule to adjust selected tab bottom margin
     // we add the rule after the first tab added
@@ -1983,12 +1986,6 @@ gTMPprefObserver = {
       attrValue = "aftertabs";
     // we use this value in disAllowNewtabbutton and overflow setters
     Tabmix.tabsUtils._show_newtabbutton = attrValue;
-    if (aShow) {
-      if (Tabmix.tabsUtils.overflow)
-        attrValue = "right-side";
-      else if (Tabmix.tabsUtils.disAllowNewtabbutton)
-        attrValue = "temporary-right-side";
-    }
     Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton", attrValue);
   },
 

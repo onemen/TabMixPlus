@@ -421,6 +421,7 @@ Tabmix.tablib = {
         '      let tab = tabs[i];' +
         '      tab.style.setProperty("margin-inline-start", width + "px", "important");' + $LF +
         '      width += layoutData.pinnedTabWidth;' +
+        '      tab._pinnedUnscrollable = true;' +
         '    }' +
         '    if (width != this.arrowScrollbox.firstTabInRowMargin) {' +
         '      this.arrowScrollbox.firstTabInRowMargin = width;' +

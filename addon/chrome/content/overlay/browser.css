@@ -141,6 +141,7 @@
 }
 
 #TabsToolbar[tabmix-show-newtabbutton*="side"] #tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow="true"]) ~ #new-tab-button,
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[overflow="true"] ~ #new-tab-button,
 #TabsToolbar[tabmix-show-newtabbutton*="side"] #new-tab-button {
   visibility: visible;
 }

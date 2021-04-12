@@ -8,7 +8,6 @@
 @namespace html url("http://www.w3.org/1999/xhtml");
 
 :root {
-  --tabs-lines: 2;
   --tab_min_width_mlt: 100px;
   --tab_max_width_mlt: 200px;
   --tab-min-height_mlt: var(--tab-min-height, 33px);
@@ -18,7 +17,7 @@
 
 #tabbrowser-tabs {
   min-height: unset !important;
-  padding-inline-start: 0px !important;
+  padding-inline-start: 0px;
 }
 
 #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal] {
@@ -37,9 +36,10 @@
 
 /* hide default scroll buttons */
 #tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(overflow-start-indicator),
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(overflow-end-indicator),
 #tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-up),
 #tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-down) {
-  visibility: collapse !important;
+  display: none;
 }
 
 #tabmix-scrollbox:not([overflowing="true"]),
