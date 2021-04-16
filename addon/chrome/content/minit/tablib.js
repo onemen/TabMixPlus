@@ -400,7 +400,7 @@ Tabmix.tablib = {
            this.arrowScrollbox.resetFirstTabInRow();\
          $&'
       )._replace(
-        'scrollButtonWidth:',
+        Tabmix.isVersion("890") ? 'scrollStartOffset:' : 'scrollButtonWidth:',
         '$& TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 :'
       )._replace(
         'if (doPosition)',
