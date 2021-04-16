@@ -722,9 +722,11 @@ Tabmix.tablib = {
       }
     };
 
+    /**
+     * only apply for sessionMnager
     Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
-      'gBrowser.warnAboutClosingTabs(closingTabs, gBrowser.closingTabsEnum.ALL)',
-      'Tabmix.tablib.closeWindow(true)', {flags: "g"}
+      /gBrowser\.warnAboutClosingTabs\(\n?\s*closingTabs,\n?\s* gBrowser\.closingTabsEnum\.ALL,?\n?\s*(source)?\n?\s*\)/g,
+      'Tabmix.tablib.closeWindow(true)'
     )._replace(
       /os\.notifyObservers\(null, "browser-lastwindow-close-granted"(?:, null)?\);/,
       'if (!TabmixSvc.isMac && !Tabmix.tablib.closeWindow(true)) return false;\
@@ -735,12 +737,13 @@ Tabmix.tablib = {
       '{',
       '{Tabmix._warnedBeforeClosing = false;'
     )._replace(
-      'if (!closeWindow(false, warnAboutClosingWindow))',
-      'var reallyClose = closeWindow(false, warnAboutClosingWindow);\
-       if (reallyClose && !Tabmix._warnedBeforeClosing)\
-         reallyClose = Tabmix.tablib.closeWindow();\
-       if (!reallyClose)'
+      /if \(!closeWindow\(false, warnAboutClosingWindow(, source)?\)\)/,
+      `let reallyClose = closeWindow(false, warnAboutClosingWindow$1);
+  if (reallyClose && !Tabmix._warnedBeforeClosing)
+    reallyClose = Tabmix.tablib.closeWindow();
+  if (!reallyClose)`
     ).toCode();
+    */
 
     Tabmix.changeCode(window, "goQuitApplication")._replace(
       'Services.startup.quit',
