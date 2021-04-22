@@ -109,6 +109,12 @@ var TabmixTabbar = {
         tabBar._pinnedTabsLayoutCache.scrollButtonWidth = tabscroll != this.SCROLL_BUTTONS_LEFT_RIGHT ?
           0 : tabstrip._scrollButtonDown.getBoundingClientRect().width;
       }
+      // partial reset cache to force update
+      if (TabmixSvc.version(890) &&
+          Services.prefs.getBoolPref("browser.proton.enabled") &&
+          tabBar._pinnedTabsLayoutCache?.uiDensity === document.documentElement.getAttribute("uidensity")) {
+        tabBar._pinnedTabsLayoutCache.uiDensity = '';
+      }
       tabBar._positionPinnedTabs();
       if (isMultiRow && TMP_tabDNDObserver.paddingLeft)
         TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(tabBar, "paddingLeft");

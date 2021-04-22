@@ -119,3 +119,7 @@
   padding-top: 1px !important;
 }
 }
+
+#tabbrowser-tabs[multibar][orient=horizontal] > .tab-drop-indicator {
+  margin-top: calc(var(--tab-min-height_mlt) * (var(--tabs-lines) - 1));
+}

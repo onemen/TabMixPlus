@@ -152,7 +152,7 @@ var TMP_tabDNDObserver = {
   onDragStart(event, tabmixDragstart) {
     // we get here on capturing phase before "tabbrowser-close-tab-button"
     // binding stop the event propagation
-    if (event.originalTarget?.classList.contains("tab-close-button")) {
+    if (event.originalTarget?.classList?.contains("tab-close-button")) {
       event.stopPropagation();
       return;
     }
@@ -187,7 +187,7 @@ var TMP_tabDNDObserver = {
     // Until canvas is HiDPI-aware (bug 780362), we need to scale the desired
     // canvas size (in CSS pixels) to the window's backing resolution in order
     // to get a full-resolution drag image for use on HiDPI displays.
-    let windowUtils = window.getInterface(Ci.nsIDOMWindowUtils);
+    let windowUtils = window.windowUtils;
     let scale = windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
     let canvas = tabBar._dndCanvas;
     if (!canvas) {
@@ -534,7 +534,7 @@ var TMP_tabDNDObserver = {
           TabmixTabbar.updateScrollStatus();
       }
 
-      gBrowser.ensureTabIsVisible(gBrowser.tabs.item(newIndex));
+      gBrowser.ensureTabIsVisible(gBrowser.tabs[newIndex]);
       TabmixTabbar.updateBeforeAndAfter();
     } else if (draggedTab) {
       // swap the dropped tab with a new one we create and then close
