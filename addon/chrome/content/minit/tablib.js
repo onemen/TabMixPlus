@@ -387,7 +387,8 @@ Tabmix.tablib = {
   change_tabContainer: function change_tabContainer() {
     let tabBar = gBrowser.tabContainer;
     if (!Tabmix.extensions.verticalTabs) {
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.handleEvent")._replace(
+      const methodName = Tabmix.isVersion(910) ? "gBrowser.tabContainer.init" : "gBrowser.tabContainer.handleEvent";
+      Tabmix.changeCode(tabBar, methodName)._replace(
         'this._updateCloseButtons',
         'TabmixTabbar._handleResize(); \
          $&'
