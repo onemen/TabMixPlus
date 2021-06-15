@@ -10,7 +10,8 @@
 ]>
 
 <overlay id="renameTabOverlay"
-         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+         xmlns:html="http://www.w3.org/1999/xhtml">
 
   <panel id="tabmixRenametab_panel"
          onpopupshown="Tabmix.renameTab.onpopupshown(event);"
@@ -32,23 +33,15 @@
       </vbox>
      </row>
     <spacer/>
-    <grid flex="1">
-      <columns>
-        <column/>
-        <column flex="1"/>
-      </columns>
-      <rows>
-        <row align="center">
-          <label control="tabmixRenametab_titleField" value="&title.label;:"/>
-          <textbox id="tabmixRenametab_titleField" oninput="Tabmix.renameTab.onNewTitle(this.value);"/>
-        </row>
-        <row align="center" id="tabmixRenametab_defaultRow">
-          <label control="tabmixRenametab_defaultField" value="&default.label;:"/>
-          <textbox id="tabmixRenametab_defaultField"
-                   readonly="true" plain="true"/>
-        </row>
-      </rows>
-    </grid>
+    <vbox flex="1">
+      <label control="tabmixRenametab_titleField" value="&title.label;:"/>
+      <html:input id="tabmixRenametab_titleField" oninput="Tabmix.renameTab.onNewTitle(this.value);"/>
+      <vbox id="tabmixRenametab_defaultRow">
+        <label control="tabmixRenametab_defaultField" value="&default.label;:"/>
+        <html:input id="tabmixRenametab_defaultField"
+                  readonly="true" plain="true"/>
+      </vbox>
+    </vbox>
     <spacer/>
     <checkbox id="tabmixRenametab_checkbox" label="&renametab.permanently.label;"
               align="center" checked="true"
@@ -58,7 +51,6 @@
     <hbox id="tabmixRenametab_buttons" pack="end">
       <button id="tabmixRenametab_doneButton"
               class="editBookmarkPanelBottomButton"
-              label="&editBookmark.done.label;"
               default="true"
               oncommand="Tabmix.renameTab.update();"/>
       <button id="tabmixRenametab_deleteButton"

@@ -234,6 +234,7 @@ so display: none !important; does not hide the button */
 .tab-progress {
   margin: 0;
   min-width: 0;
+  width: 0;
 }
 
 .tabbrowser-tab > .tab-stack > .tab-progress-container {
