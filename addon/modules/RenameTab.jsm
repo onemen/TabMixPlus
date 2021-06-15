@@ -69,7 +69,7 @@ this.RenameTab = {
     this._element("mainPopupSet").appendChild(popup);
     const ov = new Overlays(new ChromeManifest(), this.window);
     ov.load("chrome://tabmixplus/content/overlay/renameTab.xhtml");
-    this.observe(null,"xul-overlay-merged");
+    this.observe(null, "xul-overlay-merged");
   },
 
   observe(aSubject, aTopic) {
@@ -79,6 +79,8 @@ this.RenameTab = {
     this.panel._overlayLoaded = true;
     this.panel.hidden = false;
 
+    const l10Id = TabmixSvc.version(890) ? "bookmark-panel-save-button" : "bookmark-panel-done-button";
+    this._element("tabmixRenametab_doneButton").setAttribute("data-l10n-id", l10Id);
     this._element("tabmixRenametab_deleteButton").label = TabmixSvc.getDialogStrings("Cancel");
 
     // reorder buttons for MacOS & Linux
