@@ -86,7 +86,7 @@ var TMP_Places = {
     if (where == "current")
       Tabmix.getTopWin().gBrowser.selectedBrowser.tabmix_allowLoad = true;
     aParams.inBackground = Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
-    openUILinkIn(aUri, where, aParams);
+    window.openTrustedLinkIn(aUri, where, aParams);
   },
 
   idsMap: {

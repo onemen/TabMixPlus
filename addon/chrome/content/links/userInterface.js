@@ -119,7 +119,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
         break;
       case "window":
         if (!Tabmix.getSingleWindowMode()) {
-          openUILinkIn(url, where);
+          window.openWebLinkIn(url, where);
           return null;
         }
         break;
