@@ -38,7 +38,7 @@ var TabmixTabClickOptions = {
 
     // only allow middle-click on close tab button on tab to go throw as
     // middle-click on the tab
-    if (aEvent.button == 1 && target.localName == "toolbarbutton" && isCloseButton) {
+    if (aEvent.button == 1 && target.localName == "toolbarbutton" && !isCloseButton) {
       return;
     }
 
