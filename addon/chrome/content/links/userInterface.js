@@ -126,40 +126,47 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
     }
   }
   TMP_extensionsCompatibility.treeStyleTab.onBeforeNewTabCommand(baseTab || selectedTab, openTabNext);
-  var newTab = gBrowser.addTrustedTab(url, {
-    charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
-    ownerTab: loadInBackground ? null : selectedTab,
-    skipAnimation: replaceLastTab,
-    dontMove: true
-  });
-  if (replaceLastTab) {
-    newTab.__newLastTab = url;
-    if (loadBlank) {
-      gBrowser.tabContainer.setAttribute("closebuttons", "noclose");
-      gBrowser.tabContainer.removeAttribute("closebuttons-hover");
-    }
-  }
 
-  if (openTabNext) {
-    gBrowser.moveTabTo(newTab, (baseTab || selectedTab)._tPos + 1);
-  }
-  // make sure to update recently used tabs
-  // if user open many tabs quickly select event don't have time to fire
-  // before new tab select
-  if (!loadInBackground) {
-    gBrowser.selectedTab = newTab;
-    TMP_LastTab.PushSelectedTab();
-  }
+  Services.obs.notifyObservers(
+    {
+      wrappedJSObject: new Promise(resolve => {
+        let newTab = gBrowser.addTrustedTab(url, {
+          resolveOnNewTabCreated: resolve,
+          charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
+          ownerTab: loadInBackground ? null : selectedTab,
+          skipAnimation: replaceLastTab,
+          dontMove: true
+        });
+        if (replaceLastTab) {
+          newTab.__newLastTab = url;
+          if (loadBlank) {
+            gBrowser.tabContainer.setAttribute("closebuttons", "noclose");
+            gBrowser.tabContainer.removeAttribute("closebuttons-hover");
+          }
+        }
 
-  gBrowser.selectedBrowser.focus();
-  // focus the address bar on new tab
-  var clearUrlBar = !replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar") ||
-      replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
-      url == TabmixSvc.aboutBlank || url == TabmixSvc.aboutNewtab || url == "about:privatebrowsing";
-  if (clearUrlBar)
-    Tabmix.clearUrlBar(newTab, url, false, replaceLastTab);
+        if (openTabNext) {
+          gBrowser.moveTabTo(newTab, (baseTab || selectedTab)._tPos + 1);
+        }
+        // make sure to update recently used tabs
+        // if user open many tabs quickly select event don't have time to fire
+        // before new tab select
+        if (!loadInBackground) {
+          gBrowser.selectedTab = newTab;
+          TMP_LastTab.PushSelectedTab();
+        }
 
-  return newTab;
+        gBrowser.selectedBrowser.focus();
+        // focus the address bar on new tab
+        var clearUrlBar = !replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar") ||
+            replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
+            url == TabmixSvc.aboutBlank || url == TabmixSvc.aboutNewtab || url == "about:privatebrowsing";
+        if (clearUrlBar)
+          Tabmix.clearUrlBar(newTab, url, false, replaceLastTab);
+      }),
+    },
+    "browser-open-newtab-start"
+  );
 }
 
 Tabmix.selectedTab = null;
