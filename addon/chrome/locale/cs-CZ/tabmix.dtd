@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Načítat tuto stránku každých">
 <!ENTITY autoReloadSite.accesskey "S">
 <!ENTITY afterthis.label "Vedle tohoto panelu">
-<!ENTITY bookmarktab.label "Přidat panel do záložek">
 <!ENTITY undoCloseListMenu.label "Seznam zavřených panelů">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Zavřít všechny panely">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Zamknout panel">
 <!ENTITY lockTabMenu.tooltip "Všechny odkazy otevírat do nového panelu">
 <!ENTITY lockTabMenu.accesskey "Z">
-<!ENTITY bookmarktabs.label "Přidat všechny panely do záložek">
 <!ENTITY linkhere.label "Otevřít odkaz v tomto panelu">
 <!ENTITY linkhere.accesskey "T">
 <!ENTITY linkBackgroundTab.label "Otevřít odkaz v panelu na pozadí">

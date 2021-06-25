@@ -58,6 +58,18 @@ var Tabmix = {
       elem.removeAttribute(aAttr);
   },
 
+  setFTLDataId(elementId, convert = id => id) {
+    const element = document.getElementById(elementId);
+    const nodes = element.hasAttribute("data-lazy-l10n-id") ?
+      [element] : element.querySelectorAll("[data-lazy-l10n-id]");
+    nodes
+        .forEach(el => {
+          const l10Id = convert(el.getAttribute("data-lazy-l10n-id"));
+          el.setAttribute("data-l10n-id", l10Id);
+          el.removeAttribute("data-lazy-l10n-id");
+        });
+  },
+
   getBoundsWithoutFlushing(element) {
     if (!("_DOMWindowUtils" in this)) {
       try {

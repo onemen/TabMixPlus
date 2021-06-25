@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Reload This Site Every">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Efter dette faneblad">
-<!ENTITY bookmarktab.label "Bogmærk dette faneblad">
 <!ENTITY undoCloseListMenu.label "Lukkede faneblade-liste">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Luk alle faneblade">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Lås faneblad">
 <!ENTITY lockTabMenu.tooltip "Alle links åbner i nyt faneblad">
 <!ENTITY lockTabMenu.accesskey "å">
-<!ENTITY bookmarktabs.label "Bogmærk alle faneblade">
 <!ENTITY linkhere.label "Åbn link i dette faneblad">
 <!ENTITY linkhere.accesskey "h">
 <!ENTITY linkBackgroundTab.label "Åbn link i faneblad i baggrunden">

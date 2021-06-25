@@ -266,8 +266,6 @@ this.TabmixSvc = {
         prefs.setBoolPref("extensions.tabmix.squaredTabsStyle", false);
       }
 
-      prefs.setBoolPref("extensions.tabmix.tabcontext.openNonRemoteWindow", true);
-
       if (!TabmixSvc.isCyberfox) {
         prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
         Cu.import("chrome://tabmix-resource/content/NewTabURL.jsm", {});

@@ -229,7 +229,7 @@ var TabmixTabbar = {
     return heights[2] / 2;
   },
 
-  setHeight: function TMP_setHeight(aRows, aReset) {
+  setHeight: function TMP_setHeight() {
   },
 
   setHeightByPixels: function TMP_setHeightByPixels(newHeight) {
@@ -2439,14 +2439,6 @@ gTMPprefObserver = {
         if (vCompare(oldVersion, "0.4.1.1pre.130817a") &&
             Services.prefs.prefHasUserValue("browser.tabs.loadDivertedInBackground"))
           Tabmix.prefs.setBoolPref("loadExternalInBackground", true);
-        // 2013-09-25
-        if (vCompare(oldVersion, "0.4.1.2pre.130918a")) {
-          let value = Tabmix.prefs.getBoolPref("closeRightMenu");
-          if (!Tabmix.prefs.prefHasUserValue("closeRightMenu"))
-            Tabmix.prefs.setBoolPref("closeRightMenu", false);
-          else if (value)
-            Tabmix.prefs.clearUserPref("closeRightMenu");
-        }
       }
 
       let showNewVersionTab;

@@ -343,3 +343,8 @@ so display: none !important; does not hide the button */
   */
   margin-top: 1px !important;
 }
+
+/* hide menuitem in tabContextMenu */
+#tabContextMenu menuitem[tabmix_hide="true"] {
+  visibility: collapse;
+}

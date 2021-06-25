@@ -1004,6 +1004,41 @@ Tabmix.tablib = {
       }
     };
 
+    gBrowser.duplicateTabsToWindow = function(contextTab) {
+      const tabs = contextTab.multiselected ? this.selectedTabs : [contextTab];
+      this.clearMultiSelectedTabs();
+
+      if (tabs.length === 1) {
+        this.duplicateTabToWindow(tabs[0]);
+        return;
+      }
+
+      let selectedTabIndex = Math.max(0, tabs.indexOf(this.selectedTab));
+      let otherWin = OpenBrowserWindow({private: PrivateBrowsingUtils.isBrowserPrivate(contextTab.linkedBrowser)});
+      let delayedStartupFinished = (subject, topic) => {
+        if (topic == "browser-delayed-startup-finished" &&
+            subject == otherWin) {
+          Services.obs.removeObserver(delayedStartupFinished, topic);
+          let otherGBrowser = otherWin.gBrowser;
+          let otherTab = otherGBrowser.selectedTab;
+          for (let i = 0; i < tabs.length; ++i) {
+            const tab = tabs[i];
+            otherGBrowser.duplicateTab(
+              tab,
+              !tab.hasAttribute("pending") && !tab.hasAttribute("tabmix_pending"),
+              {inBackground: i !== selectedTabIndex}
+            );
+          }
+          otherGBrowser.removeTab(otherTab, {animate: false});
+        }
+      };
+
+      Services.obs.addObserver(
+        delayedStartupFinished,
+        "browser-delayed-startup-finished"
+      );
+    };
+
     gBrowser.openLinkWithHistory = function() {
       var url = Tabmix.tablib.getValidUrl();
       if (!url) {

@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Ricarica ogni">
 <!ENTITY autoReloadSite.accesskey "c">
 <!ENTITY afterthis.label "Dopo questa">
-<!ENTITY bookmarktab.label "Questa scheda in un segnalibro…">
 <!ENTITY undoCloseListMenu.label "Lista delle schede chiuse">
 <!ENTITY undoCloseListMenu.accesskey "h">
 <!ENTITY closeAllTabsMenu.label "Chiudi tutte le schede">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Blocca scheda">
 <!ENTITY lockTabMenu.tooltip "I link selezionati in una scheda bloccata verranno sempre aperti in nuove schede">
 <!ENTITY lockTabMenu.accesskey "c">
-<!ENTITY bookmarktabs.label "Tutte le schede in un segnalibro…">
 <!ENTITY linkhere.label "Apri in questa scheda">
 <!ENTITY linkhere.accesskey "q">
 <!ENTITY linkBackgroundTab.label "Apri in scheda in secondo piano">

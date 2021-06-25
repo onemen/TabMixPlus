@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Torna a carregar aquest lloc cada">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Després d&apos;aquesta pestanya">
-<!ENTITY bookmarktab.label "Afegeix a les adreces d&apos;interès aquesta pestanya">
 <!ENTITY undoCloseListMenu.label "Llista de pestanyes tancades">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Tanca totes les pestanyes">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Bloca la pestanya">
 <!ENTITY lockTabMenu.tooltip "Tots els enllaços s&apos;obren en una pestanya nova">
 <!ENTITY lockTabMenu.accesskey "B">
-<!ENTITY bookmarktabs.label "Afegeix a les adreces d&apos;interès totes les pestanyes">
 <!ENTITY linkhere.label "Obre l&apos;enllaç en aquesta pestanya">
 <!ENTITY linkhere.accesskey "Q">
 <!ENTITY linkBackgroundTab.label "Obre l&apos;enllaç en segon pla">

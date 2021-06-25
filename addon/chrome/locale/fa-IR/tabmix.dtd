@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Reload This Site Every">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "پس از این برگه">
-<!ENTITY bookmarktab.label "نشانه گذاری این برگه">
 <!ENTITY undoCloseListMenu.label "لیست برگه های بسته شده">
 <!ENTITY undoCloseListMenu.accesskey "ی">
 <!ENTITY closeAllTabsMenu.label "بستن تمام برگه ها">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "قفل کردن برگه">
 <!ENTITY lockTabMenu.tooltip "باز کردن لینک ها در برگه های جدید">
 <!ENTITY lockTabMenu.accesskey "ز">
-<!ENTITY bookmarktabs.label "نشانه گذاری تمام برگه ها">
 <!ENTITY linkhere.label "باز کردن لینک در این برگه">
 <!ENTITY linkhere.accesskey "ر">
 <!ENTITY linkBackgroundTab.label "باز کردن لینک در برگه پس زمینه">

@@ -6,6 +6,9 @@ var gMousePane = {
   clickTab: null,
   clickTabbar: null,
   init() {
+    MozXULElement.insertFTLIfNeeded("browser/tabContextMenu.ftl");
+    Tabmix.setFTLDataId("paneMouse");
+
     if (TabmixSvc.isMac) {
       let label = $("tabId").getAttribute("label2");
       $("tabId").setAttribute("label", label);

@@ -16,10 +16,6 @@
          xmlns:html="http://www.w3.org/1999/xhtml">
 
   <prefpane id="paneMenu" onpaneload="gMenuPane.init();">
-    <link xmlns="http://www.w3.org/1999/xhtml" rel="localization" href="browser/menubar.ftl" />
-    <link xmlns="http://www.w3.org/1999/xhtml" rel="localization" href="browser/tabContextMenu.ftl" />
-    <link xmlns="http://www.w3.org/1999/xhtml" rel="localization" href="browser/preferences/preferences.ftl" />
-
     <!-- scripts -->
     <script type="application/javascript" src="chrome://tabmixplus/content/preferences/menu.js"/>
     <script type="application/javascript" src="chrome://tabmixplus/content/preferences/shortcuts.js"/>
@@ -35,28 +31,26 @@
       <preference id="pref_showDuplicate"      name="extensions.tabmix.duplicateMenu"       type="bool"/>
       <preference id="pref_showDuplicateinWin" name="extensions.tabmix.duplicateinWinMenu"  type="bool"/>
       <preference id="pref_showDetachTab"      name="extensions.tabmix.detachTabMenu"       type="bool"/>
-      <preference id="pref_openNonRemoteWindow"
-                           name="extensions.tabmix.tabcontext.openNonRemoteWindow"       type="bool"/>
+      <preference id="pref_selectAllTabs"      name="extensions.tabmix.selectAllTabs"       type="bool"/>
       <preference id="pref_showMergeWin"       name="extensions.tabmix.showMergeWindow"     type="bool"/>
       <preference id="pref_muteTab"            name="extensions.tabmix.muteTabMenu"         type="bool"/>
       <preference id="pref_pinTab"             name="extensions.tabmix.pinTabMenu"          type="bool"/>
       <preference id="pref_showRenametab"      name="extensions.tabmix.renameTabMenu"       type="bool"/>
       <preference id="pref_showCopyTabUrl"     name="extensions.tabmix.copyTabUrlMenu"      type="bool"/>
+
+      <preference id="pref_reopenInContainer"  name="extensions.tabmix.reopenInContainer"   type="bool"/>
+      <preference id="pref_moveTabOptions"     name="extensions.tabmix.moveTabOptions"      type="bool"/>
+      <preference id="pref_sendTabToDevice"    name="extensions.tabmix.sendTabToDevice"     type="bool"/>
+      <preference id="pref_shareTabURL"        name="extensions.tabmix.shareTabURL"         type="bool"/>
+
       <preference id="pref_showReloadTab"      name="extensions.tabmix.reloadTabMenu"       type="bool"/>
       <preference id="pref_showAutoReload"     name="extensions.tabmix.autoReloadMenu"      type="bool"/>
-      <preference id="pref_showReloadAll"      name="extensions.tabmix.reloadAllMenu"       type="bool"/>
-      <preference id="pref_showReloadOther"    name="extensions.tabmix.reloadOtherMenu"     type="bool"/>
-      <preference id="pref_showReloadLeft"     name="extensions.tabmix.reloadLeftMenu"      type="bool"/>
-      <preference id="pref_showReloadRight"    name="extensions.tabmix.reloadRightMenu"     type="bool"/>
+      <preference id="pref_reloadTabOptions"   name="extensions.tabmix.reloadTabOptions"    type="bool"/>
       <preference id="pref_showBmkTab"         name="extensions.tabmix.bookmarkTabMenu"     type="bool"/>
       <preference id="pref_showUndoClose"      name="extensions.tabmix.undoCloseTabMenu"    type="bool"/>
       <preference id="pref_showUndoCloseList"  name="extensions.tabmix.undoCloseListMenu"   type="bool"/>
+      <preference id="pref_closeTabOptions"    name="extensions.tabmix.closeTabOptions"     type="bool"/>
       <preference id="pref_showCloseTab"       name="extensions.tabmix.closeTabMenu"        type="bool"/>
-      <preference id="pref_showCloseAll"       name="extensions.tabmix.closeAllMenu"        type="bool"/>
-      <preference id="pref_showCloseOther"     name="extensions.tabmix.closeOtherMenu"      type="bool"/>
-      <preference id="pref_showCloseSimilar"   name="extensions.tabmix.closeSimilarTabs"    type="bool"/>
-      <preference id="pref_showCloseLeft"      name="extensions.tabmix.closeLeftMenu"       type="bool"/>
-      <preference id="pref_showCloseRight"     name="extensions.tabmix.closeRightMenu"      type="bool"/>
       <preference id="pref_showDocShell"       name="extensions.tabmix.docShellMenu"        type="bool"/>
       <preference id="pref_freezeTabMenu"      name="extensions.tabmix.freezeTabMenu"       type="bool"/>
       <preference id="pref_protectTabMenu"     name="extensions.tabmix.protectTabMenu"      type="bool"/>
@@ -120,57 +114,46 @@
                 <row>
                   <vbox align="start">
                     <!-- New tab -->
-                    <checkbox_tmp id="showNewTab" data-l10n-id="menu-file-new-tab" label="tabCmd.label" preference="pref_showNewTab"/>
-                    <!-- Duplicate tab -->
-                    <checkbox_tmp id="showDuplicate" label="&duplicateTabMenu.label;" preference="pref_showDuplicate"/>
-                    <!-- Duplicate in Window -->
-                    <checkbox_tmp id="showDuplicateinWin" label="&duplicateinWin.label;" preference="pref_showDuplicateinWin" observes="obs_singleWindow"/>
-                    <!-- Detach Tab -->
-                    <checkbox_tmp id="showDetachTab" label="&detachTab.label;" preference="pref_showDetachTab" observes="obs_singleWindow"/>
-                    <!-- open Non Remote Window -->
-                    <checkbox_tmp id="openNonRemoteWindow" preference="pref_openNonRemoteWindow" observes="obs_singleWindow" hidden="true"/>
-                    <!-- Merge Windows -->
-                    <checkbox_tmp id="showMergeWin" label="&mergeContext.label;" preference="pref_showMergeWin"/>
+                    <checkbox_tmp id="showNewTab" data-lazy-l10n-id="menu-file-new-tab" preference="pref_showNewTab"/>
                     <!-- mute/unmute tabs -->
                     <checkbox_tmp id="muteTab" preference="pref_muteTab"/>
                     <!-- pin/unpin tabs -->
                     <checkbox_tmp id="pinTab" preference="pref_pinTab"/>
+                    <!-- Duplicate tab -->
+                    <checkbox_tmp id="showDuplicate" label="&duplicateTabMenu.label;" preference="pref_showDuplicate"/>
+                    <!-- Duplicate in Window -->
+                    <checkbox_tmp id="showDuplicateinWin" label="&duplicateinWin.label;" preference="pref_showDuplicateinWin" observes="obs_singleWindow"/>
+                    <!-- Move Tabs -->
+                    <checkbox_tmp id="moveTabOptions" data-lazy-l10n-id="tab-context-move-tabs" data-l10n-args='{"tabCount": 2}' preference="pref_moveTabOptions"/>
+                    <checkbox_tmp id="sendTabToDevice" preference="pref_sendTabToDevice"/>
+                    <checkbox_tmp id="shareTabURL" data-lazy-l10n-id="tab-context-share-url" preference="pref_shareTabURL"/>
+                    <!-- Merge Windows -->
+                    <checkbox_tmp id="showMergeWin" label="&mergeContext.label;" preference="pref_showMergeWin"/>
                     <!-- move to group -->
                     <checkbox_tmp id="moveToGroup" preference="pref_showMoveToGroup"/>
                     <!-- Rename tab -->
                     <checkbox_tmp id="showRenametab" label="&renametab.label;" preference="pref_showRenametab"/>
                     <!-- Copy tab Url -->
                     <checkbox_tmp id="showCopyTabUrl" label="&copytaburl.label;" preference="pref_showCopyTabUrl"/>
-                    <!-- Reload tab -->
-                    <checkbox_tmp id="showReloadTab" data-l10n-id="reload-tab" label="reloadTab.label"  preference="pref_showReloadTab"/>
-                    <!-- Reload Tab Every-->
-                    <checkbox_tmp id="showAutoReload" label="&autoReloadTab.label;" preference="pref_showAutoReload"/>
-                    <!-- Reload all tab -->
-                    <checkbox_tmp id="showReloadAll" data-l10n-id="content-blocking-reload-tabs-button" label="reloadAllTabs.label" preference="pref_showReloadAll"/>
-                    <!-- Reload left tab -->
-                    <checkbox_tmp id="showReloadLeft" label="&reloadleft.label;" preference="pref_showReloadLeft"/>
-                    <!-- Reload right tab -->
-                    <checkbox_tmp id="showReloadRight" label="&reloadright.label;" preference="pref_showReloadRight"/>
-                    <!-- Reload other tab -->
-                    <checkbox_tmp id="showReloadOther" label="&reloadother.label;" preference="pref_showReloadOther"/>
+                    <checkbox_tmp id="reopenInContainer" data-lazy-l10n-id="tab-context-open-in-new-container-tab" preference="pref_reopenInContainer"/>
+                    <!-- Select All Tabs -->
+                    <checkbox_tmp id="showSelectAllTabs" data-lazy-l10n-id="select-all-tabs" preference="pref_selectAllTabs"/>
                   </vbox>
                   <vbox align="start">
+                    <!-- Reload Tab Every -->
+                    <checkbox_tmp id="showAutoReload" label="&autoReloadTab.label;" preference="pref_showAutoReload"/>
+                    <!-- Reload Multiple Tabs -->
+                    <checkbox_tmp id="reloadTabOptions" label="Reload Multiple Tabs" preference="pref_reloadTabOptions"/>
+                    <!-- Reload tab -->
+                    <checkbox_tmp id="showReloadTab" data-lazy-l10n-id="reload-tab"  preference="pref_showReloadTab"/>
                     <!-- Undo close tabs -->
-                    <checkbox_tmp id="showUndoClose" data-l10n-id="tab-context-undo-close-tabs" data-l10n-args='{"tabCount": 1}' label="undoCloseTab.label;" preference="pref_showUndoClose" observes="obs_undoClose"/>
+                    <checkbox_tmp id="showUndoClose" data-lazy-l10n-id="tab-context-reopen-closed-tabs" data-l10n-args='{"tabCount": 1}' preference="pref_showUndoClose" observes="obs_undoClose"/>
                     <!-- Closed tabs list -->
                     <checkbox_tmp id="showUndoCloseList" label="&undoCloseListMenu.label;" preference="pref_showUndoCloseList" observes="obs_undoClose"/>
+                    <!-- Close Multiple Tabs -->
+                    <checkbox_tmp id="closeTabOptions" data-lazy-l10n-id="tab-context-close-multiple-tabs" preference="pref_closeTabOptions"/>
                     <!-- Close tabs -->
-                    <checkbox_tmp id="showCloseTab" data-l10n-id="tab-context-close-tabs" data-l10n-args='{"tabCount": 1}' label="closeTab.label;" preference="pref_showCloseTab"/>
-                    <!-- Close all tabs -->
-                    <checkbox_tmp id="showCloseAll" label="&closeAllTabsMenu.label;" preference="pref_showCloseAll"/>
-                    <!-- Close similar tabs -->
-                    <checkbox_tmp id="showCloseSimilar" label="&closeSimilarTab.label;" preference="pref_showCloseSimilar"/>
-                    <!-- Close other tabs -->
-                    <checkbox_tmp id="showCloseOther" data-l10n-id="close-other-tabs" label="closeOtherTabs.label;" preference="pref_showCloseOther"/>
-                    <!-- Close left tabs -->
-                    <checkbox_tmp id="showCloseLeft" label="&closeTabsToLeft.label;" preference="pref_showCloseLeft"/>
-                    <!-- Close right tabs -->
-                    <checkbox_tmp id="showCloseRight" data-l10n-id="close-tabs-to-the-end" label="closeTabsToTheEnd.label;" preference="pref_showCloseRight"/>
+                    <checkbox_tmp id="showCloseTab" data-lazy-l10n-id="tab-context-close-tabs" data-l10n-args='{"tabCount": 1}' preference="pref_showCloseTab"/>
                     <!-- docShell -->
                     <checkbox_tmp id="showDocShell" label="&docShellMenu.label;" preference="pref_showDocShell"/>
                     <!-- freeze tab -->
@@ -180,9 +163,9 @@
                     <!-- lock tab -->
                     <checkbox_tmp id="lockTabMenu" label="&lockTabMenu.label;" tooltiptext="&lockTabMenu.tooltip;" preference="pref_lockTabMenu"/>
                     <!-- Bookmark tab -->
-                    <checkbox_tmp id="showBmkTab" label="&bookmarktab.label;" preference="pref_showBmkTab" observes="bmMenu"/>
+                    <checkbox_tmp id="showBmkTab" data-lazy-l10n-id="bookmark-tab" preference="pref_showBmkTab"/>
                     <!-- bookmark tabs -->
-                    <checkbox_tmp id="showBmkTabs" label="&bookmarktabs.label;" preference="pref_showBmkTabs" observes="bmMenu"/>
+                    <checkbox_tmp id="showBmkTabs" data-lazy-l10n-id="menu-bookmarks-all-tabs" preference="pref_showBmkTabs"/>
                   </vbox>
                 </row>
               </rows>
@@ -211,7 +194,7 @@
                     <!-- reload every -->
                     <checkbox_tmp id="autoreloadTab" label="&autoReloadTab.label;" preference="pref_autoreloadTab"/>
                     <!-- Close tab -->
-                    <checkbox_tmp id="closetab" data-l10n-id="tab-context-close-tabs" data-l10n-args='{"tabCount": 1}' label="closeTab.label;" preference="pref_closetab"/>
+                    <checkbox_tmp id="closetab" data-lazy-l10n-id="tab-context-close-tabs" data-l10n-args='{"tabCount": 1}' preference="pref_closetab"/>
                     <!-- Duplicate tab -->
                     <checkbox_tmp id="duplicateTabContent" label="&duplicateTabMenu.label;" preference="pref_duplicateTabContent"/>
                     <!-- Duplicate tab in Win-->
@@ -233,7 +216,7 @@
                     <!-- Closed tabs list -->
                     <checkbox_tmp id="showUndoCloseListContent" label="&undoCloseListMenu.label;" preference="pref_showUndoCloseListContent" observes="obs_undoClose"/>
                     <!-- Undo close tabs -->
-                    <checkbox_tmp id="showUndoCloseContent" data-l10n-id="tab-context-undo-close-tabs" data-l10n-args='{"tabCount": 1}' label="undoCloseTab.label;" preference="pref_showUndoCloseContent" observes="obs_undoClose"/>
+                    <checkbox_tmp id="showUndoCloseContent" data-lazy-l10n-id="tab-context-reopen-closed-tabs" data-l10n-args='{"tabCount": 1}' preference="pref_showUndoCloseContent" observes="obs_undoClose"/>
                   </vbox>
                 </row>
               </rows>
@@ -311,7 +294,7 @@
             <shortcut id="reloadlefttabs"  label="&clicktab.reloadlefttabs;"/>
             <shortcut id="reloadrighttabs" label="&clicktab.reloadrighttabs;"/>
             <shortcut id="autoReloadTab"   label="&clicktab.autoReloadTab;"/>
-            <shortcut id="close"           data-l10n-id="tab-context-close-tabs" data-l10n-args='{"tabCount": 1}' label="closeTab.label;"/>
+            <shortcut id="close"           data-lazy-l10n-id="tab-context-close-tabs" data-l10n-args='{"tabCount": 1}'/>
             <shortcut id="removeall"       label="&clicktab.removeall;"/>
             <shortcut id="removesimilar"   label="&clicktab.removesimilar;"/>
             <shortcut id="removeother"     label="&clicktab.removeother;"/>
@@ -340,7 +323,6 @@
     </tabbox>
 
     <broadcasterset >
-      <broadcaster id="bmMenu" hidden="false"/>
       <broadcaster id="obs_slideDelay"/>
     </broadcasterset >
 

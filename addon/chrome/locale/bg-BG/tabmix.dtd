@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Презареждане на сайта на всеки">
 <!ENTITY autoReloadSite.accesskey "Е">
 <!ENTITY afterthis.label "След този подпрозорец">
-<!ENTITY bookmarktab.label "Отмятане на този подпрозорец">
 <!ENTITY undoCloseListMenu.label "Списък на затворени подпрозорци">
 <!ENTITY undoCloseListMenu.accesskey "т">
 <!ENTITY closeAllTabsMenu.label "Затваряне на всички подпрозорци">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Заключване на подпрозореца">
 <!ENTITY lockTabMenu.tooltip "Всички връзки се отварят в нов подпрозорец">
 <!ENTITY lockTabMenu.accesskey "в">
-<!ENTITY bookmarktabs.label "Отмятане на всички подпрозорци">
 <!ENTITY linkhere.label "Отваряне на връзката в текущия подпрозорец">
 <!ENTITY linkhere.accesskey "щ">
 <!ENTITY linkBackgroundTab.label "Отваряне на връзката в нов подпрозорец във фонов режим">

@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Recargar sitio cada">
 <!ENTITY autoReloadSite.accesskey "s">
 <!ENTITY afterthis.label "Tras esta pestaña">
-<!ENTITY bookmarktab.label "Añadir pestaña a marcadores">
 <!ENTITY undoCloseListMenu.label "Lista pestañas cerradas">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Cerrar todas las pestañas">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Bloquear pestaña">
 <!ENTITY lockTabMenu.tooltip "Fuerza a abrir todos los enlaces en nuevas pestañas">
 <!ENTITY lockTabMenu.accesskey "B">
-<!ENTITY bookmarktabs.label "Añadir todas las pestañas a marcadores">
 <!ENTITY linkhere.label "Abrir enlace en esta pestaña">
 <!ENTITY linkhere.accesskey "e">
 <!ENTITY linkBackgroundTab.label "Abrir enlace en pestaña en segundo plano">

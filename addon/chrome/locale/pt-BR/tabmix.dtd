@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Recarregar esse site a cada">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Depois dessa aba">
-<!ENTITY bookmarktab.label "Adicionar aba aos favoritos">
 <!ENTITY undoCloseListMenu.label "Lista de abas fechadas">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Fechar todas as abas">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Trancar aba">
 <!ENTITY lockTabMenu.tooltip "Abre sempre novas abas ao clicar em links em uma aba trancada">
 <!ENTITY lockTabMenu.accesskey "T">
-<!ENTITY bookmarktabs.label "Adicionar todas as abas aos favoritos">
 <!ENTITY linkhere.label "Abrir link nesta aba">
 <!ENTITY linkhere.accesskey "N">
 <!ENTITY linkBackgroundTab.label "Abrir link em aba no plano de fundo">

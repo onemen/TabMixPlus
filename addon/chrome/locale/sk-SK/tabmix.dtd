@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Obnoviť túto stránku každých">
 <!ENTITY autoReloadSite.accesskey "O">
 <!ENTITY afterthis.label "Po tejto karte">
-<!ENTITY bookmarktab.label "Vytvoriť záložku pre túto kartu">
 <!ENTITY undoCloseListMenu.label "Zoznam zatvorených kariet">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Zatvoriť všetky karty">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Zamknúť kartu">
 <!ENTITY lockTabMenu.tooltip "Všetky odkazy otvárať na novej karte">
 <!ENTITY lockTabMenu.accesskey "K">
-<!ENTITY bookmarktabs.label "Vytvoriť záložku pre všetky karty">
 <!ENTITY linkhere.label "Otvoriť odkaz na tejto karte">
 <!ENTITY linkhere.accesskey "H">
 <!ENTITY linkBackgroundTab.label "Otvoriť odkaz na pozadí">

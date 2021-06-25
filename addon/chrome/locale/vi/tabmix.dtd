@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Tải lại trang này sau mỗi">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Sau thẻ này">
-<!ENTITY bookmarktab.label "Đánh dấu Thẻ Này">
 <!ENTITY undoCloseListMenu.label "Danh sách Các thẻ đã Đóng">
 <!ENTITY undoCloseListMenu.accesskey "D">
 <!ENTITY closeAllTabsMenu.label "Đóng Tất cả Các thẻ">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Khóa Thẻ">
 <!ENTITY lockTabMenu.tooltip "Tất cả liên kết mở trong thẻ mới">
 <!ENTITY lockTabMenu.accesskey "K">
-<!ENTITY bookmarktabs.label "Đánh dấu Tất cả Các thẻ">
 <!ENTITY linkhere.label "Mở Liên Kết trong Thẻ Này">
 <!ENTITY linkhere.accesskey "y">
 <!ENTITY linkBackgroundTab.label "Mở Liên Kết trong Thẻ Hậu Cảnh">

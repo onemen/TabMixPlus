@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Поново учитај ову страницу сваких">
 <!ENTITY autoReloadSite.accesskey "П">
 <!ENTITY afterthis.label "После ове картице">
-<!ENTITY bookmarktab.label "Обележи ову картицу">
 <!ENTITY undoCloseListMenu.label "Листа затворених картица">
 <!ENTITY undoCloseListMenu.accesskey "Л">
 <!ENTITY closeAllTabsMenu.label "Затвори све картице">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Закључај картицу">
 <!ENTITY lockTabMenu.tooltip "Све везе се отварају у новој картици">
 <!ENTITY lockTabMenu.accesskey "к">
-<!ENTITY bookmarktabs.label "Обележи све картице">
 <!ENTITY linkhere.label "Отвори везу у овој картици">
 <!ENTITY linkhere.accesskey "о">
 <!ENTITY linkBackgroundTab.label "Отвори везу у картици у позадини">

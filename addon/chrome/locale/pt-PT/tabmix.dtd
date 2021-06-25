@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Recarregar este sítio a cada">
 <!ENTITY autoReloadSite.accesskey "e">
 <!ENTITY afterthis.label "Depois deste separador">
-<!ENTITY bookmarktab.label "Adicionar este separador aos marcadores">
 <!ENTITY undoCloseListMenu.label "Lista de separadores fechados">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Fechar todos os separadores">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Bloquear separador">
 <!ENTITY lockTabMenu.tooltip "Todas as ligações abrem num novo separador">
 <!ENTITY lockTabMenu.accesskey "ç">
-<!ENTITY bookmarktabs.label "Adicionar todos os separadores aos marcadores">
 <!ENTITY linkhere.label "Abrir ligação neste separador">
 <!ENTITY linkhere.accesskey "s">
 <!ENTITY linkBackgroundTab.label "Abrir ligação no separador de fundo">

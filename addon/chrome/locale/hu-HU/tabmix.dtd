@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Webhely újratöltése">
 <!ENTITY autoReloadSite.accesskey "e">
 <!ENTITY afterthis.label "ezen lapok után">
-<!ENTITY bookmarktab.label "Könyvjelzőt erre a lapra">
 <!ENTITY undoCloseListMenu.label "Bezárt lapok listája">
 <!ENTITY undoCloseListMenu.accesskey "l">
 <!ENTITY closeAllTabsMenu.label "Összes lap bezárása">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Lapzárolás">
 <!ENTITY lockTabMenu.tooltip "Minden link új lapon nyílik meg">
 <!ENTITY lockTabMenu.accesskey "p">
-<!ENTITY bookmarktabs.label "Könyvjelzőt az összes lapra">
 <!ENTITY linkhere.label "Linkek megnyitása ezen lapon">
 <!ENTITY linkhere.accesskey "e">
 <!ENTITY linkBackgroundTab.label "Link megnyitása lapon háttérben">

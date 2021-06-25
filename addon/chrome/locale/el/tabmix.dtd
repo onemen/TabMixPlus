@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Ανανέωση σελίδας κάθε">
 <!ENTITY autoReloadSite.accesskey "θ">
 <!ENTITY afterthis.label "Μετά από αυτή την καρτέλα">
-<!ENTITY bookmarktab.label "Προσθήκη καρτέλας στους σελιδοδείκτες">
 <!ENTITY undoCloseListMenu.label "Λίστα κλεισμένων καρτελών">
 <!ENTITY undoCloseListMenu.accesskey "Λ">
 <!ENTITY closeAllTabsMenu.label "Κλείσιμο όλων των καρτελών">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Κλείδωμα καρτέλας">
 <!ENTITY lockTabMenu.tooltip "Άνοιγμα όλων των δεσμών σε νέα καρτέλα">
 <!ENTITY lockTabMenu.accesskey "ς">
-<!ENTITY bookmarktabs.label "Προσθήκη όλων των καρτελών στους σελιδοδείκτες">
 <!ENTITY linkhere.label "Άνοιγμα δεσμού σε αυτή την καρτέλα">
 <!ENTITY linkhere.accesskey "ε">
 <!ENTITY linkBackgroundTab.label "Άνοιγμα δεσμού σε καρτέλα χωρίς εστίαση">

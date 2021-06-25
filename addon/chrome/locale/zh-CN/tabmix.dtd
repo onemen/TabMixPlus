@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "重新载入该网站，每隔">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "在当前页之后">
-<!ENTITY bookmarktab.label "将当前标签页加入书签">
 <!ENTITY undoCloseListMenu.label "已关闭的标签页列表">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "关闭所有标签页">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "锁定标签页">
 <!ENTITY lockTabMenu.tooltip "在新标签页打开所有链接">
 <!ENTITY lockTabMenu.accesskey "K">
-<!ENTITY bookmarktabs.label "将所有标签页加入书签">
 <!ENTITY linkhere.label "在当前标签页打开链接">
 <!ENTITY linkhere.accesskey "H">
 <!ENTITY linkBackgroundTab.label "在后台新建标签页打开链接">

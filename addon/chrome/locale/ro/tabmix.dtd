@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Încarcă acest sait la fiecare">
 <!ENTITY autoReloadSite.accesskey "s">
 <!ENTITY afterthis.label "După această filă">
-<!ENTITY bookmarktab.label "Pune semn de carte la această filă">
 <!ENTITY undoCloseListMenu.label "Afișează lista filelor închise">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Închide toate filele">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Blochează fila">
 <!ENTITY lockTabMenu.tooltip "Dezactivează deschiderea altor legături în filă">
 <!ENTITY lockTabMenu.accesskey "z">
-<!ENTITY bookmarktabs.label "Pune semne de carte la toate filele">
 <!ENTITY linkhere.label "Deschide legătura în această filă">
 <!ENTITY linkhere.accesskey "H">
 <!ENTITY linkBackgroundTab.label "Deschide legătura într-o filă în fundal">

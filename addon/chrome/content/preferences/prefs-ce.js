@@ -5,7 +5,7 @@
 
 const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
-//delay connectedCallback() of tabs till prefwindow is defined so it won't be run multiple times and cause trouble.
+// delay connectedCallback() of tabs till prefwindow is defined so it won't be run multiple times and cause trouble.
 customElements.get('tabs').prototype.delayConnectedCallback = function() {
   return !customElements.get('prefwindow');
 };
@@ -1586,7 +1586,7 @@ class PrefWindow extends MozXULElement {
 
       const obs = new OverlayLoadObserver(aPaneElement);
 
-      // Pane overlay have to be move to earlier stage to load properly 
+      // Pane overlay have to be move to earlier stage to load properly
       // document.loadOverlay(aPaneElement.src, obs);
       obs.observe();
     } else
