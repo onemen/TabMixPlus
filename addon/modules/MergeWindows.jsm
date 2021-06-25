@@ -256,21 +256,15 @@ this.MergeWindows = {
     };
 
     let windows = [], popUps = [];
-    let isWINNT = Services.appinfo.OS == "WINNT";
-    let more = () => !isWINNT || aOptions.multiple || windows.length === 0;
     // getEnumerator return windows from oldest to newest, so we use unshift.
-    // when OS is WINNT and option is not multiple the loop stops when we find the most
-    // recent suitable window
-    let fn = isWINNT ? "push" : "unshift";
-    let windowList = !isWINNT ? Services.wm.getEnumerator("navigator:browser") :
-      Services.wm.getZOrderDOMWindowEnumerator("navigator:browser", true);
-    while (more() && windowList.hasMoreElements()) {
+    let windowList = Services.wm.getEnumerator("navigator:browser");
+    while ((aOptions.multiple || windows.length === 0) && windowList.hasMoreElements()) {
       let nextWin = windowList.getNext();
       if (isSuitableBrowserWindow(nextWin)) {
         if (this.isPopupWindow(nextWin))
-          popUps[fn](nextWin);
+          popUps.unshift(nextWin);
         else
-          windows[fn](nextWin);
+          windows.unshift(nextWin);
       }
     }
     aOptions.privateNotMatch = privateNotMatch > 0;
