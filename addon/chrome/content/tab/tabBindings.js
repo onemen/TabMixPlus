@@ -1,63 +1,44 @@
 "use strict";
 
 (function() {
-  // Tabmix.changeCode(customElements.get("tabbrowser-tab"), "markup", {getter: true})._replace(
-  //             '<image class=\"tab-icon-image\" validate=\"never\" role=\"presentation\"/>',
-  //             '$&' + '\n    ' +
-  //             `<image class=\"tab-protect-icon\" />
-  //             <image class=\"tab-lock-icon\" />
-  //             <image class=\"tab-reload-icon\" />`
-  //           ).defineProperty();
+  let tabbrowsertab = customElements.get("tabbrowser-tab");
 
-  // delete customElements.get("tabbrowser-tab")._fragment;
-
-  var tabbrowsertab = customElements.get("tabbrowser-tab");
-
-  tabbrowsertab._fragment = MozXULElement.parseXULToFragment(
-    `
-<stack class="tab-stack" flex="1">
-  <vbox class="tab-background">
-    <hbox class="tab-line"/>
-    <spacer flex="1" class="tab-background-inner"/>
-    <hbox class="tab-bottom-line"/>
-  </vbox>
-  <vbox class="tab-progress-container">
-    <html:progress class="tab-progress" max="100" mode="normal"/>
-  </vbox>
-  <hbox class="tab-loading-burst"/>
-  <hbox class="tab-content" align="center">
-  <stack class="tab-icon">
-    <hbox class="tab-throbber" layer="true"/>
-    <hbox class="tab-icon-pending"/>
-    <image class="tab-icon-image" validate="never" role="presentation"/>
-    <image class="tab-protect-icon"/>
-    <image class="tab-lock-icon"/>
-    <image class="tab-reload-icon"/>
-  </stack>
-    <image class="tab-sharing-icon-overlay" role="presentation"/>
-    <image class="tab-icon-overlay" role="presentation"/>
-    <hbox class="tab-label-container"
-          onoverflow="this.setAttribute('textoverflow', 'true');"
-          onunderflow="this.removeAttribute('textoverflow');"
-          flex="1">
-      <label class="tab-text tab-label" tabmix="true" role="presentation"/>
-    </hbox>
-    <image class="tab-icon-sound" role="presentation"/>
-    <image class="tab-close-button close-icon" role="presentation"/>
-  </hbox>
-</stack>
-  `,
-    tabbrowsertab.entities
+  let markup = tabbrowsertab.markup.replace(
+    '</vbox>',
+    `$&
+        <vbox class="tab-progress-container">
+          <html:progress class="tab-progress" max="100" mode="normal"/>
+        </vbox>`
+  ).replace(
+    /<image class="tab-icon-image".*\/>/,
+    `$&
+            <image class="tab-protect-icon"/>
+            <image class="tab-lock-icon"/>
+            <image class="tab-reload-icon"/>`
   );
+
+  if (Tabmix.isVersion(870)) {
+    markup = markup.replace('tab-icon-stack', 'tab-icon tab-icon-stack');
+  } else {
+    markup = markup.replace(
+      '<hbox class="tab-content" align="center">',
+      `$&
+          <stack class="tab-icon">`
+    ).replace(
+      '<image class="tab-reload-icon"/>',
+      `$&
+          </stack>`
+    );
+  }
+
+  tabbrowsertab._fragment = MozXULElement.parseXULToFragment(markup);
 
   Tabmix.changeCode(tabbrowsertab, "inheritedAttributes", {getter: true})._replace(
     '};',
     '\n    ' +
     `
-  ".tab-image-left":"selected=visuallyselected,hover",
   ".tab-progress":"value=tab-progress,fadein,pinned,selected=visuallyselected",
   ".tab-icon":"fadein,pinned,selected=visuallyselected",
-  ".tab-image-right":"selected=visuallyselected,hover",
   ` +
     '$&'
   ).defineProperty();
