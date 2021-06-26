@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Reload This Site Every">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "אחרי לשונית זו">
-<!ENTITY bookmarktab.label "הוסף לשונית זו לסימניות">
 <!ENTITY undoCloseListMenu.label "רשימת לשוניות שנסגרו">
 <!ENTITY undoCloseListMenu.accesskey "ר">
 <!ENTITY closeAllTabsMenu.label "סגור כל הלשוניות">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "נעל לשונית">
 <!ENTITY lockTabMenu.tooltip "כל הקישורים נפתחים בלשונית חדשה">
 <!ENTITY lockTabMenu.accesskey "נ">
-<!ENTITY bookmarktabs.label "הוסף כל הלשוניות למועדפים">
 <!ENTITY linkhere.label "פתח קישורים בלשונית הנוכחית">
 <!ENTITY linkhere.accesskey "ז">
 <!ENTITY linkBackgroundTab.label "פתח קישור בלשונית ברקע">

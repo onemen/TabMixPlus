@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Оновлювати Цей сайт кожні">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Після цієї вкладки">
-<!ENTITY bookmarktab.label "Закладка для поточної вкладки">
 <!ENTITY undoCloseListMenu.label "Список закритих вкладок">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Закрити всі вкладки">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Заблокувати вкладку">
 <!ENTITY lockTabMenu.tooltip "Всі посилання відкривати в нових вкладках">
 <!ENTITY lockTabMenu.accesskey "K">
-<!ENTITY bookmarktabs.label "Закладки для всіх вкладок">
 <!ENTITY linkhere.label "Відкрити посилання в поточній вкладці">
 <!ENTITY linkhere.accesskey "H">
 <!ENTITY linkBackgroundTab.label "Відкрити посилання у новій фоновій вкладці">

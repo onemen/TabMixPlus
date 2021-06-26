@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "自動更新">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "緊鄰">
-<!ENTITY bookmarktab.label "將本頁加入書籤">
 <!ENTITY undoCloseListMenu.label "已關閉分頁列表">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "關閉全部分頁">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "鎖定分頁">
 <!ENTITY lockTabMenu.tooltip "鎖定分頁網址，當點選鏈結而變動網址時，將強制使用新分頁開啟">
 <!ENTITY lockTabMenu.accesskey "K">
-<!ENTITY bookmarktabs.label "將全部分頁加入書籤">
 <!ENTITY linkhere.label "用目前分頁開啟鏈結">
 <!ENTITY linkhere.accesskey "H">
 <!ENTITY linkBackgroundTab.label "用背景新分頁開啟鏈結">

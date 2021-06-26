@@ -6,6 +6,8 @@ const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
+Cu.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
+Cu.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
   "chrome://tabmix-resource/content/Places.jsm");
@@ -60,13 +62,14 @@ this.RenameTab = {
       return;
     }
 
-    popup = this.panel = this.window.document.createElement("panel");
+    popup = this.panel = this.window.document.createXULElement("panel");
     popup._overlayLoaded = false;
     popup.id = "tabmixRenametab_panel";
+    popup.hidden = true; // prevent panel initialize. initialize before overlay break it.
     this._element("mainPopupSet").appendChild(popup);
-    this.window.document.loadOverlay(
-      "chrome://tabmixplus/content/overlay/renameTab.xul", this
-    );
+    const ov = new Overlays(new ChromeManifest(), this.window);
+    ov.load("chrome://tabmixplus/content/overlay/renameTab.xhtml");
+    this.observe(null, "xul-overlay-merged");
   },
 
   observe(aSubject, aTopic) {
@@ -76,6 +79,8 @@ this.RenameTab = {
     this.panel._overlayLoaded = true;
     this.panel.hidden = false;
 
+    const l10Id = TabmixSvc.version(890) ? "bookmark-panel-save-button" : "bookmark-panel-done-button";
+    this._element("tabmixRenametab_doneButton").setAttribute("data-l10n-id", l10Id);
     this._element("tabmixRenametab_deleteButton").label = TabmixSvc.getDialogStrings("Cancel");
 
     // reorder buttons for MacOS & Linux
@@ -134,8 +139,8 @@ this.RenameTab = {
     var win = this.window;
     win.Tabmix.setItem(tab, "fixed-label", resetDefault ? null : label);
     win.Tabmix.setItem(tab, "label-uri", url);
-    TabmixSvc.ss.setCustomTabValue(tab, "fixed-label", resetDefault ? null : label);
-    TabmixSvc.ss.setCustomTabValue(tab, "label-uri", url);
+    TabmixSvc.setCustomTabValue(tab, "fixed-label", resetDefault ? null : label);
+    TabmixSvc.setCustomTabValue(tab, "label-uri", url);
     win.TabmixSessionManager.updateTabProp(tab);
 
     if (tab.label != label)

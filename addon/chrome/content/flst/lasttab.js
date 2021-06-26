@@ -352,7 +352,7 @@ var TMP_LastTab = {
 
   ReadPreferences() {
     // when Build-in tabPreviews is on we disable our own function
-    var mostRecentlyUsed = Services.prefs.getBoolPref("browser.ctrlTab.recentlyUsedOrder");
+    var mostRecentlyUsed = Services.prefs.getBoolPref(TabmixSvc.sortByRecentlyUsed);
     var tabPreviews = document.getElementById("ctrlTab-panel") && "ctrlTab" in window;
     if (tabPreviews) {
       var tabPreviewsCurrentStatus = Boolean(ctrlTab._recentlyUsedTabs);

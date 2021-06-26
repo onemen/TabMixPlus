@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Selle saidi automaatne uuestilaadimine">
 <!ENTITY autoReloadSite.accesskey "M">
 <!ENTITY afterthis.label "Praeguse kaardi järele">
-<!ENTITY bookmarktab.label "Lisa see kaart järjehoidjatesse">
 <!ENTITY undoCloseListMenu.label "Suletud kaardid">
 <!ENTITY undoCloseListMenu.accesskey "D">
 <!ENTITY closeAllTabsMenu.label "Sulge kõik kaardid">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Lukusta kaart">
 <!ENTITY lockTabMenu.tooltip "Kõik lingid avatakse uuel kaardil">
 <!ENTITY lockTabMenu.accesskey "R">
-<!ENTITY bookmarktabs.label "Lisa kõik kaardid järjehoidjatesse">
 <!ENTITY linkhere.label "Ava link sellel kaardil">
 <!ENTITY linkhere.accesskey "V">
 <!ENTITY linkBackgroundTab.label "Ava link taustal oleval kaardil">

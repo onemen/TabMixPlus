@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Odśwież tę witrynę co">
 <!ENTITY autoReloadSite.accesskey "W">
 <!ENTITY afterthis.label "za tą kartą">
-<!ENTITY bookmarktab.label "Dodaj zakładkę do tej karty">
 <!ENTITY undoCloseListMenu.label "Lista zamkniętych kart">
 <!ENTITY undoCloseListMenu.accesskey "H">
 <!ENTITY closeAllTabsMenu.label "Zamknij wszystkie karty">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Zablokuj kartę">
 <!ENTITY lockTabMenu.tooltip "Wszystkie odnośniki z zablokowanej karty będą otwierane w nowych kartach">
 <!ENTITY lockTabMenu.accesskey "B">
-<!ENTITY bookmarktabs.label "Dodaj zakładki do wszystkich stron">
 <!ENTITY linkhere.label "Otwórz odnośnik w tej karcie">
 <!ENTITY linkhere.accesskey "T">
 <!ENTITY linkBackgroundTab.label "Otwórz odnośnik w nowej karcie w tle">

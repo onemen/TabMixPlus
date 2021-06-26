@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Bu siteyi şu kadar sürede bir yeniden yükle:">
 <!ENTITY autoReloadSite.accesskey "H">
 <!ENTITY afterthis.label "Bu sekmeden sonra">
-<!ENTITY bookmarktab.label "Yer İmlerine ekle">
 <!ENTITY undoCloseListMenu.label "Kapatılmış sekmeler listesi">
 <!ENTITY undoCloseListMenu.accesskey "K">
 <!ENTITY closeAllTabsMenu.label "Tüm sekmeleri kapat">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Sekmeyi kilitle">
 <!ENTITY lockTabMenu.tooltip "Tüm bağlantılar yeni bir sekmede açılır">
 <!ENTITY lockTabMenu.accesskey "K">
-<!ENTITY bookmarktabs.label "Tüm sekmeleri yer imlerine kaydet">
 <!ENTITY linkhere.label "Bağlantıyı bu sekmede aç">
 <!ENTITY linkhere.accesskey "B">
 <!ENTITY linkBackgroundTab.label "Bağlantıyı arka planda aç">

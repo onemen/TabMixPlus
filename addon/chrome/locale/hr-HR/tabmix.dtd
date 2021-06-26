@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Reload This Site Every">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "Nakon ove kartice">
-<!ENTITY bookmarktab.label "Dodaj ovu karticu u Zabilješke">
 <!ENTITY undoCloseListMenu.label "Popis zatvorenih kartica">
 <!ENTITY undoCloseListMenu.accesskey "P">
 <!ENTITY closeAllTabsMenu.label "Zatvori sve kartice">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Zaključaj karticu">
 <!ENTITY lockTabMenu.tooltip "Sve poveznice otvori u novoj kartici">
 <!ENTITY lockTabMenu.accesskey "k">
-<!ENTITY bookmarktabs.label "Dodaj sve kartice u Zabilješke">
 <!ENTITY linkhere.label "Otvori poveznicu u ovoj kartici">
 <!ENTITY linkhere.accesskey "o">
 <!ENTITY linkBackgroundTab.label "Otvori poveznicu u pozadinskoj kartici">

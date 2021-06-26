@@ -38,7 +38,7 @@ var TabmixTabClickOptions = {
 
     // only allow middle-click on close tab button on tab to go throw as
     // middle-click on the tab
-    if (aEvent.button == 1 && target.localName == "toolbarbutton" && isCloseButton) {
+    if (aEvent.button == 1 && target.localName == "toolbarbutton" && !isCloseButton) {
       return;
     }
 
@@ -359,28 +359,26 @@ var TabmixContext = {
   buildTabContextMenu: function TMP_buildTabContextMenu() {
     var $id = id => document.getElementById(id);
 
+    MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
+    MozXULElement.insertFTLIfNeeded("browser/menubar.ftl");
+    Tabmix.setFTLDataId("tabContextMenu");
+
+    const i10IdMap = {"tab-context-open-in-new-container-tab": "tab-context-open-in-container"};
+    Tabmix.setFTLDataId(
+      "context_reopenInContainer",
+      l10Id => !Tabmix.isVersion(880) && i10IdMap[l10Id] || l10Id
+    );
+
     var tabContextMenu = $id("tabContextMenu");
-    tabContextMenu.insertBefore($id("context_reloadTab"), $id("tm-autoreloadTab_menu"));
-    tabContextMenu.insertBefore($id("context_openTabInWindow"), $id("context_pinTab"));
-    tabContextMenu.insertBefore($id("context_bookmarkSelectedTabs"), $id("context_bookmarkTab").nextSibling);
-    tabContextMenu.insertBefore($id("context_closeTab"), $id("tm-closeAllTabs"));
-    let closeLeftTabs = $id("tm-closeLeftTabs");
-    let closeTabsToTheEnd = $id("context_closeTabsToTheEnd");
-    tabContextMenu.insertBefore($id("context_closeOtherTabs"), closeLeftTabs);
-    tabContextMenu.insertBefore(closeTabsToTheEnd, closeLeftTabs.nextSibling);
-    Tabmix.setItem(closeTabsToTheEnd, "oncommand", "gBrowser._closeRightTabs(TabContextMenu.contextTab);");
+    tabContextMenu.insertBefore($id("context_reloadTab"), $id("tabmix_reloadTabOptions_separator"));
+    tabContextMenu.insertBefore($id("context_reloadSelectedTabs"), $id("tabmix_reloadTabOptions_separator"));
+    tabContextMenu.insertBefore($id("context_undoCloseTab"), $id("tabmix_closeTab_separator"));
+    tabContextMenu.insertBefore($id("context_closeTab"), $id("tabmix_closeTab_separator"));
+    tabContextMenu.insertBefore($id("context_bookmarkSelectedTabs"), $id("context_bookmarkAllTabs"));
+    tabContextMenu.insertBefore($id("context_bookmarkTab"), $id("context_bookmarkAllTabs"));
 
     // we can't disable menus with command attribute
     $id("context_undoCloseTab").removeAttribute("command");
-
-    let openNonRemote = $id("context_openNonRemoteWindow");
-    if (openNonRemote)
-      tabContextMenu.insertBefore(openNonRemote, $id("context_openTabInWindow").nextSibling);
-
-    let toggleMuteTab = $id("context_toggleMuteTab");
-    if (toggleMuteTab) {
-      tabContextMenu.insertBefore(toggleMuteTab, $id("context_pinTab"));
-    }
 
     // insert IE Tab menu-items before Bookmarks menu-items
     if ("gIeTab" in window) { // no need to do this fix for IE Tab 2
@@ -389,7 +387,7 @@ var TabmixContext = {
       if (aFunction in IeTab.prototype) {
         Tabmix.changeCode(IeTab.prototype, "IeTab.prototype." + aFunction)._replace(
           'tabbarMenu.insertBefore(document.getElementById("ietab-tabbar-sep"), separator);',
-          'separator = document.getElementById("tm-separator-3"); $&'
+          'separator = document.getElementById("tabmix_lockTab_separator"); $&'
         ).toCode();
       }
     }
@@ -458,20 +456,22 @@ var TabmixContext = {
 
     document.getElementById("tabContextMenu").addEventListener("popuphidden", this);
 
-    var item, triggerNode = document.getElementById("tabContextMenu").triggerNode;
-    if (triggerNode.parentNode) {
-      item = triggerNode.parentNode.id;
+    const origTriggerNode = document.getElementById("tabContextMenu").triggerNode;
+    let triggerNode = origTriggerNode && origTriggerNode.parentNode;
+    if (triggerNode && triggerNode.parentNode) {
+      const item = triggerNode.parentNode.id;
       if (item === "allTabsMenu-allTabsView") {
         TabContextMenu.contextTab = triggerNode.tab;
       }
     }
+    let multiselectionContext = TabContextMenu.contextTab.multiselected;
 
-    var clickOutTabs = triggerNode.localName == "tabs";
+    const clickOutTabs = triggerNode && triggerNode.localName == "tabs";
     var aTab = clickOutTabs ? gBrowser.selectedTab : TabContextMenu.contextTab;
 
     var isOneWindow = Tabmix.numberOfWindows() == 1;
 
-    var newTab = document.getElementById("context_newTab");
+    const newTab = document.getElementById("context_openANewTab");
     Tabmix.showItem(newTab, Tabmix.prefs.getBoolPref("newTabMenu"));
     if (clickOutTabs) {
       Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab"));
@@ -482,25 +482,31 @@ var TabmixContext = {
     }
 
     // Duplicate Commands
-    Tabmix.showItem("tm-duplicateTab", Tabmix.prefs.getBoolPref("duplicateMenu"));
+    Tabmix.showItem("context_duplicateTab", !multiselectionContext && Tabmix.prefs.getBoolPref("duplicateMenu"));
+    Tabmix.showItem("context_duplicateTabs", multiselectionContext && Tabmix.prefs.getBoolPref("duplicateMenu"));
     Tabmix.showItem("tm-duplicateinWin", Tabmix.prefs.getBoolPref("duplicateinWinMenu") && !Tabmix.singleWindowMode);
     Tabmix.showItem("context_openTabInWindow", Tabmix.prefs.getBoolPref("detachTabMenu") && !Tabmix.singleWindowMode);
 
-    Tabmix.showItem("context_openNonRemoteWindow",
-      Tabmix.prefs.getBoolPref("tabcontext.openNonRemoteWindow") &&
-        !Tabmix.singleWindowMode && gMultiProcessBrowser);
-
-    Tabmix.showItem("context_toggleMuteTab", Tabmix.prefs.getBoolPref("muteTabMenu"));
+    Tabmix.showItem("context_toggleMuteTab", !multiselectionContext && Tabmix.prefs.getBoolPref("muteTabMenu"));
+    Tabmix.showItem("context_toggleMuteTabs", multiselectionContext && Tabmix.prefs.getBoolPref("muteTabMenu"));
 
     var show = Tabmix.prefs.getBoolPref("pinTabMenu");
-    Tabmix.showItem("context_pinTab", show && !aTab.pinned);
-    Tabmix.showItem("context_unpinTab", show && aTab.pinned);
+    Tabmix.showItem("context_pinTab", !multiselectionContext && show && !aTab.pinned);
+    Tabmix.showItem("context_unpinTab", !multiselectionContext && show && aTab.pinned);
+    Tabmix.showItem("context_pinSelectedTabs", multiselectionContext && show && !aTab.pinned);
+    Tabmix.showItem("context_unpinSelectedTabs", multiselectionContext && show && aTab.pinned);
     setTimeout(() => {
       // we need to set our show/hide after tabGroups extension
       let tabViewMenu = document.getElementById("context_tabViewMenu") ||
           document.getElementById("tabGroups-context_tabViewMenu");
       Tabmix.showItem(tabViewMenu, Tabmix.prefs.getBoolPref("moveToGroup") && !aTab.pinned);
     });
+    Tabmix.showItem("context_moveTabOptions", Tabmix.prefs.getBoolPref("moveTabOptions"));
+
+    // make sure not to show menu items that are hidden by Firefox
+    Tabmix.setItem("context_sendTabToDevice", "tabmix_hide", !Tabmix.prefs.getBoolPref("sendTabToDevice") || null);
+    Tabmix.setItem("context_shareTabURL", "tabmix_hide", !Tabmix.prefs.getBoolPref("shareTabURL") || null);
+
     Tabmix.showItem("tm-mergeWindowsTab",
       Tabmix.prefs.getBoolPref("showMergeWindow") &&
       (!Tabmix.singleWindowMode ||
@@ -508,16 +514,16 @@ var TabmixContext = {
     var showRenameTabMenu = Tabmix.prefs.getBoolPref("renameTabMenu");
     Tabmix.showItem("tm-renameTab", showRenameTabMenu);
     Tabmix.showItem("tm-copyTabUrl", Tabmix.prefs.getBoolPref("copyTabUrlMenu"));
+    Tabmix.showItem("context_reopenInContainer", Tabmix.prefs.getBoolPref("reopenInContainer"));
+    Tabmix.showItem("context_selectAllTabs", Tabmix.prefs.getBoolPref("selectAllTabs"));
 
     //  ---------------- menuseparator ---------------- //
 
     // Reload Commands
-    Tabmix.showItem("context_reloadTab", Tabmix.prefs.getBoolPref("reloadTabMenu"));
-    Tabmix.showItem("context_reloadAllTabs", Tabmix.prefs.getBoolPref("reloadAllMenu"));
+    Tabmix.showItem("context_reloadTab", !multiselectionContext && Tabmix.prefs.getBoolPref("reloadTabMenu"));
+    Tabmix.showItem("context_reloadSelectedTabs", multiselectionContext && Tabmix.prefs.getBoolPref("reloadTabMenu"));
     this._showAutoReloadMenu("tm-autoreloadTab_menu", "autoReloadMenu", true);
-    Tabmix.showItem("tm-reloadRight", Tabmix.prefs.getBoolPref("reloadRightMenu"));
-    Tabmix.showItem("tm-reloadLeft", Tabmix.prefs.getBoolPref("reloadLeftMenu"));
-    Tabmix.showItem("tm-reloadOther", Tabmix.prefs.getBoolPref("reloadOtherMenu"));
+    Tabmix.showItem("context_reloadTabOptions", Tabmix.prefs.getBoolPref("reloadTabOptions"));
 
     //  ---------------- menuseparator ---------------- //
 
@@ -527,18 +533,9 @@ var TabmixContext = {
 
     //  ---------------- menuseparator ---------------- //
 
-    var tabsCount = Tabmix.visibleTabs.tabs.length;
-    var unpinnedTabsCount = tabsCount - TabmixTabbar._real_numPinnedTabs;
-    var unpinnedTabs = unpinnedTabsCount > 0;
-
     // Close tab Commands
-    var pinnedTab = TabContextMenu.contextTab.pinned;
     Tabmix.showItem("context_closeTab", Tabmix.prefs.getBoolPref("closeTabMenu"));
-    Tabmix.showItem("tm-closeAllTabs", Tabmix.prefs.getBoolPref("closeAllMenu") && unpinnedTabs);
-    Tabmix.showItem("tm-closeSimilar", Tabmix.prefs.getBoolPref("closeSimilarTabs") && unpinnedTabs);
-    Tabmix.showItem("context_closeOtherTabs", Tabmix.prefs.getBoolPref("closeOtherMenu") && unpinnedTabs);
-    Tabmix.showItem("tm-closeLeftTabs", Tabmix.prefs.getBoolPref("closeLeftMenu") && !pinnedTab);
-    Tabmix.showItem("context_closeTabsToTheEnd", Tabmix.prefs.getBoolPref("closeRightMenu") && unpinnedTabs);
+    Tabmix.showItem("context_closeTabOptions", Tabmix.prefs.getBoolPref("closeTabOptions"));
 
     //  ---------------- menuseparator ---------------- //
 
@@ -549,7 +546,8 @@ var TabmixContext = {
 
     //  ---------------- menuseparator ---------------- //
 
-    Tabmix.showItem("context_bookmarkTab", Tabmix.prefs.getBoolPref("bookmarkTabMenu"));
+    Tabmix.showItem("context_bookmarkTab", !multiselectionContext && Tabmix.prefs.getBoolPref("bookmarkTabMenu"));
+    Tabmix.showItem("context_bookmarkTabs", multiselectionContext && Tabmix.prefs.getBoolPref("bookmarkTabMenu"));
     Tabmix.showItem("context_bookmarkAllTabs", Tabmix.prefs.getBoolPref("bookmarkTabsMenu"));
 
     // we call this again when popupshown to make sure we don't show 2 menuseparator together
@@ -572,10 +570,15 @@ var TabmixContext = {
       }
     }
 
-    var protectedTab = aTab.hasAttribute("protected");
-    var lockedTab = aTab.hasAttribute("locked");
-    var noTabsToClose = !unpinnedTabsCount || unpinnedTabsCount == 1 && !aTab.pinned;
-    var cIndex = Tabmix.visibleTabs.indexOf(aTab);
+    let protectedTab = aTab.hasAttribute("protected");
+    let lockedTab = aTab.hasAttribute("locked");
+    let tabsCount = Tabmix.visibleTabs.tabs.length;
+    let unpinnedTabsCount = multiselectionContext ?
+      gBrowser.visibleTabs.filter(t => !t.multiselected && !t.pinned).length :
+      gBrowser.visibleTabs.filter(t => t != this.contextTab && !t.pinned)
+          .length;
+    let noTabsToClose = !unpinnedTabsCount || unpinnedTabsCount == 1 && !aTab.pinned;
+    let cIndex = Tabmix.visibleTabs.indexOf(aTab);
     if (Tabmix.rtl)
       cIndex = tabsCount - 1 - cIndex;
 
@@ -584,7 +587,7 @@ var TabmixContext = {
     Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || !unpinnedTabsCount);
     Tabmix.setItem("context_closeOtherTabs", "disabled", noTabsToClose);
     Tabmix.setItem("context_closeTabsToTheEnd", "disabled", cIndex == tabsCount - 1 || noTabsToClose);
-    Tabmix.setItem("tm-closeLeftTabs", "disabled",
+    Tabmix.setItem("context_closeTabsToTheStart", "disabled",
       cIndex === 0 || aTab.pinned || Tabmix.visibleTabs.previous(aTab).pinned);
 
     var closeTabsEmpty = TMP_ClosedTabs.count < 1;
@@ -598,6 +601,8 @@ var TabmixContext = {
     Tabmix.setItem("tm-reloadLeft", "disabled", tabsCount == 1 || cIndex === 0);
     Tabmix.setItem("tm-reloadOther", "disabled", tabsCount == 1);
     Tabmix.setItem("context_reloadAllTabs", "disabled", tabsCount == 1);
+    // Disable "Reload Multiple Tabs" if all sub menuitems are disabled
+    Tabmix.setItem("context_reloadTabOptions", "disabled", tabsCount == 1);
 
     Tabmix.setItem("tm-docShell", "disabled", clickOutTabs);
 
@@ -662,6 +667,9 @@ var TabmixContext = {
   updateMainContextMenu: function TMP_updateMainContextMenu(event) {
     if (!gContextMenu || event.originalTarget != document.getElementById("contentAreaContextMenu"))
       return true;
+
+    // copy label from key
+    Tabmix.setItem("tm-content-undoCloseTab", "label", document.getElementById("key_tm_undoClose").getAttribute("label"));
 
     // hide open link in window in single window mode
     Tabmix.changeCode(gContextMenu, "gContextMenu.initOpenItems")._replace(

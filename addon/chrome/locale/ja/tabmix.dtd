@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "このサイトを再読み込みする間隔">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "このタブの直後に">
-<!ENTITY bookmarktab.label "このタブをブックマーク">
 <!ENTITY undoCloseListMenu.label "最近閉じたタブ">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "すべてのタブを閉じる">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "タブをロック">
 <!ENTITY lockTabMenu.tooltip "ロックされたタブ内のリンクをクリックすると、常に新しいタブに開きます">
 <!ENTITY lockTabMenu.accesskey "K">
-<!ENTITY bookmarktabs.label "すべてのタブをブックマーク">
 <!ENTITY linkhere.label "リンクを現在のタブで開く">
 <!ENTITY linkhere.accesskey "O">
 <!ENTITY linkBackgroundTab.label "リンクをバックグランドのタブで開く">

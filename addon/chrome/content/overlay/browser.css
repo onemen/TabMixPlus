@@ -218,6 +218,7 @@ so display: none !important; does not hide the button */
 .tab-progress {
   margin: 0;
   min-width: 0;
+  width: 0;
 }
 
 .tabbrowser-tab > .tab-stack > .tab-progress-container {
@@ -320,4 +321,9 @@ so display: none !important; does not hide the button */
   background-image: none !important;
   */
   margin-top: 1px !important;
+}
+
+/* hide menuitem in tabContextMenu */
+#tabContextMenu menuitem[tabmix_hide="true"] {
+  visibility: collapse;
 }

@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Reload This Site Every">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "After This Tab">
-<!ENTITY bookmarktab.label "Bookmark This Tab">
 <!ENTITY undoCloseListMenu.label "Closed Tabs List">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Close All Tabs">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Lock Tab">
 <!ENTITY lockTabMenu.tooltip "All links open in new tab">
 <!ENTITY lockTabMenu.accesskey "K">
-<!ENTITY bookmarktabs.label "Bookmark All Tabs">
 <!ENTITY linkhere.label "Open Link in This Tab">
 <!ENTITY linkhere.accesskey "O">
 <!ENTITY linkBackgroundTab.label "Open Link in Background Tab">

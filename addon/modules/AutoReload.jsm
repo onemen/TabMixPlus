@@ -214,7 +214,7 @@ this.AutoReload = {
   _update(aTab, aValue) {
     _setItem(aTab, "reload-data", aValue);
     let win = aTab.ownerGlobal;
-    TabmixSvc.ss.setCustomTabValue(aTab, "reload-data", aValue);
+    TabmixSvc.setCustomTabValue(aTab, "reload-data", aValue);
     win.TabmixSessionManager.updateTabProp(aTab);
   },
 

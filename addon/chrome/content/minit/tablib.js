@@ -387,7 +387,8 @@ Tabmix.tablib = {
   change_tabContainer: function change_tabContainer() {
     let tabBar = gBrowser.tabContainer;
     if (!Tabmix.extensions.verticalTabs) {
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.handleEvent")._replace(
+      const methodName = Tabmix.isVersion(910) ? "gBrowser.tabContainer.init" : "gBrowser.tabContainer.handleEvent";
+      Tabmix.changeCode(tabBar, methodName)._replace(
         'this._updateCloseButtons',
         'TabmixTabbar._handleResize(); \
          $&'
@@ -400,7 +401,7 @@ Tabmix.tablib = {
            this.arrowScrollbox.resetFirstTabInRow();\
          $&'
       )._replace(
-        'scrollButtonWidth:',
+        Tabmix.isVersion("890") ? 'scrollStartOffset:' : 'scrollButtonWidth:',
         '$& TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 :'
       )._replace(
         'if (doPosition)',
@@ -722,9 +723,11 @@ Tabmix.tablib = {
       }
     };
 
+    /**
+     * only apply for sessionMnager
     Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
-      'gBrowser.warnAboutClosingTabs(closingTabs, gBrowser.closingTabsEnum.ALL)',
-      'Tabmix.tablib.closeWindow(true)', {flags: "g"}
+      /gBrowser\.warnAboutClosingTabs\(\n?\s*closingTabs,\n?\s* gBrowser\.closingTabsEnum\.ALL,?\n?\s*(source)?\n?\s*\)/g,
+      'Tabmix.tablib.closeWindow(true)'
     )._replace(
       /os\.notifyObservers\(null, "browser-lastwindow-close-granted"(?:, null)?\);/,
       'if (!TabmixSvc.isMac && !Tabmix.tablib.closeWindow(true)) return false;\
@@ -735,12 +738,13 @@ Tabmix.tablib = {
       '{',
       '{Tabmix._warnedBeforeClosing = false;'
     )._replace(
-      'if (!closeWindow(false, warnAboutClosingWindow))',
-      'var reallyClose = closeWindow(false, warnAboutClosingWindow);\
-       if (reallyClose && !Tabmix._warnedBeforeClosing)\
-         reallyClose = Tabmix.tablib.closeWindow();\
-       if (!reallyClose)'
+      /if \(!closeWindow\(false, warnAboutClosingWindow(, source)?\)\)/,
+      `let reallyClose = closeWindow(false, warnAboutClosingWindow$1);
+  if (reallyClose && !Tabmix._warnedBeforeClosing)
+    reallyClose = Tabmix.tablib.closeWindow();
+  if (!reallyClose)`
     ).toCode();
+    */
 
     Tabmix.changeCode(window, "goQuitApplication")._replace(
       'Services.startup.quit',
@@ -1000,6 +1004,41 @@ Tabmix.tablib = {
       }
     };
 
+    gBrowser.duplicateTabsToWindow = function(contextTab) {
+      const tabs = contextTab.multiselected ? this.selectedTabs : [contextTab];
+      this.clearMultiSelectedTabs();
+
+      if (tabs.length === 1) {
+        this.duplicateTabToWindow(tabs[0]);
+        return;
+      }
+
+      let selectedTabIndex = Math.max(0, tabs.indexOf(this.selectedTab));
+      let otherWin = OpenBrowserWindow({private: PrivateBrowsingUtils.isBrowserPrivate(contextTab.linkedBrowser)});
+      let delayedStartupFinished = (subject, topic) => {
+        if (topic == "browser-delayed-startup-finished" &&
+            subject == otherWin) {
+          Services.obs.removeObserver(delayedStartupFinished, topic);
+          let otherGBrowser = otherWin.gBrowser;
+          let otherTab = otherGBrowser.selectedTab;
+          for (let i = 0; i < tabs.length; ++i) {
+            const tab = tabs[i];
+            otherGBrowser.duplicateTab(
+              tab,
+              !tab.hasAttribute("pending") && !tab.hasAttribute("tabmix_pending"),
+              {inBackground: i !== selectedTabIndex}
+            );
+          }
+          otherGBrowser.removeTab(otherTab, {animate: false});
+        }
+      };
+
+      Services.obs.addObserver(
+        delayedStartupFinished,
+        "browser-delayed-startup-finished"
+      );
+    };
+
     gBrowser.openLinkWithHistory = function() {
       var url = Tabmix.tablib.getValidUrl();
       if (!url) {
@@ -1217,7 +1256,7 @@ Tabmix.tablib = {
         aTab.setAttribute("_locked", "true");
       }
       aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
-      SessionStore.setCustomTabValue(aTab, "_locked", aTab.getAttribute("_locked"));
+      TabmixSvc.setCustomTabValue(aTab, "_locked", aTab.getAttribute("_locked"));
       TabmixSessionManager.updateTabProp(aTab);
     };
 
@@ -1228,7 +1267,7 @@ Tabmix.tablib = {
         aTab.removeAttribute("protected");
       else
         aTab.setAttribute("protected", "true");
-      SessionStore.setCustomTabValue(aTab, "protected", aTab.hasAttribute("protected"));
+      TabmixSvc.setCustomTabValue(aTab, "protected", aTab.hasAttribute("protected"));
       TabmixSessionManager.updateTabProp(aTab);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();
@@ -1251,8 +1290,8 @@ Tabmix.tablib = {
       // don't keep this flag after user change lock state manually
       aTab.removeAttribute("_lockedAppTabs");
       aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
-      SessionStore.setCustomTabValue(aTab, "_locked", aTab.getAttribute("_locked"));
-      SessionStore.setCustomTabValue(aTab, "protected", aTab.getAttribute("protected"));
+      TabmixSvc.setCustomTabValue(aTab, "_locked", aTab.getAttribute("_locked"));
+      TabmixSvc.setCustomTabValue(aTab, "protected", aTab.getAttribute("protected"));
       TabmixSessionManager.updateTabProp(aTab);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();

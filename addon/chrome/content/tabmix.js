@@ -577,6 +577,14 @@ var TMP_eventListener = {
       ));
 
     Tabmix.allTabs.init();
+
+    MozXULElement.insertFTLIfNeeded("browser/tabContextMenu.ftl");
+    const i10IdMap = {"tab-context-reopen-closed-tabs": "tab-context-undo-close-tabs"};
+    Tabmix.setFTLDataId(
+      "key_tm_undoClose",
+      l10Id => !Tabmix.isVersion(880) && i10IdMap[l10Id] || l10Id
+    );
+    Tabmix.setFTLDataId("tm-content-closetab");
   },
 
   tabWidthCache: new WeakMap(),

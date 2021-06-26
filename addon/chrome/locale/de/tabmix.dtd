@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Seite automatisch neu laden">
 <!ENTITY autoReloadSite.accesskey "E">
 <!ENTITY afterthis.label "nach diesem Tab">
-<!ENTITY bookmarktab.label "Lesezeichen für diesen Tab hinzufügen">
 <!ENTITY undoCloseListMenu.label "Kürzlich geschlossene Tabs">
 <!ENTITY undoCloseListMenu.accesskey "h">
 <!ENTITY closeAllTabsMenu.label "Alle Tabs schließen">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Tab sperren">
 <!ENTITY lockTabMenu.tooltip "Links in gesperrten Tabs öffnen immer in einem neuen Tab">
 <!ENTITY lockTabMenu.accesskey "p">
-<!ENTITY bookmarktabs.label "Lesezeichen für alle Tabs hinzufügen">
 <!ENTITY linkhere.label "Link in diesem Tab öffnen">
 <!ENTITY linkhere.accesskey "f">
 <!ENTITY linkBackgroundTab.label "Link in neuem Tab im Hintergrund öffnen">

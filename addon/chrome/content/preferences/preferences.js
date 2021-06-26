@@ -353,7 +353,7 @@ var sessionPrefs = ["browser.sessionstore.resume_from_crash",
 XPCOMUtils.defineLazyGetter(window, "gPreferenceList", () => {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = [
-    "browser.allTabs.previews", "browser.ctrlTab.recentlyUsedOrder",
+    "browser.allTabs.previews", TabmixSvc.sortByRecentlyUsed,
     "browser.link.open_newwindow", "browser.link.open_newwindow.override.external",
     "browser.link.open_newwindow.restriction", TabmixSvc.newtabUrl,
     "browser.search.context.loadInBackground", "browser.search.openintab",
@@ -556,7 +556,7 @@ function openHelp(helpTopic) {
     }
   }
   helpTopic = helpTopic.toLowerCase().replace("mouse_-_", "").replace(/_-_|_/g, "-");
-  recentWindow.openUILinkIn(helpPage + helpTopic, where, {triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal()});
+  recentWindow.openTrustedLinkIn(helpPage + helpTopic, where);
 }
 
 window.gIncompatiblePane = {

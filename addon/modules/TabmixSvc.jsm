@@ -227,6 +227,9 @@ this.TabmixSvc = {
         return;
       this._initialized = true;
 
+      TabmixSvc.sortByRecentlyUsed = isVersion(890) ?
+        "browser.ctrlTab.sortByRecentlyUsed" : "browser.ctrlTab.recentlyUsedOrder";
+
       try {
         // replace old Settings.
         // we must call this before any other tabmix function
@@ -262,8 +265,6 @@ this.TabmixSvc = {
       if (TabmixSvc.australis) {
         prefs.setBoolPref("extensions.tabmix.squaredTabsStyle", false);
       }
-
-      prefs.setBoolPref("extensions.tabmix.tabcontext.openNonRemoteWindow", true);
 
       if (!TabmixSvc.isCyberfox) {
         prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
@@ -307,6 +308,14 @@ this.TabmixSvc = {
     statesToRestore: {},
     restoreCount: -1,
     observersWereNotified: false,
+  },
+
+  setCustomTabValue(tab, key, value) {
+    if (value === null || value === undefined) {
+      this.ss.deleteCustomTabValue(tab, key);
+    } else {
+      this.ss.setCustomTabValue(tab, key, value);
+    }
   },
 
   isAustralisBgStyle(orient) {

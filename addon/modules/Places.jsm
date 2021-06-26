@@ -25,6 +25,9 @@ XPCOMUtils.defineLazyModuleGetter(this, "PlacesUIUtils",
 XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils",
   "resource://gre/modules/PlacesUtils.jsm");
 
+XPCOMUtils.defineLazyModuleGetter(this, "BrowserWindowTracker",
+  "resource:///modules/BrowserWindowTracker.jsm");
+
 XPCOMUtils.defineLazyModuleGetter(this,
   "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
 

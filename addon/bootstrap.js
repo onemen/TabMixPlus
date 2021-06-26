@@ -18,6 +18,10 @@ const options = {
 const man = `
 overlay   chrome://browser/content/browser.xhtml                 chrome://tabmixplus/content/tabmix.xhtml
 overlay   about:addons                                           chrome://tabmixplus/content/preferences/overlay/aboutaddons.xhtml
+
+overlay   chrome://browser/content/places/bookmarksSidebar.xhtml chrome://tabmixplus/content/places/places.xhtml
+overlay   chrome://browser/content/places/historySidebar.xhtml   chrome://tabmixplus/content/places/places.xhtml
+overlay   chrome://browser/content/places/places.xhtml           chrome://tabmixplus/content/places/places.xhtml
 `;
 
 /**

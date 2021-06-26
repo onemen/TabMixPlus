@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Deze site vernieuwen, elke">
 <!ENTITY autoReloadSite.accesskey "e">
 <!ENTITY afterthis.label "Na dit tabblad">
-<!ENTITY bookmarktab.label "Tabblad als bladwijzer opslaan">
 <!ENTITY undoCloseListMenu.label "Lijst van afgesloten tabbladen">
 <!ENTITY undoCloseListMenu.accesskey "L">
 <!ENTITY closeAllTabsMenu.label "Alle tabbladen sluiten">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Tabblad op slot zetten">
 <!ENTITY lockTabMenu.tooltip "Alle koppelingen openen in nieuw tabblad">
 <!ENTITY lockTabMenu.accesskey "o">
-<!ENTITY bookmarktabs.label "Alle tabbladen opslaan als bladwijzer">
 <!ENTITY linkhere.label "Koppeling in dit tabblad openen">
 <!ENTITY linkhere.accesskey "D">
 <!ENTITY linkBackgroundTab.label "Koppeling in tabblad op de achtergrond openen">

@@ -3,6 +3,19 @@
 
 var gMenuPane = {
   init() {
+    MozXULElement.insertFTLIfNeeded("browser/menubar.ftl");
+    MozXULElement.insertFTLIfNeeded("browser/tabContextMenu.ftl");
+    MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
+    const i10IdMap = {
+      "tab-context-open-in-container": "reopen-in-container",
+      "tab-context-reopen-closed-tabs": "tab-context-undo-close-tabs",
+      "tab-context-open-in-new-container-tab": "tab-context-open-in-container"
+    };
+    Tabmix.setFTLDataId(
+      "paneMenu",
+      l10Id => !Tabmix.isVersion(880) && i10IdMap[l10Id] || l10Id
+    );
+
     $("pinTab").label = gPrefWindow.pinTabLabel;
     $("togglePinTab").setAttribute("label", gPrefWindow.pinTabLabel);
     $("clearClosedTabs").setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
@@ -23,19 +36,10 @@ var gMenuPane = {
       gPrefWindow.removeChild("moveToGroup");
     }
 
-    let openNonRemote = $$("context_openNonRemoteWindow");
-    if (openNonRemote) {
-      let item = $("openNonRemoteWindow");
-      item.setAttribute("label", openNonRemote.getAttribute("label"));
-      item.hidden = false;
-      let beforeItem = $("showUndoClose");
-      item = $("showReloadOther");
-      beforeItem.parentNode.insertBefore(item, beforeItem);
-      item.checked = $("pref_showReloadOther").value;
-    }
-
-    // check if bookmark item in tab context menu
-    Tabmix.setItem("bmMenu", "hidden", !($$("context_bookmarkAllTabs")));
+    $("sendTabToDevice").label = browserWindow.PluralForm.get(
+      1,
+      browserWindow.gNavigatorBundle.getString("sendTabsToDevice.label")
+    );
 
     this.setInverseLinkLabel();
 

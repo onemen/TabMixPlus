@@ -32,7 +32,6 @@
 <!ENTITY autoReloadSite.label "Uppdatera denna webbplats varje">
 <!ENTITY autoReloadSite.accesskey "e">
 <!ENTITY afterthis.label "Efter denna flik">
-<!ENTITY bookmarktab.label "Bokmärk denna flik">
 <!ENTITY undoCloseListMenu.label "Lista över stängda flikar">
 <!ENTITY undoCloseListMenu.accesskey "n">
 <!ENTITY closeAllTabsMenu.label "Stäng alla flikar">
@@ -51,7 +50,6 @@
 <!ENTITY lockTabMenu.label "Lås flik">
 <!ENTITY lockTabMenu.tooltip "Alla länkar öppnas i ny flik">
 <!ENTITY lockTabMenu.accesskey "k">
-<!ENTITY bookmarktabs.label "Lägg till bokmärken för alla flikar">
 <!ENTITY linkhere.label "Öppna länk i denna flik">
 <!ENTITY linkhere.accesskey "Ö">
 <!ENTITY linkBackgroundTab.label "Öppna länk i ny flik i bakgrunden">
