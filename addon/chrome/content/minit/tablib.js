@@ -1570,11 +1570,22 @@ Tabmix.tablib = {
       // default to true: if it were false, we wouldn't get this far
       var warnOnClose = {value: true};
 
+      const stringMap = {
+        "tabs.closeWarningMultipleTabs": "tabs.closeWarningMultiple",
+        "tabs.closeWarningPrompt": "tabs.closeWarningPromptMe",
+      };
+      function getString(name) {
+        if (!Tabmix.isVersion(880)) {
+          name = stringMap[name];
+        }
+        return Tabmix.getString(name);
+      }
+
       var message, chkBoxLabel;
-      if (shouldPrompt == 1 || numProtected === 0) {
-        message = PluralForm.get(tabsToClose, Tabmix.getString("tabs.closeWarningMultiple"))
+      if (shouldPrompt === 1 || numProtected === 0) {
+        message = PluralForm.get(tabsToClose, getString("tabs.closeWarningMultipleTabs"))
             .replace("#1", tabsToClose);
-        chkBoxLabel = shouldPrompt == 1 ? Tabmix.getString("tabs.closeWarningPromptMe") :
+        chkBoxLabel = shouldPrompt === 1 ? getString("tabs.closeWarningPrompt") :
           TabmixSvc.getString("window.closeWarning.2");
       } else {
         let messageKey = "protectedtabs.closeWarning.";
