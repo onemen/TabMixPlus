@@ -7,7 +7,7 @@
 
 /* for privateTab extensions */
 #TabsToolbar[privateTab-fixAfterTabsButtonsAccessibility]
-    #tabbrowser-tabs[flowing="multibar"][widthFitTitle="true"] .tabs-newtab-button {
+    #tabbrowser-tabs[flowing="multibar"][widthFitTitle="true"] #tabs-newtab-button {
   vertical-align: bottom;
 }
 

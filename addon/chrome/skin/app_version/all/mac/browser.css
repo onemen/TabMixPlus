@@ -16,7 +16,7 @@
    in display: block */
 #TabsToolbar[tabmix-show-newtabbutton="aftertabs"]
     #tabbrowser-tabs[flowing="multibar"] > #tabbrowser-arrowscrollbox >
-    .tabs-newtab-button[command="cmd_newNavigatorTab"]  .toolbarbutton-icon {
+    #tabs-newtab-button[command="cmd_newNavigatorTab"]  .toolbarbutton-icon {
   margin: -2px 0;
 }
 

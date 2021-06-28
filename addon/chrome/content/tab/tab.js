@@ -1707,17 +1707,7 @@ gTMPprefObserver = {
     if (!visuallyselected) {
       tab.setAttribute("visuallyselected", true);
     }
-    // let bgMiddle = document.getAnonymousElementByAttribute(tab, "class", "tab-background-middle");
-    // let margin = (-parseFloat(window.getComputedStyle(bgMiddle).borderLeftWidth)) + "px";
-    // let bgMiddleMargin = this.dynamicRules.bgMiddleMargin;
-    // if (bgMiddleMargin) {
-    //   bgMiddleMargin.style.MozMarginStart = margin;
-    //   bgMiddleMargin.style.MozMarginEnd = margin;
-    // } else {
-    //   newRule = '.tab-background-middle, .tab-background, .tabs-newtab-button {' +
-    //             '-moz-margin-end: %PX; -moz-margin-start: %PX;}';
-    //   this.insertRule(newRule.replace(/%PX/g, margin), "bgMiddleMargin");
-    // }
+
     if (!visuallyselected) {
       tab.removeAttribute("visuallyselected");
     }
