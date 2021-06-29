@@ -253,8 +253,7 @@ so display: none !important; does not hide the button */
 }
 
 #tabbrowser-tabs[orient="horizontal"]:not([widthFitTitle]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([tiletabs-single="hidden"]) {
-  -moz-box-flex: 100 !important;
-  width: 0 !important;
+  flex: 1 1 auto !important;
 }
 
 /* for tabbar on bottom with australis */
