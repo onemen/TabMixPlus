@@ -24,6 +24,9 @@ var TabmixTabbar = {
 
     Tabmix.setItem("TabsToolbar", "multibar", val == "multibar" || null);
     Tabmix.setItem("tabmix-scrollbox", "orient", val == "multibar" ? "vertical" : "horizontal");
+
+    Tabmix.tabsUtils.resizeObserver(val == "multibar");
+
     return val;
   },
 
@@ -925,6 +928,27 @@ Tabmix.tabsUtils = {
     // one tab before the last is in the first row and we are closing one tab
     let tabs = visibleTabs || Tabmix.visibleTabs.tabs;
     return this.getTabRowNumber(tabs[tabs.length - 2], this.topTabY) == 1;
+  },
+
+  _resizeObserver: null,
+  resizeObserver(observe) {
+    if (!observe && !this._resizeObserver) {
+      return;
+    }
+    if (!this._resizeObserver) {
+      this._resizeObserver = new window.ResizeObserver(entries => {
+        for (let entry of entries) {
+          if (entry.contentBoxSize) {
+            this.updateVerticalTabStrip();
+          }
+        }
+      });
+    }
+    if (observe) {
+      this._resizeObserver.observe(this.tabBar);
+    } else {
+      this._resizeObserver.unobserve(this.tabBar);
+    }
   },
 
   /**** gBrowser.tabContainer.arrowScrollbox helpers ****/

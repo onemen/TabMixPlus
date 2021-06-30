@@ -90,15 +90,6 @@ Tabmix.multiRow = {
             // allow vertical event only in multi-row mode
           } else if (event.detail === 0 && !this.isMultiRow) {
             return;
-          } else if (this.isMultiRow && !this._enterVerticalModeTimeout) {
-            this.__needToSetVerticalOrient = true;
-            // when widthFitTitle is false we enter vertical mode only after we are in overflow
-            // if first or last tab is not visible enter vertical mode
-            this._enterVerticalModeTimeout = setTimeout(() => {
-              this._enterVerticalModeTimeout = null;
-              this._enterVerticalMode(true);
-            }, 25);
-            return;
           }
 
           if (this.isMultiRow) {
@@ -113,9 +104,6 @@ Tabmix.multiRow = {
         });
 
         this.addEventListener("scroll", () => {
-          if (this.__needToSetVerticalOrient)
-            this._enterVerticalMode();
-
           const tabBar = this.parentNode;
           tabBar._unlockTabSizing();
 
@@ -314,7 +302,6 @@ Tabmix.multiRow = {
         // if first or last tab is not visible enter vertical mode
         // we can get here from new tabs, window resize tabs change width
         // so we call this function after 3 events TabOpen, overflow and scroll
-        this.__needToSetVerticalOrient = false;
         if (this.getAttribute("orient") === "vertical" ||
             this.hasAttribute("overflowing")) {
           return;
