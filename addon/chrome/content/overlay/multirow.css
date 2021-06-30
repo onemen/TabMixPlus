@@ -10,7 +10,7 @@
 :root {
   --tab_min_width_mlt: 100px;
   --tab_max_width_mlt: 200px;
-  --tab-min-height_mlt: var(--tab-min-height, 33px);
+  --tab-min-height_mlt: calc(var(--tab-min-height) + 2 * var(--proton-tab-block-margin, 0px));
   --tabmix-scrollbutton-padding:
       calc(var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding))
 }
@@ -27,10 +27,6 @@
 
 .tabbrowser-tab {
   height: var(--tab-min-height_mlt);
-}
-
-#tabs-newtab-button {
-  height: calc(var(--tab-min-height_mlt) - var(--tabs-navbar-shadow-size)) !important;
 }
 
 /* hide default scroll buttons */
@@ -50,8 +46,8 @@
 #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox-clip) {
   overflow: -moz-hidden-unscrollable;
   display: block;
-  margin-top: -1px;
-  margin-bottom: -1px;
+  margin-top: calc(var(--tabmix-multirow , 0) * 1px);
+  margin-bottom: calc(var(--tabmix-multirow , 0) * 1px);
 }
 
 #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox) {
@@ -101,5 +97,5 @@
 
 #TabsToolbar[multibar] .toolbarbutton-1 {
   -moz-box-align: start;
-  padding-top: 2px;
+  margin-top: 2px !important;
 }

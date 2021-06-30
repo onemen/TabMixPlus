@@ -218,6 +218,21 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   }
   TabmixTabbar.scrollButtonsMode = tabscroll;
 
+  // Proton
+  if (Tabmix.isVersion(860)) {
+    // 86: @supports -moz-bool-pref("browser.proton.tabs.enabled") --proton-tab-block-margin: 2px;
+    // 87-88: @supports -moz-bool-pref("browser.proton.tabs.enabled") --proton-tab-block-margin: 4px;
+    // 89-90: @media (-moz-proton) --proton-tab-block-margin: 4px;
+    // 91: no @media --tab-block-margin: 4px;
+    Tabmix.tabsUtils.protonMarginVar = Object.entries({
+      86: {name: "--proton-tab-block-margin", val: "2px"},
+      87: {name: "--proton-tab-block-margin", val: "4px"},
+      91: {name: "--tab-block-margin", val: "4px"},
+    }).reduce((acc, [version, val]) => {
+      return Tabmix.isVersion(version * 10) ? val : acc;
+    }, []);
+  }
+
   // setting flowing to "multibar" in Firefox 57 prevents Tabmix.getButtonsHeight
   // to get proper height when the window opened by SessionStore._openWindowWithState
   // with more than one rows of tabs

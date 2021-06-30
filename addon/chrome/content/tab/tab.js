@@ -609,7 +609,7 @@ Tabmix.tabsUtils = {
         }
         break;
       case "dragend":
-        if (this.tabBar.orient == "horizontal")
+        if (this.tabBar.attributes.orient.value == "horizontal")
           TMP_tabDNDObserver.onDragEnd(aEvent);
         break;
       case "dragexit":
@@ -704,6 +704,15 @@ Tabmix.tabsUtils = {
 
     if (currentMultibar != multibar) {
       Tabmix.setItem(this.tabBar, "multibar", multibar);
+    }
+
+    TabmixTabbar.visibleRows = rows;
+    document.documentElement.style.setProperty("--tabmix-multirow", rows > 1 ? 1 : 0);
+    // reduce proton tab-block-margin on tab-background to minimize gap between rows
+    if (Tabmix.isVersion(860) &&
+        gBrowser.tabContainer.attributes.orient.value === "horizontal") {
+      const margin = rows > 1 ? "1px" : "";
+      document.documentElement.style.setProperty(this.protonMarginVar.name, margin);
     }
 
     if (TabmixTabbar.isMultiRow) {
@@ -841,7 +850,9 @@ Tabmix.tabsUtils = {
       return val;
     }
 
-    if (val != this.overflow) {
+    // we may get here after tabBar ovefflow/underflow already finished
+    if (val != this.overflow ||
+        val != document.getElementById("tabmix-scrollbox").hasAttribute("overflowing")) {
       let tabBar = this.tabBar;
       let tabstrip = tabBar.arrowScrollbox;
       Tabmix.setItem("tabmix-scrollbox", "overflowing", val || null);
@@ -1682,21 +1693,7 @@ gTMPprefObserver = {
 
     let skin;
     let newRule;
-    if (!TabmixSvc.australis) {
-      newRule = `#tabbrowser-tabs[flowing="multibar"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab {
-        height: ${Tabmix._buttonsHeight}px;
-      }`;
-      this.insertRule(newRule);
-    }
 
-    newRule = '#tabmix-scrollbox[flowing="multibar"] > toolbarbutton {' +
-      '  height: #px;}'.replace("#", Tabmix._buttonsHeight);
-    this.insertRule(newRule, "scrollbutton-height");
-
-    let _buttonsHeight = Tabmix._buttonsHeight - 1;
-    newRule = '#TabsToolbar[multibar] .toolbarbutton-1 {' +
-      '  height: #px;}'.replace("#", _buttonsHeight);
-    this.insertRule(newRule, "toolbarbutton-height");
     delete Tabmix._buttonsHeight;
 
     // we don't show icons on menu on Mac OS X
@@ -1770,9 +1767,17 @@ gTMPprefObserver = {
       }, true);
     }
 
-    // tabmix-tabs-closebutton toolbarbutton
     if (!Tabmix.isVersion(880)) {
+      // tabmix-tabs-closebutton toolbarbutton
       document.getElementById("tabmix-tabs-closebutton").setAttribute("tabmix-fill-opacity", true);
+      const proton = Services.prefs.getBoolPref("browser.proton.tabs.enabled", false);
+      newRule = `#tabmix-tabs-closebutton[tabmix-fill-opacity] > .toolbarbutton-icon {
+        padding: ${proton ? 7.4 : 4}px 4px !important;
+      }`;
+      this.insertRule(newRule);
+      if (proton) {
+        this.insertRule(`#tabmix-scrollbox { margin-top: 4px }`);
+      }
     }
   },
 
