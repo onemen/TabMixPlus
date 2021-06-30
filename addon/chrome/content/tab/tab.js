@@ -708,12 +708,7 @@ Tabmix.tabsUtils = {
 
     TabmixTabbar.visibleRows = rows;
     document.documentElement.style.setProperty("--tabmix-multirow", rows > 1 ? 1 : 0);
-    // reduce proton tab-block-margin on tab-background to minimize gap between rows
-    if (this.setTabBlockMargin &&
-        gBrowser.tabContainer.attributes.orient.value === "horizontal") {
-      const margin = rows > 1 ? "1px" : "";
-      document.documentElement.style.setProperty(this.protonBlockMargin.name, margin);
-    }
+    this.updateProtonTabBlockMargin();
 
     if (TabmixTabbar.isMultiRow) {
       this.overflow = multibar == "scrollbar";
@@ -1007,7 +1002,58 @@ Tabmix.tabsUtils = {
       return false;
 
     return true;
-  }
+  },
+
+  get protonTabBlockMargin() {
+    // rules to add proton --tab-block-margin to --tab-min-height_mlt
+    // we update tab-block-margin dynamically in updateVerticalTabStrip when
+    // there are more than one row
+
+    // 86: @supports -moz-bool-pref("browser.proton.tabs.enabled") --proton-tab-block-margin: 2px;
+    // 87-88: @supports -moz-bool-pref("browser.proton.tabs.enabled") --proton-tab-block-margin: 4px;
+    // 89-90: @media (-moz-proton) --proton-tab-block-margin: 4px;
+    // 91: no @media --tab-block-margin: 4px;
+    const blockMargin = Object.entries({
+      86: {name: "--proton-tab-block-margin", val: "2px", margin: "1px"},
+      87: {name: "--proton-tab-block-margin", val: "4px", margin: "3px"},
+      91: {name: "--tab-block-margin", val: "4px", margin: "3px"},
+    }).reduce((acc, [version, val]) => {
+      return Tabmix.isVersion(version * 10) ? val : acc;
+    }, []);
+
+    const protonPrefVal = Services.prefs.getBoolPref("browser.proton.tabs.enabled", false);
+    const isEnabled = () => {
+      if (!Tabmix.isVersion(890)) {
+        // only use the pref value from the time the browser start
+        // it's in use by: @supports -moz-bool-pref("browser.proton.tabs.enabled")
+        return protonPrefVal;
+      }
+      if (!Tabmix.isVersion(910)) {
+        return Services.prefs.getBoolPref("browser.proton.enabled", false);
+      }
+      return true;
+    };
+
+    Object.defineProperty(Tabmix.tabsUtils, "protonTabBlockMargin", {
+      configurable: true,
+      enumerable: true,
+      get() {
+        return {...blockMargin, enabled: isEnabled()};
+      }
+    });
+    return {...blockMargin, enabled: isEnabled()};
+  },
+
+  updateProtonTabBlockMargin() {
+    // we reduce tab-block-margin to 1px on tab-background to minimize gap between rows,
+    // and add the difference to #tabbrowser-arrowscrollbox margin top/bottom
+    // with --tabmix-multirow-margin
+    const reduceMargin = this.protonTabBlockMargin.enabled &&
+      gBrowser.tabContainer.attributes.orient.value === "horizontal" &&
+      TabmixTabbar.visibleRows > 1;
+    const margin = reduceMargin ? "1px" : "";
+    document.documentElement.style.setProperty(this.protonTabBlockMargin.name, margin);
+  },
 };
 
 Tabmix.bottomToolbarUtils = {
@@ -1141,6 +1187,7 @@ gTMPprefObserver = {
     };
     addObserver("layout.css.devPixelsPerPx", TabmixSvc.australis);
     addObserver("browser.tabs.tabmanager.enabled", true);
+    addObserver("browser.proton.enabled", Tabmix.isVersion(890));
 
     try {
       // add Observer
@@ -1515,6 +1562,9 @@ gTMPprefObserver = {
       case "extensions.tabmix.showTabContextMenuOnTabbar":
         TabmixContext.updateTabbarContextMenu(Services.prefs.getBoolPref(prefName));
         break;
+      case "browser.proton.enabled":
+        Tabmix.tabsUtils.updateProtonTabBlockMargin();
+        break;
       default:
         break;
     }
@@ -1791,57 +1841,39 @@ gTMPprefObserver = {
       return;
     }
 
-    // 86: @supports -moz-bool-pref("browser.proton.tabs.enabled") --proton-tab-block-margin: 2px;
-    // 87-88: @supports -moz-bool-pref("browser.proton.tabs.enabled") --proton-tab-block-margin: 4px;
-    // 89-90: @media (-moz-proton) --proton-tab-block-margin: 4px;
-    // 91: no @media --tab-block-margin: 4px;
-    const protonBlockMargin = Tabmix.tabsUtils.protonBlockMargin = Object.entries({
-      // we reduve the block-margin to 1px, and add the difference to
-      // #tabbrowser-arrowscrollbox margin with --tabmix-multirow-margin
-      86: {name: "--proton-tab-block-margin", val: "2px", margin: "1px"},
-      87: {name: "--proton-tab-block-margin", val: "4px", margin: "3px"},
-      91: {name: "--tab-block-margin", val: "4px", margin: "3px"},
-    }).reduce((acc, [version, val]) => {
-      return Tabmix.isVersion(version * 10) ? val : acc;
-    }, []);
-
-    // rules to add proton --tab-block-margin to --tab-min-height_mlt
-    // we update tab-block-margin dynamically in updateVerticalTabStrip when
-    // the are more than one row
-    const setTabBlockMargin = Tabmix.isVersion(890) || protonPrefVal;
-    Tabmix.tabsUtils.setTabBlockMargin = setTabBlockMargin;
-    const minHeightMlt = margin => `:root {--tab-min-height_mlt: calc(var(--tab-min-height)${margin})}`;
-    const blockMargin = setTabBlockMargin ? ` + 2 * var(${protonBlockMargin.name}, 0px)` : "";
-    if (!Tabmix.isVersion(890)) {
-      this.insertRule(minHeightMlt(blockMargin));
-    } else {
-      newRule = `@media not (-moz-proton) {${minHeightMlt("")}}`;
-      this.insertRule(newRule);
-      newRule = `@media (-moz-proton) {${minHeightMlt(blockMargin)}}`;
-      this.insertRule(newRule);
-    }
-
+    const blockMargin = Tabmix.tabsUtils.protonTabBlockMargin;
     newRule = Tabmix.isVersion(890) ?
       `@media (-moz-proton) {
       :root {
-        --tabmix-multirow-margin: ${protonBlockMargin.margin};
+        --tabmix-multirow-margin: ${blockMargin.margin};
       }
       }` :
       `:root {
-        --tabmix-multirow-margin: ${protonPrefVal ? protonBlockMargin.margin : "0px"};
+        --tabmix-multirow-margin: ${protonPrefVal ? blockMargin.margin : "0px"};
       }`;
     this.insertRule(newRule);
 
     if (Tabmix.isVersion(890)) {
       /* overwrite rull from chrome/browser/skin/classic/browser/browser.css */
-      this.insertRule(
+      newRule =
         `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox >
         .tabbrowser-tab:not(:hover) > .tab-stack > .tab-content > .tab-close-button {
           padding-inline-start: 7px;
           width: 24px;
-        }`
-      );
+        }`;
+      if (Tabmix.isVersion(910)) {
+        this.insertRule(newRule);
+      } else {
+        this.insertRule(`@media (-moz-proton) {${newRule}}`);
+      }
     }
+
+    // Bug 1705849 - Update toolbar icon fill colours
+    const fill = Tabmix.isVersion(890) ?
+      "var(--toolbarbutton-icon-fill)" :
+      "var(--lwt-toolbarbutton-icon-fill)";
+    newRule = `:root {--tabmix-scrollbox-button-fill: ${fill}}`;
+    this.insertRule(newRule);
   },
 
   updateStyleAttributes() {

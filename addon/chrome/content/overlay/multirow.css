@@ -10,6 +10,7 @@
 :root {
   --tab_min_width_mlt: 100px;
   --tab_max_width_mlt: 200px;
+  --tab-min-height_mlt: calc(var(--tab-min-height) + 2 * (var(--proton-tab-block-margin, 0px) + var(--tab-block-margin, 0px)));
   --tabmix-scrollbutton-padding:
       calc(var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding))
 }
@@ -80,7 +81,7 @@
 /* based on browser/themes/shared/tabs.inc.css */
 #tabmix-scrollbox::part(scrollbutton-up),
 #tabmix-scrollbox::part(scrollbutton-down) {
-  fill: var(--lwt-toolbarbutton-icon-fill, currentColor);
+  fill: var(--tabmix-scrollbox-button-fill, currentColor);
   fill-opacity: var(--toolbarbutton-icon-fill-opacity);
 }
 
