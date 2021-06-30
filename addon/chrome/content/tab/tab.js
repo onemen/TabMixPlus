@@ -709,10 +709,10 @@ Tabmix.tabsUtils = {
     TabmixTabbar.visibleRows = rows;
     document.documentElement.style.setProperty("--tabmix-multirow", rows > 1 ? 1 : 0);
     // reduce proton tab-block-margin on tab-background to minimize gap between rows
-    if (Tabmix.isVersion(860) &&
+    if (this.setTabBlockMargin &&
         gBrowser.tabContainer.attributes.orient.value === "horizontal") {
       const margin = rows > 1 ? "1px" : "";
-      document.documentElement.style.setProperty(this.protonMarginVar.name, margin);
+      document.documentElement.style.setProperty(this.protonBlockMargin.name, margin);
     }
 
     if (TabmixTabbar.isMultiRow) {
@@ -1767,17 +1767,80 @@ gTMPprefObserver = {
       }, true);
     }
 
+    this.dynamicProtonRules();
+  },
+
+  dynamicProtonRules() {
+    // since Firefox 89 the pref name is "browser.tabs.enabled",
+    // but we don't need to use it here, we use @media (-moz-proton) instead
+    const protonPrefVal = Services.prefs.getBoolPref("browser.proton.tabs.enabled", false);
+    let newRule;
     if (!Tabmix.isVersion(880)) {
       // tabmix-tabs-closebutton toolbarbutton
       document.getElementById("tabmix-tabs-closebutton").setAttribute("tabmix-fill-opacity", true);
-      const proton = Services.prefs.getBoolPref("browser.proton.tabs.enabled", false);
       newRule = `#tabmix-tabs-closebutton[tabmix-fill-opacity] > .toolbarbutton-icon {
-        padding: ${proton ? 7.4 : 4}px 4px !important;
+        padding: ${protonPrefVal ? 7.4 : 4}px 4px !important;
       }`;
       this.insertRule(newRule);
-      if (proton) {
+      if (protonPrefVal) {
         this.insertRule(`#tabmix-scrollbox { margin-top: 4px }`);
       }
+    }
+
+    if (!Tabmix.isVersion(860)) {
+      return;
+    }
+
+    // 86: @supports -moz-bool-pref("browser.proton.tabs.enabled") --proton-tab-block-margin: 2px;
+    // 87-88: @supports -moz-bool-pref("browser.proton.tabs.enabled") --proton-tab-block-margin: 4px;
+    // 89-90: @media (-moz-proton) --proton-tab-block-margin: 4px;
+    // 91: no @media --tab-block-margin: 4px;
+    const protonBlockMargin = Tabmix.tabsUtils.protonBlockMargin = Object.entries({
+      // we reduve the block-margin to 1px, and add the difference to
+      // #tabbrowser-arrowscrollbox margin with --tabmix-multirow-margin
+      86: {name: "--proton-tab-block-margin", val: "2px", margin: "1px"},
+      87: {name: "--proton-tab-block-margin", val: "4px", margin: "3px"},
+      91: {name: "--tab-block-margin", val: "4px", margin: "3px"},
+    }).reduce((acc, [version, val]) => {
+      return Tabmix.isVersion(version * 10) ? val : acc;
+    }, []);
+
+    // rules to add proton --tab-block-margin to --tab-min-height_mlt
+    // we update tab-block-margin dynamically in updateVerticalTabStrip when
+    // the are more than one row
+    const setTabBlockMargin = Tabmix.isVersion(890) || protonPrefVal;
+    Tabmix.tabsUtils.setTabBlockMargin = setTabBlockMargin;
+    const minHeightMlt = margin => `:root {--tab-min-height_mlt: calc(var(--tab-min-height)${margin})}`;
+    const blockMargin = setTabBlockMargin ? ` + 2 * var(${protonBlockMargin.name}, 0px)` : "";
+    if (!Tabmix.isVersion(890)) {
+      this.insertRule(minHeightMlt(blockMargin));
+    } else {
+      newRule = `@media not (-moz-proton) {${minHeightMlt("")}}`;
+      this.insertRule(newRule);
+      newRule = `@media (-moz-proton) {${minHeightMlt(blockMargin)}}`;
+      this.insertRule(newRule);
+    }
+
+    newRule = Tabmix.isVersion(890) ?
+      `@media (-moz-proton) {
+      :root {
+        --tabmix-multirow-margin: ${protonBlockMargin.margin};
+      }
+      }` :
+      `:root {
+        --tabmix-multirow-margin: ${protonPrefVal ? protonBlockMargin.margin : "0px"};
+      }`;
+    this.insertRule(newRule);
+
+    if (Tabmix.isVersion(890)) {
+      /* overwrite rull from chrome/browser/skin/classic/browser/browser.css */
+      this.insertRule(
+        `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox >
+        .tabbrowser-tab:not(:hover) > .tab-stack > .tab-content > .tab-close-button {
+          padding-inline-start: 7px;
+          width: 24px;
+        }`
+      );
     }
   },
 
