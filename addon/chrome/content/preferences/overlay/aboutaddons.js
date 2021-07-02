@@ -9,8 +9,8 @@ function updateShowItemPreferences() {
     getHtmlBrowser() : window.docShell.chromeEventHandler;
   const tabmixItem = htmlBrowser.contentDocument
       .querySelector(`addon-card[addon-id="${ID}"]`);
-  if (tabmixItem) {
-    const panelItem = tabmixItem.querySelector(`panel-item[action="preferences"]`);
+  const panelItem = tabmixItem?.querySelector(`panel-item[action="preferences"]`);
+  if (panelItem) {
     const optionsButton = panelItem.button;
     panelItem.removeAttribute("action");
     if (!optionsButton._tabmix_command_installed) {
