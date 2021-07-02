@@ -7,8 +7,8 @@ var gLinksPane = {
     this.externalLinkValue($("externalLink").checked);
 
     $("externalLinkTarget").querySelector('menuitem[value="-1"]').label = $("externalLinkTarget").querySelector('menuitem[value="3"]').label;
-    const config = { attributes: true };
-    const callback = function (mutationList) {
+    const config = {attributes: true};
+    const callback = function(mutationList) {
       for (const mutation of mutationList) {
         if (mutation.type === 'attributes' && mutation.attributeName == "label") {
           try {

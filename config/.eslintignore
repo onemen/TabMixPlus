@@ -13,3 +13,4 @@
 eslint_result.js
 .eslintrc.js
 manifest.json
+logs/

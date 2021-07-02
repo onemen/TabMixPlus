@@ -28,7 +28,6 @@ this.DocShellCapabilities = {
   caps: ["Images", "Subframes", "MetaRedirects", "Plugins", "Javascript"],
 
   collect(tab) {
-    let browser = tab.linkedBrowser;
     let window = tab.ownerGlobal;
     if (window && window.__SSi) {
       let tabState = TabState.collect(tab);

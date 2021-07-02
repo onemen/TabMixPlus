@@ -77,7 +77,7 @@ this.TabmixUtils = {
         MergeWindows.moveTabsFromPopups(null, tab, message.objects.opener);
         break;
       case "Tabmix:contentDrop": {
-        const {json, links, name} = message.data;
+        const {json, links} = message.data;
         const url = links[0].url;
         win = browser.ownerGlobal;
         const where = !TabmixSvc.isGlitterInstalled &&

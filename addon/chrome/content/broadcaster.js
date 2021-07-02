@@ -22,9 +22,9 @@
         } catch (ex) {
           Cu.reportError(ex);
         }
-      }, { once: true });
-      const config = { attributes: true };
-      const callback = function (mutationList) {
+      }, {once: true});
+      const config = {attributes: true};
+      const callback = function(mutationList) {
         for (const mutation of mutationList) {
           if (mutation.type === 'attributes') {
             const name = mutation.target.hasAttribute(mutation.attributeName);
@@ -52,9 +52,9 @@
     connectedCallback() {
       // super();
       this.textContent = "";
-      let obs = window.document.getElementById(this.getAttribute("element"));
-      let attr = this.attributes['attribute'].value;
-      let el = this.parentNode;
+      const obs = window.document.getElementById(this.getAttribute("element"));
+      const attr = this.attributes.attribute.value;
+      const el = this.parentNode;
       window.addEventListener("load", () => {
         try {
           if (obs.hasAttribute(attr))
@@ -62,9 +62,9 @@
         } catch (ex) {
           Cu.reportError(ex);
         }
-      }, { once: true });
-      const config = { attributes: true };
-      const callback = function (mutationList) {
+      }, {once: true});
+      const config = {attributes: true};
+      const callback = function(mutationList) {
         for (const mutation of mutationList) {
           if (mutation.type === 'attributes') {
             try {
