@@ -43,11 +43,11 @@
   visibility: collapse;
 }
 
-#tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox-clip) {
+#tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox-clip) {
   overflow: -moz-hidden-unscrollable;
   display: block;
-  margin-top: calc(var(--tabmix-multirow , 0) * var(--tabmix-multirow-margin , 0));
-  margin-bottom: calc(var(--tabmix-multirow , 0) * var(--tabmix-multirow-margin , 0));
+  margin-top: calc(var(--tabmix-multirow-margin , 0));
+  margin-bottom: calc(var(--tabmix-multirow-margin , 0));
 }
 
 #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox) {
@@ -105,18 +105,28 @@
 }
 
 /* :::: make sure all buttons align to the top row :::: */
-#TabsToolbar[multibar] #TabsToolbar-customization-target {
+#TabsToolbar[multibar] #TabsToolbar-customization-target,
+#TabsToolbar[multibar] .toolbarbutton-1 {
   -moz-box-align: start;
 }
 
-#TabsToolbar[multibar] .toolbarbutton-1 {
-  -moz-box-align: start;
-  margin-top: 2px !important;
+@media not (-moz-proton) {
+:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1 {
+  margin-top: var(--tabmix-button-magin-top) !important;
+}
+
+:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1 {
+  margin-top: var(--tabmix-button-magin-top-compact) !important;
+}
 }
 
 @media (-moz-proton) {
-#TabsToolbar[multibar] .toolbarbutton-1 {
-  padding-top: 1px !important;
+:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1 {
+  margin-top: var(--tabmix-button-magin-top-proton) !important;
+}
+
+:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1 {
+  margin-top: var(--tabmix-button-magin-top-proton-compact) !important;
 }
 }
 

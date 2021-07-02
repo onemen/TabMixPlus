@@ -642,7 +642,6 @@ Tabmix.tabsUtils = {
     }
 
     TabmixTabbar.visibleRows = rows;
-    document.documentElement.style.setProperty("--tabmix-multirow", rows > 1 ? 1 : 0);
     this.updateProtonTabBlockMargin();
 
     if (TabmixTabbar.isMultiRow) {
@@ -1753,6 +1752,7 @@ gTMPprefObserver = {
     }
 
     this.dynamicProtonRules();
+    this.toolbarbuttonTopMargin();
     this.overflowIndicator();
   },
 
@@ -1786,6 +1786,19 @@ gTMPprefObserver = {
       this.insertRule(newRule);
     }
 
+    // reduce scroll button padding for compact tab without proton style
+    newRule =
+      `:root[uidensity=compact] #tabmix-scrollbox::part(scrollbutton-up),
+      :root[uidensity=compact] #tabmix-scrollbox::part(scrollbutton-down) {
+        padding-top: calc(var(--tabmix-scrollbutton-padding) - 1px) !important;
+        padding-bottom: calc(var(--tabmix-scrollbutton-padding) - 1px) !important;
+      }`;
+    if (Tabmix.isVersion(890)) {
+      this.insertRule(`@media not (-moz-proton) {${newRule}}`);
+    } else {
+      this.insertRule(newRule);
+    }
+
     // Bug 1705849 - Update toolbar icon fill colours
     const fill = Tabmix.isVersion(890) ?
       "var(--toolbarbutton-icon-fill)" :
@@ -1803,31 +1816,73 @@ gTMPprefObserver = {
       return;
     }
 
-    const blockMargin = Tabmix.tabsUtils.protonTabBlockMargin;
-    newRule = Tabmix.isVersion(890) ?
-      `@media (-moz-proton) {
-      :root {
-        --tabmix-multirow-margin: ${blockMargin.margin};
+    const insertRule = rule => {
+      if (Tabmix.isVersion(910)) {
+        this.insertRule(rule);
+      } else {
+        this.insertRule(`@media (-moz-proton) {${rule}}`);
       }
-      }` :
-      `:root {
-        --tabmix-multirow-margin: ${protonPrefVal ? blockMargin.margin : "0px"};
-      }`;
-    this.insertRule(newRule);
+    };
 
+    const blockMargin = Tabmix.tabsUtils.protonTabBlockMargin;
     if (Tabmix.isVersion(890)) {
       /* overwrite rull from chrome/browser/skin/classic/browser/browser.css */
-      newRule =
+      insertRule(
         `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox >
         .tabbrowser-tab:not(:hover) > .tab-stack > .tab-content > .tab-close-button {
           padding-inline-start: 7px;
           width: 24px;
-        }`;
-      if (Tabmix.isVersion(910)) {
-        this.insertRule(newRule);
-      } else {
-        this.insertRule(`@media (-moz-proton) {${newRule}}`);
-      }
+        }`
+      );
+
+      // for tabbrowser-arrowscrollbox top/bottom margin
+      insertRule(
+        `:root {
+          --tabmix-multirow-margin: ${blockMargin.margin};
+        }`
+      );
+    } else {
+      this.insertRule(
+        `:root {
+          --tabmix-multirow-margin: ${protonPrefVal ? blockMargin.margin : "0px"};
+        }`
+      );
+    }
+  },
+
+  toolbarbuttonTopMargin() {
+    // adjust margin-top on toolbarbutton for multirow
+    if (Tabmix.isVersion(910)) {
+      this.insertRule(
+        `:root {
+          --tabmix-button-magin-top: 7px;
+          --tabmix-button-magin-top-compact: 4px;
+          --tabmix-button-magin-top-proton: 3.5px;
+          --tabmix-button-magin-top-proton-compact: 3.5px;
+        }`
+      );
+    } else if (Tabmix.isVersion(890)) {
+      this.insertRule(
+        `:root {
+          --tabmix-button-magin-top: 2px;
+          --tabmix-button-magin-top-compact: 0;
+          --tabmix-button-magin-top-proton: 3.5px;
+          --tabmix-button-magin-top-proton-compact: 3.5px;
+        }`
+      );
+    } else {
+      this.insertRule(
+        `:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1 {
+          margin-top: 2px !important;
+        }`
+      );
+      const proton = Tabmix.isVersion(860) &&
+        Services.prefs.getBoolPref("browser.proton.tabs.enabled", false);
+      this.insertRule(
+        `:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1 {
+          margin-top: ${proton ? 2 : 0}px !important;
+        }`
+      );
     }
   },
 
