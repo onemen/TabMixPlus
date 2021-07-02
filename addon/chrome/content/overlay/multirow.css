@@ -65,11 +65,25 @@
   opacity: 0.4;
 }
 
+/* see tab.js  in this.dynamicProtonRules
 #tabmix-scrollbox::part(scrollbutton-up),
 #tabmix-scrollbox::part(scrollbutton-down) {
   appearance: none;
   margin: 0 0 var(--tabs-navbar-shadow-size) !important;
   padding: var(--tabmix-scrollbutton-padding) !important;
+}
+} */
+
+@media (-moz-proton) {
+#tabmix-scrollbox::part(scrollbutton-up),
+#tabmix-scrollbox::part(scrollbutton-down) {
+  appearance: none;
+  background-clip: padding-box;
+  border: 4px solid transparent;
+  border-radius: calc(var(--tab-border-radius) + 4px);
+  margin: 0;
+  padding: calc(var(--toolbarbutton-inner-padding) - 2px) calc(var(--toolbarbutton-inner-padding) - 6px);
+}
 }
 
 #tabmix-scrollbox:not([scrolledtostart=true])::part(scrollbutton-up):hover,
@@ -87,7 +101,7 @@
 
 #tabmix-scrollbox[orient=vertical]::part(scrollbutton-up),
 #tabmix-scrollbox[orient=vertical]::part(scrollbutton-down) {
-  list-style-image: url(chrome://global/skin/icons/arrow-dropdown-16.svg);
+  list-style-image: var(--tabmix-scrollbutton-image);
 }
 
 /* :::: make sure all buttons align to the top row :::: */
@@ -103,9 +117,5 @@
 @media (-moz-proton) {
 #TabsToolbar[multibar] .toolbarbutton-1 {
   padding-top: 1px !important;
-}
-
-#tabmix-scrollbox {
-  margin-top: 4px
 }
 }

@@ -1818,6 +1818,7 @@ gTMPprefObserver = {
     }
 
     this.dynamicProtonRules();
+    this.overflowIndicator();
   },
 
   dynamicProtonRules() {
@@ -1836,6 +1837,32 @@ gTMPprefObserver = {
         this.insertRule(`#tabmix-scrollbox { margin-top: 4px }`);
       }
     }
+
+    newRule =
+      `#tabmix-scrollbox::part(scrollbutton-up),
+      #tabmix-scrollbox::part(scrollbutton-down) {
+        appearance: none;
+        margin: 0 0 var(--tabs-navbar-shadow-size) !important;
+        padding: var(--tabmix-scrollbutton-padding) !important;
+      }`;
+    if (Tabmix.isVersion(890)) {
+      this.insertRule(`@media not (-moz-proton) {${newRule}}`);
+    } else {
+      this.insertRule(newRule);
+    }
+
+    // Bug 1705849 - Update toolbar icon fill colours
+    const fill = Tabmix.isVersion(890) ?
+      "var(--toolbarbutton-icon-fill)" :
+      "var(--lwt-toolbarbutton-icon-fill)";
+    newRule = `:root {--tabmix-scrollbox-button-fill: ${fill}}`;
+    this.insertRule(newRule);
+
+    // Bug 1699586 - De-duplicate default down arrow icon
+    const iconUrl = Tabmix.isVersion(910) ?
+      "url(chrome://global/skin/icons/arrow-down.svg)" :
+      "url(chrome://global/skin/icons/arrow-dropdown-16.svg)";
+    this.insertRule(`:root {--tabmix-scrollbutton-image: ${iconUrl}}`);
 
     if (!Tabmix.isVersion(860)) {
       return;
@@ -1867,13 +1894,84 @@ gTMPprefObserver = {
         this.insertRule(`@media (-moz-proton) {${newRule}}`);
       }
     }
+  },
 
-    // Bug 1705849 - Update toolbar icon fill colours
-    const fill = Tabmix.isVersion(890) ?
-      "var(--toolbarbutton-icon-fill)" :
-      "var(--lwt-toolbarbutton-icon-fill)";
-    newRule = `:root {--tabmix-scrollbox-button-fill: ${fill}}`;
-    this.insertRule(newRule);
+  overflowIndicator() {
+    if (!Tabmix.firstWindowInSession || !Tabmix.isVersion(890)) {
+      return;
+    }
+
+    let cssText =
+    `/* browser/themes/shared/tabs.inc.css */
+    /* Tab Overflow */
+    #tabmix-scrollbox[orient=vertical]::part(overflow-start-indicator) {
+      display: none;
+    }
+
+    #tabmix-scrollbox:not([scrolledtostart])::part(overflow-start-indicator),
+    #tabmix-scrollbox:not([scrolledtoend])::part(overflow-end-indicator) {
+      width: 7px; /* The width is the sum of the inline margins */
+      background-image: radial-gradient(ellipse at bottom,
+                                        rgba(0,0,0,0.1) 0%,
+                                        rgba(0,0,0,0.1) 7.6%,
+                                        rgba(0,0,0,0) 87.5%);
+      background-repeat: no-repeat;
+      background-position: -3px;
+      border-left: .5px solid rgba(255,255,255,.2);
+      pointer-events: none;
+      position: relative;
+      z-index: 3; /* the selected tab's z-index + 1 */
+      border-bottom: .5px solid transparent;
+    }
+
+    /* original margin-inline: -.5px -6.5px; */
+    #tabmix-scrollbox:not([scrolledtostart])::part(overflow-start-indicator) {
+      margin-inline: -6.5px -.5px;
+    }
+
+    /* original margin-inline: -6.5px -.5px; */
+    #tabmix-scrollbox:not([scrolledtoend])::part(overflow-end-indicator) {
+      margin-inline: -.5px -6.5px;
+    }
+
+    ${Tabmix.isVersion(910) ? `` : `@media not (-moz-proton) {
+    #tabmix-scrollbox:not([scrolledtostart])::part(overflow-start-indicator),
+    #tabmix-scrollbox:not([scrolledtoend])::part(overflow-end-indicator) {
+      width: 18px;
+      background-image: url(chrome://browser/skin/tabbrowser/tab-overflow-indicator.png);
+      background-size: 17px 100%;
+      border-left: 1px solid;
+      border-image: linear-gradient(rgba(255,255,255,.2),
+                                    rgba(255,255,255,.2) calc(100% - 1px - var(--tabs-navbar-shadow-size)),
+                                    transparent calc(100% - 1px - var(--tabs-navbar-shadow-size)));
+      border-image-slice: 1;
+    }
+    } /*** END !proton ***/`}
+
+    /* swap direction from the original rule
+       we place overflow-start-indicator left to the button
+     */
+    #tabmix-scrollbox:-moz-locale-dir(ltr)::part(overflow-start-indicator),
+    #tabmix-scrollbox:-moz-locale-dir(rtl)::part(overflow-end-indicator) {
+      transform: scaleX(-1);
+    }
+
+    #tabmix-scrollbox[scrolledtostart]::part(overflow-start-indicator),
+    #tabmix-scrollbox[scrolledtoend]::part(overflow-end-indicator) {
+      opacity: 0;
+    }
+
+    #tabmix-scrollbox::part(overflow-start-indicator),
+    #tabmix-scrollbox::part(overflow-end-indicator) {
+      transition: opacity 150ms ease;
+    }`;
+
+    const styleSheet = Services.io.newURI(
+      "data:text/css," + encodeURIComponent(cssText), null, null);
+
+    const sss = Cc['@mozilla.org/content/style-sheet-service;1']
+        .getService(Ci.nsIStyleSheetService);
+    sss.loadAndRegisterSheet(styleSheet, sss.AUTHOR_SHEET);
   },
 
   updateStyleAttributes() {
