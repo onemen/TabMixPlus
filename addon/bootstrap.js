@@ -4,6 +4,7 @@
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/Services.jsm");
+Cu.import("resource://gre/modules/AddonManager.jsm");
 
 const appinfo = Services.appinfo;
 const options = {
@@ -71,7 +72,7 @@ function showRestartNotification(verb, window) {
     [{
       label: 'Not Now',
       accessKey: 'N',
-      callback: () => {},
+      callback: () => { },
     }],
     {
       popupIconURL: 'chrome://tabmixplus/skin/addon-install-restart.svg',
@@ -83,7 +84,10 @@ function showRestartNotification(verb, window) {
   );
 }
 
-function install() { }
+async function install(data) {
+  const addon = await AddonManager.getAddonByID(data.id);
+  addon.__AddonInternal__.signedState = AddonManager.SIGNEDSTATE_NOT_REQUIRED;
+}
 
 function uninstall() { }
 
@@ -111,8 +115,18 @@ function startup(data, reason) {
           return man;
         }, options);
         await chromeManifest.parse();
-        if (_win.document.createXULElement) {
-          Overlays.load(chromeManifest, _win.document.defaultView);
+        const document = _win.document;
+        if (document.createXULElement) {
+          Overlays.load(chromeManifest, document.defaultView);
+          if (document.documentElement.getAttribute("windowtype") === "navigator:browser") {
+            await _win.delayedStartupPromise;
+            _win.gBrowser.tabs.forEach(x => {
+              const browser = x.linkedBrowser;
+              if (browser.currentURI.spec == 'about:addons' && browser.contentWindow) {
+                Overlays.load(chromeManifest, browser.contentWindow);
+              }
+            });
+          }
         }
       }(win));
     }

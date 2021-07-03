@@ -27,7 +27,7 @@ var TabmixTabClickOptions = {
 
     const target = aEvent.originalTarget;
     const isCloseButton = aEvent.target.classList.contains("tab-close-button");
-    this._blockDblClick = target.classList.contains("tabs-newtab-button");
+    this._blockDblClick = target.id === "tabs-newtab-button";
 
     // don't do anything if user left click on tab or tabbar button
     if (leftClick &&

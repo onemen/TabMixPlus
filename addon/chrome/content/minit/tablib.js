@@ -419,14 +419,15 @@ Tabmix.tablib = {
         '    let width = TabmixSvc.australis ? 0 : this.arrowScrollbox.scrollboxPaddingStart || 0;' + $LF +
         '    for (let i = 0; i < numPinned; i++) {' +
         '      let tab = tabs[i];' +
-        '      tab.style.marginInlineStart = width + "px";' + $LF +
+        '      tab.style.setProperty("margin-inline-start", width + "px", "important");' + $LF +
         '      width += layoutData.pinnedTabWidth;' +
+        '      tab._pinnedUnscrollable = true;' +
         '    }' +
         '    if (width != this.arrowScrollbox.firstTabInRowMargin) {' +
         '      this.arrowScrollbox.firstTabInRowMargin = width;' +
         '      this.arrowScrollbox.firstVisible =  {tab: null, x: 0, y: 0};' +
         '      gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]' +
-        '        .style.marginInlineStart =  width + "px";' + $LF +
+        '        .style.setProperty("margin-inline-start", width + "px", "important");' + $LF +
         '    }' +
         '    this.style.paddingInlineStart = "";' + $LF +
         '    TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(this, "paddingLeft");' +

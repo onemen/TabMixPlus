@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <?xml-stylesheet href="chrome://tabmixplus/content/overlay/browser.css" type="text/css"?>
+<?xml-stylesheet href="chrome://tabmixplus/content/overlay/multirow.css" type="text/css"?>
 <?xml-stylesheet href="chrome://tabmixplus/skin/tab.css" type="text/css"?>
 <?xml-stylesheet href="chrome://tabmix-os/skin/browser.css" type="text/css"?>
 
@@ -23,6 +24,7 @@
    <script type="application/javascript" src="chrome://tabmixplus/content/broadcaster.js"/>
 
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+   <script type="application/javascript" src="chrome://tabmixplus/content/tab/scrollbox.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/tab/tabBindings.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/tabmix.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/minit/tablib.js"/>
@@ -346,7 +348,7 @@
       </menupopup >
       <!-- tabmix tooltip for button -->
       <tooltip id="tabmix-tooltip"/>
-      <!-- tabmix tooltip for tabmixScrollBox -->
+      <!-- tabmix tooltip for tabmix-scrollbox -->
       <tooltip id="tabmix-rows-tooltip"
                observes="tabmix_flowing"
                onpopupshowing="Tabmix.tabsUtils.createTooltip(this);">
@@ -354,11 +356,9 @@
     </popupset>
 
     <toolbar id="TabsToolbar">
-      <box id="tabmixScrollBox" insertafter="tabbrowser-tabs"
-                     class="tabbrowser-arrowscrollbox tabmix_scrollbuttons_box"
+      <tabmixscrollbox id="tabmix-scrollbox" insertafter="tabbrowser-tabs"
                      observes="tabmix_flowing"
                      tooltip="tabmix-rows-tooltip"
-                     type="tabmix-box"
                      removable="false"/>
 
       <toolbarbutton id="tabmix-tabs-closebutton" insertafter="alltabs-button"

@@ -113,22 +113,6 @@
   display: none !important;
 }
 
-#tabbrowser-tabs:not([defaultScrollButtons]) > #tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-up,
-#tabbrowser-tabs:not([defaultScrollButtons]) > #tabbrowser-arrowscrollbox:not([_side]) > .scrollbutton-down {
-  visibility: collapse !important;
-}
-
-#tabbrowser-tabs:not([overflow="true"]) ~ #tabmixScrollBox,
-#tabmixScrollBox[flowing="singlebar"],
-#tabmixScrollBox[defaultScrollButtons] {
-  visibility: collapse;
-}
-
-#tabmixScrollBox > toolbarbutton {
-  margin: 0;
-}
-
-
 /* we use this rule in tabmix.js Tabmix.getAfterTabsButtonsWidth */
 #tabbrowser-arrowscrollbox > #tabs-newtab-button[force-display] {
   display: -moz-box !important;
@@ -157,6 +141,7 @@
 }
 
 #TabsToolbar[tabmix-show-newtabbutton*="side"] #tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow="true"]) ~ #new-tab-button,
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[overflow="true"] ~ #new-tab-button,
 #TabsToolbar[tabmix-show-newtabbutton*="side"] #new-tab-button {
   visibility: visible;
 }
@@ -261,11 +246,6 @@ so display: none !important; does not hide the button */
                                         rgba(255,255,255,.8));
 }
 
-/* :::: multi-row :::: */
-#tabbrowser-arrowscrollbox[flowing=multibar][orient=vertical] > .arrowscrollbox-scrollbox > .scrollbox-innerbox {
-  display: block !important;
-}
-
 /* :::: widthFitTitle :::: */
 #tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]) {
   -moz-box-flex: 0 !important;
@@ -273,8 +253,7 @@ so display: none !important; does not hide the button */
 }
 
 #tabbrowser-tabs[orient="horizontal"]:not([widthFitTitle]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([tiletabs-single="hidden"]) {
-  -moz-box-flex: 100 !important;
-  width: 0 !important;
+  flex: 1 1 auto !important;
 }
 
 /* for tabbar on bottom with australis */

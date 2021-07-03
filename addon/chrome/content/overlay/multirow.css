@@ -1,0 +1,135 @@
+/****************************************************************************************/
+/* multirow / multiple tab lines - modified for Tab Mix Plus ****************************/
+/* all credits go to the original authors: **********************************************/
+/* https://www.reddit.com/r/FirefoxCSS/comments/7dclp7/multirow_tabs_in_ff57/ ***********/
+/* https://github.com/MrOtherGuy/firefox-csshacks/blob/master/chrome/multi-row_tabs.css */
+/****************************************************************************************/
+
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+:root {
+  --tab_min_width_mlt: 100px;
+  --tab_max_width_mlt: 200px;
+  --tab-min-height_mlt: calc(var(--tab-min-height) + 2 * (var(--proton-tab-block-margin, 0px) + var(--tab-block-margin, 0px)));
+  --tabmix-scrollbutton-padding:
+      calc(var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding))
+}
+
+#tabbrowser-tabs {
+  min-height: unset !important;
+  padding-inline-start: 0px;
+}
+
+#tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal] {
+  overflow: -moz-hidden-unscrollable;
+  display: block;
+}
+
+.tabbrowser-tab {
+  height: var(--tab-min-height_mlt);
+}
+
+/* hide default scroll buttons */
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(overflow-start-indicator),
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(overflow-end-indicator),
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-up),
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-down) {
+  display: none;
+}
+
+#tabmix-scrollbox:not([overflowing="true"]),
+#tabmix-scrollbox[flowing="singlebar"],
+#tabmix-scrollbox[defaultScrollButtons] {
+  visibility: collapse;
+}
+
+#tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox-clip) {
+  overflow: -moz-hidden-unscrollable;
+  display: block;
+  margin-top: calc(var(--tabmix-multirow-margin , 0));
+  margin-bottom: calc(var(--tabmix-multirow-margin , 0));
+}
+
+#tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox) {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: calc(var(--tab-min-height_mlt) * var(--tabs-lines));
+}
+
+/*
+  apply #tabbrowser-arrowscrollbox button style to our buttons
+  based on browser/themes/shared/toolbarbuttons.inc.css
+*/
+#tabmix-scrollbox[scrolledtostart=true]::part(scrollbutton-up),
+#tabmix-scrollbox[scrolledtoend=true]::part(scrollbutton-down) {
+  opacity: 0.4;
+}
+
+/* see tab.js  in this.dynamicProtonRules
+#tabmix-scrollbox::part(scrollbutton-up),
+#tabmix-scrollbox::part(scrollbutton-down) {
+  appearance: none;
+  margin: 0 0 var(--tabs-navbar-shadow-size) !important;
+  padding: var(--tabmix-scrollbutton-padding) !important;
+}
+} */
+
+@media (-moz-proton) {
+#tabmix-scrollbox::part(scrollbutton-up),
+#tabmix-scrollbox::part(scrollbutton-down) {
+  appearance: none;
+  background-clip: padding-box;
+  border: 4px solid transparent;
+  border-radius: calc(var(--tab-border-radius) + 4px);
+  margin: 0;
+  padding: calc(var(--toolbarbutton-inner-padding) - 2px) calc(var(--toolbarbutton-inner-padding) - 6px);
+}
+}
+
+#tabmix-scrollbox:not([scrolledtostart=true])::part(scrollbutton-up):hover,
+#tabmix-scrollbox:not([scrolledtoend=true])::part(scrollbutton-down):hover {
+  background-color: var(--toolbarbutton-hover-background);
+  color: inherit;
+}
+
+/* based on browser/themes/shared/tabs.inc.css */
+#tabmix-scrollbox::part(scrollbutton-up),
+#tabmix-scrollbox::part(scrollbutton-down) {
+  fill: var(--tabmix-scrollbox-button-fill, currentColor);
+  fill-opacity: var(--toolbarbutton-icon-fill-opacity);
+}
+
+#tabmix-scrollbox[orient=vertical]::part(scrollbutton-up),
+#tabmix-scrollbox[orient=vertical]::part(scrollbutton-down) {
+  list-style-image: var(--tabmix-scrollbutton-image);
+}
+
+/* :::: make sure all buttons align to the top row :::: */
+#TabsToolbar[multibar] #TabsToolbar-customization-target,
+#TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+  -moz-box-align: start;
+}
+
+@media not (-moz-proton) {
+:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+  margin-top: var(--tabmix-button-magin-top) !important;
+}
+
+:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+  margin-top: var(--tabmix-button-magin-top-compact) !important;
+}
+}
+
+@media (-moz-proton) {
+:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+  margin-top: var(--tabmix-button-magin-top-proton) !important;
+}
+
+:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+  margin-top: var(--tabmix-button-magin-top-proton-compact) !important;
+}
+}
+
+#tabbrowser-tabs[multibar][orient=horizontal] > .tab-drop-indicator {
+  margin-top: calc(var(--tab-min-height_mlt) * (var(--tabs-lines) - 1));
+}

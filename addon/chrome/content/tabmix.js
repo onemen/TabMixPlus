@@ -173,8 +173,6 @@ Tabmix.afterDelayedStartup = function() {
     }
   }, 250);
 
-  TabmixTabbar._enablePositionCheck = true;
-
   TMP_TabView.init();
 
   TMP_Places.onDelayedStartup();
@@ -685,7 +683,7 @@ var TMP_eventListener = {
   /**
    * for use in Firefox 40+.
    * update FullScreen._mouseTargetRect when in full screen and the tabbar is
-   * visible. we call this function from tabBarHeightModified and showNavToolbox
+   * visible. we call this function from and showNavToolbox
    */
   updateMouseTargetRect() {
     if (!window.fullScreen || FullScreen._isChromeCollapsed) {
@@ -841,7 +839,6 @@ var TMP_eventListener = {
     if (TabmixTabbar.hideMode == 1) {
       let tabsCount = tabBar.allTabs.length - gBrowser._removingTabs.length;
       if (tabsCount == 2) {
-        TabmixTabbar.setHeight(1);
         tabBar.removeAttribute("multibar");
       }
     }
@@ -1091,6 +1088,7 @@ var TMP_eventListener = {
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, false);
 
     gBrowser.tabContainer.removeEventListener("wheel", this, true);
+    gBrowser.tabContainer.arrowScrollbox.disconnectTabmix();
 
     if (TMP_TabView.installed)
       TMP_TabView._resetTabviewFrame();

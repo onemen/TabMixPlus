@@ -16,7 +16,7 @@
    in display: block */
 #TabsToolbar[tabmix-show-newtabbutton="aftertabs"]
     #tabbrowser-tabs[flowing="multibar"] > #tabbrowser-arrowscrollbox >
-    .tabs-newtab-button[command="cmd_newNavigatorTab"]  .toolbarbutton-icon {
+    #tabs-newtab-button[command="cmd_newNavigatorTab"]  .toolbarbutton-icon {
   margin: -2px 0;
 }
 
@@ -43,28 +43,4 @@
 #tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not(:hover) > * > * > .tab-label-container > .tab-label:not([selected="true"]):-moz-lwtheme,
 #tabbrowser-tabs > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]):-moz-lwtheme {
   opacity: .8;
-}
-
-/* :::: scrollbutton arrow - fix borders :::: */
-#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up,
-#tabmixScrollBox[flowing=multibar] > .scrollbutton-up {
-  -moz-border-end: none;
-}
-
-#tabmixScrollBox[flowing=multibar] > .scrollbutton-down {
-  -moz-border-start: none;
-}
-
-#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-down:not([disabled]),
-#tabmixScrollBox[flowing=multibar] > .scrollbutton-up:not([disabled]),
-#tabmixScrollBox[flowing=multibar] > .scrollbutton-down:not([disabled]){
-  -moz-border-image: none;
-}
-
-#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:-moz-locale-dir(ltr) {
-  -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 0 0 2px;
-}
-
-#tabmixScrollBox[flowing=scrollbutton] > .scrollbutton-up:-moz-locale-dir(rtl) {
-  -moz-border-image: url("chrome://browser/skin/tabbrowser/tab-overflow-border.png") 0 2 0 2 / 0 2px 0 0;
 }
