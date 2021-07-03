@@ -115,8 +115,18 @@ function startup(data, reason) {
           return man;
         }, options);
         await chromeManifest.parse();
-        if (_win.document.createXULElement) {
-          Overlays.load(chromeManifest, _win.document.defaultView);
+        const document = _win.document;
+        if (document.createXULElement) {
+          Overlays.load(chromeManifest, document.defaultView);
+          if (document.documentElement.getAttribute("windowtype") === "navigator:browser") {
+            await _win.delayedStartupPromise;
+            _win.gBrowser.tabs.forEach(x => {
+              const browser = x.linkedBrowser;
+              if (browser.currentURI.spec == 'about:addons' && browser.contentWindow) {
+                Overlays.load(chromeManifest, browser.contentWindow);
+              }
+            });
+          }
         }
       }(win));
     }

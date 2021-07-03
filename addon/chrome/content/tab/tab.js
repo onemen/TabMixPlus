@@ -1866,14 +1866,14 @@ gTMPprefObserver = {
       );
     } else {
       this.insertRule(
-        `:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1 {
+        `:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
           margin-top: 2px !important;
         }`
       );
       const proton = Tabmix.isVersion(860) &&
         Services.prefs.getBoolPref("browser.proton.tabs.enabled", false);
       this.insertRule(
-        `:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1 {
+        `:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
           margin-top: ${proton ? 2 : 0}px !important;
         }`
       );

@@ -106,26 +106,26 @@
 
 /* :::: make sure all buttons align to the top row :::: */
 #TabsToolbar[multibar] #TabsToolbar-customization-target,
-#TabsToolbar[multibar] .toolbarbutton-1 {
+#TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   -moz-box-align: start;
 }
 
 @media not (-moz-proton) {
-:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1 {
+:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-magin-top) !important;
 }
 
-:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1 {
+:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-magin-top-compact) !important;
 }
 }
 
 @media (-moz-proton) {
-:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1 {
+:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-magin-top-proton) !important;
 }
 
-:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1 {
+:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-magin-top-proton-compact) !important;
 }
 }
