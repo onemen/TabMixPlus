@@ -230,7 +230,7 @@ Tabmix.multiRow = {
           return this._singleRowHeight;
 
         if (TabmixTabbar.visibleRows > 1) {
-          this._singleRowHeight = TabmixTabbar.singleRowHeight;
+          this._singleRowHeight = this.scrollClientRect.height / TabmixTabbar.visibleRows;
           this._smoothVerticalScroll = Math.round(this._singleRowHeight / 4);
           return this._singleRowHeight;
         }
@@ -251,15 +251,6 @@ Tabmix.multiRow = {
         }
 
         return this.scrollbox.getBoundingClientRect().height;
-      }
-
-      _calcTabMargins(aTab) {
-        if (this._tabMarginLeft === null || this._tabMarginRight === null) {
-          const tabMiddle = document.getAnonymousElementByAttribute(aTab, "class", "tab-background-middle");
-          const tabMiddleStyle = window.getComputedStyle(tabMiddle);
-          this._tabMarginLeft = parseFloat(tabMiddleStyle.marginLeft);
-          this._tabMarginRight = parseFloat(tabMiddleStyle.marginRight);
-        }
       }
 
       _ensureElementIsVisibleByIndex(element, instant, index) {

@@ -177,10 +177,10 @@ var TabmixTabbar = {
   },
 
   updateTabsInTitlebarAppearance() {
-    if (this._enablePositionCheck &&
-        (this.isMultiRow && !this._updatingAppearance ||
+    if ((this.isMultiRow && !this._updatingAppearance ||
         this.getTabsPosition() != this._tabsPosition)) {
       const rows = this.visibleRows;
+      gBrowser.tabContainer.arrowScrollbox._singleRowHeight = null;
       this.updateScrollStatus();
       if (!this._updatingAppearance && rows != this.visibleRows) {
         this._updatingAppearance = true;
@@ -217,14 +217,11 @@ var TabmixTabbar = {
     }
   },
 
-  // in Firefox 4.0+ row height can change when TabsInTitlebar or TabsOnTop
   _tabsPosition: "tabsonbottom",
   getTabsPosition: function TMP_getTabsPosition() {
     let tabsPosition, docElement = document.documentElement;
     if (docElement.getAttribute("tabsintitlebar") == "true")
       tabsPosition = "tabsintitlebar";
-    else if (docElement.getAttribute("tabsontop") == "true")
-      tabsPosition = "tabsontop";
     else
       tabsPosition = "tabsonbottom";
 
@@ -232,10 +229,7 @@ var TabmixTabbar = {
   },
 
   get singleRowHeight() {
-    let heights = this._heights[this._tabsPosition];
-    if (typeof (heights) == "undefined")
-      return Tabmix.tabsUtils.scrollClientRect.height;
-    return heights[2] / 2;
+    return gBrowser.tabContainer.arrowScrollbox.singleRowHeight;
   },
 
   _waitAfterMaximized: false,
@@ -2219,29 +2213,6 @@ gTMPprefObserver = {
       TabmixTabbar.visibleRows = 1;
     }
     return true;
-  },
-
-  // TabsOnTop removed by bug 755593
-  setTabsOnTop(onBottom) {
-    // hide/show TabsOnTop menu & menuseparator
-    let toggleTabsOnTop = document.getElementsByAttribute("command", "cmd_ToggleTabsOnTop");
-    for (let i = 0; i < toggleTabsOnTop.length; i++) {
-      let cmd = toggleTabsOnTop[i];
-      cmd.hidden = onBottom;
-      if (cmd.nextSibling && cmd.nextSibling.localName == "menuseparator")
-        cmd.nextSibling.hidden = onBottom;
-    }
-
-    if (onBottom) {
-      // save TabsOnTop status
-      if (TabsOnTop.enabled) {
-        gNavToolbox.tabmix_tabsontop = true;
-        TabsOnTop.enabled = false;
-      }
-    } else if (gNavToolbox.tabmix_tabsontop) {
-      TabsOnTop.enabled = true;
-      gNavToolbox.tabmix_tabsontop = false;
-    }
   },
 
   _bottomRect: {top: null, width: null, height: null},

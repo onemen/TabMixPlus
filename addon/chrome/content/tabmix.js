@@ -173,8 +173,6 @@ Tabmix.afterDelayedStartup = function() {
     }
   }, 250);
 
-  TabmixTabbar._enablePositionCheck = true;
-
   TMP_TabView.init();
 
   TMP_Places.onDelayedStartup();

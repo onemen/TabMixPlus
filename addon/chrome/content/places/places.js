@@ -760,6 +760,7 @@ Tabmix.onContentLoaded = {
         '  TabmixTabbar.updateTabsInTitlebarAppearance();\n  ' +
         '$1$2'
       ).toCode();
+      TabmixTabbar.updateTabsInTitlebarAppearance();
     }
 
     // we can't use TabPinned.
