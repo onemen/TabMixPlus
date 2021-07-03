@@ -86,12 +86,20 @@ function showRestartNotification(verb, window) {
 
 async function install(data) {
   const addon = await AddonManager.getAddonByID(data.id);
-  addon.__AddonInternal__.signedState = AddonManager.SIGNEDSTATE_NOT_REQUIRED;
+  if (addon.__AddonInternal__) {
+    addon.__AddonInternal__.signedState = AddonManager.SIGNEDSTATE_NOT_REQUIRED;
+  }
 }
 
 function uninstall() { }
 
 function startup(data, reason) {
+  AddonManager.getAddonByID(data.id).then(addon => {
+    if (addon.__AddonInternal__) {
+      addon.__AddonInternal__.signedState = AddonManager.SIGNEDSTATE_NOT_REQUIRED;
+    }
+  });
+
   Components.utils.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
   Components.utils.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
   Components.utils.import("resource:///modules/CustomizableUI.jsm");
