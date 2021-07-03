@@ -178,6 +178,15 @@ var gPrefWindow = {
     cancelButton.setAttribute("icon", action);
   },
 
+  removeItemAndPrefById(id) {
+    const item = document.querySelector(`[preference=${id}]`);
+    if (!item) {
+      throw new Error(`Tabmix:\n ${id} is not a preference`);
+    }
+    item.remove();
+    this.removeChild(id);
+  },
+
   removeChild(id) {
     let child = $(id);
     // override preferences getter before we remove the preference

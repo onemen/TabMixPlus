@@ -18,8 +18,7 @@ var gEventsPane = {
     var browserWindow = Tabmix.getTopWin();
     let ctrlTab = browserWindow.document.getElementById("ctrlTab-panel") && "ctrlTab" in browserWindow;
     if (!ctrlTab) {
-      gPrefWindow.removeChild("pref_ctrltab.tabPreviews");
-      gPrefWindow.removeChild("ctrltab.tabPreviews");
+      gPrefWindow.removeItemAndPrefById("pref_ctrltab.tabPreviews");
     }
 
     let newTabUrl = $("pref_newTabUrl");
@@ -43,8 +42,7 @@ var gEventsPane = {
     $("syncedTabs").label = syncedTabs;
     $("selectSyncedTabs").label = syncedTabs;
 
-    gPrefWindow.removeChild("pref_disableTabsAnimate");
-    gPrefWindow.removeChild("disableTabsAnimate");
+    gPrefWindow.removeItemAndPrefById("pref_disableTabsAnimate");
 
     if (!Tabmix.isVersion(890)) {
       gPrefWindow.removeChild("pref_ctrltab");

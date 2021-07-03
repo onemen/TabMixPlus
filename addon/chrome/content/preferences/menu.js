@@ -3,13 +3,23 @@
 
 var gMenuPane = {
   init() {
+    if (!Tabmix.isVersion(880)) {
+      gPrefWindow.removeItemAndPrefById("pref_shareTabURL");
+    }
+    if (!Tabmix.isVersion(800)) {
+      gPrefWindow.removeItemAndPrefById("pref_moveTabOptions");
+      gPrefWindow.removeItemAndPrefById("pref_showCloseTab");
+      gPrefWindow.removeItemAndPrefById("pref_closetab");
+      gPrefWindow.removeChild("close");
+    }
+
     MozXULElement.insertFTLIfNeeded("browser/menubar.ftl");
     MozXULElement.insertFTLIfNeeded("browser/tabContextMenu.ftl");
     MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
     const i10IdMap = {
       "tab-context-open-in-container": "reopen-in-container",
       "tab-context-reopen-closed-tabs": "tab-context-undo-close-tabs",
-      "tab-context-open-in-new-container-tab": "tab-context-open-in-container"
+      "tab-context-open-in-new-container-tab": "reopen-in-container"
     };
     Tabmix.setFTLDataId(
       "paneMenu",
@@ -32,8 +42,7 @@ var gMenuPane = {
     if (tabViewMenu) {
       $("moveToGroup").label = tabViewMenu.getAttribute("label");
     } else {
-      gPrefWindow.removeChild("pref_showMoveToGroup");
-      gPrefWindow.removeChild("moveToGroup");
+      gPrefWindow.removeItemAndPrefById("pref_showMoveToGroup");
     }
 
     $("sendTabToDevice").label = browserWindow.PluralForm.get(
