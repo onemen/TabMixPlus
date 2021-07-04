@@ -46,14 +46,12 @@ this.SingleWindowModeUtils = {
     if (!aWindow.arguments || aWindow.arguments.length === 0)
       return false;
 
-    const onLoad = aEvent => {
-      const window = aEvent.currentTarget;
-      window.removeEventListener("load", onLoad);
-      const docElement = window.document.documentElement;
+    const onLoad = () => {
+      const docElement = aWindow.document.documentElement;
       if (docElement.getAttribute("windowtype") == "navigator:browser")
-        this.onLoad(window);
+        this.onLoad(aWindow);
     };
-    aWindow.addEventListener("load", onLoad);
+    aWindow.addEventListener("load", onLoad, {once: true});
 
     aWindow.gTMPprefObserver.setLink_openPrefs();
 
@@ -136,7 +134,7 @@ this.SingleWindowModeUtils = {
         csp: args[10],
         fromExternal: true,
       };
-    } else if (uriToLoad instanceof newWindow.XULElement || uriToLoad instanceof Ci.nsIDOMXULElement) {
+    } else if (uriToLoad instanceof newWindow.XULElement) {
       // some extension try to swap a tab to new window
       // we don't do anything in this case.
       // just close the new window
