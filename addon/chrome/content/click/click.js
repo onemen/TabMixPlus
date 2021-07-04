@@ -692,7 +692,7 @@ var TabmixContext = {
     ).toCode();
 
     Tabmix.changeCode(gContextMenu, "gContextMenu.openLinkInTab")._replace(
-      /allowMixedContent:|charset:/,
+      'userContextId:',
       'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n' +
             '      $&'
     ).toCode(false, Tabmix.originalFunctions, "openInverseLink");
