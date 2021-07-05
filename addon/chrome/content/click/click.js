@@ -434,7 +434,7 @@ var TabmixContext = {
           this.updateMainContextMenu(aEvent);
         break;
       case "popupshown":
-        this.tabContextMenuShown(aEvent);
+        this.contextMenuShown(aEvent);
         break;
       case "popuphidden":
         if (id == "tabContextMenu") {
@@ -547,7 +547,7 @@ var TabmixContext = {
     Tabmix.showItem("context_bookmarkAllTabs", Tabmix.prefs.getBoolPref("bookmarkTabsMenu"));
 
     // we call this again when popupshown to make sure we don't show 2 menuseparator together
-    TabmixContext.tabContextMenuShown(event);
+    TabmixContext.contextMenuShown(event, "tabContextMenu");
 
     if (showRenameTabMenu) {
       // disabled rename if the title not ready yet
@@ -622,12 +622,14 @@ var TabmixContext = {
    * this function is call by "popupshown" event
    * this is only for the case that other extensions popupshowing run after our TabmixContextMenu.updateTabContextMenu
    */
-  tabContextMenuShown: function TMP_tabContextMenuShown(event) {
-    if (event.originalTarget != document.getElementById("tabContextMenu"))
+  contextMenuShown(event, id = event?.originalTarget?.id) {
+    if (!["contentAreaContextMenu", "tabContextMenu"].includes(id)) {
       return;
+    }
+    const contextMenu = document.getElementById(id);
     // don't show 2 menuseparator together
     var hideNextSeparator = true, lastVisible, hideMenu = true;
-    for (var mi = document.getElementById("tabContextMenu").firstChild; mi; mi = mi.nextSibling) {
+    for (let mi = contextMenu.firstChild; mi; mi = mi.nextSibling) {
       if (mi.localName == "menuseparator") {
         if (!lastVisible || !hideNextSeparator) {
           mi.hidden = hideNextSeparator;
@@ -655,8 +657,9 @@ var TabmixContext = {
       lastVisible.hidden = true;
 
     // if all the menu are hidden don't show the popup
-    if (hideMenu)
-      document.getElementById("tabContextMenu").hidePopup();
+    if (hideMenu) {
+      contextMenu.hidePopup();
+    }
   },
 
   // Main context menu popupshowing
@@ -795,24 +798,12 @@ var TabmixContext = {
       Tabmix.showItem("tm-openAllLinks",
         Tabmix.prefs.getBoolPref("openAllLinks") &&
         !TabmixContext.openMultipleLinks(true));
-
-      // show/hide menuseparator
-      var undoCloseSep = document.getElementById("tm-content-undoCloseSep");
-      var miscSep = document.getElementById("tm-content-miscSep");
-      var textSep = document.getElementById("tm-content-textSep");
-      undoCloseSep.hidden = undoCloseTabMenu.hidden && undoCloseListMenu.hidden ||
-          gContextMenu.isTextSelected && closeTabMenu.hidden && lockTabMenu.hidden &&
-          protectTabMenu.hidden && tabsListMenu.hidden && freezeTabMenu.hidden;
-      miscSep.hidden = mergeMenu.hidden && closeTabMenu.hidden && duplicateTabMenu.hidden &&
-          duplicateWinMenu.hidden && lockTabMenu.hidden && protectTabMenu.hidden &&
-          tabsListMenu.hidden && freezeTabMenu.hidden || gContextMenu.isTextSelected;
-      textSep.hidden = !gContextMenu.isTextSelected || mergeMenu.hidden &&
-          duplicateTabMenu.hidden && duplicateWinMenu.hidden && closeTabMenu.hidden &&
-          lockTabMenu.hidden && protectTabMenu.hidden && tabsListMenu.hidden &&
-          freezeTabMenu.hidden && undoCloseTabMenu.hidden && undoCloseListMenu.hidden;
     } catch (ex) {
       Tabmix.assert(ex);
     }
+
+    // show/hide menuseparator
+    this.contextMenuShown(event, "contentAreaContextMenu");
     return true;
   },
 
