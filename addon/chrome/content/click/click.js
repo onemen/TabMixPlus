@@ -363,11 +363,7 @@ var TabmixContext = {
     MozXULElement.insertFTLIfNeeded("browser/menubar.ftl");
     Tabmix.setFTLDataId("tabContextMenu");
 
-    const i10IdMap = {"tab-context-open-in-new-container-tab": "tab-context-open-in-container"};
-    Tabmix.setFTLDataId(
-      "context_reopenInContainer",
-      l10Id => !Tabmix.isVersion(880) && i10IdMap[l10Id] || l10Id
-    );
+    Tabmix.setFTLDataId("context_reopenInContainer");
 
     var tabContextMenu = $id("tabContextMenu");
     tabContextMenu.insertBefore($id("context_reloadTab"), $id("tabmix_reloadTabOptions_separator"));

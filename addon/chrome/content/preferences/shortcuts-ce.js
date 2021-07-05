@@ -7,7 +7,7 @@
   class MozShortcut extends MozXULElement {
     static get inheritedAttributes() {
       return {
-        "description": "disabled=blocked",
+        "description": "value=label,disabled=blocked",
         ".shortcut-edit-box": "value,disabled=blocked",
       };
     }
@@ -19,7 +19,7 @@
       this.textContent = "";
       this.appendChild(MozXULElement.parseXULToFragment(`
         <hbox align="start" class="shortcut-content">
-          <description inherits="disabled=blocked" flex="1"></description>
+          <description inherits="value=label,disabled=blocked" flex="1"></description>
           <html:input class="shortcut-edit-box" anonid="editBox" style="width:200px;" inherits="value,disabled=blocked" context=" " placeholder="&shortcuts.placeholder;" onkeydown="this.parentNode.parentNode.onKeyDown(event);" onkeypress="this.parentNode.parentNode.handleKeyEvents(event);" onfocus="this.parentNode.parentNode.updateFocus(true);" onblur="this.parentNode.parentNode.updateFocus(false);" onmousedown="event.stopPropagation(); event.preventDefault(); this.select();" onchange="event.stopPropagation();">
           </html:input>
             <image anonid="reset" class="shortcut-image" tooltiptext="&shortcuts.reset;" hidden="true" onclick="this.parentNode.parentNode.resetKey();"></image>

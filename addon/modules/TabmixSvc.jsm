@@ -328,7 +328,17 @@ this.TabmixSvc = {
 
   isFixedGoogleUrl: () => false,
 
-  blockedClickingOptions: []
+  blockedClickingOptions: [],
+
+  get i10IdMap() {
+    // map ftl key for older firefox versions
+    return {
+      "tab-context-open-in-container": {before: 880, l10n: "reopen-in-container"},
+      "tab-context-reopen-closed-tabs": {before: 880, l10n: "tab-context-undo-close-tabs"},
+      "tab-context-open-in-new-container-tab": {before: 880, l10n: "reopen-in-container"},
+      "tab-context-close-tabs": {before: 800, l10n: "close-tab"},
+    };
+  },
 };
 
 XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", () => {
