@@ -21,6 +21,10 @@
         ondialogaccept="Save();"
         persist="screenX screenY">
 
+   <script type="text/javascript"><![CDATA[
+    this.addEventListener("dialogaccept",_=> Save());
+    this.addEventListener("dialoghelp",_=> window.opener.openHelp('links#file-type-editor'));
+    ]]></script>
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.js"/>
 
