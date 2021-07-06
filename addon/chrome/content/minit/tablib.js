@@ -426,14 +426,20 @@ Tabmix.tablib = {
         '    if (width != this.arrowScrollbox.firstTabInRowMargin) {' +
         '      this.arrowScrollbox.firstTabInRowMargin = width;' +
         '      this.arrowScrollbox.firstVisible =  {tab: null, x: 0, y: 0};' +
+        '      let margin = Tabmix.tabsUtils.protonValues.enabled ? 12 : 0;\n' +
         '      gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]' +
-        '        .style.setProperty("margin-inline-start", width + "px", "important");' + $LF +
+        '        .style.setProperty("margin-inline-start", width + margin + "px", "important");' + $LF +
         '    }' +
         '    this.style.paddingInlineStart = "";' + $LF +
         '    TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(this, "paddingLeft");' +
         '    this.arrowScrollbox.setFirstTabInRow();' +
         '  }' +
         '  else $&'
+      )._replace(
+        'let width = 0;',
+        /* firefox add a gap between the last pinned tab and the first visible tab */
+        'let width = TabmixTabbar.scrollButtonsMode !== TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&\n' +
+        '  Tabmix.tabsUtils.protonValues.enabled ? 12 : 0;',
       )._replace(
         /(})(\)?)$/,
         'if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {' +

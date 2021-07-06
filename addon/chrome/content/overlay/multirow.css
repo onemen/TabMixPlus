@@ -30,11 +30,15 @@
 }
 
 /* hide default scroll buttons */
-#tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(overflow-start-indicator),
-#tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(overflow-end-indicator),
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons]):not([flowing="scrollbutton"]):not([flowing="singlebar"])::part(overflow-start-indicator),
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons]):not([flowing="singlebar"])::part(overflow-end-indicator),
 #tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-up),
 #tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-down) {
   display: none;
+}
+
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons])[flowing="singlebar"]::part(overflow-end-indicator) {
+  margin-inline-end: 6px;
 }
 
 #tabmix-scrollbox:not([overflowing="true"]),

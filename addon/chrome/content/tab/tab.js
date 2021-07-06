@@ -105,15 +105,8 @@ var TabmixTabbar = {
       }
       Tabmix.setItem(tabmixScrollBox, "collapsed", null);
 
-      if (gBrowser._numPinnedTabs && tabBar._pinnedTabsLayoutCache) {
-        tabBar._pinnedTabsLayoutCache.scrollButtonWidth = tabscroll != this.SCROLL_BUTTONS_LEFT_RIGHT ?
-          0 : tabstrip._scrollButtonDown.getBoundingClientRect().width;
-      }
-      // partial reset cache to force update
-      if (TabmixSvc.version(890) &&
-          Services.prefs.getBoolPref("browser.proton.enabled") &&
-          tabBar._pinnedTabsLayoutCache?.uiDensity === document.documentElement.getAttribute("uidensity")) {
-        tabBar._pinnedTabsLayoutCache.uiDensity = '';
+      if (tabBar._pinnedTabsLayoutCache) {
+        tabBar._pinnedTabsLayoutCache = null;
       }
       tabBar._positionPinnedTabs();
       if (isMultiRow && TMP_tabDNDObserver.paddingLeft)
@@ -636,7 +629,7 @@ Tabmix.tabsUtils = {
     }
 
     TabmixTabbar.visibleRows = rows;
-    this.updateProtonTabBlockMargin();
+    this.updateProtonValues();
 
     if (TabmixTabbar.isMultiRow) {
       this.overflow = multibar == "scrollbar";
@@ -932,7 +925,7 @@ Tabmix.tabsUtils = {
     return true;
   },
 
-  get protonTabBlockMargin() {
+  get protonValues() {
     // rules to add proton --tab-block-margin to --tab-min-height_mlt
     // we update tab-block-margin dynamically in updateVerticalTabStrip when
     // there are more than one row
@@ -962,7 +955,7 @@ Tabmix.tabsUtils = {
       return true;
     };
 
-    Object.defineProperty(Tabmix.tabsUtils, "protonTabBlockMargin", {
+    Object.defineProperty(Tabmix.tabsUtils, "protonValues", {
       configurable: true,
       enumerable: true,
       get() {
@@ -972,15 +965,15 @@ Tabmix.tabsUtils = {
     return {...blockMargin, enabled: isEnabled()};
   },
 
-  updateProtonTabBlockMargin() {
+  updateProtonValues() {
     // we reduce tab-block-margin to 1px on tab-background to minimize gap between rows,
     // and add the difference to #tabbrowser-arrowscrollbox margin top/bottom
     // with --tabmix-multirow-margin
-    const reduceMargin = this.protonTabBlockMargin.enabled &&
+    const reduceMargin = this.protonValues.enabled &&
       gBrowser.tabContainer.attributes.orient.value === "horizontal" &&
       TabmixTabbar.visibleRows > 1;
     const margin = reduceMargin ? "1px" : "";
-    document.documentElement.style.setProperty(this.protonTabBlockMargin.name, margin);
+    document.documentElement.style.setProperty(this.protonValues.name, margin);
   },
 };
 
@@ -1032,8 +1025,6 @@ Tabmix.bottomToolbarUtils = {
       tabsToolbar.style.setProperty("top", screen.availHeight + "px", "important");
       tabsToolbar.setAttribute("width", screen.availWidth);
     }
-    // force reset tabbar height
-    // TODO" check if we need this
     TabmixTabbar.visibleRows = 1;
     if (updateFullScreen) {
       TMP_eventListener.toggleTabbarVisibility(false);
@@ -1491,7 +1482,7 @@ gTMPprefObserver = {
         TabmixContext.updateTabbarContextMenu(Services.prefs.getBoolPref(prefName));
         break;
       case "browser.proton.enabled":
-        Tabmix.tabsUtils.updateProtonTabBlockMargin();
+        Tabmix.tabsUtils.updateProtonValues();
         break;
       default:
         break;
@@ -1810,15 +1801,15 @@ gTMPprefObserver = {
       return;
     }
 
-    const insertRule = rule => {
-      if (Tabmix.isVersion(910)) {
+    const insertRule = (rule, noMedia) => {
+      if (Tabmix.isVersion(910) || noMedia) {
         this.insertRule(rule);
       } else {
         this.insertRule(`@media (-moz-proton) {${rule}}`);
       }
     };
 
-    const blockMargin = Tabmix.tabsUtils.protonTabBlockMargin;
+    const blockMargin = Tabmix.tabsUtils.protonValues;
     if (Tabmix.isVersion(890)) {
       /* overwrite rull from chrome/browser/skin/classic/browser/browser.css */
       insertRule(
@@ -1842,6 +1833,15 @@ gTMPprefObserver = {
         }`
       );
     }
+
+    // Firefox adds padding for single row when positionpinnedtabs is set.
+    // padding-inline: var(--tab-shadow-max-size);
+    insertRule(
+      `#tabbrowser-tabs:not([defaultScrollButtons])[orient=horizontal][positionpinnedtabs] > #tabbrowser-arrowscrollbox::part(scrollbox) {
+        padding-inline: 0;
+      }`,
+      Tabmix.isVersion(860) && Services.prefs.getBoolPref("browser.proton.tabs.enabled", false)
+    );
   },
 
   toolbarbuttonTopMargin() {
@@ -2208,8 +2208,6 @@ gTMPprefObserver = {
       bottomToolbox.style.removeProperty("height");
       tabsToolbar.style.removeProperty("top");
       tabsToolbar.removeAttribute("width");
-      // force to reset tabbar height
-      // TODO" check if we need this
       TabmixTabbar.visibleRows = 1;
     }
     return true;

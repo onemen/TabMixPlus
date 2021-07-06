@@ -31,8 +31,7 @@ Tabmix.multiRow = {
         this.scrollboxPaddingBottom = parseFloat(window.getComputedStyle(this.scrollbox).paddingBottom);
         this._tabMarginLeft = null;
         this._tabMarginRight = null;
-        this._verticalAnimation = 4;
-        this._smoothVerticalScroll = 6;
+        this._verticalAnimation = 3;
         this._singleRowHeight = null;
         this.firstVisibleRow = null;
         this.firstTabInRowMargin = 0;
@@ -231,7 +230,6 @@ Tabmix.multiRow = {
 
         if (TabmixTabbar.visibleRows > 1) {
           this._singleRowHeight = this.scrollClientRect.height / TabmixTabbar.visibleRows;
-          this._smoothVerticalScroll = Math.round(this._singleRowHeight / 4);
           return this._singleRowHeight;
         }
 
@@ -276,7 +274,7 @@ Tabmix.multiRow = {
       }
 
       _createScrollButtonContextMenu(aEvent) {
-        const side = aEvent.target.className === "scrollbutton-up" ? "left" : "right";
+        const side = aEvent.originalTarget.id === "scrollbutton-up" ? "left" : "right";
         TabmixAllTabs.createScrollButtonTabsList(aEvent, side);
       }
 

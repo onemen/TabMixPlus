@@ -355,18 +355,17 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.tabsUtils.overflow) {
-      // TODO  change anonid to id...
-      // TODO  check how to find if we are on tabmix button or build-in button
       let tabStrip = tabBar.arrowScrollbox;
       let ltr = Tabmix.ltr || tabStrip.getAttribute('orient') == "vertical";
       let _scroll, targetAnonid;
       if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_HIDDEN) // scroll with button
-        targetAnonid = event.originalTarget.getAttribute("anonid");
+        targetAnonid = event.originalTarget.getAttribute("anonid") || event.originalTarget.id;
       // scroll without button
       else if (event.screenX <= tabStrip.scrollbox.screenX)
         targetAnonid = ltr ? "scrollbutton-up" : "scrollbutton-down";
       else if (event.screenX >= (tabStrip.scrollbox.screenX + tabStrip.scrollClientRect.width))
         targetAnonid = ltr ? "scrollbutton-down" : "scrollbutton-up";
+
       switch (targetAnonid) {
         case "scrollbutton-up":
         case "scrollbutton-up-right":
