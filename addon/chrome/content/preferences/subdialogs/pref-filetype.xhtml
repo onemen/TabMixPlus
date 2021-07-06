@@ -15,16 +15,14 @@
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html="http://www.w3.org/1999/xhtml"
         buttons="accept,cancel,help"
-        ondialoghelp="window.opener.openHelp('links#file-type-editor');"
         title="&filetype.options;"
         onload="Init(); let t = document.getElementsByTagName('dialog')[0]._buttons.help; t.icon.style.marginRight='6px'; t.image='chrome://tabmixplus/skin/question-16.png';"
-        ondialogaccept="Save();"
         persist="screenX screenY">
 
    <script type="text/javascript"><![CDATA[
-    this.addEventListener("dialogaccept",_=> Save());
-    this.addEventListener("dialoghelp",_=> window.opener.openHelp('links#file-type-editor'));
-    ]]></script>
+     this.addEventListener("dialogaccept",_=> Save());
+     this.addEventListener("dialoghelp",_=> window.opener.openHelp('links#file-type-editor'));
+   ]]></script>
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.js"/>
 
