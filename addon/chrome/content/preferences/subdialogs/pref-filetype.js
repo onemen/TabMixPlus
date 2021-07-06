@@ -44,7 +44,7 @@ function FillData() {
 function Save() {
   var filetype = [];
   for (var i = 0; i < list.getRowCount(); ++i)
-    filetype.push(list.getItemAtIndex(i).getAttribute("label").trim());
+    filetype.push(list.getItemAtIndex(i).value.trim());
 
   try {
     const data = filetype.join(" ").replace(/\\/g, '\\\\');
@@ -64,7 +64,7 @@ function Select() {
     setButtonDisable(del, true);
     return false;
   }
-  entry.value = list.selectedItem.getAttribute("label");
+  entry.value = list.selectedItem.value;
   setButtonDisable(del, false);
   return true;
 }
@@ -88,8 +88,8 @@ function Mod() {
   if (!list.selectedItem) return Add();
 
   // change the text
-  list.selectedItem.setAttribute("label", entry.value);
-  list.selectedItem.setAttribute("value", entry.value.toLowerCase());
+  list.selectedItem.getElementsByTagName("label")[0].value = entry.value;
+  list.selectedItem.value = entry.value.toLowerCase();
   SelectItemAt(list.getIndexOfItem(list.selectedItem), false);
 
   setButtonDisable(add, true);
