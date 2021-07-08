@@ -7,9 +7,8 @@ const {interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("resource://gre/modules/Services.jsm", this);
 
-XPCOMUtils.defineLazyServiceGetter(this, "aboutNewTabService",
-  "@mozilla.org/browser/aboutnewtab-service;1",
-  "nsIAboutNewTabService");
+XPCOMUtils.defineLazyModuleGetter(this, "AboutNewTab",
+  "resource:///modules/AboutNewTab.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "NewTabURL",
   "resource:///modules/NewTabURL.jsm");
@@ -47,9 +46,9 @@ this.Tabmix_NewTabURL = {
   updateNewTabURL() {
     let value = Services.prefs.getStringPref(FIREFOX_PREF);
     if (value == ABOUT_NEW_TAB) {
-      aboutNewTabService.resetNewTabURL();
+      AboutNewTab.resetNewTabURL();
     } else {
-      aboutNewTabService.newTabURL = value;
+      AboutNewTab.newTabURL = value;
     }
   }
 };

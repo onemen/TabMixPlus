@@ -45,7 +45,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
       url = "about:blank";
       break;
     case 1: // home page
-      url = gHomeButton.getHomePage().split("|")[0];
+      url = HomePage.get().split("|")[0];
       break;
     case 2: // current URI
       var currentURI = gBrowser.currentURI;
