@@ -365,10 +365,6 @@ var TabmixTabbar = {
 
 }; // TabmixTabbar end
 
-XPCOMUtils.defineLazyGetter(TabmixTabbar, "updateAppearanceOnce", () => {
-  return navigator.oscpu.startsWith("Windows NT 5.1");
-});
-
 Tabmix.tabsUtils = {
   initialized: false,
   _tabmixPositionalTabs: {},

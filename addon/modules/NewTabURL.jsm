@@ -10,9 +10,6 @@ Cu.import("resource://gre/modules/Services.jsm", this);
 XPCOMUtils.defineLazyModuleGetter(this, "AboutNewTab",
   "resource:///modules/AboutNewTab.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "NewTabURL",
-  "resource:///modules/NewTabURL.jsm");
-
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
   "chrome://tabmix-resource/content/TabmixSvc.jsm");
 

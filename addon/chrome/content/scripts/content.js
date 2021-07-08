@@ -37,9 +37,6 @@ XPCOMUtils.defineLazyModuleGetter(this, "ContextMenu",
 XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
   "chrome://tabmix-resource/content/Utils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixAboutNewTab",
-  "chrome://tabmix-resource/content/AboutNewTab.jsm");
-
 var PROCESS_TYPE_CONTENT = Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
 
 var TabmixClickEventHandler;
@@ -420,38 +417,6 @@ TabmixClickEventHandler = {
   },
 };
 
-var AboutNewTabHandler = {
-  init(global) {
-    addMessageListener("Tabmix:updateTitlefrombookmark", this);
-
-    let contentLoaded = false;
-    global.addEventListener("pageshow", event => {
-      if (event.target != content.document) {
-        return;
-      }
-      let doc = content.document;
-      // we don't need to update titles on first show if the pref is off
-      if (doc.documentURI.toLowerCase() == ContentSvc.aboutNewtab &&
-          (contentLoaded || ContentSvc.prefBranch.getBoolPref("titlefrombookmark"))) {
-        contentLoaded = true;
-        this.updateTitles();
-      }
-    });
-  },
-
-  receiveMessage({name}) {
-    if (name == "Tabmix:updateTitlefrombookmark") {
-      this.updateTitles();
-    }
-  },
-
-  updateTitles() {
-    if (content && content.gGrid) {
-      TabmixAboutNewTab.updateTitles(content.gGrid.cells);
-    }
-  }
-};
-
 var ContextMenuHandler = {
   init(global) {
     Services.els.addSystemEventListener(global, "contextmenu", this.prepareContextMenu, true);
@@ -553,6 +518,5 @@ var TabmixPageHandler = {
 
 TabmixContentHandler.init();
 TabmixClickEventHandler.init(this);
-AboutNewTabHandler.init(this);
 ContextMenuHandler.init(this);
 TabmixPageHandler.init(this);

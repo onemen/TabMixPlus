@@ -220,10 +220,6 @@ var TMP_extensionsCompatibility = {
 
     this.setVerticalTabs();
 
-    // Look for RSS/Atom News Reader
-    if ("gotoLink" in window)
-      this.wizzrss.init();
-
     if ("openNewsfox" in window)
       this.newsfox.init();
 
@@ -480,39 +476,6 @@ TMP_extensionsCompatibility.RSSTICKER = {
     }
 
     this.markAsRead();
-  }
-};
-
-// prevent Wizz RSS from load pages in locked tabs
-TMP_extensionsCompatibility.wizzrss = {
-  started: null,
-  init() {
-    if (this.started)
-      return;
-    this.started = true;
-    var codeToReplace = /getContentBrowser\(\).loadURI|contentBrowser.loadURI/g;
-    const newCode = "TMP_extensionsCompatibility.wizzrss.openURI";
-    var _functions = ["addFeedbase", "validate", "gohome", "tryagain", "promptStuff",
-      "doSearch", "viewLog", "renderItem", "playEnc", "renderAllEnc", "playAllEnc",
-      "gotoLink", "itemLinkClick", "itemListClick"];
-
-    _functions.forEach(_function => {
-      if (_function in window)
-        Tabmix.changeCode(window, _function)._replace(codeToReplace, newCode).toCode();
-    });
-  },
-
-  openURI(uri) {
-    var w = Tabmix.getTopWin();
-    var tabBrowser = w.gBrowser;
-
-    var openNewTab = w.Tabmix.whereToOpen(true).lock;
-    if (openNewTab) {
-      var theBGPref = !readPref("WizzRSSFocusTab", false, 2);
-      tabBrowser.loadOneTab(uri, {inBackground: theBGPref});
-    } else {
-      tabBrowser.loadURI(uri);
-    }
   }
 };
 

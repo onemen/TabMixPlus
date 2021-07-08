@@ -24,7 +24,6 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   MergeWindows: "chrome://tabmix-resource/content/MergeWindows.jsm",
   NewTabPagePreloading: "resource:///modules/NewTabPagePreloading.jsm",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
-  TabmixAboutNewTab: "chrome://tabmix-resource/content/AboutNewTab.jsm",
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.jsm",
 });
 
@@ -35,16 +34,6 @@ this.TabmixUtils = {
 
     // Load the frame script after registering listeners.
     mm.loadFrameScript("chrome://tabmixplus/content/scripts/content.js", true);
-
-    // call TabmixAboutNewTab.updateBrowser for gBrowser.preloadedBrowser,
-    // if it already exist before we loaded our frame script
-    let gBrowser = window.gBrowser;
-    if (TabmixSvc.prefBranch.getBoolPref("titlefrombookmark") &&
-          window.BROWSER_NEW_TAB_URL == TabmixSvc.aboutNewtab &&
-          gBrowser.preloadedBrowser && NewTabPagePreloading.enabled &&
-          !PrivateBrowsingUtils.isWindowPrivate(window)) {
-      TabmixAboutNewTab.updateBrowser(gBrowser.preloadedBrowser);
-    }
   },
 
   deinit(window) {

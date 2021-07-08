@@ -29,7 +29,6 @@ var TMP_Places = {
 
   init: function TMP_PC_init() {
     Tabmix.lazy_import(this, "PlacesUtils", "Places", "TabmixPlacesUtils");
-    Tabmix.lazy_import(this, "AboutNewTab", "AboutNewTab", "TabmixAboutNewTab");
 
     this.contextMenu.toggleEventListener(true);
 
@@ -458,10 +457,6 @@ var TMP_Places = {
   },
 
   afterTabTitleChanged(bookmarkChanged = true) {
-    if (bookmarkChanged && !this.inUpdateBatch) {
-      this.AboutNewTab.updateAllBrowsers(window);
-    }
-
     if (bookmarkChanged && !this._tabTitleChanged)
       return;
     if (this.inUpdateBatch) {
