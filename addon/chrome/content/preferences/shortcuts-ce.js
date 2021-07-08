@@ -123,7 +123,7 @@
         this.key = newKey;
         this.setAttribute("default", !this.disabled && this.defaultPref == newValue);
         this.parentNode.keys[this.id] = newValue;
-        this.parentNode.value = TabmixSvc.JSON.stringify(this.parentNode.keys);
+        this.parentNode.value = JSON.stringify(this.parentNode.keys);
         Shortcuts.prefsChangedByTabmix = true;
         $("pref_shortcuts").value = this.parentNode.value;
         Shortcuts.prefsChangedByTabmix = false;

@@ -771,10 +771,10 @@ Tabmix.tablib = {
        if (window) {
         window.focus();
         let index = aIndex || 0;
-        let closedWindows = TabmixSvc.JSON.parse(SessionStore.getClosedWindowData());
+        let closedWindows = JSON.parse(SessionStore.getClosedWindowData());
         SessionStore.forgetClosedWindow(index);
         let state = closedWindows.splice(index, 1).shift();
-        state = TabmixSvc.JSON.stringify({windows: [state]});
+        state = JSON.stringify({windows: [state]});
         SessionStore.setWindowState(window, state, false);
        }
        else $&}`
@@ -957,7 +957,7 @@ Tabmix.tablib = {
         }
       }
       try {
-        tabState = aTabData ? aTabData.state : TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
+        tabState = aTabData ? aTabData.state : JSON.parse(TabmixSvc.ss.getTabState(aTab));
         newTab = this.addTrustedTab("about:blank", {dontMove: true});
         newTab.linkedBrowser.stop();
         if (aHref) {
@@ -970,7 +970,7 @@ Tabmix.tablib = {
           }
         }
         tabState.pinned = false;
-        TabmixSvc.ss.setTabState(newTab, TabmixSvc.JSON.stringify(tabState));
+        TabmixSvc.ss.setTabState(newTab, JSON.stringify(tabState));
       } catch (ex) {
         Tabmix.assert(ex);
       }

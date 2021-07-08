@@ -359,7 +359,7 @@ this.DynamicRules = {
     //                text:boolean, textColor:string, textOpacity:string,
     //                bg:boolean, bgColor:string, bgOpacity:string
     // if we don't catch the problem here it can break the rest of tabmix startup
-    var defaultPrefValues = TabmixSvc.JSON.parse(this.defaultPrefs[ruleName]);
+    var defaultPrefValues = JSON.parse(this.defaultPrefs[ruleName]);
     if (!Prefs.prefHasUserValue(ruleName))
       return defaultPrefValues;
 
@@ -373,7 +373,7 @@ this.DynamicRules = {
       currentPrefValues = defaultPrefValues;
     };
     try {
-      currentPrefValues = TabmixSvc.JSON.parse(prefString);
+      currentPrefValues = JSON.parse(prefString);
     } catch (ex) {
       handleError(ex);
     }
@@ -402,7 +402,7 @@ this.DynamicRules = {
         prefValues[item] = value;
       }
     }
-    let newPrefString = TabmixSvc.JSON.stringify(prefValues);
+    let newPrefString = JSON.stringify(prefValues);
     if (prefString != newPrefString)
       Prefs.setCharPref(ruleName, newPrefString);
 

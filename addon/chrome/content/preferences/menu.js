@@ -64,7 +64,7 @@ var gMenuPane = {
     if (newValue == shortcuts.value)
       return;
     shortcuts.value = newValue;
-    shortcuts.keys = TabmixSvc.JSON.parse(newValue);
+    shortcuts.keys = JSON.parse(newValue);
     let callBack = shortcut => shortcut.id && shortcut.valueFromPreferences(Shortcuts.keys[shortcut.id]);
     this.updateShortcuts(shortcuts, callBack);
   },

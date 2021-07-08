@@ -183,33 +183,6 @@ this.TabmixSvc = {
     }
   },
 
-  // some extensions override native JSON so we use nsIJSON
-  JSON: {
-    nsIJSON: null,
-    parse: function TMP_parse(str) {
-      try {
-        return JSON.parse(str);
-      } catch (ex) {
-        try {
-          return "decode" in this.nsIJSON ? this.nsIJSON.decode(str) : null;
-        } catch (er) {
-          return null;
-        }
-      }
-    },
-    stringify: function TMP_stringify(obj) {
-      try {
-        return JSON.stringify(obj);
-      } catch (ex) {
-        try {
-          return "encode" in this.nsIJSON ? this.nsIJSON.encode(obj) : null;
-        } catch (er) {
-          return null;
-        }
-      }
-    }
-  },
-
   windowStartup: {
     QueryInterface: ChromeUtils.generateQI([Ci.nsIObserver,
       Ci.nsISupportsWeakReference]),
@@ -340,10 +313,6 @@ this.TabmixSvc = {
     };
   },
 };
-
-XPCOMUtils.defineLazyGetter(TabmixSvc.JSON, "nsIJSON", () => {
-  return Cc["@mozilla.org/dom/json;1"].createInstance(Ci.nsIJSON);
-});
 
 // check if australis tab shape is implemented
 XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {

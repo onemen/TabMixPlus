@@ -146,7 +146,7 @@
 
     _getPrefs(aPrefString) {
       try {
-        this._prefValues = TabmixSvc.JSON.parse(aPrefString);
+        this._prefValues = JSON.parse(aPrefString);
       } catch (er) {
         this._resetDefault(true);
         return;
@@ -183,7 +183,7 @@
             break;
         }
       }
-      Tabmix.prefs.setCharPref(this.prefName, TabmixSvc.JSON.stringify(newPrefSValue));
+      Tabmix.prefs.setCharPref(this.prefName, JSON.stringify(newPrefSValue));
     }
 
     _ondialogcancel() {

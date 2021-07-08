@@ -2467,12 +2467,12 @@ gTMPprefObserver = {
       Tabmix.prefs.clearUserPref("disableF9Key");
     }
     if (useF8Key || useF9Key) {
-      let shortcuts = TabmixSvc.JSON.parse(Tabmix.prefs.getCharPref("shortcuts"));
+      let shortcuts = JSON.parse(Tabmix.prefs.getCharPref("shortcuts"));
       if (useF8Key)
         shortcuts.slideShow = "VK_F8";
       if (useF9Key)
         shortcuts.toggleFLST = "VK_F9";
-      Tabmix.prefs.setCharPref("shortcuts", TabmixSvc.JSON.stringify(shortcuts));
+      Tabmix.prefs.setCharPref("shortcuts", JSON.stringify(shortcuts));
     }
     // 2013-09-04
     if (Tabmix.prefs.prefHasUserValue("enableScrollSwitch")) {

@@ -183,7 +183,7 @@ TabmixSessionData = {
       var tabData = TabmixSvc.ss.getTabValue(tab, id);
       if (tabData !== "" && tabData != "{}" && tabData != "null") {
         if (parse)
-          existingData = TabmixSvc.JSON.parse(tabData);
+          existingData = JSON.parse(tabData);
         else
           existingData = tabData;
       }
@@ -200,7 +200,7 @@ TabmixSessionData = {
       var data = TabmixSvc.ss.getWindowValue(win, id);
       if (data) {
         if (parse)
-          existingData = TabmixSvc.JSON.parse(data);
+          existingData = JSON.parse(data);
         else
           existingData = data;
       }
@@ -3691,7 +3691,7 @@ TabmixSessionManager = {
       // save group count before we start the restore
       let extData = winData.extData || {};
       let data = extData["tabview-groups"] || "{}";
-      let parsedData = TabmixSvc.JSON.parse(data);
+      let parsedData = JSON.parse(data);
       this._groupCount = parsedData.totalNumber || 1;
     }
   },

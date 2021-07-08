@@ -246,7 +246,7 @@ TabmixSessionManager._getSessionTabviewData = function(winData) {
   function _fixData(id, parse, def) {
     let data = extData[id] || null;
     if (data) {
-      return parse ? TabmixSvc.JSON.parse(data) : data;
+      return parse ? JSON.parse(data) : data;
     }
     return def;
   }
@@ -258,7 +258,7 @@ TabmixSessionManager._getSessionTabviewData = function(winData) {
   this._tabviewData["tabview-groups"] = groupsData;
   this.groupUpdates.lastActiveGroupId = groupsData.activeGroupId;
 
-  this._tabviewData["tabview-ui"] = _fixData("tabview-ui", false, TabmixSvc.JSON.stringify({}));
+  this._tabviewData["tabview-ui"] = _fixData("tabview-ui", false, JSON.stringify({}));
   this._tabviewData["tabview-visibility"] = _fixData("tabview-visibility", false, "false");
 };
 
@@ -274,7 +274,7 @@ TabmixSessionManager._saveTabviewData = function SM__saveTabviewData() {
 
 TabmixSessionManager._setTabviewData = function SM__setTabviewData(id, data) {
   if (typeof (data) != "string")
-    data = TabmixSvc.JSON.stringify(data);
+    data = JSON.stringify(data);
   TabmixSvc.ss.setWindowValue(window, id, data);
   if (!this.enableBackup)
     return;
@@ -292,7 +292,7 @@ TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata, 
   function setData(groupID) {
     let data = {groupID};
     parsedData = data;
-    return TabmixSvc.JSON.stringify(data);
+    return JSON.stringify(data);
   }
 
   var update = this.groupUpdates;
@@ -324,10 +324,10 @@ TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata, 
     }
 
     if (update.IDs) {
-      parsedData = TabmixSvc.JSON.parse(tabviewData);
+      parsedData = JSON.parse(tabviewData);
       if (parsedData.groupID in update.IDs) {
         parsedData.groupID = update.IDs[parsedData.groupID];
-        tabviewData = TabmixSvc.JSON.stringify(parsedData);
+        tabviewData = JSON.stringify(parsedData);
       }
     }
   }
@@ -340,7 +340,7 @@ TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata, 
     // hide all tabs that are not in the active group
     if (!Tabmix.extensions.tabGroupManager && activeGroupId !== null) {
       if (!parsedData)
-        parsedData = TabmixSvc.JSON.parse(tabviewData);
+        parsedData = JSON.parse(tabviewData);
       if (parsedData.groupID != activeGroupId)
         tabdata.hidden = true;
     }
@@ -453,7 +453,7 @@ TabmixSessionManager._prepareTabviewData = function SM__prepareTabviewData(loadO
         if (tab.pinned || tab.hidden || tab.closing || blankTabs.indexOf(tab) > -1)
           return;
         let data = {groupID};
-        data = TabmixSvc.JSON.stringify(data);
+        data = JSON.stringify(data);
         TabmixSvc.ss.setTabValue(tab, "tabview-tab", data);
         if (this.enableBackup)
           this.setLiteral(this.getNodeForTab(tab), "tabview-tab", data);

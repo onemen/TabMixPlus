@@ -43,7 +43,7 @@ var TMP_SessionStore = {
   },
 
   getTitleFromTabState(aTab) {
-    let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
+    let tabData = JSON.parse(TabmixSvc.ss.getTabState(aTab));
     let data = this.getActiveEntryData(tabData);
     if (data.url == TabmixSvc.aboutBlank) {
       return Tabmix.getString("tabs.emptyTabTitle");
@@ -55,7 +55,7 @@ var TMP_SessionStore = {
   isBlankPendingTab(aTab) {
     if (!aTab.hasAttribute("pending"))
       return false;
-    let tabData = TabmixSvc.JSON.parse(TabmixSvc.ss.getTabState(aTab));
+    let tabData = JSON.parse(TabmixSvc.ss.getTabState(aTab));
     let entries = tabData && tabData.entries;
     if (entries && entries.length > 1)
       return false;
@@ -590,7 +590,7 @@ var TMP_ClosedTabs = {
   restoreToNewWindow(aIndex) {
     var tabData = this.getClosedTabAtIndex(aIndex);
     // we pass the current tab as a place holder for tabData
-    var state = TabmixSvc.JSON.stringify(tabData ? tabData.state : {});
+    var state = JSON.stringify(tabData ? tabData.state : {});
     return gBrowser.duplicateTabToWindow(gBrowser._selectedTab, null, state);
   },
 
