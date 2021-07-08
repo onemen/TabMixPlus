@@ -20,12 +20,10 @@ this.DocShellCapabilities = {
 
   update(browser, data) {
     // Update the persistent tab state cache
-    TabStateCache.update(browser, {disallow: data.disallow || null});
+    TabStateCache.update(browser.permanentKey, {disallow: data.disallow || null});
     if (data.reload)
       browser.reload();
   },
-
-  caps: ["Images", "Subframes", "MetaRedirects", "Plugins", "Javascript"],
 
   collect(tab) {
     let window = tab.ownerGlobal;
@@ -39,8 +37,10 @@ this.DocShellCapabilities = {
 
   restore(tab, disallow, reload) {
     let browser = tab.linkedBrowser;
-    if (reload && tab.getAttribute("pending") == "true")
-      reload = false;
+    if (tab.getAttribute("pending") == "true") {
+      this.update(browser, {disallow, reload: false});
+      return;
+    }
 
     browser.messageManager.sendAsyncMessage("Tabmix:restorePermissions",
       {disallow: disallow.join(","), reload: reload || false});

@@ -1,5 +1,5 @@
 /* globals content, docShell, addMessageListener, sendSyncMessage,
-           sendAsyncMessage */
+           sendAsyncMessage, Timer */
 "use strict";
 
 var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
@@ -7,11 +7,14 @@ var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("resource://gre/modules/Services.jsm", this);
 
+XPCOMUtils.defineLazyGetter(this, "Timer", () => {
+  let tmp = {};
+  Cu.import("resource://gre/modules/Timer.jsm", tmp);
+  return tmp;
+});
+
 XPCOMUtils.defineLazyModuleGetter(this, "AppConstants",
   "resource://gre/modules/AppConstants.jsm");
-
-XPCOMUtils.defineLazyModuleGetter(this, "DocShellCapabilities",
-  "resource:///modules/sessionstore/DocShellCapabilities.jsm");
 
 XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
@@ -71,7 +74,7 @@ var TabmixContentHandler = {
     switch (name) {
       case "Tabmix:restorePermissions": {
         let disallow = new Set(data.disallow && data.disallow.split(","));
-        DocShellCapabilities.restore(docShell, disallow);
+        SessionStoreUtils.restoreDocShellCapabilities(docShell, [...disallow].join(","));
         sendSyncMessage("Tabmix:restorePermissionsComplete", {
           disallow: data.disallow,
           reload: data.reload
@@ -79,7 +82,7 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:collectPermissions": {
-        let caps = DocShellCapabilities.collect(docShell).join(",");
+        let caps = SessionStoreUtils.collectDocShellCapabilities(docShell);
         sendSyncMessage("Tabmix:collectPermissionsComplete", {caps});
         break;
       }
@@ -143,10 +146,6 @@ var TabmixContentHandler = {
         break;
       }
     }
-  },
-
-  getCapabilities() {
-    return DocShellCapabilities.collect(docShell).join(",") || "";
   },
 
   onDrop(event) {
@@ -486,7 +485,7 @@ var TabmixPageHandler = {
     // add-review is null on DOMContentLoaded
     const addReview = doc.getElementById("add-review");
     if (eventType != "pageshow" && !addReview && this.count++ < 10) {
-      this._timeoutID = setTimeout(() => {
+      this._timeoutID = Timer.setTimeout(() => {
         // make sure content exist after timeout
         if (content) {
           this.moveAMOButton("timeout");
@@ -498,7 +497,7 @@ var TabmixPageHandler = {
       content.removeEventListener("pageshow", this);
     }
     if (addReview && this._timeoutID) {
-      clearTimeout(this._timeoutID);
+      Timer.clearTimeout(this._timeoutID);
       this._timeoutID = null;
     }
     let button = doc.getElementById(this.buttonID);
