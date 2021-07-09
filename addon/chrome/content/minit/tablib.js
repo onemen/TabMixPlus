@@ -1762,7 +1762,7 @@ Tabmix.tablib = {
   },
 
   closeLastTab: function TMP_closeLastTab() {
-    if (TabmixSvc.isMac && window.location.href != getBrowserURL()) {
+    if (TabmixSvc.isMac && window.location.href != AppConstants.BROWSER_CHROME_URL) {
       closeWindow(true);
       return;
     }
