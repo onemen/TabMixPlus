@@ -3,7 +3,7 @@
 
 this.EXPORTED_SYMBOLS = ["TabmixContentClick"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {interfaces: Ci, utils: Cu} = Components;
 
 Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 
@@ -1087,11 +1087,6 @@ ContentClickInternal = {
     return false;
   },
 
-  get uriFixup() {
-    delete this.uriFixup;
-    return (this.uriFixup = Cc["@mozilla.org/docshell/urifixup;1"].getService(Ci.nsIURIFixup));
-  },
-
   /**
    * @brief Check if link refers to external domain.
    *
@@ -1103,7 +1098,9 @@ ContentClickInternal = {
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
     const fixupURI = url => {
       try {
-        return this.uriFixup.createFixupURI(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE);
+        return TabmixSvc.version(830) ?
+          Services.uriFixup.getFixupURIInfo(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE).preferredURI :
+          Services.uriFixup.createFixupURI(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE);
       } catch (ex) { }
       return null;
     };

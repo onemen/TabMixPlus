@@ -307,10 +307,10 @@ TabmixClickEventHandler = {
 
     if (href) {
       try {
-        Services.scriptSecurityManager.checkLoadURIStrWithPrincipal(
-          principal,
-          href
-        );
+        const secMan = Services.scriptSecurityManager;
+        const args = ContentSvc.version(870) ?
+          [principal, href] : [principal, href, secMan.STANDARD];
+        secMan.checkLoadURIStrWithPrincipal(...args);
       } catch (e) {
         return;
       }
