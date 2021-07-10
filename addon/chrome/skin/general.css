@@ -34,7 +34,10 @@
   -moz-padding-end: 15px;
 }
 
-:root:not([sizemode="normal"]) #tabbrowser-tabs[tabBarSpace] > #tabbrowser-arrowscrollbox {
+:root:not([chromehidden~="menubar"]) #toolbar-menubar:not([autohide="true"]) + #TabsToolbar #TabsToolbar-customization-target[tabBarSpace] ,
+:root[inFullscreen] #TabsToolbar-customization-target[tabBarSpace] ,
+:root:not([tabsintitlebar]) #TabsToolbar-customization-target[tabBarSpace] ,
+:root:not([sizemode="normal"]) #TabsToolbar-customization-target[tabBarSpace] {
   -moz-padding-start: 15px;
 }
 

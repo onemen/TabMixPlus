@@ -147,6 +147,7 @@ var TabmixTabbar = {
       Tabmix.setItem("tabbrowser-tabs", "showalltabsbutton", !allTabsButton.collapsed || null);
     }
     Tabmix.setItem(tabBar, "tabBarSpace", Tabmix.prefs.getBoolPref("tabBarSpace") || null);
+    Tabmix.setItem(tabBar.parentNode, "tabBarSpace", Tabmix.prefs.getBoolPref("tabBarSpace") || null);
     this.setShowNewTabButtonAttr();
 
     if (start)
