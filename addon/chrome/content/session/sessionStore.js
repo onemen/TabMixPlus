@@ -51,7 +51,7 @@ var TMP_SessionStore = {
     return data.title || null;
   },
 
-  // check if pending tab has no history or is about:blank
+  // check if pending tab has no history or is about:blank, about:home, about:newtab
   isBlankPendingTab(aTab) {
     if (!aTab.hasAttribute("pending"))
       return false;
@@ -59,7 +59,8 @@ var TMP_SessionStore = {
     let entries = tabData && tabData.entries;
     if (entries && entries.length > 1)
       return false;
-    return !entries[0] || entries[0].url == "about:blank";
+    return !entries[0] ||
+      [TabmixSvc.aboutBlank, TabmixSvc.aboutNewtab, "about:home"].includes(entries[0].url);
   },
 
   /**
