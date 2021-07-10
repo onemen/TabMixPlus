@@ -2704,7 +2704,7 @@ TabmixProgressListener = {
         if (tabsCount == 1)
           this.mTabBrowser.tabContainer._updateCloseButtons(true);
         tab.removeAttribute("tab-progress");
-        if (!isBlankPageURL(uri) && uri.indexOf("newTab.xul") == -1) {
+        if (!isBlankPageURL(uri)) {
           aBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
           if (Tabmix.prefs.getBoolPref("unreadTabreload") && tab.hasAttribute("visited") &&
               !tab.hasAttribute("dontremovevisited") && tab.getAttribute("visuallyselected") != "true")

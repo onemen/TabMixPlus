@@ -4,12 +4,14 @@ this.EXPORTED_SYMBOLS = ["MergeWindows"];
 
 const Cu = Components.utils;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
 Cu.import("resource://gre/modules/Services.jsm", this);
 Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
 
-XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
+
+ChromeUtils.defineModuleGetter(this, "AppConstants",
+  "resource://gre/modules/AppConstants.jsm");
 
 //////////////////////////////////////////////////////////////////////
 // The Original Code is the Merge Window function of "Duplicate Tab"//
@@ -101,9 +103,9 @@ this.MergeWindows = {
   },
 
   mergePopUpsToNewWindow(aWindows, aPrivate) {
-    var features = "chrome,all,dialog=no";
+    let features = "chrome,all,dialog=no";
     features += aPrivate ? ",private" : ",non-private";
-    var newWindow = aWindows[0].openDialog("chrome://browser/content/browser.xul",
+    let newWindow = aWindows[0].openDialog(AppConstants.BROWSER_CHROME_URL,
       "_blank", features, null);
     let mergePopUps = () => {
       newWindow.removeEventListener("SSWindowStateReady", mergePopUps);

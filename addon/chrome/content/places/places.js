@@ -37,17 +37,6 @@ var TMP_Places = {
     if ("PlacesCommandHook" in window) {
       gBrowser.tabContainer.addEventListener("SSTabRestored", this);
     }
-
-    // prevent error when closing window with sidebar open
-    var docURI = window.document.documentURI;
-    if (docURI == "chrome://browser/content/bookmarks/bookmarksPanel.xul" ||
-        docURI == "chrome://browser/content/history/history-panel.xul") {
-      let fn = "setMouseoverURL" in SidebarUtils ? "setMouseoverURL" : "clearURLFromStatusBar";
-      Tabmix.changeCode(SidebarUtils, "SidebarUtils." + fn)._replace(
-        '{',
-        '{if (window.top.XULBrowserWindow == null) return;'
-      ).toCode();
-    }
   },
 
   deinit: function TMP_PC_deinit() {
@@ -155,20 +144,19 @@ var TMP_Places = {
 
   getPrefByDocumentURI(aWindow) {
     switch (aWindow.document.documentURI) {
-      case "chrome://browser/content/places/places.xul": {
-        let history = PlacesUIUtils.getString("OrganizerQueryHistory");
-        let historyId = PlacesUIUtils.leftPaneQueries[history];
-        let node = PlacesOrganizer._places.selectedNode;
-        let historySelected = node.itemId == historyId ||
-            node.parent && node.parent.itemId == historyId;
+      case "chrome://browser/content/places/places.xhtml": {
+        let historyId = PlacesUtils.virtualHistoryGuid;
+        let node = aWindow.PlacesOrganizer._places.selectedNode;
+        let historySelected = node.bookmarkGuid == historyId ||
+            node.parent && node.parent.bookmarkGuid == historyId;
         if (!historySelected)
           return this.prefBookmark;
       }
       /* falls through */
-      case "chrome://browser/content/history/history-panel.xul":
+      case "chrome://browser/content/places/historySidebar.xhtml":
         return this.prefHistory;
-      case "chrome://browser/content/browser.xul":
-      case "chrome://browser/content/bookmarks/bookmarksPanel.xul":
+      case AppConstants.BROWSER_CHROME_URL:
+      case "chrome://browser/content/places/bookmarksSidebar.xhtml":
         /* falls through */
       default:
         break;
