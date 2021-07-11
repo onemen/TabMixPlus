@@ -179,10 +179,10 @@
                             preference="pref_loadProgressively" control="loadProgressively"
                             onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
                             onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"/>
-              <html:input id="loadProgressively" maxlength="3" size="2" preference="pref_loadProgressively"
+              <html:input id="loadProgressively" maxlength="3" size="3" preference="pref_loadProgressively"
                        onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
                        observes="obs_loadProgressively"
-                       type="number" min="1" maxwidth="42"/>
+                       type="number" min="1" maxwidth="42" oninput="value = value == '' ? this.min : value.slice(0,this.maxLength); validity.valid||(value=this.min);"/>
               <label value="&tabs.label;"/>
             </hbox>
             <hbox align="center" class="indent">
@@ -191,9 +191,9 @@
                             onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
                             onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"
                             observes="obs_loadProgressively"/>
-              <html:input id="restoreOnDemand" maxlength="3" size="2" preference="pref_restoreOnDemand"
+              <html:input id="restoreOnDemand" maxlength="3" size="3" preference="pref_restoreOnDemand"
                        onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
-                       type="number" min="1" maxwidth="42"/>
+                       type="number" min="1" maxwidth="42" oninput="value = value == '' ? this.min : value.slice(0,this.maxLength); validity.valid||(value=this.min);"/>
               <label value="&tabs.label;" observes="obs_loadProgressively"/>
             </hbox>
           </html:fieldset>
@@ -396,8 +396,8 @@
               <vbox align="start" class="indent">
                 <hbox align="center">
                   <label control="undoCloseCache" value="&undoCloseCache.label;" observes="obs_undoClose"/>
-                  <html:input id="undoCloseCache" maxlength="3" size="2" preference="pref_undoCloseCache"
-                           type="number" observes="obs_undoClose"/>
+                  <html:input id="undoCloseCache" maxlength="3" size="4" preference="pref_undoCloseCache"
+                           type="number" observes="obs_undoClose" min="0" oninput="value = value == '' ? this.min : value.slice(0,this.maxLength); validity.valid||(value=this.min);"/>
                 </hbox>
                 <checkbox_tmp id="undoClosepos" label="&undoClosepos.label;" preference="pref_undoClosepos" observes="obs_undoClose"/>
                 <checkbox_tmp id="menuonlybutton" label="&menuonlybutton.label;" preference="pref_menuonlybutton" observes="obs_undoClose"/>

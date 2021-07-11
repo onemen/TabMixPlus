@@ -313,8 +313,8 @@
                                           _label="&activateSlideshow.label;"/>
             <hbox align="center" class="indent">
               <label id="slideDelayLabel" observes="obs_slideDelay"/>
-              <html:input id="slideshow.time" maxlength="3" size="3" preference="pref_slideshow"
-                       observes="obs_slideDelay" type="number"/>
+              <html:input id="slideshow.time" maxlength="3" size="4" preference="pref_slideshow"
+                       observes="obs_slideDelay" type="number" min="0" oninput="value = value == '' ? this.min : value.slice(0,this.maxLength); validity.valid||(value=this.min);"/>
               <label value="&seconds.label;" observes="obs_slideDelay" class="timelabel"/>
             </hbox>
           </html:fieldset>
