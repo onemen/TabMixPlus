@@ -2,12 +2,8 @@
 
 this.EXPORTED_SYMBOLS = ["TabRestoreQueue"];
 
-const {utils: Cu} = Components;
-
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this,
-  "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
+ChromeUtils.defineModuleGetter(this, "TabmixSvc",
+  "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 let internal = {
   tabmix: {

@@ -56,7 +56,7 @@ var TabmixTabbar = {
     var tabstrip = tabBar.arrowScrollbox;
 
     var tabscroll = Tabmix.prefs.getIntPref("tabBarMode");
-    if (document.documentElement.getAttribute("chromehidden").indexOf("toolbar") != -1)
+    if (document.documentElement.getAttribute("chromehidden").includes("toolbar"))
       tabscroll = 1;
 
     if (tabscroll < 0 || tabscroll > 3 ||
@@ -494,9 +494,8 @@ Tabmix.tabsUtils = {
             Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") &&
             !TabmixSvc.isMac && aEvent.target.localName === "arrowscrollbox") {
           let displayAppButton = !(document.getElementById("titlebar")).hidden;
-          let tabsOnTop = !window.TabsOnTop || TabsOnTop.enabled;
           if (TabsInTitlebar.enabled ||
-              (displayAppButton && tabsOnTop && this.tabBar.parentNode._dragBindingAlive))
+              (displayAppButton && this.tabBar.parentNode._dragBindingAlive))
             return;
         }
         TabmixTabClickOptions.onTabBarDblClick(aEvent);
@@ -1107,7 +1106,7 @@ gTMPprefObserver = {
     try {
       // add Observer
       for (var i = 0; i < this.OBSERVING.length; ++i)
-        Services.prefs.addObserver(this.OBSERVING[i], this, false);
+        Services.prefs.addObserver(this.OBSERVING[i], this);
     } catch (e) {
       Tabmix.log("prefs-Observer failed to attach:\n" + e);
       Tabmix.prefs.setBoolPref("PrefObserver.error", true);
@@ -1728,10 +1727,9 @@ gTMPprefObserver = {
       let index = this.insertRule(newRule);
       newRule = this._tabStyleSheet.cssRules[index];
       gBrowser.tabContainer.addEventListener("TabOpen", function TMP_addStyleRule(aEvent) {
-        gBrowser.tabContainer.removeEventListener("TabOpen", TMP_addStyleRule, true);
         padding = Tabmix.getStyle(aEvent.target, "paddingBottom");
         newRule.style.setProperty("padding-bottom", (padding + 1) + "px", "important");
-      }, true);
+      }, {capture: true, once: true});
     }
 
     this.dynamicProtonRules();
@@ -1949,7 +1947,7 @@ gTMPprefObserver = {
     }`;
 
     const styleSheet = Services.io.newURI(
-      "data:text/css," + encodeURIComponent(cssText), null, null);
+      "data:text/css," + encodeURIComponent(cssText));
 
     const sss = Cc['@mozilla.org/content/style-sheet-service;1']
         .getService(Ci.nsIStyleSheetService);
@@ -2009,7 +2007,7 @@ gTMPprefObserver = {
 
     let isBold = function(attrib) {
       attrib = attrib.split(" ");
-      return attrib.length > 1 && attrib.indexOf("not-bold") == -1;
+      return attrib.length > 1 && !attrib.includes("not-bold");
     };
     // changing bold attribute can change tab width and effect tabBar scroll status
     // also when we turn off unloaded, unread and other style different style can take

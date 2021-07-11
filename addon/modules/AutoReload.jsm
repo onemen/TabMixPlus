@@ -2,14 +2,10 @@
 
 this.EXPORTED_SYMBOLS = ["AutoReload"];
 
-const {interfaces: Ci, utils: Cu} = Components;
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
-Cu.import("resource://gre/modules/Services.jsm", this);
-Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
-
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this, "E10SUtils",
+ChromeUtils.defineModuleGetter(this, "E10SUtils",
   "resource://gre/modules/E10SUtils.jsm");
 
 var _setItem = function() {};
@@ -97,10 +93,10 @@ this.AutoReload = {
         return [];
       }
       let defaultList = ["30", "60", "120", "300", "900", "1800"];
-      list = list.filter(val => defaultList.indexOf(val) == -1);
+      list = list.filter(val => !defaultList.includes(val));
       let newList = [];
       list.forEach(val => {
-        if (parseInt(val) && newList.indexOf(val) == -1)
+        if (parseInt(val) && !newList.includes(val))
           newList.push(val);
         if (newList.length > 6)
           newList.shift();
@@ -263,7 +259,7 @@ this.AutoReload = {
     let title = TabmixSvc.getString('confirm_autoreloadPostData_title');
     let remote = isRemote ? '_remote' : '';
     let msg = TabmixSvc.getString('confirm_autoreloadPostData' + remote);
-    Services.obs.addObserver(_observe, "common-dialog-loaded", false);
+    Services.obs.addObserver(_observe, "common-dialog-loaded");
     let resultOK = Services.prompt.confirm(window, title, msg);
     if (resultOK)
       tab.postDataAcceptedByUser = true;

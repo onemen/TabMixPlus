@@ -1,3 +1,4 @@
+/* global getKeysForShortcut */
 /* eslint no-var: 2, prefer-const: 2 */
 "use strict";
 

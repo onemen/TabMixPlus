@@ -21,9 +21,9 @@
    <script type="text/javascript"><![CDATA[
     let t = document.getElementsByTagName("dialog")[0];
     let f = new Function("event", t.getAttribute("ondialogaccept"));
-    t.addEventListener("dialogaccept",(event) => f.call(t, event));
-    t.addEventListener("dialogcancel",(event) => f.call(t, event));
-    t.addEventListener("dialogextra1",(event) => f.call(t, event));
+    t.addEventListener("dialogaccept", event => f.call(t, event));
+    t.addEventListener("dialogcancel", event => f.call(t, event));
+    t.addEventListener("dialogextra1", event => f.call(t, event));
     ]]></script>
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/dialogs/promptservice.js"/>

@@ -25,7 +25,7 @@ var TMP_DLG_RENAME = 1;
 var dialogParams, gHideElmParam, gSavedName, gCancelLabel, gOrigName;
 
 function prompt_init() {
-  dialogParams = window.arguments[0].QueryInterface(Components.interfaces.nsIDialogParamBlock);
+  dialogParams = window.arguments[0].QueryInterface(Ci.nsIDialogParamBlock);
   document.title = dialogParams.GetString(0);
 
   // display the main text

@@ -72,7 +72,7 @@ var gMenuPane = {
   _slideShow: "",
   updateShortcuts(aShortcuts, aCallBack) {
     let boxes = Array.prototype.filter.call(aShortcuts.childNodes, aCallBack);
-    $("shortcuts-panel").setAttribute("usedKeys", boxes.length > 0);
+    $("shortcuts-panel").setAttribute("usedKeys", Boolean(boxes.length));
     if (this._slideShow != $("shortcut-group").keys.slideShow) {
       this._slideShow = $("shortcut-group").keys.slideShow;
       this.setSlideShowLabel();

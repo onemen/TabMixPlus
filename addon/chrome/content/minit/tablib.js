@@ -80,7 +80,7 @@ Tabmix.tablib = {
         return null;
       }
       try {
-        let newURI = Services.io.newURI(uri, null, null);
+        let newURI = Services.io.newURI(uri);
         allowLoad = browser.currentURI.equalsExceptRef(newURI);
       } catch (ex) {}
     }
@@ -1006,8 +1006,7 @@ Tabmix.tablib = {
         };
 
         Services.obs.addObserver(delayedStartupFinished,
-          "browser-delayed-startup-finished",
-          false);
+          "browser-delayed-startup-finished");
       }
     };
 
@@ -1075,7 +1074,7 @@ Tabmix.tablib = {
       // valid urls don't contain spaces ' '; if we have a space it isn't a valid url.
       // Also disallow dropping javascript: or data: urls--bail out
       let isValid = function(aUrl) {
-        return aUrl && aUrl.length && aUrl.indexOf(" ") == -1 &&
+        return aUrl && aUrl.length && !aUrl.includes(" ") &&
             !(/^\s*(javascript|data):/).test(aUrl);
       };
 
@@ -1131,7 +1130,7 @@ Tabmix.tablib = {
         var childNodes = this.visibleTabs;
         for (var i = childNodes.length - 1; i > -1; --i) {
           if (childNodes[i] != aTab && !childNodes[i].pinned &&
-              this.getBrowserForTab(childNodes[i]).currentURI.spec.indexOf(aDomain) != -1)
+              this.getBrowserForTab(childNodes[i]).currentURI.spec.includes(aDomain))
             this.removeTab(childNodes[i]);
         }
         if (!aTab.pinned) {
@@ -1327,8 +1326,8 @@ Tabmix.tablib = {
     gBrowser.copyTabUrl = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this._selectedTab;
-      var clipboard = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
-          .getService(Components.interfaces.nsIClipboardHelper);
+      var clipboard = Cc["@mozilla.org/widget/clipboardhelper;1"]
+          .getService(Ci.nsIClipboardHelper);
 
       clipboard.copyString(this.getBrowserForTab(aTab).currentURI.spec);
     };
@@ -1463,7 +1462,7 @@ Tabmix.tablib = {
       function addProtected(aTabs) {
         for (let i = 0; i < aTabs.length; i++) {
           let tab = aTabs[i];
-          if (protectedTabs.indexOf(tab) == -1 &&
+          if (!protectedTabs.includes(tab) &&
               (onExit || !tab.hidden)) {
             protectedTabs.push(aTabs[i]);
           }
@@ -1528,7 +1527,7 @@ Tabmix.tablib = {
         case closing.GROUP:
           for (let i = numTabs - 1; i > -1; --i) {
             let tab = tabs[i];
-            if (this.getBrowserForTab(tab).currentURI.spec.indexOf(aDomain) != -1 &&
+            if (this.getBrowserForTab(tab).currentURI.spec.includes(aDomain) &&
                 !tab._isProtected)
               tabsToClose++;
           }

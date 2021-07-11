@@ -12,8 +12,6 @@
  */
 this.EXPORTED_SYMBOLS = ["CompatibilityCheck"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
-
 const TMP_BUTTON_CANCEL = 1;
 const TMP_BUTTON_EXTRA1 = 2;
 const TMP_HIDE_MENUANDTEXT = 2;
@@ -21,10 +19,9 @@ const TMP_CHECKBOX_UNCHECKED = 0;
 const TMP_CHECKBOX_CHECKED = 1;
 const TMP_HIDE_CHECKBOX = 2;
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-Cu.import("resource://gre/modules/AddonManager.jsm", this);
-Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
-XPCOMUtils.defineLazyModuleGetter(this, "Services",
+const {AddonManager} = ChromeUtils.import("resource://gre/modules/AddonManager.jsm");
+const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
+ChromeUtils.defineModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
 var _initialized = false;

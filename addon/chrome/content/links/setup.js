@@ -118,7 +118,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     if (this.firstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {
         let tmp = {};
-        Components.utils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm", tmp);
+        ChromeUtils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm", tmp);
         tmp = new tmp.CompatibilityCheck(aWindow, true);
       }, 0, window);
     }
@@ -209,7 +209,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     this.setItem(tabContainer, "widthFitTitle", true);
 
   var tabscroll = this.prefs.getIntPref("tabBarMode");
-  if (document.documentElement.getAttribute("chromehidden").indexOf("toolbar") != -1)
+  if (document.documentElement.getAttribute("chromehidden").includes("toolbar"))
     tabscroll = 1;
   if (tabscroll < 0 || tabscroll > 3 ||
       (tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window)) {

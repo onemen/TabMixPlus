@@ -1,7 +1,8 @@
 /* exported load, accept, onInput */
 "use strict";
 
-var gPref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch);
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const gPref = Services.prefs;
 
 function load() {
   var customReloadTime = gPref.getIntPref("extensions.tabmix.reload_time");
@@ -16,7 +17,7 @@ function accept() {
   var list = gPref.getCharPref("extensions.tabmix.custom_reload_list");
   list = list ? list.split(",") : [];
   let defaultList = [60, 120, 300, 900, 1800];
-  if (list.concat(defaultList).indexOf(customReloadTime) == -1) {
+  if (!list.concat(defaultList).includes(customReloadTime)) {
     list.push(customReloadTime);
     if (list.length > 6)
       list.shift();

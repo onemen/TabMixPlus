@@ -104,7 +104,7 @@ function Input() {
   } else {
     // check if the input value is in the list
     var items = list.getElementsByAttribute("value", entry.value.toLowerCase());
-    if (items.length > 0) {
+    if (items.length) {
       SelectItemAt(list.getIndexOfItem(items[0]), false);
       setButtonDisable(edit, true);
       setButtonDisable(add, true);

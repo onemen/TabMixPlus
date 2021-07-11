@@ -38,8 +38,7 @@ Tabmix.startup = function TMP_startup() {
 // we call this function from gBrowserInit._delayedStartup, see setup.js
 Tabmix.beforeDelayedStartup = function() {
   if (this.isFirstWindow) {
-    let tmp = {};
-    Cu.import("chrome://tabmix-resource/content/extensions/AddonManager.jsm", tmp);
+    ChromeUtils.import("chrome://tabmix-resource/content/extensions/AddonManager.jsm");
     TMP_SessionStore.setService(1, true);
   }
 
@@ -1151,8 +1150,7 @@ Tabmix.initialization = {
     let stopInitialization = false;
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
     if (Tabmix.singleWindowMode) {
-      let tmp = {};
-      Components.utils.import("chrome://tabmix-resource/content/SingleWindowModeUtils.jsm", tmp);
+      const tmp = ChromeUtils.import("chrome://tabmix-resource/content/SingleWindowModeUtils.jsm");
       stopInitialization = tmp.SingleWindowModeUtils.newWindow(window);
     }
 
@@ -1187,6 +1185,7 @@ Tabmix.initialization = {
       if (phase.id > currentPhase)
         break;
       if (!phase.initialized) {
+        // eslint-disable-next-line no-undef
         console.debug("Tabmix initializer:", {key, phase});
         phase.initialized = true;
         try {

@@ -533,8 +533,8 @@ var TMP_ClosedTabs = {
   copyTabUrl: function ct_copyTabUrl(index) {
     var tabData = this.getClosedTabData[index];
     var url = this.getUrl(tabData);
-    var clipboard = Components.classes["@mozilla.org/widget/clipboardhelper;1"]
-        .getService(Components.interfaces.nsIClipboardHelper);
+    var clipboard = Cc["@mozilla.org/widget/clipboardhelper;1"]
+        .getService(Ci.nsIClipboardHelper);
 
     clipboard.copyString(url);
   },
@@ -607,7 +607,7 @@ var TMP_ClosedTabs = {
     }
 
     // remove unused blank tabs
-    while (blankTabs.length > 0) {
+    while (blankTabs.length) {
       let blankTab = blankTabs.pop();
       blankTab.collapsed = true;
       gBrowser.removeTab(blankTab);

@@ -286,7 +286,7 @@
 
   if (gBrowser?.tabs?.forEach) {
     gBrowser.tabs.forEach(t => {
-      if (t?.tabmix_inited != true) {
+      if (t?.tabmix_inited !== true) {
         t._initialized = false;
         t.connectedCallback();
       }

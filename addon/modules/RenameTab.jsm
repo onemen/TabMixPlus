@@ -2,14 +2,11 @@
 
 this.EXPORTED_SYMBOLS = ["RenameTab"];
 
-const Cu = Components.utils;
+const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
+const {ChromeManifest} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
+const {Overlays} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
-Cu.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
-Cu.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
-
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
+ChromeUtils.defineModuleGetter(this, "TabmixPlacesUtils",
   "chrome://tabmix-resource/content/Places.jsm");
 
 this.RenameTab = {

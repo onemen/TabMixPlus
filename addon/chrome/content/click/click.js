@@ -1,7 +1,7 @@
 /* exported TabmixTabClickOptions, TabmixAllTabs */
 "use strict";
 
-XPCOMUtils.defineLazyModuleGetter(Tabmix, "ContextMenu",
+ChromeUtils.defineModuleGetter(Tabmix, "ContextMenu",
   "chrome://tabmix-resource/content/ContextMenu.jsm");
 
 var TabmixTabClickOptions = {
@@ -108,9 +108,8 @@ var TabmixTabClickOptions = {
         !aEvent.shiftKey && !aEvent.metaKey) {
       prefName = "alt"; /* alt click*/
       window.addEventListener("keyup", function TMP_onKeyup_onTabClick(event) {
-        event.currentTarget.removeEventListener("keyup", TMP_onKeyup_onTabClick, true);
         event.stopPropagation();
-      }, true);
+      }, {capture: true, once: true});
     } else if (leftClick && (aEvent.ctrlKey && !aEvent.metaKey ||
         !aEvent.ctrlKey && aEvent.metaKey) && !aEvent.shiftKey && !aEvent.altKey) {
       prefName = "ctrl"; /* ctrl click*/
@@ -997,7 +996,7 @@ var TabmixAllTabs = {
       }
       aTab._TMP_removeing = true;
       gBrowser.removeTab(aTab, {animate: true});
-      if (gBrowser.tabs.length > 0) {
+      if (gBrowser.tabs.length) {
         this.createTabsList(popup, aType);
       } else {
         popup.hidePopup();

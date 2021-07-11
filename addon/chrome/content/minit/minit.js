@@ -103,7 +103,7 @@ var TMP_tabDNDObserver = {
           newCode.toCode();
         }
       };
-      Services.obs.addObserver(observer, topic, false);
+      Services.obs.addObserver(observer, topic);
     } else {
       newCode.toCode();
     }
@@ -1266,13 +1266,13 @@ Tabmix.navToolbox = {
   urlBarInitialized: false,
   initializeURLBar: function TMP_navToolbox_initializeURLBar() {
     if (!gURLBar ||
-        document.documentElement.getAttribute("chromehidden").indexOf("location") != -1 ||
+        document.documentElement.getAttribute("chromehidden").includes("location") ||
         typeof gURLBar.handleCommand == "undefined")
       return;
 
     // onblur attribute reset each time we exit ToolboxCustomize
     var blur = gURLBar.getAttribute("onblur") || "";
-    if (blur.indexOf("Tabmix.urlBarOnBlur") == -1)
+    if (!blur.includes("Tabmix.urlBarOnBlur"))
       Tabmix.setItem(gURLBar, "onblur", blur + "Tabmix.urlBarOnBlur();");
 
     if (!this.urlBarInitialized) {
@@ -1367,8 +1367,8 @@ Tabmix.navToolbox = {
     let obj, fn, $LF;
     let _handleSearchCommand = searchbar.handleSearchCommand.toString();
     // we check browser.search.openintab also for search button click
-    if (_handleSearchCommand.indexOf("whereToOpenLink") > -1 &&
-          _handleSearchCommand.indexOf("forceNewTab") == -1) {
+    if (_handleSearchCommand.includes("whereToOpenLink") &&
+          !_handleSearchCommand.includes("forceNewTab")) {
       $LF = '\n            ';
       Tabmix.changeCode(searchbar, "searchbar.handleSearchCommand")._replace(
         'where = whereToOpenLink(aEvent, false, true);',

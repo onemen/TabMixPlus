@@ -2,33 +2,32 @@
 
 this.EXPORTED_SYMBOLS = ["TabmixPlacesUtils"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
-
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this, "Services",
+ChromeUtils.defineModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
 // these imports are used by PlacesUIUtils and PlacesUtils that we eval here
-XPCOMUtils.defineLazyModuleGetter(this, "PluralForm",
+// PluralForm, PrivateBrowsingUtils, OpenInTabsUtils
+/* eslint-disable no-unused-vars */
+ChromeUtils.defineModuleGetter(this, "PluralForm",
   "resource://gre/modules/PluralForm.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "OpenInTabsUtils",
+ChromeUtils.defineModuleGetter(this, "OpenInTabsUtils",
   "resource:///modules/OpenInTabsUtils.jsm");
+/* eslint-enable no-unused-vars */
 
-XPCOMUtils.defineLazyModuleGetter(this, "PlacesUIUtils",
+ChromeUtils.defineModuleGetter(this, "PlacesUIUtils",
   "resource:///modules/PlacesUIUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "PlacesUtils",
+ChromeUtils.defineModuleGetter(this, "PlacesUtils",
   "resource://gre/modules/PlacesUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "BrowserWindowTracker",
+ChromeUtils.defineModuleGetter(this, "BrowserWindowTracker",
   "resource:///modules/BrowserWindowTracker.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this,
+ChromeUtils.defineModuleGetter(this,
   "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 // this function is use by PlacesUIUtils functions that we evaluate here
@@ -208,7 +207,7 @@ PlacesUtilsInternal = {
       return value;
     };
 
-    Services.prefs.addObserver(PREF, updateValue, false);
+    Services.prefs.addObserver(PREF, updateValue);
     return updateValue();
   },
 

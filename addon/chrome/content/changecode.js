@@ -73,10 +73,10 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       try {
         // list of function that we don't warp with try-catch
         let dontDebug = ["gBrowser.tabContainer._animateTabMove, gURLBar.handleCommand"];
-        if (debugMode && dontDebug.indexOf(this.fullName) == -1) {
+        if (debugMode && !dontDebug.includes(this.fullName)) {
           let excludeReturn = ["TabsInTitlebar._update", "gBrowser._blurTab"];
           let addReturn = "", re = new RegExp("//.*", "g");
-          if (excludeReturn.indexOf(this.fullName) == -1 &&
+          if (!excludeReturn.includes(this.fullName) &&
               /return\s.+/.test(this.value.replace(re, "")))
             addReturn = "\nreturn null\n";
           this.value = this.value.replace("{", "{try {") +
@@ -207,7 +207,7 @@ Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
 };
 
 (function(obj) {
-  let global = Components.utils.getGlobalForObject(obj);
+  let global = Cu.getGlobalForObject(obj);
   // eslint-disable-next-line no-useless-concat
   let fn = global["ev" + "al"];
   Tabmix._makeCode = function(name, code) {

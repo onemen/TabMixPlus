@@ -1,10 +1,28 @@
+/* global
+  ADDON_ENABLE: false,
+  ADDON_DISABLE: false,
+  ADDON_DOWNGRADE: false,
+  ADDON_INSTALL: false,
+  ADDON_UNINSTALL: false,
+  ADDON_UPGRADE: false,
+*/
+/* eslint-env tabmix/webExtensions */
 /* eslint no-var: 2, prefer-const: 2 */
 /* exported install uninstall startup shutdown */
 "use strict";
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
-Cu.import("resource://gre/modules/Services.jsm");
-Cu.import("resource://gre/modules/AddonManager.jsm");
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const {AddonManager} = ChromeUtils.import("resource://gre/modules/AddonManager.jsm");
+
+ChromeUtils.defineModuleGetter(this, "ChromeManifest",
+  "chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
+
+ChromeUtils.defineModuleGetter(this, "Overlays",
+  "chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
+
+// eslint-disable-next-line no-unused-vars
+ChromeUtils.defineModuleGetter(this, "CustomizableUI",
+  "resource:///modules/CustomizableUI.jsm");
 
 const appinfo = Services.appinfo;
 const options = {
@@ -99,10 +117,6 @@ function startup(data, reason) {
       addon.__AddonInternal__.signedState = AddonManager.SIGNEDSTATE_NOT_REQUIRED;
     }
   });
-
-  Components.utils.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
-  Components.utils.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
-  Components.utils.import("resource:///modules/CustomizableUI.jsm");
 
   const window = Services.wm.getMostRecentWindow('navigator:browser');
   if (reason === ADDON_UPGRADE || reason === ADDON_DOWNGRADE) {

@@ -1,3 +1,4 @@
+/* global windowRoot */
 "use strict";
 
 const ID = "{dc572301-7619-498c-a57d-39143191b318}";
@@ -6,7 +7,7 @@ const ID = "{dc572301-7619-498c-a57d-39143191b318}";
 // options in dialog window
 function updateShowItemPreferences() {
   const htmlBrowser = typeof getHtmlBrowser === 'function' ?
-    getHtmlBrowser() : window.docShell.chromeEventHandler;
+    window.getHtmlBrowser() : window.docShell.chromeEventHandler;
   const tabmixItem = htmlBrowser.contentDocument
       .querySelector(`addon-card[addon-id="${ID}"]`);
   const panelItem = tabmixItem?.querySelector(`panel-item[action="preferences"]`);
@@ -37,7 +38,7 @@ window.addEventListener("load", () => {
 
 (function() {
   const htmlBrowser = typeof getHtmlBrowser === 'function' ?
-    getHtmlBrowser() : window.docShell.chromeEventHandler;
+    window.getHtmlBrowser() : window.docShell.chromeEventHandler;
   const targetNode = htmlBrowser.contentDocument.getElementById('content');
   const config = {childList: true, subtree: true};
   const callback = function(mutationList) {

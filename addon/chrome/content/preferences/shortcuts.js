@@ -43,7 +43,7 @@ function _getKeyName(win, aKey) {
 
   // don't use dynamic label for key name
   let skip = ["key_undoCloseTab", "key_undoCloseWindow"];
-  if (skip.indexOf(aKey.id) == -1) {
+  if (!skip.includes(aKey.id)) {
     let fButton = doc.getElementById("titlebar");
     val = fButton && !fButton.hidden && _getLabel(doc.getElementById("appmenu-button"), "key", aKey.id) ||
       _getLabel(doc.getElementById("main-menubar"), "key", aKey.id) ||

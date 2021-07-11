@@ -3,14 +3,9 @@
 
 this.EXPORTED_SYMBOLS = ["console"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
-Cu.import("resource://gre/modules/Services.jsm", this);
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-
-XPCOMUtils.defineLazyGetter(this, "OS", () => {
-  return Cu.import("resource://gre/modules/osfile.jsm", {}).OS;
-});
+ChromeUtils.defineModuleGetter(this, "OS", "resource://gre/modules/osfile.jsm");
 
 var gNextID = 1;
 
@@ -67,10 +62,9 @@ this.console = {
           timer.cancel();
         };
         if (aWindow) {
-          aWindow.addEventListener("unload", function unload(event) {
-            event.currentTarget.removeEventListener("unload", unload);
+          aWindow.addEventListener("unload", function unload() {
             timer.clear();
-          });
+          }, {once: true});
         }
         timer.initWithCallback({
           notify: function notify() {

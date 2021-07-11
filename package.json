@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "New Tab Mix Plus for modern Firefox",
   "scripts": {
-    "lint": "eslint --fix --cache --cache-location config\\.eslintcache --ignore-path config\\.eslintignore --ext .js,.jsm ."
+    "lint": "eslint --format codeframe --fix --cache --cache-location config\\.eslintcache --ignore-path config\\.eslintignore --ext .js,.jsm,.xhtml .",
+    "lint:test": "eslint --format codeframe --cache --cache-location config\\.eslintcache --ignore-path config\\.eslintignore --ext .js,.jsm,.xhtml .",
+    "lint:clean": "eslint --format codeframe --ignore-path config\\.eslintignore --ext .js,.jsm ."
   },
   "repository": {
     "type": "git",
@@ -16,9 +18,9 @@
     "url": "https://github.com/onemen/TabMixPlus/issues"
   },
   "homepage": "https://github.com/onemen/TabMixPlus#readme",
-  "dependencies": {},
   "devDependencies": {
-    "eslint": "^7.0.0",
-    "eslint-plugin-tabmix": "^1.0.0"
+    "eslint": "^7.3.0",
+    "eslint-plugin-mozilla": "^2.10.0",
+    "eslint-plugin-tabmix": "file:./config/eslint-plugin-tabmix"
   }
 }

@@ -1,3 +1,4 @@
+/* globals TabView TabItems */
 "use strict";
 
 TMP_TabView.subScriptLoaded = true;
@@ -360,7 +361,7 @@ TabmixSessionManager._noNormalTabs = function SM__noNormalTabs(excludeTabs) {
 
   return !Array.prototype.some.call(gBrowser.tabs, tab => {
     return !tab.pinned && !tab.hidden && !tab.closing &&
-          excludeTabs.indexOf(tab) == -1;
+          !excludeTabs.includes(tab);
   });
 };
 
@@ -522,7 +523,7 @@ TabmixSessionManager._prepareTabviewData = function SM__prepareTabviewData(loadO
     this._updateUIpageBounds = true;
   }
 
-  if (Object.keys(IDs).length > 0) {
+  if (Object.keys(IDs).length) {
     let id = this.groupUpdates.lastActiveGroupId;
     this.groupUpdates.lastActiveGroupId = IDs[id] || id;
     this.groupUpdates.IDs = IDs;

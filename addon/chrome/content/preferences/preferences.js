@@ -3,7 +3,6 @@
 "use strict";
 
 /***** Preference Dialog Functions *****/
-var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
 this.$ = id => document.getElementById(id);
@@ -359,7 +358,7 @@ var sessionPrefs = ["browser.sessionstore.resume_from_crash",
   "extensions.tabmix.sessions.manager",
   "extensions.tabmix.sessions.crashRecovery"];
 
-XPCOMUtils.defineLazyGetter(window, "gPreferenceList", () => {
+XPCOMUtils.defineLazyGetter(this, "gPreferenceList", () => {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = [
     "browser.allTabs.previews", TabmixSvc.sortByRecentlyUsed,
@@ -404,7 +403,7 @@ function defaultSetting() {
   Shortcuts.prefsChangedByTabmix = true;
   let SMinstalled = _sminstalled;
   let prefs = !SMinstalled ? gPreferenceList :
-    gPreferenceList.map(pref => sessionPrefs.indexOf(pref) == -1);
+    gPreferenceList.map(pref => !sessionPrefs.includes(pref));
   prefs.forEach(pref => {
     Services.prefs.clearUserPref(pref);
   });
@@ -423,7 +422,7 @@ function toggleSyncPreference() {
   Tabmix.prefs[fn]("syncPrefs", true);
   let exclude = ["extensions.tabmix.sessions.onStart.sessionpath"];
   gPreferenceList.forEach(pref => {
-    if (exclude.indexOf(pref) == -1)
+    if (!exclude.includes(pref))
       Services.prefs[fn](sync + pref, true);
   });
   Services.prefs.savePrefFile(null);
@@ -515,7 +514,7 @@ function loadData(pattern) {
     let valIndex = pattern[i].indexOf("=");
     if (valIndex > 0) {
       prefName = pattern[i].substring(0, valIndex);
-      if (!SMinstalled || sessionPrefs.indexOf(prefName) == -1) {
+      if (!SMinstalled || !sessionPrefs.includes(prefName)) {
         prefValue = pattern[i].substring(valIndex + 1, pattern[i].length);
         setPrefByType(prefName, prefValue, true);
       }
@@ -593,7 +592,7 @@ window.gIncompatiblePane = {
 
   checkForIncompatible(aShowList) {
     let tmp = {};
-    Components.utils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm", tmp);
+    ChromeUtils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm", tmp);
     tmp = new tmp.CompatibilityCheck(window, aShowList, true);
   },
 
@@ -620,11 +619,9 @@ XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", () => {
          win.document.getElementById("context_unpinTab").getAttribute("label");
 });
 
-XPCOMUtils.defineLazyGetter(this, "OS", () => {
-  return Cu.import("resource://gre/modules/osfile.jsm", {}).OS;
-});
+ChromeUtils.defineModuleGetter(this, "OS", "resource://gre/modules/osfile.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "AsyncUtils",
+ChromeUtils.defineModuleGetter(this, "AsyncUtils",
   "chrome://tabmix-resource/content/AsyncUtils.jsm");
 
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
@@ -655,10 +652,8 @@ gPrefWindow.onContentLoaded();
     gBrowser.removeTab(kcTab);
   } else {
     setTimeout(() => {
-      const navwin = Cc['@mozilla.org/appshell/window-mediator;1']
-          .getService(Ci.nsIWindowMediator).getMostRecentWindow('navigator:browser');
-      const {SessionStoreInternal} = Cu.import('resource:///modules/sessionstore/SessionStore.jsm', navwin);
-      const data = SessionStoreInternal._windows[navwin.__SSi];
+      const navwin = Services.wm.getMostRecentWindow('navigator:browser');
+      const data = TabmixSvc.SessionStore._windows[navwin.__SSi];
       if (data._closedTabs && data._closedTabs.length && data._closedTabs[0].state.entries[0].url === 'chrome://tabmixplus/content/preferences/preferences.xhtml')
         data._closedTabs.shift();
     }, 0);

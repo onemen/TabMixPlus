@@ -2,13 +2,12 @@
 
 this.EXPORTED_SYMBOLS = ["Shortcuts"];
 
-const {utils: Cu} = Components;
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-Cu.import("resource://gre/modules/Services.jsm", this);
-Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
+const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 var KeyConfig;
@@ -149,9 +148,9 @@ this.Shortcuts = {
       KeyConfig.init(aWindow);
     }
 
-    this.prefs.addObserver("shortcuts", this, false);
-    this.prefs.addObserver("sessions.manager", this, false);
-    Services.obs.addObserver(this, "quit-application", false);
+    this.prefs.addObserver("shortcuts", this);
+    this.prefs.addObserver("sessions.manager", this);
+    Services.obs.addObserver(this, "quit-application");
   },
 
   observe(aSubject, aTopic, aData) {
@@ -494,14 +493,14 @@ KeyConfig = {
     this.prefs = Services.prefs.getBranch("keyconfig.main.");
     let shortcuts = Shortcuts._getShortcutsPref();
     // sync non default shortcuts
-    if (Object.keys(shortcuts).length > 0)
+    if (Object.keys(shortcuts).length)
       this.syncToKeyConfig(shortcuts);
     else {
       let prefs = this.prefs.getChildList("").filter(function(pref) {
         let key = this.keyIdsMap[pref];
         return key && this.syncFromKeyConfig(key, pref, shortcuts);
       }, this);
-      if (prefs.length > 0) {
+      if (prefs.length) {
         // we are here before onWindowOpen call updateWindowKeys
         // so we don't need to do anything else here
         Shortcuts.prefBackup = shortcuts;
@@ -509,7 +508,7 @@ KeyConfig = {
       }
     }
     this.resetPref(oldReloadId);
-    this.prefs.addObserver("", this, false);
+    this.prefs.addObserver("", this);
   },
 
   deinit() {

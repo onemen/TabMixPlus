@@ -4,11 +4,7 @@
 
 this.EXPORTED_SYMBOLS = ["TabmixDownloadLastDir"];
 
-const {interfaces: Ci, utils: Cu} = Components;
-
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this, "Services",
+ChromeUtils.defineModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
 this.TabmixDownloadLastDir = {
@@ -41,9 +37,8 @@ this.TabmixDownloadLastDir = {
       enumerable: true
     };
 
-    let downloadModule = {};
-    Cu.import("resource://gre/modules/DownloadLastDir.jsm", downloadModule);
-    let obj = downloadModule.DownloadLastDir.prototype;
+    const {DownloadLastDir} = ChromeUtils.import("resource://gre/modules/DownloadLastDir.jsm");
+    let obj = DownloadLastDir.prototype;
     Object.defineProperty(obj, "window", descriptor);
     obj._window = null;
   }

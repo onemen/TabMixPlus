@@ -3,15 +3,13 @@
 
 this.EXPORTED_SYMBOLS = ["TabmixSvc"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-Cu.import("resource://gre/modules/Services.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixPlacesUtils",
+ChromeUtils.defineModuleGetter(this, "TabmixPlacesUtils",
   "chrome://tabmix-resource/content/Places.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "SyncedTabs",
+ChromeUtils.defineModuleGetter(this, "SyncedTabs",
   "chrome://tabmix-resource/content/SyncedTabs.jsm");
 
 // place holder for load default preferences function
@@ -215,7 +213,7 @@ this.TabmixSvc = {
 
       Services.obs.addObserver(this, "quit-application", true);
 
-      Cu.import("chrome://tabmix-resource/content/DownloadLastDir.jsm", {});
+      ChromeUtils.import("chrome://tabmix-resource/content/DownloadLastDir.jsm");
 
       TabmixPlacesUtils.init(aWindow);
       if (!(TabmixSvc.isBasilisk && TabmixSvc.version({bs: "52.9.2019.06.08"}))) {
@@ -224,11 +222,10 @@ this.TabmixSvc = {
       }
 
       TabmixSvc.tabStylePrefs = {};
-      let tmp = {};
-      Cu.import("chrome://tabmix-resource/content/DynamicRules.jsm", tmp);
-      tmp.DynamicRules.init(aWindow);
+      const {DynamicRules} = ChromeUtils.import("chrome://tabmix-resource/content/DynamicRules.jsm");
+      DynamicRules.init(aWindow);
 
-      Cu.import("chrome://tabmix-resource/content/TabRestoreQueue.jsm", {});
+      ChromeUtils.import("chrome://tabmix-resource/content/TabRestoreQueue.jsm", {});
     },
 
     addMissingPrefs() {
@@ -241,7 +238,7 @@ this.TabmixSvc = {
 
       if (!TabmixSvc.isCyberfox) {
         prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
-        Cu.import("chrome://tabmix-resource/content/NewTabURL.jsm", {});
+        ChromeUtils.import("chrome://tabmix-resource/content/NewTabURL.jsm", {});
       }
     },
 
@@ -293,7 +290,7 @@ this.TabmixSvc = {
 
   isAustralisBgStyle(orient) {
     if (typeof orient != "string") {
-      throw Components.Exception("orient is not valid", Components.results.NS_ERROR_INVALID_ARG);
+      throw Components.Exception("orient is not valid", Cr.NS_ERROR_INVALID_ARG);
     }
     return TabmixSvc.australis && orient == "horizontal" &&
       !this.prefBranch.getBoolPref("squaredTabsStyle");
@@ -320,9 +317,8 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", () => {
-  let tmp = {};
-  Cu.import("resource://gre/modules/Preferences.jsm", tmp);
-  return new tmp.Preferences("");
+  const {Preferences} = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
+  return new Preferences("");
 });
 
 // Tabmix preference branch
@@ -340,7 +336,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", () => {
 });
 
 XPCOMUtils.defineLazyGetter(this, "Platform", () => {
-  return (Cu.import("resource://gre/modules/AppConstants.jsm", {})).AppConstants.platform;
+  return (ChromeUtils.import("resource://gre/modules/AppConstants.jsm", {})).AppConstants.platform;
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isWindows", () => {
@@ -367,14 +363,17 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isBasilisk", () => {
   return Services.appinfo.name == "Basilisk";
 });
 
-XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "FileUtils",
+ChromeUtils.defineModuleGetter(TabmixSvc, "FileUtils",
   "resource://gre/modules/FileUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(TabmixSvc, "console",
+ChromeUtils.defineModuleGetter(TabmixSvc, "console",
   "chrome://tabmix-resource/content/log.jsm");
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", () => {
-  return Cu.import("resource:///modules/sessionstore/SessionStore.jsm", {});
+  // Don't ChromeUtils.import here it can not import variables that
+  // are not in EXPORTED_SYMBOLS
+  // eslint-disable-next-line mozilla/use-chromeutils-import
+  return Cu.import("resource:///modules/sessionstore/SessionStore.jsm");
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", function() {

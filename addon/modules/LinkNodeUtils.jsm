@@ -2,11 +2,7 @@
 
 this.EXPORTED_SYMBOLS = ["LinkNodeUtils"];
 
-const Cu = Components.utils;
-
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this, "Services",
+ChromeUtils.defineModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
 const ATTRIBS = ["href", "onclick", "onmousedown", "rel", "role"];
@@ -30,6 +26,7 @@ this.LinkNodeUtils = {
       return node;
 
     let doc = node.ownerDocument;
+    let frameElement = Boolean(node.ownerGlobal.frameElement);
     let wrapper = {
       __tabmix: true,
       baseURI: node.baseURI,
@@ -37,10 +34,11 @@ this.LinkNodeUtils = {
       pathname: node.pathname,
       className: node.className,
       target: getTargetAttr(node.target, focusedWindow),
+      ownerGlobal: {frameElement},
       ownerDocument: {
         URL: doc.URL,
         documentURI: doc.documentURI,
-        defaultView: {frameElement: Boolean(doc.defaultView.frameElement)},
+        defaultView: {frameElement},
         location: {href: doc.location ? doc.location.href : ""}
       },
       parentNode: {
@@ -79,7 +77,7 @@ this.LinkNodeUtils = {
       blocked = re.test(currentHref);
       // youtube.com - added 2013-11-15
       if (!blocked && /youtube.com/.test(currentHref) &&
-          (!this.isGMEnabled(window) || decodeURI(href).indexOf("return false;") == -1)) {
+          (!this.isGMEnabled(window) || !decodeURI(href).includes("return false;"))) {
         blocked = true;
       // amazon.com search - added 2019-04-09
       } else if (!blocked && /amazon\.com\/s\?/.test(currentHref)) {
@@ -125,7 +123,7 @@ function getTargetAttr(targetAttr, focusedWindow) {
   // If link has no target attribute, check if there is a <base> with a target attribute
   if (!targetAttr) {
     let b = focusedWindow.document.getElementsByTagName("base");
-    if (b.length > 0)
+    if (b.length)
       targetAttr = b[0].getAttribute("target");
   }
   return targetAttr;

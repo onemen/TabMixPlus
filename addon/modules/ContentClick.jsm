@@ -3,29 +3,24 @@
 
 this.EXPORTED_SYMBOLS = ["TabmixContentClick"];
 
-const {interfaces: Ci, utils: Cu} = Components;
+const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this, "ClickHandlerParent",
+ChromeUtils.defineModuleGetter(this, "ClickHandlerParent",
   "resource:///actors/ClickHandlerParent.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "E10SUtils",
+ChromeUtils.defineModuleGetter(this, "E10SUtils",
   "resource://gre/modules/E10SUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "Services",
+ChromeUtils.defineModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "BrowserUtils",
-  "resource://gre/modules/BrowserUtils.jsm");
-
-XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
+ChromeUtils.defineModuleGetter(this, "LinkNodeUtils",
   "chrome://tabmix-resource/content/LinkNodeUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
+ChromeUtils.defineModuleGetter(this, "TabmixSvc",
   "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 var ContentClickInternal;
@@ -429,8 +424,8 @@ ContentClickInternal = {
       return ["current@9"];
 
     // don't mess with links that have onclick inside iFrame
-    let onClickInFrame = wrappedOnClickNode && wrappedOnClickNode.ownerDocument.defaultView.frameElement ||
-        onclick && wrappedNode.ownerDocument.defaultView.frameElement;
+    let onClickInFrame = wrappedOnClickNode && wrappedOnClickNode.ownerGlobal.frameElement ||
+        onclick && wrappedNode.ownerGlobal.frameElement;
 
     /*
      * force a middle-clicked link to open in the current tab if certain conditions
@@ -564,7 +559,7 @@ ContentClickInternal = {
       return "12";
 
     // don't mess with links that have onclick inside iFrame
-    if (this._data.onclick && linkNode.ownerDocument.defaultView.frameElement)
+    if (this._data.onclick && linkNode.ownerGlobal.frameElement)
       return "13";
 
     /*
@@ -731,7 +726,7 @@ ContentClickInternal = {
     if (TabmixSvc.prefBranch.getBoolPref("enablefiletype")) {
       let types = TabmixSvc.prefBranch.getCharPref("filetype");
       types = types.toLowerCase().split(" ")
-          .filter(t => filetype.indexOf(t) == -1);
+          .filter(t => !filetype.includes(t));
       filetype = [...filetype, ...types];
     }
 
@@ -745,7 +740,7 @@ ContentClickInternal = {
     var testString, hrefExt, testExt;
     for (var l = 0; l < filetype.length; l++) {
       let doTest = true;
-      if (filetype[l].indexOf("/") != -1) {
+      if (filetype[l].includes("/")) {
         // add \ before first ?
         testString = filetype[l].replace(/^\/(.*)\/$/, "$1").replace(/^\?/, "\\?");
         hrefExt = linkHref;
@@ -1145,7 +1140,7 @@ ContentClickInternal = {
         let level;
         try {
           var publicSuffix = Services.eTLD.getPublicSuffixFromHost(url.hostPort);
-          level = (publicSuffix.indexOf(".") == -1) ? 2 : 3;
+          level = (!publicSuffix.includes(".")) ? 2 : 3;
         } catch (e) {
           level = 2;
         }
@@ -1174,8 +1169,8 @@ ContentClickInternal = {
         return true;
 
       if (more && (this.checkAttr(onclick, "openit") ||
-          onclick.indexOf('this.target="_Blank"') != -1 ||
-          onclick.indexOf("return false") != -1))
+          onclick.includes('this.target="_Blank"') ||
+          onclick.includes("return false")))
         return true;
     }
     return false;
@@ -1227,7 +1222,7 @@ ContentClickInternal = {
 
     // don't change the onclick if the href point to a different address
     // from the href we extract from the onclick
-    if (href && href.indexOf(clickHref) == -1 &&
+    if (href && !href.includes(clickHref) &&
         !this.checkAttr(href, "javascript"))
       return;
 

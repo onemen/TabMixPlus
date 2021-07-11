@@ -3,14 +3,12 @@
 
 this.EXPORTED_SYMBOLS = ["DynamicRules"];
 
-const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this, "Services",
+ChromeUtils.defineModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
+ChromeUtils.defineModuleGetter(this, "TabmixSvc",
   "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 XPCOMUtils.defineLazyGetter(this, "Prefs", () => {
@@ -58,12 +56,12 @@ this.DynamicRules = {
     this.styleType = this.isAustralis ? "australis" : "classic";
     this.windows10 = aWindow.navigator.oscpu.startsWith("Windows NT 10.0");
 
-    Prefs.addObserver("", this, false);
+    Prefs.addObserver("", this);
     STYLENAMES.concat(EXTRAPREFS).forEach(function(pref) {
-      Services.prefs.addObserver("extensions.tabmix." + pref, this, false);
+      Services.prefs.addObserver("extensions.tabmix." + pref, this);
     }, this);
-    Services.obs.addObserver(this, "browser-window-before-show", false);
-    Services.obs.addObserver(this, "quit-application", false);
+    Services.obs.addObserver(this, "browser-window-before-show");
+    Services.obs.addObserver(this, "quit-application");
 
     this.createTemplates();
   },
@@ -95,9 +93,8 @@ this.DynamicRules = {
     let Observer = new window.MutationObserver(tabsMutate);
     Observer.observe(window.gBrowser.tabContainer, {attributes: true});
     window.addEventListener("unload", function unload() {
-      window.removeEventListener("unload", unload);
       Observer.disconnect();
-    });
+    }, {once: true});
   },
 
   onPrefChange(data) {
@@ -328,7 +325,7 @@ this.DynamicRules = {
     for (let rule of Object.keys(style))
       cssText += "\n" + style[rule];
     let styleSheet = Services.io.newURI(
-      "data:text/css," + encodeURIComponent(cssText), null, null);
+      "data:text/css," + encodeURIComponent(cssText));
 
     if (!SSS.sheetRegistered(styleSheet, TYPE)) {
       this.unregisterSheet(name);

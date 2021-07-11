@@ -37,8 +37,7 @@ var TMP_extensionsCompatibility = {
         Tabmix.extensions.tabGroupManager = true;
         window.TMP_TabGroupsManager = {};
         window.TMP_TabGroupsManager.tabmixSessionsManager = function() {};
-        let tmp = {};
-        Components.utils.import("chrome://tabmix-resource/content/extensions/TabGroupsManager.jsm", tmp);
+        const tmp = ChromeUtils.import("chrome://tabmix-resource/content/extensions/TabGroupsManager.jsm");
         tmp.TMP_TabGroupsManager.changeCode = Tabmix.changeCode;
         tmp.TMP_TabGroupsManager.init(window, gBrowser.tabContainer);
       }
@@ -56,10 +55,10 @@ var TMP_extensionsCompatibility = {
         if (aFn in GlaxChrome) {
           Tabmix.changeCode(GlaxChrome, "GlaxChrome.CLT.DragDropManager." + aFn)._replace(
             '{', '{var TabDNDObserver = TMP_tabDNDObserver;',
-            {check: GlaxChrome[aFn].toString().indexOf("TabDNDObserver") != -1}
+            {check: GlaxChrome[aFn].toString().includes("TabDNDObserver")}
           )._replace(
             'TM_init', 'Tabmix.startup',
-            {check: GlaxChrome[aFn].toString().indexOf("TM_init") != -1, flags: "g"}
+            {check: GlaxChrome[aFn].toString().includes("TM_init"), flags: "g"}
           ).toCode();
         }
       });
@@ -81,30 +80,12 @@ var TMP_extensionsCompatibility = {
       let func = ["canOpenNewTab", "loadForSearch", "checkToDoSearch"];
       let SSB = SecondSearchBrowser.prototype;
       func.forEach(aFn => {
-        if (aFn in SSB && SSB[aFn].toString().indexOf("TM_init") != -1) {
+        if (aFn in SSB && SSB[aFn].toString().includes("TM_init")) {
           Tabmix.changeCode(SSB, "SecondSearchBrowser.prototype." + aFn)._replace(
             'TM_init', 'Tabmix.startup'
           ).toCode();
         }
       });
-    }
-
-    // fix bug in backgroundsaver extension
-    // that extension use function with the name getBoolPref
-    // we replace it back here
-    if (typeof bgSaverInit == "function" && typeof getBoolPref == "function" &&
-            getBoolPref.toString().indexOf("bgSaverPref.prefHasUserValue(sName)") != -1) {
-      window.getBoolPref = function getBoolPref(prefname, def) {
-        try {
-          return Services.prefs.getBoolPref(prefname);
-        } catch (ex) {
-          try {
-            return (bgSaverPref.prefHasUserValue(prefname) &&
-                    bgSaverPref.getBoolPref(prefname));
-          } catch (e) {}
-        }
-        return def;
-      };
     }
 
     /*  we don't use this code - leave it here as a reminder.
@@ -252,7 +233,7 @@ var TMP_extensionsCompatibility = {
       Tabmix.changeCode(gFxWeaveGlue, "gFxWeaveGlue.handleEvent")._replace(
         'else if (this.getPageIndex() == -1)',
         'else if ((event.target.id == "allTabsMenu-allTabsView" && this.getPageIndex() == -1)',
-        {check: gFxWeaveGlue.handleEvent.toString().indexOf("else if (this.getPageIndex() == -1)") != -1}
+        {check: gFxWeaveGlue.handleEvent.toString().includes("else if (this.getPageIndex() == -1)")}
       ).toCode();
     }
 
@@ -330,7 +311,7 @@ var TMP_extensionsCompatibility = {
       // problem fix in FireGestures 1.5.7 keep this here for users with older versions
       let performAction = FireGestures._performAction.toString();
       let codeToReplace = "gBrowser.moveTabTo(newTab, ++orgTab._tPos);";
-      if (performAction.indexOf(codeToReplace) != -1) {
+      if (performAction.includes(codeToReplace)) {
         Tabmix.changeCode(FireGestures, "FireGestures._performAction")._replace(
           codeToReplace, 'gBrowser.moveTabTo(newTab, orgTab._tPos + 1);'
         ).toCode();
@@ -549,7 +530,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
       // we don't need this in the new version since we change the tabs-frame place
       // keep it here for non default theme that uses old Tabmix binding
       let fn = obj.initTabbar;
-      if (fn.toString().indexOf("d = this.document") == -1) {
+      if (!fn.toString().includes("d = this.document")) {
         Tabmix.changeCode(obj, "TreeStyleTabBrowser.prototype.initTabbar")._replace(
           'newTabBox = document.getAnonymousElementByAttribute(b.mTabContainer, "id", "tabs-newbutton-box");',
           'let newTabButton = document.getElementById("new-tab-button"); \
@@ -577,9 +558,8 @@ TMP_extensionsCompatibility.treeStyleTab = {
       };
       gBrowser.tabContainer.addEventListener("TabSelect", ontabselect, true);
       window.addEventListener("unload", function onunload() {
-        window.removeEventListener("unload", onunload);
         gBrowser.tabContainer.removeEventListener("TabSelect", ontabselect, true);
-      });
+      }, {once: true});
     }
 
     // we removed TMP_howToOpen function 2011-11-15

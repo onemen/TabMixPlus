@@ -19,10 +19,10 @@ class Preferences extends MozXULElement {
       this.observe(subject, topic, data);
     };
 
-    this.service = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefService);
-    this.rootBranch = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
+    this.service = Services.prefs;
+    this.rootBranch = Services.prefs;
     this.defaultBranch = this.service.getDefaultBranch("");
-    this.rootBranchInternal = Cc["@mozilla.org/preferences-service;1"].getService(Ci.nsIPrefBranch);
+    this.rootBranchInternal = Services.prefs;
 
     /**
      * We want to call _constructAfterChildren after all child
@@ -126,8 +126,7 @@ class Preference extends MozXULElement {
     // from any previous opens of a child dialog instead of the value from
     // preferences, to pick up any edits a user may have made.
 
-    const secMan = Cc["@mozilla.org/scriptsecuritymanager;1"]
-        .getService(Ci.nsIScriptSecurityManager);
+    const secMan = Services.scriptSecurityManager;
     if (this.preferences.type == "child" &&
         !this.instantApply && window.opener &&
         secMan.isSystemPrincipal(window.opener.document.nodePrincipal)) {
@@ -406,11 +405,9 @@ class Preference extends MozXULElement {
   }
 
   _reportUnknownType() {
-    const consoleService = Cc["@mozilla.org/consoleservice;1"]
-        .getService(Ci.nsIConsoleService);
     const msg = "<preference> with id='" + this.id + "' and name='" +
               this.name + "' has unknown type '" + this.type + "'.";
-    consoleService.logStringMessage(msg);
+    Services.console.logStringMessage(msg);
   }
 
   setElementValue(aElement) {
@@ -605,8 +602,8 @@ class PrefPane extends MozXULElement {
     // PrefPane overlay have to be move earlier to here otherwise tabs elements won't load properly. see ln 1551
     // But this may be the cause of EMSG <Uncaught (in promise) undefined> shows up
     if (this.src) {
-      Components.utils.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
-      Components.utils.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
+      const {ChromeManifest} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
+      const {Overlays} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
 
       const ov = new Overlays(new ChromeManifest(), window.document.defaultView);
       ov.load(this.src);
@@ -693,15 +690,14 @@ class PrefPane extends MozXULElement {
   }
 
   get DeferredTask() {
-    const module = {};
-    ChromeUtils.import("resource://gre/modules/DeferredTask.jsm", module);
+    const {DeferredTask} = ChromeUtils.import("resource://gre/modules/DeferredTask.jsm");
     Object.defineProperty(this, "DeferredTask", {
       configurable: true,
       enumerable: true,
       writable: true,
-      value: module.DeferredTask,
+      value: DeferredTask,
     });
-    return module.DeferredTask;
+    return DeferredTask;
   }
 
   get contentHeight() {
@@ -725,9 +721,7 @@ class PrefPane extends MozXULElement {
       preference.batching = false;
     }
     if (aFlushToDisk) {
-      const psvc = Cc["@mozilla.org/preferences-service;1"]
-          .getService(Ci.nsIPrefService);
-      psvc.savePrefFile(null);
+      Services.prefs.savePrefFile(null);
     }
   }
 
@@ -919,8 +913,7 @@ class PrefWindow extends MozXULElement {
         return false;
       }
 
-      const secMan = Cc["@mozilla.org/scriptsecuritymanager;1"]
-          .getService(Ci.nsIScriptSecurityManager);
+      const secMan = Services.scriptSecurityManager;
       if (this.type == "child" && window.opener &&
           secMan.isSystemPrincipal(window.opener.document.nodePrincipal)) {
         const pdocEl = window.opener.document.documentElement;
@@ -976,9 +969,7 @@ class PrefWindow extends MozXULElement {
         for (let i = 0; i < panes.length; ++i)
           panes[i].writePreferences(false);
 
-        const psvc = Cc["@mozilla.org/preferences-service;1"]
-            .getService(Ci.nsIPrefService);
-        psvc.savePrefFile(null);
+        Services.prefs.savePrefFile(null);
       }
 
       return true;
@@ -1203,8 +1194,7 @@ class PrefWindow extends MozXULElement {
         if (!this._mStrBundle) {
           // need to create string bundle manually instead of using <xul:stringbundle/>
           // see bug 63370 for details
-          this._mStrBundle = Cc["@mozilla.org/intl/stringbundle;1"]
-              .getService(Ci.nsIStringBundleService)
+          this._mStrBundle = Services.strings
               .createBundle("chrome://global/locale/dialog.properties");
         }
         return this._mStrBundle;
@@ -1426,9 +1416,7 @@ class PrefWindow extends MozXULElement {
 
     if (this.type != "child") {
       if (!this._instantApplyInitialized) {
-        const psvc = Cc["@mozilla.org/preferences-service;1"]
-            .getService(Ci.nsIPrefBranch);
-        this.instantApply = psvc.getBoolPref("browser.preferences.instantApply");
+        this.instantApply = Services.prefs.getBoolPref("browser.preferences.instantApply");
       }
       if (this.instantApply) {
         const docElt = document.documentElement;
@@ -1531,9 +1519,7 @@ class PrefWindow extends MozXULElement {
   }
 
   get _shouldAnimate() {
-    const psvc = Cc["@mozilla.org/preferences-service;1"]
-        .getService(Ci.nsIPrefBranch);
-    return psvc.getBoolPref("browser.preferences.animateFadeIn",
+    return Services.prefs.getBoolPref("browser.preferences.animateFadeIn",
       /Mac/.test(navigator.platform));
   }
 
@@ -1760,9 +1746,7 @@ class PrefWindow extends MozXULElement {
   }
 
   openWindow(aWindowType, aURL, aFeatures, aParams) {
-    const wm = Cc["@mozilla.org/appshell/window-mediator;1"]
-        .getService(Ci.nsIWindowMediator);
-    let win = aWindowType ? wm.getMostRecentWindow(aWindowType) : null;
+    let win = aWindowType ? Services.wm.getMostRecentWindow(aWindowType) : null;
     if (win) {
       if ("initWithParams" in win)
         win.initWithParams(aParams);

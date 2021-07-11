@@ -6,7 +6,7 @@
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["Windows"];
-Cu.import("resource://gre/modules/Services.jsm", this);
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 function callOnLoad(aSubject, aCallback, beforeComplete) {
   if (aSubject.document.readyState == "complete" || beforeComplete) {

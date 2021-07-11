@@ -2,12 +2,9 @@
 
 this.EXPORTED_SYMBOLS = ["ContextMenu"];
 
-const {utils: Cu} = Components;
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-Cu.import("resource://gre/modules/Services.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
+ChromeUtils.defineModuleGetter(this, "TabmixUtils",
   "chrome://tabmix-resource/content/Utils.jsm");
 
 this.ContextMenu = {
@@ -62,7 +59,7 @@ this.ContextMenu = {
       if (securityCheck(url)) {
         if (check)
           return [true];
-        if (urls.indexOf(url) == -1)
+        if (!urls.includes(url))
           urls.push(url);
       }
       nextEpisode = treeWalker.nextNode();

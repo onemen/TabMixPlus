@@ -5,9 +5,8 @@ Tabmix.contentAreaClick = {
     // this getter trigger by call to isGreasemonkeyInstalled from
     // TMP_extensionsCompatibility.onDelayedStartup
     XPCOMUtils.defineLazyGetter(Tabmix, "ContentClick", () => {
-      let tmp = {};
-      Cu.import("chrome://tabmix-resource/content/ContentClick.jsm", tmp);
-      return tmp.TabmixContentClick;
+      return ChromeUtils.import("chrome://tabmix-resource/content/ContentClick.jsm")
+          .TabmixContentClick;
     });
 
     Tabmix.changeCode(window, "contentAreaClick")._replace(

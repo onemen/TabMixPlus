@@ -2,16 +2,10 @@
 
 this.EXPORTED_SYMBOLS = ["DocShellCapabilities"];
 
-const Cu = Components.utils;
-
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this, "TabState",
+ChromeUtils.defineModuleGetter(this, "TabState",
   "resource:///modules/sessionstore/TabState.jsm");
-XPCOMUtils.defineLazyModuleGetter(this, "TabStateCache",
+ChromeUtils.defineModuleGetter(this, "TabStateCache",
   "resource:///modules/sessionstore/TabStateCache.jsm");
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 this.DocShellCapabilities = {
   init() {
@@ -51,7 +45,7 @@ this.DocShellCapabilities = {
   onGet(nodes, tab) {
     let disallow = this.collect(tab);
     for (let i = 0; i < nodes.length; i++) {
-      nodes[i].setAttribute("checked", disallow.indexOf(nodes[i].value) == -1);
+      nodes[i].setAttribute("checked", !disallow.includes(nodes[i].value));
     }
   },
 

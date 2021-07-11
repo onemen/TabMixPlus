@@ -2,8 +2,6 @@
 
 this.EXPORTED_SYMBOLS = ["TabmixUtils"];
 
-const {classes: Cc, interfaces: Ci} = Components;
-
 // Messages that will be received via the Frame Message Manager.
 const FMM_MESSAGES = [
   "Tabmix:restorePermissionsComplete",
@@ -22,8 +20,7 @@ XPCOMUtils.defineLazyModuleGetters(this, {
   AutoReload: "chrome://tabmix-resource/content/AutoReload.jsm",
   DocShellCapabilities: "chrome://tabmix-resource/content/DocShellCapabilities.jsm",
   MergeWindows: "chrome://tabmix-resource/content/MergeWindows.jsm",
-  NewTabPagePreloading: "resource:///modules/NewTabPagePreloading.jsm",
-  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
+  Services: "resource://gre/modules/Services.jsm",
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.jsm",
 });
 
@@ -91,10 +88,8 @@ this.TabmixUtils = {
   },
 
   focusedWindow(content) {
-    let fm = Cc["@mozilla.org/focus-manager;1"].getService(Ci.nsIFocusManager);
-
     let focusedWindow = {};
-    fm.getFocusedElementForWindow(content, true, focusedWindow);
+    Services.focus.getFocusedElementForWindow(content, true, focusedWindow);
     return focusedWindow.value;
   },
 

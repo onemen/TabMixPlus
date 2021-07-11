@@ -8,28 +8,18 @@
 
 this.EXPORTED_SYMBOLS = ["Overlays"];
 
-const {ConsoleAPI} = ChromeUtils.import("resource://gre/modules/Console.jsm");
-ChromeUtils.defineModuleGetter(
-  this,
-  "Services",
+ChromeUtils.defineModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm"
 );
-ChromeUtils.defineModuleGetter(
-  this,
-  "setTimeout",
-  "resource://gre/modules/Timer.jsm"
-);
 
-// eslint-disable-next-line no-unused-vars
-const oconsole = new ConsoleAPI({
-  prefix: "Overlays.jsm",
-  consoleID: "overlays-jsm",
-  maxLogLevel: "warn" // "all"
-});
+ChromeUtils.defineModuleGetter(this, "setTimeout",
+  "resource://gre/modules/Timer.jsm");
 
-Components.utils.import("resource:///modules/CustomizableUI.jsm");
+ChromeUtils.defineModuleGetter(this, "CustomizableUI",
+  "resource:///modules/CustomizableUI.jsm");
 
-Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+ChromeUtils.defineModuleGetter(this, 'Windows',
+  "chrome://tabmix-resource/content/bootstrap/Windows.jsm");
 
 function setAttribute(obj, attr, val) {
   if (!obj || !obj.setAttribute) {
@@ -37,8 +27,6 @@ function setAttribute(obj, attr, val) {
   }
   obj.setAttribute(attr, val);
 }
-
-XPCOMUtils.defineLazyModuleGetter(this, 'Windows', "chrome://tabmix-resource/content/bootstrap/Windows.jsm");
 
 const Globals = {};
 Globals.widgets = {};
@@ -750,7 +738,7 @@ class Overlays {
         Cu.reportError(ex);
       }
 
-      node.tempAppend.container.parentNode.removeChild(node.tempAppend.container);
+      node.tempAppend.container.remove();
       delete node.tempAppend;
     }
   }

@@ -2,10 +2,8 @@
 
 this.EXPORTED_SYMBOLS = ["ContentSvc"];
 
-const {utils: Cu} = Components;
-
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-Cu.import("resource://gre/modules/Services.jsm", this);
+const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 var _versions = {};
 function isVersion(aVersionNo) {

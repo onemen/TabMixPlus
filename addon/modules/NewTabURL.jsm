@@ -2,16 +2,10 @@
 
 this.EXPORTED_SYMBOLS = ["Tabmix_NewTabURL"];
 
-const {interfaces: Ci, utils: Cu} = Components;
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-Cu.import("resource://gre/modules/Services.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this, "AboutNewTab",
+ChromeUtils.defineModuleGetter(this, "AboutNewTab",
   "resource:///modules/AboutNewTab.jsm");
-
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixSvc",
-  "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const FIREFOX_PREF = "browser.#.url".replace("#", "newtab");
 const ABOUT_NEW_TAB = "about:#".replace("#", "newtab");

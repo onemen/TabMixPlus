@@ -3,7 +3,7 @@
 
 this.EXPORTED_SYMBOLS = ["ChromeManifest"];
 
-Components.utils.import("resource://gre/modules/Services.jsm");
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 /**
  * A default map, which assumes a default value on get() if the key doesn't exist

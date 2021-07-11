@@ -1,19 +1,140 @@
-/* eslint strict: 0, object-curly-spacing: 0 */
-/* global module */
+/* eslint strict: 0, object-curly-spacing: 0, object-curly-newline: 2 */
+
+// use eslint-plugin-mozilla recommended.js for globals
+const mozillaRecommended = require("eslint-plugin-mozilla/lib/configs/recommended.js");
+
 module.exports = {
   root: true,
-  plugins: ["tabmix"],
+  plugins: ["html", "mozilla", "tabmix"],
   env: {
-    es6: true,
-    "tabmix/browser": true,
+    browser: true,
+    es2021: true,
+    "mozilla/privileged": true,
   },
 
+  overrides: [
+    {
+      // All .eslintrc.js files are in the node environment, so turn that
+      // on here.
+      // https://github.com/eslint/eslint/issues/13008
+      files: [".eslintrc.js"],
+      env: {
+        node: true,
+        browser: false,
+      },
+    },
+    {
+      files: [
+        "*.html",
+        "*.xhtml",
+      ],
+      rules: {
+        // Curly brackets are required for all the tree via recommended.js,
+        // however these files aren't auto-fixable at the moment.
+        curly: "off",
+        "no-new-func": "off",
+        strict: "off",
+      },
+    },
+    {
+      files: [
+        "addon/chrome/content/**.js",
+        "addon/chrome/content/**.xhtml",
+        "addon/chrome/content/click/**",
+        "addon/chrome/content/extensions/**",
+        "addon/chrome/content/flst/**",
+        "addon/chrome/content/links/**",
+        "addon/chrome/content/minit/**",
+        "addon/chrome/content/places/**",
+        "addon/chrome/content/session/**",
+        "addon/chrome/content/tab/**",
+      ],
+      env: {
+        "mozilla/browser-window": true,
+        "tabmix/extensions": true,
+        "tabmix/tabmix": true,
+      },
+    },
+    {
+      files: [
+        "addon/chrome/content/dialogs/**",
+      ],
+      env: {
+        "tabmix/dialog": true,
+        "mozilla/browser-window": false,
+        "tabmix/extensions": false,
+        "tabmix/tabmix": false,
+      },
+    },
+    {
+      files: [
+        "addon/chrome/content/overlay/**",
+        "addon/chrome/content/scripts/**",
+      ],
+      env: {
+        "mozilla/browser-window": false,
+        "tabmix/extensions": false,
+        "tabmix/tabmix": false,
+      },
+    },
+    {
+      files: [
+        "addon/chrome/content/preferences/**",
+      ],
+      env: {
+        "tabmix/preferences": true,
+        "mozilla/browser-window": false,
+        "tabmix/extensions": false,
+        "tabmix/tabmix": false,
+      },
+    },
+    {
+      // see eslint-plugin-mozilla recommended.js
+      env: {
+        browser: false
+      },
+      files: ["**/*.jsm", "**/*.jsm.js"],
+    },
+    {
+      files: ["addon/modules/bootstrap/**"],
+      rules: {
+        "class-methods-use-this": "off",
+        "no-new-func": "off",
+        "no-var": "error",
+        "prefer-const": "error",
+      },
+    },
+  ],
+
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 2021,
     sourceType: "script",
   },
 
   rules: {
+    "mozilla/avoid-removeChild": "error",
+    "mozilla/consistent-if-bracing": "off", // 55 errors
+    "mozilla/import-browser-window-globals": "off", // we don't need this rule
+    "mozilla/import-globals": "error",
+    "mozilla/no-compare-against-boolean-literals": "error",
+    "mozilla/no-define-cc-etc": "error",
+    "mozilla/no-throw-cr-literal": "error",
+    "mozilla/no-useless-parameters": "error",
+    "mozilla/no-useless-removeEventListener": "error",
+    "mozilla/prefer-boolean-length-check": "error",
+    "mozilla/prefer-formatValues": "error",
+    "mozilla/reject-chromeutils-import-params": "error",
+    "mozilla/reject-importGlobalProperties": ["error", "allownonwebidl"],
+    "mozilla/rejects-requires-await": "error",
+    "mozilla/use-cc-etc": "error",
+    "mozilla/use-chromeutils-generateqi": "error",
+    "mozilla/use-chromeutils-import": "error",
+    "mozilla/use-default-preference-values": "error",
+    "mozilla/use-includes-instead-of-indexOf": "error",
+    "mozilla/use-ownerGlobal": "error",
+    "mozilla/use-returnValue": "error",
+    "mozilla/use-services": "error",
+
     "no-alert": 2,
     "no-array-constructor": 2,
     "no-bitwise": 0,
@@ -292,5 +413,12 @@ module.exports = {
     yoda: [2, "never"],
   },
 
-  globals: {},
+  globals: {
+    ...mozillaRecommended.globals,
+    // XPCOMUtils: false,
+  },
+
+  settings: {
+    "html/xml-extensions": [".xhtml"],
+  },
 };

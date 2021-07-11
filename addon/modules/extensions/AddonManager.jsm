@@ -5,10 +5,8 @@
 
 this.EXPORTED_SYMBOLS = ["TabmixAddonManager"];
 
-const Cu = Components.utils;
-
-Cu.import("resource://gre/modules/AddonManager.jsm", this);
-Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
+const {AddonManager} = ChromeUtils.import("resource://gre/modules/AddonManager.jsm");
+const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const GOOGLE_REGEXP = /http(s)?:\/\/((www|encrypted|news|images)\.)?google\.(.*?)\/url\?/;
 const GOOGLE_IMGRES_REGEXP = /http(s)?:\/\/(.*?\.)?google\.(.*?)\/imgres\?/;

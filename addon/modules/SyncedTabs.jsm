@@ -3,18 +3,14 @@
 
 this.EXPORTED_SYMBOLS = ["SyncedTabs"];
 
-const {utils: Cu} = Components;
-
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this, "Services",
+ChromeUtils.defineModuleGetter(this, "Services",
   "resource://gre/modules/Services.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this,
+ChromeUtils.defineModuleGetter(this,
   "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
-const {getChromeWindow} = Cu.import("resource:///modules/syncedtabs/util.js", {});
-const {TabListView} = Cu.import("resource:///modules/syncedtabs/TabListView.js", {});
+const {getChromeWindow} = ChromeUtils.import("resource:///modules/syncedtabs/util.js", {});
+const {TabListView} = ChromeUtils.import("resource:///modules/syncedtabs/TabListView.js", {});
 
 const Tabmix = {};
 

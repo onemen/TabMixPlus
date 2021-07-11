@@ -2,11 +2,7 @@
 
 this.EXPORTED_SYMBOLS = ["AsyncUtils"];
 
-const Cu = Components.utils;
-
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-
-XPCOMUtils.defineLazyModuleGetter(this, "Promise",
+ChromeUtils.defineModuleGetter(this, "Promise",
   "resource://gre/modules/Promise.jsm");
 
 this.AsyncUtils = {

@@ -2,10 +2,8 @@
 
 this.EXPORTED_SYMBOLS = ["MergeWindows"];
 
-const Cu = Components.utils;
-
-Cu.import("resource://gre/modules/Services.jsm", this);
-Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
@@ -40,7 +38,7 @@ this.MergeWindows = {
     let options = {
       skipPopup: !this.prefs.getBoolPref("mergePopups"),
       private: this.isWindowPrivate(aWindow),
-      tabsSelected: selectedTabs.length > 0,
+      tabsSelected: Boolean(selectedTabs.length),
       multiple: mergeAllWindows && !selectedTabs.length
     };
     let {windows, normalWindowsCount} = this.getWindowsList(aWindow, options);

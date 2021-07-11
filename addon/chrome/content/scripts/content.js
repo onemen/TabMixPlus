@@ -1,43 +1,38 @@
 /* globals content, docShell, addMessageListener, sendSyncMessage,
-           sendAsyncMessage, Timer */
+           sendAsyncMessage */
 "use strict";
 
-var {classes: Cc, interfaces: Ci, utils: Cu} = Components;
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
-Cu.import("resource://gre/modules/XPCOMUtils.jsm", this);
-Cu.import("resource://gre/modules/Services.jsm", this);
+const {setTimeout, clearTimeout} = ChromeUtils.import(
+  "resource://gre/modules/Timer.jsm"
+);
 
-XPCOMUtils.defineLazyGetter(this, "Timer", () => {
-  let tmp = {};
-  Cu.import("resource://gre/modules/Timer.jsm", tmp);
-  return tmp;
-});
-
-XPCOMUtils.defineLazyModuleGetter(this, "AppConstants",
+ChromeUtils.defineModuleGetter(this, "AppConstants",
   "resource://gre/modules/AppConstants.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "PrivateBrowsingUtils",
+ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "WebNavigationFrames",
+ChromeUtils.defineModuleGetter(this, "WebNavigationFrames",
   "resource://gre/modules/WebNavigationFrames.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "E10SUtils",
+ChromeUtils.defineModuleGetter(this, "E10SUtils",
   "resource://gre/modules/E10SUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "NetUtil",
+ChromeUtils.defineModuleGetter(this, "NetUtil",
   "resource://gre/modules/NetUtil.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "ContentSvc",
+ChromeUtils.defineModuleGetter(this, "ContentSvc",
   "chrome://tabmix-resource/content/ContentSvc.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "LinkNodeUtils",
+ChromeUtils.defineModuleGetter(this, "LinkNodeUtils",
   "chrome://tabmix-resource/content/LinkNodeUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "ContextMenu",
+ChromeUtils.defineModuleGetter(this, "ContextMenu",
   "chrome://tabmix-resource/content/ContextMenu.jsm");
 
-XPCOMUtils.defineLazyModuleGetter(this, "TabmixUtils",
+ChromeUtils.defineModuleGetter(this, "TabmixUtils",
   "chrome://tabmix-resource/content/Utils.jsm");
 
 var PROCESS_TYPE_CONTENT = Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
@@ -151,11 +146,9 @@ var TabmixContentHandler = {
   onDrop(event) {
     let links;
     const linkName = { };
-    const linkHandler = Cc["@mozilla.org/content/dropped-link-handler;1"]
-        .getService(Ci.nsIDroppedLinkHandler);
     try {
       // Pass true to prevent the dropping of javascript:/data: URIs
-      links = linkHandler.dropLinks(event, true);
+      links = Services.droppedLinkHandler.dropLinks(event, true);
       // we can not send a message with array of wrapped nsIDroppedLinkItem
       links = links.map(link => {
         const {url, name, type} = link;
@@ -485,7 +478,7 @@ var TabmixPageHandler = {
     // add-review is null on DOMContentLoaded
     const addReview = doc.getElementById("add-review");
     if (eventType != "pageshow" && !addReview && this.count++ < 10) {
-      this._timeoutID = Timer.setTimeout(() => {
+      this._timeoutID = setTimeout(() => {
         // make sure content exist after timeout
         if (content) {
           this.moveAMOButton("timeout");
@@ -497,7 +490,7 @@ var TabmixPageHandler = {
       content.removeEventListener("pageshow", this);
     }
     if (addReview && this._timeoutID) {
-      Timer.clearTimeout(this._timeoutID);
+      clearTimeout(this._timeoutID);
       this._timeoutID = null;
     }
     let button = doc.getElementById(this.buttonID);

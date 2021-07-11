@@ -118,8 +118,7 @@ var Tabmix = {
       this[aModule + "Initialized"] = false;
     var self = this;
     XPCOMUtils.defineLazyGetter(aObject, aName, () => {
-      let tmp = {};
-      Components.utils.import("chrome://tabmix-resource/content/" + aModule + ".jsm", tmp);
+      let tmp = ChromeUtils.import("chrome://tabmix-resource/content/" + aModule + ".jsm");
       let Obj = tmp[aSymbol];
       if ("prototype" in tmp[aSymbol])
         Obj = new Obj();
@@ -276,10 +275,13 @@ var Tabmix = {
   },
 
   _init() {
-    Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
-    Components.utils.import("resource://gre/modules/Services.jsm");
-    // XPCOMUtils.defineLazyModuleGetter(this, "RecentWindow",
-    //   "resource:///modules/RecentWindow.jsm");
+    // load globals for our preferences windows
+    let wintype = window.document.documentElement.getAttribute("windowtype");
+    if (wintype !== "navigator:browser") {
+      window.XPCOMUtils = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm").XPCOMUtils;
+      window.Services = ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+    }
+
     this.RecentWindow = {};
     this.RecentWindow.getMostRecentBrowserWindow = Services.wm.getMostRecentBrowserWindow;
 

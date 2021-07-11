@@ -189,7 +189,7 @@ Tabmix.multiRow = {
 
         this._scrollButtonUpLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
         this._scrollButtonDownLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
-        Services.prefs.addObserver("toolkit.scrollbox.", this.tabmixPrefObserver, false);
+        Services.prefs.addObserver("toolkit.scrollbox.", this.tabmixPrefObserver);
       }
 
       disconnectTabmix() {
