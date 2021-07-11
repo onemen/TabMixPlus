@@ -32,13 +32,12 @@
   -moz-margin-start: 0;
   -moz-margin-end: 0;
   -moz-padding-end: 15px;
+  -moz-padding-start: 15px;
 }
 
-:root:not([chromehidden~="menubar"]) #toolbar-menubar:not([autohide="true"]) + #TabsToolbar #TabsToolbar-customization-target[tabBarSpace] ,
-:root[inFullscreen] #TabsToolbar-customization-target[tabBarSpace] ,
-:root:not([tabsintitlebar]) #TabsToolbar-customization-target[tabBarSpace] ,
-:root:not([sizemode="normal"]) #TabsToolbar-customization-target[tabBarSpace] {
-  -moz-padding-start: 15px;
+#TabsToolbar[tabBarSpace] .titlebar-spacer[type="pre-tabs"],
+#TabsToolbar[tabBarSpace] .titlebar-spacer[type="post-tabs"] {
+  width: 25px;
 }
 
 /* same width as history > Recently Closed Windows   */
