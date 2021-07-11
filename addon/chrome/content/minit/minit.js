@@ -1410,6 +1410,7 @@ Tabmix.navToolbox = {
   },
 
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
+    gTMPprefObserver.setSingleWindowUI();
     gTMPprefObserver.showReloadEveryOnReloadButton();
     TMP_ClosedTabs.setButtonType(Tabmix.prefs.getBoolPref("undoCloseButton.menuonly"));
   },

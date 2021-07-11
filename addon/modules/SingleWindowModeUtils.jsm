@@ -1,13 +1,9 @@
-/* globals PanelUI */
 "use strict";
 
 this.EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
 
-const {interfaces: Ci, utils: Cu} = Components;
-
-Cu.import("resource://gre/modules/Services.jsm", this);
-Cu.import("chrome://tabmix-resource/content/TabmixSvc.jsm", this);
-Cu.import("resource://gre/modules/PrivateBrowsingUtils.jsm", this);
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const {PrivateBrowsingUtils} = ChromeUtils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 this.SingleWindowModeUtils = {
   /**
@@ -183,18 +179,10 @@ this.SingleWindowModeUtils = {
     } catch (ex) { }
     try {
       // we need to close the window after timeout so other extensions don't fail.
-      // if we don't add this here BrowserShutdown fails
+      // if we don't add this here gBrowserInit.onUnload fails
       newWindow.FullZoom.init = function() {};
       newWindow.FullZoom.destroy = function() {};
-      newWindow.OfflineApps.uninit = function() {};
       newWindow.IndexedDBPromptHelper.init();
-      if ("gMenuButtonBadgeManager" in newWindow) {
-        newWindow.gMenuButtonBadgeManager.uninit = function() {
-          if (typeof PanelUI == "object" && PanelUI.panel) {
-            PanelUI.panel.removeEventListener("popupshowing", this, true);
-          }
-        };
-      }
       newWindow.gPrivateBrowsingUI.uninit = function() {};
     } catch (ex) {
       existingWindow.Tabmix.obj(ex);

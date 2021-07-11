@@ -2054,36 +2054,34 @@ gTMPprefObserver = {
   // disable the "Open New Window action
   // disable & hides some menuitem
   setSingleWindowUI() {
+    // menu item inside "appMenu-multiView" does not exist in the DOM before
+    // the menu opens for the first time
+    const appMenuMultiView = document.getElementById("appMenu-multiView");
+    if (appMenuMultiView.childElementCount === 0 && !this.setSingleWindowUI._initialized) {
+      document.getElementById("PanelUI-menu-button")
+          .addEventListener("click", () => this.setSingleWindowUI(), {once: true});
+      this.setSingleWindowUI._initialized = true;
+    }
+
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
     var newWindowButton = document.getElementById("new-window-button");
     if (newWindowButton)
       newWindowButton.setAttribute("disabled", Tabmix.singleWindowMode);
 
-    var items = document.getElementsByAttribute("command", "cmd_newNavigator");
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].localName == 'menuitem')
-        items[i].setAttribute("hidden", Tabmix.singleWindowMode);
+    const items = document.querySelectorAll('[command="cmd_newNavigator"]');
+    for (const item of items) {
+      if (item.localName == "menuitem") {
+        item.setAttribute("hidden", Tabmix.singleWindowMode);
+      } else if (item.localName == "toolbarbutton") {
+        item.setAttribute("disabled", Tabmix.singleWindowMode);
+      }
     }
 
-    var frameMenu = document.getElementById("frame");
-    if (frameMenu) {
-      let menuItem = frameMenu.getElementsByAttribute("oncommand", "gContextMenu.openFrame();")[0];
-      if (menuItem)
-        menuItem.setAttribute("hidden", Tabmix.singleWindowMode);
-    }
-
-    document.getElementById("tmOpenInNewWindow").hidden = Tabmix.singleWindowMode;
-
-    let val = Tabmix.singleWindowMode || null;
-    if (val) {
-      Tabmix.setItem("menu_newRemoteWindow", "hidden", true);
-      Tabmix.setItem("menu_newNonRemoteWindow", "hidden", true);
-    } else if (typeof gRemoteTabsUI == "object" &&
-                 document.getElementById("menu_newNonRemoteWindow")) {
-      gRemoteTabsUI.init();
-    }
-    Tabmix.setItem("Tools:RemoteWindow", "disabled", val);
-    Tabmix.setItem("Tools:NonRemoteWindow", "disabled", val);
+    const val = Tabmix.singleWindowMode || null;
+    Tabmix.setItem("tmOpenInNewWindow", "hidden", val);
+    Tabmix.setItem("context-openframe", "hidden", val);
+    Tabmix.setItem("Tools:FissionWindow", "disabled", val);
+    Tabmix.setItem("Tools:NonFissionWindow", "disabled", val);
   },
 
   setMenuIcons() {
