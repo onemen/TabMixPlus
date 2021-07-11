@@ -1101,7 +1101,7 @@ gTMPprefObserver = {
         this.OBSERVING.push(pref);
     };
     addObserver("layout.css.devPixelsPerPx", TabmixSvc.australis);
-    addObserver("browser.tabs.tabmanager.enabled", true);
+    addObserver(TabmixSvc.sortByRecentlyUsed, true);
     addObserver("browser.proton.enabled", Tabmix.isVersion(890));
 
     try {
@@ -1125,7 +1125,8 @@ gTMPprefObserver = {
     "browser.link.open_newwindow.override.external",
     "browser.link.open_newwindow.restriction",
     "browser.link.open_newwindow",
-    TabmixSvc.sortByRecentlyUsed],
+    "browser.tabs.tabmanager.enabled",
+  ],
 
   // removes the observer-object from service -- called when the window is no longer open
   removeObservers() {
@@ -1139,16 +1140,21 @@ gTMPprefObserver = {
    * subject: [wrapped nsISupports :: nsIPrefBranch], nsIPrefBranch Internal
    * topic: "changed"
    */
+  prefsValues: {},
   observe: function TMP_pref_observer(subject, topic, prefName) {
-    if (this.preventUpdate)
+    if (this.preventUpdate ||
+      this.prefsValues[prefName] === TabmixSvc.prefs.get(prefName)) {
       return;
+    }
+    const prefValue = TabmixSvc.prefs.get(prefName);
+    this.prefsValues[prefName] = prefValue;
+
     // if we don't have a valid window (closed)
     if (!(typeof (document) == 'object' && document)) {
       this.removeObservers(); // remove the observer..
       return; // ..and don't continue
     }
 
-    var prefValue, value;
     switch (prefName) {
       case "extensions.tabmix.titlefrombookmark":
         TMP_Places.onPreferenceChanged(Services.prefs.getBoolPref(prefName));
@@ -1282,8 +1288,7 @@ gTMPprefObserver = {
         gBrowser.tabContainer._updateCloseButtons();
         break;
       case "browser.tabs.closeButtons":
-        value = Services.prefs.getIntPref(prefName);
-        switch (value) {
+        switch (prefValue) {
           case 0: // Display a close button on the active tab only
             Tabmix.prefs.setIntPref("tabs.closeButtons", 3);
             break;
@@ -1298,15 +1303,14 @@ gTMPprefObserver = {
             return;
         }
         // show/hide close button on tabs
-        Tabmix.prefs.setBoolPref("tabs.closeButtons.enable", value < 2);
+        Tabmix.prefs.setBoolPref("tabs.closeButtons.enable", prefValue < 2);
         // show/hide close button on the tabbar
-        Tabmix.prefs.setBoolPref("hideTabBarButton", value != 3);
+        Tabmix.prefs.setBoolPref("hideTabBarButton", prefValue != 3);
         break;
       case "extensions.tabmix.tabs.closeButtons":
-        value = Services.prefs.getIntPref(prefName);
-        if (value < 1 || value > 5) {
+        if (prefValue < 1 || prefValue > 5) {
           Services.prefs.setIntPref(prefName, 1);
-        } else if (value == 5 && TabmixTabbar.widthFitTitle) {
+        } else if (prefValue == 5 && TabmixTabbar.widthFitTitle) {
           Services.prefs.setIntPref(prefName, 1);
         } else {
           gBrowser.tabContainer.mCloseButtons = Services.prefs.getIntPref(prefName);
@@ -1319,7 +1323,6 @@ gTMPprefObserver = {
         break;
       }
       case "extensions.tabmix.tabs.closeButtons.enable":
-        prefValue = Services.prefs.getBoolPref(prefName);
         Tabmix.tabsUtils.closeButtonsEnabled = prefValue;
         gBrowser.tabContainer.arrowScrollbox.offsetRatio = prefValue ? 0.70 : 0.50;
         gBrowser.tabContainer._updateCloseButtons();
@@ -1344,7 +1347,6 @@ gTMPprefObserver = {
         break;
       case "browser.sessionstore.max_tabs_undo": {
         // Firefox's sessionStore maintain the right amount
-        prefValue = Services.prefs.getIntPref(prefName);
         if (Tabmix.prefs.getBoolPref("undoClose") != (prefValue > 0))
           Tabmix.prefs.setBoolPref("undoClose", prefValue > 0);
         break;
