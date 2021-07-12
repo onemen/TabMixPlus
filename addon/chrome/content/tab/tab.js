@@ -2066,16 +2066,16 @@ gTMPprefObserver = {
     if (newWindowButton)
       newWindowButton.setAttribute("disabled", Tabmix.singleWindowMode);
 
+    const val = Tabmix.singleWindowMode || null;
     const items = document.querySelectorAll('[command="cmd_newNavigator"]');
     for (const item of items) {
       if (item.localName == "menuitem") {
-        item.setAttribute("hidden", Tabmix.singleWindowMode);
+        Tabmix.setItem(item, "hidden", val);
       } else if (item.localName == "toolbarbutton") {
-        item.setAttribute("disabled", Tabmix.singleWindowMode);
+        Tabmix.setItem(item, "disabled", val);
       }
     }
 
-    const val = Tabmix.singleWindowMode || null;
     Tabmix.setItem("tmOpenInNewWindow", "hidden", val);
     Tabmix.setItem("context-openframe", "hidden", val);
     Tabmix.setItem("Tools:FissionWindow", "disabled", val);

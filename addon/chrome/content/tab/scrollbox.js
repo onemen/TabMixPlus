@@ -115,9 +115,6 @@ Tabmix.multiRow = {
           scrollbox: this,
           observe(subject, topic, data) {
             switch (data) {
-              case "toolkit.scrollbox.clickToScroll.scrollDelay":
-                this.scrollbox._scrollDelay = Services.prefs.getIntPref(data);
-                break;
               case "toolkit.scrollbox.smoothScroll":
                 this.scrollbox.smoothScroll = Services.prefs.getBoolPref(data);
                 break;
