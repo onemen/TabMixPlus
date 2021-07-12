@@ -48,12 +48,15 @@ var gPrefWindow = {
     this.instantApply = docElt.instantApply;
     window.addEventListener("change", this);
     window.addEventListener("beforeaccept", this);
-    window.document.querySelectorAll('input[type=number]').forEach(x => {
-      x.addEventListener("input", this);
-      x.addEventListener("blur", this);
-      // block event when value is empty so it not get rounded to 0 and blur
-      // handler can reset it to pref value.
-      x.addEventListener("change", i => !i.target.value && i.stopPropagation(), true);
+    window.addEventListener("input", this);
+
+    window.document.querySelectorAll('input[type=number]').forEach(item => {
+      const needUpdate = this.validateInputNumber(item);
+      if (needUpdate) {
+        const preference = $(item.getAttribute("preference"));
+        preference.value = needUpdate.value;
+      }
+      this.updateInputNumberDisabled(item);
     });
 
     // init buttons extra1, extra2, accept, cancel
@@ -92,17 +95,20 @@ var gPrefWindow = {
   deinit() {
     window.removeEventListener("change", this);
     window.removeEventListener("beforeaccept", this);
+    window.removeEventListener("input", this);
     delete Tabmix.getTopWin().tabmix_setSession;
     Shortcuts.prefsChangedByTabmix = false;
     window.gIncompatiblePane.deinit();
   },
 
   handleEvent(aEvent) {
+    const item = aEvent.target;
     switch (aEvent.type) {
       case "change":
-        if (aEvent.target.localName != "preference")
+        if (item.localName != "preference") {
           return;
-        this.updateBroadcaster(aEvent.target);
+        }
+        this.updateBroadcaster(item);
         if (!this.instantApply)
           this.updateApplyButton(aEvent);
         break;
@@ -116,18 +122,9 @@ var gPrefWindow = {
         }
         break;
       case "input":
-        if (aEvent.target.localName == "input" && aEvent.target.type == "number") {
-          aEvent.target.value = aEvent.target.value.slice(0, aEvent.target.maxLength);
-          if (aEvent.target.value == '') aEvent.stopPropagation();
-          // block event when value is empty so it not get rounded to 0 and blur handler can reset it to pref value.
-        }
-        break;
-      case "blur":
-        if (aEvent.target.localName == "input" && aEvent.target.type == "number") {
-          if (!aEvent.target.validity.valid || aEvent.target.value === '') {
-            let pref = $(aEvent.target.getAttribute('preference'));
-            aEvent.target.value = pref ? pref.valueFromPreferences : aEvent.target.min;
-          }
+        if (item.type === "number") {
+          this.validateInputNumber(item);
+          this.updateInputNumberDisabled(item);
         }
         break;
     }
@@ -289,7 +286,31 @@ var gPrefWindow = {
     let val = item.checked ? preference._lastValue || checkedVal : notChecked;
     preference._lastValue = control.value;
     return val;
-  }
+  },
+
+  updateInputNumberDisabled(item) {
+    let {min, max, value} = item;
+    value = value ? Number(value) : 0;
+    min = min ? Number(min) : 0;
+    max = max ? Number(max) : Infinity;
+    Tabmix.setItem(item, "increaseDisabled", value >= max || null);
+    Tabmix.setItem(item, "decreaseDisabled", value <= min || null);
+  },
+
+  validateInputNumber(item) {
+    let {min, max, value} = item;
+    const startValue = value = Number(value) || 0;
+    min = min ? Number(min) : 0;
+    max = max ? Number(max) : Infinity;
+
+    if (value < min) {
+      value = min;
+    } else if (value > max) {
+      value = max;
+    }
+    item.value = value;
+    return startValue !== value ? {value} : null;
+  },
 };
 
 function getPrefByType(prefName) {

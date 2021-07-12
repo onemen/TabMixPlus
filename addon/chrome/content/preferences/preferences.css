@@ -2,7 +2,6 @@
   == Styles used by the XUL prefwindow element.
   ======================================================================= */
 
-  @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
   @namespace html url("http://www.w3.org/1999/xhtml");
 
   /* ::::: dialog ::::: */
@@ -82,4 +81,21 @@
 #ClickTabbar .multiselectitem,
 #mouseClick_tabbox[selectedIndex="0"] #ClickTab .multiselectitem {
   display: none;
+}
+
+  /* ::::: spinbuttons ::::: */
+
+input[type="number"][increaseDisabled]::-moz-number-spin-up,
+input[type="number"][decreaseDisabled]::-moz-number-spin-down {
+  opacity: 0.5;
+}
+
+input[type="number"] {
+  padding-inline-end: 0;
+}
+
+input[type="number"]::-moz-number-spin-up,
+input[type="number"]::-moz-number-spin-down {
+  min-height: 11px;
+  margin: 0 -2px 0 2px !important;
 }
