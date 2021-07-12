@@ -114,6 +114,21 @@
   -moz-box-align: start;
 }
 
+@media (-moz-windows-compositor) {
+  #TabsToolbar[multibar] .titlebar-buttonbox {
+    display: flex;
+  }
+
+  @media not (-moz-os-version: windows-win7) {
+    @media not (-moz-os-version: windows-win8) {
+      #TabsToolbar[multibar] toolbarbutton.titlebar-button {
+        padding: 12.25px 17px;
+        align-self: flex-start;
+      }
+    }
+  }
+}
+
 @media not (-moz-proton) {
 :root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-magin-top) !important;
