@@ -146,7 +146,7 @@ var TabmixTabbar = {
       allTabsButton.collapsed = !Services.prefs.getBoolPref("browser.tabs.tabmanager.enabled");
       Tabmix.setItem("tabbrowser-tabs", "showalltabsbutton", !allTabsButton.collapsed || null);
     }
-    Tabmix.setItem(tabBar, "tabBarSpace", Tabmix.prefs.getBoolPref("tabBarSpace") || null);
+    Tabmix.setItem("TabsToolbar", "tabBarSpace", Tabmix.prefs.getBoolPref("tabBarSpace") || null);
     this.setShowNewTabButtonAttr();
 
     if (start)

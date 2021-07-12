@@ -28,11 +28,16 @@
 }
 
 /* :::: Space on tab bar :::: */
-#tabbrowser-tabs[tabBarSpace] > #tabbrowser-arrowscrollbox {
+#TabsToolbar[tabBarSpace] #tabbrowser-arrowscrollbox {
   -moz-margin-start: 0;
   -moz-margin-end: 0;
-  -moz-padding-start: 15px;
   -moz-padding-end: 15px;
+  -moz-padding-start: 15px;
+}
+
+#TabsToolbar[tabBarSpace] .titlebar-spacer[type="pre-tabs"],
+#TabsToolbar[tabBarSpace] .titlebar-spacer[type="post-tabs"] {
+  width: 25px;
 }
 
 /* same width as history > Recently Closed Windows   */
