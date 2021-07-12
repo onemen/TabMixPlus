@@ -65,14 +65,14 @@
               <checkbox_tmp id="mouseHoverSelect" label="&mouseHoverSelect.labelBegin;"
                         preference="pref_mouseHoverSelect"/>
               <html:input id="mouseOverSelectDelay" size="5" maxlength="4"
-                        preference="pref_mouseOverSelectDelay" type="number" observes="obs_mouseHoverSelect" min="0" oninput="value = value == '' ? this.min : value.slice(0,this.maxLength); validity.valid||(value=this.min);"/>
+                        preference="pref_mouseOverSelectDelay" type="number" observes="obs_mouseHoverSelect" min="0"/>
               <label value="&milliseconds.label;" observes="obs_mouseHoverSelect" class="timelabel"/>
             </hbox>
             <checkbox_tmp id="tabFlip" label="&tabFlip.label;" preference="pref_tabFlip"/>
             <hbox align="center" class="indent">
               <label value="&tabFlip.delay;" observes="obs_tabFlip"/>
               <html:input id="tabFlipDelay" size="5" maxlength="4" preference="pref_tabFlipDelay"
-                        type="number" observes="obs_tabFlip" min="0" oninput="value = value == '' ? this.min : value.slice(0,this.maxLength); validity.valid||(value=this.min);"/>
+                        type="number" observes="obs_tabFlip" min="0"/>
               <label value="&milliseconds.label;" observes="obs_tabFlip" class="timelabel"/>
             </hbox>
             <!-- Drag tabs -->

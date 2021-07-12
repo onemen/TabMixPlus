@@ -48,6 +48,12 @@ var gPrefWindow = {
     this.instantApply = docElt.instantApply;
     window.addEventListener("change", this);
     window.addEventListener("beforeaccept", this);
+    window.document.querySelectorAll('input[type=number]').forEach(x=>{
+      x.addEventListener("input", this);
+      x.addEventListener("blur", this);
+      x.addEventListener("change", x=>x.target.value == '' && x.stopPropagation(), true);
+      //block event when value is empty so it not get rounded to 0 and blur handler can reset it to pref value.
+    });
 
     // init buttons extra1, extra2, accept, cancel
     docElt.getButton("extra1").setAttribute("icon", "apply");
@@ -106,6 +112,20 @@ var gPrefWindow = {
           // prevent TMP_SessionStore.setService from running
           Tabmix.getTopWin().tabmix_setSession = true;
           Shortcuts.prefsChangedByTabmix = true;
+        }
+        break;
+      case "input":
+        if (aEvent.target.localName == "input" && aEvent.target.type == "number"){
+          aEvent.target.value = aEvent.target.value.slice(0,aEvent.target.maxLength);
+          if (aEvent.target.value == '') aEvent.stopPropagation();
+          //block event when value is empty so it not get rounded to 0 and blur handler can reset it to pref value.
+        }
+        break;
+      case "blur":
+        if (aEvent.target.localName == "input" && aEvent.target.type == "number"){
+          let pref = $(aEvent.target.getAttribute('preference'));
+          aEvent.target.validity.valid && aEvent.target.value != '' 
+            || (aEvent.target.value = pref ? pref.valueFromPreferences : aEvent.target.min);
         }
         break;
     }
