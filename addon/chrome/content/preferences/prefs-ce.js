@@ -903,6 +903,26 @@ class PaneButton extends customElements.get('radio') {
 }
 
 class PrefWindow extends MozXULElement {
+  /**
+   * Derived bindings can set this to true to cause us to skip
+   * reading the browser.preferences.instantApply pref in the constructor.
+   * Then they can set instantApply to their wished value. -->
+   */
+  _instantApplyInitialized = false;
+  // Controls whether changed pref values take effect immediately.
+  instantApply = false;
+  _currentPane = null;
+  _initialized = false;
+  _animateTimer = null;
+  _fadeTimer = null;
+  _animateDelay = 15;
+  _animateIncrement = 40;
+  _fadeDelay = 5;
+  _fadeIncrement = 0.40;
+  _animateRemainder = 0;
+  _currentHeight = 0;
+  _multiplier = 0;
+
   constructor() {
     super();
 
@@ -1041,7 +1061,7 @@ class PrefWindow extends MozXULElement {
   }
 
   connectedCallback() {
-    if (this._initialized) {
+    if (this._initialized || this.delayConnectedCallback()) {
       return;
     }
 
@@ -1091,27 +1111,6 @@ class PrefWindow extends MozXULElement {
       const f = new Function("event", this.getAttribute("ondialogdisclosure"));
       this.addEventListener("dialogdisclosure", event => f.call(this, event));
     }
-    /**
-     * Derived bindings can set this to true to cause us to skip
-     * reading the browser.preferences.instantApply pref in the constructor.
-     * Then they can set instantApply to their wished value. -->
-     */
-    this._instantApplyInitialized = false;
-
-    // Controls whether changed pref values take effect immediately.
-    this.instantApply = false;
-
-    this._currentPane = null;
-    this._initialized = false;
-    this._animateTimer = null;
-    this._fadeTimer = null;
-    this._animateDelay = 15;
-    this._animateIncrement = 40;
-    this._fadeDelay = 5;
-    this._fadeIncrement = 0.40;
-    this._animateRemainder = 0;
-    this._currentHeight = 0;
-    this._multiplier = 0;
 
     window.addEventListener("unload", this.disconnectedCallback);
 

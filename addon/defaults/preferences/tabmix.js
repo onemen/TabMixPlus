@@ -285,3 +285,5 @@ pref("extensions.tabmix.shortcuts", '{}');
 pref("extensions.tabmix.syncPrefs", false);
 
 pref("extensions.tabmix.showTabContextMenuOnTabbar", false);
+
+pref("extensions.tabmix.instantApply", false);

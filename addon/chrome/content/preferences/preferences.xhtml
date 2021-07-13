@@ -20,7 +20,14 @@
             title="&page.header.title;"
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             autosize="true"
-            onload="customElements.define('prefwindow', PrefWindow); if (window.toString() == '[object ChromeWindow]') window.sizeToContent();"
+            onload="Object.defineProperty(customElements.get('preferences').prototype,'instantApply', {
+                      get: _=>document.documentElement.instantApply
+                    });
+                    customElements.define('prefwindow', class PrefWindowNoInst extends PrefWindow {
+                      _instantApplyInitialized = true;
+                      instantApply = Tabmix.prefs.getBoolPref('instantApply');
+                    });
+                    if (window.toString() == '[object ChromeWindow]') window.sizeToContent();"
             ondialogaccept="gPrefWindow.deinit();"
             ondialogcancel="gPrefWindow.deinit();"
             ondialogextra1="gPrefWindow.onApply();"
@@ -72,6 +79,7 @@
       <menuitem id="tm-import" label="&settings.import;" oncommand="importData();"/>
       <menuitem id="tm-export" label="&settings.export;" oncommand="exportData();"/>
       <menuitem id="syncPrefs" label="&settings.sync;" oncommand="toggleSyncPreference(); this.checked=!this.checked;" type="checkbox"/>
+      <menuitem id="instantApply" label="Instant Preference?" oncommand="Services.prefs.setBoolPref('extensions.tabmix.instantApply', !!this.getAttribute('checked'))" type="checkbox"/>
     </menupopup>
   </popupset>
 

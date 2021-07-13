@@ -71,6 +71,7 @@ var gPrefWindow = {
     paneButton.collapsed = true;
 
     $("syncPrefs").setAttribute("checked", Tabmix.prefs.getBoolPref("syncPrefs"));
+    $("instantApply").setAttribute("checked", Tabmix.prefs.getBoolPref("instantApply"));
   },
 
   initPane(aPaneID) {
