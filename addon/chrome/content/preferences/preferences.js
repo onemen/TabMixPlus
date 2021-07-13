@@ -672,6 +672,17 @@ Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
 
 gPrefWindow.onContentLoaded();
 
+function setDialog(){
+  Object.defineProperty(customElements.get('preferences').prototype,'instantApply', {
+    get: _=>document.documentElement.instantApply
+  });
+  customElements.define('prefwindow', class PrefWindowNoInst extends PrefWindow {
+    _instantApplyInitialized = true;
+    instantApply = Tabmix.prefs.getBoolPref('instantApply');
+  });
+  if (window.toString() == '[object ChromeWindow]') window.sizeToContent();
+}
+
 // avoid opening prefs in tab, workaround to bug 1414406
 (function x() {
   /* eslint no-var: 2, prefer-const: 2 */
