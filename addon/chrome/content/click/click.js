@@ -835,10 +835,14 @@ Tabmix.allTabs = {
   },
 
   insertSortButton() {
-    const sortTabbsButton = document.getElementById("allTabsMenu_sortTabbsButton");
+    const sortTabsButton = document.getElementById("allTabsMenu_sortTabsButton");
     const tabsSeparator = document.getElementById("allTabsMenu-tabsSeparator");
-    if (sortTabbsButton.nextSibling !== tabsSeparator) {
-      tabsSeparator.parentNode.insertBefore(sortTabbsButton, tabsSeparator);
+    if (sortTabsButton.nextSibling !== tabsSeparator) {
+      const searchTabs = document.getElementById("allTabsMenu-searchTabs");
+      if ([...searchTabs.classList].includes("subviewbutton-iconic")) {
+        sortTabsButton.classList.add("subviewbutton-iconic");
+      }
+      tabsSeparator.parentNode.insertBefore(sortTabsButton, tabsSeparator);
 
       const panel = gTabsPanel.allTabsPanel;
 
@@ -861,7 +865,7 @@ Tabmix.allTabs = {
 
         const sortTabs = () => [...this.gBrowser.tabs]
             .sort((a, b) => (a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1));
-        const tabs = typeof sortTabbsButton === "object" && sortTabbsButton.checked ?
+        const tabs = typeof sortTabsButton === "object" && sortTabsButton.checked ?
           sortTabs() : this.gBrowser.tabs;
 
         for (let tab of tabs) {
