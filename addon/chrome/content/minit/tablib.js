@@ -926,7 +926,7 @@ Tabmix.tablib = {
           var activeIndex = (tabState.index || tabState.entries.length) - 1;
           var entriesToRemove = 0;
           var newEntry = {url: aHref}; // we don't know the page title at this moment
-          let triggeringPrincipal = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
+          let triggeringPrincipal = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
           if (triggeringPrincipal) {
             newEntry.triggeringPrincipal_base64 = triggeringPrincipal;
           }
