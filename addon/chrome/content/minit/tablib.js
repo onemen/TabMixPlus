@@ -234,7 +234,7 @@ Tabmix.tablib = {
     Tabmix.changeCode(gBrowser, "gBrowser._endRemoveTab")._replace(
       'this._blurTab(aTab);',
       'Tabmix.tablib.onRemoveTab(aTab); \
-       if (TabmixSvc.tabAnimationsEnabled) { \
+       if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) { \
          TMP_eventListener.onTabClose_updateTabBar(aTab);\
        } \
        $&'

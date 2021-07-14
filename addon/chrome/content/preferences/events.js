@@ -42,8 +42,6 @@ var gEventsPane = {
     $("syncedTabs").label = syncedTabs;
     $("selectSyncedTabs").label = syncedTabs;
 
-    gPrefWindow.removeItemAndPrefById("pref_disableTabsAnimate");
-
     if (!Tabmix.isVersion(890)) {
       gPrefWindow.removeChild("pref_ctrltab");
       const preferences = document.getElementById("paneEvents").querySelector("preferences");

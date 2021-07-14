@@ -784,7 +784,7 @@ var TMP_eventListener = {
     } else if (!this._onOpenTimeout) {
       let self = this;
       let timeout = Tabmix.tabsUtils.disAllowNewtabbutton &&
-          TabmixSvc.tabAnimationsEnabled ? 0 : 200;
+          window.matchMedia("(prefers-reduced-motion: no-preference)").matches ? 0 : 200;
       this._onOpenTimeout = window.setTimeout(function TMP_onOpenTimeout(tab) {
         if (self._onOpenTimeout) {
           clearTimeout(self._onOpenTimeout);

@@ -383,9 +383,3 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", function() {
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
   return this.SessionStoreGlobal.SessionStoreInternal;
 });
-
-// Firefox 55
-// Bug 1352069 - Introduce a pref that allows for disabling cosmetic animations
-XPCOMUtils.defineLazyGetter(TabmixSvc, "tabAnimationsEnabled", () => {
-  return !Services.prefs.getIntPref("ui.prefersReducedMotion", 0) == 1;
-});
