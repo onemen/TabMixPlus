@@ -2654,11 +2654,6 @@ TabmixProgressListener = {
     onStateChange: function TMP_onStateChange(aBrowser, aWebProgress, aRequest, aStateFlags, aStatus) {
       let tab = this.mTabBrowser.getTabForBrowser(aBrowser);
       const nsIWebProgressListener = Ci.nsIWebProgressListener;
-      if (tab.hasAttribute("_tabmix_load_bypass_cache") &&
-          (aStateFlags & nsIWebProgressListener.STATE_START)) {
-        tab.removeAttribute("_tabmix_load_bypass_cache");
-        aRequest.loadFlags |= aRequest.LOAD_BYPASS_CACHE;
-      }
       if (aStateFlags & nsIWebProgressListener.STATE_START &&
           aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK) {
         let url = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
