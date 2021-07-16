@@ -41,6 +41,15 @@ var gMenuPane = {
 
     this.setInverseLinkLabel();
 
+    // we can not modify build-in key with reserved attribute
+    // bug 1296863 Stop disabling the "New Tab" command in popups
+    // bug 1297342 "reserved" attribute should be on <key> elements
+    Object.entries(Shortcuts.keys).forEach(([key, keyData]) => {
+      if (keyData.reserved) {
+        $(key).hidden = true;
+      }
+    });
+
     if (!Shortcuts.keys.browserReload.id)
       $("browserReload").hidden = true;
     this.initializeShortcuts();

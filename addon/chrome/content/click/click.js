@@ -666,9 +666,6 @@ var TabmixContext = {
     if (!gContextMenu || event.originalTarget != document.getElementById("contentAreaContextMenu"))
       return true;
 
-    // copy label from key
-    Tabmix.setItem("tm-content-undoCloseTab", "label", document.getElementById("key_tm_undoClose").getAttribute("label"));
-
     // hide open link in window in single window mode
     Tabmix.changeCode(gContextMenu, "gContextMenu.initOpenItems")._replace(
       /context-openlink",/, '$& !Tabmix.singleWindowMode &&'

@@ -330,7 +330,6 @@ var TMP_eventListener = {
       /**
       *  aObject, aName , aModule - file name , aSymbol - symbol in EXPORTED_SYMBOLS, aFlag, aArg
       */
-      Tabmix.lazy_import(Tabmix, "Shortcuts", "Shortcuts", "Shortcuts", true);
       Tabmix.lazy_import(Tabmix, "flst", "Slideshow", "flst", true);
       Tabmix.lazy_import(Tabmix, "MergeWindows", "MergeWindows", "MergeWindows");
       Tabmix.lazy_import(Tabmix, "autoReload", "AutoReload", "AutoReload");
@@ -508,8 +507,6 @@ var TMP_eventListener = {
     if (Tabmix.singleWindowMode)
       gTMPprefObserver.setSingleWindowUI();
 
-    Tabmix.Shortcuts.onWindowOpen(window);
-
     // if treeStyleTab extension installed we call this from
     // Tabmix.afterDelayedStartup
     if (!Tabmix.extensions.treeStyleTab)
@@ -576,7 +573,7 @@ var TMP_eventListener = {
     Tabmix.allTabs.init();
 
     MozXULElement.insertFTLIfNeeded("browser/tabContextMenu.ftl");
-    Tabmix.setFTLDataId("key_tm_undoClose");
+    Tabmix.setFTLDataId("tm-content-undoCloseTab");
     Tabmix.setFTLDataId("tm-content-closetab");
   },
 

@@ -135,6 +135,11 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   if (typeof tabBrowser == "undefined")
     tabBrowser = gBrowser || window._gBrowser;
 
+  // we need to add our keys before browser.xhtml loads our overlay,
+  // and look for our Shortcuts
+  const {Shortcuts} = ChromeUtils.import("chrome://tabmix-resource/content/Shortcuts.jsm");
+  Shortcuts.onWindowOpen(window);
+
   // return true if all tabs in the window are blank
   tabBrowser.isBlankWindow = function() {
     for (var i = 0; i < this.tabs.length; i++) {

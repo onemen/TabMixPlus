@@ -1281,6 +1281,9 @@ TabmixSessionManager = {
   },
 
   sessionUtil(action, what, sessionPath) {
+    if (this.disableSessionManager) {
+      return;
+    }
     // action = save , replace
     // type = thiswindow , allwindows
     if (Tabmix.isSingleBrowserWindow)

@@ -111,6 +111,10 @@ var TMP_SessionStore = {
     // ##### disable Session Manager #####
     Services.prefs.lockPref("extensions.tabmix.sessions.manager");
     Services.prefs.lockPref("extensions.tabmix.sessions.crashRecovery");
+    if (TabmixSessionManager.disableSessionManager) {
+      document.getElementById("tmp_disableSave").setAttribute("disabled", true);
+      return;
+    }
     TabmixSvc.sm.settingPreference = true;
 
     if (TabmixSvc.sm.settingPreference || Tabmix.prefs.prefHasUserValue("setDefault"))
