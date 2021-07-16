@@ -224,7 +224,14 @@ this.DynamicRules = {
       return;
 
     this[ruleName] = "preventUpdate";
-    let prefObj = this.validatePrefValue(ruleName);
+    let prefObj;
+    try {
+      prefObj = this.validatePrefValue(ruleName);
+    } catch (ex) {
+      this.handleError(ex, ruleName);
+      Prefs.setCharPref(ruleName, this.defaultPrefs[ruleName]);
+      prefObj = this.validatePrefValue(ruleName);
+    }
     delete this[ruleName];
 
     let val = TabmixSvc.tabStylePrefs[ruleName];
@@ -351,6 +358,12 @@ this.DynamicRules = {
     return (this.defaultPrefs = defaults);
   },
 
+  handleError(error, ruleName) {
+    Cu.reportError(TabmixSvc.console.error(error));
+    TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
+    Prefs.clearUserPref(ruleName);
+  },
+
   validatePrefValue(ruleName) {
     // styles format: italic:boolean, bold:boolean, underline:boolean,
     //                text:boolean, textColor:string, textOpacity:string,
@@ -362,26 +375,35 @@ this.DynamicRules = {
 
     var currentPrefValues, prefValues = {};
     let prefString = Prefs.getCharPref(ruleName);
-    let handleError = function(ex) {
-      TabmixSvc.console.log(ex);
-      TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
-      Prefs.clearUserPref(ruleName);
-      // set prev value to default so we can continue with this function
-      currentPrefValues = defaultPrefValues;
-    };
     try {
       currentPrefValues = JSON.parse(prefString);
     } catch (ex) {
-      handleError(ex);
+      this.handleError(ex, ruleName);
+      // set prev value to default so we can continue with this function
+      currentPrefValues = defaultPrefValues;
     }
     if (currentPrefValues === null) {
-      handleError(ruleName + " value is invalid\n" + prefString);
+      this.handleError(new Error(ruleName + " value is invalid\n" + prefString), ruleName);
+      currentPrefValues = defaultPrefValues;
     }
+
+    const reRGBA = /rgba\((?:\b(?:1?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\b,){3}(?:0?\.[0-9]?[0-9]|0|1)\)/;
+    const booleanItems = "italic,bold,underline,text,bg";
+    const colorItems = "textColor,bgColor,bgTopColor";
 
     // make sure we have all the item
     // if item is missing set it to default
     for (let item of Object.keys(defaultPrefValues)) {
       let value = currentPrefValues[item];
+      let valid;
+      if (booleanItems.includes(item)) {
+        valid = typeof value === "boolean";
+      } else if (colorItems.includes(item)) {
+        valid = typeof value === "string" && value.match(reRGBA);
+      }
+      if (!valid) {
+        throw new Error(`${ruleName} is not valid, ${item} is ${value}`);
+      }
       if (value && item.indexOf("Color") > -1) {
         let opacity = item.replace("Color", "Opacity");
         let opacityValue = opacity in currentPrefValues ? currentPrefValues[opacity] : null;

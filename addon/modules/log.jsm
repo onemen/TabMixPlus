@@ -282,6 +282,16 @@ this.console = {
     this._logMessage(" " + callerName + callerCallerName + ":\n" + aMessage, "infoFlag", caller);
   },
 
+  error(error, message = "") {
+    function CustomError() {
+      Object.assign(this, error);
+      this.name = "Tabmix Error";
+      this.message = `${message ? `\n${message}\n` : "\n"}${error.message};`;
+    }
+    CustomError.prototype = new Error();
+    return new CustomError();
+  },
+
   assert: function TMP_console_assert(aError, aMsg) {
     if (!aError || typeof aError.stack != "string") {
       let msg = aMsg ? aMsg + "\n" : "";
