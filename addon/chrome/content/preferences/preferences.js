@@ -3,13 +3,15 @@
 "use strict";
 
 /***** Preference Dialog Functions *****/
-var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
+var PrefFn = { 0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref" };
 
 this.$ = id => document.getElementById(id);
 
 var gPrefWindow = {
   widthChanged: false,
   _initialized: false,
+  set instantApply(val) { document.documentElement.instantApply = val },
+  get instantApply() { return document.documentElement.instantApply },
   onContentLoaded() {
     const prefWindow = $("TabMIxPreferences");
     if (window.toString() != "[object ChromeWindow]") {
@@ -45,18 +47,22 @@ var gPrefWindow = {
 
     window.gIncompatiblePane.init(docElt);
 
-    this.instantApply = docElt.instantApply;
     window.addEventListener("change", this);
     window.addEventListener("beforeaccept", this);
     window.addEventListener("input", this);
 
     window.document.querySelectorAll('input[type=number]').forEach(item => {
-      const needUpdate = this.validateInputNumber(item);
-      if (needUpdate) {
-        const preference = $(item.getAttribute("preference"));
-        preference.value = needUpdate.value;
-      }
+      item.addEventListener("change", i => {
+        if(!i.target.validity.valid) item.value = item.defaultValue
+      });
+      item.addEventListener("input", i => {
+        if(this.instantApply || !i.target.validity.valid) i.stopPropagation();
+        if (i.target.value.length>i.target.maxLength) item.value = item.defaultValue;
+        else if(i.target.validity.valid) item.defaultValue = item.value;
+        this.updateInputNumberDisabled(item);
+      });
       this.updateInputNumberDisabled(item);
+      item.defaultValue = item.value;
     });
 
     // init buttons extra1, extra2, accept, cancel
@@ -85,7 +91,7 @@ var gPrefWindow = {
     let content = aPaneElement.getElementsByAttribute("class", "content-box")[0];
     let style = window.getComputedStyle(content);
     let contentWidth = parseInt(style.width) + parseInt(style.marginRight) +
-                       parseInt(style.marginLeft);
+      parseInt(style.marginLeft);
     let tabboxes = aPaneElement.getElementsByTagName("tabbox");
     for (let tabbox of tabboxes) {
       diff = Math.max(diff, tabbox.getBoundingClientRect().width - contentWidth);
@@ -124,7 +130,6 @@ var gPrefWindow = {
         break;
       case "input":
         if (item.type === "number") {
-          this.validateInputNumber(item);
           this.updateInputNumberDisabled(item);
         }
         break;
@@ -210,7 +215,7 @@ var gPrefWindow = {
     let child = $(id);
     // override preferences getter before we remove the preference
     if (child.localName == "preference")
-      Object.defineProperty(child, "preferences", {value: child.parentNode});
+      Object.defineProperty(child, "preferences", { value: child.parentNode });
     child.remove();
   },
 
@@ -229,7 +234,7 @@ var gPrefWindow = {
     if (aPreference.type != "bool" && !aPreference.hasAttribute("notChecked"))
       return;
     let broadcaster = aBroadcaster ||
-                      $(aPreference.id.replace("pref_", "obs_"));
+      $(aPreference.id.replace("pref_", "obs_"));
     if (broadcaster) {
       let disable = aPreference.type == "bool" ? !aPreference.value :
         aPreference.value == parseInt(aPreference.getAttribute("notChecked"));
@@ -269,7 +274,7 @@ var gPrefWindow = {
   afterShortcutsChanged() {
     Shortcuts.prefsChangedByTabmix = false;
     if (typeof gMenuPane == "object" &&
-        $("pref_shortcuts").value != $("shortcut-group").value)
+      $("pref_shortcuts").value != $("shortcut-group").value)
       gMenuPane.initializeShortcuts();
   },
 
@@ -290,27 +295,12 @@ var gPrefWindow = {
   },
 
   updateInputNumberDisabled(item) {
-    let {min, max, value} = item;
+    let { min, max, value } = item;
     value = value ? Number(value) : 0;
     min = min ? Number(min) : 0;
     max = max ? Number(max) : Infinity;
     Tabmix.setItem(item, "increaseDisabled", value >= max || null);
     Tabmix.setItem(item, "decreaseDisabled", value <= min || null);
-  },
-
-  validateInputNumber(item) {
-    let {min, max, value} = item;
-    const startValue = value = Number(value) || 0;
-    min = min ? Number(min) : 0;
-    max = max ? Number(max) : Infinity;
-
-    if (value < min) {
-      value = min;
-    } else if (value > max) {
-      value = max;
-    }
-    item.value = value;
-    return startValue !== value ? {value} : null;
   },
 };
 
@@ -481,7 +471,7 @@ function exportData() {
         return "\n" + pref + "=" + getPrefByType(pref);
       });
       patterns.unshift("tabmixplus");
-      OS.File.writeAtomic(file.path, patterns.join(""), {encoding: "utf-8", tmpPath: file.path + ".tmp"});
+      OS.File.writeAtomic(file.path, patterns.join(""), { encoding: "utf-8", tmpPath: file.path + ".tmp" });
     }
   }).catch(Tabmix.reportError);
 }
@@ -660,7 +650,7 @@ window.gIncompatiblePane = {
 XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", () => {
   let win = Tabmix.getTopWin();
   return win.document.getElementById("context_pinTab").getAttribute("label") + "/" +
-         win.document.getElementById("context_unpinTab").getAttribute("label");
+    win.document.getElementById("context_unpinTab").getAttribute("label");
 });
 
 ChromeUtils.defineModuleGetter(this, "OS", "resource://gre/modules/osfile.jsm");
@@ -672,9 +662,9 @@ Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
 
 gPrefWindow.onContentLoaded();
 
-function setDialog(){
-  Object.defineProperty(customElements.get('preferences').prototype,'instantApply', {
-    get: _=>document.documentElement.instantApply
+function setDialog() {
+  Object.defineProperty(customElements.get('preferences').prototype, 'instantApply', {
+    get: _ => document.documentElement.instantApply
   });
   customElements.define('prefwindow', class PrefWindowNoInst extends PrefWindow {
     _instantApplyInitialized = true;

@@ -99,3 +99,9 @@ input[type="number"]::-moz-number-spin-down {
   min-height: 11px;
   margin: 0 -2px 0 2px !important;
 }
+
+input:invalid {
+  border: 1px solid red;
+  outline-style: none;
+}
+

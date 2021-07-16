@@ -150,7 +150,7 @@
             <vbox id="multi-rows" class="indent" style="height: 50px;">
               <hbox align="center" id="maxbar">
                 <label value="&maxrow.label;" TSTdisabled="true"/>
-                <html:input id="maxrow" size="3" maxlength="2" preference="pref_maxrow" type="number" min="2"/>
+                <html:input id="maxrow" size="3" maxlength="2" preference="pref_maxrow" type="number" required="" min="2"/>
               </hbox>
               <checkbox_tmp id="pinnedTabScroll" label="&pinnedTabScroll.label;"
                             preference="pref_pinnedTabScroll"/>
@@ -163,7 +163,7 @@
             <hbox align="center" id="clickToScroll.scrollDelay">
               <label value="&scrolldelay.label;" TSTdisabled="true" observes="obs_smoothScroll"/>
               <html:input id="scrollDelay" size="5" maxlength="4" observes="obs_smoothScroll"
-                        preference="pref_scrollDelay" type="number" min="0"/>
+                        preference="pref_scrollDelay" type="number" required="" min="0"/>
               <label value="&milliseconds.label;" class="timelabel" TSTdisabled="true" observes="obs_smoothScroll"/>
             </hbox>
           </html:fieldset>
@@ -231,12 +231,12 @@
               </menulist>
               <hbox id="tabDelayCheck" align="center">
                 <html:input id="tabXDelay" size="5" maxlength="4" preference="pref_tabXDelay"
-                         observes="obs_showTabX" type="number" min="0"/>
+                         observes="obs_showTabX" type="number" required="" min="0"/>
                 <label value="&milliseconds.label;" observes="obs_showTabX" class="timelabel"/>
               </hbox>
               <hbox id="tabWidthBox" align="center">
                 <html:input id="tabXwidth" size="5" maxlength="4" preference="pref_tabClipWidth"
-                         observes="obs_showTabX" type="number" min="40"/>
+                         observes="obs_showTabX" type="number" required="" min="40"/>
                 <label value="&widthPixels.label;" observes="obs_showTabX"/>
               </hbox>
             </hbox>
@@ -248,10 +248,10 @@
             <!-- Tab width -->
             <hbox align="center">
               <label value="&minWidth.label;"/>
-              <html:input id="minWidth" size="4" maxlength="3" preference="pref_minWidth" type="number"
+              <html:input id="minWidth" size="4" maxlength="3" preference="pref_minWidth" type="number" required=""
                        onsynctopreference="return gAppearancePane.userChangedWidth(this);" min="40"/>
               <label value="&widthTo.label;"/>
-              <html:input id="maxWidth" size="5" maxlength="4" preference="pref_maxWidth" type="number"
+              <html:input id="maxWidth" size="5" maxlength="4" preference="pref_maxWidth" type="number" required=""
                        onsynctopreference="return gAppearancePane.userChangedWidth(this);" min="40"/>
               <label value="&widthPixels.label;"/>
             </hbox>
