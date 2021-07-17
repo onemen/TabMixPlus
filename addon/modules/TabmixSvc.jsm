@@ -232,10 +232,6 @@ this.TabmixSvc = {
       // add missing preference to the default branch
       let prefs = Services.prefs.getDefaultBranch("");
 
-      if (TabmixSvc.australis) {
-        prefs.setBoolPref("extensions.tabmix.squaredTabsStyle", false);
-      }
-
       if (!TabmixSvc.isCyberfox) {
         prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
         ChromeUtils.import("chrome://tabmix-resource/content/NewTabURL.jsm", {});
@@ -288,14 +284,6 @@ this.TabmixSvc = {
     }
   },
 
-  isAustralisBgStyle(orient) {
-    if (typeof orient != "string") {
-      throw Components.Exception("orient is not valid", Cr.NS_ERROR_INVALID_ARG);
-    }
-    return TabmixSvc.australis && orient == "horizontal" &&
-      !this.prefBranch.getBoolPref("squaredTabsStyle");
-  },
-
   isFixedGoogleUrl: () => false,
 
   blockedClickingOptions: [],
@@ -310,11 +298,6 @@ this.TabmixSvc = {
     };
   },
 };
-
-// check if australis tab shape is implemented
-XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
-  return Boolean(this.topWin().document.getElementById("tab-curve-clip-path-start"));
-});
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", () => {
   const {Preferences} = ChromeUtils.import("resource://gre/modules/Preferences.jsm");

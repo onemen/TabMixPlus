@@ -917,29 +917,9 @@ var TabmixAllTabs = {
       case "DOMMenuItemInactive":
         this.updateMenuItemInactive(aEvent);
         break;
-      case "scroll":
-        this._popup._updateTabsVisibilityStatus();
-        break;
       case "popupshown":
         this._ensureElementIsVisible(aEvent);
         break;
-    }
-  },
-
-  _updateTabsVisibilityStatus: function TMP__updateTabsVisibilityStatus() {
-    var tabContainer = gBrowser.tabContainer;
-    // We don't want menu item decoration unless there is overflow.
-    if (tabContainer.getAttribute("overflow") != "true")
-      return;
-
-    for (var i = 0; i < this.childNodes.length; i++) {
-      let curTab = this.childNodes[i].tab;
-      if (curTab) {
-        if (Tabmix.tabsUtils.isElementVisible(curTab))
-          this.childNodes[i].setAttribute("tabIsVisible", "true");
-        else
-          this.childNodes[i].removeAttribute("tabIsVisible");
-      }
     }
   },
 
@@ -1031,12 +1011,6 @@ var TabmixAllTabs = {
 
     this.beforeCommonList(popup);
     this.createCommonList(popup, aType);
-
-    gBrowser.tabContainer.arrowScrollbox.addEventListener("scroll", this);
-    this._popup = popup;
-    if (!this._popup._updateTabsVisibilityStatus)
-      this._popup._updateTabsVisibilityStatus = this._updateTabsVisibilityStatus;
-    this._popup._updateTabsVisibilityStatus();
 
     return true;
   },
@@ -1215,15 +1189,12 @@ var TabmixAllTabs = {
     }
 
     gBrowser.tabContainer.removeEventListener("TabAttrModified", this);
-    gBrowser.tabContainer.arrowScrollbox.removeEventListener("scroll", this);
     gBrowser.tabContainer.removeEventListener("TabClose", this);
     popup.removeEventListener("DOMMenuItemActive", this);
     popup.removeEventListener("DOMMenuItemInactive", this);
 
     this.backupLabel = "";
     this._selectedItem = null;
-    popup._updateTabsVisibilityStatus = null;
-    this._popup = null;
   },
 
   updateMenuItemActive: function TMP_updateMenuItemActive(event, tab) {

@@ -416,7 +416,7 @@ Tabmix.tablib = {
         '    layoutData = {pinnedTabWidth: tabs[0].getBoundingClientRect().width};' + $LF +
         '    this._pinnedTabsLayoutCache = layoutData;' + $LF +
         '  }' + $LF +
-        '    let width = TabmixSvc.australis ? 0 : this.arrowScrollbox.scrollboxPaddingStart || 0;' + $LF +
+        '    let width = this.arrowScrollbox.scrollboxPaddingStart || 0;' + $LF +
         '    for (let i = 0; i < numPinned; i++) {' +
         '      let tab = tabs[i];' +
         '      tab.style.setProperty("margin-inline-start", width + "px", "important");' + $LF +

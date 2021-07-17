@@ -41,18 +41,12 @@ Tabmix.beforeDelayedStartup = function() {
     ChromeUtils.import("chrome://tabmix-resource/content/extensions/AddonManager.jsm");
     TMP_SessionStore.setService(1, true);
   }
-
-  // if we call these functions earlier we get this warning:
-  // XUL box for _moz_generated_content_before element contained an inline #text child
-  // by calling getBoundingClientRect
-  Tabmix.getButtonsHeight();
 };
 
 // after TabmixSessionManager and SessionStore initialized
 Tabmix.sessionInitialized = function() {
   if (Tabmix.fixMultibarRowHeight) {
     delete Tabmix._fixMultibarRowHeight;
-    TabmixTabbar._heights = [];
     Tabmix.tabsUtils.updateVerticalTabStrip(true);
   }
 
@@ -79,33 +73,6 @@ Tabmix.sessionInitialized = function() {
   if (this.firstWindowInSession) {
     Tabmix.closedObjectsUtils.toggleRecentlyClosedWindowsButton();
   }
-};
-
-// we call gTMPprefObserver.miscellaneousRules to add some dynamic rules
-// from Tabmix.afterDelayedStartup
-Tabmix.getButtonsHeight = function(setDefault) {
-  if (gBrowser.tabContainer.getAttribute("orient") == "horizontal") {
-    const {toolbar, tabBar, collapsed, tabBarCollapsed, toolbarCollapsed} =
-      Tabmix.tabsUtils.getCollapsedState;
-    let stripIsHidden = TabmixTabbar.hideMode !== 0 && collapsed;
-    if (stripIsHidden) {
-      toolbar.collapsed = false;
-      tabBar.collapsed = false;
-    }
-    this._buttonsHeight = Tabmix.getBoundsWithoutFlushing(Tabmix.visibleTabs.first).height;
-    if (stripIsHidden) {
-      toolbar.collapsed = toolbarCollapsed;
-      tabBar.collapsed = tabBarCollapsed;
-    }
-
-    if (setDefault && !this._buttonsHeight) {
-      this._buttonsHeight = TabmixSvc.australis ? 31 : 24;
-    }
-  } else {
-    this._buttonsHeight = 24;
-  }
-
-  return this._buttonsHeight;
 };
 
 Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
@@ -441,11 +408,6 @@ var TMP_eventListener = {
 
     var tabsToolbar = document.getElementById("TabsToolbar");
 
-    if (TabmixSvc.australis) {
-      let australis = TabmixSvc.isAustralisBgStyle(tabBar.attributes.orient.value);
-      tabBar.setAttribute("tabmix_australis", australis ? "true" : "classic");
-    }
-
     const skin = Services.prefs.getCharPref("extensions.activeThemeID", "");
     if (skin == "classic/1.0") {
       if (TabmixSvc.isMac)
@@ -474,9 +436,6 @@ var TMP_eventListener = {
         tabBar.setAttribute("backgroundrepeat", true);
       }
       switch (skin) {
-        case "Australis":
-          tabBar.setAttribute("tabmix_australis", "true");
-          break;
         case "cfxe": // Chromifox Extreme
         case "cfxec":
           tabBar.setAttribute("tabmix_skin", "cfxec");

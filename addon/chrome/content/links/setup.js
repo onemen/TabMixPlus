@@ -223,9 +223,6 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   }
   TabmixTabbar.scrollButtonsMode = tabscroll;
 
-  // setting flowing to "multibar" in Firefox 57 prevents Tabmix.getButtonsHeight
-  // to get proper height when the window opened by SessionStore._openWindowWithState
-  // with more than one rows of tabs
   if (TabmixSvc.SessionStore._isWindowLoaded(window)) {
     TabmixTabbar.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
   }

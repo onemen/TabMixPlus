@@ -7,7 +7,6 @@
 <!ENTITY showRGB.label "Zobrazit RGB">
 <!ENTITY unreadAfterReload.label "Po opětovném načtení stránky nastavit panel jako nepřečtený">
 <!ENTITY disableBackground.label "Zakázat vlastní barvy pozadí">
-<!ENTITY squaredTabs.label "Použít barvu pozadí na čtvercové panely">
 <!ENTITY otherTabs.label "Ostatní panely">
 <!ENTITY italic.label "Kurzíva">
 <!ENTITY bold.label "Tučně">
