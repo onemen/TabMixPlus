@@ -111,7 +111,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     if (gBrowserInit.tabmix_delayedStartupStarted) {
       Tabmix.beforeDelayedStartup();
     } else {
-      window.addEventListener("MozAfterPaint", Tabmix.beforeDelayedStartup);
+      window.addEventListener("MozAfterPaint", Tabmix.beforeDelayedStartup, {once: true});
     }
 
     // look for installed extensions that are incompatible with tabmix

@@ -450,7 +450,8 @@ var TMP_ClosedTabs = {
       case "click":
         if (event.button === 1) {
           this.restoreTab("original", -2);
-        } else if (event.button === 0 && showSubView) {
+        } else if (event.button === 0 && showSubView &&
+            !TabmixAllTabs.isAfterCtrlClick(event.target)) {
           Tabmix.closedObjectsUtils.showSubView(event);
         }
         break;

@@ -1845,8 +1845,8 @@ gTMPprefObserver = {
     if (Tabmix.isVersion(910)) {
       this.insertRule(
         `:root {
-          --tabmix-button-magin-top: 7px;
-          --tabmix-button-magin-top-compact: 4px;
+          --tabmix-button-magin-top: 3.5px;
+          --tabmix-button-magin-top-compact: 3.5px;
           --tabmix-button-magin-top-proton: 3.5px;
           --tabmix-button-magin-top-proton-compact: 3.5px;
         }`

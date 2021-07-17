@@ -376,6 +376,8 @@ var TMP_eventListener = {
     // url-fixer also prevent the use of eval changes by using closure in the replaced function
     Tabmix.navToolbox.initializeURLBar();
     Tabmix.navToolbox.initializeSearchbar();
+
+    gTMPprefObserver.addDynamicRules();
   },
 
   onWindowOpen: function TMP_EL_onWindowOpen() {
@@ -551,7 +553,6 @@ var TMP_eventListener = {
     document.getElementById("tabmix-menu").hidden = !Tabmix.prefs.getBoolPref("optionsToolMenu");
     document.getElementById("tabmix-historyUndoWindowMenu").hidden = !Tabmix.prefs.getBoolPref("closedWinToolsMenu");
 
-    gTMPprefObserver.addDynamicRules();
     // ##### disable Session Manager #####
     // TabmixSessionManager.updateSettings();
 
