@@ -47,7 +47,7 @@ var gPrefWindow = {
 
     window.gIncompatiblePane.init(docElt);
 
-    window.addEventListener("change", this);
+    window.addEventListener("change", this, true);
     window.addEventListener("beforeaccept", this);
     window.addEventListener("input", this, true);
     window.addEventListener("keypress", this);
