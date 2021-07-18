@@ -5,9 +5,6 @@
 
 **/
 
-/* bug 1379338 remove these styles */
-@import url("chrome://tabmix-os/skin/preferences.css");
-
 /********** preferences ********/
 
 prefwindow,
