@@ -647,7 +647,9 @@ ContentClickInternal = {
     if (node.hasAttribute("href") && node.hasAttribute("role")) {
       const role = node.getAttribute("role");
       if (role == "button" || role == "menu") {
-        return true;
+        // treat this "button" from github as link
+        const isGitHubButton = node.host === "github.com" && node.pathname.includes("/tree/");
+        if (!isGitHubButton) return true;
       }
     }
 
