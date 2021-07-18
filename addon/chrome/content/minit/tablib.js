@@ -641,9 +641,10 @@ Tabmix.tablib = {
       'win.gBrowser.getBrowserForTab(tab);',
       '$&\n' +
       '    if (currentIsBlank && aURI) {\n' +
-      '      let loadflags = aIsExternal ?\n' +
-      '          Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL :\n' +
-      '          Ci.nsIWebNavigation.LOAD_FLAGS_NONE;\n' +
+      '      let loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_NONE;\n' +
+      '      if (aIsExternal) {\n' +
+      '        loadFlags |= Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL;\n' +
+      '      }\n' +
       '      gBrowser.loadURI(aURI.spec, {\n' +
       '        triggeringPrincipal: aTriggeringPrincipal,\n' +
       '        referrerInfo: aReferrerInfo,\n' +
@@ -663,6 +664,7 @@ Tabmix.tablib = {
       '      aWhere = Ci.nsIBrowserDOMWindow.OPEN_NEWTAB;' +
       '  }' +
       '  if (aWhere != Ci.nsIBrowserDOMWindow.OPEN_NEWWINDOW &&' +
+      '      aWhere != Ci.nsIBrowserDOMWindow.OPEN_PRINT_BROWSER &&' +
       '      aWhere != Ci.nsIBrowserDOMWindow.OPEN_NEWTAB) {' +
       '      let isLockTab = Tabmix.whereToOpen(null).lock;' +
       '      if (isLockTab) {' +
