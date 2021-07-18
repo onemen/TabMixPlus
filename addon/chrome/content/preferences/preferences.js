@@ -49,34 +49,10 @@ var gPrefWindow = {
 
     window.addEventListener("change", this);
     window.addEventListener("beforeaccept", this);
-    window.addEventListener("input", this);
+    window.addEventListener("input", this, true);
+    window.addEventListener("keypress", this);
 
     window.document.querySelectorAll('input[type=number]').forEach(item => {
-      item.addEventListener("keypress", i => {
-        if (i.charCode == 0) return;
-        if (!(i.altKey || i.ctrlKey || i.metaKey) &&
-          (!(i.key == '-' &&
-            (i.target.editor.selection.anchorOffset == 0 ||
-              i.target.editor.selection.focusOffset == 0) ||
-            (i.charCode >= 48 && i.charCode <= 57)) ||
-            i.target.editor.textLength > i.target.maxLength ||
-            (i.target.editor.textLength == i.target.maxLength &&
-              i.target.editor.selection.anchorOffset == i.target.editor.selection.focusOffset))) {
-          i.stopPropagation();
-          i.preventDefault();
-        }
-      }, true);
-      item.addEventListener("change", i => {
-        if (!i.target.validity.valid) item.value = item.defaultValue
-      });
-      item.addEventListener("input", i => {
-        if (this.instantApply || !i.target.validity.valid) i.stopPropagation();
-        if (i.target.editor.textLength > i.target.maxLength || (i.target.validity.badInput &&
-          i.target.editor.selection.anchorNode.wholeText != "-"))
-          item.value = item.defaultValue;
-        else if (i.target.validity.valid) item.defaultValue = item.value;
-        this.updateInputNumberDisabled(item);
-      });
       this.updateInputNumberDisabled(item);
       item.defaultValue = item.value;
     });
@@ -128,6 +104,9 @@ var gPrefWindow = {
     const item = aEvent.target;
     switch (aEvent.type) {
       case "change":
+        if (item.type === "number") {
+          if (!item.validity.valid) item.value = item.defaultValue;
+        }
         if (item.localName != "preference") {
           return;
         }
@@ -146,7 +125,25 @@ var gPrefWindow = {
         break;
       case "input":
         if (item.type === "number") {
+          if (!item.validity.valid) {
+            aEvent.stopPropagation();
+            aEvent.preventDefault();
+          }
+          if (item.editor.textLength > item.maxLength || item.validity.badInput)
+            item.value = item.defaultValue;
+          else if (item.validity.valid) item.defaultValue = item.value;
           this.updateInputNumberDisabled(item);
+        }
+        break;
+      case "keypress":
+        if (item.type === "number") {
+          if (aEvent.charCode == 0 || aEvent.altKey || aEvent.ctrlKey || aEvent.metaKey) return;
+          if (!/\d/.test(aEvent.key) ||
+            (item.editor.textLength == item.maxLength &&
+              item.editor.selection.anchorOffset == item.editor.selection.focusOffset)) {
+            aEvent.stopPropagation();
+            aEvent.preventDefault();
+          }
         }
         break;
     }

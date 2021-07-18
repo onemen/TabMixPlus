@@ -85,6 +85,10 @@
 
   /* ::::: spinbuttons ::::: */
 
+input {
+  font:-moz-field;  
+}
+
 input[type="number"][increaseDisabled]::-moz-number-spin-up,
 input[type="number"][decreaseDisabled]::-moz-number-spin-down {
   opacity: 0.5;
