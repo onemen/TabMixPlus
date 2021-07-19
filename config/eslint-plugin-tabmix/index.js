@@ -38,6 +38,7 @@ module.exports = {
         gAppearancePane: false,
         getFormattedKey: false,
         gMenuPane: false,
+        gNumberInput: false,
         gPrefWindow: false,
         MozXULElement: false,
         Services: false,

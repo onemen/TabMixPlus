@@ -3,9 +3,9 @@
 
 @namespace html url("http://www.w3.org/1999/xhtml");
 
-input[type="number"][increaseDisabled]::-moz-number-spin-up,
-input[type="number"][decreaseDisabled]::-moz-number-spin-down {
-  opacity: 0.5;
+input[type="number"]:not(:disabled)[increaseDisabled]::-moz-number-spin-up,
+input[type="number"]:not(:disabled)[decreaseDisabled]::-moz-number-spin-down {
+  opacity: 0.6;
 }
 
 input[type="number"] {

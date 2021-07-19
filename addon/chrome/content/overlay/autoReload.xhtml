@@ -23,26 +23,13 @@
     let f = new Function("event", t.getAttribute("ondialogaccept"));
     t.addEventListener("dialogaccept", event => f.call(t, event));
     ]]></script>
+  <script type="application/javascript" src="chrome://tabmixplus/content/preferences/numberinput.js"/>
   <script type="application/javascript" src="chrome://tabmixplus/content/overlay/autoReload.js"/>
 
   <html:fieldset orient="horizontal" align="center" style="display: flex; justify-content: center; align-items: center;">
     <html:legend>&reloadtime.label1;</html:legend>
-    <!-- <menulist id="autoreload_minutes" editable="true"
-            <html:input list="min" type="number" min="0" size="3"/>
-             oncommand="disable_OK();"
-             oninput="onInput(this);">
-             <menupopup>
-                  <menuitem value="0" label="0" />
-                  <menuitem value="1" label="1" />
-                  <menuitem value="5" label="5"/>
-                  <menuitem value="10" label="10"/>
-                  <menuitem value="15" label="15" />
-                  <menuitem value="20" label="20"/>
-                  <menuitem value="30" label="30"/>
-             </menupopup>
-    </menulist> -->
     <div style="position: relative;">
-      <html:input id="autoreload_minutes" type="number" min="0" size="4"
+      <html:input id="autoreload_minutes" type="number" required="required" min="0" size="4" maxlength="4"
         style="position: relative;z-index: 2;padding-right: 1px;margin: 0 16px 0 0;"
         oncommand="disable_OK();"
         oninput="onInput(this);"/>
@@ -60,19 +47,8 @@
     </div>
     <label control="autoreload_minutes" value="&minutes.label;"/>
 
-    <!-- <menulist id="autoreload_seconds" editable="true"
-             oncommand="disable_OK();"
-             oninput="onInput(this);">
-             <menupopup>
-                  <menuitem value="0" label="0" />
-                  <menuitem value="10" label="10" />
-                  <menuitem value="20" label="20"/>
-                  <menuitem value="30" label="30"/>
-                  <menuitem value="45" label="45" />
-             </menupopup>
-    </menulist> -->
     <div style="position: relative;">
-      <html:input list="sec" id="autoreload_seconds" type="number" min="0" max="59" size="3"
+      <html:input list="sec" id="autoreload_seconds" type="number" required="required" min="0" max="59" size="3" maxlength="3"
         style="position: relative;z-index: 2;padding-right: 1px;margin: 0 16px 0 0;"
         oncommand="disable_OK();"
         oninput="onInput(this);"/>

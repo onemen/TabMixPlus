@@ -1,3 +1,4 @@
+/* global gNumberInput */
 /* exported load, accept, onInput */
 "use strict";
 
@@ -9,6 +10,8 @@ function load() {
   document.getElementById("autoreload_minutes").value = Math.floor(customReloadTime / 60);
   document.getElementById("autoreload_seconds").value = customReloadTime % 60;
   disable_OK();
+
+  gNumberInput.init();
 }
 
 function accept() {

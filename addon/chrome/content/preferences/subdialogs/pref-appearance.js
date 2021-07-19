@@ -16,6 +16,8 @@ const tabstyles = {
     const extra = document.documentElement.getButton("extra2");
     extra.label = $("hide-RGB").value;
     extra.classList.add("text-link");
+
+    gNumberInput.init(true);
   },
 
   save() {
