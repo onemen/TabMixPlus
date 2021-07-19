@@ -7,7 +7,6 @@
 <!ENTITY showRGB.label "RGB'yi göster">
 <!ENTITY unreadAfterReload.label "yeniden yüklenince okunmamış olarak göster">
 <!ENTITY disableBackground.label "Özel arka plan renklerini devre dışı bırak">
-<!ENTITY squaredTabs.label "Köşeli sekmeler için arka plan rengini uygula">
 <!ENTITY otherTabs.label "Diğer sekmeler">
 <!ENTITY italic.label "İtalik">
 <!ENTITY bold.label "Kalın">

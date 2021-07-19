@@ -17,10 +17,6 @@ var gAppearancePane = {
       Tabmix.setItem("smoothScroll", "disabled", true);
     }
 
-    if (!TabmixSvc.australis) {
-      Tabmix.setItem("squaredTabs", "hidden", true);
-    }
-
     let treeStyleTab = browserWindow.Tabmix.extensions.treeStyleTab;
     let disableButtonOnLefSide = !browserWindow.Tabmix.defaultCloseButtons || treeStyleTab;
     let comment = $("onLeftDisabled");

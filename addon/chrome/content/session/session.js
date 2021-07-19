@@ -1281,6 +1281,9 @@ TabmixSessionManager = {
   },
 
   sessionUtil(action, what, sessionPath) {
+    if (this.disableSessionManager) {
+      return;
+    }
     // action = save , replace
     // type = thiswindow , allwindows
     if (Tabmix.isSingleBrowserWindow)
@@ -3235,7 +3238,6 @@ TabmixSessionManager = {
     if (groups && typeof groups.activeGroupId != "undefined")
       activeGroupId = groups.activeGroupId;
     let tabs = [], numVisibleTabs = 0, firstVisibleTab = -1;
-    let needToReload = this.prefBranch.getBoolPref("restore.reloadall");
     for (let t = 0; t < tabsData.length; t++) {
       let data = tabsData[t];
       let tab = gBrowser.tabs[newIndex + t];
@@ -3274,12 +3276,6 @@ TabmixSessionManager = {
         numVisibleTabs++;
         if (!restoreSelect && firstVisibleTab < 0)
           firstVisibleTab = newIndex + t;
-      }
-
-      if (needToReload) {
-        let url = TMP_SessionStore.getActiveEntryData(data).url || "";
-        if (!url.startsWith("file:"))
-          tab.setAttribute("_tabmix_load_bypass_cache", true);
       }
     }
 

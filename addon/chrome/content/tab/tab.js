@@ -5,9 +5,6 @@ var gTMPprefObserver, TabmixProgressListener;
 // code based on Tab X 0.5 enhanced version by Morac, modified by Hemiola SUN, later CPU & onemen
 var TabmixTabbar = {
   visibleRows: 1,
-  _windowStyle: {exist: false, value: null},
-  _heights: [],
-  _rowHeight: null,
   hideMode: 0,
   position: 0,
   SCROLL_BUTTONS_HIDDEN: 0,
@@ -200,10 +197,6 @@ var TabmixTabbar = {
       if (tabBar.hasAttribute("multibar")) {
         this.setFirstTabInRow();
         Tabmix.tabsUtils.updateVerticalTabStrip();
-      } else if (TabmixSvc.australis && !this.widthFitTitle) {
-        // with Australis overflow not always trigger when tab changed width
-        tabBar.arrowScrollbox._enterVerticalMode();
-        this.setFirstTabInRow();
       }
     } else {
       Tabmix.tabsUtils.adjustNewtabButtonVisibility();
@@ -254,17 +247,11 @@ var TabmixTabbar = {
     let tabRow, topY;
 
     let numPinnedTabs = gBrowser._numPinnedTabs;
-    let isSpecial = TabmixSvc.australis &&
-        this.scrollButtonsMode != this.SCROLL_BUTTONS_MULTIROW &&
-        numPinnedTabs > 0;
-    // Firefox don't have beforeselected-visible attribute (bug 585558 didn't
-    // include it), we add tabmix-beforeselected-visible here and use it for
-    // Firefox with australis UI
-    let updateAtt = function(tab, type, attrib, visible, prefix) {
+    let updateAtt = function(tab, type, attrib, visible) {
       // special case is when scrollButtonsMode is in one row and
       // selected or hovered tab is last pinned or first non-pinned tab
       let isSpecialTab = function() {
-        if (!tab || !isSpecial)
+        if (!tab)
           return false;
         if (/^before/.test(attrib))
           return tab._tPos == numPinnedTabs - 1 ? "before" : false;
@@ -279,17 +266,16 @@ var TabmixTabbar = {
       let removed = "tabmix-removed-" + attrib;
       let oldTab = Tabmix.tabsUtils._tabmixPositionalTabs[type];
       if (oldTab && tab != oldTab) {
-        oldTab.removeAttribute("tabmix-" + attrib + "-visible");
         oldTab.removeAttribute(removed);
       }
       Tabmix.tabsUtils._tabmixPositionalTabs[type] = tab;
-      if (tab && (TabmixSvc.australis && attrib == "beforeselected" ||
-                  multibar || tab.hasAttribute(removed) || isSpecialTab())) {
+      if (tab && (multibar || tab.hasAttribute(removed) || isSpecialTab())) {
         let sameRow = multibar ? tabRow == Tabmix.tabsUtils.getTabRowNumber(tab, topY) || null : true;
         Tabmix.setItem(tab, removed, !sameRow || null);
         Tabmix.setItem(tab, attrib, getAttVal(sameRow, true));
-        if (visible)
-          Tabmix.setItem(tab, prefix + attrib + "-visible", getAttVal(sameRow));
+        if (visible) {
+          Tabmix.setItem(tab, attrib + "-visible", getAttVal(sameRow));
+        }
       }
     };
 
@@ -321,8 +307,8 @@ var TabmixTabbar = {
       topY = topY || Tabmix.tabsUtils.topTabY;
       tabRow = Tabmix.tabsUtils.getTabRowNumber(selected, topY);
     }
-    updateAtt(prev, "beforeSelectedTab", "beforeselected", TabmixSvc.australis, "tabmix-");
-    updateAtt(next, "afterSelectedTab", "afterselected", true, "");
+    updateAtt(prev, "beforeSelectedTab", "beforeselected", true);
+    updateAtt(next, "afterSelectedTab", "afterselected", true);
   },
 
   inSameRow: function TMP_inSameRow(tab1, tab2) {
@@ -494,9 +480,9 @@ Tabmix.tabsUtils = {
             Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") &&
             !TabmixSvc.isMac && aEvent.target.localName === "arrowscrollbox") {
           let displayAppButton = !(document.getElementById("titlebar")).hidden;
-          if (TabsInTitlebar.enabled ||
-              (displayAppButton && this.tabBar.parentNode._dragBindingAlive))
+          if (TabsInTitlebar.enabled || displayAppButton) {
             return;
+          }
         }
         TabmixTabClickOptions.onTabBarDblClick(aEvent);
         break;
@@ -633,7 +619,7 @@ Tabmix.tabsUtils = {
     if (!this.overflow) {
       // prevent new-tab-button on the right from flickering when new tabs animate is on.
       if (this.disAllowNewtabbutton &&
-          TabmixSvc.tabAnimationsEnabled) {
+          window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
         // after 250ms new tab is fully opened
         if (!this.adjustNewtabButtonTimeout) {
           let timeout = 250;
@@ -1099,7 +1085,6 @@ gTMPprefObserver = {
       if (condition)
         this.OBSERVING.push(pref);
     };
-    addObserver("layout.css.devPixelsPerPx", TabmixSvc.australis);
     addObserver(TabmixSvc.sortByRecentlyUsed, true);
     addObserver("browser.proton.enabled", Tabmix.isVersion(890));
 
@@ -1650,54 +1635,25 @@ gTMPprefObserver = {
   },
 
   miscellaneousRules: function TMP_PO_miscellaneousRules() {
-    // make sure we have valid height for the buttons. with some extensions
-    // combination it is possible to get zero height, if Tabmix.getButtonsHeight
-    // called to early
-    if (!Tabmix._buttonsHeight) {
-      Tabmix.getButtonsHeight(true);
-    }
-
-    let skin;
-    let newRule;
-
-    delete Tabmix._buttonsHeight;
-
     // we don't show icons on menu on Mac OS X
     if (TabmixSvc.isMac)
       return;
 
     // new tab button on tab context menu
-    newRule = '.tabmix-newtab-menu-icon {' +
+    let newRule = '.tabmix-newtab-menu-icon {' +
               'list-style-image: url("#URL");' +
               '-moz-image-region: #REGION;}';
     let url = "chrome://browser/skin/Toolbar.png", region;
-    skin = Services.prefs.getCharPref("extensions.activeThemeID", "");
+    const skin = Services.prefs.getCharPref("extensions.activeThemeID", "");
     if (skin == "classic/1.0") {
       if (TabmixSvc.isLinux)
-        region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :
-          "rect(0px, 96px, 24px, 72px)";
+        region = "rect(0px, 96px, 24px, 72px)";
       else
-        region = TabmixSvc.australis ? "rect(0px, 360px, 18px, 342px)" :
-          "rect(0pt, 180px, 18px, 162px)";
+        region = "rect(0pt, 180px, 18px, 162px)";
     } else {
       [url, region] = ["newtab.png", "auto"];
     }
     this.insertRule(newRule.replace("#URL", url).replace("#REGION", region));
-
-    if (!TabmixSvc.australis)
-      return;
-
-    // Workaround bug 943308 - tab-background not fully overlap the tab curves
-    // when layout.css.devPixelsPerPx is not 1.
-    let tab = gBrowser.selectedTab;
-    let visuallyselected = tab.hasAttribute("visuallyselected");
-    if (!visuallyselected) {
-      tab.setAttribute("visuallyselected", true);
-    }
-
-    if (!visuallyselected) {
-      tab.removeAttribute("visuallyselected");
-    }
   },
 
   addDynamicRules() {
@@ -1845,8 +1801,8 @@ gTMPprefObserver = {
     if (Tabmix.isVersion(910)) {
       this.insertRule(
         `:root {
-          --tabmix-button-magin-top: 7px;
-          --tabmix-button-magin-top-compact: 4px;
+          --tabmix-button-magin-top: 3.5px;
+          --tabmix-button-magin-top-compact: 3.5px;
           --tabmix-button-magin-top-proton: 3.5px;
           --tabmix-button-magin-top-proton-compact: 3.5px;
         }`
@@ -1976,9 +1932,6 @@ gTMPprefObserver = {
         attribValue.push("text");
       if (prefValues.bg && !Tabmix.prefs.getBoolPref("disableBackground")) {
         attribValue.push("bg");
-        if (TabmixSvc.isAustralisBgStyle(gBrowser.tabContainer.attributes.orient.value)) {
-          attribValue.push("aus");
-        }
       }
       attribValue = attribValue.join(" ");
     }
@@ -2654,11 +2607,6 @@ TabmixProgressListener = {
     onStateChange: function TMP_onStateChange(aBrowser, aWebProgress, aRequest, aStateFlags, aStatus) {
       let tab = this.mTabBrowser.getTabForBrowser(aBrowser);
       const nsIWebProgressListener = Ci.nsIWebProgressListener;
-      if (tab.hasAttribute("_tabmix_load_bypass_cache") &&
-          (aStateFlags & nsIWebProgressListener.STATE_START)) {
-        tab.removeAttribute("_tabmix_load_bypass_cache");
-        aRequest.loadFlags |= aRequest.LOAD_BYPASS_CACHE;
-      }
       if (aStateFlags & nsIWebProgressListener.STATE_START &&
           aStateFlags & nsIWebProgressListener.STATE_IS_NETWORK) {
         let url = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;

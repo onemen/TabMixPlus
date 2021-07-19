@@ -7,7 +7,6 @@
 <!ENTITY showRGB.label "显示 RGB">
 <!ENTITY unreadAfterReload.label "重新载入标签页后将其设为未读">
 <!ENTITY disableBackground.label "禁用自定义的背景颜色">
-<!ENTITY squaredTabs.label "背景颜色应用到方形标签页">
 <!ENTITY otherTabs.label "其他标签页">
 <!ENTITY italic.label "斜体">
 <!ENTITY bold.label "加粗">

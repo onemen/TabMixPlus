@@ -8,15 +8,6 @@
 
 **/
 
-#main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
-    #tabbrowser-tabs[tabmix_unloadedStyle~="aus"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unloaded"] > .tab-stack > .tab-background > .tab-background-middle,
-#main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
-    #tabbrowser-tabs[tabmix_unreadStyle~="aus"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected="true"])[tabmix_tabState="unread"] > .tab-stack > .tab-background > .tab-background-middle,
-#main-window[tabsintitlebar][sizemode=normal] #toolbar-menubar[autohide="true"][inactive] + #TabsToolbar
-    #tabbrowser-tabs[tabmix_otherStyle~="aus"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected="true"]):not([tabmix_tabState]) > .tab-stack > .tab-background > .tab-background-middle {
-  clip-path: none !important;
-}
-
 /* Override Windows 10 rules */
 @media not all and (-moz-os-version: windows-xp) {
   @media not all and (-moz-os-version: windows-vista) {
@@ -56,7 +47,7 @@
 }
 
 /* for Firefox 57 style */
-#tabbrowser-tabs:not([tabmix_australis="true"]):not([treestyletab-mode="vertical"])
+#tabbrowser-tabs:not([treestyletab-mode="vertical"])
     > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
   margin: 2px;
 }

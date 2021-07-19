@@ -6,6 +6,7 @@ const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
+const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
 ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
@@ -14,9 +15,9 @@ var KeyConfig;
 this.Shortcuts = {
   keys: {
     newTab: {id: "key_newNavigatorTab", default: "T accel"},
-    dupTab: {default: "T accel,alt"},
+    dupTab: {id: "key_tm_dupTab", useInMenu: true, default: "F #modifiers", command: 3},
     dupTabToWin: {command: 14},
-    detachTab: {default: "N accel,alt"},
+    detachTab: {id: "key_tm_detachTab", useInMenu: true, default: "V #modifiers", command: 27},
     togglePinTab: {command: 31},
     protecttab: {command: 5},
     locktab: {command: 6},
@@ -25,7 +26,7 @@ this.Shortcuts = {
     copyTabUrl: {command: 28},
     pasteTabUrl: {command: 29},
     selectMerge: {command: 22},
-    mergeWin: {default: "U accel,shift"},
+    mergeWin: {id: "key_tm_mergeWin", useInMenu: true, default: "U #modifiers", command: 23},
     addBookmark: {id: "addBookmarkAsKb", default: "D accel"},
     bookmarkAllTabs: {id: "bookmarkAllTabsKb", default: "D accel,shift"},
     reload: {id: "key_reload", default: "R accel"},
@@ -41,7 +42,6 @@ this.Shortcuts = {
     removeother: {command: 8},
     removeleft: {command: 17},
     removeright: {command: 18},
-    undoClose: {default: "VK_F12 accel"},
     undoCloseTab: {id: "key_undoCloseTab", default: "T accel,shift"},
     clearClosedTabs: {
       command() {
@@ -49,11 +49,37 @@ this.Shortcuts = {
       }
     },
     ucatab: {command: 13},
-    saveWindow: {id: "key_tm-sm-saveone", default: "VK_F1 accel", sessionKey: true},
-    saveSession: {id: "key_tm-sm-saveall", default: "VK_F9 accel", sessionKey: true},
+    saveWindow: {
+      id: "key_tm_sm_saveone",
+      useInMenu: true,
+      default: "VK_F1 accel",
+      sessionKey: true,
+      command: "TabmixSessionUtils:SaveThisWindow"
+    },
+    saveSession: {
+      id: "key_tm_sm_saveone",
+      useInMenu: true,
+      default: "VK_F9 accel",
+      sessionKey: true,
+      command: "TabmixSessionUtils:SaveAllWindow"
+    },
     switchToLast: {command: 32},
-    slideShow: {id: "key_tm_slideShow", default: "d&VK_F8"},
-    toggleFLST: {id: "key_tm_toggleFLST", default: "d&VK_F9"}
+    slideShow: {
+      id: "key_tm_slideShow",
+      // disabled by default
+      default: "d&VK_F8",
+      command() {
+        this.Tabmix.flst.toggleSlideshow();
+      }
+    },
+    toggleFLST: {
+      id: "key_tm_toggleFLST",
+      // disabled by default
+      default: "d&VK_F9",
+      command() {
+        this.Tabmix.flst.toggle();
+      }
+    }
   },
 
   get prefs() {
@@ -75,17 +101,15 @@ this.Shortcuts = {
     this.KeyboardEvent = Object.keys(aWindow.KeyboardEvent);
 
     // update keys initial value and label
-    // get our key labels from shortcutsLabels.xml
     let $ = id => id && aWindow.document.getElementById(id);
     let container = $("TabsToolbar");
-    // if (container) {
-    //   let box = aWindow.document.createElement("vbox");
-    //   box.setAttribute("shortcutsLabels", true);
-    //   container.appendChild(box);
-    // }
     let box = aWindow.MozXULElement.parseXULToFragment(`
       <div hidden="true"
+        dupTab="&duplicateTabMenu.label;"
+        dupTab_key="&tab.key; #modifiers"
         dupTabToWin="&clicktab.duplicatetabw;"
+        detachTab="&detachTab.label;"
+        detachTab_key="&window.key; #modifiers"
         protecttab="&clicktab.protecttab;"
         locktab="&clicktab.locktab;"
         freezetab="&clicktab.freezetab;"
@@ -93,6 +117,8 @@ this.Shortcuts = {
         copyTabUrl="&clicktab.copyTabUrl;"
         pasteTabUrl="&clicktab.copyUrlFromClipboard;"
         selectMerge="&clicktab.selectMerge;"
+        mergeWin="&mergeContext.label;"
+        mergeWin_key="&merge.key; #modifiers"
         reload="&clicktab.reloadtab;"
         reloadtabs="&clicktab.reloadtabs;"
         reloadothertabs="&clicktab.reloadothertabs;"
@@ -104,24 +130,37 @@ this.Shortcuts = {
         removeother="&clicktab.removeother;"
         removeleft="&clicktab.removetoLeft;"
         removeright="&clicktab.removetoRight;"
-        undoClose="&clicktab.uctab;"
         ucatab="&clicktab.ucatab;"
+        saveWindow="&saveWindow.label;"
+        saveSession="&saveAllWindows.label;"
         switchToLast="&shortcuts.switchToLast;"
+        slideShow="&shortcuts.slideshow;"
+        toggleFLST="&shortcuts.toggleFLST;"
       />
-      `, ["chrome://tabmixplus/locale/pref-tabmix.dtd", "chrome://tabmixplus/locale/shortcuts.dtd"])
-        .childNodes[0];
+      `, [
+      "chrome://tabmixplus/locale/tabmix.dtd",
+      "chrome://tabmixplus/locale/pref-tabmix.dtd",
+      "chrome://tabmixplus/locale/shortcuts.dtd"
+    ]).childNodes[0];
     for (let att of box.attributes) {
       if (this.keys[att.name]) {
         this.keys[att.name].label = att.value;
+      } else if (att.name.endsWith("_key")) {
+        this.keys[att.name.split("_")[0]].default = att.value;
       }
     }
 
+    const isMac = AppConstants.platform == "macosx";
+    // Common modifier shared by most key shortcuts
+    const platformModifiers = isMac ? "accel,alt" : "accel,shift";
+
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
-      // get default value for all keys
+      let tabmixKey = keyData.id?.startsWith("key_tm");
+      // get default value for build-in keys
       // default can be different between languages
-      if (keyData.default) {
-        const elm = $(keyData.id || "key_tm_" + key);
+      if (keyData.default && !tabmixKey) {
+        const elm = $(keyData.id);
         if (elm) {
           const modifiers = elm.getAttribute("modifiers");
           const key_ = elm.getAttribute("key");
@@ -130,16 +169,41 @@ this.Shortcuts = {
           const newDefault = disabled + (key_ || keycode).toUpperCase() +
               (modifiers ? " " + modifiers.replace(/\s/g, "") : "");
           keyData.default = newDefault;
+          if (elm.hasAttribute("reserved")) {
+            keyData.reserved = true;
+          }
         }
+      } else if (tabmixKey) {
+        keyData.default = keyData.default.replace("#modifiers", platformModifiers);
       }
       keyData.value = keyData.default || "";
       if (!container && !key.id) {
         keyData.label = "tabmix_key_" + key;
       }
     }
-    this.keys.togglePinTab.label =
-        $("context_pinTab").getAttribute("label") + "/" +
-        $("context_unpinTab").getAttribute("label");
+
+    // Firefox load lables from tabContextMenu.ftl lazily
+    const contextMutate = aMutations => {
+      for (let mutation of aMutations) {
+        if (mutation.attributeName == "label" &&
+            $("context_pinTab").hasAttribute("label") &&
+            $("context_unpinTab").hasAttribute("label")) {
+          const label = $("context_pinTab").getAttribute("label") + "/" +
+              $("context_unpinTab").getAttribute("label");
+
+          this.keys.togglePinTab.label = label;
+          const keyItem = aWindow.document.getElementById("key_tm_togglePinTab");
+          keyItem?.setAttribute("label", label);
+
+          // eslint-disable-next-line no-use-before-define
+          Observer.disconnect();
+          return;
+        }
+      }
+    };
+    let Observer = new aWindow.MutationObserver(contextMutate);
+    Observer.observe($("tabContextMenu"), {subtree: true, attributeFilter: ["label"]});
+
     this.keys.clearClosedTabs.label =
         TabmixSvc.getString("undoclosetab.clear.label");
 
@@ -217,7 +281,7 @@ this.Shortcuts = {
       let command = this.keys[aKey._id].command;
       if (typeof command == "function") {
         command.apply(win, [win.gBrowser.selectedTab]);
-      } else {
+      } else if (typeof command !== "string") {
         win.TabmixTabClickOptions.doCommand(command, win.gBrowser.selectedTab);
       }
     } catch (ex) {
@@ -285,16 +349,21 @@ this.Shortcuts = {
       else if (keyItem.parentNode != keyset)
         keyset.appendChild(keyItem);
     } else {
-      // don't add disabled key
-      if (!keyset || disabled)
+      // always add tabmix key that is in use by menu
+      if (!keyset || (disabled && !aKeyData.useInMenu)) {
         return;
+      }
       keyItem = document.createElementNS(NS_XUL, "key");
       keyItem.setAttribute("id", id);
       keyItem._id = aKey;
       keyset.appendChild(keyItem);
       keyItem.setAttribute("label", aKeyData.label);
-      aWindow.Tabmix.setItem(keyItem, "oncommand", "void(0);");
-      keyItem.addEventListener("command", this, true);
+      if (typeof aKeyData.command === "string") {
+        aWindow.Tabmix.setItem(keyItem, "command", aKeyData.command);
+      } else {
+        aWindow.Tabmix.setItem(keyItem, "oncommand", "void(0);");
+        keyItem.addEventListener("command", this, true);
+      }
     }
 
     for (let att of Object.keys(keyAtt)) {
@@ -330,10 +399,11 @@ this.Shortcuts = {
             disableSessionKeys != keyData.blocked);
       if (keyData.sessionKey)
         keyData.blocked = disableSessionKeys;
-      // on start report disabled by default shortcut as changed so _updateKey
-      // can move these shortcuts to removedShortcuts
-      if (currentValue != newValue || updateBlockState ||
-          onOpen && /^d&/.test(_default)) {
+      // on start report all tabmix keys and disabled by default shortcut as
+      // changed so _updateKey can move these shortcuts to removedShortcuts
+      if (!keyData.reserved &&
+          (onOpen && keyData.id?.startsWith("key_tm") || currentValue != newValue ||
+          updateBlockState || onOpen && /^d&/.test(_default))) {
         keyData.value = newValue;
         changedKeys[key] = keyData;
       }

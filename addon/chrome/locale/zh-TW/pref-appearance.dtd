@@ -7,7 +7,6 @@
 <!ENTITY showRGB.label "顯示 RGB">
 <!ENTITY unreadAfterReload.label "重新載入後將分頁設定為未讀取">
 <!ENTITY disableBackground.label "停用自定的背景顏色">
-<!ENTITY squaredTabs.label "將背景顏色套用到方形分頁標籤">
 <!ENTITY otherTabs.label "其他分頁">
 <!ENTITY italic.label "斜體">
 <!ENTITY bold.label "粗體">

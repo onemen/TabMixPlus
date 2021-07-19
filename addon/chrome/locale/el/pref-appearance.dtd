@@ -7,7 +7,6 @@
 <!ENTITY showRGB.label "Προβολή RGB">
 <!ENTITY unreadAfterReload.label "Ορισμός καρτέλας ως μη αναγνωσμένης μετά την ανανέωση">
 <!ENTITY disableBackground.label "Disable custom background colors">
-<!ENTITY squaredTabs.label "Εφαρμογή χρώματος παρασκηνίου σε τετραγωνισμένες καρτέλες">
 <!ENTITY otherTabs.label "Άλλες καρτέλες">
 <!ENTITY italic.label "Πλάγια">
 <!ENTITY bold.label "Έντονα">

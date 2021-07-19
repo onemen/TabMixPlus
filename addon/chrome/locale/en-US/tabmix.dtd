@@ -106,8 +106,8 @@
 <!ENTITY sm.context.startup.key "P">
 <!ENTITY sm.context.details "Show Counters, Date and Time in Session Menu">
 <!ENTITY sm.context.details.key "C">
-<!ENTITY tab.key "T">
-<!ENTITY window.key "N">
+<!ENTITY tab.key "F">
+<!ENTITY window.key "V">
 <!ENTITY merge.key "U">
 <!ENTITY sortedTabs.label "Sorted Tabs">
 <!ENTITY sortedTabs.tooltip "Check to show the list sorted alphabetically">

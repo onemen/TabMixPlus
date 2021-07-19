@@ -1425,10 +1425,6 @@ Tabmix.navToolbox = {
         scrollBox.ensureElementIsVisible(gBrowser._selectedTab.mCorrespondingMenuitem);
       };
       alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
-
-      // allTabsMenu-allTabsView fix visibility for multi-row
-      Tabmix.setNewFunction(alltabsPopup, "_updateTabsVisibilityStatus",
-        TabmixAllTabs._updateTabsVisibilityStatus);
     }
   },
 

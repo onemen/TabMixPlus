@@ -7,7 +7,6 @@
 <!ENTITY showRGB.label "Mostra RGB">
 <!ENTITY unreadAfterReload.label "marca les pestanyes com a pendents de llegir en tornar a carregar">
 <!ENTITY disableBackground.label "Disable custom background colors">
-<!ENTITY squaredTabs.label "Aplica el color de fons en les pestanyes quadrades">
 <!ENTITY otherTabs.label "Altres pestanyes">
 <!ENTITY italic.label "Cursiva">
 <!ENTITY bold.label "Negreta">

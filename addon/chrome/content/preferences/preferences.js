@@ -375,16 +375,13 @@ XPCOMUtils.defineLazyGetter(this, "gPreferenceList", () => {
     "browser.sessionstore.postdata", "browser.sessionstore.privacy_level",
     "browser.sessionstore.restore_on_demand",
     "browser.sessionstore.resume_from_crash", "browser.startup.page",
-    "browser.tabs.animate", "browser.tabs.closeWindowWithLastTab",
+    "browser.tabs.closeWindowWithLastTab",
     "browser.tabs.insertRelatedAfterCurrent", "browser.tabs.loadBookmarksInBackground",
     "browser.tabs.loadDivertedInBackground", "browser.tabs.loadInBackground",
     "browser.tabs.tabClipWidth", "browser.tabs.tabMaxWidth", "browser.tabs.tabMinWidth",
     "browser.tabs.warnOnClose", "browser.warnOnQuit",
     "toolkit.scrollbox.clickToScroll.scrollDelay", "toolkit.scrollbox.smoothScroll"
   ];
-
-  const index = otherPrefs.indexOf("browser.tabs.animate");
-  otherPrefs.splice(index, 1);
 
   let prefs = Services.prefs.getDefaultBranch("");
   let tabmixPrefs = Services.prefs.getChildList("extensions.tabmix.").sort();

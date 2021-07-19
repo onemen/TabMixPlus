@@ -111,7 +111,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     if (gBrowserInit.tabmix_delayedStartupStarted) {
       Tabmix.beforeDelayedStartup();
     } else {
-      window.addEventListener("MozAfterPaint", Tabmix.beforeDelayedStartup);
+      window.addEventListener("MozAfterPaint", Tabmix.beforeDelayedStartup, {once: true});
     }
 
     // look for installed extensions that are incompatible with tabmix
@@ -134,6 +134,11 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   if (typeof tabBrowser == "undefined")
     tabBrowser = gBrowser || window._gBrowser;
+
+  // we need to add our keys before browser.xhtml loads our overlay,
+  // and look for our Shortcuts
+  const {Shortcuts} = ChromeUtils.import("chrome://tabmix-resource/content/Shortcuts.jsm");
+  Shortcuts.onWindowOpen(window);
 
   // return true if all tabs in the window are blank
   tabBrowser.isBlankWindow = function() {
@@ -218,9 +223,6 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   }
   TabmixTabbar.scrollButtonsMode = tabscroll;
 
-  // setting flowing to "multibar" in Firefox 57 prevents Tabmix.getButtonsHeight
-  // to get proper height when the window opened by SessionStore._openWindowWithState
-  // with more than one rows of tabs
   if (TabmixSvc.SessionStore._isWindowLoaded(window)) {
     TabmixTabbar.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
   }

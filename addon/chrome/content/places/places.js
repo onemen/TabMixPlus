@@ -223,7 +223,7 @@ var TMP_Places = {
     var tabPos, index;
     var multiple = bmGroup.length > 1;
     let tabs = [], tabsData = [];
-    let savePrincipal = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
+    let savePrincipal = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
     for (i = 0; i < bmGroup.length; i++) {
       let url = bmGroup[i];
       if (i < reuseTabs.length) {
@@ -261,12 +261,9 @@ var TMP_Places = {
         tabs.push(aTab);
         let entry = {url, title: aTab.label};
         if (savePrincipal) {
-          entry.triggeringPrincipal_base64 = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
+          entry.triggeringPrincipal_base64 = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
         }
         tabsData.push({entries: [entry], index: 0});
-        if (!url.startsWith("file:") && url != "about:blank") {
-          aTab.setAttribute("_tabmix_load_bypass_cache", true);
-        }
       }
 
       if (!tabToSelect)
@@ -330,16 +327,22 @@ var TMP_Places = {
     this.restoringTabs.push(...tabs);
     this.bookmarksOnDemand = restoreOnDemand;
     TabmixSvc.SessionStore.restoreTabs(window, tabs, tabsData, 0);
-    // set icon on pending tabs
+    // set icon on pending tabs that are not about: pages
     const pendingData = tabs.map(tab => ({tab, url: tabsData.shift().entries[0].url}))
-        .filter(({tab, url}) => tab.hasAttribute("pending") && url != "about:blank");
+        .filter(({tab, url}) => tab.hasAttribute("pending") && !url.startsWith("about"));
     for (let data of pendingData) {
-      const {tab, url} = data;
-      const entryURI = BrowserUtils.makeURI(url, null, null);
-      PlacesUtils.favicons.getFaviconURLForPage(entryURI, uri => {
+      const {tab, url: pageUrl} = data;
+      const entryURI = Services.io.newURI(pageUrl);
+      PlacesUtils.favicons.getFaviconURLForPage(entryURI, iconURI => {
+        if (!iconURI) {
+          // fallback to favicon.ico
+          iconURI = {spec: `${pageUrl.replace(/\/$/, "")}/favicon.ico`};
+        }
         // skip tab that already restored
-        if (tab.hasAttribute("pending") && uri) {
-          gBrowser.setIcon(tab, uri);
+        if (tab.hasAttribute("pending")) {
+          const message = {iconUrl: iconURI.spec, pageUrl};
+          tab.linkedBrowser.messageManager
+              .sendAsyncMessage("Tabmix:SetPendingTabIcon", message);
         }
       });
     }
@@ -859,6 +862,11 @@ Tabmix.getBoolPref = function(prefname, def) {
     return def;
   }
 };
+
+if (typeof E10SUtils !== "object") {
+  ChromeUtils.defineModuleGetter(this, "E10SUtils",
+    "resource://gre/modules/E10SUtils.jsm");
+}
 
 /** DEPRECATED **/
 TMP_Places.getTabFixedTitle = function() {

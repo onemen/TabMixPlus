@@ -12,17 +12,12 @@
   height: 4px;
 }
 
-#tabbrowser-tabs:not([tabmix_australis])[tabsontop="true"] .tab-progress {
+#tabbrowser-tabs[tabsontop="true"] .tab-progress {
   margin: 3px 2px;
 }
 
-#tabbrowser-tabs:not([tabmix_australis]):not([tabsontop="true"]) .tab-progress {
+#tabbrowser-tabs:not([tabsontop="true"]) .tab-progress {
   margin: 1px 2px;
-}
-
-#tabbrowser-tabs[tabmix_australis="true"]:not([treestyletab-mode="vertical"])
-    > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
-  margin: 4px 7px 0 7px;
 }
 
 .tab-progress > .progress-bar {

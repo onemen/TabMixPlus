@@ -28,7 +28,6 @@ XPCOMUtils.defineLazyGetter(this, "isMac", () => {
 });
 
 const STYLENAMES = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
-const EXTRAPREFS = ["squaredTabsStyle"];
 
 this.DynamicRules = {
 
@@ -43,21 +42,16 @@ this.DynamicRules = {
 
   _initialized: false,
 
-  get isAustralis() {
-    return TabmixSvc.isAustralisBgStyle(this.orient);
-  },
-
   init(aWindow) {
     if (this._initialized)
       return;
     this._initialized = true;
 
     this.orient = aWindow.document.getElementById("tabbrowser-tabs").attributes.orient.value;
-    this.styleType = this.isAustralis ? "australis" : "classic";
     this.windows10 = aWindow.navigator.oscpu.startsWith("Windows NT 10.0");
 
     Prefs.addObserver("", this);
-    STYLENAMES.concat(EXTRAPREFS).forEach(function(pref) {
+    STYLENAMES.forEach(function(pref) {
       Services.prefs.addObserver("extensions.tabmix." + pref, this);
     }, this);
     Services.obs.addObserver(this, "browser-window-before-show");
@@ -104,8 +98,6 @@ this.DynamicRules = {
         this.userChangedStyle(prefName, true);
       else
         this.registerSheet(prefName);
-    } else if (prefName == "squaredTabsStyle") {
-      this.updateStyleType();
     }
   },
 
@@ -113,7 +105,7 @@ this.DynamicRules = {
     Services.obs.removeObserver(this, "browser-window-before-show");
     Services.obs.removeObserver(this, "quit-application");
     Prefs.removeObserver("", this);
-    STYLENAMES.concat(EXTRAPREFS).forEach(function(pref) {
+    STYLENAMES.forEach(function(pref) {
       Services.prefs.removeObserver("extensions.tabmix." + pref, this);
       this.unregisterSheet(pref);
     }, this);
@@ -131,7 +123,6 @@ this.DynamicRules = {
 
   createTemplates() {
     let space20 = ' '.repeat(20);
-    let space26 = ' '.repeat(26);
     let bgImage = {};
     bgImage.body = "linear-gradient(#topColor, #bottomColor)";
     let bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),\n";
@@ -172,41 +163,6 @@ this.DynamicRules = {
       },
     };
 
-    if (this.isAustralis) {
-      bgImage.bg = 'url("chrome://browser/skin/customizableui/background-noise-toolbar.png"),\n' +
-            space20 + bottomBorder +
-            space20 + bgImage.body;
-      bgImage.bgselected = 'url("chrome://browser/skin/tabbrowser/tab-active-middle.png"),\n' +
-            space20 + (this.windows10 ? "none,\n" : bottomBorder) +
-            space20 + 'linear-gradient(transparent, transparent 2px, #topColor 2px, #bottomColor)';
-      bgImage.startEndselected = bgImage.bgselected;
-      bgImage.bghover = 'url("chrome://browser/skin/customizableui/background-noise-toolbar.png"),\n' +
-            space20 + (this.windows10 ? "none,\n" : bottomBorder) +
-            space20 + 'linear-gradient(transparent, transparent 2px,\n' +
-            space26 + 'rgba(254, 254, 254, 0.72) 2px, rgba(254, 254, 254, 0.72) 2px,\n' +
-            space26 + 'rgba(250, 250, 250, 0.88) 3px, rgba(250, 250, 250, 0.88) 3px,\n' +
-            space26 + 'rgba(254, 254, 254, 0.72) 4px, rgba(254, 254, 254, 0.72) 4px, #bottomColor)';
-      bgImage.startEndhover = bgImage.bghover;
-      let _selector = '#tabbrowser-tabs[tabmix_#RULEStyle~="bg"] > ' +
-                      '#tabbrowser-arrowscrollbox > .tabbrowser-tab#HOVER#STATE > .tab-stack > .tab-background >';
-      for (let rule of Object.keys(styleRules)) {
-        let style = styleRules[rule];
-        delete style.bg;
-        let styleName = rule.replace("Tab", "");
-        let ruleSelector = _selector.replace("#RULE", styleName)
-            .replace("#STATE", tabState[styleName]);
-        let hover = rule == "currentTab" ? "" : ":hover";
-        let selector = ruleSelector.replace("#HOVER", hover);
-        let type = hover.replace(":", "") || "selected";
-        style["bg" + type] = selector + ' .tab-background-middle {\n' +
-                                   '  background-image: ' + bgImage["bg" + type] + ' !important;\n}\n';
-        style["startEnd" + type] = selector + ' :-moz-any(.tab-background-start, .tab-background-end)::before {\n' +
-                                   '  background-image: ' + bgImage["startEnd" + type] + ' !important;\n}\n';
-        if (hover) // i.e. not currentTab style
-          style.bg = ruleSelector.replace("#HOVER", ":not(:hover)") + ' .tab-background-middle {\n' +
-                        '  background-image: ' + bgImage.bg + ' !important;\n}\n';
-      }
-    }
     styleRules.progressMeter = {
       bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > ' +
           '.tab-stack > .tab-progress-container > .tab-progress::-moz-progress-bar' +
@@ -224,7 +180,14 @@ this.DynamicRules = {
       return;
 
     this[ruleName] = "preventUpdate";
-    let prefObj = this.validatePrefValue(ruleName);
+    let prefObj;
+    try {
+      prefObj = this.validatePrefValue(ruleName);
+    } catch (ex) {
+      this.handleError(ex, ruleName);
+      Prefs.setCharPref(ruleName, this.defaultPrefs[ruleName]);
+      prefObj = this.validatePrefValue(ruleName);
+    }
     delete this[ruleName];
 
     let val = TabmixSvc.tabStylePrefs[ruleName];
@@ -268,36 +231,17 @@ this.DynamicRules = {
     this.registerSheet(name);
   },
 
-  // update background type when squaredTabsStyle pref or tabbar
-  // orient changed
+  // update background type tabbar orient changed
   updateStyleType() {
-    let australis = this.isAustralis;
-    if (australis == (this.styleType == "australis")) {
-      return;
-    }
-    this.styleType = australis ? "australis" : "classic";
-
     TabmixSvc.tabStylePrefs = {};
     this.createTemplates();
-
-    function updateButtonHeight(Tabmix, rules) {
-      let newHeight = Tabmix.getButtonsHeight(true);
-      ["new-tab", "pb-indicator", "scrollbutton", "toolbarbutton"].forEach(name => {
-        let rule = rules[name + "-height"];
-        if (typeof rule == "object") {
-          rule.style.setProperty("height", newHeight + "px", "important");
-        }
-      });
-    }
 
     TabmixSvc.forEachBrowserWindow(window => {
       let {Tabmix, TabmixTabbar, gBrowser, gTMPprefObserver} = window;
       gTMPprefObserver.updateStyleAttributes();
-      updateButtonHeight(Tabmix, gTMPprefObserver.dynamicRules);
 
       // update multi-row heights
       gBrowser.tabContainer.arrowScrollbox._singleRowHeight = null;
-      TabmixTabbar._heights = [];
       TabmixTabbar.visibleRows = 1;
       Tabmix.tabsUtils.updateVerticalTabStrip();
       TabmixTabbar.setFirstTabInRow();
@@ -351,6 +295,12 @@ this.DynamicRules = {
     return (this.defaultPrefs = defaults);
   },
 
+  handleError(error, ruleName) {
+    Cu.reportError(TabmixSvc.console.error(error));
+    TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
+    Prefs.clearUserPref(ruleName);
+  },
+
   validatePrefValue(ruleName) {
     // styles format: italic:boolean, bold:boolean, underline:boolean,
     //                text:boolean, textColor:string, textOpacity:string,
@@ -362,26 +312,35 @@ this.DynamicRules = {
 
     var currentPrefValues, prefValues = {};
     let prefString = Prefs.getCharPref(ruleName);
-    let handleError = function(ex) {
-      TabmixSvc.console.log(ex);
-      TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
-      Prefs.clearUserPref(ruleName);
-      // set prev value to default so we can continue with this function
-      currentPrefValues = defaultPrefValues;
-    };
     try {
       currentPrefValues = JSON.parse(prefString);
     } catch (ex) {
-      handleError(ex);
+      this.handleError(ex, ruleName);
+      // set prev value to default so we can continue with this function
+      currentPrefValues = defaultPrefValues;
     }
     if (currentPrefValues === null) {
-      handleError(ruleName + " value is invalid\n" + prefString);
+      this.handleError(new Error(ruleName + " value is invalid\n" + prefString), ruleName);
+      currentPrefValues = defaultPrefValues;
     }
+
+    const reRGBA = /rgba\((?:\b(?:1?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\b,){3}(?:0?\.[0-9]?[0-9]|0|1)\)/;
+    const booleanItems = "italic,bold,underline,text,bg";
+    const colorItems = "textColor,bgColor,bgTopColor";
 
     // make sure we have all the item
     // if item is missing set it to default
     for (let item of Object.keys(defaultPrefValues)) {
       let value = currentPrefValues[item];
+      let valid;
+      if (booleanItems.includes(item)) {
+        valid = typeof value === "boolean";
+      } else if (colorItems.includes(item)) {
+        valid = typeof value === "string" && value.match(reRGBA);
+      }
+      if (!valid) {
+        throw new Error(`${ruleName} is not valid, ${item} is ${value}`);
+      }
       if (value && item.indexOf("Color") > -1) {
         let opacity = item.replace("Color", "Opacity");
         let opacityValue = opacity in currentPrefValues ? currentPrefValues[opacity] : null;

@@ -243,8 +243,8 @@ pref("extensions.tabmix.reloadEvery.onReloadButton", false);
 pref("extensions.tabmix.sessionToolsMenu", true);
 pref("extensions.tabmix.closedWinToolsMenu", false);
 
-pref("extensions.tabmix.sessions.crashRecovery", true);
-pref("extensions.tabmix.sessions.manager", true);
+pref("extensions.tabmix.sessions.crashRecovery", false);
+pref("extensions.tabmix.sessions.manager", false);
 pref("extensions.tabmix.sessions.restore.concatenate", false);
 pref("extensions.tabmix.sessions.restore.overwritetabs", true);
 pref("extensions.tabmix.sessions.restore.overwritewindows", true);

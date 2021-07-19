@@ -111,6 +111,10 @@ var TMP_SessionStore = {
     // ##### disable Session Manager #####
     Services.prefs.lockPref("extensions.tabmix.sessions.manager");
     Services.prefs.lockPref("extensions.tabmix.sessions.crashRecovery");
+    if (TabmixSessionManager.disableSessionManager) {
+      document.getElementById("tmp_disableSave").setAttribute("disabled", true);
+      return;
+    }
     TabmixSvc.sm.settingPreference = true;
 
     if (TabmixSvc.sm.settingPreference || Tabmix.prefs.prefHasUserValue("setDefault"))
@@ -446,7 +450,8 @@ var TMP_ClosedTabs = {
       case "click":
         if (event.button === 1) {
           this.restoreTab("original", -2);
-        } else if (event.button === 0 && showSubView) {
+        } else if (event.button === 0 && showSubView &&
+            !TabmixAllTabs.isAfterCtrlClick(event.target)) {
           Tabmix.closedObjectsUtils.showSubView(event);
         }
         break;

@@ -7,7 +7,6 @@
 <!ENTITY showRGB.label "RGB weergeven">
 <!ENTITY unreadAfterReload.label "Tabblad als ongelezen instellen na herladen">
 <!ENTITY disableBackground.label "Aangepaste achtergrondkleuren uitschakelen">
-<!ENTITY squaredTabs.label "Achtergrondkleur voor vierkante tabbladen toepassen">
 <!ENTITY otherTabs.label "Overige tabbladen">
 <!ENTITY italic.label "Cursief">
 <!ENTITY bold.label "Vet">

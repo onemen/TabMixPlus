@@ -7,7 +7,6 @@
 <!ENTITY showRGB.label "Прикажи RGB">
 <!ENTITY unreadAfterReload.label "означи картицу као непрочитану након поновног учитавања">
 <!ENTITY disableBackground.label "Disable custom background colors">
-<!ENTITY squaredTabs.label "Примени боју позадине за квадратне картице">
 <!ENTITY otherTabs.label "Остале картице">
 <!ENTITY italic.label "искошено">
 <!ENTITY bold.label "подебљано">

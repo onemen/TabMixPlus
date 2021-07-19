@@ -666,9 +666,6 @@ var TabmixContext = {
     if (!gContextMenu || event.originalTarget != document.getElementById("contentAreaContextMenu"))
       return true;
 
-    // copy label from key
-    Tabmix.setItem("tm-content-undoCloseTab", "label", document.getElementById("key_tm_undoClose").getAttribute("label"));
-
     // hide open link in window in single window mode
     Tabmix.changeCode(gContextMenu, "gContextMenu.initOpenItems")._replace(
       /context-openlink",/, '$& !Tabmix.singleWindowMode &&'
@@ -829,16 +826,23 @@ var TabmixContext = {
 Tabmix.allTabs = {
   init() {
     const allTabsButton = document.getElementById("alltabs-button");
-    allTabsButton.addEventListener("click", () => {
-      setTimeout(this.insertSortButton, 0);
-    }, {once: true});
+    allTabsButton.addEventListener("click", function onClick(event) {
+      if (event.button === 0 && event.detail === 1) {
+        allTabsButton.removeEventListener("click", onClick);
+        setTimeout(Tabmix.allTabs.insertSortButton, 0);
+      }
+    });
   },
 
   insertSortButton() {
-    const sortTabbsButton = document.getElementById("allTabsMenu_sortTabbsButton");
+    const sortTabsButton = document.getElementById("allTabsMenu_sortTabsButton");
     const tabsSeparator = document.getElementById("allTabsMenu-tabsSeparator");
-    if (sortTabbsButton.nextSibling !== tabsSeparator) {
-      tabsSeparator.parentNode.insertBefore(sortTabbsButton, tabsSeparator);
+    if (sortTabsButton.nextSibling !== tabsSeparator) {
+      const searchTabs = document.getElementById("allTabsMenu-searchTabs");
+      if ([...searchTabs.classList].includes("subviewbutton-iconic")) {
+        sortTabsButton.classList.add("subviewbutton-iconic");
+      }
+      tabsSeparator.parentNode.insertBefore(sortTabsButton, tabsSeparator);
 
       const panel = gTabsPanel.allTabsPanel;
 
@@ -861,7 +865,7 @@ Tabmix.allTabs = {
 
         const sortTabs = () => [...this.gBrowser.tabs]
             .sort((a, b) => (a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1));
-        const tabs = typeof sortTabbsButton === "object" && sortTabbsButton.checked ?
+        const tabs = typeof sortTabsButton === "object" && sortTabsButton.checked ?
           sortTabs() : this.gBrowser.tabs;
 
         for (let tab of tabs) {
@@ -913,29 +917,9 @@ var TabmixAllTabs = {
       case "DOMMenuItemInactive":
         this.updateMenuItemInactive(aEvent);
         break;
-      case "scroll":
-        this._popup._updateTabsVisibilityStatus();
-        break;
       case "popupshown":
         this._ensureElementIsVisible(aEvent);
         break;
-    }
-  },
-
-  _updateTabsVisibilityStatus: function TMP__updateTabsVisibilityStatus() {
-    var tabContainer = gBrowser.tabContainer;
-    // We don't want menu item decoration unless there is overflow.
-    if (tabContainer.getAttribute("overflow") != "true")
-      return;
-
-    for (var i = 0; i < this.childNodes.length; i++) {
-      let curTab = this.childNodes[i].tab;
-      if (curTab) {
-        if (Tabmix.tabsUtils.isElementVisible(curTab))
-          this.childNodes[i].setAttribute("tabIsVisible", "true");
-        else
-          this.childNodes[i].removeAttribute("tabIsVisible");
-      }
     }
   },
 
@@ -1027,12 +1011,6 @@ var TabmixAllTabs = {
 
     this.beforeCommonList(popup);
     this.createCommonList(popup, aType);
-
-    gBrowser.tabContainer.arrowScrollbox.addEventListener("scroll", this);
-    this._popup = popup;
-    if (!this._popup._updateTabsVisibilityStatus)
-      this._popup._updateTabsVisibilityStatus = this._updateTabsVisibilityStatus;
-    this._popup._updateTabsVisibilityStatus();
 
     return true;
   },
@@ -1211,15 +1189,12 @@ var TabmixAllTabs = {
     }
 
     gBrowser.tabContainer.removeEventListener("TabAttrModified", this);
-    gBrowser.tabContainer.arrowScrollbox.removeEventListener("scroll", this);
     gBrowser.tabContainer.removeEventListener("TabClose", this);
     popup.removeEventListener("DOMMenuItemActive", this);
     popup.removeEventListener("DOMMenuItemInactive", this);
 
     this.backupLabel = "";
     this._selectedItem = null;
-    popup._updateTabsVisibilityStatus = null;
-    this._popup = null;
   },
 
   updateMenuItemActive: function TMP_updateMenuItemActive(event, tab) {

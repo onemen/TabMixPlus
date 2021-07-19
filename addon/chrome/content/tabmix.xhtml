@@ -6,7 +6,6 @@
 <?xml-stylesheet href="chrome://tabmix-os/skin/browser.css" type="text/css"?>
 
 <?xul-overlay href="chrome://tabmixplus/content/overlay/tabContextMenu.xhtml"?>
-<?xul-overlay href="chrome://tabmixplus/content/preferences/shortcuts.xhtml"?>
 
 <!DOCTYPE overlay [
 <!ENTITY % tabmixDTD SYSTEM "chrome://tabmixplus/locale/tabmix.dtd" >
@@ -71,9 +70,9 @@
                   <menuseparator id="tm-sm-closedwindows2-endSeparator" hidden="true"/>
                </menupopup>
             </menu>
-            <menuitem id="tm-sm-saveone" label="&saveWindow.label;…" key="key_tm-sm-saveone"
+            <menuitem id="tm-sm-saveone" label="&saveWindow.label;…" key="key_tm_sm_saveone"
                   command="TabmixSessionUtils:SaveThisWindow"/>
-            <menuitem id="tm-sm-saveall" label="&saveAllWindows.label;…" key="key_tm-sm-saveall" observes="tmp_menu_AllWindows"
+            <menuitem id="tm-sm-saveall" label="&saveAllWindows.label;…" key="key_tm_sm_saveone" observes="tmp_menu_AllWindows"
                   command="TabmixSessionUtils:SaveAllWindow"/>
             <menuseparator/>
             <menu anonid="rename" label="&sm.context.rename;" accesskey="&sm.context.rename.key;">
@@ -143,7 +142,8 @@
        </menu>
       <menuseparator id="tm-content-undoCloseSep" insertbefore="context-sep-viewbgimage,context-sep-open"/>
       <menuseparator id="tm-content-after-undoCloseList" insertbefore="context-sep-viewbgimage,context-sep-open"/>
-      <menuitem id="tm-content-undoCloseTab" oncommand="TMP_ClosedTabs.undoCloseTab();" insertbefore="tm-content-after-undoCloseList"
+      <menuitem id="tm-content-undoCloseTab" data-lazy-l10n-id="tab-context-reopen-closed-tabs" data-l10n-args='{"tabCount": 1}'
+         oncommand="TMP_ClosedTabs.undoCloseTab();" insertbefore="tm-content-after-undoCloseList"
          key="key_undoCloseTab"/>
       <menu id="tm-content-undoCloseList" label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;" tmp_iconic="menu-iconic closedtabs-icon"
          insertbefore="tm-content-after-undoCloseList">
@@ -227,8 +227,8 @@
       <panelview id="tabmix-closedTabsView" class="PanelUI-subView tabmix-subview"/>
     </html:template>
 
-    <toolbarbutton id="allTabsMenu_sortTabbsButton"
-      class="subviewbutton subviewbutton-iconic"
+    <toolbarbutton id="allTabsMenu_sortTabsButton"
+      class="subviewbutton"
       closemenu="none"
       context=""
       oncommand="Tabmix.allTabs.sortTabsInList();"

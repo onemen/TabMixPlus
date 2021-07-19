@@ -41,18 +41,12 @@ Tabmix.beforeDelayedStartup = function() {
     ChromeUtils.import("chrome://tabmix-resource/content/extensions/AddonManager.jsm");
     TMP_SessionStore.setService(1, true);
   }
-
-  // if we call these functions earlier we get this warning:
-  // XUL box for _moz_generated_content_before element contained an inline #text child
-  // by calling getBoundingClientRect
-  Tabmix.getButtonsHeight();
 };
 
 // after TabmixSessionManager and SessionStore initialized
 Tabmix.sessionInitialized = function() {
   if (Tabmix.fixMultibarRowHeight) {
     delete Tabmix._fixMultibarRowHeight;
-    TabmixTabbar._heights = [];
     Tabmix.tabsUtils.updateVerticalTabStrip(true);
   }
 
@@ -79,33 +73,6 @@ Tabmix.sessionInitialized = function() {
   if (this.firstWindowInSession) {
     Tabmix.closedObjectsUtils.toggleRecentlyClosedWindowsButton();
   }
-};
-
-// we call gTMPprefObserver.miscellaneousRules to add some dynamic rules
-// from Tabmix.afterDelayedStartup
-Tabmix.getButtonsHeight = function(setDefault) {
-  if (gBrowser.tabContainer.getAttribute("orient") == "horizontal") {
-    const {toolbar, tabBar, collapsed, tabBarCollapsed, toolbarCollapsed} =
-      Tabmix.tabsUtils.getCollapsedState;
-    let stripIsHidden = TabmixTabbar.hideMode !== 0 && collapsed;
-    if (stripIsHidden) {
-      toolbar.collapsed = false;
-      tabBar.collapsed = false;
-    }
-    this._buttonsHeight = Tabmix.getBoundsWithoutFlushing(Tabmix.visibleTabs.first).height;
-    if (stripIsHidden) {
-      toolbar.collapsed = toolbarCollapsed;
-      tabBar.collapsed = tabBarCollapsed;
-    }
-
-    if (setDefault && !this._buttonsHeight) {
-      this._buttonsHeight = TabmixSvc.australis ? 31 : 24;
-    }
-  } else {
-    this._buttonsHeight = 24;
-  }
-
-  return this._buttonsHeight;
 };
 
 Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
@@ -330,7 +297,6 @@ var TMP_eventListener = {
       /**
       *  aObject, aName , aModule - file name , aSymbol - symbol in EXPORTED_SYMBOLS, aFlag, aArg
       */
-      Tabmix.lazy_import(Tabmix, "Shortcuts", "Shortcuts", "Shortcuts", true);
       Tabmix.lazy_import(Tabmix, "flst", "Slideshow", "flst", true);
       Tabmix.lazy_import(Tabmix, "MergeWindows", "MergeWindows", "MergeWindows");
       Tabmix.lazy_import(Tabmix, "autoReload", "AutoReload", "AutoReload");
@@ -377,6 +343,8 @@ var TMP_eventListener = {
     // url-fixer also prevent the use of eval changes by using closure in the replaced function
     Tabmix.navToolbox.initializeURLBar();
     Tabmix.navToolbox.initializeSearchbar();
+
+    gTMPprefObserver.addDynamicRules();
   },
 
   onWindowOpen: function TMP_EL_onWindowOpen() {
@@ -440,11 +408,6 @@ var TMP_eventListener = {
 
     var tabsToolbar = document.getElementById("TabsToolbar");
 
-    if (TabmixSvc.australis) {
-      let australis = TabmixSvc.isAustralisBgStyle(tabBar.attributes.orient.value);
-      tabBar.setAttribute("tabmix_australis", australis ? "true" : "classic");
-    }
-
     const skin = Services.prefs.getCharPref("extensions.activeThemeID", "");
     if (skin == "classic/1.0") {
       if (TabmixSvc.isMac)
@@ -473,9 +436,6 @@ var TMP_eventListener = {
         tabBar.setAttribute("backgroundrepeat", true);
       }
       switch (skin) {
-        case "Australis":
-          tabBar.setAttribute("tabmix_australis", "true");
-          break;
         case "cfxe": // Chromifox Extreme
         case "cfxec":
           tabBar.setAttribute("tabmix_skin", "cfxec");
@@ -507,8 +467,6 @@ var TMP_eventListener = {
 
     if (Tabmix.singleWindowMode)
       gTMPprefObserver.setSingleWindowUI();
-
-    Tabmix.Shortcuts.onWindowOpen(window);
 
     // if treeStyleTab extension installed we call this from
     // Tabmix.afterDelayedStartup
@@ -554,7 +512,6 @@ var TMP_eventListener = {
     document.getElementById("tabmix-menu").hidden = !Tabmix.prefs.getBoolPref("optionsToolMenu");
     document.getElementById("tabmix-historyUndoWindowMenu").hidden = !Tabmix.prefs.getBoolPref("closedWinToolsMenu");
 
-    gTMPprefObserver.addDynamicRules();
     // ##### disable Session Manager #####
     // TabmixSessionManager.updateSettings();
 
@@ -576,7 +533,7 @@ var TMP_eventListener = {
     Tabmix.allTabs.init();
 
     MozXULElement.insertFTLIfNeeded("browser/tabContextMenu.ftl");
-    Tabmix.setFTLDataId("key_tm_undoClose");
+    Tabmix.setFTLDataId("tm-content-undoCloseTab");
     Tabmix.setFTLDataId("tm-content-closetab");
   },
 
@@ -787,7 +744,7 @@ var TMP_eventListener = {
     } else if (!this._onOpenTimeout) {
       let self = this;
       let timeout = Tabmix.tabsUtils.disAllowNewtabbutton &&
-          TabmixSvc.tabAnimationsEnabled ? 0 : 200;
+          window.matchMedia("(prefers-reduced-motion: no-preference)").matches ? 0 : 200;
       this._onOpenTimeout = window.setTimeout(function TMP_onOpenTimeout(tab) {
         if (self._onOpenTimeout) {
           clearTimeout(self._onOpenTimeout);

@@ -7,7 +7,6 @@
 <!ENTITY showRGB.label "RGB megjelenítése">
 <!ENTITY unreadAfterReload.label "újratöltéskor a lap olvasatlanná válik">
 <!ENTITY disableBackground.label "Disable custom background colors">
-<!ENTITY squaredTabs.label "Háttérszín alkalmazása a téglalap lapokra">
 <!ENTITY otherTabs.label "Egyéb lapok">
 <!ENTITY italic.label "Dőlt">
 <!ENTITY bold.label "Félkövér">

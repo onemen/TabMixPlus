@@ -232,10 +232,6 @@ this.TabmixSvc = {
       // add missing preference to the default branch
       let prefs = Services.prefs.getDefaultBranch("");
 
-      if (TabmixSvc.australis) {
-        prefs.setBoolPref("extensions.tabmix.squaredTabsStyle", false);
-      }
-
       if (!TabmixSvc.isCyberfox) {
         prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
         ChromeUtils.import("chrome://tabmix-resource/content/NewTabURL.jsm", {});
@@ -288,14 +284,6 @@ this.TabmixSvc = {
     }
   },
 
-  isAustralisBgStyle(orient) {
-    if (typeof orient != "string") {
-      throw Components.Exception("orient is not valid", Cr.NS_ERROR_INVALID_ARG);
-    }
-    return TabmixSvc.australis && orient == "horizontal" &&
-      !this.prefBranch.getBoolPref("squaredTabsStyle");
-  },
-
   isFixedGoogleUrl: () => false,
 
   blockedClickingOptions: [],
@@ -310,11 +298,6 @@ this.TabmixSvc = {
     };
   },
 };
-
-// check if australis tab shape is implemented
-XPCOMUtils.defineLazyGetter(TabmixSvc, "australis", function() {
-  return Boolean(this.topWin().document.getElementById("tab-curve-clip-path-start"));
-});
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", () => {
   const {Preferences} = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
@@ -382,17 +365,4 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", function() {
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
   return this.SessionStoreGlobal.SessionStoreInternal;
-});
-
-// Firefox 54
-// Bug 1307736 - Assert history loads pass a valid triggeringPrincipal for docshell loads
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SERIALIZED_SYSTEMPRINCIPAL", function() {
-  return this.SessionStoreGlobal.Utils &&
-      this.SessionStoreGlobal.Utils.SERIALIZED_SYSTEMPRINCIPAL || null;
-});
-
-// Firefox 55
-// Bug 1352069 - Introduce a pref that allows for disabling cosmetic animations
-XPCOMUtils.defineLazyGetter(TabmixSvc, "tabAnimationsEnabled", () => {
-  return !Services.prefs.getIntPref("ui.prefersReducedMotion", 0) == 1;
 });

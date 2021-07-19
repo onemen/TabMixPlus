@@ -28,7 +28,3 @@
 #tabbrowser-tabs[multibar] #tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;
 }
-
-#tabbrowser-tabs:not([tabmix_australis])[classic][multibar] .tabbrowser-tab {
-  height: 25px;
-}

@@ -37,7 +37,7 @@ ChromeUtils.defineModuleGetter(this, "TabmixUtils",
 
 var PROCESS_TYPE_CONTENT = Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
 
-var TabmixClickEventHandler;
+var TabmixClickEventHandler, FaviconLoader;
 var TabmixContentHandler = {
   MESSAGES: [
     "Tabmix:restorePermissions",
@@ -50,6 +50,7 @@ var TabmixContentHandler = {
     "Tabmix:collectReloadData",
     "Tabmix:isFrameInContent",
     "Tabmix:collectOpener",
+    "Tabmix:SetPendingTabIcon",
   ],
 
   init() {
@@ -140,6 +141,14 @@ var TabmixContentHandler = {
         sendSyncMessage("Tabmix:getOpener", {}, {opener: content.opener});
         break;
       }
+      case "Tabmix:SetPendingTabIcon": {
+        try {
+          FaviconLoader.load(data);
+        } catch (ex) {
+          Cu.reportError(ex);
+        }
+        break;
+      }
     }
   },
 
@@ -174,6 +183,56 @@ var TabmixContentHandler = {
       event.preventDefault();
     }
   }
+};
+
+FaviconLoader = {
+  get actor() {
+    delete this.actor;
+    return (this.actor = docShell.domWindow.windowGlobalChild.getActor("LinkHandler"));
+  },
+
+  load({iconUrl, pageUrl}) {
+    const baseURI = Services.io.newURI(pageUrl);
+    const pageUri = Services.io.newURI(pageUrl, null, baseURI);
+    const iconUri = Services.io.newURI(iconUrl, null, baseURI);
+
+    // we only trigger LinkHandler actor for pending tabs
+    if (content.document.documentURIObject.spec === "about:blank") {
+      this.onHeadParsed(iconUri, pageUri);
+    }
+  },
+
+  // based on LinkHandlerChild.jsm
+  // we can't call addRootIcon from LinkHandlerChild.jsm directly since our current
+  // pageURI (document.documentURIObject) is about:blank
+  addRootIcon(pageURI) {
+    if (
+      !this.actor.seenTabIcon &&
+        Services.prefs.getBoolPref("browser.chrome.guess_favicon", true) &&
+        Services.prefs.getBoolPref("browser.chrome.site_icons", true)
+    ) {
+      if (["http", "https"].includes(pageURI.scheme)) {
+        this.actor.iconLoader.addDefaultIcon(pageURI);
+      }
+    }
+  },
+
+  onHeadParsed(iconUri, pageUri) {
+    // set iconInfo.iconUri to be /favicon.ico
+    this.addRootIcon(pageUri);
+
+    // replace iconInfo.iconUri with the one we got from
+    // PlacesUtils.favicons.getFaviconURLForPage
+    if (!iconUri.spec.startsWith("fake-favicon-uri:") &&
+        !iconUri.spec.endsWith("/favicon.ico")) {
+      const iconInfo = this.actor._iconLoader.iconInfos[0];
+      iconInfo.iconUri = iconUri;
+    }
+
+    if (this.actor._iconLoader) {
+      this.actor._iconLoader.onPageShow();
+    }
+  },
 };
 
 TabmixClickEventHandler = {

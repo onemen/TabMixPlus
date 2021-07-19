@@ -234,7 +234,7 @@ Tabmix.tablib = {
     Tabmix.changeCode(gBrowser, "gBrowser._endRemoveTab")._replace(
       'this._blurTab(aTab);',
       'Tabmix.tablib.onRemoveTab(aTab); \
-       if (TabmixSvc.tabAnimationsEnabled) { \
+       if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) { \
          TMP_eventListener.onTabClose_updateTabBar(aTab);\
        } \
        $&'
@@ -416,7 +416,7 @@ Tabmix.tablib = {
         '    layoutData = {pinnedTabWidth: tabs[0].getBoundingClientRect().width};' + $LF +
         '    this._pinnedTabsLayoutCache = layoutData;' + $LF +
         '  }' + $LF +
-        '    let width = TabmixSvc.australis ? 0 : this.arrowScrollbox.scrollboxPaddingStart || 0;' + $LF +
+        '    let width = this.arrowScrollbox.scrollboxPaddingStart || 0;' + $LF +
         '    for (let i = 0; i < numPinned; i++) {' +
         '      let tab = tabs[i];' +
         '      tab.style.setProperty("margin-inline-start", width + "px", "important");' + $LF +
@@ -641,9 +641,10 @@ Tabmix.tablib = {
       'win.gBrowser.getBrowserForTab(tab);',
       '$&\n' +
       '    if (currentIsBlank && aURI) {\n' +
-      '      let loadflags = aIsExternal ?\n' +
-      '          Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL :\n' +
-      '          Ci.nsIWebNavigation.LOAD_FLAGS_NONE;\n' +
+      '      let loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_NONE;\n' +
+      '      if (aIsExternal) {\n' +
+      '        loadFlags |= Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL;\n' +
+      '      }\n' +
       '      gBrowser.loadURI(aURI.spec, {\n' +
       '        triggeringPrincipal: aTriggeringPrincipal,\n' +
       '        referrerInfo: aReferrerInfo,\n' +
@@ -663,6 +664,7 @@ Tabmix.tablib = {
       '      aWhere = Ci.nsIBrowserDOMWindow.OPEN_NEWTAB;' +
       '  }' +
       '  if (aWhere != Ci.nsIBrowserDOMWindow.OPEN_NEWWINDOW &&' +
+      '      aWhere != Ci.nsIBrowserDOMWindow.OPEN_PRINT_BROWSER &&' +
       '      aWhere != Ci.nsIBrowserDOMWindow.OPEN_NEWTAB) {' +
       '      let isLockTab = Tabmix.whereToOpen(null).lock;' +
       '      if (isLockTab) {' +
@@ -926,7 +928,7 @@ Tabmix.tablib = {
           var activeIndex = (tabState.index || tabState.entries.length) - 1;
           var entriesToRemove = 0;
           var newEntry = {url: aHref}; // we don't know the page title at this moment
-          let triggeringPrincipal = TabmixSvc.SERIALIZED_SYSTEMPRINCIPAL;
+          let triggeringPrincipal = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
           if (triggeringPrincipal) {
             newEntry.triggeringPrincipal_base64 = triggeringPrincipal;
           }

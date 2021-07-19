@@ -7,7 +7,6 @@
 <!ENTITY showRGB.label "Mostra RGB">
 <!ENTITY unreadAfterReload.label "definir aba como não lida após atualizar">
 <!ENTITY disableBackground.label "Desativar cores de fundo personalizadas">
-<!ENTITY squaredTabs.label "Aplicar a cor de fundo para abas quadradas.">
 <!ENTITY otherTabs.label "Outras abas">
 <!ENTITY italic.label "Itálico">
 <!ENTITY bold.label "Negrito">

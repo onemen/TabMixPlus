@@ -165,13 +165,6 @@
       this.mButtonId = window.setTimeout(this.setShowButton, this.tabXDelay, this);
       if (this.mouseHoverSelect)
         this.mFocusId = window.setTimeout(this.doMouseHoverSelect, this.mouseHoverSelectDelay, this);
-
-      if (TabmixSvc.australis) {
-        this.tabmix_mouseover = window.setTimeout(() => {
-          clearTimeout(this.tabmix_mouseover);
-          TabmixTabbar.updateBeforeAndAfter(true);
-        }, 0);
-      }
     };
 
     this.doMouseHoverSelect = function(aTab) {
@@ -207,19 +200,6 @@
       this.mButtonId = window.setTimeout(this.removeShowButton, this.tabXDelay, this);
       if (this.mouseHoverSelect && this.mFocusId)
         clearTimeout(this.mFocusId);
-
-      if (TabmixSvc.australis) {
-        clearTimeout(this.tabmix_mouseover);
-        let positionalTabs = Tabmix.tabsUtils._tabmixPositionalTabs;
-        if (positionalTabs.beforeHoveredTab) {
-          positionalTabs.beforeHoveredTab.removeAttribute("tabmix-removed-beforehovered");
-          positionalTabs.beforeHoveredTab = null;
-        }
-        if (positionalTabs.afterHoveredTab) {
-          positionalTabs.afterHoveredTab.removeAttribute("tabmix-removed-afterhovered");
-          positionalTabs.afterHoveredTab = null;
-        }
-      }
     };
 
     this.setHoverState = function(aEvent, aOver) {

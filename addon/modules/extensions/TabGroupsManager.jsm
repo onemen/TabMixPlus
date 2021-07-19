@@ -22,7 +22,7 @@ this.TMP_TabGroupsManager = {
       'this.onTabClose_updateTabBar(tab);',
       'try {TabGroupsManager.eventListener.onTabClose(aEvent);} catch(e) {Tabmix.log(e);}'
     )._replace(
-      '!TabmixSvc.tabAnimationsEnabled', 'true'
+      'gReduceMotion', 'true'
     ).toCode();
 
     this.changeCode(aWindow.TMP_tabDNDObserver, "TMP_tabDNDObserver.onDragExit")._replace(

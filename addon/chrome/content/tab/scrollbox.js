@@ -37,7 +37,7 @@ Tabmix.multiRow = {
         this.firstTabInRowMargin = 0;
         this.offsetAmountToScroll = Tabmix.prefs.getBoolPref("offsetAmountToScroll");
         this.offsetRatio = Tabmix.tabsUtils.closeButtonsEnabled ? 0.70 : 0.50;
-        this.minOffset = TabmixSvc.australis ? 25 : 50;
+        this.minOffset = 50;
         this.firstVisible = {tab: null, x: 0, y: 0};
 
         this.scrollbox.addEventListener("underflow", event => {

@@ -7,7 +7,6 @@
 <!ENTITY showRGB.label "Show RGB">
 <!ENTITY unreadAfterReload.label "set tab as unread after reload">
 <!ENTITY disableBackground.label "Disable custom background colors">
-<!ENTITY squaredTabs.label "Apply background color for squared tabs">
 <!ENTITY otherTabs.label "다른 탭">
 <!ENTITY italic.label "기울임꼴">
 <!ENTITY bold.label "굵게">

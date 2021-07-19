@@ -1,17 +1,21 @@
+#shortcut-group {
+  grid-auto-rows: max-content;
+}
+
 shortcut {
   -moz-box-orient: vertical;
 }
 
 .shortcut-edit-box {
   margin: 0 0 0 4px;
-  padding-top: 1px;
-  padding-bottom: 1px;
+  padding: 1px 36px 1px 4px;
   font-weight: normal;
   height: 24px;
   position: absolute;
   right: 0;
-  padding-right: 36px;
+  top: 0;
   box-sizing: inherit;
+  width:200px;
 }
 
 .shortcut-image {
@@ -24,12 +28,11 @@ shortcut {
   position: relative;
 }
 
-.shortcut-edit-box:not([focused]) > .shortcut-image {
+.shortcut-content:not(:focus-within) > .shortcut-image {
   visibility: collapse;
 }
 
-shortcut[value=""] .shortcut-edit-box:not([focused]) input,
-shortcut:not([value]) .shortcut-edit-box:not([focused]) input {
+.shortcut-edit-box:not(:focus)::placeholder {
   color: transparent;
 }
 
@@ -80,11 +83,7 @@ shortcut[used="true"] > .shortcut-content {
 shortcut[used="true"] > .shortcut-content,
 shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > .shortcut-image,
 shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > * > .textbox-input {
-/*  font-weight: bold;*/
   background-color: rgba(255, 255, 0, 0.1); /* yellow */
-/*XXX check from what version of firefox we can use this */
-  background-image: url("chrome://mozapps/skin/extensions/stripes-warning.png");
-  background-repeat: repeat-x;
 }
 
 .shortcut-notificationbox {
@@ -92,7 +91,7 @@ shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > * > .textbox-in
   border-bottom-color: rgba(28, 31, 37, 0.1);
 }
 
-#shortcuts-panel[hide-shortcut-warning="true"] shortcut:not([focused=true]) > .shortcut-notificationbox,
+#shortcuts-panel[hide-shortcut-warning="true"] shortcut:not(:focus-within) > .shortcut-notificationbox,
 .shortcut-notificationbox:empty {
   display: none;
 }
@@ -102,8 +101,7 @@ shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > * > .textbox-in
 }
 
 .warning-icon {
-/*XXX check from what version of firefox we can use this */
-  list-style-image: url("chrome://mozapps/skin/extensions/alerticon-warning.png");
+  list-style-image: url("chrome://devtools/skin/images/alert.svg");
   width: 16px;
   height: 15px;
   margin: 3px 0;
@@ -116,6 +114,10 @@ shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > * > .textbox-in
 #shortcuts-panel[hide-unused-shortcuts="true"] shortcut:not([value]) + hbox,
 #shortcuts-panel[hide-unused-shortcuts="true"] shortcut:not([value]) {
   visibility: collapse;
+}
+
+description {
+	margin-block: 0;
 }
 
 description[disabled] {

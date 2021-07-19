@@ -19,9 +19,9 @@
       }
       this.textContent = "";
       this.appendChild(MozXULElement.parseXULToFragment(`
-        <hbox align="start" class="shortcut-content">
+        <hbox align="center" class="shortcut-content">
           <description inherits="value=label,disabled=blocked" flex="1"></description>
-          <html:input class="shortcut-edit-box" anonid="editBox" style="width:200px;" inherits="value,disabled=blocked" context=" " placeholder="&shortcuts.placeholder;" onkeydown="this.parentNode.parentNode.onKeyDown(event);" onkeypress="this.parentNode.parentNode.handleKeyEvents(event);" onfocus="this.parentNode.parentNode.updateFocus(true);" onblur="this.parentNode.parentNode.updateFocus(false);" onmousedown="event.stopPropagation(); event.preventDefault(); this.select();" onchange="event.stopPropagation();">
+          <html:input class="shortcut-edit-box" anonid="editBox" inherits="value,disabled=blocked" context=" " placeholder="&shortcuts.placeholder;" onkeydown="this.parentNode.parentNode.onKeyDown(event);" onkeypress="this.parentNode.parentNode.handleKeyEvents(event);" onfocus="this.parentNode.parentNode.updateFocus(true);" onblur="this.parentNode.parentNode.updateFocus(false);" onmousedown="event.stopPropagation(); event.preventDefault(); this.select();" onchange="event.stopPropagation();">
           </html:input>
             <image anonid="reset" class="shortcut-image" tooltiptext="&shortcuts.reset;" hidden="true" onclick="this.parentNode.parentNode.resetKey();"></image>
             <image anonid="disable" class="shortcut-image" tooltiptext="&shortcuts.clear;" onclick="this.parentNode.parentNode.disableKey();"></image>
@@ -113,7 +113,6 @@
         this.editBox.select();
         $('shortcuts-panel').editBox = this.editBox;
       }
-      this.setAttribute("focused", onFocus);
     }
 
     applyNewValue(aNewValue, aDisabled) {
@@ -153,7 +152,7 @@
       if (usedKey) {
         const msg = (box.getAttribute("inuse") + ":\n" + usedKey).split("\n");
         for (let i = 0, l = msg.length; i < l; i++) {
-          const node = document.createElement("description");
+          const node = document.createXULElement("description");
           node.setAttribute("value", msg[i]);
           box.appendChild(node);
         }
