@@ -33,8 +33,8 @@ const gNumberInput = {
       case "change":
         if (!item.validity.valid) {
           item.value = item.defaultValue;
-          this.updateSpinnerDisabledState(item);
         }
+        this.updateSpinnerDisabledState(item);
         break;
       case "input":
         if (!item.validity.valid) {
