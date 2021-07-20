@@ -12,6 +12,11 @@ function load() {
   disable_OK();
 
   gNumberInput.init();
+  gNumberInput.inputExpr = gNumberInput.changeExpr = (e)=>{
+    const outRange = (e.target.validity.rangeOverflow||e.target.validity.rangeUnderflow);
+    if(outRange) e.target.oninput();//call default input logic
+    return !e.target.validity.valid &&! outRange;
+  };
 }
 
 function accept() {

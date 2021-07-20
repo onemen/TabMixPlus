@@ -24,6 +24,10 @@ const gNumberInput = {
     window.addEventListener("keypress", this);
   },
 
+  changeExpr: (event)=>!event.target.validity.valid,
+
+  inputExpr: (event)=>!event.target.validity.valid,
+
   handleEvent(event) {
     const item = event.target;
     if (item.type !== "number") {
@@ -31,13 +35,13 @@ const gNumberInput = {
     }
     switch (event.type) {
       case "change":
-        if (!item.validity.valid) {
+        if (this.changeExpr(event)) {
           item.value = item.defaultValue;
         }
         this.updateSpinnerDisabledState(item);
         break;
       case "input":
-        if (!item.validity.valid) {
+        if (this.inputExpr(event)) {
           event.stopPropagation();
           event.preventDefault();
         }
