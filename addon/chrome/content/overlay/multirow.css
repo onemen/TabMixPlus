@@ -20,10 +20,6 @@
   padding-inline-start: 0px;
 }
 
-#tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal] {
-  overflow: -moz-hidden-unscrollable;
-  display: block;
-}
 
 .tabbrowser-tab {
   height: var(--tab-min-height_mlt);

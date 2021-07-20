@@ -1699,8 +1699,13 @@ gTMPprefObserver = {
     const protonPrefVal = Services.prefs.getBoolPref("browser.proton.tabs.enabled", false);
     let newRule;
     if (!Tabmix.isVersion(880)) {
-      // tabmix-tabs-closebutton toolbarbutton
-      document.getElementById("tabmix-tabs-closebutton").setAttribute("tabmix-fill-opacity", true);
+      // the button is not ready when we call dynamicProtonRules early
+      // onContentLoaded>addDynamicRules>dynamicProtonRules
+      setTimeout(() => {
+        // tabmix-tabs-closebutton toolbarbutton
+        document.getElementById("tabmix-tabs-closebutton").setAttribute("tabmix-fill-opacity", true);
+      }, 100);
+
       newRule = `#tabmix-tabs-closebutton[tabmix-fill-opacity] > .toolbarbutton-icon {
         padding: ${protonPrefVal ? 7.4 : 4}px 4px !important;
       }`;
