@@ -48,6 +48,7 @@ const gNumberInput = {
         if (item.editor.textLength > item.maxLength || item.validity.badInput) {
           item.value = item.defaultValue;
         } else if (item.validity.valid) {
+          item.value = parseInt(item.value);
           item.defaultValue = item.value;
         }
         this.updateSpinnerDisabledState(item);

@@ -1,3 +1,4 @@
+/* global PrefWindow */
 /* exported  defaultSetting, toggleSyncPreference, exportData, importData,
              setDialog, showPane, openHelp */
 "use strict";
@@ -8,7 +9,6 @@ var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 this.$ = id => document.getElementById(id);
 
 var gPrefWindow = {
-  widthChanged: false,
   _initialized: false,
   set instantApply(val) {document.documentElement.instantApply = val;},
   get instantApply() {return document.documentElement.instantApply;},
@@ -106,8 +106,7 @@ var gPrefWindow = {
           this.updateApplyButton(aEvent);
         break;
       case "beforeaccept":
-        if (this.widthChanged)
-          gAppearancePane.changeTabsWidth();
+        this.applyBlockedChanges();
         if (!this.instantApply) {
           // prevent TMP_SessionStore.setService from running
           Tabmix.getTopWin().tabmix_setSession = true;
@@ -117,14 +116,72 @@ var gPrefWindow = {
     }
   },
 
-  changes: [],
+  changes: new Set(),
+
+  widthPrefs: ["pref_minWidth", "pref_maxWidth"],
+
+  get widthChanged() {return this.isInChanges(this.widthPrefs);},
+
+  set widthChanged(val) {
+    this.updateChanges(val, this.widthPrefs);
+  },
+
+  isInChanges(list) {
+    return list.some(prefOrId => {
+      if (typeof prefOrId === "string") prefOrId = $(prefOrId);
+      return this.changes.has(prefOrId);
+    });
+  },
+
+  updateChanges(add, list) {
+    if (!Array.isArray(list)) list = [list];
+    const fnName = add ? "add" : "delete";
+    for (let prefOrId of list) {
+      if (typeof prefOrId === "string") prefOrId = $(prefOrId);
+      this.changes[fnName](prefOrId);
+    }
+    this.setButtons(!this.changes.size);
+  },
+
+  // block change on instantApply, user is force to hit apply
+  blockOnInstantApply(item) {
+    if (!this.instantApply) {
+      return undefined;
+    }
+    const preference = $(item.getAttribute("preference"));
+    const valueChange = item.value !== String(preference.valueFromPreferences);
+    this.updateChanges(valueChange, preference);
+    return preference.value;
+  },
+
+  applyBlockedChanges() {
+    if (this.widthChanged) {
+      gAppearancePane.changeTabsWidth();
+    }
+    if (this.instantApply) {
+      this.updateValueFromElement();
+    }
+  },
+
+  updateValueFromElement() {
+    // widthPrefs handled in gAppearancePane.changeTabsWidth
+    const changes = [...this.changes].filter(c => !this.widthPrefs.includes(c));
+    // in instantApply all the changes in this.changes are blocked changes
+    // with: onsynctopreference="return gPrefWindow.blockOnInstantApply(this);"/>
+    for (let preference of changes) {
+      this.changes.delete(preference);
+      const element = document.querySelector(`[preference=${preference.id}]`);
+      preference.value = preference.getValueByType(element);
+    }
+  },
+
   resetChanges() {
     // remove all pending changes
-    if (!this.instantApply || this.widthChanged) {
+    if (this.changes.size) {
       if (this.widthChanged)
         gAppearancePane.resetWidthChange();
-      while (this.changes.length) {
-        let preference = this.changes.shift();
+      for (let preference of this.changes) {
+        this.changes.delete(preference);
         preference.value = preference.valueFromPreferences;
         if (preference.hasAttribute("notChecked"))
           delete preference._lastValue;
@@ -138,18 +195,12 @@ var gPrefWindow = {
     if (item.localName != "preference")
       return;
     let valueChanged = item.value != item.valueFromPreferences;
-    let index = this.changes.indexOf(item);
-    if (valueChanged && index == -1)
-      this.changes.push(item);
-    else if (!valueChanged && index > -1)
-      this.changes.splice(index, 1);
-    this.setButtons(!this.changes.length);
+    this.updateChanges(valueChanged, item);
   },
 
   onApply() {
+    this.applyBlockedChanges();
     this.setButtons(true);
-    if (this.widthChanged)
-      gAppearancePane.changeTabsWidth();
     if (this.instantApply)
       return;
 
@@ -157,8 +208,8 @@ var gPrefWindow = {
     Tabmix.prefs.setBoolPref("setDefault", true);
     Shortcuts.prefsChangedByTabmix = true;
     // Write all values to preferences.
-    while (this.changes.length) {
-      var preference = this.changes.shift();
+    for (let preference of this.changes) {
+      this.changes.delete(preference);
       preference.batching = true;
       preference.valueFromPreferences = preference.value;
       preference.batching = false;

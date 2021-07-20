@@ -396,7 +396,8 @@
                 <hbox align="center">
                   <label control="undoCloseCache" value="&undoCloseCache.label;" observes="obs_undoClose"/>
                   <html:input id="undoCloseCache" maxlength="3" size="3" preference="pref_undoCloseCache"
-                           type="number" required="required" observes="obs_undoClose" min="0"/>
+                           type="number" required="required" observes="obs_undoClose" min="0"
+                           onsynctopreference="return gPrefWindow.blockOnInstantApply(this);"/>
                 </hbox>
                 <checkbox_tmp id="undoClosepos" label="&undoClosepos.label;" preference="pref_undoClosepos" observes="obs_undoClose"/>
                 <checkbox_tmp id="menuonlybutton" label="&menuonlybutton.label;" preference="pref_menuonlybutton" observes="obs_undoClose"/>

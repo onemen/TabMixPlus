@@ -480,6 +480,11 @@ class Preference extends MozXULElement {
       }
     }
 
+    const preference = document.getElementById(aElement.getAttribute("preference"));
+    return preference.getValueByType(aElement);
+  }
+
+  getValueByType(aElement) {
     /**
      * Read the value of an attribute from an element, assuming the
      * attribute is a property on the element's node API. If the property

@@ -47,9 +47,7 @@ var gSessionPane = {
         preference.value = aValue;
       else {
         preference.valueFromPreferences = aValue;
-        let index = gPrefWindow.changes.indexOf(preference);
-        if (index > -1)
-          gPrefWindow.changes.splice(index, 1);
+        gPrefWindow.changes.delete(preference);
       }
       preference.batching = false;
     }
@@ -81,7 +79,7 @@ var gSessionPane = {
     if (instantApply)
       Services.prefs.savePrefFile(null);
     else
-      gPrefWindow.setButtons(!gPrefWindow.changes.length);
+      gPrefWindow.setButtons(!gPrefWindow.changes.size);
   },
 
   setSessionpath(val) {
