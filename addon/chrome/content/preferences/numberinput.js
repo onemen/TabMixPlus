@@ -24,9 +24,9 @@ const gNumberInput = {
     window.addEventListener("keypress", this);
   },
 
-  changeExpr: (event)=>!event.target.validity.valid,
+  changeExpr: event => !event.target.validity.valid,
 
-  inputExpr: (event)=>!event.target.validity.valid,
+  inputExpr: event => !event.target.validity.valid,
 
   handleEvent(event) {
     const item = event.target;
