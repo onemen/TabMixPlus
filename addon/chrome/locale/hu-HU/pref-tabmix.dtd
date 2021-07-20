@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Minden oldalnál">
 <!ENTITY ss.privacy_level.unencrypted "Nem titkosított oldalaknál">
 <!ENTITY ss.privacy_level.nosites "Semmilyen oldalnál">
-<!ENTITY ss.postdata.label1 "Küldött adatok mentésének maximális mérete">
-<!ENTITY ss.postdata.label2 "(bájtokban, -1 = nincs limit)">
 <!ENTITY sessionManger.enable "Munkamenet-kezelő engedélyezése">
 <!ENTITY crashRecovery.enable "Hiba-helyreállító engedélyezése">
 <!ENTITY sm.StartExit "Indítás/Kilépés">

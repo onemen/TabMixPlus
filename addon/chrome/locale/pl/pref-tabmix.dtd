@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "wszystkich witryn">
 <!ENTITY ss.privacy_level.unencrypted "tylko witryn nieszyfrowanych">
 <!ENTITY ss.privacy_level.nosites "- nie zapisuj -">
-<!ENTITY ss.postdata.label1 "Maksymalna liczba zapisywanych danych typu POSTDATA">
-<!ENTITY ss.postdata.label2 "(w bajtach, -1 = wszystko)">
 <!ENTITY sessionManger.enable "Włącz menedżera sesji">
 <!ENTITY crashRecovery.enable "Włącz odzyskiwanie sesji">
 <!ENTITY sm.StartExit "Uruchamianie/Zamykanie">

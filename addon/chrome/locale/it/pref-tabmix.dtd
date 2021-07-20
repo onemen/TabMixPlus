@@ -307,8 +307,6 @@
 <!ENTITY ss.privacy_level.allsites "tutti i siti">
 <!ENTITY ss.privacy_level.unencrypted "i siti non cifrati">
 <!ENTITY ss.privacy_level.nosites "nessun sito">
-<!ENTITY ss.postdata.label1 "Quantità massima di POSTDATA da memorizzare">
-<!ENTITY ss.postdata.label2 "(in byte, -1 = tutti)">
 <!ENTITY sessionManger.enable "Attiva il ripristino delle sessioni di Tab Mix Plus">
 <!ENTITY crashRecovery.enable "Attiva il ripristino delle sessioni dopo crash">
 <!ENTITY sm.StartExit "Avvio/Chiusura">

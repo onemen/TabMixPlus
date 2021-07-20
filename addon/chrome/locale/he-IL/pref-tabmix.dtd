@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "כל האתרים">
 <!ENTITY ss.privacy_level.unencrypted "אתרים לא מוצפנים בלבד">
 <!ENTITY ss.privacy_level.nosites "שום אתר">
-<!ENTITY ss.postdata.label1 "מספר מקסימלי של POSTDATA לשחזור">
-<!ENTITY ss.postdata.label2 "בבייטים, -1 הכל">
 <!ENTITY sessionManger.enable "אפשר מנהל ההפעלות">
 <!ENTITY crashRecovery.enable "אפשר שחזור קריסות">
 <!ENTITY sm.StartExit "התחלה/יציאה">

@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Todas as páginas">
 <!ENTITY ss.privacy_level.unencrypted "Somente páginas não criptografadas">
 <!ENTITY ss.privacy_level.nosites "Nenhuma página">
-<!ENTITY ss.postdata.label1 "Quantidade máxima de POSTDATA a ser salva">
-<!ENTITY ss.postdata.label2 "em bytes, -1 = tudo">
 <!ENTITY sessionManger.enable "Ativar Gerenciador de Sessões">
 <!ENTITY crashRecovery.enable "Ativar Recuperação de Falhas">
 <!ENTITY sm.StartExit "Iniciar/Sair">

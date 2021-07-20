@@ -7,7 +7,6 @@ var gSessionPane = {
     if (TabmixSvc.isLinux)
       $("sessionManager-panels").setAttribute("linux", "true");
 
-    gPrefWindow.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
     this.isSessionStoreEnabled(true);
     this.updateSessionShortcuts();
 

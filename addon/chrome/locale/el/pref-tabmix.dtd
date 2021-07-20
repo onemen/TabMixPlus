@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Όλες τις σελίδες">
 <!ENTITY ss.privacy_level.unencrypted "Μη κρυπτογραφημένες σελίδες μόνο">
 <!ENTITY ss.privacy_level.nosites "Καμία σελίδα">
-<!ENTITY ss.postdata.label1 "Μέγιστος όγκος αποθήκευσης δεδομένων αποστολής">
-<!ENTITY ss.postdata.label2 "(σε byte, -1 = όλα)">
 <!ENTITY sessionManger.enable "Ενεργοποίηση διαχειριστή συνεδρίας">
 <!ENTITY crashRecovery.enable "Ενεργοποίηση επαναφοράς μετά από κατάρρευση">
 <!ENTITY sm.StartExit "Εκκίνηση/Κλείσιμο">

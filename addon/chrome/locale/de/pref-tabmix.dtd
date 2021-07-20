@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "für alle Websites">
 <!ENTITY ss.privacy_level.unencrypted "nur für unverschlüsselte Websites">
 <!ENTITY ss.privacy_level.nosites "nie">
-<!ENTITY ss.postdata.label1 "Maximale Anzahl gesicherter POST-Daten">
-<!ENTITY ss.postdata.label2 "(in Bytes, -1 = alle)">
 <!ENTITY sessionManger.enable "TMP-Sitzungs-Manager aktivieren">
 <!ENTITY crashRecovery.enable "Wiederherstellung nach Absturz aktivieren">
 <!ENTITY sm.StartExit "Start/Beenden">

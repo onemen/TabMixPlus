@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Alle sider">
 <!ENTITY ss.privacy_level.unencrypted "Kun ikke-krypterede sider">
 <!ENTITY ss.privacy_level.nosites "Slet ingen sider">
-<!ENTITY ss.postdata.label1 "Maksimal mængde POSTDATA der gemmes">
-<!ENTITY ss.postdata.label2 "(i bytes, -1 = alt)">
 <!ENTITY sessionManger.enable "Slå Sessionsadministration til">
 <!ENTITY crashRecovery.enable "Slå Genetablering af afbrudte til">
 <!ENTITY sm.StartExit "Start/afslut">

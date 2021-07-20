@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Alle sites">
 <!ENTITY ss.privacy_level.unencrypted "Alleen onversleutelde sites">
 <!ENTITY ss.privacy_level.nosites "Geen enkele site">
-<!ENTITY ss.postdata.label1 "Maximaal opgeslagen hoeveelheid POSTDATA">
-<!ENTITY ss.postdata.label2 "(in bytes, -1 = alles)">
 <!ENTITY sessionManger.enable "Sessiebeheerder inschakelen">
 <!ENTITY crashRecovery.enable "Vastloopherstel inschakelen">
 <!ENTITY sm.StartExit "Starten/Afsluiten">

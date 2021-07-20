@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "所有站点">
 <!ENTITY ss.privacy_level.unencrypted "仅非加密的站点">
 <!ENTITY ss.privacy_level.nosites "无任何站点">
-<!ENTITY ss.postdata.label1 "保存 POSTDATA 的最大数量">
-<!ENTITY ss.postdata.label2 "（单位：字节，-1＝全部保存）">
 <!ENTITY sessionManger.enable "启用浏览进程管理器">
 <!ENTITY crashRecovery.enable "启用崩溃进程恢复">
 <!ENTITY sm.StartExit "启动/退出">

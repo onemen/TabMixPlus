@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "تمام سایت ها">
 <!ENTITY ss.privacy_level.unencrypted "فقط سایت های رمزبندی نشده">
 <!ENTITY ss.privacy_level.nosites "هیچ سایتی">
-<!ENTITY ss.postdata.label1 "POSTDATA بالاترین میزان ذخیره">
-<!ENTITY ss.postdata.label2 "(in bytes, -1 = all of it)">
 <!ENTITY sessionManger.enable "فعال کردن مدیریت نشست">
 <!ENTITY crashRecovery.enable "فعال کردن بازیافت نشست قفل شده">
 <!ENTITY sm.StartExit "شروع/خروج">

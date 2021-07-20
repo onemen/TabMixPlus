@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "儲存所有網站的隱私資料">
 <!ENTITY ss.privacy_level.unencrypted "僅儲存未加密站台的隱私資料">
 <!ENTITY ss.privacy_level.nosites "不儲存任何站台的隱私資料">
-<!ENTITY ss.postdata.label1 "儲存 POSTDATA 時，所允許的最大資料量">
-<!ENTITY ss.postdata.label2 "單位：位元組（-1 = 全部）">
 <!ENTITY sessionManger.enable "啟用瀏覽狀態管理">
 <!ENTITY crashRecovery.enable "啟用異常終止狀態回復">
 <!ENTITY sm.StartExit "啟動/關閉">

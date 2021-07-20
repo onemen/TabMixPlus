@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Все сайты">
 <!ENTITY ss.privacy_level.unencrypted "Только незашифрованные сайты">
 <!ENTITY ss.privacy_level.nosites "Ни для каких сайтов">
-<!ENTITY ss.postdata.label1 "Максимальный размер хранимых отправляемых данных">
-<!ENTITY ss.postdata.label2 "(в байтах, -1 = все)">
 <!ENTITY sessionManger.enable "Включить менеджер сессий">
 <!ENTITY crashRecovery.enable "Включить защиту от вылетов">
 <!ENTITY sm.StartExit "Запуск/Выход">

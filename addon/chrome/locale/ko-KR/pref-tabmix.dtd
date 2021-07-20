@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "모든 사이트에서">
 <!ENTITY ss.privacy_level.unencrypted "암호화되지 않은 사이트만">
 <!ENTITY ss.privacy_level.nosites "저장 안함">
-<!ENTITY ss.postdata.label1 "저장될 POST 데이터의 최대 크기">
-<!ENTITY ss.postdata.label2 "(바이트 단위, -1은 전부)">
 <!ENTITY sessionManger.enable "세션 관리자 쓰기">
 <!ENTITY crashRecovery.enable "충돌 후 복구 쓰기">
 <!ENTITY sm.StartExit "켤 때/끌 때">

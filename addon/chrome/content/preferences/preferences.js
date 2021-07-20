@@ -423,7 +423,7 @@ XPCOMUtils.defineLazyGetter(this, "gPreferenceList", () => {
     "browser.link.open_newwindow.restriction", TabmixSvc.newtabUrl,
     "browser.search.context.loadInBackground", "browser.search.openintab",
     "browser.sessionstore.interval", "browser.sessionstore.max_tabs_undo",
-    "browser.sessionstore.postdata", "browser.sessionstore.privacy_level",
+    "browser.sessionstore.privacy_level",
     "browser.sessionstore.restore_on_demand",
     "browser.sessionstore.resume_from_crash", "browser.startup.page",
     "browser.tabs.closeWindowWithLastTab",

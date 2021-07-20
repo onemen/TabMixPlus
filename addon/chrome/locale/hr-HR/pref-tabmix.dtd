@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Sve stranice">
 <!ENTITY ss.privacy_level.unencrypted "Samo nekodirane stranice">
 <!ENTITY ss.privacy_level.nosites "Niti jednu stranicu">
-<!ENTITY ss.postdata.label1 "Maksimalna količina POSTDATA koja se sprema">
-<!ENTITY ss.postdata.label2 "(u bajtovima, -1 = sve od njih)">
 <!ENTITY sessionManger.enable "Omogući Upravitelja Prijavama">
 <!ENTITY crashRecovery.enable "Omogući Vraćanje nakon rušenja">
 <!ENTITY sm.StartExit "Pokreni/Izađi">

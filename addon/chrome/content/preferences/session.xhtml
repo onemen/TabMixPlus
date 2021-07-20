@@ -35,10 +35,7 @@
       <preference id="pref_ss_timeinterval"
                   name="browser.sessionstore.interval"                       type="int"/>
       <preference id="pref_ss_postdata"
-                  name="browser.sessionstore.privacy_level"                  type="int"
-                  onchange="gPrefWindow.setDisabled('obs_ss_postdata', this.value == 2);"/>
-      <preference id="pref_ss_postdatabytes"
-                  name="browser.sessionstore.postdata"                       type="int"/>
+                  name="browser.sessionstore.privacy_level"                  type="int"/>
       <preference id="pref_onStart"
                   name="extensions.tabmix.sessions.onStart"                  type="int"/>
       <preference id="pref_onClose"
@@ -208,12 +205,6 @@
                       </menupopup>
                     </menulist>
                   </hbox>
-                  <label control="ss_postdatabytes" value="&ss.postdata.label1;" observes="obs_ss_postdata"/>
-                  <hbox align="center" pack="end">
-                    <label control="ss_postdatabytes" value="&ss.postdata.label2;:" observes="obs_ss_postdata"/>
-                    <html:input id="ss_postdatabytes"  preference="pref_ss_postdatabytes"
-                             maxlength="6" size="6" type="number" required="required" min="-1" observes="obs_ss_postdata"/>
-                  </hbox>
                 </vbox>
               </tabpanel>
               <!-- Tabmix Session manager - preserve -->
@@ -248,10 +239,6 @@
 
     <broadcasterset id="paneSession:Broadcaster">
       <broadcaster id="obs_onRestore.overwritewindows"/>
-    </broadcasterset>
-
-    <broadcasterset>
-      <broadcaster id="obs_ss_postdata"/>
     </broadcasterset>
 
   </prefpane>
