@@ -34,12 +34,16 @@ const gNumberInput = {
       return;
     }
     switch (event.type) {
-      case "change":
+      case "change": {
         if (this.changeExpr(event)) {
-          item.value = item.defaultValue;
+          const {rangeOverflow, rangeUnderflow} = item.validity;
+          if (rangeUnderflow && item.min) item.value = item.min;
+          else if (rangeOverflow && item.max) item.value = item.max;
+          else item.value = $(item.getAttribute("preference"))?.valueFromPreferences ?? item.defaultValue;
         }
         this.updateSpinnerDisabledState(item);
         break;
+      }
       case "input":
         if (this.inputExpr(event)) {
           event.stopPropagation();
