@@ -1,6 +1,6 @@
 /* global PrefWindow */
-/* exported  defaultSetting, toggleSyncPreference, exportData, importData,
-             setDialog, showPane, openHelp */
+/* exported defaultSetting, exportData, importData, openHelp, setDialog,
+            showPane, toggleInstantApply, toggleSyncPreference */
 "use strict";
 
 /***** Preference Dialog Functions *****/
@@ -468,6 +468,21 @@ function defaultSetting() {
   gPrefWindow.afterShortcutsChanged();
   Tabmix.prefs.clearUserPref("setDefault");
   Services.prefs.savePrefFile(null);
+}
+
+function toggleInstantApply(menuItem) {
+  const checked = Boolean(menuItem.getAttribute("checked"));
+
+  // apply all pending changes before we change mode to instantApply
+  if (checked) gPrefWindow.onApply();
+
+  document.documentElement.instantApply = checked;
+  Tabmix.prefs.setBoolPref("instantApply", checked);
+
+  // update blocked value
+  if (!checked) gPrefWindow.updateValueFromElement();
+
+  gPrefWindow.setButtons(!gPrefWindow.changes.size);
 }
 
 function toggleSyncPreference() {
