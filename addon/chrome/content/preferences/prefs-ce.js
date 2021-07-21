@@ -612,21 +612,11 @@ class PrefPane extends MozXULElement {
       return;
     }
 
-    delayTabsConnectedCallback = true;
-    if (this.src) {
-      const ov = new Overlays(new ChromeManifest(), window.document.defaultView);
-      ov.load(this.src);
-    }
-
     const fragment = this.fragment;
     const contentBox = fragment.querySelector('.content-box');
     const childNodes = [...this.childNodes];
     this.appendChild(fragment);
     contentBox.append(...childNodes);
-
-    // now we can safly call connectedCallback on all tabs in this PrefPane
-    delayTabsConnectedCallback = false;
-    this.querySelectorAll("tabs").forEach(tab => tab.connectedCallback());
 
     this.initializeAttributeInheritance();
 
@@ -1570,8 +1560,18 @@ class PrefWindow extends MozXULElement {
 
     this._selector.selectedItem = document.getElementsByAttribute("pane", aPaneElement.id)[0];
     if (!aPaneElement.loaded) {
+      delayTabsConnectedCallback = true;
+      const src = aPaneElement.src;
+      if (src) {
+        const ov = new Overlays(new ChromeManifest(), window.document.defaultView);
+        ov.load(src);
+      }
       aPaneElement.loaded = true;
       aPaneElement.connectedCallback();
+      // now we can safely call connectedCallback for all tabs in this PrefPane
+      delayTabsConnectedCallback = false;
+      aPaneElement.querySelectorAll("tabs").forEach(tab => tab.connectedCallback());
+
       this._fireEvent("paneload", aPaneElement);
       this._selectPane(aPaneElement);
     } else
