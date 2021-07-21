@@ -1084,7 +1084,7 @@ class PrefWindow extends MozXULElement {
     fragmentLastChild.append(...otherChildren);
 
     updateAttribute("dlgbuttons", "accept,cancel");
-    updateAttribute("persist", "lastSelected screenX screenY");
+    updateAttribute("persist", "screenX screenY");
     updateAttribute("closebuttonlabel", MozXULElement.parseXULToFragment(`<div attr="&uiTour.infoPanel.close;" />`, ["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
     updateAttribute("closebuttonaccesskey", "C");
     updateAttribute("role", "dialog");
@@ -1499,13 +1499,17 @@ class PrefWindow extends MozXULElement {
   }
 
   get lastSelected() {
+    if (!this.hasAttribute("lastSelected")) {
+      const val = Services.xulStore.getValue(this, "persist", "lastSelected");
+      this.setAttribute('lastSelected', val);
+      return val;
+    }
     return this.getAttribute('lastSelected');
   }
 
   set lastSelected(val) {
     this.setAttribute("lastSelected", val);
-    const {Services} = ChromeUtils.import('resource://gre/modules/Services.jsm');
-    Services.xulStore.persist(this, "lastSelected");
+    Services.xulStore.setValue(this, "persist", "lastSelected", val);
     return val;
   }
 
