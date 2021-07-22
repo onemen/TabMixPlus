@@ -254,11 +254,11 @@
       <spacer flex="1" class="visible"></spacer>
       <html:input anonid="color" class="visible" palettename="standard" type="color" inherits="disabled"></html:input>
       <label value="[RGB]:" inherits="disabled"></label>
-      <html:input anonid="red" class="rgbcontrol" inherits="disabled" maxlength="3" size="3" type="number" required="required" min="0" max="255"></html:input>
-      <html:input anonid="green" class="rgbcontrol" inherits="disabled" maxlength="3" size="3" type="number" required="required" min="0" max="255"></html:input>
-      <html:input anonid="blue" class="rgbcontrol" inherits="disabled" maxlength="3" size="3" type="number" required="required" min="0" max="255"></html:input>
+      <html:input anonid="red" class="rgbcontrol" inherits="disabled" maxlength="3" size="4" type="number" required="required" min="0" max="255"></html:input>
+      <html:input anonid="green" class="rgbcontrol" inherits="disabled" maxlength="3" size="4" type="number" required="required" min="0" max="255"></html:input>
+      <html:input anonid="blue" class="rgbcontrol" inherits="disabled" maxlength="3" size="4" type="number" required="required" min="0" max="255"></html:input>
       <label control="opacity" value="&opacity.label;[%]:" class="opacity" inherits="disabled"></label>
-      <html:input anonid="opacity" class="opacity" inherits="disabled" maxlength="3" size="3" type="number" required="required" min="0" max="100"></html:input>
+      <html:input anonid="opacity" class="opacity" inherits="disabled" maxlength="3" size="4" type="number" required="required" min="0" max="100"></html:input>
     `, ["chrome://tabmixplus/locale/pref-tabmix.dtd", "chrome://tabmixplus/locale/pref-appearance.dtd"]));
       // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
       this.initializeAttributeInheritance();
