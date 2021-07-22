@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Alla webbplatser">
 <!ENTITY ss.privacy_level.unencrypted "Endast okrypterade webbplatser">
 <!ENTITY ss.privacy_level.nosites "Inga webbplatser alls">
-<!ENTITY ss.postdata.label1 "Maximal mängd av POSTDATA som ska sparas">
-<!ENTITY ss.postdata.label2 "(i byte, -1 = allting)">
 <!ENTITY sessionManger.enable "Aktivera aktivitetshanteraren">
 <!ENTITY crashRecovery.enable "Aktivera återställning vid krasch">
 <!ENTITY sm.StartExit "Uppstart/Nedstängning">

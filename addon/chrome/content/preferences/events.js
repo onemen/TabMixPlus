@@ -54,8 +54,6 @@ var gEventsPane = {
       preferences.appendChild(preference);
     }
 
-    $("restoreOnDemand").setAttribute("type", "number");
-
     this.alignTabOpeningBoxes();
 
     gPrefWindow.initPane("paneEvents");
@@ -181,11 +179,13 @@ var gEventsPane = {
         return;
       }
       const onDemand = $("restoreOnDemand");
-      onDemand.min = item.valueNumber;
+      const newMinValue = Number(item.value) || 0;
+      onDemand.min = newMinValue;
       const restoreOnDemand = $("pref_restoreOnDemand");
       if (prefValue > Math.abs(restoreOnDemand.value)) {
         restoreOnDemand.value = $("chk_restoreOnDemand").checked ? prefValue : -prefValue;
       }
+      Tabmix.setItem(onDemand, "decreaseDisabled", restoreOnDemand.value <= newMinValue || null);
     },
 
     setOnDemandDisabledState() {

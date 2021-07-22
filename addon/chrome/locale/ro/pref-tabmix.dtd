@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "toate saiturile">
 <!ENTITY ss.privacy_level.unencrypted "numai saiturile necriptate">
 <!ENTITY ss.privacy_level.nosites "niciun sait">
-<!ENTITY ss.postdata.label1 "Cantitatea maximă de date „POSTDATA” ce se salvează">
-<!ENTITY ss.postdata.label2 "(în octeți; -1 pentru nelimitat)">
 <!ENTITY sessionManger.enable "Se activează Gestionarul de sesiuni">
 <!ENTITY crashRecovery.enable "Se activează recuperarea după o eșuare">
 <!ENTITY sm.StartExit "Lansare/Închidere">

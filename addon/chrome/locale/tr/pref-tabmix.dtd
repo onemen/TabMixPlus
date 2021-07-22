@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Tüm sitelerde">
 <!ENTITY ss.privacy_level.unencrypted "Şifrelenmemiş sitelerde">
 <!ENTITY ss.privacy_level.nosites "Hiçbir sitede">
-<!ENTITY ss.postdata.label1 "Kaydedilecek en fazla POSTDATA bilgisi miktarı">
-<!ENTITY ss.postdata.label2 "(bayt olarak, tamamı için -1 kullanın)">
 <!ENTITY sessionManger.enable "Oturum Yöneticisi etkin">
 <!ENTITY crashRecovery.enable "Çökme Kurtarma etkin">
 <!ENTITY sm.StartExit "Başlatma/Kapatma">

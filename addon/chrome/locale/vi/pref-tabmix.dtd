@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Tất cả các trang">
 <!ENTITY ss.privacy_level.unencrypted "Chỉ các trang không được mã hóa">
 <!ENTITY ss.privacy_level.nosites "Không trang nào cả">
-<!ENTITY ss.postdata.label1 "Lượng POSTDATA được lưu trữ tối đa">
-<!ENTITY ss.postdata.label2 "(theo byte, -1 = tất cả)">
 <!ENTITY sessionManger.enable "Bật “Quản lí Phiên”">
 <!ENTITY crashRecovery.enable "Bật “Khôi phục Đổ vỡ”">
 <!ENTITY sm.StartExit "Khởi động/Thoát">

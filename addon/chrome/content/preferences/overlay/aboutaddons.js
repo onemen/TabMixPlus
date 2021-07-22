@@ -45,8 +45,8 @@ window.addEventListener("load", () => {
     for (const mutation of mutationList) {
       if (mutation.type === 'childList') {
         const node = mutation?.addedNodes[0];
-        const isAddonList = node?.nodeName == "DIV" || node?.nodeName == "ADDON-LIST";
-        if (isAddonList && node.querySelector(`addon-card[addon-id="${ID}"]`)) {
+        const isAddonList = node?.nodeName == "DIV" || node?.nodeName == "ADDON-LIST" || node?.nodeName == "ADDON-CARD";
+        if (isAddonList && (node.querySelector(`addon-card[addon-id="${ID}"]`) || node.getAttribute('addon-id') == ID)) {
           try {
             updateShowItemPreferences();
             break;

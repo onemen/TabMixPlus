@@ -7,7 +7,6 @@ var gSessionPane = {
     if (TabmixSvc.isLinux)
       $("sessionManager-panels").setAttribute("linux", "true");
 
-    gPrefWindow.setDisabled("obs_ss_postdata", $("pref_ss_postdata").value == 2);
     this.isSessionStoreEnabled(true);
     this.updateSessionShortcuts();
 
@@ -47,9 +46,7 @@ var gSessionPane = {
         preference.value = aValue;
       else {
         preference.valueFromPreferences = aValue;
-        let index = gPrefWindow.changes.indexOf(preference);
-        if (index > -1)
-          gPrefWindow.changes.splice(index, 1);
+        gPrefWindow.changes.delete(preference);
       }
       preference.batching = false;
     }
@@ -81,7 +78,7 @@ var gSessionPane = {
     if (instantApply)
       Services.prefs.savePrefFile(null);
     else
-      gPrefWindow.setButtons(!gPrefWindow.changes.length);
+      gPrefWindow.setButtons(!gPrefWindow.changes.size);
   },
 
   setSessionpath(val) {

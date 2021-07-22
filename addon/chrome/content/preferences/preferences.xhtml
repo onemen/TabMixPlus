@@ -5,6 +5,7 @@
 <?xml-stylesheet href="chrome://tabmixplus/skin/preferences/preferences.css"?>
 
 <?xml-stylesheet href="chrome://tabmixplus/skin/preferences.css"?>
+<?xml-stylesheet href="chrome://tabmixplus/skin/numberinput.css"?>
 <?xml-stylesheet href="chrome://tabmixplus/skin/shortcuts.css"?>
 
 <!DOCTYPE prefwindow [
@@ -20,7 +21,7 @@
             title="&page.header.title;"
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             autosize="true"
-            onload="customElements.define('prefwindow', PrefWindow); if (window.toString() == '[object ChromeWindow]') window.sizeToContent();"
+            onload="setDialog();"
             ondialogaccept="gPrefWindow.deinit();"
             ondialogcancel="gPrefWindow.deinit();"
             ondialogextra1="gPrefWindow.onApply();"
@@ -29,7 +30,8 @@
             buttonlabelextra1="&apply.label;"
             buttonlabelextra2="&settings.label;"
             minwidth="527"
-            persist="screenX screenY">
+            persist="screenX screenY"
+            tabindex="0">
 
   <!-- scripts -->
   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/prefs-ce.js"/>
@@ -37,6 +39,7 @@
   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/shortcuts-ce.js"/>
   <script type="application/javascript" src="chrome://tabmixplus/content/broadcaster.js"/>
   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
+  <script type="application/javascript" src="chrome://tabmixplus/content/preferences/numberinput.js"/>
   <script type="application/javascript" src="chrome://tabmixplus/content/preferences/preferences.js"/>
 
   <prefpane id="paneLinks" label="&tab.links;" class="prefpane"
@@ -71,6 +74,7 @@
       <menuitem id="tm-import" label="&settings.import;" oncommand="importData();"/>
       <menuitem id="tm-export" label="&settings.export;" oncommand="exportData();"/>
       <menuitem id="syncPrefs" label="&settings.sync;" oncommand="toggleSyncPreference(); this.checked=!this.checked;" type="checkbox"/>
+      <menuitem id="instantApply" label="Instant Apply" oncommand="toggleInstantApply(this);" type="checkbox"/>
     </menupopup>
   </popupset>
 

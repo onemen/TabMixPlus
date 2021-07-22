@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "All sites">
 <!ENTITY ss.privacy_level.unencrypted "Unencrypted sites only">
 <!ENTITY ss.privacy_level.nosites "No sites at all">
-<!ENTITY ss.postdata.label1 "Maximum amount of POSTDATA to be stored">
-<!ENTITY ss.postdata.label2 "(in bytes, -1 = all of it)">
 <!ENTITY sessionManger.enable "Enable Session Manager">
 <!ENTITY crashRecovery.enable "Enable Crash Recovery">
 <!ENTITY sm.StartExit "Start/Exit">

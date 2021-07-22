@@ -1,5 +1,6 @@
-/* exported  defaultSetting, toggleSyncPreference, exportData, importData,
-             showPane, openHelp */
+/* global PrefWindow */
+/* exported defaultSetting, exportData, importData, openHelp, setDialog,
+            showPane, toggleInstantApply, toggleSyncPreference */
 "use strict";
 
 /***** Preference Dialog Functions *****/
@@ -8,8 +9,9 @@ var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 this.$ = id => document.getElementById(id);
 
 var gPrefWindow = {
-  widthChanged: false,
   _initialized: false,
+  set instantApply(val) {document.documentElement.instantApply = val;},
+  get instantApply() {return document.documentElement.instantApply;},
   onContentLoaded() {
     const prefWindow = $("TabMIxPreferences");
     if (window.toString() != "[object ChromeWindow]") {
@@ -45,9 +47,10 @@ var gPrefWindow = {
 
     window.gIncompatiblePane.init(docElt);
 
-    this.instantApply = docElt.instantApply;
     window.addEventListener("change", this);
     window.addEventListener("beforeaccept", this);
+
+    gNumberInput.init();
 
     // init buttons extra1, extra2, accept, cancel
     docElt.getButton("extra1").setAttribute("icon", "apply");
@@ -61,6 +64,7 @@ var gPrefWindow = {
     paneButton.collapsed = true;
 
     $("syncPrefs").setAttribute("checked", Tabmix.prefs.getBoolPref("syncPrefs"));
+    $("instantApply").setAttribute("checked", Tabmix.prefs.getBoolPref("instantApply"));
   },
 
   initPane(aPaneID) {
@@ -74,7 +78,7 @@ var gPrefWindow = {
     let content = aPaneElement.getElementsByAttribute("class", "content-box")[0];
     let style = window.getComputedStyle(content);
     let contentWidth = parseInt(style.width) + parseInt(style.marginRight) +
-                       parseInt(style.marginLeft);
+      parseInt(style.marginLeft);
     let tabboxes = aPaneElement.getElementsByTagName("tabbox");
     for (let tabbox of tabboxes) {
       diff = Math.max(diff, tabbox.getBoundingClientRect().width - contentWidth);
@@ -91,17 +95,18 @@ var gPrefWindow = {
   },
 
   handleEvent(aEvent) {
+    const item = aEvent.target;
     switch (aEvent.type) {
       case "change":
-        if (aEvent.target.localName != "preference")
+        if (item.localName != "preference") {
           return;
-        this.updateBroadcaster(aEvent.target);
+        }
+        this.updateBroadcaster(item);
         if (!this.instantApply)
           this.updateApplyButton(aEvent);
         break;
       case "beforeaccept":
-        if (this.widthChanged)
-          gAppearancePane.changeTabsWidth();
+        this.applyBlockedChanges();
         if (!this.instantApply) {
           // prevent TMP_SessionStore.setService from running
           Tabmix.getTopWin().tabmix_setSession = true;
@@ -111,14 +116,72 @@ var gPrefWindow = {
     }
   },
 
-  changes: [],
+  changes: new Set(),
+
+  widthPrefs: ["pref_minWidth", "pref_maxWidth"],
+
+  get widthChanged() {return this.isInChanges(this.widthPrefs);},
+
+  set widthChanged(val) {
+    this.updateChanges(val, this.widthPrefs);
+  },
+
+  isInChanges(list) {
+    return list.some(prefOrId => {
+      if (typeof prefOrId === "string") prefOrId = $(prefOrId);
+      return this.changes.has(prefOrId);
+    });
+  },
+
+  updateChanges(add, list) {
+    if (!Array.isArray(list)) list = [list];
+    const fnName = add ? "add" : "delete";
+    for (let prefOrId of list) {
+      if (typeof prefOrId === "string") prefOrId = $(prefOrId);
+      this.changes[fnName](prefOrId);
+    }
+    this.setButtons(!this.changes.size);
+  },
+
+  // block change on instantApply, user is force to hit apply
+  blockOnInstantApply(item) {
+    if (!this.instantApply) {
+      return undefined;
+    }
+    const preference = $(item.getAttribute("preference"));
+    const valueChange = item.value !== String(preference.valueFromPreferences);
+    this.updateChanges(valueChange, preference);
+    return preference.value;
+  },
+
+  applyBlockedChanges() {
+    if (this.widthChanged) {
+      gAppearancePane.changeTabsWidth();
+    }
+    if (this.instantApply) {
+      this.updateValueFromElement();
+    }
+  },
+
+  updateValueFromElement() {
+    // widthPrefs handled in gAppearancePane.changeTabsWidth
+    const changes = [...this.changes].filter(c => !this.widthPrefs.includes(c));
+    // in instantApply all the changes in this.changes are blocked changes
+    // with: onsynctopreference="return gPrefWindow.blockOnInstantApply(this);"/>
+    for (let preference of changes) {
+      this.changes.delete(preference);
+      const element = document.querySelector(`[preference=${preference.id}]`);
+      preference.value = preference.getValueByType(element);
+    }
+  },
+
   resetChanges() {
     // remove all pending changes
-    if (!this.instantApply || this.widthChanged) {
+    if (this.changes.size) {
       if (this.widthChanged)
         gAppearancePane.resetWidthChange();
-      while (this.changes.length) {
-        let preference = this.changes.shift();
+      for (let preference of this.changes) {
+        this.changes.delete(preference);
         preference.value = preference.valueFromPreferences;
         if (preference.hasAttribute("notChecked"))
           delete preference._lastValue;
@@ -132,18 +195,12 @@ var gPrefWindow = {
     if (item.localName != "preference")
       return;
     let valueChanged = item.value != item.valueFromPreferences;
-    let index = this.changes.indexOf(item);
-    if (valueChanged && index == -1)
-      this.changes.push(item);
-    else if (!valueChanged && index > -1)
-      this.changes.splice(index, 1);
-    this.setButtons(!this.changes.length);
+    this.updateChanges(valueChanged, item);
   },
 
   onApply() {
+    this.applyBlockedChanges();
     this.setButtons(true);
-    if (this.widthChanged)
-      gAppearancePane.changeTabsWidth();
     if (this.instantApply)
       return;
 
@@ -151,8 +208,8 @@ var gPrefWindow = {
     Tabmix.prefs.setBoolPref("setDefault", true);
     Shortcuts.prefsChangedByTabmix = true;
     // Write all values to preferences.
-    while (this.changes.length) {
-      var preference = this.changes.shift();
+    for (let preference of this.changes) {
+      this.changes.delete(preference);
       preference.batching = true;
       preference.valueFromPreferences = preference.value;
       preference.batching = false;
@@ -209,7 +266,7 @@ var gPrefWindow = {
     if (aPreference.type != "bool" && !aPreference.hasAttribute("notChecked"))
       return;
     let broadcaster = aBroadcaster ||
-                      $(aPreference.id.replace("pref_", "obs_"));
+      $(aPreference.id.replace("pref_", "obs_"));
     if (broadcaster) {
       let disable = aPreference.type == "bool" ? !aPreference.value :
         aPreference.value == parseInt(aPreference.getAttribute("notChecked"));
@@ -249,7 +306,7 @@ var gPrefWindow = {
   afterShortcutsChanged() {
     Shortcuts.prefsChangedByTabmix = false;
     if (typeof gMenuPane == "object" &&
-        $("pref_shortcuts").value != $("shortcut-group").value)
+      $("pref_shortcuts").value != $("shortcut-group").value)
       gMenuPane.initializeShortcuts();
   },
 
@@ -267,7 +324,7 @@ var gPrefWindow = {
     let val = item.checked ? preference._lastValue || checkedVal : notChecked;
     preference._lastValue = control.value;
     return val;
-  }
+  },
 };
 
 function getPrefByType(prefName) {
@@ -366,7 +423,7 @@ XPCOMUtils.defineLazyGetter(this, "gPreferenceList", () => {
     "browser.link.open_newwindow.restriction", TabmixSvc.newtabUrl,
     "browser.search.context.loadInBackground", "browser.search.openintab",
     "browser.sessionstore.interval", "browser.sessionstore.max_tabs_undo",
-    "browser.sessionstore.postdata", "browser.sessionstore.privacy_level",
+    "browser.sessionstore.privacy_level",
     "browser.sessionstore.restore_on_demand",
     "browser.sessionstore.resume_from_crash", "browser.startup.page",
     "browser.tabs.closeWindowWithLastTab",
@@ -411,6 +468,21 @@ function defaultSetting() {
   gPrefWindow.afterShortcutsChanged();
   Tabmix.prefs.clearUserPref("setDefault");
   Services.prefs.savePrefFile(null);
+}
+
+function toggleInstantApply(menuItem) {
+  const checked = Boolean(menuItem.getAttribute("checked"));
+
+  // apply all pending changes before we change mode to instantApply
+  if (checked) gPrefWindow.onApply();
+
+  document.documentElement.instantApply = checked;
+  Tabmix.prefs.setBoolPref("instantApply", checked);
+
+  // update blocked value
+  if (!checked) gPrefWindow.updateValueFromElement();
+
+  gPrefWindow.setButtons(!gPrefWindow.changes.size);
 }
 
 function toggleSyncPreference() {
@@ -613,7 +685,7 @@ window.gIncompatiblePane = {
 XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", () => {
   let win = Tabmix.getTopWin();
   return win.document.getElementById("context_pinTab").getAttribute("label") + "/" +
-         win.document.getElementById("context_unpinTab").getAttribute("label");
+    win.document.getElementById("context_unpinTab").getAttribute("label");
 });
 
 ChromeUtils.defineModuleGetter(this, "OS", "resource://gre/modules/osfile.jsm");
@@ -624,6 +696,15 @@ ChromeUtils.defineModuleGetter(this, "AsyncUtils",
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
 
 gPrefWindow.onContentLoaded();
+
+function setDialog() {
+  Object.defineProperty(customElements.get('preferences').prototype, 'instantApply', {get: () => document.documentElement.instantApply});
+  customElements.define('prefwindow', class PrefWindowNoInst extends PrefWindow {
+    _instantApplyInitialized = true;
+    instantApply = Tabmix.prefs.getBoolPref('instantApply');
+  });
+  if (window.toString() == '[object ChromeWindow]') window.sizeToContent();
+}
 
 // avoid opening prefs in tab, workaround to bug 1414406
 (function x() {

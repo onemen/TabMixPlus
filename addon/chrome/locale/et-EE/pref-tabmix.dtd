@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Kõik saidid">
 <!ENTITY ss.privacy_level.unencrypted "Ainult krüptimata saidid">
 <!ENTITY ss.privacy_level.nosites "Mitte ükski sait">
-<!ENTITY ss.postdata.label1 "Maksimaalne salvestatavate POSTDATA andmete maht">
-<!ENTITY ss.postdata.label2 "(baitides, -1 = kõik)">
 <!ENTITY sessionManger.enable "Luba Seansside halduri kasutamine">
 <!ENTITY crashRecovery.enable "Luba krahhieelse olukorra taastamine">
 <!ENTITY sm.StartExit "Käivitumine/Väljumine">

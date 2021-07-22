@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "すべてのサイトに対して保存">
 <!ENTITY ss.privacy_level.unencrypted "暗号化されていないサイトに対して保存">
 <!ENTITY ss.privacy_level.nosites "すべてのサイトに対して保存しない">
-<!ENTITY ss.postdata.label1 "POSTDATA の最大保存バイト数">
-<!ENTITY ss.postdata.label2 "(-1 を設定すると無制限)">
 <!ENTITY sessionManger.enable "セッションマネージャを有効にする">
 <!ENTITY crashRecovery.enable "クラッシュリカバリーを有効にする">
 <!ENTITY sm.StartExit "起動／終了時">

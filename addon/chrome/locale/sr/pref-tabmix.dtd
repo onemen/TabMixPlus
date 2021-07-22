@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Све сајтове">
 <!ENTITY ss.privacy_level.unencrypted "Само нешифрованe сајтовe">
 <!ENTITY ss.privacy_level.nosites "Ниједан сајт">
-<!ENTITY ss.postdata.label1 "Максимална количина POSTDATA података за чување">
-<!ENTITY ss.postdata.label2 "(у бајтовима, -1 = свe)">
 <!ENTITY sessionManger.enable "Омогући управљача сесијама">
 <!ENTITY crashRecovery.enable "Омогући опоравак од грешке">
 <!ENTITY sm.StartExit "Покрени/изађи">

@@ -1,0 +1,24 @@
+
+/* ::::: number input ::::: */
+
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+input[type="number"]:not(:disabled)[increaseDisabled]::-moz-number-spin-up,
+input[type="number"]:not(:disabled)[decreaseDisabled]::-moz-number-spin-down {
+  opacity: 0.6;
+}
+
+input[type="number"] {
+  padding-inline-end: 0;
+}
+
+input[type="number"]::-moz-number-spin-up,
+input[type="number"]::-moz-number-spin-down {
+  min-height: 11px;
+  margin: 0 -2px 0 2px !important;
+}
+
+input:invalid {
+  border: 1px solid red;
+  outline-style: none;
+}

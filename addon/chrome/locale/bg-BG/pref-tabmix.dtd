@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "За всички сайтове">
 <!ENTITY ss.privacy_level.unencrypted "Само за нешифровани сайтове">
 <!ENTITY ss.privacy_level.nosites "Без записване">
-<!ENTITY ss.postdata.label1 "Максимален размер на POSTDATA данни за съхранение">
-<!ENTITY ss.postdata.label2 "(в байтове, -1 = всичко)">
 <!ENTITY sessionManger.enable "Включване на Мениджъра на сесии">
 <!ENTITY crashRecovery.enable "Възстановяване на сесия след крах на Firefox">
 <!ENTITY sm.StartExit "Пускане/Изход">

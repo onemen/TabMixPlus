@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Tots els llocs">
 <!ENTITY ss.privacy_level.unencrypted "Només els llocs no xifrats">
 <!ENTITY ss.privacy_level.nosites "Cap lloc">
-<!ENTITY ss.postdata.label1 "Quantitat màxima de POSTDATA que es desarà">
-<!ENTITY ss.postdata.label2 "(en bytes, -1 = tot)">
 <!ENTITY sessionManger.enable "Habilita el gestor de sessions">
 <!ENTITY crashRecovery.enable "Habilita la recuperació després de fallada">
 <!ENTITY sm.StartExit "Inici/Sortida">

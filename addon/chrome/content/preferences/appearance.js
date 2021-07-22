@@ -143,7 +143,6 @@ var gAppearancePane = {
                         $("maxWidth").value != $("pref_maxWidth").valueFromPreferences;
     if (!gPrefWindow.instantApply)
       return undefined;
-    gPrefWindow.setButtons(!gPrefWindow.widthChanged);
     // block the change by returning the preference own value
     return $(item.getAttribute("preference")).value;
   },
@@ -153,8 +152,10 @@ var gAppearancePane = {
       return;
     gPrefWindow.widthChanged = false;
     let [minWidth, maxWidth] = [parseInt($("minWidth").value), parseInt($("maxWidth").value)];
-    if (minWidth > maxWidth)
+    if (minWidth > maxWidth) {
       [minWidth, maxWidth] = [maxWidth, minWidth];
+      [$("minWidth").value, $("maxWidth").value] = [minWidth, maxWidth];
+    }
     [$("pref_minWidth").value, $("pref_maxWidth").value] = [minWidth, maxWidth];
   },
 

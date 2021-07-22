@@ -269,8 +269,6 @@
 <!ENTITY ss.privacy_level.allsites "Všechny stránky">
 <!ENTITY ss.privacy_level.unencrypted "Pouze nezabezpečené stránky">
 <!ENTITY ss.privacy_level.nosites "Žádné stránky">
-<!ENTITY ss.postdata.label1 "Maximální množství dat typu POSTDATA, které bude uloženo">
-<!ENTITY ss.postdata.label2 "(v bytech, -1 = vše)">
 <!ENTITY sessionManger.enable "Povolit Správce relací">
 <!ENTITY crashRecovery.enable "Povolit obnovu po pádu">
 <!ENTITY sm.StartExit "Spouštění/Zavírání">
