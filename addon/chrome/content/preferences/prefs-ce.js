@@ -8,11 +8,12 @@ const {Overlays} = ChromeUtils.import("chrome://tabmix-resource/content/bootstra
 
 // delay connectedCallback() of tabs till tabs inserted into DOM so it won't be run multiple times and cause trouble.
 let delayTabsConnectedCallback = false;
-customElements.get('tabs').prototype.delayConnectedCallback = function() {
+const MozTabs = customElements.get("tabs").prototype;
+MozTabs.delayConnectedCallback = function() {
   return delayTabsConnectedCallback;
 };
 
-Object.defineProperty(customElements.get("tab").prototype, "container", {
+Object.defineProperty(MozTabs, "container", {
   get() {
     return this.parentNode;
   }
@@ -1574,7 +1575,7 @@ class PrefWindow extends MozXULElement {
       aPaneElement.connectedCallback();
       // now we can safely call connectedCallback for all tabs in this PrefPane
       delayTabsConnectedCallback = false;
-      aPaneElement.querySelectorAll("tabs").forEach(tab => tab.connectedCallback());
+      aPaneElement.querySelectorAll("tabs").forEach(tabs => tabs.connectedCallback());
 
       this._fireEvent("paneload", aPaneElement);
       this._selectPane(aPaneElement);
