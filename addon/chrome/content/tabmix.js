@@ -70,7 +70,7 @@ Tabmix.sessionInitialized = function() {
   TMP_SessionStore.persistTabAttribute();
 
   TMP_ClosedTabs.setButtonDisableState();
-  if (this.firstWindowInSession) {
+  if (this.isFirstWindowInSession) {
     Tabmix.closedObjectsUtils.toggleRecentlyClosedWindowsButton();
   }
 };

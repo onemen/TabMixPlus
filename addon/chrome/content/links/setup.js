@@ -43,7 +43,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     var SM = TabmixSessionManager;
     SM.initializePrivateStateVars();
 
-    var firstWindow = this.firstWindowInSession || SM.firstNonPrivateWindow;
+    var firstWindow = this.isFirstWindowInSession || SM.firstNonPrivateWindow;
     var disabled = TMP_SessionStore.isSessionStoreEnabled() ||
                       this.extensions.sessionManager;
     var sessionManager = this.prefs.getBoolPref("sessions.manager");
@@ -59,7 +59,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     // Set SessionStore._loadState to running on first window in the session
     // to prevent it from restoring last session or pinned tabs.
     let setStateRunning = (willRestore || notRestore) &&
-        this.firstWindowInSession && !this.isWindowAfterSessionRestore;
+        this.isFirstWindowInSession && !this.isWindowAfterSessionRestore;
     // RunState exist since Firefox 34, bug 1020831
     if (setStateRunning) {
       let RunState = TabmixSvc.SessionStoreGlobal.RunState || {
@@ -115,7 +115,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     }
 
     // look for installed extensions that are incompatible with tabmix
-    if (this.firstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
+    if (this.isFirstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {
         let tmp = {};
         ChromeUtils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm", tmp);

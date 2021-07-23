@@ -326,7 +326,7 @@ TabmixSessionManager = {
 
     var sanitized = this.enableManager && TabmixSvc.sm.sanitized;
     // check if we need to backup
-    if (Tabmix.firstWindowInSession && this.enableManager && !sanitized) {
+    if (Tabmix.isFirstWindowInSession && this.enableManager && !sanitized) {
       try {
         this.archiveSessions();
       } catch (ex) {
@@ -364,7 +364,7 @@ TabmixSessionManager = {
     // If sessionStore restore the session after restart we do not need to do anything
     // when all tabs are pinned, session restore add the home page on restart
     // prepare history sessions
-    if (Tabmix.firstWindowInSession && !this.globalPrivateBrowsing &&
+    if (Tabmix.isFirstWindowInSession && !this.globalPrivateBrowsing &&
         !sanitized && !Tabmix.isWindowAfterSessionRestore) {
       if (this.enableManager || crashed) {
         if (crashed)
@@ -425,7 +425,7 @@ TabmixSessionManager = {
       this.copyClosedTabsToRDF(this.gThisWin);
     }
     // initialize closed window list broadcaster
-    var status = this.isPrivateWindow ? isFirstWindow || this.isPrivateSession : Tabmix.firstWindowInSession;
+    var status = this.isPrivateWindow ? isFirstWindow || this.isPrivateSession : Tabmix.isFirstWindowInSession;
     var disabled = this.enableManager ? status || this.isClosedWindowsEmpty() :
       TabmixSvc.ss.getClosedWindowCount() === 0;
     Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);

@@ -1844,7 +1844,7 @@ gTMPprefObserver = {
   },
 
   overflowIndicator() {
-    if (!Tabmix.firstWindowInSession || !Tabmix.isVersion(890)) {
+    if (!Tabmix.isFirstWindowInSession || !Tabmix.isVersion(890)) {
       return;
     }
 

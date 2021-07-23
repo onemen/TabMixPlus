@@ -231,6 +231,11 @@ var Tabmix = {
     return count;
   },
 
+  get isFirstWindowInSession() {
+    // this.firstWindowInSession is undefined before TabmixSvc.windowStartup._initialized
+    return this.firstWindowInSession ?? TabmixSvc.windowStartup._initialized === false;
+  },
+
   get isSingleBrowserWindow() {
     return this.numberOfWindows(false, "navigator:browser") == 1;
   },
