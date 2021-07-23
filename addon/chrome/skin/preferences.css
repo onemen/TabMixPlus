@@ -225,7 +225,7 @@ prefpane {
   padding: 3px 1px 1px 1px;
 }
 
-prefpane > tabbox {
+prefpane > .content-box > tabbox {
   width: 525px;
   height: 464px;
 }
