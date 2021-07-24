@@ -139,8 +139,10 @@ function startup(data, reason) {
         await chromeManifest.parse();
         const document = _win.document;
         if (document.createXULElement) {
+          const isBrowser = document.documentElement.getAttribute("windowtype") === "navigator:browser";
+          const isOverflow = isBrowser && _win.gBrowser.tabContainer.getAttribute("overflow");
           Overlays.load(chromeManifest, document.defaultView);
-          if (document.documentElement.getAttribute("windowtype") === "navigator:browser") {
+          if (isBrowser) {
             await _win.delayedStartupPromise;
             _win.gBrowser.tabs.forEach(x => {
               const browser = x.linkedBrowser;
@@ -148,6 +150,10 @@ function startup(data, reason) {
                 Overlays.load(chromeManifest, browser.contentWindow);
               }
             });
+            // verify our scroll buttons are visible on overflow
+            if (isOverflow) {
+              _win.Tabmix.tabsUtils.updateVerticalTabStrip();
+            }
           }
         }
       }(win));
