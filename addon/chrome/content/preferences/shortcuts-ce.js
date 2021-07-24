@@ -9,22 +9,33 @@
     static get inheritedAttributes() {
       return {
         "description": "value=label,disabled=blocked",
+        ".input-container": "disabled=blocked",
         ".shortcut-edit-box": "value,disabled=blocked",
       };
     }
 
     connectedCallback() {
-      if (this.delayConnectedCallback()) {
+      if (this._initialized || this.delayConnectedCallback()) {
         return;
       }
       this.textContent = "";
       this.appendChild(MozXULElement.parseXULToFragment(`
         <hbox align="center" class="shortcut-content">
           <description inherits="value=label,disabled=blocked" flex="1"></description>
-          <html:input class="shortcut-edit-box" anonid="editBox" inherits="value,disabled=blocked" context=" " placeholder="&shortcuts.placeholder;" onkeydown="this.parentNode.parentNode.onKeyDown(event);" onkeypress="this.parentNode.parentNode.handleKeyEvents(event);" onfocus="this.parentNode.parentNode.updateFocus(true);" onblur="this.parentNode.parentNode.updateFocus(false);" onmousedown="event.stopPropagation(); event.preventDefault(); this.select();" onchange="event.stopPropagation();">
-          </html:input>
-            <image anonid="reset" class="shortcut-image" tooltiptext="&shortcuts.reset;" hidden="true" onclick="this.parentNode.parentNode.resetKey();"></image>
-            <image anonid="disable" class="shortcut-image" tooltiptext="&shortcuts.clear;" onclick="this.parentNode.parentNode.disableKey();"></image>
+          <hbox class="input-container" inherits="disabled=blocked">
+            <html:input flex="1" focused="true" class="shortcut-edit-box" anonid="editBox"
+              inherits="value,disabled=blocked" context=" "
+              placeholder="&shortcuts.placeholder;"
+              onkeydown="this.shortcut.onKeyDown(event);"
+              onkeypress="this.shortcut.handleKeyEvents(event);"
+              onfocus="this.shortcut.updateFocus(true);"
+              onmousedown="event.stopPropagation(); event.preventDefault(); this.select();"
+              onchange="event.stopPropagation();"/>
+            <image anonid="reset" class="shortcut-image" tooltiptext="&shortcuts.reset;" _hidden="true"
+              onclick="resetKey();"/>
+            <image anonid="disable" class="shortcut-image" tooltiptext="&shortcuts.clear;"
+              onclick="disableKey();"/>
+          </hbox>
         </hbox>
         <vbox anonid="notificationbox" class="shortcut-notificationbox" inuse="&shortcuts.inuse;" flex="1"></vbox>
       `, ["chrome://tabmixplus/locale/shortcuts.dtd"]));
@@ -33,9 +44,13 @@
 
       this._key = null;
 
+      this.description = this.querySelector("description");
       this.notificationbox = this.getElementsByAttribute("anonid", "notificationbox")[0];
 
       this.editBox = this.getElementsByAttribute("anonid", "editBox")[0];
+      this.editBox.shortcut = this;
+
+      this._initialized = true;
     }
 
     get keyid() {
@@ -89,7 +104,7 @@
       const defaultVal = (Shortcuts.keys[this.id].default || "").replace(/^d&/, "");
       if (defaultVal) {
         const resetButton = this.getElementsByAttribute("anonid", "reset")[0];
-        resetButton.hidden = false;
+        resetButton.setAttribute("_hidden", false);
         const defaultKey = getFormattedKey(Shortcuts.keyParse(defaultVal));
         resetButton.setAttribute("tooltiptext",
           resetButton.getAttribute("tooltiptext") + "\nDefault is: " + defaultKey);
@@ -99,7 +114,7 @@
     }
 
     valueFromPreferences(aKeyData) {
-      this.editBox.previousSibling.textContent = this.getAttribute("label");
+      this.description.textContent = this.getAttribute("label");
       if (!aKeyData.value && !this._key)
         return false;
       this.key = Shortcuts.keyParse(aKeyData.value);
@@ -111,8 +126,11 @@
     updateFocus(onFocus) {
       if (onFocus) {
         this.editBox.select();
-        $('shortcuts-panel').editBox = this.editBox;
+        const panel = $('shortcuts-panel');
+        panel.shortcut?.removeAttribute("focused");
+        panel.shortcut = this;
       }
+      this.setAttribute("focused", onFocus);
     }
 
     applyNewValue(aNewValue, aDisabled) {

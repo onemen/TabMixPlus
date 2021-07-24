@@ -6,16 +6,39 @@ shortcut {
   -moz-box-orient: vertical;
 }
 
-.shortcut-edit-box {
-  margin: 0 0 0 4px;
-  padding: 1px 36px 1px 4px;
+.shortcut-content {
+  height: 24px;
+  margin: 1px 0;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  border: 0.8px solid #b1b1b1;
+  box-sizing: inherit;
   font-weight: normal;
   height: 24px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  box-sizing: inherit;
-  width:200px;
+  padding: 2px;
+  transition: all 0.15s ease-in-out;
+  width:175px;
+}
+
+shortcut[focused="true"] .input-container {
+   border-color: #0996f8;
+   box-shadow: inset 0 0 0 1px rgba(97, 181, 255, 0.75);
+}
+
+.input-container[disabled] {
+  background-color: ThreeDLightShadow
+}
+
+.shortcut-edit-box {
+  background-color: transparent;
+  border: none;
+  flex: 1;
+  margin: 0;
+  outline: none;
+  padding: 0 0 0 4px;
 }
 
 .shortcut-image {
@@ -28,7 +51,7 @@ shortcut {
   position: relative;
 }
 
-.shortcut-content:not(:focus-within) > .shortcut-image {
+shortcut:not([focused="true"]) .shortcut-image {
   visibility: collapse;
 }
 
@@ -44,6 +67,7 @@ shortcut {
   opacity: 1;
 }
 
+.shortcut-image[_hidden="true"],
 shortcut[default="true"] .shortcut-image[anonid="reset"],
 shortcut[value=""] .shortcut-image[anonid="disable"],
 shortcut:not([value]) .shortcut-image[anonid="disable"] {
@@ -64,12 +88,6 @@ shortcut:not([value]) .shortcut-image[anonid="disable"] {
 
 #TabMIxPreferences[linux] .shortcut-image[anonid="reset"] {
   margin: 1px 0;
-}
-
-.shortcut-content {
-  height: 24px;
-  margin: 1px 0;
-  position: relative;
 }
 
 .shortcut-notificationbox,
@@ -117,7 +135,7 @@ shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > * > .textbox-in
 }
 
 description {
-	margin-block: 0;
+  margin-block: 0;
 }
 
 description[disabled] {

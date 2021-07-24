@@ -251,8 +251,8 @@
               hide-unused-shortcuts="false" usedKeys="false"
               persist="hide-shortcut-warning hide-unused-shortcuts"
               onmousedown="if (event.originalTarget.className == 'shortcut-image') return;
-                  var editBox = this.editBox || null;
-                  if (editBox) {editBox.blur(); this.editBox = null;}">
+                  var shortcut = this.shortcut || null;
+                  if (shortcut) {shortcut.updateFocus(false); this.shortcut = null;}">
           <hbox>
             <label value="&shortcuts.edit;" flex="1"/>
             <spacer flex="1"/>
