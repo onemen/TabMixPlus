@@ -74,6 +74,15 @@
 }
 } */
 
+#navigator-toolbox:not(:hover) #tabmix-scrollbox:not([highlight])::part(scrollbutton-down) {
+  transition: background-color 1s ease-out 0s;
+}
+
+#tabmix-scrollbox[highlight]::part(scrollbutton-down) {
+  background-color: highlight;
+}
+
+/* see tab.js  in this.dynamicProtonRules
 @media (-moz-proton) {
 #tabmix-scrollbox::part(scrollbutton-up),
 #tabmix-scrollbox::part(scrollbutton-down) {
@@ -84,7 +93,7 @@
   margin: 0;
   padding: calc(var(--toolbarbutton-inner-padding) - 2px) calc(var(--toolbarbutton-inner-padding) - 6px);
 }
-}
+} */
 
 #tabmix-scrollbox:not([scrolledtostart=true])::part(scrollbutton-up):hover,
 #tabmix-scrollbox:not([scrolledtoend=true])::part(scrollbutton-down):hover {
@@ -92,11 +101,18 @@
   color: inherit;
 }
 
+#tabmix-scrollbox:not([scrolledtostart="true"])::part(scrollbutton-up):hover:active,
+#tabmix-scrollbox:not([scrolledtoend="true"])::part(scrollbutton-down):hover:active {
+  background-color: var(--toolbarbutton-active-background, var(--toolbarbutton-hover-background));
+  color: inherit;
+}
+
 /* based on browser/themes/shared/tabs.inc.css */
 #tabmix-scrollbox::part(scrollbutton-up),
 #tabmix-scrollbox::part(scrollbutton-down) {
   fill: var(--tabmix-scrollbox-button-fill, currentColor);
-  fill-opacity: var(--toolbarbutton-icon-fill-opacity);
+  /* firefox 92+ - Bug 1703914 Remove --toolbarbutton-icon-fill-opacity CSS variable */
+  fill-opacity: var(--toolbarbutton-icon-fill-opacity, 1);
 }
 
 #tabmix-scrollbox[orient=vertical]::part(scrollbutton-up),

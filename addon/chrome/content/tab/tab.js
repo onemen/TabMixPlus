@@ -1715,31 +1715,60 @@ gTMPprefObserver = {
       }
     }
 
-    newRule =
-      `#tabmix-scrollbox::part(scrollbutton-up),
+    if (!Tabmix.isVersion(910)) {
+      newRule =
+     `#tabmix-scrollbox::part(scrollbutton-up),
       #tabmix-scrollbox::part(scrollbutton-down) {
-        appearance: none;
+        ${Tabmix.isVersion(860) ? `appearance: none;` : `-moz-appearance: none;`}
         margin: 0 0 var(--tabs-navbar-shadow-size) !important;
-        padding: var(--tabmix-scrollbutton-padding) !important;
+        padding: var(--tabmix-scrollbutton-padding) var(--toolbarbutton-inner-padding) !important;
       }`;
-    if (Tabmix.isVersion(890)) {
-      this.insertRule(`@media not (-moz-proton) {${newRule}}`);
-    } else {
-      this.insertRule(newRule);
+      if (Tabmix.isVersion(890)) {
+        this.insertRule(`@media not (-moz-proton) {${newRule}}`);
+      } else {
+        this.insertRule(newRule);
+      }
+
+      // reduce scroll button padding for compact tab without proton style
+      newRule =
+        `:root[uidensity=compact] #tabmix-scrollbox::part(scrollbutton-up),
+        :root[uidensity=compact] #tabmix-scrollbox::part(scrollbutton-down) {
+          padding-top: calc(var(--tabmix-scrollbutton-padding) - 1px) !important;
+          padding-bottom: calc(var(--tabmix-scrollbutton-padding) - 1px) !important;
+        }`;
+      if (Tabmix.isVersion(890)) {
+        this.insertRule(`@media not (-moz-proton) {${newRule}}`);
+      } else {
+        this.insertRule(newRule);
+      }
     }
 
-    // reduce scroll button padding for compact tab without proton style
-    newRule =
-      `:root[uidensity=compact] #tabmix-scrollbox::part(scrollbutton-up),
-      :root[uidensity=compact] #tabmix-scrollbox::part(scrollbutton-down) {
-        padding-top: calc(var(--tabmix-scrollbutton-padding) - 1px) !important;
-        padding-bottom: calc(var(--tabmix-scrollbutton-padding) - 1px) !important;
-      }`;
-    if (Tabmix.isVersion(890)) {
-      this.insertRule(`@media not (-moz-proton) {${newRule}}`);
-    } else {
-      this.insertRule(newRule);
-    }
+    const insertRule = (rule, noMedia) => {
+      if (Tabmix.isVersion(910) || noMedia) {
+        this.insertRule(rule);
+      } else {
+        this.insertRule(`@media (-moz-proton) {${rule}}`);
+      }
+    };
+
+    insertRule(
+      `#tabmix-scrollbox::part(scrollbutton-up),
+       #tabmix-scrollbox::part(scrollbutton-down) {
+         appearance: none;
+         background-clip: padding-box;
+         border: 4px solid transparent;
+         border-radius: calc(var(--tab-border-radius) + 4px);
+         margin: 0;
+         padding: calc(var(--toolbarbutton-inner-padding) - 2px) calc(var(--toolbarbutton-inner-padding) - 6px);
+       }`
+    );
+
+    insertRule(
+      `#tabmix-scrollbox[flowing=multibar]::part(scrollbutton-up),
+       #tabmix-scrollbox[flowing=multibar]::part(scrollbutton-down) {
+         padding-inline: calc(var(--toolbarbutton-inner-padding) - 5px);
+       }`
+    );
 
     // Bug 1705849 - Update toolbar icon fill colours
     const fill = Tabmix.isVersion(890) ?
@@ -1763,14 +1792,6 @@ gTMPprefObserver = {
       this.insertRule(newRule);
       return;
     }
-
-    const insertRule = (rule, noMedia) => {
-      if (Tabmix.isVersion(910) || noMedia) {
-        this.insertRule(rule);
-      } else {
-        this.insertRule(`@media (-moz-proton) {${rule}}`);
-      }
-    };
 
     const blockMargin = Tabmix.tabsUtils.protonValues;
     if (Tabmix.isVersion(890)) {
@@ -1902,6 +1923,16 @@ gTMPprefObserver = {
     #tabmix-scrollbox:-moz-locale-dir(rtl)::part(overflow-end-indicator) {
       transform: scaleX(-1);
     }
+
+    ${Tabmix.isVersion(910) ? `` : `@media not (-moz-proton) {
+    #tabmix-scrollbox:not([scrolledtostart])::part(overflow-start-indicator) {
+      margin-inline: -1px -17px;
+    }
+
+    #tabmix-scrollbox:not([scrolledtoend])::part(overflow-end-indicator) {
+      margin-inline: -17px -1px;
+    }
+    }`}
 
     #tabmix-scrollbox[scrolledtostart]::part(overflow-start-indicator),
     #tabmix-scrollbox[scrolledtoend]::part(overflow-end-indicator) {
