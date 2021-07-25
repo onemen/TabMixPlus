@@ -62,3 +62,18 @@ prefwindow[chromehidden~="toolbar"] .chromeclass-toolbar {
 windowdragbox {
   width: 100%;
 }
+
+@media (-moz-proton) {
+menulist[disabled="true"] {
+  background-color: -moz-Dialog;
+  color: GrayText;
+}
+
+menulist > menupopup menu,
+menulist > menupopup menuitem {
+  appearance: none;
+  font-size: 1em;
+  padding-block: 0.2em;
+  padding-inline: 10px 20px;
+}
+} /** END Proton **/
