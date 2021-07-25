@@ -63,19 +63,36 @@ this.TabmixSvc = {
     this._defaultPreferencesLoaded = true;
     const prefs = Services.prefs.getDefaultBranch("");
     pref = function(prefName, prefValue) {
+      const setPref = setPrefType => {
+        try {
+          prefs[setPrefType](prefName, prefValue);
+        } catch (ex1) {
+          try {
+            // current value is invalid or deleted by the user
+            Services.prefs[setPrefType](prefName, prefValue);
+            prefs[setPrefType](prefName, prefValue);
+            Services.prefs.clearUserPref(prefName);
+          } catch (ex2) {
+            TabmixSvc.console.reportError(`errored twice when trying to set ${prefName} default`);
+            TabmixSvc.console.reportError(ex1);
+            TabmixSvc.console.reportError(ex2);
+          }
+        }
+      };
+
       switch (prefValue.constructor.name) {
         case "String":
-          prefs.setCharPref(prefName, prefValue);
+          setPref("setCharPref");
           break;
         case "Number":
-          prefs.setIntPref(prefName, prefValue);
+          setPref("setIntPref");
           break;
         case "Boolean":
-          prefs.setBoolPref(prefName, prefValue);
+          setPref("setBoolPref");
           break;
         default:
           TabmixSvc.console.reportError(`can't set pref ${prefName} to value '${prefValue}'; ` +
-            `it isn't a String, Number, or Boolean`);
+              `it isn't a String, Number, or Boolean`);
       }
     };
     try {
