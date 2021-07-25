@@ -300,3 +300,144 @@ tabbox > tabpanels {
 .menu checkbox {
   padding-top: 0;
 }
+
+@media (-moz-proton) {
+:root {
+  --in-content-border-color: #d7d7db;
+  --in-content-button-text-color: rgb(21, 20, 26);
+  --in-content-button-text-color-hover: rgb(21, 20, 26);
+  --in-content-button-background: rgba(207,207,216,.33);
+  --in-content-button-background-hover: rgba(207,207,216,.66);
+  --in-content-button-background-active: rgb(207,207,216);
+  --in-content-box-border-color: color-mix(in srgb, currentColor 41%, transparent);
+  --in-content-box-background: #fff;
+  --in-content-focus-outline-color: #0061e0;
+  --in-content-border-invalid: #ff0039;
+  background-color: #f9f9fb !important;
+}
+
+/* prefwindow {
+  background-color: #f9f9fb !important;
+} */
+
+prefpane {
+  padding: 3px 0 1px 0;
+}
+
+menulist[disabled="true"] {
+  background-color: -moz-Dialog;
+  color: GrayText;
+}
+
+menulist > menupopup menu,
+menulist > menupopup menuitem {
+  appearance: none;
+  font-size: 1em;
+  padding-block: 0.2em;
+  padding-inline: 10px 20px;
+}
+
+radio[pane] {
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+/* tabpanels and tabs */
+
+tabpanels {
+  appearance: none;
+  border: none;
+  padding: 10px;
+  background-color: transparent;
+  color: inherit;
+}
+
+tabs {
+  margin: 0;
+  border-bottom: 1px solid var(--in-content-border-color);
+  background-color: transparent;
+  color: inherit;
+}
+
+tabs.tabs-hidden {
+  border-bottom: none;
+}
+
+tab {
+  appearance: none;
+  margin-top: 0;
+  padding: 2px 10px 0 !important;
+  min-height: 25px;
+  color: inherit;
+  background-color: transparent;
+  border-bottom: 2px solid transparent;
+  transition: background-color 50ms ease 0s;
+}
+
+tab:hover {
+  border-bottom-color: var(--in-content-border-color);
+  background-color: var(--in-content-button-background-hover);
+  color: var(--in-content-button-text-color-hover);
+}
+
+tab[selected] {
+  color: var(--in-content-accent-color) !important; /* override macOS tabbox.css */
+  border-bottom-color: currentColor;
+}
+
+/* buttons */
+
+button {
+  appearance: none;
+  min-height: 26px;
+  color: var(--in-content-button-text-color, inherit);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: var(--in-content-button-background);
+  font-weight: 600;
+  padding: 4px 10px;
+  text-decoration: none;
+  margin: 2px 8px;
+  font-size: 1em;
+}
+
+button:hover {
+  background-color: var(--in-content-button-background-hover);
+  color: var(--in-content-button-text-color-hover);
+  border-color: transparent;
+}
+
+button:hover:active {
+  background-color: var(--in-content-button-background-active);
+}
+
+/* pane spesific rules  */
+
+.prefWindow-dlgbuttons {
+	padding-inline-start: 10px;
+}
+
+#TabMIxPreferences:not([linux]):not([mac]) .groupbox-tabbox > tabs,
+.groupbox-tabbox > tabs {
+  border-bottom: none;
+	margin-bottom: 4px;
+}
+
+#TabMIxPreferences:not([ubuntu]) .groupbox-panels,
+.groupbox-panels {
+  appearance: none;
+  border: 2px groove ThreeDFace;
+  border-radius: 4px;
+  padding-inline: 0.75em;
+}
+
+.mouseclick-panel > checkbox_tmp {
+  /* align with checkboxes above */
+  margin-inline-start: calc(0.75em + 4px);
+}
+
+#sessionsPanel > .sessionManager {
+ margin: 2px;
+}
+
+} /** END Proton **/

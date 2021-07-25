@@ -82,3 +82,9 @@
 #mouseClick_tabbox[selectedIndex="0"] #ClickTab .multiselectitem {
   display: none;
 }
+
+@media (-moz-proton) {
+html|fieldset {
+ border-radius: 4px;
+}
+}
