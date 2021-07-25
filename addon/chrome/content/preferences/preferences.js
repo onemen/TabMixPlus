@@ -468,10 +468,29 @@ function defaultSetting() {
   gPrefWindow.afterShortcutsChanged();
   Tabmix.prefs.clearUserPref("setDefault");
   Services.prefs.savePrefFile(null);
+  updateInstantApply();
+}
+
+// update instantApply after import or reset
+function updateInstantApply() {
+  const menuItem = $("instantApply");
+  const checked = menuItem.getAttribute("checked") === "true";
+
+  // update any left over items with its preference value
+  for (let preference of gPrefWindow.changes) {
+    gPrefWindow.changes.delete(preference);
+    preference.updateElements();
+  }
+
+  if (Tabmix.prefs.getBoolPref('instantApply') !== checked) {
+    menuItem.setAttribute("checked", !checked);
+    document.documentElement.instantApply = !checked;
+  }
+  gPrefWindow.setButtons(!gPrefWindow.changes.size);
 }
 
 function toggleInstantApply(menuItem) {
-  const checked = Boolean(menuItem.getAttribute("checked"));
+  const checked = menuItem.getAttribute("checked") === "true";
 
   // apply all pending changes before we change mode to instantApply
   if (checked) gPrefWindow.onApply();
@@ -594,6 +613,7 @@ function loadData(pattern) {
   browserWindow.gTMPprefObserver.updateTabClickingOptions();
   Tabmix.prefs.clearUserPref("setDefault");
   Services.prefs.savePrefFile(null);
+  updateInstantApply();
 }
 
 // this function is called from Tabmix.openOptionsDialog if the dialog already opened

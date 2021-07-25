@@ -161,8 +161,14 @@ var gAppearancePane = {
 
   resetWidthChange() {
     gPrefWindow.widthChanged = false;
-    $("minWidth").value = $("pref_minWidth").value;
-    $("maxWidth").value = $("pref_maxWidth").value;
+    const min = $("pref_minWidth");
+    min.value = min.valueFromPreferences;
+    const max = $("pref_maxWidth");
+    max.value = max.valueFromPreferences;
+    if (gPrefWindow.instantApply) {
+      $("minWidth").value = min.value;
+      $("maxWidth").value = max.value;
+    }
   },
 
   openAdvanceAppearance() {

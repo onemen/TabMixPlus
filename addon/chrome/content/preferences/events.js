@@ -176,10 +176,12 @@ var gEventsPane = {
 
     setOnDemandMinValue(item, prefValue) {
       if (item.id != "loadProgressively") {
+        Tabmix.setItem("restoreOnDemand", "decreaseDisabled",
+          prefValue <= Math.abs($("pref_loadProgressively").value) || null);
         return;
       }
       const onDemand = $("restoreOnDemand");
-      const newMinValue = Number(item.value) || 0;
+      const newMinValue = Number(prefValue) || 0;
       onDemand.min = newMinValue;
       const restoreOnDemand = $("pref_restoreOnDemand");
       if (prefValue > Math.abs(restoreOnDemand.value)) {
