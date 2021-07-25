@@ -64,6 +64,22 @@ windowdragbox {
 }
 
 @media (-moz-proton) {
+:root {
+  --in-content-button-text-color: rgb(21, 20, 26);
+  --in-content-button-text-color-hover: rgb(21, 20, 26);
+  --in-content-button-background: rgba(207,207,216,.33);
+  --in-content-button-background-hover: rgba(207,207,216,.66);
+  --in-content-button-background-active: rgb(207,207,216);
+  --in-content-box-border-color: color-mix(in srgb, currentColor 41%, transparent);
+  --in-content-box-background: #fff;
+  --in-content-focus-outline-color: #0061e0;
+  --in-content-border-invalid: #ff0039;
+}
+
+prefwindow {
+  background-color: #f9f9fb !important;
+}
+
 menulist[disabled="true"] {
   background-color: -moz-Dialog;
   color: GrayText;
@@ -76,4 +92,31 @@ menulist > menupopup menuitem {
   padding-block: 0.2em;
   padding-inline: 10px 20px;
 }
+
+/* buttons */
+
+button {
+  appearance: none;
+  min-height: 26px;
+  color: var(--in-content-button-text-color, inherit);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: var(--in-content-button-background);
+  font-weight: 600;
+  padding: 4px 10px;
+  text-decoration: none;
+  margin: 2px 8px;
+  font-size: 1em;
+}
+
+button:hover {
+	background-color: var(--in-content-button-background-hover);
+	color: var(--in-content-button-text-color-hover);
+	border-color: transparent;
+}
+
+button:hover:active {
+	background-color: var(--in-content-button-background-active);
+}
+
 } /** END Proton **/
