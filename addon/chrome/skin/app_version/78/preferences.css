@@ -7,39 +7,4 @@
 
 /********** preferences ********/
 
-prefwindow,
-prefwindow:root /* override :root from above */,
-prefpane {
-  -moz-box-orient: vertical;
-}
-
-prefwindow > .paneDeckContainer {
-  overflow: hidden;
-}
-
-prefpane > .content-box {
-  overflow: hidden;
-}
-
-prefwindow[type="child"] > .paneDeckContainer {
-  overflow: -moz-hidden-unscrollable;
-}
-
-prefwindow[type="child"] > prefpane > .content-box {
-  -moz-box-flex: 1;
-  overflow: -moz-hidden-unscrollable;
-}
-
-preferences,
-preference {
-  visibility: collapse;
-}
-
-radio[pane] {
-  -moz-box-orient: vertical;
-  -moz-box-align: center;
-}
-
-prefwindow[chromehidden~="toolbar"] .chromeclass-toolbar {
-  display: none;
-}
+@import url("chrome://tabmixplus/skin/app_version/all/preferences.css");

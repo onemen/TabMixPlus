@@ -1,8 +1,8 @@
 /********** preferences ********/
 
-@namespace html url("http://www.w3.org/1999/xhtml");
-
 @import url("chrome://tabmix-version/skin/preferences.css");
+
+@namespace html url("http://www.w3.org/1999/xhtml");
 
 /* Global Styles */
 radio[pane] {
