@@ -12,7 +12,6 @@ prefwindow,
 prefwindow:root /* override :root from above */,
 prefpane {
   -moz-box-orient: vertical;
-  background-color: red !important;
 }
 
 prefwindow > .paneDeckContainer {
