@@ -7,7 +7,7 @@ var gEventsPane = {
     var hbox = $("focusTab-box");
     var label = $("focusTab-label").getBoundingClientRect().width;
     var menulist = $("focusTab");
-    if (hbox.getBoundingClientRect().width > label + menulist.getBoundingClientRect().width) {
+    if (hbox.parentNode.getBoundingClientRect().width > label + menulist.getBoundingClientRect().width) {
       menulist.parentNode.removeAttribute("pack");
       hbox.setAttribute("orient", "horizontal");
       hbox.setAttribute("align", "center");

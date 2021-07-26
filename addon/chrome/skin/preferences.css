@@ -2,6 +2,8 @@
 
 @import url("chrome://tabmix-version/skin/preferences.css");
 
+@namespace html url("http://www.w3.org/1999/xhtml");
+
 /* Global Styles */
 radio[pane] {
   list-style-image: url(tmpoptions.png);
@@ -177,6 +179,14 @@ tabbox > tabs {
   -moz-margin-end: 2px;
 }
 
+.extraIcons .checkbox-icon {
+	padding: 2px 0 2px 0;
+	margin-top: 4px;
+  margin-inline-end: 3px;
+	max-height: 11px !important;
+	width: 7px;
+}
+
 #extraIcons-locked .checkbox-icon {
   list-style-image: url(locked.png);
   -moz-image-region: rect(0 9px 9px 0);
@@ -185,16 +195,12 @@ tabbox > tabs {
 #extraIcons-protected .checkbox-icon {
   list-style-image: url(protected.png);
   -moz-image-region: rect(5px 16px 16px 7px);
+  height: 11px;
 }
 
 #extraIcons-autoreload .checkbox-icon {
   list-style-image: url(autoreload.png);
   -moz-image-region: rect(0px 16px 9px 7px);
-}
-
-.extraIcons .checkbox-icon {
-  padding: 2px 0 2px 0;
-  -moz-margin-end: 3px;
 }
 
 .clicktab-popup {
@@ -300,8 +306,57 @@ tabbox > tabpanels {
   padding-top: 0;
 }
 
-/* Tabmix preferences spesific rules  */
+separator.groove {
+  display: block;
+  margin-inline: -8px;
+}
+
+html|fieldset + html|fieldset {
+  margin-top: 6px;
+}
+
+html|fieldset.flex {
+  display: flex;
+}
+
+html|fieldset.flex.column {
+  flex-direction: column;
+}
+
+html|fieldset.grid,
+.grid {
+  display: grid;
+}
+
+html|fieldset[flex="1"] {
+  -moz-box-flex: 1;
+}
+
+#ClickTabbar .multiselectitem,
+#mouseClick_tabbox[selectedIndex="0"] #ClickTab .multiselectitem {
+  display: none;
+}
+
+.bold-lable {
+  -moz-margin-start: 2px;
+  -moz-padding-start: 1px;
+  font-weight: 600;
+}
+
+/* override above rules for proton */
 @media (-moz-proton) {
+prefpane {
+  padding: 3px 0 1px 0;
+}
+
+prefpane > .content-box > tabbox {
+  height: 505px;
+}
+
+#TabMIxPreferences[mac] prefpane > .content-box > tabbox {
+  height: 505px;
+}
+
 .prefWindow-dlgbuttons {
 	padding-inline-start: 10px;
 }
