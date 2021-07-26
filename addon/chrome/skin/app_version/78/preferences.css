@@ -8,10 +8,7 @@
 /********** preferences ********/
 
 prefwindow,
-prefwindow:root {
-  -moz-box-orient: vertical;
-}
-
+prefwindow:root /* override :root from above */,
 prefpane {
   -moz-box-orient: vertical;
 }
@@ -33,10 +30,7 @@ prefwindow[type="child"] > prefpane > .content-box {
   overflow: -moz-hidden-unscrollable;
 }
 
-preferences {
-  visibility: collapse;
-}
-
+preferences,
 preference {
   visibility: collapse;
 }
