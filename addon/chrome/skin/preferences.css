@@ -1,7 +1,8 @@
 /********** preferences ********/
 
-@import url("chrome://tabmix-version/skin/preferences.css");
+@namespace html url("http://www.w3.org/1999/xhtml");
 
+@import url("chrome://tabmix-version/skin/preferences.css");
 
 /* Global Styles */
 radio[pane] {
@@ -303,6 +304,7 @@ tabbox > tabpanels {
 
 @media (-moz-proton) {
 :root {
+  --in-content-button-background: rgba(207,207,216,.33);
   --in-content-border-color: #d7d7db;
   --in-content-button-text-color: rgb(21, 20, 26);
   --in-content-button-text-color-hover: rgb(21, 20, 26);
@@ -313,12 +315,19 @@ tabbox > tabpanels {
   --in-content-box-background: #fff;
   --in-content-focus-outline-color: #0061e0;
   --in-content-border-invalid: #ff0039;
-  background-color: #f9f9fb !important;
+  --in-content-primary-button-background: #0061e0;
+  --in-content-primary-button-background-hover: #0250bb;
+  --in-content-primary-button-background-active: #053e94;
+  --in-content-primary-button-text-color: rgb(251,251,254);
+  --in-content-primary-button-text-color-hover: var(--in-content-primary-button-text-color);
+  --checkbox-border-color: var(--in-content-box-border-color);
+  --checkbox-checked-border-color: transparent;
+  --checkbox-checked-bgcolor: var(--in-content-primary-button-background);
+  --checkbox-checked-color: var(--in-content-primary-button-text-color);
+  --checkbox-checked-hover-bgcolor: var(--in-content-primary-button-background-hover);
+  --checkbox-unchecked-bgcolor: var(--in-content-button-background);
+  background-color: #f9f9fb;
 }
-
-/* prefwindow {
-  background-color: #f9f9fb !important;
-} */
 
 prefpane {
   padding: 3px 0 1px 0;
@@ -337,9 +346,14 @@ menulist > menupopup menuitem {
   padding-inline: 10px 20px;
 }
 
-radio[pane] {
+.paneSelector > radio {
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
+}
+
+.paneSelector > radio .radio-label {
+  font-size: 1.25em;
+  font-weight: 300;
 }
 
 /* tabpanels and tabs */
@@ -409,6 +423,103 @@ button:hover {
 
 button:hover:active {
   background-color: var(--in-content-button-background-active);
+}
+
+html|fieldset {
+ border-radius: 4px;
+}
+
+html|fieldset + html|fieldset {
+  margin-top: 10px;
+}
+
+html|legend {
+  font-size: 1.14em;
+  font-weight: 600;
+  line-height: normal;
+}
+
+/* Checkboxes and radio buttons */
+
+button:-moz-focusring,
+html|select:-moz-focusring,
+html|input:is([type="checkbox"], [type="color"], [type="radio"]):-moz-focusring,
+menulist:-moz-focusring,
+checkbox:not([native]):-moz-focusring > .checkbox-check,
+radio[focused="true"] > .radio-check,
+tab:-moz-focusring > .tab-middle > .tab-text {
+  box-shadow: none;
+  outline: 2px solid var(--in-content-focus-outline-color);
+  outline-offset: 2px;
+}
+
+html|input[type="radio"],
+*.radio-check {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 1px solid var(--in-content-box-border-color);
+  border-radius: 100%;
+  margin-block: 2px;
+  margin-inline: 0 6px;
+  background-color: var(--in-content-button-background);
+  background-position: center;
+  flex-shrink: 0;
+}
+
+html|input[type="radio"]:enabled:hover,
+radio:not([disabled="true"]):hover > *.radio-check {
+  background-color: var(--in-content-button-background-hover);
+  color: var(--in-content-button-text-color-hover);
+}
+
+html|input[type="radio"]:enabled:hover:active,
+radio:not([disabled="true"]):hover:active > *.radio-check {
+  background-color: var(--in-content-button-background-active);
+}
+
+html|input[type="radio"]:checked,
+*.radio-check[selected] {
+  -moz-context-properties: fill;
+  fill: currentColor;
+  color: var(--in-content-primary-button-text-color);
+  background-color: var(--in-content-primary-button-background);
+  background-image: url("chrome://global/skin/icons/radio.svg");
+  border-color: transparent;
+  color-adjust: exact;
+}
+
+html|input[type="radio"]:enabled:checked:hover,
+radio:not([disabled="true"])[selected]:hover > *.radio-check {
+  background-color: var(--in-content-primary-button-background-hover);
+  color: var(--in-content-primary-button-text-color-hover);
+}
+
+html|input[type="radio"]:enabled:checked:hover:active,
+radio:not([disabled="true"])[selected]:hover:active > *.radio-check {
+  background-color: var(--in-content-primary-button-background-active);
+}
+
+*.radio-label-box {
+  margin-inline: 0 8px;
+  padding-inline-start: 0;
+}
+
+/* Disabled checkboxes, radios and labels */
+
+checkbox[disabled="true"],
+radio[disabled="true"],
+label[disabled="true"] {
+  color: inherit;
+}
+
+html|input[type="checkbox"]:disabled,
+html|input[type="radio"]:disabled,
+checkbox[disabled="true"],
+radio[disabled="true"],
+label[disabled="true"] {
+  opacity: 0.5;
 }
 
 /* pane spesific rules  */
