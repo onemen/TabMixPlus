@@ -8,12 +8,11 @@ const {Overlays} = ChromeUtils.import("chrome://tabmix-resource/content/bootstra
 
 // delay connectedCallback() of tabs till tabs inserted into DOM so it won't be run multiple times and cause trouble.
 let delayTabsConnectedCallback = false;
-const MozTabs = customElements.get("tabs").prototype;
-MozTabs.delayConnectedCallback = function() {
+customElements.get('tabs').prototype.delayConnectedCallback = function() {
   return delayTabsConnectedCallback;
 };
 
-Object.defineProperty(MozTabs, "container", {
+Object.defineProperty(customElements.get("tab").prototype, "container", {
   get() {
     return this.parentNode;
   }
