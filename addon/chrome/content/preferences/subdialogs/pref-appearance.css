@@ -38,6 +38,10 @@ checkbox[anonid="useThis"][disabled] {
   border: 1px solid transparent;
 }
 
+.dialog-button[icon="help"] .button-icon {
+	margin-inline-end: 6px;
+}
+
 hbox[_hidebox="true"],
 colorbox[_hidebox="true"],
 label[_hidebox="true"] {

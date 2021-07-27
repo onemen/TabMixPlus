@@ -2,6 +2,7 @@
 
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.css" type="text/css"?>
+<?xml-stylesheet href="chrome://tabmixplus/skin/pref-appearance.css"?>
 <?xml-stylesheet href="chrome://tabmixplus/skin/numberinput.css"?>
 
 <!DOCTYPE dialog [
@@ -54,5 +55,11 @@
      </tabpanels>
    </tabbox>
    <label value="&hideRGB.label;" show="&showRGB.label;" hide="&hideRGB.label;" id="hide-RGB" persist="value" hidden="true"/>
-
+   <hbox class="dialog-button-box" pack="end">
+     <button dlgtype="extra2" class="dialog-button" hidden="true"/>
+     <spacer anonid="spacer" flex="1"/>
+     <button dlgtype="accept" class="dialog-button" icon="accept"/>
+     <button dlgtype="cancel" class="dialog-button" icon="cancel"/>
+     <button dlgtype="help" class="dialog-button" hidden="true" icon="help"/>
+   </hbox>
 </dialog>
