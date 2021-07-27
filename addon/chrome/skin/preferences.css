@@ -256,7 +256,7 @@ tabbox > tabpanels {
 }
 
 /* for Mac */
-#TabMIxPreferences[mac] prefpane > tabbox {
+#TabMIxPreferences[mac] prefpane > .content-box > tabbox {
   height: 468px;
 }
 
