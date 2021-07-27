@@ -119,8 +119,8 @@
               <tab label="&shift.label;"  linkedpanel="pl" class="subtabs"/>
               <tab label="&alt.label;"    linkedpanel="pl" class="subtabs"/>
             </tabs>
-            <tabpanels class="groupbox-panels" flex="0" selectedIndex="1"
-                  onselect="if(event.target.selectedIndex == 1) event.stopPropagation(); this.selectedIndex = 0;">
+            <tabpanels class="groupbox-panels" flex="0" selectedIndex="0"
+                  onselect="if (this.tabbox &amp;&amp; this.selectedIndex !== 0) {event.stopPropagation(); this.selectedIndex = 0;}">
               <tabpanel id="_tabpanel">
                 <spacer style="height: 8px;"/>
                 <!-- click on a tab -->

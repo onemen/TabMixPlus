@@ -1,14 +1,23 @@
-/* globals CustomEvent dump KeyEvent Node openDialog */
 /* exported PrefWindow */
 /* eslint no-var: 2, prefer-const: 2, no-new-func: 0, class-methods-use-this: 0 */
 "use strict";
 
 const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
+const {ChromeManifest} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
+const {Overlays} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
 
-// delay connectedCallback() of tabs till prefwindow is defined so it won't be run multiple times and cause trouble.
-customElements.get('tabs').prototype.delayConnectedCallback = function() {
-  return !customElements.get('prefwindow');
+// delay connectedCallback() of tabs till tabs inserted into DOM so it won't be run multiple times and cause trouble.
+let delayTabsConnectedCallback = false;
+const MozTabs = customElements.get("tabs").prototype;
+MozTabs.delayConnectedCallback = function() {
+  return delayTabsConnectedCallback;
 };
+
+Object.defineProperty(MozTabs, "container", {
+  get() {
+    return this.parentNode;
+  }
+});
 
 class Preferences extends MozXULElement {
   constructor() {
@@ -600,18 +609,8 @@ class PrefPane extends MozXULElement {
   }
 
   connectedCallback() {
-    if (this._initialized) {
+    if (this._initialized || !this.loaded) {
       return;
-    }
-
-    // PrefPane overlay have to be move earlier to here otherwise tabs elements won't load properly. see ln 1551
-    // But this may be the cause of EMSG <Uncaught (in promise) undefined> shows up
-    if (this.src) {
-      const {ChromeManifest} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
-      const {Overlays} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
-
-      const ov = new Overlays(new ChromeManifest(), window.document.defaultView);
-      ov.load(this.src);
     }
 
     const fragment = this.fragment;
@@ -619,9 +618,9 @@ class PrefPane extends MozXULElement {
     const childNodes = [...this.childNodes];
     this.appendChild(fragment);
     contentBox.append(...childNodes);
+
     this.initializeAttributeInheritance();
 
-    this._loaded = false;
     this._deferredValueUpdateElements = new Set();
     this._content = this.getElementsByClassName('content-box')[0];
 
@@ -1086,7 +1085,7 @@ class PrefWindow extends MozXULElement {
     fragmentLastChild.append(...otherChildren);
 
     updateAttribute("dlgbuttons", "accept,cancel");
-    updateAttribute("persist", "lastSelected screenX screenY");
+    updateAttribute("persist", "screenX screenY");
     updateAttribute("closebuttonlabel", MozXULElement.parseXULToFragment(`<div attr="&uiTour.infoPanel.close;" />`, ["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
     updateAttribute("closebuttonaccesskey", "C");
     updateAttribute("role", "dialog");
@@ -1501,13 +1500,17 @@ class PrefWindow extends MozXULElement {
   }
 
   get lastSelected() {
+    if (!this.hasAttribute("lastSelected")) {
+      const val = Services.xulStore.getValue(this, "persist", "lastSelected");
+      this.setAttribute('lastSelected', val);
+      return val;
+    }
     return this.getAttribute('lastSelected');
   }
 
   set lastSelected(val) {
     this.setAttribute("lastSelected", val);
-    const {Services} = ChromeUtils.import('resource://gre/modules/Services.jsm');
-    Services.xulStore.persist(this, "lastSelected");
+    Services.xulStore.setValue(this, "persist", "lastSelected", val);
     return val;
   }
 
@@ -1562,23 +1565,20 @@ class PrefWindow extends MozXULElement {
 
     this._selector.selectedItem = document.getElementsByAttribute("pane", aPaneElement.id)[0];
     if (!aPaneElement.loaded) {
-      const OverlayLoadObserver = function(aPane) {
-        this._pane = aPane;
-      };
-      OverlayLoadObserver.prototype = {
-        _outer: this,
-        observe() {
-          this._pane.loaded = true;
-          this._outer._fireEvent("paneload", this._pane);
-          this._outer._selectPane(this._pane);
-        }
-      };
+      delayTabsConnectedCallback = true;
+      const src = aPaneElement.src;
+      if (src) {
+        const ov = new Overlays(new ChromeManifest(), window.document.defaultView);
+        ov.load(src);
+      }
+      aPaneElement.loaded = true;
+      aPaneElement.connectedCallback();
+      // now we can safely call connectedCallback for all tabs in this PrefPane
+      delayTabsConnectedCallback = false;
+      aPaneElement.querySelectorAll("tabs").forEach(tabs => tabs.connectedCallback());
 
-      const obs = new OverlayLoadObserver(aPaneElement);
-
-      // Pane overlay have to be move to earlier stage to load properly
-      // document.loadOverlay(aPaneElement.src, obs);
-      obs.observe();
+      this._fireEvent("paneload", aPaneElement);
+      this._selectPane(aPaneElement);
     } else
       this._selectPane(aPaneElement);
   }

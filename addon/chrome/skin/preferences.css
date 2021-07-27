@@ -225,7 +225,7 @@ prefpane {
   padding: 3px 1px 1px 1px;
 }
 
-prefpane > tabbox {
+prefpane > .content-box > tabbox {
   width: 525px;
   height: 464px;
 }
@@ -256,7 +256,7 @@ tabbox > tabpanels {
 }
 
 /* for Mac */
-#TabMIxPreferences[mac] prefpane > tabbox {
+#TabMIxPreferences[mac] prefpane > .content-box > tabbox {
   height: 468px;
 }
 
