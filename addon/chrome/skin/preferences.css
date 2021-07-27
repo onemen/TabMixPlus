@@ -311,8 +311,8 @@ separator.groove {
   margin-inline: -8px;
 }
 
-html|fieldset + html|fieldset {
-  margin-top: 6px;
+html|fieldset {
+  margin-block: 3px;
 }
 
 html|fieldset.flex {

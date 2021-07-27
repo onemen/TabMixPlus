@@ -16,7 +16,7 @@
         xmlns:html="http://www.w3.org/1999/xhtml"
         buttons="accept,cancel,help"
         title="&filetype.options;"
-        onload="Init(); let t = document.getElementsByTagName('dialog')[0]._buttons.help; t.icon.style.marginRight='6px'; t.image='chrome://tabmixplus/skin/question-16.png';"
+        onload="Init()"
         persist="screenX screenY">
 
    <script type="text/javascript"><![CDATA[
@@ -42,4 +42,9 @@
          <button id="filetypeRestore" label="&settings.default;" oncommand="Restore();"/>
         </hbox>
    </html:fieldset>
+   <hbox class="dialog-button-box" pack="end">
+     <button dlgtype="accept" class="dialog-button" icon="accept"/>
+     <button dlgtype="cancel" class="dialog-button" icon="cancel"/>
+     <button dlgtype="help" class="dialog-button" hidden="true" icon="help"/>
+   </hbox>
 </dialog>
