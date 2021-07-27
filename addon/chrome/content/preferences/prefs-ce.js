@@ -621,10 +621,6 @@ class PrefPane extends MozXULElement {
 
     this.initializeAttributeInheritance();
 
-    this.querySelectorAll('input[type="number"]').forEach(input => {
-      input.setAttribute("style", `width: calc(${Number(input.size)}ch + 28px);`);
-    });
-
     this._deferredValueUpdateElements = new Set();
     this._content = this.getElementsByClassName('content-box')[0];
 
