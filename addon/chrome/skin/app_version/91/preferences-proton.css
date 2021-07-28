@@ -24,6 +24,10 @@
   --in-content-box-info-background: #f0f0f4;
   --in-content-focus-outline-color: #0061e0;
   --in-content-border-invalid: #ff0039;
+  --in-content-item-hover: color-mix(in srgb, var(--in-content-primary-button-background) 20%, transparent);
+  --in-content-item-hover-text: rgb(21, 20, 26);
+  --in-content-item-selected: var(--in-content-primary-button-background);
+  --in-content-item-selected-text: var(--in-content-primary-button-text-color);
   --in-content-link-color: #0060df;;
   --in-content-link-color-hover: #003eaa;;
   --in-content-link-color-active: #002275;
@@ -33,6 +37,7 @@
   --in-content-primary-button-background-active: #053e94;
   --in-content-primary-button-text-color: rgb(251,251,254);
   --in-content-primary-button-text-color-hover: var(--in-content-primary-button-text-color);
+  --in-content-text-color: rgb(21, 20, 26);
   --checkbox-border-color: var(--in-content-box-border-color);
   --checkbox-checked-border-color: transparent;
   --checkbox-checked-bgcolor: var(--in-content-primary-button-background);
@@ -47,6 +52,8 @@ html|a, .text-link {
 	text-decoration: none;
 }
 
+/* menulist menupopup menuitem */
+
 menulist[disabled="true"] {
   background-color: -moz-Dialog;
   color: GrayText;
@@ -58,6 +65,51 @@ menulist > menupopup menuitem {
   font-size: 1em;
   padding-block: 0.2em;
   padding-inline: 10px 20px;
+}
+
+menulist > menupopup {
+  appearance: none;
+  border: none;
+  background-color: transparent;
+  --panel-border-color: var(--in-content-box-border-color);
+  --panel-border-radius: 2px;
+  --panel-background: var(--in-content-box-background);
+  --panel-color: var(--in-content-text-color);
+  --panel-padding: 0;
+}
+
+menulist > menupopup menu,
+menulist > menupopup menuitem {
+  appearance: none;
+  font-size: 1em;
+  padding-block: 0.2em;
+  padding-inline: 10px 30px;
+}
+
+menulist > menupopup > menu:not([disabled="true"])[_moz-menuactive="true"],
+menulist > menupopup > menuitem:not([disabled="true"])[_moz-menuactive="true"] {
+  color: var(--in-content-item-hover-text);
+  background-color: var(--in-content-item-hover);
+}
+
+menulist > menupopup > menu:not([disabled="true"])[selected="true"],
+menulist > menupopup > menuitem:not([disabled="true"])[selected="true"] {
+  color: var(--in-content-item-selected-text);
+  background-color: var(--in-content-item-selected);
+}
+
+menulist > menupopup > menu[disabled="true"],
+menulist > menupopup > menuitem[disabled="true"] {
+  color: #999;
+  background-color: transparent;
+}
+
+menulist > menupopup menuseparator {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--in-content-box-border-color);
+  border-bottom: none;
 }
 
 .paneSelector > radio {
