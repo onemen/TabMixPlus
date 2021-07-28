@@ -107,6 +107,7 @@ tab[selected] {
 
 /* buttons */
 
+html|input[type="color"],
 button {
   appearance: none;
   min-height: 26px;
@@ -121,14 +122,37 @@ button {
   font-size: 1em;
 }
 
+html|input[type="color"] {
+  border: 1px solid var(--in-content-box-border-color);
+  min-height: initial;
+  padding: 4px;
+  margin: 2px 4px;
+}
+
+@media (prefers-contrast) {
+  button:not(.primary, [default], [type="submit"], [autofocus]),
+  html|input[type="color"],
+  menulist {
+    border-color: ThreeDShadow;
+  }
+}
+
+html|input[type="color"]:hover,
 button:hover {
   background-color: var(--in-content-button-background-hover);
   color: var(--in-content-button-text-color-hover);
   border-color: transparent;
 }
 
+html|input[type="color"]:enabled:hover:active,
 button:hover:active {
   background-color: var(--in-content-button-background-active);
+}
+
+html|input[type="color"]:disabled,
+button[disabled="true"],
+menulist[disabled="true"] {
+  opacity: 0.4;
 }
 
 html|fieldset {

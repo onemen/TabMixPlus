@@ -50,7 +50,7 @@ var gAppearancePane = {
     var label = $("tabsScroll.label").getBoundingClientRect().width;
     var menulist = $("tabsScroll");
     var indent = 23; // we have class="indent"
-    if (hbox.getBoundingClientRect().width > label + menulist.getBoundingClientRect().width - indent) {
+    if (hbox.parentNode.getBoundingClientRect().width > label + menulist.getBoundingClientRect().width - indent) {
       menulist.parentNode.removeAttribute("pack");
       menulist.parentNode.removeAttribute("class");
       hbox.setAttribute("orient", "horizontal");

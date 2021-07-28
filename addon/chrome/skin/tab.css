@@ -143,7 +143,6 @@ toolbar[iconsize=small] #tabmix-alltabs-button, #tm-tabsList > .menu-iconic-left
 toolbar[iconsize=small] #tabmix-alltabs-button:hover, #tm-tabsList:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
 toolbar[iconsize=small] #tabmix-alltabs-button[disabled=true], #tm-tabsList[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
 
-
 #btn-sm-settings, .tabmix-menu-icon {
    list-style-image: url(tmpsmall.png);
 }

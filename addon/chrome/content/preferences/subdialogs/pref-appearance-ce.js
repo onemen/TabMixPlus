@@ -37,29 +37,26 @@
       this.appendChild(MozXULElement.parseXULToFragment(`
       <hbox align="center">
         <checkbox anonid="useThis" label="&useThis.label;: " oncommand="this.parentNode.parentNode._updateUseThisState(this.checked); event.stopPropagation();"></checkbox>
-        <label style="font-weight: bold;"></label>
+        <label></label>
       </hbox>
       <separator class="groove"></separator>
       <hbox align="center" style="height: 28px;" inherits="_hidebox">
-        <checkbox anonid="italic" inherits="disabled" label="&italic.label;" style="font-style: italic;"></checkbox>
-        <checkbox anonid="bold" inherits="disabled" label="&bold.label;" style="font-weight: bold;"></checkbox>
-        <checkbox anonid="underline" class="tabStyles_underline" inherits="disabled" label="&underline.label;"></checkbox>
+        <checkbox anonid="italic" inherits="disabled" label="&italic.label;"></checkbox>
+        <checkbox anonid="bold" inherits="disabled" label="&bold.label;"></checkbox>
+        <checkbox anonid="underline" inherits="disabled" label="&underline.label;"></checkbox>
       </hbox>
-      <hbox flex="1">
-        <vbox>
-          <colorbox anonid="textColor" inherits="disabled=text-disabled,_hidebox">
-            <checkbox anonid="text" class="visible" inherits="disabled" label="&textcolor.label;:" oncommand="this.parentNode.parentNode.parentNode.parentNode.updateDisableState(this.getAttribute('anonid'))"></checkbox>
-          </colorbox>
-          <checkbox_tmp anonid="bg" inherits="disabled" label="&bgColor.label;:" oncommand="this.parentNode.parentNode.parentNode.updateDisableState(this.getAttribute('anonid'))"></checkbox_tmp>
-          <colorbox anonid="bgTopColor" class="bgTop" inherits="disabled=bg-disabled,hidden=_hidebox">
-            <label value="&bgTopColor.label;:" class="visible" inherits="disabled=bg-disabled"></label>
-          </colorbox>
-          <colorbox anonid="bgColor" class="bgBottom" inherits="disabled=bg-disabled">
-            <label value="&bgBottomColor.label;:" class="visible" inherits="disabled=bg-disabled,_hidebox"></label>
-          </colorbox>
-        </vbox>
-        <spacer flex="1"></spacer>
-      </hbox>
+      <vbox flex="1">
+        <colorbox anonid="textColor" inherits="disabled=text-disabled,_hidebox" ${Tabmix.isVersion(910) ? 'class="color-swatch"' : ""}>
+          <checkbox anonid="text" class="visible" inherits="disabled" label="&textcolor.label;:" oncommand="this.parentNode.parentNode.parentNode.updateDisableState(this.getAttribute('anonid'))"></checkbox>
+        </colorbox>
+        <checkbox_tmp anonid="bg" inherits="disabled" label="&bgColor.label;:" oncommand="this.parentNode.parentNode.updateDisableState(this.getAttribute('anonid'))"></checkbox_tmp>
+        <colorbox anonid="bgTopColor" class="bgTop" inherits="disabled=bg-disabled,hidden=_hidebox">
+          <label value="&bgTopColor.label;:" class="visible" inherits="disabled=bg-disabled"></label>
+        </colorbox>
+        <colorbox anonid="bgColor" class="bgBottom" inherits="disabled=bg-disabled">
+          <label value="&bgBottomColor.label;:" class="visible" inherits="disabled=bg-disabled,_hidebox"></label>
+        </colorbox>
+      </vbox>
       <separator class="groove"></separator>
       <hbox align="center" class="reset-button-box">
         <button label="&settings.default;" oncommand="this.parentNode.parentNode._resetDefault();"></button>
@@ -274,7 +271,7 @@
       }, this);
 
       this._colorpicker = this.getElementsByAttribute("anonid", "color")[0];
-      this._parent = this.parentNode.parentNode.parentNode;
+      this._parent = this.parentNode.parentNode;
     }
 
     get rgba() {

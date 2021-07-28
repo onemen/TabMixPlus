@@ -40,6 +40,10 @@ radio[pane=paneIncompatible][show=true] {
   visibility: visible;
 }
 
+menulist {
+  min-height: 23.2px;
+}
+
 .content-help {
   -moz-appearance: none;
   margin: 0;
@@ -321,6 +325,10 @@ html|fieldset.flex {
 
 html|fieldset.flex.column {
   flex-direction: column;
+}
+
+html|fieldset.flex.column > spacer[flex="1"] {
+  flex: 1;
 }
 
 html|fieldset.grid,

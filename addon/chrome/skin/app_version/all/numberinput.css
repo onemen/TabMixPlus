@@ -65,7 +65,6 @@ input[type="number"] {
   background-color: var(--in-content-box-background);
 }
 
-
 input[type="number"] {
   font-family: inherit;
   font-size: inherit;
