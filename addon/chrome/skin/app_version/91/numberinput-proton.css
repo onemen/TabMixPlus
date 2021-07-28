@@ -13,8 +13,8 @@
 @media (-moz-proton) {
 :root {
   --input-padding-inline: 4px;
-  /* one extra pixel needed with proton */
-  --input-width-offset: calc(var(--input-sppiner-offset) + var(--input-padding-inline) + 1px);
+  --input-sppiner-offset: 20px;
+  --input-width-offset: calc(var(--input-sppiner-offset) + var(--input-padding-inline) + 2px);
 }
 
 /* textboxes */
