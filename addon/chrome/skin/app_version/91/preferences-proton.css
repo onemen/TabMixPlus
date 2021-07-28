@@ -21,6 +21,7 @@
   --in-content-button-background-active: rgb(207,207,216);
   --in-content-box-border-color: color-mix(in srgb, currentColor 41%, transparent);
   --in-content-box-background: #fff;
+  --in-content-box-info-background: #f0f0f4;
   --in-content-focus-outline-color: #0061e0;
   --in-content-border-invalid: #ff0039;
   --in-content-link-color: #0060df;;
