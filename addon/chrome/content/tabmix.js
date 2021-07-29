@@ -1056,7 +1056,6 @@ var TMP_eventListener = {
     Tabmix.navToolbox.deinit();
     Tabmix.Utils.deinit(window);
     Tabmix.tabsUtils.onUnload();
-    Tabmix.bottomToolbarUtils.onUnload();
   },
 
   // some theme not using up to date Tabmix tab binding
