@@ -979,6 +979,7 @@ Tabmix.bottomToolbarUtils = {
   init() {
     if (!this.toolbox && TabmixTabbar.position === 1) {
       this.createToolbox();
+      this.createFullScrToggler();
     }
     this.resizeObserver(TabmixTabbar.position === 1);
   },
@@ -1016,6 +1017,22 @@ Tabmix.bottomToolbarUtils = {
       TMP_eventListener.toggleTabbarVisibility(false);
       TabmixTabbar.updateSettings(false);
     }
+  },
+
+  createFullScrToggler() {
+    const fullScrToggler = document.createXULElement("vbox");
+    fullScrToggler.id = "fullscr-bottom-toggler";
+    fullScrToggler.hidden = true;
+    const toggler = document.getElementById("fullscr-toggler");
+    toggler.parentNode.insertBefore(fullScrToggler, toggler);
+
+    let $LF = '\n    ';
+    Tabmix.changeCode(FullScreen, "FullScreen.hideNavToolbox")._replace(
+      'this._isChromeCollapsed = true;',
+      'TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);' + $LF +
+        '$&' + $LF +
+        'TMP_eventListener.toggleTabbarVisibility(false, arguments[0]);'
+    ).toCode();
   },
 
   _resizeObserver: null,

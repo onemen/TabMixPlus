@@ -587,25 +587,13 @@ var TMP_eventListener = {
   },
 
   onFullScreen: function TMP_EL_onFullScreen(enterFS) {
-    // add fullscr-bottom-toggler when tabbar is on the bottom
     var fullScrToggler = document.getElementById("fullscr-bottom-toggler");
     if (enterFS && TabmixTabbar.position == 1) {
-      if (!fullScrToggler) {
-        fullScrToggler = document.createElement("hbox");
-        fullScrToggler.id = "fullscr-bottom-toggler";
+      if (!fullScrToggler.initialized) {
         fullScrToggler.addEventListener("mouseover", this._expandCallback);
         fullScrToggler.addEventListener("dragenter", this._expandCallback);
-        fullScrToggler.hidden = true;
-        let bottombox = document.getElementById("browser-bottombox");
-        bottombox.appendChild(fullScrToggler);
-
-        let $LF = '\n    ';
-        Tabmix.changeCode(FullScreen, "FullScreen.hideNavToolbox")._replace(
-          'this._isChromeCollapsed = true;',
-          'TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);' + $LF +
-            '$&' + $LF +
-            'TMP_eventListener.toggleTabbarVisibility(false, arguments[0]);'
-        ).toCode();
+        fullScrToggler.addEventListener("touchmove", this._expandCallback, {passive: true});
+        fullScrToggler.initialized = true;
       }
       if (!document.fullscreenElement) {
         fullScrToggler.hidden = false;
@@ -660,7 +648,7 @@ var TMP_eventListener = {
 
   _expandCallback: function TMP_EL__expandCallback() {
     if (TabmixTabbar.hideMode === 0 || TabmixTabbar.hideMode == 1 && gBrowser.tabs.length > 1) {
-      FullScreen.mouseoverToggle(true);
+      FullScreen.showNavToolbox(true);
     }
   },
 
@@ -670,27 +658,26 @@ var TMP_eventListener = {
     if (TabmixTabbar.position != 1 || !fullScrToggler) {
       return;
     }
-    fullScrToggler.hidden = aShow;
     let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
     if (aShow) {
+      fullScrToggler.hidden = true;
+      bottomToolbox.removeAttribute("fullscreenShouldAnimate");
       bottomToolbox.style.marginBottom = "";
     } else {
+      if (!BrowserHandler.kiosk) {
+        fullScrToggler.hidden = false;
+      }
+
+      if (aAnimate &&
+          window.matchMedia("(prefers-reduced-motion: no-preference)").matches &&
+          !BrowserHandler.kiosk) {
+        bottomToolbox.setAttribute("fullscreenShouldAnimate", true);
+      }
+
       let bottombox = document.getElementById("browser-bottombox");
       bottomToolbox.style.marginBottom =
           -(bottomToolbox.getBoundingClientRect().height +
           bottombox.getBoundingClientRect().height) + "px";
-
-      if (aAnimate &&
-          Services.prefs.getBoolPref("toolkit.cosmeticAnimations.enabled")) {
-        // Hide the fullscreen toggler until the transition ends.
-        let listener = function() {
-          gNavToolbox.removeEventListener("transitionend", listener, true);
-          if (FullScreen._isChromeCollapsed)
-            fullScrToggler.hidden = false;
-        };
-        gNavToolbox.addEventListener("transitionend", listener, true);
-        fullScrToggler.hidden = true;
-      }
     }
   },
 

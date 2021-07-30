@@ -285,11 +285,6 @@ so display: none !important; does not hide the button */
   visibility: collapse;
 }
 
-#main-window[inFullscreen][inDOMFullscreen] #tabmix-bottom-toolbox,
-#main-window[inFullscreen][inDOMFullscreen] #fullscr-bottom-toggler {
-  visibility: collapse;
-}
-
 #tabmix-rows-tooltip:not([flowing="multibar"]) {
   display: none;
 }
@@ -349,4 +344,23 @@ so display: none !important; does not hide the button */
 
 #tabmix-bottom-toolbox[multibar] > toolbox {
   margin-block: var(--tabmix-multirow-margin , 0);
+}
+
+#tabmix-bottom-toolbox[fullscreenShouldAnimate] {
+  transition: 0.8s margin-bottom ease-out;
+}
+
+#main-window[inFullscreen][inDOMFullscreen] #tabmix-bottom-toolbox,
+#main-window[inFullscreen][inDOMFullscreen] #fullscr-bottom-toggler {
+  visibility: collapse;
+}
+
+/* :::: Fullscreen pseudo-toolbar :::: */
+#fullscr-bottom-toggler {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  position: fixed;
+  z-index: 2147483647;
 }
