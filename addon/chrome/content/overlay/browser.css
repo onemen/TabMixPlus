@@ -316,7 +316,7 @@ so display: none !important; does not hide the button */
   */
 }
 
-:root[customizing],
+:root[customizing] #tabmix-bottom-toolbox,
 #main-window:not([tabmix-tabbaronbottom]) #tabmix-bottom-toolbox {
   visibility: collapse;
 }
@@ -328,6 +328,12 @@ so display: none !important; does not hide the button */
   appearance: none;
   min-width: 1px;
   min-height: 1px;
+}
+
+#tabmix-bottom-toolbox > toolbox:-moz-lwtheme {
+  background-image: var(--lwt-additional-images);
+  background-repeat: var(--lwt-background-tiling);
+  background-position: var(--lwt-background-alignment);
 }
 
 #tabmix-bottom-toolbox[multibar] > toolbox {

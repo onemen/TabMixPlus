@@ -29,7 +29,7 @@
       vertical-align: bottom;
     }
 
-    #tabmix-bottom-toolbox {
+    #tabmix-bottom-toolbox > toolbox  {
       -moz-appearance: none;
       border-top: none;
       background-color: transparent;
