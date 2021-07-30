@@ -425,7 +425,7 @@ Tabmix.tabsUtils = {
       afterHoveredTab: null
     };
 
-    Tabmix.afterTabsButtonsWidth = [51.6];
+    Tabmix.afterTabsButtonsWidth = [35];
     Tabmix.tabsNewtabButton =
       this.tabBar.getElementsByAttribute("command", "cmd_newNavigatorTab")[0];
     this._show_newtabbutton = "aftertabs";
@@ -614,28 +614,6 @@ Tabmix.tabsUtils = {
 
     if (TabmixTabbar.isMultiRow) {
       this.overflow = multibar == "scrollbar";
-    }
-
-    if (!this.overflow) {
-      // prevent new-tab-button on the right from flickering when new tabs animate is on.
-      if (this.disAllowNewtabbutton &&
-          window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-        // after 250ms new tab is fully opened
-        if (!this.adjustNewtabButtonTimeout) {
-          let timeout = 250;
-          if (Tabmix.callerTrace("onxbloverflow")) {
-            let timeFromLastTabOpened = Date.now() - Tabmix._lastTabOpenedTime;
-            if (timeFromLastTabOpened < 250)
-              timeout = 0;
-          }
-          this.adjustNewtabButtonTimeout = setTimeout(() => {
-            this.adjustNewtabButtonVisibility();
-            this.adjustNewtabButtonTimeout = null;
-          }, timeout);
-        }
-      } else {
-        this.adjustNewtabButtonVisibility();
-      }
     }
 
     this._inUpdateVerticalTabStrip = false;
