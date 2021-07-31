@@ -313,10 +313,6 @@ so display: none !important; does not hide the button */
   */
 }
 
-/* #main-window[tabmix-tabbaronbottom] #TabsToolbar-customization-target {
-  width: var(--tabmix-bottom-toolbox-width);
-} */
-
 :root:not([customizing]) #TabsToolbar[tabbaronbottom] > .toolbar-items {
   width: 100%;
 }
@@ -336,12 +332,6 @@ so display: none !important; does not hide the button */
   height: calc(var(--tab-min-height_mlt) * var(--tabmix-visiblerows, 1))
 }
 
-#tabmix-bottom-toolbox > toolbox:-moz-lwtheme {
-  background-image: var(--lwt-additional-images);
-  background-repeat: var(--lwt-background-tiling);
-  background-position: var(--lwt-background-alignment);
-}
-
 #tabmix-bottom-toolbox[multibar] > toolbox {
   margin-block: var(--tabmix-multirow-margin , 0);
 }
@@ -353,6 +343,32 @@ so display: none !important; does not hide the button */
 #main-window[inFullscreen][inDOMFullscreen] #tabmix-bottom-toolbox,
 #main-window[inFullscreen][inDOMFullscreen] #fullscr-bottom-toggler {
   visibility: collapse;
+}
+
+/* set background based on rules for #navigator-toolbox
+   from chrome\browser\content\browser\browser.css */
+#tabmix-bottom-toolbox > toolbox:-moz-lwtheme {
+  background-image: var(--lwt-additional-images);
+  background-repeat: var(--lwt-background-tiling);
+  background-position: var(--lwt-background-alignment);
+}
+
+@media not (-moz-os-version: windows-win7) {
+  @media not (-moz-os-version: windows-win8) {
+    #tabmix-bottom-toolbox:-moz-lwtheme {
+      background-color: var(--lwt-accent-color);
+    }
+
+   :root[lwtheme-image] #tabmix-bottom-toolbox > toolbox {
+     background-image: var(--lwt-header-image), var(--lwt-additional-images);
+     background-repeat: no-repeat, var(--lwt-background-tiling);
+     background-position: right top, var(--lwt-background-alignment);
+   }
+
+   #tabmix-bottom-toolbox > toolbox:-moz-window-inactive:-moz-lwtheme {
+     background-color: var(--lwt-accent-color-inactive, var(--lwt-accent-color));
+   }
+  }
 }
 
 /* :::: Fullscreen pseudo-toolbar :::: */
