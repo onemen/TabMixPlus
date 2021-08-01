@@ -311,9 +311,19 @@ so display: none !important; does not hide the button */
   display: block;
   position: fixed !important;
   -moz-appearance: none !important;
+  top: var(--tabmix-bottom-toolbox-top);
+  width: 100%;
   /* look at browser.css for each platform
   background-image: none !important;
   */
+}
+
+/* #main-window[tabmix-tabbaronbottom] #TabsToolbar-customization-target {
+  width: var(--tabmix-bottom-toolbox-width);
+} */
+
+:root:not([customizing]) #TabsToolbar[tabbaronbottom] > .toolbar-items {
+  width: 100%;
 }
 
 :root[customizing] #tabmix-bottom-toolbox,
@@ -328,6 +338,7 @@ so display: none !important; does not hide the button */
   appearance: none;
   min-width: 1px;
   min-height: 1px;
+  height: calc(var(--tab-min-height_mlt) * var(--tabmix-visiblerows, 1))
 }
 
 #tabmix-bottom-toolbox > toolbox:-moz-lwtheme {

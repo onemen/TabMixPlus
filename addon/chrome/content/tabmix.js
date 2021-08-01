@@ -674,7 +674,6 @@ var TMP_eventListener = {
     let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
     if (aShow) {
       bottomToolbox.style.marginBottom = "";
-      gTMPprefObserver.updateTabbarBottomPosition();
     } else {
       let bottombox = document.getElementById("browser-bottombox");
       bottomToolbox.style.marginBottom =
@@ -692,7 +691,6 @@ var TMP_eventListener = {
         gNavToolbox.addEventListener("transitionend", listener, true);
         fullScrToggler.hidden = true;
       }
-      gTMPprefObserver.updateTabbarBottomPosition();
     }
   },
 
