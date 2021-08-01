@@ -12,6 +12,47 @@ ChromeUtils.defineModuleGetter(this, "TabmixPlacesUtils",
 ChromeUtils.defineModuleGetter(this, "SyncedTabs",
   "chrome://tabmix-resource/content/SyncedTabs.jsm");
 
+const waterfoxPrefObserver = {
+  _initialized: false,
+
+  init() {
+    if (TabmixSvc.isWaterfox && isVersion(780)) {
+      this._initialized = true;
+      this.observe(null, null, "browser.tabBar.position");
+      this.addObserver();
+    }
+  },
+
+  addObserver() {
+    Services.prefs.addObserver("browser.tabBar.position", this);
+    Services.prefs.addObserver("extensions.tabmix.tabBarPosition", this);
+  },
+
+  removeObservers() {
+    if (this._initialized) {
+      Services.prefs.removeObserver("browser.tabBar.position", this);
+      Services.prefs.removeObserver("extensions.tabmix.tabBarPosition", this);
+    }
+  },
+
+  observe: function TMP_pref_observer(subject, topic, prefName) {
+    if (this.preventUpdate) {
+      return;
+    }
+    this.preventUpdate = true;
+    const prefValue = TabmixSvc.prefs.get(prefName);
+    switch (prefName) {
+      case "browser.tabBar.position":
+        Services.prefs.setIntPref("extensions.tabmix.tabBarPosition", prefValue === "bottom" ? 1 : 0);
+        break;
+      case "extensions.tabmix.tabBarPosition":
+        Services.prefs.setCharPref("browser.tabBar.position", prefValue === 0 ? "topAboveAB" : "bottom");
+        break;
+    }
+    this.preventUpdate = false;
+  },
+};
+
 // place holder for load default preferences function
 // eslint-disable-next-line no-unused-vars
 var pref;
@@ -243,6 +284,8 @@ this.TabmixSvc = {
       DynamicRules.init(aWindow);
 
       ChromeUtils.import("chrome://tabmix-resource/content/TabRestoreQueue.jsm", {});
+
+      waterfoxPrefObserver.init();
     },
 
     addMissingPrefs() {
@@ -268,6 +311,7 @@ this.TabmixSvc = {
           }
           delete TabmixSvc.SessionStoreGlobal;
           delete TabmixSvc.SessionStore;
+          waterfoxPrefObserver.removeObservers();
           break;
       }
     }

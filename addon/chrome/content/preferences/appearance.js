@@ -59,6 +59,32 @@ var gAppearancePane = {
 
     gPrefWindow.removeChild("obs_smoothScroll");
 
+    // waterfox position control
+    if (TabmixSvc.isWaterfox && Tabmix.isVersion(780)) {
+      MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
+      const position = $("tabBarPosition");
+      const menupopup = position.firstChild;
+      while (menupopup.hasChildNodes()) {
+        menupopup.firstChild.remove();
+      }
+      menupopup.appendChild(MozXULElement.parseXULToFragment(
+        `<menuitem value="topAboveAB"
+            data-l10n-id="tab-top-above-ab"/>
+         <menuitem value="topUnderAB"
+            data-l10n-id="tab-top-under-ab"/>
+         <menuitem value="bottom"
+            data-l10n-id="tab-bottom"/>`
+      ));
+      position.setAttribute("preference", "browser.tabBar.position");
+      position.setAttribute("value", Services.prefs.getCharPref("browser.tabBar.position"));
+      const preferences = document.documentElement.querySelector("preferences");
+      preferences.appendChild(MozXULElement.parseXULToFragment(
+        `<preference id="browser.tabBar.position"
+                     name="browser.tabBar.position"
+                     type="string"/>`
+      ));
+    }
+
     gPrefWindow.initPane("paneAppearance");
     // call this function after initPane
     // we update some broadcaster that initPane may reset
