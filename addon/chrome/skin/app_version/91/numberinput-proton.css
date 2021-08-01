@@ -18,7 +18,7 @@
 }
 
 /* textboxes */
-/* input:is([type="text"], [type="number"]), */
+
 input:is([type="text"], [type="number"]) {
   appearance: none;
   border: 1px solid var(--in-content-box-border-color);

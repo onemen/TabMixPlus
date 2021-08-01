@@ -14,18 +14,19 @@ shortcut {
 .input-container {
   display: flex;
   align-items: center;
-  border: 0.8px solid #b1b1b1;
+  border: 1px solid var(--in-content-box-border-color);
+  border-radius: 4px;
   box-sizing: inherit;
   font-weight: normal;
   height: 24px;
   padding: 2px;
-  transition: all 0.15s ease-in-out;
   width:175px;
 }
 
 shortcut[focused="true"] .input-container {
-   border-color: #0996f8;
-   box-shadow: inset 0 0 0 1px rgba(97, 181, 255, 0.75);
+   border-color: transparent;
+   outline: 2px solid var(--in-content-focus-outline-color);
+   outline-offset: -1px;
 }
 
 .input-container[disabled] {
