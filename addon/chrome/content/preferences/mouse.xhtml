@@ -176,15 +176,16 @@
                 <!-- we will clone the menupopup from ClickTab on startup -->
                 <menulist id="ClickTabbar" class="indent" onsyncfrompreference="gMousePane.setCheckedState(this);"/>
                 <!-- place holder to set tabbox width -->
-                <spacer style="height: 50px;"/>
-                <checkbox_tmp id="click_dragwindow" label="&ontabbar.click.label;"
-                              preference="pref_click_dragwindow"/>
-                <checkbox_tmp id="dblclick_changesize" label="&ontabbar.dblClick.label;"
-                              preference="pref_dblclick_changesize"/>
+                <checkbox_tmp label="&ontabbar.dblClick.label;" style="visibility: hidden;"/>
               </tabpanel>
               <tabpanel id="pl"></tabpanel>
             </tabpanels>
           </tabbox>
+          <spacer style="height: 12px;"/>
+          <checkbox_tmp id="click_dragwindow" label="&ontabbar.click.label;"
+                        preference="pref_click_dragwindow"/>
+          <checkbox_tmp id="dblclick_changesize" label="&ontabbar.dblClick.label;"
+                        preference="pref_dblclick_changesize"/>
         </tabpanel>
       </tabpanels>
     </tabbox>
