@@ -60,7 +60,7 @@ var Tabmix = {
 
   setFTLDataId(elementId, map = TabmixSvc.i10IdMap) {
     function convert(id, data = map[id]) {
-      return data && !Tabmix.isVersion(data.before) ? data.l10n : id;
+      return data && !Tabmix.isVersion(data.before) ? convert(data.l10n) : id;
     }
     const element = document.getElementById(elementId);
     const nodes = element.hasAttribute("data-lazy-l10n-id") ?
