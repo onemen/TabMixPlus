@@ -345,6 +345,16 @@ so display: none !important; does not hide the button */
   visibility: collapse;
 }
 
+#main-window[tabmix-tabbaronbottom] #toolbar-menubar[autohide="true"][inactive="true"]:not([customizing="true"]) {
+	min-height: initial !important;
+	height: initial !important;
+	appearance: initial !important;
+}
+
+#main-window[tabmix-tabbaronbottom] #toolbar-menubar[autohide="true"][inactive="true"]:not([customizing="true"]) > #menubar-items > * {
+  opacity: 0;
+}
+
 /* set background based on rules for #navigator-toolbox
    from chrome\browser\content\browser\browser.css */
 #tabmix-bottom-toolbox > toolbox:-moz-lwtheme {
