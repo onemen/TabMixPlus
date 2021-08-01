@@ -18,7 +18,8 @@
 }
 
 /* textboxes */
-input[type="number"] {
+/* input:is([type="text"], [type="number"]), */
+input:is([type="text"], [type="number"]) {
   appearance: none;
   border: 1px solid var(--in-content-box-border-color);
   border-radius: 4px;
@@ -26,27 +27,27 @@ input[type="number"] {
   background-color: var(--in-content-box-background);
 }
 
-input[type="number"] {
+input:is([type="text"], [type="number"]) {
   font-family: inherit;
   font-size: inherit;
   padding: 2px 0 2px var(--input-padding-inline);
   margin: 2px 4px;
 }
 
-input[type="number"]:focus,
+input:is([type="text"], [type="number"]):focus,
 richlistbox:focus-visible {
   border-color: transparent;
   outline: 2px solid var(--in-content-focus-outline-color);
   outline-offset: -1px; /* Prevents antialising around the corners */
 }
 
-input[type="number"]:invalid {
+input:is([type="text"], [type="number"]):invalid {
   border-color: transparent;
   outline: 2px solid var(--in-content-border-invalid);
   outline-offset: -1px; /* Prevents antialising around the corners */
 }
 
-input[type="number"]:disabled {
+input:is([type="text"], [type="number"]):disabled {
   opacity: 0.4;
 }
 

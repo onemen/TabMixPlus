@@ -198,14 +198,14 @@ html|input[type="color"] {
 }
 
 html|input[type="color"]:hover,
-button:hover {
+button:not([disabled="true"]):hover {
   background-color: var(--in-content-button-background-hover);
   color: var(--in-content-button-text-color-hover);
   border-color: transparent;
 }
 
 html|input[type="color"]:enabled:hover:active,
-button:hover:active {
+button:not([disabled="true"]):hover:active {
   background-color: var(--in-content-button-background-active);
 }
 
@@ -304,6 +304,76 @@ checkbox[disabled="true"],
 radio[disabled="true"],
 label[disabled="true"] {
   opacity: 0.5;
+}
+
+/* richlistbox */
+
+richlistbox {
+  appearance: none;
+  margin-inline: 0;
+  background-color: var(--in-content-box-background);
+  border: 1px solid var(--in-content-box-border-color);
+  border-radius: 4px;
+  color: var(--in-content-text-color);
+}
+
+richlistbox > richlistitem[selected],
+treechildren::-moz-tree-row(selected) {
+  background-color: var(--in-content-item-selected);
+  color: var(--in-content-item-selected-text);
+}
+
+richlistbox > richlistitem[selected] {
+  /* Ensure buttons/menulists inside richlistitems (containers, applications) look OK */
+  --in-content-button-background: color-mix(in srgb, currentColor 15%, transparent);
+  --in-content-button-background-hover: color-mix(in srgb, currentColor 30%, transparent);
+  --in-content-button-background-active: color-mix(in srgb, currentColor 45%, transparent);
+  --in-content-button-text-color: var(--in-content-item-selected-text);
+  --in-content-button-text-color-hover: var(--in-content-item-selected-text);
+  --in-content-focus-outline-color: var(--in-content-item-selected-text);
+}
+
+richlistitem[selected] menulist:focus-visible {
+  outline-offset: -2px;
+}
+
+/* pref-filetype */
+.filetype-content {
+  border:none;
+}
+
+#filetypeEntry {
+  padding-block: 4px;
+}
+
+.filetype-buttons,
+.filetype-content > hbox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filetype-content > hbox {
+  margin-top: 10px;
+}
+
+.filetype-content > hbox > *:first-child {
+  margin-inline-start: 0;
+}
+
+.filetype-content > hbox > *:last-child {
+  margin-inline-end: 0;
+}
+
+.filetype-separator {
+  border-top: 1px solid ThreeDShadow;
+  border-bottom: 1px solid ThreeDHighlight;
+  height: 0 !important;
+  margin: 0.4em 0.4em 1em;
+}
+
+.filetype-buttons {
+  margin-inline: 11px;
 }
 
 } /** END Proton **/
