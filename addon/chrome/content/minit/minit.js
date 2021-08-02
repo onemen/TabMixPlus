@@ -22,7 +22,6 @@ var TMP_tabDNDObserver = {
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
     if (Tabmix.extensions.verticalTabBar) {
-      tabBar.useTabmixDragstart = () => false;
       tabBar.useTabmixDnD = () => false;
       return;
     }
@@ -89,25 +88,8 @@ var TMP_tabDNDObserver = {
       $1$2'
     ).toCode();
 
-    tabBar.useTabmixDragstart = function(aEvent) {
-      if (TMP_tabDNDObserver.draggedTab) {
-        delete TMP_tabDNDObserver.draggedTab.__tabmixDragStart;
-        TMP_tabDNDObserver.draggedTab = null;
-      }
-      return this.getAttribute("orient") == "horizontal" &&
-        (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
-        aEvent.altKey);
-    };
-    tabBar.useTabmixDnD = function(aEvent) {
-      function checkTab(dt) {
-        let tab = TMP_tabDNDObserver.getSourceNode(dt);
-        return !tab || tab.__tabmixDragStart ||
-          TMP_tabDNDObserver.getDragType(tab) == TMP_tabDNDObserver.DRAG_TAB_TO_NEW_WINDOW;
-      }
-
-      return this.getAttribute("orient") == "horizontal" &&
-        (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
-        checkTab(aEvent.dataTransfer));
+    tabBar.useTabmixDnD = function() {
+      return false;
     };
 
     this._dragOverDelay = tabBar._dragOverDelay;
@@ -121,119 +103,34 @@ var TMP_tabDNDObserver = {
     return gBrowser.tabContainer._isCustomizing;
   },
 
-  onDragStart(event, tabmixDragstart) {
-    // we get here on capturing phase before our mousedown handler stop the event propagation
-    if (event.originalTarget.classList?.contains("tab-close-button")) {
-      event.stopPropagation();
-      return;
-    }
-
-    let tabBar = gBrowser.tabContainer;
-    let tab = tabBar._getDragTargetTab(event, false);
-    if (!tab || this._isCustomizing)
-      return;
-
-    tab.__tabmixDragStart = tabmixDragstart;
-    this.draggedTab = tab;
-    tab.setAttribute("dragged", true);
+  on_dragstart(event) {
+    const tabBar = gBrowser.tabContainer;
     TabmixTabbar.removeShowButtonAttr();
-
-    let dt = event.dataTransfer;
-    dt.mozSetDataAt(TAB_DROP_TYPE, tab, 0);
-    let browser = tab.linkedBrowser;
-
-    // We must not set text/x-moz-url or text/plain data here,
-    // otherwise trying to detach the tab by dropping it on the desktop
-    // may result in an "internet shortcut"
-    dt.mozSetDataAt("text/x-moz-text-internal", browser.currentURI.spec, 0);
-
-    // Set the cursor to an arrow during tab drags.
-    dt.mozCursor = "default";
-
-    // Set the tab as the source of the drag, which ensures we have a stable
-    // node to deliver the `dragend` event.  See bug 1345473.
-    dt.addElement(tab);
-
-    // Create a canvas to which we capture the current tab.
-    // Until canvas is HiDPI-aware (bug 780362), we need to scale the desired
-    // canvas size (in CSS pixels) to the window's backing resolution in order
-    // to get a full-resolution drag image for use on HiDPI displays.
-    let windowUtils = window.windowUtils;
-    let scale = windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
-    let canvas = tabBar._dndCanvas;
-    if (!canvas) {
-      tabBar._dndCanvas = canvas =
-          document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
-      canvas.style.width = "100%";
-      canvas.style.height = "100%";
-      canvas.mozOpaque = true;
-    }
-
-    canvas.width = 160 * scale;
-    canvas.height = 90 * scale;
-    let toDrag = canvas;
+    tabBar.on_dragstart(event);
+    const windowUtils = window.windowUtils;
+    const scale = windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
     let dragImageOffsetX = -16;
     let dragImageOffsetY = TabmixTabbar.visibleRows == 1 ? -16 : -30;
+    let toDrag = tabBar._dndCanvas;
     if (gMultiProcessBrowser) {
-      let context = canvas.getContext('2d');
-      context.fillStyle = "white";
-      context.fillRect(0, 0, canvas.width, canvas.height);
-
-      let captureListener;
-      let platform = AppConstants.platform;
-      // On Windows and Mac we can update the drag image during a drag
-      // using updateDragImage. On Linux, we can use a panel.
-      if (platform == "win" || platform == "macosx") {
-        captureListener = function() {
-          dt.updateDragImage(canvas, dragImageOffsetX, dragImageOffsetY);
-        };
-      } else {
-        // Create a panel to use it in setDragImage
-        // which will tell xul to render a panel that follows
-        // the pointer while a dnd session is on.
-        if (!tabBar._dndPanel) {
-          tabBar._dndCanvas = canvas;
-          tabBar._dndPanel = document.createElement("panel");
-          tabBar._dndPanel.className = "dragfeedback-tab";
-          tabBar._dndPanel.setAttribute("type", "drag");
-          let wrapper = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
-          wrapper.style.width = "160px";
-          wrapper.style.height = "90px";
-          wrapper.appendChild(canvas);
-          tabBar._dndPanel.appendChild(wrapper);
-          document.documentElement.appendChild(tabBar._dndPanel);
-        }
+      const platform = AppConstants.platform;
+      if (platform !== "win" && platform !== "macosx") {
         toDrag = tabBar._dndPanel;
       }
-      // PageThumb is async with e10s but that's fine
-      // since we can update the image during the dnd.
-      PageThumbs.captureToCanvas(browser, canvas, captureListener);
     } else {
-      // For the non e10s case we can just use PageThumbs
-      // sync, so let's use the canvas for setDragImage.
-      PageThumbs.captureToCanvas(browser, canvas);
       dragImageOffsetX *= scale;
       dragImageOffsetY *= scale;
     }
     if (TabmixTabbar.position == 1) {
-      dragImageOffsetY = canvas.height - dragImageOffsetY;
+      dragImageOffsetY = tabBar._dndCanvas.height - dragImageOffsetY;
     }
-    dt.setDragImage(toDrag, dragImageOffsetX, dragImageOffsetY);
-
-    // _dragData.offsetX/Y give the coordinates that the mouse should be
-    // positioned relative to the corner of the new window created upon
-    // dragend such that the mouse appears to have the same position
-    // relative to the corner of the dragged tab.
-    let clientX = ele => ele.getBoundingClientRect().left;
-    let tabOffsetX = clientX(tab) - clientX(tabBar);
-    tab._dragData = {
-      offsetX: event.screenX - window.screenX - tabOffsetX,
-      offsetY: event.screenY - window.screenY,
-      scrollX: tabBar.arrowScrollbox.scrollPosition,
-      screenX: event.screenX
+    const captureListener = function() {
+      event.dataTransfer.updateDragImage(toDrag, dragImageOffsetX, dragImageOffsetY);
     };
-
-    event.stopPropagation();
+    const tab = tabBar._getDragTargetTab(event, false);
+    PageThumbs.captureToCanvas(tab.linkedBrowser, tabBar._dndCanvas)
+        .then(captureListener)
+        .catch(e => Cu.reportError(e));
   },
 
   onDragOver: function minit_onDragOver(event) {

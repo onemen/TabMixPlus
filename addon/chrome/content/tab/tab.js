@@ -503,9 +503,8 @@ Tabmix.tabsUtils = {
         TabmixTabClickOptions.onTabClick(aEvent);
         break;
       case "dragstart": {
-        let tabmixDragstart = this.tabBar.useTabmixDragstart(aEvent);
-        if (tabmixDragstart || TabmixTabbar.position == 1) {
-          TMP_tabDNDObserver.onDragStart(aEvent, tabmixDragstart);
+        if (TabmixTabbar.visibleRows > 1 || TabmixTabbar.position == 1) {
+          TMP_tabDNDObserver.on_dragstart(aEvent);
         }
         break;
       }
