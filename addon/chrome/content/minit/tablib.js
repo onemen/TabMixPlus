@@ -351,7 +351,7 @@ Tabmix.tablib = {
       '{ beforeTabOpen, isContentTitle }',
       '{ beforeTabOpen, isContentTitle, urlTitle }'
     )._replace(
-      'this._tabAttrModified',
+      'return true;',
       ` Tabmix.tablib.onTabTitleChanged(aTab, aTab.linkedBrowser, aLabel == urlTitle);
          $&`
     ).toCode();
@@ -1685,9 +1685,6 @@ Tabmix.tablib = {
   },
 
   getTabTitle: function TMP_getTabTitle(aTab, url) {
-    if (aTab.getAttribute("tabmix_bookmarkUrl") === url) {
-      return true;
-    }
     if (aTab?._tabmixState?.noBookmart) {
       aTab._tabmixState = {};
       return false;
@@ -1732,7 +1729,7 @@ Tabmix.tablib = {
       return;
     }
 
-    if (aTab.hasAttribute("width")) {
+    if (aTab.hasAttribute("width") && !aTab.hasAttribute("faviconized")) {
       const {width} = aTab.getBoundingClientRect();
       aTab.removeAttribute("width");
       if (width != aTab.getBoundingClientRect().width)

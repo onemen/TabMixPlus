@@ -377,13 +377,8 @@ var TMP_Places = {
     if (!aUrl)
       aUrl = aTab.linkedBrowser.currentURI.spec;
     if (title != aTab.label) {
-      aTab.label = title;
       aTab.setAttribute("tabmix_changed_label", title);
-      gBrowser._tabAttrModified(aTab, ["label"]);
-      if (aTab.selected)
-        gBrowser.updateTitlebar();
-      if (!aTab.hasAttribute("faviconized"))
-        aTab.removeAttribute("width");
+      gBrowser._setTabLabel(aTab, title);
       this._tabTitleChanged = true;
       return true;
     }
