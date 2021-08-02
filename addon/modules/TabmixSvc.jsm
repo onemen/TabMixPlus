@@ -12,46 +12,8 @@ ChromeUtils.defineModuleGetter(this, "TabmixPlacesUtils",
 ChromeUtils.defineModuleGetter(this, "SyncedTabs",
   "chrome://tabmix-resource/content/SyncedTabs.jsm");
 
-const waterfoxPrefObserver = {
-  _initialized: false,
-
-  init() {
-    if (TabmixSvc.isWaterfox && isVersion(780)) {
-      this._initialized = true;
-      this.observe(null, null, "browser.tabBar.position");
-      this.addObserver();
-    }
-  },
-
-  addObserver() {
-    Services.prefs.addObserver("browser.tabBar.position", this);
-    Services.prefs.addObserver("extensions.tabmix.tabBarPosition", this);
-  },
-
-  removeObservers() {
-    if (this._initialized) {
-      Services.prefs.removeObserver("browser.tabBar.position", this);
-      Services.prefs.removeObserver("extensions.tabmix.tabBarPosition", this);
-    }
-  },
-
-  observe: function TMP_pref_observer(subject, topic, prefName) {
-    if (this.preventUpdate) {
-      return;
-    }
-    this.preventUpdate = true;
-    const prefValue = TabmixSvc.prefs.get(prefName);
-    switch (prefName) {
-      case "browser.tabBar.position":
-        Services.prefs.setIntPref("extensions.tabmix.tabBarPosition", prefValue === "bottom" ? 1 : 0);
-        break;
-      case "extensions.tabmix.tabBarPosition":
-        Services.prefs.setCharPref("browser.tabBar.position", prefValue === 0 ? "topAboveAB" : "bottom");
-        break;
-    }
-    this.preventUpdate = false;
-  },
-};
+ChromeUtils.defineModuleGetter(this, "AppConstants",
+  "resource://gre/modules/AppConstants.jsm");
 
 // place holder for load default preferences function
 // eslint-disable-next-line no-unused-vars
@@ -285,7 +247,11 @@ this.TabmixSvc = {
 
       ChromeUtils.import("chrome://tabmix-resource/content/TabRestoreQueue.jsm", {});
 
-      waterfoxPrefObserver.init();
+      if (TabmixSvc.isG3Waterfox) {
+        // Waterfox use build-in preference - browser.tabBar.position
+        Services.prefs.clearUserPref("extensions.tabmix.tabBarPosition");
+        Services.prefs.lockPref("extensions.tabmix.tabBarPosition");
+      }
     },
 
     addMissingPrefs() {
@@ -311,7 +277,6 @@ this.TabmixSvc = {
           }
           delete TabmixSvc.SessionStoreGlobal;
           delete TabmixSvc.SessionStore;
-          waterfoxPrefObserver.removeObservers();
           break;
       }
     }
@@ -380,7 +345,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", () => {
 });
 
 XPCOMUtils.defineLazyGetter(this, "Platform", () => {
-  return (ChromeUtils.import("resource://gre/modules/AppConstants.jsm", {})).AppConstants.platform;
+  return AppConstants.platform;
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isWindows", () => {
@@ -401,6 +366,10 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isCyberfox", () => {
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isWaterfox", () => {
   return Services.appinfo.name == "Waterfox";
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isG3Waterfox", () => {
+  return Services.appinfo.name == "Waterfox" && isVersion(780);
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isBasilisk", () => {

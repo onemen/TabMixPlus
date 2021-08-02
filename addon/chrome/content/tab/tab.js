@@ -977,6 +977,10 @@ Tabmix.bottomToolbarUtils = {
   get toolbox() {return document.getElementById("tabmix-bottom-toolbox");},
 
   init() {
+    if (TabmixSvc.isG3Waterfox) {
+      return;
+    }
+
     if (!this.toolbox && TabmixTabbar.position === 1) {
       this.createToolbox();
       this.createFullScrToggler();
@@ -1037,7 +1041,7 @@ Tabmix.bottomToolbarUtils = {
 
   _resizeObserver: null,
   resizeObserver(observe) {
-    if (!observe && !this._resizeObserver) {
+    if (!observe && !this._resizeObserver || TabmixSvc.isG3Waterfox) {
       return;
     }
     if (!this._resizeObserver) {

@@ -588,7 +588,7 @@ var TMP_eventListener = {
 
   onFullScreen: function TMP_EL_onFullScreen(enterFS) {
     var fullScrToggler = document.getElementById("fullscr-bottom-toggler");
-    if (enterFS && TabmixTabbar.position == 1) {
+    if (enterFS && !TabmixSvc.isG3Waterfox && TabmixTabbar.position == 1) {
       if (!fullScrToggler.initialized) {
         fullScrToggler.addEventListener("mouseover", this._expandCallback);
         fullScrToggler.addEventListener("dragenter", this._expandCallback);
