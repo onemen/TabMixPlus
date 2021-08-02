@@ -1228,12 +1228,12 @@ Tabmix.navToolbox = {
     gNavToolbox.addEventListener("customizationchange", this);
     this.toolboxChanged = false;
     this.customizeStarted = true;
-    Tabmix.bottomToolbarUtils.resizeObserver(false);
+    Tabmix.bottomToolbarUtils.resizeObserver("customization-container", true);
   },
 
   customizeDone: function TMP_navToolbox_customizeDone(aToolboxChanged) {
     gNavToolbox.removeEventListener("customizationchange", this);
-    Tabmix.bottomToolbarUtils.resizeObserver(TabmixTabbar.flowing);
+    Tabmix.bottomToolbarUtils.resizeObserver("customization-container", false);
     this.customizeStarted = false;
 
     if (aToolboxChanged)

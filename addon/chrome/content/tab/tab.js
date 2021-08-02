@@ -985,7 +985,7 @@ Tabmix.bottomToolbarUtils = {
       this.createToolbox();
       this.createFullScrToggler();
     }
-    this.resizeObserver(TabmixTabbar.position === 1);
+    this.resizeObserver();
   },
 
   createToolbox() {
@@ -1016,7 +1016,6 @@ Tabmix.bottomToolbarUtils = {
       tabsToolbar.style.setProperty("top", screen.availHeight + "px", "important");
       Tabmix.setItem("TabsToolbar-customization-target", "width", screen.availWidth);
     }
-    // TabmixTabbar.visibleRows = 1;
     if (updateFullScreen) {
       TMP_eventListener.toggleTabbarVisibility(false);
       TabmixTabbar.updateSettings(false);
@@ -1040,10 +1039,18 @@ Tabmix.bottomToolbarUtils = {
   },
 
   _resizeObserver: null,
-  resizeObserver(observe) {
-    if (!observe && !this._resizeObserver || TabmixSvc.isG3Waterfox) {
+  _observing: new Set(),
+
+  resizeObserver(elementId = "browser", isCustomizing) {
+    let observe = TabmixTabbar.position === 1;
+    if (!observe || TabmixSvc.isG3Waterfox) {
+      if (this._observing.size) {
+        this._observing.clear();
+        this._resizeObserver.disconnect();
+      }
       return;
     }
+
     if (!this._resizeObserver) {
       this._resizeObserver = new window.ResizeObserver(entries => {
         for (let entry of entries) {
@@ -1054,20 +1061,32 @@ Tabmix.bottomToolbarUtils = {
         }
       });
     }
-    const browserEl = document.getElementById("browser");
-    if (observe && !gBrowser.tabContainer._isCustomizing) {
-      this._resizeObserver.observe(browserEl);
+
+    if (elementId === "customization-container") {
+      observe = isCustomizing;
+    }
+
+    const element = document.getElementById(elementId);
+    if (observe) {
+      this._observing.add(elementId);
+      this._resizeObserver.observe(element);
     } else {
-      this._resizeObserver.unobserve(browserEl);
+      this._observing.delete(elementId);
+      this._resizeObserver.unobserve(element);
     }
   },
 
   _bottomRect: {top: null},
+  _customizingMinTop: 455,
+
   _update() {
-    const rect = this.toolbox.getBoundingClientRect();
-    if (this._bottomRect.top != rect.top) {
-      this._bottomRect.top = rect.top;
-      document.documentElement.style.setProperty("--tabmix-bottom-toolbox-top", `${rect.top}px`);
+    let {top} = this.toolbox.getBoundingClientRect();
+    if (gBrowser.tabContainer._isCustomizing && top < this._customizingMinTop) {
+      top = this._customizingMinTop;
+    }
+    if (this._bottomRect.top != top) {
+      this._bottomRect.top = top;
+      document.documentElement.style.setProperty("--tabmix-bottom-toolbox-top", `${top}px`);
     }
   },
 };

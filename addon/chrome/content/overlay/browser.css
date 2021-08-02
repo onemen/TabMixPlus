@@ -302,7 +302,7 @@ so display: none !important; does not hide the button */
 }
 
 /* we don't need rule for toolbar-drag - when tabbar on bottom */
-:root:not([customizing]) #TabsToolbar[tabbaronbottom] {
+#TabsToolbar[tabbaronbottom] {
   display: block;
   position: fixed !important;
   -moz-appearance: none !important;
@@ -313,11 +313,10 @@ so display: none !important; does not hide the button */
   */
 }
 
-:root:not([customizing]) #TabsToolbar[tabbaronbottom] > .toolbar-items {
+#TabsToolbar[tabbaronbottom] > .toolbar-items {
   width: 100%;
 }
 
-:root[customizing] #tabmix-bottom-toolbox,
 #main-window:not([tabmix-tabbaronbottom]) #tabmix-bottom-toolbox {
   visibility: collapse;
 }
