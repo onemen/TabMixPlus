@@ -1717,6 +1717,9 @@ Tabmix.tablib = {
   },
 
   onTabTitleChanged: function TMP_onTabTitleChanged(aTab, aBrowser, isUrlTitle) {
+    if (!aTab || !aTab.parentNode || !aBrowser) {
+      return;
+    }
     // when TabmixTabbar.widthFitTitle is true we only have width attribute after tab reload
     // some site, like Gmail change title internally, after load already finished and we have remove
     // width attribute
