@@ -54,19 +54,17 @@ var TMP_tabDNDObserver = {
           }'
     )._replace(
       'let shiftWidth = tabWidth * movingTabs.length;',
-      'let shiftWidth = Tabmix.getMovingTabsWidth(movingTabs);'
-    )._replace(
-      'draggedTab._dragData.tabWidth = tabWidth;',
-      `let rightTabWidth = movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
+      `let shiftWidth = Tabmix.getMovingTabsWidth(movingTabs);
+       draggedTab._dragData.shiftWidth = shiftWidth;
+       let rightTabWidth = movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
        let leftTabWidth = movingTabs[0].getBoundingClientRect().width;
-       draggedTab._dragData.tabWidth = leftTabWidth;`
+       let referenceTabWidht = ltrMove ? rightTabWidth : leftTabWidth;`
     )._replace(
       '(rightMovingTabScreenX + tabWidth)',
       '(rightMovingTabScreenX + rightTabWidth)'
     )._replace(
       /let leftTabCenter =.*;/,
-      `let referenceTabWidht = ltrMove ? rightTabWidth : leftTabWidth;
-       let leftTabCenter = leftMovingTabScreenX + translateX + leftTabWidth / 2;`
+      `let leftTabCenter = leftMovingTabScreenX + translateX + leftTabWidth / 2;`
     )._replace(
       /let rightTabCenter =.*;/,
       `let rightTabCenter = rightMovingTabScreenX + translateX + rightTabWidth / 2;`
@@ -90,7 +88,19 @@ var TMP_tabDNDObserver = {
         $&`
     )._replace(
       'newIndex >= oldIndex',
-      'RTL_UI || !tabmixHandleMove ? $& : ltrMove && newIndex > -1'
+      '!tabmixHandleMove ? $& : newIndex > -1 && (RTL_UI !== ltrMove)'
+    ).toCode();
+
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_drop")._replace(
+      'if (oldTranslateX && oldTranslateX',
+      `let refTab = this.allTabs[dropIndex];
+       if (refTab) {
+         let firstMovingTab = RTL_UI ? movingTabs[movingTabs.length - 1] : movingTabs[0];
+           newTranslateX = RTL_UI && dropIndex < firstMovingTab._tPos || !RTL_UI && dropIndex > firstMovingTab._tPos
+             ? refTab.screenX + refTab.getBoundingClientRect().width - firstMovingTab.screenX - draggedTab._dragData.shiftWidth
+             : refTab.screenX - firstMovingTab.screenX;
+       }
+      $&`
     ).toCode();
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
@@ -102,8 +112,16 @@ var TMP_tabDNDObserver = {
       $1$2'
     ).toCode();
 
-    tabBar.useTabmixDnD = function() {
-      return false;
+    tabBar.useTabmixDnD = function(aEvent) {
+      function checkTab(dt) {
+        let tab = TMP_tabDNDObserver.getSourceNode(dt);
+        return !tab || tab.__tabmixDragStart ||
+          TMP_tabDNDObserver.getDragType(tab) == TMP_tabDNDObserver.DRAG_TAB_TO_NEW_WINDOW;
+      }
+
+      return this.getAttribute("orient") == "horizontal" &&
+        (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
+        checkTab(aEvent.dataTransfer));
     };
 
     this._dragOverDelay = tabBar._dragOverDelay;
@@ -118,7 +136,18 @@ var TMP_tabDNDObserver = {
   },
 
   on_dragstart(event) {
+    if (this.draggedTab) {
+      delete this.draggedTab.__tabmixDragStart;
+    }
+
     const tabBar = gBrowser.tabContainer;
+    const tab = tabBar._getDragTargetTab(event, false);
+    if (!tab || this._isCustomizing) {
+      return;
+    }
+    tab.__tabmixDragStart = true;
+    this.draggedTab = tab;
+
     TabmixTabbar.removeShowButtonAttr();
     tabBar.on_dragstart(event);
     const windowUtils = window.windowUtils;
@@ -141,7 +170,6 @@ var TMP_tabDNDObserver = {
     const captureListener = function() {
       event.dataTransfer.updateDragImage(toDrag, dragImageOffsetX, dragImageOffsetY);
     };
-    const tab = tabBar._getDragTargetTab(event, false);
     PageThumbs.captureToCanvas(tab.linkedBrowser, tabBar._dndCanvas)
         .then(captureListener)
         .catch(e => Cu.reportError(e));
@@ -537,7 +565,6 @@ var TMP_tabDNDObserver = {
 
     if (this.draggedTab) {
       delete this.draggedTab.__tabmixDragStart;
-      this.draggedTab.removeAttribute("dragged", true);
       this.draggedTab = null;
     }
     // see comment in gBrowser.tabContainer.dragEnd
@@ -650,7 +677,6 @@ var TMP_tabDNDObserver = {
     this.clearDragmark();
     if (this.draggedTab) {
       delete this.draggedTab.__tabmixDragStart;
-      this.draggedTab.removeAttribute("dragged", true);
       this.draggedTab = null;
     }
     this.updateStatusField();
