@@ -520,7 +520,7 @@ Tabmix.tabsUtils = {
         if (this.tabBar.useTabmixDnD(aEvent)) {
           TMP_tabDNDObserver.onDrop(aEvent);
         } else {
-          TMP_tabDNDObserver.drop(aEvent);
+          // TMP_tabDNDObserver.drop(aEvent);
         }
         break;
       case "dragend":

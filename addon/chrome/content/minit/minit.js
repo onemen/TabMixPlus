@@ -54,17 +54,31 @@ var TMP_tabDNDObserver = {
           }'
     )._replace(
       'let shiftWidth = tabWidth * movingTabs.length;',
-      `let shiftWidth = Tabmix.getMovingTabsWidth(movingTabs);
-      let draggedTabWidth = draggedTab.getBoundingClientRect().width;`
+      'let shiftWidth = Tabmix.getMovingTabsWidth(movingTabs);'
+    )._replace(
+      'draggedTab._dragData.tabWidth = tabWidth;',
+      `let rightTabWidth = movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
+       let leftTabWidth = movingTabs[0].getBoundingClientRect().width;
+       draggedTab._dragData.tabWidth = leftTabWidth;`
+    )._replace(
+      '(rightMovingTabScreenX + tabWidth)',
+      '(rightMovingTabScreenX + rightTabWidth)'
+    )._replace(
+      /let leftTabCenter =.*;/,
+      `let referenceTabWidht = ltrMove ? rightTabWidth : leftTabWidth;
+       let leftTabCenter = leftMovingTabScreenX + translateX + leftTabWidth / 2;`
+    )._replace(
+      /let rightTabCenter =.*;/,
+      `let rightTabCenter = rightMovingTabScreenX + translateX + rightTabWidth / 2;`
     )._replace(
       'if (screenX > tabCenter) {',
       `let midWidth = tabs[mid].getBoundingClientRect().width;
-        if (tabmixHandleMove && draggedTabWidth > midWidth) {
+        if (tabmixHandleMove && referenceTabWidht > midWidth) {
           screenX += midWidth / 2;
-          if (screenX > tabCenter + draggedTabWidth / 2) {
+          if (screenX > tabCenter + referenceTabWidht / 2) {
             high = mid - 1;
           } else if (
-            screenX < tabCenter - draggedTabWidth / 2
+            screenX < tabCenter - referenceTabWidht / 2
           ) {
             low = mid + 1;
           } else {
