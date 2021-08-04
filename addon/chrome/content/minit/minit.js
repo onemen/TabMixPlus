@@ -175,8 +175,7 @@ var TMP_tabDNDObserver = {
         .catch(e => Cu.reportError(e));
   },
 
-  onDragOver: function minit_onDragOver(event) {
-    console.log("onDragOver");
+  on_dragOver(event) {
     var dt = event.dataTransfer;
     var tabBar = gBrowser.tabContainer;
 
@@ -194,6 +193,39 @@ var TMP_tabDNDObserver = {
                  Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
         tabBar.selectedIndex : gBrowser.tabs.length - 1;
       left_right = 1;
+    }
+
+    if (Tabmix.tabsUtils.overflow) {
+      let tabStrip = tabBar.arrowScrollbox;
+      let ltr = Tabmix.ltr || tabStrip.getAttribute('orient') == "vertical";
+      let _scroll, targetAnonid;
+      if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_HIDDEN) // scroll with button
+        targetAnonid = event.originalTarget.getAttribute("anonid") || event.originalTarget.id;
+      // scroll without button
+      else if (event.screenX <= tabStrip.scrollbox.screenX)
+        targetAnonid = ltr ? "scrollbutton-up" : "scrollbutton-down";
+      else if (event.screenX >= (tabStrip.scrollbox.screenX + tabStrip.scrollClientRect.width))
+        targetAnonid = ltr ? "scrollbutton-down" : "scrollbutton-up";
+
+      switch (targetAnonid) {
+        case "scrollbutton-up":
+        case "scrollbutton-up-right":
+          if (Tabmix.tabsUtils.canScrollTabsLeft)
+            _scroll = -1;
+          break;
+        case "scrollbutton-down":
+        case "scrollbutton-down-right":
+          if (Tabmix.tabsUtils.canScrollTabsRight)
+            _scroll = 1;
+          break;
+      }
+      if (_scroll) {
+        let scrollIncrement = TabmixTabbar.isMultiRow ?
+          Math.round(tabStrip._singleRowHeight / 6) : tabStrip.scrollIncrement;
+        tabStrip.scrollByPixels(_scroll * scrollIncrement, true);
+        this.clearDragmark();
+        return;
+      }
     }
 
     var isCopy = this.isCopyDropEffect(dt, event, dragType);
@@ -223,7 +255,6 @@ var TMP_tabDNDObserver = {
     }
 
     var canDrop;
-    var hideIndicator = false;
     if (effects === "" || effects == "none" && this._isCustomizing) {
       this.clearDragmark();
       return;
@@ -265,36 +296,14 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    if (Tabmix.tabsUtils.overflow) {
-      let tabStrip = tabBar.arrowScrollbox;
-      let ltr = Tabmix.ltr || tabStrip.getAttribute('orient') == "vertical";
-      let _scroll, targetAnonid;
-      if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_HIDDEN) // scroll with button
-        targetAnonid = event.originalTarget.getAttribute("anonid") || event.originalTarget.id;
-      // scroll without button
-      else if (event.screenX <= tabStrip.scrollbox.screenX)
-        targetAnonid = ltr ? "scrollbutton-up" : "scrollbutton-down";
-      else if (event.screenX >= (tabStrip.scrollbox.screenX + tabStrip.scrollClientRect.width))
-        targetAnonid = ltr ? "scrollbutton-down" : "scrollbutton-up";
-
-      switch (targetAnonid) {
-        case "scrollbutton-up":
-        case "scrollbutton-up-right":
-          if (Tabmix.tabsUtils.canScrollTabsLeft)
-            _scroll = -1;
-          break;
-        case "scrollbutton-down":
-        case "scrollbutton-down-right":
-          if (Tabmix.tabsUtils.canScrollTabsRight)
-            _scroll = 1;
-          break;
+    let draggedTab = event.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
+    if ((effects == "move" || effects == "copy") && tabBar == draggedTab.container) {
+      if (!tabBar._isGroupTabsAnimationOver()) {
+        this.clearDragmark();
+        // Wait for grouping tabs animation to finish
+        return;
       }
-      if (_scroll) {
-        let scrollIncrement = TabmixTabbar.isMultiRow ?
-          Math.round(tabStrip._singleRowHeight / 6) : tabStrip.scrollIncrement;
-        tabStrip.scrollByPixels((ltr ? _scroll : -_scroll) * scrollIncrement, false);
-        hideIndicator = true;
-      }
+      tabBar._finishGroupSelectedTabs(draggedTab);
     }
 
     if (dragType == this.DRAG_LINK) {
@@ -307,7 +316,7 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    if (replaceTab || hideIndicator || !canDrop) {
+    if (replaceTab || !canDrop) {
       this.clearDragmark();
       return;
     }
@@ -853,14 +862,6 @@ var TMP_tabDNDObserver = {
 
   setFirefoxDropIndicator(val) {
     gBrowser.tabContainer._tabDropIndicator.hidden = !val;
-  },
-
-  removeDragmarkAttribute(tab) {
-    tab.removeAttribute("dragmark");
-  },
-
-  setDragmarkAttribute(tab, markSide) {
-    tab.setAttribute("dragmark", markSide);
   },
 
   getSourceNode: function TMP_getSourceNode(aDataTransfer) {

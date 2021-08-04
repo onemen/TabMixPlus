@@ -513,7 +513,7 @@ Tabmix.tabsUtils = {
           return;
         }
         if (this.tabBar.useTabmixDnD(aEvent))
-          TMP_tabDNDObserver.onDragOver(aEvent);
+          TMP_tabDNDObserver.on_dragOver(aEvent);
         break;
       }
       case "drop":
