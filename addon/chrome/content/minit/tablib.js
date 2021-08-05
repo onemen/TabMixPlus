@@ -137,7 +137,7 @@ Tabmix.tablib = {
       let callerTrace = Tabmix.callerTrace(),
           isRestoringTab = callerTrace.contain("ssi_restoreWindow");
 
-      let {dontMove, isPending, referrerInfo, relatedToCurrent = null, openerBrowser} = args[1] || {};
+      let {dontMove, index, isPending, openerBrowser, referrerInfo, relatedToCurrent = null} = args[1] || {};
 
       if (relatedToCurrent === null) {
         relatedToCurrent = Boolean(referrerInfo && referrerInfo.originalReferrer);
@@ -181,7 +181,7 @@ Tabmix.tablib = {
         t.setAttribute("tabmix_pending", "true");
       }
 
-      if (relatedToCurrent && openTabnext) {
+      if (typeof index !== "number" && relatedToCurrent && openTabnext) {
         let newTabPos = (lastRelatedTab || openerTab)._tPos + 1;
         // update new position if the new tab already moved before
         // lastRelatedTab/openerTab by other extension (TreeStyleTab)
@@ -1646,13 +1646,13 @@ Tabmix.tablib = {
       // and vice versa.
       if (PrivateBrowsingUtils.isWindowPrivate(window) !=
           PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerGlobal)) {
-        return;
+        return false;
       }
 
       if (gBrowserInit.tabmix_delayedStartupStarted && !gBrowserInit.delayedStartupFinished) {
         // we probably will never get here in single window mode
         if (Tabmix.singleWindowMode) {
-          return;
+          return false;
         }
         Tabmix._afterTabduplicated = true;
         let url = aOtherTab.linkedBrowser.currentURI.spec;
@@ -1660,7 +1660,7 @@ Tabmix.tablib = {
       }
 
       Tabmix.copyTabData(aOurTab, aOtherTab);
-      Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
+      return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
     };
     Tabmix.setNewFunction(gBrowser, "swapBrowsersAndCloseOther", swapTab);
 

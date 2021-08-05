@@ -399,7 +399,7 @@ Tabmix.tabsUtils = {
     return {collapsed, toolbar, tabBar, toolbarCollapsed, tabBarCollapsed};
   },
 
-  events: ["dblclick", "click", "dragstart", "drop", "dragend", "dragexit"],
+  events: ["dblclick", "click", "dragstart", "drop", "dragexit"],
 
   init() {
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, true, this);
@@ -513,23 +513,15 @@ Tabmix.tabsUtils = {
           return;
         }
         if (this.tabBar.useTabmixDnD(aEvent))
-          TMP_tabDNDObserver.on_dragOver(aEvent);
+          TMP_tabDNDObserver.on_dragover(aEvent);
         break;
       }
       case "drop":
-        if (this.tabBar.useTabmixDnD(aEvent)) {
-          TMP_tabDNDObserver.onDrop(aEvent);
-        } else {
-          // TMP_tabDNDObserver.drop(aEvent);
-        }
-        break;
-      case "dragend":
-        if (this.tabBar.attributes.orient.value == "horizontal")
-          TMP_tabDNDObserver.onDragEnd(aEvent);
+        document.getElementById("tabmix-tooltip").hidePopup();
         break;
       case "dragexit":
         if (this.tabBar.useTabmixDnD(aEvent))
-          TMP_tabDNDObserver.onDragExit(aEvent);
+          TMP_tabDNDObserver.on_dragexit(aEvent);
         break;
     }
   },

@@ -440,7 +440,7 @@ Tabmix.multiRow = {
         this.addEventListener("dragover", event => {
           const tabBar = gBrowser.tabContainer;
           if (tabBar.useTabmixDnD(event))
-            TMP_tabDNDObserver.onDragOver(event);
+            TMP_tabDNDObserver.on_dragover(event);
         });
 
         this.addEventListener("drop", event => {
