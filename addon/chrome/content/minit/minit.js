@@ -442,17 +442,30 @@ var TMP_tabDNDObserver = {
           return i;
       }
     } else {
+      // adjust mouseY position when it is in the margin area
+      const tabStrip = gBrowser.tabContainer.arrowScrollbox;
+      const singleRowHeight = tabStrip.singleRowHeight;
+      const firstVisibleRow = Math.round(tabStrip.scrollPosition / singleRowHeight) + 1;
+      const {top, height} = document.getElementById("tabbrowser-arrowscrollbox").getBoundingClientRect();
+      if (mY > top + height - this._multirowMargin) {
+        mY = top + height - this._multirowMargin - 1;
+      } else if (mY < top + this._multirowMargin) {
+        mY = top + this._multirowMargin + 1;
+      }
+      const currentRow = firstVisibleRow + parseInt((mY - top - this._multirowMargin) / singleRowHeight);
       let topY = Tabmix.tabsUtils.topTabY;
-      for (let i = 0; i < numTabs; i++) {
+      let index;
+      for (index = 0; index < numTabs; index++) {
+        if (getTabRowNumber(tabs[index], topY) === currentRow) {
+          break;
+        }
+      }
+
+      for (let i = index; i < numTabs; i++) {
         let tab = tabs[i];
-        let thisRow = getTabRowNumber(tab, topY);
-        const {height} = tab.getBoundingClientRect();
-        if (mY >= tab.screenY + height) {
-          while (i < numTabs - 1 && getTabRowNumber(tabs[i + 1], topY) == thisRow)
-            i++;
-        } else if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr)) {
+        if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr)) {
           return i;
-        } else if (i == numTabs - 1 || getTabRowNumber(tabs[i + 1], topY) != thisRow) {
+        } else if (i == numTabs - 1 || getTabRowNumber(tabs[i + 1], topY) !== currentRow) {
           return i;
         }
       }

@@ -1847,12 +1847,14 @@ gTMPprefObserver = {
           --tabmix-multirow-margin: ${blockMargin.margin};
         }`
       );
+      TMP_tabDNDObserver._multirowMargin = parseInt(blockMargin.margin);
     } else {
       this.insertRule(
         `:root {
           --tabmix-multirow-margin: ${protonPrefVal ? blockMargin.margin : "0px"};
         }`
       );
+      TMP_tabDNDObserver._multirowMargin = protonPrefVal ? parseInt(blockMargin.margin) : 0;
     }
 
     // Firefox adds padding for single row when positionpinnedtabs is set.
