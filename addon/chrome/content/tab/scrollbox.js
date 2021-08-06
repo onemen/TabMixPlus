@@ -444,7 +444,10 @@ Tabmix.multiRow = {
         });
 
         this.addEventListener("drop", event => {
+          event.preventDefault();
+          event.stopPropagation();
           this.finishScroll(event);
+          gBrowser.tabContainer.on_drop(event);
         });
 
         this.addEventListener("dragexit", event => {

@@ -121,6 +121,11 @@ var TMP_tabDNDObserver = {
     )._replace(
       'let newIndex = this._getDropIndex(event, true);',
       `let { newIndex, left_right } = this._getDropIndex(event, true, true);
+      if (event.target.id === "tabmix-scrollbox") {
+        left_right = 0;
+        if (event.originalTarget.id === "scrollbutton-up") newIndex = 0;
+        else if (event.originalTarget.id === "scrollbutton-down") newIndex = this.allTabs.length;
+      }
       let firstUrl = links[0].url;
       replace =
         left_right === -1 || Tabmix.ContentClick.isUrlForDownload(firstUrl);
