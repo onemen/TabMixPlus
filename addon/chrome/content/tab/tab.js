@@ -399,13 +399,10 @@ Tabmix.tabsUtils = {
     return {collapsed, toolbar, tabBar, toolbarCollapsed, tabBarCollapsed};
   },
 
-  events: ["dblclick", "click", "dragstart", "drop", "dragexit"],
+  events: ["dblclick", "click", "dragstart", "dragover", "drop", "dragexit"],
 
   init() {
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, true, this);
-    // add dragover event handler to TabsToolbar to capture dragging over
-    // tabbar margin area, filter out events that are out of the tabbar
-    this.tabBar.parentNode.addEventListener("dragover", this, true);
 
     if (this.initialized) {
       Tabmix.log("initializeTabmixUI - some extension initialize tabbrowser-tabs binding again");
@@ -474,8 +471,6 @@ Tabmix.tabsUtils = {
     if (!this.initialized)
       return;
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, false, this);
-    if (this.tabBar.parentNode)
-      this.tabBar.parentNode.removeEventListener("dragover", this, true);
     this._tabmixPositionalTabs = null;
   },
 
@@ -509,9 +504,6 @@ Tabmix.tabsUtils = {
         break;
       }
       case "dragover": {
-        if (!this.tabBar.contains(aEvent.target)) {
-          return;
-        }
         if (this.tabBar.useTabmixDnD(aEvent))
           TMP_tabDNDObserver.on_dragover(aEvent);
         break;
