@@ -259,6 +259,8 @@ var TMP_tabDNDObserver = {
           Math.round(tabStrip._singleRowHeight / 6) : tabStrip.scrollIncrement;
         tabStrip.scrollByPixels(_scroll * scrollIncrement, true);
         this.clearDragmark();
+        event.preventDefault();
+        event.stopPropagation();
         return;
       }
     }
