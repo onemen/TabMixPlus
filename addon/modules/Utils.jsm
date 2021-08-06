@@ -70,8 +70,7 @@ this.TabmixUtils = {
           win.Tabmix.tablib.whereToOpenDrop(json, url);
         if (where == "tab") {
           links[0].tabmixContentDrop = "tab";
-          // see browser.xml dropLinks method
-          browser.droppedLinkHandler(null, links);
+          browser.droppedLinkHandler(null, links, Services.scriptSecurityManager.getSystemPrincipal());
           // prevent default
           return true;
         }
