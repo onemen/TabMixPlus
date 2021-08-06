@@ -509,7 +509,7 @@ Tabmix.tabsUtils = {
         break;
       }
       case "drop":
-        document.getElementById("tabmix-tooltip").hidePopup();
+        TMP_tabDNDObserver.hideDragoverMessage();
         break;
       case "dragexit":
         if (this.tabBar.useTabmixDnD(aEvent))

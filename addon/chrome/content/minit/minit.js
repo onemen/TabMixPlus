@@ -318,18 +318,10 @@ var TMP_tabDNDObserver = {
       if (!tabBar.contains(event.target)) {
         this.gMsg = this.gBackupLabel;
       }
-      var statusTextFld = document.getElementById("statusbar-display");
-      if (statusTextFld && statusTextFld.getAttribute("label") != this.gMsg) {
-        if (this.gBackupLabel === "")
-          this.gBackupLabel = statusTextFld.getAttribute("label");
-        statusTextFld.label = this.gMsg;
-        this.statusFieldChanged = true;
-      } else if (!statusTextFld) {
-        let tooltip = document.getElementById("tabmix-tooltip");
-        if (tooltip.state == "closed") {
-          tooltip.label = this.gMsg;
-          tooltip.openPopup(document.getElementById("browser"), null, 1, 1, false, false);
-        }
+      let tooltip = document.getElementById("tabmix-tooltip");
+      if (tooltip.state == "closed") {
+        tooltip.label = this.gMsg;
+        tooltip.openPopup(document.getElementById("browser"), null, 1, 1, false, false);
       }
     }
 
@@ -376,18 +368,11 @@ var TMP_tabDNDObserver = {
       delete this.draggedTab.__tabmixDragStart;
       this.draggedTab = null;
     }
-    this.updateStatusField();
+    this.hideDragoverMessage();
   },
 
-  updateStatusField() {
-    var statusTextFld = document.getElementById("statusbar-display");
-    if (statusTextFld && this.statusFieldChanged) {
-      statusTextFld.label = "";
-      this.gBackupLabel = "";
-      this.statusFieldChanged = null;
-    } else if (!statusTextFld) {
-      document.getElementById("tabmix-tooltip").hidePopup();
-    }
+  hideDragoverMessage() {
+    document.getElementById("tabmix-tooltip").hidePopup();
   },
 
   _getDropIndex(event, isLink, dropLink) {
@@ -643,15 +628,10 @@ var TMP_undocloseTabButtonObserver = {
 
     aEvent.preventDefault();
     var label = TabmixSvc.getString("droptoclose.label");
-    var statusTextFld = document.getElementById("statusbar-display");
-    if (statusTextFld)
-      statusTextFld.label = label;
-    else {
-      let tooltip = document.getElementById("tabmix-tooltip");
-      if (tooltip.state == "closed") {
-        tooltip.label = label;
-        tooltip.openPopup(aEvent.target, "before_start", -1, -1, false, false);
-      }
+    let tooltip = document.getElementById("tabmix-tooltip");
+    if (tooltip.state == "closed") {
+      tooltip.label = label;
+      tooltip.openPopup(aEvent.target, "before_start", -1, -1, false, false);
     }
 
     aEvent.target.setAttribute("dragover", "true");
@@ -660,12 +640,7 @@ var TMP_undocloseTabButtonObserver = {
 
   onDragExit(aEvent) {
     if (aEvent.target.hasAttribute("dragover")) {
-      var statusTextFld = document.getElementById("statusbar-display");
-      if (statusTextFld)
-        statusTextFld.label = "";
-      else
-        document.getElementById("tabmix-tooltip").hidePopup();
-
+      document.getElementById("tabmix-tooltip").hidePopup();
       aEvent.target.removeAttribute("dragover");
     }
   },
