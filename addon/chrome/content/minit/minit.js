@@ -364,7 +364,7 @@ var TMP_tabDNDObserver = {
     this.setDragmark(newIndex, left_right);
   },
 
-  on_dragexit(event) {
+  on_dragleave(event) {
     event.stopPropagation();
     this._dragTime = 0;
 

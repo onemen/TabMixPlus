@@ -399,7 +399,7 @@ Tabmix.tabsUtils = {
     return {collapsed, toolbar, tabBar, toolbarCollapsed, tabBarCollapsed};
   },
 
-  events: ["dblclick", "click", "dragstart", "dragover", "drop", "dragexit"],
+  events: ["dblclick", "click", "dragstart", "dragover", "drop", "dragleave"],
 
   init() {
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, true, this);
@@ -511,9 +511,9 @@ Tabmix.tabsUtils = {
       case "drop":
         TMP_tabDNDObserver.hideDragoverMessage();
         break;
-      case "dragexit":
+      case "dragleave":
         if (this.tabBar.useTabmixDnD(aEvent))
-          TMP_tabDNDObserver.on_dragexit(aEvent);
+          TMP_tabDNDObserver.on_dragleave(aEvent);
         break;
     }
   },
