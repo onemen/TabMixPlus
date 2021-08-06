@@ -7,7 +7,6 @@ var TMP_tabDNDObserver = {
   gMsg: null,
   draglink: "",
   lastTime: 0,
-  dragmarkindex: null,
   marginBottom: 0,
   LinuxMarginEnd: 0,
   _dragTime: 0,
@@ -236,8 +235,16 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.tabsUtils.overflow) {
+      this.clearDragmark();
+
+      if (TabmixTabbar.scrollButtonsMode === TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT) {
+        if (["scrollbutton-up", "scrollbutton-down"].includes(event.originalTarget.id)) {
+          return;
+        }
+      }
+
       let tabStrip = tabBar.arrowScrollbox;
-      let ltr = Tabmix.ltr || tabStrip.getAttribute('orient') == "vertical";
+      let ltr = Tabmix.ltr || TabmixTabbar.visibleRows > 1;
       let _scroll, targetAnonid;
       if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_HIDDEN) // scroll with button
         targetAnonid = event.originalTarget.getAttribute("anonid") || event.originalTarget.id;
@@ -261,9 +268,8 @@ var TMP_tabDNDObserver = {
       }
       if (_scroll) {
         let scrollIncrement = TabmixTabbar.isMultiRow ?
-          Math.round(tabStrip._singleRowHeight / 6) : tabStrip.scrollIncrement;
-        tabStrip.scrollByPixels(_scroll * scrollIncrement, true);
-        this.clearDragmark();
+          Math.round(tabStrip._singleRowHeight / 8) : tabStrip.scrollIncrement;
+        tabStrip.scrollByPixels((ltr ? _scroll : -_scroll) * scrollIncrement, true);
         event.preventDefault();
         event.stopPropagation();
         return;
@@ -511,11 +517,6 @@ var TMP_tabDNDObserver = {
   },
 
   setDragmark: function minit_setDragmark(index, left_right) {
-    var newIndex = index + left_right;
-    if (this.dragmarkindex && this.dragmarkindex.newIndex == newIndex &&
-        gBrowser.tabs[this.dragmarkindex.index].pinned == gBrowser.tabs[index].pinned)
-      return;
-
     this.clearDragmark();// clear old dragmark if one exist
 
     // code for firefox indicator
@@ -557,27 +558,16 @@ var TMP_tabDNDObserver = {
     // make indicator visible
     ind.style.removeProperty("margin-bottom");
 
-    this.setFirefoxDropIndicator(true);
+    ind.hidden = false;
     newMargin += ind.clientWidth / 2;
     if (!ltr)
       newMargin *= -1;
 
-    ind.style.MozTransform = "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";
-    ind.style.MozMarginStart = (-ind.clientWidth) + "px";
-
-    this.dragmarkindex = {newIndex, index};
+    ind.style.transform = "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";
   },
 
-  clearDragmark: function minit_clearDragmark() {
-    if (this.dragmarkindex === null)
-      return;
-
-    this.setFirefoxDropIndicator(false);
-    this.dragmarkindex = null;
-  },
-
-  setFirefoxDropIndicator(val) {
-    gBrowser.tabContainer._tabDropIndicator.hidden = !val;
+  clearDragmark() {
+    gBrowser.tabContainer._tabDropIndicator.hidden = true;
   },
 
   getSourceNode: function TMP_getSourceNode(aDataTransfer) {

@@ -439,8 +439,20 @@ Tabmix.multiRow = {
 
         this.addEventListener("dragover", event => {
           const tabBar = gBrowser.tabContainer;
-          if (tabBar.useTabmixDnD(event))
+          if (tabBar.useTabmixDnD(event)) {
             TMP_tabDNDObserver.on_dragover(event);
+            const ind = gBrowser.tabContainer._tabDropIndicator;
+            const {left, right} = gBrowser.tabContainer.getBoundingClientRect();
+            let newMarginX = event.originalTarget === this._scrollButtonDown ? right - left : 0;
+            const newMarginY = event.originalTarget === this._scrollButtonUp ?
+              (TabmixTabbar.visibleRows - 1) * gBrowser.tabContainer.arrowScrollbox.singleRowHeight : 0;
+            ind.hidden = false;
+            newMarginX += ind.clientWidth / 2;
+            if (RTL_UI) {
+              newMarginX *= -1;
+            }
+            ind.style.transform = "translate(" + Math.round(newMarginX) + "px," + Math.round(-newMarginY) + "px)";
+          }
         });
 
         this.addEventListener("drop", event => {
@@ -452,6 +464,7 @@ Tabmix.multiRow = {
 
         this.addEventListener("dragexit", event => {
           this.finishScroll(event);
+          gBrowser.tabContainer._tabDropIndicator.hidden = true;
         });
       }
 
