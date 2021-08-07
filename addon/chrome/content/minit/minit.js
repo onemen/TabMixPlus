@@ -154,7 +154,7 @@ var TMP_tabDNDObserver = {
     tabBar.useTabmixDnD = function(aEvent) {
       function checkTab(dt) {
         let tab = TMP_tabDNDObserver.getSourceNode(dt);
-        return !tab || tab.__tabmixDragStart ||
+        return !tab ||
           TMP_tabDNDObserver.getDragType(tab) == TMP_tabDNDObserver.DRAG_TAB_TO_NEW_WINDOW;
       }
 
@@ -168,6 +168,25 @@ var TMP_tabDNDObserver = {
 
     // without this the Indicator is not visible on the first drag
     tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
+
+    // prevent grouping selected tabs for multi row tabbar
+    Tabmix.originalFunctions._groupSelectedTabs = tabBar._groupSelectedTabs;
+    tabBar._groupSelectedTabs = function() {
+      if (TabmixTabbar.visibleRows > 1) return;
+      Tabmix.originalFunctions._groupSelectedTabs.apply(this, arguments);
+    };
+
+    const events = ["dragstart", "dragover", "drop", "dragend", "dragleave"];
+    TMP_eventListener.toggleEventListener(tabBar, events, true, this);
+  },
+
+  handleEvent(event) {
+    let methodName = `on_${event.type}`;
+    if (methodName in this) {
+      this[methodName](event);
+    } else {
+      throw new Error(`Unexpected event ${event.type}`);
+    }
   },
 
   get _isCustomizing() {
@@ -175,8 +194,8 @@ var TMP_tabDNDObserver = {
   },
 
   on_dragstart(event) {
-    if (this.draggedTab) {
-      delete this.draggedTab.__tabmixDragStart;
+    if (TabmixTabbar.visibleRows === 1 && TabmixTabbar.position === 0) {
+      return;
     }
 
     const tabBar = gBrowser.tabContainer;
@@ -184,8 +203,6 @@ var TMP_tabDNDObserver = {
     if (!tab || this._isCustomizing) {
       return;
     }
-    tab.__tabmixDragStart = true;
-    this.draggedTab = tab;
 
     TabmixTabbar.removeShowButtonAttr();
     tabBar.on_dragstart(event);
@@ -215,9 +232,12 @@ var TMP_tabDNDObserver = {
   },
 
   on_dragover(event) {
-    var dt = event.dataTransfer;
     var tabBar = gBrowser.tabContainer;
+    if (!tabBar.useTabmixDnD(event)) {
+      return;
+    }
 
+    var dt = event.dataTransfer;
     var sourceNode = this.getSourceNode(dt);
     var dragType = this.getDragType(sourceNode);
     var newIndex = this._getDNDIndex(event);
@@ -364,21 +384,64 @@ var TMP_tabDNDObserver = {
     this.setDragmark(newIndex, left_right);
   },
 
+  on_drop() {
+    this.hideDragoverMessage();
+  },
+
+  on_dragend(event) {
+    // don't allow to open new window in single window mode
+    // respect bug489729 extension preference
+    const disableDetachTab =
+        window.bug489729 && Services.prefs.getBoolPref("extensions.bug489729.disable_detach_tab") ||
+        Tabmix.singleWindowMode && gBrowser.tabs.length > 1;
+
+    if (!disableDetachTab) {
+      // fall back to default Firefox event handler
+      return;
+    }
+
+    event.stopPropagation();
+
+    var tabBar = gBrowser.tabContainer;
+    var dt = event.dataTransfer;
+    var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
+
+    if (!tabBar.useTabmixDnD(event)) {
+      // Prevent this code from running if a tabdrop animation is
+      // running since calling _finishAnimateTabMove would clear
+      // any CSS transition that is running.
+      if (draggedTab.hasAttribute("tabdrop-samewindow")) {
+        return;
+      }
+
+      tabBar._finishGroupSelectedTabs(draggedTab);
+      tabBar._finishAnimateTabMove();
+    }
+
+    if (dt.mozUserCancelled || dt.dropEffect != "none" || this._isCustomizing) {
+      delete draggedTab._dragData;
+      return;
+    }
+
+    this.clearDragmark();
+  },
+
   on_dragleave(event) {
+    const tabBar = gBrowser.tabContainer;
+    if (!tabBar.useTabmixDnD(event)) {
+      return;
+    }
+
     event.stopPropagation();
     this._dragTime = 0;
 
     var target = event.relatedTarget;
-    while (target && target.localName != "arrowscrollbox")
+    while (target && target != tabBar)
       target = target.parentNode;
     if (target)
       return;
 
     this.clearDragmark();
-    if (this.draggedTab) {
-      delete this.draggedTab.__tabmixDragStart;
-      this.draggedTab = null;
-    }
     this.hideDragoverMessage();
   },
 
