@@ -15,6 +15,7 @@ var TMP_tabDNDObserver = {
   TAB_DROP_TYPE: "application/x-moz-tabbrowser-tab",
   draggedTab: null,
   paddingLeft: 0,
+  _multirowMargin: 0,
 
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
@@ -509,7 +510,9 @@ var TMP_tabDNDObserver = {
       const tabStrip = gBrowser.tabContainer.arrowScrollbox;
       const singleRowHeight = tabStrip.singleRowHeight;
       const firstVisibleRow = Math.round(tabStrip.scrollPosition / singleRowHeight) + 1;
-      const {top, height} = document.getElementById("tabbrowser-arrowscrollbox").getBoundingClientRect();
+      const scrollBox = document.getElementById("tabbrowser-arrowscrollbox");
+      const {height} = scrollBox.getBoundingClientRect();
+      const top = scrollBox.screenY;
       if (mY > top + height - this._multirowMargin) {
         mY = top + height - this._multirowMargin - 1;
       } else if (mY < top + this._multirowMargin) {
@@ -599,12 +602,12 @@ var TMP_tabDNDObserver = {
     tabRect = gBrowser.tabs[index].getBoundingClientRect();
     if (ltr)
       newMargin = tabRect.left - rect.left +
-          (left_right == 1 ? tabRect.width + this.LinuxMarginEnd : 0) -
-          this.paddingLeft;
+      (left_right == 1 ? tabRect.width + this.LinuxMarginEnd : 0) -
+      this.paddingLeft;
     else
       newMargin = rect.right - tabRect.left -
-          (left_right === 0 ? tabRect.width + this.LinuxMarginEnd : 0) -
-          this.paddingLeft;
+      (left_right === 0 ? tabRect.width + this.LinuxMarginEnd : 0) -
+      this.paddingLeft;
 
     ///XXX fix min/max x margin when in one row the drag mark is visible after
     ///XXX the arrow when the last tab is partly visible
@@ -616,7 +619,7 @@ var TMP_tabDNDObserver = {
       newMarginY = tabRect.bottom - rect.bottom;
       // fix for some theme on Mac OS X
       if (TabmixTabbar.visibleRows > 1 &&
-            ind.parentNode.getBoundingClientRect().height === 0) {
+        ind.parentNode.getBoundingClientRect().height === 0) {
         newMarginY += tabRect.height;
       }
     }
