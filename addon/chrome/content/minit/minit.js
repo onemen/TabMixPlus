@@ -4,8 +4,6 @@
 /****    Drag and Drop observers    ****/
 var TMP_tabDNDObserver = {
   draglink: "",
-  lastTime: 0,
-  marginBottom: 0,
   LinuxMarginEnd: 0,
   _dragTime: 0,
   _dragOverDelay: 350,
@@ -13,18 +11,17 @@ var TMP_tabDNDObserver = {
   DRAG_TAB_TO_NEW_WINDOW: 1,
   DRAG_TAB_IN_SAME_WINDOW: 2,
   TAB_DROP_TYPE: "application/x-moz-tabbrowser-tab",
-  draggedTab: null,
   paddingLeft: 0,
   _multirowMargin: 0,
 
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
     if (Tabmix.extensions.verticalTabBar) {
-      tabBar.useTabmixDnD = () => false;
+      this.useTabmixDnD = () => false;
       return;
     }
 
-    tabBar.moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
+    this._moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
 
     Tabmix.getMovingTabsWidth = movingTabs => {
       return movingTabs.reduce((width, tab) => {
@@ -150,18 +147,6 @@ var TMP_tabDNDObserver = {
       $1$2'
     ).toCode();
 
-    tabBar.useTabmixDnD = function(aEvent) {
-      function checkTab(dt) {
-        let tab = TMP_tabDNDObserver.getSourceNode(dt);
-        return !tab ||
-          TMP_tabDNDObserver.getDragType(tab) == TMP_tabDNDObserver.DRAG_TAB_TO_NEW_WINDOW;
-      }
-
-      return this.getAttribute("orient") == "horizontal" &&
-        (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
-        checkTab(aEvent.dataTransfer));
-    };
-
     this._dragOverDelay = tabBar._dragOverDelay;
     this.draglink = `Hold ${TabmixSvc.isMac ? "⌘" : "Ctrl"} to replace locked tab with link Url`;
 
@@ -177,6 +162,16 @@ var TMP_tabDNDObserver = {
 
     const events = ["dragstart", "dragover", "drop", "dragend", "dragleave"];
     TMP_eventListener.toggleEventListener(tabBar, events, true, this);
+  },
+
+  useTabmixDnD(aEvent) {
+    const tabBar = gBrowser.tabContainer;
+    return (
+      tabBar.getAttribute("orient") == "horizontal" &&
+      (!this._moveTabOnDragging ||
+        tabBar.hasAttribute("multibar") ||
+        aEvent.dataTransfer.mozTypesAt(0)[0] !== this.TAB_DROP_TYPE)
+    );
   },
 
   handleEvent(event) {
@@ -231,11 +226,11 @@ var TMP_tabDNDObserver = {
   },
 
   on_dragover(event) {
-    var tabBar = gBrowser.tabContainer;
-    if (this._dragoverScrollButton(event) || !tabBar.useTabmixDnD(event)) {
+    if (this._dragoverScrollButton(event) || !this.useTabmixDnD(event)) {
       return;
     }
 
+    var tabBar = gBrowser.tabContainer;
     var dt = event.dataTransfer;
     var sourceNode = this.getSourceNode(dt);
     var dragType = this.getDragType(sourceNode);
@@ -363,7 +358,7 @@ var TMP_tabDNDObserver = {
     var dt = event.dataTransfer;
     var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
 
-    if (!tabBar.useTabmixDnD(event)) {
+    if (!this.useTabmixDnD(event)) {
       // Prevent this code from running if a tabdrop animation is
       // running since calling _finishAnimateTabMove would clear
       // any CSS transition that is running.
@@ -381,14 +376,14 @@ var TMP_tabDNDObserver = {
   },
 
   on_dragleave(event) {
-    const tabBar = gBrowser.tabContainer;
-    if (!tabBar.useTabmixDnD(event)) {
+    if (!this.useTabmixDnD(event)) {
       return;
     }
 
     event.stopPropagation();
     this._dragTime = 0;
 
+    const tabBar = gBrowser.tabContainer;
     var target = event.relatedTarget;
     while (target && target != tabBar)
       target = target.parentNode;

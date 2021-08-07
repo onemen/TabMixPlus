@@ -406,11 +406,6 @@ var TMP_eventListener = {
 
     if (TabmixSvc.isMac) {
       tabBar.setAttribute("Mac", "true");
-      // get Mac drop indicator marginBottom ,   Mac default theme have marginBottom: -24px
-      let ind = gBrowser.tabContainer._tabDropIndicator;
-      if (ind) {
-        TMP_tabDNDObserver.marginBottom = Tabmix.getStyle(ind, "marginBottom");
-      }
     }
 
     var tabsToolbar = document.getElementById("TabsToolbar");

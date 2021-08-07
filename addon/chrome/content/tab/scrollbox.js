@@ -438,8 +438,7 @@ Tabmix.multiRow = {
         this._scrollButtonDown = this.shadowRoot.getElementById("scrollbutton-down");
 
         this.addEventListener("dragover", event => {
-          const tabBar = gBrowser.tabContainer;
-          if (tabBar.useTabmixDnD(event)) {
+          if (TMP_tabDNDObserver.useTabmixDnD(event)) {
             TMP_tabDNDObserver._dragoverScrollButton(event);
             const ind = gBrowser.tabContainer._tabDropIndicator;
             const {left, right} = gBrowser.tabContainer.getBoundingClientRect();
@@ -520,10 +519,9 @@ Tabmix.multiRow = {
 
       // eslint-disable-next-line class-methods-use-this
       finishScroll(aEvent) {
-        const tabBar = gBrowser.tabContainer;
-        if (!tabBar.useTabmixDnD(aEvent))
+        if (!TMP_tabDNDObserver.useTabmixDnD(aEvent))
           return;
-        tabBar._tabDropIndicator.hidden = true;
+        gBrowser.tabContainer._tabDropIndicator.hidden = true;
         let index;
         const target = aEvent.originalTarget.getAttribute("anonid");
         if (target === "scrollbutton-up-right")
