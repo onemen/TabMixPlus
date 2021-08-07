@@ -128,7 +128,6 @@ var TMP_tabDNDObserver = {
       let firstUrl = links[0].url;
       replace =
         left_right === -1 || Tabmix.ContentClick.isUrlForDownload(firstUrl);
-      newIndex += left_right;
       if (replace) {
         targetTab =
           event.target.closest("tab.tabbrowser-tab") || this.allTabs[newIndex];
@@ -136,7 +135,8 @@ var TMP_tabDNDObserver = {
         targetTab.linkedBrowser.tabmix_allowLoad = true;
       } else {
         targetTab = null;
-      }`
+      }
+      newIndex += left_right;`
     ).toCode();
 
     Tabmix.originalFunctions._getDropIndex = gBrowser.tabContainer._getDropIndex;
@@ -451,7 +451,7 @@ var TMP_tabDNDObserver = {
 
   _getDropIndex(event, isLink, dropLink) {
     const tabBar = gBrowser.tabContainer;
-    if (!tabBar.hasAttribute("multibar")) {
+    if (!dropLink && !tabBar.hasAttribute("multibar")) {
       return Tabmix.originalFunctions._getDropIndex.apply(tabBar, arguments);
     }
 
