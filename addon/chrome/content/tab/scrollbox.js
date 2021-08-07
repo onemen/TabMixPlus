@@ -440,7 +440,7 @@ Tabmix.multiRow = {
         this.addEventListener("dragover", event => {
           const tabBar = gBrowser.tabContainer;
           if (tabBar.useTabmixDnD(event)) {
-            TMP_tabDNDObserver.on_dragover(event);
+            TMP_tabDNDObserver._dragoverScrollButton(event);
             const ind = gBrowser.tabContainer._tabDropIndicator;
             const {left, right} = gBrowser.tabContainer.getBoundingClientRect();
             let newMarginX = event.originalTarget === this._scrollButtonDown ? right - left : 0;
@@ -464,7 +464,6 @@ Tabmix.multiRow = {
 
         this.addEventListener("dragexit", event => {
           this.finishScroll(event);
-          gBrowser.tabContainer._tabDropIndicator.hidden = true;
         });
       }
 
@@ -524,7 +523,7 @@ Tabmix.multiRow = {
         const tabBar = gBrowser.tabContainer;
         if (!tabBar.useTabmixDnD(aEvent))
           return;
-        TMP_tabDNDObserver.clearDragmark();
+        tabBar._tabDropIndicator.hidden = true;
         let index;
         const target = aEvent.originalTarget.getAttribute("anonid");
         if (target === "scrollbutton-up-right")

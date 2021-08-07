@@ -233,7 +233,7 @@ var TMP_tabDNDObserver = {
 
   on_dragover(event) {
     var tabBar = gBrowser.tabContainer;
-    if (!tabBar.useTabmixDnD(event)) {
+    if (this._dragoverScrollButton(event) || !tabBar.useTabmixDnD(event)) {
       return;
     }
 
@@ -252,48 +252,6 @@ var TMP_tabDNDObserver = {
                  Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
         tabBar.selectedIndex : gBrowser.tabs.length - 1;
       left_right = 1;
-    }
-
-    if (Tabmix.tabsUtils.overflow) {
-      this.clearDragmark();
-
-      if (TabmixTabbar.scrollButtonsMode === TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT) {
-        if (["scrollbutton-up", "scrollbutton-down"].includes(event.originalTarget.id)) {
-          return;
-        }
-      }
-
-      let tabStrip = tabBar.arrowScrollbox;
-      let ltr = Tabmix.ltr || TabmixTabbar.visibleRows > 1;
-      let _scroll, targetAnonid;
-      if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_HIDDEN) // scroll with button
-        targetAnonid = event.originalTarget.getAttribute("anonid") || event.originalTarget.id;
-      // scroll without button
-      else if (event.screenX <= tabStrip.scrollbox.screenX)
-        targetAnonid = ltr ? "scrollbutton-up" : "scrollbutton-down";
-      else if (event.screenX >= (tabStrip.scrollbox.screenX + tabStrip.scrollClientRect.width))
-        targetAnonid = ltr ? "scrollbutton-down" : "scrollbutton-up";
-
-      switch (targetAnonid) {
-        case "scrollbutton-up":
-        case "scrollbutton-up-right":
-          if (Tabmix.tabsUtils.canScrollTabsLeft)
-            _scroll = -1;
-          break;
-        case "scrollbutton-down":
-        case "scrollbutton-down-right":
-          if (Tabmix.tabsUtils.canScrollTabsRight)
-            _scroll = 1;
-          break;
-      }
-      if (_scroll) {
-        let scrollIncrement = TabmixTabbar.isMultiRow ?
-          Math.round(tabStrip._singleRowHeight / 8) : tabStrip.scrollIncrement;
-        tabStrip.scrollByPixels((ltr ? _scroll : -_scroll) * scrollIncrement, true);
-        event.preventDefault();
-        event.stopPropagation();
-        return;
-      }
     }
 
     var isCopy = this.isCopyDropEffect(dt, event, dragType);
@@ -443,6 +401,54 @@ var TMP_tabDNDObserver = {
 
     this.clearDragmark();
     this.hideDragoverMessage();
+  },
+
+  _dragoverScrollButton(event) {
+    if (!Tabmix.tabsUtils.overflow) {
+      return false;
+    }
+
+    this.clearDragmark();
+
+    if (TabmixTabbar.scrollButtonsMode === TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT) {
+      if (["scrollbutton-up", "scrollbutton-down"].includes(event.originalTarget.id)) {
+        return true;
+      }
+    }
+
+    let tabBar = gBrowser.tabContainer;
+    let tabStrip = tabBar.arrowScrollbox;
+    let ltr = Tabmix.ltr || TabmixTabbar.visibleRows > 1;
+    let scrollDirection, targetAnonid;
+    if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_HIDDEN) // scroll with button
+      targetAnonid = event.originalTarget.getAttribute("anonid") || event.originalTarget.id;
+      // scroll without button
+    else if (event.screenX <= tabStrip.scrollbox.screenX)
+      targetAnonid = ltr ? "scrollbutton-up" : "scrollbutton-down";
+    else if (event.screenX >= (tabStrip.scrollbox.screenX + tabStrip.scrollClientRect.width))
+      targetAnonid = ltr ? "scrollbutton-down" : "scrollbutton-up";
+
+    switch (targetAnonid) {
+      case "scrollbutton-up":
+      case "scrollbutton-up-right":
+        if (Tabmix.tabsUtils.canScrollTabsLeft)
+          scrollDirection = -1;
+        break;
+      case "scrollbutton-down":
+      case "scrollbutton-down-right":
+        if (Tabmix.tabsUtils.canScrollTabsRight)
+          scrollDirection = 1;
+        break;
+    }
+    if (scrollDirection) {
+      let scrollIncrement = TabmixTabbar.isMultiRow ?
+        Math.round(tabStrip._singleRowHeight / 8) : tabStrip.scrollIncrement;
+      tabStrip.scrollByPixels((ltr ? scrollDirection : -scrollDirection) * scrollIncrement, true);
+      event.preventDefault();
+      event.stopPropagation();
+      return true;
+    }
+    return false;
   },
 
   hideDragoverMessage() {
