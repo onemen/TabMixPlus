@@ -3,8 +3,6 @@
 
 /****    Drag and Drop observers    ****/
 var TMP_tabDNDObserver = {
-  gBackupLabel: "",
-  gMsg: null,
   draglink: "",
   lastTime: 0,
   marginBottom: 0,
@@ -164,7 +162,7 @@ var TMP_tabDNDObserver = {
     };
 
     this._dragOverDelay = tabBar._dragOverDelay;
-    this.draglink = TabmixSvc.getString("droplink.label");
+    this.draglink = `Hold ${TabmixSvc.isMac ? "⌘" : "Ctrl"} to replace locked tab with link Url`;
 
     // without this the Indicator is not visible on the first drag
     tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
@@ -275,8 +273,17 @@ var TMP_tabDNDObserver = {
           disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
         } catch (ex) {}
 
-        if (disAllowDrop)
+        if (disAllowDrop) {
+          // show Drag & Drop message
+          if (dragType == this.DRAG_LINK) {
+            let tooltip = document.getElementById("tabmix-tooltip");
+            if (tooltip.state == "closed") {
+              tooltip.label = this.draglink;
+              tooltip.openPopup(document.getElementById("browser"), null, 1, 1, false, false);
+            }
+          }
           dt.effectAllowed = "none";
+        }
       }
     }
 
@@ -300,20 +307,6 @@ var TMP_tabDNDObserver = {
     event.preventDefault();
     event.stopPropagation();
 
-    // show Drag & Drop message
-    if (dragType == this.DRAG_LINK) {
-      this.gMsg = event.originalTarget.getAttribute("command") == "cmd_newNavigatorTab" ?
-        this.gBackupLabel : this.draglink;
-      if (!tabBar.contains(event.target)) {
-        this.gMsg = this.gBackupLabel;
-      }
-      let tooltip = document.getElementById("tabmix-tooltip");
-      if (tooltip.state == "closed") {
-        tooltip.label = this.gMsg;
-        tooltip.openPopup(document.getElementById("browser"), null, 1, 1, false, false);
-      }
-    }
-
     let draggedTab = event.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
     if ((effects == "move" || effects == "copy") && tabBar == draggedTab.container) {
       if (!tabBar._isGroupTabsAnimationOver()) {
@@ -325,6 +318,9 @@ var TMP_tabDNDObserver = {
     }
 
     if (dragType == this.DRAG_LINK) {
+      if (dt.effectAllowed !== "none") {
+        this.hideDragoverMessage();
+      }
       let tab = tabBar._getDragTargetTab(event, true);
       if (tab && !this._isCustomizing) {
         if (!this._dragTime)
