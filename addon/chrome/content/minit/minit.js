@@ -336,7 +336,7 @@ var TMP_tabDNDObserver = {
       return;
     }
 
-    this.setDragmark(newIndex, left_right);
+    this.setDragmark(event, newIndex, left_right);
   },
 
   on_drop() {
@@ -344,6 +344,8 @@ var TMP_tabDNDObserver = {
   },
 
   on_dragend(event) {
+    this.clearDragmark();
+
     // don't allow to open new window in single window mode
     // respect bug489729 extension preference
     const disableDetachTab =
@@ -375,10 +377,7 @@ var TMP_tabDNDObserver = {
 
     if (dt.mozUserCancelled || dt.dropEffect != "none" || this._isCustomizing) {
       delete draggedTab._dragData;
-      return;
     }
-
-    this.clearDragmark();
   },
 
   on_dragleave(event) {
@@ -584,22 +583,22 @@ var TMP_tabDNDObserver = {
     return this.DRAG_LINK; // 0
   },
 
-  setDragmark: function minit_setDragmark(index, left_right) {
+  setDragmark(event, index, left_right) {
     this.clearDragmark();// clear old dragmark if one exist
 
-    // code for firefox indicator
-    var ind = gBrowser.tabContainer._tabDropIndicator;
-    var minMargin, maxMargin, newMargin;
-    var tabRect;
-    var ltr = Tabmix.ltr;
-    let scrollRect = gBrowser.tabContainer.arrowScrollbox.scrollClientRect;
     let rect = gBrowser.tabContainer.getBoundingClientRect();
-    minMargin = scrollRect.left - rect.left - this.paddingLeft;
-    maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
-    if (!ltr)
-      [minMargin, maxMargin] = [gBrowser.clientWidth - maxMargin, gBrowser.clientWidth - minMargin];
+    // don't show indicator when dragging to the end of non-maximized window
+    // on_dragleave not always fires when exiting the window
+    const offset = RTL_UI ? rect.right - event.clientX : event.clientX;
+    if (window.windowState !== window.STATE_MAXIMIZED && offset <= 5) {
+      return;
+    }
 
-    tabRect = gBrowser.tabs[index].getBoundingClientRect();
+    // code for firefox indicator
+    let ind = gBrowser.tabContainer._tabDropIndicator;
+    let ltr = Tabmix.ltr;
+    let newMargin;
+    let tabRect = gBrowser.tabs[index].getBoundingClientRect();
     if (ltr)
       newMargin = tabRect.left - rect.left +
       (left_right == 1 ? tabRect.width + this.LinuxMarginEnd : 0) -
