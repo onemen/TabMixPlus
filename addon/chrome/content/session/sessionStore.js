@@ -43,20 +43,42 @@ var TMP_SessionStore = {
   },
 
   getTitleFromTabState(aTab) {
-    let tabData = JSON.parse(TabmixSvc.ss.getTabState(aTab));
-    let data = this.getActiveEntryData(tabData);
+    let data = {};
+    data.title = TabmixSvc.ss.getLazyTabValue(aTab, "title");
+    if (data.title) {
+      data.url = TabmixSvc.ss.getLazyTabValue(aTab, "url");
+    } else {
+      let tabData = JSON.parse(TabmixSvc.ss.getTabState(aTab));
+      data = this.getActiveEntryData(tabData);
+    }
     if (data.url == TabmixSvc.aboutBlank) {
       return Tabmix.getString("tabs.emptyTabTitle");
     }
     return data.title || null;
   },
 
+  getUrlFromTabState(aTab) {
+    let data = {};
+    data.url = TabmixSvc.ss.getLazyTabValue(aTab, "url");
+    if (!data.url) {
+      let tabData = JSON.parse(TabmixSvc.ss.getTabState(aTab));
+      data = this.getActiveEntryData(tabData);
+    }
+    return data.url;
+  },
+
   // check if pending tab has no history or is about:blank, about:home, about:newtab
   isBlankPendingTab(aTab) {
     if (!aTab.hasAttribute("pending"))
       return false;
-    let tabData = JSON.parse(TabmixSvc.ss.getTabState(aTab));
-    let entries = tabData && tabData.entries;
+    let entries;
+    let url = TabmixSvc.ss.getLazyTabValue(aTab, "url");
+    if (url) {
+      entries = [{url}];
+    } else {
+      let tabData = JSON.parse(TabmixSvc.ss.getTabState(aTab));
+      entries = tabData && tabData.entries;
+    }
     if (entries && entries.length > 1)
       return false;
     return !entries[0] ||
