@@ -5,7 +5,6 @@
 
 **/
 
-/********** preferences ********/
+/********** global styles for pref-appearance.css ********/
 
-@import url("chrome://tabmixplus/skin/app_version/all/preferences.css");
 @import url("chrome://tabmixplus/skin/app_version/all/numberinput.css");

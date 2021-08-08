@@ -1,6 +1,5 @@
-.tabStyles_underline span {
-   text-decoration: underline;
-}
+
+@namespace html "http://www.w3.org/1999/xhtml";
 
 #stylestabs > tab {
   padding-left: 4px !important;
@@ -18,6 +17,37 @@ checkbox[anonid="useThis"][disabled] .checkbox-check {
 
 checkbox[anonid="useThis"][disabled] {
   color: black;
+}
+
+checkbox[anonid="italic"] .checkbox-label {
+  font-style: italic;
+}
+
+checkbox[anonid="useThis"] + label,
+checkbox[anonid="bold"] .checkbox-label {
+  margin-block: 0;
+  font-weight: bold;
+}
+
+checkbox[anonid="underline"] .checkbox-label {
+  text-decoration: underline;
+}
+
+checkbox[anonid] {
+  padding-inline-end: 10px;
+}
+
+html|input[type="color"] {
+  padding: 3px;
+  width: 38px;
+}
+
+@media not (-moz-proton) {
+.color-swatch > html|input[type="color"]::-moz-color-swatch {
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  padding: 2px;
+}
 }
 
 .rgbcontrol {
@@ -38,6 +68,14 @@ checkbox[anonid="useThis"][disabled] {
   border: 1px solid transparent;
 }
 
+.dialog-button[icon="help"] .button-icon {
+	margin-inline-end: 6px;
+}
+
+colorbox[anonid="textColor"] {
+  margin-block: 4px;
+}
+
 hbox[_hidebox="true"],
 colorbox[_hidebox="true"],
 label[_hidebox="true"] {
@@ -46,10 +84,6 @@ label[_hidebox="true"] {
 
 dialog[hide-RGB="true"] colorbox > *:not([class="visible"]) {
   visibility: hidden;
-}
-
-.colorpicker-button-colorbox[disabled] {
-  border-color: rgba(0,0,0,.2);
 }
 
 .dialog-button[icon="help"] {

@@ -198,22 +198,19 @@
           </html:fieldset>
           <html:fieldset flex="1" orient="horizontal">
             <html:legend>&lockTabs.label;</html:legend>
-            <vbox flex="1" pack="end">
+            <vbox class="grid" style="grid-template-columns: 40% 60%;">
               <!-- Look All Tabs -->
               <checkbox_tmp id="lockallTabs" pack="start" label="&lockNewTabs.label;" preference="pref_lockallTabs"/>
-              <!-- Look App Tabs -->
-              <checkbox_tmp id="lockAppTabs" align="start" label="&lockAppTabs.label;" preference="pref_lockAppTabs"/>
-            </vbox>
-            <vbox flex="1" pack="end">
-              <!--<spacer style="height: 3px;"/>-->
               <checkbox_tmp id="updateLockState" align="center" label="&updateLockState.label;"
                           preference="pref_updateLockState"/>
+              <!-- Look App Tabs -->
+              <checkbox_tmp id="lockAppTabs" align="start" label="&lockAppTabs.label;" preference="pref_lockAppTabs"/>
             </vbox>
           </html:fieldset>
         </tabpanel>
 <!-- ======================================================== -->
         <tabpanel id="tabopening">
-          <html:fieldset flex="1">
+          <html:fieldset flex="1" class="flex column">
             <html:legend>&openNewTab.label;</html:legend>
             <hbox>
               <vbox align="start" setWidth="true">
@@ -247,7 +244,7 @@
             <checkbox_tmp id="midcurrent" label="&middlecurrent1.label;"
                       tooltiptext="&middlecurrent.tooltip;" preference="pref_midcurrent"/>
           </html:fieldset>
-          <html:fieldset flex="1">
+          <html:fieldset flex="1" class="flex column">
             <html:legend>&tabFocus.caption;</html:legend>
             <hbox>
               <vbox align="start" setWidth="true">
@@ -290,7 +287,7 @@
               </vbox>
               <vbox>
                 <checkbox_tmp id="inverseother" label="&selectTabBH.label;, &openUrl.label;, &openSearch.label;"
-                              style="width: 19em;" align="start" preference="pref_inverseother"/>
+                              style="width: 22em;" align="start" preference="pref_inverseother"/>
               </vbox>
             </hbox>
           </html:fieldset>

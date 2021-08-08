@@ -2,6 +2,7 @@
 
 @import url("chrome://tabmix-version/skin/preferences.css");
 
+@namespace html url("http://www.w3.org/1999/xhtml");
 
 /* Global Styles */
 radio[pane] {
@@ -37,6 +38,10 @@ radio[pane=paneIncompatible] {
 
 radio[pane=paneIncompatible][show=true] {
   visibility: visible;
+}
+
+menulist {
+  min-height: 23.2px;
 }
 
 .content-help {
@@ -155,7 +160,7 @@ tabpanel {
   padding-right: 4px;
 }
 
-#TabMIxPreferences:not([ubuntu]) .groupbox-panels {
+#TabMIxPreferences:not([ubuntu]) .groupbox-panels:not(.tabclick) {
   -moz-appearance: groupbox;
   padding: 3px 3px 6px 3px;
 }
@@ -178,6 +183,14 @@ tabbox > tabs {
   -moz-margin-end: 2px;
 }
 
+.extraIcons .checkbox-icon {
+	padding: 2px 0 2px 0;
+	margin-top: 4px;
+  margin-inline-end: 3px;
+	max-height: 11px !important;
+	width: 7px;
+}
+
 #extraIcons-locked .checkbox-icon {
   list-style-image: url(locked.png);
   -moz-image-region: rect(0 9px 9px 0);
@@ -186,16 +199,12 @@ tabbox > tabs {
 #extraIcons-protected .checkbox-icon {
   list-style-image: url(protected.png);
   -moz-image-region: rect(5px 16px 16px 7px);
+  height: 11px;
 }
 
 #extraIcons-autoreload .checkbox-icon {
   list-style-image: url(autoreload.png);
   -moz-image-region: rect(0px 16px 9px 7px);
-}
-
-.extraIcons .checkbox-icon {
-  padding: 2px 0 2px 0;
-  -moz-margin-end: 3px;
 }
 
 .clicktab-popup {
@@ -300,3 +309,108 @@ tabbox > tabpanels {
 .menu checkbox {
   padding-top: 0;
 }
+
+separator.groove {
+  display: block;
+  margin-inline: -8px;
+}
+
+html|fieldset {
+  margin-block: 3px;
+}
+
+html|fieldset.flex {
+  display: flex;
+}
+
+html|fieldset.flex.column {
+  flex-direction: column;
+}
+
+html|fieldset.flex.column > spacer[flex="1"] {
+  flex: 1;
+}
+
+html|fieldset.grid,
+.grid {
+  display: grid;
+}
+
+html|fieldset[flex="1"] {
+  -moz-box-flex: 1;
+}
+
+#ClickTabbar .multiselectitem,
+#mouseclick_tabbox[selectedIndex="0"] #ClickTab .multiselectitem {
+  display: none;
+}
+
+.bold-lable {
+  -moz-margin-start: 2px;
+  -moz-padding-start: 1px;
+  font-weight: 600;
+}
+
+/* override above rules for proton */
+@media (-moz-proton) {
+prefpane {
+  padding: 3px 0 1px 0;
+}
+
+prefpane > .content-box > tabbox {
+  height: 505px;
+}
+
+#TabMIxPreferences[mac] prefpane > .content-box > tabbox {
+  height: 505px;
+}
+
+.prefWindow-dlgbuttons {
+	padding-inline-start: 10px;
+}
+
+#TabMIxPreferences:not([linux]):not([mac]) .groupbox-tabbox:not(#mouseclick_tabbox) > tabs {
+  border-bottom: none;
+	margin-bottom: 4px;
+}
+
+#TabMIxPreferences:not([ubuntu]) .groupbox-panels:not(.tabclick) {
+  appearance: none;
+  border: 2px groove ThreeDFace;
+  border-radius: 4px;
+  padding-inline: 0.75em;
+}
+
+#sessionsPanel > .sessionManager {
+ margin: 2px;
+}
+
+/*  tabclicking options tabbox  */
+.mouseclick-panel {
+  --mouseclick-border: 1px solid color-mix(in srgb, var(--in-content-accent-color) 41%, transparent);
+  display: flex;
+  flex-direction: column;
+  margin-top: 25px;
+  margin-inline: 25px;
+}
+
+#mouseclick_tabbox {
+ border: 2px solid var(--in-content-border-color);
+ border-radius: 4px;
+ padding: 0;
+}
+
+#mouseclick_tabbox > #tabclick {
+ display: flex;
+ margin: 0;
+}
+
+#tabclick > tab {
+   flex: 1;
+}
+
+#mouseclick_tabbox > .groupbox-panels menulist {
+  margin-inline-end: 23px;
+}
+
+} /** END Proton **/

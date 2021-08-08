@@ -1,0 +1,29 @@
+/**
+    Firefox version 91+
+
+    All platform
+
+**/
+
+/********** global styles for pref-appearance.css ********/
+
+@import url("chrome://tabmixplus/skin/app_version/all/numberinput.css");
+@import url("chrome://tabmixplus/skin/app_version/91/numberinput-proton.css");
+@import url("chrome://tabmixplus/skin/app_version/91/preferences-proton.css");
+
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+@media (-moz-proton) {
+checkbox[anonid]:-moz-focusring > .checkbox-check {
+  outline: none;
+}
+
+.reset-button-box button {
+  margin-inline-start: -2px;
+}
+
+.dialog-button[dlgtype="extra2"] {
+  background-color: transparent;
+  margin-inline-start: 0;
+}
+} /** END Proton **/

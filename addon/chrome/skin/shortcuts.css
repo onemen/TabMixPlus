@@ -14,7 +14,8 @@ shortcut {
 .input-container {
   display: flex;
   align-items: center;
-  border: 0.8px solid #b1b1b1;
+  border: 1px solid #b1b1b1;
+  border-radius: 4px;
   box-sizing: inherit;
   font-weight: normal;
   height: 24px;
@@ -24,8 +25,8 @@ shortcut {
 }
 
 shortcut[focused="true"] .input-container {
-   border-color: #0996f8;
-   box-shadow: inset 0 0 0 1px rgba(97, 181, 255, 0.75);
+   border-color: #0061e0;
+   box-shadow: inset 0 0 0 1px rgba(0, 97, 224, 0.75);
 }
 
 .input-container[disabled] {

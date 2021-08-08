@@ -107,10 +107,10 @@
                       preference="pref_reversescrolling" observes="obs_tabbarscrolling"/>
           </html:fieldset>
         </tabpanel>
-        <tabpanel align="start">
-          <label value="&clicktab.label;" style="-moz-margin-start: 2px; -moz-padding-start: 1px;"/>
+        <tabpanel class="mouseclick-panel" align="start">
+          <label value="&clicktab.label;" class="bold-lable"/>
           <spacer style="height: 1em;"/>
-          <tabbox id="mouseClick_tabbox" class="groupbox-tabbox" flex="0"
+          <tabbox id="mouseclick_tabbox" class="groupbox-tabbox" flex="0"
                   onselect="gMousePane.tabSelectionChanged(event);">
             <tabs id="tabclick">
               <tab label="&double.label;" linkedpanel="pl" class="subtabs"/>
@@ -119,7 +119,7 @@
               <tab label="&shift.label;"  linkedpanel="pl" class="subtabs"/>
               <tab label="&alt.label;"    linkedpanel="pl" class="subtabs"/>
             </tabs>
-            <tabpanels class="groupbox-panels" flex="0" selectedIndex="0"
+            <tabpanels class="groupbox-panels tabclick" flex="0" selectedIndex="0"
                   onselect="if (this.tabbox &amp;&amp; this.selectedIndex !== 0) {event.stopPropagation(); this.selectedIndex = 0;}">
               <tabpanel id="_tabpanel">
                 <spacer style="height: 8px;"/>

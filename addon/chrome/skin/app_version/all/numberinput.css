@@ -1,0 +1,47 @@
+
+/* ::::: number input ::::: */
+
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+:root {
+  --input-padding-inline: 1px; /* non proton value based on forms.css  */
+  --input-sppiner-offset: 19px;
+  --input-width-offset: calc(var(--input-sppiner-offset) + var(--input-padding-inline));
+}
+
+input[type="number"]:not(:disabled)[increaseDisabled]::-moz-number-spin-up,
+input[type="number"]:not(:disabled)[decreaseDisabled]::-moz-number-spin-down {
+  opacity: 0.6;
+}
+
+input[type="number"] {
+  padding-inline-end: 0;
+}
+
+input[type="number"]::-moz-number-spin-up,
+input[type="number"]::-moz-number-spin-down {
+  min-height: 11px;
+  margin: 0 -2px 0 2px;
+}
+
+input[type="number"]:invalid {
+  border: 1px solid red;
+  outline-style: none;
+}
+
+/* fix width issue with some theme/fonts */
+input[type="number"][size="2"] {
+  width: calc(2ch + var(--input-width-offset));
+}
+input[type="number"][size="3"] {
+  width: calc(3ch + var(--input-width-offset));
+}
+input[type="number"][size="4"] {
+  width: calc(4ch + var(--input-width-offset));
+}
+input[type="number"][size="5"] {
+  width: calc(5ch + var(--input-width-offset));
+}
+input[type="number"][size="6"] {
+  width: calc(6ch + var(--input-width-offset));
+}

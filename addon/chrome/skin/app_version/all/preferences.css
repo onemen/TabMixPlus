@@ -1,8 +1,16 @@
+/**
+    Firefox all versions
+
+    All platform
+
+**/
+
 /* toolkit/content/xul.css */
 /********** preferences ********/
 
 prefwindow,
-prefwindow:root /* override :root from above */, prefpane {
+prefwindow:root /* override :root from above */,
+prefpane {
   -moz-box-orient: vertical;
 }
 
@@ -23,7 +31,8 @@ prefwindow[type="child"] > prefpane > .content-box {
   overflow: -moz-hidden-unscrollable;
 }
 
-preferences, preference {
+preferences,
+preference {
   visibility: collapse;
 }
 

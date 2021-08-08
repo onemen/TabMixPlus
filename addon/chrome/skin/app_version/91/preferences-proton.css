@@ -1,0 +1,379 @@
+/**
+    Firefox version 91+
+
+    All platform
+
+    proton styles for preferences.xhtml and child windows
+**/
+
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+@media (-moz-proton) {
+:root {
+  --in-content-accent-color: #0a84ff;
+  --in-content-accent-color-active: #0060df;
+  --in-content-button-background: rgba(207,207,216,.33);
+  --in-content-border-color: #d7d7db;
+  --in-content-button-text-color: rgb(21, 20, 26);
+  --in-content-button-text-color-hover: rgb(21, 20, 26);
+  --in-content-button-background: rgba(207,207,216,.33);
+  --in-content-button-background-hover: rgba(207,207,216,.66);
+  --in-content-button-background-active: rgb(207,207,216);
+  --in-content-box-border-color: color-mix(in srgb, currentColor 41%, transparent);
+  --in-content-box-background: #fff;
+  --in-content-box-info-background: #f0f0f4;
+  --in-content-focus-outline-color: #0061e0;
+  --in-content-border-invalid: #ff0039;
+  --in-content-item-hover: color-mix(in srgb, var(--in-content-primary-button-background) 20%, transparent);
+  --in-content-item-hover-text: rgb(21, 20, 26);
+  --in-content-item-selected: var(--in-content-primary-button-background);
+  --in-content-item-selected-text: var(--in-content-primary-button-text-color);
+  --in-content-link-color: #0060df;;
+  --in-content-link-color-hover: #003eaa;;
+  --in-content-link-color-active: #002275;
+  --in-content-link-color-visited: #0060df;;
+  --in-content-primary-button-background: #0061e0;
+  --in-content-primary-button-background-hover: #0250bb;
+  --in-content-primary-button-background-active: #053e94;
+  --in-content-primary-button-text-color: rgb(251,251,254);
+  --in-content-primary-button-text-color-hover: var(--in-content-primary-button-text-color);
+  --in-content-text-color: rgb(21, 20, 26);
+  --checkbox-border-color: var(--in-content-box-border-color);
+  --checkbox-checked-border-color: transparent;
+  --checkbox-checked-bgcolor: var(--in-content-primary-button-background);
+  --checkbox-checked-color: var(--in-content-primary-button-text-color);
+  --checkbox-checked-hover-bgcolor: var(--in-content-primary-button-background-hover);
+  --checkbox-unchecked-bgcolor: var(--in-content-button-background);
+  background-color: #ffffff;
+}
+
+html|a, .text-link {
+	color: var(--in-content-link-color);
+	text-decoration: none;
+}
+
+/* menulist menupopup menuitem */
+
+menulist[disabled="true"] {
+  background-color: -moz-Dialog;
+  color: GrayText;
+}
+
+menulist > menupopup menu,
+menulist > menupopup menuitem {
+  appearance: none;
+  font-size: 1em;
+  padding-block: 0.2em;
+  padding-inline: 10px 20px;
+}
+
+menulist > menupopup {
+  appearance: none;
+  border: none;
+  background-color: transparent;
+  --panel-border-color: var(--in-content-box-border-color);
+  --panel-border-radius: 2px;
+  --panel-background: var(--in-content-box-background);
+  --panel-color: var(--in-content-text-color);
+  --panel-padding: 0;
+}
+
+menulist > menupopup menu,
+menulist > menupopup menuitem {
+  appearance: none;
+  font-size: 1em;
+  padding-block: 0.2em;
+  padding-inline: 10px 30px;
+}
+
+menulist > menupopup > menu:not([disabled="true"])[_moz-menuactive="true"],
+menulist > menupopup > menuitem:not([disabled="true"])[_moz-menuactive="true"] {
+  color: var(--in-content-item-hover-text);
+  background-color: var(--in-content-item-hover);
+}
+
+menulist > menupopup > menu:not([disabled="true"])[selected="true"],
+menulist > menupopup > menuitem:not([disabled="true"])[selected="true"] {
+  color: var(--in-content-item-selected-text);
+  background-color: var(--in-content-item-selected);
+}
+
+menulist > menupopup > menu[disabled="true"],
+menulist > menupopup > menuitem[disabled="true"] {
+  color: #999;
+  background-color: transparent;
+}
+
+menulist > menupopup menuseparator {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--in-content-box-border-color);
+  border-bottom: none;
+}
+
+.paneSelector > radio {
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+.paneSelector > radio .radio-label {
+  font-size: 1.25em;
+  font-weight: 300;
+}
+
+/* tabpanels and tabs */
+
+tabpanels {
+  appearance: none;
+  border: none;
+  padding: 6px 10px;
+  background-color: transparent;
+  color: inherit;
+}
+
+tabs {
+  margin: 0;
+  border-bottom: 1px solid var(--in-content-border-color);
+  background-color: transparent;
+  color: inherit;
+}
+
+tabs.tabs-hidden {
+  border-bottom: 1px transparent;
+}
+
+tab {
+  appearance: none;
+  margin-top: 0;
+  padding: 2px 10px 0 !important;
+  min-height: 24px;
+  color: inherit;
+  background-color: transparent;
+  border-bottom: 2px solid transparent;
+  transition: background-color 50ms ease 0s;
+}
+
+tab:hover {
+  border-bottom-color: var(--in-content-border-color);
+  background-color: var(--in-content-button-background-hover);
+  color: var(--in-content-button-text-color-hover);
+}
+
+tab[selected] {
+  color: var(--in-content-accent-color) !important; /* override macOS tabbox.css */
+  border-bottom-color: currentColor;
+}
+
+/* buttons */
+
+html|input[type="color"],
+button {
+  appearance: none;
+  min-height: 26px;
+  color: var(--in-content-button-text-color, inherit);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: var(--in-content-button-background);
+  font-weight: 600;
+  padding: 4px 10px;
+  text-decoration: none;
+  margin: 2px 8px;
+  font-size: 1em;
+}
+
+html|input[type="color"] {
+  border: 1px solid var(--in-content-box-border-color);
+  min-height: initial;
+  padding: 4px;
+  margin: 2px 4px;
+}
+
+@media (prefers-contrast) {
+  button:not(.primary, [default], [type="submit"], [autofocus]),
+  html|input[type="color"],
+  menulist {
+    border-color: ThreeDShadow;
+  }
+}
+
+html|input[type="color"]:hover,
+button:not([disabled="true"]):hover {
+  background-color: var(--in-content-button-background-hover);
+  color: var(--in-content-button-text-color-hover);
+  border-color: transparent;
+}
+
+html|input[type="color"]:enabled:hover:active,
+button:not([disabled="true"]):hover:active {
+  background-color: var(--in-content-button-background-active);
+}
+
+html|input[type="color"]:disabled,
+button[disabled="true"],
+menulist[disabled="true"] {
+  opacity: 0.4;
+}
+
+html|fieldset {
+ border-radius: 4px;
+}
+
+html|legend {
+  font-weight: 600;
+}
+
+/* Checkboxes and radio buttons */
+
+button:-moz-focusring,
+html|select:-moz-focusring,
+html|input:is([type="checkbox"], [type="color"], [type="radio"]):-moz-focusring,
+menulist:-moz-focusring,
+checkbox:not([native]):-moz-focusring > .checkbox-check,
+radio[focused="true"] > .radio-check,
+tab:-moz-focusring > .tab-middle > .tab-text {
+  box-shadow: none;
+  outline: 2px solid var(--in-content-focus-outline-color);
+  outline-offset: 2px;
+}
+
+html|input[type="radio"],
+*.radio-check {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 1px solid var(--in-content-box-border-color);
+  border-radius: 100%;
+  margin-block: 2px;
+  margin-inline: 0 6px;
+  background-color: var(--in-content-button-background);
+  background-position: center;
+  flex-shrink: 0;
+}
+
+html|input[type="radio"]:enabled:hover,
+radio:not([disabled="true"]):hover > *.radio-check {
+  background-color: var(--in-content-button-background-hover);
+  color: var(--in-content-button-text-color-hover);
+}
+
+html|input[type="radio"]:enabled:hover:active,
+radio:not([disabled="true"]):hover:active > *.radio-check {
+  background-color: var(--in-content-button-background-active);
+}
+
+html|input[type="radio"]:checked,
+*.radio-check[selected] {
+  -moz-context-properties: fill;
+  fill: currentColor;
+  color: var(--in-content-primary-button-text-color);
+  background-color: var(--in-content-primary-button-background);
+  background-image: url("chrome://global/skin/icons/radio.svg");
+  border-color: transparent;
+  color-adjust: exact;
+}
+
+html|input[type="radio"]:enabled:checked:hover,
+radio:not([disabled="true"])[selected]:hover > *.radio-check {
+  background-color: var(--in-content-primary-button-background-hover);
+  color: var(--in-content-primary-button-text-color-hover);
+}
+
+html|input[type="radio"]:enabled:checked:hover:active,
+radio:not([disabled="true"])[selected]:hover:active > *.radio-check {
+  background-color: var(--in-content-primary-button-background-active);
+}
+
+*.radio-label-box {
+  margin-inline: 0 8px;
+  padding-inline-start: 0;
+}
+
+/* Disabled checkboxes, radios and labels */
+
+checkbox[disabled="true"],
+radio[disabled="true"],
+label[disabled="true"] {
+  color: inherit;
+}
+
+html|input[type="checkbox"]:disabled,
+html|input[type="radio"]:disabled,
+checkbox[disabled="true"],
+radio[disabled="true"],
+label[disabled="true"] {
+  opacity: 0.5;
+}
+
+/* richlistbox */
+
+richlistbox {
+  appearance: none;
+  margin-inline: 0;
+  background-color: var(--in-content-box-background);
+  border: 1px solid var(--in-content-box-border-color);
+  border-radius: 4px;
+  color: var(--in-content-text-color);
+}
+
+richlistbox > richlistitem[selected],
+treechildren::-moz-tree-row(selected) {
+  background-color: var(--in-content-item-selected);
+  color: var(--in-content-item-selected-text);
+}
+
+richlistbox > richlistitem[selected] {
+  /* Ensure buttons/menulists inside richlistitems (containers, applications) look OK */
+  --in-content-button-background: color-mix(in srgb, currentColor 15%, transparent);
+  --in-content-button-background-hover: color-mix(in srgb, currentColor 30%, transparent);
+  --in-content-button-background-active: color-mix(in srgb, currentColor 45%, transparent);
+  --in-content-button-text-color: var(--in-content-item-selected-text);
+  --in-content-button-text-color-hover: var(--in-content-item-selected-text);
+  --in-content-focus-outline-color: var(--in-content-item-selected-text);
+}
+
+richlistitem[selected] menulist:focus-visible {
+  outline-offset: -2px;
+}
+
+/* pref-filetype */
+.filetype-content {
+  border:none;
+}
+
+#filetypeEntry {
+  padding-block: 4px;
+}
+
+.filetype-buttons,
+.filetype-content > hbox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filetype-content > hbox {
+  margin-top: 10px;
+}
+
+.filetype-content > hbox > *:first-child {
+  margin-inline-start: 0;
+}
+
+.filetype-content > hbox > *:last-child {
+  margin-inline-end: 0;
+}
+
+.filetype-separator {
+  border-top: 1px solid ThreeDShadow;
+  border-bottom: 1px solid ThreeDHighlight;
+  height: 0 !important;
+  margin: 0.4em 0.4em 1em;
+}
+
+.filetype-buttons {
+  margin-inline: 11px;
+}
+
+} /** END Proton **/
