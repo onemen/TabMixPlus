@@ -416,10 +416,8 @@ Tabmix.tabsUtils = {
 
     const tab = this.tabBar.allTabs[0];
 
-    XPCOMUtils.defineLazyGetter(Tabmix, "rtl", () => {
-      return window.getComputedStyle(this.tabBar).direction == "rtl";
-    });
-    XPCOMUtils.defineLazyGetter(Tabmix, "ltr", () => !Tabmix.rtl);
+    Tabmix.rtl = RTL_UI;
+    Tabmix.ltr = !RTL_UI;
 
     // don't set button to left side if it is not inside tab-content
     let button = tab.getElementsByClassName("tab-close-button")[0];

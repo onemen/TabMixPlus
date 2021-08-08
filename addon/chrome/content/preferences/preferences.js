@@ -713,6 +713,11 @@ ChromeUtils.defineModuleGetter(this, "OS", "resource://gre/modules/osfile.jsm");
 ChromeUtils.defineModuleGetter(this, "AsyncUtils",
   "chrome://tabmix-resource/content/AsyncUtils.jsm");
 
+// eslint-disable-next-line no-unused-vars
+XPCOMUtils.defineLazyGetter(this, "RTL_UI", () => {
+  return Services.locale.isAppLocaleRTL;
+});
+
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
 
 gPrefWindow.onContentLoaded();

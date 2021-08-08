@@ -41,6 +41,7 @@ module.exports = {
         gNumberInput: false,
         gPrefWindow: false,
         MozXULElement: false,
+        RTL_UI: false,
         Services: false,
         Shortcuts: false,
         Tabmix: false,
