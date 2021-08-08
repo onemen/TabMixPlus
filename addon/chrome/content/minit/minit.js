@@ -160,8 +160,10 @@ var TMP_tabDNDObserver = {
       Tabmix.originalFunctions._groupSelectedTabs.apply(this, arguments);
     };
 
-    const events = ["dragstart", "dragover", "drop", "dragend", "dragleave"];
+    // const events = ["dragstart", "dragover", "drop", "dragend", "dragleave"];
+    const events = ["dragstart", "drop", "dragend", "dragleave"];
     TMP_eventListener.toggleEventListener(tabBar, events, true, this);
+    tabBar.parentNode.addEventListener("dragover", this, {capture: true});
   },
 
   useTabmixDnD(aEvent) {
@@ -387,8 +389,13 @@ var TMP_tabDNDObserver = {
     var target = event.relatedTarget;
     while (target && target != tabBar)
       target = target.parentNode;
-    if (target)
+    if (target) {
+      if (this.isDragmarkOnEdge(event)) {
+        this.clearDragmark();
+        this.hideDragoverMessage();
+      }
       return;
+    }
 
     this.clearDragmark();
     this.hideDragoverMessage();
@@ -581,15 +588,12 @@ var TMP_tabDNDObserver = {
   setDragmark(event, index, left_right) {
     this.clearDragmark();// clear old dragmark if one exist
 
-    let rect = gBrowser.tabContainer.getBoundingClientRect();
-    // don't show indicator when dragging to the end of non-maximized window
-    // on_dragleave not always fires when exiting the window
-    const offset = RTL_UI ? rect.right - event.clientX : event.clientX;
-    if (window.windowState !== window.STATE_MAXIMIZED && offset <= 5) {
+    if (this.isDragmarkOnEdge(event)) {
       return;
     }
 
     // code for firefox indicator
+    let rect = gBrowser.tabContainer.getBoundingClientRect();
     let ind = gBrowser.tabContainer._tabDropIndicator;
     let ltr = Tabmix.ltr;
     let newMargin;
@@ -630,6 +634,15 @@ var TMP_tabDNDObserver = {
 
   clearDragmark() {
     gBrowser.tabContainer._tabDropIndicator.hidden = true;
+  },
+
+  isDragmarkOnEdge(event) {
+    // don't show indicator when dragging to the end of non-maximized window
+    // on_dragleave not always fires when exiting the window
+    const rect = gBrowser.tabContainer.getBoundingClientRect();
+    const offset = RTL_UI ? rect.right - event.clientX : event.clientX;
+    const windowOnEdge = RTL_UI ? gBrowser.tabContainer.screenX + rect.width >= window.screen.availWidth : gBrowser.tabContainer.screenX <= 0;
+    return window.windowState !== window.STATE_MAXIMIZED && !windowOnEdge && offset <= 6;
   },
 
   getSourceNode: function TMP_getSourceNode(aDataTransfer) {
