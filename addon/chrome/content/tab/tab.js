@@ -4,7 +4,7 @@ var gTMPprefObserver, TabmixProgressListener;
 
 // code based on Tab X 0.5 enhanced version by Morac, modified by Hemiola SUN, later CPU & onemen
 var TabmixTabbar = {
-  visibleRows: 1,
+  _visibleRows: 1,
   hideMode: 0,
   position: 0,
   SCROLL_BUTTONS_HIDDEN: 0,
@@ -33,6 +33,19 @@ var TabmixTabbar = {
 
   get isMultiRow() {
     return this.flowing == "multibar";
+  },
+
+  get visibleRows() {
+    return this._visibleRows;
+  },
+
+  set visibleRows(rows) {
+    const currentValue = this._visibleRows;
+    this._visibleRows = rows;
+    if (currentValue !== rows) {
+      document.documentElement.style.setProperty("--tabmix-visiblerows", rows);
+      Tabmix.tabsUtils.updateProtonValues();
+    }
   },
 
   isButtonOnTabsToolBar(button) {
@@ -174,7 +187,7 @@ var TabmixTabbar = {
       this.updateScrollStatus();
       if (!this._updatingAppearance && rows != this.visibleRows) {
         this._updatingAppearance = true;
-        TabsInTitlebar.updateAppearance(true);
+        TabsInTitlebar._update();
         this._updatingAppearance = false;
       }
     }
@@ -606,11 +619,12 @@ Tabmix.tabsUtils = {
       multibar = "true";
 
     if (currentMultibar != multibar) {
+      // set multibar also at _enterVerticalMode
       Tabmix.setItem(this.tabBar, "multibar", multibar);
+      Tabmix.setItem("tabmix-bottom-toolbox", "multibar", multibar);
     }
 
     TabmixTabbar.visibleRows = rows;
-    this.updateProtonValues();
 
     if (TabmixTabbar.isMultiRow) {
       this.overflow = multibar == "scrollbar";
@@ -826,11 +840,12 @@ Tabmix.tabsUtils = {
         for (let entry of entries) {
           if (entry.contentBoxSize) {
             this.updateVerticalTabStrip();
+            break;
           }
         }
       });
     }
-    if (observe) {
+    if (observe && !gBrowser.tabContainer._isCustomizing) {
       this._resizeObserver.observe(this.tabBar);
     } else {
       this._resizeObserver.unobserve(this.tabBar);
@@ -937,66 +952,119 @@ Tabmix.tabsUtils = {
 };
 
 Tabmix.bottomToolbarUtils = {
-  initialized: false,
+  get toolbox() {return document.getElementById("tabmix-bottom-toolbox");},
 
   init() {
-    this.updatePosition();
-    if (this.initialized) {
+    if (TabmixSvc.isG3Waterfox) {
       return;
     }
-    this.initialized = true;
-    //XXX we don't check for aEvent.target != window to catch changes in
-    // browser-bottombox. try to improve it...
-    window.addEventListener("resize", this);
-  },
 
-  onUnload() {
-    if (!this.initialized) {
-      return;
+    if (!this.toolbox && TabmixTabbar.position === 1) {
+      this.createToolbox();
+      this.createFullScrToggler();
     }
-    window.removeEventListener("resize", this);
+    this.resizeObserver();
   },
 
-  updatePosition() {
+  createToolbox() {
     var updateFullScreen,
         tabBar = gBrowser.tabContainer;
     Tabmix.setItem(tabBar.arrowScrollbox, "flowing", TabmixTabbar.flowing);
-    var bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
-    if (!bottomToolbox) {
-      bottomToolbox = document.createElement("toolbox");
-      bottomToolbox.setAttribute("id", "tabmix-bottom-toolbox");
-      bottomToolbox.collapsed = gBrowser.tabContainer.collapsed;
-      // if we decide to move this box into browser-bottombox
-      // remember to fix background css rules for all platform
-      let referenceNode = document.getElementById("content-deck");
-      referenceNode = referenceNode ? referenceNode.nextSibling :
+    const multibar = gBrowser.tabContainer.getAttribute("multibar") ? ` multibar="true"` : ``;
+    const fragment = MozXULElement.parseXULToFragment(
+      `<vbox id="tabmix-bottom-toolbox"${multibar}>
+         <toolbox></toolbox>
+       </vbox>`
+    );
+    fragment.collapsed = gBrowser.tabContainer.collapsed;
+    const referenceNode =
+        document.getElementById("customization-container")?.nextSibling ??
+        document.getElementById("fullscreen-and-pointerlock-wrapper")?.nextSibling ??
         document.getElementById("browser-bottombox");
-      referenceNode.parentNode.insertBefore(bottomToolbox, referenceNode);
-      updateFullScreen = window.fullScreen;
-    }
-    if (Tabmix.tabsUtils.visible) {
-      gTMPprefObserver.updateTabbarBottomPosition();
-    } else {
+    referenceNode.parentNode.insertBefore(fragment, referenceNode);
+    delete this.toolbox;
+    this.toolbox = document.getElementById("tabmix-bottom-toolbox");
+    updateFullScreen = window.fullScreen;
+
+    if (!Tabmix.tabsUtils.visible) {
       // the tabbar is hidden on startup
       let height = tabBar.arrowScrollbox.scrollClientRect.height;
-      bottomToolbox.style.setProperty("height", height + "px", "important");
+      this.toolbox.firstChild.style.setProperty("height", height + "px", "important");
       let tabsToolbar = document.getElementById("TabsToolbar");
       tabsToolbar.style.setProperty("top", screen.availHeight + "px", "important");
-      tabsToolbar.setAttribute("width", screen.availWidth);
+      Tabmix.setItem("TabsToolbar-customization-target", "width", screen.availWidth);
     }
-    TabmixTabbar.visibleRows = 1;
     if (updateFullScreen) {
       TMP_eventListener.toggleTabbarVisibility(false);
       TabmixTabbar.updateSettings(false);
     }
   },
 
-  handleEvent(aEvent) {
-    switch (aEvent.type) {
-      case "resize": {
-        gTMPprefObserver.updateTabbarBottomPosition(aEvent);
-        break;
+  createFullScrToggler() {
+    const fullScrToggler = document.createXULElement("vbox");
+    fullScrToggler.id = "fullscr-bottom-toggler";
+    fullScrToggler.hidden = true;
+    const toggler = document.getElementById("fullscr-toggler");
+    toggler.parentNode.insertBefore(fullScrToggler, toggler);
+
+    let $LF = '\n    ';
+    Tabmix.changeCode(FullScreen, "FullScreen.hideNavToolbox")._replace(
+      'this._isChromeCollapsed = true;',
+      'TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);' + $LF +
+        '$&' + $LF +
+        'TMP_eventListener.toggleTabbarVisibility(false, arguments[0]);'
+    ).toCode();
+  },
+
+  _resizeObserver: null,
+  _observing: new Set(),
+
+  resizeObserver(elementId = "browser", isCustomizing) {
+    let observe = TabmixTabbar.position === 1;
+    if (!observe || TabmixSvc.isG3Waterfox) {
+      if (this._observing.size) {
+        this._observing.clear();
+        this._resizeObserver.disconnect();
       }
+      return;
+    }
+
+    if (!this._resizeObserver) {
+      this._resizeObserver = new window.ResizeObserver(entries => {
+        for (let entry of entries) {
+          if (entry.contentBoxSize) {
+            this._update();
+            break;
+          }
+        }
+      });
+    }
+
+    if (elementId === "customization-container") {
+      observe = isCustomizing;
+    }
+
+    const element = document.getElementById(elementId);
+    if (observe) {
+      this._observing.add(elementId);
+      this._resizeObserver.observe(element);
+    } else {
+      this._observing.delete(elementId);
+      this._resizeObserver.unobserve(element);
+    }
+  },
+
+  _bottomRect: {top: null},
+  _customizingMinTop: 455,
+
+  _update() {
+    let {top} = this.toolbox.getBoundingClientRect();
+    if (gBrowser.tabContainer._isCustomizing && top < this._customizingMinTop) {
+      top = this._customizingMinTop;
+    }
+    if (this._bottomRect.top != top) {
+      this._bottomRect.top = top;
+      document.documentElement.style.setProperty("--tabmix-bottom-toolbox-top", `${top}px`);
     }
   },
 };
@@ -2161,10 +2229,10 @@ gTMPprefObserver = {
       return false;
 
     TabmixTabbar.position = aPosition;
+    Tabmix.bottomToolbarUtils.init();
     gBrowser.tabContainer._tabDropIndicator.removeAttribute("style");
     var tabsToolbar = document.getElementById("TabsToolbar");
-    // setting tabbaronbottom attribute trigger updatePosition in our
-    // scrollbox.xml\toolbar binding
+    // setting tabbaronbottom attribute triggers Tabmix.bottomToolbarUtils.resizeObserver
     let onbottom = TabmixTabbar.position == 1 || null;
     Tabmix.setItem(tabsToolbar, "tabbaronbottom", onbottom);
     Tabmix.setItem("main-window", "tabmix-tabbaronbottom", onbottom);
@@ -2172,54 +2240,12 @@ gTMPprefObserver = {
     if (TabmixTabbar.position === 0) {// top
       this._bottomRect = {top: null, width: null, height: null};
       let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
-      bottomToolbox.style.removeProperty("height");
+      bottomToolbox.firstChild.style.removeProperty("height");
       tabsToolbar.style.removeProperty("top");
-      tabsToolbar.removeAttribute("width");
+      Tabmix.setItem("TabsToolbar-customization-target", "width", null);
       TabmixTabbar.visibleRows = 1;
     }
     return true;
-  },
-
-  _bottomRect: {top: null, width: null, height: null},
-  updateTabbarBottomPosition: function TMP_PO_updateTabbarBottomPosition(aEvent) {
-    let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
-    if (!bottomToolbox || TabmixTabbar.position != 1 || !Tabmix.tabsUtils.visible) {
-      return;
-    }
-
-    if (bottomToolbox.collapsed != gInPrintPreviewMode)
-      bottomToolbox.collapsed = gInPrintPreviewMode;
-    if (gInPrintPreviewMode)
-      return;
-
-    if (aEvent && aEvent.target != window) {
-      // when the event is not from the window check if tabmix-bottom-toolbox
-      // change its position
-      let {top, width} = bottomToolbox.getBoundingClientRect();
-      if (top == this._bottomRect.top &&
-          width == this._bottomRect.width)
-        return;
-    }
-
-    let tabsToolbar = document.getElementById("TabsToolbar");
-    // when we here after many tabs closed fast arrowScrollbox height can larger
-    // then one row.
-    let newHeight = TabmixTabbar.visibleRows == 1 ? TabmixTabbar.singleRowHeight :
-      gBrowser.tabContainer.arrowScrollbox.scrollClientRect.height;
-    if (this._bottomRect.height != newHeight) {
-      this._bottomRect.height = newHeight;
-      bottomToolbox.style.setProperty("height", newHeight + "px", "important");
-    }
-    // get new rect after changing the height
-    let rect = bottomToolbox.getBoundingClientRect();
-    if (this._bottomRect.top != rect.top) {
-      this._bottomRect.top = rect.top;
-      tabsToolbar.style.setProperty("top", rect.top + "px", "important");
-    }
-    if (this._bottomRect.width != rect.width) {
-      this._bottomRect.width = rect.width;
-      tabsToolbar.setAttribute("width", rect.width);
-    }
   },
 
   // Show Reload Every menu on Reload button

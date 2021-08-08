@@ -469,7 +469,6 @@ Tabmix.tablib = {
       `const bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
       if (bottomToolbox) {
         bottomToolbox.collapsed = collapse;
-        gTMPprefObserver.updateTabbarBottomPosition();
       }
       $1$2`
     ).toCode();

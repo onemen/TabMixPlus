@@ -246,7 +246,6 @@ this.DynamicRules = {
       Tabmix.tabsUtils.updateVerticalTabStrip();
       TabmixTabbar.setFirstTabInRow();
       TabmixTabbar.updateBeforeAndAfter();
-      gTMPprefObserver.updateTabbarBottomPosition();
     });
   },
 

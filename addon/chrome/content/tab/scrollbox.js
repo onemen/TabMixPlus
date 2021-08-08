@@ -305,7 +305,9 @@ Tabmix.multiRow = {
           // is on the next row
           Tabmix.tabsUtils.disAllowNewtabbutton = false;
           const tabBar = this.parentNode;
+          // set multibar also at updateVerticalTabStrip
           Tabmix.setItem(tabBar, "multibar", true);
+          Tabmix.setItem("tabmix-bottom-toolbox", "multibar", true);
           const multibar = Tabmix.tabsUtils.updateVerticalTabStrip();
           if (multibar === null) {
             TabmixTabbar._failedToEnterVerticalMode = true;

@@ -164,12 +164,6 @@ toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > 
   list-style-image: none !important;
 }
 
-/* ::::: Fullscreen pseudo-toolbar ::::: */
-#fullscr-bottom-toggler {
-  height: 1px;
-  background: black;
-}
-
 /*
  *****************************************************************************
  *                                non default theme

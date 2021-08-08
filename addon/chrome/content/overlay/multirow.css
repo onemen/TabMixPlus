@@ -45,8 +45,8 @@
 #tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox-clip) {
   overflow: -moz-hidden-unscrollable;
   display: block;
-  margin-top: calc(var(--tabmix-multirow-margin , 0));
-  margin-bottom: calc(var(--tabmix-multirow-margin , 0));
+  margin-top: var(--tabmix-multirow-margin , 0);
+  margin-bottom: var(--tabmix-multirow-margin , 0);
 }
 
 #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox) {

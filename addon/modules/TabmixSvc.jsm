@@ -12,6 +12,9 @@ ChromeUtils.defineModuleGetter(this, "TabmixPlacesUtils",
 ChromeUtils.defineModuleGetter(this, "SyncedTabs",
   "chrome://tabmix-resource/content/SyncedTabs.jsm");
 
+ChromeUtils.defineModuleGetter(this, "AppConstants",
+  "resource://gre/modules/AppConstants.jsm");
+
 // place holder for load default preferences function
 // eslint-disable-next-line no-unused-vars
 var pref;
@@ -243,6 +246,12 @@ this.TabmixSvc = {
       DynamicRules.init(aWindow);
 
       ChromeUtils.import("chrome://tabmix-resource/content/TabRestoreQueue.jsm", {});
+
+      if (TabmixSvc.isG3Waterfox) {
+        // Waterfox use build-in preference - browser.tabBar.position
+        Services.prefs.clearUserPref("extensions.tabmix.tabBarPosition");
+        Services.prefs.lockPref("extensions.tabmix.tabBarPosition");
+      }
     },
 
     addMissingPrefs() {
@@ -337,7 +346,7 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", () => {
 });
 
 XPCOMUtils.defineLazyGetter(this, "Platform", () => {
-  return (ChromeUtils.import("resource://gre/modules/AppConstants.jsm", {})).AppConstants.platform;
+  return AppConstants.platform;
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isWindows", () => {
@@ -358,6 +367,10 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isCyberfox", () => {
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isWaterfox", () => {
   return Services.appinfo.name == "Waterfox";
+});
+
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isG3Waterfox", () => {
+  return Services.appinfo.name == "Waterfox" && isVersion(780);
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isBasilisk", () => {

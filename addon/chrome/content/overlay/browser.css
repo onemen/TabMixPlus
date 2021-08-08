@@ -255,14 +255,6 @@ so display: none !important; does not hide the button */
   flex: 1 1 auto !important;
 }
 
-/* this will trigger resize if we exit hidden tabbar mode before
-   we set width or height to this box
-*/
-#tabmix-bottom-toolbox {
-  min-width: 1px;
-  min-height: 1px;
-}
-
 /* we add #TabsToolbar to get higher specificity, in order to override Firefox rule */
 #TabsToolbar #tabbrowser-tabs:not([overflow="true"], [hashiddentabs], [showalltabsbutton]) ~ #alltabs-button {
   display: none;
@@ -292,32 +284,107 @@ so display: none !important; does not hide the button */
   visibility: collapse;
 }
 
-#main-window[inFullscreen][inDOMFullscreen] #tabmix-bottom-toolbox,
-#main-window[inFullscreen][inDOMFullscreen] #fullscr-bottom-toggler {
-  visibility: collapse;
-}
-
 #tabmix-rows-tooltip:not([flowing="multibar"]) {
   display: none;
 }
+
+/* hide menuitem in tabContextMenu */
+#tabContextMenu menuitem[tabmix_hide="true"] {
+  visibility: collapse;
+}
+
+/* :::: tabbar on bottom :::: */
 
 #main-window[tabsintitlebar][tabmix-tabbaronbottom] .tabbrowser-tabbox,
 #main-window[tabsintitlebar] #TabsToolbar-customization-target[tabmix-disallow-drag] {
   -moz-window-dragging: no-drag;
 }
 
-/* :::: tabbar on bottom :::: */
 /* we don't need rule for toolbar-drag - when tabbar on bottom */
 #TabsToolbar[tabbaronbottom] {
+  display: block;
   position: fixed !important;
   -moz-appearance: none !important;
+  top: var(--tabmix-bottom-toolbox-top);
+  width: 100%;
   /* look at browser.css for each platform
   background-image: none !important;
   */
-  margin-top: 1px !important;
 }
 
-/* hide menuitem in tabContextMenu */
-#tabContextMenu menuitem[tabmix_hide="true"] {
+#TabsToolbar[tabbaronbottom] > .toolbar-items {
+  width: 100%;
+}
+
+#main-window:not([tabmix-tabbaronbottom]) #tabmix-bottom-toolbox {
   visibility: collapse;
+}
+
+/* it will trigger resize if we exit hidden tabbar mode before
+   we set width or height to this box
+*/
+#tabmix-bottom-toolbox > toolbox {
+  appearance: none;
+  min-width: 1px;
+  min-height: 1px;
+  height: calc(var(--tab-min-height_mlt) * var(--tabmix-visiblerows, 1))
+}
+
+#tabmix-bottom-toolbox[multibar] > toolbox {
+  margin-block: var(--tabmix-multirow-margin , 0);
+}
+
+#tabmix-bottom-toolbox[fullscreenShouldAnimate] {
+  transition: 0.8s margin-bottom ease-out;
+}
+
+#main-window[inFullscreen][inDOMFullscreen] #tabmix-bottom-toolbox,
+#main-window[inFullscreen][inDOMFullscreen] #fullscr-bottom-toggler {
+  visibility: collapse;
+}
+
+#main-window[tabmix-tabbaronbottom] #toolbar-menubar[autohide="true"][inactive="true"]:not([customizing="true"]) {
+	min-height: initial !important;
+	height: initial !important;
+	appearance: initial !important;
+}
+
+#main-window[tabmix-tabbaronbottom] #toolbar-menubar[autohide="true"][inactive="true"]:not([customizing="true"]) > #menubar-items > * {
+  opacity: 0;
+}
+
+/* set background based on rules for #navigator-toolbox
+   from chrome\browser\content\browser\browser.css */
+#tabmix-bottom-toolbox > toolbox:-moz-lwtheme {
+  background-image: var(--lwt-additional-images);
+  background-repeat: var(--lwt-background-tiling);
+  background-position: var(--lwt-background-alignment);
+}
+
+@media not (-moz-os-version: windows-win7) {
+  @media not (-moz-os-version: windows-win8) {
+    #tabmix-bottom-toolbox:-moz-lwtheme {
+      background-color: var(--lwt-accent-color);
+    }
+
+   :root[lwtheme-image] #tabmix-bottom-toolbox > toolbox {
+     background-image: var(--lwt-header-image), var(--lwt-additional-images);
+     background-repeat: no-repeat, var(--lwt-background-tiling);
+     background-position: right top, var(--lwt-background-alignment);
+   }
+
+   #tabmix-bottom-toolbox > toolbox:-moz-window-inactive:-moz-lwtheme {
+     background-color: var(--lwt-accent-color-inactive, var(--lwt-accent-color));
+   }
+  }
+}
+
+/* :::: Fullscreen pseudo-toolbar :::: */
+#fullscr-bottom-toggler {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  position: fixed;
+  z-index: 2147483647;
 }
