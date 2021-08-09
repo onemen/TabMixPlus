@@ -160,10 +160,8 @@ var TMP_tabDNDObserver = {
       Tabmix.originalFunctions._groupSelectedTabs.apply(this, arguments);
     };
 
-    // const events = ["dragstart", "dragover", "drop", "dragend", "dragleave"];
-    const events = ["dragstart", "drop", "dragend", "dragleave"];
+    const events = ["dragstart", "dragover", "drop", "dragend", "dragleave"];
     TMP_eventListener.toggleEventListener(tabBar, events, true, this);
-    tabBar.parentNode.addEventListener("dragover", this, {capture: true});
   },
 
   useTabmixDnD(aEvent) {
@@ -389,11 +387,7 @@ var TMP_tabDNDObserver = {
     var target = event.relatedTarget;
     while (target && target != tabBar)
       target = target.parentNode;
-    if (target) {
-      if (this.isDragmarkOnEdge(event)) {
-        this.clearDragmark();
-        this.hideDragoverMessage();
-      }
+    if (target && !this.isDragmarkOnEdge(event)) {
       return;
     }
 
@@ -639,10 +633,28 @@ var TMP_tabDNDObserver = {
   isDragmarkOnEdge(event) {
     // don't show indicator when dragging to the end of non-maximized window
     // on_dragleave not always fires when exiting the window
-    const rect = gBrowser.tabContainer.getBoundingClientRect();
-    const offset = RTL_UI ? rect.right - event.clientX : event.clientX;
-    const windowOnEdge = RTL_UI ? gBrowser.tabContainer.screenX + rect.width >= window.screen.availWidth : gBrowser.tabContainer.screenX <= 0;
-    return window.windowState !== window.STATE_MAXIMIZED && !windowOnEdge && offset <= 6;
+    if (window.windowState === window.STATE_MAXIMIZED) {
+      return false;
+    }
+
+    let windowOnEdge, offset;
+    if (RTL_UI) {
+      const rect = gBrowser.tabContainer.getBoundingClientRect();
+      windowOnEdge = gBrowser.tabContainer.screenX + rect.width >= window.screen.availWidth;
+      offset = rect.right - event.clientX;
+    } else {
+      windowOnEdge = gBrowser.tabContainer.screenX <= 0;
+      offset = event.clientX;
+    }
+
+    if (!windowOnEdge && offset === this._lastOffset) {
+      return this._lastOnEdge;
+    }
+
+    const onEdge = !windowOnEdge && offset <= 6 && this._lastOffset + 1 > offset;
+    this._lastOffset = offset;
+    this._lastOnEdge = onEdge;
+    return onEdge;
   },
 
   getSourceNode: function TMP_getSourceNode(aDataTransfer) {
