@@ -1466,7 +1466,7 @@ gTMPprefObserver = {
         TabmixTabbar.updateSettings(false);
         break;
       case "extensions.tabmix.moveTabOnDragging":
-        gBrowser.tabContainer.moveTabOnDragging = Services.prefs.getBoolPref(prefName);
+        TMP_tabDNDObserver._moveTabOnDragging = prefValue;
         break;
       case "layout.css.devPixelsPerPx":
         setTimeout(() => this.setBgMiddleMargin(), 0);

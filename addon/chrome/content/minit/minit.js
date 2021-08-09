@@ -90,7 +90,7 @@ var TMP_tabDNDObserver = {
       '} else if (draggedTab && draggedTab.container == this) {',
       `gBrowser.ensureTabIsVisible(draggedTabCopy);
         TabmixTabbar.updateBeforeAndAfter();
-      } else if (draggedTab && draggedTab.container == this && TabmixTabbar.visibleRows > 1) {
+      } else if (draggedTab && draggedTab.container == this && TMP_tabDNDObserver.useTabmixDnD(event)) {
         let oldIndex = draggedTab._tPos;
         let newIndex = this._getDropIndex(event, false);
         let moveLeft = newIndex < oldIndex;
@@ -449,7 +449,7 @@ var TMP_tabDNDObserver = {
 
   _getDropIndex(event, isLink, dropLink) {
     const tabBar = gBrowser.tabContainer;
-    if (!dropLink && !tabBar.hasAttribute("multibar")) {
+    if (!dropLink && !this.useTabmixDnD(event)) {
       return Tabmix.originalFunctions._getDropIndex.apply(tabBar, arguments);
     }
 
@@ -461,12 +461,13 @@ var TMP_tabDNDObserver = {
     let newIndex = this._getDNDIndex(event);
     let left_right;
 
-    if (newIndex < gBrowser.tabs.length)
+    if (newIndex < gBrowser.tabs.length) {
       left_right = this.getLeft_Right(event, newIndex, oldIndex, dragType);
-    else {
-      newIndex = dragType != this.DRAG_TAB_IN_SAME_WINDOW &&
-             Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
-        tabBar.selectedIndex : gBrowser.tabs.length - 1;
+    } else {
+      newIndex =
+        dragType != this.DRAG_TAB_IN_SAME_WINDOW &&
+        Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
+          tabBar.selectedIndex : gBrowser.tabs.length - 1;
       left_right = 1;
     }
     return dropLink ? {newIndex, left_right} : newIndex + left_right;
