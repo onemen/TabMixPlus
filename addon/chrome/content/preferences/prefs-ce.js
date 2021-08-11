@@ -1088,7 +1088,6 @@ class PrefWindow extends MozXULElement {
     updateAttribute("closebuttonlabel", MozXULElement.parseXULToFragment(`<div attr="&uiTour.infoPanel.close;" />`, ["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
     updateAttribute("closebuttonaccesskey", "C");
     updateAttribute("role", "dialog");
-    updateAttribute("title", MozXULElement.parseXULToFragment(`<div attr="&preferencesCmd2.label;" />`, ["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
 
     if (this.hasAttribute("ondialogaccept")) {
       const f = new Function("event", this.getAttribute("ondialogaccept"));
