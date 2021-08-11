@@ -160,7 +160,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
         // focus the address bar on new tab
         var clearUrlBar = !replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar") ||
             replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
-            url == TabmixSvc.aboutBlank || url == TabmixSvc.aboutNewtab || url == "about:privatebrowsing";
+            Tabmix.isBlankNewTab(url) || url == "about:privatebrowsing";
         if (clearUrlBar)
           Tabmix.clearUrlBar(newTab, url, false, replaceLastTab);
       }),

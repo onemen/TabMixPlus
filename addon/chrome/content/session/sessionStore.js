@@ -25,7 +25,7 @@ var TMP_SessionStore = {
       const dataTitle = aUndoItem.title || tabData.title || tabData.url;
       return TMP_Places.getTitleFromBookmark(tabData.url, dataTitle)
           .then(title => {
-            if (title == TabmixSvc.aboutBlank) {
+            if (Tabmix.isBlankNewTab(title)) {
               title = Tabmix.getString("tabs.emptyTabTitle");
             }
             return title;
@@ -51,7 +51,7 @@ var TMP_SessionStore = {
       let tabData = JSON.parse(TabmixSvc.ss.getTabState(aTab));
       data = this.getActiveEntryData(tabData);
     }
-    if (data.url == TabmixSvc.aboutBlank) {
+    if (Tabmix.isBlankNewTab(data.url)) {
       return Tabmix.getString("tabs.emptyTabTitle");
     }
     return data.title || null;

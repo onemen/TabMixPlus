@@ -1939,6 +1939,13 @@ Tabmix.newTabUrls = [
   "chrome://fastdial/content/fastdial.html"
 ];
 
+Tabmix.isBlankNewTab = function(url) {
+  return [
+    TabmixSvc.aboutNewtab,
+    TabmixSvc.aboutBlank,
+  ].includes(url);
+};
+
 Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {
   return Tabmix.prefs.getBoolPref("openTabNext") &&
       (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") || aRelatedToCurrent);

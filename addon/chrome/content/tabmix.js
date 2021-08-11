@@ -582,7 +582,7 @@ var TMP_eventListener = {
 
     // don't mark new tab as unread
     let url = TabmixSvc.ss.getLazyTabValue(tab, "url") || tab.linkedBrowser.currentURI.spec;
-    if (url == TabmixSvc.aboutBlank || url == TabmixSvc.aboutNewtab)
+    if (Tabmix.isBlankNewTab(url))
       tab.setAttribute("visited", true);
   },
 
@@ -713,7 +713,7 @@ var TMP_eventListener = {
   onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
     if (aTab.hasAttribute("pending")) {
       this.onSSTabRestoring(aTab);
-      if (aTab.label == "about:blank") {
+      if (Tabmix.isBlankNewTab(aTab.label)) {
         aTab.label = Tabmix.getString("tabs.emptyTabTitle");
         gBrowser._tabAttrModified(aTab, ["label"]);
       }
