@@ -423,8 +423,8 @@ Tabmix.multiRow = {
     class TabmixRightScrollBox extends MozXULElement {
       static get inheritedAttributes() {
         return {
-          "anonid=\"scrollbutton-up-right\"": "orient,disabled=scrolledtostart",
-          "anonid=\"scrollbutton-down-right\"": "orient,disabled=scrolledtoend",
+          "#scrollbutton-up": "orient,disabled=scrolledtostart",
+          "#scrollbutton-down": "orient,disabled=scrolledtoend",
         };
       }
 
@@ -442,7 +442,7 @@ Tabmix.multiRow = {
             TMP_tabDNDObserver._dragoverScrollButton(event);
             const ind = gBrowser.tabContainer._tabDropIndicator;
             const {left, right} = gBrowser.tabContainer.getBoundingClientRect();
-            let newMarginX = event.originalTarget === this._scrollButtonDown ? right - left : 0;
+            let newMarginX = event.originalTarget === this._scrollButtonDown ? right - left - 6 : 0;
             const newMarginY = event.originalTarget === this._scrollButtonUp ?
               (TabmixTabbar.visibleRows - 1) * gBrowser.tabContainer.arrowScrollbox.singleRowHeight : 0;
             ind.hidden = false;
@@ -515,6 +515,7 @@ Tabmix.multiRow = {
         tabstrip._scrollButtonUpRight = this._scrollButtonUp;
         tabstrip._scrollButtonUp = tabstrip.shadowRoot.getElementById("scrollbutton-up");
         tabstrip._scrollButtonDown = tabstrip.shadowRoot.getElementById("scrollbutton-down");
+        this.initializeAttributeInheritance();
       }
 
       // eslint-disable-next-line class-methods-use-this

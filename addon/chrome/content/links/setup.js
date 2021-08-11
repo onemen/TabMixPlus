@@ -153,10 +153,8 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     return this.isBlankBrowser(this.getBrowserForTab(aTab));
   };
 
-  //XXX isTabEmpty exist in Firefox 4.0 - same as isBlankNotBusyTab
-  // isTabEmpty don't check for Tabmix.isNewTabUrls
   tabBrowser.isBlankNotBusyTab = function TMP_isBlankNotBusyTab(aTab, aboutBlank) {
-    if (aTab.hasAttribute("busy") || aTab.hasAttribute("pending"))
+    if (aTab.hasAttribute("busy"))
       return false;
 
     return this.isBlankBrowser(this.getBrowserForTab(aTab), aboutBlank);

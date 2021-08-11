@@ -160,6 +160,10 @@
 }
 }
 
+#tabbrowser-tabs[orient=horizontal] > .tab-drop-indicator {
+  pointer-events: none;
+}
+
 #tabbrowser-tabs[multibar][orient=horizontal] > .tab-drop-indicator {
   margin-top: calc(var(--tab-min-height_mlt) * (var(--tabs-lines) - 1) + var(--tabmix-multirow-margin, 0px));
 }
