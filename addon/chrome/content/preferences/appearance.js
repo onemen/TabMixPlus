@@ -176,7 +176,9 @@ var gAppearancePane = {
   changeTabsWidth() {
     if (!gPrefWindow.widthChanged)
       return;
-    gPrefWindow.widthChanged = false;
+    if (gPrefWindow.instantApply) {
+      gPrefWindow.widthChanged = false;
+    }
     let [minWidth, maxWidth] = [parseInt($("minWidth").value), parseInt($("maxWidth").value)];
     if (minWidth > maxWidth) {
       [minWidth, maxWidth] = [maxWidth, minWidth];

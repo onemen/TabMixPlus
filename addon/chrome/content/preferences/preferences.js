@@ -489,14 +489,17 @@ function updateInstantApply() {
   gPrefWindow.setButtons(!gPrefWindow.changes.size);
 }
 
-function toggleInstantApply(menuItem) {
-  const checked = menuItem.getAttribute("checked") === "true";
+function toggleInstantApply(item) {
+  const checked = item.localName === "menuitem" ?
+    item.getAttribute("checked") === "true" : item.value;
 
   // apply all pending changes before we change mode to instantApply
   if (checked) gPrefWindow.onApply();
 
   document.documentElement.instantApply = checked;
-  Tabmix.prefs.setBoolPref("instantApply", checked);
+  if (item.id === "instantApply") {
+    Tabmix.prefs.setBoolPref("instantApply", checked);
+  }
 
   // update blocked value
   if (!checked) gPrefWindow.updateValueFromElement();

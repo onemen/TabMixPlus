@@ -711,6 +711,9 @@ class PrefPane extends MozXULElement {
   }
 
   writePreferences(aFlushToDisk) {
+    if (!this.loaded) {
+      return;
+    }
     // Write all values to preferences.
     if (this._deferredValueUpdateElements.size) {
       this._finalizeDeferredElements();
