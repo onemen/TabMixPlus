@@ -138,7 +138,11 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:collectOpener": {
-        sendSyncMessage("Tabmix:getOpener", {}, {opener: content.opener});
+        let openerID = null;
+        try {
+          openerID = content.opener?.top?.docShell?.outerWindowID;
+        } catch {/* ignore permission errors */}
+        sendSyncMessage("Tabmix:getOpener", {openerID});
         break;
       }
       case "Tabmix:SetPendingTabIcon": {

@@ -11,6 +11,12 @@ ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
 ChromeUtils.defineModuleGetter(this, "AppConstants",
   "resource://gre/modules/AppConstants.jsm");
 
+ChromeUtils.defineModuleGetter(
+  this,
+  "PromiseUtils",
+  "resource://gre/modules/PromiseUtils.jsm"
+);
+
 //////////////////////////////////////////////////////////////////////
 // The Original Code is the Merge Window function of "Duplicate Tab"//
 // extension for Mozilla Firefox.                                   //
@@ -101,15 +107,23 @@ this.MergeWindows = {
   },
 
   mergePopUpsToNewWindow(aWindows, aPrivate) {
+    const tabsToMove = aWindows.reduce((tabs, win) => [...tabs, ...win.gBrowser.tabs], []);
+    const firstTab = tabsToMove.shift();
+
     let features = "chrome,all,dialog=no";
     features += aPrivate ? ",private" : ",non-private";
     let newWindow = aWindows[0].openDialog(AppConstants.BROWSER_CHROME_URL,
-      "_blank", features, null);
-    let mergePopUps = () => {
-      newWindow.removeEventListener("SSWindowStateReady", mergePopUps);
-      this.concatTabsAndMerge(newWindow, aWindows);
-    };
-    newWindow.addEventListener("SSWindowStateReady", mergePopUps);
+      "_blank", features, firstTab);
+
+    if (tabsToMove.length) {
+      newWindow.addEventListener(
+        "before-initial-tab-adopted",
+        () => {
+          this.swapTabs(newWindow, tabsToMove);
+        },
+        {once: true}
+      );
+    }
   },
 
   concatTabsAndMerge(aTargetWindow, aWindows) {
@@ -122,29 +136,34 @@ this.MergeWindows = {
   // tabs from popup windows open after opener or at the end
   // other tabs open according to our openTabNext preference
   // and move to place by tabbrowser.addTab
-  moveTabsFromPopups(newTab, aTab, openerWindow, tabbrowser) {
-    if (!newTab) {
-      newTab = aTab.__tabmixNewTab;
-      delete aTab.__tabmixNewTab;
-      tabbrowser = newTab.ownerGlobal.gBrowser;
+  moveTabsFromPopups(tab, openerID, tabbrowser) {
+    if (!tabbrowser) {
+      tabbrowser = tab.__tabmixTabBrowser;
+      delete tab.__tabmixTabBrowser;
     }
-    let index = tabbrowser.tabs.length - 1;
-    if (openerWindow) {
+    let index = tabbrowser.tabs.length;
+    let openerTab;
+    if (openerID) {
       // since we merge popup after all other tabs was merged,
       // we only look for opener in the target window
-      let openerTab = tabbrowser._getTabForContentWindow(openerWindow);
+      const openerBrowser = tabbrowser.getBrowserForOuterWindowID(openerID);
+      openerTab = tabbrowser.getTabForBrowser(openerBrowser);
       if (openerTab)
         index = openerTab._tPos + 1;
     }
 
-    let relatedTabBackup = tabbrowser._lastRelatedTabMap;
-    tabbrowser.moveTabTo(newTab, index);
-    tabbrowser._lastRelatedTabMap = relatedTabBackup;
-    tabbrowser.swapBrowsersAndCloseOther(newTab, aTab);
+    const promise = tab._tabmix_movepopup_promise;
+    delete tab._tabmix_movepopup_promise;
+    const tabToSelect = tab.hasAttribute("_TMP_selectAfterMerge");
+    const newTab = tabbrowser.adoptTab(tab, index, false);
+    if (openerTab) {
+      newTab.owner = openerTab;
+    }
+    promise.resolve(tabToSelect ? newTab : null);
   },
 
   // move tabs to a window
-  swapTabs: function TMP_swapTabs(aWindow, tabs) {
+  async swapTabs(aWindow, tabs) {
     var currentWindow = TabmixSvc.topWin();
     var notFocused = currentWindow != aWindow;
     if (notFocused) {
@@ -155,52 +174,63 @@ this.MergeWindows = {
     }
 
     var tabbrowser = aWindow.gBrowser;
-
     var placePopupNextToOpener = this.prefs.getBoolPref("placePopupNextToOpener");
     var tabToSelect = null;
-    // make sure that the tabs will open in the same order
-    let prefVal = this.prefs.getBoolPref("openTabNextInverse");
-    this.prefs.setBoolPref("openTabNextInverse", true);
+    let newIndex = Services.prefs.getBoolPref("browser.tabs.insertAfterCurrent") ?
+      tabbrowser.selectedTab._tPos + 1 : tabbrowser.tabs.length;
+    const popups = [];
+
     for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
       let isPopup = !tab.ownerGlobal.toolbar.visible;
-      let params = {dontMove: isPopup};
-      params = {eventDetail: {adoptedTab: tab}};
-      if (tab.hasAttribute("usercontextid")) {
-        params.userContextId = tab.getAttribute("usercontextid");
-      }
-      let newTab = tabbrowser.addTrustedTab("about:blank", params);
-      let newBrowser = newTab.linkedBrowser;
-      let newURL = tab.linkedBrowser.currentURI.spec;
-      tabbrowser.updateBrowserRemotenessByURL(newBrowser, newURL);
-      newBrowser.stop();
-      void newBrowser.docShell;
-      if (tab.pinned) {
-        tabbrowser.pinTab(newTab);
-      }
-      if (tab.hasAttribute("_TMP_selectAfterMerge")) {
-        tab.removeAttribute("_TMP_selectAfterMerge");
-        tabToSelect = newTab;
-      }
       if (isPopup) {
-        let openerWindow;
-        if (placePopupNextToOpener) {
-          let browser = tab.linkedBrowser;
-          if (browser.getAttribute("remote") == "true") {
-            browser.messageManager.sendAsyncMessage("Tabmix:collectOpener");
-            tab.__tabmixNewTab = newTab;
-            return;
-          }
-          openerWindow = browser.contentWindow.opener;
-        }
-        this.moveTabsFromPopups(newTab, tab, openerWindow, tabbrowser);
+        popups.push(tab);
       } else {
-        // we don't keep tab attributes: visited, tabmix_selectedID
-        // see in Tabmix.copyTabData list of attributes we copy to the new tab
-        tabbrowser.swapBrowsersAndCloseOther(newTab, tab);
+        let newTab = tabbrowser.adoptTab(tab, newIndex, false);
+        if (tab.hasAttribute("_TMP_selectAfterMerge")) {
+          tab.removeAttribute("_TMP_selectAfterMerge");
+          tabToSelect = newTab;
+        }
+        newIndex++;
       }
     }
-    this.prefs.setBoolPref("openTabNextInverse", prefVal);
+
+    const max_windows_undo = Services.prefs.getIntPref("browser.sessionstore.max_windows_undo");
+    const closedWindowCount = aWindow.SessionStore.getClosedWindowCount();
+    const tempMax = Math.max(max_windows_undo, closedWindowCount + popups.length);
+    Services.prefs.setIntPref("browser.sessionstore.max_windows_undo", tempMax);
+
+    const promises = [Promise.resolve(tabToSelect)];
+    for (const tab of popups) {
+      const deferred = PromiseUtils.defer();
+      promises.push(deferred.promise);
+      tab._tabmix_movepopup_promise = deferred;
+
+      let openerWindowID, waitToMessage;
+      if (placePopupNextToOpener) {
+        let browser = tab.linkedBrowser;
+        openerWindowID = browser.browsingContext?.opener?.currentWindowGlobal?.outerWindowId;
+        if (!openerWindowID && browser.getAttribute("remote") == "true") {
+          tab.__tabmixTabBrowser = tabbrowser;
+          browser.messageManager.sendAsyncMessage("Tabmix:collectOpener");
+          waitToMessage = true;
+        }
+      }
+      if (!waitToMessage) {
+        this.moveTabsFromPopups(tab, openerWindowID, tabbrowser);
+      }
+    }
+
+    tabToSelect = (await Promise.all(promises)).filter(t => t)[0];
+
+    if (popups.length) {
+      // wait until sessionStore finish saveing closed windows data
+      await TabmixSvc.SessionStore._handleClosedWindows();
+      while (aWindow.SessionStore.getClosedWindowCount() > closedWindowCount) {
+        aWindow.SessionStore.forgetClosedWindow(0);
+      }
+      Services.prefs.setIntPref("browser.sessionstore.max_windows_undo", max_windows_undo);
+    }
 
     if (notFocused) {
       // select new tab after all other tabs swap to the target window

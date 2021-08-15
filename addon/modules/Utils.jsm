@@ -60,7 +60,7 @@ this.TabmixUtils = {
       case "Tabmix:getOpener":
         win = browser.ownerGlobal;
         tab = win.gBrowser.getTabForBrowser(browser);
-        MergeWindows.moveTabsFromPopups(null, tab, message.objects.opener);
+        MergeWindows.moveTabsFromPopups(tab, message.data.openerID);
         break;
       case "Tabmix:contentDrop": {
         const {json, links} = message.data;
