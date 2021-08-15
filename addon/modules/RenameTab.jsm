@@ -140,8 +140,10 @@ this.RenameTab = {
     TabmixSvc.setCustomTabValue(tab, "label-uri", url);
     win.TabmixSessionManager.updateTabProp(tab);
 
-    if (tab.label != label)
+    if (tab.label != label) {
+      delete tab._labelIsInitialTitle;
       win.gBrowser.setTabTitle(tab);
+    }
 
     this.hidePopup();
   },
