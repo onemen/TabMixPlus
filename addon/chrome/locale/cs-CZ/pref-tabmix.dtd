@@ -49,13 +49,8 @@
 <!ENTITY focusContent.label "Při otevírání neprázdné stránky přepnout na její obsah">
 <!ENTITY openTabNext.label "Otevřít nový panel vedle současného panelu">
 <!ENTITY openOtherTabNext.label "Otevírat další panely vedle toho současného">
-<!ENTITY relatedAfterCurrent.label "Pouze pokud se současným panelem souvisí">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Otevírat duplikované panely vedle panelů původních">
-<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Změnit pořadí otevíraných panelů">
-<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Otevře nový panel vedle panelu, který byl otevřen z aktuálního panelu (naposledy vybraného)">
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">

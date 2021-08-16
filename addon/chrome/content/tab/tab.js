@@ -2501,6 +2501,12 @@ gTMPprefObserver = {
     if (Tabmix.isVersion(890)) {
       migrateCtrlTab("browser.ctrlTab.recentlyUsedOrder");
     }
+    // 2021-08-08
+    if (Services.prefs.prefHasUserValue("extensions.tabmix.openTabNext")) {
+      Services.prefs.setBoolPref("browser.tabs.insertAfterCurrent",
+        Services.prefs.getBoolPref("extensions.tabmix.openTabNext"));
+      Services.prefs.clearUserPref("extensions.tabmix.openTabNext");
+    }
 
     let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {
       let oldVersion = TabmixSvc.prefs.get("extensions.tabmix.version", "");

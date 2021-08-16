@@ -49,13 +49,8 @@
 <!ENTITY focusContent.label "Zamerať obsah pri načítaní nie prázdnej stránky">
 <!ENTITY openTabNext.label "Otvoriť nové karty vedľa aktuálnej karty">
 <!ENTITY openOtherTabNext.label "Otvoriť ostatné karty vedľa aktuálnej">
-<!ENTITY relatedAfterCurrent.label "Len ak súvisí s aktuálnou kartou">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Otvoriť duplikované karty vedľa pôvodnej">
-<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Zmeniť poradie otvárania">
-<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Otvoriť ďalšiu kartu vedľa naposledy otvorenej z aktuálnej karty (odvtedy, čo bola naposledy vybratá)">
 <!ENTITY moveSwitchToTabNext.label "Presunúť kartu z &quot;Prepnúť sa na záložku&quot; vedľa aktuálnej">
 <!ENTITY loadTabsProgressively.label "Načítať karty progresívne">
 <!ENTITY restoreOnDemand.label "Nenačítať karty pokiaľ nie sú vybraté">

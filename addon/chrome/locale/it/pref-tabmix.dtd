@@ -49,13 +49,8 @@
 <!ENTITY focusContent.label "Non selezionare automaticamente la barra degli indirizzi al caricamento di pagine non vuote">
 <!ENTITY openTabNext.label "Apri le schede dopo quella attuale in primo piano">
 <!ENTITY openOtherTabNext.label "Apri le altre schede dopo quella attuale">
-<!ENTITY relatedAfterCurrent.label "Solo se relative alla scheda attuale">
 <!ENTITY openTabNext.tooltip1 "Effettua l&apos;apertura [a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Apri le schede duplicate accanto a quelle originali">
-<!ENTITY openTabNext.tooltip "Effettua l&apos;apertura [a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Modifica l&apos;ordine di apertura">
-<!ENTITY openTabNextInverse.tooltip "Effettua l&apos;apertura [a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 " ">
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">

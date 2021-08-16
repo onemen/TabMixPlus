@@ -49,13 +49,8 @@
 <!ENTITY focusContent.label "À l'ouverture d'un onglet non vide, positionner le curseur dans la page et non dans la barre d'adresse">
 <!ENTITY openTabNext.label "Ouvrir les nouveaux onglets à la suite de l'onglet courant">
 <!ENTITY openOtherTabNext.label "Ouvrir les autres onglets à la suite de l'onglet courant">
-<!ENTITY relatedAfterCurrent.label "Seulement si dérivé de l'onglet courant">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Ouvrir les onglets dupliqués à la suite de l'original">
-<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Modifier l'ordre d'ouverture">
-<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Ouvrir les nouveaux onglets à la suite du dernier onglet ouvert à partir de l'onglet courant (depuis la dernière fois qu'il a été sélectionné)">
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Charger les onglets progressivement">
 <!ENTITY restoreOnDemand.label "Ne pas charger les onglets avant qu'ils soient sélectionnés">

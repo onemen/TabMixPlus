@@ -49,13 +49,8 @@
 <!ENTITY focusContent.label "Inhoud op voorgrond weergeven bij het laden van een niet-lege pagina">
 <!ENTITY openTabNext.label "Nieuwe tabbladen naast het huidige tabblad openen">
 <!ENTITY openOtherTabNext.label "Andere tabbladen openen naast huidige">
-<!ENTITY relatedAfterCurrent.label "Alleen indien gerelateerd aan het huidige tabblad">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Gedupliceerde tabbladen naast het origineel openen">
-<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Volgorde van openen wijzigen">
-<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Nieuw tabblad openen naast laatste vanuit huidige tabblad geopende (laatst geselecteerde)">
 <!ENTITY moveSwitchToTabNext.label "Tabblad van ‘Naar tabblad wisselen’ naar positie naast huidige verplaatsen">
 <!ENTITY loadTabsProgressively.label "Tabbladen progressief laden">
 <!ENTITY restoreOnDemand.label "Tabbladen niet laden voor selectie">

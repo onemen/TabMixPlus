@@ -345,7 +345,7 @@ var TMP_extensionsCompatibility = {
     // override some of All-in-One Gestures function
     // override the duplicate tab function
     if (typeof aioDupTab == 'function')
-      window.aioDupTab = () => gBrowser.duplicateTab(gBrowser._selectedTab);
+      window.aioDupTab = () => Tabmix.duplicateTab(gBrowser._selectedTab);
 
     // override the duplicate in new window function
     if (typeof aioDupWindow == 'function')

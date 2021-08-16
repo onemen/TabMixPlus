@@ -137,68 +137,20 @@ Tabmix.tablib = {
       let callerTrace = Tabmix.callerTrace(),
           isRestoringTab = callerTrace.contain("ssi_restoreWindow");
 
-      let {dontMove, index, isPending, openerBrowser, referrerInfo, relatedToCurrent = null} = args[1] || {};
+      let {index, isPending} = args[1] || {};
 
-      if (relatedToCurrent === null) {
-        relatedToCurrent = Boolean(referrerInfo && referrerInfo.originalReferrer);
-      }
-      let insertRelatedAfterCurrent = Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent");
-      if (insertRelatedAfterCurrent) {
-        Services.prefs.setBoolPref("browser.tabs.insertRelatedAfterCurrent", false);
+      if (typeof index !== "number" &&
+          callerTrace.contain("ssi_restoreWindow", "duplicateTabIn ")) {
+        args[1].index = this.tabs.length;
       }
 
-      let openTabnext = Tabmix.prefs.getBoolPref("openTabNext");
-      if (openTabnext) {
-        let dontMoveNewTab = dontMove ||
-            callerTrace.contain("ssi_restoreWindow", "ssi_duplicateTab");
-        if (dontMoveNewTab) {
-          openTabnext = false;
-        } else if (!insertRelatedAfterCurrent) {
-          relatedToCurrent = true;
-        }
-        let checkToOpenTabNext = openTabnext && relatedToCurrent;
-        TMP_extensionsCompatibility.treeStyleTab.checkToOpenTabNext(this.selectedTab, checkToOpenTabNext);
-      }
-
-      // new tab can trigger selection change by some extensions (divX HiQ)
-      // we save current state before adding the new tab
-      let selectedTab = this.selectedTab;
-      let openerTab = openerBrowser && this.getTabForBrowser(openerBrowser) ||
-        relatedToCurrent && selectedTab;
-      let lastRelatedTab = this._lastRelatedTabMap.get(openerTab);
-
-      // we use var here to allow other extensions that wrap our code with
-      // try-catch-finally to have access to 't' outside of the current scope
-      // (see https://addons.mozilla.org/en-US/firefox/addon/mclickfocustab/)
       var t = Tabmix.originalFunctions.gBrowser_addTab.apply(this, args);
-
-      if (insertRelatedAfterCurrent) {
-        Services.prefs.setBoolPref("browser.tabs.insertRelatedAfterCurrent", true);
-      }
 
       if (isPending || isRestoringTab &&
           Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) {
         t.setAttribute("tabmix_pending", "true");
       }
 
-      if (typeof index !== "number" && relatedToCurrent && openTabnext) {
-        let newTabPos = (lastRelatedTab || openerTab)._tPos + 1;
-        // update new position if the new tab already moved before
-        // lastRelatedTab/openerTab by other extension (TreeStyleTab)
-        if (newTabPos - 1 > t._tPos) {
-          newTabPos--;
-        }
-        if (lastRelatedTab) {
-          lastRelatedTab.owner = null;
-        } else {
-          t.owner = openerTab;
-        }
-        this.moveTabTo(t, newTabPos, true);
-        if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {
-          TMP_LastTab.attachTab(t, lastRelatedTab);
-          this._lastRelatedTabMap.set(openerTab, t);
-        }
-      }
       return t;
     };
 
@@ -582,8 +534,8 @@ Tabmix.tablib = {
       }
 
       let pref = Tabmix.callerTrace("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
-        "openTabNext" : "openDuplicateNext";
-      let openTabNext = Tabmix.prefs.getBoolPref(pref);
+        "browser.tabs.insertAfterCurrent" : "extensions.tabmix.openDuplicateNext";
+      let openTabNext = Services.prefs.getBoolPref(pref);
       TMP_extensionsCompatibility.treeStyleTab.openNewTabNext(aTab, openTabNext, true);
 
       let result = Tabmix.originalFunctions.duplicateTabIn.apply(this, arguments);
@@ -877,7 +829,7 @@ Tabmix.tablib = {
   },
 
   addNewFunctionsTo_gBrowser: function addNewFunctionsTo_gBrowser() {
-    let duplicateTab = function tabbrowser_duplicateTab(aTab, aHref, aTabData, disallowSelect, dontFocusUrlBar) {
+    let duplicateTab = function(aTab, aHref, aTabData, disallowSelect, dontFocusUrlBar) {
       if (aTab.localName != "tab")
         aTab = this._selectedTab;
 
@@ -888,7 +840,7 @@ Tabmix.tablib = {
 
       // try to have SessionStore duplicate the given tab
       if (!aHref && !aTabData) {
-        newTab = TabmixSvc.ss.duplicateTab(window, aTab, 0);
+        newTab = this.duplicateTab(aTab, true, {inBackground: true, index: this.tabs.length});
       } else {
         newTab = this.SSS_duplicateTab(aTab, aHref, aTabData);
       }
@@ -917,7 +869,7 @@ Tabmix.tablib = {
 
       return newTab;
     };
-    Tabmix.setNewFunction(gBrowser, "duplicateTab", duplicateTab);
+    Tabmix.duplicateTab = duplicateTab.bind(gBrowser);
 
     gBrowser.SSS_duplicateTab = function tabbrowser_SSS_duplicateTab(aTab, aHref, aTabData) {
       var newTab = null, tabState;
@@ -959,7 +911,7 @@ Tabmix.tablib = {
       }
       try {
         tabState = aTabData ? aTabData.state : JSON.parse(TabmixSvc.ss.getTabState(aTab));
-        newTab = this.addTrustedTab("about:blank", {dontMove: true});
+        newTab = this.addTrustedTab("about:blank", {index: gBrowser.tabs.length});
         newTab.linkedBrowser.stop();
         if (aHref) {
           if (Tabmix.ContentClick.isUrlForDownload(aHref))
@@ -985,7 +937,7 @@ Tabmix.tablib = {
 
       if (Tabmix.singleWindowMode) {
         if (!aMoveTab)
-          this.duplicateTab(aTab, null, aTabData);
+          Tabmix.duplicateTab(aTab, null, aTabData);
       } else if (aMoveTab) {
         this.replaceTabWithWindow(aTab);
       } else {
@@ -1028,13 +980,22 @@ Tabmix.tablib = {
           Services.obs.removeObserver(delayedStartupFinished, topic);
           let otherGBrowser = otherWin.gBrowser;
           let otherTab = otherGBrowser.selectedTab;
-          for (let i = 0; i < tabs.length; ++i) {
-            const tab = tabs[i];
-            otherGBrowser.duplicateTab(
+          for (let index = 0; index < tabs.length; index += 1) {
+            const tab = tabs[index];
+            const pending = tab.hasAttribute("pending") || tab.hasAttribute("tabmix_pending");
+            const newTab = otherGBrowser.duplicateTab(
               tab,
-              !tab.hasAttribute("pending") && !tab.hasAttribute("tabmix_pending"),
-              {inBackground: i !== selectedTabIndex}
+              !pending,
+              {inBackground: index !== selectedTabIndex, index}
             );
+            if (pending) {
+              newTab.removeAttribute("busy");
+            }
+            newTab.__duplicateFromWindow = true;
+            setTimeout(() => {
+              delete newTab.__duplicateFromWindow;
+              Tabmix.copyTabData(newTab, tab);
+            }, 0);
           }
           otherGBrowser.removeTab(otherTab, {animate: false});
         }
@@ -1053,7 +1014,7 @@ Tabmix.tablib = {
       }
 
       urlSecurityCheck(url, gContextMenu.principal);
-      this.duplicateTab(gBrowser.selectedTab, url);
+      Tabmix.duplicateTab(gBrowser.selectedTab, url);
     };
 
     Tabmix.tablib.openLinkInCurrent = function() {
@@ -1946,7 +1907,10 @@ Tabmix.isBlankNewTab = function(url) {
   ].includes(url);
 };
 
-Tabmix.getOpenTabNextPref = function TMP_getOpenTabNextPref(aRelatedToCurrent) {
-  return Tabmix.prefs.getBoolPref("openTabNext") &&
-      (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") || aRelatedToCurrent);
+Tabmix.getOpenTabNextPref = function(aRelatedToCurrent) {
+  return (
+    Services.prefs.getBoolPref("browser.tabs.insertAfterCurrent") ||
+    (Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") &&
+      aRelatedToCurrent)
+  );
 };

@@ -682,7 +682,7 @@ var TMP_ClosedTabs = {
         allowInheritPrincipal: true,
         noInitialLabel: true,
         userContextId,
-        dontMove: true,
+        index: gBrowser.tabs.length,
       }, state));
     if (!reuseExisting && aBlankTabToReuse) {
       gBrowser.removeTab(aBlankTabToReuse, {animate: false});

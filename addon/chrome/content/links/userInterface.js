@@ -53,7 +53,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
       break;
     case 3: { // duplicate tab
       let currentUrl = gBrowser.currentURI.spec;
-      let dupTab = gBrowser.duplicateTab(selectedTab, null, null, null, true);
+      let dupTab = Tabmix.duplicateTab(selectedTab, null, null, null, true);
       Tabmix.clearUrlBar(dupTab, currentUrl, true);
       return dupTab;
     }
@@ -135,7 +135,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
           charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
           ownerTab: loadInBackground ? null : selectedTab,
           skipAnimation: replaceLastTab,
-          dontMove: true
+          index: openTabNext ? (baseTab || selectedTab)._tPos + 1 : gBrowser.tabs.length,
         });
         if (replaceLastTab) {
           newTab.__newLastTab = url;
@@ -145,9 +145,6 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
           }
         }
 
-        if (openTabNext) {
-          gBrowser.moveTabTo(newTab, (baseTab || selectedTab)._tPos + 1);
-        }
         // make sure to update recently used tabs
         // if user open many tabs quickly select event don't have time to fire
         // before new tab select
@@ -350,6 +347,9 @@ Tabmix.isPendingTab = function(aTab) {
 };
 
 Tabmix.setTabStyle = function(aTab, boldChanged) {
+  if (aTab.__duplicateFromWindow) {
+    return;
+  }
   if (!aTab)
     return;
   let style = "null";
@@ -363,8 +363,6 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
       !aTab.hasAttribute("visited") && !aTab.isEmpty) {
     style = "unread";
   }
-
-  // console.log("Tabmix.setTabStyle", aTab._tPos, aTab.label, aTab.hasAttribute("visited"));
 
   let currentStyle = aTab.getAttribute("tabmix_tabState") || null;
   if (style != "unread" && style != "unloaded")

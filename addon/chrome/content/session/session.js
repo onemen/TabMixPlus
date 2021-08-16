@@ -3088,7 +3088,7 @@ TabmixSessionManager = {
         skipAnimation: true,
         noInitialLabel: true,
         skipBackgroundNotify: true,
-        dontMove: true,
+        index: gBrowser.tabs.length,
         isPending: pending
       });
       // flag. dont save tab that are in restore phase

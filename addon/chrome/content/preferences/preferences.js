@@ -427,6 +427,7 @@ XPCOMUtils.defineLazyGetter(this, "gPreferenceList", () => {
     "browser.sessionstore.restore_on_demand",
     "browser.sessionstore.resume_from_crash", "browser.startup.page",
     "browser.tabs.closeWindowWithLastTab",
+    "browser.tabs.insertAfterCurrent",
     "browser.tabs.insertRelatedAfterCurrent", "browser.tabs.loadBookmarksInBackground",
     "browser.tabs.loadDivertedInBackground", "browser.tabs.loadInBackground",
     "browser.tabs.tabClipWidth", "browser.tabs.tabMaxWidth", "browser.tabs.tabMinWidth",

@@ -49,13 +49,8 @@
 <!ENTITY focusContent.label "Inhaltsbereich fokussieren, falls keine leere Seite geladen wird">
 <!ENTITY openTabNext.label "Neue Tabs neben dem aktiven Tab öffnen">
 <!ENTITY openOtherTabNext.label "Andere Tabs neben dem aktiven Tab öffnen">
-<!ENTITY relatedAfterCurrent.label "Nur wenn sie in Beziehung zum aktiven Tab stehen">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Duplizierte Tabs neben dem Ursprungs-Tab öffnen">
-<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Reihenfolge beim Öffnen umkehren">
-<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Neuen Tab öffnen neben dem zuletzt vom aktuellen Tab aus geöffneten Tab (solange dieser der zuletzt aktive ist)">
 <!ENTITY moveSwitchToTabNext.label "Tab mit 'Zum Tab wechseln' neben den aktuellen Tab verschieben">
 <!ENTITY loadTabsProgressively.label "Progressives laden von Tabs">
 <!ENTITY restoreOnDemand.label "Tabs erst nach dem Auswählen laden">

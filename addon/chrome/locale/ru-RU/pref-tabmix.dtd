@@ -49,13 +49,8 @@
 <!ENTITY focusContent.label "Фокусироваться на вкладке, когда она не пустая">
 <!ENTITY openTabNext.label "Размещать новые вкладки сразу после текущей">
 <!ENTITY openOtherTabNext.label "Открывать другие вкладки после текущей">
-<!ENTITY relatedAfterCurrent.label "Только если связано с текущей вкладкой">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Открывать клонированные вкладки сразу после оригинальных">
-<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Изменять порядок открытия">
-<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Открывать новую вкладку сразу после последней вкладки, открытой с этой же страницы">
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Загружать вкладки прогрессивно,">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">

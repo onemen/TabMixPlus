@@ -180,7 +180,7 @@ var TabmixTabClickOptions = {
         }
         break;
       case 3:
-        gBrowser.duplicateTab(aTab);
+        Tabmix.duplicateTab(aTab);
         break;
       case 4:
         if (aTab.linkedBrowser.__SS_restoreState != 2)

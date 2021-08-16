@@ -49,13 +49,8 @@
 <!ENTITY focusContent.label "Enfocar al cargar página con contenido">
 <!ENTITY openTabNext.label "Abrir nueva pestaña junto a la actual">
 <!ENTITY openOtherTabNext.label "Abrir otras pestañas junto a la actual">
-<!ENTITY relatedAfterCurrent.label "Sólo las relacionadas con la actual">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Abrir pestañas duplicadas junto a la original">
-<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Cambiar orden de apertura">
-<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Abrir nueva pestaña junto a la última abierta desde la pestaña actual (desde que se seleccionó por última vez)">
 <!ENTITY moveSwitchToTabNext.label "Mover pestaña desde &quot;Cambiar a pestaña&quot; a continuación de la actual">
 <!ENTITY loadTabsProgressively.label "Cargar pestañas progresivamente">
 <!ENTITY restoreOnDemand.label "No cargar pestañas antes de seleccionarlas">

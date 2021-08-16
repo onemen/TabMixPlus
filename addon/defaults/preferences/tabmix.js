@@ -38,8 +38,9 @@ pref("extensions.tabmix.replaceLastTabWith.newtab.url", "about:newtab");
 pref("extensions.tabmix.selectLocationBar", true);
 pref("extensions.tabmix.selectLocationBar.afterLastTabClosed", true);
 pref("extensions.tabmix.openNewTabNext", false);
-pref("extensions.tabmix.openTabNext", false);
-pref("extensions.tabmix.openTabNextInverse", true);
+// replaced with browser.tabs.insertAfterCurrent, see bug 1344749
+// pref("extensions.tabmix.openTabNext", false);
+// pref("extensions.tabmix.openTabNextInverse", true);
 pref("extensions.tabmix.openDuplicateNext", true);
 pref("extensions.tabmix.moveSwitchToTabNext", false);
 pref("extensions.tabmix.focusTab", 2);

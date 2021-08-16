@@ -55,6 +55,8 @@ var gEventsPane = {
 
     this.alignTabOpeningBoxes();
 
+    gPrefWindow.setDisabled("obs_openTabNext", $("pref_openTabNext").value);
+
     gPrefWindow.initPane("paneEvents");
   },
 

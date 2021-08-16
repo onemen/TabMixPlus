@@ -49,13 +49,8 @@
 <!ENTITY focusContent.label "Пређи на садржај кад се учитава страница која није празна">
 <!ENTITY openTabNext.label "Нове картице отварај поред тренутне">
 <!ENTITY openOtherTabNext.label "Остале картице отварај поред тренутне">
-<!ENTITY relatedAfterCurrent.label "Само ако имају неке везе са тренутном">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Дуплиране картице отварај поред изворне">
-<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Промени редослед отварања">
-<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Отвори нову картицу поред картице која је последња отворена из текуће картице (јер је била последља одабрана)">
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">

@@ -167,7 +167,7 @@ var TMP_Places = {
   // fixed: reuse all blank tab not just in the end
   // fixed: if "extensions.tabmix.loadBookmarksAndReplace" is true don't reuse
   //        locked and protected tabs open bookmark after those tabs
-  // fixed: focus the first tab if "extensions.tabmix.openTabNext" is true
+  // fixed: focus the first tab if "browser.tabs.insertAfterCurrent" is true
   // fixed: remove "selected" and "tabmix_selectedID" from reuse tab
   openGroup: function TMP_PC_openGroup(bmGroup, aWhere) {
     var openTabs = Tabmix.visibleTabs.tabs;
@@ -244,13 +244,18 @@ var TMP_Places = {
         if (!aTab.selected) {
           aTab.removeAttribute("visited");
           aTab.removeAttribute("tabmix_selectedID");
-        } else
+        } else {
           aTab.setAttribute("reloadcurrent", true);
+        }
+        // move tab to place
+        index = prevTab._tPos + 1;
+        tabPos = aTab._tPos < index ? index - 1 : index;
+        gBrowser.moveTabTo(aTab, tabPos);
       } else {
         let params = {
           skipAnimation: multiple,
           noInitialLabel: this._titlefrombookmark,
-          dontMove: true,
+          index: prevTab._tPos + 1,
           forceNotRemote: loadProgressively
         };
         // PlacesUIUtils.openTabset use SystemPrincipal
@@ -268,10 +273,6 @@ var TMP_Places = {
 
       if (!tabToSelect)
         tabToSelect = aTab;
-      // move tab to place
-      index = prevTab._tPos + 1;
-      tabPos = aTab._tPos < index ? index - 1 : index;
-      gBrowser.moveTabTo(aTab, tabPos);
       TMP_LastTab.attachTab(aTab, prevTab);
       prevTab = aTab;
     }

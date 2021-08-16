@@ -49,13 +49,8 @@
 <!ENTITY focusContent.label "Фокусиране на съдържанието при зареждане на не-празна страница">
 <!ENTITY openTabNext.label "Отваряне на нови подпрозорци непосредствено до текущия">
 <!ENTITY openOtherTabNext.label "Отваряне на други подпрозорци непосредствено до текущия">
-<!ENTITY relatedAfterCurrent.label "Само ако са свързани с текущия подпрозорец">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Отваряне на дублираните подпрозорци непосредствено до оригиналните">
-<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Промяна на поредността на отваряне">
-<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Отваряне на нов подпрозорец непосредствено до последния подпрозорец, отворен от текущия подпрозорец">
 <!ENTITY moveSwitchToTabNext.label "Преместване на подпрозореца от „Превключване към подпрозореца“ до текущия">
 <!ENTITY loadTabsProgressively.label "Поетапно зареждане на подпрозорците">
 <!ENTITY restoreOnDemand.label "Без зареждане на подпрозорците, докато не ги избера">

@@ -658,7 +658,7 @@ var TMP_undocloseTabButtonObserver = {
 
 Tabmix.goButtonClick = function TMP_goButtonClick(aEvent) {
   if (aEvent.button == 1 && gURLBar.value == gBrowser.currentURI.spec)
-    gBrowser.duplicateTab(gBrowser._selectedTab);
+    this.duplicateTab(gBrowser._selectedTab);
   else if (aEvent.button != 2)
     gURLBar.handleCommand(aEvent);
 };

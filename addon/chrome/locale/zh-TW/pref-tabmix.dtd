@@ -49,13 +49,8 @@
 <!ENTITY focusContent.label "載入非空白頁時，焦點切換至頁面內容">
 <!ENTITY openTabNext.label "新分頁開啟於目前分頁的旁邊">
 <!ENTITY openOtherTabNext.label "其他分頁開啟於目前分頁的旁邊">
-<!ENTITY relatedAfterCurrent.label "只作用於和目前分頁相關的分頁">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "將複製的分頁置於原始分頁的旁邊">
-<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "變更開啟順序">
-<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "將新分頁開啟於最後一個由本分頁開啟的分頁旁（因為該分頁是最後選取的）">
 <!ENTITY moveSwitchToTabNext.label "將「要切換過去的分頁」移動到目前分頁旁">
 <!ENTITY loadTabsProgressively.label "逐步載入分頁">
 <!ENTITY restoreOnDemand.label "選取後才載入分頁">

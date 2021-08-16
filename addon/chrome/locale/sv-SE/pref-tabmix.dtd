@@ -49,13 +49,8 @@
 <!ENTITY focusContent.label "Lägg fokus på innehållet när en icke-tom sida läses in">
 <!ENTITY openTabNext.label "Öppna ny flik intill nuvarande">
 <!ENTITY openOtherTabNext.label "Öppna andra flikar intill nuvarande flik">
-<!ENTITY relatedAfterCurrent.label "Endast vid relevans med nuvarande flik">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Öppna duplicerade flikar intill originalfliken">
-<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
-<!ENTITY openTabNextInverse.label "Ändra öppningsordning">
-<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
-<!ENTITY openTabNextInverse.tooltip1 "Öppna ny flik intill den senaste fliken som öppnades från nuvarande flik (då den var senast markerad)">
 <!ENTITY moveSwitchToTabNext.label "Flytta flik från &quot;Byt till flik&quot; intill nuvarande flik">
 <!ENTITY loadTabsProgressively.label "Läs in flikar progressivt">
 <!ENTITY restoreOnDemand.label "Läs inte in flikar förrän de väljs">
