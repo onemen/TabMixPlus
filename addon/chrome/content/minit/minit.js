@@ -3,12 +3,7 @@
 
 /****    Drag and Drop observers    ****/
 var TMP_tabDNDObserver = {
-  gBackupLabel: "",
-  gMsg: null,
   draglink: "",
-  lastTime: 0,
-  dragmarkindex: null,
-  marginBottom: 0,
   LinuxMarginEnd: 0,
   _dragTime: 0,
   _dragOverDelay: 350,
@@ -16,40 +11,34 @@ var TMP_tabDNDObserver = {
   DRAG_TAB_TO_NEW_WINDOW: 1,
   DRAG_TAB_IN_SAME_WINDOW: 2,
   TAB_DROP_TYPE: "application/x-moz-tabbrowser-tab",
-  draggedTab: null,
   paddingLeft: 0,
+  _multirowMargin: 0,
 
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
     if (Tabmix.extensions.verticalTabBar) {
-      tabBar.useTabmixDragstart = () => false;
-      tabBar.useTabmixDnD = () => false;
+      this.useTabmixDnD = () => false;
       return;
     }
 
-    tabBar.moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
+    this._moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
 
-    // https://addons.mozilla.org/en-US/firefox/addon/multiple-tab-handler/
-    const tabsDragUtils = "piro.sakura.ne.jp" in window &&
-      "tabsDragUtils" in window["piro.sakura.ne.jp"];
-    Tabmix.handleAnimateTabMove = function(dragContext) {
-      if (gBrowser.tabContainer.getAttribute("orient") != "horizontal") {
-        return false;
-      }
-      return !dragContext || !dragContext.draggedTabs ||
-          dragContext.draggedTabs.length == 1;
+    Tabmix.getMovingTabsWidth = movingTabs => {
+      return movingTabs.reduce((width, tab) => {
+        return width + tab.getBoundingClientRect().width;
+      }, 0);
     };
     // Determine what tab we're dragging over.
     // * In tabmix tabs can have different width
-    // * Point of reference is the start of the dragged tab when
+    // * Point of reference is the start of the dragged tab/tabs when
     //   dragging left and the end when dragging right. If that point
     //   is before (for dragging left) or after (for dragging right)
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
-    let newCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
       'if (this.getAttribute("movingtab")',
-      `let tabmixHandleMove = Tabmix.handleAnimateTabMove(typeof TDUContext == "object" ? TDUContext : null);
-          $&`
+      `let tabmixHandleMove = this.getAttribute("orient") === "horizontal" && TabmixTabbar.widthFitTitle;
+      $&`
     )._replace(
       'this.selectedItem = draggedTab;',
       'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
@@ -59,54 +48,128 @@ var TMP_tabDNDObserver = {
             draggedTab.setAttribute("dragged", true);\n\
           }'
     )._replace(
-      'draggedTab._dragData.animLastScreenX = screenX;',
-      'let draggingRight = screenX > draggedTab._dragData.animLastScreenX;\n          ' +
-      '$&', {check: !tabsDragUtils}
+      'let shiftWidth = tabWidth * movingTabs.length;',
+      `let shiftWidth = Tabmix.getMovingTabsWidth(movingTabs);
+       draggedTab._dragData.shiftWidth = shiftWidth;
+       let rightTabWidth = movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
+       let leftTabWidth = movingTabs[0].getBoundingClientRect().width;
+       let referenceTabWidht = ltrMove ? rightTabWidth : leftTabWidth;`
     )._replace(
-    // TODO: need more testing
-    //   'let tabCenter = tabScreenX + translateX + tabWidth / 2;',
-    //   'let tabCenter = tabScreenX + translateX + (tabmixHandleMove ? draggingRight * tabWidth : tabWidth / 2);'
-    // )._replace(
-      tabsDragUtils ? /screenX = boxObject\[TDUContext.*;/ :
-        /screenX = tabs\[mid\].*;/,
-      '$&\n            ' +
-      `let halfWidth;
-            if (tabmixHandleMove) {
-              halfWidth = tabs[mid].getBoundingClientRect().width / 2;
-              screenX += draggingRight * halfWidth;
-            }`
+      '(rightMovingTabScreenX + tabWidth)',
+      '(rightMovingTabScreenX + rightTabWidth)'
     )._replace(
-      tabsDragUtils ? /screenX \+ boxObject\[TDUContext.* < tabCenter/ :
-        /screenX \+ tabs\[mid\][^<]*<\n*\s*tabCenter/,
-      'tabmixHandleMove ? screenX + halfWidth < tabCenter : $&'
+      /let leftTabCenter =.*;/,
+      `let leftTabCenter = leftMovingTabScreenX + translateX + leftTabWidth / 2;`
     )._replace(
-      'screenX > TDUContext.lastTabCenter',
-      'tabmixHandleMove ? screenX > tabCenter : $&',
-      {check: tabsDragUtils}
+      /let rightTabCenter =.*;/,
+      `let rightTabCenter = rightMovingTabScreenX + translateX + rightTabWidth / 2;`
+    )._replace(
+      'if (screenX > tabCenter) {',
+      `let midWidth = tabs[mid].getBoundingClientRect().width;
+        if (tabmixHandleMove && referenceTabWidht > midWidth) {
+          screenX += midWidth / 2;
+          if (screenX > tabCenter + referenceTabWidht / 2) {
+            high = mid - 1;
+          } else if (
+            screenX < tabCenter - referenceTabWidht / 2
+          ) {
+            low = mid + 1;
+          } else {
+            newIndex = tabs[mid]._tPos;
+            break;
+          }
+          continue;
+        }
+        $&`
     )._replace(
       'newIndex >= oldIndex',
-      'RTL_UI || !tabmixHandleMove ? $& : draggingRight && newIndex > -1'
-    );
-    if (tabsDragUtils) {
-      const topic = "browser-delayed-startup-finished";
-      const observer = function(subject) {
-        if (subject == window) {
-          Services.obs.removeObserver(observer, topic);
-          // update for multiple-tab-handler version 0.8.2017061501
-          if (!newCode.value.includes("draggingRight = screenX")) {
-            newCode.value = newCode.value.replace(
-              'draggedTab._dragData.animLastScreenX = screenX;',
-              'let draggingRight = screenX > draggedTab._dragData.animLastScreenX;\n          ' +
-              '$&'
-            );
-          }
-          newCode.toCode();
+      '!tabmixHandleMove ? $& : newIndex > -1 && (RTL_UI !== ltrMove)'
+    ).toCode();
+
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_dragover")._replace(
+      'event.stopPropagation();',
+      `$&
+      if (TMP_tabDNDObserver.handleDragover(event)) {
+        return;
+      }`
+    )._replace(
+      'if (effects == "move") {',
+      'if (effects == "move" && !TMP_tabDNDObserver.useTabmixDnD(event)) {'
+    )._replace(
+      'var newMargin;',
+      'var newMargin, newMarginY = 0;'
+    )._replace(
+      'let newIndex = this._getDropIndex(event, effects == "link");',
+      'let {newIndex, mouseIndex} = this._getDropIndex(event, effects == "link", true);'
+    )._replace(
+      'if (newIndex == children.length) {',
+      `const isFirstTabInRow = TMP_tabDNDObserver.isFirstTabInRow(newIndex, mouseIndex, children);
+       if (newIndex == children.length || isFirstTabInRow) {`
+    )._replace(
+      /let tabRect = children[^;]*;/g,
+      `$&
+      newMarginY = TMP_tabDNDObserver.getDropIndicatorMarginY(ind, tabRect, rect);`
+    )._replace(
+      'ind.style.transform = "translate(" + Math.round(newMargin) + "px)";',
+      'ind.style.transform = "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";'
+    ).toCode();
+
+    Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_drop")._replace(
+      'var dt = event.dataTransfer;',
+      `const useTabmixDnD = TMP_tabDNDObserver.useTabmixDnD(event);
+       if (useTabmixDnD) {
+         TMP_tabDNDObserver.hideDragoverMessage();
+       }
+       $&`
+    )._replace(
+      '} else if (draggedTab && draggedTab.container == this) {',
+      `gBrowser.ensureTabIsVisible(draggedTabCopy);
+        TabmixTabbar.updateBeforeAndAfter();
+      } else if (draggedTab && draggedTab.container == this && useTabmixDnD) {
+        let oldIndex = draggedTab._tPos;
+        let newIndex = this._getDropIndex(event, false);
+        let moveLeft = newIndex < oldIndex;
+        if (!moveLeft) newIndex -= 1;
+        for (let tab of movingTabs) {
+          gBrowser.moveTabTo(tab, newIndex);
+          if (moveLeft) newIndex++;
         }
-      };
-      Services.obs.addObserver(observer, topic);
-    } else {
-      newCode.toCode();
-    }
+        TabmixTabbar.updateScrollStatus();
+        gBrowser.ensureTabIsVisible(draggedTab);
+        TabmixTabbar.updateBeforeAndAfter();
+      $&`
+    )._replace(
+      'if (oldTranslateX && oldTranslateX',
+      `let refTab = this.allTabs[dropIndex];
+       if (refTab) {
+         let firstMovingTab = RTL_UI ? movingTabs[movingTabs.length - 1] : movingTabs[0];
+           newTranslateX = RTL_UI && dropIndex < firstMovingTab._tPos || !RTL_UI && dropIndex > firstMovingTab._tPos
+             ? refTab.screenX + refTab.getBoundingClientRect().width - firstMovingTab.screenX - draggedTab._dragData.shiftWidth
+             : refTab.screenX - firstMovingTab.screenX;
+       }
+      $&`
+    )._replace(
+      'let newIndex = this._getDropIndex(event, true);',
+      `$&
+      if (event.target.id === "tabmix-scrollbox") {
+        if (event.originalTarget.id === "scrollbutton-up") newIndex = 0;
+        else if (event.originalTarget.id === "scrollbutton-down") newIndex = this.allTabs.length;
+      }
+      let firstUrl = links[0].url;
+      replace =
+        !!targetTab || Tabmix.ContentClick.isUrlForDownload(firstUrl);
+      if (replace) {
+        targetTab =
+          event.target.closest("tab.tabbrowser-tab") || this.allTabs[newIndex];
+        // allow to load in locked tab
+        targetTab.linkedBrowser.tabmix_allowLoad = true;
+      } else {
+        targetTab = null;
+      }`
+    ).toCode();
+
+    Tabmix.originalFunctions._getDropIndex = gBrowser.tabContainer._getDropIndex;
+    gBrowser.tabContainer._getDropIndex = this._getDropIndex.bind(this);
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
       /(})(\)?)$/,
@@ -117,511 +180,178 @@ var TMP_tabDNDObserver = {
       $1$2'
     ).toCode();
 
-    tabBar.useTabmixDragstart = function(aEvent) {
-      if (TMP_tabDNDObserver.draggedTab) {
-        delete TMP_tabDNDObserver.draggedTab.__tabmixDragStart;
-        TMP_tabDNDObserver.draggedTab = null;
-      }
-      return this.getAttribute("orient") == "horizontal" &&
-        (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
-        aEvent.altKey);
-    };
-    tabBar.useTabmixDnD = function(aEvent) {
-      function checkTab(dt) {
-        let tab = TMP_tabDNDObserver.getSourceNode(dt);
-        return !tab || tab.__tabmixDragStart ||
-          TMP_tabDNDObserver.getDragType(tab) == TMP_tabDNDObserver.DRAG_TAB_TO_NEW_WINDOW;
-      }
-
-      return this.getAttribute("orient") == "horizontal" &&
-        (!this.moveTabOnDragging || this.hasAttribute("multibar") ||
-        checkTab(aEvent.dataTransfer));
-    };
-
     this._dragOverDelay = tabBar._dragOverDelay;
-    this.draglink = TabmixSvc.getString("droplink.label");
+    this.draglink = `Hold ${TabmixSvc.isMac ? "⌘" : "Ctrl"} to replace locked tab with link Url`;
 
     // without this the Indicator is not visible on the first drag
     tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
+
+    // prevent grouping selected tabs for multi row tabbar
+    Tabmix.originalFunctions._groupSelectedTabs = tabBar._groupSelectedTabs;
+    tabBar._groupSelectedTabs = function() {
+      if (TabmixTabbar.visibleRows > 1) return;
+      Tabmix.originalFunctions._groupSelectedTabs.apply(this, arguments);
+    };
+
+    Tabmix.originalFunctions.on_dragstart = gBrowser.tabContainer.on_dragstart;
+    gBrowser.tabContainer.on_dragstart = this.on_dragstart.bind(tabBar);
+
+    Tabmix.originalFunctions.on_dragend = gBrowser.tabContainer.on_dragend;
+    gBrowser.tabContainer.on_dragend = this.on_dragend.bind(this);
+
+    Tabmix.originalFunctions.on_dragleave = gBrowser.tabContainer.on_dragleave;
+    gBrowser.tabContainer.on_dragleave = this.on_dragleave.bind(this);
   },
 
-  get _isCustomizing() {
-    return gBrowser.tabContainer._isCustomizing;
+  useTabmixDnD(aEvent) {
+    const tabBar = gBrowser.tabContainer;
+    return (
+      tabBar.getAttribute("orient") == "horizontal" &&
+      (!this._moveTabOnDragging ||
+        tabBar.hasAttribute("multibar") ||
+        aEvent.dataTransfer.mozTypesAt(0)[0] !== this.TAB_DROP_TYPE)
+    );
   },
 
-  onDragStart(event, tabmixDragstart) {
-    // we get here on capturing phase before "tabbrowser-close-tab-button"
-    // binding stop the event propagation
-    if (event.originalTarget?.classList?.contains("tab-close-button")) {
-      event.stopPropagation();
+  handleEvent(event) {
+    let methodName = `on_${event.type}`;
+    if (methodName in this) {
+      this[methodName](event);
+    } else {
+      throw new Error(`Unexpected event ${event.type}`);
+    }
+  },
+
+  // on_dragstart is bound to gBrowser.tabContainer
+  on_dragstart(event) {
+    const tab = this._getDragTargetTab(event, false);
+    if (!tab || this._isCustomizing) {
       return;
     }
 
-    let tabBar = gBrowser.tabContainer;
-    let tab = tabBar._getDragTargetTab(event, false);
-    if (!tab || this._isCustomizing)
-      return;
-
-    tab.__tabmixDragStart = tabmixDragstart;
-    this.draggedTab = tab;
-    tab.setAttribute("dragged", true);
     TabmixTabbar.removeShowButtonAttr();
+    Tabmix.originalFunctions.on_dragstart.apply(this, [event]);
 
-    let dt = event.dataTransfer;
-    dt.mozSetDataAt(TAB_DROP_TYPE, tab, 0);
-    let browser = tab.linkedBrowser;
-
-    // We must not set text/x-moz-url or text/plain data here,
-    // otherwise trying to detach the tab by dropping it on the desktop
-    // may result in an "internet shortcut"
-    dt.mozSetDataAt("text/x-moz-text-internal", browser.currentURI.spec, 0);
-
-    // Set the cursor to an arrow during tab drags.
-    dt.mozCursor = "default";
-
-    // Set the tab as the source of the drag, which ensures we have a stable
-    // node to deliver the `dragend` event.  See bug 1345473.
-    dt.addElement(tab);
-
-    // Create a canvas to which we capture the current tab.
-    // Until canvas is HiDPI-aware (bug 780362), we need to scale the desired
-    // canvas size (in CSS pixels) to the window's backing resolution in order
-    // to get a full-resolution drag image for use on HiDPI displays.
-    let windowUtils = window.windowUtils;
-    let scale = windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
-    let canvas = tabBar._dndCanvas;
-    if (!canvas) {
-      tabBar._dndCanvas = canvas =
-          document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
-      canvas.style.width = "100%";
-      canvas.style.height = "100%";
-      canvas.mozOpaque = true;
+    if (TabmixTabbar.visibleRows === 1 && TabmixTabbar.position === 0) {
+      return;
     }
 
-    canvas.width = 160 * scale;
-    canvas.height = 90 * scale;
-    let toDrag = canvas;
+    const windowUtils = window.windowUtils;
+    const scale = windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
     let dragImageOffsetX = -16;
     let dragImageOffsetY = TabmixTabbar.visibleRows == 1 ? -16 : -30;
+    let toDrag = this._dndCanvas;
     if (gMultiProcessBrowser) {
-      let context = canvas.getContext('2d');
-      context.fillStyle = "white";
-      context.fillRect(0, 0, canvas.width, canvas.height);
-
-      let captureListener;
-      let platform = AppConstants.platform;
-      // On Windows and Mac we can update the drag image during a drag
-      // using updateDragImage. On Linux, we can use a panel.
-      if (platform == "win" || platform == "macosx") {
-        captureListener = function() {
-          dt.updateDragImage(canvas, dragImageOffsetX, dragImageOffsetY);
-        };
-      } else {
-        // Create a panel to use it in setDragImage
-        // which will tell xul to render a panel that follows
-        // the pointer while a dnd session is on.
-        if (!tabBar._dndPanel) {
-          tabBar._dndCanvas = canvas;
-          tabBar._dndPanel = document.createElement("panel");
-          tabBar._dndPanel.className = "dragfeedback-tab";
-          tabBar._dndPanel.setAttribute("type", "drag");
-          let wrapper = document.createElementNS("http://www.w3.org/1999/xhtml", "div");
-          wrapper.style.width = "160px";
-          wrapper.style.height = "90px";
-          wrapper.appendChild(canvas);
-          tabBar._dndPanel.appendChild(wrapper);
-          document.documentElement.appendChild(tabBar._dndPanel);
-        }
-        toDrag = tabBar._dndPanel;
+      const platform = AppConstants.platform;
+      if (platform !== "win" && platform !== "macosx") {
+        toDrag = this._dndPanel;
       }
-      // PageThumb is async with e10s but that's fine
-      // since we can update the image during the dnd.
-      PageThumbs.captureToCanvas(browser, canvas, captureListener);
     } else {
-      // For the non e10s case we can just use PageThumbs
-      // sync, so let's use the canvas for setDragImage.
-      PageThumbs.captureToCanvas(browser, canvas);
       dragImageOffsetX *= scale;
       dragImageOffsetY *= scale;
     }
     if (TabmixTabbar.position == 1) {
-      dragImageOffsetY = canvas.height - dragImageOffsetY;
+      dragImageOffsetY = this._dndCanvas.height - dragImageOffsetY;
     }
-    dt.setDragImage(toDrag, dragImageOffsetX, dragImageOffsetY);
-
-    // _dragData.offsetX/Y give the coordinates that the mouse should be
-    // positioned relative to the corner of the new window created upon
-    // dragend such that the mouse appears to have the same position
-    // relative to the corner of the dragged tab.
-    let clientX = ele => ele.getBoundingClientRect().left;
-    let tabOffsetX = clientX(tab) - clientX(tabBar);
-    tab._dragData = {
-      offsetX: event.screenX - window.screenX - tabOffsetX,
-      offsetY: event.screenY - window.screenY,
-      scrollX: tabBar.arrowScrollbox.scrollPosition,
-      screenX: event.screenX
+    const captureListener = function() {
+      event.dataTransfer.updateDragImage(toDrag, dragImageOffsetX, dragImageOffsetY);
     };
-
-    event.stopPropagation();
+    PageThumbs.captureToCanvas(tab.linkedBrowser, this._dndCanvas)
+        .then(captureListener)
+        .catch(e => Cu.reportError(e));
   },
 
-  onDragOver: function minit_onDragOver(event) {
-    var dt = event.dataTransfer;
-    var tabBar = gBrowser.tabContainer;
-
-    var sourceNode = this.getSourceNode(dt);
-    var dragType = this.getDragType(sourceNode);
-    var newIndex = this._getDNDIndex(event);
-    var oldIndex = dragType != this.DRAG_LINK ? sourceNode._tPos : -1;
-    var left_right; // 1:right, 0: left, -1: drop link on tab to replace tab
-    ///XXX check if we need here visibleTabs insteadof gBrowser.tabs
-    ///    check with groups with or without pinned tabs
-    if (newIndex < gBrowser.tabs.length)
-      left_right = this.getLeft_Right(event, newIndex, oldIndex, dragType);
-    else {
-      newIndex = dragType != this.DRAG_TAB_IN_SAME_WINDOW &&
-                 Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
-        tabBar.selectedIndex : gBrowser.tabs.length - 1;
-      left_right = 1;
+  // we call this frunction from gBrowser.tabContainer.on_dragover
+  handleDragover(event) {
+    if (this._dragoverScrollButton(event)) {
+      return true;
     }
 
-    var isCopy = this.isCopyDropEffect(dt, event, dragType);
-    var effects = gBrowser.tabContainer._getDropEffectForTabDrag(event);
+    const tabBar = gBrowser.tabContainer;
+    const effects = tabBar._getDropEffectForTabDrag(event);
+    const dt = event.dataTransfer;
+    const isCopy = dt.dropEffect == "copy";
+    const targetTab = tabBar._getDragTargetTab(event, true);
 
-    var replaceTab = (left_right == -1);
+    let disAllowDrop = false;
     /* we don't allow to drop link on lock tab.
      * unless:
      *           - the tab is blank
      *     or    - the user press Ctrl/Meta Key
      *     or    - we drop link that start download
      */
-    if (replaceTab && !isCopy) {
-      let disAllowDrop, targetTab = gBrowser.tabs[newIndex];
+    if (effects == "link" && targetTab && !isCopy) {
       if (targetTab.getAttribute("locked") && !gBrowser.isBlankNotBusyTab(targetTab)) {
         // Pass true to disallow dropping javascript: or data: urls
-        let links;
         try {
-          links = browserDragAndDrop.dropLinks(event, true);
+          const links = browserDragAndDrop.dropLinks(event, true);
           const url = links && links.length ? links[0].url : null;
           disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
         } catch (ex) {}
 
-        if (disAllowDrop)
-          dt.effectAllowed = "none";
+        if (disAllowDrop) {
+          // show Drag & Drop message
+          let tooltip = document.getElementById("tabmix-tooltip");
+          if (tooltip.state == "closed") {
+            tooltip.label = this.draglink;
+            tooltip.openPopup(document.getElementById("browser"), null, 1, 1, false, false);
+          }
+        }
       }
     }
 
-    var canDrop;
-    var hideIndicator = false;
-    if (effects === "" || effects == "none" && this._isCustomizing) {
-      this.clearDragmark();
-      return;
+    // disAllowDrop drop when user drag link over tabbrowser-tabs multi-row margeing
+    if (effects == "link" && !targetTab && !disAllowDrop && TabmixTabbar.visibleRows > 1) {
+      const {top, bottom} = tabBar.arrowScrollbox.getBoundingClientRect();
+      if (event.clientY < top + this._multirowMargin || event.clientY > bottom - this._multirowMargin) {
+        disAllowDrop = true;
+      }
     }
-    canDrop = effects != "none";
-    if (canDrop && !isCopy && dragType == this.DRAG_TAB_IN_SAME_WINDOW && oldIndex == newIndex) {
-      canDrop = false;
-      dt.effectAllowed = "none";
-    } else if (TabmixTabbar.scrollButtonsMode == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&
+
+    if (!disAllowDrop) {
+      this.hideDragoverMessage();
+      const {dragType, oldIndex, newIndex} = this.eventParams(event);
+      if (!isCopy && dragType == this.DRAG_TAB_IN_SAME_WINDOW &&
+        (oldIndex === newIndex || newIndex - oldIndex === 1)) {
+        disAllowDrop = true;
+      } else if (TabmixTabbar.scrollButtonsMode == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&
         // if we don't set effectAllowed to none then the drop indicator stay
         gBrowser.tabs[0].pinned &&
         Tabmix.compare(event.screenX, Tabmix.itemEnd(gBrowser.tabs[0], !Tabmix.ltr), Tabmix.ltr)) {
-      canDrop = false;
+        disAllowDrop = true;
+      }
+    }
+
+    if (disAllowDrop) {
+      this.clearDragmark();
       dt.effectAllowed = "none";
     }
 
-    event.preventDefault();
-    event.stopPropagation();
-
-    // show Drag & Drop message
-    if (dragType == this.DRAG_LINK) {
-      this.gMsg = event.originalTarget.getAttribute("command") == "cmd_newNavigatorTab" ?
-        this.gBackupLabel : this.draglink;
-      if (!tabBar.contains(event.target)) {
-        this.gMsg = this.gBackupLabel;
-      }
-      var statusTextFld = document.getElementById("statusbar-display");
-      if (statusTextFld && statusTextFld.getAttribute("label") != this.gMsg) {
-        if (this.gBackupLabel === "")
-          this.gBackupLabel = statusTextFld.getAttribute("label");
-        statusTextFld.label = this.gMsg;
-        this.statusFieldChanged = true;
-      } else if (!statusTextFld) {
-        let tooltip = document.getElementById("tabmix-tooltip");
-        if (tooltip.state == "closed") {
-          tooltip.label = this.gMsg;
-          tooltip.openPopup(document.getElementById("browser"), null, 1, 1, false, false);
-        }
-      }
-    }
-
-    if (Tabmix.tabsUtils.overflow) {
-      let tabStrip = tabBar.arrowScrollbox;
-      let ltr = Tabmix.ltr || tabStrip.getAttribute('orient') == "vertical";
-      let _scroll, targetAnonid;
-      if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_HIDDEN) // scroll with button
-        targetAnonid = event.originalTarget.getAttribute("anonid") || event.originalTarget.id;
-      // scroll without button
-      else if (event.screenX <= tabStrip.scrollbox.screenX)
-        targetAnonid = ltr ? "scrollbutton-up" : "scrollbutton-down";
-      else if (event.screenX >= (tabStrip.scrollbox.screenX + tabStrip.scrollClientRect.width))
-        targetAnonid = ltr ? "scrollbutton-down" : "scrollbutton-up";
-
-      switch (targetAnonid) {
-        case "scrollbutton-up":
-        case "scrollbutton-up-right":
-          if (Tabmix.tabsUtils.canScrollTabsLeft)
-            _scroll = -1;
-          break;
-        case "scrollbutton-down":
-        case "scrollbutton-down-right":
-          if (Tabmix.tabsUtils.canScrollTabsRight)
-            _scroll = 1;
-          break;
-      }
-      if (_scroll) {
-        let scrollIncrement = TabmixTabbar.isMultiRow ?
-          Math.round(tabStrip._singleRowHeight / 6) : tabStrip.scrollIncrement;
-        tabStrip.scrollByPixels((ltr ? _scroll : -_scroll) * scrollIncrement, false);
-        hideIndicator = true;
-      }
-    }
-
-    if (dragType == this.DRAG_LINK) {
-      let tab = tabBar._getDragTargetTab(event, true);
-      if (tab && !this._isCustomizing) {
-        if (!this._dragTime)
-          this._dragTime = Date.now();
-        if (Date.now() >= this._dragTime + this._dragOverDelay)
-          tabBar.selectedItem = tab;
-      }
-    }
-
-    if (replaceTab || hideIndicator || !canDrop) {
-      this.clearDragmark();
-      return;
-    }
-
-    this.setDragmark(newIndex, left_right);
+    return disAllowDrop;
   },
 
-  // built-in drop method doesn't take into account different tab width
-  drop(event) {
-    var tabBar = gBrowser.tabContainer;
-    var dt = event.dataTransfer;
-    var dropEffect = dt.dropEffect;
-    var draggedTab;
-    if (dt.mozTypesAt(0)[0] == TAB_DROP_TYPE) { // tab copy or move
-      draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
-      // not our drop then
-      if (!draggedTab)
-        return;
-    }
-
-    // fall back to build-in drop method
-    if (!draggedTab || dropEffect == "copy" || draggedTab.container != tabBar) {
-      return;
-    }
-
-    tabBar._tabDropIndicator.hidden = true;
-    event.stopPropagation();
-    let oldTranslateX = draggedTab._dragData && draggedTab._dragData.translateX;
-    let dropIndex = "animDropIndex" in draggedTab._dragData &&
-        draggedTab._dragData.animDropIndex;
-    if (dropIndex && dropIndex > draggedTab._tPos)
-      dropIndex--;
-
-    let newTranslateX = 0;
-    if (oldTranslateX && dropIndex !== false) {
-      let tabIndex = draggedTab._tPos;
-      if (dropIndex > tabIndex) {
-        for (let i = tabIndex + 1; i <= dropIndex; i++) {
-          newTranslateX += Tabmix.getBoundsWithoutFlushing(gBrowser.tabs[i]).width;
-        }
-      } else if (dropIndex < tabIndex) {
-        for (let i = dropIndex; i < tabIndex; i++) {
-          newTranslateX -= Tabmix.getBoundsWithoutFlushing(gBrowser.tabs[i]).width;
-        }
-      }
-    }
-
-    if (oldTranslateX && oldTranslateX != newTranslateX) {
-      draggedTab.setAttribute("tabdrop-samewindow", "true");
-      draggedTab.style.transform = "translateX(" + newTranslateX + "px)";
-      let onTransitionEnd = transitionendEvent => {
-        if (transitionendEvent.propertyName != "transform" ||
-            transitionendEvent.originalTarget != draggedTab) {
-          return;
-        }
-        draggedTab.removeEventListener("transitionend", onTransitionEnd);
-
-        draggedTab.removeAttribute("tabdrop-samewindow");
-
-        tabBar._finishAnimateTabMove();
-        if (dropIndex !== false)
-          gBrowser.moveTabTo(draggedTab, dropIndex);
-      };
-      draggedTab.addEventListener("transitionend", onTransitionEnd);
-    } else {
-      tabBar._finishAnimateTabMove();
-      if (dropIndex !== false)
-        gBrowser.moveTabTo(draggedTab, dropIndex);
-    }
-
-    if (draggedTab) {
-      delete draggedTab._dragData;
-    }
-  },
-
-  onDrop: function minit_onDrop(event) {
+  on_dragend(event) {
     this.clearDragmark();
-    this.updateStatusField();
-    var dt = event.dataTransfer;
-    var sourceNode = this.getSourceNode(dt);
-    var dragType = this.getDragType(sourceNode);
-    var isCopy = this.isCopyDropEffect(dt, event, dragType);
-    var draggedTab;
-    if (dragType != this.DRAG_LINK) {
-      draggedTab = sourceNode;
-      // not our drop then
-      if (!draggedTab)
-        return;
+
+    // don't allow to open new window in single window mode
+    // respect bug489729 extension preference
+    const disableDetachTab =
+        window.bug489729 && Services.prefs.getBoolPref("extensions.bug489729.disable_detach_tab") ||
+        Tabmix.singleWindowMode && gBrowser.tabs.length > 1;
+
+    let tabBar = gBrowser.tabContainer;
+    if (!disableDetachTab) {
+      // fall back to default Firefox event handler
+      Tabmix.originalFunctions.on_dragend.apply(tabBar, [event]);
+      return;
     }
 
     event.stopPropagation();
 
-    document.getElementById("tabmix-tooltip").hidePopup();
-    /* eslint-disable */
-    // old TreeStyleTab extension version look for isTabReorder in our code
-    var isTabReorder = dragType == this.DRAG_TAB_IN_SAME_WINDOW;
-    /* eslint-enable */
-    var newIndex = this._getDNDIndex(event);
-    var oldIndex = draggedTab ? draggedTab._tPos : -1;
-    var left_right;
-
-    if (newIndex < gBrowser.tabs.length)
-      left_right = this.getLeft_Right(event, newIndex, oldIndex, dragType);
-    else {
-      newIndex = dragType != this.DRAG_TAB_IN_SAME_WINDOW &&
-                 Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
-        gBrowser.tabContainer.selectedIndex : gBrowser.tabs.length - 1;
-      left_right = 1;
-    }
-
-    if (draggedTab && (isCopy || dragType == this.DRAG_TAB_IN_SAME_WINDOW)) {
-      if (isCopy) {
-        // copy the dropped tab (wherever it's from)
-        let newTab = gBrowser.duplicateTab(draggedTab);
-        gBrowser.moveTabTo(newTab, newIndex + left_right);
-
-        if (dragType == this.DRAG_TAB_TO_NEW_WINDOW || event.shiftKey)
-          gBrowser.selectedTab = newTab;
-      } else {
-        // move the dropped tab
-        newIndex += left_right - (newIndex > oldIndex);
-
-        let numPinned = gBrowser._numPinnedTabs;
-        if (draggedTab.pinned) {
-          if (newIndex >= numPinned)
-            gBrowser.unpinTab(draggedTab);
-        } else if (newIndex <= numPinned - 1 || (newIndex == numPinned && dt.__pinTab)) {
-          gBrowser.pinTab(draggedTab);
-        }
-        if (newIndex != draggedTab._tPos)
-          gBrowser.moveTabTo(draggedTab, newIndex);
-
-        if (gBrowser.tabContainer.hasAttribute("multibar"))
-          TabmixTabbar.updateScrollStatus();
-      }
-
-      gBrowser.ensureTabIsVisible(gBrowser.tabs[newIndex]);
-      TabmixTabbar.updateBeforeAndAfter();
-    } else if (draggedTab) {
-      // swap the dropped tab with a new one we create and then close
-      // it in the other window (making it seem to have moved between
-      // windows)
-      let params = {};
-      params = {eventDetail: {adoptedTab: draggedTab}};
-      if (draggedTab.hasAttribute("usercontextid")) {
-        // new tab must have the same usercontextid as the old one
-        params.userContextId = draggedTab.getAttribute("usercontextid");
-      }
-      let newTab = gBrowser.addTrustedTab("about:blank", params);
-      var newBrowser = gBrowser.getBrowserForTab(newTab);
-      let draggedBrowserURL = draggedTab.linkedBrowser.currentURI.spec;
-      // If we're an e10s browser window, an exception will be thrown
-      // if we attempt to drag a non-remote browser in, so we need to
-      // ensure that the remoteness of the newly created browser is
-      // appropriate for the URL of the tab being dragged in.
-      gBrowser.updateBrowserRemotenessByURL(newBrowser, draggedBrowserURL);
-
-      // Stop the about:blank load
-      newBrowser.stop();
-      // make sure it has a docShell
-      void newBrowser.docShell;
-
-      let numPinned = gBrowser._numPinnedTabs;
-      newIndex += left_right;
-      if (newIndex < numPinned || draggedTab.pinned && newIndex == numPinned)
-        gBrowser.pinTab(newTab);
-
-      gBrowser.moveTabTo(newTab, newIndex);
-
-      gBrowser.selectedTab = newTab;
-      draggedTab.container._finishAnimateTabMove();
-      gBrowser.swapBrowsersAndCloseOther(newTab, draggedTab);
-      gBrowser.updateCurrentBrowser(true);
-    } else {
-      // Pass true to disallow dropping javascript: or data: urls
-      let links;
-      try {
-        links = browserDragAndDrop.dropLinks(event, true);
-      } catch (ex) {}
-
-      if (!links || links.length === 0) {
-        return;
-      }
-
-      let bgLoad = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
-
-      if (event.shiftKey)
-        bgLoad = !bgLoad; // shift Key reverse the pref
-
-      const url = links[0].url;
-      const replaceCurrentTab = left_right == -1 || Tabmix.ContentClick.isUrlForDownload(url);
-      let tab;
-      if (replaceCurrentTab) {
-        tab = event.target.closest("tab.tabbrowser-tab") || gBrowser.tabs[newIndex];
-        // allow to load in locked tab
-        tab.linkedBrowser.tabmix_allowLoad = true;
-      }
-
-      let urls = links.map(link => link.url);
-      let params = {
-        inBackground: bgLoad,
-        replace: replaceCurrentTab,
-        allowThirdPartyFixup: true,
-        targetTab: tab,
-        newIndex: newIndex + left_right,
-        userContextId: gBrowser.tabContainer.selectedItem.getAttribute("usercontextid"),
-        triggeringPrincipal: dt.mozSourceNode ?
-          dt.mozSourceNode.nodePrincipal : Services.scriptSecurityManager.getSystemPrincipal()
-      };
-
-      gBrowser.loadTabs(urls, params);
-    }
-    if (draggedTab) {
-      delete draggedTab._dragData;
-      draggedTab.removeAttribute("dragged", true);
-    }
-  },
-
-  onDragEnd: function minit_onDragEnd(aEvent) {
-    var tabBar = gBrowser.tabContainer;
-
-    var dt = aEvent.dataTransfer;
+    var dt = event.dataTransfer;
     var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
 
-    if (!tabBar.useTabmixDnD(aEvent)) {
+    if (!this.useTabmixDnD(event)) {
       // Prevent this code from running if a tabdrop animation is
       // running since calling _finishAnimateTabMove would clear
       // any CSS transition that is running.
@@ -629,139 +359,107 @@ var TMP_tabDNDObserver = {
         return;
       }
 
+      tabBar._finishGroupSelectedTabs(draggedTab);
       tabBar._finishAnimateTabMove();
     }
 
-    if (this.draggedTab) {
-      delete this.draggedTab.__tabmixDragStart;
-      this.draggedTab.removeAttribute("dragged", true);
-      this.draggedTab = null;
-    }
-    // see comment in gBrowser.tabContainer.dragEnd
-    if (dt.mozUserCancelled || dt.dropEffect != "none" || this._isCustomizing) {
+    if (dt.mozUserCancelled || dt.dropEffect != "none" || tabBar._isCustomizing) {
       delete draggedTab._dragData;
-      return;
     }
-
-    this.clearDragmark(aEvent);
-
-    // don't allow to open new window in single window mode
-    // respect bug489729 extension preference
-    if (window.bug489729 && Services.prefs.getBoolPref("extensions.bug489729.disable_detach_tab") ||
-        Tabmix.singleWindowMode && gBrowser.tabs.length > 1) {
-      aEvent.stopPropagation();
-      return;
-    }
-
-    // Disable detach within the browser toolbox
-    var eX = aEvent.screenX;
-    var eY = aEvent.screenY;
-    var wX = window.screenX;
-    // check if the drop point is horizontally within the window
-    if (eX > wX && eX < (wX + window.outerWidth)) {
-      // also avoid detaching if the the tab was dropped too close to
-      // the tabbar (half a tab)
-      var bo = tabBar.arrowScrollbox.scrollbox;
-      var rowHeight = TabmixTabbar.singleRowHeight;
-      var endScreenY = bo.screenY + bo.height + 0.5 * rowHeight;
-      if (TabmixTabbar.position === 0) {// tabbar on the top
-        if (eY < endScreenY && eY > window.screenY) {
-          aEvent.stopPropagation();
-          return;
-        }
-      } else {// bottom
-        const {height} = gNavToolbox.getBoundingClientRect();
-        var toolboxEndScreenY = gNavToolbox.screenY + height;
-        var startScreenY = bo.screenY - 0.5 * rowHeight;
-        if ((eY > startScreenY && eY < endScreenY) || eY < toolboxEndScreenY) {
-          aEvent.stopPropagation();
-          return;
-        }
-      }
-    }
-
-    // we copy this code from gBrowser.tabContainer dragend handler
-    // for the case tabbar is on the bottom
-
-    // screen.availLeft et. al. only check the screen that this window is on,
-    // but we want to look at the screen the tab is being dropped onto.
-    var screen = Cc["@mozilla.org/gfx/screenmanager;1"]
-        .getService(Ci.nsIScreenManager)
-        .screenForRect(eX, eY, 1, 1);
-    var fullX = {}, fullY = {}, fullWidth = {}, fullHeight = {};
-    var availX = {}, availY = {}, availWidth = {}, availHeight = {};
-    // get full screen rect and available rect, both in desktop pix
-    screen.GetRectDisplayPix(fullX, fullY, fullWidth, fullHeight);
-    screen.GetAvailRectDisplayPix(availX, availY, availWidth, availHeight);
-
-    // scale factor to convert desktop pixels to CSS px
-    var scaleFactor =
-        screen.contentsScaleFactor / screen.defaultCSSScaleFactor;
-    // synchronize CSS-px top-left coordinates with the screen's desktop-px
-    // coordinates, to ensure uniqueness across multiple screens
-    // (compare the equivalent adjustments in nsGlobalWindow::GetScreenXY()
-    // and related methods)
-    availX.value = (availX.value - fullX.value) * scaleFactor + fullX.value;
-    availY.value = (availY.value - fullY.value) * scaleFactor + fullY.value;
-    availWidth.value *= scaleFactor;
-    availHeight.value *= scaleFactor;
-
-    // ensure new window entirely within screen
-    var winWidth = Math.min(window.outerWidth, availWidth.value);
-    var winHeight = Math.min(window.outerHeight, availHeight.value);
-    var left = Math.min(Math.max(eX - draggedTab._dragData.offsetX, availX.value),
-      availX.value + availWidth.value - winWidth);
-    var top = Math.min(Math.max(eY - draggedTab._dragData.offsetY, availY.value),
-      availY.value + availHeight.value - winHeight);
-
-    delete draggedTab._dragData;
-
-    if (gBrowser.tabs.length == 1) {
-      // resize _before_ move to ensure the window fits the new screen.  if
-      // the window is too large for its screen, the window manager may do
-      // automatic repositioning.
-      window.resizeTo(winWidth, winHeight);
-      window.moveTo(left, top);
-      window.focus();
-    } else {
-      let props = {screenX: left, screenY: top};
-      if (!TabmixSvc.isWindows) {
-        props.outerWidth = winWidth;
-        props.outerHeight = winHeight;
-      }
-      gBrowser.replaceTabWithWindow(draggedTab, props);
-    }
-    aEvent.stopPropagation();
   },
 
-  onDragExit: function minit_onDragExit(event) {
-    event.stopPropagation();
+  on_dragleave(event) {
     this._dragTime = 0;
+    this.hideDragoverMessage();
+    Tabmix.originalFunctions.on_dragleave.apply(gBrowser.tabContainer, [event]);
+  },
 
-    var target = event.relatedTarget;
-    while (target && target.localName != "arrowscrollbox")
-      target = target.parentNode;
-    if (target)
-      return;
+  _dragoverScrollButton(event) {
+    if (!Tabmix.tabsUtils.overflow) {
+      return false;
+    }
 
     this.clearDragmark();
-    if (this.draggedTab) {
-      delete this.draggedTab.__tabmixDragStart;
-      this.draggedTab.removeAttribute("dragged", true);
-      this.draggedTab = null;
+
+    if (TabmixTabbar.scrollButtonsMode === TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT) {
+      if (["scrollbutton-up", "scrollbutton-down"].includes(event.originalTarget.id)) {
+        return false;
+      }
     }
-    this.updateStatusField();
+
+    let tabBar = gBrowser.tabContainer;
+    let tabStrip = tabBar.arrowScrollbox;
+    let ltr = Tabmix.ltr || TabmixTabbar.visibleRows > 1;
+    let scrollDirection, targetAnonid;
+    if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_HIDDEN) // scroll with button
+      targetAnonid = event.originalTarget.getAttribute("anonid") || event.originalTarget.id;
+      // scroll without button
+    else if (event.screenX <= tabStrip.scrollbox.screenX)
+      targetAnonid = ltr ? "scrollbutton-up" : "scrollbutton-down";
+    else if (event.screenX >= (tabStrip.scrollbox.screenX + tabStrip.scrollClientRect.width))
+      targetAnonid = ltr ? "scrollbutton-down" : "scrollbutton-up";
+
+    switch (targetAnonid) {
+      case "scrollbutton-up":
+      case "scrollbutton-up-right":
+        scrollDirection = -1;
+        break;
+      case "scrollbutton-down":
+      case "scrollbutton-down-right":
+        scrollDirection = 1;
+        break;
+    }
+    if (scrollDirection) {
+      let scrollIncrement = TabmixTabbar.isMultiRow ?
+        Math.round(tabStrip._singleRowHeight / 8) : tabStrip.scrollIncrement;
+      tabStrip.scrollByPixels((ltr ? scrollDirection : -scrollDirection) * scrollIncrement, true);
+      event.preventDefault();
+      event.stopPropagation();
+      return true;
+    }
+    return false;
   },
 
-  updateStatusField() {
-    var statusTextFld = document.getElementById("statusbar-display");
-    if (statusTextFld && this.statusFieldChanged) {
-      statusTextFld.label = "";
-      this.gBackupLabel = "";
-      this.statusFieldChanged = null;
-    } else if (!statusTextFld) {
-      document.getElementById("tabmix-tooltip").hidePopup();
+  hideDragoverMessage() {
+    document.getElementById("tabmix-tooltip").hidePopup();
+  },
+
+  _getDropIndex(event, aLink, asObj) {
+    const tabBar = gBrowser.tabContainer;
+    if (!asObj && !this.useTabmixDnD(event)) {
+      return Tabmix.originalFunctions._getDropIndex.apply(tabBar, arguments);
     }
+    const params = this.eventParams(event);
+    return asObj ? params : params.newIndex;
+  },
+
+  eventParams(event) {
+    const tabBar = gBrowser.tabContainer;
+    const dt = event.dataTransfer;
+    const sourceNode = this.getSourceNode(dt);
+    const dragType = this.getDragType(sourceNode);
+    const tab = dragType != this.DRAG_LINK && sourceNode;
+    const oldIndex = tab ? tab._tPos : -1;
+    let newIndex = this._getDNDIndex(event);
+    const mouseIndex = newIndex;
+
+    if (newIndex < gBrowser.tabs.length) {
+      newIndex += this.getLeft_Right(event, newIndex, oldIndex, dragType);
+    } else {
+      newIndex =
+        dragType != this.DRAG_TAB_IN_SAME_WINDOW &&
+        Tabmix.getOpenTabNextPref(dragType == this.DRAG_LINK) ?
+          tabBar.selectedIndex + 1 : gBrowser.tabs.length;
+    }
+
+    return {
+      sourceNode,
+      dragType,
+      tab,
+      oldIndex,
+      newIndex,
+      mouseIndex,
+    };
   },
 
   // get _tPos from group index
@@ -793,17 +491,31 @@ var TMP_tabDNDObserver = {
           return i;
       }
     } else {
+      // adjust mouseY position when it is in the margin area
+      const tabStrip = gBrowser.tabContainer.arrowScrollbox;
+      const singleRowHeight = tabStrip.singleRowHeight;
+      const firstVisibleRow = Math.round(tabStrip.scrollPosition / singleRowHeight) + 1;
+      const {height} = tabStrip.getBoundingClientRect();
+      const top = tabStrip.screenY;
+      if (mY >= top + height - this._multirowMargin) {
+        mY = top + height - this._multirowMargin - 1;
+      } else if (mY <= top + this._multirowMargin) {
+        mY = top + this._multirowMargin + 1;
+      }
+      const currentRow = firstVisibleRow + parseInt((mY - top - this._multirowMargin) / singleRowHeight);
       let topY = Tabmix.tabsUtils.topTabY;
-      for (let i = 0; i < numTabs; i++) {
+      let index;
+      for (index = 0; index < numTabs; index++) {
+        if (getTabRowNumber(tabs[index], topY) === currentRow) {
+          break;
+        }
+      }
+
+      for (let i = index; i < numTabs; i++) {
         let tab = tabs[i];
-        let thisRow = getTabRowNumber(tab, topY);
-        const {height} = tab.getBoundingClientRect();
-        if (mY >= tab.screenY + height) {
-          while (i < numTabs - 1 && getTabRowNumber(tabs[i + 1], topY) == thisRow)
-            i++;
-        } else if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr)) {
+        if (Tabmix.compare(mX, Tabmix.itemEnd(tab, Tabmix.ltr), Tabmix.ltr)) {
           return i;
-        } else if (i == numTabs - 1 || getTabRowNumber(tabs[i + 1], topY) != thisRow) {
+        } else if (i == numTabs - 1 || getTabRowNumber(tabs[i + 1], topY) !== currentRow) {
           return i;
         }
       }
@@ -813,27 +525,17 @@ var TMP_tabDNDObserver = {
 
   getLeft_Right(event, newIndex, oldIndex, dragType) {
     var mX = event.screenX;
-    var left_right;
     var tab = gBrowser.tabs[newIndex];
     const {width} = tab.getBoundingClientRect();
-    var ltr = Tabmix.ltr;
-    var _left = ltr ? 0 : 1;
-    var _right = ltr ? 1 : 0;
-
-    var isCtrlKey = ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey);
-    var lockedTab = tab.getAttribute("locked") && !gBrowser.isBlankNotBusyTab(tab);
-    if ((dragType == this.DRAG_LINK && lockedTab) || (dragType == this.DRAG_LINK && !lockedTab && !isCtrlKey)) {
-      left_right = (mX < tab.screenX + width / 4) ? _left : _right;
-      if (left_right == _right && mX < tab.screenX + width * 3 / 4)
-        left_right = -1;
-    } else {
-      left_right = (mX < tab.screenX + width / 2) ? _left : _right;
-      if (!isCtrlKey && dragType == this.DRAG_TAB_IN_SAME_WINDOW) {
-        if (newIndex == oldIndex - 1)
-          left_right = ltr ? _left : _right;
-        else if (newIndex == oldIndex + 1)
-          left_right = ltr ? _right : _left;
-      }
+    const [_left, _right] = RTL_UI ? [1, 0] : [0, 1];
+    let left_right = (mX < tab.screenX + width / 2) ? _left : _right;
+    const isCopy = event.dataTransfer.dropEffect == "copy";
+    if (
+      !isCopy &&
+      dragType == this.DRAG_TAB_IN_SAME_WINDOW &&
+      newIndex == oldIndex + 1
+    ) {
+      left_right = 1;
     }
 
     return left_right;
@@ -856,82 +558,44 @@ var TMP_tabDNDObserver = {
     return this.DRAG_LINK; // 0
   },
 
-  setDragmark: function minit_setDragmark(index, left_right) {
-    var newIndex = index + left_right;
-    if (this.dragmarkindex && this.dragmarkindex.newIndex == newIndex &&
-        gBrowser.tabs[this.dragmarkindex.index].pinned == gBrowser.tabs[index].pinned)
-      return;
+  getDropIndicatorMarginY(ind, tabRect, rect) {
+    if (TabmixTabbar.visibleRows === 1) {
+      return 0;
+    }
 
-    this.clearDragmark();// clear old dragmark if one exist
-
-    // code for firefox indicator
-    var ind = gBrowser.tabContainer._tabDropIndicator;
-    var minMargin, maxMargin, newMargin;
-    var tabRect;
-    var ltr = Tabmix.ltr;
-    let scrollRect = gBrowser.tabContainer.arrowScrollbox.scrollClientRect;
-    let rect = gBrowser.tabContainer.getBoundingClientRect();
-    minMargin = scrollRect.left - rect.left - this.paddingLeft;
-    maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
-    if (!ltr)
-      [minMargin, maxMargin] = [gBrowser.clientWidth - maxMargin, gBrowser.clientWidth - minMargin];
-
-    tabRect = gBrowser.tabs[index].getBoundingClientRect();
-    if (ltr)
-      newMargin = tabRect.left - rect.left +
-          (left_right == 1 ? tabRect.width + this.LinuxMarginEnd : 0) -
-          this.paddingLeft;
-    else
-      newMargin = rect.right - tabRect.left -
-          (left_right === 0 ? tabRect.width + this.LinuxMarginEnd : 0) -
-          this.paddingLeft;
-
-    ///XXX fix min/max x margin when in one row the drag mark is visible after
-    ///XXX the arrow when the last tab is partly visible
-    ///XXX look like the same is happen with Firefox
-    var newMarginY;
+    let newMarginY;
     if (TabmixTabbar.position == 1) {
       newMarginY = tabRect.bottom - ind.parentNode.getBoundingClientRect().bottom;
     } else {
       newMarginY = tabRect.bottom - rect.bottom;
       // fix for some theme on Mac OS X
       if (TabmixTabbar.visibleRows > 1 &&
-            ind.parentNode.getBoundingClientRect().height === 0) {
+        ind.parentNode.getBoundingClientRect().height === 0) {
         newMarginY += tabRect.height;
       }
     }
-    // make indicator visible
-    ind.style.removeProperty("margin-bottom");
 
-    this.setFirefoxDropIndicator(true);
-    newMargin += ind.clientWidth / 2;
-    if (!ltr)
-      newMargin *= -1;
-
-    ind.style.MozTransform = "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";
-    ind.style.MozMarginStart = (-ind.clientWidth) + "px";
-
-    this.dragmarkindex = {newIndex, index};
+    return newMarginY;
   },
 
-  clearDragmark: function minit_clearDragmark() {
-    if (this.dragmarkindex === null)
-      return;
+  isFirstTabInRow(newIndex, mouseIndex, children) {
+    if (
+      TabmixTabbar.visibleRows === 1 ||
+      newIndex === 0 ||
+      newIndex === children.length ||
+      newIndex === mouseIndex
+    ) {
+      return false;
+    }
 
-    this.setFirefoxDropIndicator(false);
-    this.dragmarkindex = null;
+    const topY = Tabmix.tabsUtils.topTabY;
+    const rowA = Tabmix.tabsUtils.getTabRowNumber(children[mouseIndex], topY);
+    const rowB = Tabmix.tabsUtils.getTabRowNumber(children[newIndex], topY);
+    return rowA < rowB;
   },
 
-  setFirefoxDropIndicator(val) {
-    gBrowser.tabContainer._tabDropIndicator.hidden = !val;
-  },
-
-  removeDragmarkAttribute(tab) {
-    tab.removeAttribute("dragmark");
-  },
-
-  setDragmarkAttribute(tab, markSide) {
-    tab.setAttribute("dragmark", markSide);
+  clearDragmark() {
+    gBrowser.tabContainer._tabDropIndicator.hidden = true;
   },
 
   getSourceNode: function TMP_getSourceNode(aDataTransfer) {
@@ -940,40 +604,6 @@ var TMP_tabDNDObserver = {
       return aDataTransfer.mozGetDataAt(this.TAB_DROP_TYPE, 0);
     return null;
   },
-
-  isCopyDropEffect(dt, event, type) {
-    let isCopy = dt.dropEffect == "copy";
-    if (isCopy && type == this.DRAG_LINK) {
-      // Dragging bookmark or livemark from the Bookmarks toolbar, or dragging
-      // data from external source, always have 'copy' dropEffect
-      let isCtrlKey = ((event.ctrlKey || event.metaKey) && !event.shiftKey && !event.altKey);
-      let sourceNode = dt.effectAllowed == "copyLink" &&
-          dt.mozSourceNode ? dt.mozSourceNode : {};
-
-      // return true when user drag text from the urlbar
-      let isUrlbar = node => {
-        let result;
-        // when user drag text from the address bar to another tab
-        // node.parentNode is null after selected tab changed
-        // save _tabmix_isUrlbar on the first run of this function
-        if (typeof sourceNode._tabmix_isUrlbar == "boolean") {
-          return sourceNode._tabmix_isUrlbar;
-        }
-        while (!result && node.parentNode) {
-          node = node.parentNode;
-          result = node.classList.contains("urlbar-input");
-        }
-        if (typeof sourceNode._tabmix_isUrlbar == "undefined") {
-          sourceNode._tabmix_isUrlbar = result;
-        }
-        return result;
-      };
-      let move = !isCtrlKey && (!dt.mozSourceNode || sourceNode._placesNode || isUrlbar(sourceNode));
-      return !move;
-    }
-    return isCopy;
-  }
-
 }; // TMP_tabDNDObserver end
 
 var TMP_undocloseTabButtonObserver = {
@@ -987,15 +617,10 @@ var TMP_undocloseTabButtonObserver = {
 
     aEvent.preventDefault();
     var label = TabmixSvc.getString("droptoclose.label");
-    var statusTextFld = document.getElementById("statusbar-display");
-    if (statusTextFld)
-      statusTextFld.label = label;
-    else {
-      let tooltip = document.getElementById("tabmix-tooltip");
-      if (tooltip.state == "closed") {
-        tooltip.label = label;
-        tooltip.openPopup(aEvent.target, "before_start", -1, -1, false, false);
-      }
+    let tooltip = document.getElementById("tabmix-tooltip");
+    if (tooltip.state == "closed") {
+      tooltip.label = label;
+      tooltip.openPopup(aEvent.target, "before_start", -1, -1, false, false);
     }
 
     aEvent.target.setAttribute("dragover", "true");
@@ -1004,12 +629,7 @@ var TMP_undocloseTabButtonObserver = {
 
   onDragExit(aEvent) {
     if (aEvent.target.hasAttribute("dragover")) {
-      var statusTextFld = document.getElementById("statusbar-display");
-      if (statusTextFld)
-        statusTextFld.label = "";
-      else
-        document.getElementById("tabmix-tooltip").hidePopup();
-
+      document.getElementById("tabmix-tooltip").hidePopup();
       aEvent.target.removeAttribute("dragover");
     }
   },

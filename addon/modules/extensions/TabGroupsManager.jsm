@@ -25,7 +25,7 @@ this.TMP_TabGroupsManager = {
       'gReduceMotion', 'true'
     ).toCode();
 
-    this.changeCode(aWindow.TMP_tabDNDObserver, "TMP_tabDNDObserver.onDragExit")._replace(
+    this.changeCode(aWindow.TMP_tabDNDObserver, "TMP_tabDNDObserver.on_dragleave")._replace(
       'if (target)',
       'if (target && !(/^TabGroupsManager/.test(target.id)))'
     ).toCode();

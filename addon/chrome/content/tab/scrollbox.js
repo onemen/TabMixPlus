@@ -423,8 +423,8 @@ Tabmix.multiRow = {
     class TabmixRightScrollBox extends MozXULElement {
       static get inheritedAttributes() {
         return {
-          "anonid=\"scrollbutton-up-right\"": "orient,disabled=scrolledtostart",
-          "anonid=\"scrollbutton-down-right\"": "orient,disabled=scrolledtoend",
+          "#scrollbutton-up": "orient,disabled=scrolledtostart",
+          "#scrollbutton-down": "orient,disabled=scrolledtoend",
         };
       }
 
@@ -438,13 +438,27 @@ Tabmix.multiRow = {
         this._scrollButtonDown = this.shadowRoot.getElementById("scrollbutton-down");
 
         this.addEventListener("dragover", event => {
-          const tabBar = gBrowser.tabContainer;
-          if (tabBar.useTabmixDnD(event))
-            TMP_tabDNDObserver.onDragOver(event);
+          if (TMP_tabDNDObserver.useTabmixDnD(event)) {
+            TMP_tabDNDObserver._dragoverScrollButton(event);
+            const ind = gBrowser.tabContainer._tabDropIndicator;
+            const {left, right} = gBrowser.tabContainer.getBoundingClientRect();
+            let newMarginX = event.originalTarget === this._scrollButtonDown ? right - left - 6 : 0;
+            const newMarginY = event.originalTarget === this._scrollButtonUp ?
+              (TabmixTabbar.visibleRows - 1) * gBrowser.tabContainer.arrowScrollbox.singleRowHeight : 0;
+            ind.hidden = false;
+            newMarginX += ind.clientWidth / 2;
+            if (RTL_UI) {
+              newMarginX *= -1;
+            }
+            ind.style.transform = "translate(" + Math.round(newMarginX) + "px," + Math.round(-newMarginY) + "px)";
+          }
         });
 
         this.addEventListener("drop", event => {
+          event.preventDefault();
+          event.stopPropagation();
           this.finishScroll(event);
+          gBrowser.tabContainer.on_drop(event);
         });
 
         this.addEventListener("dragexit", event => {
@@ -501,14 +515,14 @@ Tabmix.multiRow = {
         tabstrip._scrollButtonUpRight = this._scrollButtonUp;
         tabstrip._scrollButtonUp = tabstrip.shadowRoot.getElementById("scrollbutton-up");
         tabstrip._scrollButtonDown = tabstrip.shadowRoot.getElementById("scrollbutton-down");
+        this.initializeAttributeInheritance();
       }
 
       // eslint-disable-next-line class-methods-use-this
       finishScroll(aEvent) {
-        const tabBar = gBrowser.tabContainer;
-        if (!tabBar.useTabmixDnD(aEvent))
+        if (!TMP_tabDNDObserver.useTabmixDnD(aEvent))
           return;
-        TMP_tabDNDObserver.clearDragmark();
+        gBrowser.tabContainer._tabDropIndicator.hidden = true;
         let index;
         const target = aEvent.originalTarget.getAttribute("anonid");
         if (target === "scrollbutton-up-right")

@@ -207,6 +207,13 @@ Tabmix.afterDelayedStartup = function() {
 
 var TMP_eventListener = {
   init: function TMP_EL_init() {
+    // before-initial-tab-adopted is fired before we are ready,
+    // we have to mkae sure our initialization finsihed before
+    // Firefox call gBrowser.swapBrowsersAndCloseOther
+    window.addEventListener("before-initial-tab-adopted", () => {
+      Tabmix.initialization.run("onWindowOpen");
+    }, {capture: true, once: true});
+
     window.addEventListener("load", this);
     window.addEventListener("SSWindowRestored", this);
     window.delayedStartupPromise.then(() => {
@@ -399,11 +406,6 @@ var TMP_eventListener = {
 
     if (TabmixSvc.isMac) {
       tabBar.setAttribute("Mac", "true");
-      // get Mac drop indicator marginBottom ,   Mac default theme have marginBottom: -24px
-      let ind = gBrowser.tabContainer._tabDropIndicator;
-      if (ind) {
-        TMP_tabDNDObserver.marginBottom = Tabmix.getStyle(ind, "marginBottom");
-      }
     }
 
     var tabsToolbar = document.getElementById("TabsToolbar");

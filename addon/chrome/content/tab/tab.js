@@ -399,13 +399,10 @@ Tabmix.tabsUtils = {
     return {collapsed, toolbar, tabBar, toolbarCollapsed, tabBarCollapsed};
   },
 
-  events: ["dblclick", "click", "dragstart", "drop", "dragend", "dragexit"],
+  events: ["dblclick", "click"],
 
   init() {
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, true, this);
-    // add dragover event handler to TabsToolbar to capture dragging over
-    // tabbar margin area, filter out events that are out of the tabbar
-    this.tabBar.parentNode.addEventListener("dragover", this, true);
 
     if (this.initialized) {
       Tabmix.log("initializeTabmixUI - some extension initialize tabbrowser-tabs binding again");
@@ -472,8 +469,6 @@ Tabmix.tabsUtils = {
     if (!this.initialized)
       return;
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, false, this);
-    if (this.tabBar.parentNode)
-      this.tabBar.parentNode.removeEventListener("dragover", this, true);
     this._tabmixPositionalTabs = null;
   },
 
@@ -499,36 +494,6 @@ Tabmix.tabsUtils = {
         break;
       case "click":
         TabmixTabClickOptions.onTabClick(aEvent);
-        break;
-      case "dragstart": {
-        let tabmixDragstart = this.tabBar.useTabmixDragstart(aEvent);
-        if (tabmixDragstart || TabmixTabbar.position == 1) {
-          TMP_tabDNDObserver.onDragStart(aEvent, tabmixDragstart);
-        }
-        break;
-      }
-      case "dragover": {
-        if (!this.tabBar.contains(aEvent.target)) {
-          return;
-        }
-        if (this.tabBar.useTabmixDnD(aEvent))
-          TMP_tabDNDObserver.onDragOver(aEvent);
-        break;
-      }
-      case "drop":
-        if (this.tabBar.useTabmixDnD(aEvent)) {
-          TMP_tabDNDObserver.onDrop(aEvent);
-        } else {
-          TMP_tabDNDObserver.drop(aEvent);
-        }
-        break;
-      case "dragend":
-        if (this.tabBar.attributes.orient.value == "horizontal")
-          TMP_tabDNDObserver.onDragEnd(aEvent);
-        break;
-      case "dragexit":
-        if (this.tabBar.useTabmixDnD(aEvent))
-          TMP_tabDNDObserver.onDragExit(aEvent);
         break;
     }
   },
@@ -1499,7 +1464,7 @@ gTMPprefObserver = {
         TabmixTabbar.updateSettings(false);
         break;
       case "extensions.tabmix.moveTabOnDragging":
-        gBrowser.tabContainer.moveTabOnDragging = Services.prefs.getBoolPref(prefName);
+        TMP_tabDNDObserver._moveTabOnDragging = prefValue;
         break;
       case "layout.css.devPixelsPerPx":
         setTimeout(() => this.setBgMiddleMargin(), 0);
@@ -1854,12 +1819,14 @@ gTMPprefObserver = {
           --tabmix-multirow-margin: ${blockMargin.margin};
         }`
       );
+      TMP_tabDNDObserver._multirowMargin = parseInt(blockMargin.margin);
     } else {
       this.insertRule(
         `:root {
           --tabmix-multirow-margin: ${protonPrefVal ? blockMargin.margin : "0px"};
         }`
       );
+      TMP_tabDNDObserver._multirowMargin = protonPrefVal ? parseInt(blockMargin.margin) : 0;
     }
 
     // Firefox adds padding for single row when positionpinnedtabs is set.
