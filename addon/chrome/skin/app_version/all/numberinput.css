@@ -21,7 +21,8 @@ input[type="number"] {
 input[type="number"]::-moz-number-spin-up,
 input[type="number"]::-moz-number-spin-down {
   min-height: 11px;
-  margin: 0 -2px 0 2px;
+  margin-block: 0;
+  margin-inline: 2px -2px;
 }
 
 input[type="number"]:invalid {

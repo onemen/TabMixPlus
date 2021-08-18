@@ -30,7 +30,8 @@ input:is([type="text"], [type="number"]) {
 input:is([type="text"], [type="number"]) {
   font-family: inherit;
   font-size: inherit;
-  padding: 2px 0 2px var(--input-padding-inline);
+  padding-block: 2px;
+  padding-inline: var(--input-padding-inline) 0;
   margin: 2px 4px;
 }
 
@@ -65,8 +66,15 @@ input[type="number"]::-moz-number-spin-box {
   border-end-end-radius: 4px;
   margin-inline-start: 2px !important;
   position: absolute;
-  right: 0;
   top: 0;
+}
+
+input[type="number"]:-moz-locale-dir(ltr)::-moz-number-spin-box {
+  right: 0;
+}
+
+input[type="number"]:-moz-locale-dir(rtl)::-moz-number-spin-box {
+  left: 0;
 }
 
 input[type="number"]::-moz-number-spin-up,
