@@ -49,8 +49,13 @@
 <!ENTITY focusContent.label "打开非空白页面时焦点集中到内容区域">
 <!ENTITY openTabNext.label "紧邻当前标签页打开新标签页">
 <!ENTITY openOtherTabNext.label "紧邻当前标签页打开其他标签页">
+<!ENTITY relatedAfterCurrent.label "仅当与当前标签页有关">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "紧邻原来页面打开复制的标签页">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "更改标签页打开次序">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "紧邻上次由当前页打开的页面（上次选中的标签页）处新建标签页">
 <!ENTITY moveSwitchToTabNext.label "“切换到标签页”时将标签页移动到旁边">
 <!ENTITY loadTabsProgressively.label "逐渐加载标签页">
 <!ENTITY restoreOnDemand.label "选中前不加载标签页">

@@ -55,7 +55,7 @@ var gEventsPane = {
 
     this.alignTabOpeningBoxes();
 
-    gPrefWindow.setDisabled("obs_openTabNext", $("pref_openTabNext").value);
+    this.openTabNext.on_change();
 
     gPrefWindow.initPane("paneEvents");
   },
@@ -195,6 +195,46 @@ var gEventsPane = {
       const disabled = $("pref_loadProgressively").value < 0 ||
                        $("pref_restoreOnDemand").value < 0;
       gPrefWindow.setDisabled("restoreOnDemand", disabled);
+    },
+  },
+
+  openTabNext: {
+    isChanging: false,
+    on_change(preference) {
+      if (this.isChanging) {
+        return;
+      }
+      this.isChanging = true;
+
+      const openTabNext = $("pref_openTabNext");
+      const relatedAfterCurrent = $("pref_relatedAfterCurrent");
+      const openTabNextCheckbox = $("openTabNext");
+
+      if (preference === openTabNext) {
+        // browser.tabs.insertAfterCurrent defult is false, in the case both pref
+        // is true turn off browser.tabs.insertRelatedAfterCurrent
+        if (openTabNext.value && relatedAfterCurrent.value) {
+          relatedAfterCurrent.value = false;
+        }
+      } else {
+        openTabNext.value =
+            relatedAfterCurrent.value ? false : openTabNextCheckbox.checked;
+      }
+
+      const checked = openTabNext.value || relatedAfterCurrent.value;
+      openTabNextCheckbox.checked = checked;
+      gPrefWindow.setDisabled("obs_openTabNext_control", !checked);
+
+      this.isChanging = false;
+    },
+
+    on_command(checked) {
+      if (checked) {
+        $("pref_openTabNext").value = true;
+      } else {
+        $("pref_openTabNext").value = false;
+        $("pref_relatedAfterCurrent").value = false;
+      }
     },
   },
 };

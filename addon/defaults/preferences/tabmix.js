@@ -40,7 +40,7 @@ pref("extensions.tabmix.selectLocationBar.afterLastTabClosed", true);
 pref("extensions.tabmix.openNewTabNext", false);
 // replaced with browser.tabs.insertAfterCurrent, see bug 1344749
 // pref("extensions.tabmix.openTabNext", false);
-// pref("extensions.tabmix.openTabNextInverse", true);
+pref("extensions.tabmix.openTabNextInverse", true);
 pref("extensions.tabmix.openDuplicateNext", true);
 pref("extensions.tabmix.moveSwitchToTabNext", false);
 pref("extensions.tabmix.focusTab", 2);

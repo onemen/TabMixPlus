@@ -49,8 +49,13 @@
 <!ENTITY focusContent.label "התמקד בתוכן בעת טעינת דף לא ריק">
 <!ENTITY openTabNext.label "פתח לשוניות חדשות ליד הלשוניות הנוכחיות">
 <!ENTITY openOtherTabNext.label "פתח לשוניות ליד לשונית זו">
+<!ENTITY relatedAfterCurrent.label "רק אם קשור ללשונית הזו">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "פתח לשוניות משוכפלות ליד המקוריות">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "שנה סדר פתיחה">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "פתח לשונית חדשה סמוך ללשונית האחרונה שנוצרה מתוך לשונית זו">
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">

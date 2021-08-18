@@ -49,8 +49,13 @@
 <!ENTITY focusContent.label "Boş olmayan bir sayfa yüklerken içeriğe odaklan">
 <!ENTITY openTabNext.label "Yeni sekmeleri geçerli olana bitişik aç">
 <!ENTITY openOtherTabNext.label "Diğer sekmeleri geçerli olanın bitişiğinde aç">
+<!ENTITY relatedAfterCurrent.label "Yalnızca mevcut sekmeyle ilişkili ise">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Çiftlenen sekmeleri orijinalin bitişiğinde aç">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Açılma sırasını değiştir">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Yeni sekmeyi, geçerli olanın son açtığı sekmenin bitişiğinde aç">
 <!ENTITY moveSwitchToTabNext.label "Sekmeyi 'Sekmeye geç'ten geçerli olanın yanına taşı">
 <!ENTITY loadTabsProgressively.label "Sekmeleri kademeli olarak yükle">
 <!ENTITY restoreOnDemand.label "Seçilene dek sekmeleri yükleme">

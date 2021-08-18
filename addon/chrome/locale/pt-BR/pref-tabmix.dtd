@@ -49,8 +49,13 @@
 <!ENTITY focusContent.label "Destacar conteúdo quando carregar a página não-branco">
 <!ENTITY openTabNext.label "Abrir novas abas ao lado da aba atual">
 <!ENTITY openOtherTabNext.label "Abrir outras abas próxima da atual">
+<!ENTITY relatedAfterCurrent.label "Apenas se relacionadas à aba atual">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Abrir abas duplicadas ao lado das iniciadoras">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Mudar ordem de abertura">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Abrir nova aba próxima da última aba aberta a partir da aba atual (desde que foi a última a ser selecionada)">
 <!ENTITY moveSwitchToTabNext.label "Mover a aba de 'Alternar para a aba' próximo ao atual">
 <!ENTITY loadTabsProgressively.label "Carregar abas progressivamente">
 <!ENTITY restoreOnDemand.label "Não carregue abas até que esteja selecionado.">

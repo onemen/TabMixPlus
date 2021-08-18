@@ -27,8 +27,10 @@
                   type="bool" inverted="true"/>
       <preference id="pref_openNewTabNext"      name="extensions.tabmix.openNewTabNext"       type="bool"/>
       <preference id="pref_openTabNext"         name="browser.tabs.insertAfterCurrent"        type="bool"
-                  onchange="gPrefWindow.setDisabled('obs_openTabNext', this.value);"/>
-      <preference id="pref_relatedAfterCurrent" name="browser.tabs.insertRelatedAfterCurrent" type="bool"/>
+                  onchange="gEventsPane.openTabNext.on_change(this)"/>
+      <preference id="pref_relatedAfterCurrent" name="browser.tabs.insertRelatedAfterCurrent" type="bool"
+                  onchange="gEventsPane.openTabNext.on_change(this)"/>
+      <preference id="pref_openTabNextInverse"  name="extensions.tabmix.openTabNextInverse"   type="bool"/>
       <preference id="pref_openDuplicateNext"   name="extensions.tabmix.openDuplicateNext"    type="bool"/>
       <preference id="pref_moveSwitchToTabNext" name="extensions.tabmix.moveSwitchToTabNext"  type="bool"/>
       <preference id="pref_loadProgressively"   name="extensions.tabmix.load_tabs_progressively"
@@ -157,10 +159,13 @@
           <html:fieldset flex="1">
             <!-- Open links next to current tab -->
             <checkbox_tmp id="openTabNext" label="&openOtherTabNext.label;"
-                      tooltiptext="&openTabNext.tooltip1;"
-                      preference="pref_openTabNext"/>
-            <checkbox_tmp _class="indent" id="relatedAfterCurrent" label="Open only related tab next to current one"
-                      preference="pref_relatedAfterCurrent" observes="obs_openTabNext"/>
+                      tooltiptext="&openTabNext.tooltip;"
+                      oncommand="gEventsPane.openTabNext.on_command(this.checked);"/>
+            <checkbox_tmp class="indent" id="relatedAfterCurrent" label="&relatedAfterCurrent.label;"
+                      preference="pref_relatedAfterCurrent" observes="obs_openTabNext_control"/>
+            <checkbox_tmp class="indent" id="openTabNextInverse" label="&openTabNextInverse.label;"
+                      preference="pref_openTabNextInverse"  observes="obs_openTabNext_control"
+                      tooltiptext="&openTabNextInverse.tooltip1; &openTabNextInverse.tooltip;"/>
             <separator class="groove"/>
             <checkbox_tmp id="openDuplicateNext" label="&openDuplicateNext.label;"
                       preference="pref_openDuplicateNext"/>
@@ -422,7 +427,7 @@
    </tabbox>
 
    <broadcasterset id="paneEvents:Broadcaster">
-      <broadcaster id="obs_openTabNext" inverseDependency="true"/>
+      <broadcaster id="obs_openTabNext_control"/>
       <broadcaster id="obs_mergePopups"/>
       <broadcaster id="obs_closeOnMerge"/>
       <broadcaster id="obs_ctrltab"/>

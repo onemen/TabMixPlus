@@ -49,8 +49,13 @@
 <!ENTITY focusContent.label "Focus content when loading non blank page">
 <!ENTITY openTabNext.label "Åbn nye faneblade ved siden af nuværende">
 <!ENTITY openOtherTabNext.label "Åbn andre faneblade ved siden af det nuværende">
+<!ENTITY relatedAfterCurrent.label "Kun hvis relateret til nuværende faneblad">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Åbn duplikerede faneblade ved siden af den originale">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Skift åbnings-sortering">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Åbn ny fane ved siden af det sidst åbnede faneblad fra nuværende (siden det sidst blev valgt)">
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">

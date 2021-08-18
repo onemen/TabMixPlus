@@ -49,8 +49,13 @@
 <!ENTITY focusContent.label "Εστίαση στο περιεχόμενο κατά την φόρτωση μη κενής σελίδας">
 <!ENTITY openTabNext.label "Άνοιγμα νέων καρτελών δίπλα στην τρέχουσα">
 <!ENTITY openOtherTabNext.label "Άνοιγμα άλλων καρτελών δίπλα στην τρέχουσα">
+<!ENTITY relatedAfterCurrent.label "Μόνο αν σχετίζονται με την τρέχουσα καρτέλα">
 <!ENTITY openTabNext.tooltip1 "[α][β][γ][1][2][3] -&gt; [α][1][2][3][β][γ]">
 <!ENTITY openDuplicateNext.label "Άνοιγμα αντιγράφων καρτελών δίπλα από τις πρωτότυπες">
+<!ENTITY openTabNext.tooltip "[α][β][γ][1][2][3] -&gt; [α][3][2][1][β][γ]">
+<!ENTITY openTabNextInverse.label "Αλλαγή σειράς ανοίγματος">
+<!ENTITY openTabNextInverse.tooltip "[α][3][2][1][β][γ] -&gt; [α][1][2][3][β][γ]">
+<!ENTITY openTabNextInverse.tooltip1 "Άνοιγμα νέας καρτέλας δίπλα από την τελευταία καρτέλα που ανοίχτηκε μέσα από την τρέχουσα (αφού ήταν η τελευταία επιλεγμένη)">
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">

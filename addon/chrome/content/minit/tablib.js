@@ -154,6 +154,11 @@ Tabmix.tablib = {
       return t;
     };
 
+    Tabmix.changeCode(gBrowser, "gBrowser._insertTabAtIndex")._replace(
+      /(?<!else )if \(openerTab\) \{/,
+      'if (openerTab && Tabmix.prefs.getBoolPref("openTabNextInverse")) {'
+    ).toCode();
+
     Tabmix.originalFunctions.gBrowser_removeTab = gBrowser.removeTab;
     gBrowser.removeTab = function(aTab, aParams = {}, ...args) {
       let result;

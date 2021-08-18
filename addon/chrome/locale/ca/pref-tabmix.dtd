@@ -49,8 +49,13 @@
 <!ENTITY focusContent.label "Enfoca el contingut en carregar una pàgina que no sigui en blanc">
 <!ENTITY openTabNext.label "Obre les pestanyes noves al costat de l'actual">
 <!ENTITY openOtherTabNext.label "Obre les altres pestanyes al costat de l'actual">
+<!ENTITY relatedAfterCurrent.label "Només si estan relacionades amb la pestanya actual">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Obre les pestanyes duplicades al costat de l'original">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Canvia l'ordre d'obertura">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Obre la pestanya nova al costat de l'última pestanya oberta des de la pestanya actual (des que s'ha seleccionat per darrera vegada)">
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">

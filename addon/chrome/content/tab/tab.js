@@ -1119,6 +1119,8 @@ gTMPprefObserver = {
     "browser.link.open_newwindow.restriction",
     "browser.link.open_newwindow",
     "browser.tabs.tabmanager.enabled",
+    "browser.tabs.insertAfterCurrent",
+    "browser.tabs.insertRelatedAfterCurrent",
   ],
 
   // removes the observer-object from service -- called when the window is no longer open
@@ -1474,6 +1476,20 @@ gTMPprefObserver = {
         break;
       case "browser.proton.enabled":
         Tabmix.tabsUtils.updateProtonValues();
+        break;
+      case "browser.tabs.insertAfterCurrent":
+        // browser.tabs.insertAfterCurrent defult is false, in the case both pref
+        // is true turn browser.tabs.insertRelatedAfterCurrent off
+        if (!Services.wm.getMostRecentWindow("mozilla:tabmixopt") &&
+            prefValue && Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")) {
+          Services.prefs.setBoolPref("browser.tabs.insertRelatedAfterCurrent", false);
+        }
+        break;
+      case "browser.tabs.insertRelatedAfterCurrent":
+        // if user manualy turn insertRelatedAfterCurrent on, turn insertAfterCurrent off
+        if (!Services.wm.getMostRecentWindow("mozilla:tabmixopt") && prefValue) {
+          Services.prefs.setBoolPref("browser.tabs.insertAfterCurrent", false);
+        }
         break;
       default:
         break;
@@ -2501,10 +2517,14 @@ gTMPprefObserver = {
     if (Tabmix.isVersion(890)) {
       migrateCtrlTab("browser.ctrlTab.recentlyUsedOrder");
     }
-    // 2021-08-08
+    // 2021-08-18
     if (Services.prefs.prefHasUserValue("extensions.tabmix.openTabNext")) {
-      Services.prefs.setBoolPref("browser.tabs.insertAfterCurrent",
-        Services.prefs.getBoolPref("extensions.tabmix.openTabNext"));
+      // insertAfterCurrent override insertRelatedAfterCurrent, set it only if
+      // tabmix.openTabNext was true and insertRelatedAfterCurrent was false
+      if (!Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")) {
+        Services.prefs.setBoolPref("browser.tabs.insertAfterCurrent",
+          Services.prefs.getBoolPref("extensions.tabmix.openTabNext"));
+      }
       Services.prefs.clearUserPref("extensions.tabmix.openTabNext");
     }
 

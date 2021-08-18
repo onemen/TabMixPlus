@@ -49,8 +49,13 @@
 <!ENTITY focusContent.label "Chuyển trỏ chuột tới nội dung khi tải trang trắng">
 <!ENTITY openTabNext.label "Mở thẻ mới kế bên thẻ hiện tại">
 <!ENTITY openOtherTabNext.label "Mở thẻ khác kế bên thẻ hiện tại">
+<!ENTITY relatedAfterCurrent.label "Chỉ khi có liên quan với thẻ hiện tại">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Mở thẻ bản sao kế bên thẻ gốc">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Thay đổi thứ tự mở">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Mở thẻ mới kế bên thẻ được mở cuối cùng từ thẻ hiện tại (kể từ lúc nó được chọn cuối cùng)">
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">

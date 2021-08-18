@@ -49,8 +49,13 @@
 <!ENTITY focusContent.label "Mitte-tühja lehe avamisel suuna fookus lehe sisule">
 <!ENTITY openTabNext.label "Ava uued kaardid praeguse kõrval">
 <!ENTITY openOtherTabNext.label "Ava teised kaardid praeguse kõrval">
+<!ENTITY relatedAfterCurrent.label "Ainult siis, kui need on seotud praeguse kaardiga">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Ava kopeeritud kaardid originaalide kõrval">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Muuda avanemise järjekorda">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Ava uus kaart praegusest kaardist viimati avatud kaardi kõrval (kuna seda valiti viimasena)">
 <!ENTITY moveSwitchToTabNext.label "Funktsiooni 'Vaheta kaarti' kasutamisel teisalda sihtkaart praeguse kõrvale">
 <!ENTITY loadTabsProgressively.label "Laadi kaardid järk-järgult">
 <!ENTITY restoreOnDemand.label "Ära laadi kaarte enne nende valimist">

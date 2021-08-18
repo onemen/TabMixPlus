@@ -49,8 +49,13 @@
 <!ENTITY focusContent.label "Focar conteúdo quando carregar uma página não vazia">
 <!ENTITY openTabNext.label "Abrir novos separadores a seguir ao actual">
 <!ENTITY openOtherTabNext.label "Abrir outros separadores a seguir ao actual">
+<!ENTITY relatedAfterCurrent.label "Apenas se relacionado com o separador actual">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Abrir separadores duplicados a seguir ao original">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Alterar ordem de abertura">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Abrir separador ao pé do último separador aberto (desde a última selecção)">
 <!ENTITY moveSwitchToTabNext.label "Move tab from 'Switch to tab' next to current one">
 <!ENTITY loadTabsProgressively.label "Load tabs progressively">
 <!ENTITY restoreOnDemand.label "Don't load tabs until selected">

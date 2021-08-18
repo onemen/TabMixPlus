@@ -49,8 +49,13 @@
 <!ENTITY focusContent.label "Strony z treścią uaktywniaj podczas wczytywania">
 <!ENTITY openTabNext.label "Otwieraj nowe karty za aktywną kartą">
 <!ENTITY openOtherTabNext.label "Otwieraj inne karty za aktywną kartą">
+<!ENTITY relatedAfterCurrent.label "Tylko jeśli są z nią powiązane">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "Umieszczaj powielone karty za ich oryginałami">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "Zmień kolejność otwierania">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "Otwieraj nową kartę za ostatnio otwartą kartą z aktywnej karty">
 <!ENTITY moveSwitchToTabNext.label "Umieszczaj przełączaną kartę za aktywną kartą">
 <!ENTITY loadTabsProgressively.label "Wczytuj karty sukcesywnie">
 <!ENTITY restoreOnDemand.label "Nie wczytuj kart przed wybraniem">

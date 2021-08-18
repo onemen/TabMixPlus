@@ -122,6 +122,9 @@ var TMP_tabDNDObserver = {
        }
        $&`
     )._replace(
+      'let newTab = gBrowser.duplicateTab(tab);',
+      'let newTab = Tabmix.duplicateTab(tab);'
+    )._replace(
       '} else if (draggedTab && draggedTab.container == this) {',
       `gBrowser.ensureTabIsVisible(draggedTabCopy);
         TabmixTabbar.updateBeforeAndAfter();

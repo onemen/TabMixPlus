@@ -49,8 +49,13 @@
 <!ENTITY focusContent.label "空白ページ以外を読み込むときはコンテンツにフォーカスする">
 <!ENTITY openTabNext.label "新しいタブを現在のタブの直後に開く">
 <!ENTITY openOtherTabNext.label "他のタブを現在のタブの直後に開く">
+<!ENTITY relatedAfterCurrent.label "現在のタブに関連する場合のみ">
 <!ENTITY openTabNext.tooltip1 "[a][b][c][1][2][3] -&gt; [a][1][2][3][b][c]">
 <!ENTITY openDuplicateNext.label "複製したタブを元のタブの直後に開く">
+<!ENTITY openTabNext.tooltip "[a][b][c][1][2][3] -&gt; [a][3][2][1][b][c]">
+<!ENTITY openTabNextInverse.label "タブを開く順番を変更する">
+<!ENTITY openTabNextInverse.tooltip "[a][3][2][1][b][c] -&gt; [a][1][2][3][b][c]">
+<!ENTITY openTabNextInverse.tooltip1 "新しいタブを現在のタブから最後に開いたタブの直後に開く(最後にフォーカスしたタブに続いて)">
 <!ENTITY moveSwitchToTabNext.label "現在のタブの直後に入れ替えて開く">
 <!ENTITY loadTabsProgressively.label "次の指定以上のタブを開くときは順番に読み込む">
 <!ENTITY restoreOnDemand.label "次の指定以上のタブを開くときは選択されるまで読み込まない">
