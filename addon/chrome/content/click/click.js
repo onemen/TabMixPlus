@@ -600,8 +600,15 @@ var TabmixContext = {
     let noTabsToClose = !unpinnedTabsCount || unpinnedTabsCount == 1 && !aTab.pinned;
     let cIndex = Tabmix.visibleTabs.indexOf(aTab);
 
+    // count unprotected tabs for closing
+    let selectedTabsCount = multiselectionContext ? ChromeUtils.nondeterministicGetWeakSetKeys(
+      gBrowser._multiSelectedTabsSet
+    ).filter(tab => tab.isConnected && !tab.closing && !tab.hasAttribute("protected")).length : 1;
+    let tabCountInfo = JSON.stringify({tabCount: selectedTabsCount});
+    Tabmix.setItem("context_closeTab", "data-l10n-args", tabCountInfo);
+
     var keepLastTab = tabsCount == 1 && Tabmix.prefs.getBoolPref("keepLastTab");
-    Tabmix.setItem("context_closeTab", "disabled", protectedTab || keepLastTab);
+    Tabmix.setItem("context_closeTab", "disabled", (multiselectionContext ? selectedTabsCount === 0 : protectedTab) || keepLastTab);
     Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || !unpinnedTabsCount);
     Tabmix.setItem("context_closeOtherTabs", "disabled", noTabsToClose);
     Tabmix.setItem("context_closeTabsToTheEnd", "disabled", cIndex == tabsCount - 1 || noTabsToClose);
@@ -615,6 +622,9 @@ var TabmixContext = {
     Tabmix.setItem("context_openTabInWindow", "disabled", tabsCount == 1);
     Tabmix.setItem("tm-mergeWindowsTab", "disabled", isOneWindow);
 
+    if (Tabmix.rtl) {
+      cIndex = tabsCount - 1 - cIndex;
+    }
     Tabmix.setItem("tm-reloadRight", "disabled", tabsCount == 1 || cIndex == tabsCount - 1);
     Tabmix.setItem("tm-reloadLeft", "disabled", tabsCount == 1 || cIndex === 0);
     Tabmix.setItem("tm-reloadOther", "disabled", tabsCount == 1);

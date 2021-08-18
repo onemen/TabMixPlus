@@ -1520,9 +1520,10 @@ Tabmix.tablib = {
       'tab._isProtected'
     ).toCode();
 
+    // Firefox remove selected pinned tabs
     Tabmix.changeCode(gBrowser, "gBrowser.removeMultiSelectedTabs")._replace(
       'let selectedTabs = this.selectedTabs',
-      '$&.filter(tab => !tab._isProtected)'
+      '$&.filter(tab => !tab._isProtected || tab.pinned)'
     ).toCode();
 
     Tabmix.changeCode(gBrowser, "gBrowser.warnAboutClosingTabs")._replace(
