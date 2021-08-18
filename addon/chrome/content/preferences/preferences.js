@@ -432,6 +432,7 @@ XPCOMUtils.defineLazyGetter(this, "gPreferenceList", () => {
     "browser.tabs.loadDivertedInBackground", "browser.tabs.loadInBackground",
     "browser.tabs.tabClipWidth", "browser.tabs.tabMaxWidth", "browser.tabs.tabMinWidth",
     "browser.tabs.warnOnClose", "browser.warnOnQuit",
+    "browser.tabs.warnOnCloseOtherTabs",
     "toolkit.scrollbox.clickToScroll.scrollDelay", "toolkit.scrollbox.smoothScroll"
   ];
 

@@ -74,7 +74,7 @@
                   type="bool" inverted="true"/>
       <preference id="pref_inverselinks"        name="extensions.tabmix.inversefocusLinks"    type="bool"/>
       <preference id="pref_inverseother"        name="extensions.tabmix.inversefocusOther"    type="bool"/>
-      <preference id="pref_warnOnClose"         name="extensions.tabmix.tabs.warnOnClose"     type="bool"/>
+      <preference id="pref_warnOnCloseTabs"     name="browser.tabs.warnOnCloseOtherTabs"      type="bool"/>
       <preference id="pref_warnOnCloseWindow"   name="browser.tabs.warnOnClose"               type="bool"/>
       <preference id="pref_warnOnCloseProtected"
                   name="extensions.tabmix.protectedtabs.warnOnClose"                          type="bool"/>
@@ -300,7 +300,7 @@
             <html:legend>&warning.caption.label;</html:legend>
             <vbox align="start">
               <!-- Warn when closing multiple tabs -->
-              <checkbox_tmp id="warnOnClose" label="&warnOnCloseMultipleTabs.label;" preference="pref_warnOnClose"/>
+              <checkbox_tmp id="warnOnCloseTabs" label="&warnOnCloseMultipleTabs.label;" preference="pref_warnOnCloseTabs"/>
               <!-- Warn when closing window with tabs -->
               <checkbox_tmp id="warnOnCloseWindow" label="&warnOnCloseWindow1.label;" preference="pref_warnOnCloseWindow"/>
               <!-- Warn when closing window with protected tabs -->

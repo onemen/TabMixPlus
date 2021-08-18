@@ -50,7 +50,11 @@ pref("extensions.tabmix.protectedtabs.warnOnClose", true);
     swap prefs --> warn when closing window "extensions.tabmix.windows.warnOnClose" replaced with "browser.tabs.warnOnClose"
                    warn when closing tabs "browser.tabs.warnOnClose" replaced with "extensions.tabmix.tabs.warnOnClose"
 */
+/*
+2021-08-17
+    replaced extensions.tabmix.tabs.warnOnClose with browser.tabs.warnOnCloseOtherTabs
 pref("extensions.tabmix.tabs.warnOnClose", true);
+*/
 /*
 2008-09-23
 we replace extensions.tabmix.keepWindow

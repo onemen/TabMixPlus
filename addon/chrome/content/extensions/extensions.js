@@ -319,9 +319,9 @@ var TMP_extensionsCompatibility = {
 
       FireGestures.closeMultipleTabs = function(aLeftRight) {
         if (aLeftRight == "left")
-          gBrowser._closeLeftTabs(gBrowser._selectedTab);
+          gBrowser.removeTabsToTheStartFrom(gBrowser._selectedTab);
         else
-          gBrowser._closeRightTabs(gBrowser._selectedTab);
+          gBrowser.removeTabsToTheEndFrom(gBrowser._selectedTab);
       };
     }
 

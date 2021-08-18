@@ -226,10 +226,10 @@ var TabmixTabClickOptions = {
         gBrowser.reloadAllTabsBut(aTab);
         break;
       case 17:
-        gBrowser._closeLeftTabs(aTab);
+        gBrowser.removeTabsToTheStartFrom(aTab);
         break;
       case 18:
-        gBrowser._closeRightTabs(aTab);
+        gBrowser.removeTabsToTheEndFrom(aTab);
         break;
       case 19:
         gBrowser._reloadLeftTabs(aTab);
@@ -384,6 +384,18 @@ var TabmixContext = {
     tabContextMenu.insertBefore($id("context_closeTab"), $id("tabmix_closeTab_separator"));
     tabContextMenu.insertBefore($id("context_bookmarkSelectedTabs"), $id("context_bookmarkAllTabs"));
     tabContextMenu.insertBefore($id("context_bookmarkTab"), $id("context_bookmarkAllTabs"));
+
+    if (!Tabmix.isVersion(880)) {
+      const closeTabsToTheStart = MozXULElement.parseXULToFragment(
+        `<menuitem id="context_closeTabsToTheStart"
+          label="&closeTabsToLeft.label;" accesskey="&closeleft.accesskey;"
+          oncommand="gBrowser.removeTabsToTheStartFrom(TabContextMenu.contextTab);"/>
+        `,
+        ["chrome://tabmixplus/locale/tabmix.dtd"]
+      );
+      const closeTabsToTheEnd = $id("context_closeTabsToTheEnd");
+      closeTabsToTheEnd.parentElement.insertBefore(closeTabsToTheStart, closeTabsToTheEnd);
+    }
 
     // we can't disable menus with command attribute
     $id("context_undoCloseTab").removeAttribute("command");
@@ -587,8 +599,6 @@ var TabmixContext = {
           .length;
     let noTabsToClose = !unpinnedTabsCount || unpinnedTabsCount == 1 && !aTab.pinned;
     let cIndex = Tabmix.visibleTabs.indexOf(aTab);
-    if (Tabmix.rtl)
-      cIndex = tabsCount - 1 - cIndex;
 
     var keepLastTab = tabsCount == 1 && Tabmix.prefs.getBoolPref("keepLastTab");
     Tabmix.setItem("context_closeTab", "disabled", protectedTab || keepLastTab);

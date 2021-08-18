@@ -2527,6 +2527,11 @@ gTMPprefObserver = {
       }
       Services.prefs.clearUserPref("extensions.tabmix.openTabNext");
     }
+    // 2021-08-17
+    if (Tabmix.prefs.prefHasUserValue("tabs.warnOnClose")) {
+      Services.prefs.setBoolPref("browser.tabs.warnOnCloseOtherTabs", Tabmix.prefs.getBoolPref("tabs.warnOnClose"));
+      Tabmix.prefs.clearUserPref("tabs.warnOnClose");
+    }
 
     let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {
       let oldVersion = TabmixSvc.prefs.get("extensions.tabmix.version", "");
