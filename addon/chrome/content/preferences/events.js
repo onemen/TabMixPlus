@@ -55,7 +55,7 @@ var gEventsPane = {
 
     this.alignTabOpeningBoxes();
 
-    this.openTabNext.on_change();
+    this.openTabNext.on_change($("pref_openTabNext"));
 
     gPrefWindow.initPane("paneEvents");
   },
