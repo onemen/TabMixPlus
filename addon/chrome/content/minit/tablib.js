@@ -1793,7 +1793,7 @@ Tabmix.tablib = {
     if (aUri != browser.currentURI.spec) {
       let tab = gBrowser._selectedTab;
       let isCopy = "dataTransfer" in aEvent ?
-        TMP_tabDNDObserver.isCopyDropEffect(aEvent.dataTransfer, aEvent, 0) :
+        aEvent.dataTransfer.dropEffect === "copy" :
         (aEvent.ctrlKey || aEvent.metaKey);
       if (!isCopy && tab.getAttribute("locked") &&
           !gBrowser.isBlankNotBusyTab(tab) &&
