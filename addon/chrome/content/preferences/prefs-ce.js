@@ -1088,9 +1088,16 @@ class PrefWindow extends MozXULElement {
 
     updateAttribute("dlgbuttons", "accept,cancel");
     updateAttribute("persist", "screenX screenY");
-    updateAttribute("closebuttonlabel", MozXULElement.parseXULToFragment(`<div attr="&uiTour.infoPanel.close;" />`, ["chrome://browser/locale/browser.dtd"]).childNodes[0].attributes[0].value);
-    updateAttribute("closebuttonaccesskey", "C");
     updateAttribute("role", "dialog");
+
+    // get close button label
+    MozXULElement.insertFTLIfNeeded("toolkit/printing/printPreview.ftl");
+    const closeButton = this.querySelector("button[dlgtype='cancel']");
+    document.l10n.setAttributes(closeButton, "printpreview-close");
+    document.l10n.translateElements([closeButton]).then(() => {
+      updateAttribute("closebuttonlabel", closeButton.getAttribute("label"));
+      updateAttribute("closebuttonaccesskey", closeButton.getAttribute("accesskey"));
+    });
 
     if (this.hasAttribute("ondialogaccept")) {
       const f = new Function("event", this.getAttribute("ondialogaccept"));
