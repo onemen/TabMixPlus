@@ -8,6 +8,9 @@ const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixS
 ChromeUtils.defineModuleGetter(this, "E10SUtils",
   "resource://gre/modules/E10SUtils.jsm");
 
+ChromeUtils.defineModuleGetter(this, "TabmixUtils",
+  "chrome://tabmix-resource/content/Utils.jsm");
+
 var _setItem = function() {};
 
 this.AutoReload = {
@@ -271,6 +274,15 @@ this.AutoReload = {
 
   reloadRemoteTab(browser, data) {
     var window = browser.ownerGlobal;
+
+    if (Services.appinfo.sessionHistoryInParent) {
+      const postData = TabmixUtils.getPostDataFromHistory(browser.browsingContext.sessionHistory);
+      data = {
+        ...data,
+        ...postData
+      };
+    }
+
     let tab = window.gBrowser.getTabForBrowser(browser);
     if (data.isPostData && !this.confirm(window, tab, false))
       return;

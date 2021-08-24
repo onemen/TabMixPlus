@@ -19,7 +19,9 @@ const {XPCOMUtils} = ChromeUtils.import(
 XPCOMUtils.defineLazyModuleGetters(this, {
   AutoReload: "chrome://tabmix-resource/content/AutoReload.jsm",
   DocShellCapabilities: "chrome://tabmix-resource/content/DocShellCapabilities.jsm",
+  E10SUtils: "resource://gre/modules/E10SUtils.jsm",
   MergeWindows: "chrome://tabmix-resource/content/MergeWindows.jsm",
+  NetUtil: "resource://gre/modules/NetUtil.jsm",
   Services: "resource://gre/modules/Services.jsm",
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.jsm",
 });
@@ -101,7 +103,22 @@ this.TabmixUtils = {
 
   // change current history title
   updateHistoryTitle(history, title) {
-    var shEntry = history.getEntryAtIndex(history.index, false).QueryInterface(Ci.nsISHEntry);
-    shEntry.setTitle(title);
-  }
+    const shEntry = history.getEntryAtIndex(history.index).QueryInterface(Ci.nsISHEntry);
+    shEntry.title = title;
+  },
+
+  getPostDataFromHistory(history) {
+    const json = {};
+    const shEntry = history.getEntryAtIndex(history.index).QueryInterface(Ci.nsISHEntry);
+    if (shEntry) {
+      let postData = shEntry.postData;
+      if (postData) {
+        postData = postData.clone();
+        json.postData = NetUtil.readInputStreamToString(postData, postData.available());
+        json.referrerInfo = E10SUtils.serializeReferrerInfo(shEntry.referrerInfo);
+      }
+      json.isPostData = Boolean(json.postData);
+    }
+    return json;
+  },
 };
