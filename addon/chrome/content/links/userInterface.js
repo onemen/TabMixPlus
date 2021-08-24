@@ -304,8 +304,9 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
     reloadData = reloadData.split(" ");
     aTab.autoReloadURI = reloadData[0];
     aTab.autoReloadTime = reloadData[1];
-    if (pending)
-      this.autoReload.onTabReloaded(aTab, aTab.linkedBrowser);
+    if (pending) {
+      this.autoReload.restorePendingTabs(aTab);
+    }
   }
 
   let boldChanged = {value: false};

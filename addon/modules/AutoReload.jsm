@@ -229,8 +229,7 @@ this.AutoReload = {
   },
 
   /**
-   *  called by TabmixProgressListener.listener and Tabmix.restoreTabState
-   *  for pending tabs
+   *  called by TabmixProgressListener.listener
    */
   onTabReloaded(aTab, aBrowser) {
     var win = aTab.ownerGlobal;
@@ -254,6 +253,38 @@ this.AutoReload = {
       aTab.autoReloadEnabled = false;
     }
     _setItem(aTab, "_reload", aTab.autoReloadEnabled || null);
+  },
+
+  /**
+   *  called by Tabmix.restoreTabState for pending tabs
+   */
+  restoringdTabs: new WeakSet(),
+  restorePendingTabs(tab) {
+    if (this.restoringdTabs.has(tab) || !tab.hasAttribute("pending")) {
+      return;
+    }
+
+    this.restoringdTabs.add(tab);
+    tab.addEventListener(
+      "SSTabRestored",
+      () => {
+        this.restoringdTabs.delete(tab);
+      },
+      {once: true}
+    );
+
+    if (tab.linkedPanel) {
+      TabmixSvc.SessionStore.restoreTabContent(tab);
+    } else {
+      tab.addEventListener(
+        "SSTabRestoring",
+        () => {
+          TabmixSvc.SessionStore.restoreTabContent(tab);
+        },
+        {once: true}
+      );
+      tab.ownerGlobal.gBrowser._insertBrowser(tab);
+    }
   },
 
   confirm(window, tab, isRemote) {
