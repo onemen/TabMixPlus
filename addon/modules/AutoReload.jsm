@@ -358,7 +358,54 @@ function _reloadTab(aTab) {
   doReloadTab(window, browser, data);
 }
 
+/**
+ * when tab have beforeunload prompt, check if user canceled the reload
+ */
+async function beforeReload(window, browser) {
+  const gBrowser = window.gBrowser;
+  let prompt;
+  if (TabmixSvc.version(830)) {
+    const {permitUnload} = await browser.asyncPermitUnload("dontUnload");
+    if (permitUnload) {
+      return;
+    }
+  } else {
+    const {permitUnload} = window.PermitUnloader.permitUnload(
+      browser.frameLoader,
+      browser.dontPromptAndDontUnload
+    );
+    if (permitUnload) {
+      return;
+    }
+    gBrowser.addEventListener("DOMWillOpenModalDialog", () => {
+      window.setTimeout(() => {
+        const promptBox = browser.tabModalPromptBox;
+        const prompts = promptBox.listPrompts();
+        if (prompts.length) {
+          // This code assumes that the beforeunload prompt
+          // is the top-most prompt on the tab.
+          prompt = prompts[prompts.length - 1];
+        }
+      }, 0);
+    }, {once: true});
+  }
+  gBrowser.addEventListener("DOMModalDialogClosed", event => {
+    const permitUnload =
+      event.target.nodeName != "browser" ||
+      (prompt ?
+        !prompt.args.inPermitUnload || prompt.args.ok :
+        !event.detail?.wasPermitUnload || event.detail.areLeaving);
+    if (!permitUnload) {
+      // User canceled the reload disable AutoReload for this tab
+      const tab = gBrowser.getTabForBrowser(browser);
+      AutoReload._disable(tab);
+    }
+  }, {once: true});
+}
+
 function doReloadTab(window, browser, data) {
+  beforeReload(window, browser);
+
   browser.__tabmixScrollPosition = {
     x: data.scrollX,
     y: data.scrollY
