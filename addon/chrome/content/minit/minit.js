@@ -163,7 +163,8 @@ var TMP_tabDNDObserver = {
         !!targetTab || Tabmix.ContentClick.isUrlForDownload(firstUrl);
       if (replace) {
         targetTab =
-          event.target.closest("tab.tabbrowser-tab") || this.allTabs[newIndex];
+          event.target.closest("tab.tabbrowser-tab") ||
+          this.allTabs[Math.min(newIndex, this.allTabs.length - 1)];
         // allow to load in locked tab
         targetTab.linkedBrowser.tabmix_allowLoad = true;
       } else {
