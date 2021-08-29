@@ -45,6 +45,10 @@
   --checkbox-checked-hover-bgcolor: var(--in-content-primary-button-background-hover);
   --checkbox-unchecked-bgcolor: var(--in-content-button-background);
   background-color: #ffffff;
+
+  /* for autoReload.xhtml */
+  --combined-element-border-radius: 4px;
+  --combined-element-outline: 1px solid var(--in-content-focus-outline-color);
 }
 
 html|a, .text-link {
@@ -59,6 +63,7 @@ menulist[disabled="true"] {
   color: GrayText;
 }
 
+.select-menupopup menuitem,
 menulist > menupopup menu,
 menulist > menupopup menuitem {
   appearance: none;
@@ -67,6 +72,7 @@ menulist > menupopup menuitem {
   padding-inline: 10px 20px;
 }
 
+.select-menupopup,
 menulist > menupopup {
   appearance: none;
   border: none;
@@ -78,32 +84,28 @@ menulist > menupopup {
   --panel-padding: 0;
 }
 
-menulist > menupopup menu,
-menulist > menupopup menuitem {
-  appearance: none;
-  font-size: 1em;
-  padding-block: 0.2em;
-  padding-inline: 10px 30px;
-}
-
+.select-menupopup > menuitem:not([disabled="true"])[_moz-menuactive="true"],
 menulist > menupopup > menu:not([disabled="true"])[_moz-menuactive="true"],
 menulist > menupopup > menuitem:not([disabled="true"])[_moz-menuactive="true"] {
   color: var(--in-content-item-hover-text);
   background-color: var(--in-content-item-hover);
 }
 
+.select-menupopup > menuitem:not([disabled="true"])[selected="true"],
 menulist > menupopup > menu:not([disabled="true"])[selected="true"],
 menulist > menupopup > menuitem:not([disabled="true"])[selected="true"] {
   color: var(--in-content-item-selected-text);
   background-color: var(--in-content-item-selected);
 }
 
+.select-menupopup > menuitem[disabled="true"],
 menulist > menupopup > menu[disabled="true"],
 menulist > menupopup > menuitem[disabled="true"] {
   color: #999;
   background-color: transparent;
 }
 
+.select-menupopup menuseparator,
 menulist > menupopup menuseparator {
   appearance: none;
   margin: 0;

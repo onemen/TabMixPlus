@@ -20,9 +20,6 @@ ChromeUtils.defineModuleGetter(this, "WebNavigationFrames",
 ChromeUtils.defineModuleGetter(this, "E10SUtils",
   "resource://gre/modules/E10SUtils.jsm");
 
-ChromeUtils.defineModuleGetter(this, "NetUtil",
-  "resource://gre/modules/NetUtil.jsm");
-
 ChromeUtils.defineModuleGetter(this, "ContentSvc",
   "chrome://tabmix-resource/content/ContentSvc.jsm");
 
@@ -96,7 +93,7 @@ var TabmixContentHandler = {
       }
       case "Tabmix:updateHistoryTitle": {
         let history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
-        TabmixUtils.updateHistoryTitle(history, data.title);
+        TabmixUtils.updateHistoryTitle(history.legacySHistory, data.title);
         break;
       }
       case "Tabmix:collectScrollPosition": {
@@ -112,23 +109,16 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:collectReloadData": {
+        let postData = {isPostData: false, postData: null};
+        if (!Services.appinfo.sessionHistoryInParent) {
+          const history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
+          postData = TabmixUtils.getPostDataFromHistory(history.legacySHistory);
+        }
         let json = {
           scrollX: content.scrollX,
           scrollY: content.scrollY,
-          postData: null
+          ...postData,
         };
-        const sessionHistoryEntry = docShell
-            .QueryInterface(Ci.nsIWebPageDescriptor)
-            .currentDescriptor.QueryInterface(Ci.nsISHEntry);
-        if (sessionHistoryEntry) {
-          let postData = sessionHistoryEntry.postData;
-          if (postData) {
-            postData = postData.clone();
-            json.postData = NetUtil.readInputStreamToString(postData, postData.available());
-            json.referrerInfo = E10SUtils.serializeReferrerInfo(sessionHistoryEntry.referrerInfo);
-          }
-          json.isPostData = Boolean(json.postData);
-        }
         sendAsyncMessage("Tabmix:reloadTab", json);
         break;
       }

@@ -8,6 +8,9 @@ const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixS
 ChromeUtils.defineModuleGetter(this, "E10SUtils",
   "resource://gre/modules/E10SUtils.jsm");
 
+ChromeUtils.defineModuleGetter(this, "TabmixUtils",
+  "chrome://tabmix-resource/content/Utils.jsm");
+
 var _setItem = function() {};
 
 this.AutoReload = {
@@ -226,8 +229,7 @@ this.AutoReload = {
   },
 
   /**
-   *  called by TabmixProgressListener.listener and Tabmix.restoreTabState
-   *  for pending tabs
+   *  called by TabmixProgressListener.listener
    */
   onTabReloaded(aTab, aBrowser) {
     var win = aTab.ownerGlobal;
@@ -253,6 +255,38 @@ this.AutoReload = {
     _setItem(aTab, "_reload", aTab.autoReloadEnabled || null);
   },
 
+  /**
+   *  called by Tabmix.restoreTabState for pending tabs
+   */
+  restoringdTabs: new WeakSet(),
+  restorePendingTabs(tab) {
+    if (this.restoringdTabs.has(tab) || !tab.hasAttribute("pending")) {
+      return;
+    }
+
+    this.restoringdTabs.add(tab);
+    tab.addEventListener(
+      "SSTabRestored",
+      () => {
+        this.restoringdTabs.delete(tab);
+      },
+      {once: true}
+    );
+
+    if (tab.linkedPanel) {
+      TabmixSvc.SessionStore.restoreTabContent(tab);
+    } else {
+      tab.addEventListener(
+        "SSTabRestoring",
+        () => {
+          TabmixSvc.SessionStore.restoreTabContent(tab);
+        },
+        {once: true}
+      );
+      tab.ownerGlobal.gBrowser._insertBrowser(tab);
+    }
+  },
+
   confirm(window, tab, isRemote) {
     if (tab.postDataAcceptedByUser)
       return true;
@@ -271,6 +305,15 @@ this.AutoReload = {
 
   reloadRemoteTab(browser, data) {
     var window = browser.ownerGlobal;
+
+    if (Services.appinfo.sessionHistoryInParent) {
+      const postData = TabmixUtils.getPostDataFromHistory(browser.browsingContext.sessionHistory);
+      data = {
+        ...data,
+        ...postData
+      };
+    }
+
     let tab = window.gBrowser.getTabForBrowser(browser);
     if (data.isPostData && !this.confirm(window, tab, false))
       return;
@@ -315,7 +358,54 @@ function _reloadTab(aTab) {
   doReloadTab(window, browser, data);
 }
 
+/**
+ * when tab have beforeunload prompt, check if user canceled the reload
+ */
+async function beforeReload(window, browser) {
+  const gBrowser = window.gBrowser;
+  let prompt;
+  if (TabmixSvc.version(830)) {
+    const {permitUnload} = await browser.asyncPermitUnload("dontUnload");
+    if (permitUnload) {
+      return;
+    }
+  } else {
+    const {permitUnload} = window.PermitUnloader.permitUnload(
+      browser.frameLoader,
+      browser.dontPromptAndDontUnload
+    );
+    if (permitUnload) {
+      return;
+    }
+    gBrowser.addEventListener("DOMWillOpenModalDialog", () => {
+      window.setTimeout(() => {
+        const promptBox = browser.tabModalPromptBox;
+        const prompts = promptBox.listPrompts();
+        if (prompts.length) {
+          // This code assumes that the beforeunload prompt
+          // is the top-most prompt on the tab.
+          prompt = prompts[prompts.length - 1];
+        }
+      }, 0);
+    }, {once: true});
+  }
+  gBrowser.addEventListener("DOMModalDialogClosed", event => {
+    const permitUnload =
+      event.target.nodeName != "browser" ||
+      (prompt ?
+        !prompt.args.inPermitUnload || prompt.args.ok :
+        !event.detail?.wasPermitUnload || event.detail.areLeaving);
+    if (!permitUnload) {
+      // User canceled the reload disable AutoReload for this tab
+      const tab = gBrowser.getTabForBrowser(browser);
+      AutoReload._disable(tab);
+    }
+  }, {once: true});
+}
+
 function doReloadTab(window, browser, data) {
+  beforeReload(window, browser);
+
   browser.__tabmixScrollPosition = {
     x: data.scrollX,
     y: data.scrollY

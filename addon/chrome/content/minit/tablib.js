@@ -899,7 +899,13 @@ Tabmix.tablib = {
         try {
           this.removeEventListener("SSTabRestored", updateNewHistoryTitle, true);
           let browser = this.linkedBrowser;
-          browser.messageManager.sendAsyncMessage("Tabmix:updateHistoryTitle", {title: this.label});
+          if (Services.appinfo.sessionHistoryInParent) {
+            const history = browser.browsingContext.sessionHistory;
+            const shEntry = history.getEntryAtIndex(history.index, false).QueryInterface(Ci.nsISHEntry);
+            shEntry.title = this.label;
+          } else {
+            browser.messageManager.sendAsyncMessage("Tabmix:updateHistoryTitle", {title: this.label});
+          }
         } catch (ex) {
           Tabmix.assert(ex);
         }
