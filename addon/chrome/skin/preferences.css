@@ -85,6 +85,7 @@ menulist {
   display: -moz-box; /* for Linux */
 }
 
+.dialog-button-box > button,
 .dialog-button {
   margin: 2px;
 }

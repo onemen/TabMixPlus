@@ -1,8 +1,10 @@
 /* global gNumberInput */
-/* exported load, accept, onInput */
+/* exported load, accept, onInput openPopup */
 "use strict";
 
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
+
 const gPref = Services.prefs;
 
 function load() {
@@ -17,6 +19,18 @@ function load() {
     if (outRange) e.target.oninput();// call default input logic
     return !e.target.validity.valid && !outRange;
   };
+
+  // Apply our styles to the shadow dom buttons
+  const linkElem = document.createElement("link");
+  linkElem.setAttribute("rel", "stylesheet");
+  linkElem.setAttribute("href", "chrome://tabmixplus/skin/preferences.css");
+  const dialog = document.getElementById("reloadevery_custom_dialog");
+  dialog.shadowRoot.appendChild(linkElem);
+
+  const iconUrl = TabmixSvc.version(910) ?
+    "url(chrome://global/skin/icons/arrow-down.svg)" :
+    "url(chrome://global/skin/icons/arrow-dropdown-16.svg)";
+  document.documentElement.style.setProperty("--select-button-background-image", iconUrl);
 }
 
 function accept() {
@@ -65,4 +79,13 @@ function onInput(item) {
     item.value = 59;
 
   disable_OK();
+}
+
+function openPopup(button) {
+  const popup = button.nextElementSibling;
+  if (popup.state !== "closed") {
+    popup.hidePopup();
+  } else {
+    popup.openPopup(button.parentNode.parentNode, "after_start", 0, -1);
+  }
 }

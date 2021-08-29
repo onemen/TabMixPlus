@@ -1,0 +1,74 @@
+@namespace html url("http://www.w3.org/1999/xhtml");
+
+html|fieldset {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 15px;
+  margin-bottom: 10px;
+  min-width: 235px;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.container > label {
+  margin-inline-end: 0;
+}
+
+.combined-element {
+  background-color: var(--in-content-box-background);
+  border: 1px solid var(--in-content-box-border-color);
+  border-radius: var(--combined-element-border-radius);
+}
+
+.combined-element:focus-within {
+  border-color: var(--in-content-focus-outline-color);
+  outline: var(--combined-element-outline);
+}
+
+.select-button {
+  background-color: var(--in-content-button-background);
+  background-image: var(--select-button-background-image);
+  background-repeat: no-repeat;
+  background-size: 8px;
+  background-position: right 3px center;
+  width: 14px;
+}
+
+.select-button:hover {
+  background-color: var(--in-content-button-background-hover);
+  color: var(--in-content-button-text-color-hover);
+  border-color: transparent;
+}
+
+.select-button:hover:active {
+  background-color: var(--in-content-button-background-active);
+}
+
+.select-menupopup {
+  padding-top: 1px;
+}
+
+.select-menupopup menuitem {
+  padding-inline: 10px 0;
+}
+
+input[type="number"] {
+  border: none;
+  border-start-end-radius: 0px;
+  border-end-end-radius: 0px;
+  margin: 0;
+}
+
+input[type="number"]:focus {
+  outline: none;
+}
+
+input[type="number"]::-moz-number-spin-box {
+  border-inline-end: 1px solid var(--in-content-box-border-color);
+  border-start-end-radius: 0px;
+  border-end-end-radius: 0px;
+}
