@@ -28,10 +28,10 @@
   --in-content-item-hover-text: rgb(21, 20, 26);
   --in-content-item-selected: var(--in-content-primary-button-background);
   --in-content-item-selected-text: var(--in-content-primary-button-text-color);
-  --in-content-link-color: #0060df;;
-  --in-content-link-color-hover: #003eaa;;
+  --in-content-link-color: #0060df;
+  --in-content-link-color-hover: #003eaa;
   --in-content-link-color-active: #002275;
-  --in-content-link-color-visited: #0060df;;
+  --in-content-link-color-visited: #0060df;
   --in-content-primary-button-background: #0061e0;
   --in-content-primary-button-background-hover: #0250bb;
   --in-content-primary-button-background-active: #053e94;
