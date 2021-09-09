@@ -145,7 +145,7 @@ var TabmixAddonManager = {
     this.initialized = true;
 
     AddonManager.addAddonListener(TabmixListener);
-    AddonManager.getAddonsByTypes(["extension"], addons => {
+    AddonManager.getAddonsByTypes(["extension"]).then(addons => {
       addons.forEach(addon => {
         if (addon.isActive) {
           TabmixListener.init(addon.id);

@@ -2570,14 +2570,14 @@ gTMPprefObserver = {
           if (showComment && (_loadOnNewTab || _replaceLastTabWith))
             defaultChanged = "&newtabpage";
           let b = Tabmix.getTopWin().gBrowser;
-          b.selectedTab = b.addTrustedTab("http://tabmixplus.org/version_update2.htm?version=" +
+          b.selectedTab = b.addTrustedTab("http://tabmixplus.org/version_update3.htm?version=" +
                                    currentVersion + defaultChanged);
           b.selectedTab.loadOnStartup = true;
         }, 1000);
         // noting more to do at the moment
       }
     };
-    AddonManager.getAddonByID("{dc572301-7619-498c-a57d-39143191b318}", aAddon => {
+    AddonManager.getAddonByID("{dc572301-7619-498c-a57d-39143191b318}").then(aAddon => {
       try {
         let shouldAutoUpdate = AddonManager.shouldAutoUpdate(aAddon);
         getVersion(aAddon.version, shouldAutoUpdate);

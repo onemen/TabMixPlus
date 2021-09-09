@@ -66,7 +66,7 @@ CompatibilityCheck.prototype = {
 
     var guid_list = this.getList();
     var self = this;
-    AddonManager.getAddonsByTypes(["extension"], aAddonsList => {
+    AddonManager.getAddonsByTypes(["extension"]).then(aAddonsList => {
       for (let i = 0; i < aAddonsList.length; i++) {
         let addon = aAddonsList[i];
         if (addon.id.toLowerCase() in guid_list) {
@@ -145,7 +145,7 @@ CompatibilityCheck.prototype = {
   doDisable: function TMP_EX_doDisable() {
     var list = this.list;
     list.forEach(aAddonToDisable => {
-      AddonManager.getAddonByID(aAddonToDisable.id, aAddon => {
+      AddonManager.getAddonByID(aAddonToDisable.id).then(aAddon => {
         aAddon.userDisabled = true;
       });
     });
