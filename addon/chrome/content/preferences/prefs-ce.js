@@ -1053,11 +1053,13 @@ class PrefWindow extends MozXULElement {
           <button dlgtype="help" class="dialog-button" hidden="true" icon="help"/>
           <button dlgtype="extra2" class="dialog-button" hidden="true"/>
           <button dlgtype="extra1" class="dialog-button" hidden="true"/>
+          <button class="donate-button" onclick="donate();"/>
           <spacer anonid="spacer" flex="1"/>
           <button dlgtype="cancel" class="dialog-button" icon="cancel"/>
           <button dlgtype="accept" class="dialog-button" icon="accept"/>`;
     return `
           <button dlgtype="extra2" class="dialog-button" hidden="true"/>
+          <button class="donate-button" onclick="donate();"/>
           <spacer anonid="spacer" flex="1"/>
           <button dlgtype="accept" class="dialog-button" icon="accept"/>
           <button dlgtype="extra1" class="dialog-button" hidden="true"/>

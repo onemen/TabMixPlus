@@ -1,5 +1,5 @@
 /* global PrefWindow */
-/* exported defaultSetting, exportData, importData, openHelp, setDialog,
+/* exported defaultSetting, donate, exportData, importData, openHelp, setDialog,
             showPane, toggleInstantApply, toggleSyncPreference */
 "use strict";
 
@@ -659,6 +659,14 @@ function openHelp(helpTopic) {
   }
   helpTopic = helpTopic.toLowerCase().replace("mouse_-_", "").replace(/_-_|_/g, "-");
   recentWindow.openTrustedLinkIn(helpPage + helpTopic, where);
+}
+
+function donate() {
+  const recentWindow = Tabmix.getTopWin();
+  const tabBrowser = recentWindow.gBrowser;
+  const url = "https://www.paypal.com/donate?hosted_button_id=W25388CZ3MNU8";
+  const where = tabBrowser.selectedTab.isEmpty ? "current" : "tab";
+  recentWindow.openTrustedLinkIn(url, where);
 }
 
 window.gIncompatiblePane = {
