@@ -47,7 +47,7 @@ The develpoer of these script/extension recomend using the first option:
 <br/>
 
 ## Browser Compatibility
-  * Firefox 78 - Firfox Nigthly
+  * Firefox 78 - Firefox Nigthly
   * Waterfox G3
 
 > For **Pale Moon** download **Tab Mix Plus** from [here](https://addons.palemoon.org/addon/tab-mix-plus/)
