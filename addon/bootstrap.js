@@ -104,7 +104,7 @@ function showRestartNotification(verb, window) {
 
 async function install(data) {
   const addon = await AddonManager.getAddonByID(data.id);
-  if (addon.__AddonInternal__) {
+  if (addon?.__AddonInternal__) {
     addon.__AddonInternal__.signedState = AddonManager.SIGNEDSTATE_NOT_REQUIRED;
   }
 }
@@ -113,7 +113,7 @@ function uninstall() { }
 
 function startup(data, reason) {
   AddonManager.getAddonByID(data.id).then(addon => {
-    if (addon.__AddonInternal__) {
+    if (addon?.__AddonInternal__) {
       addon.__AddonInternal__.signedState = AddonManager.SIGNEDSTATE_NOT_REQUIRED;
     }
   });
