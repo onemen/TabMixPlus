@@ -1354,7 +1354,7 @@ TabmixSessionManager = {
       default: return false;
     }
     if (numTabs > 0) return {win: numWindows, tab: numTabs};
-    let msg = TabmixSvc.getSMString("sm.sessoinSave.error");
+    let msg = TabmixSvc.getSMString("sm.sessionSave.error");
     let title = TabmixSvc.getSMString("sm.title");
     Services.prompt.alert(window, title, msg);
     return false;
@@ -1901,7 +1901,7 @@ TabmixSessionManager = {
           menu = document.createElement("menuseparator");
           popup.insertBefore(menu, popup.lastChild);
         }
-        if (contents == 1) loadsession = -1; // set "Last Sessoin" as default in the list
+        if (contents == 1) loadsession = -1; // set "Last Session" as default in the list
         this.setDefaultIndex(popup, loadsession, sessionpath);
         break;
       case "onStart.loadsession":

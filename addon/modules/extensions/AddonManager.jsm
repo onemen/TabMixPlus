@@ -43,13 +43,13 @@ var GoogleNoTrackingUrl = {
   onEnabled() {
     const pref = "extensions." + this.id + "aggresiveGoogleImagesCleanup";
     TabmixSvc.isFixedGoogleUrl = function(url) {
-      const aggresiveWithImageUrls = TabmixSvc.prefs.get(pref, false);
+      const aggressiveWithImageUrls = TabmixSvc.prefs.get(pref, false);
       const isSearchResult = GOOGLE_REGEXP.test(url);
       const isImageSearchResult = GOOGLE_IMGRES_REGEXP.test(url);
       const isGooglePlusRedirect = GOOGLE_PLUS_REGEXP.test(url);
 
       return isSearchResult || isGooglePlusRedirect ||
-        isImageSearchResult && aggresiveWithImageUrls;
+        isImageSearchResult && aggressiveWithImageUrls;
     };
   },
   onDisabled() {

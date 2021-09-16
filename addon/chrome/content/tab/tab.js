@@ -702,7 +702,7 @@ Tabmix.tabsUtils = {
       return val;
     }
 
-    // we may get here after tabBar ovefflow/underflow already finished
+    // we may get here after tabBar overflow/underflow already finished
     if (val != this.overflow ||
         val != document.getElementById("tabmix-scrollbox").hasAttribute("overflowing")) {
       let tabBar = this.tabBar;
@@ -710,7 +710,7 @@ Tabmix.tabsUtils = {
       Tabmix.setItem("tabmix-scrollbox", "overflowing", val || null);
       this.showNewTabButtonOnSide(val, "right-side");
 
-      // arrowScrollbox and tabbrowser-tabs overflow/underflow listners skip vertical event
+      // arrowScrollbox and tabbrowser-tabs overflow/underflow listeners skip vertical event
       // when event.detail is 0
 
       // update arrowScrollbox
@@ -1486,7 +1486,7 @@ gTMPprefObserver = {
         }
         break;
       case "browser.tabs.insertRelatedAfterCurrent":
-        // if user manualy turn insertRelatedAfterCurrent on, turn insertAfterCurrent off
+        // if user manually turn insertRelatedAfterCurrent on, turn insertAfterCurrent off
         if (!Services.wm.getMostRecentWindow("mozilla:tabmixopt") && prefValue) {
           Services.prefs.setBoolPref("browser.tabs.insertAfterCurrent", false);
         }
@@ -1515,7 +1515,7 @@ gTMPprefObserver = {
 
   _tabStyleSheet: null,
   get tabStyleSheet() {
-    // cna't find where our file is try to use: chrome://browser/content/tabbrowser.css
+    // can't find where our file is try to use: chrome://browser/content/tabbrowser.css
     var href = "chrome://tabmixplus/skin/tab.css";
     // find tab.css to insert our dynamic rules into it.
     // insert our rules into document.styleSheets[0] cause problem with other extensions
@@ -1820,7 +1820,7 @@ gTMPprefObserver = {
 
     const blockMargin = Tabmix.tabsUtils.protonValues;
     if (Tabmix.isVersion(890)) {
-      /* overwrite rull from chrome/browser/skin/classic/browser/browser.css */
+      /* overwrite rule from chrome/browser/skin/classic/browser/browser.css */
       insertRule(
         `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox >
         .tabbrowser-tab:not(:hover) > .tab-stack > .tab-content > .tab-close-button {
@@ -1860,19 +1860,19 @@ gTMPprefObserver = {
     if (Tabmix.isVersion(910)) {
       this.insertRule(
         `:root {
-          --tabmix-button-magin-top: 3.5px;
-          --tabmix-button-magin-top-compact: 3.5px;
-          --tabmix-button-magin-top-proton: 3.5px;
-          --tabmix-button-magin-top-proton-compact: 3.5px;
+          --tabmix-button-margin-top: 3.5px;
+          --tabmix-button-margin-top-compact: 3.5px;
+          --tabmix-button-margin-top-proton: 3.5px;
+          --tabmix-button-margin-top-proton-compact: 3.5px;
         }`
       );
     } else if (Tabmix.isVersion(890)) {
       this.insertRule(
         `:root {
-          --tabmix-button-magin-top: 2px;
-          --tabmix-button-magin-top-compact: 0;
-          --tabmix-button-magin-top-proton: 3.5px;
-          --tabmix-button-magin-top-proton-compact: 3.5px;
+          --tabmix-button-margin-top: 2px;
+          --tabmix-button-margin-top-compact: 0;
+          --tabmix-button-margin-top-proton: 3.5px;
+          --tabmix-button-margin-top-proton-compact: 3.5px;
         }`
       );
     } else {

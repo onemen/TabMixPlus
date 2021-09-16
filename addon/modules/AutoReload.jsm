@@ -258,17 +258,17 @@ this.AutoReload = {
   /**
    *  called by Tabmix.restoreTabState for pending tabs
    */
-  restoringdTabs: new WeakSet(),
+  restoringTabs: new WeakSet(),
   restorePendingTabs(tab) {
-    if (this.restoringdTabs.has(tab) || !tab.hasAttribute("pending")) {
+    if (this.restoringTabs.has(tab) || !tab.hasAttribute("pending")) {
       return;
     }
 
-    this.restoringdTabs.add(tab);
+    this.restoringTabs.add(tab);
     tab.addEventListener(
       "SSTabRestored",
       () => {
-        this.restoringdTabs.delete(tab);
+        this.restoringTabs.delete(tab);
       },
       {once: true}
     );

@@ -108,7 +108,7 @@ function removeOnceListener(oncer) {
 //	(optional) aType - type of windows to execute aCallback on, defaults to null (all)
 //	(optional) aURI - (string) when defined, checks the documentURI property against the aURI value and only executes aCallback when true, defaults to null
 // callOnAll(aCallback, aType, aURI, beforeComplete) - goes through every opened browser window of aType and executes aCallback on it
-//	(optional) beforeComplete - true calls aCallback immediatelly regardless of readyState, false fires aCallback when window loads if readyState != complete, defaults to false.
+//	(optional) beforeComplete - true calls aCallback immediately regardless of readyState, false fires aCallback when window loads if readyState != complete, defaults to false.
 //	see callOnMostRecent()
 // register(aHandler, aTopic, aType, aURI, beforeComplete) - registers aHandler to be notified of every aTopic
 //	aHandler - (function(aWindow)) handler to be fired. Or (nsiObserver object) with observe() method which will be passed aWindow and aTopic as its only two arguments.
@@ -117,7 +117,7 @@ function removeOnceListener(oncer) {
 //					Note that regardless of this value, if you set aType, no callback will be performed before the window is loaded because the windowtype attribute
 //					won't be loaded yet! In some cases even the URI might not be loaded either so there's no point in setting this at all.
 //	see callOnMostRecent() and callOnAll()
-// unregister(aHandler, aTopic, aType, aURI, beforeComplete) - unregisters aHandler from being notified of every aTopic
+// unregister(aHandler, aTopic, aType, aURI, beforeComplete) - unregister aHandler from being notified of every aTopic
 //	see register()
 // watching(aHandler, aTopic, aType, aURI, beforeComplete) - 	returns (int) with corresponding watcher index in watchers[] if aHandler has been registered for aTopic
 //								returns (bool) false otherwise

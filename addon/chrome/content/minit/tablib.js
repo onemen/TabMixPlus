@@ -689,7 +689,7 @@ Tabmix.tablib = {
     };
 
     /**
-     * only apply for sessionMnager
+     * only apply for sessionManager
     Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
       /gBrowser\.warnAboutClosingTabs\(\n?\s*closingTabs,\n?\s* gBrowser\.closingTabsEnum\.ALL,?\n?\s*(source)?\n?\s*\)/g,
       'Tabmix.tablib.closeWindow(true)'
@@ -1715,7 +1715,7 @@ Tabmix.tablib = {
   },
 
   /**
-  * only apply for sessionMnager
+  * only apply for sessionManager
   closeWindow: function TMP_closeWindow(aCountOnlyBrowserWindows) {
     // we use this flag in WindowIsClosing
     Tabmix._warnedBeforeClosing = true;

@@ -412,10 +412,10 @@ Tabmix.multiRow = {
     }
 
     // inject our code into arrowScrollbox
-    const tabmixAarrowScrollbox = Object.getOwnPropertyDescriptors(TabmixArrowScrollbox.prototype);
-    delete tabmixAarrowScrollbox.constructor;
+    const tabmixArrowScrollbox = Object.getOwnPropertyDescriptors(TabmixArrowScrollbox.prototype);
+    delete tabmixArrowScrollbox.constructor;
     const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
-    Object.defineProperties(arrowScrollbox, tabmixAarrowScrollbox);
+    Object.defineProperties(arrowScrollbox, tabmixArrowScrollbox);
     arrowScrollbox.connectTabmix();
   },
 

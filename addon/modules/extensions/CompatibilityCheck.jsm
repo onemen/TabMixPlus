@@ -214,7 +214,7 @@ CompatibilityCheck.prototype = {
       '{9b9d2aaa-ae26-4447-a7a1-633a32b19ddd}': true, //   Tabbrowser Preferences
       'tabdrag': true, //   tabdrag-for-tablib
       'tabfx@chaosware.net': true, //   TabFX
-      'tabsopenrelative@jomel.me.uk': true, //   Tabs open ralative
+      'tabsopenrelative@jomel.me.uk': true, //   Tabs open relative
       'tablib': true, //   tablib
       '{328bbe91-cb86-40b0-a3fd-2b39969f9faa}': true, //   Undo Close Tab
       'undoclosetab@dorando': true, //   Undo Close Tab

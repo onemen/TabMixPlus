@@ -142,21 +142,21 @@
 
 @media not (-moz-proton) {
 :root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
-  margin-top: var(--tabmix-button-magin-top) !important;
+  margin-top: var(--tabmix-button-margin-top) !important;
 }
 
 :root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
-  margin-top: var(--tabmix-button-magin-top-compact) !important;
+  margin-top: var(--tabmix-button-margin-top-compact) !important;
 }
 }
 
 @media (-moz-proton) {
 :root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
-  margin-top: var(--tabmix-button-magin-top-proton) !important;
+  margin-top: var(--tabmix-button-margin-top-proton) !important;
 }
 
 :root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
-  margin-top: var(--tabmix-button-magin-top-proton-compact) !important;
+  margin-top: var(--tabmix-button-margin-top-proton-compact) !important;
 }
 }
 

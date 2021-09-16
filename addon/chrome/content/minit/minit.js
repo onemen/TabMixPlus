@@ -53,7 +53,7 @@ var TMP_tabDNDObserver = {
        draggedTab._dragData.shiftWidth = shiftWidth;
        let rightTabWidth = movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
        let leftTabWidth = movingTabs[0].getBoundingClientRect().width;
-       let referenceTabWidht = ltrMove ? rightTabWidth : leftTabWidth;`
+       let referenceTabWidth = ltrMove ? rightTabWidth : leftTabWidth;`
     )._replace(
       '(rightMovingTabScreenX + tabWidth)',
       '(rightMovingTabScreenX + rightTabWidth)'
@@ -66,12 +66,12 @@ var TMP_tabDNDObserver = {
     )._replace(
       'if (screenX > tabCenter) {',
       `let midWidth = tabs[mid].getBoundingClientRect().width;
-        if (tabmixHandleMove && referenceTabWidht > midWidth) {
+        if (tabmixHandleMove && referenceTabWidth > midWidth) {
           screenX += midWidth / 2;
-          if (screenX > tabCenter + referenceTabWidht / 2) {
+          if (screenX > tabCenter + referenceTabWidth / 2) {
             high = mid - 1;
           } else if (
-            screenX < tabCenter - referenceTabWidht / 2
+            screenX < tabCenter - referenceTabWidth / 2
           ) {
             low = mid + 1;
           } else {
@@ -265,7 +265,7 @@ var TMP_tabDNDObserver = {
         .catch(e => Cu.reportError(e));
   },
 
-  // we call this frunction from gBrowser.tabContainer.on_dragover
+  // we call this function from gBrowser.tabContainer.on_dragover
   handleDragover(event) {
     if (this._dragoverScrollButton(event)) {
       return true;
@@ -304,7 +304,7 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    // disAllowDrop drop when user drag link over tabbrowser-tabs multi-row margeing
+    // disAllowDrop drop when user drag link over tabbrowser-tabs multi-row margin
     if (effects == "link" && !targetTab && !disAllowDrop && TabmixTabbar.visibleRows > 1) {
       const {top, bottom} = tabBar.arrowScrollbox.getBoundingClientRect();
       if (event.clientY < top + this._multirowMargin || event.clientY > bottom - this._multirowMargin) {

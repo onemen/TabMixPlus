@@ -202,7 +202,7 @@ class ChromeManifest {
    * Parse the component instruction, to load xpcom components
    *
    * @param {String} classid        The xpcom class id to load
-   * @param {String} loction        The file location of this component
+   * @param {String} location       The file location of this component
    * @param {...String} flags       The flags for this instruction
    */
   _parseComponent(classid, location, ...flags) {
@@ -278,7 +278,7 @@ class ChromeManifest {
   }
 
   /**
-   * Parse the resource instruction, to set up resource uri subtitutions
+   * Parse the resource instruction, to set up resource uri substitutions
    *
    * @param {String} packagename    The resource package name, e.g. resource://packagename/
    * @param {String} url            The location for this content registration

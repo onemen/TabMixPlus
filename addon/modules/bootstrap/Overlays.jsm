@@ -781,8 +781,8 @@ class Overlays {
 
     if (!(data.type in WT)) data.type = 'custom';
     else {
-      // here we should have code to handle the <toolbarbutton> in overlay that use widget types making widge out of them
-      // by convert 'on*' attributeis to function.
+      // here we should have code to handle the <toolbarbutton> in overlay that use widget types making widget out of them
+      // by convert 'on*' attributes to function.
       for (const key of Object.keys(data).filter(t => t.startsWith('on'))) {
         const f = new Function("args", data[key]);
         data[key] = f;

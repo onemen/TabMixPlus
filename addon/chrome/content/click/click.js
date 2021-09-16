@@ -91,7 +91,7 @@ var TabmixTabClickOptions = {
         middleMul = middleAndModifier === '33,34' || middleAndModifier === '34,33';
       }
       if (press2Key || middleMul) {
-        this._tabRangeSelecte(tab, true);
+        this._tabRangeSelected(tab, true);
         aEvent.stopPropagation();
         aEvent.preventDefault();
         return;
@@ -307,10 +307,10 @@ var TabmixTabClickOptions = {
         gBrowser.previousTab(gBrowser.selectedTab);
         break;
       case 33:
-        this._tabMultiSelecte(aTab);
+        this._tabMultiSelected(aTab);
         break;
       case 34:
-        this._tabRangeSelecte(aTab, false);
+        this._tabRangeSelected(aTab, false);
         break;
       default:
         return false;
@@ -319,7 +319,7 @@ var TabmixTabClickOptions = {
   },
 
   // taken from MozTabbrowserTab.prototype.on_mousedown()
-  _tabMultiSelecte(aTab) {
+  _tabMultiSelected(aTab) {
     if (aTab.multiselected) {
       gBrowser.removeFromMultiSelectedTabs(aTab, {isLastMultiSelectChange: true});
     } else if (aTab != gBrowser.selectedTab) {
@@ -328,7 +328,7 @@ var TabmixTabClickOptions = {
     }
   },
 
-  _tabRangeSelecte(aTab, cumul) {
+  _tabRangeSelected(aTab, cumul) {
     const lastSelectedTab = gBrowser.lastMultiSelectedTab;
     if (!cumul) gBrowser.clearMultiSelectedTabs({isLastMultiSelectChange: false});
     gBrowser.addRangeToMultiSelectedTabs(lastSelectedTab, aTab);

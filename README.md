@@ -24,14 +24,14 @@
 ## Installation
 1. **_Legacy_ extensions loader**<br/>
 Since Firefox removed the internal component that loads _legacy_ extension, in order to install **Tab Mix Plus**, or any other _legacy_ extension, you have to install 3rd party helper script/extension.<br/>
-The develpoer of these script/extension recomend using the first option:
+The developer of these script/extension recommend using the first option:
      * If you're using normal Firefox (aka "stable" or "release"), Beta or ESR, you need to install this script [userChromeJS](https://github.com/xiaoxiaoflood/firefox-scripts#instructions). 
      * [bootstrapLoader.xpi](https://github.com/xiaoxiaoflood/firefox-scripts/tree/master/extensions/bootstrapLoader) extension  is an option for those who use [Firefox Developer Edition](https://www.mozilla.org/firefox/developer/) or [Firefox Nightly](https://www.mozilla.org/firefox/channel/desktop/#nightly).
 
 <br/>
 
-2. **Donwload XPI**<br/>
-    Donwload xpi file from our [releases](https://github.com/onemen/TabMixPlus/releases) page to your local computer.
+2. **Download XPI**<br/>
+    Download xpi file from our [releases](https://github.com/onemen/TabMixPlus/releases) page to your local computer.
     >If you are using Firefox Beta, Developer Edition or Nightly we recommend using the latest **Tab Mix Plus** _development build_ (tags with **pre** in the title)
 
 <br/>
@@ -47,7 +47,7 @@ The develpoer of these script/extension recomend using the first option:
 <br/>
 
 ## Browser Compatibility
-  * Firefox 78 - Firfox Nigthly
+  * Firefox 78 - Firefox Nightly
   * Waterfox G3
 
 > For **Pale Moon** download **Tab Mix Plus** from [here](https://addons.palemoon.org/addon/tab-mix-plus/)
