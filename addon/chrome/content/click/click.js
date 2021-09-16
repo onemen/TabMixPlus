@@ -936,11 +936,22 @@ Tabmix.allTabs = {
   showAllTabsPanel(event) {
     gTabsPanel.init();
     this.insertSortButton();
-    PanelUI.showSubView(
-      gTabsPanel.kElements.allTabsView,
-      event.target,
-      event
-    );
+
+    let anchor = event.target;
+    if (
+      !Tabmix.isVersion(860) &&
+      anchor.parentNode.parentNode.id === "widget-overflow-fixed-list"
+    ) {
+      anchor = document.getElementById("nav-bar-overflow-button");
+    }
+
+    setTimeout(() => {
+      PanelUI.showSubView(
+        gTabsPanel.kElements.allTabsView,
+        anchor,
+        event
+      );
+    }, 0);
   },
 };
 
