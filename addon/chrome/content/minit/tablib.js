@@ -1476,12 +1476,13 @@ Tabmix.tablib = {
         return Tabmix.getString(convert(name));
       }
 
+      const msgNum = num => (Tabmix.isVersion(940) ? num + 1 : num);
       let warningTitle, message, chkBoxLabel;
       if (shouldPrompt === 1 || numProtected === 0) {
         message = PluralForm.get(tabsToClose, getString("tabs.closeTabsTitle"))
             .replace("#1", tabsToClose);
         chkBoxLabel = shouldPrompt === 1 ? getString("tabs.closeTabsConfirmCheckbox") :
-          TabmixSvc.getString("window.closeWarning.2");
+          TabmixSvc.getString(`window.closeWarning.${msgNum(2)}`);
       } else {
         let messageKey = "protectedtabs.closeWarning.";
         messageKey += (numProtected < tabsToClose) ? "3" : (numProtected == 1) ? "1" : "2";
@@ -1489,7 +1490,7 @@ Tabmix.tablib = {
           TabmixSvc.getFormattedString(messageKey, [tabsToClose, numProtected]),
           TabmixSvc.getString("protectedtabs.closeWarning.4")
         ];
-        var chkBoxKey = shouldPrompt == 3 ? "window.closeWarning.2" : "protectedtabs.closeWarning.5";
+        var chkBoxKey = shouldPrompt == 3 ? `window.closeWarning.${msgNum(2)}` : `protectedtabs.closeWarning.${msgNum(5)}`;
         chkBoxLabel = TabmixSvc.getString(chkBoxKey);
       }
 
