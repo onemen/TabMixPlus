@@ -385,6 +385,21 @@ var TabmixContext = {
     tabContextMenu.insertBefore($id("context_bookmarkSelectedTabs"), $id("context_bookmarkAllTabs"));
     tabContextMenu.insertBefore($id("context_bookmarkTab"), $id("context_bookmarkAllTabs"));
 
+    const openTab = $id("context_openANewTab");
+    if (Tabmix.isVersion(940)) {
+      tabContextMenu.addEventListener("popupshowing", () => {
+        openTab.setAttribute("_newtab", openTab.getAttribute("label"));
+      }, {once: true});
+    } else {
+      const {firstElementChild: element} = MozXULElement.parseXULToFragment(
+        `<menuitem label="&tabCmd.label;"/>`,
+        ["chrome://browser/locale/browser.dtd"]
+      );
+      const label = element.getAttribute("label");
+      openTab.setAttribute("label", label);
+      openTab.setAttribute("_newtab", label);
+    }
+
     if (!Tabmix.isVersion(880)) {
       const closeTabsToTheStart = MozXULElement.parseXULToFragment(
         `<menuitem id="context_closeTabsToTheStart"
