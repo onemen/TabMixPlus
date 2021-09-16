@@ -585,6 +585,13 @@ var TabmixContext = {
     Tabmix.showItem("context_bookmarkTabs", multiselectionContext && Tabmix.prefs.getBoolPref("bookmarkTabMenu"));
     Tabmix.showItem("context_bookmarkAllTabs", Tabmix.prefs.getBoolPref("bookmarkTabsMenu"));
 
+    document
+        .getElementById("context_bookmarkAllTabs")
+        .setAttribute(
+          "accesskey",
+          document.getElementById("context_bookmarkTab").getAttribute("accesskey")
+        );
+
     // we call this again when popupshown to make sure we don't show 2 menuseparator together
     TabmixContext.contextMenuShown(event, "tabContextMenu");
 

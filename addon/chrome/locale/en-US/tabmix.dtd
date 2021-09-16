@@ -12,15 +12,17 @@
 <!ENTITY duplicateTabMenu.label "Duplicate Tab">
 <!ENTITY duplicateTabMenu.accesskey "D">
 <!ENTITY duplicateinWin.label "Duplicate to New Window">
-<!ENTITY duplicateinWin.accesskey "W">
+<!ENTITY duplicateinWin.accesskey "N">
 <!ENTITY detachTab.label "Move to New Window">
 <!ENTITY detachTab.accesskey "E">
 <!ENTITY mergeContext.label "Merge Windows">
-<!ENTITY mergeContext.accesskey "M">
+<!ENTITY mergeContext.accesskey "G">
 <!ENTITY renametab.label "Rename Tab">
-<!ENTITY renametab.accesskey "M">
+<!ENTITY renametab.accesskey "A">
 <!ENTITY copytaburl.label "Copy Tab URL">
 <!ENTITY copytaburl.accesskey "Y">
+<!ENTITY reloadmultiple.label "Reload Multiple Tabs">
+<!ENTITY reloadmultiple.accesskey "T">
 <!ENTITY reloadother.label "Reload Other Tabs">
 <!ENTITY reloadother.accesskey "O">
 <!ENTITY reloadleft.label "Reload Left Tabs">
@@ -41,7 +43,7 @@
 <!ENTITY closeTabsToLeft.label "Close Tabs to the Left">
 <!ENTITY closeleft.accesskey "L">
 <!ENTITY docShellMenu.label "Permissions">
-<!ENTITY docShellMenu.accesskey "P">
+<!ENTITY docShellMenu.accesskey "I">
 <!ENTITY freezeTabMenu.label "Freeze Tab">
 <!ENTITY freezeTabMenu.accesskey "F">
 <!ENTITY protectTabMenu.label "Protect Tab">
