@@ -65,6 +65,7 @@ var gPrefWindow = {
 
     $("syncPrefs").setAttribute("checked", Tabmix.prefs.getBoolPref("syncPrefs"));
     $("instantApply").setAttribute("checked", Tabmix.prefs.getBoolPref("instantApply"));
+    positionDonateButton();
   },
 
   initPane(aPaneID) {
@@ -492,6 +493,8 @@ function updateInstantApply() {
 }
 
 function toggleInstantApply(item) {
+  const preference = $("pref_instantApply");
+  if (preference._running) return;
   const checked = item.localName === "menuitem" ?
     item.getAttribute("checked") === "true" : item.value;
 
@@ -500,13 +503,27 @@ function toggleInstantApply(item) {
 
   document.documentElement.instantApply = checked;
   if (item.id === "instantApply") {
+    preference._running = true;
     Tabmix.prefs.setBoolPref("instantApply", checked);
+    preference._running = false;
   }
 
   // update blocked value
   if (!checked) gPrefWindow.updateValueFromElement();
 
   gPrefWindow.setButtons(!gPrefWindow.changes.size);
+  positionDonateButton();
+}
+
+function positionDonateButton() {
+  const donateBox = document.querySelector(".donate-button-container");
+  const dlgbuttons = document.querySelector('[anonid="dlg-buttons"]');
+  if (gPrefWindow.instantApply) {
+    dlgbuttons.insertBefore(donateBox, dlgbuttons.querySelector("spacer"));
+  } else {
+    dlgbuttons.parentNode.insertBefore(donateBox, dlgbuttons);
+  }
+  if (window.toString() === "[object Window]") window.sizeToContent();
 }
 
 function toggleSyncPreference() {

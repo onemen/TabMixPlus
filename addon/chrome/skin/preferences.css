@@ -90,14 +90,25 @@ menulist {
   margin: 2px;
 }
 
-.prefWindow-dlgbuttons .donate-button {
-  appearance: none;
+.donate-button-container {
+  padding-bottom: 0;
+}
+
+@media (-moz-proton) {
+#TabMIxPreferences > .donate-button-container {
+  margin-top: -6px;
+}
+}
+
+.donate-button-container > .donate-button {
+  -moz-appearance: none;
   cursor: pointer;
   background: url(https://img.shields.io/badge/Donate-PayPal-green.svg) no-repeat center/100%;
+  min-height: 26px;
   width: 100px;
 }
 
-.prefWindow-dlgbuttons .donate-button:hover {
+.donate-button-container > .donate-button:hover {
   box-shadow: inset 0 0 0 3px rgb(83 83 83);
   border-radius: 3px;
 }
@@ -263,6 +274,10 @@ tabbox {
 
 tabbox > tabpanels {
   -moz-box-flex: 1;
+}
+
+tabbox > tabpanels:last-child {
+  padding-bottom: 6px;
 }
 
 /* for Linux */
