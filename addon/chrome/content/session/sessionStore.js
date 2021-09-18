@@ -604,8 +604,11 @@ var TMP_ClosedTabs = {
     if (aIndex < 0 || aIndex >= this.count)
       return null;
 
-    const closedTabs = TabmixSvc.SessionStore._windows[window.__SSi]._closedTabs;
-    const closedTab = TabmixSvc.SessionStore.removeClosedTabData(closedTabs, aIndex);
+    const winData = TabmixSvc.SessionStore._windows[window.__SSi];
+    const closedTabs = winData._closedTabs;
+    const closedTab = Tabmix.isVersion(940) ?
+      TabmixSvc.SessionStore.removeClosedTabData(winData, closedTabs, aIndex) :
+      TabmixSvc.SessionStore.removeClosedTabData(closedTabs, aIndex);
     TabmixSvc.SessionStore._notifyOfClosedObjectsChange();
     return closedTab;
   },
