@@ -1410,7 +1410,10 @@ gTMPprefObserver = {
       case "extensions.tabmix.lasttab.tabPreviews":
       case "extensions.tabmix.lasttab.respondToMouseInTabList":
       case "extensions.tabmix.lasttab.showTabList":
-        TMP_LastTab.ReadPreferences();
+        setTimeout(() => {
+          // wait until ctrlTab observer finished (ctrlTab.observe, ctrlTab.readPref)
+          TMP_LastTab.ReadPreferences();
+        }, 0);
         break;
       case "extensions.tabmix.reloadEvery.onReloadButton":
         this.showReloadEveryOnReloadButton();
