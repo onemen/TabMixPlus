@@ -904,40 +904,19 @@ Tabmix.navToolbox = {
     if (!this.urlBarInitialized) {
       Tabmix.originalFunctions.gURLBar_handleCommand = gURLBar.handleCommand;
       gURLBar.handleCommand = this.handleCommand.bind(gURLBar);
+      gURLBar.view._rows.addEventListener("mouseup", event => {
+        this.on_mouseup(event);
+      }, {capture: true});
       this.urlBarInitialized = true;
     }
   },
 
   handleCommand(event, openUILinkWhere, openUILinkParams = {}) {
     let prevTab, prevTabPos;
-    let _parseActionUrl = function(aUrl) {
-      if (!aUrl.startsWith("mozaction:")) {
-        return null;
-      }
-
-      // URL is in the format mozaction:ACTION,PARAMS
-      // Where PARAMS is a JSON encoded object.
-      let [, type, params] = aUrl.match(/^mozaction:([^,]+),(.*)$/);
-
-      let newAction = {type};
-
-      try {
-        newAction.params = JSON.parse(params);
-        for (const [key, value] of Object.entries(newAction.params)) {
-          newAction.params[key] = decodeURIComponent(value);
-        }
-      } catch (e) {
-        // If this failed, we assume that params is not a JSON object, and
-        // is instead just a flat string. This may happen for legacy
-        // search components.
-        newAction.params = {url: params};
-      }
-
-      return newAction;
-    };
-    let action = _parseActionUrl(this.value) || {};
+    let element = this.view.selectedElement;
+    let result = this.view.getResultFromElement(element);
     if (Tabmix.prefs.getBoolPref("moveSwitchToTabNext") &&
-        action.type == "switchtab" && this.hasAttribute("actiontype")) {
+        result.type === UrlbarUtils.RESULT_TYPE.TAB_SWITCH && this.hasAttribute("actiontype")) {
       prevTab = gBrowser.selectedTab;
       prevTabPos = prevTab._tPos;
     }
@@ -947,7 +926,7 @@ Tabmix.navToolbox = {
       let altEnter = !isMouseEvent && event &&
           event.altKey && !gBrowser.selectedTab.isEmpty;
       let where = "current";
-      let url = action.params ? action.params.url : this.value;
+      let url = result.payload?.url ?? this.value;
       let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar",
         altEnter).inNew && !(/^ *javascript:/.test(url));
       if (isMouseEvent || altEnter || loadNewTab) {
@@ -971,6 +950,65 @@ Tabmix.navToolbox = {
       let pos = prevTabPos + Number(gBrowser.selectedTab._tPos > prevTabPos) -
           Number(!prevTab || !prevTab.parentNode);
       gBrowser.moveTabTo(gBrowser.selectedTab, pos);
+    }
+  },
+
+  on_mouseup(event) {
+    // based on:
+    // - gURLBar.view._on_mouseup (UrlbarView.jsm)
+    // - gURLBar.pickResult (UrlbarInput.jsm)
+    if (event.button == 2 || !Tabmix.prefs.getBoolPref("moveSwitchToTabNext")) {
+      return;
+    }
+
+    const element = gURLBar.view.getClosestSelectableElement(event.target);
+    const result = element && gURLBar.view.getResultFromElement(element);
+    if (!result) {
+      return;
+    }
+
+    if (
+      result.heuristic &&
+      gURLBar.searchMode?.isPreview &&
+      gURLBar.view.oneOffSearchButtons.selectedButton
+    ) {
+      return;
+    }
+
+    let urlOverride;
+    if (element?.classList.contains("urlbarView-help")) {
+      urlOverride = result.payload.helpUrl;
+    }
+    const isCanonized = gURLBar.setValueFromResult({
+      result,
+      event,
+      urlOverride,
+    });
+    if (isCanonized) {
+      return;
+    }
+
+    if (result.type === UrlbarUtils.RESULT_TYPE.TAB_SWITCH) {
+      // move switched to tab only when it is in the same window
+      const resultUrl = result.payload?.url;
+      const inSameWindow = gBrowser.browsers.some(browser => {
+        return browser.currentURI.displaySpec === resultUrl;
+      });
+      if (inSameWindow) {
+        const prevTab = gBrowser.selectedTab;
+        const prevTabPos = prevTab._tPos;
+        gBrowser.tabContainer.addEventListener(
+          "TabSelect",
+          () => {
+            const pos =
+              prevTabPos +
+              Number(gBrowser.selectedTab._tPos > prevTabPos) -
+              Number(!prevTab || !prevTab.parentNode);
+            gBrowser.moveTabTo(gBrowser.selectedTab, pos);
+          },
+          {once: true}
+        );
+      }
     }
   },
 
