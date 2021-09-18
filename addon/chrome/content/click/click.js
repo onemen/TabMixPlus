@@ -1163,12 +1163,7 @@ var TabmixAllTabs = {
     let url = gBrowser.getBrowserForTab(tab).currentURI.spec;
     mi.setAttribute("statustext", url);
     mi.setAttribute("tooltiptext", tab.label + "\n" + url);
-    let count = "";
-    if (Tabmix.ltr) {
-      count = (value < 9 ? "  " : "") + (value + 1) + ": ";
-      mi.setAttribute("count", count);
-    }
-    this._setMenuitemAttributes(mi, tab);
+    this._setMenuitemAttributes(mi, tab, value);
     if (tab.selected)
       this._selectedItem = mi;
 
@@ -1191,11 +1186,21 @@ var TabmixAllTabs = {
     }
   },
 
-  _setMenuitemAttributes: function TMP__setMenuitemAttributes(aMenuitem, aTab) {
+  _setMenuitemAttributes(aMenuitem, aTab, value) {
     if (!aMenuitem)
       return;
 
-    aMenuitem.setAttribute("label", aMenuitem.getAttribute("count") + aTab.label);
+    const isRTL =
+      window.windowUtils.getDirectionFromText(aTab.label) === Ci.nsIDOMWindowUtils.DIRECTION_RTL;
+    const rtlSpacer = Tabmix.rtl && value < 9 ? "  " : "";
+    const ltrSpacer = Tabmix.ltr && value < 9 ? "  " : "";
+    if (Tabmix.ltr === isRTL) {
+      const count = " :" + rtlSpacer + (value + 1) + ltrSpacer;
+      aMenuitem.setAttribute("label", aTab.label + count);
+    } else {
+      const count = ltrSpacer + (value + 1) + rtlSpacer + ": ";
+      aMenuitem.setAttribute("label", count + aTab.label);
+    }
     aMenuitem.setAttribute("crop", "end");
 
     if (aTab.hasAttribute("busy")) {
