@@ -196,7 +196,7 @@ Tabmix.tablib = {
        } \
        $&'
     )._replace(
-      // we call gURLBar.select from Tabmix.clearUrlBar
+      // we call gURLBar.select from Tabmix.clearUrlBarIfNeeded
       // see TMP_BrowserOpenTab
       'gURLBar.select();',
       '{/* see TMP_BrowserOpenTab */}'

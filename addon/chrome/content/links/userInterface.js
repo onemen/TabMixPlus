@@ -54,7 +54,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
     case 3: { // duplicate tab
       let currentUrl = gBrowser.currentURI.spec;
       let dupTab = Tabmix.duplicateTab(selectedTab, null, null, null, true);
-      Tabmix.clearUrlBar(dupTab, currentUrl, true);
+      Tabmix.clearUrlBarIfNeeded(dupTab, currentUrl, true, replaceLastTab);
       return dupTab;
     }
     case 4: {// user url
@@ -154,12 +154,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
         }
 
         gBrowser.selectedBrowser.focus();
-        // focus the address bar on new tab
-        var clearUrlBar = !replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar") ||
-            replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
-            Tabmix.isBlankNewTab(url) || url == "about:privatebrowsing";
-        if (clearUrlBar)
-          Tabmix.clearUrlBar(newTab, url, false, replaceLastTab);
+        Tabmix.clearUrlBarIfNeeded(newTab, url, false, replaceLastTab);
       }),
     },
     "browser-open-newtab-start"
@@ -167,7 +162,15 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
 }
 
 Tabmix.selectedTab = null;
-Tabmix.clearUrlBar = function TMP_clearUrlBar(aTab, aUrl, aTimeOut, replaceLastTab) {
+Tabmix.clearUrlBarIfNeeded = function(aTab, aUrl, aTimeOut, replaceLastTab) {
+  // check if we need to focus the address bar on new tab
+  const needToClearUrlBar = !replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar") ||
+    replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
+    Tabmix.isBlankNewTab(aUrl) || aUrl == "about:privatebrowsing";
+  if (!needToClearUrlBar) {
+    return;
+  }
+
   // Firefox always call gURLBar.select when it replacing last tab
   if (!replaceLastTab && /about:home|(www\.)*(google|bing)\./.test(aUrl))
     return;
