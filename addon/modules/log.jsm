@@ -321,7 +321,7 @@ this.console = {
   get caller() {
     let parent = Components.stack.caller;
     parent = parent.name == "_logMessage" ? parent.caller.caller : parent.caller;
-    if (parent.name == "TMP_console_wrapper")
+    if (parent?.name == "TMP_console_wrapper")
       parent = parent.caller.caller;
     return parent || {};
   },
@@ -336,14 +336,20 @@ this.console = {
       ex = "reportError was called with null";
     }
     msg = ":\n" + (msg ? msg + "\n" : "");
+    // eslint-disable-next-line mozilla/reject-osfile
     if (typeof ex != "object" || ex instanceof OS.File.Error ||
         typeof ex.message != "string") {
       this._logMessage(msg + ex.toString(), "errorFlag");
     } else {
-      if (typeof ex.filename == "undefined") {
+      let caller = ex;
+      if (typeof ex.filename == "undefined" && ex.fileName) {
         ex.filename = ex.fileName;
       }
-      this._logMessage(msg + ex.message, "errorFlag", ex);
+      if (!ex.filename || !ex.linenumber) {
+        caller = this.caller;
+        ex.stack = caller.stack;
+      }
+      this._logMessage(msg + ex.message, "errorFlag", caller);
     }
   },
 

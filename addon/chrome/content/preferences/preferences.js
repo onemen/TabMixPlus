@@ -547,21 +547,35 @@ function exportData() {
         return "\n" + pref + "=" + getPrefByType(pref);
       });
       patterns.unshift("tabmixplus");
-      OS.File.writeAtomic(file.path, patterns.join(""), {encoding: "utf-8", tmpPath: file.path + ".tmp"});
+      if (TabmixSvc.version(860)) {
+        IOUtils.writeUTF8(file.path, patterns.join(""));
+      } else {
+        // eslint-disable-next-line mozilla/reject-osfile
+        OS.File.writeAtomic(file.path, patterns.join(""), {encoding: "utf-8", tmpPath: file.path + ".tmp"});
+      }
     }
   }).catch(Tabmix.reportError);
 }
 
-function importData() {
-  showFilePicker("open").then(file => {
-    return file && OS.File.read(file.path);
-  }).then(input => {
-    if (input) {
+async function importData() {
+  try {
+    const file = await showFilePicker("open");
+    if (!file) return;
+    let input;
+    if (TabmixSvc.version(860)) {
+      input = await IOUtils.readUTF8(file.path);
+    } else {
+      // eslint-disable-next-line mozilla/reject-osfile
+      const data = await OS.File.read(file.path);
       let decoder = new TextDecoder();
-      input = decoder.decode(input);
+      input = decoder.decode(data || "");
+    }
+    if (input) {
       loadData(input.replace(/\r\n/g, "\n").split("\n"));
     }
-  }).catch(Tabmix.reportError);
+  } catch (ex) {
+    Tabmix.reportError(ex);
+  }
 }
 
 /**
