@@ -168,13 +168,15 @@
     };
 
     this.doMouseHoverSelect = function(aTab) {
-      if (!aTab || !aTab.parentNode)
+      if (!aTab || !aTab.parentNode) {
         return; // this tab already removed....
+      }
 
-      if (gBrowser.hasAttribute("preventMouseHoverSelect"))
-        gBrowser.removeAttribute("preventMouseHoverSelect");
-      else if (aTab.mIsHover)
+      if (gBrowser.tabContainer.hasAttribute("preventMouseHoverSelect")) {
+        gBrowser.tabContainer.removeAttribute("preventMouseHoverSelect");
+      } else if (aTab.mIsHover) {
         aTab.container.selectedItem = aTab;
+      }
     };
 
     this.setShowButton = function(aTab) {

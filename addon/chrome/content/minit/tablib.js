@@ -1378,11 +1378,11 @@ Tabmix.tablib = {
       // add extra delay after tab removed or after tab flip before we select by hover
       // to let the user time to move the mouse
       if (aTab.mouseHoverSelect) {
-        this.setAttribute("preventMouseHoverSelect", true);
+        this.tabContainer.setAttribute("preventMouseHoverSelect", true);
         var delay = aTab.mouseHoverSelectDelay + 50;
-        setTimeout(function removeDelayAfterClose(browser) {
-          browser.removeAttribute("preventMouseHoverSelect");
-        }, delay, this);
+        setTimeout(() => {
+          this.tabContainer.removeAttribute("preventMouseHoverSelect");
+        }, delay);
       }
     };
 
