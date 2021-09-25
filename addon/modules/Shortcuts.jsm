@@ -172,6 +172,14 @@ this.Shortcuts = {
           if (elm.hasAttribute("reserved")) {
             keyData.reserved = true;
           }
+
+          // when user change shortcut we re-insert the "mainKeyset" to the DOM,
+          // this triggers async fluent translation for keys with data-l10n-id
+          // attribute, once the translation finished it reset the key attribute
+          // to its default value.
+          if (elm.hasAttribute("data-l10n-id")) {
+            elm.removeAttribute("data-l10n-id");
+          }
         }
       } else if (tabmixKey) {
         keyData.default = keyData.default.replace("#modifiers", platformModifiers);
