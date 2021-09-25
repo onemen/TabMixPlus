@@ -79,9 +79,7 @@ this.TabmixUtils = {
         return false;
       }
       case "Tabmix:contextmenu": {
-        win = browser.ownerGlobal;
-        let links = message.data.links;
-        win.Tabmix.contextMenuLinks = links && links.split("\n") || [];
+        browser.ownerGlobal.Tabmix.contextMenuLinks = message.data.links;
         break;
       }
     }

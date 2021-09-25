@@ -47,20 +47,21 @@ this.ContextMenu = {
     let treeWalker = doc.createTreeWalker(range,
       NodeFilter.SHOW_ELEMENT, filter, true);
     let nextEpisode = treeWalker.nextNode();
-    let urls = [];
+    let urls = new Map();
     while (nextEpisode !== null) {
-      let url;
+      let target = nextEpisode;
       if (nextEpisode.nodeName == "li") {
         let node = nextEpisode.firstChild;
-        url = node.nodeName == "p" ? node.firstChild.href : node.href;
-      } else {
-        url = nextEpisode.href;
+        target = node.nodeName == "p" ? node.firstChild : node;
       }
+      let url = target.href;
       if (securityCheck(url)) {
         if (check)
           return [true];
-        if (!urls.includes(url))
-          urls.push(url);
+
+        if (!urls.has(url)) {
+          urls.set(url, target.getAttribute("data-usercontextid"));
+        }
       }
       nextEpisode = treeWalker.nextNode();
     }

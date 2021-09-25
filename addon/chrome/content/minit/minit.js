@@ -667,13 +667,6 @@ Tabmix.goButtonClick = function TMP_goButtonClick(aEvent) {
     gURLBar.handleCommand(aEvent);
 };
 
-Tabmix.loadTabs = function TMP_loadTabs(aURIs, aReplace) {
-  let bgLoad = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
-  try {
-    gBrowser.loadTabs(aURIs, bgLoad, aReplace);
-  } catch (ex) { }
-};
-
 Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
   var aTab = gBrowser._selectedTab;
   var isBlankTab = gBrowser.isBlankNotBusyTab(aTab);

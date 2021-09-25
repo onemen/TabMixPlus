@@ -393,8 +393,8 @@ var TMP_extensionsCompatibility = {
     // https://addons.mozilla.org/he/firefox/addon/redirect-remover/
     if (window.rdrb && typeof rdrb.cleanLink == "function") {
       Tabmix.changeCode(TabmixContext, "TabmixContext.openMultipleLinks")._replace(
-        'Tabmix.loadTabs(urls, false);',
-        'urls = urls.map(url => rdrb.cleanLink(url));\n' +
+        'let params',
+        'url = rdrb.cleanLink(url);\n' +
         '      $&'
       ).toCode();
     }
@@ -636,10 +636,15 @@ TMP_extensionsCompatibility.treeStyleTab = {
          Tabmix.TST_initTabContentsOrder(tab); \
          $1$2'
       ).toCode();
-      // Added 2011-11-09, i'm not sure we really need it, Tabmix.loadTabs call gBrowser.loadTabs
+      // Added 2011-11-09, i'm not sure we really need it, openMultipleLinks call openLinkIn
       Tabmix.changeCode(TabmixContext, "TabmixContext.openMultipleLinks")._replace(
-        /(Tabmix.loadTabs\([^)]+\);)/g,
-        'TreeStyleTabService.readyToOpenChildTab(gBrowser, true); $1 TreeStyleTabService.stopToOpenChildTab(gBrowser);'
+        'for (let [url, usercontextid] of urls) {',
+        `TreeStyleTabService.readyToOpenChildTab(gBrowser, true);
+         $&`
+      )._replace(
+        'return false;',
+        `TreeStyleTabService.stopToOpenChildTab(gBrowser);
+         $&`
       ).toCode();
     }
   },

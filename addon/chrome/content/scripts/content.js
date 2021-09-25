@@ -474,7 +474,7 @@ var ContextMenuHandler = {
 
     let links;
     if (ContentSvc.prefBranch.getBoolPref("openAllLinks")) {
-      links = ContextMenu.getSelectedLinks(content).join("\n");
+      links = ContextMenu.getSelectedLinks(content);
     }
 
     sendSyncMessage("Tabmix:contextmenu", {links});

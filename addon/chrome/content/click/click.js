@@ -863,11 +863,19 @@ var TabmixContext = {
   },
 
   openMultipleLinks: function TMP_openMultipleLinks(check) {
-    let urls = gContextMenu.tabmixLinks || [];
-    if (!check && urls.length) {
-      Tabmix.loadTabs(urls, false);
+    let urls = gContextMenu.tabmixLinks || new Map();
+    if (!check && urls.size) {
+      for (let [url, usercontextid] of urls) {
+        try {
+          let params = {userContextId: parseInt(usercontextid)};
+          openLinkIn(url, "tab", gContextMenu._openLinkInParameters(params));
+        } catch (ex) {
+          Tabmix.reportError(ex);
+        }
+      }
+      return false;
     }
-    return urls.length === 0;
+    return urls.size === 0;
   }
 };
 
