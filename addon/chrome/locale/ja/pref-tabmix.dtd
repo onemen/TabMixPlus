@@ -59,7 +59,7 @@
 <!ENTITY moveSwitchToTabNext.label "現在のタブの直後に入れ替えて開く">
 <!ENTITY loadTabsProgressively.label "次の指定以上のタブを開くときは順番に読み込む">
 <!ENTITY restoreOnDemand.label "次の指定以上のタブを開くときは選択されるまで読み込まない">
-<!ENTITY openMoreThan.label "when you open more than">
+<!ENTITY openMoreThan.label " ">
 <!ENTITY tabs.label "タブ">
 <!ENTITY lockTabs.label "タブのロック">
 <!ENTITY lockNewTabs.label "新しいタブをロックする">
@@ -102,7 +102,7 @@
 <!ENTITY focusTab.openerTab "リンク元／右側のタブ">
 <!ENTITY focusTab.openerTab.rtl "リンク元／左側のタブ">
 <!ENTITY focusTab.lastOpenedTab "最後に開いたタブ">
-<!ENTITY undoClose.label "[閉じたタブを復元]の機能を有効にする">
+<!ENTITY undoClose.label "[閉じたタブを復元] の機能を有効にする">
 <!ENTITY undoCloseCache.label "記憶するタブの数:">
 <!ENTITY undoClosepos.label "タブを元の位置に戻す">
 <!ENTITY menuonlybutton.label "ツールバーボタンにリストだけ表示させる">
@@ -118,7 +118,7 @@
 <!ENTITY mergelastfocused.label "現在のウィンドウと直前にフォーカスされたウィンドウだけをマージする">
 <!ENTITY mergePopups.label "ポップアップウィンドウもマージする">
 <!ENTITY popupNextToOpener.label "ポップアップウィンドウを開いたタブの直後にタブを開く">
-<!ENTITY activateSlideshow.label "#1 キーでタブをローテーション表示させる">
+<!ENTITY activateSlideshow.label "キーでタブをローテーション表示させる">
 <!ENTITY toggleAnimation.label "タブの開閉アニメーションを無効にする">
 <!ENTITY reloadEvery.matchAddress.label "アドレスに依存せずタブを再読み込みする">
 <!ENTITY reloadEvery.onReloadButton.label "[更新] ボタンに [自動再読み込み] メニューを表示する">
@@ -137,7 +137,7 @@
 <!ENTITY newTabButton.position.afterlast.label "最後のタブの隣">
 <!ENTITY allTabsButton.label "[タブの一覧] ボタンを表示">
 <!ENTITY tabBarSpace.label "両端にスペースを表示">
-<!ENTITY tabBarSpace.tooltip "多くのタブが開いていてもクリックやドラッグ＆ドロップが出来るように">
+<!ENTITY tabBarSpace.tooltip "多くのタブが開いていてもクリックやドラッグ＆ドロップができるように">
 <!ENTITY tabbar.label "タブが一つしか開いていない場合、タブバーを隠す">
 <!ENTITY moveTabOnDragging.label "タブをドラッグした時（ドロップインジケータを動かすのではなく）タブそのものを直接移動させる">
 <!ENTITY verticalTabbar.description1 "これらの設定は他の垂直タブ用の拡張機能によってコントロールされます">
@@ -181,7 +181,7 @@
 <!ENTITY widthTo.label "から">
 <!ENTITY widthPixels.label "ピクセル">
 <!ENTITY onLeftDisabled.label "このテーマではボタンを左サイドに配置できません">
-<!ENTITY onLeftDisabled.tst.label "treeStyleTab がインストールされている場合は、左サイドにボタンの配置はできません">
+<!ENTITY onLeftDisabled.tst.label "treeStyleTab がインストールされている場合は左サイドにボタンの配置はできません">
 <!ENTITY flexTabs.label "タブ幅をページタイトルの長さに合わせて調節する">
 <!ENTITY bookastitle.label "タブのタイトルをブックマークの登録名と置き換える">
 <!-- LOCALIZATION NOTE:          change this only if you need to change the width -->
@@ -194,15 +194,15 @@
 <!ENTITY toolbar.nohidden.label "非表示ボタンなし">
 <!ENTITY mouseGesture.label "マウスジェスチャー">
 <!ENTITY mouseClick.label "マウスクリック">
-<!ENTITY mouseHoverSelect.labelBegin "マウスオーバーでタブを選択　ディレイ時間:">
+<!ENTITY mouseHoverSelect.labelBegin "マウスオーバーでタブを選択　遅延時間:">
 <!ENTITY tabFlip.label "現在のタブをクリックしたとき、直前にフォーカスしていたタブにフォーカスを移す">
-<!ENTITY tabFlip.delay "ディレイ時間:">
+<!ENTITY tabFlip.delay "遅延時間:">
 <!ENTITY clickFocus.label "クリックでタブを選択する場合、ボタンを離すまで選択しない">
 <!ENTITY removeEntries.label "中クリックで Tab Mix Plus のメニューリスト項目を削除する">
 <!ENTITY lockTabSizingOnClose.label "タブを閉じてもカーソルがツールバー上にある間は他のタブをリサイズしない">
 <!ENTITY removeEntries.tooltip "[最近閉じたタブ][最近閉じたウィンドウ][保存されたセッション] の各リストを含む">
 <!ENTITY tabbarscrolling.caption "タブバー上でのスクロール動作">
-<!ENTITY tabbarscrolling.holdShift.label "Shift キーを併用することで、オプションを一時的に切り替えることができる">
+<!ENTITY tabbarscrolling.holdShift.label "Shift キーを併用することでオプションを一時的に切り替えることができる">
 <!ENTITY tabbarscrolling.selectTab.label "タブ選択をスクロール">
 <!ENTITY tabbarscrolling.scrollAllTabs.label "全タブをスクロール">
 <!ENTITY tabbarscrolling.inverse.label "スクロール方向を反転">
@@ -231,8 +231,8 @@
 <!ENTITY clicktab.copyUrlFromClipboard "クリップボードの URL を開く">
 <!ENTITY clicktab.selectMerge "マージするタブとして選択する">
 <!ENTITY clicktab.mergeTabs "ウィンドウ同士をマージする">
-<!ENTITY clicktab.bookTab "このタブをブックマーク...">
-<!ENTITY clicktab.bookTabs "すべてのタブをブックマーク...">
+<!ENTITY clicktab.bookTab "このタブをブックマーク">
+<!ENTITY clicktab.bookTabs "すべてのタブをブックマーク">
 <!ENTITY clicktab.reloadtab "タブを再読み込み">
 <!ENTITY clicktab.reloadtabs "すべてのタブを再読み込み">
 <!ENTITY clicktab.reloadothertabs "他のタブを再読み込み">
@@ -260,27 +260,27 @@
 <!ENTITY startupBlankPage.label "空白ページを表示する">
 <!ENTITY startupLastSession1.label "前回終了時のウィンドウとタブを表示する">
 <!ENTITY ss.enable.label "Firefox 内蔵のセッション復元機能を使用する">
-<!ENTITY ss.enable.tooltip "チェックを外すと、Tab Mix Plus のセッションマネージャを使用します">
+<!ENTITY ss.enable.tooltip "チェックを外すと Tab Mix Plus のセッションマネージャーを使用します">
 <!ENTITY ss.advanced_setting "拡張設定">
-<!ENTITY ss.advanced_setting.warning "よくわからない場合は、以下の設定を変更しないでください">
+<!ENTITY ss.advanced_setting.warning "よくわからない場合は以下の設定を変更しないでください">
 <!ENTITY ss.interval "セッション状態の最小保存間隔">
 <!ENTITY ss.interval.seconds "(ミリ秒):">
 <!ENTITY ss.privacy_level "機密データ(フォームデータ、POSTDATA、Cookie)を">
 <!ENTITY ss.privacy_level.allsites "すべてのサイトに対して保存">
 <!ENTITY ss.privacy_level.unencrypted "暗号化されていないサイトに対して保存">
 <!ENTITY ss.privacy_level.nosites "すべてのサイトに対して保存しない">
-<!ENTITY sessionManger.enable "セッションマネージャを有効にする">
+<!ENTITY sessionManger.enable "セッションマネージャーを有効にする">
 <!ENTITY crashRecovery.enable "クラッシュリカバリーを有効にする">
 <!ENTITY sm.StartExit "起動／終了時">
 <!ENTITY sm.restore "復元">
 <!ENTITY sm.preserve "状態の保持">
 <!ENTITY sm.start "ブラウザ起動時:">
 <!ENTITY sm.start.restore "復元する">
-<!ENTITY sm.start.ask "復元する前にたずねる">
+<!ENTITY sm.start.ask "復元する前に尋ねる">
 <!ENTITY sm.start.nothing "復元しない">
 <!ENTITY sm.exit "ブラウザ終了時:">
 <!ENTITY sm.exit.save "セッションを保存する">
-<!ENTITY sm.exit.ask "保存する前にたずねる">
+<!ENTITY sm.exit.ask "保存する前に尋ねる">
 <!ENTITY sm.exit.nothing "保存しない">
 <!ENTITY sm.startup "起動時のセッション:">
 <!ENTITY sm.lastsession "最後のセッション">
@@ -289,8 +289,8 @@
 <!ENTITY sm.restore.options "セッションを復元する場合:">
 <!ENTITY sm.restore.overwrite "現在のウィンドウに上書きする">
 <!ENTITY sm.restore.overwriteTabs "タブも上書きする">
-<!ENTITY sm.restore.closedWinList "上書きされたウィンドウを[最近閉じたウィンドウ]リストに保存する">
-<!ENTITY sm.restore.merge "複数のウィンドウを一つにする">
+<!ENTITY sm.restore.closedWinList "上書きされたウィンドウを [最近閉じたウィンドウ] リストに保存する">
+<!ENTITY sm.restore.merge "複数のウィンドウをひとつにする">
 <!ENTITY sm.restore.bypassCache "復元時にキャッシュを使わない">
 <!ENTITY sm.notrestore.label "起動時に復元しない時">
 <!ENTITY sm.restorePinned1.label "前回ピン留めしていたタブを復元する">
@@ -303,5 +303,5 @@
 <!ENTITY sm.restore.winOptions "ウィンドウで状態保持する項目:">
 <!ENTITY sm.restore.selectedTab "選択されたタブ">
 <!ENTITY sm.restore.closedTabs "最近閉じたタブ">
-<!ENTITY incompatible.extensions "いくつかの拡張機能が Tab Mix Plus と不整合を起こします。これらの拡張機能を無効にするか削除することを推奨します">
+<!ENTITY incompatible.extensions "いくつかの拡張機能が Tab Mix Plus と不整合を起こします。これらの拡張機能を無効にするか削除することを推奨します。">
 <!ENTITY incompatible.button.label "リストを表示">

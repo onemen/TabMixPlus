@@ -6,8 +6,8 @@
 <!ENTITY closedwindowsbtn.label "最近閉じたウィンドウ">
 <!ENTITY closedwindowsbtn.tooltip "[最近閉じたウィンドウ] のリストを表示">
 <!ENTITY page.header.title "Tab Mix Plus オプション">
-<!ENTITY options.main.sessionbutton.label "Tab Mix Plus セッションマネージャ">
-<!ENTITY session.Tools "セッションマネージャ">
+<!ENTITY options.main.sessionbutton.label "Tab Mix Plus セッションマネージャー">
+<!ENTITY session.Tools "セッションマネージャー">
 <!ENTITY closedWin.label "最近閉じたウィンドウ">
 <!ENTITY duplicateTabMenu.label "タブを複製">
 <!ENTITY duplicateTabMenu.accesskey "D">
@@ -48,7 +48,7 @@
 <!ENTITY protectTabMenu.tooltip "保護されたタブは閉じられなくなります">
 <!ENTITY protectTabMenu.accesskey "P">
 <!ENTITY lockTabMenu.label "タブをロック">
-<!ENTITY lockTabMenu.tooltip "ロックされたタブ内のリンクをクリックすると、常に新しいタブに開きます">
+<!ENTITY lockTabMenu.tooltip "ロックされたタブ内のリンクをクリックすると常に新しいタブに開きます">
 <!ENTITY lockTabMenu.accesskey "K">
 <!ENTITY linkhere.label "リンクを現在のタブで開く">
 <!ENTITY linkhere.accesskey "O">
@@ -106,8 +106,8 @@
 <!ENTITY sm.context.startup.key "P">
 <!ENTITY sm.context.details "カウンターと日付をセッションメニューに表示">
 <!ENTITY sm.context.details.key "C">
-<!ENTITY tab.key "T">
-<!ENTITY window.key "N">
+<!ENTITY tab.key "F">
+<!ENTITY window.key "V">
 <!ENTITY merge.key "U">
 <!ENTITY sortedTabs.label "タブをソート">
 <!ENTITY sortedTabs.tooltip "アルファベット順にソートしたタブリストを表示">
