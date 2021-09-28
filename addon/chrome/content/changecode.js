@@ -79,7 +79,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
           if (!excludeReturn.includes(this.fullName) &&
               /return\s.+/.test(this.value.replace(re, "")))
             addReturn = "\nreturn null\n";
-          this.value = this.value.replace("{", "{try {") +
+          this.value = this.value.replace(/\([^)]*\)\s*{/, "$&\ntry {") +
             ' catch (ex) {' +
             '   TabmixSvc.console.assert(ex, "outer try-catch in ' + (aName || this.fullName) + '");}' +
             addReturn +
@@ -97,6 +97,8 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       } catch (ex) {
         console.reportError(ex, console.callerName() + " failed to change " +
                             this.fullName + "\nError: ");
+
+        console.log(this.value);
       }
     },
 
