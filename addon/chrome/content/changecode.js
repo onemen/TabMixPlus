@@ -159,7 +159,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
         ex.message = ex.fnName + " was unable to change " + aName + "." +
             (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) +
             "\n\nTry Tabmix latest development version from tabmixplus.org/tab_mix_plus-dev-build.xpi," +
-            "\nReport about this to Tabmix developer at http://tabmixplus.org/forum/";
+            "\nReport about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues";
         console.reportError(ex);
         if (debugMode) {
           console.clog(ex.fnName + "\nfunction " + aName + " = " + this.value, ex);
