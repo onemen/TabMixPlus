@@ -18,9 +18,6 @@ ChromeUtils.defineModuleGetter(this, "setTimeout",
 ChromeUtils.defineModuleGetter(this, "CustomizableUI",
   "resource:///modules/CustomizableUI.jsm");
 
-ChromeUtils.defineModuleGetter(this, "TabmixSvc",
-  "chrome://tabmix-resource/content/TabmixSvc.jsm");
-
 ChromeUtils.defineModuleGetter(this, "Windows",
   "chrome://tabmix-resource/content/bootstrap/Windows.jsm");
 
@@ -167,8 +164,6 @@ class Overlays {
       }
 
       unloadedOverlays.unshift(...t_unloadedOverlays);
-
-      this.setLocalizedLabels(url, doc);
 
       // Run through all overlay nodes on the first level (hookup nodes). Scripts will be deferred
       // until later for simplicity (c++ code seems to process them earlier?).
@@ -863,35 +858,5 @@ class Overlays {
     }
 
     return data;
-  }
-
-  /**
-   * Some labels changed from dtd to Fluent, set the proper type of data,
-   *  we call this function early for the case the toolbarbutton are in
-   *  customized plate.
-   */
-  setLocalizedLabels(url, doc) {
-    if (url !== "chrome://tabmixplus/content/tabmix.xhtml") {
-      return;
-    }
-
-    const nodes = doc.documentElement.querySelectorAll('[_data-l10n-id="tabs-toolbar-list-all-tabs"]');
-    if (TabmixSvc.version(940)) {
-      for (const node of nodes) {
-        node.setAttribute("data-l10n-id", "tabs-toolbar-list-all-tabs");
-        node.removeAttribute("_data-l10n-id");
-      }
-    } else {
-      const {firstElementChild: element} = this.window.MozXULElement.parseXULToFragment(
-        `<toolbarbutton label="&listAllTabs.label;"/>`,
-        ["chrome://browser/locale/browser.dtd"]
-      );
-      const label = element.getAttribute("label");
-      for (const node of nodes) {
-        node.setAttribute("label", label);
-        if (node.id === "tabmix-alltabs-toolbaritem")
-          node.setAttribute("tooltiptext", label);
-      }
-    }
   }
 }

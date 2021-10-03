@@ -788,6 +788,10 @@ Tabmix.navToolbox = {
           let command = aNode.getAttribute("command");
           if (/Browser:ReloadOrDuplicate|Browser:Stop/.test(command))
             gTMPprefObserver.showReloadEveryOnReloadButton();
+
+          if (aNode.id === "tabmix-closedTabs-toolbaritem") {
+            TMP_ClosedTabs.setButtonType(Tabmix.prefs.getBoolPref("undoCloseButton.menuonly"));
+          }
         }
       }.bind(this)
     };

@@ -117,6 +117,7 @@ toolbar[iconsize=small] #tabmix-closedTabsButton:hover, .closedtabs-icon:hover >
   -moz-box-align: start;
 }
 
+#tabmix-closedTabs-toolbaritem[cui-areatype=menu-panel] > #tabmix-closedTabs-dropmarker,
 #tabmix-closedTabs-dropmarker:not([type=menu-button]) {
   display: none;
 }
