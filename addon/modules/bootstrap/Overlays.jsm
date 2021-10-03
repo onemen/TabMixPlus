@@ -15,9 +15,6 @@ ChromeUtils.defineModuleGetter(this, "Services",
 ChromeUtils.defineModuleGetter(this, "setTimeout",
   "resource://gre/modules/Timer.jsm");
 
-const Globals = {};
-Globals.widgets = {};
-
 /**
  * The overlays class, providing support for loading overlays like they used to work. This class
  * should likely be called through its static method Overlays.load()
