@@ -153,6 +153,8 @@ Tabmix.afterDelayedStartup = function() {
     gTMPprefObserver.setTabbarDragging(false);
   }
 
+  Tabmix.handleTabbarVisibility.toggleEventListener(true);
+
   TMP_extensionsCompatibility.onDelayedStartup();
 
   setTimeout(() => Tabmix.getAfterTabsButtonsWidth(), 100);
@@ -1013,6 +1015,7 @@ var TMP_eventListener = {
     Tabmix.closedObjectsUtils.removeObservers();
     TabmixTabClickOptions.toggleEventListener(false);
     TabmixContext.toggleEventListener(false);
+    Tabmix.handleTabbarVisibility.toggleEventListener(false);
 
     TMP_Places.deinit();
     TMP_LastTab.deinit();

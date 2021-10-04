@@ -30,6 +30,8 @@
       <preference id="pref_showAllTabsButton" name="browser.tabs.tabmanager.enabled"            type="bool"/>
       <preference id="pref_tabBarSpace"       name="extensions.tabmix.tabBarSpace"              type="bool"/>
       <preference id="pref_hideTabbar"        name="extensions.tabmix.hideTabbar"               type="int"/>
+      <preference id="pref_hideTabbar.showContextMenu"
+                  name="extensions.tabmix.hideTabbar.showContextMenu"                           type="bool"/>
       <preference id="pref_tabBarPosition"    name="extensions.tabmix.tabBarPosition"           type="int"/>
       <preference id="pref_tabsScroll"        name="extensions.tabmix.tabBarMode"               type="int"
                   onchange="gAppearancePane.tabsScrollChanged();"/>
@@ -115,6 +117,8 @@
                 </menupopup>
               </menulist>
             </hbox>
+            <checkbox_tmp id="show-hideTabbar-context-menu" label="&hideTabBar.showcontextmenu;"
+                          preference="pref_hideTabbar.showContextMenu"/>
             <separator/>
             <description class="header" style="text-decoration: underline;color: #CC0000; width: &toolbar.description.width;"
                          hidden="true" id="treeStyleTab.msg">

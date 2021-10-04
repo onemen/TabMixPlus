@@ -120,6 +120,8 @@
 <!ENTITY minutes.label "minutes">
 <!ENTITY minute.label "minute">
 <!ENTITY hideTabBar.label "Hide the tab bar">
+<!ENTITY hideTabBar.label.key "H">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Never">
 <!ENTITY hideTabBar.never.key "N">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

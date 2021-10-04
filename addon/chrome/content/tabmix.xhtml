@@ -277,14 +277,17 @@
                  oncommand="TabmixAllTabs._tabsListOncommand(event);"
                  onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
       <!-- popup for show\hide the tabbar -->
-      <menupopup id="hideTabbar_context" oncommand="Tabmix.prefs.setIntPref('hideTabbar', event.originalTarget.value);"
-                 onpopupshowing="this.childNodes[TabmixTabbar.hideMode+2].setAttribute('checked' ,'true');">
-        <menuitem           type="radio" label="&hideTabBar.label;:" disabled="true" style="font-weight: bold;color: #CC0000;"/>
-        <menuseparator/>
-        <menuitem value="0" type="radio" label="&hideTabBar.never.label;"    accesskey="&hideTabBar.never.key;"/>
-        <menuitem value="1" type="radio" label="&hideTabBar.oneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
-        <menuitem value="2" type="radio" label="&hideTabBar.always.label;"   accesskey="&hideTabBar.always.key;"/>
-      </menupopup >
+      <html:template id="tabmix_hideTabbar_menu-container">
+        <menuseparator id="tabmix_hideTabbar_separator" tabmix_context="true"/>
+        <menu id="tabmix_hideTabbar_menu" tabmix_context="true" label="&hideTabBar.label;" accesskey="&hideTabBar.label.key;">
+          <menupopup oncommand="Tabmix.prefs.setIntPref('hideTabbar', event.originalTarget.value);"
+                     onpopupshowing="this.children[TabmixTabbar.hideMode].setAttribute('checked' ,'true');">
+            <menuitem value="0" type="radio" label="&hideTabBar.never.label;" accesskey="&hideTabBar.never.key;"/>
+            <menuitem value="1" type="radio" label="&hideTabBar.oneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
+            <menuitem value="2" type="radio" label="&hideTabBar.always.label;" accesskey="&hideTabBar.always.key;"/>
+          </menupopup>
+        </menu>
+      </html:template>
       <!-- tabmix tooltip for button -->
       <tooltip id="tabmix-tooltip"/>
       <!-- tabmix tooltip for tabmix-scrollbox -->

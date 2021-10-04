@@ -90,6 +90,7 @@ change default to Never Hide tabbar
 pref("extensions.tabmix.hideTabbar", 1); // default to browser.tabs.autoHide == true
 */
 pref("extensions.tabmix.hideTabbar", 0); // default to browser.tabs.autoHide == false
+pref("extensions.tabmix.hideTabbar.showContextMenu", false);
 pref("extensions.tabmix.tabBarPosition", 0);
 
 /*

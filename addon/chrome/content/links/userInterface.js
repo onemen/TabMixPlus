@@ -379,3 +379,67 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
   // return true if state changed
   boldChanged.value = currentStyle != style;
 };
+
+Tabmix.handleTabbarVisibility = {
+  get contextMenu() {
+    delete this.contextMenu;
+    return (this.contextMenu = document.getElementById("toolbar-context-menu"));
+  },
+
+  get pref() {
+    return Tabmix.prefs.getBoolPref("hideTabbar.showContextMenu");
+  },
+
+  getHideTabbarMenu() {
+    let hideTabbarMenu = document.getElementById("tabmix_hideTabbar_menu");
+    if (!hideTabbarMenu) {
+      const template = document.getElementById("tabmix_hideTabbar_menu-container");
+      this.contextMenu.appendChild(template.content.cloneNode(true));
+      hideTabbarMenu = document.getElementById("tabmix_hideTabbar_menu");
+    }
+    return {
+      hideTabbarMenu,
+      separator: document.getElementById("tabmix_hideTabbar_separator"),
+    };
+  },
+
+  enabled: false,
+  toggleEventListener(enable) {
+    if (this.pref !== this.enabled) {
+      if (this.enabled) {
+        // remove our menu items
+        const items = this.contextMenu.querySelectorAll("[tabmix_context]");
+        items.forEach(item => item.remove());
+      }
+      this.enabled = enable;
+      const eventListener = enable ? "addEventListener" : "removeEventListener";
+      this.contextMenu[eventListener]("popupshowing", this, false);
+    }
+  },
+
+  handleEvent(event) {
+    let methodName = `on_${event.type}`;
+    if (methodName in this) {
+      this[methodName](event);
+    } else {
+      throw new Error(`Unexpected event ${event.type}`);
+    }
+  },
+
+  on_popupshowing(event) {
+    if (event.target !== this.contextMenu) {
+      return;
+    }
+
+    const targetElement =
+      document.getElementById("toggle_PersonalToolbar") ??
+      document.getElementById("toggle_toolbar-menubar") ??
+      document.getElementById("viewToolbarsMenuSeparator").previousSibling;
+    const target = targetElement?.nextSibling;
+
+    const {hideTabbarMenu, separator} = this.getHideTabbarMenu();
+    this.contextMenu.insertBefore(separator, target);
+    this.contextMenu.insertBefore(hideTabbarMenu, target);
+    separator.hidden = Boolean(targetElement);
+  },
+};

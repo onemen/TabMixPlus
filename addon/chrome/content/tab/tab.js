@@ -1400,6 +1400,9 @@ gTMPprefObserver = {
         this.setAutoHidePref();
         this.setTabBarVisibility(false);
         break;
+      case "extensions.tabmix.hideTabbar.showContextMenu":
+        Tabmix.handleTabbarVisibility.toggleEventListener(Services.prefs.getBoolPref(prefName));
+        break;
       case "browser.tabs.autoHide":
         this.setAutoHidePref();
         break;

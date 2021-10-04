@@ -80,7 +80,6 @@ const widgets = {
       return `
       <toolbaritem id="${this.id}"
         class="toolbaritem-combined-buttons chromeclass-toolbar-additional"
-        context="hideTabbar_context"
         data-l10n-id="tabs-toolbar-list-all-tabs"
         badged="true"
         removable="true"
