@@ -332,7 +332,7 @@ var TMP_ClosedTabs = {
     return this._buttonBroadcaster;
   },
 
-  // make tabmix-closedTabsButton single-functionality or dual-functionality
+  // make tabmix-closedTabs-toolbaritem single-functionality or dual-functionality
   setButtonType(menuOnly) {
     const buttonType = menuOnly ? "menu" : "menu-button";
     if (this.buttonBroadcaster.getAttribute("type") != buttonType) {
@@ -341,8 +341,9 @@ var TMP_ClosedTabs = {
 
     const closedTabsButton = document.getElementById("tabmix-closedTabsButton");
     if (closedTabsButton) {
-      if (buttonType === "menu-button") {
-        closedTabsButton.setAttribute("tooltiptext", closedTabsButton.getAttribute("_tooltiptext"));
+      const onOverflowMenu = closedTabsButton.parentNode.getAttribute("cui-areatype") === "menu-panel";
+      if (buttonType === "menu-button" && !onOverflowMenu) {
+        closedTabsButton.setAttribute("tooltiptext", closedTabsButton.parentNode.getAttribute("_tooltiptext"));
       } else {
         closedTabsButton.removeAttribute("tooltiptext");
       }
@@ -867,12 +868,23 @@ Tabmix.closedObjectsUtils = {
     }
   },
 
-  showSubView(event) {
+  async showSubView(event) {
     const viewType = event.target.id == "tabmix-closedWindowsButton" ? "Windows" : "Tabs";
+
+    let anchor = event.target;
+    if (
+      !Tabmix.isVersion(860) &&
+      viewType === "Windows" &&
+      anchor.parentNode.parentNode.id === "widget-overflow-fixed-list"
+    ) {
+      anchor = document.getElementById("nav-bar-overflow-button");
+      await new Promise(r => setTimeout(r, 0));
+    }
+
     this.initObjectPanel(viewType);
     PanelUI.showSubView(
       `tabmix-closed${viewType}View`,
-      event.target,
+      anchor,
       event
     );
   },

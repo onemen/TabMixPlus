@@ -20,9 +20,8 @@ ChromeUtils.defineModuleGetter(this, "ChromeManifest",
 ChromeUtils.defineModuleGetter(this, "Overlays",
   "chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
 
-// eslint-disable-next-line no-unused-vars
-ChromeUtils.defineModuleGetter(this, "CustomizableUI",
-  "resource:///modules/CustomizableUI.jsm");
+ChromeUtils.defineModuleGetter(this, "TabmixWidgets",
+  "chrome://tabmix-resource/content/bootstrap/TabmixWidgets.jsm");
 
 const appinfo = Services.appinfo;
 const options = {
@@ -118,6 +117,8 @@ function startup(data, reason) {
     }
   });
 
+  TabmixWidgets.create();
+
   const window = Services.wm.getMostRecentWindow('navigator:browser');
   if (reason === ADDON_UPGRADE || reason === ADDON_DOWNGRADE) {
     showRestartNotification("upgraded", window);
@@ -189,4 +190,6 @@ function shutdown(data, reason) {
   } else if (reason === ADDON_UNINSTALL /* && window.Tabmix */) {
     showRestartNotification("uninstalled", window);
   }
+
+  TabmixWidgets.destroy(reason === ADDON_UNINSTALL);
 }

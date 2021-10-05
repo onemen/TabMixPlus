@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Closed Tabs">
 <!ENTITY closedtabsbtn.tooltip "Display Closed Tabs List">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Display and Manage your Sessions">
 <!ENTITY tabslistbtn.label "Opened Tabs">
 <!ENTITY tabslistbtn.tooltip "Display Opened Tabs List">

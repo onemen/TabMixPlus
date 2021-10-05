@@ -1716,6 +1716,30 @@ gTMPprefObserver = {
       }, {capture: true, once: true});
     }
 
+    if (!Tabmix.isVersion(860)) {
+      this.insertRule(
+        `#tabmix-closedTabs-dropmarker > .toolbarbutton-icon {
+          list-style-image: url(chrome://global/skin/icons/arrow-dropdown-12.svg);
+          padding-inline: 2px;
+          padding-block: calc(var(--toolbarbutton-inner-padding) + (16px - 12px) / 2);
+          width: calc(2 * 2px + 12px);
+        }`
+      );
+
+      this.insertRule(
+        `toolbarpaletteitem[place="menu-panel"] > .toolbaritem-combined-buttons[id^="tabmix"] {
+          -moz-box-flex: 1;
+          margin: 0;
+        }`
+      );
+
+      this.insertRule(
+        `toolbarpaletteitem[place="menu-panel"] > .toolbaritem-combined-buttons[id^="tabmix"] > toolbarbutton {
+          max-width: 29em !important;
+        }`
+      );
+    }
+
     this.dynamicProtonRules();
     this.toolbarbuttonTopMargin();
     this.overflowIndicator();
