@@ -185,7 +185,7 @@ var TMP_tabDNDObserver = {
     ).toCode();
 
     this._dragOverDelay = tabBar._dragOverDelay;
-    this.draglink = `Hold ${TabmixSvc.isMac ? "⌘" : "Ctrl"} to replace locked tab with link Url`;
+    this.draglink = TabmixSvc.getString("droplink.label").replace("#key", TabmixSvc.isMac ? "⌘" : "Ctrl");
 
     // without this the Indicator is not visible on the first drag
     tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";

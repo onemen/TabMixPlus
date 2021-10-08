@@ -11,6 +11,7 @@
 <!ENTITY settings.sync "Sync Preferences">
 <!ENTITY settings.default "Restore Defaults">
 <!ENTITY settings.revert "Revert">
+<!ENTITY settings.instantapply "Instant Apply">
 <!ENTITY generalWindowOpen.label "Open links that open in a new window in:">
 <!ENTITY externalLink.useSeparate.label "Use separate preference for links from other applications">
 <!ENTITY externalLinkTarget.label "Open links from other applications in:">
@@ -219,6 +220,8 @@
 <!ENTITY ontabbar.click.label "Prevent clicking on Tab-bar from dragging the window.">
 <!ENTITY clicktab.default "Firefox default or other extension">
 <!ENTITY clicktab.nothing "Does nothing">
+<!ENTITY clicktab.multiselect "Multi-select">
+<!ENTITY clicktab.rangedselect "Ranged-select">
 <!ENTITY clicktab.addtab "Open a new tab">
 <!ENTITY clicktab.duplicatetab "Duplicates the tab">
 <!ENTITY clicktab.duplicatetabw "Duplicates the tab in a new window">
