@@ -216,6 +216,9 @@ Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
     if (name) {
       return fn(name + " = " + code);
     }
+    if (code.startsWith("async") && !code.startsWith("async function")) {
+      return fn("(async function " + code.replace(/^async/, "") + ")");
+    }
     if (!code.startsWith("function")) {
       return fn("(function " + code + ")");
     }

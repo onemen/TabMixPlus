@@ -36,6 +36,16 @@ var TMP_Places = {
     // PlacesCommandHook exist on browser window
     if ("PlacesCommandHook" in window) {
       gBrowser.tabContainer.addEventListener("SSTabRestored", this);
+
+      Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.getUniquePages")._replace(
+        'browser.contentTitle || tab.label;',
+        'tab.getAttribute("fixed-label") || $&'
+      ).toCode();
+
+      Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
+        'info.title = info.title || url.href',
+        'info.title = gBrowser.selectedTab.getAttribute("fixed-label") || info.title || url.href'
+      ).toCode();
     }
   },
 
