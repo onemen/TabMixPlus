@@ -68,9 +68,10 @@ const widgets = {
   },
   alltabs: {
     id: "tabmix-alltabs-toolbaritem",
-    localizeFiles: ["chrome://browser/locale/browser.dtd"],
+    localizeFiles: [],
     get updateMarkup() {
       if (!TabmixSvc.version(940)) {
+        this.localizeFiles.push("chrome://browser/locale/browser.dtd");
         const label = 'label="&listAllTabs.label;" tooltiptext="&listAllTabs.label;"';
         return this.markup.replace(/data-l10n-id=[^\n]*/g, label);
       }
