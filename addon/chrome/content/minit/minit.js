@@ -901,6 +901,15 @@ Tabmix.navToolbox = {
     if (!this.urlBarInitialized) {
       Tabmix.originalFunctions.gURLBar_handleCommand = gURLBar.handleCommand;
       gURLBar.handleCommand = this.handleCommand.bind(gURLBar);
+
+      Tabmix.originalFunctions.gURLBar__whereToOpen = gURLBar._whereToOpen;
+      gURLBar._whereToOpen = function(event) {
+        if (event?.__tabmix__whereToOpen) {
+          return event.__tabmix__whereToOpen;
+        }
+        return Tabmix.originalFunctions.gURLBar__whereToOpen.apply(this, arguments);
+      };
+
       gURLBar.view._rows.addEventListener("mouseup", event => {
         this.on_mouseup(event);
       }, {capture: true});
@@ -908,7 +917,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  handleCommand(event, openUILinkWhere, openUILinkParams = {}) {
+  handleCommand(event, openUILinkWhere) {
     let prevTab, prevTabPos;
     let element = this.view.selectedElement;
     let result = this.view.getResultFromElement(element);
@@ -918,6 +927,7 @@ Tabmix.navToolbox = {
       prevTabPos = prevTab._tPos;
     }
 
+    // openUILinkWhere is not used since Firefox 83
     if (!openUILinkWhere) {
       let isMouseEvent = event instanceof MouseEvent;
       let altEnter = !isMouseEvent && event &&
@@ -936,11 +946,13 @@ Tabmix.navToolbox = {
         else if (!isMouseEvent && !loadNewTab && /^tab/.test(where))
           where = "current";
       }
-      openUILinkWhere = where;
+      if (Tabmix.prefs.getBoolPref("loadUrlInBackground") && where === "tab") {
+        where = "tabshifted";
+      }
+      event.__tabmix__whereToOpen = where;
     }
 
-    openUILinkParams.inBackground = Tabmix.prefs.getBoolPref("loadUrlInBackground");
-    Tabmix.originalFunctions.gURLBar_handleCommand.call(gURLBar, event, openUILinkWhere, openUILinkParams);
+    Tabmix.originalFunctions.gURLBar_handleCommand.apply(this, arguments);
 
     // move the tab that was switched to after the previously selected tab
     if (typeof prevTabPos == "number") {
