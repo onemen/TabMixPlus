@@ -229,10 +229,15 @@ var gPrefWindow = {
     applyButton.hidden = this.instantApply && disable;
     docElt.getButton("accept").hidden = disable;
 
+    const donateBox = document.querySelector(".donate-button-container");
+    donateBox.hidden = this.instantApply && !disable;
+
     var action = disable ? "close" : "cancel";
     var cancelButton = docElt.getButton("cancel");
     cancelButton.label = docElt.getAttribute(action + "buttonlabel");
     cancelButton.setAttribute("icon", action);
+
+    docElt.defaultButton = disable ? "cancel" : "accept";
   },
 
   removeItemAndPrefById(id) {

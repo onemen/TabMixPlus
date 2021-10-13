@@ -42,14 +42,6 @@ html|input[type="color"] {
   width: 38px;
 }
 
-@media not (-moz-proton) {
-.color-swatch > html|input[type="color"]::-moz-color-swatch {
-  width: calc(100% - 4px);
-  height: calc(100% - 4px);
-  padding: 2px;
-}
-}
-
 .rgbcontrol {
   margin-left: -1px;
   margin-right: 0;

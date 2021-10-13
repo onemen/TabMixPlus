@@ -1037,7 +1037,7 @@ class PrefWindow extends MozXULElement {
           </deck>
         </hbox>
         <hbox class="prefWindow-dlgbuttons donate-button-container">
-        <button class="donate-button dialog-button" onclick="donate();"/>
+          <button class="donate-button dialog-button" onclick="donate();"/>
         </hbox>
         <hbox anonid="dlg-buttons" class="prefWindow-dlgbuttons" pack="end">` +
         this.osButtons + `

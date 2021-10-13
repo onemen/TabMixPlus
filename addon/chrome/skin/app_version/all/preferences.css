@@ -71,3 +71,7 @@ prefwindow[chromehidden~="toolbar"] .chromeclass-toolbar {
 windowdragbox {
   width: 100%;
 }
+
+.font-bold {
+  font-weight: bold;
+}

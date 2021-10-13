@@ -46,7 +46,7 @@
         <checkbox anonid="underline" inherits="disabled" label="&underline.label;"></checkbox>
       </hbox>
       <vbox flex="1">
-        <colorbox anonid="textColor" inherits="disabled=text-disabled,_hidebox" ${Tabmix.isVersion(910) ? 'class="color-swatch"' : ""}>
+        <colorbox anonid="textColor" inherits="disabled=text-disabled,_hidebox">
           <checkbox anonid="text" class="visible" inherits="disabled" label="&textcolor.label;:" oncommand="this.parentNode.parentNode.parentNode.updateDisableState(this.getAttribute('anonid'))"></checkbox>
         </colorbox>
         <checkbox_tmp anonid="bg" inherits="disabled" label="&bgColor.label;:" oncommand="this.parentNode.parentNode.updateDisableState(this.getAttribute('anonid'))"></checkbox_tmp>
