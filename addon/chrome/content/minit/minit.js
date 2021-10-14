@@ -907,6 +907,11 @@ Tabmix.navToolbox = {
         if (event?.__tabmix__whereToOpen) {
           return event.__tabmix__whereToOpen;
         }
+        if (gBrowser.selectedBrowser.__tabmix__whereToOpen) {
+          const where = gBrowser.selectedBrowser.__tabmix__whereToOpen;
+          delete gBrowser.selectedBrowser.__tabmix__whereToOpen;
+          return where;
+        }
         return Tabmix.originalFunctions.gURLBar__whereToOpen.apply(this, arguments);
       };
 
@@ -949,10 +954,23 @@ Tabmix.navToolbox = {
       if (Tabmix.prefs.getBoolPref("loadUrlInBackground") && where === "tab") {
         where = "tabshifted";
       }
-      event.__tabmix__whereToOpen = where;
+      if (event) {
+        event.__tabmix__whereToOpen = where;
+      } else if (
+        where.startsWith("tab") &&
+        // when user clicked paste & go with current url we let Firefox
+        // reload the same url
+        this.untrimmedValue !== gBrowser.selectedBrowser.currentURI.spec
+      ) {
+        gBrowser.selectedBrowser.__tabmix__whereToOpen = where;
+      }
     }
 
     Tabmix.originalFunctions.gURLBar_handleCommand.apply(this, arguments);
+
+    if (gBrowser.selectedBrowser.__tabmix__whereToOpen) {
+      delete gBrowser.selectedBrowser.__tabmix__whereToOpen;
+    }
 
     // move the tab that was switched to after the previously selected tab
     if (typeof prevTabPos == "number") {

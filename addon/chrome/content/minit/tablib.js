@@ -40,6 +40,14 @@ Tabmix.tablib = {
       }
       return null;
     };
+
+    for (const tab of gBrowser.tabs) {
+      const browser = tab.linkedBrowser;
+      browser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
+      if (tab.linkedPanel) {
+        browser.loadURI = _loadURI.bind(null, browser);
+      }
+    }
   },
 
   _loadURI(browser, uri, params) {
