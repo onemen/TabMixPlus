@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "לשוניות שנסגרו">
 <!ENTITY closedtabsbtn.tooltip "הצג רשימת לשוניות שנסגרו">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "הצג ונהל את הפעלותיך">
 <!ENTITY tabslistbtn.label "לשוניות שנפתחו">
 <!ENTITY tabslistbtn.tooltip "הצג רשימת לשוניות שנפתחו">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "דקות">
 <!ENTITY minute.label "דקה">
 <!ENTITY hideTabBar.label "הסתר את סרגל הלשוניות">
+<!ENTITY hideTabBar.label.key "ה">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "לעולם לא">
 <!ENTITY hideTabBar.never.key "ל">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

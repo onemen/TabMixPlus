@@ -170,26 +170,7 @@
 <!ENTITY showTabX.left "sulla parte sinistra">
 <!ENTITY showTabX.rtl "sulla parte destra">
 <!ENTITY milliseconds.label " ">
-<!-- LOCALIZATION NOTE
-          change this only if you need to change the width
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--->
+<!-- LOCALIZATION NOTE change this only if you need to change the width -->
 <!ENTITY showTabX.popup.width "13em">
 <!ENTITY showTabX.always "sempre">
 <!ENTITY showTabX.current "nella scheda attuale">
@@ -203,26 +184,7 @@
 <!ENTITY onLeftDisabled.tst.label "Can&apos;t place button on left side when treeStyleTab installed">
 <!ENTITY flexTabs.label "Adatta le schede al titolo della pagina web">
 <!ENTITY bookastitle.label "Utilizza il nome del segnalibro come titolo per la scheda">
-<!-- LOCALIZATION NOTE
-          change this only if you need to change the width
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--->
+<!-- LOCALIZATION NOTE change this only if you need to change the width -->
 <!ENTITY toolbar.description.width "21em">
 <!ENTITY toolbar.description "È possibile personalizzare quali pulsanti di Tab Mix Plus mostrare nelle barre degli strumenti">
 <!ENTITY toolbar.button.label "Personalizza">

@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Separadores fechados">
 <!ENTITY closedtabsbtn.tooltip "Mostrar lista dos separadores fechados">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Mostrar e gerir as suas sessões">
 <!ENTITY tabslistbtn.label "Separadores abertos">
 <!ENTITY tabslistbtn.tooltip "Mostrar lista dos separadores abertos">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "minutos">
 <!ENTITY minute.label "minuto">
 <!ENTITY hideTabBar.label "Ocultar a barra do separador">
+<!ENTITY hideTabBar.label.key "O">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Nunca">
 <!ENTITY hideTabBar.never.key "N">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

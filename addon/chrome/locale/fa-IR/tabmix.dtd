@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "برگه های بسته شده">
 <!ENTITY closedtabsbtn.tooltip "نمایش لیست برگه های بسته شده">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "نمایش و مدیریت نشست ها">
 <!ENTITY tabslistbtn.label "برگه های باز شده">
 <!ENTITY tabslistbtn.tooltip "نمایش لیست برگه های باز شده">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "دقیقه">
 <!ENTITY minute.label "دقیقه">
 <!ENTITY hideTabBar.label "پنهان کردن نوار برگه ها">
+<!ENTITY hideTabBar.label.key "پ">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "هیچ وقت">
 <!ENTITY hideTabBar.never.key "و">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

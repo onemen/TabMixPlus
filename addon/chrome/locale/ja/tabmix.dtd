@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "最近閉じたタブ">
 <!ENTITY closedtabsbtn.tooltip "最近閉じたタブのリストを表示">
+<!ENTITY reopenlastclosedtab.tooltip "最後に閉じたタブを開く">
 <!ENTITY sessionbtn.tooltip "セッションを表示＆操作">
 <!ENTITY tabslistbtn.label "タブの一覧">
 <!ENTITY tabslistbtn.tooltip "[タブの一覧] を表示">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "分">
 <!ENTITY minute.label "分">
 <!ENTITY hideTabBar.label "タブバーの表示">
+<!ENTITY hideTabBar.label.key "H">
+<!ENTITY hideTabBar.showcontextmenu "'タブバーの表示'をツールバーのコンテキストメニューに追加">
 <!ENTITY hideTabBar.never.label "常に表示する">
 <!ENTITY hideTabBar.never.key "N">
 <!ENTITY hideTabBar.oneTab.label "タブが一つのときは隠す">

@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Gesloten tabbladen">
 <!ENTITY closedtabsbtn.tooltip "Lijst met gesloten tabbladen weergeven">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "De sessies weergeven en beheren">
 <!ENTITY tabslistbtn.label "Geopende tabbladen">
 <!ENTITY tabslistbtn.tooltip "Lijst met geopende tabbladen weergeven">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "minuten">
 <!ENTITY minute.label "minuut">
 <!ENTITY hideTabBar.label "De tabbladenbalk verbergen">
+<!ENTITY hideTabBar.label.key "D">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Nooit">
 <!ENTITY hideTabBar.never.key "N">
 <!ENTITY hideTabBar.oneTab.label "Als slechts één tabblad geopend is">

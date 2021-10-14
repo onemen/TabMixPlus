@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Pestanyes tancades">
 <!ENTITY closedtabsbtn.tooltip "Mostra la llista de pestanyes tancades">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Mostra i gestiona les sessions">
 <!ENTITY tabslistbtn.label "Pestanyes obertes">
 <!ENTITY tabslistbtn.tooltip "Mostra la llista de pestanyes obertes">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "minuts">
 <!ENTITY minute.label "minut">
 <!ENTITY hideTabBar.label "Amaga la barra de pestanyes">
+<!ENTITY hideTabBar.label.key "A">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Mai">
 <!ENTITY hideTabBar.never.key "M">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

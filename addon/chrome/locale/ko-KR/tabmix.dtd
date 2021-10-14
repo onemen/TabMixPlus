@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "닫은 탭">
 <!ENTITY closedtabsbtn.tooltip "닫은 탭 목록을 보여줍니다.">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "세션을 보여주고 관리합니다.">
 <!ENTITY tabslistbtn.label "열린 탭">
 <!ENTITY tabslistbtn.tooltip "열린 탭 목록을 보여줍니다.">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "분">
 <!ENTITY minute.label "분">
 <!ENTITY hideTabBar.label "탭 도구 모음 숨기기">
+<!ENTITY hideTabBar.label.key "H">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "사용 안함">
 <!ENTITY hideTabBar.never.key "N">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Suletud kaardid">
 <!ENTITY closedtabsbtn.tooltip "Näita suletud kaartide loendit">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Vaata ja halda oma seansse">
 <!ENTITY tabslistbtn.label "Avatud kaardid">
 <!ENTITY tabslistbtn.tooltip "Näita avatud kaartide loendit">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "minutit">
 <!ENTITY minute.label "minut">
 <!ENTITY hideTabBar.label "Peida kaartide riba">
+<!ENTITY hideTabBar.label.key "P">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Mitte kunagi">
 <!ENTITY hideTabBar.never.key "M">
 <!ENTITY hideTabBar.oneTab.label "Kui avatud on ainult üks kaart">

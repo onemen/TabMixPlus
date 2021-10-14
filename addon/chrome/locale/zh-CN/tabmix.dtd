@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "已关闭的标签页">
 <!ENTITY closedtabsbtn.tooltip "显示已关闭的标签页列表">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "显示并管理您的浏览进程">
 <!ENTITY tabslistbtn.label "已打开的标签页">
 <!ENTITY tabslistbtn.tooltip "显示已打开的标签页列表">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "分钟">
 <!ENTITY minute.label "分钟">
 <!ENTITY hideTabBar.label "隐藏标签栏">
+<!ENTITY hideTabBar.label.key "H">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "不隐藏">
 <!ENTITY hideTabBar.never.key "N">
 <!ENTITY hideTabBar.oneTab.label "在您只有一个标签页时">

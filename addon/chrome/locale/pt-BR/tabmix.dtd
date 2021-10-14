@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Abas fechadas">
 <!ENTITY closedtabsbtn.tooltip "Mostra lista de abas fechadas">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Mostra e gerencia suas sessões">
 <!ENTITY tabslistbtn.label "Abas abertas">
 <!ENTITY tabslistbtn.tooltip "Mostra lista de abas abertas">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "minutos">
 <!ENTITY minute.label "minuto">
 <!ENTITY hideTabBar.label "Esconder a barra de abas">
+<!ENTITY hideTabBar.label.key "E">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Nunca">
 <!ENTITY hideTabBar.never.key "N">
 <!ENTITY hideTabBar.oneTab.label "Quando você tem apenas uma aba">

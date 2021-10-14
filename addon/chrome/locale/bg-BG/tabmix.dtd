@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Затворени подпрозорци">
 <!ENTITY closedtabsbtn.tooltip "Показване на списък на затворените подпрозорци">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Показване и управляване на сесиите Ви">
 <!ENTITY tabslistbtn.label "Отворени подпрозорци">
 <!ENTITY tabslistbtn.tooltip "Показване на списък на отворените подпрозорци">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "минути">
 <!ENTITY minute.label "минута">
 <!ENTITY hideTabBar.label "Скриване на лентата с подпрозорци">
+<!ENTITY hideTabBar.label.key "С">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Никога">
 <!ENTITY hideTabBar.never.key "Н">
 <!ENTITY hideTabBar.oneTab.label "При само един подпрозорец">

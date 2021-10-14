@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Zavřené panely">
 <!ENTITY closedtabsbtn.tooltip "Zobrazit seznam zavřených panelů">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Zobrazit a spravovat relace">
 <!ENTITY tabslistbtn.label "Otevřené panely">
 <!ENTITY tabslistbtn.tooltip "Zobrazit seznam otevřených panelů">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "min">
 <!ENTITY minute.label "min">
 <!ENTITY hideTabBar.label "Skrýt lištu s panely">
+<!ENTITY hideTabBar.label.key "S">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Nikdy">
 <!ENTITY hideTabBar.never.key "N">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

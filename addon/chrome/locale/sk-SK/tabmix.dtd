@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Zatvorené karty">
 <!ENTITY closedtabsbtn.tooltip "Zobraziť zoznam zatvorených kariet">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Zobraziť a upraviť relácie">
 <!ENTITY tabslistbtn.label "Otvorené karty">
 <!ENTITY tabslistbtn.tooltip "Zobraziť zoznam otvorených kariet">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "minút">
 <!ENTITY minute.label "minúta">
 <!ENTITY hideTabBar.label "Skryť panel karty">
+<!ENTITY hideTabBar.label.key "S">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Nikdy">
 <!ENTITY hideTabBar.never.key "N">
 <!ENTITY hideTabBar.oneTab.label "Ak je otvorená len jedna karta">

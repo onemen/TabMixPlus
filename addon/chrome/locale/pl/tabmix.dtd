@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Zamknięte karty">
 <!ENTITY closedtabsbtn.tooltip "Wyświetla listę zamkniętych kart">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Wyświetla zapisane sesje i pomaga zarządzać nimi">
 <!ENTITY tabslistbtn.label "Otwarte karty">
 <!ENTITY tabslistbtn.tooltip "Wyświetla listę otwartych kart">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "min">
 <!ENTITY minute.label "min">
 <!ENTITY hideTabBar.label "Wyświetlanie paska kart">
+<!ENTITY hideTabBar.label.key "W">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Zawsze">
 <!ENTITY hideTabBar.never.key "W">
 <!ENTITY hideTabBar.oneTab.label "Gdy jest tylko jedna karta">

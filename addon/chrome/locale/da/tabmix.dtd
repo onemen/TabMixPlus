@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Lukkede faneblade">
 <!ENTITY closedtabsbtn.tooltip "Vis Lukkede faneblade-liste">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Vis og administrer dine sessioner">
 <!ENTITY tabslistbtn.label "Åbnede faneblade">
 <!ENTITY tabslistbtn.tooltip "Vis Åbnede faneblade-liste">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "minutter">
 <!ENTITY minute.label "minut">
 <!ENTITY hideTabBar.label "Skjul fanebladslinjen">
+<!ENTITY hideTabBar.label.key "S">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Aldrig">
 <!ENTITY hideTabBar.never.key "l">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

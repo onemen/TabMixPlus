@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Закрытые вкладки">
 <!ENTITY closedtabsbtn.tooltip "Показать список закрытых вкладок">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Отображение и управление сессиями">
 <!ENTITY tabslistbtn.label "Открытые вкладки">
 <!ENTITY tabslistbtn.tooltip "Показать список открытых вкладок">
@@ -79,7 +80,7 @@
 <!ENTITY bookmark.accesskey "ц">
 <!ENTITY deletelist.label "Удалить из списка">
 <!ENTITY deletelist.accesskey "У">
-<!ENTITY settings.label "Настройки ">
+<!ENTITY settings.label "Настройки">
 <!ENTITY saveWindow.label "Сохранить данное окно">
 <!ENTITY saveAllWindows.label "Сохранить все окна">
 <!ENTITY sm.context.overwrite "Восстановить с заменой существующих окон">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "минут">
 <!ENTITY minute.label "минута">
 <!ENTITY hideTabBar.label "Скрывать панель вкладок">
+<!ENTITY hideTabBar.label.key "C">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Никогда">
 <!ENTITY hideTabBar.never.key "Н">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

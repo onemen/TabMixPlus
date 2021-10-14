@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Bezárt lapok">
 <!ENTITY closedtabsbtn.tooltip "Bezárt lapok listája">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Munkamenet-kezelő">
 <!ENTITY tabslistbtn.label "Megnyitott lapok">
 <!ENTITY tabslistbtn.tooltip "Megnyitott lapok listája">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "perc">
 <!ENTITY minute.label "perc">
 <!ENTITY hideTabBar.label "Lapok eszköztár elrejtése">
+<!ENTITY hideTabBar.label.key "L">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Soha">
 <!ENTITY hideTabBar.never.key "S">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

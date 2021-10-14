@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Geschlossene Tabs">
 <!ENTITY closedtabsbtn.tooltip "Liste geschlossener Tabs anzeigen und Tab wiederherstellen (Linksklick auf Schaltfläche)">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Sitzungen anzeigen und verwalten">
 <!ENTITY tabslistbtn.label "Offene Tabs">
 <!ENTITY tabslistbtn.tooltip "Liste offener Tabs anzeigen">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "Minuten">
 <!ENTITY minute.label "Minute">
 <!ENTITY hideTabBar.label "Tab-Leiste ausblenden">
+<!ENTITY hideTabBar.label.key "T">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "nie">
 <!ENTITY hideTabBar.never.key "n">
 <!ENTITY hideTabBar.oneTab.label "Bei nur einem geöffneten Tab">

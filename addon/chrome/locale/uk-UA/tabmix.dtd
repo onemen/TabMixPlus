@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Закриті вкладки">
 <!ENTITY closedtabsbtn.tooltip "Показати список закритих вкладок">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Відображення і управління сесіями">
 <!ENTITY tabslistbtn.label "Відкриті вкладки">
 <!ENTITY tabslistbtn.tooltip "Показати список відкритих вкладок">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "хвилин">
 <!ENTITY minute.label "хвилина">
 <!ENTITY hideTabBar.label "Приховати панель вкладок">
+<!ENTITY hideTabBar.label.key "П">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Ніколи">
 <!ENTITY hideTabBar.never.key "N">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Thẻ đã đóng">
 <!ENTITY closedtabsbtn.tooltip "Hiển thị Danh sách Thẻ đã đóng">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Hiển thị và Quản lí các Phiên của bạn.">
 <!ENTITY tabslistbtn.label "Thẻ đã mở">
 <!ENTITY tabslistbtn.tooltip "Hiển thị Danh sách Thẻ đã mở">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "phút">
 <!ENTITY minute.label "phút">
 <!ENTITY hideTabBar.label "Ẩn thanh thẻ">
+<!ENTITY hideTabBar.label.key "H">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Không bao giờ">
 <!ENTITY hideTabBar.never.key "K">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Κλεισμένες καρτέλες">
 <!ENTITY closedtabsbtn.tooltip "Εμφάνιση λίστας κλεισμένων καρτελών">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Εμφάνιση και διαχείριση των συνεδριών σας">
 <!ENTITY tabslistbtn.label "Ανοιγμένες καρτέλες">
 <!ENTITY tabslistbtn.tooltip "Εμφάνιση λίστας ανοιγμένων καρτελών">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "λεπτά">
 <!ENTITY minute.label "λεπτό">
 <!ENTITY hideTabBar.label "Απόκρυψη της εργαλειοθήκης καρτελών">
+<!ENTITY hideTabBar.label.key "A">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Ποτέ">
 <!ENTITY hideTabBar.never.key "τ">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

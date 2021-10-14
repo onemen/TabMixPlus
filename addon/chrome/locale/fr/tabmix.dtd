@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Onglets récemment fermés">
 <!ENTITY closedtabsbtn.tooltip "Afficher la liste des onglets récemment fermés">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Afficher et gérer vos sessions">
 <!ENTITY tabslistbtn.label "Onglets ouverts">
 <!ENTITY tabslistbtn.tooltip "Afficher la liste des onglets ouverts">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "minutes">
 <!ENTITY minute.label "minute">
 <!ENTITY hideTabBar.label "Cacher la barre d&apos;onglets">
+<!ENTITY hideTabBar.label.key "C">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Jamais">
 <!ENTITY hideTabBar.never.key "J">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

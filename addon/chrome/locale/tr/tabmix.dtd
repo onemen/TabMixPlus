@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Kapatılmış sekmeler">
 <!ENTITY closedtabsbtn.tooltip "Kapatılmış sekmeler listesini göster">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Oturumları göster ve yönet">
 <!ENTITY tabslistbtn.label "Açık sekmeler">
 <!ENTITY tabslistbtn.tooltip "Açık sekmeler listesini göster">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "dakika">
 <!ENTITY minute.label "dakika">
 <!ENTITY hideTabBar.label "Sekme çubuğunu gizle">
+<!ENTITY hideTabBar.label.key "S">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Asla">
 <!ENTITY hideTabBar.never.key "A">
 <!ENTITY hideTabBar.oneTab.label "Yalnızca bir sekme olduğunda">

@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Schede chiuse">
 <!ENTITY closedtabsbtn.tooltip "Visualizza la lista delle schede chiuse">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Mostra e gestisci le sessioni salvate">
 <!ENTITY tabslistbtn.label "Schede aperte">
 <!ENTITY tabslistbtn.tooltip "Visualizza la lista delle schede aperte">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "minuti">
 <!ENTITY minute.label "minuto">
 <!ENTITY hideTabBar.label "Visualizzazione della barra delle schede">
+<!ENTITY hideTabBar.label.key "V">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Attiva sempre">
 <!ENTITY hideTabBar.never.key "v">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

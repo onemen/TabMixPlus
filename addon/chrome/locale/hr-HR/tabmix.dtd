@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Zatvorene kartice">
 <!ENTITY closedtabsbtn.tooltip "Prikaži popis zatvorenih kartica">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Prikaži i uredi Vaše Prijave">
 <!ENTITY tabslistbtn.label "Otvorene kartice">
 <!ENTITY tabslistbtn.tooltip "Prikaži popis otvorenih kertica">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "minuta">
 <!ENTITY minute.label "minuta">
 <!ENTITY hideTabBar.label "Hide the tab bar">
+<!ENTITY hideTabBar.label.key "H">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Never">
 <!ENTITY hideTabBar.never.key "N">
 <!ENTITY hideTabBar.oneTab.label "When you have only one tab">

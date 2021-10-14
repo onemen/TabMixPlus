@@ -1,5 +1,6 @@
 <!ENTITY closedtabsbtn.label "Pestañas cerradas">
 <!ENTITY closedtabsbtn.tooltip "Mostrar lista pestañas cerradas">
+<!ENTITY reopenlastclosedtab.tooltip "Reopen last closed tab">
 <!ENTITY sessionbtn.tooltip "Mostrar y administrar sus sesiones">
 <!ENTITY tabslistbtn.label "Pestañas abiertas">
 <!ENTITY tabslistbtn.tooltip "Mostrar pestañas abiertas">
@@ -119,6 +120,8 @@
 <!ENTITY minutes.label "minutos">
 <!ENTITY minute.label "minuto">
 <!ENTITY hideTabBar.label "Ocultar la barra de pestañas">
+<!ENTITY hideTabBar.label.key "O">
+<!ENTITY hideTabBar.showcontextmenu "Add 'Hide the tab bar' to Toolbar context menu">
 <!ENTITY hideTabBar.never.label "Nunca">
 <!ENTITY hideTabBar.never.key "N">
 <!ENTITY hideTabBar.oneTab.label "Cuando tenga una sola pestaña">
