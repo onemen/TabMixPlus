@@ -17,6 +17,12 @@ ChromeUtils.defineModuleGetter(
   "resource://gre/modules/PromiseUtils.jsm"
 );
 
+ChromeUtils.defineModuleGetter(
+  this,
+  "BrowserWindowTracker",
+  "resource:///modules/BrowserWindowTracker.jsm"
+);
+
 //////////////////////////////////////////////////////////////////////
 // The Original Code is the Merge Window function of "Duplicate Tab"//
 // extension for Mozilla Firefox.                                   //
@@ -286,17 +292,19 @@ this.MergeWindows = {
     };
 
     let windows = [], popUps = [];
-    // getEnumerator return windows from oldest to newest, so we use unshift.
-    let windowList = Services.wm.getEnumerator("navigator:browser");
-    while ((aOptions.multiple || windows.length === 0) && windowList.hasMoreElements()) {
-      let nextWin = windowList.getNext();
+    const windowList = BrowserWindowTracker.orderedWindows;
+    for (const nextWin of windowList) {
       if (isSuitableBrowserWindow(nextWin)) {
         if (this.isPopupWindow(nextWin))
-          popUps.unshift(nextWin);
+          popUps.push(nextWin);
         else
-          windows.unshift(nextWin);
+          windows.push(nextWin);
+      }
+      if (!aOptions.multiple && windows.length) {
+        break;
       }
     }
+
     aOptions.privateNotMatch = privateNotMatch > 0;
     if (aOptions.skipPopup)
       popUps = [];
