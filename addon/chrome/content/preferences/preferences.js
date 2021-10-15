@@ -592,19 +592,21 @@ async function importData() {
  * @return Promise<{nsILocalFile}>
  */
 function showFilePicker(mode) {
-  const nsIFilePicker = Ci.nsIFilePicker;
-  var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-  if (mode == "open")
-    mode = nsIFilePicker.modeOpen;
-  else {
-    fp.defaultExtension = "txt";
-    fp.defaultString = "TMPpref";
-    mode = nsIFilePicker.modeSave;
-  }
-  fp.init(window, null, mode);
-  fp.appendFilters(nsIFilePicker.filterText);
-  return AsyncUtils.spawnFn(fp, fp.open).then(aResult => {
-    return aResult != nsIFilePicker.returnCancel ? fp.file : null;
+  return new Promise(resolve => {
+    const nsIFilePicker = Ci.nsIFilePicker;
+    var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
+    if (mode == "open")
+      mode = nsIFilePicker.modeOpen;
+    else {
+      fp.defaultExtension = "txt";
+      fp.defaultString = "TMPpref";
+      mode = nsIFilePicker.modeSave;
+    }
+    fp.init(window, null, mode);
+    fp.appendFilters(nsIFilePicker.filterText);
+    fp.open(result => {
+      resolve(result != nsIFilePicker.returnCancel ? fp.file : null);
+    });
   });
 }
 
@@ -758,9 +760,6 @@ XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", () => {
 });
 
 ChromeUtils.defineModuleGetter(this, "OS", "resource://gre/modules/osfile.jsm");
-
-ChromeUtils.defineModuleGetter(this, "AsyncUtils",
-  "chrome://tabmix-resource/content/AsyncUtils.jsm");
 
 // eslint-disable-next-line no-unused-vars
 XPCOMUtils.defineLazyGetter(this, "RTL_UI", () => {
