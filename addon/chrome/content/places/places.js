@@ -62,8 +62,11 @@ var TMP_Places = {
       return;
 
     var aMenuPopup = aEvent.target;
-    if (aMenuPopup.id != "goPopup" && aMenuPopup.id != "appmenu_historyMenupopup")
+    // "goPopup" replace by "historyMenuPopup" on Firefox 95
+    const ids = ["goPopup", "historyMenuPopup", "appmenu_historyMenupopup"];
+    if (!ids.includes(aMenuPopup.id)) {
       return;
+    }
 
     for (let i = 0; i < aMenuPopup.childNodes.length; i++) {
       let item = aMenuPopup.childNodes[i];
@@ -90,6 +93,7 @@ var TMP_Places = {
   idsMap: {
     "PanelUI-historyItems": "history",
     goPopup: "history",
+    historyMenuPopup: "history",
     bookmarksMenuPopup: "bookmarks",
     BMB_bookmarksPopup: "bookmarks",
   },
