@@ -737,7 +737,7 @@ Tabmix.tablib = {
        if (window) {
         window.focus();
         let index = aIndex || 0;
-        let closedWindows = JSON.parse(SessionStore.getClosedWindowData());
+        let closedWindows = SessionStore.getClosedWindowData(false);
         SessionStore.forgetClosedWindow(index);
         let state = closedWindows.splice(index, 1).shift();
         state = JSON.stringify({windows: [state]});
