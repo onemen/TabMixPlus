@@ -56,6 +56,17 @@
 }
 
 /* for extra icons */
+.tab-icon-stack:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) > .tab-lock-icon {
+  opacity: 1 !important;
+  margin-inline-start: -4px;
+}
+
+.tab-icon-stack:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) > .tab-protect-icon,
+.tab-icon-stack:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) > .tab-reload-icon {
+  opacity: 1 !important;
+  margin-inline-start: 4px;
+}
+
 .tab-protect-icon {
   list-style-image: url("protected.png");
   display: none;
