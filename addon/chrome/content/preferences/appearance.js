@@ -60,35 +60,57 @@ var gAppearancePane = {
 
     // waterfox position control
     if (TabmixSvc.isG3Waterfox) {
-      gPrefWindow.removeItemAndPrefById("pref_tabBarPosition");
-      MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
-      const position = $("waterfox-tabBarPosition");
-      position.hidden = false;
-      position.appendChild(MozXULElement.parseXULToFragment(
-        `<menupopup>
-           <menuitem value="topAboveAB"
-             data-l10n-id="tab-top-above-ab"/>
-           <menuitem value="topUnderAB"
-             data-l10n-id="tab-top-under-ab"/>
-           <menuitem value="bottom"
-             data-l10n-id="tab-bottom"/>
-         </menupopup>`
-      ));
-      position.setAttribute("preference", "browser.tabBar.position");
-      position.setAttribute("value", Services.prefs.getCharPref("browser.tabBar.position"));
-      const preferences = $("paneAppearance").querySelector("preferences");
-      preferences.appendChild(MozXULElement.parseXULToFragment(
-        `<preference id="browser.tabBar.position"
-                     name="browser.tabBar.position"
-                     type="string"
-                     onchange="window.opener.moveTabBar();"/>`
-      ));
+      this._waterfoxPositionControl();
     }
 
     gPrefWindow.initPane("paneAppearance");
     // call this function after initPane
     // we update some broadcaster that initPane may reset
     this.toolbarButtons(browserWindow);
+  },
+
+  _waterfoxPositionControl() {
+    gPrefWindow.removeItemAndPrefById("pref_tabBarPosition");
+    MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
+    const position = $("waterfox-tabBarPosition");
+    position.hidden = false;
+    let positionPref, defaultPrefValue;
+    if (Tabmix.isVersion(913)) {
+      defaultPrefValue = "topabove";
+      positionPref = "browser.tabs.toolbarposition";
+      position.appendChild(MozXULElement.parseXULToFragment(
+        `<menupopup>
+           <menuitem id="tabBarTopAbove" value="topabove" data-l10n-id="tab-bar-top-above"/>
+           <menuitem id="tabBarTopBelow" value="topbelow" data-l10n-id="tab-bar-top-below"/>
+           <menuitem id="tabBarBottomAbove" value="bottomabove" data-l10n-id="tab-bar-bottom-above"/>
+           <menuitem id="tabBarBottomBelow" value="bottombelow" data-l10n-id="tab-bar-bottom-below"/>
+         </menupopup>`
+      ));
+      if (!Services.prefs.prefHasUserValue(positionPref)) {
+        document.l10n.translateElements([$("tabBarTopAbove")]).then(() => {
+          position.setAttribute("label", $("tabBarTopAbove").label);
+        });
+      }
+    } else {
+      defaultPrefValue = "topAboveAB";
+      positionPref = "browser.tabBar.position";
+      position.appendChild(MozXULElement.parseXULToFragment(
+        `<menupopup>
+           <menuitem value="topAboveAB" data-l10n-id="tab-top-above-ab"/>
+           <menuitem value="topUnderAB" data-l10n-id="tab-top-under-ab"/>
+           <menuitem value="bottom" data-l10n-id="tab-bottom"/>
+         </menupopup>`
+      ));
+    }
+    position.setAttribute("preference", positionPref);
+    position.setAttribute("value", Services.prefs.getCharPref(positionPref, defaultPrefValue));
+    const preferences = $("paneAppearance").querySelector("preferences");
+    preferences.appendChild(MozXULElement.parseXULToFragment(
+      `<preference id="${positionPref}"
+                     name="${positionPref}"
+                     type="wstring"
+                     ${Tabmix.isVersion(913) ? "" : 'onchange = "window.opener.moveTabBar();"'}/>`
+    ));
   },
 
   tabCloseButtonChanged() {
