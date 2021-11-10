@@ -534,7 +534,7 @@ TabmixSessionManager = {
     var msg = TabmixSvc.getSMString("sm.askBeforeSave.msg0");
     // add remark - Only non-private windows will save
     // when there is one private window or more..
-    if (Tabmix.RecentWindow.getMostRecentBrowserWindow({private: true}))
+    if (BrowserWindowTracker.getTopWindow({private: true}))
       msg += "\n" + TabmixSvc.getSMString("sm.askBeforeSave.msg2");
     msg += "\n\n" + TabmixSvc.getSMString("sm.askBeforeSave.msg1");
     var chkBoxLabel = TabmixSvc.getSMString("sm.saveClosedTab.chkbox.label");

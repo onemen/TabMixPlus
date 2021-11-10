@@ -725,7 +725,7 @@ var TabmixContext = {
       /openLinkIn\(\n*\s*this\.linkURL,\n*\s*"window",/,
       'var [win, where] = [window, "window"];\
              if (Tabmix.singleWindowMode) {\
-               let pbWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({ private: true });\
+               let pbWindow = BrowserWindowTracker.getTopWindow({ private: true });\
                if (pbWindow) {\
                  [win, where] = [pbWindow, "tab"];\
                  pbWindow.focus();\

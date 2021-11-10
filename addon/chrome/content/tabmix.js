@@ -13,7 +13,7 @@ Tabmix.startup = function TMP_startup() {
   // otherwise open new tab in most recent window of the appropriate type
   this._openNewTab = function(aPrivate) {
     if (this.singleWindowMode) {
-      let win = this.RecentWindow.getMostRecentBrowserWindow({private: aPrivate});
+      let win = BrowserWindowTracker.getTopWindow({private: aPrivate});
       if (win) {
         win.focus();
         win.BrowserOpenTab();

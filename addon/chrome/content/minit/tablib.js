@@ -732,7 +732,7 @@ Tabmix.tablib = {
     Tabmix.changeCode(window, "undoCloseWindow")._replace(
       'window = SessionStore.undoCloseWindow(aIndex || 0);',
       `{if (Tabmix.singleWindowMode) {
-          window = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});
+          window = BrowserWindowTracker.getTopWindow({private: false});
        }
        if (window) {
         window.focus();
@@ -1762,7 +1762,7 @@ Tabmix.tablib = {
         return false;
 
       // try to find non-private window
-      let nonPrivateWindow = Tabmix.RecentWindow.getMostRecentBrowserWindow({private: false});
+      let nonPrivateWindow = BrowserWindowTracker.getTopWindow({private: false});
       if (!nonPrivateWindow)
         return false;
 

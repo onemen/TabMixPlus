@@ -109,8 +109,7 @@ var Tabmix = {
     // allow to open new window if:
     //   user are not in single window mode or
     //   there is no other window with the same privacy type
-    return !this.getSingleWindowMode() ||
-      !this.RecentWindow.getMostRecentBrowserWindow({private: isPrivate});
+    return !this.getSingleWindowMode() || !BrowserWindowTracker.getTopWindow({private: isPrivate});
   },
 
   lazy_import(aObject, aName, aModule, aSymbol, aFlag, aArg) {
@@ -286,9 +285,6 @@ var Tabmix = {
       window.XPCOMUtils = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm").XPCOMUtils;
       window.Services = ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
     }
-
-    this.RecentWindow = {};
-    this.RecentWindow.getMostRecentBrowserWindow = Services.wm.getMostRecentBrowserWindow;
 
     const destroy = () => {
       window.removeEventListener("unload", destroy);
