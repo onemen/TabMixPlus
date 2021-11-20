@@ -902,6 +902,8 @@ Tabmix.navToolbox = {
       Tabmix.originalFunctions.gURLBar_handleCommand = gURLBar.handleCommand;
       gURLBar.handleCommand = this.handleCommand.bind(gURLBar);
 
+      this.whereToOpenFromUrlBar = this.whereToOpenFromUrlBar.bind(gURLBar);
+
       Tabmix.originalFunctions.gURLBar__whereToOpen = gURLBar._whereToOpen;
       gURLBar._whereToOpen = function(event) {
         if (event?.__tabmix__whereToOpen) {
@@ -934,36 +936,7 @@ Tabmix.navToolbox = {
 
     // openUILinkWhere is not used since Firefox 83
     if (!openUILinkWhere) {
-      let isMouseEvent = event instanceof MouseEvent;
-      let altEnter = !isMouseEvent && event &&
-          event.altKey && !gBrowser.selectedTab.isEmpty;
-      let where = "current";
-      let url = result?.payload?.url ?? this.value;
-      let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar",
-        altEnter).inNew && !(/^ *javascript:/.test(url));
-      if (isMouseEvent || altEnter || loadNewTab) {
-        // Use the standard UI link behaviors for clicks or Alt+Enter
-        where = "tab";
-        if (isMouseEvent || event && !altEnter)
-          where = whereToOpenLink(event, false, false);
-        if (loadNewTab && where == "current" || !isMouseEvent && where == "window")
-          where = "tab";
-        else if (!isMouseEvent && !loadNewTab && /^tab/.test(where))
-          where = "current";
-      }
-      if (Tabmix.prefs.getBoolPref("loadUrlInBackground") && where === "tab") {
-        where = "tabshifted";
-      }
-      if (event) {
-        event.__tabmix__whereToOpen = where;
-      } else if (
-        where.startsWith("tab") &&
-        // when user clicked paste & go with current url we let Firefox
-        // reload the same url
-        this.untrimmedValue !== gBrowser.selectedBrowser.currentURI.spec
-      ) {
-        gBrowser.selectedBrowser.__tabmix__whereToOpen = where;
-      }
+      Tabmix.navToolbox.whereToOpenFromUrlBar(event, result);
     }
 
     Tabmix.originalFunctions.gURLBar_handleCommand.apply(this, arguments);
@@ -984,7 +957,7 @@ Tabmix.navToolbox = {
     // based on:
     // - gURLBar.view._on_mouseup (UrlbarView.jsm)
     // - gURLBar.pickResult (UrlbarInput.jsm)
-    if (event.button == 2 || !Tabmix.prefs.getBoolPref("moveSwitchToTabNext")) {
+    if (event.button == 2) {
       return;
     }
 
@@ -999,6 +972,11 @@ Tabmix.navToolbox = {
       gURLBar.searchMode?.isPreview &&
       gURLBar.view.oneOffSearchButtons.selectedButton
     ) {
+      return;
+    }
+
+    this.whereToOpenFromUrlBar(event, result);
+    if (!Tabmix.prefs.getBoolPref("moveSwitchToTabNext")) {
       return;
     }
 
@@ -1036,6 +1014,37 @@ Tabmix.navToolbox = {
           {once: true}
         );
       }
+    }
+  },
+
+  whereToOpenFromUrlBar(event, result) {
+    let isMouseEvent = event instanceof MouseEvent;
+    let altEnter = !isMouseEvent && event &&
+      event.altKey && !gBrowser.selectedTab.isEmpty;
+    let where = "current";
+    let url = result?.payload?.url ?? this.value;
+    let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar",
+      altEnter).inNew && !(/^ *javascript:/.test(url));
+    if (isMouseEvent || altEnter || loadNewTab) {
+      // Use the standard UI link behaviors for clicks or Alt+Enter
+      where = "tab";
+      if (isMouseEvent || event && !altEnter)
+        where = whereToOpenLink(event, false, false);
+      if (loadNewTab && where == "current" || !isMouseEvent && where == "window")
+        where = "tab";
+      else if (!isMouseEvent && !loadNewTab && /^tab/.test(where))
+        where = "current";
+    }
+    if (Tabmix.prefs.getBoolPref("loadUrlInBackground") && where === "tab") {
+      where = "tabshifted";
+    }
+    if (event) {
+      event.__tabmix__whereToOpen = where;
+    } else if (where.startsWith("tab") &&
+      // when user clicked paste & go with current url we let Firefox
+      // reload the same url
+      this.untrimmedValue !== gBrowser.selectedBrowser.currentURI.spec) {
+      gBrowser.selectedBrowser.__tabmix__whereToOpen = where;
     }
   },
 
