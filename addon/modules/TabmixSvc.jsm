@@ -176,6 +176,16 @@ this.TabmixSvc = {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },
 
+  skipSingleWindowModeCheck: false,
+  getSingleWindowMode() {
+    // if we don't have any browser window opened return false
+    // so we can open new window
+    if (this.skipSingleWindowModeCheck || !this.topWin()) {
+      return false;
+    }
+    return this.prefBranch.getBoolPref("singleWindow");
+  },
+
   get direct2dDisabled() {
     delete this.direct2dDisabled;
     try {

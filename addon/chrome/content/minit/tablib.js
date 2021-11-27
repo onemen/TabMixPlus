@@ -531,7 +531,7 @@ Tabmix.tablib = {
     // TreeStyleTab eval of this function use delta
     // eslint-disable-next-line no-unused-vars
     window.duplicateTabIn = function(aTab, where, delta) {
-      if (where == "window" && Tabmix.getSingleWindowMode()) {
+      if (where == "window" && TabmixSvc.getSingleWindowMode()) {
         where = "tab";
       }
       // we prevent SessionStore.duplicateTab from moving the tab

@@ -777,14 +777,14 @@ Tabmix.onContentLoaded = {
     ).toCode();
   },
 
-  change_utilityOverlay() {
+  change_whereToOpenLink(parent) {
     // fix small bug when the event is not mouse event
     // inverse focus of middle/ctrl/meta clicked bookmarks/history
     // don't inverse focus when called from onPopupClick and One-Click Search
     // Bar Interface is on
     // when we are in single window mode set the function to return "tab"
     let $LF = '\n    ';
-    Tabmix.changeCode(window, "whereToOpenLink")._replace(
+    Tabmix.changeCode(parent, "whereToOpenLink")._replace(
       '{', '{\n' +
       'if (e && e.tabmixContentClick) {\n' +
       '  let {where, suppressTabsOnFileDownload} = e.tabmixContentClick;\n' +
@@ -796,21 +796,34 @@ Tabmix.onContentLoaded = {
     )._replace(
       'return shift ? "tabshifted" : "tab";',
       '{' + $LF +
-      'let callerTrace = Tabmix.callerTrace();' + $LF +
+      'let callerTrace = TabmixSvc.console.callerTrace();' + $LF +
       'let list = ["openUILink", "handleLinkClick", "BG_observe", "contentAreaClick",' + $LF +
       '            "TMP_tabshifted", "TMP_whereToOpenLink", "TMP_contentLinkClick"];' + $LF +
       'let pref = callerTrace.contain(list) ?' + $LF +
       '    "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";' + $LF +
-      'let notOneClickSearch = !Tabmix.getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
+      'let notOneClickSearch = !Services.prefs.getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
       '                        !callerTrace.contain("onPopupClick");' + $LF +
-      'if (notOneClickSearch && Tabmix.getBoolPref(pref, true))' + $LF +
+      'if (notOneClickSearch && Services.prefs.getBoolPref(pref, true))' + $LF +
       '  shift = !shift;' + $LF +
       '$&' + $LF +
       '}'
     )._replace(
       'return "window";',
-      'return Tabmix.getSingleWindowMode() ? "tab" : "window";'
+      'return TabmixSvc.getSingleWindowMode() ? "tab" : "window";'
     ).toCode();
+  },
+
+  change_utilityOverlay() {
+    if (Tabmix.isVersion(960)) {
+      //  Bug 1742801 - move whereToOpenLink and getRootEvent implementations into BrowserUtils
+      //  Bug 1742889 - Rewrite consumers of whereToOpenLink to use BrowserUtils.whereToOpenLink
+      if (!TabmixSvc.whereToOpenLinkChanged) {
+        TabmixSvc.whereToOpenLinkChanged = true;
+        this.change_whereToOpenLink(BrowserUtils);
+      }
+    } else {
+      this.change_whereToOpenLink(window);
+    }
 
     // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+
     // in case it warp the function in its object
@@ -820,7 +833,7 @@ Tabmix.onContentLoaded = {
       '{\n' +
       '  let callerTrace = Tabmix.callerTrace();\n' +
       '  if (callerTrace.contain("BG_observe", "loadHomepage")) {\n' +
-      '    params.inBackground = Tabmix.getBoolPref("browser.tabs.loadInBackground");\n' +
+      '    params.inBackground = Services.prefs.getBoolPref("browser.tabs.loadInBackground");\n' +
       '  } else if (where == "current" &&\n' +
       '      callerTrace.contain("ReaderParent.toggleReaderMode")) {\n' +
       '    gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
@@ -863,14 +876,6 @@ Tabmix.onContentLoaded = {
     return [window, aName];
   }
 
-};
-
-Tabmix.getBoolPref = function(prefname, def) {
-  try {
-    return Services.prefs.getBoolPref(prefname);
-  } catch (er) {
-    return def;
-  }
 };
 
 if (typeof E10SUtils !== "object") {

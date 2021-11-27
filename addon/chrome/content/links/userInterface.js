@@ -107,9 +107,9 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
   if (aEvent && !aTab && !replaceLastTab &&
       (aEvent instanceof MouseEvent || aEvent instanceof XULCommandEvent)) {
     // don't replace 'window' to 'tab' in whereToOpenLink when singleWindowMode is on
-    Tabmix.skipSingleWindowModeCheck = true;
+    TabmixSvc.skipSingleWindowModeCheck = true;
     let where = whereToOpenLink(aEvent, false, true);
-    Tabmix.skipSingleWindowModeCheck = false;
+    TabmixSvc.skipSingleWindowModeCheck = false;
     switch (where) {
       case "tabshifted":
         loadInBackground = !loadInBackground;
@@ -118,7 +118,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
         openTabNext = !openTabNext;
         break;
       case "window":
-        if (!Tabmix.getSingleWindowMode()) {
+        if (!TabmixSvc.getSingleWindowMode()) {
           window.openWebLinkIn(url, where);
           return null;
         }
