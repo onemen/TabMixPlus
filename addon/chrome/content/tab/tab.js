@@ -547,7 +547,7 @@ Tabmix.tabsUtils = {
   },
 
   updateVerticalTabStrip(aReset) {
-    if (Tabmix.extensions.verticalTabBar || gInPrintPreviewMode ||
+    if (Tabmix.extensions.verticalTabBar || window.gInPrintPreviewMode ||
         this.inDOMFullscreen || FullScreen._isChromeCollapsed ||
         TabmixTabbar._waitAfterMaximized ||
         !Tabmix.tabsUtils.visible && TabmixTabbar.visibleRows == 1)
