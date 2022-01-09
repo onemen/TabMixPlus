@@ -5,6 +5,16 @@ var TMP_Places = {
   prefHistory: "extensions.tabmix.opentabfor.history",
   prefBookmark: "extensions.tabmix.opentabfor.bookmarks",
 
+  get PlacesUtils() {
+    delete this.PlacesUtils;
+    const {TabmixPlacesUtils} = ChromeUtils.import("chrome://tabmix-resource/content/Places.jsm");
+    this.PlacesUtils = TabmixPlacesUtils;
+    // we get here only after the window was loaded
+    // so we can safely call our 'onWindowOpen' initialization
+    Tabmix.initialization.run("onWindowOpen");
+    return this.PlacesUtils;
+  },
+
   addEvent: function TMP_PC_addEvent() {
     window.addEventListener("load", this);
     window.addEventListener("unload", this);
@@ -28,8 +38,6 @@ var TMP_Places = {
   },
 
   init: function TMP_PC_init() {
-    Tabmix.lazy_import(this, "PlacesUtils", "Places", "TabmixPlacesUtils");
-
     this.contextMenu.toggleEventListener(true);
 
     // use tab label for bookmark name when user renamed the tab
