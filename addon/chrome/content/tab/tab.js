@@ -951,10 +951,7 @@ Tabmix.bottomToolbarUtils = {
 
     if (!Tabmix.tabsUtils.visible) {
       // the tabbar is hidden on startup
-      let height = tabBar.arrowScrollbox.scrollClientRect.height;
-      this.toolbox.firstChild.style.setProperty("height", height + "px", "important");
-      let tabsToolbar = document.getElementById("TabsToolbar");
-      tabsToolbar.style.setProperty("top", screen.availHeight + "px", "important");
+      this.toolbox.collapsed = true;
       Tabmix.setItem("TabsToolbar-customization-target", "width", screen.availWidth);
     }
     if (updateFullScreen) {
