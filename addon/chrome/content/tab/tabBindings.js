@@ -83,7 +83,7 @@
       void this.clientTop; // just using this to flush style updates
     }
     // prevent chrome://global/content/bindings/tabbox.xml#tab mousedown handler
-    if (this.mOverCloseButton || this._overPlayingIcon) {
+    if (this.mOverCloseButton || TabmixTabClickOptions.isOverlayIcons(event)) {
       event.stopPropagation();
     } else if (this.mouseDownSelect) {
       this.onMouseCommand(event);

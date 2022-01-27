@@ -8,6 +8,15 @@ var TabmixTabClickOptions = {
   _tabFlipTimeOut: null,
   _blockDblClick: false,
 
+  isOverlayIcons(event) {
+    const overlayIcons = [
+      "tab-icon-sound", // for Firefox 78 - 91
+      "tab-sharing-icon-overlay",
+      "tab-icon-overlay",
+    ];
+    return overlayIcons.some(icon => event.target.classList.contains(icon));
+  },
+
   // Single click on tab/tabbar
   onTabClick: function TMP_onTabClick(aEvent) {
     if (!aEvent)
@@ -31,7 +40,7 @@ var TabmixTabClickOptions = {
 
     // don't do anything if user left click on tab or tabbar button
     if (leftClick &&
-        (isCloseButton || aEvent.target._overPlayingIcon ||
+        (isCloseButton || this.isOverlayIcons(aEvent) ||
          target.localName == "toolbarbutton")) {
       return;
     }
@@ -134,7 +143,7 @@ var TabmixTabClickOptions = {
     const target = aEvent.originalTarget;
     const isCloseButton = aEvent.target.classList.contains("tab-close-button");
     // don't do anything if user left click on tab or tabbar button
-    if (isCloseButton || aEvent.target._overPlayingIcon ||
+    if (isCloseButton || this.isOverlayIcons(aEvent) ||
         target.localName == "toolbarbutton") {
       return;
     }
