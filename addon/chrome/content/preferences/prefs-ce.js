@@ -1580,18 +1580,23 @@ class PrefWindow extends MozXULElement {
       const src = aPaneElement.src;
       if (src) {
         const ov = new Overlays(new ChromeManifest(), window.document.defaultView);
-        ov.load(src);
+        ov.load(src).then(() => this._paneLoaded(aPaneElement));
+      } else {
+        this._paneLoaded(aPaneElement);
       }
-      aPaneElement.loaded = true;
-      aPaneElement.connectedCallback();
-      // now we can safely call connectedCallback for all tabs in this PrefPane
-      delayTabsConnectedCallback = false;
-      aPaneElement.querySelectorAll("tabs").forEach(tabs => tabs.connectedCallback());
-
-      this._fireEvent("paneload", aPaneElement);
-      this._selectPane(aPaneElement);
     } else
       this._selectPane(aPaneElement);
+  }
+
+  _paneLoaded(aPaneElement) {
+    aPaneElement.loaded = true;
+    aPaneElement.connectedCallback();
+    // now we can safely call connectedCallback for all tabs in this PrefPane
+    delayTabsConnectedCallback = false;
+    aPaneElement.querySelectorAll("tabs").forEach(tabs => tabs.connectedCallback());
+
+    this._fireEvent("paneload", aPaneElement);
+    this._selectPane(aPaneElement);
   }
 
   _fireEvent(aEventName, aTarget) {

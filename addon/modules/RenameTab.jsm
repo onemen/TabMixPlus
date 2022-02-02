@@ -65,8 +65,9 @@ this.RenameTab = {
     popup.hidden = true; // prevent panel initialize. initialize before overlay break it.
     this._element("mainPopupSet").appendChild(popup);
     const ov = new Overlays(new ChromeManifest(), this.window);
-    ov.load("chrome://tabmixplus/content/overlay/renameTab.xhtml");
-    this.observe(null, "xul-overlay-merged");
+    ov.load("chrome://tabmixplus/content/overlay/renameTab.xhtml").then(() => {
+      this.observe(null, "xul-overlay-merged");
+    });
   },
 
   observe(aSubject, aTopic) {
