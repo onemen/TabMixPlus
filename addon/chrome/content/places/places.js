@@ -276,9 +276,9 @@ var TMP_Places = {
       } else {
         let params = {
           skipAnimation: multiple,
+          allowInheritPrincipal: true,
           noInitialLabel: this._titlefrombookmark,
           index: prevTab._tPos + 1,
-          forceNotRemote: loadProgressively
         };
         // PlacesUIUtils.openTabset use SystemPrincipal
         aTab = gBrowser.addTrustedTab(loadProgressively ? "about:blank" : url, params);
@@ -297,7 +297,10 @@ var TMP_Places = {
         tabToSelect = aTab;
       TMP_LastTab.attachTab(aTab, prevTab);
       prevTab = aTab;
+      aTab.initialize();
     }
+
+    gBrowser._invalidateCachedTabs();
 
     // focus the first tab if prefs say to
     if (!loadInBackground || doReplace &&
