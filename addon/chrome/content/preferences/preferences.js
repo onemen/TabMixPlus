@@ -778,36 +778,3 @@ function setDialog() {
   });
   if (window.toString() == '[object ChromeWindow]') window.sizeToContent();
 }
-
-// avoid opening prefs in tab, workaround to bug 1414406
-(function x() {
-  /* eslint no-var: 2, prefer-const: 2 */
-  const chromewin = window.docShell.rootTreeItem.domWindow;
-  if (chromewin.location.href !== 'chrome://tabmixplus/content/preferences/preferences.xhtml') {
-    const gBrowser = chromewin.gBrowser;
-    const kcTab = gBrowser.selectedTab;
-    let previousTab;
-    let lastAccessed = 0;
-    for (const tab of gBrowser.tabs) {
-      if (!tab._notselectedsinceload && !tab.getAttribute('pending') && tab._lastAccessed > lastAccessed && tab != kcTab) {
-        lastAccessed = tab._lastAccessed;
-        previousTab = tab;
-      }
-    }
-    gBrowser.selectedTab = previousTab;
-
-    chromewin.setTimeout(() => {
-      gBrowser.ownerGlobal.Tabmix.openOptionsDialog(-1);
-    }, 0);
-
-    gBrowser.removeTab(kcTab);
-  } else {
-    setTimeout(() => {
-      const navwin = Services.wm.getMostRecentWindow('navigator:browser');
-      const data = TabmixSvc.SessionStore._windows[navwin.__SSi];
-      if (data._closedTabs && data._closedTabs.length && data._closedTabs[0].state.entries[0].url === 'chrome://tabmixplus/content/preferences/preferences.xhtml')
-        data._closedTabs.shift();
-    }, 0);
-  }
-  /* eslint no-var: 0, prefer-const: 0 */
-}());

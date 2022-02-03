@@ -13,7 +13,7 @@
     <em:iconURL>chrome://tabmixplus/skin/tmp.png</em:iconURL>
     <em:homepageURL>http://tabmixplus.org</em:homepageURL>
     <em:optionsURL>chrome://tabmixplus/content/preferences/preferences.xhtml</em:optionsURL>
-    <em:optionsType>3</em:optionsType>
+    <em:optionsType>1</em:optionsType>
     <em:aboutURL>chrome://tabmixplus/content/dialogs/about.xhtml</em:aboutURL>
     <em:creator>ONEMEN (tabmix.onemen@gmail.com)</em:creator>
     <em:developer>ONEMEN</em:developer>

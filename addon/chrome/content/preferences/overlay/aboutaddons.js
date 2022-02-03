@@ -14,6 +14,7 @@ function updateShowItemPreferences() {
   if (panelItem) {
     const optionsButton = panelItem.button;
     panelItem.removeAttribute("action");
+    panelItem.hidden = false;
     if (!optionsButton._tabmix_command_installed) {
       optionsButton._tabmix_command_installed = true;
       optionsButton.addEventListener("click", event => {
