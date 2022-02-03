@@ -1,11 +1,6 @@
 "use strict";
 
 (function() {
-  // with bootstrap.js we get here after DOMContentLoaded was fired
-  // we can call our initializer with 'onContentLoaded' flag
-  Tabmix.initialization.init.initialized = false;
-  Tabmix.initialization.run("onContentLoaded", gBrowser.tabContainer);
-
   Tabmix.setNewFunction(gBrowser.tabContainer, "_notifyBackgroundTab", function _notifyBackgroundTab(aTab) {
     if (aTab.pinned || aTab.hidden) {
       return;

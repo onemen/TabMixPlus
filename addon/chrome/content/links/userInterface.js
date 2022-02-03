@@ -272,21 +272,6 @@ Tabmix.checkCurrent = function TMP_checkCurrent(url) {
   return "current";
 };
 
-/**
- * @brief copy Tabmix data from old tab to new tab.
- *        we use it before swapBrowsersAndCloseOther
- */
-Tabmix.copyTabData = function TMP_copyTabData(newTab, oldTab) {
-  let _xulAttributes = ["protected", "_locked", "fixed-label", "label-uri", "reload-data", "visited"];
-
-  var self = this;
-  _xulAttributes.forEach(function _setData(attr) {
-    self.setItem(newTab, attr, oldTab.hasAttribute(attr) ? oldTab.getAttribute(attr) : null);
-  });
-
-  this.restoreTabState(newTab);
-};
-
 Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   if (aTab.hasAttribute("_locked")) {
     if (aTab.getAttribute("_locked") == "true")

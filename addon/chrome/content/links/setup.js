@@ -108,7 +108,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
       Tabmix.prepareLoadOnStartup = function() { };
     }
 
-    if (gBrowserInit.tabmix_delayedStartupStarted) {
+    if (Tabmix.isAfterMozAfterPaint) {
       Tabmix.beforeDelayedStartup();
     } else {
       window.addEventListener("MozAfterPaint", Tabmix.beforeDelayedStartup, {once: true});

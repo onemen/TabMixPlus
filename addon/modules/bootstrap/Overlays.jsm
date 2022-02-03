@@ -161,6 +161,12 @@ class Overlays {
       forwardReferences.unshift(...t_forwardReferences);
     }
 
+    // We've resolved all the forward references we can, we can now go ahead and load the scripts
+    this.deferredLoad = [];
+    for (const script of this.unloadedScripts) {
+      this.deferredLoad.push(...this.loadScript(script));
+    }
+
     const ids = xulStore.getIDsEnumerator(this.location);
     while (ids.hasMore()) {
       this.persistedIDs.add(ids.getNext());
@@ -216,11 +222,6 @@ class Overlays {
       }
     }
 
-    // We've resolved all the forward references we can, we can now go ahead and load the scripts
-    this.deferredLoad = [];
-    for (const script of this.unloadedScripts) {
-      this.deferredLoad.push(...this.loadScript(script));
-    }
     if (this.document.readyState == "complete") {
       setTimeout(() => {
         this._finish();

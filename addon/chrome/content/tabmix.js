@@ -209,15 +209,14 @@ Tabmix.afterDelayedStartup = function() {
 
 var TMP_eventListener = {
   init: function TMP_EL_init() {
-    // before-initial-tab-adopted is fired before we are ready,
-    // we have to make sure our initialization finshed before
-    // Firefox call gBrowser.swapBrowsersAndCloseOther
-    window.addEventListener("before-initial-tab-adopted", () => {
-      Tabmix.initialization.run("onWindowOpen");
-    }, {capture: true, once: true});
-
     window.addEventListener("load", this);
+
     window.addEventListener("SSWindowRestored", this);
+    if (Tabmix.isAfterSSWindowRestored) {
+      delete Tabmix.isAfterSSWindowRestored;
+      this.onSSWindowRestored();
+    }
+
     window.delayedStartupPromise.then(() => {
       Tabmix.initialization.run("afterDelayedStartup");
     });
@@ -1094,7 +1093,6 @@ Tabmix.initialization = {
       *       when ImTranslator extension installed)
       */
     let stopInitialization = false;
-    Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
     if (Tabmix.singleWindowMode) {
       const tmp = ChromeUtils.import("chrome://tabmix-resource/content/SingleWindowModeUtils.jsm");
       stopInitialization = tmp.SingleWindowModeUtils.newWindow(window);
@@ -1160,5 +1158,3 @@ Tabmix._deferredInitialized = (function() {
 
   return deferred;
 }());
-
-TMP_eventListener.init();

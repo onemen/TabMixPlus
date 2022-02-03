@@ -20,6 +20,9 @@ ChromeUtils.defineModuleGetter(this, "ChromeManifest",
 ChromeUtils.defineModuleGetter(this, "Overlays",
   "chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
 
+ChromeUtils.defineModuleGetter(this, "ScriptsLoader",
+  "chrome://tabmix-resource/content/bootstrap/ScriptsLoader.jsm");
+
 ChromeUtils.defineModuleGetter(this, "TabmixWidgets",
   "chrome://tabmix-resource/content/bootstrap/TabmixWidgets.jsm");
 
@@ -142,8 +145,9 @@ function startup(data, reason) {
         if (document.createXULElement) {
           const isBrowser = document.documentElement.getAttribute("windowtype") === "navigator:browser";
           const isOverflow = isBrowser && _win.gBrowser.tabContainer.getAttribute("overflow");
-          Overlays.load(chromeManifest, document.defaultView);
+          const promiseOverlayLoaded = Overlays.load(chromeManifest, document.defaultView);
           if (isBrowser) {
+            ScriptsLoader.initForWindow(_win, promiseOverlayLoaded);
             await _win.delayedStartupPromise;
             _win.gBrowser.tabs.forEach(x => {
               const browser = x.linkedBrowser;
@@ -170,12 +174,10 @@ function startup(data, reason) {
     const documentObserver = {
       observe(document) {
         if (document.createXULElement) {
+          const promiseOverlayLoaded = Overlays.load(chromeManifest, document.defaultView);
           if (document.documentElement.getAttribute("windowtype") === "navigator:browser") {
-            document.defaultView.addEventListener("MozAfterPaint", () => {
-              document.defaultView.gBrowserInit.tabmix_delayedStartupStarted = true;
-            }, {once: true});
+            ScriptsLoader.initForWindow(document.defaultView, promiseOverlayLoaded);
           }
-          Overlays.load(chromeManifest, document.defaultView);
         }
       }
     };
