@@ -411,7 +411,7 @@ Tabmix.tabsUtils = {
     }
     this.initialized = true;
 
-    const tab = this.tabBar.allTabs[0];
+    const tab = gBrowser.selectedTab;
 
     Tabmix.rtl = RTL_UI;
     Tabmix.ltr = !RTL_UI;
