@@ -32,7 +32,7 @@ class Overlays {
     const instance = new Overlays(overlayProvider, window);
 
     const urls = overlayProvider.overlay.get(instance.location, false);
-    instance.load(urls);
+    return instance.load(urls);
   }
 
   /**
@@ -65,8 +65,8 @@ class Overlays {
    *
    * @param {String[]} urls                         The urls to load
    */
-  load(urls) {
-    const unloadedOverlays = this._collectOverlays(this.document).concat(urls);
+  async load(urls) {
+    const unloadedOverlays = new Set(this._collectOverlays(this.document).concat(urls));
     let forwardReferences = [];
     this.unloadedScripts = [];
     const unloadedSheets = [];
@@ -79,14 +79,13 @@ class Overlays {
       unloadedSheets.push(sheet);
     }
 
-    if (!unloadedOverlays.length && !unloadedSheets.length) {
+    if (!unloadedOverlays.size && !unloadedSheets.length) {
       return;
     }
 
-    while (unloadedOverlays.length) {
-      const url = unloadedOverlays.shift();
-      const xhr = this.fetchOverlay(url);
-      const doc = xhr.responseXML;
+    for (const url of unloadedOverlays) {
+      unloadedOverlays.delete(url);
+      const doc = await this.fetchOverlay(url);
 
       console.debug(`Applying ${url} to ${this.location}`);
 
@@ -147,7 +146,7 @@ class Overlays {
         t_unloadedOverlays.push(overlayUrl);
       }
 
-      unloadedOverlays.unshift(...t_unloadedOverlays);
+      t_unloadedOverlays.forEach(o => unloadedOverlays.add(o));
 
       // Run through all overlay nodes on the first level (hookup nodes). Scripts will be deferred
       // until later for simplicity (c++ code seems to process them earlier?).
@@ -459,11 +458,10 @@ class Overlays {
   }
 
   /**
-   * Fetches the overlay from the given chrome:// or resource:// URL. This happen synchronously so
-   * we have a chance to complete before the load event.
+   * Fetches the overlay from the given chrome:// or resource:// URL.
    *
-   * @param {String} srcUrl                         The URL to load
-   * @return {XMLHttpRequest}                       The completed XHR.
+   * @param {String} srcUrl          The URL to load
+   * @return {Promise<XMLDocument>}  Returns a promise that is resolved with the XML document.
    */
   fetchOverlay(srcUrl) {
     if (!srcUrl.startsWith("chrome://") && !srcUrl.startsWith("resource://")) {
@@ -472,24 +470,25 @@ class Overlays {
       );
     }
 
-    const xhr = new this.window.XMLHttpRequest();
-    xhr.overrideMimeType("application/xml");
-    xhr.open("GET", srcUrl, false);
+    return new Promise((resolve, reject) => {
+      const xhr = new this.window.XMLHttpRequest();
+      xhr.overrideMimeType("application/xml");
+      xhr.open("GET", srcUrl, true);
 
-    // Elevate the request, so DTDs will work. Should not be a security issue since we
-    // only load chrome, resource and file URLs, and that is our privileged chrome package.
-    try {
-      xhr.channel.owner = Services.scriptSecurityManager.getSystemPrincipal();
-    } catch (ex) {
-      console.error(
-        "Failed to set system principal while fetching overlay " + srcUrl
-      );
-      xhr.close();
-      throw new Error("Failed to set system principal");
-    }
+      // Elevate the request, so DTDs will work. Should not be a security issue since we
+      // only load chrome, resource and file URLs, and that is our privileged chrome package.
+      try {
+        xhr.channel.owner = Services.scriptSecurityManager.getSystemPrincipal();
+      } catch (ex) {
+        console.error(`Failed to set system principal while fetching overlay ${srcUrl}`);
+        xhr.close();
+        reject("Failed to set system principal");
+      }
 
-    xhr.send(null);
-    return xhr;
+      xhr.onload = () => resolve(xhr.responseXML);
+      xhr.onerror = () => reject(`Failed to load ${srcUrl} to ${this.location}`);
+      xhr.send(null);
+    });
   }
 
   /**

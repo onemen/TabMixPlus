@@ -1589,30 +1589,6 @@ Tabmix.tablib = {
       }
     };
 
-    Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
-    let swapTab = function tabmix_swapBrowsersAndCloseOther(aOurTab, aOtherTab) {
-      // Do not allow transferring a private tab to a non-private window
-      // and vice versa.
-      if (PrivateBrowsingUtils.isWindowPrivate(window) !=
-          PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerGlobal)) {
-        return false;
-      }
-
-      if (gBrowserInit.tabmix_delayedStartupStarted && !gBrowserInit.delayedStartupFinished) {
-        // we probably will never get here in single window mode
-        if (Tabmix.singleWindowMode) {
-          return false;
-        }
-        Tabmix._afterTabduplicated = true;
-        let url = aOtherTab.linkedBrowser.currentURI.spec;
-        gBrowser.tabContainer._updateCloseButtons(true, url);
-      }
-
-      Tabmix.copyTabData(aOurTab, aOtherTab);
-      return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
-    };
-    Tabmix.setNewFunction(gBrowser, "swapBrowsersAndCloseOther", swapTab);
-
     // Bug 752376 - Avoid calling scrollbox.ensureElementIsVisible()
     // if the tab strip doesn't overflow to prevent layout flushes
     gBrowser.ensureTabIsVisible = function tabmix_ensureTabIsVisible(aTab, aSmoothScroll) {

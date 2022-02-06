@@ -18,9 +18,6 @@
          xmlns:html="http://www.w3.org/1999/xhtml"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-   <script type="application/javascript" src="chrome://tabmixplus/content/broadcaster.js"/>
-
-   <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/tab/scrollbox.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/tab/tabBindings.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/tabmix.js"/>
@@ -37,6 +34,14 @@
    <script type="application/javascript" src="chrome://tabmixplus/content/session/sessionStore.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/extensions/extensions.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/tab/tabsBindings.js"/>
+
+  <script type="text/javascript">
+    // with bootstrap.js we get here after DOMContentLoaded was fired
+    // we can call our initializer with 'onContentLoaded' flag
+    Tabmix.initialization.init.initialized = false;
+    TMP_eventListener.init();
+    Tabmix.initialization.run("onContentLoaded", gBrowser.tabContainer);
+  </script>
 
   <commandset id="mainCommandSet">
     <command id="TabmixSessionUtils:SaveThisWindow" observes="tmp_disableSave"
