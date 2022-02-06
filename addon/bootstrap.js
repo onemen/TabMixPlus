@@ -113,7 +113,12 @@ async function install(data) {
 
 function uninstall() { }
 
-function startup(data, reason) {
+async function startup(data, reason) {
+  const chromeManifest = new ChromeManifest(() => {
+    return man;
+  }, options);
+  await chromeManifest.parse();
+
   AddonManager.getAddonByID(data.id).then(addon => {
     if (addon?.__AddonInternal__) {
       addon.__AddonInternal__.signedState = AddonManager.SIGNEDSTATE_NOT_REQUIRED;
@@ -126,63 +131,39 @@ function startup(data, reason) {
   if (reason === ADDON_UPGRADE || reason === ADDON_DOWNGRADE) {
     showRestartNotification("upgraded", window);
     return;
-  } /* else if (reason === ADDON_ENABLE && window.Tabmix) {
-      showRestartNotification("re-enabled", window);
-      return;
-  } */
+  }
 
   if (reason === ADDON_INSTALL || (reason === ADDON_ENABLE && !window.Tabmix)) {
     const enumerator = Services.wm.getEnumerator(null);
     while (enumerator.hasMoreElements()) {
       const win = enumerator.getNext();
-
-      (async function(_win) {
-        const chromeManifest = new ChromeManifest(() => {
-          return man;
-        }, options);
-        await chromeManifest.parse();
-        const document = _win.document;
-        if (document.createXULElement) {
-          const isBrowser = document.documentElement.getAttribute("windowtype") === "navigator:browser";
-          const isOverflow = isBrowser && _win.gBrowser.tabContainer.getAttribute("overflow");
-          const promiseOverlayLoaded = Overlays.load(chromeManifest, document.defaultView);
-          if (isBrowser) {
-            ScriptsLoader.initForWindow(_win, promiseOverlayLoaded);
-            await _win.delayedStartupPromise;
-            _win.gBrowser.tabs.forEach(x => {
-              const browser = x.linkedBrowser;
-              if (browser.currentURI.spec == 'about:addons' && browser.contentWindow) {
-                Overlays.load(chromeManifest, browser.contentWindow);
-              }
-            });
-            // verify our scroll buttons are visible on overflow
-            if (isOverflow) {
-              _win.Tabmix.tabsUtils.updateVerticalTabStrip();
-            }
-          }
+      const document = win.document;
+      if (document.createXULElement) {
+        const isBrowser = document.documentElement.getAttribute("windowtype") === "navigator:browser";
+        const isOverflow = isBrowser && win.gBrowser.tabContainer.getAttribute("overflow");
+        const promiseOverlayLoaded = Overlays.load(chromeManifest, document.defaultView);
+        if (isBrowser) {
+          ScriptsLoader.initForWindow(win, promiseOverlayLoaded, {
+            chromeManifest,
+            isOverflow,
+            isEnabled: true,
+          });
         }
-      }(win));
+      }
     }
   }
 
-  (async function() {
-    const chromeManifest = new ChromeManifest(() => {
-      return man;
-    }, options);
-    await chromeManifest.parse();
-
-    const documentObserver = {
-      observe(document) {
-        if (document.createXULElement) {
-          const promiseOverlayLoaded = Overlays.load(chromeManifest, document.defaultView);
-          if (document.documentElement.getAttribute("windowtype") === "navigator:browser") {
-            ScriptsLoader.initForWindow(document.defaultView, promiseOverlayLoaded);
-          }
+  const documentObserver = {
+    observe(document) {
+      if (document.createXULElement) {
+        const promiseOverlayLoaded = Overlays.load(chromeManifest, document.defaultView);
+        if (document.documentElement.getAttribute("windowtype") === "navigator:browser") {
+          ScriptsLoader.initForWindow(document.defaultView, promiseOverlayLoaded);
         }
       }
-    };
-    Services.obs.addObserver(documentObserver, "chrome-document-loaded");
-  }());
+    }
+  };
+  Services.obs.addObserver(documentObserver, "chrome-document-loaded");
 }
 
 function shutdown(data, reason) {

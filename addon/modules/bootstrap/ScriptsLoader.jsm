@@ -6,30 +6,74 @@
 
 this.EXPORTED_SYMBOLS = ["ScriptsLoader"];
 
+/**
+ * stylesheets and scripts for navigator:browser
+ */
+const CSS_URLS = [
+  "chrome://tabmixplus/content/overlay/browser.css",
+  "chrome://tabmixplus/content/overlay/multirow.css",
+  "chrome://tabmixplus/skin/tab.css",
+  "chrome://tabmix-os/skin/browser.css",
+];
+
+const SCRIPTS = [
+  "chrome://tabmixplus/content/broadcaster.js",
+  "chrome://tabmixplus/content/utils.js",
+  "chrome://tabmixplus/content/tab/scrollbox.js",
+  "chrome://tabmixplus/content/tab/tabBindings.js",
+  "chrome://tabmixplus/content/tabmix.js",
+  "chrome://tabmixplus/content/minit/tablib.js",
+  "chrome://tabmixplus/content/minit/minit.js",
+  "chrome://tabmixplus/content/links/contentLinks.js",
+  "chrome://tabmixplus/content/links/userInterface.js",
+  "chrome://tabmixplus/content/links/setup.js",
+  "chrome://tabmixplus/content/tab/tab.js",
+  "chrome://tabmixplus/content/flst/lasttab.js",
+  "chrome://tabmixplus/content/click/click.js",
+  "chrome://tabmixplus/content/places/places.js",
+  "chrome://tabmixplus/content/session/session.js",
+  "chrome://tabmixplus/content/session/sessionStore.js",
+  "chrome://tabmixplus/content/extensions/extensions.js",
+  "chrome://tabmixplus/content/tab/tabsBindings.js",
+];
+
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 XPCOMUtils.defineLazyModuleGetters(this, {
-  //
+  Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.jsm",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
+  SessionStore: "resource:///modules/sessionstore/SessionStore.jsm",
 });
 
 const initialized = new WeakSet();
 
 this.ScriptsLoader = {
-  initForWindow(window, promiseOverlayLoaded) {
+  initForWindow(window, promiseOverlayLoaded, params = {}) {
     if (initialized.has(window)) {
       return;
     }
     initialized.add(window);
 
+    this._loadCSS(window);
     this._loadScripts(window, promiseOverlayLoaded);
     this._addListeners(window);
+    if (params.isEnabled) {
+      this._updateAfterEnambled(window, params);
+    }
+  },
+
+  _loadCSS(window) {
+    for (const url of CSS_URLS) {
+      const winUtils = window.windowUtils;
+      winUtils.loadSheetUsingURIString(url, winUtils.AUTHOR_SHEET);
+    }
   },
 
   _loadScripts(window, promiseOverlayLoaded) {
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/broadcaster.js", window);
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/utils.js", window);
+    for (const url of SCRIPTS) {
+      Services.scriptloader.loadSubScript(url, window);
+    }
 
     window.Tabmix.promiseOverlayLoaded = promiseOverlayLoaded;
   },
@@ -118,5 +162,30 @@ this.ScriptsLoader = {
       return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
     };
     Tabmix.setNewFunction(gBrowser, "swapBrowsersAndCloseOther", swapTab);
+  },
+
+  async _updateAfterEnambled(window, {chromeManifest, isOverflow}) {
+    await window.delayedStartupPromise;
+
+    const {gBrowser, Tabmix, TMP_Places} = window;
+
+    gBrowser.tabs.forEach(tab => {
+      const browser = tab.linkedBrowser;
+      if (browser.currentURI.spec == "about:addons" && browser.contentWindow) {
+        Overlays.load(chromeManifest, browser.contentWindow);
+      }
+    });
+
+    // verify our scroll buttons are visible on overflow
+    if (isOverflow) {
+      Tabmix.tabsUtils.updateVerticalTabStrip();
+    }
+
+    // update tabs title
+    await Tabmix._deferredInitialized.promise;
+    gBrowser.tabs.forEach(tab => {
+      const url = SessionStore.getLazyTabValue(tab, "url") || tab.linkedBrowser.currentURI.spec;
+      TMP_Places.asyncSetTabTitle(tab, url);
+    });
   },
 };
