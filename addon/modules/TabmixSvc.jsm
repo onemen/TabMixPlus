@@ -20,18 +20,26 @@ ChromeUtils.defineModuleGetter(this, "AppConstants",
 var pref;
 
 var _versions = {};
-function isVersion(aVersionNo) {
+function isVersion(aVersionNo, updateChannel) {
   let firefox, waterfox, basilisk;
   if (typeof aVersionNo === 'object') {
     firefox = aVersionNo.ff || 0;
     waterfox = aVersionNo.wf || "";
     basilisk = aVersionNo.bs || "";
+    updateChannel = aVersionNo.updateChannel || null;
 
     if (!firefox && !waterfox && !basilisk) {
       TabmixSvc.console.log('invalid version check ' + JSON.stringify(aVersionNo));
       return true;
     }
     aVersionNo = firefox;
+  }
+
+  if (
+    updateChannel &&
+    Services.appinfo.defaultUpdateChannel.toLowerCase() !== updateChannel.toLowerCase()
+  ) {
+    return false;
   }
 
   if (TabmixSvc.isWaterfox && waterfox) {

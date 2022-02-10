@@ -825,7 +825,7 @@ Tabmix.onContentLoaded = {
   },
 
   change_utilityOverlay() {
-    if (Tabmix.isVersion(960)) {
+    if (Tabmix.isVersion(960) || Tabmix.isVersion(916, "esr")) {
       //  Bug 1742801 - move whereToOpenLink and getRootEvent implementations into BrowserUtils
       //  Bug 1742889 - Rewrite consumers of whereToOpenLink to use BrowserUtils.whereToOpenLink
       if (!TabmixSvc.whereToOpenLinkChanged) {
