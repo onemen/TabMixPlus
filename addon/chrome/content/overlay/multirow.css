@@ -11,8 +11,8 @@
   --tab_min_width_mlt: 100px;
   --tab_max_width_mlt: 200px;
   --tab-min-height_mlt: calc(var(--tab-min-height) + 2 * (var(--proton-tab-block-margin, 0px) + var(--tab-block-margin, 0px)));
-  --tabmix-scrollbutton-padding:
-      calc(var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding))
+  --tabmix-scrollbutton-padding: calc(var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding));
+  --tabmix-multirow-margin: 0px;
 }
 
 #tabbrowser-tabs {
@@ -125,21 +125,6 @@
   -moz-box-align: start;
 }
 
-@media (-moz-windows-compositor) {
-  #TabsToolbar[multibar] .titlebar-buttonbox {
-    display: flex;
-  }
-
-  @media not (-moz-os-version: windows-win7) {
-    @media not (-moz-os-version: windows-win8) {
-      #TabsToolbar[multibar] toolbarbutton.titlebar-button {
-        padding: 12.25px 17px;
-        align-self: flex-start;
-      }
-    }
-  }
-}
-
 @media not (-moz-proton) {
 :root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-margin-top) !important;
@@ -165,5 +150,5 @@
 }
 
 #tabbrowser-tabs[multibar][orient=horizontal] > .tab-drop-indicator {
-  margin-top: calc(var(--tab-min-height_mlt) * (var(--tabs-lines) - 1) + var(--tabmix-multirow-margin, 0px));
+  margin-top: calc(var(--tab-min-height_mlt) * (var(--tabmix-visibleRows) - 1) + var(--tabmix-multirow-margin));
 }

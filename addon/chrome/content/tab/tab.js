@@ -43,7 +43,7 @@ var TabmixTabbar = {
     const currentValue = this._visibleRows;
     this._visibleRows = rows;
     if (currentValue !== rows) {
-      document.documentElement.style.setProperty("--tabmix-visiblerows", rows);
+      gTMPprefObserver.dynamicRules.visibleRows.style.setProperty("--tabmix-visibleRows", rows);
       Tabmix.tabsUtils.updateProtonValues();
     }
   },
@@ -864,8 +864,8 @@ Tabmix.tabsUtils = {
 
   get protonValues() {
     // rules to add proton --tab-block-margin to --tab-min-height_mlt
-    // we update tab-block-margin dynamically in updateVerticalTabStrip when
-    // there are more than one row
+    // we update tab-block-margin dynamically by calling updateProtonValues
+    // every time TabmixTabbar.visibleRows setter changed
 
     // 86: @supports -moz-bool-pref("browser.proton.tabs.enabled") --proton-tab-block-margin: 2px;
     // 87-88: @supports -moz-bool-pref("browser.proton.tabs.enabled") --proton-tab-block-margin: 4px;
@@ -1700,6 +1700,7 @@ gTMPprefObserver = {
     this.insertRule(marginStart, "tabmix-firstTabInRow");
 
     this.insertRule(`:root { --tabs-lines: ` + Tabmix.prefs.getIntPref("tabBarMaxRow") + `;}`, 'max-rows');
+    this.insertRule(`:root { --tabmix-visibleRows: ` + TabmixTabbar.visibleRows + `;}`, "visibleRows");
 
     // for ColorfulTabs 8.0+
     // add new rule to adjust selected tab bottom margin
@@ -1743,6 +1744,7 @@ gTMPprefObserver = {
     this.dynamicProtonRules();
     this.toolbarbuttonTopMargin();
     this.overflowIndicator();
+    this.dynamicRulesForVersion();
   },
 
   dynamicProtonRules() {
@@ -1862,6 +1864,13 @@ gTMPprefObserver = {
           --tabmix-multirow-margin: ${blockMargin.margin};
         }`
       );
+
+      insertRule(
+        `#main-window[tabsintitlebar] #toolbar-menubar[autohide="true"][inactive="true"]:not([customizing="true"]) + #TabsToolbar {
+          --tabmix-multirow-margin: 0px;
+        }`
+      );
+
       TMP_tabDNDObserver._multirowMargin = parseInt(blockMargin.margin);
     } else {
       this.insertRule(
@@ -1893,6 +1902,20 @@ gTMPprefObserver = {
           --tabmix-button-margin-top-proton-compact: 3.5px;
         }`
       );
+
+      if (Tabmix.isVersion(960)) {
+        this.insertRule(
+          `:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+            margin-top: var(--tabmix-button-margin-top-proton) !important;
+          }`
+        );
+
+        this.insertRule(
+          `:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+            margin-top: var(--tabmix-button-margin-top-proton-compact) !important;
+          }`
+        );
+      }
     } else if (Tabmix.isVersion(890)) {
       this.insertRule(
         `:root {
@@ -2004,6 +2027,38 @@ gTMPprefObserver = {
     const sss = Cc['@mozilla.org/content/style-sheet-service;1']
         .getService(Ci.nsIStyleSheetService);
     sss.loadAndRegisterSheet(styleSheet, sss.AUTHOR_SHEET);
+  },
+
+  dynamicRulesForVersion() {
+    if (!Tabmix.isFirstWindowInSession) {
+      return;
+    }
+
+    // changed by bug 1754547 - Provide a @media query to target major platform/toolkits
+    const platform = Tabmix.isVersion(990) ? "-moz-platform" : "-moz-os-version";
+
+    const cssText = `
+    @media (-moz-windows-compositor) {
+      #TabsToolbar[multibar] .titlebar-buttonbox {
+        display: flex;
+      }
+
+      @media not (${platform}: windows-win7) {
+        @media not (${platform}: windows-win8) {
+          #TabsToolbar[multibar] toolbarbutton.titlebar-button {
+            padding-block: 12px;
+            align-self: flex-start;
+          }
+        }
+      }
+    }`;
+
+    const styleSheet = Services.io.newURI(
+      "data:text/css," + encodeURIComponent(cssText));
+
+    const sss = Cc['@mozilla.org/content/style-sheet-service;1']
+        .getService(Ci.nsIStyleSheetService);
+    sss.loadAndRegisterSheet(styleSheet, sss.USER_SHEET);
   },
 
   updateStyleAttributes() {
