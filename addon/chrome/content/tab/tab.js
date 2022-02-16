@@ -43,7 +43,7 @@ var TabmixTabbar = {
     const currentValue = this._visibleRows;
     this._visibleRows = rows;
     if (currentValue !== rows) {
-      gTMPprefObserver.dynamicRules.visibleRows.style.setProperty("--tabmix-visibleRows", rows);
+      gTMPprefObserver.dynamicRules.visibleRows.style.setProperty("--tabmix-visiblerows", rows);
       Tabmix.tabsUtils.updateProtonValues();
     }
   },
@@ -1700,7 +1700,7 @@ gTMPprefObserver = {
     this.insertRule(marginStart, "tabmix-firstTabInRow");
 
     this.insertRule(`:root { --tabs-lines: ` + Tabmix.prefs.getIntPref("tabBarMaxRow") + `;}`, 'max-rows');
-    this.insertRule(`:root { --tabmix-visibleRows: ` + TabmixTabbar.visibleRows + `;}`, "visibleRows");
+    this.insertRule(`:root { --tabmix-visiblerows: ` + TabmixTabbar.visibleRows + `;}`, "visibleRows");
 
     // for ColorfulTabs 8.0+
     // add new rule to adjust selected tab bottom margin
