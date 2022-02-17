@@ -10,7 +10,7 @@
           <html:progress class="tab-progress" max="100" mode="normal"/>
         </vbox>`
   ).replace(
-    /<image class="tab-icon-image".*\/>/,
+    /<.*class="tab-icon-image".*\/>/,
     `$&
             <image class="tab-protect-icon"/>
             <image class="tab-lock-icon"/>
