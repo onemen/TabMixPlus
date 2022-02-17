@@ -412,6 +412,7 @@ Tabmix.tabsUtils = {
     this.initialized = true;
 
     const tab = gBrowser.selectedTab;
+    TMP_eventListener.tabsAlreadyOpened = gBrowser.tabs.length > 1;
 
     Tabmix.rtl = RTL_UI;
     Tabmix.ltr = !RTL_UI;

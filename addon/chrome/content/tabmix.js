@@ -565,6 +565,7 @@ var TMP_eventListener = {
   },
 
   async onSSWindowRestored() {
+    TMP_SessionStore.persistTabAttribute();
     if (Services.prefs.getBoolPref("browser.sessionstore.restore_tabs_lazily", false)) {
       // make sure we are fulli initialized
       await Tabmix._deferredInitialized.promise;
@@ -572,6 +573,13 @@ var TMP_eventListener = {
         if (tab.hasAttribute("pending")) {
           const url = TabmixSvc.ss.getLazyTabValue(tab, "url");
           TMP_Places.asyncSetTabTitle(tab, url);
+        }
+      });
+    }
+    if (this.tabsAlreadyOpened) {
+      gBrowser.tabs.forEach(tab => {
+        if (tab.getAttribute("fadein") && tab.getAttribute("linkedpanel") !== "panel-1-1") {
+          this.onTabOpen_delayUpdateTabBar(tab);
         }
       });
     }
