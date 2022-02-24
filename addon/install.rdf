@@ -11,7 +11,7 @@
     <em:multiprocessCompatible>true</em:multiprocessCompatible>
     <em:description>Tab browsing with an added boost.</em:description>
     <em:iconURL>chrome://tabmixplus/skin/tmp.png</em:iconURL>
-    <em:homepageURL>http://tabmixplus.org</em:homepageURL>
+    <em:homepageURL>https://tabmixplus.org</em:homepageURL>
     <em:optionsURL>chrome://tabmixplus/content/preferences/preferences.xhtml</em:optionsURL>
     <em:optionsType>1</em:optionsType>
     <em:aboutURL>chrome://tabmixplus/content/dialogs/about.xhtml</em:aboutURL>

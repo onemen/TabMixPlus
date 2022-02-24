@@ -12,7 +12,7 @@ The following license applies to all files:
  * License for the specific language governing rights and limitations
  * under the License.
  *
- * The Original Code is the Tab Mix Plus extension (http://tabmixplus.org).
+ * The Original Code is the Tab Mix Plus extension (https://tabmixplus.org).
  *
  * The Initial Developer of the Original Code is ONEMEN (tabmix.onemen@gmail.com).
  * Portions created by Initial Developer are Copyright (C) 2009

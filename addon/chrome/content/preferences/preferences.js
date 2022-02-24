@@ -669,7 +669,7 @@ function showPane(paneID) {
 }
 
 function openHelp(helpTopic) {
-  var helpPage = "http://tabmixplus.org/support/viewtopic.php?t=3&p=";
+  var helpPage = "https://tabmixplus.org/support/viewtopic.php?t=3&p=";
   // Check if the help page already open in the top window
   var recentWindow = Tabmix.getTopWin();
   var tabBrowser = recentWindow.gBrowser;

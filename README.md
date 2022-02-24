@@ -60,4 +60,4 @@ Tab Mix Plus comes with Options window that includes all of its preferences as w
 <br/>
 
 ## Docs
-[Read The Docs](http://tabmixplus.org/support/viewtopic.php?t=3)
+[Read The Docs](https://tabmixplus.org/support/viewtopic.php?t=3)
