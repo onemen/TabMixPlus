@@ -234,8 +234,8 @@ var TMP_eventListener = {
       case "SSWindowRestored":
         this.onSSWindowRestored();
         break;
-      case "SSTabRestoring":
-        this.onSSTabRestoring(aEvent.target);
+      case "SSTabRestored":
+        this.onSSTabRestored(aEvent.target);
         break;
       case "TabOpen":
         this.onTabOpen(aEvent);
@@ -317,7 +317,7 @@ var TMP_eventListener = {
       Tabmix.assert(ex);
     }
 
-    this._tabEvents = ["SSTabRestoring", "PrivateTab:PrivateChanged",
+    this._tabEvents = ["SSTabRestored", "PrivateTab:PrivateChanged",
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned",
       "TabAttrModified"];
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
@@ -566,16 +566,15 @@ var TMP_eventListener = {
 
   async onSSWindowRestored() {
     TMP_SessionStore.persistTabAttribute();
-    if (Services.prefs.getBoolPref("browser.sessionstore.restore_tabs_lazily", false)) {
-      // make sure we are fulli initialized
-      await Tabmix._deferredInitialized.promise;
-      gBrowser.tabs.forEach(tab => {
-        if (tab.hasAttribute("pending")) {
-          const url = TabmixSvc.ss.getLazyTabValue(tab, "url");
-          TMP_Places.asyncSetTabTitle(tab, url);
-        }
-      });
-    }
+    // make sure we are fully initialized
+    await Tabmix._deferredInitialized.promise;
+    gBrowser.tabs.forEach(tab => {
+      if (tab.hasAttribute("pending")) {
+        const url = TabmixSvc.ss.getLazyTabValue(tab, "url");
+        TMP_Places.asyncSetTabTitle(tab, url);
+      }
+    });
+
     if (this.tabsAlreadyOpened) {
       gBrowser.tabs.forEach(tab => {
         if (tab.getAttribute("fadein") && tab.getAttribute("linkedpanel") !== "panel-1-1") {
@@ -585,11 +584,8 @@ var TMP_eventListener = {
     }
   },
 
-  onSSTabRestoring: function TMP_EL_onSSTabRestoring(tab) {
+  onSSTabRestored(tab) {
     Tabmix.restoreTabState(tab);
-    TabmixSessionManager.restoreHistoryComplete(tab);
-
-    gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
 
     // don't mark new tab as unread
     let url = TabmixSvc.ss.getLazyTabValue(tab, "url") || tab.linkedBrowser.currentURI.spec;
@@ -723,7 +719,7 @@ var TMP_eventListener = {
   lastTimeTabOpened: 0,
   onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
     if (aTab.hasAttribute("pending")) {
-      this.onSSTabRestoring(aTab);
+      this.onSSTabRestored(aTab);
       if (Tabmix.isBlankNewTab(aTab.label)) {
         aTab.label = Tabmix.getString("tabs.emptyTabTitle");
         gBrowser._tabAttrModified(aTab, ["label"]);
