@@ -59,13 +59,13 @@ this.ScriptsLoader = {
     this._loadScripts(window, promiseOverlayLoaded);
     this._addListeners(window);
     if (params.isEnabled) {
-      this._updateAfterEnambled(window, params);
+      this._updateAfterEnabled(window, params);
     }
   },
 
   _loadCSS(window) {
+    const winUtils = window.windowUtils;
     for (const url of CSS_URLS) {
-      const winUtils = window.windowUtils;
       winUtils.loadSheetUsingURIString(url, winUtils.AUTHOR_SHEET);
     }
   },
@@ -164,7 +164,7 @@ this.ScriptsLoader = {
     Tabmix.setNewFunction(gBrowser, "swapBrowsersAndCloseOther", swapTab);
   },
 
-  async _updateAfterEnambled(window, {chromeManifest, isOverflow}) {
+  async _updateAfterEnabled(window, {chromeManifest, isOverflow}) {
     await window.delayedStartupPromise;
 
     const {gBrowser, Tabmix, TMP_Places} = window;
