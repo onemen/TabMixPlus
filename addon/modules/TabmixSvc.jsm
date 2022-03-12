@@ -415,3 +415,5 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", function() {
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
   return this.SessionStoreGlobal.SessionStoreInternal;
 });
+
+TabmixSvc.loadDefaultPreferences();

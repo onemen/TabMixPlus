@@ -1089,7 +1089,6 @@ Tabmix.initialization = {
   afterDelayedStartup: {id: 5, obj: "Tabmix"},
 
   get isValidWindow() {
-    TabmixSvc.loadDefaultPreferences();
     /**
       * don't initialize Tabmix functions on this window if one of this is true:
       *  - the window is about to close by SingleWindowModeUtils
