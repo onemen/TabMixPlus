@@ -206,7 +206,12 @@ prefpane > .content-box > tabbox {
 }
 
 #tabclick > tab {
-   flex: 1;
+  padding: 2px 0 0 !important;
+  flex: 1;
+}
+
+#tabclick .subtabs .tab-text {
+	min-width: initial;
 }
 
 #mouseclick_tabbox > .groupbox-panels menulist {

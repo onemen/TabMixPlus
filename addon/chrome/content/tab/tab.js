@@ -20,6 +20,7 @@ var TabmixTabbar = {
     Tabmix.setItem("tabmix_flowing", "flowing", val);
 
     Tabmix.setItem("TabsToolbar", "multibar", val == "multibar" || null);
+    Tabmix.setItem("TabsToolbar", "tabmix-flowing", val);
     Tabmix.setItem("tabmix-scrollbox", "orient", val == "multibar" ? "vertical" : "horizontal");
 
     Tabmix.tabsUtils.resizeObserver(val == "multibar");
@@ -2038,7 +2039,7 @@ gTMPprefObserver = {
     // changed by bug 1754547 - Provide a @media query to target major platform/toolkits
     const platform = Tabmix.isVersion(990) ? "-moz-platform" : "-moz-os-version";
 
-    const cssText = `
+    let cssText = `
     @media (-moz-windows-compositor) {
       #TabsToolbar[multibar] .titlebar-buttonbox {
         display: flex;
@@ -2053,6 +2054,15 @@ gTMPprefObserver = {
         }
       }
     }`;
+
+    if (TabmixSvc.isMac) {
+      // we can't use -moz-platform before Firefox 99
+      cssText = `
+      #TabsToolbar[tabmix-flowing="multibar"] .titlebar-buttonbox-container {
+        -moz-box-align: start !important;
+        margin-top: calc((var(--tab-min-height_mlt) - 16px) / 2 + 3px);
+      }`;
+    }
 
     const styleSheet = Services.io.newURI(
       "data:text/css," + encodeURIComponent(cssText));

@@ -114,6 +114,10 @@ tabpanel {
   margin-bottom: 0 !important;
 }
 
+tab.subtabs:focus-visible > .tab-middle > .tab-text {
+  outline: none;
+}
+
 .subtabs .tab-text {
   min-width: 50px;
   text-align: center;
