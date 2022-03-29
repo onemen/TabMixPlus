@@ -317,7 +317,7 @@ var TMP_eventListener = {
       Tabmix.assert(ex);
     }
 
-    this._tabEvents = ["SSTabRestored", "PrivateTab:PrivateChanged",
+    this._tabEvents = ["SSTabRestoring", "SSTabRestored", "PrivateTab:PrivateChanged",
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned",
       "TabAttrModified"];
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
@@ -576,6 +576,8 @@ var TMP_eventListener = {
     });
 
     if (this.tabsAlreadyOpened) {
+      // make sure this code runs only once for this window
+      delete this.tabsAlreadyOpened;
       gBrowser.tabs.forEach(tab => {
         if (tab.getAttribute("fadein") && tab.getAttribute("linkedpanel") !== "panel-1-1") {
           this.onTabOpen_delayUpdateTabBar(tab);
