@@ -234,6 +234,7 @@ var TMP_eventListener = {
       case "SSWindowRestored":
         this.onSSWindowRestored();
         break;
+      case "SSTabRestoring":
       case "SSTabRestored":
         this.onSSTabRestored(aEvent.target);
         break;
