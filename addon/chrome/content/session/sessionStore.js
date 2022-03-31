@@ -205,7 +205,7 @@ var TMP_SessionStore = {
       let buttons = TabmixSvc.getDialogStrings("Yes", "No").join("\n");
       let self = this;
       let callBack = function(aResult) {
-        if ((msgNo == 1 && aResult.button == 1) || ((msgNo == 2 && aResult.button === 0))) {
+        if (msgNo == 1 && aResult.button == 1 || msgNo == 2 && aResult.button === 0) {
           self.setSessionRestore(false);
           Services.prefs.setBoolPref(TMP_SS_MANAGER, TMP_manager_enabled);
           Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, TMP_crashRecovery_enabled);
@@ -351,7 +351,7 @@ var TMP_ClosedTabs = {
   },
 
   setButtonDisableState: function ct_setButtonDisableState(aState) {
-    if (typeof (aState) == "undefined")
+    if (typeof aState == "undefined")
       aState = this.count === 0;
     Tabmix.setItem(this.buttonBroadcaster, "disabled", aState || null);
   },
@@ -711,7 +711,7 @@ var TMP_ClosedTabs = {
     // after we open new tab we only need to fix position if this condition is true
     // we prevent gBrowser.addTab from moving new tab when we call it from here
     var restorePosition = Tabmix.prefs.getBoolPref("undoClosePosition");
-    if (aWhere == "current" || (aWhere == "original" && restorePosition)) {
+    if (aWhere == "current" || aWhere == "original" && restorePosition) {
       gBrowser.moveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, pos));
     } else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) {
       let tab = gBrowser._lastRelatedTabMap.get(gBrowser.selectedTab) || gBrowser.selectedTab;

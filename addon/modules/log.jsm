@@ -40,7 +40,7 @@ this.console = {
   _timers: {},
   show(aMethod, aDelay, aWindow) {
     try {
-      if (typeof (aDelay) == "undefined")
+      if (typeof aDelay == "undefined")
         aDelay = 500;
 
       let logMethod = () => {

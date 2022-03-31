@@ -133,7 +133,7 @@ async function startup(data, reason) {
     return;
   }
 
-  if (reason === ADDON_INSTALL || (reason === ADDON_ENABLE && !window.Tabmix)) {
+  if (reason === ADDON_INSTALL || reason === ADDON_ENABLE && !window.Tabmix) {
     const enumerator = Services.wm.getEnumerator(null);
     while (enumerator.hasMoreElements()) {
       const win = enumerator.getNext();

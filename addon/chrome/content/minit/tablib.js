@@ -810,7 +810,7 @@ Tabmix.tablib = {
       if (undoItem && m.hasAttribute("targetURI")) {
         TMP_SessionStore.asyncGetTabTitleForClosedWindow(undoItem).then(title => {
           let otherTabsCount = undoItem.tabs.length - 1;
-          let label = (otherTabsCount === 0) ?
+          let label = otherTabsCount === 0 ?
             menuLabelStringSingleTab : PluralForm.get(otherTabsCount, menuLabelString);
           const menuLabel = label.replace("#1", title)
               .replace("#2", otherTabsCount);
@@ -1492,7 +1492,7 @@ Tabmix.tablib = {
           TabmixSvc.getString("window.closeWarning.2");
       } else {
         let messageKey = "protectedtabs.closeWarning.";
-        messageKey += (numProtected < tabsToClose) ? "3" : (numProtected == 1) ? "1" : "2";
+        messageKey += numProtected < tabsToClose ? "3" : numProtected == 1 ? "1" : "2";
         message = [
           TabmixSvc.getFormattedString(messageKey, [tabsToClose, numProtected]),
           TabmixSvc.getString("protectedtabs.closeWarning.4")
@@ -1647,7 +1647,7 @@ Tabmix.tablib = {
     // when TabmixTabbar.widthFitTitle is true we only have width attribute after tab reload
     // some site, like Gmail change title internally, after load already finished and we have remove
     // width attribute
-    if (!TabmixTabbar.widthFitTitle || (isUrlTitle && aTab.hasAttribute("width")))
+    if (!TabmixTabbar.widthFitTitle || isUrlTitle && aTab.hasAttribute("width"))
       return;
 
     if (aBrowser.getAttribute("remote") == "true" &&
@@ -1801,7 +1801,7 @@ Tabmix.tablib = {
       let tab = gBrowser._selectedTab;
       let isCopy = "dataTransfer" in aEvent ?
         aEvent.dataTransfer.dropEffect === "copy" :
-        (aEvent.ctrlKey || aEvent.metaKey);
+        aEvent.ctrlKey || aEvent.metaKey;
       if (!isCopy && tab.getAttribute("locked") &&
           !gBrowser.isBlankNotBusyTab(tab) &&
           !Tabmix.ContentClick.isUrlForDownload(aUri)) {
@@ -1878,7 +1878,7 @@ Tabmix.isBlankNewTab = function(url) {
 Tabmix.getOpenTabNextPref = function(aRelatedToCurrent) {
   return (
     Services.prefs.getBoolPref("browser.tabs.insertAfterCurrent") ||
-    (Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") &&
-      aRelatedToCurrent)
+    Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") &&
+      aRelatedToCurrent
   );
 };

@@ -146,16 +146,16 @@ var TMP_Places = {
     var tabBrowser = w.gBrowser;
     var aTab = tabBrowser._selectedTab;
 
-    if (typeof (aPref) == "undefined")
+    if (typeof aPref == "undefined")
       aPref = this.getPrefByDocumentURI(window);
 
     var _pref = w.Services.prefs;
-    if ((_pref.getBoolPref(aPref) || aTab.hasAttribute("locked"))) {
+    if (_pref.getBoolPref(aPref) || aTab.hasAttribute("locked")) {
       if (aEvent && _pref.getBoolPref("extensions.tabmix.middlecurrent") &&
-          ((aEvent instanceof MouseEvent &&
-            (aEvent.button == 1 || aEvent.button === 0 && (aEvent.ctrlKey || aEvent.metaKey))) ||
-           (aEvent instanceof XULCommandEvent &&
-            typeof aEvent.target._placesNode == "object" && (aEvent.ctrlKey || aEvent.metaKey))))
+          (aEvent instanceof MouseEvent &&
+            (aEvent.button == 1 || aEvent.button === 0 && (aEvent.ctrlKey || aEvent.metaKey)) ||
+           aEvent instanceof XULCommandEvent &&
+            typeof aEvent.target._placesNode == "object" && (aEvent.ctrlKey || aEvent.metaKey)))
         aWhere = "current";
       else if (aWhere == "current" && !tabBrowser.isBlankNotBusyTab(aTab))
         aWhere = "tab";
@@ -208,13 +208,13 @@ var TMP_Places = {
       aTab = openTabs[i];
       tabIsBlank = gBrowser.isBlankNotBusyTab(aTab);
       // don't reuse collapsed tab if width fitTitle is set
-      canReplace = (doReplace && !aTab.hasAttribute("locked") &&
-                    !aTab.hasAttribute("pinned")) || tabIsBlank;
+      canReplace = doReplace && !aTab.hasAttribute("locked") &&
+                    !aTab.hasAttribute("pinned") || tabIsBlank;
       if (reuseTabs.length < bmGroup.length && canReplace)
         reuseTabs.push(aTab);
-      else if ((doReplace && !aTab.hasAttribute("locked") &&
+      else if (doReplace && !aTab.hasAttribute("locked") &&
                 !aTab.hasAttribute("protected") &&
-                !aTab.hasAttribute("pinned")) || tabIsBlank) {
+                !aTab.hasAttribute("pinned") || tabIsBlank) {
         aTab.collapsed = true;
         removeTabs.push(aTab);
       }
@@ -644,7 +644,7 @@ var TMP_Places = {
                                                newValue, lastModified, itemType,
                                                parentId, guid) {
     if (itemId == -1 || itemType != Ci.nsINavBookmarksService.TYPE_BOOKMARK ||
-        (property != "uri" && property != "title"))
+        property != "uri" && property != "title")
       return;
 
     if (property == "uri" && newValue && !isBlankPageURL(newValue)) {

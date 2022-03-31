@@ -21,9 +21,9 @@ this.SingleWindowModeUtils = {
     const isPrivate = PrivateBrowsingUtils.isWindowPrivate(aExclude);
 
     function isSuitableBrowserWindow(win) {
-      return (!win.closed && win.document.readyState == "complete" &&
+      return !win.closed && win.document.readyState == "complete" &&
               win.toolbar.visible && win != aExclude &&
-              PrivateBrowsingUtils.isWindowPrivate(win) == isPrivate);
+              PrivateBrowsingUtils.isWindowPrivate(win) == isPrivate;
     }
 
     const windows = Services.wm.getEnumerator("navigator:browser");

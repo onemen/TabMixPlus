@@ -82,7 +82,7 @@ var TabmixTabClickOptions = {
     // handle multi-select
     if (!clickOutTabs) {
       const keyPress = [
-        (aEvent.ctrlKey && !aEvent.metaKey || !aEvent.ctrlKey && aEvent.metaKey),
+        aEvent.ctrlKey && !aEvent.metaKey || !aEvent.ctrlKey && aEvent.metaKey,
         aEvent.shiftKey,
         aEvent.altKey,
       ];
@@ -291,7 +291,7 @@ var TabmixTabClickOptions = {
         // changed on 2011-03-09 - open new tab when clicked on tabbar
         // or when the tab is locked
         event = document.createEvent("Events");
-        var opennewTab = clickOutTabs || (aTab.hasAttribute("locked") && !gBrowser.isBlankNotBusyTab(aTab));
+        var opennewTab = clickOutTabs || aTab.hasAttribute("locked") && !gBrowser.isBlankNotBusyTab(aTab);
         event.ctrlKey = opennewTab;
         event.initEvent("click", true, true);
         middleMousePaste(event);
@@ -554,7 +554,7 @@ var TabmixContext = {
     Tabmix.showItem("tm-mergeWindowsTab",
       Tabmix.prefs.getBoolPref("showMergeWindow") &&
       (!Tabmix.singleWindowMode ||
-      (Tabmix.singleWindowMode && !isOneWindow)));
+      Tabmix.singleWindowMode && !isOneWindow));
     var showRenameTabMenu = Tabmix.prefs.getBoolPref("renameTabMenu");
     Tabmix.showItem("tm-renameTab", showRenameTabMenu);
     Tabmix.showItem("tm-copyTabUrl", Tabmix.prefs.getBoolPref("copyTabUrlMenu"));

@@ -143,7 +143,7 @@ function prompt_deinit(button) {
     if (window.opener && !window.opener.closed) {
       let returnData = {
         button: dialogParams.GetInt(4),
-        checked: (dialogParams.GetInt(5) == TMP_CHECKBOX_CHECKED),
+        checked: dialogParams.GetInt(5) == TMP_CHECKBOX_CHECKED,
         label: dialogParams.GetString(5),
         value: dialogParams.GetInt(6)
       };

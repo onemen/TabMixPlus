@@ -210,7 +210,7 @@ var TMP_LastTab = {
           tab.mCorrespondingMenuitem.setAttribute("_moz-menuactive", "false");
       }
 
-      if ((this.handleCtrlTab && event.shiftKey) || (!this.handleCtrlTab && !event.shiftKey)) {
+      if (this.handleCtrlTab && event.shiftKey || !this.handleCtrlTab && !event.shiftKey) {
         this.TabIndex++;
         if (this.TabIndex >= tabCount)
           this.TabIndex = 0;

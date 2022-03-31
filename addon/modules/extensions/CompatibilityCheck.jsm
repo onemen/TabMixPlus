@@ -71,8 +71,8 @@ CompatibilityCheck.prototype = {
         let addon = aAddonsList[i];
         if (addon.id.toLowerCase() in guid_list) {
           let disabled = addon.userDisabled;
-          if ((!disabled && !isPending(addon, "disable") && !isPending(addon, "uninstall")) ||
-                  (disabled && isPending(addon, "enable"))) {
+          if (!disabled && !isPending(addon, "disable") && !isPending(addon, "uninstall") ||
+                  disabled && isPending(addon, "enable")) {
             self.list.push(new AddOn(addon));
             if (!self.showList)
               break;

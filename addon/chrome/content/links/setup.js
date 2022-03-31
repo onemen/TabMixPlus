@@ -207,7 +207,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   }
   tabContainer.mTabMaxWidth = max;
   tabContainer.mTabMinWidth = min;
-  TabmixTabbar.widthFitTitle = this.prefs.getBoolPref("flexTabs") && (max != min);
+  TabmixTabbar.widthFitTitle = this.prefs.getBoolPref("flexTabs") && max != min;
   if (TabmixTabbar.widthFitTitle)
     this.setItem(tabContainer, "widthFitTitle", true);
 
@@ -215,7 +215,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   if (document.documentElement.getAttribute("chromehidden").includes("toolbar"))
     tabscroll = 1;
   if (tabscroll < 0 || tabscroll > 3 ||
-      (tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window)) {
+      tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window) {
     this.prefs.setIntPref("tabBarMode", 1);
     tabscroll = 1;
   }
@@ -292,7 +292,7 @@ Tabmix._updateCloseButtons = function tabContainer_updateCloseButtons(skipUpdate
       this.setAttribute("closebuttons", "noclose");
       this.removeAttribute("closebuttons-hover");
     }
-  } else if ((!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons")) ||
+  } else if (!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons") ||
              transitionend) {
     TabmixTabbar.updateScrollStatus(transitionend);
     TabmixTabbar.updateBeforeAndAfter();

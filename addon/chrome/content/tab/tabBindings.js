@@ -113,7 +113,7 @@
       '_isProtected': {
         get() {
           return this.hasAttribute("protected") || this.pinned ||
-            ("permaTabs" in window && this.hasAttribute("isPermaTab"));
+            "permaTabs" in window && this.hasAttribute("isPermaTab");
         }
       },
       'mouseHoverSelect': {
@@ -241,7 +241,7 @@
         this.container._selectNewTab(this);
         let isTabFocused = false;
         try {
-          isTabFocused = (document.commandDispatcher.focusedElement == this);
+          isTabFocused = document.commandDispatcher.focusedElement == this;
         } catch (e) { }
         if (!isTabFocused) {
           this.setAttribute("ignorefocus", "true");

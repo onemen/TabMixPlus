@@ -173,7 +173,13 @@ module.exports = {
     "no-extra-bind": 2,
     "no-extra-boolean-cast": 2,
     "no-extra-label": 2,
-    "no-extra-parens": [2, "functions"], // TODO need to fix this for [2, "all"]
+    "no-extra-parens": [2, "all", {
+      "returnAssign": false,
+      "enforceForArrowConditionals": false,
+      "enforceForSequenceExpressions": false,
+      "enforceForNewInMemberExpressions": false,
+      "enforceForFunctionPrototypeMethods": false,
+    }],
     "no-extra-semi": 2,
     "no-fallthrough": 2,
     "no-floating-decimal": 2,

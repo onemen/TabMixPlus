@@ -122,7 +122,7 @@ this.AutoReload = {
     var timeLabel = aItem.hasAttribute("_label") ? aItem.getAttribute("_label") + " " : "";
     if (aSeconds > 59) {
       let minutes = parseInt(aSeconds / 60);
-      timeLabel += minutes + " " + (this._labels[minutes > 1 ? "minutes" : "minute"]);
+      timeLabel += minutes + " " + this._labels[minutes > 1 ? "minutes" : "minute"];
       aSeconds -= 60 * minutes;
       if (aSeconds)
         timeLabel += " ";

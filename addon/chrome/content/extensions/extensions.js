@@ -47,7 +47,7 @@ var TMP_extensionsCompatibility = {
 
     // fix for Cluster Tabs - Cluster Tab look for TM_init
     // https://addons.mozilla.org/en-US/firefox/addon/cluster-tabs-for-firefox/
-    if ("GlaxChrome" in window && typeof (window.GlaxChrome) == "object") {
+    if ("GlaxChrome" in window && typeof window.GlaxChrome == "object") {
       document.getElementById("main-window").setAttribute("gscltTMPinstalled", true);
       let func = ["_setupForOtherExtensions", "enableCustomDragDropMode"];
       let GlaxChrome = window.GlaxChrome.CLT.DragDropManager;
@@ -129,7 +129,7 @@ var TMP_extensionsCompatibility = {
         '  f.gBrowser.TMP_selectNewForegroundTab(newTab, false);' +
         '  TMP_LastTab.PushSelectedTab();' +
         '}';
-      if (typeof (foxTab.openNewTab) == "function") {
+      if (typeof foxTab.openNewTab == "function") {
         Tabmix.changeCode(foxTab, "foxTab.openNewTab")._replace(
           '{', loadNewInBackground
         )._replace(
@@ -145,7 +145,7 @@ var TMP_extensionsCompatibility = {
           'if( !loadNewInBackground) $&'
         ).toCode();
       }
-      if (typeof (foxTab.showNewTabMessage) == "function") {
+      if (typeof foxTab.showNewTabMessage == "function") {
         Tabmix.changeCode(foxTab, "foxTab.showNewTabMessage")._replace(
           '{', loadNewInBackground
         )._replace(
@@ -207,7 +207,7 @@ var TMP_extensionsCompatibility = {
     if ("RSSTICKER" in window)
       this.RSSTICKER.init();
 
-    if ("PersonaController" in window && typeof (window.PersonaController) == "object") {
+    if ("PersonaController" in window && typeof window.PersonaController == "object") {
       Tabmix.changeCode(PersonaController, "PersonaController._applyPersona")._replace(
         /(})(\)?)$/,
         'if (TabmixTabbar.position == 1) {\
@@ -289,7 +289,7 @@ var TMP_extensionsCompatibility = {
     }
 
     // for MR Tech's local install extension
-    if (typeof (Local_Install) == "object") {
+    if (typeof Local_Install == "object") {
       // don't open 'Throbber' in current tab when tab is locked
       // or 'Throbber' is to different site then the current
       Tabmix.changeCode(Local_Install, "Local_Install.openThrobber")._replace(
@@ -434,7 +434,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
   onClick(event) {
     if (event.ctrlKey) {
       this.markAsRead(true);
-    } else if ((this.parent.alwaysOpenInNewTab && (event.which == 1)) || (event.which == 2)) {
+    } else if (this.parent.alwaysOpenInNewTab && event.which == 1 || event.which == 2) {
       this.onContextOpen("tab");
     } else if (event.which == 1) {
       this.onContextOpen();

@@ -64,8 +64,8 @@ Tabmix.multiRow = {
             //XXX don't do anything on Linux when hovering last tab and
             // we show close button on tab on hover
             if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows === 1 ||
-              (!Tabmix.visibleTabs.last.hasAttribute("showbutton") &&
-                !Tabmix.visibleTabs.last.hasAttribute("showbutton_removed")))
+              !Tabmix.visibleTabs.last.hasAttribute("showbutton") &&
+                !Tabmix.visibleTabs.last.hasAttribute("showbutton_removed"))
               Tabmix.tabsUtils.updateVerticalTabStrip();
           } else {
             Tabmix.tabsUtils.overflow = false;

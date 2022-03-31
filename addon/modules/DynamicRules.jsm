@@ -126,7 +126,7 @@ this.DynamicRules = {
     let bgImage = {};
     bgImage.body = "linear-gradient(#topColor, #bottomColor)";
     let bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),\n";
-    bgImage.bg = isMac ? bgImage.body : (bottomBorder + space20 + bgImage.body);
+    bgImage.bg = isMac ? bgImage.body : bottomBorder + space20 + bgImage.body;
     ///XXX move -moz-appearance: to general rule when style have bg
     let background = " {\n  -moz-appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
     let backgroundRule = ' > .tab-stack > .tab-background' + background;

@@ -75,7 +75,7 @@ var gMousePane = {
   resetPreference(checkbox) {
     let menulist = $(checkbox.getAttribute("control"));
     let prefID = menulist.getAttribute("preference");
-    $(prefID).value = checkbox.checked ? (menulist[prefID] || 0) : -1;
+    $(prefID).value = checkbox.checked ? menulist[prefID] || 0 : -1;
   },
 
   setCheckedState(menulist) {

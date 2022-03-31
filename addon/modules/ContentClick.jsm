@@ -361,7 +361,7 @@ ContentClickInternal = {
     };
 
     ///XXX check again how SubmitToTab work
-    if (typeof (this._window.SubmitToTab) != 'undefined') {
+    if (typeof this._window.SubmitToTab != 'undefined') {
       let target = event.target;
       if (target instanceof HTMLButtonElement ||
           target instanceof HTMLInputElement) {
@@ -689,7 +689,7 @@ ContentClickInternal = {
     href = hrefFromOnClick || href;
 
     // prevent link with "custombutton" protocol to open new tab when custombutton extension exist
-    if (event.button != 2 && typeof (custombuttons) != 'undefined') {
+    if (event.button != 2 && typeof custombuttons != 'undefined') {
       if (this.checkAttr(href, "custombutton://"))
         return true;
     }
@@ -1079,7 +1079,7 @@ ContentClickInternal = {
    *
    */
   checkAttr: function TMP_checkAttr(attr, string) {
-    if (typeof (attr) == "string")
+    if (typeof attr == "string")
       return attr.startsWith(string);
     return false;
   },
@@ -1103,7 +1103,7 @@ ContentClickInternal = {
     };
 
     let getDomain = function getDomain(url) {
-      if (typeof (url) != "string")
+      if (typeof url != "string")
         url = url.toString();
 
       if (url.match(/auth\?/))
@@ -1142,7 +1142,7 @@ ContentClickInternal = {
         let level;
         try {
           var publicSuffix = Services.eTLD.getPublicSuffixFromHost(url.hostPort);
-          level = (!publicSuffix.includes(".")) ? 2 : 3;
+          level = !publicSuffix.includes(".") ? 2 : 3;
         } catch (e) {
           level = 2;
         }

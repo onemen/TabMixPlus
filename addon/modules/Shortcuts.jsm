@@ -358,7 +358,7 @@ this.Shortcuts = {
         keyset.appendChild(keyItem);
     } else {
       // always add tabmix key that is in use by menu
-      if (!keyset || (disabled && !aKeyData.useInMenu)) {
+      if (!keyset || disabled && !aKeyData.useInMenu) {
         return;
       }
       keyItem = document.createElementNS(NS_XUL, "key");
@@ -436,10 +436,10 @@ this.Shortcuts = {
       // or its value equal to default, remove it from the preference
       let keyData = this.keys[key] || null;
       if (!keyData || typeof val != "string" || val == keyData.default || val === "" ||
-          (val == "d&" && (!keyData.default || /^d&/.test(keyData.default)))) {
+          val == "d&" && (!keyData.default || /^d&/.test(keyData.default))) {
         delete shortcuts[key];
         updatePreference = true;
-      } else if (keyData.default && (val == "d&" + keyData.default)) {
+      } else if (keyData.default && val == "d&" + keyData.default) {
         shortcuts[key] = "d&";
         updatePreference = true;
       } else if (val != "d&" && !this.prefBackup) {
@@ -506,8 +506,8 @@ this.Shortcuts = {
   },
 
   validateKey: function validateKey(key) {
-    if ((key.keycode && key.keycode == "VK_SCROLL_LOCK" || key.keycode == "VK_CONTEXT_MENU") ||
-       (!key.key && !key.keycode)) {
+    if (key.keycode && key.keycode == "VK_SCROLL_LOCK" || key.keycode == "VK_CONTEXT_MENU" ||
+       !key.key && !key.keycode) {
       key = null;
     } else if (key.modifiers && /alt/.test(key.modifiers) && key.keycode &&
         (key.keycode == "VK_BACK_QUOTE" || key.keycode == "VK_TAB")) {
@@ -725,5 +725,5 @@ function getPlatformAccel() {
     case 18: return "alt";
     case 224: return "meta";
   }
-  return (Services.appinfo.OS == "Darwin" ? "meta" : "control");
+  return Services.appinfo.OS == "Darwin" ? "meta" : "control";
 }

@@ -60,8 +60,8 @@ const gNumberInput = {
       case "keypress":
         if (event.charCode == 0 || event.altKey || event.ctrlKey || event.metaKey) return;
         if (!/\d/.test(event.key) ||
-            (item.editor.textLength == item.maxLength &&
-              item.editor.selection.anchorOffset == item.editor.selection.focusOffset)) {
+            item.editor.textLength == item.maxLength &&
+              item.editor.selection.anchorOffset == item.editor.selection.focusOffset) {
           event.stopPropagation();
           event.preventDefault();
         }

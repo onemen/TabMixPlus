@@ -143,10 +143,10 @@ class Preference extends MozXULElement {
       // Try to find a preference element for the same preference.
       let preference = null;
       const parentPreferences = pdoc.getElementsByTagName("preferences");
-      for (let k = 0; (k < parentPreferences.length && !preference); ++k) {
+      for (let k = 0; k < parentPreferences.length && !preference; ++k) {
         const parentPrefs = parentPreferences[k]
             .getElementsByAttribute("name", this.name);
-        for (let l = 0; (l < parentPrefs.length && !preference); ++l) {
+        for (let l = 0; l < parentPrefs.length && !preference; ++l) {
           if (parentPrefs[l].localName == "preference")
             preference = parentPrefs[l];
         }
@@ -376,7 +376,7 @@ class Preference extends MozXULElement {
         break;
       case "file": {
         let lf;
-        if (typeof (val) == "string") {
+        if (typeof val == "string") {
           lf = Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsIFile);
           lf.persistentDescriptor = val;
           if (!lf.exists()) {
@@ -517,7 +517,7 @@ class Preference extends MozXULElement {
       case "int":
         return parseInt(value, 10) || 0;
       case "bool":
-        return typeof (value) == "boolean" ? value : value == "true";
+        return typeof value == "boolean" ? value : value == "true";
     }
     return value;
   }
@@ -967,10 +967,10 @@ class PrefWindow extends MozXULElement {
                 // Try to find a preference element for the same preference.
                 let preference = null;
                 const parentPreferences = pdoc.getElementsByTagName("preferences");
-                for (let k = 0; (k < parentPreferences.length && !preference); ++k) {
+                for (let k = 0; k < parentPreferences.length && !preference; ++k) {
                   const parentPrefs = parentPreferences[k]
                       .getElementsByAttribute("name", preferences[j].name);
-                  for (let l = 0; (l < parentPrefs.length && !preference); ++l) {
+                  for (let l = 0; l < parentPrefs.length && !preference; ++l) {
                     if (parentPrefs[l].localName == "preference")
                       preference = parentPrefs[l];
                   }
@@ -1545,12 +1545,12 @@ class PrefWindow extends MozXULElement {
     const lastSelectedPane = document.getElementById(this.lastSelected);
     let increment = this._animateIncrement * this._multiplier;
     const newHeight = this._currentHeight + increment;
-    if ((this._multiplier > 0 && this._currentHeight >= lastSelectedPane.contentHeight) ||
-        (this._multiplier < 0 && this._currentHeight <= lastSelectedPane.contentHeight))
+    if (this._multiplier > 0 && this._currentHeight >= lastSelectedPane.contentHeight ||
+        this._multiplier < 0 && this._currentHeight <= lastSelectedPane.contentHeight)
       return 0;
 
-    if ((this._multiplier > 0 && newHeight > lastSelectedPane.contentHeight) ||
-        (this._multiplier < 0 && newHeight < lastSelectedPane.contentHeight))
+    if (this._multiplier > 0 && newHeight > lastSelectedPane.contentHeight ||
+        this._multiplier < 0 && newHeight < lastSelectedPane.contentHeight)
       increment = this._animateRemainder * this._multiplier;
     return increment;
   }
@@ -1762,7 +1762,7 @@ class PrefWindow extends MozXULElement {
   }
 
   openSubDialog(aURL, aFeatures, aParams) {
-    return openDialog(aURL, "", "modal,centerscreen,resizable=no" + (aFeatures != "" ? ("," + aFeatures) : ""), aParams);
+    return openDialog(aURL, "", "modal,centerscreen,resizable=no" + (aFeatures != "" ? "," + aFeatures : ""), aParams);
   }
 
   openWindow(aWindowType, aURL, aFeatures, aParams) {
@@ -1772,8 +1772,8 @@ class PrefWindow extends MozXULElement {
         win.initWithParams(aParams);
       win.focus();
     } else {
-      const features = "resizable,dialog=no,centerscreen" + (aFeatures != "" ? ("," + aFeatures) : "");
-      const parentWindow = (this.instantApply || !window.opener || window.opener.closed) ? window : window.opener;
+      const features = "resizable,dialog=no,centerscreen" + (aFeatures != "" ? "," + aFeatures : "");
+      const parentWindow = this.instantApply || !window.opener || window.opener.closed ? window : window.opener;
       win = parentWindow.openDialog(aURL, "_blank", features, aParams);
     }
     return win;

@@ -400,7 +400,7 @@ var TMP_tabDNDObserver = {
       // scroll without button
     else if (event.screenX <= tabStrip.scrollbox.screenX)
       targetAnonid = ltr ? "scrollbutton-up" : "scrollbutton-down";
-    else if (event.screenX >= (tabStrip.scrollbox.screenX + tabStrip.scrollClientRect.width))
+    else if (event.screenX >= tabStrip.scrollbox.screenX + tabStrip.scrollClientRect.width)
       targetAnonid = ltr ? "scrollbutton-down" : "scrollbutton-up";
 
     switch (targetAnonid) {
@@ -532,7 +532,7 @@ var TMP_tabDNDObserver = {
     var tab = gBrowser.tabs[newIndex];
     const {width} = tab.getBoundingClientRect();
     const [_left, _right] = RTL_UI ? [1, 0] : [0, 1];
-    let left_right = (mX < tab.screenX + width / 2) ? _left : _right;
+    let left_right = mX < tab.screenX + width / 2 ? _left : _right;
     const isCopy = event.dataTransfer.dropEffect == "copy";
     if (
       !isCopy &&
@@ -672,8 +672,8 @@ Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
   var isBlankTab = gBrowser.isBlankNotBusyTab(aTab);
   var isLockTab = !isBlankTab && aTab.hasAttribute("locked");
 
-  var openTabPref = typeof (pref) == "string" ? Services.prefs.getBoolPref(pref) : pref;
-  if (typeof (altKey) != "undefined") {
+  var openTabPref = typeof pref == "string" ? Services.prefs.getBoolPref(pref) : pref;
+  if (typeof altKey != "undefined") {
     // don't reuse blank tab if the user press alt key when the pref is to open in current tab
     if (altKey && !openTabPref)
       isBlankTab = false;
@@ -1024,7 +1024,7 @@ Tabmix.navToolbox = {
     let where = "current";
     let url = result?.payload?.url ?? this.value;
     let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar",
-      altEnter).inNew && !(/^ *javascript:/.test(url));
+      altEnter).inNew && !/^ *javascript:/.test(url);
     if (isMouseEvent || altEnter || loadNewTab) {
       // Use the standard UI link behaviors for clicks or Alt+Enter
       where = "tab";

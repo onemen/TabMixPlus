@@ -131,7 +131,7 @@ this.RenameTab = {
     var data = this.data;
     var tab = data.tab;
     var label = data.value;
-    var resetDefault = aReset || (label == data.docTitle && !data.permanently);
+    var resetDefault = aReset || label == data.docTitle && !data.permanently;
     var url = resetDefault ? null : data.permanently ? "*" : data.url;
 
     var win = this.window;

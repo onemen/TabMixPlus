@@ -23,19 +23,19 @@ var Tabmix = {
 
   // Show/hide one item (specified via name or the item element itself).
   showItem(aItemOrId, aShow) {
-    var item = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
+    var item = typeof aItemOrId == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     if (item && item.hidden == Boolean(aShow))
       item.hidden = !aShow;
   },
 
   setItem(aItemOrId, aAttr, aVal) {
-    var elem = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
+    var elem = typeof aItemOrId == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     if (elem) {
       if (aVal === null || aVal === undefined) {
         elem.removeAttribute(aAttr);
         return;
       }
-      if (typeof (aVal) == "boolean")
+      if (typeof aVal == "boolean")
         aVal = aVal ? "true" : "false";
 
       if (!elem.hasAttribute(aAttr) || elem.getAttribute(aAttr) != aVal)
@@ -44,7 +44,7 @@ var Tabmix = {
   },
 
   setAttributeList(aItemOrId, aAttr, aValue, aAdd) {
-    let elem = typeof (aItemOrId) == "string" ? document.getElementById(aItemOrId) : aItemOrId;
+    let elem = typeof aItemOrId == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     let att = elem.getAttribute(aAttr);
     let array = att ? att.split(" ") : [];
     let index = array.indexOf(aValue);
@@ -147,7 +147,7 @@ var Tabmix = {
       this.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
                  " from:\nfile: chrome://" + path + "\nline: " + line +
                  "\n\nPlease inform Tabmix Plus developer" +
-                 (extensionName ? (" and " + extensionName + "developer.") : "."));
+                 (extensionName ? " and " + extensionName + "developer." : "."));
     } else {
       this.clog(err.message + "\n\n" + stack);
     }
@@ -166,7 +166,7 @@ var Tabmix = {
 
     // we use non modal dialog when we call for prompt on startup
     // when we don't have a callBack function use modal dialog
-    let modal = typeof (aCallBack) != "function";
+    let modal = typeof aCallBack != "function";
     var i;
     for (i = 0; i < intParam.length; i++)
       dpb.SetInt(i, intParam[i]);
@@ -175,7 +175,7 @@ var Tabmix = {
     for (i = 0; i < strParam.length; i++)
       dpb.SetString(i, strParam[i]);
 
-    if (typeof (aWindow) == "undefined") {
+    if (typeof aWindow == "undefined") {
       try {
         aWindow = window;
       } catch (e) {
@@ -192,14 +192,14 @@ var Tabmix = {
 
     return {
       button: dpb.GetInt(4),
-      checked: (dpb.GetInt(5) == this.CHECKBOX_CHECKED),
+      checked: dpb.GetInt(5) == this.CHECKBOX_CHECKED,
       label: dpb.GetString(5),
       value: dpb.GetInt(6)
     };
   },
 
   windowEnumerator: function Tabmix_windowEnumerator(aWindowtype) {
-    if (typeof (aWindowtype) == "undefined")
+    if (typeof aWindowtype == "undefined")
       aWindowtype = "navigator:browser";
     return Services.wm.getEnumerator(aWindowtype);
   },
