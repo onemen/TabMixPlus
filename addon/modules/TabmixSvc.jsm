@@ -32,6 +32,9 @@ function isVersion(aVersionNo, updateChannel) {
       TabmixSvc.console.log('invalid version check ' + JSON.stringify(aVersionNo));
       return true;
     }
+    if (!firefox && !TabmixSvc.isWaterfox && !TabmixSvc.isBasilisk) {
+      return false;
+    }
     aVersionNo = firefox;
   }
 
