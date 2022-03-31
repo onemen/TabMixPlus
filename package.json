@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "New Tab Mix Plus for modern Firefox",
   "scripts": {
-    "lint": "eslint --format codeframe --fix --cache --cache-location config\\.eslintcache --ignore-path config\\.eslintignore --ext .js,.jsm,.xhtml .",
-    "lint:test": "eslint --format codeframe --cache --cache-location config\\.eslintcache --ignore-path config\\.eslintignore --ext .js,.jsm,.xhtml .",
-    "lint:clean": "eslint --format codeframe --ignore-path config\\.eslintignore --ext .js,.jsm ."
+    "lint": "eslint --format stylish --fix --cache --cache-location config\\.eslintcache --ignore-path config\\.eslintignore --ext .js,.jsm,.xhtml .",
+    "lint:test": "eslint --format stylish --cache --cache-location config\\.eslintcache --ignore-path config\\.eslintignore --ext .js,.jsm,.xhtml .",
+    "lint:clean": "eslint --format stylish --ignore-path config\\.eslintignore --ext .js,.jsm ."
   },
   "repository": {
     "type": "git",
@@ -19,10 +19,10 @@
   },
   "homepage": "https://github.com/onemen/TabMixPlus#readme",
   "devDependencies": {
-    "@babel/core": "^7.15.5",
-    "@babel/eslint-parser": "^7.15.7",
-    "eslint": "^7.32.0",
-    "eslint-plugin-mozilla": "^2.11.1",
+    "@babel/core": "^7.17.8",
+    "@babel/eslint-parser": "^7.17.0",
+    "eslint": "^8.12.0",
+    "eslint-plugin-mozilla": "^2.11.4",
     "eslint-plugin-tabmix": "file:./config/eslint-plugin-tabmix"
   }
 }

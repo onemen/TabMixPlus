@@ -9,8 +9,8 @@ ChromeUtils.defineModuleGetter(this, "Services",
 ChromeUtils.defineModuleGetter(this,
   "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
-const {getChromeWindow} = ChromeUtils.import("resource:///modules/syncedtabs/util.js", {});
-const {TabListView} = ChromeUtils.import("resource:///modules/syncedtabs/TabListView.js", {});
+const {getChromeWindow} = ChromeUtils.import("resource:///modules/syncedtabs/util.js");
+const {TabListView} = ChromeUtils.import("resource:///modules/syncedtabs/TabListView.js");
 
 const Tabmix = {};
 

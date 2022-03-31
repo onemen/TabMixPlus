@@ -266,7 +266,7 @@ this.TabmixSvc = {
       const {DynamicRules} = ChromeUtils.import("chrome://tabmix-resource/content/DynamicRules.jsm");
       DynamicRules.init(aWindow);
 
-      ChromeUtils.import("chrome://tabmix-resource/content/TabRestoreQueue.jsm", {});
+      ChromeUtils.import("chrome://tabmix-resource/content/TabRestoreQueue.jsm");
 
       if (TabmixSvc.isG3Waterfox) {
         // Waterfox use build-in preference - browser.tabBar.position
@@ -281,7 +281,7 @@ this.TabmixSvc = {
 
       if (!TabmixSvc.isCyberfox) {
         prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
-        ChromeUtils.import("chrome://tabmix-resource/content/NewTabURL.jsm", {});
+        ChromeUtils.import("chrome://tabmix-resource/content/NewTabURL.jsm");
       }
     },
 
