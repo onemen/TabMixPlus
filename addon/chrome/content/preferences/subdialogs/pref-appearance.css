@@ -1,6 +1,11 @@
 
 @namespace html "http://www.w3.org/1999/xhtml";
 
+#stylestabs {
+  display: flex;
+  justify-content: space-between;
+}
+
 #stylestabs > tab {
   padding-left: 4px !important;
   padding-right: 4px !important;
