@@ -89,7 +89,7 @@ PlacesUtilsInternal = {
     try {
       this.initPlacesUIUtils(aWindow);
     } catch (ex) {
-      TabmixSvc.console.reportError(ex);
+      console.error("Tabmix Error:", ex);
     }
   },
 
@@ -171,7 +171,8 @@ PlacesUtilsInternal = {
     // we disable the open menu when the tab is lock
     // the 2nd check for aWhere == "current" is for non Firefox code that may call this function
     code = Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openNodeIn")._replace(
-      '{', '$&\n' +
+      /\)\n*\s*{/,
+      '$&\n' +
       '    var TMP_Event;\n' +
       '    if (arguments.length > 1 && typeof aWhere == "object") {\n' +
       '      TMP_Event = aWhere.event;\n' +
