@@ -285,7 +285,7 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   // this function run before tab load, so onTabReloaded will run when
   // onStateChange get STATE_STOP, unless the tab is pending
   var reloadData = aTab.getAttribute("reload-data");
-  if (reloadData) {
+  if (reloadData && !aTab.hasAttribute("_reload")) {
     this.autoReload.initTab(aTab);
     aTab.autoReloadEnabled = true;
     aTab.setAttribute("_reload", true);
