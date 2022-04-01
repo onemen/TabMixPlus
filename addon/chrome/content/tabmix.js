@@ -574,6 +574,7 @@ var TMP_eventListener = {
         const url = TabmixSvc.ss.getLazyTabValue(tab, "url");
         TMP_Places.asyncSetTabTitle(tab, url);
       }
+      Tabmix.restoreTabState(tab);
     });
 
     if (this.tabsAlreadyOpened) {
