@@ -149,6 +149,7 @@ var TMP_tabDNDObserver = {
            newTranslateX = RTL_UI && dropIndex < firstMovingTab._tPos || !RTL_UI && dropIndex > firstMovingTab._tPos
              ? refTab.screenX + refTab.getBoundingClientRect().width - firstMovingTab.screenX - draggedTab._dragData.shiftWidth
              : refTab.screenX - firstMovingTab.screenX;
+           newTranslateX = Math.round(newTranslateX);
        }
       $&`
     )._replace(
@@ -315,13 +316,19 @@ var TMP_tabDNDObserver = {
     if (!disAllowDrop) {
       this.hideDragoverMessage();
       const {dragType, oldIndex, newIndex} = this.eventParams(event);
-      if (!isCopy && dragType == this.DRAG_TAB_IN_SAME_WINDOW &&
-        (oldIndex === newIndex || newIndex - oldIndex === 1)) {
+      if (
+        !isCopy &&
+        dragType == this.DRAG_TAB_IN_SAME_WINDOW &&
+        (oldIndex === newIndex || newIndex - oldIndex === 1) &&
+        this.useTabmixDnD(event)
+      ) {
         disAllowDrop = true;
-      } else if (TabmixTabbar.scrollButtonsMode == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&
+      } else if (
+        TabmixTabbar.scrollButtonsMode == TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&
         // if we don't set effectAllowed to none then the drop indicator stay
         gBrowser.tabs[0].pinned &&
-        Tabmix.compare(event.screenX, Tabmix.itemEnd(gBrowser.tabs[0], !Tabmix.ltr), Tabmix.ltr)) {
+        Tabmix.compare(event.screenX, Tabmix.itemEnd(gBrowser.tabs[0], !Tabmix.ltr), Tabmix.ltr)
+      ) {
         disAllowDrop = true;
       }
     }
