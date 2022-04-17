@@ -570,8 +570,8 @@ var TMP_eventListener = {
     // make sure we are fully initialized
     await Tabmix._deferredInitialized.promise;
     gBrowser.tabs.forEach(tab => {
-      if (tab.hasAttribute("pending")) {
-        const url = TabmixSvc.ss.getLazyTabValue(tab, "url");
+      if (!tab.hasAttribute("pending")) {
+        const url = tab.linkedBrowser.currentURI.spec;
         TMP_Places.asyncSetTabTitle(tab, url);
       }
       Tabmix.restoreTabState(tab);
