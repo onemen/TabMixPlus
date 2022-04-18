@@ -783,15 +783,14 @@ Tabmix.tablib = {
     if (popup)
       popup.setAttribute("context", "tm_undocloseWindowContextMenu");
 
-    Tabmix.originalFunctions.gURLBarsetURI = gURLBar.setURI();
-    let _gURLBarsetURI = function tabmix_gURLBarsetURI() {
+    Tabmix.originalFunctions.gURLBar_setURI = gURLBar.setURI;
+    gURLBar.setURI = function tabmix_gURLBarsetURI() {
       if (Tabmix.selectedTab == gBrowser.selectedTab &&
           Tabmix.userTypedValue && gBrowser.userTypedValue !== "") {
         gBrowser.userTypedValue = "";
       }
-      Tabmix.originalFunctions.gURLBarsetURI.apply(window, arguments);
+      Tabmix.originalFunctions.gURLBar_setURI.apply(this, arguments);
     };
-    Tabmix.setNewFunction(gURLBar, "setURI()", _gURLBarsetURI);
   },
 
   populateUndoWindowSubmenu(undoPopup) {
