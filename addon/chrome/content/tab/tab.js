@@ -465,6 +465,21 @@ Tabmix.tabsUtils = {
 
     Tabmix.multiRow.init();
     Tabmix.initialization.run("beforeStartup", gBrowser, this.tabBar);
+    this.addPendingObserver();
+  },
+
+  addPendingObserver() {
+    const tabsMutate = aMutations => {
+      for (let mutation of aMutations) {
+        const tab = mutation.target;
+        if (tab.getAttribute("pending") === "true") {
+          tab.removeAttribute("visited");
+          Tabmix.setTabStyle(tab);
+        }
+      }
+    };
+    let Observer = new MutationObserver(tabsMutate);
+    Observer.observe(this.tabBar, {subtree: true, attributeFilter: ["pending"]});
   },
 
   onUnload() {
