@@ -130,7 +130,7 @@ this.SingleWindowModeUtils = {
         csp: args[10],
         fromExternal: true,
       };
-    } else if (uriToLoad instanceof newWindow.XULElement) {
+    } else if (newWindow.XULElement.isInstance(uriToLoad)) {
       // some extension try to swap a tab to new window
       // we don't do anything in this case.
       // just close the new window

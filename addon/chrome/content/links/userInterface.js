@@ -105,7 +105,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
   // Let accel-click and middle-click on the new tab button toggle openTabNext preference
   // see bug 528005
   if (aEvent && !aTab && !replaceLastTab &&
-      (aEvent instanceof MouseEvent || aEvent instanceof XULCommandEvent)) {
+      (MouseEvent.isInstance(aEvent) || XULCommandEvent.isInstance(aEvent))) {
     // don't replace 'window' to 'tab' in whereToOpenLink when singleWindowMode is on
     TabmixSvc.skipSingleWindowModeCheck = true;
     let where = whereToOpenLink(aEvent, false, true);

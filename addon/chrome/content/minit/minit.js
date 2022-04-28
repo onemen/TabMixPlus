@@ -554,7 +554,7 @@ var TMP_tabDNDObserver = {
 
   getDragType(sourceNode) {
     if (
-      sourceNode instanceof XULElement &&
+      XULElement.isInstance(sourceNode) &&
       sourceNode.localName == "tab" &&
       sourceNode.ownerGlobal.isChromeWindow &&
       sourceNode.ownerDocument.documentElement.getAttribute("windowtype") ==
@@ -1025,7 +1025,7 @@ Tabmix.navToolbox = {
   },
 
   whereToOpenFromUrlBar(event, result) {
-    let isMouseEvent = event instanceof MouseEvent;
+    let isMouseEvent = MouseEvent.isInstance(event);
     let altEnter = !isMouseEvent && event &&
       event.altKey && !gBrowser.selectedTab.isEmpty;
     let where = "current";

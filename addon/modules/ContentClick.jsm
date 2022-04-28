@@ -363,8 +363,8 @@ ContentClickInternal = {
     ///XXX check again how SubmitToTab work
     if (typeof this._window.SubmitToTab != 'undefined') {
       let target = event.target;
-      if (target instanceof HTMLButtonElement ||
-          target instanceof HTMLInputElement) {
+      if (HTMLButtonElement.isInstance(target) ||
+          HTMLInputElement.isInstance(target)) {
         if (this._window.SubmitToTab.SubmitToTab.contentAreaClick(event) === false) {
           return ["default@1"];
         }
