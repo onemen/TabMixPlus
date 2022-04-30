@@ -55,6 +55,10 @@
   max-height: calc(var(--tab-min-height_mlt) * var(--tabs-lines));
 }
 
+#tabbrowser-tabs[multibar][orient=horizontal] .tabbrowser-tab[usercontextid] > .tab-stack > .tab-background > .tab-context-line {
+  margin-top: -1px;
+}
+
 /*
   apply #tabbrowser-arrowscrollbox button style to our buttons
   based on browser/themes/shared/toolbarbuttons.inc.css
