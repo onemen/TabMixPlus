@@ -425,7 +425,7 @@ Tabmix.tablib = {
       `if (TabmixTabbar.hideMode === 2) {
         collapse = true;
       } else if (!gBrowser ||
-        gBrowser.tabs.length - gBrowser._removingTabs.length == 1) {
+        ${Tabmix.isVersion(102) ? "gBrowser.visibleTabs.length == 1" : "gBrowser.tabs.length - gBrowser._removingTabs.length == 1"}) {
         collapse = !window.toolbar.visible || TabmixTabbar.hideMode === 1;
       }
       $&`
