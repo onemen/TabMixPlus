@@ -30,11 +30,12 @@ shortcut[focused="true"] .input-container {
 }
 
 .input-container[disabled] {
-  background-color: ThreeDLightShadow
+  opacity: 0.4;
 }
 
 .shortcut-edit-box {
   background-color: transparent;
+  color: inherit;
   border: none;
   flex: 1;
   margin: 0;
