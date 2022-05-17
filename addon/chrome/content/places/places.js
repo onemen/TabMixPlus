@@ -850,8 +850,8 @@ Tabmix.onContentLoaded = {
       '    gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
       '  }\n'
     )._replace(
-      '(targetBrowser).pinned',
-      '$& && !params.suppressTabsOnFileDownload',
+      '!aAllowPinnedTabHostChange',
+      '!params.suppressTabsOnFileDownload && $&',
     )._replace(
       'if ((where == "tab" ||',
       'if (w && where == "window" &&\n' +
