@@ -13,3 +13,4 @@
 <!ENTITY shortcuts.reset "重置">
 <!ENTITY shortcuts.clear "清除">
 <!ENTITY shortcuts.inuse "该快捷键所占用的命令为：">
+<!ENTITY shortcuts.otherExtension "Other Extension">

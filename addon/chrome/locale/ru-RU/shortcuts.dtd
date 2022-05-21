@@ -13,3 +13,4 @@
 <!ENTITY shortcuts.reset "Сбросить">
 <!ENTITY shortcuts.clear "Очистить">
 <!ENTITY shortcuts.inuse "Эта горячая клавиша уже используется">
+<!ENTITY shortcuts.otherExtension "Other Extension">

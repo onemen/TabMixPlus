@@ -13,3 +13,4 @@
 <!ENTITY shortcuts.reset "Заводски настройки">
 <!ENTITY shortcuts.clear "Изчистване">
 <!ENTITY shortcuts.inuse "Клавишната комбинация вече се използва за:">
+<!ENTITY shortcuts.otherExtension "Other Extension">

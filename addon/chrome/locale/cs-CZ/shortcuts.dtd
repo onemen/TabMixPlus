@@ -13,3 +13,4 @@
 <!ENTITY shortcuts.reset "Obnovit">
 <!ENTITY shortcuts.clear "Vymazat">
 <!ENTITY shortcuts.inuse "Tato klávesová zkratka je již používána:">
+<!ENTITY shortcuts.otherExtension "Other Extension">

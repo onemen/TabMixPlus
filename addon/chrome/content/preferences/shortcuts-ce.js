@@ -5,6 +5,35 @@
 // This is loaded into all XUL windows. Wrap in a block to prevent
 // leaking to window scope.
 {
+  const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
+  ChromeUtils.defineModuleGetter(
+    this,
+    "TabmixSvc",
+    "chrome://tabmix-resource/content/TabmixSvc.jsm"
+  );
+  XPCOMUtils.defineLazyGetter(this, "shortcutKeyMapPromise", async() => {
+    const {ExtensionShortcutKeyMap} = ChromeUtils.import(
+      "resource://gre/modules/ExtensionShortcuts.jsm"
+    );
+    const {AddonManager} = ChromeUtils.import("resource://gre/modules/AddonManager.jsm");
+    const shortcutKeyMap = new ExtensionShortcutKeyMap();
+    const addons = await AddonManager.getAddonsByTypes(["extension"]);
+    await shortcutKeyMap.buildForAddonIds(addons.map(addon => addon.id));
+    return shortcutKeyMap;
+  });
+
+  const getDuplicateShortcutAddonsName = async shortcutString => {
+    if (!TabmixSvc.version(900)) {
+      return null;
+    }
+
+    const shortcutKeyMap = await shortcutKeyMapPromise;
+    if (shortcutKeyMap.has(shortcutString)) {
+      return [...shortcutKeyMap.get(shortcutString).values()].map(addon => addon.addonName);
+    }
+    return null;
+  };
+
   class MozShortcut extends MozXULElement {
     static get inheritedAttributes() {
       return {
@@ -37,7 +66,10 @@
               onclick="disableKey();"/>
           </hbox>
         </hbox>
-        <vbox anonid="notificationbox" class="shortcut-notificationbox" inuse="&shortcuts.inuse;" flex="1"></vbox>
+        <vbox anonid="notificationbox" class="shortcut-notificationbox" flex="1"
+          inuse="&shortcuts.inuse;"
+          otherExtension="&shortcuts.otherExtension;"
+        ></vbox>
       `, ["chrome://tabmixplus/locale/shortcuts.dtd"]));
       this.initializeAttributeInheritance();
       // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
@@ -167,12 +199,24 @@
       while (box.hasChildNodes()) {
         box.firstChild.remove();
       }
+
+      function addDescription(label) {
+        const node = document.createXULElement("description");
+        node.setAttribute("value", label);
+        box.appendChild(node);
+      }
+
       if (usedKey) {
         const msg = (box.getAttribute("inuse") + ":\n" + usedKey).split("\n");
         for (let i = 0, l = msg.length; i < l; i++) {
-          const node = document.createXULElement("description");
-          node.setAttribute("value", msg[i]);
-          box.appendChild(node);
+          // Firefox code in ExtensionShortcuts.jsm buildKey set oncommand to "//""
+          if (msg[i] === "//") {
+            getDuplicateShortcutAddonsName(shortcut).then(names => {
+              (names || [box.getAttribute("otherExtension")]).forEach(addDescription);
+            });
+          } else {
+            addDescription(msg[i]);
+          }
         }
         if (!this.hasAttribute("used"))
           this.setAttribute("used", true);

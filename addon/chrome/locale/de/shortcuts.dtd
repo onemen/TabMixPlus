@@ -13,3 +13,4 @@
 <!ENTITY shortcuts.reset "Zurücksetzen">
 <!ENTITY shortcuts.clear "Löschen">
 <!ENTITY shortcuts.inuse "Dieses Tastaturkürzel wird bereits verwendet!">
+<!ENTITY shortcuts.otherExtension "Other Extension">

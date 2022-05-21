@@ -140,6 +140,10 @@ description {
   margin-block: 0;
 }
 
+.shortcut-notificationbox > description:not(:first-child) {
+  padding-inline-start: 1.5rem;
+}
+
 description[disabled] {
   color: GrayText;
 }

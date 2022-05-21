@@ -13,3 +13,4 @@
 <!ENTITY shortcuts.reset "リセット">
 <!ENTITY shortcuts.clear "クリア">
 <!ENTITY shortcuts.inuse "ショートカットが以下と重複しています">
+<!ENTITY shortcuts.otherExtension "Other Extension">

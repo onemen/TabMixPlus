@@ -32,9 +32,11 @@ function getKeysForShortcut(shortcut, id, win) {
       keycode: key.getAttribute("keycode")
     };
     return getFormattedKey(_key) == shortcut;
-  }).map(key => "     " + _getKeyName(win, key).replace(dots, ""));
+  }).map(key => _getKeyName(win, key).replace(dots, ""));
 
-  return usedKeys.join("\n");
+  // Firefox code in ExtensionShortcuts.jsm buildKey set oncommand to "//""
+  // filter out duplicates "//"
+  return usedKeys.filter((v, i, a) => a.indexOf(v) === i).join("\n");
 }
 
 function _getKeyName(win, aKey) {
