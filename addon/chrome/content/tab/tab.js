@@ -2238,7 +2238,7 @@ gTMPprefObserver = {
   setTabBarVisibility: function TMP_PO_setTabBarVisibility() {
     if (
       TabmixTabbar.hideMode !== 2 &&
-      (Tabmix.isVersion(102) ?
+      (Tabmix.isVersion(1020) ?
         gBrowser.visibleTabs.length > 1 :
         gBrowser.tabs.length - gBrowser._removingTabs.length > 1)
     ) {

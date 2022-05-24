@@ -395,7 +395,9 @@ Tabmix.tablib = {
         '      gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]' +
         '        .style.setProperty("margin-inline-start", width + margin + "px", "important");' + $LF +
         '    }' +
-        '    this.style.paddingInlineStart = "";' + $LF +
+        (Tabmix.isVersion(1020) ?
+          '    this.style.removeProperty("--tab-overflow-pinned-tabs-width");' :
+          '    this.style.paddingInlineStart = "";') + $LF +
         '    TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(this, "paddingLeft");' +
         '    this.arrowScrollbox.setFirstTabInRow();' +
         '  }' +
@@ -408,7 +410,9 @@ Tabmix.tablib = {
       )._replace(
         /(})(\)?)$/,
         'if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {' +
-        '  TMP_tabDNDObserver.paddingLeft = parseInt(this.style.paddingInlineStart || 0);' +
+        (Tabmix.isVersion(1020) ?
+          '  TMP_tabDNDObserver.paddingLeft = parseInt(this.style.getPropertyValue("--tab-overflow-pinned-tabs-width") || 0);' :
+          '  TMP_tabDNDObserver.paddingLeft = parseInt(this.style.paddingInlineStart || 0);') +
         '}' +
         '$1$2'
       ).toCode();
@@ -425,7 +429,7 @@ Tabmix.tablib = {
       `if (TabmixTabbar.hideMode === 2) {
         collapse = true;
       } else if (!gBrowser ||
-        ${Tabmix.isVersion(102) ? "gBrowser.visibleTabs.length == 1" : "gBrowser.tabs.length - gBrowser._removingTabs.length == 1"}) {
+        ${Tabmix.isVersion(1020) ? "gBrowser.visibleTabs.length == 1" : "gBrowser.tabs.length - gBrowser._removingTabs.length == 1"}) {
         collapse = !window.toolbar.visible || TabmixTabbar.hideMode === 1;
       }
       $&`

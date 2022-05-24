@@ -17,7 +17,6 @@
 
 #tabbrowser-tabs {
   min-height: unset !important;
-  padding-inline-start: 0px;
 }
 
 .tabbrowser-tab {
