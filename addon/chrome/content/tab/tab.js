@@ -1830,7 +1830,7 @@ gTMPprefObserver = {
          border: 4px solid transparent;
          border-radius: calc(var(--tab-border-radius) + 4px);
          margin: 0;
-         padding: calc(var(--toolbarbutton-inner-padding) - 2px) calc(var(--toolbarbutton-inner-padding) - 6px);
+         padding: calc(var(--toolbarbutton-inner-padding) - 3px) calc(var(--toolbarbutton-inner-padding) - 6px);
        }`
     );
 
