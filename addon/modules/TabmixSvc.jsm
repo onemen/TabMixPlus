@@ -5,15 +5,13 @@ this.EXPORTED_SYMBOLS = ["TabmixSvc"];
 
 const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
 ChromeUtils.defineModuleGetter(this, "TabmixPlacesUtils",
   "chrome://tabmix-resource/content/Places.jsm");
 
 ChromeUtils.defineModuleGetter(this, "SyncedTabs",
   "chrome://tabmix-resource/content/SyncedTabs.jsm");
-
-ChromeUtils.defineModuleGetter(this, "AppConstants",
-  "resource://gre/modules/AppConstants.jsm");
 
 // place holder for load default preferences function
 // eslint-disable-next-line no-unused-vars
