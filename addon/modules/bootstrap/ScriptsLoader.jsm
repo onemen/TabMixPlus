@@ -40,7 +40,9 @@ const SCRIPTS = [
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
-XPCOMUtils.defineLazyModuleGetters(this, {
+const lazy = {};
+
+XPCOMUtils.defineLazyModuleGetters(lazy, {
   Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.jsm",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
   SessionStore: "resource:///modules/sessionstore/SessionStore.jsm",
@@ -142,8 +144,8 @@ this.ScriptsLoader = {
       // Do not allow transferring a private tab to a non-private window
       // and vice versa.
       if (
-        PrivateBrowsingUtils.isWindowPrivate(window) !==
-        PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerGlobal)
+        lazy.PrivateBrowsingUtils.isWindowPrivate(window) !==
+        lazy.PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerGlobal)
       ) {
         return false;
       }
@@ -172,7 +174,7 @@ this.ScriptsLoader = {
     gBrowser.tabs.forEach(tab => {
       const browser = tab.linkedBrowser;
       if (browser.currentURI.spec == "about:addons" && browser.contentWindow) {
-        Overlays.load(chromeManifest, browser.contentWindow);
+        lazy.Overlays.load(chromeManifest, browser.contentWindow);
       }
     });
 
@@ -184,7 +186,7 @@ this.ScriptsLoader = {
     // update tabs title
     await Tabmix._deferredInitialized.promise;
     gBrowser.tabs.forEach(tab => {
-      const url = SessionStore.getLazyTabValue(tab, "url") || tab.linkedBrowser.currentURI.spec;
+      const url = lazy.SessionStore.getLazyTabValue(tab, "url") || tab.linkedBrowser.currentURI.spec;
       TMP_Places.asyncSetTabTitle(tab, url);
     });
   },

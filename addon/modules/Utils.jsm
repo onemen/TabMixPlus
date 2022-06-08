@@ -16,7 +16,9 @@ const {XPCOMUtils} = ChromeUtils.import(
   "resource://gre/modules/XPCOMUtils.jsm"
 );
 
-XPCOMUtils.defineLazyModuleGetters(this, {
+const lazy = {};
+
+XPCOMUtils.defineLazyModuleGetters(lazy, {
   AutoReload: "chrome://tabmix-resource/content/AutoReload.jsm",
   DocShellCapabilities: "chrome://tabmix-resource/content/DocShellCapabilities.jsm",
   E10SUtils: "resource://gre/modules/E10SUtils.jsm",
@@ -45,7 +47,7 @@ this.TabmixUtils = {
     let win, tab;
     switch (message.name) {
       case "Tabmix:restorePermissionsComplete":
-        DocShellCapabilities.update(browser, message.data);
+        lazy.DocShellCapabilities.update(browser, message.data);
         break;
       case "Tabmix:updateScrollPosition":
         win = browser.ownerGlobal;
@@ -56,23 +58,23 @@ this.TabmixUtils = {
         let postData = message.data.postData;
         if (postData)
           message.data.postData = this.makeInputStream(postData);
-        AutoReload.reloadRemoteTab(browser, message.data);
+        lazy.AutoReload.reloadRemoteTab(browser, message.data);
         break;
       }
       case "Tabmix:getOpener":
         win = browser.ownerGlobal;
         tab = win.gBrowser.getTabForBrowser(browser);
-        MergeWindows.moveTabsFromPopups(tab, message.data.openerID);
+        lazy.MergeWindows.moveTabsFromPopups(tab, message.data.openerID);
         break;
       case "Tabmix:contentDrop": {
         const {json, links} = message.data;
         const url = links[0].url;
         win = browser.ownerGlobal;
-        const where = !TabmixSvc.isGlitterInstalled &&
+        const where = !lazy.TabmixSvc.isGlitterInstalled &&
           win.Tabmix.tablib.whereToOpenDrop(json, url);
         if (where == "tab") {
           links[0].tabmixContentDrop = "tab";
-          browser.droppedLinkHandler(null, links, Services.scriptSecurityManager.getSystemPrincipal());
+          browser.droppedLinkHandler(null, links, lazy.Services.scriptSecurityManager.getSystemPrincipal());
           // prevent default
           return true;
         }
@@ -88,7 +90,7 @@ this.TabmixUtils = {
 
   focusedWindow(content) {
     let focusedWindow = {};
-    Services.focus.getFocusedElementForWindow(content, true, focusedWindow);
+    lazy.Services.focus.getFocusedElementForWindow(content, true, focusedWindow);
     return focusedWindow.value;
   },
 
@@ -112,8 +114,8 @@ this.TabmixUtils = {
       let postData = shEntry.postData;
       if (postData) {
         postData = postData.clone();
-        json.postData = NetUtil.readInputStreamToString(postData, postData.available());
-        json.referrerInfo = E10SUtils.serializeReferrerInfo(shEntry.referrerInfo);
+        json.postData = lazy.NetUtil.readInputStreamToString(postData, postData.available());
+        json.referrerInfo = lazy.E10SUtils.serializeReferrerInfo(shEntry.referrerInfo);
       }
       json.isPostData = Boolean(json.postData);
     }

@@ -2,43 +2,53 @@
 
 this.EXPORTED_SYMBOLS = ["TabmixPlacesUtils"];
 
-ChromeUtils.defineModuleGetter(this, "Services",
-  "resource://gre/modules/Services.jsm");
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
+const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
-// these imports are used by PlacesUIUtils and PlacesUtils that we eval here
-// PluralForm, PrivateBrowsingUtils, OpenInTabsUtils
-/* eslint-disable no-unused-vars */
-ChromeUtils.defineModuleGetter(this, "PluralForm",
-  "resource://gre/modules/PluralForm.jsm");
+const lazy = {};
 
-ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
-  "resource://gre/modules/PrivateBrowsingUtils.jsm");
+XPCOMUtils.defineLazyModuleGetters(lazy, {
+  //
+  BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm"
+});
 
-ChromeUtils.defineModuleGetter(this, "OpenInTabsUtils",
-  "resource:///modules/OpenInTabsUtils.jsm");
-/* eslint-enable no-unused-vars */
+if (TabmixSvc.version(1030)) {
+  XPCOMUtils.defineLazyModuleGetters(lazy, {
+    OpenInTabsUtils: "resource:///modules/OpenInTabsUtils.jsm",
+    PlacesUtils: "resource://gre/modules/PlacesUtils.jsm",
+    PluralForm: "resource://gre/modules/PluralForm.jsm",
+    PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
+  });
+} else {
+  // these imports are used by PlacesUIUtils and PlacesUtils that we eval here
+  // PluralForm, PrivateBrowsingUtils, OpenInTabsUtils
+  /* eslint-disable no-unused-vars */
+  ChromeUtils.defineModuleGetter(this, "PluralForm",
+    "resource://gre/modules/PluralForm.jsm");
+
+  ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
+    "resource://gre/modules/PrivateBrowsingUtils.jsm");
+
+  ChromeUtils.defineModuleGetter(this, "OpenInTabsUtils",
+    "resource:///modules/OpenInTabsUtils.jsm");
+  /* eslint-enable no-unused-vars */
+
+  ChromeUtils.defineModuleGetter(this, "PlacesUtils",
+    "resource://gre/modules/PlacesUtils.jsm");
+}
 
 ChromeUtils.defineModuleGetter(this, "PlacesUIUtils",
   "resource:///modules/PlacesUIUtils.jsm");
 
-ChromeUtils.defineModuleGetter(this, "PlacesUtils",
-  "resource://gre/modules/PlacesUtils.jsm");
-
-ChromeUtils.defineModuleGetter(this, "BrowserWindowTracker",
-  "resource:///modules/BrowserWindowTracker.jsm");
-
-ChromeUtils.defineModuleGetter(this,
-  "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
-
-// this function is use by PlacesUIUtils functions that we evaluate here
+// this function is used by PlacesUIUtils functions that we evaluate here
 // eslint-disable-next-line no-unused-vars
 function getBrowserWindow(aWindow) {
   return aWindow &&
       aWindow.document.documentElement.getAttribute("windowtype") ==
         "navigator:browser" ?
     aWindow :
-    // eslint-disable-next-line no-undef
-    BrowserWindowTracker.getTopWindow();
+    lazy.BrowserWindowTracker.getTopWindow();
 }
 
 var PlacesUtilsInternal;
@@ -215,6 +225,9 @@ PlacesUtilsInternal = {
   /* :::::::::::::::   AsyncPlacesUtils   ::::::::::::::: */
 
   fetch(guidOrInfo, onResult = null, options = {}) {
+    if (TabmixSvc.version(1030)) {
+      return lazy.PlacesUtils.bookmarks.fetch(guidOrInfo, onResult, options);
+    }
     return PlacesUtils.bookmarks.fetch(guidOrInfo, onResult, options);
   },
 
