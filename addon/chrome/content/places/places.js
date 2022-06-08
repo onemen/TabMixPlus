@@ -411,7 +411,7 @@ var TMP_Places = {
     return false;
   },
 
-  asyncSetTabTitle(tab, url, initial) {
+  asyncSetTabTitle(tab, url, initial, reset) {
     if (!tab) {
       return false;
     }
@@ -420,7 +420,12 @@ var TMP_Places = {
     }
     return this.asyncGetTabTitle(tab, url).then(newTitle => {
       // only call setTabTitle if we found one to avoid loop
-      if (!newTitle) return false;
+      if (!newTitle) {
+        if (reset && !tab.hasAttribute("pending")) {
+          gBrowser.setTabTitle(tab);
+        }
+        return false;
+      }
       if (newTitle != tab.label) {
         this.setTabTitle(tab, url, newTitle);
         if (initial) {
@@ -495,6 +500,19 @@ var TMP_Places = {
     }
   },
 
+  get listeners() {
+    delete this.listeners;
+    this.listeners = [
+      "bookmark-added",
+      "bookmark-removed",
+    ];
+    if (Tabmix.isVersion(950)) {
+      this.listeners.push("bookmark-title-changed");
+      this.listeners.push("bookmark-url-changed");
+    }
+    return this.listeners;
+  },
+
   startObserver: function TMP_PC_startObserver() {
     // Start observing bookmarks if needed.
     if (!this._hasBookmarksObserver) {
@@ -502,7 +520,7 @@ var TMP_Places = {
         PlacesUtils.bookmarks.addObserver(this);
         this.handlePlacesEvents = this.handlePlacesEvents.bind(this);
         PlacesUtils.observers.addListener(
-          ["bookmark-added", "bookmark-removed"],
+          this.listeners,
           this.handlePlacesEvents
         );
         this._hasBookmarksObserver = true;
@@ -516,7 +534,7 @@ var TMP_Places = {
     if (this._hasBookmarksObserver) {
       PlacesUtils.bookmarks.removeObserver(this);
       PlacesUtils.observers.removeListener(
-        ["bookmark-added", "bookmark-removed"],
+        this.listeners,
         this.handlePlacesEvents
       );
       this._hasBookmarksObserver = false;
@@ -622,6 +640,19 @@ var TMP_Places = {
     this.afterTabTitleChanged();
   },
 
+  async updateTabs() {
+    const promises = [];
+    for (let tab of gBrowser.tabs) {
+      tab.removeAttribute("tabmix_bookmarkUrl");
+      let url = tab.linkedBrowser.currentURI.spec;
+      if (!this.isUserRenameTab(tab, url)) {
+        promises.push(this.asyncSetTabTitle(tab, url, false, true));
+      }
+    }
+    await Promise.all(promises);
+    this.afterTabTitleChanged();
+  },
+
   handlePlacesEvents(aEvents) {
     const events = aEvents.filter(ev => ev.id !== -1 ||
       ev.itemType === Ci.nsINavBookmarksService.TYPE_BOOKMARK);
@@ -634,6 +665,10 @@ var TMP_Places = {
           break;
         case "bookmark-removed":
           this.removeItemUrlFromTabs(ev.url);
+          break;
+        case "bookmark-title-changed":
+        case "bookmark-url-changed":
+          this.updateTabs();
           break;
       }
     }
