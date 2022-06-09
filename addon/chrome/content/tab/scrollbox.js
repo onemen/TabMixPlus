@@ -168,7 +168,8 @@ Tabmix.multiRow = {
                                  rightOrBottomEdge(rightOrBottomElement) <= rightOrBottomEdge(this.scrollbox) - _scrollboxPaddingRight + 2) {
                         scrolledToEnd = true;
                       }
-                    } else $&`
+                    } else $&`,
+          {check: !Tabmix.isVersion(1030)}
         )._replace(
           'if (scrolledToEnd) {',
           'let box = document.getElementById("tabmix-scrollbox");' + $LF +
