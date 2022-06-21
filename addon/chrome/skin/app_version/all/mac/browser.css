@@ -14,9 +14,10 @@
 
 /* prevent tabbrowser-tabs height from increasing by 2px when the tabs are
    in display: block */
-#TabsToolbar[tabmix-show-newtabbutton="aftertabs"]
-    #tabbrowser-tabs[flowing="multibar"] > #tabbrowser-arrowscrollbox >
-    #tabs-newtab-button[command="cmd_newNavigatorTab"]  .toolbarbutton-icon {
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[flowing="multibar"] >
+  #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"] .toolbarbutton-icon,
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[flowing="multibar"] >
+  #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"] .toolbarbutton-icon {
   margin: -2px 0;
 }
 

@@ -113,7 +113,8 @@
 }
 
 /* we use this rule in tabmix.js Tabmix.getAfterTabsButtonsWidth */
-#tabbrowser-arrowscrollbox > #tabs-newtab-button[force-display] {
+#tabbrowser-arrowscrollbox > #tabs-newtab-button[force-display],
+#tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[force-display] {
   display: -moz-box !important;
 }
 
@@ -121,7 +122,10 @@
 #TabsToolbar:not([currentset*="privateTab-toolbar-openNewPrivateTab"]) #privateTab-afterTabs-openNewPrivateTab,
 #tabbrowser-tabs[overflow="true"] > #tabbrowser-arrowscrollbox > #tabs-newtab-button,
 #TabsToolbar:not([tabmix-show-newtabbutton]) #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"],
-#TabsToolbar[tabmix-show-newtabbutton*="side"] #tabbrowser-arrowscrollbox > #tabs-newtab-button {
+#TabsToolbar[tabmix-show-newtabbutton*="side"] #tabbrowser-arrowscrollbox > #tabs-newtab-button,
+#tabbrowser-tabs[overflow="true"] > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button,
+#TabsToolbar:not([tabmix-show-newtabbutton]) #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"],
+#TabsToolbar[tabmix-show-newtabbutton*="side"] #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button {
   display: none;
   border: none;
   margin: 0;
@@ -129,7 +133,9 @@
 }
 
 #TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"])
-   #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"] {
+  #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"],
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"])
+  #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"] {
   display: -moz-box;
   visibility: visible;
 }
@@ -156,12 +162,16 @@
 }
 
 #TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"]:not([tabmix-show-newtabbutton])
-     #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"] {
+  #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"],
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"]:not([tabmix-show-newtabbutton])
+  #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"] {
   display: none; /* override privateTab visibility: visible !important; */
 }
 
 #TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="side"]
-     #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button {
+  #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button,
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="side"]
+  #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button {
   display: none; /* override privateTab visibility: visible !important; */
 }
 
