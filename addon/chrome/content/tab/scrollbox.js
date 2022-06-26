@@ -169,7 +169,7 @@ Tabmix.multiRow = {
                         scrolledToEnd = true;
                       }
                     } else $&`,
-          {check: !Tabmix.isVersion(1030)}
+          {check: !Tabmix.isVersion(1020)}
         )._replace(
           'if (scrolledToEnd) {',
           'let box = document.getElementById("tabmix-scrollbox");' + $LF +
