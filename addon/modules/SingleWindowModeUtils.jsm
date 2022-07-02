@@ -1,11 +1,11 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
+const EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
 
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {PrivateBrowsingUtils} = ChromeUtils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 
-this.SingleWindowModeUtils = {
+const SingleWindowModeUtils = {
   /**
    * @brief Locate a browser window.
    *

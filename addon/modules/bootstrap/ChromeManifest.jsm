@@ -1,7 +1,7 @@
 /* exported ChromeManifest */
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["ChromeManifest"];
+const EXPORTED_SYMBOLS = ["ChromeManifest"];
 
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 

@@ -210,9 +210,9 @@ var TMP_Places = {
       // don't reuse collapsed tab if width fitTitle is set
       canReplace = doReplace && !aTab.hasAttribute("locked") &&
                     !aTab.hasAttribute("pinned") || tabIsBlank;
-      if (reuseTabs.length < bmGroup.length && canReplace)
+      if (reuseTabs.length < bmGroup.length && canReplace) {
         reuseTabs.push(aTab);
-      else if (doReplace && !aTab.hasAttribute("locked") &&
+      } else if (doReplace && !aTab.hasAttribute("locked") &&
                 !aTab.hasAttribute("protected") &&
                 !aTab.hasAttribute("pinned") || tabIsBlank) {
         aTab.collapsed = true;

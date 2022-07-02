@@ -307,9 +307,9 @@ TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata, 
     tabviewData = tabdata.extData && tabdata.extData["tabview-tab"] || null;
     // make sure data is not "null"
     if (!tabviewData || tabviewData == "null") {
-      if (update.lastActiveGroupId)
+      if (update.lastActiveGroupId) {
         tabviewData = setData(update.lastActiveGroupId);
-      else {
+      } else {
         // force Panorama to reconnect all reused tabs
         if (aTab._tabViewTabItem) {
           // remove any old data
@@ -439,10 +439,10 @@ TabmixSessionManager._prepareTabviewData = function SM__prepareTabviewData(loadO
   if (groupItemsIsEmpty) {
     // we can get here also on startup before we set any data to current window
 
-    if (noNormalVisibleTabs)
-    // nothing else to do we use this._tabviewData as is.
+    if (noNormalVisibleTabs) {
+      // nothing else to do we use this._tabviewData as is.
       this._updateUIpageBounds = true;
-    else {
+    } else {
       // Tabview did not started
       // add all normal tabs to new group with the proper id
       let newGroupsData = this._tabviewData["tabview-groups"];

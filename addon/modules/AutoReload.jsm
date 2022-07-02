@@ -1,19 +1,20 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["AutoReload"];
+const EXPORTED_SYMBOLS = ["AutoReload"];
 
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
-ChromeUtils.defineModuleGetter(this, "E10SUtils",
+const lazy = {};
+ChromeUtils.defineModuleGetter(lazy, "E10SUtils",
   "resource://gre/modules/E10SUtils.jsm");
 
-ChromeUtils.defineModuleGetter(this, "TabmixUtils",
+ChromeUtils.defineModuleGetter(lazy, "TabmixUtils",
   "chrome://tabmix-resource/content/Utils.jsm");
 
 var _setItem = function() {};
 
-this.AutoReload = {
+const AutoReload = {
   init() {
     _setItem = TabmixSvc.topWin().Tabmix.setItem;
   },
@@ -307,7 +308,7 @@ this.AutoReload = {
     var window = browser.ownerGlobal;
 
     if (Services.appinfo.sessionHistoryInParent) {
-      const postData = TabmixUtils.getPostDataFromHistory(browser.browsingContext.sessionHistory);
+      const postData = lazy.TabmixUtils.getPostDataFromHistory(browser.browsingContext.sessionHistory);
       data = {
         ...data,
         ...postData
@@ -318,7 +319,7 @@ this.AutoReload = {
     if (data.isPostData && !this.confirm(window, tab, false))
       return;
 
-    data.referrerInfo = E10SUtils.deserializeReferrerInfo(data.referrerInfo);
+    data.referrerInfo = lazy.E10SUtils.deserializeReferrerInfo(data.referrerInfo);
     doReloadTab(window, browser, data);
   }
 };

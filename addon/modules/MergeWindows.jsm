@@ -1,22 +1,23 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["MergeWindows"];
+const EXPORTED_SYMBOLS = ["MergeWindows"];
 
 const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
-ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
+const lazy = {};
+ChromeUtils.defineModuleGetter(lazy, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 ChromeUtils.defineModuleGetter(
-  this,
+  lazy,
   "PromiseUtils",
   "resource://gre/modules/PromiseUtils.jsm"
 );
 
 ChromeUtils.defineModuleGetter(
-  this,
+  lazy,
   "BrowserWindowTracker",
   "resource:///modules/BrowserWindowTracker.jsm"
 );
@@ -31,7 +32,7 @@ ChromeUtils.defineModuleGetter(
 // Convert to module and modified by onemen                          //
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
-this.MergeWindows = {
+const MergeWindows = {
   get prefs() {
     delete this.prefs;
     return (this.prefs = Services.prefs.getBranch("extensions.tabmix."));
@@ -52,9 +53,9 @@ this.MergeWindows = {
       multiple: mergeAllWindows && !selectedTabs.length
     };
     let {windows, normalWindowsCount} = this.getWindowsList(aWindow, options);
-    if (!windows.length)
+    if (!windows.length) {
       this.notify(aWindow, options.privateNotMatch);
-    else if (!normalWindowsCount && this.isPopupWindow(aWindow)) {
+    } else if (!normalWindowsCount && this.isPopupWindow(aWindow)) {
       windows.unshift(aWindow);
       this.mergePopUpsToNewWindow(windows, options.private);
     } else if (options.multiple) {
@@ -206,7 +207,7 @@ this.MergeWindows = {
 
     const promises = [Promise.resolve(tabToSelect)];
     for (const tab of popups) {
-      const deferred = PromiseUtils.defer();
+      const deferred = lazy.PromiseUtils.defer();
       promises.push(deferred.promise);
       tab._tabmix_movepopup_promise = deferred;
 
@@ -249,7 +250,7 @@ this.MergeWindows = {
   },
 
   isWindowPrivate(aWindow) {
-    return PrivateBrowsingUtils.isWindowPrivate(aWindow);
+    return lazy.PrivateBrowsingUtils.isWindowPrivate(aWindow);
   },
 
   /*
@@ -290,7 +291,7 @@ this.MergeWindows = {
     };
 
     let windows = [], popUps = [];
-    const windowList = BrowserWindowTracker.orderedWindows;
+    const windowList = lazy.BrowserWindowTracker.orderedWindows;
     for (const nextWin of windowList) {
       if (isSuitableBrowserWindow(nextWin)) {
         if (this.isPopupWindow(nextWin))

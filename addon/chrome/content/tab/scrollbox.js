@@ -344,9 +344,9 @@ Tabmix.multiRow = {
           let row = tab.closing ? -1 : Tabmix.tabsUtils.getTabRowNumber(tab, topY);
           if (row > current) {
             current = row;
-            if (!tab.hasAttribute("tabmix-firstTabInRow"))
+            if (!tab.hasAttribute("tabmix-firstTabInRow")) {
               tab.setAttribute("tabmix-firstTabInRow", true);
-            else if (i > 0) {
+            } else if (i > 0) {
               // remove the margin when the tab have place in the previous row
               const tabEnd = tabs[i - 1].getBoundingClientRect()[end] +
                 (Tabmix.ltr ? tab.getBoundingClientRect().width : 0);
@@ -362,8 +362,9 @@ Tabmix.multiRow = {
               index = ++i;
               break;
             }
-          } else if (tab.hasAttribute("tabmix-firstTabInRow"))
+          } else if (tab.hasAttribute("tabmix-firstTabInRow")) {
             tab.removeAttribute("tabmix-firstTabInRow");
+          }
         }
         for (let i = index; i < tabs.length; i++) {
           const tab = tabs[i];

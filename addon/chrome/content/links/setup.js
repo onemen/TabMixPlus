@@ -117,9 +117,8 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     // look for installed extensions that are incompatible with tabmix
     if (this.isFirstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {
-        let tmp = {};
-        ChromeUtils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm", tmp);
-        tmp = new tmp.CompatibilityCheck(aWindow, true);
+        const {CompatibilityCheck} = ChromeUtils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm");
+        return new CompatibilityCheck(aWindow, true);
       }, 0, window);
     }
 

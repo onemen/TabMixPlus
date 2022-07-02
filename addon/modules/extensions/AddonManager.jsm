@@ -3,7 +3,7 @@
  */
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["TabmixAddonManager"];
+const EXPORTED_SYMBOLS = ["TabmixAddonManager"];
 
 const {AddonManager} = ChromeUtils.import("resource://gre/modules/AddonManager.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
@@ -112,9 +112,9 @@ var TabmixListener = {
   },
   onChange(aAddon, aAction) {
     let id = aAddon.id;
-    if (id == SessionManager.id)
+    if (id == SessionManager.id) {
       SessionManager[aAction]();
-    else if (id == PrivateTab.id) {
+    } else if (id == PrivateTab.id) {
       PrivateTab[aAction]();
     } else if (id == GoogleNoTrackingUrl.id) {
       GoogleNoTrackingUrl[aAction]();

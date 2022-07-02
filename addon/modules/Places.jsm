@@ -1,6 +1,6 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["TabmixPlacesUtils"];
+const EXPORTED_SYMBOLS = ["TabmixPlacesUtils"];
 
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
@@ -14,6 +14,7 @@ XPCOMUtils.defineLazyModuleGetters(lazy, {
 });
 
 if (TabmixSvc.version(1030)) {
+  // eslint-disable-next-line mozilla/valid-lazy
   XPCOMUtils.defineLazyModuleGetters(lazy, {
     OpenInTabsUtils: "resource:///modules/OpenInTabsUtils.jsm",
     PlacesUtils: "resource://gre/modules/PlacesUtils.jsm",
@@ -23,7 +24,7 @@ if (TabmixSvc.version(1030)) {
 } else {
   // these imports are used by PlacesUIUtils and PlacesUtils that we eval here
   // PluralForm, PrivateBrowsingUtils, OpenInTabsUtils
-  /* eslint-disable no-unused-vars */
+  /* eslint-disable no-unused-vars, mozilla/reject-global-this */
   ChromeUtils.defineModuleGetter(this, "PluralForm",
     "resource://gre/modules/PluralForm.jsm");
 
@@ -32,13 +33,13 @@ if (TabmixSvc.version(1030)) {
 
   ChromeUtils.defineModuleGetter(this, "OpenInTabsUtils",
     "resource:///modules/OpenInTabsUtils.jsm");
-  /* eslint-enable no-unused-vars */
 
   ChromeUtils.defineModuleGetter(this, "PlacesUtils",
     "resource://gre/modules/PlacesUtils.jsm");
+  /* eslint-enable no-unused-vars, mozilla/reject-global-this */
 }
 
-ChromeUtils.defineModuleGetter(this, "PlacesUIUtils",
+ChromeUtils.defineModuleGetter(lazy, "PlacesUIUtils",
   "resource:///modules/PlacesUIUtils.jsm");
 
 // this function is used by PlacesUIUtils functions that we evaluate here
@@ -52,7 +53,7 @@ function getBrowserWindow(aWindow) {
 }
 
 var PlacesUtilsInternal;
-this.TabmixPlacesUtils = Object.freeze({
+const TabmixPlacesUtils = Object.freeze({
   init(aWindow) {
     PlacesUtilsInternal.init(aWindow);
   },
@@ -108,15 +109,17 @@ PlacesUtilsInternal = {
       this._timer.clear();
 
     this.functions.forEach(aFn => {
-      PlacesUIUtils[aFn] = PlacesUIUtils["tabmix_" + aFn];
-      delete PlacesUIUtils["tabmix_" + aFn];
+      lazy.PlacesUIUtils[aFn] = lazy.PlacesUIUtils["tabmix_" + aFn];
+      delete lazy.PlacesUIUtils["tabmix_" + aFn];
     });
+
+    this._removeObserver?.();
   },
 
   functions: ["openTabset", "openNodeWithEvent", "_openNodeIn"],
   initPlacesUIUtils: function TMP_PC_initPlacesUIUtils(aWindow) {
     try {
-      PlacesUIUtils.openTabset.toString();
+      lazy.PlacesUIUtils.openTabset.toString();
     } catch (ex) {
       if (aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser") {
         TabmixSvc.console.log("Starting with Firefox 21 Imacros 8.3.0 break toString on PlacesUIUtils functions." +
@@ -126,14 +129,14 @@ PlacesUtilsInternal = {
     }
 
     this.functions.forEach(aFn => {
-      PlacesUIUtils["tabmix_" + aFn] = PlacesUIUtils[aFn];
+      lazy.PlacesUIUtils["tabmix_" + aFn] = lazy.PlacesUIUtils[aFn];
     });
 
     let code;
 
     function updateOpenTabset(name, treeStyleTab) {
       let openGroup = "    browserWindow.TMP_Places.openGroup(urls, where$1);";
-      code = Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + name)._replace(
+      code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils." + name)._replace(
         'urls = []',
         'behavior, $&', {check: treeStyleTab}
       )._replace(
@@ -146,18 +149,18 @@ PlacesUtilsInternal = {
         '      where = "current";\n' +
         openGroup.replace("$1", treeStyleTab ? ", behavior" : "")
       );
-      PlacesUIUtils[name] = makeCode(code);
+      lazy.PlacesUIUtils[name] = makeCode(code);
     }
     var treeStyleTabInstalled = "TreeStyleTabBookmarksService" in aWindow;
     if (treeStyleTabInstalled &&
-        typeof PlacesUIUtils.__treestyletab__openTabset == "function") {
+        typeof lazy.PlacesUIUtils.__treestyletab__openTabset == "function") {
       updateOpenTabset("__treestyletab__openTabset");
     } else if (treeStyleTabInstalled) {
       // wait until TreeStyleTab changed PlacesUIUtils.openTabset
       let timer = this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
       this.__index = 0;
       timer.initWithCallback(() => {
-        let str = PlacesUIUtils.openTabset.toString();
+        let str = lazy.PlacesUIUtils.openTabset.toString();
         if (++this.__index > 10 || str.indexOf("TreeStyleTabBookmarksService") > -1 ||
             str.indexOf("GroupBookmarkBehavior") > -1) {
           timer.cancel();
@@ -170,17 +173,17 @@ PlacesUtilsInternal = {
       updateOpenTabset("openTabset");
     }
 
-    let fnName = treeStyleTabInstalled && PlacesUIUtils.__treestyletab__openNodeWithEvent ?
+    let fnName = treeStyleTabInstalled && lazy.PlacesUIUtils.__treestyletab__openNodeWithEvent ?
       "__treestyletab__openNodeWithEvent" : "openNodeWithEvent";
-    code = Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
+    code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
       /window.whereToOpenLink\(aEvent[,\s\w]*\)/, '{where: $&, event: aEvent}'
     );
-    PlacesUIUtils[fnName] = makeCode(code);
+    lazy.PlacesUIUtils[fnName] = makeCode(code);
 
     // Don't change "current" when user click context menu open (callee is PC_doCommand and aWhere is current)
     // we disable the open menu when the tab is lock
     // the 2nd check for aWhere == "current" is for non Firefox code that may call this function
-    code = Tabmix.changeCode(PlacesUIUtils, "PlacesUIUtils._openNodeIn")._replace(
+    code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils._openNodeIn")._replace(
       /\)\n*\s*{/,
       '$&\n' +
       '    var TMP_Event;\n' +
@@ -205,7 +208,7 @@ PlacesUtilsInternal = {
       '        browserWindow.gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
       '      $&'
     );
-    PlacesUIUtils._openNodeIn = makeCode(code);
+    lazy.PlacesUIUtils._openNodeIn = makeCode(code);
   },
 
   // Lazy getter for titlefrombookmark preference
@@ -219,6 +222,9 @@ PlacesUtilsInternal = {
     };
 
     Services.prefs.addObserver(PREF, updateValue);
+    this._removeObserver = () => {
+      Services.prefs.removeObserver(PREF, updateValue);
+    };
     return updateValue();
   },
 

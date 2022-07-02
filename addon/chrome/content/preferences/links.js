@@ -32,9 +32,9 @@ var gLinksPane = {
   externalLinkValue(checked) {
     let external = $("externalLinkTarget");
     let preference = $(external.getAttribute("preference"));
-    if (!checked)
+    if (!checked) {
       preference.value = -1;
-    else if (preference.value == -1) {
+    } else if (preference.value == -1) {
       external.value = $("generalWindowOpen").value;
       preference.value = $("generalWindowOpen").value;
     }

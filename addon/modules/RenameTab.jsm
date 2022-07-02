@@ -1,15 +1,16 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["RenameTab"];
+const EXPORTED_SYMBOLS = ["RenameTab"];
 
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 const {ChromeManifest} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
 const {Overlays} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
 
-ChromeUtils.defineModuleGetter(this, "TabmixPlacesUtils",
+const lazy = {};
+ChromeUtils.defineModuleGetter(lazy, "TabmixPlacesUtils",
   "chrome://tabmix-resource/content/Places.jsm");
 
-this.RenameTab = {
+const RenameTab = {
   window: null,
   panel: null,
   data: {},
@@ -45,7 +46,7 @@ this.RenameTab = {
       this.showPanel();
     };
 
-    TabmixPlacesUtils.asyncGetTitleFromBookmark(this.data.url, docTitle, null, aTab)
+    lazy.TabmixPlacesUtils.asyncGetTitleFromBookmark(this.data.url, docTitle, null, aTab)
         .then(title => prepareDataAndShowPanel(title));
   },
 
@@ -96,9 +97,9 @@ this.RenameTab = {
     popup.addEventListener("keypress", this);
     // dock the panel to the tab icon when possible, otherwise show the panel
     // at screen center
-    if (this.window.Tabmix.tabsUtils.isElementVisible(this.data.tab))
+    if (this.window.Tabmix.tabsUtils.isElementVisible(this.data.tab)) {
       popup.openPopup(this.data.tab, "bottomcenter topleft");
-    else {
+    } else {
       let screen = this.window.screen;
       const {height = 215, width = 330} = popup.getBoundingClientRect();
       popup.openPopupAtScreen(screen.availLeft + (screen.availWidth - width) / 2,

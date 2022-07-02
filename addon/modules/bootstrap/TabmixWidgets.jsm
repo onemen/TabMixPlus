@@ -1,12 +1,13 @@
 "use strict";
 
 /* eslint curly: 2 */
-this.EXPORTED_SYMBOLS = ["TabmixWidgets"];
+const EXPORTED_SYMBOLS = ["TabmixWidgets"];
 
-ChromeUtils.defineModuleGetter(this, "CustomizableUI",
+const lazy = {};
+ChromeUtils.defineModuleGetter(lazy, "CustomizableUI",
   "resource:///modules/CustomizableUI.jsm");
 
-ChromeUtils.defineModuleGetter(this, "TabmixSvc",
+ChromeUtils.defineModuleGetter(lazy, "TabmixSvc",
   "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const widgets = {
@@ -70,7 +71,7 @@ const widgets = {
     id: "tabmix-alltabs-toolbaritem",
     localizeFiles: [],
     get updateMarkup() {
-      if (!TabmixSvc.version(940)) {
+      if (!lazy.TabmixSvc.version(940)) {
         this.localizeFiles.push("chrome://browser/locale/browser.dtd");
         const label = 'label="&listAllTabs.label;" tooltiptext="&listAllTabs.label;"';
         return this.markup.replace(/data-l10n-id=[^\n]*/g, label);
@@ -108,7 +109,7 @@ function on_build(widget) {
 
 function createWidget(widget) {
   try {
-    CustomizableUI.createWidget({
+    lazy.CustomizableUI.createWidget({
       id: widget.id,
       type: "custom",
       localized: false,
@@ -119,27 +120,27 @@ function createWidget(widget) {
   }
 }
 
-this.TabmixWidgets = {
+const TabmixWidgets = {
   create() {
     try {
-      CustomizableUI.beginBatchUpdate();
+      lazy.CustomizableUI.beginBatchUpdate();
       Object.values(widgets).forEach(createWidget);
     } finally {
-      CustomizableUI.endBatchUpdate();
+      lazy.CustomizableUI.endBatchUpdate();
     }
   },
 
   destroy(uninstall) {
     try {
-      CustomizableUI.beginBatchUpdate();
+      lazy.CustomizableUI.beginBatchUpdate();
       Object.values(widgets).forEach(widget => {
-        CustomizableUI.destroyWidget(widget.id);
+        lazy.CustomizableUI.destroyWidget(widget.id);
         if (uninstall) {
-          CustomizableUI.removeWidgetFromArea(widget.id);
+          lazy.CustomizableUI.removeWidgetFromArea(widget.id);
         }
       });
     } finally {
-      CustomizableUI.endBatchUpdate();
+      lazy.CustomizableUI.endBatchUpdate();
     }
   },
 };

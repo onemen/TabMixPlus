@@ -1,6 +1,6 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["TabmixUtils"];
+const EXPORTED_SYMBOLS = ["TabmixUtils"];
 
 // Messages that will be received via the Frame Message Manager.
 const FMM_MESSAGES = [
@@ -12,9 +12,8 @@ const FMM_MESSAGES = [
   "Tabmix:contextmenu",
 ];
 
-const {XPCOMUtils} = ChromeUtils.import(
-  "resource://gre/modules/XPCOMUtils.jsm"
-);
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const lazy = {};
 
@@ -24,11 +23,10 @@ XPCOMUtils.defineLazyModuleGetters(lazy, {
   E10SUtils: "resource://gre/modules/E10SUtils.jsm",
   MergeWindows: "chrome://tabmix-resource/content/MergeWindows.jsm",
   NetUtil: "resource://gre/modules/NetUtil.jsm",
-  Services: "resource://gre/modules/Services.jsm",
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.jsm",
 });
 
-this.TabmixUtils = {
+const TabmixUtils = {
   initMessageManager(window) {
     let mm = window.getGroupMessageManager("browsers");
     FMM_MESSAGES.forEach(msg => mm.addMessageListener(msg, this));
@@ -74,7 +72,7 @@ this.TabmixUtils = {
           win.Tabmix.tablib.whereToOpenDrop(json, url);
         if (where == "tab") {
           links[0].tabmixContentDrop = "tab";
-          browser.droppedLinkHandler(null, links, lazy.Services.scriptSecurityManager.getSystemPrincipal());
+          browser.droppedLinkHandler(null, links, Services.scriptSecurityManager.getSystemPrincipal());
           // prevent default
           return true;
         }
@@ -90,7 +88,7 @@ this.TabmixUtils = {
 
   focusedWindow(content) {
     let focusedWindow = {};
-    lazy.Services.focus.getFocusedElementForWindow(content, true, focusedWindow);
+    Services.focus.getFocusedElementForWindow(content, true, focusedWindow);
     return focusedWindow.value;
   },
 

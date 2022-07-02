@@ -24,8 +24,6 @@ var TabmixTabbar = {
     Tabmix.setItem("tabmix-scrollbox", "orient", val == "multibar" ? "vertical" : "horizontal");
 
     Tabmix.tabsUtils.resizeObserver(val == "multibar");
-
-    return val;
   },
 
   get flowing() {
@@ -706,7 +704,6 @@ Tabmix.tabsUtils = {
   set disAllowNewtabbutton(val) {
     let newVal = this.overflow || val;
     this.showNewTabButtonOnSide(newVal, "temporary-right-side");
-    return newVal;
   },
 
   get overflow() {
@@ -716,7 +713,7 @@ Tabmix.tabsUtils = {
   set overflow(val) {
     // don't do anything if other extensions set orient to vertical
     if (this.tabBar.arrowScrollbox.getAttribute('orient') == "vertical") {
-      return val;
+      return;
     }
 
     // we may get here after tabBar overflow/underflow already finished
@@ -751,7 +748,6 @@ Tabmix.tabsUtils = {
         }
       }
     }
-    return val;
   },
 
   showNewTabButtonOnSide(aCondition, aValue) {
@@ -1139,9 +1135,9 @@ gTMPprefObserver = {
 
   // removes the observer-object from service -- called when the window is no longer open
   removeObservers() {
-    let prefSvc = Services.prefs;
-    for (var i = 0; i < this.OBSERVING.length; ++i)
-      prefSvc.removeObserver(this.OBSERVING[i], this);
+    for (var i = 0; i < this.OBSERVING.length; ++i) {
+      Services.prefs.removeObserver(this.OBSERVING[i], this);
+    }
   },
 
   /**
@@ -2666,9 +2662,9 @@ gTMPprefObserver = {
         // versions if auto update is on for Tabmix and the new version is from a
         // different date then the installed version
         let isDevBuild = /[A-Za-z]/.test(currentVersion);
-        if (!isDevBuild)
+        if (!isDevBuild) {
           showNewVersionTab = true;
-        else if (shouldAutoUpdate || oldVersion === "") {
+        } else if (shouldAutoUpdate || oldVersion === "") {
           let re = /([A-Za-z]*)\d*$/;
           let subs = obj => (obj[1] ? obj.input.substring(0, obj.index) : obj.input);
           showNewVersionTab = subs(re.exec(currentVersion)) != subs(re.exec(oldVersion));

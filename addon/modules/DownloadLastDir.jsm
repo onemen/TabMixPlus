@@ -1,13 +1,12 @@
-/// "use strict";
+"use strict";
 
 /* eslint strict: 0 */
 
-this.EXPORTED_SYMBOLS = ["TabmixDownloadLastDir"];
+const EXPORTED_SYMBOLS = ["TabmixDownloadLastDir"];
 
-ChromeUtils.defineModuleGetter(this, "Services",
-  "resource://gre/modules/Services.jsm");
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
-this.TabmixDownloadLastDir = {
+const TabmixDownloadLastDir = {
   _initialized: false,
   init() {
     if (this._initialized)
@@ -44,4 +43,4 @@ this.TabmixDownloadLastDir = {
   }
 };
 
-this.TabmixDownloadLastDir.init();
+TabmixDownloadLastDir.init();

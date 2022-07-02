@@ -1,30 +1,28 @@
-/* globals ClickHandlerParent  */
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["TabmixContentClick"];
+const EXPORTED_SYMBOLS = ["TabmixContentClick"];
 
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
-ChromeUtils.defineModuleGetter(this, "ClickHandlerParent",
+const lazy = {};
+ChromeUtils.defineModuleGetter(lazy, "ClickHandlerParent",
   "resource:///actors/ClickHandlerParent.jsm");
 
-ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
+ChromeUtils.defineModuleGetter(lazy, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
-ChromeUtils.defineModuleGetter(this, "E10SUtils",
+ChromeUtils.defineModuleGetter(lazy, "E10SUtils",
   "resource://gre/modules/E10SUtils.jsm");
 
-ChromeUtils.defineModuleGetter(this, "Services",
-  "resource://gre/modules/Services.jsm");
-
-ChromeUtils.defineModuleGetter(this, "LinkNodeUtils",
+ChromeUtils.defineModuleGetter(lazy, "LinkNodeUtils",
   "chrome://tabmix-resource/content/LinkNodeUtils.jsm");
 
-ChromeUtils.defineModuleGetter(this, "TabmixSvc",
+ChromeUtils.defineModuleGetter(lazy, "TabmixSvc",
   "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 var ContentClickInternal;
-this.TabmixContentClick = {
+const TabmixContentClick = {
   init() {
     ContentClickInternal.init();
   },
@@ -70,13 +68,13 @@ ContentClickInternal = {
     this._initialized = true;
 
     try {
-      if (typeof ClickHandlerParent.prototype.contentAreaClick !== "function") {
-        TabmixSvc.console.log("ClickHandlerParent.contentAreaClick is not a function");
+      if (typeof lazy.ClickHandlerParent.prototype.contentAreaClick !== "function") {
+        lazy.TabmixSvc.console.log("ClickHandlerParent.contentAreaClick is not a function");
         this.functions = [];
         return;
       }
     } catch (ex) {
-      TabmixSvc.console.log("ClickHandlerParent.jsm is not included");
+      lazy.TabmixSvc.console.log("ClickHandlerParent.jsm is not included");
       this.functions = [];
       return;
     }
@@ -96,18 +94,18 @@ ContentClickInternal = {
       return;
 
     this.functions.forEach(aFn => {
-      ClickHandlerParent.prototype[aFn] = ClickHandlerParent.prototype["tabmix_" + aFn];
-      delete ClickHandlerParent.prototype["tabmix_" + aFn];
+      lazy.ClickHandlerParent.prototype[aFn] = lazy.ClickHandlerParent.prototype["tabmix_" + aFn];
+      delete lazy.ClickHandlerParent.prototype["tabmix_" + aFn];
     });
   },
 
   functions: ["contentAreaClick"],
   initContentAreaClick: function TMP_initContentAreaClick() {
     this.functions.forEach(aFn => {
-      ClickHandlerParent.prototype["tabmix_" + aFn] = ClickHandlerParent.prototype[aFn];
+      lazy.ClickHandlerParent.prototype["tabmix_" + aFn] = lazy.ClickHandlerParent.prototype[aFn];
     });
 
-    ClickHandlerParent.prototype.contentAreaClick = function contentAreaClick(json) {
+    lazy.ClickHandlerParent.prototype.contentAreaClick = function contentAreaClick(json) {
       this.tabmix_contentAreaClick.apply(this, arguments);
 
       // we add preventDefault in our content.js when 'where' is not the
@@ -130,13 +128,13 @@ ContentClickInternal = {
       let params = {
         charset: browser.characterSet,
         suppressTabsOnFileDownload,
-        referrerInfo: E10SUtils.deserializeReferrerInfo(json.referrerInfo),
+        referrerInfo: lazy.E10SUtils.deserializeReferrerInfo(json.referrerInfo),
         allowMixedContent: json.allowMixedContent,
         isContentWindowPrivate: json.isContentWindowPrivate,
         originPrincipal: json.originPrincipal,
         originStoragePrincipal: json.originStoragePrincipal,
         triggeringPrincipal: json.triggeringPrincipal,
-        csp: json.csp ? E10SUtils.deserializeCSP(json.csp) : null,
+        csp: json.csp ? lazy.E10SUtils.deserializeCSP(json.csp) : null,
         frameID: json.frameID,
       };
       if (json.originAttributes.userContextId) {
@@ -146,7 +144,7 @@ ContentClickInternal = {
       window.openLinkIn(json.href, where, params);
 
       try {
-        if (!PrivateBrowsingUtils.isWindowPrivate(window)) {
+        if (!lazy.PrivateBrowsingUtils.isWindowPrivate(window)) {
           // this function is bound to ClickHandlerParent that import PlacesUIUtils
           // eslint-disable-next-line no-undef
           PlacesUIUtils.markPageAsFollowedLink(json.href);
@@ -198,13 +196,13 @@ ContentClickInternal = {
     let win = browser.ownerGlobal;
     win.openLinkIn(href, result.where, {
       charset: browser.characterSet,
-      referrerInfo: E10SUtils.deserializeReferrerInfo(event.referrerInfo),
+      referrerInfo: lazy.E10SUtils.deserializeReferrerInfo(event.referrerInfo),
       allowMixedContent: event.allowMixedContent,
       isContentWindowPrivate: event.isContentWindowPrivate,
       originPrincipal: event.originPrincipal,
       originStoragePrincipal: event.originStoragePrincipal,
       triggeringPrincipal: event.triggeringPrincipal,
-      csp: event.csp ? E10SUtils.deserializeCSP(event.csp) : null,
+      csp: event.csp ? lazy.E10SUtils.deserializeCSP(event.csp) : null,
       frameID: event.frameID,
       suppressTabsOnFileDownload: result.suppressTabsOnFileDownload
     });
@@ -269,7 +267,7 @@ ContentClickInternal = {
 
   getPref() {
     XPCOMUtils.defineLazyGetter(this, "targetPref", () => {
-      return TabmixSvc.prefBranch.getIntPref("opentabforLinks");
+      return lazy.TabmixSvc.prefBranch.getIntPref("opentabforLinks");
     });
 
     let tabBrowser = this._window.gBrowser;
@@ -288,7 +286,7 @@ ContentClickInternal = {
    */
   getWrappedNode(node, focusedWindow, getTargetIsFrame) {
     let wrapNode = function wrapNode(aNode, aGetTargetIsFrame) {
-      let nObj = LinkNodeUtils.wrap(aNode, focusedWindow, aGetTargetIsFrame);
+      let nObj = lazy.LinkNodeUtils.wrap(aNode, focusedWindow, aGetTargetIsFrame);
       nObj.hasAttribute = function(att) {
         return att in this._attributes;
       };
@@ -453,7 +451,7 @@ ContentClickInternal = {
      * in the current page
      */
     if (wrappedNode && wrappedNode.targetIsFrame &&
-        TabmixSvc.prefBranch.getBoolPref("targetIsFrame")) {
+        lazy.TabmixSvc.prefBranch.getBoolPref("targetIsFrame")) {
       return ["default@13"];
     }
 
@@ -505,7 +503,7 @@ ContentClickInternal = {
 
     let [href, linkNode] = win.hrefAndLinkNodeForClickEvent(aEvent);
     if (!href) {
-      let node = LinkNodeUtils.getNodeWithOnClick(aEvent.target);
+      let node = lazy.LinkNodeUtils.getNodeWithOnClick(aEvent.target);
       let wrappedOnClickNode = this.getWrappedNode(node, aFocusedWindow, aEvent.button === 0);
       if (this.getHrefFromNodeOnClick(aEvent, aBrowser, wrappedOnClickNode))
         aEvent.preventDefault();
@@ -567,7 +565,7 @@ ContentClickInternal = {
      * in the current page
      */
     if (wrappedNode && wrappedNode.targetIsFrame &&
-        TabmixSvc.prefBranch.getBoolPref("targetIsFrame")) {
+        lazy.TabmixSvc.prefBranch.getBoolPref("targetIsFrame")) {
       return "14";
     }
 
@@ -590,7 +588,7 @@ ContentClickInternal = {
       openNewTab = true;
 
     if (openNewTab) {
-      let blocked = LinkNodeUtils.isSpecialPage(href, linkNode, currentHref, this._window);
+      let blocked = lazy.LinkNodeUtils.isSpecialPage(href, linkNode, currentHref, this._window);
       if (!blocked) {
         return "16";
       }
@@ -625,7 +623,7 @@ ContentClickInternal = {
     if (typeof GM_function != "function")
       return;
 
-    LinkNodeUtils._GM_function.set(window, GM_function);
+    lazy.LinkNodeUtils._GM_function.set(window, GM_function);
   },
 
   miscellaneous(node) {
@@ -665,7 +663,7 @@ ContentClickInternal = {
    *
    */
   isGreasemonkeyScript: function TMP_isGreasemonkeyScript(href) {
-    if (LinkNodeUtils.isGMEnabled(this._window)) {
+    if (lazy.LinkNodeUtils.isGMEnabled(this._window)) {
       if (href && href.match(/\.user\.js(\?|$)/i))
         return true;
     }
@@ -725,8 +723,8 @@ ContentClickInternal = {
 
     // always check if the link is an xpi link
     let filetype = ["xpi"];
-    if (TabmixSvc.prefBranch.getBoolPref("enablefiletype")) {
-      let types = TabmixSvc.prefBranch.getCharPref("filetype");
+    if (lazy.TabmixSvc.prefBranch.getBoolPref("enablefiletype")) {
+      let types = lazy.TabmixSvc.prefBranch.getCharPref("filetype");
       types = types.toLowerCase().split(" ")
           .filter(t => !filetype.includes(t));
       filetype = [...filetype, ...types];
@@ -791,7 +789,7 @@ ContentClickInternal = {
    */
   divertMiddleClick: function TMP_divertMiddleClick() {
     // middlecurrent - A Boolean value that controls how middle clicks are handled.
-    if (!TabmixSvc.prefBranch.getBoolPref("middlecurrent"))
+    if (!lazy.TabmixSvc.prefBranch.getBoolPref("middlecurrent"))
       return false;
 
     var isTabLocked = this.targetPref == 1 || this.currentTabLocked;
@@ -830,7 +828,7 @@ ContentClickInternal = {
 
     let {event, targetAttr} = this._data;
     if (!targetAttr || event.ctrlKey || event.metaKey) return false;
-    if (!TabmixSvc.prefBranch.getBoolPref("linkTarget")) return false;
+    if (!lazy.TabmixSvc.prefBranch.getBoolPref("linkTarget")) return false;
 
     var targetString = /^(_self|_parent|_top|_content|_main)$/;
     if (targetString.test(targetAttr.toLowerCase())) return false;
@@ -968,15 +966,15 @@ ContentClickInternal = {
    *        and its frames for content with matching name and href
    */
   selectExistingTab: function TMP_selectExistingTab(window, href, targetFrame) {
-    if (TabmixSvc.prefBranch.getIntPref("opentabforLinks") !== 0 ||
+    if (lazy.TabmixSvc.prefBranch.getIntPref("opentabforLinks") !== 0 ||
         Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
 
     let isValidWindow = function(aWindow) {
       // window is valid only if both source and destination are in the same
       // privacy state and multiProcess state
-      return PrivateBrowsingUtils.isWindowPrivate(window) ==
-        PrivateBrowsingUtils.isWindowPrivate(aWindow) &&
+      return lazy.PrivateBrowsingUtils.isWindowPrivate(window) ==
+        lazy.PrivateBrowsingUtils.isWindowPrivate(aWindow) &&
         window.gMultiProcessBrowser == aWindow.gMultiProcessBrowser;
     };
 
@@ -1052,7 +1050,7 @@ ContentClickInternal = {
             browser.messageManager
                 .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
           } else {
-            let result = LinkNodeUtils.isFrameInContent(browser.contentWindow,
+            let result = lazy.LinkNodeUtils.isFrameInContent(browser.contentWindow,
               this.frameData.href, this.frameData.name);
             this.result(browser, {result});
           }
@@ -1095,7 +1093,7 @@ ContentClickInternal = {
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
     const fixupURI = url => {
       try {
-        return TabmixSvc.version(830) ?
+        return lazy.TabmixSvc.version(830) ?
           Services.uriFixup.getFixupURIInfo(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE).preferredURI :
           Services.uriFixup.createFixupURI(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE);
       } catch (ex) { }
@@ -1187,9 +1185,9 @@ ContentClickInternal = {
       return event.__hrefFromOnClick;
 
     let result = {__hrefFromOnClick: null};
-    if (onclick)
+    if (onclick) {
       this._hrefFromOnClick(href, node, onclick, result);
-    else {
+    } else {
       let parent = node.parentNode;
       if (parent && parent.hasAttribute("onclick"))
         this._hrefFromOnClick(href, parent, parent.getAttribute("onclick"), result);
@@ -1213,7 +1211,7 @@ ContentClickInternal = {
       newHref = makeURI(clickHref, null, makeURI(node.baseURI)).spec;
     } catch (ex) {
       // unexpected error
-      TabmixSvc.console.log(ex +
+      lazy.TabmixSvc.console.log(ex +
         "\nunexpected error from makeURLAbsolute\nurl " + clickHref);
       return;
     }

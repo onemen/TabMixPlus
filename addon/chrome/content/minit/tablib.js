@@ -936,9 +936,9 @@ Tabmix.tablib = {
         newTab = this.addTrustedTab("about:blank", {index: gBrowser.tabs.length});
         newTab.linkedBrowser.stop();
         if (aHref) {
-          if (Tabmix.ContentClick.isUrlForDownload(aHref))
+          if (Tabmix.ContentClick.isUrlForDownload(aHref)) {
             newTab.addEventListener("SSTabRestored", urlForDownload, true);
-          else {
+          } else {
             delete tabState.scroll;
             addNewHistoryEntry();
             newTab.addEventListener("SSTabRestored", updateNewHistoryTitle, true);
@@ -997,9 +997,8 @@ Tabmix.tablib = {
       let selectedTabIndex = Math.max(0, tabs.indexOf(this.selectedTab));
       let otherWin = OpenBrowserWindow({private: PrivateBrowsingUtils.isBrowserPrivate(contextTab.linkedBrowser)});
       let delayedStartupFinished = (subject, topic) => {
-        if (topic == "browser-delayed-startup-finished" &&
-            subject == otherWin) {
-          Services.obs.removeObserver(delayedStartupFinished, topic);
+        if (topic == "browser-delayed-startup-finished" && subject == otherWin) {
+          Services.obs.removeObserver(delayedStartupFinished, "browser-delayed-startup-finished");
           let otherGBrowser = otherWin.gBrowser;
           let otherTab = otherGBrowser.selectedTab;
           for (let index = 0; index < tabs.length; index += 1) {

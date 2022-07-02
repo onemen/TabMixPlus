@@ -1,6 +1,6 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["ContentSvc"];
+const EXPORTED_SYMBOLS = ["ContentSvc"];
 
 const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
@@ -14,7 +14,7 @@ function isVersion(aVersionNo) {
   return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo / 10 + ".0a1") >= 0);
 }
 
-this.ContentSvc = {
+const ContentSvc = {
   aboutNewtab: "about:#".replace("#", "newtab"),
 
   getStringPref(prefName) {

@@ -70,11 +70,10 @@ function _getKeyName(win, aKey) {
   let id = command && command.indexOf(":") > -1 ? command :
     aKey.id.replace(/xxx_key.+?_/, "") || // keyconfig format
            command || aKey.getAttribute("oncommand");
-  let gUnicodeConverter = Cc['@mozilla.org/intl/scriptableunicodeconverter']
-      .createInstance(Ci.nsIScriptableUnicodeConverter);
-  gUnicodeConverter.charset = "UTF-8";
   try {
-    id = gUnicodeConverter.ConvertToUnicode(id);
+    const u8arr = new Uint8Array(id.split('').map(c => c.charCodeAt(0)));
+    const utf8decoder = new TextDecoder("utf-8");
+    id = utf8decoder.decode(u8arr);
   } catch (ex) { }
 
   let keyname = {

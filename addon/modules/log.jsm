@@ -1,15 +1,15 @@
-/* globals OS */
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["console"];
+const EXPORTED_SYMBOLS = ["console"];
 
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
-ChromeUtils.defineModuleGetter(this, "OS", "resource://gre/modules/osfile.jsm");
+const lazy = {};
+ChromeUtils.defineModuleGetter(lazy, "OS", "resource://gre/modules/osfile.jsm");
 
 var gNextID = 1;
 
-this.console = {
+const console = {
   getObject(aWindow, aMethod) {
     let msg = "";
     if (!aWindow)
@@ -21,9 +21,9 @@ this.console = {
       return {toString: () => msg};
     }
     var rootID, methodsList = aMethod.split(".");
-    if (methodsList[0] == "window")
+    if (methodsList[0] == "window") {
       methodsList.shift();
-    else if (methodsList[0] == "document") {
+    } else if (methodsList[0] == "document") {
       methodsList.shift();
       rootID = methodsList.shift().replace(/getElementById\(|\)|'|"/g, "");
     }
@@ -221,9 +221,9 @@ this.console = {
         objS += offset + prop + " =  [!!error retrieving property]\n";
       }
     }
-    if (aDisallowLog)
-      objS = aMessage + "======================\n" + objS;
-    else {
+    if (aDisallowLog) {
+      objS = aMessage + "======================\\n" + objS;
+    } else {
       let msg = aMessage + "=============== Object Properties ===============\n";
       this.log(msg + objS, true, false, this.caller);
     }
@@ -233,8 +233,7 @@ this.console = {
   // RegExp to remove path/to/profile/extensions from filename
   get _pathRegExp() {
     delete this._pathRegExp;
-    let folder = OS.Path.join(OS.Constants.Path.profileDir, "extensions");
-    let path = folder.replace(/\\/g, "/") + "/";
+    const path = lazy.OS.Constants.Path.profileDir.replace(/\\/g, "/") + "/extensions/";
     return (this._pathRegExp = new RegExp("jar:|file:///|" + path, "g"));
   },
 
@@ -337,7 +336,7 @@ this.console = {
     }
     msg = ":\n" + (msg ? msg + "\n" : "");
     // eslint-disable-next-line mozilla/reject-osfile
-    if (typeof ex != "object" || ex instanceof OS.File.Error ||
+    if (typeof ex != "object" || ex instanceof lazy.OS.File.Error ||
         typeof ex.message != "string") {
       this._logMessage(msg + ex.toString(), "errorFlag");
     } else {
@@ -372,4 +371,4 @@ this.console = {
 
 (function(_this) {
   _this.reportError = _this.reportError.bind(_this);
-}(this.console));
+}(console));

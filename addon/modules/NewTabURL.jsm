@@ -1,17 +1,18 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["Tabmix_NewTabURL"];
+const EXPORTED_SYMBOLS = ["Tabmix_NewTabURL"];
 
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
-ChromeUtils.defineModuleGetter(this, "AboutNewTab",
+const lazy = {};
+ChromeUtils.defineModuleGetter(lazy, "AboutNewTab",
   "resource:///modules/AboutNewTab.jsm");
 
 const FIREFOX_PREF = "browser.#.url".replace("#", "newtab");
 const ABOUT_NEW_TAB = "about:#".replace("#", "newtab");
 
 // browser. newtab.url preference was removed by bug 1118285 (Firefox 41+)
-this.Tabmix_NewTabURL = {
+const Tabmix_NewTabURL = {
   QueryInterface: ChromeUtils.generateQI([
     Ci.nsIObserver,
     Ci.nsISupportsWeakReference
@@ -21,6 +22,7 @@ this.Tabmix_NewTabURL = {
     if (Services.prefs.prefHasUserValue(FIREFOX_PREF))
       this.updateNewTabURL();
 
+    // eslint-disable-next-line mozilla/balanced-observers
     Services.prefs.addObserver(FIREFOX_PREF, this, true);
   },
 
@@ -37,11 +39,11 @@ this.Tabmix_NewTabURL = {
   updateNewTabURL() {
     let value = Services.prefs.getStringPref(FIREFOX_PREF);
     if (value == ABOUT_NEW_TAB) {
-      AboutNewTab.resetNewTabURL();
+      lazy.AboutNewTab.resetNewTabURL();
     } else {
-      AboutNewTab.newTabURL = value;
+      lazy.AboutNewTab.newTabURL = value;
     }
   }
 };
 
-this.Tabmix_NewTabURL.init();
+Tabmix_NewTabURL.init();

@@ -6,13 +6,13 @@
 
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["Overlays"];
+const EXPORTED_SYMBOLS = ["Overlays"];
 
-ChromeUtils.defineModuleGetter(this, "Services",
-  "resource://gre/modules/Services.jsm"
-);
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
-ChromeUtils.defineModuleGetter(this, "setTimeout",
+const lazy = {};
+
+ChromeUtils.defineModuleGetter(lazy, "setTimeout",
   "resource://gre/modules/Timer.jsm");
 
 /**
@@ -223,7 +223,7 @@ class Overlays {
     }
 
     if (this.document.readyState == "complete") {
-      setTimeout(() => {
+      lazy.setTimeout(() => {
         this._finish();
 
         // Now execute load handlers since we are done loading scripts

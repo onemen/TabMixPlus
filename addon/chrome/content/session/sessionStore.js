@@ -19,9 +19,9 @@ var TMP_SessionStore = {
       return Promise.resolve(aUndoItem.title);
     let tabData = this.getActiveEntryData(selectedTab);
     let url = selectedTab.attributes["label-uri"];
-    if (url == tabData.url || url == "*")
+    if (url == tabData.url || url == "*") {
       aUndoItem.title = selectedTab.attributes["fixed-label"];
-    else {
+    } else {
       const dataTitle = aUndoItem.title || tabData.title || tabData.url;
       return TMP_Places.getTitleFromBookmark(tabData.url, dataTitle)
           .then(title => {
@@ -240,11 +240,11 @@ var TMP_SessionStore = {
   // we call this from onContentLoaded before nsSessionStore run its onLoad
   setAfterSessionRestored() {
     let afterSessionRestore;
-    if (!Tabmix.isFirstWindow)
+    if (!Tabmix.isFirstWindow) {
       afterSessionRestore = false;
     // When we close all browser windows without exit (non browser windows are opened)
     // Firefox reopen last closed window when a browser window opens
-    else if (Tabmix.numberOfWindows(false, null) > 1) {
+    } else if (Tabmix.numberOfWindows(false, null) > 1) {
       if ((Tabmix.prefs.getBoolPref("sessions.manager") ||
            Tabmix.prefs.getBoolPref("sessions.crashRecovery")) &&
           TabmixSvc.ss.getClosedWindowCount() > 0) {
@@ -255,9 +255,9 @@ var TMP_SessionStore = {
       afterSessionRestore = true;
     }
 
-    if (typeof afterSessionRestore == "boolean")
+    if (typeof afterSessionRestore == "boolean") {
       Tabmix.isWindowAfterSessionRestore = afterSessionRestore;
-    else {
+    } else {
       XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", () => {
         // when TMP session manager is enabled ss.willRestore is true only after restart
         SessionStartup.onceInitialized.then(() => {
@@ -386,7 +386,6 @@ var TMP_ClosedTabs = {
 
   set keepMenuOpen(val) {
     Tabmix.prefs.setBoolPref("undoClose.keepMenuOpen", Boolean(val));
-    return val;
   },
 
   populateUndoSubmenu(aPopup) {

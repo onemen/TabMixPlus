@@ -4,7 +4,7 @@
 
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["ScriptsLoader"];
+const EXPORTED_SYMBOLS = ["ScriptsLoader"];
 
 /**
  * stylesheets and scripts for navigator:browser
@@ -50,7 +50,7 @@ XPCOMUtils.defineLazyModuleGetters(lazy, {
 
 const initialized = new WeakSet();
 
-this.ScriptsLoader = {
+const ScriptsLoader = {
   initForWindow(window, promiseOverlayLoaded, params = {}) {
     if (initialized.has(window)) {
       return;
@@ -140,12 +140,12 @@ this.ScriptsLoader = {
     };
 
     Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
-    const swapTab = function tabmix_swapBrowsersAndCloseOther(aOurTab, aOtherTab) {
+    const swapTab = function tabmix_swapBrowsersAndCloseOther(ourTab, otherTab) {
       // Do not allow transferring a private tab to a non-private window
       // and vice versa.
       if (
         lazy.PrivateBrowsingUtils.isWindowPrivate(window) !==
-        lazy.PrivateBrowsingUtils.isWindowPrivate(aOtherTab.ownerGlobal)
+        lazy.PrivateBrowsingUtils.isWindowPrivate(otherTab.ownerGlobal)
       ) {
         return false;
       }
@@ -156,11 +156,11 @@ this.ScriptsLoader = {
           return false;
         }
         Tabmix._afterTabduplicated = true;
-        const url = aOtherTab.linkedBrowser.currentURI.spec;
+        const url = otherTab.linkedBrowser.currentURI.spec;
         gBrowser.tabContainer._updateCloseButtons(true, url);
       }
 
-      Tabmix.copyTabData(aOurTab, aOtherTab);
+      Tabmix.copyTabData(ourTab, otherTab);
       return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
     };
     Tabmix.setNewFunction(gBrowser, "swapBrowsersAndCloseOther", swapTab);

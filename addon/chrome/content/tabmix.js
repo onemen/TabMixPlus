@@ -414,9 +414,9 @@ var TMP_eventListener = {
 
     const skin = Services.prefs.getCharPref("extensions.activeThemeID", "");
     if (skin == "classic/1.0") {
-      if (TabmixSvc.isMac)
+      if (TabmixSvc.isMac) {
         tabBar.setAttribute("classic", "v4Mac");
-      else if (TabmixSvc.isLinux) {
+      } else if (TabmixSvc.isLinux) {
         tabBar.setAttribute("classic", "v3Linux");
         ///XXX test if this is still the case
         TMP_tabDNDObserver.LinuxMarginEnd = -2;
@@ -705,7 +705,7 @@ var TMP_eventListener = {
   // Function to catch when new tabs are created and update tab icons if needed
   // In addition clicks and doubleclick events are trapped.
   onTabOpen: function TMP_EL_onTabOpen(aEvent) {
-    Tabmix._lastTabOpenedTime = Date.now();
+    Tabmix._lastTabOpenedTime = performance.timing.navigationStart + performance.now();
     var tab = aEvent.target;
     this.setTabAttribute(tab);
     TMP_LastTab.tabs = null;
@@ -733,7 +733,7 @@ var TMP_eventListener = {
     aTab.tabmixKey = {};
     this.tabWidthCache.set(aTab.tabmixKey, aTab.getBoundingClientRect().width);
 
-    let newTime = Date.now();
+    const newTime = performance.timing.navigationStart + performance.now();
     if (Tabmix.tabsUtils.overflow || newTime - this.lastTimeTabOpened > 200) {
       this.onTabOpen_updateTabBar(aTab);
       this.lastTimeTabOpened = newTime;

@@ -1,6 +1,6 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["Decode"];
+const EXPORTED_SYMBOLS = ["Decode"];
 
 /*
     The escape and unescape functions are deprecated we use encodeURI and decodeURI instead.
@@ -9,7 +9,7 @@ this.EXPORTED_SYMBOLS = ["Decode"];
 
     use unescape if exist, if removed from firefox we use our own function
 */
-this.Decode = {
+const Decode = {
   escape(str) {
     // we always use encodeURI
     return encodeURI(str);

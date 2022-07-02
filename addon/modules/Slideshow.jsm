@@ -1,10 +1,12 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["flst"];
+const EXPORTED_SYMBOLS = ["flst"];
 
 const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
-ChromeUtils.defineModuleGetter(this, "Shortcuts",
+
+const lazy = {};
+ChromeUtils.defineModuleGetter(lazy, "Shortcuts",
   "chrome://tabmix-resource/content/Shortcuts.jsm");
 
 function flst() {
@@ -20,7 +22,7 @@ function flst() {
 flst.prototype = {
   showAlert(msg, id) {
     try {
-      msg = msg.replace(/F8|F9/, Shortcuts.getFormattedKeyForID(id));
+      msg = msg.replace(/F8|F9/, lazy.Shortcuts.getFormattedKeyForID(id));
       let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
       alerts.showAlertNotification("chrome://tabmixplus/skin/tmp.png", "Tab Mix Plus", msg, false, "", null);
     } catch (e) { }

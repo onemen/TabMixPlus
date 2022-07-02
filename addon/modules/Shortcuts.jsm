@@ -1,6 +1,6 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["Shortcuts"];
+const EXPORTED_SYMBOLS = ["Shortcuts"];
 
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
@@ -8,11 +8,12 @@ const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
-ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
+const lazy = {};
+ChromeUtils.defineModuleGetter(lazy, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 var KeyConfig;
-this.Shortcuts = {
+const Shortcuts = {
   keys: {
     newTab: {id: "key_newNavigatorTab", default: "T accel"},
     dupTab: {id: "key_tm_dupTab", useInMenu: true, default: "F #modifiers", command: 3},
@@ -394,7 +395,7 @@ this.Shortcuts = {
 
   _getChangedKeys: function TMP_SC__getChangedKeys(aOptions) {
     let shortcuts = !aOptions.onChange && this.prefBackup || this._getShortcutsPref();
-    let disableSessionKeys = PrivateBrowsingUtils.permanentPrivateBrowsing ||
+    let disableSessionKeys = lazy.PrivateBrowsingUtils.permanentPrivateBrowsing ||
         !this.prefs.getBoolPref("sessions.manager");
     let changedKeys = {}, onOpen = aOptions.onOpen;
     for (let key of Object.keys(this.keys)) {
@@ -472,9 +473,9 @@ this.Shortcuts = {
 
     // make sure that key and keycode are valid
     key.key = key.key.toUpperCase();
-    if (key.key == " ")
+    if (key.key == " ") {
       [key.key, key.keycode] = ["", "VK_SPACE"];
-    else {
+    } else {
       key.keycode = "VK_" + key.keycode.toUpperCase().replace(/^VK_/, "");
       if (key.keycode != "VK_BACK" && !this.KeyboardEvent.includes("DOM_" + key.keycode)) {
         // not all items in KeyboardEvent are valid as keyboard shortcuts
@@ -571,9 +572,9 @@ KeyConfig = {
     this.prefs = Services.prefs.getBranch("keyconfig.main.");
     let shortcuts = Shortcuts._getShortcutsPref();
     // sync non default shortcuts
-    if (Object.keys(shortcuts).length)
+    if (Object.keys(shortcuts).length) {
       this.syncToKeyConfig(shortcuts);
-    else {
+    } else {
       let prefs = this.prefs.getChildList("").filter(function(pref) {
         let key = this.keyIdsMap[pref];
         return key && this.syncFromKeyConfig(key, pref, shortcuts);
@@ -613,11 +614,11 @@ KeyConfig = {
     try {
       prefValue = getPref("keyconfig.main." + aPrefName).split("][");
     } catch (ex) { }
-    if (!prefValue)
+    if (!prefValue) {
       newValue = keyData.default;
-    else if (/^!/.test(prefValue))
+    } else if (/^!/.test(prefValue)) {
       newValue = "d&";
-    else {
+    } else {
       let newKey = {
         modifiers: prefValue[0].replace(" ", ","),
         key: prefValue[1],
@@ -644,9 +645,9 @@ KeyConfig = {
       if (onChange)
         prefVal = prefVal.value;
       let id = Shortcuts.keys[key].id || "key_tm_" + key;
-      if (!prefVal || prefVal == Shortcuts.keys[key].default)
+      if (!prefVal || prefVal == Shortcuts.keys[key].default) {
         this.resetPref(id);
-      else {
+      } else {
         let obj = Shortcuts.keyParse(prefVal);
         let newValue = obj.disabled ? ["!", "", ""] :
           [obj.modifiers.replace(",", " "), obj.key, obj.keycode];

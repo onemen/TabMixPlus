@@ -1,8 +1,9 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["TabRestoreQueue"];
+const EXPORTED_SYMBOLS = ["TabRestoreQueue"];
 
-ChromeUtils.defineModuleGetter(this, "TabmixSvc",
+const lazy = {};
+ChromeUtils.defineModuleGetter(lazy, "TabmixSvc",
   "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 let internal = {
@@ -70,10 +71,10 @@ let internal = {
   },
 };
 
-this.TabRestoreQueue = {
+const TabRestoreQueue = {
   init() {
     const global = {};
-    const tabRestoreQueue = TabmixSvc.SessionStoreGlobal.TabRestoreQueue;
+    const tabRestoreQueue = lazy.TabmixSvc.SessionStoreGlobal.TabRestoreQueue;
     global.TabRestoreQueue = tabRestoreQueue;
     for (let key of Object.keys(internal)) {
       if (typeof internal[key] == "function") {
@@ -85,4 +86,4 @@ this.TabRestoreQueue = {
   },
 };
 
-this.TabRestoreQueue.init();
+TabRestoreQueue.init();

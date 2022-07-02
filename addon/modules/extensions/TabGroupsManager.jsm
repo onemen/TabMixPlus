@@ -4,9 +4,9 @@
 /**
  * original code by onemen
  */
-this.EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
+const EXPORTED_SYMBOLS = ["TMP_TabGroupsManager"];
 
-this.TMP_TabGroupsManager = {
+const TMP_TabGroupsManager = {
   init: function TMP_TGM_init(aWindow) {
     this.changeCode(aWindow.TMP_eventListener, "TMP_eventListener.onTabOpen")._replace(
       /(})(\)?)$/,

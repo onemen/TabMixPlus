@@ -10,7 +10,7 @@
  *                   code modified by onemen 2006-01-13
  *                   code modified by onemen 2010-03-22 - work with new AddonManager for firefox 4.0
  */
-this.EXPORTED_SYMBOLS = ["CompatibilityCheck"];
+const EXPORTED_SYMBOLS = ["CompatibilityCheck"];
 
 const TMP_BUTTON_CANCEL = 1;
 const TMP_BUTTON_EXTRA1 = 2;
@@ -20,9 +20,8 @@ const TMP_CHECKBOX_CHECKED = 1;
 const TMP_HIDE_CHECKBOX = 2;
 
 const {AddonManager} = ChromeUtils.import("resource://gre/modules/AddonManager.jsm");
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
-ChromeUtils.defineModuleGetter(this, "Services",
-  "resource://gre/modules/Services.jsm");
 
 var _initialized = false;
 

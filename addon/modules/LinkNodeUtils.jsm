@@ -1,13 +1,12 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["LinkNodeUtils"];
+const EXPORTED_SYMBOLS = ["LinkNodeUtils"];
 
-ChromeUtils.defineModuleGetter(this, "Services",
-  "resource://gre/modules/Services.jsm");
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 const ATTRIBS = ["href", "onclick", "onmousedown", "rel", "role"];
 
-this.LinkNodeUtils = {
+const LinkNodeUtils = {
   isFrameInContent(content, href, name) {
     if (!content)
       return false;

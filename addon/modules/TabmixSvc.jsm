@@ -1,21 +1,23 @@
 /* globals dump */
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["TabmixSvc"];
+const EXPORTED_SYMBOLS = ["TabmixSvc"];
 
 const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
-ChromeUtils.defineModuleGetter(this, "TabmixPlacesUtils",
+const lazy = {};
+ChromeUtils.defineModuleGetter(lazy, "TabmixPlacesUtils",
   "chrome://tabmix-resource/content/Places.jsm");
 
-ChromeUtils.defineModuleGetter(this, "SyncedTabs",
+ChromeUtils.defineModuleGetter(lazy, "SyncedTabs",
   "chrome://tabmix-resource/content/SyncedTabs.jsm");
 
 // place holder for load default preferences function
 // eslint-disable-next-line no-unused-vars
 var pref;
+let TabmixSvc;
 
 var _versions = {};
 function isVersion(aVersionNo, updateChannel) {
@@ -61,7 +63,7 @@ function isVersion(aVersionNo, updateChannel) {
   return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo / 10 + ".0a1") >= 0);
 }
 
-this.TabmixSvc = {
+TabmixSvc = {
   aboutBlank: "about:blank",
   aboutNewtab: "about:#".replace("#", "newtab"),
   newtabUrl: "browser.#.url".replace("#", "newtab"),
@@ -254,10 +256,10 @@ this.TabmixSvc = {
 
       ChromeUtils.import("chrome://tabmix-resource/content/DownloadLastDir.jsm");
 
-      TabmixPlacesUtils.init(aWindow);
+      lazy.TabmixPlacesUtils.init(aWindow);
       if (!(TabmixSvc.isBasilisk && TabmixSvc.version({bs: "52.9.2019.06.08"}))) {
         this.syncedTabsInitialized = true;
-        SyncedTabs.init(aWindow);
+        lazy.SyncedTabs.init(aWindow);
       }
 
       TabmixSvc.tabStylePrefs = {};
@@ -286,9 +288,10 @@ this.TabmixSvc = {
     observe(aSubject, aTopic) {
       switch (aTopic) {
         case "quit-application":
-          TabmixPlacesUtils.onQuitApplication();
+          Services.obs.removeObserver(this, "quit-application");
+          lazy.TabmixPlacesUtils.onQuitApplication();
           if (this.syncedTabsInitialized) {
-            SyncedTabs.onQuitApplication();
+            lazy.SyncedTabs.onQuitApplication();
           }
           for (let id of Object.keys(TabmixSvc.console._timers)) {
             let timer = TabmixSvc.console._timers[id];
@@ -312,7 +315,7 @@ this.TabmixSvc = {
     },
     set sanitized(val) {
       delete this.sanitized;
-      return (this.sanitized = val);
+      this.sanitized = val;
     },
     private: true,
     settingPreference: false,
@@ -364,20 +367,20 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", () => {
   return Services.strings.createBundle(properties);
 });
 
-XPCOMUtils.defineLazyGetter(this, "Platform", () => {
+XPCOMUtils.defineLazyGetter(lazy, "Platform", () => {
   return AppConstants.platform;
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isWindows", () => {
-  return Platform == "win";
+  return lazy.Platform == "win";
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", () => {
-  return Platform == "macosx";
+  return lazy.Platform == "macosx";
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", () => {
-  return Platform == "linux";
+  return lazy.Platform == "linux";
 });
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isCyberfox", () => {

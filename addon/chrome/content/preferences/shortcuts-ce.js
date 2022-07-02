@@ -96,7 +96,6 @@
         else
           this.removeAttribute("blocked");
       }
-      return val;
     }
 
     get blocked() {
@@ -105,7 +104,6 @@
 
     set disabled(val) {
       this._key.disabled = val;
-      return val;
     }
 
     get disabled() {
@@ -115,7 +113,6 @@
     set value(val) {
       if (this.value != val)
         this.setAttribute("value", val);
-      return val;
     }
 
     get value() {
@@ -125,7 +122,6 @@
     set key(val) {
       this._key = val;
       this.value = val.disabled ? "" : getFormattedKey(val);
-      return val;
     }
 
     get key() {
@@ -263,11 +259,11 @@
         key.modifiers = key.modifiers.replace(Shortcuts.getPlatformAccel(), "accel");
       }
 
-      if (event.charCode == event.DOM_VK_SPACE)
+      if (event.charCode == event.DOM_VK_SPACE) {
         key.keycode = "VK_SPACE";
-      else if (event.charCode)
+      } else if (event.charCode) {
         key.key = String.fromCharCode(event.charCode).toUpperCase();
-      else {
+      } else {
         const eKeyCode = event.keyCode;
         if (eKeyCode == 8)
           key.keycode = "VK_BACK";

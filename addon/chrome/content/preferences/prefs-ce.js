@@ -193,16 +193,15 @@ class Preference extends MozXULElement {
   }
 
   set name(val) {
-    if (val == this.name)
-      return val;
+    if (val == this.name) {
+      return;
+    }
 
     this.preferences.rootBranchInternal
         .removeObserver(this.name, this.preferences.observerFunction);
     this.setAttribute("name", val);
     this.preferences.rootBranchInternal
         .addObserver(val, this.preferences.observerFunction);
-
-    return val;
   }
 
   get type() {
@@ -211,7 +210,6 @@ class Preference extends MozXULElement {
 
   set type(val) {
     this.setAttribute('type', val);
-    return val;
   }
 
   get inverted() {
@@ -220,7 +218,6 @@ class Preference extends MozXULElement {
 
   set inverted(val) {
     this.setAttribute('inverted', val);
-    return val;
   }
 
   get readonly() {
@@ -229,7 +226,6 @@ class Preference extends MozXULElement {
 
   set readonly(val) {
     this.setAttribute('readonly', val);
-    return val;
   }
 
   get value() {
@@ -237,7 +233,7 @@ class Preference extends MozXULElement {
   }
 
   set value(val) {
-    return this._setValue(val);
+    this._setValue(val);
   }
 
   get locked() {
@@ -254,8 +250,9 @@ class Preference extends MozXULElement {
     else
       this.removeAttribute("disabled");
 
-    if (!this.id)
-      return val;
+    if (!this.id) {
+      return;
+    }
 
     const elements = document.getElementsByAttribute("preference", this.id);
     for (let i = 0; i < elements.length; ++i) {
@@ -265,8 +262,6 @@ class Preference extends MozXULElement {
       for (let j = 0; j < labels.length; ++j)
         labels[j].disabled = val;
     }
-
-    return val;
   }
 
   get tabIndex() {
@@ -279,8 +274,9 @@ class Preference extends MozXULElement {
     else
       this.removeAttribute("tabindex");
 
-    if (!this.id)
-      return val;
+    if (!this.id) {
+      return;
+    }
 
     const elements = document.getElementsByAttribute("preference", this.id);
     for (let i = 0; i < elements.length; ++i) {
@@ -290,8 +286,6 @@ class Preference extends MozXULElement {
       for (let j = 0; j < labels.length; ++j)
         labels[j].tabIndex = val;
     }
-
-    return val;
   }
 
   get hasUserValue() {
@@ -344,13 +338,14 @@ class Preference extends MozXULElement {
 
   set valueFromPreferences(val) {
     // Exit early if nothing to do.
-    if (this.readonly || this.valueFromPreferences == val)
-      return val;
+    if (this.readonly || this.valueFromPreferences == val) {
+      return;
+    }
 
     // The special value undefined means 'reset preference to default'.
     if (val === undefined) {
       this.preferences.rootBranch.clearUserPref(this.name);
-      return val;
+      return;
     }
 
     // Force a resync of preferences with value.
@@ -394,7 +389,6 @@ class Preference extends MozXULElement {
     }
     if (!this.batching)
       this.preferences.service.savePrefFile(null);
-    return val;
   }
 
   _setValue(aValue) {
@@ -458,18 +452,19 @@ class Preference extends MozXULElement {
       else
         element.setAttribute(attribute, value);
     }
-    if (aElement.localName == "checkbox")
+    if (aElement.localName == "checkbox") {
       setValue(aElement, "checked", val);
-    else if (aElement.localName == "colorpicker")
+    } else if (aElement.localName == "colorpicker") {
       setValue(aElement, "color", val);
-    else if (aElement.localName == "input") {
+    } else if (aElement.localName == "input") {
       // XXXmano Bug 303998: Avoid a caret placement issue if either the
       // preference observer or its setter calls updateElements as a result
       // of the input event handler.
       if (aElement.value !== val)
         setValue(aElement, "value", val);
-    } else
+    } else {
       setValue(aElement, "value", val);
+    }
   }
 
   getElementValue(aElement) {
@@ -632,7 +627,6 @@ class PrefPane extends MozXULElement {
 
   set src(val) {
     this.setAttribute('src', val);
-    return val;
   }
 
   get selected() {
@@ -641,7 +635,6 @@ class PrefPane extends MozXULElement {
 
   set selected(val) {
     this.setAttribute('selected', val);
-    return val;
   }
 
   get image() {
@@ -650,7 +643,6 @@ class PrefPane extends MozXULElement {
 
   set image(val) {
     this.setAttribute('image', val);
-    return val;
   }
 
   get label() {
@@ -659,7 +651,6 @@ class PrefPane extends MozXULElement {
 
   set label(val) {
     this.setAttribute('label', val);
-    return val;
   }
 
   get preferenceElements() {
@@ -689,7 +680,6 @@ class PrefPane extends MozXULElement {
 
   set loaded(val) {
     this._loaded = val;
-    return val;
   }
 
   get DeferredTask() {
@@ -840,7 +830,6 @@ class PaneButton extends customElements.get('radio') {
       this.setAttribute('disabled', 'true');
     else
       this.removeAttribute('disabled');
-    return val;
   }
 
   get tabIndex() {
@@ -852,7 +841,6 @@ class PaneButton extends customElements.get('radio') {
       this.setAttribute('tabindex', val);
     else
       this.removeAttribute('tabindex');
-    return val;
   }
 
   get label() {
@@ -861,7 +849,6 @@ class PaneButton extends customElements.get('radio') {
 
   set label(val) {
     this.setAttribute('label', val);
-    return val;
   }
 
   get crop() {
@@ -870,7 +857,6 @@ class PaneButton extends customElements.get('radio') {
 
   set crop(val) {
     this.setAttribute('crop', val);
-    return val;
   }
 
   get image() {
@@ -879,7 +865,6 @@ class PaneButton extends customElements.get('radio') {
 
   set image(val) {
     this.setAttribute('image', val);
-    return val;
   }
 
   get command() {
@@ -888,7 +873,6 @@ class PaneButton extends customElements.get('radio') {
 
   set command(val) {
     this.setAttribute('command', val);
-    return val;
   }
 
   get accessKey() {
@@ -904,7 +888,6 @@ class PaneButton extends customElements.get('radio') {
     if (labelElement) {
       labelElement.setAttribute("accesskey", val);
     }
-    return val;
   }
 }
 
@@ -1179,7 +1162,6 @@ class PrefWindow extends MozXULElement {
       },
       set: val => {
         this._configureButtons(val);
-        return val;
       }
     });
 
@@ -1191,7 +1173,6 @@ class PrefWindow extends MozXULElement {
       },
       set: val => {
         this._setDefaultButton(val);
-        return val;
       }
     });
 
@@ -1522,7 +1503,6 @@ class PrefWindow extends MozXULElement {
   set lastSelected(val) {
     this.setAttribute("lastSelected", val);
     Services.xulStore.setValue(this, "persist", "lastSelected", val);
-    return val;
   }
 
   get currentPane() {
@@ -1533,7 +1513,7 @@ class PrefWindow extends MozXULElement {
   }
 
   set currentPane(val) {
-    return (this._currentPane = val);
+    this._currentPane = val;
   }
 
   get _shouldAnimate() {
@@ -1584,8 +1564,9 @@ class PrefWindow extends MozXULElement {
       } else {
         this._paneLoaded(aPaneElement);
       }
-    } else
+    } else {
       this._selectPane(aPaneElement);
+    }
   }
 
   _paneLoaded(aPaneElement) {
@@ -1742,9 +1723,9 @@ class PrefWindow extends MozXULElement {
 
       const elt = document.getElementById(this.lastSelected);
       const newOpacity = parseFloat(window.getComputedStyle(elt).opacity) + this._fadeIncrement;
-      if (newOpacity < 1.0)
+      if (newOpacity < 1.0) {
         elt.style.opacity = newOpacity;
-      else {
+      } else {
         this._animateTimer.cancel();
         elt.style.opacity = 1.0;
       }

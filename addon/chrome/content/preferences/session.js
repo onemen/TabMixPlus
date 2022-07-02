@@ -42,9 +42,9 @@ var gSessionPane = {
     function updatePrefs(aItemId, aValue) {
       let preference = $("pref_" + aItemId);
       preference.batching = true;
-      if (instantApply)
+      if (instantApply) {
         preference.value = aValue;
-      else {
+      } else {
         preference.valueFromPreferences = aValue;
         gPrefWindow.changes.delete(preference);
       }

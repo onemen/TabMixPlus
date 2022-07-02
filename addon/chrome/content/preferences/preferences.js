@@ -25,9 +25,9 @@ var gPrefWindow = {
 
     var prefWindow = $("TabMIxPreferences");
 
-    if (TabmixSvc.isMac)
+    if (TabmixSvc.isMac) {
       prefWindow.setAttribute("mac", true);
-    else if (TabmixSvc.isLinux) {
+    } else if (TabmixSvc.isLinux) {
       prefWindow.setAttribute("linux", true);
     }
 
@@ -297,9 +297,9 @@ var gPrefWindow = {
     let preference = $("pref_" + tabs.id);
     if (!tabs._inited) {
       tabs._inited = true;
-      if (preference.value !== null)
+      if (preference.value !== null) {
         tabs.selectedIndex = preference.value;
-      else {
+      } else {
         let val = preference.valueFromPreferences;
         if (val !== null)
           tabs.selectedIndex = val;
@@ -595,9 +595,9 @@ function showFilePicker(mode) {
   return new Promise(resolve => {
     const nsIFilePicker = Ci.nsIFilePicker;
     var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-    if (mode == "open")
+    if (mode == "open") {
       mode = nsIFilePicker.modeOpen;
-    else {
+    } else {
       fp.defaultExtension = "txt";
       fp.defaultString = "TMPpref";
       mode = nsIFilePicker.modeSave;
@@ -731,9 +731,8 @@ window.gIncompatiblePane = {
   },
 
   checkForIncompatible(aShowList) {
-    let tmp = {};
-    ChromeUtils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm", tmp);
-    tmp = new tmp.CompatibilityCheck(window, aShowList, true);
+    const {CompatibilityCheck} = ChromeUtils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm");
+    return new CompatibilityCheck(window, aShowList, true);
   },
 
   // call back function from CompatibilityCheck.jsm

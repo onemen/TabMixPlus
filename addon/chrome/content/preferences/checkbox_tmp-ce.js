@@ -32,7 +32,7 @@
     }
 
     set label(val) {
-      return (this._checkbox.label = val);
+      this._checkbox.label = val;
     }
 
     get label() {
@@ -40,7 +40,7 @@
     }
 
     set value(val) {
-      return (this.checked = val);
+      this.checked = val;
     }
 
     get value() {
@@ -48,7 +48,7 @@
     }
 
     set checked(val) {
-      return (this._checkbox.checked = val);
+      this._checkbox.checked = val;
     }
 
     get checked() {
@@ -56,7 +56,7 @@
     }
 
     set disabled(val) {
-      return (this._checkbox.disabled = val);
+      this._checkbox.disabled = val;
     }
 
     get disabled() {

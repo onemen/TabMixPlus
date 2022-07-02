@@ -1,18 +1,19 @@
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["ContextMenu"];
+const EXPORTED_SYMBOLS = ["ContextMenu"];
 
 const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
-ChromeUtils.defineModuleGetter(this, "TabmixUtils",
+const lazy = {};
+ChromeUtils.defineModuleGetter(lazy, "TabmixUtils",
   "chrome://tabmix-resource/content/Utils.jsm");
 
-this.ContextMenu = {
+const ContextMenu = {
   getSelectedLinks(content, check) {
     let doc = content.document;
     const NodeFilter = doc.defaultView.NodeFilter;
     // get focused window selection
-    let selectionObject = TabmixUtils.focusedWindow(content).getSelection();
+    let selectionObject = lazy.TabmixUtils.focusedWindow(content).getSelection();
     if (selectionObject.isCollapsed) // nothing selected
       return [];
 

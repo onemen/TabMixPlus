@@ -1,35 +1,34 @@
-/* globals  Prefs isMac SSS */
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["DynamicRules"];
+const EXPORTED_SYMBOLS = ["DynamicRules"];
 
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
-ChromeUtils.defineModuleGetter(this, "Services",
-  "resource://gre/modules/Services.jsm");
+const lazy = {};
 
-ChromeUtils.defineModuleGetter(this, "TabmixSvc",
+ChromeUtils.defineModuleGetter(lazy, "TabmixSvc",
   "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
-XPCOMUtils.defineLazyGetter(this, "Prefs", () => {
+XPCOMUtils.defineLazyGetter(lazy, "Prefs", () => {
   return Services.prefs.getBranch("extensions.tabmix.styles.");
 });
 
 var TYPE;
-XPCOMUtils.defineLazyGetter(this, "SSS", () => {
+XPCOMUtils.defineLazyGetter(lazy, "SSS", () => {
   let sss = Cc['@mozilla.org/content/style-sheet-service;1']
       .getService(Ci.nsIStyleSheetService);
   TYPE = sss.USER_SHEET;
   return sss;
 });
 
-XPCOMUtils.defineLazyGetter(this, "isMac", () => {
-  return TabmixSvc.isMac;
+XPCOMUtils.defineLazyGetter(lazy, "isMac", () => {
+  return lazy.TabmixSvc.isMac;
 });
 
 const STYLENAMES = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
 
-this.DynamicRules = {
+const DynamicRules = {
 
   // hold templates for our css rules
   cssTemplates: {},
@@ -50,7 +49,7 @@ this.DynamicRules = {
     this.orient = aWindow.document.getElementById("tabbrowser-tabs").attributes.orient.value;
     this.windows10 = aWindow.navigator.oscpu.startsWith("Windows NT 10.0");
 
-    Prefs.addObserver("", this);
+    lazy.Prefs.addObserver("", this);
     STYLENAMES.forEach(function(pref) {
       Services.prefs.addObserver("extensions.tabmix." + pref, this);
     }, this);
@@ -104,7 +103,7 @@ this.DynamicRules = {
   onQuitApplication() {
     Services.obs.removeObserver(this, "browser-window-before-show");
     Services.obs.removeObserver(this, "quit-application");
-    Prefs.removeObserver("", this);
+    lazy.Prefs.removeObserver("", this);
     STYLENAMES.forEach(function(pref) {
       Services.prefs.removeObserver("extensions.tabmix." + pref, this);
       this.unregisterSheet(pref);
@@ -113,7 +112,7 @@ this.DynamicRules = {
 
   updateOpenedWindows(ruleName) {
     // update all opened windows
-    TabmixSvc.forEachBrowserWindow(window => {
+    lazy.TabmixSvc.forEachBrowserWindow(window => {
       if (ruleName != "progressMeter")
         window.gTMPprefObserver.updateTabsStyle(ruleName);
       else
@@ -126,7 +125,7 @@ this.DynamicRules = {
     let bgImage = {};
     bgImage.body = "linear-gradient(#topColor, #bottomColor)";
     let bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),\n";
-    bgImage.bg = isMac ? bgImage.body : bottomBorder + space20 + bgImage.body;
+    bgImage.bg = lazy.isMac ? bgImage.body : bottomBorder + space20 + bgImage.body;
     ///XXX move -moz-appearance: to general rule when style have bg
     let background = " {\n  -moz-appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
     let backgroundRule = ' > .tab-stack > .tab-background' + background;
@@ -181,13 +180,13 @@ this.DynamicRules = {
       prefObj = this.validatePrefValue(ruleName);
     } catch (ex) {
       this.handleError(ex, ruleName);
-      Prefs.setCharPref(ruleName, this.defaultPrefs[ruleName]);
+      lazy.Prefs.setCharPref(ruleName, this.defaultPrefs[ruleName]);
       prefObj = this.validatePrefValue(ruleName);
     }
     delete this[ruleName];
 
-    let val = TabmixSvc.tabStylePrefs[ruleName];
-    TabmixSvc.tabStylePrefs[ruleName] = prefObj;
+    let val = lazy.TabmixSvc.tabStylePrefs[ruleName];
+    lazy.TabmixSvc.tabStylePrefs[ruleName] = prefObj;
 
     if (ruleName == "progressMeter") {
       prefObj.text = false;
@@ -229,10 +228,10 @@ this.DynamicRules = {
 
   // update background type tabbar orient changed
   updateStyleType() {
-    TabmixSvc.tabStylePrefs = {};
+    lazy.TabmixSvc.tabStylePrefs = {};
     this.createTemplates();
 
-    TabmixSvc.forEachBrowserWindow(window => {
+    lazy.TabmixSvc.forEachBrowserWindow(window => {
       let {Tabmix, TabmixTabbar, gBrowser, gTMPprefObserver} = window;
       gTMPprefObserver.updateStyleAttributes();
 
@@ -252,7 +251,7 @@ this.DynamicRules = {
    *      - when user disable/enable the style
    */
   registerSheet(name) {
-    let enabled = TabmixSvc.prefBranch.getBoolPref(name);
+    let enabled = lazy.TabmixSvc.prefBranch.getBoolPref(name);
     if (!enabled)
       return;
 
@@ -266,18 +265,18 @@ this.DynamicRules = {
     let styleSheet = Services.io.newURI(
       "data:text/css," + encodeURIComponent(cssText));
 
-    if (!SSS.sheetRegistered(styleSheet, TYPE)) {
+    if (!lazy.SSS.sheetRegistered(styleSheet, TYPE)) {
       this.unregisterSheet(name);
       this.registered[name] = styleSheet;
-      SSS.loadAndRegisterSheet(styleSheet, TYPE);
+      lazy.SSS.loadAndRegisterSheet(styleSheet, TYPE);
     }
   },
 
   unregisterSheet(name) {
     let styleSheet = this.registered[name] || null;
     if (styleSheet &&
-        SSS.sheetRegistered(styleSheet, TYPE))
-      SSS.unregisterSheet(styleSheet, TYPE);
+      lazy.SSS.sheetRegistered(styleSheet, TYPE))
+      lazy.SSS.unregisterSheet(styleSheet, TYPE);
   },
 
   get defaultPrefs() {
@@ -291,9 +290,9 @@ this.DynamicRules = {
   },
 
   handleError(error, ruleName) {
-    Cu.reportError(TabmixSvc.console.error(error));
-    TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
-    Prefs.clearUserPref(ruleName);
+    Cu.reportError(lazy.TabmixSvc.console.error(error));
+    lazy.TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
+    lazy.Prefs.clearUserPref(ruleName);
   },
 
   validatePrefValue(ruleName) {
@@ -302,11 +301,12 @@ this.DynamicRules = {
     //                bg:boolean, bgColor:string, bgOpacity:string
     // if we don't catch the problem here it can break the rest of tabmix startup
     var defaultPrefValues = JSON.parse(this.defaultPrefs[ruleName]);
-    if (!Prefs.prefHasUserValue(ruleName))
+    if (!lazy.Prefs.prefHasUserValue(ruleName)) {
       return defaultPrefValues;
+    }
 
     var currentPrefValues, prefValues = {};
-    let prefString = Prefs.getCharPref(ruleName);
+    let prefString = lazy.Prefs.getCharPref(ruleName);
     try {
       currentPrefValues = JSON.parse(prefString);
     } catch (ex) {
@@ -354,8 +354,9 @@ this.DynamicRules = {
       }
     }
     let newPrefString = JSON.stringify(prefValues);
-    if (prefString != newPrefString)
-      Prefs.setCharPref(ruleName, newPrefString);
+    if (prefString != newPrefString) {
+      lazy.Prefs.setCharPref(ruleName, newPrefString);
+    }
 
     return prefValues;
   }

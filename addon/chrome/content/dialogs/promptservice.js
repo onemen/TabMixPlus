@@ -64,14 +64,16 @@ function prompt_init() {
         for (i = 1; i < popup.childNodes.length; ++i) {
           item = popup.childNodes[i];
           if (item.localName != "menuseparator" &&
-              item.getAttribute("disabled") != "true") {
+            item.getAttribute("disabled") != "true") {
             index = i;
             break;
           }
         }
     }
     menuList.selectedIndex = index;
-  } else menuList.hidden = true;
+  } else {
+    menuList.hidden = true;
+  }
 
   // display the textBox
   var textBox = document.getElementById("tm_textbox");

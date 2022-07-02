@@ -1,20 +1,16 @@
 /* eslint object-shorthand: "error" */
 "use strict";
 
-this.EXPORTED_SYMBOLS = ["SyncedTabs"];
-
-ChromeUtils.defineModuleGetter(this, "Services",
-  "resource://gre/modules/Services.jsm");
-
-ChromeUtils.defineModuleGetter(this,
-  "TabmixSvc", "chrome://tabmix-resource/content/TabmixSvc.jsm");
+const EXPORTED_SYMBOLS = ["SyncedTabs"];
 
 const {getChromeWindow} = ChromeUtils.import("resource:///modules/syncedtabs/util.js");
 const {TabListView} = ChromeUtils.import("resource:///modules/syncedtabs/TabListView.js");
+const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
+const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
 
 const Tabmix = {};
 
-this.SyncedTabs = {
+const SyncedTabs = {
   _initialized: false,
 
   init(aWindow) {

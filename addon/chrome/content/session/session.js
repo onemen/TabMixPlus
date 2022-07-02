@@ -1,4 +1,5 @@
 /* globals TabmixConvertSession */
+/* eslint "mozilla/avoid-Date-timing": "off", mozilla/consistent-if-bracing: off */
 "use strict";
 
 Tabmix.BUTTON_OK = 0;
@@ -123,9 +124,9 @@ TabmixSessionData = {
     }
     // if save.permissions is false we save all Permissions as on, so if we change this pref after session
     // was saved, the session will load with Permissions as on.
-    if (checkPref && !Tabmix.prefs.getBoolPref("sessions.save.permissions"))
+    if (checkPref && !Tabmix.prefs.getBoolPref("sessions.save.permissions")) {
       tabProperties += "11111";
-    else {
+    } else {
       let disallow = Tabmix.docShellCapabilities.collect(aTab);
       this.docShellItems.forEach(item => {
         tabProperties += disallow.includes(item) ? "0" : "1";
@@ -2276,11 +2277,11 @@ TabmixSessionManager = {
   onFirstWindowPromptCallBack: function SM_onFirstWindowPromptCallBack(aResult) {
     this.waitForCallBack = false;
     this.enableCrashRecovery(aResult);
-    if (aResult.button == Tabmix.BUTTON_OK)
+    if (aResult.button == Tabmix.BUTTON_OK) {
       this.loadSession(aResult.label, "firstwindowopen", !this.firstNonPrivateWindow);
-    else if (this.waitForCallBack)
+    } else if (this.waitForCallBack) {
       this.deferredRestore();
-    else {
+    } else {
       // we are here not after a callback only when the startup file is empty
       this.loadHomePage();
     }
@@ -2442,9 +2443,9 @@ TabmixSessionManager = {
     var thisSession = this.RDFService.GetResource(this.gSessionPath[0]);
     var container = this.initContainer(thisSession);
     var curTime;
-    if (aPopUp || this.isPrivateWindow)
+    if (aPopUp || this.isPrivateWindow) {
       curTime = this.getLiteralValue(thisSession, "timestamp", 0);
-    else {
+    } else {
       let pref = "warnAboutClosingTabs.timeout";
       let delay = Tabmix.prefs.prefHasUserValue(pref) ? Tabmix.prefs.getCharPref(pref) : 0;
       curTime = new Date().valueOf() - Number(delay);
@@ -3204,9 +3205,9 @@ TabmixSessionManager = {
           gBrowser.moveTabTo(newTab, gBrowser.tabs.length - 1);
       }
 
-      if (tabsCount == blankTabsCount)
+      if (tabsCount == blankTabsCount) {
         newPos = 0;
-      else {
+      } else {
         newPos = openTabNext && cTab._tPos < gBrowser.tabs.length - 1 && !multipleTabsOnStartUp ?
           cTab._tPos + 1 : tabsCount - blankTabsCount;
       }
@@ -3269,9 +3270,9 @@ TabmixSessionManager = {
 
       this._setTabviewTab(tab, data, activeGroupId);
 
-      if (data.hidden)
+      if (data.hidden) {
         gBrowser.hideTab(tab);
-      else {
+      } else {
         gBrowser.showTab(tab);
         numVisibleTabs++;
         if (!restoreSelect && firstVisibleTab < 0)

@@ -1,16 +1,13 @@
-/* eslint strict: 0, object-curly-spacing: 0, object-curly-newline: 2 */
-
-// use eslint-plugin-mozilla recommended.js for globals
-const mozillaRecommended = require("eslint-plugin-mozilla/lib/configs/recommended.js");
-
 module.exports = {
   root: true,
-  plugins: ["html", "mozilla", "tabmix"],
+  plugins: ["mozilla", "tabmix"],
   env: {
     browser: true,
     es2021: true,
     "mozilla/privileged": true,
   },
+
+  extends: ["plugin:mozilla/recommended"],
 
   overrides: [
     {
@@ -22,12 +19,10 @@ module.exports = {
         node: true,
         browser: false,
       },
+      rules: {strict: "off"},
     },
     {
-      files: [
-        "*.html",
-        "*.xhtml",
-      ],
+      files: ["*.html", "*.xhtml"],
       rules: {
         // Curly brackets are required for all the tree via recommended.js,
         // however these files aren't auto-fixable at the moment.
@@ -56,9 +51,7 @@ module.exports = {
       },
     },
     {
-      files: [
-        "addon/chrome/content/dialogs/**",
-      ],
+      files: ["addon/chrome/content/dialogs/**"],
       env: {
         "tabmix/dialog": true,
         "mozilla/browser-window": false,
@@ -67,10 +60,7 @@ module.exports = {
       },
     },
     {
-      files: [
-        "addon/chrome/content/overlay/**",
-        "addon/chrome/content/scripts/**",
-      ],
+      files: ["addon/chrome/content/overlay/**", "addon/chrome/content/scripts/**"],
       env: {
         "mozilla/browser-window": false,
         "tabmix/extensions": false,
@@ -78,9 +68,7 @@ module.exports = {
       },
     },
     {
-      files: [
-        "addon/chrome/content/preferences/**",
-      ],
+      files: ["addon/chrome/content/preferences/**"],
       env: {
         "tabmix/preferences": true,
         "mozilla/browser-window": false,
@@ -89,15 +77,12 @@ module.exports = {
       },
     },
     {
-      // see eslint-plugin-mozilla recommended.js
-      env: {
-        browser: false
-      },
-      files: ["**/*.jsm", "**/*.jsm.js"],
-    },
-    {
       files: ["addon/modules/bootstrap/**"],
       rules: {
+        "mozilla/balanced-listeners": "error",
+        "mozilla/no-aArgs": "error",
+        "mozilla/var-only-at-top-level": "error",
+
         "class-methods-use-this": "off",
         "no-new-func": "off",
         "no-var": "error",
@@ -106,39 +91,64 @@ module.exports = {
     },
   ],
 
-  parser: "@babel/eslint-parser",
-
   parserOptions: {
-    ecmaVersion: 2021,
+    ecmaVersion: 13,
     sourceType: "script",
     requireConfigFile: false,
   },
 
   rules: {
-    "mozilla/avoid-removeChild": "error",
-    "mozilla/consistent-if-bracing": "off", // 55 errors
-    "mozilla/import-browser-window-globals": "off", // we don't need this rule
-    "mozilla/import-globals": "error",
-    "mozilla/no-compare-against-boolean-literals": "error",
-    "mozilla/no-define-cc-etc": "error",
-    "mozilla/no-throw-cr-literal": "error",
-    "mozilla/no-useless-parameters": "error",
-    "mozilla/no-useless-removeEventListener": "error",
-    "mozilla/prefer-boolean-length-check": "error",
-    "mozilla/prefer-formatValues": "error",
-    "mozilla/reject-chromeutils-import-params": "error",
-    "mozilla/reject-importGlobalProperties": ["error", "allownonwebidl"],
-    "mozilla/reject-osfile": "warn",
-    "mozilla/rejects-requires-await": "error",
-    "mozilla/use-cc-etc": "error",
-    "mozilla/use-chromeutils-generateqi": "error",
-    "mozilla/use-chromeutils-import": "error",
-    "mozilla/use-default-preference-values": "error",
-    "mozilla/use-includes-instead-of-indexOf": "error",
-    "mozilla/use-isInstance": "error",
-    "mozilla/use-ownerGlobal": "error",
-    "mozilla/use-returnValue": "error",
-    "mozilla/use-services": "error",
+    "prettier/prettier": "off",
+
+    // Enable some mozilla rules that are not enabled by mozilla/recommended.
+    "mozilla/avoid-Date-timing": "error",
+    // "mozilla/avoid-removeChild": "error", // recommended
+    "mozilla/balanced-listeners": "off",
+    "mozilla/balanced-observers": "error",
+    // "mozilla/consistent-if-bracing": "error", // recommended
+    // "mozilla/import-browser-window-globals": "error", // recommended
+    // "mozilla/import-content-task-globals": "error", // we don't need this rule
+    // "mozilla/import-globals": "error", // recommended
+    // "mozilla/import-headjs-globals": "error", // we don't need this rule
+    // "mozilla/lazy-getter-object-name": "error", // recommended
+    // "mozilla/mark-exported-symbols-as-used": "error", // recommended
+    // "mozilla/mark-test-function-used": "error", // we don't need this rule
+    "mozilla/no-aArgs": "off", // not yet ...
+    // "mozilla/no-addtask-setup": "error", // we don't need this rule
+    // "mozilla/no-arbitrary-setTimeout": "error", // we don't need this rule
+    // "mozilla/no-compare-against-boolean-literals": "error", // recommended
+    // "mozilla/no-define-cc-etc": "error", // recommended
+    // "mozilla/no-throw-cr-literal": "error", // recommended
+    // "mozilla/no-useless-parameters": "error", // recommended
+    // "mozilla/no-useless-removeEventListener": "error", // recommended
+    // "mozilla/no-useless-run-test": "error", // we don't need this rule
+    // "mozilla/prefer-boolean-length-check": "error", // recommended
+    // "mozilla/prefer-formatValues": "error", // recommended
+    // "mozilla/reject-addtask-only": "error", // recommended
+    // "mozilla/reject-chromeutils-import-params": "error", // recommended
+    // "mozilla/reject-eager-module-in-lazy-getter": "error", // recommended
+    // "mozilla/reject-global-this": "error", // recommended
+    // "mozilla/reject-globalThis-modification": "error", // recommended
+    // "mozilla/reject-import-system-module-from-non-system": "error", // recommended
+    // "mozilla/reject-importGlobalProperties": "error", // recommended for sjs files
+    // "mozilla/reject-osfile": "warn", // recommended
+    // "mozilla/reject-scriptableunicodeconverter": "warn", // recommended
+    // "mozilla/reject-relative-requires": "error", // we don't need this rule
+    // "mozilla/reject-some-requires": "error", // we don't need this rule
+    // "mozilla/reject-top-level-await": "error", // recommended
+    // "mozilla/rejects-requires-await": "error", // recommended
+    // "mozilla/use-cc-etc": "error", // recommended
+    // "mozilla/use-chromeutils-generateqi": "error", // recommended
+    // "mozilla/use-chromeutils-import": "error", // recommended
+    // "mozilla/use-default-preference-values": "error", // recommended
+    // "mozilla/use-ownerGlobal": "error", // recommended
+    // "mozilla/use-includes-instead-of-indexOf": "error", // recommended
+    // "mozilla/use-isInstance": "error", // recommended
+    // "mozilla/use-returnValue": "error", // recommended
+    // "mozilla/use-services": "error", // recommended
+    // "mozilla/valid-lazy": "error", // recommended
+    // "mozilla/valid-services": "error", // recommended
+    // "mozilla/var-only-at-top-level": "error", // not yet ...
 
     "no-alert": 2,
     "no-array-constructor": 2,
@@ -148,7 +158,7 @@ module.exports = {
     "no-catch-shadow": 2,
     "no-class-assign": 2,
     "no-cond-assign": 2,
-    "no-confusing-arrow": [2, { allowParens: true }],
+    "no-confusing-arrow": [2, {allowParens: true}],
     "no-console": 0,
     "no-const-assign": 2,
     "no-constant-condition": 2,
@@ -161,9 +171,9 @@ module.exports = {
     "no-dupe-class-members": 2,
     "no-dupe-keys": 2,
     "no-duplicate-case": 2,
-    "no-duplicate-imports": [2, { includeExports: true }],
+    "no-duplicate-imports": [2, {includeExports: true}],
     "no-else-return": 2,
-    "no-empty": [2, { allowEmptyCatch: true }],
+    "no-empty": [2, {allowEmptyCatch: true}],
     "no-empty-character-class": 2,
     "no-empty-function": 0,
     "no-empty-pattern": 2,
@@ -174,13 +184,17 @@ module.exports = {
     "no-extra-bind": 2,
     "no-extra-boolean-cast": 2,
     "no-extra-label": 2,
-    "no-extra-parens": [2, "all", {
-      "returnAssign": false,
-      "enforceForArrowConditionals": false,
-      "enforceForSequenceExpressions": false,
-      "enforceForNewInMemberExpressions": false,
-      "enforceForFunctionPrototypeMethods": false,
-    }],
+    "no-extra-parens": [
+      2,
+      "all",
+      {
+        returnAssign: false,
+        enforceForArrowConditionals: false,
+        enforceForSequenceExpressions: false,
+        enforceForNewInMemberExpressions: false,
+        enforceForFunctionPrototypeMethods: false,
+      },
+    ],
     "no-extra-semi": 2,
     "no-fallthrough": 2,
     "no-floating-decimal": 2,
@@ -207,7 +221,7 @@ module.exports = {
     "no-multi-spaces": 2,
     // TODO need to fix this...
     "no-multi-str": 0,
-    "no-multiple-empty-lines": [2, { max: 1 }],
+    "no-multiple-empty-lines": [2, {max: 1}],
     "no-native-reassign": 2,
     "no-negated-condition": 0,
     "no-negated-in-lhs": 2,
@@ -228,7 +242,7 @@ module.exports = {
     "no-process-exit": 2, // node
     "no-proto": 2,
     "no-prototype-builtins": 0,
-    "no-redeclare": [2, { builtinGlobals: false }],
+    "no-redeclare": [2, {builtinGlobals: false}],
     "no-regex-spaces": 2,
     "no-restricted-globals": 0,
     "no-restricted-imports": 0,
@@ -241,7 +255,7 @@ module.exports = {
     "no-self-assign": 2,
     "no-self-compare": 2,
     "no-sequences": 2,
-    "no-shadow": [2, { hoist: "all" }],
+    "no-shadow": [2, {hoist: "all"}],
     "no-shadow-restricted-names": 2,
     "no-spaced-func": 0,
     "no-sparse-arrays": 2,
@@ -264,7 +278,7 @@ module.exports = {
     "no-unsafe-negation": 2,
     "no-unused-expressions": 2,
     "no-unused-labels": 2,
-    "no-unused-vars": [2, { vars: "all", args: "after-used" }],
+    "no-unused-vars": [2, {vars: "all", args: "after-used"}],
     "no-use-before-define": [2, "nofunc"],
     "no-useless-call": 2,
     "no-useless-computed-key": 2,
@@ -275,10 +289,7 @@ module.exports = {
     "no-useless-return": 2,
     "no-var": 0,
     "no-void": 0,
-    "no-warning-comments": [
-      0,
-      { terms: ["todo", "fixme", "xxx"], location: "start" },
-    ],
+    "no-warning-comments": [0, {terms: ["todo", "fixme", "xxx"], location: "start"}],
     "no-whitespace-before-property": 2,
     "no-with": 2,
     "accessor-pairs": 2,
@@ -286,10 +297,10 @@ module.exports = {
     "array-callback-return": 2,
     "arrow-body-style": 0,
     "arrow-parens": [2, "as-needed"],
-    "arrow-spacing": [2, { before: true, after: true }],
+    "arrow-spacing": [2, {before: true, after: true}],
     "block-scoped-var": 2,
     "block-spacing": [2, "never"],
-    "brace-style": [2, "1tbs", { allowSingleLine: true }],
+    "brace-style": [2, "1tbs", {allowSingleLine: true}],
     "callback-return": 0,
     camelcase: 0,
     "class-methods-use-this": 2,
@@ -307,7 +318,7 @@ module.exports = {
     curly: [0, "all"],
     "default-case": 0,
     "dot-location": [2, "property"],
-    "dot-notation": [2, { allowKeywords: true }],
+    "dot-notation": [2, {allowKeywords: true}],
     "eol-last": 2,
     eqeqeq: 0,
     "func-call-spacing": [2, "never"],
@@ -326,25 +337,25 @@ module.exports = {
       2,
       {
         SwitchCase: 1,
-        VariableDeclarator: { var: 2, let: 2, const: 3 },
+        VariableDeclarator: {var: 2, let: 2, const: 3},
         outerIIFEBody: 1,
         MemberExpression: 2,
-        FunctionDeclaration: { body: 1, parameters: "first" },
-        FunctionExpression: { body: 1, parameters: "first" },
-        CallExpression: { arguments: 1 },
+        FunctionDeclaration: {body: 1, parameters: "first"},
+        FunctionExpression: {body: 1, parameters: "first"},
+        CallExpression: {arguments: 1},
         ArrayExpression: 1,
         ObjectExpression: 1,
       },
     ],
     "init-declarations": 0,
     "jsx-quotes": 0,
-    "key-spacing": [2, { beforeColon: false, afterColon: true }],
+    "key-spacing": [2, {beforeColon: false, afterColon: true}],
     "keyword-spacing": 2,
     "line-comment-position": 0,
     "linebreak-style": [2, "unix"],
     "lines-around-comment": [
       0,
-      { beforeBlockComment: true, allowBlockStart: true, allowBlockEnd: true },
+      {beforeBlockComment: true, allowBlockStart: true, allowBlockEnd: true},
     ],
     "max-depth": [0, 4],
     "max-len": [0, 120, 4],
@@ -352,7 +363,7 @@ module.exports = {
     "max-nested-callbacks": [0, 2],
     "max-params": [0, 3],
     "max-statements": [0, 10],
-    "max-statements-per-line": [2, { max: 1 }],
+    "max-statements-per-line": [2, {max: 1}],
     "multiline-ternary": 0,
     "new-cap": 0,
     "new-parens": 2,
@@ -360,13 +371,13 @@ module.exports = {
     "object-curly-newline": [
       2,
       {
-        ObjectExpression: { multiline: true },
+        ObjectExpression: {multiline: true},
         ObjectPattern: "never",
       },
     ],
     "object-curly-spacing": [2, "never"],
-    "object-property-newline": [2, { allowMultiplePropertiesPerLine: true }],
-    "object-shorthand": [2, "always", { avoidQuotes: true }],
+    "object-property-newline": [2, {allowMultiplePropertiesPerLine: true}],
+    "object-shorthand": [2, "always", {avoidQuotes: true}],
     "one-var": 0,
     "one-var-declaration-per-line": 0,
     "operator-assignment": [2, "always"],
@@ -374,17 +385,17 @@ module.exports = {
     "padded-blocks": [2, "never"],
     "padding-line-between-statements": [
       2,
-      { blankLine: "never", prev: "*", next: "directive" },
-      { blankLine: "always", prev: "directive", next: "*" },
+      {blankLine: "never", prev: "*", next: "directive"},
+      {blankLine: "always", prev: "directive", next: "*"},
     ],
-    "prefer-arrow-callback": [2, { allowNamedFunctions: true }],
+    "prefer-arrow-callback": [2, {allowNamedFunctions: true}],
     "prefer-const": 0, // TODO many errors in old code
     "prefer-numeric-literals": 0,
     "prefer-rest-params": 0, // I don’t want to be notified about arguments variables,
     "prefer-spread": 0, // Spread operator for function calls (Firefox 27)
     "prefer-template": 0, // since Firefox 34
     // in Firefox i can use properties obj - {default: x, private: y}
-    "quote-props": [0, "as-needed", { keywords: true }],
+    "quote-props": [0, "as-needed", {keywords: true}],
     quotes: [0, "double"],
     radix: 0,
     "require-await": 2,
@@ -392,7 +403,7 @@ module.exports = {
     "require-yield": 2,
     "rest-spread-spacing": 2,
     semi: 2,
-    "semi-spacing": [2, { before: false, after: true }],
+    "semi-spacing": [2, {before: false, after: true}],
     "sort-imports": 0,
     "sort-keys": 0,
     "sort-vars": 0,
@@ -400,7 +411,7 @@ module.exports = {
     "space-before-function-paren": [2, "never"],
     "space-in-parens": [2, "never"],
     "space-infix-ops": 2,
-    "space-unary-ops": [2, { words: true, nonwords: false }],
+    "space-unary-ops": [2, {words: true, nonwords: false}],
     "spaced-comment": [
       2,
       "always",
@@ -410,7 +421,7 @@ module.exports = {
       },
     ],
     strict: [2, "global"],
-    "switch-colon-spacing": [2, { after: true, before: false }],
+    "switch-colon-spacing": [2, {after: true, before: false}],
     "symbol-description": 2,
     "template-curly-spacing": [2, "never"],
     "unicode-bom": 0,
@@ -422,14 +433,5 @@ module.exports = {
     "wrap-regex": 0,
     "yield-star-spacing": [2, "after"],
     yoda: [2, "never"],
-  },
-
-  globals: {
-    ...mozillaRecommended.globals,
-    // XPCOMUtils: false,
-  },
-
-  settings: {
-    "html/xml-extensions": [".xhtml"],
   },
 };
