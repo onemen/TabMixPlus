@@ -100,15 +100,17 @@ const ScriptsLoader = {
     );
 
     // before-initial-tab-adopted is fired before we are ready,
-    // we have to make sure our initialization finshed before
+    // we have to make sure our initialization finished before
     // Firefox call gBrowser.swapBrowsersAndCloseOther
-    window.addEventListener(
-      "before-initial-tab-adopted",
-      () => {
-        this._prepareBeforeOverlays(window);
-      },
-      {capture: true, once: true}
-    );
+    ["load", "before-initial-tab-adopted"].forEach(event => {
+      window.addEventListener(
+        event,
+        () => {
+          this._prepareBeforeOverlays(window);
+        },
+        {capture: true, once: true}
+      );
+    });
   },
 
   /**
@@ -119,6 +121,10 @@ const ScriptsLoader = {
    */
   _prepareBeforeOverlays(window) {
     const {gBrowser, gBrowserInit, Tabmix} = window;
+
+    if (Tabmix.copyTabData) {
+      return;
+    }
 
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
     /**

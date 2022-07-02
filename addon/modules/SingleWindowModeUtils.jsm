@@ -160,6 +160,7 @@ const SingleWindowModeUtils = {
       };
       urls = [uriToLoad];
     } else {
+      params.triggeringPrincipal = Services.scriptSecurityManager.getSystemPrincipal();
       urls = uriToLoad ? uriToLoad.split("|") : ["about:blank"];
     }
 
@@ -176,7 +177,9 @@ const SingleWindowModeUtils = {
         for (let i = 1; i < urls.length; ++i)
           existingBrowser.addTrustedTab(urls[i]);
       }
-    } catch (ex) { }
+    } catch (ex) {
+      console.error(ex);
+    }
     try {
       // we need to close the window after timeout so other extensions don't fail.
       // if we don't add this here gBrowserInit.onUnload fails
