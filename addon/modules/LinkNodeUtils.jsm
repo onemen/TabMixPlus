@@ -153,8 +153,13 @@ function targetIsFrame(targetAttr, focusedWindow) {
 function existsFrameName(content, targetFrame) {
   for (let i = 0; i < content.frames.length; i++) {
     let frame = content.frames[i];
-    if (frame.name == targetFrame || existsFrameName(frame, targetFrame))
-      return true;
+    // Might throw with SecurityError: Permission denied to access property
+    // "name" on cross-origin object.
+    try {
+      if (frame.name == targetFrame || existsFrameName(frame, targetFrame)) {
+        return true;
+      }
+    } catch (error) { }
   }
   return false;
 }
