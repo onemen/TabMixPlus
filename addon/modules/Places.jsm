@@ -8,14 +8,10 @@ const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm")
 
 const lazy = {};
 
-XPCOMUtils.defineLazyModuleGetters(lazy, {
-  //
-  BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm"
-});
-
 if (TabmixSvc.version(1030)) {
   // eslint-disable-next-line mozilla/valid-lazy
   XPCOMUtils.defineLazyModuleGetters(lazy, {
+    BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
     OpenInTabsUtils: "resource:///modules/OpenInTabsUtils.jsm",
     PlacesUtils: "resource://gre/modules/PlacesUtils.jsm",
     PluralForm: "resource://gre/modules/PluralForm.jsm",
@@ -25,6 +21,9 @@ if (TabmixSvc.version(1030)) {
   // these imports are used by PlacesUIUtils and PlacesUtils that we eval here
   // PluralForm, PrivateBrowsingUtils, OpenInTabsUtils
   /* eslint-disable no-unused-vars, mozilla/reject-global-this */
+  ChromeUtils.defineModuleGetter(this, "BrowserWindowTracker",
+    "resource:///modules/BrowserWindowTracker.jsm");
+
   ChromeUtils.defineModuleGetter(this, "PluralForm",
     "resource://gre/modules/PluralForm.jsm");
 
@@ -49,7 +48,13 @@ function getBrowserWindow(aWindow) {
       aWindow.document.documentElement.getAttribute("windowtype") ==
         "navigator:browser" ?
     aWindow :
-    lazy.BrowserWindowTracker.getTopWindow();
+    getTopWindow();
+}
+
+function getTopWindow() {
+  return TabmixSvc.version(1030) ?
+    lazy.BrowserWindowTracker.getTopWindow() :
+    BrowserWindowTracker.getTopWindow();
 }
 
 var PlacesUtilsInternal;
