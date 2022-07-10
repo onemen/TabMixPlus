@@ -716,6 +716,9 @@ var TMP_eventListener = {
       tab.tabmix_allowLoad = false;
     }
     Tabmix.setTabStyle(tab);
+    if (gBrowser.selectedTab.pinned && !tab.pinned) {
+      TabmixTabbar.setFirstTabInRow();
+    }
   },
 
   // this function call onTabOpen_updateTabBar after some delay
