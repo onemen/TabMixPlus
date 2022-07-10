@@ -791,10 +791,6 @@ Tabmix.onContentLoaded = {
     if ("_update" in TabsInTitlebar) {
       // set option to Prevent double click on Tab-bar from changing window size.
       Tabmix.changeCode(TabsInTitlebar, "TabsInTitlebar._update")._replace(
-        'let tabAndMenuHeight = fullTabsHeight + fullMenuHeight;',
-        'fullTabsHeight = fullTabsHeight / TabmixTabbar.visibleRows;\n      $&',
-        {check: TabmixSvc.isMac}
-      )._replace(
         /(})(\)?)$/,
         // when we get in and out of tabsintitlebar mode call updateScrollStatus
         // force another update when rows number changed by Tabmix to update
