@@ -79,9 +79,13 @@
       this._initUseThisPref = {prefvalue: checked, optionvalue: checked};
       this._initPrefValues = Tabmix.prefs.getCharPref(this.prefName);
 
-      if (!Services.prefs.getBoolPref("browser.preferences.instantApply")) {
-        this._item = window.opener &&
-        window.opener.document.getElementById("pref_" + this.id);
+      if (
+        !Services.prefs.getBoolPref(
+          "browser.preferences.instantApply",
+          /Mac/.test(navigator.platform)
+        )
+      ) {
+        this._item = window.opener && window.opener.document.getElementById("pref_" + this.id);
         if (this._item) {
           this._initUseThisPref.optionvalue = checked = this._item.value;
           Tabmix.prefs.setBoolPref(this.id, checked);

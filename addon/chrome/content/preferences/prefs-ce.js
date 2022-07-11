@@ -59,8 +59,13 @@ class Preferences extends MozXULElement {
 
   get instantApply() {
     const doc = document.documentElement;
-    return this.type == "child" ? doc.instantApply :
-      doc.instantApply || this.rootBranch.getBoolPref("browser.preferences.instantApply");
+    return this.type == "child" ?
+      doc.instantApply :
+      doc.instantApply ||
+          this.rootBranch.getBoolPref(
+            "browser.preferences.instantApply",
+            /Mac/.test(navigator.platform)
+          );
   }
 
   observe(aSubject, aTopic, aData) {
@@ -1411,7 +1416,10 @@ class PrefWindow extends MozXULElement {
 
     if (this.type != "child") {
       if (!this._instantApplyInitialized) {
-        this.instantApply = Services.prefs.getBoolPref("browser.preferences.instantApply");
+        this.instantApply = Services.prefs.getBoolPref(
+          "browser.preferences.instantApply",
+          /Mac/.test(navigator.platform)
+        );
       }
       if (this.instantApply) {
         const docElt = document.documentElement;
