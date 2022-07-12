@@ -2,7 +2,7 @@
 
 const EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
 
-const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {PrivateBrowsingUtils} = ChromeUtils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 const SingleWindowModeUtils = {

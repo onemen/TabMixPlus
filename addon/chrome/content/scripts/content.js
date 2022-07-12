@@ -1,6 +1,6 @@
 "use strict";
 
-const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
 const {setTimeout, clearTimeout} = ChromeUtils.import(
   "resource://gre/modules/Timer.jsm"

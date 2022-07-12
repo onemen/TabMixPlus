@@ -37,7 +37,7 @@ const SCRIPTS = [
   "chrome://tabmixplus/content/tab/tabsBindings.js",
 ];
 
-const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const lazy = {};

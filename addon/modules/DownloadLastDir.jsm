@@ -4,7 +4,7 @@
 
 const EXPORTED_SYMBOLS = ["TabmixDownloadLastDir"];
 
-const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
 const TabmixDownloadLastDir = {
   _initialized: false,

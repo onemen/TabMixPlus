@@ -20,7 +20,7 @@ const TMP_CHECKBOX_CHECKED = 1;
 const TMP_HIDE_CHECKBOX = 2;
 
 const {AddonManager} = ChromeUtils.import("resource://gre/modules/AddonManager.jsm");
-const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 var _initialized = false;

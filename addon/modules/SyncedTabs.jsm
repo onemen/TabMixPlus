@@ -6,7 +6,7 @@ const EXPORTED_SYMBOLS = ["SyncedTabs"];
 const {getChromeWindow} = ChromeUtils.import("resource:///modules/syncedtabs/util.js");
 const {TabListView} = ChromeUtils.import("resource:///modules/syncedtabs/TabListView.js");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
-const {Services} = ChromeUtils.import("resource://gre/modules/Services.jsm");
+const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
 const Tabmix = {};
 

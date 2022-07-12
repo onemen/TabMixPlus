@@ -273,7 +273,7 @@ var Tabmix = {
     let wintype = window.document.documentElement.getAttribute("windowtype");
     if (wintype !== "navigator:browser") {
       window.XPCOMUtils = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm").XPCOMUtils;
-      window.Services = ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+      window.Services = window.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
     }
 
     const destroy = () => {
