@@ -11,6 +11,8 @@
 @namespace html url("http://www.w3.org/1999/xhtml");
 
 :root {
+  --shortcut-image-stroke: #ffffff;
+
   /* for autoReload.xhtml */
   --combined-element-border-radius: 4px;
   --combined-element-outline: 1px solid var(--in-content-focus-outline-color);

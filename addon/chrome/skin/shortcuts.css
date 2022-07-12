@@ -76,16 +76,27 @@ shortcut:not([value]) .shortcut-image[anonid="disable"] {
   visibility: collapse;
 }
 
+.shortcut-image {
+  width: 16px;
+  height: 16px;
+  -moz-context-properties: stroke;
+}
+
 .shortcut-image[anonid="disable"] {
-  list-style-image: url("chrome://tabmixplus/skin/disabled.png");
-  margin-right: -2px;
+  background-image: url("chrome://tabmixplus/skin/disabled.svg");
+  stroke: red;
 }
 
 .shortcut-image[anonid="reset"] {
-  list-style-image: url("chrome://tabmixplus/skin/refresh.png");
-  width: 16px;
-  height: 16px;
-  margin: 3px 0 1px;
+  background-image: url("chrome://tabmixplus/skin/refresh.svg");
+  margin-inline-end: 2px;
+  stroke: black;
+}
+
+@media (prefers-color-scheme: dark) {
+  .shortcut-image[anonid="reset"] {
+    stroke: var(--shortcut-image-stroke, black);
+  }
 }
 
 #TabMIxPreferences[linux] .shortcut-image[anonid="reset"] {
