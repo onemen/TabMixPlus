@@ -1,4 +1,3 @@
-/* eslint-env node */
 /* eslint strict: 0, object-curly-newline: [2, always] */
 
 module.exports = {
@@ -57,5 +56,8 @@ module.exports = {
         TabmixSvc: false,
       },
     },
+  },
+  rules: {
+    "valid-lazy": require("./valid-lazy"),
   },
 };

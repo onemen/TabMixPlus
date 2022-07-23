@@ -9,7 +9,8 @@
 **/*עותק*.js
 **/*עותק*.jsm
 **/private/*
-**/config/*
+.config/*
+!./config/eslint-plugin-tabmix/*
 eslint_result.js
 manifest.json
 logs/

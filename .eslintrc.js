@@ -90,6 +90,14 @@ module.exports = {
         "prefer-const": "error",
       },
     },
+    {
+      // All files in eslint-plugin-tabmix are in the node environment.
+      files: ["config/eslint-plugin-tabmix/**"],
+      env: {
+        node: true,
+        browser: false,
+      }
+    }
   ],
 
   parserOptions: {
@@ -147,7 +155,8 @@ module.exports = {
     // "mozilla/use-isInstance": "error", // recommended
     // "mozilla/use-returnValue": "error", // recommended
     // "mozilla/use-services": "error", // recommended
-    // "mozilla/valid-lazy": "error", // recommended
+    "mozilla/valid-lazy": "off", // recommended
+    "tabmix/valid-lazy": "error", // recommended
     // "mozilla/valid-services": "error", // recommended
     // "mozilla/var-only-at-top-level": "error", // not yet ...
 

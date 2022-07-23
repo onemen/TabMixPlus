@@ -5,13 +5,12 @@ const EXPORTED_SYMBOLS = ["TabmixPlacesUtils"];
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const lazy = {};
 
 if (TabmixSvc.version(1030)) {
-  // eslint-disable-next-line mozilla/valid-lazy
-  XPCOMUtils.defineLazyModuleGetters(lazy, {
+  // eslint-disable-next-line tabmix/valid-lazy
+  TabmixChromeUtils.defineLazyModuleGetters(lazy, {
     BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
     OpenInTabsUtils: "resource:///modules/OpenInTabsUtils.jsm",
     PlacesUtils: "resource://gre/modules/PlacesUtils.jsm",
@@ -39,8 +38,7 @@ if (TabmixSvc.version(1030)) {
   /* eslint-enable no-unused-vars, mozilla/reject-global-this */
 }
 
-ChromeUtils.defineModuleGetter(lazy, "PlacesUIUtils",
-  "resource:///modules/PlacesUIUtils.jsm");
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {PlacesUIUtils: "resource:///modules/PlacesUIUtils.jsm"});
 
 // this function is used by PlacesUIUtils functions that we evaluate here
 // eslint-disable-next-line no-unused-vars

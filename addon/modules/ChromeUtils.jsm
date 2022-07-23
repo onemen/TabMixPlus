@@ -5,8 +5,9 @@ const EXPORTED_SYMBOLS = ["TabmixChromeUtils"];
 const Services =
   globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
-const modules = {
-  // add sys.mjs modules here
+const modulesMap = {
+  "resource://gre/modules/PlacesUtils.jsm": [1040, "resource://gre/modules/PlacesUtils.sys.mjs"],
+  "resource:///modules/PlacesUIUtils.jsm": [1040, "resource:///modules/PlacesUIUtils.sys.mjs"],
   "resource://gre/modules/XPCOMUtils.jsm": [1040, "resource://gre/modules/XPCOMUtils.sys.mjs"],
 };
 
@@ -19,9 +20,37 @@ function isVersion(aVersionNo) {
 }
 
 var TabmixChromeUtils = {
+  get XPCOMUtils() {
+    delete this.XPCOMUtils;
+    return (this.XPCOMUtils = this.import("resource://gre/modules/XPCOMUtils.jsm").XPCOMUtils);
+  },
+
+  defineLazyModuleGetters(lazy, modules) {
+    if (isVersion(1040)) {
+      const esModules = {};
+      const JSMModules = {};
+      for (let [name, module] of Object.entries(modules)) {
+        const [varsion, modulePath] = modulesMap[module] ?? [];
+        if (varsion && isVersion(varsion)) {
+          esModules[name] = modulePath;
+        } else {
+          JSMModules[name] = module;
+        }
+      }
+      if (Object.keys(esModules).length) {
+        ChromeUtils.defineESModuleGetters(lazy, esModules);
+      }
+      if (Object.keys(JSMModules).length) {
+        this.XPCOMUtils.defineLazyModuleGetters(lazy, JSMModules);
+      }
+    } else {
+      this.XPCOMUtils.defineLazyModuleGetters(lazy, modules);
+    }
+  },
+
   import(module) {
     if (isVersion(1040)) {
-      const [varsion, modulePath] = modules[module] ?? {};
+      const [varsion, modulePath] = modulesMap[module] ?? [];
       if (varsion && isVersion(varsion)) {
         return ChromeUtils.importESModule(modulePath);
       }
