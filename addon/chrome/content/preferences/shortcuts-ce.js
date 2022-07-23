@@ -5,7 +5,8 @@
 // This is loaded into all XUL windows. Wrap in a block to prevent
 // leaking to window scope.
 {
-  const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
+  const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+  const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
   ChromeUtils.defineModuleGetter(
     this,
     "TabmixSvc",

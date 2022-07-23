@@ -2,7 +2,8 @@
 
 const EXPORTED_SYMBOLS = ["flst"];
 
-const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
+const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const lazy = {};

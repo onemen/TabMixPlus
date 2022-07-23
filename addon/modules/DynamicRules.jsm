@@ -3,7 +3,8 @@
 const EXPORTED_SYMBOLS = ["DynamicRules"];
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const {XPCOMUtils} = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
+const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const lazy = {};
 

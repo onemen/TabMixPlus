@@ -272,7 +272,8 @@ var Tabmix = {
     // load globals for our preferences windows
     let wintype = window.document.documentElement.getAttribute("windowtype");
     if (wintype !== "navigator:browser") {
-      window.XPCOMUtils = ChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm").XPCOMUtils;
+      const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+      window.XPCOMUtils = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm").XPCOMUtils;
       window.Services = window.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
     }
 
