@@ -5,6 +5,10 @@ const EXPORTED_SYMBOLS = ["TabmixChromeUtils"];
 const Services =
   globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
+/**
+ * Note: If you rename this identifier, also update getModulesMap function in
+ * eslint-plugin-tabmix use-mjs-modules.js.
+ */
 const modulesMap = {
   "resource://gre/modules/PlacesUtils.jsm": [1040, "resource://gre/modules/PlacesUtils.sys.mjs"],
   "resource:///modules/PlacesUIUtils.jsm": [1040, "resource:///modules/PlacesUIUtils.sys.mjs"],

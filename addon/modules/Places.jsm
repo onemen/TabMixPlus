@@ -33,6 +33,7 @@ if (TabmixSvc.version(1030)) {
   ChromeUtils.defineModuleGetter(this, "OpenInTabsUtils",
     "resource:///modules/OpenInTabsUtils.jsm");
 
+  // eslint-disable-next-line tabmix/use-mjs-modules
   ChromeUtils.defineModuleGetter(this, "PlacesUtils",
     "resource://gre/modules/PlacesUtils.jsm");
   /* eslint-enable no-unused-vars, mozilla/reject-global-this */

@@ -58,6 +58,7 @@ module.exports = {
     },
   },
   rules: {
+    "use-mjs-modules": require("./use-mjs-modules"),
     "valid-lazy": require("./valid-lazy"),
   },
 };

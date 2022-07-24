@@ -30,3 +30,5 @@ node_modules/
 *.xpi
 *.rar
 *.zip
+
+**/sysmjs.txt

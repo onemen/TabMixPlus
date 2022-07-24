@@ -96,7 +96,11 @@ module.exports = {
       env: {
         node: true,
         browser: false,
-      }
+      },
+      rules: {
+        "no-var": "error",
+        "prefer-const": "error",
+      },
     }
   ],
 
@@ -159,6 +163,7 @@ module.exports = {
     "tabmix/valid-lazy": "error", // recommended
     // "mozilla/valid-services": "error", // recommended
     // "mozilla/var-only-at-top-level": "error", // not yet ...
+    "tabmix/use-mjs-modules": "error",
 
     "no-alert": 2,
     "no-array-constructor": 2,
