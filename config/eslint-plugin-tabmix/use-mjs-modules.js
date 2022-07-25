@@ -8,6 +8,7 @@ const mozillaPath = path.dirname(mozilla);
 const helpers = require(path.join(mozillaPath, "helpers.js"));
 
 const SYSMJS_FILE_NAME = "sysmjs.txt";
+const USED_SYSMJS_IN_TABMIX = "usedmjs.json";
 const CHROME_UTILS_PATH = "addon/modules/ChromeUtils.jsm";
 const ROOTDIR = path.join(__dirname, "..", "..");
 
@@ -45,6 +46,16 @@ function getModulesMap() {
   return [];
 }
 
+function readUsedMjsResources() {
+  const filePath = path.join(__dirname, USED_SYSMJS_IN_TABMIX);
+  if (!fs.existsSync(filePath)) {
+    console.log("File not found", filePath);
+    return [];
+  }
+  const content = fs.readFileSync(filePath, "utf8");
+  return JSON.parse(content);
+}
+
 const [jsmFiles] = getMsjFiles() || [];
 
 const items = ["XPCOMUtils", "ChromeUtils", "TabmixChromeUtils"];
@@ -66,7 +77,9 @@ const callExpressionMultiDefinitions = [
 module.exports = {
   meta: {
     messages: {
-      missingInChromeUtils: "The path to {{name}} is missing from ChromeUtils.jsm modulesMap object.",
+      missingInChromeUtils:
+        "The path to {{name}} is missing from ChromeUtils.jsm modulesMap object.",
+      modulesMap: "modulesMap is missing some .sys.mjs files:\n {{missingFiles}}",
       outDatedChromeUtilsImport: "Use TabmixChromeUtils.import for {{name}}, .sys.mjs file exist",
       outDatedDefineLazyModuleGetters:
         "Use TabmixChromeUtils.defineLazyModuleGetters for {{name}}, .sys.mjs file exist",
@@ -80,13 +93,31 @@ module.exports = {
     }
 
     const isChromeUtils = context.getFilename() === path.resolve(CHROME_UTILS_PATH);
-    let modulesMap;
-    if (!modulesMap || isChromeUtils) {
+    let modulesMap, usedMjsResources;
+    if (!modulesMap) {
       modulesMap = getModulesMap();
     }
 
     function isIdentifier(node, id) {
       return node && node.type === "Identifier" && node.name === id;
+    }
+
+    function checkForMissingResources(node, loc) {
+      if (!usedMjsResources) {
+        usedMjsResources = readUsedMjsResources();
+      }
+      const missingMjsFiles = usedMjsResources.filter(f => !modulesMap.includes(f));
+      if (missingMjsFiles.length) {
+        const missingFiles = missingMjsFiles
+            .map(f => path.basename(f).replace(".jsm", ".sys.mjs"))
+            .join("\n ");
+        context.report({
+          node,
+          loc,
+          messageId: "modulesMap",
+          data: {missingFiles},
+        });
+      }
     }
 
     function addReport(messageId, node, {value}, prop) {
@@ -122,53 +153,69 @@ module.exports = {
       }
     }
 
-    return {
-      CallExpression(node) {
-        const {callee} = node;
-        if (
-          callee.type != "MemberExpression" ||
+    const CallExpression = node => {
+      const {callee} = node;
+      if (
+        callee.type != "MemberExpression" ||
           callee.object.type == "MemberExpression" &&
             !items.includes(callee.object.object.name) ||
           callee.object.type != "MemberExpression" && !items.includes(callee.object.name)
-        ) {
-          return;
-        }
+      ) {
+        return;
+      }
 
-        if (isIdentifier(callee.object, "TabmixChromeUtils")) {
-          if (isIdentifier(callee.property, "import")) {
-            addReport("missingInChromeUtils", node, node.arguments[0]);
-          } else if (isIdentifier(callee.property, "defineLazyModuleGetters")) {
-            addReportForExpression("missingInChromeUtils", node);
-          }
-          return;
+      if (isIdentifier(callee.object, "TabmixChromeUtils")) {
+        if (isIdentifier(callee.property, "import")) {
+          addReport("missingInChromeUtils", node, node.arguments[0]);
+        } else if (isIdentifier(callee.property, "defineLazyModuleGetters")) {
+          addReportForExpression("missingInChromeUtils", node);
         }
+        return;
+      }
 
-        if (isIdentifier(callee.object, "ChromeUtils") && isIdentifier(callee.property, "import")) {
-          addReport("outDatedChromeUtilsImport", node, node.arguments[0]);
-          return;
+      if (isIdentifier(callee.object, "ChromeUtils") && isIdentifier(callee.property, "import")) {
+        addReport("outDatedChromeUtilsImport", node, node.arguments[0]);
+        return;
+      }
+
+      let source;
+      try {
+        source = helpers.getASTSource(node);
+      } catch (e) {
+        return;
+      }
+
+      for (const reg of callExpressionDefinitions) {
+        const match = source.match(reg);
+        if (match) {
+          addReport("outDatedDefineLazyModuleGetters", node, {value: match[2]});
         }
+      }
 
-        let source;
-        try {
-          source = helpers.getASTSource(node);
-        } catch (e) {
-          return;
-        }
-
-        for (const reg of callExpressionDefinitions) {
-          const match = source.match(reg);
-          if (match) {
-            addReport("outDatedDefineLazyModuleGetters", node, {value: match[2]});
-          }
-        }
-
-        if (
-          callExpressionMultiDefinitions.some(expr => source.startsWith(expr)) &&
+      if (
+        callExpressionMultiDefinitions.some(expr => source.startsWith(expr)) &&
           node.arguments[1]
-        ) {
-          addReportForExpression("outDatedDefineLazyModuleGetters", node);
-        }
-      },
+      ) {
+        addReportForExpression("outDatedDefineLazyModuleGetters", node);
+      }
     };
+
+    const VariableDeclaration = node => {
+      for (const item of node.declarations) {
+        if (item.id?.type == "Identifier" && item.id?.name === "modulesMap") {
+          modulesMap = item.init.properties.map(i => i.key.value);
+          checkForMissingResources(node, item.id.loc);
+          break;
+        }
+      }
+    };
+
+    if (isChromeUtils) {
+      return {
+        CallExpression,
+        VariableDeclaration,
+      };
+    }
+    return {CallExpression};
   },
 };
