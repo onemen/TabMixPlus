@@ -62,6 +62,7 @@ module.exports = {
     {
       files: ["addon/chrome/content/overlay/**", "addon/chrome/content/scripts/**"],
       env: {
+        "mozilla/frame-script": true,
         "mozilla/browser-window": false,
         "tabmix/extensions": false,
         "tabmix/tabmix": false,
