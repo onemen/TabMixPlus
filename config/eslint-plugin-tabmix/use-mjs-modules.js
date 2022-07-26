@@ -56,6 +56,7 @@ function readUsedMjsResources() {
   return JSON.parse(content);
 }
 
+let modulesMap, usedMjsResources;
 const [jsmFiles] = getMsjFiles() || [];
 
 const items = ["XPCOMUtils", "ChromeUtils", "TabmixChromeUtils"];
@@ -92,20 +93,15 @@ module.exports = {
       return {};
     }
 
-    const isChromeUtils = context.getFilename() === path.resolve(CHROME_UTILS_PATH);
-    let modulesMap, usedMjsResources;
-    if (!modulesMap) {
-      modulesMap = getModulesMap();
-    }
-
     function isIdentifier(node, id) {
       return node && node.type === "Identifier" && node.name === id;
     }
 
-    function checkForMissingResources(node, loc) {
+    function checkForMissingResources(node, item) {
       if (!usedMjsResources) {
         usedMjsResources = readUsedMjsResources();
       }
+      modulesMap = item.init.properties.map(i => i.key.value);
       const missingMjsFiles = usedMjsResources.filter(f => !modulesMap.includes(f));
       if (missingMjsFiles.length) {
         const missingFiles = missingMjsFiles
@@ -113,7 +109,7 @@ module.exports = {
             .join("\n ");
         context.report({
           node,
-          loc,
+          loc: item.id.loc,
           messageId: "modulesMap",
           data: {missingFiles},
         });
@@ -130,6 +126,9 @@ module.exports = {
             messageId,
             data: {name},
           });
+        }
+        if (!modulesMap) {
+          modulesMap = getModulesMap();
         }
         if (!modulesMap.includes(value)) {
           context.report({
@@ -203,13 +202,13 @@ module.exports = {
     const VariableDeclaration = node => {
       for (const item of node.declarations) {
         if (item.id?.type == "Identifier" && item.id?.name === "modulesMap") {
-          modulesMap = item.init.properties.map(i => i.key.value);
-          checkForMissingResources(node, item.id.loc);
+          checkForMissingResources(node, item);
           break;
         }
       }
     };
 
+    const isChromeUtils = context.getFilename() === path.resolve(CHROME_UTILS_PATH);
     if (isChromeUtils) {
       return {
         CallExpression,
