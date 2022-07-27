@@ -20,7 +20,7 @@ if (TabmixSvc.version(1030)) {
 } else {
   // these imports are used by PlacesUIUtils and PlacesUtils that we eval here
   // PluralForm, PrivateBrowsingUtils, OpenInTabsUtils
-  /* eslint-disable no-unused-vars, mozilla/reject-global-this */
+  /* eslint-disable no-unused-vars, mozilla/reject-global-this, tabmix/use-mjs-modules */
   ChromeUtils.defineModuleGetter(this, "BrowserWindowTracker",
     "resource:///modules/BrowserWindowTracker.jsm");
 
@@ -33,10 +33,9 @@ if (TabmixSvc.version(1030)) {
   ChromeUtils.defineModuleGetter(this, "OpenInTabsUtils",
     "resource:///modules/OpenInTabsUtils.jsm");
 
-  // eslint-disable-next-line tabmix/use-mjs-modules
   ChromeUtils.defineModuleGetter(this, "PlacesUtils",
     "resource://gre/modules/PlacesUtils.jsm");
-  /* eslint-enable no-unused-vars, mozilla/reject-global-this */
+  /* eslint-enable no-unused-vars, mozilla/reject-global-this, tabmix/use-mjs-modules */
 }
 
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {PlacesUIUtils: "resource:///modules/PlacesUIUtils.jsm"});

@@ -12,6 +12,7 @@ const Services =
 const modulesMap = {
   "resource://gre/modules/PlacesUtils.jsm": [1040, "resource://gre/modules/PlacesUtils.sys.mjs"],
   "resource:///modules/PlacesUIUtils.jsm": [1040, "resource:///modules/PlacesUIUtils.sys.mjs"],
+  "resource://gre/modules/PluralForm.jsm": [1050, "resource://gre/modules/PluralForm.sys.mjs"],
   "resource://gre/modules/XPCOMUtils.jsm": [1040, "resource://gre/modules/XPCOMUtils.sys.mjs"],
 };
 
