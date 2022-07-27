@@ -825,6 +825,8 @@ Tabmix.navToolbox = {
     if (alltabsPopup && alltabsPopup._tabmix_inited) {
       alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
     }
+
+    gURLBar?.removeEventListener("blur", this);
   },
 
   cleanCurrentset() {
@@ -839,6 +841,7 @@ Tabmix.navToolbox = {
 
   handleEvent: function TMP_navToolbox_handleEvent(aEvent) {
     switch (aEvent.type) {
+      // navToolbox events
       case "beforecustomization":
         this.customizeStart();
         break;
@@ -848,6 +851,10 @@ Tabmix.navToolbox = {
         break;
       case "aftercustomization":
         this.customizeDone(this.toolboxChanged);
+        break;
+      // gURLBar events
+      case "blur":
+        Tabmix.urlBarOnBlur();
         break;
     }
   },
@@ -900,12 +907,9 @@ Tabmix.navToolbox = {
         typeof gURLBar.handleCommand == "undefined")
       return;
 
-    // onblur attribute reset each time we exit ToolboxCustomize
-    var blur = gURLBar.getAttribute("onblur") || "";
-    if (!blur.includes("Tabmix.urlBarOnBlur"))
-      Tabmix.setItem(gURLBar, "onblur", blur + "Tabmix.urlBarOnBlur();");
-
     if (!this.urlBarInitialized) {
+      gURLBar.addEventListener("blur", this);
+
       Tabmix.originalFunctions.gURLBar_handleCommand = gURLBar.handleCommand;
       gURLBar.handleCommand = this.handleCommand.bind(gURLBar);
 
@@ -932,6 +936,11 @@ Tabmix.navToolbox = {
   },
 
   handleCommand(event, openUILinkWhere) {
+    if (Tabmix.selectedTab === gBrowser.selectedTab) {
+      Tabmix.selectedTab = null;
+      Tabmix.userTypedValue = "";
+    }
+
     let prevTab, prevTabPos;
     let element = this.view.selectedElement;
     let result = this.view.getResultFromElement(element);

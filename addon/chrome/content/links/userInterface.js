@@ -207,17 +207,10 @@ Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
   if (!tab)
     return;
 
-  var isCurrentTab = tab.selected;
   var browser = gBrowser.getBrowserForTab(tab);
   var url = this.userTypedValue;
   if (!isBlankPageURL(url))
     browser.userTypedValue = url;
-  if (isCurrentTab && gBrowser.mIsBusy) {
-    browser.addEventListener("load", function TMP_onLoad_urlBarOnBlur() {
-      Tabmix.updateUrlBarValue();
-    }, {capture: true, once: true});
-    return;
-  }
 
   this.updateUrlBarValue();
 };
