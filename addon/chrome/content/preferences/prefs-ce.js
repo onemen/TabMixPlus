@@ -1294,10 +1294,7 @@ class PrefWindow extends MozXULElement {
             document.l10n.setAttributes(button, this.getAttribute("buttonid" + dlgtype));
             this._l10nButtons.push(button);
           } else if (dlgtype != "extra1" && dlgtype != "extra2") {
-            button.setAttribute("label", this.mStrBundle.GetStringFromName("button-" + dlgtype));
-            const accessKey = this.mStrBundle.GetStringFromName("accesskey-" + dlgtype);
-            if (accessKey)
-              button.setAttribute("accesskey", accessKey);
+            this.setButtonLabel(dlgtype, button);
           }
         }
         // allow specifying alternate icons in the dialog header
@@ -1353,6 +1350,14 @@ class PrefWindow extends MozXULElement {
           spacer.removeAttribute("hidden");
           spacer.setAttribute("flex", shown.extra2 ? "1" : "0");
         }
+      }
+    };
+
+    this.setButtonLabel = function(dlgtype, button) {
+      button.setAttribute("label", this.mStrBundle.GetStringFromName("button-" + dlgtype));
+      const accessKey = this.mStrBundle.GetStringFromName("accesskey-" + dlgtype);
+      if (accessKey) {
+        button.setAttribute("accesskey", accessKey);
       }
     };
 

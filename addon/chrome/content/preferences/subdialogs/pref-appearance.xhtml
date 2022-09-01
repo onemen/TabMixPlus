@@ -16,8 +16,7 @@
         windowtype="mozilla:tabmixopt-appearance"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html="http://www.w3.org/1999/xhtml"
-        buttons="accept,cancel,help,extra2"
-        ondialoghelp="tabstyles.openHelp();"
+        buttons="accept,cancel,extra1,extra2"
         title="&styles.label;"
         persist="screenX screenY hide-RGB"
         onload="tabstyles.init();"
@@ -29,8 +28,8 @@
     /* global tabstyles */
     this.addEventListener("dialogcancel", () => tabstyles.cancel());
     this.addEventListener("dialogaccept", () => tabstyles.save());
+    this.addEventListener("dialogextra1", () => tabstyles.openHelp());
     this.addEventListener("dialogextra2", () => tabstyles.toggleRGB_visibility());
-    this.addEventListener("dialoghelp", () => tabstyles.openHelp());
     ]]></script>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-appearance-ce.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/checkbox_tmp-ce.js"/>
@@ -60,6 +59,6 @@
      <spacer anonid="spacer" flex="1"/>
      <button dlgtype="accept" class="dialog-button" icon="accept"/>
      <button dlgtype="cancel" class="dialog-button" icon="cancel"/>
-     <button dlgtype="help" class="dialog-button" hidden="true" icon="help"/>
+     <button dlgtype="extra1" class="dialog-button" hidden="true" icon="help"/>
    </hbox>
 </dialog>

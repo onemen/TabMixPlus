@@ -102,6 +102,10 @@
       useThis.nextSibling.value = document.getElementById("_" + this.id).label;
       // colorpicker need some time until its ready
       window.setTimeout(() => this._getPrefs(this._initPrefValues), 0);
+
+      const prefwindow = window.opener.document.querySelector("prefwindow");
+      const button = document.querySelector('[dlgtype="extra1"]');
+      prefwindow.setButtonLabel("help", button);
     }
 
     get prefName() {

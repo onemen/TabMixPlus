@@ -4,6 +4,10 @@
 var list, entry, edit, del, add;
 
 function Init() {
+  const prefwindow = window.opener.document.querySelector("prefwindow");
+  const button = document.querySelector('[dlgtype="extra1"]');
+  prefwindow.setButtonLabel("help", button);
+
   // set these once and refer to them later
   list = document.getElementById('filetypeList');
   entry = document.getElementById('filetypeEntry');
