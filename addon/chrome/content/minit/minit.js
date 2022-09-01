@@ -206,6 +206,12 @@ var TMP_tabDNDObserver = {
 
     Tabmix.originalFunctions.on_dragleave = gBrowser.tabContainer.on_dragleave;
     gBrowser.tabContainer.on_dragleave = this.on_dragleave.bind(this);
+
+    // for Firefox 106 - after bug 1771831
+    this.getDropEffectForTabDrag =
+      typeof gBrowser.tabContainer.getDropEffectForTabDrag === "function" ?
+        gBrowser.tabContainer.getDropEffectForTabDrag :
+        gBrowser.tabContainer._getDropEffectForTabDrag;
   },
 
   useTabmixDnD(aEvent) {
@@ -273,7 +279,7 @@ var TMP_tabDNDObserver = {
     }
 
     const tabBar = gBrowser.tabContainer;
-    const effects = tabBar._getDropEffectForTabDrag(event);
+    const effects = this.getDropEffectForTabDrag(event);
     const dt = event.dataTransfer;
     const isCopy = dt.dropEffect == "copy";
     const targetTab = tabBar._getDragTargetTab(event, true);
