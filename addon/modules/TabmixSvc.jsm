@@ -116,7 +116,7 @@ TabmixSvc = {
     } catch (ex) {
       TabmixSvc.console.reportError(ex);
     }
-    // eslint-disable-next-line no-unused-vars
+
     pref = null;
   },
 

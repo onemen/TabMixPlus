@@ -520,7 +520,6 @@ Tabmix.multiRow = {
         this.initializeAttributeInheritance();
       }
 
-      // eslint-disable-next-line class-methods-use-this
       finishScroll(aEvent) {
         if (!TMP_tabDNDObserver.useTabmixDnD(aEvent))
           return;

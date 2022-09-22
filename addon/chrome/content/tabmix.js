@@ -1139,7 +1139,6 @@ Tabmix.initialization = {
       if (phase.id > currentPhase)
         break;
       if (!phase.initialized) {
-        // eslint-disable-next-line no-undef
         console.debug("Tabmix initializer:", {key, phase});
         phase.initialized = true;
         try {

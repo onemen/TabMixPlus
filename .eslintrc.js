@@ -449,4 +449,5 @@ module.exports = {
     "yield-star-spacing": [2, "after"],
     yoda: [2, "never"],
   },
+  "reportUnusedDisableDirectives": true
 };
