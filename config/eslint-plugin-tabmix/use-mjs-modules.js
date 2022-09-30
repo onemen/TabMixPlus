@@ -62,12 +62,9 @@ const [jsmFiles] = getMsjFiles() || [];
 const items = ["XPCOMUtils", "ChromeUtils", "TabmixChromeUtils"];
 
 const callExpressionDefinitions = [
-  /^XPCOMUtils\.defineLazyGetter\(lazy,\s*"(\w+)",\s*"(.+)"/,
-  /^XPCOMUtils\.defineLazyGetter\(this,\s*"(\w+)",\s*"(.+)"/,
-  /^XPCOMUtils\.defineLazyModuleGetter\(lazy,\s*"(\w+)",\s*"(.+)"/,
-  /^XPCOMUtils\.defineLazyModuleGetter\(this,\s*"(\w+)",\s*"(.+)"/,
-  /^ChromeUtils\.defineModuleGetter\(lazy,\s*"(\w+)",\s*"(.+)"/,
-  /^ChromeUtils\.defineModuleGetter\(this,\s*"(\w+)",\s*"(.+)"/,
+  /^XPCOMUtils\.defineLazyGetter\(.*,\s*"(\w+)",\s*"(.+)"/,
+  /^XPCOMUtils\.defineLazyModuleGetter\(.*,\s*"(\w+)",\s*"(.+)"/,
+  /^ChromeUtils\.defineModuleGetter\(.*,\s*"(\w+)",\s*"(.+)"/,
 ];
 
 const callExpressionMultiDefinitions = [

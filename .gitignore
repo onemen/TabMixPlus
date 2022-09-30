@@ -33,3 +33,6 @@ node_modules/
 
 **/sysmjs.txt
 **/usedmjs.json
+
+#hide test folder
+test/*

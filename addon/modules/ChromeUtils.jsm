@@ -14,6 +14,8 @@ const modulesMap = {
   "resource:///modules/PlacesUIUtils.jsm": [1040, "resource:///modules/PlacesUIUtils.sys.mjs"],
   "resource://gre/modules/PluralForm.jsm": [1050, "resource://gre/modules/PluralForm.sys.mjs"],
   "resource://gre/modules/XPCOMUtils.jsm": [1040, "resource://gre/modules/XPCOMUtils.sys.mjs"],
+  "resource://gre/modules/PromiseUtils.jsm": [1070, "resource://gre/modules/PromiseUtils.sys.mjs"],
+  "resource://gre/modules/FileUtils.jsm": [1070, "resource://gre/modules/FileUtils.sys.mjs"],
 };
 
 const _versions = {};

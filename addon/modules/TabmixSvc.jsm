@@ -400,8 +400,10 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isBasilisk", () => {
   return Services.appinfo.name == "Basilisk";
 });
 
-ChromeUtils.defineModuleGetter(TabmixSvc, "FileUtils",
-  "resource://gre/modules/FileUtils.jsm");
+TabmixChromeUtils.defineLazyModuleGetters(TabmixSvc, {
+  FileUtils: "resource://gre/modules/FileUtils.jsm",
+  //
+});
 
 ChromeUtils.defineModuleGetter(TabmixSvc, "console",
   "chrome://tabmix-resource/content/log.jsm");
