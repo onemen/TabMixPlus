@@ -56,7 +56,28 @@ function readUsedMjsResources() {
   return JSON.parse(content);
 }
 
-let modulesMap, usedMjsResources;
+const lazy = {};
+
+Object.defineProperty(lazy, "usedMjsResources", {
+  get() {
+    delete this.usedMjsResources;
+    return (this.usedMjsResources = readUsedMjsResources());
+  },
+  configurable: true,
+});
+
+Object.defineProperty(lazy, "modulesMap", {
+  get() {
+    delete this.modulesMap;
+    return (this.modulesMap = getModulesMap());
+  },
+  set(val) {
+    delete this.modulesMap;
+    this.modulesMap = val;
+  },
+  configurable: true,
+});
+
 const [jsmFiles] = getMsjFiles() || [];
 
 const items = ["XPCOMUtils", "ChromeUtils", "TabmixChromeUtils"];
@@ -95,11 +116,8 @@ module.exports = {
     }
 
     function checkForMissingResources(node, item) {
-      if (!usedMjsResources) {
-        usedMjsResources = readUsedMjsResources();
-      }
-      modulesMap = item.init.properties.map(i => i.key.value);
-      const missingMjsFiles = usedMjsResources.filter(f => !modulesMap.includes(f));
+      lazy.modulesMap = item.init.properties.map(i => i.key.value);
+      const missingMjsFiles = lazy.usedMjsResources.filter(f => !lazy.modulesMap.includes(f));
       if (missingMjsFiles.length) {
         const missingFiles = missingMjsFiles
             .map(f => path.basename(f).replace(".jsm", ".sys.mjs"))
@@ -114,7 +132,7 @@ module.exports = {
     }
 
     function addReport(messageId, node, {value}, prop) {
-      if (value && jsmFiles.includes(path.basename(value))) {
+      if (value && lazy.usedMjsResources.includes(value)) {
         const name = `"${value.split("/").pop()}"`;
         if (messageId !== "missingInChromeUtils") {
           context.report({
@@ -124,10 +142,7 @@ module.exports = {
             data: {name},
           });
         }
-        if (!modulesMap) {
-          modulesMap = getModulesMap();
-        }
-        if (!modulesMap.includes(value)) {
+        if (!lazy.modulesMap.includes(value)) {
           context.report({
             node,
             loc: prop?.loc,
