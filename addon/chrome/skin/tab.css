@@ -20,10 +20,6 @@
   max-height: none !important;
 }
 
-#TabsToolbar[multibar] {
-  height: auto !important;
-}
-
 #tabbrowser-tabs[flowing=multibar][multibar=scrollbar] .tabbrowser-tab[collapsed=true] {
   display: none !important;
 }

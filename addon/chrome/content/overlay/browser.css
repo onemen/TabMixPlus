@@ -269,6 +269,9 @@ so display: none !important; does not hide the button */
 #TabsToolbar #tabbrowser-tabs:not([overflow="true"], [hashiddentabs], [showalltabsbutton]) ~ #alltabs-button {
   display: none;
 }
+#TabsToolbar #tabbrowser-tabs[showalltabsbutton] ~ #alltabs-button {
+  display: -moz-box;
+}
 #TabsToolbar #tabbrowser-tabs:not([overflow="true"], [showalltabsbutton])[using-closing-tabs-spacer] ~ #alltabs-button {
   /* temporary space to keep a tab's close button under the cursor */
   display: -moz-box;

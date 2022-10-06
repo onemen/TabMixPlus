@@ -1822,6 +1822,11 @@ gTMPprefObserver = {
       }
     };
 
+    // fix scroll buttons height when Waterfox userChrome enabled
+    const reduceButtonHeight =
+      TabmixSvc.isG5Waterfox && Services.prefs.getBoolPref("userChrome.theme.enable", false);
+    const buttonsMarginBlock = reduceButtonHeight ? "-4px !important" : "0";
+
     insertRule(
       `#tabmix-scrollbox::part(scrollbutton-up),
        #tabmix-scrollbox::part(scrollbutton-down) {
@@ -1829,7 +1834,7 @@ gTMPprefObserver = {
          background-clip: padding-box;
          border: 4px solid transparent;
          border-radius: calc(var(--tab-border-radius) + 4px);
-         margin: 0;
+         margin: ${buttonsMarginBlock};
          padding: calc(var(--toolbarbutton-inner-padding) - 3px) calc(var(--toolbarbutton-inner-padding) - 6px);
        }`
     );

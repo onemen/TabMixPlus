@@ -396,6 +396,10 @@ XPCOMUtils.defineLazyGetter(TabmixSvc, "isG3Waterfox", () => {
   return Services.appinfo.name == "Waterfox" && isVersion(780);
 });
 
+XPCOMUtils.defineLazyGetter(TabmixSvc, "isG5Waterfox", () => {
+  return Services.appinfo.name == "Waterfox" && isVersion(1020);
+});
+
 XPCOMUtils.defineLazyGetter(TabmixSvc, "isBasilisk", () => {
   return Services.appinfo.name == "Basilisk";
 });
