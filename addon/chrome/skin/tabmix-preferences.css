@@ -149,6 +149,11 @@ tab.subtabs:focus-visible > .tab-middle > .tab-text {
   -moz-image-region: rect(0 24px 24px 0);
 }
 
+#TabMIxPreferences {
+  display: flex;
+  flex-direction: column;
+}
+
 /* Chromifox theme force button height to 25px */
 #TabMIxPreferences[chromifox=true] .spinbuttons-button {
   max-height: 11px !important;
@@ -259,7 +264,7 @@ prefpane > .content-box > tabbox {
   height: 464px;
 }
 
-prefwindow[in-tab] .paneSelector {
+prefwindow .paneSelector {
   width: 530px;
 }
 

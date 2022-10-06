@@ -12,13 +12,6 @@ var gPrefWindow = {
   _initialized: false,
   set instantApply(val) {document.documentElement.instantApply = val;},
   get instantApply() {return document.documentElement.instantApply;},
-  onContentLoaded() {
-    const prefWindow = $("TabMIxPreferences");
-    if (window.toString() != "[object ChromeWindow]") {
-      prefWindow.style.display = "flex";
-      prefWindow.setAttribute("in-tab", true);
-    }
-  },
 
   init() {
     this._initialized = true;
@@ -766,8 +759,6 @@ XPCOMUtils.defineLazyGetter(this, "RTL_UI", () => {
 });
 
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
-
-gPrefWindow.onContentLoaded();
 
 function setDialog() {
   Object.defineProperty(customElements.get('preferences').prototype, 'instantApply', {get: () => document.documentElement.instantApply});
