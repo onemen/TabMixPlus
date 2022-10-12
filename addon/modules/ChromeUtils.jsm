@@ -16,6 +16,7 @@ const modulesMap = {
   "resource://gre/modules/XPCOMUtils.jsm": [1040, "resource://gre/modules/XPCOMUtils.sys.mjs"],
   "resource://gre/modules/PromiseUtils.jsm": [1070, "resource://gre/modules/PromiseUtils.sys.mjs"],
   "resource://gre/modules/FileUtils.jsm": [1070, "resource://gre/modules/FileUtils.sys.mjs"],
+  "resource:///actors/ClickHandlerParent.jsm": [1070, "resource:///actors/ClickHandlerParent.sys.mjs"],
 };
 
 const _versions = {};

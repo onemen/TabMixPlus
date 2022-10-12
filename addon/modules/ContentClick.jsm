@@ -7,8 +7,7 @@ const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content
 const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const lazy = {};
-ChromeUtils.defineModuleGetter(lazy, "ClickHandlerParent",
-  "resource:///actors/ClickHandlerParent.jsm");
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {ClickHandlerParent: "resource:///actors/ClickHandlerParent.jsm"});
 
 ChromeUtils.defineModuleGetter(lazy, "PrivateBrowsingUtils",
   "resource://gre/modules/PrivateBrowsingUtils.jsm");
