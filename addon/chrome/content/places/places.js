@@ -921,8 +921,8 @@ Tabmix.onContentLoaded = {
 };
 
 if (typeof E10SUtils !== "object") {
-  ChromeUtils.defineModuleGetter(this, "E10SUtils",
-    "resource://gre/modules/E10SUtils.jsm");
+  const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+  TabmixChromeUtils.defineLazyModuleGetters(this, {E10SUtils: "resource://gre/modules/E10SUtils.jsm"});
 }
 
 /** DEPRECATED **/

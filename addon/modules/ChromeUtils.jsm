@@ -17,6 +17,12 @@ const modulesMap = {
   "resource://gre/modules/PromiseUtils.jsm": [1070, "resource://gre/modules/PromiseUtils.sys.mjs"],
   "resource://gre/modules/FileUtils.jsm": [1070, "resource://gre/modules/FileUtils.sys.mjs"],
   "resource:///actors/ClickHandlerParent.jsm": [1070, "resource:///actors/ClickHandlerParent.sys.mjs"],
+  "resource://gre/modules/AppConstants.jsm": [1080, "resource://gre/modules/AppConstants.sys.mjs"],
+  "resource://gre/modules/DeferredTask.jsm": [1080, "resource://gre/modules/DeferredTask.sys.mjs"],
+  "resource://gre/modules/E10SUtils.jsm": [1080, "resource://gre/modules/E10SUtils.sys.mjs"],
+  "resource://gre/modules/Preferences.jsm": [1080, "resource://gre/modules/Preferences.sys.mjs"],
+  "resource://gre/modules/PrivateBrowsingUtils.jsm": [1080, "resource://gre/modules/PrivateBrowsingUtils.sys.mjs"],
+  "resource://gre/modules/Timer.jsm": [1080, "resource://gre/modules/Timer.sys.mjs"],
 };
 
 const _versions = {};

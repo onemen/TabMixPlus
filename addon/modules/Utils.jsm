@@ -14,11 +14,10 @@ const FMM_MESSAGES = [
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const lazy = {};
 
-XPCOMUtils.defineLazyModuleGetters(lazy, {
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {
   AutoReload: "chrome://tabmix-resource/content/AutoReload.jsm",
   DocShellCapabilities: "chrome://tabmix-resource/content/DocShellCapabilities.jsm",
   E10SUtils: "resource://gre/modules/E10SUtils.jsm",

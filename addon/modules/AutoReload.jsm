@@ -3,14 +3,14 @@
 const EXPORTED_SYMBOLS = ["AutoReload"];
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const lazy = {};
-ChromeUtils.defineModuleGetter(lazy, "E10SUtils",
-  "resource://gre/modules/E10SUtils.jsm");
-
-ChromeUtils.defineModuleGetter(lazy, "TabmixUtils",
-  "chrome://tabmix-resource/content/Utils.jsm");
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+  E10SUtils: "resource://gre/modules/E10SUtils.jsm",
+  TabmixUtils: "chrome://tabmix-resource/content/Utils.jsm",
+});
 
 var _setItem = function() {};
 

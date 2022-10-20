@@ -3,7 +3,8 @@
 const EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const {PrivateBrowsingUtils} = ChromeUtils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
+const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+const {PrivateBrowsingUtils} = TabmixChromeUtils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
 
 const SingleWindowModeUtils = {
   /**

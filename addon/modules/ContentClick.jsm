@@ -7,19 +7,13 @@ const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content
 const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const lazy = {};
-TabmixChromeUtils.defineLazyModuleGetters(lazy, {ClickHandlerParent: "resource:///actors/ClickHandlerParent.jsm"});
-
-ChromeUtils.defineModuleGetter(lazy, "PrivateBrowsingUtils",
-  "resource://gre/modules/PrivateBrowsingUtils.jsm");
-
-ChromeUtils.defineModuleGetter(lazy, "E10SUtils",
-  "resource://gre/modules/E10SUtils.jsm");
-
-ChromeUtils.defineModuleGetter(lazy, "LinkNodeUtils",
-  "chrome://tabmix-resource/content/LinkNodeUtils.jsm");
-
-ChromeUtils.defineModuleGetter(lazy, "TabmixSvc",
-  "chrome://tabmix-resource/content/TabmixSvc.jsm");
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+  ClickHandlerParent: "resource:///actors/ClickHandlerParent.jsm",
+  E10SUtils: "resource://gre/modules/E10SUtils.jsm",
+  LinkNodeUtils: "chrome://tabmix-resource/content/LinkNodeUtils.jsm",
+  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
+  TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.jsm",
+});
 
 var ContentClickInternal;
 const TabmixContentClick = {

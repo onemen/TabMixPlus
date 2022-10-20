@@ -7,11 +7,13 @@ const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content
 const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
-const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
+const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
 const lazy = {};
-ChromeUtils.defineModuleGetter(lazy, "PrivateBrowsingUtils",
-  "resource://gre/modules/PrivateBrowsingUtils.jsm");
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
+  //
+});
 
 var KeyConfig;
 const Shortcuts = {

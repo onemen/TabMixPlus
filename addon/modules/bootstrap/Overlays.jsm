@@ -9,11 +9,13 @@
 const EXPORTED_SYMBOLS = ["Overlays"];
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 
 const lazy = {};
-
-ChromeUtils.defineModuleGetter(lazy, "setTimeout",
-  "resource://gre/modules/Timer.jsm");
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+  setTimeout: "resource://gre/modules/Timer.jsm"
+  //
+});
 
 /**
  * The overlays class, providing support for loading overlays like they used to work. This class

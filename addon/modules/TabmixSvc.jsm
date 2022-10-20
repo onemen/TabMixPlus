@@ -6,7 +6,7 @@ const EXPORTED_SYMBOLS = ["TabmixSvc"];
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
+const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
 const lazy = {};
 ChromeUtils.defineModuleGetter(lazy, "TabmixPlacesUtils",
@@ -350,7 +350,7 @@ TabmixSvc = {
 };
 
 XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", () => {
-  const {Preferences} = ChromeUtils.import("resource://gre/modules/Preferences.jsm");
+  const {Preferences} = TabmixChromeUtils.import("resource://gre/modules/Preferences.jsm");
   return new Preferences("");
 });
 

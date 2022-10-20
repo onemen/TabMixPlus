@@ -67,6 +67,10 @@ module.exports = {
         "tabmix/extensions": false,
         "tabmix/tabmix": false,
       },
+      rules: {
+        //
+        "mozilla/reject-eager-module-in-lazy-getter": "error", // recommended
+      },
     },
     {
       files: ["addon/chrome/content/preferences/**"],
@@ -164,6 +168,7 @@ module.exports = {
     // "mozilla/valid-services": "error", // recommended
     // "mozilla/var-only-at-top-level": "error", // not yet ...
     "tabmix/use-mjs-modules": "error",
+    "tabmix/import-globals": "error",
 
     "no-alert": 2,
     "no-array-constructor": 2,

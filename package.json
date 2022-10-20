@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/onemen/TabMixPlus#readme",
   "devDependencies": {
-    "eslint": "^8.23.1",
+    "eslint": "^8.25.0",
     "eslint-plugin-mozilla": "^2.12.5",
     "eslint-plugin-tabmix": "file:./config/eslint-plugin-tabmix"
   }

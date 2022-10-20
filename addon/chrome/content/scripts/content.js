@@ -1,21 +1,22 @@
+/* globals Cc, Ci, Cu */
 "use strict";
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 
-const {setTimeout, clearTimeout} = ChromeUtils.import(
+const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
+
+TabmixChromeUtils.defineLazyModuleGetters(this, {
+  E10SUtils: "resource://gre/modules/E10SUtils.jsm",
+  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
+});
+
+const {setTimeout, clearTimeout} = TabmixChromeUtils.import(
   "resource://gre/modules/Timer.jsm"
 );
 
-const {AppConstants} = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
-
-ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
-  "resource://gre/modules/PrivateBrowsingUtils.jsm");
-
 ChromeUtils.defineModuleGetter(this, "WebNavigationFrames",
   "resource://gre/modules/WebNavigationFrames.jsm");
-
-ChromeUtils.defineModuleGetter(this, "E10SUtils",
-  "resource://gre/modules/E10SUtils.jsm");
 
 ChromeUtils.defineModuleGetter(this, "ContentSvc",
   "chrome://tabmix-resource/content/ContentSvc.jsm");

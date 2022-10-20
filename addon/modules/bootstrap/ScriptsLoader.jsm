@@ -39,11 +39,10 @@ const SCRIPTS = [
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const lazy = {};
 
-XPCOMUtils.defineLazyModuleGetters(lazy, {
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {
   Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.jsm",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
   SessionStore: "resource:///modules/sessionstore/SessionStore.jsm",
