@@ -131,7 +131,8 @@ Tabmix.afterDelayedStartup = function() {
   // focus address-bar area if the selected tab is blank when Firefox starts
   // focus content area if the selected tab is not blank when Firefox starts
   setTimeout(() => {
-    const isBlank = gBrowser.isBlankNotBusyTab(gBrowser.selectedTab);
+    const isBlank =
+      gBrowser.currentURI.spec === "about:home" || gBrowser.isBlankNotBusyTab(gBrowser.selectedTab);
     if (gURLBar.focused && !isBlank) {
       gBrowser.selectedBrowser.focus();
     } else if (!gURLBar.focused && isBlank) {
