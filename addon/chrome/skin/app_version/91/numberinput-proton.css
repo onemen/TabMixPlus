@@ -52,8 +52,7 @@ input:is([type="text"], [type="number"]):disabled {
 }
 
 input[type="number"] {
-  padding-inline-end: var(--input-sppiner-offset);
-  position: relative;
+  text-align: center;
 }
 
 input[type="number"]::-moz-number-spin-box {
@@ -64,16 +63,6 @@ input[type="number"]::-moz-number-spin-box {
   border-start-end-radius: 4px;
   border-end-end-radius: 4px;
   margin-inline-start: 2px !important;
-  position: absolute;
-  top: 0;
-}
-
-input[type="number"]:-moz-locale-dir(ltr)::-moz-number-spin-box {
-  right: 0;
-}
-
-input[type="number"]:-moz-locale-dir(rtl)::-moz-number-spin-box {
-  left: 0;
 }
 
 input[type="number"]::-moz-number-spin-up,

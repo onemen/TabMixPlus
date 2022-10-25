@@ -59,6 +59,11 @@ var gPrefWindow = {
     $("syncPrefs").setAttribute("checked", Tabmix.prefs.getBoolPref("syncPrefs"));
     $("instantApply").setAttribute("checked", Tabmix.prefs.getBoolPref("instantApply"));
     positionDonateButton();
+
+    if (Tabmix.isVersion(1080)) {
+      docElt.style.setProperty("--input-padding-inline", "2px");
+      docElt.style.setProperty("--input-sppiner-offset", "14px");
+    }
   },
 
   initPane(aPaneID) {

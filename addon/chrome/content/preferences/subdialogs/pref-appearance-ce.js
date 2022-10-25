@@ -106,6 +106,12 @@
       const prefwindow = window.opener.document.querySelector("prefwindow");
       const button = document.querySelector('[dlgtype="extra1"]');
       prefwindow.setButtonLabel("help", button);
+
+      if (Tabmix.isVersion(1080)) {
+        document.documentElement.style.setProperty("--input-padding-inline", "2px");
+        document.documentElement.style.setProperty("--input-sppiner-offset", "14px");
+        document.documentElement.style.setProperty("minWidth", "510px");
+      }
     }
 
     get prefName() {
