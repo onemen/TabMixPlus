@@ -424,12 +424,14 @@ var TMP_ClosedTabs = {
     }
 
     const addMenu = this.addMenuItem.bind(this, aPopup, isSubviewbutton);
-    // "Keep menu open"
-    const mi = addMenu("lockedClosedTabsList", TabmixSvc.getString("undoclosetab.keepOpen.label"), -3);
-    mi.setAttribute("tooltiptext", TabmixSvc.getString("undoclosetab.keepOpen.description"));
-    mi.setAttribute("closemenu", "none");
-    const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
-    mi.setAttribute("image", image);
+    if (isSubviewbutton) {
+      // "Keep menu open"
+      const mi = addMenu("lockedClosedTabsList", TabmixSvc.getString("undoclosetab.keepOpen.label"), -3);
+      mi.setAttribute("tooltiptext", TabmixSvc.getString("undoclosetab.keepOpen.description"));
+      mi.setAttribute("closemenu", "none");
+      const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
+      mi.setAttribute("image", image);
+    }
     // "Clear Closed Tabs List"
     addMenu("clearClosedTabsList", TabmixSvc.getString("undoclosetab.clear.label"), -1, "clearClosedTabs");
 
@@ -444,7 +446,7 @@ var TMP_ClosedTabs = {
     if (isSubviewbutton) {
       m.setAttribute("class", "subviewbutton subviewbutton-iconic");
     } else {
-      m.setAttribute("class", "menuitem-iconic");
+      m.setAttribute("class", "menuitem");
     }
     if (keyId && document.getElementById("key_tm_" + keyId)) {
       m.setAttribute("key", "key_tm_" + keyId);
