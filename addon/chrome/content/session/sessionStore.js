@@ -679,14 +679,15 @@ var TMP_ClosedTabs = {
         aBlankTabToReuse.getAttribute("usercontextid") === userContextId;
 
     let newTab = reuseExisting ? aBlankTabToReuse :
-      gBrowser.addTrustedTab(null, Object.assign({
+      gBrowser.addTrustedTab(null, {
         createLazyBrowser,
         skipAnimation: tabToRemove || skipAnimation,
         allowInheritPrincipal: true,
         noInitialLabel: true,
+        pinned: state.pinned,
         userContextId,
         index: gBrowser.tabs.length,
-      }, state));
+      });
     if (!reuseExisting && aBlankTabToReuse) {
       gBrowser.removeTab(aBlankTabToReuse, {animate: false});
     }
