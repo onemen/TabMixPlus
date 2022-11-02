@@ -1113,6 +1113,17 @@ Tabmix.navToolbox = {
     // Personas Interactive Theme Engine 1.6.5
     let pIte = fnString.indexOf("BTPIServices") > -1;
 
+    if (Tabmix.isVersion(1070)) {
+      // Bug 1793414 (Firefox 107) - MozSearchbar calls into BrowserSearch where it doesn't need to
+      // add references to lazy.FormHistory and lazy.SearchSuggestionController
+      const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+      // eslint-disable-next-line tabmix/valid-lazy, no-undef
+      TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+        FormHistory: "resource://gre/modules/FormHistory.jsm",
+        SearchSuggestionController: "resource://gre/modules/SearchSuggestionController.jsm",
+      });
+    }
+
     $LF = '\n          ';
     Tabmix.changeCode(obj, "searchbar." + fn)._replace(
       'let params',
