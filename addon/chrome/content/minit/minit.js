@@ -934,7 +934,9 @@ Tabmix.navToolbox = {
         return Tabmix.originalFunctions.gURLBar__whereToOpen.apply(this, arguments);
       };
 
-      gURLBar.view._rows.addEventListener("mouseup", event => {
+      this.on_mouseup = this.on_mouseup.bind(gURLBar.view);
+      const rows = gURLBar.view.panel.querySelector(".urlbarView-results");
+      rows.addEventListener("mouseup", event => {
         this.on_mouseup(event);
       }, {capture: true});
       this.urlBarInitialized = true;
@@ -975,29 +977,30 @@ Tabmix.navToolbox = {
     }
   },
 
+  // this methos is bound to gURLBar.view
   on_mouseup(event) {
     // based on:
-    // - gURLBar.view._on_mouseup (UrlbarView.jsm)
-    // - gURLBar.pickResult (UrlbarInput.jsm)
+    // - gURLBar.view.on_mouseup (UrlbarView.sys.mjs)
+    // - gURLBar.pickResult (UrlbarInput.sys.mjs)
     if (event.button == 2) {
       return;
     }
 
-    const element = gURLBar.view.getClosestSelectableElement(event.target);
-    const result = element && gURLBar.view.getResultFromElement(element);
+    const element = Tabmix.navToolbox.getClosestSelectableElement(event.target);
+    const result = element && this.getResultFromElement(element);
     if (!result) {
       return;
     }
 
     if (
       result.heuristic &&
-      gURLBar.searchMode?.isPreview &&
-      gURLBar.view.oneOffSearchButtons.selectedButton
+      this.input.searchMode?.isPreview &&
+      this.oneOffSearchButtons.selectedButton
     ) {
       return;
     }
 
-    this.whereToOpenFromUrlBar(event, result);
+    Tabmix.navToolbox.whereToOpenFromUrlBar(event, result);
     if (!Tabmix.prefs.getBoolPref("moveSwitchToTabNext")) {
       return;
     }
@@ -1006,7 +1009,7 @@ Tabmix.navToolbox = {
     if (element?.classList.contains("urlbarView-help")) {
       urlOverride = result.payload.helpUrl;
     }
-    const isCanonized = gURLBar.setValueFromResult({
+    const isCanonized = this.input.setValueFromResult({
       result,
       event,
       urlOverride,
@@ -1037,6 +1040,35 @@ Tabmix.navToolbox = {
         );
       }
     }
+  },
+
+  // private method from gURLBar.view (UrlbarView.sys.mjs)
+  getClosestSelectableElement(element) {
+    if (!Tabmix.isVersion(1080)) {
+      return gURLBar.view.getClosestSelectableElement(element);
+    }
+
+    const SELECTABLE_ELEMENT_SELECTOR = "[role=button], [selectable=true]";
+    const UNSELECTABLE_ELEMENT_SELECTOR = "[selectable=false]";
+    let closest = element.closest(SELECTABLE_ELEMENT_SELECTOR);
+    if (!closest) {
+      let row = element.closest(".urlbarView-row");
+      if (row && row.querySelector(UNSELECTABLE_ELEMENT_SELECTOR)) {
+        return null;
+      } else if (row && !row.querySelector(SELECTABLE_ELEMENT_SELECTOR)) {
+        closest = row;
+      }
+    }
+    return this.isElementVisible(closest) ? closest : null;
+  },
+
+  // private method from gURLBar.view (UrlbarView.sys.mjs)
+  isElementVisible(element) {
+    if (!element || element.style.display == "none") {
+      return false;
+    }
+    let row = element.closest(".urlbarView-row");
+    return row && row.style.display != "none";
   },
 
   whereToOpenFromUrlBar(event, result) {
