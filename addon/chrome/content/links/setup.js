@@ -284,10 +284,16 @@ Tabmix._updateCloseButtons = function tabContainer_updateCloseButtons(skipUpdate
       let currentURI = gBrowser.currentURI;
       aUrl = currentURI ? currentURI.spec : null;
     }
-    if (Tabmix.tabsUtils._keepLastTab ||
-        isBlankPageURL(tab.__newLastTab || null) ||
-        (!aUrl || isBlankPageURL(aUrl)) &&
-        gBrowser.isBlankNotBusyTab(tab)) {
+    // hide the close button if one of this condition is true:
+    //   - if "Do not close window when closing last tab" is set and the tab is blank,
+    //     about:blank or other new tab.
+    //   - if "Prevent last tab from closing" is set.
+    if (
+      Tabmix.tabsUtils._keepLastTab ||
+        !Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
+          (isBlankPageURL(tab.__newLastTab || null) ||
+            (!aUrl || isBlankPageURL(aUrl)) && gBrowser.isBlankNotBusyTab(tab))
+    ) {
       this.setAttribute("closebuttons", "noclose");
       this.removeAttribute("closebuttons-hover");
     }

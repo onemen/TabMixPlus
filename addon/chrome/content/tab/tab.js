@@ -1131,6 +1131,7 @@ gTMPprefObserver = {
     "browser.tabs.tabmanager.enabled",
     "browser.tabs.insertAfterCurrent",
     "browser.tabs.insertRelatedAfterCurrent",
+    "browser.tabs.closeWindowWithLastTab"
   ],
 
   // removes the observer-object from service -- called when the window is no longer open
@@ -1286,6 +1287,9 @@ gTMPprefObserver = {
       }
       case "browser.tabs.tabClipWidth":
         gBrowser.tabContainer.mTabClipWidth = Services.prefs.getIntPref(prefName);
+        gBrowser.tabContainer._updateCloseButtons();
+        break;
+      case "browser.tabs.closeWindowWithLastTab":
         gBrowser.tabContainer._updateCloseButtons();
         break;
       case "extensions.tabmix.keepLastTab":

@@ -1867,7 +1867,8 @@ Tabmix.newTabUrls = [
   "chrome://abouttab/content/text.html",
   "chrome://abouttab/content/tab.html",
   "chrome://google-toolbar/content/new-tab.html",
-  "chrome://fastdial/content/fastdial.html"
+  "chrome://fastdial/content/fastdial.html",
+  "chrome://browser/content/blanktab.html"
 ];
 
 Tabmix.isBlankNewTab = function(url) {
