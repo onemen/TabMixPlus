@@ -18,6 +18,10 @@
   opacity: 0.8
 }
 
+#tabmix-tabs-closebutton.close-icon {
+  width: unset;
+}
+
 #tabmix-tabs-closebutton:hover {
   background-color: transparent;
 }
