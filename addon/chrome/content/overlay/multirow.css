@@ -46,6 +46,7 @@
   display: block;
   margin-top: var(--tabmix-multirow-margin , 0);
   margin-bottom: var(--tabmix-multirow-margin , 0);
+  contain: unset;
 }
 
 #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox) {
