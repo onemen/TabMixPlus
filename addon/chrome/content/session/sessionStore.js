@@ -26,7 +26,7 @@ var TMP_SessionStore = {
       return TMP_Places.getTitleFromBookmark(tabData.url, dataTitle)
           .then(title => {
             if (Tabmix.isBlankNewTab(title)) {
-              title = Tabmix.getString("tabs.emptyTabTitle");
+              title = Tabmix.emptyTabTitle;
             }
             return title;
           });
@@ -52,7 +52,7 @@ var TMP_SessionStore = {
       data = this.getActiveEntryData(tabData);
     }
     if (Tabmix.isBlankNewTab(data.url)) {
-      return Tabmix.getString("tabs.emptyTabTitle");
+      return Tabmix.emptyTabTitle;
     }
     return data.title || null;
   },

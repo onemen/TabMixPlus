@@ -529,11 +529,21 @@ var TMP_eventListener = {
     delete Tabmix._updateCloseButtons;
 
     // update tooltip for tabmix-tabs-closebutton
-    document.getElementById("tabmix-tabs-closebutton").setAttribute('tooltiptext',
-      PluralForm.get(
-        1,
-        gTabBrowserBundle.GetStringFromName("tabs.closeTabs.tooltip")
-      ));
+    const closeButton = document.getElementById("tabmix-tabs-closebutton");
+    if (Tabmix.isVersion(1090)) {
+      document.l10n.setAttributes(closeButton, "tabbrowser-close-tabs-tooltip", {tabCount: 1});
+      document.l10n.translateElements([closeButton]).then(() => {
+        closeButton.removeAttribute("data-l10n-id");
+        closeButton.setAttribute("tooltiptext", closeButton.getAttribute("label"));
+      });
+    } else {
+      closeButton.setAttribute("tooltiptext",
+        PluralForm.get(
+          1,
+          gTabBrowserBundle.GetStringFromName("tabs.closeTabs.tooltip")
+        )
+      );
+    }
 
     Tabmix.allTabs.init();
 
@@ -729,7 +739,7 @@ var TMP_eventListener = {
     if (aTab.hasAttribute("pending")) {
       this.onSSTabRestored(aTab);
       if (Tabmix.isBlankNewTab(aTab.label)) {
-        aTab.label = Tabmix.getString("tabs.emptyTabTitle");
+        aTab.label = Tabmix.emptyTabTitle;
         gBrowser._tabAttrModified(aTab, ["label"]);
       }
     }

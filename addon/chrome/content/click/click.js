@@ -605,7 +605,7 @@ var TabmixContext = {
         let url = browser.currentURI.spec;
         TMP_Places.getTitleFromBookmark(url, browser.contentTitle)
             .then(docTitle => {
-              if (!docTitle || docTitle == Tabmix.getString("tabs.emptyTabTitle"))
+              if (!docTitle || docTitle == Tabmix.emptyTabTitle)
                 titleNotReady = true;
               Tabmix.setItem("tm-renameTab", "disabled", titleNotReady);
             });

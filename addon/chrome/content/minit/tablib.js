@@ -1473,24 +1473,14 @@ Tabmix.tablib = {
     };
 
     Tabmix.tablib.showClosingTabsPrompt = function(shouldPrompt, tabsToClose, numProtected, flags, warnOnClose) {
-      const stringMap = {
-        "tabs.closeTabsTitle": {before: 940, l10n: "tabs.closeWarningMultipleTabs"},
-        "tabs.closeTabsConfirmCheckbox": {before: 940, l10n: "tabs.closeWarningPrompt"},
-        "tabs.closeWarningMultipleTabs": {before: 880, l10n: "tabs.closeWarningMultiple"},
-        "tabs.closeWarningPrompt": {before: 880, l10n: "tabs.closeWarningPromptMe"},
-      };
-      function convert(id, data = stringMap[id]) {
-        return data && !Tabmix.isVersion(data.before) ? convert(data.l10n) : id;
-      }
-      function getString(name) {
-        return Tabmix.getString(convert(name));
-      }
+      const getString = Tabmix.formatValueSync;
 
       let warningTitle, message, chkBoxLabel;
       if (shouldPrompt === 1 || numProtected === 0) {
-        message = PluralForm.get(tabsToClose, getString("tabs.closeTabsTitle"))
-            .replace("#1", tabsToClose);
-        chkBoxLabel = shouldPrompt === 1 ? getString("tabs.closeTabsConfirmCheckbox") :
+        message = Tabmix.isVersion(1090) ?
+          getString("tabbrowser-confirm-close-tabs-title", {tabCount: tabsToClose}) :
+          PluralForm.get(tabsToClose, getString("tabs.closeTabsTitle")).replace("#1", tabsToClose);
+        chkBoxLabel = shouldPrompt === 1 ? getString("tabbrowser-confirm-close-tabs-checkbox") :
           TabmixSvc.getString("window.closeWarning.2");
       } else {
         let messageKey = "protectedtabs.closeWarning.";
@@ -1503,7 +1493,7 @@ Tabmix.tablib = {
         chkBoxLabel = TabmixSvc.getString(chkBoxKey);
       }
 
-      let buttonLabel = shouldPrompt == 1 ? getString("tabs.closeButtonMultiple") :
+      let buttonLabel = shouldPrompt == 1 ? getString("tabbrowser-confirm-close-tabs-button") :
         TabmixSvc.getString("closeWindow.label");
 
       if (Tabmix.isVersion(940)) {
@@ -1637,7 +1627,7 @@ Tabmix.tablib = {
   get labels() {
     delete this.labels;
     this.labels = [
-      Tabmix.getString("tabs.emptyTabTitle"),
+      Tabmix.emptyTabTitle,
     ];
     return this.labels;
   },
@@ -1843,18 +1833,32 @@ Tabmix.tablib = {
 
 }; // end Tabmix.tablib
 
-// Firefox 58 - Bug 1409784 - Remove mStringBundle from tabbrowser binding
-// and expose gTabBrowserBundle instead
-XPCOMUtils.defineLazyGetter(Tabmix, "getString", () => {
-  return typeof gTabBrowserBundle == "object" ?
-    gTabBrowserBundle.GetStringFromName.bind(gTabBrowserBundle) :
-    gBrowser.mStringBundle.getString.bind(gBrowser.mStringBundle);
+XPCOMUtils.defineLazyGetter(Tabmix, "emptyTabTitle", () => {
+  return Tabmix.formatValueSync("tabbrowser-empty-tab-title");
 });
 
-XPCOMUtils.defineLazyGetter(Tabmix, "getFormattedString", () => {
-  return typeof gTabBrowserBundle == "object" ?
-    gTabBrowserBundle.formatStringFromName.bind(gTabBrowserBundle) :
-    gBrowser.mStringBundle.getFormattedString.bind(gBrowser.mStringBundle);
+// since Firefox 109, after bug 1760029 removed tabbrowser.properties we use fluent
+XPCOMUtils.defineLazyGetter(Tabmix, "formatValueSync", () => {
+  const stringMap = {
+    "tabs.closeTabsTitle": {before: 940, l10n: "tabs.closeWarningMultipleTabs"},
+    "tabs.closeTabsConfirmCheckbox": {before: 940, l10n: "tabs.closeWarningPrompt"},
+    "tabs.closeWarningMultipleTabs": {before: 880, l10n: "tabs.closeWarningMultiple"},
+    "tabs.closeWarningPrompt": {before: 880, l10n: "tabs.closeWarningPromptMe"},
+    "tabbrowser-empty-tab-title": {before: 1090, l10n: "tabs.emptyTabTitle"},
+    "tabbrowser-confirm-close-tabs-title": {before: 1090, l10n: "tabs.closeTabsTitle"},
+    "tabbrowser-confirm-close-tabs-button": {before: 1090, l10n: "tabs.closeButtonMultiple"},
+    "tabbrowser-confirm-close-tabs-checkbox": {before: 1090, l10n: "tabs.closeTabsConfirmCheckbox"},
+  };
+  function convert(id, data = stringMap[id]) {
+    return data && !Tabmix.isVersion(data.before) ? convert(data.l10n) : id;
+  }
+  const getString = Tabmix.isVersion(1090) ?
+    gBrowser.tabLocalization.formatValueSync.bind(gBrowser.tabLocalization) :
+    gTabBrowserBundle.GetStringFromName.bind(gTabBrowserBundle);
+
+  return (id, args) => {
+    return getString(convert(id), args);
+  };
 });
 
 Tabmix.isNewTabUrls = function Tabmix_isNewTabUrls(aUrl) {
