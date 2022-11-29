@@ -983,8 +983,7 @@ Tabmix.bottomToolbarUtils = {
     let $LF = '\n    ';
     Tabmix.changeCode(FullScreen, "FullScreen.hideNavToolbox")._replace(
       'this._isChromeCollapsed = true;',
-      'TMP_eventListener._updateMarginBottom(gNavToolbox.style.marginTop);' + $LF +
-        '$&' + $LF +
+      '$&' + $LF +
         'TMP_eventListener.toggleTabbarVisibility(false, arguments[0]);'
     ).toCode();
   },

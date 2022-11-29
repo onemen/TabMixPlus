@@ -696,10 +696,9 @@ var TMP_eventListener = {
         bottomToolbox.setAttribute("fullscreenShouldAnimate", true);
       }
 
-      let bottombox = document.getElementById("browser-bottombox");
       bottomToolbox.style.marginBottom =
           -(bottomToolbox.getBoundingClientRect().height +
-          bottombox.getBoundingClientRect().height) + "px";
+          (bottomToolbox.nextElementSibling?.getBoundingClientRect().height ?? 0)) + "px";
     }
   },
 
