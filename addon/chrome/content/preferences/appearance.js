@@ -71,11 +71,11 @@ var gAppearancePane = {
 
   _waterfoxPositionControl() {
     gPrefWindow.removeItemAndPrefById("pref_tabBarPosition");
-    MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
     const position = $("waterfox-tabBarPosition");
     position.hidden = false;
     let positionPref, defaultPrefValue;
     if (Tabmix.isVersion(913)) {
+      MozXULElement.insertFTLIfNeeded(Tabmix.isVersion(1020) ? "browser/waterfox.ftl" : "browser/extensibles.ftl");
       defaultPrefValue = "topabove";
       positionPref = "browser.tabs.toolbarposition";
       position.appendChild(MozXULElement.parseXULToFragment(
@@ -89,9 +89,10 @@ var gAppearancePane = {
       if (!Services.prefs.prefHasUserValue(positionPref)) {
         document.l10n.translateElements([$("tabBarTopAbove")]).then(() => {
           position.setAttribute("label", $("tabBarTopAbove").label);
-        });
+        }).catch(e => console.error("error in _waterfoxPositionControl", e));
       }
     } else {
+      MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
       defaultPrefValue = "topAboveAB";
       positionPref = "browser.tabBar.position";
       position.appendChild(MozXULElement.parseXULToFragment(
