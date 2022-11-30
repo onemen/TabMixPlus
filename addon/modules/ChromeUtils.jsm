@@ -24,6 +24,7 @@ const modulesMap = {
   "resource://gre/modules/Preferences.jsm": [1080, "resource://gre/modules/Preferences.sys.mjs"],
   "resource://gre/modules/PrivateBrowsingUtils.jsm": [1080, "resource://gre/modules/PrivateBrowsingUtils.sys.mjs"],
   "resource://gre/modules/Timer.jsm": [1080, "resource://gre/modules/Timer.sys.mjs"],
+  "resource://gre/modules/FormHistory.jsm": [1090, "resource://gre/modules/FormHistory.sys.mjs"],
 };
 
 const _versions = {};
