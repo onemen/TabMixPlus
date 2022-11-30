@@ -1826,6 +1826,13 @@ gTMPprefObserver = {
       TabmixSvc.isG5Waterfox && Services.prefs.getBoolPref("userChrome.theme.enable", false);
     const buttonsMarginBlock = reduceButtonHeight ? "-4px !important" : "0";
 
+    if (TabmixSvc.isWaterfox) {
+      insertRule(
+        `#main-window[uidensity=compact] #tabbrowser-tabs:not([secondarytext-unsupported]) .tab-label-container {
+          height: 29px;
+        }`);
+    }
+
     insertRule(
       `#tabmix-scrollbox::part(scrollbutton-up),
        #tabmix-scrollbox::part(scrollbutton-down) {
