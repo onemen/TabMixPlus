@@ -60,7 +60,9 @@ Tabmix.tablib = {
     params.inBackground = false;
     params.allowThirdPartyFixup = isFlagged("LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP");
     params.fromExternal = isFlagged("LOAD_FLAGS_FROM_EXTERNAL");
-    params.allowMixedContent = isFlagged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
+    if (!Tabmix.isVersion(890)) {
+      params.allowMixedContent = isFlagged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
+    }
     return gBrowser.loadOneTab(uri, params);
   },
 

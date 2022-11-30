@@ -210,8 +210,7 @@ Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
 
 (function(obj) {
   let global = Cu.getGlobalForObject(obj);
-  // eslint-disable-next-line no-useless-concat
-  let fn = global["ev" + "al"];
+  let fn = global.eval;
   Tabmix._makeCode = function(name, code) {
     if (name) {
       return fn(name + " = " + code);

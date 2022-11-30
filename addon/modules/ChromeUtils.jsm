@@ -18,6 +18,7 @@ const modulesMap = {
   "resource://gre/modules/FileUtils.jsm": [1070, "resource://gre/modules/FileUtils.sys.mjs"],
   "resource:///actors/ClickHandlerParent.jsm": [1070, "resource:///actors/ClickHandlerParent.sys.mjs"],
   "resource://gre/modules/SearchSuggestionController.jsm": [1070, "resource://gre/modules/SearchSuggestionController.sys.mjs"],
+  "resource://gre/modules/BrowserUtils.jsm": [1070, "resource://gre/modules/BrowserUtils.sys.mjs"],
   "resource://gre/modules/AppConstants.jsm": [1080, "resource://gre/modules/AppConstants.sys.mjs"],
   "resource://gre/modules/DeferredTask.jsm": [1080, "resource://gre/modules/DeferredTask.sys.mjs"],
   "resource://gre/modules/E10SUtils.jsm": [1080, "resource://gre/modules/E10SUtils.sys.mjs"],

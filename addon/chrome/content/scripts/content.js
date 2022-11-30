@@ -7,6 +7,7 @@ const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content
 const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
 TabmixChromeUtils.defineLazyModuleGetters(this, {
+  BrowserUtils: "resource://gre/modules/BrowserUtils.jsm",
   E10SUtils: "resource://gre/modules/E10SUtils.jsm",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
 });
@@ -237,7 +238,7 @@ TabmixClickEventHandler = {
         const divertMiddleClick = event.button == 1 && ContentSvc.prefBranch.getBoolPref("middlecurrent");
         const ctrlKey = AppConstants.platform == "macosx" ? event.metaKey : event.ctrlKey;
         if (divertMiddleClick || ctrlKey ||
-        LinkNodeUtils.isSpecialPage(href, node, currentHref)) {
+            LinkNodeUtils.isSpecialPage(href, node, currentHref)) {
           this.contentAreaClick(event, linkData);
         }
       }
@@ -256,8 +257,20 @@ TabmixClickEventHandler = {
   getLinkData(event) {
     // tabmix_isMultiProcessBrowser is undefined for remote browser when
     // window.gMultiProcessBrowser is true
-    if (!event.isTrusted || event.defaultPrevented || event.button == 2 ||
+    if (event.defaultPrevented || event.button == 2 ||
         event.tabmix_isMultiProcessBrowser === false) {
+      return null;
+    }
+
+    // Don't do anything on editable things, we shouldn't open links in
+    // contenteditables, and editor needs to possibly handle middlemouse paste
+    let composedTarget = event.composedTarget;
+    if (
+      composedTarget.isContentEditable ||
+      composedTarget.ownerDocument && composedTarget.ownerDocument.designMode == "on" ||
+      ChromeUtils.getClassName(composedTarget) == "HTMLInputElement" ||
+      ChromeUtils.getClassName(composedTarget) == "HTMLTextAreaElement"
+    ) {
       return null;
     }
 
@@ -269,7 +282,18 @@ TabmixClickEventHandler = {
       return null;
     }
 
-    return this._hrefAndLinkNodeForClickEvent(event);
+    // For untrusted events, require a valid transient user gesture activation.
+    if (
+      ContentSvc.version(960) ?
+        !event.isTrusted && !ownerDoc.hasValidTransientUserGestureActivation :
+        !event.isTrusted
+    ) {
+      return null;
+    }
+
+    return ContentSvc.version(910) ?
+      BrowserUtils.hrefAndLinkNodeForClickEvent(event) :
+      this._hrefAndLinkNodeForClickEvent(event);
   },
 
   contentAreaClick(event, linkData) {
@@ -298,6 +322,7 @@ TabmixClickEventHandler = {
     let frameID = WebNavigationFrames.getFrameId(ownerDoc.defaultView);
 
     let json = {
+      isTrusted: event.isTrusted,
       button: event.button,
       shiftKey: event.shiftKey,
       ctrlKey: event.ctrlKey,
@@ -349,7 +374,14 @@ TabmixClickEventHandler = {
 
     const actor = docShell.domWindow.windowGlobalChild.getActor("ClickHandler");
 
-    if (href) {
+    // we are not suppose to get here from middle-click TabmixContent:Click
+    // should return "default";
+    const isFromMiddleMousePasteHandler =
+      ContentSvc.version(980) &&
+      Services.prefs.getBoolPref("middlemouse.contentLoadURL", false) &&
+      !Services.prefs.getBoolPref("general.autoScroll", true);
+
+    if (href && !isFromMiddleMousePasteHandler) {
       try {
         const secMan = Services.scriptSecurityManager;
         const args = ContentSvc.version(870) ?
@@ -359,34 +391,52 @@ TabmixClickEventHandler = {
         return;
       }
 
+      if (
+        ContentSvc.version(960) &&
+        !event.isTrusted &&
+        BrowserUtils.whereToOpenLink(event) != "current"
+      ) {
+        ownerDoc.consumeTransientUserGestureActivation();
+      }
+
       json.href = href;
       if (node) {
         json.title = node.getAttribute("title");
       }
 
-      // Check if the link needs to be opened with mixed content allowed.
-      // Only when the owner doc has |mixedContentChannel| and the same origin
-      // should we allow mixed content.
-      json.allowMixedContent = false;
-      let docshell = ownerDoc.defaultView.docShell;
-      if (docShell.mixedContentChannel) {
-        const sm = Services.scriptSecurityManager;
-        try {
-          let targetURI = Services.io.newURI(href);
-          let isPrivateWin =
+      if (!ContentSvc.version(890)) {
+        // Check if the link needs to be opened with mixed content allowed.
+        // Only when the owner doc has |mixedContentChannel| and the same origin
+        // should we allow mixed content.
+        json.allowMixedContent = false;
+        let docshell = ownerDoc.defaultView.docShell;
+        if (docShell.mixedContentChannel) {
+          const sm = Services.scriptSecurityManager;
+          try {
+            let targetURI = Services.io.newURI(href);
+            let isPrivateWin =
             ownerDoc.nodePrincipal.originAttributes.privateBrowsingId > 0;
-          sm.checkSameOriginURI(
-            docshell.mixedContentChannel.URI,
-            targetURI,
-            false,
-            isPrivateWin
-          );
-          json.allowMixedContent = true;
-        } catch (e) {}
+            sm.checkSameOriginURI(
+              docshell.mixedContentChannel.URI,
+              targetURI,
+              false,
+              isPrivateWin
+            );
+            json.allowMixedContent = true;
+          } catch (e) {}
+        }
       }
       json.originPrincipal = ownerDoc.nodePrincipal;
       json.originStoragePrincipal = ownerDoc.effectiveStoragePrincipal;
       json.triggeringPrincipal = ownerDoc.nodePrincipal;
+
+      if (
+        ContentSvc.version(1050) &&
+        (ownerDoc.URL === "about:newtab" || ownerDoc.URL === "about:home") &&
+        node.dataset.isSponsoredLink === "true"
+      ) {
+        json.globalHistoryOptions = {triggeringSponsoredURL: href};
+      }
 
       // If a link element is clicked with middle button, user wants to open
       // the link somewhere rather than pasting clipboard content.  Therefore,
@@ -394,7 +444,7 @@ TabmixClickEventHandler = {
       // actions here to avoid leaking clipboard content unexpectedly.
       // Note that whether the link will work actually or not does not matter
       // because in this case, user does not intent to paste clipboard content.
-      if (event.button === 1) {
+      if (ContentSvc.version(1000) || event.button === 1) {
         event.preventMultipleActions();
       }
 
@@ -402,8 +452,12 @@ TabmixClickEventHandler = {
       return;
     }
 
-    // This might be middle mouse navigation.
-    if (event.button == 1) {
+    // This might be middle mouse navigation, in which case pass this back:
+    if (ContentSvc.version(980)) {
+      if (!href && event.button == 1 && isFromMiddleMousePasteHandler) {
+        docShell.domWindow.windowGlobalChild.getActor("MiddleMousePasteHandler").onProcessedClick(json);
+      }
+    } else if (event.button == 1) {
       actor.sendAsyncMessage("Content:Click", json);
     }
   },

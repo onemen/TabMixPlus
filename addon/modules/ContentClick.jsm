@@ -11,6 +11,7 @@ TabmixChromeUtils.defineLazyModuleGetters(lazy, {
   ClickHandlerParent: "resource:///actors/ClickHandlerParent.jsm",
   E10SUtils: "resource://gre/modules/E10SUtils.jsm",
   LinkNodeUtils: "chrome://tabmix-resource/content/LinkNodeUtils.jsm",
+  PlacesUIUtils: "resource:///modules/PlacesUIUtils.jsm",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.jsm",
 });
@@ -123,14 +124,34 @@ ContentClickInternal = {
         charset: browser.characterSet,
         suppressTabsOnFileDownload,
         referrerInfo: lazy.E10SUtils.deserializeReferrerInfo(json.referrerInfo),
-        allowMixedContent: json.allowMixedContent,
         isContentWindowPrivate: json.isContentWindowPrivate,
         originPrincipal: json.originPrincipal,
         originStoragePrincipal: json.originStoragePrincipal,
         triggeringPrincipal: json.triggeringPrincipal,
         csp: json.csp ? lazy.E10SUtils.deserializeCSP(json.csp) : null,
         frameID: json.frameID,
+        openerBrowser: browser,
+        hasValidUserGestureActivation: true,
+        triggeringRemoteType: this.manager.domProcess?.remoteType,
       };
+
+      if (!lazy.TabmixSvc.version(890)) {
+        params.allowMixedContent = json.allowMixedContent;
+      }
+
+      if (lazy.TabmixSvc.version(1050)) {
+        if (json.globalHistoryOptions) {
+          params.globalHistoryOptions = json.globalHistoryOptions;
+        } else {
+          params.globalHistoryOptions = {
+            triggeringSponsoredURL: browser.getAttribute("triggeringSponsoredURL"),
+            triggeringSponsoredURLVisitTimeMS: browser.getAttribute(
+              "triggeringSponsoredURLVisitTimeMS"
+            ),
+          };
+        }
+      }
+
       if (json.originAttributes.userContextId) {
         params.userContextId = json.originAttributes.userContextId;
       }
@@ -140,8 +161,7 @@ ContentClickInternal = {
       try {
         if (!lazy.PrivateBrowsingUtils.isWindowPrivate(window)) {
           // this function is bound to ClickHandlerParent that import PlacesUIUtils
-          // eslint-disable-next-line no-undef
-          PlacesUIUtils.markPageAsFollowedLink(json.href);
+          lazy.PlacesUIUtils.markPageAsFollowedLink(json.href);
         }
       } catch (ex) {
         /* Skip invalid URIs. */
@@ -187,19 +207,31 @@ ContentClickInternal = {
       return false;
     }
 
-    let win = browser.ownerGlobal;
-    win.openLinkIn(href, result.where, {
+    if (lazy.TabmixSvc.version(960) && !event.isTrusted && result.where != "current") {
+      browser.ownerDocument.consumeTransientUserGestureActivation();
+    }
+
+    const params = {
       charset: browser.characterSet,
       referrerInfo: lazy.E10SUtils.deserializeReferrerInfo(event.referrerInfo),
-      allowMixedContent: event.allowMixedContent,
       isContentWindowPrivate: event.isContentWindowPrivate,
       originPrincipal: event.originPrincipal,
       originStoragePrincipal: event.originStoragePrincipal,
       triggeringPrincipal: event.triggeringPrincipal,
       csp: event.csp ? lazy.E10SUtils.deserializeCSP(event.csp) : null,
       frameID: event.frameID,
-      suppressTabsOnFileDownload: result.suppressTabsOnFileDownload
-    });
+      suppressTabsOnFileDownload: result.suppressTabsOnFileDownload,
+      openerBrowser: browser,
+      hasValidUserGestureActivation: true,
+      triggeringRemoteType: lazy.ClickHandlerParent.manager?.domProcess?.remoteType,
+    };
+
+    if (!lazy.TabmixSvc.version(890)) {
+      params.allowMixedContent = event.allowMixedContent;
+    }
+
+    let win = browser.ownerGlobal;
+    win.openLinkIn(href, result.where, params);
 
     return true;
   },
