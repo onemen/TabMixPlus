@@ -68,12 +68,23 @@ var gPrefWindow = {
 
   initPane(aPaneID) {
     this.initBroadcasters(aPaneID);
+
+    const aPaneElement = $(aPaneID);
+    // select last selected tab in this pane
+    const tabs = $(aPaneID).querySelector("tabbox")?.querySelector("tabs");
+    if (tabs) {
+      let preference = $("pref_" + tabs.id);
+      if (preference?.value !== undefined) {
+        tabs.selectedIndex = preference.value;
+      }
+    }
+
     // let _selectPane method set width for first prefpane
     if (!this._initialized) {
       this.init();
       return;
     }
-    let aPaneElement = $(aPaneID), diff = 0;
+    let diff = 0;
     let content = aPaneElement.getElementsByAttribute("class", "content-box")[0];
     let style = window.getComputedStyle(content);
     let contentWidth = parseInt(style.width) + parseInt(style.marginRight) +
