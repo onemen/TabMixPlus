@@ -22,8 +22,26 @@ var gMenuPane = {
     var browserWindow = Tabmix.getTopWin();
     let $$ = id => browserWindow.document.getElementById(id);
 
-    $("muteTab").label = browserWindow.gNavigatorBundle.getString("muteTab.label") + "/" +
-        browserWindow.gNavigatorBundle.getString("unmuteTab.label");
+    if (Tabmix.isVersion(1050)) {
+      const [showBmkTab, showBmkTabs] = [$("showBmkTab"), $("showBmkTabs")];
+      document.l10n.translateElements([showBmkTab, showBmkTabs]).then(() => {
+        showBmkTab.label = showBmkTab.label.replace("…", "");
+        showBmkTabs.label = showBmkTabs.label.replace("…", "");
+      });
+    }
+
+    if (Tabmix.isVersion(1090)) {
+      MozXULElement.insertFTLIfNeeded("browser/tabbrowser.ftl");
+      const [muted, unmuted] = [$("muteTab"), $("unmuteTab")];
+      document.l10n.setAttributes(muted, "tabbrowser-context-mute-tab");
+      document.l10n.setAttributes(unmuted, "tabbrowser-context-unmute-tab");
+      document.l10n.translateElements([muted, unmuted, $("showBmkTab")]).then(() => {
+        muted.label += "/" + unmuted.label;
+      });
+    } else {
+      $("muteTab").label = browserWindow.gNavigatorBundle.getString("muteTab.label") + "/" +
+            browserWindow.gNavigatorBundle.getString("unmuteTab.label");
+    }
 
     // if Tabview exist copy its menu label
     let tabViewMenu = browserWindow.TMP_TabView.installed &&

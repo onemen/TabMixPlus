@@ -345,6 +345,7 @@ TabmixSvc = {
       "tab-context-open-in-new-container-tab": {before: 880, l10n: "reopen-in-container"},
       "tab-context-close-n-tabs": {before: 920, l10n: "tab-context-close-tabs"},
       "tab-context-close-tabs": {before: 800, l10n: "close-tab"},
+      "tab-context-bookmark-tab": {before: 1050, l10n: "bookmark-tab"},
     };
   },
 };
