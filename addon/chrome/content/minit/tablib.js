@@ -764,17 +764,9 @@ Tabmix.tablib = {
       $1$2`
     ).toCode();
 
-    Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype._onPopupShowing")._replace(
-      'this.toggleRecentlyClosedWindows();',
-      '$& \
-       TMP_Places.historyMenuItemsTitle(aEvent);'
-    )._replace(
-      'this.toggleRecentlyClosedWindows();',
-      '$& \
-       let SM = TabmixSessionManager;\
-       Tabmix.setItem("Browser:RestoreLastSession", "disabled", !SM.canRestoreLastSession || SM.isPrivateWindow);',
-      {check: Tabmix.prefs.getBoolPref("sessions.manager")}
-    ).toCode();
+    document.getElementById("history-menu").addEventListener("popupshowing", event => {
+      TMP_Places.historyMenuItemsTitle(event);
+    });
 
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoWindowSubmenu")._replace(
       '"menuitem"',
