@@ -413,6 +413,7 @@ TabmixChromeUtils.defineLazyModuleGetters(TabmixSvc, {
 ChromeUtils.defineModuleGetter(TabmixSvc, "console",
   "chrome://tabmix-resource/content/log.jsm");
 
+// TODO: this will stop working with SessionStore.sys.mjs
 XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", () => {
   // Don't ChromeUtils.import here it can not import variables that
   // are not in EXPORTED_SYMBOLS

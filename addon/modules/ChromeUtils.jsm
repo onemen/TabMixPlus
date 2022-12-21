@@ -26,6 +26,9 @@ const modulesMap = {
   "resource://gre/modules/PrivateBrowsingUtils.jsm": [1080, "resource://gre/modules/PrivateBrowsingUtils.sys.mjs"],
   "resource://gre/modules/Timer.jsm": [1080, "resource://gre/modules/Timer.sys.mjs"],
   "resource://gre/modules/FormHistory.jsm": [1090, "resource://gre/modules/FormHistory.sys.mjs"],
+  "resource:///modules/sessionstore/TabState.jsm": [1090, "resource:///modules/sessionstore/TabState.sys.mjs"],
+  "resource:///modules/sessionstore/TabStateCache.jsm": [1090, "resource:///modules/sessionstore/TabStateCache.sys.mjs"],
+  "resource:///modules/sessionstore/SessionStore.jsm": [1090, "resource:///modules/sessionstore/SessionStore.sys.mjs"],
 };
 
 const _versions = {};

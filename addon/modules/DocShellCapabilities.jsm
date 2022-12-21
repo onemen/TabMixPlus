@@ -3,10 +3,11 @@
 const EXPORTED_SYMBOLS = ["DocShellCapabilities"];
 
 const lazy = {};
-ChromeUtils.defineModuleGetter(lazy, "TabState",
-  "resource:///modules/sessionstore/TabState.jsm");
-ChromeUtils.defineModuleGetter(lazy, "TabStateCache",
-  "resource:///modules/sessionstore/TabStateCache.jsm");
+const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+  TabState: "resource:///modules/sessionstore/TabState.jsm",
+  TabStateCache: "resource:///modules/sessionstore/TabStateCache.jsm",
+});
 
 const DocShellCapabilities = {
   init() {

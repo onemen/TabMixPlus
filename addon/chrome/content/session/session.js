@@ -305,10 +305,11 @@ TabmixSessionManager = {
     }
     this._inited = true;
 
-    ChromeUtils.defineModuleGetter(this, "TabState",
-      "resource:///modules/sessionstore/TabState.jsm");
-    ChromeUtils.defineModuleGetter(this, "TabStateCache",
-      "resource:///modules/sessionstore/TabStateCache.jsm");
+    const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+    TabmixChromeUtils.defineLazyModuleGetters(TabmixSessionManager, {
+      TabState: "resource:///modules/sessionstore/TabState.jsm",
+      TabStateCache: "resource:///modules/sessionstore/TabStateCache.jsm",
+    });
 
     // just in case Tabmix.tablib isn't init yet
     // when Webmail Notifier extension installed and user have master password
