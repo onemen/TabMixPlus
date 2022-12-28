@@ -1,4 +1,4 @@
-/* globals Cc, Ci, Cu */
+/* globals Cc, Ci */
 "use strict";
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
@@ -138,7 +138,7 @@ var TabmixContentHandler = {
         try {
           FaviconLoader.load(data);
         } catch (ex) {
-          Cu.reportError(ex);
+          console.error(ex);
         }
         break;
       }

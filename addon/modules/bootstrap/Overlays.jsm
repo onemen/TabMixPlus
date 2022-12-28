@@ -540,7 +540,7 @@ class Overlays {
       try {
         Services.scriptloader.loadSubScript(url, this.window);
       } catch (ex) {
-        Cu.reportError(ex);
+        console.error(ex);
       }
     } else if (node.textContent) {
       console.debug(`Loading eval'd script into ${this.window.location}`);
@@ -551,7 +551,7 @@ class Overlays {
         // loadSubScript will have to do.
         Services.scriptloader.loadSubScript(dataURL, this.window);
       } catch (ex) {
-        Cu.reportError(ex);
+        console.error(ex);
       }
     }
 

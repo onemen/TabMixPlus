@@ -20,7 +20,7 @@
             }
           });
         } catch (ex) {
-          Cu.reportError(ex);
+          console.error(ex);
         }
       }, {once: true});
       const config = {attributes: true};
@@ -37,7 +37,7 @@
                   el.removeAttribute(mutation.attributeName);
                 }
               } catch (ex) {
-                Cu.reportError(ex);
+                console.error(ex);
               }
             }
           }
@@ -60,7 +60,7 @@
           if (obs.hasAttribute(attr))
             el.setAttribute(attr, obs.attributes[attr].value);
         } catch (ex) {
-          Cu.reportError(ex);
+          console.error(ex);
         }
       }, {once: true});
       const config = {attributes: true};
@@ -75,7 +75,7 @@
                 el.removeAttribute(attr);
               }
             } catch (ex) {
-              Cu.reportError(ex);
+              console.error(ex);
             }
           }
         }

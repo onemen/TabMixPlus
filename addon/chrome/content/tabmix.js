@@ -540,6 +540,7 @@ var TMP_eventListener = {
       closeButton.setAttribute("tooltiptext",
         PluralForm.get(
           1,
+          // eslint-disable-next-line no-undef
           gTabBrowserBundle.GetStringFromName("tabs.closeTabs.tooltip")
         )
       );

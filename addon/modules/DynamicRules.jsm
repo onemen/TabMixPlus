@@ -291,7 +291,7 @@ const DynamicRules = {
   },
 
   handleError(error, ruleName) {
-    Cu.reportError(lazy.TabmixSvc.console.error(error));
+    console.error(lazy.TabmixSvc.console.error(error));
     lazy.TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
     lazy.Prefs.clearUserPref(ruleName);
   },

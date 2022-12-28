@@ -269,7 +269,7 @@ var TMP_tabDNDObserver = {
     };
     PageThumbs.captureToCanvas(tab.linkedBrowser, this._dndCanvas)
         .then(captureListener)
-        .catch(e => Cu.reportError(e));
+        .catch(e => console.error(e));
   },
 
   // we call this function from gBrowser.tabContainer.on_dragover

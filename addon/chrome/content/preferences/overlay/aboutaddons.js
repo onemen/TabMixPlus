@@ -33,7 +33,7 @@ window.addEventListener("load", () => {
   try {
     updateShowItemPreferences();
   } catch (ex) {
-    Cu.reportError(ex);
+    console.error(ex);
   }
 }, {once: true});
 
@@ -52,7 +52,7 @@ window.addEventListener("load", () => {
             updateShowItemPreferences();
             break;
           } catch (ex) {
-            Cu.reportError(ex);
+            console.error(ex);
           }
         }
       }

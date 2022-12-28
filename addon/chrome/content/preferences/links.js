@@ -16,7 +16,7 @@ var gLinksPane = {
               $("externalLinkTarget").querySelector('menuitem[value="-1"]').label = mutation.target.label;
             }
           } catch (ex) {
-            Cu.reportError(ex);
+            console.error(ex);
           }
         }
       }

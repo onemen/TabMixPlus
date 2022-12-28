@@ -101,7 +101,7 @@ class Preferences extends MozXULElement {
       event.initEvent("change", true, true);
       aPreference.dispatchEvent(event);
     } catch (e) {
-      Cu.reportError(e);
+      console.error(e);
     }
   }
 }
@@ -435,7 +435,7 @@ class Preference extends MozXULElement {
           aElement.getAttribute("onsyncfrompreference"));
         rv = f.call(aElement, event);
       } catch (e) {
-        Cu.reportError(e);
+        console.error(e);
       }
     }
     let val = rv;
@@ -485,7 +485,7 @@ class Preference extends MozXULElement {
         if (rv !== undefined)
           return rv;
       } catch (e) {
-        Cu.reportError(e);
+        console.error(e);
       }
     }
 
@@ -1608,7 +1608,7 @@ class PrefWindow extends MozXULElement {
       }
       return !cancel;
     } catch (e) {
-      Cu.reportError(e);
+      console.error(e);
     }
     return false;
   }

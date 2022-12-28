@@ -1848,6 +1848,7 @@ XPCOMUtils.defineLazyGetter(Tabmix, "formatValueSync", () => {
   }
   const getString = Tabmix.isVersion(1090) ?
     gBrowser.tabLocalization.formatValueSync.bind(gBrowser.tabLocalization) :
+    // eslint-disable-next-line no-undef
     gTabBrowserBundle.GetStringFromName.bind(gTabBrowserBundle);
 
   return (id, args) => {
