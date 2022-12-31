@@ -167,6 +167,11 @@ prefpane > .content-box > tabbox {
   height: 505px;
 }
 
+#TabMIxPreferences[linux] prefpane > .content-box > tabbox {
+  width: 560px;
+  height: 540px;
+}
+
 .prefWindow-dlgbuttons {
 	padding-inline-start: 10px;
 }

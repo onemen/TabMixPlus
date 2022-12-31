@@ -22,6 +22,9 @@ var gPrefWindow = {
       prefWindow.setAttribute("mac", true);
     } else if (TabmixSvc.isLinux) {
       prefWindow.setAttribute("linux", true);
+      window.requestAnimationFrame(() => {
+        window.sizeToContent();
+      });
     }
 
     /* we don't need to fix tabpanels border in ubuntu */
