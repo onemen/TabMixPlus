@@ -398,6 +398,14 @@ Tabmix.tabsUtils = {
     return {collapsed, toolbar, tabBar, toolbarCollapsed, tabBarCollapsed};
   },
 
+  // get all tabs without _removingTabs
+  getTabsCount(num = gBrowser.tabs.length) {
+    const removingTabs = Tabmix.isVersion(1100) ?
+      gBrowser._removingTabs.size :
+      gBrowser._removingTabs.length;
+    return num - removingTabs;
+  },
+
   events: ["dblclick", "click"],
 
   init() {
@@ -741,7 +749,10 @@ Tabmix.tabsUtils = {
           if (tabBar._lastTabClosedByMouse) {
             tabBar._expandSpacerBy(tabBar._scrollButtonWidth);
           }
-          for (let tab of Array.from(gBrowser._removingTabs)) {
+          const removingTabs = Tabmix.isVersion(1100) ?
+            gBrowser._removingTabs :
+            Array.from(gBrowser._removingTabs);
+          for (let tab of removingTabs) {
             gBrowser.removeTab(tab);
           }
           tabBar._positionPinnedTabs();
@@ -2251,7 +2262,7 @@ gTMPprefObserver = {
       TabmixTabbar.hideMode !== 2 &&
       (Tabmix.isVersion(1020) ?
         gBrowser.visibleTabs.length > 1 :
-        gBrowser.tabs.length - gBrowser._removingTabs.length > 1)
+        Tabmix.tabsUtils.getTabsCount() > 1)
     ) {
       gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
       TabmixTabbar.updateBeforeAndAfter();

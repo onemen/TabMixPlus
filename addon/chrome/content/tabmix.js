@@ -799,8 +799,7 @@ var TMP_eventListener = {
     // reset all scroll and multi-row parameter
     // strip already collapsed at this point
     if (TabmixTabbar.hideMode == 1) {
-      let tabsCount = tabBar.allTabs.length - gBrowser._removingTabs.length;
-      if (tabsCount == 2) {
+      if (Tabmix.tabsUtils.getTabsCount() == 2) {
         tabBar.removeAttribute("multibar");
       }
     }

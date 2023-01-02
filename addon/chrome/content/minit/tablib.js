@@ -431,7 +431,7 @@ Tabmix.tablib = {
       `if (TabmixTabbar.hideMode === 2) {
         collapse = true;
       } else if (!gBrowser ||
-        ${Tabmix.isVersion(1020) ? "gBrowser.visibleTabs.length == 1" : "gBrowser.tabs.length - gBrowser._removingTabs.length == 1"}) {
+        ${Tabmix.isVersion(1020) ? "gBrowser.visibleTabs.length == 1" : "Tabmix.tabsUtils.getTabsCount() == 1"}) {
         collapse = !window.toolbar.visible || TabmixTabbar.hideMode === 1;
       }
       $&`
@@ -1421,7 +1421,7 @@ Tabmix.tablib = {
         "extensions.tabmix.protectedtabs.warnOnClose",
         "browser.tabs.warnOnClose"];
       if (onExit) {
-        let openTabs = numTabs - this._removingTabs.length;
+        let openTabs = Tabmix.tabsUtils.getTabsCount(numTabs);
         if (openTabs > 1 && Services.prefs.getBoolPref(prefs[2]))
           shouldPrompt = 3;
         else if (numProtected > 0 && Services.prefs.getBoolPref(prefs[1]))
@@ -1766,7 +1766,7 @@ Tabmix.tablib = {
       var pref = "extensions.tabmix.warnAboutClosingTabs.timeout";
       var startTime = new Date().valueOf();
       var oldTime = Services.prefs.prefHasUserValue(pref) ? Services.prefs.getCharPref(pref) : 0;
-      let closingTabs = gBrowser.tabs.length - gBrowser._removingTabs.length;
+      let closingTabs = Tabmix.tabsUtils.getTabsCount();
       canClose = gBrowser.warnAboutClosingTabs(closingTabs, gBrowser.closingTabsEnum.ALL);
       Services.prefs.setCharPref(pref, Number(oldTime) + (new Date().valueOf() - startTime));
     }

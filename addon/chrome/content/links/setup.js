@@ -245,7 +245,7 @@ Tabmix._updateCloseButtons = function tabContainer_updateCloseButtons(skipUpdate
 
   let oldValue = this.getAttribute("closebuttons");
   var tabs = Tabmix.visibleTabs.tabs;
-  var tabsCount = tabs.length - gBrowser._removingTabs.length;
+  var tabsCount = Tabmix.tabsUtils.getTabsCount(tabs.length);
   switch (Tabmix.tabsUtils.closeButtonsEnabled ? this.mCloseButtons : 0) {
     case 0:
       this.removeAttribute("closebuttons-hover");
