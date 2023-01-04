@@ -63,7 +63,7 @@ Tabmix.tablib = {
     if (!Tabmix.isVersion(890)) {
       params.allowMixedContent = isFlagged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
     }
-    return gBrowser.loadOneTab(uri, params);
+    return Tabmix.isVersion(1100) ? gBrowser.addTab(uri, params) : gBrowser.loadOneTab(uri, params);
   },
 
   allowLoad(browser, uri) {
@@ -605,7 +605,7 @@ Tabmix.tablib = {
       '"browser.tabs.loadDivertedInBackground"',
       'aIsExternal ? "extensions.tabmix.loadExternalInBackground" : $&'
     )._replace(
-      'win.gBrowser.loadOneTab',
+      Tabmix.isVersion(1100) ? 'win.gBrowser.addTab' : 'win.gBrowser.loadOneTab',
       'currentIsBlank ? win.gBrowser._selectedTab : $&'
     )._replace(
       'win.gBrowser.getBrowserForTab(tab);',
@@ -1798,14 +1798,6 @@ Tabmix.tablib = {
       browser.tabmix_allowLoad = true;
     }
     return where;
-  },
-
-  contentAreaOnDrop: function TMP_contentAreaOnDrop(aEvent, aUri, aPostData) {
-    let where = aEvent.tabmixContentDrop || this.whereToOpenDrop(aEvent, aUri);
-    if (where == "tab")
-      gBrowser.loadOneTab(aUri, null, null, aPostData, false, false);
-    else
-      loadURI(aUri, null, aPostData, false);
   },
 
   setURLBarFocus: function TMP_setURLBarFocus() {
