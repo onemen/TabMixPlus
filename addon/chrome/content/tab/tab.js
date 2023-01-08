@@ -254,6 +254,9 @@ var TabmixTabbar = {
 
   // Update positional attributes when we are in multi-row mode
   updateBeforeAndAfter: function TMP_updateBeforeAndAfter(onlyHoverAtt) {
+    if (Tabmix.isVersion(1100)) {
+      return;
+    }
     let tabBar = gBrowser.tabContainer;
     let multibar = tabBar.hasAttribute("multibar");
     let tabRow, topY;
