@@ -319,7 +319,6 @@ TabmixClickEventHandler = {
     }
 
     referrerInfo = E10SUtils.serializeReferrerInfo(referrerInfo);
-    let frameID = WebNavigationFrames.getFrameId(ownerDoc.defaultView);
 
     let json = {
       isTrusted: event.isTrusted,
@@ -330,15 +329,18 @@ TabmixClickEventHandler = {
       altKey: event.altKey,
       href: null,
       title: null,
-      frameID,
-      triggeringPrincipal: principal,
       csp,
       referrerInfo,
-      originAttributes: principal ? principal.originAttributes : {},
-      isContentWindowPrivate: PrivateBrowsingUtils.isContentWindowPrivate(
-        ownerDoc.defaultView
-      ),
     };
+
+    if (!ContentSvc.version(1100)) {
+      json.frameID = WebNavigationFrames.getFrameId(ownerDoc.defaultView);
+      json.triggeringPrincipal = principal;
+      json.originAttributes = principal ? principal.originAttributes : {};
+      json.isContentWindowPrivate = PrivateBrowsingUtils.isContentWindowPrivate(
+        ownerDoc.defaultView
+      );
+    }
 
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       json.tabmix_openLinkWithHistory = true;
@@ -426,9 +428,12 @@ TabmixClickEventHandler = {
           } catch (e) {}
         }
       }
-      json.originPrincipal = ownerDoc.nodePrincipal;
-      json.originStoragePrincipal = ownerDoc.effectiveStoragePrincipal;
-      json.triggeringPrincipal = ownerDoc.nodePrincipal;
+
+      if (!ContentSvc.version(1100)) {
+        json.originPrincipal = ownerDoc.nodePrincipal;
+        json.originStoragePrincipal = ownerDoc.effectiveStoragePrincipal;
+        json.triggeringPrincipal = ownerDoc.nodePrincipal;
+      }
 
       if (
         ContentSvc.version(1050) &&
