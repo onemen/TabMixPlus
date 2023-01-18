@@ -300,7 +300,11 @@ var TMP_Places = {
       aTab.initialize();
     }
 
-    gBrowser._invalidateCachedTabs();
+    if (Tabmix.isVersion(1110)) {
+      gBrowser.tabContainer._invalidateCachedTabs();
+    } else {
+      gBrowser._invalidateCachedTabs();
+    }
 
     // focus the first tab if prefs say to
     if (!loadInBackground || doReplace &&
