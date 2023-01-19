@@ -282,7 +282,8 @@ Tabmix.tablib = {
     )._replace(
       /title = title\.substring\(0, 500\).*;/,
       '$&\
-      urlTitle = title;'
+      urlTitle = title;',
+      {check: !Tabmix.isVersion(1100)}
     )._replace(
       /title = Services.textToSubURI.unEscapeNonAsciiURI\([^;]*;/,
       '$&\
@@ -301,8 +302,8 @@ Tabmix.tablib = {
          TMP_Places.currentTab = null;\
        $&'
     )._replace(
-      '{ isContentTitle }',
-      '{ isContentTitle, urlTitle }',
+      '{ isContentTitle',
+      '{ isContentTitle, urlTitle',
     ).toCode();
 
     Tabmix.originalFunctions.gBrowser_setInitialTabTitle = gBrowser.setInitialTabTitle;
@@ -315,8 +316,13 @@ Tabmix.tablib = {
     };
 
     Tabmix.changeCode(gBrowser, "gBrowser._setTabLabel")._replace(
-      '{ beforeTabOpen, isContentTitle }',
-      '{ beforeTabOpen, isContentTitle, urlTitle }'
+      '{ beforeTabOpen, isContentTitle',
+      '{ beforeTabOpen, isContentTitle, urlTitle'
+    )._replace(
+      /aLabel = aLabel\.substring\(0, 500\).*;/,
+      `$&
+       urlTitle = aLabel;`,
+      {check: Tabmix.isVersion(1100)}
     )._replace(
       'return true;',
       ` Tabmix.tablib.onTabTitleChanged(aTab, aTab.linkedBrowser, aLabel == urlTitle);
