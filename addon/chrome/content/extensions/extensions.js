@@ -443,10 +443,13 @@ TMP_extensionsCompatibility.RSSTICKER = {
 
   onContextOpen(target) {
     if (!target) {
-      if (Tabmix.whereToOpen(null).lock)
+      if (Tabmix.whereToOpen(null).lock) {
         this.parent.browser.openInNewTab(this.href);
-      else
+      } else if (Tabmix.isVersion("1110")) {
+        window.openLinkIn(this.href, "current", {allowThirdPartyFixup: false});
+      } else {
         window.loadURI(this.href);
+      }
     } else if (target == "window") {
       if (Tabmix.singleWindowMode)
         this.parent.browser.openInNewTab(this.href);
