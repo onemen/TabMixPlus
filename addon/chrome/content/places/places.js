@@ -521,7 +521,9 @@ var TMP_Places = {
     // Start observing bookmarks if needed.
     if (!this._hasBookmarksObserver) {
       try {
-        PlacesUtils.bookmarks.addObserver(this);
+        if (!Tabmix.isVersion(1120)) {
+          PlacesUtils.bookmarks.addObserver(this);
+        }
         this.handlePlacesEvents = this.handlePlacesEvents.bind(this);
         PlacesUtils.observers.addListener(
           this.listeners,
@@ -536,7 +538,9 @@ var TMP_Places = {
 
   stopObserver: function TMP_PC_stopObserver() {
     if (this._hasBookmarksObserver) {
-      PlacesUtils.bookmarks.removeObserver(this);
+      if (!Tabmix.isVersion(1120)) {
+        PlacesUtils.bookmarks.removeObserver(this);
+      }
       PlacesUtils.observers.removeListener(
         this.listeners,
         this.handlePlacesEvents
