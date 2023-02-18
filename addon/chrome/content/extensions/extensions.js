@@ -445,7 +445,7 @@ TMP_extensionsCompatibility.RSSTICKER = {
     if (!target) {
       if (Tabmix.whereToOpen(null).lock) {
         this.parent.browser.openInNewTab(this.href);
-      } else if (Tabmix.isVersion("1110")) {
+      } else if (Tabmix.isVersion(1110)) {
         window.openLinkIn(this.href, "current", {allowThirdPartyFixup: false});
       } else {
         window.loadURI(this.href);

@@ -416,14 +416,15 @@ function doReloadTab(window, browser, data) {
                   Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE;
 
   // This part is based on BrowserReloadWithFlags.
-  let url = browser.currentURI.spec;
+  let url = browser.currentURI;
+  let urlSpec = url.spec;
   let {postData, referrerInfo} = data;
   let loadURI =
-      window.gBrowser.updateBrowserRemotenessByURL(browser, url) || postData;
+      window.gBrowser.updateBrowserRemotenessByURL(browser, urlSpec) || postData;
   if (loadURI) {
     if (!postData)
       postData = referrerInfo = null;
-    browser.loadURI(url, {
+    browser.loadURI(TabmixSvc.version(1120) ? url : urlSpec, {
       loadFlags,
       referrerInfo,
       triggeringPrincipal: browser.contentPrincipal,

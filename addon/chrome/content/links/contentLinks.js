@@ -20,7 +20,7 @@ Tabmix.contentAreaClick = {
       /if \(\n*\s*linkNode\.getAttribute\("onclick"\)/,
       'if (where == "default") $&'
     )._replace(
-      Tabmix.isVersion("1110") ? 'openLinkIn(' : 'loadURI(',
+      Tabmix.isVersion(1110) ? 'openLinkIn(' : 'loadURI(',
       'if (where == "tab" || where == "tabshifted") {\n' +
       '        let doc = event.target.ownerDocument;\n' +
       '        let params = { charset: doc.characterSet, initiatingDoc: doc,\n' +

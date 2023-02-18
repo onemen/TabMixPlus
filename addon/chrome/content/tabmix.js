@@ -242,6 +242,9 @@ var TMP_eventListener = {
       case "TabOpen":
         this.onTabOpen(aEvent);
         break;
+      case "TabBrowserInserted":
+        this.onTabBrowserInserted(aEvent);
+        break;
       case "TabClose":
         this.onTabClose(aEvent);
         break;
@@ -322,6 +325,11 @@ var TMP_eventListener = {
     this._tabEvents = ["SSTabRestoring", "SSTabRestored", "PrivateTab:PrivateChanged",
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned",
       "TabAttrModified"];
+
+    if (Tabmix.isVersion(1120)) {
+      this._tabEvents.push("TabBrowserInserted");
+    }
+
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
 
     gBrowser.selectedTab.tabmixKey = {};
@@ -730,6 +738,10 @@ var TMP_eventListener = {
     if (gBrowser.selectedTab.pinned && !tab.pinned) {
       TabmixTabbar.setFirstTabInRow();
     }
+  },
+
+  onTabBrowserInserted(event) {
+    Tabmix.tablib.setLoadURI(event.target.linkedBrowser);
   },
 
   // this function call onTabOpen_updateTabBar after some delay

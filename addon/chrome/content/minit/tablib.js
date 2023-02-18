@@ -17,6 +17,48 @@ Tabmix.tablib = {
 
   _loadURIInitialized: false,
   setLoadURI: function tabmix_tablib_setLoadURI(aBrowser) {
+    if (!Tabmix.isVersion(1120)) {
+      this.setLoadURI_before_112(aBrowser);
+      return;
+    }
+
+    const tabs = this._loadURIInitialized ? [gBrowser.getTabForBrowser(aBrowser)] : gBrowser.tabs;
+    this._loadURIInitialized = true;
+    for (const tab of tabs) {
+      const browser = tab.linkedBrowser;
+      browser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
+      if (tab.linkedPanel) {
+        this.loadURIWrapper(browser, "loadURI");
+        this.loadURIWrapper(browser, "fixupAndLoadURIString");
+      }
+    }
+  },
+
+  loadURIWrapper(browser, methodName) {
+    const original = browser[methodName];
+    if (original.__tabmix) {
+      return;
+    }
+    const wrapper = {
+      [methodName](...args) {
+        try {
+          const tabmixResult = Tabmix.tablib._loadURI(browser, ...args);
+          if (tabmixResult) {
+            return tabmixResult;
+          }
+
+          original(...args);
+        } catch (ex) {
+          console.error(ex);
+        }
+        return null;
+      }
+    };
+    browser[methodName] = wrapper[methodName].bind(null);
+    browser[methodName].__tabmix = true;
+  },
+
+  setLoadURI_before_112(aBrowser) {
     // set init value according to lockallTabs state
     // we update this value in TabmixProgressListener.listener.onStateChange
     aBrowser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
@@ -51,7 +93,8 @@ Tabmix.tablib = {
   },
 
   _loadURI(browser, uri, params) {
-    if (Tabmix.tablib.allowLoad(browser, uri)) {
+    const urlSpec = typeof uri === "string" ? uri : uri.spec;
+    if (Tabmix.tablib.allowLoad(browser, urlSpec)) {
       return null;
     }
     // redirect load request to a new tab
@@ -63,7 +106,7 @@ Tabmix.tablib = {
     if (!Tabmix.isVersion(890)) {
       params.allowMixedContent = isFlagged("LOAD_FLAGS_ALLOW_MIXED_CONTENT");
     }
-    return Tabmix.isVersion(1100) ? gBrowser.addTab(uri, params) : gBrowser.loadOneTab(uri, params);
+    return Tabmix.isVersion(1100) ? gBrowser.addTab(urlSpec, params) : gBrowser.loadOneTab(urlSpec, params);
   },
 
   allowLoad(browser, uri) {
@@ -374,7 +417,7 @@ Tabmix.tablib = {
            this.arrowScrollbox.resetFirstTabInRow();\
          $&'
       )._replace(
-        Tabmix.isVersion("890") ? 'scrollStartOffset:' : 'scrollButtonWidth:',
+        Tabmix.isVersion(890) ? 'scrollStartOffset:' : 'scrollButtonWidth:',
         '$& TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 :'
       )._replace(
         'if (doPosition)',
@@ -621,7 +664,11 @@ Tabmix.tablib = {
       '      if (aIsExternal) {\n' +
       '        loadFlags |= Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL;\n' +
       '      }\n' +
-      '      gBrowser.loadURI(aURI.spec, {\n' +
+      (
+        Tabmix.isVersion(1120) ?
+          '      gBrowser.fixupAndLoadURIString(aURI.spec, {\n' :
+          '      gBrowser.loadURI(aURI.spec, {\n'
+      ) +
       '        triggeringPrincipal: aTriggeringPrincipal,\n' +
       '        referrerInfo: aReferrerInfo,\n' +
       '        userContextId: aUserContextId,\n' +

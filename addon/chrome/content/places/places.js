@@ -246,6 +246,7 @@ var TMP_Places = {
     var multiple = bmGroup.length > 1;
     let tabs = [], tabsData = [];
     let savePrincipal = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
+    const loadURIMethod = Tabmix.isVersion(1120) ? "fixupAndLoadURIString" : "loadURI";
     for (i = 0; i < bmGroup.length; i++) {
       let url = bmGroup[i];
       if (i < reuseTabs.length) {
@@ -254,7 +255,7 @@ var TMP_Places = {
           const browser = aTab.linkedBrowser;
           try {
             browser.userTypedValue = url;
-            browser.loadURI(url, {
+            browser[loadURIMethod](url, {
               flags: Ci.nsIWebNavigation.LOAD_FLAGS_NONE,
               triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
             });
