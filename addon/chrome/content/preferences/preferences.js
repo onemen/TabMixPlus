@@ -96,7 +96,9 @@ var gPrefWindow = {
     for (let tabbox of tabboxes) {
       diff = Math.max(diff, tabbox.getBoundingClientRect().width - contentWidth);
     }
-    window.innerWidth += diff;
+    if (diff) {
+      window.resizeBy(diff, 0);
+    }
   },
 
   deinit() {

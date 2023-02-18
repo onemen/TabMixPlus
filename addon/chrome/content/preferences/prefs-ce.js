@@ -1668,7 +1668,10 @@ class PrefWindow extends MozXULElement {
               const bottomBox = aPaneElement.getElementsByAttribute("class", "bottomBox")[0];
               if (bottomBox)
                 bottomPadding = parseInt(window.getComputedStyle(bottomBox).paddingBottom);
-              window.innerHeight += bottomPadding + verticalPadding + aPaneElement.contentHeight - targetHeight;
+              const diff = bottomPadding + verticalPadding + aPaneElement.contentHeight - targetHeight;
+              if (diff) {
+                window.resizeBy(0, diff);
+              }
             }
 
             // XXX rstrong - extend the contents of the prefpane to
