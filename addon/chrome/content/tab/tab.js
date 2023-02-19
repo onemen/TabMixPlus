@@ -84,6 +84,9 @@ var TabmixTabbar = {
       // update pointer to the button object that we are going to use
       let useTabmixButtons = tabscroll > this.SCROLL_BUTTONS_LEFT_RIGHT;
       let overflow = Tabmix.tabsUtils.overflow;
+      if (start && overflow) {
+        Tabmix.tabsUtils.overflow = true;
+      }
 
       // from Firefox 4.0+ on we add dynamically scroll buttons on TabsToolbar.
       let tabmixScrollBox = document.getElementById("tabmix-scrollbox");
