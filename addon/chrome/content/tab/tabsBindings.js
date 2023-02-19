@@ -1,45 +1,97 @@
 "use strict";
 
 (function() {
-  Tabmix.setNewFunction(gBrowser.tabContainer, "_notifyBackgroundTab", function _notifyBackgroundTab(aTab) {
-    if (aTab.pinned || aTab.hidden) {
-      return;
-    }
-    // Is the new tab already completely visible?
-    if (Tabmix.tabsUtils.isElementVisible(aTab))
-      return;
-
-    var scrollRect = this.arrowScrollbox.scrollClientRect;
-    var tab = aTab.getBoundingClientRect();
-
-    // DOMRect left/right properties are immutable.
-    tab = {left: tab.left, right: tab.right, top: tab.top, bottom: tab.bottom};
-
-    if (this.arrowScrollbox.smoothScroll) {
-      let selected = !this.selectedItem.pinned &&
-        this.selectedItem.getBoundingClientRect();
-
-      // Can we make both the new tab and the selected tab completely visible?
-      if (!selected ||
-        !TabmixTabbar.isMultiRow && Math.max(tab.right - selected.left, selected.right - tab.left) <= scrollRect.width ||
-        TabmixTabbar.isMultiRow && Math.max(tab.bottom - selected.top, selected.bottom - tab.top) <= scrollRect.height) {
-        if (Tabmix.tabsUtils.overflow)
-          this.arrowScrollbox.ensureElementIsVisible(aTab);
+  Tabmix.setNewFunction(
+    gBrowser.tabContainer,
+    "_notifyBackgroundTab",
+    function _notifyBackgroundTab(aTab) {
+      if (aTab.pinned || aTab.hidden || this.getAttribute("overflow") != "true") {
         return;
       }
 
-      if (TabmixTabbar.isMultiRow)
-        this.arrowScrollbox.scrollByPixels(selected.top - scrollRect.top);
-      else
-        this.arrowScrollbox.scrollByPixels(this.arrowScrollbox._isRTLScrollbox ?
-          selected.right - scrollRect.right : selected.left - scrollRect.left);
-    }
+      this._lastTabToScrollIntoView = aTab;
+      if (!this._backgroundTabScrollPromise) {
+        this._backgroundTabScrollPromise = window
+            .promiseDocumentFlushed(() => {
+              let lastTabRect = this._lastTabToScrollIntoView.getBoundingClientRect();
+              let selectedTab = this.selectedItem;
+              if (selectedTab.pinned) {
+                selectedTab = null;
+              } else {
+                selectedTab = selectedTab.getBoundingClientRect();
+                selectedTab = {
+                  left: selectedTab.left,
+                  right: selectedTab.right,
+                  top: selectedTab.top,
+                  bottom: selectedTab.bottom,
+                };
+              }
+              return [
+                this._lastTabToScrollIntoView,
+                this.arrowScrollbox.scrollClientRect,
+                {
+                  left: lastTabRect.left,
+                  right: lastTabRect.right,
+                  top: lastTabRect.top,
+                  bottom: lastTabRect.bottom,
+                },
+                selectedTab,
+              ];
+            })
+            .then(([tabToScrollIntoView, scrollRect, tabRect, selectedRect]) => {
+            // First off, remove the promise so we can re-enter if necessary.
+              delete this._backgroundTabScrollPromise;
+              // Then, if the layout info isn't for the last-scrolled-to-tab, re-run
+              // the code above to get layout info for *that* tab, and don't do
+              // anything here, as we really just want to run this for the last-opened tab.
+              if (this._lastTabToScrollIntoView != tabToScrollIntoView) {
+                this._notifyBackgroundTab(this._lastTabToScrollIntoView);
+                return;
+              }
+              delete this._lastTabToScrollIntoView;
+              // Is the new tab already completely visible?
+              if (Tabmix.tabsUtils.isElementVisible(tabToScrollIntoView)) {
+                return;
+              }
 
-    if (!this._animateElement.hasAttribute("highlight")) {
-      this._animateElement.setAttribute("highlight", "true");
-      setTimeout(ele => {
-        ele.removeAttribute("highlight");
-      }, 150, this._animateElement);
+              if (this.arrowScrollbox.smoothScroll) {
+              // Can we make both the new tab and the selected tab completely visible?
+                if (
+                  !selectedRect ||
+                !TabmixTabbar.isMultiRow &&
+                  Math.max(tabRect.right - selectedRect.left, selectedRect.right - tabRect.left) <=
+                    scrollRect.width ||
+                TabmixTabbar.isMultiRow &&
+                  Math.max(tabRect.bottom - selectedRect.top, selectedRect.bottom - tabRect.top) <=
+                    scrollRect.height
+                ) {
+                  this.arrowScrollbox.ensureElementIsVisible(tabToScrollIntoView);
+                  return;
+                }
+
+                if (TabmixTabbar.isMultiRow) {
+                  this.arrowScrollbox.scrollByPixels(selectedRect.top - scrollRect.top);
+                } else {
+                  this.arrowScrollbox.scrollByPixels(
+                    RTL_UI ?
+                      selectedRect.right - scrollRect.right :
+                      selectedRect.left - scrollRect.left
+                  );
+                }
+              }
+
+              if (!this._animateElement.hasAttribute("highlight")) {
+                this._animateElement.setAttribute("highlight", "true");
+                setTimeout(
+                  ele => {
+                    ele.removeAttribute("highlight");
+                  },
+                  150,
+                  this._animateElement
+                );
+              }
+            });
+      }
     }
-  });
+  );
 }());

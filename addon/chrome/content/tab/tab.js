@@ -856,7 +856,10 @@ Tabmix.tabsUtils = {
       tabstrip._scrollButtonDownRight :
       tabstrip._scrollButtonDownLeft || // fall back to original
       tabstrip.shadowRoot.getElementById("scrollbutton-down");
-    this.tabBar._animateElement = tabstrip._scrollButtonDown;
+
+    this.tabBar._animateElement = useTabmixButtons ?
+      document.getElementById("tabmix-scrollbox") :
+      tabstrip;
 
     tabstrip._scrollButtonUp = useTabmixButtons ?
       tabstrip._scrollButtonUpRight :
