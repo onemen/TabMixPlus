@@ -14,7 +14,7 @@ module.exports = {
       // All .eslintrc.js files are in the node environment, so turn that
       // on here.
       // https://github.com/eslint/eslint/issues/13008
-      files: [".eslintrc.js"],
+      files: [".eslintrc.js", "*.config.js"],
       env: {
         node: true,
         browser: false,
@@ -105,7 +105,7 @@ module.exports = {
         "no-var": "error",
         "prefer-const": "error",
       },
-    }
+    },
   ],
 
   parserOptions: {
@@ -454,5 +454,5 @@ module.exports = {
     "yield-star-spacing": [2, "after"],
     yoda: [2, "never"],
   },
-  "reportUnusedDisableDirectives": true
+  reportUnusedDisableDirectives: true,
 };

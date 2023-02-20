@@ -1,0 +1,8 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+if (exec < /dev/tty) ; then
+  exec >/dev/tty 2>&1;
+fi
+
+./node_modules/.bin/lint-staged

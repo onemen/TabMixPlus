@@ -5,7 +5,8 @@
   "scripts": {
     "lint": "eslint --format stylish --fix --cache --cache-location config\\.eslintcache --ignore-path config\\.eslintignore --ext .js,.jsm,.xhtml .",
     "lint:test": "eslint --format stylish --cache --cache-location config\\.eslintcache --ignore-path config\\.eslintignore --ext .js,.jsm,.xhtml .",
-    "lint:clean": "eslint --format stylish --ignore-path config\\.eslintignore --ext .js,.jsm ."
+    "lint:clean": "eslint --format stylish --ignore-path config\\.eslintignore --ext .js,.jsm .",
+    "prepare": "husky install config/husky"
   },
   "repository": {
     "type": "git",
@@ -19,8 +20,12 @@
   },
   "homepage": "https://github.com/onemen/TabMixPlus#readme",
   "devDependencies": {
+    "@commitlint/cli": "^17.4.4",
+    "@commitlint/config-conventional": "^17.4.4",
     "eslint": "^8.30.0",
     "eslint-plugin-mozilla": "^3.0.1",
-    "eslint-plugin-tabmix": "file:./config/eslint-plugin-tabmix"
+    "eslint-plugin-tabmix": "file:./config/eslint-plugin-tabmix",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.2"
   }
 }
