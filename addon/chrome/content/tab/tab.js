@@ -1698,28 +1698,6 @@ gTMPprefObserver = {
     }
   },
 
-  miscellaneousRules: function TMP_PO_miscellaneousRules() {
-    // we don't show icons on menu on Mac OS X
-    if (TabmixSvc.isMac)
-      return;
-
-    // new tab button on tab context menu
-    let newRule = '.tabmix-newtab-menu-icon {' +
-              'list-style-image: url("#URL");' +
-              '-moz-image-region: #REGION;}';
-    let url = "chrome://browser/skin/Toolbar.png", region;
-    const skin = Services.prefs.getCharPref("extensions.activeThemeID", "");
-    if (skin == "classic/1.0") {
-      if (TabmixSvc.isLinux)
-        region = "rect(0px, 96px, 24px, 72px)";
-      else
-        region = "rect(0pt, 180px, 18px, 162px)";
-    } else {
-      [url, region] = ["newtab.png", "auto"];
-    }
-    this.insertRule(newRule.replace("#URL", url).replace("#REGION", region));
-  },
-
   addDynamicRules() {
     // tab width rules
     let tst = Tabmix.extensions.treeStyleTab ? ":not([treestyletab-collapsed='true'])" : "";

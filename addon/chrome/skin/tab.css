@@ -97,17 +97,13 @@
 }
 
 /*  :::::: Tabmix toolbar button :::::: */
-#tabmix-closedTabsButton, .closedtabs-icon {
-  list-style-image: url(undoclosetab.png);
-}
+#tabmix-closedTabsButton { list-style-image: url(icons/closed-tabs-24x24.png); }
+#tabmix-closedTabsButton:hover { list-style-image: url(icons/closed-tabs-24x24-hovered.png); }
+#main-window:not([customizing]) #tabmix-closedTabsButton[disabled=true] { list-style-image: url(icons/closed-tabs-24x24-disabled.png); }
 
-#tabmix-closedTabsButton { -moz-image-region: rect(0 24px 24px 0); }
-#tabmix-closedTabsButton:hover { -moz-image-region: rect(24px 24px 48px 0); }
-#main-window:not([customizing]) #tabmix-closedTabsButton[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
-
-toolbar[iconsize=small] #tabmix-closedTabsButton, .closedtabs-icon > .menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
-toolbar[iconsize=small] #tabmix-closedTabsButton:hover, .closedtabs-icon:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
-#main-window:not([customizing]) toolbar[iconsize=small] #tabmix-closedTabsButton[disabled=true], .closedtabs-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
+toolbar[iconsize=small] #tabmix-closedTabsButton, .closedtabs-icon > .menu-iconic-left { list-style-image: url(icons/closed-tabs-16x16.png); }
+toolbar[iconsize=small] #tabmix-closedTabsButton:hover, .closedtabs-icon:hover > .menu-iconic-left { list-style-image: url(icons/closed-tabs-16x16-hovered.png); }
+#main-window:not([customizing]) toolbar[iconsize=small] #tabmix-closedTabsButton[disabled=true], .closedtabs-icon[disabled=true] > .menu-iconic-left { list-style-image: url(icons/closed-tabs-16x16-disabled.png); }
 
 #tabmix-closedTabs-toolbaritem[cui-areatype="toolbar"] #tabmix-closedTabsButton[type=menu-button] .toolbarbutton-icon {
   border-right: 1px solid rgba(0, 0, 0, 0.16);
@@ -129,43 +125,28 @@ toolbar[iconsize=small] #tabmix-closedTabsButton:hover, .closedtabs-icon:hover >
   display: none;
 }
 
-#tabmix-closedWindowsButton , .closedwindows-icon {
-  list-style-image: url(undoclosewindow.png);
-}
+#tabmix-closedWindowsButton { list-style-image: url(icons/closed-win-24x24.png); }
+#tabmix-closedWindowsButton:hover { list-style-image: url(icons/closed-win-24x24-hovered.png); }
+#main-window:not([customizing]) #tabmix-closedWindowsButton[disabled=true] { list-style-image: url(icons/closed-win-24x24-disabled.png); }
+toolbar[iconsize=small] #tabmix-closedWindowsButton, .closedwindows-icon > .menu-iconic-left { list-style-image: url(icons/closed-win-16x16.png); }
+toolbar[iconsize=small] #tabmix-closedWindowsButton:hover, .closedwindows-icon:hover > .menu-iconic-left { list-style-image: url(icons/closed-win-16x16-hovered.png)!important; }
+#main-window:not([customizing]) toolbar[iconsize=small] #tabmix-closedWindowsButton[disabled=true], .closedwindows-icon[disabled=true] > .menu-iconic-left { list-style-image: url(icons/closed-win-16x16-disabled.png)!important; }
 
-#tabmix-closedWindowsButton { -moz-image-region: rect(0 24px 24px 0); }
-#tabmix-closedWindowsButton:hover { -moz-image-region: rect(24px 24px 48px 0); }
-#main-window:not([customizing]) #tabmix-closedWindowsButton[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
+#tabmix-alltabs-button { list-style-image: url(icons/tab-list-24x24.png)!important; }
+#tabmix-alltabs-button:hover { list-style-image: url(icons/tab-list-24x24-hovered.png) }
+#tabmix-alltabs-button[disabled=true] { list-style-image: url(icons/tab-list-24x24-disabled.png); }
+toolbar[iconsize=small] #tabmix-alltabs-button, .tabmix-tabslist-icon > .menu-iconic-left { list-style-image: url(icons/tab-list-16x16.png); }
+toolbar[iconsize=small] #tabmix-alltabs-button:hover, .tabmix-tabslist-icon:hover > .menu-iconic-left { list-style-image: url(icons/tab-list-16x16-hovered.png); }
+toolbar[iconsize=small] #tabmix-alltabs-button[disabled=true], .tabmix-tabslist-icon[disabled=true] > .menu-iconic-left { list-style-image: url(icons/tab-list-24x24-disabled.png); }
 
-toolbar[iconsize=small] #tabmix-closedWindowsButton, .closedwindows-icon >.menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
-toolbar[iconsize=small] #tabmix-closedWindowsButton:hover, .closedwindows-icon:hover >.menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px)!important; }
-#main-window:not([customizing]) toolbar[iconsize=small] #tabmix-closedWindowsButton[disabled=true], .closedwindows-icon[disabled=true] >.menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px)!important; }
+.tabmix-menu-icon .menu-iconic-left { list-style-image: url(tmpsmall.png); }
 
-#tabmix-alltabs-button, .tabmix-tabslist-icon {
-  list-style-image: url(tabslist.png);
-}
-#tabmix-alltabs-button { -moz-image-region: rect(0 24px 24px 0); }
-#tabmix-alltabs-button:hover { -moz-image-region: rect(24px 24px 48px 0); }
-#tabmix-alltabs-button[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
-toolbar[iconsize=small] #tabmix-alltabs-button, .tabmix-tabslist-icon > .menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
-toolbar[iconsize=small] #tabmix-alltabs-button:hover, .tabmix-tabslist-icon:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
-toolbar[iconsize=small] #tabmix-alltabs-button[disabled=true], .tabmix-tabslist-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
-
-#btn-sm-settings, .tabmix-menu-icon {
-   list-style-image: url(tmpsmall.png);
-}
-.tabmix-menu-icon .menu-iconic-left { -moz-image-region: rect(0 16px 16px 0)!important; }
-
-#btn_sessionmanager, .sessionmanager-icon {
-  list-style-image: url(sessionmanager.png);
-}
-#btn_sessionmanager { -moz-image-region: rect(0 24px 24px 0); }
-#btn_sessionmanager:hover { -moz-image-region: rect(24px 24px 48px 0); }
-#main-window:not([customizing]) #btn_sessionmanager[disabled=true] { -moz-image-region: rect(48px 24px 72px 0); }
-
-toolbar[iconsize=small] #btn_sessionmanager, .sessionmanager-icon > .menu-iconic-left{ -moz-image-region: rect(0 40px 16px 24px); }
-toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > .menu-iconic-left{ -moz-image-region: rect(16px 40px 32px 24px); }
-#main-window:not([customizing]) toolbar[iconsize=small] #btn_sessionmanager[disabled=true], .sessionmanager-icon[disabled=true] > .menu-iconic-left{ -moz-image-region: rect(32px 40px 48px 24px); }
+#btn_sessionmanager { list-style-image: url(icons/session-manager-24x24.png); }
+#btn_sessionmanager:hover { list-style-image: url(icons/session-manager-24x24-hovered.png); }
+#main-window:not([customizing]) #btn_sessionmanager[disabled=true] { list-style-image: url(icons/session-manager-24x24-disabled.png); }
+toolbar[iconsize=small] #btn_sessionmanager, .sessionmanager-icon > .menu-iconic-left { list-style-image: url(icons/session-manager-16x16.png); }
+toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > .menu-iconic-left { list-style-image: url(icons/session-manager-16x16-hovered.png); }
+#main-window:not([customizing]) toolbar[iconsize=small] #btn_sessionmanager[disabled=true], .sessionmanager-icon[disabled=true] > .menu-iconic-left { list-style-image: url(icons/session-manager-16x16-disabled.png); }
 
 /* for hashcoulouredtabs */
 #content[hashedtabs] .tabbrowser-tab:not([busy]) .tab-icon-image:not([src]) {

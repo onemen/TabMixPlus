@@ -4,34 +4,36 @@
 
 /* Global Styles */
 radio[pane] {
-  list-style-image: url(tmpoptions.png);
   padding: 5px 5px 1px 4px;
 }
 
 radio[pane=paneLinks] {
-  -moz-image-region: rect(0px 24px 24px 0);
+  list-style-image: url(icons/links.png);
 }
 radio[pane=paneEvents] {
-  -moz-image-region: rect(0px 48px 24px 24px);
+  list-style-image: url(icons/events.png);
 }
 radio[pane=paneAppearance] {
-  -moz-image-region: rect(0px 72px 24px 48px);
+  list-style-image: url(icons/appearance.png);
 }
 radio[pane=paneMouse] {
-  -moz-image-region: rect(0px 96px 24px 72px);
+  list-style-image: url(icons/mouse.png);
 }
 radio[pane=paneMenu] {
-  -moz-image-region: rect(0px 120px 24px 96px);
+  list-style-image: url(icons/menu.png);
 }
 radio[pane=paneSession] {
-  list-style-image: url(sessionmanager.png);
-  -moz-image-region: rect(0px 24px 24px 0);
+  list-style-image: url(icons/session-manager-24x24.png);
 }
 
 radio[pane=paneIncompatible] {
-  list-style-image: url("chrome://global/skin/icons/Error.png") !important;
-  -moz-image-region: auto; /* cut off inheritance */
+  list-style-image: url("chrome://global/skin/icons/error.svg") !important;
   visibility: collapse;
+}
+
+radio[pane=paneIncompatible] .radio-icon {
+  width: 24px;
+  height: 24px;
 }
 
 radio[pane=paneIncompatible][show=true] {
@@ -125,28 +127,24 @@ tab.subtabs:focus-visible > .tab-middle > .tab-text {
 
 /* Tabmix toolbar button icons */
 #_btn_sessionmanager {
-  list-style-image: url(sessionmanager.png);
+  list-style-image: url(icons/session-manager-24x24.png);
 }
 
 #_tabmix-closedTabsButton {
-  list-style-image: url(undoclosetab.png);
+  list-style-image: url(icons/closed-tabs-24x24.png);
 }
 
 #_tabmix-closedWindowsButton {
-  list-style-image: url(undoclosewindow.png);
+  list-style-image: url(icons/closed-win-24x24.png);
 }
 
 #_tabmix-alltabs-button {
-  list-style-image: url(tabslist.png);
+  list-style-image: url(icons/tab-list-24x24.png);
 }
 
 .tabmixbuttons {
   -moz-box-align: center;
   padding: 3px;
-}
-
-.tabmixbuttons > image {
-  -moz-image-region: rect(0 24px 24px 0);
 }
 
 #TabMIxPreferences {
@@ -213,23 +211,21 @@ tabbox > tabs {
 	margin-top: 4px;
   margin-inline-end: 3px;
 	max-height: 11px !important;
-	width: 7px;
+	width: 10px;
 }
 
 #extraIcons-locked .checkbox-icon {
-  list-style-image: url(locked.png);
-  -moz-image-region: rect(0 9px 9px 0);
+  background-image: url(locked.png);
 }
 
 #extraIcons-protected .checkbox-icon {
-  list-style-image: url(protected.png);
-  -moz-image-region: rect(5px 16px 16px 7px);
-  height: 11px;
+  background-image: url(protected.png);
+  background-position: 10px 11px;
 }
 
 #extraIcons-autoreload .checkbox-icon {
-  list-style-image: url(autoreload.png);
-  -moz-image-region: rect(0px 16px 9px 7px);
+  background-image: url(autoreload.png);
+  background-position: 10px 0;
 }
 
 .clicktab-popup {

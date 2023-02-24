@@ -165,7 +165,6 @@ Tabmix.afterDelayedStartup = function() {
   TabmixTabbar.updateSettings(true);
   gTMPprefObserver.setTabIconMargin();
   gTMPprefObserver.setCloseButtonMargin();
-  gTMPprefObserver.miscellaneousRules();
   if (!gTMPprefObserver._tabStyleSheet) {
     this.log("can't load dynamic styles for tabmixplus");
   }
