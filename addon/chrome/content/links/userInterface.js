@@ -233,12 +233,23 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
  */
 Tabmix.openUILink_init = function TMP_openUILink_init() {
   if ("openUILink" in window) {
+    let parentObj = window;
+    if (Tabmix.isVersion(1120)) {
+      parentObj = window.URILoadingHelper;
+      const fnString = parentObj.openUILink.toString();
+      if (/TMP_Places/.test(fnString)) {
+        return;
+      }
+    }
+
+    Tabmix.onContentLoaded.lazyGetter();
+
     // divert all the calls from places UI to use our preferences
-    this.changeCode(window, "openUILink")._replace(
+    this.changeCode(parentObj, "openUILink")._replace(
       'aIgnoreAlt = params.ignoreAlt;',
       'aIgnoreAlt = params.ignoreAlt || null;'
     )._replace(
-      /openUILinkIn\(.*\);/,
+      Tabmix.isVersion(1120) ? /this\.openLinkIn\(.*\);/ : /openUILinkIn\(.*\);/,
       'where = TMP_Places.openUILink(url, event, where, params);\n' +
       '  if (where) {\n' +
       '    try {\n      $&\n    } catch (ex) {  }\n' +

@@ -700,10 +700,6 @@ Tabmix.tablib = {
       'isExternal ? "extensions.tabmix.loadExternalInBackground" : $&', {flags: "g"}
     ).toCode();
 
-    // fix after Bug 606678
-    // fix compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
-    [fnObj, fnName] = Tabmix.onContentLoaded.getXnotifierFunction("openNewTabWith");
-
     Tabmix.originalFunctions.FillHistoryMenu = window.FillHistoryMenu;
     let fillHistoryMenu = function FillHistoryMenu(aParent) {
       let rv = Tabmix.originalFunctions.FillHistoryMenu.apply(this, arguments);

@@ -441,19 +441,21 @@ var TMP_Places = {
     });
   },
 
-  asyncGetTabTitle(aTab, aUrl, title) {
+  async asyncGetTabTitle(aTab, aUrl, title) {
     aTab.removeAttribute("tabmix_bookmarkUrl");
     if (this.isUserRenameTab(aTab, aUrl))
       return Promise.resolve(aTab.getAttribute("fixed-label"));
 
-    return this.getTitleFromBookmark(aUrl).then(newTitle => {
-      if (aTab && newTitle) {
-        aTab.setAttribute("tabmix_bookmarkUrl", aUrl);
-      }
-      if (!newTitle && aTab.hasAttribute("pending"))
-        newTitle = TMP_SessionStore.getTitleFromTabState(aTab);
-      return newTitle || title;
-    });
+    await Tabmix.promiseOverlayLoaded;
+
+    let newTitle = await this.getTitleFromBookmark(aUrl);
+    if (aTab && newTitle) {
+      aTab.setAttribute("tabmix_bookmarkUrl", aUrl);
+    }
+    if (!newTitle && aTab.hasAttribute("pending")) {
+      newTitle = TMP_SessionStore.getTitleFromTabState(aTab);
+    }
+    return newTitle || title;
   },
 
   get _titlefrombookmark() {
@@ -879,6 +881,18 @@ Tabmix.onContentLoaded = {
     // update incompatibility with X-notifier(aka WebMail Notifier) 2.9.13+
     // in case it warp the function in its object
     let [fnObj, fnName] = this.getXnotifierFunction("openLinkIn");
+
+    let isPrivate = "aIsPrivate";
+    if (Tabmix.isVersion(1120)) {
+      isPrivate = "params.private";
+      const fnString = fnObj[fnName].toString();
+      if (/Tabmix/.test(fnString)) {
+        return;
+      }
+    }
+
+    this.lazyGetter();
+
     Tabmix.changeCode(fnObj, fnName)._replace(
       '{',
       '{\n' +
@@ -890,25 +904,342 @@ Tabmix.onContentLoaded = {
       '    gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
       '  }\n'
     )._replace(
-      '!aAllowPinnedTabHostChange',
+      'saveLink',
+      'Tabmix.onContentLoaded.saveLink',
+      {check: Tabmix.isVersion(1120)}
+    )._replace(
+      'openInWindow',
+      'Tabmix.onContentLoaded.openInWindow',
+      {check: Tabmix.isVersion(1120)}
+    )._replace(
+      'updatePrincipals',
+      'Tabmix.onContentLoaded.updatePrincipals',
+      {check: Tabmix.isVersion(1120)}
+    )._replace(
+      'openInCurrentTab',
+      'Tabmix.onContentLoaded.openInCurrentTab',
+      {check: Tabmix.isVersion(1120)}
+    )._replace(
+      Tabmix.isVersion(1120) ? '!allowPinnedTabHostChange' : '!aAllowPinnedTabHostChange',
       '!params.suppressTabsOnFileDownload && $&',
     )._replace(
       'if ((where == "tab" ||',
-      'if (w && where == "window" &&\n' +
-      '      !Tabmix.isNewWindowAllow(aIsPrivate)) {\n' +
-      '    where = "tab";\n' +
-      '  }\n' +
-      '  $&'
+      `if (w && where == "window" && !Tabmix.isNewWindowAllow(${isPrivate})) {
+           where = "tab";
+       }
+       $&`
     )._replace(
       /(})(\)?)$/,
-      '  const targetTab = where == "current" ?\n' +
-      '      w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();\n' +
-      '  w.TMP_Places.asyncSetTabTitle(targetTab, url, true);\n' +
-      '  if (where == "current") {\n' +
-      '    w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);\n' +
-      '  }\n' +
-      '$1$2'
+      `const targetTab = where == "current" ?
+        w.gBrowser.selectedTab : w.gBrowser.getTabForLastPanel();
+        w.TMP_Places.asyncSetTabTitle(targetTab, url, true).then(() => {
+          if (where == "current") {
+            w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);
+          }
+        });
+      $1$2`
     ).toCode();
+  },
+
+  _lazyGetterInitialized: false,
+  lazyGetter() {
+    if (Tabmix.isVersion(1120) && !this._lazyGetterInitialized) {
+      this._lazyGetterInitialized = true;
+      // eslint-disable-next-line tabmix/valid-lazy, no-undef
+      XPCOMUtils.defineLazyModuleGetters(lazy, {
+        AboutNewTab: "resource:///modules/AboutNewTab.jsm",
+        BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
+      });
+
+      // eslint-disable-next-line no-undef
+      XPCOMUtils.defineLazyGetter(lazy, "ReferrerInfo", () =>
+        Components.Constructor(
+          "@mozilla.org/referrer-info;1",
+          "nsIReferrerInfo",
+          "init"
+        )
+      );
+    }
+  },
+
+  saveLink(window, url, params) {
+    if ("isContentWindowPrivate" in params) {
+      window.saveURL(
+        url,
+        null,
+        null,
+        null,
+        true,
+        true,
+        params.referrerInfo,
+        null,
+        null,
+        params.isContentWindowPrivate,
+        params.originPrincipal
+      );
+    } else {
+      if (!params.initiatingDoc) {
+        console.error(
+          "openUILink/openLinkIn was called with " +
+            "where == 'save' but without initiatingDoc.  See bug 814264."
+        );
+        return;
+      }
+      window.saveURL(
+        url,
+        null,
+        null,
+        null,
+        true,
+        true,
+        params.referrerInfo,
+        null,
+        params.initiatingDoc
+      );
+    }
+  },
+
+  openInWindow(url, params, sourceWindow) {
+    let {referrerInfo,
+      forceNonPrivate,
+      triggeringRemoteType,
+      forceAllowDataURI,
+      globalHistoryOptions,
+      allowThirdPartyFixup,
+      userContextId,
+      postData,
+      originPrincipal,
+      originStoragePrincipal,
+      triggeringPrincipal,
+      csp,
+      resolveOnContentBrowserCreated,} = params;
+    let features = "chrome,dialog=no,all";
+    if (params.private) {
+      features += ",private";
+      // To prevent regular browsing data from leaking to private browsing sites,
+      // strip the referrer when opening a new private window. (See Bug: 1409226)
+      // eslint-disable-next-line no-undef
+      referrerInfo = new lazy.ReferrerInfo(
+        referrerInfo.referrerPolicy,
+        false,
+        referrerInfo.originalReferrer
+      );
+    } else if (forceNonPrivate) {
+      features += ",non-private";
+    }
+
+    // This propagates to window.arguments.
+    var sa = Cc["@mozilla.org/array;1"].createInstance(Ci.nsIMutableArray);
+
+    var wuri = Cc["@mozilla.org/supports-string;1"].createInstance(
+      Ci.nsISupportsString
+    );
+    wuri.data = url;
+
+    let extraOptions = Cc["@mozilla.org/hash-property-bag;1"].createInstance(
+      Ci.nsIWritablePropertyBag2
+    );
+    if (triggeringRemoteType) {
+      extraOptions.setPropertyAsACString(
+        "triggeringRemoteType",
+        triggeringRemoteType
+      );
+    }
+    if (params.hasValidUserGestureActivation !== undefined) {
+      extraOptions.setPropertyAsBool(
+        "hasValidUserGestureActivation",
+        params.hasValidUserGestureActivation
+      );
+    }
+    if (forceAllowDataURI) {
+      extraOptions.setPropertyAsBool("forceAllowDataURI", true);
+    }
+    if (params.fromExternal !== undefined) {
+      extraOptions.setPropertyAsBool("fromExternal", params.fromExternal);
+    }
+    if (globalHistoryOptions?.triggeringSponsoredURL) {
+      extraOptions.setPropertyAsACString(
+        "triggeringSponsoredURL",
+        globalHistoryOptions.triggeringSponsoredURL
+      );
+      if (globalHistoryOptions.triggeringSponsoredURLVisitTimeMS) {
+        extraOptions.setPropertyAsUint64(
+          "triggeringSponsoredURLVisitTimeMS",
+          globalHistoryOptions.triggeringSponsoredURLVisitTimeMS
+        );
+      }
+    }
+
+    var allowThirdPartyFixupSupports = Cc[
+        "@mozilla.org/supports-PRBool;1"
+    ].createInstance(Ci.nsISupportsPRBool);
+    allowThirdPartyFixupSupports.data = allowThirdPartyFixup;
+
+    var userContextIdSupports = Cc[
+        "@mozilla.org/supports-PRUint32;1"
+    ].createInstance(Ci.nsISupportsPRUint32);
+    userContextIdSupports.data = userContextId;
+
+    sa.appendElement(wuri);
+    sa.appendElement(extraOptions);
+    sa.appendElement(referrerInfo);
+    sa.appendElement(postData);
+    sa.appendElement(allowThirdPartyFixupSupports);
+    sa.appendElement(userContextIdSupports);
+    sa.appendElement(originPrincipal);
+    sa.appendElement(originStoragePrincipal);
+    sa.appendElement(triggeringPrincipal);
+    sa.appendElement(null); // allowInheritPrincipal
+    sa.appendElement(csp);
+
+    let win;
+
+    // Returns a promise that will be resolved when the new window's startup is finished.
+    function waitForWindowStartup() {
+      return new Promise(resolve => {
+        const delayedStartupObserver = aSubject => {
+          if (aSubject == win) {
+            Services.obs.removeObserver(
+              delayedStartupObserver,
+              "browser-delayed-startup-finished"
+            );
+            resolve();
+          }
+        };
+        Services.obs.addObserver(
+          delayedStartupObserver,
+          "browser-delayed-startup-finished"
+        );
+      });
+    }
+
+    if (params.frameID != undefined && sourceWindow) {
+      // Only notify it as a WebExtensions' webNavigation.onCreatedNavigationTarget
+      // event if it contains the expected frameID params.
+      // (e.g. we should not notify it as a onCreatedNavigationTarget if the user is
+      // opening a new window using the keyboard shortcut).
+      const sourceTabBrowser = sourceWindow.gBrowser.selectedBrowser;
+      waitForWindowStartup().then(() => {
+        Services.obs.notifyObservers(
+          {
+            wrappedJSObject: {
+              url,
+              createdTabBrowser: win.gBrowser.selectedBrowser,
+              sourceTabBrowser,
+              sourceFrameID: params.frameID,
+            },
+          },
+          "webNavigation-createdNavigationTarget"
+        );
+      });
+    }
+
+    if (resolveOnContentBrowserCreated) {
+      waitForWindowStartup().then(() =>
+        resolveOnContentBrowserCreated(win.gBrowser.selectedBrowser)
+      );
+    }
+
+    win = Services.ww.openWindow(
+      sourceWindow,
+      AppConstants.BROWSER_CHROME_URL,
+      null,
+      features,
+      sa
+    );
+  },
+
+  openInCurrentTab(targetBrowser, url, uriObj, params) {
+    let flags = Ci.nsIWebNavigation.LOAD_FLAGS_NONE;
+
+    if (params.allowThirdPartyFixup) {
+      flags |= Ci.nsIWebNavigation.LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP;
+      flags |= Ci.nsIWebNavigation.LOAD_FLAGS_FIXUP_SCHEME_TYPOS;
+    }
+    // LOAD_FLAGS_DISALLOW_INHERIT_PRINCIPAL isn't supported for javascript URIs,
+    // i.e. it causes them not to load at all. Callers should strip
+    // "javascript:" from pasted strings to prevent blank tabs
+    if (!params.allowInheritPrincipal) {
+      flags |= Ci.nsIWebNavigation.LOAD_FLAGS_DISALLOW_INHERIT_PRINCIPAL;
+    }
+
+    if (params.allowPopups) {
+      flags |= Ci.nsIWebNavigation.LOAD_FLAGS_ALLOW_POPUPS;
+    }
+    if (params.indicateErrorPageLoad) {
+      flags |= Ci.nsIWebNavigation.LOAD_FLAGS_ERROR_LOAD_CHANGES_RV;
+    }
+    if (params.forceAllowDataURI) {
+      flags |= Ci.nsIWebNavigation.LOAD_FLAGS_FORCE_ALLOW_DATA_URI;
+    }
+    if (params.fromExternal) {
+      flags |= Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL;
+    }
+
+    let {URI_INHERITS_SECURITY_CONTEXT} = Ci.nsIProtocolHandler;
+    if (
+      params.forceAboutBlankViewerInCurrent &&
+      (!uriObj ||
+        Services.io.getDynamicProtocolFlags(uriObj) &
+          URI_INHERITS_SECURITY_CONTEXT)
+    ) {
+      // Unless we know for sure we're not inheriting principals,
+      // force the about:blank viewer to have the right principal:
+      targetBrowser.createAboutBlankContentViewer(
+        params.originPrincipal,
+        params.originStoragePrincipal
+      );
+    }
+
+    let {triggeringPrincipal,
+      csp,
+      referrerInfo,
+      postData,
+      userContextId,
+      hasValidUserGestureActivation,
+      globalHistoryOptions,
+      triggeringRemoteType,} = params;
+
+    targetBrowser.fixupAndLoadURIString(url, {
+      triggeringPrincipal,
+      csp,
+      flags,
+      referrerInfo,
+      postData,
+      userContextId,
+      hasValidUserGestureActivation,
+      globalHistoryOptions,
+      triggeringRemoteType,
+    });
+    params.resolveOnContentBrowserCreated?.(targetBrowser);
+  },
+
+  updatePrincipals(window, params) {
+    let {userContextId} = params;
+    // Teach the principal about the right OA to use, e.g. in case when
+    // opening a link in a new private window, or in a new container tab.
+    // Please note we do not have to do that for SystemPrincipals and we
+    // can not do it for NullPrincipals since NullPrincipals are only
+    // identical if they actually are the same object (See Bug: 1346759)
+    function useOAForPrincipal(principal) {
+      if (principal && principal.isContentPrincipal) {
+        let privateBrowsingId =
+          params.private ||
+          window && PrivateBrowsingUtils.isWindowPrivate(window);
+        let attrs = {
+          userContextId,
+          privateBrowsingId,
+          firstPartyDomain: principal.originAttributes.firstPartyDomain,
+        };
+        return Services.scriptSecurityManager.principalWithOA(principal, attrs);
+      }
+      return principal;
+    }
+    params.originPrincipal = useOAForPrincipal(params.originPrincipal);
+    params.originStoragePrincipal = useOAForPrincipal(
+      params.originStoragePrincipal
+    );
+    params.triggeringPrincipal = useOAForPrincipal(params.triggeringPrincipal);
   },
 
   // update compatibility with X-notifier(aka WebMail Notifier) 2.9.13+
@@ -923,6 +1254,9 @@ Tabmix.onContentLoaded = {
       if (fn.length) {
         return [com.tobwithu[fn[0]], aName];
       }
+    }
+    if (Tabmix.isVersion(1120) && aName === "openLinkIn") {
+      return [window.URILoadingHelper, aName];
     }
     return [window, aName];
   }
