@@ -256,12 +256,12 @@ prefpane {
 }
 
 prefpane > .content-box > tabbox {
-  width: 525px;
-  height: 464px;
+  min-width: 525px;
+  min-height: 464px;
 }
 
 prefwindow .paneSelector {
-  width: 530px;
+  min-width: 530px;
 }
 
 tabbox {

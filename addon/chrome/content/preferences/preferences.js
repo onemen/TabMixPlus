@@ -32,15 +32,6 @@ var gPrefWindow = {
       prefWindow.setAttribute("ubuntu", true);
 
     var docElt = document.documentElement;
-
-    // don't use browser.preferences.animateFadeIn
-    Object.defineProperty(docElt, "_shouldAnimate", {
-      value: false,
-      writable: true,
-      configurable: true
-    });
-    docElt.setAttribute("animated", "false");
-
     window.gIncompatiblePane.init(docElt);
 
     window.addEventListener("change", this);
@@ -94,19 +85,6 @@ var gPrefWindow = {
     // let _selectPane method set width for first prefpane
     if (!this._initialized) {
       this.init();
-      return;
-    }
-    let diff = 0;
-    let content = aPaneElement.getElementsByAttribute("class", "content-box")[0];
-    let style = window.getComputedStyle(content);
-    let contentWidth = parseInt(style.width) + parseInt(style.marginRight) +
-      parseInt(style.marginLeft);
-    let tabboxes = aPaneElement.getElementsByTagName("tabbox");
-    for (let tabbox of tabboxes) {
-      diff = Math.max(diff, tabbox.getBoundingClientRect().width - contentWidth);
-    }
-    if (diff) {
-      window.resizeBy(diff, 0);
     }
   },
 
@@ -796,5 +774,9 @@ function setDialog() {
     _instantApplyInitialized = true;
     instantApply = Tabmix.prefs.getBoolPref('instantApply');
   });
-  if (window.toString() == '[object ChromeWindow]') window.sizeToContent();
+  if (window.toString() == '[object Window]') {
+    window.requestAnimationFrame(() => {
+      window.sizeToContent();
+    });
+  }
 }

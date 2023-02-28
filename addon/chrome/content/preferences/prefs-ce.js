@@ -700,10 +700,13 @@ class PrefPane extends MozXULElement {
   }
 
   get contentHeight() {
-    let targetHeight = parseInt(window.getComputedStyle(this._content).height);
-    targetHeight += parseInt(window.getComputedStyle(this._content).marginTop);
-    targetHeight += parseInt(window.getComputedStyle(this._content).marginBottom);
-    return targetHeight;
+    const {height, marginTop, marginBottom} = window.getComputedStyle(this._content);
+    return parseInt(height) + parseInt(marginTop) + parseInt(marginBottom);
+  }
+
+  get contentWidth() {
+    const {width, marginLeft, marginRight} = window.getComputedStyle(this._content);
+    return parseInt(width) + parseInt(marginLeft) + parseInt(marginRight);
   }
 
   writePreferences(aFlushToDisk) {
@@ -1447,7 +1450,7 @@ class PrefWindow extends MozXULElement {
         }
       }
     }
-    this.setAttribute("animated", this._shouldAnimate ? "true" : "false");
+
     const panes = this.preferencePanes;
 
     let lastPane = null;
@@ -1530,21 +1533,17 @@ class PrefWindow extends MozXULElement {
     this._currentPane = val;
   }
 
-  get _shouldAnimate() {
-    return Services.prefs.getBoolPref("browser.preferences.animateFadeIn",
-      /Mac/.test(navigator.platform));
-  }
-
   get _sizeIncrement() {
     const lastSelectedPane = document.getElementById(this.lastSelected);
     let increment = this._animateIncrement * this._multiplier;
     const newHeight = this._currentHeight + increment;
-    if (this._multiplier > 0 && this._currentHeight >= lastSelectedPane.contentHeight ||
-        this._multiplier < 0 && this._currentHeight <= lastSelectedPane.contentHeight)
+    const contentHeight = lastSelectedPane.contentHeight;
+    if (this._multiplier > 0 && this._currentHeight >= contentHeight ||
+        this._multiplier < 0 && this._currentHeight <= contentHeight)
       return 0;
 
-    if (this._multiplier > 0 && newHeight > lastSelectedPane.contentHeight ||
-        this._multiplier < 0 && newHeight < lastSelectedPane.contentHeight)
+    if (this._multiplier > 0 && newHeight > contentHeight ||
+        this._multiplier < 0 && newHeight < contentHeight)
       increment = this._animateRemainder * this._multiplier;
     return increment;
   }
@@ -1633,51 +1632,23 @@ class PrefWindow extends MozXULElement {
         this._paneDeck.selectedIndex = i;
 
         if (this.type != "child") {
-          if (aPaneElement.hasAttribute("flex") && this._shouldAnimate &&
-              prefpanes.length > 1)
-            aPaneElement.removeAttribute("flex");
-          // Calling sizeToContent after the first prefpane is loaded
-          // will size the windows contents so style information is
-          // available to calculate correct sizing.
-          if (!this._initialized && prefpanes.length > 1) {
-            if (this._shouldAnimate)
-              this.style.minHeight = 0;
-            window.sizeToContent();
-          }
-
           const oldPane = this.lastSelected ? document.getElementById(this.lastSelected) : this.preferencePanes[0];
           oldPane.selected = !(aPaneElement.selected = true);
           this.lastSelected = aPaneElement.id;
           this.currentPane = aPaneElement;
           this._initialized = true;
 
-          // Only animate if we've switched between prefpanes
-          if (this._shouldAnimate && oldPane.id != aPaneElement.id) {
-            aPaneElement.style.opacity = 0.0;
-            this.animate(oldPane, aPaneElement);
-          } else if (!this._shouldAnimate && prefpanes.length > 1) {
-            const targetHeight = parseInt(window.getComputedStyle(this._paneDeckContainer).height);
-            let verticalPadding = parseInt(window.getComputedStyle(aPaneElement).paddingTop);
-            verticalPadding += parseInt(window.getComputedStyle(aPaneElement).paddingBottom);
-            if (aPaneElement.contentHeight > targetHeight - verticalPadding) {
-              // To workaround the bottom border of a groupbox from being
-              // cutoff an hbox with a class of bottomBox may enclose it.
-              // This needs to include its padding to resize properly.
-              // See bug 394433
-              let bottomPadding = 0;
-              const bottomBox = aPaneElement.getElementsByAttribute("class", "bottomBox")[0];
-              if (bottomBox)
-                bottomPadding = parseInt(window.getComputedStyle(bottomBox).paddingBottom);
-              const diff = bottomPadding + verticalPadding + aPaneElement.contentHeight - targetHeight;
-              if (diff) {
-                window.resizeBy(0, diff);
-              }
-            }
-
-            // XXX rstrong - extend the contents of the prefpane to
-            // prevent elements from being cutoff (see bug 349098).
-            if (aPaneElement.contentHeight + verticalPadding < targetHeight)
-              aPaneElement._content.style.height = targetHeight - verticalPadding + "px";
+          if (prefpanes.length > 1) {
+            window.requestAnimationFrame(() => {
+              window.requestAnimationFrame(() => {
+                const {height, width} = window.getComputedStyle(this._paneDeckContainer);
+                const {paddingTop, paddingBottom, paddingLeft, paddingRight} = window.getComputedStyle(aPaneElement);
+                const paddingY = parseInt(paddingTop) + parseInt(paddingBottom);
+                const paddingX = parseInt(paddingLeft) + parseInt(paddingRight);
+                this.maybeResize(aPaneElement, parseInt(height), "height", paddingY,);
+                this.maybeResize(aPaneElement, parseInt(width), "width", paddingX);
+              });
+            });
           }
         }
         break;
@@ -1685,71 +1656,31 @@ class PrefWindow extends MozXULElement {
     }
   }
 
-  animate(aOldPane, aNewPane) {
-    // if we are already resizing, use currentHeight
-    const oldHeight = this._currentHeight ? this._currentHeight : aOldPane.contentHeight;
-
-    this._multiplier = aNewPane.contentHeight > oldHeight ? 1 : -1;
-    const sizeDelta = Math.abs(oldHeight - aNewPane.contentHeight);
-    this._animateRemainder = sizeDelta % this._animateIncrement;
-
-    this._setUpAnimationTimer(oldHeight);
-  }
-
-  _setUpAnimationTimer(aStartHeight) {
-    if (!this._animateTimer)
-      this._animateTimer = Cc["@mozilla.org/timer;1"]
-          .createInstance(Ci.nsITimer);
-    else
-      this._animateTimer.cancel();
-    this._currentHeight = aStartHeight;
-
-    const callback = () => {
-      if (!document && this._animateTimer) {
-        this._animateTimer.cancel();
+  maybeResize(aPaneElement, targetSize, measurement, padding) {
+    const prop = measurement === "height" ? "contentHeight" : "contentWidth";
+    const contentSize = aPaneElement[prop];
+    if (contentSize > targetSize - padding) {
+      let bottomPadding = 0;
+      if (measurement === "height") {
+        // To workaround the bottom border of a groupbox from being
+        // cutoff an hbox with a class of bottomBox may enclose it.
+        // This needs to include its padding to resize properly.
+        // See bug 394433
+        const bottomBox = aPaneElement.getElementsByAttribute("class", "bottomBox")[0];
+        if (bottomBox)
+          bottomPadding = parseInt(window.getComputedStyle(bottomBox).paddingBottom);
       }
-
-      const increment = this._sizeIncrement;
-      if (increment != 0) {
-        window.innerHeight += increment;
-        this._currentHeight += increment;
-      } else {
-        this._animateTimer.cancel();
-        this._setUpFadeTimer();
+      const diff = bottomPadding + padding + contentSize - targetSize;
+      if (diff) {
+        window.resizeBy(diff * Number(measurement === "width"), diff * Number(measurement === "height"));
       }
-    };
+    }
 
-    this._animateTimer.initWithCallback(callback, this._scrollDelay,
-      this._animateTimer.TYPE_REPEATING_SLACK);
-  }
-
-  _setUpFadeTimer() {
-    if (!this._fadeTimer)
-      this._fadeTimer = Cc["@mozilla.org/timer;1"]
-          .createInstance(Ci.nsITimer);
-    else
-      this._fadeTimer.cancel();
-
-    this._fadeTimer.initWithCallback(this, this._fadeDelay,
-      Ci.nsITimer.TYPE_REPEATING_SLACK);
-
-    const callback = () => {
-      if (!document && this._fadeTimer) {
-        this._fadeTimer.cancel();
-      }
-
-      const elt = document.getElementById(this.lastSelected);
-      const newOpacity = parseFloat(window.getComputedStyle(elt).opacity) + this._fadeIncrement;
-      if (newOpacity < 1.0) {
-        elt.style.opacity = newOpacity;
-      } else {
-        this._animateTimer.cancel();
-        elt.style.opacity = 1.0;
-      }
-    };
-
-    this._fadeTimer.initWithCallback(callback, this._fadeDelay,
-      this._fadeTimer.TYPE_REPEATING_SLACK);
+    // extend the contents of the prefpane to
+    // prevent elements from being cutoff (see bug 349098).
+    if (aPaneElement[prop] + padding < targetSize) {
+      aPaneElement._content.style[measurement] = targetSize - padding + "px";
+    }
   }
 
   addPane(aPaneElement) {
