@@ -275,11 +275,22 @@ var TMP_Places = {
         tabPos = aTab._tPos < index ? index - 1 : index;
         gBrowser.moveTabTo(aTab, tabPos);
       } else {
+        let preferredRemoteType = E10SUtils.getRemoteTypeForURI(
+          url,
+          gMultiProcessBrowser,
+          gFissionBrowser,
+          E10SUtils.DEFAULT_REMOTE_TYPE,
+          null,
+          E10SUtils.predictOriginAttributes({window})
+        );
         let params = {
           skipAnimation: multiple,
           allowInheritPrincipal: true,
           noInitialLabel: this._titlefrombookmark,
           index: prevTab._tPos + 1,
+          skipBackgroundNotify: loadProgressively,
+          skipLoad: loadProgressively && tabToSelect,
+          preferredRemoteType,
         };
         // PlacesUIUtils.openTabset use SystemPrincipal
         aTab = gBrowser.addTrustedTab(loadProgressively ? "about:blank" : url, params);
@@ -291,7 +302,14 @@ var TMP_Places = {
         if (savePrincipal) {
           entry.triggeringPrincipal_base64 = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
         }
-        tabsData.push({entries: [entry], index: 0});
+        // make SessionStore load the tab with proper loadFlags by setting
+        // userTypedValue and userTypedClear
+        tabsData.push({
+          entries: [entry],
+          index: 0,
+          userTypedValue: url,
+          userTypedClear: 1,
+        });
       }
 
       if (!tabToSelect)
