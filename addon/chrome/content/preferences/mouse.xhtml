@@ -123,7 +123,7 @@
                 <spacer style="height: 8px;"/>
                 <!-- click on a tab -->
                 <checkbox_tmp label="&ontab.label;" control="ClickTab" align="center" flex="1" oncommand="gMousePane.resetPreference(this);"/>
-                <menulist id="ClickTab" class="indent" onsyncfrompreference="gMousePane.setCheckedState(this);">
+                <menulist id="ClickTab" class="indent" onsyncfrompreference="gMousePane.setCheckedState(this);" sizetopopup="pref">
                   <menupopup class="clicktab-popup" onpopupshown="gMousePane.ensureElementIsVisible(this);">
                     <menuitem value="-1" label="&clicktab.default;" hidden="true"/>
                     <menuitem value="0" label="&clicktab.nothing;"/>
@@ -172,7 +172,7 @@
                 <!-- click on a tabbar -->
                 <checkbox_tmp label="&ontabbar.label;" control="ClickTabbar" oncommand="gMousePane.resetPreference(this);"/>
                 <!-- we will clone the menupopup from ClickTab on startup -->
-                <menulist id="ClickTabbar" class="indent" onsyncfrompreference="gMousePane.setCheckedState(this);"/>
+                <menulist id="ClickTabbar" class="indent" onsyncfrompreference="gMousePane.setCheckedState(this);" sizetopopup="pref"/>
                 <!-- place holder to set tabbox width -->
                 <checkbox_tmp label="&ontabbar.dblClick.label;" style="visibility: hidden;"/>
               </tabpanel>

@@ -82,6 +82,15 @@ var gPrefWindow = {
       }
     }
 
+    if (Tabmix.isVersion(1100)) {
+      const menuLists = aPaneElement.querySelectorAll("menulist");
+      for (const menuList of menuLists) {
+        if (!menuList.hasAttribute("sizetopopup") && menuList.firstChild) {
+          menuList.style.width = menuList.firstChild.getBoundingClientRect().width + "px";
+        }
+      }
+    }
+
     // let _selectPane method set width for first prefpane
     if (!this._initialized) {
       this.init();
