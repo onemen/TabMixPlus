@@ -838,6 +838,13 @@ Tabmix.tablib = {
       }
       Tabmix.originalFunctions.gURLBar_setURI.apply(this, arguments);
     };
+
+    Tabmix.originalFunctions.isBlankPageURL = isBlankPageURL;
+    window.isBlankPageURL = function isBlankPageURL(url) {
+      return (
+        url === "about:newtab" || Tabmix.originalFunctions.isBlankPageURL.apply(null, arguments)
+      );
+    };
   },
 
   populateUndoWindowSubmenu(undoPopup) {
