@@ -99,8 +99,10 @@ var TMP_tabDNDObserver = {
       'var newMargin;',
       'var newMargin, newMarginY = 0;'
     )._replace(
-      'let newIndex = this._getDropIndex(event, effects == "link");',
-      'let {newIndex, mouseIndex} = this._getDropIndex(event, effects == "link", true);'
+      /let newIndex = this\._getDropIndex\(event.*\);/,
+      Tabmix.isVersion(1120) ?
+        'let {newIndex, mouseIndex} = this._getDropIndex(event, {returnObj:true});' :
+        'let {newIndex, mouseIndex} = this._getDropIndex(event, effects == "link", true);'
     )._replace(
       'if (newIndex == children.length) {',
       `const isFirstTabInRow = TMP_tabDNDObserver.isFirstTabInRow(newIndex, mouseIndex, children);
@@ -153,7 +155,7 @@ var TMP_tabDNDObserver = {
        }
       $&`
     )._replace(
-      'let newIndex = this._getDropIndex(event, true);',
+      /let newIndex = this\._getDropIndex\(event.*\);/,
       `$&
       if (event.target.id === "tabmix-scrollbox") {
         if (event.originalTarget.id === "scrollbutton-up") newIndex = 0;
@@ -174,7 +176,9 @@ var TMP_tabDNDObserver = {
     ).toCode();
 
     Tabmix.originalFunctions._getDropIndex = gBrowser.tabContainer._getDropIndex;
-    gBrowser.tabContainer._getDropIndex = this._getDropIndex.bind(this);
+    gBrowser.tabContainer._getDropIndex = Tabmix.isVersion(1120) ?
+      this._getDropIndex.bind(this) :
+      this._getDropIndex_before_112.bind(this);
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
       /(})(\)?)$/,
@@ -235,7 +239,9 @@ var TMP_tabDNDObserver = {
 
   // on_dragstart is bound to gBrowser.tabContainer
   on_dragstart(event) {
-    const tab = this._getDragTargetTab(event, false);
+    const tab = Tabmix.isVersion(1120) ?
+      this._getDragTargetTab(event) :
+      this._getDragTargetTab(event, false);
     if (!tab || this._isCustomizing) {
       return;
     }
@@ -282,7 +288,9 @@ var TMP_tabDNDObserver = {
     const effects = this.getDropEffectForTabDrag(event);
     const dt = event.dataTransfer;
     const isCopy = dt.dropEffect == "copy";
-    const targetTab = tabBar._getDragTargetTab(event, true);
+    const targetTab = Tabmix.isVersion(1120) ?
+      tabBar._getDragTargetTab(event, {ignoreTabSides: true}) :
+      tabBar._getDragTargetTab(event, true);
 
     let disAllowDrop = false;
     /* we don't allow to drop link on lock tab.
@@ -441,13 +449,22 @@ var TMP_tabDNDObserver = {
     document.getElementById("tabmix-tooltip").hidePopup();
   },
 
-  _getDropIndex(event, aLink, asObj) {
+  _getDropIndex_before_112(event, aLink, asObj) {
     const tabBar = gBrowser.tabContainer;
     if (!asObj && !this.useTabmixDnD(event)) {
       return Tabmix.originalFunctions._getDropIndex.apply(tabBar, arguments);
     }
     const params = this.eventParams(event);
     return asObj ? params : params.newIndex;
+  },
+
+  _getDropIndex(event, {returnObj} = {}) {
+    const tabBar = gBrowser.tabContainer;
+    if (!returnObj && !this.useTabmixDnD(event)) {
+      return Tabmix.originalFunctions._getDropIndex.apply(tabBar, arguments);
+    }
+    const params = this.eventParams(event);
+    return returnObj ? params : params.newIndex;
   },
 
   eventParams(event) {

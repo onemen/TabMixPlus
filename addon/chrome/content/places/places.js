@@ -879,7 +879,7 @@ Tabmix.onContentLoaded = {
     }
 
     function getTargetWindow(params = {}) {
-      if (Tabmix.isVersion(1112)) {
+      if (Tabmix.isVersion(1120)) {
         return window.URILoadingHelper.getTargetWindow(window, params);
       }
       if (Tabmix.isVersion(980)) {
