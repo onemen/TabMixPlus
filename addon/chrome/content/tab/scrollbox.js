@@ -472,7 +472,7 @@ Tabmix.multiRow = {
         return `
         <html:link rel="stylesheet" href="chrome://global/skin/toolbarbutton.css"/>
         <html:link rel="stylesheet" href="chrome://global/skin/arrowscrollbox.css"/>
-        <spacer part="overflow-start-indicator"/>
+        <spacer part="overflow-end-indicator"/>
         <toolbarbutton id="scrollbutton-up" part="scrollbutton-up"
                 inherits="orient,disabled=scrolledtostart"
                 oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'left');"

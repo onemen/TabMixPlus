@@ -1975,7 +1975,8 @@ gTMPprefObserver = {
     let cssText =
     `/* browser/themes/shared/tabs.inc.css */
     /* Tab Overflow */
-    #tabmix-scrollbox[orient=vertical]::part(overflow-start-indicator) {
+    #tabmix-scrollbox[orient=vertical]::part(overflow-start-indicator),
+    #tabmix-scrollbox[orient=vertical]::part(overflow-end-indicator) {
       display: none;
     }
 
@@ -2018,14 +2019,6 @@ gTMPprefObserver = {
       border-image-slice: 1;
     }
     } /*** END !proton ***/`}
-
-    /* swap direction from the original rule
-       we place overflow-start-indicator left to the button
-     */
-    #tabmix-scrollbox:-moz-locale-dir(ltr)::part(overflow-start-indicator),
-    #tabmix-scrollbox:-moz-locale-dir(rtl)::part(overflow-end-indicator) {
-      transform: scaleX(-1);
-    }
 
     ${Tabmix.isVersion(910) ? `` : `@media not (-moz-proton) {
     #tabmix-scrollbox:not([scrolledtostart])::part(overflow-start-indicator) {

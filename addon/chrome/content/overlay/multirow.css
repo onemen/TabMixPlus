@@ -129,6 +129,14 @@
   list-style-image: var(--tabmix-scrollbutton-image);
 }
 
+/* swap direction from the original rule
+   we place the indicator left to the buttons
+*/
+#tabmix-scrollbox:-moz-locale-dir(ltr)::part(overflow-start-indicator),
+#tabmix-scrollbox:-moz-locale-dir(rtl)::part(overflow-end-indicator) {
+  transform: scaleX(-1);
+}
+
 /* :::: make sure all buttons align to the top row :::: */
 #TabsToolbar[multibar] #TabsToolbar-customization-target,
 #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
