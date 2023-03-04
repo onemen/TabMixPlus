@@ -61,7 +61,8 @@ function isVersion(aVersionNo, updateChannel) {
     return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo) >= 0);
   }
 
-  return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo / 10 + ".0a1") >= 0);
+  const suffix = Services.appinfo.vendor === "LibreWolf" ? ".0-1" : ".0a1";
+  return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo / 10 + suffix) >= 0);
 }
 
 TabmixSvc = {
