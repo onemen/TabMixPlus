@@ -77,12 +77,16 @@ menulist {
 }
 
 .dialog-button[dlgtype="extra2"] {
-  list-style-image: url(arrow.png);
   -moz-box-direction: reverse;
 }
 
 .dialog-button[dlgtype="extra2"] .button-icon {
   display: -moz-box; /* for Linux */
+  margin-inline-start: 5px;
+  order: 1;
+  list-style-image: url(arrow-up.svg);
+  -moz-context-properties: fill;
+  fill: currentColor;
 }
 
 .dialog-button-box > button,
