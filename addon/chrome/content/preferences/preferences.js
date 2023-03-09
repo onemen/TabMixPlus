@@ -302,8 +302,11 @@ var gPrefWindow = {
         tabs.selectedIndex = preference.value;
       } else {
         let val = preference.valueFromPreferences;
-        if (val !== null)
+        if (val === null) {
+          preference.valueFromPreferences = tabs.selectedIndex;
+        } else {
           tabs.selectedIndex = val;
+        }
       }
     } else if (preference.value != tabs.selectedIndex) {
       preference.valueFromPreferences = tabs.selectedIndex;
