@@ -3,23 +3,22 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://tabmixplus/skin/preferences.css"?>
 
-<!DOCTYPE dialog [
+<!DOCTYPE window [
 <!ENTITY % dialogDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
 %dialogDTD;
 <!ENTITY % filetypeDTD SYSTEM "chrome://tabmixplus/locale/pref-filetype.dtd" >
 %filetypeDTD;
 ]>
 
-<dialog id="pref-TMP-filetype"
+<window id="pref-TMP-filetype"
         class="system-font-size"
         windowtype="mozilla:tabmixopt-filetype"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html="http://www.w3.org/1999/xhtml"
-        buttons="accept,cancel,extra1"
         title="&filetype.options;"
         onload="Init()"
         persist="screenX screenY">
-
+<dialog buttons="accept,cancel,extra1">
    <script type="text/javascript"><![CDATA[
      /* global Save */
      this.addEventListener("dialogaccept", () => Save());
@@ -50,3 +49,4 @@
      <button dlgtype="extra1" class="dialog-button" hidden="true" icon="help"/>
    </hbox>
 </dialog>
+</window>

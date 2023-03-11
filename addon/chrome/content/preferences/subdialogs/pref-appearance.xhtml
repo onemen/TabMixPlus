@@ -4,25 +4,25 @@
 <?xml-stylesheet href="chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.css" type="text/css"?>
 <?xml-stylesheet href="chrome://tabmixplus/skin/pref-appearance.css"?>
 
-<!DOCTYPE dialog [
+<!DOCTYPE window [
 <!ENTITY % dialogDTD SYSTEM "chrome://tabmixplus/locale/pref-tabmix.dtd" >
 %dialogDTD;
 <!ENTITY % appearanceDTD SYSTEM "chrome://tabmixplus/locale/pref-appearance.dtd" >
 %appearanceDTD;
 ]>
 
-<dialog id="pref-TMP-styles"
+<window id="pref-TMP-styles"
         class="system-font-size"
         windowtype="mozilla:tabmixopt-appearance"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html="http://www.w3.org/1999/xhtml"
-        buttons="accept,cancel,extra1,extra2"
         title="&styles.label;"
         persist="screenX screenY hide-RGB"
-        onload="tabstyles.init();"
         ondialogcancel="tabstyles.cancel();"
         ondialogaccept="tabstyles.save();"
         ondialogextra2="tabstyles.toggleRGB_visibility();">
+<dialog buttons="accept,cancel,extra1,extra2"
+        onload="tabstyles.init();">
 
    <script type="text/javascript"><![CDATA[
     /* global tabstyles */
@@ -62,3 +62,4 @@
      <button dlgtype="extra1" class="dialog-button" hidden="true" icon="help"/>
    </hbox>
 </dialog>
+</window>
