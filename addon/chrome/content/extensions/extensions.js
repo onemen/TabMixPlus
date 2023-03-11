@@ -529,25 +529,6 @@ TMP_extensionsCompatibility.treeStyleTab = {
     }.bind(gBrowser.treeStyleTab);
 
     if ("TreeStyleTabBrowser" in window) {
-      let obj = TreeStyleTabBrowser.prototype;
-      // we don't need this in the new version since we change the tabs-frame place
-      // keep it here for non default theme that uses old Tabmix binding
-      let fn = obj.initTabbar;
-      if (!fn.toString().includes("d = this.document")) {
-        Tabmix.changeCode(obj, "TreeStyleTabBrowser.prototype.initTabbar")._replace(
-          'newTabBox = document.getAnonymousElementByAttribute(b.mTabContainer, "id", "tabs-newbutton-box");',
-          'let newTabButton = document.getElementById("new-tab-button"); \
-           if (newTabButton && newTabButton.parentNode == gBrowser.tabContainer._container) \
-             newTabBox = newTabButton;'
-        )._replace(
-          'newTabBox.orient',
-          'if (newTabBox) $&', {flags: "g"}
-        ).toCode();
-      }
-      obj.getTabClosebox = function(aTab) {
-        return this.document.getAnonymousElementByAttribute(aTab, 'class', 'tab-close-button close-icon');
-      };
-
       // update ordinal on previous selected tab when close tab button is on the
       // left side and CloseButtons preference is 4 - close buttons on hover
       // and active tabs

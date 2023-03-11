@@ -26,83 +26,96 @@
 
 #tabbrowser-tabs:not([favhideclose="true"])[closebuttons="activetab"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
 #tabbrowser-tabs:not([favhideclose="true"])[closebuttons="alltabs"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
-  display: -moz-box !important;
+  display: inline-flex !important;
 }
 
 #tabbrowser-tabs[favhideclose="true"][closebuttons="activetab"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
 #tabbrowser-tabs[favhideclose="true"][closebuttons="alltabs"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
-  display: -moz-box !important;
+  display: inline-flex !important;
 }
 
 #tabbrowser-tabs[closebuttons-hover="notactivetab"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button,
 #tabbrowser-tabs[closebuttons-hover="alltabs"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button {
-  display: -moz-box !important;
+  display: inline-flex !important;
 }
 
 /* button on the left side */
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon,
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon {
-  -moz-box-ordinal-group: 1 !important;
+  order: 1 !important;
+  -moz-box-ordinal-group: 1 !important;  /* before Firefox 112 */
 }
 
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons="activetab"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[selected="true"] > .tab-stack > .tab-content > .tab-icon,
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-close-button,
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
-  -moz-box-ordinal-group: 2 !important;
+  order: 2 !important;
+  -moz-box-ordinal-group: 2 !important;  /* before Firefox 112 */
 }
 
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-sharing-icon-overlay,
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > .tab-sharing-icon-overlay {
-  -moz-box-ordinal-group: 1 !important;
+  order: 1 !important;
+  -moz-box-ordinal-group: 1 !important;  /* before Firefox 112 */
 }
 
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon-overlay,
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-overlay {
-  -moz-box-ordinal-group: 1 !important;
+  order: 1 !important;
+  -moz-box-ordinal-group: 1 !important;  /* before Firefox 112 */
 }
 
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-label-container,
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label-container,
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-label,
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label {
-  -moz-box-ordinal-group: 3 !important;
+  order: 3 !important;
+  -moz-box-ordinal-group: 3 !important;  /* before Firefox 112 */
   pointer-events: none;
 }
 
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-icon-sound,
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-sound {
-  -moz-box-ordinal-group: 3 !important;
+  order: 3 !important;
+  -moz-box-ordinal-group: 3 !important;  /* before Firefox 112 */
 }
 
 #tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button) {
-  -moz-box-ordinal-group: 5 !important;
+  order: 5 !important;
+  -moz-box-ordinal-group: 5 !important;  /* before Firefox 112 */
 }
 
 #tabbrowser-tabs:not([closebuttons-side="left"]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button):not(.tab-icon-sound):not(.tab-label):not(.tab-label-container):not(label) {
-  -moz-box-ordinal-group: 1;
+  order: 1;
+  -moz-box-ordinal-group: 1;  /* before Firefox 112 */
 }
 
 #tabbrowser-tabs:not([closebuttons-side="left"]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label-container,
 #tabbrowser-tabs:not([closebuttons-side="left"]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > .tab-label {
-  -moz-box-ordinal-group: 2;
+  order: 2;
+  -moz-box-ordinal-group: 2;  /* before Firefox 112 */
 }
 
 #tabbrowser-tabs:not([closebuttons-side="left"]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-sound {
-  -moz-box-ordinal-group: 3;
+  order: 3;
+  -moz-box-ordinal-group: 3;  /* before Firefox 112 */
 }
 
 #tabbrowser-tabs:not([closebuttons-side="left"]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > label {
-  -moz-box-ordinal-group: 4;
+  order: 4;
+  -moz-box-ordinal-group: 4;  /* before Firefox 112 */
 }
 
 #tabbrowser-tabs:not([closebuttons-side="left"]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
-  -moz-box-ordinal-group: 5;
+  order: 5;
+  -moz-box-ordinal-group: 5;  /* before Firefox 112 */
 }
 
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[selected="true"] > .tab-stack > .tab-content > .tab-close-button,
 #tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
   direction: rtl;
-  -moz-box-ordinal-group: 0 !important;
+  order: 0 !important;
+  -moz-box-ordinal-group: 0 !important;  /* before Firefox 112 */
 }
 
 /* for themes that use old tabmix xml version */
@@ -115,7 +128,8 @@
 /* we use this rule in tabmix.js Tabmix.getAfterTabsButtonsWidth */
 #tabbrowser-arrowscrollbox > #tabs-newtab-button[force-display],
 #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[force-display] {
-  display: -moz-box !important;
+  display: flex !important;
+  align-items: center;
 }
 
 /*** hide tabs-newtab-button that we don't use ***/
@@ -136,13 +150,15 @@
   #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"],
 #TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"])
   #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"] {
-  display: -moz-box;
+  display: flex;
+  align-items: center;
   visibility: visible;
 }
 
 /* override firefox rule from browser.css */
 #tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow="true"]) ~ #new-tab-button {
-  display: -moz-box;
+  display: flex;
+  align-items: center;
 }
 
 #TabsToolbar[tabmix-show-newtabbutton*="side"] #tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow="true"]) ~ #new-tab-button,
@@ -194,23 +210,10 @@
    display: none !important;
 }
 
-/* we use display: -moz-box !important;
+/* we use display: inline-flex !important;
 so display: none !important; does not hide the button */
 .tab-close-button:not([fadein]) {
   visibility: hidden;
-}
-
-/*
- When the tabbar is in display:block hiding this items on a tab collapses the
- height when there is no close button on the tab
-*/
-#tabbrowser-tabs[flowing=multibar] .tab-throbber:not([fadein]):not([pinned]),
-#tabbrowser-tabs[flowing=multibar] .tab-label:not([fadein]):not([pinned]),
-#tabbrowser-tabs[flowing=multibar] .tab-icon-image:not([fadein]):not([pinned]),
-#tabbrowser-tabs[flowing=multibar] .tab-close-button:not([fadein]):not([pinned]) {
-  display: -moz-box !important;
-  visibility: collapse !important;
-  width: 0 !important;
 }
 
 /* we don't remove top and bottom borders to prevent tab height from shrinking */
@@ -228,7 +231,6 @@ so display: none !important; does not hide the button */
 .tab-progress {
   margin: 0;
   min-width: 0;
-  width: 0;
 }
 
 .tabbrowser-tab > .tab-stack > .tab-progress-container {
@@ -240,7 +242,7 @@ so display: none !important; does not hide the button */
 }
 
 #tabbrowser-tabs[tabmix_progressMeter] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned])[busy] > .tab-stack > .tab-progress-container > .tab-progress[value] {
-  display: -moz-box;
+  display: inline-block;
 }
 
 .tab-progress > .progress-bar:-moz-locale-dir(ltr) {
@@ -257,7 +259,8 @@ so display: none !important; does not hide the button */
 
 /* :::: widthFitTitle :::: */
 #tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]) {
-  -moz-box-flex: 0 !important;
+  flex: 0 0 auto !important;
+  -moz-box-flex: 0 !important; /* before Firefox 112 */
   width: auto !important;
 }
 
@@ -270,11 +273,12 @@ so display: none !important; does not hide the button */
   display: none;
 }
 #TabsToolbar #tabbrowser-tabs[showalltabsbutton] ~ #alltabs-button {
-  display: -moz-box;
+  display: flex;
+  align-items: center;
 }
 #TabsToolbar #tabbrowser-tabs:not([overflow="true"], [showalltabsbutton])[using-closing-tabs-spacer] ~ #alltabs-button {
   /* temporary space to keep a tab's close button under the cursor */
-  display: -moz-box;
+  display: flex;
   visibility: hidden;
 }
 

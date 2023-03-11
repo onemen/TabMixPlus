@@ -196,8 +196,7 @@ prefpane > .content-box > tabbox {
 /*  tabclicking options tabbox  */
 .mouseclick-panel {
   --mouseclick-border: 1px solid color-mix(in srgb, var(--in-content-accent-color) 41%, transparent);
-  display: flex;
-  flex-direction: column;
+  display: block;
   margin-top: 25px;
   margin-inline: 25px;
 }
@@ -215,7 +214,7 @@ prefpane > .content-box > tabbox {
 
 #tabclick > tab {
   padding: 2px 0 0 !important;
-  flex: 1;
+  flex: 1 auto;
 }
 
 #tabclick .subtabs .tab-text {

@@ -42,7 +42,7 @@
 }
 
 #tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox-clip) {
-  overflow: -moz-hidden-unscrollable;
+  overflow: clip;
   display: block;
   margin-top: var(--tabmix-multirow-margin , 0);
   margin-bottom: var(--tabmix-multirow-margin , 0);
@@ -140,7 +140,8 @@
 /* :::: make sure all buttons align to the top row :::: */
 #TabsToolbar[multibar] #TabsToolbar-customization-target,
 #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
-  -moz-box-align: start;
+  align-items: flex-start;
+  -moz-box-align: start; /* before Firefox 112 */
 }
 
 @media not (-moz-proton) {

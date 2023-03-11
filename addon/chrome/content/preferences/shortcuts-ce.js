@@ -50,8 +50,8 @@
       }
       this.textContent = "";
       this.appendChild(MozXULElement.parseXULToFragment(`
-        <hbox align="center" class="shortcut-content">
-          <description inherits="disabled=blocked" flex="1"></description>
+        <hbox class="shortcut-content">
+          <description inherits="disabled=blocked"></description>
           <hbox class="input-container" inherits="disabled=blocked">
             <html:input flex="1" focused="true" class="shortcut-edit-box" anonid="editBox"
               inherits="value,disabled=blocked" context=" "

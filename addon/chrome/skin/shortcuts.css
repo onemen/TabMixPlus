@@ -3,12 +3,17 @@
 }
 
 shortcut {
-  -moz-box-orient: vertical;
+  flex-direction: column;
+  -moz-box-orient: vertical; /* before Firefox 112 */
 }
 
 .shortcut-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   height: 24px;
   margin: 1px 0;
+  width: 100%;
 }
 
 .input-container {
@@ -44,7 +49,6 @@ shortcut[focused="true"] .input-container {
 }
 
 .shortcut-image {
-  -moz-box-ordinal-group: 100;
   opacity: 0.75;
   cursor: default;
   width: 20px;

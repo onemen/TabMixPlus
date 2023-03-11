@@ -1652,7 +1652,7 @@ gTMPprefObserver = {
       return; // nothing to do....
 
     // move left button that show on hover over tab title
-    icon.style.setProperty("display", "-moz-box", "important");
+    icon.style.setProperty("display", "inline-flex", "important");
     let iconMargin = '#tabbrowser-tabs[closebuttons-hover="notactivetab"][closebuttons-side="left"] > ' +
                      '#tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"])' +
                      ':not([isPermaTab="true"]):not([protected]) .tab-close-button,' +
@@ -1866,7 +1866,7 @@ gTMPprefObserver = {
     if (!Tabmix.isVersion(860)) {
       newRule = `
       #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal] {
-        overflow: -moz-hidden-unscrollable;
+        overflow: clip;
         display: block;
       }`;
       this.insertRule(newRule);
@@ -2076,7 +2076,8 @@ gTMPprefObserver = {
       // we can't use -moz-platform before Firefox 99
       cssText = `
       #TabsToolbar[tabmix-flowing="multibar"] .titlebar-buttonbox-container {
-        -moz-box-align: start !important;
+        align-items: flex-start !important;
+        -moz-box-align: start !important; /* before Firefox 112 */
         margin-top: calc((var(--tab-min-height_mlt) - 16px) / 2 + 3px);
       }`;
     }

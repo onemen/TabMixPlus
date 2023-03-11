@@ -11,7 +11,8 @@
 prefwindow,
 prefwindow:root /* override :root from above */,
 prefpane {
-  -moz-box-orient: vertical;
+  flex-direction: column;
+  -moz-box-orient: vertical; /* before Firefox 112 */
 }
 
 prefwindow > .paneDeckContainer {
@@ -23,12 +24,13 @@ prefpane > .content-box {
 }
 
 prefwindow[type="child"] > .paneDeckContainer {
-  overflow: -moz-hidden-unscrollable;
+  overflow: clip;
 }
 
 prefwindow[type="child"] > prefpane > .content-box {
-  -moz-box-flex: 1;
-  overflow: -moz-hidden-unscrollable;
+  flex: 1;
+  -moz-box-flex: 1; /* before Firefox 112 */
+  overflow: clip;
 }
 
 preferences,
@@ -41,7 +43,8 @@ radio[pane] .radio-check {
 }
 
 radio[pane] .radio-label-box {
-  -moz-box-orient: vertical;
+  flex-direction: column;
+  -moz-box-orient: vertical; /* before Firefox 112 */
   outline: none;
   margin-inline: 5px;
   margin-bottom: 2px;

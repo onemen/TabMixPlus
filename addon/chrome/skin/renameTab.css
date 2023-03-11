@@ -23,8 +23,3 @@
 #tabmixRenametab_panel:not([modified]) #tabmixRenametab_defaultRow {
   visibility: hidden;
 }
-
-/* for firefox 4.0 - 7.0 */
-#tabmixRenametab_panel > .panel-arrowcontainer > .panel-arrowcontent > .panel-inner-arrowcontent {
-  -moz-box-flex: 1;
-}

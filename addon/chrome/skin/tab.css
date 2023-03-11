@@ -7,10 +7,6 @@
 
 @import url("chrome://tabmixplus/skin/general.css");
 
-#tabbrowser-tabs[flowing=multibar][multibar] .tabs-frame .tabs-right {
-  display: none !important;
-}
-
 /*we need to make multirow work on all themes, this should help a bit*/
 #tabbrowser-tabs[flowing=multibar][multibar],
 #tabbrowser-tabs[flowing=multibar][multibar] .tabbrowser-strip,
@@ -22,18 +18,6 @@
 
 #tabbrowser-tabs[flowing=multibar][multibar=scrollbar] .tabbrowser-tab[collapsed=true] {
   display: none !important;
-}
-
-#tabbrowser-tabs[flowing=singlebar] .tabs-frame[orient="horizontal"],
-#tabbrowser-tabs[flowing=scrollbutton] .tabs-frame[orient="horizontal"],
-#tabbrowser-tabs[flowing=multibar]:not([multibar]) .tabs-frame[orient="horizontal"] {
-  overflow: hidden !important;
-}
-
-.tabs-frame[orient="vertical"] {
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
-  -moz-box-flex: 1 !important;
 }
 
 /* some theme align text to center this make all tab align to center in multi-rows*/
@@ -87,7 +71,7 @@
 #tabbrowser-tabs[tabmix_icons~="autoreload"] .tabbrowser-tab[_reload] .tab-reload-icon ,
 #tabbrowser-tabs[tabmix_icons~="protected"] .tabbrowser-tab[protected] .tab-protect-icon ,
 #tabbrowser-tabs[tabmix_icons~="locked"] .tabbrowser-tab[locked] .tab-lock-icon {
-  display: -moz-box;
+  display: inline-flex;
 }
 
 #tabbrowser-tabs[tabmix_icons~="notpinned"] .tabbrowser-tab[pinned] .tab-reload-icon,
@@ -113,11 +97,13 @@ toolbar[iconsize=small] #tabmix-closedTabsButton:hover, .closedtabs-icon:hover >
 }
 
 #wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabsButton[type=menu-button] {
-  -moz-box-align: end;
+  align-items: flex-end;
+  -moz-box-align: end; /* before Firefox 112 */
 }
 
 #wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabs-dropmarker[type=menu-button] {
-  -moz-box-align: start;
+  align-items: flex-start;
+  -moz-box-align: start; /* before Firefox 112 */
 }
 
 #tabmix-closedTabs-toolbaritem[cui-areatype=menu-panel] > #tabmix-closedTabs-dropmarker,
@@ -189,12 +175,6 @@ toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > 
   margin: 0 0 0;
 }
 
-#tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] .tabs-frame,
-#tabbrowser-tabs[tabmix_skin="phoenityaura"][multibar] .tabs-frame {
-  margin-top: 2px;
-  margin-bottom: 3px;
-}
-
 /* CrystalFox_Qute-BigRedBrent */
 #tabbrowser-tabs[tabmix_skin="CrystalFox"]:not([multibar])[inline=true] #tabbrowser-arrowscrollbox > toolbarbutton,
 #tabbrowser-tabs[tabmix_skin="CrystalFox"][multibar] #tabbrowser-arrowscrollbox > toolbarbutton {
@@ -209,5 +189,6 @@ toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > 
 
 /* Vista-aero */
 #myTabBarRightBox[vista_aero] {
-  -moz-box-align: start;
+  align-items: flex-start;
+  -moz-box-align: start; /* before Firefox 112 */
 }

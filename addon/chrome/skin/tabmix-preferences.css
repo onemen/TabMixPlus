@@ -77,11 +77,10 @@ menulist {
 }
 
 .dialog-button[dlgtype="extra2"] {
-  -moz-box-direction: reverse;
+  -moz-box-direction: reverse; /* before Firefox 112 */
 }
 
 .dialog-button[dlgtype="extra2"] .button-icon {
-  display: -moz-box; /* for Linux */
   margin-inline-start: 5px;
   order: 1;
   list-style-image: url(arrow-up.svg);
@@ -112,7 +111,8 @@ menulist {
 }
 
 tabpanel {
-  -moz-box-orient: vertical;
+  flex-direction: column;
+  -moz-box-orient: vertical; /* before Firefox 112 */
 }
 
 .bottom-separator {
@@ -147,7 +147,8 @@ tab.subtabs:focus-visible > .tab-middle > .tab-text {
 }
 
 .tabmixbuttons {
-  -moz-box-align: center;
+  align-items: center;
+  -moz-box-align: center; /* before Firefox 112 */
   padding: 3px;
 }
 
@@ -233,7 +234,8 @@ tabbox > tabs {
 }
 
 .clicktab-popup {
-  -moz-box-orient: vertical;
+  flex-direction: column;
+  -moz-box-orient: vertical; /* before Firefox 112 */
 }
 
 .clicktab-popup > * > .arrowscrollbox-scrollbox {
@@ -256,6 +258,7 @@ radio[pane] > image {
 }
 
 prefpane {
+  height: fit-content;
   padding: 3px 1px 1px 1px;
 }
 
@@ -269,12 +272,14 @@ prefwindow .paneSelector {
 }
 
 tabbox {
-  -moz-box-flex: 1;
+  flex: 1;
+  -moz-box-flex: 1; /* before Firefox 112 */
   padding: 0 1px;
 }
 
 tabbox > tabpanels {
-  -moz-box-flex: 1;
+  flex: 1;
+  -moz-box-flex: 1; /* before Firefox 112 */
 }
 
 tabbox > tabpanels:last-child {
@@ -366,7 +371,8 @@ html|fieldset.grid,
 }
 
 html|fieldset[flex="1"] {
-  -moz-box-flex: 1;
+  -moz-box-flex: 1; /* before Firefox 112 */
+  flex: 1 auto;
 }
 
 #ClickTabbar .multiselectitem,

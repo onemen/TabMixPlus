@@ -911,15 +911,6 @@ class PrefWindow extends MozXULElement {
   instantApply = false;
   _currentPane = null;
   _initialized = false;
-  _animateTimer = null;
-  _fadeTimer = null;
-  _animateDelay = 15;
-  _animateIncrement = 40;
-  _fadeDelay = 5;
-  _fadeIncrement = 0.40;
-  _animateRemainder = 0;
-  _currentHeight = 0;
-  _multiplier = 0;
 
   constructor() {
     super();
@@ -1477,15 +1468,7 @@ class PrefWindow extends MozXULElement {
   }
 
   disconnectedCallback() {
-    // Release timers to avoid reference cycles.
-    if (this._animateTimer) {
-      this._animateTimer.cancel();
-      this._animateTimer = null;
-    }
-    if (this._fadeTimer) {
-      this._fadeTimer.cancel();
-      this._fadeTimer = null;
-    }
+    //
   }
 
   get preferencePanes() {
@@ -1531,21 +1514,6 @@ class PrefWindow extends MozXULElement {
 
   set currentPane(val) {
     this._currentPane = val;
-  }
-
-  get _sizeIncrement() {
-    const lastSelectedPane = document.getElementById(this.lastSelected);
-    let increment = this._animateIncrement * this._multiplier;
-    const newHeight = this._currentHeight + increment;
-    const contentHeight = lastSelectedPane.contentHeight;
-    if (this._multiplier > 0 && this._currentHeight >= contentHeight ||
-        this._multiplier < 0 && this._currentHeight <= contentHeight)
-      return 0;
-
-    if (this._multiplier > 0 && newHeight > contentHeight ||
-        this._multiplier < 0 && newHeight < contentHeight)
-      increment = this._animateRemainder * this._multiplier;
-    return increment;
   }
 
   _makePaneButton(aPaneElement) {
