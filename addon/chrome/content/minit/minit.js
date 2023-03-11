@@ -155,13 +155,13 @@ var TMP_tabDNDObserver = {
        }
       $&`
     )._replace(
-      /let newIndex = this\._getDropIndex\(event.*\);/,
+      'let urls = links.map(link => link.url);',
       `$&
       if (event.target.id === "tabmix-scrollbox") {
         if (event.originalTarget.id === "scrollbutton-up") newIndex = 0;
         else if (event.originalTarget.id === "scrollbutton-down") newIndex = this.allTabs.length;
       }
-      let firstUrl = links[0].url;
+      let firstUrl = urls[0];
       replace =
         !!targetTab || Tabmix.ContentClick.isUrlForDownload(firstUrl);
       if (replace) {
