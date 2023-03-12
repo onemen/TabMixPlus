@@ -49,15 +49,6 @@
   max-width: 32em !important;
 }
 
-/* override panelUI.css */
-.tabmix-subview toolbarbutton.subviewbutton:not([disabled],[open],:active):is(:hover,:focus) {
-  background-color:  #9bcdff;
-}
-
-.tabmix-subview toolbarbutton.subviewbutton:not([disabled]):is([open], :hover:active) {
-  background-color:  #9bcdff;
-}
-
 .tabmix-subview menuseparator.subviewbutton {
   border-top: 1px solid var(--panel-separator-color);
   min-height: 0;

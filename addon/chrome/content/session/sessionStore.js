@@ -746,6 +746,17 @@ Tabmix.closedObjectsUtils = {
 
     Services.obs.addObserver(this, "sessionstore-closed-objects-changed");
 
+    // force LinkTargetDisplay.update to show item's uri in the status bar from
+    // our closed tabs list context menu
+    const undoCloseListMenu = document.getElementById("tm-content-undoCloseList-menu");
+    undoCloseListMenu.addEventListener("popupshowing", () => {
+      LinkTargetDisplay._undoCloseListMenu = undoCloseListMenu;
+      Tabmix.changeCode(LinkTargetDisplay, "LinkTargetDisplay.update")._replace(
+        /this\._contextMenu\.state/g,
+        'this._undoCloseListMenu.state == "closed" && $&'
+      ).toCode();
+    }, {once: true});
+
     this.toggleRecentlyClosedWindowsButton();
   },
 
@@ -824,6 +835,34 @@ Tabmix.closedObjectsUtils = {
     this.updateView(node.parentNode);
   },
 
+  addHoverListeners({menupopup}) {
+    // Lazily add the hover listeners on first showing and never remove them
+    if (menupopup.hasStatusListener) {
+      return;
+    }
+
+    const popupName = menupopup.constructor.name;
+    if (!["MozMenuPopup", "XULElement"].includes(popupName)) {
+      return;
+    }
+
+    const [eventOn, eventOff] =
+      popupName === "MozMenuPopup" ?
+        ["DOMMenuItemActive", "DOMMenuItemInactive"] :
+        ["mouseover", "mouseout"];
+
+    // Show item's uri in the status bar when hovering, and clear on exit
+    menupopup.addEventListener(eventOn, event => {
+      if (event.target.hasAttribute("targetURI")) {
+        window.XULBrowserWindow.setOverLink(event.target.getAttribute("targetURI"));
+      }
+    });
+    menupopup.addEventListener(eventOff, () => {
+      window.XULBrowserWindow.setOverLink("");
+    });
+    menupopup.hasStatusListener = true;
+  },
+
   populateClosedTabsMenu(undoTabMenu) {
     if (TabmixAllTabs.isAfterCtrlClick(undoTabMenu)) {
       return false;
@@ -831,6 +870,8 @@ Tabmix.closedObjectsUtils = {
 
     const _getClosedTabCount = HistoryMenu.prototype._getClosedTabCount;
     HistoryMenu.prototype.populateUndoSubmenu.apply({undoTabMenu, _getClosedTabCount});
+
+    this.addHoverListeners(undoTabMenu);
 
     // Bug 1689378 removed keyboard shortcut indicator for Firefox 87+
     if (undoTabMenu.localName === "panelview") {
@@ -843,6 +884,8 @@ Tabmix.closedObjectsUtils = {
 
   populateClosedWindowsMenu(undoWindowMenu) {
     HistoryMenu.prototype.populateUndoWindowSubmenu.apply({undoWindowMenu});
+
+    this.addHoverListeners(undoWindowMenu);
 
     // Bug 1689378 removed keyboard shortcut indicator for Firefox 87+
     if (undoWindowMenu.localName === "panelview") {

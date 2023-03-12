@@ -1276,6 +1276,16 @@ var TabmixAllTabs = {
 
     this.backupLabel = "";
     this._selectedItem = null;
+
+    if (window.XULBrowserWindow) {
+      window.XULBrowserWindow.setOverLink("");
+      if (
+        document.getElementById("contentAreaContextMenu").state === "open" &&
+        StatusPanel.isVisible
+      ) {
+        StatusPanel.update();
+      }
+    }
   },
 
   updateMenuItemActive: function TMP_updateMenuItemActive(event, tab) {
