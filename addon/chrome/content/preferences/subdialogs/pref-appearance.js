@@ -10,10 +10,12 @@ const tabstyles = {
     $("stylestabs").selectedIndex = Tabmix.prefs.prefHasUserValue(this.pref) ?
       Tabmix.prefs.getIntPref(this.pref) : 0;
 
-    if (!window.opener && !Tabmix.getTopWin())
-      document.documentElement.getButton("help").disabled = true;
+    const dialog = document.querySelector("dialog");
+    if (!window.opener && !Tabmix.getTopWin()) {
+      dialog.getButton("extra1").disabled = true;
+    }
 
-    const extra = document.documentElement.getButton("extra2");
+    const extra = dialog.getButton("extra2");
     extra.label = $("hide-RGB").value;
     extra.classList.add("text-link");
 
@@ -36,18 +38,19 @@ const tabstyles = {
 
   openHelp() {
     const win = window.opener || Tabmix.getTopWin();
-    if (win)
+    if (win) {
       win.openHelp("display-tab#customize_styles");
-    else
-      document.documentElement.getButton("help").disabled = true;
+    } else {
+      this.dialog.getButton("extra1").disabled = true;
+    }
   },
 
   toggleRGB_visibility() {
-    const doc = document.documentElement;
-    const extra = doc.getButton("extra2");
+    const dialog = document.querySelector("dialog");
+    const extra = dialog.getButton("extra2");
     const item = $("hide-RGB");
-    const wasShow = doc.getAttribute("hide-RGB") != "true";
+    const wasShow = dialog.getAttribute("hide-RGB") != "true";
     extra.label = item.value = item.getAttribute(wasShow ? 'show' : 'hide');
-    doc.setAttribute("hide-RGB", wasShow);
+    dialog.setAttribute("hide-RGB", wasShow);
   }
 };
