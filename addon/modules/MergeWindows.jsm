@@ -322,8 +322,19 @@ const MergeWindows = {
     let name = "mergeWindows-notification";
     if (!notificationBox.getNotificationWithValue(name)) {
       const priority = notificationBox.PRIORITY_INFO_MEDIUM;
-      let notificationBar = notificationBox.appendNotification(errorMessage,
-        name, errorimage, priority, null);
+      let notificationBar;
+      if (TabmixSvc.version(940)) {
+        notificationBar = notificationBox.appendNotification(
+          name,
+          {
+            label: errorMessage,
+            priority,
+          }
+        );
+      } else {
+        notificationBar = notificationBox.appendNotification(errorMessage,
+          name, errorimage, priority, null);
+      }
       aWindow.setTimeout(() => {
         notificationBox.removeNotification(notificationBar);
       }, 10000);

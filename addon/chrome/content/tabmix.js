@@ -186,9 +186,7 @@ Tabmix.afterDelayedStartup = function() {
   TMP_tabDNDObserver.paddingLeft = this.getStyle(gBrowser.tabContainer, "paddingLeft");
 
   // show global notification when debug mode is on
-  let gnb = Tabmix._debugMode &&
-            (document.getElementById("high-priority-global-notificationbox") ||
-            document.getElementById("global-notificationbox"));
+  let gnb = Tabmix._debugMode && gBrowser.getNotificationBox();
   if (gnb) {
     let buttons = [{
       label: "Disable Debug Mode",
@@ -201,9 +199,22 @@ Tabmix.afterDelayedStartup = function() {
       "In case it's activated accidentally, click the button to disable it " +
       "or set 'extensions.tabmix.enableDebug' in about:config to false. " +
       "Once you disable 'Debug Mode' restart your browser.";
-    const errorimage = "chrome://tabmixplus/skin/tmpsmall.png";
-    gnb.appendNotification(msg, "tabmix-debugmode-enabled",
-      errorimage, gnb.PRIORITY_CRITICAL_HIGH, buttons);
+    setTimeout(() => {
+      if (Tabmix.isVersion(940)) {
+        gnb.appendNotification(
+          "tabmix-debugmode-enabled",
+          {
+            label: msg,
+            priority: gnb.PRIORITY_CRITICAL_HIGH,
+          },
+          buttons
+        );
+      } else {
+        const errorimage = "chrome://tabmixplus/skin/tmpsmall.png";
+        gnb.appendNotification(msg, "tabmix-debugmode-enabled",
+          errorimage, gnb.PRIORITY_CRITICAL_HIGH, buttons);
+      }
+    }, 500);
   }
 };
 
