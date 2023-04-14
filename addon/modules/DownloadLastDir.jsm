@@ -5,6 +5,8 @@
 const EXPORTED_SYMBOLS = ["TabmixDownloadLastDir"];
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+const {DownloadLastDir} = TabmixChromeUtils.import("resource://gre/modules/DownloadLastDir.jsm");
 
 const TabmixDownloadLastDir = {
   _initialized: false,
@@ -36,7 +38,6 @@ const TabmixDownloadLastDir = {
       enumerable: true
     };
 
-    const {DownloadLastDir} = ChromeUtils.import("resource://gre/modules/DownloadLastDir.jsm");
     let obj = DownloadLastDir.prototype;
     Object.defineProperty(obj, "window", descriptor);
     obj._window = null;

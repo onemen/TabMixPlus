@@ -29,6 +29,7 @@ const modulesMap = {
   "resource:///modules/sessionstore/TabState.jsm": [1090, "resource:///modules/sessionstore/TabState.sys.mjs"],
   "resource:///modules/sessionstore/TabStateCache.jsm": [1090, "resource:///modules/sessionstore/TabStateCache.sys.mjs"],
   "resource:///modules/sessionstore/SessionStore.jsm": [1090, "resource:///modules/sessionstore/SessionStore.sys.mjs"],
+  "resource://gre/modules/DownloadLastDir.jsm": [1140, "resource://gre/modules/DownloadLastDir.sys.mjs"],
 };
 
 const _versions = {};
