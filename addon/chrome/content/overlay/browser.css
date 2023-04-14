@@ -265,7 +265,7 @@ so display: none !important; does not hide the button */
 }
 
 #tabbrowser-tabs[orient="horizontal"]:not([widthFitTitle]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([tiletabs-single="hidden"]) {
-  flex: 1 1 auto !important;
+  flex: 1 1 0% !important;
 }
 
 /* we add #TabsToolbar to get higher specificity, in order to override Firefox rule */
