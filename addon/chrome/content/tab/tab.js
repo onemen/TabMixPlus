@@ -107,7 +107,7 @@ var TabmixTabbar = {
 
       if (prevTabscroll == this.SCROLL_BUTTONS_MULTIROW) {
         tabstrip.resetFirstTabInRow();
-        Tabmix.tabsUtils.updateVerticalTabStrip(true);
+        Tabmix.tabsUtils.updateVerticalTabStrip({reset: true});
       } else if (isMultiRow && overflow) {
         // if we are in overflow in one line we will have more then one line
         // in multi-row. we try to prevent extra over/underflow events by setting
@@ -575,7 +575,7 @@ Tabmix.tabsUtils = {
     }
   },
 
-  updateVerticalTabStrip(aReset) {
+  updateVerticalTabStrip({reset, forceRightSide} = {}) {
     if (Tabmix.extensions.verticalTabBar || window.gInPrintPreviewMode ||
         this.inDOMFullscreen || FullScreen._isChromeCollapsed ||
         TabmixTabbar._waitAfterMaximized ||
@@ -586,9 +586,9 @@ Tabmix.tabsUtils = {
     this._inUpdateVerticalTabStrip = true;
 
     // we must adjustNewtabButtonVisibility before get lastTabRowNumber
-    this.adjustNewtabButtonVisibility();
+    this.adjustNewtabButtonVisibility(forceRightSide);
     // this.lastTabRowNumber is null when we hide the tabbar
-    let rows = aReset || this.tabBar.allTabs.length == 1 ? 1 : this.lastTabRowNumber || 1;
+    let rows = reset || this.tabBar.allTabs.length == 1 ? 1 : this.lastTabRowNumber || 1;
 
     let currentMultibar = this.tabBar.getAttribute("multibar") || null;
     let maxRow = Tabmix.prefs.getIntPref("tabBarMaxRow");
@@ -631,8 +631,13 @@ Tabmix.tabsUtils = {
    * in the current row. we don't want the button to be on the next row when the
    * tab is on the current row
    */
-  adjustNewtabButtonVisibility() {
+  adjustNewtabButtonVisibility(forceRightSide) {
     if (!TabmixTabbar.isMultiRow || this.tabBar.arrowScrollbox.getAttribute('orient') == "vertical") {
+      return;
+    }
+
+    if (forceRightSide) {
+      this.disAllowNewtabbutton = true;
       return;
     }
 
@@ -701,8 +706,7 @@ Tabmix.tabsUtils = {
       this.disAllowNewtabbutton = buttonEnd > tsboEnd;
       return;
     }
-    let lastTabEnd = previousTab.screenX +
-    getWidth(previousTab) + getWidth(lastTab);
+    let lastTabEnd = previousTab.screenX + getWidth(previousTab) + getWidth(lastTab);
     // both last tab and new tab button are in the next row
     if (lastTabEnd > tsboEnd)
       this.disAllowNewtabbutton = false;
@@ -824,6 +828,10 @@ Tabmix.tabsUtils = {
   },
 
   _resizeObserver: null,
+  _lastResize: {
+    time: 0,
+    width: 0,
+  },
   resizeObserver(observe) {
     if (!observe && !this._resizeObserver) {
       return;
@@ -832,7 +840,14 @@ Tabmix.tabsUtils = {
       this._resizeObserver = new window.ResizeObserver(entries => {
         for (let entry of entries) {
           if (entry.contentBoxSize) {
-            this.updateVerticalTabStrip();
+            const {width} = this.tabBar.getBoundingClientRect();
+            const forceRightSide =
+              TabmixTabbar.isMultiRow &&
+              Tabmix.prefs.getIntPref("newTabButton.position") === 2 &&
+              performance.now() - this._lastResize.time < 30 &&
+              Math.abs(this._lastResize.width - width) < 50;
+            this._lastResize = {time: performance.now(), width};
+            this.updateVerticalTabStrip({forceRightSide});
             break;
           }
         }

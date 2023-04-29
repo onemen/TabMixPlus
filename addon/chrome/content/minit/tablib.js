@@ -1146,7 +1146,7 @@ Tabmix.tablib = {
       }
 
       if (TabmixTabbar.visibleRows > 1) {
-        Tabmix.tabsUtils.updateVerticalTabStrip(true);
+        Tabmix.tabsUtils.updateVerticalTabStrip({reset: true});
       }
       this.removeTabs(tabsToRemove, {suppressWarnAboutClosingWindow: true});
     };

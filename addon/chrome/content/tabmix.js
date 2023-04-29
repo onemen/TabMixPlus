@@ -47,7 +47,7 @@ Tabmix.beforeDelayedStartup = function() {
 Tabmix.sessionInitialized = function() {
   if (Tabmix.fixMultibarRowHeight) {
     delete Tabmix._fixMultibarRowHeight;
-    Tabmix.tabsUtils.updateVerticalTabStrip(true);
+    Tabmix.tabsUtils.updateVerticalTabStrip({reset: true});
   }
 
   var SM = TabmixSessionManager;
