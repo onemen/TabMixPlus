@@ -549,7 +549,11 @@ var TabmixContext = {
 
     // make sure not to show menu items that are hidden by Firefox
     Tabmix.setItem("context_sendTabToDevice", "tabmix_hide", !Tabmix.prefs.getBoolPref("sendTabToDevice") || null);
-    Tabmix.setItem("context_shareTabURL", "tabmix_hide", !Tabmix.prefs.getBoolPref("shareTabURL") || null);
+
+    const shareTabURL = Tabmix.isVersion(920) ?
+      event.originalTarget.querySelector(".share-tab-url-item") :
+      "context_shareTabURL";
+    Tabmix.setItem(shareTabURL, "tabmix_hide", !Tabmix.prefs.getBoolPref("shareTabURL") || null);
 
     Tabmix.showItem("tm-mergeWindowsTab",
       Tabmix.prefs.getBoolPref("showMergeWindow") &&
