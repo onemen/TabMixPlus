@@ -847,13 +847,21 @@ Tabmix.tablib = {
     };
   },
 
+  get recentlyClosed() {
+    delete this.recentlyClosed;
+    if (Tabmix.isVersion(1150)) {
+      return (this.recentlyClosed = new Localization(["browser/recentlyClosed.ftl"], true));
+    }
+    return {
+      label: gNavigatorBundle.getString("menuUndoCloseWindowLabel"),
+      oneTabLabel: gNavigatorBundle.getString("menuUndoCloseWindowSingleTabLabel")
+    };
+  },
+
   populateUndoWindowSubmenu(undoPopup) {
     const isSubviewbutton = undoPopup.__tagName === "toolbarbutton";
     undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
     let undoItems = TabmixSvc.ss.getClosedWindowData(false);
-    let menuLabelString = gNavigatorBundle.getString("menuUndoCloseWindowLabel");
-    let menuLabelStringSingleTab =
-      gNavigatorBundle.getString("menuUndoCloseWindowSingleTabLabel");
     let checkForMiddleClick = function(e) {
       this.checkForMiddleClick(e);
     }.bind(Tabmix.closedObjectsUtils);
@@ -863,10 +871,17 @@ Tabmix.tablib = {
       if (undoItem && m.hasAttribute("targetURI")) {
         TMP_SessionStore.asyncGetTabTitleForClosedWindow(undoItem).then(title => {
           let otherTabsCount = undoItem.tabs.length - 1;
-          let label = otherTabsCount === 0 ?
-            menuLabelStringSingleTab : PluralForm.get(otherTabsCount, menuLabelString);
-          const menuLabel = label.replace("#1", title)
-              .replace("#2", otherTabsCount);
+          let menuLabel;
+          if (Tabmix.isVersion(1150)) {
+            menuLabel = this.recentlyClosed.formatValueSync(
+              "recently-closed-undo-close-window-label",
+              {tabCount: otherTabsCount, winTitle: title}
+            );
+          } else {
+            let label = otherTabsCount === 0 ?
+              this.recentlyClosed.oneTabLabel : PluralForm.get(otherTabsCount, this.recentlyClosed.label);
+            menuLabel = label.replace("#1", title).replace("#2", otherTabsCount);
+          }
           m.setAttribute("label", menuLabel);
         });
       }
