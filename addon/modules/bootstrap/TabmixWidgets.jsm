@@ -3,9 +3,13 @@
 /* eslint curly: 2 */
 const EXPORTED_SYMBOLS = ["TabmixWidgets"];
 
+const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+
 const lazy = {};
-ChromeUtils.defineModuleGetter(lazy, "CustomizableUI",
-  "resource:///modules/CustomizableUI.jsm");
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+  CustomizableUI: "resource:///modules/CustomizableUI.jsm",
+  //
+});
 
 ChromeUtils.defineModuleGetter(lazy, "TabmixSvc",
   "chrome://tabmix-resource/content/TabmixSvc.jsm");
