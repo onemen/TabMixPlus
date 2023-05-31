@@ -4,9 +4,6 @@ const EXPORTED_SYMBOLS = ["console"];
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
-const lazy = {};
-ChromeUtils.defineModuleGetter(lazy, "OS", "resource://gre/modules/osfile.jsm");
-
 var gNextID = 1;
 
 const console = {
@@ -233,7 +230,7 @@ const console = {
   // RegExp to remove path/to/profile/extensions from filename
   get _pathRegExp() {
     delete this._pathRegExp;
-    const path = lazy.OS.Constants.Path.profileDir.replace(/\\/g, "/") + "/extensions/";
+    const path = Services.dirsvc.get("ProfD", Ci.nsIFile).path.replace(/\\/g, "/") + "/extensions/";
     return (this._pathRegExp = new RegExp("jar:|file:///|" + path, "g"));
   },
 
@@ -335,9 +332,7 @@ const console = {
       ex = "reportError was called with null";
     }
     msg = ":\n" + (msg ? msg + "\n" : "");
-    // eslint-disable-next-line mozilla/reject-osfile
-    if (typeof ex != "object" || ex instanceof lazy.OS.File.Error ||
-        typeof ex.message != "string") {
+    if (typeof ex != "object" || typeof ex.message != "string") {
       this._logMessage(msg + ex.toString(), "errorFlag");
     } else {
       let caller = ex;
