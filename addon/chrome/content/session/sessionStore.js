@@ -360,14 +360,16 @@ var TMP_ClosedTabs = {
    * Get closed tabs count
    */
   get count() {
-    return window.__SSi ? TabmixSvc.ss.getClosedTabCount(window) : 0;
+    const name = Tabmix.isVersion(1150) ? "getClosedTabCountForWindow" : "getClosedTabCount";
+    return window.__SSi ? TabmixSvc.ss[name](window) : 0;
   },
 
   /**
    * Get closed tabs data
    */
   get getClosedTabData() {
-    return window.__SSi ? TabmixSvc.ss.getClosedTabData(window, false) : {};
+    const name = Tabmix.isVersion(1150) ? "getClosedTabDataForWindow" : "getClosedTabData";
+    return window.__SSi ? TabmixSvc.ss[name](window, false) : {};
   },
 
   getUrl: function ct_getUrl(aTabData) {
