@@ -10,14 +10,12 @@ TabmixChromeUtils.defineLazyModuleGetters(this, {
   BrowserUtils: "resource://gre/modules/BrowserUtils.jsm",
   E10SUtils: "resource://gre/modules/E10SUtils.jsm",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
+  WebNavigationFrames: "resource://gre/modules/WebNavigationFrames.jsm",
 });
 
 const {setTimeout, clearTimeout} = TabmixChromeUtils.import(
   "resource://gre/modules/Timer.jsm"
 );
-
-ChromeUtils.defineModuleGetter(this, "WebNavigationFrames",
-  "resource://gre/modules/WebNavigationFrames.jsm");
 
 ChromeUtils.defineModuleGetter(this, "ContentSvc",
   "chrome://tabmix-resource/content/ContentSvc.jsm");

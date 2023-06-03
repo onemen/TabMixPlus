@@ -32,6 +32,8 @@ const modulesMap = {
   "resource://gre/modules/DownloadLastDir.jsm": [1140, "resource://gre/modules/DownloadLastDir.sys.mjs"],
   "resource:///modules/CustomizableUI.jsm": [1150, "resource:///modules/CustomizableUI.sys.mjs"],
   "resource://gre/modules/NetUtil.jsm": [1150, "resource:///modules/NetUtil.sys.mjs"],
+  "resource://gre/modules/ExtensionShortcuts.jsm": [1150, "resource://gre/modules/ExtensionShortcuts.sys.mjs"],
+  "resource://gre/modules/WebNavigationFrames.jsm": [1150, "resource://gre/modules/WebNavigationFrames.sys.mjs"],
 };
 
 const _versions = {};

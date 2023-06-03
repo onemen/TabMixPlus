@@ -13,7 +13,7 @@
     "chrome://tabmix-resource/content/TabmixSvc.jsm"
   );
   XPCOMUtils.defineLazyGetter(this, "shortcutKeyMapPromise", async() => {
-    const {ExtensionShortcutKeyMap} = ChromeUtils.import(
+    const {ExtensionShortcutKeyMap} = TabmixChromeUtils.import(
       "resource://gre/modules/ExtensionShortcuts.jsm"
     );
     const {AddonManager} = ChromeUtils.import("resource://gre/modules/AddonManager.jsm");
