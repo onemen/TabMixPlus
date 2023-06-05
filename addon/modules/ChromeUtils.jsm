@@ -34,6 +34,7 @@ const modulesMap = {
   "resource://gre/modules/NetUtil.jsm": [1150, "resource:///modules/NetUtil.sys.mjs"],
   "resource://gre/modules/ExtensionShortcuts.jsm": [1150, "resource://gre/modules/ExtensionShortcuts.sys.mjs"],
   "resource://gre/modules/WebNavigationFrames.jsm": [1150, "resource://gre/modules/WebNavigationFrames.sys.mjs"],
+  "resource://gre/modules/AddonManager.jsm": [1150, "resource://gre/modules/AddonManager.sys.mjs"],
 };
 
 const _versions = {};

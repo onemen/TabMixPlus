@@ -16,7 +16,7 @@
     const {ExtensionShortcutKeyMap} = TabmixChromeUtils.import(
       "resource://gre/modules/ExtensionShortcuts.jsm"
     );
-    const {AddonManager} = ChromeUtils.import("resource://gre/modules/AddonManager.jsm");
+    const {AddonManager} = TabmixChromeUtils.import("resource://gre/modules/AddonManager.jsm");
     const shortcutKeyMap = new ExtensionShortcutKeyMap();
     const addons = await AddonManager.getAddonsByTypes(["extension"]);
     await shortcutKeyMap.buildForAddonIds(addons.map(addon => addon.id));

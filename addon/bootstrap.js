@@ -12,7 +12,14 @@
 "use strict";
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const {AddonManager} = ChromeUtils.import("resource://gre/modules/AddonManager.jsm");
+const {AddonManager} = (function() {
+  try {
+    return ChromeUtils.importESModule("resource://gre/modules/AddonManager.sys.mjs");
+  } catch {
+    // eslint-disable-next-line tabmix/use-mjs-modules
+    return ChromeUtils.import("resource://gre/modules/AddonManager.jsm");
+  }
+}());
 
 ChromeUtils.defineModuleGetter(this, "ChromeManifest",
   "chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
