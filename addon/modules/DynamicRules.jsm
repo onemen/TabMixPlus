@@ -140,27 +140,31 @@ const DynamicRules = {
       other: ':not([tabmix_tabState])' + _notSelected,
     };
 
+    // add more selectors to increase specificity of our rule in order to
+    // override rules from Firefox and Waterfox
+    let selector = '#TabsToolbar #TabsToolbar-customization-target #tabbrowser-tabs';
+
     let styleRules = {
       currentTab: {
-        text: '#tabbrowser-tabs[tabmix_currentStyle~="text"] .tabbrowser-tab' + tabState.current + tabTextRule,
-        bg: '#tabbrowser-tabs[tabmix_currentStyle~="bg"] .tabbrowser-tab' + tabState.current + backgroundRule
+        text: `${selector}[tabmix_currentStyle~="text"] .tabbrowser-tab${tabState.current}${tabTextRule}`,
+        bg: `${selector}[tabmix_currentStyle~="bg"] .tabbrowser-tab${tabState.current}${backgroundRule}`
       },
       unloadedTab: {
-        text: '#tabbrowser-tabs[tabmix_unloadedStyle~="text"] .tabbrowser-tab' + tabState.unloaded + tabTextRule,
-        bg: '#tabbrowser-tabs[tabmix_unloadedStyle~="bg"] .tabbrowser-tab' + tabState.unloaded + backgroundRule
+        text: `${selector}[tabmix_unloadedStyle~="text"] .tabbrowser-tab${tabState.unloaded}${tabTextRule}`,
+        bg: `${selector}[tabmix_unloadedStyle~="bg"] .tabbrowser-tab${tabState.unloaded}${backgroundRule}`
       },
       unreadTab: {
-        text: '#tabbrowser-tabs[tabmix_unreadStyle~="text"] .tabbrowser-tab' + tabState.unread + tabTextRule,
-        bg: '#tabbrowser-tabs[tabmix_unreadStyle~="bg"] .tabbrowser-tab' + tabState.unread + backgroundRule
+        text: `${selector}[tabmix_unreadStyle~="text"] .tabbrowser-tab${tabState.unread}${tabTextRule}`,
+        bg: `${selector}[tabmix_unreadStyle~="bg"] .tabbrowser-tab${tabState.unread}${backgroundRule}`
       },
       otherTab: {
-        text: '#tabbrowser-tabs[tabmix_otherStyle~="text"] .tabbrowser-tab' + tabState.other + tabTextRule,
-        bg: '#tabbrowser-tabs[tabmix_otherStyle~="bg"] .tabbrowser-tab' + tabState.other + backgroundRule
+        text: `${selector}[tabmix_otherStyle~="text"] .tabbrowser-tab${tabState.other}${tabTextRule}`,
+        bg: `${selector}[tabmix_otherStyle~="bg"] .tabbrowser-tab${tabState.other}${backgroundRule}`
       },
     };
 
     styleRules.progressMeter = {
-      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > ' +
+      bg: selector + '[tabmix_progressMeter="userColor"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > ' +
           '.tab-stack > .tab-progress-container > .tab-progress::-moz-progress-bar' +
           '{\n  background-color: #bottomColor !important;\n}\n'
     };
