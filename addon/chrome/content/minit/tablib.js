@@ -553,12 +553,14 @@ Tabmix.tablib = {
     //   '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.callerTrace("onxblmousedown")) return;'
     // ).toCode();
 
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")._replace(
-      /(})(\)?)$/,
-      '          Tabmix.setTabStyle(this.selectedItem);\n' +
-      '          TabmixTabbar.updateBeforeAndAfter();\n' +
-      '$1$2'
-    ).toCode();
+    if (!Tabmix.isVersion(1160)) {
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")._replace(
+        /(})(\)?)$/,
+        '          Tabmix.setTabStyle(this.selectedItem);\n' +
+        '          TabmixTabbar.updateBeforeAndAfter();\n' +
+        '$1$2'
+      ).toCode();
+    }
   },
 
   change_utility: function change_utility() {
