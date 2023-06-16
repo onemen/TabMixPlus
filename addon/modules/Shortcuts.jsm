@@ -46,7 +46,7 @@ const Shortcuts = {
     removeother: {command: 8},
     removeleft: {command: 17},
     removeright: {command: 18},
-    undoCloseTab: {id: "key_undoCloseTab", default: "T accel,shift"},
+    undoCloseTab: {id: "key_restoreLastClosedTabOrWindowOrSession", default: "T accel,shift"},
     clearClosedTabs: {
       command() {
         this.TMP_ClosedTabs.restoreTab('original', -1);
@@ -103,6 +103,10 @@ const Shortcuts = {
     this.initialized = true;
 
     this.KeyboardEvent = Object.keys(aWindow.KeyboardEvent);
+
+    if (!TabmixSvc.version(1160)) {
+      this.keys.undoCloseTab.id = "key_undoCloseTab";
+    }
 
     // update keys initial value and label
     let $ = id => id && aWindow.document.getElementById(id);

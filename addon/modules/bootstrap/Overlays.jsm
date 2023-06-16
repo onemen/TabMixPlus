@@ -17,6 +17,10 @@ TabmixChromeUtils.defineLazyModuleGetters(lazy, {
   //
 });
 
+function isVersion(versionNo) {
+  return Services.vc.compare(Services.appinfo.version, versionNo / 10 + ".0a1") >= 0;
+}
+
 /**
  * The overlays class, providing support for loading overlays like they used to work. This class
  * should likely be called through its static method Overlays.load()
@@ -90,6 +94,8 @@ class Overlays {
       const doc = await this.fetchOverlay(url);
 
       console.debug(`Applying ${url} to ${this.location}`);
+
+      this._update(url, doc);
 
       // clean the document a bit
       const emptyNodes = doc.evaluate(
@@ -248,6 +254,21 @@ class Overlays {
         this._finish.bind(this),
         {once: true}
       );
+    }
+  }
+
+  /**
+   * update document according to changes in Firefox
+   *
+   * @param {String} url        The document url
+   * @param {XMLDocument} doc   The html document
+   */
+  _update(url, doc) {
+    if (url === "chrome://tabmixplus/content/tabmix.xhtml") {
+      if (!isVersion(1160)) {
+        const menu = doc.getElementById("tm-content-undoCloseTab");
+        menu.setAttribute("key", "key_undoCloseTab");
+      }
     }
   }
 
