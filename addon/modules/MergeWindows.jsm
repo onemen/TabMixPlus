@@ -9,15 +9,10 @@ const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixS
 
 const lazy = {};
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+  BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
   PromiseUtils: "resource://gre/modules/PromiseUtils.jsm",
 });
-
-ChromeUtils.defineModuleGetter(
-  lazy,
-  "BrowserWindowTracker",
-  "resource:///modules/BrowserWindowTracker.jsm"
-);
 
 //////////////////////////////////////////////////////////////////////
 // The Original Code is the Merge Window function of "Duplicate Tab"//

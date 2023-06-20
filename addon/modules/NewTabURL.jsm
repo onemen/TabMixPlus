@@ -3,10 +3,14 @@
 const EXPORTED_SYMBOLS = ["Tabmix_NewTabURL"];
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 
 const lazy = {};
-ChromeUtils.defineModuleGetter(lazy, "AboutNewTab",
-  "resource:///modules/AboutNewTab.jsm");
+
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+  AboutNewTab: "resource:///modules/AboutNewTab.jsm"
+  //
+});
 
 const FIREFOX_PREF = "browser.#.url".replace("#", "newtab");
 const ABOUT_NEW_TAB = "about:#".replace("#", "newtab");
