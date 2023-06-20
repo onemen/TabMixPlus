@@ -180,7 +180,8 @@ PlacesUtilsInternal = {
     let fnName = treeStyleTabInstalled && lazy.PlacesUIUtils.__treestyletab__openNodeWithEvent ?
       "__treestyletab__openNodeWithEvent" : "openNodeWithEvent";
     code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
-      /window.whereToOpenLink\(aEvent[,\s\w]*\)/, '{where: $&, event: aEvent}'
+      'this._openNodeIn',
+      'where = {where, event: aEvent};\n    $&'
     );
     lazy.PlacesUIUtils[fnName] = makeCode(code);
 
