@@ -224,6 +224,14 @@
     }
 
     onKeyDown(event) {
+      // prevents Alt+C from closing our preferences window
+      if (event.altKey && (event.keyCode === 67 || event.key === 'c')) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.handleKeyEvents(event, true);
+        return;
+      }
+
       // handle Ctrl/Command + W
       const control = !event.shiftKey && (event.ctrlKey || event.metaKey);
       if (control && event.keyCode == 87)
