@@ -15,7 +15,7 @@
 
 ## Table of Contents <!-- omit in toc -->
 - [Installation](#installation)
-- [Firefox 101 update](#firefox-101-update)
+- [Firefox 115 update](#firefox-115-update)
 - [Browser Compatibility](#browser-compatibility)
 - [Configuration](#configuration)
 - [Docs](#docs)
@@ -47,10 +47,10 @@ The developer of these script/extension recommend using the first option:
 
 <br/>
 
-## Firefox 101 update
-    After updating to Firefox version 101 or newer, you have to reinstall userChromeJS and Tab Mix.
+## Firefox 115 update
+> If <b>Tab Mix Plus</b> stop working after Firefox 115 installed, you have to update the file `config.js` in your `Application Binary` path with the script from [here](https://github.com/onemen/TabMixPlus/issues/233#issuecomment-1624025716) .
 
-* Reinstall latest version of [userChromeJS](https://github.com/xiaoxiaoflood/firefox-scripts#instructions).
+* Close Firefox and update `config.js`.
 * Open <b>about:support</b> and click "Clear startup cache…" to force Firefox to load userChromeJS on the next startup.</li>
 * Reinstall latest <b>Tab Mix Plus</b> again.
 
