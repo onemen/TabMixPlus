@@ -58,6 +58,25 @@ var gPrefWindow = {
       docElt.style.setProperty("--input-padding-inline", "2px");
       docElt.style.setProperty("--input-sppiner-offset", "14px");
     }
+
+    this.updateMaxHeight();
+  },
+
+  updateMaxHeight() {
+    let previousDevicePixelRatio;
+    const setMaxHeight = () => {
+      const currentDevicePixelRatio = window.devicePixelRatio;
+      if (currentDevicePixelRatio !== previousDevicePixelRatio) {
+        const maxHeight = window.screen.height * 0.8;
+        document.documentElement.style.maxHeight = window.devicePixelRatio > 1.25 ? maxHeight + "px" : "";
+        window.requestAnimationFrame(() => {
+          window.sizeToContent();
+        });
+      }
+      previousDevicePixelRatio = currentDevicePixelRatio;
+    };
+    window.addEventListener("resize", setMaxHeight);
+    setMaxHeight();
   },
 
   initPane(aPaneID) {

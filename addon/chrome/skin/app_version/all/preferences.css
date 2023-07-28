@@ -16,7 +16,7 @@ prefpane {
 }
 
 prefwindow > .paneDeckContainer {
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 prefpane > .content-box {
