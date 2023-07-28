@@ -68,7 +68,7 @@ menulist {
 }
 
 .dialog-button[icon="help"] .button-icon {
-  display: -moz-box !important; /* for Linux */
+  display: inline-flex !important; /* for Linux */
   margin-right: 6px;
 }
 
