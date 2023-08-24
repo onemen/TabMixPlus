@@ -52,11 +52,6 @@ var gMenuPane = {
       gPrefWindow.removeItemAndPrefById("pref_showMoveToGroup");
     }
 
-    $("sendTabToDevice").label = browserWindow.PluralForm.get(
-      1,
-      browserWindow.gNavigatorBundle.getString("sendTabsToDevice.label")
-    );
-
     this.setInverseLinkLabel();
 
     // we can not modify build-in key with reserved attribute

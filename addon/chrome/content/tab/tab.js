@@ -812,10 +812,9 @@ Tabmix.tabsUtils = {
   createTooltip(box) {
     let rows = this.lastTabRowNumber;
     let active = this.getTabRowNumber(gBrowser.selectedTab, this.topTabY);
-    let rowsStr = TabmixSvc.getString("rowsTooltip.rowscount");
+    let rowsStr = TabmixSvc.getString("rowsTooltip.rowscount").split(";")[1];
     let activeStr = TabmixSvc.getString("rowsTooltip.activetab");
-    box.label = PluralForm.get(rows, rowsStr).replace("#1", rows) +
-        "\n" + activeStr.replace("#1", active);
+    box.label = `${rowsStr.replace("#1", rows)}\n${activeStr.replace("#1", active)}`;
   },
 
   isSingleRow(visibleTabs) {
