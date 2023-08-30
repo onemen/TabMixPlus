@@ -6,11 +6,24 @@
 
 const EXPORTED_SYMBOLS = ["ScriptsLoader"];
 
+const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+
+const lazy = {};
+
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+  Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.jsm",
+  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
+  SessionStore: "resource:///modules/sessionstore/SessionStore.jsm",
+});
+
+const isVersion119 = Services.vc.compare(Services.appinfo.version, "119.0a1");
+
 /**
  * stylesheets and scripts for navigator:browser
  */
 const CSS_URLS = [
-  "chrome://tabmixplus/content/overlay/browser.css",
+  isVersion119 ? "chrome://tabmixplus/content/overlay/browser.css" : "chrome://tabmixplus/content/overlay/browser_before_119.css",
   "chrome://tabmixplus/content/overlay/multirow.css",
   "chrome://tabmixplus/skin/tab.css",
   "chrome://tabmix-os/skin/browser.css",
@@ -36,17 +49,6 @@ const SCRIPTS = [
   "chrome://tabmixplus/content/extensions/extensions.js",
   "chrome://tabmixplus/content/tab/tabsBindings.js",
 ];
-
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-
-const lazy = {};
-
-TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-  Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.jsm",
-  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
-  SessionStore: "resource:///modules/sessionstore/SessionStore.jsm",
-});
 
 const initialized = new WeakSet();
 

@@ -134,10 +134,10 @@
 
 /*** hide tabs-newtab-button that we don't use ***/
 #TabsToolbar:not([currentset*="privateTab-toolbar-openNewPrivateTab"]) #privateTab-afterTabs-openNewPrivateTab,
-#tabbrowser-tabs[overflow] > #tabbrowser-arrowscrollbox > #tabs-newtab-button,
+#tabbrowser-tabs[overflow="true"] > #tabbrowser-arrowscrollbox > #tabs-newtab-button,
 #TabsToolbar:not([tabmix-show-newtabbutton]) #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"],
 #TabsToolbar[tabmix-show-newtabbutton*="side"] #tabbrowser-arrowscrollbox > #tabs-newtab-button,
-#tabbrowser-tabs[overflow] > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button,
+#tabbrowser-tabs[overflow="true"] > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button,
 #TabsToolbar:not([tabmix-show-newtabbutton]) #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"],
 #TabsToolbar[tabmix-show-newtabbutton*="side"] #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button {
   display: none;
@@ -147,22 +147,22 @@
 }
 
 #TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"])
-  #tabbrowser-tabs:not([overflow]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"],
+  #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"],
 #TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"])
-  #tabbrowser-tabs:not([overflow]) > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"] {
+  #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"] {
   display: flex;
   align-items: center;
   visibility: visible;
 }
 
 /* override firefox rule from browser.css */
-#tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow]) ~ #new-tab-button {
+#tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow="true"]) ~ #new-tab-button {
   display: flex;
   align-items: center;
 }
 
-#TabsToolbar[tabmix-show-newtabbutton*="side"] #tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow]) ~ #new-tab-button,
-#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[overflow] ~ #new-tab-button,
+#TabsToolbar[tabmix-show-newtabbutton*="side"] #tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow="true"]) ~ #new-tab-button,
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[overflow="true"] ~ #new-tab-button,
 #TabsToolbar[tabmix-show-newtabbutton*="side"] #new-tab-button {
   visibility: visible;
 }
@@ -178,16 +178,16 @@
 }
 
 #TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"]:not([tabmix-show-newtabbutton])
-  #tabbrowser-tabs:not([overflow]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"],
+  #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"],
 #TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"]:not([tabmix-show-newtabbutton])
-  #tabbrowser-tabs:not([overflow]) > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"] {
+  #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"] {
   display: none; /* override privateTab visibility: visible !important; */
 }
 
 #TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="side"]
-  #tabbrowser-tabs:not([overflow]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button,
+  #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabs-newtab-button,
 #TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="side"]
-  #tabbrowser-tabs:not([overflow]) > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button {
+  #tabbrowser-tabs:not([overflow="true"]) > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button {
   display: none; /* override privateTab visibility: visible !important; */
 }
 
@@ -269,14 +269,14 @@ so display: none !important; does not hide the button */
 }
 
 /* we add #TabsToolbar to get higher specificity, in order to override Firefox rule */
-#TabsToolbar #tabbrowser-tabs:not([overflow], [hashiddentabs], [showalltabsbutton]) ~ #alltabs-button {
+#TabsToolbar #tabbrowser-tabs:not([overflow="true"], [hashiddentabs], [showalltabsbutton]) ~ #alltabs-button {
   display: none;
 }
 #TabsToolbar #tabbrowser-tabs[showalltabsbutton] ~ #alltabs-button {
   display: flex;
   align-items: center;
 }
-#TabsToolbar #tabbrowser-tabs:not([overflow], [showalltabsbutton])[using-closing-tabs-spacer] ~ #alltabs-button {
+#TabsToolbar #tabbrowser-tabs:not([overflow="true"], [showalltabsbutton])[using-closing-tabs-spacer] ~ #alltabs-button {
   /* temporary space to keep a tab's close button under the cursor */
   display: flex;
   visibility: hidden;

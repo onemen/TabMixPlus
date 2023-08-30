@@ -132,9 +132,10 @@ const DynamicRules = {
     let backgroundRule = ' > .tab-stack > .tab-background' + background;
     let tabTextRule = " .tab-text {\n  color: #textColor !important;\n}\n";
 
-    let _notSelected = ':not([visuallyselected="true"])';
+    const visuallyselected = lazy.TabmixSvc.version(1190) ? '[visuallyselected]' : '[visuallyselected="true"]';
+    const _notSelected = `:not(${visuallyselected})`;
     let tabState = {
-      current: '[visuallyselected="true"]',
+      current: visuallyselected,
       unloaded: '[tabmix_tabState="unloaded"]' + _notSelected,
       unread: '[tabmix_tabState="unread"]' + _notSelected,
       other: ':not([tabmix_tabState])' + _notSelected,
