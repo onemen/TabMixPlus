@@ -412,7 +412,7 @@ Tabmix.tablib = {
 
       let $LF = '\n          ';
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
-        'this.removeAttribute("positionpinnedtabs");',
+        'let layoutData = this._pinnedTabsLayoutCache;',
         'if (typeof this.arrowScrollbox.resetFirstTabInRow == "function")\
            this.arrowScrollbox.resetFirstTabInRow();\
          $&'
@@ -426,7 +426,8 @@ Tabmix.tablib = {
         '  doPosition = false;' + $LF +
         '}' + $LF +
         'if (doPosition && TabmixTabbar.isMultiRow) {' + $LF +
-        '  this.setAttribute("positionpinnedtabs", "true");' + $LF +
+        (Tabmix.isVersion(1190) ? '  this.toggleAttribute("positionpinnedtabs", true)' :
+          '  this.setAttribute("positionpinnedtabs", "true");') + $LF +
         '  let layoutData = this._pinnedTabsLayoutCache;' + $LF +
         '  if (!layoutData) {' + $LF +
         '    layoutData = {pinnedTabWidth: tabs[0].getBoundingClientRect().width};' + $LF +

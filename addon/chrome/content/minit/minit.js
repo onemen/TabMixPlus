@@ -36,9 +36,9 @@ var TMP_tabDNDObserver = {
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
-      'if (this.getAttribute("movingtab")',
-      `let tabmixHandleMove = this.getAttribute("orient") === "horizontal" && TabmixTabbar.widthFitTitle;
-      $&`
+      'let movingTabs = draggedTab._dragData.movingTabs;',
+      `$&
+      let tabmixHandleMove = this.getAttribute("orient") === "horizontal" && TabmixTabbar.widthFitTitle;`
     )._replace(
       'this.selectedItem = draggedTab;',
       'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
