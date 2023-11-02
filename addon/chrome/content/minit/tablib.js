@@ -1627,8 +1627,8 @@ Tabmix.tablib = {
       tabsToClose -= keepLastTab;
       shouldPrompt = promptType > 0;`
     )._replace(
-      /var buttonPressed = ps\.confirmEx[^;]*;/,
-      'var buttonPressed = Tabmix.tablib.showClosingTabsPrompt(promptType, tabsToClose, numProtected, flags, warnOnClose);'
+      /buttonPressed = ps\.confirmEx[^;]*;/,
+      'buttonPressed = Tabmix.tablib.showClosingTabsPrompt(promptType, tabsToClose, numProtected, flags, warnOnClose);'
     )._replace(
       'aCloseTabs == this.closingTabsEnum.ALL &&', ''
     )._replace(
