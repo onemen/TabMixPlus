@@ -2823,8 +2823,14 @@ TabmixProgressListener = {
         tab.removeAttribute("tab-progress");
         if (!isBlankPageURL(uri)) {
           aBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
-          if (Tabmix.prefs.getBoolPref("unreadTabreload") && tab.hasAttribute("visited") &&
-              !tab.hasAttribute("dontremovevisited") && tab.getAttribute("visuallyselected") != "true")
+          if (
+            Tabmix.prefs.getBoolPref("unreadTabreload") &&
+            tab.hasAttribute("visited") &&
+            !tab.hasAttribute("dontremovevisited") &&
+            (TabmixSvc.version(1190) ?
+              !tab.hasAttribute("visuallyselected") :
+              tab.getAttribute("visuallyselected") !== "true")
+          )
             tab.removeAttribute("visited");
           Tabmix.setTabStyle(tab);
         }
