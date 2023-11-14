@@ -278,14 +278,15 @@ Tabmix.tablib = {
 
     const $LF = '\n    ';
     Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")._replace(
-      'let dataSuffix =',
+      'if (title) {',
       'let titlePromise;' + $LF +
         'if (tab.hasAttribute("tabmix_changed_label")) {' + $LF +
         '  titlePromise = Promise.resolve(tab.getAttribute("tabmix_changed_label"));' + $LF +
         '} else {' + $LF +
         '  titlePromise = TMP_Places.asyncGetTabTitle(tab, aBrowser.currentURI.spec, title);' + $LF +
         '}' + $LF +
-        'return titlePromise.then(title => {' + $LF +
+        'return titlePromise.then(newTitle => {' + $LF +
+        '  title = newTitle;' + $LF +
         '$&'
     )._replace(
       /(})(\)?)$/,
