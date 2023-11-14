@@ -578,7 +578,6 @@ function exportData() {
       if (TabmixSvc.version(860)) {
         IOUtils.writeUTF8(file.path, patterns.join(""));
       } else {
-        // eslint-disable-next-line mozilla/reject-osfile
         OS.File.writeAtomic(file.path, patterns.join(""), {encoding: "utf-8", tmpPath: file.path + ".tmp"});
       }
     }
@@ -593,7 +592,6 @@ async function importData() {
     if (TabmixSvc.version(860)) {
       input = await IOUtils.readUTF8(file.path);
     } else {
-      // eslint-disable-next-line mozilla/reject-osfile
       const data = await OS.File.read(file.path);
       let decoder = new TextDecoder();
       input = decoder.decode(data || "");

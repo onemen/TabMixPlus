@@ -901,9 +901,9 @@ Tabmix.onContentLoaded = {
         return window.URILoadingHelper.getTargetWindow(window, params);
       }
       if (Tabmix.isVersion(980)) {
-        return getTopWin(params);
+        return window.getTopWin(params);
       }
-      return getTopWin(params.skipPopups);
+      return window.getTopWin(params.skipPopups);
     }
 
     function getWindow(where, params) {

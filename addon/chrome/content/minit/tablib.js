@@ -87,7 +87,7 @@ Tabmix.tablib = {
       const browser = tab.linkedBrowser;
       browser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
       if (tab.linkedPanel) {
-        browser.loadURI = _loadURI.bind(null, browser);
+        browser.loadURI = window._loadURI.bind(null, browser);
       }
     }
   },
@@ -883,7 +883,7 @@ Tabmix.tablib = {
             );
           } else {
             let label = otherTabsCount === 0 ?
-              this.recentlyClosed.oneTabLabel : PluralForm.get(otherTabsCount, this.recentlyClosed.label);
+              this.recentlyClosed.oneTabLabel : window.PluralForm.get(otherTabsCount, this.recentlyClosed.label);
             menuLabel = label.replace("#1", title).replace("#2", otherTabsCount);
           }
           m.setAttribute("label", menuLabel);
@@ -1548,7 +1548,7 @@ Tabmix.tablib = {
       if (shouldPrompt === 1 || numProtected === 0) {
         message = Tabmix.isVersion(1090) ?
           getString("tabbrowser-confirm-close-tabs-title", {tabCount: tabsToClose}) :
-          PluralForm.get(tabsToClose, getString("tabs.closeTabsTitle")).replace("#1", tabsToClose);
+          window.PluralForm.get(tabsToClose, getString("tabs.closeTabsTitle")).replace("#1", tabsToClose);
         chkBoxLabel = shouldPrompt === 1 ? getString("tabbrowser-confirm-close-tabs-checkbox") :
           TabmixSvc.getString("window.closeWarning.2");
       } else {

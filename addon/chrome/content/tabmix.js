@@ -556,7 +556,7 @@ var TMP_eventListener = {
       });
     } else {
       closeButton.setAttribute("tooltiptext",
-        PluralForm.get(
+        window.PluralForm.get(
           1,
           // eslint-disable-next-line no-undef
           gTabBrowserBundle.GetStringFromName("tabs.closeTabs.tooltip")
