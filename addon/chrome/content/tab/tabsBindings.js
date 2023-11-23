@@ -5,7 +5,9 @@
     gBrowser.tabContainer,
     "_notifyBackgroundTab",
     function _notifyBackgroundTab(aTab) {
-      if (aTab.pinned || aTab.hidden || this.getAttribute("overflow") != "true") {
+      if (aTab.pinned || aTab.hidden || (TabmixSvc.version(1190) ?
+        !this.hasAttribute("overflow") :
+        this.getAttribute("overflow") !== "true")) {
         return;
       }
 

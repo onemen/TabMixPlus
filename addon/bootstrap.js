@@ -43,6 +43,8 @@ const options = {
   abi: appinfo.XPCOMABI
 };
 
+const isVersion119 = Services.vc.compare(appinfo.version, "119.0a1");
+
 const man = `
 overlay   chrome://browser/content/browser.xhtml                 chrome://tabmixplus/content/tabmix.xhtml
 overlay   about:addons                                           chrome://tabmixplus/content/preferences/overlay/aboutaddons.xhtml
@@ -147,7 +149,9 @@ async function startup(data, reason) {
       const document = win.document;
       if (document.createXULElement) {
         const isBrowser = document.documentElement.getAttribute("windowtype") === "navigator:browser";
-        const isOverflow = isBrowser && win.gBrowser.tabContainer.getAttribute("overflow");
+        const isOverflow = isVersion119 ?
+          isBrowser && win.gBrowser.tabContainer.hasAttribute("overflow") :
+          isBrowser && win.gBrowser.tabContainer.getAttribute("overflow") === "true";
         const promiseOverlayLoaded = Overlays.load(chromeManifest, document.defaultView);
         if (isBrowser) {
           ScriptsLoader.initForWindow(win, promiseOverlayLoaded, {
