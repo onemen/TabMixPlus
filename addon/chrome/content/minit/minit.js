@@ -1173,6 +1173,14 @@ Tabmix.navToolbox = {
       });
     }
 
+    if (Tabmix.isVersion(1210)) {
+      // eslint-disable-next-line tabmix/valid-lazy, no-undef
+      ChromeUtils.defineESModuleGetters(lazy, {
+        UrlbarPrefs: "resource:///modules/UrlbarPrefs.sys.mjs",
+        //
+      });
+    }
+
     $LF = '\n          ';
     Tabmix.changeCode(obj, "searchbar." + fn)._replace(
       'let params',
