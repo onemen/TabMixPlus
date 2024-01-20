@@ -1173,7 +1173,8 @@ Tabmix.navToolbox = {
       });
     }
 
-    if (Tabmix.isVersion(1210)) {
+    if (Tabmix.isVersion(1210) && !Tabmix.isVersion(1220)) {
+      // Bug 1866616 add useage for UrlbarPrefs.sys.mjs only in Firefox 121
       // eslint-disable-next-line tabmix/valid-lazy, no-undef
       ChromeUtils.defineESModuleGetters(lazy, {
         UrlbarPrefs: "resource:///modules/UrlbarPrefs.sys.mjs",
