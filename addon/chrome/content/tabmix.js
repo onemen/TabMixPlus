@@ -129,14 +129,19 @@ Tabmix.afterDelayedStartup = function() {
   }
 
   // focus address-bar area if the selected tab is blank when Firefox starts
+  // unless the searchbar is focused
   // focus content area if the selected tab is not blank when Firefox starts
   setTimeout(() => {
     const isBlank =
-      gBrowser.currentURI.spec === "about:home" || gBrowser.isBlankNotBusyTab(gBrowser.selectedTab);
+    gBrowser.currentURI.spec === "about:home" || gBrowser.isBlankNotBusyTab(gBrowser.selectedTab);
     if (gURLBar.focused && !isBlank) {
       gBrowser.selectedBrowser.focus();
-    } else if (!gURLBar.focused && isBlank) {
-      gURLBar.focus();
+    } else {
+      const focusedElement = Services.focus.focusedElement ?? document.activeElement;
+      const isSearchbarFocused = Boolean(focusedElement?.closest("#searchbar"));
+      if (!isSearchbarFocused && !gURLBar.focused && isBlank) {
+        gURLBar.focus();
+      }
     }
   }, 250);
 
