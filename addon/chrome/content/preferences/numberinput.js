@@ -39,7 +39,7 @@ const gNumberInput = {
           const {rangeOverflow, rangeUnderflow} = item.validity;
           if (rangeUnderflow && item.min) item.value = item.min;
           else if (rangeOverflow && item.max) item.value = item.max;
-          else item.value = $(item.getAttribute("preference"))?.valueFromPreferences ?? item.defaultValue;
+          else item.value = document.getElementById(item.getAttribute("preference"))?.valueFromPreferences ?? item.defaultValue;
         }
         this.updateSpinnerDisabledState(item);
         break;

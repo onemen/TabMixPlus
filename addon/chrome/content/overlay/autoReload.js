@@ -1,5 +1,5 @@
 /* global gNumberInput */
-/* exported load, accept, onInput openPopup */
+/* exported load, accept, onInput, onSelect, openPopup */
 "use strict";
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
@@ -11,7 +11,7 @@ function load() {
   var customReloadTime = gPref.getIntPref("extensions.tabmix.reload_time");
   document.getElementById("autoreload_minutes").value = Math.floor(customReloadTime / 60);
   document.getElementById("autoreload_seconds").value = customReloadTime % 60;
-  disable_OK();
+  updateOkButtonDisabledState();
 
   gNumberInput.init();
   gNumberInput.inputExpr = gNumberInput.changeExpr = e => {
@@ -64,7 +64,7 @@ function getCustomReloadTime() {
   return minutes * 60 + seconds;
 }
 
-function disable_OK() {
+function updateOkButtonDisabledState() {
   document.documentElement.getButton("accept").disabled = getCustomReloadTime() === 0;
 }
 
@@ -78,7 +78,15 @@ function onInput(item) {
   if (item.id == "autoreload_seconds" && val > 59)
     item.value = 59;
 
-  disable_OK();
+  updateOkButtonDisabledState();
+}
+
+function onSelect(event) {
+  const item = event.target;
+  const input = item.closest(".combined-element").firstChild;
+  input.value = item.value;
+  input.focus();
+  updateOkButtonDisabledState();
 }
 
 function openPopup(button) {
