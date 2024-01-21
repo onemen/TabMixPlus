@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Lukusta püsikaardid">
 <!ENTITY updateLockState.label "Rakenda muudatused avatud kaartidele">
 <!ENTITY openNewTab.label "Ava uuel kaardil järgnevate kaudu avatud leht:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Järjehoidjad">
 <!ENTITY openPlacesGroups.label "Järjehoidja-/ajaloogrupid">
 <!ENTITY openPlacesGroups.tooltip "Järjehoidja-/ajaloogruppide avamisel ära kirjuta kaarte üle">

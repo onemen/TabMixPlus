@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "鎖定應用程式分頁">
 <!ENTITY updateLockState.label "變更套用到已開啟的分頁">
 <!ENTITY openNewTab.label "下列項目將使用新分頁開啟：">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "書籤">
 <!ENTITY openPlacesGroups.label "書籤、瀏覽記錄群組">
 <!ENTITY openPlacesGroups.tooltip "勾選此項，開啟書籤、瀏覽記錄群組時保留目前已開啟的分頁">

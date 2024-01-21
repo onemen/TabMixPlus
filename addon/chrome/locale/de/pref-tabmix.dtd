@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "App-Tabs sperren">
 <!ENTITY updateLockState.label "Änderungen auf geöffnete Tabs anwenden">
 <!ENTITY openNewTab.label "In neuen Tabs öffnen">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Lesezeichen">
 <!ENTITY openPlacesGroups.label "Lesezeichen - Chronikgruppen">
 <!ENTITY openPlacesGroups.tooltip "Bestehende Tabs werden beim Öffnen einer Lesezeichen - Chronikgruppe nicht überschrieben">

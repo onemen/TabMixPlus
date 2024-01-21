@@ -237,7 +237,7 @@ Tabmix.tablib = {
     if (!Tabmix.extensions.tabGroupManager) {
       Tabmix.changeCode(gBrowser, "gBrowser._beginRemoveTab")._replace(
         /this\.addTrustedTab\(BROWSER_NEW_TAB_URL, {\s*skipAnimation: true,?\s*}\)/,
-        'TMP_BrowserOpenTab(null, null, true)'
+        `TMP_BrowserOpenTab(${Tabmix.isVersion(1150) ? "{}" : "null"}, null, true)`
       ).toCode();
     }
 

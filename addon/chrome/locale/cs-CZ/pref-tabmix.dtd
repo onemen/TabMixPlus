@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Zamknout panely aplikací">
 <!ENTITY updateLockState.label "Aplikovat změny na již otevřené panely">
 <!ENTITY openNewTab.label "Otevírat panely z:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Záložky">
 <!ENTITY openPlacesGroups.label "Seskupit záložky/historii">
 <!ENTITY openPlacesGroups.tooltip "Při otevírání skupiny záložek či historie nepřepsat karty">

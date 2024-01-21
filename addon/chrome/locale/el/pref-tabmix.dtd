@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Κλείδωμα πρωτευόντων καρτελών">
 <!ENTITY updateLockState.label "Εφαρμογή των αλλαγών στις ανοιχτές καρτέλες">
 <!ENTITY openNewTab.label "Άνοιγμα καρτελών από:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Σελιδοδείκτες">
 <!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
 <!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">

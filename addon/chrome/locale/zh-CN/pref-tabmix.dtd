@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "锁定应用程序标签页">
 <!ENTITY updateLockState.label "更改应用到打开的标签页">
 <!ENTITY openNewTab.label "在新建标签页打开来自以下位置的链接：">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "书签">
 <!ENTITY openPlacesGroups.label "书签/历史记录分组">
 <!ENTITY openPlacesGroups.tooltip "打开书签/历史记录分组时不覆盖标签页">

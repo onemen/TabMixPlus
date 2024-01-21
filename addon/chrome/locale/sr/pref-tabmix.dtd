@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Закључани App језичци">
 <!ENTITY updateLockState.label "Примени измене на отворене језичке">
 <!ENTITY openNewTab.label "Отварај картице из:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "обележивача">
 <!ENTITY openPlacesGroups.label "Групе забелешки/историје">
 <!ENTITY openPlacesGroups.tooltip "Не заборављај језичке приликом отварања групе забелешки/историје">

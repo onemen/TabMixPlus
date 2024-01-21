@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Blokuj karty programów">
 <!ENTITY updateLockState.label "Zastosuj zmiany w otwartych kartach">
 <!ENTITY openNewTab.label "Otwieraj w kartach witryny wywołane z:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "zakładek">
 <!ENTITY openPlacesGroups.label "Grupy zakładek/historii">
 <!ENTITY openPlacesGroups.tooltip "Nie zastępuj kart, gdy jest otwierana grupa zakładek/historii">

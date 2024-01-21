@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Блокировать прикреплённые вкладки">
 <!ENTITY updateLockState.label "Применить изменения к открытым вкладкам">
 <!ENTITY openNewTab.label "Открывать в новых вкладках:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Закладки">
 <!ENTITY openPlacesGroups.label "Группы закладок/журнала">
 <!ENTITY openPlacesGroups.tooltip "Не замещать вкладки при открытии группы закладок/журнала">

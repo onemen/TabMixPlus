@@ -398,6 +398,9 @@ var TabmixContext = {
     if (Tabmix.isVersion(940)) {
       tabContextMenu.addEventListener("popupshowing", () => {
         openTab.setAttribute("_newtab", openTab.getAttribute("label"));
+        if (Tabmix.isVersion(1150)) {
+          openTab.setAttribute("oncommand", "BrowserOpenTab({ event });");
+        }
       }, {once: true});
     } else {
       const {firstElementChild: element} = MozXULElement.parseXULToFragment(
@@ -522,7 +525,7 @@ var TabmixContext = {
       Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab();");
     } else {
       Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab") + "  " + newTab.getAttribute("_afterthis"));
-      Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab(null, TabContextMenu.contextTab);");
+      Tabmix.setItem(newTab, "oncommand", `TMP_BrowserOpenTab(${Tabmix.isVersion(1150) ? {} : null}, TabContextMenu.contextTab);`);
     }
 
     // Duplicate Commands

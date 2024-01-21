@@ -53,6 +53,11 @@ var gEventsPane = {
       preferences.appendChild(preference);
     }
 
+    if (!Tabmix.isVersion(1150)) {
+      $("searchclipboardfor").parentElement.remove();
+      gPrefWindow.removeChild("pref_searchclipboardfor");
+    }
+
     this.alignTabOpeningBoxes();
 
     this.openTabNext.on_change($("pref_openTabNext"));

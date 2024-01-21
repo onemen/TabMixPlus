@@ -40,6 +40,8 @@
       <preference id="pref_lockAppTabs"         name="extensions.tabmix.lockAppTabs"          type="bool"/>
       <preference id="pref_updateLockState"     name="extensions.tabmix.updateOpenedTabsLockState"
                   type="bool"/>
+      <preference id="pref_searchclipboardfor"  name="browser.tabs.searchclipboardfor.middleclick"
+                  type="bool"/>
       <preference id="pref_openBookmarks"       name="extensions.tabmix.opentabfor.bookmarks" type="bool"/>
       <preference id="pref_openUrl"             name="extensions.tabmix.opentabfor.urlbar"    type="bool"/>
       <preference id="pref_syncedTabs"          name="extensions.tabmix.opentabfor.syncedTabs"
@@ -212,6 +214,11 @@
         </tabpanel>
 <!-- ======================================================== -->
         <tabpanel id="tabopening">
+          <html:fieldset flex="1" class="flex column">
+            <checkbox_tmp id="searchclipboardfor" label="&searchclipboardfor.label;"
+                          style="max-width: 460px;"
+                          preference="pref_searchclipboardfor"/>
+          </html:fieldset>
           <html:fieldset flex="1" class="flex column">
             <html:legend>&openNewTab.label;</html:legend>
             <hbox>

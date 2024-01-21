@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Bloquear pestañas de aplicación">
 <!ENTITY updateLockState.label "Aplicar cambios a pestañas abiertas">
 <!ENTITY openNewTab.label "Abrir pestañas desde:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Marcadores">
 <!ENTITY openPlacesGroups.label "Grupos de marcadores/historial">
 <!ENTITY openPlacesGroups.tooltip "No sustituir pestañas al abrir un grupo de marcadores/historial">

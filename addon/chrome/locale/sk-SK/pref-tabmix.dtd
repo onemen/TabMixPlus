@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Zamknúť karty aplikácie">
 <!ENTITY updateLockState.label "Aplikovať zmeny na otvorených záložkách">
 <!ENTITY openNewTab.label "Otvoriť karty z:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Záložky">
 <!ENTITY openPlacesGroups.label "Skupiny záložiek/histórie">
 <!ENTITY openPlacesGroups.tooltip "Neprepisovať karty pri otváraní skupiny záložiek/histórie">

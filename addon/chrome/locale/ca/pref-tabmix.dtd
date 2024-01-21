@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Bloca les pestanyes d'aplicació">
 <!ENTITY updateLockState.label "Aplica els canvis a les pestanyes obertes">
 <!ENTITY openNewTab.label "Obre pestanyes des de:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Adreces d'interès">
 <!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
 <!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">

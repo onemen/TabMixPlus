@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "ピン留めしたアプリケーションタブをロックする">
 <!ENTITY updateLockState.label "タブを開くときは上の設定を適用する">
 <!ENTITY openNewTab.label "以下を新しいタブに読み込む:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "ブックマーク">
 <!ENTITY openPlacesGroups.label "ブックマークや履歴のグループ">
 <!ENTITY openPlacesGroups.tooltip "ブックマークや履歴のグループを開くとき、既存のタブを上書きしない">

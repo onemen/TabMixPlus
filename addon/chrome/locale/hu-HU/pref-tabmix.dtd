@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Alkalmazás lapok zárolása">
 <!ENTITY updateLockState.label "Változtatások alkalmazása a nyitott lapokra">
 <!ENTITY openNewTab.label "Új lap megnyitása az alábbiakból:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Könyvjelzők">
 <!ENTITY openPlacesGroups.label "Könyvjelzők és Előzmények csoportjai">
 <!ENTITY openPlacesGroups.tooltip "Ne kezelje máshogy a lapokat, ha Könyvjelzők és Előzmények csoportot nyit meg">

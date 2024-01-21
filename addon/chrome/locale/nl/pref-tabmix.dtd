@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "App tabbladen op slot zetten">
 <!ENTITY updateLockState.label "Wijzigingen op openstaande tabbladen toepassen">
 <!ENTITY openNewTab.label "Tabbladen openen vanuit:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Bladwijzers">
 <!ENTITY openPlacesGroups.label "Groepen bladwijzers/geschiedenis">
 <!ENTITY openPlacesGroups.tooltip "Tabbladen niet overschrijven bij openen van een groep bladwijzers/geschiedenis">

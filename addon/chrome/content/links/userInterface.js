@@ -34,10 +34,13 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
 
 // Don't change this function name other extensions using it
 // Speed-Dial, Fast-Dial, TabGroupManager
-function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
+function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab) {
   var newTabContent = replaceLastTab ? Tabmix.prefs.getIntPref("replaceLastTabWith.type") :
     Tabmix.prefs.getIntPref("loadOnNewTab.type");
   var url;
+  let {event, url: passedURL} = Tabmix.isVersion(1150) ? eventOrObject ?? {} : {event: eventOrObject};
+  let werePassedURL = Boolean(passedURL);
+  let searchClipboard = window.gMiddleClickNewTabUsesPasteboard && event?.button == 1;
   var newTabUrl = BROWSER_NEW_TAB_URL;
   var selectedTab = gBrowser.selectedTab;
   switch (newTabContent) {
@@ -75,7 +78,7 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
       break;
     }
     default:
-      url = newTabUrl;
+      url = passedURL ?? newTabUrl;
   }
   // if google.toolbar extension installed check google.toolbar.newtab pref
   if ("GTB_GoogleToolbarOverlay" in window) {
@@ -102,13 +105,15 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
     Tabmix.prefs.getBoolPref("loadNewInBackground");
   let baseTab = aTab && aTab.localName == "tab" ? aTab : null;
   let openTabNext = baseTab || !replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext");
+
+  let where = "tab";
   // Let accel-click and middle-click on the new tab button toggle openTabNext preference
   // see bug 528005
-  if (aEvent && !aTab && !replaceLastTab &&
-      (MouseEvent.isInstance(aEvent) || XULCommandEvent.isInstance(aEvent))) {
+  if (event && !aTab && !replaceLastTab &&
+      (MouseEvent.isInstance(event) || XULCommandEvent.isInstance(event))) {
     // don't replace 'window' to 'tab' in whereToOpenLink when singleWindowMode is on
     TabmixSvc.skipSingleWindowModeCheck = true;
-    let where = whereToOpenLink(aEvent, false, true);
+    where = whereToOpenLink(event, false, true);
     TabmixSvc.skipSingleWindowModeCheck = false;
     switch (where) {
       case "tabshifted":
@@ -116,6 +121,9 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
         /* falls through */
       case "tab":
         openTabNext = !openTabNext;
+        break;
+      case "current":
+        where = "tab";
         break;
       case "window":
         if (!TabmixSvc.getSingleWindowMode()) {
@@ -130,13 +138,37 @@ function TMP_BrowserOpenTab(aEvent, aTab, replaceLastTab) {
   Services.obs.notifyObservers(
     {
       wrappedJSObject: new Promise(resolve => {
-        let newTab = gBrowser.addTrustedTab(url, {
+        let options = {
           resolveOnNewTabCreated: resolve,
           charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
           ownerTab: loadInBackground ? null : selectedTab,
           skipAnimation: replaceLastTab,
-          index: openTabNext ? (baseTab || selectedTab)._tPos + 1 : gBrowser.tabs.length,
-        });
+        };
+
+        if (!werePassedURL && searchClipboard) {
+          let clipboard = readFromClipboard();
+          clipboard = UrlbarUtils.stripUnsafeProtocolOnPaste(clipboard).trim();
+          if (clipboard) {
+            url = clipboard;
+            options.allowThirdPartyFixup = true;
+            if (gBrowser.isBlankTab(gBrowser.selectedTab)) {
+              where = 'current';
+            }
+          }
+        }
+
+        let newTab;
+        if (where.startsWith("tab")) {
+          options.index = openTabNext ? (baseTab || selectedTab)._tPos + 1 : gBrowser.tabs.length;
+          newTab = gBrowser.addTrustedTab(url, options);
+        } else {
+          // openTrustedLinkIn set forceForeground to true if not set before
+          options.forceForeground = false;
+          openTrustedLinkIn(url, where, options);
+          // openTrustedLinkIn does not return the new tab...
+          newTab = gBrowser.getTabForLastPanel();
+        }
+
         if (replaceLastTab) {
           newTab.__newLastTab = url;
           if (loadBlank) {

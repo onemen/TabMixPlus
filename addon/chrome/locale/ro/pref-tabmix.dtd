@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Se blochează filele cu aplicații">
 <!ENTITY updateLockState.label "Se aplică modificările la toate filele deschise">
 <!ENTITY openNewTab.label "Se deschid filele din:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Semne de carte">
 <!ENTITY openPlacesGroups.label "Grupuri de semne de carte / istoric">
 <!ENTITY openPlacesGroups.tooltip "La deschiderea grupurilor, nu se suprascriu alte file">

@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Verrouiller les onglets des applications">
 <!ENTITY updateLockState.label "Appliquer les changements aux onglets ouverts">
 <!ENTITY openNewTab.label "Utiliser un nouvel onglet :">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "pour ouvrir un marque-page">
 <!ENTITY openPlacesGroups.label "pour ouvrir un groupe de marques-pages/historique">
 <!ENTITY openPlacesGroups.tooltip "Ne pas remplacer les onglets à l'ouverture d'un groupe de marques-pages/historique">

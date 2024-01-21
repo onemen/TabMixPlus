@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Lock App tabs">
 <!ENTITY updateLockState.label "Apply changes to open tabs">
 <!ENTITY openNewTab.label "Åbn faneblade fra:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Bogmærker">
 <!ENTITY openPlacesGroups.label "Groups of bookmarks/history">
 <!ENTITY openPlacesGroups.tooltip "Don&apos;t override tabs when opening a group of bookmarks/history">

@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Bloquear abas de aplicativos">
 <!ENTITY updateLockState.label "Aplicar alterações nas abas abertas">
 <!ENTITY openNewTab.label "Abrir novas abas a partir de:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Favoritos">
 <!ENTITY openPlacesGroups.label "Grupos do favoritos/histórico">
 <!ENTITY openPlacesGroups.tooltip "Não substituir as abas ao abrir um grupo de favoritos/histórico">

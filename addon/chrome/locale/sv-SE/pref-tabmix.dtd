@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Lås fastnålade flikar">
 <!ENTITY updateLockState.label "Tillämpa ändringar på öppnade flikar">
 <!ENTITY openNewTab.label "Öppna ny flik från:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Bokmärken">
 <!ENTITY openPlacesGroups.label "Grupper av bokmärken/historik">
 <!ENTITY openPlacesGroups.tooltip "Skriv inte över flikar när en grupp av bokmärken/historik öppnas">

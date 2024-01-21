@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Заключване на прикрепени подпрозорци">
 <!ENTITY updateLockState.label "Прилагане на измененията за текущите отворени подпрозорци">
 <!ENTITY openNewTab.label "Отваряне в нови подпрозорци на:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Отметки">
 <!ENTITY openPlacesGroups.label "Групи от отметки/история">
 <!ENTITY openPlacesGroups.tooltip "При отваряне на група от отметки/история, подпрозорците не се заменят">

@@ -66,6 +66,7 @@
 <!ENTITY lockAppTabs.label "Uygulama sekmelerini kilitlme">
 <!ENTITY updateLockState.label "Değişiklikleri açık sekmelere uygula">
 <!ENTITY openNewTab.label "Bunlardan bağlantıları yeni sekmelerde aç:">
+<!ENTITY searchclipboardfor.label "Middle-click new tab button to open URLs or search for text from clipboard">
 <!ENTITY openBookmarks.label "Yer imleri">
 <!ENTITY openPlacesGroups.label "Yer imleri/geçmiş grupları">
 <!ENTITY openPlacesGroups.tooltip "Bir yerimi/geçmiş grubunu açarken mevcut sekmeleri kaybetmeyin">
