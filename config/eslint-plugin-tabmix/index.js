@@ -12,6 +12,7 @@ module.exports = {
         gTMPprefObserver: true,
         Tabmix: true,
         TabmixAllTabs: true,
+        TabmixChromeUtils: true,
         TabmixContext: true,
         TabmixProgressListener: true,
         TabmixSessionData: true,
@@ -44,8 +45,8 @@ module.exports = {
         Services: false,
         Shortcuts: false,
         Tabmix: false,
+        TabmixChromeUtils: true,
         TabmixSvc: false,
-        XPCOMUtils: false,
       },
     },
     dialog: {

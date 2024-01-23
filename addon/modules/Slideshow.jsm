@@ -3,7 +3,6 @@
 const EXPORTED_SYMBOLS = ["flst"];
 
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const lazy = {};
@@ -15,7 +14,11 @@ function flst() {
   this.flstOff = TabmixSvc.getString("flstOff.label");
   this.slideshowOn = TabmixSvc.getString("slideshowOn.label");
   this.slideshowOff = TabmixSvc.getString("slideshowOff.label");
-  XPCOMUtils.defineLazyGetter(this, "tabContainer", () => {
+
+  // prevents eslint-plugin-tabmix import-globals.js from identify internal
+  // imports as globals
+  // eslint-disable-next-line no-unused-vars
+  TabmixChromeUtils.defineLazyGetter(this, "tabContainer", () => {
     return TabmixSvc.topWin().gBrowser.tabContainer;
   });
 }

@@ -3,7 +3,6 @@
 const EXPORTED_SYMBOLS = ["ContentSvc"];
 
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
 var _versions = {};
@@ -29,6 +28,6 @@ const ContentSvc = {
 };
 
 // Tabmix preference branch
-XPCOMUtils.defineLazyGetter(ContentSvc, "prefBranch", () => {
+TabmixChromeUtils.defineLazyGetter(ContentSvc, "prefBranch", () => {
   return Services.prefs.getBranch("extensions.tabmix.");
 });

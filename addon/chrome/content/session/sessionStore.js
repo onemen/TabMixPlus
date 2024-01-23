@@ -258,7 +258,7 @@ var TMP_SessionStore = {
     if (typeof afterSessionRestore == "boolean") {
       Tabmix.isWindowAfterSessionRestore = afterSessionRestore;
     } else {
-      XPCOMUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", () => {
+      TabmixChromeUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", () => {
         // when TMP session manager is enabled ss.willRestore is true only after restart
         SessionStartup.onceInitialized.then(() => {
           Tabmix.isWindowAfterSessionRestore = SessionStartup.willRestore();

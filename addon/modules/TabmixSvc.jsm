@@ -4,7 +4,6 @@
 const EXPORTED_SYMBOLS = ["TabmixSvc"];
 
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
@@ -351,58 +350,58 @@ TabmixSvc = {
   },
 };
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "prefs", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "prefs", () => {
   const {Preferences} = TabmixChromeUtils.import("resource://gre/modules/Preferences.jsm");
   return new Preferences("");
 });
 
 // Tabmix preference branch
-XPCOMUtils.defineLazyGetter(TabmixSvc, "prefBranch", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "prefBranch", () => {
   return Services.prefs.getBranch("extensions.tabmix.");
 });
 // string bundle
-XPCOMUtils.defineLazyGetter(TabmixSvc, "_strings", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "_strings", () => {
   let properties = "chrome://tabmixplus/locale/tabmix.properties";
   return Services.strings.createBundle(properties);
 });
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SMstrings", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "SMstrings", () => {
   let properties = "chrome://tabmixplus/locale/session-manager.properties";
   return Services.strings.createBundle(properties);
 });
 
-XPCOMUtils.defineLazyGetter(lazy, "Platform", () => {
+TabmixChromeUtils.defineLazyGetter(lazy, "Platform", () => {
   return AppConstants.platform;
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isWindows", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "isWindows", () => {
   return lazy.Platform == "win";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isMac", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "isMac", () => {
   return lazy.Platform == "macosx";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isLinux", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "isLinux", () => {
   return lazy.Platform == "linux";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isCyberfox", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "isCyberfox", () => {
   return Services.appinfo.name == "Cyberfox";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isWaterfox", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "isWaterfox", () => {
   return Services.appinfo.name == "Waterfox";
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isG3Waterfox", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "isG3Waterfox", () => {
   return Services.appinfo.name == "Waterfox" && isVersion(780);
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isG5Waterfox", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "isG5Waterfox", () => {
   return Services.appinfo.name == "Waterfox" && isVersion(1020);
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "isBasilisk", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "isBasilisk", () => {
   return Services.appinfo.name == "Basilisk";
 });
 
@@ -415,18 +414,18 @@ ChromeUtils.defineModuleGetter(TabmixSvc, "console",
   "chrome://tabmix-resource/content/log.jsm");
 
 // TODO: this will stop working with SessionStore.sys.mjs
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", () => {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", () => {
   // Don't ChromeUtils.import here it can not import variables that
   // are not in EXPORTED_SYMBOLS
   // eslint-disable-next-line mozilla/use-chromeutils-import
   return Cu.import("resource:///modules/sessionstore/SessionStore.jsm");
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "ss", function() {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "ss", function() {
   return this.SessionStoreGlobal.SessionStore;
 });
 
-XPCOMUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
+TabmixChromeUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
   return this.SessionStoreGlobal.SessionStoreInternal;
 });
 

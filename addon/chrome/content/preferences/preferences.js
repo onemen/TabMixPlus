@@ -444,7 +444,7 @@ var sessionPrefs = ["browser.sessionstore.resume_from_crash",
   "extensions.tabmix.sessions.manager",
   "extensions.tabmix.sessions.crashRecovery"];
 
-XPCOMUtils.defineLazyGetter(this, "gPreferenceList", () => {
+TabmixChromeUtils.defineLazyGetter(this, "gPreferenceList", () => {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = [
     "browser.allTabs.previews", TabmixSvc.sortByRecentlyUsed,
@@ -477,7 +477,7 @@ XPCOMUtils.defineLazyGetter(this, "gPreferenceList", () => {
   return tabmixPrefs;
 });
 
-XPCOMUtils.defineLazyGetter(this, "_sminstalled", () => {
+TabmixChromeUtils.defineLazyGetter(this, "_sminstalled", () => {
   return Tabmix.getTopWin().Tabmix.extensions.sessionManager;
 });
 
@@ -773,7 +773,7 @@ window.gIncompatiblePane = {
 
 };
 
-XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", () => {
+TabmixChromeUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", () => {
   let win = Tabmix.getTopWin();
   return win.document.getElementById("context_pinTab").getAttribute("label") + "/" +
     win.document.getElementById("context_unpinTab").getAttribute("label");
@@ -782,7 +782,7 @@ XPCOMUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", () => {
 ChromeUtils.defineModuleGetter(this, "OS", "resource://gre/modules/osfile.jsm");
 
 // eslint-disable-next-line no-unused-vars
-XPCOMUtils.defineLazyGetter(this, "RTL_UI", () => {
+TabmixChromeUtils.defineLazyGetter(this, "RTL_UI", () => {
   return Services.locale.isAppLocaleRTL;
 });
 

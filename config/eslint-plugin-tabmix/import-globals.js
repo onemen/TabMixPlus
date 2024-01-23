@@ -14,11 +14,14 @@ const helpers = require(path.join(mozillaPath, "helpers.js"));
 const callExpressionDefinitions = [
   /^TabmixChromeUtils\.defineLazyModuleGetters\((?:globalThis|this), "(\w+)"/,
   /^TabmixChromeUtils\.import\((?:globalThis|this), "(\w+)"/,
+  /^TabmixChromeUtils\.defineLazyGetter\((?:globalThis|this), "(\w+)"/,
 ];
 
 const callExpressionMultiDefinitions = [
   "TabmixChromeUtils.defineLazyModuleGetters(this,",
   "TabmixChromeUtils.defineLazyModuleGetters(globalThis,",
+  "TabmixChromeUtils.defineLazyGetter(this,",
+  "TabmixChromeUtils.defineLazyGetter(globalThis,",
 ];
 
 /**

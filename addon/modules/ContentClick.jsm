@@ -4,7 +4,6 @@ const EXPORTED_SYMBOLS = ["TabmixContentClick"];
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const lazy = {};
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
@@ -15,6 +14,10 @@ TabmixChromeUtils.defineLazyModuleGetters(lazy, {
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.jsm",
 });
+
+// prevents eslint-plugin-tabmix import-globals.js from identify internal
+// imports as globals
+const internalChromeUtils = TabmixChromeUtils;
 
 var ContentClickInternal;
 const TabmixContentClick = {
@@ -292,12 +295,12 @@ ContentClickInternal = {
   },
 
   getPref() {
-    XPCOMUtils.defineLazyGetter(this, "targetPref", () => {
+    internalChromeUtils.defineLazyGetter(this, "targetPref", () => {
       return lazy.TabmixSvc.prefBranch.getIntPref("opentabforLinks");
     });
 
     let tabBrowser = this._window.gBrowser;
-    XPCOMUtils.defineLazyGetter(this, "currentTabLocked", () => {
+    internalChromeUtils.defineLazyGetter(this, "currentTabLocked", () => {
       return tabBrowser.selectedTab.hasAttribute("locked");
     });
   },
@@ -346,18 +349,18 @@ ContentClickInternal = {
       this.wrappedNode = wrappedNode || null;
       this.wrappedOnClickNode = wrappedOnClickNode || null;
       this.targetAttr = wrappedNode && wrappedNode.target;
-      XPCOMUtils.defineLazyGetter(this, "currentURL", () => {
+      internalChromeUtils.defineLazyGetter(this, "currentURL", () => {
         return self._browser.currentURI ? self._browser.currentURI.spec : "";
       });
-      XPCOMUtils.defineLazyGetter(this, "onclick", function() {
+      internalChromeUtils.defineLazyGetter(this, "onclick", function() {
         if (this.wrappedNode && this.wrappedNode.hasAttribute("onclick"))
           return this.wrappedNode.getAttribute("onclick");
         return null;
       });
-      XPCOMUtils.defineLazyGetter(this, "hrefFromOnClick", function() {
+      internalChromeUtils.defineLazyGetter(this, "hrefFromOnClick", function() {
         return self.getHrefFromOnClick(event, href, this.wrappedNode, this.onclick);
       });
-      XPCOMUtils.defineLazyGetter(this, "isLinkToExternalDomain", function() {
+      internalChromeUtils.defineLazyGetter(this, "isLinkToExternalDomain", function() {
         /**
          * Check if link refers to external domain.
          * Get current page url

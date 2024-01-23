@@ -1894,12 +1894,12 @@ Tabmix.tablib = {
 
 }; // end Tabmix.tablib
 
-XPCOMUtils.defineLazyGetter(Tabmix, "emptyTabTitle", () => {
+TabmixChromeUtils.defineLazyGetter(Tabmix, "emptyTabTitle", () => {
   return Tabmix.formatValueSync("tabbrowser-empty-tab-title");
 });
 
 // since Firefox 109, after bug 1760029 removed tabbrowser.properties we use fluent
-XPCOMUtils.defineLazyGetter(Tabmix, "formatValueSync", () => {
+TabmixChromeUtils.defineLazyGetter(Tabmix, "formatValueSync", () => {
   const stringMap = {
     "tabs.closeTabsTitle": {before: 940, l10n: "tabs.closeWarningMultipleTabs"},
     "tabs.closeTabsConfirmCheckbox": {before: 940, l10n: "tabs.closeWarningPrompt"},

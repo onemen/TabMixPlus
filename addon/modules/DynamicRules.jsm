@@ -4,26 +4,25 @@ const EXPORTED_SYMBOLS = ["DynamicRules"];
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 const lazy = {};
 
 ChromeUtils.defineModuleGetter(lazy, "TabmixSvc",
   "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
-XPCOMUtils.defineLazyGetter(lazy, "Prefs", () => {
+TabmixChromeUtils.defineLazyGetter(lazy, "Prefs", () => {
   return Services.prefs.getBranch("extensions.tabmix.styles.");
 });
 
 var TYPE;
-XPCOMUtils.defineLazyGetter(lazy, "SSS", () => {
+TabmixChromeUtils.defineLazyGetter(lazy, "SSS", () => {
   let sss = Cc['@mozilla.org/content/style-sheet-service;1']
       .getService(Ci.nsIStyleSheetService);
   TYPE = sss.USER_SHEET;
   return sss;
 });
 
-XPCOMUtils.defineLazyGetter(lazy, "isMac", () => {
+TabmixChromeUtils.defineLazyGetter(lazy, "isMac", () => {
   return lazy.TabmixSvc.isMac;
 });
 

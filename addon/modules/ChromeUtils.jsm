@@ -86,4 +86,12 @@ var TabmixChromeUtils = {
     }
     return ChromeUtils.import(module);
   },
+
+  defineLazyGetter(aObject, aName, aLambda) {
+    if (isVersion(1230)) {
+      ChromeUtils.defineLazyGetter(aObject, aName, aLambda);
+    } else {
+      this.XPCOMUtils.defineLazyGetter(aObject, aName, aLambda);
+    }
+  },
 };

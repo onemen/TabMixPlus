@@ -4,7 +4,6 @@ const EXPORTED_SYMBOLS = ["Shortcuts"];
 
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
@@ -324,7 +323,7 @@ const Shortcuts = {
 
     aWindow.addEventListener("unload", this);
 
-    XPCOMUtils.defineLazyGetter(aWindow.Tabmix, "removedShortcuts", () => {
+    TabmixChromeUtils.defineLazyGetter(aWindow.Tabmix, "removedShortcuts", () => {
       let document = aWindow.document;
       return document.documentElement.appendChild(document.createElement("tabmix_shortcuts"));
     });

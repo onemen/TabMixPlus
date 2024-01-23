@@ -5,14 +5,12 @@
 // This is loaded into all XUL windows. Wrap in a block to prevent
 // leaking to window scope.
 {
-  const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-  const {XPCOMUtils} = TabmixChromeUtils.import("resource://gre/modules/XPCOMUtils.jsm");
   ChromeUtils.defineModuleGetter(
     this,
     "TabmixSvc",
     "chrome://tabmix-resource/content/TabmixSvc.jsm"
   );
-  XPCOMUtils.defineLazyGetter(this, "shortcutKeyMapPromise", async() => {
+  TabmixChromeUtils.defineLazyGetter(this, "shortcutKeyMapPromise", async() => {
     const {ExtensionShortcutKeyMap} = TabmixChromeUtils.import(
       "resource://gre/modules/ExtensionShortcuts.jsm"
     );

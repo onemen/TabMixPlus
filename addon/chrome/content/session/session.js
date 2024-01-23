@@ -305,7 +305,6 @@ TabmixSessionManager = {
     }
     this._inited = true;
 
-    const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
     TabmixChromeUtils.defineLazyModuleGetters(TabmixSessionManager, {
       TabState: "resource:///modules/sessionstore/TabState.jsm",
       TabStateCache: "resource:///modules/sessionstore/TabStateCache.jsm",
