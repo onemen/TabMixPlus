@@ -58,7 +58,7 @@ The developer of these script/extension recommend using the first option:
 
 ## Browser Compatibility
   * Firefox 78 - Firefox Nightly
-  * Waterfox G3
+  * Waterfox G3 - G6 and beyond
 
 > For **Pale Moon** download **Tab Mix Plus** from [here](https://addons.palemoon.org/addon/tab-mix-plus/)
 
@@ -70,4 +70,4 @@ Tab Mix Plus comes with Options window that includes all of its preferences as w
 <br/>
 
 ## Docs
-[Read The Docs](https://tabmixplus.org/support/viewtopic.php?t=3)
+[Read The Docs](https://onemen.github.io/tabmixplus-docs/help/index.html)

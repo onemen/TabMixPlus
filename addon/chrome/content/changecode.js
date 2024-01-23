@@ -158,7 +158,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
         let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
         ex.message = ex.fnName + " was unable to change " + aName + "." +
             (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) +
-            "\n\nTry Tabmix latest development version from tabmixplus.org/tab_mix_plus-dev-build.xpi," +
+            "\n\nTry Tabmix latest development version from https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/," +
             "\nReport about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues";
         console.reportError(ex);
         if (debugMode) {

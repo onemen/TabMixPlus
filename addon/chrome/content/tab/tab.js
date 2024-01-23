@@ -2699,7 +2699,7 @@ gTMPprefObserver = {
           if (showComment && (_loadOnNewTab || _replaceLastTabWith))
             defaultChanged = "&newtabpage";
           let b = Tabmix.getTopWin().gBrowser;
-          b.selectedTab = b.addTrustedTab("https://tabmixplus.org/version_update3.htm?version=" +
+          b.selectedTab = b.addTrustedTab("https://onemen.github.io/tabmixplus-docs/version_update.html?version=" +
                                    currentVersion + defaultChanged);
           b.selectedTab.loadOnStartup = true;
         }, 1000);

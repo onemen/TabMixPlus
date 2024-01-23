@@ -690,7 +690,7 @@ function showPane(paneID) {
 }
 
 function openHelp(helpTopic) {
-  var helpPage = "https://tabmixplus.org/support/viewtopic.php?t=3&p=";
+  var helpPage = "https://onemen.github.io/tabmixplus-docs/help/";
   // Check if the help page already open in the top window
   var recentWindow = Tabmix.getTopWin();
   var tabBrowser = recentWindow.gBrowser;
