@@ -10,6 +10,7 @@ const lazy = {};
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
   E10SUtils: "resource://gre/modules/E10SUtils.jsm",
   TabmixUtils: "chrome://tabmix-resource/content/Utils.jsm",
+  SitePermissions: "resource:///modules/SitePermissions.jsm"
 });
 
 var _setItem = function() {};
@@ -411,9 +412,12 @@ function doReloadTab(window, browser, data) {
     x: data.scrollX,
     y: data.scrollY
   };
-  var loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY |
-                  Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_PROXY |
+
+  let loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_PROXY |
                   Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE;
+  if (Services.prefs.getIntPref("fission.webContentIsolationStrategy") < 2) {
+    loadFlags |= Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY;
+  }
 
   // This part is based on BrowserReloadWithFlags.
   let url = browser.currentURI;
@@ -422,10 +426,12 @@ function doReloadTab(window, browser, data) {
   let loadURI =
       window.gBrowser.updateBrowserRemotenessByURL(browser, urlSpec) || postData;
   if (loadURI) {
-    if (!postData)
+    if (!postData) {
       postData = referrerInfo = null;
+    }
+    browser.tabmix_allowLoad = true;
     browser.loadURI(TabmixSvc.version(1120) ? url : urlSpec, {
-      loadFlags,
+      flags: loadFlags,
       referrerInfo,
       triggeringPrincipal: browser.contentPrincipal,
       postData
@@ -433,10 +439,19 @@ function doReloadTab(window, browser, data) {
     return;
   }
 
-  browser.sendMessageToActor("Browser:Reload", {
-    flags: loadFlags,
-    handlingUserInput: window.windowUtils.isHandlingUserInput
-  }, "BrowserTab");
+  lazy.SitePermissions.clearTemporaryBlockPermissions(browser);
+  // Also reset DOS mitigations for the basic auth prompt on reload.
+  delete browser.authPromptAbuseCounter;
+
+  const handlingUserInput = TabmixSvc.version(900) ?
+    window.document.hasValidTransientUserGestureActivation :
+    window.windowUtils.isHandlingUserInput;
+
+  browser.sendMessageToActor(
+    "Browser:Reload",
+    {flags: loadFlags, handlingUserInput},
+    "BrowserTab"
+  );
 }
 
 function _observe(aSubject, aTopic) {

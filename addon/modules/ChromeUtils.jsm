@@ -35,6 +35,7 @@ const modulesMap = {
   "resource://gre/modules/ExtensionShortcuts.jsm": [1150, "resource://gre/modules/ExtensionShortcuts.sys.mjs"],
   "resource://gre/modules/WebNavigationFrames.jsm": [1150, "resource://gre/modules/WebNavigationFrames.sys.mjs"],
   "resource://gre/modules/AddonManager.jsm": [1150, "resource://gre/modules/AddonManager.sys.mjs"],
+  "resource:///modules/SitePermissions.jsm": [1150, "resource:///modules/SitePermissions.sys.mjs"],
   "resource:///modules/AboutNewTab.jsm": [1160, "resource:///modules/AboutNewTab.sys.mjs"],
   "resource:///modules/BrowserWindowTracker.jsm": [1160, "resource:///modules/BrowserWindowTracker.sys.mjs"],
   "resource:///modules/OpenInTabsUtils.jsm": [1160, "resource:///modules/OpenInTabsUtils.sys.mjs"],
