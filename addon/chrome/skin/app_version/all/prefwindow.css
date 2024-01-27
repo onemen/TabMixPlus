@@ -60,12 +60,12 @@
 
   radio[pane]:hover {
     background-color: #E0E8F6;
-    color: black;
+    color: var(--in-content-button-text-color-hover);
     -moz-appearance: none;
   }
 
   radio[pane][selected="true"] {
     background-color: #C1D2EE;
-    color: black;
+    color: var(--in-content-button-text-color-hover);
     -moz-appearance: none;
   }
