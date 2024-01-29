@@ -1,12 +1,5 @@
 ![tabmix-header](https://github.com/onemen/TabMixPlus/assets/3650909/232b1106-10ed-4b07-ab7d-53301167a694)
 
-<style>
-details {
-  margin-left: 32px;
-  margin-bottom: 5px !important;
-}
-</style>
-
 **Tab Mix Plus** is a very popular _legacy_ extension for the Mozilla Firefox browser that enhances Firefox's tab browsing abilities. It includes such features as duplicating tabs, controlling tab focus, tab clicking options, undo closed tabs and windows, plus much more.<br/>
 **Session Manager** feature is not included at the moment since it requires complete rewrite.
 
