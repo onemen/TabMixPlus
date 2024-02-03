@@ -19,6 +19,8 @@
 /* textboxes */
 
 input:is([type="text"], [type="number"]) {
+  /* overide default styles of 32px */
+  --input-text-min-height: 24px;
   appearance: none;
   border: 1px solid var(--in-content-box-border-color);
   border-radius: 4px;
