@@ -525,7 +525,7 @@ var TabmixContext = {
       Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab();");
     } else {
       Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab") + "  " + newTab.getAttribute("_afterthis"));
-      Tabmix.setItem(newTab, "oncommand", `TMP_BrowserOpenTab(${Tabmix.isVersion(1150) ? {} : null}, TabContextMenu.contextTab);`);
+      Tabmix.setItem(newTab, "oncommand", `TMP_BrowserOpenTab(${Tabmix.isVersion(1150) ? `{}` : `null`}, TabContextMenu.contextTab);`);
     }
 
     // Duplicate Commands
