@@ -184,8 +184,15 @@ var TabmixTabClickOptions = {
         break;
       case 2:
         if (aTab?.parentNode) {
-          let byMouse = event?.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE;
-          gBrowser.removeTab(aTab, {animate: true, byMouse});
+          if (Tabmix.isVersion(1120)) {
+            gBrowser.removeTab(aTab, {
+              animate: true,
+              triggeringEvent: event,
+            });
+          } else {
+            let byMouse = event?.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE;
+            gBrowser.removeTab(aTab, {animate: true, byMouse});
+          }
         }
         break;
       case 3:
