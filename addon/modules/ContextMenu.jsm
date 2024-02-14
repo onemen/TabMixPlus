@@ -14,8 +14,10 @@ const ContextMenu = {
     const NodeFilter = doc.defaultView.NodeFilter;
     // get focused window selection
     let selectionObject = lazy.TabmixUtils.focusedWindow(content).getSelection();
-    if (selectionObject.isCollapsed) // nothing selected
-      return [];
+    if (selectionObject.isCollapsed) {
+      // nothing selected
+      return new Map();
+    }
 
     let filter = {
       acceptNode(n) {
