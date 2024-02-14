@@ -80,13 +80,20 @@ Since Firefox removed the internal component that loads _legacy_ extension, in o
      * copy `config-prefs.js` to `Firefox.app/Contents/Resources/defaults/pref/config-prefs.js`
    </details>
 
-   1.3. Create `chrome` folder in your **Profile Folder** (if one does not exist) and extract [utils](https://github.com/onemen/TabMixPlus/files/14075742/utils_extensions_and_scripts.zip) folder in it.
+   1.3. Create `chrome` folder in your **Profile Folder** (if one does not exist).
 
-   1.4. Open `about:support` page and click "Clear startup cache…" to force Firefox to load the installed scripts on the next startup.
+   1.4. Extract [utils](https://github.com/onemen/TabMixPlus/files/14075742/utils_extensions_and_scripts.zip) folder inside the `chrome` folder, the result should be `[PROFILE_NAME]/chrome/utils`, all the files should be in the `utils` folder (see the screenshot below).
 
-   1.5. Start Firefox again.
+   <details><summary>screenshoot</summary>
 
-   1.6. Follow the instructions below to install `Tab Mix Plus`.
+   ![firefox](https://github.com/onemen/TabMixPlus/assets/3650909/fc5da575-2c75-493e-8342-34f1142ece4a)
+   </details>
+
+   1.5. Open `about:support` page and click "Clear startup cache…" to force Firefox to load the installed scripts on the next startup.
+
+   1.6. Start Firefox again.
+
+   1.7. Follow the instructions below to install `Tab Mix Plus`.
 
    <br/>
 
