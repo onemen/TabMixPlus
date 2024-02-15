@@ -58,7 +58,7 @@ const gNumberInput = {
         this.updateSpinnerDisabledState(item);
         break;
       case "keypress":
-        if (event.charCode == 0 || event.altKey || event.ctrlKey || event.metaKey) return;
+        if (event.charCode == 0 || Tabmix.isAltKey(event) || event.ctrlKey || event.metaKey) return;
         if (!/\d/.test(event.key) ||
             item.editor.textLength == item.maxLength &&
               item.editor.selection.anchorOffset == item.editor.selection.focusOffset) {

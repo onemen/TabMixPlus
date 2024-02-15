@@ -539,7 +539,14 @@ ContentClickInternal = {
       return "2.1";
     }
 
-    if (aEvent.button !== 0 || aEvent.shiftKey || aEvent.ctrlKey || aEvent.altKey || aEvent.metaKey) {
+    if (
+      aEvent.button !== 0 ||
+      aEvent.shiftKey ||
+      aEvent.ctrlKey ||
+      aEvent.altKey ||
+      aEvent.getModifierState("AltGraph") ||
+      aEvent.metaKey
+    ) {
       if (/^save|window|tab/.test(win.whereToOpenLink(aEvent)))
         this.getHrefFromOnClick(aEvent, href, linkNode, linkNode.getAttribute("onclick"));
       return "3";

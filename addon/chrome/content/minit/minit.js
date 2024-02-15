@@ -1091,7 +1091,8 @@ Tabmix.navToolbox = {
   whereToOpenFromUrlBar(event, result) {
     let isMouseEvent = MouseEvent.isInstance(event);
     let altEnter = !isMouseEvent && event &&
-      event.altKey && !gBrowser.selectedTab.isEmpty;
+      Tabmix.isAltKey(event) && !gBrowser.selectedTab.isEmpty;
+
     let where = "current";
     let url = result?.payload?.url ?? this.value;
     let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar",

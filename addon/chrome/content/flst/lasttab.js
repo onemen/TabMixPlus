@@ -166,12 +166,12 @@ var TMP_LastTab = {
   isCtrlTab(event) {
     return (this.handleCtrlTab || this.showTabList) &&
       event.keyCode == event.DOM_VK_TAB &&
-      event.ctrlKey && !event.altKey && !event.metaKey;
+      event.ctrlKey && !Tabmix.isAltKey(event) && !event.metaKey;
   },
 
   OnKeyDown(event) {
-    this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
-    Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
+    this.CtrlKey = event.ctrlKey && !Tabmix.isAltKey(event) && !event.metaKey;
+    Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || Tabmix.isAltKey(event) || event.metaKey;
     this.OnKeyPress(event);
   },
 
@@ -258,8 +258,8 @@ var TMP_LastTab = {
 
   OnKeyUp: function _LastTab_OnKeyUp(event) {
     var keyReleased = event.keyCode == event.DOM_VK_CONTROL;
-    this.CtrlKey = event.ctrlKey && !event.altKey && !event.metaKey;
-    Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
+    this.CtrlKey = event.ctrlKey && !Tabmix.isAltKey(event) && !event.metaKey;
+    Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || Tabmix.isAltKey(event) || event.metaKey;
     if (!keyReleased)
       return;
     var tabToSelect;

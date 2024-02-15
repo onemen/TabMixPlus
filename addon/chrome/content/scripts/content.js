@@ -163,7 +163,7 @@ var TabmixContentHandler = {
         ctrlKey: event.ctrlKey,
         metaKey: event.metaKey,
         shiftKey: event.shiftKey,
-        altKey: event.altKey
+        altKey: event.altKey || event.getModifierState("AltGraph")
       },
       links,
       name: linkName.value
@@ -324,7 +324,7 @@ TabmixClickEventHandler = {
       shiftKey: event.shiftKey,
       ctrlKey: event.ctrlKey,
       metaKey: event.metaKey,
-      altKey: event.altKey,
+      altKey: event.altKey || event.getModifierState("AltGraph"),
       href: null,
       title: null,
       csp,

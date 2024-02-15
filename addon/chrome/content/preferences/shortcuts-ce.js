@@ -223,6 +223,7 @@
 
     onKeyDown(event) {
       // prevents Alt+C from closing our preferences window
+      // note: AltGraph+C does not close window
       if (event.altKey && (event.keyCode === 67 || event.key === 'c')) {
         event.preventDefault();
         event.stopPropagation();
@@ -241,10 +242,18 @@
       event.stopPropagation();
       event.stopImmediatePropagation();
 
+      console.log('handleKeyEvents', event, ctrl_w);
+
       const key = {modifiers: "", key: "", keycode: ""};
-      const modifiers = ["ctrl", "meta", "alt", "shift"];
+      const modifiers = ["ctrl", "meta", "alt", "altGr", "shift"];
+
+      console.log('event.getModifierState("AltGraph")', event.getModifierState("AltGraph"));
+      console.log('event.getModifierState("AltGr")', event.getModifierState("AltGr"), 'event.altGrKey', event.altGrKey);
+
       key.modifiers = modifiers.filter(mod => event[mod + "Key"])
           .join(",").replace("ctrl", "control");
+
+      console.log('key.modifiers', key.modifiers);
 
       if (!key.modifiers) {
         // Return and Esc blur the edit box

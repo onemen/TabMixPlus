@@ -64,7 +64,7 @@ var TabmixTabClickOptions = {
     if (!clickOutTabs && leftClick && tab.hasAttribute("clickOnCurrent")) {
       tab.removeAttribute("clickOnCurrent");
       let tabFlip = Tabmix.prefs.getBoolPref("tabFlip");
-      if (tabFlip && !aEvent.shiftKey && !aEvent.ctrlKey && !aEvent.altKey && !aEvent.metaKey) {
+      if (tabFlip && !aEvent.shiftKey && !aEvent.ctrlKey && !Tabmix.isAltKey(aEvent) && !aEvent.metaKey) {
         let self = this;
         let tabFlipDelay = Tabmix.prefs.getIntPref("tabFlipDelay");
         if (this._tabFlipTimeOut)
@@ -84,7 +84,7 @@ var TabmixTabClickOptions = {
       const keyPress = [
         aEvent.ctrlKey && !aEvent.metaKey || !aEvent.ctrlKey && aEvent.metaKey,
         aEvent.shiftKey,
-        aEvent.altKey,
+        Tabmix.isAltKey(aEvent),
       ];
       const keyPrefs = [
         Tabmix.prefs.getIntPref("ctrlClickTab"),
@@ -111,16 +111,16 @@ var TabmixTabClickOptions = {
     if (aEvent.button == 1) {
       prefName = "middle"; /* middle click*/
     } else if (leftClick && aEvent.shiftKey && !aEvent.ctrlKey &&
-        !aEvent.altKey && !aEvent.metaKey) {
+        !Tabmix.isAltKey(aEvent) && !aEvent.metaKey) {
       prefName = "shift"; /* shift click*/
-    } else if (leftClick && aEvent.altKey && !aEvent.ctrlKey &&
+    } else if (leftClick && Tabmix.isAltKey(aEvent) && !aEvent.ctrlKey &&
         !aEvent.shiftKey && !aEvent.metaKey) {
       prefName = "alt"; /* alt click*/
       window.addEventListener("keyup", function TMP_onKeyup_onTabClick(event) {
         event.stopPropagation();
       }, {capture: true, once: true});
     } else if (leftClick && (aEvent.ctrlKey && !aEvent.metaKey ||
-        !aEvent.ctrlKey && aEvent.metaKey) && !aEvent.shiftKey && !aEvent.altKey) {
+        !aEvent.ctrlKey && aEvent.metaKey) && !aEvent.shiftKey && !Tabmix.isAltKey(aEvent)) {
       prefName = "ctrl"; /* ctrl click*/
     }
 
@@ -136,7 +136,7 @@ var TabmixTabClickOptions = {
   // Double click on tab/tabbar
   onTabBarDblClick: function TMP_onTabBarDblClick(aEvent) {
     if (!aEvent || aEvent.button !== 0 || aEvent.ctrlKey || aEvent.shiftKey ||
-        aEvent.altKey || aEvent.metaKey) {
+        Tabmix.isAltKey(aEvent) || aEvent.metaKey) {
       return;
     }
 
@@ -373,7 +373,7 @@ var TabmixTabClickOptions = {
    */
   blockMouseDown(event) {
     if (event.shiftKey && Tabmix.prefs.getIntPref("shiftClickTab") != -1 ||
-      event.altKey && Tabmix.prefs.getIntPref("altClickTab") != -1 ||
+      Tabmix.isAltKey(event) && Tabmix.prefs.getIntPref("altClickTab") != -1 ||
       (event.ctrlKey || event.metaKey) && Tabmix.prefs.getIntPref("ctrlClickTab") != -1
     ) {
       return true;

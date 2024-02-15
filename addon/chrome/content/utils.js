@@ -17,6 +17,10 @@ var Tabmix = {
     return TabmixSvc.version.apply(null, arguments);
   },
 
+  isAltKey(event) {
+    return event.altKey || event.getModifierState("AltGraph");
+  },
+
   // for debug
   debug: function TMP_utils_debug(aMessage, aShowCaller) {
     if (this._debug)
