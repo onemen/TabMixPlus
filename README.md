@@ -9,6 +9,30 @@
 >If you are interested in keeping **Tab Mix Plus** working, please donate.
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?hosted_button_id=W25388CZ3MNU8)
 
+---
+
+## Exciting News! ✨<!-- omit in toc -->
+Excited to Announce a New Home for **Tab Mix Plus** Documentation!
+
+I'm thrilled to share the launch of a brand-new website dedicated to the **Tab Mix Plus** extension documentation! If you've been looking for clearer instructions, smoother navigation, and an overall better experience with **Tab Mix Plus** documentation, this site is for you.
+
+### Here's what you can expect:
+- Step-by-step installation: Getting started with **Tab Mix Plus** just got easier thanks to detailed instructions and troubleshooting tips. [Read More](https://onemen.github.io/tabmixplus-docs/other/installation/)
+
+- Modern design: Say goodbye to clutter and hello to a clean, contemporary interface that's easy to read and navigate.
+
+- Improved search: Find the information you need instantly with my enhanced search functionality.
+
+- Accessible everywhere: Whether you're on a desktop, tablet, or mobile phone, the responsive design ensures a smooth experience.
+
+I encourage you to explore the new documentation website and share your feedback! Your input is invaluable in helping me continuously improve the documentation and make it even more helpful for everyone.
+
+### Ready to take a look?
+- Visit the new [documentation](https://onemen.github.io/tabmixplus-docs/) web site.
+- Learn how you can [contribute to the docs](https://github.com/onemen/tabmixplus-docs).
+
+---
+
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -164,8 +188,8 @@ Tab Mix Plus comes with Options window that includes all of its preferences as w
 
 Read the docs (please 🙏):
 
-[Help](https://onemen.github.io/tabmixplus-docs/help/index.html)
+[Help](https://onemen.github.io/tabmixplus-docs/help/links/)
 
-[Troubleshooting](https://onemen.github.io/tabmixplus-docs/troubleshooting/index.html)
+[Troubleshooting](https://onemen.github.io/tabmixplus-docs/troubleshooting/tabmix-does-not-work/)
 
-[Change Log](https://onemen.github.io/tabmixplus-docs/changelog/index.html)
+[Change Log](https://github.com/onemen/TabMixPlus/releases)

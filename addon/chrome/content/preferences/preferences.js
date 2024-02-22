@@ -690,7 +690,7 @@ function showPane(paneID) {
 }
 
 function openHelp(helpTopic) {
-  var helpPage = "https://onemen.github.io/tabmixplus-docs/help/";
+  var helpPage = "https://onemen.github.io/tabmixplus-docs/";
   // Check if the help page already open in the top window
   var recentWindow = Tabmix.getTopWin();
   var tabBrowser = recentWindow.gBrowser;
@@ -717,7 +717,7 @@ function openHelp(helpTopic) {
     }
   }
   helpTopic = helpTopic.toLowerCase().replace("mouse_-_", "").replace(/_-_|_/g, "-");
-  recentWindow.openTrustedLinkIn(helpPage + helpTopic, where);
+  recentWindow.openTrustedLinkIn(helpPage + "help/" + helpTopic, where);
 }
 
 function donate() {

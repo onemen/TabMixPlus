@@ -46,3 +46,22 @@ input[type="number"][size="5"] {
 input[type="number"][size="6"] {
   width: calc(6ch + var(--input-width-offset));
 }
+
+
+/* show badge New on help buttons */
+
+.dialog-button[icon="help"] {
+  position: relative;
+}
+
+.dialog-button[icon="help"]::before {
+  content: "New";
+  background-color: green;
+  border-radius: 5px;
+  color: white;
+  position: absolute;
+  top: -16px;
+  right: 0;
+  padding: 2px 10px;
+  transform: rotate(15deg);
+}
