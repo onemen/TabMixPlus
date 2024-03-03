@@ -1,6 +1,6 @@
 /* global PrefWindow */
 /* exported defaultSetting, donate, exportData, importData, openHelp, setDialog,
-            showPane, toggleInstantApply, toggleSyncPreference */
+            showPane, toggleInstantApply, toggleSyncPreference closeAll */
 "use strict";
 
 /***** Preference Dialog Functions *****/
@@ -798,5 +798,19 @@ function setDialog() {
     window.requestAnimationFrame(() => {
       window.sizeToContent();
     });
+  }
+}
+
+function closeAll() {
+  const subDialog =
+      Services.wm.getMostRecentWindow("mozilla:tabmixopt-filetype") ??
+      Services.wm.getMostRecentWindow("mozilla:tabmixopt-appearance");
+  subDialog?.close();
+  if (subDialog) {
+    setTimeout(() => {
+      window.close();
+    }, 0);
+  } else {
+    window.close();
   }
 }

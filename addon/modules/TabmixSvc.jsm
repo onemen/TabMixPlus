@@ -254,6 +254,7 @@ TabmixSvc = {
       this.addMissingPrefs();
 
       Services.obs.addObserver(this, "quit-application", true);
+      Services.obs.addObserver(this, "browser-lastwindow-close-granted", true);
 
       ChromeUtils.import("chrome://tabmix-resource/content/DownloadLastDir.jsm");
 
@@ -288,6 +289,12 @@ TabmixSvc = {
 
     observe(aSubject, aTopic) {
       switch (aTopic) {
+        case "browser-lastwindow-close-granted": {
+          Services.obs.removeObserver(this, "browser-lastwindow-close-granted");
+          // we close tabmix dialog windows when last browser closed
+          Services.wm.getMostRecentWindow("mozilla:tabmixopt")?.closeAll();
+          break;
+        }
         case "quit-application":
           Services.obs.removeObserver(this, "quit-application");
           lazy.TabmixPlacesUtils.onQuitApplication();
