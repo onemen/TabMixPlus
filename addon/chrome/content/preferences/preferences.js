@@ -623,7 +623,7 @@ function showFilePicker(mode) {
       fp.defaultString = "TMPpref";
       mode = nsIFilePicker.modeSave;
     }
-    fp.init(window, null, mode);
+    fp.init(Tabmix.isVersion(1250) ? window.browsingContext : window, null, mode);
     fp.appendFilters(nsIFilePicker.filterText);
     fp.open(result => {
       resolve(result != nsIFilePicker.returnCancel ? fp.file : null);
