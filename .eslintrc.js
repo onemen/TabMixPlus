@@ -248,7 +248,7 @@ module.exports = {
     "no-nested-ternary": 0,
     "no-new": 2,
     "no-new-func": 2,
-    "no-new-object": 2,
+    "no-object-constructor": 2,
     "no-new-require": 0, // node
     "no-new-symbol": 2,
     "no-new-wrappers": 2,
@@ -345,6 +345,7 @@ module.exports = {
     "func-name-matching": 0,
     "func-names": 0,
     "func-style": [0, "declaration"],
+    "getter-return": 2,
     "generator-star-spacing": [2, "after"],
     "global-require": 0, // node
     "guard-for-in": 2,

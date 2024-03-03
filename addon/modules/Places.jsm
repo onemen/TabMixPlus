@@ -9,12 +9,14 @@ const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content
 const lazy = {};
 
 if (TabmixSvc.version(1030)) {
-  // eslint-disable-next-line tabmix/valid-lazy
   TabmixChromeUtils.defineLazyModuleGetters(lazy, {
     BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
+    // eslint-disable-next-line tabmix/valid-lazy
     OpenInTabsUtils: "resource:///modules/OpenInTabsUtils.jsm",
     PlacesUtils: "resource://gre/modules/PlacesUtils.jsm",
+    // eslint-disable-next-line tabmix/valid-lazy
     PluralForm: "resource://gre/modules/PluralForm.jsm",
+    // eslint-disable-next-line tabmix/valid-lazy
     PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
   });
 } else {

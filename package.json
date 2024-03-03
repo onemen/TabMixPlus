@@ -20,12 +20,12 @@
   },
   "homepage": "https://github.com/onemen/TabMixPlus#readme",
   "devDependencies": {
-    "@commitlint/cli": "^18.4.1",
-    "@commitlint/config-conventional": "^18.4.0",
-    "eslint": "^8.53.0",
-    "eslint-plugin-mozilla": "^3.2.0",
+    "@commitlint/cli": "^19.0.3",
+    "@commitlint/config-conventional": "^19.0.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-mozilla": "^3.7.0",
     "eslint-plugin-tabmix": "file:./config/eslint-plugin-tabmix",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.1.0"
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2"
   }
 }
