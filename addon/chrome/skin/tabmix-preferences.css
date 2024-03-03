@@ -125,6 +125,7 @@ tab.subtabs:focus-visible > .tab-middle > .tab-text {
 }
 
 .subtabs .tab-text {
+  display: inline-block;
   min-width: 50px;
   text-align: center;
 }

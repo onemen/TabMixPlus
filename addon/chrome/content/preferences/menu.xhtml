@@ -103,149 +103,125 @@
           <checkbox_tmp id="showOnTabbar" label="&showOnTabbar.label;" preference="pref_showOnTabbar"/>
           <html:fieldset flex="1">
             <html:legend>&showtabBarContext.label;</html:legend>
-            <grid flex="1" style="overflow: auto; /* height:18em; */">
-              <columns>
-                <column flex="1"/>
-                <column flex="1"/>
-              </columns>
-              <rows>
-                <row>
-                  <vbox align="start">
-                    <!-- New tab -->
-                    <checkbox_tmp id="showNewTab" data-lazy-l10n-id="menu-file-new-tab" preference="pref_showNewTab"/>
-                    <!-- mute/unmute tabs -->
-                    <checkbox_tmp id="muteTab" preference="pref_muteTab"/>
-                    <checkbox_tmp id="unmuteTab" hidden="true"/>
-                    <!-- pin/unpin tabs -->
-                    <checkbox_tmp id="pinTab" preference="pref_pinTab"/>
-                    <!-- Duplicate tab -->
-                    <checkbox_tmp id="showDuplicate" label="&duplicateTabMenu.label;" preference="pref_showDuplicate"/>
-                    <!-- Duplicate in Window -->
-                    <checkbox_tmp id="showDuplicateinWin" label="&duplicateinWin.label;" preference="pref_showDuplicateinWin" observes="obs_singleWindow"/>
-                    <!-- Move Tabs -->
-                    <checkbox_tmp id="moveTabOptions" data-lazy-l10n-id="tab-context-move-tabs" data-l10n-args='{"tabCount": 2}' preference="pref_moveTabOptions"/>
-                    <checkbox_tmp id="sendTabToDevice" preference="pref_sendTabToDevice"
-                                  data-lazy-l10n-id="tab-context-send-tabs-to-device"
-                                  data-l10n-args='{"tabCount": 1}'/>
-                    <checkbox_tmp id="shareTabURL" data-lazy-l10n-id="tab-context-share-url" preference="pref_shareTabURL"/>
-                    <!-- Merge Windows -->
-                    <checkbox_tmp id="showMergeWin" label="&mergeContext.label;" preference="pref_showMergeWin"/>
-                    <!-- move to group -->
-                    <checkbox_tmp id="moveToGroup" preference="pref_showMoveToGroup"/>
-                    <!-- Rename tab -->
-                    <checkbox_tmp id="showRenametab" label="&renametab.label;" preference="pref_showRenametab"/>
-                    <!-- Copy tab Url -->
-                    <checkbox_tmp id="showCopyTabUrl" label="&copytaburl.label;" preference="pref_showCopyTabUrl"/>
-                    <checkbox_tmp id="reopenInContainer" data-lazy-l10n-id="tab-context-open-in-new-container-tab" preference="pref_reopenInContainer"/>
-                    <!-- Select All Tabs -->
-                    <checkbox_tmp id="showSelectAllTabs" data-lazy-l10n-id="select-all-tabs" preference="pref_selectAllTabs"/>
-                  </vbox>
-                  <vbox align="start">
-                    <!-- Reload Tab Every -->
-                    <checkbox_tmp id="showAutoReload" label="&autoReloadTab.label;" preference="pref_showAutoReload"/>
-                    <!-- Reload Multiple Tabs -->
-                    <checkbox_tmp id="reloadTabOptions" label="Reload Multiple Tabs" preference="pref_reloadTabOptions"/>
-                    <!-- Reload tab -->
-                    <checkbox_tmp id="showReloadTab" data-lazy-l10n-id="reload-tab"  preference="pref_showReloadTab"/>
-                    <!-- Undo close tabs -->
-                    <checkbox_tmp id="showUndoClose" data-lazy-l10n-id="tab-context-reopen-closed-tabs" data-l10n-args='{"tabCount": 1}' preference="pref_showUndoClose" observes="obs_undoClose"/>
-                    <!-- Closed tabs list -->
-                    <checkbox_tmp id="showUndoCloseList" label="&undoCloseListMenu.label;" preference="pref_showUndoCloseList" observes="obs_undoClose"/>
-                    <!-- Close Multiple Tabs -->
-                    <checkbox_tmp id="closeTabOptions" data-lazy-l10n-id="tab-context-close-multiple-tabs" preference="pref_closeTabOptions"/>
-                    <!-- Close tabs -->
-                    <checkbox_tmp id="showCloseTab" data-lazy-l10n-id="tab-context-close-n-tabs" data-l10n-args='{"tabCount": 1}' preference="pref_showCloseTab"/>
-                    <!-- docShell -->
-                    <checkbox_tmp id="showDocShell" label="&docShellMenu.label;" preference="pref_showDocShell"/>
-                    <!-- freeze tab -->
-                    <checkbox_tmp id="freezeTabMenu" label="&freezeTabMenu.label;" tooltiptext="&clicktab.freezetab;" preference="pref_freezeTabMenu"/>
-                    <!-- protect tab -->
-                    <checkbox_tmp id="protectTabMenu" label="&protectTabMenu.label;" tooltiptext="&protectTabMenu.tooltip;" preference="pref_protectTabMenu"/>
-                    <!-- lock tab -->
-                    <checkbox_tmp id="lockTabMenu" label="&lockTabMenu.label;" tooltiptext="&lockTabMenu.tooltip;" preference="pref_lockTabMenu"/>
-                    <!-- Bookmark tab -->
-                    <checkbox_tmp id="showBmkTab" data-lazy-l10n-id="tab-context-bookmark-tab" preference="pref_showBmkTab"/>
-                    <!-- bookmark tabs -->
-                    <checkbox_tmp id="showBmkTabs" data-lazy-l10n-id="menu-bookmarks-all-tabs" preference="pref_showBmkTabs"/>
-                  </vbox>
-                </row>
-              </rows>
-            </grid>
+            <div style="overflow: auto; display: grid; grid-template-columns: 1fr 1fr;">
+              <vbox align="start">
+                <!-- New tab -->
+                <checkbox_tmp id="showNewTab" data-lazy-l10n-id="menu-file-new-tab" preference="pref_showNewTab"/>
+                <!-- mute/unmute tabs -->
+                <checkbox_tmp id="muteTab" preference="pref_muteTab"/>
+                <checkbox_tmp id="unmuteTab" hidden="true"/>
+                <!-- pin/unpin tabs -->
+                <checkbox_tmp id="pinTab" preference="pref_pinTab"/>
+                <!-- Duplicate tab -->
+                <checkbox_tmp id="showDuplicate" label="&duplicateTabMenu.label;" preference="pref_showDuplicate"/>
+                <!-- Duplicate in Window -->
+                <checkbox_tmp id="showDuplicateinWin" label="&duplicateinWin.label;" preference="pref_showDuplicateinWin" observes="obs_singleWindow"/>
+                <!-- Move Tabs -->
+                <checkbox_tmp id="moveTabOptions" data-lazy-l10n-id="tab-context-move-tabs" data-l10n-args='{"tabCount": 2}' preference="pref_moveTabOptions"/>
+                <checkbox_tmp id="sendTabToDevice" preference="pref_sendTabToDevice"
+                              data-lazy-l10n-id="tab-context-send-tabs-to-device"
+                              data-l10n-args='{"tabCount": 1}'/>
+                <checkbox_tmp id="shareTabURL" data-lazy-l10n-id="tab-context-share-url" preference="pref_shareTabURL"/>
+                <!-- Merge Windows -->
+                <checkbox_tmp id="showMergeWin" label="&mergeContext.label;" preference="pref_showMergeWin"/>
+                <!-- move to group -->
+                <checkbox_tmp id="moveToGroup" preference="pref_showMoveToGroup"/>
+                <!-- Rename tab -->
+                <checkbox_tmp id="showRenametab" label="&renametab.label;" preference="pref_showRenametab"/>
+                <!-- Copy tab Url -->
+                <checkbox_tmp id="showCopyTabUrl" label="&copytaburl.label;" preference="pref_showCopyTabUrl"/>
+                <checkbox_tmp id="reopenInContainer" data-lazy-l10n-id="tab-context-open-in-new-container-tab" preference="pref_reopenInContainer"/>
+                <!-- Select All Tabs -->
+                <checkbox_tmp id="showSelectAllTabs" data-lazy-l10n-id="select-all-tabs" preference="pref_selectAllTabs"/>
+              </vbox>
+              <vbox align="start">
+                <!-- Reload Tab Every -->
+                <checkbox_tmp id="showAutoReload" label="&autoReloadTab.label;" preference="pref_showAutoReload"/>
+                <!-- Reload Multiple Tabs -->
+                <checkbox_tmp id="reloadTabOptions" label="Reload Multiple Tabs" preference="pref_reloadTabOptions"/>
+                <!-- Reload tab -->
+                <checkbox_tmp id="showReloadTab" data-lazy-l10n-id="reload-tab"  preference="pref_showReloadTab"/>
+                <!-- Undo close tabs -->
+                <checkbox_tmp id="showUndoClose" data-lazy-l10n-id="tab-context-reopen-closed-tabs" data-l10n-args='{"tabCount": 1}' preference="pref_showUndoClose" observes="obs_undoClose"/>
+                <!-- Closed tabs list -->
+                <checkbox_tmp id="showUndoCloseList" label="&undoCloseListMenu.label;" preference="pref_showUndoCloseList" observes="obs_undoClose"/>
+                <!-- Close Multiple Tabs -->
+                <checkbox_tmp id="closeTabOptions" data-lazy-l10n-id="tab-context-close-multiple-tabs" preference="pref_closeTabOptions"/>
+                <!-- Close tabs -->
+                <checkbox_tmp id="showCloseTab" data-lazy-l10n-id="tab-context-close-n-tabs" data-l10n-args='{"tabCount": 1}' preference="pref_showCloseTab"/>
+                <!-- docShell -->
+                <checkbox_tmp id="showDocShell" label="&docShellMenu.label;" preference="pref_showDocShell"/>
+                <!-- freeze tab -->
+                <checkbox_tmp id="freezeTabMenu" label="&freezeTabMenu.label;" tooltiptext="&clicktab.freezetab;" preference="pref_freezeTabMenu"/>
+                <!-- protect tab -->
+                <checkbox_tmp id="protectTabMenu" label="&protectTabMenu.label;" tooltiptext="&protectTabMenu.tooltip;" preference="pref_protectTabMenu"/>
+                <!-- lock tab -->
+                <checkbox_tmp id="lockTabMenu" label="&lockTabMenu.label;" tooltiptext="&lockTabMenu.tooltip;" preference="pref_lockTabMenu"/>
+                <!-- Bookmark tab -->
+                <checkbox_tmp id="showBmkTab" data-lazy-l10n-id="tab-context-bookmark-tab" preference="pref_showBmkTab"/>
+                <!-- bookmark tabs -->
+                <checkbox_tmp id="showBmkTabs" data-lazy-l10n-id="menu-bookmarks-all-tabs" preference="pref_showBmkTabs"/>
+              </vbox>
+            </div>
           </html:fieldset>
         </tabpanel>
         <tabpanel>
           <html:fieldset flex="1">
             <html:legend>&showContentAreaContext.label;</html:legend>
-            <grid flex="1" style="overflow: auto; height:18em;">
-              <columns>
-                <column flex="1"/>
-                <column flex="1"/>
-              </columns>
-              <rows>
-                <row>
-                  <vbox align="start">
-                    <!-- links in current tab -->
-                    <checkbox_tmp id="showLinkHere" label="&linkhere.label;" preference="pref_showLinkHere"/>
-                    <!-- links in inverse tab -->
-                    <checkbox_tmp id="showInverseLink" fglabel="&linkForegroundTab.label;" bglabel="&linkBackgroundTab.label;" preference="pref_showInverseLink"/>
-                    <!-- multiple links -->
-                    <checkbox_tmp id="openAllLinks" label="&openalllinks.label;" preference="pref_openAllLinks"/>
-                    <!-- link in duplicate tab -->
-                    <checkbox_tmp id="linkWithHist" label="&linkwithhistory.label;" preference="pref_linkWithHist"/>
-                    <!-- reload every -->
-                    <checkbox_tmp id="autoreloadTab" label="&autoReloadTab.label;" preference="pref_autoreloadTab"/>
-                    <!-- Close tab -->
-                    <checkbox_tmp id="closetab" data-lazy-l10n-id="tab-context-close-n-tabs" data-l10n-args='{"tabCount": 1}' preference="pref_closetab"/>
-                    <!-- Duplicate tab -->
-                    <checkbox_tmp id="duplicateTabContent" label="&duplicateTabMenu.label;" preference="pref_duplicateTabContent"/>
-                    <!-- Duplicate tab in Win-->
-                    <checkbox_tmp id="duplicateWinContent" label="&duplicateinWin.label;" preference="pref_duplicateWinContent" observes="obs_singleWindow"/>
-                  </vbox>
-                  <vbox align="start">
-                    <!-- Detach Tab-->
-                    <checkbox_tmp id="detachTabContent" label="&detachTab.label;" preference="pref_detachTabContent" observes="obs_singleWindow"/>
-                    <!-- Merge Content-->
-                    <checkbox_tmp id="mergeContent" label="&mergeContext.label;" preference="pref_mergeContent"/>
-                    <!-- freeze tab -->
-                    <checkbox_tmp id="freezeTabContent" label="&freezeTabMenu.label;" tooltiptext="&clicktab.freezetab;" preference="pref_freezeTabContent"/>
-                    <!-- protect tab -->
-                    <checkbox_tmp id="protectTabContent" label="&protectTabMenu.label;" tooltiptext="&protectTabMenu.tooltip;" preference="pref_protectTabContent"/>
-                    <!-- lock tab -->
-                    <checkbox_tmp id="lockTabContent" label="&lockTabMenu.label;" tooltiptext="&lockTabMenu.tooltip;" preference="pref_lockTabContent"/>
-                    <!-- Opened tabs list -->
-                    <checkbox_tmp id="tabsList" label="&tabsList.label;" preference="pref_tabsList"/>
-                    <!-- Closed tabs list -->
-                    <checkbox_tmp id="showUndoCloseListContent" label="&undoCloseListMenu.label;" preference="pref_showUndoCloseListContent" observes="obs_undoClose"/>
-                    <!-- Undo close tabs -->
-                    <checkbox_tmp id="showUndoCloseContent" data-lazy-l10n-id="tab-context-reopen-closed-tabs" data-l10n-args='{"tabCount": 1}' preference="pref_showUndoCloseContent" observes="obs_undoClose"/>
-                  </vbox>
-                </row>
-              </rows>
-            </grid>
+            <div style="overflow: auto; display: grid; grid-template-columns: 1fr 1fr;">
+              <vbox align="start">
+                <!-- links in current tab -->
+                <checkbox_tmp id="showLinkHere" label="&linkhere.label;" preference="pref_showLinkHere"/>
+                <!-- links in inverse tab -->
+                <checkbox_tmp id="showInverseLink" fglabel="&linkForegroundTab.label;" bglabel="&linkBackgroundTab.label;" preference="pref_showInverseLink"/>
+                <!-- multiple links -->
+                <checkbox_tmp id="openAllLinks" label="&openalllinks.label;" preference="pref_openAllLinks"/>
+                <!-- link in duplicate tab -->
+                <checkbox_tmp id="linkWithHist" label="&linkwithhistory.label;" preference="pref_linkWithHist"/>
+                <!-- reload every -->
+                <checkbox_tmp id="autoreloadTab" label="&autoReloadTab.label;" preference="pref_autoreloadTab"/>
+                <!-- Close tab -->
+                <checkbox_tmp id="closetab" data-lazy-l10n-id="tab-context-close-n-tabs" data-l10n-args='{"tabCount": 1}' preference="pref_closetab"/>
+                <!-- Duplicate tab -->
+                <checkbox_tmp id="duplicateTabContent" label="&duplicateTabMenu.label;" preference="pref_duplicateTabContent"/>
+                <!-- Duplicate tab in Win-->
+                <checkbox_tmp id="duplicateWinContent" label="&duplicateinWin.label;" preference="pref_duplicateWinContent" observes="obs_singleWindow"/>
+              </vbox>
+              <vbox align="start">
+                <!-- Detach Tab-->
+                <checkbox_tmp id="detachTabContent" label="&detachTab.label;" preference="pref_detachTabContent" observes="obs_singleWindow"/>
+                <!-- Merge Content-->
+                <checkbox_tmp id="mergeContent" label="&mergeContext.label;" preference="pref_mergeContent"/>
+                <!-- freeze tab -->
+                <checkbox_tmp id="freezeTabContent" label="&freezeTabMenu.label;" tooltiptext="&clicktab.freezetab;" preference="pref_freezeTabContent"/>
+                <!-- protect tab -->
+                <checkbox_tmp id="protectTabContent" label="&protectTabMenu.label;" tooltiptext="&protectTabMenu.tooltip;" preference="pref_protectTabContent"/>
+                <!-- lock tab -->
+                <checkbox_tmp id="lockTabContent" label="&lockTabMenu.label;" tooltiptext="&lockTabMenu.tooltip;" preference="pref_lockTabContent"/>
+                <!-- Opened tabs list -->
+                <checkbox_tmp id="tabsList" label="&tabsList.label;" preference="pref_tabsList"/>
+                <!-- Closed tabs list -->
+                <checkbox_tmp id="showUndoCloseListContent" label="&undoCloseListMenu.label;" preference="pref_showUndoCloseListContent" observes="obs_undoClose"/>
+                <!-- Undo close tabs -->
+                <checkbox_tmp id="showUndoCloseContent" data-lazy-l10n-id="tab-context-reopen-closed-tabs" data-l10n-args='{"tabCount": 1}' preference="pref_showUndoCloseContent" observes="obs_undoClose"/>
+              </vbox>
+            </div>
           </html:fieldset>
         </tabpanel>
         <tabpanel>
           <html:fieldset flex="1">
             <html:legend>&showToolsMenu.label;</html:legend>
             <!-- tab mix options in Tools Menu -->
-            <grid flex="1" style="overflow: auto; height:18em;">
-              <columns>
-                <column flex="1"/>
-                <column flex="1"/>
-              </columns>
-              <rows>
-                <row>
-                  <vbox align="start">
-                    <checkbox_tmp id="optionsToolsMenu" preference="pref_optionsToolsMenu"
-                              label="&page.header.title;…"/>
-                    <checkbox_tmp hidden="true" id="sessionToolsMenu" preference="pref_sessionToolsMenu"
-                              label="&session.Tools;"/>
-                    <checkbox_tmp id="closedWinToolsMenu" preference="pref_closedWinToolsMenu"
-                              label="&closedWin.label;"/>
-                  </vbox>
-                </row>
-              </rows>
-            </grid>
+            <div style="overflow: auto; display: grid; grid-template-columns: 1fr 1fr;">
+              <vbox align="start">
+                <checkbox_tmp id="optionsToolsMenu" preference="pref_optionsToolsMenu"
+                          label="&page.header.title;…"/>
+                <checkbox_tmp hidden="true" id="sessionToolsMenu" preference="pref_sessionToolsMenu"
+                          label="&session.Tools;"/>
+                <checkbox_tmp id="closedWinToolsMenu" preference="pref_closedWinToolsMenu"
+                          label="&closedWin.label;"/>
+              </vbox>
+            </div>
           </html:fieldset>
         </tabpanel>
         <tabpanel id="shortcuts-panel" hide-shortcut-warning="true"
