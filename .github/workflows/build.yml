@@ -75,7 +75,7 @@ jobs:
           git config user.email "tabmix.onemen@gmail.com"
           git config user.name "onemen"
           git push origin :refs/tags/dev-build
-          git tag dev-build
+          git tag -f dev-build
           git push origin dev-build
 
       - name: Update release
