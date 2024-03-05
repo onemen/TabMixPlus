@@ -112,6 +112,16 @@ jobs:
             // const artifactUrl = '${{ steps.upload-artifact.outputs.artifact-url }}/${{ env.XPI_NAME }}.zip';
             const artifactUrl = '${{ steps.upload-artifact.outputs.artifact-url }}';
             const artifactDownloadPath = '${{ steps.download-artifact.outputs.download-path }}/${{ env.XPI_NAME }}.zip';
+
+            const runId = github.run_id;
+            const xpiName = process.env.XPI_NAME;
+            const artifactDownloadUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/artifacts/${runId}/download-artifact/${encodeURIComponent(xpiName)}.zip`;
+
+
+            console.log('-------------------------------------------');
+            console.log({artifactDownloadUrl})
+            console.log({artifactDownloadPath})
+
             const assetName = 'tabmix-dev-build.xpi';
 
             /*
@@ -125,10 +135,9 @@ jobs:
             */
 
             // Download the artifact
-            const response = await fetch(artifactDownloadPath);
-            console.log('-------------------------------------------')
+            // const response = await fetch(artifactDownloadPath);
+            const response = await fetch(artifactDownloadUrl);
             //console.log({firstArtifactId})
-            console.log({artifactDownloadPath})
             console.log({artifactUrl})
             // console.log(response)
             console.log('-------------------------------------------')
