@@ -74,9 +74,31 @@ jobs:
         run: |
           git config user.email "tabmix.onemen@gmail.com"
           git config user.name "onemen"
-          git tag -fa dev-build
           git push origin :refs/tags/dev-build
+          git tag dev-build
           git push origin dev-build
+
+      - name: Update release
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { owner, repo } = context.repo
+            const releaseId = ${{ env.RELEASE_ID }}
+            const release = await github.rest.repos.getRelease({
+              owner,
+              repo,
+              release_id: releaseId,
+            })
+            if (release.data.draft) {
+              await github.rest.repos.updateRelease({
+                owner,
+                repo,
+                release_id: releaseId,
+                tag_name: 'dev-build',
+                draft: false,
+              })
+            }
 
       - name: Upload new asset
         uses: actions/github-script@v7
