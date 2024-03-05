@@ -39,8 +39,6 @@ jobs:
         with:
           name: ${{ env.XPI_NAME }}
           path: addon/
-        env:
-          ARTIFACT_DOWNLOAD_URL: ${{ steps.upload-artifact.outputs.artifact_url }}
 
       # - name: Download XPI from Release
       #   uses: actions/download-artifact@v4
@@ -107,14 +105,26 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const fs = require('fs');
-            const { owner, repo } = context.repo
-            const releaseId = ${{ env.RELEASE_ID }}
-            const assetPath = process.env.ARTIFACT_DOWNLOAD_URL
-            const assetName = 'tabmix-dev-build.xpi'
-            const assetContentType = 'application/x-xpinstall'
-            const asset = fs.readFileSync(assetPath)
-            const assetSize = fs.statSync(assetPath).size
+            const { owner, repo } = context.repo;
+            const releaseId = ${{ env.RELEASE_ID }};
+            // Use the captured artifact URL
+            const artifactUrl = '${{ steps.upload-artifact.outputs.artifact-url }}';
+            const assetName = 'tabmix-dev-build.xpi';
+
+            // Download the artifact
+            const response = await fetch(artifactUrl);
+            console.log('-------------------------------------------')
+            console.log({artifactUrl})
+            console.log(response)
+            console.log('-------------------------------------------')
+            if (!response.ok) {
+              throw new Error(`Error downloading artifact: ${response.statusText}`);
+            }
+            const asset = await response.arrayBuffer();
+            const assetSize = asset.byteLength;
+            const assetContentType = 'application/x-xpinstall';
+
+            // Upload the asset
             await github.rest.repos.uploadReleaseAsset({
               owner,
               repo,
@@ -125,14 +135,4 @@ jobs:
                 'content-length': assetSize,
                 'content-type': assetContentType,
               },
-            })
-
-      # - name: Rename artifacts
-      #   run: mv '${{ github.workflow }}/${{ env.XPI_NAME }}.zip' '${{ github.workflow }}/${{ env.XPI_NAME }}.xpi'
-
-      # - name: Upload new asset
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #     allowUpdates: "true"
-      #     tag: 'dev-build'
-      #     artifacts: ${{ github.workflow }}/${{ env.XPI_NAME }}
+            });
