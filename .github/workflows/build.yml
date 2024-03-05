@@ -27,7 +27,7 @@ jobs:
 
       - name: Set XPI file name
         run: |
-          echo "XPI_NAME=tabmix-dev-build-${{ env.VERSION }}-${{ env.DATE }}" >> $GITHUB_ENV
+          echo "XPI_NAME=tabmix-dev-build" >> $GITHUB_ENV
 
       - name: Replace version in install.rdf
         run: |
@@ -100,27 +100,37 @@ jobs:
               make_latest: false,
             })
 
+      # - name: Upload new asset
+      #   uses: actions/github-script@v7
+      #   with:
+      #     github-token: ${{secrets.GITHUB_TOKEN}}
+      #     script: |
+      #       const fs = require('fs');
+      #       const { owner, repo } = context.repo
+      #       const releaseId = ${{ env.RELEASE_ID }}
+      #       const assetPath = '${{ github.workspace }}/addon/${{ env.XPI_NAME }}'
+      #       const assetName = 'tabmix-dev-build.xpi'
+      #       const assetContentType = 'application/x-xpinstall'
+      #       const asset = fs.readFileSync(assetPath)
+      #       const assetSize = fs.statSync(assetPath).size
+      #       await github.rest.repos.uploadReleaseAsset({
+      #         owner,
+      #         repo,
+      #         release_id: releaseId,
+      #         name: assetName,
+      #         data: asset,
+      #         headers: {
+      #           'content-length': assetSize,
+      #           'content-type': assetContentType,
+      #         },
+      #       })
+
+      # - name: Rename artifacts
+      #   run: mv '${{ github.workflow }}/${{ env.XPI_NAME }}.zip' '${{ github.workflow }}/${{ env.XPI_NAME }}.xpi'
+
       - name: Upload new asset
-        uses: actions/github-script@v7
+        uses: ncipollo/release-action@v1
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const fs = require('fs');
-            const { owner, repo } = context.repo
-            const releaseId = ${{ env.RELEASE_ID }}
-            const assetPath = '${{ github.workspace }}/addon/${{ env.XPI_NAME }}'
-            const assetName = 'tabmix-dev-build.xpi'
-            const assetContentType = 'application/x-xpinstall'
-            const asset = fs.readFileSync(assetPath)
-            const assetSize = fs.statSync(assetPath).size
-            await github.rest.repos.uploadReleaseAsset({
-              owner,
-              repo,
-              release_id: releaseId,
-              name: assetName,
-              data: asset,
-              headers: {
-                'content-length': assetSize,
-                'content-type': assetContentType,
-              },
-            })
+          allowUpdates: "true"
+          tag: 'dev-build'
+          artifacts: ${{ github.workflow }}/${{ env.XPI_NAME }}
