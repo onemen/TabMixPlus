@@ -15,16 +15,6 @@ jobs:
           fetch-depth: 0
           ref: main
 
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Download deps
-        uses: bahmutov/npm-install@v1
-        with:
-          useLockFile: false
-
       - name: Get latest tag version
         id: get-version
         run: |
@@ -49,8 +39,62 @@ jobs:
           name: ${{ env.XPI_NAME }}
           path: addon/
 
-      # - name: Create Release (optional)
-      #   uses: ncipollo/release-action@v3
-      #   with:
-      #     tag_name: ${{ env.VERSION }}-${{ env.DATE }}
-      #     artifacts: ${{ github.workflow }}/tabmix-dev-build/*.xpi
+      - name: Get Release ID
+        id: get_release
+        run: |
+          RELEASE_ID=$(curl --silent "https://api.github.com/repos/${{ github.repository }}/releases/tags/dev-build" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" | jq '.id')
+          echo "RELEASE_ID=$RELEASE_ID" >> $GITHUB_ENV
+
+      - name: Delete existing asset
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const { owner, repo } = context.repo
+            const releaseId = ${{ env.RELEASE_ID }}
+            const assets = await github.repos.listReleaseAssets({
+              owner,
+              repo,
+              release_id: releaseId,
+            })
+            for (const asset of assets.data) {
+              if (asset.name === 'tabmix-dev-build.xpi') {
+                await github.repos.deleteReleaseAsset({
+                  owner,
+                  repo,
+                  asset_id: asset.id,
+                })
+              }
+            }
+
+      - name: Move tag to latest commit
+        run: |
+          git tag -fa dev-build -m "Move tag to latest commit"
+          git push origin :refs/tags/dev-build
+          git push origin dev-build
+
+      - name: Upload new asset
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs');
+            const { owner, repo } = context.repo
+            const releaseId = ${{ env.RELEASE_ID }}
+            const assetPath = '${{ env.XPI_NAME }}'
+            const assetName = 'tabmix-dev-build.xpi'
+            const assetContentType = 'application/x-xpinstall'
+            const asset = fs.readFileSync(assetPath)
+            const assetSize = fs.statSync(assetPath).size
+            await github.repos.uploadReleaseAsset({
+              owner,
+              repo,
+              release_id: releaseId,
+              name: assetName,
+              data: asset,
+              headers: {
+                'content-length': assetSize,
+                'content-type': assetContentType,
+              },
+            })
