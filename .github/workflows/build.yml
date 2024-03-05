@@ -32,21 +32,22 @@ jobs:
         id: get-date
         run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
+      - name: Set XPI file name
+        run: |
+          echo "XPI_NAME=tabmix-dev-build-${{ env.VERSION }}-${{ env.DATE }}.xpi" >> $GITHUB_ENV
+
       - name: Replace version in install.rdf
         run: |
-          sed -i "s/1.0.0-unbundeled/${{ env.VERSION }}/" addon/install.rdf
+          sed -i "s/1.0.0-unbundeled/${{ env.VERSION }}-${{ env.DATE }}.xpi/" addon/install.rdf
 
-      - name: Zip the folder
-        uses: actions/zip@v3
-        with:
-          path: addon/*
-          file_name: dev-build-${{ env.VERSION }}-${{ env.DATE }}.xpi
+      - name: Zip addon folder
+        run: zip -r ${{ env.XPI_NAME }} addon/*
 
       - name: Upload XPI to Release
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: tabmix-dev-build
-          path: dev-build-${{ env.VERSION }}-${{ env.DATE }}.xpi
+          name: ${{ env.XPI_NAME }}
+          path: ${{ env.XPI_NAME }}
 
       # - name: Create Release (optional)
       #   uses: ncipollo/release-action@v3
