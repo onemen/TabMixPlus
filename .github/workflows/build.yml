@@ -42,8 +42,10 @@ jobs:
       - name: Get Release ID
         id: get_release
         run: |
-          RELEASE_ID=$(curl --silent "https://api.github.com/repos/${{ github.repository }}/releases/tags/dev-build" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" | jq '.id')
+          RESPONSE=$(curl --silent "https://api.github.com/repos/${{ github.repository }}/releases/tags/dev-build" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}")
+          echo "$RESPONSE"
+          RELEASE_ID=$(echo "$RESPONSE" | jq '.id')
           echo "RELEASE_ID=$RELEASE_ID" >> $GITHUB_ENV
 
       - name: Delete existing asset
