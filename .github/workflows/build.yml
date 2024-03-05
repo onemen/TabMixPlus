@@ -39,14 +39,13 @@ jobs:
         with:
           name: ${{ env.XPI_NAME }}
           path: addon/
+        env:
+          ARTIFACT_DOWNLOAD_URL: ${{ steps.upload-artifact.outputs.artifact_url }}
 
-      - name: Log uploaded XPI
-        run: console.log("uploaded XPI", "${{ steps.upload-artifact.outputs.download-url }}")
-
-      - name: Download XPI from Release
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.XPI_NAME }}
+      # - name: Download XPI from Release
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: ${{ env.XPI_NAME }}
 
       - name: Get Release ID
         id: get_release
@@ -111,7 +110,7 @@ jobs:
             const fs = require('fs');
             const { owner, repo } = context.repo
             const releaseId = ${{ env.RELEASE_ID }}
-            const assetPath = '${{ github.workspace }}/${{ env.XPI_NAME }}'
+            const assetPath = process.env.ARTIFACT_DOWNLOAD_URL
             const assetName = 'tabmix-dev-build.xpi'
             const assetContentType = 'application/x-xpinstall'
             const asset = fs.readFileSync(assetPath)
