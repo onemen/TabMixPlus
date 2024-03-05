@@ -108,7 +108,7 @@ jobs:
             const fs = require('fs');
             const { owner, repo } = context.repo
             const releaseId = ${{ env.RELEASE_ID }}
-            const assetPath = '${{ github.workspace }}/${{ env.XPI_NAME }}.zip'
+            const assetPath = '${{ github.workspace }}/addon/${{ env.XPI_NAME }}'
             const assetName = 'tabmix-dev-build.xpi'
             const assetContentType = 'application/x-xpinstall'
             const asset = fs.readFileSync(assetPath)
