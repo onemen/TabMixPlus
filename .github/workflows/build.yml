@@ -40,10 +40,11 @@ jobs:
           name: ${{ env.XPI_NAME }}
           path: addon/
 
-      # - name: Download XPI from Release
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: ${{ env.XPI_NAME }}
+      - name: Download XPI from Release
+        id: download-artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.XPI_NAME }}
 
       - name: Get Release ID
         id: get_release
@@ -110,19 +111,29 @@ jobs:
             // Use the captured artifact URL
             // const artifactUrl = '${{ steps.upload-artifact.outputs.artifact-url }}/${{ env.XPI_NAME }}.zip';
             const artifactUrl = '${{ steps.upload-artifact.outputs.artifact-url }}';
+            const artifactDownloadPath = '${{ steps.download-artifact.outputs.download-path }}';
             const assetName = 'tabmix-dev-build.xpi';
 
-            const artifactsID = await fetch("https://api.github.com/repos/onemen/TabMixPlus/actions/artifacts");
+            /*
+            const artifactResponse = await fetch("https://api.github.com/repos/onemen/TabMixPlus/actions/artifacts");
+            if (!artifactResponse.ok) {
+              throw new Error(`Can't find artifact id: ${artifactResponse.statusText}`);
+            }
+            // const data = await artifactResponse.json();
+            // const firstArtifactId = data.artifacts[0].id;
+            // const artifactUrl = `https://github.com/onemen/TabMixPlus/actions/artifacts/${firstArtifactId}`
+            */
 
             // Download the artifact
             const response = await fetch(artifactUrl);
             console.log('-------------------------------------------')
-            console.log({artifactsID})
+            //console.log({firstArtifactId})
+            console.log({artifactDownloadPath})
             console.log({artifactUrl})
             // console.log(response)
             console.log('-------------------------------------------')
             if (!response.ok) {
-              throw new Error(`Error downloading artifact: ${response.statusText}`);
+              throw new Error(`downloading artifact failed: ${response.statusText}`);
             }
             const asset = await response.arrayBuffer();
             const assetSize = asset.byteLength;
