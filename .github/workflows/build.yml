@@ -53,8 +53,11 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
+            console.log(context) // log the context object
             const { owner, repo } = context.repo
             const releaseId = ${{ env.RELEASE_ID }}
+            console.log({releaseId}) // log the releaseId
+            console.log(github.repos) // log the github.repos object
             const assets = await github.repos.listReleaseAssets({
               owner,
               repo,
