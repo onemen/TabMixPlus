@@ -49,7 +49,7 @@ jobs:
         id: get_release
         run: |
           RESPONSE=$(curl --silent "https://api.github.com/repos/${{ github.repository }}/releases/tags/dev-build" \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}")
+            -H "Authorization: Bearer ${{ secrets.REPO_WORKFLOW_TOKEN }}")
           echo "$RESPONSE"
           RELEASE_ID=$(echo "$RESPONSE" | jq '.id')
           echo "RELEASE_ID=$RELEASE_ID" >> $GITHUB_ENV
@@ -57,7 +57,7 @@ jobs:
       - name: Delete existing asset
         uses: actions/github-script@v7
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{secrets.REPO_WORKFLOW_TOKEN}}
           script: |
             const { owner, repo } = context.repo
             const releaseId = ${{ env.RELEASE_ID }}
@@ -87,7 +87,7 @@ jobs:
       - name: Update release
         uses: actions/github-script@v7
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{secrets.REPO_WORKFLOW_TOKEN}}
           script: |
             const { owner, repo } = context.repo
             const releaseId = ${{ env.RELEASE_ID }}
@@ -103,19 +103,23 @@ jobs:
       - name: Upload new asset
         uses: actions/github-script@v7
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{secrets.REPO_WORKFLOW_TOKEN}}
           script: |
             const { owner, repo } = context.repo;
             const releaseId = ${{ env.RELEASE_ID }};
             // Use the captured artifact URL
+            // const artifactUrl = '${{ steps.upload-artifact.outputs.artifact-url }}/${{ env.XPI_NAME }}.zip';
             const artifactUrl = '${{ steps.upload-artifact.outputs.artifact-url }}';
             const assetName = 'tabmix-dev-build.xpi';
+
+            const artifactsID = await fetch("https://api.github.com/repos/onemen/TabMixPlus/actions/artifacts");
 
             // Download the artifact
             const response = await fetch(artifactUrl);
             console.log('-------------------------------------------')
+            console.log({artifactsID})
             console.log({artifactUrl})
-            console.log(response)
+            // console.log(response)
             console.log('-------------------------------------------')
             if (!response.ok) {
               throw new Error(`Error downloading artifact: ${response.statusText}`);
