@@ -111,7 +111,7 @@ jobs:
             // Use the captured artifact URL
             // const artifactUrl = '${{ steps.upload-artifact.outputs.artifact-url }}/${{ env.XPI_NAME }}.zip';
             const artifactUrl = '${{ steps.upload-artifact.outputs.artifact-url }}';
-            const artifactDownloadPath = '${{ steps.download-artifact.outputs.download-path }}';
+            const artifactDownloadPath = '${{ steps.download-artifact.outputs.download-path }}/${{ env.XPI_NAME }}.zip';
             const assetName = 'tabmix-dev-build.xpi';
 
             /*
@@ -125,7 +125,7 @@ jobs:
             */
 
             // Download the artifact
-            const response = await fetch(artifactUrl);
+            const response = await fetch(artifactDownloadPath);
             console.log('-------------------------------------------')
             //console.log({firstArtifactId})
             console.log({artifactDownloadPath})
