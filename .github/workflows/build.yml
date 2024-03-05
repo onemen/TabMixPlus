@@ -72,6 +72,8 @@ jobs:
 
       - name: Move tag to latest commit
         run: |
+          git config user.email "tabmix.onemen@gmail.com"
+          git config user.name "onemen"
           git tag -fa dev-build
           git push origin :refs/tags/dev-build
           git push origin dev-build
