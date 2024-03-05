@@ -34,18 +34,19 @@ jobs:
           sed -i "s/1.0.0-unbundeled/${{ env.VERSION }}-${{ env.DATE }}/" addon/install.rdf
 
       - name: Upload XPI to Release
+        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.XPI_NAME }}
           path: addon/
 
+      - name: Log uploaded XPI
+        run: console.log("uploaded XPI", "${{ steps.upload-artifact.outputs.download-url }}")
+
       - name: Download XPI from Release
         uses: actions/download-artifact@v4
-        # with:
-        #   name: ${{ env.XPI_NAME }}
-        #   path: ${{ github.workspace }}
-      - name: Display structure of downloaded files
-        run: ls -R
+        with:
+          name: ${{ env.XPI_NAME }}
 
       - name: Get Release ID
         id: get_release
