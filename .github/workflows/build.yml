@@ -41,9 +41,11 @@ jobs:
 
       - name: Download XPI from Release
         uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.XPI_NAME }}
-          path: ${{ github.workspace }}
+        # with:
+        #   name: ${{ env.XPI_NAME }}
+        #   path: ${{ github.workspace }}
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - name: Get Release ID
         id: get_release
@@ -100,37 +102,37 @@ jobs:
               make_latest: false,
             })
 
-      # - name: Upload new asset
-      #   uses: actions/github-script@v7
-      #   with:
-      #     github-token: ${{secrets.GITHUB_TOKEN}}
-      #     script: |
-      #       const fs = require('fs');
-      #       const { owner, repo } = context.repo
-      #       const releaseId = ${{ env.RELEASE_ID }}
-      #       const assetPath = '${{ github.workspace }}/addon/${{ env.XPI_NAME }}'
-      #       const assetName = 'tabmix-dev-build.xpi'
-      #       const assetContentType = 'application/x-xpinstall'
-      #       const asset = fs.readFileSync(assetPath)
-      #       const assetSize = fs.statSync(assetPath).size
-      #       await github.rest.repos.uploadReleaseAsset({
-      #         owner,
-      #         repo,
-      #         release_id: releaseId,
-      #         name: assetName,
-      #         data: asset,
-      #         headers: {
-      #           'content-length': assetSize,
-      #           'content-type': assetContentType,
-      #         },
-      #       })
+      - name: Upload new asset
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs');
+            const { owner, repo } = context.repo
+            const releaseId = ${{ env.RELEASE_ID }}
+            const assetPath = '${{ github.workspace }}/${{ env.XPI_NAME }}'
+            const assetName = 'tabmix-dev-build.xpi'
+            const assetContentType = 'application/x-xpinstall'
+            const asset = fs.readFileSync(assetPath)
+            const assetSize = fs.statSync(assetPath).size
+            await github.rest.repos.uploadReleaseAsset({
+              owner,
+              repo,
+              release_id: releaseId,
+              name: assetName,
+              data: asset,
+              headers: {
+                'content-length': assetSize,
+                'content-type': assetContentType,
+              },
+            })
 
       # - name: Rename artifacts
       #   run: mv '${{ github.workflow }}/${{ env.XPI_NAME }}.zip' '${{ github.workflow }}/${{ env.XPI_NAME }}.xpi'
 
-      - name: Upload new asset
-        uses: ncipollo/release-action@v1
-        with:
-          allowUpdates: "true"
-          tag: 'dev-build'
-          artifacts: ${{ github.workflow }}/${{ env.XPI_NAME }}
+      # - name: Upload new asset
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     allowUpdates: "true"
+      #     tag: 'dev-build'
+      #     artifacts: ${{ github.workflow }}/${{ env.XPI_NAME }}
