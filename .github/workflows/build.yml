@@ -28,7 +28,7 @@ jobs:
       - name: Get latest tag version
         id: get-version
         run: |
-          version=$(git describe --abbrev=0 --tags)
+          version=$(git describe --abbrev=0 --tags | cut -c 2-)
           echo "VERSION=$version" >> $GITHUB_ENV
 
       - name: Generate 8-digit date
@@ -41,7 +41,7 @@ jobs:
 
       - name: Replace version in install.rdf
         run: |
-          sed -i "s/1.0.0-unbundeled/${{ env.VERSION }}-${{ env.DATE }}.xpi/" addon/install.rdf
+          sed -i "s/1.0.0-unbundeled/${{ env.VERSION }}-${{ env.DATE }}/" addon/install.rdf
 
       - name: Zip addon folder
         run: zip -r ${{ env.XPI_NAME }} addon/*
@@ -51,6 +51,7 @@ jobs:
         with:
           name: ${{ env.XPI_NAME }}
           path: ${{ env.XPI_NAME }}
+          if-no-files-found: error
 
       # - name: Create Release (optional)
       #   uses: ncipollo/release-action@v3
