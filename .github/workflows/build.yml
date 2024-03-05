@@ -1,0 +1,55 @@
+name: Build Firefox Extension XPI
+
+on:
+  push:
+    branches: [ wip/build-xpi ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Download deps
+        uses: bahmutov/npm-install@v1
+        with:
+          useLockFile: false
+
+      - name: Get latest tag version
+        id: get-version
+        run: |
+          version=$(git describe --abbrev=0 --tags)
+          echo "VERSION=$version" >> $GITHUB_ENV
+
+      - name: Generate 8-digit date
+        id: get-date
+        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
+
+      - name: Replace version in install.rdf
+        run: |
+          sed -i "s/1.0.0-unbundeled/${{ env.VERSION }}/" addon/install.rdf
+
+      - name: Zip the folder
+        uses: actions/zip@v3
+        with:
+          path: addon/*
+          file_name: dev-build-${{ env.VERSION }}-${{ env.DATE }}.xpi
+
+      - name: Upload XPI to Release
+        uses: actions/upload-artifact@v3
+        with:
+          name: tabmix-dev-build
+          path: dev-build-${{ env.VERSION }}-${{ env.DATE }}.xpi
+
+      # - name: Create Release (optional)
+      #   uses: ncipollo/release-action@v3
+      #   with:
+      #     tag_name: ${{ env.VERSION }}-${{ env.DATE }}
+      #     artifacts: ${{ github.workflow }}/tabmix-dev-build/*.xpi
