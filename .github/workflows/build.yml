@@ -53,19 +53,16 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            console.log(context) // log the context object
             const { owner, repo } = context.repo
             const releaseId = ${{ env.RELEASE_ID }}
-            console.log({releaseId}) // log the releaseId
-            console.log(github.repos) // log the github.repos object
-            const assets = await github.repos.listReleaseAssets({
+            const assets = await github.rest.repos.listReleaseAssets({
               owner,
               repo,
               release_id: releaseId,
             })
             for (const asset of assets.data) {
               if (asset.name === 'tabmix-dev-build.xpi') {
-                await github.repos.deleteReleaseAsset({
+                await github.rest.repos.deleteReleaseAsset({
                   owner,
                   repo,
                   asset_id: asset.id,
@@ -75,7 +72,7 @@ jobs:
 
       - name: Move tag to latest commit
         run: |
-          git tag -fa dev-build -m "Move tag to latest commit"
+          git tag -fa dev-build
           git push origin :refs/tags/dev-build
           git push origin dev-build
 
@@ -92,7 +89,7 @@ jobs:
             const assetContentType = 'application/x-xpinstall'
             const asset = fs.readFileSync(assetPath)
             const assetSize = fs.statSync(assetPath).size
-            await github.repos.uploadReleaseAsset({
+            await github.rest.repos.uploadReleaseAsset({
               owner,
               repo,
               release_id: releaseId,
