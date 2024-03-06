@@ -51,9 +51,10 @@ jobs:
         with:
           script: |
             try {
-            import FormData from "form-data";
-            import fs from "fs";
-            import fetch from "node-fetch";
+            const fs = require('fs');
+            const FormData = require('form-data');
+
+            const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
             const formData = new FormData()
             const filePath = '${{ env.XPI_NAME }}.xpi'
