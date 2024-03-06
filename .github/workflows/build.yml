@@ -34,7 +34,9 @@ jobs:
           sed -i "s/1.0.0-unbundeled/${{ env.VERSION }}-${{ env.DATE }}/" addon/install.rdf
 
       - name: Zip addon folder
-        run: zip -rjq ${{ env.XPI_NAME }}.xpi addon/*
+        run: |
+          cd addon
+          zip -rq ../${{ env.XPI_NAME }}.xpi *
 
       - name: Upload XPI to Release
         uses: actions/upload-artifact@v4
