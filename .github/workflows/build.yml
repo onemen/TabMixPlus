@@ -57,16 +57,17 @@ jobs:
           script: |
             const { owner, repo } = context.repo
             try {
-              const releaseID = await github.rest.repos.getReleaseByTag({
+              const release = await github.rest.repos.getReleaseByTag({
                 owner,
                 repo,
                 tag: 'dev-build',
               });
+              const releaseID = release.data.id
               console.log('Update dev-build release, ID', releaseID)
               const assets = await github.rest.repos.listReleaseAssets({
                 owner,
                 repo,
-                release_id: releaseId,
+                release_id: releaseID,
               })
               for (const asset of assets.data) {
                 if (asset.name === 'tabmix-dev-build.xpi') {
@@ -81,7 +82,7 @@ jobs:
               await github.rest.repos.updateRelease({
                 owner,
                 repo,
-                release_id: releaseId,
+                release_id: releaseID,
                 tag_name: 'dev-build',
                 draft: false,
                 make_latest: 'legacy',
@@ -102,21 +103,32 @@ jobs:
               console.log('dev-build release created successfully')
             }
 
+      - name: Archive Release
+        uses: thedoctor0/zip-release@0.7.5
+        with:
+          type: 'zip'
+          filename: ${{ env.XPI_NAME }}
 
-      # - name: Zip addon folder
-      #   run: zip -r ${{ env.XPI_NAME }}.xpi addon/*
+      - name: Upload asset
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          owner: 'onemen'
+          repo: 'TabMixPlus'
+          tag: 'dev-build'
+          allowUpdates: true
+          artifacts: ${{ env.XPI_NAME }}.zip
 
-      - name: list files
-        shell: bash
-        # working-directory: ${{ github.workspace }}
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
-          gh release upload dev-build ${{ steps.upload-artifact.outputs.artifact-url }} --clobber
-        # gh release upload dev-build ${{ env.XPI_NAME }} --clobber
-        # run: |
-        #   for filename in ./* ; do
-        #     echo "working on $filename..."
-        #   done
+      # - name: list files
+      #   shell: bash
+      #   # working-directory: ${{ github.workspace }}
+      #   run: |
+      #     echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
+      #     gh release upload dev-build ${{ steps.upload-artifact.outputs.artifact-url }} --clobber
+      #   # gh release upload dev-build ${{ env.XPI_NAME }} --clobber
+      #   # run: |
+      #   #   for filename in ./* ; do
+      #   #     echo "working on $filename..."
+      #   #   done
 
       # - name: Upload new asset
       #   uses: actions/github-script@v7
