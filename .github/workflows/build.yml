@@ -34,20 +34,13 @@ jobs:
           sed -i "s/1.0.0-unbundeled/${{ env.VERSION }}-${{ env.DATE }}/" addon/install.rdf
 
       - name: Zip addon folder
-        run: zip -r ${{ env.XPI_NAME }}.xpi addon
+        run: zip -rjq ${{ env.XPI_NAME }}.xpi addon/*
 
       - name: Upload XPI to Release
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.XPI_NAME }}
           path: ${{ env.XPI_NAME }}.xpi
-
-      # - name: Upload XPI to Release
-      #   id: upload-artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: ${{ env.XPI_NAME }}
-      #     path: addon/
 
       - name: Download XPI from Release
         id: download-artifact
@@ -59,68 +52,47 @@ jobs:
         run: |
           git tag -d dev-build && git tag dev-build $(git rev-parse HEAD)
 
-      - name: Update dev-build release
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{secrets.REPO_WORKFLOW_TOKEN}}
-          script: |
-            const { owner, repo } = context.repo
-            try {
-              const release = await github.rest.repos.getReleaseByTag({
-                owner,
-                repo,
-                tag: 'dev-build',
-              });
-              const releaseID = release.data.id
-              console.log('Update dev-build release, ID', releaseID)
-              const assets = await github.rest.repos.listReleaseAssets({
-                owner,
-                repo,
-                release_id: releaseID,
-              })
-              for (const asset of assets.data) {
-                if (asset.name === 'tabmix-dev-build.xpi') {
-                  console.log('Delete existing asset', asset.name)
-                  await github.rest.repos.deleteReleaseAsset({
-                    owner,
-                    repo,
-                    asset_id: asset.id,
-                  })
-                }
-              }
-              await github.rest.repos.updateRelease({
-                owner,
-                repo,
-                release_id: releaseID,
-                tag_name: 'dev-build',
-                draft: false,
-                make_latest: 'legacy',
-              })
-              console.log('dev-build release updated successfully')
-            } catch (error) {
-              /*
-              console.log('dev-build release does not exist')
-              await github.rest.repos.createRelease({
-                owner,
-                repo,
-                tag_name: 'dev-build',
-                draft: false,
-                prerelease: true,
-                make_latest: 'legacy',
-                name: 'Development Build',
-                body: 'This release includes an XPI file that is automatically generated after each push to the main branch.'
-              });
-              console.log('dev-build release created successfully')
-              */
-            }
-
-      # - name: Archive Release
-      #   uses: thedoctor0/zip-release@0.7.5
+      # - name: Update dev-build release
+      #   uses: actions/github-script@v7
       #   with:
-      #     type: 'zip'
-      #     filename: ${{ env.XPI_NAME }}
+      #     github-token: ${{secrets.REPO_WORKFLOW_TOKEN}}
+      #     script: |
+      #       const { owner, repo } = context.repo
+      #       const release = await github.rest.repos.getReleaseByTag({
+      #         owner,
+      #         repo,
+      #         tag: 'dev-build',
+      #       });
+      #       if (release.ok) {
+      #         const releaseID = release.data.id
+      #         console.log('Update dev-build release, ID', releaseID)
+      #         const assets = await github.rest.repos.listReleaseAssets({
+      #           owner,
+      #           repo,
+      #           release_id: releaseID,
+      #         })
+      #         for (const asset of assets.data) {
+      #           if (asset.name === 'tabmix-dev-build.xpi') {
+      #             console.log('Delete existing asset', asset.name)
+      #             await github.rest.repos.deleteReleaseAsset({
+      #               owner,
+      #               repo,
+      #               asset_id: asset.id,
+      #             })
+      #           }
+      #         }
+      #         await github.rest.repos.updateRelease({
+      #           owner,
+      #           repo,
+      #           release_id: releaseID,
+      #           tag_name: 'dev-build',
+      #           draft: false,
+      #           make_latest: 'legacy',
+      #         })
+      #         console.log('dev-build release updated successfully')
+      #       }
 
-      - name: Upload asset
+      - name: Upload asset to release
         uses: ncipollo/release-action@v1.14.0
         with:
           allowUpdates: true
@@ -137,75 +109,3 @@ jobs:
           omitPrereleaseDuringUpdate: true
           replacesArtifacts: true
           artifacts: ${{ env.XPI_NAME }}.xpi
-
-      # - name: list files
-      #   shell: bash
-      #   # working-directory: ${{ github.workspace }}
-      #   run: |
-      #     echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
-      #     gh release upload dev-build ${{ steps.upload-artifact.outputs.artifact-url }} --clobber
-      #   # gh release upload dev-build ${{ env.XPI_NAME }} --clobber
-      #   # run: |
-      #   #   for filename in ./* ; do
-      #   #     echo "working on $filename..."
-      #   #   done
-
-      # - name: Upload new asset
-      #   uses: actions/github-script@v7
-      #   with:
-      #     github-token: ${{secrets.REPO_WORKFLOW_TOKEN}}
-      #     script: |
-      #       const { owner, repo } = context.repo;
-      #       const releaseId = ${{ env.RELEASE_ID }};
-      #       // Use the captured artifact URL
-      #       // const artifactUrl = '${{ steps.upload-artifact.outputs.artifact-url }}/${{ env.XPI_NAME }}.zip';
-      #       const artifactUrl = '${{ steps.upload-artifact.outputs.artifact-url }}';
-      #       const artifactDownloadPath = '${{ steps.download-artifact.outputs.download-path }}/${{ env.XPI_NAME }}.zip';
-
-      #       const runId = github.run_id;
-      #       const xpiName = process.env.XPI_NAME;
-      #       const artifactDownloadUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/artifacts/${runId}/download-artifact/${encodeURIComponent(xpiName)}.zip`;
-
-
-      #       console.log('-------------------------------------------');
-      #       console.log({artifactDownloadUrl})
-      #       console.log({artifactDownloadPath})
-
-      #       const assetName = 'tabmix-dev-build.xpi';
-
-      #       /*
-      #       const artifactResponse = await fetch("https://api.github.com/repos/onemen/TabMixPlus/actions/artifacts");
-      #       if (!artifactResponse.ok) {
-      #         throw new Error(`Can't find artifact id: ${artifactResponse.statusText}`);
-      #       }
-      #       // const data = await artifactResponse.json();
-      #       // const firstArtifactId = data.artifacts[0].id;
-      #       // const artifactUrl = `https://github.com/onemen/TabMixPlus/actions/artifacts/${firstArtifactId}`
-      #       */
-
-      #       // Download the artifact
-      #       // const response = await fetch(artifactDownloadPath);
-      #       const response = await fetch(artifactDownloadUrl);
-      #       //console.log({firstArtifactId})
-      #       console.log({artifactUrl})
-      #       // console.log(response)
-      #       console.log('-------------------------------------------')
-      #       if (!response.ok) {
-      #         throw new Error(`downloading artifact failed: ${response.statusText}`);
-      #       }
-      #       const asset = await response.arrayBuffer();
-      #       const assetSize = asset.byteLength;
-      #       const assetContentType = 'application/x-xpinstall';
-
-      #       // Upload the asset
-      #       await github.rest.repos.uploadReleaseAsset({
-      #         owner,
-      #         repo,
-      #         release_id: releaseId,
-      #         name: assetName,
-      #         data: asset,
-      #         headers: {
-      #           'content-length': assetSize,
-      #           'content-type': assetContentType,
-      #         },
-      #       });
