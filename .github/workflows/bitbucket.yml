@@ -52,47 +52,53 @@ jobs:
           npm install node-fetch form-data
 
       - name: Upload dev-build to bitbucket
-        uses: actions/github-script@v7
-        with:
-          script: |
-            try {
-            const fs = require('fs');
-            const FormData = require('form-data');
+        env:
+          BITBUCKET_ACCESS_TOKEN: ${{ secrets.BITBUCKET_ACCESS_TOKEN }}
+        run: node bitbucket.mjs
+        working-directory: utils
 
-            const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+      # - name: Upload dev-build to bitbucket
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       try {
+      #       const fs = require('fs');
+      #       const FormData = require('form-data');
 
-            const formData = new FormData()
-            const filePath = '${{ env.XPI_NAME }}.xpi'
-            console.log({filePath})
-            const readStream = fs.createReadStream(filePath)
-            console.log({readStream})
-            formData.append("files", readStream)
-            console.log({formData})
+      #       const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
-            const BITBUCKET_URL =
-              'https://api.bitbucket.org/2.0/repositories/onemen/tabmixplus-for-firefox/downloads'
-            console.log({BITBUCKET_URL})
+      #       const formData = new FormData()
+      #       const filePath = '${{ env.XPI_NAME }}.xpi'
+      #       console.log({filePath})
+      #       const readStream = fs.createReadStream(filePath)
+      #       console.log({readStream})
+      #       formData.append("files", readStream)
+      #       console.log({formData})
 
-            let boundary = '--------------------------'
-            for (var i = 0; i < 24; i++) {
-              boundary += Math.floor(Math.random() * 10).toString(16)
-            }
-            console.log({boundary})
+      #       const BITBUCKET_URL =
+      #         'https://api.bitbucket.org/2.0/repositories/onemen/tabmixplus-for-firefox/downloads'
+      #       console.log({BITBUCKET_URL})
 
-            const headers = new Headers({
-              Authorization: `Bearer ${{ secrets.BITBUCKET_ACCESS_TOKEN }}`,
-              "Content-Type": `multipart/form-data; boundary=${boundary}`,
-            })
-            console.log({headers})
+      #       let boundary = '--------------------------'
+      #       for (var i = 0; i < 24; i++) {
+      #         boundary += Math.floor(Math.random() * 10).toString(16)
+      #       }
+      #       console.log({boundary})
 
-            const response = await fetch(BITBUCKET_URL, {method: "POST", body: formData, headers})
-            console.log({response})
-            if (response.ok) {
-              console.log(`File ${basename(filePath)} was uploaded to bitbucket downloads page`)
-            } else {
-              const text = await response.text()
-              console.log("Error uploading file:", text, response.status, response.statusText)
-            }
-            } catch (error) {
-              console.log(error)
-            }
+      #       const headers = new Headers({
+      #         Authorization: `Bearer ${{ secrets.BITBUCKET_ACCESS_TOKEN }}`,
+      #         "Content-Type": `multipart/form-data; boundary=${boundary}`,
+      #       })
+      #       console.log({headers})
+
+      #       const response = await fetch(BITBUCKET_URL, {method: "POST", body: formData, headers})
+      #       console.log({response})
+      #       if (response.ok) {
+      #         console.log(`File ${basename(filePath)} was uploaded to bitbucket downloads page`)
+      #       } else {
+      #         const text = await response.text()
+      #         console.log("Error uploading file:", text, response.status, response.statusText)
+      #       }
+      #       } catch (error) {
+      #         console.log(error)
+      #       }
