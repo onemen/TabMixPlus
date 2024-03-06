@@ -4,6 +4,9 @@ on:
   push:
     branches: [ wip/build-xpi ]
 
+env:
+  XPI_NAME: tabmix-dev-build
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,37 +18,24 @@ jobs:
           fetch-depth: 0
           ref: main
 
-      - name: Get latest tag version
-        id: get-version
+      - name: set version in install.rdf
         run: |
           version=$(git tag --sort=-creatordate | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1 | cut -c 2-)
-          echo "VERSION=$version" >> $GITHUB_ENV
-
-      - name: Generate 8-digit date
-        id: get-date
-        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
-
-      - name: Set XPI file name
-        run: |
-          echo "XPI_NAME=tabmix-dev-build" >> $GITHUB_ENV
-
-      - name: Replace version in install.rdf
-        run: |
-          sed -i "s/1.0.0-unbundeled/${{ env.VERSION }}-${{ env.DATE }}/" addon/install.rdf
+          date=$(date +'%Y%m%d')
+          sed -i "s/1.0.0-unbundeled/$version-$date/" addon/install.rdf
 
       - name: Zip addon folder
         run: |
           cd addon
           zip -rq ../${{ env.XPI_NAME }}.xpi *
 
-      - name: Upload XPI to Release
+      - name: Upload XPI to artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.XPI_NAME }}
           path: ${{ env.XPI_NAME }}.xpi
 
-      - name: Download XPI from Release
-        id: download-artifact
+      - name: Download XPI from artifact
         uses: actions/download-artifact@v4
         with:
           name: ${{ env.XPI_NAME }}
@@ -53,46 +43,6 @@ jobs:
       - name: Update dev-build tag
         run: |
           git tag -d dev-build && git tag dev-build $(git rev-parse HEAD)
-
-      # - name: Update dev-build release
-      #   uses: actions/github-script@v7
-      #   with:
-      #     github-token: ${{secrets.REPO_WORKFLOW_TOKEN}}
-      #     script: |
-      #       const { owner, repo } = context.repo
-      #       const release = await github.rest.repos.getReleaseByTag({
-      #         owner,
-      #         repo,
-      #         tag: 'dev-build',
-      #       });
-      #       if (release.ok) {
-      #         const releaseID = release.data.id
-      #         console.log('Update dev-build release, ID', releaseID)
-      #         const assets = await github.rest.repos.listReleaseAssets({
-      #           owner,
-      #           repo,
-      #           release_id: releaseID,
-      #         })
-      #         for (const asset of assets.data) {
-      #           if (asset.name === 'tabmix-dev-build.xpi') {
-      #             console.log('Delete existing asset', asset.name)
-      #             await github.rest.repos.deleteReleaseAsset({
-      #               owner,
-      #               repo,
-      #               asset_id: asset.id,
-      #             })
-      #           }
-      #         }
-      #         await github.rest.repos.updateRelease({
-      #           owner,
-      #           repo,
-      #           release_id: releaseID,
-      #           tag_name: 'dev-build',
-      #           draft: false,
-      #           make_latest: 'legacy',
-      #         })
-      #         console.log('dev-build release updated successfully')
-      #       }
 
       - name: Upload asset to release
         uses: ncipollo/release-action@v1.14.0
