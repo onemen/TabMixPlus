@@ -46,60 +46,62 @@ jobs:
         with:
           name: ${{ env.XPI_NAME }}
 
-      - name: Get Release ID
-        id: get_release
+      - name: Update dev-build tag
         run: |
-          RESPONSE=$(curl --silent "https://api.github.com/repos/${{ github.repository }}/releases/tags/dev-build" \
-            -H "Authorization: Bearer ${{ secrets.REPO_WORKFLOW_TOKEN }}")
-          echo "$RESPONSE"
-          RELEASE_ID=$(echo "$RESPONSE" | jq '.id')
-          echo "RELEASE_ID=$RELEASE_ID" >> $GITHUB_ENV
+          git tag -d dev-build && git tag dev-build $(git rev-parse HEAD)
 
-      - name: Delete existing asset
+      - name: Update dev-build release
         uses: actions/github-script@v7
         with:
           github-token: ${{secrets.REPO_WORKFLOW_TOKEN}}
           script: |
             const { owner, repo } = context.repo
-            const releaseId = ${{ env.RELEASE_ID }}
-            const assets = await github.rest.repos.listReleaseAssets({
-              owner,
-              repo,
-              release_id: releaseId,
-            })
-            for (const asset of assets.data) {
-              if (asset.name === 'tabmix-dev-build.xpi') {
-                await github.rest.repos.deleteReleaseAsset({
-                  owner,
-                  repo,
-                  asset_id: asset.id,
-                })
+            try {
+              const releaseID = await github.rest.repos.getReleaseByTag({
+                owner,
+                repo,
+                tag: 'dev-build',
+              });
+              console.log('Update dev-build release, ID', releaseID)
+              const assets = await github.rest.repos.listReleaseAssets({
+                owner,
+                repo,
+                release_id: releaseId,
+              })
+              for (const asset of assets.data) {
+                if (asset.name === 'tabmix-dev-build.xpi') {
+                  console.log('Delete existing asset', asset.name)
+                  await github.rest.repos.deleteReleaseAsset({
+                    owner,
+                    repo,
+                    asset_id: asset.id,
+                  })
+                }
               }
+              await github.rest.repos.updateRelease({
+                owner,
+                repo,
+                release_id: releaseId,
+                tag_name: 'dev-build',
+                draft: false,
+                make_latest: 'legacy',
+              })
+              console.log('dev-build release updated successfully')
+            } catch (error) {
+              console.log('dev-build release does not exist')
+              await github.rest.repos.createRelease({
+                owner,
+                repo,
+                tag_name: 'dev-build',
+                draft: false,
+                prerelease: true,
+                make_latest: 'legacy',
+                name: 'Development Build',
+                body: 'This release includes an XPI file that is automatically generated after each push to the main branch.'
+              });
+              console.log('dev-build release created successfully')
             }
 
-      - name: Move tag to latest commit
-        run: |
-          git config user.email "tabmix.onemen@gmail.com"
-          git config user.name "onemen"
-          git push origin :refs/tags/dev-build
-          git tag -f dev-build
-          git push origin dev-build
-
-      - name: Update release
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{secrets.REPO_WORKFLOW_TOKEN}}
-          script: |
-            const { owner, repo } = context.repo
-            const releaseId = ${{ env.RELEASE_ID }}
-            await github.rest.repos.updateRelease({
-              owner,
-              repo,
-              release_id: releaseId,
-              tag_name: 'dev-build',
-              draft: false,
-              make_latest: false,
-            })
 
       # - name: Zip addon folder
       #   run: zip -r ${{ env.XPI_NAME }}.xpi addon/*
