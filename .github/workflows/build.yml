@@ -33,12 +33,21 @@ jobs:
         run: |
           sed -i "s/1.0.0-unbundeled/${{ env.VERSION }}-${{ env.DATE }}/" addon/install.rdf
 
+      - name: Zip addon folder
+        run: zip -r ${{ env.XPI_NAME }}.xpi addon
+
       - name: Upload XPI to Release
-        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.XPI_NAME }}
-          path: addon/
+          path: ${{ env.XPI_NAME }}.xpi
+
+      # - name: Upload XPI to Release
+      #   id: upload-artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ${{ env.XPI_NAME }}
+      #     path: addon/
 
       - name: Download XPI from Release
         id: download-artifact
@@ -89,6 +98,7 @@ jobs:
               })
               console.log('dev-build release updated successfully')
             } catch (error) {
+              /*
               console.log('dev-build release does not exist')
               await github.rest.repos.createRelease({
                 owner,
@@ -101,22 +111,32 @@ jobs:
                 body: 'This release includes an XPI file that is automatically generated after each push to the main branch.'
               });
               console.log('dev-build release created successfully')
+              */
             }
 
-      - name: Archive Release
-        uses: thedoctor0/zip-release@0.7.5
-        with:
-          type: 'zip'
-          filename: ${{ env.XPI_NAME }}
+      # - name: Archive Release
+      #   uses: thedoctor0/zip-release@0.7.5
+      #   with:
+      #     type: 'zip'
+      #     filename: ${{ env.XPI_NAME }}
 
       - name: Upload asset
         uses: ncipollo/release-action@v1.14.0
         with:
+          allowUpdates: true
           owner: 'onemen'
           repo: 'TabMixPlus'
           tag: 'dev-build'
-          allowUpdates: true
-          artifacts: ${{ env.XPI_NAME }}.zip
+          draft: false
+          prerelease: true
+          makeLatest: 'legacy'
+          name: 'Development Build'
+          body: 'This release includes an XPI file that is automatically generated after each push to the main branch.'
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
+          omitPrereleaseDuringUpdate: true
+          replacesArtifacts: true
+          artifacts: ${{ env.XPI_NAME }}.xpi
 
       # - name: list files
       #   shell: bash
