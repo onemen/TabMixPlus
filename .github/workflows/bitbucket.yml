@@ -23,7 +23,21 @@ jobs:
 
       - name: Set version in install.rdf
         run: |
-          version=$(git tag --sort=-creatordate | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1 | cut -c 2-)
+          function next_version() {
+            local version=$(git tag --sort=-creatordate | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1 | cut -c 2-)
+            if [[ $version =~ ^([0-9]+\.[0-9]+\.[0-9]+-pre\.)([0-9]+)$ ]]; then
+              local prefix=${BASH_REMATCH[1]}
+              local number=${BASH_REMATCH[2]}
+              let "number++"
+              echo "${prefix}${number}"
+            else
+              local IFS='.'
+              local -a parts=($version)
+              let "parts[-1]++"
+              echo "${parts[*]}"
+            fi
+          }
+          version=$(next_version)
           date=$(date +'%Y%m%d.%H%M')
           sed -i "s/1.0.0-unbundeled/$version-$date/" addon/install.rdf
 
