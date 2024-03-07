@@ -43,19 +43,26 @@ jobs:
       #   with:
       #     name: ${{ env.XPI_NAME }}
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      # - name: Use Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20'
 
-      - name: Install dependencies
-        run: |
-          npm install node-fetch form-data
+      # - name: Install dependencies
+      #   run: |
+      #     npm install node-fetch form-data
+
+      # - name: Upload dev-build to bitbucket
+      #   env:
+      #     BITBUCKET_ACCESS_TOKEN: ${{ secrets.BITBUCKET_ACCESS_TOKEN }}
+      #   run: node ./utils/bitbucket.mjs
 
       - name: Upload dev-build to bitbucket
-        env:
-          BITBUCKET_ACCESS_TOKEN: ${{ secrets.BITBUCKET_ACCESS_TOKEN }}
-        run: node ./utils/bitbucket.mjs
+        run: |
+          curl --request POST \
+          --url 'https://api.bitbucket.org/2.0/repositories/onemen/tabmixplus-for-firefox/downloads' \
+          --header 'Authorization: Bearer ${{ secrets.BITBUCKET_ACCESS_TOKEN }}' \
+          -F 'files=@/tmp/${{ env.XPI_NAME }}.xpi'
 
 
       # - name: Upload dev-build to bitbucket
