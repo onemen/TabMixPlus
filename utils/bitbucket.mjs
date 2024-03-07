@@ -7,7 +7,7 @@ const BITBUCKET_URL =
 
 async function bitbucketUpload() {
   const formData = new FormData();
-  const filePath = `${process.env.XPI_NAME}.xpi`;
+  const filePath = `/tmp/${process.env.XPI_NAME}.xpi`;
   const readStream = fs.createReadStream(filePath);
   formData.append("files", readStream);
 
