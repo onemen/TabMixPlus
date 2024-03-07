@@ -5,7 +5,7 @@ on:
     branches: [ wip/build-xpi ]
 
 env:
-  XPI_NAME: tabmix-dev-build
+  XPI_NAME: tab_mix_plus-dev-build
 
 jobs:
   build-and-upload:
