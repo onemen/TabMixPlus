@@ -20,44 +20,39 @@ jobs:
 
       - name: Set version in install.rdf
         run: |
-          version=$(git tag --sort=-creatordate | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1 | cut -c 2-)
+          function next_version() {
+            local version=$(git tag --sort=-creatordate | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1 | cut -c 2-)
+            if [[ $version =~ ^([0-9]+\.[0-9]+\.[0-9]+-pre\.)([0-9]+)$ ]]; then
+              local prefix=${BASH_REMATCH[1]}
+              local number=${BASH_REMATCH[2]}
+              let "number++"
+              echo "${prefix}${number}"
+            else
+              local IFS='.'
+              local -a parts=($version)
+              let "parts[-1]++"
+              echo "${parts[*]}"
+            fi
+          }
+          version=$(next_version)
           date=$(date +'%Y%m%d.%H%M')
           sed -i "s/1.0.0-unbundeled/$version-$date/" addon/install.rdf
+          echo "next version: $version-$date"
 
       - name: Zip addon folder
         run: |
           cd addon
-          zip -rq ../${{ env.XPI_NAME }}.xpi *
-
-      - name: Upload XPI to artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.XPI_NAME }}
-          path: ${{ env.XPI_NAME }}.xpi
-
-      - name: Download XPI from artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.XPI_NAME }}
+          zip -rq /tmp/${{ env.XPI_NAME }}.xpi *
 
       - name: Update dev-build tag
         run: |
-          git tag -d dev-build && git tag dev-build $(git rev-parse HEAD)
+          if [ $(git rev-parse dev-build) != $(git rev-parse HEAD) ]; then
+            git tag -d dev-build && git tag dev-build $(git rev-parse HEAD)
+          fi
 
-      - name: Upload asset to release
-        uses: ncipollo/release-action@v1.14.0
-        with:
-          allowUpdates: true
-          owner: 'onemen'
-          repo: 'TabMixPlus'
-          tag: 'dev-build'
-          draft: false
-          prerelease: true
-          makeLatest: 'legacy'
-          name: 'Development Build'
-          body: 'This release includes an XPI file that is automatically generated after each push to the main branch.'
-          omitBodyDuringUpdate: true
-          omitNameDuringUpdate: true
-          omitPrereleaseDuringUpdate: true
-          replacesArtifacts: true
-          artifacts: ${{ env.XPI_NAME }}.xpi
+      - name: Upload release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release edit dev-build --draft=false
+          gh release upload dev-build /tmp/${{ env.XPI_NAME }}.xpi --clobber
