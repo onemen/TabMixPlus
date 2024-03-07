@@ -106,22 +106,6 @@ module.exports = {
         "prefer-const": "error",
       },
     },
-    {
-      files: ["utils/*.js", "utils/*.cjs", "utils/*.mjs"],
-      env: {
-        node: true,
-        browser: false,
-      },
-      parserOptions: {
-        ecmaVersion: 2023,
-        sourceType: "module",
-      },
-      rules: {
-        "no-var": "error",
-        "prefer-const": "error",
-        strict: "off"
-      },
-    },
   ],
 
   parserOptions: {
