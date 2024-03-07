@@ -53,10 +53,16 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          notes="This release includes an XPI file that is automatically generated after each push to the main branch."
           if ! gh release view dev-build > /dev/null 2>&1; then
-            gh release create dev-build --title "Development Build" --notes "This release includes an XPI file that is automatically generated after each push to the main branch." --draft --prerelease
+            gh release create dev-build --title "Development Build" --prerelease
           fi
-          gh release edit dev-build --draft=false
+          version_tag=$(git tag --sort=-creatordate | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+          if [ $(git rev-parse $version_tag) != $(git rev-parse HEAD) ]; then
+            changes_url="https://github.com/onemen/TabMixPlus/compare/$version_tag...HEAD"
+            notes="$notes<br /><br />Changes since [$version_tag]($changes_url)"
+          fi
+          gh release edit dev-build --draft=false --notes="$notes"
           gh release upload dev-build /tmp/${{ env.XPI_NAME }}.xpi --clobber
 
       - name: Upload to Bitbucket
