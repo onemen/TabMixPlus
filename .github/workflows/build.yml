@@ -54,5 +54,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          if ! gh release view dev-build > /dev/null 2>&1; then
+            gh release create dev-build --title "Development Build" --notes "This release includes an XPI file that is automatically generated after each push to the main branch." --draft --prerelease
+          fi
           gh release edit dev-build --draft=false
           gh release upload dev-build /tmp/${{ env.XPI_NAME }}.xpi --clobber
