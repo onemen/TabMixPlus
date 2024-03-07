@@ -8,9 +8,8 @@ env:
   XPI_NAME: tabmix-dev-build
 
 jobs:
-  build:
+  build-and-upload:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -50,7 +49,7 @@ jobs:
             git tag -d dev-build && git tag dev-build $(git rev-parse HEAD)
           fi
 
-      - name: Upload release asset
+      - name: Upload release asset to GitHub
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -59,3 +58,10 @@ jobs:
           fi
           gh release edit dev-build --draft=false
           gh release upload dev-build /tmp/${{ env.XPI_NAME }}.xpi --clobber
+
+      - name: Upload to Bitbucket
+        run: |
+          curl --request POST \
+          --url 'https://api.bitbucket.org/2.0/repositories/onemen/tabmixplus-for-firefox/downloads' \
+          --header 'Authorization: Bearer ${{ secrets.BITBUCKET_ACCESS_TOKEN }}' \
+          -F 'files=@/tmp/${{ env.XPI_NAME }}.xpi'
