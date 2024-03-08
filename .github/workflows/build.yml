@@ -93,6 +93,28 @@ jobs:
           # changelog="${{ steps.changelog.outputs.changes }}"
           # notes="$notes<br /><br />Changes since [$version_tag]($changes_url)<br />$changelog"
 
+      - name: Modify CHANGELOG.md
+        run: |
+          content=$(cat CHANGELOG.md)
+          content=$(echo "$content" | sed '1,5d')  # Remove first 5 lines
+          content="This release includes an XPI file that is automatically generated after each push to the main branch.\n$content"  # Add custom line at the top
+          content=$(echo "$content" | python -c '
+          import re
+          import sys
+
+          def process_line(line):
+              line = line.replace("__", "\\__")
+              line = line.replace("followup", "follow up")
+              line = re.sub(r"(\n\*\s*)(\w)", lambda m: m.group(1) + m.group(2).upper(), line)
+              line = re.sub(r"(Bug|bug)\s(\d{5,7})", r"\g<0>", line)
+              return line
+
+          for line in sys.stdin:
+              sys.stdout.write(process_line(line))
+          ')
+              echo "$content" > CHANGELOG.md
+
+
       - name: Upload release asset to GitHub
         env:
           GH_TOKEN: ${{ github.token }}
