@@ -241,7 +241,11 @@ TabmixClickEventHandler = {
         }
       }
     }, true);
-    Services.els.addSystemEventListener(global, "click", this, true);
+    if (ContentSvc.version(1250)) {
+      global.addEventListener("click", this, {capture: true, mozSystemGroup: true});
+    } else {
+      Services.els.addSystemEventListener(global, "click", this, true);
+    }
   },
 
   handleEvent(event) {
@@ -519,7 +523,14 @@ TabmixClickEventHandler = {
 
 var ContextMenuHandler = {
   init(global) {
-    Services.els.addSystemEventListener(global, "contextmenu", this.prepareContextMenu, true);
+    if (ContentSvc.version(1250)) {
+      global.addEventListener("contextmenu", this.prepareContextMenu, {
+        capture: true,
+        mozSystemGroup: true,
+      });
+    } else {
+      Services.els.addSystemEventListener(global, "contextmenu", this.prepareContextMenu, true);
+    }
   },
 
   prepareContextMenu(event) {
