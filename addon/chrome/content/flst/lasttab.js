@@ -144,12 +144,12 @@ var TMP_LastTab = {
     if (this.respondToMouseInTabList) {
       if (this.KeyboardNavigating) {
         if (event.target.value != this.inverseIndex(this.TabIndex))
-          this.tabs[this.TabIndex].mCorrespondingMenuitem.setAttribute("_moz-menuactive", "false");
+          this.tabs[this.TabIndex].mCorrespondingMenuitem.removeAttribute("_moz-menuactive");
         this.KeyboardNavigating = false;
       }
       this.TabIndex = this.inverseIndex(event.target.value);
     } else if (event.target.value != this.inverseIndex(this.TabIndex)) {
-      event.target.setAttribute("_moz-menuactive", "false");
+      event.target.removeAttribute("_moz-menuactive");
     }
   },
 
@@ -220,7 +220,7 @@ var TMP_LastTab = {
       if (this.TabListLock) {
         let tab = this.tabs[this.TabIndex];
         if (tab)
-          tab.mCorrespondingMenuitem.setAttribute("_moz-menuactive", "false");
+          tab.mCorrespondingMenuitem.removeAttribute("_moz-menuactive");
       }
 
       if (this.handleCtrlTab && event.shiftKey || !this.handleCtrlTab && !event.shiftKey) {
