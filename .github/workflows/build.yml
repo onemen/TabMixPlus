@@ -2,7 +2,7 @@ name: dev-build
 
 on:
   push:
-    branches: [ wip/build-xpi ]
+    branches: [ main ]
 
 env:
   XPI_NAME: tab_mix_plus-dev-build
