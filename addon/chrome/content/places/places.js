@@ -375,7 +375,14 @@ var TMP_Places = {
   restoreTabs(tabs, tabsData, restoreOnDemand) {
     this.restoringTabs.push(...tabs);
     this.bookmarksOnDemand = restoreOnDemand;
+
+    tabs.forEach(tab => {
+      if (tab.linkedBrowser.__SS_restoreState) {
+        TabmixSvc.SessionStore._resetTabRestoringState(tab);
+      }
+    });
     TabmixSvc.SessionStore.restoreTabs(window, tabs, tabsData, 0);
+
     // set icon on pending tabs that are not about: pages
     const pendingData = tabs.map(tab => ({tab, url: tabsData.shift().entries[0].url}))
         .filter(({tab, url}) => tab.hasAttribute("pending") && !url.startsWith("about"));

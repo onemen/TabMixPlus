@@ -16,7 +16,6 @@ if (TabmixSvc.version(1030)) {
     PlacesUtils: "resource://gre/modules/PlacesUtils.jsm",
     // eslint-disable-next-line tabmix/valid-lazy
     PluralForm: "resource://gre/modules/PluralForm.jsm",
-    // eslint-disable-next-line tabmix/valid-lazy
     PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
   });
 } else {
@@ -124,7 +123,9 @@ PlacesUtilsInternal = {
 
   functions: ["openTabset", "openNodeWithEvent", "_openNodeIn"],
   initPlacesUIUtils: function TMP_PC_initPlacesUIUtils(aWindow) {
+    let originalOpenTabset;
     try {
+      originalOpenTabset = aWindow._tabmix_PlacesUIUtils_openTabset;
       lazy.PlacesUIUtils.openTabset.toString();
     } catch (ex) {
       if (aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser") {
@@ -141,6 +142,17 @@ PlacesUtilsInternal = {
     let code;
 
     function updateOpenTabset(name, treeStyleTab) {
+      const isWaterfoxOverridePlacesUIUtils =
+        TabmixSvc.isWaterfox &&
+        Services.vc.compare(Services.appinfo.version, "115.9.0") >= 0 &&
+        !lazy.PrivateBrowsingUtils.isWindowPrivate(aWindow);
+      if (isWaterfoxOverridePlacesUIUtils) {
+        if (!originalOpenTabset) {
+          // can not find original PlacesUIUtils.openTabset that Waterfox override
+          return;
+        }
+        lazy.PlacesUIUtils[name] = originalOpenTabset;
+      }
       let openGroup = "    browserWindow.TMP_Places.openGroup(urls, where$1);";
       code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils." + name)._replace(
         'urls = []',
@@ -156,6 +168,10 @@ PlacesUtilsInternal = {
         openGroup.replace("$1", treeStyleTab ? ", behavior" : "")
       );
       lazy.PlacesUIUtils[name] = makeCode(code);
+      if (isWaterfoxOverridePlacesUIUtils) {
+        const {PrivateTab} = ChromeUtils.importESModule("resource:///modules/PrivateTab.sys.mjs");
+        PrivateTab.overridePlacesUIUtils();
+      }
     }
     var treeStyleTabInstalled = "TreeStyleTabBookmarksService" in aWindow;
     if (treeStyleTabInstalled &&

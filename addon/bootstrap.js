@@ -142,6 +142,14 @@ async function startup(data, reason) {
     return;
   }
 
+  const {name, version} = Services.appinfo;
+  let _tabmix_PlacesUIUtils_openTabset;
+  if (name === 'Waterfox' && Services.vc.compare(version, '115.9.0') >= 0) {
+    const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+    const {PlacesUIUtils} = TabmixChromeUtils.import("resource:///modules/PlacesUIUtils.jsm");
+    _tabmix_PlacesUIUtils_openTabset = PlacesUIUtils.openTabset;
+  }
+
   if (reason === ADDON_INSTALL || reason === ADDON_ENABLE && !window.Tabmix) {
     const enumerator = Services.wm.getEnumerator(null);
     while (enumerator.hasMoreElements()) {
@@ -169,6 +177,7 @@ async function startup(data, reason) {
       if (document.createXULElement) {
         const promiseOverlayLoaded = Overlays.load(chromeManifest, document.defaultView);
         if (document.documentElement.getAttribute("windowtype") === "navigator:browser") {
+          document.defaultView._tabmix_PlacesUIUtils_openTabset = _tabmix_PlacesUIUtils_openTabset;
           ScriptsLoader.initForWindow(document.defaultView, promiseOverlayLoaded);
         }
       }
