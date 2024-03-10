@@ -2,7 +2,7 @@ name: dev-build
 
 on:
   push:
-    branches: [ wip/build-xpi ]
+    branches: [ main ]
 
 env:
   XPI_NAME: tab_mix_plus-dev-build
@@ -53,7 +53,9 @@ jobs:
       - name: Update dev-build tag
         run: |
           if [ $(git rev-parse dev-build) != $(git rev-parse HEAD) ]; then
-            git tag -d dev-build && git tag dev-build $(git rev-parse HEAD)
+            git tag -d dev-build || true
+            git tag dev-build HEAD
+            git push origin -f dev-build
           fi
 
       - name: Create CHANGELOG
