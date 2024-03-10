@@ -6,7 +6,6 @@ on:
 
 env:
   XPI_NAME: tab_mix_plus-dev-build
-  CHANGELOG_EXIST: false
   PREVIOUS_TAG: ''
   NOTES: 'This release includes an XPI file that is automatically generated after each push to the main branch.'
 
@@ -21,11 +20,12 @@ jobs:
           ref: main
 
       - name: Set version in install.rdf
+        id: set_version
         run: |
           previous_tag=$(git tag --sort=-creatordate | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
           echo "PREVIOUS_TAG=$previous_tag" >> $GITHUB_ENV
           changelog_exist=$( [[ $(git rev-parse $previous_tag) != $(git rev-parse HEAD) ]] && echo true || echo false )
-          echo "CHANGELOG_EXIST=$changelog_exist" >> $GITHUB_ENV
+          echo "CHANGELOG_EXIST=$changelog_exist" >> $GITHUB_OUTPUT
           function next_version() {
             local version=$(echo $previous_tag | cut -c 2-)
             if [[ $version =~ ^([0-9]+\.[0-9]+\.[0-9]+-pre\.)([0-9]+)$ ]]; then
@@ -59,7 +59,7 @@ jobs:
           fi
 
       - name: Create CHANGELOG
-        if: ${{ env.CHANGELOG_EXIST }}
+        if: ${{ steps.set_version.outputs.CHANGELOG_EXIST == 'true' }}
         uses: requarks/changelog-action@v1.10.1
         with:
           token: ${{ github.token }}
@@ -68,7 +68,7 @@ jobs:
           excludeTypes: ''
 
       - name: Modify CHANGELOG
-        if: ${{ env.CHANGELOG_EXIST }}
+        if: ${{ steps.set_version.outputs.CHANGELOG_EXIST == 'true' }}
         run: |
           node -e '
             let content = fs.readFileSync("CHANGELOG.md", "utf8");
@@ -90,7 +90,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if [ ${{ env.CHANGELOG_EXIST }} ]; then
+          if [ ${{ steps.set_version.outputs.CHANGELOG_EXIST == 'true' }} ]; then
             gh release edit dev-build --draft=false --notes-file=CHANGELOG.md
           else
             url=https://github.com/onemen/TabMixPlus/releases/tag/${{ env.PREVIOUS_TAG }}

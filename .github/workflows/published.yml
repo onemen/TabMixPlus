@@ -12,6 +12,7 @@ jobs:
         env:
           github-token: ${{ secrets.TABMIXPLUS_DOCS_TOKEN }}
         run: |
-          if (/^v[0-9]/.test(github.context.payload.release.tag_name)) {
-            gh workflow run --repo onemen/tabmixplus-docs --ref main deploy.yml
-          }
+          tag_name=${{ github.event.release.tag_name }}
+          if [[ $tag_name =~ ^v[0-9] ]]; then
+            gh workflow run --repo onemen/tabmixplus-docs --ref main deploy.yml --github-token $github-token
+          fi
