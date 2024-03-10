@@ -1,16 +1,25 @@
 {
-  arrowParens: "avoid",
-  bracketSpacing: false,
-  endOfLine: "lf",
-  htmlWhitespaceSensitivity: "css",
-  insertPragma: false,
-  printWidth: 100,
-  proseWrap: "always",
-  quoteProps: "as-needed",
-  requirePragma: false,
-  semi: true,
-  singleQuote: false,
-  tabWidth: 2,
-  trailingComma: "es5",
-  useTabs: false,
+  "arrowParens": "avoid",
+  "bracketSpacing": false,
+  "endOfLine": "lf",
+  "htmlWhitespaceSensitivity": "css",
+  "insertPragma": false,
+  "printWidth": 100,
+  "proseWrap": "always",
+  "quoteProps": "as-needed",
+  "requirePragma": false,
+  "semi": true,
+  "singleQuote": false,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "useTabs": false,
+  "overrides": [
+    {
+      "files": "*.yaml",
+      "options": {
+        "semi": false,
+        "singleQuote": true
+      }
+    }
+  ]
 }

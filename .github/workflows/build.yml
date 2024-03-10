@@ -1,0 +1,107 @@
+name: dev-build
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  XPI_NAME: tab_mix_plus-dev-build
+  CHANGELOG_EXIST: false
+  PREVIOUS_TAG: ''
+  NOTES: 'This release includes an XPI file that is automatically generated after each push to the main branch.'
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Set version in install.rdf
+        run: |
+          previous_tag=$(git tag --sort=-creatordate | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+          echo "PREVIOUS_TAG=$previous_tag" >> $GITHUB_ENV
+          changelog_exist=$( [[ $(git rev-parse $previous_tag) != $(git rev-parse HEAD) ]] && echo true || echo false )
+          echo "CHANGELOG_EXIST=$changelog_exist" >> $GITHUB_ENV
+          function next_version() {
+            local version=$(echo $previous_tag | cut -c 2-)
+            if [[ $version =~ ^([0-9]+\.[0-9]+\.[0-9]+-pre\.)([0-9]+)$ ]]; then
+              local prefix=${BASH_REMATCH[1]}
+              local number=${BASH_REMATCH[2]}
+              let "number++"
+              echo "${prefix}${number}"
+            else
+              local IFS='.'
+              local -a parts=($version)
+              let "parts[-1]++"
+              echo "${parts[*]}"
+            fi
+          }
+          version=$(next_version)
+          date=$(date +'%Y%m%d.%H%M')
+          sed -i 's/1.0.0-unbundeled/'"$version"-"$date"'/; s/updates.json/updates-dev-build.json/' addon/install.rdf
+          echo "next version: $version-$date"
+
+      - name: Zip addon folder
+        run: |
+          cd addon
+          zip -rq /tmp/${{ env.XPI_NAME }}.xpi *
+
+      - name: Update dev-build tag
+        run: |
+          if [ $(git rev-parse dev-build) != $(git rev-parse HEAD) ]; then
+            git tag -d dev-build || true
+            git tag dev-build HEAD
+            git push origin -f dev-build
+          fi
+
+      - name: Create CHANGELOG
+        if: ${{ env.CHANGELOG_EXIST }}
+        uses: requarks/changelog-action@v1.10.1
+        with:
+          token: ${{ github.token }}
+          fromTag: 'dev-build'
+          toTag: ${{ env.PREVIOUS_TAG }}
+          excludeTypes: ''
+
+      - name: Modify CHANGELOG
+        if: ${{ env.CHANGELOG_EXIST }}
+        run: |
+          node -e '
+            let content = fs.readFileSync("CHANGELOG.md", "utf8");
+            let newContent = content.replace("### :wrench: Chores", "### :wrench: Maintenance").split("\n").slice(5);
+            newContent.unshift("${{ env.NOTES }}");
+            newContent = newContent.map(line => {
+              return line
+                .replace(" *(commit by [@onemen](https://github.com/onemen))*", "")
+                .replace(/-\s*(\[.{9}\][^)]*\))\s-\s(.*)/g, "- $2 ($1)")
+                .replace(/__/g, "\\_\\_")
+                .replace(/followup/gi, "follow up")
+                .replace(/(-\s*)(\w)/g, (_, p1, p2) => p1 + p2.toUpperCase())
+                .replace(/(Bug|bug)\s(\d{5,7})/g, "[$&](https://bugzilla.mozilla.org/show_bug.cgi?id=$2)");
+            });
+            fs.writeFileSync("CHANGELOG.md", newContent.join("\n"));
+          '
+
+      - name: Upload release asset to GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ ${{ env.CHANGELOG_EXIST }} ]; then
+            gh release edit dev-build --draft=false --notes-file=CHANGELOG.md
+          else
+            url=https://github.com/onemen/TabMixPlus/releases/tag/${{ env.PREVIOUS_TAG }}
+            notes="${{ env.NOTES }}<br /><br />No changes since [${{ env.PREVIOUS_TAG }}]($url)"
+            gh release edit dev-build --draft=false --notes="$notes"
+          fi
+          gh release upload dev-build /tmp/${{ env.XPI_NAME }}.xpi --clobber
+
+      - name: Upload to Bitbucket
+        run: |
+          curl --request POST \
+          --url 'https://api.bitbucket.org/2.0/repositories/onemen/tabmixplus-for-firefox/downloads' \
+          --header 'Authorization: Bearer ${{ secrets.BITBUCKET_ACCESS_TOKEN }}' \
+          -F 'files=@/tmp/${{ env.XPI_NAME }}.xpi'
