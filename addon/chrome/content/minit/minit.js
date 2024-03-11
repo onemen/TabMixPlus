@@ -1,3 +1,4 @@
+/* globals lazy */
 /* exported TMP_undocloseTabButtonObserver, TMP_TabView */
 "use strict";
 
@@ -1166,19 +1167,19 @@ Tabmix.navToolbox = {
     if (Tabmix.isVersion(1070)) {
       // Bug 1793414 (Firefox 107) - MozSearchbar calls into BrowserSearch where it doesn't need to
       // add references to lazy.FormHistory and lazy.SearchSuggestionController
-      TabmixChromeUtils.defineLazyModuleGetters(window.lazy, {
-
+      TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+        // eslint-disable-next-line tabmix/valid-lazy
         FormHistory: "resource://gre/modules/FormHistory.jsm",
-
+        // eslint-disable-next-line tabmix/valid-lazy
         SearchSuggestionController: "resource://gre/modules/SearchSuggestionController.jsm",
       });
     }
 
     if (Tabmix.isVersion(1210) && !Tabmix.isVersion(1220)) {
       // Bug 1866616 add useage for UrlbarPrefs.sys.mjs only in Firefox 121
-      ChromeUtils.defineESModuleGetters(window.lazy, {
+      ChromeUtils.defineESModuleGetters(lazy, {
+        // eslint-disable-next-line tabmix/valid-lazy
         UrlbarPrefs: "resource:///modules/UrlbarPrefs.sys.mjs",
-        //
       });
     }
 

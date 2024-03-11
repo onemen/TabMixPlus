@@ -68,7 +68,12 @@ var TabmixChromeUtils = {
         }
       }
       if (Object.keys(esModules).length) {
-        ChromeUtils.defineESModuleGetters(lazy, esModules);
+        try {
+          ChromeUtils.defineESModuleGetters(lazy, esModules);
+        } catch (error) {
+          console.log('Error when Tabmix call ChromeUtils.defineESModuleGetters with', esModules);
+          console.log(error);
+        }
       }
       if (Object.keys(JSMModules).length) {
         this.XPCOMUtils.defineLazyModuleGetters(lazy, JSMModules);
