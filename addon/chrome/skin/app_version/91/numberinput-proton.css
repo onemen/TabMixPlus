@@ -65,6 +65,8 @@ input[type="number"]::-moz-number-spin-box {
   border-start-end-radius: 4px;
   border-end-end-radius: 4px;
   margin-inline-start: 2px !important;
+  /* revert bug 1790700 - Show <input type='number'> spin buttons only on hover/focus */
+  opacity: 1;
 }
 
 input[type="number"]::-moz-number-spin-up,
