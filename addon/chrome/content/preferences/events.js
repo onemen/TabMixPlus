@@ -21,10 +21,6 @@ var gEventsPane = {
       gPrefWindow.removeItemAndPrefById("pref_ctrltab.tabPreviews");
     }
 
-    let newTabUrl = $("pref_newTabUrl");
-    newTabUrl.name = TabmixSvc.newtabUrl;
-    newTabUrl.value = newTabUrl.valueFromPreferences;
-
     this.newTabUrl($("pref_loadOnNewTab"), false, false);
     this.disableReplaceLastTabWith();
     this.disableShowTabList();
