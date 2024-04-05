@@ -419,7 +419,7 @@ function doReloadTab(window, browser, data) {
     loadFlags |= Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY;
   }
 
-  // This part is based on BrowserReloadWithFlags.
+  // This part is based on BrowserCommands.reloadWithFlags.
   let url = browser.currentURI;
   let urlSpec = url.spec;
   let {postData, referrerInfo} = data;

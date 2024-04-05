@@ -152,7 +152,7 @@ var TMP_extensionsCompatibility = {
           'f.gBrowser.selectedTab = newTab', newCode
         ).toCode();
       }
-      window.BrowserOpenTab = TMP_BrowserOpenTab;
+      Tabmix.set_BrowserOpenTab();
       foxTab.defaultBrowserOpenTab = TMP_BrowserOpenTab;
     }
 
@@ -353,7 +353,7 @@ var TMP_extensionsCompatibility = {
 
     // override the aioCloseWindow function
     if (typeof aioCloseWindow == 'function')
-      window.aioCloseWindow = BrowserTryToCloseWindow;
+      window.aioCloseWindow = Tabmix.isVersion(1260) ? window.BrowserCommands.tryToCloseWindow : BrowserTryToCloseWindow;
   },
 
   onDelayedStartup: function TMP_EC_onDelayedStartup() {
@@ -377,7 +377,7 @@ var TMP_extensionsCompatibility = {
         'SpeedDial.originalBrowserOpenTab(event);',
         'SpeedDial.originalBrowserOpenTab(event, arguments.length > 1 && arguments[1]);'
       ).toCode();
-      window.BrowserOpenTab = TMP_BrowserOpenTab;
+      Tabmix.set_BrowserOpenTab();
     }
 
     // Classic Theme Restorer

@@ -605,8 +605,12 @@ Tabmix.tablib = {
         return Tabmix.originalFunctions.duplicateTabIn.apply(this, arguments);
       }
 
-      let pref = Tabmix.callerTrace("gotoHistoryIndex", "BrowserForward", "BrowserBack") ?
-        "browser.tabs.insertAfterCurrent" : "extensions.tabmix.openDuplicateNext";
+      let names = Tabmix.isVersion(1260) ?
+        ["gotoHistoryIndex", "forward", "back"] :
+        ["gotoHistoryIndex", "forward", "back"];
+      let pref = Tabmix.callerTrace(...names) ?
+        "browser.tabs.insertAfterCurrent" :
+        "extensions.tabmix.openDuplicateNext";
       let openTabNext = Services.prefs.getBoolPref(pref);
       TMP_extensionsCompatibility.treeStyleTab.openNewTabNext(aTab, openTabNext, true);
 
@@ -626,7 +630,9 @@ Tabmix.tablib = {
       return result;
     };
 
-    Tabmix.changeCode(window, "BrowserCloseTabOrWindow")._replace(
+    let fnObj = Tabmix.isVersion(1260) ? window.BrowserCommands : window;
+    let fnName = Tabmix.isVersion(1260) ? "closeTabOrWindow" : "BrowserCloseTabOrWindow";
+    Tabmix.changeCode(fnObj, fnName)._replace(
       'closeWindow(true);', // Mac
       'Tabmix.tablib.closeLastTab();', {check: TabmixSvc.isMac, flags: "g"}
     )._replace(
@@ -641,7 +647,7 @@ Tabmix.tablib = {
      * we don't check isUrlForDownload for external links,
      * it is not likely that link in other application opened Firefox for downloading data
      */
-    let fnObj = nsBrowserAccess.prototype;
+    fnObj = nsBrowserAccess.prototype;
     // TreeStyleTab 0.16.2015111001 wrap openURI in nsBrowserAccess.prototype.__treestyletab__openURI
     let TSTopenURI = Tabmix.extensions.treeStyleTab &&
         typeof fnObj.__treestyletab__openURI == "function" ? "__treestyletab__openURI" : "";
@@ -651,7 +657,7 @@ Tabmix.tablib = {
       'let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser._selectedTab); \
        $&'
     )._replace(
-      'win.BrowserOpenTab()',
+      Tabmix.isVersion(1260) ? 'win.BrowserCommands.openTab()' : 'win.BrowserOpenTab()',
       'if (currentIsBlank) Tabmix.tablib.setURLBarFocus(); \
       else $&'
     )._replace(
@@ -683,7 +689,7 @@ Tabmix.tablib = {
       '    }'
     ).toCode();
 
-    let fnName = "nsBrowserAccess.prototype." + (TSTopenURI || "getContentWindowOrOpenURI");
+    fnName = "nsBrowserAccess.prototype." + (TSTopenURI || "getContentWindowOrOpenURI");
     Tabmix.changeCode(fnObj, fnName)._replace(
       'switch (aWhere) {',
       '  if (Tabmix.singleWindowMode &&' +

@@ -205,7 +205,7 @@
     };
 
     this.setHoverState = function(aEvent, aOver) {
-      if (aEvent.target.classList.contains("tab-close-button")) {
+      if (aEvent.target?.classList.contains("tab-close-button")) {
         this.mOverCloseButton = aOver;
       }
       this.mIsHover = aOver;

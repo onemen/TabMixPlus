@@ -16,7 +16,7 @@ Tabmix.startup = function TMP_startup() {
       let win = BrowserWindowTracker.getTopWindow({private: aPrivate});
       if (win) {
         win.focus();
-        win.BrowserOpenTab();
+        win.Tabmix.BrowserOpenTab();
         return false;
       }
     }

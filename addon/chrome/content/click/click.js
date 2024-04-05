@@ -180,7 +180,7 @@ var TabmixTabClickOptions = {
       case 0:
         break;
       case 1:
-        BrowserOpenTab();
+        Tabmix.BrowserOpenTab();
         break;
       case 2:
         if (aTab?.parentNode) {
@@ -406,7 +406,7 @@ var TabmixContext = {
       tabContextMenu.addEventListener("popupshowing", () => {
         openTab.setAttribute("_newtab", openTab.getAttribute("label"));
         if (Tabmix.isVersion(1150)) {
-          openTab.setAttribute("oncommand", "BrowserOpenTab({ event });");
+          openTab.setAttribute("oncommand", "Tabmix.BrowserOpenTab({ event });");
         }
       }, {once: true});
     } else {
@@ -1021,7 +1021,11 @@ var TabmixAllTabs = {
         aButton.setAttribute("afterctrlclick", true);
       } else if (aButton.id == "tabmix-alltabs-button" ||
           aButton.parentNode && aButton.parentNode.id == "allTabsMenu-allTabsView") {
-        BrowserCloseTabOrWindow();
+        if (Tabmix.isVersion(1260)) {
+          window.BrowserCommands.closeTabOrWindow();
+        } else {
+          BrowserCloseTabOrWindow();
+        }
         aButton.setAttribute("afterctrlclick", true);
       }
     }
