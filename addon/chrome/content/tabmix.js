@@ -67,8 +67,6 @@ Tabmix.sessionInitialized = function() {
     Tabmix.setTabStyle(tab);
   }
 
-  TMP_SessionStore.persistTabAttribute();
-
   TMP_ClosedTabs.setButtonDisableState();
   if (this.isFirstWindowInSession) {
     Tabmix.closedObjectsUtils.toggleRecentlyClosedWindowsButton();
@@ -601,7 +599,6 @@ var TMP_eventListener = {
   },
 
   async onSSWindowRestored() {
-    TMP_SessionStore.persistTabAttribute();
     // make sure we are fully initialized
     await Tabmix._deferredInitialized.promise;
     gBrowser.tabs.forEach(tab => {

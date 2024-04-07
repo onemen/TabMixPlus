@@ -307,11 +307,19 @@ Tabmix.checkCurrent = function TMP_checkCurrent(url) {
 };
 
 Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
+  const attributes = ["protected", "_locked", "fixed-label", "label-uri", "reload-data"];
+  attributes.forEach(att => {
+    const value = TabmixSvc.ss.getCustomTabValue(aTab, att);
+    this.setItem(aTab, att, value || null);
+  });
+
   if (aTab.hasAttribute("_locked")) {
     if (aTab.getAttribute("_locked") == "true")
       aTab.setAttribute("locked", "true");
     else
       aTab.removeAttribute("locked");
+
+    aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
   }
 
   let pending = aTab.hasAttribute("pending");
@@ -347,7 +355,7 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
     aTab.removeAttribute("visited");
   }
   Tabmix.setTabStyle(aTab, boldChanged);
-  if (boldChanged.value) {
+  if (aTab.hasAttribute("protected") || boldChanged.value) {
     TabmixTabbar.updateScrollStatus();
     TabmixTabbar.updateBeforeAndAfter();
   }

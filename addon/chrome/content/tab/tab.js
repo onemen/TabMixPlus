@@ -469,8 +469,10 @@ Tabmix.tabsUtils = {
     Tabmix.setTabStyle(tab);
     TabmixTabbar.lockallTabs = Tabmix.prefs.getBoolPref("lockallTabs");
     if (TabmixTabbar.lockallTabs) {
-      tab.setAttribute("locked", true);
-      tab.tabmix_allowLoad = false;
+      gBrowser.tabs.forEach(_tab => {
+        _tab.setAttribute("locked", true);
+        _tab.tabmix_allowLoad = false;
+      });
     }
     if ("linkedBrowser" in tab)
       Tabmix.tablib.setLoadURI(tab.linkedBrowser);
@@ -1236,6 +1238,7 @@ gTMPprefObserver = {
             } else {
               tab.removeAttribute("_locked");
             }
+            TabmixSvc.setCustomTabValue(tab, "_locked", tab.getAttribute("_locked"));
             tab.linkedBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
           }
         }

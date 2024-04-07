@@ -86,40 +86,6 @@ var TMP_SessionStore = {
   },
 
   /**
-   * @brief       - Add attribute to nsSessionStore persistTabAttribute.
-   *
-   *   we call this after nsSessionStore.init
-   *   we add this also when we use TMP session manager.
-   *   we use Firefox SessionStore closed tab service and for restore after restart
-   *
-   * @returns        Nothing.
-   */
-  persistTabAttribute: function TMP_ss_persistTabAttribute() {
-    if (TabmixSvc.sm.persistTabAttributeSet)
-      return;
-
-    try {
-      /*
-         * XUL Tab attributes to (re)store
-         * Restored in nsSessionStore restoreHistory()
-         */
-      var _xulAttributes = ["protected", "_locked", "fixed-label", "label-uri", "reload-data"];
-
-      // make TreeStyleTab extension compatible with Tabmix Plus
-      if ("TreeStyleTabBrowser" in window)
-        _xulAttributes = _xulAttributes.concat(TabmixSessionData.tabTSTProperties);
-
-      _xulAttributes.forEach(aAttr => {
-        TabmixSvc.ss.persistTabAttribute(aAttr);
-      });
-
-      TabmixSvc.sm.persistTabAttributeSet = true;
-    } catch (ex) {
-      Tabmix.log("nsSessionStore could not add Attribute to persistTabAttribute: " + ex + "\n");
-    }
-  },
-
-  /**
    * @brief         make sure that we don't enable both sessionStore and session manager
    *
    * @param msgNo   a Integer value - msg no. to show.

@@ -314,7 +314,6 @@ TabmixSvc = {
 
   sm: {
     lastSessionPath: null,
-    persistTabAttributeSet: false,
     status: "",
     crashed: false,
     get sanitized() {
