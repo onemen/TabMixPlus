@@ -995,7 +995,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  // this methos is bound to gURLBar.view
+  // this method is bound to gURLBar.view
   on_mouseup(event) {
     // based on:
     // - gURLBar.view.on_mouseup (UrlbarView.sys.mjs)
@@ -1004,8 +1004,9 @@ Tabmix.navToolbox = {
       return;
     }
 
-    const element = Tabmix.navToolbox.getClosestSelectableElement(event.target);
+    const element = Tabmix.navToolbox.getClosestSelectableElement(event.target, {byMouse: true});
     const result = element && this.getResultFromElement(element);
+    Tabmix.navToolbox.whereToOpenFromUrlBar(event, result);
     if (!result) {
       return;
     }
@@ -1018,7 +1019,6 @@ Tabmix.navToolbox = {
       return;
     }
 
-    Tabmix.navToolbox.whereToOpenFromUrlBar(event, result);
     if (!Tabmix.prefs.getBoolPref("moveSwitchToTabNext")) {
       return;
     }
@@ -1061,23 +1061,45 @@ Tabmix.navToolbox = {
   },
 
   // private method from gURLBar.view (UrlbarView.sys.mjs)
-  getClosestSelectableElement(element) {
+  getClosestSelectableElement(element, {byMouse = false} = {}) {
     if (!Tabmix.isVersion(1080)) {
       return gURLBar.view.getClosestSelectableElement(element);
     }
 
     const SELECTABLE_ELEMENT_SELECTOR = "[role=button], [selectable=true]";
-    const UNSELECTABLE_ELEMENT_SELECTOR = "[selectable=false]";
-    let closest = element.closest(SELECTABLE_ELEMENT_SELECTOR);
-    if (!closest) {
-      let row = element.closest(".urlbarView-row");
-      if (row && row.querySelector(UNSELECTABLE_ELEMENT_SELECTOR)) {
-        return null;
-      } else if (row && !row.querySelector(SELECTABLE_ELEMENT_SELECTOR)) {
-        closest = row;
+    const KEYBOARD_SELECTABLE_ELEMENT_SELECTOR = "[role=button]:not([keyboard-inaccessible]), [selectable]";
+    let closest;
+    if (!Tabmix.isVersion(1120)) {
+      const UNSELECTABLE_ELEMENT_SELECTOR = "[selectable=false]";
+      closest = element.closest(SELECTABLE_ELEMENT_SELECTOR);
+      if (!closest) {
+        let row = element.closest(".urlbarView-row");
+        if (row && row.querySelector(UNSELECTABLE_ELEMENT_SELECTOR)) {
+          return null;
+        } else if (row && !row.querySelector(SELECTABLE_ELEMENT_SELECTOR)) {
+          closest = row;
+        }
       }
+      return this.isElementVisible(closest) ? closest : null;
     }
-    return this.isElementVisible(closest) ? closest : null;
+
+    closest = element.closest(
+      byMouse ?
+        SELECTABLE_ELEMENT_SELECTOR :
+        KEYBOARD_SELECTABLE_ELEMENT_SELECTOR
+    );
+    if (closest && this.isElementVisible(closest)) {
+      return closest;
+    }
+    // When clicking on a gap within a row or on its border or padding, treat
+    // this as if the main part was clicked.
+    if (
+      element.classList.contains("urlbarView-row") &&
+      element.hasAttribute("row-selectable")
+    ) {
+      return element._content;
+    }
+    return null;
   },
 
   // private method from gURLBar.view (UrlbarView.sys.mjs)
