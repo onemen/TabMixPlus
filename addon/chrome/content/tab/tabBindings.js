@@ -120,7 +120,7 @@
         get() {
           try {
             return Tabmix.prefs.getBoolPref("mouseOverSelect");
-          } catch (e) {
+          } catch {
             return false;
           }
         }
@@ -129,7 +129,7 @@
         get() {
           try {
             return Tabmix.prefs.getBoolPref("selectTabOnMouseDown");
-          } catch (e) {
+          } catch {
             return false;
           }
         }
@@ -138,7 +138,7 @@
         get() {
           try {
             return Tabmix.prefs.getIntPref("mouseOverSelectDelay");
-          } catch (e) {
+          } catch {
             return 250;
           }
         }
@@ -147,7 +147,7 @@
         get() {
           try {
             return Tabmix.prefs.getIntPref("tabs.closeButtons.delay");
-          } catch (e) {
+          } catch {
             return 0;
           }
         }
@@ -242,7 +242,7 @@
         let isTabFocused = false;
         try {
           isTabFocused = document.commandDispatcher.focusedElement == this;
-        } catch (e) { }
+        } catch {}
         if (!isTabFocused) {
           this.setAttribute("ignorefocus", "true");
           this.mSelect = setTimeout(() => this.removeAttribute("ignorefocus"), 0);

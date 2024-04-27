@@ -1,4 +1,3 @@
-"use strict";
 
 const path = require("path");
 const fs = require("fs");
@@ -192,7 +191,7 @@ module.exports = {
       let source;
       try {
         source = helpers.getASTSource(node);
-      } catch (e) {
+      } catch {
         return;
       }
 

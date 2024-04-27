@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "New Tab Mix Plus for modern Firefox",
   "scripts": {
-    "lint": "eslint --format stylish --fix --cache --cache-location config/.eslintcache --ignore-path config/.eslintignore --ext .js,.jsm,.xhtml .",
-    "lint:test": "eslint --format stylish --cache --cache-location config/.eslintcache --ignore-path config/.eslintignore --ext .js,.jsm,.xhtml .",
-    "lint:clean": "eslint --format stylish --ignore-path config/.eslintignore --ext .js,.jsm .",
-    "prepare": "husky install config/husky"
+    "lint": "eslint --format stylish --fix --cache --cache-location config/.eslintcache --no-warn-ignored **/**/*.{js,jsm,xhtml}",
+    "lint:test": "eslint --format stylish --cache --cache-location config/.eslintcache --no-warn-ignored **/**/*.{js,jsm,xhtml}",
+    "lint:clean": "eslint --format stylish --no-warn-ignored **/**/*.{js,jsm,xhtml}",
+    "prepare": "husky config/husky"
   },
   "repository": {
     "type": "git",
@@ -20,11 +20,17 @@
   },
   "homepage": "https://github.com/onemen/TabMixPlus#readme",
   "devDependencies": {
-    "@commitlint/cli": "^19.0.3",
-    "@commitlint/config-conventional": "^19.0.3",
-    "eslint": "^8.57.0",
-    "eslint-plugin-mozilla": "^3.7.0",
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@eslint/eslintrc": "^3.0.2",
+    "eslint": "^9.1.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-html": "^8.1.1",
+    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-mozilla": "^3.7.3",
+    "eslint-plugin-no-unsanitized": "^4.0.2",
     "eslint-plugin-tabmix": "file:./config/eslint-plugin-tabmix",
+    "globals": "^15.0.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2"
   }

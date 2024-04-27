@@ -1,4 +1,4 @@
 module.exports = {
-  "*.{js,ts,tsx}":
-    "eslint --fix --cache-location config/.eslintcache --cache --ignore-path config/.eslintignore --ext .js,.jsm,.xhtml .",
+  "*.{js,jsm,xhtml}":
+    "eslint --format stylish --fix --cache --cache-location config/.eslintcache --no-warn-ignored **/**/*.{js,jsm,xhtml}",
 };

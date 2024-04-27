@@ -71,7 +71,7 @@ ContentClickInternal = {
         this.functions = [];
         return;
       }
-    } catch (ex) {
+    } catch {
       lazy.TabmixSvc.console.log("ClickHandlerParent.jsm is not included");
       this.functions = [];
       return;
@@ -166,7 +166,7 @@ ContentClickInternal = {
           // this function is bound to ClickHandlerParent that import PlacesUIUtils
           lazy.PlacesUIUtils.markPageAsFollowedLink(json.href);
         }
-      } catch (ex) {
+      } catch {
         /* Skip invalid URIs. */
       }
     };
@@ -794,7 +794,7 @@ ContentClickInternal = {
           testExt = new RegExp(testString + "[a-z0-9?.]+", 'i');
           if (testExt.test(hrefExt))
             doTest = false;
-        } catch (ex) {}
+        } catch {}
       }
       try {
         if (doTest) {
@@ -802,7 +802,7 @@ ContentClickInternal = {
           if (testExt.test(hrefExt))
             return true;
         }
-      } catch (ex) {}
+      } catch {}
     }
     return false;
   },
@@ -1132,7 +1132,7 @@ ContentClickInternal = {
         return lazy.TabmixSvc.version(830) ?
           Services.uriFixup.getFixupURIInfo(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE).preferredURI :
           Services.uriFixup.createFixupURI(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE);
-      } catch (ex) { }
+      } catch {}
       return null;
     };
 
@@ -1177,7 +1177,7 @@ ContentClickInternal = {
         try {
           var publicSuffix = Services.eTLD.getPublicSuffixFromHost(url.hostPort);
           level = !publicSuffix.includes(".") ? 2 : 3;
-        } catch (e) {
+        } catch {
           level = 2;
         }
         var host = url.hostPort.split(".");

@@ -77,7 +77,7 @@ function _getKeyName(win, aKey) {
     const u8arr = new Uint8Array(id.split('').map(c => c.charCodeAt(0)));
     const utf8decoder = new TextDecoder("utf-8");
     id = utf8decoder.decode(u8arr);
-  } catch (ex) { }
+  } catch {}
 
   let keyname = {
     action: Services.prefs.getIntPref("browser.backspace_action"),

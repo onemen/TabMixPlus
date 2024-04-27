@@ -23,7 +23,7 @@ const TabmixDownloadLastDir = {
         if (this._window) {
           try {
             this._window.QueryInterface(Ci.nsIInterfaceRequestor);
-          } catch (ex) {
+          } catch {
             let win = Services.wm.getMostRecentWindow("navigator:browser");
             return win ? win.gBrowser.selectedTab.ownerGlobal : null;
           }

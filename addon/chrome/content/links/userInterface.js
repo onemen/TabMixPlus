@@ -85,7 +85,7 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab) {
     try {
       if (Services.prefs.getBoolPref("google.toolbar.newtab"))
         url = "chrome://google-toolbar/content/new-tab.html";
-    } catch (ex) {/* no pref - do noting */}
+    } catch {/* no pref - do noting */}
   }
   if (TabmixTabbar.widthFitTitle && replaceLastTab && !selectedTab.collapsed)
     selectedTab.collapsed = true;

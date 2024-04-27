@@ -30,7 +30,7 @@ const console = {
       if (rootID)
         obj = obj.document.getElementById(rootID);
       methodsList.forEach(aFn => (obj = obj[aFn]));
-    } catch (ex) { }
+    } catch {}
     return obj || {toString: () => "undefined"};
   },
 
@@ -214,7 +214,7 @@ const console = {
         objS += offset + prop + "[" + type + "] =  " + val + "\n";
         if (type == "object" && val !== null && level && typeof level == "boolean")
           objS += this.obj(val, "", true, "deep") + "\n";
-      } catch (ex) {
+      } catch {
         objS += offset + prop + " =  [!!error retrieving property]\n";
       }
     }

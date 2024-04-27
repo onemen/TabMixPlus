@@ -95,7 +95,7 @@ CompatibilityCheck.prototype = {
     var list = this.list;
     try {
       list.sort();
-    } catch (ex) { }
+    } catch {}
 
     var outStr = "";
     for (let i = 0; i < list.length; i++) {

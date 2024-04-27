@@ -316,7 +316,7 @@ TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata, 
           aTab._tabViewTabItem._reconnected = false;
           try {
             TabmixSvc.ss.deleteTabValue(aTab, id);
-          } catch (ex) { }
+          } catch {}
           if (tabdata.extData)
             delete tabdata.extData["tabview-tab"];
         }
@@ -541,7 +541,7 @@ TabmixSessionManager.showNotification = function SM_showNotification() {
   try {
     let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
     alerts.showAlertNotification("chrome://tabmixplus/skin/tmp.png", "Tab Mix Plus", msg, false, "", null);
-  } catch (e) { }
+  } catch {}
 };
 
 /* ............... TabView Code Fix  ............... */

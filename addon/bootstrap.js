@@ -1,14 +1,4 @@
-/* global
-  ADDON_ENABLE: false,
-  ADDON_DISABLE: false,
-  ADDON_DOWNGRADE: false,
-  ADDON_INSTALL: false,
-  ADDON_UNINSTALL: false,
-  ADDON_UPGRADE: false,
-*/
-/* eslint-env tabmix/webExtensions */
-/* eslint no-var: 2, prefer-const: 2 */
-/* exported install uninstall startup shutdown */
+/* exported install, uninstall, startup, shutdown */
 "use strict";
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;

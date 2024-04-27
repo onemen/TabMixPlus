@@ -3,7 +3,6 @@
  * append TabmixChromeUtils to eslint-plugin-mozilla import-globals rule
  * callExpressionMultiDefinitions lists
  */
-"use strict";
 
 const path = require("path");
 
@@ -66,7 +65,7 @@ function convertCallExpressionToGlobals(node, isGlobal) {
   let source;
   try {
     source = helpers.getASTSource(node);
-  } catch (e) {
+  } catch {
     return [];
   }
 
@@ -148,9 +147,9 @@ module.exports = {
     let globalScope, parents;
 
     return {
-      Program() {
-        parents = context.getAncestors();
-        globalScope = context.getScope();
+      Program(node) {
+        parents = context.sourceCode.getAncestors(node);
+        globalScope = context.sourceCode.getScope(node);
       },
 
       ExpressionStatement(node) {

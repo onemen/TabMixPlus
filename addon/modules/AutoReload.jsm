@@ -352,7 +352,7 @@ function _reloadTab(aTab) {
       if (data.postData && !AutoReload.confirm(window, aTab))
         return;
     }
-  } catch (e) { }
+  } catch {}
 
   let contentWindow = browser.contentWindow;
   data.scrollX = contentWindow.scrollX;

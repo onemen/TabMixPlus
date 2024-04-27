@@ -1,6 +1,6 @@
 /* global PrefWindow */
 /* exported defaultSetting, donate, exportData, importData, openHelp, setDialog,
-            showPane, toggleInstantApply, toggleSyncPreference closeAll */
+            showPane, toggleInstantApply, toggleSyncPreference, closeAll */
 "use strict";
 
 /***** Preference Dialog Functions *****/
@@ -471,7 +471,7 @@ TabmixChromeUtils.defineLazyGetter(this, "gPreferenceList", () => {
   tabmixPrefs = otherPrefs.concat(tabmixPrefs).filter(pref => {
     try {
       return prefs["get" + PrefFn[prefs.getPrefType(pref)]](pref) !== undefined;
-    } catch (ex) { }
+    } catch {}
     return false;
   });
   return tabmixPrefs;

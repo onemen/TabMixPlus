@@ -165,7 +165,7 @@ TabmixSessionData = {
         let tabClr = colorfulTabs.clrSession.getTabValue(aTab, "tabClr");
         if (tabClr)
           tabProperties += " tabClr=" + encodeURI(tabClr);
-      } catch (ex) {}
+      } catch {}
     }
 
     tabProperties += TMP_extensionsCompatibility.treeStyleTab.getProperties(aTab);
@@ -668,7 +668,7 @@ TabmixSessionManager = {
       tabmixSanitized = isLastWindow &&
         Services.prefs.getBoolPref("privacy.sanitize.sanitizeOnShutdown") &&
         Tabmix.Sanitizer.tryToSanitize(true);
-    } catch (ex) {
+    } catch {
       tabmixSanitized = false;
     }
     if (!tabmixSanitized && this._inited) {
@@ -803,7 +803,7 @@ TabmixSessionManager = {
         // so that we don't disrupt startup
         try {
           gBrowser.loadTabs(URIs, false, !addTab);
-        } catch (e) {
+        } catch {
           afterLoad(gBrowser.selectedBrowser);
         }
       } else {
@@ -980,7 +980,7 @@ TabmixSessionManager = {
     // only if we fail we use deprecated unescape
     try {
       return decodeURI(encodedString);
-    } catch (ex) {
+    } catch {
       let decodedString;
       try {
         // we defined lazy getter for _decode to import from Decode.jsm module
@@ -1135,7 +1135,7 @@ TabmixSessionManager = {
     try {
       this.DATASource.QueryInterface(Ci.nsIRDFRemoteDataSource).Flush();
       this._lastSaveTime = Date.now();
-    } catch (ex) {
+    } catch {
       if (this._interval < 10000) {
         this._interval += 500;
         this.saveStateDelayed();
@@ -2094,7 +2094,7 @@ TabmixSessionManager = {
       this.prefBranch.setBoolPref("manager", true); // enable session manager
       try {
         Services.prefs.savePrefFile(null); // store the pref immediately
-      } catch (ex) { }
+      } catch {}
     }
     if (aResult.button == Tabmix.BUTTON_OK) {
       switch (this.callBackData.whatToLoad) {
@@ -2785,7 +2785,7 @@ TabmixSessionManager = {
     var tabState;
     try {
       tabState = JSON.parse(TabmixSvc.ss.getTabState(aTab));
-    } catch (ex) { }
+    } catch {}
     var data = this.serializeHistory(tabState);
     if (!data)
       return false;

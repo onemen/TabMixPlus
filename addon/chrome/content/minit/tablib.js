@@ -135,7 +135,7 @@ Tabmix.tablib = {
       try {
         let newURI = Services.io.newURI(uri);
         allowLoad = browser.currentURI.equalsExceptRef(newURI);
-      } catch (ex) {}
+      } catch {}
     }
     let isBlankTab = (function() {
       // first tab is busy when browser window starts on Firefox 51
@@ -1893,7 +1893,7 @@ Tabmix.tablib = {
       if (tab != skipTab && tab.linkedBrowser.__SS_restoreState != 2) {
         try {
           tab.linkedBrowser.reload();
-        } catch (ex) { }
+        } catch {}
       }
     }
   }

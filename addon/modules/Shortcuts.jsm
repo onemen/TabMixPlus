@@ -431,7 +431,7 @@ const Shortcuts = {
     let shortcuts = null, updatePreference = false;
     try {
       shortcuts = JSON.parse(getPref("extensions.tabmix.shortcuts"));
-    } catch (ex) {}
+    } catch {}
     if (shortcuts === null) {
       TabmixSvc.console.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
       shortcuts = {};
@@ -619,7 +619,7 @@ KeyConfig = {
     let prefValue, newValue, keyData = Shortcuts.keys[aKey];
     try {
       prefValue = getPref("keyconfig.main." + aPrefName).split("][");
-    } catch (ex) { }
+    } catch {}
     if (!prefValue) {
       newValue = keyData.default;
     } else if (/^!/.test(prefValue)) {
@@ -702,7 +702,7 @@ function getFormattedKey(key) {
     try {
       let localeKeys = Services.strings.createBundle("chrome://global/locale/keys.properties");
       val += localeKeys.GetStringFromName(key.keycode);
-    } catch (ex) {
+    } catch {
       val += "<" + key.keycode + ">";
     }
   }

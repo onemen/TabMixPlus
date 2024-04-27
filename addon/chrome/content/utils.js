@@ -88,7 +88,7 @@ var Tabmix = {
         if (!this._DOMWindowUtils.getBoundsWithoutFlushing) {
           this._DOMWindowUtils = null;
         }
-      } catch (ex) {
+      } catch {
         this._DOMWindowUtils = null;
       }
     }
@@ -184,7 +184,7 @@ var Tabmix = {
     if (typeof aWindow == "undefined") {
       try {
         aWindow = window;
-      } catch (e) {
+      } catch {
         aWindow = null;
       }
     }

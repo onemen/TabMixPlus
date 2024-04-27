@@ -40,7 +40,7 @@ const ContextMenu = {
       try {
         secMan.checkLoadURIStrWithPrincipal(
           doc.nodePrincipal, url, secMan.STANDARD);
-      } catch (e) {
+      } catch {
         return false;
       }
       return true;

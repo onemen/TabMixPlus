@@ -2185,7 +2185,7 @@ gTMPprefObserver = {
       try {
         var prefValue = Services.prefs.getIntPref(pref);
         test = test ? prefValue == testVal : prefValue != testVal;
-      } catch (e) {
+      } catch {
         test = true;
       }
 

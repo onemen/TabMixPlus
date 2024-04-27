@@ -88,7 +88,7 @@ const LinkNodeUtils = {
         blocked = host == "developer.mozilla.org" && linkNode.host != host &&
             linkNode.classList.contains("external");
       }
-    } catch (ex) {
+    } catch {
       blocked = false;
     }
     return blocked;
@@ -159,7 +159,7 @@ function existsFrameName(content, targetFrame) {
       if (frame.name == targetFrame || existsFrameName(frame, targetFrame)) {
         return true;
       }
-    } catch (error) { }
+    } catch {}
   }
   return false;
 }

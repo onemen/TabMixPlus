@@ -502,7 +502,7 @@ class Overlays {
       // only load chrome, resource and file URLs, and that is our privileged chrome package.
       try {
         xhr.channel.owner = Services.scriptSecurityManager.getSystemPrincipal();
-      } catch (ex) {
+      } catch {
         console.error(`Failed to set system principal while fetching overlay ${srcUrl}`);
         xhr.close();
         reject("Failed to set system principal");

@@ -21,7 +21,7 @@ if (TabmixSvc.version(1030)) {
 } else {
   // these imports are used by PlacesUIUtils and PlacesUtils that we eval here
   // PluralForm, PrivateBrowsingUtils, OpenInTabsUtils
-  /* eslint-disable no-unused-vars, mozilla/reject-global-this, tabmix/use-mjs-modules */
+  /* eslint-disable no-unused-vars, tabmix/use-mjs-modules, mozilla/reject-global-this */
   ChromeUtils.defineModuleGetter(this, "BrowserWindowTracker",
     "resource:///modules/BrowserWindowTracker.jsm");
 
@@ -36,7 +36,7 @@ if (TabmixSvc.version(1030)) {
 
   ChromeUtils.defineModuleGetter(this, "PlacesUtils",
     "resource://gre/modules/PlacesUtils.jsm");
-  /* eslint-enable no-unused-vars, mozilla/reject-global-this, tabmix/use-mjs-modules */
+  /* eslint-enable no-unused-vars, tabmix/use-mjs-modules, mozilla/reject-global-this */
 }
 
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {PlacesUIUtils: "resource:///modules/PlacesUIUtils.jsm"});
@@ -127,7 +127,7 @@ PlacesUtilsInternal = {
     try {
       originalOpenTabset = aWindow._tabmix_PlacesUIUtils_openTabset;
       lazy.PlacesUIUtils.openTabset.toString();
-    } catch (ex) {
+    } catch {
       if (aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser") {
         TabmixSvc.console.log("Starting with Firefox 21 Imacros 8.3.0 break toString on PlacesUIUtils functions." +
           "\nTabmix can't update PlacesUIUtils to work according to Tabmix preferences, use Imacros 8.3.1 and up.");

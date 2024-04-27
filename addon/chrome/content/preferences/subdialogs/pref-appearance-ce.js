@@ -158,7 +158,7 @@
     _getPrefs(aPrefString) {
       try {
         this._prefValues = JSON.parse(aPrefString);
-      } catch (er) {
+      } catch {
         this._resetDefault(true);
         return;
       }

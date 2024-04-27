@@ -4,7 +4,6 @@
  * append TabmixChromeUtils to eslint-plugin-mozilla valid-lazy rule
  * items and callExpressionMultiDefinitions lists
  */
-"use strict";
 
 const path = require("path");
 

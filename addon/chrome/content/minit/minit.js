@@ -307,7 +307,7 @@ var TMP_tabDNDObserver = {
           const links = browserDragAndDrop.dropLinks(event, true);
           const url = links && links.length ? links[0].url : null;
           disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
-        } catch (ex) {}
+        } catch {}
 
         if (disAllowDrop) {
           // show Drag & Drop message
@@ -1198,7 +1198,7 @@ Tabmix.navToolbox = {
     }
 
     if (Tabmix.isVersion(1210) && !Tabmix.isVersion(1220)) {
-      // Bug 1866616 add useage for UrlbarPrefs.sys.mjs only in Firefox 121
+      // Bug 1866616 add usage for UrlbarPrefs.sys.mjs only in Firefox 121
       ChromeUtils.defineESModuleGetters(lazy, {
         // eslint-disable-next-line tabmix/valid-lazy
         UrlbarPrefs: "resource:///modules/UrlbarPrefs.sys.mjs",
@@ -1253,7 +1253,7 @@ Tabmix.navToolbox = {
     this.setScrollButtons();
     try {
       this.setCloseButtonPosition();
-    } catch (ex) { }
+    } catch { }
     gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));
     this.setScrollButtons(false, true);
 

@@ -29,7 +29,7 @@ flst.prototype = {
       msg = msg.replace(/F8|F9/, lazy.Shortcuts.getFormattedKeyForID(id));
       let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
       alerts.showAlertNotification("chrome://tabmixplus/skin/tmp.png", "Tab Mix Plus", msg, false, "", null);
-    } catch (e) { }
+    } catch {}
   },
 
   // toggle flst on/off

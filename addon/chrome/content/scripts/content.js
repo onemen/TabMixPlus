@@ -154,7 +154,7 @@ var TabmixContentHandler = {
         const {url, name, type} = link;
         return {url, name, type};
       });
-    } catch (ex) {
+    } catch {
       return;
     }
     let data = {
@@ -391,7 +391,7 @@ TabmixClickEventHandler = {
         const args = ContentSvc.version(870) ?
           [principal, href] : [principal, href, secMan.STANDARD];
         secMan.checkLoadURIStrWithPrincipal(...args);
-      } catch (e) {
+      } catch {
         return;
       }
 
@@ -427,7 +427,7 @@ TabmixClickEventHandler = {
               isPrivateWin
             );
             json.allowMixedContent = true;
-          } catch (e) {}
+          } catch {}
         }
       }
 

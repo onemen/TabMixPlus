@@ -177,7 +177,7 @@ TabmixSvc = {
     return keys.map(key => {
       try {
         return stringBundle.GetStringFromName(key);
-      } catch (ex) {
+      } catch {
         this.console.log("Failed to get string " + key + " in bundle: commonDialogs.properties");
         return key;
       }
@@ -203,7 +203,7 @@ TabmixSvc = {
     try {
       // this pref exist only in windows
       return (this.direct2dDisabled = Services.prefs.getBoolPref("gfx.direct2d.disabled"));
-    } catch (ex) {}
+    } catch {}
     return (this.direct2dDisabled = false);
   },
 

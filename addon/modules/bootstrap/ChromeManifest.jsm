@@ -191,7 +191,7 @@ class ChromeManifest {
 
       try {
         await this.parse(filename, base + "/" + dirparts.join("/"));
-      } catch (e) {
+      } catch {
         console.log(`Could not read manifest '${base}/${filename}'.`);
       }
     }

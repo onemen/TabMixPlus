@@ -259,7 +259,7 @@ var TMP_Places = {
               flags: Ci.nsIWebNavigation.LOAD_FLAGS_NONE,
               triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
             });
-          } catch (ex) { }
+          } catch {}
         }
         this.resetRestoreState(aTab);
         aTab.collapsed = false;

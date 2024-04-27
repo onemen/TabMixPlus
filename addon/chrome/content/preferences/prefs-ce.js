@@ -337,7 +337,7 @@ class Preference extends MozXULElement {
         default:
           this._reportUnknownType();
       }
-    } catch (e) { }
+    } catch {}
     return null;
   }
 
@@ -586,7 +586,7 @@ class PrefPane extends MozXULElement {
         try {
           const preference = this.preferenceForElement(elements[i]);
           preference.setElementValue(elements[i]);
-        } catch (e) {
+        } catch {
           dump("*** No preference found for " + elements[i].getAttribute("preference") + "\n");
         }
       }
@@ -1238,7 +1238,7 @@ class PrefWindow extends MozXULElement {
         try {
           if (defaultButton)
             window.notifyDefaultButtonLoaded(defaultButton);
-        } catch (e) {}
+        } catch {}
       }
 
       // Give focus after onload completes, see bug 103197.

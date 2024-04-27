@@ -1024,6 +1024,7 @@ var TabmixAllTabs = {
         if (Tabmix.isVersion(1260)) {
           window.BrowserCommands.closeTabOrWindow();
         } else {
+          // eslint-disable-next-line no-undef
           BrowserCloseTabOrWindow();
         }
         aButton.setAttribute("afterctrlclick", true);

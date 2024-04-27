@@ -271,7 +271,7 @@ var TMP_extensionsCompatibility = {
           'stopPropagation()'
         ).toCode();
       }
-    } catch (ex) {}
+    } catch {}
 
     try {
       if ("TreeStyleTabService" in window)
@@ -353,7 +353,10 @@ var TMP_extensionsCompatibility = {
 
     // override the aioCloseWindow function
     if (typeof aioCloseWindow == 'function')
-      window.aioCloseWindow = Tabmix.isVersion(1260) ? window.BrowserCommands.tryToCloseWindow : BrowserTryToCloseWindow;
+      window.aioCloseWindow = Tabmix.isVersion(1260) ?
+        window.BrowserCommands.tryToCloseWindow :
+        // eslint-disable-next-line no-undef
+        BrowserTryToCloseWindow;
   },
 
   onDelayedStartup: function TMP_EC_onDelayedStartup() {
@@ -525,7 +528,7 @@ TMP_extensionsCompatibility.treeStyleTab = {
     Tabmix.TST_initTabContentsOrder = function() {
       try {
         this.initTabContentsOrder.apply(this, arguments);
-      } catch (ex) { }
+      } catch {}
     }.bind(gBrowser.treeStyleTab);
 
     if ("TreeStyleTabBrowser" in window) {
