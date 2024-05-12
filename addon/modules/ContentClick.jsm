@@ -116,7 +116,7 @@ ContentClickInternal = {
       // based on ClickHandlerParent.prototype.contentAreaClick
       let browser = this.manager.browsingContext.top.embedderElement;
       let window = browser.ownerGlobal;
-      var where = window.whereToOpenLink(json);
+      var where = window.Tabmix.whereToOpenLink(json);
       if (where != "current") {
         return;
       }
@@ -383,7 +383,7 @@ ContentClickInternal = {
   whereToOpen: function TMP_whereToOpenLink(event, href, wrappedNode, wrappedOnClickNode) {
     let eventWhere;
     let TMP_tabshifted = aEvent => {
-      var where = eventWhere || this._window.whereToOpenLink(aEvent);
+      var where = eventWhere || this._window.Tabmix.whereToOpenLink(aEvent);
       return where == "tabshifted" ? "tabshifted" : "tab";
     };
 
@@ -405,7 +405,7 @@ ContentClickInternal = {
     this.getData(event, href, wrappedNode, wrappedOnClickNode);
 
     // whereToOpenLink return save or window
-    eventWhere = this._window.whereToOpenLink(event);
+    eventWhere = this._window.Tabmix.whereToOpenLink(event);
     if (/^save|window/.test(eventWhere)) {
       // make sure to trigger hrefFromOnClick getter
       void this._data.hrefFromOnClick;
@@ -547,7 +547,7 @@ ContentClickInternal = {
       aEvent.getModifierState("AltGraph") ||
       aEvent.metaKey
     ) {
-      if (/^save|window|tab/.test(win.whereToOpenLink(aEvent)))
+      if (/^save|window|tab/.test(win.Tabmix.whereToOpenLink(aEvent)))
         this.getHrefFromOnClick(aEvent, href, linkNode, linkNode.getAttribute("onclick"));
       return "3";
     }
@@ -629,7 +629,7 @@ ContentClickInternal = {
         return "16";
       }
 
-      let where = this._window.whereToOpenLink(aEvent);
+      let where = this._window.Tabmix.whereToOpenLink(aEvent);
       aEvent.__where = where == "tabshifted" ? "tabshifted" : "tab";
       // in Firefox 17.0-20.0 we can't pass aEvent.__where to handleLinkClick
       // add 4th arguments with where value

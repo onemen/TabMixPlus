@@ -42,7 +42,7 @@ const SyncedTabs = {
 
     TabListView.prototype.tabmix_whereToOpen = function(event) {
       let window = getChromeWindow(this._window);
-      let where = window.whereToOpenLink(event);
+      let where = window.Tabmix.whereToOpenLink(event);
       if (where == "current") {
         let pref = "extensions.tabmix.opentabfor.syncedTabs";
         if (window.Tabmix.whereToOpen(pref).inNew) {

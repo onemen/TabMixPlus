@@ -1124,7 +1124,7 @@ Tabmix.navToolbox = {
       // Use the standard UI link behaviors for clicks or Alt+Enter
       where = "tab";
       if (isMouseEvent || event && !altEnter)
-        where = whereToOpenLink(event, false, false);
+        where = Tabmix.whereToOpenLink(event, false, false);
       if (loadNewTab && where == "current" || !isMouseEvent && where == "window")
         where = "tab";
       else if (!isMouseEvent && !loadNewTab && /^tab/.test(where))
@@ -1166,7 +1166,7 @@ Tabmix.navToolbox = {
           !_handleSearchCommand.includes("forceNewTab")) {
       $LF = '\n            ';
       Tabmix.changeCode(searchbar, "searchbar.handleSearchCommand")._replace(
-        'where = whereToOpenLink(aEvent, false, true);',
+        'where = Tabmix.whereToOpenLink(aEvent, false, true);',
         '$&' + $LF +
         'let forceNewTab = where == "current" && Services.prefs.getBoolPref("browser.search.openintab");' + $LF +
         'if (forceNewTab) {' + $LF +

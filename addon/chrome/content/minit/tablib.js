@@ -734,7 +734,7 @@ Tabmix.tablib = {
       let obj = fdGoHome ? window.FdTabLoader : window;
       fnName = fdGoHome ? "FdTabLoader.BrowserGoHome" : "window.BrowserGoHome";
       Tabmix.changeCode(obj, fnName)._replace(
-        'var where = whereToOpenLink(aEvent, false, true);',
+        'var where = Tabmix.whereToOpenLink(aEvent, false, true);',
         '$&' +
         'if (where == "current" && Tabmix.whereToOpen(false).inNew) where = "tab";'
       )._replace(

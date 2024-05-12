@@ -91,7 +91,7 @@ var TMP_Places = {
   openMenuItem(aUri, aEvent, aParams, aPref) {
     let pref = "extensions.tabmix.opentabfor." + aPref;
     let where = this.isBookmarklet(aUri) ? "current" :
-      this.fixWhereToOpen(aEvent, whereToOpenLink(aEvent, false, true), pref);
+      this.fixWhereToOpen(aEvent, Tabmix.whereToOpenLink(aEvent, false, true), pref);
     if (where == "current")
       Tabmix.getTopWin().gBrowser.selectedBrowser.tabmix_allowLoad = true;
     aParams.inBackground = Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");

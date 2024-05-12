@@ -234,6 +234,10 @@ var TMP_eventListener = {
     window.delayedStartupPromise.then(() => {
       Tabmix.initialization.run("afterDelayedStartup");
     });
+
+    Tabmix.whereToOpenLink = Tabmix.isVersion(1270) ?
+      BrowserUtils.whereToOpenLink.bind(BrowserUtils) :
+      window.whereToOpenLink.bind(window);
   },
 
   handleEvent: function TMP_EL_handleEvent(aEvent) {
