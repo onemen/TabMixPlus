@@ -726,24 +726,6 @@ Tabmix.tablib = {
     };
     Tabmix.setNewFunction(window, "FillHistoryMenu", fillHistoryMenu);
 
-    // Fix for old Fast Dial versions before 4.6.1
-    // https://addons.mozilla.org/en-us/firefox/addon/fast-dial/
-    let fastDial = window.FdTabLoader,
-        fdGoHome = fastDial && fastDial.BrowserGoHome;
-    if (window.BrowserGoHome || fdGoHome) {
-      let obj = fdGoHome ? window.FdTabLoader : window;
-      fnName = fdGoHome ? "FdTabLoader.BrowserGoHome" : "window.BrowserGoHome";
-      Tabmix.changeCode(obj, fnName)._replace(
-        'var where = Tabmix.whereToOpenLink(aEvent, false, true);',
-        '$&' +
-        'if (where == "current" && Tabmix.whereToOpen(false).inNew) where = "tab";'
-      )._replace(
-        /loadOneOrMoreURIs\([^;]+;/,
-        '$& \
-        gBrowser.ensureTabIsVisible(gBrowser.selectedTab);'
-      ).toCode();
-    }
-
     Tabmix.changeCode(newWindowButtonObserver, "newWindowButtonObserver.onDragOver")._replace(
       '{',
       '{ \

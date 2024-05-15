@@ -1166,7 +1166,9 @@ Tabmix.navToolbox = {
           !_handleSearchCommand.includes("forceNewTab")) {
       $LF = '\n            ';
       Tabmix.changeCode(searchbar, "searchbar.handleSearchCommand")._replace(
-        'where = Tabmix.whereToOpenLink(aEvent, false, true);',
+        Tabmix.isVersion(1270) ?
+          "where = lazy.BrowserUtils.whereToOpenLink(aEvent, false, true);" :
+          'where = whereToOpenLink(aEvent, false, true);',
         '$&' + $LF +
         'let forceNewTab = where == "current" && Services.prefs.getBoolPref("browser.search.openintab");' + $LF +
         'if (forceNewTab) {' + $LF +
