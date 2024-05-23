@@ -45,7 +45,13 @@ const Tabmix_NewTabURL = {
     if (value == ABOUT_NEW_TAB) {
       lazy.AboutNewTab.resetNewTabURL();
     } else {
-      lazy.AboutNewTab.newTabURL = value;
+      try {
+        Services.io.newURI(value);
+        lazy.AboutNewTab.newTabURL = value;
+      } catch {
+        let {preferredURI} = Services.uriFixup.getFixupURIInfo(value);
+        lazy.AboutNewTab.newTabURL = preferredURI.spec;
+      }
     }
   }
 };

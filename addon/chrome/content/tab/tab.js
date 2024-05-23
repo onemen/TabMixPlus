@@ -2664,6 +2664,18 @@ gTMPprefObserver = {
       Services.prefs.setBoolPref("browser.tabs.warnOnCloseOtherTabs", Tabmix.prefs.getBoolPref("tabs.warnOnClose"));
       Tabmix.prefs.clearUserPref("tabs.warnOnClose");
     }
+    // 2024-05-23
+    if (Tabmix.prefs.getIntPref("loadOnNewTab.type") === 4 && Services.prefs.prefHasUserValue("browser.newtab.url")) {
+      let value = Services.prefs.getCharPref("browser.newtab.url");
+      try {
+        Services.io.newURI(value);
+      } catch {
+        let {preferredURI} = Services.uriFixup.getFixupURIInfo(value);
+        Services.prefs.setCharPref("browser.newtab.url", preferredURI.spec);
+        console.log("TabMix: Invalid 'browser.newtab.url'", value);
+        console.log("TabMix: Fixed 'browser.newtab.url' to", preferredURI.spec);
+      }
+    }
 
     let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {
       let oldVersion = TabmixSvc.prefs.get("extensions.tabmix.version", "");

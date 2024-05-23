@@ -146,11 +146,15 @@
             <hbox class="indent" align="center">
               <label id="newTabUrlLabel" value="&location.label.1;:" control="newTabUrl"/>
               <html:input id="newTabUrl" type="text" class="padded uri-element" flex="1"
+                       style="width: 227px;"
                        onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
                        onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
                        placeholder="&newtab.placeholder.label;"
                        preference="pref_newTabUrl"
                        onkeydown="gEventsPane.onNewTabKeyDown(event);"/>
+            </hbox>
+            <hbox class="indent" align="center">
+              <label value="Address must starts with 'https://', 'http://' or 'about:'"/>
             </hbox>
             <checkbox_tmp id="selectLocationBar" label="&focusContent.label;"
                       preference="pref_selectLocationBar"/>
@@ -336,7 +340,7 @@
                   </menulist>
               </hbox>
               <hbox class="indent" align="center">
-                 <label id="newTabUrlLabel_1" value="&location.label.1;:" control="newTabUrl_1"/>
+                <label id="newTabUrlLabel_1" value="&location.label.1;:" control="newTabUrl_1"/>
                  <html:input id="newTabUrl_1" type="text" class="padded uri-element" flex="1"
                           onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
                           onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
