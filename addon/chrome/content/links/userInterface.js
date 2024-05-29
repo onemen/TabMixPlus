@@ -280,7 +280,7 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
       'aIgnoreAlt = params.ignoreAlt || null;'
     )._replace(
       Tabmix.isVersion(1120) ? /this\.openLinkIn\(.*\);/ : /openUILinkIn\(.*\);/,
-      'where = TMP_Places.openUILink(url, event, where, params);\n' +
+      'where = window.TMP_Places.openUILink(url, event, where, params);\n' +
       '  if (where) {\n' +
       '    try {\n      $&\n    } catch (ex) {  }\n' +
       '  }\n'

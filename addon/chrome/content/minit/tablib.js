@@ -283,7 +283,7 @@ Tabmix.tablib = {
         'if (tab.hasAttribute("tabmix_changed_label")) {' + $LF +
         '  titlePromise = Promise.resolve(tab.getAttribute("tabmix_changed_label"));' + $LF +
         '} else {' + $LF +
-        '  titlePromise = TMP_Places.asyncGetTabTitle(tab, aBrowser.currentURI.spec, title);' + $LF +
+        '  titlePromise = window.TMP_Places.asyncGetTabTitle(tab, aBrowser.currentURI.spec, title);' + $LF +
         '}' + $LF +
         'return titlePromise.then(newTitle => {' + $LF +
         '  title = newTitle;' + $LF +
@@ -343,7 +343,7 @@ Tabmix.tablib = {
            Tabmix.tablib.onTabTitleChanged(aTab, browser, title == urlTitle);\
        }\
        else if (noChange)\
-         TMP_Places.currentTab = null;\
+         window.TMP_Places.currentTab = null;\
        $&'
     )._replace(
       '{ isContentTitle',
