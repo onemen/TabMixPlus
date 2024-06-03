@@ -381,10 +381,8 @@ const Shortcuts = {
       }
     }
 
-    for (let att of Object.keys(keyAtt)) {
-      let val = keyAtt[att];
-      if (val)
-        keyItem.setAttribute(att, val);
+    for (let [att, val] of Object.entries(keyAtt)) {
+      keyItem.setAttribute(att, val || "");
     }
     // remove existing acceltext from menus
     let items = document.getElementsByAttribute("key", keyItem.id);

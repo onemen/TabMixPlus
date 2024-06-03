@@ -661,8 +661,8 @@ function loadData(pattern) {
     pattern.splice(1, 0, pattern.splice(index, 1)[0]);
 
   var prefName, prefValue;
-  Shortcuts.prefsChangedByTabmix = true;
   for (let i = 1; i < pattern.length; i++) {
+    Shortcuts.prefsChangedByTabmix = true;
     let valIndex = pattern[i].indexOf("=");
     if (valIndex > 0) {
       prefName = pattern[i].substring(0, valIndex);
