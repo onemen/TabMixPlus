@@ -691,13 +691,6 @@ var TMP_undocloseTabButtonObserver = {
 
 /* ::::::::::     miscellaneous     :::::::::: */
 
-Tabmix.goButtonClick = function TMP_goButtonClick(aEvent) {
-  if (aEvent.button == 1 && gURLBar.value == gBrowser.currentURI.spec)
-    this.duplicateTab(gBrowser._selectedTab);
-  else if (aEvent.button != 2)
-    gURLBar.handleCommand(aEvent);
-};
-
 Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
   var aTab = gBrowser._selectedTab;
   var isBlankTab = gBrowser.isBlankNotBusyTab(aTab);
