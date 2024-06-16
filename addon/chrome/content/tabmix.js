@@ -858,6 +858,12 @@ var TMP_eventListener = {
     if (this.tabWidthCache.has(tab.tabmixKey)) {
       this.tabWidthCache.delete(tab.tabmixKey);
     }
+
+    if (TabmixTabbar.isMultiRow && Tabmix.tabsUtils.overflow) {
+      setTimeout(() => {
+        Tabmix.tabsUtils.updateVerticalTabStrip();
+      }, 0);
+    }
   },
 
   // TGM extension use it
