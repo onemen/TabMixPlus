@@ -899,8 +899,10 @@ Tabmix.onContentLoaded = {
         TabmixSvc.whereToOpenLinkChanged = true;
         this.change_whereToOpenLink(BrowserUtils);
       }
+      Tabmix.whereToOpenLink = BrowserUtils.whereToOpenLink.bind(BrowserUtils);
     } else {
       this.change_whereToOpenLink(window);
+      Tabmix.whereToOpenLink = window.whereToOpenLink.bind(window);
     }
 
     function getTargetWindow(params = {}) {
