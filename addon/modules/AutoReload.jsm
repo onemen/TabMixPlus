@@ -321,7 +321,7 @@ const AutoReload = {
       return;
 
     data.referrerInfo = lazy.E10SUtils.deserializeReferrerInfo(data.referrerInfo);
-    doReloadTab(window, browser, data);
+    doReloadTab(window, browser, tab, data);
   }
 };
 
@@ -357,7 +357,7 @@ function _reloadTab(aTab) {
   let contentWindow = browser.contentWindow;
   data.scrollX = contentWindow.scrollX;
   data.scrollY = contentWindow.scrollY;
-  doReloadTab(window, browser, data);
+  doReloadTab(window, browser, aTab, data);
 }
 
 /**
@@ -405,7 +405,7 @@ async function beforeReload(window, browser) {
   }, {once: true});
 }
 
-function doReloadTab(window, browser, data) {
+function doReloadTab(window, browser, tab, data) {
   beforeReload(window, browser);
 
   browser.__tabmixScrollPosition = {
@@ -443,15 +443,28 @@ function doReloadTab(window, browser, data) {
   // Also reset DOS mitigations for the basic auth prompt on reload.
   delete browser.authPromptAbuseCounter;
 
-  const handlingUserInput = TabmixSvc.version(900) ?
-    window.document.hasValidTransientUserGestureActivation :
-    window.windowUtils.isHandlingUserInput;
+  if (TabmixSvc.version(1290)) {
+    if (window.document.hasValidTransientUserGestureActivation) {
+      loadFlags |= Ci.nsIWebNavigation.LOAD_FLAGS_USER_ACTIVATION;
+    }
+    const {browsingContext} = tab.linkedBrowser;
+    const {sessionHistory} = browsingContext;
+    if (sessionHistory) {
+      sessionHistory.reload(loadFlags);
+    } else {
+      browsingContext.reload(loadFlags);
+    }
+  } else {
+    const handlingUserInput = TabmixSvc.version(900) ?
+      window.document.hasValidTransientUserGestureActivation :
+      window.windowUtils.isHandlingUserInput;
 
-  browser.sendMessageToActor(
-    "Browser:Reload",
-    {flags: loadFlags, handlingUserInput},
-    "BrowserTab"
-  );
+    browser.sendMessageToActor(
+      "Browser:Reload",
+      {flags: loadFlags, handlingUserInput},
+      "BrowserTab"
+    );
+  }
 }
 
 function _observe(aSubject, aTopic) {
