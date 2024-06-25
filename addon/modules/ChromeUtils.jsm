@@ -55,13 +55,24 @@ var TabmixChromeUtils = {
     return (this.XPCOMUtils = this.import("resource://gre/modules/XPCOMUtils.jsm").XPCOMUtils);
   },
 
+  esmModulePath(module) {
+    if (module.endsWith(".sys.mjs")) {
+      return module;
+    }
+    const [varsion, modulePath] = modulesMap[module] ?? [];
+    if (varsion && isVersion(varsion)) {
+      return modulePath;
+    }
+    return null;
+  },
+
   defineLazyModuleGetters(lazy, modules) {
     if (isVersion(1040)) {
       const esModules = {};
       const JSMModules = {};
       for (let [name, module] of Object.entries(modules)) {
-        const [varsion, modulePath] = modulesMap[module] ?? [];
-        if (varsion && isVersion(varsion)) {
+        const modulePath = this.esmModulePath(module);
+        if (modulePath) {
           esModules[name] = modulePath;
         } else {
           JSMModules[name] = module;
@@ -85,8 +96,8 @@ var TabmixChromeUtils = {
 
   import(module) {
     if (isVersion(1040)) {
-      const [varsion, modulePath] = modulesMap[module] ?? [];
-      if (varsion && isVersion(varsion)) {
+      const modulePath = this.esmModulePath(module);
+      if (modulePath) {
         return ChromeUtils.importESModule(modulePath);
       }
     }

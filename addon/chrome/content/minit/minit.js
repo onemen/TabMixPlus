@@ -1,4 +1,3 @@
-/* globals lazy */
 /* exported TMP_undocloseTabButtonObserver, TMP_TabView */
 "use strict";
 
@@ -1154,11 +1153,57 @@ Tabmix.navToolbox = {
 
     let obj, fn, $LF;
     let _handleSearchCommand = searchbar.handleSearchCommand.toString();
+    const change_handleSearchCommand =
+      _handleSearchCommand.includes("whereToOpenLink") &&
+      !_handleSearchCommand.includes("forceNewTab");
+
+    let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
+    [obj, fn] = [organizeSE ? window.organizeSE : searchbar, "doSearch"];
+    if ("__treestyletab__original_doSearch" in searchbar)
+      [obj, fn] = [searchbar, "__treestyletab__original_doSearch"];
+    let fnString = obj[fn].toString();
+    const change_doSearch = !fnString.includes('Tabmix');
+
+    if (!change_handleSearchCommand && !change_doSearch) {
+      // both functions already changed
+      return;
+    }
+
+    const lazy = {};
+    if (Tabmix.isVersion(1070)) {
+      const modules = {
+        // Bug 1793414 (Firefox 107) - MozSearchbar calls into BrowserSearch where it doesn't need to
+        // add references to lazy.FormHistory and lazy.SearchSuggestionController
+        FormHistory: "resource://gre/modules/FormHistory.jsm",
+        SearchSuggestionController: "resource://gre/modules/SearchSuggestionController.jsm",
+      };
+
+      if (Tabmix.isVersion(1210) && !Tabmix.isVersion(1220)) {
+        // Bug 1866616 add usage for UrlbarPrefs.sys.mjs only in Firefox 121
+        modules.UrlbarPrefs = "resource:///modules/UrlbarPrefs.sys.mjs";
+      }
+
+      if (Tabmix.isVersion(1290)) {
+        // Bug 1742889 (Firefox 129) - Rewrite consumers of whereToOpenLink to use BrowserUtils.whereToOpenLink
+        // add references to lazy.BrowserUtils
+        modules.BrowserUtils = "resource://gre/modules/BrowserUtils.sys.mjs";
+      }
+
+      TabmixChromeUtils.defineLazyModuleGetters(lazy, modules);
+    }
+
+    // we use local eval here to use lazy from the current scope
+    function makeCode({value: code}) {
+      if (!code.startsWith("function")) {
+        code = "function " + code;
+      }
+      return eval("(" + code + ")");
+    }
+
     // we check browser.search.openintab also for search button click
-    if (_handleSearchCommand.includes("whereToOpenLink") &&
-          !_handleSearchCommand.includes("forceNewTab")) {
+    if (change_handleSearchCommand) {
       $LF = '\n            ';
-      Tabmix.changeCode(searchbar, "searchbar.handleSearchCommand")._replace(
+      searchbar.handleSearchCommand = makeCode(Tabmix.changeCode(searchbar, "searchbar.handleSearchCommand")._replace(
         Tabmix.isVersion(1270) ?
           "where = lazy.BrowserUtils.whereToOpenLink(aEvent, false, true);" :
           'where = whereToOpenLink(aEvent, false, true);',
@@ -1167,41 +1212,18 @@ Tabmix.navToolbox = {
         'if (forceNewTab) {' + $LF +
         '  where = "tab";' + $LF +
         '}'
-      ).toCode();
+      ));
     }
 
-    let organizeSE = "organizeSE" in window && "doSearch" in window.organizeSE;
-    [obj, fn] = [organizeSE ? window.organizeSE : searchbar, "doSearch"];
-    if ("__treestyletab__original_doSearch" in searchbar)
-      [obj, fn] = [searchbar, "__treestyletab__original_doSearch"];
-    let fnString = obj[fn].toString();
-    if (/Tabmix/.test(fnString))
+    if (!change_doSearch) {
       return;
+    }
 
     // Personas Interactive Theme Engine 1.6.5
     let pIte = fnString.indexOf("BTPIServices") > -1;
 
-    if (Tabmix.isVersion(1070)) {
-      // Bug 1793414 (Firefox 107) - MozSearchbar calls into BrowserSearch where it doesn't need to
-      // add references to lazy.FormHistory and lazy.SearchSuggestionController
-      TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-        // eslint-disable-next-line tabmix/valid-lazy
-        FormHistory: "resource://gre/modules/FormHistory.jsm",
-        // eslint-disable-next-line tabmix/valid-lazy
-        SearchSuggestionController: "resource://gre/modules/SearchSuggestionController.jsm",
-      });
-    }
-
-    if (Tabmix.isVersion(1210) && !Tabmix.isVersion(1220)) {
-      // Bug 1866616 add usage for UrlbarPrefs.sys.mjs only in Firefox 121
-      ChromeUtils.defineESModuleGetters(lazy, {
-        // eslint-disable-next-line tabmix/valid-lazy
-        UrlbarPrefs: "resource:///modules/UrlbarPrefs.sys.mjs",
-      });
-    }
-
     $LF = '\n          ';
-    Tabmix.changeCode(obj, "searchbar." + fn)._replace(
+    obj[fn] = makeCode(Tabmix.changeCode(obj, "searchbar." + fn)._replace(
       'let params',
       'aWhere = Tabmix.navToolbox.whereToOpenSearch(aWhere);' + $LF +
       '$&'
@@ -1215,7 +1237,7 @@ Tabmix.navToolbox = {
     )._replace(
       /BTPIServices/g,
       'Services', {check: pIte}
-    ).toCode();
+    ));
   },
 
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
