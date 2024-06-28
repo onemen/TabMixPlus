@@ -398,6 +398,9 @@ var TabmixContext = {
     tabContextMenu.insertBefore($id("context_reloadSelectedTabs"), $id("tabmix_reloadTabOptions_separator"));
     tabContextMenu.insertBefore($id("context_undoCloseTab"), $id("tabmix_closeTab_separator"));
     tabContextMenu.insertBefore($id("context_closeTab"), $id("tabmix_closeTab_separator"));
+    if (Tabmix.isVersion(1270)) {
+      tabContextMenu.insertBefore($id("context_closeDuplicateTabs"), $id("tabmix_closeTab_separator"));
+    }
     tabContextMenu.insertBefore($id("context_bookmarkSelectedTabs"), $id("context_bookmarkAllTabs"));
     tabContextMenu.insertBefore($id("context_bookmarkTab"), $id("context_bookmarkAllTabs"));
 
@@ -639,11 +642,7 @@ var TabmixContext = {
     let cIndex = Tabmix.visibleTabs.indexOf(aTab);
 
     // count unprotected tabs for closing
-    let selectedTabsCount = multiselectionContext ? ChromeUtils.nondeterministicGetWeakSetKeys(
-      gBrowser._multiSelectedTabsSet
-    ).filter(tab => tab.isConnected && !tab.closing && !tab.hasAttribute("protected")).length : 1;
-    let tabCountInfo = JSON.stringify({tabCount: selectedTabsCount});
-    Tabmix.setItem("context_closeTab", "data-l10n-args", tabCountInfo);
+    const selectedTabsCount = this.updateSelectedTabsCount("context_closeTab", multiselectionContext);
 
     var keepLastTab = tabsCount == 1 && Tabmix.prefs.getBoolPref("keepLastTab");
     Tabmix.setItem("context_closeTab", "disabled", (multiselectionContext ? selectedTabsCount === 0 : protectedTab) || keepLastTab);
@@ -802,9 +801,11 @@ var TabmixContext = {
       }
       Tabmix.showItem("tm-linkWithhistory", Tabmix.prefs.getBoolPref("linkWithHistory") && onLink);
       var closeTabMenu = document.getElementById("tm-content-closetab");
-      Tabmix.showItem(closeTabMenu, !contentClick && Tabmix.prefs.getBoolPref("closeTabContent"));
+      let showCloseTab = !contentClick && Tabmix.prefs.getBoolPref("closeTabContent");
+      const selectedTabsCount = this.updateSelectedTabsCount(closeTabMenu, showCloseTab);
+      Tabmix.showItem(closeTabMenu, showCloseTab);
       var keepLastTab = tabsCount == 1 && Tabmix.prefs.getBoolPref("keepLastTab");
-      Tabmix.setItem(closeTabMenu, "disabled", protectedTab || keepLastTab);
+      Tabmix.setItem(closeTabMenu, "disabled", selectedTabsCount === 0 && protectedTab || keepLastTab);
 
       // for remote tab get call getValidUrl when it is safe to use CPOWs
       // getValidUrl may call getParamsForLink
@@ -899,7 +900,18 @@ var TabmixContext = {
       return false;
     }
     return urls.size === 0;
-  }
+  },
+
+  updateSelectedTabsCount(itemOrId, isVisible) {
+    const selectedTabsCount = isVisible ?
+      ChromeUtils.nondeterministicGetWeakSetKeys(gBrowser._multiSelectedTabsSet).filter(
+        tab => tab.isConnected && !tab.closing && !tab.hasAttribute("protected")
+      ).length :
+      1;
+    const tabCountInfo = JSON.stringify({tabCount: selectedTabsCount || 1});
+    Tabmix.setItem(itemOrId, "data-l10n-args", tabCountInfo);
+    return selectedTabsCount;
+  },
 };
 
 Tabmix.allTabs = {
