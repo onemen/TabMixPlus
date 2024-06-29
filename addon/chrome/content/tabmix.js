@@ -30,8 +30,8 @@ Tabmix.startup = function TMP_startup() {
   TabmixContext.toggleEventListener(true);
 
   // if sessionStore disabled use TMP command
-  window.undoCloseTab = function ct_window_undoCloseTab(aIndex, aWhere) {
-    return TMP_ClosedTabs.undoCloseTab(aIndex, aWhere);
+  window.undoCloseTab = function ct_window_undoCloseTab(aIndex, sourceWindowSSId, aWhere) {
+    return TMP_ClosedTabs.undoCloseTab(aIndex, sourceWindowSSId, aWhere);
   };
 };
 
@@ -246,6 +246,7 @@ var TMP_eventListener = {
         TabmixSessionManager.onWindowClose(!Tabmix.numberOfWindows());
         break;
       case "SSWindowRestored":
+        TMP_ClosedTabs.setButtonDisableState();
         this.onSSWindowRestored();
         break;
       case "SSTabRestoring":

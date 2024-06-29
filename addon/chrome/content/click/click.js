@@ -230,7 +230,7 @@ var TabmixTabClickOptions = {
         break;
       }
       case 13:
-        TMP_ClosedTabs.restoreTab("original", -2);
+        TMP_ClosedTabs.restoreTab(window, -2, "original");
         break;
       case 14:
         gBrowser.duplicateTabToWindow(aTab, false);

@@ -103,6 +103,10 @@
                   name="extensions.tabmix.undoCloseButton.menuonly"                           type="bool"/>
       <preference id="pref_keepMenuOpen"
                   name="extensions.tabmix.undoClose.keepMenuOpen"                             type="bool"/>
+      <preference id="pref_closedTabsFromAllWindows"
+                  name="browser.sessionstore.closedTabsFromAllWindows"                        type="bool"/>
+      <preference id="pref_closedTabsFromClosedWindows"
+                  name="browser.sessionstore.closedTabsFromClosedWindows"                     type="bool"/>
       <preference id="pref_ctrltab"             name="browser.ctrlTab.sortByRecentlyUsed"     type="bool"
                   onchange="gEventsPane.disableShowTabList();"/>
       <preference id="pref_ctrltab.tabPreviews" name="extensions.tabmix.lasttab.tabPreviews"  type="bool"
@@ -397,7 +401,7 @@
         </tabpanel>
 <!-- ======================================================== -->
         <tabpanel>
-          <html:fieldset flex="1">
+         <html:fieldset flex="1">
             <vbox align="start">
               <!-- Enable Undo Close Tab
                    gTMPprefObserver.observe control changes in these preference -->
@@ -414,7 +418,13 @@
                 <checkbox_tmp id="keepMenuOpen" preference="pref_keepMenuOpen" observes="obs_undoClose"/>
               </vbox>
             </vbox>
-            <separator class="groove"/>
+            <separator class="groove" id="closedTabsFrom-separator"/>
+            <vbox align="start" class="indent">
+              <checkbox_tmp id="closedTabsFromAllWindows" label="List closed tabs from all opened windows" preference="pref_closedTabsFromAllWindows" observes="obs_undoClose"/>
+              <checkbox_tmp id="closedTabsFromClosedWindows" label="List closed tabs from recently closed windows" preference="pref_closedTabsFromClosedWindows" observes="obs_undoClose"/>
+            </vbox>
+         </html:fieldset>
+         <html:fieldset flex="1">
             <checkbox_tmp id="ctrltab" label="&ctrltab.label;" preference="pref_ctrltab"/>
             <checkbox_tmp id="ctrltab.tabPreviews" class="indent" label="&ctrltab.tabPreviews;" preference="pref_ctrltab.tabPreviews"
                       observes="obs_ctrltab"/>

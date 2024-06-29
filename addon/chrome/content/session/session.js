@@ -88,7 +88,7 @@ Tabmix.Sanitizer = {
       // clear closed tabs and disable the button if we use TMP session manager and save close tabs
       if ((TabmixSessionManager.enableManager || TabmixSessionManager.enableBackup) &&
           TabmixSessionManager.saveClosedTabs) {
-        wnd.TMP_ClosedTabs.restoreTab("original", -1);
+        wnd.TMP_ClosedTabs.restoreTab(window, -1, "original");
       }
     }
     // for the case Tabmix session manager is off

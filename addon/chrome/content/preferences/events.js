@@ -54,6 +54,12 @@ var gEventsPane = {
       gPrefWindow.removeChild("pref_searchclipboardfor");
     }
 
+    if (!Tabmix.isVersion(1170)) {
+      $("closedTabsFrom-separator").remove();
+      gPrefWindow.removeItemAndPrefById("pref_closedTabsFromAllWindows");
+      gPrefWindow.removeItemAndPrefById("pref_closedTabsFromClosedWindows");
+    }
+
     this.alignTabOpeningBoxes();
 
     this.openTabNext.on_change($("pref_openTabNext"));

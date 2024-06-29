@@ -326,7 +326,10 @@ var TMP_ClosedTabs = {
    * Get closed tabs count
    */
   get count() {
-    const name = Tabmix.isVersion(1150) ? "getClosedTabCountForWindow" : "getClosedTabCount";
+    const name =
+      Tabmix.isVersion(1150) && !Tabmix.isVersion(1170) ?
+        "getClosedTabCountForWindow" :
+        "getClosedTabCount";
     return window.__SSi ? TabmixSvc.ss[name](window) : 0;
   },
 
@@ -334,8 +337,53 @@ var TMP_ClosedTabs = {
    * Get closed tabs data
    */
   get getClosedTabData() {
-    const name = Tabmix.isVersion(1150) ? "getClosedTabDataForWindow" : "getClosedTabData";
-    return window.__SSi ? TabmixSvc.ss[name](window, false) : {};
+    const name =
+      Tabmix.isVersion(1150) && !Tabmix.isVersion(1170) ?
+        "getClosedTabDataForWindow" :
+        "getClosedTabData";
+    const args = Tabmix.isVersion(1170) ? [] : [window, false];
+    return window.__SSi ? TabmixSvc.ss[name](...args) : {};
+  },
+
+  get allClosedTabData() {
+    const closedTabsData = this.getClosedTabData;
+    if (Tabmix.isVersion(1190)) {
+      const restoreClosedTabsFromClosedWindows = Services.prefs.getBoolPref(
+        "browser.sessionstore.closedTabsFromClosedWindows"
+      );
+      if (restoreClosedTabsFromClosedWindows) {
+        closedTabsData.push(...TabmixSvc.ss.getClosedTabDataFromClosedWindows());
+      }
+    }
+    return closedTabsData;
+  },
+
+  getSource(item) {
+    if (!Tabmix.isVersion(1170)) {
+      return window;
+    }
+
+    let source = window;
+    if (item.hasAttribute("source-closed-id")) {
+      source = {
+        sourceClosedId: Number(item.getAttribute("source-closed-id")),
+        closedWindow: true,
+      };
+    } else if (item.hasAttribute("source-window-id")) {
+      source = {sourceWindowId: item.getAttribute("source-window-id")};
+    }
+
+    return source;
+  },
+
+  getSingleClosedTabData(source, index) {
+    if (!Tabmix.isVersion(1170)) {
+      return this.getClosedTabData[index];
+    }
+
+    const sourceWinData = TabmixSvc.SessionStore._resolveClosedDataSource(source);
+    const closeTabData = sourceWinData._closedTabs.find(tabData => tabData.closedId == index);
+    return closeTabData;
   },
 
   getUrl: function ct_getUrl(aTabData) {
@@ -361,16 +409,18 @@ var TMP_ClosedTabs = {
     const isSubviewbutton = aPopup.__tagName === "toolbarbutton";
     for (let i = 0; i < aPopup.childNodes.length - 1; i++) {
       let m = aPopup.childNodes[i];
-      let tabData = closedTabs[i];
+      let tabData =
+        i < closedTabs.length ?
+          closedTabs[i] :
+          this.getSingleClosedTabData(this.getSource(m), Number(m.getAttribute("value")));
       if (tabData && m.hasAttribute("targetURI")) {
         this.getTitle(tabData, m.getAttribute("targetURI")).then(title => {
           m.setAttribute("label", title);
         });
       }
-      m.setAttribute("value", i);
       m.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
       m.removeAttribute("oncommand");
-      m.addEventListener("command", this);
+      m.addEventListener("command", this, {capture: true, once: true});
       m.addEventListener("click", this);
       m.removeEventListener(
         "click",
@@ -385,7 +435,14 @@ var TMP_ClosedTabs = {
     // Reopen All Tabs
     let reopenAllTabs = aPopup.lastChild;
     reopenAllTabs.setAttribute("value", -2);
-    reopenAllTabs.removeAttribute("oncommand");
+    if (Tabmix.isVersion(1170)) {
+      reopenAllTabs.removeEventListener(
+        "command",
+        RecentlyClosedTabsAndWindowsMenuUtils.onRestoreAllTabsCommand
+      );
+    } else {
+      reopenAllTabs.removeAttribute("oncommand");
+    }
     reopenAllTabs.addEventListener("command", this);
     if (isSubviewbutton) {
       reopenAllTabs.classList.add("subviewbutton", "subviewbutton-iconic");
@@ -430,6 +487,9 @@ var TMP_ClosedTabs = {
         this.checkForMiddleClick(event);
         break;
       case "command":
+        // stop the event before it trigger the listener from
+        // RecentlyClosedTabsAndWindowsMenuUtils.createEntry
+        event.stopPropagation();
         this.restoreCommand(event);
         break;
     }
@@ -441,7 +501,7 @@ var TMP_ClosedTabs = {
     switch (event.type) {
       case "click":
         if (event.button === 1) {
-          this.restoreTab("original", -2);
+          this.restoreTab(window, -2, "original");
         } else if (event.button === 0 && showSubView &&
             !TabmixAllTabs.isAfterCtrlClick(event.target)) {
           Tabmix.closedObjectsUtils.showSubView(event);
@@ -503,9 +563,11 @@ var TMP_ClosedTabs = {
   },
 
   doCommand(command, where, item, keepMenuOpen) {
+    // valid commands: restoreTab, addBookmarks, copyTabUrl
     const popup = item.parentNode;
     const index = Number(item.getAttribute("value"));
-    this[command](where || index, index);
+    const source = this.getSource(item);
+    this[command](source, index, where);
     const rePopulate = (keepMenuOpen || this.keepMenuOpen) && this.count > 0;
     if (rePopulate) {
       if (popup && command == "restoreTab") {
@@ -519,75 +581,94 @@ var TMP_ClosedTabs = {
     }
   },
 
-  addBookmarks: function ct_addBookmarks(index) {
-    var tabData = this.getClosedTabData[index];
+  addBookmarks: function ct_addBookmarks(source, index) {
+    var tabData = this.getSingleClosedTabData(source, index);
     var url = this.getUrl(tabData);
     this.getTitle(tabData, url).then(title => {
       PlacesCommandHook.bookmarkLink(url, title);
     });
   },
 
-  copyTabUrl: function ct_copyTabUrl(index) {
-    var tabData = this.getClosedTabData[index];
+  copyTabUrl: function ct_copyTabUrl(source, index) {
+    var tabData = this.getSingleClosedTabData(source, index);
     var url = this.getUrl(tabData);
-    var clipboard = Cc["@mozilla.org/widget/clipboardhelper;1"]
-        .getService(Ci.nsIClipboardHelper);
+    var clipboard = Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper);
 
     clipboard.copyString(url);
   },
 
-  restoreTab: function ct_restoreTab(aWhere, aIndex) {
-    switch (aWhere) {
+  restoreTab: function ct_restoreTab(source, index, where) {
+    switch (where) {
       case "window":
-        this.restoreToNewWindow(aIndex);
+        this.restoreToNewWindow(source, index);
         break;
       case "delete":
-        TabmixSvc.ss.forgetClosedTab(window, aIndex);
+        if (source.closedWindow) {
+          TabmixSvc.ss.forgetClosedTabById(index, source);
+        } else {
+          TabmixSvc.ss.forgetClosedTab(source, index);
+        }
         break;
       case "original":
-        if (aIndex == -1) {
+        if (index == -1) {
           this.removeAllClosedTabs();
           break;
-        } else if (aIndex == -2) {
+        } else if (index == -2) {
           this.restoreAllClosedTabs();
           break;
         }
-        // else do the default
-        /* falls through */
+      // else do the default
+      /* falls through */
       default:
-        this._undoCloseTab(aIndex, aWhere, true);
+        this._undoCloseTab(source, index, where, true);
     }
   },
 
   removeAllClosedTabs() {
-    while (this.count) {
-      TabmixSvc.ss.forgetClosedTab(window, 0);
+    if (Tabmix.isVersion(1170)) {
+      const closedTabsData = this.allClosedTabData;
+      for (const {closedId, sourceClosedId, sourceWindowId} of closedTabsData) {
+        TabmixSvc.ss.forgetClosedTabById(closedId, {sourceClosedId, sourceWindowId});
+      }
+    } else {
+      while (this.count) {
+        TabmixSvc.ss.forgetClosedTab(window, 0);
+      }
     }
   },
 
   /**
    * @brief           fetch the data of closed tab, while removing it from the array
-   * @param aIndex    a Integer value - 0 or grater index to remove
+   * @param source    An optional sessionstore id to identify the source window
+   * @param index    a Integer value - 0 or grater index to remove
    * @returns         closed tab data at aIndex.
    */
-  getClosedTabAtIndex: function ct_getClosedTabAtIndex(aIndex) {
-    if (aIndex < 0 || aIndex >= this.count)
-      return null;
-
-    const winData = TabmixSvc.SessionStore._windows[window.__SSi];
+  getClosedTabAtIndex: function ct_getClosedTabAtIndex(source, index) {
+    const winData = Tabmix.isVersion(1170) ?
+      TabmixSvc.SessionStore._resolveClosedDataSource(source) :
+      TabmixSvc.SessionStore._windows[window.__SSi];
     const closedTabs = winData._closedTabs;
+    const closedIndex =
+      source.closedWindow && !source.restoreAll ?
+        closedTabs.findIndex(tabData => tabData.closedId == index) :
+        index;
+    if (closedIndex < 0) {
+      return null;
+    }
     const closedTab = Tabmix.isVersion(940) ?
-      TabmixSvc.SessionStore.removeClosedTabData(winData, closedTabs, aIndex) :
-      TabmixSvc.SessionStore.removeClosedTabData(closedTabs, aIndex);
+      TabmixSvc.SessionStore.removeClosedTabData(winData, closedTabs, closedIndex) :
+      TabmixSvc.SessionStore.removeClosedTabData(closedTabs, closedIndex);
     TabmixSvc.SessionStore._notifyOfClosedObjectsChange();
     return closedTab;
   },
 
-  restoreToNewWindow(aIndex) {
-    var tabData = this.getClosedTabAtIndex(aIndex);
-    // we pass the current tab as a place holder for tabData
-    var state = JSON.stringify(tabData ? tabData.state : {});
-    return gBrowser.duplicateTabToWindow(gBrowser._selectedTab, null, state);
+  restoreToNewWindow(source, index) {
+    const tabData = this.getClosedTabAtIndex(source, index);
+    if (tabData) {
+      // we pass the current tab as a place holder for tabData
+      const state = JSON.stringify(tabData ? tabData.state : {});
+      gBrowser.duplicateTabToWindow(gBrowser._selectedTab, null, state);
+    }
   },
 
   restoreAllClosedTabs() {
@@ -600,10 +681,20 @@ var TMP_ClosedTabs = {
     // catch blank tabs
     const blankTabs = gBrowser.tabs.filter(tab => gBrowser.isBlankNotBusyTab(tab));
 
-    var multiple = closedTabCount > 1;
-    for (let i = 0; i < closedTabCount; i++) {
+    const closedTabsData = this.allClosedTabData;
+    const multiple = closedTabsData.length > 1;
+    for (let i = 0; i < closedTabsData.length; i++) {
       let blankTab = blankTabs.pop() || null;
-      this._undoCloseTab(0, "original", i === 0, blankTab, multiple);
+      const {sourceClosedId, sourceWindowId} = closedTabsData[i];
+      const source = Tabmix.isVersion(1170) ?
+        {
+          sourceClosedId,
+          sourceWindowId,
+          restoreAll: true,
+          closedWindow: typeof sourceClosedId !== "undefined",
+        } :
+        window;
+      this._undoCloseTab(source, 0, "original", i === 0, blankTab, multiple);
     }
 
     // remove unused blank tabs
@@ -614,12 +705,11 @@ var TMP_ClosedTabs = {
     }
   },
 
-  _undoCloseTab(aIndex, aWhere, aSelectRestoredTab, aBlankTabToReuse, skipAnimation) {
-    if (!Tabmix.prefs.getBoolPref("undoClose") || this.count === 0)
-      return null;
+  _undoCloseTab(aSource, aIndex, aWhere, aSelectRestoredTab, aBlankTabToReuse, multiple) {
+    if (!Tabmix.prefs.getBoolPref("undoClose") || this.count === 0) return null;
 
     // get tab data
-    let {state, pos} = this.getClosedTabAtIndex(aIndex);
+    let {state, pos} = this.getClosedTabAtIndex(aSource, aIndex);
 
     var tabToRemove = null;
     var cTab = gBrowser._selectedTab;
@@ -648,15 +738,38 @@ var TMP_ClosedTabs = {
     let reuseExisting = !createLazyBrowser && aBlankTabToReuse &&
         aBlankTabToReuse.getAttribute("usercontextid") === userContextId;
 
+    let preferredRemoteType;
+    if (Tabmix.isVersion(1000)) {
+      // Predict the remote type to use for the load to avoid unnecessary process
+      // switches.
+      preferredRemoteType = E10SUtils.DEFAULT_REMOTE_TYPE;
+      let url;
+      if (state.entries?.length) {
+        let activeIndex = (state.index || state.entries.length) - 1;
+        activeIndex = Math.min(activeIndex, state.entries.length - 1);
+        activeIndex = Math.max(activeIndex, 0);
+        url = state.entries[activeIndex].url;
+      }
+      if (url) {
+        preferredRemoteType = TabmixSvc.SessionStore.getPreferredRemoteType(
+          url,
+          window,
+          state.userContextId
+        );
+      }
+    }
+
     let newTab = reuseExisting ? aBlankTabToReuse :
       gBrowser.addTrustedTab(null, {
         createLazyBrowser,
-        skipAnimation: tabToRemove || skipAnimation,
+        skipAnimation: tabToRemove || multiple,
         allowInheritPrincipal: true,
         noInitialLabel: true,
         pinned: state.pinned,
         userContextId,
         index: gBrowser.tabs.length,
+        skipLoad: true,
+        preferredRemoteType,
       });
     if (!reuseExisting && aBlankTabToReuse) {
       gBrowser.removeTab(aBlankTabToReuse, {animate: false});
@@ -678,9 +791,16 @@ var TMP_ClosedTabs = {
       TabView.afterUndoCloseTab();
     }
 
+    const fromSameWindow = aSource === window || aSource.sourceWindowId === window.__SSi;
+    // don't restore position for tabs from other windows
+    const restorePosition = fromSameWindow && Tabmix.prefs.getBoolPref("undoClosePosition");
+    // if we're opening multiple tabs move tabs from other windows to the end
+    if (!fromSameWindow && multiple) {
+      aWhere = "end";
+    }
+
     // after we open new tab we only need to fix position if this condition is true
     // we prevent gBrowser.addTab from moving new tab when we call it from here
-    var restorePosition = Tabmix.prefs.getBoolPref("undoClosePosition");
     if (aWhere == "current" || aWhere == "original" && restorePosition) {
       gBrowser.moveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, pos));
     } else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) {
@@ -699,10 +819,34 @@ var TMP_ClosedTabs = {
     return newTab;
   },
 
-  undoCloseTab: function ct_undoCloseTab(aIndex, aWhere) {
-    return this._undoCloseTab(aIndex || 0, aWhere || "original", true);
-  }
+  // based on function undoCloseTab from browser.js
+  undoCloseTab: function ct_undoCloseTab(aIndex, sourceWindowSSId, aWhere) {
+    // the window the tab was closed from
+    let sourceWindow;
+    if (sourceWindowSSId) {
+      sourceWindow = SessionStore.getWindowById(sourceWindowSSId);
+      if (!sourceWindow) {
+        throw new Error("sourceWindowSSId argument to undoCloseTab didn't resolve to a window");
+      }
+    } else {
+      sourceWindow = window;
+    }
 
+    // We are specifically interested in the lastClosedTabCount for the source window.
+    // When aIndex is undefined, we restore all the lastClosedTabCount tabs.
+    let lastClosedTabCount = SessionStore.getLastClosedTabCount(sourceWindow);
+    let tab = null;
+    // aIndex is undefined if the function is called without a specific tab to restore.
+    let tabsToRestore = aIndex !== undefined ? [aIndex] : new Array(lastClosedTabCount).fill(0);
+    let multiple = tabsToRestore.length > 1;
+    for (let index of tabsToRestore) {
+      if (SessionStore.getClosedTabCountForWindow(sourceWindow) > index) {
+        tab = this._undoCloseTab(sourceWindow, index, aWhere || "original", !tab, null, multiple);
+      }
+    }
+
+    return tab;
+  },
 };
 
 Tabmix.closedObjectsUtils = {
@@ -885,6 +1029,9 @@ Tabmix.closedObjectsUtils = {
     const viewType = event.target.id == "tabmix-closedWindowsButton" ? "Windows" : "Tabs";
 
     let anchor = event.target;
+    if (anchor.getAttribute("disabled") === "true") {
+      return;
+    }
     if (
       !Tabmix.isVersion(860) &&
       viewType === "Windows" &&

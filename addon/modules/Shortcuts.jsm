@@ -48,7 +48,7 @@ const Shortcuts = {
     undoCloseTab: {id: "key_restoreLastClosedTabOrWindowOrSession", default: "T accel,shift"},
     clearClosedTabs: {
       command() {
-        this.TMP_ClosedTabs.restoreTab('original', -1);
+        this.TMP_ClosedTabs.restoreTab({}, -1, "original");
       }
     },
     ucatab: {command: 13},
