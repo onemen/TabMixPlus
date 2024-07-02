@@ -135,6 +135,8 @@ pref("extensions.tabmix.enableScrollSwitch", false);
 */
 pref("extensions.tabmix.scrollTabs", 0);
 pref("extensions.tabmix.reversedScroll", false);
+pref("extensions.tabmix.useScrollByTabs", false);
+pref("extensions.tabmix.scrollByTabs", 1);
 
 pref("extensions.tabmix.dblClickTab", 0);
 pref("extensions.tabmix.dblClickTabbar", 1);

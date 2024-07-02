@@ -1019,6 +1019,10 @@ var TMP_eventListener = {
           instant = true;
         } else if (aEvent.deltaMode == aEvent.DOM_DELTA_PAGE) {
           scrollAmount = delta * tabStrip.scrollClientSize;
+        } else if (Tabmix.prefs.getBoolPref("useScrollByTabs")) {
+          delta = delta > 0 ? 1 : -1;
+          tabStrip.scrollByIndex(delta * Tabmix.prefs.getIntPref("scrollByTabs"));
+          return;
         } else {
           scrollAmount = delta * tabStrip.lineScrollAmount;
         }

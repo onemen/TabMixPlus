@@ -27,6 +27,8 @@
       <preference id="pref_tabbarscrolling"   name="extensions.tabmix.scrollTabs"         type="int"
                   notChecked="2"/>
       <preference id="pref_reversescrolling"  name="extensions.tabmix.reversedScroll"     type="bool"/>
+      <preference id="pref_useScrollByTabs"    name="extensions.tabmix.useScrollByTabs"     type="bool"/>
+      <preference id="pref_scrollByTabs"       name="extensions.tabmix.scrollByTabs"        type="int"/>
       <preference id="pref_mouseDownSelect"   name="extensions.tabmix.selectTabOnMouseDown"
                   type="bool" inverted="true"/>
       <preference id="pref_middleclickDelete" name="extensions.tabmix.middleclickDelete"  type="bool"/>
@@ -103,6 +105,15 @@
             </radiogroup>
             <checkbox_tmp id="reversescrolling" label="&tabbarscrolling.inverse.label;"
                       preference="pref_reversescrolling" observes="obs_tabbarscrolling"/>
+            <separator class="thin"/>
+            <hbox align="center">
+              <checkbox_tmp label="Enable `Scroll by Tabs`" id="useScrollByTabs" preference="pref_useScrollByTabs"/>
+              <label value="Scroll by" observes="obs_useScrollByTabs"/>
+              <html:input id="tabFlipDelay" size="2" maxlength="2" preference="pref_scrollByTabs" observes="obs_useScrollByTabs"
+                          type="number" required="required" min="1" max="6"
+                          onsyncfrompreference="this.nextSibling.value=this.value==='1'?'tab':'tabs'"/>
+              <label value="tab(s)" observes="obs_useScrollByTabs"/>
+            </hbox>
           </html:fieldset>
         </tabpanel>
         <tabpanel class="mouseclick-panel" align="start">
@@ -192,6 +203,7 @@
       <broadcaster id="obs_mouseHoverSelect"/>
       <broadcaster id="obs_tabFlip"/>
       <broadcaster id="obs_tabbarscrolling"/>
+      <broadcaster id="obs_useScrollByTabs"/>
     </broadcasterset>
 
   </prefpane>
