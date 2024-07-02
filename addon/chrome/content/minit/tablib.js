@@ -711,20 +711,36 @@ Tabmix.tablib = {
     ).toCode();
 
     Tabmix.originalFunctions.FillHistoryMenu = window.FillHistoryMenu;
-    let fillHistoryMenu = function FillHistoryMenu(aParent) {
+    if (Tabmix.isVersion(1290)) {
+      document.getElementById("back-button").childNodes[0].removeEventListener("popupshowing", FillHistoryMenu);
+      document.getElementById("forward-button").childNodes[0].removeEventListener("popupshowing", FillHistoryMenu);
+    }
+    let fillHistoryMenu = function FillHistoryMenu(parentOrEvent) {
+      let parent = Tabmix.isVersion(1290) ? parentOrEvent.target : parentOrEvent;
       let rv = Tabmix.originalFunctions.FillHistoryMenu.apply(this, arguments);
-      let l = aParent.childNodes.length;
+      const userLabel = gBrowser.selectedTab.getAttribute("fixed-label");
+      const userLabelUri = gBrowser.selectedTab.getAttribute("label-uri");
+      let l = parent.childNodes.length;
       for (let i = 0; i < l; i++) {
-        let item = aParent.childNodes[i];
+        let item = parent.childNodes[i];
         let uri = item.getAttribute("uri");
         let label = item.getAttribute("label");
-        TMP_Places.getTitleFromBookmark(uri, label).then(title => {
-          Tabmix.setItem(item, "label", title);
-        });
+        if (userLabelUri === uri && userLabel) {
+          // user rename tab for specific url
+          Tabmix.setItem(item, "label", userLabel);
+        } else {
+          TMP_Places.getTitleFromBookmark(uri, label).then(title => {
+            Tabmix.setItem(item, "label", title);
+          });
+        }
       }
       return rv;
     };
     Tabmix.setNewFunction(window, "FillHistoryMenu", fillHistoryMenu);
+    if (Tabmix.isVersion(1290)) {
+      document.getElementById("back-button").childNodes[0].addEventListener("popupshowing", FillHistoryMenu);
+      document.getElementById("forward-button").childNodes[0].addEventListener("popupshowing", FillHistoryMenu);
+    }
 
     Tabmix.changeCode(newWindowButtonObserver, "newWindowButtonObserver.onDragOver")._replace(
       '{',
@@ -818,9 +834,10 @@ Tabmix.tablib = {
       '$1$2'
     ).toCode();
 
-    var popup = document.getElementById("historyUndoWindowPopup");
-    if (popup)
-      popup.setAttribute("context", "tm_undocloseWindowContextMenu");
+    var undoWindowPopup = document.getElementById("historyUndoWindowPopup");
+    if (undoWindowPopup) {
+      undoWindowPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
+    }
 
     Tabmix.originalFunctions.gURLBar_setURI = gURLBar.setURI;
     gURLBar.setURI = function tabmix_gURLBarsetURI() {
