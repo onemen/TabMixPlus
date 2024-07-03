@@ -663,7 +663,7 @@ ContentClickInternal = {
   },
 
   miscellaneous(node) {
-    if ("className" in node) {
+    if ("className" in node && node.host !== "github.com") {
       // don't interrupt with noscript
       if (node.className.indexOf("__noscriptPlaceholder__") > -1)
         return true;
