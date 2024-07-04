@@ -29,12 +29,12 @@ var TMP_LastTab = {
     TabmixAllTabs.updateMenuItemActive(null, item);
 
     // show the list at the center of the screen
-    const {height, width} = tablist.getBoundingClientRect();
-    let left = () => screen.availLeft + (screen.availWidth - width) / 2;
-    let top = () => screen.availTop + (screen.availHeight - height) / 2;
+    let left = (w = 0) => screen.availLeft + (screen.availWidth - w) / 2;
+    let top = (h = 0) => screen.availTop + (screen.availHeight - h) / 2;
     tablist.style.visibility = "hidden";
     tablist.openPopupAtScreen(left(), top(), true);
-    tablist.moveTo(left(), top());
+    const {height, width} = tablist.getBoundingClientRect();
+    tablist.moveTo(left(width), top(height));
     tablist.style.visibility = "";
 
     var ietab = "chrome://ietab/content/reloaded.html?url=";
