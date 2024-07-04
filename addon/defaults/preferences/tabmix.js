@@ -196,6 +196,7 @@ pref("extensions.tabmix.renameTabMenu", false);
 pref("extensions.tabmix.reloadTabMenu", true);
 pref("extensions.tabmix.reloadTabOptions", true);
 pref("extensions.tabmix.closeTabMenu", true);
+pref("extensions.tabmix.closeDuplicateTabs", true);
 pref("extensions.tabmix.closeTabOptions", true);
 pref("extensions.tabmix.closeTabContent", false);
 pref("extensions.tabmix.undoCloseTabMenu", true);

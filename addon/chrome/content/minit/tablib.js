@@ -1623,6 +1623,30 @@ Tabmix.tablib = {
       '$&.filter(tab => !tab._isProtected || tab.pinned)'
     ).toCode();
 
+    if (Tabmix.isVersion(1270)) {
+      Tabmix.changeCode(gBrowser, "gBrowser._removeDuplicateTabs")._replace(
+        'if (!this.warnAboutClosingTabs',
+        `const tabsCount = tabs.length;
+        tabs = tabs.filter(tab => !tab._isProtected);
+        const protectedCount = tabsCount - tabs.length;
+        $&`
+      )._replace(
+        '{ l10nArgs:',
+        '{ protectedCount, l10nArgs:',
+      ).toCode();
+
+      Tabmix.changeCode(ConfirmationHint, "ConfirmationHint.show")._replace(
+        'const DURATION',
+        `if (options.protectedCount) {
+           this._panel.classList.add("with-description");
+           this._description.hidden = false;
+           const description = options.protectedCount === 1 ? "1 duplicate tab is protected" : options.protectedCount + " duplicate tabs are protected";
+           this._description.setAttribute("value", description);
+         }
+         $&`
+      ).toCode();
+    }
+
     Tabmix.changeCode(gBrowser, "gBrowser.warnAboutClosingTabs")._replace(
       'var shouldPrompt = Services.prefs.getBoolPref(pref);',
       `$&
@@ -1632,8 +1656,8 @@ Tabmix.tablib = {
       tabsToClose -= keepLastTab;
       shouldPrompt = promptType > 0;`
     )._replace(
-      /buttonPressed = ps\.confirmEx[^;]*;/,
-      'buttonPressed = Tabmix.tablib.showClosingTabsPrompt(promptType, tabsToClose, numProtected, flags, warnOnClose);'
+      /var buttonPressed = ps\.confirmEx[^;]*;/,
+      'var buttonPressed = Tabmix.tablib.showClosingTabsPrompt(promptType, tabsToClose, numProtected, flags, warnOnClose);'
     )._replace(
       'aCloseTabs == this.closingTabsEnum.ALL &&', ''
     )._replace(

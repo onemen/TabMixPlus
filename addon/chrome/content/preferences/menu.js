@@ -43,6 +43,10 @@ var gMenuPane = {
             browserWindow.gNavigatorBundle.getString("unmuteTab.label");
     }
 
+    if (!Tabmix.isVersion(1270)) {
+      gPrefWindow.removeItemAndPrefById("pref_closeDuplicateTabs");
+    }
+
     // if Tabview exist copy its menu label
     let tabViewMenu = browserWindow.TMP_TabView.installed &&
         ($$("context_tabViewMenu") || $$("tabGroups-context_tabViewMenu"));

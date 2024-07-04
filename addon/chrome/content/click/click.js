@@ -396,11 +396,13 @@ var TabmixContext = {
     var tabContextMenu = $id("tabContextMenu");
     tabContextMenu.insertBefore($id("context_reloadTab"), $id("tabmix_reloadTabOptions_separator"));
     tabContextMenu.insertBefore($id("context_reloadSelectedTabs"), $id("tabmix_reloadTabOptions_separator"));
-    tabContextMenu.insertBefore($id("context_undoCloseTab"), $id("tabmix_closeTab_separator"));
-    tabContextMenu.insertBefore($id("context_closeTab"), $id("tabmix_closeTab_separator"));
+    const closeTabSeparator = $id("tabmix_closeTab_separator");
+    tabContextMenu.insertBefore($id("context_undoCloseTab"), closeTabSeparator);
+    tabContextMenu.insertBefore($id("context_closeTab"), closeTabSeparator);
     if (Tabmix.isVersion(1270)) {
-      tabContextMenu.insertBefore($id("context_closeDuplicateTabs"), $id("tabmix_closeTab_separator"));
+      tabContextMenu.insertBefore($id("context_closeDuplicateTabs"), closeTabSeparator);
     }
+    tabContextMenu.insertBefore($id("context_closeTabOptions"), closeTabSeparator);
     tabContextMenu.insertBefore($id("context_bookmarkSelectedTabs"), $id("context_bookmarkAllTabs"));
     tabContextMenu.insertBefore($id("context_bookmarkTab"), $id("context_bookmarkAllTabs"));
 
@@ -596,6 +598,12 @@ var TabmixContext = {
 
     // Close tab Commands
     Tabmix.showItem("context_closeTab", Tabmix.prefs.getBoolPref("closeTabMenu"));
+    if (Tabmix.isVersion(1270)) {
+      const showCloseDuplicateTabs =
+        Tabmix.prefs.getBoolPref("closeDuplicateTabs") &&
+        Services.prefs.getBoolPref("browser.tabs.context.close-duplicate.enabled");
+      Tabmix.showItem("context_closeDuplicateTabs", showCloseDuplicateTabs);
+    }
     Tabmix.showItem("context_closeTabOptions", Tabmix.prefs.getBoolPref("closeTabOptions"));
 
     //  ---------------- menuseparator ---------------- //
