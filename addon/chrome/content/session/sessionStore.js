@@ -739,7 +739,7 @@ var TMP_ClosedTabs = {
         aBlankTabToReuse.getAttribute("usercontextid") === userContextId;
 
     let preferredRemoteType;
-    if (Tabmix.isVersion(1000)) {
+    if (Tabmix.isVersion(1170)) {
       // Predict the remote type to use for the load to avoid unnecessary process
       // switches.
       preferredRemoteType = E10SUtils.DEFAULT_REMOTE_TYPE;
