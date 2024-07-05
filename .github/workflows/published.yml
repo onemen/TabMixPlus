@@ -4,15 +4,14 @@ on:
   release:
     types: [published]
 
+  workflow_dispatch:
+
 jobs:
   update-docs:
     runs-on: ubuntu-latest
     steps:
       - name: Update tabmixplus-docs
         env:
-          github-token: ${{ secrets.TABMIXPLUS_DOCS_TOKEN }}
+          GH_TOKEN: ${{ secrets.TABMIXPLUS_DOCS_TOKEN }}
         run: |
-          tag_name=${{ github.event.release.tag_name }}
-          if [[ $tag_name =~ ^v[0-9] ]]; then
-            gh workflow run --repo onemen/tabmixplus-docs --ref main deploy.yml --github-token $github-token
-          fi
+          gh workflow run --repo onemen/tabmixplus-docs --ref main deploy.yml
