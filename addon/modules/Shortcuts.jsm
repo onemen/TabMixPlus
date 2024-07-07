@@ -179,14 +179,6 @@ const Shortcuts = {
           if (elm.hasAttribute("reserved")) {
             keyData.reserved = true;
           }
-
-          // when user change shortcut we re-insert the "mainKeyset" to the DOM,
-          // this triggers async fluent translation for keys with data-l10n-id
-          // attribute, once the translation finished it reset the key attribute
-          // to its default value.
-          if (elm.hasAttribute("data-l10n-id")) {
-            elm.removeAttribute("data-l10n-id");
-          }
         }
       } else if (tabmixKey) {
         keyData.default = keyData.default.replace("#modifiers", platformModifiers);
@@ -327,6 +319,22 @@ const Shortcuts = {
       let document = aWindow.document;
       return document.documentElement.appendChild(document.createElement("tabmix_shortcuts"));
     });
+
+    const $ = id => id && aWindow.document.getElementById(id);
+    for (let key of Object.keys(this.keys)) {
+      let keyData = this.keys[key];
+      let tabmixKey = keyData.id?.startsWith("key_tm");
+      if (keyData.default && !tabmixKey) {
+        const elm = $(keyData.id);
+        // when user change shortcut we re-insert the "mainKeyset" to the DOM,
+        // this triggers async fluent translation for keys with data-l10n-id
+        // attribute, once the translation finished it reset the key attribute
+        // to its default value.
+        if (elm?.hasAttribute("data-l10n-id")) {
+          elm.removeAttribute("data-l10n-id");
+        }
+      }
+    }
 
     let [changedKeys, needUpdate] = this._getChangedKeys({onOpen: true});
     if (needUpdate)
