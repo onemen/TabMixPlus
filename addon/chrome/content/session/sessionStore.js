@@ -841,7 +841,14 @@ var TMP_ClosedTabs = {
     let multiple = tabsToRestore.length > 1;
     for (let index of tabsToRestore) {
       if (SessionStore.getClosedTabCountForWindow(sourceWindow) > index) {
-        tab = this._undoCloseTab(sourceWindow, index, aWhere || "original", !tab, null, multiple);
+        tab = this._undoCloseTab(
+          sourceWindow,
+          index,
+          aWhere || "original",
+          !tab,
+          !tab ? undefined : null,
+          multiple
+        );
       }
     }
 
