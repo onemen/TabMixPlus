@@ -43,6 +43,14 @@
     '$&'
   ).defineProperty();
 
+  // workaround bug 1905267 - event.target.classList can be undefined when detaching tab by its label
+  ["on_mouseover", "on_mouseout"].forEach(methodName => {
+    Tabmix.changeCode(tabbrowsertab.prototype, methodName)._replace(
+      'event.target.classList',
+      'event.target?.classList?'
+    ).toCode();
+  });
+
   delete tabbrowsertab._flippedInheritedAttributes;
 
   Tabmix.changeCode(tabbrowsertab.prototype, "initialize")._replace(
