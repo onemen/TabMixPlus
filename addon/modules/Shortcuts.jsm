@@ -381,9 +381,17 @@ const Shortcuts = {
       }
     }
 
+    // only set key or keycode
+    if (keyAtt.key) {
+      delete keyAtt.keycode;
+    } else if (keyAtt.keycode) {
+      delete keyAtt.key;
+    }
+
     for (let [att, val] of Object.entries(keyAtt)) {
       keyItem.setAttribute(att, val || "");
     }
+
     // remove existing acceltext from menus
     let items = document.getElementsByAttribute("key", keyItem.id);
     for (let i = 0, l = items.length; i < l; i++)
