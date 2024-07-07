@@ -35,13 +35,22 @@ var gMousePane = {
     this._inited = true;
   },
 
-  tabSelectionChanged(aEvent) {
-    if (aEvent.target.localName != "tabpanels")
+  tabSelectionChanged(event) {
+    if (event.target.localName != "tabpanels") {
       return;
-    gPrefWindow.tabSelectionChanged(aEvent);
+    }
+    gPrefWindow.tabSelectionChanged(event);
 
-    if (this._inited)
-      this.updatePanelPrefs(aEvent.target._tabbox.tabs.selectedIndex);
+    if (this._inited) {
+      this.updatePanelPrefs(event.target._tabbox.tabs.selectedIndex);
+    }
+  },
+
+  panelSelectionChanged(event, panel = event.target) {
+    if (panel.tabbox && panel.selectedIndex !== 0) {
+      event.stopPropagation();
+      panel.selectedIndex = 0;
+    }
   },
 
   _options: ["dbl", "middle", "ctrl", "shift", "alt"],

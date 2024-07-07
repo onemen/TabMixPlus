@@ -129,7 +129,7 @@
               <tab label="&alt.label;"    linkedpanel="pl" class="subtabs"/>
             </tabs>
             <tabpanels class="groupbox-panels tabclick" flex="0" selectedIndex="0"
-                  onselect="if (this.tabbox &amp;&amp; this.selectedIndex !== 0) {event.stopPropagation(); this.selectedIndex = 0;}">
+                  onselect="gMousePane.panelSelectionChanged(event);">
               <tabpanel id="_tabpanel">
                 <spacer style="height: 8px;"/>
                 <!-- click on a tab -->
