@@ -101,16 +101,18 @@ var TMP_tabDNDObserver = {
     )._replace(
       /let newIndex = this\._getDropIndex\(event.*\);/,
       Tabmix.isVersion(1120) ?
-        'let {newIndex, mouseIndex} = this._getDropIndex(event, {returnObj:true});' :
-        'let {newIndex, mouseIndex} = this._getDropIndex(event, effects == "link", true);'
-    )._replace(
-      'if (newIndex == children.length) {',
-      `const isFirstTabInRow = TMP_tabDNDObserver.isFirstTabInRow(newIndex, mouseIndex, children);
-       if (newIndex == children.length || isFirstTabInRow) {`
+        'let {newIndex, addWidth} = this._getDropIndex(event, {dragover: true, children: this.allTabs});' :
+        'let {newIndex, addWidth} = this._getDropIndex(event, effects == "link", true);'
     )._replace(
       /let tabRect = children[^;]*;/g,
       `$&
       newMarginY = TMP_tabDNDObserver.getDropIndicatorMarginY(ind, tabRect, rect);`
+    )._replace(
+      'newMargin = rect.right - tabRect.right',
+      '$& + (addWidth ? tabRect.width : 0)'
+    )._replace(
+      'newMargin = tabRect.left - rect.left',
+      '$& + (addWidth ? tabRect.width : 0)'
     )._replace(
       'ind.style.transform = "translate(" + Math.round(newMargin) + "px)";',
       'ind.style.transform = "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";'
@@ -458,13 +460,20 @@ var TMP_tabDNDObserver = {
     return asObj ? params : params.newIndex;
   },
 
-  _getDropIndex(event, {returnObj} = {}) {
+  _getDropIndex(event, {dragover, children} = {}) {
     const tabBar = gBrowser.tabContainer;
-    if (!returnObj && !this.useTabmixDnD(event)) {
+    if (!dragover && !this.useTabmixDnD(event)) {
       return Tabmix.originalFunctions._getDropIndex.apply(tabBar, arguments);
     }
     const params = this.eventParams(event);
-    return returnObj ? params : params.newIndex;
+    if (dragover && this.isLastTabInRow(params.newIndex, params.mouseIndex, children)) {
+      // when user drag to the last tab in the row, show drag indicator at the
+      // end of the tabs instead of the beginning of the next tab that is in
+      // the next row
+      params.newIndex = params.mouseIndex;
+      params.addWidth = true;
+    }
+    return dragover ? params : params.newIndex;
   },
 
   eventParams(event) {
@@ -612,7 +621,7 @@ var TMP_tabDNDObserver = {
     return newMarginY;
   },
 
-  isFirstTabInRow(newIndex, mouseIndex, children) {
+  isLastTabInRow(newIndex, mouseIndex, children) {
     if (
       TabmixTabbar.visibleRows === 1 ||
       newIndex === 0 ||
