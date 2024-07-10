@@ -35,7 +35,7 @@ var TMP_tabDNDObserver = {
     //   is before (for dragging left) or after (for dragging right)
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
+    const _animateTabMove = Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
       'let movingTabs = draggedTab._dragData.movingTabs;',
       `$&
       let tabmixHandleMove = this.getAttribute("orient") === "horizontal" && TabmixTabbar.widthFitTitle;`
@@ -48,30 +48,14 @@ var TMP_tabDNDObserver = {
             draggedTab.setAttribute("dragged", true);\n\
           }'
     )._replace(
-      'let shiftWidth = tabWidth * movingTabs.length;',
-      `let shiftWidth = Tabmix.getMovingTabsWidth(movingTabs);
-       draggedTab._dragData.shiftWidth = shiftWidth;
-       let rightTabWidth = movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
-       let leftTabWidth = movingTabs[0].getBoundingClientRect().width;
-       let referenceTabWidth = ltrMove ? rightTabWidth : leftTabWidth;`
-    )._replace(
-      '(rightMovingTabScreenX + tabWidth)',
-      '(rightMovingTabScreenX + rightTabWidth)'
-    )._replace(
-      /let leftTabCenter =.*;/,
-      `let leftTabCenter = leftMovingTabScreenX + translateX + leftTabWidth / 2;`
-    )._replace(
-      /let rightTabCenter =.*;/,
-      `let rightTabCenter = rightMovingTabScreenX + translateX + rightTabWidth / 2;`
-    )._replace(
-      'if (screenX > tabCenter) {',
+      `if (${Tabmix.isVersion(1300) ? "screen" : "screenX"} > tabCenter) {`,
       `let midWidth = tabs[mid].getBoundingClientRect().width;
-        if (tabmixHandleMove && referenceTabWidth > midWidth) {
-          screenX += midWidth / 2;
-          if (screenX > tabCenter + referenceTabWidth / 2) {
+        if (!this._verticalTabs && tabmixHandleMove && referenceTabWidth > midWidth) {
+          _screenX += midWidth / 2;
+          if (_screenX > tabCenter + referenceTabWidth / 2) {
             high = mid - 1;
           } else if (
-            screenX < tabCenter - referenceTabWidth / 2
+            _screenX < tabCenter - referenceTabWidth / 2
           ) {
             low = mid + 1;
           } else {
@@ -80,11 +64,53 @@ var TMP_tabDNDObserver = {
           }
           continue;
         }
-        $&`
+        $&`.replace(/_screenX/g, Tabmix.isVersion(1300) ? "screen" : "screenX")
     )._replace(
       'newIndex >= oldIndex',
-      '!tabmixHandleMove ? $& : newIndex > -1 && (RTL_UI !== ltrMove)'
-    ).toCode();
+      `!tabmixHandleMove ? $& : newIndex > -1 && (RTL_UI !== ${Tabmix.isVersion(1300) ? "directionMove" : "ltrMove"})`
+    );
+
+    if (Tabmix.isVersion(1300)) {
+      _animateTabMove._replace(
+        'let shiftSize = tabSize * movingTabs.length;',
+        `$&
+         let rightTabWidth, leftTabWidth, referenceTabWidth;
+         if (!this._verticalTabs) {
+           shiftSize = Tabmix.getMovingTabsWidth(movingTabs);
+           draggedTab._dragData.shiftWidth = shiftSize;
+           rightTabWidth = movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
+           leftTabWidth = movingTabs[0].getBoundingClientRect().width;
+           referenceTabWidth = directionMove ? rightTabWidth : leftTabWidth;
+         }`
+      )._replace(
+        '(firstMovingTabScreen + tabSize)',
+        `(firstMovingTabScreen + (this._verticalTabs ? tabSize : rightTabWidth))`
+      )._replace(
+        /let firstTabCenter =.*;/,
+        `let firstTabCenter = lastMovingTabScreen + translate + (this._verticalTabs ? tabSize / 2 : leftTabWidth / 2);`
+      )._replace(
+        /let lastTabCenter =.*;/,
+        `let lastTabCenter = firstMovingTabScreen + translate + (this._verticalTabs ? tabSize / 2 : rightTabWidth / 2);`,
+      ).toCode();
+    } else {
+      _animateTabMove._replace(
+        'let shiftWidth = tabWidth * movingTabs.length;',
+        `let shiftWidth = Tabmix.getMovingTabsWidth(movingTabs);
+         draggedTab._dragData.shiftWidth = shiftWidth;
+         let rightTabWidth = movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
+         let leftTabWidth = movingTabs[0].getBoundingClientRect().width;
+         let referenceTabWidth = ltrMove ? rightTabWidth : leftTabWidth;`
+      )._replace(
+        '(rightMovingTabScreenX + tabWidth)',
+        `(rightMovingTabScreenX + rightTabWidth)`,
+      )._replace(
+        /let leftTabCenter =.*;/,
+        `let leftTabCenter = leftMovingTabScreenX + translateX + leftTabWidth / 2;`
+      )._replace(
+        /let rightTabCenter =.*;/,
+        `let rightTabCenter = rightMovingTabScreenX + translateX + rightTabWidth / 2;`
+      ).toCode();
+    }
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_dragover")._replace(
       'event.stopPropagation();',
@@ -115,7 +141,14 @@ var TMP_tabDNDObserver = {
       '$& + (addWidth ? tabRect.width : 0)'
     )._replace(
       'ind.style.transform = "translate(" + Math.round(newMargin) + "px)";',
-      'ind.style.transform = "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";'
+      'ind.style.transform = "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";',
+      {check: !Tabmix.isVersion(1300)}
+    )._replace(
+      /ind\.style\.transform\s=[^;]*;/,
+      `ind.style.transform = this._verticalTabs
+         ? "translateY(" + Math.round(newMargin) + "px)"
+         : "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";`,
+      {check: Tabmix.isVersion(1300)}
     ).toCode();
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_drop")._replace(
@@ -146,16 +179,16 @@ var TMP_tabDNDObserver = {
         TabmixTabbar.updateBeforeAndAfter();
       $&`
     )._replace(
-      'if (oldTranslateX && oldTranslateX',
+      Tabmix.isVersion(1300) ? 'if (oldTranslate && oldTranslate' : 'if (oldTranslateX && oldTranslateX',
       `let refTab = this.allTabs[dropIndex];
-       if (refTab) {
+       if (!this._verticalTabs && refTab) {
          let firstMovingTab = RTL_UI ? movingTabs[movingTabs.length - 1] : movingTabs[0];
-           newTranslateX = RTL_UI && dropIndex < firstMovingTab._tPos || !RTL_UI && dropIndex > firstMovingTab._tPos
+           _newTranslateX = RTL_UI && dropIndex < firstMovingTab._tPos || !RTL_UI && dropIndex > firstMovingTab._tPos
              ? refTab.screenX + refTab.getBoundingClientRect().width - firstMovingTab.screenX - draggedTab._dragData.shiftWidth
              : refTab.screenX - firstMovingTab.screenX;
-           newTranslateX = Math.round(newTranslateX);
+           _newTranslateX = Math.round(_newTranslateX);
        }
-      $&`
+      $&`.replace(/_newTranslateX/g, Tabmix.isVersion(1300) ? "newTranslate" : "newTranslateX")
     )._replace(
       'let urls = links.map(link => link.url);',
       `$&
