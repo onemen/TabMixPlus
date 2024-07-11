@@ -1002,7 +1002,7 @@ var TMP_eventListener = {
     if (shouldMoveFocus) {
       aEvent.stopPropagation();
       aEvent.preventDefault();
-      if ((Tabmix.isVersion(1170) ? event?.inputSource : event?.mozInputSource) == MouseEvent.MOZ_SOURCE_MOUSE) {
+      if ((Tabmix.isVersion(1170) ? aEvent?.inputSource : aEvent?.mozInputSource) == MouseEvent.MOZ_SOURCE_MOUSE) {
         direction = direction > 0 ? 1 : -1;
         tabBar.advanceSelectedTab(direction, true);
       }

@@ -4,8 +4,25 @@ const globals = require("globals");
 
 const eslintPluginMozilla = require("eslint-plugin-mozilla");
 const eslintPluginTabmix = require("./config/eslint-plugin-tabmix");
+const eslintPluginJson = require("eslint-plugin-json");
+const RuleHelper = require("eslint-plugin-no-unsanitized/lib/ruleHelper");
 
-const {env, overrides, parserOptions, plugins, rules} = eslintPluginMozilla.configs.recommended;
+// workaround to Error: Could not serialize processor object (missing 'meta' object).
+if (!eslintPluginJson.processors.meta) {
+  eslintPluginJson.processors.meta = {
+    name: "eslint-plugin-json",
+    version: "4.0.0"
+  };
+}
+
+// workaround to TypeError: this.context.getSource is not a function
+const normalizeMethodCall = RuleHelper?.prototype?.normalizeMethodCall;
+if (normalizeMethodCall && !normalizeMethodCall.toString().includes("this.context.sourceCode.getText")) {
+  const code = normalizeMethodCall.toString().replace("this.context.getSource", "this.context.sourceCode.getText");
+  RuleHelper.prototype.normalizeMethodCall = eval("(function " + code + ")");
+}
+
+const {env, overrides, parserOptions, rules} = eslintPluginMozilla.configs.recommended;
 const mozillaGlobals = eslintPluginMozilla.environments;
 const tabmixGlobals = eslintPluginTabmix.environments;
 
@@ -16,14 +33,9 @@ module.exports = [
     ignores: [
       ".hg",
       "**/*~/*",
-      "**/*~*.xul",
-      "**/*~*.xml",
-      "**/*~*.js",
-      "**/*~*.jsm",
-      "**/*׳¢׳•׳×׳§*.js",
-      "**/*׳¢׳•׳×׳§*.jsm",
-      "**/*עותק*.js",
-      "**/*עותק*.jsm",
+      "**/*~*.*",
+      "**/*׳¢׳•׳×׳§*.*",
+      "**/*עותק*.*",
       "**/private/*",
       "./config/*",
       "!./config/eslint-plugin-tabmix/*",
@@ -38,24 +50,25 @@ module.exports = [
 
   ...compat.plugins("mozilla", "tabmix"),
 
+  {
+    // add json pluging here until it add proper meta to its processors
+    name: "plugin:json/recommended-with-comments",
+    files: ["**/*.json"],
+    ...eslintPluginJson.configs["recommended-with-comments"],
+  },
+
   // plugin:mozilla/recommended
   ...compat.config({
     env,
     extends: [
-      // 'eslint:recommended',
+      // add other extends above to prevent eslint 9 errors
       "prettier",
-      // TODO: fix error in plugin:json with eslint 9:
-      // Value[{ "allowComments": true }] should NOT have more than 0 items.
-      // "plugin:json/recommended-with-comments",
     ],
     overrides,
     parserOptions,
-    plugins,
-    rules: {
-      ...rules,
-      // TODO: turn no-unsanitized off until it compatible with eslint 9
-      "no-unsanitized/method": "off",
-    },
+    // remove json pluging until it add proper meta to its processors
+    plugins: ["html", "no-unsanitized"],
+    rules,
   }),
 
   {
@@ -419,6 +432,8 @@ module.exports = [
         ...globals.es2021,
         ...mozillaGlobals.privileged.globals,
         ...mozillaGlobals.specific.globals,
+        event: 'off',
+        name: 'off',
       },
     },
   },

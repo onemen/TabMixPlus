@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "New Tab Mix Plus for modern Firefox",
   "scripts": {
-    "lint": "eslint --format stylish --fix --cache --cache-location config/.eslintcache --no-warn-ignored **/**/*.{js,jsm,xhtml}",
-    "lint:test": "eslint --format stylish --cache --cache-location config/.eslintcache --no-warn-ignored **/**/*.{js,jsm,xhtml}",
-    "lint:clean": "eslint --format stylish --no-warn-ignored **/**/*.{js,jsm,xhtml}",
+    "lint": "eslint --format stylish --fix --cache --cache-location config/.eslintcache",
+    "lint:test": "eslint --format stylish --cache --cache-location config/.eslintcache",
+    "lint:clean": "eslint --format stylish",
     "prepare": "husky config/husky"
   },
   "repository": {
@@ -26,7 +26,7 @@
     "eslint": "^9.1.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-html": "^8.1.1",
-    "eslint-plugin-json": "^3.1.0",
+    "eslint-plugin-json": "^4.0.0",
     "eslint-plugin-mozilla": "^3.7.3",
     "eslint-plugin-no-unsanitized": "^4.0.2",
     "eslint-plugin-tabmix": "file:./config/eslint-plugin-tabmix",
