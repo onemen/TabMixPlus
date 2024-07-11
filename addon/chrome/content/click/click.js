@@ -51,8 +51,9 @@ var TabmixTabClickOptions = {
       return;
     }
 
-    const clickOutTabs = aEvent.target.localName == "arrowscrollbox";
-    const tab = clickOutTabs ? gBrowser._selectedTab : aEvent.target.closest("tab.tabbrowser-tab");
+    const targetTab = aEvent.target.closest("tab.tabbrowser-tab");
+    const clickOutTabs = !targetTab;
+    const tab = targetTab ?? gBrowser.selectedTab;
 
     // we replace click handler from tab binding with this to make sure that we
     // always call onMouseCommand (if we need to) before we call tab flip.

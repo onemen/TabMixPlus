@@ -248,8 +248,8 @@ tabbox > tabs {
   display: none !important;
 }
 
-groupbox[tstInstalled] label[TSTdisabled="true"] {
-  color: GrayText;
+#tabBarDisplay[tstInstalled] label[TSTdisabled="true"] {
+  opacity: 50%;
 }
 
 /* rules to make the new option window look the same as the old one */

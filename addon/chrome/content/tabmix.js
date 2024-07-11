@@ -1005,8 +1005,14 @@ var TMP_eventListener = {
       if ((Tabmix.isVersion(1170) ? aEvent?.inputSource : aEvent?.mozInputSource) == MouseEvent.MOZ_SOURCE_MOUSE) {
         direction = direction > 0 ? 1 : -1;
         tabBar.advanceSelectedTab(direction, true);
+        if (Tabmix.isVersion(1270) && Tabmix.tabsUtils.isVerticalTabs) {
+          gBrowser.selectedTab.scrollIntoView({
+            block: "nearest",
+            behavior: "smooth",
+          });
+        }
       }
-    } else if (direction !== 0 && !Tabmix.extensions.treeStyleTab) {
+    } else if (direction !== 0 && !Tabmix.tabsUtils.isVerticalTabs && !Tabmix.extensions.treeStyleTab) {
       // this code is based on arrowscrollbox.js on_wheel event handler
       let scrollByDelta = function(delta, useInstant) {
         let instant;

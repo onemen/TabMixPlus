@@ -158,7 +158,9 @@ var TabmixTabbar = {
       allTabsButton.collapsed = !Services.prefs.getBoolPref("browser.tabs.tabmanager.enabled");
       Tabmix.setItem("tabbrowser-tabs", "showalltabsbutton", !allTabsButton.collapsed || null);
     }
-    Tabmix.setItem("TabsToolbar", "tabBarSpace", Tabmix.prefs.getBoolPref("tabBarSpace") || null);
+    const tabBarSpace = Tabmix.prefs.getBoolPref("tabBarSpace") || null;
+    Tabmix.setItem(tabBar.arrowScrollbox, "tabBarSpace", tabBarSpace);
+    Tabmix.setItem("TabsToolbar", "tabBarSpace", tabBarSpace);
     this.setShowNewTabButtonAttr();
 
     if (start)
@@ -395,6 +397,13 @@ Tabmix.tabsUtils = {
     return !this.getCollapsedState.collapsed;
   },
 
+  get isVerticalTabs() {
+    return (
+      this.tabBar.getAttribute("orient") === "vertical" &&
+      this.tabBar.arrowScrollbox.getAttribute("orient") === "vertical"
+    );
+  },
+
   get getCollapsedState() {
     const toolbar = document.getElementById("TabsToolbar");
     const tabBar = gBrowser.tabContainer;
@@ -416,6 +425,43 @@ Tabmix.tabsUtils = {
 
   init() {
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, true, this);
+    if (Tabmix.isVersion(1300) && window.SidebarController.sidebarRevampEnabled) {
+      // handle click/dblclick event on the empty space below the tabs,
+      // clicking on this area should be tarted as a click on the tabbar
+      // and sent to event TabmixTabClickOptions
+      let timeoutId, observer;
+      const addSidbarListeners = () => {
+        const sidbarHtml = document.getElementById("sidebar-main")?.firstElementChild;
+        const sidebar = sidbarHtml?.shadowRoot?.querySelector("button-group");
+        if (sidebar) {
+          if (this.tabBar._verticalTabs) {
+            Tabmix.tabsUtils.initializeTabmixUI();
+          }
+          TMP_eventListener.toggleEventListener(sidebar, this.events, true, event => {
+            const isSidebarButton = event.originalTarget.closest("button");
+            if (this.tabBar._verticalTabs && !isSidebarButton) {
+              this.handleEvent(event);
+            }
+          });
+          clearTimeout(timeoutId);
+          observer.disconnect();
+        }
+      };
+
+      observer = new MutationObserver(addSidbarListeners);
+      observer.observe(document, {childList: true, subtree: true});
+
+      // throw an error if we can't find the sidebar after 1000ms
+      timeoutId = setTimeout(() => {
+        const message = `Error:\nTabmix can't find the sidebar DOM element to add click/dblclick listeners to it.
+          \n\nTry Tabmix latest development version from https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/
+          \nReport about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues`;
+        console.error(message);
+        observer.disconnect();
+      }, 1000);
+
+      addSidbarListeners();
+    }
 
     if (this.initialized) {
       Tabmix.log("initializeTabmixUI - some extension initialize tabbrowser-tabs binding again");
@@ -505,15 +551,8 @@ Tabmix.tabsUtils = {
 
   handleEvent(aEvent) {
     switch (aEvent.type) {
-      case "MozMouseHittest":
-        if (Tabmix.keyModifierDown && !document.hasFocus()) {
-          Tabmix.keyModifierDown = false;
-        }
-        if (aEvent.button === 0 && (Tabmix.keyModifierDown || aEvent.detail > 0))
-          aEvent.stopPropagation();
-        break;
       case "dblclick":
-        if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
+        if (!this.tabBar._verticalTabs && Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
             Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") &&
             !TabmixSvc.isMac && aEvent.target.localName === "arrowscrollbox") {
           let displayAppButton = !document.getElementById("titlebar").hidden;
@@ -956,7 +995,7 @@ Tabmix.tabsUtils = {
     // and add the difference to #tabbrowser-arrowscrollbox margin top/bottom
     // with --tabmix-multirow-margin
     const reduceMargin = this.protonValues.enabled &&
-      gBrowser.tabContainer.attributes.orient.value === "horizontal" &&
+      gBrowser.tabContainer.attributes.orient?.value !== "vertical" &&
       TabmixTabbar.visibleRows > 1;
     const margin = reduceMargin ? "1px" : "";
     document.documentElement.style.setProperty(this.protonValues.name, margin);

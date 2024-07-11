@@ -410,10 +410,11 @@ var TMP_extensionsCompatibility = {
     // https://addons.mozilla.org/en-US/firefox/addon/tabkit-2nd-edition/
     let isVertical = typeof VerticalTabs == "object" ||
         typeof VerticalTabsReloaded == "object" ||
-        typeof gBrowser.tabContainer._verticalTabs == "boolean" ||
+        !Tabmix.isVersion(1300) && typeof gBrowser.tabContainer._verticalTabs == "boolean" ||
         typeof sidetabs == "object" ||
         typeof tabkit == "object" ||
-        typeof tabkitGlobal == "object";
+        typeof tabkitGlobal == "object" ||
+        Tabmix.tabsUtils.isVerticalTabs;
     let treeStyleTab = typeof TreeStyleTabService == "object";
     Tabmix.extensions.verticalTabBar = isVertical || treeStyleTab;
     Tabmix.extensions.verticalTabs = isVertical && !treeStyleTab;

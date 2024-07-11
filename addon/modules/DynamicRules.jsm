@@ -46,7 +46,7 @@ const DynamicRules = {
       return;
     this._initialized = true;
 
-    this.orient = aWindow.document.getElementById("tabbrowser-tabs").attributes.orient.value;
+    this.orient = aWindow.document.getElementById("tabbrowser-tabs").attributes.orient?.value ?? "horizontal";
     this.windows10 = aWindow.navigator.oscpu.startsWith("Windows NT 10.0");
 
     lazy.Prefs.addObserver("", this);
@@ -77,7 +77,7 @@ const DynamicRules = {
     const tabsMutate = aMutations => {
       for (let mutation of aMutations) {
         if (mutation.attributeName == "orient") {
-          this.orient = mutation.target.orient || mutation.target.attributes.orient.value;
+          this.orient = mutation.target.orient || mutation.target.attributes.orient?.value || "horizontal";
           this.updateStyleType();
           return;
         }
@@ -142,24 +142,24 @@ const DynamicRules = {
 
     // add more selectors to increase specificity of our rule in order to
     // override rules from Firefox and Waterfox
-    let selector = '#TabsToolbar #TabsToolbar-customization-target #tabbrowser-tabs';
+    let selector = '#tabbrowser-tabs';
 
     let styleRules = {
       currentTab: {
-        text: `${selector}[tabmix_currentStyle~="text"] .tabbrowser-tab${tabState.current}${tabTextRule}`,
-        bg: `${selector}[tabmix_currentStyle~="bg"] .tabbrowser-tab${tabState.current}${backgroundRule}`
+        text: `${selector}[tabmix_currentStyle~="text"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.current}${tabTextRule}`,
+        bg: `${selector}[tabmix_currentStyle~="bg"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.current}${backgroundRule}`
       },
       unloadedTab: {
-        text: `${selector}[tabmix_unloadedStyle~="text"] .tabbrowser-tab${tabState.unloaded}${tabTextRule}`,
-        bg: `${selector}[tabmix_unloadedStyle~="bg"] .tabbrowser-tab${tabState.unloaded}${backgroundRule}`
+        text: `${selector}[tabmix_unloadedStyle~="text"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.unloaded}${tabTextRule}`,
+        bg: `${selector}[tabmix_unloadedStyle~="bg"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.unloaded}${backgroundRule}`
       },
       unreadTab: {
-        text: `${selector}[tabmix_unreadStyle~="text"] .tabbrowser-tab${tabState.unread}${tabTextRule}`,
-        bg: `${selector}[tabmix_unreadStyle~="bg"] .tabbrowser-tab${tabState.unread}${backgroundRule}`
+        text: `${selector}[tabmix_unreadStyle~="text"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.unread}${tabTextRule}`,
+        bg: `${selector}[tabmix_unreadStyle~="bg"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.unread}${backgroundRule}`
       },
       otherTab: {
-        text: `${selector}[tabmix_otherStyle~="text"] .tabbrowser-tab${tabState.other}${tabTextRule}`,
-        bg: `${selector}[tabmix_otherStyle~="bg"] .tabbrowser-tab${tabState.other}${backgroundRule}`
+        text: `${selector}[tabmix_otherStyle~="text"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.other}${tabTextRule}`,
+        bg: `${selector}[tabmix_otherStyle~="bg"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.other}${backgroundRule}`
       },
     };
 

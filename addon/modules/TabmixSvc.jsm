@@ -270,6 +270,10 @@ TabmixSvc = {
 
       ChromeUtils.import("chrome://tabmix-resource/content/TabRestoreQueue.jsm");
 
+      if (isVersion(1300)) {
+        ChromeUtils.import("chrome://tabmix-resource/content/VerticalTabs.jsm");
+      }
+
       if (TabmixSvc.isG3Waterfox) {
         // Waterfox use build-in preference - browser.tabBar.position
         Services.prefs.clearUserPref("extensions.tabmix.tabBarPosition");

@@ -37,6 +37,7 @@
 
 #tabmix-scrollbox:not([overflowing="true"]),
 #tabmix-scrollbox[flowing="singlebar"],
+#tabmix-scrollbox[verticalTabs],
 #tabmix-scrollbox[defaultScrollButtons] {
   visibility: collapse;
 }
