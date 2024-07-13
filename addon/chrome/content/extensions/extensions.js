@@ -413,9 +413,12 @@ var TMP_extensionsCompatibility = {
         !Tabmix.isVersion(1300) && typeof gBrowser.tabContainer._verticalTabs == "boolean" ||
         typeof sidetabs == "object" ||
         typeof tabkit == "object" ||
-        typeof tabkitGlobal == "object" ||
-        Tabmix.tabsUtils.isVerticalTabs;
+        typeof tabkitGlobal == "object";
     let treeStyleTab = typeof TreeStyleTabService == "object";
+
+    // Firefox 130+ includes vertical tabs feature.
+    // it can be toggle by preference sidebar.verticalTabs, we use getter
+    // Tabmix.tabsUtils.isVerticalTabBar.
     Tabmix.extensions.verticalTabBar = isVertical || treeStyleTab;
     Tabmix.extensions.verticalTabs = isVertical && !treeStyleTab;
   },

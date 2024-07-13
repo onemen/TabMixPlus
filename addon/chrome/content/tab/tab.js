@@ -70,7 +70,7 @@ var TabmixTabbar = {
 
     if (tabscroll < 0 || tabscroll > 3 ||
         tabscroll != this.SCROLL_BUTTONS_LEFT_RIGHT &&
-        Tabmix.extensions.verticalTabBar) {
+        Tabmix.tabsUtils.isVerticalTabBar) {
       Tabmix.prefs.setIntPref("tabBarMode", 1);
       return;
     }
@@ -397,6 +397,10 @@ Tabmix.tabsUtils = {
     return !this.getCollapsedState.collapsed;
   },
 
+  get isVerticalTabBar() {
+    return Tabmix.extensions.verticalTabBar || this.isVerticalTabs;
+  },
+
   get isVerticalTabs() {
     return (
       this.tabBar.getAttribute("orient") === "vertical" &&
@@ -429,38 +433,20 @@ Tabmix.tabsUtils = {
       // handle click/dblclick event on the empty space below the tabs,
       // clicking on this area should be tarted as a click on the tabbar
       // and sent to event TabmixTabClickOptions
-      let timeoutId, observer;
-      const addSidbarListeners = () => {
-        const sidbarHtml = document.getElementById("sidebar-main")?.firstElementChild;
-        const sidebar = sidbarHtml?.shadowRoot?.querySelector("button-group");
-        if (sidebar) {
-          if (this.tabBar._verticalTabs) {
-            Tabmix.tabsUtils.initializeTabmixUI();
-          }
-          TMP_eventListener.toggleEventListener(sidebar, this.events, true, event => {
-            const isSidebarButton = event.originalTarget.closest("button");
-            if (this.tabBar._verticalTabs && !isSidebarButton) {
-              this.handleEvent(event);
-            }
-          });
-          clearTimeout(timeoutId);
-          observer.disconnect();
+      window.SidebarController.promiseInitialized.then(() => {
+        if (this.tabBar._verticalTabs) {
+          Tabmix.tabsUtils.initializeTabmixUI();
         }
-      };
-
-      observer = new MutationObserver(addSidbarListeners);
-      observer.observe(document, {childList: true, subtree: true});
-
-      // throw an error if we can't find the sidebar after 1000ms
-      timeoutId = setTimeout(() => {
-        const message = `Error:\nTabmix can't find the sidebar DOM element to add click/dblclick listeners to it.
-          \n\nTry Tabmix latest development version from https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/
-          \nReport about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues`;
-        console.error(message);
-        observer.disconnect();
-      }, 1000);
-
-      addSidbarListeners();
+        const sidebarMain = document.querySelector("sidebar-main");
+        const sidebar = sidebarMain?.shadowRoot?.querySelector("button-group");
+        this.handleSidebarEvent = event => {
+          const isSidebarButton = event.originalTarget.closest("button");
+          if (this.tabBar._verticalTabs && !isSidebarButton) {
+            this.handleEvent(event);
+          }
+        };
+        TMP_eventListener.toggleEventListener(sidebar, this.events, true, this.handleSidebarEvent);
+      });
     }
 
     if (this.initialized) {
@@ -546,6 +532,11 @@ Tabmix.tabsUtils = {
     if (!this.initialized)
       return;
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, false, this);
+    if (this.handleSidebarEvent) {
+      const sidebarMain = document.querySelector("sidebar-main");
+      const sidebar = sidebarMain?.shadowRoot?.querySelector("button-group");
+      TMP_eventListener.toggleEventListener(sidebar, this.events, false, this.handleSidebarEvent);
+    }
     this._tabmixPositionalTabs = null;
   },
 
@@ -617,7 +608,7 @@ Tabmix.tabsUtils = {
   },
 
   updateVerticalTabStrip({reset, forceRightSide} = {}) {
-    if (Tabmix.extensions.verticalTabBar || window.gInPrintPreviewMode ||
+    if (this.isVerticalTabBar || window.gInPrintPreviewMode ||
         this.inDOMFullscreen || FullScreen._isChromeCollapsed ||
         TabmixTabbar._waitAfterMaximized ||
         !Tabmix.tabsUtils.visible && TabmixTabbar.visibleRows == 1)
@@ -2307,6 +2298,9 @@ gTMPprefObserver = {
   },
 
   changeNewTabButtonSide(aPosition) {
+    if (gBrowser.tabContainer._verticalTabs && Tabmix.tabsUtils.isVerticalTabs) {
+      aPosition = 1;
+    }
     let $ = id => document.getElementById(id);
     let newTabButton = $("new-tab-button");
     if (TabmixTabbar.isButtonOnTabsToolBar(newTabButton)) {
@@ -2359,21 +2353,25 @@ gTMPprefObserver = {
      *  left-side       - show the button on left side
      */
     let attrValue;
-    if (!aShow)
+    if (!aShow) {
       attrValue = null;
-    else if (aPosition === 0)
-      attrValue = "left-side";
-    else if (aPosition == 1)
+    } else if (
+      aPosition == 1 ||
+      gBrowser.tabContainer._verticalTabs && Tabmix.tabsUtils.isVerticalTabs
+    ) {
       attrValue = "right-side";
-    else
+    } else if (aPosition === 0) {
+      attrValue = "left-side";
+    } else {
       attrValue = "aftertabs";
+    }
     // we use this value in disAllowNewtabbutton and overflow setters
     Tabmix.tabsUtils._show_newtabbutton = attrValue;
     Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton", attrValue);
   },
 
   tabBarPositionChanged(aPosition) {
-    if (aPosition > 1 || aPosition !== 0 && Tabmix.extensions.verticalTabBar) {
+    if (aPosition > 1 || aPosition !== 0 && Tabmix.tabsUtils.isVerticalTabBar) {
       Tabmix.prefs.setIntPref("tabBarPosition", 0);
       return false;
     }

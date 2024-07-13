@@ -395,6 +395,14 @@ var TMP_eventListener = {
       Tabmix.assert(ex);
     }
 
+    if (!CustomizableUI.getPlacementOfWidget("tabmix-scrollbox")) {
+      CustomizableUI.addWidgetToArea(
+        "tabmix-scrollbox",
+        CustomizableUI.AREA_TABSTRIP,
+        CustomizableUI.getPlacementOfWidget("tabbrowser-tabs").position + 1
+      );
+    }
+
     gBrowser.tabpanels.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     // init tabmix functions

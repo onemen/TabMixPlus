@@ -1323,8 +1323,10 @@ Tabmix.navToolbox = {
 
   setScrollButtons(reset, onlyPosition) {
     let box = document.getElementById("tabmix-scrollbox");
-    if (!box)
+    if (box?.parentNode !== gBrowser.tabContainer.parentNode) {
+      // nothing to do here when our button box is not a sibling of gBrowser.tabContainer
       return;
+    }
 
     if (!reset && box == gBrowser.tabContainer.nextSibling)
       return;

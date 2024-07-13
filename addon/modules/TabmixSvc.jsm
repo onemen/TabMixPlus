@@ -271,7 +271,8 @@ TabmixSvc = {
       ChromeUtils.import("chrome://tabmix-resource/content/TabRestoreQueue.jsm");
 
       if (isVersion(1300)) {
-        ChromeUtils.import("chrome://tabmix-resource/content/VerticalTabs.jsm");
+        const {VerticalTabs} = ChromeUtils.import("chrome://tabmix-resource/content/VerticalTabs.jsm");
+        VerticalTabs.init(aWindow);
       }
 
       if (TabmixSvc.isG3Waterfox) {

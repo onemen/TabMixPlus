@@ -5,7 +5,7 @@ var gAppearancePane = {
   init() {
     var browserWindow = Tabmix.getTopWin();
     // disable options for position the tabbar and scroll mode if TreeStyleTab extension installed
-    if (browserWindow.Tabmix.extensions.verticalTabBar) {
+    if (browserWindow.Tabmix.tabsUtils.isVerticalTabBar) {
       const description = document.getElementById("treeStyleTab.msg");
       Tabmix.setItem(description, "hidden", null);
       if (browserWindow.gBrowser.tabContainer._verticalTabs) {
@@ -20,6 +20,13 @@ var gAppearancePane = {
       Tabmix.setItem("offsetAmountToScroll", "disabled", true);
       Tabmix.setItem("scrollDelay", "disabled", true);
       Tabmix.setItem("smoothScroll", "disabled", true);
+    }
+
+    if (
+      browserWindow.gBrowser.tabContainer._verticalTabs &&
+      browserWindow.Tabmix.tabsUtils.isVerticalTabs
+    ) {
+      Tabmix.setItem("newTabButton.position", "hidden", true);
     }
 
     let treeStyleTab = browserWindow.Tabmix.extensions.treeStyleTab;
