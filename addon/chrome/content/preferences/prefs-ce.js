@@ -1467,7 +1467,10 @@ class PrefWindow extends MozXULElement {
   }
 
   disconnectedCallback() {
-    //
+    for (const pane of this.preferencePanes) {
+      pane._resizeObserver?.disconnect();
+      pane._resizeObserver = null;
+    }
   }
 
   get preferencePanes() {
@@ -1546,6 +1549,9 @@ class PrefWindow extends MozXULElement {
       }
     } else {
       this._selectPane(aPaneElement);
+      if (this.preferencePanes.length > 1) {
+        this.sizeToContent();
+      }
     }
   }
 
@@ -1558,6 +1564,13 @@ class PrefWindow extends MozXULElement {
 
     this._fireEvent("paneload", aPaneElement);
     this._selectPane(aPaneElement);
+
+    if (this.preferencePanes.length > 1) {
+      aPaneElement._resizeObserver = new ResizeObserver(() => {
+        this.sizeToContent();
+      });
+      aPaneElement._resizeObserver.observe(aPaneElement);
+    }
   }
 
   _fireEvent(aEventName, aTarget) {
@@ -1604,23 +1617,23 @@ class PrefWindow extends MozXULElement {
           this.lastSelected = aPaneElement.id;
           this.currentPane = aPaneElement;
           this._initialized = true;
-
-          if (prefpanes.length > 1) {
-            window.requestAnimationFrame(() => {
-              window.requestAnimationFrame(() => {
-                const {height, width} = window.getComputedStyle(this._paneDeckContainer);
-                const {paddingTop, paddingBottom, paddingLeft, paddingRight} = window.getComputedStyle(aPaneElement);
-                const paddingY = parseInt(paddingTop) + parseInt(paddingBottom);
-                const paddingX = parseInt(paddingLeft) + parseInt(paddingRight);
-                this.maybeResize(aPaneElement, parseInt(height), "height", paddingY,);
-                this.maybeResize(aPaneElement, parseInt(width), "width", paddingX);
-              });
-            });
-          }
         }
         break;
       }
     }
+  }
+
+  sizeToContent() {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        const {height, width} = window.getComputedStyle(this._paneDeckContainer);
+        const {paddingTop, paddingBottom, paddingLeft, paddingRight} = window.getComputedStyle(this.currentPane);
+        const paddingY = parseInt(paddingTop) + parseInt(paddingBottom);
+        const paddingX = parseInt(paddingLeft) + parseInt(paddingRight);
+        this.maybeResize(this.currentPane, parseInt(height), "height", paddingY);
+        this.maybeResize(this.currentPane, parseInt(width), "width", paddingX);
+      });
+    });
   }
 
   maybeResize(aPaneElement, targetSize, measurement, padding) {
