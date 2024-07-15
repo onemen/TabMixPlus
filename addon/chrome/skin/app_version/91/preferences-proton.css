@@ -161,16 +161,16 @@ prefpane {
 
 prefpane > .content-box > tabbox {
   height: unset;
-  min-height: 505px;
+  min-height: var(--content-box-max-pane-height, 505px);
 }
 
 #TabMIxPreferences[mac] prefpane > .content-box > tabbox {
-  min-height: 505px;
+  min-height: var(--content-box-max-pane-height, 505px);
 }
 
 #TabMIxPreferences[linux] prefpane > .content-box > tabbox {
   width: 560px;
-  min-height: 540px;
+  min-height: var(--content-box-max-pane-height, 540px);
 }
 
 .prefWindow-dlgbuttons {

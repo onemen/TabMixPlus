@@ -22,9 +22,7 @@ var gPrefWindow = {
       prefWindow.setAttribute("mac", true);
     } else if (TabmixSvc.isLinux) {
       prefWindow.setAttribute("linux", true);
-      window.requestAnimationFrame(() => {
-        window.sizeToContent();
-      });
+      prefWindow.sizeToContent();
     }
 
     /* we don't need to fix tabpanels border in ubuntu */
@@ -69,9 +67,7 @@ var gPrefWindow = {
       if (currentDevicePixelRatio !== previousDevicePixelRatio) {
         const maxHeight = window.screen.height * 0.8;
         document.documentElement.style.maxHeight = window.devicePixelRatio > 1.25 ? maxHeight + "px" : "";
-        window.requestAnimationFrame(() => {
-          window.sizeToContent();
-        });
+        document.documentElement.sizeToContent();
       }
       previousDevicePixelRatio = currentDevicePixelRatio;
     };
@@ -551,7 +547,9 @@ function positionDonateButton() {
   } else {
     dlgbuttons.parentNode.insertBefore(donateBox, dlgbuttons);
   }
-  if (window.toString() === "[object Window]") window.sizeToContent();
+  if (window.toString() === "[object Window]") {
+    document.documentElement.sizeToContent();
+  }
 }
 
 function toggleSyncPreference() {
@@ -795,9 +793,7 @@ function setDialog() {
     instantApply = Tabmix.prefs.getBoolPref('instantApply');
   });
   if (window.toString() == '[object Window]') {
-    window.requestAnimationFrame(() => {
-      window.sizeToContent();
-    });
+    document.documentElement.sizeToContent();
   }
 }
 

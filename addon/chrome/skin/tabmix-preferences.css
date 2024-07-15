@@ -156,6 +156,7 @@ tab.subtabs:focus-visible > .tab-middle > .tab-text {
 #TabMIxPreferences {
   display: flex;
   flex-direction: column;
+  min-height: 550px;
 }
 
 /* Chromifox theme force button height to 25px */
@@ -265,7 +266,7 @@ prefpane {
 
 prefpane > .content-box > tabbox {
   min-width: 525px;
-  min-height: 464px;
+  min-height: var(--content-box-max-pane-height, 464px);
 }
 
 prefwindow .paneSelector {
@@ -301,7 +302,7 @@ tabbox > tabpanels:last-child {
 
 /* for Mac */
 #TabMIxPreferences[mac] prefpane > .content-box > tabbox {
-  height: 468px;
+  height: var(--content-box-max-pane-height, 468px);
 }
 
 #TabMIxPreferences[mac] .groupbox-tabbox {

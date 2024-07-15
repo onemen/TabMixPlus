@@ -622,6 +622,7 @@ class PrefPane extends MozXULElement {
 
     this._deferredValueUpdateElements = new Set();
     this._content = this.getElementsByClassName('content-box')[0];
+    // TODO: check if this._content is the same as contentBox
 
     this._initialized = true;
   }
@@ -1246,7 +1247,7 @@ class PrefWindow extends MozXULElement {
 
       if (this._l10nButtons.length) {
         document.l10n.translateElements(this._l10nButtons).then(() => {
-          window.sizeToContent();
+          document.documentElement.sizeToContent();
         });
       }
     };
@@ -1550,7 +1551,7 @@ class PrefWindow extends MozXULElement {
     } else {
       this._selectPane(aPaneElement);
       if (this.preferencePanes.length > 1) {
-        this.sizeToContent();
+        this.sizeToContent(true);
       }
     }
   }
@@ -1567,7 +1568,7 @@ class PrefWindow extends MozXULElement {
 
     if (this.preferencePanes.length > 1) {
       aPaneElement._resizeObserver = new ResizeObserver(() => {
-        this.sizeToContent();
+        this.sizeToContent(true);
       });
       aPaneElement._resizeObserver.observe(aPaneElement);
     }
@@ -1623,23 +1624,47 @@ class PrefWindow extends MozXULElement {
     }
   }
 
-  sizeToContent() {
+  /**
+   * @param {boolean} onlySizeUp
+   *                  default false, when true check only for increase in size
+   */
+  sizeToContent(onlySizeUp = false) {
+    if (!onlySizeUp && this.currentPane._content) {
+      this.currentPane._content.style.height = "";
+      this.currentPane._content.style.width = "";
+    }
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
+        if (!this.currentPane._content) {
+          return;
+        }
         const {height, width} = window.getComputedStyle(this._paneDeckContainer);
         const {paddingTop, paddingBottom, paddingLeft, paddingRight} = window.getComputedStyle(this.currentPane);
         const paddingY = parseInt(paddingTop) + parseInt(paddingBottom);
         const paddingX = parseInt(paddingLeft) + parseInt(paddingRight);
-        this.maybeResize(this.currentPane, parseInt(height), "height", paddingY);
-        this.maybeResize(this.currentPane, parseInt(width), "width", paddingX);
+        this.maybeResize(this.currentPane, parseInt(height), "height", paddingY, onlySizeUp);
+        this.maybeResize(this.currentPane, parseInt(width), "width", paddingX, onlySizeUp);
       });
     });
   }
 
-  maybeResize(aPaneElement, targetSize, measurement, padding) {
+  maxContentSize = {
+    width: 0,
+    height: 0
+  };
+
+  maybeResize(aPaneElement, targetSize, measurement, padding, onlySizeUp) {
     const prop = measurement === "height" ? "contentHeight" : "contentWidth";
     const contentSize = aPaneElement[prop];
-    if (contentSize > targetSize - padding) {
+    if (contentSize > this.maxContentSize[measurement]) {
+      this.maxContentSize[measurement] = contentSize;
+      this._paneDeckContainer.style.setProperty(`--content-box-max-pane-${measurement}`, `${contentSize}px`);
+    }
+
+    const condition = onlySizeUp ?
+      contentSize > targetSize - padding :
+      Math.abs(contentSize - (targetSize - padding)) > 0;
+    if (condition) {
       let bottomPadding = 0;
       if (measurement === "height") {
         // To workaround the bottom border of a groupbox from being
@@ -1658,7 +1683,7 @@ class PrefWindow extends MozXULElement {
 
     // extend the contents of the prefpane to
     // prevent elements from being cutoff (see bug 349098).
-    if (aPaneElement[prop] + padding < targetSize) {
+    if (onlySizeUp && aPaneElement[prop] + padding < targetSize) {
       aPaneElement._content.style[measurement] = targetSize - padding + "px";
     }
   }
