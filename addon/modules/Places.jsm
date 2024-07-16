@@ -5,6 +5,9 @@ const EXPORTED_SYMBOLS = ["TabmixPlacesUtils"];
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+// AppConstants is used in modified PlacesUIUtils functions
+// eslint-disable-next-line no-unused-vars
+const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
 const lazy = {};
 
