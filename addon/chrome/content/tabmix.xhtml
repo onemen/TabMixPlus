@@ -207,7 +207,7 @@
       </menupopup>
       <!-- context menu for undoclosewindow menupopup for use with sessionRestore -->
       <menupopup id="tm_undocloseWindowContextMenu"
-                  onpopupshowing="return this.triggerNode.value >= 0;">
+                  onpopupshowing="return Tabmix.closedObjectsUtils.on_popupshowing(this);">
         <menuitem id="tm_delete-window" label="&deletelist.label;" accesskey="&deletelist.accesskey;"
                   oncommand="Tabmix.closedObjectsUtils.on_delete(this.parentNode.triggerNode);"/>
       </menupopup>

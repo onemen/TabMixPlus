@@ -813,11 +813,14 @@ Tabmix.tablib = {
       '"menuitem"',
       'undoPopup.__tagName || "menuitem"'
     )._replace(
+      // workaround for bug 1868452 - Key key_undoCloseTab of menuitem could not be found
+      'undoPopup.appendChild(tabsFragment);',
+      `TMP_ClosedTabs.fix_bug_1868452(tabsFragment.firstChild);
+      $&`,
+      {check: Tabmix.isVersion(1160)}
+    )._replace(
       /(})(\)?)$/,
-      `if (!undoPopup.hasAttribute("context")) {
-        undoPopup.setAttribute("context", "tm_undocloseContextMenu");
-      }
-      TMP_ClosedTabs.populateUndoSubmenu(undoPopup);
+      `TMP_ClosedTabs.populateUndoSubmenu(undoPopup);
       $1$2`
     ).toCode();
 
@@ -867,15 +870,16 @@ Tabmix.tablib = {
     };
   },
 
-  populateUndoWindowSubmenu(undoPopup) {
+  populateUndoWindowSubmenu(undoPopup, panel, isAppMenu = Boolean(panel)) {
     const isSubviewbutton = undoPopup.__tagName === "toolbarbutton";
     undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
     let undoItems = TabmixSvc.ss.getClosedWindowData(false);
     let checkForMiddleClick = function(e) {
       this.checkForMiddleClick(e);
     }.bind(Tabmix.closedObjectsUtils);
-    for (let i = 0; i < undoPopup.childNodes.length - 1; i++) {
-      let m = undoPopup.childNodes[i];
+    const childNodes = panel?.childNodes ?? undoPopup.childNodes;
+    for (let i = 0; i < childNodes.length - (isAppMenu ? 0 : 1); i++) {
+      let m = childNodes[i];
       let undoItem = undoItems[i];
       if (undoItem && m.hasAttribute("targetURI")) {
         TMP_SessionStore.asyncGetTabTitleForClosedWindow(undoItem).then(title => {
@@ -902,6 +906,13 @@ Tabmix.tablib = {
         m.setAttribute("class", "bookmark-item subviewbutton subviewbutton-iconic");
       }
     }
+
+    if (panel?.__updatingViewAfterDelete) {
+      // we are repopulateing the the list after user removed an item
+      // the menuitem already exist
+      return;
+    }
+
     let restoreAllWindows = undoPopup.lastChild;
     restoreAllWindows.setAttribute("value", -2);
     let clearList = document.createXULElement(undoPopup.__tagName || "menuitem");
@@ -909,8 +920,8 @@ Tabmix.tablib = {
     clearList.setAttribute("label", TabmixSvc.getString("undoClosedWindows.clear.label"));
     clearList.setAttribute("value", -1);
     if (isSubviewbutton) {
-      restoreAllWindows.setAttribute("class", "subviewbutton subviewbutton-iconic");
-      clearList.setAttribute("class", "subviewbutton subviewbutton-iconic");
+      restoreAllWindows.classList.add("subviewbutton");
+      clearList.classList.add("subviewbutton");
     }
     clearList.addEventListener("command", () => {
       Tabmix.closedObjectsUtils.forgetClosedWindow(-1);

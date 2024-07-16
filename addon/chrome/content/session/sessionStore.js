@@ -404,11 +404,16 @@ var TMP_ClosedTabs = {
     Tabmix.prefs.setBoolPref("undoClose.keepMenuOpen", Boolean(val));
   },
 
-  populateUndoSubmenu(aPopup) {
+  populateUndoSubmenu(aPopup, panel, isAppMenu = Boolean(panel)) {
+    const parent = panel ?? aPopup;
+    if (!parent.hasAttribute("context")) {
+      parent.setAttribute("context", "tm_undocloseContextMenu");
+    }
     const closedTabs = this.getClosedTabData;
+    const childNodes = parent.childNodes;
     const isSubviewbutton = aPopup.__tagName === "toolbarbutton";
-    for (let i = 0; i < aPopup.childNodes.length - 1; i++) {
-      let m = aPopup.childNodes[i];
+    for (let i = 0; i < childNodes.length - (isAppMenu ? 0 : 1); i++) {
+      let m = childNodes[i];
       let tabData =
         i < closedTabs.length ?
           closedTabs[i] :
@@ -432,6 +437,12 @@ var TMP_ClosedTabs = {
       }
     }
 
+    if (panel?.__updatingViewAfterDelete) {
+      // we are repopulateing the the list after user removed an item
+      // the menuitem already exist
+      return true;
+    }
+
     // Reopen All Tabs
     let reopenAllTabs = aPopup.lastChild;
     reopenAllTabs.setAttribute("value", -2);
@@ -444,18 +455,16 @@ var TMP_ClosedTabs = {
       reopenAllTabs.removeAttribute("oncommand");
     }
     reopenAllTabs.addEventListener("command", this);
-    if (isSubviewbutton) {
-      reopenAllTabs.classList.add("subviewbutton", "subviewbutton-iconic");
-    }
 
     const addMenu = this.addMenuItem.bind(this, aPopup, isSubviewbutton);
     if (isSubviewbutton) {
+      reopenAllTabs.classList.add("subviewbutton");
       // "Keep menu open"
       const mi = addMenu("lockedClosedTabsList", TabmixSvc.getString("undoclosetab.keepOpen.label"), -3);
       mi.setAttribute("tooltiptext", TabmixSvc.getString("undoclosetab.keepOpen.description"));
       mi.setAttribute("closemenu", "none");
       const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
-      mi.setAttribute("image", image);
+      Tabmix.setItem(mi, "image", image || null);
     }
     // "Clear Closed Tabs List"
     addMenu("clearClosedTabsList", TabmixSvc.getString("undoclosetab.clear.label"), -1, "clearClosedTabs");
@@ -469,7 +478,7 @@ var TMP_ClosedTabs = {
     m.setAttribute("label", label);
     m.setAttribute("value", val);
     if (isSubviewbutton) {
-      m.setAttribute("class", "subviewbutton subviewbutton-iconic");
+      m.setAttribute("class", "subviewbutton");
     } else {
       m.setAttribute("class", "menuitem");
     }
@@ -522,9 +531,10 @@ var TMP_ClosedTabs = {
     if (index == -3) {
       this.keepMenuOpen = !this.keepMenuOpen;
       const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
-      item.setAttribute("image", image);
-      this.setPopupWidth(item.parentNode);
-      Tabmix.closedObjectsUtils.populateClosedTabsMenu(item.parentNode.parentNode);
+      Tabmix.setItem(item, "image", image || null);
+      if (item.parentNode.id !== "appMenu-library-recentlyClosedTabs") {
+        this.setPopupWidth(item.parentNode);
+      }
       return;
     }
 
@@ -552,7 +562,7 @@ var TMP_ClosedTabs = {
     Array.prototype.forEach.call(popup.childNodes, item => {
       item.setAttribute("closemenu", val);
     });
-    return popup.triggerNode.value >= 0;
+    return Tabmix.closedObjectsUtils.on_popupshowing(popup);
   },
 
   contextMenuOnCommand(event) {
@@ -571,8 +581,12 @@ var TMP_ClosedTabs = {
     const rePopulate = (keepMenuOpen || this.keepMenuOpen) && this.count > 0;
     if (rePopulate) {
       if (popup && command == "restoreTab") {
-        this.setPopupWidth(popup);
-        Tabmix.closedObjectsUtils.populateClosedTabsMenu(popup.parentNode);
+        if (popup.parentNode.id === "appMenu-library-recentlyClosedTabs") {
+          Tabmix.closedObjectsUtils.updateAppmenuView(popup, "Tabs");
+        } else {
+          this.setPopupWidth(popup);
+          Tabmix.closedObjectsUtils.populateClosedTabsMenu(popup.parentNode);
+        }
       }
     } else if (popup.parentNode.tagName === "panelview") {
       popup.hidePopup();
@@ -854,6 +868,15 @@ var TMP_ClosedTabs = {
 
     return tab;
   },
+
+  // workaround for bug 1868452 - Key key_undoCloseTab of menuitem could not be found
+  fix_bug_1868452(item) {
+    if (Tabmix.isVersion(1160) && item?.getAttribute("key") === "key_undoCloseTab") {
+      item.setAttribute("key", "key_restoreLastClosedTabOrWindowOrSession");
+      return true;
+    }
+    return false;
+  },
 };
 
 Tabmix.closedObjectsUtils = {
@@ -877,6 +900,27 @@ Tabmix.closedObjectsUtils = {
     }, {once: true});
 
     this.toggleRecentlyClosedWindowsButton();
+
+    // update appMenu History >
+    //                Recently closed Tabs
+    //                Recently closed Windows
+    const appMenu = [
+      {id: "appMenu-library-recentlyClosedTabs", method: TMP_ClosedTabs.populateUndoSubmenu.bind(TMP_ClosedTabs)},
+      {id: "appMenu-library-recentlyClosedWindows", method: Tabmix.tablib.populateUndoWindowSubmenu.bind(Tabmix.tablib)},
+    ];
+    appMenu.forEach(({id, method}) => {
+      PanelMultiView.getViewNode(document, id).addEventListener("ViewShowing", e => {
+        window.requestAnimationFrame(() => {
+          const popup = e.target;
+          popup.__tagName = "toolbarbutton";
+          const panel = popup.querySelector(".panel-subview-body");
+          method(popup, panel);
+          panel.hidePopup = () => popup.closest("panel")?.hidePopup();
+          TMP_ClosedTabs.fix_bug_1868452(panel.firstChild);
+          CustomizableUI.addShortcut(panel.firstChild);
+        });
+      });
+    });
   },
 
   initObjectPanel(viewType) {
@@ -946,6 +990,18 @@ Tabmix.closedObjectsUtils = {
         this.toggleRecentlyClosedWindowsButton();
         break;
     }
+  },
+
+  on_popupshowing(popup) {
+    const target = popup.triggerNode;
+    const showContextMenu = Number(target.getAttribute("value") ?? -1) >= 0;
+    if (showContextMenu) {
+      target.classList.add("context-open");
+      popup.addEventListener("popuphidden", () => {
+        target.classList.remove("context-open");
+      }, {once: true});
+    }
+    return showContextMenu;
   },
 
   on_delete(node) {
@@ -1063,13 +1119,43 @@ Tabmix.closedObjectsUtils = {
 
   updateView(popup) {
     if (TabmixSvc.ss.getClosedWindowCount() > 0) {
-      this.populateClosedWindowsMenu(popup.parentNode);
+      if (popup.parentNode.id === "appMenu-library-recentlyClosedWindows") {
+        this.updateAppmenuView(popup, "Windows");
+      } else {
+        this.populateClosedWindowsMenu(popup.parentNode);
+      }
     } else {
       popup.hidePopup();
       if (popup.parentNode.localName != "panelview") {
         popup.parentNode.parentNode.hidePopup();
       }
     }
+  },
+
+  updateAppmenuView(panel, type) {
+    // panel her is ".panel-subview-body"
+    const utils = RecentlyClosedTabsAndWindowsMenuUtils;
+    const fragment =
+      type === "Tabs" ?
+        utils.getTabsFragment(window, "toolbarbutton", true) :
+        utils.getWindowsFragment(window, "toolbarbutton", true);
+    if (!fragment.childElementCount) {
+      panel.hidePopup();
+      return;
+    }
+    while (panel.hasChildNodes()) {
+      panel.firstChild.remove();
+    }
+    fragment.firstChild.remove();
+    panel.appendChild(fragment);
+    panel.__updatingViewAfterDelete = true;
+    if (type === "Tabs") {
+      TMP_ClosedTabs.fix_bug_1868452(panel.firstChild);
+      TMP_ClosedTabs.populateUndoSubmenu(panel.parentNode, panel);
+    } else {
+      Tabmix.tablib.populateUndoWindowSubmenu(panel.parentNode, panel);
+    }
+    CustomizableUI.addShortcut(panel.firstChild);
   },
 
 };

@@ -58,3 +58,8 @@
   min-height: 0;
   padding: 0;
 }
+
+.context-open {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-inset);
+}
