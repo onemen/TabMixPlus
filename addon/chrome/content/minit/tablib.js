@@ -1557,9 +1557,15 @@ Tabmix.tablib = {
       };
     };
 
-    Tabmix.tablib.showClosingTabsPrompt = function(shouldPrompt, tabsToClose, numProtected, flags, warnOnClose) {
+    Tabmix.tablib.showClosingTabsPrompt = function(
+      shouldPrompt,
+      tabsToClose,
+      numProtected,
+      flags,
+      warnOnClose,
+      {checkboxLabel2, restoreSession} = {}
+    ) {
       const getString = Tabmix.formatValueSync;
-
       let warningTitle, message, chkBoxLabel;
       if (shouldPrompt === 1 || numProtected === 0) {
         message = Tabmix.isVersion(1090) ?
@@ -1593,18 +1599,36 @@ Tabmix.tablib = {
         message = shouldPrompt === 1 || numProtected === 0 ? message : message.join("\n");
       }
 
-      var ps = Services.prompt;
-      var buttonPressed = ps.confirmEx(
-        window,
-        warningTitle,
-        message,
-        flags,
-        buttonLabel,
-        null,
-        null,
-        chkBoxLabel,
-        warnOnClose
-      );
+      let ps = Services.prompt;
+      let buttonPressed;
+      if (restoreSession) {
+        // for waterfox G6.0.17+
+        buttonPressed = ps.confirmEx2(
+          window,
+          warningTitle,
+          message,
+          flags,
+          buttonLabel,
+          null,
+          null,
+          chkBoxLabel,
+          warnOnClose,
+          checkboxLabel2,
+          restoreSession
+        );
+      } else {
+        buttonPressed = ps.confirmEx(
+          window,
+          warningTitle,
+          message,
+          flags,
+          buttonLabel,
+          null,
+          null,
+          chkBoxLabel,
+          warnOnClose
+        );
+      }
 
       return buttonPressed;
     };
@@ -1667,8 +1691,12 @@ Tabmix.tablib = {
       tabsToClose -= keepLastTab;
       shouldPrompt = promptType > 0;`
     )._replace(
-      /var buttonPressed = ps\.confirmEx[^;]*;/,
-      'var buttonPressed = Tabmix.tablib.showClosingTabsPrompt(promptType, tabsToClose, numProtected, flags, warnOnClose);'
+      /(?<!const )buttonPressed = ps\.confirmEx[^;]*;/,
+      'buttonPressed = Tabmix.tablib.showClosingTabsPrompt(promptType, tabsToClose, numProtected, flags, warnOnClose);'
+    )._replace(
+      /(?<!const )buttonPressed = ps\.confirmEx2[^;]*;/,
+      'buttonPressed = Tabmix.tablib.showClosingTabsPrompt(promptType, tabsToClose, numProtected, flags, warnOnClose, {checkboxLabel2,  restoreSession});',
+      {check: Tabmix.isVersion({wf: "115.13.0"})}
     )._replace(
       'aCloseTabs == this.closingTabsEnum.ALL &&', ''
     )._replace(
