@@ -853,8 +853,11 @@ var TMP_ClosedTabs = {
     // aIndex is undefined if the function is called without a specific tab to restore.
     let tabsToRestore = aIndex !== undefined ? [aIndex] : new Array(lastClosedTabCount).fill(0);
     let multiple = tabsToRestore.length > 1;
+    const getClosedTabCount = Tabmix.isVersion(1150) ?
+      SessionStore.getClosedTabCountForWindow :
+      SessionStore.getClosedTabCount;
     for (let index of tabsToRestore) {
-      if (SessionStore.getClosedTabCountForWindow(sourceWindow) > index) {
+      if (getClosedTabCount(sourceWindow) > index) {
         tab = this._undoCloseTab(
           sourceWindow,
           index,
