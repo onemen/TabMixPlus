@@ -873,8 +873,13 @@ var TMP_ClosedTabs = {
 
   // workaround for bug 1868452 - Key key_undoCloseTab of menuitem could not be found
   fix_bug_1868452(item) {
-    if (Tabmix.isVersion(1160) && item?.getAttribute("key") === "key_undoCloseTab") {
-      item.setAttribute("key", "key_restoreLastClosedTabOrWindowOrSession");
+    if (
+      Tabmix.isVersion(1160) &&
+      item?.getAttribute("key") === "key_undoCloseTab" &&
+      !document.getElementById("key_undoCloseTab") &&
+      document.getElementById("key_restoreLastClosedTabOrWindowOrSession")
+    ) {
+      document.getElementById("key_restoreLastClosedTabOrWindowOrSession").id = "key_undoCloseTab";
       return true;
     }
     return false;
