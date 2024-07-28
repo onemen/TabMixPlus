@@ -1211,8 +1211,8 @@ Tabmix.navToolbox = {
         modules.UrlbarPrefs = "resource:///modules/UrlbarPrefs.sys.mjs";
       }
 
-      if (Tabmix.isVersion(1290)) {
-        // Bug 1742889 (Firefox 129) - Rewrite consumers of whereToOpenLink to use BrowserUtils.whereToOpenLink
+      if (Tabmix.isVersion(1270)) {
+        // Bug 1742889 (Firefox 127) - Rewrite consumers of whereToOpenLink to use BrowserUtils.whereToOpenLink
         // add references to lazy.BrowserUtils
         modules.BrowserUtils = "resource://gre/modules/BrowserUtils.sys.mjs";
       }
