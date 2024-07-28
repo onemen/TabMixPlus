@@ -6,17 +6,19 @@
 /***** Preference Dialog Functions *****/
 var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
 
+/** @type {Functions["getById"]} */
 this.$ = id => document.getElementById(id);
+
+// this is the same as document.documentElement it is the PrefWindow class
+const prefWindow = $("TabMIxPreferences");
 
 var gPrefWindow = {
   _initialized: false,
-  set instantApply(val) {document.documentElement.instantApply = val;},
-  get instantApply() {return document.documentElement.instantApply;},
+  set instantApply(val) {prefWindow.instantApply = val;},
+  get instantApply() {return prefWindow.instantApply;},
 
   init() {
     this._initialized = true;
-
-    var prefWindow = $("TabMIxPreferences");
 
     if (TabmixSvc.isMac) {
       prefWindow.setAttribute("mac", true);
@@ -29,8 +31,7 @@ var gPrefWindow = {
     if (navigator.userAgent.toLowerCase().indexOf("ubuntu") > -1)
       prefWindow.setAttribute("ubuntu", true);
 
-    var docElt = document.documentElement;
-    window.gIncompatiblePane.init(docElt);
+    window.gIncompatiblePane.init(prefWindow);
 
     window.addEventListener("change", this);
     window.addEventListener("beforeaccept", this);
@@ -38,14 +39,14 @@ var gPrefWindow = {
     gNumberInput.init();
 
     // init buttons extra1, extra2, accept, cancel
-    docElt.getButton("extra1").setAttribute("icon", "apply");
-    docElt.getButton("extra2").setAttribute("popup", "tm-settings");
-    docElt.setAttribute("cancelbuttonlabel", docElt.mStrBundle.GetStringFromName("button-cancel"));
+    prefWindow.getButton("extra1").setAttribute("icon", "apply");
+    prefWindow.getButton("extra2").setAttribute("popup", "tm-settings");
+    prefWindow.setAttribute("cancelbuttonlabel", prefWindow.mStrBundle.GetStringFromName("button-cancel"));
     this.setButtons(true);
 
     this.initBroadcasters("main");
     // hide broadcasters pane button
-    var paneButton = docElt.getElementsByAttribute("pane", "broadcasters")[0];
+    var paneButton = prefWindow.getElementsByAttribute("pane", "broadcasters")[0];
     paneButton.collapsed = true;
 
     $("syncPrefs").setAttribute("checked", Tabmix.prefs.getBoolPref("syncPrefs"));
@@ -53,8 +54,8 @@ var gPrefWindow = {
     positionDonateButton();
 
     if (Tabmix.isVersion(1080)) {
-      docElt.style.setProperty("--input-padding-inline", "2px");
-      docElt.style.setProperty("--input-sppiner-offset", "14px");
+      prefWindow.style.setProperty("--input-padding-inline", "2px");
+      prefWindow.style.setProperty("--input-spinner-offset", "14px");
     }
 
     this.updateMaxHeight();
@@ -66,8 +67,8 @@ var gPrefWindow = {
       const currentDevicePixelRatio = window.devicePixelRatio;
       if (currentDevicePixelRatio !== previousDevicePixelRatio) {
         const maxHeight = window.screen.height * 0.8;
-        document.documentElement.style.maxHeight = window.devicePixelRatio > 1.25 ? maxHeight + "px" : "";
-        document.documentElement.sizeToContent();
+        prefWindow.style.maxHeight = window.devicePixelRatio > 1.25 ? maxHeight + "px" : "";
+        prefWindow.sizeToContent();
       }
       previousDevicePixelRatio = currentDevicePixelRatio;
     };
@@ -237,7 +238,7 @@ var gPrefWindow = {
   },
 
   setButtons(disable) {
-    var docElt = document.documentElement;
+    var docElt = prefWindow;
     // when in instantApply mode apply and accept buttons are hidden except when user
     // change min/max width value
     var applyButton = docElt.getButton("extra1");
@@ -473,7 +474,7 @@ TabmixChromeUtils.defineLazyGetter(this, "gPreferenceList", () => {
   return tabmixPrefs;
 });
 
-TabmixChromeUtils.defineLazyGetter(this, "_sminstalled", () => {
+TabmixChromeUtils.defineLazyGetter(window, "_sminstalled", () => {
   return Tabmix.getTopWin().Tabmix.extensions.sessionManager;
 });
 
@@ -482,7 +483,7 @@ function defaultSetting() {
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
   Shortcuts.prefsChangedByTabmix = true;
-  let SMinstalled = _sminstalled;
+  let SMinstalled = window._sminstalled;
   let prefs = !SMinstalled ? gPreferenceList :
     gPreferenceList.map(pref => !sessionPrefs.includes(pref));
   prefs.forEach(pref => {
@@ -511,7 +512,7 @@ function updateInstantApply() {
 
   if (Tabmix.prefs.getBoolPref('instantApply') !== checked) {
     menuItem.setAttribute("checked", !checked);
-    document.documentElement.instantApply = !checked;
+    prefWindow.instantApply = !checked;
   }
   gPrefWindow.setButtons(!gPrefWindow.changes.size);
 }
@@ -525,7 +526,7 @@ function toggleInstantApply(item) {
   // apply all pending changes before we change mode to instantApply
   if (checked) gPrefWindow.onApply();
 
-  document.documentElement.instantApply = checked;
+  prefWindow.instantApply = checked;
   if (item.id === "instantApply") {
     preference._running = true;
     Tabmix.prefs.setBoolPref("instantApply", checked);
@@ -548,7 +549,7 @@ function positionDonateButton() {
     dlgbuttons.parentNode.insertBefore(donateBox, dlgbuttons);
   }
   if (window.toString() === "[object Window]") {
-    document.documentElement.sizeToContent();
+    prefWindow.sizeToContent();
   }
 }
 
@@ -621,7 +622,12 @@ function showFilePicker(mode) {
       fp.defaultString = "TMPpref";
       mode = nsIFilePicker.modeSave;
     }
-    fp.init(Tabmix.isVersion(1250) ? window.browsingContext : window, null, mode);
+    if (Tabmix.isVersion(1250)) {
+      fp.init(window.browsingContext, null, mode);
+    } else {
+      // @ts-expect-error - we don't use it from Firefox 125
+      fp.init(window, null, mode);
+    }
     fp.appendFilters(nsIFilePicker.filterText);
     fp.open(result => {
       resolve(result != nsIFilePicker.returnCancel ? fp.file : null);
@@ -643,7 +649,7 @@ function loadData(pattern) {
   Tabmix.prefs.setBoolPref("setDefault", true);
 
   // disable both Firefox & Tabmix session manager to prevent our prefs observer to block the change
-  let SMinstalled = _sminstalled;
+  let SMinstalled = window._sminstalled;
   if (!SMinstalled) {
     Tabmix.prefs.setBoolPref("sessions.manager", false);
     Tabmix.prefs.setBoolPref("sessions.crashRecovery", false);
@@ -680,7 +686,7 @@ function loadData(pattern) {
 
 // this function is called from Tabmix.openOptionsDialog if the dialog already opened
 function showPane(paneID) {
-  let docElt = document.documentElement;
+  let docElt = document.getElementById("TabMIxPreferences");
   let paneToLoad = document.getElementById(paneID);
   if (!paneToLoad || paneToLoad.nodeName != "prefpane")
     paneToLoad = $(docElt.lastSelected);
@@ -704,11 +710,12 @@ function openHelp(helpTopic) {
     }
     return false;
   }
+  /** @type {WhereToOpen} */
   var where = selectHelpPage() ||
     tabBrowser.selectedTab.isEmpty ? "current" : "tab";
 
   if (!helpTopic) {
-    var currentPane = document.documentElement.currentPane;
+    var currentPane = prefWindow.currentPane;
     helpTopic = currentPane.helpTopic;
     if (currentPane.id == "paneSession") {
       helpTopic = $("session").parentNode.selectedTab.getAttribute("helpTopic");
@@ -728,6 +735,7 @@ function donate() {
 
 window.gIncompatiblePane = {
   lastSelected: "paneLinks",
+  paneButton: null,
 
   init(docElt) {
     this.paneButton = docElt.getElementsByAttribute("pane", "paneIncompatible")[0];
@@ -744,7 +752,6 @@ window.gIncompatiblePane = {
   handleEvent(aEvent) {
     if (aEvent.type != "command")
       return;
-    let prefWindow = document.documentElement;
     if (prefWindow.lastSelected != "paneIncompatible")
       this.lastSelected = prefWindow.lastSelected;
   },
@@ -762,8 +769,8 @@ window.gIncompatiblePane = {
     }
     Tabmix.setItem(this.paneButton, "show", !aHide);
 
-    if (aHide && document.documentElement.lastSelected == "paneIncompatible")
-      document.documentElement.showPane($(this.lastSelected));
+    if (aHide && prefWindow.lastSelected == "paneIncompatible")
+      prefWindow.showPane($(this.lastSelected));
 
     if (aFocus)
       window.focus();
@@ -787,13 +794,13 @@ TabmixChromeUtils.defineLazyGetter(this, "RTL_UI", () => {
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
 
 function setDialog() {
-  Object.defineProperty(customElements.get('preferences').prototype, 'instantApply', {get: () => document.documentElement.instantApply});
+  Object.defineProperty(customElements.get('preferences').prototype, 'instantApply', {get: () => prefWindow.instantApply});
   customElements.define('prefwindow', class PrefWindowNoInst extends PrefWindow {
     _instantApplyInitialized = true;
     instantApply = Tabmix.prefs.getBoolPref('instantApply');
   });
   if (window.toString() == '[object Window]') {
-    document.documentElement.sizeToContent();
+    prefWindow.sizeToContent();
   }
 }
 

@@ -136,7 +136,11 @@
         resetButton.setAttribute("tooltiptext",
           resetButton.getAttribute("tooltiptext") + "\nDefault is: " + defaultKey);
       }
-      this.__defineGetter__("defaultPref", () => defaultVal);
+      Object.defineProperty(this, "defaultPref", {
+        value: defaultVal,
+        configurable: true,
+        enumerable: true
+      });
       return defaultVal;
     }
 
@@ -167,10 +171,11 @@
         newKey.disabled = aDisabled;
         this.key = newKey;
         this.setAttribute("default", !this.disabled && this.defaultPref == newValue);
-        this.parentNode.keys[this.id] = newValue;
-        this.parentNode.value = JSON.stringify(this.parentNode.keys);
+        const shortcuts = $("shortcut-group");
+        shortcuts.keys[this.id] = newValue;
+        shortcuts.value = JSON.stringify(shortcuts.keys);
         Shortcuts.prefsChangedByTabmix = true;
-        $("pref_shortcuts").value = this.parentNode.value;
+        $("pref_shortcuts").value = shortcuts.value;
         Shortcuts.prefsChangedByTabmix = false;
         const callBack = shortcut => shortcut.id && shortcut.updateNotification();
         gMenuPane.updateShortcuts(this.parentNode, callBack);

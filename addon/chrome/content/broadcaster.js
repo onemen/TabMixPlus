@@ -54,7 +54,7 @@
       this.textContent = "";
       const obs = window.document.getElementById(this.getAttribute("element"));
       const attr = this.attributes.attribute.value;
-      const el = this.parentNode;
+      const el = this.parentElement;
       window.addEventListener("load", () => {
         try {
           if (obs.hasAttribute(attr))

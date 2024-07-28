@@ -168,6 +168,10 @@
       }
     });
 
+    /**
+     *  @this {MockedGeckoTypes.BrowserTab}
+     *  @param {MouseEvent} aEvent
+     */
     this.onMouseOver = function(aEvent) {
       this.setHoverState(aEvent, true);
       this.mButtonId = window.setTimeout(this.setShowButton, this.tabXDelay, this);
@@ -187,6 +191,9 @@
       }
     };
 
+    /**
+     *  @param {MockedGeckoTypes.BrowserTab} aTab
+     */
     this.setShowButton = function(aTab) {
       if (!aTab || !aTab.parentNode)
         return; // this tab already removed....
@@ -204,6 +211,10 @@
       }
     };
 
+    /**
+    *  @this {MockedGeckoTypes.BrowserTab}
+    *  @param {MouseEvent} aEvent
+    */
     this.onMouseOut = function(aEvent) {
       this.setHoverState(aEvent, false);
       clearTimeout(this.mButtonId);
@@ -212,7 +223,13 @@
         clearTimeout(this.mFocusId);
     };
 
+    /**
+    *  @this {MockedGeckoTypes.BrowserTab}
+    *  @param {MouseEvent} aEvent
+    *  @param {boolean} aOver
+    */
     this.setHoverState = function(aEvent, aOver) {
+      // @ts-ignore
       if (aEvent.target?.classList?.contains("tab-close-button")) {
         this.mOverCloseButton = aOver;
       }
@@ -235,6 +252,11 @@
       }
     };
 
+    /**
+    *  @this {MockedGeckoTypes.BrowserTab}
+    *  @param {MouseEvent} aEvent
+    *  @param {boolean} aSelectNewTab
+    */
     this.onMouseCommand = function(aEvent, aSelectNewTab) {
       var isSelected = this == this.container.selectedItem;
       Tabmix.setItem(this, "clickOnCurrent",
@@ -268,10 +290,6 @@
         }
       }, this);
     };
-  });
-
-  Tabmix.setNewFunction(tabbrowsertab.prototype, "disconnectedCallback", function disconnectedCallback() {
-    this.clearTimeouts();
   });
 
   if (gBrowser?.tabs?.forEach) {

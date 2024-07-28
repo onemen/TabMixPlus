@@ -228,7 +228,7 @@ var TMP_tabDNDObserver = {
     this.draglink = `Hold ${TabmixSvc.isMac ? "⌘" : "Ctrl"} to replace locked tab with link Url`;
 
     // without this the Indicator is not visible on the first drag
-    tabBar._tabDropIndicator.style.MozTransform = "translate(0px, 0px)";
+    tabBar._tabDropIndicator.style.transform = "translate(0px, 0px)";
 
     // prevent grouping selected tabs for multi row tabbar
     Tabmix.originalFunctions._groupSelectedTabs = tabBar._groupSelectedTabs;
@@ -288,8 +288,9 @@ var TMP_tabDNDObserver = {
       return;
     }
 
-    const windowUtils = window.windowUtils;
-    const scale = windowUtils.screenPixelsPerCSSPixel / windowUtils.fullZoom;
+    const scale = Tabmix.isVersion(1090) ?
+      window.devicePixelRatio :
+      window.windowUtils.screenPixelsPerCSSPixel / window.windowUtils.fullZoom;
     let dragImageOffsetX = -16;
     let dragImageOffsetY = TabmixTabbar.visibleRows == 1 ? -16 : -30;
     let toDrag = this._dndCanvas;
@@ -325,6 +326,7 @@ var TMP_tabDNDObserver = {
     const isCopy = dt.dropEffect == "copy";
     const targetTab = Tabmix.isVersion(1120) ?
       tabBar._getDragTargetTab(event, {ignoreTabSides: true}) :
+      // @ts-ignore - not in use since firefox 112
       tabBar._getDragTargetTab(event, true);
 
     let disAllowDrop = false;
@@ -493,7 +495,7 @@ var TMP_tabDNDObserver = {
     return asObj ? params : params.newIndex;
   },
 
-  _getDropIndex(event, {dragover, children} = {}) {
+  _getDropIndex(event, {dragover = false, children = []} = {}) {
     const tabBar = gBrowser.tabContainer;
     if (!dragover && !this.useTabmixDnD(event)) {
       return Tabmix.originalFunctions._getDropIndex.apply(tabBar, arguments);
@@ -578,7 +580,7 @@ var TMP_tabDNDObserver = {
       } else if (mY <= top + this._multirowMargin) {
         mY = top + this._multirowMargin + 1;
       }
-      const currentRow = firstVisibleRow + parseInt((mY - top - this._multirowMargin) / singleRowHeight);
+      const currentRow = firstVisibleRow + Math.round((mY - top - this._multirowMargin) / singleRowHeight);
       let topY = Tabmix.tabsUtils.topTabY;
       let index;
       for (index = 0; index < numTabs; index++) {
@@ -840,26 +842,25 @@ Tabmix.navToolbox = {
     gNavToolbox.addEventListener("beforecustomization", this);
     gNavToolbox.addEventListener("aftercustomization", this);
 
-    this.listener = {
-      onWidgetAfterDOMChange: function(aNode, aNextNode, aContainer, aWasRemoval) {
-        if (this.customizeStarted)
-          return;
-        if (aContainer.id == "TabsToolbar") {
-          this.tabStripAreaChanged();
-          TabmixTabbar.updateScrollStatus();
-          TabmixTabbar.updateBeforeAndAfter();
-        }
-        if (!aWasRemoval) {
-          let command = aNode.getAttribute("command");
-          if (/Browser:ReloadOrDuplicate|Browser:Stop/.test(command))
-            gTMPprefObserver.showReloadEveryOnReloadButton();
+    const onWidgetAfterDOMChange = (aNode, aNextNode, aContainer, aWasRemoval) => {
+      if (this.customizeStarted)
+        return;
+      if (aContainer.id == "TabsToolbar") {
+        this.tabStripAreaChanged();
+        TabmixTabbar.updateScrollStatus();
+        TabmixTabbar.updateBeforeAndAfter();
+      }
+      if (!aWasRemoval) {
+        let command = aNode.getAttribute("command");
+        if (/Browser:ReloadOrDuplicate|Browser:Stop/.test(command))
+          gTMPprefObserver.showReloadEveryOnReloadButton();
 
-          if (aNode.id === "tabmix-closedTabs-toolbaritem") {
-            TMP_ClosedTabs.setButtonType(Tabmix.prefs.getBoolPref("undoCloseButton.menuonly"));
-          }
+        if (aNode.id === "tabmix-closedTabs-toolbaritem") {
+          TMP_ClosedTabs.setButtonType(Tabmix.prefs.getBoolPref("undoCloseButton.menuonly"));
         }
-      }.bind(this)
+      }
     };
+    this.listener = {onWidgetAfterDOMChange};
     CustomizableUI.addListener(this.listener);
   },
 
@@ -879,22 +880,7 @@ Tabmix.navToolbox = {
     CustomizableUI.removeWidgetFromArea("tabmix-scrollbox");
     CustomizableUI.removeListener(this.listener);
 
-    let alltabsPopup = document.getElementById("allTabsMenu-allTabsView");
-    if (alltabsPopup && alltabsPopup._tabmix_inited) {
-      alltabsPopup.removeEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
-    }
-
     gURLBar?.removeEventListener("blur", this);
-  },
-
-  cleanCurrentset() {
-    let tabsToolbar = document.getElementById("TabsToolbar");
-    let cSet = tabsToolbar.getAttribute("currentset");
-    if (cSet.indexOf("tabmix-scrollbox") > -1) {
-      cSet = cSet.replace("tabmix-scrollbox", "").replace(",,", ",");
-      tabsToolbar.setAttribute("currentset", cSet);
-      document.persist("TabsToolbar", "currentset");
-    }
   },
 
   handleEvent: function TMP_navToolbox_handleEvent(aEvent) {
@@ -954,7 +940,6 @@ Tabmix.navToolbox = {
     this.initializeURLBar();
     this.initializeSearchbar();
     this.toolbarButtons();
-    this.initializeAlltabsPopup();
     this.tabStripAreaChanged();
   },
 
@@ -1150,6 +1135,7 @@ Tabmix.navToolbox = {
     let altEnter = !isMouseEvent && event &&
       Tabmix.isAltKey(event) && !gBrowser.selectedTab.isEmpty;
 
+    /** @type {WhereToOpen} */
     let where = "current";
     let url = result?.payload?.url ?? this.value;
     let loadNewTab = Tabmix.whereToOpen("extensions.tabmix.opentabfor.urlbar",
@@ -1286,19 +1272,6 @@ Tabmix.navToolbox = {
     gTMPprefObserver.setSingleWindowUI();
     gTMPprefObserver.showReloadEveryOnReloadButton();
     TMP_ClosedTabs.setButtonType(Tabmix.prefs.getBoolPref("undoCloseButton.menuonly"));
-  },
-
-  initializeAlltabsPopup: function TMP_navToolbox_initializeAlltabsPopup() {
-    let alltabsPopup = document.getElementById("allTabsMenu-allTabsView");
-    if (alltabsPopup && !alltabsPopup._tabmix_inited) {
-      alltabsPopup._tabmix_inited = true;
-      alltabsPopup.setAttribute("context", "tabContextMenu");
-      alltabsPopup.__ensureElementIsVisible = function() {
-        let scrollBox = this.getElementsByClassName("popup-internal-box")[0];
-        scrollBox.ensureElementIsVisible(gBrowser._selectedTab.mCorrespondingMenuitem);
-      };
-      alltabsPopup.addEventListener("popupshown", alltabsPopup.__ensureElementIsVisible);
-    }
   },
 
   tabStripAreaChanged() {

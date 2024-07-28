@@ -2,22 +2,23 @@
 /* exported load, accept, onInput, onSelect, openPopup */
 "use strict";
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
+/** @type {TabmixModules.TabmixSvc} */
+const TabmixSvc = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm").TabmixSvc;
 
-const gPref = Services.prefs;
+const gPref = TabmixSvc.prefBranch;
 
 function load() {
-  var customReloadTime = gPref.getIntPref("extensions.tabmix.reload_time");
-  document.getElementById("autoreload_minutes").value = Math.floor(customReloadTime / 60);
-  document.getElementById("autoreload_seconds").value = customReloadTime % 60;
+  const customReloadTime = gPref.getIntPref("reload_time");
+  document.getElementById("autoreload_minutes").value = String(Math.floor(customReloadTime / 60));
+  document.getElementById("autoreload_seconds").value = String(customReloadTime % 60);
   updateOkButtonDisabledState();
 
   gNumberInput.init();
   gNumberInput.inputExpr = gNumberInput.changeExpr = e => {
-    const outRange = e.target.validity.rangeOverflow || e.target.validity.rangeUnderflow;
-    if (outRange) e.target.oninput();// call default input logic
-    return !e.target.validity.valid && !outRange;
+    const target = e.target;
+    const outRange = target.validity.rangeOverflow || target.validity.rangeUnderflow;
+    if (outRange) target.oninput(e);// call default input logic
+    return !target.validity.valid && !outRange;
   };
 
   // Apply our styles to the shadow dom buttons
@@ -34,29 +35,29 @@ function load() {
 }
 
 function accept() {
-  var customReloadTime = getCustomReloadTime();
-  gPref.setIntPref("extensions.tabmix.reload_time", customReloadTime);
-  var list = gPref.getCharPref("extensions.tabmix.custom_reload_list");
-  list = list ? list.split(",") : [];
+  const customReloadTime = getCustomReloadTime();
+  gPref.setIntPref("reload_time", customReloadTime);
+  let listPrefValue = gPref.getCharPref("custom_reload_list");
+  const list = listPrefValue?.split(",").map(Number) ?? [];
   let defaultList = [60, 120, 300, 900, 1800];
   if (!list.concat(defaultList).includes(customReloadTime)) {
     list.push(customReloadTime);
     if (list.length > 6)
       list.shift();
-    gPref.setCharPref("extensions.tabmix.custom_reload_list", list.join(","));
+    gPref.setCharPref("custom_reload_list", list.join(","));
   }
 
   window.arguments[0].ok = true;
 }
 
 function getCustomReloadTime() {
-  var minutes;
+  let minutes;
   if (document.getElementById("autoreload_minutes").value !== '')
     minutes = parseInt(document.getElementById("autoreload_minutes").value);
   else
     minutes = 0;
 
-  var seconds;
+  let seconds;
   if (document.getElementById("autoreload_seconds").value !== '')
     seconds = parseInt(document.getElementById("autoreload_seconds").value);
   else

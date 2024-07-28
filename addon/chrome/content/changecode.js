@@ -184,7 +184,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       fullName: afnName,
       options: aOptions
     });
-  } catch (ex) {
+  } catch (/** @type {any} */ ex) {
     console.clog(console.callerName() + " failed to change " + afnName + "\nError: " + ex.message);
     if (debugMode)
       console.obj(aParent, "aParent");

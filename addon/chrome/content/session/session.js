@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* globals TabmixConvertSession */
 /* eslint "mozilla/avoid-Date-timing": "off", mozilla/consistent-if-bracing: off */
 "use strict";

@@ -1,6 +1,6 @@
-/* globals Cc, Ci */
 "use strict";
 
+/** @type {MockedGeckoTypes.Services} */ // @ts-ignore - see general.d.ts
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 
@@ -11,11 +11,9 @@ TabmixChromeUtils.defineLazyModuleGetters(this, {
   E10SUtils: "resource://gre/modules/E10SUtils.jsm",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
   WebNavigationFrames: "resource://gre/modules/WebNavigationFrames.jsm",
+  clearTimeout: "resource://gre/modules/Timer.jsm",
+  setTimeout: "resource://gre/modules/Timer.jsm",
 });
-
-const {setTimeout, clearTimeout} = TabmixChromeUtils.import(
-  "resource://gre/modules/Timer.jsm"
-);
 
 ChromeUtils.defineModuleGetter(this, "ContentSvc",
   "chrome://tabmix-resource/content/ContentSvc.jsm");
@@ -31,7 +29,6 @@ ChromeUtils.defineModuleGetter(this, "TabmixUtils",
 
 var PROCESS_TYPE_CONTENT = Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
 
-var TabmixClickEventHandler, FaviconLoader;
 var TabmixContentHandler = {
   MESSAGES: [
     "Tabmix:restorePermissions",
@@ -90,6 +87,8 @@ var TabmixContentHandler = {
       }
       case "Tabmix:updateHistoryTitle": {
         let history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
+        // @ts-expect-error - not in use since Firefox 82
+        // bug 1662410 - Remove usage of ChildSHistory::LegacySHistory
         TabmixUtils.updateHistoryTitle(history.legacySHistory, data.title);
         break;
       }
@@ -109,6 +108,8 @@ var TabmixContentHandler = {
         let postData = {isPostData: false, postData: null};
         if (!Services.appinfo.sessionHistoryInParent) {
           const history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
+          // @ts-expect-error - not in use since Firefox 82
+          // bug 1662410 - Remove usage of ChildSHistory::LegacySHistory
           postData = TabmixUtils.getPostDataFromHistory(history.legacySHistory);
         }
         let json = {
@@ -134,6 +135,7 @@ var TabmixContentHandler = {
       }
       case "Tabmix:SetPendingTabIcon": {
         try {
+          // eslint-disable-next-line no-use-before-define
           FaviconLoader.load(data);
         } catch (ex) {
           console.error(ex);
@@ -176,10 +178,15 @@ var TabmixContentHandler = {
   }
 };
 
-FaviconLoader = {
+var FaviconLoader = {
   get actor() {
-    delete this.actor;
-    return (this.actor = docShell.domWindow.windowGlobalChild.getActor("LinkHandler"));
+    const actor = docShell.domWindow.windowGlobalChild.getActor("LinkHandler");
+    Object.defineProperty(this, "actor", {
+      value: actor,
+      configurable: true,
+      enumerable: true
+    });
+    return actor;
   },
 
   load({iconUrl, pageUrl}) {
@@ -226,7 +233,7 @@ FaviconLoader = {
   },
 };
 
-TabmixClickEventHandler = {
+var TabmixClickEventHandler = {
   init: function init(global) {
     global.addEventListener("click", event => {
       let linkData = this.getLinkData(event);
@@ -388,9 +395,11 @@ TabmixClickEventHandler = {
     if (href && !isFromMiddleMousePasteHandler) {
       try {
         const secMan = Services.scriptSecurityManager;
-        const args = ContentSvc.version(870) ?
-          [principal, href] : [principal, href, secMan.STANDARD];
-        secMan.checkLoadURIStrWithPrincipal(...args);
+        if (ContentSvc.version(870)) {
+          secMan.checkLoadURIStrWithPrincipal(principal, href);
+        } else {
+          secMan.checkLoadURIStrWithPrincipal(principal, href, secMan.STANDARD);
+        }
       } catch {
         return;
       }
@@ -414,6 +423,7 @@ TabmixClickEventHandler = {
         // should we allow mixed content.
         json.allowMixedContent = false;
         let docshell = ownerDoc.defaultView.docShell;
+        // @ts-expect-error - not in use since Firefox 890
         if (docShell.mixedContentChannel) {
           const sm = Services.scriptSecurityManager;
           try {
@@ -462,6 +472,9 @@ TabmixClickEventHandler = {
     // This might be middle mouse navigation, in which case pass this back:
     if (ContentSvc.version(980)) {
       if (!href && event.button == 1 && isFromMiddleMousePasteHandler) {
+        const g = docShell.domWindow.windowGlobalChild.getActor("MiddleMousePasteHandler");
+        console.log(g);
+
         docShell.domWindow.windowGlobalChild.getActor("MiddleMousePasteHandler").onProcessedClick(json);
       }
     } else if (event.button == 1) {

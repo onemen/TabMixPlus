@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* globals TabView TabItems */
 "use strict";
 

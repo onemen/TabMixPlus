@@ -4,17 +4,15 @@ const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content
 
 var Tabmix = {
   get prefs() {
-    delete this.prefs;
-    return (this.prefs = Services.prefs.getBranch("extensions.tabmix."));
+    return this.lazyGetter(this, "prefs", Services.prefs.getBranch("extensions.tabmix."));
   },
 
   get defaultPrefs() {
-    delete this.defaultPrefs;
-    return (this.defaultPrefs = Services.prefs.getDefaultBranch("extensions.tabmix."));
+    return this.lazyGetter(this, "defaultPrefs", Services.prefs.getDefaultBranch("extensions.tabmix."));
   },
 
-  isVersion() {
-    return TabmixSvc.version.apply(null, arguments);
+  isVersion(aVersionNo, updateChannel) {
+    return TabmixSvc.version.apply(null, [aVersionNo, updateChannel]);
   },
 
   isAltKey(event) {
@@ -123,6 +121,15 @@ var Tabmix = {
         self[aModule + "Initialized"] = true;
       return Obj;
     });
+  },
+
+  lazyGetter(obj, name, get, config = {
+    configurable: true,
+    enumerable: true,
+  }) {
+    config.value = typeof get == "function" ? get() : get;
+    Object.defineProperty(obj, name, config);
+    return config.value;
   },
 
   backwardCompatibilityGetter(aObject, aOldName, aNewName) {
@@ -239,10 +246,6 @@ var Tabmix = {
     return this.isSingleBrowserWindow;
   },
 
-  get window() {
-    return window;
-  },
-
   compare: function TMP_utils_compare(a, b, lessThan) {
     return lessThan ? a < b : a > b;
   },
@@ -291,18 +294,18 @@ var Tabmix = {
       "getObject", "log", "getCallerNameByIndex", "callerName",
       "clog", "isCallerInList", "callerTrace",
       "obj", "assert", "trace", "reportError"];
-    methods.forEach(function(id) {
+    methods.forEach(id => {
       this[id] = function TMP_console_wrapper() {
         return this._getMethod(id, arguments);
-      }.bind(this);
-    }, this);
+      };
+      this[id] = this[id].bind(this);
+    });
   },
 
   originalFunctions: {},
   destroy: function TMP_utils_destroy() {
     this.toCode = null;
     this.originalFunctions = null;
-    delete this.window;
   }
 };
 

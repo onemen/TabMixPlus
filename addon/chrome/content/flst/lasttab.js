@@ -154,7 +154,7 @@ var TMP_LastTab = {
   },
 
   ItemInactive(event) {
-    TabmixAllTabs.updateMenuItemInactive(event);
+    TabmixAllTabs.updateMenuItemInactive();
     if (!this.respondToMouseInTabList && event.target.value == this.inverseIndex(this.TabIndex))
       event.target.setAttribute("_moz-menuactive", "true");
   },
@@ -289,7 +289,7 @@ var TMP_LastTab = {
         tabToSelect = tab;
       }
 
-      TabmixAllTabs.updateMenuItemInactive(null);
+      TabmixAllTabs.updateMenuItemInactive();
       TabmixAllTabs.backupLabel = "";
 
       this.TabList.hidePopup();

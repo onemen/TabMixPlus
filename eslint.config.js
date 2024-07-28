@@ -5,6 +5,7 @@ const globals = require("globals");
 const eslintPluginMozilla = require("eslint-plugin-mozilla");
 const eslintPluginTabmix = require("./config/eslint-plugin-tabmix");
 const eslintPluginJson = require("eslint-plugin-json");
+const tseslint = require("typescript-eslint");
 const RuleHelper = require("eslint-plugin-no-unsanitized/lib/ruleHelper");
 
 // workaround to Error: Could not serialize processor object (missing 'meta' object).
@@ -43,6 +44,7 @@ module.exports = [
       "manifest.json",
       "logs/",
       ".vscode",
+      "**/*.local.*",
     ],
   },
 
@@ -263,7 +265,13 @@ module.exports = [
       "no-unsafe-negation": 2,
       "no-unused-expressions": 2,
       "no-unused-labels": 2,
-      "no-unused-vars": [2, {vars: "all", args: "after-used"}],
+      "no-unused-vars": [2, {
+        vars: "all",
+        args: "after-used",
+        argsIgnorePattern: "^_",
+        ignoreRestSiblings: true,
+        varsIgnorePattern: "^ignored",
+      }],
       "no-use-before-define": [2, "nofunc"],
       "no-useless-call": 2,
       "no-useless-computed-key": 2,
@@ -551,4 +559,24 @@ module.exports = [
       "prefer-const": "error",
     },
   },
+
+  // for .d.ts files only
+  ...[
+    ...tseslint.configs.recommended.map(conf => ({
+      ...conf,
+      files: ["**/*.d.ts"],
+      ignores: ["**/gecko/*.d.ts"],
+    })),
+    {
+      files: ["**/*.d.ts"],
+      ignores: ["**/gecko/*.d.ts"],
+      rules: {
+        "no-var": "off",
+        "no-unused-vars": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-misused-new": "off"
+      },
+    },
+  ],
 ];

@@ -1,7 +1,9 @@
 /* exported install, uninstall, startup, shutdown */
 "use strict";
 
+/** @type {MockedGeckoTypes.Services} */ // @ts-ignore - see general.d.ts
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+// @ts-ignore - we are not redeclare block-scoped variable 'AddonManager' here
 const {AddonManager} = (function() {
   try {
     return ChromeUtils.importESModule("resource://gre/modules/AddonManager.sys.mjs");

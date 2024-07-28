@@ -1,6 +1,6 @@
 "use strict";
 
-var gTMPprefObserver, TabmixProgressListener;
+var TabmixProgressListener;
 
 // code based on Tab X 0.5 enhanced version by Morac, modified by Hemiola SUN, later CPU & onemen
 var TabmixTabbar = {
@@ -42,7 +42,7 @@ var TabmixTabbar = {
     const currentValue = this._visibleRows;
     this._visibleRows = rows;
     if (currentValue !== rows) {
-      gTMPprefObserver.dynamicRules.visibleRows.style.setProperty("--tabmix-visiblerows", rows);
+      gTMPprefObserver.dynamicRules.visibleRows.style.setProperty("--tabmix-visiblerows", String(rows));
       Tabmix.tabsUtils.updateProtonValues();
     }
   },
@@ -199,11 +199,11 @@ var TabmixTabbar = {
 
   updateScrollStatus: function TMP_updateScrollStatus(delay) {
     if (delay) {
-      if (this.updateScrollStatus.timeout) {
+      if (this._updateScrollStatusTimeout) {
         return;
       }
-      this.updateScrollStatus.timeout = setTimeout(() => {
-        this.updateScrollStatus.timeout = null;
+      this._updateScrollStatusTimeout = setTimeout(() => {
+        this._updateScrollStatusTimeout = null;
       }, 250);
     }
     var tabBar = gBrowser.tabContainer;
@@ -376,9 +376,12 @@ Tabmix.tabsUtils = {
   _tabmixPositionalTabs: {},
 
   get tabBar() {
-    delete this.tabBar;
-    const _gBrowser = window.gBrowser || window._gBrowser;
-    return (this.tabBar = _gBrowser.tabContainer);
+    /** @type {MockedGeckoTypes.TabContainer} */
+    const tabBar = Tabmix.lazyGetter(this, "tabBar", () => {
+      const tabbrowser = window.gBrowser || window._gBrowser;
+      return tabbrowser.tabContainer;
+    });
+    return tabBar;
   },
 
   get scrollClientRect() {
@@ -421,6 +424,7 @@ Tabmix.tabsUtils = {
   getTabsCount(num = gBrowser.tabs.length) {
     const removingTabs = Tabmix.isVersion(1100) ?
       gBrowser._removingTabs.size :
+      // @ts-expect-error - not in use
       gBrowser._removingTabs.length;
     return num - removingTabs;
   },
@@ -607,7 +611,7 @@ Tabmix.tabsUtils = {
     }
   },
 
-  updateVerticalTabStrip({reset, forceRightSide} = {}) {
+  updateVerticalTabStrip({reset = false, forceRightSide = false} = {}) {
     if (this.isVerticalTabBar || window.gInPrintPreviewMode ||
         this.inDOMFullscreen || FullScreen._isChromeCollapsed ||
         TabmixTabbar._waitAfterMaximized ||
@@ -820,7 +824,7 @@ Tabmix.tabsUtils = {
   },
 
   getTabRowNumber(aTab, aTop) {
-    let {top, height = 0} = aTab ? aTab.getBoundingClientRect() : {};
+    let {top = null, height = 0} = aTab ? aTab.getBoundingClientRect() : {height: 0};
     if (!height) // don't panic
       return 1;
     // some theme add marginTop/marginBottom to tabs
@@ -846,7 +850,7 @@ Tabmix.tabsUtils = {
     let active = this.getTabRowNumber(gBrowser.selectedTab, this.topTabY);
     let rowsStr = TabmixSvc.getString("rowsTooltip.rowscount").split(";")[1];
     let activeStr = TabmixSvc.getString("rowsTooltip.activetab");
-    box.label = `${rowsStr.replace("#1", rows)}\n${activeStr.replace("#1", active)}`;
+    box.label = `${rowsStr.replace("#1", rows.toString())}\n${activeStr.replace("#1", active.toString())}`;
   },
 
   isSingleRow(visibleTabs) {
@@ -941,6 +945,10 @@ Tabmix.tabsUtils = {
     return true;
   },
 
+  /**
+   *  @typedef {{name: string, val: string, margin: string, enabled: boolean}}  ProtonValues
+   *  @type {ProtonValues}
+   */
   get protonValues() {
     // rules to add proton --tab-block-margin to --tab-min-height_mlt
     // we update tab-block-margin dynamically by calling updateProtonValues
@@ -955,8 +963,8 @@ Tabmix.tabsUtils = {
       87: {name: "--proton-tab-block-margin", val: "4px", margin: "3px"},
       91: {name: "--tab-block-margin", val: "4px", margin: "3px"},
     }).reduce((acc, [version, val]) => {
-      return Tabmix.isVersion(version * 10) ? val : acc;
-    }, []);
+      return Tabmix.isVersion(Number(version) * 10) ? val : acc;
+    }, {name: "", val: "", margin: ""});
 
     const protonPrefVal = Services.prefs.getBoolPref("browser.proton.tabs.enabled", false);
     const isEnabled = () => {
@@ -971,14 +979,13 @@ Tabmix.tabsUtils = {
       return true;
     };
 
+    const _protonValues = {...blockMargin, enabled: isEnabled()};
     Object.defineProperty(Tabmix.tabsUtils, "protonValues", {
       configurable: true,
       enumerable: true,
-      get() {
-        return {...blockMargin, enabled: isEnabled()};
-      }
+      value: _protonValues,
     });
-    return {...blockMargin, enabled: isEnabled()};
+    return _protonValues;
   },
 
   updateProtonValues() {
@@ -986,7 +993,7 @@ Tabmix.tabsUtils = {
     // and add the difference to #tabbrowser-arrowscrollbox margin top/bottom
     // with --tabmix-multirow-margin
     const reduceMargin = this.protonValues.enabled &&
-      gBrowser.tabContainer.attributes.orient?.value !== "vertical" &&
+      gBrowser.tabContainer.getAttribute("orient") !== "vertical" &&
       TabmixTabbar.visibleRows > 1;
     const margin = reduceMargin ? "1px" : "";
     document.documentElement.style.setProperty(this.protonValues.name, margin);
@@ -1024,8 +1031,11 @@ Tabmix.bottomToolbarUtils = {
         document.getElementById("fullscreen-and-pointerlock-wrapper")?.nextSibling ??
         document.getElementById("browser-bottombox");
     referenceNode.parentNode.insertBefore(fragment, referenceNode);
-    delete this.toolbox;
-    this.toolbox = document.getElementById("tabmix-bottom-toolbox");
+    Object.defineProperty(this, "toolbox", {
+      value: document.getElementById("tabmix-bottom-toolbox"),
+      configurable: true,
+      enumerable: true
+    });
     updateFullScreen = window.fullScreen;
 
     if (!Tabmix.tabsUtils.visible) {
@@ -1158,8 +1168,8 @@ Tabmix.visibleTabs = {
 };
 
 // Function to catch changes to Tab Mix preferences and update existing windows and tabs
-//
-gTMPprefObserver = {
+window.gTMPprefObserver = {
+  _marginStart: "0px",
   preventUpdate: false,
   init() {
     Tabmix.prefs.clearUserPref("setDefault");
@@ -1352,7 +1362,7 @@ gTMPprefObserver = {
         break;
       }
       case "browser.tabs.tabClipWidth":
-        gBrowser.tabContainer.mTabClipWidth = Services.prefs.getIntPref(prefName);
+        gBrowser.tabContainer._tabClipWidth = Services.prefs.getIntPref(prefName);
         gBrowser.tabContainer._updateCloseButtons();
         break;
       case "browser.tabs.closeWindowWithLastTab":
@@ -1478,7 +1488,7 @@ gTMPprefObserver = {
         break;
       case "extensions.tabmix.hideTabbar":
         this.setAutoHidePref();
-        this.setTabBarVisibility(false);
+        this.setTabBarVisibility();
         break;
       case "extensions.tabmix.hideTabbar.showContextMenu":
         Tabmix.handleTabbarVisibility.toggleEventListener(Services.prefs.getBoolPref(prefName));
@@ -1508,7 +1518,8 @@ gTMPprefObserver = {
           Tabmix.prefs.setIntPref("tabBarMaxRow", 2);
           return;
         }
-        this.dynamicRules["max-rows"].style.setProperty('--tabs-lines', row);
+        const maxRowVar = this.dynamicRules["max-rows"];
+        maxRowVar.style.setProperty('--tabs-lines', row);
         // maxRow changed
         if (TabmixTabbar.isMultiRow) {
           let isVisible = Tabmix.tabsUtils.isElementVisible(gBrowser._selectedTab);
@@ -1553,9 +1564,6 @@ gTMPprefObserver = {
         break;
       case "extensions.tabmix.moveTabOnDragging":
         TMP_tabDNDObserver._moveTabOnDragging = prefValue;
-        break;
-      case "layout.css.devPixelsPerPx":
-        setTimeout(() => this.setBgMiddleMargin(), 0);
         break;
       case "extensions.tabmix.showTabContextMenuOnTabbar":
         TabmixContext.updateTabbarContextMenu(Services.prefs.getBoolPref(prefName));
@@ -1707,7 +1715,7 @@ gTMPprefObserver = {
                      '#tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"])' +
                      ':not([protected]) .tab-close-button {' +
                      '-moz-margin-start: 0px !important;' +
-                     '-moz-margin-end: %Spx !important;}'.replace("%S", -icon.getBoundingClientRect().width);
+                     '-moz-margin-end: %Spx !important;}'.replace("%S", String(-icon.getBoundingClientRect().width));
     icon.style.removeProperty("display");
     this.insertRule(iconMargin);
 
@@ -1752,7 +1760,7 @@ gTMPprefObserver = {
                   ":not([pinned]) {min-width: #1px !important; max-width: #2px !important;}";
     let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
     let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
-    newRule = newRule.replace("#1", _min).replace("#2", _max);
+    newRule = newRule.replace("#1", _min.toString()).replace("#2", _max.toString());
     this.insertRule(newRule, "width");
 
     // rule for controlling margin-inline-start when we have pinned tab in multi-row
@@ -1771,10 +1779,10 @@ gTMPprefObserver = {
       newRule = '#tabbrowser-tabs[flowing="multibar"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[selected=true]' +
                     ' {margin-bottom: -1px !important; padding-bottom: ' + (padding + 1) + 'px !important;}';
       let index = this.insertRule(newRule);
-      newRule = this._tabStyleSheet.cssRules[index];
+      const cssStyleRule = this._tabStyleSheet.cssRules[index];
       gBrowser.tabContainer.addEventListener("TabOpen", function TMP_addStyleRule(aEvent) {
         padding = Tabmix.getStyle(aEvent.target, "paddingBottom");
-        newRule.style.setProperty("padding-bottom", padding + 1 + "px", "important");
+        cssStyleRule.style.setProperty("padding-bottom", padding + 1 + "px", "important");
       }, {capture: true, once: true});
     }
 
@@ -2231,14 +2239,15 @@ gTMPprefObserver = {
   // code for Single Window Mode...
   // disable the "Open New Window action
   // disable & hides some menuitem
+  _singleWindowUI_initialized: false,
   setSingleWindowUI() {
     // menu item inside "appMenu-multiView" does not exist in the DOM before
     // the menu opens for the first time
     const appMenuMultiView = document.getElementById("appMenu-multiView");
-    if (appMenuMultiView.childElementCount === 0 && !this.setSingleWindowUI._initialized) {
+    if (appMenuMultiView.childElementCount === 0 && !this._singleWindowUI_initialized) {
       document.getElementById("PanelUI-menu-button")
           .addEventListener("click", () => this.setSingleWindowUI(), {once: true});
-      this.setSingleWindowUI._initialized = true;
+      this._singleWindowUI_initialized = true;
     }
 
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
@@ -2388,7 +2397,7 @@ gTMPprefObserver = {
     Tabmix.setItem("main-window", "tabmix-tabbaronbottom", onbottom);
 
     if (TabmixTabbar.position === 0) {// top
-      this._bottomRect = {top: null, width: null, height: null};
+      Tabmix.bottomToolbarUtils._bottomRect = {top: null, width: null, height: null};
       let bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
       bottomToolbox.firstChild.style.removeProperty("height");
       tabsToolbar.style.removeProperty("top");

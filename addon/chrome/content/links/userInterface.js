@@ -38,7 +38,7 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab) {
   var newTabContent = replaceLastTab ? Tabmix.prefs.getIntPref("replaceLastTabWith.type") :
     Tabmix.prefs.getIntPref("loadOnNewTab.type");
   var url;
-  let {event, url: passedURL} = Tabmix.isVersion(1150) ? eventOrObject ?? {} : {event: eventOrObject};
+  let {event, url: passedURL = null} = Tabmix.isVersion(1150) ? eventOrObject ?? {} : {event: eventOrObject};
   let werePassedURL = Boolean(passedURL);
   let searchClipboard = window.gMiddleClickNewTabUsesPasteboard && event?.button == 1;
   var newTabUrl = BROWSER_NEW_TAB_URL;
@@ -410,11 +410,6 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
 };
 
 Tabmix.handleTabbarVisibility = {
-  get contextMenu() {
-    delete this.contextMenu;
-    return (this.contextMenu = document.getElementById("toolbar-context-menu"));
-  },
-
   get pref() {
     return Tabmix.prefs.getBoolPref("hideTabbar.showContextMenu");
   },
@@ -472,3 +467,7 @@ Tabmix.handleTabbarVisibility = {
     separator.hidden = Boolean(targetElement);
   },
 };
+
+TabmixChromeUtils.defineLazyGetter(Tabmix.handleTabbarVisibility, "contextMenu", () => {
+  return document.getElementById("toolbar-context-menu");
+});

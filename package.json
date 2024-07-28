@@ -6,7 +6,9 @@
     "lint": "eslint --format stylish --fix --cache --cache-location config/.eslintcache",
     "lint:test": "eslint --format stylish --cache --cache-location config/.eslintcache",
     "lint:clean": "eslint --format stylish",
-    "prepare": "husky config/husky"
+    "prepare": "husky config/husky",
+    "tsc:clean": "node config/typecheck.cjs",
+    "typecheck": "tsc -b -f > tsc.local.txt"
   },
   "repository": {
     "type": "git",
@@ -22,16 +24,18 @@
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
-    "@eslint/eslintrc": "^3.0.2",
-    "eslint": "^9.1.1",
+    "@eslint/eslintrc": "^3.1.0",
+    "eslint": "^9.8.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-html": "^8.1.1",
     "eslint-plugin-json": "^4.0.0",
-    "eslint-plugin-mozilla": "^3.7.3",
+    "eslint-plugin-mozilla": "^3.7.4",
     "eslint-plugin-no-unsanitized": "^4.0.2",
     "eslint-plugin-tabmix": "file:./config/eslint-plugin-tabmix",
-    "globals": "^15.0.0",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.2"
+    "globals": "^15.8.0",
+    "husky": "^9.1.3",
+    "lint-staged": "^15.2.7",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^7.17.0"
   }
 }

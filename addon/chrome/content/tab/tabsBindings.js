@@ -4,6 +4,10 @@
   Tabmix.setNewFunction(
     gBrowser.tabContainer,
     "_notifyBackgroundTab",
+    /**
+     *  @this {typeof gBrowser.tabContainer}
+     *  @param {MockedGeckoTypes.BrowserTab} aTab
+     */
     function _notifyBackgroundTab(aTab) {
       if (aTab.pinned || aTab.hidden || (TabmixSvc.version(1190) ?
         !this.hasAttribute("overflow") :
@@ -17,15 +21,16 @@
             .promiseDocumentFlushed(() => {
               let lastTabRect = this._lastTabToScrollIntoView.getBoundingClientRect();
               let selectedTab = this.selectedItem;
+              let tabRect;
               if (selectedTab.pinned) {
-                selectedTab = null;
+                tabRect = null;
               } else {
-                selectedTab = selectedTab.getBoundingClientRect();
-                selectedTab = {
-                  left: selectedTab.left,
-                  right: selectedTab.right,
-                  top: selectedTab.top,
-                  bottom: selectedTab.bottom,
+                tabRect = selectedTab.getBoundingClientRect();
+                tabRect = {
+                  left: tabRect.left,
+                  right: tabRect.right,
+                  top: tabRect.top,
+                  bottom: tabRect.bottom,
                 };
               }
               return [
@@ -37,7 +42,7 @@
                   top: lastTabRect.top,
                   bottom: lastTabRect.bottom,
                 },
-                selectedTab,
+                tabRect,
               ];
             })
             .then(([tabToScrollIntoView, scrollRect, tabRect, selectedRect]) => {

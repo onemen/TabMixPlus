@@ -32,6 +32,7 @@
       if (this.delayConnectedCallback()) {
         return;
       }
+      this._getElementById = aID => this.getElementsByAttribute("anonid", aID)[0];
 
       this.textContent = "";
       this.appendChild(MozXULElement.parseXULToFragment(`
@@ -108,9 +109,10 @@
       prefwindow.setButtonLabel("help", button);
 
       if (Tabmix.isVersion(1080)) {
-        document.documentElement.style.setProperty("--input-padding-inline", "2px");
-        document.documentElement.style.setProperty("--input-sppiner-offset", "14px");
-        document.documentElement.style.setProperty("minWidth", "510px");
+        const doc = document.documentElement;
+        doc.style.setProperty("--input-padding-inline", "2px");
+        doc.style.setProperty("--input-spinner-offset", "14px");
+        doc.style.setProperty("minWidth", "510px");
       }
     }
 
@@ -118,9 +120,12 @@
       return 'styles.' + this.id;
     }
 
+    /**
+     * @param {any} val
+     */
     set disabled(val) {
       if (val) {
-        this.setAttribute("disabled", true);
+        this.setAttribute("disabled", "true");
       } else {
         this.removeAttribute("disabled");
       }
@@ -128,10 +133,6 @@
 
     get disabled() {
       return this.getAttribute('disabled');
-    }
-
-    _getElementById(aID) {
-      return this.getElementsByAttribute("anonid", aID)[0];
     }
 
     _updateUseThisState(aEnabled) {
@@ -165,13 +166,10 @@
 
       for (const _id of Object.keys(this._prefValues)) {
         const item = this._getElementById(_id);
-        switch (item && item.localName) {
-          case "checkbox":
-          case "checkbox_tmp":
-            item.checked = this._prefValues[_id];
-            break;
-          case "colorbox":
-            item.color = this._prefValues[_id];
+        if (item && "checked" in item) {
+          item.checked = this._prefValues[_id];
+        } else if (item && "color" in item) {
+          item.color = this._prefValues[_id];
         }
       }
 
@@ -184,14 +182,10 @@
       const newPrefSValue = {};
       for (const _id of Object.keys(this._prefValues)) {
         const item = this._getElementById(_id);
-        switch (item.localName) {
-          case "checkbox":
-          case "checkbox_tmp":
-            newPrefSValue[_id] = item.checked;
-            break;
-          case "colorbox":
-            newPrefSValue[_id] = item.color;
-            break;
+        if (item && "checked" in item) {
+          newPrefSValue[_id] = item.checked;
+        } else if (item && "color" in item) {
+          newPrefSValue[_id] = item.color;
         }
       }
       Tabmix.prefs.setCharPref(this.prefName, JSON.stringify(newPrefSValue));
@@ -206,12 +200,15 @@
 
     updateDisableState(aID) {
       const disableBg = this.disableBgColor && aID == "bg";
-      const disabled = this.disabled || disableBg ||
-      !this._getElementById(aID).checked;
+      const disabled = this.disabled || disableBg || !this._getElementById(aID).checked;
       if (disableBg)
         this._getElementById("bg").disabled = true;
       Tabmix.setItem(this, aID + "-disabled", disabled || null);
-      this._getElementById(aID + "Color").updateColor();
+      if (aID === "text") {
+        this._getElementById("textColor").updateColor();
+      } else if (aID === "bg") {
+        this._getElementById("bgColor").updateColor();
+      }
       if (aID == "bg")
         this._getElementById("bgTopColor").updateColor();
     }
@@ -280,12 +277,13 @@
 
       this._parent = null;
 
-      ["red", "green", "blue", "opacity"].forEach(function(id) {
+      ["red", "green", "blue", "opacity"].forEach(id => {
         this._RGB.push(this.getElementsByAttribute("anonid", id)[0]);
-      }, this);
+      });
 
       this._colorpicker = this.getElementsByAttribute("anonid", "color")[0];
-      this._parent = this.parentNode.parentNode;
+      /** @type {MozTabstylepanel} */ // @ts-ignore
+      this._parent = this.closest("tabstylepanel");
     }
 
     get rgba() {
@@ -298,7 +296,7 @@
       const color = val.replace(/rgba|rgb|\(|\)/g, "").split(",");
       for (let i = 0; i < 3; i++)
         this._RGB[i].value = color[i];
-      this._RGB[3].value = (color[3] || 1) * 100;
+      this._RGB[3].value = (parseFloat(color[3]) || 1) * 100;
       this.updateColor();
     }
 
@@ -319,9 +317,9 @@
             rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
             a = (rgb && rgb[4] || "").trim(),
             hex = rgb ?
-              (rgb[1] | 1 << 8).toString(16).slice(1) +
-      (rgb[2] | 1 << 8).toString(16).slice(1) +
-      (rgb[3] | 1 << 8).toString(16).slice(1) : orig;
+              (parseFloat(rgb[1]) | 1 << 8).toString(16).slice(1) +
+      (parseFloat(rgb[2]) | 1 << 8).toString(16).slice(1) +
+      (parseFloat(rgb[3]) | 1 << 8).toString(16).slice(1) : orig;
 
       this._colorpicker.value = "#" + hex;
       this._colorpicker.style.opacity = a;

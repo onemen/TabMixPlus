@@ -5,16 +5,6 @@ var TMP_Places = {
   prefHistory: "extensions.tabmix.opentabfor.history",
   prefBookmark: "extensions.tabmix.opentabfor.bookmarks",
 
-  get PlacesUtils() {
-    delete this.PlacesUtils;
-    const {TabmixPlacesUtils} = ChromeUtils.import("chrome://tabmix-resource/content/Places.jsm");
-    this.PlacesUtils = TabmixPlacesUtils;
-    // we get here only after the window was loaded
-    // so we can safely call our 'onWindowOpen' initialization
-    Tabmix.initialization.run("onWindowOpen");
-    return this.PlacesUtils;
-  },
-
   addEvent: function TMP_PC_addEvent() {
     window.addEventListener("load", this);
     window.addEventListener("unload", this);
@@ -38,6 +28,13 @@ var TMP_Places = {
   },
 
   init: function TMP_PC_init() {
+    this._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark");
+
+    this.listeners = ["bookmark-added", "bookmark-removed"];
+    if (Tabmix.isVersion(950)) {
+      this.listeners.push("bookmark-title-changed", "bookmark-url-changed");
+    }
+
     this.contextMenu.toggleEventListener(true);
 
     // use tab label for bookmark name when user renamed the tab
@@ -155,6 +152,7 @@ var TMP_Places = {
           (MouseEvent.isInstance(aEvent) &&
             (aEvent.button == 1 || aEvent.button === 0 && (aEvent.ctrlKey || aEvent.metaKey)) ||
            XULCommandEvent.isInstance(aEvent) &&
+            // @ts-ignore - we check here to make sure it is _placesNode
             typeof aEvent.target._placesNode == "object" && (aEvent.ctrlKey || aEvent.metaKey)))
         aWhere = "current";
       else if (aWhere == "current" && !tabBrowser.isBlankNotBusyTab(aTab))
@@ -202,9 +200,14 @@ var TMP_Places = {
     var openTabNext = Tabmix.getOpenTabNextPref();
 
     // catch tab for reuse
-    var aTab, reuseTabs = [], removeTabs = [], i;
+    /** @type {MockedGeckoTypes.BrowserTab} */
+    let aTab;
+    /** @type {MockedGeckoTypes.BrowserTab[]} */
+    const reuseTabs = [];
+    /** @type {MockedGeckoTypes.BrowserTab[]} */
+    const removeTabs = [];
     var tabIsBlank, canReplace;
-    for (i = 0; i < openTabs.length; i++) {
+    for (let i = 0; i < openTabs.length; i++) {
       aTab = openTabs[i];
       tabIsBlank = gBrowser.isBlankNotBusyTab(aTab);
       // don't reuse collapsed tab if width fitTitle is set
@@ -247,7 +250,7 @@ var TMP_Places = {
     let tabs = [], tabsData = [];
     let savePrincipal = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
     const loadURIMethod = Tabmix.isVersion(1120) ? "fixupAndLoadURIString" : "loadURI";
-    for (i = 0; i < bmGroup.length; i++) {
+    for (let i = 0; i < bmGroup.length; i++) {
       let url = bmGroup[i];
       if (i < reuseTabs.length) {
         aTab = reuseTabs[i];
@@ -268,7 +271,7 @@ var TMP_Places = {
           aTab.removeAttribute("visited");
           aTab.removeAttribute("tabmix_selectedID");
         } else {
-          aTab.setAttribute("reloadcurrent", true);
+          aTab.setAttribute("reloadcurrent", "true");
         }
         // move tab to place
         index = prevTab._tPos + 1;
@@ -328,7 +331,7 @@ var TMP_Places = {
     // focus the first tab if prefs say to
     if (!loadInBackground || doReplace &&
                              (gBrowser.selectedTab.hasAttribute("reloadcurrent") ||
-                              gBrowser.selectedTab in removeTabs)) {
+                             removeTabs.includes(gBrowser.selectedTab))) {
       var old = gBrowser.selectedTab;
       gBrowser.selectedTab = tabToSelect;
       if (!multiple && old != tabToSelect)
@@ -392,7 +395,7 @@ var TMP_Places = {
       PlacesUtils.favicons.getFaviconURLForPage(entryURI, iconURI => {
         if (!iconURI) {
           // fallback to favicon.ico
-          iconURI = {spec: `${pageUrl.replace(/\/$/, "")}/favicon.ico`};
+          iconURI = Services.io.newURI(`${pageUrl.replace(/\/$/, "")}/favicon.ico`);
         }
         // skip tab that already restored
         if (tab.hasAttribute("pending")) {
@@ -443,7 +446,7 @@ var TMP_Places = {
 
   asyncSetTabTitle(tab, url, initial, reset) {
     if (!tab) {
-      return false;
+      return Promise.resolve(false);
     }
     if (!url) {
       url = tab.linkedBrowser.currentURI.spec;
@@ -481,11 +484,6 @@ var TMP_Places = {
       newTitle = TMP_SessionStore.getTitleFromTabState(aTab);
     }
     return newTitle || title;
-  },
-
-  get _titlefrombookmark() {
-    delete this._titlefrombookmark;
-    return (this._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark"));
   },
 
   getTitleFromBookmark(aUrl, aTitle) {
@@ -530,19 +528,6 @@ var TMP_Places = {
       gBrowser.ensureTabIsVisible(this.currentTab, false);
       this.currentTab = null;
     }
-  },
-
-  get listeners() {
-    delete this.listeners;
-    this.listeners = [
-      "bookmark-added",
-      "bookmark-removed",
-    ];
-    if (Tabmix.isVersion(950)) {
-      this.listeners.push("bookmark-title-changed");
-      this.listeners.push("bookmark-url-changed");
-    }
-    return this.listeners;
   },
 
   startObserver: function TMP_PC_startObserver() {
@@ -595,14 +580,14 @@ var TMP_Places = {
       this.startObserver();
     } else {
       let tabs = gBrowser.tabContainer.getElementsByAttribute("tabmix_bookmarkUrl", "*");
-      Array.prototype.slice.call(tabs).forEach(function(tab) {
+      Array.prototype.slice.call(tabs).forEach(tab => {
         tab.removeAttribute("tabmix_bookmarkUrl");
         if (tab.hasAttribute("pending")) {
           promises.push(this.asyncSetTabTitle(tab));
         } else {
           gBrowser.setTabTitle(tab);
         }
-      }, this);
+      });
       this.stopObserver();
     }
     Promise.all(promises).then(() => {
@@ -614,12 +599,6 @@ var TMP_Places = {
   inUpdateBatch: false,
   _tabTitleChanged: false,
   currentTab: null,
-
-  // nsINavBookmarkObserver
-
-  QueryInterface: ChromeUtils.generateQI([
-    Ci.nsINavBookmarkObserver
-  ]),
 
   async addItemUrlToTabs(aUrl) {
     if (this.inUpdateBatch) {
@@ -817,6 +796,14 @@ TMP_Places.contextMenu = {
   }
 };
 
+TabmixChromeUtils.defineLazyGetter(TMP_Places, "PlacesUtils", () => {
+  const {TabmixPlacesUtils} = ChromeUtils.import("chrome://tabmix-resource/content/Places.jsm");
+  // we get here only after the window was loaded
+  // so we can safely call our 'onWindowOpen' initialization t make sure its done
+  Tabmix.initialization.run("onWindowOpen");
+  return TabmixPlacesUtils;
+});
+
 Tabmix.onContentLoaded = {
   changeCode() {
     this.change_miscellaneous();
@@ -932,7 +919,7 @@ Tabmix.onContentLoaded = {
       // We don't want to open tabs in popups, so try to find a non-popup window in
       // that case.
       if ((where == "tab" || where == "tabshifted") && w && !w.toolbar.visible) {
-        w = this.getTargetWindow({
+        w = getTargetWindow({
           skipPopups: true,
           forceNonPrivate,
         });

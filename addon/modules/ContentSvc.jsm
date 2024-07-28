@@ -17,8 +17,13 @@ function isVersion(aVersionNo) {
 const ContentSvc = {
   aboutNewtab: "about:#".replace("#", "newtab"),
 
-  getStringPref(prefName) {
-    return Services.prefs.getStringPref(prefName);
+  getString(aStringKey) {
+    try {
+      return this._strings.GetStringFromName(aStringKey);
+    } catch (e) {
+      dump("*** Failed to get string " + aStringKey + " in bundle: tabmix.properties\n");
+      throw e;
+    }
   },
 
   version() {
@@ -30,4 +35,8 @@ const ContentSvc = {
 // Tabmix preference branch
 TabmixChromeUtils.defineLazyGetter(ContentSvc, "prefBranch", () => {
   return Services.prefs.getBranch("extensions.tabmix.");
+});
+TabmixChromeUtils.defineLazyGetter(ContentSvc, "_strings", () => {
+  let properties = "chrome://tabmixplus/locale/tabmix.properties";
+  return Services.strings.createBundle(properties);
 });

@@ -25,7 +25,7 @@ Tabmix.set_BrowserOpenTab = function() {
   } else {
     window.BrowserOpenTab = TMP_BrowserOpenTab;
   }
-  this.BrowserOpenTab = TMP_BrowserOpenTab;
+  Tabmix.BrowserOpenTab = TMP_BrowserOpenTab;
 };
 
 Tabmix.beforeBrowserInitOnLoad = function() {

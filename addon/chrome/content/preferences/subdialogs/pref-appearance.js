@@ -2,7 +2,7 @@
 /* exported tabstyles */
 "use strict";
 
-const $ = id => document.getElementById(id);
+this.$ = id => document.getElementById(id);
 
 const tabstyles = {
   pref: "appearance_tab",

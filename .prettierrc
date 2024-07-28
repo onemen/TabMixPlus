@@ -20,6 +20,12 @@
         "semi": false,
         "singleQuote": true
       }
+    },
+    {
+      "files": "*.d.ts",
+      "options": {
+        "printWidth": 500
+      }
     }
   ]
 }

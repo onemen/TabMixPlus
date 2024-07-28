@@ -5,8 +5,8 @@
 
 :root {
   --input-padding-inline: 1px; /* non proton value based on forms.css  */
-  --input-sppiner-offset: 19px;
-  --input-width-offset: calc(var(--input-sppiner-offset) + var(--input-padding-inline));
+  --input-spinner-offset: 19px;
+  --input-width-offset: calc(var(--input-spinner-offset) + var(--input-padding-inline));
 }
 
 input[type="number"]:not(:disabled)[increaseDisabled]::-moz-number-spin-up,

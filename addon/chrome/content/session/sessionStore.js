@@ -363,17 +363,16 @@ var TMP_ClosedTabs = {
       return window;
     }
 
-    let source = window;
     if (item.hasAttribute("source-closed-id")) {
-      source = {
+      return {
         sourceClosedId: Number(item.getAttribute("source-closed-id")),
         closedWindow: true,
       };
     } else if (item.hasAttribute("source-window-id")) {
-      source = {sourceWindowId: item.getAttribute("source-window-id")};
+      return {sourceWindowId: item.getAttribute("source-window-id")};
     }
 
-    return source;
+    return window;
   },
 
   getSingleClosedTabData(source, index) {
@@ -933,10 +932,14 @@ Tabmix.closedObjectsUtils = {
     }
     this[wasInitialized] = true;
 
-    const template = document.getElementById(`tabmix-closed${viewType}-container`);
+    const viewId =
+      viewType === "Tabs" ? "tabmix-closedTabs-container" : "tabmix-closedWindows-container";
+    const template = document.getElementById(viewId);
     template.replaceWith(template.content);
 
-    const panelview = document.getElementById(`tabmix-closed${viewType}View`);
+    const panelview = document.getElementById(
+      viewType === "Tabs" ? "tabmix-closedTabsView" : "tabmix-closedWindowsView"
+    );
 
     const body = document.createXULElement("vbox");
     body.className = "panel-subview-body";
@@ -1046,8 +1049,12 @@ Tabmix.closedObjectsUtils = {
       return false;
     }
 
-    const _getClosedTabCount = HistoryMenu.prototype._getClosedTabCount;
-    HistoryMenu.prototype.populateUndoSubmenu.apply({undoTabMenu, _getClosedTabCount});
+    const params = {undoTabMenu,};
+    if (!Tabmix.isVersion(1190)) {
+      // @ts-expect-error - remove in Firefox 119
+      params._getClosedTabCount = HistoryMenu.prototype._getClosedTabCount;
+    }
+    HistoryMenu.prototype.populateUndoSubmenu.apply(params);
 
     this.addHoverListeners(undoTabMenu);
 

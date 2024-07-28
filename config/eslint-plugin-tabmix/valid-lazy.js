@@ -9,9 +9,11 @@ const path = require("path");
 
 const mozilla = require.resolve("eslint-plugin-mozilla");
 const mozillaPath = path.dirname(mozilla);
+// @ts-expect-error - used as closer in eval
 const helpers = require(path.join(mozillaPath, "helpers.js"));
 const validLazy = require(path.join(mozillaPath, "rules", "valid-lazy.js"));
 
+// @ts-expect-error - used as closer in eval
 const items = [
   "loader",
   "XPCOMUtils",
@@ -23,6 +25,7 @@ const items = [
   "Reflect",
 ];
 
+// @ts-expect-error - used as closer in eval
 const callExpressionDefinitions = [
   /^loader\.lazyGetter\(lazy, "(\w+)"/,
   /^loader\.lazyServiceGetter\(lazy, "(\w+)"/,
@@ -41,6 +44,7 @@ const callExpressionDefinitions = [
   /^Reflect\.defineProperty\(lazy, "(\w+)"/,
 ];
 
+// @ts-expect-error - used as closer in eval
 const callExpressionMultiDefinitions = [
   "TabmixChromeUtils.defineLazyModuleGetters(lazy,",
   "ChromeUtils.defineESModuleGetters(lazy,",

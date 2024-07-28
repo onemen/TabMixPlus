@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["DOM", "ES2023"],
+    "module": "commonjs",
+    "baseUrl": ".",
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "alwaysStrict": true,
+    // "noFallthroughCasesInSwitch": true, // we have lint rule for this
+    // "noImplicitAny": true, // maybe in the future
+    // "noImplicitOverride": true, // useless for our use case
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    // "noUnusedParameters": true, // we have eslint rule for this
+    // "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "useUnknownInCatchVariables": true
+
+    // "strictNullChecks": true,
+    // "exactOptionalPropertyTypes": true,
+    // "strictPropertyInitialization": true
+  }
+}

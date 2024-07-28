@@ -1,0 +1,15 @@
+{
+  "extends": "../config/base.tsconfig.json",
+  "include": ["**/*.js", "**/*.sys.mjs"],
+  "exclude": [
+    "node_modules",
+    "**/gecko/**/*.d.ts",
+    "logs/**",
+    "**/*~/*",
+    "**/*~*.*",
+    "**/*.local.*"
+  ],
+  "compilerOptions": {
+    "types": ["../types/general.d.ts", "node"]
+  }
+}

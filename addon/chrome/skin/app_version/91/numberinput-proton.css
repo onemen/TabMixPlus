@@ -12,8 +12,8 @@
 
 :root {
   --input-padding-inline: 4px;
-  --input-sppiner-offset: 20px;
-  --input-width-offset: calc(var(--input-sppiner-offset) + var(--input-padding-inline) + 2px);
+  --input-spinner-offset: 20px;
+  --input-width-offset: calc(var(--input-spinner-offset) + var(--input-padding-inline) + 2px);
 }
 
 /* textboxes */

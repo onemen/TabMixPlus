@@ -186,18 +186,18 @@ Tabmix.tablib = {
 
   change_gBrowser: function change_gBrowser() {
     Tabmix.originalFunctions.gBrowser_addTab = gBrowser.addTab;
-    gBrowser.addTab = function(...args) {
+    gBrowser.addTab = function(uriString, options, ...rest) {
       let callerTrace = Tabmix.callerTrace(),
           isRestoringTab = callerTrace.contain("ssi_restoreWindow");
 
-      let {index, isPending} = args[1] || {};
+      let {index, isPending} = options || {};
 
       if (typeof index !== "number" &&
           callerTrace.contain("ssi_restoreWindow", "duplicateTabIn ")) {
-        args[1].index = this.tabs.length;
+        options.index = this.tabs.length;
       }
 
-      var t = Tabmix.originalFunctions.gBrowser_addTab.apply(this, args);
+      var t = Tabmix.originalFunctions.gBrowser_addTab.apply(this, [uriString, options, ...rest]);
 
       if (isPending || isRestoringTab &&
           Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) {
@@ -260,6 +260,8 @@ Tabmix.tablib = {
     ).toCode();
 
     Tabmix.originalFunctions.gBrowser_blurTab = gBrowser._blurTab;
+
+    /** @this {MockedGeckoTypes.TabBrowser} */
     gBrowser._blurTab = function(aTab) {
       if (!aTab.selected)
         return;
@@ -294,6 +296,7 @@ Tabmix.tablib = {
         '$1$2'
     ).toCode(false, gBrowser, "asyncGetWindowTitleForBrowser");
 
+    /** @this {MockedGeckoTypes.TabBrowser} */
     gBrowser.updateTitlebar = function() {
       this.asyncGetWindowTitleForBrowser(this.selectedBrowser).then(title => {
         document.title = title;
@@ -601,7 +604,7 @@ Tabmix.tablib = {
         arguments[1] = "tabshifted";
       }
 
-      if (where == window) {
+      if (where == "window") {
         return Tabmix.originalFunctions.duplicateTabIn.apply(this, arguments);
       }
 
@@ -715,6 +718,7 @@ Tabmix.tablib = {
       document.getElementById("back-button").childNodes[0].removeEventListener("popupshowing", FillHistoryMenu);
       document.getElementById("forward-button").childNodes[0].removeEventListener("popupshowing", FillHistoryMenu);
     }
+    /** @this {Window} */
     let fillHistoryMenu = function FillHistoryMenu(parentOrEvent) {
       let parent = Tabmix.isVersion(1290) ? parentOrEvent.target : parentOrEvent;
       let rv = Tabmix.originalFunctions.FillHistoryMenu.apply(this, arguments);
@@ -859,24 +863,10 @@ Tabmix.tablib = {
     };
   },
 
-  get recentlyClosed() {
-    delete this.recentlyClosed;
-    if (Tabmix.isVersion(1150)) {
-      return (this.recentlyClosed = new Localization(["browser/recentlyClosed.ftl"], true));
-    }
-    return {
-      label: gNavigatorBundle.getString("menuUndoCloseWindowLabel"),
-      oneTabLabel: gNavigatorBundle.getString("menuUndoCloseWindowSingleTabLabel")
-    };
-  },
-
   populateUndoWindowSubmenu(undoPopup, panel, isAppMenu = Boolean(panel)) {
     const isSubviewbutton = undoPopup.__tagName === "toolbarbutton";
     undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
     let undoItems = TabmixSvc.ss.getClosedWindowData(false);
-    let checkForMiddleClick = function(e) {
-      this.checkForMiddleClick(e);
-    }.bind(Tabmix.closedObjectsUtils);
     const childNodes = panel?.childNodes ?? undoPopup.childNodes;
     for (let i = 0; i < childNodes.length - (isAppMenu ? 0 : 1); i++) {
       let m = childNodes[i];
@@ -900,7 +890,7 @@ Tabmix.tablib = {
       }
       m.setAttribute("value", i);
       m.fileName = "closedwindow";
-      m.addEventListener("click", checkForMiddleClick);
+      m.addEventListener("click", e => Tabmix.closedObjectsUtils.checkForMiddleClick(e));
       if (isSubviewbutton) {
         m.value = i;
         m.setAttribute("class", "bookmark-item subviewbutton subviewbutton-iconic");
@@ -914,11 +904,11 @@ Tabmix.tablib = {
     }
 
     let restoreAllWindows = undoPopup.lastChild;
-    restoreAllWindows.setAttribute("value", -2);
+    restoreAllWindows.setAttribute("value", "-2");
     let clearList = document.createXULElement(undoPopup.__tagName || "menuitem");
     clearList.id = "menu_clearClosedWindowsList";
     clearList.setAttribute("label", TabmixSvc.getString("undoClosedWindows.clear.label"));
-    clearList.setAttribute("value", -1);
+    clearList.setAttribute("value", "-1");
     if (isSubviewbutton) {
       restoreAllWindows.classList.add("subviewbutton");
       clearList.classList.add("subviewbutton");
@@ -930,6 +920,7 @@ Tabmix.tablib = {
   },
 
   addNewFunctionsTo_gBrowser: function addNewFunctionsTo_gBrowser() {
+    /** @this {MockedGeckoTypes.TabBrowser} */
     let duplicateTab = function(aTab, aHref, aTabData, disallowSelect, dontFocusUrlBar) {
       if (aTab.localName != "tab")
         aTab = this._selectedTab;
@@ -991,13 +982,14 @@ Tabmix.tablib = {
         }
       }
       // we need to update history title after the new page loaded for use in back/forward button
+      /** @this {MockedGeckoTypes.BrowserTab} */
       function updateNewHistoryTitle() {
         try {
           this.removeEventListener("SSTabRestored", updateNewHistoryTitle, true);
           let browser = this.linkedBrowser;
           if (Services.appinfo.sessionHistoryInParent) {
             const history = browser.browsingContext.sessionHistory;
-            const shEntry = history.getEntryAtIndex(history.index, false).QueryInterface(Ci.nsISHEntry);
+            const shEntry = history.getEntryAtIndex(history.index).QueryInterface(Ci.nsISHEntry);
             shEntry.title = this.label;
           } else {
             browser.messageManager.sendAsyncMessage("Tabmix:updateHistoryTitle", {title: this.label});
@@ -1006,6 +998,7 @@ Tabmix.tablib = {
           Tabmix.assert(ex);
         }
       }
+      /** @this {MockedGeckoTypes.BrowserTab} */
       function urlForDownload() {
         try {
           this.removeEventListener("SSTabRestored", urlForDownload, true);
@@ -1038,6 +1031,9 @@ Tabmix.tablib = {
       return newTab;
     };
 
+    /**
+     *  @this {MockedGeckoTypes.TabBrowser}
+     */
     gBrowser.duplicateTabToWindow = function(aTab, aMoveTab, aTabData) {
       if (aTab.localName != "tab")
         aTab = this._selectedTab;
@@ -1070,6 +1066,7 @@ Tabmix.tablib = {
       }
     };
 
+    /** @param {MockedGeckoTypes.BrowserTab} contextTab */
     gBrowser.duplicateTabsToWindow = function(contextTab) {
       const tabs = contextTab.multiselected ? this.selectedTabs : [contextTab];
       this.clearMultiSelectedTabs();
@@ -1262,6 +1259,7 @@ Tabmix.tablib = {
         this.reloadLeftTabs(aTab);
     };
 
+    /**  @this {MockedGeckoTypes.TabBrowser}  */
     gBrowser.reloadLeftTabs = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this._selectedTab;
@@ -1272,6 +1270,7 @@ Tabmix.tablib = {
       Tabmix.tablib.reloadTabs(childNodes.slice(0, tabPos).reverse());
     };
 
+    /**  @this {MockedGeckoTypes.TabBrowser}  */
     gBrowser.reloadRightTabs = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this._selectedTab;
@@ -1282,6 +1281,7 @@ Tabmix.tablib = {
       Tabmix.tablib.reloadTabs(childNodes.slice(tabPos + 1));
     };
 
+    /**  @this {MockedGeckoTypes.TabBrowser}  */
     gBrowser.reloadAllTabsBut = function(aTab) {
       if (aTab.localName != "tab")
         aTab = this._selectedTab;
@@ -1398,6 +1398,7 @@ Tabmix.tablib = {
       return tempIndex;
     };
 
+    /** @this {MockedGeckoTypes.TabBrowser} */
     gBrowser.previousTab = function(aTab) {
       var tabs = this.visibleTabs;
       if (tabs.length == 1)
@@ -1473,7 +1474,7 @@ Tabmix.tablib = {
       // add extra delay after tab removed or after tab flip before we select by hover
       // to let the user time to move the mouse
       if (aTab.mouseHoverSelect) {
-        this.tabContainer.setAttribute("preventMouseHoverSelect", true);
+        this.tabContainer.setAttribute("preventMouseHoverSelect", "true");
         var delay = aTab.mouseHoverSelectDelay + 50;
         setTimeout(() => {
           this.tabContainer.removeAttribute("preventMouseHoverSelect");
@@ -1563,7 +1564,7 @@ Tabmix.tablib = {
       numProtected,
       flags,
       warnOnClose,
-      {checkboxLabel2, restoreSession} = {}
+      {checkboxLabel2 = null, restoreSession = null} = {}
     ) {
       const getString = Tabmix.formatValueSync;
       let warningTitle, message, chkBoxLabel;
@@ -1613,7 +1614,7 @@ Tabmix.tablib = {
           null,
           chkBoxLabel,
           warnOnClose,
-          checkboxLabel2,
+          checkboxLabel2.value,
           restoreSession
         );
       } else {
@@ -1670,7 +1671,7 @@ Tabmix.tablib = {
         '{ protectedCount, l10nArgs:',
       ).toCode();
 
-      Tabmix.changeCode(ConfirmationHint, "ConfirmationHint.show")._replace(
+      Tabmix.changeCode(window.ConfirmationHint, "ConfirmationHint.show")._replace(
         'const DURATION',
         `if (options.protectedCount) {
            this._panel.classList.add("with-description");
@@ -1759,14 +1760,6 @@ Tabmix.tablib = {
     });
 
     return true;
-  },
-
-  get labels() {
-    delete this.labels;
-    this.labels = [
-      Tabmix.emptyTabTitle,
-    ];
-    return this.labels;
   },
 
   onTabTitleChanged: function TMP_onTabTitleChanged(aTab, aBrowser, isUrlTitle) {
@@ -1961,6 +1954,21 @@ Tabmix.tablib = {
   }
 
 }; // end Tabmix.tablib
+
+TabmixChromeUtils.defineLazyGetter(Tabmix.tablib, "recentlyClosed", () => {
+  if (Tabmix.isVersion(1150)) {
+    return new Localization(["browser/recentlyClosed.ftl"], true);
+  }
+  return {
+    label: gNavigatorBundle.getString("menuUndoCloseWindowLabel"),
+    oneTabLabel: gNavigatorBundle.getString("menuUndoCloseWindowSingleTabLabel")
+  };
+});
+
+// keep this here for the case Firefox will use more then one label in the future
+TabmixChromeUtils.defineLazyGetter(Tabmix.tablib, "labels", () => {
+  return [Tabmix.emptyTabTitle];
+});
 
 TabmixChromeUtils.defineLazyGetter(Tabmix, "emptyTabTitle", () => {
   return Tabmix.formatValueSync("tabbrowser-empty-tab-title");

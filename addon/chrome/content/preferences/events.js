@@ -148,7 +148,7 @@ var gEventsPane = {
   },
 
   editSlideShowKey() {
-    document.documentElement.showPane($("paneMenu"));
+    document.getElementById("TabMIxPreferences").showPane($("paneMenu"));
     if (typeof gMenuPane == "object")
       gMenuPane.editSlideShowKey();
     else

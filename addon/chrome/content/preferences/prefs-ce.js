@@ -2,6 +2,9 @@
 /* eslint no-var: 2, prefer-const: 2, no-new-func: 0, class-methods-use-this: 0 */
 "use strict";
 
+/** @type {MockedGeckoTypes.Services} */ // @ts-ignore - see general.d.ts
+const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+
 const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 const {ChromeManifest} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
 const {Overlays} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
@@ -138,11 +141,9 @@ class Preference extends MozXULElement {
     // In non-instant apply mode, we must try and use the last saved state
     // from any previous opens of a child dialog instead of the value from
     // preferences, to pick up any edits a user may have made.
-
-    const secMan = Services.scriptSecurityManager;
     if (this.preferences.type == "child" &&
         !this.instantApply && window.opener &&
-        secMan.isSystemPrincipal(window.opener.document.nodePrincipal)) {
+        window.opener.document.nodePrincipal.isSystemPrincipal) {
       const pdoc = window.opener.document;
 
       // Try to find a preference element for the same preference.
@@ -613,16 +614,14 @@ class PrefPane extends MozXULElement {
     }
 
     const fragment = this.fragment;
-    const contentBox = fragment.querySelector('.content-box');
+    this._content = fragment.querySelector('.content-box');
     const childNodes = [...this.childNodes];
     this.appendChild(fragment);
-    contentBox.append(...childNodes);
+    this._content.append(...childNodes);
 
     this.initializeAttributeInheritance();
 
     this._deferredValueUpdateElements = new Set();
-    this._content = this.getElementsByClassName('content-box')[0];
-    // TODO: check if this._content is the same as contentBox
 
     this._initialized = true;
   }
@@ -922,9 +921,8 @@ class PrefWindow extends MozXULElement {
         return false;
       }
 
-      const secMan = Services.scriptSecurityManager;
       if (this.type == "child" && window.opener &&
-          secMan.isSystemPrincipal(window.opener.document.nodePrincipal)) {
+          window.opener.document.nodePrincipal.isSystemPrincipal) {
         const pdocEl = window.opener.document.documentElement;
         if (pdocEl.instantApply) {
           const panes = this.preferencePanes;
@@ -1136,23 +1134,20 @@ class PrefWindow extends MozXULElement {
       this.addEventListener("focus", event => {
         const btn = this.getButton(this.defaultButton);
         if (btn) {
-          btn.setAttribute("default",
-            event.originalTarget == btn ||
+          const isDefault = event.originalTarget == btn ||
             !(event.originalTarget.localName == "button" ||
-              event.originalTarget.localName == "toolbarbutton"));
+              event.originalTarget.localName == "toolbarbutton");
+          btn.setAttribute("default", isDefault ? "true" : "false");
         }
       }, true);
     }
 
     // listen for when window is closed via native close buttons
     window.addEventListener("close", event => {
-      if (!document.documentElement.cancelDialog()) {
+      if (!this.cancelDialog()) {
         event.preventDefault();
       }
     });
-
-    // for things that we need to initialize after onload fires
-    window.addEventListener("load", event => this.postLoadInit(event));
 
     this._l10nButtons = [];
 
@@ -1196,16 +1191,14 @@ class PrefWindow extends MozXULElement {
       }
     });
 
-    this.postLoadInit = function() {
-      function focusInit() {
-        const dialog = document.documentElement;
-        const defaultButton = dialog.getButton(dialog.defaultButton);
+    this.postLoadInit = () => {
+      const focusInit = () => {
+        const defaultButton = this.getButton(this.defaultButton);
 
         // give focus to the first focusable element in the dialog
         let focusedElt = document.commandDispatcher.focusedElement;
         if (!focusedElt) {
-          document.commandDispatcher.advanceFocusIntoSubtree(dialog);
-
+          document.commandDispatcher.advanceFocusIntoSubtree(this);
           focusedElt = document.commandDispatcher.focusedElement;
           if (focusedElt) {
             const initialFocusedElt = focusedElt;
@@ -1240,19 +1233,26 @@ class PrefWindow extends MozXULElement {
           if (defaultButton)
             window.notifyDefaultButtonLoaded(defaultButton);
         } catch {}
-      }
+      };
 
       // Give focus after onload completes, see bug 103197.
       setTimeout(focusInit, 0);
 
       if (this._l10nButtons.length) {
         document.l10n.translateElements(this._l10nButtons).then(() => {
-          document.documentElement.sizeToContent();
+          this.sizeToContent();
         });
       }
     };
 
-    this._configureButtons = function(aButtons) {
+    // for things that we need to initialize after onload fires
+    if (document.readyState === "complete") {
+      this.postLoadInit();
+    } else {
+      window.addEventListener("load", () => this.postLoadInit());
+    }
+
+    this._configureButtons = aButtons => {
       // by default, get all the anonymous button elements
       const buttons = {};
       this._buttons = buttons;
@@ -1348,7 +1348,7 @@ class PrefWindow extends MozXULElement {
       }
     };
 
-    this.setButtonLabel = function(dlgtype, button) {
+    this.setButtonLabel = (dlgtype, button) => {
       button.setAttribute("label", this.mStrBundle.GetStringFromName("button-" + dlgtype));
       const accessKey = this.mStrBundle.GetStringFromName("accesskey-" + dlgtype);
       if (accessKey) {
@@ -1356,7 +1356,7 @@ class PrefWindow extends MozXULElement {
       }
     };
 
-    this._setDefaultButton = function(aNewDefault) {
+    this._setDefaultButton = aNewDefault => {
       // remove the default attribute from the previous default button, if any
       const oldDefaultButton = this.getButton(this.defaultButton);
       if (oldDefaultButton)
@@ -1372,12 +1372,10 @@ class PrefWindow extends MozXULElement {
       }
     };
 
-    this._handleButtonCommand = function(aEvent) {
-      return document.documentElement._doButtonCommand(
-        aEvent.target.getAttribute("dlgtype"));
-    };
+    this._handleButtonCommand = aEvent =>
+      this._doButtonCommand(aEvent.target.getAttribute("dlgtype"));
 
-    this._doButtonCommand = function(aDlgType) {
+    this._doButtonCommand = aDlgType => {
       const button = this.getButton(aDlgType);
       if (!button.disabled) {
         const noCancel = this._fireButtonEvent(aDlgType);
@@ -1422,10 +1420,9 @@ class PrefWindow extends MozXULElement {
         );
       }
       if (this.instantApply) {
-        const docElt = document.documentElement;
-        const acceptButton = docElt.getButton("accept");
+        const acceptButton = this.getButton("accept");
         acceptButton.hidden = true;
-        const cancelButton = docElt.getButton("cancel");
+        const cancelButton = this.getButton("cancel");
         if (/Mac/.test(navigator.platform)) {
           // no buttons on Mac except Help
           cancelButton.hidden = true;
@@ -1436,8 +1433,8 @@ class PrefWindow extends MozXULElement {
         } else {
           // morph the Cancel button into the Close button
           cancelButton.setAttribute("icon", "close");
-          cancelButton.label = docElt.getAttribute("closebuttonlabel");
-          cancelButton.accesskey = docElt.getAttribute("closebuttonaccesskey");
+          cancelButton.label = this.getAttribute("closebuttonlabel");
+          cancelButton.accessKey = this.getAttribute("closebuttonaccesskey");
         }
       }
     }
@@ -1496,16 +1493,16 @@ class PrefWindow extends MozXULElement {
 
   get lastSelected() {
     if (!this.hasAttribute("lastSelected")) {
-      const val = Services.xulStore.getValue(this, "persist", "lastSelected");
+      const val = Services.xulStore.getValue(document.documentURI, "persist", "lastSelected");
       this.setAttribute('lastSelected', val);
-      return val;
+      return String(val);
     }
     return this.getAttribute('lastSelected');
   }
 
   set lastSelected(val) {
     this.setAttribute("lastSelected", val);
-    Services.xulStore.setValue(this, "persist", "lastSelected", val);
+    Services.xulStore.setValue(document.documentURI, "persist", "lastSelected", val);
   }
 
   get currentPane() {
@@ -1599,7 +1596,7 @@ class PrefWindow extends MozXULElement {
       if (paneTitle != "")
         document.title = paneTitle;
     }
-    const helpButton = document.documentElement.getButton("help");
+    const helpButton = this.getButton("help");
     if (aPaneElement.helpTopic)
       helpButton.hidden = false;
     else
@@ -1611,7 +1608,6 @@ class PrefWindow extends MozXULElement {
     for (let i = 0; i < prefpanes.length; ++i) {
       if (prefpanes[i] == aPaneElement) {
         this._paneDeck.selectedIndex = i;
-
         if (this.type != "child") {
           const oldPane = this.lastSelected ? document.getElementById(this.lastSelected) : this.preferencePanes[0];
           oldPane.selected = !(aPaneElement.selected = true);
@@ -1702,8 +1698,6 @@ class PrefWindow extends MozXULElement {
   openWindow(aWindowType, aURL, aFeatures, aParams) {
     let win = aWindowType ? Services.wm.getMostRecentWindow(aWindowType) : null;
     if (win) {
-      if ("initWithParams" in win)
-        win.initWithParams(aParams);
       win.focus();
     } else {
       const features = "resizable,dialog=no,centerscreen" + (aFeatures != "" ? "," + aFeatures : "");

@@ -6,6 +6,7 @@
  * original code by Hemiola SUN, further developed by onemen and CPU
  */
 
+/** @this {Tabmix} */
 Tabmix.startup = function TMP_startup() {
   var cmdNewWindow = document.getElementById("cmd_newNavigator");
   var originalNewNavigator = cmdNewWindow.getAttribute("oncommand");
@@ -118,7 +119,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
 
 Tabmix.afterDelayedStartup = function() {
   if (this._callPrepareLoadOnStartup) {
-    gBrowserInit._uriToLoadPromise
+    gBrowserInit.uriToLoadPromise
         .then(uriToLoad => this.prepareLoadOnStartup(uriToLoad))
         .then(() => TabmixSessionManager.init());
   } else {
@@ -279,7 +280,7 @@ var TMP_eventListener = {
         this._onLoad(aEvent.type);
         break;
       case "unload":
-        this.onWindowClose(aEvent);
+        this.onWindowClose();
         break;
       case "fullscreen": {
         let enterFS = window.fullScreen;
@@ -295,9 +296,9 @@ var TMP_eventListener = {
   toggleEventListener(aObj, aArray, aEnable, aHandler) {
     var handler = aHandler || this;
     var eventListener = aEnable ? "addEventListener" : "removeEventListener";
-    aArray.forEach(function(eventName) {
-      aObj[eventListener](eventName, this, true);
-    }, handler);
+    aArray.forEach(eventName => {
+      aObj[eventListener](eventName, handler, true);
+    });
   },
 
   // ignore non-browser windows
@@ -685,7 +686,7 @@ var TMP_eventListener = {
     let rect = gBrowser.tabpanels.getBoundingClientRect();
     FullScreen._mouseTargetRect = {
       top: rect.top + 50,
-      bottom: rect.bottom - (TabmixTabbar.position == 1) * 50,
+      bottom: rect.bottom - (TabmixTabbar.position === 1 ? 50 : 0),
       left: rect.left,
       right: rect.right
     };
@@ -1160,7 +1161,6 @@ Tabmix.initialization = {
       window.removeEventListener("load", TMP_eventListener);
     }
 
-    delete this.isValidWindow;
     Object.defineProperty(this, "run", {enumerable: false});
     Object.defineProperty(this, "isValidWindow", {
       value: !stopInitialization,
@@ -1168,7 +1168,7 @@ Tabmix.initialization = {
     });
     const value = Math.max(...Object.values(Tabmix.initialization).map(({id}) => id));
     Object.defineProperty(this, "_lastPhase", {enumerable: false, value});
-    return this.isValidWindow;
+    return !stopInitialization;
   },
 
   run: function tabmix_initialization_run(aPhase) {

@@ -1,0 +1,19 @@
+{
+  "extends": "../config/base.tsconfig.json",
+  "include": ["**/*.js", "**/*.sys.mjs"],
+  "exclude": [
+    "node_modules",
+    "**/gecko/**/*.d.ts",
+    "logs/**",
+    "**/*~/*",
+    "**/*~*.*",
+    "**/*.local.*",
+    // files with different scopes
+    "**/preferences",
+    "**/overlay",
+    "**/scripts"
+  ],
+  "compilerOptions": {
+    "types": ["../types/general.d.ts", "../types/addon.d.ts"]
+  }
+}
