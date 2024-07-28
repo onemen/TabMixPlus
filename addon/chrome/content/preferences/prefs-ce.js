@@ -1070,6 +1070,10 @@ class PrefWindow extends MozXULElement {
     deck.append(...childrenPrefpane);
     fragmentLastChild.append(...otherChildren);
 
+    this._paneDeckContainer.addEventListener("overflow", () => {
+      this.sizeToContent(false);
+    });
+
     updateAttribute("dlgbuttons", "accept,cancel");
     updateAttribute("persist", "screenX screenY");
     updateAttribute("role", "dialog");
