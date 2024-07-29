@@ -42,6 +42,10 @@ var VerticalTabs = {
   },
 
   onBeforeBrowserWindowShown(window) {
+    if (window._tabmix_windowIsClosing) {
+      // we close window on singleWindowMode
+      return;
+    }
     // this is a workaround until Firefox stop calling SidebarController.toggleTabstrip
     // when revamp did not loaded.
     const {SidebarController, Tabmix} = window;

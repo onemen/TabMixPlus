@@ -37,20 +37,10 @@ const SingleWindowModeUtils = {
   },
 
   newWindow(aWindow) {
-    if (!aWindow.Tabmix.singleWindowMode)
-      return false;
-
     if (!aWindow.arguments || aWindow.arguments.length === 0)
       return false;
 
-    const onLoad = () => {
-      const docElement = aWindow.document.documentElement;
-      if (docElement.getAttribute("windowtype") == "navigator:browser")
-        this.onLoad(aWindow);
-    };
-    aWindow.addEventListener("load", onLoad, {once: true});
-
-    aWindow.gTMPprefObserver.setLink_openPrefs();
+    aWindow.addEventListener("load", () => this.onLoad(aWindow), {once: true});
 
     const existingWindow = this.getBrowserWindow(aWindow);
     // no navigator:browser window open yet?
@@ -184,10 +174,13 @@ const SingleWindowModeUtils = {
     try {
       // we need to close the window after timeout so other extensions don't fail.
       // if we don't add this here gBrowserInit.onUnload fails
-      newWindow.FullZoom.init = function() {};
-      newWindow.FullZoom.destroy = function() {};
-      newWindow.IndexedDBPromptHelper.init();
-      newWindow.gPrivateBrowsingUI.uninit = function() {};
+      // gBrowserInit moved to browser-init.js on Firefox 127
+      if (!newWindow.gBrowserInit._boundDelayedStartup) {
+        newWindow.FullZoom.init = function() {};
+        newWindow.FullZoom.destroy = function() {};
+        // removed before firefox 115
+        newWindow.IndexedDBPromptHelper?.init();
+      }
     } catch (ex) {
       existingWindow.Tabmix.obj(ex);
     }

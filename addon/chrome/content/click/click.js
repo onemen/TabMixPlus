@@ -496,35 +496,28 @@ var TabmixContext = {
   },
 
   handleEvent(aEvent) {
-    let id = aEvent.target.id;
-
-    if (
-      id === "contentAreaContextMenu" &&
-      aEvent.eventPhase === Event.CAPTURING_PHASE &&
-      aEvent.type === "popupshowing"
-    ) {
-      this._prepareContextMenu();
+    if (aEvent.type === "popupshowing" && aEvent.target.state != "showing") {
       return;
     }
 
-    switch (aEvent.type) {
-      case "popupshowing":
-        if (aEvent.target.state != "showing") {
-          return;
-        }
-        if (id == "tabContextMenu")
-          this.updateTabContextMenu(aEvent);
-        else if (id == "contentAreaContextMenu")
-          this.updateMainContextMenu(aEvent);
+    let id = aEvent.target.id;
+    switch (`${id}:${aEvent.type}:${aEvent.eventPhase}`) {
+      case "contentAreaContextMenu:popupshowing:1":
+        this._prepareContextMenu();
         break;
-      case "popupshown":
+      case "contentAreaContextMenu:popupshowing:2":
+        this.updateMainContextMenu(aEvent);
+        break;
+      case "tabContextMenu:popupshowing:2":
+        this.updateTabContextMenu(aEvent);
+        break;
+      case "tabContextMenu:popupshown:2":
+      case "contentAreaContextMenu:popupshown:2":
         this.contextMenuShown(aEvent);
         break;
-      case "popuphidden":
-        if (id == "tabContextMenu") {
-          aEvent.target.removeEventListener("popuphidden", this);
-          Tabmix.hidePopup(aEvent.target);
-        }
+      case "tabContextMenu:popuphidden:2":
+        aEvent.target.removeEventListener("popuphidden", this);
+        Tabmix.hidePopup(aEvent.target);
         break;
     }
   },

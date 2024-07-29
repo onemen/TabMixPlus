@@ -8,25 +8,31 @@
 
 /** @this {Tabmix} */
 Tabmix.startup = function TMP_startup() {
-  var cmdNewWindow = document.getElementById("cmd_newNavigator");
-  var originalNewNavigator = cmdNewWindow.getAttribute("oncommand");
-  // When in single window mode allow one normal window and one private window.
-  // otherwise open new tab in most recent window of the appropriate type
-  this._openNewTab = function(aPrivate) {
-    if (this.singleWindowMode) {
-      let win = BrowserWindowTracker.getTopWindow({private: aPrivate});
+  Tabmix.originalFunctions.OpenBrowserWindow = window.OpenBrowserWindow;
+  window.OpenBrowserWindow = function(options = {}) {
+    // When in single window mode allow one normal window and one private window.
+    // otherwise open new tab in most recent window of the appropriate type
+    if (Tabmix.singleWindowMode) {
+      const win = BrowserWindowTracker.getTopWindow({private: options.private ?? false});
       if (win) {
-        win.focus();
         win.Tabmix.BrowserOpenTab();
-        return false;
+        if (win !== window) {
+          win.gBrowser.selectedBrowser.focus();
+        }
+        return win;
       }
     }
-    return true;
+    return Tabmix.originalFunctions.OpenBrowserWindow.call(this, options);
   };
-  let command = document.getElementById("Tools:PrivateBrowsing");
-  let originalCode = command.getAttribute("oncommand");
-  Tabmix.setItem(command, "oncommand", "if (Tabmix._openNewTab(true)) {" + originalCode + "}");
-  Tabmix.setItem(cmdNewWindow, "oncommand", "if (Tabmix._openNewTab(false)) {" + originalNewNavigator + "}");
+
+  // hide 'File > New Private Window' menu item when in single window mode when
+  // there are open private window
+  document.getElementById("menu_FilePopup").addEventListener("popupshowing", () => {
+    this.showItem(
+      "menu_newPrivateWindow",
+      !this.singleWindowMode || !BrowserWindowTracker.getTopWindow({private: true})
+    );
+  });
 
   TabmixContext.toggleEventListener(true);
 
@@ -1144,18 +1150,8 @@ Tabmix.initialization = {
   afterDelayedStartup: {id: 5, obj: "Tabmix"},
 
   get isValidWindow() {
-    /**
-      * don't initialize Tabmix functions on this window if one of this is true:
-      *  - the window is about to close by SingleWindowModeUtils
-      *  - tabbrowser-tabs binding didn't start (i only saw it happened
-      *       when ImTranslator extension installed)
-      */
-    let stopInitialization = false;
-    if (Tabmix.singleWindowMode) {
-      const tmp = ChromeUtils.import("chrome://tabmix-resource/content/SingleWindowModeUtils.jsm");
-      stopInitialization = tmp.SingleWindowModeUtils.newWindow(window);
-    }
-
+    // it is unlikely that we get her before SingleWindowModeUtils closes thw window
+    let stopInitialization = window._tabmix_windowIsClosing;
     if (stopInitialization) {
       this.run = function() {};
       window.removeEventListener("load", TMP_eventListener);

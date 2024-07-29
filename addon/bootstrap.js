@@ -25,6 +25,9 @@ ChromeUtils.defineModuleGetter(this, "ScriptsLoader",
 ChromeUtils.defineModuleGetter(this, "TabmixWidgets",
   "chrome://tabmix-resource/content/bootstrap/TabmixWidgets.jsm");
 
+ChromeUtils.defineModuleGetter(this, "TabmixChromeUtils",
+  "chrome://tabmix-resource/content/ChromeUtils.jsm");
+
 const appinfo = Services.appinfo;
 const options = {
   application: appinfo.ID,
@@ -137,7 +140,6 @@ async function startup(data, reason) {
   const {name, version} = Services.appinfo;
   let _tabmix_PlacesUIUtils_openTabset;
   if (name === 'Waterfox' && Services.vc.compare(version, '115.9.0') >= 0) {
-    const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
     const {PlacesUIUtils} = TabmixChromeUtils.import("resource:///modules/PlacesUIUtils.jsm");
     _tabmix_PlacesUIUtils_openTabset = PlacesUIUtils.openTabset;
   }
@@ -164,13 +166,33 @@ async function startup(data, reason) {
     }
   }
 
+  const lazy = {};
+
+  TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+    //
+    SingleWindowModeUtils: "chrome://tabmix-resource/content/SingleWindowModeUtils.jsm"
+  });
+
   const documentObserver = {
     observe(document) {
       if (document.createXULElement) {
-        const promiseOverlayLoaded = Overlays.load(chromeManifest, document.defaultView);
-        if (document.documentElement.getAttribute("windowtype") === "navigator:browser") {
-          document.defaultView._tabmix_PlacesUIUtils_openTabset = _tabmix_PlacesUIUtils_openTabset;
-          ScriptsLoader.initForWindow(document.defaultView, promiseOverlayLoaded);
+        const isSingleWindowMode = Services.prefs.getBoolPref("extensions.tabmix.singleWindow");
+        const isBrowser = document.documentElement.getAttribute("windowtype") === "navigator:browser";
+        const win = document.ownerGlobal;
+
+        let stopInitialization;
+        if (isBrowser && isSingleWindowMode) {
+          stopInitialization = lazy.SingleWindowModeUtils.newWindow(win);
+        }
+
+        if (stopInitialization) {
+          win._tabmix_windowIsClosing = true;
+        } else {
+          const promiseOverlayLoaded = Overlays.load(chromeManifest, win);
+          if (isBrowser) {
+            win._tabmix_PlacesUIUtils_openTabset = _tabmix_PlacesUIUtils_openTabset;
+            ScriptsLoader.initForWindow(win, promiseOverlayLoaded);
+          }
         }
       }
     }

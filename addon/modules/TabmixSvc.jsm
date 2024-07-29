@@ -280,6 +280,8 @@ TabmixSvc = {
         Services.prefs.clearUserPref("extensions.tabmix.tabBarPosition");
         Services.prefs.lockPref("extensions.tabmix.tabBarPosition");
       }
+
+      aWindow.gTMPprefObserver.setLink_openPrefs();
     },
 
     addMissingPrefs() {

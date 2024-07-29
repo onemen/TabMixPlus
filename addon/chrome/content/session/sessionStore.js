@@ -908,6 +908,10 @@ Tabmix.closedObjectsUtils = {
 
     this.toggleRecentlyClosedWindowsButton();
 
+    if (!Tabmix.isVersion(800)) {
+      return;
+    }
+
     // update appMenu History >
     //                Recently closed Tabs
     //                Recently closed Windows
