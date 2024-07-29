@@ -223,4 +223,8 @@ Tabmix.nonStrictMode = function(aObj, aFn, aArg) {
     }
     return fn("(" + code + ")");
   };
+
+  // make code with lazy run in local scope, to make sure local variables
+  // will be available in the code
+  Tabmix._localMakeCode = `(${Tabmix._makeCode.toString().replace(/fn/g, 'eval')})`;
 }(this));

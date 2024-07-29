@@ -489,6 +489,7 @@ var TabmixContext = {
 
   toggleEventListener(enable) {
     var eventListener = enable ? "addEventListener" : "removeEventListener";
+    document.getElementById("contentAreaContextMenu").parentElement[eventListener]("popupshowing", this, true);
     document.getElementById("contentAreaContextMenu")[eventListener]("popupshowing", this, false);
     document.getElementById("tabContextMenu")[eventListener]("popupshowing", this, false);
     document.getElementById("tabContextMenu")[eventListener]("popupshown", this, false);
@@ -496,6 +497,16 @@ var TabmixContext = {
 
   handleEvent(aEvent) {
     let id = aEvent.target.id;
+
+    if (
+      id === "contentAreaContextMenu" &&
+      aEvent.eventPhase === Event.CAPTURING_PHASE &&
+      aEvent.type === "popupshowing"
+    ) {
+      this._prepareContextMenu();
+      return;
+    }
+
     switch (aEvent.type) {
       case "popupshowing":
         if (aEvent.target.state != "showing") {
@@ -752,32 +763,46 @@ var TabmixContext = {
     }
   },
 
-  // Main context menu popupshowing
-  updateMainContextMenu: function TMP_updateMainContextMenu(event) {
-    if (!gContextMenu || event.originalTarget != document.getElementById("contentAreaContextMenu"))
-      return true;
+  _prepareContextMenu() {
+    if (!nsContextMenu || nsContextMenu._tabmix_initialized) {
+      return;
+    }
+
+    nsContextMenu._tabmix_initialized = true;
+
+    const lazy = {};
+    if (Tabmix.isVersion(1290)) {
+      const modules = {
+        ContextualIdentityService: "resource://gre/modules/ContextualIdentityService.sys.mjs",
+        PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
+      };
+      TabmixChromeUtils.defineLazyModuleGetters(lazy, modules);
+    }
 
     // hide open link in window in single window mode
-    Tabmix.changeCode(gContextMenu, "gContextMenu.initOpenItems")._replace(
+    const code = Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems")._replace(
       /context-openlink",/, '$& !Tabmix.singleWindowMode &&'
     )._replace(
       /context-openlinkprivate",/, '$& (!Tabmix.singleWindowMode || !isWindowPrivate) &&'
+    );
+
+    const make = eval(Tabmix._localMakeCode);
+    nsContextMenu.prototype.initOpenItems = make(null, code.value);
+
+    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInPrivateWindow")._replace(
+      /(?:this\.window\.)?openLinkIn\(\n*\s*this\.linkURL,\n*\s*"window",/,
+      `var [win, where] = [${Tabmix.isVersion(1290) ? "this.window" : "window"}, "window"];
+      if (Tabmix.singleWindowMode) {
+        let pbWindow = BrowserWindowTracker.getTopWindow({ private: true });
+        if (pbWindow) {
+          [win, where] = [pbWindow, "tab"];
+          pbWindow.focus();
+        }
+      }
+      win.openLinkIn(this.linkURL, where,`
     ).toCode();
 
-    Tabmix.changeCode(gContextMenu, "gContextMenu.openLinkInPrivateWindow")._replace(
-      /openLinkIn\(\n*\s*this\.linkURL,\n*\s*"window",/,
-      'var [win, where] = [window, "window"];\
-             if (Tabmix.singleWindowMode) {\
-               let pbWindow = BrowserWindowTracker.getTopWindow({ private: true });\
-               if (pbWindow) {\
-                 [win, where] = [pbWindow, "tab"];\
-                 pbWindow.focus();\
-               }\
-             }\
-             win.openLinkIn(this.linkURL, where,'
-    ).toCode();
-
-    Tabmix.changeCode(gContextMenu, "gContextMenu.openLinkInTab")._replace(
+    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
       'userContextId:',
       'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n' +
             '      $&'
@@ -793,6 +818,13 @@ var TabmixContext = {
       // nsContextMenu.prototype.openLinkInTab
       Tabmix.originalFunctions.openInverseLink.call(gContextMenu, ev);
     };
+  },
+
+  // Main context menu popupshowing
+  updateMainContextMenu: function TMP_updateMainContextMenu(event) {
+    if (!gContextMenu || event.originalTarget != document.getElementById("contentAreaContextMenu")) {
+      return true;
+    }
 
     gContextMenu.tabmixLinks = Tabmix.contextMenuLinks;
     Tabmix.contextMenuLinks = null;

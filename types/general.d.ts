@@ -743,6 +743,7 @@ declare var gReduceMotion: any;
 declare var gTabBrowserBundle: any;
 declare var HomePage: any;
 declare var LinkTargetDisplay: any;
+declare var nsContextMenu: any;
 declare var OpenInTabsUtils: any;
 declare var openTrustedLinkIn: any;
 declare var OS: any;

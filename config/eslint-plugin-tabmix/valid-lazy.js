@@ -54,7 +54,8 @@ const callExpressionMultiDefinitions = [
   "loader.lazyRequireGetter(lazy,",
 ];
 
-let createFunction = validLazy.create.toString();
+// fix a bug in mozilla valid-lazy.js when the code is `let lazy`
+let createFunction = validLazy.create.toString().replace(/node\.init\./g, "node.init?.");
 
 if (!createFunction.startsWith("function")) {
   createFunction = "function " + createFunction;
