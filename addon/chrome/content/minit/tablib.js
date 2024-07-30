@@ -414,7 +414,8 @@ Tabmix.tablib = {
          $&'
       ).toCode();
 
-      let $LF = '\n          ';
+      let $LF = '\n      ';
+      const doPosition = Tabmix.isVersion(1300) ? "absPositionHorizontalTabs" : "doPosition";
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
         'let layoutData = this._pinnedTabsLayoutCache;',
         'if (typeof this.arrowScrollbox.resetFirstTabInRow == "function")\
@@ -424,12 +425,12 @@ Tabmix.tablib = {
         Tabmix.isVersion(890) ? 'scrollStartOffset:' : 'scrollButtonWidth:',
         '$& TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 :'
       )._replace(
-        'if (doPosition)',
-        'if (doPosition && TabmixTabbar.isMultiRow &&' + $LF +
-        '    Tabmix.prefs.getBoolPref("pinnedTabScroll")) {' + $LF +
-        '  doPosition = false;' + $LF +
-        '}' + $LF +
-        'if (doPosition && TabmixTabbar.isMultiRow) {' + $LF +
+        `if (${doPosition})`,
+        `if (${doPosition} && TabmixTabbar.isMultiRow &&
+          Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
+        ${doPosition} = false;
+      }
+      if (${doPosition} && TabmixTabbar.isMultiRow) {` + $LF +
         (Tabmix.isVersion(1190) ? '  this.toggleAttribute("positionpinnedtabs", true)' :
           '  this.setAttribute("positionpinnedtabs", "true");') + $LF +
         '  let layoutData = this._pinnedTabsLayoutCache;' + $LF +

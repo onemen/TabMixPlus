@@ -109,7 +109,7 @@ var VerticalTabs = {
   },
 
   toggleTabstrip(window) {
-    const {document, gBrowser, SidebarController, Tabmix, TabmixTabbar} = window;
+    const {document, SidebarController, Tabmix, TabmixTabbar} = window;
 
     if (!SidebarController.revampComponentsLoaded) {
       return;
@@ -121,8 +121,6 @@ var VerticalTabs = {
       tabmixScrollBox.setAttribute("verticalTabs", true);
     } else {
       tabmixScrollBox.removeAttribute("verticalTabs");
-      gBrowser.tabContainer.setAttribute("orient", "horizontal");
-
       const useTabmixButtons =
         TabmixTabbar.scrollButtonsMode > TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT;
       Tabmix.tabsUtils.updateScrollButtons(useTabmixButtons);

@@ -132,13 +132,6 @@
   align-items: center;
 }
 
-/* override rule from fireofx tabs.css - always show new tab button on vertical tabs */
-#vertical-tabs #tabbrowser-tabs > #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button {
-  display: flex !important;
-  align-items: center;
-  height: var(--tab-min-height);
-}
-
 /*** hide tabs-newtab-button that we don't use ***/
 #TabsToolbar:not([currentset*="privateTab-toolbar-openNewPrivateTab"]) #privateTab-afterTabs-openNewPrivateTab,
 #TabsToolbar #tabbrowser-tabs[overflow] > #tabbrowser-arrowscrollbox > #tabs-newtab-button,
