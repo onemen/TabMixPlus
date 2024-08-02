@@ -7,6 +7,7 @@
       "../../../../types/customDialog.d.ts",
       "../../../../types/numberInput.d.ts",
       "../../../../types/tabmix.d.ts"
-    ]
+    ],
+    "outDir": "../../../../.local.dist/overlay",
   }
 }

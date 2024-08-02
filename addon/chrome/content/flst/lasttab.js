@@ -205,7 +205,7 @@ var TMP_LastTab = {
     return this._tabs;
   },
 
-  OnKeyPress: function _LastTab_OnKeyPress(event) {
+  OnKeyPress(event) {
     if (this.isCtrlTab(event)) {
       let tabCount = this.tabs.length;
       if (!this.KeyLock) {
@@ -269,7 +269,7 @@ var TMP_LastTab = {
     }
   },
 
-  OnKeyUp: function _LastTab_OnKeyUp(event) {
+  OnKeyUp(event) {
     var keyReleased = event.keyCode == event.DOM_VK_CONTROL;
     this.CtrlKey = event.ctrlKey && !Tabmix.isAltKey(event) && !event.metaKey;
     Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || Tabmix.isAltKey(event) || event.metaKey;

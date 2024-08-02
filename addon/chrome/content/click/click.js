@@ -18,7 +18,7 @@ var TabmixTabClickOptions = {
   },
 
   // Single click on tab/tabbar
-  onTabClick: function TMP_onTabClick(aEvent) {
+  onTabClick(aEvent) {
     if (!aEvent)
       return;
     if (aEvent.button == 2)
@@ -1252,7 +1252,7 @@ var TabmixAllTabs = {
     scrollBox.ensureElementIsVisible(this._selectedItem);
   },
 
-  createMenuItems: function TMP_createMenuItems(popup, tab, value) {
+  createMenuItems(popup, tab, value) {
     /** @type {Element & MenuitemParams} */
     let mi = document.createXULElement("menuitem");
     mi.setAttribute("class", "menuitem-iconic bookmark-item alltabs-item");
@@ -1338,7 +1338,7 @@ var TabmixAllTabs = {
       gBrowser.selectedTab = aTab;
   },
 
-  hideCommonList: function TMP_hideCommonList(popup) {
+  hideCommonList(popup) {
     // clear out the menu popup and remove the listeners
     while (popup.hasChildNodes()) {
       var menuItem = popup.firstChild;

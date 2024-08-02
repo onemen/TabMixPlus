@@ -14,7 +14,7 @@ var TMP_tabDNDObserver = {
   paddingLeft: 0,
   _multirowMargin: 0,
 
-  init: function TMP_tabDNDObserver_init() {
+  init() {
     var tabBar = gBrowser.tabContainer;
     if (Tabmix.extensions.verticalTabBar) {
       this.useTabmixDnD = () => false;

@@ -57,7 +57,7 @@ var TabmixTabbar = {
     return this.isButtonOnTabsToolBar(button) ? button : null;
   },
 
-  updateSettings: function TMP_updateSettings(start) {
+  updateSettings(start) {
     if (!gBrowser || Tabmix.prefs.prefHasUserValue("setDefault"))
       return;
 
@@ -197,7 +197,7 @@ var TabmixTabbar = {
     }
   },
 
-  updateScrollStatus: function TMP_updateScrollStatus(delay) {
+  updateScrollStatus(delay) {
     if (delay) {
       if (this._updateScrollStatusTimeout) {
         return;
@@ -236,7 +236,7 @@ var TabmixTabbar = {
   },
 
   _waitAfterMaximized: false,
-  _handleResize: function TMP__handleResize() {
+  _handleResize() {
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
       this.setFirstTabInRow();

@@ -14,6 +14,7 @@
     "**/scripts"
   ],
   "compilerOptions": {
-    "types": ["../types/general.d.ts", "../types/addon.d.ts"]
+    "types": ["../types/general.d.ts", "../types/addon.d.ts"],
+    "outDir": "../.local.dist/addon",
   }
 }

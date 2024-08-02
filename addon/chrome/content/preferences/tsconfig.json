@@ -3,6 +3,7 @@
   "include": ["**/*.js", "**/*.sys.mjs"],
   "exclude": ["**/*~*.*", "**/*.local.*"],
   "compilerOptions": {
-    "types": ["../../../../types/preferences.d.ts"]
+    "types": ["../../../../types/preferences.d.ts"],
+    "outDir": "../../../../.local.dist/preferences",
   }
 }

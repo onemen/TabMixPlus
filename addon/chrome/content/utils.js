@@ -303,7 +303,7 @@ var Tabmix = {
   },
 
   originalFunctions: {},
-  destroy: function TMP_utils_destroy() {
+  destroy() {
     this.toCode = null;
     this.originalFunctions = null;
   }

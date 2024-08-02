@@ -308,7 +308,7 @@ var TMP_eventListener = {
   },
 
   // ignore non-browser windows
-  _onLoad: function TMP_EL_onContentLoaded(aType) {
+  _onLoad(aType) {
     window.removeEventListener(aType, this);
     let wintype = window.document.documentElement.getAttribute("windowtype");
     if (wintype == "navigator:browser") {
@@ -323,7 +323,7 @@ var TMP_eventListener = {
     }
   },
 
-  onContentLoaded: function TMP_EL_onContentLoaded() {
+  onContentLoaded() {
     Tabmix.isFirstWindow = Tabmix.numberOfWindows() == 1;
     TMP_SessionStore.setAfterSessionRestored();
 
@@ -775,7 +775,7 @@ var TMP_eventListener = {
   // this function call onTabOpen_updateTabBar after some delay
   // when more the one tabs opened at once
   lastTimeTabOpened: 0,
-  onTabOpen_delayUpdateTabBar: function TMP_EL_onTabOpen_delayUpdateTabBar(aTab) {
+  onTabOpen_delayUpdateTabBar(aTab) {
     if (aTab.hasAttribute("pending")) {
       this.onSSTabRestored(aTab);
       if (Tabmix.isBlankNewTab(aTab.label)) {

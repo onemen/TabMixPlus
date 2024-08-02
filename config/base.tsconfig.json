@@ -6,7 +6,7 @@
     "baseUrl": ".",
     "allowJs": true,
     "checkJs": true,
-    "noEmit": true,
+    // "noEmit": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
 
@@ -25,10 +25,17 @@
     // "strict": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
 
     // "strictNullChecks": true,
     // "exactOptionalPropertyTypes": true,
     // "strictPropertyInitialization": true
+
+    "outDir": "../../../../.local.dist",
+    "declaration": true,
+    // "module": "None",
+    // "declarationDir": "../.local.dist/types",
+    "noEmit": false,
+    "emitDeclarationOnly": true
   }
 }
