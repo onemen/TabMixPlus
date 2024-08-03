@@ -14,7 +14,7 @@
     "allowUnusedLabels": false,
     "alwaysStrict": true,
     // "noFallthroughCasesInSwitch": true, // we have lint rule for this
-    // "noImplicitAny": true, // maybe in the future
+    "noImplicitAny": true, // maybe in the future
     // "noImplicitOverride": true, // useless for our use case
     "noImplicitReturns": true,
     "noImplicitThis": true,

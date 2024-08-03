@@ -124,7 +124,7 @@ interface Tabmix {
 
 // TODO: fix this
 declare var Shortcuts: any;
-declare var Tabmix: any;
+declare var Tabmix: typeof TabmixNS;
 declare var TabmixChromeUtils: any;
 
 declare var TabmixSvc: TabmixModules.TabmixSvc;

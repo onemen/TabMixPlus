@@ -388,7 +388,7 @@ declare namespace MockedGeckoTypes {
   }
 
   interface TabsPanel extends TabsListBase {
-    constructor(opts: any);
+    constructor(opts: any): void;
     view: any;
     panelMultiView: any;
     _populate(): void;
@@ -422,7 +422,7 @@ declare namespace MockedGeckoTypes {
   }
 
   interface TabsListBase {
-    constructor({className, filterFn, insertBefore, containerNode, dropIndicator}: {className: string; filterFn: any; insertBefore: any; containerNode: any; dropIndicator?: null | undefined});
+    constructor({className, filterFn, insertBefore, containerNode, dropIndicator}: {className: string; filterFn: any; insertBefore: any; containerNode: any; dropIndicator?: null | undefined}): void;
     className: string;
     filterFn: any;
     insertBefore: any;
@@ -773,6 +773,12 @@ declare var TabView: any;
 declare namespace MockedExports {
   interface nsISupportsString {
     number: string;
+  }
+
+  interface Cc {
+    "@mozilla.org/embedcomp/dialogparam;1": {
+      createInstance(instance: nsIDialogParamBlock): nsIDialogParamBlock;
+    };
   }
 
   interface Ci {

@@ -52,11 +52,6 @@ Tabmix.beforeDelayedStartup = function() {
 
 // after TabmixSessionManager and SessionStore initialized
 Tabmix.sessionInitialized = function() {
-  if (Tabmix.fixMultibarRowHeight) {
-    delete Tabmix._fixMultibarRowHeight;
-    Tabmix.tabsUtils.updateVerticalTabStrip({reset: true});
-  }
-
   var SM = TabmixSessionManager;
   if (SM.enableManager) {
     window.restoreLastSession = function restoreLastSession() {
@@ -80,6 +75,7 @@ Tabmix.sessionInitialized = function() {
   }
 };
 
+/** @this {Tabmix} */
 Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
   if (gBrowser.tabContainer.getAttribute("orient") == "horizontal") {
     const {toolbar, tabBar, collapsed, tabBarCollapsed, toolbarCollapsed} =

@@ -2,13 +2,19 @@
 
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 
+// /** @type {Partial<typeof TabmixNS>} */
+/** @type {TabmixTypes} */
 var Tabmix = {
   get prefs() {
     return this.lazyGetter(this, "prefs", Services.prefs.getBranch("extensions.tabmix."));
   },
 
   get defaultPrefs() {
-    return this.lazyGetter(this, "defaultPrefs", Services.prefs.getDefaultBranch("extensions.tabmix."));
+    return this.lazyGetter(
+      this,
+      "defaultPrefs",
+      Services.prefs.getDefaultBranch("extensions.tabmix.")
+    );
   },
 
   isVersion(aVersionNo, updateChannel) {
@@ -21,15 +27,13 @@ var Tabmix = {
 
   // for debug
   debug: function TMP_utils_debug(aMessage, aShowCaller) {
-    if (this._debug)
-      this.log(aMessage, aShowCaller);
+    if (this._debug) this.log(aMessage, aShowCaller);
   },
 
   // Show/hide one item (specified via name or the item element itself).
   showItem(aItemOrId, aShow) {
     var item = typeof aItemOrId == "string" ? document.getElementById(aItemOrId) : aItemOrId;
-    if (item && item.hidden == Boolean(aShow))
-      item.hidden = !aShow;
+    if (item && item.hidden == Boolean(aShow)) item.hidden = !aShow;
   },
 
   setItem(aItemOrId, aAttr, aVal) {
@@ -39,8 +43,7 @@ var Tabmix = {
         elem.removeAttribute(aAttr);
         return;
       }
-      if (typeof aVal == "boolean")
-        aVal = aVal ? "true" : "false";
+      if (typeof aVal == "boolean") aVal = aVal ? "true" : "false";
 
       if (!elem.hasAttribute(aAttr) || elem.getAttribute(aAttr) != aVal)
         elem.setAttribute(aAttr, aVal);
@@ -52,47 +55,32 @@ var Tabmix = {
     let att = elem.getAttribute(aAttr);
     let array = att ? att.split(" ") : [];
     let index = array.indexOf(aValue);
-    if (aAdd && index == -1)
-      array.push(aValue);
-    else if (!aAdd && index != -1)
-      array.splice(index, 1);
-    if (array.length)
-      elem.setAttribute(aAttr, array.join(" "));
-    else
-      elem.removeAttribute(aAttr);
+    if (aAdd && index == -1) array.push(aValue);
+    else if (!aAdd && index != -1) array.splice(index, 1);
+    if (array.length) elem.setAttribute(aAttr, array.join(" "));
+    else elem.removeAttribute(aAttr);
   },
 
   setFTLDataId(elementId, map = TabmixSvc.i10IdMap) {
+    /** @type {TabmixNS.convert} */
     function convert(id, data = map[id]) {
       return data && !Tabmix.isVersion(data.before) ? convert(data.l10n) : id;
     }
+    /** @type {Element} */
     const element = document.getElementById(elementId);
     const nodes = element.hasAttribute("data-lazy-l10n-id") ?
-      [element] : element.querySelectorAll("[data-lazy-l10n-id]");
-    nodes
-        .forEach(el => {
-          const l10Id = convert(el.getAttribute("data-lazy-l10n-id"));
-          el.setAttribute("data-l10n-id", l10Id);
-          el.removeAttribute("data-lazy-l10n-id");
-        });
+      [element] :
+      [...element.querySelectorAll("[data-lazy-l10n-id]")];
+    // TODO: how to type nodes
+    nodes.forEach(el => {
+      const l10Id = convert(el.getAttribute("data-lazy-l10n-id"));
+      el.setAttribute("data-l10n-id", l10Id);
+      el.removeAttribute("data-lazy-l10n-id");
+    });
   },
 
   getBoundsWithoutFlushing(element) {
-    if (!("_DOMWindowUtils" in this)) {
-      try {
-        this._DOMWindowUtils =
-          window.QueryInterface(Ci.nsIInterfaceRequestor)
-              .getInterface(Ci.nsIDOMWindowUtils);
-        if (!this._DOMWindowUtils.getBoundsWithoutFlushing) {
-          this._DOMWindowUtils = null;
-        }
-      } catch {
-        this._DOMWindowUtils = null;
-      }
-    }
-    return this._DOMWindowUtils ?
-      this._DOMWindowUtils.getBoundsWithoutFlushing(element) :
-      element.getBoundingClientRect();
+    return window.windowUtils?.getBoundsWithoutFlushing(element) ?? element.getBoundingClientRect();
   },
 
   getTopWin() {
@@ -103,38 +91,40 @@ var Tabmix = {
     // allow to open new window if:
     //   user are not in single window mode or
     //   there is no other window with the same privacy type
-    return !TabmixSvc.getSingleWindowMode() || !BrowserWindowTracker.getTopWindow({private: isPrivate});
+    return (
+      !TabmixSvc.getSingleWindowMode() || !BrowserWindowTracker.getTopWindow({private: isPrivate})
+    );
   },
 
   lazy_import(aObject, aName, aModule, aSymbol, aFlag, aArg) {
-    if (aFlag)
-      this[aModule + "Initialized"] = false;
+    if (aFlag) this[aModule + "Initialized"] = false;
     var self = this;
     TabmixChromeUtils.defineLazyGetter(aObject, aName, () => {
       let tmp = ChromeUtils.import("chrome://tabmix-resource/content/" + aModule + ".jsm");
       let Obj = tmp[aSymbol];
-      if ("prototype" in tmp[aSymbol])
-        Obj = new Obj();
-      else if ("init" in Obj)
-        Obj.init.apply(Obj, aArg);
-      if (aFlag)
-        self[aModule + "Initialized"] = true;
+      if ("prototype" in tmp[aSymbol]) Obj = new Obj();
+      else if ("init" in Obj) Obj.init.apply(Obj, aArg);
+      if (aFlag) self[aModule + "Initialized"] = true;
       return Obj;
     });
   },
 
-  lazyGetter(obj, name, get, config = {
-    configurable: true,
-    enumerable: true,
-  }) {
+  lazyGetter(
+    obj,
+    name,
+    get,
+    config = {
+      configurable: true,
+      enumerable: true,
+    }
+  ) {
     config.value = typeof get == "function" ? get() : get;
     Object.defineProperty(obj, name, config);
     return config.value;
   },
 
   backwardCompatibilityGetter(aObject, aOldName, aNewName) {
-    if (aOldName in aObject)
-      return;
+    if (aOldName in aObject) return;
 
     var self = this;
     Object.defineProperty(aObject, aOldName, {
@@ -143,7 +133,7 @@ var Tabmix = {
         delete aObject[aOldName];
         return (aObject[aOldName] = self.getObject(window, aNewName));
       },
-      configurable: true
+      configurable: true,
     });
   },
 
@@ -155,20 +145,28 @@ var Tabmix = {
     if (stackData && stackData.length == 2) {
       let [path, line] = stackData[1].replace("chrome://", "").split(":");
       let index = path.indexOf("/") - 1;
-      let extensionName = index > -1 ?
-        path.charAt(0).toUpperCase() + path.substr(1, index) + " " : "";
-      this.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
-                 " from:\nfile: chrome://" + path + "\nline: " + line +
-                 "\n\nPlease inform Tabmix Plus developer" +
-                 (extensionName ? " and " + extensionName + "developer." : "."));
+      let extensionName =
+        index > -1 ? path.charAt(0).toUpperCase() + path.substr(1, index) + " " : "";
+      this.clog(
+        err.message +
+          "\n\n" +
+          extensionName +
+          "extension call " +
+          aOldName +
+          " from:\nfile: chrome://" +
+          path +
+          "\nline: " +
+          line +
+          "\n\nPlease inform Tabmix Plus developer" +
+          (extensionName ? " and " + extensionName + "developer." : ".")
+      );
     } else {
       this.clog(err.message + "\n\n" + stack);
     }
   },
 
   promptService(intParam, strParam, aWindow, aCallBack) {
-    var dpb = Cc["@mozilla.org/embedcomp/dialogparam;1"]
-        .createInstance(Ci.nsIDialogParamBlock);
+    var dpb = Cc["@mozilla.org/embedcomp/dialogparam;1"].createInstance(Ci.nsIDialogParamBlock);
     // intParam[0] - default button accept=0, cancel=1, extra1=2
     // intParam[1] - show menuList= 1 , show textBox= 0, hide_both= 2
     // intParam[2] - set checkbox checked  true=1 , false=0, hide=2
@@ -181,12 +179,10 @@ var Tabmix = {
     // when we don't have a callBack function use modal dialog
     let modal = typeof aCallBack != "function";
     var i;
-    for (i = 0; i < intParam.length; i++)
-      dpb.SetInt(i, intParam[i]);
+    for (i = 0; i < intParam.length; i++) dpb.SetInt(i, intParam[i]);
     // strParam labels for: title, msg, testbox.value, checkbox.label, buttons[]
     // buttons[]: labels array for each button
-    for (i = 0; i < strParam.length; i++)
-      dpb.SetString(i, strParam[i]);
+    for (i = 0; i < strParam.length; i++) dpb.SetString(i, strParam[i]);
 
     if (typeof aWindow == "undefined") {
       try {
@@ -197,23 +193,25 @@ var Tabmix = {
     }
 
     // we add dependent to features to make this dialog float over the window on start
-    var dialog = Services.ww.openWindow(aWindow,
-      "chrome://tabmixplus/content/dialogs/promptservice.xhtml", "", "centerscreen" +
-           (modal ? ",modal" : ",dependent"), dpb);
-    if (!modal)
-      dialog._callBackFunction = aCallBack;
+    var dialog = Services.ww.openWindow(
+      aWindow,
+      "chrome://tabmixplus/content/dialogs/promptservice.xhtml",
+      "",
+      "centerscreen" + (modal ? ",modal" : ",dependent"),
+      dpb
+    );
+    if (!modal) dialog._callBackFunction = aCallBack;
 
     return {
       button: dpb.GetInt(4),
       checked: dpb.GetInt(5) == this.CHECKBOX_CHECKED,
       label: dpb.GetString(5),
-      value: dpb.GetInt(6)
+      value: dpb.GetInt(6),
     };
   },
 
   windowEnumerator: function Tabmix_windowEnumerator(aWindowtype) {
-    if (typeof aWindowtype == "undefined")
-      aWindowtype = "navigator:browser";
+    if (typeof aWindowtype == "undefined") aWindowtype = "navigator:browser";
     return Services.wm.getEnumerator(aWindowtype);
   },
 
@@ -222,12 +220,10 @@ var Tabmix = {
     var count = 0;
     while (enumerator.hasMoreElements()) {
       let win = enumerator.getNext();
-      let isClosed = "TabmixSessionManager" in win &&
-          win.TabmixSessionManager.windowClosed;
+      let isClosed = "TabmixSessionManager" in win && win.TabmixSessionManager.windowClosed;
       if (!isClosed) {
         count++;
-        if (!all && count == 2)
-          break;
+        if (!all && count == 2) break;
       }
     }
     return count;
@@ -281,7 +277,8 @@ var Tabmix = {
     // load globals for our preferences windows
     let wintype = window.document.documentElement.getAttribute("windowtype");
     if (wintype !== "navigator:browser") {
-      window.Services = window.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+      window.Services =
+        window.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
     }
 
     const destroy = () => {
@@ -290,10 +287,22 @@ var Tabmix = {
     };
     window.addEventListener("unload", destroy);
 
-    var methods = ["changeCode", "setNewFunction", "nonStrictMode",
-      "getObject", "log", "getCallerNameByIndex", "callerName",
-      "clog", "isCallerInList", "callerTrace",
-      "obj", "assert", "trace", "reportError"];
+    var methods = [
+      "changeCode",
+      "setNewFunction",
+      "nonStrictMode",
+      "getObject",
+      "log",
+      "getCallerNameByIndex",
+      "callerName",
+      "clog",
+      "isCallerInList",
+      "callerTrace",
+      "obj",
+      "assert",
+      "trace",
+      "reportError",
+    ];
     methods.forEach(id => {
       this[id] = function TMP_console_wrapper() {
         return this._getMethod(id, arguments);
@@ -306,7 +315,7 @@ var Tabmix = {
   destroy: function TMP_utils_destroy() {
     this.toCode = null;
     this.originalFunctions = null;
-  }
+  },
 };
 
 Tabmix._init();

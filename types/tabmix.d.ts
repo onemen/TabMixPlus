@@ -102,6 +102,127 @@ declare namespace Preferences {
   const _prefBranch: any;
 }
 
+type I10MapValue = {before: number; l10n: string};
+type I10Map = Record<string, I10MapValue>;
+
+declare namespace TabmixNS {
+  const _debug: boolean;
+  const firstWindowInSession: boolean;
+
+  const prefs: nsIPrefBranch;
+  const defaultPrefs: nsIPrefBranch;
+  function isVersion(aVersionNo: number | {ff?: number; wf?: string; bs?: string; updateChannel?: string}, updateChannel?: string): boolean;
+  function isAltKey(event: any): any;
+  function debug(aMessage: any, aShowCaller: any): void;
+  function showItem(aItemOrId: any, aShow: any): void;
+  function setItem(aItemOrId: any, aAttr: any, aVal: any): void;
+  function setAttributeList(aItemOrId: any, aAttr: any, aValue: any, aAdd: any): void;
+  function setFTLDataId(elementId: any, map?: I10Map): void;
+  function convert(id: string, data?: I10MapValue): string;
+  function getBoundsWithoutFlushing(element: HTMLElement): DOMRect;
+  function getTopWin(): TabmixOptionsWindow | Window | MockedGeckoTypes.BrowserWindow;
+  function isNewWindowAllow(isPrivate: any): boolean;
+  function lazy_import(aObject: any, aName: any, aModule: any, aSymbol: any, aFlag: any, aArg: any): void;
+  function lazyGetter(obj: any, name: string, get: any, config?: {configurable?: boolean; enumerable?: boolean; value?: any}): any;
+  function backwardCompatibilityGetter(aObject: any, aOldName: any, aNewName: any): void;
+  function informAboutChangeInTabmix(aOldName: any, aNewName: any): void;
+  function promptService(intParam: any, strParam: any, aWindow: any, aCallBack: any): {button: any; checked: boolean; label: any; value: any};
+  function windowEnumerator(aWindowtype: any): MockedGeckoTypes.nsISimpleEnumeratorWithWindow;
+  function numberOfWindows(all: any, aWindowtype: any): number;
+  const isFirstWindowInSession: any;
+  const isSingleBrowserWindow: boolean;
+  const isLastBrowserWindow: boolean;
+  function compare(a: any, b: any, lessThan: any): boolean;
+  function itemEnd(item: any, end: any): any;
+  function show(aMethod: any, aDelay: any, aWindow: any): void;
+  function _getMethod(id: any, args: any): any;
+  function installChangecode(): void;
+  function _init(): void;
+  let originalFunctions: {
+    OpenBrowserWindow: typeof window.OpenBrowserWindow;
+  } & Record<string, (...any: any[]) => any>;
+  function destroy(): void;
+
+  // imported from log.jsm
+  function log(aMessage: string, aShowCaller: boolean, offset?: number, caller?: {filename: string; lineNumber: number; columnNumber: number}): void;
+  function clog(aMessage: string, caller?: {filename: string; lineNumber: number; columnNumber: number}): void;
+  function getObject(aWindow: Window, aMethod: string): any;
+
+  // from changedcode
+  // TODO: fix returned type
+  const _debugMode: boolean;
+  const _localMakeCode: string;
+  function _makeCode(name: string | null, code: string): typeof Function;
+  function changeCode(aParent: any, afnName: string, aOptions: any): any;
+  function nonStrictMode(aObj: any, aFn: any, aArg: any): void;
+  function setNewFunction(aObj: any, aName: string, aCode: string): void;
+  // TODO: check if it's needed
+  function toCode(): any;
+
+  // tabmix.js
+  let _lastTabOpenedTime: number;
+  const _deferredInitialized: {
+    promise: Promise<void>;
+    resolve: typeof Promise.resolve;
+    reject: typeof Promise.reject;
+  };
+  const initialization: typeof TabmixInitialization;
+  let isFirstWindow: boolean;
+  let selectedTab: MockedGeckoTypes.BrowserTab;
+  const singleWindowMode: boolean;
+  let tabsNewtabButton: HTMLButtonElement;
+  let userTypedValue: string;
+  function afterDelayedStartup(): void;
+  function beforeDelayedStartup(): void;
+  function getAfterTabsButtonsWidth(): void;
+  function sessionInitialized(): void;
+  function startup(): void;
+
+  // click.js
+  function openInverseLink(ev: any): void;
+  const allTabs: typeof AllTabs;
+
+  // tab.js
+  let contextMenuLinks: HTMLLinkElement[];
+  const tabsUtils: typeof TabsUtils;
+
+  // userinterface.js
+  function setTabStyle(aTab: MockedGeckoTypes.BrowserTab, boldChanged: boolean): void;
+
+  // contants
+  const CHECKBOX_CHECKED: number;
+}
+
+declare namespace AllTabs {
+  function init(): void;
+}
+
+type InitializationStep = {id: number; obj: string};
+declare namespace TabmixInitialization {
+  const init: InitializationStep;
+  const beforeStartup: InitializationStep;
+  const onContentLoaded: InitializationStep;
+  const beforeBrowserInitOnLoad: InitializationStep;
+  const onWindowOpen: InitializationStep;
+  const afterDelayedStartup: InitializationStep;
+  // TODO: check if there is spacial type for getter in namespace
+  function isValidWindow(): boolean;
+  function run(aPhase: number): any;
+}
+
+declare namespace TabsUtils {
+  const initialized: false;
+  const _tabmixPositionalTabs: {
+    beforeSelectedTab?: MockedGeckoTypes.BrowserTab;
+    afterSelectedTab?: MockedGeckoTypes.BrowserTab;
+    beforeHoveredTab?: MockedGeckoTypes.BrowserTab;
+    afterHoveredTab?: MockedGeckoTypes.BrowserTab;
+  };
+}
+
+// type TabmixTypes = Partial<typeof TabmixNS> & {[key: string]: any};
+type TabmixTypes = Partial<typeof TabmixNS>;
+
 declare namespace TabmixModules {
   // TODO: replace all any with its proper types
   interface TabmixSvc {
@@ -116,7 +237,7 @@ declare namespace TabmixModules {
     getSingleWindowMode: () => boolean;
     getString: (key: string) => string;
     getSMString: (key: string) => string;
-    i10IdMap: () => Record<string, {before: number; l10n: string}>;
+    i10IdMap: I10Map;
     isBasilisk: boolean;
     isCyberfox: boolean;
     isFixedGoogleUrl: (url: string) => boolean;
@@ -133,7 +254,7 @@ declare namespace TabmixModules {
     prefs: typeof Preferences;
     setCustomTabValue: (tab: MockedGeckoTypes.BrowserTab, key: string, value?: string) => void;
     sanitized: boolean;
-    setLabel: (property) => string;
+    setLabel: (property: string) => string;
     sortByRecentlyUsed: string;
     SessionStore: any;
     SessionStoreGlobal: any;
