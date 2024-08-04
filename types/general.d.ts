@@ -205,9 +205,10 @@ declare namespace MockedGeckoTypes {
     _tabDropIndicator?: HTMLElement;
     _unlockTabSizing: () => void;
     _updateCloseButtons(skipUpdateScrollStatus?: boolean, aUrl?: string): void;
-    _verticalTabs: boolean;
     advanceSelectedTab: (dir: number, wrap: boolean) => void;
     readonly allTabs: BrowserTab[];
+    arrowScrollbox: ArrowScrollbox;
+    getDropEffectForTabDrag: (event: DragEvent) => string;
     mCloseButtons: number;
     mTabMaxWidth: number;
     mTabMinWidth: number;
@@ -215,8 +216,7 @@ declare namespace MockedGeckoTypes {
     get selectedItem(): BrowserTab;
     set selectedIndex(val: number);
     get selectedIndex(): number;
-    arrowScrollbox: ArrowScrollbox;
-    getDropEffectForTabDrag: (event: DragEvent) => string;
+    readonly verticalMode: boolean;
 
     on_dragover: (event: DragEvent) => void;
     on_dragleave: (event: DragEvent) => void;

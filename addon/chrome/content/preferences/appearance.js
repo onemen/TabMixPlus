@@ -8,7 +8,7 @@ var gAppearancePane = {
     if (browserWindow.Tabmix.tabsUtils.isVerticalTabBar) {
       const description = document.getElementById("treeStyleTab.msg");
       Tabmix.setItem(description, "hidden", null);
-      if (browserWindow.gBrowser.tabContainer._verticalTabs) {
+      if (browserWindow.gBrowser.tabContainer.verticalMode) {
         description.innerHTML = "These preferences are not in use for vertical tabs.";
         description.style.width = "25em";
       }
@@ -23,7 +23,7 @@ var gAppearancePane = {
     }
 
     if (
-      browserWindow.gBrowser.tabContainer._verticalTabs &&
+      browserWindow.gBrowser.tabContainer.verticalMode &&
       browserWindow.Tabmix.tabsUtils.isVerticalTabs
     ) {
       Tabmix.setItem("newTabButton.position", "hidden", true);

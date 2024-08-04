@@ -50,7 +50,7 @@ var TMP_tabDNDObserver = {
     )._replace(
       `if (${Tabmix.isVersion(1300) ? "screen" : "screenX"} > tabCenter) {`,
       `let midWidth = tabs[mid].getBoundingClientRect().width;
-        if (!this._verticalTabs && tabmixHandleMove && referenceTabWidth > midWidth) {
+        if (!this.verticalMode && tabmixHandleMove && referenceTabWidth > midWidth) {
           _screenX += midWidth / 2;
           if (_screenX > tabCenter + referenceTabWidth / 2) {
             high = mid - 1;
@@ -75,7 +75,7 @@ var TMP_tabDNDObserver = {
         'let shiftSize = tabSize * movingTabs.length;',
         `$&
          let rightTabWidth, leftTabWidth, referenceTabWidth;
-         if (!this._verticalTabs) {
+         if (!this.verticalMode) {
            shiftSize = Tabmix.getMovingTabsWidth(movingTabs);
            draggedTab._dragData.shiftWidth = shiftSize;
            rightTabWidth = movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
@@ -84,13 +84,13 @@ var TMP_tabDNDObserver = {
          }`
       )._replace(
         '(firstMovingTabScreen + tabSize)',
-        `(firstMovingTabScreen + (this._verticalTabs ? tabSize : rightTabWidth))`
+        `(firstMovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth))`
       )._replace(
         /let firstTabCenter =.*;/,
-        `let firstTabCenter = lastMovingTabScreen + translate + (this._verticalTabs ? tabSize / 2 : leftTabWidth / 2);`
+        `let firstTabCenter = lastMovingTabScreen + translate + (this.verticalMode ? tabSize / 2 : leftTabWidth / 2);`
       )._replace(
         /let lastTabCenter =.*;/,
-        `let lastTabCenter = firstMovingTabScreen + translate + (this._verticalTabs ? tabSize / 2 : rightTabWidth / 2);`,
+        `let lastTabCenter = firstMovingTabScreen + translate + (this.verticalMode ? tabSize / 2 : rightTabWidth / 2);`,
       ).toCode();
     } else {
       _animateTabMove._replace(
@@ -145,7 +145,7 @@ var TMP_tabDNDObserver = {
       {check: !Tabmix.isVersion(1300)}
     )._replace(
       /ind\.style\.transform\s=[^;]*;/,
-      `ind.style.transform = this._verticalTabs
+      `ind.style.transform = this.verticalMode
          ? "translateY(" + Math.round(newMargin) + "px)"
          : "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";`,
       {check: Tabmix.isVersion(1300)}
@@ -181,7 +181,7 @@ var TMP_tabDNDObserver = {
     )._replace(
       Tabmix.isVersion(1300) ? 'if (oldTranslate && oldTranslate' : 'if (oldTranslateX && oldTranslateX',
       `let refTab = this.allTabs[dropIndex];
-       if (!this._verticalTabs && refTab) {
+       if (!this.verticalMode && refTab) {
          let firstMovingTab = RTL_UI ? movingTabs[movingTabs.length - 1] : movingTabs[0];
            _newTranslateX = RTL_UI && dropIndex < firstMovingTab._tPos || !RTL_UI && dropIndex > firstMovingTab._tPos
              ? refTab.screenX + refTab.getBoundingClientRect().width - firstMovingTab.screenX - draggedTab._dragData.shiftWidth

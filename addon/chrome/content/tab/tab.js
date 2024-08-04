@@ -438,14 +438,14 @@ Tabmix.tabsUtils = {
       // clicking on this area should be tarted as a click on the tabbar
       // and sent to event TabmixTabClickOptions
       window.SidebarController.promiseInitialized.then(() => {
-        if (this.tabBar._verticalTabs) {
+        if (this.tabBar.verticalMode) {
           Tabmix.tabsUtils.initializeTabmixUI();
         }
         const sidebarMain = document.querySelector("sidebar-main");
         const sidebar = sidebarMain?.shadowRoot?.querySelector("button-group");
         this.handleSidebarEvent = event => {
           const isSidebarButton = event.originalTarget.closest("button");
-          if (this.tabBar._verticalTabs && !isSidebarButton) {
+          if (this.tabBar.verticalMode && !isSidebarButton) {
             this.handleEvent(event);
           }
         };
@@ -547,7 +547,7 @@ Tabmix.tabsUtils = {
   handleEvent(aEvent) {
     switch (aEvent.type) {
       case "dblclick":
-        if (!this.tabBar._verticalTabs && Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
+        if (!this.tabBar.verticalMode && Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
             Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") &&
             !TabmixSvc.isMac && aEvent.target.localName === "arrowscrollbox") {
           let displayAppButton = !document.getElementById("titlebar").hidden;
@@ -2307,7 +2307,7 @@ window.gTMPprefObserver = {
   },
 
   changeNewTabButtonSide(aPosition) {
-    if (gBrowser.tabContainer._verticalTabs && Tabmix.tabsUtils.isVerticalTabs) {
+    if (gBrowser.tabContainer.verticalMode && Tabmix.tabsUtils.isVerticalTabs) {
       aPosition = 1;
     }
     let $ = id => document.getElementById(id);
@@ -2366,7 +2366,7 @@ window.gTMPprefObserver = {
       attrValue = null;
     } else if (
       aPosition == 1 ||
-      gBrowser.tabContainer._verticalTabs && Tabmix.tabsUtils.isVerticalTabs
+      gBrowser.tabContainer.verticalMode && Tabmix.tabsUtils.isVerticalTabs
     ) {
       attrValue = "right-side";
     } else if (aPosition === 0) {
