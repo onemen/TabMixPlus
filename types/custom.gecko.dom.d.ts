@@ -96,6 +96,7 @@ interface GetByMap {
   "fullscr-bottom-toggler": HTMLElement & {initialized: boolean};
   "tabmix-bottom-toolbox": HTMLElement;
   reloadevery_custom_dialog: HTMLDialogElement;
+  cmd_newNavigatorTab: HTMLButtonElement;
 }
 
 interface CustomSearchbar extends HTMLInputElement {
@@ -121,7 +122,7 @@ interface HTMLCollection_G<T, K> extends HTMLCollectionBase_G<T> {
 }
 
 interface ParentNode {
-  getElementsByAttribute<K extends keyof GetByMap>(name: "anonid", value: K): HTMLCollection_G<GetByMap[K], K> | null;
+  getElementsByAttribute<K extends keyof GetByMap>(name: "anonid" | "command", value: K): HTMLCollection_G<GetByMap[K], K> | null;
   getElementsByAttribute<K extends keyof GetByMap>(name: K, value: string): HTMLCollection_G<GetByMap[K], K> | null;
   getElementsByClassName<K extends keyof GetByMap>(name: K): HTMLCollection_G<GetByMap[K], K> | null;
   _getElementById<K extends keyof GetByMap | string>(selectors: K): K extends keyof GetByMap ? GetByMap[K] : HTMLElement | null;

@@ -144,83 +144,12 @@ declare namespace TabmixNS {
   function destroy(): void;
 
   // imported from log.jsm
-  function log(aMessage: string, aShowCaller: boolean, offset?: number, caller?: {filename: string; lineNumber: number; columnNumber: number}): void;
+  function assert(aError: unknown, aMsg?: string): void;
+  function log(aMessage: string, aShowCaller?: boolean, offset?: number, caller?: {filename: string; lineNumber: number; columnNumber: number}): void;
   function clog(aMessage: string, caller?: {filename: string; lineNumber: number; columnNumber: number}): void;
   function getObject(aWindow: Window, aMethod: string): any;
-
-  // from changedcode
-  // TODO: fix returned type
-  const _debugMode: boolean;
-  const _localMakeCode: string;
-  function _makeCode(name: string | null, code: string): typeof Function;
-  function changeCode(aParent: any, afnName: string, aOptions: any): any;
-  function nonStrictMode(aObj: any, aFn: any, aArg: any): void;
-  function setNewFunction(aObj: any, aName: string, aCode: string): void;
-  // TODO: check if it's needed
-  function toCode(): any;
-
-  // tabmix.js
-  let _lastTabOpenedTime: number;
-  const _deferredInitialized: {
-    promise: Promise<void>;
-    resolve: typeof Promise.resolve;
-    reject: typeof Promise.reject;
-  };
-  const initialization: typeof TabmixInitialization;
-  let isFirstWindow: boolean;
-  let selectedTab: MockedGeckoTypes.BrowserTab;
-  const singleWindowMode: boolean;
-  let tabsNewtabButton: HTMLButtonElement;
-  let userTypedValue: string;
-  function afterDelayedStartup(): void;
-  function beforeDelayedStartup(): void;
-  function getAfterTabsButtonsWidth(): void;
-  function sessionInitialized(): void;
-  function startup(): void;
-
-  // click.js
-  function openInverseLink(ev: any): void;
-  const allTabs: typeof AllTabs;
-
-  // tab.js
-  let contextMenuLinks: HTMLLinkElement[];
-  const tabsUtils: typeof TabsUtils;
-
-  // userinterface.js
-  function setTabStyle(aTab: MockedGeckoTypes.BrowserTab, boldChanged: boolean): void;
-
-  // contants
-  const CHECKBOX_CHECKED: number;
 }
 
-declare namespace AllTabs {
-  function init(): void;
-}
-
-type InitializationStep = {id: number; obj: string};
-declare namespace TabmixInitialization {
-  const init: InitializationStep;
-  const beforeStartup: InitializationStep;
-  const onContentLoaded: InitializationStep;
-  const beforeBrowserInitOnLoad: InitializationStep;
-  const onWindowOpen: InitializationStep;
-  const afterDelayedStartup: InitializationStep;
-  // TODO: check if there is spacial type for getter in namespace
-  function isValidWindow(): boolean;
-  function run(aPhase: number): any;
-}
-
-declare namespace TabsUtils {
-  const initialized: false;
-  const _tabmixPositionalTabs: {
-    beforeSelectedTab?: MockedGeckoTypes.BrowserTab;
-    afterSelectedTab?: MockedGeckoTypes.BrowserTab;
-    beforeHoveredTab?: MockedGeckoTypes.BrowserTab;
-    afterHoveredTab?: MockedGeckoTypes.BrowserTab;
-  };
-}
-
-// type TabmixTypes = Partial<typeof TabmixNS> & {[key: string]: any};
 type TabmixTypes = Partial<typeof TabmixNS>;
 
 declare namespace TabmixModules {

@@ -4,6 +4,7 @@
 ChromeUtils.defineModuleGetter(Tabmix, "ContextMenu",
   "chrome://tabmix-resource/content/ContextMenu.jsm");
 
+/** @type {TabmixTabClickOptions} */
 var TabmixTabClickOptions = {
   _tabFlipTimeOut: null,
   _blockDblClick: false,
@@ -392,6 +393,7 @@ var TabmixTabClickOptions = {
   },
 };
 
+/** @type {TabmixContext} */
 var TabmixContext = {
   // Create new items in the tab bar context menu
   buildTabContextMenu: function TMP_buildTabContextMenu() {
@@ -1044,6 +1046,7 @@ Tabmix.allTabs = {
 };
 
 // for all tabs popup lists
+/** @type {TabmixAllTabs} */
 var TabmixAllTabs = {
   _selectedItem: null,
   _popup: null,

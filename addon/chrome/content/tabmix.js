@@ -111,7 +111,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
       if (openNewPrivateTabRect.right > openNewTabRect.right)
         this.tabsNewtabButton = openNewPrivateTab;
     }
-    this.tabsNewtabButton.removeAttribute("force-display", true);
+    this.tabsNewtabButton.removeAttribute("force-display");
     if (stripIsHidden) {
       toolbar.collapsed = toolbarCollapsed;
       tabBar.collapsed = tabBarCollapsed;
@@ -1197,6 +1197,7 @@ Tabmix.initialization = {
 
 // A promise resolved once initialization is complete
 Tabmix._deferredInitialized = (function() {
+  /** @type {DefferedPromise} */
   let deferred = {};
 
   deferred.promise = new Promise((resolve, reject) => {
