@@ -475,6 +475,10 @@ var TabmixContext = {
     // move tm-content-miscSep to its place (Firefox 32+)
     let sep = $id("tm-content-miscSep");
     sep.parentNode.insertBefore(sep, $id("tm-content-closetab"));
+
+    if (!Tabmix.isVersion(880)) {
+      this._showHideSeparators.push("contentAreaContextMenu");
+    }
   },
 
   updateTabbarContextMenu(show) {
@@ -712,12 +716,16 @@ var TabmixContext = {
   },
 
   /**
-   *  don't show 2 menuseparator together
+   * don't show 2 menuseparator together
    * this function is call by "popupshown" event
    * this is only for the case that other extensions popupshowing run after our TabmixContextMenu.updateTabContextMenu
    */
+  _showHideSeparators: ["tabContextMenu"],
   contextMenuShown(event, id = event?.originalTarget?.id) {
-    if (!["contentAreaContextMenu", "tabContextMenu"].includes(id)) {
+    if (!this._showHideSeparators.includes(id)) {
+      if (id === "contentAreaContextMenu") {
+        document.getElementById(id).showHideSeparators();
+      }
       return;
     }
     const contextMenu = document.getElementById(id);
