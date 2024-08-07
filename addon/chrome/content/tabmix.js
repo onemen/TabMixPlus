@@ -568,10 +568,11 @@ var TMP_eventListener = {
     // update tooltip for tabmix-tabs-closebutton
     const closeButton = document.getElementById("tabmix-tabs-closebutton");
     if (Tabmix.isVersion(1090)) {
-      document.l10n.setAttributes(closeButton, "tabbrowser-close-tabs-tooltip", {tabCount: 1});
+      const [l10Id, attrName] = Tabmix.isVersion(1310) ? ["tabbrowser-close-tabs-button", "tooltiptext"] : ["tabbrowser-close-tabs-tooltip", "label"];
+      document.l10n.setAttributes(closeButton, l10Id, {tabCount: 1});
       document.l10n.translateElements([closeButton]).then(() => {
         closeButton.removeAttribute("data-l10n-id");
-        closeButton.setAttribute("tooltiptext", closeButton.getAttribute("label"));
+        closeButton.setAttribute("tooltiptext", closeButton.getAttribute(attrName));
       });
     } else {
       closeButton.setAttribute("tooltiptext",
