@@ -433,26 +433,6 @@ Tabmix.tabsUtils = {
 
   init() {
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, true, this);
-    if (Tabmix.isVersion(1300) && window.SidebarController.sidebarRevampEnabled) {
-      // handle click/dblclick event on the empty space below the tabs,
-      // clicking on this area should be tarted as a click on the tabbar
-      // and sent to event TabmixTabClickOptions
-      window.SidebarController.promiseInitialized.then(() => {
-        if (this.tabBar.verticalMode) {
-          Tabmix.tabsUtils.initializeTabmixUI();
-        }
-        const sidebarMain = document.querySelector("sidebar-main");
-        const sidebar = sidebarMain?.shadowRoot?.querySelector("button-group");
-        this.handleSidebarEvent = event => {
-          const isSidebarButton = event.originalTarget.closest("button");
-          if (this.tabBar.verticalMode && !isSidebarButton) {
-            this.handleEvent(event);
-          }
-        };
-        TMP_eventListener.toggleEventListener(sidebar, this.events, true, this.handleSidebarEvent);
-      });
-    }
-
     if (this.initialized) {
       Tabmix.log("initializeTabmixUI - some extension initialize tabbrowser-tabs binding again");
       this.initializeTabmixUI();
@@ -536,11 +516,6 @@ Tabmix.tabsUtils = {
     if (!this.initialized)
       return;
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, false, this);
-    if (this.handleSidebarEvent) {
-      const sidebarMain = document.querySelector("sidebar-main");
-      const sidebar = sidebarMain?.shadowRoot?.querySelector("button-group");
-      TMP_eventListener.toggleEventListener(sidebar, this.events, false, this.handleSidebarEvent);
-    }
     this._tabmixPositionalTabs = null;
   },
 

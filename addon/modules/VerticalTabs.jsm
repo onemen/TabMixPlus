@@ -14,69 +14,24 @@ TabmixChromeUtils.defineLazyModuleGetters(lazy, {
 });
 
 var VerticalTabs = {
-  init(window) {
+  init() {
     if (this._initialized) {
       return;
     }
     this._initialized = true;
 
-    this.onBeforeBrowserWindowShown(window);
-
     Services.prefs.addObserver("sidebar.verticalTabs", this);
-    Services.obs.addObserver(this, "browser-window-before-show");
     Services.obs.addObserver(this, "quit-application");
   },
 
   observe(subject, topic, data) {
     switch (topic) {
-      case "browser-window-before-show":
-        this.onBeforeBrowserWindowShown(subject);
-        break;
       case "nsPref:changed":
         this.onPrefChange(data);
         break;
       case "quit-application":
         this.onQuitApplication();
         break;
-    }
-  },
-
-  onBeforeBrowserWindowShown(window) {
-    if (window._tabmix_windowIsClosing) {
-      // we close window on singleWindowMode
-      return;
-    }
-    // this is a workaround until Firefox stop calling SidebarController.toggleTabstrip
-    // when revamp did not loaded.
-    const {SidebarController, Tabmix} = window;
-    if (!SidebarController.revampComponentsLoaded) {
-      // when `addObserver` is missing then the getter was already used and the
-      // observer will always call the original function
-      const isLazyGetter = SidebarController.__lookupGetter__("sidebarVerticalTabsEnabled")
-          .toString()
-          .includes("addObserver");
-      if (!isLazyGetter) {
-        return;
-      }
-
-      Tabmix.originalFunctions.SidebarController_toggleTabstrip = SidebarController.toggleTabstrip;
-      SidebarController.toggleTabstrip = function(...args) {
-        if (!SidebarController.revampComponentsLoaded) {
-          // block original function if the sidebar did not initialized
-          return;
-        }
-        Tabmix.originalFunctions.SidebarController_toggleTabstrip.apply(this, args);
-      };
-      // reset LazyPreferenceGetter
-      delete SidebarController.sidebarVerticalTabsEnabled;
-      const {XPCOMUtils} = ChromeUtils.importESModule("resource://gre/modules/XPCOMUtils.sys.mjs");
-      XPCOMUtils.defineLazyPreferenceGetter(
-        window.SidebarController,
-        "sidebarVerticalTabsEnabled",
-        "sidebar.verticalTabs",
-        false,
-        window.SidebarController.toggleTabstrip.bind(window.SidebarController)
-      );
     }
   },
 
@@ -130,7 +85,6 @@ var VerticalTabs = {
 
   onQuitApplication() {
     Services.prefs.removeObserver("sidebar.verticalTabs", this);
-    Services.obs.removeObserver(this, "browser-window-before-show");
     Services.obs.removeObserver(this, "quit-application");
   },
 };
