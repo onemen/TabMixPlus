@@ -186,13 +186,14 @@ const ScriptsLoader = {
       }
     });
 
+    await Tabmix._deferredInitialized.promise;
+
     // verify our scroll buttons are visible on overflow
     if (isOverflow) {
       Tabmix.tabsUtils.updateVerticalTabStrip();
     }
 
     // update tabs title
-    await Tabmix._deferredInitialized.promise;
     gBrowser.tabs.forEach(tab => {
       const url = lazy.SessionStore.getLazyTabValue(tab, "url") || tab.linkedBrowser.currentURI.spec;
       TMP_Places.asyncSetTabTitle(tab, url);

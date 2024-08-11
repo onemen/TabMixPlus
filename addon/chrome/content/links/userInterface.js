@@ -393,7 +393,7 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
     style = aTab.pinned || aTab.hasAttribute("visited") ||
       TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
   } else if (!isSelected && Tabmix.prefs.getBoolPref("unreadTab") &&
-      !aTab.hasAttribute("visited") && !aTab.isEmpty) {
+      !aTab.hasAttribute("visited") && Boolean(aTab.linkedBrowser.browsingContext) && !aTab.isEmpty) {
     style = "unread";
   }
 
