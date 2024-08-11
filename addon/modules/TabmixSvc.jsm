@@ -442,4 +442,12 @@ TabmixChromeUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
   return this.SessionStoreGlobal.SessionStoreInternal;
 });
 
+TabmixChromeUtils.defineLazyGetter(TabmixSvc.sm, "TAB_STATE_NEEDS_RESTORE", () => {
+  return TabmixSvc.SessionStoreGlobal.TAB_STATE_NEEDS_RESTORE;
+});
+
+TabmixChromeUtils.defineLazyGetter(TabmixSvc.sm, "TAB_STATE_RESTORING", () => {
+  return TabmixSvc.SessionStoreGlobal.TAB_STATE_RESTORING;
+});
+
 TabmixSvc.loadDefaultPreferences();

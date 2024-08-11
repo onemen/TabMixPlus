@@ -1774,7 +1774,7 @@ Tabmix.tablib = {
       return;
 
     if (aBrowser.getAttribute("remote") == "true" &&
-        aBrowser.__SS_restoreState == 2 &&
+        aTab._restoreState == 2 &&
         this.labels.indexOf(aTab.label) > -1) {
       return;
     }
@@ -1946,7 +1946,7 @@ Tabmix.tablib = {
     let l = tabs.length;
     for (let i = 0; i < l; i++) {
       let tab = tabs[i];
-      if (tab != skipTab && tab.linkedBrowser.__SS_restoreState != 2) {
+      if (tab != skipTab && tab._restoreState != 2) {
         try {
           tab.linkedBrowser.reload();
         } catch {}

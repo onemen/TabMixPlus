@@ -3300,8 +3300,9 @@ TabmixSessionManager = {
     if (overwrite) {
       for (let i = 0; i < gBrowser.tabs.length; i++) {
         let tab = gBrowser.tabs[i];
-        if (gBrowser.browsers[i].__SS_restoreState)
+        if (tab._restoreState) {
           TabmixSvc.SessionStore._resetTabRestoringState(tab);
+        }
       }
     }
     TabmixSvc.SessionStore.restoreTabs(window, tabs, tabsData, 0);

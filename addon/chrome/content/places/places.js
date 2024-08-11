@@ -380,7 +380,7 @@ var TMP_Places = {
     this.bookmarksOnDemand = restoreOnDemand;
 
     tabs.forEach(tab => {
-      if (tab.linkedBrowser.__SS_restoreState) {
+      if (tab._restoreState) {
         TabmixSvc.SessionStore._resetTabRestoringState(tab);
       }
     });
@@ -411,7 +411,7 @@ var TMP_Places = {
   restoringTabs: [],
 
   resetRestoreState(tab) {
-    if (tab.linkedBrowser.__SS_restoreState) {
+    if (tab._restoreState) {
       TabmixSvc.SessionStore._resetTabRestoringState(tab);
     }
     this.updateRestoringTabsList(tab);

@@ -201,8 +201,9 @@ var TabmixTabClickOptions = {
         Tabmix.duplicateTab(aTab);
         break;
       case 4:
-        if (aTab.linkedBrowser.__SS_restoreState != 2)
+        if (aTab._restoreState != 2) {
           gBrowser.reloadTab(aTab);
+        }
         break;
       case 5:
         gBrowser.protectTab(aTab);

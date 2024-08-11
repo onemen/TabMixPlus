@@ -139,6 +139,8 @@ declare namespace TabmixModules {
     SessionStoreGlobal: any;
     skipSingleWindowModeCheck: boolean;
     sm: {
+      TAB_STATE_NEEDS_RESTORE: number;
+      TAB_STATE_RESTORING: number;
       crashed: boolean;
       lastSessionPath: string | null;
       settingPreference: boolean;

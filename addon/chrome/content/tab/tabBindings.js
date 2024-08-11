@@ -165,7 +165,15 @@
           const {height, y} = this.getBoundingClientRect();
           return height + y;
         }
-      }
+      },
+      '_restoreState': {
+        get() {
+          if (this.hasAttribute("pending") || this.hasAttribute("tabmix_pending")) {
+            return TabmixSvc.sm.TAB_STATE_NEEDS_RESTORE;
+          }
+          return SessionStore.getInternalObjectState(this.linkedBrowser);
+        }
+      },
     });
 
     /**
