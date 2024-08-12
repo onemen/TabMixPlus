@@ -12,8 +12,7 @@
     <menupopup id="tabContextMenu">
         <menuitem id="context_openANewTab" insertbefore="context_reloadTab"
                  _afterthis="(&afterthis.label;)"
-                 tmp_iconic="menuitem-iconic tabmix-newtab-menu-icon menuitem-with-favicon"
-                 oncommand="Tabmix.BrowserOpenTab();"/>
+                 tmp_iconic="menuitem-iconic tabmix-newtab-menu-icon menuitem-with-favicon"/>
         <menuitem id="tm-duplicateinWin" insertafter="context_duplicateTabs"
                  label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"
                  oncommand="gBrowser.duplicateTabsToWindow(TabContextMenu.contextTab);"/>
@@ -108,7 +107,6 @@
         <menuitem id="tm-closeSimilar" insertbefore="context_closeOtherTabs"
                  label="&closeSimilarTab.label;" accesskey="&closeSimilarTab.accesskey;"
                  oncommand="gBrowser.closeGroupTabs(TabContextMenu.contextTab);"/>
-        <menuitem id="context_undoCloseTab" oncommand="TMP_ClosedTabs.undoCloseTab();"/>
 
         <menuseparator id="tabmix_closeTab_separator" insertbefore="context_undoCloseTab" type="tabmix"/>
         <menu id="tm-docShell" insertbefore="context_undoCloseTab"

@@ -421,7 +421,7 @@ var TabmixContext = {
     if (Tabmix.isVersion(940)) {
       tabContextMenu.addEventListener("popupshowing", () => {
         openTab.setAttribute("_newtab", openTab.getAttribute("label"));
-        if (Tabmix.isVersion(1150)) {
+        if (Tabmix.isVersion(1150) && !Tabmix.isVersion(1290)) {
           openTab.setAttribute("oncommand", "Tabmix.BrowserOpenTab({ event });");
         }
       }, {once: true});
@@ -433,6 +433,7 @@ var TabmixContext = {
       const label = element.getAttribute("label");
       openTab.setAttribute("label", label);
       openTab.setAttribute("_newtab", label);
+      openTab.setAttribute("oncommand", "Tabmix.BrowserOpenTab();");
     }
 
     if (!Tabmix.isVersion(880)) {
@@ -545,7 +546,7 @@ var TabmixContext = {
         TabContextMenu.contextTab = triggerNode.tab;
       }
     }
-    let multiselectionContext = TabContextMenu.contextTab.multiselected;
+    let multiselectionContext = TabContextMenu.contextTab?.multiselected;
 
     const clickOutTabs = triggerNode && triggerNode.localName == "tabs";
     var aTab = clickOutTabs ? gBrowser.selectedTab : TabContextMenu.contextTab;
@@ -554,12 +555,14 @@ var TabmixContext = {
 
     const newTab = document.getElementById("context_openANewTab");
     Tabmix.showItem(newTab, Tabmix.prefs.getBoolPref("newTabMenu"));
-    if (clickOutTabs) {
-      Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab"));
-      Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab();");
-    } else {
-      Tabmix.setItem(newTab, "label", newTab.getAttribute("_newtab") + "  " + newTab.getAttribute("_afterthis"));
-      Tabmix.setItem(newTab, "oncommand", `TMP_BrowserOpenTab(${Tabmix.isVersion(1150) ? `{}` : `null`}, TabContextMenu.contextTab);`);
+    const newTabMenuLabel = newTab.getAttribute("_newtab") + (clickOutTabs ? "" : "  " + newTab.getAttribute("_afterthis"));
+    Tabmix.setItem(newTab, "label", newTabMenuLabel);
+    if (!Tabmix.isVersion(1290)) {
+      if (clickOutTabs) {
+        Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab();");
+      } else {
+        Tabmix.setItem(newTab, "oncommand", `TMP_BrowserOpenTab(${Tabmix.isVersion(1150) ? `{}` : `null`}, TabContextMenu.contextTab);`);
+      }
     }
 
     // Duplicate Commands

@@ -277,8 +277,9 @@ declare namespace MockedGeckoTypes {
     _selectedTab: BrowserTab;
     _setTabLabel: (tab: BrowserTab, label: string, options?: {beforeTabOpen?: boolean; isContentTitle?: boolean; isURL?: boolean}) => boolean;
     _tabAttrModified: (tab: BrowserTab, changed: string[]) => void;
-    addTab: (url: string, params?: {index?: number; isPending?: boolean} | Record<string, unknown>) => BrowserTab;
+    addAdjacentNewTab: (tab: BrowserTab) => void;
     addRangeToMultiSelectedTabs: (start: BrowserTab, end: BrowserTab) => void;
+    addTab: (url: string, params?: {index?: number; isPending?: boolean} | Record<string, unknown>) => BrowserTab;
     addToMultiSelectedTabs: (tab: BrowserTab) => BrowserTab;
     addTrustedTab: (aURI: string, params?: Params) => BrowserTab;
     browsers: ChromeBrowser[];

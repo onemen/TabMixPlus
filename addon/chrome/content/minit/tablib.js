@@ -207,6 +207,13 @@ Tabmix.tablib = {
       return t;
     };
 
+    if (Tabmix.isVersion(1290)) {
+      // this function is triggered by "context_openANewTab" command
+      gBrowser.addAdjacentNewTab = function(tab) {
+        TMP_BrowserOpenTab({}, tab);
+      };
+    }
+
     Tabmix.changeCode(gBrowser, "gBrowser._insertTabAtIndex")._replace(
       /(?<!else )if \(openerTab\) \{/,
       'if (openerTab && Tabmix.prefs.getBoolPref("openTabNextInverse")) {'
