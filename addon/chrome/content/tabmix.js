@@ -1054,6 +1054,10 @@ var TMP_eventListener = {
       aEvent.stopPropagation();
       aEvent.preventDefault();
 
+      if (!Tabmix.tabsUtils.overflow) {
+        return;
+      }
+
       if (orient == "vertical") {
         scrollByDelta(direction, false);
       } else {

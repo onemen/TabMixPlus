@@ -107,7 +107,7 @@
                       preference="pref_reversescrolling" observes="obs_tabbarscrolling"/>
             <separator class="thin"/>
             <hbox align="center">
-              <checkbox_tmp label="Enable `Scroll by Tabs`" id="useScrollByTabs" preference="pref_useScrollByTabs"/>
+              <checkbox_tmp label="Enable `Scroll by Tabs`" id="useScrollByTabs" preference="pref_useScrollByTabs" observes="obs_tabbarscrolling"/>
               <label value="Scroll by" observes="obs_useScrollByTabs"/>
               <html:input id="tabFlipDelay" size="2" maxlength="2" preference="pref_scrollByTabs" observes="obs_useScrollByTabs"
                           type="number" required="required" min="1" max="6"
