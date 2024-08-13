@@ -278,13 +278,14 @@ var TMP_Places = {
         tabPos = aTab._tPos < index ? index - 1 : index;
         gBrowser.moveTabTo(aTab, tabPos);
       } else {
+        let oa = Tabmix.isVersion(860) ? E10SUtils.predictOriginAttributes({window}) : {};
         let preferredRemoteType = E10SUtils.getRemoteTypeForURI(
           url,
           gMultiProcessBrowser,
           gFissionBrowser,
           E10SUtils.DEFAULT_REMOTE_TYPE,
           null,
-          E10SUtils.predictOriginAttributes({window})
+          oa
         );
         let params = {
           skipAnimation: multiple,
