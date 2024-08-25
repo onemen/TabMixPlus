@@ -4,6 +4,11 @@ const EXPORTED_SYMBOLS = ["console"];
 
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 
+const lazy = {};
+
+ChromeUtils.defineModuleGetter(lazy, "ContentSvc",
+  "chrome://tabmix-resource/content/ContentSvc.jsm");
+
 var gNextID = 1;
 
 const console = {
@@ -40,6 +45,7 @@ const console = {
       if (typeof aDelay == "undefined")
         aDelay = 500;
 
+      const caller = this.caller;
       let logMethod = () => {
         let result = "", isObj = typeof aMethod == "object";
         if (typeof aMethod != "function") {
@@ -47,7 +53,7 @@ const console = {
             this.getObject(aWindow, aMethod);
           result = " = " + result.toString();
         }
-        this.clog((isObj ? aMethod.fullName : aMethod) + result, this.caller);
+        this.clog((isObj ? aMethod.fullName : aMethod) + result, caller);
       };
 
       if (aDelay >= 0) {
@@ -357,8 +363,13 @@ const console = {
       caller = this.caller;
     let {filename, lineNumber, columnNumber} = caller;
     let consoleMsg = Cc["@mozilla.org/scripterror;1"].createInstance(Ci.nsIScriptError);
-    consoleMsg.init("Tabmix" + msg, filename, null, lineNumber, columnNumber,
-      Ci.nsIScriptError[flag], "component javascript");
+    if (lazy.ContentSvc.version(1300)) {
+      consoleMsg.init("Tabmix" + msg, filename, lineNumber, columnNumber,
+        Ci.nsIScriptError[flag], "component javascript");
+    } else {
+      consoleMsg.init("Tabmix" + msg, filename, null, lineNumber, columnNumber,
+        Ci.nsIScriptError[flag], "component javascript");
+    }
     Services.console.logMessage(consoleMsg);
   },
 
