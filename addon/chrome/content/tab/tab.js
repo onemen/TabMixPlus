@@ -1785,6 +1785,13 @@ window.gTMPprefObserver = {
       );
     }
 
+    if (Tabmix.isVersion(1310)) {
+      const htmlSlot = gBrowser.tabContainer.arrowScrollbox.scrollbox.firstChild;
+      if (htmlSlot) {
+        htmlSlot.style.flexWrap = "inherit";
+      }
+    }
+
     this.dynamicProtonRules();
     this.toolbarbuttonTopMargin();
     this.overflowIndicator();

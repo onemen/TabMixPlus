@@ -27,7 +27,6 @@ Tabmix.multiRow = {
         }
         this.tabmixInitialized = true;
 
-        this.blockUnderflow = false;
         this._scrollButtonUpLeft = this.shadowRoot.getElementById("scrollbutton-up");
         this._scrollButtonDownLeft = this.shadowRoot.getElementById("scrollbutton-down");
         this.scrollboxPaddingTop = parseFloat(window.getComputedStyle(this.scrollbox).paddingTop);
@@ -43,10 +42,47 @@ Tabmix.multiRow = {
         this.minOffset = 50;
         this.firstVisible = {tab: null, x: 0, y: 0};
 
-        this.scrollbox.addEventListener("underflow", event => {
+        let overflowTarget = this.scrollbox;
+        if (Tabmix.isVersion(1310)) {
+          // eslint-disable-next-line consistent-this
+          overflowTarget = this;
+          const slot = this.shadowRoot.querySelector("slot");
+          // modify MozArrowScrollbox _overflowObserver to handle multi-row
+          const tabmixOverflowObserver1 = new ResizeObserver(_ => {
+            const contentSize =
+              slot.getBoundingClientRect()[this._verticalMode ? "height" : "width"];
+            // NOTE(emilio): This should be contentSize > scrollClientSize, but due
+            // to how Gecko internally rounds in those cases, we allow for some
+            // minor differences (the internal Gecko layout size is 1/60th of a
+            // pixel, so 0.02 should cover it).
+            const scrollClientSize =
+              this.scrollbox[this._verticalMode ? "clientHeightDouble" : "clientWidthDouble"];
+            const overflowing = contentSize - scrollClientSize > 0.02;
+            if (overflowing == this.hasAttribute("overflowing")) {
+              if (overflowing) {
+                // Update scroll buttons' disabled state when the slot or scrollbox
+                // size changes while we were already overflowing.
+                this._updateScrollButtonsDisabledState();
+              }
+              return;
+            }
+            window.requestAnimationFrame(() => {
+              this.toggleAttribute("overflowing", overflowing);
+              this._updateScrollButtonsDisabledState();
+              this.dispatchEvent(
+                new CustomEvent(overflowing ? "overflow" : "underflow")
+              );
+            });
+          });
+          tabmixOverflowObserver1.observe(slot);
+          tabmixOverflowObserver1.observe(this.scrollbox);
+        }
+
+        overflowTarget.addEventListener("underflow", event => {
           // filter underflow events which were dispatched on nested scrollboxes
-          if (event.originalTarget !== this.scrollbox)
+          if (event.originalTarget !== overflowTarget) {
             return;
+          }
 
           // Ignore events that doesn't match our orientation.
           // Scrollport event orientation:
@@ -57,8 +93,7 @@ Tabmix.multiRow = {
             if (event.detail === 1) {
               return;
             }
-          } else if (event.detail === 0 && !this.isMultiRow || this.blockUnderflow) {
-            this.blockUnderflow = false;
+          } else if (event.detail === 0 && !this.isMultiRow) {
             return;
           }
 
@@ -75,10 +110,11 @@ Tabmix.multiRow = {
           }
         }, true);
 
-        this.scrollbox.addEventListener("overflow", event => {
+        overflowTarget.addEventListener("overflow", event => {
           // filter overflow events which were dispatched on nested scrollboxes
-          if (event.originalTarget !== this.scrollbox)
+          if (event.originalTarget !== overflowTarget) {
             return;
+          }
 
           // Ignore events that doesn't match our orientation.
           // Scrollport event orientation:
@@ -174,7 +210,7 @@ Tabmix.multiRow = {
                     } else $&`,
           {check: !Tabmix.isVersion(1020)}
         )._replace(
-          'if (scrolledToEnd) {',
+          Tabmix.isVersion(1310) ? 'this.toggleAttribute("scrolledtoend", scrolledToEnd);' : 'if (scrolledToEnd) {',
           'let box = document.getElementById("tabmix-scrollbox");' + $LF +
             '  Tabmix.setItem(box, "scrolledtoend", scrolledToEnd || null);' + $LF +
             '  Tabmix.setItem(box, "scrolledtostart", scrolledToStart || null);' + $LF +
@@ -188,6 +224,15 @@ Tabmix.multiRow = {
                   }`
         ).defineProperty();
 
+        const codeToReplace = Tabmix.isVersion(1310) ? 'this.#verticalMode' : 'this.getAttribute("orient") == "vertical"';
+        Tabmix.changeCode(this, "scrollbox.on_touchstart")._replace(
+          codeToReplace, 'this._verticalMode'
+        ).toCode();
+
+        Tabmix.changeCode(this, "scrollbox.on_touchmove")._replace(
+          codeToReplace, 'this._verticalMode'
+        ).toCode();
+
         this._scrollButtonUpLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
         this._scrollButtonDownLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);
         Services.prefs.addObserver("toolkit.scrollbox.", this.tabmixPrefObserver);
@@ -200,14 +245,19 @@ Tabmix.multiRow = {
       }
 
       /** @this {This} */
+      get _verticalMode() {
+        return this.isMultiRow || this.getAttribute("orient") === "vertical";
+      }
+
+      /** @this {This} */
       get startEndProps() {
-        return this.isMultiRow || this.getAttribute("orient") === "vertical" ?
+        return this._verticalMode ?
           ["top", "bottom"] : ["left", "right"];
       }
 
       /** @this {This} */
       get isRTLScrollbox() {
-        return this.isMultiRow || this.getAttribute("orient") === "vertical" ?
+        return this._verticalMode ?
           false : Tabmix.rtl;
       }
 
@@ -217,15 +267,29 @@ Tabmix.multiRow = {
       }
 
       /** @this {This} */
+      get scrollClientSize() {
+        if (
+          Tabmix.isVersion(1310) &&
+          this.isMultiRow &&
+          Tabmix.callerName().startsWith("MozArrowScrollbox/overflowObserver")
+        ) {
+          // prevent MozArrowScrollbox/overflowObserver from changing overflowing state
+          // when we are in isMultiRow mode
+          return this.hasAttribute("overflowing") ? -Infinity : Infinity;
+        }
+        return this.scrollbox[this._verticalMode ? "clientHeightDouble" : "clientWidthDouble"];
+      }
+
+      /** @this {This} */
       get scrollSize() {
-        return this.isMultiRow || this.getAttribute("orient") === "vertical" ?
+        return this._verticalMode ?
           this.scrollbox.scrollHeight :
           this.scrollbox.scrollWidth;
       }
 
       /** @this {This} */
       get scrollPosition() {
-        return this.isMultiRow || this.getAttribute("orient") === "vertical" ?
+        return this._verticalMode ?
           this.scrollbox.scrollTop :
           this.scrollbox.scrollLeft;
       }
@@ -295,7 +359,7 @@ Tabmix.multiRow = {
       }
 
       /** @this {This} */
-      _enterVerticalMode(blockUnderflow) {
+      _enterVerticalMode() {
         // when widthFitTitle is false we enter vertical mode only after we are in overflow
         // if first or last tab is not visible enter vertical mode
         // we can get here from new tabs, window resize tabs change width
@@ -323,9 +387,6 @@ Tabmix.multiRow = {
           const multibar = Tabmix.tabsUtils.updateVerticalTabStrip();
           if (multibar === null) {
             TabmixTabbar._failedToEnterVerticalMode = true;
-          }
-          if (blockUnderflow && multibar) {
-            this.blockUnderflow = true;
           }
           this.updateOverflow(Tabmix.tabsUtils.overflow);
         }
@@ -410,8 +471,12 @@ Tabmix.multiRow = {
         }
 
         Tabmix.setItem(this, "overflowing", overflow || null);
-
         this._updateScrollButtonsDisabledState();
+        if (Tabmix.isVersion(1310) && !overflow) {
+          // we are here before tabmixOverflowObserver
+          this.dispatchEvent(new CustomEvent("underflow"));
+        }
+
         if (!overflow) {
           const childNodes = this._getScrollableElements();
           if (childNodes && childNodes.length) {

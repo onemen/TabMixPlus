@@ -35,7 +35,7 @@
   margin-inline-end: 6px;
 }
 
-#tabmix-scrollbox:not([overflowing="true"]),
+#tabmix-scrollbox:not([overflowing]),
 #tabmix-scrollbox[flowing="singlebar"],
 #tabmix-scrollbox[verticalTabs],
 #tabmix-scrollbox[defaultScrollButtons] {
@@ -70,8 +70,8 @@
   apply #tabbrowser-arrowscrollbox button style to our buttons
   based on browser/themes/shared/toolbarbuttons.inc.css
 */
-#tabmix-scrollbox[scrolledtostart=true]::part(scrollbutton-up),
-#tabmix-scrollbox[scrolledtoend=true]::part(scrollbutton-down) {
+#tabmix-scrollbox[scrolledtostart]::part(scrollbutton-up),
+#tabmix-scrollbox[scrolledtoend]::part(scrollbutton-down) {
   opacity: 0.4;
 }
 
@@ -105,14 +105,14 @@
 }
 } */
 
-#tabmix-scrollbox:not([scrolledtostart=true])::part(scrollbutton-up):hover,
-#tabmix-scrollbox:not([scrolledtoend=true])::part(scrollbutton-down):hover {
+#tabmix-scrollbox:not([scrolledtostart])::part(scrollbutton-up):hover,
+#tabmix-scrollbox:not([scrolledtoend])::part(scrollbutton-down):hover {
   background-color: var(--toolbarbutton-hover-background);
   color: inherit;
 }
 
-#tabmix-scrollbox:not([scrolledtostart="true"])::part(scrollbutton-up):hover:active,
-#tabmix-scrollbox:not([scrolledtoend="true"])::part(scrollbutton-down):hover:active {
+#tabmix-scrollbox:not([scrolledtostart])::part(scrollbutton-up):hover:active,
+#tabmix-scrollbox:not([scrolledtoend])::part(scrollbutton-down):hover:active {
   background-color: var(--toolbarbutton-active-background, var(--toolbarbutton-hover-background));
   color: inherit;
 }

@@ -472,9 +472,6 @@ var TabmixClickEventHandler = {
     // This might be middle mouse navigation, in which case pass this back:
     if (ContentSvc.version(980)) {
       if (!href && event.button == 1 && isFromMiddleMousePasteHandler) {
-        const g = docShell.domWindow.windowGlobalChild.getActor("MiddleMousePasteHandler");
-        console.log(g);
-
         docShell.domWindow.windowGlobalChild.getActor("MiddleMousePasteHandler").onProcessedClick(json);
       }
     } else if (event.button == 1) {

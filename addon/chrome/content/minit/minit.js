@@ -28,6 +28,21 @@ var TMP_tabDNDObserver = {
         return width + tab.getBoundingClientRect().width;
       }, 0);
     };
+
+    if (Tabmix.isVersion(1310)) {
+      // create none private method in gBrowser.tabContainer
+      // we will use instead of #rtlMode in:
+      //  gBrowser.tabContainer._animateTabMove
+      //  gBrowser.tabContainer.on_dragover
+      Object.defineProperty(gBrowser.tabContainer, "_rtlMode", {
+        get() {
+          return !this.verticalMode && RTL_UI;
+        },
+        configurable: true,
+        enumerable: true,
+      });
+    }
+
     // Determine what tab we're dragging over.
     // * In tabmix tabs can have different width
     // * Point of reference is the start of the dragged tab/tabs when
@@ -91,6 +106,8 @@ var TMP_tabDNDObserver = {
       )._replace(
         /let lastTabCenter =.*;/,
         `let lastTabCenter = firstMovingTabScreen + translate + (this.verticalMode ? tabSize / 2 : rightTabWidth / 2);`,
+      )._replace(
+        "this.#rtlMode", "this._rtlMode", {check: Tabmix.isVersion(1310), flags: "g"}
       ).toCode();
     } else {
       _animateTabMove._replace(
@@ -149,6 +166,8 @@ var TMP_tabDNDObserver = {
          ? "translateY(" + Math.round(newMargin) + "px)"
          : "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";`,
       {check: Tabmix.isVersion(1300)}
+    )._replace(
+      "this.#rtlMode", "this._rtlMode", {check: Tabmix.isVersion(1310), flags: "g"}
     ).toCode();
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_drop")._replace(

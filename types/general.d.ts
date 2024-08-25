@@ -18,6 +18,7 @@ interface HTMLElement {
 }
 
 interface CSSStyleDeclaration {
+  flexWrap: string;
   height: string;
   marginBottom: string;
   marginLeft: string;
@@ -157,11 +158,13 @@ declare namespace MockedGeckoTypes {
     };
 
     _ensureElementIsVisibleAnimationFrame: number;
+    _overflowObserver: ResizeObserver;
     _singleRowHeight: number;
     _tabMarginLeft: number;
     _tabMarginRight: number;
     _verticalAnimation: number;
-    blockUnderflow: boolean;
+    // insteadof private getter in MozArrowScrollbox
+    _verticalMode: boolean;
     firstTabInRowMargin: number;
     firstVisible: {tab: BrowserTab; x: number; y: number};
     firstVisibleRow: number;
@@ -179,6 +182,7 @@ declare namespace MockedGeckoTypes {
 
   interface TabContainer extends Element {
     _animateElement: ArrowScrollbox;
+    _animateTabMove: (event: MouseEvent) => void;
     _backgroundTabScrollPromise?: Promise<void>;
     _blockDblClick?: boolean;
     _dragOverDelay: number;
