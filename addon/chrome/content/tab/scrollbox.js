@@ -42,42 +42,7 @@ Tabmix.multiRow = {
         this.minOffset = 50;
         this.firstVisible = {tab: null, x: 0, y: 0};
 
-        let overflowTarget = this.scrollbox;
-        if (Tabmix.isVersion(1310)) {
-          // eslint-disable-next-line consistent-this
-          overflowTarget = this;
-          const slot = this.shadowRoot.querySelector("slot");
-          // modify MozArrowScrollbox _overflowObserver to handle multi-row
-          const tabmixOverflowObserver1 = new ResizeObserver(_ => {
-            const contentSize =
-              slot.getBoundingClientRect()[this._verticalMode ? "height" : "width"];
-            // NOTE(emilio): This should be contentSize > scrollClientSize, but due
-            // to how Gecko internally rounds in those cases, we allow for some
-            // minor differences (the internal Gecko layout size is 1/60th of a
-            // pixel, so 0.02 should cover it).
-            const scrollClientSize =
-              this.scrollbox[this._verticalMode ? "clientHeightDouble" : "clientWidthDouble"];
-            const overflowing = contentSize - scrollClientSize > 0.02;
-            if (overflowing == this.hasAttribute("overflowing")) {
-              if (overflowing) {
-                // Update scroll buttons' disabled state when the slot or scrollbox
-                // size changes while we were already overflowing.
-                this._updateScrollButtonsDisabledState();
-              }
-              return;
-            }
-            window.requestAnimationFrame(() => {
-              this.toggleAttribute("overflowing", overflowing);
-              this._updateScrollButtonsDisabledState();
-              this.dispatchEvent(
-                new CustomEvent(overflowing ? "overflow" : "underflow")
-              );
-            });
-          });
-          tabmixOverflowObserver1.observe(slot);
-          tabmixOverflowObserver1.observe(this.scrollbox);
-        }
-
+        const overflowTarget = Tabmix.isVersion(1310) ? this : this.scrollbox;
         overflowTarget.addEventListener("underflow", event => {
           // filter underflow events which were dispatched on nested scrollboxes
           if (event.originalTarget !== overflowTarget) {
@@ -144,6 +109,9 @@ Tabmix.multiRow = {
         this.addEventListener("scroll", () => {
           const tabBar = this.parentNode;
           tabBar._unlockTabSizing();
+          if (Tabmix.isVersion(1310)) {
+            this._updateScrollButtonsDisabledState();
+          }
 
           if (this.isMultiRow && tabBar.allTabs[0].pinned) {
             this.setFirstTabInRow(true);
@@ -185,16 +153,20 @@ Tabmix.multiRow = {
           '{ if (aEvent.button && aEvent.button === 2) return;'
         ).toCode();
 
-        const $LF = '\n            ';
+        if (Tabmix.isVersion(1310)) {
+          const arrowscrollboxClass = customElements.get("arrowscrollbox");
+          const code = arrowscrollboxClass.toString().split(" #updateScrollButtonsDisabledState")[1];
+          const updateButtons = `_updateScrollButtonsDisabledState${code}`
+              .split(" disconnectedCallback")[0]
+              .trim()
+              .replace(/#scrollButtonUpdatePending/g, "_scrollButtonUpdatePending")
+              .replace(/#updateScrollButtonsDisabledState/g, "_updateScrollButtonsDisabledState");
+
+          this._updateScrollButtonsDisabledState = eval(`(function ${updateButtons})`);
+        }
         Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")._replace(
-          'if (!this.hasAttribute("overflowing")) {',
-          '$&' + $LF +
-              'let box = document.getElementById("tabmix-scrollbox");' + $LF +
-              'Tabmix.setItem(box, "scrolledtoend", true);' + $LF +
-              'Tabmix.setItem(box, "scrolledtostart", true);'
-        )._replace(
           'if (this.isRTLScrollbox',
-          '$& && !this.isMultiRow'
+          '$& && !this.isMultiRow', {flags: "g"}
         )._replace(
           /if\s*\(\n*\s*leftOrTopElement/,
           `if (this.isMultiRow) {
@@ -209,12 +181,6 @@ Tabmix.multiRow = {
                       }
                     } else $&`,
           {check: !Tabmix.isVersion(1020)}
-        )._replace(
-          Tabmix.isVersion(1310) ? 'this.toggleAttribute("scrolledtoend", scrolledToEnd);' : 'if (scrolledToEnd) {',
-          'let box = document.getElementById("tabmix-scrollbox");' + $LF +
-            '  Tabmix.setItem(box, "scrolledtoend", scrolledToEnd || null);' + $LF +
-            '  Tabmix.setItem(box, "scrolledtostart", scrolledToStart || null);' + $LF +
-            '  $&'
         ).toCode();
 
         Tabmix.changeCode(this, "scrollbox.lineScrollAmount", {getter: true})._replace(
@@ -255,7 +221,6 @@ Tabmix.multiRow = {
           ["top", "bottom"] : ["left", "right"];
       }
 
-      /** @this {This} */
       get isRTLScrollbox() {
         return this._verticalMode ?
           false : Tabmix.rtl;
@@ -268,16 +233,21 @@ Tabmix.multiRow = {
 
       /** @this {This} */
       get scrollClientSize() {
+        const scrollClientSize =
+          this.scrollbox[this._verticalMode ? "clientHeightDouble" : "clientWidthDouble"];
         if (
           Tabmix.isVersion(1310) &&
           this.isMultiRow &&
           Tabmix.callerName().startsWith("MozArrowScrollbox/overflowObserver")
         ) {
-          // prevent MozArrowScrollbox/overflowObserver from changing overflowing state
-          // when we are in isMultiRow mode
-          return this.hasAttribute("overflowing") ? -Infinity : Infinity;
+          // MozArrowScrollbox/overflowObserver doesn't calculate overflowing based MultiRow
+          // the value that we return from here force it get the right overflowing state
+          const slot = this.shadowRoot.querySelector("slot");
+          const contentSize = slot.getBoundingClientRect()[this._verticalMode ? "height" : "width"];
+          const overflowing = contentSize - scrollClientSize > 0.02;
+          return overflowing ? -Infinity : Infinity;
         }
-        return this.scrollbox[this._verticalMode ? "clientHeightDouble" : "clientWidthDouble"];
+        return scrollClientSize;
       }
 
       /** @this {This} */
@@ -539,6 +509,18 @@ Tabmix.multiRow = {
         this.addEventListener("dragexit", event => {
           this.finishScroll(event);
         });
+
+        const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
+        const hasAttribute = (/** @type {string} */ attr) => arrowScrollbox.hasAttribute(attr) || null;
+        Tabmix.setItem(this, "scrolledtoend", hasAttribute("scrolledtoend"));
+        Tabmix.setItem(this, "scrolledtostart", hasAttribute("scrolledtostart"));
+        const scrollButtonsStateObserver = new MutationObserver(([entry]) => {
+          if (["scrolledtostart", "scrolledtoend"].includes(entry.attributeName)) {
+            Tabmix.setItem(this, "scrolledtoend", hasAttribute("scrolledtoend"));
+            Tabmix.setItem(this, "scrolledtostart", hasAttribute("scrolledtostart"));
+          }
+        });
+        scrollButtonsStateObserver.observe(arrowScrollbox, {attributes: true});
       }
 
       get markup() {

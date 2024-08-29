@@ -110,6 +110,7 @@ declare namespace MockedGeckoTypes {
   }
 
   interface ArrowScrollbox extends Element {
+    _boundsWithoutFlushing: (element: HTMLElement) => DOMRect;
     _singleRowHeight: number;
     _canScrollToElement: (element: BrowserTab) => boolean;
     _createScrollButtonContextMenu: (aEvent: MouseEvent) => void;
@@ -123,12 +124,12 @@ declare namespace MockedGeckoTypes {
     _scrollButtonDownRight: HTMLButtonElement;
     _scrollButtonUpLeft: HTMLButtonElement;
     _scrollButtonUpRight: HTMLButtonElement;
-    _updateScrollButtonsDisabledState: () => void;
-    connectTabmix: () => void;
     ensureElementIsVisible: (tab: BrowserTab, instant?: boolean) => void;
+    readonly isRTLScrollbox: boolean;
     get lineScrollAmount(): number;
     offsetAmountToScroll: boolean;
     offsetRatio: number;
+    readonly overflowing: boolean;
     scrollbox: any;
     scrollByPixels: (pixels: number, instant?: boolean) => void;
     scrollByIndex(index: number, instant?: boolean): void;
@@ -142,6 +143,7 @@ declare namespace MockedGeckoTypes {
 
     // Tabmix
     _enterVerticalMode: () => void;
+    connectTabmix: () => void;
     disconnectTabmix: () => void;
     resetFirstTabInRow: () => void;
     setFirstTabInRow: (scroll?: boolean) => void;
@@ -157,13 +159,16 @@ declare namespace MockedGeckoTypes {
       sample(timeStamp: any): void;
     };
 
+    _updateScrollButtonsDisabledState: (this: TabmixArrowScrollbox, aRafCount?: number) => void;
     _ensureElementIsVisibleAnimationFrame: number;
     _overflowObserver: ResizeObserver;
+    // instead of private getter in MozArrowScrollbox
+    _scrollButtonUpdatePending: boolean;
     _singleRowHeight: number;
     _tabMarginLeft: number;
     _tabMarginRight: number;
     _verticalAnimation: number;
-    // insteadof private getter in MozArrowScrollbox
+    // instead of private getter in MozArrowScrollbox
     _verticalMode: boolean;
     firstTabInRowMargin: number;
     firstVisible: {tab: BrowserTab; x: number; y: number};
