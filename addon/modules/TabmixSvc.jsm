@@ -292,6 +292,10 @@ TabmixSvc = {
         prefs.setCharPref(TabmixSvc.newtabUrl, TabmixSvc.aboutNewtab);
         ChromeUtils.import("chrome://tabmix-resource/content/NewTabURL.jsm");
       }
+
+      if (isVersion(1320)) {
+        prefs.setBoolPref("browser.tabs.tabmanager.enabled", true);
+      }
     },
 
     observe(aSubject, aTopic) {
