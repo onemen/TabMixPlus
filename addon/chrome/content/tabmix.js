@@ -90,8 +90,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
       tabBar.collapsed = false;
     }
     // save tabsNewtabButton width
-    this.tabsNewtabButton =
-      tabBar.getElementsByAttribute("command", "cmd_newNavigatorTab")[0];
+    this.tabsNewtabButton = document.getElementById("tabs-newtab-button");
     this.tabsNewtabButton.setAttribute("force-display", true);
     let openNewTabRect = Tabmix.getBoundsWithoutFlushing(this.tabsNewtabButton);
     let style = window.getComputedStyle(this.tabsNewtabButton);

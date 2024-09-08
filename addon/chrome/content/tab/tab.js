@@ -464,8 +464,7 @@ Tabmix.tabsUtils = {
     };
 
     Tabmix.afterTabsButtonsWidth = [35];
-    Tabmix.tabsNewtabButton =
-      this.tabBar.getElementsByAttribute("command", "cmd_newNavigatorTab")[0];
+    Tabmix.tabsNewtabButton = document.getElementById("tabs-newtab-button");
     this._show_newtabbutton = "aftertabs";
 
     let attr = ["notpinned", "autoreload", "protected", "locked"].filter(att => {
