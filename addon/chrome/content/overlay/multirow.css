@@ -145,6 +145,19 @@
   -moz-box-align: start; /* before Firefox 112 */
 }
 
+:root[uidensity=compact] {
+  --private-browsing-indicator-margin-top: 9px;
+}
+
+#TabsToolbar[multibar][tabmix-multibar-active] #private-browsing-indicator-with-label {
+  align-items: flex-start;
+  margin-top: var(--private-browsing-indicator-margin-top, 12px);
+}
+
+#TabsToolbar[multibar][tabmix-multibar-active] #private-browsing-indicator-with-label > image {
+  margin-top: 2px;
+}
+
 @media not (-moz-proton) {
 :root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-margin-top) !important;

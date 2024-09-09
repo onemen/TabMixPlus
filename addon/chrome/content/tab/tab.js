@@ -624,6 +624,7 @@ Tabmix.tabsUtils = {
       // set multibar also at _enterVerticalMode
       Tabmix.setItem(this.tabBar, "multibar", multibar);
       Tabmix.setItem("tabmix-bottom-toolbox", "multibar", multibar);
+      Tabmix.setItem("TabsToolbar", "tabmix-multibar-active", multibar ? "" : null);
     }
 
     TabmixTabbar.visibleRows = rows;
