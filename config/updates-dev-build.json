@@ -160,7 +160,7 @@
           "version": "1.23.0",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.23.0.xpi",
           "browser_specific_settings": {
-            "gecko": { "strict_min_version": "78" }
+            "gecko": { "strict_min_version": "115" }
           }
         }
       ]

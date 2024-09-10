@@ -144,8 +144,8 @@ Since Firefox removed the internal component that loads _legacy_ extension, in o
 1. **Install XPI**
 
    To install the file you have just downloaded:
-   * Open `Add-ons Manager` tab (about:addons) and select `Extensions`.  
-     or  
+   * Open `Add-ons Manager` tab (about:addons) and select `Extensions`.
+     or
      Click the menu button ☰, click `Add-ons and Themes` and select `Extensions`.
    * To add the downloaded add-on to the list of available add-ons, drag and drop the file into the Add-ons window. The add-on is added to the list.
    * The installation process should begin.
@@ -171,8 +171,10 @@ If <b>Tab Mix Plus</b> stops working after Firefox update was installed or when 
 
 ## Browser Compatibility
 
-  * Firefox 78 - Firefox Nightly
+  * Firefox 115 ESR - Firefox Nightly
   * Waterfox G3 - G6 and beyond
+
+> Firefox versions prior to 115 ESR are not supported.
 
 > For **Pale Moon** download **Tab Mix Plus** from [here](https://addons.palemoon.org/addon/tab-mix-plus/)
 
