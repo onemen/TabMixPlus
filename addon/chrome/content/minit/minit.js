@@ -42,6 +42,24 @@ var TMP_tabDNDObserver = {
         enumerable: true,
       });
     }
+    if (Tabmix.isVersion(1320)) {
+      // create none private method in gBrowser.tabContainer
+      // we will use instead of #isContainerVerticalPinnedExpanded in:
+      //  gBrowser.tabContainer.on_dragover
+      //  gBrowser.tabContainer.on_drop
+      Object.defineProperty(gBrowser.tabContainer, "_isContainerVerticalPinnedExpanded", {
+        /** @param {Tab} tab */
+        value(tab) {
+          return (
+            this.verticalMode &&
+            tab.hasAttribute("pinned") &&
+            this.hasAttribute("expanded")
+          );
+        },
+        configurable: true,
+        enumerable: true,
+      });
+    }
 
     // Determine what tab we're dragging over.
     // * In tabmix tabs can have different width
@@ -129,7 +147,7 @@ var TMP_tabDNDObserver = {
       ).toCode();
     }
 
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_dragover")._replace(
+    const dragoverCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_dragover")._replace(
       'event.stopPropagation();',
       `$&
       if (TMP_tabDNDObserver.handleDragover(event)) {
@@ -167,10 +185,10 @@ var TMP_tabDNDObserver = {
          : "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";`,
       {check: Tabmix.isVersion(1300)}
     )._replace(
-      "this.#rtlMode", "this._rtlMode", {check: Tabmix.isVersion(1310), flags: "g"}
-    ).toCode();
+      /this\.#(\w*)/g, "this._$1", {check: Tabmix.isVersion(1310)}
+    );
 
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_drop")._replace(
+    const dropCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_drop")._replace(
       'var dt = event.dataTransfer;',
       `const useTabmixDnD = TMP_tabDNDObserver.useTabmixDnD(event);
        if (useTabmixDnD) {
@@ -198,7 +216,7 @@ var TMP_tabDNDObserver = {
         TabmixTabbar.updateBeforeAndAfter();
       $&`
     )._replace(
-      Tabmix.isVersion(1300) ? 'if (oldTranslate && oldTranslate' : 'if (oldTranslateX && oldTranslateX',
+      Tabmix.isVersion(1300) ? Tabmix.isVersion(1320) ? 'let shouldTranslate;' : 'if (oldTranslate && oldTranslate' : 'if (oldTranslateX && oldTranslateX',
       `let refTab = this.allTabs[dropIndex];
        if (!this.verticalMode && refTab) {
          let firstMovingTab = RTL_UI ? movingTabs[movingTabs.length - 1] : movingTabs[0];
@@ -207,7 +225,7 @@ var TMP_tabDNDObserver = {
              : refTab.screenX - firstMovingTab.screenX;
            _newTranslateX = Math.round(_newTranslateX);
        }
-      $&`.replace(/_newTranslateX/g, Tabmix.isVersion(1300) ? "newTranslate" : "newTranslateX")
+      $&`.replace(/_newTranslateX/g, Tabmix.isVersion(1300) && !Tabmix.isVersion(1320) ? "newTranslate" : "newTranslateX"),
     )._replace(
       'let urls = links.map(link => link.url);',
       `$&
@@ -227,7 +245,29 @@ var TMP_tabDNDObserver = {
       } else {
         targetTab = null;
       }`
-    ).toCode();
+    )._replace(
+      /this\.#(\w*)/g, "this._$1", {check: Tabmix.isVersion(1320)}
+    );
+
+    /**
+     * @param {"on_dragover" | "on_drop"} name
+     * @param {ChangeCodeNS.ChangeCodeClass} code
+     */
+    function patchDragMethod(name, code) {
+      if (Tabmix.isVersion(1320)) {
+        code.toCode(false, Tabmix.originalFunctions, `_tabmix_${name}`);
+        Tabmix.originalFunctions[name] = gBrowser.tabContainer[name];
+        gBrowser.tabContainer[name] = function(event) {
+          const methodName = this.verticalMode ? name : `_tabmix_${name}`;
+          Tabmix.originalFunctions[methodName].apply(this, [event]);
+        };
+      } else {
+        code.toCode(false, gBrowser.tabContainer, name);
+      }
+    }
+
+    patchDragMethod("on_dragover", dragoverCode);
+    patchDragMethod("on_drop", dropCode);
 
     Tabmix.originalFunctions._getDropIndex = gBrowser.tabContainer._getDropIndex;
     gBrowser.tabContainer._getDropIndex = Tabmix.isVersion(1120) ?
