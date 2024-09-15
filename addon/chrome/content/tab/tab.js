@@ -51,6 +51,15 @@ var TabmixTabbar = {
     return button && document.getElementById("TabsToolbar").contains(button);
   },
 
+  isButtonOnToolBar(button) {
+    return (
+      button &&
+      (document.getElementById("TabsToolbar").contains(button) ||
+        document.getElementById("nav-bar").contains(button) ||
+        document.getElementById("widget-overflow-list").contains(button))
+    );
+  },
+
   // get privateTab-toolbar-openNewPrivateTab, when the button is on the tabbar
   newPrivateTabButton() {
     let button = document.getElementById("privateTab-toolbar-openNewPrivateTab");
@@ -149,12 +158,12 @@ var TabmixTabbar = {
     if (tabBar.mCloseButtons == 5)
       tabBar._updateCloseButtons(true);
 
-    // show on tabbar
+    // show on tabbar or nav-bar
     let tabstripClosebutton = document.getElementById("tabmix-tabs-closebutton");
-    if (this.isButtonOnTabsToolBar(tabstripClosebutton))
+    if (this.isButtonOnToolBar(tabstripClosebutton))
       tabstripClosebutton.collapsed = Tabmix.prefs.getBoolPref("hideTabBarButton");
     let allTabsButton = document.getElementById("alltabs-button");
-    if (this.isButtonOnTabsToolBar(allTabsButton)) {
+    if (this.isButtonOnToolBar(allTabsButton)) {
       allTabsButton.collapsed = !Services.prefs.getBoolPref("browser.tabs.tabmanager.enabled");
       Tabmix.setItem("tabbrowser-tabs", "showalltabsbutton", !allTabsButton.collapsed || null);
     }
@@ -176,10 +185,13 @@ var TabmixTabbar = {
   },
 
   setShowNewTabButtonAttr() {
-    let newTabButton = document.getElementById("new-tab-button");
     let showNewTabButton = Tabmix.prefs.getBoolPref("newTabButton") &&
-        this.isButtonOnTabsToolBar(newTabButton);
+        Boolean(CustomizableUI.getPlacementOfWidget("new-tab-button"));
     let position = Tabmix.prefs.getIntPref("newTabButton.position");
+    if (position === 2 && gBrowser.tabContainer.verticalMode && Tabmix.tabsUtils.isVerticalTabs) {
+      position = 1;
+      Tabmix.prefs.setIntPref("newTabButton.position", 1);
+    }
     gTMPprefObserver.setShowNewTabButtonAttr(showNewTabButton, position);
   },
 
@@ -1804,13 +1816,6 @@ window.gTMPprefObserver = {
     const protonPrefVal = Services.prefs.getBoolPref("browser.proton.tabs.enabled", false);
     let newRule;
     if (!Tabmix.isVersion(880)) {
-      // the button is not ready when we call dynamicProtonRules early
-      // onContentLoaded>addDynamicRules>dynamicProtonRules
-      setTimeout(() => {
-        // tabmix-tabs-closebutton toolbarbutton
-        document.getElementById("tabmix-tabs-closebutton").setAttribute("tabmix-fill-opacity", true);
-      }, 100);
-
       newRule = `#tabmix-tabs-closebutton[tabmix-fill-opacity] > .toolbarbutton-icon {
         padding: ${protonPrefVal ? 7.4 : 4}px 4px !important;
       }`;
@@ -2289,9 +2294,6 @@ window.gTMPprefObserver = {
   },
 
   changeNewTabButtonSide(aPosition) {
-    if (gBrowser.tabContainer.verticalMode && Tabmix.tabsUtils.isVerticalTabs) {
-      aPosition = 1;
-    }
     let $ = id => document.getElementById(id);
     let newTabButton = $("new-tab-button");
     if (TabmixTabbar.isButtonOnTabsToolBar(newTabButton)) {
@@ -2323,6 +2325,10 @@ window.gTMPprefObserver = {
         else
           doChange();
       }
+    } else if (gBrowser.tabContainer.verticalMode && Tabmix.tabsUtils.isVerticalTabBar) {
+      let showNewTabButton = Tabmix.prefs.getBoolPref("newTabButton");
+      this.setShowNewTabButtonAttr(showNewTabButton, 1);
+      Tabmix.sideNewTabButton = newTabButton;
     } else {
       this.setShowNewTabButtonAttr(false);
       Tabmix.sideNewTabButton = null;
@@ -2346,10 +2352,7 @@ window.gTMPprefObserver = {
     let attrValue;
     if (!aShow) {
       attrValue = null;
-    } else if (
-      aPosition == 1 ||
-      gBrowser.tabContainer.verticalMode && Tabmix.tabsUtils.isVerticalTabs
-    ) {
+    } else if (aPosition == 1) {
       attrValue = "right-side";
     } else if (aPosition === 0) {
       attrValue = "left-side";
@@ -2358,7 +2361,11 @@ window.gTMPprefObserver = {
     }
     // we use this value in disAllowNewtabbutton and overflow setters
     Tabmix.tabsUtils._show_newtabbutton = attrValue;
-    Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton", attrValue);
+    if (gBrowser.tabContainer.verticalMode && Tabmix.tabsUtils.isVerticalTabs) {
+      Tabmix.setItem("new-tab-button", "collapsed", attrValue ? null : true);
+    } else {
+      Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton", attrValue);
+    }
   },
 
   tabBarPositionChanged(aPosition) {

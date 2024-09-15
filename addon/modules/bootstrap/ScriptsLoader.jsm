@@ -12,12 +12,17 @@ const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content
 const lazy = {};
 
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+  CustomizableUI: "resource:///modules/CustomizableUI.jsm",
   Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.jsm",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
   SessionStore: "resource:///modules/sessionstore/SessionStore.jsm",
 });
 
-const isVersion119 = Services.vc.compare(Services.appinfo.version, "119.0a1");
+function isVersion(versionNo) {
+  return Services.vc.compare(Services.appinfo.version, versionNo / 10 + ".0a1") >= 0;
+}
+
+const isVersion119 = isVersion(1190);
 
 /**
  * stylesheets and scripts for navigator:browser
@@ -59,12 +64,32 @@ const ScriptsLoader = {
     }
     initialized.add(window);
 
+    this._addCloseButton();
     this._loadCSS(window);
     this._loadScripts(window, promiseOverlayLoaded);
     this._addListeners(window);
     if (params.isEnabled) {
       this._updateAfterEnabled(window, params);
     }
+  },
+
+  _closeButtonAdded: false,
+  _addCloseButton() {
+    // since Firefox version 132, we need to allow tabmix-tabs-closebutton to move to nav-bar
+    // when vertical tabs are enabled
+    // we create it as widget and add it to the proper area TabsToolbar or nav-bar
+    // we add it after alltabs-button by default but keep its position if user
+    // move it in the toolbar
+    if (!this._closeButtonAdded) {
+      const allTabsButtonPlacement = lazy.CustomizableUI.getPlacementOfWidget("alltabs-button");
+      const closeButtonPlacement = lazy.CustomizableUI.getPlacementOfWidget("tabmix-tabs-closebutton");
+      if (!closeButtonPlacement || closeButtonPlacement.area !== allTabsButtonPlacement?.area) {
+        const {area, position} = allTabsButtonPlacement ?? {area: lazy.CustomizableUI.AREA_TABSTRIP};
+        const finalPosition = typeof position === "number" ? position + 1 : undefined;
+        lazy.CustomizableUI.addWidgetToArea("tabmix-tabs-closebutton", area, finalPosition);
+      }
+    }
+    this._closeButtonAdded = true;
   },
 
   _loadCSS(window) {

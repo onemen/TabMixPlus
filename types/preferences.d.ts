@@ -40,6 +40,7 @@ interface XULCommandDispatcher {
 interface Window {
   _sminstalled: boolean;
   $<K extends keyof GetByMap>(selectors: K | string): K extends keyof GetByMap ? GetByMap[K] : HTMLElement | null;
+  CustomizableUI: typeof CustomizableUI;
 }
 
 interface EventTarget {

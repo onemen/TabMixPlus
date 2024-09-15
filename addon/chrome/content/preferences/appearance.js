@@ -41,7 +41,6 @@ var gAppearancePane = {
     // rtl update position
     if (RTL_UI) {
       let right = $("newTabButton.position.right");
-      // let left = $("newTabButton.position.left");
       let left = $("newTabButton.position.left");
       [right.label, left.label] = [left.label, right.label];
 
@@ -184,8 +183,7 @@ var gAppearancePane = {
 
     // Display > Tab bar
     function updateDisabledState(buttonID, itemID, aEnable) {
-      let button = aWindow.document.getElementById(buttonID);
-      let enablePosition = button && aWindow.document.getElementById("TabsToolbar").contains(button);
+      const enablePosition = Boolean(aWindow.CustomizableUI.getPlacementOfWidget(buttonID));
       gPrefWindow.setDisabled(itemID, !enablePosition || null);
       gPrefWindow.setDisabled("obs_" + itemID, !aEnable || !enablePosition || null);
     }

@@ -402,10 +402,11 @@ var TMP_eventListener = {
     }
 
     if (!CustomizableUI.getPlacementOfWidget("tabmix-scrollbox")) {
+      const tabsWidget = CustomizableUI.getPlacementOfWidget("tabbrowser-tabs");
       CustomizableUI.addWidgetToArea(
         "tabmix-scrollbox",
         CustomizableUI.AREA_TABSTRIP,
-        CustomizableUI.getPlacementOfWidget("tabbrowser-tabs").position + 1
+        tabsWidget?.area === CustomizableUI.AREA_TABSTRIP ? tabsWidget.position + 1 : 0
       );
     }
 
@@ -563,25 +564,6 @@ var TMP_eventListener = {
 
     Tabmix.setNewFunction(tabBar, "_updateCloseButtons", Tabmix._updateCloseButtons);
     delete Tabmix._updateCloseButtons;
-
-    // update tooltip for tabmix-tabs-closebutton
-    const closeButton = document.getElementById("tabmix-tabs-closebutton");
-    if (Tabmix.isVersion(1090)) {
-      const [l10Id, attrName] = Tabmix.isVersion(1310) ? ["tabbrowser-close-tabs-button", "tooltiptext"] : ["tabbrowser-close-tabs-tooltip", "label"];
-      document.l10n.setAttributes(closeButton, l10Id, {tabCount: 1});
-      document.l10n.translateElements([closeButton]).then(() => {
-        closeButton.removeAttribute("data-l10n-id");
-        closeButton.setAttribute("tooltiptext", closeButton.getAttribute(attrName));
-      });
-    } else {
-      closeButton.setAttribute("tooltiptext",
-        window.PluralForm.get(
-          1,
-          // eslint-disable-next-line no-undef
-          gTabBrowserBundle.GetStringFromName("tabs.closeTabs.tooltip")
-        )
-      );
-    }
 
     Tabmix.allTabs.init();
 

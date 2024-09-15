@@ -602,6 +602,22 @@ interface HistoryMenu {
   populateUndoWindowSubmenu: () => void;
 }
 
+interface CustomizableUIListener {
+  onWidgetAfterDOMChange(aNode: Node, aNextNode: Node, aContainer: ParentNode, aWasRemoval: boolean): void;
+}
+
+interface CustomizableUI {
+  AREA_TABSTRIP: string;
+  addListener: (aListener: CustomizableUIListener) => void;
+  addShortcut(aShortcutNode: Node, aTargetNode?: Node): void;
+  addWidgetToArea: (aWidgetId: string, aArea: string, aPosition: number, aInitialAdd?: boolean) => void;
+  getWidgetIdsInArea: (aArea: string) => string[];
+  getPlacementOfWidget: (aWidgetId: string, aOnlyRegistered?: boolean, aDeadAreas?: boolean) => {area: string; position: number} | null;
+  moveWidgetWithinArea: (aWidgetId: string, aPosition: number) => void;
+  removeListener: (aListener: CustomizableUIListener) => void;
+  removeWidgetFromArea: (aWidgetId: string) => void;
+}
+
 interface E10SUtils {
   SERIALIZED_SYSTEMPRINCIPAL: string;
   DEFAULT_REMOTE_TYPE: string;
@@ -693,6 +709,7 @@ declare function OpenBrowserWindow(params?: {private?: boolean; features?: strin
 declare function urlSecurityCheck(aURL: string, aPrincipal: nsIPrincipal, aFlags?: nsIScriptSecurityManager): void;
 declare function undoCloseWindow(index: number): void;
 
+declare var CustomizableUI: CustomizableUI;
 declare var E10SUtils: E10SUtils;
 declare var FullScreen: FullScreen;
 declare var gBrowser: MockedGeckoTypes.TabBrowser;
@@ -743,7 +760,6 @@ declare var BrowserUtils: any;
 declare var closeMenus: any;
 declare var Components: any;
 declare var ctrlTab: any;
-declare var CustomizableUI: any;
 /** @deprecated removed from firefox on version 87 */
 declare var getHtmlBrowser: any;
 declare var gMultiProcessBrowser: any;

@@ -22,8 +22,12 @@
   width: unset;
 }
 
-#tabmix-tabs-closebutton:hover {
+#tabmix-tabs-closebutton:not([overflowedItem]):hover {
   background-color: transparent;
+}
+
+#widget-overflow-list #tabmix-tabs-closebutton.close-icon > .toolbarbutton-text {
+  display: block;
 }
 
 /* ::::  for light weight themes :::: */

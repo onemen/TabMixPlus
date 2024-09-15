@@ -901,6 +901,7 @@ Tabmix.navToolbox = {
     gNavToolbox.addEventListener("beforecustomization", this);
     gNavToolbox.addEventListener("aftercustomization", this);
 
+    /** @type {CustomizableUIListener["onWidgetAfterDOMChange"]} */
     const onWidgetAfterDOMChange = (aNode, aNextNode, aContainer, aWasRemoval) => {
       if (this.customizeStarted)
         return;
@@ -926,15 +927,6 @@ Tabmix.navToolbox = {
   deinit: function TMP_navToolbox_deinit() {
     gNavToolbox.removeEventListener("beforecustomization", this);
     gNavToolbox.removeEventListener("aftercustomization", this);
-
-    // remove tabmix-tabs-closebutton when its position is immediately after
-    // tabmix-scrollbox and save its position in preference for future use.
-    let boxPosition = Tabmix.getPlacement("tabmix-scrollbox");
-    let buttonPosition = Tabmix.getPlacement("tabmix-tabs-closebutton");
-    if (buttonPosition == boxPosition + 1) {
-      Tabmix.prefs.setIntPref("tabs-closeButton-position", buttonPosition);
-      CustomizableUI.removeWidgetFromArea("tabmix-tabs-closebutton");
-    }
 
     CustomizableUI.removeWidgetFromArea("tabmix-scrollbox");
     CustomizableUI.removeListener(this.listener);
@@ -1340,13 +1332,13 @@ Tabmix.navToolbox = {
      * we restore tabmix-scrollbox position first since its position is fixed,
      * to be on the safe side we check tabmix-scrollbox position again after we
      * restore tabmix-tabs-closebutton and new-tab-button position.
+     * see ScriptsLoader._addCloseButton and VerticalTabs how we handle tabmix-tabs-closebutton
      */
-    this.setScrollButtons();
-    try {
-      this.setCloseButtonPosition();
-    } catch { }
-    gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));
-    this.setScrollButtons(false, true);
+    if (!Tabmix.tabsUtils.isVerticalTabBar) {
+      this.setScrollButtons();
+      gTMPprefObserver.changeNewTabButtonSide(Tabmix.prefs.getIntPref("newTabButton.position"));
+      this.setScrollButtons(false, true);
+    }
 
     // reset tabsNewtabButton and afterTabsButtonsWidth
     if (typeof privateTab == "object")
@@ -1354,6 +1346,9 @@ Tabmix.navToolbox = {
   },
 
   setScrollButtons(reset, onlyPosition) {
+    if (Tabmix.tabsUtils.isVerticalTabBar) {
+      return;
+    }
     let box = document.getElementById("tabmix-scrollbox");
     if (box?.parentNode !== gBrowser.tabContainer.parentNode) {
       // nothing to do here when our button box is not a sibling of gBrowser.tabContainer
@@ -1371,32 +1366,6 @@ Tabmix.navToolbox = {
       Tabmix.tabsUtils.updateScrollButtons(useTabmixButtons);
     }
   },
-
-  _closeButtonInitialized: false,
-  setCloseButtonPosition() {
-    if (this._closeButtonInitialized)
-      return;
-
-    // if tabmix-tabs-closebutton was positioned immediately after
-    // tabmix-scrollbox we removed the button on exit, to avoid bug 1034394.
-    let pref = "tabs-closeButton-position";
-    if (Tabmix.prefs.prefHasUserValue(pref)) {
-      let position = Tabmix.prefs.getIntPref(pref);
-      Tabmix.prefs.clearUserPref(pref);
-      CustomizableUI.moveWidgetWithinArea("tabmix-tabs-closebutton", position);
-    } else if (!document.getElementById("tabs-closebutton")) {
-      // try to restore button position from tabs-closebutton position
-      // if item with tabs-closebutton id exist, some other extension add it
-      // will throw if called too early (before placements have been fetched)
-      let currentset = CustomizableUI.getWidgetIdsInArea("TabsToolbar");
-      let position = currentset.indexOf("tabs-closebutton");
-      if (position > -1) {
-        CustomizableUI.removeWidgetFromArea("tabs-closebutton");
-        CustomizableUI.moveWidgetWithinArea("tabmix-tabs-closebutton", position);
-      }
-    }
-    this._closeButtonInitialized = true;
-  }
 
 };
 

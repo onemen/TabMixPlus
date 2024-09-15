@@ -98,16 +98,59 @@ const widgets = {
       </toolbaritem>`;
     },
   },
+  tabsCloseButton: {
+    id: "tabmix-tabs-closebutton",
+    localizeFiles: [],
+    get updateMarkup() {
+      const l10nId = lazy.TabmixSvc.version(1310) ?
+        "tabbrowser-close-tabs-button" :
+        lazy.TabmixSvc.version(1090) ?
+          "tabbrowser-close-tabs-tooltip" :
+          "close-tab";
+      const markup = this.markup.replace('command="cmd_close"', `$& data-l10n-id="${l10nId}"`);
+      if (!lazy.TabmixSvc.version(880)) {
+        return markup.replace('command="cmd_close"', '$& tabmix-fill-opacity="true"');
+      }
+      return markup;
+    },
+    get markup() {
+      return `
+      <toolbarbutton id="tabmix-tabs-closebutton"
+        data-l10n-args='{"tabCount": 1}'
+        class="close-icon toolbarbutton-1 chromeclass-toolbar-additional"
+        command="cmd_close"
+        cui-areatype="toolbar"
+        removable="false"/>`;
+    },
+    onBuild(document, node) {
+      if (!lazy.TabmixSvc.version(880)) {
+        document.ownerGlobal.MozXULElement.insertFTLIfNeeded("browser/tabContextMenu.ftl");
+      }
+      document.l10n?.translateElements([node]).then(() => {
+        node.removeAttribute("data-l10n-id");
+        node.removeAttribute("data-l10n-args");
+        if (node.hasAttribute("label")) {
+          node.setAttribute("tooltiptext", node.getAttribute("label"));
+        } else if (node.hasAttribute("tooltiptext")) {
+          node.setAttribute("label", node.getAttribute("tooltiptext"));
+        }
+      });
+    },
+  },
 };
 
 function on_build(widget) {
-  const {markup, updateMarkup, localizeFiles} = widget;
+  const {markup, updateMarkup, localizeFiles, onBuild} = widget;
   return function(document) {
     const MozXULElement = document.ownerGlobal.MozXULElement;
     const node = MozXULElement.parseXULToFragment(updateMarkup ?? markup, localizeFiles);
     const parent = document.createXULElement("box");
     parent.appendChild(node);
-    return parent.childNodes[0];
+    const child = parent.childNodes[0];
+    if (onBuild) {
+      onBuild(document, child);
+    }
+    return child;
   };
 }
 
