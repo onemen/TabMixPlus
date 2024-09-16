@@ -13,6 +13,9 @@ var del;
 var add;
 
 function Init() {
+  window.addEventListener("dialogaccept", () => Save());
+  window.addEventListener("dialogextra1", () => window.opener.openHelp('links#file-type-editor'));
+
   const prefwindow = window.opener.document.querySelector("prefwindow");
   const button = document.querySelector('[dlgtype="extra1"]');
   prefwindow.setButtonLabel("help", button);

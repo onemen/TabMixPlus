@@ -44,6 +44,11 @@ function prompt_init() {
   }
   documentElement = document.documentElement;
 
+  const dialog = documentElement;
+  dialog.addEventListener("dialogaccept", prompt_deinit.bind(dialog, 0));
+  dialog.addEventListener("dialogcancel", prompt_deinit.bind(dialog, 1));
+  dialog.addEventListener("dialogextra1", prompt_extra1.bind(dialog, 2));
+
   dialogParams = window.arguments[0].QueryInterface(Ci.nsIDialogParamBlock);
   document.title = dialogParams.GetString(0);
 
@@ -127,7 +132,6 @@ function prompt_init() {
 
   // Set and focus default button
   var dButton = buttons[dialogParams.GetInt(0)] ?? "accept";
-  var dialog = documentElement;
   dialog.defaultButton = dButton;
   if (gHideElmParam == TMP_HIDE_MENUANDTEXT) { // hide menulist & text box and set focus to default Button
     document.getElementById("space_before_checkbox").hidden = true;

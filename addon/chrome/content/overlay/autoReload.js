@@ -7,6 +7,7 @@ const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixS
 const gPref = TabmixSvc.prefBranch;
 
 function load() {
+  document.documentElement.addEventListener("dialogaccept", accept.bind(null));
   const customReloadTime = gPref.getIntPref("reload_time");
   document.getElementById("autoreload_minutes").value = String(Math.floor(customReloadTime / 60));
   document.getElementById("autoreload_seconds").value = String(customReloadTime % 60);

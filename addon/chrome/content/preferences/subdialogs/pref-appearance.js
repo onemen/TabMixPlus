@@ -11,6 +11,11 @@ const tabstyles = {
     $("stylestabs").selectedIndex = Tabmix.prefs.prefHasUserValue(this.pref) ?
       Tabmix.prefs.getIntPref(this.pref) : 0;
 
+    window.addEventListener("dialogcancel", () => tabstyles.cancel());
+    window.addEventListener("dialogaccept", () => tabstyles.save());
+    window.addEventListener("dialogextra1", () => tabstyles.openHelp());
+    window.addEventListener("dialogextra2", () => tabstyles.toggleRGB_visibility());
+
     const dialog = document.querySelector("dialog");
     if (!window.opener && !Tabmix.getTopWin()) {
       dialog.getButton("extra1").disabled = true;

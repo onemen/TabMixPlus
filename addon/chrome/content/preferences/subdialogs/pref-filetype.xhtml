@@ -19,11 +19,6 @@
         onload="Init()"
         persist="screenX screenY">
 <dialog buttons="accept,cancel,extra1">
-   <script type="text/javascript"><![CDATA[
-     /* global Save */
-     this.addEventListener("dialogaccept", () => Save());
-     this.addEventListener("dialogextra1", () => window.opener.openHelp('links#file-type-editor'));
-   ]]></script>
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.js"/>
 

@@ -602,7 +602,7 @@ interface PanelItemButton extends HTMLButtonElement {
 interface QuerySelectorMap {
   ".content-box": HTMLElement;
   deck: HTMLElement;
-  dialog: HTMLDialogElement;
+  dialog: HTMLDialogElement & {ownerGlobal: Window};
   description: HTMLElement;
   'panel-item[action="preferences"]': HTMLElement & {button: PanelItemButton};
   prefwindow: PrefWindowClass;
