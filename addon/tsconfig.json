@@ -1,6 +1,6 @@
 {
   "extends": "../config/base.tsconfig.json",
-  "include": ["**/*.js", "**/*.sys.mjs"],
+  "include": ["*.js"],
   "exclude": [
     "node_modules",
     "**/gecko/**/*.d.ts",
@@ -9,11 +9,11 @@
     "**/*~*.*",
     "**/*.local.*",
     // files with different scopes
-    "**/preferences",
-    "**/overlay",
-    "**/scripts"
+    "chrome/**",
+    "defaults/**",
+    "modules/**"
   ],
   "compilerOptions": {
-    "types": ["../types/general.d.ts", "../types/addon.d.ts"]
+    "types": ["../types/general.d.ts", "../types/tabmix.d.ts"]
   }
 }

@@ -75,7 +75,7 @@ shortcut:not([focused="true"]) .shortcut-image {
 }
 
 .shortcut-image[_hidden="true"],
-shortcut[default="true"] .shortcut-image[anonid="reset"],
+shortcut[default="true"] .shortcut-image[anonid="shortcut_reset"],
 shortcut[value=""] .shortcut-image[anonid="disable"],
 shortcut:not([value]) .shortcut-image[anonid="disable"] {
   visibility: collapse;
@@ -92,19 +92,19 @@ shortcut:not([value]) .shortcut-image[anonid="disable"] {
   stroke: red;
 }
 
-.shortcut-image[anonid="reset"] {
+.shortcut-image[anonid="shortcut_reset"] {
   background-image: url("chrome://tabmixplus/skin/refresh.svg");
   margin-inline-end: 2px;
   stroke: black;
 }
 
 @media (prefers-color-scheme: dark) {
-  .shortcut-image[anonid="reset"] {
+  .shortcut-image[anonid="shortcut_reset"] {
     stroke: var(--shortcut-image-stroke, black);
   }
 }
 
-#TabMIxPreferences[linux] .shortcut-image[anonid="reset"] {
+#TabMIxPreferences[linux] .shortcut-image[anonid="shortcut_reset"] {
   margin: 1px 0;
 }
 

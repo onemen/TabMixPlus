@@ -5,7 +5,7 @@
   },
   "references": [
     {"path": "./addon"},
-    {"path": "./config"},
+    {"path": "./addon/chrome/content"},
     {"path": "./addon/chrome/content/preferences"},
     {"path": "./addon/chrome/content/overlay"},
     {"path": "./addon/chrome/content/scripts"}

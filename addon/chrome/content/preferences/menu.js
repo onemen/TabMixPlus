@@ -1,6 +1,7 @@
 /* exported gMenuPane */
 "use strict";
 
+/** @type {MenuPane} */
 var gMenuPane = {
   init() {
     if (!Tabmix.isVersion(880)) {
@@ -20,11 +21,12 @@ var gMenuPane = {
     $("clearClosedTabs").setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
 
     var browserWindow = Tabmix.getTopWin();
+    /** @type {Functions["getById"]} */
     let $$ = id => browserWindow.document.getElementById(id);
 
     if (Tabmix.isVersion(1050)) {
       const [showBmkTab, showBmkTabs] = [$("showBmkTab"), $("showBmkTabs")];
-      document.l10n.translateElements([showBmkTab, showBmkTabs]).then(() => {
+      document.l10n?.translateElements([showBmkTab, showBmkTabs]).then(() => {
         showBmkTab.label = showBmkTab.label.replace("…", "");
         showBmkTabs.label = showBmkTabs.label.replace("…", "");
       });
@@ -33,9 +35,9 @@ var gMenuPane = {
     if (Tabmix.isVersion(1090)) {
       MozXULElement.insertFTLIfNeeded("browser/tabbrowser.ftl");
       const [muted, unmuted] = [$("muteTab"), $("unmuteTab")];
-      document.l10n.setAttributes(muted, "tabbrowser-context-mute-tab");
-      document.l10n.setAttributes(unmuted, "tabbrowser-context-unmute-tab");
-      document.l10n.translateElements([muted, unmuted, $("showBmkTab")]).then(() => {
+      document.l10n?.setAttributes(muted, "tabbrowser-context-mute-tab");
+      document.l10n?.setAttributes(unmuted, "tabbrowser-context-unmute-tab");
+      document.l10n?.translateElements([muted, unmuted, $("showBmkTab")]).then(() => {
         muted.label += "/" + unmuted.label;
       });
     } else {
@@ -85,19 +87,23 @@ var gMenuPane = {
     if (Shortcuts.prefsChangedByTabmix)
       return;
 
-    let newValue = $("pref_shortcuts").value;
+    let newValue = $Pref("pref_shortcuts").stringValue;
     let shortcuts = $("shortcut-group");
     if (newValue == shortcuts.value)
       return;
     shortcuts.value = newValue;
     shortcuts.keys = JSON.parse(newValue);
-    let callBack = shortcut => shortcut.id && shortcut.valueFromPreferences(Shortcuts.keys[shortcut.id]);
+    /** @param {MozShortcutClass} shortcut */
+    let callBack = shortcut => {
+      const shortcutData = Shortcuts.keys[shortcut.id];
+      return shortcutData ? shortcut.valueFromPreferences(shortcutData) : false;
+    };
     this.updateShortcuts(shortcuts, callBack);
   },
 
   _slideShow: "",
   updateShortcuts(aShortcuts, aCallBack) {
-    let boxes = Array.prototype.filter.call(aShortcuts.childNodes, aCallBack);
+    let boxes = Array.from(aShortcuts.childNodes).filter(shortcut => aCallBack(shortcut));
     $("shortcuts-panel").setAttribute("usedKeys", Boolean(boxes.length));
     if (this._slideShow != $("shortcut-group").keys.slideShow) {
       this._slideShow = $("shortcut-group").keys.slideShow;
@@ -108,7 +114,7 @@ var gMenuPane = {
   setSlideShowLabel() {
     let slideShow = $("slideShow");
     let label = slideShow.disabled ? "??" : getFormattedKey(slideShow.key);
-    $("slideDelayLabel").value = slideShow.getAttribute("_label").replace("#1", label);
+    $("slideDelayLabel").value = slideShow.getAttribute("_label")?.replace("#1", label) ?? "";
     gPrefWindow.setDisabled("obs_slideDelay", slideShow.disabled);
   },
 
@@ -125,8 +131,8 @@ var gMenuPane = {
   },
 
   updateSessionShortcuts() {
-    let block = !($("pref_sessionManager") || $("pref_sessionManager1")).value ||
-        Shortcuts.permanentPrivateBrowsing;
+    const permanentPrivateBrowsing = this.PrivateBrowsingUtils.permanentPrivateBrowsing;
+    let block = !($Pref("pref_sessionManager") || $Pref("pref_sessionManager1")).value || permanentPrivateBrowsing;
     $("saveWindow").blocked = block;
     $("saveSession").blocked = block;
   },
@@ -135,7 +141,7 @@ var gMenuPane = {
   toggleLinkLabel(item) {
     var panel = $("shortcuts-panel");
     var wasShow = panel.getAttribute(item.id) == 'false';
-    item.value = item.getAttribute(wasShow ? 'show' : 'hide');
+    item.value = item.getAttribute(wasShow ? 'show' : 'hide') ?? '';
     panel.setAttribute(item.id, wasShow);
   },
 
@@ -143,8 +149,15 @@ var gMenuPane = {
   // when "Links" in Events > Tab Focus changed
   setInverseLinkLabel() {
     var showInverseLink = $("showInverseLink");
-    var val = ($("pref_selectTab") || $("pref_selectTab1")).value;
-    var label = showInverseLink.getAttribute((val ? "bg" : "fg") + "label");
+    var val = ($Pref("pref_selectTab") || $Pref("pref_selectTab1")).value;
+    var label = showInverseLink.getAttribute((val ? "bg" : "fg") + "label") ?? "";
     showInverseLink.setAttribute("label", label);
-  }
+  },
+
+  get PrivateBrowsingUtils() {
+    return Tabmix.lazyGetter(this, "PrivateBrowsingUtils", () =>
+      TabmixChromeUtils.import("resource://gre/modules/PrivateBrowsingUtils.jsm").PrivateBrowsingUtils
+    );
+  },
 };
+

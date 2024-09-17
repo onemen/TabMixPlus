@@ -1,6 +1,9 @@
+/// <reference types="numberinput.d.ts" />
+
 /* exported gNumberInput */
 "use strict";
 
+/** @type {NumberInput} */
 const gNumberInput = {
   init(delay = false) {
     window.addEventListener("change", this, true);
@@ -18,10 +21,10 @@ const gNumberInput = {
     }
   },
 
-  uninit() {
+  unload() {
     window.removeEventListener("change", this);
     window.removeEventListener("input", this);
-    window.addEventListener("keypress", this);
+    window.removeEventListener("keypress", this);
   },
 
   changeExpr: event => !event.target.validity.valid,
@@ -30,16 +33,21 @@ const gNumberInput = {
 
   handleEvent(event) {
     const item = event.target;
-    if (item.type !== "number") {
+    if (item.type !== "number" && event.type !== "unload") {
       return;
     }
     switch (event.type) {
       case "change": {
         if (this.changeExpr(event)) {
           const {rangeOverflow, rangeUnderflow} = item.validity;
-          if (rangeUnderflow && item.min) item.value = item.min;
-          else if (rangeOverflow && item.max) item.value = item.max;
-          else item.value = document.getElementById(item.getAttribute("preference"))?.valueFromPreferences ?? item.defaultValue;
+          if (rangeUnderflow && item.min) {
+            item.value = item.min;
+          } else if (rangeOverflow && item.max) {
+            item.value = item.max;
+          } else {
+            const preference = document.getElementById(item.getAttribute("preference"), "_PREF_CLASS_");
+            item.value = Number(preference?.valueFromPreferences ?? item.defaultValue);
+          }
         }
         this.updateSpinnerDisabledState(item);
         break;
@@ -52,7 +60,7 @@ const gNumberInput = {
         if (item.editor.textLength > item.maxLength || item.validity.badInput) {
           item.value = item.defaultValue;
         } else if (item.validity.valid) {
-          item.value = parseInt(item.value);
+          item.value = parseInt(item.value.toString());
           item.defaultValue = item.value;
         }
         this.updateSpinnerDisabledState(item);

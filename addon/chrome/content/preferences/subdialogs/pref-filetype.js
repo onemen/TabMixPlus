@@ -1,7 +1,16 @@
 /* exported Init, Select, Mod, Input, Del, Restore */
 "use strict";
 
-var list, entry, edit, del, add;
+/** @type {RichListBox} */
+var list;
+/** @type {Omit<HTMLInputElement, "value"> & {value: string | null}} */
+var entry;
+/** @type {HTMLButtonElement} */
+var edit;
+/** @type {HTMLButtonElement} */
+var del;
+/** @type {HTMLButtonElement} */
+var add;
 
 function Init() {
   const prefwindow = window.opener.document.querySelector("prefwindow");
@@ -25,17 +34,17 @@ function FillData() {
   }
 
   var data = Services.prefs.getCharPref(list.getAttribute('prefstring'));
-  var items, item;
 
   if (!data.length) {
     setButtonDisable(del, true);
     return true;
   }
 
-  items = data.replace(/\\\\/g, '\\').split(' ');
-  for (var i = 0; i < items.length; ++i) {
-    if (items[i] !== "") {
-      item = items[i].trim();
+  const items = data.replace(/\\\\/g, '\\').split(' ');
+  // for (var i = 0; i < items.length; ++i) {
+  for (let item of items) {
+    if (item !== "") {
+      item = item.trim();
       list.appendItem(item, item.toLowerCase());
     }
   }
@@ -108,7 +117,7 @@ function Input() {
   } else {
     // check if the input value is in the list
     var items = list.getElementsByAttribute("value", entry.value.toLowerCase());
-    if (items.length) {
+    if (items?.[0]) {
       SelectItemAt(list.getIndexOfItem(items[0]), false);
       setButtonDisable(edit, true);
       setButtonDisable(add, true);
@@ -140,12 +149,14 @@ function Restore() {
 }
 
 // select new item and focus the list
+/** @type {Globals.SelectItemAt} */
 function SelectItemAt(index, focus) {
   list.ensureIndexIsVisible(index);
   list.selectedIndex = index;
   if (focus) list.focus();
 }
 
+/** @type {Globals.setButtonDisable} */
 function setButtonDisable(button, set) {
   if (set) {
     button.setAttribute("disabled", true);

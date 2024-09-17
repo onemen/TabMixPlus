@@ -1,6 +1,6 @@
 "use strict";
 
-/** @type {MockedGeckoTypes.Services} */ // @ts-ignore - see general.d.ts
+/** @type {MockedGeckoTypes.Services} */ // @ts-expect-error - see general.d.ts
 const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 
@@ -29,6 +29,7 @@ ChromeUtils.defineModuleGetter(this, "TabmixUtils",
 
 var PROCESS_TYPE_CONTENT = Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
 
+/** @type {TabmixContentHandler} */
 var TabmixContentHandler = {
   MESSAGES: [
     "Tabmix:restorePermissions",
@@ -105,6 +106,7 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:collectReloadData": {
+        /** @type {{isPostData: boolean, postData: unknown}} */
         let postData = {isPostData: false, postData: null};
         if (!Services.appinfo.sessionHistoryInParent) {
           const history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
@@ -147,7 +149,6 @@ var TabmixContentHandler = {
 
   onDrop(event) {
     let links;
-    const linkName = { };
     try {
       // Pass true to prevent the dropping of javascript:/data: URIs
       links = Services.droppedLinkHandler.dropLinks(event, true);
@@ -168,7 +169,6 @@ var TabmixContentHandler = {
         altKey: event.altKey || event.getModifierState("AltGraph")
       },
       links,
-      name: linkName.value
     };
     let result = sendSyncMessage("Tabmix:contentDrop", data);
     if (result[0]) {
@@ -178,6 +178,7 @@ var TabmixContentHandler = {
   }
 };
 
+/** @type {FaviconLoader} */
 var FaviconLoader = {
   get actor() {
     const actor = docShell.domWindow.windowGlobalChild.getActor("LinkHandler");
@@ -233,6 +234,7 @@ var FaviconLoader = {
   },
 };
 
+/** @type {TabmixClickEventHandler} */
 var TabmixClickEventHandler = {
   init: function init(global) {
     global.addEventListener("click", event => {
@@ -251,6 +253,7 @@ var TabmixClickEventHandler = {
     if (ContentSvc.version(1250)) {
       global.addEventListener("click", this, {capture: true, mozSystemGroup: true});
     } else {
+      // @ts-expect-error - Firefox < 1250
       Services.els.addSystemEventListener(global, "click", this, true);
     }
   },
@@ -313,9 +316,9 @@ var TabmixClickEventHandler = {
     let [href, node, principal] = linkData;
     let ownerDoc = event.originalTarget.ownerDocument;
 
-    let csp = ownerDoc.csp;
+    let serializeCSP = "", csp = ownerDoc.csp;
     if (csp) {
-      csp = E10SUtils.serializeCSP(csp);
+      serializeCSP = E10SUtils.serializeCSP(csp);
     }
 
     let referrerInfo = Cc["@mozilla.org/referrer-info;1"].createInstance(
@@ -327,8 +330,9 @@ var TabmixClickEventHandler = {
       referrerInfo.initWithDocument(ownerDoc);
     }
 
-    referrerInfo = E10SUtils.serializeReferrerInfo(referrerInfo);
+    let serializeReferrerInfo = E10SUtils.serializeReferrerInfo(referrerInfo);
 
+    /** @type {Partial<ClickJSONData>} */
     let json = {
       isTrusted: event.isTrusted,
       button: event.button,
@@ -338,8 +342,8 @@ var TabmixClickEventHandler = {
       altKey: event.altKey || event.getModifierState("AltGraph"),
       href: null,
       title: null,
-      csp,
-      referrerInfo,
+      csp: serializeCSP,
+      referrerInfo: serializeReferrerInfo,
     };
 
     if (!ContentSvc.version(1100)) {
@@ -356,6 +360,7 @@ var TabmixClickEventHandler = {
 
     // see getHrefFromNodeOnClick in tabmix's ContentClick.jsm
     // for the case there is no href
+    /** @type {LinkNode} */
     let linkNode = href ? node : LinkNodeUtils.getNodeWithOnClick(event.target);
     if (linkNode) {
       if (!href) {
@@ -364,7 +369,7 @@ var TabmixClickEventHandler = {
         json.triggeringPrincipal = ownerDoc.nodePrincipal;
       }
       linkNode = LinkNodeUtils.wrap(linkNode, TabmixUtils.focusedWindow(content),
-        href && event.button === 0);
+        Boolean(href && event.button === 0));
     }
 
     let result = sendSyncMessage("TabmixContent:Click",
@@ -431,6 +436,7 @@ var TabmixClickEventHandler = {
             let isPrivateWin =
             ownerDoc.nodePrincipal.originAttributes.privateBrowsingId > 0;
             sm.checkSameOriginURI(
+              // @ts-expect-error - deprecated
               docshell.mixedContentChannel.URI,
               targetURI,
               false,
@@ -450,7 +456,8 @@ var TabmixClickEventHandler = {
       if (
         ContentSvc.version(1050) &&
         (ownerDoc.URL === "about:newtab" || ownerDoc.URL === "about:home") &&
-        node.dataset.isSponsoredLink === "true"
+        // we are here only when we have href, so we also have node
+        node?.dataset.isSponsoredLink === "true"
       ) {
         json.globalHistoryOptions = {triggeringSponsoredURL: href};
       }
@@ -482,15 +489,12 @@ var TabmixClickEventHandler = {
   /**
    * Extracts linkNode and href for the current click target.
    *
-   * @param event
-   *        The click event.
-   * @return [href, linkNode, linkPrincipal].
-   *
    * @note linkNode will be null if the click wasn't on an anchor
    *       element. This includes SVG links, because callers expect |node|
    *       to behave like an <a> element, which SVG links (XLink) don't.
    */
   _hrefAndLinkNodeForClickEvent(event) {
+    /** @param {ContentClickLinkElement} aNode */
     function isHTMLLink(aNode) {
       // Be consistent with what nsContextMenu.js does.
       return content.HTMLAnchorElement.isInstance(aNode) && aNode.href ||
@@ -531,6 +535,7 @@ var TabmixClickEventHandler = {
   },
 };
 
+/** @type {ContextMenuHandler} */
 var ContextMenuHandler = {
   init(global) {
     if (ContentSvc.version(1250)) {
@@ -539,6 +544,7 @@ var ContextMenuHandler = {
         mozSystemGroup: true,
       });
     } else {
+      // @ts-expect-error - Firefox < 1250
       Services.els.addSystemEventListener(global, "contextmenu", this.prepareContextMenu, true);
     }
   },
@@ -548,7 +554,8 @@ var ContextMenuHandler = {
       return;
     }
 
-    let links;
+    /** @type {Map<string, string>} */
+    let links = new Map();
     if (ContentSvc.prefBranch.getBoolPref("openAllLinks")) {
       links = ContextMenu.getSelectedLinks(content);
     }
@@ -560,7 +567,10 @@ var ContextMenuHandler = {
 const AMO = new RegExp("https://addons.mozilla.org/.+/firefox/addon/tab-mix-plus/");
 const BITBUCKET = "https://bitbucket.org/onemen/tabmixplus/issues?status=new&status=open";
 
+/** @type {TabmixPageHandler} */
 var TabmixPageHandler = {
+  _timeoutID: 0,
+
   init(global) {
     global.addEventListener("DOMContentLoaded", this);
   },
@@ -596,8 +606,10 @@ var TabmixPageHandler = {
       bugReport.className = "button";
       bugReport.target = "_blank";
       bugReport.style.marginBottom = "4px";
-      let ul = email.parentNode.parentNode;
-      ul.parentNode.insertBefore(bugReport, ul);
+      let ul = email.parentNode?.parentNode;
+      if (ul) {
+        ul.parentNode?.insertBefore(bugReport, ul);
+      }
     }
   },
 
@@ -624,7 +636,7 @@ var TabmixPageHandler = {
     }
     let button = doc.getElementById(this.buttonID);
     if (addReview && button) {
-      addReview.parentNode.insertBefore(button, addReview);
+      addReview.parentNode?.insertBefore(button, addReview);
     }
   },
 

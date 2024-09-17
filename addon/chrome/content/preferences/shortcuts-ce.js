@@ -21,6 +21,10 @@
     return shortcutKeyMap;
   });
 
+  /**
+   *  @param {string} shortcutString
+   *  @returns {Promise<string[] | null>}
+   */
   const getDuplicateShortcutAddonsName = async shortcutString => {
     if (!TabmixSvc.version(900)) {
       return null;
@@ -33,6 +37,7 @@
     return null;
   };
 
+  /** @type {MozShortcutClass} */
   class MozShortcut extends MozXULElement {
     static get inheritedAttributes() {
       return {
@@ -42,6 +47,7 @@
       };
     }
 
+    /** @this {MozShortcutClass} */
     connectedCallback() {
       if (this._initialized || this.delayConnectedCallback()) {
         return;
@@ -59,7 +65,7 @@
               onfocus="this.shortcut.updateFocus(true);"
               onmousedown="event.stopPropagation(); event.preventDefault(); this.select();"
               onchange="event.stopPropagation();"/>
-            <image anonid="reset" class="shortcut-image" tooltiptext="&shortcuts.reset;" _hidden="true"
+            <image anonid="shortcut_reset" class="shortcut-image" tooltiptext="&shortcuts.reset;" _hidden="true"
               onclick="resetKey();"/>
             <image anonid="disable" class="shortcut-image" tooltiptext="&shortcuts.clear;"
               onclick="disableKey();"/>
@@ -75,17 +81,25 @@
 
       this._key = null;
 
-      this.description = this.querySelector("description");
-      this.notificationbox = this.getElementsByAttribute("anonid", "notificationbox")[0];
-
-      this.editBox = this.getElementsByAttribute("anonid", "editBox")[0];
       this.editBox.shortcut = this;
 
       this._initialized = true;
     }
 
+    get description() {
+      return Tabmix.lazyGetter(this, "description", this.querySelector("description"));
+    }
+
+    get editBox() {
+      return Tabmix.lazyGetter(this, "editBox", () => this.getElementsByAttribute("anonid", "editBox")[0]);
+    }
+
+    get notificationbox() {
+      return Tabmix.lazyGetter(this, "notificationbox", () => this.getElementsByAttribute("anonid", "notificationbox")[0]);
+    }
+
     get keyid() {
-      return Shortcuts.keys[this.id].id || 'key_tm_' + this.id;
+      return Shortcuts.keys[this.id]?.id || 'key_tm_' + this.id;
     }
 
     set blocked(val) {
@@ -102,7 +116,9 @@
     }
 
     set disabled(val) {
-      this._key.disabled = val;
+      if (this._key) {
+        this._key.disabled = Boolean(val);
+      }
     }
 
     get disabled() {
@@ -115,12 +131,12 @@
     }
 
     get value() {
-      return this.getAttribute('value');
+      return this.getAttribute('value') ?? "";
     }
 
     set key(val) {
       this._key = val;
-      this.value = val.disabled ? "" : getFormattedKey(val);
+      this.value = val?.disabled ? "" : getFormattedKey(val);
     }
 
     get key() {
@@ -128,9 +144,9 @@
     }
 
     get defaultPref() {
-      const defaultVal = (Shortcuts.keys[this.id].default || "").replace(/^d&/, "");
+      const defaultVal = (Shortcuts.keys[this.id]?.default || "").replace(/^d&/, "");
       if (defaultVal) {
-        const resetButton = this.getElementsByAttribute("anonid", "reset")[0];
+        const resetButton = this.getElementsByAttribute("anonid", "shortcut_reset")[0];
         resetButton.setAttribute("_hidden", false);
         const defaultKey = getFormattedKey(Shortcuts.keyParse(defaultVal));
         resetButton.setAttribute("tooltiptext",
@@ -144,6 +160,7 @@
       return defaultVal;
     }
 
+    /** @type {MozShortcutClass["valueFromPreferences"]} */
     valueFromPreferences(aKeyData) {
       this.description.textContent = this.getAttribute("label");
       if (!aKeyData.value && !this._key)
@@ -154,6 +171,7 @@
       return this.updateNotification();
     }
 
+    /** @type {MozShortcutClass["updateFocus"]} */
     updateFocus(onFocus) {
       if (onFocus) {
         this.editBox.select();
@@ -164,6 +182,7 @@
       this.setAttribute("focused", onFocus);
     }
 
+    /** @type {MozShortcutClass["applyNewValue"]} */
     applyNewValue(aNewValue, aDisabled) {
       const newValue = (aDisabled ? "d&" : "") + (aNewValue || "").replace(/^d&/, "");
       if (newValue != Shortcuts.keyStringify(this.key)) {
@@ -175,18 +194,21 @@
         shortcuts.keys[this.id] = newValue;
         shortcuts.value = JSON.stringify(shortcuts.keys);
         Shortcuts.prefsChangedByTabmix = true;
-        $("pref_shortcuts").value = shortcuts.value;
+        $Pref("pref_shortcuts").value = shortcuts.value;
         Shortcuts.prefsChangedByTabmix = false;
+        /** @param {MozShortcutClass} shortcut */
         const callBack = shortcut => shortcut.id && shortcut.updateNotification();
         gMenuPane.updateShortcuts(this.parentNode, callBack);
       }
       this.editBox.select();
     }
 
+    /** @this {MozShortcutClass} */
     resetKey() {
       this.applyNewValue(this.defaultPref, false);
     }
 
+    /** @this {MozShortcutClass} */
     disableKey() {
       if (!this.disabled)
         this.applyNewValue("", true);
@@ -197,12 +219,17 @@
       const usedKey = shortcut && getKeysForShortcut(shortcut, this.keyid);
       const box = this.notificationbox;
       while (box.hasChildNodes()) {
-        box.firstChild.remove();
+        box.firstChild?.remove();
       }
 
-      function addDescription(label) {
+      /**
+       * @param {string | null} label
+       * @param {number} [_index]
+       * @param {*[]} [_array]
+       */
+      function addDescription(label, _index, _array) {
         const node = document.createXULElement("description");
-        node.setAttribute("value", label);
+        node.setAttribute("value", label ?? "");
         box.appendChild(node);
       }
 
@@ -215,7 +242,7 @@
               (names || [box.getAttribute("otherExtension")]).forEach(addDescription);
             });
           } else {
-            addDescription(msg[i]);
+            addDescription(msg[i] ?? "");
           }
         }
         if (!this.hasAttribute("used"))
@@ -226,6 +253,7 @@
       return usedKey;
     }
 
+    /** @type {MozShortcutClass["onKeyDown"]} */
     onKeyDown(event) {
       // prevents Alt+C from closing our preferences window
       // note: AltGraph+C does not close window
@@ -242,6 +270,7 @@
         this.handleKeyEvents(event, true);
     }
 
+    /** @type {MozShortcutClass["handleKeyEvents"]} */
     handleKeyEvents(event, ctrl_w) {
       event.preventDefault();
       event.stopPropagation();
@@ -282,6 +311,7 @@
         if (eKeyCode == 8)
           key.keycode = "VK_BACK";
         for (const keycode of Object.keys(KeyboardEvent)) {
+          // @ts-expect-error
           const val = KeyboardEvent[keycode];
           if (val == eKeyCode) {
             const str = ctrl_w ? "DOM_VK_" : "DOM_";

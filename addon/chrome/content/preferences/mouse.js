@@ -1,34 +1,42 @@
 /* exported gMousePane */
 "use strict";
 
+/** @type {MousePane} */
 var gMousePane = {
   _inited: false,
-  clickTab: null,
-  clickTabbar: null,
+
+  get clickTab() {
+    return Tabmix.lazyGetter(this, "clickTab", $("ClickTab"));
+  },
+
+  get clickTabbar() {
+    return Tabmix.lazyGetter(this, "clickTabbar", $("ClickTabbar"));
+  },
+
   init() {
     MozXULElement.insertFTLIfNeeded("browser/tabContextMenu.ftl");
     Tabmix.setFTLDataId("paneMouse");
 
     if (TabmixSvc.isMac) {
       let label = $("tabId").getAttribute("label2");
-      $("tabId").setAttribute("label", label);
+      $("tabId").setAttribute("label", label ?? "");
     }
 
     $("ClickTabPinTab").label = gPrefWindow.pinTabLabel;
 
     // Init tabclicking options
-    this.clickTab = $("ClickTab");
     var menuPopup = this.clickTab.firstChild;
     // block item in tabclicking options that are not in use
     var blocked = TabmixSvc.blockedClickingOptions;
-    for (let i = 0; i < blocked.length; i++) {
-      let item = menuPopup.getElementsByAttribute("value", blocked[i])[0];
-      item.hidden = true;
+    for (const commandId of blocked) {
+      let item = menuPopup.getElementsByAttribute("value", commandId)[0];
+      if (item) {
+        item.hidden = true;
+      }
     }
-    this.clickTabbar = $("ClickTabbar");
     this.clickTabbar.appendChild(this.clickTab.firstChild.cloneNode(true));
     this.updatePanelPrefs($("tabclick").selectedIndex);
-    this.updateDblClickTabbar($("pref_click_dragwindow"));
+    this.updateDblClickTabbar($Pref("pref_click_dragwindow"));
 
     gPrefWindow.initPane("paneMouse");
 
@@ -71,7 +79,7 @@ var gMousePane = {
   },
 
   updatePref(element, prefID) {
-    let preference = $(prefID);
+    let preference = $Pref(prefID);
     element.setAttribute("preference", prefID);
     preference.setElementValue(element);
   },
@@ -82,6 +90,7 @@ var gMousePane = {
   },
 
   resetPreference(checkbox) {
+    /** @type {MousePaneNS.MenuList} */ // @ts-expect-error
     let menulist = $(checkbox.getAttribute("control"));
     let prefID = menulist.getAttribute("preference");
     $(prefID).value = checkbox.checked ? menulist[prefID] || 0 : -1;
@@ -89,7 +98,7 @@ var gMousePane = {
 
   setCheckedState(menulist) {
     let prefID = menulist.getAttribute("preference");
-    let val = $(prefID).value;
+    let val = $Pref(prefID).numberValue;
     if (val != -1)
       menulist[prefID] = val;
     menulist.disabled = val == -1;
@@ -97,7 +106,7 @@ var gMousePane = {
   },
 
   updateDblClickTabbar(pref) {
-    let dblClickTabbar = $("pref_dblclick_changesize");
+    let dblClickTabbar = $Pref("pref_dblclick_changesize");
     if (pref.value && !dblClickTabbar.value)
       dblClickTabbar.value = pref.value;
     let checkbox = $("dblclick_changesize")._checkbox;

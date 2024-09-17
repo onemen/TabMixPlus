@@ -14,7 +14,7 @@
     "allowUnusedLabels": false,
     "alwaysStrict": true,
     // "noFallthroughCasesInSwitch": true, // we have lint rule for this
-    // "noImplicitAny": true, // maybe in the future
+    "noImplicitAny": true,
     // "noImplicitOverride": true, // useless for our use case
     "noImplicitReturns": true,
     "noImplicitThis": true,
@@ -22,13 +22,13 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     // "noUnusedParameters": true, // we have eslint rule for this
-    // "strict": true,
+    "strict": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
 
-    // "strictNullChecks": true,
-    // "exactOptionalPropertyTypes": true,
-    // "strictPropertyInitialization": true
+    "strictNullChecks": true,
+    "exactOptionalPropertyTypes": true,
+    "strictPropertyInitialization": true
   }
 }

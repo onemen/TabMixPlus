@@ -2,8 +2,7 @@
 /* exported load, accept, onInput, onSelect, openPopup */
 "use strict";
 
-/** @type {TabmixModules.TabmixSvc} */
-const TabmixSvc = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm").TabmixSvc;
+const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const gPref = TabmixSvc.prefBranch;
 
@@ -53,13 +52,13 @@ function accept() {
 function getCustomReloadTime() {
   let minutes;
   if (document.getElementById("autoreload_minutes").value !== '')
-    minutes = parseInt(document.getElementById("autoreload_minutes").value);
+    minutes = parseInt(String(document.getElementById("autoreload_minutes").value));
   else
     minutes = 0;
 
   let seconds;
   if (document.getElementById("autoreload_seconds").value !== '')
-    seconds = parseInt(document.getElementById("autoreload_seconds").value);
+    seconds = parseInt(String(document.getElementById("autoreload_seconds").value));
   else
     seconds = 0;
   return minutes * 60 + seconds;
@@ -69,10 +68,12 @@ function updateOkButtonDisabledState() {
   document.documentElement.getButton("accept").disabled = getCustomReloadTime() === 0;
 }
 
+/** @type {Globals.oninput} */
 function onInput(item) {
-  item.value = parseInt(item.value);
-  if (item.value == 'NaN')
+  item.value = parseInt(item.value.toString());
+  if (item.value.toString() === 'NaN') {
     item.value = '';
+  }
   let val = Number(item.value);
   if (val < 0)
     item.value = -item.value;
@@ -82,6 +83,7 @@ function onInput(item) {
   updateOkButtonDisabledState();
 }
 
+/** @type {Globals.onSelect} */
 function onSelect(event) {
   const item = event.target;
   const input = item.closest(".combined-element").firstChild;
@@ -90,11 +92,12 @@ function onSelect(event) {
   updateOkButtonDisabledState();
 }
 
+/** @type {Globals.openPopup} */
 function openPopup(button) {
   const popup = button.nextElementSibling;
   if (popup.state !== "closed") {
     popup.hidePopup();
   } else {
-    popup.openPopup(button.parentNode.parentNode, "after_start", 0, -1);
+    popup.openPopup(button.closest(".container"), "after_start", 0, -1);
   }
 }

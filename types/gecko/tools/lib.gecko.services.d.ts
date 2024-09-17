@@ -1,10 +1,11 @@
+// don't check the imported files
+// @ts-nocheck
+
 /**
  * NOTE: Do not modify this file by hand.
  * Content was generated from services.json.
+ * If you're updating some of the sources, see README for instructions.
  */
-
-// don't check the imported files
-// @ts-nocheck
 
 interface JSServices {
   DAPTelemetry: nsIDAPTelemetry;

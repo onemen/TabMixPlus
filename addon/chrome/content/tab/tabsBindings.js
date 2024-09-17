@@ -6,7 +6,7 @@
     "_notifyBackgroundTab",
     /**
      *  @this {typeof gBrowser.tabContainer}
-     *  @param {MockedGeckoTypes.BrowserTab} aTab
+     *  @param {Tab} aTab
      */
     function _notifyBackgroundTab(aTab) {
       if (aTab.pinned || aTab.hidden || (TabmixSvc.version(1190) ?
@@ -19,6 +19,7 @@
       if (!this._backgroundTabScrollPromise) {
         this._backgroundTabScrollPromise = window
             .promiseDocumentFlushed(() => {
+              // @ts-expect-error
               let lastTabRect = this._lastTabToScrollIntoView.getBoundingClientRect();
               let selectedTab = this.selectedItem;
               let tabRect;
@@ -51,11 +52,13 @@
               // Then, if the layout info isn't for the last-scrolled-to-tab, re-run
               // the code above to get layout info for *that* tab, and don't do
               // anything here, as we really just want to run this for the last-opened tab.
-              if (this._lastTabToScrollIntoView != tabToScrollIntoView) {
-                this._notifyBackgroundTab(this._lastTabToScrollIntoView);
-                return;
+              if (this._lastTabToScrollIntoView) {
+                if (this._lastTabToScrollIntoView != tabToScrollIntoView) {
+                  this._notifyBackgroundTab(this._lastTabToScrollIntoView);
+                  return;
+                }
+                delete this._lastTabToScrollIntoView;
               }
-              delete this._lastTabToScrollIntoView;
               // Is the new tab already completely visible?
               if (Tabmix.tabsUtils.isElementVisible(tabToScrollIntoView)) {
                 return;

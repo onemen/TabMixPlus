@@ -2,6 +2,7 @@
 /* exported tabstyles */
 "use strict";
 
+/** @param {string} id @type {Document["getElementById"]} */
 this.$ = id => document.getElementById(id);
 
 const tabstyles = {
@@ -31,7 +32,7 @@ const tabstyles = {
   cancel() {
     const panels = $("stylespanels").childNodes;
     for (const panel of panels) {
-      $(panel.id)._ondialogcancel();
+      panel?._ondialogcancel();
     }
     this.save();
   },
@@ -41,7 +42,8 @@ const tabstyles = {
     if (win) {
       win.openHelp("display-tab#customize_styles");
     } else {
-      this.dialog.getButton("extra1").disabled = true;
+      const dialog = document.querySelector("dialog");
+      dialog.getButton("extra1").disabled = true;
     }
   },
 
@@ -50,7 +52,7 @@ const tabstyles = {
     const extra = dialog.getButton("extra2");
     const item = $("hide-RGB");
     const wasShow = dialog.getAttribute("hide-RGB") != "true";
-    extra.label = item.value = item.getAttribute(wasShow ? 'show' : 'hide');
+    extra.label = item.value = item.getAttribute(wasShow ? 'show' : 'hide') ?? "";
     dialog.setAttribute("hide-RGB", wasShow);
   }
 };

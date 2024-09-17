@@ -4,10 +4,12 @@
 // so we don't evaluate all code as strict mode code
 
 // aOptions can be: getter, setter or forceUpdate
+// @ts-expect-error - when ChangeCode throw an error Tabmix.changeCode is null
 Tabmix.changeCode = function(aParent, afnName, aOptions) {
   let console = TabmixSvc.console;
   let debugMode = this._debugMode;
 
+  /** @type {typeof ChangeCodeClass.ChangeCode} */
   function ChangeCode(aParams) {
     this.obj = aParams.obj;
     this.fnName = aParams.fnName;
@@ -25,10 +27,12 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
     } else {
       this.errMsg = "\n" + this.fullName + " is undefined.";
     }
-    this.notFound = [];
+    this.notFound.length = 0;
   }
 
+  /** @type {Partial<typeof ChangeCodeClass.prototype>} */
   ChangeCode.prototype = {
+    notFound: [],
     value: "",
     errMsg: "",
     _replace: function TMP_utils__replace(substr, newString, aParams) {
@@ -111,15 +115,18 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       }
 
       let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
+      /** @type {Partial<ChangeCodeNS.Descriptor>} */
       let descriptor = {enumerable: true, configurable: true};
 
-      let removeSpaces = function(match, p1 = "", p2 = "", p3 = "") {
+      let removeSpaces = function(_match = "", p1 = "", p2 = "", p3 = "") {
         return p1 + (p2 + p3).replace(/\s/g, '_');
       };
 
+      /** @param {string} type */
       let setDescriptor = type => {
         let fnType = "__lookup#ter__".replace("#", type);
         type = type.toLowerCase();
+        /** @type {string} */ // @ts-expect-error
         let code = aCode && aCode[type + "ter"] ||
                    this.type == fnType ? this.value : obj[fnType](fnName);
 
@@ -139,8 +146,8 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       Object.defineProperty(obj, fnName, descriptor);
     },
 
-    show(aObj, aName) {
-      if (aObj && aName in aObj) {
+    show(aObj, aName = "") {
+      if (aObj?.hasOwnProperty(aName)) {
         console.show({obj: aObj, name: aName, fullName: this.fullName});
       } else if (typeof this.fullName == "string") {
         let win = typeof window != "undefined" ? window : undefined;
@@ -173,14 +180,15 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
     getCallerData(stack) {
       let caller = (stack.caller || {}).caller || {};
       let {filename, lineNumber, columnNumber, name} = caller;
-      return {filename, lineNumber, columnNumber, fnName: name};
+      return {filename, lineNumber, columnNumber, fnName: name, message: ""};
     }
   };
 
   try {
+    /** @type {ChangeCodeClass} */ // @ts-expect-error
     return new ChangeCode({
       obj: aParent,
-      fnName: afnName.split(".").pop(),
+      fnName: afnName.split(".").pop() ?? "",
       fullName: afnName,
       options: aOptions
     });

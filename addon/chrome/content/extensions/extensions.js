@@ -10,6 +10,7 @@
  * Fix compatibility with other extensions
  *
  */
+/** @type {ExtensionsCompatibility} */
 var TMP_extensionsCompatibility = {
   preInit: function TMP_EC_preInit() {
     if ("TreeStyleTabWindowHelper" in window) {

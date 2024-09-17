@@ -34,11 +34,16 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
 
 // Don't change this function name other extensions using it
 // Speed-Dial, Fast-Dial, TabGroupManager
-function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab) {
+/** @type {GlobalFunctions.TMP_BrowserOpenTab} */
+function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
   var newTabContent = replaceLastTab ? Tabmix.prefs.getIntPref("replaceLastTabWith.type") :
     Tabmix.prefs.getIntPref("loadOnNewTab.type");
-  var url;
-  let {event, url: passedURL = null} = Tabmix.isVersion(1150) ? eventOrObject ?? {} : {event: eventOrObject};
+  /** @type {string} */
+  let url = "";
+  let {event, url: passedURL = null} = Tabmix.isVersion(1150) ?
+    eventOrObject ?? {} :
+    {event: MouseEvent.isInstance(eventOrObject) ? eventOrObject : null};
+
   let werePassedURL = Boolean(passedURL);
   let searchClipboard = window.gMiddleClickNewTabUsesPasteboard && event?.button == 1;
   var newTabUrl = BROWSER_NEW_TAB_URL;
@@ -48,6 +53,7 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab) {
       url = "about:blank";
       break;
     case 1: // home page
+      /** @type {string} */ // @ts-expect-error
       url = HomePage.get().split("|")[0];
       break;
     case 2: // current URI
@@ -56,9 +62,11 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab) {
       break;
     case 3: { // duplicate tab
       let currentUrl = gBrowser.currentURI.spec;
-      let dupTab = Tabmix.duplicateTab(selectedTab, null, null, null, true);
-      Tabmix.clearUrlBarIfNeeded(dupTab, currentUrl, true, replaceLastTab);
-      return dupTab;
+      let dupTab = Tabmix.duplicateTab(selectedTab, "", undefined, false, true);
+      if (dupTab) {
+        Tabmix.clearUrlBarIfNeeded(dupTab, currentUrl, true, replaceLastTab);
+      }
+      return;
     }
     case 4: {// user url
       if (replaceLastTab || TabmixSvc.isCyberfox) {
@@ -104,7 +112,7 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab) {
   var loadInBackground = replaceLastTab ? false :
     Tabmix.prefs.getBoolPref("loadNewInBackground");
   let baseTab = aTab && aTab.localName == "tab" ? aTab : null;
-  let openTabNext = baseTab || !replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext");
+  let openTabNext = Boolean(baseTab) || !replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext");
 
   let where = "tab";
   // Let accel-click and middle-click on the new tab button toggle openTabNext preference
@@ -128,7 +136,7 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab) {
       case "window":
         if (!TabmixSvc.getSingleWindowMode()) {
           window.openWebLinkIn(url, where);
-          return null;
+          return;
         }
         break;
     }
@@ -138,6 +146,7 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab) {
   Services.obs.notifyObservers(
     {
       wrappedJSObject: new Promise(resolve => {
+        /** @type {AddTabParams} */
         let options = {
           resolveOnNewTabCreated: resolve,
           charset: loadBlank ? null : gBrowser.selectedBrowser.characterSet,
@@ -215,9 +224,6 @@ Tabmix.clearUrlBarIfNeeded = function(aTab, aUrl, aTimeOut, replaceLastTab) {
   }
   // don't try to focus urlbar on popup
   if (aTab.selected && window.toolbar.visible) {
-    if (gMultiProcessBrowser) {
-      aTab._skipContentFocus = true;
-    }
     if (aTimeOut) {
       setTimeout(() => gURLBar.select(), 30);
     } else {
@@ -265,6 +271,7 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
  */
 Tabmix.openUILink_init = function TMP_openUILink_init() {
   if ("openUILink" in window) {
+    /** @type {Window | Window["URILoadingHelper"]} */
     let parentObj = window;
     if (Tabmix.isVersion(1120)) {
       parentObj = window.URILoadingHelper;
@@ -331,11 +338,15 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
     this.autoReload.initTab(aTab);
     aTab.autoReloadEnabled = true;
     aTab.setAttribute("_reload", true);
-    reloadData = reloadData.split(" ");
-    aTab.autoReloadURI = reloadData[0];
-    aTab.autoReloadTime = reloadData[1];
-    if (pending) {
-      this.autoReload.restorePendingTabs(aTab);
+    const [uri, time] = reloadData.split(" ");
+    if (uri && time) {
+      aTab.autoReloadURI = uri;
+      aTab.autoReloadTime = Number(time);
+      if (pending) {
+        this.autoReload.restorePendingTabs(aTab);
+      }
+    } else {
+      console.warn(`Invalid reloadData format: ${reloadData} +for tab ${aTab.label}`);
     }
   }
 
@@ -383,7 +394,7 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
   }
   if (!aTab)
     return;
-  let style = "null";
+  let style = null;
   let isSelected = TabmixSvc.version(1190) ?
     aTab.hasAttribute("visuallyselected") :
     aTab.getAttribute("visuallyselected") === "true";
@@ -410,6 +421,10 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
 };
 
 Tabmix.handleTabbarVisibility = {
+  get contextMenu() {
+    return Tabmix.lazyGetter(this, "contextMenu", document.getElementById("toolbar-context-menu"));
+  },
+
   get pref() {
     return Tabmix.prefs.getBoolPref("hideTabbar.showContextMenu");
   },
@@ -433,7 +448,7 @@ Tabmix.handleTabbarVisibility = {
       if (this.enabled) {
         // remove our menu items
         const items = this.contextMenu.querySelectorAll("[tabmix_context]");
-        items.forEach(item => item.remove());
+        items.forEach(item => item?.remove());
       }
       this.enabled = enable;
       const eventListener = enable ? "addEventListener" : "removeEventListener";
@@ -461,13 +476,13 @@ Tabmix.handleTabbarVisibility = {
       document.getElementById("viewToolbarsMenuSeparator").previousSibling;
     const target = targetElement?.nextSibling;
 
-    const {hideTabbarMenu, separator} = this.getHideTabbarMenu();
-    this.contextMenu.insertBefore(separator, target);
-    this.contextMenu.insertBefore(hideTabbarMenu, target);
-    separator.hidden = Boolean(targetElement);
+    if (target) {
+      const {hideTabbarMenu, separator} = this.getHideTabbarMenu();
+      this.contextMenu.insertBefore(separator, target);
+      this.contextMenu.insertBefore(hideTabbarMenu, target);
+      separator.hidden = Boolean(targetElement);
+    } else {
+      console.log("Tabmix: no target found to insert 'Hide the tab bar' menu");
+    }
   },
 };
-
-TabmixChromeUtils.defineLazyGetter(Tabmix.handleTabbarVisibility, "contextMenu", () => {
-  return document.getElementById("toolbar-context-menu");
-});

@@ -2,6 +2,7 @@
 
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 
+/** @type {TabmixTypes} */ // @ts-expect-error - TabmixTypes included properties added in another files
 var Tabmix = {
   get prefs() {
     return this.lazyGetter(this, "prefs", Services.prefs.getBranch("extensions.tabmix."));
@@ -42,13 +43,19 @@ var Tabmix = {
       if (typeof aVal == "boolean")
         aVal = aVal ? "true" : "false";
 
-      if (!elem.hasAttribute(aAttr) || elem.getAttribute(aAttr) != aVal)
-        elem.setAttribute(aAttr, aVal);
+      if (!elem.hasAttribute(aAttr) || elem.getAttribute(aAttr) != aVal) {
+        const stringVal = typeof aVal !== "string" ? String(aVal) : aVal;
+        elem.setAttribute(aAttr, stringVal);
+      }
     }
   },
 
   setAttributeList(aItemOrId, aAttr, aValue, aAdd) {
     let elem = typeof aItemOrId == "string" ? document.getElementById(aItemOrId) : aItemOrId;
+    if (!elem) {
+      console.error(`Tabmix setAttributeList: ${aItemOrId} not found`);
+      return;
+    }
     let att = elem.getAttribute(aAttr);
     let array = att ? att.split(" ") : [];
     let index = array.indexOf(aValue);
@@ -63,43 +70,41 @@ var Tabmix = {
   },
 
   setFTLDataId(elementId, map = TabmixSvc.i10IdMap) {
+    /** @type {TabmixNS.convert} */
     function convert(id, data = map[id]) {
       return data && !Tabmix.isVersion(data.before) ? convert(data.l10n) : id;
     }
+    /** @type {(HTMLElement & HTMLInputElement & XULTab) | null | undefined} */
     const element = document.getElementById(elementId);
+    if (!element) {
+      console.error(`Tabmix setFTLDataId: ${elementId} not found`);
+      return;
+    }
+    /** @type {(HTMLElement | null)[]} */
     const nodes = element.hasAttribute("data-lazy-l10n-id") ?
-      [element] : element.querySelectorAll("[data-lazy-l10n-id]");
-    nodes
-        .forEach(el => {
-          const l10Id = convert(el.getAttribute("data-lazy-l10n-id"));
-          el.setAttribute("data-l10n-id", l10Id);
-          el.removeAttribute("data-lazy-l10n-id");
-        });
+      [element] : [...element.querySelectorAll("[data-lazy-l10n-id]")];
+    nodes.forEach(el => {
+      if (!el) return;
+      const dataId = el.getAttribute("data-lazy-l10n-id");
+      if (!dataId) {
+        console.error(`Tabmix setFTLDataId: ${elementId} has no data-lazy-l10n-id`);
+        return;
+      }
+      const l10Id = convert(dataId);
+      el.setAttribute("data-l10n-id", l10Id);
+      el.removeAttribute("data-lazy-l10n-id");
+    });
   },
 
   getBoundsWithoutFlushing(element) {
-    if (!("_DOMWindowUtils" in this)) {
-      try {
-        this._DOMWindowUtils =
-          window.QueryInterface(Ci.nsIInterfaceRequestor)
-              .getInterface(Ci.nsIDOMWindowUtils);
-        if (!this._DOMWindowUtils.getBoundsWithoutFlushing) {
-          this._DOMWindowUtils = null;
-        }
-      } catch {
-        this._DOMWindowUtils = null;
-      }
-    }
-    return this._DOMWindowUtils ?
-      this._DOMWindowUtils.getBoundsWithoutFlushing(element) :
-      element.getBoundingClientRect();
+    return window.windowUtils?.getBoundsWithoutFlushing(element) ?? element.getBoundingClientRect();
   },
 
   getTopWin() {
     return Services.wm.getMostRecentWindow("navigator:browser");
   },
 
-  isNewWindowAllow(isPrivate) {
+  isNewWindowAllow(isPrivate = false) {
     // allow to open new window if:
     //   user are not in single window mode or
     //   there is no other window with the same privacy type
@@ -123,11 +128,17 @@ var Tabmix = {
     });
   },
 
-  lazyGetter(obj, name, get, config = {
+  lazyGetter(obj, name, get, baseConfig = {
     configurable: true,
     enumerable: true,
   }) {
-    config.value = typeof get == "function" ? get() : get;
+    if (!(name in obj)) {
+      console.error(`Tabmix.lazyGetter: "get ${name}" does not exist when calling:\n${Error().stack?.split("\n").slice(1, 2) ?? ""}`);
+    }
+    const config = {
+      ...baseConfig,
+      value: typeof get == "function" ? get() : get
+    };
     Object.defineProperty(obj, name, config);
     return config.value;
   },
@@ -150,10 +161,10 @@ var Tabmix = {
   informAboutChangeInTabmix(aOldName, aNewName) {
     let err = Error(aOldName + " is deprecated in Tabmix, use " + aNewName + " instead.");
     // cut off the first lines, we looking for the function that trigger the getter.
-    let stack = Error().stack.split("\n").slice(3);
+    let stack = Error().stack?.split("\n").slice(3) ?? [];
     let stackData = stack[0] ? stack[0].split("@") : null;
     if (stackData && stackData.length == 2) {
-      let [path, line] = stackData[1].replace("chrome://", "").split(":");
+      let [path = "", line = 0] = stackData[1]?.replace("chrome://", "").split(":") ?? [];
       let index = path.indexOf("/") - 1;
       let extensionName = index > -1 ?
         path.charAt(0).toUpperCase() + path.substr(1, index) + " " : "";
@@ -179,19 +190,20 @@ var Tabmix = {
 
     // we use non modal dialog when we call for prompt on startup
     // when we don't have a callBack function use modal dialog
-    let modal = typeof aCallBack != "function";
+    const modal = typeof aCallBack != "function";
     var i;
     for (i = 0; i < intParam.length; i++)
-      dpb.SetInt(i, intParam[i]);
+      dpb.SetInt(i, intParam[i] ?? 0);
     // strParam labels for: title, msg, testbox.value, checkbox.label, buttons[]
     // buttons[]: labels array for each button
     for (i = 0; i < strParam.length; i++)
-      dpb.SetString(i, strParam[i]);
+      dpb.SetString(i, strParam[i] ?? "");
 
     if (typeof aWindow == "undefined") {
       try {
         aWindow = window;
       } catch {
+        // @ts-expect-error - Services.ww.openWindow can be called with parent = null
         aWindow = null;
       }
     }
@@ -304,8 +316,7 @@ var Tabmix = {
 
   originalFunctions: {},
   destroy: function TMP_utils_destroy() {
-    this.toCode = null;
-    this.originalFunctions = null;
+    this.originalFunctions = {};
   }
 };
 

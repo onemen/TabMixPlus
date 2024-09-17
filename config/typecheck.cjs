@@ -12,7 +12,14 @@ function filterLines(input, output) {
       return;
     }
 
-    const lines = data.split("\n");
+    const lines = []
+    for (const line of data.split("\n")) {
+      if (line.startsWith(" ")) {
+        lines[lines.length-1] = lines.at(-1) + "\n" + line;
+      } else {
+        lines.push(line);
+      }
+    }
     const prefixes = ["addon", "config", "types"];
     const filteredLines = lines.filter(line => prefixes.some(prefix => line.startsWith(prefix)));
     const cleanData = filteredLines.length ? filteredLines.join("\n") : "No errors found!";
@@ -31,11 +38,14 @@ function main() {
 
   // Execute TypeScript compilation
   try {
-    child_process.execSync(`tsc -b > ${inputFile}`);
-  } catch { }
+    child_process.execSync(`tsc -b -f> ${inputFile}`);
+  } catch {}
 
   // Call your filterLines function
   filterLines(inputFile, outputFile);
+
+  // Delete the input file
+  fs.unlinkSync(inputFile);
 }
 
 main();

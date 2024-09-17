@@ -1,14 +1,18 @@
 /* exported gEventsPane */
 "use strict";
 
+/** @type {EventsPane} */
 var gEventsPane = {
   init() {
     // for locales with long labels
     var hbox = $("focusTab-box");
     var label = $("focusTab-label").getBoundingClientRect().width;
     var menulist = $("focusTab");
-    if (hbox.parentNode.getBoundingClientRect().width > label + menulist.getBoundingClientRect().width) {
-      menulist.parentNode.removeAttribute("pack");
+    if (
+      hbox.parentNode &&
+      hbox.parentNode.getBoundingClientRect().width > label + menulist.getBoundingClientRect().width
+    ) {
+      menulist.parentNode?.removeAttribute("pack");
       hbox.setAttribute("orient", "horizontal");
       hbox.setAttribute("align", "center");
     }
@@ -21,16 +25,17 @@ var gEventsPane = {
       gPrefWindow.removeItemAndPrefById("pref_ctrltab.tabPreviews");
     }
 
-    this.newTabUrl($("pref_loadOnNewTab"), false, false);
+    this.newTabUrl($Pref("pref_loadOnNewTab"), false, false);
     this.disableReplaceLastTabWith();
     this.disableShowTabList();
 
     if (RTL_UI) {
-      let focusTab = $("focusTab").firstChild.childNodes;
+      /** @type {[Node,Node,Node,Node,Node,Node]} */ // @ts-expect-error - there are 6 labels in the list
+      let focusTab = $("focusTab").firstChild?.childNodes;
       let [rightLabel, leftLabel] = [focusTab[2].label, focusTab[1].label];
-      [focusTab[2].label, focusTab[1].label] = [leftLabel, rightLabel];
+      [focusTab[2].label, focusTab[1].label] = [leftLabel ?? "", rightLabel ?? ""];
       // "opener/left"
-      focusTab[5].label = focusTab[5].getAttribute("rtlLabel");
+      focusTab[5].label = focusTab[5].getAttribute("rtlLabel") ?? "";
     }
 
     const {label: syncedTabs} = browserWindow.document.getElementById("menu_tabsSidebar");
@@ -50,7 +55,7 @@ var gEventsPane = {
     }
 
     if (!Tabmix.isVersion(1150)) {
-      $("searchclipboardfor").parentElement.remove();
+      $("searchclipboardfor").parentElement?.remove();
       gPrefWindow.removeChild("pref_searchclipboardfor");
     }
 
@@ -62,7 +67,7 @@ var gEventsPane = {
 
     this.alignTabOpeningBoxes();
 
-    this.openTabNext.on_change($("pref_openTabNext"));
+    this.openTabNext.on_change($Pref("pref_openTabNext"));
 
     gPrefWindow.initPane("paneEvents");
   },
@@ -70,8 +75,10 @@ var gEventsPane = {
   // align Tab opening group boxes
   // add setWidth attribute to columns that need to be aligned
   alignTabOpeningBoxes() {
+    /** @type {Record<number, number>} */
     const widths = {};
     const rows = $("tabopening").querySelectorAll("hbox");
+    /** @type {(fn: (col: Element, id: number) => void) => void} */
     function updateGrid(fn) {
       for (let row of rows) {
         let id = 0;
@@ -93,9 +100,9 @@ var gEventsPane = {
   },
 
   disableShowTabList() {
-    var ctrlTabPv = $("pref_ctrltab.tabPreviews");
-    var disableShowTabList = $("pref_ctrltab").value &&
-                             ctrlTabPv && ctrlTabPv.value;
+    var ctrlTabPv = $Pref("pref_ctrltab.tabPreviews");
+    var disableShowTabList = $Pref("pref_ctrltab").booleanValue &&
+      ctrlTabPv && ctrlTabPv.booleanValue;
     gPrefWindow.setDisabled("showTabList", disableShowTabList);
     if (!$("obs_showTabList").hasAttribute("disabled"))
       gPrefWindow.setDisabled("respondToMouse", disableShowTabList);
@@ -105,9 +112,9 @@ var gEventsPane = {
     // we disable replaceLastTabWith if one of this test is true
     // browser.tabs.closeWindowWithLastTab = true OR
     // extensions.tabmix.keepLastTab = true
-    var disable = !$("pref_keepWindow").value || $("pref_keepLastTab").value;
+    var disable = !$Pref("pref_keepWindow").booleanValue || $Pref("pref_keepLastTab").booleanValue;
     gPrefWindow.setDisabled("obs_replaceLastTabWith", disable);
-    this.newTabUrl($("pref_replaceLastTabWith"), disable, !disable);
+    this.newTabUrl($Pref("pref_replaceLastTabWith"), disable, !disable);
   },
 
   newTabUrl(preference, disable, setFocus) {
@@ -121,11 +128,11 @@ var gEventsPane = {
   },
 
   syncFromNewTabUrlPref(item) {
-    var preference = $(item.getAttribute("preference"));
+    var preference = $Pref(item.getAttribute("preference"));
     // If the pref is set to the default, set the value to ""
     // to show the placeholder text
     let value = preference.value;
-    if (value && value.toLowerCase() == TabmixSvc.aboutNewtab)
+    if (value && value.toString().toLowerCase() == TabmixSvc.aboutNewtab)
       return "";
     return this.syncToNewTabUrlPref(value, TabmixSvc.aboutBlank);
   },
@@ -148,7 +155,7 @@ var gEventsPane = {
   },
 
   editSlideShowKey() {
-    document.getElementById("TabMIxPreferences").showPane($("paneMenu"));
+    document.getElementById("TabMIxPreferences").showPane($Pane("paneMenu"));
     if (typeof gMenuPane == "object")
       gMenuPane.editSlideShowKey();
     else
@@ -157,27 +164,28 @@ var gEventsPane = {
 
   loadProgressively: {
     syncToCheckBox(item) {
-      let preference = $(item.getAttribute("preference"));
+      let preference = $Pref(item.getAttribute("preference"));
       if (preference.value === 0) {
         preference.value = 1;
       }
+      const value = preference.numberValue;
       if (preference.hasAttribute("notChecked")) {
-        preference.setAttribute("notChecked", -Math.abs(preference.value));
+        preference.setAttribute("notChecked", -Math.abs(value));
       }
       this.setOnDemandDisabledState();
-      return preference.value > -1;
+      return value > -1;
     },
 
     syncFromCheckBox(item) {
-      let preference = $(item.getAttribute("preference"));
+      let preference = $Pref(item.getAttribute("preference"));
       let control = $(item.getAttribute("control"));
       control.disabled = !item.checked;
-      return -preference.value;
+      return -preference.numberValue;
     },
 
     syncFromPref(item) {
-      const preference = $(item.getAttribute("preference"));
-      const prefValue = Math.abs(preference.value);
+      const preference = $Pref(item.getAttribute("preference"));
+      const prefValue = Math.abs(preference.numberValue);
       this.setOnDemandMinValue(item, prefValue);
       return prefValue;
     },
@@ -185,22 +193,22 @@ var gEventsPane = {
     setOnDemandMinValue(item, prefValue) {
       if (item.id != "loadProgressively") {
         Tabmix.setItem("restoreOnDemand", "decreaseDisabled",
-          prefValue <= Math.abs($("pref_loadProgressively").value) || null);
+          prefValue <= Math.abs($Pref("pref_loadProgressively").numberValue) || null);
         return;
       }
       const onDemand = $("restoreOnDemand");
       const newMinValue = Number(prefValue) || 0;
-      onDemand.min = newMinValue;
-      const restoreOnDemand = $("pref_restoreOnDemand");
-      if (prefValue > Math.abs(restoreOnDemand.value)) {
+      onDemand.min = String(newMinValue);
+      const restoreOnDemand = $Pref("pref_restoreOnDemand");
+      if (prefValue > Math.abs(restoreOnDemand.numberValue)) {
         restoreOnDemand.value = $("chk_restoreOnDemand").checked ? prefValue : -prefValue;
       }
-      Tabmix.setItem(onDemand, "decreaseDisabled", restoreOnDemand.value <= newMinValue || null);
+      Tabmix.setItem(onDemand, "decreaseDisabled", restoreOnDemand.numberValue <= newMinValue || null);
     },
 
     setOnDemandDisabledState() {
-      const disabled = $("pref_loadProgressively").value < 0 ||
-                       $("pref_restoreOnDemand").value < 0;
+      const disabled = $Pref("pref_loadProgressively").numberValue < 0 ||
+                       $Pref("pref_restoreOnDemand").numberValue < 0;
       gPrefWindow.setDisabled("restoreOnDemand", disabled);
     },
   },
@@ -213,8 +221,8 @@ var gEventsPane = {
       }
       this.isChanging = true;
 
-      const openTabNext = $("pref_openTabNext");
-      const relatedAfterCurrent = $("pref_relatedAfterCurrent");
+      const openTabNext = $Pref("pref_openTabNext");
+      const relatedAfterCurrent = $Pref("pref_relatedAfterCurrent");
       const openTabNextCheckbox = $("openTabNext");
 
       if (preference === openTabNext) {
@@ -228,7 +236,7 @@ var gEventsPane = {
             relatedAfterCurrent.value ? false : openTabNextCheckbox.checked;
       }
 
-      const checked = openTabNext.value || relatedAfterCurrent.value;
+      const checked = openTabNext.booleanValue || relatedAfterCurrent.booleanValue;
       openTabNextCheckbox.checked = checked;
       gPrefWindow.setDisabled("obs_openTabNext_control", !checked);
 
@@ -237,10 +245,10 @@ var gEventsPane = {
 
     on_command(checked) {
       if (checked) {
-        $("pref_openTabNext").value = true;
+        $Pref("pref_openTabNext").value = true;
       } else {
-        $("pref_openTabNext").value = false;
-        $("pref_relatedAfterCurrent").value = false;
+        $Pref("pref_openTabNext").value = false;
+        $Pref("pref_relatedAfterCurrent").value = false;
       }
     },
   },

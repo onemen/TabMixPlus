@@ -160,7 +160,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     return this.isBlankBrowser(this.getBrowserForTab(aTab));
   };
 
-  tabBrowser.isBlankNotBusyTab = function TMP_isBlankNotBusyTab(aTab, aboutBlank) {
+  tabBrowser.isBlankNotBusyTab = function(aTab, aboutBlank) {
     if (aTab.hasAttribute("busy"))
       return false;
 
@@ -193,7 +193,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   tabBrowser.getTabForLastPanel = function() {
     let notificationbox = this.tabpanels.lastChild;
     let browser = this.getBrowserForTabPanel(notificationbox);
-    if (browser === gBrowser.preloadedBrowser) {
+    if (browser === gBrowser.preloadedBrowser && notificationbox.previousSibling) {
       browser = this.getBrowserForTabPanel(notificationbox.previousSibling);
     }
     return this.getTabForBrowser(browser);
@@ -219,7 +219,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     this.setItem(tabContainer, "widthFitTitle", true);
 
   var tabscroll = this.prefs.getIntPref("tabBarMode");
-  if (document.documentElement.getAttribute("chromehidden").includes("toolbar"))
+  if (document.documentElement.getAttribute("chromehidden")?.includes("toolbar"))
     tabscroll = 1;
   if (tabscroll < 0 || tabscroll > 3 ||
       tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window) {
@@ -229,7 +229,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   TabmixTabbar.scrollButtonsMode = tabscroll;
 
   if (TabmixSvc.SessionStore._isWindowLoaded(window)) {
-    TabmixTabbar.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll];
+    TabmixTabbar.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll] || "scrollbutton";
   }
 
   // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore

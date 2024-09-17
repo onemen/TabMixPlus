@@ -1,9 +1,25 @@
 "use strict";
 
 // code by onemen
+/** @type {TabmixPlaces} */
 var TMP_Places = {
+  _batchData: {remove: [], add: []},
+  _titlefrombookmark: false,
+  listeners: [],
   prefHistory: "extensions.tabmix.opentabfor.history",
   prefBookmark: "extensions.tabmix.opentabfor.bookmarks",
+
+  get PlacesUtils() {
+    return Tabmix.lazyGetter(this, "PlacesUtils", () => {
+      const {TabmixPlacesUtils} = ChromeUtils.import("chrome://tabmix-resource/content/Places.jsm");
+      // we get here only after the window was loaded
+      // so we can safely call our 'onWindowOpen' initialization t make sure its done
+      if (!Tabmix.initialization.onWindowOpen.initialized) {
+        Tabmix.initialization.run("onWindowOpen");
+      }
+      return TabmixPlacesUtils;
+    });
+  },
 
   addEvent: function TMP_PC_addEvent() {
     window.addEventListener("load", this);
@@ -30,6 +46,7 @@ var TMP_Places = {
   init: function TMP_PC_init() {
     this._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark");
 
+    /** @type {PlacesEventType[]} */
     this.listeners = ["bookmark-added", "bookmark-removed"];
     if (Tabmix.isVersion(950)) {
       this.listeners.push("bookmark-title-changed", "bookmark-url-changed");
@@ -73,8 +90,7 @@ var TMP_Places = {
       return;
     }
 
-    for (let i = 0; i < aMenuPopup.childNodes.length; i++) {
-      let item = aMenuPopup.childNodes[i];
+    for (const item of Array.from(aMenuPopup.childNodes)) {
       if ("_placesNode" in item) {
         const url = item._placesNode.uri;
         this.getTitleFromBookmark(url).then(bookMarkName => {
@@ -152,7 +168,7 @@ var TMP_Places = {
           (MouseEvent.isInstance(aEvent) &&
             (aEvent.button == 1 || aEvent.button === 0 && (aEvent.ctrlKey || aEvent.metaKey)) ||
            XULCommandEvent.isInstance(aEvent) &&
-            // @ts-ignore - we check here to make sure it is _placesNode
+            // @ts-expect-error - we check here to make sure it is _placesNode
             typeof aEvent.target._placesNode == "object" && (aEvent.ctrlKey || aEvent.metaKey)))
         aWhere = "current";
       else if (aWhere == "current" && !tabBrowser.isBlankNotBusyTab(aTab))
@@ -200,15 +216,12 @@ var TMP_Places = {
     var openTabNext = Tabmix.getOpenTabNextPref();
 
     // catch tab for reuse
-    /** @type {MockedGeckoTypes.BrowserTab} */
-    let aTab;
-    /** @type {MockedGeckoTypes.BrowserTab[]} */
+    /** @type {Tab[]} */
     const reuseTabs = [];
-    /** @type {MockedGeckoTypes.BrowserTab[]} */
+    /** @type {Tab[]} */
     const removeTabs = [];
     var tabIsBlank, canReplace;
-    for (let i = 0; i < openTabs.length; i++) {
-      aTab = openTabs[i];
+    for (const aTab of openTabs) {
       tabIsBlank = gBrowser.isBlankNotBusyTab(aTab);
       // don't reuse collapsed tab if width fitTitle is set
       canReplace = doReplace && !aTab.hasAttribute("locked") &&
@@ -235,7 +248,9 @@ var TMP_Places = {
     const tabCount = this.restoringTabs.length + bmGroup.length;
     const [loadProgressively, restoreOnDemand] = this.getPreferences(tabCount);
 
-    var tabToSelect = null;
+    /** @type {Tab | undefined} */
+    var tabToSelect;
+    /** @type {Tab} */
     let prevTab;
     let relatedToCurrent = !doReplace && openTabNext && gBrowser._selectedTab._tPos < openTabs.length - 1;
     if (relatedToCurrent) {
@@ -247,19 +262,21 @@ var TMP_Places = {
     }
     var tabPos, index;
     var multiple = bmGroup.length > 1;
-    let tabs = [], tabsData = [];
+    /** @type {Map<Tab, string>} */
+    let tabsMapWithUrl = new Map();
+    /** @type {SessionStoreNS.TabData[]} */
+    let tabsData = [];
     let savePrincipal = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
     const loadURIMethod = Tabmix.isVersion(1120) ? "fixupAndLoadURIString" : "loadURI";
-    for (let i = 0; i < bmGroup.length; i++) {
-      let url = bmGroup[i];
-      if (i < reuseTabs.length) {
-        aTab = reuseTabs[i];
+    bmGroup.forEach((url, i) => {
+      let aTab = reuseTabs[i];
+      if (aTab) {
         if (!loadProgressively) {
           const browser = aTab.linkedBrowser;
           try {
             browser.userTypedValue = url;
             browser[loadURIMethod](url, {
-              flags: Ci.nsIWebNavigation.LOAD_FLAGS_NONE,
+              loadFlags: Ci.nsIWebNavigation.LOAD_FLAGS_NONE,
               triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
             });
           } catch {}
@@ -301,7 +318,8 @@ var TMP_Places = {
       }
       this.asyncSetTabTitle(aTab, url, true);
       if (loadProgressively) {
-        tabs.push(aTab);
+        tabsMapWithUrl.set(aTab, url);
+        /** @type {SessionStoreNS.TabDataEntry} */
         let entry = {url, title: aTab.label};
         if (savePrincipal) {
           entry.triggeringPrincipal_base64 = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
@@ -321,7 +339,7 @@ var TMP_Places = {
       TMP_LastTab.attachTab(aTab, prevTab);
       prevTab = aTab;
       aTab.initialize();
-    }
+    });
 
     if (Tabmix.isVersion(1110)) {
       gBrowser.tabContainer._invalidateCachedTabs();
@@ -330,19 +348,20 @@ var TMP_Places = {
     }
 
     // focus the first tab if prefs say to
-    if (!loadInBackground || doReplace &&
-                             (gBrowser.selectedTab.hasAttribute("reloadcurrent") ||
-                             removeTabs.includes(gBrowser.selectedTab))) {
-      var old = gBrowser.selectedTab;
-      gBrowser.selectedTab = tabToSelect;
-      if (!multiple && old != tabToSelect)
-        tabToSelect.owner = old;
-      var reloadCurrent = old.hasAttribute("reloadcurrent");
-      if (reloadCurrent)
-        old.removeAttribute("reloadcurrent");
-      if (reloadCurrent && old != tabToSelect) {
-        old.removeAttribute("visited");
-        old.removeAttribute("tabmix_selectedID");
+    if (tabToSelect) {
+      const replaceCurrent =
+        gBrowser.selectedTab.hasAttribute("reloadcurrent") ||
+        removeTabs.includes(gBrowser.selectedTab);
+      if (!loadInBackground || doReplace && replaceCurrent) {
+        var old = gBrowser.selectedTab;
+        gBrowser.selectedTab = tabToSelect;
+        if (!multiple && old != tabToSelect) tabToSelect.owner = old;
+        var reloadCurrent = old.hasAttribute("reloadcurrent");
+        if (reloadCurrent) old.removeAttribute("reloadcurrent");
+        if (reloadCurrent && old != tabToSelect) {
+          old.removeAttribute("visited");
+          old.removeAttribute("tabmix_selectedID");
+        }
       }
     }
 
@@ -350,12 +369,10 @@ var TMP_Places = {
     gBrowser.selectedBrowser.focus();
 
     // Close any remaining open tabs or blank tabs that are left over.
-    while (removeTabs.length) {
-      gBrowser.removeTab(removeTabs.pop());
-    }
+    removeTabs.forEach(tab => gBrowser.removeTab(tab));
 
     if (loadProgressively) {
-      this.restoreTabs(tabs, tabsData, this.bookmarksOnDemand || restoreOnDemand);
+      this.restoreTabs(tabsMapWithUrl, tabsData, this.bookmarksOnDemand || restoreOnDemand);
     }
   },
 
@@ -376,7 +393,8 @@ var TMP_Places = {
     return [tabCount > progressively, tabCount > onDemand];
   },
 
-  restoreTabs(tabs, tabsData, restoreOnDemand) {
+  restoreTabs(tabsMapWithUrl, tabsData, restoreOnDemand) {
+    const tabs = Array.from(tabsMapWithUrl.keys());
     this.restoringTabs.push(...tabs);
     this.bookmarksOnDemand = restoreOnDemand;
 
@@ -388,10 +406,10 @@ var TMP_Places = {
     TabmixSvc.SessionStore.restoreTabs(window, tabs, tabsData, 0);
 
     // set icon on pending tabs that are not about: pages
-    const pendingData = tabs.map(tab => ({tab, url: tabsData.shift().entries[0].url}))
-        .filter(({tab, url}) => tab.hasAttribute("pending") && !url.startsWith("about"));
-    for (let data of pendingData) {
-      const {tab, url: pageUrl} = data;
+    const pendingData = Array.from(tabsMapWithUrl.entries()).filter(
+      ([tab, url]) => tab.hasAttribute("pending") && !url.startsWith("about")
+    );
+    for (let [tab, pageUrl] of pendingData) {
       const entryURI = Services.io.newURI(pageUrl);
       PlacesUtils.favicons.getFaviconURLForPage(entryURI, iconURI => {
         if (!iconURI) {
@@ -470,10 +488,11 @@ var TMP_Places = {
     });
   },
 
-  async asyncGetTabTitle(aTab, aUrl, title) {
+  async asyncGetTabTitle(aTab, aUrl, title = "") {
     aTab.removeAttribute("tabmix_bookmarkUrl");
-    if (this.isUserRenameTab(aTab, aUrl))
-      return Promise.resolve(aTab.getAttribute("fixed-label"));
+    if (this.isUserRenameTab(aTab, aUrl)) {
+      return Promise.resolve(aTab.getAttribute("fixed-label") ?? "");
+    }
 
     await Tabmix.promiseOverlayLoaded;
 
@@ -487,7 +506,7 @@ var TMP_Places = {
     return newTitle || title;
   },
 
-  getTitleFromBookmark(aUrl, aTitle) {
+  getTitleFromBookmark(aUrl, aTitle = "") {
     return this.PlacesUtils.asyncGetTitleFromBookmark(aUrl, aTitle);
   },
 
@@ -602,19 +621,19 @@ var TMP_Places = {
   currentTab: null,
 
   async addItemUrlToTabs(aUrl) {
+    const urls = Array.isArray(aUrl) ? aUrl : [aUrl];
     if (this.inUpdateBatch) {
-      this._batchData.add.push(aUrl);
+      this._batchData.add.push(...urls);
       return;
-    } else if (!Array.isArray(aUrl)) {
-      aUrl = [aUrl];
     }
-
+    /** @type {Promise<boolean>[]} */
     const promises = [];
-    const getIndex = url => aUrl.indexOf(url) + 1;
+    const getBookmarkUrl = (/** @type {string} */ url) => (urls.includes(url) ? url : null);
+    /** @type {(tab: Tab, url: string) => Promise<void>} */
     const updateTabs = async(tab, url) => {
-      let index = await this.PlacesUtils.applyCallBackOnUrl(url, getIndex);
-      if (index) {
-        tab.setAttribute("tabmix_bookmarkUrl", aUrl[index - 1]);
+      let bookmarkUrl = await this.PlacesUtils.applyCallBackOnUrl(url, getBookmarkUrl);
+      if (bookmarkUrl) {
+        tab.setAttribute("tabmix_bookmarkUrl", bookmarkUrl);
         promises.push(this.asyncSetTabTitle(tab, url));
       }
     };
@@ -630,15 +649,16 @@ var TMP_Places = {
   },
 
   async removeItemUrlFromTabs(aUrl) {
-    if (this.inUpdateBatch) {
-      this._batchData.remove.push(aUrl);
-      return;
-    }
-    const promises = [];
-    const attrib = "tabmix_bookmarkUrl";
     const batch = Array.isArray(aUrl);
     const urls = batch ? aUrl : [aUrl];
-    const tabs = gBrowser.tabContainer.getElementsByAttribute(attrib, batch ? "*" : aUrl);
+    if (this.inUpdateBatch) {
+      this._batchData.remove.push(...urls);
+      return;
+    }
+    /** @type {Promise<boolean>[]} */
+    const promises = [];
+    const attrib = "tabmix_bookmarkUrl";
+    const tabs = gBrowser.tabContainer.getElementsByAttribute(attrib, batch ? "*" : aUrl) ?? [];
     Array.from(tabs).forEach(tab => {
       let url = tab.linkedBrowser.currentURI.spec;
       if (urls.includes(url)) {
@@ -731,79 +751,76 @@ var TMP_Places = {
   },
 
   onItemVisited() {},
-  onItemMoved() {}
-};
+  onItemMoved() {},
 
-TMP_Places.contextMenu = {
-  toggleEventListener(enable) {
-    var eventListener = enable ? "addEventListener" : "removeEventListener";
-    window[eventListener]("unload", this, false);
-    document.getElementById("placesContext")[eventListener]("popupshowing", this, false);
+  /** DEPRECATED **/
+  getTabFixedTitle() {
+    Tabmix.log('this function was DEPRECATED and removed since 2013');
   },
 
-  handleEvent(aEvent) {
-    switch (aEvent.type) {
-      case "popupshowing":
-        this.buildContextMenu();
-        break;
-      case "unload":
-        this.toggleEventListener(false);
-        break;
-    }
-  },
+  contextMenu: {
+    toggleEventListener(enable) {
+      const eventListener = enable ? "addEventListener" : "removeEventListener";
+      window[eventListener]("unload", this, false);
+      document.getElementById("placesContext")[eventListener]("popupshowing", this, false);
+    },
 
-  buildContextMenu: function TMP_PC_buildContextMenu() {
-    var _open = document.getElementById("placesContext_open");
-    var _openInWindow = document.getElementById("placesContext_open:newwindow");
-    var _openInPrivateWindow =
+    handleEvent(aEvent) {
+      switch (aEvent.type) {
+        case "popupshowing":
+          this.buildContextMenu();
+          break;
+        case "unload":
+          this.toggleEventListener(false);
+          break;
+      }
+    },
+
+    buildContextMenu: function TMP_PC_buildContextMenu() {
+      var _open = document.getElementById("placesContext_open");
+      var _openInWindow = document.getElementById("placesContext_open:newwindow");
+      var _openInPrivateWindow =
         document.getElementById("placesContext_open:newprivatewindow") || {hidden: true};
-    var _openInTab = document.getElementById("placesContext_open:newtab");
-    this.update(_open, _openInWindow, _openInPrivateWindow, _openInTab, TMP_Places.getPrefByDocumentURI(window));
-  },
+      var _openInTab = document.getElementById("placesContext_open:newtab");
+      this.update(_open, _openInWindow, _openInPrivateWindow, _openInTab, TMP_Places.getPrefByDocumentURI(window));
+    },
 
-  // update context menu for bookmarks manager and sidebar
-  // for bookmarks/places, history, sage and more.....
-  update: function TMP_contextMenu_update(open, openInWindow, openInPrivateWindow,
-                                          openInTab, pref) {
+    // update context menu for bookmarks manager and sidebar
+    // for bookmarks/places, history, sage and more.....
+    update: function TMP_contextMenu_update(open, openInWindow, openInPrivateWindow,
+                                            openInTab, pref) {
     // if all 4 is hidden... probably "Open all in Tabs" is visible
-    if (open.hidden && openInWindow.hidden && openInPrivateWindow.hidden &&
+      if (open.hidden && openInWindow.hidden && openInPrivateWindow.hidden &&
         openInTab.hidden) {
-      return;
+        return;
+      }
+
+      var w = Tabmix.getTopWin();
+      if (w) {
+        let where = w.Tabmix.whereToOpen(pref);
+        if (!openInPrivateWindow.hidden && !Tabmix.isNewWindowAllow(true))
+          openInPrivateWindow.hidden = true;
+
+        if (!openInWindow.hidden && !Tabmix.isNewWindowAllow(false))
+          openInWindow.hidden = true;
+        else if (openInWindow.hasAttribute("default"))
+          openInWindow.removeAttribute("default");
+
+        Tabmix.setItem(openInTab, "default", where.inNew ? "true" : null);
+
+        if (open.hidden != where.lock)
+          open.hidden = where.lock;
+        if (!open.hidden)
+          Tabmix.setItem(open, "default", !where.inNew ? "true" : null);
+      } else {
+        open.hidden = true;
+        openInTab.hidden = true;
+        openInWindow.hidden = false;
+        openInWindow.setAttribute("default", true);
+      }
     }
-
-    var w = Tabmix.getTopWin();
-    if (w) {
-      let where = w.Tabmix.whereToOpen(pref);
-      if (!openInPrivateWindow.hidden && !Tabmix.isNewWindowAllow(true))
-        openInPrivateWindow.hidden = true;
-
-      if (!openInWindow.hidden && !Tabmix.isNewWindowAllow(false))
-        openInWindow.hidden = true;
-      else if (openInWindow.hasAttribute("default"))
-        openInWindow.removeAttribute("default");
-
-      Tabmix.setItem(openInTab, "default", where.inNew ? "true" : null);
-
-      if (open.hidden != where.lock)
-        open.hidden = where.lock;
-      if (!open.hidden)
-        Tabmix.setItem(open, "default", !where.inNew ? "true" : null);
-    } else {
-      open.hidden = true;
-      openInTab.hidden = true;
-      openInWindow.hidden = false;
-      openInWindow.setAttribute("default", true);
-    }
-  }
+  },
 };
-
-TabmixChromeUtils.defineLazyGetter(TMP_Places, "PlacesUtils", () => {
-  const {TabmixPlacesUtils} = ChromeUtils.import("chrome://tabmix-resource/content/Places.jsm");
-  // we get here only after the window was loaded
-  // so we can safely call our 'onWindowOpen' initialization t make sure its done
-  Tabmix.initialization.run("onWindowOpen");
-  return TabmixPlacesUtils;
-});
 
 Tabmix.onContentLoaded = {
   changeCode() {
@@ -893,6 +910,7 @@ Tabmix.onContentLoaded = {
       Tabmix.whereToOpenLink = window.whereToOpenLink.bind(window);
     }
 
+    /** @type {PrivateFunctionsNS.onContentLoaded._getTargetWindow} */
     function getTargetWindow(params = {}) {
       if (Tabmix.isVersion(1120)) {
         return window.URILoadingHelper.getTargetWindow(window, params);
@@ -903,8 +921,9 @@ Tabmix.onContentLoaded = {
       return window.getTopWin(params.skipPopups);
     }
 
-    function getWindow(where, params) {
-      const forceNonPrivate = params.forceNonPrivate;
+    /** @type {PrivateFunctionsNS.onContentLoaded._getWindow} */
+    function getWindow(where, params = {}) {
+      const forceNonPrivate = params.forceNonPrivate ?? false;
       // Establish which window we'll load the link in.
       let w;
       if (where == "current" && params.targetBrowser) {
@@ -934,7 +953,8 @@ Tabmix.onContentLoaded = {
     let [fnObj, fnName] = this.getXnotifierFunction("openLinkIn");
     Tabmix.originalFunctions.openLinkIn = fnObj[fnName];
 
-    fnObj[fnName] = function openLinkIn(url, _where, params) {
+    /** @type {PrivateFunctionsNS.onContentLoaded._openLinkIn} */
+    fnObj[fnName] = function openLinkIn(url, _where, params = {}) {
       const {w, where} = getWindow(_where, params);
 
       const callerTrace = Tabmix.callerTrace();
@@ -974,8 +994,9 @@ Tabmix.onContentLoaded = {
         return typeof com.tobwithu[f] == "object" &&
           typeof com.tobwithu[f][aName] == "function";
       });
-      if (fn.length) {
-        return [com.tobwithu[fn[0]], aName];
+      const obj = fn?.[0] ? com.tobwithu[fn[0]] : undefined;
+      if (obj) {
+        return [obj, aName];
       }
     }
     return [window, aName];
@@ -986,8 +1007,3 @@ Tabmix.onContentLoaded = {
 if (typeof E10SUtils !== "object") {
   TabmixChromeUtils.defineLazyModuleGetters(this, {E10SUtils: "resource://gre/modules/E10SUtils.jsm"});
 }
-
-/** DEPRECATED **/
-TMP_Places.getTabFixedTitle = function() {
-  Tabmix.log('this function was DEPRECATED and removed since 2013');
-};

@@ -57,6 +57,8 @@ module.exports = {
     },
     preferences: {
       $: false,
+      $Pref: false,
+      $Pane: false,
       gAppearancePane: false,
       getFormattedKey: false,
       gMenuPane: false,
@@ -79,6 +81,7 @@ module.exports = {
   },
   rules: {
     "import-globals": require("./import-globals"),
+    "lazy-getter-name-match": require("./lazy-getter-name-match"),
     "use-mjs-modules": require("./use-mjs-modules"),
     "valid-lazy": require("./valid-lazy"),
   },

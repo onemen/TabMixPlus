@@ -36,6 +36,3 @@ node_modules/
 
 #hide test folder
 test/*
-
-# remove .github from this branch to push it to private repo
-.github

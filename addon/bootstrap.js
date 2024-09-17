@@ -1,17 +1,19 @@
+/// <reference types="../types/bootstrap.d.ts" />
+
 /* exported install, uninstall, startup, shutdown */
 "use strict";
 
-/** @type {MockedGeckoTypes.Services} */ // @ts-ignore - see general.d.ts
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-// @ts-ignore - we are not redeclare block-scoped variable 'AddonManager' here
-const {AddonManager} = (function() {
+(function(g) {
+  if (!globalThis.Services) {
+    g.Services = ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+  }
   try {
-    return ChromeUtils.importESModule("resource://gre/modules/AddonManager.sys.mjs");
+    g.AddonManager = ChromeUtils.importESModule("resource://gre/modules/AddonManager.sys.mjs").AddonManager;
   } catch {
     // eslint-disable-next-line tabmix/use-mjs-modules
-    return ChromeUtils.import("resource://gre/modules/AddonManager.jsm");
+    g.AddonManager = ChromeUtils.import("resource://gre/modules/AddonManager.jsm").AddonManager;
   }
-}());
+}(this));
 
 ChromeUtils.defineModuleGetter(this, "ChromeManifest",
   "chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
@@ -53,6 +55,7 @@ overlay   chrome://browser/content/places/places.xhtml           chrome://tabmix
  * restartApplication: Restarts the application, keeping it in
  * safe mode if it is already in safe mode.
  */
+/** @type {Bootstarp.restartApplication} */
 function restartApplication() {
   const cancelQuit = Cc["@mozilla.org/supports-PRBool;1"].createInstance(
     Ci.nsISupportsPRBool
@@ -79,7 +82,11 @@ function restartApplication() {
   return undefined;
 }
 
+/** @type {Bootstarp.showRestartNotification} */
 function showRestartNotification(verb, window) {
+  if (!window.gBrowser.selectedBrowser) {
+    return;
+  }
   window.PopupNotifications._currentNotifications.shift();
   window.PopupNotifications.show(
     window.gBrowser.selectedBrowser,
@@ -108,6 +115,7 @@ function showRestartNotification(verb, window) {
   );
 }
 
+/** @type {Bootstarp.install} */
 async function install(data) {
   const addon = await AddonManager.getAddonByID(data.id);
   if (addon?.__AddonInternal__) {
@@ -117,6 +125,7 @@ async function install(data) {
 
 function uninstall() { }
 
+/** @type {Bootstarp.startup} */
 async function startup(data, reason) {
   const chromeManifest = new ChromeManifest(() => {
     return man;
@@ -138,7 +147,8 @@ async function startup(data, reason) {
   }
 
   const {name, version} = Services.appinfo;
-  let _tabmix_PlacesUIUtils_openTabset;
+  /** @type {MockedGeckoTypes.PlacesUIUtils["openTabset"]} */
+  let _tabmix_PlacesUIUtils_openTabset = () => {};
   if (name === 'Waterfox' && Services.vc.compare(version, '115.9.0') >= 0) {
     const {PlacesUIUtils} = TabmixChromeUtils.import("resource:///modules/PlacesUIUtils.jsm");
     _tabmix_PlacesUIUtils_openTabset = PlacesUIUtils.openTabset;
@@ -149,12 +159,12 @@ async function startup(data, reason) {
     while (enumerator.hasMoreElements()) {
       const win = enumerator.getNext();
       const document = win.document;
-      if (document.createXULElement) {
+      if (document.documentElement) {
         const isBrowser = document.documentElement.getAttribute("windowtype") === "navigator:browser";
         const isOverflow = isVersion119 ?
           isBrowser && win.gBrowser.tabContainer.hasAttribute("overflow") :
           isBrowser && win.gBrowser.tabContainer.getAttribute("overflow") === "true";
-        const promiseOverlayLoaded = Overlays.load(chromeManifest, document.defaultView);
+        const promiseOverlayLoaded = Overlays.load(chromeManifest, win);
         if (isBrowser) {
           ScriptsLoader.initForWindow(win, promiseOverlayLoaded, {
             chromeManifest,
@@ -166,6 +176,7 @@ async function startup(data, reason) {
     }
   }
 
+  /** @type {any} */
   const lazy = {};
 
   TabmixChromeUtils.defineLazyModuleGetters(lazy, {
@@ -173,9 +184,10 @@ async function startup(data, reason) {
     SingleWindowModeUtils: "chrome://tabmix-resource/content/SingleWindowModeUtils.jsm"
   });
 
+  /** @type {DocumentObserver} */
   const documentObserver = {
     observe(document) {
-      if (document.createXULElement) {
+      if (document.documentElement && document.ownerGlobal) {
         const isSingleWindowMode = Services.prefs.getBoolPref("extensions.tabmix.singleWindow");
         const isBrowser = document.documentElement.getAttribute("windowtype") === "navigator:browser";
         const win = document.ownerGlobal;
@@ -202,6 +214,7 @@ async function startup(data, reason) {
   Services.obs.addObserver(documentObserver, "chrome-document-loaded");
 }
 
+/** @type {Bootstarp.shutdown} */
 function shutdown(data, reason) {
   const window = Services.wm.getMostRecentWindow('navigator:browser');
   if (reason === ADDON_DISABLE) {

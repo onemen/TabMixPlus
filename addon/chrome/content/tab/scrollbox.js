@@ -17,10 +17,11 @@ Tabmix.multiRow = {
   },
 
   extandArrowscrollbox() {
-    /** @typedef {MockedGeckoTypes.TabmixArrowScrollbox} This */
+    /** @typedef {TabmixArrowScrollboxNS.ArrowScrollbox} This */
+    /** @typedef {TabmixArrowScrollboxNS.ArrowScrollbox} ASB */
 
     class TabmixArrowScrollbox {
-      /** @this {This} */
+      /** @type {ASB["connectTabmix"]} */
       connectTabmix() {
         if (this.tabmixInitialized) {
           return;
@@ -29,13 +30,12 @@ Tabmix.multiRow = {
 
         this._scrollButtonUpLeft = this.shadowRoot.getElementById("scrollbutton-up");
         this._scrollButtonDownLeft = this.shadowRoot.getElementById("scrollbutton-down");
-        this.scrollboxPaddingTop = parseFloat(window.getComputedStyle(this.scrollbox).paddingTop);
-        this.scrollboxPaddingBottom = parseFloat(window.getComputedStyle(this.scrollbox).paddingBottom);
-        this._tabMarginLeft = null;
-        this._tabMarginRight = null;
+        const style = window.getComputedStyle(this.scrollbox);
+        this.scrollboxPaddingTop = style ? parseFloat(style.paddingTop) : 0;
+        this.scrollboxPaddingBottom = style ? parseFloat(style.paddingBottom) : 0;
         this._verticalAnimation = 3;
         this._singleRowHeight = null;
-        this.firstVisibleRow = null;
+        this.firstVisibleRow = -1;
         this.firstTabInRowMargin = 0;
         this.offsetAmountToScroll = Tabmix.prefs.getBoolPref("offsetAmountToScroll");
         this.offsetRatio = Tabmix.tabsUtils.closeButtonsEnabled ? 0.70 : 0.50;
@@ -43,7 +43,7 @@ Tabmix.multiRow = {
         this.firstVisible = {tab: null, x: 0, y: 0};
 
         const overflowTarget = Tabmix.isVersion(1310) ? this : this.scrollbox;
-        overflowTarget.addEventListener("underflow", event => {
+        overflowTarget.addEventListener("underflow", (/** @type {MouseEvent} */event) => {
           // filter underflow events which were dispatched on nested scrollboxes
           if (event.originalTarget !== overflowTarget) {
             return;
@@ -75,7 +75,7 @@ Tabmix.multiRow = {
           }
         }, true);
 
-        overflowTarget.addEventListener("overflow", event => {
+        overflowTarget.addEventListener("overflow", (/** @type {MouseEvent} */event) => {
           // filter overflow events which were dispatched on nested scrollboxes
           if (event.originalTarget !== overflowTarget) {
             return;
@@ -154,8 +154,10 @@ Tabmix.multiRow = {
         ).toCode();
 
         if (Tabmix.isVersion(1310)) {
+          /** @type {MockedGeckoTypes.ArrowScrollbox} */ // @ts-expect-error
           const arrowscrollboxClass = customElements.get("arrowscrollbox");
           const code = arrowscrollboxClass.toString().split(" #updateScrollButtonsDisabledState")[1];
+          // @ts-expect-error
           const updateButtons = `_updateScrollButtonsDisabledState${code}`
               .split(" disconnectedCallback")[0]
               .trim()
@@ -204,6 +206,7 @@ Tabmix.multiRow = {
         Services.prefs.addObserver("toolkit.scrollbox.", this.tabmixPrefObserver);
       }
 
+      /** @this {This} */
       disconnectTabmix() {
         this._scrollButtonUpLeft.removeEventListener("contextmenu", this._createScrollButtonContextMenu, true);
         this._scrollButtonDownLeft.removeEventListener("contextmenu", this._createScrollButtonContextMenu, true);
@@ -281,8 +284,7 @@ Tabmix.multiRow = {
           return height;
 
         // if selectedItem don't have height find other tab that does
-        for (let i = 0; i < tabs.length; i++) {
-          const tab = tabs[i];
+        for (const tab of tabs) {
           const tabHeight = tab.getBoundingClientRect().height;
           if (tabHeight) {
             return tabHeight;
@@ -292,7 +294,7 @@ Tabmix.multiRow = {
         return this.scrollbox.getBoundingClientRect().height;
       }
 
-      /** @this {This} */
+      /** @type {ASB["_ensureElementIsVisibleByIndex"]} */
       _ensureElementIsVisibleByIndex(element, instant, index) {
         if (!this.isMultiRow) {
           this.ensureElementIsVisible(element, instant);
@@ -315,11 +317,13 @@ Tabmix.multiRow = {
         );
       }
 
+      /** @type {ASB["_createScrollButtonContextMenu"]} */
       _createScrollButtonContextMenu(aEvent) {
         const side = aEvent.originalTarget.id === "scrollbutton-up" ? "left" : "right";
         TabmixAllTabs.createScrollButtonTabsList(aEvent, side);
       }
 
+      /** @type {ASB["_distanceToRow"]} */
       _distanceToRow(amountToScroll) {
         if (!this.isMultiRow)
           return amountToScroll;
@@ -328,7 +332,7 @@ Tabmix.multiRow = {
         return Math.round((amountToScroll + position) / rowHeight) * rowHeight - position;
       }
 
-      /** @this {This} */
+      /** @type {ASB["_enterVerticalMode"]} */
       _enterVerticalMode() {
         // when widthFitTitle is false we enter vertical mode only after we are in overflow
         // if first or last tab is not visible enter vertical mode
@@ -362,7 +366,7 @@ Tabmix.multiRow = {
         }
       }
 
-      /** @this {This} */
+      /** @type {ASB["setFirstTabInRow"]} */
       setFirstTabInRow(scroll) {
         const firstVisibleRow = Math.round(this.scrollPosition / this.singleRowHeight) + 1;
         if (scroll) {
@@ -381,17 +385,17 @@ Tabmix.multiRow = {
         const containerEnd = this.scrollClientRect[end];
         const topY = Tabmix.tabsUtils.topTabY;
         const tabs = this._getScrollableElements();
-        let index, current = 0;
-        for (let i = 0; i < tabs.length; i++) {
-          const tab = tabs[i];
+        let index, current = 0, previousTab;
+        for (const tab of tabs) {
           let row = tab.closing ? -1 : Tabmix.tabsUtils.getTabRowNumber(tab, topY);
           if (row > current) {
+            const i = tabs.indexOf(tab);
             current = row;
             if (!tab.hasAttribute("tabmix-firstTabInRow")) {
               tab.setAttribute("tabmix-firstTabInRow", true);
-            } else if (i > 0) {
+            } else if (previousTab) {
               // remove the margin when the tab have place in the previous row
-              const tabEnd = tabs[i - 1].getBoundingClientRect()[end] +
+              const tabEnd = previousTab.getBoundingClientRect()[end] +
                 (Tabmix.ltr ? tab.getBoundingClientRect().width : 0);
               if (!Tabmix.compare(tabEnd, containerEnd, Tabmix.rtl)) {
                 tab.removeAttribute("tabmix-firstTabInRow");
@@ -402,15 +406,15 @@ Tabmix.multiRow = {
             if (row === firstVisibleRow) {
               const rect = tab.getBoundingClientRect();
               this.firstVisible = {tab, x: rect.left, y: rect.top};
-              index = ++i;
+              index = i + 1;
               break;
             }
           } else if (tab.hasAttribute("tabmix-firstTabInRow")) {
             tab.removeAttribute("tabmix-firstTabInRow");
           }
+          previousTab = tab;
         }
-        for (let i = index; i < tabs.length; i++) {
-          const tab = tabs[i];
+        for (const tab of tabs.slice(index)) {
           if (tab.hasAttribute("tabmix-firstTabInRow"))
             tab.removeAttribute("tabmix-firstTabInRow");
         }
@@ -426,13 +430,13 @@ Tabmix.multiRow = {
         // each time we remove the attribute we remove node from the list
         const tabBar = this.parentNode;
         const tabs = tabBar.getElementsByAttribute("tabmix-firstTabInRow", "*");
-        for (let i = 0, num = tabs.length; i < num; i++) {
-          tabs[0].removeAttribute("tabmix-firstTabInRow");
+        for (const tab of Array.from(tabs)) {
+          tab.removeAttribute("tabmix-firstTabInRow");
         }
         this.firstVisible = {tab: null, x: 0, y: 0};
       }
 
-      /** @this {This} */
+      /** @type {ASB["updateOverflow"]} */
       updateOverflow(overflow) {
         // we get here after we update overflow from updateVerticalTabStrip
         if (this.getAttribute("orient") === "vertical" ||
@@ -449,7 +453,7 @@ Tabmix.multiRow = {
 
         if (!overflow) {
           const childNodes = this._getScrollableElements();
-          if (childNodes && childNodes.length) {
+          if (childNodes?.length && childNodes[0]) {
             this.ensureElementIsVisible(childNodes[0], true);
           }
         }
@@ -458,6 +462,7 @@ Tabmix.multiRow = {
 
     // inject our code into arrowScrollbox
     const tabmixArrowScrollbox = Object.getOwnPropertyDescriptors(TabmixArrowScrollbox.prototype);
+    // @ts-expect-error
     delete tabmixArrowScrollbox.constructor;
     const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
     Object.defineProperties(arrowScrollbox, tabmixArrowScrollbox);
@@ -465,6 +470,9 @@ Tabmix.multiRow = {
   },
 
   addScrollBoxButtons() {
+    /** @typedef {TabmixArrowScrollboxNS.RightScrollBox} RSB */
+
+    /** @type {RSB} */
     class TabmixRightScrollBox extends MozXULElement {
       static get inheritedAttributes() {
         return {
@@ -473,6 +481,7 @@ Tabmix.multiRow = {
         };
       }
 
+      /** @type {RSB["constructor"]} */
       constructor() {
         super();
         this.attachShadow({mode: "open"});
@@ -514,8 +523,8 @@ Tabmix.multiRow = {
         const hasAttribute = (/** @type {string} */ attr) => arrowScrollbox.hasAttribute(attr) || null;
         Tabmix.setItem(this, "scrolledtoend", hasAttribute("scrolledtoend"));
         Tabmix.setItem(this, "scrolledtostart", hasAttribute("scrolledtostart"));
-        const scrollButtonsStateObserver = new MutationObserver(([entry]) => {
-          if (["scrolledtostart", "scrolledtoend"].includes(entry.attributeName)) {
+        const scrollButtonsStateObserver = new MutationObserver(([entry = {}]) => {
+          if (["scrolledtostart", "scrolledtoend"].includes(entry.attributeName ?? "")) {
             Tabmix.setItem(this, "scrolledtoend", hasAttribute("scrolledtoend"));
             Tabmix.setItem(this, "scrolledtostart", hasAttribute("scrolledtostart"));
           }
@@ -552,7 +561,7 @@ Tabmix.multiRow = {
       }
 
       get fragment() {
-        if (!this.constructor.hasOwnProperty("_fragment")) {
+        if (!this._fragment) {
           this._fragment = MozXULElement.parseXULToFragment(
             this.markup
           );
@@ -575,6 +584,7 @@ Tabmix.multiRow = {
         this.initializeAttributeInheritance();
       }
 
+      /** @type {RSB["finishScroll"]} */
       finishScroll(aEvent) {
         if (!TMP_tabDNDObserver.useTabmixDnD(aEvent))
           return;

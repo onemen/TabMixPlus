@@ -2,11 +2,7 @@
   "extends": "../../../../config/base.tsconfig.json",
   "include": ["**/*.js", "**/*.sys.mjs"],
   "compilerOptions": {
-    "types": [
-      "../../../../types/general.d.ts",
-      "../../../../types/customDialog.d.ts",
-      "../../../../types/numberInput.d.ts",
-      "../../../../types/tabmix.d.ts"
-    ]
+    "typeRoots": ["../../../../types"],
+    "types": ["general.d.ts", "customDialog.d.ts", "autoReload.d.ts", "tabmix.d.ts"]
   }
 }

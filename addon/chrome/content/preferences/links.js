@@ -1,6 +1,7 @@
 /* exported gLinksPane */
 "use strict";
 
+/** @type {LinksPane} */
 var gLinksPane = {
   init() {
     this.singleWindow($("singleWindow").checked);
@@ -8,11 +9,11 @@ var gLinksPane = {
 
     $("externalLinkTarget").querySelector('menuitem[value="-1"]').label = $("externalLinkTarget").querySelector('menuitem[value="3"]').label;
     const config = {attributes: true};
-    const callback = function(mutationList) {
+    const callback = function(/** @type {MutationRecord[]} */ mutationList) {
       for (const mutation of mutationList) {
         if (mutation.type === 'attributes' && mutation.attributeName == "label") {
           try {
-            if (mutation.target.hasAttribute("label")) {
+            if (mutation.target?.label) {
               $("externalLinkTarget").querySelector('menuitem[value="-1"]').label = mutation.target.label;
             }
           } catch (ex) {
@@ -24,42 +25,47 @@ var gLinksPane = {
     const observer = new MutationObserver(callback);
     observer.observe($("generalWindowOpen"), config);
 
-    gPrefWindow.setDisabled("obs_opentabforAllLinks", $("pref_opentabforLinks").value == 1);
+    gPrefWindow.setDisabled("obs_opentabforAllLinks", $Pref("pref_opentabforLinks").value == 1);
 
     gPrefWindow.initPane("paneLinks");
   },
 
   externalLinkValue(checked) {
     let external = $("externalLinkTarget");
-    let preference = $(external.getAttribute("preference"));
+    let preference = $Pref(external.getAttribute("preference"));
     if (!checked) {
       preference.value = -1;
     } else if (preference.value == -1) {
       external.value = $("generalWindowOpen").value;
       preference.value = $("generalWindowOpen").value;
     }
-    external.firstChild.firstChild.hidden = checked;
+    if (external.firstChild?.firstChild) {
+      external.firstChild.firstChild.hidden = checked;
+    }
     gPrefWindow.setDisabled("obs_externalLink", !checked);
   },
 
   updateExternalLinkCheckBox(external) {
-    let preference = $(external.getAttribute("preference"));
+    let preference = $Pref(external.getAttribute("preference"));
     if (external.value == preference.value)
       return;
     let checkbox = $("externalLink");
     let checked = preference.value != -1;
     if (checkbox.checked != checked) {
       checkbox.checked = checked;
-      external.firstChild.firstChild.hidden = checked;
+      if (external.firstChild?.firstChild) {
+        external.firstChild.firstChild.hidden = checked;
+      }
       gPrefWindow.setDisabled("obs_externalLink", !checked);
     }
   },
 
   singleWindow(enableSingleWindow) {
+    /** @type {LinksPaneNS.updateStatus} */
     function updateStatus(itemId, testVal, test, newVal) {
       var item = $(itemId);
       if (test ? item.value == testVal : item.value != testVal) {
-        let preference = $(item.getAttribute("preference"));
+        let preference = $Pref(item.getAttribute("preference"));
         preference.value = newVal;
       }
     }

@@ -1,4 +1,5 @@
-// devtools/client/performance-new/@types/gecko.d.ts
+// don't check the imported files
+// @ts-nocheck
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -18,9 +19,6 @@
  * global and makes sure that all the definitions inside do not clash with
  * naming.
  */
-
-// don't check the imported files
-// @ts-nocheck
 declare namespace MockedExports {
   /**
    * This interface teaches ChromeUtils.import how to find modules.
@@ -133,7 +131,7 @@ declare namespace MockedExports {
   ) => unknown;
   type PrefObserver = PrefObserverFunction | { observe: PrefObserverFunction };
 
-  interface nsIURI { }
+  interface nsIURI {}
 
   interface SharedLibrary {
     start: number;
@@ -221,8 +219,8 @@ declare namespace MockedExports {
     };
   };
 
-  interface BrowsingContextStub { }
-  interface PrincipalStub { }
+  interface BrowsingContextStub {}
+  interface PrincipalStub {}
 
   interface WebChannelTarget {
     browsingContext: BrowsingContextStub;
@@ -244,7 +242,7 @@ declare namespace MockedExports {
 
   // This class is needed by the Cc importing mechanism. e.g.
   // Cc["@mozilla.org/filepicker;1"].createInstance(Ci.nsIFilePicker);
-  class nsIFilePicker { }
+  class nsIFilePicker {}
 
   interface FilePicker {
     init: (browsingContext: BrowsingContext, title: string, mode: number) => void;
@@ -382,7 +380,7 @@ declare interface ChromeDocument extends Document {
    * only refines iframes, but more tags could be added.
    */
   createXULElement: ((type: "iframe") => XULIframeElement) &
-  ((type: string) => XULElement);
+    ((type: string) => XULElement);
 
   /**
    * This is a fluent instance connected to this document.
@@ -447,7 +445,7 @@ declare interface Window {
   ) => void;
 }
 
-declare class ChromeWorker extends Worker { }
+declare class ChromeWorker extends Worker {}
 
 declare interface MenuListElement extends XULElement {
   value: string;

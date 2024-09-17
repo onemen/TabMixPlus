@@ -5,8 +5,6 @@
  *
  * original code by Hemiola SUN, further developed by onemen and CPU
  */
-
-/** @this {Tabmix} */
 Tabmix.startup = function TMP_startup() {
   Tabmix.originalFunctions.OpenBrowserWindow = window.OpenBrowserWindow;
   window.OpenBrowserWindow = function(options = {}) {
@@ -27,7 +25,7 @@ Tabmix.startup = function TMP_startup() {
 
   // hide 'File > New Private Window' menu item when in single window mode when
   // there are open private window
-  document.getElementById("menu_FilePopup").addEventListener("popupshowing", () => {
+  document.getElementById("menu_FilePopup")?.addEventListener("popupshowing", () => {
     this.showItem(
       "menu_newPrivateWindow",
       !this.singleWindowMode || !BrowserWindowTracker.getTopWindow({private: true})
@@ -52,11 +50,6 @@ Tabmix.beforeDelayedStartup = function() {
 
 // after TabmixSessionManager and SessionStore initialized
 Tabmix.sessionInitialized = function() {
-  if (Tabmix.fixMultibarRowHeight) {
-    delete Tabmix._fixMultibarRowHeight;
-    Tabmix.tabsUtils.updateVerticalTabStrip({reset: true});
-  }
-
   var SM = TabmixSessionManager;
   if (SM.enableManager) {
     window.restoreLastSession = function restoreLastSession() {
@@ -81,9 +74,12 @@ Tabmix.sessionInitialized = function() {
 };
 
 Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
+  if (!this.afterTabsButtonsWidth) {
+    this.afterTabsButtonsWidth = [];
+  }
   if (gBrowser.tabContainer.getAttribute("orient") == "horizontal") {
     const {toolbar, tabBar, collapsed, tabBarCollapsed, toolbarCollapsed} =
-  Tabmix.tabsUtils.getCollapsedState;
+      Tabmix.tabsUtils.getCollapsedState;
     let stripIsHidden = TabmixTabbar.hideMode !== 0 && collapsed;
     if (stripIsHidden) {
       toolbar.collapsed = false;
@@ -94,13 +90,12 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     this.tabsNewtabButton.setAttribute("force-display", true);
     let openNewTabRect = Tabmix.getBoundsWithoutFlushing(this.tabsNewtabButton);
     let style = window.getComputedStyle(this.tabsNewtabButton);
-    let marginStart = style.getPropertyValue("margin-left");
+    let marginStart = style?.getPropertyValue("margin-left") ?? "0px";
     // it doesn't work when marginEnd add to buttonWidth
     // let marginEnd = style.getPropertyValue("margin-right");
     // let buttonWidth = openNewTabRect.width + parseFloat(marginStart) + parseFloat(marginEnd);
     let buttonWidth = openNewTabRect.width + parseFloat(marginStart);
     if (buttonWidth > 0) {
-      this.afterTabsButtonsWidth = [];
       this.afterTabsButtonsWidth.push(buttonWidth);
     }
 
@@ -114,7 +109,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
       if (openNewPrivateTabRect.right > openNewTabRect.right)
         this.tabsNewtabButton = openNewPrivateTab;
     }
-    this.tabsNewtabButton.removeAttribute("force-display", true);
+    this.tabsNewtabButton.removeAttribute("force-display");
     if (stripIsHidden) {
       toolbar.collapsed = toolbarCollapsed;
       tabBar.collapsed = tabBarCollapsed;
@@ -227,6 +222,16 @@ Tabmix.afterDelayedStartup = function() {
   }
 };
 
+/**
+ TODO:
+ add missing properties:
+    _updateAttrib
+    _onOpenTimeout
+    _tabEvents
+    tabsAlreadyOpened
+ */
+
+/** @type {TabmixEventListener} */ // @ts-expect-error
 var TMP_eventListener = {
   init: function TMP_EL_init() {
     window.addEventListener("load", this);
@@ -243,6 +248,15 @@ var TMP_eventListener = {
   },
 
   handleEvent: function TMP_EL_handleEvent(aEvent) {
+    if (WheelEvent.isInstance(aEvent)) {
+      switch (aEvent.type) {
+        case "wheel":
+          this.onTabBarScroll(aEvent);
+          break;
+      }
+      return;
+    }
+
     switch (aEvent.type) {
       case "TabAttrModified":
         this.onTabAttrModified(aEvent);
@@ -277,10 +291,6 @@ var TMP_eventListener = {
       case "TabUnpinned":
         this.onTabUnpinned(aEvent);
         break;
-      case "DOMMouseScroll":
-      case "wheel":
-        this.onTabBarScroll(aEvent);
-        break;
       case "load":
         this._onLoad(aEvent.type);
         break;
@@ -299,8 +309,8 @@ var TMP_eventListener = {
   },
 
   toggleEventListener(aObj, aArray, aEnable, aHandler) {
-    var handler = aHandler || this;
-    var eventListener = aEnable ? "addEventListener" : "removeEventListener";
+    const handler = aHandler || this;
+    const eventListener = aEnable ? "addEventListener" : "removeEventListener";
     aArray.forEach(eventName => {
       aObj[eventListener](eventName, handler, true);
     });
@@ -563,6 +573,7 @@ var TMP_eventListener = {
     ).toCode(false, tabBar, "tabmix_updateCloseButtons");
 
     Tabmix.setNewFunction(tabBar, "_updateCloseButtons", Tabmix._updateCloseButtons);
+    // @ts-expect-error - it is ok to delete this function
     delete Tabmix._updateCloseButtons;
 
     Tabmix.allTabs.init();
@@ -710,7 +721,7 @@ var TMP_eventListener = {
       }
 
       if (aAnimate &&
-          window.matchMedia("(prefers-reduced-motion: no-preference)").matches &&
+          window.matchMedia("(prefers-reduced-motion: no-preference)")?.matches &&
           !BrowserHandler.kiosk) {
         bottomToolbox.setAttribute("fullscreenShouldAnimate", true);
       }
@@ -723,6 +734,7 @@ var TMP_eventListener = {
 
   updateMultiRow(aReset) {
     if (aReset)
+      // @ts-expect-error - it's ok
       Tabmix.tabsNewtabButton = null;
     if (TabmixTabbar.isMultiRow) {
       Tabmix.tabsUtils.updateVerticalTabStrip();
@@ -776,14 +788,18 @@ var TMP_eventListener = {
     } else if (!this._onOpenTimeout) {
       let self = this;
       let timeout = Tabmix.tabsUtils.disAllowNewtabbutton &&
-          window.matchMedia("(prefers-reduced-motion: no-preference)").matches ? 0 : 200;
-      this._onOpenTimeout = window.setTimeout(function TMP_onOpenTimeout(tab) {
-        if (self._onOpenTimeout) {
-          clearTimeout(self._onOpenTimeout);
-          self._onOpenTimeout = null;
-        }
-        self.onTabOpen_updateTabBar(tab);
-      }, timeout, aTab);
+          window.matchMedia("(prefers-reduced-motion: no-preference)")?.matches ? 0 : 200;
+      this._onOpenTimeout = window.setTimeout(
+        function TMP_onOpenTimeout(/** @type {MockedGeckoTypes.BrowserTab} */ tab) {
+          if (self._onOpenTimeout) {
+            clearTimeout(self._onOpenTimeout);
+            self._onOpenTimeout = null;
+          }
+          self.onTabOpen_updateTabBar(tab);
+        },
+        timeout,
+        aTab
+      );
     }
   },
 
@@ -909,8 +925,7 @@ var TMP_eventListener = {
     // this class change tab height (by changing the borders)
     if (typeof window.colorfulTabs == "object" && window.colorfulTabs.standout &&
         !tab.classList.contains("standout")) {
-      for (let i = 0; i < gBrowser.tabs.length; i++) {
-        let _tab = gBrowser.tabs[i];
+      for (const _tab of gBrowser.tabs) {
         if (_tab.classList.contains("standout")) {
           _tab.classList.remove("standout");
           break;
@@ -982,7 +997,9 @@ var TMP_eventListener = {
     if (aEvent.shiftKey)
       shouldMoveFocus = !shouldMoveFocus;
 
-    let direction, isVertical;
+    /** @type {number} */
+    let direction;
+    let isVertical = false;
 
     if (orient == "vertical") {
       direction = aEvent.deltaY;
@@ -1010,7 +1027,11 @@ var TMP_eventListener = {
         }
       }
     } else if (direction !== 0 && !Tabmix.tabsUtils.isVerticalTabs && !Tabmix.extensions.treeStyleTab) {
-      // this code is based on arrowscrollbox.js on_wheel event handler
+      /**
+       * this code is based on arrowscrollbox.js on_wheel event handler
+       * @param {number} delta
+       * @param {boolean} useInstant
+       */
       let scrollByDelta = function(delta, useInstant) {
         let instant;
         let scrollAmount = 0;
@@ -1087,7 +1108,7 @@ var TMP_eventListener = {
     gBrowser.tabpanels.removeEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     gTMPprefObserver.removeObservers();
-    gTMPprefObserver.dynamicRules = null;
+    gTMPprefObserver.dynamicRules = {};
 
     TabmixProgressListener.listener.mTabBrowser = null;
     gBrowser.removeTabsProgressListener(TabmixProgressListener.listener);
@@ -1108,10 +1129,11 @@ var TMP_eventListener = {
         let XULNS = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
         let image = document.createElementNS(XULNS, "image");
         image.setAttribute("class", "tab-reload-icon");
-        lockIcon.parentNode.appendChild(image);
+        lockIcon.parentNode?.appendChild(image);
       }
     }
 
+    /** @type  {TabmixEventListenerNS._updateAttrib} */
     function updateAttrib(aGetAtt, aGetValue, aAtt, aValue) {
       let node = aTab.getElementsByAttribute(aGetAtt, aGetValue)[0];
       Tabmix.setItem(node, aAtt, aValue);
@@ -1134,6 +1156,7 @@ Tabmix.initialization = {
   beforeBrowserInitOnLoad: {id: 3, obj: "Tabmix"},
   onWindowOpen: {id: 4, obj: "TMP_eventListener"},
   afterDelayedStartup: {id: 5, obj: "Tabmix"},
+  _lastPhase: 5,
 
   get isValidWindow() {
     // it is unlikely that we get her before SingleWindowModeUtils closes thw window
@@ -1148,7 +1171,8 @@ Tabmix.initialization = {
       value: !stopInitialization,
       enumerable: false
     });
-    const value = Math.max(...Object.values(Tabmix.initialization).map(({id}) => id));
+    // @ts-expect-error
+    const value = Math.max(...Object.values(Tabmix.initialization).map(({id}) => id ?? 0));
     Object.defineProperty(this, "_lastPhase", {enumerable: false, value});
     return !stopInitialization;
   },
@@ -1158,12 +1182,14 @@ Tabmix.initialization = {
       return null;
     }
     let result, currentPhase = this[aPhase].id;
-    let getObj = function(list) {
+    let getObj = function(/** @type {string} */ list) {
       let obj = window;
       list.split(".").forEach(prop => (obj = obj[prop]));
       return obj;
     };
-    for (let key of Object.keys(this)) {
+    for (const _key of Object.keys(this)) {
+      /** @type {keyof InitializationSteps} */ // @ts-expect-error
+      const key = _key;
       let phase = this[key];
       if (phase.id > currentPhase)
         break;
@@ -1187,6 +1213,7 @@ Tabmix.initialization = {
 
 // A promise resolved once initialization is complete
 Tabmix._deferredInitialized = (function() {
+  /** @type {DeferredPromise} */
   let deferred = {};
 
   deferred.promise = new Promise((resolve, reject) => {

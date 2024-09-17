@@ -69,7 +69,7 @@ class Overlays {
    * Loads the given urls into the window, recursively loading further overlays as provided by the
    * overlayProvider.
    *
-   * @param {String[]} urls                         The urls to load
+   * @param {string | string[]} urls                         The urls to load
    */
   async load(urls) {
     const unloadedOverlays = new Set(this._collectOverlays(this.document).concat(urls));

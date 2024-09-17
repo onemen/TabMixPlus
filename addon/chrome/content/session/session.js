@@ -20,7 +20,10 @@ Tabmix.DLG_SAVE = 0;
 Tabmix.DLG_RENAME = 1;
 Tabmix.NO_NEED_TO_REPLACE = -1;
 
-var TabmixSessionManager, TabmixSessionData;
+/** @type {TabmixSessionManager} */
+var TabmixSessionManager;
+/** @type {TabmixSessionData} */
+var TabmixSessionData;
 
 /**
  *  sanitize private data by delete the files session.rdf session.old

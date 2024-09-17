@@ -4,18 +4,47 @@
 "use strict";
 
 /***** Preference Dialog Functions *****/
-var PrefFn = {0: "", 32: "CharPref", 64: "IntPref", 128: "BoolPref"};
+/** @type {Globals.PrefFn} */
+const PrefFn = new Map([[0, ''], [32, 'getCharPref'], [64, 'getIntPref'], [128, 'getBoolPref']]);
 
-/** @type {Functions["getById"]} */
-this.$ = id => document.getElementById(id);
+/** @param {string} id @type {Document["getElementById"]}  */
+var $ = id => document.getElementById(id);
+
+/** @param {string} id */
+var $Pref = id => {
+  const preference = document.getElementById(id, "_PREF_CLASS_");
+  // only show error messgae when the element exist bt it is not a preference
+  if (preference && preference.nodeName !== "preference") {
+    console.error(`Preference ${id} is not a preference!`);
+  }
+  return preference;
+};
+
+/**  @param {string} id */
+const $Pane = id => {
+  const pane = document.getElementById(id, "_PANE_CLASS_");
+  if (pane.nodeName !== "prefpane") {
+    console.error(`Pane ${id} is not a prefpane!`);
+  }
+  return pane;
+};
 
 // this is the same as document.documentElement it is the PrefWindow class
 const prefWindow = $("TabMIxPreferences");
 
+/** @type {GeneralPrefWindow} */
 var gPrefWindow = {
   _initialized: false,
   set instantApply(val) {prefWindow.instantApply = val;},
   get instantApply() {return prefWindow.instantApply;},
+
+  get pinTabLabel() {
+    return Tabmix.lazyGetter(this, "pinTabLabel", () => {
+      let win = Tabmix.getTopWin();
+      return win.document.getElementById("context_pinTab").getAttribute("label") + "/" +
+        win.document.getElementById("context_unpinTab").getAttribute("label");
+    });
+  },
 
   init() {
     this._initialized = true;
@@ -31,7 +60,7 @@ var gPrefWindow = {
     if (navigator.userAgent.toLowerCase().indexOf("ubuntu") > -1)
       prefWindow.setAttribute("ubuntu", true);
 
-    window.gIncompatiblePane.init(prefWindow);
+    window.gIncompatiblePane.init();
 
     window.addEventListener("change", this);
     window.addEventListener("beforeaccept", this);
@@ -62,6 +91,7 @@ var gPrefWindow = {
   },
 
   updateMaxHeight() {
+    /** @type {number} */
     let previousDevicePixelRatio;
     const setMaxHeight = () => {
       const currentDevicePixelRatio = window.devicePixelRatio;
@@ -81,11 +111,12 @@ var gPrefWindow = {
 
     const aPaneElement = $(aPaneID);
     // select last selected tab in this pane
+    /** @type {CustomGroupElement<HTMLElement>} */ // @ts-expect-error
     const tabs = $(aPaneID).querySelector("tabbox")?.querySelector("tabs");
     if (tabs) {
-      let preference = $("pref_" + tabs.id);
+      let preference = $Pref("pref_" + tabs.id);
       if (preference?.value !== undefined) {
-        tabs.selectedIndex = preference.value;
+        tabs.selectedIndex = preference.numberValue;
       }
     }
 
@@ -107,7 +138,7 @@ var gPrefWindow = {
   deinit() {
     window.removeEventListener("change", this);
     window.removeEventListener("beforeaccept", this);
-    delete Tabmix.getTopWin().tabmix_setSession;
+    TabmixSvc.sm.settingPreference = false;
     Shortcuts.prefsChangedByTabmix = false;
     window.gIncompatiblePane.deinit();
   },
@@ -126,8 +157,7 @@ var gPrefWindow = {
       case "beforeaccept":
         this.applyBlockedChanges();
         if (!this.instantApply) {
-          // prevent TMP_SessionStore.setService from running
-          Tabmix.getTopWin().tabmix_setSession = true;
+          TabmixSvc.sm.settingPreference = true;
           Shortcuts.prefsChangedByTabmix = true;
         }
         break;
@@ -146,8 +176,8 @@ var gPrefWindow = {
 
   isInChanges(list) {
     return list.some(prefOrId => {
-      if (typeof prefOrId === "string") prefOrId = $(prefOrId);
-      return this.changes.has(prefOrId);
+      const preference = typeof prefOrId === "string" ? $Pref(prefOrId) : prefOrId;
+      return this.changes.has(preference);
     });
   },
 
@@ -155,8 +185,8 @@ var gPrefWindow = {
     if (!Array.isArray(list)) list = [list];
     const fnName = add ? "add" : "delete";
     for (let prefOrId of list) {
-      if (typeof prefOrId === "string") prefOrId = $(prefOrId);
-      this.changes[fnName](prefOrId);
+      const preference = typeof prefOrId === "string" ? $Pref(prefOrId) : prefOrId;
+      this.changes[fnName](preference);
     }
     this.setButtons(!this.changes.size);
   },
@@ -166,7 +196,7 @@ var gPrefWindow = {
     if (!this.instantApply) {
       return undefined;
     }
-    const preference = $(item.getAttribute("preference"));
+    const preference = $Pref(item.getAttribute("preference"));
     const valueChange = item.value !== String(preference.valueFromPreferences);
     this.updateChanges(valueChange, preference);
     return preference.value;
@@ -189,7 +219,11 @@ var gPrefWindow = {
     for (let preference of changes) {
       this.changes.delete(preference);
       const element = document.querySelector(`[preference=${preference.id}]`);
-      preference.value = preference.getValueByType(element);
+      if (element) {
+        preference.value = preference.getValueByType(element);
+      } else {
+        throw new Error(`No preference element found for ${preference.id}`);
+      }
     }
   },
 
@@ -251,7 +285,7 @@ var gPrefWindow = {
 
     var action = disable ? "close" : "cancel";
     var cancelButton = docElt.getButton("cancel");
-    cancelButton.label = docElt.getAttribute(action + "buttonlabel");
+    cancelButton.label = docElt.getAttribute(action + "buttonlabel") ?? "";
     cancelButton.setAttribute("icon", action);
 
     docElt.defaultButton = disable ? "cancel" : "accept";
@@ -279,9 +313,13 @@ var gPrefWindow = {
     if (!broadcasters)
       return;
     for (let broadcaster of broadcasters.childNodes) {
-      let preference = $(broadcaster.id.replace("obs", "pref"));
-      if (preference)
-        this.updateBroadcaster(preference, broadcaster);
+      if (broadcaster?.id) {
+        // not all observers are for preferences
+        let preference = $Pref(broadcaster.id.replace("obs", "pref"));
+        if (preference) {
+          this.updateBroadcaster(preference, broadcaster);
+        }
+      }
     }
   },
 
@@ -291,8 +329,10 @@ var gPrefWindow = {
     let broadcaster = aBroadcaster ||
       $(aPreference.id.replace("pref_", "obs_"));
     if (broadcaster) {
-      let disable = aPreference.type == "bool" ? !aPreference.value :
-        aPreference.value == parseInt(aPreference.getAttribute("notChecked"));
+      let {type, value} = aPreference;
+      let disable = type == "bool" ? !value : aPreference.type == "number" ?
+        value == parseInt(aPreference.getAttribute("notChecked") ?? "") :
+        value == aPreference.getAttribute("notChecked");
       this.setDisabled(broadcaster, disable);
     }
   },
@@ -311,17 +351,17 @@ var gPrefWindow = {
     var tabs = event.target?.tabbox?.tabs;
     if (tabs?.localName != "tabs" || !tabs.tabbox.hasAttribute("onselect"))
       return;
-    let preference = $("pref_" + tabs.id);
+    let preference = $Pref("pref_" + tabs.id);
     if (!tabs._inited) {
       tabs._inited = true;
       if (preference.value !== null) {
-        tabs.selectedIndex = preference.value;
+        tabs.selectedIndex = preference.numberValue;
       } else {
         let val = preference.valueFromPreferences;
         if (val === null) {
           preference.valueFromPreferences = tabs.selectedIndex;
         } else {
-          tabs.selectedIndex = val;
+          tabs.selectedIndex = Number(val);
         }
       }
     } else if (preference.value != tabs.selectedIndex) {
@@ -332,41 +372,44 @@ var gPrefWindow = {
   afterShortcutsChanged() {
     Shortcuts.prefsChangedByTabmix = false;
     if (typeof gMenuPane == "object" &&
-      $("pref_shortcuts").value != $("shortcut-group").value)
+      $Pref("pref_shortcuts").value != $("shortcut-group").value)
       gMenuPane.initializeShortcuts();
   },
 
   // syncfrompreference and synctopreference are for checkbox preference
   // controlled by int preference
   syncfrompreference(item) {
-    let preference = $(item.getAttribute("preference"));
-    return preference.value != parseInt(preference.getAttribute("notChecked"));
+    let preference = $Pref(item.getAttribute("preference"));
+    return preference.value != parseInt(preference.getAttribute("notChecked") ?? "");
   },
 
   synctopreference(item, checkedVal) {
-    let preference = $(item.getAttribute("preference"));
+    let preference = $Pref(item.getAttribute("preference"));
     let control = $(item.getAttribute("control"));
-    let notChecked = parseInt(preference.getAttribute("notChecked"));
+    let notChecked = parseInt(preference.getAttribute("notChecked") ?? "");
     let val = item.checked ? preference._lastValue || checkedVal : notChecked;
     preference._lastValue = control.value;
     return val;
   },
 };
 
+/** @type {Globals.getPrefByType} */
 function getPrefByType(prefName) {
   try {
-    var fn = PrefFn[Services.prefs.getPrefType(prefName)];
-    if (fn == "CharPref") {
+    var fn = PrefFn.get(Services.prefs.getPrefType(prefName));
+    if (fn == "getCharPref") {
       return Services.prefs.getStringPref(prefName);
     }
-
-    return Services.prefs["get" + fn](prefName);
+    if (fn && fn in Services.prefs) {
+      return Services.prefs[fn](prefName);
+    }
   } catch (ex) {
     Tabmix.log("can't read preference " + prefName + "\n" + ex, true);
   }
   return null;
 }
 
+/** @type {Globals.setPrefByType} */
 function setPrefByType(prefName, newValue, atImport) {
   let pref = {
     name: prefName,
@@ -382,15 +425,19 @@ function setPrefByType(prefName, newValue, atImport) {
   }
 }
 
+/** @type {Globals.setPref} */
 function setPref(aPref) {
-  let fn = PrefFn[aPref.type];
-  if (fn == "CharPref") {
+  let fn = PrefFn.get(aPref.type);
+  if (fn == "getCharPref") {
     Services.prefs.setStringPref(aPref.name, aPref.value);
-  } else {
-    Services.prefs["set" + fn](aPref.name, aPref.value);
+  } else if (fn) {
+    const setFn = fn.replace(/^get/, "set");
+    // @ts-expect-error
+    Services.prefs[setFn](aPref.name, aPref.value);
   }
 }
 
+/** @type {Globals.setPrefAfterImport} */
 function setPrefAfterImport(aPref) {
   // in prev version we use " " for to export string to file
   aPref.value = aPref.value.replace(/^"*|"*$/g, "");
@@ -467,7 +514,10 @@ TabmixChromeUtils.defineLazyGetter(this, "gPreferenceList", () => {
   // filter out preference without default value
   tabmixPrefs = otherPrefs.concat(tabmixPrefs).filter(pref => {
     try {
-      return prefs["get" + PrefFn[prefs.getPrefType(pref)]](pref) !== undefined;
+      const fn = PrefFn.get(prefs.getPrefType(pref));
+      if (fn && fn in prefs) {
+        return prefs[fn](pref) !== undefined;
+      }
     } catch {}
     return false;
   });
@@ -485,7 +535,7 @@ function defaultSetting() {
   Shortcuts.prefsChangedByTabmix = true;
   let SMinstalled = window._sminstalled;
   let prefs = !SMinstalled ? gPreferenceList :
-    gPreferenceList.map(pref => !sessionPrefs.includes(pref));
+    gPreferenceList.filter(pref => !sessionPrefs.includes(pref));
   prefs.forEach(pref => {
     Services.prefs.clearUserPref(pref);
   });
@@ -517,8 +567,9 @@ function updateInstantApply() {
   gPrefWindow.setButtons(!gPrefWindow.changes.size);
 }
 
+/** @type {Globals.toggleInstantApply} */
 function toggleInstantApply(item) {
-  const preference = $("pref_instantApply");
+  const preference = $Pref("pref_instantApply");
   if (preference._running) return;
   const checked = item.localName === "menuitem" ?
     item.getAttribute("checked") === "true" : item.value;
@@ -546,7 +597,7 @@ function positionDonateButton() {
   if (gPrefWindow.instantApply) {
     dlgbuttons.insertBefore(donateBox, dlgbuttons.querySelector("spacer"));
   } else {
-    dlgbuttons.parentNode.insertBefore(donateBox, dlgbuttons);
+    dlgbuttons.parentNode?.insertBefore(donateBox, dlgbuttons);
   }
   if (window.toString() === "[object Window]") {
     prefWindow.sizeToContent();
@@ -555,6 +606,7 @@ function positionDonateButton() {
 
 function toggleSyncPreference() {
   const sync = "services.sync.prefs.sync.";
+  /** @type {"clearUserPref" | "setBoolPref"} */
   let fn = Tabmix.prefs.getBoolPref("syncPrefs") ? "clearUserPref" : "setBoolPref";
   Tabmix.prefs[fn]("syncPrefs", true);
   let exclude = ["extensions.tabmix.sessions.onStart.sessionpath"];
@@ -568,7 +620,7 @@ function toggleSyncPreference() {
 function exportData() {
   // save all pending changes
   gPrefWindow.onApply();
-  showFilePicker("save").then(file => {
+  showFilePicker(Ci.nsIFilePicker.modeSave).then(file => {
     if (file) {
       let patterns = gPreferenceList.map(pref => {
         return "\n" + pref + "=" + getPrefByType(pref);
@@ -585,7 +637,7 @@ function exportData() {
 
 async function importData() {
   try {
-    const file = await showFilePicker("open");
+    const file = await showFilePicker(Ci.nsIFilePicker.modeOpen);
     if (!file) return;
     let input;
     if (TabmixSvc.version(860)) {
@@ -606,7 +658,7 @@ async function importData() {
 /**
  * Open file picker in open or save mode
  *
- * @param mode
+ * @param {number} mode
  *        The mode for the file picker: open|save
  *
  * @return Promise<{nsILocalFile}>
@@ -615,12 +667,9 @@ function showFilePicker(mode) {
   return new Promise(resolve => {
     const nsIFilePicker = Ci.nsIFilePicker;
     var fp = Cc["@mozilla.org/filepicker;1"].createInstance(nsIFilePicker);
-    if (mode == "open") {
-      mode = nsIFilePicker.modeOpen;
-    } else {
+    if (mode === nsIFilePicker.modeSave) {
       fp.defaultExtension = "txt";
       fp.defaultString = "TMPpref";
-      mode = nsIFilePicker.modeSave;
     }
     if (Tabmix.isVersion(1250)) {
       fp.init(window.browsingContext, null, mode);
@@ -635,6 +684,7 @@ function showFilePicker(mode) {
   });
 }
 
+/** @type {Globals.loadData} */
 function loadData(pattern) {
   if (pattern[0] != "tabmixplus") {
     //  Can not import because it is not a valid file.
@@ -661,17 +711,18 @@ function loadData(pattern) {
   // set updateOpenedTabsLockState before lockallTabs and lockAppTabs
   let pref = "extensions.tabmix.updateOpenedTabsLockState=";
   let index = pattern.indexOf(pref + true) + pattern.indexOf(pref + false) + 1;
-  if (index > 0)
-    pattern.splice(1, 0, pattern.splice(index, 1)[0]);
+  if (index > 0) {
+    pattern.splice(1, 0, pattern.splice(index, 1)[0] ?? "");
+  }
 
   var prefName, prefValue;
-  for (let i = 1; i < pattern.length; i++) {
+  for (const val of pattern) {
     Shortcuts.prefsChangedByTabmix = true;
-    let valIndex = pattern[i].indexOf("=");
+    let valIndex = val.indexOf("=");
     if (valIndex > 0) {
-      prefName = pattern[i].substring(0, valIndex);
+      prefName = val.substring(0, valIndex);
       if (!SMinstalled || !sessionPrefs.includes(prefName)) {
-        prefValue = pattern[i].substring(valIndex + 1, pattern[i].length);
+        prefValue = val.substring(valIndex + 1, val.length);
         setPrefByType(prefName, prefValue, true);
       }
     }
@@ -685,30 +736,28 @@ function loadData(pattern) {
 }
 
 // this function is called from Tabmix.openOptionsDialog if the dialog already opened
+/** @type {Globals.showPane} */
 function showPane(paneID) {
-  let docElt = document.getElementById("TabMIxPreferences");
-  let paneToLoad = document.getElementById(paneID);
-  if (!paneToLoad || paneToLoad.nodeName != "prefpane")
-    paneToLoad = $(docElt.lastSelected);
-  docElt.showPane(paneToLoad);
+  let pane = $Pane(paneID);
+  const paneToLoad = !pane || pane.nodeName != "prefpane" ? $Pane(prefWindow.lastSelected) : pane;
+  prefWindow.showPane(paneToLoad);
 }
 
+/** @type {Globals.openHelp} */
 function openHelp(helpTopic) {
   var helpPage = "https://onemen.github.io/tabmixplus-docs/";
   // Check if the help page already open in the top window
   var recentWindow = Tabmix.getTopWin();
   var tabBrowser = recentWindow.gBrowser;
   function selectHelpPage() {
-    let browsers = tabBrowser.browsers;
-    for (let i = 0; i < browsers.length; i++) {
-      let browser = browsers[i];
+    return tabBrowser.browsers.some((browser, i) => {
       if (browser.currentURI.spec.startsWith(helpPage)) {
         tabBrowser.tabContainer.selectedIndex = i;
         browser.tabmix_allowLoad = true;
         return true;
       }
-    }
-    return false;
+      return false;
+    });
   }
   /** @type {WhereToOpen} */
   var where = selectHelpPage() ||
@@ -718,7 +767,7 @@ function openHelp(helpTopic) {
     var currentPane = prefWindow.currentPane;
     helpTopic = currentPane.helpTopic;
     if (currentPane.id == "paneSession") {
-      helpTopic = $("session").parentNode.selectedTab.getAttribute("helpTopic");
+      helpTopic = $("session").parentNode.selectedTab.getAttribute("helpTopic") ?? "";
     }
   }
   helpTopic = helpTopic.toLowerCase().replace("mouse_-_", "").replace(/_-_|_/g, "-");
@@ -735,10 +784,13 @@ function donate() {
 
 window.gIncompatiblePane = {
   lastSelected: "paneLinks",
-  paneButton: null,
 
-  init(docElt) {
-    this.paneButton = docElt.getElementsByAttribute("pane", "paneIncompatible")[0];
+  get paneButton() {
+    return Tabmix.lazyGetter(this, "paneButton",
+      prefWindow.getElementsByAttribute("pane", "paneIncompatible")[0]);
+  },
+
+  init() {
     let radioGroup = this.paneButton.parentNode;
     radioGroup.addEventListener("command", this);
     this.checkForIncompatible(false);
@@ -769,20 +821,16 @@ window.gIncompatiblePane = {
     }
     Tabmix.setItem(this.paneButton, "show", !aHide);
 
-    if (aHide && prefWindow.lastSelected == "paneIncompatible")
-      prefWindow.showPane($(this.lastSelected));
+    if (aHide && prefWindow.lastSelected == "paneIncompatible") {
+      const pane = $Pane(this.lastSelected);
+      prefWindow.showPane(pane);
+    }
 
     if (aFocus)
       window.focus();
   }
 
 };
-
-TabmixChromeUtils.defineLazyGetter(gPrefWindow, "pinTabLabel", () => {
-  let win = Tabmix.getTopWin();
-  return win.document.getElementById("context_pinTab").getAttribute("label") + "/" +
-    win.document.getElementById("context_unpinTab").getAttribute("label");
-});
 
 ChromeUtils.defineModuleGetter(this, "OS", "resource://gre/modules/osfile.jsm");
 
@@ -794,7 +842,10 @@ TabmixChromeUtils.defineLazyGetter(this, "RTL_UI", () => {
 Tabmix.lazy_import(window, "Shortcuts", "Shortcuts", "Shortcuts");
 
 function setDialog() {
-  Object.defineProperty(customElements.get('preferences').prototype, 'instantApply', {get: () => prefWindow.instantApply});
+  const preferences = customElements.get('preferences');
+  if (preferences) {
+    Object.defineProperty(preferences.prototype, 'instantApply', {get: () => prefWindow.instantApply});
+  }
   customElements.define('prefwindow', class PrefWindowNoInst extends PrefWindow {
     _instantApplyInitialized = true;
     instantApply = Tabmix.prefs.getBoolPref('instantApply');

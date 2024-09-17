@@ -172,6 +172,7 @@ module.exports = [
       // "mozilla/var-only-at-top-level": "error", // not yet ...
       "tabmix/use-mjs-modules": "error",
       "tabmix/import-globals": "error",
+      "tabmix/lazy-getter-name-match": "error",
 
       "no-alert": 2,
       "no-array-constructor": 2,
@@ -601,17 +602,18 @@ module.exports = [
     ...tseslint.configs.recommended.map(conf => ({
       ...conf,
       files: ["**/*.d.ts"],
-      ignores: ["**/gecko/*.d.ts"],
+      ignores: ["**/gecko/**/*.d.ts"],
     })),
     {
       files: ["**/*.d.ts"],
-      ignores: ["**/gecko/*.d.ts"],
+      ignores: ["**/gecko/**/*.d.ts"],
       rules: {
         "no-var": "off",
         "no-unused-vars": "off",
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-misused-new": "off"
+        "@typescript-eslint/no-misused-new": "off",
+        "@typescript-eslint/no-empty-object-type": ["error", {allowInterfaces: 'with-single-extends'}]
       },
     },
   ],

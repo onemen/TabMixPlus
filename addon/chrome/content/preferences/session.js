@@ -1,8 +1,8 @@
 /* exported gSessionPane */
 "use strict";
 
+/** @type {SessionPane} */
 var gSessionPane = {
-  gSessionManager: null,
   init() {
     if (TabmixSvc.isLinux)
       $("sessionManager-panels").setAttribute("linux", "true");
@@ -19,9 +19,6 @@ var gSessionPane = {
   },
 
   isSessionStoreEnabled(onStart) {
-    if (this.gSessionManager)
-      return;
-
     var sessionStoreEnabled = Services.prefs.getIntPref("browser.startup.page") == 3 ||
         Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
     $("sessionsOptions").checked = sessionStoreEnabled;
@@ -39,8 +36,9 @@ var gSessionPane = {
     var useSessionManager = !item.checked;
     $("sessionsPanel").setAttribute("manager", useSessionManager ? "tabmix" : "firefox");
 
+    /** @type {(aItemId: string, aValue: PreferenceValue)=>void} */
     function updatePrefs(aItemId, aValue) {
-      let preference = $("pref_" + aItemId);
+      let preference = $Pref("pref_" + aItemId);
       preference.batching = true;
       if (instantApply) {
         preference.value = aValue;
@@ -82,8 +80,10 @@ var gSessionPane = {
   },
 
   setSessionpath(val) {
-    var menuItem = $("onStart.popup").getElementsByAttribute("value", val)[0];
-    $("pref_sessionpath").value = menuItem.getAttribute("session");
+    const menuItem = $("onStart.popup").getElementsByAttribute("value", val)[0];
+    if (menuItem) {
+      $Pref("pref_sessionpath").value = menuItem.getAttribute("session");
+    }
   },
 
 };

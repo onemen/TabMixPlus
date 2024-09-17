@@ -1,3 +1,4 @@
+/// <reference types="../../../../../types/aboutaddons.d.ts" />
 /* global windowRoot */
 "use strict";
 
@@ -42,11 +43,12 @@ window.addEventListener("load", () => {
     window.getHtmlBrowser() : window.docShell.chromeEventHandler;
   const targetNode = htmlBrowser.contentDocument.getElementById('content');
   const config = {childList: true, subtree: true};
-  const callback = function(mutationList) {
+  const callback = function(/** @type {MutationRecord[]} */ mutationList) {
     for (const mutation of mutationList) {
       if (mutation.type === 'childList') {
         const node = mutation?.addedNodes[0];
         const isAddonList = node?.nodeName == "DIV" || node?.nodeName == "ADDON-LIST" || node?.nodeName == "ADDON-CARD";
+        // @ts-expect-error - it is ok, querySelector exist
         if (isAddonList && (node.querySelector(`addon-card[addon-id="${ID}"]`) || node.getAttribute('addon-id') == ID)) {
           try {
             updateShowItemPreferences();

@@ -3,6 +3,11 @@
 (function() {
   let tabbrowsertab = customElements.get("tabbrowser-tab");
 
+  if (!tabbrowsertab) {
+    console.error("Tabmix: tabbrowser-tab not found in tabBindings.js");
+    return;
+  }
+
   let markup = tabbrowsertab.markup.replace(
     '</vbox>',
     `$&
@@ -68,8 +73,6 @@
   this.mFocusId = 0;
 
   this.mSelect = 0;
-
-  this.tabmix_mouseover = 0;
 
   this.constructor.tabmix_init.call(this);
 
@@ -177,7 +180,7 @@
     });
 
     /**
-     *  @this {MockedGeckoTypes.BrowserTab}
+     *  @this {Tab}
      *  @param {MouseEvent} aEvent
      */
     this.onMouseOver = function(aEvent) {
@@ -187,6 +190,7 @@
         this.mFocusId = window.setTimeout(this.doMouseHoverSelect, this.mouseHoverSelectDelay, this);
     };
 
+    /** @param {Tab} aTab */
     this.doMouseHoverSelect = function(aTab) {
       if (!aTab || !aTab.parentNode) {
         return; // this tab already removed....
@@ -199,9 +203,7 @@
       }
     };
 
-    /**
-     *  @param {MockedGeckoTypes.BrowserTab} aTab
-     */
+    /** @param {Tab} aTab */
     this.setShowButton = function(aTab) {
       if (!aTab || !aTab.parentNode)
         return; // this tab already removed....
@@ -220,30 +222,32 @@
     };
 
     /**
-    *  @this {MockedGeckoTypes.BrowserTab}
+    *  @this {Tab}
     *  @param {MouseEvent} aEvent
     */
     this.onMouseOut = function(aEvent) {
       this.setHoverState(aEvent, false);
-      clearTimeout(this.mButtonId);
+      if (this.mButtonId) {
+        clearTimeout(this.mButtonId);
+      }
       this.mButtonId = window.setTimeout(this.removeShowButton, this.tabXDelay, this);
       if (this.mouseHoverSelect && this.mFocusId)
         clearTimeout(this.mFocusId);
     };
 
     /**
-    *  @this {MockedGeckoTypes.BrowserTab}
+    *  @this {Tab}
     *  @param {MouseEvent} aEvent
     *  @param {boolean} aOver
     */
     this.setHoverState = function(aEvent, aOver) {
-      // @ts-ignore
       if (aEvent.target?.classList?.contains("tab-close-button")) {
         this.mOverCloseButton = aOver;
       }
       this.mIsHover = aOver;
     };
 
+    /** @param {Tab} aTab */
     this.removeShowButton = function(aTab) {
       if (!aTab || !aTab.parentNode)
         return; // this tab already removed....
@@ -261,7 +265,7 @@
     };
 
     /**
-    *  @this {MockedGeckoTypes.BrowserTab}
+    *  @this {Tab}
     *  @param {MouseEvent} aEvent
     *  @param {boolean} aSelectNewTab
     */
@@ -289,14 +293,24 @@
       // on mousedown event fall through to default mousedown from tabbox.xml
     };
 
+    const TimeoutIds = {
+      mSelect: '',
+      mFocusId: '',
+      mButtonId: '',
+      autoReloadTimerID: '',
+    };
+
+    /** @type {Array<keyof typeof TimeoutIds>} */ // @ts-expect-error
+    const timeouts = Object.values(TimeoutIds);
+
+    /** @this {Tab} */
     this.clearTimeouts = function() {
-      var timeouts = ["mSelect", "mFocusId", "mButtonId", "autoReloadTimerID", "tabmix_mouseover"];
-      timeouts.forEach(function(aTimeout) {
+      timeouts.forEach(aTimeout => {
         if (aTimeout in this && this[aTimeout]) {
           clearTimeout(this[aTimeout]);
           this[aTimeout] = null;
         }
-      }, this);
+      });
     };
   });
 

@@ -1,12 +1,16 @@
 /// <reference types="./override.d.ts" />
-/// <reference types="./gecko/lib.gecko.dom.d.ts" />
-/// <reference types="./gecko/lib.gecko.xpcom.d.ts" />
+/// <reference types="./gecko/tools/lib.gecko.dom.d.ts" />
+/// <reference types="./gecko/tools/lib.gecko.xpcom.d.ts" />
 
+// helpers types
+type f<T> = Array<T>;
+type NonEmptyArray<T> = T[] & {0: T};
 type Params = Record<string, unknown>;
 
 // for class extending MozXULElement
 interface CustomElementConstructorOverride {
   _fragment: DocumentFragment;
+  get fragment(): Node;
   _flippedInheritedAttributes?: Record<string, unknown>;
   get inheritedAttributes(): Record<string, string>;
   insertFTLIfNeeded(id: string): Promise<void>;
@@ -21,15 +25,21 @@ interface CustomElementConstructorOverride {
 interface CustomElementConstructor extends CustomElementConstructorOverride {}
 
 interface CustomElementRegistry {
-  // with CustomElementConstructor make owr custom classes type doesn't match
-  // expected type for constructor argument in customElements.define
+  // with CustomElementConstructor the type of owr custom classes doesn't match
+  // the expected type for constructor argument in customElements.define
   define(name: string, constructor: CustomElementConstructorOverride, options?: ElementDefinitionOptions): void;
 }
 
-interface MozXULElement extends Omit<Element, "value"> {
+// add properties to GetByTagNameMap as needed when using getElementsByTagName
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface GetByTagNameMap {}
+
+interface MozXULElement extends Omit<Element, "parentNode" | "value">, CustomElementConstructorOverride {
   connectedCallback(): void;
   delayConnectedCallback(): boolean;
+  disconnectedCallback(): void;
   getElementForAttrInheritance(selector: string): Element;
+  getElementsByTagName<K extends keyof GetByTagNameMap>(localName: K): NonEmptyCollection_G<GetByTagNameMap[K]>;
   initializeAttributeInheritance(): void;
 }
 
@@ -39,63 +49,30 @@ interface NamedNodeMap {
   };
 }
 
-interface MozColorbox extends CustomElementConstructorOverride {
-  updateColor(): void;
-}
-
 declare var MozXULElement: CustomElementConstructorOverride;
-declare var MozColorbox: MozColorbox;
 
 interface QuerySelectorMap {
-  "[anonid='useThis']": HTMLInputElement;
-  "[dlgtype='extra1']": HTMLButtonElement;
+  '[anonid="useThis"]': HTMLInputElement;
   '[dlgtype="extra1"]': HTMLButtonElement;
+  "[tabmix_context]": NodeList;
+  ".urlbarView-results": HTMLElement;
+  slot: HTMLElement;
 }
 
 interface GetByMap {
-  // for pref-appearance.xhtml
-  color: HTMLInputElement;
-  red: HTMLInputElement;
-  green: HTMLInputElement;
-  blue: HTMLInputElement;
-  opacity: HTMLInputElement;
-  italic: HTMLInputElement;
-  bold: HTMLInputElement;
-  underline: HTMLInputElement;
-  text: HTMLInputElement;
-  bg: HTMLInputElement;
-  textColor: MozColorbox;
-  bgColor: MozColorbox;
-  bgTopColor: MozColorbox;
-  _unloadedTab: HTMLElement;
-  _unreadTab: HTMLElement;
-  _otherTab: HTMLElement;
-  _progressMeter: HTMLElement;
-  useThis: HTMLInputElement;
-
-  checkbox: HTMLInputElement & XULTab;
-  checkboxContainer: HTMLElement;
-  space_before_checkbox: HTMLElement;
-  tm_info: HTMLElement;
-  tm_checkbox: HTMLInputElement;
-  tm_prompt: HTMLMenuElement;
-  tm_prompt_menu: XULPopupElement;
-  tm_textbox: HTMLInputElement;
-
+  checkbox: HTMLInputElement;
   "tabmix-tooltip": XULPopupElement;
   searchbar: CustomSearchbar;
   "tabmix_hideTabbar_menu-container": HTMLTemplateElement;
   "tabmix-closedTabs-container": HTMLTemplateElement;
   "tabmix-closedWindows-container": HTMLTemplateElement;
-  "tabmix-closedTabsView": CustomPanelView;
-  "tabmix-closedWindowsView": CustomPanelView;
 
   "scrollbutton-up": HTMLButtonElement;
   "scrollbutton-down": HTMLButtonElement;
   "tab-close-button": HTMLButtonElement;
   "fullscr-bottom-toggler": HTMLElement & {initialized: boolean};
   "tabmix-bottom-toolbox": HTMLElement;
-  reloadevery_custom_dialog: HTMLDialogElement;
+  "nav-bar-overflow-button": HTMLButtonElement;
 }
 
 interface CustomSearchbar extends HTMLInputElement {
@@ -110,30 +87,49 @@ interface KnownElements {
 }
 
 interface HTMLCollectionBase_G<T> {
-  [Symbol.iterator](): IterableIterator<T>;
   readonly length: number;
   item(index: number): T | null;
+  forEach(callbackfn: (value: T | null, key: number, parent: NodeList) => void, thisArg?: any): void;
   [index: number]: T;
+  [Symbol.iterator](): IterableIterator<T | null>;
+  entries(): IterableIterator<[number, T | null]>;
+  keys(): IterableIterator<number>;
+  values(): IterableIterator<T | null>;
+  [Symbol.iterator](): IterableIterator<T>; // Remove the | null
 }
 
-interface HTMLCollection_G<T, K> extends HTMLCollectionBase_G<T> {
-  namedItem(name: K): T | null;
+interface HTMLCollection_G<T> extends HTMLCollectionBase_G<T> {
+  namedItem(name: string): T | null;
 }
+
+type NonEmptyCollection_G<T> = HTMLCollectionBase_G<T> & {0: T};
 
 interface ParentNode {
-  getElementsByAttribute<K extends keyof GetByMap>(name: "anonid", value: K): HTMLCollection_G<GetByMap[K], K> | null;
-  getElementsByAttribute<K extends keyof GetByMap>(name: K, value: string): HTMLCollection_G<GetByMap[K], K> | null;
-  getElementsByClassName<K extends keyof GetByMap>(name: K): HTMLCollection_G<GetByMap[K], K> | null;
+  id?: string;
+  getElementsByAttribute(name: "pinned" | "isPermaTab" | "protected", value: true): HTMLCollection_G<MockedGeckoTypes.BrowserTab>;
+  getElementsByAttribute(name: string, value: number | null): HTMLCollection;
+  getElementsByAttribute<K extends keyof GetByMap>(name: "anonid" | "class" | "command" | "pane", value: K): NonEmptyCollection_G<GetByMap[K]>;
+  getElementsByAttribute(name: "dlgtype", value: string): NonEmptyCollection_G<HTMLButtonElement>;
+  getElementsByAttribute<K extends keyof GetByMap>(name: K, value: string): HTMLCollection_G<GetByMap[K]>;
   _getElementById<K extends keyof GetByMap | string>(selectors: K): K extends keyof GetByMap ? GetByMap[K] : HTMLElement | null;
-  querySelector<K extends keyof QuerySelectorMap | string>(selectors: K): K extends keyof QuerySelectorMap ? QuerySelectorMap[K] : HTMLElement | null;
+  querySelector<K extends keyof QuerySelectorMap | string>(selectors: K): K extends keyof QuerySelectorMap ? QuerySelectorMap[K] : HTMLElement;
+  querySelectorAll<K extends keyof QuerySelectorMap>(selectors: K): QuerySelectorMap[K];
+  querySelectorAll(selectors: string): HTMLCollection_G<HTMLElement>;
 }
 
 interface XULTab {
   label: string;
 }
 
+interface ContentSecurityPolicy extends nsIContentSecurityPolicy {}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface createXULMap {}
+
 interface Document {
+  createXULElement<K extends keyof createXULMap | string>(selectors: K): K extends keyof createXULMap ? createXULMap[K] : HTMLElement;
   getElementById<K extends keyof GetByMap | string>(selectors: K): K extends keyof GetByMap ? GetByMap[K] : (HTMLElement & HTMLInputElement & XULTab) | null;
+  getElementsByTagName<K extends keyof GetByTagNameMap>(localName: K): NonEmptyCollection_G<GetByTagNameMap[K]>;
   querySelector<K extends keyof QuerySelectorMap | string>(selectors: K): K extends keyof QuerySelectorMap ? QuerySelectorMap[K] : HTMLElement | null;
 }
 
@@ -148,24 +144,30 @@ interface HTMLInputElement {
 
 interface Node {
   className: string;
+  classList: DOMTokenList;
   collapsed: boolean;
+  fileName: string;
   getAttribute(name: string): string | null;
-  setAttribute(name: string, value: string): void;
+  getBoundingClientRect(): DOMRect;
+  hasAttribute(name: string): boolean;
   hidden: boolean | null;
   hidePopup(cancel?: boolean): void;
   id?: string;
   localName: string;
+  removeAttribute(name: string): void;
+  setAttribute(name: string, value: string | boolean | number): void;
+  readonly tagName: string;
 }
 
 interface XULCommandDispatcher {
   focusedElement: Element;
 }
 
-interface CustomPanelView extends HTMLElement {
-  menupopup: Element;
-}
-
-/** for content.js */
+/**
+ * for content.js
+ * this types are here since it is also used by other files
+ */
+type IconInfo = {pageUri: nsIURI; iconUri: nsIURI; width: number; isRichIcon: boolean; type: string; node: HTMLLinkElement};
 
 interface IconLoader {
   addDefaultIcon(pageUri: any): void;
@@ -181,10 +183,5 @@ interface JSWindowActorChild {
 }
 
 interface mozIDOMWindowProxy {
-  windowGlobalChild: WindowGlobalChild | null;
   _callBackFunction?: (data: {button: number; checked: boolean; label: string; value: number}) => void;
 }
-
-// @ts-expect-error - override nsIPrefBranch from gecko.d.ts and use the one form lib.gecko.xpcom.d.ts
-// for use in Services.prefs
-declare interface nsIPrefBranch {}

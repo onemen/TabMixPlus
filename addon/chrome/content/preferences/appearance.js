@@ -1,7 +1,9 @@
 /* exported gAppearancePane */
 "use strict";
 
+/** @type {AppearancePane} */
 var gAppearancePane = {
+  _tabmixCustomizeToolbar: null,
   init() {
     var browserWindow = Tabmix.getTopWin();
     // disable options for position the tabbar and scroll mode if TreeStyleTab extension installed
@@ -35,7 +37,7 @@ var gAppearancePane = {
     Tabmix.setItem("tabXLeft", "disabled", disableButtonOnLefSide || null);
     Tabmix.setItem(comment, "hidden", !disableButtonOnLefSide || null);
     if (treeStyleTab) {
-      comment.value = comment.getAttribute("tst");
+      comment.value = comment.getAttribute("tst") ?? "";
     }
 
     // rtl update position
@@ -44,11 +46,12 @@ var gAppearancePane = {
       let left = $("newTabButton.position.left");
       [right.label, left.label] = [left.label, right.label];
 
-      let tabsScroll = $("tabsScroll").firstChild.childNodes;
-      tabsScroll[2].label = tabsScroll[2].getAttribute("rtlLabel");
+      /** @type {[Node, Node, Node]} */ // @ts-expect-error
+      let tabsScroll = $("tabsScroll").firstChild?.childNodes;
+      tabsScroll[2].label = tabsScroll[2].getAttribute("rtlLabel") ?? "";
 
       let tabXLeft = $("tabXLeft");
-      tabXLeft.label = tabXLeft.getAttribute("rtlLabel");
+      tabXLeft.label = tabXLeft.getAttribute("rtlLabel") ?? "";
     }
 
     this.tabCloseButtonChanged();
@@ -60,9 +63,12 @@ var gAppearancePane = {
     var label = $("tabsScroll.label").getBoundingClientRect().width;
     var menulist = $("tabsScroll");
     var indent = 23; // we have class="indent"
-    if (hbox.parentNode.getBoundingClientRect().width > label + menulist.getBoundingClientRect().width - indent) {
-      menulist.parentNode.removeAttribute("pack");
-      menulist.parentNode.removeAttribute("class");
+    if (
+      hbox.parentNode &&
+      hbox.parentNode.getBoundingClientRect().width > label + menulist.getBoundingClientRect().width - indent
+    ) {
+      menulist.parentNode?.removeAttribute("pack");
+      menulist.parentNode?.removeAttribute("class");
       hbox.setAttribute("orient", "horizontal");
       hbox.setAttribute("align", "center");
     }
@@ -98,7 +104,7 @@ var gAppearancePane = {
          </menupopup>`
       ));
       if (!Services.prefs.prefHasUserValue(positionPref)) {
-        document.l10n.translateElements([$("tabBarTopAbove")]).then(() => {
+        document.l10n?.translateElements([$("tabBarTopAbove")]).then(() => {
           position.setAttribute("label", $("tabBarTopAbove").label);
         }).catch(e => console.error("error in _waterfoxPositionControl", e));
       }
@@ -126,13 +132,13 @@ var gAppearancePane = {
   },
 
   tabCloseButtonChanged() {
-    var tabCbValue = $("pref_tabCloseButton").value;
+    var tabCbValue = $Pref("pref_tabCloseButton").value;
     Tabmix.setItem("tabDelayCheck", "hidden", tabCbValue != 2 && tabCbValue != 4);
     Tabmix.setItem("tabWidthBox", "hidden", tabCbValue != 5);
   },
 
   setTabCloseButtonUI() {
-    if ($("pref_flexTabs").value) {
+    if ($Pref("pref_flexTabs").value) {
       $("alltabsItem").disabled = true;
       let tabCbUI = $("tabCloseButton");
       if (tabCbUI.selectedItem.value == 5) {
@@ -145,7 +151,7 @@ var gAppearancePane = {
   },
 
   tabsScrollChanged() {
-    var multiRow = $("pref_tabsScroll").value == 2;
+    var multiRow = $Pref("pref_tabsScroll").value == 2;
     $("multi-rows").hidden = !multiRow;
     $("one-row").hidden = multiRow;
   },
@@ -153,12 +159,7 @@ var gAppearancePane = {
   tabmixCustomizeToolbar() {
     this._tabmixCustomizeToolbar = true;
     const win = Tabmix.getTopWin();
-    if (typeof win.gCustomizeMode == "object") {
-      // Firefox 57
-      win.gCustomizeMode.enter();
-    } else {
-      win.BrowserCustomizeToolbar();
-    }
+    win.gCustomizeMode.enter();
   },
 
   toolbarButtons(aWindow) {
@@ -170,27 +171,36 @@ var gAppearancePane = {
     ];
     var onToolbar = $("onToolbar");
     var onPlate = $("onPlate");
-    for (let i = 0; i < buttons.length; ++i) {
-      let button = aWindow.document.getElementById(buttons[i]);
-      let optionButton = $("_" + buttons[i]).parentNode;
-      if (button)
-        onToolbar.appendChild(optionButton);
-      else
-        onPlate.appendChild(optionButton);
+    for (const id of buttons) {
+      let button = aWindow.document.getElementById(id);
+      let optionButton = $("_" + id).parentNode;
+      if (optionButton) {
+        if (button)
+          onToolbar.appendChild(optionButton);
+        else
+          onPlate.appendChild(optionButton);
+      } else {
+        throw new Error(`Tabmix: _${id} parentNode not found`);
+      }
     }
-    onToolbar.childNodes[1].hidden = onToolbar.childNodes.length > 2;
-    onPlate.childNodes[1].hidden = onPlate.childNodes.length > 2;
+    if (onToolbar.childNodes[1]) {
+      onToolbar.childNodes[1].hidden = onToolbar.childNodes.length > 2;
+    }
+    if (onPlate.childNodes[1]) {
+      onPlate.childNodes[1].hidden = onPlate.childNodes.length > 2;
+    }
 
     // Display > Tab bar
+    /** @type {(buttonID: string, itemID: string, aEnable: boolean) => void} */
     function updateDisabledState(buttonID, itemID, aEnable) {
       const enablePosition = Boolean(aWindow.CustomizableUI.getPlacementOfWidget(buttonID));
       gPrefWindow.setDisabled(itemID, !enablePosition || null);
       gPrefWindow.setDisabled("obs_" + itemID, !aEnable || !enablePosition || null);
     }
-    updateDisabledState("new-tab-button", "newTabButton", $("pref_newTabButton").value);
+    updateDisabledState("new-tab-button", "newTabButton", $Pref("pref_newTabButton").booleanValue);
 
     if (this._tabmixCustomizeToolbar) {
-      delete this._tabmixCustomizeToolbar;
+      this._tabmixCustomizeToolbar = null;
       window.focus();
     }
   },
@@ -198,12 +208,12 @@ var gAppearancePane = {
   // block width change on instantApply
   // user is force to hit apply
   userChangedWidth(item) {
-    gPrefWindow.widthChanged = $("minWidth").value != $("pref_minWidth").valueFromPreferences ||
-                        $("maxWidth").value != $("pref_maxWidth").valueFromPreferences;
+    gPrefWindow.widthChanged = $("minWidth").value != $Pref("pref_minWidth").valueFromPreferences ||
+                        $("maxWidth").value != $Pref("pref_maxWidth").valueFromPreferences;
     if (!gPrefWindow.instantApply)
       return undefined;
     // block the change by returning the preference own value
-    return $(item.getAttribute("preference")).value;
+    return $Pref(item.getAttribute("preference")).value;
   },
 
   changeTabsWidth() {
@@ -215,20 +225,20 @@ var gAppearancePane = {
     let [minWidth, maxWidth] = [parseInt($("minWidth").value), parseInt($("maxWidth").value)];
     if (minWidth > maxWidth) {
       [minWidth, maxWidth] = [maxWidth, minWidth];
-      [$("minWidth").value, $("maxWidth").value] = [minWidth, maxWidth];
+      [$("minWidth").value, $("maxWidth").value] = [String(minWidth), String(maxWidth)];
     }
-    [$("pref_minWidth").value, $("pref_maxWidth").value] = [minWidth, maxWidth];
+    [$Pref("pref_minWidth").value, $Pref("pref_maxWidth").value] = [minWidth, maxWidth];
   },
 
   resetWidthChange() {
     gPrefWindow.widthChanged = false;
-    const min = $("pref_minWidth");
+    const min = $Pref("pref_minWidth");
     min.value = min.valueFromPreferences;
-    const max = $("pref_maxWidth");
+    const max = $Pref("pref_maxWidth");
     max.value = max.valueFromPreferences;
     if (gPrefWindow.instantApply) {
-      $("minWidth").value = min.value;
-      $("maxWidth").value = max.value;
+      $("minWidth").value = String(min.value);
+      $("maxWidth").value = String(max.value);
     }
   },
 

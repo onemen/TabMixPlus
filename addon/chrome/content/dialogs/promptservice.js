@@ -24,24 +24,37 @@ var TMP_SHOW_CLOSED_WINDOW_LIST = 3;
 var TMP_DLG_SAVE = 0;
 var TMP_DLG_RENAME = 1;
 
-var dialogParams, gHideElmParam, gSavedName, gCancelLabel, gOrigName;
+/** @type {nsIDialogParamBlock} */
+var dialogParams;
+/** @type {number} */
+var gHideElmParam;
+/** @type {string[]} */
+var gSavedName;
+/** @type {string} */
+var gCancelLabel;
+/** @type {string} */
+var gOrigName;
 /** @type {Element} */
 let documentElement;
 
 function prompt_init() {
+  if (!document.documentElement) {
+    // not supposed to happen
+    return;
+  }
   documentElement = document.documentElement;
 
   dialogParams = window.arguments[0].QueryInterface(Ci.nsIDialogParamBlock);
   document.title = dialogParams.GetString(0);
 
   // display the main text
-  var i, messageText = dialogParams.GetString(1);
+  var messageText = dialogParams.GetString(1);
   var messageParent = document.getElementById("tm_info");
   var messageParagraphs = messageText.split("\n");
   gHideElmParam = dialogParams.GetInt(1);
-  for (i = 0; i < messageParagraphs.length; i++) {
-    var descriptionNode = document.createElement("description");
-    var text = document.createTextNode(messageParagraphs[i]);
+  for (const paragraphs of messageParagraphs) {
+    const descriptionNode = document.createElement("description");
+    const text = document.createTextNode(paragraphs);
     descriptionNode.appendChild(text);
     messageParent.appendChild(descriptionNode);
   }
@@ -63,13 +76,12 @@ function prompt_init() {
       default:
         index = menuList.defaultIndex;
         if (index >= popup.childNodes.length || index < 0) index = 1;
-        isDisabled = popup.childNodes[index].getAttribute("disabled") == "true";
+        isDisabled = popup.childNodes[index]?.getAttribute("disabled") == "true";
         // select the first entry that isn't menuseparator and not "disabled"
         if (!isDisabled) break;
-        var item;
-        for (i = 1; i < popup.childNodes.length; ++i) {
-          item = popup.childNodes[i];
-          if (item.localName != "menuseparator" &&
+        for (let i = 1; i < popup.childNodes.length; ++i) {
+          const item = popup.childNodes[i];
+          if (item && item.localName != "menuseparator" &&
             item.getAttribute("disabled") != "true") {
             index = i;
             break;
@@ -84,9 +96,9 @@ function prompt_init() {
   // display the textBox
   var textBox = document.getElementById("tm_textbox");
   if (gHideElmParam == TMP_SHOW_TEXTBOX) {
-    messageParent.lastChild.setAttribute("style", "height:3em");
+    messageParent.lastChild?.setAttribute("style", "height:3em");
     gSavedName = dialogParams.GetString(2).split("\n");
-    textBox.value = gSavedName.shift();
+    textBox.value = gSavedName.shift() ?? "";
     gOrigName = textBox.value.toLowerCase();
   } else {
     textBox.hidden = true;
@@ -102,19 +114,19 @@ function prompt_init() {
   }
 
   // display the command buttons
-  var aButtons, buttons = ["accept", "cancel", "extra1"];
+  const buttons = ["accept", "cancel", "extra1"];
   var btnLabels = dialogParams.GetString(4).split("\n");
-  for (i = 0; i < buttons.length; ++i) {
-    aButtons = documentElement.getButton(buttons[i]);
-    if (i < btnLabels.length && btnLabels[i] !== "") {
-      setLabelForNode(aButtons, btnLabels[i]);
+  buttons.forEach((type, i) => {
+    const button = documentElement.getButton(type);
+    if (i < btnLabels.length && btnLabels[i]) {
+      setLabelForNode(button, btnLabels[i]);
     } else {
-      aButtons.hidden = true; // hide extra button
+      button.hidden = true; // hide extra button
     }
-  }
+  });
 
   // Set and focus default button
-  var dButton = buttons[dialogParams.GetInt(0)];
+  var dButton = buttons[dialogParams.GetInt(0)] ?? "accept";
   var dialog = documentElement;
   dialog.defaultButton = dButton;
   if (gHideElmParam == TMP_HIDE_MENUANDTEXT) { // hide menulist & text box and set focus to default Button
@@ -124,7 +136,7 @@ function prompt_init() {
 
   if (gHideElmParam == TMP_SHOW_TEXTBOX) {
     dialog.getButton("extra1").hidden = true;
-    gCancelLabel = dialog.getButton("cancel").label;
+    gCancelLabel = dialog.getButton("cancel").label ?? "Cancel";
     inputText(textBox);
   }
 
@@ -133,16 +145,16 @@ function prompt_init() {
   centerWindowOnScreen();
 }
 
+/** @param {number} button */
 function prompt_deinit(button) {
   dialogParams.SetInt(4, button); // ok = 0; cancel = 1; extra1 = 2;
-  dialogParams.SetInt(5, document.getElementById("tm_checkbox").checked);
+  dialogParams.SetInt(5, Number(document.getElementById("tm_checkbox").checked));
   if (gHideElmParam < TMP_HIDE_MENUANDTEXT) {
     if (gHideElmParam == TMP_SHOW_MENULIST) {
       var item = document.getElementById("tm_prompt").selectedItem;
       ///XXX item.fileName - in the new Tabmix.Sessions
-      // @ts-ignore
       dialogParams.SetString(5, item.session || item.fileName);
-      dialogParams.SetInt(6, item.getAttribute("value"));
+      dialogParams.SetInt(6, parseInt(item.getAttribute("value") ?? ""));
     } else {
       dialogParams.SetString(5, document.getElementById("tm_textbox").value);
     }
@@ -162,16 +174,22 @@ function prompt_deinit(button) {
         Tabmix.assert(ex, "error in callback " + window._callBackFunction.name);
       }
     }
-    window._callBackFunction = null;
+    delete window._callBackFunction;
   }
 }
 
+/** @param {number} button */
 function prompt_extra1(button) {
   prompt_deinit(button);
   window.close();
 }
 
 // copy from commonDialog.js
+/**
+ * @param {HTMLInputElement | HTMLButtonElement} aNode
+ * @param {string} aLabel
+ * @param {boolean} [aIsLabelFlag]
+ */
 function setLabelForNode(aNode, aLabel, aIsLabelFlag) {
   var accessKey = null;
   if (/ *\(&([^&])\)(:?)$/.test(aLabel)) {
@@ -195,6 +213,7 @@ function setLabelForNode(aNode, aLabel, aIsLabelFlag) {
     aNode.accessKey = accessKey;
 }
 
+/** @param {HTMLInputElement} textBox */
 function inputText(textBox) {
   var btnOK = documentElement.getButton("accept");
   var btnCancel = documentElement.getButton("cancel");
@@ -211,7 +230,7 @@ function inputText(textBox) {
   msg[2] = TabmixSvc.getSMString("sm.sessionName.msg2");
   msg[3] = msg[2] + ", " + TabmixSvc.getSMString("sm.sessionName.msg3");
   var cLabel = TabmixSvc.setLabel("sm.replaceStartup.button1");
-  /** @type {CharacterData} */ // @ts-ignore
+  /** @type {CharacterData} */ // @ts-expect-error
   var description = document.getElementById("tm_info").lastChild.firstChild;
   textBox.value = textBox.value.replace(/^[\s]+/g, "");
   var name = textBox.value.toLowerCase();
@@ -219,7 +238,7 @@ function inputText(textBox) {
   if (name === "") validName = 1;
   if (validName === 0) {
     for (var i = 0; i < gSavedName.length; i++) {
-      if (name == gSavedName[i].toLowerCase() && gSavedName[i] !== "") {
+      if (name == gSavedName[i]?.toLowerCase() && gSavedName[i] !== "") {
         if (dialogParams.GetInt(3) != TMP_DLG_RENAME) {
           validName = 3;
           dialogParams.SetInt(6, i);
@@ -258,5 +277,5 @@ function inputText(textBox) {
       documentElement.defaultButton = "cancel";
       break;
   }
-  description.replaceData(0, description.length, msg[validName]);
+  description.replaceData(0, description.length, msg[validName] ?? "");
 }
