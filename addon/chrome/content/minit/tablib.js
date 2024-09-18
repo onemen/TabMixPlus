@@ -418,12 +418,13 @@ Tabmix.tablib = {
   change_tabContainer: function change_tabContainer() {
     let tabBar = gBrowser.tabContainer;
     if (!Tabmix.extensions.verticalTabs) {
-      const methodName = Tabmix.isVersion(910) ? "gBrowser.tabContainer.init" : "gBrowser.tabContainer.handleEvent";
-      Tabmix.changeCode(tabBar, methodName)._replace(
-        'this._updateCloseButtons',
-        'TabmixTabbar._handleResize(); \
-         $&'
-      ).toCode();
+      // foolows the example from gBrowser.tabContainer.init
+      let handleResize = () => {
+        TabmixTabbar._handleResize();
+      };
+      window.addEventListener("resize", handleResize);
+      const observer = new MutationObserver(handleResize);
+      observer.observe(document.documentElement, {attributeFilter: ["inFullscreen", "inDOMFullscreen"],});
 
       let $LF = '\n      ';
       const doPosition = Tabmix.isVersion(1300) ? "absPositionHorizontalTabs" : "doPosition";
