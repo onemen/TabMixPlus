@@ -64,12 +64,25 @@ Tabmix.multiRow = {
 
           const tabBar = this.parentNode;
           if (tabBar.hasAttribute("multibar") && Tabmix.tabsUtils.overflow) {
-            //XXX don't do anything on Linux when hovering last tab and
+            // don't do anything on Linux when hovering last tab and
             // we show close button on tab on hover
-            if (!TabmixSvc.isLinux || TabmixTabbar.visibleRows === 1 ||
+            if (
+              !TabmixSvc.isLinux ||
+              TabmixTabbar.visibleRows === 1 ||
               !Tabmix.visibleTabs.last.hasAttribute("showbutton") &&
-                !Tabmix.visibleTabs.last.hasAttribute("showbutton_removed"))
+                !Tabmix.visibleTabs.last.hasAttribute("showbutton_removed")
+            )
               Tabmix.tabsUtils.updateVerticalTabStrip();
+          } else if (
+            !TabmixTabbar.widthFitTitle &&
+            tabBar.hasAttribute("multibar") &&
+            document.getElementById("tabmix-scrollbox").hasAttribute("overflowing")
+          ) {
+            // when widthFitTitle is false firefox arrowscrollbox fires underflow
+            // event after tab closed when tabs in the last row are not in their
+            // maximum width.
+            // if our multi-row are overflowing call updateVerticalTabStrip to get the right state.
+            Tabmix.tabsUtils.updateVerticalTabStrip();
           } else {
             Tabmix.tabsUtils.overflow = false;
           }
