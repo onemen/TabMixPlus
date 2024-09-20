@@ -431,6 +431,18 @@ Tabmix.multiRow = {
           if (tab.hasAttribute("tabmix-firstTabInRow"))
             tab.removeAttribute("tabmix-firstTabInRow");
         }
+        setTimeout(() => {
+          // use timeout to make sure we run this after other listeners and observers
+          // that may update the overflow state and/or scroll state
+          if (
+            Tabmix.tabsUtils.overflow &&
+            this.hasAttribute("scrolledtostart") &&
+            this.hasAttribute("scrolledtoend")
+          ) {
+            this.resetFirstTabInRow();
+            Tabmix.tabsUtils.updateVerticalTabStrip({reset: true});
+          }
+        }, 50);
       }
 
       /** @this {This} */
