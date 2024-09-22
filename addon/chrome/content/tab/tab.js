@@ -1844,7 +1844,23 @@ window.gTMPprefObserver = {
       const htmlSlot = gBrowser.tabContainer.arrowScrollbox.scrollbox.firstChild;
       if (htmlSlot) {
         htmlSlot.style.flexWrap = "inherit";
+        this.insertRule(
+          `#tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox) {
+            margin-top: var(--tabmix-multirow-margin, 0);
+            margin-bottom: var(--tabmix-multirow-margin, 0);
+          }`
+        );
       }
+    } else {
+      this.insertRule(
+        `#tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox-clip) {
+          overflow: clip;
+          display: block;
+          margin-top: var(--tabmix-multirow-margin, 0);
+          margin-bottom: var(--tabmix-multirow-margin, 0);
+          contain: unset;
+        }`
+      );
     }
 
     this.dynamicProtonRules();

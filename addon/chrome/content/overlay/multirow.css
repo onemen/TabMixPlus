@@ -12,7 +12,6 @@
   --tab_max_width_mlt: 200px;
   --tab-min-height_mlt: calc(var(--tab-min-height) + 2 * (var(--proton-tab-block-margin, 0px) + var(--tab-block-margin, 0px)));
   --tabmix-scrollbutton-padding: calc(var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding));
-  --tabmix-multirow-margin: 0px;
 }
 
 #tabbrowser-tabs {
@@ -42,14 +41,6 @@
   visibility: collapse;
 }
 
-#tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox-clip) {
-  overflow: clip;
-  display: block;
-  margin-top: var(--tabmix-multirow-margin , 0);
-  margin-bottom: var(--tabmix-multirow-margin , 0);
-  contain: unset;
-}
-
 #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox) {
   display: flex;
   flex-wrap: wrap;
@@ -64,6 +55,10 @@
 
 #tabbrowser-tabs[multibar][orient=horizontal] .tabbrowser-tab[usercontextid] > .tab-stack > .tab-background > .tab-context-line {
   margin-top: -1px;
+}
+
+#tabbrowser-tabs[multibar=scrollbar][orient=horizontal] .tabbrowser-tab[pinned] {
+  margin-top: -0.5px !important
 }
 
 /*
@@ -183,5 +178,5 @@
 }
 
 #tabbrowser-tabs[multibar][orient=horizontal] > .tab-drop-indicator {
-  margin-top: calc(var(--tab-min-height_mlt) * (var(--tabmix-visiblerows) - 1) + var(--tabmix-multirow-margin));
+  margin-top: calc(var(--tab-min-height_mlt) * (var(--tabmix-visiblerows) - 1) + var(--tabmix-multirow-margin, 0));
 }
