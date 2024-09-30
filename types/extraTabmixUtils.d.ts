@@ -458,8 +458,11 @@ declare namespace TabsUtils {
   function onUnload(): void;
   function handleEvent(aEvent: MouseEvent): void;
   function initializeTabmixUI(): void;
-  function updateVerticalTabStrip(params?: {reset?: boolean; forceRightSide?: boolean}): string | null;
-  function adjustNewtabButtonVisibility(forceRightSide?: boolean): void;
+  function updateVerticalTabStrip(params?: {reset?: boolean}): string | null;
+  function _newTabButtonWidth(onSide?: boolean): number;
+  let _widthCache: {minWidth: number; maxWidth: number; [key: number]: number};
+  function updateMinWidth(): void;
+  function adjustNewtabButtonVisibility(): void;
   let disAllowNewtabbutton: boolean;
   let overflow: boolean;
   function showNewTabButtonOnSide(aCondition: boolean, aValue: string): void;
@@ -471,7 +474,6 @@ declare namespace TabsUtils {
   function createTooltip(box: HTMLElement & {label: string}): void;
   function isSingleRow(visibleTabs: Tab[]): boolean;
   let _resizeObserver: ResizeObserver | null;
-  let _lastResize: {time: number; width: number};
   function resizeObserver(observe: boolean): void;
   function updateScrollButtons(useTabmixButtons: boolean): void;
   function isElementVisible(element: Tab | null | undefined): boolean;

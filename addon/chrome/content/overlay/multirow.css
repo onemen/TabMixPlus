@@ -144,12 +144,12 @@
   --private-browsing-indicator-margin-top: 9px;
 }
 
-#TabsToolbar[multibar][tabmix-multibar-active] #private-browsing-indicator-with-label {
+#TabsToolbar[multibar] #private-browsing-indicator-with-label {
   align-items: flex-start;
   margin-top: var(--private-browsing-indicator-margin-top, 12px);
 }
 
-#TabsToolbar[multibar][tabmix-multibar-active] #private-browsing-indicator-with-label > image {
+#TabsToolbar[multibar] #private-browsing-indicator-with-label > image {
   margin-top: 2px;
 }
 

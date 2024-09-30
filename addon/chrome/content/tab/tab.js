@@ -608,7 +608,7 @@ Tabmix.tabsUtils = {
     }
   },
 
-  updateVerticalTabStrip({reset = false, forceRightSide = false} = {}) {
+  updateVerticalTabStrip({reset = false} = {}) {
     if (this.isVerticalTabBar || window.gInPrintPreviewMode ||
         this.inDOMFullscreen || FullScreen._isChromeCollapsed ||
         TabmixTabbar._waitAfterMaximized ||
@@ -619,7 +619,7 @@ Tabmix.tabsUtils = {
     this._inUpdateVerticalTabStrip = true;
 
     // we must adjustNewtabButtonVisibility before get lastTabRowNumber
-    this.adjustNewtabButtonVisibility(forceRightSide);
+    this.adjustNewtabButtonVisibility();
     // this.lastTabRowNumber is null when we hide the tabbar
     let rows = reset || this.tabBar.allTabs.length == 1 ? 1 : this.lastTabRowNumber || 1;
 
@@ -647,7 +647,6 @@ Tabmix.tabsUtils = {
       // set multibar also at _enterVerticalMode
       Tabmix.setItem(this.tabBar, "multibar", multibar);
       Tabmix.setItem("tabmix-bottom-toolbox", "multibar", multibar);
-      Tabmix.setItem("TabsToolbar", "tabmix-multibar-active", multibar ? "" : null);
     }
 
     TabmixTabbar.visibleRows = rows;
@@ -660,18 +659,127 @@ Tabmix.tabsUtils = {
     return multibar;
   },
 
+  // buttons that are not on TabsToolbar or not visible are null
+  _newTabButtonWidth(onSide) {
+    let width = 0,
+        privateTabButton = TabmixTabbar.newPrivateTabButton();
+    if (privateTabButton) {
+      width += onSide ?
+        privateTabButton.getBoundingClientRect().width :
+        Tabmix.afterTabsButtonsWidth[1] ?? 0;
+    }
+    if (Tabmix.sideNewTabButton) {
+      width += onSide ?
+        Tabmix.sideNewTabButton.getBoundingClientRect().width :
+        Tabmix.afterTabsButtonsWidth[0] ?? 0;
+    }
+    return width;
+  },
+
+  // when widthFitTitle is false and user set new-tab-button after tabs we need
+  // to adjust tab min-Width so tabbar width minus new-tab-button width is
+  // multiple of tab width
+  _widthCache: {minWidth: 0, maxWidth: 0},
+  updateMinWidth() {
+    if (TabmixTabbar.widthFitTitle) {
+      return;
+    }
+
+    const minWidth = this.tabBar.mTabMinWidth;
+    const currentMinWidth = parseFloat(
+      gTMPprefObserver.dynamicRules.width.style.getPropertyValue("min-width")
+    );
+    const currentMaxWidth = parseFloat(
+      gTMPprefObserver.dynamicRules.width.style.getPropertyValue("max-width")
+    );
+
+    /** @param {number} width */
+    const setNewMinWidth = width => {
+      if (width !== currentMinWidth) {
+        this.tabBar.setAttribute("no-animation", "");
+        gTMPprefObserver.dynamicRules.width.style.setProperty(
+          "min-width",
+          width + "px",
+          "important"
+        );
+        if (minWidth === this.tabBar.mTabMaxWidth || width > currentMaxWidth) {
+          gTMPprefObserver.dynamicRules.width.style.setProperty(
+            "max-width",
+            this._widthCache.maxWidth + "px",
+            "important"
+          );
+        }
+        setTimeout(() => this.tabBar.removeAttribute("no-animation"), 0);
+      }
+    };
+
+    const isFirstRowWithPinnedTabs =
+      gBrowser._numPinnedTabs && Tabmix.tabsUtils.lastTabRowNumber === 1;
+    const cacheMinWidth = this._widthCache[gBrowser._numPinnedTabs];
+    if (cacheMinWidth) {
+      setNewMinWidth(cacheMinWidth);
+      return;
+    }
+
+    const firstNonPinnedTab = gBrowser.tabs[gBrowser._numPinnedTabs];
+    const padding = firstNonPinnedTab ?
+      Tabmix.getStyle(firstNonPinnedTab, "paddingLeft") + Tabmix.getStyle(firstNonPinnedTab, "paddingRight") :
+      4;
+
+    /**
+     * @param {number} stripWidth
+     * @param {number} buttonWidth
+     */
+    function calcMinWidth(stripWidth, buttonWidth, tabMinWidth = minWidth) {
+      const widthWithoutButtons = stripWidth - buttonWidth;
+      const maxTabsInRow = Math.floor(stripWidth / (tabMinWidth + padding));
+      const isTabsFit = maxTabsInRow * (tabMinWidth + padding) <= widthWithoutButtons;
+      return isTabsFit ?
+        tabMinWidth :
+        Math.floor((widthWithoutButtons - 1) / maxTabsInRow) - padding;
+    }
+
+    const tabsButtonWidth = this._newTabButtonWidth(false);
+    const tsbo = this.tabBar.arrowScrollbox.scrollbox;
+    const tsboBaseWidth = tsbo.getBoundingClientRect().width;
+    const tabstripWidth = this.disAllowNewtabbutton ?
+      tsboBaseWidth + this._newTabButtonWidth(true) :
+      tsboBaseWidth;
+    const newMinWidth = calcMinWidth(tabstripWidth, tabsButtonWidth);
+    if (this._widthCache.minWidth !== newMinWidth) {
+      this._widthCache.minWidth = newMinWidth;
+      this._widthCache.maxWidth = newMinWidth;
+      this._widthCache[gBrowser._numPinnedTabs] = newMinWidth;
+    }
+
+    if (isFirstRowWithPinnedTabs && firstNonPinnedTab) {
+      const stripWidthWithoutPinned = tabstripWidth - firstNonPinnedTab.getBoundingClientRect().x;
+      const testNewMinWidth = calcMinWidth(stripWidthWithoutPinned, tabsButtonWidth, newMinWidth);
+      if (testNewMinWidth > newMinWidth) {
+        const widthForeNonPinnedTabs = calcMinWidth(stripWidthWithoutPinned, tabsButtonWidth);
+        this._widthCache[gBrowser._numPinnedTabs] = widthForeNonPinnedTabs;
+        this._widthCache.maxWidth = Math.max(this._widthCache.maxWidth, widthForeNonPinnedTabs);
+        setNewMinWidth(widthForeNonPinnedTabs);
+        return;
+      }
+    }
+    setNewMinWidth(newMinWidth);
+  },
+
   /**
    * check that we have enough room to show new tab button after the last tab
    * in the current row. we don't want the button to be on the next row when the
    * tab is on the current row
    */
-  adjustNewtabButtonVisibility(forceRightSide) {
+  adjustNewtabButtonVisibility() {
     if (!TabmixTabbar.isMultiRow || this.tabBar.arrowScrollbox.getAttribute('orient') == "vertical") {
       return;
     }
 
-    if (forceRightSide) {
-      this.disAllowNewtabbutton = true;
+    // TabmixTabbar.widthFitTitle is false when mTabMinWidth === mTabMaxWidth
+    if (this.checkNewtabButtonVisibility && !TabmixTabbar.widthFitTitle) {
+      this.updateMinWidth();
+      this.disAllowNewtabbutton = false;
       return;
     }
 
@@ -685,7 +793,9 @@ Tabmix.tabsUtils = {
     if (!Tabmix.tabsNewtabButton)
       Tabmix.getAfterTabsButtonsWidth();
 
-    var lastTab = Tabmix.visibleTabs.last;
+    const lastTab = Tabmix.visibleTabs.last;
+    const tsboRect = this.tabBar.arrowScrollbox.scrollbox.getBoundingClientRect();
+    const tabstripEnd = tsboRect.x + tsboRect.width;
     // button is visible
     //         A: last tab and the button are in the same row:
     //            check if we have room for the button in this row
@@ -694,11 +804,8 @@ Tabmix.tabsUtils = {
     if (!this.disAllowNewtabbutton) {
       let sameRow = TabmixTabbar.inSameRow(lastTab, Tabmix.tabsNewtabButton);
       if (sameRow) {
-        let tabstripEnd = this.tabBar.arrowScrollbox.scrollbox.screenX +
-            this.tabBar.arrowScrollbox.scrollbox.getBoundingClientRect().width;
-
-        const {width} = Tabmix.tabsNewtabButton.getBoundingClientRect();
-        let buttonEnd = Tabmix.tabsNewtabButton.screenX + width;
+        const buttonRect = Tabmix.tabsNewtabButton.getBoundingClientRect();
+        const buttonEnd = buttonRect.x + buttonRect.width;
         this.disAllowNewtabbutton = buttonEnd > tabstripEnd;
       } else {
         this.disAllowNewtabbutton = true;
@@ -718,35 +825,21 @@ Tabmix.tabsUtils = {
       return;
     }
 
-    /** @param {Tab | HTMLButtonElement} item */
-    const getWidth = item => item.getBoundingClientRect().width;
-
-    // buttons that are not on TabsToolbar or not visible are null
-    /** @param {boolean} [aOnSide] */
-    let newTabButtonWidth = function(aOnSide) {
-      let width = 0, privateTabButton = TabmixTabbar.newPrivateTabButton();
-      if (privateTabButton) {
-        width += aOnSide ? getWidth(privateTabButton) : Tabmix.afterTabsButtonsWidth[1] ?? 0;
-      }
-      if (Tabmix.sideNewTabButton) {
-        width += aOnSide ? getWidth(Tabmix.sideNewTabButton) : Tabmix.afterTabsButtonsWidth[0] ?? 0;
-      }
-      return width;
-    };
-    let tsbo = this.tabBar.arrowScrollbox.scrollbox;
-    let tsboEnd = tsbo.screenX + tsbo.getBoundingClientRect().width + newTabButtonWidth(true);
+    const tsboEnd = tabstripEnd + this._newTabButtonWidth(true);
     if (TabmixTabbar.inSameRow(lastTab, previousTab)) {
-      let buttonEnd = lastTab.screenX + getWidth(lastTab) +
-          newTabButtonWidth();
+      const lastTabRect = lastTab.getBoundingClientRect();
+      const buttonEnd = lastTabRect.x + lastTabRect.width + this._newTabButtonWidth();
       this.disAllowNewtabbutton = buttonEnd > tsboEnd;
       return;
     }
-    let lastTabEnd = previousTab.screenX + getWidth(previousTab) + getWidth(lastTab);
+    const previousTabRect = previousTab.getBoundingClientRect();
+    const lastTabEnd = previousTabRect.x + previousTabRect.width + lastTab.getBoundingClientRect().width;
     // both last tab and new tab button are in the next row
-    if (lastTabEnd > tsboEnd)
+    if (lastTabEnd > tsboEnd) {
       this.disAllowNewtabbutton = false;
-    else
-      this.disAllowNewtabbutton = lastTabEnd + newTabButtonWidth() > tsboEnd;
+    } else {
+      this.disAllowNewtabbutton = lastTabEnd + this._newTabButtonWidth() > tsboEnd;
+    }
   },
 
   get disAllowNewtabbutton() {
@@ -765,7 +858,7 @@ Tabmix.tabsUtils = {
 
   set overflow(val) {
     // don't do anything if other extensions set orient to vertical
-    if (this.tabBar.arrowScrollbox.getAttribute('orient') == "vertical") {
+    if (this.tabBar.arrowScrollbox.getAttribute("orient") == "vertical") {
       return;
     }
 
@@ -866,10 +959,6 @@ Tabmix.tabsUtils = {
   },
 
   _resizeObserver: null,
-  _lastResize: {
-    time: 0,
-    width: 0,
-  },
   resizeObserver(observe) {
     if (!observe && !this._resizeObserver) {
       return;
@@ -878,14 +967,7 @@ Tabmix.tabsUtils = {
       this._resizeObserver = new window.ResizeObserver(entries => {
         for (let entry of entries) {
           if (entry.contentBoxSize) {
-            const {width} = this.tabBar.getBoundingClientRect();
-            const forceRightSide =
-              TabmixTabbar.isMultiRow &&
-              Tabmix.prefs.getIntPref("newTabButton.position") === 2 &&
-              performance.now() - this._lastResize.time < 30 &&
-              Math.abs(this._lastResize.width - width) < 50;
-            this._lastResize = {time: performance.now(), width};
-            this.updateVerticalTabStrip({forceRightSide});
+            this.updateVerticalTabStrip();
             break;
           }
         }
@@ -1355,10 +1437,13 @@ window.gTMPprefObserver = {
           else
             tabMinWidth = tabMaxWidth;
         }
+        Tabmix.tabsUtils._widthCache = {minWidth: 0, maxWidth: 0};
         gBrowser.tabContainer.mTabMaxWidth = tabMaxWidth;
         gBrowser.tabContainer.mTabMinWidth = tabMinWidth;
+        gBrowser.tabContainer.setAttribute("no-animation", "");
         this.dynamicRules.width.style.setProperty("max-width", tabMaxWidth + "px", "important");
         this.dynamicRules.width.style.setProperty("min-width", tabMinWidth + "px", "important");
+        setTimeout(() => gBrowser.tabContainer.removeAttribute("no-animation"), 0);
         TabmixTabbar.updateSettings(false);
         // we need this timeout when there are many tabs
         if (typeof this._tabWidthChanged == "undefined") {
@@ -2025,12 +2110,13 @@ window.gTMPprefObserver = {
   toolbarbuttonTopMargin() {
     // adjust margin-top on toolbarbutton for multirow
     if (Tabmix.isVersion(910)) {
+      const margin = Tabmix.isVersion(1280) ? "4px" : "3.5px";
       this.insertRule(
         `:root {
-          --tabmix-button-margin-top: 3.5px;
-          --tabmix-button-margin-top-compact: 3.5px;
-          --tabmix-button-margin-top-proton: 3.5px;
-          --tabmix-button-margin-top-proton-compact: 3.5px;
+          --tabmix-button-margin-top: ${margin};
+          --tabmix-button-margin-top-compact: ${margin};
+          --tabmix-button-margin-top-proton: ${margin};
+          --tabmix-button-margin-top-proton-compact: ${margin};
         }`
       );
 

@@ -67,3 +67,7 @@
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-inset);
 }
+
+#tabbrowser-tabs[no-animation] .tabbrowser-tab:not([pinned]) {
+	transition: none !important;
+}
