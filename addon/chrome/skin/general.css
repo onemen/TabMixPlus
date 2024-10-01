@@ -71,3 +71,7 @@
 #tabbrowser-tabs[no-animation] .tabbrowser-tab:not([pinned]) {
 	transition: none !important;
 }
+
+#tabbrowser-tabs[orient="horizontal"][multibar]:not([widthFitTitle]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab[fadein]:not([pinned]) {
+  max-width: var(--tabmix-overflow-max-width, 250px) !important;
+}

@@ -967,6 +967,7 @@ Tabmix.tabsUtils = {
       this._resizeObserver = new window.ResizeObserver(entries => {
         for (let entry of entries) {
           if (entry.contentBoxSize) {
+            this.updateOverflowMaxWidth();
             this.updateVerticalTabStrip();
             break;
           }
@@ -977,6 +978,26 @@ Tabmix.tabsUtils = {
       this._resizeObserver.observe(this.tabBar);
     } else {
       this._resizeObserver.unobserve(this.tabBar);
+    }
+  },
+
+  _overflow_max_width: 250,
+  updateOverflowMaxWidth() {
+    if (!TabmixTabbar.widthFitTitle && gBrowser.visibleTabs.length > gBrowser._numPinnedTabs) {
+      const tsbo = this.tabBar.arrowScrollbox.scrollbox;
+      const tsboBaseWidth = tsbo.getBoundingClientRect().width;
+      const minWidth = parseFloat(gTMPprefObserver.dynamicRules.width.style.getPropertyValue("min-width"));
+      const tab = gBrowser.tabs.at(-1);
+      const padding = tab ? Tabmix.getStyle(tab, "paddingLeft") + Tabmix.getStyle(tab, "paddingRight") : 4;
+      const maxTabsInRow = Math.floor(tsboBaseWidth / (minWidth + padding));
+      const newMaxWidth = Math.floor(1000 * tsboBaseWidth / maxTabsInRow) / 1000 - padding;
+      if (this._overflow_max_width !== newMaxWidth) {
+        this._overflow_max_width = newMaxWidth;
+        const root = document.querySelector(":root");
+        this.tabBar.setAttribute("no-animation", "");
+        root?.style.setProperty("--tabmix-overflow-max-width", newMaxWidth + "px");
+        setTimeout(() => this.tabBar.removeAttribute("no-animation"), 0);
+      }
     }
   },
 
@@ -1443,6 +1464,7 @@ window.gTMPprefObserver = {
         gBrowser.tabContainer.setAttribute("no-animation", "");
         this.dynamicRules.width.style.setProperty("max-width", tabMaxWidth + "px", "important");
         this.dynamicRules.width.style.setProperty("min-width", tabMinWidth + "px", "important");
+        Tabmix.tabsUtils.updateOverflowMaxWidth();
         setTimeout(() => gBrowser.tabContainer.removeAttribute("no-animation"), 0);
         TabmixTabbar.updateSettings(false);
         // we need this timeout when there are many tabs
