@@ -502,7 +502,12 @@ Tabmix.tablib = {
         ${Tabmix.isVersion(1020) ? "gBrowser.visibleTabs.length == 1" : "Tabmix.tabsUtils.getTabsCount() == 1"}) {
         collapse = !window.toolbar.visible || TabmixTabbar.hideMode === 1;
       }
-      $&`
+      $&`,
+      {check: !Tabmix.isVersion(1330)}
+    )._replace(
+      'if (nonPopupWithVerticalTabs) {',
+      'if (nonPopupWithVerticalTabs || TabmixTabbar.hideMode === 2) {',
+      {check: Tabmix.isVersion(133)}
     )._replace(
       /(})(\)?)$/,
       `const bottomToolbox = document.getElementById("tabmix-bottom-toolbox");

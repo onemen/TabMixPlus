@@ -837,7 +837,7 @@ interface StatusPanel {
 }
 
 interface TabBarVisibility {
-  update: () => void;
+  update: (force?: boolean) => void;
 }
 
 interface XULBrowserWindow {

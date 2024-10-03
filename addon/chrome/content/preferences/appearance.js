@@ -14,7 +14,8 @@ var gAppearancePane = {
         description.innerHTML = "These preferences are not in use for vertical tabs.";
         description.style.width = "25em";
       }
-      Tabmix.setItem("tabBarDisplay", "tstInstalled", true);
+      const tabBarDisplay = $("tabBarDisplay");
+      Tabmix.setItem(tabBarDisplay, "tstInstalled", true);
       Tabmix.setItem("tabBarPosition", "disabled", true);
       Tabmix.setItem("tabsScroll", "disabled", true);
       Tabmix.setItem("maxrow", "disabled", true);
@@ -22,6 +23,14 @@ var gAppearancePane = {
       Tabmix.setItem("offsetAmountToScroll", "disabled", true);
       Tabmix.setItem("scrollDelay", "disabled", true);
       Tabmix.setItem("smoothScroll", "disabled", true);
+
+      if (Tabmix.isVersion(1330)) {
+        const hideTabbar = $("hideTabbar");
+        Tabmix.setItem(hideTabbar, "disabled", true);
+        Tabmix.setItem(hideTabbar.previousElementSibling, "disabled", true);
+        Tabmix.setItem("show-hideTabbar-context-menu", "disabled", true);
+        tabBarDisplay.insertBefore(description, tabBarDisplay.firstChild);
+      }
     }
 
     if (
