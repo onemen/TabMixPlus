@@ -441,6 +441,7 @@ Tabmix.tablib = {
         `if (${doPosition} && TabmixTabbar.isMultiRow &&
           Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
         ${doPosition} = false;
+        this.toggleAttribute("positionpinnedtabs", false);
       }
       if (${doPosition} && TabmixTabbar.isMultiRow) {` + $LF +
         (Tabmix.isVersion(1190) ? '  this.toggleAttribute("positionpinnedtabs", true)' :
