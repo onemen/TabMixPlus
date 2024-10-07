@@ -90,7 +90,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if [ ${{ steps.set_version.outputs.CHANGELOG_EXIST == 'true' }} ]; then
+          if [ "${{ steps.set_version.outputs.CHANGELOG_EXIST }}" == "true" ]; then
             gh release edit dev-build --draft=false --notes-file=CHANGELOG.md
           else
             url=https://github.com/onemen/TabMixPlus/releases/tag/${{ env.PREVIOUS_TAG }}
@@ -98,6 +98,12 @@ jobs:
             gh release edit dev-build --draft=false --notes="$notes"
           fi
           gh release upload dev-build /tmp/${{ env.XPI_NAME }}.xpi --clobber
+
+      - name: Update tabmixplus-docs
+        env:
+          GH_TOKEN: ${{ secrets.TABMIXPLUS_DOCS_TOKEN }}
+        run: |
+          gh workflow run --repo onemen/tabmixplus-docs --ref main deploy.yml
 
       - name: Upload to Bitbucket
         run: |
