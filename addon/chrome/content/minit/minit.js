@@ -646,7 +646,7 @@ var TMP_tabDNDObserver = {
       } else if (mY <= top + this._multirowMargin) {
         mY = top + this._multirowMargin + 1;
       }
-      const currentRow = firstVisibleRow + Math.round((mY - top - this._multirowMargin) / singleRowHeight);
+      const currentRow = firstVisibleRow + Math.floor((mY - top - this._multirowMargin) / singleRowHeight);
       let topY = Tabmix.tabsUtils.topTabY;
       let index;
       for (index = 0; index < numTabs; index++) {
