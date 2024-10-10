@@ -293,7 +293,7 @@ TabmixSvc = {
         ChromeUtils.import("chrome://tabmix-resource/content/NewTabURL.jsm");
       }
 
-      if (isVersion(1320)) {
+      if (isVersion(1310)) {
         prefs.setBoolPref("browser.tabs.tabmanager.enabled", true);
       }
     },
