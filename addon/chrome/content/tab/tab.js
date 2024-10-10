@@ -1230,7 +1230,15 @@ Tabmix.bottomToolbarUtils = {
 
 Tabmix.visibleTabs = {
   get tabs() {
-    return gBrowser.tabContainer._getVisibleTabs();
+    const getVisibleTabs = Tabmix.isVersion(1330) ?
+      () => gBrowser.tabContainer.visibleTabs :
+      () => gBrowser.tabContainer._getVisibleTabs();
+    Object.defineProperty(this, "tabs", {
+      get: getVisibleTabs,
+      enumerable: true,
+      configurable: true
+    });
+    return getVisibleTabs();
   },
 
   get first() {

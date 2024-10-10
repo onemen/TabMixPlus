@@ -222,13 +222,8 @@ declare namespace MockedGeckoTypes {
     _finishAnimateTabMove: () => void;
     _finishGroupSelectedTabs: (tab: BrowserTab) => void;
     _getDragTargetTab(event: DragEvent, options?: {ignoreTabSides?: boolean}): BrowserTab | null;
-    /** @deprecated removed since Firefox version 112 */
-    _getDragTargetTab(event: DragEvent, isLink: boolean): BrowserTab | null;
     // we are adding arguments to _getDropIndex see minit.js for details
     _getDropIndex(event: DragEvent, ...rest: unknown[]): DragEventParams | number;
-    /** @deprecated removed by bug 1771831 in firefox 106 */
-    _getDropEffectForTabDrag: (event: DragEvent) => string;
-    _getVisibleTabs: () => Tabs;
     _groupSelectedTabs: (tab: BrowserTab) => void;
     _handleTabSelect: (instant: boolean) => void;
     _invalidateCachedTabs: () => void;
@@ -257,6 +252,7 @@ declare namespace MockedGeckoTypes {
     set selectedIndex(val: number);
     get selectedIndex(): number;
     readonly verticalMode: boolean;
+    readonly visibleTabs: Tabs;
 
     on_dragover: (event: DragEvent) => void;
     on_dragleave: (event: DragEvent) => void;
@@ -278,6 +274,12 @@ declare namespace MockedGeckoTypes {
     _afterSelectedTab: BrowserTab;
     /** @deprecated removed by bug 1808661 in firefox 110 */
     _beforeHoveredTab: BrowserTab;
+    /** @deprecated removed since Firefox version 112 */
+    _getDragTargetTab(event: DragEvent, isLink: boolean): BrowserTab | null;
+    /** @deprecated removed by bug 1771831 in firefox 106 */
+    _getDropEffectForTabDrag: (event: DragEvent) => string;
+    /** @deprecated removed by bug 1923635 in firefox 133 */
+    _getVisibleTabs: () => Tabs;
     /** @deprecated removed by bug 1808661 in firefox 110 */
     _hoveredTab: BrowserTab;
   }

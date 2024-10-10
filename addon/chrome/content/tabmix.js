@@ -568,7 +568,9 @@ var TMP_eventListener = {
     // TabmixSessionManager.updateSettings();
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._updateCloseButtons")._replace(
-      'this._getVisibleTabs()[gBrowser._numPinnedTabs];',
+      Tabmix.isVersion(1330) ?
+        'this.visibleTabs[gBrowser._numPinnedTabs];' :
+        'this._getVisibleTabs()[gBrowser._numPinnedTabs];',
       'TMP_TabView.checkTabs(Tabmix.visibleTabs.tabs);'
     ).toCode(false, tabBar, "tabmix_updateCloseButtons");
 
