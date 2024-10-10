@@ -506,13 +506,19 @@ Tabmix.tablib = {
       {check: !Tabmix.isVersion(1330)}
     )._replace(
       'if (nonPopupWithVerticalTabs) {',
-      'if (nonPopupWithVerticalTabs || TabmixTabbar.hideMode === 2) {',
-      {check: Tabmix.isVersion(133)}
+      `if (
+        nonPopupWithVerticalTabs ||
+        TabmixTabbar.hideMode === 2 ||
+        (!isPopup &&
+          TabmixTabbar.hideMode === 1 &&
+          gBrowser.visibleTabs.length === 1)
+      ) {`,
+      {check: Tabmix.isVersion(1330)}
     )._replace(
       /(})(\)?)$/,
       `const bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
       if (bottomToolbox) {
-        bottomToolbox.collapsed = collapse;
+        bottomToolbox.collapsed = ${Tabmix.isVersion(1330) ? "hideTabstrip" : "collapse"};
       }
       $1$2`
     ).toCode();
