@@ -42,7 +42,7 @@ jobs:
           }
           version=$(next_version)
           date=$(date +'%Y%m%d.%H%M')
-          sed -i 's/1.0.0-unbundeled/'"$version"-"$date"'/; s/updates.json/updates-dev-build.json/' addon/install.rdf
+          sed -i 's/10.0.0-unbundeled/'"$version"-"$date"'/; s/updates.json/updates-dev-build.json/' addon/install.rdf
           echo "next version: $version-$date"
 
       - name: Zip addon folder
