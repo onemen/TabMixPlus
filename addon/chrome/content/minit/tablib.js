@@ -2058,6 +2058,7 @@ Tabmix.isBlankNewTab = function(url) {
   return [
     TabmixSvc.aboutNewtab,
     TabmixSvc.aboutBlank,
+    "chrome://browser/content/blanktab.html",
   ].includes(url);
 };
 
