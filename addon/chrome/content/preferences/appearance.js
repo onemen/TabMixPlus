@@ -82,8 +82,6 @@ var gAppearancePane = {
       hbox.setAttribute("align", "center");
     }
 
-    gPrefWindow.removeChild("obs_smoothScroll");
-
     // waterfox position control
     if (TabmixSvc.isG3Waterfox) {
       this._waterfoxPositionControl();
