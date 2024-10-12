@@ -63,6 +63,7 @@
       <preference id="pref_maxWidth"          name="browser.tabs.tabMaxWidth"                   type="int"/>
       <preference id="pref_flexTabs"          name="extensions.tabmix.flexTabs"                 type="bool"
                   onchange="gAppearancePane.setTabCloseButtonUI();"/>
+      <preference id="pref_flexTabs_fitRow"   name="extensions.tabmix.flexTabs_fitRow"          type="bool"/>
       <preference id="pref_bookastitle"       name="extensions.tabmix.titlefrombookmark"        type="bool"/>
       <preference id="pref_enableMaxTabsInRow"
                   name="extensions.tabmix.enableMaxTabsInRow"                                   type="bool"/>
@@ -250,7 +251,7 @@
             <!-- Tab width -->
             <hbox align="center">
               <label value="&minWidth.label;"/>
-              <html:input id="minWidth" size="3" maxlength="3" preference="pref_minWidth" type="number" required="required"
+              <html:input id="minWidth" size="4" maxlength="3" preference="pref_minWidth" type="number" required="required"
                        onsynctopreference="return gAppearancePane.userChangedWidth(this);" min="40"/>
               <label value="&widthTo.label;"/>
               <html:input id="maxWidth" size="4" maxlength="4" preference="pref_maxWidth" type="number" required="required"
@@ -258,6 +259,7 @@
               <label value="&widthPixels.label;"/>
             </hbox>
             <checkbox_tmp id="flexTabs" label="&flexTabs.label;"  preference="pref_flexTabs"/>
+            <checkbox_tmp id="flexTabs_fitRow" label="Tab width fills rows on overflow" preference="pref_flexTabs_fitRow" observes="obs_flexTabs"/>
             <checkbox_tmp id="bookastitle" label="&bookastitle.label;" preference="pref_bookastitle"/>
           </html:fieldset>
         </tabpanel>
@@ -302,6 +304,7 @@
     </tabbox>
 
     <broadcasterset id="paneAppearance:Broadcaster">
+      <broadcaster id="obs_flexTabs" inverseDependency="true"/>
       <broadcaster id="obs_newTabButton"/>
       <broadcaster id="obs_smoothScroll" inverseDependency="true"/>
       <broadcaster id="obs_unreadTab"/>

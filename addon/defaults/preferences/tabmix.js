@@ -118,6 +118,7 @@ pref("extensions.tabmix.styles.otherTab", '{"italic":false,"bold":false,"underli
 pref("extensions.tabmix.styles.progressMeter", '{"bg":true,"bgColor":"rgba(170,170,255,1)"}');
 
 pref("extensions.tabmix.flexTabs", false);
+pref("extensions.tabmix.flexTabs_fitRow", true);
 
 pref("extensions.tabmix.titlefrombookmark", false);
 

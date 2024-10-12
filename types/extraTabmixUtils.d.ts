@@ -475,7 +475,7 @@ declare namespace TabsUtils {
   function isSingleRow(visibleTabs: Tab[]): boolean;
   let _resizeObserver: ResizeObserver | null;
   function resizeObserver(observe: boolean): void;
-  let _overflow_max_width: number;
+  let _tab_overflow_width: number;
   function updateOverflowMaxWidth(): void;
   function updateScrollButtons(useTabmixButtons: boolean): void;
   function isElementVisible(element: Tab | null | undefined): boolean;

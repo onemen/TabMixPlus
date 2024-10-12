@@ -73,5 +73,5 @@
 }
 
 #tabbrowser-tabs[orient="horizontal"][multibar]:not([widthFitTitle]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab[fadein]:not([pinned]) {
-  max-width: var(--tabmix-overflow-max-width, 250px) !important;
+  max-width: var(--tabmix-tab-overflow-width, var(--tab-min-width)) !important;
 }
