@@ -591,6 +591,7 @@ type GeneralPrefWindow = typeof PrefWindowNS;
 type SessionPane = typeof SessionPaneNS;
 
 interface CustomGroupElement<T> extends Element {
+  _inited: boolean;
   selectedItem?: T | null | undefined;
   selectedIndex: number;
 }

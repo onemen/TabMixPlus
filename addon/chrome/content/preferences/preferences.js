@@ -116,6 +116,7 @@ var gPrefWindow = {
     if (tabs) {
       let preference = $Pref("pref_" + tabs.id);
       if (preference?.value !== undefined) {
+        tabs._inited = true;
         tabs.selectedIndex = preference.numberValue;
       }
     }
