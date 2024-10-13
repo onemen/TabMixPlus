@@ -215,8 +215,12 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   tabContainer.mTabMaxWidth = max;
   tabContainer.mTabMinWidth = min;
   TabmixTabbar.widthFitTitle = this.prefs.getBoolPref("flexTabs") && max != min;
-  if (TabmixTabbar.widthFitTitle)
+  if (TabmixTabbar.widthFitTitle) {
     this.setItem(tabContainer, "widthFitTitle", true);
+    if (Tabmix.isVersion(1310)) {
+      Tabmix.setItem(tabContainer.arrowScrollbox, "widthFitTitle", true);
+    }
+  }
 
   var tabscroll = this.prefs.getIntPref("tabBarMode");
   if (document.documentElement.getAttribute("chromehidden")?.includes("toolbar"))

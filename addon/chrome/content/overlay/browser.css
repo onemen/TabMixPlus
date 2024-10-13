@@ -258,7 +258,8 @@ so display: none !important; does not hide the button */
 }
 
 /* :::: widthFitTitle :::: */
-#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]) {
+/* more dynamic rules are in tab.js addDynamicRules */
+#tabbrowser-tabs[orient="horizontal"][flowing="multibar"][widthFitTitle] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]) {
   flex: 0 0 auto !important;
   -moz-box-flex: 0 !important; /* before Firefox 112 */
   width: auto !important;

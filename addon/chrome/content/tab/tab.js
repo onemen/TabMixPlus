@@ -144,6 +144,9 @@ var TabmixTabbar = {
     this.widthFitTitle = Tabmix.prefs.getBoolPref("flexTabs") &&
                     tabBar.mTabMaxWidth != tabBar.mTabMinWidth;
     Tabmix.setItem(tabBar, "widthFitTitle", this.widthFitTitle || null);
+    if (Tabmix.isVersion(1310)) {
+      Tabmix.setItem(tabBar.arrowScrollbox, "widthFitTitle", this.widthFitTitle || null);
+    }
 
     if (Tabmix.prefs.getIntPref("tabs.closeButtons") == 5 && this.widthFitTitle)
       Tabmix.prefs.setIntPref("tabs.closeButtons", 1);
@@ -1969,16 +1972,26 @@ window.gTMPprefObserver = {
     }
 
     if (Tabmix.isVersion(1310)) {
-      const htmlSlot = gBrowser.tabContainer.arrowScrollbox.scrollbox.firstChild;
-      if (htmlSlot) {
-        htmlSlot.style.flexWrap = "inherit";
-        this.insertRule(
-          `#tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox) {
-            margin-top: var(--tabmix-multirow-margin, 0);
-            margin-bottom: var(--tabmix-multirow-margin, 0);
-          }`
-        );
-      }
+      this.insertRule(
+        `#tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox) {
+          margin-top: var(--tabmix-multirow-margin, 0);
+          margin-bottom: var(--tabmix-multirow-margin, 0);
+        }`
+      );
+
+      const shadowRoot = gBrowser.tabContainer.arrowScrollbox.shadowRoot;
+      const styleSheet = new CSSStyleSheet();
+      styleSheet.replaceSync(`
+        slot {
+          flex-wrap: inherit;
+        }
+        :host(:not([flowing="multibar"])[orient="horizontal"][widthFitTitle]) slot {
+          display: grid;
+          grid-auto-flow: column;
+          grid-auto-columns: max-content;
+        }
+      `);
+      shadowRoot.adoptedStyleSheets = [styleSheet];
     } else {
       this.insertRule(
         `#tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox-clip) {
@@ -1987,6 +2000,13 @@ window.gTMPprefObserver = {
           margin-top: var(--tabmix-multirow-margin, 0);
           margin-bottom: var(--tabmix-multirow-margin, 0);
           contain: unset;
+        }`
+      );
+
+      this.insertRule(
+        `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]) {
+          flex: 0 0 auto !important;
+          width: auto !important;
         }`
       );
     }
