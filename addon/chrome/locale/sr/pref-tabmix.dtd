@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "Прикажи у више редова">
 <!ENTITY maxrow.label "Највећи број број редова који ће се видети:">
 <!ENTITY pinnedTabScroll.label "Дозволи спуштање закачених језичака">
-<!ENTITY offsetAmountToScroll.label "Приликом померања прикажи део наредног језичка који се не види у целости">
 <!ENTITY smoothScroll.label "Омогући глатко померање">
 <!ENTITY scrolldelay.label "Задршка при померању (време између понављања померања)">
 <!ENTITY currenttab.style.label "тренутни језичак">

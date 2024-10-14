@@ -20,7 +20,6 @@ var gAppearancePane = {
       Tabmix.setItem("tabsScroll", "disabled", true);
       Tabmix.setItem("maxrow", "disabled", true);
       Tabmix.setItem("pinnedTabScroll", "disabled", true);
-      Tabmix.setItem("offsetAmountToScroll", "disabled", true);
       Tabmix.setItem("scrollDelay", "disabled", true);
       Tabmix.setItem("smoothScroll", "disabled", true);
 
@@ -160,7 +159,6 @@ var gAppearancePane = {
   tabsScrollChanged() {
     var multiRow = $Pref("pref_tabsScroll").value == 2;
     $("multi-rows").hidden = !multiRow;
-    $("one-row").hidden = multiRow;
   },
 
   tabmixCustomizeToolbar() {

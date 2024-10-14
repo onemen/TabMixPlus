@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "többsoros">
 <!ENTITY maxrow.label "Sorok maximális száma:">
 <!ENTITY pinnedTabScroll.label "Rögzített lapok görgetésének engedélyezése">
-<!ENTITY offsetAmountToScroll.label "Gördítéskor a következő lapok részeinek megjelenítése">
 <!ENTITY smoothScroll.label "Finom görgetés">
 <!ENTITY scrolldelay.label "Görgetés késleltetése (időintervallum a görgetések között)">
 <!ENTITY currenttab.style.label "Aktuális lap">

@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "wyświetlaj je w wielu rzędach">
 <!ENTITY maxrow.label "Maksymalna liczba wyświetlanych rzędów etykiet kart:">
 <!ENTITY pinnedTabScroll.label "Zezwalaj na przewijanie przypiętych kart">
-<!ENTITY offsetAmountToScroll.label "Podczas przewijania wyświetlaj część następnej poza zasięgiem wzroku karty">
 <!ENTITY smoothScroll.label "Włącz płynne przewijanie">
 <!ENTITY scrolldelay.label "Opóźnienie przewijania (czas pomiędzy powtórnym przewijaniem)">
 <!ENTITY currenttab.style.label "aktywną kartę">

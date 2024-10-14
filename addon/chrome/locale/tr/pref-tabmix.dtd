@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "Çoklu-satır">
 <!ENTITY maxrow.label "Görüntülenecek en fazla satır sayısı:">
 <!ENTITY pinnedTabScroll.label "Sabitlenmiş sekmeleri kaydırmaya izin ver">
-<!ENTITY offsetAmountToScroll.label "Kaydırma yaparken görüş alanı dışındaki sekmenin bir bölümünü göster">
 <!ENTITY smoothScroll.label "Akıcı kaydırmayı etkinleştir">
 <!ENTITY scrolldelay.label "Kaydırma gecikmesi (kaydırmalar arasında geçecek zaman)">
 <!ENTITY currenttab.style.label "Geçerli sekmeyi">

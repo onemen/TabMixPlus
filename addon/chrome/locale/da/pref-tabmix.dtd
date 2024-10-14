@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "Multi-række">
 <!ENTITY maxrow.label "Maks antal rækker der skal vises:">
 <!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Rulle-forsinkelse (tid mellem gentagne rul)">
 <!ENTITY currenttab.style.label "Nuværende faneblad">

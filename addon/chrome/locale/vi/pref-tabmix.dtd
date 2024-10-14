@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "Nhiều hàng">
 <!ENTITY maxrow.label "Số lượng hàng tối đa:">
 <!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
-<!ENTITY offsetAmountToScroll.label "Hiển thị phần không nhìn thấy của thẻ tiếp theo khi cuộn">
 <!ENTITY smoothScroll.label "Bật tính năng cuộn mượt mà">
 <!ENTITY scrolldelay.label "Thời gian trễ khi Cuộn (thời gian giữa 2 lần cuộn lặp lại)">
 <!ENTITY currenttab.style.label "Thẻ hiện tại">

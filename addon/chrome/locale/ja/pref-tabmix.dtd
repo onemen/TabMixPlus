@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "多段表示にする">
 <!ENTITY maxrow.label "バーの最大表示段数:">
 <!ENTITY pinnedTabScroll.label "ピン留めしたタブもスクロール">
-<!ENTITY offsetAmountToScroll.label "スクロール時、両端で次のタブが部分的に見えるようにする">
 <!ENTITY smoothScroll.label "スムーズスクロールを有効にする">
 <!ENTITY scrolldelay.label "スクロール遅延時間（スクロール反復間の時間）:">
 <!ENTITY currenttab.style.label "現在のタブ">

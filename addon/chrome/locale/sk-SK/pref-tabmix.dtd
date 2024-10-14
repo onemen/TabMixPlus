@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "Viacradá lišta kariet">
 <!ENTITY maxrow.label "Maximálny počet riadkov:">
 <!ENTITY pinnedTabScroll.label "Povoliť pripnutým záložkám posúvanie">
-<!ENTITY offsetAmountToScroll.label "Pri rolovaní zobraziť časť ďalšej karty mimo pohľadu">
 <!ENTITY smoothScroll.label "Zapnúť plynulé rolovanie">
 <!ENTITY scrolldelay.label "Oneskorenie skrolovania (čas medzi opakovaním skrolovania)">
 <!ENTITY currenttab.style.label "Aktuálna karta">

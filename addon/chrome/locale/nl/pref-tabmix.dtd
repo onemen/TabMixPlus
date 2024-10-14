@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "in meerdere rijen zetten">
 <!ENTITY maxrow.label "Maximum aantal zichtbare rijen:">
 <!ENTITY pinnedTabScroll.label "Scrollen van vastgezette tabbladen toestaan">
-<!ENTITY offsetAmountToScroll.label "Tijdens het scrollen gedeelte van het volgende niet-zichtbare tabblad weergeven">
 <!ENTITY smoothScroll.label "Soepel scrollen inschakelen">
 <!ENTITY scrolldelay.label "Schuifvertraging (tijd tussen schuifherhaling)">
 <!ENTITY currenttab.style.label "Huidige tabblad">

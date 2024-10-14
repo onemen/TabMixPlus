@@ -37,7 +37,6 @@ Tabmix.multiRow = {
         this._singleRowHeight = null;
         this.firstVisibleRow = -1;
         this.firstTabInRowMargin = 0;
-        this.offsetAmountToScroll = Tabmix.prefs.getBoolPref("offsetAmountToScroll");
         this.offsetRatio = Tabmix.tabsUtils.closeButtonsEnabled ? 0.70 : 0.50;
         this.minOffset = 50;
         this.firstVisible = {tab: null, x: 0, y: 0};

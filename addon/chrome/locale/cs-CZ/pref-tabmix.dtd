@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "Víceřadá lišta panelů">
 <!ENTITY maxrow.label "Maximální počet řádků:">
 <!ENTITY pinnedTabScroll.label "Umožnit skrolování na připnutých kartách">
-<!ENTITY offsetAmountToScroll.label "Při posouvání stránky zobrazit část dalšího panelu">
 <!ENTITY smoothScroll.label "Povolit plynulé posouvání">
 <!ENTITY scrolldelay.label "Zpoždění posuvníku">
 <!ENTITY currenttab.style.label "Aktuální panel">

@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "Разполагане на подпрозорците на няколко реда">
 <!ENTITY maxrow.label "Максимален брой редове:">
 <!ENTITY pinnedTabScroll.label "Прелистване на забодените подпрозорци">
-<!ENTITY offsetAmountToScroll.label "При прелистване да се показва част от следващия все още непоказан подпрозорец">
 <!ENTITY smoothScroll.label "Включване на плавно превъртане">
 <!ENTITY scrolldelay.label "Забавяне на прелистването (време до преминаването към следващия подпрозорец)">
 <!ENTITY currenttab.style.label "Текущия подпрозорец">

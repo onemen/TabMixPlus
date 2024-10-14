@@ -193,7 +193,6 @@ declare namespace MockedGeckoTypes {
     ensureElementIsVisible: (tab: BrowserTab, instant?: boolean) => void;
     readonly isRTLScrollbox: boolean;
     get lineScrollAmount(): number;
-    offsetAmountToScroll: boolean;
     offsetRatio: number;
     readonly overflowing: boolean;
     scrollbox: HTMLElement & EventTarget;

@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "Mitmerealine">
 <!ENTITY maxrow.label "Maksimaalne näidatavate ridade arv:">
 <!ENTITY pinnedTabScroll.label "Luba püsikaartide kerimine">
-<!ENTITY offsetAmountToScroll.label "Kerimisel näita osa järgmisest peidusolevast kaardist">
 <!ENTITY smoothScroll.label "Kasuta sujuvat kerimist">
 <!ENTITY scrolldelay.label "Kerimise viivitus (kerimise korduste vaheline aeg)">
 <!ENTITY currenttab.style.label "Praegune kaart">

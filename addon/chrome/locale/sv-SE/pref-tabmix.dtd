@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "Flera rader">
 <!ENTITY maxrow.label "Max antal rader att visa:">
 <!ENTITY pinnedTabScroll.label "Låt fastnålade flikar rulla">
-<!ENTITY offsetAmountToScroll.label "Visa del av nästa flik utom synhåll vid rullning">
 <!ENTITY smoothScroll.label "Aktivera mjuk rullning">
 <!ENTITY scrolldelay.label "Rullfördröjning (tid mellan varje rullning)">
 <!ENTITY currenttab.style.label "Nuvarande flik">

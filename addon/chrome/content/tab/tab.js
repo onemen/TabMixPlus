@@ -1686,9 +1686,6 @@ window.gTMPprefObserver = {
       case "extensions.tabmix.pinnedTabScroll":
         gBrowser.tabContainer._positionPinnedTabs();
         break;
-      case "extensions.tabmix.offsetAmountToScroll":
-        gBrowser.tabContainer.arrowScrollbox.offsetAmountToScroll = Services.prefs.getBoolPref(prefName);
-        break;
       case "browser.tabs.onTop":
         if (TabmixTabbar.position == 1 && Services.prefs.getBoolPref(prefName)) {
           Services.prefs.setBoolPref(prefName, false);

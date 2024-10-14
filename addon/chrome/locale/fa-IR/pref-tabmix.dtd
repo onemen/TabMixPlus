@@ -153,7 +153,6 @@
 <!ENTITY tabScroll.multibar "چند ردیفی شود">
 <!ENTITY maxrow.label "حداکثر تعداد ردیف های قابل نمایش">
 <!ENTITY pinnedTabScroll.label "Allow pinned tabs to scroll">
-<!ENTITY offsetAmountToScroll.label "When scrolling show part of next out-of-sight tab">
 <!ENTITY smoothScroll.label "Enable smooth scroll">
 <!ENTITY scrolldelay.label "Scroll Delay (time between scroll repetition)">
 <!ENTITY currenttab.style.label "تب فعلی">
