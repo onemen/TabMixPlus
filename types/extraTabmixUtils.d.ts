@@ -474,6 +474,7 @@ declare namespace TabsUtils {
   function createTooltip(box: HTMLElement & {label: string}): void;
   function isSingleRow(visibleTabs: Tab[]): boolean;
   let _resizeObserver: ResizeObserver | null;
+  let _lastTabBarWidth: number;
   function resizeObserver(observe: boolean): void;
   let _tab_overflow_width: number;
   function updateOverflowMaxWidth(): void;

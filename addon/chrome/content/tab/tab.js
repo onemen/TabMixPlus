@@ -959,6 +959,7 @@ Tabmix.tabsUtils = {
   },
 
   _resizeObserver: null,
+  _lastTabBarWidth: 0,
   resizeObserver(observe) {
     if (!observe && !this._resizeObserver) {
       return;
@@ -967,6 +968,11 @@ Tabmix.tabsUtils = {
       this._resizeObserver = new window.ResizeObserver(entries => {
         for (let entry of entries) {
           if (entry.contentBoxSize) {
+            const tabBarWidth = this.tabBar.getBoundingClientRect().width;
+            if (this._lastTabBarWidth !== tabBarWidth) {
+              this._widthCache = {minWidth: 0, maxWidth: 0};
+              this._lastTabBarWidth = tabBarWidth;
+            }
             this.updateOverflowMaxWidth();
             this.updateVerticalTabStrip();
             break;
