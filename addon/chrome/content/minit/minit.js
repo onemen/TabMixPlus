@@ -109,19 +109,24 @@ var TMP_tabDNDObserver = {
 
     if (Tabmix.isVersion(1300)) {
       _animateTabMove._replace(
-        'let shiftSize = tabSize * movingTabs.length;',
+        'let translate = screen - draggedTab._dragData[screenAxis];',
         `$&
          let rightTabWidth, leftTabWidth, referenceTabWidth;
          if (!this.verticalMode) {
            shiftSize = Tabmix.getMovingTabsWidth(movingTabs);
            draggedTab._dragData.shiftWidth = shiftSize;
-           rightTabWidth = movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
+           rightTabWidth = movingTabs.at(-1).getBoundingClientRect().width;
            leftTabWidth = movingTabs[0].getBoundingClientRect().width;
            referenceTabWidth = directionMove ? rightTabWidth : leftTabWidth;
          }`
       )._replace(
         '(firstMovingTabScreen + tabSize)',
-        `(firstMovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth))`
+        `(firstMovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth))`,
+        {check: !Tabmix.isVersion(1330)}
+      )._replace(
+        '(lastMovingTabScreen + tabSize)',
+        `(lastMovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth))`,
+        {check: Tabmix.isVersion(1330)}
       )._replace(
         /let firstTabCenter =.*;/,
         `let firstTabCenter = lastMovingTabScreen + translate + (this.verticalMode ? tabSize / 2 : leftTabWidth / 2);`
