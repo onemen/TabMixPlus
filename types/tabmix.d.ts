@@ -36,14 +36,12 @@ interface gTMPprefObserver {
   changeNewTabButtonSide: (aPosition: number) => void;
   dynamicRules: (Record<RulesTYpes, CSSRule> & {[key: string]: CSSRule}) | {[key: string]: CSSRule};
   dynamicProtonRules: () => void;
-  dynamicRulesForVersion: () => void;
   getStyleSheets: (aHref: string, aFirst: boolean) => CSSStyleSheet[];
   get tabStyleSheet(): CSSStyleSheet;
   init: () => void;
   insertRule: (iconRule: string, name?: string) => number;
   OBSERVING: string[];
   observe: (aSubject: nsISupports, aTopic: string, aData: string) => void;
-  overflowIndicator: () => void;
   preventUpdate: boolean;
   prefsValues: Record<string, unknown>;
   removeObservers: () => void;
@@ -149,10 +147,6 @@ type AttributeProps = {
 type I10MapValue = {before: number; l10n: string};
 type I10Map = Record<string, I10MapValue>;
 type ItemOrId = string | Node | Element | AttributeProps | null | undefined;
-
-interface nsIDOMWindowUtils {
-  getBoundsWithoutFlushing(aElement: TabmixNS.ElementTypes): DOMRect;
-}
 
 declare namespace TabmixNS {
   type LazyGetterReturnType<T extends (() => unknown) | unknown> = T extends () => infer R ? R : T;
@@ -286,12 +280,8 @@ declare namespace TabmixModules {
     getString: (key: string) => string;
     getSMString: (key: string) => string;
     i10IdMap: I10Map;
-    isBasilisk: boolean;
     isCyberfox: boolean;
     isFixedGoogleUrl: (url: string) => boolean;
-    isG3Waterfox: boolean;
-    isG4Waterfox: boolean;
-    isG5Waterfox: boolean;
     isLinux: boolean;
     isMac: boolean;
     isWaterfox: boolean;
@@ -329,7 +319,6 @@ declare namespace TabmixModules {
     whereToOpenLinkChanged: boolean;
     windowStartup: {
       _initialized: boolean;
-      syncedTabsInitialized: boolean;
       init: (window: Window) => void;
     };
   }
@@ -347,11 +336,9 @@ interface TabmixChromeUtilsType {
 }
 
 interface TabmixUtils {
-  /** @deprecated - removed from firefox on version 82 */
-  getPostDataFromHistory(legacySHistory: unknown): unknown;
+  getPostDataFromHistory(legacySHistory: nsISHistory): {isPostData: boolean; postData: string; referrerInfo: string};
   focusedWindow(content: Window): Window;
-  /** @deprecated - removed from firefox on version 82 */
-  updateHistoryTitle(legacySHistory: unknown, title: string): void;
+  updateHistoryTitle(legacySHistory: nsISHistory, title: string): void;
 }
 
 declare var ContentSvc: ContentSvc;

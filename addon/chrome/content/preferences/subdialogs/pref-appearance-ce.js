@@ -111,13 +111,6 @@ const TabpanelsClass = customElements.get("tabpanels");
       const prefwindow = window.opener.document.querySelector("prefwindow");
       const button = document.querySelector('[dlgtype="extra1"]');
       prefwindow.setButtonLabel("help", button);
-
-      if (Tabmix.isVersion(1080)) {
-        const doc = document.documentElement;
-        doc.style.setProperty("--input-padding-inline", "2px");
-        doc.style.setProperty("--input-spinner-offset", "14px");
-        doc.style.setProperty("minWidth", "510px");
-      }
     }
 
     get prefName() {

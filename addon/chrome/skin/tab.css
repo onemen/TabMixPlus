@@ -5,8 +5,6 @@
 
 **/
 
-@import url("chrome://tabmixplus/skin/general.css");
-
 /*we need to make multirow work on all themes, this should help a bit*/
 #tabbrowser-tabs[flowing=multibar][multibar],
 #tabbrowser-tabs[flowing=multibar][multibar] .tabbrowser-strip,
@@ -98,12 +96,10 @@ toolbar[iconsize=small] #tabmix-closedTabsButton:hover, .closedtabs-icon:hover >
 
 #wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabsButton[type=menu-button] {
   align-items: flex-end;
-  -moz-box-align: end; /* before Firefox 112 */
 }
 
 #wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabs-dropmarker[type=menu-button] {
   align-items: flex-start;
-  -moz-box-align: start; /* before Firefox 112 */
 }
 
 #tabmix-closedTabs-toolbaritem[cui-areatype=menu-panel] > #tabmix-closedTabs-dropmarker,
@@ -190,5 +186,4 @@ toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > 
 /* Vista-aero */
 #myTabBarRightBox[vista_aero] {
   align-items: flex-start;
-  -moz-box-align: start; /* before Firefox 112 */
 }

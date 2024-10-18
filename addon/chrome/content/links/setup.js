@@ -312,6 +312,5 @@ Tabmix._updateCloseButtons = function tabContainer_updateCloseButtons(skipUpdate
   } else if (!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons") ||
              transitionend) {
     TabmixTabbar.updateScrollStatus(transitionend);
-    TabmixTabbar.updateBeforeAndAfter();
   }
 };

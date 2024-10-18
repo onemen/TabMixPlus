@@ -2,7 +2,6 @@
 
 const EXPORTED_SYMBOLS = ["Tabmix_NewTabURL"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 
 const lazy = {};
@@ -18,8 +17,8 @@ const ABOUT_NEW_TAB = "about:#".replace("#", "newtab");
 // browser. newtab.url preference was removed by bug 1118285 (Firefox 41+)
 const Tabmix_NewTabURL = {
   QueryInterface: ChromeUtils.generateQI([
-    Ci.nsIObserver,
-    Ci.nsISupportsWeakReference
+    "nsIObserver",
+    "nsISupportsWeakReference",
   ]),
 
   init() {

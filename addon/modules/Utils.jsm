@@ -12,17 +12,19 @@ const FMM_MESSAGES = [
   "Tabmix:contextmenu",
 ];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 
 const lazy = {};
 
+ChromeUtils.defineESModuleGetters(lazy, {
+  E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
+  NetUtil: "resource://gre/modules/NetUtil.sys.mjs",
+});
+
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
   AutoReload: "chrome://tabmix-resource/content/AutoReload.jsm",
   DocShellCapabilities: "chrome://tabmix-resource/content/DocShellCapabilities.jsm",
-  E10SUtils: "resource://gre/modules/E10SUtils.jsm",
   MergeWindows: "chrome://tabmix-resource/content/MergeWindows.jsm",
-  NetUtil: "resource://gre/modules/NetUtil.jsm",
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.jsm",
 });
 

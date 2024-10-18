@@ -4,9 +4,9 @@
 @namespace html url("http://www.w3.org/1999/xhtml");
 
 :root {
-  --input-padding-inline: 1px; /* non proton value based on forms.css  */
-  --input-spinner-offset: 19px;
-  --input-width-offset: calc(var(--input-spinner-offset) + var(--input-padding-inline));
+  --input-padding-inline: 2px;
+  --input-spinner-offset: 14px;
+  --input-width-offset: calc(var(--input-spinner-offset) + var(--input-padding-inline) + 2px);
 }
 
 input[type="number"]:not(:disabled)[increaseDisabled]::-moz-number-spin-up,
@@ -16,18 +16,88 @@ input[type="number"]:not(:disabled)[decreaseDisabled]::-moz-number-spin-down {
 
 input[type="number"] {
   padding-inline-end: 0;
+  text-align: center;
 }
 
 input[type="number"]::-moz-number-spin-up,
 input[type="number"]::-moz-number-spin-down {
+  border: 0;
+  border-radius: 0;
+  background-color: var(--in-content-button-background);
+  background-image: url("chrome://global/skin/icons/arrow-down.svg");
+  background-repeat: no-repeat;
+  background-size: 8px;
+  background-position: center;
+  -moz-context-properties: fill;
+  fill: currentColor;
   min-height: 11px;
   margin-block: 0;
-  margin-inline: 2px -2px;
+  margin-inline: 0;
+  appearance: none;
 }
 
 input[type="number"]:invalid {
   border: 1px solid red;
   outline-style: none;
+}
+
+/* textboxes */
+
+input:is([type="text"], [type="number"]) {
+  /* overide default styles of 32px */
+  --input-text-min-height: 24px;
+  appearance: none;
+  border: 1px solid var(--in-content-box-border-color);
+  border-radius: 4px;
+  color: inherit;
+  background-color: var(--in-content-box-background);
+}
+
+input:is([type="text"], [type="number"]) {
+  font-family: inherit;
+  font-size: inherit;
+  padding-block: 2px;
+  padding-inline: var(--input-padding-inline) 0;
+  margin: 2px 4px;
+}
+
+input:is([type="text"], [type="number"]):focus,
+richlistbox:focus-visible {
+  border-color: transparent;
+  outline: 2px solid var(--in-content-focus-outline-color);
+  outline-offset: -1px; /* Prevents antialising around the corners */
+}
+
+input:is([type="text"], [type="number"]):invalid {
+  border-color: transparent;
+  outline: 2px solid var(--in-content-border-invalid);
+  outline-offset: -1px; /* Prevents antialising around the corners */
+}
+
+input:is([type="text"], [type="number"]):disabled {
+  opacity: 0.4;
+}
+
+input[type="number"]::-moz-number-spin-box {
+  height: 100%;
+  max-height: 100%;
+  border-inline-start: 1px solid var(--in-content-box-border-color);
+  width: calc(1em + 2px);
+  border-start-end-radius: 4px;
+  border-end-end-radius: 4px;
+  margin-inline-start: 2px !important;
+  /* revert bug 1790700 - Show <input type='number'> spin buttons only on hover/focus */
+  opacity: 1;
+}
+
+input[type="number"]::-moz-number-spin-up {
+  background-image: url("chrome://global/skin/icons/arrow-up.svg");
+}
+
+input[type="number"]:enabled::-moz-number-spin-up:hover,
+input[type="number"]:enabled::-moz-number-spin-down:hover {
+  background-color: var(--in-content-button-background-hover);
+  color: var(--in-content-button-text-color-hover);
 }
 
 /* fix width issue with some theme/fonts */
@@ -43,10 +113,10 @@ input[type="number"][size="4"] {
 input[type="number"][size="5"] {
   width: calc(5ch + var(--input-width-offset));
 }
+
 input[type="number"][size="6"] {
   width: calc(6ch + var(--input-width-offset));
 }
-
 
 /* show badge New on help buttons */
 

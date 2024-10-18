@@ -2,7 +2,6 @@
 
 const EXPORTED_SYMBOLS = ["flst"];
 
-const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const lazy = {};
@@ -17,8 +16,8 @@ function flst() {
 
   // prevents eslint-plugin-tabmix import-globals.js from identify internal
   // imports as globals
-  // eslint-disable-next-line no-unused-vars
-  TabmixChromeUtils.defineLazyGetter(this, "tabContainer", () => {
+
+  ChromeUtils.defineLazyGetter(this, "tabContainer", () => {
     return TabmixSvc.topWin().gBrowser.tabContainer;
   });
 }

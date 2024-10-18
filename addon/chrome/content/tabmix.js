@@ -204,20 +204,14 @@ Tabmix.afterDelayedStartup = function() {
       "or set 'extensions.tabmix.enableDebug' in about:config to false. " +
       "Once you disable 'Debug Mode' restart your browser.";
     setTimeout(() => {
-      if (Tabmix.isVersion(940)) {
-        gnb.appendNotification(
-          "tabmix-debugmode-enabled",
-          {
-            label: msg,
-            priority: gnb.PRIORITY_CRITICAL_HIGH,
-          },
-          buttons
-        );
-      } else {
-        const errorimage = "chrome://tabmixplus/skin/tmpsmall.png";
-        gnb.appendNotification(msg, "tabmix-debugmode-enabled",
-          errorimage, gnb.PRIORITY_CRITICAL_HIGH, buttons);
-      }
+      gnb.appendNotification(
+        "tabmix-debugmode-enabled",
+        {
+          label: msg,
+          priority: gnb.PRIORITY_CRITICAL_HIGH,
+        },
+        buttons
+      );
     }, 500);
   }
 };
@@ -354,11 +348,7 @@ var TMP_eventListener = {
 
     this._tabEvents = ["SSTabRestoring", "SSTabRestored", "PrivateTab:PrivateChanged",
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned",
-      "TabAttrModified"];
-
-    if (Tabmix.isVersion(1120)) {
-      this._tabEvents.push("TabBrowserInserted");
-    }
+      "TabAttrModified", "TabBrowserInserted"];
 
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
 
@@ -642,7 +632,7 @@ var TMP_eventListener = {
 
   onFullScreen: function TMP_EL_onFullScreen(enterFS) {
     var fullScrToggler = document.getElementById("fullscr-bottom-toggler");
-    if (enterFS && !TabmixSvc.isG3Waterfox && TabmixTabbar.position == 1) {
+    if (enterFS && !TabmixSvc.isWaterfox && TabmixTabbar.position == 1) {
       if (!fullScrToggler.initialized) {
         fullScrToggler.addEventListener("mouseover", this._expandCallback);
         fullScrToggler.addEventListener("dragenter", this._expandCallback);
@@ -741,7 +731,6 @@ var TMP_eventListener = {
     if (TabmixTabbar.isMultiRow) {
       Tabmix.tabsUtils.updateVerticalTabStrip();
       TabmixTabbar.setFirstTabInRow();
-      TabmixTabbar.updateBeforeAndAfter();
     }
   },
 
@@ -823,7 +812,6 @@ var TMP_eventListener = {
       if (aTab == tabBar.selectedItem)
         gBrowser.ensureTabIsVisible(aTab);
     }
-    TabmixTabbar.updateBeforeAndAfter();
   },
 
   onTabClose: function TMP_EL_onTabClose(aEvent) {
@@ -895,7 +883,6 @@ var TMP_eventListener = {
           Tabmix.tabsUtils.updateVerticalTabStrip();
         }
       }
-      TabmixTabbar.updateBeforeAndAfter();
     }
 
     // workaround when we remove last visible tab
@@ -967,8 +954,6 @@ var TMP_eventListener = {
     if (!tab.pinned)
       TabmixTabbar.setFirstTabInRow();
     TabmixSessionManager.tabMoved(tab, aEvent.detail, tab._tPos);
-
-    TabmixTabbar.updateBeforeAndAfter();
   },
 
   onTabUnpinned: function TMP_EL_onTabUnpinned(aEvent) {
@@ -980,7 +965,6 @@ var TMP_eventListener = {
     }
     tab.style.marginTop = "";
     TabmixTabbar.updateScrollStatus();
-    TabmixTabbar.updateBeforeAndAfter();
   },
 
   onTabBarScroll: function TMP_EL_onTabBarScroll(aEvent) {

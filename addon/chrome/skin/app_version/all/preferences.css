@@ -12,7 +12,6 @@ prefwindow,
 prefwindow:root /* override :root from above */,
 prefpane {
   flex-direction: column;
-  -moz-box-orient: vertical; /* before Firefox 112 */
 }
 
 prefwindow > .paneDeckContainer {
@@ -29,7 +28,6 @@ prefwindow[type="child"] > .paneDeckContainer {
 
 prefwindow[type="child"] > prefpane > .content-box {
   flex: 1;
-  -moz-box-flex: 1; /* before Firefox 112 */
   overflow: clip;
 }
 
@@ -44,7 +42,6 @@ radio[pane] .radio-check {
 
 radio[pane] .radio-label-box {
   flex-direction: column;
-  -moz-box-orient: vertical; /* before Firefox 112 */
   outline: none;
   margin-inline: 5px;
   margin-bottom: 2px;
@@ -64,7 +61,7 @@ prefwindow[chromehidden~="toolbar"] .chromeclass-toolbar {
 
 .button-menu-dropmarker {
   direction: rtl;
-  -moz-appearance: button !important;
+  appearance: button !important;
 }
 
 .button-menu-dropmarker .button-icon {

@@ -8,13 +8,10 @@
 
 const EXPORTED_SYMBOLS = ["Overlays"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-
 const lazy = {};
-TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-  setTimeout: "resource://gre/modules/Timer.jsm"
+ChromeUtils.defineESModuleGetters(lazy, {
   //
+  setTimeout: "resource://gre/modules/Timer.sys.mjs",
 });
 
 function isVersion(versionNo) {

@@ -2,9 +2,7 @@
 
 const EXPORTED_SYMBOLS = ["SingleWindowModeUtils"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {PrivateBrowsingUtils} = TabmixChromeUtils.import("resource://gre/modules/PrivateBrowsingUtils.jsm");
+const {PrivateBrowsingUtils} = ChromeUtils.importESModule("resource://gre/modules/PrivateBrowsingUtils.sys.mjs");
 
 const SingleWindowModeUtils = {
   /**
@@ -178,8 +176,6 @@ const SingleWindowModeUtils = {
       if (!newWindow.gBrowserInit._boundDelayedStartup) {
         newWindow.FullZoom.init = function() {};
         newWindow.FullZoom.destroy = function() {};
-        // removed before firefox 115
-        newWindow.IndexedDBPromptHelper?.init();
       }
     } catch (ex) {
       existingWindow.Tabmix.obj(ex);

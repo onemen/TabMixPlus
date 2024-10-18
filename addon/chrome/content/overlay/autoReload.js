@@ -27,11 +27,6 @@ function load() {
   linkElem.setAttribute("href", "chrome://tabmixplus/skin/preferences.css");
   const dialog = document.getElementById("reloadevery_custom_dialog");
   dialog.shadowRoot.appendChild(linkElem);
-
-  const iconUrl = TabmixSvc.version(910) ?
-    "url(chrome://global/skin/icons/arrow-down.svg)" :
-    "url(chrome://global/skin/icons/arrow-dropdown-16.svg)";
-  document.documentElement.style.setProperty("--select-button-background-image", iconUrl);
 }
 
 function accept() {

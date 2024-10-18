@@ -5070,7 +5070,7 @@ interface BrowsingContext extends LoadContextMixin {
     watchedByDevTools: boolean;
     readonly window: WindowProxy | null;
     getAllBrowsingContextsInSubtree(): BrowsingContext[];
-    resetLocationChangeRateLimit(): void;
+    resetNavigationRateLimit(): void;
     setRDMPaneMaxTouchPoints(maxTouchPoints: number): void;
     setRDMPaneOrientation(type: OrientationType, rotationAngle: number): void;
 }
@@ -24278,7 +24278,7 @@ declare namespace L10nOverlays {
 }
 
 declare namespace MediaControlService {
-    function generateMediaControlKey(aKey: MediaControlKey): void;
+    function generateMediaControlKey(aKey: MediaControlKey, aSeekValue?: double): void;
     function getCurrentActiveMediaMetadata(): MediaMetadataInit;
     function getCurrentMediaSessionPlaybackState(): MediaSessionPlaybackState;
 }
@@ -25324,7 +25324,7 @@ type ImageOrientation = "flipY" | "from-image" | "none";
 type ImportESModuleTargetGlobal = "contextual" | "current" | "devtools" | "shared";
 type InspectorPropertyType = "color" | "gradient" | "timing-function";
 type IterationCompositeOperation = "accumulate" | "replace";
-type JSRFPTarget = "RoundWindowSize" | "SiteSpecificZoom";
+type JSRFPTarget = "RoundWindowSize" | "SiteSpecificZoom" | "CSSPrefersColorScheme";
 type L10nFileSourceHasFileStatus = "missing" | "present" | "unknown";
 type LatencyMode = "quality" | "realtime";
 type LineAlignSetting = "center" | "end" | "start";
@@ -25455,7 +25455,7 @@ type VideoTransferCharacteristics = "bt709" | "hlg" | "iec61966-2-1" | "linear" 
 type VisibilityState = "hidden" | "visible";
 type WakeLockType = "screen";
 type WebGLPowerPreference = "default" | "high-performance" | "low-power";
-type WebIDLProcType = "browser" | "extension" | "file" | "forkServer" | "gmpPlugin" | "gpu" | "inference" | "ipdlUnitTest" | "preallocated" | "privilegedabout" | "privilegedmozilla" | "rdd" | "remoteSandboxBroker" | "socket" | "unknown" | "utility" | "vr" | "web" | "webIsolated" | "webServiceWorker" | "withCoopCoep";
+type WebIDLProcType = "browser" | "extension" | "file" | "forkServer" | "gmpPlugin" | "gpu" | "inference" | "ipdlUnitTest" | "preallocated" | "privilegedabout" | "privilegedmozilla" | "rdd" | "socket" | "unknown" | "utility" | "vr" | "web" | "webIsolated" | "webServiceWorker" | "withCoopCoep";
 type WebIDLUtilityActorName = "audioDecoder_AppleMedia" | "audioDecoder_Generic" | "audioDecoder_WMF" | "jSOracle" | "mfMediaEngineCDM" | "unknown" | "windowsFileDialog" | "windowsUtils";
 type WebTransportCongestionControl = "default" | "low-latency" | "throughput";
 type WebTransportErrorSource = "session" | "stream";

@@ -9,7 +9,7 @@
      *  @param {Tab} aTab
      */
     function _notifyBackgroundTab(aTab) {
-      if (aTab.pinned || aTab.hidden || (TabmixSvc.version(1190) ?
+      if (aTab.pinned || aTab.hidden || (Tabmix.isVersion(1190) ?
         !this.hasAttribute("overflow") :
         this.getAttribute("overflow") !== "true")) {
         return;

@@ -3,15 +3,19 @@
 const EXPORTED_SYMBOLS = ["MergeWindows"];
 
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
+const {AppConstants} = ChromeUtils.importESModule("resource://gre/modules/AppConstants.sys.mjs");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
+  // Firefox 123 Bug 1864821 - Replace PromiseUtils.defer with Promise.withResolvers
+  PromiseUtils: "resource://gre/modules/PromiseUtils.sys.mjs",
+});
+
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+  //
   BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
-  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
-  PromiseUtils: "resource://gre/modules/PromiseUtils.jsm",
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -199,7 +203,7 @@ const MergeWindows = {
 
     const promises = [Promise.resolve(tabToSelect)];
     for (const tab of popups) {
-      const deferred = lazy.PromiseUtils.defer();
+      const deferred = TabmixSvc.version(1230) ? Promise.withResolvers() : lazy.PromiseUtils.defer();
       promises.push(deferred.promise);
       tab._tabmix_movepopup_promise = deferred;
 
@@ -312,24 +316,17 @@ const MergeWindows = {
     let errorMessage = TabmixSvc.getString('tmp.merge.error');
     if (privateNotMatch)
       errorMessage += ", " + TabmixSvc.getString('tmp.merge.private');
-    const errorimage = "chrome://tabmixplus/skin/tmpsmall.png";
     let notificationBox = aWindow.gBrowser.getNotificationBox();
     let name = "mergeWindows-notification";
     if (!notificationBox.getNotificationWithValue(name)) {
       const priority = notificationBox.PRIORITY_INFO_MEDIUM;
-      let notificationBar;
-      if (TabmixSvc.version(940)) {
-        notificationBar = notificationBox.appendNotification(
-          name,
-          {
-            label: errorMessage,
-            priority,
-          }
-        );
-      } else {
-        notificationBar = notificationBox.appendNotification(errorMessage,
-          name, errorimage, priority, null);
-      }
+      const notificationBar = notificationBox.appendNotification(
+        name,
+        {
+          label: errorMessage,
+          priority,
+        }
+      );
       aWindow.setTimeout(() => {
         notificationBox.removeNotification(notificationBar);
       }, 10000);

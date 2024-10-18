@@ -156,22 +156,8 @@ interface Window {
     init: () => void;
   };
 
-  /** @deprecated - removed from firefox on version 112 */
-  _loadURI: (...args: loadURIArgs) => Tab | null;
-  /** @deprecated - removed from firefox on version 112 */
+  /** @deprecated - removed from firefox on version 126 */
   BrowserOpenTab: (options: {event: MouseEvent; url: string}) => void;
-  /** @deprecated - not in use since Firefox 112 */
-  getTopWin(params: Params): Window;
-  /** @deprecated - not in use since Firefox 98 */
-  getTopWin(skipPopups?: boolean): Window;
-  /** @deprecated */
-  gInPrintPreviewMode: boolean;
-  /** @deprecated - removed from firefox on version 109 */
-  PluralForm: {
-    get(aNum: number, aWords: string): string;
-  };
-  /** @deprecated - not in use since Firefox 91 */
-  whereToOpenLink: (e: Event, ignoreButton?: boolean, ignoreAlt?: boolean) => WhereToOpen;
 }
 
 /* Tabmix modules */
@@ -220,7 +206,6 @@ declare namespace TabDNDObserverNS {
   let TAB_DROP_TYPE: string;
   let paddingLeft: number;
   let _multirowMargin: number;
-  let getDropEffectForTabDrag: MockedGeckoTypes.TabContainer["getDropEffectForTabDrag"];
   function init(): void;
   function useTabmixDnD(event: DragEvent): boolean;
   function handleEvent(event: DragEvent): void;
@@ -230,7 +215,6 @@ declare namespace TabDNDObserverNS {
   function on_dragleave(event: DragEvent): void;
   function _dragoverScrollButton(event: DragEvent): boolean;
   function hideDragoverMessage(): void;
-  function _getDropIndex_before_112(event: DragEvent, aLink: boolean, asObj: boolean): DragEventParams | number;
   function _getDropIndex(event: DragEvent, options?: {dragover?: boolean; children?: Tab[]}): DragEventParams | number;
   function eventParams(event: DragEvent): DragEventParams;
   function _getDNDIndex(aEvent: DragEvent): number;
@@ -609,9 +593,6 @@ declare namespace TabmixPlacesNS {
   function onItemMoved(): void;
   const contextMenu: typeof TabmixPlacesInternalNS.ContextMenu;
   const PlacesUtils: TabmixPlacesUtils;
-
-  /** @deprecated */
-  function getTabFixedTitle(): void;
 }
 
 declare namespace TabmixPlacesInternalNS {
@@ -669,7 +650,6 @@ declare namespace TabmixTabbarNS {
   const singleRowHeight: number;
   let _waitAfterMaximized: boolean;
   function _handleResize(): void;
-  function updateBeforeAndAfter(onlyHoverAtt?: boolean): void;
   function inSameRow(tab1: Tab | null, tab2: Tab | HTMLButtonElement | null): boolean;
   function setFirstTabInRow(): void;
   function removeShowButtonAttr(): void;
@@ -733,7 +713,6 @@ declare namespace UndocloseTabButtonObserverNS {
   function onDragOver(aEvent: TabDragEvent): boolean;
   function onDragExit(aEvent: TabDragEvent): void;
   function onDrop(aEvent: TabDragEvent): void;
-  function NEW_getSourceNode(aDataTransfer: DataTransfer): Node | null;
 }
 
 type ExtensionsCompatibility = typeof ExtensionsCompatibilityNS;
@@ -813,8 +792,6 @@ declare namespace SessionStoreNS {
     function getClosedTabDataFromClosedWindows(): ClosedTabData[];
     function getClosedWindowCount(): number;
     function getClosedWindowData(): ClosedWindowState[];
-    /** @deprecated - getClosedWindowData always return an object since Firefox 95 */
-    function getClosedWindowData(aAsString?: boolean): ClosedWindowState[];
     function getCustomTabValue(aTab: Tab, aKey: string): string;
     function getInternalObjectState(aBrowser: MockedGeckoTypes.ChromeBrowser): number;
     function getLastClosedTabCount(aWindow: Window): number;
@@ -832,8 +809,6 @@ declare namespace SessionStoreNS {
     function _setWindowStateReady(aWindow: Window): void;
     function getPreferredRemoteType(url: string, aWindow: Window, userContextId?: number): string;
     function removeClosedTabData(winData: WindowState, closedTabs: ClosedTabData[], index: number): ClosedTabData;
-    /** @deprecated - removed from firefox on version 94 */
-    function removeClosedTabData(closedTabs: ClosedTabData[], closedIndex: number): ClosedTabData;
     function restoreTab(newTab: Tab, state: TabData): void;
     function restoreTabs(aWindow: Window, aTabs: Tab[], aTabData: TabData[], aSelectTab: number): void;
     function saveStateDelayed(aWindow?: Window): void;
@@ -855,8 +830,6 @@ declare namespace MockedGeckoTypes {
   interface TabBrowser {
     addTabsProgressListener(listener: typeof TabmixProgressListenerNS.listener): void;
     removeTabsProgressListener: (listener: typeof TabmixProgressListenerNS.listener) => void;
-    /** @deprecated removed since Firefox version 110 */
-    loadOneTab: (url: string, params?: AddTabParams) => BrowserTab;
   }
 
   // arrowScrollbox: ArrowScrollbox;

@@ -257,7 +257,6 @@ var TMP_extensionsCompatibility = {
         '  tab.removeAttribute("minwidth");' +
         '  tab.removeAttribute("maxwidth");' +
         '  TabmixTabbar.updateScrollStatus();' +
-        '  TabmixTabbar.updateBeforeAndAfter();' +
         '  $1$2'
       ).toCode();
     }
@@ -454,10 +453,8 @@ TMP_extensionsCompatibility.RSSTICKER = {
     if (!target) {
       if (Tabmix.whereToOpen(null).lock) {
         this.parent.browser.openInNewTab(this.href);
-      } else if (Tabmix.isVersion(1110)) {
-        window.openLinkIn(this.href, "current", {allowThirdPartyFixup: false});
       } else {
-        window.loadURI(this.href);
+        window.openLinkIn(this.href, "current", {allowThirdPartyFixup: false});
       }
     } else if (target == "window") {
       if (Tabmix.singleWindowMode)

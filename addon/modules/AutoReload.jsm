@@ -2,15 +2,19 @@
 
 const EXPORTED_SYMBOLS = ["AutoReload"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const lazy = {};
+
+ChromeUtils.defineESModuleGetters(lazy, {
+  E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
+  SitePermissions: "resource:///modules/SitePermissions.sys.mjs",
+});
+
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-  E10SUtils: "resource://gre/modules/E10SUtils.jsm",
+  //
   TabmixUtils: "chrome://tabmix-resource/content/Utils.jsm",
-  SitePermissions: "resource:///modules/SitePermissions.jsm"
 });
 
 var _setItem = function() {};
@@ -366,38 +370,17 @@ function _reloadTab(aTab) {
 async function beforeReload(window, browser) {
   const gBrowser = window.gBrowser;
   let prompt;
-  if (TabmixSvc.version(830)) {
-    const {permitUnload} = await browser.asyncPermitUnload("dontUnload");
-    if (permitUnload) {
-      return;
-    }
-  } else {
-    const {permitUnload} = window.PermitUnloader.permitUnload(
-      browser.frameLoader,
-      browser.dontPromptAndDontUnload
-    );
-    if (permitUnload) {
-      return;
-    }
-    gBrowser.addEventListener("DOMWillOpenModalDialog", () => {
-      window.setTimeout(() => {
-        const promptBox = browser.tabModalPromptBox;
-        const prompts = promptBox.listPrompts();
-        if (prompts.length) {
-          // This code assumes that the beforeunload prompt
-          // is the top-most prompt on the tab.
-          prompt = prompts[prompts.length - 1];
-        }
-      }, 0);
-    }, {once: true});
+  const {permitUnload} = await browser.asyncPermitUnload("dontUnload");
+  if (permitUnload) {
+    return;
   }
   gBrowser.addEventListener("DOMModalDialogClosed", event => {
-    const permitUnload =
+    const canUnload =
       event.target.nodeName != "browser" ||
       (prompt ?
         !prompt.args.inPermitUnload || prompt.args.ok :
         !event.detail?.wasPermitUnload || event.detail.areLeaving);
-    if (!permitUnload) {
+    if (!canUnload) {
       // User canceled the reload disable AutoReload for this tab
       const tab = gBrowser.getTabForBrowser(browser);
       AutoReload._disable(tab);
@@ -430,7 +413,7 @@ function doReloadTab(window, browser, tab, data) {
       postData = referrerInfo = null;
     }
     browser.tabmix_allowLoad = true;
-    browser.loadURI(TabmixSvc.version(1120) ? url : urlSpec, {
+    browser.loadURI(url, {
       flags: loadFlags,
       referrerInfo,
       triggeringPrincipal: browser.contentPrincipal,
@@ -455,9 +438,7 @@ function doReloadTab(window, browser, tab, data) {
       browsingContext.reload(loadFlags);
     }
   } else {
-    const handlingUserInput = TabmixSvc.version(900) ?
-      window.document.hasValidTransientUserGestureActivation :
-      window.windowUtils.isHandlingUserInput;
+    const handlingUserInput = window.document.hasValidTransientUserGestureActivation;
 
     browser.sendMessageToActor(
       "Browser:Reload",

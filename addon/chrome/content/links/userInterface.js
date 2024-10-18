@@ -40,9 +40,7 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
     Tabmix.prefs.getIntPref("loadOnNewTab.type");
   /** @type {string} */
   let url = "";
-  let {event, url: passedURL = null} = Tabmix.isVersion(1150) ?
-    eventOrObject ?? {} :
-    {event: MouseEvent.isInstance(eventOrObject) ? eventOrObject : null};
+  let {event, url: passedURL = null} = eventOrObject ?? {};
 
   let werePassedURL = Boolean(passedURL);
   let searchClipboard = window.gMiddleClickNewTabUsesPasteboard && event?.button == 1;
@@ -273,20 +271,18 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
   if ("openUILink" in window) {
     /** @type {Window | Window["URILoadingHelper"]} */
     let parentObj = window;
-    if (Tabmix.isVersion(1120)) {
-      parentObj = window.URILoadingHelper;
-      if (TabmixSvc.URILoadingHelperChanged) {
-        return;
-      }
-      TabmixSvc.URILoadingHelperChanged = true;
+    parentObj = window.URILoadingHelper;
+    if (TabmixSvc.URILoadingHelperChanged) {
+      return;
     }
+    TabmixSvc.URILoadingHelperChanged = true;
 
     // divert all the calls from places UI to use our preferences
     this.changeCode(parentObj, "openUILink")._replace(
       'aIgnoreAlt = params.ignoreAlt;',
       'aIgnoreAlt = params.ignoreAlt || null;'
     )._replace(
-      Tabmix.isVersion(1120) ? /this\.openLinkIn\(.*\);/ : /openUILinkIn\(.*\);/,
+      /this\.openLinkIn\(.*\);/,
       'where = window.TMP_Places.openUILink(url, event, where, params);\n' +
       '  if (where) {\n' +
       '    try {\n      $&\n    } catch (ex) {  }\n' +
@@ -357,7 +353,6 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
       TMP_Places.asyncSetTabTitle(aTab, url, true).then(tabTitleChanged => {
         if (tabTitleChanged) {
           TabmixTabbar.updateScrollStatus();
-          TabmixTabbar.updateBeforeAndAfter();
         }
       });
     }
@@ -368,7 +363,6 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   Tabmix.setTabStyle(aTab, boldChanged);
   if (aTab.hasAttribute("protected") || boldChanged.value) {
     TabmixTabbar.updateScrollStatus();
-    TabmixTabbar.updateBeforeAndAfter();
   }
 
   // make sure other extensions don't set minwidth maxwidth
@@ -395,7 +389,7 @@ Tabmix.setTabStyle = function(aTab, boldChanged) {
   if (!aTab)
     return;
   let style = null;
-  let isSelected = TabmixSvc.version(1190) ?
+  let isSelected = Tabmix.isVersion(1190) ?
     aTab.hasAttribute("visuallyselected") :
     aTab.getAttribute("visuallyselected") === "true";
   // if pending tab is blank we don't style it as unload or unread

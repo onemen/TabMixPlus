@@ -1,7 +1,5 @@
 "use strict";
 
-const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-
 /** @type {TabmixTypes} */ // @ts-expect-error - TabmixTypes included properties added in another files
 var Tabmix = {
   get prefs() {
@@ -115,7 +113,7 @@ var Tabmix = {
     if (aFlag)
       this[aModule + "Initialized"] = false;
     var self = this;
-    TabmixChromeUtils.defineLazyGetter(aObject, aName, () => {
+    ChromeUtils.defineLazyGetter(aObject, aName, () => {
       let tmp = ChromeUtils.import("chrome://tabmix-resource/content/" + aModule + ".jsm");
       let Obj = tmp[aSymbol];
       if ("prototype" in tmp[aSymbol])
@@ -290,12 +288,6 @@ var Tabmix = {
   },
 
   _init() {
-    // load globals for our preferences windows
-    let wintype = window.document.documentElement.getAttribute("windowtype");
-    if (wintype !== "navigator:browser") {
-      window.Services = window.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-    }
-
     const destroy = () => {
       window.removeEventListener("unload", destroy);
       this.destroy();

@@ -2,14 +2,17 @@
 
 const EXPORTED_SYMBOLS = ["VerticalTabs"];
 
-const Services =
-  globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 
 const lazy = {};
 
+ChromeUtils.defineESModuleGetters(lazy, {
+  //
+  setTimeout: "resource://gre/modules/Timer.sys.mjs",
+});
+
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-  setTimeout: "resource://gre/modules/Timer.jsm",
+  //
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.jsm",
 });
 

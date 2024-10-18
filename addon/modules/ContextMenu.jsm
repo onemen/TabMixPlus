@@ -2,8 +2,6 @@
 
 const EXPORTED_SYMBOLS = ["ContextMenu"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-
 const lazy = {};
 ChromeUtils.defineModuleGetter(lazy, "TabmixUtils",
   "chrome://tabmix-resource/content/Utils.jsm");

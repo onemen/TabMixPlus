@@ -15,8 +15,6 @@ var TMP_tabDNDObserver = {
   paddingLeft: 0,
   _multirowMargin: 0,
   _moveTabOnDragging: true,
-  // placeholder, we set it in init
-  getDropEffectForTabDrag: _ => "none",
 
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
@@ -170,9 +168,7 @@ var TMP_tabDNDObserver = {
       'var newMargin, newMarginY = 0;'
     )._replace(
       /let newIndex = this\._getDropIndex\(event.*\);/,
-      Tabmix.isVersion(1120) ?
-        'let {newIndex, addWidth} = this._getDropIndex(event, {dragover: true, children: this.allTabs});' :
-        'let {newIndex, addWidth} = this._getDropIndex(event, effects == "link", true);'
+      'let {newIndex, addWidth} = this._getDropIndex(event, {dragover: true, children: this.allTabs});'
     )._replace(
       /let tabRect = children[^;]*;/g,
       `$&
@@ -210,10 +206,9 @@ var TMP_tabDNDObserver = {
     )._replace(
       '} else if (draggedTab && draggedTab.container == this) {',
       `gBrowser.ensureTabIsVisible(draggedTabCopy);
-        TabmixTabbar.updateBeforeAndAfter();
       } else if (draggedTab && draggedTab.container == this && useTabmixDnD) {
         let oldIndex = draggedTab._tPos;
-        let newIndex = this._getDropIndex(event, Tabmix.isVersion(1120) ? {dragover: false} : false);
+        let newIndex = this._getDropIndex(event, {dragover: false});
         let moveLeft = newIndex < oldIndex;
         if (!moveLeft) newIndex -= 1;
         for (let tab of movingTabs) {
@@ -222,7 +217,6 @@ var TMP_tabDNDObserver = {
         }
         TabmixTabbar.updateScrollStatus();
         gBrowser.ensureTabIsVisible(draggedTab);
-        TabmixTabbar.updateBeforeAndAfter();
       $&`
     )._replace(
       Tabmix.isVersion(1300) ? Tabmix.isVersion(1320) ? 'let shouldTranslate;' : 'if (oldTranslate && oldTranslate' : 'if (oldTranslateX && oldTranslateX',
@@ -279,9 +273,7 @@ var TMP_tabDNDObserver = {
     patchDragMethod("on_drop", dropCode);
 
     Tabmix.originalFunctions._getDropIndex = gBrowser.tabContainer._getDropIndex;
-    gBrowser.tabContainer._getDropIndex = Tabmix.isVersion(1120) ?
-      this._getDropIndex.bind(this) :
-      this._getDropIndex_before_112.bind(this);
+    gBrowser.tabContainer._getDropIndex = this._getDropIndex.bind(this);
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
       /(})(\)?)$/,
@@ -314,12 +306,6 @@ var TMP_tabDNDObserver = {
 
     Tabmix.originalFunctions.on_dragleave = gBrowser.tabContainer.on_dragleave;
     gBrowser.tabContainer.on_dragleave = this.on_dragleave.bind(this);
-
-    // for Firefox 106 - after bug 1771831
-    this.getDropEffectForTabDrag =
-      typeof gBrowser.tabContainer.getDropEffectForTabDrag === "function" ?
-        gBrowser.tabContainer.getDropEffectForTabDrag :
-        gBrowser.tabContainer._getDropEffectForTabDrag;
   },
 
   useTabmixDnD(aEvent) {
@@ -344,9 +330,7 @@ var TMP_tabDNDObserver = {
 
   // on_dragstart is bound to gBrowser.tabContainer
   on_dragstart(event) {
-    const tab = Tabmix.isVersion(1120) ?
-      this._getDragTargetTab(event) :
-      this._getDragTargetTab(event, false);
+    const tab = this._getDragTargetTab(event);
     if (!tab || this._isCustomizing) {
       return;
     }
@@ -358,9 +342,7 @@ var TMP_tabDNDObserver = {
       return;
     }
 
-    const scale = Tabmix.isVersion(1090) ?
-      window.devicePixelRatio :
-      window.windowUtils.screenPixelsPerCSSPixel / window.windowUtils.fullZoom;
+    const scale = window.devicePixelRatio;
     let dragImageOffsetX = -16;
     let dragImageOffsetY = TabmixTabbar.visibleRows == 1 ? -16 : -30;
     let toDrag = this._dndCanvas;
@@ -391,12 +373,10 @@ var TMP_tabDNDObserver = {
     }
 
     const tabBar = gBrowser.tabContainer;
-    const effects = this.getDropEffectForTabDrag(event);
+    const effects = tabBar.getDropEffectForTabDrag(event);
     const dt = event.dataTransfer;
     const isCopy = dt.dropEffect == "copy";
-    const targetTab = Tabmix.isVersion(1120) ?
-      tabBar._getDragTargetTab(event, {ignoreTabSides: true}) :
-      tabBar._getDragTargetTab(event, true);
+    const targetTab = tabBar._getDragTargetTab(event, {ignoreTabSides: true});
 
     let disAllowDrop = false;
     /* we don't allow to drop link on lock tab.
@@ -553,15 +533,6 @@ var TMP_tabDNDObserver = {
 
   hideDragoverMessage() {
     document.getElementById("tabmix-tooltip").hidePopup();
-  },
-
-  _getDropIndex_before_112(event, aLink, asObj) {
-    const tabBar = gBrowser.tabContainer;
-    if (!asObj && !this.useTabmixDnD(event)) {
-      return Tabmix.originalFunctions._getDropIndex.apply(tabBar, [event]);
-    }
-    const params = this.eventParams(event);
-    return asObj ? params : params.newIndex;
   },
 
   _getDropIndex(event, {dragover = false, children = []} = {children: []}) {
@@ -765,7 +736,7 @@ var TMP_tabDNDObserver = {
 var TMP_undocloseTabButtonObserver = {
   onDragOver(aEvent) {
     var dt = aEvent.dataTransfer;
-    var sourceNode = TMP_tabDNDObserver.getSourceNode(dt) || this.NEW_getSourceNode(dt);
+    var sourceNode = TMP_tabDNDObserver.getSourceNode(dt);
     if (!sourceNode || sourceNode.localName != "tab") {
       dt.effectAllowed = "none";
       return true;
@@ -792,7 +763,7 @@ var TMP_undocloseTabButtonObserver = {
 
   onDrop(aEvent) {
     var dt = aEvent.dataTransfer;
-    var sourceNode = TMP_tabDNDObserver.getSourceNode(dt) || this.NEW_getSourceNode(dt);
+    var sourceNode = TMP_tabDNDObserver.getSourceNode(dt);
     if (sourceNode && sourceNode.localName == "tab")
       // let tabbrowser drag event time to end before we remove the sourceNode
       setTimeout(
@@ -803,15 +774,6 @@ var TMP_undocloseTabButtonObserver = {
 
     this.onDragExit(aEvent);
   },
-
-  //XXX we don't need it after bug 455694 (tab drag/detach animations) backed-out.
-  // we leave it in case the code will change again.
-  NEW_getSourceNode: function TMP_NEW_getSourceNode(aDataTransfer) {
-    let node = aDataTransfer.mozSourceNode;
-    while (node && node.localName != "tab" && node.localName != "tabs")
-      node = node.parentNode;
-    return node?.localName === "tab" ? node : null;
-  }
 };
 
 /* ::::::::::     miscellaneous     :::::::::: */
@@ -936,7 +898,6 @@ Tabmix.navToolbox = {
       if (aContainer.id == "TabsToolbar") {
         this.tabStripAreaChanged();
         TabmixTabbar.updateScrollStatus();
-        TabmixTabbar.updateBeforeAndAfter();
       }
       if (!aWasRemoval) {
         let command = aNode.getAttribute("command") ?? "";
@@ -1006,7 +967,6 @@ Tabmix.navToolbox = {
       this.resetUI = false;
     } else if (aToolboxChanged) {
       TabmixTabbar.updateScrollStatus();
-      TabmixTabbar.updateBeforeAndAfter();
     }
 
     // if tabmix option dialog is open update visible buttons and set focus if needed
@@ -1058,7 +1018,7 @@ Tabmix.navToolbox = {
     }
   },
 
-  handleCommand(event, openUILinkWhere) {
+  handleCommand(event) {
     if (Tabmix.selectedTab === gBrowser.selectedTab) {
       Tabmix.selectedTab = null;
       Tabmix.userTypedValue = "";
@@ -1073,12 +1033,7 @@ Tabmix.navToolbox = {
       prevTabPos = prevTab._tPos;
     }
 
-    // openUILinkWhere is not used since Firefox 83
-    if (!openUILinkWhere) {
-      Tabmix.navToolbox.whereToOpenFromUrlBar(event, result);
-    }
-
-    Tabmix.originalFunctions.gURLBar_handleCommand.apply(this, [event, openUILinkWhere]);
+    Tabmix.originalFunctions.gURLBar_handleCommand.apply(this, [event]);
 
     if (gBrowser.selectedBrowser.__tabmix__whereToOpen) {
       delete gBrowser.selectedBrowser.__tabmix__whereToOpen;
@@ -1159,28 +1114,9 @@ Tabmix.navToolbox = {
 
   // private method from gURLBar.view (UrlbarView.sys.mjs)
   getClosestSelectableElement(element, {byMouse = false} = {}) {
-    if (!Tabmix.isVersion(1080)) {
-      return gURLBar.view.getClosestSelectableElement(element);
-    }
-
     const SELECTABLE_ELEMENT_SELECTOR = "[role=button], [selectable=true]";
     const KEYBOARD_SELECTABLE_ELEMENT_SELECTOR = "[role=button]:not([keyboard-inaccessible]), [selectable]";
-    let closest;
-    if (!Tabmix.isVersion(1120)) {
-      const UNSELECTABLE_ELEMENT_SELECTOR = "[selectable=false]";
-      closest = element.closest(SELECTABLE_ELEMENT_SELECTOR);
-      if (!closest) {
-        let row = element.closest(".urlbarView-row");
-        if (row && row.querySelector(UNSELECTABLE_ELEMENT_SELECTOR)) {
-          return null;
-        } else if (row && !row.querySelector(SELECTABLE_ELEMENT_SELECTOR)) {
-          closest = row;
-        }
-      }
-      return this.isElementVisible(closest) ? closest : null;
-    }
-
-    closest = element.closest(
+    const closest = element.closest(
       byMouse ?
         SELECTABLE_ELEMENT_SELECTOR :
         KEYBOARD_SELECTABLE_ELEMENT_SELECTOR
@@ -1276,29 +1212,27 @@ Tabmix.navToolbox = {
       return;
     }
 
-    const lazy = {};
-    if (Tabmix.isVersion(1070)) {
-      /** @type {any} */
-      const modules = {
-        // Bug 1793414 (Firefox 107) - MozSearchbar calls into BrowserSearch where it doesn't need to
-        // add references to lazy.FormHistory and lazy.SearchSuggestionController
-        FormHistory: "resource://gre/modules/FormHistory.jsm",
-        SearchSuggestionController: "resource://gre/modules/SearchSuggestionController.jsm",
-      };
+    /** @type {any} */
+    const modules = {
+      // Bug 1793414 (Firefox 107) - MozSearchbar calls into BrowserSearch where it doesn't need to
+      // add references to lazy.FormHistory and lazy.SearchSuggestionController
+      FormHistory: "resource://gre/modules/FormHistory.sys.mjs",
+      SearchSuggestionController: "resource://gre/modules/SearchSuggestionController.sys.mjs",
+    };
 
-      if (Tabmix.isVersion(1210) && !Tabmix.isVersion(1220)) {
-        // Bug 1866616 add usage for UrlbarPrefs.sys.mjs only in Firefox 121
-        modules.UrlbarPrefs = "resource:///modules/UrlbarPrefs.sys.mjs";
-      }
-
-      if (Tabmix.isVersion(1270)) {
-        // Bug 1742889 (Firefox 127) - Rewrite consumers of whereToOpenLink to use BrowserUtils.whereToOpenLink
-        // add references to lazy.BrowserUtils
-        modules.BrowserUtils = "resource://gre/modules/BrowserUtils.sys.mjs";
-      }
-
-      TabmixChromeUtils.defineLazyModuleGetters(lazy, modules);
+    if (Tabmix.isVersion(1210) && !Tabmix.isVersion(1220)) {
+      // Bug 1866616 add usage for UrlbarPrefs.sys.mjs only in Firefox 121
+      modules.UrlbarPrefs = "resource:///modules/UrlbarPrefs.sys.mjs";
     }
+
+    if (Tabmix.isVersion(1270)) {
+      // Bug 1742889 (Firefox 127) - Rewrite consumers of whereToOpenLink to use BrowserUtils.whereToOpenLink
+      // add references to lazy.BrowserUtils
+      modules.BrowserUtils = "resource://gre/modules/BrowserUtils.sys.mjs";
+    }
+
+    const lazy = {};
+    ChromeUtils.defineESModuleGetters(lazy, modules);
 
     // we use local eval here to use lazy from the current scope
     /** @param {{value: string}} params */
@@ -1310,20 +1244,6 @@ Tabmix.navToolbox = {
     }
 
     // we check browser.search.openintab also for search button click
-    if (change_handleSearchCommand) {
-      $LF = '\n            ';
-      searchbar.handleSearchCommand = makeCode(Tabmix.changeCode(searchbar, "searchbar.handleSearchCommand")._replace(
-        Tabmix.isVersion(1270) ?
-          "where = lazy.BrowserUtils.whereToOpenLink(aEvent, false, true);" :
-          'where = whereToOpenLink(aEvent, false, true);',
-        '$&' + $LF +
-        'let forceNewTab = where == "current" && Services.prefs.getBoolPref("browser.search.openintab");' + $LF +
-        'if (forceNewTab) {' + $LF +
-        '  where = "tab";' + $LF +
-        '}'
-      ));
-    }
-
     if (!change_doSearch) {
       return;
     }

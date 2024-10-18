@@ -55,7 +55,7 @@ Tabmix.Sanitizer = {
   // XXX need to add test if we fail to delete then alert the user or ....?
   sanitize: function TMP_SN_sanitize() {
     // get file references
-    var sessionFile = TabmixSvc.FileUtils.getDir("ProfD", []);
+    var sessionFile = FileUtils.getDir("ProfD", []);
     var sessionFileBackup = sessionFile.clone();
     var sessionsBackupDir = sessionFile.clone();
     sessionFile.append("session.rdf");
@@ -309,9 +309,9 @@ TabmixSessionManager = {
     }
     this._inited = true;
 
-    TabmixChromeUtils.defineLazyModuleGetters(TabmixSessionManager, {
-      TabState: "resource:///modules/sessionstore/TabState.jsm",
-      TabStateCache: "resource:///modules/sessionstore/TabStateCache.jsm",
+    ChromeUtils.defineESModuleGetters(TabmixSessionManager, {
+      TabState: "resource:///modules/sessionstore/TabState.sys.mjs",
+      TabStateCache: "resource:///modules/sessionstore/TabStateCache.sys.mjs",
     });
 
     // just in case Tabmix.tablib isn't init yet
@@ -876,7 +876,7 @@ TabmixSessionManager = {
   },
 
   get profileDir() {
-    return TabmixSvc.FileUtils.getDir("ProfD", []);
+    return FileUtils.getDir("ProfD", []);
   },
 
   getAnonymousId() {
@@ -3344,7 +3344,6 @@ TabmixSessionManager = {
     // check if we restore all tabs
     if (typeof this.tabsToLoad == "number" && --this.tabsToLoad === 0) {
       delete this.tabsToLoad;
-      TabmixTabbar.updateBeforeAndAfter(); // just in case (we do it also in setTabTitle
       if (this.enableBackup) {
         var result = this.saveOneWindow(this.gSessionPath[0], "windowbackup");
         if (result > 0)

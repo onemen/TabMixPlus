@@ -2,8 +2,6 @@
 
 const EXPORTED_SYMBOLS = ["LinkNodeUtils"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-
 const ATTRIBS = ["href", "onclick", "onmousedown", "rel", "role"];
 
 const LinkNodeUtils = {

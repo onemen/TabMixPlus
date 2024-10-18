@@ -189,7 +189,6 @@ var TabmixTabbar = {
     window.setTimeout(_currentVisible => {
       if (_currentVisible)
         gBrowser.ensureTabIsVisible(gBrowser.selectedTab);
-      this.updateBeforeAndAfter();
     }, 50, currentVisible);
   },
 
@@ -258,99 +257,17 @@ var TabmixTabbar = {
       this.setFirstTabInRow();
       if (!tabBar.hasAttribute("multibar")) {
         tabBar.arrowScrollbox._enterVerticalMode();
-        this.updateBeforeAndAfter();
       } else {
         this._waitAfterMaximized = window.windowState == window.STATE_MAXIMIZED;
         setTimeout(() => {
           this._waitAfterMaximized = false;
           Tabmix.tabsUtils.updateVerticalTabStrip();
-          this.updateBeforeAndAfter();
         }, 0);
       }
     }
     /// maybe we cad add this to the popupshowing / or as css rule ?
     Tabmix.setItem("allTabsMenu-allTabsView", "position",
       window.windowState != window.STATE_MAXIMIZED || this.position == 1 ? "start_before" : "after_end");
-  },
-
-  // Update positional attributes when we are in multi-row mode
-  updateBeforeAndAfter: function TMP_updateBeforeAndAfter(onlyHoverAtt) {
-    if (Tabmix.isVersion(1100)) {
-      return;
-    }
-    let tabBar = gBrowser.tabContainer;
-    let multibar = tabBar.hasAttribute("multibar");
-
-    /** @type {number} */
-    let tabRow;
-    /** @type {number} */
-    let topY = 0;
-
-    let numPinnedTabs = gBrowser._numPinnedTabs;
-    /** @type {PrivateFunctionsNS.TabmixTabbar._updateAtt} */
-    let updateAtt = function(tab, type, attrib, visible) {
-      // special case is when scrollButtonsMode is in one row and
-      // selected or hovered tab is last pinned or first non-pinned tab
-      let isSpecialTab = function() {
-        if (!tab)
-          return false;
-        if (/^before/.test(attrib))
-          return tab._tPos == numPinnedTabs - 1 ? "before" : false;
-        return tab._tPos == numPinnedTabs ? "after" : false;
-      };
-      /** @type {PrivateFunctionsNS.TabmixTabbar._getAttVal} */
-      let getAttVal = function(val, hoverAttr) {
-        if (!isSpecialTab() || hoverAttr && visible && /selected/.test(attrib))
-          return val;
-        return val ? "special" : val;
-      };
-
-      let removed = "tabmix-removed-" + attrib;
-      let oldTab = Tabmix.tabsUtils._tabmixPositionalTabs[type];
-      if (oldTab && tab != oldTab) {
-        oldTab.removeAttribute(removed);
-      }
-      Tabmix.tabsUtils._tabmixPositionalTabs[type] = tab;
-      if (tab && (multibar || tab.hasAttribute(removed) || isSpecialTab())) {
-        let sameRow = multibar ? tabRow == Tabmix.tabsUtils.getTabRowNumber(tab, topY) || null : true;
-        Tabmix.setItem(tab, removed, !sameRow || null);
-        Tabmix.setItem(tab, attrib, getAttVal(sameRow, true));
-        if (visible) {
-          Tabmix.setItem(tab, attrib + "-visible", getAttVal(sameRow));
-        }
-      }
-    };
-
-    if (tabBar._hoveredTab && !tabBar._hoveredTab.closing) {
-      if (multibar) {
-        topY = Tabmix.tabsUtils.topTabY;
-        tabRow = Tabmix.tabsUtils.getTabRowNumber(tabBar._hoveredTab, topY);
-      }
-      updateAtt(tabBar._beforeHoveredTab, "beforeHoveredTab", "beforehovered");
-      updateAtt(tabBar._afterHoveredTab, "afterHoveredTab", "afterhovered");
-    }
-
-    if (onlyHoverAtt)
-      return;
-
-    let selected = gBrowser._switcher ? gBrowser._switcher.visibleTab : gBrowser.selectedTab;
-    let prev = null, next = null;
-    if (!selected.closing) {
-      let visibleTabs = Tabmix.visibleTabs.tabs;
-      if (!visibleTabs.length)
-        return;
-      let selectedIndex = visibleTabs.indexOf(selected);
-      if (selectedIndex > 0)
-        prev = visibleTabs[selectedIndex - 1];
-      next = tabBar._afterSelectedTab;
-    }
-
-    if (multibar) {
-      topY = topY || Tabmix.tabsUtils.topTabY;
-      tabRow = Tabmix.tabsUtils.getTabRowNumber(selected, topY);
-    }
-    updateAtt(prev, "beforeSelectedTab", "beforeselected", true);
-    updateAtt(next, "afterSelectedTab", "afterselected", true);
   },
 
   inSameRow: function TMP_inSameRow(tab1, tab2) {
@@ -447,11 +364,7 @@ Tabmix.tabsUtils = {
 
   // get all tabs without _removingTabs
   getTabsCount(num = gBrowser.tabs.length) {
-    const removingTabs = Tabmix.isVersion(1100) ?
-      gBrowser._removingTabs.size :
-      // @ts-expect-error - not in use
-      gBrowser._removingTabs.length;
-    return num - removingTabs;
+    return num - gBrowser._removingTabs.size;
   },
 
   events: ["dblclick", "click"],
@@ -612,7 +525,7 @@ Tabmix.tabsUtils = {
   },
 
   updateVerticalTabStrip({reset = false} = {}) {
-    if (this.isVerticalTabBar || window.gInPrintPreviewMode ||
+    if (this.isVerticalTabBar ||
         this.inDOMFullscreen || FullScreen._isChromeCollapsed ||
         TabmixTabbar._waitAfterMaximized ||
         !Tabmix.tabsUtils.visible && TabmixTabbar.visibleRows == 1)
@@ -890,10 +803,7 @@ Tabmix.tabsUtils = {
           if (tabBar._lastTabClosedByMouse) {
             tabBar._expandSpacerBy(tabBar._scrollButtonWidth);
           }
-          const removingTabs = Tabmix.isVersion(1100) ?
-            gBrowser._removingTabs :
-            Array.from(gBrowser._removingTabs);
-          for (let tab of removingTabs) {
+          for (let tab of gBrowser._removingTabs) {
             gBrowser.removeTab(tab);
           }
           tabBar._positionPinnedTabs();
@@ -1071,32 +981,12 @@ Tabmix.tabsUtils = {
     // we update tab-block-margin dynamically by calling updateProtonValues
     // every time TabmixTabbar.visibleRows setter changed
 
-    // 86: @supports -moz-bool-pref("browser.proton.tabs.enabled") --proton-tab-block-margin: 2px;
-    // 87-88: @supports -moz-bool-pref("browser.proton.tabs.enabled") --proton-tab-block-margin: 4px;
-    // 89-90: @media (-moz-proton) --proton-tab-block-margin: 4px;
-    // 91: no @media --tab-block-margin: 4px;
-    const blockMargin = Object.entries({
-      86: {name: "--proton-tab-block-margin", val: "2px", margin: "1px"},
-      87: {name: "--proton-tab-block-margin", val: "4px", margin: "3px"},
-      91: {name: "--tab-block-margin", val: "4px", margin: "3px"},
-    }).reduce((acc, [version, val]) => {
+    // 91+: no @media --tab-block-margin: 4px;
+    const blockMargin = Object.entries({91: {name: "--tab-block-margin", val: "4px", margin: "3px"},}).reduce((acc, [version, val]) => {
       return Tabmix.isVersion(Number(version) * 10) ? val : acc;
     }, {name: "", val: "", margin: ""});
 
-    const protonPrefVal = Services.prefs.getBoolPref("browser.proton.tabs.enabled", false);
-    const isEnabled = () => {
-      if (!Tabmix.isVersion(890)) {
-        // only use the pref value from the time the browser start
-        // it's in use by: @supports -moz-bool-pref("browser.proton.tabs.enabled")
-        return protonPrefVal;
-      }
-      if (!Tabmix.isVersion(910)) {
-        return Services.prefs.getBoolPref("browser.proton.enabled", false);
-      }
-      return true;
-    };
-
-    const _protonValues = {...blockMargin, enabled: isEnabled()};
+    const _protonValues = {...blockMargin, enabled: true};
     Object.defineProperty(Tabmix.tabsUtils, "protonValues", {
       configurable: true,
       enumerable: true,
@@ -1121,7 +1011,7 @@ Tabmix.bottomToolbarUtils = {
   get toolbox() {return document.getElementById("tabmix-bottom-toolbox");},
 
   init() {
-    if (TabmixSvc.isG3Waterfox) {
+    if (TabmixSvc.isWaterfox) {
       return;
     }
 
@@ -1186,7 +1076,7 @@ Tabmix.bottomToolbarUtils = {
 
   resizeObserver(elementId = "browser", isCustomizing = false) {
     let observe = TabmixTabbar.position === 1;
-    if (!observe || TabmixSvc.isG3Waterfox) {
+    if (!observe || TabmixSvc.isWaterfox) {
       if (this._observing.size) {
         this._observing.clear();
         this._resizeObserver?.disconnect();
@@ -1314,8 +1204,7 @@ window.gTMPprefObserver = {
       if (condition)
         this.OBSERVING.push(pref);
     };
-    addObserver(TabmixSvc.sortByRecentlyUsed, true);
-    addObserver("browser.proton.enabled", Tabmix.isVersion(890));
+    addObserver("browser.ctrlTab.sortByRecentlyUsed", true);
 
     try {
       // add Observer
@@ -1654,7 +1543,7 @@ window.gTMPprefObserver = {
       case "extensions.tabmix.newTabButton.position":
         this.changeNewTabButtonSide(Services.prefs.getIntPref(prefName));
         break;
-      case TabmixSvc.sortByRecentlyUsed:
+      case "browser.ctrlTab.sortByRecentlyUsed":
       case "extensions.tabmix.lasttab.tabPreviews":
       case "extensions.tabmix.lasttab.respondToMouseInTabList":
       case "extensions.tabmix.lasttab.showTabList":
@@ -1689,7 +1578,6 @@ window.gTMPprefObserver = {
               gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
           }
         }
-        TabmixTabbar.updateBeforeAndAfter();
         break;
       }
       case "extensions.tabmix.pinnedTabScroll":
@@ -1947,30 +1835,6 @@ window.gTMPprefObserver = {
       }, {capture: true, once: true});
     }
 
-    if (!Tabmix.isVersion(860)) {
-      this.insertRule(
-        `#tabmix-closedTabs-dropmarker > .toolbarbutton-icon {
-          list-style-image: url(chrome://global/skin/icons/arrow-dropdown-12.svg);
-          padding-inline: 2px;
-          padding-block: calc(var(--toolbarbutton-inner-padding) + (16px - 12px) / 2);
-          width: calc(2 * 2px + 12px);
-        }`
-      );
-
-      this.insertRule(
-        `toolbarpaletteitem[place="menu-panel"] > .toolbaritem-combined-buttons[id^="tabmix"] {
-          -moz-box-flex: 1;
-          margin: 0;
-        }`
-      );
-
-      this.insertRule(
-        `toolbarpaletteitem[place="menu-panel"] > .toolbaritem-combined-buttons[id^="tabmix"] > toolbarbutton {
-          max-width: 29em !important;
-        }`
-      );
-    }
-
     if (Tabmix.isVersion(1310)) {
       this.insertRule(
         `#tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox) {
@@ -2013,78 +1877,22 @@ window.gTMPprefObserver = {
 
     this.dynamicProtonRules();
     this.toolbarbuttonTopMargin();
-    this.overflowIndicator();
-    this.dynamicRulesForVersion();
   },
 
   dynamicProtonRules() {
-    // since Firefox 89 the pref name is "browser.tabs.enabled",
-    // but we don't need to use it here, we use @media (-moz-proton) instead
-    const protonPrefVal = Services.prefs.getBoolPref("browser.proton.tabs.enabled", false);
-    let newRule;
-    if (!Tabmix.isVersion(880)) {
-      newRule = `#tabmix-tabs-closebutton[tabmix-fill-opacity] > .toolbarbutton-icon {
-        padding: ${protonPrefVal ? 7.4 : 4}px 4px !important;
-      }`;
-      this.insertRule(newRule);
-      if (protonPrefVal) {
-        this.insertRule(`#tabmix-scrollbox { margin-top: 4px }`);
-      }
-    }
-
-    if (!Tabmix.isVersion(910)) {
-      newRule =
-     `#tabmix-scrollbox::part(scrollbutton-up),
-      #tabmix-scrollbox::part(scrollbutton-down) {
-        ${Tabmix.isVersion(860) ? `appearance: none;` : `-moz-appearance: none;`}
-        margin: 0 0 var(--tabs-navbar-shadow-size) !important;
-        padding: var(--tabmix-scrollbutton-padding) var(--toolbarbutton-inner-padding) !important;
-      }`;
-      if (Tabmix.isVersion(890)) {
-        this.insertRule(`@media not (-moz-proton) {${newRule}}`);
-      } else {
-        this.insertRule(newRule);
-      }
-
-      // reduce scroll button padding for compact tab without proton style
-      newRule =
-        `:root[uidensity=compact] #tabmix-scrollbox::part(scrollbutton-up),
-        :root[uidensity=compact] #tabmix-scrollbox::part(scrollbutton-down) {
-          padding-top: calc(var(--tabmix-scrollbutton-padding) - 1px) !important;
-          padding-bottom: calc(var(--tabmix-scrollbutton-padding) - 1px) !important;
-        }`;
-      if (Tabmix.isVersion(890)) {
-        this.insertRule(`@media not (-moz-proton) {${newRule}}`);
-      } else {
-        this.insertRule(newRule);
-      }
-    }
-
-    /**
-     * @param {string} rule
-     * @param {boolean} [noMedia]
-     */
-    const insertRule = (rule, noMedia) => {
-      if (Tabmix.isVersion(910) || noMedia) {
-        this.insertRule(rule);
-      } else {
-        this.insertRule(`@media (-moz-proton) {${rule}}`);
-      }
-    };
-
     // fix scroll buttons height when Waterfox userChrome enabled
     const reduceButtonHeight =
-      TabmixSvc.isG5Waterfox && Services.prefs.getBoolPref("userChrome.theme.enable", false);
+      TabmixSvc.isWaterfox && Services.prefs.getBoolPref("userChrome.theme.enable", false);
     const buttonsMarginBlock = reduceButtonHeight ? "-4px !important" : "0";
 
     if (TabmixSvc.isWaterfox) {
-      insertRule(
+      this.insertRule(
         `#main-window[uidensity=compact] #tabbrowser-tabs:not([secondarytext-unsupported]) .tab-label-container {
           height: 29px;
         }`);
     }
 
-    insertRule(
+    this.insertRule(
       `#tabmix-scrollbox::part(scrollbutton-up),
        #tabmix-scrollbox::part(scrollbutton-down) {
          appearance: none;
@@ -2096,252 +1904,62 @@ window.gTMPprefObserver = {
        }`
     );
 
-    insertRule(
+    this.insertRule(
       `#tabmix-scrollbox[flowing=multibar]::part(scrollbutton-up),
        #tabmix-scrollbox[flowing=multibar]::part(scrollbutton-down) {
          padding-inline: calc(var(--toolbarbutton-inner-padding) - 5px);
        }`
     );
 
-    // Bug 1705849 - Update toolbar icon fill colours
-    const fill = Tabmix.isVersion(890) ?
-      "var(--toolbarbutton-icon-fill)" :
-      "var(--lwt-toolbarbutton-icon-fill)";
-    newRule = `:root {--tabmix-scrollbox-button-fill: ${fill}}`;
-    this.insertRule(newRule);
-
-    // Bug 1699586 - De-duplicate default down arrow icon
-    const iconUrl = Tabmix.isVersion(910) ?
-      "url(chrome://global/skin/icons/arrow-down.svg)" :
-      "url(chrome://global/skin/icons/arrow-dropdown-16.svg)";
-    this.insertRule(`:root {--tabmix-scrollbutton-image: ${iconUrl}}`);
-
-    if (!Tabmix.isVersion(860)) {
-      newRule = `
-      #tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal] {
-        overflow: clip;
-        display: block;
+    const blockMargin = Tabmix.tabsUtils.protonValues;
+    const cssText = `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox >
+      .tabbrowser-tab:not(:hover, [pinned]) > .tab-stack > .tab-content > .tab-close-button {
+        padding-inline-start: 7px !important;
+        width: 24px !important;
       }`;
-      this.insertRule(newRule);
-      return;
+    if (TabmixSvc.isWaterfox) {
+      const styleSheet = Services.io.newURI("data:text/css," + encodeURIComponent(cssText));
+      const sss = Cc["@mozilla.org/content/style-sheet-service;1"].getService(
+        Ci.nsIStyleSheetService
+      );
+      sss.loadAndRegisterSheet(styleSheet, sss.USER_SHEET);
+    } else {
+      this.insertRule(cssText);
     }
 
-    const blockMargin = Tabmix.tabsUtils.protonValues;
-    if (Tabmix.isVersion(890)) {
-      /* overwrite rule from chrome/browser/skin/classic/browser/browser.css */
-      insertRule(
-        `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox >
-        .tabbrowser-tab:not(:hover) > .tab-stack > .tab-content > .tab-close-button {
-          padding-inline-start: 7px;
-          width: 24px;
-        }`
-      );
-
-      // for tabbrowser-arrowscrollbox top/bottom margin
-      insertRule(
-        `:root {
+    // for tabbrowser-arrowscrollbox top/bottom margin
+    this.insertRule(
+      `:root {
           --tabmix-multirow-margin: ${blockMargin.margin};
         }`
-      );
+    );
 
-      insertRule(
-        `#main-window[tabsintitlebar] #toolbar-menubar[autohide="true"][inactive="true"]:not([customizing="true"]) + #TabsToolbar {
+    this.insertRule(
+      `#main-window[tabsintitlebar] #toolbar-menubar[autohide="true"][inactive="true"]:not([customizing="true"]) + #TabsToolbar {
           --tabmix-multirow-margin: 0px;
         }`
-      );
+    );
 
-      TMP_tabDNDObserver._multirowMargin = parseInt(blockMargin.margin);
-    } else {
-      this.insertRule(
-        `:root {
-          --tabmix-multirow-margin: ${protonPrefVal ? blockMargin.margin : "0px"};
-        }`
-      );
-      TMP_tabDNDObserver._multirowMargin = protonPrefVal ? parseInt(blockMargin.margin) : 0;
-    }
+    TMP_tabDNDObserver._multirowMargin = parseInt(blockMargin.margin);
 
     // Firefox adds padding for single row when positionpinnedtabs is set.
     // padding-inline: var(--tab-shadow-max-size);
-    insertRule(
+    this.insertRule(
       `#tabbrowser-tabs:not([defaultScrollButtons])[orient=horizontal][positionpinnedtabs] > #tabbrowser-arrowscrollbox::part(scrollbox) {
         padding-inline: 0;
-      }`,
-      Tabmix.isVersion(860) && Services.prefs.getBoolPref("browser.proton.tabs.enabled", false)
+      }`
     );
   },
 
   toolbarbuttonTopMargin() {
     // adjust margin-top on toolbarbutton for multirow
-    if (Tabmix.isVersion(910)) {
-      const margin = Tabmix.isVersion(1280) ? "4px" : "3.5px";
-      this.insertRule(
-        `:root {
-          --tabmix-button-margin-top: ${margin};
-          --tabmix-button-margin-top-compact: ${margin};
+    const margin = Tabmix.isVersion(1280) ? "4px" : "3.5px";
+    this.insertRule(
+      `:root {
           --tabmix-button-margin-top-proton: ${margin};
           --tabmix-button-margin-top-proton-compact: ${margin};
         }`
-      );
-
-      if (Tabmix.isVersion(960)) {
-        this.insertRule(
-          `:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
-            margin-top: var(--tabmix-button-margin-top-proton) !important;
-          }`
-        );
-
-        this.insertRule(
-          `:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
-            margin-top: var(--tabmix-button-margin-top-proton-compact) !important;
-          }`
-        );
-      }
-    } else if (Tabmix.isVersion(890)) {
-      this.insertRule(
-        `:root {
-          --tabmix-button-margin-top: 2px;
-          --tabmix-button-margin-top-compact: 0;
-          --tabmix-button-margin-top-proton: 3.5px;
-          --tabmix-button-margin-top-proton-compact: 3.5px;
-        }`
-      );
-    } else {
-      this.insertRule(
-        `:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
-          margin-top: 2px !important;
-        }`
-      );
-      const proton = Tabmix.isVersion(860) &&
-        Services.prefs.getBoolPref("browser.proton.tabs.enabled", false);
-      this.insertRule(
-        `:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
-          margin-top: ${proton ? 2 : 0}px !important;
-        }`
-      );
-    }
-  },
-
-  overflowIndicator() {
-    if (!Tabmix.isFirstWindowInSession || !Tabmix.isVersion(890)) {
-      return;
-    }
-
-    let cssText =
-    `/* browser/themes/shared/tabs.inc.css */
-    /* Tab Overflow */
-    #tabmix-scrollbox[orient=vertical]::part(overflow-start-indicator),
-    #tabmix-scrollbox[orient=vertical]::part(overflow-end-indicator) {
-      display: none;
-    }
-
-    #tabmix-scrollbox:not([scrolledtostart])::part(overflow-start-indicator),
-    #tabmix-scrollbox:not([scrolledtoend])::part(overflow-end-indicator) {
-      width: 7px; /* The width is the sum of the inline margins */
-      background-image: radial-gradient(ellipse at bottom,
-                                        rgba(0,0,0,0.1) 0%,
-                                        rgba(0,0,0,0.1) 7.6%,
-                                        rgba(0,0,0,0) 87.5%);
-      background-repeat: no-repeat;
-      background-position: -3px;
-      border-left: .5px solid rgba(255,255,255,.2);
-      pointer-events: none;
-      position: relative;
-      z-index: 3; /* the selected tab's z-index + 1 */
-      border-bottom: .5px solid transparent;
-    }
-
-    /* original margin-inline: -.5px -6.5px; */
-    #tabmix-scrollbox:not([scrolledtostart])::part(overflow-start-indicator) {
-      margin-inline: -6.5px -.5px;
-    }
-
-    /* original margin-inline: -6.5px -.5px; */
-    #tabmix-scrollbox:not([scrolledtoend])::part(overflow-end-indicator) {
-      margin-inline: -.5px -6.5px;
-    }
-
-    ${Tabmix.isVersion(910) ? `` : `@media not (-moz-proton) {
-    #tabmix-scrollbox:not([scrolledtostart])::part(overflow-start-indicator),
-    #tabmix-scrollbox:not([scrolledtoend])::part(overflow-end-indicator) {
-      width: 18px;
-      background-image: url(chrome://browser/skin/tabbrowser/tab-overflow-indicator.png);
-      background-size: 17px 100%;
-      border-left: 1px solid;
-      border-image: linear-gradient(rgba(255,255,255,.2),
-                                    rgba(255,255,255,.2) calc(100% - 1px - var(--tabs-navbar-shadow-size)),
-                                    transparent calc(100% - 1px - var(--tabs-navbar-shadow-size)));
-      border-image-slice: 1;
-    }
-    } /*** END !proton ***/`}
-
-    ${Tabmix.isVersion(910) ? `` : `@media not (-moz-proton) {
-    #tabmix-scrollbox:not([scrolledtostart])::part(overflow-start-indicator) {
-      margin-inline: -1px -17px;
-    }
-
-    #tabmix-scrollbox:not([scrolledtoend])::part(overflow-end-indicator) {
-      margin-inline: -17px -1px;
-    }
-    }`}
-
-    #tabmix-scrollbox[scrolledtostart]::part(overflow-start-indicator),
-    #tabmix-scrollbox[scrolledtoend]::part(overflow-end-indicator) {
-      opacity: 0;
-    }
-
-    #tabmix-scrollbox::part(overflow-start-indicator),
-    #tabmix-scrollbox::part(overflow-end-indicator) {
-      transition: opacity 150ms ease;
-    }`;
-
-    const styleSheet = Services.io.newURI(
-      "data:text/css," + encodeURIComponent(cssText));
-
-    const sss = Cc['@mozilla.org/content/style-sheet-service;1']
-        .getService(Ci.nsIStyleSheetService);
-    sss.loadAndRegisterSheet(styleSheet, sss.AUTHOR_SHEET);
-  },
-
-  dynamicRulesForVersion() {
-    if (!Tabmix.isFirstWindowInSession) {
-      return;
-    }
-
-    // changed by bug 1754547 - Provide a @media query to target major platform/toolkits
-    const platform = Tabmix.isVersion(990) ? "-moz-platform" : "-moz-os-version";
-
-    let cssText = `
-    @media (-moz-windows-compositor) {
-      #TabsToolbar[multibar] .titlebar-buttonbox {
-        display: flex;
-      }
-
-      @media not (${platform}: windows-win7) {
-        @media not (${platform}: windows-win8) {
-          #TabsToolbar[multibar] toolbarbutton.titlebar-button {
-            padding-block: 12px;
-            align-self: flex-start;
-          }
-        }
-      }
-    }`;
-
-    if (TabmixSvc.isMac) {
-      // we can't use -moz-platform before Firefox 99
-      cssText = `
-      #TabsToolbar[tabmix-flowing="multibar"] .titlebar-buttonbox-container {
-        align-items: flex-start !important;
-        -moz-box-align: start !important; /* before Firefox 112 */
-        margin-top: calc((var(--tab-min-height_mlt) - 16px) / 2 + 3px);
-      }`;
-    }
-
-    const styleSheet = Services.io.newURI(
-      "data:text/css," + encodeURIComponent(cssText));
-
-    const sss = Cc['@mozilla.org/content/style-sheet-service;1']
-        .getService(Ci.nsIStyleSheetService);
-    sss.loadAndRegisterSheet(styleSheet, sss.USER_SHEET);
+    );
   },
 
   updateStyleAttributes() {
@@ -2402,7 +2020,6 @@ window.gTMPprefObserver = {
     // control with a different bold attribute
     if (isBold(attribValue) != isBold(currentAttrib)) {
       TabmixTabbar.updateScrollStatus();
-      TabmixTabbar.updateBeforeAndAfter();
     }
   },
 
@@ -2499,14 +2116,8 @@ window.gTMPprefObserver = {
   },
 
   setTabBarVisibility: function TMP_PO_setTabBarVisibility() {
-    if (
-      TabmixTabbar.hideMode !== 2 &&
-      (Tabmix.isVersion(1020) ?
-        gBrowser.visibleTabs.length > 1 :
-        Tabmix.tabsUtils.getTabsCount() > 1)
-    ) {
+    if (TabmixTabbar.hideMode !== 2 && gBrowser.visibleTabs.length > 1) {
       gBrowser.ensureTabIsVisible(gBrowser.selectedTab, false);
-      TabmixTabbar.updateBeforeAndAfter();
     }
   },
 
@@ -2891,21 +2502,16 @@ window.gTMPprefObserver = {
     function migrateCtrlTab(oldPrefName) {
       if (Services.prefs.prefHasUserValue(oldPrefName)) {
         let newPrefValue = Services.prefs.getBoolPref(oldPrefName);
-        if (Tabmix.isVersion(890)) {
-          if (Services.prefs.getBoolPref("browser.engagement.ctrlTab.has-used")) {
-            Services.prefs.setBoolPref(
-              "browser.ctrlTab.sortByRecentlyUsed",
-              newPrefValue
-            );
-          } else {
-            Services.prefs.setBoolPref(
-              "browser.ctrlTab.sortByRecentlyUsed",
-              false
-            );
-          }
+        if (Services.prefs.getBoolPref("browser.engagement.ctrlTab.has-used")) {
+          Services.prefs.setBoolPref(
+            "browser.ctrlTab.sortByRecentlyUsed",
+            newPrefValue
+          );
         } else {
-          Services.prefs.setBoolPref("browser.ctrlTab.recentlyUsedOrder",
-            newPrefValue);
+          Services.prefs.setBoolPref(
+            "browser.ctrlTab.sortByRecentlyUsed",
+            false
+          );
         }
         Services.prefs.clearUserPref(oldPrefName);
       }
@@ -2913,9 +2519,7 @@ window.gTMPprefObserver = {
     migrateCtrlTab("browser.ctrlTab.mostRecentlyUsed");
     migrateCtrlTab("extensions.tabmix.lasttab.handleCtrlTab");
     migrateCtrlTab("browser.ctrlTab.previews");
-    if (Tabmix.isVersion(890)) {
-      migrateCtrlTab("browser.ctrlTab.recentlyUsedOrder");
-    }
+    migrateCtrlTab("browser.ctrlTab.recentlyUsedOrder");
     // 2021-08-18
     if (Services.prefs.prefHasUserValue("extensions.tabmix.openTabNext")) {
       // insertAfterCurrent override insertRelatedAfterCurrent, set it only if
@@ -3117,7 +2721,7 @@ TabmixProgressListener = {
             Tabmix.prefs.getBoolPref("unreadTabreload") &&
             tab.hasAttribute("visited") &&
             !tab.hasAttribute("dontremovevisited") &&
-            (TabmixSvc.version(1190) ?
+            (Tabmix.isVersion(1190) ?
               !tab.hasAttribute("visuallyselected") :
               tab.getAttribute("visuallyselected") !== "true")
           )

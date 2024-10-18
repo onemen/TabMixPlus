@@ -181,20 +181,6 @@ Tabmix.multiRow = {
         Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")._replace(
           'if (this.isRTLScrollbox',
           '$& && !this.isMultiRow', {flags: "g"}
-        )._replace(
-          /if\s*\(\n*\s*leftOrTopElement/,
-          `if (this.isMultiRow) {
-                      const _scrollboxPaddingLeft = typeof scrollboxPaddingLeft === "number" ? scrollboxPaddingLeft : 0;
-                      const _scrollboxPaddingRight = typeof scrollboxPaddingRight === "number" ? scrollboxPaddingRight : 0;
-                      if (leftOrTopElement &&
-                          leftOrTopEdge(leftOrTopElement) >= leftOrTopEdge(this.scrollbox) + _scrollboxPaddingLeft) {
-                        scrolledToStart = true;
-                      } else if (rightOrBottomElement &&
-                                 rightOrBottomEdge(rightOrBottomElement) <= rightOrBottomEdge(this.scrollbox) - _scrollboxPaddingRight + 2) {
-                        scrolledToEnd = true;
-                      }
-                    } else $&`,
-          {check: !Tabmix.isVersion(1020)}
         ).toCode();
 
         Tabmix.changeCode(this, "scrollbox.lineScrollAmount", {getter: true})._replace(

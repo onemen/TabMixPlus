@@ -65,7 +65,7 @@ html|input[type="color"] {
 }
 
 .dialog-button[dlgtype="extra2"] {
-  -moz-appearance: none;
+  appearance: none;
   border: 1px solid transparent;
 }
 

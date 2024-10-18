@@ -6,16 +6,19 @@
 
 const EXPORTED_SYMBOLS = ["ScriptsLoader"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 
 const lazy = {};
 
+ChromeUtils.defineESModuleGetters(lazy, {
+  CustomizableUI: "resource:///modules/CustomizableUI.sys.mjs",
+  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
+  SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
+});
+
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-  CustomizableUI: "resource:///modules/CustomizableUI.jsm",
+  //
   Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.jsm",
-  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
-  SessionStore: "resource:///modules/sessionstore/SessionStore.jsm",
 });
 
 function isVersion(versionNo) {
@@ -30,6 +33,7 @@ const isVersion119 = isVersion(1190);
 const CSS_URLS = [
   isVersion119 ? "chrome://tabmixplus/content/overlay/browser.css" : "chrome://tabmixplus/content/overlay/browser_before_119.css",
   "chrome://tabmixplus/content/overlay/multirow.css",
+  "chrome://tabmixplus/skin/general.css",
   "chrome://tabmixplus/skin/tab.css",
   "chrome://tabmix-os/skin/browser.css",
 ];

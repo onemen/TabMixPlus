@@ -2,10 +2,7 @@
 /* eslint no-var: 2, prefer-const: 2, no-new-func: 0, class-methods-use-this: 0 */
 "use strict";
 
-/** @type {MockedGeckoTypes.Services} */ // @ts-expect-error - see general.d.ts
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-
-const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
+const {AppConstants} = ChromeUtils.importESModule("resource://gre/modules/AppConstants.sys.mjs");
 const {ChromeManifest} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
 const {Overlays} = ChromeUtils.import("chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
 
@@ -750,7 +747,7 @@ class PrefPane extends MozXULElement {
 
   /** @type {PrefPaneClass["DeferredTask"]} */
   get DeferredTask() {
-    const {DeferredTask} = TabmixChromeUtils.import("resource://gre/modules/DeferredTask.jsm");
+    const {DeferredTask} = ChromeUtils.importESModule("resource://gre/modules/DeferredTask.sys.mjs");
     Object.defineProperty(this, "DeferredTask", {
       configurable: true,
       enumerable: true,

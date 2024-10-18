@@ -47,10 +47,12 @@ var TMP_Places = {
     this._titlefrombookmark = Tabmix.prefs.getBoolPref("titlefrombookmark");
 
     /** @type {PlacesEventType[]} */
-    this.listeners = ["bookmark-added", "bookmark-removed"];
-    if (Tabmix.isVersion(950)) {
-      this.listeners.push("bookmark-title-changed", "bookmark-url-changed");
-    }
+    this.listeners = [
+      "bookmark-added",
+      "bookmark-removed",
+      "bookmark-title-changed",
+      "bookmark-url-changed",
+    ];
 
     this.contextMenu.toggleEventListener(true);
 
@@ -84,8 +86,7 @@ var TMP_Places = {
       return;
 
     var aMenuPopup = aEvent.target;
-    // "goPopup" replace by "historyMenuPopup" on Firefox 95
-    const ids = ["goPopup", "historyMenuPopup", "appmenu_historyMenupopup"];
+    const ids = ["historyMenuPopup", "appmenu_historyMenupopup"];
     if (!ids.includes(aMenuPopup.id)) {
       return;
     }
@@ -113,7 +114,6 @@ var TMP_Places = {
 
   idsMap: {
     "PanelUI-historyItems": "history",
-    goPopup: "history",
     historyMenuPopup: "history",
     bookmarksMenuPopup: "bookmarks",
     BMB_bookmarksPopup: "bookmarks",
@@ -267,7 +267,6 @@ var TMP_Places = {
     /** @type {SessionStoreNS.TabData[]} */
     let tabsData = [];
     let savePrincipal = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
-    const loadURIMethod = Tabmix.isVersion(1120) ? "fixupAndLoadURIString" : "loadURI";
     bmGroup.forEach((url, i) => {
       let aTab = reuseTabs[i];
       if (aTab) {
@@ -275,7 +274,7 @@ var TMP_Places = {
           const browser = aTab.linkedBrowser;
           try {
             browser.userTypedValue = url;
-            browser[loadURIMethod](url, {
+            browser.fixupAndLoadURIString(url, {
               loadFlags: Ci.nsIWebNavigation.LOAD_FLAGS_NONE,
               triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
             });
@@ -295,14 +294,13 @@ var TMP_Places = {
         tabPos = aTab._tPos < index ? index - 1 : index;
         gBrowser.moveTabTo(aTab, tabPos);
       } else {
-        let oa = Tabmix.isVersion(860) ? E10SUtils.predictOriginAttributes({window}) : {};
         let preferredRemoteType = E10SUtils.getRemoteTypeForURI(
           url,
           gMultiProcessBrowser,
           gFissionBrowser,
           E10SUtils.DEFAULT_REMOTE_TYPE,
           null,
-          oa
+          E10SUtils.predictOriginAttributes({window})
         );
         let params = {
           skipAnimation: multiple,
@@ -341,11 +339,7 @@ var TMP_Places = {
       aTab.initialize();
     });
 
-    if (Tabmix.isVersion(1110)) {
-      gBrowser.tabContainer._invalidateCachedTabs();
-    } else {
-      gBrowser._invalidateCachedTabs();
-    }
+    gBrowser.tabContainer._invalidateCachedTabs();
 
     // focus the first tab if prefs say to
     if (tabToSelect) {
@@ -532,7 +526,6 @@ var TMP_Places = {
     }
     this._tabTitleChanged = false;
     TabmixTabbar.updateScrollStatus();
-    TabmixTabbar.updateBeforeAndAfter();
     if (this.currentTab) {
       let tabstrip = gBrowser.tabContainer.arrowScrollbox;
       if (!TabmixTabbar.isMultiRow) {
@@ -554,9 +547,6 @@ var TMP_Places = {
     // Start observing bookmarks if needed.
     if (!this._hasBookmarksObserver) {
       try {
-        if (!Tabmix.isVersion(1120)) {
-          PlacesUtils.bookmarks.addObserver(this);
-        }
         this.handlePlacesEvents = this.handlePlacesEvents.bind(this);
         PlacesUtils.observers.addListener(
           this.listeners,
@@ -571,9 +561,6 @@ var TMP_Places = {
 
   stopObserver: function TMP_PC_stopObserver() {
     if (this._hasBookmarksObserver) {
-      if (!Tabmix.isVersion(1120)) {
-        PlacesUtils.bookmarks.removeObserver(this);
-      }
       PlacesUtils.observers.removeListener(
         this.listeners,
         this.handlePlacesEvents
@@ -753,11 +740,6 @@ var TMP_Places = {
   onItemVisited() {},
   onItemMoved() {},
 
-  /** DEPRECATED **/
-  getTabFixedTitle() {
-    Tabmix.log('this function was DEPRECATED and removed since 2013');
-  },
-
   contextMenu: {
     toggleEventListener(enable) {
       const eventListener = enable ? "addEventListener" : "removeEventListener";
@@ -855,8 +837,7 @@ Tabmix.onContentLoaded = {
       '    aTab.setAttribute("_lockedAppTabs", "true");' +
       '  }' +
       '  $&' +
-      '  TabmixTabbar.updateScrollStatus();' +
-      '  TabmixTabbar.updateBeforeAndAfter();'
+      '  TabmixTabbar.updateScrollStatus();'
     ).toCode();
   },
 
@@ -897,29 +878,13 @@ Tabmix.onContentLoaded = {
   },
 
   change_utilityOverlay() {
-    if (Tabmix.isVersion(960) || Tabmix.isVersion(916, "esr") || Tabmix.isVersion({wf: "91.6.0"})) {
-      //  Bug 1742801 - move whereToOpenLink and getRootEvent implementations into BrowserUtils
-      //  Bug 1742889 - Rewrite consumers of whereToOpenLink to use BrowserUtils.whereToOpenLink
-      if (!TabmixSvc.whereToOpenLinkChanged) {
-        TabmixSvc.whereToOpenLinkChanged = true;
-        this.change_whereToOpenLink(BrowserUtils);
-      }
-      Tabmix.whereToOpenLink = BrowserUtils.whereToOpenLink.bind(BrowserUtils);
-    } else {
-      this.change_whereToOpenLink(window);
-      Tabmix.whereToOpenLink = window.whereToOpenLink.bind(window);
+    //  Bug 1742801 - move whereToOpenLink and getRootEvent implementations into BrowserUtils
+    //  Bug 1742889 - Rewrite consumers of whereToOpenLink to use BrowserUtils.whereToOpenLink
+    if (!TabmixSvc.whereToOpenLinkChanged) {
+      TabmixSvc.whereToOpenLinkChanged = true;
+      this.change_whereToOpenLink(BrowserUtils);
     }
-
-    /** @type {PrivateFunctionsNS.onContentLoaded._getTargetWindow} */
-    function getTargetWindow(params = {}) {
-      if (Tabmix.isVersion(1120)) {
-        return window.URILoadingHelper.getTargetWindow(window, params);
-      }
-      if (Tabmix.isVersion(980)) {
-        return window.getTopWin(params);
-      }
-      return window.getTopWin(params.skipPopups);
-    }
+    Tabmix.whereToOpenLink = BrowserUtils.whereToOpenLink.bind(BrowserUtils);
 
     /** @type {PrivateFunctionsNS.onContentLoaded._getWindow} */
     function getWindow(where, params = {}) {
@@ -929,7 +894,7 @@ Tabmix.onContentLoaded = {
       if (where == "current" && params.targetBrowser) {
         w = params.targetBrowser.ownerGlobal;
       } else {
-        w = getTargetWindow({forceNonPrivate});
+        w = window.URILoadingHelper.getTargetWindow(window, {forceNonPrivate});
       }
 
       if (w && where == "window" && !Tabmix.isNewWindowAllow(params.private)) {
@@ -939,7 +904,7 @@ Tabmix.onContentLoaded = {
       // We don't want to open tabs in popups, so try to find a non-popup window in
       // that case.
       if ((where == "tab" || where == "tabshifted") && w && !w.toolbar.visible) {
-        w = getTargetWindow({
+        w = window.URILoadingHelper.getTargetWindow(window, {
           skipPopups: true,
           forceNonPrivate,
         });
@@ -1005,5 +970,5 @@ Tabmix.onContentLoaded = {
 };
 
 if (typeof E10SUtils !== "object") {
-  TabmixChromeUtils.defineLazyModuleGetters(this, {E10SUtils: "resource://gre/modules/E10SUtils.jsm"});
+  ChromeUtils.defineESModuleGetters(this, {E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs"});
 }

@@ -19,8 +19,8 @@ const callExpressionDefinitions = [
 const callExpressionMultiDefinitions = [
   "TabmixChromeUtils.defineLazyModuleGetters(this,",
   "TabmixChromeUtils.defineLazyModuleGetters(globalThis,",
-  "TabmixChromeUtils.defineLazyGetter(this,",
-  "TabmixChromeUtils.defineLazyGetter(globalThis,",
+  "ChromeUtils.defineLazyGetter(this,",
+  "ChromeUtils.defineLazyGetter(globalThis,",
 ];
 
 /**

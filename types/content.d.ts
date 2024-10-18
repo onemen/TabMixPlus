@@ -19,8 +19,6 @@ type ClickJSONData = {
   originPrincipal: nsIPrincipal;
   originStoragePrincipal: nsIPrincipal;
   tabmixContentClick: ContentClickResult;
-  /** @deprecated - used before Firefox 89 */
-  allowMixedContent: unknown;
   globalHistoryOptions: {triggeringSponsoredURL: string};
 };
 type LinkNode = ContentClickLinkElement | WrappedNode | null;
@@ -64,7 +62,6 @@ declare namespace TabmixClickEventHandlerNS {
   function handleEvent(event: ContentEvent): void;
   function getLinkData(event: ContentEvent): ContentClickLinkData;
   function contentAreaClick(event: ContentEvent, linkData: ContentClickLinkData): void;
-  function _hrefAndLinkNodeForClickEvent(event: ContentEvent): ContentClickLinkData;
 }
 
 declare namespace ContextMenuHandlerNS {

@@ -3,9 +3,7 @@
 }
 
 shortcut {
-  /* before Firefox 112 */
   flex-direction: column;
-  -moz-box-orient: vertical;
 }
 
 .shortcut-content {

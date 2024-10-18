@@ -5,16 +5,11 @@
 // This is loaded into all XUL windows. Wrap in a block to prevent
 // leaking to window scope.
 {
-  ChromeUtils.defineModuleGetter(
-    this,
-    "TabmixSvc",
-    "chrome://tabmix-resource/content/TabmixSvc.jsm"
-  );
-  TabmixChromeUtils.defineLazyGetter(this, "shortcutKeyMapPromise", async() => {
-    const {ExtensionShortcutKeyMap} = TabmixChromeUtils.import(
-      "resource://gre/modules/ExtensionShortcuts.jsm"
+  ChromeUtils.defineLazyGetter(this, "shortcutKeyMapPromise", async() => {
+    const {ExtensionShortcutKeyMap} = ChromeUtils.importESModule(
+      "resource://gre/modules/ExtensionShortcuts.sys.mjs"
     );
-    const {AddonManager} = TabmixChromeUtils.import("resource://gre/modules/AddonManager.jsm");
+    const {AddonManager} = ChromeUtils.importESModule("resource://gre/modules/AddonManager.sys.mjs");
     const shortcutKeyMap = new ExtensionShortcutKeyMap();
     const addons = await AddonManager.getAddonsByTypes(["extension"]);
     await shortcutKeyMap.buildForAddonIds(addons.map(addon => addon.id));
@@ -26,10 +21,6 @@
    *  @returns {Promise<string[] | null>}
    */
   const getDuplicateShortcutAddonsName = async shortcutString => {
-    if (!TabmixSvc.version(900)) {
-      return null;
-    }
-
     const shortcutKeyMap = await shortcutKeyMapPromise;
     if (shortcutKeyMap.has(shortcutString)) {
       return [...shortcutKeyMap.get(shortcutString).values()].map(addon => addon.addonName);
@@ -236,7 +227,7 @@
       if (usedKey) {
         const msg = (box.getAttribute("inuse") + ":\n" + usedKey).split("\n");
         for (let i = 0, l = msg.length; i < l; i++) {
-          // Firefox code in ExtensionShortcuts.jsm buildKey set oncommand to "//""
+          // Firefox code in ExtensionShortcuts.sys.mjs buildKey set oncommand to "//""
           if (msg[i] === "//") {
             getDuplicateShortcutAddonsName(shortcut).then(names => {
               (names || [box.getAttribute("otherExtension")]).forEach(addDescription);

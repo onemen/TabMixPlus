@@ -2,16 +2,18 @@
 
 const EXPORTED_SYMBOLS = ["TabmixContentClick"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 
 const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  ClickHandlerParent: "resource:///actors/ClickHandlerParent.sys.mjs",
+  E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
+  PlacesUIUtils: "resource:///modules/PlacesUIUtils.sys.mjs",
+  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
+});
+
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-  ClickHandlerParent: "resource:///actors/ClickHandlerParent.jsm",
-  E10SUtils: "resource://gre/modules/E10SUtils.jsm",
   LinkNodeUtils: "chrome://tabmix-resource/content/LinkNodeUtils.jsm",
-  PlacesUIUtils: "resource:///modules/PlacesUIUtils.jsm",
-  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.jsm",
 });
 
@@ -72,7 +74,7 @@ ContentClickInternal = {
         return;
       }
     } catch {
-      lazy.TabmixSvc.console.log("ClickHandlerParent.jsm is not included");
+      lazy.TabmixSvc.console.log("Unable to use ClickHandlerParent.sys.mjs");
       this.functions = [];
       return;
     }
@@ -138,21 +140,15 @@ ContentClickInternal = {
         triggeringRemoteType: this.manager.domProcess?.remoteType,
       };
 
-      if (!lazy.TabmixSvc.version(890)) {
-        params.allowMixedContent = json.allowMixedContent;
-      }
-
-      if (lazy.TabmixSvc.version(1050)) {
-        if (json.globalHistoryOptions) {
-          params.globalHistoryOptions = json.globalHistoryOptions;
-        } else {
-          params.globalHistoryOptions = {
-            triggeringSponsoredURL: browser.getAttribute("triggeringSponsoredURL"),
-            triggeringSponsoredURLVisitTimeMS: browser.getAttribute(
-              "triggeringSponsoredURLVisitTimeMS"
-            ),
-          };
-        }
+      if (json.globalHistoryOptions) {
+        params.globalHistoryOptions = json.globalHistoryOptions;
+      } else {
+        params.globalHistoryOptions = {
+          triggeringSponsoredURL: browser.getAttribute("triggeringSponsoredURL"),
+          triggeringSponsoredURLVisitTimeMS: browser.getAttribute(
+            "triggeringSponsoredURLVisitTimeMS"
+          ),
+        };
       }
 
       if (json.originAttributes.userContextId) {
@@ -210,7 +206,7 @@ ContentClickInternal = {
       return false;
     }
 
-    if (lazy.TabmixSvc.version(960) && !event.isTrusted && result.where != "current") {
+    if (!event.isTrusted && result.where != "current") {
       browser.ownerDocument.consumeTransientUserGestureActivation();
     }
 
@@ -228,10 +224,6 @@ ContentClickInternal = {
       hasValidUserGestureActivation: true,
       triggeringRemoteType: lazy.ClickHandlerParent.manager?.domProcess?.remoteType,
     };
-
-    if (!lazy.TabmixSvc.version(890)) {
-      params.allowMixedContent = event.allowMixedContent;
-    }
 
     let win = browser.ownerGlobal;
     win.openLinkIn(href, result.where, params);
@@ -1129,9 +1121,7 @@ ContentClickInternal = {
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
     const fixupURI = url => {
       try {
-        return lazy.TabmixSvc.version(830) ?
-          Services.uriFixup.getFixupURIInfo(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE).preferredURI :
-          Services.uriFixup.createFixupURI(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE);
+        return Services.uriFixup.getFixupURIInfo(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE).preferredURI;
       } catch {}
       return null;
     };

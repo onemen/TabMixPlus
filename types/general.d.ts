@@ -113,9 +113,6 @@ declare namespace MockedGeckoTypes {
     __tabmix_loadURI: boolean;
     __tabmix_fixupAndLoadURIString: boolean;
     tabmix_allowLoad?: boolean;
-
-    /** @deprecated removed since Firefox version 61 */
-    __SS_restoreState?: number;
   }
 
   interface Browser extends MockedExports.Browser {
@@ -267,20 +264,8 @@ declare namespace MockedGeckoTypes {
     __showbuttonTab?: BrowserTab;
     tabmix_updateCloseButtons: TabContainer["_updateCloseButtons"];
 
-    /** @deprecated removed by bug 1808661 in firefox 110 */
-    _afterHoveredTab: BrowserTab;
-    /** @deprecated removed by bug 1808661 in firefox 110 */
-    _afterSelectedTab: BrowserTab;
-    /** @deprecated removed by bug 1808661 in firefox 110 */
-    _beforeHoveredTab: BrowserTab;
-    /** @deprecated removed since Firefox version 112 */
-    _getDragTargetTab(event: DragEvent, isLink: boolean): BrowserTab | null;
-    /** @deprecated removed by bug 1771831 in firefox 106 */
-    _getDropEffectForTabDrag: (event: DragEvent) => string;
     /** @deprecated removed by bug 1923635 in firefox 133 */
     _getVisibleTabs: () => Tabs;
-    /** @deprecated removed by bug 1808661 in firefox 110 */
-    _hoveredTab: BrowserTab;
   }
 
   interface TabBox {
@@ -311,8 +296,6 @@ declare namespace MockedGeckoTypes {
   interface NotificationBox {
     PRIORITY_CRITICAL_HIGH: number;
     appendNotification(aType: string, aNotification: Notification, aButtons: NotificationButton[]): HTMLElement;
-    /** @deprecated removed since Firefox version 94 */
-    appendNotification(aLabel: string, aValue: string, aImage: string, aPriority: number, aButtons: NotificationButton[], aEventCallback?: (event: "removed" | "dismissed" | "disconnected") => void, aNotificationIs?: string): HTMLElement;
   }
 
   interface TabBrowser extends Browser {
@@ -322,8 +305,6 @@ declare namespace MockedGeckoTypes {
     };
     _blurTab: (tab: BrowserTab) => void;
     readonly _numPinnedTabs: number;
-    /** @deprecated removed by bug 1808784 in firefox 111 */
-    _invalidateCachedTabs: () => void;
     _lastRelatedTabMap: WeakMap<BrowserTab, BrowserTab>;
     _multiSelectedTabsSet: WeakSet<BrowserTab>;
     _removingTabs: Set<BrowserTab>;
@@ -582,11 +563,7 @@ declare namespace MockedGeckoTypes {
   }
 
   interface BookmarksService extends nsINavBookmarksService {
-    /** @deprecated removed since Firefox version 112 */
-    addObserver: (observer: nsINavBookmarksObserver) => void;
     fetch: (guidOrInfo: string | {uri?: string; title?: string; guid?: string}, onResult?: ((result: BookmarkInfo) => void) | null, options?: {concurrent?: boolean; includePath?: boolean; includeItemIds?: boolean}) => Promise<BookmarkInfo>;
-    /** @deprecated removed since Firefox version 112 */
-    removeObserver: (observer: nsINavBookmarksObserver) => void;
   }
 
   interface PlacesUtils {
@@ -787,8 +764,6 @@ interface UrlbarInput {
 interface UrlbarView {
   input: UrlbarInput;
   panel: HTMLElement;
-  /** @deprecated removed since Firefox version 108 */
-  getClosestSelectableElement: (element: EventTarget, options?: {byMouse: boolean}) => Element;
   getResultFromElement: (element: Element) => UrlbarResult;
   readonly oneOffSearchButtons: {selectedButton: HTMLButtonElement};
   selectedElement: Element;
@@ -798,8 +773,6 @@ interface gURLBar extends HTMLElement {
   _whereToOpen: (event?: Event & {__tabmix__whereToOpen?: WhereToOpen}) => WhereToOpen;
   focused: boolean;
   handleCommand(event?: Event): void;
-  /** @deprecated removed since Firefox version 83 */
-  handleCommand(event?: Event, openUILinkWhere?: boolean): void;
   select: () => void;
   setURI: (uri?: string, dueToTabSwitch?: boolean, dueToSessionRestore?: boolean, dontShowSearchTerms?: boolean, isSameDocument?: boolean) => void;
   untrimmedValue: string;
@@ -861,8 +834,6 @@ declare function readFromClipboard(): string;
 declare function setTimeout<T extends unknown[], U>(callback: (...args: T) => U, timeout: number, ...args: T): number;
 declare function urlSecurityCheck(aURL: string, aPrincipal: nsIPrincipal, aFlags?: nsIScriptSecurityManager): void;
 declare function undoCloseWindow(index: number): void;
-/** @deprecated removed from firefox on version 87 */
-declare function getHtmlBrowser(): HTMLElement;
 
 declare var CustomizableUI: CustomizableUI;
 declare var E10SUtils: E10SUtils;
@@ -917,10 +888,6 @@ declare var ctrlTab: {
 declare var gMultiProcessBrowser: boolean;
 declare var gNavToolbox: HTMLElement;
 declare var gReduceMotion: boolean;
-/** @deprecated removed from firefox on version 109 */
-declare var gTabBrowserBundle: {
-  GetStringFromName: (name: string) => string;
-};
 declare var HomePage: {
   get: (aWindow?: Window) => string;
 };
@@ -936,13 +903,6 @@ declare var nsContextMenu: {
 };
 declare var OpenInTabsUtils: {
   confirmOpenInTabs: (closedTabCount: number, aWindow?: Window) => boolean;
-};
-/** @deprecated - use IOUtils since Freifx version 86 */
-declare var OS: {
-  File: {
-    writeAtomic: (path: string, data: string, options: {encoding: string; tmpPath: string}) => Promise<void>;
-    read(path: string): Promise<string>;
-  };
 };
 declare var PageThumbs: {
   captureToCanvas: (aBrowser: MockedGeckoTypes.ChromeBrowser, aCanvas: MockedGeckoTypes.DNDCanvas, aArgs?: unknown, aSkipTelemetry?: boolean) => Promise<MockedGeckoTypes.DNDCanvas>;
@@ -998,20 +958,17 @@ declare namespace MockedExports {
     "@mozilla.org/widget/clipboardhelper;1": {getService(service: nsJSIID<nsIClipboardHelper>): nsIClipboardHelper};
   }
 
+  interface _nsIWebNavigation extends nsIWebNavigation {
+    sessionHistory: nsISupports & {legacySHistory: nsISHistory};
+  }
+
   interface Ci extends Omit<nsIXPCComponents_Interfaces, "nsIFilePicker"> {
-    nsIWebNavigation: nsJSIID<nsIWebNavigation> & {[key: string]: any};
+    nsIWebNavigation: nsJSIID<_nsIWebNavigation> & {[key: string]: any};
   }
 
   interface Cu {
     getGlobalForObject(obj: unknown): any;
   }
-}
-
-interface nsIDOMWindowUtils {
-  /** @deprecated removed since Firefox version 109 */
-  fullZoom: number;
-  /** @deprecated removed since Firefox version 109 */
-  screenPixelsPerCSSPixel: number;
 }
 
 interface XULElement {
@@ -1023,10 +980,8 @@ interface XULCommandDispatcher {
 }
 
 interface TabmixKnownModules {
-  "resource://gre/modules/AddonManager.jsm": {AddonManager: AddonManagerType};
   "resource://gre/modules/AddonManager.sys.mjs": {AddonManager: AddonManagerType};
-  "resource://gre/modules/AppConstants.jsm": {AppConstants: AppConstantsType};
-  "resource://gre/modules/PrivateBrowsingUtils.jsm": {PrivateBrowsingUtils: PrivateBrowsingUtils};
-  "resource://gre/modules/Services.jsm": {Services: MockedGeckoTypes.Services};
-  "resource:///modules/PlacesUIUtils.jsm": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
+  "resource://gre/modules/AppConstants.sys.mjs": {AppConstants: AppConstantsType};
+  "resource://gre/modules/PrivateBrowsingUtils.sys.mjs": {PrivateBrowsingUtils: PrivateBrowsingUtils};
+  "resource:///modules/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
 }

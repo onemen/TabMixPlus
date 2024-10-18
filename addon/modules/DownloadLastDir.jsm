@@ -4,9 +4,7 @@
 
 const EXPORTED_SYMBOLS = ["TabmixDownloadLastDir"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {DownloadLastDir} = TabmixChromeUtils.import("resource://gre/modules/DownloadLastDir.jsm");
+const {DownloadLastDir} = ChromeUtils.importESModule("resource://gre/modules/DownloadLastDir.sys.mjs");
 
 const TabmixDownloadLastDir = {
   _initialized: false,
@@ -15,7 +13,7 @@ const TabmixDownloadLastDir = {
       return;
     this._initialized = true;
 
-    // original DownloadLastDir.jsm query Ci.nsILoadContext on this.window,
+    // original DownloadLastDir.sys.mjs query Ci.nsILoadContext on this.window,
     // it fails if we already closed the tab that initialized the download
     // with TypeError: can't access dead object
     let descriptor = {

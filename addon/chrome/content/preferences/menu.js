@@ -4,13 +4,6 @@
 /** @type {MenuPane} */
 var gMenuPane = {
   init() {
-    if (!Tabmix.isVersion(880)) {
-      gPrefWindow.removeItemAndPrefById("pref_shareTabURL");
-    }
-    if (!Tabmix.isVersion(800)) {
-      gPrefWindow.removeItemAndPrefById("pref_moveTabOptions");
-    }
-
     MozXULElement.insertFTLIfNeeded("browser/menubar.ftl");
     MozXULElement.insertFTLIfNeeded("browser/tabContextMenu.ftl");
     MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
@@ -24,26 +17,19 @@ var gMenuPane = {
     /** @type {Functions["getById"]} */
     let $$ = id => browserWindow.document.getElementById(id);
 
-    if (Tabmix.isVersion(1050)) {
-      const [showBmkTab, showBmkTabs] = [$("showBmkTab"), $("showBmkTabs")];
-      document.l10n?.translateElements([showBmkTab, showBmkTabs]).then(() => {
-        showBmkTab.label = showBmkTab.label.replace("…", "");
-        showBmkTabs.label = showBmkTabs.label.replace("…", "");
-      });
-    }
+    const [showBmkTab, showBmkTabs] = [$("showBmkTab"), $("showBmkTabs")];
+    document.l10n?.translateElements([showBmkTab, showBmkTabs]).then(() => {
+      showBmkTab.label = showBmkTab.label.replace("…", "");
+      showBmkTabs.label = showBmkTabs.label.replace("…", "");
+    });
 
-    if (Tabmix.isVersion(1090)) {
-      MozXULElement.insertFTLIfNeeded("browser/tabbrowser.ftl");
-      const [muted, unmuted] = [$("muteTab"), $("unmuteTab")];
-      document.l10n?.setAttributes(muted, "tabbrowser-context-mute-tab");
-      document.l10n?.setAttributes(unmuted, "tabbrowser-context-unmute-tab");
-      document.l10n?.translateElements([muted, unmuted, $("showBmkTab")]).then(() => {
-        muted.label += "/" + unmuted.label;
-      });
-    } else {
-      $("muteTab").label = browserWindow.gNavigatorBundle.getString("muteTab.label") + "/" +
-            browserWindow.gNavigatorBundle.getString("unmuteTab.label");
-    }
+    MozXULElement.insertFTLIfNeeded("browser/tabbrowser.ftl");
+    const [muted, unmuted] = [$("muteTab"), $("unmuteTab")];
+    document.l10n?.setAttributes(muted, "tabbrowser-context-mute-tab");
+    document.l10n?.setAttributes(unmuted, "tabbrowser-context-unmute-tab");
+    document.l10n?.translateElements([muted, unmuted, $("showBmkTab")]).then(() => {
+      muted.label += "/" + unmuted.label;
+    });
 
     if (!Tabmix.isVersion(1270)) {
       gPrefWindow.removeItemAndPrefById("pref_closeDuplicateTabs");
@@ -156,8 +142,7 @@ var gMenuPane = {
 
   get PrivateBrowsingUtils() {
     return Tabmix.lazyGetter(this, "PrivateBrowsingUtils", () =>
-      TabmixChromeUtils.import("resource://gre/modules/PrivateBrowsingUtils.jsm").PrivateBrowsingUtils
+      ChromeUtils.importESModule("resource://gre/modules/PrivateBrowsingUtils.sys.mjs").PrivateBrowsingUtils
     );
   },
 };
-

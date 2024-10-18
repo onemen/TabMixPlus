@@ -5,8 +5,7 @@
 
 const EXPORTED_SYMBOLS = ["TabmixAddonManager"];
 
-const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const {AddonManager} = TabmixChromeUtils.import("resource://gre/modules/AddonManager.jsm");
+const {AddonManager} = ChromeUtils.importESModule("resource://gre/modules/AddonManager.sys.mjs");
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 
 const GOOGLE_REGEXP = /http(s)?:\/\/((www|encrypted|news|images)\.)?google\.(.*?)\/url\?/;

@@ -45,7 +45,7 @@ menulist {
 }
 
 .content-help {
-  -moz-appearance: none;
+  appearance: none;
   margin: 0;
   min-width: 20px;
   border: 0 solid transparent;
@@ -76,10 +76,6 @@ menulist {
   opacity: 0.4;
 }
 
-.dialog-button[dlgtype="extra2"] {
-  -moz-box-direction: reverse; /* before Firefox 112 */
-}
-
 .dialog-button[dlgtype="extra2"] .button-icon {
   margin-inline-start: 5px;
   order: 1;
@@ -98,7 +94,7 @@ menulist {
 }
 
 .donate-button-container > .donate-button {
-  -moz-appearance: none;
+  appearance: none;
   cursor: pointer;
   background: url(https://img.shields.io/badge/Donate-PayPal-green.svg) no-repeat center/100%;
   min-height: 26px;
@@ -112,7 +108,6 @@ menulist {
 
 tabpanel {
   flex-direction: column;
-  -moz-box-orient: vertical; /* before Firefox 112 */
 }
 
 .bottom-separator {
@@ -149,7 +144,6 @@ tab.subtabs:focus-visible > .tab-middle > .tab-text {
 
 .tabmixbuttons {
   align-items: center;
-  -moz-box-align: center; /* before Firefox 112 */
   padding: 3px;
 }
 
@@ -191,7 +185,7 @@ tab.subtabs:focus-visible > .tab-middle > .tab-text {
 }
 
 #TabMIxPreferences:not([ubuntu]) .groupbox-panels:not(.tabclick) {
-  -moz-appearance: groupbox;
+  appearance: groupbox;
   padding: 3px 3px 6px 3px;
 }
 
@@ -237,7 +231,6 @@ tabbox > tabs {
 
 .clicktab-popup {
   flex-direction: column;
-  -moz-box-orient: vertical; /* before Firefox 112 */
 }
 
 .clicktab-popup > * > .arrowscrollbox-scrollbox {
@@ -275,13 +268,11 @@ prefwindow .paneSelector {
 
 tabbox {
   flex: 1;
-  -moz-box-flex: 1; /* before Firefox 112 */
   padding: 0 1px;
 }
 
 tabbox > tabpanels {
   flex: 1;
-  -moz-box-flex: 1; /* before Firefox 112 */
 }
 
 tabbox > tabpanels:last-child {
@@ -333,7 +324,7 @@ tabbox > tabpanels:last-child {
 }
 
 #TabMIxPreferences[mac] prefpane .groupbox-body {
-  -moz-appearance: groupbox;
+  appearance: groupbox;
   padding-top: 2px;
   margin-bottom: 2px;
 }
@@ -373,7 +364,6 @@ html|fieldset.grid,
 }
 
 html|fieldset[flex="1"] {
-  -moz-box-flex: 1; /* before Firefox 112 */
   flex: 1 auto;
 }
 

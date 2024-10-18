@@ -10487,7 +10487,6 @@ interface nsITelemetry extends nsISupports {
   readonly canRecordReleaseData: boolean;
   readonly canRecordPrereleaseData: boolean;
   readonly isOfficialTelemetry: boolean;
-  setHistogramRecordingEnabled(id: string, enabled: boolean): void;
   asyncFetchTelemetryData(aCallback: nsIFetchTelemetryDataCallback): void;
   readonly fileIOReports: any;
   msSinceProcessStart(): double;
@@ -10503,7 +10502,6 @@ interface nsITelemetry extends nsISupports {
   clearScalars(): void;
   flushBatchedChildTelemetry(): void;
   recordEvent(aCategory: string, aMethod: string, aObject: string, aValue?: any, extra?: any): void;
-  setEventRecordingEnabled(aCategory: string, aEnabled: boolean): void;
   snapshotEvents(aDataset: u32, aClear?: boolean, aEventLimit?: u32): any;
   registerEvents(aCategory: string, aEventData: any): void;
   registerBuiltinEvents(aCategory: string, aEventData: any): void;
@@ -14575,7 +14573,6 @@ interface nsIXULRuntime extends nsISupports, Enums<typeof nsIXULRuntime.Experime
   readonly PROCESS_TYPE_VR: 6;
   readonly PROCESS_TYPE_RDD: 7;
   readonly PROCESS_TYPE_SOCKET: 8;
-  readonly PROCESS_TYPE_REMOTESANDBOXBROKER: 9;
   readonly PROCESS_TYPE_FORKSERVER: 10;
   readonly PROCESS_TYPE_UTILITY: 11;
   readonly E10S_MULTI_EXPERIMENT: 1;

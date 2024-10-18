@@ -173,7 +173,6 @@ declare namespace TabmixNS {
   let newTabUrls: string[];
   function _duplicateTab(this: MockedGeckoTypes.TabBrowser, aTab: Tab, aHref?: string, aTabData?: TabData | string, disallowSelect?: boolean, dontFocusUrlBar?: boolean): Tab | null;
   function duplicateTab(aTab: Tab, aHref?: string, aTabData?: TabData | string, disallowSelect?: boolean, dontFocusUrlBar?: boolean): Tab | null;
-  function formatValueSync(id: string, args?: {tabCount?: number; winTitle?: string} | L10nArgs): string;
   function getOpenTabNextPref(aRelatedToCurrent?: boolean): boolean;
   function isBlankNewTab(url: string): boolean;
   function isNewTabUrls(aUrl: string): boolean;
@@ -256,7 +255,7 @@ declare namespace ClosedObjectsUtils {
   function populateClosedWindowsMenu(undoWindowMenu: CustomPanelView): void;
   function removeObservers(this: typeof ClosedObjectsUtils): void;
   function restoreWindow(where: WhereToOpen | "delete", index: number): void;
-  function showSubView(event: ButtonEvent): Promise<void>;
+  function showSubView(event: ButtonEvent): void;
   function toggleRecentlyClosedWindowsButton(): void;
   function updateView(popup: PopupElement): void;
   function updateAppmenuView(panel: PopupElement, type: "Tabs" | "Windows"): void;
@@ -351,7 +350,6 @@ declare namespace OnContentLoaded {
 declare namespace PrivateFunctionsNS {
   namespace onContentLoaded {
     type Params = {forceprivate?: boolean; forceNonPrivate?: boolean; inBackground?: boolean; private?: boolean; skipPopups?: boolean; targetBrowser?: Browser};
-    function _getTargetWindow(params?: Params): Window | null;
     function _getWindow(where: WhereToOpen, params?: Params): {w: Window | null; where: WhereToOpen};
     function _openLinkIn(url: string, _where: WhereToOpen, params?: Params): void;
   }
@@ -397,7 +395,6 @@ declare namespace Tablib {
   let _loadURIInitialized: boolean;
   function setLoadURI(aBrowser: Browser): void;
   function loadURIWrapper(browser: Browser, methodName: "loadURI" | "fixupAndLoadURIString"): void;
-  function setLoadURI_before_112(aBrowser: Browser): void;
   function _loadURI(...args: loadURIArgs): Tab | null;
   function allowLoad(browser: Browser, uri: string): boolean;
   function isException(loadInCurrent: boolean): boolean;

@@ -31,7 +31,7 @@ html|fieldset {
 
 .select-button {
   background-color: var(--in-content-button-background);
-  background-image: var(--select-button-background-image);
+  background-image: url(chrome://global/skin/icons/arrow-down.svg);
   background-repeat: no-repeat;
   background-size: 8px;
   background-position: right 3px center;

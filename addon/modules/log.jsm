@@ -2,8 +2,6 @@
 
 const EXPORTED_SYMBOLS = ["console"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-
 const lazy = {};
 
 ChromeUtils.defineModuleGetter(lazy, "ContentSvc",

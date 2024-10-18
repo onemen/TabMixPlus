@@ -4,15 +4,7 @@
 "use strict";
 
 (function(g) {
-  if (!globalThis.Services) {
-    g.Services = ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-  }
-  try {
-    g.AddonManager = ChromeUtils.importESModule("resource://gre/modules/AddonManager.sys.mjs").AddonManager;
-  } catch {
-    // eslint-disable-next-line tabmix/use-mjs-modules
-    g.AddonManager = ChromeUtils.import("resource://gre/modules/AddonManager.jsm").AddonManager;
-  }
+  g.AddonManager = ChromeUtils.importESModule("resource://gre/modules/AddonManager.sys.mjs").AddonManager;
 }(this));
 
 ChromeUtils.defineModuleGetter(this, "ChromeManifest",
@@ -20,6 +12,9 @@ ChromeUtils.defineModuleGetter(this, "ChromeManifest",
 
 ChromeUtils.defineModuleGetter(this, "Overlays",
   "chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
+
+ChromeUtils.defineModuleGetter(this, "PreferencesLoader",
+  "chrome://tabmix-resource/content/bootstrap/PreferencesLoader.jsm");
 
 ChromeUtils.defineModuleGetter(this, "ScriptsLoader",
   "chrome://tabmix-resource/content/bootstrap/ScriptsLoader.jsm");
@@ -138,6 +133,7 @@ async function startup(data, reason) {
     }
   });
 
+  PreferencesLoader.loadDefaultPreferences();
   TabmixWidgets.create();
 
   const window = Services.wm.getMostRecentWindow('navigator:browser');
@@ -150,7 +146,7 @@ async function startup(data, reason) {
   /** @type {MockedGeckoTypes.PlacesUIUtils["openTabset"]} */
   let _tabmix_PlacesUIUtils_openTabset = () => {};
   if (name === 'Waterfox' && Services.vc.compare(version, '115.9.0') >= 0) {
-    const {PlacesUIUtils} = TabmixChromeUtils.import("resource:///modules/PlacesUIUtils.jsm");
+    const {PlacesUIUtils} = ChromeUtils.importESModule("resource:///modules/PlacesUIUtils.sys.mjs");
     _tabmix_PlacesUIUtils_openTabset = PlacesUIUtils.openTabset;
   }
 

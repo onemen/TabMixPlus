@@ -90,7 +90,7 @@ var TMP_SessionStore = {
    * @brief         make sure that we don't enable both sessionStore and session manager
    *
    * @param msgNo   a Integer value - msg no. to show.
-   *                -1 when session manager extension enabled (see AddonManager.jsm)
+   *                -1 when session manager extension enabled (see AddonManager.sys.mjs)
    *
    * @param start   a Boolean value - true if we call this function before startup.
    *
@@ -226,7 +226,7 @@ var TMP_SessionStore = {
     if (typeof afterSessionRestore == "boolean") {
       Tabmix.isWindowAfterSessionRestore = afterSessionRestore;
     } else {
-      TabmixChromeUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", () => {
+      ChromeUtils.defineLazyGetter(Tabmix, "isWindowAfterSessionRestore", () => {
         // when TMP session manager is enabled ss.willRestore is true only after restart
         SessionStartup.onceInitialized.then(() => {
           Tabmix.isWindowAfterSessionRestore = SessionStartup.willRestore();
@@ -319,7 +319,7 @@ var TMP_ClosedTabs = {
    */
   get count() {
     const name =
-      Tabmix.isVersion(1150) && !Tabmix.isVersion(1170) ?
+      !Tabmix.isVersion(1170) ?
         "getClosedTabCountForWindow" :
         "getClosedTabCount";
     return window.__SSi ? TabmixSvc.ss[name](window) : 0;
@@ -330,7 +330,7 @@ var TMP_ClosedTabs = {
    */
   get getClosedTabData() {
     if (window.__SSi) {
-      if (Tabmix.isVersion(1150) && !Tabmix.isVersion(1170)) {
+      if (!Tabmix.isVersion(1170)) {
         return TabmixSvc.ss.getClosedTabDataForWindow(window);
       }
       return Tabmix.isVersion(1170) ?
@@ -684,9 +684,7 @@ var TMP_ClosedTabs = {
     if (closedIndex < 0) {
       return null;
     }
-    const closedTab = Tabmix.isVersion(940) ?
-      TabmixSvc.SessionStore.removeClosedTabData(winData, closedTabs, closedIndex) :
-      TabmixSvc.SessionStore.removeClosedTabData(closedTabs, closedIndex);
+    const closedTab = TabmixSvc.SessionStore.removeClosedTabData(winData, closedTabs, closedIndex);
     TabmixSvc.SessionStore._notifyOfClosedObjectsChange();
     return closedTab;
   },
@@ -877,11 +875,8 @@ var TMP_ClosedTabs = {
     // aIndex is undefined if the function is called without a specific tab to restore.
     let tabsToRestore = aIndex !== undefined ? [aIndex] : new Array(lastClosedTabCount).fill(0);
     let multiple = tabsToRestore.length > 1;
-    const getClosedTabCount = Tabmix.isVersion(1150) ?
-      SessionStore.getClosedTabCountForWindow :
-      SessionStore.getClosedTabCount;
     for (let index of tabsToRestore) {
-      if (getClosedTabCount(sourceWindow) > index) {
+      if (SessionStore.getClosedTabCountForWindow(sourceWindow) > index) {
         tab = this._undoCloseTab(
           sourceWindow,
           index,
@@ -935,10 +930,6 @@ Tabmix.closedObjectsUtils = {
     }, {once: true});
 
     this.toggleRecentlyClosedWindowsButton();
-
-    if (!Tabmix.isVersion(800)) {
-      return;
-    }
 
     // update appMenu History >
     //                Recently closed Tabs
@@ -1140,20 +1131,12 @@ Tabmix.closedObjectsUtils = {
     }
   },
 
-  async showSubView(event) {
+  showSubView(event) {
     const viewType = event.target.id == "tabmix-closedWindowsButton" ? "Windows" : "Tabs";
 
     let anchor = event.target;
     if (anchor.getAttribute("disabled") === "true") {
       return;
-    }
-    if (
-      !Tabmix.isVersion(860) &&
-      viewType === "Windows" &&
-      anchor.parentNode.parentNode?.id === "widget-overflow-fixed-list"
-    ) {
-      anchor = document.getElementById("nav-bar-overflow-button");
-      await new Promise(r => setTimeout(r, 0));
     }
 
     this.initObjectPanel(viewType);

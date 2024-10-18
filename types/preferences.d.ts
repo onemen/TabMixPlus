@@ -74,8 +74,6 @@ interface IgIncompatiblePane {
 
 interface WindowProxy {
   gIncompatiblePane: IgIncompatiblePane;
-  /** @deprecated — removed from firefox on version 87 */
-  getHtmlBrowser: () => HTMLElement;
   Tabmix: typeof TabmixNS;
 }
 
@@ -727,8 +725,8 @@ interface BrowserWindow extends MockedGeckoTypes.BrowserWindow {
 interface TabmixKnownModules {
   "chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm": {ChromeManifest: ChromeManifestClass};
   "chrome://tabmix-resource/content/bootstrap/Overlays.jsm": {Overlays: OverlaysClass};
-  "resource://gre/modules/DeferredTask.jsm": {DeferredTask: DeferredTaskConstructor};
-  "resource://gre/modules/ExtensionShortcuts.jsm": {ExtensionShortcutKeyMap: typeof ExtensionShortcutKeyMap};
+  "resource://gre/modules/DeferredTask.sys.mjs": {DeferredTask: DeferredTaskConstructor};
+  "resource://gre/modules/ExtensionShortcuts.sys.mjs": {ExtensionShortcutKeyMap: typeof ExtensionShortcutKeyMap};
 }
 
 declare namespace TabmixNS {

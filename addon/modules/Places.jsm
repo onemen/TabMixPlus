@@ -2,49 +2,29 @@
 
 const EXPORTED_SYMBOLS = ["TabmixPlacesUtils"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
 const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
 // AppConstants is used in modified PlacesUIUtils functions
 // eslint-disable-next-line no-unused-vars
-const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
+const {AppConstants} = ChromeUtils.importESModule("resource://gre/modules/AppConstants.sys.mjs");
 
 const lazy = {};
 
-if (TabmixSvc.version(1030)) {
-  TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-    // eslint-disable-next-line tabmix/valid-lazy
-    BrowserUtils: "resource://gre/modules/BrowserUtils.jsm",
-    BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
-    // eslint-disable-next-line tabmix/valid-lazy
-    OpenInTabsUtils: "resource:///modules/OpenInTabsUtils.jsm",
-    PlacesUtils: "resource://gre/modules/PlacesUtils.jsm",
-    // eslint-disable-next-line tabmix/valid-lazy
-    PluralForm: "resource://gre/modules/PluralForm.jsm",
-    PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
-  });
-} else {
-  // these imports are used by PlacesUIUtils and PlacesUtils that we eval here
-  // PluralForm, PrivateBrowsingUtils, OpenInTabsUtils
-  /* eslint-disable no-unused-vars, tabmix/use-mjs-modules, mozilla/reject-global-this */
-  ChromeUtils.defineModuleGetter(this, "BrowserWindowTracker",
-    "resource:///modules/BrowserWindowTracker.jsm");
+ChromeUtils.defineESModuleGetters(lazy, {
+  // eslint-disable-next-line tabmix/valid-lazy
+  BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
+  PlacesUtils: "resource://gre/modules/PlacesUtils.sys.mjs",
+  PlacesUIUtils: "resource:///modules/PlacesUIUtils.sys.mjs",
+  // eslint-disable-next-line tabmix/valid-lazy
+  PluralForm: "resource://gre/modules/PluralForm.sys.mjs",
+  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
+});
 
-  ChromeUtils.defineModuleGetter(this, "PluralForm",
-    "resource://gre/modules/PluralForm.jsm");
-
-  ChromeUtils.defineModuleGetter(this, "PrivateBrowsingUtils",
-    "resource://gre/modules/PrivateBrowsingUtils.jsm");
-
-  ChromeUtils.defineModuleGetter(this, "OpenInTabsUtils",
-    "resource:///modules/OpenInTabsUtils.jsm");
-
-  ChromeUtils.defineModuleGetter(this, "PlacesUtils",
-    "resource://gre/modules/PlacesUtils.jsm");
-  /* eslint-enable no-unused-vars, tabmix/use-mjs-modules, mozilla/reject-global-this */
-}
-
-TabmixChromeUtils.defineLazyModuleGetters(lazy, {PlacesUIUtils: "resource:///modules/PlacesUIUtils.jsm"});
+TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+  BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
+  // eslint-disable-next-line tabmix/valid-lazy
+  OpenInTabsUtils: "resource:///modules/OpenInTabsUtils.jsm",
+});
 
 // this function is used by PlacesUIUtils functions that we evaluate here
 // eslint-disable-next-line no-unused-vars
@@ -57,9 +37,7 @@ function getBrowserWindow(aWindow) {
 }
 
 function getTopWindow() {
-  return TabmixSvc.version(1030) ?
-    lazy.BrowserWindowTracker.getTopWindow() :
-    BrowserWindowTracker.getTopWindow();
+  return lazy.BrowserWindowTracker.getTopWindow();
 }
 
 var PlacesUtilsInternal;
@@ -148,8 +126,7 @@ PlacesUtilsInternal = {
 
     function updateOpenTabset(name, treeStyleTab) {
       const isWaterfoxOverridePlacesUIUtils =
-        TabmixSvc.isWaterfox &&
-        Services.vc.compare(Services.appinfo.version, "115.9.0") >= 0 &&
+        TabmixSvc.version({wf: "115.9.0"}) &&
         !lazy.PrivateBrowsingUtils.isWindowPrivate(aWindow);
       if (isWaterfoxOverridePlacesUIUtils) {
         if (!originalOpenTabset) {
@@ -259,10 +236,7 @@ PlacesUtilsInternal = {
   /* :::::::::::::::   AsyncPlacesUtils   ::::::::::::::: */
 
   fetch(guidOrInfo, onResult = null, options = {}) {
-    if (TabmixSvc.version(1030)) {
-      return lazy.PlacesUtils.bookmarks.fetch(guidOrInfo, onResult, options);
-    }
-    return PlacesUtils.bookmarks.fetch(guidOrInfo, onResult, options);
+    return lazy.PlacesUtils.bookmarks.fetch(guidOrInfo, onResult, options);
   },
 
   async getBookmarkTitle(url) {

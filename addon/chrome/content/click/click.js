@@ -8,7 +8,6 @@ var TabmixTabClickOptions = {
 
   isOverlayIcons(event) {
     const overlayIcons = [
-      "tab-icon-sound", // for Firefox 78 - 91
       "tab-sharing-icon-overlay",
       "tab-icon-overlay",
     ];
@@ -189,16 +188,10 @@ var TabmixTabClickOptions = {
         break;
       case 2:
         if (aTab?.parentNode) {
-          if (Tabmix.isVersion(1120)) {
-            gBrowser.removeTab(aTab, {
-              animate: true,
-              triggeringEvent: event,
-            });
-          } else {
-            let byMouse = event?.mozInputSource == MouseEvent.MOZ_SOURCE_MOUSE;
-            // @ts-expect-error - byMouse removed in Firefox 112
-            gBrowser.removeTab(aTab, {animate: true, byMouse});
-          }
+          gBrowser.removeTab(aTab, {
+            animate: true,
+            triggeringEvent: event,
+          });
         }
         break;
       case 3:
@@ -348,19 +341,16 @@ var TabmixTabClickOptions = {
   // taken from MozTabbrowserTab.prototype.on_mousedown()
   _tabMultiSelected(aTab) {
     if (aTab.multiselected) {
-      // @ts-expect-error - isLastMultiSelectChange removed in Firefox 86
-      gBrowser.removeFromMultiSelectedTabs(aTab, {isLastMultiSelectChange: true});
+      gBrowser.removeFromMultiSelectedTabs(aTab);
     } else if (aTab != gBrowser.selectedTab) {
-      // @ts-expect-error - isLastMultiSelectChange removed in Firefox 86
-      gBrowser.addToMultiSelectedTabs(aTab, {isLastMultiSelectChange: true});
+      gBrowser.addToMultiSelectedTabs(aTab);
       gBrowser.lastMultiSelectedTab = aTab;
     }
   },
 
   _tabRangeSelected(aTab, cumul) {
     const lastSelectedTab = gBrowser.lastMultiSelectedTab;
-    // @ts-expect-error - isLastMultiSelectChange removed in Firefox 86
-    if (!cumul) gBrowser.clearMultiSelectedTabs({isLastMultiSelectChange: false});
+    if (!cumul) gBrowser.clearMultiSelectedTabs();
     gBrowser.addRangeToMultiSelectedTabs(lastSelectedTab, aTab);
   },
 
@@ -424,35 +414,12 @@ var TabmixContext = {
     tabContextMenu.insertBefore($id("context_bookmarkTab"), $id("context_bookmarkAllTabs"));
 
     const openTab = $id("context_openANewTab");
-    if (Tabmix.isVersion(940)) {
-      tabContextMenu.addEventListener("popupshowing", () => {
-        openTab.setAttribute("_newtab", openTab.getAttribute("label") ?? "");
-        if (Tabmix.isVersion(1150) && !Tabmix.isVersion(1290)) {
-          openTab.setAttribute("oncommand", "Tabmix.BrowserOpenTab({ event });");
-        }
-      }, {once: true});
-    } else {
-      const {firstElementChild: element} = MozXULElement.parseXULToFragment(
-        `<menuitem label="&tabCmd.label;"/>`,
-        ["chrome://browser/locale/browser.dtd"]
-      );
-      const label = element?.getAttribute("label") ?? "";
-      openTab.setAttribute("label", label);
-      openTab.setAttribute("_newtab", label);
-      openTab.setAttribute("oncommand", "Tabmix.BrowserOpenTab();");
-    }
-
-    if (!Tabmix.isVersion(880)) {
-      const closeTabsToTheStart = MozXULElement.parseXULToFragment(
-        `<menuitem id="context_closeTabsToTheStart"
-          label="&closeTabsToLeft.label;" accesskey="&closeleft.accesskey;"
-          oncommand="gBrowser.removeTabsToTheStartFrom(TabContextMenu.contextTab);"/>
-        `,
-        ["chrome://tabmixplus/locale/tabmix.dtd"]
-      );
-      const closeTabsToTheEnd = $id("context_closeTabsToTheEnd");
-      closeTabsToTheEnd.parentElement.insertBefore(closeTabsToTheStart, closeTabsToTheEnd);
-    }
+    tabContextMenu.addEventListener("popupshowing", () => {
+      openTab.setAttribute("_newtab", openTab.getAttribute("label") ?? "");
+      if (!Tabmix.isVersion(1290)) {
+        openTab.setAttribute("oncommand", "Tabmix.BrowserOpenTab({ event });");
+      }
+    }, {once: true});
 
     // we can't disable menus with command attribute
     $id("context_undoCloseTab").removeAttribute("command");
@@ -483,10 +450,6 @@ var TabmixContext = {
     // move tm-content-miscSep to its place (Firefox 32+)
     let sep = $id("tm-content-miscSep");
     sep.parentNode.insertBefore(sep, $id("tm-content-closetab"));
-
-    if (!Tabmix.isVersion(880)) {
-      this._showHideSeparators.push("contentAreaContextMenu");
-    }
   },
 
   updateTabbarContextMenu(show) {
@@ -568,7 +531,7 @@ var TabmixContext = {
       if (clickOutTabs) {
         Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab();");
       } else {
-        Tabmix.setItem(newTab, "oncommand", `TMP_BrowserOpenTab(${Tabmix.isVersion(1150) ? `{}` : `null`}, TabContextMenu.contextTab);`);
+        Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab({}, TabContextMenu.contextTab);");
       }
     }
 
@@ -597,9 +560,7 @@ var TabmixContext = {
     // make sure not to show menu items that are hidden by Firefox
     Tabmix.setItem("context_sendTabToDevice", "tabmix_hide", !Tabmix.prefs.getBoolPref("sendTabToDevice") || null);
 
-    const shareTabURL = Tabmix.isVersion(920) ?
-      event.originalTarget.querySelector(".share-tab-url-item") :
-      "context_shareTabURL";
+    const shareTabURL = event.originalTarget.querySelector(".share-tab-url-item");
     Tabmix.setItem(shareTabURL, "tabmix_hide", !Tabmix.prefs.getBoolPref("shareTabURL") || null);
 
     Tabmix.showItem("tm-mergeWindowsTab",
@@ -789,7 +750,7 @@ var TabmixContext = {
         ContextualIdentityService: "resource://gre/modules/ContextualIdentityService.sys.mjs",
         PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
       };
-      TabmixChromeUtils.defineLazyModuleGetters(lazy, modules);
+      ChromeUtils.defineESModuleGetters(lazy, modules);
     }
 
     // hide open link in window in single window mode
@@ -1045,14 +1006,7 @@ Tabmix.allTabs = {
     gTabsPanel.init();
     this.insertSortButton();
 
-    let button;
-    if (
-      !Tabmix.isVersion(860) &&
-      event.target.parentNode.parentNode?.id === "widget-overflow-fixed-list"
-    ) {
-      button = document.getElementById("nav-bar-overflow-button");
-    }
-    let anchor = button ?? event.target;
+    let anchor = event.target;
 
     setTimeout(() => {
       PanelUI.showSubView(

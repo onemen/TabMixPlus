@@ -3,15 +3,13 @@
 const EXPORTED_SYMBOLS = ["Shortcuts"];
 
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
-const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
-const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
+const {AppConstants} = ChromeUtils.importESModule("resource://gre/modules/AppConstants.sys.mjs");
 
 const lazy = {};
-TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
+ChromeUtils.defineESModuleGetters(lazy, {
   //
+  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
 });
 
 var KeyConfig;
@@ -315,7 +313,7 @@ const Shortcuts = {
 
     aWindow.addEventListener("unload", this);
 
-    TabmixChromeUtils.defineLazyGetter(aWindow.Tabmix, "removedShortcuts", () => {
+    ChromeUtils.defineLazyGetter(aWindow.Tabmix, "removedShortcuts", () => {
       let document = aWindow.document;
       return document.documentElement.appendChild(document.createElement("tabmix_shortcuts"));
     });

@@ -53,6 +53,11 @@ type DocumentObserver = Callable<{
   observe(aSubject: nsISupports & Document, aTopic: string, aData: string): void;
 }>;
 
+interface PreferencesLoader {
+  _defaultPreferencesLoaded: boolean;
+  loadDefaultPreferences: () => void;
+}
+
 interface ScriptsLoader {
   initForWindow: (window: Window, promiseOverlayLoaded: Promise<void>, params?: {chromeManifest: ChromeManifest; isOverflow: boolean; isEnabled: boolean}) => void;
 }
@@ -64,6 +69,7 @@ interface TabmixWidgets {
 
 declare const ChromeManifest: ChromeManifestClass;
 declare const Overlays: OverlaysClass;
+declare var PreferencesLoader: PreferencesLoader;
 declare var ScriptsLoader: ScriptsLoader;
 declare const TabmixChromeUtils: TabmixChromeUtilsType;
 declare var TabmixWidgets: TabmixWidgets;

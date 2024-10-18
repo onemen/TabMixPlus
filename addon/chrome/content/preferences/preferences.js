@@ -82,11 +82,6 @@ var gPrefWindow = {
     $("instantApply").setAttribute("checked", Tabmix.prefs.getBoolPref("instantApply"));
     positionDonateButton();
 
-    if (Tabmix.isVersion(1080)) {
-      prefWindow.style.setProperty("--input-padding-inline", "2px");
-      prefWindow.style.setProperty("--input-spinner-offset", "14px");
-    }
-
     this.updateMaxHeight();
   },
 
@@ -121,12 +116,10 @@ var gPrefWindow = {
       }
     }
 
-    if (Tabmix.isVersion(1100)) {
-      const menuLists = aPaneElement.querySelectorAll("menulist");
-      for (const menuList of menuLists) {
-        if (!menuList.hasAttribute("sizetopopup") && menuList.firstChild) {
-          menuList.style.width = menuList.firstChild.getBoundingClientRect().width + "px";
-        }
+    const menuLists = aPaneElement.querySelectorAll("menulist");
+    for (const menuList of menuLists) {
+      if (!menuList.hasAttribute("sizetopopup") && menuList.firstChild) {
+        menuList.style.width = menuList.firstChild.getBoundingClientRect().width + "px";
       }
     }
 
@@ -489,10 +482,10 @@ var sessionPrefs = ["browser.sessionstore.resume_from_crash",
   "extensions.tabmix.sessions.manager",
   "extensions.tabmix.sessions.crashRecovery"];
 
-TabmixChromeUtils.defineLazyGetter(this, "gPreferenceList", () => {
+ChromeUtils.defineLazyGetter(this, "gPreferenceList", () => {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = [
-    "browser.allTabs.previews", TabmixSvc.sortByRecentlyUsed,
+    "browser.allTabs.previews", "browser.ctrlTab.sortByRecentlyUsed",
     "browser.link.open_newwindow", "browser.link.open_newwindow.override.external",
     "browser.link.open_newwindow.restriction", TabmixSvc.newtabUrl,
     "browser.search.context.loadInBackground", "browser.search.openintab",
@@ -525,7 +518,7 @@ TabmixChromeUtils.defineLazyGetter(this, "gPreferenceList", () => {
   return tabmixPrefs;
 });
 
-TabmixChromeUtils.defineLazyGetter(window, "_sminstalled", () => {
+ChromeUtils.defineLazyGetter(window, "_sminstalled", () => {
   return Tabmix.getTopWin().Tabmix.extensions.sessionManager;
 });
 
@@ -627,11 +620,7 @@ function exportData() {
         return "\n" + pref + "=" + getPrefByType(pref);
       });
       patterns.unshift("tabmixplus");
-      if (TabmixSvc.version(860)) {
-        IOUtils.writeUTF8(file.path, patterns.join(""));
-      } else {
-        OS.File.writeAtomic(file.path, patterns.join(""), {encoding: "utf-8", tmpPath: file.path + ".tmp"});
-      }
+      IOUtils.writeUTF8(file.path, patterns.join(""));
     }
   }).catch(Tabmix.reportError);
 }
@@ -641,13 +630,7 @@ async function importData() {
     const file = await showFilePicker(Ci.nsIFilePicker.modeOpen);
     if (!file) return;
     let input;
-    if (TabmixSvc.version(860)) {
-      input = await IOUtils.readUTF8(file.path);
-    } else {
-      const data = await OS.File.read(file.path);
-      let decoder = new TextDecoder();
-      input = decoder.decode(data || "");
-    }
+    input = await IOUtils.readUTF8(file.path);
     if (input) {
       loadData(input.replace(/\r\n/g, "\n").split("\n"));
     }
@@ -833,10 +816,8 @@ window.gIncompatiblePane = {
 
 };
 
-ChromeUtils.defineModuleGetter(this, "OS", "resource://gre/modules/osfile.jsm");
-
 // eslint-disable-next-line no-unused-vars
-TabmixChromeUtils.defineLazyGetter(this, "RTL_UI", () => {
+ChromeUtils.defineLazyGetter(this, "RTL_UI", () => {
   return Services.locale.isAppLocaleRTL;
 });
 

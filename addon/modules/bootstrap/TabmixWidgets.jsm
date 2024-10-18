@@ -3,16 +3,14 @@
 /* eslint curly: 2 */
 const EXPORTED_SYMBOLS = ["TabmixWidgets"];
 
-const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-
 const lazy = {};
-TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-  CustomizableUI: "resource:///modules/CustomizableUI.jsm",
+ChromeUtils.defineESModuleGetters(lazy, {
   //
+  CustomizableUI: "resource:///modules/CustomizableUI.sys.mjs",
 });
 
-ChromeUtils.defineModuleGetter(lazy, "TabmixSvc",
-  "chrome://tabmix-resource/content/TabmixSvc.jsm");
+ChromeUtils.defineModuleGetter(lazy, "isVersion",
+  "chrome://tabmix-resource/content/BrowserVersion.jsm");
 
 const widgets = {
   closedTabs: {
@@ -74,14 +72,6 @@ const widgets = {
   alltabs: {
     id: "tabmix-alltabs-toolbaritem",
     localizeFiles: [],
-    get updateMarkup() {
-      if (!lazy.TabmixSvc.version(940)) {
-        this.localizeFiles.push("chrome://browser/locale/browser.dtd");
-        const label = 'label="&listAllTabs.label;" tooltiptext="&listAllTabs.label;"';
-        return this.markup.replace(/data-l10n-id=[^\n]*/g, label);
-      }
-      return this.markup;
-    },
     get markup() {
       return `
       <toolbaritem id="${this.id}"
@@ -102,15 +92,10 @@ const widgets = {
     id: "tabmix-tabs-closebutton",
     localizeFiles: [],
     get updateMarkup() {
-      const l10nId = lazy.TabmixSvc.version(1310) ?
+      const l10nId = lazy.isVersion(1310) ?
         "tabbrowser-close-tabs-button" :
-        lazy.TabmixSvc.version(1090) ?
-          "tabbrowser-close-tabs-tooltip" :
-          "close-tab";
+        "tabbrowser-close-tabs-tooltip";
       const markup = this.markup.replace('command="cmd_close"', `$& data-l10n-id="${l10nId}"`);
-      if (!lazy.TabmixSvc.version(880)) {
-        return markup.replace('command="cmd_close"', '$& tabmix-fill-opacity="true"');
-      }
       return markup;
     },
     get markup() {
@@ -123,9 +108,6 @@ const widgets = {
         removable="false"/>`;
     },
     onBuild(document, node) {
-      if (!lazy.TabmixSvc.version(880)) {
-        document.ownerGlobal.MozXULElement.insertFTLIfNeeded("browser/tabContextMenu.ftl");
-      }
       document.l10n?.translateElements([node]).then(() => {
         node.removeAttribute("data-l10n-id");
         node.removeAttribute("data-l10n-args");

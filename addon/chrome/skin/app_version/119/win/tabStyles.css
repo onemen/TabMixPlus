@@ -30,13 +30,13 @@
     }
 
     #tabmix-bottom-toolbox > toolbox  {
-      -moz-appearance: none;
+      appearance: none;
       border-top: none;
       background-color: transparent;
     }
 
     #TabsToolbar[tabbaronbottom]:not(:-moz-lwtheme) {
-      -moz-appearance: none;
+      appearance: none;
     }
   }
 }
@@ -46,7 +46,6 @@
   box-shadow: none !important;
 }
 
-/* for Firefox 57 style */
 #tabbrowser-tabs:not([treestyletab-mode="vertical"])
     > #tabbrowser-arrowscrollbox > .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
   margin: 2px;

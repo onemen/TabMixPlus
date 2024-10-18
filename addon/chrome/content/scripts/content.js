@@ -1,18 +1,12 @@
 "use strict";
 
-/** @type {MockedGeckoTypes.Services} */ // @ts-expect-error - see general.d.ts
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
+const {AppConstants} = ChromeUtils.importESModule("resource://gre/modules/AppConstants.sys.mjs");
 
-const {AppConstants} = TabmixChromeUtils.import("resource://gre/modules/AppConstants.jsm");
-
-TabmixChromeUtils.defineLazyModuleGetters(this, {
-  BrowserUtils: "resource://gre/modules/BrowserUtils.jsm",
-  E10SUtils: "resource://gre/modules/E10SUtils.jsm",
-  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.jsm",
-  WebNavigationFrames: "resource://gre/modules/WebNavigationFrames.jsm",
-  clearTimeout: "resource://gre/modules/Timer.jsm",
-  setTimeout: "resource://gre/modules/Timer.jsm",
+ChromeUtils.defineESModuleGetters(this, {
+  BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
+  E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
+  clearTimeout: "resource://gre/modules/Timer.sys.mjs",
+  setTimeout: "resource://gre/modules/Timer.sys.mjs",
 });
 
 ChromeUtils.defineModuleGetter(this, "ContentSvc",
@@ -33,9 +27,7 @@ var PROCESS_TYPE_CONTENT = Services.appinfo.processType == Services.appinfo.PROC
 var TabmixContentHandler = {
   MESSAGES: [
     "Tabmix:restorePermissions",
-    "Tabmix:collectPermissions",
     "Tabmix:resetContentName",
-    "Tabmix:sendDOMTitleChanged",
     "Tabmix:updateHistoryTitle",
     "Tabmix:collectScrollPosition",
     "Tabmix:setScrollPosition",
@@ -69,28 +61,16 @@ var TabmixContentHandler = {
         });
         break;
       }
-      case "Tabmix:collectPermissions": {
-        let caps = SessionStoreUtils.collectDocShellCapabilities(docShell);
-        sendSyncMessage("Tabmix:collectPermissionsComplete", {caps});
-        break;
-      }
       case "Tabmix:resetContentName": {
         if (content.name)
           content.name = "";
         break;
       }
-      case "Tabmix:sendDOMTitleChanged": {
-        // workaround for bug 1081891
-        let title = content.document.title;
-        if (title)
-          sendAsyncMessage("DOMTitleChanged", {title});
-        break;
-      }
       case "Tabmix:updateHistoryTitle": {
-        let history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
-        // @ts-expect-error - not in use since Firefox 82
-        // bug 1662410 - Remove usage of ChildSHistory::LegacySHistory
-        TabmixUtils.updateHistoryTitle(history.legacySHistory, data.title);
+        if (!Services.appinfo.sessionHistoryInParent) {
+          let history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
+          TabmixUtils.updateHistoryTitle(history.legacySHistory, data.title);
+        }
         break;
       }
       case "Tabmix:collectScrollPosition": {
@@ -106,12 +86,9 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:collectReloadData": {
-        /** @type {{isPostData: boolean, postData: unknown}} */
-        let postData = {isPostData: false, postData: null};
+        let postData = {isPostData: false, postData: "", referrerInfo: ""};
         if (!Services.appinfo.sessionHistoryInParent) {
           const history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
-          // @ts-expect-error - not in use since Firefox 82
-          // bug 1662410 - Remove usage of ChildSHistory::LegacySHistory
           postData = TabmixUtils.getPostDataFromHistory(history.legacySHistory);
         }
         let json = {
@@ -295,17 +272,11 @@ var TabmixClickEventHandler = {
     }
 
     // For untrusted events, require a valid transient user gesture activation.
-    if (
-      ContentSvc.version(960) ?
-        !event.isTrusted && !ownerDoc.hasValidTransientUserGestureActivation :
-        !event.isTrusted
-    ) {
+    if (!event.isTrusted && !ownerDoc.hasValidTransientUserGestureActivation) {
       return null;
     }
 
-    return ContentSvc.version(910) ?
-      BrowserUtils.hrefAndLinkNodeForClickEvent(event) :
-      this._hrefAndLinkNodeForClickEvent(event);
+    return BrowserUtils.hrefAndLinkNodeForClickEvent(event);
   },
 
   contentAreaClick(event, linkData) {
@@ -346,15 +317,6 @@ var TabmixClickEventHandler = {
       referrerInfo: serializeReferrerInfo,
     };
 
-    if (!ContentSvc.version(1100)) {
-      json.frameID = WebNavigationFrames.getFrameId(ownerDoc.defaultView);
-      json.triggeringPrincipal = principal;
-      json.originAttributes = principal ? principal.originAttributes : {};
-      json.isContentWindowPrivate = PrivateBrowsingUtils.isContentWindowPrivate(
-        ownerDoc.defaultView
-      );
-    }
-
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       json.tabmix_openLinkWithHistory = true;
 
@@ -393,24 +355,18 @@ var TabmixClickEventHandler = {
     // we are not suppose to get here from middle-click TabmixContent:Click
     // should return "default";
     const isFromMiddleMousePasteHandler =
-      ContentSvc.version(980) &&
       Services.prefs.getBoolPref("middlemouse.contentLoadURL", false) &&
       !Services.prefs.getBoolPref("general.autoScroll", true);
 
     if (href && !isFromMiddleMousePasteHandler) {
       try {
         const secMan = Services.scriptSecurityManager;
-        if (ContentSvc.version(870)) {
-          secMan.checkLoadURIStrWithPrincipal(principal, href);
-        } else {
-          secMan.checkLoadURIStrWithPrincipal(principal, href, secMan.STANDARD);
-        }
+        secMan.checkLoadURIStrWithPrincipal(principal, href);
       } catch {
         return;
       }
 
       if (
-        ContentSvc.version(960) &&
         !event.isTrusted &&
         BrowserUtils.whereToOpenLink(event) != "current"
       ) {
@@ -422,39 +378,7 @@ var TabmixClickEventHandler = {
         json.title = node.getAttribute("title");
       }
 
-      if (!ContentSvc.version(890)) {
-        // Check if the link needs to be opened with mixed content allowed.
-        // Only when the owner doc has |mixedContentChannel| and the same origin
-        // should we allow mixed content.
-        json.allowMixedContent = false;
-        let docshell = ownerDoc.defaultView.docShell;
-        // @ts-expect-error - not in use since Firefox 890
-        if (docShell.mixedContentChannel) {
-          const sm = Services.scriptSecurityManager;
-          try {
-            let targetURI = Services.io.newURI(href);
-            let isPrivateWin =
-            ownerDoc.nodePrincipal.originAttributes.privateBrowsingId > 0;
-            sm.checkSameOriginURI(
-              // @ts-expect-error - deprecated
-              docshell.mixedContentChannel.URI,
-              targetURI,
-              false,
-              isPrivateWin
-            );
-            json.allowMixedContent = true;
-          } catch {}
-        }
-      }
-
-      if (!ContentSvc.version(1100)) {
-        json.originPrincipal = ownerDoc.nodePrincipal;
-        json.originStoragePrincipal = ownerDoc.effectiveStoragePrincipal;
-        json.triggeringPrincipal = ownerDoc.nodePrincipal;
-      }
-
       if (
-        ContentSvc.version(1050) &&
         (ownerDoc.URL === "about:newtab" || ownerDoc.URL === "about:home") &&
         // we are here only when we have href, so we also have node
         node?.dataset.isSponsoredLink === "true"
@@ -462,76 +386,15 @@ var TabmixClickEventHandler = {
         json.globalHistoryOptions = {triggeringSponsoredURL: href};
       }
 
-      // If a link element is clicked with middle button, user wants to open
-      // the link somewhere rather than pasting clipboard content.  Therefore,
-      // when it's clicked with middle button, we should prevent multiple
-      // actions here to avoid leaking clipboard content unexpectedly.
-      // Note that whether the link will work actually or not does not matter
-      // because in this case, user does not intent to paste clipboard content.
-      if (ContentSvc.version(1000) || event.button === 1) {
-        event.preventMultipleActions();
-      }
-
+      event.preventMultipleActions();
       actor.sendAsyncMessage("Content:Click", json);
       return;
     }
 
     // This might be middle mouse navigation, in which case pass this back:
-    if (ContentSvc.version(980)) {
-      if (!href && event.button == 1 && isFromMiddleMousePasteHandler) {
-        docShell.domWindow.windowGlobalChild.getActor("MiddleMousePasteHandler").onProcessedClick(json);
-      }
-    } else if (event.button == 1) {
-      actor.sendAsyncMessage("Content:Click", json);
+    if (!href && event.button == 1 && isFromMiddleMousePasteHandler) {
+      docShell.domWindow.windowGlobalChild.getActor("MiddleMousePasteHandler").onProcessedClick(json);
     }
-  },
-
-  /**
-   * Extracts linkNode and href for the current click target.
-   *
-   * @note linkNode will be null if the click wasn't on an anchor
-   *       element. This includes SVG links, because callers expect |node|
-   *       to behave like an <a> element, which SVG links (XLink) don't.
-   */
-  _hrefAndLinkNodeForClickEvent(event) {
-    /** @param {ContentClickLinkElement} aNode */
-    function isHTMLLink(aNode) {
-      // Be consistent with what nsContextMenu.js does.
-      return content.HTMLAnchorElement.isInstance(aNode) && aNode.href ||
-              content.HTMLAreaElement.isInstance(aNode) && aNode.href ||
-              content.HTMLLinkElement.isInstance(aNode);
-    }
-
-    let node = event.target;
-    while (node && !isHTMLLink(node)) {
-      node = node.parentNode;
-    }
-
-    if (node)
-      return [node.href, node, node.ownerDocument.nodePrincipal];
-
-    // If there is no linkNode, try simple XLink.
-    let href, baseURI;
-    node = event.target;
-    while (node && !href) {
-      if (node.nodeType == content.Node.ELEMENT_NODE &&
-          (node.localName == "a" ||
-           node.namespaceURI == "http://www.w3.org/1998/Math/MathML")) {
-        href = node.getAttribute("href") ||
-            node.getAttributeNS("http://www.w3.org/1999/xlink", "href");
-        if (href) {
-          baseURI = node.ownerDocument.baseURIObject;
-          break;
-        }
-      }
-      node = node.parentNode;
-    }
-
-    // In case of XLink, we don't return the node we got href from since
-    // callers expect <a>-like elements.
-    // Note: makeURI() will throw if aUri is not a valid URI.
-    return [href ? Services.io.newURI(href, null, baseURI).spec : null, null,
-      node && node.ownerDocument.nodePrincipal];
   },
 };
 

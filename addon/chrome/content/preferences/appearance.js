@@ -82,7 +82,7 @@ var gAppearancePane = {
     }
 
     // waterfox position control
-    if (TabmixSvc.isG3Waterfox) {
+    if (TabmixSvc.isWaterfox) {
       this._waterfoxPositionControl();
     }
 
@@ -97,34 +97,21 @@ var gAppearancePane = {
     const position = $("waterfox-tabBarPosition");
     position.hidden = false;
     let positionPref, defaultPrefValue;
-    if (Tabmix.isVersion(913)) {
-      MozXULElement.insertFTLIfNeeded(Tabmix.isVersion(1020) ? "browser/waterfox.ftl" : "browser/extensibles.ftl");
-      defaultPrefValue = "topabove";
-      positionPref = "browser.tabs.toolbarposition";
-      position.appendChild(MozXULElement.parseXULToFragment(
-        `<menupopup>
-           <menuitem id="tabBarTopAbove" value="topabove" data-l10n-id="tab-bar-top-above"/>
-           <menuitem id="tabBarTopBelow" value="topbelow" data-l10n-id="tab-bar-top-below"/>
-           <menuitem id="tabBarBottomAbove" value="bottomabove" data-l10n-id="tab-bar-bottom-above"/>
-           <menuitem id="tabBarBottomBelow" value="bottombelow" data-l10n-id="tab-bar-bottom-below"/>
-         </menupopup>`
-      ));
-      if (!Services.prefs.prefHasUserValue(positionPref)) {
-        document.l10n?.translateElements([$("tabBarTopAbove")]).then(() => {
-          position.setAttribute("label", $("tabBarTopAbove").label);
-        }).catch(e => console.error("error in _waterfoxPositionControl", e));
-      }
-    } else {
-      MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
-      defaultPrefValue = "topAboveAB";
-      positionPref = "browser.tabBar.position";
-      position.appendChild(MozXULElement.parseXULToFragment(
-        `<menupopup>
-           <menuitem value="topAboveAB" data-l10n-id="tab-top-above-ab"/>
-           <menuitem value="topUnderAB" data-l10n-id="tab-top-under-ab"/>
-           <menuitem value="bottom" data-l10n-id="tab-bottom"/>
-         </menupopup>`
-      ));
+    MozXULElement.insertFTLIfNeeded("browser/waterfox.ftl");
+    defaultPrefValue = "topabove";
+    positionPref = "browser.tabs.toolbarposition";
+    position.appendChild(MozXULElement.parseXULToFragment(
+      `<menupopup>
+         <menuitem id="tabBarTopAbove" value="topabove" data-l10n-id="tab-bar-top-above"/>
+         <menuitem id="tabBarTopBelow" value="topbelow" data-l10n-id="tab-bar-top-below"/>
+         <menuitem id="tabBarBottomAbove" value="bottomabove" data-l10n-id="tab-bar-bottom-above"/>
+         <menuitem id="tabBarBottomBelow" value="bottombelow" data-l10n-id="tab-bar-bottom-below"/>
+       </menupopup>`
+    ));
+    if (!Services.prefs.prefHasUserValue(positionPref)) {
+      document.l10n?.translateElements([$("tabBarTopAbove")]).then(() => {
+        position.setAttribute("label", $("tabBarTopAbove").label);
+      }).catch(e => console.error("error in _waterfoxPositionControl", e));
     }
     position.setAttribute("preference", positionPref);
     position.setAttribute("value", Services.prefs.getCharPref(positionPref, defaultPrefValue));
@@ -133,7 +120,7 @@ var gAppearancePane = {
       `<preference id="${positionPref}"
                      name="${positionPref}"
                      type="wstring"
-                     ${Tabmix.isVersion(913) ? "" : 'onchange = "window.opener.moveTabBar();"'}/>`
+       />`
     ));
   },
 

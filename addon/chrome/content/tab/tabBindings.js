@@ -20,21 +20,10 @@
             <image class="tab-protect-icon"/>
             <image class="tab-lock-icon"/>
             <image class="tab-reload-icon"/>`
+  ).replace(
+    'tab-icon-stack',
+    'tab-icon tab-icon-stack'
   );
-
-  if (Tabmix.isVersion(870)) {
-    markup = markup.replace('tab-icon-stack', 'tab-icon tab-icon-stack');
-  } else {
-    markup = markup.replace(
-      '<hbox class="tab-content" align="center">',
-      `$&
-          <stack class="tab-icon">`
-    ).replace(
-      '<image class="tab-reload-icon"/>',
-      `$&
-          </stack>`
-    );
-  }
 
   tabbrowsertab._fragment = MozXULElement.parseXULToFragment(markup);
 

@@ -7,7 +7,7 @@
 
 /* :::: progress bar on tabs :::: */
 .tab-progress {
-  -moz-appearance: none;
+  appearance: none;
   min-height: 0;
   height: 4px;
 }
@@ -21,7 +21,7 @@
 }
 
 .tab-progress > .progress-bar {
-  -moz-appearance: none;
+  appearance: none;
   border: 0;
   border-top: 1px solid rgba(0,0,0,.4);
   border-bottom: 1px solid rgba(0,0,0,.3);

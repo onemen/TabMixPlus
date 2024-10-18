@@ -2,27 +2,24 @@
 
 const EXPORTED_SYMBOLS = ["DynamicRules"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const {TabmixChromeUtils} = ChromeUtils.import("chrome://tabmix-resource/content/ChromeUtils.jsm");
-
 const lazy = {};
 
 ChromeUtils.defineModuleGetter(lazy, "TabmixSvc",
   "chrome://tabmix-resource/content/TabmixSvc.jsm");
 
-TabmixChromeUtils.defineLazyGetter(lazy, "Prefs", () => {
+ChromeUtils.defineLazyGetter(lazy, "Prefs", () => {
   return Services.prefs.getBranch("extensions.tabmix.styles.");
 });
 
 var TYPE;
-TabmixChromeUtils.defineLazyGetter(lazy, "SSS", () => {
+ChromeUtils.defineLazyGetter(lazy, "SSS", () => {
   let sss = Cc['@mozilla.org/content/style-sheet-service;1']
       .getService(Ci.nsIStyleSheetService);
   TYPE = sss.USER_SHEET;
   return sss;
 });
 
-TabmixChromeUtils.defineLazyGetter(lazy, "isMac", () => {
+ChromeUtils.defineLazyGetter(lazy, "isMac", () => {
   return lazy.TabmixSvc.isMac;
 });
 
@@ -126,8 +123,7 @@ const DynamicRules = {
     bgImage.body = "linear-gradient(#topColor, #bottomColor)";
     let bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),\n";
     bgImage.bg = lazy.isMac ? bgImage.body : bottomBorder + space20 + bgImage.body;
-    ///XXX move -moz-appearance: to general rule when style have bg
-    let background = " {\n  -moz-appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
+    let background = " {\n  appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
     let backgroundRule = ' > .tab-stack > .tab-background' + background;
     let tabTextRule = " .tab-text {\n  color: #textColor !important;\n}\n";
 
@@ -245,7 +241,6 @@ const DynamicRules = {
       TabmixTabbar.visibleRows = 1;
       Tabmix.tabsUtils.updateVerticalTabStrip();
       TabmixTabbar.setFirstTabInRow();
-      TabmixTabbar.updateBeforeAndAfter();
     });
   },
 

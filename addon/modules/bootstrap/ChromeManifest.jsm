@@ -3,8 +3,6 @@
 
 const EXPORTED_SYMBOLS = ["ChromeManifest"];
 
-const Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-
 /**
  * A default map, which assumes a default value on get() if the key doesn't exist
  */

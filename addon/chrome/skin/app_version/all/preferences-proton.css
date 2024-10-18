@@ -6,8 +6,6 @@
     proton styles for preferences.xhtml and child windows
 **/
 
-@import url("chrome://global/skin/in-content/common.css");
-
 @namespace html url("http://www.w3.org/1999/xhtml");
 
 :root {

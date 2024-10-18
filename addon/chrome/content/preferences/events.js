@@ -42,23 +42,6 @@ var gEventsPane = {
     $("syncedTabs").label = syncedTabs;
     $("selectSyncedTabs").label = syncedTabs;
 
-    if (!Tabmix.isVersion(890)) {
-      gPrefWindow.removeChild("pref_ctrltab");
-      const preferences = document.getElementById("paneEvents").querySelector("preferences");
-      const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
-      const preference = document.createElementNS(NS_XUL, "preference");
-      preference.id = "pref_ctrltab";
-      preference.setAttribute("name", "browser.ctrlTab.recentlyUsedOrder");
-      preference.setAttribute("type", "bool");
-      preference.setAttribute("onchange", "gEventsPane.disableShowTabList();");
-      preferences.appendChild(preference);
-    }
-
-    if (!Tabmix.isVersion(1150)) {
-      $("searchclipboardfor").parentElement?.remove();
-      gPrefWindow.removeChild("pref_searchclipboardfor");
-    }
-
     if (!Tabmix.isVersion(1170)) {
       $("closedTabsFrom-separator").remove();
       gPrefWindow.removeItemAndPrefById("pref_closedTabsFromAllWindows");

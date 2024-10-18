@@ -88,7 +88,6 @@
 }
 
 /* see tab.js  in this.dynamicProtonRules
-@media (-moz-proton) {
 #tabmix-scrollbox::part(scrollbutton-up),
 #tabmix-scrollbox::part(scrollbutton-down) {
   appearance: none;
@@ -98,7 +97,7 @@
   margin: 0;
   padding: calc(var(--toolbarbutton-inner-padding) - 2px) calc(var(--toolbarbutton-inner-padding) - 6px);
 }
-} */
+*/
 
 #tabmix-scrollbox:not([scrolledtostart])::part(scrollbutton-up):hover,
 #tabmix-scrollbox:not([scrolledtoend])::part(scrollbutton-down):hover {
@@ -115,14 +114,13 @@
 /* based on browser/themes/shared/tabs.inc.css */
 #tabmix-scrollbox::part(scrollbutton-up),
 #tabmix-scrollbox::part(scrollbutton-down) {
-  fill: var(--tabmix-scrollbox-button-fill, currentColor);
-  /* firefox 92+ - Bug 1703914 Remove --toolbarbutton-icon-fill-opacity CSS variable */
+  fill: var(--toolbarbutton-icon-fill, currentColor);
   fill-opacity: var(--toolbarbutton-icon-fill-opacity, 1);
 }
 
 #tabmix-scrollbox[orient=vertical]::part(scrollbutton-up),
 #tabmix-scrollbox[orient=vertical]::part(scrollbutton-down) {
-  list-style-image: var(--tabmix-scrollbutton-image);
+  list-style-image: url(chrome://global/skin/icons/arrow-down.svg);
 }
 
 /* swap direction from the original rule
@@ -137,7 +135,28 @@
 #TabsToolbar[multibar] #TabsToolbar-customization-target,
 #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   align-items: flex-start;
-  -moz-box-align: start; /* before Firefox 112 */
+}
+
+@media (-moz-windows-compositor) {
+  #TabsToolbar[multibar] .titlebar-buttonbox {
+    display: flex;
+  }
+
+  @media not (-moz-platform: windows-win7) {
+    @media not (-moz-platform: windows-win8) {
+      #TabsToolbar[multibar] toolbarbutton.titlebar-button {
+        padding-block: 12px;
+        align-self: flex-start;
+      }
+    }
+  }
+}
+
+@media (-moz-platform: macos) {
+  #TabsToolbar[tabmix-flowing="multibar"] .titlebar-buttonbox-container {
+    align-items: flex-start !important;
+    margin-top: calc((var(--tab-min-height_mlt) - 16px) / 2 + 3px);
+  }
 }
 
 :root[uidensity=compact] {
@@ -153,24 +172,12 @@
   margin-top: 2px;
 }
 
-@media not (-moz-proton) {
-:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
-  margin-top: var(--tabmix-button-margin-top) !important;
-}
-
-:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
-  margin-top: var(--tabmix-button-margin-top-compact) !important;
-}
-}
-
-@media (-moz-proton) {
 :root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-margin-top-proton) !important;
 }
 
 :root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-margin-top-proton-compact) !important;
-}
 }
 
 #tabbrowser-tabs[orient=horizontal] > .tab-drop-indicator {
@@ -179,4 +186,47 @@
 
 #tabbrowser-tabs[multibar][orient=horizontal] > .tab-drop-indicator {
   margin-top: calc(var(--tab-min-height_mlt) * (var(--tabmix-visiblerows) - 1) + var(--tabmix-multirow-margin, 0));
+}
+
+/* browser/themes/shared/tabs.inc.css */
+/* Tab Overflow */
+#tabmix-scrollbox[orient=vertical]::part(overflow-start-indicator),
+#tabmix-scrollbox[orient=vertical]::part(overflow-end-indicator) {
+  display: none;
+}
+
+#tabmix-scrollbox:not([scrolledtostart])::part(overflow-start-indicator),
+#tabmix-scrollbox:not([scrolledtoend])::part(overflow-end-indicator) {
+  width: 7px; /* The width is the sum of the inline margins */
+  background-image: radial-gradient(ellipse at bottom,
+                                    rgba(0,0,0,0.1) 0%,
+                                    rgba(0,0,0,0.1) 7.6%,
+                                    rgba(0,0,0,0) 87.5%);
+  background-repeat: no-repeat;
+  background-position: -3px;
+  border-left: .5px solid rgba(255,255,255,.2);
+  pointer-events: none;
+  position: relative;
+  z-index: 3; /* the selected tab's z-index + 1 */
+  border-bottom: .5px solid transparent;
+}
+
+/* original margin-inline: -.5px -6.5px; */
+#tabmix-scrollbox:not([scrolledtostart])::part(overflow-start-indicator) {
+  margin-inline: -6.5px -.5px;
+}
+
+/* original margin-inline: -6.5px -.5px; */
+#tabmix-scrollbox:not([scrolledtoend])::part(overflow-end-indicator) {
+  margin-inline: -.5px -6.5px;
+}
+
+#tabmix-scrollbox[scrolledtostart]::part(overflow-start-indicator),
+#tabmix-scrollbox[scrolledtoend]::part(overflow-end-indicator) {
+  opacity: 0;
+}
+
+#tabmix-scrollbox::part(overflow-start-indicator),
+#tabmix-scrollbox::part(overflow-end-indicator) {
+  transition: opacity 150ms ease;
 }
