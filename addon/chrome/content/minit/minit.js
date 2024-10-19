@@ -71,9 +71,9 @@ var TMP_tabDNDObserver = {
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
     const _animateTabMove = Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
-      'let movingTabs = draggedTab._dragData.movingTabs;',
-      `$&
-      let tabmixHandleMove = this.getAttribute("orient") === "horizontal" && TabmixTabbar.widthFitTitle;`
+      'let draggedTab',
+      `let tabmixHandleMove = this.getAttribute("orient") === "horizontal" && TabmixTabbar.widthFitTitle;
+      $&`
     )._replace(
       'this.selectedItem = draggedTab;',
       'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
@@ -83,7 +83,7 @@ var TMP_tabDNDObserver = {
             draggedTab.setAttribute("dragged", true);\n\
           }'
     )._replace(
-      `if (${Tabmix.isVersion(1300) ? "screen" : "screenX"} > tabCenter) {`,
+      `if (${Tabmix.isVersion(1300) ? "screen" : "screenX"} > ${Tabmix.isVersion(1330) ? "point" : "tabCenter"}) {`,
       `let midWidth = tabs[mid].getBoundingClientRect().width;
         if (!this.verticalMode && tabmixHandleMove && referenceTabWidth > midWidth) {
           _screenX += midWidth / 2;
@@ -94,7 +94,7 @@ var TMP_tabDNDObserver = {
           ) {
             low = mid + 1;
           } else {
-            newIndex = tabs[mid]._tPos;
+            ${Tabmix.isVersion(1330) ? "index" : "newIndex"} = tabs[mid]._tPos;
             break;
           }
           continue;
@@ -102,12 +102,17 @@ var TMP_tabDNDObserver = {
         $&`.replace(/_screenX/g, Tabmix.isVersion(1300) ? "screen" : "screenX")
     )._replace(
       'newIndex >= oldIndex',
-      `!tabmixHandleMove ? $& : newIndex > -1 && (RTL_UI !== ${Tabmix.isVersion(1300) ? "directionMove" : "ltrMove"})`
+      `!tabmixHandleMove ? $& : newIndex > -1 && (RTL_UI !== ${Tabmix.isVersion(1300) ? "directionMove" : "ltrMove"})`,
+      {check: !Tabmix.isVersion(1330)}
+    )._replace(
+      'index >= oldIndex',
+      `!tabmixHandleMove ? $& : index > -1 && (RTL_UI !== directionForward)`,
+      {check: Tabmix.isVersion(1330)}
     );
 
     if (Tabmix.isVersion(1300)) {
       _animateTabMove._replace(
-        'let translate = screen - draggedTab._dragData[screenAxis];',
+        `let translate = screen - ${Tabmix.isVersion(1330) ? "dragData" : "draggedTab._dragData"}[screenAxis];`,
         `$&
          let rightTabWidth, leftTabWidth, referenceTabWidth;
          if (!this.verticalMode) {
@@ -115,7 +120,7 @@ var TMP_tabDNDObserver = {
            draggedTab._dragData.shiftWidth = shiftSize;
            rightTabWidth = movingTabs.at(-1).getBoundingClientRect().width;
            leftTabWidth = movingTabs[0].getBoundingClientRect().width;
-           referenceTabWidth = directionMove ? rightTabWidth : leftTabWidth;
+           referenceTabWidth = ${Tabmix.isVersion(1330) ? "directionForward" : "directionMove"} ? rightTabWidth : leftTabWidth;
          }`
       )._replace(
         '(firstMovingTabScreen + tabSize)',
@@ -219,7 +224,7 @@ var TMP_tabDNDObserver = {
         gBrowser.ensureTabIsVisible(draggedTab);
       $&`
     )._replace(
-      Tabmix.isVersion(1300) ? Tabmix.isVersion(1320) ? 'let shouldTranslate;' : 'if (oldTranslate && oldTranslate' : 'if (oldTranslateX && oldTranslateX',
+      Tabmix.isVersion(1300) ? Tabmix.isVersion(1320) ? 'let shouldTranslate' : 'if (oldTranslate && oldTranslate' : 'if (oldTranslateX && oldTranslateX',
       `let refTab = this.allTabs[dropIndex];
        if (!this.verticalMode && refTab) {
          let firstMovingTab = RTL_UI ? movingTabs[movingTabs.length - 1] : movingTabs[0];
