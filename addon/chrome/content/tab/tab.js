@@ -638,9 +638,6 @@ Tabmix.tabsUtils = {
     }
 
     const firstNonPinnedTab = gBrowser.tabs[gBrowser._numPinnedTabs];
-    const padding = firstNonPinnedTab ?
-      Tabmix.getStyle(firstNonPinnedTab, "paddingLeft") + Tabmix.getStyle(firstNonPinnedTab, "paddingRight") :
-      4;
 
     /**
      * @param {number} stripWidth
@@ -648,11 +645,11 @@ Tabmix.tabsUtils = {
      */
     function calcMinWidth(stripWidth, buttonWidth, tabMinWidth = minWidth) {
       const widthWithoutButtons = stripWidth - buttonWidth;
-      const maxTabsInRow = Math.floor(stripWidth / (tabMinWidth + padding));
-      const isTabsFit = maxTabsInRow * (tabMinWidth + padding) <= widthWithoutButtons;
+      const maxTabsInRow = Math.floor(stripWidth / tabMinWidth);
+      const isTabsFit = maxTabsInRow * tabMinWidth <= widthWithoutButtons;
       return isTabsFit ?
         tabMinWidth :
-        Math.floor((widthWithoutButtons - 1) / maxTabsInRow) - padding;
+        Math.floor((widthWithoutButtons - 1) / maxTabsInRow);
     }
 
     const tabsButtonWidth = this._newTabButtonWidth(false);
@@ -907,10 +904,8 @@ Tabmix.tabsUtils = {
       const tsbo = this.tabBar.arrowScrollbox.scrollbox;
       const tsboBaseWidth = tsbo.getBoundingClientRect().width;
       const minWidth = parseFloat(gTMPprefObserver.dynamicRules.width.style.getPropertyValue("min-width"));
-      const tab = gBrowser.tabs.at(-1);
-      const padding = tab ? Tabmix.getStyle(tab, "paddingLeft") + Tabmix.getStyle(tab, "paddingRight") : 4;
-      const maxTabsInRow = Math.floor(tsboBaseWidth / (minWidth + padding));
-      const newMaxWidth = Math.floor(1000 * tsboBaseWidth / maxTabsInRow) / 1000 - padding;
+      const maxTabsInRow = Math.floor(tsboBaseWidth / minWidth);
+      const newMaxWidth = Math.floor(1000 * tsboBaseWidth / maxTabsInRow) / 1000;
       if (this._tab_overflow_width !== newMaxWidth) {
         this._tab_overflow_width = newMaxWidth;
         const root = document.querySelector(":root");
