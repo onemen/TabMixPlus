@@ -150,13 +150,15 @@
                 </menulist>
               </hbox>
             </box>
-            <vbox id="multi-rows" class="indent" style="height: 54px;">
-              <hbox align="center" id="maxbar">
-                <label value="&maxrow.label;" TSTdisabled="true"/>
-                <html:input id="maxrow" size="2" maxlength="2" preference="pref_maxrow" type="number" required="required" min="2"/>
-              </hbox>
-              <checkbox_tmp id="pinnedTabScroll" label="&pinnedTabScroll.label;"
-                            preference="pref_pinnedTabScroll"/>
+            <vbox style="height: 54px;">
+              <vbox id="multi-rows" class="indent">
+                <hbox align="center" id="maxbar">
+                  <label value="&maxrow.label;" TSTdisabled="true"/>
+                  <html:input id="maxrow" size="2" maxlength="2" preference="pref_maxrow" type="number" required="required" min="2"/>
+                </hbox>
+                <checkbox_tmp id="pinnedTabScroll" label="&pinnedTabScroll.label;"
+                              preference="pref_pinnedTabScroll"/>
+              </vbox>
             </vbox>
             <checkbox_tmp id="smoothScroll" label="&smoothScroll.label;" preference="pref_smoothScroll"/>
             <hbox align="center" id="clickToScroll.scrollDelay">

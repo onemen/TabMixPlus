@@ -185,7 +185,6 @@ tab.subtabs:focus-visible > .tab-middle > .tab-text {
 }
 
 #TabMIxPreferences:not([ubuntu]) .groupbox-panels:not(.tabclick) {
-  appearance: groupbox;
   padding: 3px 3px 6px 3px;
 }
 
@@ -324,7 +323,6 @@ tabbox > tabpanels:last-child {
 }
 
 #TabMIxPreferences[mac] prefpane .groupbox-body {
-  appearance: groupbox;
   padding-top: 2px;
   margin-bottom: 2px;
 }

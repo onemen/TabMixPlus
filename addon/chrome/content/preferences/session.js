@@ -7,6 +7,9 @@ var gSessionPane = {
     if (TabmixSvc.isLinux)
       $("sessionManager-panels").setAttribute("linux", "true");
 
+    // while we don't use session manager always set `Advanced Setting` as selected tab
+    $("session").selectedIndex = 2;
+
     this.isSessionStoreEnabled(true);
     this.updateSessionShortcuts();
 
