@@ -20,13 +20,13 @@ var TabmixTabbar = {
   SCROLL_BUTTONS_RIGHT: 3,
 
   set flowing(val) {
-    Tabmix.setItem(gBrowser.tabContainer, "flowing", val);
-    Tabmix.setItem(gBrowser.tabContainer.arrowScrollbox, "flowing", val);
+    Tabmix.setItem(gBrowser.tabContainer, "tabmix-flowing", val);
+    Tabmix.setItem(gBrowser.tabContainer.arrowScrollbox, "tabmix-flowing", val);
 
     // update our broadcaster
-    Tabmix.setItem("tabmix_flowing", "flowing", val);
+    Tabmix.setItem("tabmix_flowing", "tabmix-flowing", val);
 
-    Tabmix.setItem("TabsToolbar", "multibar", val == "multibar" || null);
+    Tabmix.setItem("TabsToolbar", "tabmix-multibar", val == "multibar" || null);
     Tabmix.setItem("TabsToolbar", "tabmix-flowing", val);
     Tabmix.setItem("tabmix-scrollbox", "orient", val == "multibar" ? "vertical" : "horizontal");
 
@@ -34,11 +34,21 @@ var TabmixTabbar = {
   },
 
   get flowing() {
-    return gBrowser.tabContainer.getAttribute("flowing");
+    return gBrowser.tabContainer.getAttribute("tabmix-flowing");
   },
 
   get isMultiRow() {
     return this.flowing == "multibar";
+  },
+
+  get multiRowState() {
+    /** @type {"scrollbar" | "true" | null} */ // @ts-expect-error
+    const val = gBrowser.tabContainer.getAttribute("tabmix-multibar");
+    return val;
+  },
+
+  get hasMultiRows() {
+    return gBrowser.tabContainer.hasAttribute("tabmix-multibar");
   },
 
   get visibleRows() {
@@ -177,8 +187,8 @@ var TabmixTabbar = {
       Tabmix.setItem("tabbrowser-tabs", "showalltabsbutton", !allTabsButton.collapsed || null);
     }
     const tabBarSpace = Tabmix.prefs.getBoolPref("tabBarSpace") || null;
-    Tabmix.setItem(tabBar.arrowScrollbox, "tabBarSpace", tabBarSpace);
-    Tabmix.setItem("TabsToolbar", "tabBarSpace", tabBarSpace);
+    Tabmix.setItem(tabBar.arrowScrollbox, "tabmix-tabBarSpace", tabBarSpace);
+    Tabmix.setItem("TabsToolbar", "tabmix-tabBarSpace", tabBarSpace);
     this.setShowNewTabButtonAttr();
 
     if (start)
@@ -226,12 +236,11 @@ var TabmixTabbar = {
         this._updateScrollStatusTimeout = null;
       }, 250);
     }
-    var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
       //XXX we only need setFirstTabInRow from here when tab width changed
       // so if widthFitTitle is false we need to call it if we actually change the width
       // for other chases we need to call it when we change title
-      if (tabBar.hasAttribute("multibar")) {
+      if (this.hasMultiRows) {
         this.setFirstTabInRow();
         Tabmix.tabsUtils.updateVerticalTabStrip();
       }
@@ -255,7 +264,7 @@ var TabmixTabbar = {
     var tabBar = gBrowser.tabContainer;
     if (this.isMultiRow) {
       this.setFirstTabInRow();
-      if (!tabBar.hasAttribute("multibar")) {
+      if (!this.hasMultiRows) {
         tabBar.arrowScrollbox._enterVerticalMode();
       } else {
         this._waitAfterMaximized = window.windowState == window.STATE_MAXIMIZED;
@@ -506,7 +515,7 @@ Tabmix.tabsUtils = {
       window.TabScope.init();
     }
 
-    TabmixTabbar.flowing = this.tabBar.getAttribute("flowing");
+    TabmixTabbar.flowing = this.tabBar.getAttribute("tabmix-flowing");
     Tabmix.navToolbox.setScrollButtons(true);
 
     // fix incompatibility with Personal Titlebar extension
@@ -531,7 +540,7 @@ Tabmix.tabsUtils = {
         !Tabmix.tabsUtils.visible && TabmixTabbar.visibleRows == 1)
       return null;
     if (this._inUpdateVerticalTabStrip)
-      return this.tabBar.getAttribute("multibar");
+      return TabmixTabbar.multiRowState;
     this._inUpdateVerticalTabStrip = true;
 
     // we must adjustNewtabButtonVisibility before get lastTabRowNumber
@@ -539,7 +548,7 @@ Tabmix.tabsUtils = {
     // this.lastTabRowNumber is null when we hide the tabbar
     let rows = reset || this.tabBar.allTabs.length == 1 ? 1 : this.lastTabRowNumber || 1;
 
-    let currentMultibar = this.tabBar.getAttribute("multibar") || null;
+    let currentMultibar = TabmixTabbar.multiRowState || null;
     let maxRow = Tabmix.prefs.getIntPref("tabBarMaxRow");
     // we need to check for the case that last row of tabs is empty and we still have hidden row on top
     // this can occur when we close last tab in the last row or when some tab changed width
@@ -553,7 +562,7 @@ Tabmix.tabsUtils = {
 
     let multibar;
     if (rows == 1)
-      multibar = null; // removeAttribute "multibar"
+      multibar = null; // removeAttribute "tabmix-multibar"
     else if (rows > maxRow)
       [multibar, rows] = ["scrollbar", maxRow];
     else
@@ -561,8 +570,8 @@ Tabmix.tabsUtils = {
 
     if (currentMultibar != multibar) {
       // set multibar also at _enterVerticalMode
-      Tabmix.setItem(this.tabBar, "multibar", multibar);
-      Tabmix.setItem("tabmix-bottom-toolbox", "multibar", multibar);
+      Tabmix.setItem(this.tabBar, "tabmix-multibar", multibar);
+      Tabmix.setItem("tabmix-bottom-toolbox", "tabmix-multibar", multibar);
     }
 
     TabmixTabbar.visibleRows = rows;
@@ -860,7 +869,7 @@ Tabmix.tabsUtils = {
   },
 
   isSingleRow(visibleTabs) {
-    if (!this.tabBar.hasAttribute("multibar"))
+    if (!TabmixTabbar.hasMultiRows)
       return true;
     // we get here when we are about to go to single row
     // one tab before the last is in the first row and we are closing one tab
@@ -1020,8 +1029,8 @@ Tabmix.bottomToolbarUtils = {
   createToolbox() {
     var updateFullScreen,
         tabBar = gBrowser.tabContainer;
-    Tabmix.setItem(tabBar.arrowScrollbox, "flowing", TabmixTabbar.flowing);
-    const multibar = gBrowser.tabContainer.getAttribute("multibar") ? ` multibar="true"` : ``;
+    Tabmix.setItem(tabBar.arrowScrollbox, "tabmix-flowing", TabmixTabbar.flowing);
+    const multibar = TabmixTabbar.multiRowState ? ` multibar="true"` : ``;
     const fragment = MozXULElement.parseXULToFragment(
       `<vbox id="tabmix-bottom-toolbox"${multibar}>
          <toolbox></toolbox>
@@ -1820,7 +1829,7 @@ window.gTMPprefObserver = {
     // we add the rule after the first tab added
     if (typeof colorfulTabs == "object") {
       let padding = Tabmix.getStyle(gBrowser.tabs[0], "paddingBottom");
-      newRule = '#tabbrowser-tabs[flowing="multibar"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[selected=true]' +
+      newRule = '#tabbrowser-tabs[tabmix-flowing="multibar"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[selected=true]' +
                     ' {margin-bottom: -1px !important; padding-bottom: ' + (padding + 1) + 'px !important;}';
       let index = this.insertRule(newRule);
       const cssStyleRule = this.tabStyleSheet.cssRules[index];
@@ -1832,7 +1841,7 @@ window.gTMPprefObserver = {
 
     if (Tabmix.isVersion(1310)) {
       this.insertRule(
-        `#tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox) {
+        `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox) {
           margin-top: var(--tabmix-multirow-margin, 0);
           margin-bottom: var(--tabmix-multirow-margin, 0);
         }`
@@ -1844,7 +1853,7 @@ window.gTMPprefObserver = {
         slot {
           flex-wrap: inherit;
         }
-        :host(:not([flowing="multibar"])[orient="horizontal"][widthFitTitle]) slot {
+        :host(:not([tabmix-flowing="multibar"])[orient="horizontal"][widthFitTitle]) slot {
           display: grid;
           grid-auto-flow: column;
           grid-auto-columns: max-content;
@@ -1853,7 +1862,7 @@ window.gTMPprefObserver = {
       shadowRoot.adoptedStyleSheets = [styleSheet];
     } else {
       this.insertRule(
-        `#tabbrowser-tabs[multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox-clip) {
+        `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox-clip) {
           overflow: clip;
           display: block;
           margin-top: var(--tabmix-multirow-margin, 0);
@@ -1900,8 +1909,8 @@ window.gTMPprefObserver = {
     );
 
     this.insertRule(
-      `#tabmix-scrollbox[flowing=multibar]::part(scrollbutton-up),
-       #tabmix-scrollbox[flowing=multibar]::part(scrollbutton-down) {
+      `#tabmix-scrollbox[tabmix-flowing=multibar]::part(scrollbutton-up),
+       #tabmix-scrollbox[tabmix-flowing=multibar]::part(scrollbutton-down) {
          padding-inline: calc(var(--toolbarbutton-inner-padding) - 5px);
        }`
     );

@@ -14,9 +14,9 @@
 
 /* prevent tabbrowser-tabs height from increasing by 2px when the tabs are
    in display: block */
-#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[flowing="multibar"] >
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[tabmix-flowing="multibar"] >
   #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"] .toolbarbutton-icon,
-#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[flowing="multibar"] >
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[tabmix-flowing="multibar"] >
   #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"] .toolbarbutton-icon {
   margin: -2px 0;
 }
@@ -25,13 +25,13 @@
   position: static !important;
 }
 
-#TabsToolbar[multibar]:not(:-moz-lwtheme) {
+#TabsToolbar[tabmix-multibar]:not(:-moz-lwtheme) {
   background-repeat: repeat;
   background-color: rgb(225, 225, 225);
   background-image: linear-gradient(rgb(232, 232, 232), rgb(211, 211, 211));
 }
 
-#tabbrowser-tabs[multibar=true] #tabbrowser-arrowscrollbox > toolbarbutton {
+#tabbrowser-tabs[tabmix-multibar=true] #tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;
 }
 

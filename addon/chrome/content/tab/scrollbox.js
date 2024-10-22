@@ -61,8 +61,7 @@ Tabmix.multiRow = {
             return;
           }
 
-          const tabBar = this.parentNode;
-          if (tabBar.hasAttribute("multibar") && Tabmix.tabsUtils.overflow) {
+          if (TabmixTabbar.hasMultiRows && Tabmix.tabsUtils.overflow) {
             // don't do anything on Linux when hovering last tab and
             // we show close button on tab on hover
             if (
@@ -74,7 +73,7 @@ Tabmix.multiRow = {
               Tabmix.tabsUtils.updateVerticalTabStrip();
           } else if (
             !TabmixTabbar.widthFitTitle &&
-            tabBar.hasAttribute("multibar") &&
+            TabmixTabbar.hasMultiRows &&
             document.getElementById("tabmix-scrollbox").hasAttribute("overflowing")
           ) {
             // when widthFitTitle is false firefox arrowscrollbox fires underflow
@@ -229,7 +228,7 @@ Tabmix.multiRow = {
 
       /** @this {This} */
       get isMultiRow() {
-        return this.getAttribute("flowing") === "multibar";
+        return this.getAttribute("tabmix-flowing") === "multibar";
       }
 
       /** @this {This} */
@@ -354,8 +353,8 @@ Tabmix.multiRow = {
           Tabmix.tabsUtils.disAllowNewtabbutton = false;
           const tabBar = this.parentNode;
           // set multibar also at updateVerticalTabStrip
-          Tabmix.setItem(tabBar, "multibar", true);
-          Tabmix.setItem("tabmix-bottom-toolbox", "multibar", true);
+          Tabmix.setItem(tabBar, "tabmix-multibar", true);
+          Tabmix.setItem("tabmix-bottom-toolbox", "tabmix-multibar", true);
           const multibar = Tabmix.tabsUtils.updateVerticalTabStrip();
           if (multibar === null) {
             TabmixTabbar._failedToEnterVerticalMode = true;

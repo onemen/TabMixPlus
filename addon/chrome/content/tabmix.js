@@ -828,7 +828,7 @@ var TMP_eventListener = {
     // strip already collapsed at this point
     if (TabmixTabbar.hideMode == 1) {
       if (Tabmix.tabsUtils.getTabsCount() == 2) {
-        tabBar.removeAttribute("multibar");
+        tabBar.removeAttribute("tabmix-multibar");
       }
     }
 
@@ -836,7 +836,7 @@ var TMP_eventListener = {
     // onTabClose_updateTabBar.
     // we would like to get early respond when row height is going to change.
     var updateNow = gReduceMotion;
-    if (!updateNow && tabBar.hasAttribute("multibar")) {
+    if (!updateNow && TabmixTabbar.hasMultiRows) {
       let lastTab = Tabmix.visibleTabs.last;
       if (!TabmixTabbar.inSameRow(lastTab, Tabmix.visibleTabs.previous(lastTab))) {
         updateNow = true;
@@ -875,7 +875,7 @@ var TMP_eventListener = {
     var tabBar = gBrowser.tabContainer;
     function _updateTabstrip() {
       // underflow not always fires when Classic theme restorer installed
-      let multibar = tabBar.getAttribute("multibar");
+      let multibar = TabmixTabbar.multiRowState;
       if (multibar) {
         let lastTabRowNumber = Tabmix.tabsUtils.lastTabRowNumber;
         if (multibar == "true" &&
@@ -893,7 +893,7 @@ var TMP_eventListener = {
 
     if (Tabmix.tabsUtils.disAllowNewtabbutton)
       Tabmix.tabsUtils.adjustNewtabButtonVisibility();
-    if (TabmixTabbar.isMultiRow && tabBar.hasAttribute("multibar")) {
+    if (TabmixTabbar.isMultiRow && TabmixTabbar.hasMultiRows) {
       _updateTabstrip();
       setTimeout(() => _updateTabstrip(), 0);
     }

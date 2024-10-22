@@ -23,41 +23,41 @@
 }
 
 /* hide default scroll buttons */
-#tabbrowser-arrowscrollbox:not([defaultScrollButtons]):not([flowing="scrollbutton"]):not([flowing="singlebar"])::part(overflow-start-indicator),
-#tabbrowser-arrowscrollbox:not([defaultScrollButtons]):not([flowing="singlebar"])::part(overflow-end-indicator),
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons]):not([tabmix-flowing="scrollbutton"]):not([tabmix-flowing="singlebar"])::part(overflow-start-indicator),
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons]):not([tabmix-flowing="singlebar"])::part(overflow-end-indicator),
 #tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-up),
 #tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-down) {
   display: none;
 }
 
-#tabbrowser-arrowscrollbox:not([defaultScrollButtons])[flowing="singlebar"]::part(overflow-end-indicator) {
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons])[tabmix-flowing="singlebar"]::part(overflow-end-indicator) {
   margin-inline-end: 6px;
 }
 
 #tabmix-scrollbox:not([overflowing]),
-#tabmix-scrollbox[flowing="singlebar"],
+#tabmix-scrollbox[tabmix-flowing="singlebar"],
 #tabmix-scrollbox[verticalTabs],
 #tabmix-scrollbox[defaultScrollButtons] {
   visibility: collapse;
 }
 
-#tabbrowser-arrowscrollbox[flowing=multibar][orient=horizontal]::part(scrollbox) {
+#tabbrowser-arrowscrollbox[tabmix-flowing=multibar][orient=horizontal]::part(scrollbox) {
   display: flex;
   flex-wrap: wrap;
   max-height: calc(var(--tab-min-height_mlt) * var(--tabs-lines));
 }
 
 /* waterfox with userChrome enabled set overflow: hidden */
-#TabsToolbar[multibar] {
+#TabsToolbar[tabmix-multibar] {
   height: auto !important;
   overflow: unset !important;
 }
 
-#tabbrowser-tabs[multibar][orient=horizontal] .tabbrowser-tab[usercontextid] > .tab-stack > .tab-background > .tab-context-line {
+#tabbrowser-tabs[tabmix-multibar][orient=horizontal] .tabbrowser-tab[usercontextid] > .tab-stack > .tab-background > .tab-context-line {
   margin-top: -1px;
 }
 
-#tabbrowser-tabs[multibar=scrollbar][orient=horizontal] .tabbrowser-tab[pinned] {
+#tabbrowser-tabs[tabmix-multibar=scrollbar][orient=horizontal] .tabbrowser-tab[pinned] {
   margin-top: -0.5px !important
 }
 
@@ -132,19 +132,19 @@
 }
 
 /* :::: make sure all buttons align to the top row :::: */
-#TabsToolbar[multibar] #TabsToolbar-customization-target,
-#TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+#TabsToolbar[tabmix-multibar] #TabsToolbar-customization-target,
+#TabsToolbar[tabmix-multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   align-items: flex-start;
 }
 
 @media (-moz-windows-compositor) {
-  #TabsToolbar[multibar] .titlebar-buttonbox {
+  #TabsToolbar[tabmix-multibar] .titlebar-buttonbox {
     display: flex;
   }
 
   @media not (-moz-platform: windows-win7) {
     @media not (-moz-platform: windows-win8) {
-      #TabsToolbar[multibar] toolbarbutton.titlebar-button {
+      #TabsToolbar[tabmix-multibar] toolbarbutton.titlebar-button {
         padding-block: 12px;
         align-self: flex-start;
       }
@@ -163,20 +163,20 @@
   --private-browsing-indicator-margin-top: 9px;
 }
 
-#TabsToolbar[multibar] #private-browsing-indicator-with-label {
+#TabsToolbar[tabmix-multibar] #private-browsing-indicator-with-label {
   align-items: flex-start;
   margin-top: var(--private-browsing-indicator-margin-top, 12px);
 }
 
-#TabsToolbar[multibar] #private-browsing-indicator-with-label > image {
+#TabsToolbar[tabmix-multibar] #private-browsing-indicator-with-label > image {
   margin-top: 2px;
 }
 
-:root:not([uidensity=compact]) #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+:root:not([uidensity=compact]) #TabsToolbar[tabmix-multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-margin-top-proton) !important;
 }
 
-:root[uidensity=compact] #TabsToolbar[multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+:root[uidensity=compact] #TabsToolbar[tabmix-multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-margin-top-proton-compact) !important;
 }
 
@@ -184,7 +184,7 @@
   pointer-events: none;
 }
 
-#tabbrowser-tabs[multibar][orient=horizontal] > .tab-drop-indicator {
+#tabbrowser-tabs[tabmix-multibar][orient=horizontal] > .tab-drop-indicator {
   margin-top: calc(var(--tab-min-height_mlt) * (var(--tabmix-visiblerows) - 1) + var(--tabmix-multirow-margin, 0));
 }
 

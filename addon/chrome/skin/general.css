@@ -7,7 +7,7 @@
 
 /* for privateTab extensions */
 #TabsToolbar[privateTab-fixAfterTabsButtonsAccessibility]
-    #tabbrowser-tabs[flowing="multibar"][widthFitTitle="true"] #tabs-newtab-button {
+    #tabbrowser-tabs[tabmix-flowing="multibar"][widthFitTitle="true"] #tabs-newtab-button {
   vertical-align: bottom;
 }
 
@@ -36,19 +36,19 @@
 }
 
 /* :::: Space on tab bar :::: */
-#tabbrowser-arrowscrollbox[orient="horizontal"][tabBarSpace] {
+#tabbrowser-arrowscrollbox[orient="horizontal"][tabmix-tabBarSpace] {
   -moz-margin-start: 0;
   -moz-margin-end: 0;
   -moz-padding-end: 15px;
   -moz-padding-start: 15px;
 }
 
-#tabbrowser-arrowscrollbox[orient="vertical"][tabBarSpace] {
+#tabbrowser-arrowscrollbox[orient="vertical"][tabmix-tabBarSpace] {
   padding-block: 15px;
 }
 
-#TabsToolbar[tabBarSpace] .titlebar-spacer[type="pre-tabs"],
-#TabsToolbar[tabBarSpace] .titlebar-spacer[type="post-tabs"] {
+#TabsToolbar[tabmix-tabBarSpace] .titlebar-spacer[type="pre-tabs"],
+#TabsToolbar[tabmix-tabBarSpace] .titlebar-spacer[type="post-tabs"] {
   width: 25px;
 }
 
@@ -72,6 +72,6 @@
 	transition: none !important;
 }
 
-#tabbrowser-tabs[orient="horizontal"][multibar]:not([widthFitTitle]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab[fadein]:not([pinned]) {
+#tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab[fadein]:not([pinned]) {
   max-width: var(--tabmix-tab-overflow-width, var(--tab-min-width)) !important;
 }

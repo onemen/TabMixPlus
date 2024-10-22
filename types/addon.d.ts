@@ -633,6 +633,8 @@ declare namespace TabmixTabbarNS {
   const SCROLL_BUTTONS_RIGHT: number;
   let flowing: string | null;
   const isMultiRow: boolean;
+  const multiRowState: "scrollbar" | "true" | null;
+  const hasMultiRows: boolean;
   let visibleRows: number;
   function isButtonOnTabsToolBar(button: HTMLButtonElement): boolean;
   function isButtonOnToolBar(button: HTMLButtonElement): boolean;

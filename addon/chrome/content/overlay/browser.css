@@ -246,7 +246,7 @@ so display: none !important; does not hide the button */
 
 /* :::: widthFitTitle :::: */
 /* more dynamic rules are in tab.js addDynamicRules */
-#tabbrowser-tabs[orient="horizontal"][flowing="multibar"][widthFitTitle] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]) {
+#tabbrowser-tabs[orient="horizontal"][tabmix-flowing="multibar"][widthFitTitle] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]) {
   flex: 0 0 auto !important;
   width: auto !important;
 }
@@ -286,13 +286,13 @@ so display: none !important; does not hide the button */
   }
 }
 
-#tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-start-indicator,
-#tabbrowser-arrowscrollbox[flowing="multibar"] > .arrowscrollbox-overflow-end-indicator {
+#tabbrowser-arrowscrollbox[tabmix-flowing="multibar"] > .arrowscrollbox-overflow-start-indicator,
+#tabbrowser-arrowscrollbox[tabmix-flowing="multibar"] > .arrowscrollbox-overflow-end-indicator {
   margin-bottom: 0;
   visibility: collapse;
 }
 
-#tabmix-rows-tooltip:not([flowing="multibar"]) {
+#tabmix-rows-tooltip:not([tabmix-flowing="multibar"]) {
   display: none;
 }
 
@@ -339,7 +339,7 @@ so display: none !important; does not hide the button */
   height: calc(var(--tab-min-height_mlt) * var(--tabmix-visiblerows, 1))
 }
 
-#tabmix-bottom-toolbox[multibar] > toolbox {
+#tabmix-bottom-toolbox[tabmix-multibar] > toolbox {
   margin-block: var(--tabmix-multirow-margin , 0);
 }
 

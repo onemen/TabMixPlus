@@ -318,7 +318,7 @@ var TMP_tabDNDObserver = {
     return (
       tabBar.getAttribute("orient") == "horizontal" &&
       (!this._moveTabOnDragging ||
-        tabBar.hasAttribute("multibar") ||
+        TabmixTabbar.hasMultiRows ||
         aEvent.dataTransfer.mozTypesAt(0)[0] !== this.TAB_DROP_TYPE)
     );
   },
@@ -603,10 +603,9 @@ var TMP_tabDNDObserver = {
     // in the row find the closest tab by mX,
     // if no tab is match return gBrowser.tabs.length
     var mX = event.screenX, mY = event.screenY;
-    var tabBar = gBrowser.tabContainer;
     var tabs = Tabmix.visibleTabs.tabs;
     var numTabs = tabs.length;
-    if (!tabBar.hasAttribute("multibar")) {
+    if (!TabmixTabbar.hasMultiRows) {
       const target = event.target.closest("tab.tabbrowser-tab");
       let startIndex = target ? Tabmix.visibleTabs.indexOf(target) : 0;
       const index = tabs
