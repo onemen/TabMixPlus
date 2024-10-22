@@ -1433,10 +1433,16 @@ Tabmix.tablib = {
           }
         }
       }
+
       // we always restore pinned tabs no need to warn about closing
-      if (this._numPinnedTabs && !onExit) {
+      if (Tabmix.isVersion(1300)) {
+        if (this.pinnedTabCount && !onExit) {
+          addProtected(this.tabContainer.getElementsByAttribute("pinned", true));
+        }
+      } else if (this._numPinnedTabs && !onExit) {
         addProtected(this.tabContainer.getElementsByAttribute("pinned", true));
       }
+
       if ("permaTabs" in window) {
         addProtected(this.tabContainer.getElementsByAttribute("isPermaTab", true));
       }

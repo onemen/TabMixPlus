@@ -638,15 +638,16 @@ Tabmix.tabsUtils = {
       }
     };
 
-    const isFirstRowWithPinnedTabs =
-      gBrowser._numPinnedTabs && Tabmix.tabsUtils.lastTabRowNumber === 1;
-    const cacheMinWidth = this._widthCache[gBrowser._numPinnedTabs];
+    const pinnedTabCount = Tabmix.isVersion(1330) ? gBrowser.pinnedTabCount : gBrowser._numPinnedTabs;
+
+    const isFirstRowWithPinnedTabs = pinnedTabCount && Tabmix.tabsUtils.lastTabRowNumber === 1;
+    const cacheMinWidth = this._widthCache[pinnedTabCount];
     if (cacheMinWidth) {
       setNewMinWidth(cacheMinWidth);
       return;
     }
 
-    const firstNonPinnedTab = gBrowser.tabs[gBrowser._numPinnedTabs];
+    const firstNonPinnedTab = gBrowser.tabs[pinnedTabCount];
 
     /**
      * @param {number} stripWidth
@@ -671,7 +672,7 @@ Tabmix.tabsUtils = {
     if (this._widthCache.minWidth !== newMinWidth) {
       this._widthCache.minWidth = newMinWidth;
       this._widthCache.maxWidth = newMinWidth;
-      this._widthCache[gBrowser._numPinnedTabs] = newMinWidth;
+      this._widthCache[pinnedTabCount] = newMinWidth;
     }
 
     if (isFirstRowWithPinnedTabs && firstNonPinnedTab) {
@@ -679,7 +680,7 @@ Tabmix.tabsUtils = {
       const testNewMinWidth = calcMinWidth(stripWidthWithoutPinned, tabsButtonWidth, newMinWidth);
       if (testNewMinWidth > newMinWidth) {
         const widthForeNonPinnedTabs = calcMinWidth(stripWidthWithoutPinned, tabsButtonWidth);
-        this._widthCache[gBrowser._numPinnedTabs] = widthForeNonPinnedTabs;
+        this._widthCache[pinnedTabCount] = widthForeNonPinnedTabs;
         this._widthCache.maxWidth = Math.max(this._widthCache.maxWidth, widthForeNonPinnedTabs);
         setNewMinWidth(widthForeNonPinnedTabs);
         return;
@@ -908,8 +909,7 @@ Tabmix.tabsUtils = {
 
   _tab_overflow_width: 250,
   updateOverflowMaxWidth() {
-    if (!TabmixTabbar.widthFitTitle && Tabmix.prefs.getBoolPref("flexTabs_fitRow") &&
-        gBrowser.visibleTabs.length > gBrowser._numPinnedTabs) {
+    if (!TabmixTabbar.widthFitTitle && Tabmix.prefs.getBoolPref("flexTabs_fitRow")) {
       const tsbo = this.tabBar.arrowScrollbox.scrollbox;
       const tsboBaseWidth = tsbo.getBoundingClientRect().width;
       const minWidth = parseFloat(gTMPprefObserver.dynamicRules.width.style.getPropertyValue("min-width"));

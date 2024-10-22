@@ -304,6 +304,8 @@ declare namespace MockedGeckoTypes {
       visibleTab: BrowserTab;
     };
     _blurTab: (tab: BrowserTab) => void;
+    readonly pinnedTabCount: number;
+    /** @deprecated replaced with pinnedTabCount in Firefox version 133 */
     readonly _numPinnedTabs: number;
     _lastRelatedTabMap: WeakMap<BrowserTab, BrowserTab>;
     _multiSelectedTabsSet: WeakSet<BrowserTab>;
