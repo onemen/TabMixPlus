@@ -15,12 +15,10 @@ ChromeUtils.defineModuleGetter(lazy, "SyncedTabs",
 ChromeUtils.defineModuleGetter(lazy, "isVersion",
   "chrome://tabmix-resource/content/BrowserVersion.jsm");
 
-// place holder for load default preferences function
-// eslint-disable-next-line no-unused-vars
-var pref;
-let TabmixSvc;
+ChromeUtils.defineModuleGetter(lazy, "FloorpPrefsObserver",
+  "chrome://tabmix-resource/content/Floorp.jsm");
 
-TabmixSvc = {
+const TabmixSvc = {
   aboutBlank: "about:blank",
   aboutNewtab: "about:#".replace("#", "newtab"),
   newtabUrl: "browser.#.url".replace("#", "newtab"),
@@ -178,6 +176,10 @@ TabmixSvc = {
         // Waterfox use build-in preference - browser.tabBar.position
         Services.prefs.clearUserPref("extensions.tabmix.tabBarPosition");
         Services.prefs.lockPref("extensions.tabmix.tabBarPosition");
+      }
+
+      if (lazy.isVersion({fp: "128.0.0"})) {
+        lazy.FloorpPrefsObserver.init();
       }
 
       aWindow.gTMPprefObserver.setLink_openPrefs();

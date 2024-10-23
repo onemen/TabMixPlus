@@ -156,6 +156,9 @@ interface Window {
     init: () => void;
   };
 
+  /** Floorp */
+  gFloorpObservePreference: (prefName: string, callback: () => void) => void;
+
   /** @deprecated - removed from firefox on version 126 */
   BrowserOpenTab: (options: {event: MouseEvent; url: string}) => void;
 }
@@ -659,11 +662,6 @@ declare namespace TabmixTabbarNS {
 }
 
 declare namespace PrivateFunctionsNS {
-  namespace TabmixTabbar {
-    function _updateAtt(tab: Tab | null | undefined, type: keyof typeof TabsUtils._tabmixPositionalTabs, attrib: string, visible?: boolean): void;
-    function _getAttVal(val: boolean | null, hoverAttr?: boolean): "special" | boolean | null;
-  }
-
   namespace UndocloseTabButtonObserver {
     function _removeTab(b: MockedGeckoTypes.TabBrowser, aTab: Tab): void;
   }

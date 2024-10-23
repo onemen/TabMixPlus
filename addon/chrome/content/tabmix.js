@@ -73,13 +73,15 @@ Tabmix.sessionInitialized = function() {
   }
 };
 
-Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
-  if (!this.afterTabsButtonsWidth) {
-    this.afterTabsButtonsWidth = [];
-  }
+/** @this {typeof TabmixNS} */ // @ts-ignore
+Tabmix.getAfterTabsButtonsWidth = function() {
+  this.afterTabsButtonsWidthReady = false;
+  this.afterTabsButtonsWidth = this.isVersion({fp: "128.0.0"}) ? [40] : [35];
+  /** @type {number[]} */
+  const buttonWidths = [];
   if (gBrowser.tabContainer.getAttribute("orient") == "horizontal") {
     const {toolbar, tabBar, collapsed, tabBarCollapsed, toolbarCollapsed} =
-      Tabmix.tabsUtils.getCollapsedState;
+      this.tabsUtils.getCollapsedState;
     let stripIsHidden = TabmixTabbar.hideMode !== 0 && collapsed;
     if (stripIsHidden) {
       toolbar.collapsed = false;
@@ -88,7 +90,9 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     // save tabsNewtabButton width
     this.tabsNewtabButton = document.getElementById("tabs-newtab-button");
     this.tabsNewtabButton.setAttribute("force-display", true);
-    let openNewTabRect = Tabmix.getBoundsWithoutFlushing(this.tabsNewtabButton);
+    // don't use getBoundsWithoutFlushing here, it will get width zero if the button is hidden
+    // since we get here after the browser was painted we can use getBoundingClientRect
+    let openNewTabRect = this.tabsNewtabButton.getBoundingClientRect();
     let style = window.getComputedStyle(this.tabsNewtabButton);
     let marginStart = style?.getPropertyValue("margin-left") ?? "0px";
     // it doesn't work when marginEnd add to buttonWidth
@@ -96,7 +100,7 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     // let buttonWidth = openNewTabRect.width + parseFloat(marginStart) + parseFloat(marginEnd);
     let buttonWidth = openNewTabRect.width + parseFloat(marginStart);
     if (buttonWidth > 0) {
-      this.afterTabsButtonsWidth.push(buttonWidth);
+      buttonWidths.push(buttonWidth);
     }
 
     // when privateTab extension installed add its new tab button width
@@ -104,8 +108,8 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     // the right button
     let openNewPrivateTab = document.getElementById("privateTab-afterTabs-openNewPrivateTab");
     if (openNewPrivateTab) {
-      let openNewPrivateTabRect = Tabmix.getBoundsWithoutFlushing(openNewPrivateTab);
-      this.afterTabsButtonsWidth.push(openNewPrivateTabRect.width);
+      let openNewPrivateTabRect = openNewPrivateTab.getBoundingClientRect();
+      buttonWidths.push(openNewPrivateTabRect.width);
       if (openNewPrivateTabRect.right > openNewTabRect.right)
         this.tabsNewtabButton = openNewPrivateTab;
     }
@@ -113,6 +117,11 @@ Tabmix.getAfterTabsButtonsWidth = function TMP_getAfterTabsButtonsWidth() {
     if (stripIsHidden) {
       toolbar.collapsed = toolbarCollapsed;
       tabBar.collapsed = tabBarCollapsed;
+    }
+    if (buttonWidths.length) {
+      this.tabsUtils._widthCache = {minWidth: 0, maxWidth: 0};
+      this.afterTabsButtonsWidth = buttonWidths;
+      this.afterTabsButtonsWidthReady = true;
     }
   }
 };
@@ -161,8 +170,6 @@ Tabmix.afterDelayedStartup = function() {
   Tabmix.handleTabbarVisibility.toggleEventListener(true);
 
   TMP_extensionsCompatibility.onDelayedStartup();
-
-  setTimeout(() => Tabmix.getAfterTabsButtonsWidth(), 100);
 
   gTMPprefObserver.setMenuIcons();
 

@@ -63,6 +63,17 @@ var TMP_tabDNDObserver = {
       });
     }
 
+    function tabmixHandleMoveString() {
+      const baseTest = 'this.getAttribute("orient") === "horizontal" && TabmixTabbar.widthFitTitle';
+      if (Tabmix.isVersion(1300)) {
+        return `!this.verticalMode && ${baseTest}`;
+      }
+      if (Tabmix.isVersion({fp: "128.0.0"})) {
+        return `!verticalTabbarEnabled() &&  ${baseTest}`;
+      }
+      return baseTest;
+    }
+
     // Determine what tab we're dragging over.
     // * In tabmix tabs can have different width
     // * Point of reference is the start of the dragged tab/tabs when
@@ -71,8 +82,8 @@ var TMP_tabDNDObserver = {
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
     const _animateTabMove = Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")._replace(
-      'let draggedTab',
-      `let tabmixHandleMove = this.getAttribute("orient") === "horizontal" && TabmixTabbar.widthFitTitle;
+      /(?:const|let) draggedTab/,
+      `let tabmixHandleMove = ${tabmixHandleMoveString()};
       $&`
     )._replace(
       'this.selectedItem = draggedTab;',
@@ -85,7 +96,7 @@ var TMP_tabDNDObserver = {
     )._replace(
       `if (${Tabmix.isVersion(1300) ? "screen" : "screenX"} > ${Tabmix.isVersion(1330) ? "point" : "tabCenter"}) {`,
       `let midWidth = tabs[mid].getBoundingClientRect().width;
-        if (!this.verticalMode && tabmixHandleMove && referenceTabWidth > midWidth) {
+        if (tabmixHandleMove && referenceTabWidth > midWidth) {
           _screenX += midWidth / 2;
           if (_screenX > tabCenter + referenceTabWidth / 2) {
             high = mid - 1;
@@ -140,22 +151,28 @@ var TMP_tabDNDObserver = {
         "this.#rtlMode", "this._rtlMode", {check: Tabmix.isVersion(1310), flags: "g"}
       ).toCode();
     } else {
+      // helper function to get floorp strings for width in vertical mode
+      /** @param {string} vertical @param {string} horizontal */
+      const getWidthString = (vertical, horizontal) =>
+        (Tabmix.isVersion({fp: "128.0.0"}) ?
+          `(verticalTabbarEnabled() ? ${vertical} : ${horizontal})` :
+          horizontal);
       _animateTabMove._replace(
-        'let shiftWidth = tabWidth * movingTabs.length;',
-        `let shiftWidth = Tabmix.getMovingTabsWidth(movingTabs);
+        /(?:const|let) shiftWidth = tabWidth \* movingTabs\.length;/,
+        `let shiftWidth = tabmixHandleMove ? Tabmix.getMovingTabsWidth(movingTabs) : tabWidth * movingTabs.length;
          draggedTab._dragData.shiftWidth = shiftWidth;
          let rightTabWidth = movingTabs[movingTabs.length - 1].getBoundingClientRect().width;
          let leftTabWidth = movingTabs[0].getBoundingClientRect().width;
          let referenceTabWidth = ltrMove ? rightTabWidth : leftTabWidth;`
       )._replace(
         '(rightMovingTabScreenX + tabWidth)',
-        `(rightMovingTabScreenX + rightTabWidth)`,
+        `(rightMovingTabScreenX + ${getWidthString("tabWidth", "rightTabWidth")})`,
       )._replace(
-        /let leftTabCenter =.*;/,
-        `let leftTabCenter = leftMovingTabScreenX + translateX + leftTabWidth / 2;`
+        /(?:const|let) leftTabCenter =.*;/,
+        `let leftTabCenter = leftMovingTabScreenX + translateX + ${getWidthString("tabWidth / 2", "leftTabWidth / 2")};`
       )._replace(
-        /let rightTabCenter =.*;/,
-        `let rightTabCenter = rightMovingTabScreenX + translateX + rightTabWidth / 2;`
+        /(?:const|let) rightTabCenter =.*;/,
+        `let rightTabCenter = rightMovingTabScreenX + translateX + ${getWidthString("tabWidth / 2", "rightTabWidth / 2")};`
       ).toCode();
     }
 
@@ -172,12 +189,12 @@ var TMP_tabDNDObserver = {
       'var newMargin;',
       'var newMargin, newMarginY = 0;'
     )._replace(
-      /let newIndex = this\._getDropIndex\(event.*\);/,
+      /(?:const|let) newIndex = this\._getDropIndex\(event.*\);/,
       'let {newIndex, addWidth} = this._getDropIndex(event, {dragover: true, children: this.allTabs});'
     )._replace(
-      /let tabRect = children[^;]*;/g,
+      /(?:const|let) tabRect = children[^;]*;/g,
       `$&
-      newMarginY = TMP_tabDNDObserver.getDropIndicatorMarginY(ind, tabRect, rect);`
+      newMarginY = TMP_tabDNDObserver.getDropIndicatorMarginY(ind, tabRect, rect);`,
     )._replace(
       'newMargin = rect.right - tabRect.right',
       '$& + (addWidth ? tabRect.width : 0)'
@@ -206,8 +223,8 @@ var TMP_tabDNDObserver = {
        }
        $&`
     )._replace(
-      'let newTab = gBrowser.duplicateTab(tab);',
-      'let newTab = Tabmix.duplicateTab(tab);'
+      'newTab = gBrowser.duplicateTab(tab);',
+      'newTab = Tabmix.duplicateTab(tab);'
     )._replace(
       '} else if (draggedTab && draggedTab.container == this) {',
       `gBrowser.ensureTabIsVisible(draggedTabCopy);
@@ -235,7 +252,7 @@ var TMP_tabDNDObserver = {
        }
       $&`.replace(/_newTranslateX/g, Tabmix.isVersion(1300) && !Tabmix.isVersion(1320) ? "newTranslate" : "newTranslateX"),
     )._replace(
-      'let urls = links.map(link => link.url);',
+      /urls = links.map\(\(?link\)? => link.url\);/,
       `$&
       if (event.target.id === "tabmix-scrollbox") {
         if (event.originalTarget.id === "scrollbutton-up") newIndex = 0;

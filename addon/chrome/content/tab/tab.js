@@ -322,7 +322,6 @@ Tabmix.tabsUtils = {
   _inUpdateVerticalTabStrip: false,
   _keepLastTab: false,
   _show_newtabbutton: "aftertabs",
-  _tabmixPositionalTabs: {},
   checkNewtabButtonVisibility: false,
   closeButtonsEnabled: false,
   initialized: false,
@@ -403,14 +402,8 @@ Tabmix.tabsUtils = {
     this.tabBar.mCloseButtons = Tabmix.prefs.getIntPref("tabs.closeButtons");
     this._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
     this.closeButtonsEnabled = Tabmix.prefs.getBoolPref("tabs.closeButtons.enable");
-    this._tabmixPositionalTabs = {
-      beforeSelectedTab: null,
-      afterSelectedTab: null,
-      beforeHoveredTab: null,
-      afterHoveredTab: null
-    };
 
-    Tabmix.afterTabsButtonsWidth = [35];
+    Tabmix.getAfterTabsButtonsWidth();
     Tabmix.tabsNewtabButton = document.getElementById("tabs-newtab-button");
     this._show_newtabbutton = "aftertabs";
 
@@ -463,7 +456,6 @@ Tabmix.tabsUtils = {
     if (!this.initialized)
       return;
     TMP_eventListener.toggleEventListener(this.tabBar, this.events, false, this);
-    this._tabmixPositionalTabs = {};
   },
 
   handleEvent(aEvent) {
@@ -621,6 +613,11 @@ Tabmix.tabsUtils = {
     /** @param {number} width */
     const setNewMinWidth = width => {
       if (width !== currentMinWidth) {
+        // since we prevent tab animation whe we change min/max width we need to remove closing tabs
+        // to avoid bug 608589
+        for (let tab of gBrowser._removingTabs) {
+          gBrowser._endRemoveTab(tab);
+        }
         this.tabBar.setAttribute("no-animation", "");
         gTMPprefObserver.dynamicRules.width.style.setProperty(
           "min-width",
@@ -672,13 +669,13 @@ Tabmix.tabsUtils = {
     if (this._widthCache.minWidth !== newMinWidth) {
       this._widthCache.minWidth = newMinWidth;
       this._widthCache.maxWidth = newMinWidth;
-      this._widthCache[pinnedTabCount] = newMinWidth;
+      this._widthCache[0] = newMinWidth;
     }
 
     if (isFirstRowWithPinnedTabs && firstNonPinnedTab) {
       const stripWidthWithoutPinned = tabstripWidth - (firstNonPinnedTab.getBoundingClientRect().x - tsboX);
       const testNewMinWidth = calcMinWidth(stripWidthWithoutPinned, tabsButtonWidth, newMinWidth);
-      if (testNewMinWidth > newMinWidth) {
+      if (testNewMinWidth < newMinWidth) {
         const widthForeNonPinnedTabs = calcMinWidth(stripWidthWithoutPinned, tabsButtonWidth);
         this._widthCache[pinnedTabCount] = widthForeNonPinnedTabs;
         this._widthCache.maxWidth = Math.max(this._widthCache.maxWidth, widthForeNonPinnedTabs);
@@ -699,13 +696,6 @@ Tabmix.tabsUtils = {
       return;
     }
 
-    // TabmixTabbar.widthFitTitle is false when mTabMinWidth === mTabMaxWidth
-    if (this.checkNewtabButtonVisibility && !TabmixTabbar.widthFitTitle) {
-      this.updateMinWidth();
-      this.disAllowNewtabbutton = false;
-      return;
-    }
-
     if (!this.checkNewtabButtonVisibility) {
       this.showNewTabButtonOnSide(this.overflow, "right-side");
       return;
@@ -713,8 +703,16 @@ Tabmix.tabsUtils = {
 
     // when Private-tab enabled/disabled we need to reset
     // tabsNewtabButton and afterTabsButtonsWidth
-    if (!Tabmix.tabsNewtabButton)
+    if (!Tabmix.tabsNewtabButton || !Tabmix.afterTabsButtonsWidthReady) {
       Tabmix.getAfterTabsButtonsWidth();
+    }
+
+    // TabmixTabbar.widthFitTitle is false when mTabMinWidth === mTabMaxWidth
+    if (this.checkNewtabButtonVisibility && !TabmixTabbar.widthFitTitle) {
+      this.updateMinWidth();
+      this.disAllowNewtabbutton = false;
+      return;
+    }
 
     const lastTab = Tabmix.visibleTabs.last;
     const tsboRect = this.tabBar.arrowScrollbox.scrollbox.getBoundingClientRect();
@@ -1007,7 +1005,7 @@ Tabmix.tabsUtils = {
       gBrowser.tabContainer.getAttribute("orient") !== "vertical" &&
       TabmixTabbar.visibleRows > 1;
     const margin = reduceMargin ? "1px" : "";
-    document.documentElement.style.setProperty(this.protonValues.name, margin);
+    document.documentElement.style.setProperty(this.protonValues.name, margin, "important");
   },
 };
 
@@ -1879,6 +1877,14 @@ window.gTMPprefObserver = {
       );
     }
 
+    this.insertRule(`:root { --tabmix-tab-min-height: var(--tab-min-height);}`, "tabMinHeight");
+    if (Tabmix.isVersion({fp: "128.0.0"})) {
+      window.gFloorpObservePreference("floorp.browser.tabs.tabMinHeight", () => {
+        const height = Services.prefs.getIntPref("floorp.browser.tabs.tabMinHeight", 30);
+        this.dynamicRules.tabMinHeight.style.setProperty("--tabmix-tab-min-height", height + "px");
+      });
+    }
+
     this.dynamicProtonRules();
     this.toolbarbuttonTopMargin();
   },
@@ -1896,6 +1902,14 @@ window.gTMPprefObserver = {
         }`);
     }
 
+    const padding = Tabmix.isVersion({fp: "128.0.0"}) ? {
+      block: "3.5px",
+      inline: "3.5px",
+    } : {
+      block: "calc(var(--toolbarbutton-inner-padding) - 3px)",
+      inline: "calc(var(--toolbarbutton-inner-padding) - 6px)",
+    };
+
     this.insertRule(
       `#tabmix-scrollbox::part(scrollbutton-up),
        #tabmix-scrollbox::part(scrollbutton-down) {
@@ -1904,14 +1918,14 @@ window.gTMPprefObserver = {
          border: 4px solid transparent;
          border-radius: calc(var(--tab-border-radius) + 4px);
          margin: ${buttonsMarginBlock};
-         padding: calc(var(--toolbarbutton-inner-padding) - 3px) calc(var(--toolbarbutton-inner-padding) - 6px);
+         padding: ${padding.block} ${padding.inline};
        }`
     );
 
     this.insertRule(
       `#tabmix-scrollbox[tabmix-flowing=multibar]::part(scrollbutton-up),
        #tabmix-scrollbox[tabmix-flowing=multibar]::part(scrollbutton-down) {
-         padding-inline: calc(var(--toolbarbutton-inner-padding) - 5px);
+         padding: ${padding.block};
        }`
     );
 

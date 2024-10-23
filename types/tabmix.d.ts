@@ -2,6 +2,8 @@
 
 // Tabmix modules
 
+type BrowserVersion = (aVersionNo: number | {ff?: number; wf?: string; fp?: string; updateChannel?: string}, updateChannel?: string) => boolean;
+
 interface ChromeManifest {
   parse: (filename?: string, base?: string) => Promise<void>;
 }
@@ -25,7 +27,7 @@ interface CSSRule {
   readonly style: CSSStyleDeclaration;
 }
 
-type RulesTYpes = "max-rows" | "visibleRows" | "width";
+type RulesTYpes = "max-rows" | "visibleRows" | "width" | "tabMinHeight";
 interface gTMPprefObserver {
   _marginStart: string;
   _singleWindowUI_initialized: boolean;
@@ -158,7 +160,7 @@ declare namespace TabmixNS {
 
   const prefs: nsIPrefBranchXpcom;
   const defaultPrefs: nsIPrefBranchXpcom;
-  function isVersion(aVersionNo: number | {ff?: number; wf?: string; bs?: string; updateChannel?: string}, updateChannel?: string): boolean;
+  const isVersion: BrowserVersion;
   function isAltKey(event: MouseEvent): boolean;
   function debug(aMessage: string, aShowCaller?: boolean): void;
   function showItem(aItemOrId: ItemOrId, aShow?: boolean): void;
@@ -281,6 +283,7 @@ declare namespace TabmixModules {
     getSMString: (key: string) => string;
     i10IdMap: I10Map;
     isCyberfox: boolean;
+    isFloorp: boolean;
     isFixedGoogleUrl: (url: string) => boolean;
     isLinux: boolean;
     isMac: boolean;
@@ -315,7 +318,7 @@ declare namespace TabmixModules {
       progressMeter: TabStyle & {text: false};
     };
     URILoadingHelperChanged: boolean;
-    version: (aVersionNo: number | {ff?: number; wf?: string; bs?: string; updateChannel?: string}, updateChannel?: string) => boolean;
+    version: BrowserVersion;
     whereToOpenLinkChanged: boolean;
     windowStartup: {
       _initialized: boolean;

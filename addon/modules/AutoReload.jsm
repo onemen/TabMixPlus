@@ -426,7 +426,7 @@ function doReloadTab(window, browser, tab, data) {
   // Also reset DOS mitigations for the basic auth prompt on reload.
   delete browser.authPromptAbuseCounter;
 
-  if (TabmixSvc.version(1290) || TabmixSvc.version(1283, "esr")) {
+  if (TabmixSvc.version(1290) || TabmixSvc.version(1283, "esr") || TabmixSvc.version({fp: "128.0.0"})) {
     if (window.document.hasValidTransientUserGestureActivation) {
       loadFlags |= Ci.nsIWebNavigation.LOAD_FLAGS_USER_ACTIVATION;
     }

@@ -304,7 +304,7 @@ declare namespace MockedGeckoTypes {
       visibleTab: BrowserTab;
     };
     _blurTab: (tab: BrowserTab) => void;
-    readonly pinnedTabCount: number;
+    _endRemoveTab: (tab: BrowserTab) => void;
     /** @deprecated replaced with pinnedTabCount in Firefox version 133 */
     readonly _numPinnedTabs: number;
     _lastRelatedTabMap: WeakMap<BrowserTab, BrowserTab>;
@@ -334,6 +334,7 @@ declare namespace MockedGeckoTypes {
     lastMultiSelectedTab: BrowserTab;
     moveTabTo: (tab: BrowserTab, index: number, keepRelatedTabs?: boolean) => void;
     pinTab: (tab: BrowserTab) => void;
+    readonly pinnedTabCount: number;
     preloadedBrowser?: ChromeBrowser;
     reloadTab: (tab: BrowserTab) => void;
     /// modified by Tab Mix Plus

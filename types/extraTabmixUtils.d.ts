@@ -66,6 +66,7 @@ declare namespace TabmixNS {
   let _lastTabOpenedTime: number;
   let _deferredInitialized: DeferredPromise;
   let afterTabsButtonsWidth: number[];
+  let afterTabsButtonsWidthReady: boolean;
   let initialization: typeof TabmixInitialization;
   let isFirstWindow: boolean;
   let selectedTab: Tab | null;
@@ -74,7 +75,7 @@ declare namespace TabmixNS {
   let userTypedValue: string;
   function afterDelayedStartup(): void;
   function beforeDelayedStartup(): void;
-  function getAfterTabsButtonsWidth(this: typeof TabmixNS): void;
+  function getAfterTabsButtonsWidth(): void;
   function sessionInitialized(): void;
   function startup(): void;
   // lazygetters for modules (jsm files)
@@ -434,12 +435,6 @@ declare namespace TabsUtils {
   let closeButtonsEnabled: boolean;
 
   let initialized: boolean;
-  let _tabmixPositionalTabs: {
-    beforeSelectedTab?: Tab | null | undefined;
-    afterSelectedTab?: Tab | null | undefined;
-    beforeHoveredTab?: Tab | null | undefined;
-    afterHoveredTab?: Tab | null | undefined;
-  };
   const tabBar: MockedGeckoTypes.TabContainer;
   const scrollClientRect: DOMRect;
   function getInnerbox(): HTMLElement;
