@@ -269,18 +269,18 @@ so display: none !important; does not hide the button */
 }
 
 /* for the case user drag background tab when selectTabOnMouseDown is false */
-#tabbrowser-tabs[movingBackgroundTab] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[dragged] {
+#tabbrowser-tabs[tabmix-movingBackgroundTab] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[tabmix-dragged] {
   position: relative;
   z-index: 3;
   pointer-events: none; /* avoid blocking dragover events on scroll buttons */
 }
 
-#tabbrowser-tabs[movingBackgroundTab] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([tabdrop-samewindow])[dragged] {
+#tabbrowser-tabs[tabmix-movingBackgroundTab] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([tabdrop-samewindow])[tabmix-dragged] {
   transition: none !important;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  #tabbrowser-tabs[movingBackgroundTab] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[fadein]:not([dragged]) {
+  #tabbrowser-tabs[tabmix-movingBackgroundTab] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[fadein]:not([tabmix-dragged]) {
     transition: transform 200ms var(--animation-easing-function, ease-out);
   }
 }

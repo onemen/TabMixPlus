@@ -224,6 +224,7 @@ interface OriginalFunctions {
   openInverseLink: nsContextMenu["openLinkInTab"];
 
   _getDropIndex: MockedGeckoTypes.TabContainer["_getDropIndex"];
+  _finishAnimateTabMove: MockedGeckoTypes.TabContainer["_finishAnimateTabMove"];
   _groupSelectedTabs: MockedGeckoTypes.TabContainer["_groupSelectedTabs"];
   on_dragstart: MockedGeckoTypes.TabContainer["on_dragstart"];
   on_dragover: MockedGeckoTypes.TabContainer["on_dragover"];

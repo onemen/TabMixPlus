@@ -263,6 +263,8 @@ declare namespace MockedGeckoTypes {
     // Tabmix
     __showbuttonTab?: BrowserTab;
     tabmix_updateCloseButtons: TabContainer["_updateCloseButtons"];
+    // using insteadof private method #setDragOverGroupColor since Firefox 133
+    _setDragOverGroupColor: (groupColorCode: string) => void;
 
     /** @deprecated removed by bug 1923635 in firefox 133 */
     _getVisibleTabs: () => Tabs;

@@ -44,6 +44,7 @@ var TMP_tabDNDObserver = {
         enumerable: true,
       });
     }
+
     if (Tabmix.isVersion(1320)) {
       // create none private method in gBrowser.tabContainer
       // we will use instead of #isContainerVerticalPinnedExpanded in:
@@ -61,6 +62,26 @@ var TMP_tabDNDObserver = {
         configurable: true,
         enumerable: true,
       });
+    }
+
+    if (Tabmix.isVersion(1330)) {
+      /** @type {MockedGeckoTypes.TabContainer} */ // @ts-expect-error
+      const tabbrowserTabs = customElements.get("tabbrowser-tabs");
+      const code = tabbrowserTabs
+          .toString()
+          .split(" #setDragOverGroupColor")[1] // function to extract from source code
+          ?.split(" _finishAnimateTabMove")[0] // next function in the source code
+          ?.trim();
+      if (code) {
+        gBrowser.tabContainer._setDragOverGroupColor = eval(
+          `(function _setDragOverGroupColor${code})`
+        );
+      } else {
+        console.error(
+          "tabmix Error: can't find gBrowser.tabContainer.#setDragOverGroupColor function"
+        );
+        gBrowser.tabContainer._setDragOverGroupColor = function() {};
+      }
     }
 
     function tabmixHandleMoveString() {
@@ -90,8 +111,8 @@ var TMP_tabDNDObserver = {
       'if (Tabmix.prefs.getBoolPref("selectTabOnMouseDown"))\n\
             $&\n\
           else if (!draggedTab.selected) {\n\
-            this.setAttribute("movingBackgroundTab", true);\n\
-            draggedTab.setAttribute("dragged", true);\n\
+            this.setAttribute("tabmix-movingBackgroundTab", true);\n\
+            draggedTab.setAttribute("tabmix-dragged", true);\n\
           }'
     )._replace(
       `if (${Tabmix.isVersion(1300) ? "screen" : "screenX"} > ${Tabmix.isVersion(1330) ? "point" : "tabCenter"}) {`,
@@ -148,7 +169,7 @@ var TMP_tabDNDObserver = {
         /let lastTabCenter =.*;/,
         `let lastTabCenter = firstMovingTabScreen + translate + (this.verticalMode ? tabSize / 2 : rightTabWidth / 2);`,
       )._replace(
-        "this.#rtlMode", "this._rtlMode", {check: Tabmix.isVersion(1310), flags: "g"}
+        /this\.#(\w*)/g, "this._$1", {check: Tabmix.isVersion(1310)}
       ).toCode();
     } else {
       // helper function to get floorp strings for width in vertical mode
@@ -297,14 +318,13 @@ var TMP_tabDNDObserver = {
     Tabmix.originalFunctions._getDropIndex = gBrowser.tabContainer._getDropIndex;
     gBrowser.tabContainer._getDropIndex = this._getDropIndex.bind(this);
 
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._finishAnimateTabMove")._replace(
-      /(})(\)?)$/,
-      '\n\
-        this.removeAttribute("movingBackgroundTab");\n\
-        let tabs = this.getElementsByAttribute("dragged", "*");\n\
-        Array.prototype.slice.call(tabs).forEach(tab => tab.removeAttribute("dragged"));\n\
-      $1$2'
-    ).toCode();
+    Tabmix.originalFunctions._finishAnimateTabMove = gBrowser.tabContainer._finishAnimateTabMove;
+    gBrowser.tabContainer._finishAnimateTabMove = function(...args) {
+      Tabmix.originalFunctions._finishAnimateTabMove.apply(this, args);
+      this.removeAttribute("tabmix-movingBackgroundTab");
+      const tabs = this.querySelectorAll("[tabmix-dragged]");
+      tabs.forEach(tab => tab?.removeAttribute("tabmix-dragged"));
+    };
 
     this._dragOverDelay = tabBar._dragOverDelay;
     this.draglink = `Hold ${TabmixSvc.isMac ? "⌘" : "Ctrl"} to replace locked tab with link Url`;

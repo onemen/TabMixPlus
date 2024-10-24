@@ -202,7 +202,7 @@
         return;
 
       if (aTab.mIsHover && aTab.getAttribute("showbutton") != "on" &&
-        !aTab.hasAttribute("dragged")) {
+        !aTab.hasAttribute("tabmix-dragged")) {
         if (TabmixTabbar.widthFitTitle)
           aTab.style.setProperty("width", Tabmix.getBoundsWithoutFlushing(aTab).width + "px", "important");
         aTab.setAttribute("showbutton", "on");
