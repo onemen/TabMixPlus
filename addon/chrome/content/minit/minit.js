@@ -174,10 +174,9 @@ var TMP_tabDNDObserver = {
     } else {
       // helper function to get floorp strings for width in vertical mode
       /** @param {string} vertical @param {string} horizontal */
-      const getWidthString = (vertical, horizontal) =>
-        (Tabmix.isVersion({fp: "128.0.0"}) ?
-          `(verticalTabbarEnabled() ? ${vertical} : ${horizontal})` :
-          horizontal);
+      const getWidthString = (vertical, horizontal) => (Tabmix.isVersion({fp: "128.0.0"}) ?
+        `(verticalTabbarEnabled() ? ${vertical} : ${horizontal})` :
+        horizontal);
       _animateTabMove._replace(
         /(?:const|let) shiftWidth = tabWidth \* movingTabs\.length;/,
         `let shiftWidth = tabmixHandleMove ? Tabmix.getMovingTabsWidth(movingTabs) : tabWidth * movingTabs.length;

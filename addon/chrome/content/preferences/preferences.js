@@ -830,6 +830,7 @@ function setDialog() {
   }
   customElements.define('prefwindow', class PrefWindowNoInst extends PrefWindow {
     _instantApplyInitialized = true;
+
     instantApply = Tabmix.prefs.getBoolPref('instantApply');
   });
   if (window.toString() == '[object Window]') {

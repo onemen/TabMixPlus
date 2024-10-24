@@ -24,6 +24,7 @@ const TabpanelsClass = customElements.get("tabpanels");
         "[anonid='bgColor'] > label": "disabled=bg-disabled,_hidebox",
       };
     }
+
     /** @this {TabstylepanelClass} */
     constructor() {
       super();

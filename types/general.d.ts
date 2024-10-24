@@ -108,7 +108,7 @@ declare namespace MockedGeckoTypes {
     set userTypedValue(val: string);
     get userTypedValue(): string | null;
 
-    /// modified by Tab Mix Plus
+    // modified by Tab Mix Plus
     __tabmix__whereToOpen?: WhereToOpen;
     __tabmix_loadURI: boolean;
     __tabmix_fixupAndLoadURIString: boolean;
@@ -143,7 +143,7 @@ declare namespace MockedGeckoTypes {
     readonly pinned: boolean;
     selected: boolean;
 
-    /// modified by Tab Mix Plus
+    // modified by Tab Mix Plus
     __duplicateFromWindow?: boolean;
     __newLastTab?: string;
     _initialized: boolean;
@@ -301,7 +301,7 @@ declare namespace MockedGeckoTypes {
   }
 
   interface TabBrowser extends Browser {
-    /// build in methods and properties
+    // build in methods and properties
     _switcher: {
       visibleTab: BrowserTab;
     };
@@ -339,7 +339,7 @@ declare namespace MockedGeckoTypes {
     readonly pinnedTabCount: number;
     preloadedBrowser?: ChromeBrowser;
     reloadTab: (tab: BrowserTab) => void;
-    /// modified by Tab Mix Plus
+    // modified by Tab Mix Plus
     removeTab: (
       tab: BrowserTab,
       params?: {
@@ -384,7 +384,7 @@ declare namespace MockedGeckoTypes {
     get userTypedValue(): string | null;
     warnAboutClosingTabs: (tabsToClose: number, aCloseTabs: ClosingTabsEnumValues, aSource?: string) => boolean;
 
-    /// Tab mix method
+    // Tab mix method
     _reloadLeftTabs: (tab: BrowserTab) => void;
     _reloadRightTabs: (tab: BrowserTab) => void;
     asyncGetWindowTitleForBrowser: (browser: ChromeBrowser) => Promise<string>;

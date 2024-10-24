@@ -36,3 +36,5 @@ node_modules/
 
 #hide test folder
 test/*
+
+**/tsconfig.tsbuildinfo

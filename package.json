@@ -2,12 +2,13 @@
   "name": "tab-mix-plus",
   "version": "1.0.0",
   "description": "New Tab Mix Plus for modern Firefox",
+  "type": "module",
   "scripts": {
     "lint": "eslint --format stylish --fix --cache --cache-location config/.eslintcache",
     "lint:test": "eslint --format stylish --cache --cache-location config/.eslintcache",
     "lint:clean": "eslint --format stylish",
     "prepare": "husky config/husky",
-    "tsc:clean": "node config/typecheck.cjs",
+    "tsc:clean": "node config/typecheck.js",
     "typecheck": "tsc -b -f > tsc.local.txt"
   },
   "repository": {
@@ -22,20 +23,18 @@
   },
   "homepage": "https://github.com/onemen/TabMixPlus#readme",
   "devDependencies": {
-    "@commitlint/cli": "^19.4.1",
-    "@commitlint/config-conventional": "^19.4.1",
-    "@eslint/eslintrc": "^3.1.0",
-    "eslint": "^9.10.0",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@stylistic/eslint-plugin-js": "^2.9.0",
+    "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-html": "^8.1.1",
-    "eslint-plugin-json": "^4.0.1",
-    "eslint-plugin-mozilla": "^3.7.5",
-    "eslint-plugin-no-unsanitized": "^4.1.0",
+    "eslint-plugin-html": "^8.1.2",
+    "eslint-plugin-mozilla": "^4.0.0",
     "eslint-plugin-tabmix": "file:./config/eslint-plugin-tabmix",
-    "globals": "^15.9.0",
-    "husky": "^9.1.5",
+    "globals": "^15.11.0",
+    "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
-    "typescript": "^5.5.4",
-    "typescript-eslint": "^8.4.0"
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.11.0"
   }
 }

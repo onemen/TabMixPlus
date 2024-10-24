@@ -4,11 +4,7 @@
  * callExpressionMultiDefinitions lists
  */
 
-const path = require("path");
-
-const mozilla = require.resolve("eslint-plugin-mozilla");
-const mozillaPath = path.dirname(mozilla);
-const helpers = require(path.join(mozillaPath, "helpers.js"));
+import helpers from "eslint-plugin-mozilla/lib/helpers.js";
 
 const callExpressionDefinitions = [
   /^TabmixChromeUtils\.defineLazyModuleGetters\((?:globalThis|this), "(\w+)"/,
@@ -137,7 +133,7 @@ function convertCallExpressionToGlobals(node, isGlobal) {
   return [];
 }
 
-module.exports = {
+export default {
   meta: {
     messages: { },
     type: "problem",

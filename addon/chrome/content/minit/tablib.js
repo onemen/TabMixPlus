@@ -1175,8 +1175,7 @@ Tabmix.tablib = {
       var aDomain = matches ? matches[1] : URL;
 
       const tabsToRemove = this.visibleTabs.filter(
-        tab =>
-          !tab._isProtected &&
+        tab => !tab._isProtected &&
           tab.linkedBrowser.currentURI.spec.includes(aDomain ?? "")
       );
       if (

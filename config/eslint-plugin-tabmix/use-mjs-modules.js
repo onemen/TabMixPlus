@@ -1,10 +1,10 @@
 
-const path = require("path");
-const fs = require("fs");
+import fs from "node:fs";
+import path from "node:path";
 
-const mozilla = require.resolve("eslint-plugin-mozilla");
-const mozillaPath = path.dirname(mozilla);
-const helpers = require(path.join(mozillaPath, "helpers.js"));
+import helpers from "eslint-plugin-mozilla/lib/helpers.js";
+
+const __dirname = new URL('.', import.meta.url).pathname.replace(/^\//, '');
 
 const SYSMJS_FILE_NAME = "sysmjs.txt";
 const USED_SYSMJS_IN_TABMIX = "usedmjs.json";
@@ -92,7 +92,7 @@ const callExpressionMultiDefinitions = [
   "XPCOMUtils.defineLazyModuleGetters(",
 ];
 
-module.exports = {
+export default {
   meta: {
     messages: {
       missingInChromeUtils:

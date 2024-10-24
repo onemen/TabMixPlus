@@ -976,9 +976,12 @@ class PrefWindow extends MozXULElement {
    * Then they can set instantApply to their wished value. -->
    */
   _instantApplyInitialized = false;
+
   // Controls whether changed pref values take effect immediately.
   instantApply = false;
+
   _currentPane = null;
+
   _initialized = false;
 
   /** @this {PrefWindowClass} */
@@ -1444,9 +1447,8 @@ class PrefWindow extends MozXULElement {
     };
 
     /** @type {PrefWindowClass["_handleButtonCommand"]} */
-    this._handleButtonCommand = aEvent =>
-      // @ts-expect-error
-      this._doButtonCommand(aEvent.target.getAttribute("dlgtype"));
+    // @ts-expect-error
+    this._handleButtonCommand = aEvent => this._doButtonCommand(aEvent.target.getAttribute("dlgtype"));
 
     /** @type {PrefWindowClass["_doButtonCommand"]} */
     this._doButtonCommand = aDlgType => {
@@ -1551,8 +1553,7 @@ class PrefWindow extends MozXULElement {
   }
 
   get mStrBundle() {
-    return Tabmix.lazyGetter(this, "mStrBundle", () =>
-      Services.strings.createBundle("chrome://global/locale/dialog.properties")
+    return Tabmix.lazyGetter(this, "mStrBundle", () => Services.strings.createBundle("chrome://global/locale/dialog.properties")
     );
   }
 

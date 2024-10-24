@@ -6,7 +6,7 @@
   "insertPragma": false,
   "printWidth": 100,
   "proseWrap": "always",
-  "quoteProps": "as-needed",
+  "quoteProps": "consistent",
   "requirePragma": false,
   "semi": true,
   "singleQuote": false,

@@ -141,8 +141,7 @@ var gMenuPane = {
   },
 
   get PrivateBrowsingUtils() {
-    return Tabmix.lazyGetter(this, "PrivateBrowsingUtils", () =>
-      ChromeUtils.importESModule("resource://gre/modules/PrivateBrowsingUtils.sys.mjs").PrivateBrowsingUtils
+    return Tabmix.lazyGetter(this, "PrivateBrowsingUtils", () => ChromeUtils.importESModule("resource://gre/modules/PrivateBrowsingUtils.sys.mjs").PrivateBrowsingUtils
     );
   },
 };

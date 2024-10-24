@@ -263,7 +263,9 @@ declare namespace ClosedObjectsUtils {
 }
 
 declare class CompatibilityCheck {
-  constructor(aWindow: Window, aShowList: boolean, aCallbackDialog?: boolean);
+
+    constructor(aWindow: Window, aShowList: boolean, aCallbackDialog?: boolean);
+
 }
 
 declare namespace ContentAreaClick {

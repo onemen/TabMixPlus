@@ -5,13 +5,11 @@
  * items and callExpressionMultiDefinitions lists
  */
 
-const path = require("path");
+import MozillaHelpers from "eslint-plugin-mozilla/lib/helpers.js";
+import validLazy from "eslint-plugin-mozilla/lib/rules/valid-lazy.js";
 
-const mozilla = require.resolve("eslint-plugin-mozilla");
-const mozillaPath = path.dirname(mozilla);
-// @ts-expect-error - used as closer in eval
-const helpers = require(path.join(mozillaPath, "helpers.js"));
-const validLazy = require(path.join(mozillaPath, "rules", "valid-lazy.js"));
+// used as closer in eval
+const helpers = MozillaHelpers;
 
 // @ts-expect-error - used as closer in eval
 const items = [
@@ -61,7 +59,7 @@ if (!createFunction.startsWith("function")) {
   createFunction = "function " + createFunction;
 }
 
-module.exports = {
+export default {
   ...validLazy,
   create: eval("(" + createFunction + ")")
 };
