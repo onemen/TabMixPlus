@@ -165,17 +165,11 @@ Tabmix.multiRow = {
         ).toCode();
 
         if (Tabmix.isVersion(1310)) {
-          /** @type {MockedGeckoTypes.ArrowScrollbox} */ // @ts-expect-error
-          const arrowscrollboxClass = customElements.get("arrowscrollbox");
-          const code = arrowscrollboxClass.toString().split(" #updateScrollButtonsDisabledState")[1];
-          // @ts-expect-error
-          const updateButtons = `_updateScrollButtonsDisabledState${code}`
-              .split(" disconnectedCallback")[0]
-              .trim()
-              .replace(/#scrollButtonUpdatePending/g, "_scrollButtonUpdatePending")
-              .replace(/#updateScrollButtonsDisabledState/g, "_updateScrollButtonsDisabledState");
-
-          this._updateScrollButtonsDisabledState = eval(`(function ${updateButtons})`);
+          this._updateScrollButtonsDisabledState = Tabmix.getPrivateMethod(
+            "arrowscrollbox",
+            "updateScrollButtonsDisabledState",
+            "disconnectedCallback"
+          );
         }
         Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")._replace(
           'if (this.isRTLScrollbox',

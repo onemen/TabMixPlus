@@ -225,6 +225,8 @@ interface OriginalFunctions {
 
   _getDropIndex: MockedGeckoTypes.TabContainer["_getDropIndex"];
   _finishAnimateTabMove: MockedGeckoTypes.TabContainer["_finishAnimateTabMove"];
+  _moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
+  /** @deprecated replaced with TabContainer.#moveTogetherSelectedTabs in firefox 133 */
   _groupSelectedTabs: MockedGeckoTypes.TabContainer["_groupSelectedTabs"];
   on_dragstart: MockedGeckoTypes.TabContainer["on_dragstart"];
   on_dragover: MockedGeckoTypes.TabContainer["on_dragover"];

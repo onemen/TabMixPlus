@@ -65,23 +65,38 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.isVersion(1330)) {
-      /** @type {MockedGeckoTypes.TabContainer} */ // @ts-expect-error
-      const tabbrowserTabs = customElements.get("tabbrowser-tabs");
-      const code = tabbrowserTabs
-          .toString()
-          .split(" #setDragOverGroupColor")[1] // function to extract from source code
-          ?.split(" _finishAnimateTabMove")[0] // next function in the source code
-          ?.trim();
-      if (code) {
-        gBrowser.tabContainer._setDragOverGroupColor = eval(
-          `(function _setDragOverGroupColor${code})`
-        );
-      } else {
-        console.error(
-          "tabmix Error: can't find gBrowser.tabContainer.#setDragOverGroupColor function"
-        );
-        gBrowser.tabContainer._setDragOverGroupColor = function() {};
-      }
+      gBrowser.tabContainer._setDragOverGroupColor = Tabmix.getPrivateMethod(
+        "tabbrowser-tabs",
+        "setDragOverGroupColor",
+        "_finishAnimateTabMove"
+      );
+
+      gBrowser.tabContainer._isAnimatingMoveTogetherSelectedTabs = Tabmix.getPrivateMethod(
+        "tabbrowser-tabs",
+        "isAnimatingMoveTogetherSelectedTabs",
+        "handleEvent"
+      );
+
+      gBrowser.tabContainer._moveTogetherSelectedTabs = Tabmix.getPrivateMethod(
+        "tabbrowser-tabs",
+        "moveTogetherSelectedTabs",
+        "_finishMoveTogetherSelectedTabs"
+      );
+      // prevent grouping selected tabs for multi row tabbar
+      Tabmix.originalFunctions._moveTogetherSelectedTabs = tabBar._moveTogetherSelectedTabs;
+      /** @type {typeof tabBar._moveTogetherSelectedTabs} */
+      tabBar._moveTogetherSelectedTabs = function(...args) {
+        if (TabmixTabbar.visibleRows > 1) return;
+        Tabmix.originalFunctions._moveTogetherSelectedTabs.apply(this, args);
+      };
+    } else {
+      // prevent grouping selected tabs for multi row tabbar
+      Tabmix.originalFunctions._groupSelectedTabs = tabBar._groupSelectedTabs;
+      /** @type {typeof tabBar._groupSelectedTabs} */
+      tabBar._groupSelectedTabs = function(...args) {
+        if (TabmixTabbar.visibleRows > 1) return;
+        Tabmix.originalFunctions._groupSelectedTabs.apply(this, args);
+      };
     }
 
     function tabmixHandleMoveString() {
@@ -327,14 +342,6 @@ var TMP_tabDNDObserver = {
 
     // without this the Indicator is not visible on the first drag
     tabBar._tabDropIndicator.style.transform = "translate(0px, 0px)";
-
-    // prevent grouping selected tabs for multi row tabbar
-    Tabmix.originalFunctions._groupSelectedTabs = tabBar._groupSelectedTabs;
-    /** @type {typeof tabBar._groupSelectedTabs} */
-    tabBar._groupSelectedTabs = function(...args) {
-      if (TabmixTabbar.visibleRows > 1) return;
-      Tabmix.originalFunctions._groupSelectedTabs.apply(this, args);
-    };
 
     Tabmix.originalFunctions.on_dragstart = gBrowser.tabContainer.on_dragstart;
     gBrowser.tabContainer.on_dragstart = this.on_dragstart.bind(tabBar);
@@ -1361,4 +1368,25 @@ Tabmix.navToolbox = {
 Tabmix.getPlacement = function(id) {
   let placement = CustomizableUI.getPlacementOfWidget(id);
   return placement ? placement.position : -1;
+};
+
+Tabmix.getPrivateMethod = function(constructorName, methhodName, nextMethodName) {
+  const errorMsg = `can't find ${constructorName}.${methhodName} function`;
+  const firefoxClass = customElements.get(constructorName);
+  const method = function() {};
+  if (!firefoxClass) {
+    console.error(`Tabmix Error: can't find ${constructorName} custom element\n${errorMsg}`);
+    return method;
+  }
+  const code = firefoxClass
+      .toString()
+      .split(` #${methhodName}`)[1] // function to extract from source code
+      ?.split(` ${nextMethodName}`)[0] // next function in the source code
+      ?.trim()
+      .replace(/this\.#(\w*)/g, "this._$1");
+  if (code) {
+    return eval(`(function ${code})`);
+  }
+  console.error(`Tabmix Error: ${errorMsg}`);
+  return method;
 };

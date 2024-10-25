@@ -220,12 +220,15 @@ declare namespace MockedGeckoTypes {
     _getDragTargetTab(event: DragEvent, options?: {ignoreTabSides?: boolean}): BrowserTab | null;
     // we are adding arguments to _getDropIndex see minit.js for details
     _getDropIndex(event: DragEvent, ...rest: unknown[]): DragEventParams | number;
+    /** @deprecated replaced with #moveTogetherSelectedTabs in firefox 133 */
     _groupSelectedTabs: (tab: BrowserTab) => void;
     _handleTabSelect: (instant: boolean) => void;
     _invalidateCachedTabs: () => void;
+    _isAnimatingMoveTogetherSelectedTabs: () => boolean;
     get _isCustomizing(): boolean;
     _lastTabClosedByMouse: boolean;
     _lastTabToScrollIntoView?: BrowserTab;
+    _moveTogetherSelectedTabs: (tab: BrowserTab) => void;
     _notifyBackgroundTab: (aTab: BrowserTab) => void;
     _pinnedTabsLayoutCache: Record<string, unknown> | null;
     _positionPinnedTabs: () => void;
@@ -659,19 +662,19 @@ interface TabmixOptionsWindow extends Window {
 }
 
 interface GetByMap {
-  browser: MockedGeckoTypes.TabBrowser;
-  tabmix_bookmarkUrl: MockedGeckoTypes.BrowserTab;
+  "browser": MockedGeckoTypes.TabBrowser;
+  "tabmix_bookmarkUrl": MockedGeckoTypes.BrowserTab;
   "new-tab-button": HTMLButtonElement;
-  placesContext: XULPopupElement;
-  placesContext_open: HTMLElement;
+  "placesContext": XULPopupElement;
+  "placesContext_open": HTMLElement;
   "placesContext_open:newprivatewindow": HTMLElement;
   "placesContext_open:newtab": HTMLElement;
   "placesContext_open:newwindow": HTMLElement;
-  tabmix_hideTabbar_menu: HTMLMenuElement;
-  tabmix_hideTabbar_separator: HTMLElement;
+  "tabmix_hideTabbar_menu": HTMLMenuElement;
+  "tabmix_hideTabbar_separator": HTMLElement;
   "tabs-newtab-button": HTMLButtonElement;
   "toolbar-context-menu": XULPopupElement;
-  browserStack: HTMLElement & {firstChild: MockedGeckoTypes.ChromeBrowser};
+  "browserStack": HTMLElement & {firstChild: MockedGeckoTypes.ChromeBrowser};
   "tabbrowser-tabs": MockedGeckoTypes.TabContainer;
 }
 

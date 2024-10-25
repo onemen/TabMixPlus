@@ -53,6 +53,13 @@ declare namespace ChangeCodeNS {
 
 declare var ChangeCodeClass: ChangeCodeNS.ChangeCodeClass;
 
+interface PrivateMethods {
+  isAnimatingMoveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_isAnimatingMoveTogetherSelectedTabs"];
+  moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
+  setDragOverGroupColor: MockedGeckoTypes.TabContainer["_setDragOverGroupColor"];
+  updateScrollButtonsDisabledState: TabmixArrowScrollboxNS.ArrowScrollbox["_updateScrollButtonsDisabledState"];
+}
+
 declare namespace TabmixNS {
   // from changedcode
   let _debugMode: boolean;
@@ -106,6 +113,8 @@ declare namespace TabmixNS {
   function getStyle(aObj: Element, aStyle: string): number;
   function getMovingTabsWidth(movingTabs: Tab[]): number;
   function getPlacement(id: string): number;
+
+  function getPrivateMethod<T extends keyof PrivateMethods>(constructorName: string, methodName: T, nextMethodName: string): PrivateMethods[T];
   function hidePopup(aPopupMenu: XULPopupElement): void;
   function whereToOpen(pref: string | boolean, altKey?: boolean): {inNew: boolean; lock: boolean};
 
@@ -263,9 +272,7 @@ declare namespace ClosedObjectsUtils {
 }
 
 declare class CompatibilityCheck {
-
-    constructor(aWindow: Window, aShowList: boolean, aCallbackDialog?: boolean);
-
+  constructor(aWindow: Window, aShowList: boolean, aCallbackDialog?: boolean);
 }
 
 declare namespace ContentAreaClick {
