@@ -27,6 +27,9 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
     } else {
       this.errMsg = "\n" + this.fullName + " is undefined.";
     }
+
+    this.verifyPrivateMethodReplaced();
+
     this.notFound.length = 0;
   }
 
@@ -35,6 +38,9 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
     notFound: [],
     value: "",
     errMsg: "",
+    errMsgContent:
+      "\n\nTry Tabmix latest development version from https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/," +
+      "\nReport about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues",
     _replace: function TMP_utils__replace(substr, newString, aParams) {
       // Don't insert new code before "use strict";
       if (substr == "{") {
@@ -164,9 +170,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       if (notFoundCount && !this.silent) {
         let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
         ex.message = ex.fnName + " was unable to change " + aName + "." +
-            (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) +
-            "\n\nTry Tabmix latest development version from https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/," +
-            "\nReport about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues";
+            (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) + this.errMsgContent;
         console.reportError(ex);
         if (debugMode) {
           console.clog(ex.fnName + "\nfunction " + aName + " = " + this.value, ex);
@@ -181,7 +185,24 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       let caller = (stack.caller || {}).caller || {};
       let {filename, lineNumber, columnNumber, name} = caller;
       return {filename, lineNumber, columnNumber, fnName: name, message: ""};
-    }
+    },
+
+    verifyPrivateMethodReplaced() {
+      const matches = this.value.match(/this\.#(\w+)/g);
+      if (!matches) {
+        return;
+      }
+      const privateMethods = new Set(matches.map(match => match.replace("this.#", "")));
+      const parentName = afnName.split(".").slice(0, -1).join(".");
+      const ex = this.getCallerData(Components.stack.caller);
+      for (const methods of privateMethods) {
+        if (typeof aParent[`_${methods}`] === "undefined") {
+          ex.message = `Implement replacement for private method #${methods} in ${parentName} it is used by ${this.fullName}${this.errMsgContent}`;
+          console.reportError(ex);
+        }
+      }
+      this.value = this.value.replace(/this\.#(\w+)/g, "this._$1");
+    },
   };
 
   try {

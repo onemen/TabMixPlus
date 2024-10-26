@@ -343,7 +343,7 @@ const console = {
       if (typeof ex.filename == "undefined" && ex.fileName) {
         ex.filename = ex.fileName;
       }
-      if (!ex.filename || !ex.linenumber) {
+      if (!ex.filename || !ex.lineNumber) {
         caller = this.caller;
         ex.stack = caller.stack;
       }

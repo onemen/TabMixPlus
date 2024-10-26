@@ -185,11 +185,11 @@ Tabmix.multiRow = {
 
         const codeToReplace = Tabmix.isVersion(1310) ? 'this.#verticalMode' : 'this.getAttribute("orient") == "vertical"';
         Tabmix.changeCode(this, "scrollbox.on_touchstart")._replace(
-          codeToReplace, 'this._verticalMode'
+          codeToReplace, 'this._verticalMode', {silent: true}
         ).toCode();
 
         Tabmix.changeCode(this, "scrollbox.on_touchmove")._replace(
-          codeToReplace, 'this._verticalMode'
+          codeToReplace, 'this._verticalMode', {silent: true}
         ).toCode();
 
         this._scrollButtonUpLeft.addEventListener("contextmenu", this._createScrollButtonContextMenu, true);

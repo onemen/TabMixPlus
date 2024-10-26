@@ -35,6 +35,7 @@ declare namespace ChangeCodeNS {
     type: "__lookupSetter__" | "__lookupGetter__";
     value: string;
     errMsg: string;
+    errMsgContent: string;
     notFound: (string | RegExp)[];
 
     prototype: ChangeCodeClass;
@@ -48,6 +49,7 @@ declare namespace ChangeCodeNS {
     show(aObj?: Record<string, unknown>, aName?: string): void;
     isValidToChange(this: ChangeCodeClass, aName: string): boolean;
     getCallerData(stack: nsIStackFrame, aOptions?: unknown): {filename: string; lineNumber: number; columnNumber: number; fnName: string; message: string};
+    verifyPrivateMethodReplaced(): void;
   }
 }
 

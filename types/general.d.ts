@@ -208,6 +208,7 @@ declare namespace MockedGeckoTypes {
 
   interface TabContainer extends Element {
     _animateElement: ArrowScrollbox;
+    _animateExpandedPinnedTabMove: (event: MouseEvent) => void;
     _animateTabMove: (event: MouseEvent) => void;
     _backgroundTabScrollPromise?: Promise<void>;
     _blockDblClick?: boolean;

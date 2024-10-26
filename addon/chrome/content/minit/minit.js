@@ -62,6 +62,9 @@ var TMP_tabDNDObserver = {
         configurable: true,
         enumerable: true,
       });
+
+      // this function is just a place holder we don't use it in vertical mode
+      gBrowser.tabContainer._animateExpandedPinnedTabMove = function() {};
     }
 
     if (Tabmix.isVersion(1330)) {
@@ -180,8 +183,6 @@ var TMP_tabDNDObserver = {
       )._replace(
         /let lastTabCenter = (.*)tabSize \/ 2;/,
         'let lastTabCenter = $1(this.verticalMode ? tabSize / 2 : rightTabWidth / 2);'
-      )._replace(
-        /this\.#(\w*)/g, "this._$1", {check: Tabmix.isVersion(1310)}
       ).toCode();
     } else {
       // helper function to get floorp strings for width in vertical mode
@@ -243,8 +244,6 @@ var TMP_tabDNDObserver = {
          ? "translateY(" + Math.round(newMargin) + "px)"
          : "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";`,
       {check: Tabmix.isVersion(1300)}
-    )._replace(
-      /this\.#(\w*)/g, "this._$1", {check: Tabmix.isVersion(1310)}
     );
 
     const dropCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_drop")._replace(
@@ -302,8 +301,6 @@ var TMP_tabDNDObserver = {
       } else {
         targetTab = null;
       }`
-    )._replace(
-      /this\.#(\w*)/g, "this._$1", {check: Tabmix.isVersion(1320)}
     );
 
     /**
