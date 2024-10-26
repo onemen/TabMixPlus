@@ -119,10 +119,10 @@ var TMP_tabDNDObserver = {
       `let midWidth = tabs[mid].getBoundingClientRect().width;
         if (tabmixHandleMove && referenceTabWidth > midWidth) {
           _screenX += midWidth / 2;
-          if (_screenX > tabCenter + referenceTabWidth / 2) {
+          if (_screenX > _point + referenceTabWidth / 2) {
             high = mid - 1;
           } else if (
-            _screenX < tabCenter - referenceTabWidth / 2
+            _screenX < _point - referenceTabWidth / 2
           ) {
             low = mid + 1;
           } else {
@@ -132,6 +132,7 @@ var TMP_tabDNDObserver = {
           continue;
         }
         $&`.replace(/_screenX/g, Tabmix.isVersion(1300) ? "screen" : "screenX")
+          .replace(/_point/g, Tabmix.isVersion(1330) ? "point" : "tabCenter")
     )._replace(
       'newIndex >= oldIndex',
       `!tabmixHandleMove ? $& : newIndex > -1 && (RTL_UI !== ${Tabmix.isVersion(1300) ? "directionMove" : "ltrMove"})`,
@@ -143,6 +144,7 @@ var TMP_tabDNDObserver = {
     );
 
     if (Tabmix.isVersion(1300)) {
+      // NOTE: firstMovingTabScreen and lastMovingTabScreen was swapped in version 1330
       _animateTabMove._replace(
         `let translate = screen - ${Tabmix.isVersion(1330) ? "dragData" : "draggedTab._dragData"}[screenAxis];`,
         `$&
@@ -155,19 +157,14 @@ var TMP_tabDNDObserver = {
            referenceTabWidth = ${Tabmix.isVersion(1330) ? "directionForward" : "directionMove"} ? rightTabWidth : leftTabWidth;
          }`
       )._replace(
-        '(firstMovingTabScreen + tabSize)',
-        `(firstMovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth))`,
-        {check: !Tabmix.isVersion(1330)}
+        /\((.*)MovingTabScreen \+ tabSize\)/,
+        '($1MovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth))',
       )._replace(
-        '(lastMovingTabScreen + tabSize)',
-        `(lastMovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth))`,
-        {check: Tabmix.isVersion(1330)}
+        /let firstTabCenter = (.*)tabSize \/ 2;/,
+        'let firstTabCenter = $1(this.verticalMode ? tabSize / 2 : leftTabWidth / 2);'
       )._replace(
-        /let firstTabCenter =.*;/,
-        `let firstTabCenter = lastMovingTabScreen + translate + (this.verticalMode ? tabSize / 2 : leftTabWidth / 2);`
-      )._replace(
-        /let lastTabCenter =.*;/,
-        `let lastTabCenter = firstMovingTabScreen + translate + (this.verticalMode ? tabSize / 2 : rightTabWidth / 2);`,
+        /let lastTabCenter = (.*)tabSize \/ 2;/,
+        'let lastTabCenter = $1(this.verticalMode ? tabSize / 2 : rightTabWidth / 2);'
       )._replace(
         /this\.#(\w*)/g, "this._$1", {check: Tabmix.isVersion(1310)}
       ).toCode();
