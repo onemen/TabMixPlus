@@ -523,6 +523,8 @@ Tabmix.tabsUtils = {
       // when Vertical Tabs Reloaded installed TabsInTitlebar was not initialized
       TabsInTitlebar.init();
     }
+
+    this.updateProtonValues();
   },
 
   updateVerticalTabStrip({reset = false} = {}) {
