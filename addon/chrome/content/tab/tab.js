@@ -1887,6 +1887,20 @@ window.gTMPprefObserver = {
       });
     }
 
+    const selectorType = Tabmix.isVersion(1340) ? "." : "#";
+    this.insertRule(
+      `#TabsToolbar[tabmix-multibar] ${selectorType}private-browsing-indicator-with-label {
+        align-items: flex-start;
+        margin-top: var(--private-browsing-indicator-margin-top, 12px);
+      }`
+    );
+
+    this.insertRule(
+      `#TabsToolbar[tabmix-multibar] ${selectorType}private-browsing-indicator-with-label > image {
+        margin-top: 2px;
+      }`
+    );
+
     this.dynamicProtonRules();
     this.toolbarbuttonTopMargin();
   },

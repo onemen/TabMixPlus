@@ -163,14 +163,6 @@
   --private-browsing-indicator-margin-top: 9px;
 }
 
-#TabsToolbar[tabmix-multibar] #private-browsing-indicator-with-label {
-  align-items: flex-start;
-  margin-top: var(--private-browsing-indicator-margin-top, 12px);
-}
-
-#TabsToolbar[tabmix-multibar] #private-browsing-indicator-with-label > image {
-  margin-top: 2px;
-}
 
 :root:not([uidensity=compact]) #TabsToolbar[tabmix-multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-margin-top-proton) !important;
