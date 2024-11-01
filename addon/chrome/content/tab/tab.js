@@ -895,6 +895,9 @@ Tabmix.tabsUtils = {
             }
             this.updateOverflowMaxWidth();
             this.updateVerticalTabStrip();
+            if (Tabmix.isVersion(1340)) {
+              gURLBar.onWidgetAfterDOMChange(gURLBar.textbox.parentNode);
+            }
             break;
           }
         }

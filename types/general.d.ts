@@ -782,8 +782,12 @@ interface gURLBar extends HTMLElement {
   _whereToOpen: (event?: Event & {__tabmix__whereToOpen?: WhereToOpen}) => WhereToOpen;
   focused: boolean;
   handleCommand(event?: Event): void;
+  onWidgetAfterDOMChange(aNode: Node): void;
   select: () => void;
   setURI: (uri?: string, dueToTabSwitch?: boolean, dueToSessionRestore?: boolean, dontShowSearchTerms?: boolean, isSameDocument?: boolean) => void;
+  textbox: Node & {
+    parentNode: Node;
+  };
   untrimmedValue: string;
   view: UrlbarView;
   value: string;
