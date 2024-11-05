@@ -1074,6 +1074,7 @@ Tabmix.navToolbox = {
       prevTabPos = prevTab._tPos;
     }
 
+    Tabmix.navToolbox.whereToOpenFromUrlBar(event, result);
     Tabmix.originalFunctions.gURLBar_handleCommand.apply(this, [event]);
 
     if (gBrowser.selectedBrowser.__tabmix__whereToOpen) {
