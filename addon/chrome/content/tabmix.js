@@ -744,7 +744,7 @@ var TMP_eventListener = {
   // Function to catch when new tabs are created and update tab icons if needed
   // In addition clicks and doubleclick events are trapped.
   onTabOpen: function TMP_EL_onTabOpen(aEvent) {
-    Tabmix._lastTabOpenedTime = performance.timing.navigationStart + performance.now();
+    Tabmix._lastTabOpenedTime = performance.timeOrigin + performance.now();
     var tab = aEvent.target;
     this.setTabAttribute(tab);
     TMP_LastTab.tabs = null;
@@ -779,7 +779,7 @@ var TMP_eventListener = {
     aTab.tabmixKey = {};
     this.tabWidthCache.set(aTab.tabmixKey, aTab.getBoundingClientRect().width);
 
-    const newTime = performance.timing.navigationStart + performance.now();
+    const newTime = performance.timeOrigin + performance.now();
     if (Tabmix.tabsUtils.overflow || newTime - this.lastTimeTabOpened > 200) {
       this.onTabOpen_updateTabBar(aTab);
       this.lastTimeTabOpened = newTime;
