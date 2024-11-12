@@ -381,6 +381,11 @@ Tabmix.tablib = {
       const doPosition = Tabmix.isVersion(1300) ? "absPositionHorizontalTabs" : "doPosition";
       const floorpVerticalTabbar = Tabmix.isVersion({fp: "128.0.0"}) ? " && !verticalTabbarEnabled()" : "";
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
+        'this._updateVerticalPinnedTabs();',
+        `$&
+         absPositionHorizontalTabs = false;`,
+        {check: Tabmix.isVersion(1300)}
+      )._replace(
         'const doPosition =',
         'let doPosition =',
         {check: Tabmix.isVersion({fp: "128.0.0"})}
