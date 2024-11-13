@@ -47,10 +47,16 @@
 
   .paneSelector {
     border-bottom: 2px groove ThreeDFace;
-    margin: 0px;
+    margin: 0;
     padding-inline-start: 10px;
     background-color: -moz-Field;
     color: -moz-FieldText;
+  }
+
+  @media (-moz-platform: linux) {
+    prefwindow radiogroup.paneSelector:focus-visible > radio[focused="true"] > .radio-label-box {
+      outline: none;
+    }
   }
 
   .paneButtonIcon {
