@@ -56,9 +56,13 @@ declare namespace ChangeCodeNS {
 declare var ChangeCodeClass: ChangeCodeNS.ChangeCodeClass;
 
 interface PrivateMethods {
+  // TabContainer
+  clearDragOverCreateGroupTimer: MockedGeckoTypes.TabContainer["_clearDragOverCreateGroupTimer"];
   isAnimatingMoveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_isAnimatingMoveTogetherSelectedTabs"];
   moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
   setDragOverGroupColor: MockedGeckoTypes.TabContainer["_setDragOverGroupColor"];
+  triggerDragOverCreateGroup: MockedGeckoTypes.TabContainer["_triggerDragOverCreateGroup"];
+  // ArrowScrollbox
   updateScrollButtonsDisabledState: TabmixArrowScrollboxNS.ArrowScrollbox["_updateScrollButtonsDisabledState"];
 }
 

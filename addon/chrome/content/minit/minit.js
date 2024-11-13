@@ -102,6 +102,22 @@ var TMP_tabDNDObserver = {
       };
     }
 
+    if (Tabmix.isVersion(1340)) {
+      gBrowser.tabContainer._clearDragOverCreateGroupTimer = Tabmix.getPrivateMethod(
+        "tabbrowser-tabs",
+        "clearDragOverCreateGroupTimer",
+        "#setDragOverGroupColor"
+      );
+
+      gBrowser.tabContainer._dragOverCreateGroupTimer = 0;
+
+      gBrowser.tabContainer._triggerDragOverCreateGroup = Tabmix.getPrivateMethod(
+        "tabbrowser-tabs",
+        "triggerDragOverCreateGroup",
+        "#clearDragOverCreateGroupTimer"
+      );
+    }
+
     function tabmixHandleMoveString() {
       const baseTest = 'this.getAttribute("orient") === "horizontal" && TabmixTabbar.widthFitTitle';
       if (Tabmix.isVersion(1300)) {

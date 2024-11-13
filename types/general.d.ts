@@ -126,6 +126,16 @@ declare namespace MockedGeckoTypes {
     readonly _isProtected: boolean;
     _labelIsInitialTitle?: boolean;
     _tPos: number;
+    _dragData: {
+      offsetX: number;
+      offsetY: number;
+      scrollPos: number;
+      screenX: number;
+      screenY: number;
+      movingTabs: BrowserTab[];
+      fromTabList: boolean;
+      tabGroupCreationColor: string;
+    };
     closing: boolean;
     readonly container: TabContainer;
     connectedCallback: () => void;
@@ -225,11 +235,9 @@ declare namespace MockedGeckoTypes {
     _groupSelectedTabs: (tab: BrowserTab) => void;
     _handleTabSelect: (instant: boolean) => void;
     _invalidateCachedTabs: () => void;
-    _isAnimatingMoveTogetherSelectedTabs: () => boolean;
     get _isCustomizing(): boolean;
     _lastTabClosedByMouse: boolean;
     _lastTabToScrollIntoView?: BrowserTab;
-    _moveTogetherSelectedTabs: (tab: BrowserTab) => void;
     _notifyBackgroundTab: (aTab: BrowserTab) => void;
     _pinnedTabsLayoutCache: Record<string, unknown> | null;
     _positionPinnedTabs: () => void;
@@ -267,8 +275,15 @@ declare namespace MockedGeckoTypes {
     // Tabmix
     __showbuttonTab?: BrowserTab;
     tabmix_updateCloseButtons: TabContainer["_updateCloseButtons"];
+
+    // replacment for private methods
+    _clearDragOverCreateGroupTimer: () => void;
+    _dragOverCreateGroupTimer: number;
+    _isAnimatingMoveTogetherSelectedTabs: () => boolean;
+    _moveTogetherSelectedTabs: (tab: BrowserTab) => void;
     // using insteadof private method #setDragOverGroupColor since Firefox 133
     _setDragOverGroupColor: (groupColorCode: string) => void;
+    _triggerDragOverCreateGroup: (dragData: BrowserTab["_dragData"], groupDropIndex: number) => void;
 
     /** @deprecated removed by bug 1923635 in firefox 133 */
     _getVisibleTabs: () => Tabs;
