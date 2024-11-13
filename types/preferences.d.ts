@@ -1,7 +1,7 @@
-/// <reference types="general.d.ts" />
-/// <reference types="tabmix.d.ts" />
-/// <reference types="extraTabmixUtils.d.ts" />
-/// <reference types="customDialog.d.ts" />
+/// <reference types="./general.d.ts" />
+/// <reference types="./tabmix.d.ts" />
+/// <reference types="./extraTabmixUtils.d.ts" />
+/// <reference types="./customDialog.d.ts" />
 
 type GeneralElement = HTMLElement;
 
@@ -600,11 +600,11 @@ interface PanelItemButton extends HTMLButtonElement {
 
 interface QuerySelectorMap {
   ".content-box": HTMLElement;
-  deck: HTMLElement;
-  dialog: HTMLDialogElement & {ownerGlobal: Window};
-  description: HTMLElement;
+  "deck": HTMLElement;
+  "dialog": HTMLDialogElement & {ownerGlobal: Window};
+  "description": HTMLElement;
   'panel-item[action="preferences"]': HTMLElement & {button: PanelItemButton};
-  prefwindow: PrefWindowClass;
+  "prefwindow": PrefWindowClass;
   "button[dlgtype='cancel']": HTMLButtonElement & {firstChild: Element};
   ".donate-button-container": HTMLButtonElement;
   '[anonid="dlg-buttons"]': CustomGroupElement<HTMLButtonElement>;
@@ -617,90 +617,90 @@ interface createXULMap {
 }
 
 interface GetByMap {
-  broadcasters: PrefPaneClass;
-  chk_restoreOnDemand: HTMLInputElement;
-  ClickTab: MousePaneNS.MenuList;
-  ClickTabbar: MousePaneNS.MenuList;
-  dblclick_changesize: CheckboxClass;
-  control: HTMLLabelElement;
-  dlgtype: HTMLButtonElement;
-  editBox: ShortcutEditBox;
-  externalLink: CheckboxClass;
-  externalLinkTarget: HTMLMenuElement;
-  focusTab: HTMLMenuElement;
+  "broadcasters": PrefPaneClass;
+  "chk_restoreOnDemand": HTMLInputElement;
+  "ClickTab": MousePaneNS.MenuList;
+  "ClickTabbar": MousePaneNS.MenuList;
+  "dblclick_changesize": CheckboxClass;
+  "control": HTMLLabelElement;
+  "dlgtype": HTMLButtonElement;
+  "editBox": ShortcutEditBox;
+  "externalLink": CheckboxClass;
+  "externalLinkTarget": HTMLMenuElement;
+  "focusTab": HTMLMenuElement;
   "focusTab-box": HTMLElement;
   "focusTab-label": HTMLLabelElement;
-  generalWindowOpen: HTMLMenuElement;
+  "generalWindowOpen": HTMLMenuElement;
   "hide-unused-shortcuts": HTMLLabelElement;
   "hide-RGB": HTMLLabelElement & {value: string};
-  minWidth: HTMLInputElement;
-  maxWidth: HTMLInputElement;
-  muteTab: CheckboxClass & Element;
-  menu: CustomGroupElement<HTMLElement>;
-  readonly notificationbox: HTMLElement;
-  obs_showTabList: HTMLElement;
-  onLeftDisabled: HTMLLabelElement;
-  onToolbar: HTMLElement;
-  onPlate: HTMLElement;
-  openTabNext: CheckboxClass;
-  pane: PrefPaneClass;
-  paneDeck: CustomGroupElement<HTMLInputElement>;
-  paneIncompatible: PrefPaneClass;
-  paneMenu: PrefPaneClass;
-  paneDeckContainer: HTMLElement;
-  preference: PreferenceElement;
-  selector: CustomGroupElement<PrefPaneClass>;
-  restoreOnDemand: HTMLInputElement;
-  searchclipboardfor: CheckboxClass;
+  "minWidth": HTMLInputElement;
+  "maxWidth": HTMLInputElement;
+  "muteTab": CheckboxClass & Element;
+  "menu": CustomGroupElement<HTMLElement>;
+  readonly "notificationbox": HTMLElement;
+  "obs_showTabList": HTMLElement;
+  "onLeftDisabled": HTMLLabelElement;
+  "onToolbar": HTMLElement;
+  "onPlate": HTMLElement;
+  "openTabNext": CheckboxClass;
+  "pane": PrefPaneClass;
+  "paneDeck": CustomGroupElement<HTMLInputElement>;
+  "paneIncompatible": PrefPaneClass;
+  "paneMenu": PrefPaneClass;
+  "paneDeckContainer": HTMLElement;
+  "preference": PreferenceElement;
+  "selector": CustomGroupElement<PrefPaneClass>;
+  "restoreOnDemand": HTMLInputElement;
+  "searchclipboardfor": CheckboxClass;
   "shortcut-group": ShortcutParent;
   "shortcuts-panel": ShortcutsPanel;
-  singleWindow: CheckboxClass;
-  tabBarTopAbove: HTMLMenuElement;
-  tabclick: CustomGroupElement<HTMLElement>;
-  tabCloseButton: HTMLMenuElement;
-  TabMIxPreferences: PrefWindowClass;
-  tabsScroll: HTMLMenuElement;
-  tabXLeft: CheckboxClass;
+  "singleWindow": CheckboxClass;
+  "tabBarTopAbove": HTMLMenuElement;
+  "tabclick": CustomGroupElement<HTMLElement>;
+  "tabCloseButton": HTMLMenuElement;
+  "TabMIxPreferences": PrefWindowClass;
+  "tabsScroll": HTMLMenuElement;
+  "tabXLeft": CheckboxClass;
   "treeStyleTab.msg": HTMLElement;
-  shortcut_reset: HTMLButtonElement;
-  showBmkTab: CheckboxClass & Element;
-  showBmkTabs: CheckboxClass & Element;
-  unmuteTab: CheckboxClass & Element;
-  session: SessionPaneNS.SessionsTabs;
-  sessionsOptions: CheckboxClass & Element;
-  stylestabs: CustomGroupElement<HTMLElement>;
-  stylespanels: Omit<HTMLElement, "childNodes"> & {childNodes: HTMLCollectionBase_G<TabstylepanelClass>};
+  "shortcut_reset": HTMLButtonElement;
+  "showBmkTab": CheckboxClass & Element;
+  "showBmkTabs": CheckboxClass & Element;
+  "unmuteTab": CheckboxClass & Element;
+  "session": SessionPaneNS.SessionsTabs;
+  "sessionsOptions": CheckboxClass & Element;
+  "stylestabs": CustomGroupElement<HTMLElement>;
+  "stylespanels": Omit<HTMLElement, "childNodes"> & {childNodes: HTMLCollectionBase_G<TabstylepanelClass>};
 
-  saveSession: MozShortcutClass;
-  saveWindow: MozShortcutClass;
-  slideShow: MozShortcutClass;
+  "saveSession": MozShortcutClass;
+  "saveWindow": MozShortcutClass;
+  "slideShow": MozShortcutClass;
 
   // for pref-appearance.xhtml
-  color: StyleElement;
-  red: StyleElement;
-  green: StyleElement;
-  blue: StyleElement;
-  opacity: StyleElement;
-  italic: StyleElement;
-  bold: StyleElement;
-  underline: StyleElement;
-  text: StyleElement;
-  bg: StyleElement;
-  textColor: MozColorboxClass;
-  bgColor: MozColorboxClass;
-  bgTopColor: MozColorboxClass;
-  _unloadedTab: HTMLElement;
-  _unreadTab: HTMLElement;
-  _otherTab: HTMLElement;
-  _progressMeter: HTMLElement;
-  useThis: StyleElement;
+  "color": StyleElement;
+  "red": StyleElement;
+  "green": StyleElement;
+  "blue": StyleElement;
+  "opacity": StyleElement;
+  "italic": StyleElement;
+  "bold": StyleElement;
+  "underline": StyleElement;
+  "text": StyleElement;
+  "bg": StyleElement;
+  "textColor": MozColorboxClass;
+  "bgColor": MozColorboxClass;
+  "bgTopColor": MozColorboxClass;
+  "_unloadedTab": HTMLElement;
+  "_unreadTab": HTMLElement;
+  "_otherTab": HTMLElement;
+  "_progressMeter": HTMLElement;
+  "useThis": StyleElement;
 
   // pref-filetype.xhtml
-  filetypeList: RichListBox;
-  filetypeEntry: HTMLInputElement;
-  filetypeEdit: HTMLButtonElement;
-  filetypeDelete: HTMLButtonElement;
-  filetypeAdd: HTMLButtonElement;
+  "filetypeList": RichListBox;
+  "filetypeEntry": HTMLInputElement;
+  "filetypeEdit": HTMLButtonElement;
+  "filetypeDelete": HTMLButtonElement;
+  "filetypeAdd": HTMLButtonElement;
 }
 
 interface GetByTagNameMap {

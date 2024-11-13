@@ -25,17 +25,18 @@ declare namespace MockedExports {
    */
   interface KnownModules {
     Services: typeof import("Services");
-    // "resource://gre/modules/AppConstants.sys.mjs": typeof import("C:/Users/Hadar/Documents/FireFox/Firefox_nightly/Firefox Nightly/Firefox Nightly - omni/modules/AppConstants.sys.mjs");
-    // "resource:///modules/CustomizableUI.sys.mjs": typeof import("C:/Users/Hadar/Documents/FireFox/Firefox_nightly/Firefox Nightly/Firefox Nightly - omni/modules/CustomizableUI.sys.mjs");
-    // "resource:///modules/CustomizableWidgets.sys.mjs": typeof import("C:/Users/Hadar/Documents/FireFox/Firefox_nightly/Firefox Nightly/Firefox Nightly - omni/modules/CustomizableWidgets.sys.mjs");
-    // "resource://devtools/shared/loader/Loader.sys.mjs": typeof import("C:/Users/Hadar/Documents/FireFox/Firefox_nightly/Firefox Nightly/Firefox Nightly - omni/chrome/devtools/modules/devtools/shared/loader/Loader.sys.mjs");
-    // "resource://devtools/client/performance-new/shared/background.sys.mjs": typeof import("C:/Users/Hadar/Documents/FireFox/Firefox_nightly/Firefox Nightly/Firefox Nightly - omni/chrome/devtools/modules/devtools/client/performance-new/shared/background.sys.mjs");
-    // "resource://devtools/client/performance-new/shared/symbolication.sys.mjs": typeof import("C:/Users/Hadar/Documents/FireFox/Firefox_nightly/Firefox Nightly/Firefox Nightly - omni/chrome/devtools/modules/devtools/client/performance-new/shared/symbolication.sys.mjs");
+    // "resource://gre/modules/AppConstants.sys.mjs": typeof import("resource://gre/modules/AppConstants.sys.mjs");
+    // "resource:///modules/CustomizableUI.sys.mjs": typeof import("resource:///modules/CustomizableUI.sys.mjs");
+    // "resource:///modules/CustomizableWidgets.sys.mjs": typeof import("resource:///modules/CustomizableWidgets.sys.mjs");
+    // "resource://devtools/shared/loader/Loader.sys.mjs": typeof import("resource://devtools/shared/loader/Loader.sys.mjs");
+    // "resource://devtools/client/performance-new/shared/background.sys.mjs": typeof import("resource://devtools/client/performance-new/shared/background.sys.mjs");
+    // "resource://devtools/client/performance-new/shared/symbolication.sys.mjs": typeof import("resource://devtools/client/performance-new/shared/symbolication.sys.mjs");
     // "resource://devtools/shared/loader/browser-loader.sys.mjs": any;
-    // "resource://devtools/client/performance-new/popup/menu-button.sys.mjs": typeof import("C:/Users/Hadar/Documents/FireFox/Firefox_nightly/Firefox Nightly/Firefox Nightly - omni/chrome/devtools/modules/devtools/client/performance-new/popup/menu-button.sys.mjs");
-    // "resource://devtools/client/performance-new/shared/typescript-lazy-load.sys.mjs": typeof import("C:/Users/Hadar/Documents/FireFox/Firefox_nightly/Firefox Nightly/Firefox Nightly - omni/chrome/devtools/modules/devtools/client/performance-new/shared/typescript-lazy-load.sys.mjs");
-    // "resource://devtools/client/performance-new/popup/logic.sys.mjs": typeof import("C:/Users/Hadar/Documents/FireFox/Firefox_nightly/Firefox Nightly/Firefox Nightly - omni/chrome/devtools/modules/devtools/client/performance-new/popup/logic.sys.mjs");
-    // "resource:///modules/PanelMultiView.sys.mjs": typeof import("C:/Users/Hadar/Documents/FireFox/Firefox_nightly/Firefox Nightly/Firefox Nightly - omni/modules/PanelMultiView.sys.mjs");
+    // "resource://devtools/client/performance-new/popup/menu-button.sys.mjs": typeof import("resource://devtools/client/performance-new/popup/menu-button.sys.mjs");
+    // "resource://devtools/client/performance-new/shared/typescript-lazy-load.sys.mjs": typeof import("resource://devtools/client/performance-new/shared/typescript-lazy-load.sys.mjs");
+    // "resource://devtools/client/performance-new/popup/logic.sys.mjs": typeof import("resource://devtools/client/performance-new/popup/logic.sys.mjs");
+    // "resource:///modules/PanelMultiView.sys.mjs": typeof import("resource:///modules/PanelMultiView.sys.mjs");
+    // "resource://gre/modules/PlacesUtils.sys.mjs": typeof import("resource://gre/modules/PlacesUtils.sys.mjs");
   }
 
   interface ChromeUtils {
@@ -229,6 +230,24 @@ declare namespace MockedExports {
     principal: PrincipalStub;
   }
 
+  interface FaviconData {
+    uri: nsIURI;
+    dataLen: number;
+    data: number[];
+    mimeType: string;
+    size: number;
+  }
+
+  const PlaceUtilsSYSMJS: {
+    PlacesUtils: {
+      promiseFaviconData: (
+        pageUrl: string | URL | nsIURI,
+        preferredWidth?: number
+      ) => Promise<FaviconData>;
+      // TS-TODO: Add the rest.
+    };
+  };
+
   // TS-TODO
   const CustomizableUISYSMJS: any;
   const CustomizableWidgetsSYSMJS: any;
@@ -245,7 +264,11 @@ declare namespace MockedExports {
   class nsIFilePicker {}
 
   interface FilePicker {
-    init: (browsingContext: BrowsingContext, title: string, mode: number) => void;
+    init: (
+      browsingContext: BrowsingContext,
+      title: string,
+      mode: number
+    ) => void;
     open: (callback: (rv: number) => unknown) => void;
     // The following are enum values.
     modeGetFolder: number;
@@ -359,6 +382,10 @@ declare module "resource:///modules/PanelMultiView.sys.mjs" {
 
 declare module "resource://devtools/shared/loader/Loader.sys.mjs" {
   export = MockedExports.LoaderESM;
+}
+
+declare module "resource://gre/modules/PlacesUtils.sys.mjs" {
+  export = MockedExports.PlaceUtilsSYSMJS;
 }
 
 declare var ChromeUtils: MockedExports.ChromeUtils;

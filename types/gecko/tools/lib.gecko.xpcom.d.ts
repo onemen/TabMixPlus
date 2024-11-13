@@ -1919,7 +1919,7 @@ interface nsIURIFixupInfo extends nsISupports {
   fixedURI: nsIURI;
   keywordProviderName: string;
   keywordAsSent: string;
-  wasSchemelessInput: boolean;
+  schemelessInput: nsILoadInfo.SchemelessInputType;
   fixupChangedProtocol: boolean;
   fixupCreatedAlternateURI: boolean;
   originalInput: string;
@@ -3845,7 +3845,6 @@ interface nsIHttpsOnlyModePermission extends nsISupports {
   readonly LOAD_INSECURE_BLOCK: 2;
   readonly LOAD_INSECURE_ALLOW_SESSION: 9;
   readonly HTTPSFIRST_LOAD_INSECURE_ALLOW: 10;
-  readonly HTTPSFIRST_LOAD_INSECURE_ALLOW_SESSION: 11;
 }
 
 // https://searchfox.org/mozilla-central/source/dom/serializers/nsIDocumentEncoder.idl
@@ -6191,6 +6190,12 @@ enum CrossOriginEmbedderPolicy {
   EMBEDDER_POLICY_CREDENTIALLESS = 2,
 }
 
+enum SchemelessInputType {
+  SchemelessInputTypeUnset = 0,
+  SchemelessInputTypeSchemeful = 1,
+  SchemelessInputTypeSchemeless = 2,
+}
+
 enum HTTPSUpgradeTelemetryType {
   NOT_INITIALIZED = 0,
   NO_UPGRADE = 1,
@@ -6369,7 +6374,7 @@ interface nsILoadInfo extends nsISupports, Enums<typeof nsILoadInfo.StoragePermi
   readonly shouldSkipCheckForBrokenURLOrZeroSized: boolean;
   unstrippedURI: nsIURI;
   hasInjectedCookieForCookieBannerHandling: boolean;
-  wasSchemelessInput: boolean;
+  schemelessInput: nsILoadInfo.SchemelessInputType;
   httpsUpgradeTelemetry: nsILoadInfo.HTTPSUpgradeTelemetryType;
 }
 
@@ -14547,8 +14552,6 @@ enum ContentWin32kLockdownState {
 
 enum FissionDecisionStatus {
   eFissionStatusUnknown = 0,
-  eFissionExperimentControl = 1,
-  eFissionExperimentTreatment = 2,
   eFissionDisabledByE10sEnv = 3,
   eFissionEnabledByEnv = 4,
   eFissionDisabledByEnv = 5,
@@ -14557,7 +14560,6 @@ enum FissionDecisionStatus {
   eFissionEnabledByUserPref = 9,
   eFissionDisabledByUserPref = 10,
   eFissionDisabledByE10sOther = 11,
-  eFissionEnabledByRollout = 12,
 }
 
 }

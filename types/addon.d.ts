@@ -15,23 +15,23 @@ interface HTMLButtonElement {
 
 interface GetByMap {
   "alltabs-button": HTMLButtonElement;
-  allTabsMenu_sortTabsButton: HTMLButtonElement;
+  "allTabsMenu_sortTabsButton": HTMLButtonElement;
   "allTabsMenu-searchTabs": HTMLButtonElement;
   "allTabsMenu-tabsSeparator": HTMLMenuElement;
   "appMenu-multiView": HTMLElement;
   "back-button": HTMLButtonElement;
-  contentAreaContextMenu: ContextMenu;
-  context_openANewTab: HTMLMenuElement;
+  "contentAreaContextMenu": ContextMenu;
+  "context_openANewTab": HTMLMenuElement;
   "forward-button": HTMLButtonElement;
   "fullscr-toggler": HTMLElement;
   "history-menu": HTMLMenuElement;
-  key_restoreLastClosedTabOrWindowOrSession: HTMLElement;
-  lasttabTabList: TabmixAllTabsNS.PopupElement;
+  "key_restoreLastClosedTabOrWindowOrSession": HTMLElement;
+  "lasttabTabList": TabmixAllTabsNS.PopupElement;
   "nav-bar": HTMLElement;
   "PanelUI-menu-button": HTMLButtonElement;
   "privateTab-afterTabs-openNewPrivateTab": HTMLButtonElement;
   "privateTab-toolbar-openNewPrivateTab": HTMLButtonElement;
-  tabContextMenu: ContextMenu;
+  "tabContextMenu": ContextMenu;
   "tabmix-closedTabsButton": HTMLButtonElement;
   "tabmix-closedTabsView": ClosedObjectsUtils.CustomPanelView;
   "tabmix-closedWindowsView": ClosedObjectsUtils.CustomPanelView;
@@ -40,9 +40,9 @@ interface GetByMap {
   "tabmix-menu": HTMLMenuElement;
   "tabmix-scrollbox": TabmixArrowScrollboxNS.RightScrollBox;
   "tabmix-tabs-closebutton": HTMLButtonElement;
-  tabslist: TabmixAllTabsNS.PopupElement;
-  TabsToolbar: HTMLElement;
-  titlebar: HTMLElement;
+  "tabslist": TabmixAllTabsNS.PopupElement;
+  "TabsToolbar": HTMLElement;
+  "titlebar": HTMLElement;
   "tm-autoreload_menu": HTMLMenuElement;
   "tm-autoreloadTab_menu": HTMLMenuElement;
   "tm-content-closetab": HTMLMenuElement;
@@ -51,9 +51,9 @@ interface GetByMap {
   "tm-openinverselink": HTMLMenuElement;
   "tm-protectTab": HTMLMenuElement;
   "tm-content-undoCloseList-menu": HTMLMenuElement;
-  tmp_disableSave: HTMLElement;
-  tmp_undocloseButton: HTMLElement;
-  viewToolbarsMenuSeparator: HTMLElement;
+  "tmp_disableSave": HTMLElement;
+  "tmp_undocloseButton": HTMLElement;
+  "viewToolbarsMenuSeparator": HTMLElement;
   "widget-overflow-list": HTMLElement;
 }
 
@@ -850,11 +850,23 @@ declare namespace Tablib {
   function populateUndoWindowSubmenu(undoPopup: ClosedObjectsUtils.CustomPanelView, panel?: ClosedObjectsUtils.PopupElement, isAppMenu?: boolean): void;
 }
 
+interface PrivateMethods {
+  // TabContainer
+  clearDragOverCreateGroupTimer: MockedGeckoTypes.TabContainer["_clearDragOverCreateGroupTimer"];
+  isAnimatingMoveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_isAnimatingMoveTogetherSelectedTabs"];
+  moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
+  setDragOverGroupColor: MockedGeckoTypes.TabContainer["_setDragOverGroupColor"];
+  triggerDragOverCreateGroup: MockedGeckoTypes.TabContainer["_triggerDragOverCreateGroup"];
+  // ArrowScrollbox
+  updateScrollButtonsDisabledState: TabmixArrowScrollboxNS.ArrowScrollbox["_updateScrollButtonsDisabledState"];
+}
+
 declare namespace TabmixNS {
   type ElementTypesExtended = ElementTypes | TabmixAllTabsNS.PopupElement;
   let tablib: typeof Tablib;
   function isAltKey(event: MouseEvent | TabmixLastTabNS.KeyEvent): boolean;
   function getBoundsWithoutFlushing(element: ElementTypesExtended): DOMRect;
+  function getPrivateMethod<T extends keyof PrivateMethods>(constructorName: string, methodName: T, nextMethodName: string): PrivateMethods[T];
 }
 
 declare namespace TabmixModules {

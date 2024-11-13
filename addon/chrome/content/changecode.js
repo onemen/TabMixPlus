@@ -4,12 +4,16 @@
 // so we don't evaluate all code as strict mode code
 
 // aOptions can be: getter, setter or forceUpdate
-// @ts-expect-error - when ChangeCode throw an error Tabmix.changeCode is null
+/** @type {TabmixNS.changeCode} */
 Tabmix.changeCode = function(aParent, afnName, aOptions) {
   let console = TabmixSvc.console;
   let debugMode = this._debugMode;
 
-  /** @type {typeof ChangeCodeClass.ChangeCode} */
+  /**
+   * @constructor
+   * @this {ChangeCodeNS.ChangeCodeClass}
+   * @param {ChangeCodeNS.ChangeCodeParams} aParams
+   */
   function ChangeCode(aParams) {
     this.obj = aParams.obj;
     this.fnName = aParams.fnName;
@@ -33,9 +37,10 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
     this.notFound.length = 0;
   }
 
-  /** @type {Partial<typeof ChangeCodeClass.prototype>} */
+  /** @type {Partial<ChangeCodeNS.ChangeCodeClass>} */
   ChangeCode.prototype = {
     notFound: [],
+    type: "",
     value: "",
     errMsg: "",
     errMsgContent:
@@ -206,18 +211,18 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
   };
 
   try {
-    /** @type {ChangeCodeClass} */ // @ts-expect-error
     return new ChangeCode({
       obj: aParent,
       fnName: afnName.split(".").pop() ?? "",
       fullName: afnName,
-      options: aOptions
+      options: aOptions ?? {},
     });
   } catch (/** @type {any} */ ex) {
     console.clog(console.callerName() + " failed to change " + afnName + "\nError: " + ex.message);
     if (debugMode)
       console.obj(aParent, "aParent");
   }
+  // @ts-expect-error - when ChangeCode throw an error Tabmix.changeCode is null
   return null;
 };
 

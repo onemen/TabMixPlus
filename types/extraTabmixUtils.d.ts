@@ -21,7 +21,7 @@ declare namespace ChangeCodeNS {
     [key: string]: unknown;
   };
   interface ChangeCodeParams {
-    obj: Record<string, unknown>;
+    obj: Record<string, any>;
     fnName: string;
     fullName: string;
     options?: Options;
@@ -32,39 +32,23 @@ declare namespace ChangeCodeNS {
     fullName: string;
     needUpdate: boolean;
     silent: boolean;
-    type: "__lookupSetter__" | "__lookupGetter__";
+    type: "__lookupSetter__" | "__lookupGetter__" | "";
     value: string;
     errMsg: string;
     errMsgContent: string;
     notFound: (string | RegExp)[];
 
-    prototype: ChangeCodeClass;
-    new (aParams: ChangeCodeParams): ChangeCodeClass;
-    isInstance: IsInstance<ChangeCodeClass>;
-
-    ChangeCode(this: ChangeCodeClass, aParams: ChangeCodeParams): void;
     _replace(this: ChangeCodeClass, substr: string | RegExp, newString: string, aParams?: ReplaceParams): ChangeCodeClass;
     toCode(this: ChangeCodeClass, aShow?: boolean, aObj?: Record<string, any>, aName?: string): void;
     defineProperty(this: ChangeCodeClass, aObj?: Record<string, unknown>, aName?: string, aCode?: {setter?: string; getter?: string}): void;
     show(aObj?: Record<string, unknown>, aName?: string): void;
     isValidToChange(this: ChangeCodeClass, aName: string): boolean;
     getCallerData(stack: nsIStackFrame, aOptions?: unknown): {filename: string; lineNumber: number; columnNumber: number; fnName: string; message: string};
-    verifyPrivateMethodReplaced(): void;
+    verifyPrivateMethodReplaced(this: ChangeCodeClass): void;
   }
 }
 
 declare var ChangeCodeClass: ChangeCodeNS.ChangeCodeClass;
-
-interface PrivateMethods {
-  // TabContainer
-  clearDragOverCreateGroupTimer: MockedGeckoTypes.TabContainer["_clearDragOverCreateGroupTimer"];
-  isAnimatingMoveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_isAnimatingMoveTogetherSelectedTabs"];
-  moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
-  setDragOverGroupColor: MockedGeckoTypes.TabContainer["_setDragOverGroupColor"];
-  triggerDragOverCreateGroup: MockedGeckoTypes.TabContainer["_triggerDragOverCreateGroup"];
-  // ArrowScrollbox
-  updateScrollButtonsDisabledState: TabmixArrowScrollboxNS.ArrowScrollbox["_updateScrollButtonsDisabledState"];
-}
 
 declare namespace TabmixNS {
   // from changedcode
@@ -120,7 +104,7 @@ declare namespace TabmixNS {
   function getMovingTabsWidth(movingTabs: Tab[]): number;
   function getPlacement(id: string): number;
 
-  function getPrivateMethod<T extends keyof PrivateMethods>(constructorName: string, methodName: T, nextMethodName: string): PrivateMethods[T];
+  // getPrivateMethod is in addon.d.ts
   function hidePopup(aPopupMenu: XULPopupElement): void;
   function whereToOpen(pref: string | boolean, altKey?: boolean): {inNew: boolean; lock: boolean};
 
