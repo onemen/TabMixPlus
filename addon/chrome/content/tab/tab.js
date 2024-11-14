@@ -1741,9 +1741,9 @@ window.gTMPprefObserver = {
       this.insertRule(newRule);
     };
     iconRule = '#tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="alltabs"] > ' +
-               '#tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([protected])%faviconized% .%S ,' +
+               '#tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([protected])%faviconized% .%S ,' +
                '#tabbrowser-tabs%favhideclose%[closebuttons-side="left"][closebuttons="activetab"] > ' +
-               '#tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([protected])[selected="true"]%faviconized% .%S {' +
+               '#tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([protected])[selected="true"]%faviconized% .%S {' +
                '-moz-margin-start: %PX !important;}';
     if ("faviconize" in window) {
       let newRule = iconRule.replace(/%favhideclose%/g, ':not([favhideclose="true"])').replace(/%faviconized%/g, '');
@@ -1766,10 +1766,10 @@ window.gTMPprefObserver = {
     // move left button that show on hover over tab title
     icon.style.setProperty("display", "inline-flex", "important");
     let iconMargin = '#tabbrowser-tabs[closebuttons-hover="notactivetab"][closebuttons-side="left"] > ' +
-                     '#tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"])' +
+                     '#tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"])' +
                      ':not([isPermaTab="true"]):not([protected]) .tab-close-button,' +
                      '#tabbrowser-tabs[closebuttons-hover="alltabs"][closebuttons-side="left"] > ' +
-                     '#tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"])' +
+                     '#tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"])' +
                      ':not([protected]) .tab-close-button {' +
                      '-moz-margin-start: 0px !important;' +
                      '-moz-margin-end: %Spx !important;}'.replace("%S", String(-icon.getBoundingClientRect().width));
@@ -1782,12 +1782,12 @@ window.gTMPprefObserver = {
     let marginEnd = style?.getPropertyValue(sMarginEnd) ?? "0px";
     let textMarginEnd = parseInt(marginEnd) ? marginEnd : this._marginStart;
     let iconRule = '#tabbrowser-tabs%favhideclose%[closebuttons="noclose"] > ' +
-        '#tabbrowser-arrowscrollbox > .tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
+        '#tabbrowser-arrowscrollbox .tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
         '#tabbrowser-tabs%favhideclose%[closebuttons-side="left"] > ' +
-        '#tabbrowser-arrowscrollbox > .tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
+        '#tabbrowser-arrowscrollbox .tabbrowser-tab%faviconized%:not([pinned]) .tab-label[tabmix="true"],' +
         '#tabbrowser-tabs%favhideclose%[closebuttons="activetab"]' +
         ':not([closebuttons-hover="notactivetab"])[closebuttons-side="right"] > ' +
-        '#tabbrowser-arrowscrollbox > .tabbrowser-tab%faviconized%:not([pinned]):not([selected="true"]) ' +
+        '#tabbrowser-arrowscrollbox .tabbrowser-tab%faviconized%:not([pinned]):not([selected="true"]) ' +
         '.tab-label[tabmix="true"],' +
         '.tabbrowser-tab%faviconized1%[protected]:not([pinned]) .tab-label[tabmix="true"] {' +
         '-moz-margin-end: %PX !important;}'.replace("%PX", textMarginEnd);
@@ -1800,8 +1800,12 @@ window.gTMPprefObserver = {
           .replace(/%faviconized%/g, ':not([faviconized="true"])')
           .replace(/%faviconized1%/g, ':not([faviconized="true"])');
       this.insertRule(newRule);
-      newRule = '.tabbrowser-tab[faviconized="true"][protected]:not([pinned]) {max-width: 36px !important;}';
-      this.insertRule(newRule);
+      newRule =
+       `#tabbrowser-arrowscrollbox > tab-group:not([collapsed]) > .tabbrowser-tab[faviconized="true"][protected]:not([pinned]),
+        #tabbrowser-arrowscrollbox > .tabbrowser-tab[faviconized="true"][protected]:not([pinned]) {
+          max-width: 36px !important;
+        }`;
+      this.insertRule(newRule.trim());
     } else {
       let newRule = iconRule.replace(/%favhideclose%/g, '')
           .replace(/%faviconized%/g, '').replace(/%faviconized1%/g, '');
@@ -1812,16 +1816,20 @@ window.gTMPprefObserver = {
   addDynamicRules() {
     // tab width rules
     let tst = Tabmix.extensions.treeStyleTab ? ":not([treestyletab-collapsed='true'])" : "";
-    let newRule = ".tabbrowser-tab[fadein]" + tst +
-                  ":not([pinned]) {min-width: #1px !important; max-width: #2px !important;}";
+    let newRule =
+     `#tabbrowser-arrowscrollbox > tab-group:not([collapsed]) > .tabbrowser-tab[fadein]${tst}:not([pinned]),
+      #tabbrowser-arrowscrollbox > .tabbrowser-tab[fadein]${tst}:not([pinned]) {
+        min-width: #1px !important;
+        max-width: #2px !important;
+      }`;
     let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
     let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
     newRule = newRule.replace("#1", String(_min)).replace("#2", String(_max));
-    this.insertRule(newRule, "width");
+    this.insertRule(newRule.trim(), "width");
 
     // rule for controlling margin-inline-start when we have pinned tab in multi-row
     let marginStart = '#tabbrowser-tabs[positionpinnedtabs] > ' +
-                      `#tabbrowser-arrowscrollbox > .tabbrowser-tab[tabmix-firstTabInRow="true"]{margin-inline-start: 0px;}`;
+                      `#tabbrowser-arrowscrollbox .tabbrowser-tab[tabmix-firstTabInRow="true"]{margin-inline-start: 0px;}`;
     this.insertRule(marginStart, "tabmix-firstTabInRow");
 
     this.insertRule(`:root { --tabs-lines: ` + Tabmix.prefs.getIntPref("tabBarMaxRow") + `;}`, 'max-rows');
@@ -1832,7 +1840,7 @@ window.gTMPprefObserver = {
     // we add the rule after the first tab added
     if (typeof colorfulTabs == "object") {
       let padding = Tabmix.getStyle(gBrowser.tabs[0], "paddingBottom");
-      newRule = '#tabbrowser-tabs[tabmix-flowing="multibar"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[selected=true]' +
+      newRule = '#tabbrowser-tabs[tabmix-flowing="multibar"] > #tabbrowser-arrowscrollbox .tabbrowser-tab[selected=true]' +
                     ' {margin-bottom: -1px !important; padding-bottom: ' + (padding + 1) + 'px !important;}';
       let index = this.insertRule(newRule);
       const cssStyleRule = this.tabStyleSheet.cssRules[index];
@@ -1875,7 +1883,7 @@ window.gTMPprefObserver = {
       );
 
       this.insertRule(
-        `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([pinned]) {
+        `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]) {
           flex: 0 0 auto !important;
           width: auto !important;
         }`
@@ -1949,7 +1957,7 @@ window.gTMPprefObserver = {
     );
 
     const blockMargin = Tabmix.tabsUtils.protonValues;
-    const cssText = `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox >
+    const cssText = `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox
       .tabbrowser-tab:not(:hover, [pinned]) > .tab-stack > .tab-content > .tab-close-button {
         padding-inline-start: 7px !important;
         width: 24px !important;

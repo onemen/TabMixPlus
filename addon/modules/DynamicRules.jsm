@@ -142,25 +142,25 @@ const DynamicRules = {
 
     let styleRules = {
       currentTab: {
-        text: `${selector}[tabmix_currentStyle~="text"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.current}${tabTextRule}`,
-        bg: `${selector}[tabmix_currentStyle~="bg"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.current}${backgroundRule}`
+        text: `${selector}[tabmix_currentStyle~="text"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.current}${tabTextRule}`,
+        bg: `${selector}[tabmix_currentStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.current}${backgroundRule}`
       },
       unloadedTab: {
-        text: `${selector}[tabmix_unloadedStyle~="text"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.unloaded}${tabTextRule}`,
-        bg: `${selector}[tabmix_unloadedStyle~="bg"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.unloaded}${backgroundRule}`
+        text: `${selector}[tabmix_unloadedStyle~="text"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.unloaded}${tabTextRule}`,
+        bg: `${selector}[tabmix_unloadedStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.unloaded}${backgroundRule}`
       },
       unreadTab: {
-        text: `${selector}[tabmix_unreadStyle~="text"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.unread}${tabTextRule}`,
-        bg: `${selector}[tabmix_unreadStyle~="bg"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.unread}${backgroundRule}`
+        text: `${selector}[tabmix_unreadStyle~="text"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.unread}${tabTextRule}`,
+        bg: `${selector}[tabmix_unreadStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.unread}${backgroundRule}`
       },
       otherTab: {
-        text: `${selector}[tabmix_otherStyle~="text"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.other}${tabTextRule}`,
-        bg: `${selector}[tabmix_otherStyle~="bg"] #tabbrowser-arrowscrollbox > .tabbrowser-tab${tabState.other}${backgroundRule}`
+        text: `${selector}[tabmix_otherStyle~="text"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.other}${tabTextRule}`,
+        bg: `${selector}[tabmix_otherStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.other}${backgroundRule}`
       },
     };
 
     styleRules.progressMeter = {
-      bg: selector + '[tabmix_progressMeter="userColor"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab > ' +
+      bg: selector + '[tabmix_progressMeter="userColor"] > #tabbrowser-arrowscrollbox .tabbrowser-tab > ' +
           '.tab-stack > .tab-progress-container > .tab-progress::-moz-progress-bar' +
           '{\n  background-color: #bottomColor !important;\n}\n'
     };

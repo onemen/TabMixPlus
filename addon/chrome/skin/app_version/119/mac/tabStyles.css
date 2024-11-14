@@ -5,21 +5,21 @@
 
 **/
 
-#tabbrowser-tabs[tabmix_currentStyle~="bg"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[visuallyselected] > .tab-stack > .tab-content,
-#tabbrowser-tabs[tabmix_unloadedStyle~="bg"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unloaded"] > .tab-stack > .tab-content,
-#tabbrowser-tabs[tabmix_unreadStyle~="bg"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unread"] > .tab-stack > .tab-content,
-#tabbrowser-tabs[tabmix_otherStyle~="bg"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected]):not([tabmix_tabState]) > .tab-stack > .tab-content {
+#tabbrowser-tabs[tabmix_currentStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab[visuallyselected] > .tab-stack > .tab-content,
+#tabbrowser-tabs[tabmix_unloadedStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unloaded"] > .tab-stack > .tab-content,
+#tabbrowser-tabs[tabmix_unreadStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unread"] > .tab-stack > .tab-content,
+#tabbrowser-tabs[tabmix_otherStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([visuallyselected]):not([tabmix_tabState]) > .tab-stack > .tab-content {
   border-image: none !important;
 }
 
 /* tabmix color on tab - for inactive window */
-#tabbrowser-tabs[tabmix_currentStyle~="bg"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[visuallyselected] > .tab-stack > .tab-background >
+#tabbrowser-tabs[tabmix_currentStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab[visuallyselected] > .tab-stack > .tab-background >
       :-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end):-moz-window-inactive,
-#tabbrowser-tabs[tabmix_unloadedStyle~="bg"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unloaded"] > .tab-stack > .tab-background >
+#tabbrowser-tabs[tabmix_unloadedStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unloaded"] > .tab-stack > .tab-background >
       :-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end):-moz-window-inactive,
-#tabbrowser-tabs[tabmix_unreadStyle~="bg"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unread"] > .tab-stack > .tab-background >
+#tabbrowser-tabs[tabmix_unreadStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unread"] > .tab-stack > .tab-background >
       :-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end):-moz-window-inactive,
-#tabbrowser-tabs[tabmix_otherStyle~="bg"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab:not([visuallyselected]):not([tabmix_tabState]) > .tab-stack > .tab-background >
+#tabbrowser-tabs[tabmix_otherStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([visuallyselected]):not([tabmix_tabState]) > .tab-stack > .tab-background >
       :-moz-any(.tab-background-start, .tab-background-middle, .tab-background-end):-moz-window-inactive {
   opacity: 0.5 !important;
 }
