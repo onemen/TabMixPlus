@@ -9,7 +9,7 @@
     "lint:clean": "eslint --format stylish",
     "prepare": "husky config/husky",
     "tsc:clean": "node config/typecheck.js",
-    "typecheck": "tsc -b -f > tsc.local.txt"
+    "typecheck": "tsc --build > tsc.local.txt"
   },
   "repository": {
     "type": "git",
