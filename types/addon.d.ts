@@ -276,6 +276,7 @@ declare namespace TabmixArrowScrollboxNS {
     minOffset: number;
     offsetRatio: number;
     parentNode: MockedGeckoTypes.TabContainer;
+    readonly scrollSize: number;
     readonly shadowRoot: ShadowRoot;
     scrollboxPaddingBottom: number;
     scrollboxPaddingTop: number;

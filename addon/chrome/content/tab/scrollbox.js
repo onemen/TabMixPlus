@@ -176,13 +176,6 @@ Tabmix.multiRow = {
           '$& && !this.isMultiRow', {flags: "g"}
         ).toCode();
 
-        Tabmix.changeCode(this, "scrollbox.lineScrollAmount", {getter: true})._replace(
-          '{', `{
-                  if (this.isMultiRow) {
-                    return this.scrollSize / Tabmix.tabsUtils.lastTabRowNumber;
-                  }`
-        ).defineProperty();
-
         const codeToReplace = Tabmix.isVersion(1310) ? 'this.#verticalMode' : 'this.getAttribute("orient") == "vertical"';
         Tabmix.changeCode(this, "scrollbox.on_touchstart")._replace(
           codeToReplace, 'this._verticalMode', {silent: true}

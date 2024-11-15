@@ -1030,7 +1030,7 @@ var TMP_eventListener = {
         let scrollAmount = 0;
         if (TabmixTabbar.isMultiRow) {
           delta = delta > 0 ? 1 : -1;
-          scrollAmount = delta * tabStrip.lineScrollAmount;
+          scrollAmount = delta * (tabStrip.scrollSize / Tabmix.tabsUtils.lastTabRowNumber);
         } else if (aEvent.deltaMode == aEvent.DOM_DELTA_PIXEL) {
           scrollAmount = delta;
           instant = true;
