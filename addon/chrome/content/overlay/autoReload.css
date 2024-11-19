@@ -36,6 +36,9 @@ html|fieldset {
   background-size: 8px;
   background-position: right 3px center;
   width: 14px;
+  appearance: none;
+  -moz-context-properties: fill;
+  fill: currentColor;
 }
 
 .select-button:hover {
@@ -54,6 +57,9 @@ html|fieldset {
 
 .select-menupopup menuitem {
   padding-inline: 10px 0;
+  /* for Waterfox 6.5.0 */
+  --menu-background-padding-default: 10px;
+  --context-menu-mac-padding: 10px;
 }
 
 input[type="number"] {
