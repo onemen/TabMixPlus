@@ -171,8 +171,12 @@ If <b>Tab Mix Plus</b> stops working after Firefox update was installed or when 
 
 ## Browser Compatibility
 
+Tab Mix Plus is fully compatible with the following browsers:
+
   * Firefox 115 ESR - Firefox Nightly
-  * Waterfox G3 - G6 and beyond
+  * Waterfox G6 and beyond
+  * Floorp 11.9.0+
+  * LibreWolf 122+
 
 > Firefox versions prior to 115 ESR are not supported.
 
