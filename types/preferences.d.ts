@@ -372,9 +372,10 @@ interface MozColorbox extends MozColorboxOverrideMozXULElement {
   _RGB: StyleElement[];
   _colorpicker: StyleElement;
   _parent: TabstylepanelClass;
-  updateColor(): void;
-  update(this: MozColorbox, event: ColorEvent): void;
   getColor(format?: boolean): string;
+  update(this: MozColorbox, event: ColorEvent): void;
+  updateColor(): void;
+  updateRgba(this: MozColorbox, val: string): void;
 }
 
 interface MozColorboxClass extends MozColorbox {}

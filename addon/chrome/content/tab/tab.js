@@ -1959,7 +1959,7 @@ window.gTMPprefObserver = {
     const blockMargin = Tabmix.tabsUtils.protonValues;
     const cssText = `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox
       .tabbrowser-tab:not(:hover, [pinned]) > .tab-stack > .tab-content > .tab-close-button {
-        padding-inline-start: 7px !important;
+        padding-inline-start: 6px !important;
         width: 24px !important;
       }`;
     if (TabmixSvc.isWaterfox) {

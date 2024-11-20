@@ -19,10 +19,6 @@ ChromeUtils.defineLazyGetter(lazy, "SSS", () => {
   return sss;
 });
 
-ChromeUtils.defineLazyGetter(lazy, "isMac", () => {
-  return lazy.TabmixSvc.isMac;
-});
-
 const STYLENAMES = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
 
 const DynamicRules = {
@@ -117,50 +113,53 @@ const DynamicRules = {
     });
   },
 
+  getSelector(name, rule) {
+    // add more selectors to increase specificity of our rule in order to
+    // override rules from Firefox and Waterfox
+    let selector = '#tabbrowser-tabs';
+
+    name = name.replace("Tab", "");
+    return `${selector}[tabmix_#style~="#type"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${this.tabState[name]}`
+        .replace("#style", `${name}Style`)
+        .replace("#type", rule);
+  },
+
   createTemplates() {
-    let space20 = ' '.repeat(20);
-    let bgImage = {};
-    bgImage.body = "linear-gradient(#topColor, #bottomColor)";
-    let bottomBorder = "linear-gradient(to top, rgba(10%,10%,10%,.4) 1px, transparent 1px),\n";
-    bgImage.bg = lazy.isMac ? bgImage.body : bottomBorder + space20 + bgImage.body;
+    let bgImage = {bg: "linear-gradient(#topColor, #bottomColor)",};
     let background = " {\n  appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
     let backgroundRule = ' > .tab-stack > .tab-background' + background;
     let tabTextRule = " .tab-text {\n  color: #textColor !important;\n}\n";
 
     const visuallyselected = lazy.TabmixSvc.version(1190) ? '[visuallyselected]' : '[visuallyselected="true"]';
     const _notSelected = `:not(${visuallyselected})`;
-    let tabState = {
+    this.tabState = {
       current: visuallyselected,
       unloaded: '[tabmix_tabState="unloaded"]' + _notSelected,
       unread: '[tabmix_tabState="unread"]' + _notSelected,
       other: ':not([tabmix_tabState])' + _notSelected,
     };
 
-    // add more selectors to increase specificity of our rule in order to
-    // override rules from Firefox and Waterfox
-    let selector = '#tabbrowser-tabs';
-
     let styleRules = {
       currentTab: {
-        text: `${selector}[tabmix_currentStyle~="text"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.current}${tabTextRule}`,
-        bg: `${selector}[tabmix_currentStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.current}${backgroundRule}`
+        text: `${this.getSelector("current", "text")}${tabTextRule}`,
+        bg: `${this.getSelector("current", "bg")}${backgroundRule}`
       },
       unloadedTab: {
-        text: `${selector}[tabmix_unloadedStyle~="text"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.unloaded}${tabTextRule}`,
-        bg: `${selector}[tabmix_unloadedStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.unloaded}${backgroundRule}`
+        text: `${this.getSelector("unloaded", "text")}${tabTextRule}`,
+        bg: `${this.getSelector("unloaded", "bg")}${backgroundRule}`
       },
       unreadTab: {
-        text: `${selector}[tabmix_unreadStyle~="text"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.unread}${tabTextRule}`,
-        bg: `${selector}[tabmix_unreadStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.unread}${backgroundRule}`
+        text: `${this.getSelector("unread", "text")}${tabTextRule}`,
+        bg: `${this.getSelector("unread", "bg")}${backgroundRule}`
       },
       otherTab: {
-        text: `${selector}[tabmix_otherStyle~="text"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.other}${tabTextRule}`,
-        bg: `${selector}[tabmix_otherStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${tabState.other}${backgroundRule}`
+        text: `${this.getSelector("other", "text")}${tabTextRule}`,
+        bg: `${this.getSelector("other", "bg")}${backgroundRule}`
       },
     };
 
     styleRules.progressMeter = {
-      bg: selector + '[tabmix_progressMeter="userColor"] > #tabbrowser-arrowscrollbox .tabbrowser-tab > ' +
+      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > #tabbrowser-arrowscrollbox .tabbrowser-tab > ' +
           '.tab-stack > .tab-progress-container > .tab-progress::-moz-progress-bar' +
           '{\n  background-color: #bottomColor !important;\n}\n'
     };
@@ -198,10 +197,10 @@ const DynamicRules = {
     // update styles on start or when user changed or enable color
     let changed = !val || // on start
                   prefObj.bg && (!val.bg || // bgColor enabled
-                    val.bgColor != prefObj.bgColor || // bgColor changed
-                    val.bgTopColor != prefObj.bgTopColor) || // bgTopColor changed
+                  val.bgColor != prefObj.bgColor || // bgColor changed
+                  val.bgTopColor != prefObj.bgTopColor) || // bgTopColor changed
                   prefObj.text && (!val.text || // textColor enabled
-                    val.textColor != prefObj.textColor); // textColor changed
+                  val.textColor != prefObj.textColor); // textColor changed
 
     if (changed)
       this.updateStyles(ruleName, prefObj);
@@ -212,15 +211,29 @@ const DynamicRules = {
 
   updateStyles(name, prefObj) {
     let templates = this.cssTemplates[name];
+
+    const buttonSelector = rule => `${this.getSelector(name, rule)} > .tab-stack > .tab-content > .tab-close-button`;
+
     let style = {};
     for (let rule of Object.keys(templates)) {
       let cssText = templates[rule];
       if (rule == "text") {
-        if (prefObj.text)
-          style[rule] = cssText.replace(/#textColor/g, prefObj.textColor);
+        if (prefObj.text) {
+          style[rule] = cssText.replace(/#textColor/g, prefObj.textColor) +
+          `\n${buttonSelector(rule)} {
+            fill: ${prefObj.textColor} !important;
+          }`;
+        }
       } else if (prefObj.bg) {
         style[rule] = cssText.replace(/#bottomColor/g, prefObj.bgColor)
             .replace(/#topColor/g, prefObj.bgTopColor);
+
+        if (name !== "progressMeter") {
+          const {topColor, bottomColor} = getButtonColors(prefObj);
+          style[rule] += `\n${buttonSelector(rule)}:hover {
+            background-image: linear-gradient(${topColor}, ${bottomColor});
+          }`;
+        }
       }
     }
     this.styles[name] = Object.keys(style).length ? style : null;
@@ -397,4 +410,65 @@ function getRGBcolor(aColorCode, aOpacity) {
   else if (newRGB[3] === undefined || newRGB[3] < 0 || newRGB[3] > 1)
     newRGB[3] = 1;
   return "rgba(" + newRGB.join(",") + ")";
+}
+
+// get darkened color for close button hover state
+function getButtonColors({bgColor, bgTopColor}) {
+  function parseRgba(rgbaString) {
+    const match = rgbaString.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+(?:\.\d+)?)\)/);
+    if (match) {
+      return {
+        r: parseInt(match[1]),
+        g: parseInt(match[2]),
+        b: parseInt(match[3]),
+        a: parseFloat(match[4])
+      };
+    }
+    return null;
+  }
+
+  function rgbaToHsla(rgba) {
+    const r = rgba.r / 255;
+    const g = rgba.g / 255;
+    const b = rgba.b / 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const delta = max - min;
+    let h;
+    if (delta === 0) {
+      h = 0;
+    } else if (max === r) {
+      h = (60 * ((g - b) / delta) + 360) % 360;
+    } else if (max === g) {
+      h = (60 * ((b - r) / delta) + 120) % 360;
+    } else if (max === b) {
+      h = (60 * ((r - g) / delta) + 240) % 360;
+    }
+    const l = (max + min) / 2;
+    const s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+    return {
+      h: Math.round(h),
+      s: Math.round(s * 100) / 100,
+      l: Math.round(l * 100) / 100,
+      a: Math.round(rgba.a * 100) / 100
+    };
+  }
+
+  function darkenRgba(rgba, amount) {
+    const hsla = rgbaToHsla(rgba);
+    hsla.l -= amount / 100;
+    if (hsla.l < 0) hsla.l = 0;
+    return hsla;
+  }
+
+  function hslaToString(hsla) {
+    return `hsla(${hsla.h}, ${hsla.s * 100}%, ${hsla.l * 100}%, ${hsla.a})`;
+  }
+
+  const topColorRGB = parseRgba(bgTopColor.trim());
+  const bottomColorRGB = parseRgba(bgColor.trim());
+  return {
+    topColor: hslaToString(darkenRgba(topColorRGB, 10)),
+    bottomColor: hslaToString(darkenRgba(bottomColorRGB, 10)),
+  };
 }

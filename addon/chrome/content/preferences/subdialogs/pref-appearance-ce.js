@@ -238,20 +238,17 @@ const TabpanelsClass = customElements.get("tabpanels");
       this.addEventListener("change", event => {
         const item = event.originalTarget;
         if (item.type == "color") {
-        // colorpicker use rgb hexadecimal format
-          const color = item.value.replace("#", "");
-          this._RGB.slice(0, -1).forEach((element, i) => {
-            const subS = color.substr(i * 2, 2);
-            element.value = String(parseInt(subS, 16));
-          });
+          this.updateRgba(item.value);
         }
         this.update(event);
       });
 
       this.addEventListener("input", event => {
-        if (event.originalTarget?.type != "color") {
-          this.update(event);
+        const item = event.originalTarget;
+        if (item?.type === "color") {
+          this.updateRgba(item.value);
         }
+        this.update(event);
       });
     }
 
@@ -296,6 +293,16 @@ const TabpanelsClass = customElements.get("tabpanels");
         return i < lastIndex ? parseInt(c.value) : parseInt(c.value) / 100;
       });
       return rgba;
+    }
+
+    /** @type {MozColorboxClass["updateRgba"]} */
+    updateRgba(val) {
+      // colorpicker use rgb hexadecimal format
+      const color = val.replace("#", "");
+      this._RGB.slice(0, -1).forEach((element, i) => {
+        const subS = color.substr(i * 2, 2);
+        element.value = String(parseInt(subS, 16));
+      });
     }
 
     /** @this {MozColorboxClass} */
