@@ -23,6 +23,31 @@ var TMP_tabDNDObserver = {
       return;
     }
 
+    const makeCode = (function() {
+      let _make;
+      if (Tabmix.isVersion(1340)) {
+        // Since Firefox 134, tabs.js contains scoped constants for group drop actions:
+        // - GROUP_DROP_ACTION_CREATE: used in on_drop and triggerDragOverCreateGroup
+        // - GROUP_DROP_ACTION_APPEND: used in on_drop and _animateTabMove
+
+        // @ts-expect-error
+        // eslint-disable-next-line no-unused-vars
+        const GROUP_DROP_ACTION_CREATE = 0x1;
+        // @ts-expect-error
+        // eslint-disable-next-line no-unused-vars
+        const GROUP_DROP_ACTION_APPEND = 0x2;
+
+        _make = eval(Tabmix._localMakeCode);
+      } else {
+        _make = Tabmix._makeCode;
+      }
+
+      /** @param {string | Function} code */
+      return function(code) {
+        return _make(null, code.toString());
+      };
+    }());
+
     this._moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
 
     Tabmix.getMovingTabsWidth = movingTabs => {
@@ -111,11 +136,11 @@ var TMP_tabDNDObserver = {
 
       gBrowser.tabContainer._dragOverCreateGroupTimer = 0;
 
-      gBrowser.tabContainer._triggerDragOverCreateGroup = Tabmix.getPrivateMethod(
+      gBrowser.tabContainer._triggerDragOverCreateGroup = makeCode(Tabmix.getPrivateMethod(
         "tabbrowser-tabs",
         "triggerDragOverCreateGroup",
         "#clearDragOverCreateGroupTimer"
-      );
+      ));
     }
 
     function tabmixHandleMoveString() {
@@ -199,7 +224,13 @@ var TMP_tabDNDObserver = {
       )._replace(
         /let lastTabCenter = (.*)tabSize \/ 2;/,
         'let lastTabCenter = $1(this.verticalMode ? tabSize / 2 : rightTabWidth / 2);'
-      ).toCode();
+      );
+
+      if (Tabmix.isVersion(1340)) {
+        gBrowser.tabContainer._animateTabMove = makeCode(_animateTabMove.value);
+      } else {
+        _animateTabMove.toCode();
+      }
     } else {
       // helper function to get floorp strings for width in vertical mode
       /** @param {string} vertical @param {string} horizontal */
@@ -325,7 +356,7 @@ var TMP_tabDNDObserver = {
      */
     function patchDragMethod(name, code) {
       if (Tabmix.isVersion(1320)) {
-        code.toCode(false, Tabmix.originalFunctions, `_tabmix_${name}`);
+        Tabmix.originalFunctions[`_tabmix_${name}`] = makeCode(code.value);
         Tabmix.originalFunctions[name] = gBrowser.tabContainer[name];
         gBrowser.tabContainer[name] = function(event) {
           const methodName = this.verticalMode ? name : `_tabmix_${name}`;
