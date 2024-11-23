@@ -25,9 +25,9 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
 
     if (options && (options.setter || options.getter)) {
       this.type = options.setter ? "__lookupSetter__" : "__lookupGetter__";
-      this.value = this.obj[this.type](this.fnName).toString();
+      this._value = this.obj[this.type](this.fnName).toString();
     } else if (typeof this.obj[this.fnName] == "function") {
-      this.value = this.obj[this.fnName].toString();
+      this._value = this.obj[this.fnName].toString();
     } else {
       this.errMsg = "\n" + this.fullName + " is undefined.";
     }
@@ -41,16 +41,23 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
   ChangeCode.prototype = {
     notFound: [],
     type: "",
-    value: "",
+    _value: "",
     errMsg: "",
     errMsgContent:
       "\n\nTry Tabmix latest development version from https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/," +
       "\nReport about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues",
+
+    /** @this {ChangeCodeNS.ChangeCodeClass} */
+    get value() {
+      this.isValidToChange(this.fullName);
+      return this._value;
+    },
+
     _replace: function TMP_utils__replace(substr, newString, aParams) {
       // Don't insert new code before "use strict";
       if (substr == "{") {
         let re = /['|"]use strict['|"];/;
-        let result = re.exec(this.value);
+        let result = re.exec(this._value);
         if (result) {
           if (!newString.startsWith("$&")) {
             newString = newString.replace(substr, result[0] + "\n");
@@ -74,9 +81,9 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
           substr = new RegExp(substr.replace(/[{[(\\^.$|?*+/)\]}]/g, "\\$&"), flags);
       }
 
-      var exist = typeof substr == "string" ? this.value.indexOf(substr) > -1 : substr.test(this.value);
+      var exist = typeof substr == "string" ? this._value.indexOf(substr) > -1 : substr.test(this._value);
       if (exist) {
-        this.value = this.value.replace(substr, newString);
+        this._value = this._value.replace(substr, newString);
         this.needUpdate = true;
       } else if (!silent) {
         this.notFound.push(substr);
@@ -92,9 +99,9 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
           let excludeReturn = ["TabsInTitlebar._update", "gBrowser._blurTab"];
           let addReturn = "", re = new RegExp("//.*", "g");
           if (!excludeReturn.includes(this.fullName) &&
-              /return\s.+/.test(this.value.replace(re, "")))
+              /return\s.+/.test(this._value.replace(re, "")))
             addReturn = "\nreturn null\n";
-          this.value = this.value.replace(/\([^)]*\)\s*{/, "$&\ntry {") +
+          this._value = this._value.replace(/\([^)]*\)\s*{/, "$&\ntry {") +
             ' catch (ex) {' +
             '   TabmixSvc.console.assert(ex, "outer try-catch in ' + (aName || this.fullName) + '");}' +
             addReturn +
@@ -103,9 +110,9 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
         let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
         if (this.isValidToChange(this.fullName)) {
           if (obj)
-            Tabmix.setNewFunction(obj, fnName, Tabmix._makeCode(null, this.value));
+            Tabmix.setNewFunction(obj, fnName, Tabmix._makeCode(null, this._value));
           else
-            Tabmix._makeCode(fnName, this.value);
+            Tabmix._makeCode(fnName, this._value);
         }
         if (aShow)
           this.show(obj, fnName);
@@ -113,7 +120,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
         console.reportError(ex, console.callerName() + " failed to change " +
                             this.fullName + "\nError: ");
 
-        console.log(this.value);
+        console.log(this._value);
       }
     },
 
@@ -139,7 +146,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
         type = type.toLowerCase();
         /** @type {string} */ // @ts-expect-error
         let code = aCode && aCode[type + "ter"] ||
-                   this.type == fnType ? this.value : obj[fnType](fnName);
+                   this.type == fnType ? this._value : obj[fnType](fnName);
 
         if (typeof code == "string") {
           // bug 1255925 - Give a name to getters/setters add space before the function name
@@ -178,7 +185,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
             (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) + this.errMsgContent;
         console.reportError(ex);
         if (debugMode) {
-          console.clog(ex.fnName + "\nfunction " + aName + " = " + this.value, ex);
+          console.clog(ex.fnName + "\nfunction " + aName + " = " + this._value, ex);
         }
       } else if (!this.needUpdate && debugMode) {
         console.clog(ex.fnName + " no update needed to " + aName, ex);
@@ -193,7 +200,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
     },
 
     verifyPrivateMethodReplaced() {
-      const matches = this.value.match(/this\.#(\w+)/g);
+      const matches = this._value.match(/this\.#(\w+)/g);
       if (!matches) {
         return;
       }
@@ -206,7 +213,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
           console.reportError(ex);
         }
       }
-      this.value = this.value.replace(/this\.#(\w+)/g, "this._$1");
+      this._value = this._value.replace(/this\.#(\w+)/g, "this._$1");
     },
   };
 

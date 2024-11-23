@@ -33,11 +33,12 @@ declare namespace ChangeCodeNS {
     needUpdate: boolean;
     silent: boolean;
     type: "__lookupSetter__" | "__lookupGetter__" | "";
-    value: string;
+    _value: string;
     errMsg: string;
     errMsgContent: string;
     notFound: (string | RegExp)[];
 
+    get value(): string;
     _replace(this: ChangeCodeClass, substr: string | RegExp, newString: string, aParams?: ReplaceParams): ChangeCodeClass;
     toCode(this: ChangeCodeClass, aShow?: boolean, aObj?: Record<string, any>, aName?: string): void;
     defineProperty(this: ChangeCodeClass, aObj?: Record<string, unknown>, aName?: string, aCode?: {setter?: string; getter?: string}): void;
