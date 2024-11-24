@@ -24,18 +24,18 @@
    display: none !important;
 }
 
-#tabbrowser-tabs:not([favhideclose="true"])[closebuttons="activetab"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
-#tabbrowser-tabs:not([favhideclose="true"])[closebuttons="alltabs"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
+#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded]):not([favhideclose="true"])[closebuttons="activetab"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
+#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded]):not([favhideclose="true"])[closebuttons="alltabs"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
   display: inline-flex !important;
 }
 
-#tabbrowser-tabs[favhideclose="true"][closebuttons="activetab"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
-#tabbrowser-tabs[favhideclose="true"][closebuttons="alltabs"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
+#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded])[favhideclose="true"][closebuttons="activetab"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
+#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded])[favhideclose="true"][closebuttons="alltabs"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
   display: inline-flex !important;
 }
 
-#tabbrowser-tabs[closebuttons-hover="notactivetab"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button,
-#tabbrowser-tabs[closebuttons-hover="alltabs"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button {
+#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded])[closebuttons-hover="notactivetab"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button,
+#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded])[closebuttons-hover="alltabs"] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button {
   display: inline-flex !important;
 }
 

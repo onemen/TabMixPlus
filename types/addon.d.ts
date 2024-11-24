@@ -99,7 +99,7 @@ interface Window {
   setTimeout: typeof setTimeout;
   SidebarController: {
     promiseInitialized: Promise<void>;
-    readonly sidebarRevampEnabled: boolean;
+    readonly sidebarVerticalTabsEnabled: boolean;
   };
   Tabmix: typeof TabmixNS;
   TabmixSessionManager: TabmixSessionManager;

@@ -292,7 +292,12 @@ var TabmixTabbar = {
     var tabBar = gBrowser.tabContainer;
     // call our tabstrip function only when we are in multi-row and
     // in overflow with pinned tabs
-    if (this.isMultiRow && Tabmix.tabsUtils.overflow && tabBar.allTabs[0].pinned) {
+    if (
+      !Tabmix.tabsUtils.isVerticalTabs &&
+      this.isMultiRow &&
+      Tabmix.tabsUtils.overflow &&
+      tabBar.allTabs[0].pinned
+    ) {
       tabBar.arrowScrollbox.setFirstTabInRow();
     }
   },
@@ -1817,8 +1822,8 @@ window.gTMPprefObserver = {
     // tab width rules
     let tst = Tabmix.extensions.treeStyleTab ? ":not([treestyletab-collapsed='true'])" : "";
     let newRule =
-     `#tabbrowser-arrowscrollbox > tab-group:not([collapsed]) > .tabbrowser-tab[fadein]${tst}:not([pinned]),
-      #tabbrowser-arrowscrollbox > .tabbrowser-tab[fadein]${tst}:not([pinned]) {
+     `#tabbrowser-arrowscrollbox:not([orient="vertical"]) > tab-group:not([collapsed]) > .tabbrowser-tab[fadein]${tst}:not([pinned]),
+      #tabbrowser-arrowscrollbox:not([orient="vertical"]) > .tabbrowser-tab[fadein]${tst}:not([pinned]) {
         min-width: #1px !important;
         max-width: #2px !important;
       }`;

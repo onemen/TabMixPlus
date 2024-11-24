@@ -575,6 +575,10 @@ var TMP_eventListener = {
     // @ts-expect-error - it is ok to delete this function
     delete Tabmix._updateCloseButtons;
 
+    if (Tabmix.isVersion(1300) && window.SidebarController.sidebarVerticalTabsEnabled) {
+      tabBar._updateCloseButtons();
+    }
+
     Tabmix.allTabs.init();
 
     MozXULElement.insertFTLIfNeeded("browser/tabContextMenu.ftl");

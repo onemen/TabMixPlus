@@ -67,7 +67,7 @@ var VerticalTabs = {
   },
 
   toggleTabstrip(window) {
-    const {document, SidebarController, Tabmix, TabmixTabbar} = window;
+    const {document, gBrowser, SidebarController, Tabmix, TabmixTabbar} = window;
 
     if (!SidebarController.revampComponentsLoaded) {
       return;
@@ -77,6 +77,7 @@ var VerticalTabs = {
 
     if (SidebarController.sidebarVerticalTabsEnabled) {
       tabmixScrollBox.setAttribute("verticalTabs", true);
+      gBrowser.tabContainer.arrowScrollbox.resetFirstTabInRow();
     } else {
       tabmixScrollBox.removeAttribute("verticalTabs");
       const useTabmixButtons =
