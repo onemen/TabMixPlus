@@ -174,62 +174,114 @@ var TMP_tabDNDObserver = {
             draggedTab.setAttribute("tabmix-dragged", true);\n\
           }'
     )._replace(
-      `if (${Tabmix.isVersion(1300) ? "screen" : "screenX"} > ${Tabmix.isVersion(1330) ? "point" : "tabCenter"}) {`,
+      `if (${Tabmix.isVersion(1300) ? "screen" : "screenX"} > tabCenter) {`,
       `let midWidth = tabs[mid].getBoundingClientRect().width;
         if (tabmixHandleMove && referenceTabWidth > midWidth) {
           _screenX += midWidth / 2;
-          if (_screenX > _point + referenceTabWidth / 2) {
+          if (_screenX > tabCenter + referenceTabWidth / 2) {
             high = mid - 1;
           } else if (
-            _screenX < _point - referenceTabWidth / 2
+            _screenX < tabCenter - referenceTabWidth / 2
           ) {
             low = mid + 1;
           } else {
-            ${Tabmix.isVersion(1330) ? "index" : "newIndex"} = tabs[mid]._tPos;
+            newIndex = tabs[mid]._tPos;
             break;
           }
           continue;
         }
-        $&`.replace(/_screenX/g, Tabmix.isVersion(1300) ? "screen" : "screenX")
-          .replace(/_point/g, Tabmix.isVersion(1330) ? "point" : "tabCenter")
-    )._replace(
-      'newIndex >= oldIndex',
-      `!tabmixHandleMove ? $& : newIndex > -1 && (RTL_UI !== ${Tabmix.isVersion(1300) ? "directionMove" : "ltrMove"})`,
+        $&`.replace(/_screenX/g, Tabmix.isVersion(1300) ? "screen" : "screenX"),
       {check: !Tabmix.isVersion(1330)}
     )._replace(
-      'index >= oldIndex',
-      `!tabmixHandleMove ? $& : index > -1 && (RTL_UI !== directionForward)`,
-      {check: Tabmix.isVersion(1330)}
+      Tabmix.isVersion(1340) || !Tabmix.isVersion(1330) ?
+        'newIndex >= oldIndex' :
+        'index >= oldIndex',
+      Tabmix.isVersion(1330) ?
+        `!tabmixHandleMove ? $& : ${Tabmix.isVersion(1340) ? "newIndex" : "index"} > -1 && (RTL_UI !== directionForward)` :
+        `!tabmixHandleMove ? $& : newIndex > -1 && (RTL_UI !== ${Tabmix.isVersion(1300) ? "directionMove" : "ltrMove"})`
     );
 
     if (Tabmix.isVersion(1300)) {
       // NOTE: firstMovingTabScreen and lastMovingTabScreen was swapped in version 1330
+      const referenceTabString = Tabmix.isVersion(1330) ?
+        'referenceTabEdge = (directionForward ? lastMovingTabScreen + rightTabWidth : firstMovingTabScreen) + translate;' :
+        'referenceTabWidth = directionMove ? rightTabWidth : leftTabWidth';
       _animateTabMove._replace(
         `let translate = screen - ${Tabmix.isVersion(1330) ? "dragData" : "draggedTab._dragData"}[screenAxis];`,
         `$&
-         let rightTabWidth, leftTabWidth, referenceTabWidth;
+         let rightTabWidth, leftTabWidth, ${Tabmix.isVersion(1330) ? "referenceTabEdge" : "referenceTabWidth"};
          if (!this.verticalMode) {
            shiftSize = Tabmix.getMovingTabsWidth(movingTabs);
            draggedTab._dragData.shiftWidth = shiftSize;
            rightTabWidth = movingTabs.at(-1).getBoundingClientRect().width;
            leftTabWidth = movingTabs[0].getBoundingClientRect().width;
-           referenceTabWidth = ${Tabmix.isVersion(1330) ? "directionForward" : "directionMove"} ? rightTabWidth : leftTabWidth;
+           ${referenceTabString}
          }`
       )._replace(
         /\((.*)MovingTabScreen \+ tabSize\)/,
         '($1MovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth))',
-      )._replace(
-        /let firstTabCenter = (.*)tabSize \/ 2;/,
-        'let firstTabCenter = $1(this.verticalMode ? tabSize / 2 : leftTabWidth / 2);'
-      )._replace(
-        /let lastTabCenter = (.*)tabSize \/ 2;/,
-        'let lastTabCenter = $1(this.verticalMode ? tabSize / 2 : rightTabWidth / 2);'
       );
+
+      if (Tabmix.isVersion(1330)) {
+        // Firefox 133+
+        _animateTabMove._replace(
+          'lastMovingTabScreen + tabSize *',
+          'lastMovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth) *'
+        )._replace(
+          'firstMovingTabScreen + tabSize *',
+          'firstMovingTabScreen + (this.verticalMode ? tabSize : leftTabWidth) *'
+        )._replace(
+          'if (screen > point) {',
+          `if (tabmixHandleMove) {
+              let midWidth = tabs[mid].getBoundingClientRect().width;
+              if (screen > referenceTabEdge) {
+                high = mid - 1;
+              } else if (screen + midWidth < referenceTabEdge) {
+                low = mid + 1;
+              } else {
+                let thresholdCrossed = directionForward ? screen + midWidth * tabSizeDragOverThreshold < referenceTabEdge
+                  : screen + midWidth * (1- tabSizeDragOverThreshold) > referenceTabEdge;
+                if (thresholdCrossed) {
+                  index = tabs[mid]._tPos;
+                }
+                break;
+              }
+              continue;
+            }
+            $&`
+        );
+
+        if (!Tabmix.isVersion(1340)) {
+          // Firefox 133 only
+          _animateTabMove._replace(
+            /tabSizeDragOverThreshold/g,
+            'point'
+          )._replace(
+            'tabDropIndexFromPoint(tabCenter)',
+            'tabDropIndexFromPoint(tabmixHandleMove ? (gBrowser._tabGroupsEnabled ? 0.7 : 0.5) : tabCenter)'
+          )._replace(
+            'tabDropIndexFromPoint(groupPoint)',
+            'tabDropIndexFromPoint(tabmixHandleMove ? dragOverGroupingThreshold : groupPoint)'
+          )._replace(
+            // temporary fix bug in Firefox 133.0b9 - 2024-11-25
+            'this.allTabs[dragData.animDropIndex].group',
+            'this.allTabs[dragData.animDropIndex]?.group',
+            {silent: true}
+          );
+        }
+      }
 
       if (Tabmix.isVersion(1340)) {
         gBrowser.tabContainer._animateTabMove = makeCode(_animateTabMove.value);
       } else {
-        _animateTabMove.toCode();
+        // Firefox 130 - 133
+        _animateTabMove._replace(
+          /let firstTabCenter = (.*)tabSize \/ 2;/,
+          'let firstTabCenter = $1(this.verticalMode ? tabSize / 2 : leftTabWidth / 2);'
+        )._replace(
+          /let lastTabCenter = (.*)tabSize \/ 2;/,
+          'let lastTabCenter = $1(this.verticalMode ? tabSize / 2 : rightTabWidth / 2);'
+        ).toCode();
       }
     } else {
       // helper function to get floorp strings for width in vertical mode
@@ -358,7 +410,7 @@ var TMP_tabDNDObserver = {
       if (Tabmix.isVersion(1320)) {
         Tabmix.originalFunctions[`_tabmix_${name}`] = makeCode(code.value);
         Tabmix.originalFunctions[name] = gBrowser.tabContainer[name];
-        gBrowser.tabContainer[name] = function(event) {
+        gBrowser.tabContainer[name] = function tabmix_patchDragMethod(event) {
           const methodName = this.verticalMode ? name : `_tabmix_${name}`;
           Tabmix.originalFunctions[methodName].apply(this, [event]);
         };
