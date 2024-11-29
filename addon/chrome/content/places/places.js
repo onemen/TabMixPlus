@@ -811,11 +811,26 @@ Tabmix.onContentLoaded = {
   },
 
   change_miscellaneous() {
-    if ("_update" in TabsInTitlebar) {
+    const [customTitlebar, updateTitlebar] = TabmixSvc.version(1350) ?
+      [window.CustomTitlebar, "CustomTitlebar._update"] :
+      [window.TabsInTitlebar, "TabsInTitlebar._update"];
+
+    if ("_update" in customTitlebar) {
+      if (!TabmixSvc.version(1350)) {
+        Tabmix.changeCode(TabmixTabbar, "TabmixTabbar.updateTabsInTitlebarAppearance")._replace(
+          'window.CustomTitlebar',
+          'window.TabsInTitlebar'
+        ).toCode();
+
+        Tabmix.changeCode(TabmixTabbar, "TabmixTabbar.getTabsPosition")._replace(
+          /customtitlebar/g,
+          'tabsintitlebar'
+        ).toCode();
+      }
       // set option to Prevent double click on Tab-bar from changing window size.
-      Tabmix.changeCode(TabsInTitlebar, "TabsInTitlebar._update")._replace(
+      Tabmix.changeCode(customTitlebar, updateTitlebar)._replace(
         /(})(\)?)$/,
-        // when we get in and out of tabsintitlebar mode call updateScrollStatus
+        // when we get in and out of customTitlebar mode call updateScrollStatus
         // force another update when rows number changed by Tabmix to update
         // titlebar and titlebarContent height
         '  TabmixTabbar.updateTabsInTitlebarAppearance();\n  ' +

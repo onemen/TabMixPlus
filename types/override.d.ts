@@ -54,4 +54,7 @@ declare var performance: Performance;
 interface Window {
   readonly document: Document;
   readonly performance: Performance;
+  CustomTitlebar: CustomTitlebar;
+  /** @deprecated - use CustomTitlebar instead from Firefox 135 */
+  TabsInTitlebar: CustomTitlebar;
 }

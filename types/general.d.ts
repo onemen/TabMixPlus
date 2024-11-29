@@ -747,6 +747,13 @@ interface CustomizableUI {
   removeWidgetFromArea: (aWidgetId: string) => void;
 }
 
+interface CustomTitlebar {
+  _updatingAppearance: boolean;
+  _update: () => void;
+  enabled: boolean;
+  init: () => void;
+}
+
 interface E10SUtils {
   SERIALIZED_SYSTEMPRINCIPAL: string;
   DEFAULT_REMOTE_TYPE: string;
@@ -949,12 +956,11 @@ declare var SessionStartup: {
   willRestore: () => boolean;
 };
 declare var TAB_DROP_TYPE: string;
-declare var TabsInTitlebar: {
-  _updatingAppearance: boolean;
-  _update: () => void;
-  enabled: boolean;
-  init: () => void;
-};
+
+declare var CustomTitlebar: CustomTitlebar;
+/** @deprecated - use CustomTitlebar instead from Firefox 135 */
+declare var TabsInTitlebar: CustomTitlebar;
+
 declare var UrlbarUtils: {
   RESULT_TYPE: {
     TAB_SWITCH: number;

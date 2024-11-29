@@ -35,7 +35,6 @@ declare namespace ChangeCodeNS {
     type: "__lookupSetter__" | "__lookupGetter__" | "";
     _value: string;
     errMsg: string;
-    errMsgContent: string;
     notFound: (string | RegExp)[];
 
     get value(): string;
@@ -433,6 +432,7 @@ declare namespace TabsUtils {
   let _show_newtabbutton: string | null;
   let checkNewtabButtonVisibility: boolean;
   let closeButtonsEnabled: boolean;
+  let customTitlebar: CustomTitlebar;
 
   let initialized: boolean;
   const tabBar: MockedGeckoTypes.TabContainer;

@@ -651,8 +651,8 @@ declare namespace TabmixTabbarNS {
   function updateTabsInTitlebarAppearance(): void;
   let _updateScrollStatusTimeout: number | null;
   function updateScrollStatus(delay?: boolean): void;
-  const _tabsPosition: "tabsonbottom";
-  function getTabsPosition(): "tabsonbottom" | "tabsintitlebar";
+  let _tabsPosition: "tabsonbottom" | "customtitlebar";
+  function getTabsPosition(): "tabsonbottom" | "customtitlebar";
   const singleRowHeight: number;
   let _waitAfterMaximized: boolean;
   function _handleResize(): void;

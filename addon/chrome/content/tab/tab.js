@@ -216,12 +216,13 @@ var TabmixTabbar = {
   updateTabsInTitlebarAppearance() {
     if (this.isMultiRow && !this._updatingAppearance ||
         this.getTabsPosition() != this._tabsPosition) {
+      this._tabsPosition = this.getTabsPosition();
       const rows = this.visibleRows;
       gBrowser.tabContainer.arrowScrollbox._singleRowHeight = null;
       this.updateScrollStatus();
       if (!this._updatingAppearance && rows != this.visibleRows) {
         this._updatingAppearance = true;
-        TabsInTitlebar._update();
+        window.CustomTitlebar._update();
         this._updatingAppearance = false;
       }
     }
@@ -252,7 +253,7 @@ var TabmixTabbar = {
   _tabsPosition: "tabsonbottom",
   getTabsPosition: function TMP_getTabsPosition() {
     const docElement = document.documentElement;
-    return docElement?.getAttribute("tabsintitlebar") == "true" ? "tabsintitlebar" : "tabsonbottom";
+    return docElement?.getAttribute("customtitlebar") == "true" ? "customtitlebar" : "tabsonbottom";
   },
 
   get singleRowHeight() {
@@ -329,6 +330,7 @@ Tabmix.tabsUtils = {
   _show_newtabbutton: "aftertabs",
   checkNewtabButtonVisibility: false,
   closeButtonsEnabled: false,
+  customTitlebar: TabmixSvc.version(1350) ? window.CustomTitlebar : window.TabsInTitlebar,
   initialized: false,
 
   get tabBar() {
@@ -470,7 +472,7 @@ Tabmix.tabsUtils = {
             Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") &&
             !TabmixSvc.isMac && aEvent.target?.localName === "arrowscrollbox") {
           let displayAppButton = !document.getElementById("titlebar").hidden;
-          if (TabsInTitlebar.enabled || displayAppButton) {
+          if (this.customTitlebar.enabled || displayAppButton) {
             return;
           }
         }
@@ -525,8 +527,8 @@ Tabmix.tabsUtils = {
     }
 
     if (Tabmix.extensions.verticalTabs) {
-      // when Vertical Tabs Reloaded installed TabsInTitlebar was not initialized
-      TabsInTitlebar.init();
+      // when Vertical Tabs Reloaded installed CustomTitlebar/TabsInTitlebar was not initialized
+      this.customTitlebar.init();
     }
 
     this.updateProtonValues();
@@ -1984,8 +1986,15 @@ window.gTMPprefObserver = {
         }`
     );
 
+    const customtitlebar = Tabmix.isVersion(1350) ? "customtitlebar" : "tabsintitlebar";
     this.insertRule(
-      `#main-window[tabsintitlebar] #toolbar-menubar[autohide="true"][inactive="true"]:not([customizing="true"]) + #TabsToolbar {
+      `#main-window[${customtitlebar}][tabmix-tabbaronbottom] .tabbrowser-tabbox,
+       #main-window[${customtitlebar}] #TabsToolbar-customization-target[tabmix-disallow-drag] {
+        -moz-window-dragging: no-drag;
+       }`
+    );
+    this.insertRule(
+      `#main-window[${customtitlebar}] #toolbar-menubar[autohide="true"][inactive="true"]:not([customizing="true"]) + #TabsToolbar {
           --tabmix-multirow-margin: 0px;
         }`
     );

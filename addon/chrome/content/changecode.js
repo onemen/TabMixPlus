@@ -8,6 +8,10 @@
 Tabmix.changeCode = function(aParent, afnName, aOptions) {
   let console = TabmixSvc.console;
   let debugMode = this._debugMode;
+  let errMsgContent =
+    "\n\nTry Tabmix latest development version from https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/," +
+    "\nReport about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues";
+  let customTitlebar = TabmixSvc.version(1350) ? "CustomTitlebar._update" : "TabsInTitlebar._update";
 
   /**
    * @constructor
@@ -43,9 +47,6 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
     type: "",
     _value: "",
     errMsg: "",
-    errMsgContent:
-      "\n\nTry Tabmix latest development version from https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/," +
-      "\nReport about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues",
 
     /** @this {ChangeCodeNS.ChangeCodeClass} */
     get value() {
@@ -96,7 +97,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
         // list of function that we don't warp with try-catch
         let dontDebug = ["gBrowser.tabContainer._animateTabMove, gURLBar.handleCommand"];
         if (debugMode && !dontDebug.includes(this.fullName)) {
-          let excludeReturn = ["TabsInTitlebar._update", "gBrowser._blurTab"];
+          let excludeReturn = [customTitlebar, "gBrowser._blurTab"];
           let addReturn = "", re = new RegExp("//.*", "g");
           if (!excludeReturn.includes(this.fullName) &&
               /return\s.+/.test(this._value.replace(re, "")))
@@ -182,7 +183,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       if (notFoundCount && !this.silent) {
         let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
         ex.message = ex.fnName + " was unable to change " + aName + "." +
-            (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) + this.errMsgContent;
+            (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) + errMsgContent;
         console.reportError(ex);
         if (debugMode) {
           console.clog(ex.fnName + "\nfunction " + aName + " = " + this._value, ex);
@@ -209,7 +210,7 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       const ex = this.getCallerData(Components.stack.caller);
       for (const methods of privateMethods) {
         if (typeof aParent[`_${methods}`] === "undefined") {
-          ex.message = `Implement replacement for private method #${methods} in ${parentName} it is used by ${this.fullName}${this.errMsgContent}`;
+          ex.message = `Implement replacement for private method #${methods} in ${parentName} it is used by ${this.fullName}${errMsgContent}`;
           console.reportError(ex);
         }
       }
