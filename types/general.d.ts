@@ -837,6 +837,7 @@ interface PanelUI {
 interface PrivateBrowsingUtils {
   isBrowserPrivate: (browser: MockedGeckoTypes.ChromeBrowser) => boolean;
   isContentWindowPrivate: (window: Window) => boolean;
+  isWindowPrivate: (window: Window) => boolean;
   permanentPrivateBrowsing: boolean;
 }
 
@@ -947,8 +948,8 @@ declare var PanelMultiView: {
 };
 declare var RecentlyClosedTabsAndWindowsMenuUtils: {
   _undoCloseMiddleClick: (event: MouseEvent) => void;
-  getTabsFragment: (aWindow: Window, aTagName: string, aPrefixRestoreAll?: boolean) => Omit<HTMLElement, "firstChild"> & {firstChild: HTMLElement};
-  getWindowsFragment: (aWindow: Window, aTagName: string, aPrefixRestoreAll?: boolean) => Omit<HTMLElement, "firstChild"> & {firstChild: HTMLElement};
+  getTabsFragment: (aWindow: Window, aTagName: string, aPrefixRestoreAll?: boolean) => Omit<HTMLElement, "firstChild" | "lastChild"> & {firstChild: HTMLElement; lastChild: HTMLElement};
+  getWindowsFragment: (aWindow: Window, aTagName: string, aPrefixRestoreAll?: boolean) => Omit<HTMLElement, "firstChild" | "lastChild"> & {firstChild: HTMLElement; lastChild: HTMLElement};
   onRestoreAllTabsCommand: (event: MouseEvent) => void;
 };
 declare var SessionStartup: {

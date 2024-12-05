@@ -54,15 +54,15 @@ declare var MozXULElement: CustomElementConstructorOverride;
 interface QuerySelectorMap {
   '[anonid="useThis"]': HTMLInputElement;
   '[dlgtype="extra1"]': HTMLButtonElement;
-  "[tabmix_context]": NodeList;
+  "[tabmix_context]": HTMLElement;
   ".urlbarView-results": HTMLElement;
-  slot: HTMLElement;
+  "slot": HTMLElement;
 }
 
 interface GetByMap {
-  checkbox: HTMLInputElement;
+  "checkbox": HTMLInputElement;
   "tabmix-tooltip": XULPopupElement;
-  searchbar: CustomSearchbar;
+  "searchbar": CustomSearchbar;
   "tabmix_hideTabbar_menu-container": HTMLTemplateElement;
   "tabmix-closedTabs-container": HTMLTemplateElement;
   "tabmix-closedWindows-container": HTMLTemplateElement;
@@ -89,7 +89,7 @@ interface KnownElements {
 interface HTMLCollectionBase_G<T> {
   readonly length: number;
   item(index: number): T | null;
-  forEach(callbackfn: (value: T | null, key: number, parent: NodeList) => void, thisArg?: any): void;
+  forEach(callbackfn: (value: T, key: number, parent: NodeList) => void, thisArg?: any): void;
   [index: number]: T;
   [Symbol.iterator](): IterableIterator<T | null>;
   entries(): IterableIterator<[number, T | null]>;
@@ -113,7 +113,7 @@ interface ParentNode {
   getElementsByAttribute<K extends keyof GetByMap>(name: K, value: string): HTMLCollection_G<GetByMap[K]>;
   _getElementById<K extends keyof GetByMap | string>(selectors: K): K extends keyof GetByMap ? GetByMap[K] : HTMLElement | null;
   querySelector<K extends keyof QuerySelectorMap | string>(selectors: K): K extends keyof QuerySelectorMap ? QuerySelectorMap[K] : HTMLElement;
-  querySelectorAll<K extends keyof QuerySelectorMap>(selectors: K): QuerySelectorMap[K];
+  querySelectorAll<K extends keyof QuerySelectorMap>(selectors: K): HTMLCollection_G<QuerySelectorMap[K]>;
   querySelectorAll(selectors: string): HTMLCollection_G<HTMLElement>;
 }
 

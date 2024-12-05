@@ -22,7 +22,7 @@ declare namespace NumberInput {
 }
 
 interface QuerySelectorMap {
-  "input[type=number]": HTMLNumberInputElement[];
+  "input[type=number]": HTMLNumberInputElement;
 }
 
 interface XULPopupElement {

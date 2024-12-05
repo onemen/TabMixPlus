@@ -33,7 +33,7 @@ var TMP_SessionStore = {
     return Promise.resolve(aUndoItem.title);
   },
 
-  // get nsSessionStore active entry data.
+  // get SessionStore active entry data.
   getActiveEntryData: function TMP_ss_getActiveEntryData(aData) {
     let activeIndex = (aData.index || aData.entries.length) - 1;
     if (activeIndex >= aData.entries.length)
@@ -205,7 +205,7 @@ var TMP_SessionStore = {
   afterSwitchThemes: false,
   // we call this only one time on window load
   // and store the value in Tabmix.isWindowAfterSessionRestore
-  // we call this from onContentLoaded before nsSessionStore run its onLoad
+  // we call this from onContentLoaded before SessionStore run its onLoad
   setAfterSessionRestored() {
     let afterSessionRestore;
     if (!Tabmix.isFirstWindow) {
@@ -250,7 +250,7 @@ var TMP_SessionStore = {
   /**
    * @brief           update tab title from user name or bookmark.
    *
-   * @param aTabData  an object value - tabData from nsSessionStore
+   * @param aTabData  an object value - tabData from SessionStore
    *
    * @param aUri      string value - url address
    *
@@ -267,16 +267,16 @@ var TMP_SessionStore = {
   },
 
   /**
-   * @brief           get attribute xultab data
+   * @brief           get custom tab value from SessionStore
    *
-   * @param aTabData  an object value - tabData from nsSessionStore
+   * @param aTabData  an object value - tabData from SessionStore
    *
    * @param attrib    attribute name as string
    *
    * @returns         attribute value as string or empty string.
    */
   _getAttribute: function TMP_ss__getAttribute(aTabData, attrib) {
-    return aTabData.attributes?.[attrib] ?? "";
+    return aTabData.extData?.[attrib] ?? "";
   }
 
 };
@@ -322,7 +322,19 @@ var TMP_ClosedTabs = {
       !Tabmix.isVersion(1170) ?
         "getClosedTabCountForWindow" :
         "getClosedTabCount";
-    return window.__SSi ? TabmixSvc.ss[name](window) : 0;
+    // exclude closed groups from closed windows until Bug 1932941 fixed
+    return window.__SSi ? TabmixSvc.ss[name](window) - this.getClosedTabCountFromClosedGroupInClosedWindows() : 0;
+  },
+
+  getClosedTabCountFromClosedGroupInClosedWindows() {
+    if (!Tabmix.isVersion(1350)) {
+      return 0;
+    }
+    return Object.values(TabmixSvc.SessionStore._closedWindows)
+        .map(winData => winData.closedGroups)
+        .flat()
+        .map(group => group.tabs.length)
+        .reduce((a, b) => a + b, 0);
   },
 
   /**
@@ -330,19 +342,16 @@ var TMP_ClosedTabs = {
    */
   get getClosedTabData() {
     if (window.__SSi) {
-      if (!Tabmix.isVersion(1170)) {
-        return TabmixSvc.ss.getClosedTabDataForWindow(window);
-      }
       return Tabmix.isVersion(1170) ?
         TabmixSvc.ss.getClosedTabData() :
-        TabmixSvc.ss.getClosedTabData(window, false);
+        TabmixSvc.ss.getClosedTabDataForWindow(window);
     }
     return [];
   },
 
   get allClosedTabData() {
     const closedTabsData = this.getClosedTabData;
-    if (Tabmix.isVersion(1190)) {
+    if (Tabmix.isVersion(1190) && !PrivateBrowsingUtils.isWindowPrivate(window)) {
       const restoreClosedTabsFromClosedWindows = Services.prefs.getBoolPref(
         "browser.sessionstore.closedTabsFromClosedWindows"
       );
@@ -376,8 +385,15 @@ var TMP_ClosedTabs = {
     }
 
     const sourceWinData = TabmixSvc.SessionStore._resolveClosedDataSource(source);
-    const closeTabData = sourceWinData._closedTabs.find(tabData => tabData.closedId == index);
-    return closeTabData;
+    if (source.closedWindow) {
+      return sourceWinData._closedTabs.find(tabData => tabData.closedId == index);
+    } else if (Tabmix.isVersion(1350)) {
+      return TabmixSvc.SessionStore._getStateForClosedTabsAndClosedGroupTabs(
+        sourceWinData,
+        index
+      );
+    }
+    return sourceWinData._closedTabs[index];
   },
 
   getUrl: function ct_getUrl(aTabData) {
@@ -403,41 +419,52 @@ var TMP_ClosedTabs = {
     if (!parent.hasAttribute("context")) {
       parent.setAttribute("context", "tm_undocloseContextMenu");
     }
-    const closedTabs = this.getClosedTabData;
+
+    const closedTabsByWindow = this.allClosedTabData.reduce(
+      /** @param {SessionStoreNS.ClosedTabsByWindow} acc */
+      (acc, tabData) => {
+        const {sourceClosedId, sourceWindowId} = tabData;
+        const key = typeof sourceClosedId === "number" ? `closedWindow${sourceClosedId}` : sourceWindowId;
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(tabData);
+        return acc;
+      }, {});
+
     const childNodes = parent.childNodes;
     const isSubviewbutton = aPopup.__tagName === "toolbarbutton";
     for (let i = 0; i < childNodes.length - (isAppMenu ? 0 : 1); i++) {
       /** @type {TabmixClosedTabsNS.Menuitem} */ // @ts-expect-error
       let m = childNodes[i];
-      let tabData =
-        i < closedTabs.length ?
-          closedTabs[i] :
-          this.getSingleClosedTabData(this.getSource(m), Number(m.getAttribute("value")));
-      if (tabData && m.hasAttribute("targetURI")) {
-        this.getTitle(tabData, m.getAttribute("targetURI") ?? "").then(title => {
-          m.setAttribute("label", title);
-        });
-      }
-      m.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
-      m.removeAttribute("oncommand");
-      m.addEventListener("command", this, {capture: true, once: true});
-      m.addEventListener("click", this);
-      m.removeEventListener(
-        "click",
-        RecentlyClosedTabsAndWindowsMenuUtils._undoCloseMiddleClick
-      );
-      if (isSubviewbutton) {
-        m.value = i;
-        m.setAttribute("class", "bookmark-item subviewbutton subviewbutton-iconic");
+      if (isSubviewbutton && m.id.startsWith("closed-tabs-tab-group")) {
+        const groupId = m.id.replace("closed-tabs-tab-group-", "");
+        m.nextElementSibling?.setAttribute("data-group-id", groupId);
+        const subview = m.querySelector(".panel-subview-body");
+        subview.setAttribute("context", "tm_undocloseContextMenu");
+        subview.hidePopup = aPopup.hidePopup;
+        this.updateTabGroupItems(m, closedTabsByWindow, isSubviewbutton);
+      } else if (m.tagName === "menu") {
+        this.updateTabGroupItems(m.menupopup, closedTabsByWindow, isSubviewbutton);
+      } else if (
+        !m.previousElementSibling?.id.startsWith("closed-tabs-tab-group") &&
+        m.tagName !== "menuseparator"
+      ) {
+        this.updateMenuItem(m, closedTabsByWindow);
+        if (isSubviewbutton) {
+          m.value = i;
+          m.setAttribute("class", "bookmark-item subviewbutton subviewbutton-iconic");
+        }
       }
     }
 
     if (panel?.__updatingViewAfterDelete) {
-      // we are repopulateing the the list after user removed an item
+      // we are repopulateing the list after user removed an item
       // the menuitem already exist
       return true;
     }
 
+    Tabmix.closedObjectsUtils.addSeparatorIfMissing(aPopup);
     // Reopen All Tabs
     let reopenAllTabs = aPopup.lastChild;
     reopenAllTabs.setAttribute("value", -2);
@@ -455,23 +482,119 @@ var TMP_ClosedTabs = {
     if (isSubviewbutton) {
       reopenAllTabs.classList.add("subviewbutton");
       // "Keep menu open"
-      const mi = addMenu("lockedClosedTabsList", TabmixSvc.getString("undoclosetab.keepOpen.label"), -3);
+      const mi = addMenu({
+        id: "lockedClosedTabsList",
+        label: TabmixSvc.getString("undoclosetab.keepOpen.label"),
+        val: -3,
+      });
       mi.setAttribute("tooltiptext", TabmixSvc.getString("undoclosetab.keepOpen.description"));
       mi.setAttribute("closemenu", "none");
       const image = this.keepMenuOpen ? "chrome://tabmixplus/skin/pin.png" : "";
       Tabmix.setItem(mi, "image", image || null);
     }
     // "Clear Closed Tabs List"
-    addMenu("clearClosedTabsList", TabmixSvc.getString("undoclosetab.clear.label"), -1, "clearClosedTabs");
+    addMenu({
+      id: "clearClosedTabsList",
+      label: TabmixSvc.getString("undoclosetab.clear.label"),
+      val: -1,
+      keyId: "clearClosedTabs",
+    });
 
     return true;
   },
 
-  addMenuItem(popup, isSubviewbutton, id, label, val, keyId) {
-    const m = document.createXULElement(popup.__tagName || "menuitem");
+  updateTabGroupItems(parent, closedTabsByWindow, isSubviewbutton) {
+    const tagName = isSubviewbutton ? "toolbarbutton" : "menuitem";
+    const items = parent.querySelectorAll(tagName);
+    for (const item of Array.from(items).slice(0, -1)) {
+      this.updateMenuItem(item, closedTabsByWindow);
+    }
+    this.addMenuItem(parent, isSubviewbutton, {
+      id: "clearTabGroup",
+      label: "Clear tab group",
+      tagName,
+      command: () => {
+        const {id, ...source} = items.item(0)?.closedGroup ?? {id: ""};
+        TabmixSvc.SessionStore.forgetClosedTabGroup(source, id);
+      },
+    });
+  },
+
+  updateMenuItem(item, closedTabsByWindow) {
+    const index = Number(item.getAttribute("value"));
+
+    const {sourceWindowId, sourceClosedId} = this.getSource(item);
+    const windowKey = typeof sourceClosedId === "number" ? `closedWindow${sourceClosedId}` : sourceWindowId;
+    const closedTabsForWindow = closedTabsByWindow[windowKey];
+    if (closedTabsForWindow) {
+      const tabData = sourceClosedId ?
+        closedTabsForWindow.find(data => data.closedId === index) :
+        closedTabsForWindow.at(index);
+
+      if (tabData && item.hasAttribute("targetURI")) {
+        this.getTitle(tabData, item.getAttribute("targetURI") ?? "").then(title => {
+          item.setAttribute("label", title);
+        });
+      }
+      if (tabData?.state.groupId) {
+        item.closedGroup = {
+          id: tabData.state.groupId,
+          sourceClosedId: tabData.sourceClosedId,
+          sourceWindowId: tabData.sourceWindowId,
+        };
+      }
+    } else {
+      console.log("Tabmix Error: unable to find closed tab data", item,
+        {sourceWindowId, sourceClosedId, windowKey, closedTabsForWindow, closedTabsByWindow});
+    }
+    item.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
+    item.removeAttribute("oncommand");
+    item.addEventListener("command", this, {capture: true, once: true});
+    item.addEventListener("click", this);
+    item.removeEventListener("click", RecentlyClosedTabsAndWindowsMenuUtils._undoCloseMiddleClick);
+  },
+
+  repopulateGroupItems(popup) {
+    this.setPopupWidth(popup);
+    const groupId = popup.parentNode.id.replace("closed-tabs-tab-group-", "");
+    const group = TabmixSvc.SessionStore.getClosedTabGroups().find(g => g.id === groupId);
+    const items = Array.from(popup.querySelectorAll("toolbarbutton"));
+    if (!group) {
+      const panel = popup.parentNode.panelMultiView;
+      panel.goBack();
+      panel.querySelector(`[data-group-id="${groupId}"]`).remove();
+      popup.parentNode.remove();
+      return true;
+    }
+    items.at(-1)?.remove();
+    for (let i = 0; i < items.length - 1; i++) {
+      const item = items[i];
+      const closedTabData = group.tabs[i];
+      if (!item || !closedTabData) {
+        return false;
+      }
+      delete item._tabmix_middleClicked;
+      const {url, title} = TMP_SessionStore.getActiveEntryData(closedTabData.state);
+      if (!url || !title) {
+        return false;
+      }
+      item.setAttribute("targetURI", url);
+      item.setAttribute("label", title);
+      item.addEventListener("command", this, {capture: true, once: true});
+      this.getTitle(closedTabData, item.getAttribute("targetURI") ?? "").then(newTitle => {
+        item.setAttribute("label", newTitle);
+      });
+    }
+    return true;
+  },
+
+  addMenuItem(popup, isSubviewbutton, {id, label, command, val, keyId, tagName}) {
+    const m = document.createXULElement(tagName || popup.__tagName || "menuitem");
     m.setAttribute("id", id);
     m.setAttribute("label", label);
-    m.setAttribute("value", val);
+    if (val) {
+      m.setAttribute("value", val);
+    }
     if (isSubviewbutton) {
       m.setAttribute("class", "subviewbutton");
     } else {
@@ -480,12 +603,17 @@ var TMP_ClosedTabs = {
     if (keyId && document.getElementById("key_tm_" + keyId)) {
       m.setAttribute("key", "key_tm_" + keyId);
     }
-    m.addEventListener("command", this);
+    m.addEventListener("command", command ?? this);
     popup.insertBefore(m, popup.lastChild);
     return m;
   },
 
   handleEvent(event) {
+    if (event.originalTarget._tabmix_middleClicked) {
+      delete event.originalTarget._tabmix_middleClicked;
+      return;
+    }
+
     switch (event.type) {
       case "click":
         this.checkForMiddleClick(event);
@@ -549,7 +677,9 @@ var TMP_ClosedTabs = {
 
     const deleteItem = Tabmix.prefs.getBoolPref("middleclickDelete");
     const where = deleteItem ? "delete" : "tab";
-    this.doCommand("restoreTab", where, aEvent.originalTarget, deleteItem);
+    aEvent.originalTarget._tabmix_middleClicked = true;
+    const keepMenuOpen = deleteItem && aEvent.originalTarget.tagName !== "menuitem";
+    this.doCommand("restoreTab", where, aEvent.originalTarget, keepMenuOpen);
   },
 
   contextMenuOnPopupShowing(popup) {
@@ -566,12 +696,12 @@ var TMP_ClosedTabs = {
     if (!commandData) {
       throw new Error("missing commandData in contextMenuOnCommand");
     }
-    const [command, where] = commandData.split(",");
+    const [command, where = ""] = commandData.split(",");
     const popup = menuItem.parentNode;
     const commands = ["restoreTab", "addBookmarks", "copyTabUrl"];
     /** @type {"restoreTab" | "addBookmarks" | "copyTabUrl"} */ // @ts-expect-error
     const validCommand = commands.find(c => c === command);
-    if (validCommand && where) {
+    if (validCommand) {
       this.doCommand(validCommand, where, popup.triggerNode);
     } else {
       throw new Error(`Unexpected command in contextMenuOnCommand ${command}`);
@@ -583,18 +713,23 @@ var TMP_ClosedTabs = {
     const popup = item.parentNode;
     const index = Number(item.getAttribute("value"));
     const source = this.getSource(item);
+    source.closedGroup = item.closedGroup;
     this[command](source, index, where);
     const rePopulate = (keepMenuOpen || this.keepMenuOpen) && this.count > 0;
     if (rePopulate) {
       if (popup && command == "restoreTab") {
         if (popup.parentNode?.id === "appMenu-library-recentlyClosedTabs") {
           Tabmix.closedObjectsUtils.updateAppmenuView(popup, "Tabs");
+        } else if (popup.parentNode.id.startsWith("closed-tabs-tab-group")) {
+          if (!this.repopulateGroupItems(popup)) {
+            popup.hidePopup();
+          }
         } else {
           this.setPopupWidth(popup);
           Tabmix.closedObjectsUtils.populateClosedTabsMenu(popup.parentNode);
         }
       }
-    } else if (popup.parentNode.tagName === "panelview") {
+    } else if (popup?.parentNode.tagName === "panelview") {
       popup.hidePopup();
     } else if (!this.count || item.getAttribute("closemenu") == "none") {
       closeMenus(popup);
@@ -633,6 +768,8 @@ var TMP_ClosedTabs = {
       case "delete":
         if (source.closedWindow) {
           TabmixSvc.ss.forgetClosedTabById(index, source);
+        } else if (source.closedGroup) {
+          this.getClosedTabAtIndex(source, index);
         } else {
           TabmixSvc.ss.forgetClosedTab(source, index);
         }
@@ -653,6 +790,15 @@ var TMP_ClosedTabs = {
   },
 
   removeAllClosedTabs() {
+    if (Tabmix.isVersion(1350)) {
+      const closedGroups = TabmixSvc.SessionStore.getClosedTabGroups({closedTabsFromClosedWindows: false});
+      for (const group of closedGroups) {
+        const tabData = group.tabs[0];
+        if (tabData) {
+          TabmixSvc.SessionStore.forgetClosedTabGroup(tabData, group.id);
+        }
+      }
+    }
     if (Tabmix.isVersion(1170)) {
       const closedTabsData = this.allClosedTabData;
       for (const {closedId, sourceClosedId, sourceWindowId} of closedTabsData) {
@@ -667,8 +813,8 @@ var TMP_ClosedTabs = {
 
   /**
    * @brief           fetch the data of closed tab, while removing it from the array
-   * @param source    An optional sessionstore id to identify the source window
-   * @param index    a Integer value - 0 or grater index to remove
+   * @param source    optional sessionstore id to identify the source window
+   * @param index     Integer value - 0 or grater index to remove
    * @returns         closed tab data at aIndex.
    */
   getClosedTabAtIndex: function ct_getClosedTabAtIndex(source, index) {
@@ -684,7 +830,32 @@ var TMP_ClosedTabs = {
     if (closedIndex < 0) {
       return null;
     }
-    const closedTab = TabmixSvc.SessionStore.removeClosedTabData(winData, closedTabs, closedIndex);
+
+    if (!Tabmix.isVersion(1350)) {
+      const tabData = TabmixSvc.SessionStore.removeClosedTabData(winData, closedTabs, closedIndex);
+      TabmixSvc.SessionStore._notifyOfClosedObjectsChange();
+      return tabData;
+    }
+
+    const closedTabState = TabmixSvc.SessionStore._getStateForClosedTabsAndClosedGroupTabs(
+      winData,
+      closedIndex
+    );
+    if (!closedTabState) {
+      return null;
+    }
+    const {closedTabSet, closedTabIndex} =
+        TabmixSvc.SessionStore._getClosedTabStateFromUnifiedIndex(winData, closedTabState);
+    const groupIds = closedTabSet?.map(tabData => tabData.state.groupId);
+    const closedTab = TabmixSvc.SessionStore.removeClosedTabData(winData, closedTabSet, closedTabIndex);
+    // temporary fix for bug 1933966
+    for (const groupId of groupIds) {
+      const group = TabmixSvc.SessionStore.getClosedTabGroup(source, groupId);
+      if (group?.tabs.length === 0) {
+        TabmixSvc.SessionStore.forgetClosedTabGroup(source, group.id);
+      }
+    }
+
     TabmixSvc.SessionStore._notifyOfClosedObjectsChange();
     return closedTab;
   },
@@ -778,14 +949,7 @@ var TMP_ClosedTabs = {
       // Predict the remote type to use for the load to avoid unnecessary process
       // switches.
       preferredRemoteType = E10SUtils.DEFAULT_REMOTE_TYPE;
-      let url;
-      if (state.entries?.length) {
-        let activeIndex = (state.index || state.entries.length) - 1;
-        activeIndex = Math.min(activeIndex, state.entries.length - 1);
-        activeIndex = Math.max(activeIndex, 0);
-        // @ts-expect-error entries[activeIndex] exist
-        url = state.entries[activeIndex].url;
-      }
+      const url = this.getUrl(tabData);
       if (url) {
         preferredRemoteType = TabmixSvc.SessionStore.getPreferredRemoteType(
           url,
@@ -1077,6 +1241,18 @@ Tabmix.closedObjectsUtils = {
     menupopup.hasStatusListener = true;
   },
 
+  addSeparatorIfMissing(popup) {
+    if (popup.tagName === "panelview") {
+      return;
+    }
+    const reopenAllmenu = popup.lastChild;
+    if (reopenAllmenu.previousSibling?.tagName !== "menuseparator") {
+      const separator = document.createXULElement("menuseparator");
+      separator.classList.add("bookmark-item", "subviewbutton", "subviewbutton-iconic");
+      popup.insertBefore(separator, reopenAllmenu);
+    }
+  },
+
   populateClosedTabsMenu(undoTabMenu) {
     if (TabmixAllTabs.isAfterCtrlClick(undoTabMenu)) {
       return false;
@@ -1181,7 +1357,12 @@ Tabmix.closedObjectsUtils = {
     while (panel.hasChildNodes()) {
       panel.firstChild.remove();
     }
-    fragment.firstChild.remove();
+    // remove "Restore All Tabs"
+    if (Tabmix.isVersion(1350)) {
+      fragment.lastChild.remove();
+    } else {
+      fragment.firstChild.remove();
+    }
     panel.appendChild(fragment);
     panel.__updatingViewAfterDelete = true;
     if (type === "Tabs") {

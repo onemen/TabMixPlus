@@ -876,6 +876,7 @@ Tabmix.tablib = {
       return;
     }
 
+    Tabmix.closedObjectsUtils.addSeparatorIfMissing(undoPopup);
     let restoreAllWindows = undoPopup.lastChild;
     restoreAllWindows.setAttribute("value", "-2");
     let clearList = document.createXULElement(undoPopup.__tagName || "menuitem");
@@ -1520,7 +1521,6 @@ Tabmix.tablib = {
       {checkboxLabel2 = "", restoreSession = null} = {}
     ) {
       let warningTitle = "", buttonLabel = "", chkBoxLabel = "", warningText = "";
-      // if (shouldPrompt === 1 || numProtected === 0) {
       if (shouldPrompt === 1) {
         // @ts-expect-error - return types are strings
         [warningTitle, buttonLabel, chkBoxLabel] = gBrowser.tabLocalization.formatValuesSync([
@@ -1529,7 +1529,7 @@ Tabmix.tablib = {
             args: {tabCount: tabsToClose},
           },
           {id: "tabbrowser-confirm-close-tabs-button"},
-          {id: "tabbrowser-confirm-close-tabs-checkbox"},
+          {id: `tabbrowser-${Tabmix.isVersion(1350) ? "ask" : "confirm"}-close-tabs-checkbox`},
         ]);
       } else if (numProtected === 0) {
         // @ts-expect-error - return types are strings

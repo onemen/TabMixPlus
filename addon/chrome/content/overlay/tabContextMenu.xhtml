@@ -86,9 +86,9 @@
                  tmp_iconic="menu-iconic closedtabs-icon"
                  label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;">
           <menupopup id="tm-undoCloseList-menu"
-            onpopupshowing="Tabmix.closedObjectsUtils.populateClosedTabsMenu(this.parentNode); event.stopPropagation();"
-            onpopupshown="event.stopPropagation();"
-            onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
+            onpopupshowing="if (event.target === this) {Tabmix.closedObjectsUtils.populateClosedTabsMenu(this.parentNode); event.stopPropagation();}"
+            onpopupshown="if (event.target === this) event.stopPropagation();"
+            onpopuphidden="if (event.target === this) TabmixAllTabs.hideCommonList(this);"/>
         </menu>
 <!--
         <menuitem id="context_closeTab"/>

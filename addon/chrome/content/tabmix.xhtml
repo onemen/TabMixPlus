@@ -129,8 +129,8 @@
       <menu id="tm-content-undoCloseList" label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;" tmp_iconic="menu-iconic closedtabs-icon"
          insertbefore="tm-content-after-undoCloseList">
         <menupopup id="tm-content-undoCloseList-menu"
-          onpopupshowing="Tabmix.closedObjectsUtils.populateClosedTabsMenu(this.parentNode);"
-          onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
+          onpopupshowing="if (event.target === this) Tabmix.closedObjectsUtils.populateClosedTabsMenu(this.parentNode);"
+          onpopuphidden="if (event.target === this) TabmixAllTabs.hideCommonList(this);"/>
       </menu>
       <menu id="tm-autoreload_menu" insertafter="context-sep-navigation"
             labelTab="&autoReloadTab.label;" accesskeyTab="&autoReloadTab.accesskey;"
