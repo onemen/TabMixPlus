@@ -161,12 +161,13 @@ declare namespace TabmixNS {
   type TabData = {
     attributes?: Record<string, string>;
     entries: TabDataEntry[];
+    extData?: Record<string, string>;
+    groupId?: string;
     index: number;
     pinned?: boolean;
     userContextId?: number;
     userTypedValue: string;
     userTypedClear: number;
-    xultab?: string;
   };
 
   const emptyTabTitle: string;
@@ -222,11 +223,15 @@ declare namespace ClosedObjectsUtils {
   interface CustomPanelView extends HTMLElement {
     lastChild: HTMLMenuElement;
     menupopup: PopupElement;
+    panelMultiView: HTMLElement & {
+      goBack(): void;
+    };
   }
 
   type Menuitem = Omit<HTMLMenuElement, "parentNode"> & {
     readonly parentNode: PopupElement;
     readonly triggerNode: Menuitem;
+    menupopup: PopupElement;
     value: number;
   };
 
@@ -251,6 +256,7 @@ declare namespace ClosedObjectsUtils {
   function on_popupshowing(popup: PopupElement): boolean;
   function on_delete(node: Menuitem): void;
   function addHoverListeners(params: CustomPanelView): void;
+  function addSeparatorIfMissing(popup: CustomPanelView): void;
   function populateClosedTabsMenu(undoTabMenu: CustomPanelView): boolean;
   function populateClosedWindowsMenu(undoWindowMenu: CustomPanelView): void;
   function removeObservers(this: typeof ClosedObjectsUtils): void;
