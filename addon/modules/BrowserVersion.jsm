@@ -62,6 +62,6 @@ function isVersion(aVersionNo, updateChannel) {
     return (_versions[prefix + aVersionNo] = Services.vc.compare(v, aVersionNo) >= 0);
   }
 
-  const suffix = isLibrewolf ? ".0-1" : ".0a1";
+  const suffix = isLibrewolf ? `.${v.split('.')[1] ?? "0-1"}` : ".0a1";
   return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo / 10 + suffix) >= 0);
 }
