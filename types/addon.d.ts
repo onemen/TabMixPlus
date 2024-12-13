@@ -814,6 +814,7 @@ declare namespace SessionStoreNS {
     const _windows: Record<SSi, WindowState>;
     const _closedWindows: ClosedWindowState[];
     let _closedObjectsChanged: boolean;
+    function _cleanupOrphanedClosedGroups(winData: WindowState): void;
     function _isWindowLoaded(aWindow: Window): boolean;
     function _notifyOfClosedObjectsChange(): void;
     function _getStateForClosedTabsAndClosedGroupTabs(winData: WindowState, aIndex: number): ClosedTabData;

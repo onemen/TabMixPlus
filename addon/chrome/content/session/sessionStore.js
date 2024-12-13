@@ -846,15 +846,8 @@ var TMP_ClosedTabs = {
     }
     const {closedTabSet, closedTabIndex} =
         TabmixSvc.SessionStore._getClosedTabStateFromUnifiedIndex(winData, closedTabState);
-    const groupIds = closedTabSet?.map(tabData => tabData.state.groupId);
     const closedTab = TabmixSvc.SessionStore.removeClosedTabData(winData, closedTabSet, closedTabIndex);
-    // temporary fix for bug 1933966
-    for (const groupId of groupIds) {
-      const group = TabmixSvc.SessionStore.getClosedTabGroup(source, groupId);
-      if (group?.tabs.length === 0) {
-        TabmixSvc.SessionStore.forgetClosedTabGroup(source, group.id);
-      }
-    }
+    TabmixSvc.SessionStore._cleanupOrphanedClosedGroups(winData);
 
     TabmixSvc.SessionStore._notifyOfClosedObjectsChange();
     return closedTab;
