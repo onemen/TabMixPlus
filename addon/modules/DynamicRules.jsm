@@ -213,6 +213,7 @@ const DynamicRules = {
     let templates = this.cssTemplates[name];
 
     const buttonSelector = rule => `${this.getSelector(name, rule)} > .tab-stack > .tab-content > .tab-close-button`;
+    const bgSelector = rule => `${this.getSelector(name, rule)}:hover > .tab-stack > .tab-background`;
 
     let style = {};
     for (let rule of Object.keys(templates)) {
@@ -229,9 +230,17 @@ const DynamicRules = {
             .replace(/#topColor/g, prefObj.bgTopColor);
 
         if (name !== "progressMeter") {
-          const {topColor, bottomColor} = getButtonColors(prefObj);
+          const {topColor, bottomColor} = getButtonColors(prefObj, 10);
           style[rule] += `\n${buttonSelector(rule)}:hover {
             background-image: linear-gradient(${topColor}, ${bottomColor});
+          }`;
+        }
+
+        if (name !== "currentTab" && name !== "progressMeter") {
+          const {topColor, bottomColor} = getButtonColors(prefObj, 15);
+          style[rule] += `\n${bgSelector(rule)} {
+            background-image: linear-gradient(${topColor}, ${bottomColor}) !important;
+            outline: red !important;
           }`;
         }
       }
@@ -413,7 +422,7 @@ function getRGBcolor(aColorCode, aOpacity) {
 }
 
 // get darkened color for close button hover state
-function getButtonColors({bgColor, bgTopColor}) {
+function getButtonColors({bgColor, bgTopColor}, value = 10) {
   function parseRgba(rgbaString) {
     const match = rgbaString.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+(?:\.\d+)?)\)/);
     if (match) {
@@ -458,6 +467,7 @@ function getButtonColors({bgColor, bgTopColor}) {
     const hsla = rgbaToHsla(rgba);
     hsla.l -= amount / 100;
     if (hsla.l < 0) hsla.l = 0;
+    if (hsla.l > 100) hsla.l = 100;
     return hsla;
   }
 
@@ -468,7 +478,7 @@ function getButtonColors({bgColor, bgTopColor}) {
   const topColorRGB = parseRgba(bgTopColor.trim());
   const bottomColorRGB = parseRgba(bgColor.trim());
   return {
-    topColor: hslaToString(darkenRgba(topColorRGB, 10)),
-    bottomColor: hslaToString(darkenRgba(bottomColorRGB, 10)),
+    topColor: hslaToString(darkenRgba(topColorRGB, value)),
+    bottomColor: hslaToString(darkenRgba(bottomColorRGB, value)),
   };
 }
