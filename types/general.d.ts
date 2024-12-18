@@ -227,6 +227,8 @@ declare namespace MockedGeckoTypes {
     _dragOverDelay: number;
     _expandSpacerBy: (pixels: number) => void;
     _finishAnimateTabMove: () => void;
+    _finishMoveTogetherSelectedTabs: (tab: BrowserTab) => void;
+    /** @deprecated replaced with _finishMoveTogetherSelectedTabs in firefox 133 */
     _finishGroupSelectedTabs: (tab: BrowserTab) => void;
     _getDragTargetTab(event: DragEvent, options?: {ignoreTabSides?: boolean}): BrowserTab | null;
     // we are adding arguments to _getDropIndex see minit.js for details

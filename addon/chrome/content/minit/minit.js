@@ -611,7 +611,11 @@ var TMP_tabDNDObserver = {
         return;
       }
 
-      tabBar._finishGroupSelectedTabs(draggedTab);
+      if (Tabmix.isVersion(1330)) {
+        tabBar._finishMoveTogetherSelectedTabs(draggedTab);
+      } else {
+        tabBar._finishGroupSelectedTabs(draggedTab);
+      }
       tabBar._finishAnimateTabMove();
     }
 
