@@ -1589,13 +1589,15 @@ Tabmix.tablib = {
     Tabmix.tablib.showClosingTabsPrompt = Tabmix.tablib.showClosingTabsPrompt.bind(gBrowser);
 
     // remove protected tabs from tabs to remove
-    Tabmix.changeCode(gBrowser, "gBrowser.removeTabsToTheStartFrom")._replace(
-      'let tabs = this.getTabsToTheStartFrom(aTab)',
+    const prefix = Tabmix.isVersion(1350) ? "_" : "";
+
+    Tabmix.changeCode(gBrowser, `gBrowser.${prefix}getTabsToTheStartFrom`)._replace(
+      /return tabsToStart/g,
       '$&.filter(tab => !tab._isProtected)'
     ).toCode();
 
-    Tabmix.changeCode(gBrowser, "gBrowser.removeTabsToTheEndFrom")._replace(
-      'let tabs = this.getTabsToTheEndFrom(aTab)',
+    Tabmix.changeCode(gBrowser, `gBrowser.${prefix}getTabsToTheEndFrom`)._replace(
+      /return tabsToEnd/g,
       '$&.filter(tab => !tab._isProtected)'
     ).toCode();
 

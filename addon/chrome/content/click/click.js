@@ -636,11 +636,20 @@ var TabmixContext = {
     let protectedTab = aTab.hasAttribute("protected");
     let lockedTab = aTab.hasAttribute("locked");
     let tabsCount = Tabmix.visibleTabs.tabs.length;
-    let unpinnedTabsCount = multiselectionContext ?
-      gBrowser.visibleTabs.filter(t => !t.multiselected && !t.pinned).length :
-      gBrowser.visibleTabs.filter(t => t != TabContextMenu.contextTab && !t.pinned)
-          .length;
-    let noTabsToClose = !unpinnedTabsCount || unpinnedTabsCount == 1 && !aTab.pinned;
+    let noTabsToEnd, noTabsToStart, unpinnedTabsToClose;
+    if (Tabmix.isVersion(1350)) {
+      noTabsToEnd = !gBrowser._getTabsToTheEndFrom(aTab).length;
+      noTabsToStart = !gBrowser._getTabsToTheStartFrom(aTab).length;
+      unpinnedTabsToClose = multiselectionContext ?
+        gBrowser.visibleTabs.filter(t => !t.multiselected && !t.pinned && !t.hidden).length :
+        gBrowser.visibleTabs.filter(t => t != TabContextMenu.contextTab && !t.pinned && !t.hidden).length;
+    } else {
+      noTabsToEnd = !gBrowser.getTabsToTheEndFrom(aTab).length;
+      noTabsToStart = !gBrowser.getTabsToTheStartFrom(aTab).length;
+      unpinnedTabsToClose = multiselectionContext ?
+        gBrowser.visibleTabs.filter(t => !t.multiselected && !t.pinned).length :
+        gBrowser.visibleTabs.filter(t => t != TabContextMenu.contextTab && !t.pinned).length;
+    }
     let cIndex = Tabmix.visibleTabs.indexOf(aTab);
 
     // count unprotected tabs for closing
@@ -648,11 +657,10 @@ var TabmixContext = {
 
     var keepLastTab = tabsCount == 1 && Tabmix.prefs.getBoolPref("keepLastTab");
     Tabmix.setItem("context_closeTab", "disabled", (multiselectionContext ? selectedTabsCount === 0 : protectedTab) || keepLastTab);
-    Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || !unpinnedTabsCount);
-    Tabmix.setItem("context_closeOtherTabs", "disabled", noTabsToClose);
-    Tabmix.setItem("context_closeTabsToTheEnd", "disabled", cIndex == tabsCount - 1 || noTabsToClose);
-    Tabmix.setItem("context_closeTabsToTheStart", "disabled",
-      cIndex === 0 || aTab.pinned || Tabmix.visibleTabs.previous(aTab)?.pinned);
+    Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || !unpinnedTabsToClose);
+    Tabmix.setItem("context_closeOtherTabs", "disabled", unpinnedTabsToClose < 1);
+    Tabmix.setItem("context_closeTabsToTheEnd", "disabled", noTabsToEnd);
+    Tabmix.setItem("context_closeTabsToTheStart", "disabled", noTabsToStart);
 
     var closeTabsEmpty = TMP_ClosedTabs.count < 1;
     Tabmix.setItem("context_undoCloseTab", "disabled", closeTabsEmpty);

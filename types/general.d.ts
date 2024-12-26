@@ -351,6 +351,11 @@ declare namespace MockedGeckoTypes {
     getBrowserForTab: (tab: BrowserTab) => ChromeBrowser;
     getNotificationBox: (browser?: ChromeBrowser) => NotificationBox;
     getTabForBrowser: (browser: ChromeBrowser) => BrowserTab;
+    _getTabsToTheEndFrom: (tab: BrowserTab) => BrowserTab[];
+    _getTabsToTheStartFrom: (tab: BrowserTab) => BrowserTab[];
+    /** @deprecated replaced with _getTabsToTheEndFrom in firefox 135 */
+    getTabsToTheEndFrom: (tab: BrowserTab) => BrowserTab[];
+    /** @deprecated replaced with _getTabsToTheStartFrom in firefox 135 */
     getTabsToTheStartFrom: (tab: BrowserTab) => BrowserTab[];
     getIcon: (tab: BrowserTab) => string;
     hideTab: (aTab: BrowserTab, aSource?: string) => void;
