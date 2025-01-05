@@ -43,7 +43,13 @@ interface Addon {
   setEnabled(value: boolean): Promise<void>;
   uninstall(): Promise<boolean>;
   __AddonInternal__: {
+    matchingTargetApplication: {
+      id: string;
+      minVersion: string;
+      maxVersion: string;
+    };
     signedState?: number;
+    updateURL: string;
   };
 }
 

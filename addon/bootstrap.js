@@ -35,8 +35,6 @@ const options = {
   abi: appinfo.XPCOMABI
 };
 
-const isVersion119 = Services.vc.compare(appinfo.version, "119.0a1");
-
 const man = `
 overlay   chrome://browser/content/browser.xhtml                 chrome://tabmixplus/content/tabmix.xhtml
 overlay   about:addons                                           chrome://tabmixplus/content/preferences/overlay/aboutaddons.xhtml
@@ -115,28 +113,41 @@ function showRestartNotification(verb, window) {
   );
 }
 
-/** @type {Bootstarp.install} */
-async function install(data) {
-  const addon = await AddonManager.getAddonByID(data.id);
+/** @param {string} id */
+async function updateAddon(id) {
+  const addon = await AddonManager.getAddonByID(id);
   if (addon?.__AddonInternal__) {
     addon.__AddonInternal__.signedState = AddonManager.SIGNEDSTATE_NOT_REQUIRED;
+    if (Services.appinfo.name === "Zen") {
+      addon.__AddonInternal__.matchingTargetApplication.minVersion = "1.0";
+      addon.__AddonInternal__.updateURL = "https://raw.githubusercontent.com/onemen/TabMixPlus/main/config/zen_updates.json";
+    }
   }
+}
+
+/** @type {Bootstarp.install} */
+async function install(data) {
+  await updateAddon(data.id);
 }
 
 function uninstall() { }
 
 /** @type {Bootstarp.startup} */
 async function startup(data, reason) {
+  /** @type {any} */
+  const lazy = {};
+
+  TabmixChromeUtils.defineLazyModuleGetters(lazy, {
+    isVersion: "chrome://tabmix-resource/content/BrowserVersion.jsm",
+    SingleWindowModeUtils: "chrome://tabmix-resource/content/SingleWindowModeUtils.jsm"
+  });
+
   const chromeManifest = new ChromeManifest(() => {
     return man;
   }, options);
   await chromeManifest.parse();
 
-  AddonManager.getAddonByID(data.id).then(addon => {
-    if (addon?.__AddonInternal__) {
-      addon.__AddonInternal__.signedState = AddonManager.SIGNEDSTATE_NOT_REQUIRED;
-    }
-  });
+  updateAddon(data.id);
 
   PreferencesLoader.loadDefaultPreferences();
   TabmixWidgets.create();
@@ -147,10 +158,9 @@ async function startup(data, reason) {
     return;
   }
 
-  const {name, version} = Services.appinfo;
   /** @type {MockedGeckoTypes.PlacesUIUtils["openTabset"]} */
   let _tabmix_PlacesUIUtils_openTabset = () => {};
-  if (name === 'Waterfox' && Services.vc.compare(version, '115.9.0') >= 0) {
+  if (lazy.isVersion({wf: "115.9.0"})) {
     const {PlacesUIUtils} = ChromeUtils.importESModule("resource:///modules/PlacesUIUtils.sys.mjs");
     _tabmix_PlacesUIUtils_openTabset = PlacesUIUtils.openTabset;
   }
@@ -162,7 +172,7 @@ async function startup(data, reason) {
       const document = win.document;
       if (document.documentElement) {
         const isBrowser = document.documentElement.getAttribute("windowtype") === "navigator:browser";
-        const isOverflow = isVersion119 ?
+        const isOverflow = lazy.isVersion(1190) ?
           isBrowser && win.gBrowser.tabContainer.hasAttribute("overflow") :
           isBrowser && win.gBrowser.tabContainer.getAttribute("overflow") === "true";
         const promiseOverlayLoaded = Overlays.load(chromeManifest, win);
@@ -176,14 +186,6 @@ async function startup(data, reason) {
       }
     }
   }
-
-  /** @type {any} */
-  const lazy = {};
-
-  TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-    //
-    SingleWindowModeUtils: "chrome://tabmix-resource/content/SingleWindowModeUtils.jsm"
-  });
 
   /** @type {DocumentObserver} */
   const documentObserver = {

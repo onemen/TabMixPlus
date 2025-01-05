@@ -4,12 +4,23 @@
 
 const ID = "{dc572301-7619-498c-a57d-39143191b318}";
 
-// update gViewController.commands.cmd_showItemPreferences to open Tabmix
-// options in dialog window
-function updateShowItemPreferences() {
+function updateAddonCard() {
   const htmlBrowser = window.docShell.chromeEventHandler;
   const tabmixItem = htmlBrowser.contentDocument
       .querySelector(`addon-card[addon-id="${ID}"]`);
+
+  // hide compatibility error message
+  const messageBar = tabmixItem?.querySelector(".addon-card-message");
+  if (messageBar) {
+    const supportedVersion = Services.vc.compare(Services.appinfo.platformVersion, "115.0") >= 0;
+    const incompatibleMessage = messageBar?.getAttribute("data-l10n-id")?.includes("incompatible");
+    if (incompatibleMessage && supportedVersion) {
+      messageBar.remove();
+    }
+  }
+
+  // update gViewController.commands.cmd_showItemPreferences to open Tabmix
+  // options in dialog window.
   const panelItem = tabmixItem?.querySelector(`panel-item[action="preferences"]`);
   if (panelItem) {
     const optionsButton = panelItem.button;
@@ -31,7 +42,7 @@ function updateShowItemPreferences() {
 
 window.addEventListener("load", () => {
   try {
-    updateShowItemPreferences();
+    updateAddonCard();
   } catch (ex) {
     console.error(ex);
   }
@@ -49,7 +60,7 @@ window.addEventListener("load", () => {
         // @ts-expect-error - it is ok, querySelector exist
         if (isAddonList && (node.querySelector(`addon-card[addon-id="${ID}"]`) || node.getAttribute('addon-id') == ID)) {
           try {
-            updateShowItemPreferences();
+            updateAddonCard();
             break;
           } catch (ex) {
             console.error(ex);

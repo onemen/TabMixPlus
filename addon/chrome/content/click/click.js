@@ -952,7 +952,7 @@ var TabmixContext = {
 Tabmix.allTabs = {
   init() {
     const allTabsButton = document.getElementById("alltabs-button");
-    allTabsButton.addEventListener("click", function onClick(event) {
+    allTabsButton?.addEventListener("click", function onClick(event) {
       if (event.button === 0 && event.detail === 1) {
         allTabsButton.removeEventListener("click", onClick);
         setTimeout(Tabmix.allTabs.insertSortButton, 0);

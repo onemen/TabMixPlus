@@ -17,21 +17,15 @@ ChromeUtils.defineESModuleGetters(lazy, {
 });
 
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-  //
+  isVersion: "chrome://tabmix-resource/content/BrowserVersion.jsm",
   Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.jsm",
 });
-
-function isVersion(versionNo) {
-  return Services.vc.compare(Services.appinfo.version, versionNo / 10 + ".0a1") >= 0;
-}
-
-const isVersion119 = isVersion(1190);
 
 /**
  * stylesheets and scripts for navigator:browser
  */
 const CSS_URLS = [
-  isVersion119 ? "chrome://tabmixplus/content/overlay/browser.css" : "chrome://tabmixplus/content/overlay/browser_before_119.css",
+  lazy.isVersion(1190) ? "chrome://tabmixplus/content/overlay/browser.css" : "chrome://tabmixplus/content/overlay/browser_before_119.css",
   "chrome://tabmixplus/content/overlay/multirow.css",
   "chrome://tabmixplus/skin/general.css",
   "chrome://tabmixplus/skin/tab.css",

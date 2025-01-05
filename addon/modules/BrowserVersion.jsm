@@ -16,6 +16,10 @@ ChromeUtils.defineLazyGetter(lazy, "isFloorp", () => {
   return Services.appinfo.name == "Floorp";
 });
 
+ChromeUtils.defineLazyGetter(lazy, "isZen", () => {
+  return Services.appinfo.name == "Zen";
+});
+
 const _versions = {};
 function isVersion(aVersionNo, updateChannel) {
   let firefox, waterfox, floorp, prefix = "";
@@ -56,12 +60,11 @@ function isVersion(aVersionNo, updateChannel) {
   if (typeof _versions[prefix + aVersionNo] == "boolean")
     return _versions[prefix + aVersionNo];
 
-  let v = Services.appinfo.version;
+  let v = isLibrewolf || lazy.isZen ? Services.appinfo.platformVersion : Services.appinfo.version;
 
   if (lazy.isWaterfox && waterfox || lazy.isFloorp && floorp) {
     return (_versions[prefix + aVersionNo] = Services.vc.compare(v, aVersionNo) >= 0);
   }
 
-  const suffix = isLibrewolf ? `.${v.split('.')[1] ?? "0-1"}` : ".0a1";
-  return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo / 10 + suffix) >= 0);
+  return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo / 10 + ".0a1") >= 0);
 }

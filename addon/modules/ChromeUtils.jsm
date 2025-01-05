@@ -2,6 +2,11 @@
 
 const EXPORTED_SYMBOLS = ["TabmixChromeUtils"];
 
+const localLazy = {};
+
+ChromeUtils.defineModuleGetter(localLazy, "isVersion",
+  "chrome://tabmix-resource/content/BrowserVersion.jsm");
+
 /**
  * Note: If you rename this identifier, also update getModulesMap function in
  * eslint-plugin-tabmix use-mjs-modules.js.
@@ -14,14 +19,6 @@ const modulesMap = {
   "resource:///modules/OpenInTabsUtils.jsm": [1160, "resource:///modules/OpenInTabsUtils.sys.mjs"],
 };
 
-const _versions = {};
-function isVersion(aVersionNo) {
-  if (typeof _versions[aVersionNo] == "boolean") return _versions[aVersionNo];
-
-  let v = Services.appinfo.version;
-  return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo / 10 + ".0a1") >= 0);
-}
-
 var TabmixChromeUtils = {
   get XPCOMUtils() {
     delete this.XPCOMUtils;
@@ -33,7 +30,7 @@ var TabmixChromeUtils = {
       return module;
     }
     const [varsion, modulePath] = modulesMap[module] ?? [];
-    if (varsion && isVersion(varsion)) {
+    if (varsion && localLazy.isVersion(varsion)) {
       return modulePath;
     }
     return null;

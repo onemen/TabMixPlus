@@ -2439,16 +2439,13 @@ window.gTMPprefObserver = {
       Services.prefs.setIntPref("toolkit.scrollbox.clickToScroll.scrollDelay", val);
     }
     // 2012-03-21
-    var _loadOnNewTab = true, _replaceLastTabWith = true;
     if (Tabmix.prefs.prefHasUserValue("loadOnNewTab")) {
       let val = getPrefByType("extensions.tabmix.loadOnNewTab", 4, "IntPref");
       Tabmix.prefs.setIntPref("loadOnNewTab.type", val);
-      _loadOnNewTab = false;
     }
     if (Tabmix.prefs.prefHasUserValue("replaceLastTabWith")) {
       let val = getPrefByType("extensions.tabmix.replaceLastTabWith", 4, "IntPref");
       Tabmix.prefs.setIntPref("replaceLastTabWith.type", val);
-      _replaceLastTabWith = false;
     }
     // Changing our preference to use New Tab Page as default starting from Firefox 12
     /** @type {TabmixprefObserverNS._setNewTabUrl} */
@@ -2610,16 +2607,6 @@ window.gTMPprefObserver = {
     /** @type {TabmixprefObserverNS._getVersion} */
     let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {
       let oldVersion = TabmixSvc.prefs.get("extensions.tabmix.version", "");
-
-      // @ts-expect-error
-      let vCompare = (a, b) => Services.vc.compare(a, b) <= 0;
-      if (oldVersion) {
-        // 2013-08-18
-        if (vCompare(oldVersion, "0.4.1.1pre.130817a") &&
-            Services.prefs.prefHasUserValue("browser.tabs.loadDivertedInBackground"))
-          Tabmix.prefs.setBoolPref("loadExternalInBackground", true);
-      }
-
       let showNewVersionTab;
       if (currentVersion != oldVersion) {
         // reset current preference in case it is not a string
@@ -2644,13 +2631,9 @@ window.gTMPprefObserver = {
       if (showNewVersionTab) {
         // open Tabmix page in a new tab
         window.setTimeout(() => {
-          let defaultChanged = "";
-          let showComment = oldVersion ? Services.vc.compare(oldVersion, "0.4.0.2pre.120330a") <= 0 : false;
-          if (showComment && (_loadOnNewTab || _replaceLastTabWith))
-            defaultChanged = "&newtabpage";
           let b = Tabmix.getTopWin().gBrowser;
           b.selectedTab = b.addTrustedTab("https://onemen.github.io/tabmixplus-docs/version_update?version=" +
-                                   currentVersion + defaultChanged);
+                                   currentVersion);
           b.selectedTab.loadOnStartup = true;
         }, 1000);
         // noting more to do at the moment

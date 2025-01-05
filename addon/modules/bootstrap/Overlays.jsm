@@ -14,9 +14,8 @@ ChromeUtils.defineESModuleGetters(lazy, {
   setTimeout: "resource://gre/modules/Timer.sys.mjs",
 });
 
-function isVersion(versionNo) {
-  return Services.vc.compare(Services.appinfo.version, versionNo / 10 + ".0a1") >= 0;
-}
+ChromeUtils.defineModuleGetter(lazy, "isVersion",
+  "chrome://tabmix-resource/content/BrowserVersion.jsm");
 
 /**
  * The overlays class, providing support for loading overlays like they used to work. This class
@@ -262,7 +261,7 @@ class Overlays {
    */
   _update(url, doc) {
     if (url === "chrome://tabmixplus/content/tabmix.xhtml") {
-      if (!isVersion(1160)) {
+      if (!lazy.isVersion(1160)) {
         const menu = doc.getElementById("tm-content-undoCloseTab");
         menu.setAttribute("key", "key_undoCloseTab");
       }
