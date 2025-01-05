@@ -133,6 +133,7 @@
 
 /* :::: make sure all buttons align to the top row :::: */
 #TabsToolbar[tabmix-multibar] #TabsToolbar-customization-target,
+#TabsToolbar[tabmix-multibar] .titlebar-buttonbox,
 #TabsToolbar[tabmix-multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   align-items: flex-start;
 }

@@ -1905,7 +1905,7 @@ window.gTMPprefObserver = {
       });
     }
 
-    const selectorType = Tabmix.isVersion(1340) ? "." : "#";
+    const selectorType = Tabmix.isVersion(1330) ? "." : "#";
     this.insertRule(
       `#TabsToolbar[tabmix-multibar] ${selectorType}private-browsing-indicator-with-label {
         align-items: flex-start;
