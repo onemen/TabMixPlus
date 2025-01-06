@@ -54,7 +54,7 @@ Since Firefox removed the internal component that loads _legacy_ extension, in o
    ![firefox](https://github.com/onemen/TabMixPlus/assets/3650909/e39c4d4e-5bec-47fe-96d7-faba7fab24b2)
    </details>
 
-   1.2. Install [configuration files](https://github.com/onemen/TabMixPlus/files/14075743/fx-folder.zip) to your **Application Binary** folder.
+   1.2. Install [configuration files](https://raw.githubusercontent.com/xiaoxiaoflood/firefox-scripts/master/fx-folder.zip) to your **Application Binary** folder.
 
    `fx-folder.zip` files are packed with paths used by Firefox for Windows, `Linux` and `MacOS` users should follow the instructions below.
    <details>
@@ -118,7 +118,7 @@ Since Firefox removed the internal component that loads _legacy_ extension, in o
 
    1.3. Create `chrome` folder in your **Profile Folder** (if one does not exist).
 
-   1.4. Extract [utils](https://github.com/onemen/TabMixPlus/files/14075742/utils_extensions_and_scripts.zip) folder inside the `chrome` folder, the result should be `[PROFILE_NAME]/chrome/utils`, all the files should be in the `utils` folder (see the screenshot below).
+   1.4. Extract [utils](https://raw.githubusercontent.com/xiaoxiaoflood/firefox-scripts/master/utils.zip) folder inside the `chrome` folder, the result should be `[PROFILE_NAME]/chrome/utils`, all the files should be in the `utils` folder (see the screenshot below).
 
    <details><summary>screenshoot</summary>
 
@@ -158,9 +158,9 @@ If <b>Tab Mix Plus</b> stops working after Firefox update was installed or when 
 
 * Uninstall **Tab Mix Plus**.
 * Close Firefox and **reinstall** the latest versions of these scripts (see instructions above):
-  * Install [configuration files](https://github.com/onemen/TabMixPlus/files/14075743/fx-folder.zip) to your **Application Binary** folder.
+  * Install [configuration files](https://raw.githubusercontent.com/xiaoxiaoflood/firefox-scripts/master/fx-folder.zip) to your **Application Binary** folder.
 
-  * Extract [utils](https://github.com/onemen/TabMixPlus/files/14075742/utils_extensions_and_scripts.zip) folder to `chrome` in your in your **Profile Folder**.
+  * Extract [utils](https://raw.githubusercontent.com/xiaoxiaoflood/firefox-scripts/master/utils.zip) folder to `chrome` in your in your **Profile Folder**.
 
 * Some users report that their Firefox is not able to install or use **Tab Mix Plus** unless they set `extensions.experiments.enabled` to **true** in `about:config`.
 
