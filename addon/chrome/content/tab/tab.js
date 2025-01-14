@@ -1047,9 +1047,10 @@ Tabmix.bottomToolbarUtils = {
        </vbox>`
     );
     fragment.collapsed = gBrowser.tabContainer.collapsed;
+    const fullscreenItem = Tabmix.isVersion(1350) ? "fullscreen-warning" : "fullscreen-and-pointerlock-wrapper";
     const referenceNode =
+        document.getElementById(fullscreenItem)?.nextSibling ??
         document.getElementById("customization-container")?.nextSibling ??
-        document.getElementById("fullscreen-and-pointerlock-wrapper")?.nextSibling ??
         document.getElementById("browser-bottombox");
     referenceNode?.parentNode?.insertBefore(fragment, referenceNode);
     Object.defineProperty(this, "toolbox", {
