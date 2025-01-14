@@ -22,58 +22,13 @@
   </script>
 
   <commandset id="mainCommandSet">
-    <command id="TabmixSessionUtils:SaveThisWindow" observes="tmp_disableSave"
-             oncommand="TabmixSessionManager.sessionUtil('save', 'thiswindow');event.stopPropagation();"/>
-    <command id="TabmixSessionUtils:SaveAllWindow" observes="tmp_disableSave"
-             oncommand="TabmixSessionManager.sessionUtil('save', 'allwindows');event.stopPropagation();"/>
+    <command id="TabmixSessionUtils:SaveThisWindow" observes="tmp_disableSave"/>
+    <command id="TabmixSessionUtils:SaveAllWindow" observes="tmp_disableSave"/>
   </commandset>
 
    <!-- Menu in Tools Menu -->
    <menupopup id="menu_ToolsPopup">
-      <menuitem id="tabmix-menu" label="&page.header.title;…" insertbefore="prefSep" tmp_iconic="menuitem-iconic tabmix-menu-icon"
-         oncommand="Tabmix.openOptionsDialog();"/>
-      <menu hidden="true" id="tm-sessionmanager" label="&session.Tools;" insertbefore="prefSep" sessionmanager-menu="true" tmp_iconic="menu-iconic sessionmanager-icon">
-         <menupopup id="tm-sessionmanager_menu"
-                  context="tm_sessionmanagerContextMenu"
-                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows');"
-                  oncommand="TabmixSessionManager.restoreSession(event.originalTarget);"
-                  onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager._rdfRoot+'/windows');">
-            <menuitem label="&settings.label;…" tmp_iconic="menuitem-iconic tabmix-menu-icon"
-                  oncommand="Tabmix.openOptionsDialog('paneSession'); event.stopPropagation();"/>
-            <menuseparator/>
-            <menu id="tm-sm-closedwindows2" label="&closedWin.label;" observes="tmp_closedwindows" tmp_iconic="menu-iconic closedwindows-icon">
-               <menupopup id="tm-sm-closedwindows_menu2"
-                  context="tm_sessionmanagerContextMenu"
-                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager.gSessionPath[0]);"
-                  oncommand="TabmixSessionManager.restoreSession(event.originalTarget);event.stopPropagation();"
-                  onclick="TabmixSessionManager.removeFromMenu(event, this, TabmixSessionManager.gSessionPath[0]);event.stopPropagation();">
-                  <menuseparator id="tm-sm-closedwindows2-startSeparator" hidden="true"/>
-                  <menuseparator id="tm-sm-closedwindows2-endSeparator" hidden="true"/>
-               </menupopup>
-            </menu>
-            <menuitem id="tm-sm-saveone" label="&saveWindow.label;…" key="key_tm_sm_saveone"
-                  command="TabmixSessionUtils:SaveThisWindow"/>
-            <menuitem id="tm-sm-saveall" label="&saveAllWindows.label;…" key="key_tm_sm_saveone" observes="tmp_menu_AllWindows"
-                  command="TabmixSessionUtils:SaveAllWindow"/>
-            <menuseparator/>
-            <menu anonid="rename" label="&sm.context.rename;" accesskey="&sm.context.rename.key;">
-               <menupopup
-                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows', 0, true);"
-                  oncommand="TabmixSessionManager.renameSession(event.originalTarget.session);event.stopPropagation();">
-               </menupopup>
-            </menu>
-            <menu anonid="delete" label="&sm.context.delete;" accesskey="&sm.context.delete.key;">
-               <menupopup
-                  onpopupshowing="TabmixSessionManager.createMenu(this, TabmixSessionManager._rdfRoot+'/windows');"
-                  oncommand="TabmixSessionManager.removeSavedSession(event.originalTarget, true);event.stopPropagation();">
-                  <menuseparator id="tm-sm-delete-startSeparator" hidden="true"/>
-                  <menuseparator id="tm-sm-delete-endSeparator" hidden="true"/>
-               </menupopup>
-            </menu>
-            <menuseparator id="tm-sessionmanager-startSeparator"/>
-            <menuseparator id="tm-sessionmanager-endSeparator"/>
-         </menupopup>
-      </menu>
+      <menuitem id="tabmix-menu" label="&page.header.title;…" insertbefore="prefSep" tmp_iconic="menuitem-iconic tabmix-menu-icon"/>
       <menu id="tabmix-historyUndoWindowMenu"
             insertbefore="prefSep"
             label="&closedWin.label;"
@@ -81,61 +36,50 @@
             tmp_iconic="menu-iconic closedwindows-icon">
          <menupopup id="tabmix-historyUndoWindowPopup"
             context="tm_sessionmanagerContextMenu"
-            placespopup="true"
-            onpopupshowing="Tabmix.closedObjectsUtils.populateClosedWindowsMenu(this.parentNode);"/>
+            placespopup="true"/>
       </menu>
    </menupopup>
 
     <popup id="contentAreaContextMenu">
-      <menuitem id="context-openlinkincurrent" label="&linkhere.label;" accesskey="&linkhere.accesskey;"
-                oncommand="Tabmix.tablib.openLinkInCurrent();"/>
+      <menuitem id="context-openlinkincurrent" label="&linkhere.label;" accesskey="&linkhere.accesskey;"/>
       <menuitem id="tm-openinverselink" label="" fglabel="&linkForegroundTab.label;" bglabel="&linkBackgroundTab.label;"
          fgaccesskey="&linkForegroundTab.accesskey;" bgaccesskey="&linkBackgroundTab.accesskey;"
-         insertafter="context-openlinkintab"
-         oncommand="Tabmix.openInverseLink(event);"/>
+         insertafter="context-openlinkintab"/>
       <menuitem id="tm-openAllLinks" label="&openalllinks.label;" accesskey="&openalllinks.accesskey;"
-         insertafter="context-openlinkintab" oncommand="TabmixContext.openMultipleLinks();"/>
+         insertafter="context-openlinkintab"/>
       <menuitem id="tm-linkWithhistory" label="&linkwithhistory.label;" accesskey="&linkwithhistory.accesskey;"
-         insertafter="context-openlinkintab" oncommand="gBrowser.openLinkWithHistory();"/>
+         insertafter="context-openlinkintab"/>
       <menuseparator id="tm-content-miscSep" insertafter="context-sep-viewbgimage,context-sep-open"/>
-      <menuitem id="tm-content-closetab" data-lazy-l10n-id="tab-context-close-n-tabs" data-l10n-args='{"tabCount": 1}' oncommand="gBrowser.removeCurrentTab();" insertbefore="context-sep-viewbgimage,context-sep-open"/>
+      <menuitem id="tm-content-closetab" data-lazy-l10n-id="tab-context-close-n-tabs" data-l10n-args='{"tabCount": 1}' insertbefore="context-sep-viewbgimage,context-sep-open"/>
       <menuitem id="tm-duplicateTabContext" key="key_tm_dupTab" label="&duplicateTabMenu.label;" accesskey="&duplicateTabMenu.accesskey;"
-         oncommand="Tabmix.duplicateTab(gBrowser._selectedTab);" insertbefore="context-sep-viewbgimage,context-sep-open"/>
+         insertbefore="context-sep-viewbgimage,context-sep-open"/>
       <menuitem id="tm-duplicateinWinContext" label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"
-         oncommand="gBrowser.duplicateTabToWindow(gBrowser._selectedTab, false);" insertbefore="context-sep-viewbgimage,context-sep-open"/>
+         insertbefore="context-sep-viewbgimage,context-sep-open"/>
       <menuitem id="tm-detachTabContext" key="key_tm_detachTab" label="&detachTab.label;" accesskey="&detachTab.accesskey;"
-         oncommand="gBrowser.duplicateTabToWindow(gBrowser._selectedTab, true);" insertbefore="context-sep-viewbgimage,context-sep-open"/>
-      <menuitem id="tm-mergeWindows" key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;" oncommand="Tabmix.MergeWindows.mergeWindows(window);" insertbefore="context-sep-viewbgimage,context-sep-open" />
-      <menuitem id="tm-content-freezeTab" type="checkbox" oncommand="gBrowser.freezeTab(gBrowser._selectedTab);"
+         insertbefore="context-sep-viewbgimage,context-sep-open"/>
+      <menuitem id="tm-mergeWindows" key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;" insertbefore="context-sep-viewbgimage,context-sep-open" />
+      <menuitem id="tm-content-freezeTab" type="checkbox"
          insertbefore="context-sep-viewbgimage,context-sep-open" label="&freezeTabMenu.label;" accesskey="&freezeTabMenu.accesskey;"/>
       <menuitem id="tm-content-protectTab" type="checkbox"
-         oncommand="gBrowser.protectTab(gBrowser._selectedTab);"
          insertbefore="context-sep-viewbgimage,context-sep-open" label="&protectTabMenu.label;" accesskey="&protectTabMenu.accesskey;"/>
       <menuitem id="tm-content-lockTab" type="checkbox"
-         oncommand="gBrowser.lockTab(gBrowser._selectedTab);"
          insertbefore="context-sep-viewbgimage,context-sep-open" label="&lockTabMenu.label;" accesskey="&lockTabMenu.accesskey;"/>
       <menu id="tm-tabsList" label="&tabsList.label;" accesskey="&tabsList.accesskey;" insertbefore="context-sep-viewbgimage,context-sep-open" tmp_iconic="menu-iconic tabmix-tabslist-icon">
-        <menupopup id="tm-tabsList-menu"
-           onpopupshowing="TabmixAllTabs.createTabsList(this, 2);"
-           onpopuphidden="TabmixAllTabs.hideCommonList(this);"
-           onclick="TabmixAllTabs.removeTabFromList(event, this, 2);"
-           oncommand="gBrowser.selectedTab = gBrowser.tabs[event.originalTarget.value];"/>
-       </menu>
+        <menupopup id="tm-tabsList-menu"/>
+      </menu>
       <menuseparator id="tm-content-undoCloseSep" insertbefore="context-sep-viewbgimage,context-sep-open"/>
       <menuseparator id="tm-content-after-undoCloseList" insertbefore="context-sep-viewbgimage,context-sep-open"/>
       <menuitem id="tm-content-undoCloseTab" data-lazy-l10n-id="tab-context-reopen-closed-tabs" data-l10n-args='{"tabCount": 1}'
-         observes="History:UndoCloseTab" insertbefore="tm-content-after-undoCloseList"
+         command="History:UndoCloseTab" insertbefore="tm-content-after-undoCloseList"
          key="key_restoreLastClosedTabOrWindowOrSession"/>
       <menu id="tm-content-undoCloseList" label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;" tmp_iconic="menu-iconic closedtabs-icon"
          insertbefore="tm-content-after-undoCloseList">
-        <menupopup id="tm-content-undoCloseList-menu"
-          onpopupshowing="if (event.target === this) Tabmix.closedObjectsUtils.populateClosedTabsMenu(this.parentNode);"
-          onpopuphidden="if (event.target === this) TabmixAllTabs.hideCommonList(this);"/>
+        <menupopup id="tm-content-undoCloseList-menu"/>
       </menu>
       <menu id="tm-autoreload_menu" insertafter="context-sep-navigation"
             labelTab="&autoReloadTab.label;" accesskeyTab="&autoReloadTab.accesskey;"
             labelSite="&autoReloadSite.label;" accesskeySite="&autoReloadSite.accesskey;">
-        <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser._selectedTab);"/>
+        <menupopup data-popup="autoReload"/>
       </menu>
     </popup>
 
@@ -151,29 +95,28 @@
       class="subviewbutton"
       closemenu="none"
       context=""
-      oncommand="Tabmix.allTabs.sortTabsInList();"
+      _oncommand="Tabmix.allTabs.sortTabsInList();"
       label="&sortedTabs.label;"
       insertbefore="allTabsMenu-tabsSeparator"
       type="checkbox"/>
 
     <!-- add auto reload popup to reload button -->
     <toolbarbutton id="reload-button">
-      <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser._selectedTab);"/>
+      <menupopup data-popup="autoReload"/>
     </toolbarbutton>
+
 
     <popupset id="mainPopupSet">
       <!-- popup menu for autoreload -->
-      <menupopup id="autoreload_popup" oncommand="Tabmix.autoReload.setTime(this._tab, event.originalTarget.value);"
-                 onpopupshowing="Tabmix.autoReload.onPopupShowing(this, gBrowser._selectedTab);"
-                 onpopuphidden="this._tab = null;">
+      <menupopup id="autoreload_popup" data-popup="autoReload">
         <menuitem label="&autoReloadTab.label;"  disabled="true" style="font-weight: bold;color: #CC0000;"/>
         <menuseparator />
         <menuitem _label="&enable.label;:" type="checkbox"
                   seconds="&seconds.label;" minute="&minute.label;" minutes="&minutes.label;"
-                  oncommand="Tabmix.autoReload.toggle(this.parentNode._tab); event.stopPropagation();"/>
+                  data-command="toggle"/>
         <menuseparator />
         <menuitem label="&custom.label;…" anonid="start_custom_list"
-                  oncommand="Tabmix.autoReload.setCustomTime(this.parentNode._tab); event.stopPropagation();"/>
+                  data-command="customTime"/>
         <menuseparator anonid="end_custom_list"/>
         <menuitem label="1  &minute.label;"  type="radio" value="60"/>
         <menuitem label="2  &minutes.label;" type="radio" value="120"/>
@@ -181,13 +124,11 @@
         <menuitem label="15 &minutes.label;" type="radio" value="900"/>
         <menuitem label="30 &minutes.label;" type="radio" value="1800"/>
         <menuseparator anonid="end_custom_list"/>
-        <menuitem label="&enableTabs.label;" oncommand="Tabmix.autoReload.enableAllTabs(gBrowser); event.stopPropagation();"/>
-        <menuitem label="&disableTabs.label;" oncommand="Tabmix.autoReload.disableAllTabs(gBrowser); event.stopPropagation();"/>
+        <menuitem label="&enableTabs.label;" data-command="enableAllTabs"/>
+        <menuitem label="&disableTabs.label;" data-command="disableAllTabs"/>
       </menupopup>
       <!-- context menu for undoclosetab menupopup -->
-      <menupopup id="tm_undocloseContextMenu"
-                  oncommand="TMP_ClosedTabs.contextMenuOnCommand(event);"
-                  onpopupshowing="return TMP_ClosedTabs.contextMenuOnPopupShowing(this);">
+      <menupopup id="tm_undocloseContextMenu">
         <menuitem id="tmOpen" label="&restoreincurrent.label;" accesskey="&restoreincurrent.accesskey;"
                   commandData="restoreTab,current"/>
         <menuitem id="tmOpenInNewWindow" label="&restoreinwin.label;" accesskey="&restoreinwin.accesskey;"
@@ -206,61 +147,17 @@
                   commandData="restoreTab,delete"/>
       </menupopup>
       <!-- context menu for undoclosewindow menupopup for use with sessionRestore -->
-      <menupopup id="tm_undocloseWindowContextMenu"
-                  onpopupshowing="return Tabmix.closedObjectsUtils.on_popupshowing(this);">
-        <menuitem id="tm_delete-window" label="&deletelist.label;" accesskey="&deletelist.accesskey;"
-                  oncommand="Tabmix.closedObjectsUtils.on_delete(this.parentNode.triggerNode);"/>
-      </menupopup>
-      <!-- context menu for session manager menupopup -->
-      <menupopup hidden="true" id="tm_sessionmanagerContextMenu"
-                  onpopupshowing="return TabmixSessionManager.updateSessionMenu(this);"
-                  onpopuphidden="Tabmix.hidePopup(this);">
-        <menuitem id="tm-sm-OpenInCurrentWindow" label="&sm.context.overwrite;" accesskey="&sm.context.overwrite.key;"
-                  oncommand="TabmixSessionManager.restoreSession(this.parentNode.triggerNode, true);"/>
-        <menuitem id="tm-sm-OpenInNewWindow" label="&sm.context.restore.new;" accesskey="&sm.context.restore.newkey;"
-                  oncommand="TabmixSessionManager.restoreSession(this.parentNode.triggerNode, false);"/>
-        <menuseparator/>
-        <menuitem id="tm-sm-ReplaceWithThis" label="&sm.context.replacethis;" accesskey="&sm.context.replacethis.key;" observes="tmp_contextmenu_ThisWindow"
-                  oncommand="TabmixSessionManager.sessionUtil('replace', 'thiswindow', this.parentNode.triggerNode.session);"/>
-        <menuitem id="tm-sm-AddThis" label="&sm.context.add;" accesskey="&sm.context.add.key;" observes="tmp_contextmenu_ThisWindow"
-                  oncommand="TabmixSessionManager.addWinToSession('savethiswindow', this.parentNode.triggerNode.session);"/>
-        <menuseparator observes="tmp_contextmenu_ThisWindow"/>
-        <menuitem id="tm-sm-ReplaceWithAll" label="&sm.context.replaceall;" accesskey="&sm.context.replaceall.key;" observes="tmp_contextmenu_AllWindows"
-                  oncommand="TabmixSessionManager.sessionUtil('replace', 'allwindows', this.parentNode.triggerNode.session);"/>
-        <menuitem id="tm-sm-AddAll" label="&sm.context.addall;" accesskey="&sm.context.addall.key;" observes="tmp_contextmenu_AllWindows"
-                  oncommand="TabmixSessionManager.addWinToSession('saveallwindows', this.parentNode.triggerNode.session);"/>
-        <menuseparator observes="tmp_contextmenu_AllWindows"/>
-        <menuitem id="tm-sm-Save" label="&sm.context.save;" accesskey="&sm.context.save.key;" observes="tmp_disableSave"
-                  oncommand="TabmixSessionManager.saveClosedSession(this.parentNode.triggerNode);"/>
-        <menuitem id="tm-sm-Rename" label="&sm.context.rename;" accesskey="&sm.context.rename.key;"
-                  oncommand="TabmixSessionManager.renameSession(this.parentNode.triggerNode.session);"/>
-        <menuseparator/>
-        <menuitem id="tm-sm-Delete" label="&sm.context.delete;" accesskey="&sm.context.delete.key;" closemenu="single"
-                  oncommand="TabmixSessionManager.removeSavedSession(this.parentNode.triggerNode);"/>
-        <menuitem id="tm-sm-DeleteAll" label="&sm.context.deleteall;" accesskey="&sm.context.deleteall.key;"
-                  oncommand="TabmixSessionManager.removeAllSavedSession(this.parentNode.triggerNode);"/>
-        <menuseparator/>
-        <menuitem id="tm-sm-SetAsStartup" label="&sm.context.startup;" accesskey="&sm.context.startup.key;"
-                  type="checkbox" closemenu="single"
-                  oncommand="TabmixSessionManager.setSessionAsStartup(this);"/>
-        <menuitem id="tm-sm-showext" label="&sm.context.details;" accesskey="&sm.context.details.key;"
-                  type="checkbox" closemenu="single"
-                  oncommand="TabmixSessionManager.setShowNameExt(this.parentNode);"/>
+      <menupopup id="tm_undocloseWindowContextMenu">
+        <menuitem id="tm_delete-window" label="&deletelist.label;" accesskey="&deletelist.accesskey;"/>
       </menupopup>
       <!-- menupopup for lasttab -->
-      <menupopup id="lasttabTabList" ignorekeys="true" flex="1"
-                 oncommand="TMP_LastTab.onMenuCommand(event);"
-                 onpopupshowing="TMP_LastTab.onPopupshowing();"
-                 onpopuphidden="TMP_LastTab.onPopuphidden();" />
-      <menupopup id="tabslist"
-                 oncommand="TabmixAllTabs._tabsListOncommand(event);"
-                 onpopuphidden="TabmixAllTabs.hideCommonList(this);"/>
+      <menupopup id="lasttabTabList" ignorekeys="true" flex="1"/>
+      <menupopup id="tabslist"/>
       <!-- popup for show\hide the tabbar -->
       <html:template id="tabmix_hideTabbar_menu-container">
         <menuseparator id="tabmix_hideTabbar_separator" tabmix_context="true"/>
         <menu id="tabmix_hideTabbar_menu" tabmix_context="true" label="&hideTabBar.label;" accesskey="&hideTabBar.label.key;">
-          <menupopup oncommand="Tabmix.prefs.setIntPref('hideTabbar', event.originalTarget.value);"
-                     onpopupshowing="this.children[TabmixTabbar.hideMode].setAttribute('checked' ,'true');">
+          <menupopup id="tabmix_hideTabbar_popup">
             <menuitem value="0" type="radio" label="&hideTabBar.never.label;" accesskey="&hideTabBar.never.key;"/>
             <menuitem value="1" type="radio" label="&hideTabBar.oneTab.label;" accesskey="&hideTabBar.onOneTab.key;"/>
             <menuitem value="2" type="radio" label="&hideTabBar.always.label;" accesskey="&hideTabBar.always.key;"/>
@@ -270,10 +167,7 @@
       <!-- tabmix tooltip for button -->
       <tooltip id="tabmix-tooltip"/>
       <!-- tabmix tooltip for tabmix-scrollbox -->
-      <tooltip id="tabmix-rows-tooltip"
-               observes="tabmix_flowing"
-               onpopupshowing="Tabmix.tabsUtils.createTooltip(this);">
-      </tooltip>
+      <tooltip id="tabmix-rows-tooltip" observes="tabmix_flowing"/>
     </popupset>
 
     <toolbar id="TabsToolbar-customization-target">

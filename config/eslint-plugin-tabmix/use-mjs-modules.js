@@ -4,7 +4,7 @@ import path from "node:path";
 
 import helpers from "eslint-plugin-mozilla/lib/helpers.js";
 
-const __dirname = new URL('.', import.meta.url).pathname.replace(/^\//, '');
+const __dirname = decodeURIComponent(new URL('.', import.meta.url).pathname.replace(/^\//, ''));
 
 const SYSMJS_FILE_NAME = "sysmjs.txt";
 const USED_SYSMJS_IN_TABMIX = "usedmjs.json";

@@ -472,12 +472,6 @@ var TMP_eventListener = {
         Tabmix.setItem(tabsToolbar, "classic40", version);
       }
     } else {
-      /**
-       * some theme like Vista-aero 3.0.0.91 and BlueSky 3.0.0.91
-       * use TMP_TBP_Startup in stylesheet window[onload="TMP_TBP_Startup()"]
-       */
-      Tabmix.setItem("main-window", "onload", "TMP_TBP_Startup();");
-
       //XXX need to add theme list here
       var themes = /^(iPoxRemix|Ie8fox|Vfox3)/;
       if (themes.test(skin)) {

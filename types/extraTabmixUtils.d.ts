@@ -78,6 +78,7 @@ declare namespace TabmixNS {
   // lazygetters for modules (jsm files)
   const SlideshowInitialized: boolean;
   let autoReload: typeof AutoReload;
+  let docShellCapabilities: typeof DocShellCapabilities;
   let flst: typeof Flst;
   let MergeWindows: typeof MergeWindowsModule;
   let renameTab: typeof RenameTab;
@@ -204,6 +205,8 @@ declare namespace AutoReload {
   function onTabReloaded(aTab: Tab, aBrowser: Browser): void;
   function restorePendingTabs(aTab: Tab): void;
   function toggle(aTab: Tab): void;
+  function addEventListener(popup: ClosedObjectsUtils.PopupElement): void;
+  function onPopupShowing(aPopup: ClosedObjectsUtils.PopupElement, aTab: Tab): void;
 }
 
 declare namespace BottomToolbarUtils {
@@ -219,6 +222,9 @@ declare namespace BottomToolbarUtils {
   function _update(): void;
 }
 
+type PopupEvent = Omit<MouseEvent, "target" | "originalTarget"> & {target: ClosedObjectsUtils.Menuitem; originalTarget: ClosedObjectsUtils.Menuitem};
+type MenuPopupEvent = Omit<MouseEvent, "target" | "originalTarget"> & {target: ClosedObjectsUtils.PopupElement; originalTarget: ClosedObjectsUtils.PopupElement};
+
 declare namespace ClosedObjectsUtils {
   interface CustomPanelView extends HTMLElement {
     lastChild: HTMLMenuElement;
@@ -233,15 +239,41 @@ declare namespace ClosedObjectsUtils {
     readonly triggerNode: Menuitem;
     menupopup: PopupElement;
     value: number;
+    // extra props for popup menus
+    _tabmix_middleClicked?: boolean;
+    closedGroup?: null;
+    dataset: {
+      command?: string;
+      popup?: string;
+    };
+    mCorrespondingMenuitem?: Menuitem | null;
+    remove(): void;
+    tab: Tab;
   };
+
+  interface ScrollBox extends Menuitem {
+    ensureElementIsVisible: (item: Menuitem) => void;
+  }
+
+  type PopupOptions = Omit<OpenPopupOptions, "triggerEvent"> & {triggerEvent?: PopupEvent | null};
+  type OpenPopup = (anchorElement?: Menuitem | null, options?: PopupOptions | string, x?: number, y?: number, isContextMenu?: boolean, attributesOverride?: boolean, triggerEvent?: PopupEvent) => void;
 
   interface PopupElement extends Omit<HTMLElement, "childNodes" | "parentNode" | "firstChild" | "lastChild"> {
     hasStatusListener?: boolean;
     readonly childNodes: HTMLCollectionBase_G<Menuitem>;
     readonly firstChild: Menuitem;
     readonly lastChild: Menuitem;
+    openPopup: OpenPopup;
     readonly parentNode: CustomPanelView;
+    scrollBox: ScrollBox;
     readonly triggerNode: Menuitem;
+    dataset: {
+      command?: string;
+      popup?: string;
+    };
+    // from XULPopupElement
+    moveTo(left: number, top: number): void;
+    openPopupAtScreen(x?: number, y?: number, isContextMenu?: boolean, triggerEvent?: Event | null): void;
   }
   type ButtonEvent = Omit<MouseEvent, "target"> & {target: HTMLButtonElement};
 
@@ -253,7 +285,7 @@ declare namespace ClosedObjectsUtils {
   function checkForMiddleClick(event: GenericEvent<Menuitem, MouseEvent>): void;
   function forgetClosedWindow(index: number): void;
   function observe(subject: nsISupports, topic: string): void;
-  function on_popupshowing(popup: PopupElement): boolean;
+  function on_popupshowing(event: MenuPopupEvent, popup: PopupElement): void;
   function on_delete(node: Menuitem): void;
   function addHoverListeners(params: CustomPanelView): void;
   function addSeparatorIfMissing(popup: CustomPanelView): void;
@@ -291,6 +323,15 @@ declare namespace ContentClickModule {
   function getParamsForLink(event: MouseEvent | SyntaticEvent, linkNode: EventTarget, href: string, browser: Browser, focusedWindow: Window): {where: string; _href: string; suppressTabsOnFileDownload: boolean; targetAttr: string};
   function isLinkToExternalDomain(curpage: string, target: string): boolean;
   function isUrlForDownload(url: string): boolean;
+}
+
+declare namespace DocShellCapabilities {
+  function init(): void;
+  function update(browser: Browser, data: any): void;
+  function collect(tab: Tab): void;
+  function restore(tab: Tab, disallow: string[], reload: boolean): void;
+  function onGet(nodes: HTMLCollectionBase_G<ClosedObjectsUtils.Menuitem>, tab: Tab): void;
+  function onSet(tab: Tab, node: Node): void;
 }
 
 declare namespace Flst {

@@ -12,8 +12,6 @@
          xmlns:html="http://www.w3.org/1999/xhtml">
 
   <panel id="tabmixRenametab_panel"
-         onpopupshown="Tabmix.renameTab.onpopupshown(event);"
-         onpopuphidden="Tabmix.renameTab.onpopuphidden(event);"
          orient="vertical" type="arrow" hidden="true"
          noautofocus="true" level="top" minwidth="330">
     <row align="center">
@@ -25,15 +23,14 @@
         <hbox>
           <button id="tabmixRenametab_resetButton"
                   label="&renametab.reset.label;"
-                  class="editBookmarkPanelHeaderButton"
-                  oncommand="Tabmix.renameTab.resetTitle();"/>
+                  class="editBookmarkPanelHeaderButton"/>
         </hbox>
       </vbox>
      </row>
     <spacer/>
     <vbox flex="1">
       <label control="tabmixRenametab_titleField" value="&title.label;:"/>
-      <html:input id="tabmixRenametab_titleField" oninput="Tabmix.renameTab.onNewTitle(this.value);"/>
+      <html:input id="tabmixRenametab_titleField"/>
       <vbox id="tabmixRenametab_defaultRow">
         <label control="tabmixRenametab_defaultField" value="&default.label;:"/>
         <html:input id="tabmixRenametab_defaultField"
@@ -43,17 +40,14 @@
     <spacer/>
     <checkbox id="tabmixRenametab_checkbox" label="&renametab.permanently.label;"
               align="center" checked="true"
-              tooltiptext="&renametab.permanently.tooltip;"
-              oncommand="Tabmix.renameTab.data.permanently = this.checked;"/>
+              tooltiptext="&renametab.permanently.tooltip;"/>
     <spacer/>
     <hbox id="tabmixRenametab_buttons" pack="end">
       <button id="tabmixRenametab_doneButton"
               class="editBookmarkPanelBottomButton"
-              default="true"
-              oncommand="Tabmix.renameTab.update();"/>
+              default="true"/>
       <button id="tabmixRenametab_deleteButton"
-              class="editBookmarkPanelBottomButton"
-              oncommand="Tabmix.renameTab.hidePopup();"/>
+              class="editBookmarkPanelBottomButton"/>
     </hbox>
   </panel>
 

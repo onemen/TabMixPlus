@@ -356,6 +356,7 @@ export default [
         ...mozillaGlobals["browser-window"].globals,
         ...tabmixGlobals.extensions,
         ...tabmixGlobals.tabmix,
+        TabsPanel: false
       },
     },
   },

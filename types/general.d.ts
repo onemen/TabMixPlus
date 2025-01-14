@@ -139,6 +139,7 @@ declare namespace MockedGeckoTypes {
     closing: boolean;
     readonly container: TabContainer;
     connectedCallback: () => void;
+    group: MozTabbrowserTabGroup | null;
     initialize: () => void;
     readonly isEmpty: boolean;
     label: string;
@@ -160,7 +161,6 @@ declare namespace MockedGeckoTypes {
     _restoreState: number;
     _tabmix_downloadingTimeout: number | null;
     _tabmixState?: {noBookmart?: boolean};
-    _TMP_removeing: boolean;
     _tPosInGroup?: number;
     autoReloadEnabled?: boolean;
     autoReloadTimerID: number | null;
@@ -392,7 +392,7 @@ declare namespace MockedGeckoTypes {
     // removeTabsProgressListener: (listener: typeof TabmixProgressListener.listener) => void;
     removeTabsToTheEndFrom: (tab: BrowserTab) => void;
     removeTabsToTheStartFrom: (tab: BrowserTab) => void;
-    removeCurrentTab: (params: Params) => void;
+    removeCurrentTab: (params?: Params) => void;
     replaceTabWithWindow: (tab: BrowserTab) => Window | null;
     set selectedTabs(tabs: Tabs);
     get selectedTabs(): Tabs;
@@ -461,12 +461,16 @@ declare namespace MockedGeckoTypes {
     gBrowser: TabBrowser;
   }
 
+  type MozTabbrowserTabGroup = {color: string; id: string; label: string};
+
   interface TabsPanel extends TabsListBase {
+    prototype: TabsListBase;
     constructor(opts: Record<string, unknown>): void;
     view: unknown;
     panelMultiView: HTMLElement;
     _populate(): void;
     _createRow(tab: BrowserTab): TabsPanelRow;
+    _createGroupRow(group: MozTabbrowserTabGroup): TabsPanelRow;
     _setRowAttributes(row: TabsPanelRow, tab: BrowserTab): void;
     _setImageAttributes(row: TabsPanelRow, tab: BrowserTab): void;
     _onDragStart(event: TabsPanelDragEvent): void;
@@ -968,6 +972,7 @@ declare var TAB_DROP_TYPE: string;
 declare var CustomTitlebar: CustomTitlebar;
 /** @deprecated - use CustomTitlebar instead from Firefox 135 */
 declare var TabsInTitlebar: CustomTitlebar;
+declare var TabsPanel: MockedGeckoTypes.TabsPanel;
 
 declare var UrlbarUtils: {
   RESULT_TYPE: {

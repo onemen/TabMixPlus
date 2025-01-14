@@ -36,6 +36,7 @@ interface GetByMap {
   "tabmix-closedTabsView": ClosedObjectsUtils.CustomPanelView;
   "tabmix-closedWindowsView": ClosedObjectsUtils.CustomPanelView;
   "tabmix-historyUndoWindowMenu": HTMLMenuElement;
+  "tabmix-historyUndoWindowPopup": ClosedObjectsUtils.PopupElement;
   "tabmix-firstTabInRow": Tab;
   "tabmix-menu": HTMLMenuElement;
   "tabmix-scrollbox": TabmixArrowScrollboxNS.RightScrollBox;
@@ -48,6 +49,7 @@ interface GetByMap {
   "tm-content-closetab": HTMLMenuElement;
   "tm-freezeTab": HTMLMenuElement;
   "tm-lockTab": HTMLMenuElement;
+  "tm-tabsList-menu": ClosedObjectsUtils.PopupElement;
   "tm-openinverselink": HTMLMenuElement;
   "tm-protectTab": HTMLMenuElement;
   "tm-content-undoCloseList-menu": HTMLMenuElement;
@@ -171,6 +173,10 @@ interface XULPopupElement {
   openPopup(anchorElement?: AnchorElement1, options?: StringOrOpenPopupOptions, x?: number, y?: number, isContextMenu?: boolean, attributesOverride?: boolean, triggerEvent?: Event | null): void;
 }
 
+interface GetClosestMap {
+  menupopup: ClosedObjectsUtils.PopupElement;
+}
+
 interface EventTarget {
   _content: Element;
   childNodes: NodeList;
@@ -257,6 +263,12 @@ declare namespace TabmixArrowScrollboxNS {
       sample(timeStamp: number): void;
     };
 
+    _continueScroll(index: number): void;
+    _distanceScroll(event: PopupEvent): void;
+    _pauseScroll(): void;
+    _startScroll(index: number): void;
+    _stopScroll(): void;
+
     _ensureElementIsVisibleAnimationFrame: number;
     _scrollButtonDownLeft: HTMLButtonElement;
     _scrollButtonDownRight: HTMLButtonElement;
@@ -286,7 +298,7 @@ declare namespace TabmixArrowScrollboxNS {
       observe: (aSubject: unknown, aTopic: string, aData: string) => void;
     };
 
-    _createScrollButtonContextMenu: (aEvent: TabmixAllTabsNS.PopupEvent) => void;
+    _createScrollButtonContextMenu: (aEvent: PopupEvent) => void;
     _ensureElementIsVisibleByIndex: (this: ASB, element: Tab, instant: boolean, index: number) => void;
     _distanceToRow: (amountToScroll: number) => number;
     _enterVerticalMode: (this: ASB, blockUnderflow?: boolean) => void;
@@ -310,6 +322,7 @@ declare namespace TabmixArrowScrollboxNS {
   type RSB = RightScrollBox;
   export interface RightScrollBox extends MozXULElement, Omit<MockedGeckoTypes.ArrowScrollbox, "getElementsByTagName"> {
     addEventListener<K extends keyof CustomElementEventMap>(type: K, listener: (this: Element, ev: CustomElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions): void;
+    addButtonListeners: (button: HTMLButtonElement, side: "left" | "right") => void;
     constructor: (this: RSB) => RSB;
     finishScroll: (this: RSB, aEvent: RSBDragEvent) => void;
     fragment: Node;
@@ -329,8 +342,7 @@ declare namespace TabmixClosedTabsNS {
 
   type PanelView = ClosedObjectsUtils.CustomPanelView;
   type Popup = ClosedObjectsUtils.PopupElement;
-  type Menuitem = ClosedObjectsUtils.Menuitem & {closedGroup?: null; _tabmix_middleClicked?: boolean};
-  type PopupEvent = Omit<MouseEvent, "target" | "originalTarget"> & {target: Menuitem; originalTarget: Menuitem};
+  type Menuitem = ClosedObjectsUtils.Menuitem;
   type ButtonEvent = Omit<MouseEvent, "target"> & {target: HTMLButtonElement};
   type ClosedGroup = {id: string; sourceClosedId: number; sourceWindowId: string};
   type MenuItemInClosedGroup = HTMLElement & {closedGroup: ClosedGroup; _tabmix_middleClicked?: boolean};
@@ -358,7 +370,7 @@ declare namespace TabmixClosedTabsNS {
   function restoreCommand(aEvent: PopupEvent): void;
   function setPopupWidth(popup: Popup | Node): void;
   function checkForMiddleClick(aEvent: PopupEvent): void;
-  function contextMenuOnPopupShowing(popup: Popup): boolean;
+  function contextMenuOnPopupShowing(event: MenuPopupEvent, popup: Popup): void;
   function contextMenuOnCommand(event: PopupEvent): void;
   function doCommand(command: "restoreTab" | "addBookmarks" | "copyTabUrl", where: string, item: Menuitem, keepMenuOpen?: boolean): void;
   function addBookmarks(source: ClosedDataSource, index: number): void;
@@ -390,7 +402,7 @@ declare namespace TabmixContextNS {
   function _prepareContextMenu(): void;
   function updateMainContextMenu(event: ContextEvent): boolean;
   function _showAutoReloadMenu(menuId: "tm-autoreload_menu" | "tm-autoreloadTab_menu", pref: string, test: boolean): void;
-  function openMultipleLinks(check: boolean): boolean;
+  function openMultipleLinks(check?: boolean): boolean;
   function updateSelectedTabsCount(itemOrId: HTMLElement | string, isVisible: boolean): number;
 }
 
@@ -435,33 +447,10 @@ declare namespace TabmixEventListenerNS {
 
 type OriginalNode = Node;
 declare namespace TabmixAllTabsNS {
-  interface PopupExtends {
-    appendChild(node: Menuitem): Menuitem;
-    readonly childNodes: HTMLCollectionBase_G<Menuitem>;
-    readonly firstChild: Menuitem;
-    readonly lastChild: Menuitem;
-    openPopup: OpenPopup;
-    readonly parentNode: HTMLButtonElement;
-    scrollBox: ScrollBox;
-    readonly triggerNode: Menuitem;
-  }
-  type PopupElement = Omit<XULPopupElement, keyof PopupExtends> & PopupExtends;
+  type PopupElement = ClosedObjectsUtils.PopupElement;
   type ButtonEvent = Omit<MouseEvent, "target"> & {target: PopupElement};
-  type TabEvent = Omit<MouseEvent, "target"> & {target: Tab; originalTarget: Menuitem};
-  type PopupEvent = GenericEvent<HTMLButtonElement, MouseEvent>;
-
-  interface Menuitem extends Omit<HTMLMenuElement, "parentNode"> {
-    readonly parentNode: PopupElement;
-    remove(): void;
-    tab: Tab;
-  }
-
-  interface ScrollBox extends Menuitem {
-    ensureElementIsVisible: (item: Menuitem) => void;
-  }
-
-  type PopupOptions = Omit<OpenPopupOptions, "triggerEvent"> & {triggerEvent?: PopupEvent | null};
-  type OpenPopup = (anchorElement?: CustomElement<HTMLButtonElement> | null, options?: PopupOptions | string, x?: number, y?: number, isContextMenu?: boolean, attributesOverride?: boolean, triggerEvent?: PopupEvent) => void;
+  type TabEvent = PopupEvent;
+  type Menuitem = ClosedObjectsUtils.Menuitem;
 
   let _selectedItem: Menuitem | null;
   let backupLabel: string;
@@ -470,7 +459,7 @@ declare namespace TabmixAllTabsNS {
   function checkForCtrlClick(aEvent: PopupEvent): void;
   function isAfterCtrlClick(aButton: HTMLElement): boolean;
   function createScrollButtonTabsList(event: PopupEvent, side: "left" | "right"): void;
-  function removeTabFromList(event: TabEvent, popup: PopupElement, aType: number): void;
+  function removeTabFromList(event: TabEvent): void;
   function createTabsList(popup: PopupElement, aType: number): boolean;
   function beforeCommonList(popup: PopupElement, aCloseTabsPopup?: boolean): void;
   function createCommonList(popup: PopupElement, aType: number, side?: "left" | "right"): void;
@@ -493,7 +482,6 @@ interface LastTabTabs {
 }
 
 declare namespace TabmixLastTabNS {
-  type PopupEvent = Omit<MouseEvent, "target"> & {target: TabmixAllTabsNS.Menuitem};
   type KeyEvent = Omit<KeyboardEvent, "target"> & {target: TabmixAllTabsNS.Menuitem};
 
   let CtrlKey: boolean;
@@ -923,6 +911,7 @@ interface TabmixSessionManager {
   overrideHomepage: string | nsIArray | Tab | null;
   privateTabChanged: (event: TabmixEventListenerNS.TabEvent) => void;
   restoreLastSession: () => void;
+  sessionUtil: (action: string, what: string, sessionPath?: string) => void;
   tabClosed: (tab: Tab) => void;
   tabMoved: (aTab: Tab, oldPos: number, newPos: number) => void;
   tabSelected: (needFlush: boolean) => void;

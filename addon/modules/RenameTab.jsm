@@ -78,6 +78,11 @@ const RenameTab = {
     this.panel._overlayLoaded = true;
     this.panel.hidden = false;
 
+    this.panel.addEventListener("popupshown", this);
+    this.panel.addEventListener("popuphidden", this);
+    this.panel.addEventListener("command", this);
+    this.panel.addEventListener("input", this);
+
     this._element("tabmixRenametab_doneButton").setAttribute("data-l10n-id", "bookmark-panel-save-button");
     this._element("tabmixRenametab_deleteButton").label = TabmixSvc.getDialogStrings("Cancel");
 
@@ -149,11 +154,44 @@ const RenameTab = {
     this.hidePopup();
   },
 
-  handleEvent(aEvent) {
-    if (aEvent.type == "keypress" &&
-         aEvent.keyCode == aEvent.DOM_VK_RETURN &&
-         aEvent.target.localName != "button")
-      this.update();
+  handleEvent(event) {
+    switch (event.type) {
+      case "command":
+        this.handleCommand(event);
+        break;
+      case "input":
+        this.onNewTitle(event.target.value);
+        break;
+      case "keypress":
+        if (event.keyCode === event.DOM_VK_RETURN &&
+            event.target.localName !== "button") {
+          this.update();
+        }
+        break;
+      case "popupshown":
+        this.onpopupshown(event);
+        break;
+      case "popuphidden":
+        this.onpopuphidden(event);
+        break;
+    }
+  },
+
+  handleCommand(event) {
+    switch (event.target.id) {
+      case "tabmixRenametab_resetButton":
+        this.resetTitle();
+        break;
+      case "tabmixRenametab_checkbox":
+        this.data.permanently = event.target.checked;
+        break;
+      case "tabmixRenametab_doneButton":
+        this.update();
+        break;
+      case "tabmixRenametab_deleteButton":
+        this.hidePopup();
+        break;
+    }
   },
 
   onpopupshown(aEvent) {

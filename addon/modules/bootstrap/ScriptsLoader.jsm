@@ -103,6 +103,8 @@ const ScriptsLoader = {
     }
 
     window.Tabmix.promiseOverlayLoaded = promiseOverlayLoaded;
+
+    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/click/listeners.js", window);
   },
 
   _addListeners(window) {

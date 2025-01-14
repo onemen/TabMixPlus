@@ -1,3 +1,4 @@
+/* eslint-disable mozilla/balanced-listeners */
 "use strict";
 
 /* eslint curly: 2 */
@@ -30,22 +31,44 @@ const widgets = {
         <toolbarbutton id="tabmix-closedTabsButton"
           class="toolbarbutton-1 subviewbutton-nav"
           label="&closedtabsbtn.label;"
-          observes="tmp_undocloseButton"
-          oncommand="TMP_ClosedTabs.handleButtonEvent(event);"
-          onclick="TMP_ClosedTabs.handleButtonEvent(event);"
-          onmousedown="TabmixAllTabs.checkForCtrlClick(event);"
-          onmouseup="if (event.target == this) setTimeout(function(b) {b.removeAttribute('afterctrlclick')}, 0, this);"
-          ondragover="TMP_undocloseTabButtonObserver.onDragOver(event);"
-          ondragenter="TMP_undocloseTabButtonObserver.onDragOver(event);"
-          ondrop="TMP_undocloseTabButtonObserver.onDrop(event);"
-          ondragexit="TMP_undocloseTabButtonObserver.onDragExit(event);">
-        </toolbarbutton>
+          observes="tmp_undocloseButton"/>
         <toolbarbutton id="tabmix-closedTabs-dropmarker"
           class="toolbarbutton-1 toolbarbutton-combined-buttons-dropmarker"
           tooltiptext="&closedtabsbtn.tooltip;"
-          observes="tmp_undocloseButton"
-          oncommand="Tabmix.closedObjectsUtils.showSubView(event)"/>
+          observes="tmp_undocloseButton"/>
       </toolbaritem>`;
+    },
+    onBuild(node) {
+      const [button, dropmarker] = node.children;
+      button.addEventListener("command", event => {
+        node.ownerGlobal.TMP_ClosedTabs.handleButtonEvent(event);
+      });
+      button.addEventListener("click", event => {
+        node.ownerGlobal.TMP_ClosedTabs.handleButtonEvent(event);
+      });
+      button.addEventListener("mousedown", event => {
+        node.ownerGlobal.TabmixAllTabs.checkForCtrlClick(event);
+      });
+      button.addEventListener("mouseup", event => {
+        if (event.target == button) {
+          node.ownerGlobal.setTimeout(() => button.removeAttribute("afterctrlclick"), 0);
+        }
+      });
+      button.addEventListener("dragover", event => {
+        node.ownerGlobal.TMP_undocloseTabButtonObserver.onDragOver(event);
+      });
+      button.addEventListener("dragenter", event => {
+        node.ownerGlobal.TMP_undocloseTabButtonObserver.onDragOver(event);
+      });
+      button.addEventListener("drop", event => {
+        node.ownerGlobal.TMP_undocloseTabButtonObserver.onDrop(event);
+      });
+      button.addEventListener("dragexit", event => {
+        node.ownerGlobal.TMP_undocloseTabButtonObserver.onDragExit(event);
+      });
+      dropmarker.addEventListener("command", event => {
+        node.ownerGlobal.Tabmix.closedObjectsUtils.showSubView(event);
+      });
     },
   },
   closedWindows: {
@@ -64,9 +87,13 @@ const widgets = {
         <toolbarbutton id="tabmix-closedWindowsButton"
           class="toolbarbutton-1 subviewbutton-nav"
           observes="tmp_closedwindows"
-          oncommand="Tabmix.closedObjectsUtils.showSubView(event)"
           label="&closedwindowsbtn.label;"/>
       </toolbaritem>`;
+    },
+    onBuild(node) {
+      node.firstChild.addEventListener("command", event => {
+        node.ownerGlobal.Tabmix.closedObjectsUtils.showSubView(event);
+      });
     },
   },
   alltabs: {
@@ -83,9 +110,13 @@ const widgets = {
         widget-type="button-and-view">
       <toolbarbutton id="tabmix-alltabs-button"
         class="toolbarbutton-1 subviewbutton-nav tabs-alltabs-button"
-        data-l10n-id="tabs-toolbar-list-all-tabs"
-        oncommand="Tabmix.allTabs.showAllTabsPanel(event);"/>
+        data-l10n-id="tabs-toolbar-list-all-tabs"/>
       </toolbaritem>`;
+    },
+    onBuild(node) {
+      node.firstChild.addEventListener("command", event => {
+        node.ownerGlobal.Tabmix.allTabs.showAllTabsPanel(event);
+      });
     },
   },
   tabsCloseButton: {
@@ -107,7 +138,7 @@ const widgets = {
         cui-areatype="toolbar"
         removable="false"/>`;
     },
-    onBuild(document, node) {
+    onBuild(node, document) {
       document.l10n?.translateElements([node]).then(() => {
         node.removeAttribute("data-l10n-id");
         node.removeAttribute("data-l10n-args");
@@ -130,7 +161,7 @@ function on_build(widget) {
     parent.appendChild(node);
     const child = parent.childNodes[0];
     if (onBuild) {
-      onBuild(document, child);
+      onBuild(child, document);
     }
     return child;
   };

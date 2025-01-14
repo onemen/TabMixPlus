@@ -39,9 +39,6 @@ const AutoReload = {
     var win = aTab.ownerGlobal;
     let popup = win.document.getElementById("autoreload_popup");
     let parent = aPopup.parentNode;
-    win.Tabmix.setItem(aPopup, "onpopuphidden", "this._tab = null;");
-    win.Tabmix.setItem(aPopup, "oncommand",
-      "Tabmix.autoReload.setTime(this._tab, event.originalTarget.value);event.stopPropagation();");
     for (let i = 0; i < popup.childNodes.length; i++)
       aPopup.appendChild(popup.childNodes[i].cloneNode(true));
     if (parent.id != "reload-button") {
@@ -51,6 +48,34 @@ const AutoReload = {
     aPopup.inited = true;
   },
 
+  addEventListener(popup) {
+    popup.listenersAdded = true;
+    popup.addEventListener("command", event => {
+      event.stopPropagation();
+      switch (event.target.dataset.command) {
+        case "toggle":
+          this.toggle(popup._tab);
+          break;
+        case "customTime":
+          this.setCustomTime(popup._tab);
+          break;
+        case "enableAllTabs":
+          this.enableAllTabs(popup.ownerGlobal.gBrowser);
+          break;
+        case "disableAllTabs":
+          this.disableAllTabs(popup.ownerGlobal.gBrowser);
+          break;
+        default:
+          this.setTime(popup._tab, event.originalTarget.value);
+          break;
+      }
+    });
+
+    popup.addEventListener("popuphidden", () => {
+      popup._tab = null;
+    });
+  },
+
   onPopupShowing(aPopup, aTab) {
     var menuItems = aPopup.childNodes;
     aPopup._tab = null;
@@ -58,8 +83,12 @@ const AutoReload = {
       aTab = this._currentTab(aTab);
 
     // populate the menu on the first popupShowing
-    if (!aPopup.id && !aPopup.inited)
+    if (!aPopup.id && !aPopup.inited) {
       this.addClonePopup(aPopup, aTab);
+    }
+    if (!aPopup.listenersAdded) {
+      this.addEventListener(aPopup);
+    }
     aPopup._tab = aTab;
 
     if (aPopup._tab.autoReloadEnabled === undefined)

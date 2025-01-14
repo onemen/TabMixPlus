@@ -486,6 +486,8 @@ Tabmix.multiRow = {
         this.textContent = "";
         this._scrollButtonUp = this.shadowRoot.getElementById("scrollbutton-up");
         this._scrollButtonDown = this.shadowRoot.getElementById("scrollbutton-down");
+        this.addButtonListeners(this._scrollButtonUp, "left");
+        this.addButtonListeners(this._scrollButtonDown, "right");
 
         this.addEventListener("dragover", event => {
           if (TMP_tabDNDObserver.useTabmixDnD(event)) {
@@ -535,23 +537,11 @@ Tabmix.multiRow = {
         <spacer part="overflow-end-indicator"/>
         <toolbarbutton id="scrollbutton-up" part="scrollbutton-up"
                 inherits="orient,disabled=scrolledtostart"
-                oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'left');"
-                anonid="scrollbutton-up-right"
-                onclick="if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._distanceScroll(event);"
-                onmousedown="if (event.button === 0) if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._startScroll(-1);"
-                onmouseup="if (event.button === 0) gBrowser.tabContainer.arrowScrollbox._stopScroll();"
-                onmouseover="if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._continueScroll(-1);"
-                onmouseout="gBrowser.tabContainer.arrowScrollbox._pauseScroll();">
+                anonid="scrollbutton-up-right">
         </toolbarbutton>
         <toolbarbutton id="scrollbutton-down" part="scrollbutton-down"
                 inherits="orient,disabled=scrolledtoend"
-                oncontextmenu="TabmixAllTabs.createScrollButtonTabsList(event, 'right');"
-                anonid="scrollbutton-down-right"
-                onclick="if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._distanceScroll(event);"
-                onmousedown="if (event.button === 0) if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._startScroll(1);"
-                onmouseup="if (event.button === 0) gBrowser.tabContainer.arrowScrollbox._stopScroll();"
-                onmouseover="if (!this.disabled) gBrowser.tabContainer.arrowScrollbox._continueScroll(1);"
-                onmouseout="gBrowser.tabContainer.arrowScrollbox._pauseScroll();">
+                anonid="scrollbutton-down-right">
         </toolbarbutton>
         `;
       }
@@ -563,6 +553,37 @@ Tabmix.multiRow = {
           );
         }
         return document.importNode(this._fragment, true);
+      }
+
+      /** @type {RSB["addButtonListeners"]} */
+      addButtonListeners(button, side) {
+        const scrollDirection = side === "left" ? -1 : 1;
+        button.addEventListener("contextmenu", (/** @type {PopupEvent } */ event) => {
+          TabmixAllTabs.createScrollButtonTabsList(event, side);
+        });
+        button.addEventListener("click", (/** @type {PopupEvent } */ event) => {
+          if (!event.target.disabled) {
+            gBrowser.tabContainer.arrowScrollbox._distanceScroll(event);
+          }
+        });
+        button.addEventListener("mousedown", (/** @type {PopupEvent } */ event) => {
+          if (event.button === 0 && !event.target.disabled) {
+            gBrowser.tabContainer.arrowScrollbox._startScroll(scrollDirection);
+          }
+        });
+        button.addEventListener("mouseup", (/** @type {PopupEvent } */ event) => {
+          if (event.button === 0) {
+            gBrowser.tabContainer.arrowScrollbox._stopScroll();
+          }
+        });
+        button.addEventListener("mouseover", (/** @type {PopupEvent } */ event) => {
+          if (!event.target.disabled) {
+            gBrowser.tabContainer.arrowScrollbox._continueScroll(scrollDirection);
+          }
+        });
+        button.addEventListener("mouseout", () => {
+          gBrowser.tabContainer.arrowScrollbox._pauseScroll();
+        });
       }
 
       connectedCallback() {

@@ -14,8 +14,7 @@
                  _afterthis="(&afterthis.label;)"
                  tmp_iconic="menuitem-iconic tabmix-newtab-menu-icon menuitem-with-favicon"/>
         <menuitem id="tm-duplicateinWin" insertafter="context_duplicateTabs"
-                 label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"
-                 oncommand="gBrowser.duplicateTabsToWindow(TabContextMenu.contextTab);"/>
+                 label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"/>
 <!--
         <menuitem id="context_reloadTab">
         <menuitem id="context_reloadSelectedTabs">
@@ -34,14 +33,11 @@
 -->
 
         <menuitem id="tm-mergeWindowsTab" insertbefore="context_reopenInContainer"
-                 key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;"
-                 oncommand="Tabmix.MergeWindows.mergeWindows(window);"/>
+                 key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;"/>
         <menuitem id="tm-renameTab" insertbefore="context_reopenInContainer"
-                 label="&renametab.label;" accesskey="&renametab.accesskey;"
-                 oncommand="Tabmix.renameTab.editTitle(TabContextMenu.contextTab);"/>
+                 label="&renametab.label;" accesskey="&renametab.accesskey;"/>
         <menuitem id="tm-copyTabUrl" insertbefore="context_reopenInContainer"
-                 label="&copytaburl.label;" accesskey="&copytaburl.accesskey;"
-                 oncommand="gBrowser.copyTabUrl(TabContextMenu.contextTab);"/>
+                 label="&copytaburl.label;" accesskey="&copytaburl.accesskey;"/>
 <!--
         <menu id="context_reopenInContainer"/>
         <menu id="context_moveTabOptions">
@@ -60,24 +56,20 @@
         <menu id="tm-autoreloadTab_menu" insertbefore="context_closeTabOptions"
               labelTab="&autoReloadTab.label;" accesskeyTab="&autoReloadTab.accesskey;"
               labelSite="&autoReloadSite.label;" accesskeySite="&autoReloadSite.accesskey;">
-           <menupopup onpopupshowing="Tabmix.autoReload.onPopupShowing(this, TabContextMenu.contextTab);"/>
+           <menupopup data-popup="autoReload"/>
         </menu>
         <menu id="context_reloadTabOptions" insertbefore="context_closeTabOptions"
             label="Reload Multiple Tabs">
           <menupopup id="reloadTabOptions">
             <!-- add menu item to reload selected tabs -->
             <menuitem id="tm-reloadLeft"
-                    label="&reloadleft.label;" accesskey="&reloadleft.accesskey;"
-                    oncommand="gBrowser._reloadLeftTabs(TabContextMenu.contextTab);"/>
+                    label="&reloadleft.label;" accesskey="&reloadleft.accesskey;"/>
             <menuitem id="tm-reloadRight"
-                    label="&reloadright.label;" accesskey="&reloadright.accesskey;"
-                    oncommand="gBrowser._reloadRightTabs(TabContextMenu.contextTab);" />
+                    label="&reloadright.label;" accesskey="&reloadright.accesskey;"/>
             <menuitem id="context_reloadAllTabs"
-                    data-lazy-l10n-id="content-blocking-reload-tabs-button"
-                    oncommand="Tabmix.tablib.reloadTabs(Tabmix.visibleTabs.tabs);"/>
+                    data-lazy-l10n-id="content-blocking-reload-tabs-button"/>
             <menuitem id="tm-reloadOther"
-                    label="&reloadother.label;" accesskey="&reloadother.accesskey;"
-                    oncommand="gBrowser.reloadAllTabsBut(TabContextMenu.contextTab);" />
+                    label="&reloadother.label;" accesskey="&reloadother.accesskey;"/>
           </menupopup>
         </menu>
         <menuseparator id="tabmix_reloadTabOptions_separator" insertbefore="context_closeTabOptions" type="tabmix"/>
@@ -85,10 +77,7 @@
         <menu id="tm-undoCloseList" insertbefore="context_closeTabOptions"
                  tmp_iconic="menu-iconic closedtabs-icon"
                  label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;">
-          <menupopup id="tm-undoCloseList-menu"
-            onpopupshowing="if (event.target === this) {Tabmix.closedObjectsUtils.populateClosedTabsMenu(this.parentNode); event.stopPropagation();}"
-            onpopupshown="if (event.target === this) event.stopPropagation();"
-            onpopuphidden="if (event.target === this) TabmixAllTabs.hideCommonList(this);"/>
+          <menupopup id="tm-undoCloseList-menu"/>
         </menu>
 <!--
         <menuitem id="context_closeTab"/>
@@ -101,20 +90,14 @@
         </menu>
 -->
         <menuitem id="tm-closeAllTabs" insertbefore="context_closeOtherTabs"
-                 label="&closeAllTabsMenu.label;" accesskey="&closeall.accesskey;"
-                 oncommand="gBrowser.closeAllTabs();"/>
+                 label="&closeAllTabsMenu.label;" accesskey="&closeall.accesskey;"/>
         <menuitem id="tm-closeSimilar" insertbefore="context_closeOtherTabs"
-                 label="&closeSimilarTab.label;" accesskey="&closeSimilarTab.accesskey;"
-                 oncommand="gBrowser.closeGroupTabs(TabContextMenu.contextTab);"/>
+                 label="&closeSimilarTab.label;" accesskey="&closeSimilarTab.accesskey;"/>
 
         <menuseparator id="tabmix_closeTab_separator" insertbefore="context_undoCloseTab" type="tabmix"/>
         <menu id="tm-docShell" insertbefore="context_undoCloseTab"
                 label="&docShellMenu.label;" accesskey="&docShellMenu.accesskey;">
-         <menupopup
-                onpopupshowing="Tabmix.docShellCapabilities.onGet(this.childNodes, TabContextMenu.contextTab);
-                                event.stopPropagation();"
-                onpopupshown="event.stopPropagation();"
-                oncommand="Tabmix.docShellCapabilities.onSet(TabContextMenu.contextTab,event.originalTarget);">
+         <menupopup id="tabmix-docShell-popup">
            <menuitem label="&allowImage.label;" value="Images" class="menuitem-iconic" type="checkbox" checked="true" />
            <menuitem label="&allowFrame.label;" value="Subframes" class="menuitem-iconic" type="checkbox" checked="true" />
            <menuitem label="&allowRedirect.label;" value="MetaRedirects" class="menuitem-iconic" type="checkbox" checked="true" />
@@ -123,14 +106,11 @@
          </menupopup>
         </menu>
         <menuitem id="tm-freezeTab" insertbefore="context_undoCloseTab"
-                 label="&freezeTabMenu.label;" accesskey="&freezeTabMenu.accesskey;" type="checkbox"
-                 oncommand="gBrowser.freezeTab(TabContextMenu.contextTab);" />
+                  label="&freezeTabMenu.label;" accesskey="&freezeTabMenu.accesskey;" type="checkbox"/>
         <menuitem id="tm-protectTab" insertbefore="context_undoCloseTab"
-                 label="&protectTabMenu.label;" accesskey="&protectTabMenu.accesskey;" type="checkbox"
-                 oncommand="gBrowser.protectTab(TabContextMenu.contextTab);"/>
+                  label="&protectTabMenu.label;" accesskey="&protectTabMenu.accesskey;" type="checkbox"/>
         <menuitem id="tm-lockTab" insertbefore="context_undoCloseTab"
-                 label="&lockTabMenu.label;" accesskey="&lockTabMenu.accesskey;" type="checkbox"
-                 oncommand="gBrowser.lockTab(TabContextMenu.contextTab);"/>
+                  label="&lockTabMenu.label;" accesskey="&lockTabMenu.accesskey;" type="checkbox"/>
         <menuseparator id="tabmix_lockTab_separator" insertbefore="context_undoCloseTab" type="tabmix"/>
 
 <!--

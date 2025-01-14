@@ -958,6 +958,10 @@ Tabmix.allTabs = {
         setTimeout(Tabmix.allTabs.insertSortButton, 0);
       }
     });
+
+    document
+        .getElementById("allTabsMenu_sortTabsButton")
+        .addEventListener("command", () => this.sortTabsInList());
   },
 
   insertSortButton() {
@@ -985,8 +989,10 @@ Tabmix.allTabs = {
         return row;
       };
 
-      panel._populate = function() {
+      // we modify here _populate from TabsListBase class
+      Object.getPrototypeOf(TabsPanel.prototype)._populate = function() {
         let fragment = this.doc.createDocumentFragment();
+        let currentGroupId;
 
         const sortTabs = () => [...this.gBrowser.tabs]
             .sort((a, b) => (a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1));
@@ -995,6 +1001,10 @@ Tabmix.allTabs = {
 
         for (let tab of tabs) {
           if (this.filterFn(tab)) {
+            if (Tabmix.isVersion(1350) && tab.group && tab.group.id != currentGroupId) {
+              fragment.appendChild(this._createGroupRow(tab.group));
+              currentGroupId = tab.group.id;
+            }
             fragment.appendChild(this._createRow(tab));
           }
         }
@@ -1034,7 +1044,6 @@ var TabmixAllTabs = {
   handleEvent: function TMP_AT_handleEvent(aEvent) {
     switch (aEvent.type) {
       case "TabAttrModified": {
-        console.log("TabAttrModified", aEvent);
         /** @type {Tab} */
         let tab = aEvent.target;
         let menuitem = tab.mCorrespondingMenuitem;
@@ -1106,24 +1115,10 @@ var TabmixAllTabs = {
     }
   },
 
-  removeTabFromList: function TMP_removeTabFromList(event, popup, aType) {
-    if (!Tabmix.prefs.getBoolPref("middleclickDelete"))
-      return;
-
-    if (event.button == 1) {
-      let aTab = event.originalTarget.tab;
-      if (popup.parentNode.id == "tm-tabsList" && (aTab.selected || gBrowser.isBlankTab(gBrowser._selectedTab))) {
-        popup.hidePopup();
-        gBrowser.removeTab(aTab, {animate: true});
-        return;
-      }
-      aTab._TMP_removeing = true;
-      gBrowser.removeTab(aTab, {animate: true});
-      if (gBrowser.tabs.length) {
-        this.createTabsList(popup, aType);
-      } else {
-        popup.hidePopup();
-      }
+  removeTabFromList: function TMP_removeTabFromList(event) {
+    if (event.button === 1 && Tabmix.prefs.getBoolPref("middleclickDelete")) {
+      closeMenus(event.target);
+      gBrowser.removeTab(event.originalTarget.tab, {animate: true});
     }
   },
 

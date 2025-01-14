@@ -382,7 +382,10 @@ const Shortcuts = {
       if (typeof aKeyData.command === "string") {
         aWindow.Tabmix.setItem(keyItem, "command", aKeyData.command);
       } else {
-        aWindow.Tabmix.setItem(keyItem, "oncommand", "void(0);");
+        if (keyItem.hasAttribute("oncommand")) {
+          keyItem.removeAttribute("oncommand");
+          keyItem.oncommand = () => void 0;
+        }
         keyItem.addEventListener("command", this, true);
       }
     }

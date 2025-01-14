@@ -682,12 +682,12 @@ var TMP_ClosedTabs = {
     this.doCommand("restoreTab", where, aEvent.originalTarget, keepMenuOpen);
   },
 
-  contextMenuOnPopupShowing(popup) {
+  contextMenuOnPopupShowing(event, popup) {
     const val = this.keepMenuOpen ? "single" : "auto";
     Array.prototype.forEach.call(popup.childNodes, item => {
       item.setAttribute("closemenu", val);
     });
-    return Tabmix.closedObjectsUtils.on_popupshowing(popup);
+    Tabmix.closedObjectsUtils.on_popupshowing(event, popup);
   },
 
   contextMenuOnCommand(event) {
@@ -1186,7 +1186,7 @@ Tabmix.closedObjectsUtils = {
     }
   },
 
-  on_popupshowing(popup) {
+  on_popupshowing(event, popup) {
     const target = popup.triggerNode;
     const showContextMenu = Number(target.getAttribute("value") ?? -1) >= 0;
     if (showContextMenu) {
@@ -1194,8 +1194,9 @@ Tabmix.closedObjectsUtils = {
       popup.addEventListener("popuphidden", () => {
         target.classList.remove("context-open");
       }, {once: true});
+    } else {
+      event.preventDefault();
     }
-    return showContextMenu;
   },
 
   on_delete(node) {
