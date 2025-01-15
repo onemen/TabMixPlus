@@ -989,15 +989,37 @@ Tabmix.allTabs = {
         return row;
       };
 
-      // we modify here _populate from TabsListBase class
-      Object.getPrototypeOf(TabsPanel.prototype)._populate = function() {
+      // TabsListBase class
+      // modify _populateDOM and _populate add _tabmix_sortTabs
+
+      /** @type {MockedGeckoTypes.TabsListBase} */
+      const TabsListBase = Object.getPrototypeOf(TabsPanel.prototype);
+
+      if (Tabmix.isVersion(1350)) {
+        TabsListBase._tabmix_sortTabs = function() {
+          return this.gBrowser.tabs.slice()
+              .sort((a, b) => {
+                if (a.group?.id === b.group?.id) {
+                  return a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1;
+                }
+                const labelA = a.group ? a.group.label.toLowerCase() : a.label.toLowerCase();
+                const labelB = b.group ? b.group.label.toLowerCase() : b.label.toLowerCase();
+                return labelA > labelB ? 1 : -1;
+              });
+        };
+      } else {
+        TabsListBase._tabmix_sortTabs = function() {
+          return this.gBrowser.tabs.slice()
+              .sort((a, b) => (a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1));
+        };
+      }
+
+      TabsListBase._populateDOM = function() {
         let fragment = this.doc.createDocumentFragment();
         let currentGroupId;
 
-        const sortTabs = () => [...this.gBrowser.tabs]
-            .sort((a, b) => (a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1));
         const tabs = typeof sortTabsButton === "object" && sortTabsButton.checked ?
-          sortTabs() : this.gBrowser.tabs;
+          this._tabmix_sortTabs() : this.gBrowser.tabs;
 
         for (let tab of tabs) {
           if (this.filterFn(tab)) {
@@ -1005,13 +1027,21 @@ Tabmix.allTabs = {
               fragment.appendChild(this._createGroupRow(tab.group));
               currentGroupId = tab.group.id;
             }
-            fragment.appendChild(this._createRow(tab));
+            if (!tab.group?.collapsed) {
+              fragment.appendChild(this._createRow(tab));
+            }
           }
         }
 
         this._addElement(fragment);
-        this._setupListeners();
       };
+
+      if (!Tabmix.isVersion(1360)) {
+        TabsListBase._populate = function() {
+          this._populateDOM();
+          this._setupListeners();
+        };
+      }
     }
   },
 

@@ -461,7 +461,7 @@ declare namespace MockedGeckoTypes {
     gBrowser: TabBrowser;
   }
 
-  type MozTabbrowserTabGroup = {color: string; id: string; label: string};
+  type MozTabbrowserTabGroup = {color: string; collapsed: boolean; id: string; label: string};
 
   interface TabsPanel extends TabsListBase {
     prototype: TabsListBase;
@@ -515,8 +515,11 @@ declare namespace MockedGeckoTypes {
     handleEvent(event: Event): void;
     _selectTab(tab: BrowserTab): void;
     _populate(): void;
+    _populateDOM(): void;
     _addElement(elementOrFragment: DocumentFragment | HTMLElement): void;
     _cleanup(): void;
+    _createRow(tab: BrowserTab): TabsPanelRow;
+    _createGroupRow(group: MozTabbrowserTabGroup): TabsPanelRow;
     _setupListeners(): void;
     _cleanupListeners(): void;
     _tabAttrModified(tab: BrowserTab): void;
@@ -524,6 +527,8 @@ declare namespace MockedGeckoTypes {
     _addTab(newtab: BrowserTab): void;
     _tabClose(tab: BrowserTab): void;
     _removeItem(item: TabsPanelRow, tab: BrowserTab): void;
+
+    _tabmix_sortTabs(): BrowserTab[];
   }
 
   interface gTabsPanel {
