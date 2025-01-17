@@ -9,36 +9,23 @@
 **/
 
 /* Override Windows 10 rules */
-@media not all and (-moz-os-version: windows-xp) {
-  @media not all and (-moz-os-version: windows-vista) {
-    @media not all and (-moz-os-version: windows-win7) {
-      @media not all and (-moz-os-version: windows-win8) {
-        #tabbrowser-tabs[tabmix_currentStyle~="bg"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[visuallyselected="true"] > .tab-stack > .tab-background > .tab-background-middle {
-          background-size: auto 100%, auto 100%, auto 100%;
-          background-clip: content-box;
-        }
-      }
-    }
-  }
+#tabbrowser-tabs[tabmix_currentStyle~="bg"] > #tabbrowser-arrowscrollbox > .tabbrowser-tab[visuallyselected="true"] > .tab-stack > .tab-background > .tab-background-middle {
+  background-size: auto 100%, auto 100%, auto 100%;
+  background-clip: content-box;
 }
 
-/* for windows 7 and up */
-@media not all and (-moz-os-version: windows-xp) {
-  @media not all and (-moz-os-version: windows-vista) {
-    #tabbrowser-tabs[tabmix-multibar=true] #tabbrowser-arrowscrollbox > toolbarbutton {
-      vertical-align: bottom;
-    }
+#tabbrowser-tabs[tabmix-multibar=true] #tabbrowser-arrowscrollbox > toolbarbutton {
+  vertical-align: bottom;
+}
 
-    #tabmix-bottom-toolbox > toolbox  {
-      appearance: none;
-      border-top: none;
-      background-color: transparent;
-    }
+#tabmix-bottom-toolbox > toolbox  {
+  appearance: none;
+  border-top: none;
+  background-color: transparent;
+}
 
-    #TabsToolbar[tabbaronbottom]:not(:-moz-lwtheme) {
-      appearance: none;
-    }
-  }
+#TabsToolbar[tabbaronbottom]:not(:-moz-lwtheme) {
+  appearance: none;
 }
 
 #TabsToolbar[tabbaronbottom]::before,

@@ -1598,6 +1598,14 @@ window.gTMPprefObserver = {
       case "extensions.tabmix.pinnedTabScroll":
         gBrowser.tabContainer._positionPinnedTabs();
         break;
+      case "extensions.tabmix.theme_background":
+        this.dynamicRules.themeBackground.style.cssText = "";
+        if (prefValue === 0) {
+          this.dynamicRules.themeBackground.style.setProperty("background-repeat", "repeat-y");
+        } else {
+          this.dynamicRules.themeBackground.style.setProperty("background-size", "cover");
+        }
+        break;
       case "browser.tabs.onTop":
         if (TabmixTabbar.position == 1 && Services.prefs.getBoolPref(prefName)) {
           Services.prefs.setBoolPref(prefName, false);
@@ -1918,6 +1926,18 @@ window.gTMPprefObserver = {
       `#TabsToolbar[tabmix-multibar] ${selectorType}private-browsing-indicator-with-label > image {
         margin-top: 2px;
       }`
+    );
+
+    // Firefox 126, Bug 1884792 - Remove chrome-only :-moz-lwtheme pseudo-class
+    const lwtheme = Tabmix.isVersion(1260) ? "is([lwtheme], [lwtheme-image])" : "-moz-lwtheme";
+    // theme background style for multi-row
+    this.insertRule(
+      `:root[tabmix_lwt]:${lwtheme} #navigator-toolbox,
+       :root[tabmix_lwt]:${lwtheme} #tabmix-bottom-toolbox > toolbox {
+         ${Tabmix.prefs.getIntPref("theme_background") === 0 ?
+              "background-repeat: repeat-y;" : "background-size: cover;"
+          }
+       }`, "themeBackground"
     );
 
     this.dynamicProtonRules();

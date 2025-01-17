@@ -30,11 +30,6 @@
   display: block;
 }
 
-/* ::::  for light weight themes :::: */
-#main-window[tabmix_lwt]:-moz-lwtheme {
-  background-repeat: repeat-y !important;
-}
-
 /* :::: Space on tab bar :::: */
 #tabbrowser-arrowscrollbox[orient="horizontal"][tabmix-tabBarSpace] {
   -moz-margin-start: 0;

@@ -40,6 +40,7 @@
                   name="toolkit.scrollbox.clickToScroll.scrollDelay"                            type="int"/>
       <preference id="pref_maxrow"            name="extensions.tabmix.tabBarMaxRow"             type="int"/>
       <preference id="pref_pinnedTabScroll"   name="extensions.tabmix.pinnedTabScroll"          type="bool"/>
+      <preference id="pref_theme_background"  name="extensions.tabmix.theme_background"         type="int"/>
       <preference id="pref_currentTab"        name="extensions.tabmix.currentTab"               type="bool"/>
       <preference id="pref_unreadTab"         name="extensions.tabmix.unreadTab"                type="bool"/>
       <preference id="pref_unreadTabreload"   name="extensions.tabmix.unreadTabreload"          type="bool"/>
@@ -150,7 +151,7 @@
                 </menulist>
               </hbox>
             </box>
-            <vbox style="height: 54px;">
+            <vbox id="multi-rows-box" style="height: 54px;">
               <vbox id="multi-rows" class="indent">
                 <hbox align="center" id="maxbar">
                   <label value="&maxrow.label;" TSTdisabled="true"/>
@@ -159,6 +160,13 @@
                 <checkbox_tmp id="pinnedTabScroll" label="&pinnedTabScroll.label;"
                               preference="pref_pinnedTabScroll"/>
               </vbox>
+              <hbox id="theme-background-box" align="center" hidden="true">
+                <label value="Theme background style:" style="margin-inline-end: 10px;" TSTdisabled="true"/>
+                <radiogroup id="theme-background" preference="pref_theme_background" style="flex-direction: row;">
+                  <radio value="0" label="Repeat"/>
+                  <radio value="1" label="Cover"/>
+                </radiogroup>
+              </hbox>
             </vbox>
             <checkbox_tmp id="smoothScroll" label="&smoothScroll.label;" preference="pref_smoothScroll"/>
             <hbox align="center" id="clickToScroll.scrollDelay">

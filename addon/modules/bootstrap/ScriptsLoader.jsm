@@ -25,7 +25,12 @@ TabmixChromeUtils.defineLazyModuleGetters(lazy, {
  * stylesheets and scripts for navigator:browser
  */
 const CSS_URLS = [
-  lazy.isVersion(1190) ? "chrome://tabmixplus/content/overlay/browser.css" : "chrome://tabmixplus/content/overlay/browser_before_119.css",
+  lazy.isVersion(1190) ?
+    "chrome://tabmixplus/content/overlay/browser.css" :
+    "chrome://tabmixplus/content/overlay/browser_before_119.css",
+  lazy.isVersion(1260) ?
+    "chrome://tabmixplus/skin/app_version/all/themeStyles.css" :
+    "chrome://tabmixplus/skin/app_version/all/themeStyles_before_126.css",
   "chrome://tabmixplus/content/overlay/multirow.css",
   "chrome://tabmixplus/skin/general.css",
   "chrome://tabmixplus/skin/tab.css",

@@ -362,32 +362,6 @@ so display: none !important; does not hide the button */
   opacity: 0;
 }
 
-/* set background based on rules for #navigator-toolbox
-   from chrome\browser\content\browser\browser.css */
-#tabmix-bottom-toolbox > toolbox:-moz-lwtheme {
-  background-image: var(--lwt-additional-images);
-  background-repeat: var(--lwt-background-tiling);
-  background-position: var(--lwt-background-alignment);
-}
-
-@media not (-moz-os-version: windows-win7) {
-  @media not (-moz-os-version: windows-win8) {
-    #tabmix-bottom-toolbox:-moz-lwtheme {
-      background-color: var(--lwt-accent-color);
-    }
-
-   :root[lwtheme-image] #tabmix-bottom-toolbox > toolbox {
-     background-image: var(--lwt-header-image), var(--lwt-additional-images);
-     background-repeat: no-repeat, var(--lwt-background-tiling);
-     background-position: right top, var(--lwt-background-alignment);
-   }
-
-   #tabmix-bottom-toolbox > toolbox:-moz-window-inactive:-moz-lwtheme {
-     background-color: var(--lwt-accent-color-inactive, var(--lwt-accent-color));
-   }
-  }
-}
-
 /* :::: Fullscreen pseudo-toolbar :::: */
 #fullscr-bottom-toggler {
   bottom: 0;

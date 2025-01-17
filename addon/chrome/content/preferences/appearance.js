@@ -23,6 +23,7 @@ var gAppearancePane = {
       Tabmix.setItem("pinnedTabScroll", "disabled", true);
       Tabmix.setItem("scrollDelay", "disabled", true);
       Tabmix.setItem("smoothScroll", "disabled", true);
+      $("theme-background").disabled = true;
 
       if (Tabmix.isVersion(1330) || floorpVerticalTabbar) {
         const hideTabbar = $("hideTabbar");
@@ -31,6 +32,11 @@ var gAppearancePane = {
         Tabmix.setItem("show-hideTabbar-context-menu", "disabled", true);
         tabBarDisplay.insertBefore(description, tabBarDisplay.firstChild);
       }
+    }
+
+    if (window.opener.document.documentElement.hasAttribute("lwtheme")) {
+      Tabmix.setItem("multi-rows-box", "style", "height: 80px;");
+      Tabmix.setItem("theme-background-box", "hidden", null);
     }
 
     if (
@@ -145,8 +151,9 @@ var gAppearancePane = {
   },
 
   tabsScrollChanged() {
-    var multiRow = $Pref("pref_tabsScroll").value == 2;
+    const multiRow = $Pref("pref_tabsScroll").value == 2;
     $("multi-rows").hidden = !multiRow;
+    $("theme-background-box").hidden = !multiRow || !window.opener.document.documentElement.hasAttribute("lwtheme");
   },
 
   tabmixCustomizeToolbar() {

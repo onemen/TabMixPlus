@@ -15,15 +15,6 @@
   background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 64, 16, 48);
 }
 
-#tabmix-tabs-closebutton:not(:hover):-moz-lwtheme-brighttext {
-  background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 80, 16, 64);
-}
-
-#tabmix-tabs-closebutton:not(:hover):-moz-lwtheme-darktext {
-  /*noinspection CssInvalidFunction*/
-  background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 96, 16, 80);
-}
-
 /* set on linux we need to set vertical align even if the button is hidden*/
 #tabbrowser-tabs[tabmix-multibar] #tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;

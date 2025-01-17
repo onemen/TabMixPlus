@@ -138,18 +138,12 @@
   align-items: flex-start;
 }
 
-@media (-moz-windows-compositor) {
+@media (-moz-platform: windows) {
   #TabsToolbar[tabmix-multibar] .titlebar-buttonbox {
     display: flex;
-  }
-
-  @media not (-moz-platform: windows-win7) {
-    @media not (-moz-platform: windows-win8) {
-      #TabsToolbar[tabmix-multibar] toolbarbutton.titlebar-button {
-        padding-block: 12px;
-        align-self: flex-start;
-      }
-    }
+    align-items: center !important;
+    height: var(--tab-min-height_mlt);
+    margin-block: 3px;
   }
 }
 

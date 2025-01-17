@@ -10,7 +10,3 @@
 #TabsToolbar[tabbaronbottom] {
   background-image: none !important;
 }
-
-#TabsToolbar[tabbaronbottom]:not(:-moz-lwtheme) {
-  border-top: 1px solid rgba(10, 31, 51, 0.35);
-}

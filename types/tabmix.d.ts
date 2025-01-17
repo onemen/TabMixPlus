@@ -27,7 +27,7 @@ interface CSSRule {
   readonly style: CSSStyleDeclaration;
 }
 
-type RulesTYpes = "max-rows" | "visibleRows" | "width" | "tabMinHeight";
+type RulesTypes = "max-rows" | "visibleRows" | "width" | "tabMinHeight" | "themeBackground";
 interface gTMPprefObserver {
   _marginStart: string;
   _singleWindowUI_initialized: boolean;
@@ -36,7 +36,7 @@ interface gTMPprefObserver {
   addDynamicRules: () => void;
   blockTabClickingOptions: (prefName: string) => void;
   changeNewTabButtonSide: (aPosition: number) => void;
-  dynamicRules: (Record<RulesTYpes, CSSRule> & {[key: string]: CSSRule}) | {[key: string]: CSSRule};
+  dynamicRules: (Record<RulesTypes, CSSRule> & {[key: string]: CSSRule}) | {[key: string]: CSSRule};
   dynamicProtonRules: () => void;
   getStyleSheets: (aHref: string, aFirst: boolean) => CSSStyleSheet[];
   get tabStyleSheet(): CSSStyleSheet;

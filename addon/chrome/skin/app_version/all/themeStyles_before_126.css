@@ -1,0 +1,58 @@
+/**
+*  Bug 1884792 - Remove chrome-only :-moz-lwtheme pseudo-class
+*  since Firefox 126 use :root[lwtheme] or :root[lwtheme-image]
+*  this file is for Firefox version before 126
+*/
+
+/* set background based on rules for #navigator-toolbox
+ from chrome\browser\content\browser\browser.css */
+ #tabmix-bottom-toolbox > toolbox:-moz-lwtheme {
+  background-image: var(--lwt-additional-images);
+  background-repeat: var(--lwt-background-tiling);
+  background-position: var(--lwt-background-alignment);
+}
+
+#tabmix-bottom-toolbox:-moz-lwtheme {
+  background-color: var(--lwt-accent-color);
+}
+
+:root[lwtheme-image] #tabmix-bottom-toolbox > toolbox {
+  background-image: var(--lwt-header-image), var(--lwt-additional-images);
+  background-repeat: no-repeat, var(--lwt-background-tiling);
+  background-position: right top, var(--lwt-background-alignment);
+}
+
+#tabmix-bottom-toolbox > toolbox:-moz-window-inactive:-moz-lwtheme {
+  background-color: var(--lwt-accent-color-inactive, var(--lwt-accent-color));
+}
+
+@media (-moz-platform: windows) {
+  #TabsToolbar[tabbaronbottom]:not(:-moz-lwtheme) {
+    appearance: none;
+    border-top: 1px solid rgba(10, 31, 51, 0.35);
+  }
+}
+
+@media (-moz-platform: linux) {
+  :root[lwtheme-brighttext] #tabmix-tabs-closebutton:not(:hover) {
+    background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 80, 16, 64);
+  }
+
+  :root:-moz-lwtheme:not([lwtheme-brighttext]) #tabmix-tabs-closebutton:not(:hover) {
+    background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 96, 16, 80);
+  }
+}
+
+@media (-moz-platform: macos) {
+  #TabsToolbar[tabmix-multibar]:not(:-moz-lwtheme) {
+    background-repeat: repeat;
+    background-color: rgb(225, 225, 225);
+    background-image: linear-gradient(rgb(232, 232, 232), rgb(211, 211, 211));
+  }
+
+  /* for mac - look in pinstripe/browser/browser.css */
+  #tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-label-container > .tab-label:not([selected="true"]):-moz-lwtheme,
+  #tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]):-moz-lwtheme {
+    opacity: .8;
+  }
+}
