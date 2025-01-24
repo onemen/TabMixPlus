@@ -226,10 +226,11 @@ declare namespace TabDNDObserverNS {
   function hideDragoverMessage(): void;
   function _getDropIndex(event: DragEvent, options?: {dragover?: boolean; children?: Tab[]}): DragEventParams | number;
   function eventParams(event: DragEvent): DragEventParams;
-  function _getDNDIndex(aEvent: DragEvent): number;
-  function getNewIndex(event: DragEvent): number;
+  function _getDNDIndex(aEvent: DragEvent, tab: Tab | null): number;
+  function getNewIndex(event: DragEvent, tab: Tab | null): number;
   function getLeft_Right(event: DragEvent, newIndex: number, oldIndex: number, dragType: number): number;
   function getDragType(sourceNode: HTMLLinkElement | Tab | null): {dragType: number; tab: Tab | null};
+  function getDropIndicatorMarginX(draggedTab: Tab, newIndex: number, addWidth: boolean, tabRect: DOMRect, rect: DOMRect, defaultMargin: number): number;
   function getDropIndicatorMarginY(ind: HTMLElement, tabRect: DOMRect, rect: DOMRect): number;
   function isLastTabInRow(newIndex: number, mouseIndex: number, children: Tab[]): boolean;
   function clearDragmark(): void;

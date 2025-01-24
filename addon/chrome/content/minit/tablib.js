@@ -364,6 +364,15 @@ Tabmix.tablib = {
           '$&'
       ).toCode();
     }
+
+    if (!Tabmix.isVersion(1300)) {
+      Object.defineProperty(gBrowser, 'pinnedTabCount', {
+        get: function pinnedTabCount() {
+          return gBrowser._numPinnedTabs;
+        },
+        configurable: true
+      });
+    }
   },
 
   change_tabContainer: function change_tabContainer() {
@@ -1445,11 +1454,7 @@ Tabmix.tablib = {
       }
 
       // we always restore pinned tabs no need to warn about closing
-      if (Tabmix.isVersion(1300)) {
-        if (this.pinnedTabCount && !onExit) {
-          addProtected(this.tabContainer.getElementsByAttribute("pinned", true));
-        }
-      } else if (this._numPinnedTabs && !onExit) {
+      if (this.pinnedTabCount && !onExit) {
         addProtected(this.tabContainer.getElementsByAttribute("pinned", true));
       }
 

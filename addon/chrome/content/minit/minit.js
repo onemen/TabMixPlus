@@ -326,13 +326,23 @@ var TMP_tabDNDObserver = {
     )._replace(
       /(?:const|let) tabRect = children[^;]*;/g,
       `$&
-      newMarginY = TMP_tabDNDObserver.getDropIndicatorMarginY(ind, tabRect, rect);`,
+      newMarginY = TMP_tabDNDObserver.getDropIndicatorMarginY(ind, draggedTab?.pinned ? draggedTab.getBoundingClientRect() : tabRect, rect);`,
     )._replace(
-      'newMargin = rect.right - tabRect.right',
-      '$& + (addWidth ? tabRect.width : 0)'
+      // there is bug in firefox when swapping margin for RTL
+      /\[minMargin, maxMargin\]\s=[^;]*;/,
+      '[minMargin, maxMargin] = [minMargin, maxMargin]'
     )._replace(
-      'newMargin = tabRect.left - rect.left',
-      '$& + (addWidth ? tabRect.width : 0)'
+      // fix for the case user drag pinned tab to a scroll button
+      'newMargin = pixelsToScroll > 0 ? maxMargin : minMargin;',
+      `if (draggedTab?.pinned) {
+          let tabRect = gBrowser.visibleTabs[gBrowser.pinnedTabCount - 1].getBoundingClientRect();
+          newMargin = RTL_UI ? rect.right - tabRect.left : tabRect.right - rect.left;
+        } else {
+          $&
+        }`
+    )._replace(
+      /newMargin = (rect.right|tabRect.right|tabRect.left) - (rect.left|tabRect.right|tabRect.left)/g,
+      'newMargin = TMP_tabDNDObserver.getDropIndicatorMarginX(draggedTab, newIndex, addWidth, tabRect, rect, $1 - $2)'
     )._replace(
       'ind.style.transform = "translate(" + Math.round(newMargin) + "px)";',
       'ind.style.transform = "translate(" + Math.round(newMargin) + "px," + Math.round(newMarginY) + "px)";',
@@ -451,12 +461,17 @@ var TMP_tabDNDObserver = {
 
   useTabmixDnD(aEvent) {
     const tabBar = gBrowser.tabContainer;
-    return (
-      tabBar.getAttribute("orient") == "horizontal" &&
-      (!this._moveTabOnDragging ||
-        TabmixTabbar.hasMultiRows ||
-        aEvent.dataTransfer.mozTypesAt(0)[0] !== this.TAB_DROP_TYPE)
-    );
+    if (tabBar.getAttribute("orient") !== "horizontal") {
+      return false;
+    }
+    if (!this._moveTabOnDragging) {
+      return true;
+    }
+    const draggedTab = aEvent.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
+    if (draggedTab?.pinned) {
+      return false;
+    }
+    return TabmixTabbar.hasMultiRows || !draggedTab;
   },
 
   handleEvent(event) {
@@ -554,7 +569,7 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    if (!disAllowDrop) {
+    if (!disAllowDrop && !["scrollbutton-up", "scrollbutton-down"].includes(event.originalTarget.id)) {
       this.hideDragoverMessage();
       const {dragType, oldIndex, newIndex} = this.eventParams(event);
       if (
@@ -655,6 +670,14 @@ var TMP_tabDNDObserver = {
     else if (event.screenX >= tabStrip.scrollbox.screenX + tabStrip.scrollClientRect.width)
       targetAnonid = ltr ? "scrollbutton-down" : "scrollbutton-up";
 
+    const pinnedTabCount = gBrowser.pinnedTabCount;
+    if (pinnedTabCount && targetAnonid === "scrollbutton-up") {
+      const pinnedTabRect = gBrowser.visibleTabs[pinnedTabCount - 1]?.getBoundingClientRect() ?? {right: 0, left: 0};
+      if (ltr ? event.screenX < pinnedTabRect.right : event.screenX > pinnedTabRect.left) {
+        targetAnonid = null;
+      }
+    }
+
     switch (targetAnonid) {
       case "scrollbutton-up":
       case "scrollbutton-up-right":
@@ -671,6 +694,23 @@ var TMP_tabDNDObserver = {
       tabStrip.scrollByPixels((ltr ? scrollDirection : -scrollDirection) * scrollIncrement, true);
       event.preventDefault();
       event.stopPropagation();
+
+      if (["scrollbutton-up", "scrollbutton-down"].includes(targetAnonid ?? "")) {
+        let arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
+        let rect = arrowScrollbox.getBoundingClientRect();
+        let scrollRect = arrowScrollbox.scrollClientRect;
+        let minMargin = scrollRect.left - rect.left;
+        let maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
+        let newMargin = scrollDirection > 0 ? maxMargin : minMargin;
+        const ind = gBrowser.tabContainer._tabDropIndicator;
+        ind.hidden = false;
+        newMargin += ind.clientWidth / 2;
+        if (RTL_UI) {
+          newMargin *= -1;
+        }
+        ind.style.transform = "translate(" + Math.round(newMargin) + "px, 0px)";
+      }
+
       return true;
     }
     return false;
@@ -702,7 +742,7 @@ var TMP_tabDNDObserver = {
     const sourceNode = this.getSourceNode(dt);
     const {dragType, tab} = this.getDragType(sourceNode);
     const oldIndex = tab ? tab._tPos : -1;
-    let newIndex = this._getDNDIndex(event);
+    let newIndex = this._getDNDIndex(event, tab);
     const mouseIndex = newIndex;
 
     if (newIndex < gBrowser.tabs.length) {
@@ -725,8 +765,8 @@ var TMP_tabDNDObserver = {
   },
 
   // get _tPos from group index
-  _getDNDIndex(aEvent) {
-    var indexInGroup = this.getNewIndex(aEvent);
+  _getDNDIndex(aEvent, draggedTab) {
+    var indexInGroup = this.getNewIndex(aEvent, draggedTab);
     var tabs = Tabmix.visibleTabs.tabs;
     var lastIndex = tabs.length - 1;
     if (indexInGroup < 0 || indexInGroup > lastIndex)
@@ -735,7 +775,7 @@ var TMP_tabDNDObserver = {
     return tabs[indexInGroup]._tPos;
   },
 
-  getNewIndex(event) {
+  getNewIndex(event, draggedTab) {
     /** @param {Tab} tab @param {number} top */
     let getTabRowNumber = (tab, top) => (tab.pinned ? 1 : Tabmix.tabsUtils.getTabRowNumber(tab, top));
     // if mX is less then the first tab return 0
@@ -758,7 +798,7 @@ var TMP_tabDNDObserver = {
       // adjust mouseY position when it is in the margin area
       const tabStrip = gBrowser.tabContainer.arrowScrollbox;
       const singleRowHeight = tabStrip.singleRowHeight;
-      const firstVisibleRow = Math.round(tabStrip.scrollPosition / singleRowHeight) + 1;
+      const firstVisibleRow = draggedTab?.pinned ? 1 : Math.round(tabStrip.scrollPosition / singleRowHeight) + 1;
       const {height} = tabStrip.getBoundingClientRect();
       const top = tabStrip.screenY;
       if (mY >= top + height - this._multirowMargin) {
@@ -768,8 +808,9 @@ var TMP_tabDNDObserver = {
       }
       const currentRow = firstVisibleRow + Math.floor((mY - top - this._multirowMargin) / singleRowHeight);
       let topY = Tabmix.tabsUtils.topTabY;
-      let index;
-      for (index = 0; index < numTabs; index++) {
+      const pinnedTabCount = gBrowser.pinnedTabCount;
+      let index = pinnedTabCount && !draggedTab?.pinned ? pinnedTabCount : 0;
+      for (index; index < numTabs; index++) {
         // @ts-expect-error - tabs[i] is never undefined
         if (getTabRowNumber(tabs[index], topY) === currentRow) {
           break;
@@ -826,6 +867,48 @@ var TMP_tabDNDObserver = {
       return {dragType: this.DRAG_TAB_TO_NEW_WINDOW, tab};
     }
     return {dragType: this.DRAG_LINK, tab: null};
+  },
+
+  /**
+   * when dragging link or normal tab to pinned tab area show drop indicator
+   * before the first non pinned tab.
+   * when dragging pinned tab out of the pinned tab area show drop indicator
+   * after the last pinned tab
+   */
+  getDropIndicatorMarginX(draggedTab, newIndex, addWidth, tabRect, rect, defaultMargin) {
+    const pinnedTabCount = gBrowser.pinnedTabCount;
+    if (pinnedTabCount === 0) {
+      return defaultMargin + (addWidth ? tabRect.width : 0);
+    }
+
+    if (TabmixTabbar.hasMultiRows) {
+      // the case for dragging link or non-pinned tab to pinned tabs area is handeld in getNewIndex
+      if (draggedTab?.pinned && newIndex >= pinnedTabCount) {
+        const pinnedTabRect = gBrowser.visibleTabs[pinnedTabCount - 1]?.getBoundingClientRect() ?? {right: 0, left: 0};
+        return RTL_UI ? rect.right - pinnedTabRect.left : pinnedTabRect.right - rect.left;
+      }
+    } else {
+      let allTabsPinnedOffset = 0;
+      if (!draggedTab?.pinned) {
+        if (gBrowser.tabContainer.hasAttribute("overflow")) {
+          let scrollRect = gBrowser.tabContainer.arrowScrollbox.scrollClientRect;
+          return Math.min(Math.max(defaultMargin + (addWidth ? tabRect.width : 0), scrollRect.left - rect.left), scrollRect.right - rect.left);
+        }
+        const firstNonPinnedTab = gBrowser.visibleTabs[pinnedTabCount];
+        allTabsPinnedOffset = firstNonPinnedTab ? 0 : 8;
+        if (firstNonPinnedTab) {
+          const firstNonPinnedTabRect = firstNonPinnedTab.getBoundingClientRect();
+          return RTL_UI ?
+            Math.max(defaultMargin + (addWidth ? tabRect.width : 0), rect.right - firstNonPinnedTabRect.right) :
+            Math.max(defaultMargin + (addWidth ? tabRect.width : 0), firstNonPinnedTabRect.left - rect.left);
+        }
+      }
+      if (draggedTab?.pinned && newIndex >= pinnedTabCount || allTabsPinnedOffset) {
+        const pinnedTabRect = gBrowser.visibleTabs[pinnedTabCount - 1]?.getBoundingClientRect() ?? {right: 0, left: 0};
+        return RTL_UI ? rect.right - pinnedTabRect.left + allTabsPinnedOffset : pinnedTabRect.right - rect.left + allTabsPinnedOffset;
+      }
+    }
+    return defaultMargin + (addWidth ? tabRect.width : 0);
   },
 
   getDropIndicatorMarginY(ind, tabRect, rect) {

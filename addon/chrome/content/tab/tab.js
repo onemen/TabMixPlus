@@ -644,8 +644,7 @@ Tabmix.tabsUtils = {
       }
     };
 
-    const pinnedTabCount = Tabmix.isVersion(1330) ? gBrowser.pinnedTabCount : gBrowser._numPinnedTabs;
-
+    const pinnedTabCount = gBrowser.pinnedTabCount;
     const isFirstRowWithPinnedTabs = pinnedTabCount && Tabmix.tabsUtils.lastTabRowNumber === 1;
     const cacheMinWidth = this._widthCache[pinnedTabCount];
     if (cacheMinWidth) {
@@ -1145,7 +1144,7 @@ Tabmix.bottomToolbarUtils = {
 
 Tabmix.visibleTabs = {
   get tabs() {
-    const getVisibleTabs = Tabmix.isVersion(1330) ?
+    const getVisibleTabs = Tabmix.isVersion(1300) ?
       () => gBrowser.tabContainer.visibleTabs :
       () => gBrowser.tabContainer._getVisibleTabs();
     Object.defineProperty(this, "tabs", {
