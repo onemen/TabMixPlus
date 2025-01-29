@@ -848,6 +848,18 @@ Tabmix.tablib = {
         url === "about:newtab" || Tabmix.originalFunctions.isBlankPageURL.apply(null, [url])
       );
     };
+
+    Tabmix.changeCode(window, "window.undoCloseTab")._replace(
+      /tab = SessionStore\.undoCloseTab.*\n.*true;/,
+      `tab = TMP_ClosedTabs._undoCloseTab(
+            sourceWindow,
+            index,
+            "original",
+            !tab,
+            !tab ? undefined : null,
+            tabsToRemove.length > 1
+          );`
+    ).toCode();
   },
 
   populateUndoWindowSubmenu(undoPopup, panel, isAppMenu = Boolean(panel)) {
@@ -1688,7 +1700,7 @@ Tabmix.tablib = {
 
     /** DEPRECATED **/
     // we keep this function to stay compatible with other extensions that use it
-    gBrowser.undoRemoveTab = () => TMP_ClosedTabs.undoCloseTab();
+    gBrowser.undoRemoveTab = () => undoCloseTab();
     // Tabmix don't use this function anymore
     // but treeStyleTab extension look for it
     gBrowser.restoreTab = function() { };

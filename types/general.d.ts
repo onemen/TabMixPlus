@@ -886,6 +886,7 @@ declare function readFromClipboard(): string;
 declare function setTimeout<T extends unknown[], U>(callback: (...args: T) => U, timeout: number, ...args: T): number;
 declare function urlSecurityCheck(aURL: string, aPrincipal: nsIPrincipal, aFlags?: nsIScriptSecurityManager): void;
 declare function undoCloseWindow(index: number): void;
+declare function undoCloseTab(aIndex?: number, sourceWindowSSId?: string): MockedGeckoTypes.BrowserTab | null;
 
 declare var CustomizableUI: CustomizableUI;
 declare var E10SUtils: E10SUtils;

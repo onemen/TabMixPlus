@@ -642,7 +642,7 @@ var TMP_ClosedTabs = {
       case "command":
         if (event.target.id === "tabmix-closedTabsButton" && !showSubView &&
             !TabmixAllTabs.isAfterCtrlClick(event.target)) {
-          TMP_ClosedTabs.undoCloseTab();
+          undoCloseTab();
         }
         break;
     }
@@ -1010,42 +1010,6 @@ var TMP_ClosedTabs = {
       gBrowser.TMP_selectNewForegroundTab(newTab, false, "", false);
     }
     return newTab;
-  },
-
-  // based on function undoCloseTab from browser.js
-  undoCloseTab: function ct_undoCloseTab(aIndex, sourceWindowSSId, aWhere) {
-    // the window the tab was closed from
-    let sourceWindow;
-    if (sourceWindowSSId) {
-      sourceWindow = SessionStore.getWindowById(sourceWindowSSId);
-      if (!sourceWindow) {
-        throw new Error("sourceWindowSSId argument to undoCloseTab didn't resolve to a window");
-      }
-    } else {
-      sourceWindow = window;
-    }
-
-    // We are specifically interested in the lastClosedTabCount for the source window.
-    // When aIndex is undefined, we restore all the lastClosedTabCount tabs.
-    let lastClosedTabCount = SessionStore.getLastClosedTabCount(sourceWindow);
-    let tab = null;
-    // aIndex is undefined if the function is called without a specific tab to restore.
-    let tabsToRestore = aIndex !== undefined ? [aIndex] : new Array(lastClosedTabCount).fill(0);
-    let multiple = tabsToRestore.length > 1;
-    for (let index of tabsToRestore) {
-      if (SessionStore.getClosedTabCountForWindow(sourceWindow) > index) {
-        tab = this._undoCloseTab(
-          sourceWindow,
-          index,
-          aWhere || "original",
-          !tab,
-          !tab ? undefined : null,
-          multiple
-        );
-      }
-    }
-
-    return tab;
   },
 
   // workaround for bug 1868452 - Key key_undoCloseTab of menuitem could not be found

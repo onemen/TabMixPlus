@@ -33,11 +33,6 @@ Tabmix.startup = function TMP_startup() {
   });
 
   TabmixContext.toggleEventListener(true);
-
-  // if sessionStore disabled use TMP command
-  window.undoCloseTab = function ct_window_undoCloseTab(aIndex, sourceWindowSSId, aWhere) {
-    return TMP_ClosedTabs.undoCloseTab(aIndex, sourceWindowSSId, aWhere);
-  };
 };
 
 // we call this function from gBrowserInit._delayedStartup, see setup.js

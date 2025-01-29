@@ -218,7 +218,7 @@ var TabmixTabClickOptions = {
         gBrowser.closeAllTabs();
         break;
       case 10:
-        TMP_ClosedTabs.undoCloseTab();
+        undoCloseTab();
         break;
       case 11:
         Tabmix.renameTab.editTitle(aTab);
@@ -1099,7 +1099,7 @@ var TabmixAllTabs = {
     var aButton = aEvent.target;
     if (!aButton.disabled && aEvent.button === 0 && (aEvent.ctrlKey || aEvent.metaKey)) {
       if (aButton.id == "tabmix-closedTabsButton") {
-        TMP_ClosedTabs.undoCloseTab();
+        undoCloseTab();
         aButton.setAttribute("afterctrlclick", true);
       } else if (aButton.id == "tabmix-alltabs-button" ||
           aButton.parentNode && aButton.parentNode.id == "allTabsMenu-allTabsView") {

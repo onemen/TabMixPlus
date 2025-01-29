@@ -106,7 +106,6 @@ interface Window {
   Tabmix: typeof TabmixNS;
   TabmixSessionManager: TabmixSessionManager;
   TMP_Places: TabmixPlaces;
-  undoCloseTab: (typeof TabmixClosedTabsNS)["undoCloseTab"];
   URILoadingHelper: {
     getTargetWindow(window: Window, {skipPopups, forceNonPrivate}?: {skipPopups?: boolean; forceNonPrivate?: boolean}): Window | null;
     openUILink(window: Window, url: string, event: Event, aIgnoreButton: boolean | {ignoreButton: boolean; ignoreAlt: boolean}, aIgnoreAlt: boolean, aAllowThirdPartyFixup: boolean, aPostData: unknown, aReferrerInfo: unknown): void;
@@ -382,7 +381,6 @@ declare namespace TabmixClosedTabsNS {
   function restoreToNewWindow(source: ClosedDataSource, index: number): void;
   function restoreAllClosedTabs(): void;
   function _undoCloseTab(aSource: ClosedDataSource, aIndex: number, aWhere: string, aSelectRestoredTab: boolean, aBlankTabToReuse?: Tab | null, multiple?: boolean): Tab | null;
-  function undoCloseTab(aIndex?: number, sourceWindowSSId?: string, aWhere?: string): Tab | null;
   function fix_bug_1868452(item: Menuitem): boolean;
 }
 
