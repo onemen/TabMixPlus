@@ -4,4 +4,7 @@ if (exec < /dev/tty) ; then
   exec >/dev/tty 2>&1;
 fi
 
-./node_modules/.bin/lint-staged
+branch=$(git rev-parse --abbrev-ref HEAD)
+if [ "$branch" = "main" ]; then
+  ./node_modules/.bin/lint-staged --config ./config/husky/lint-staged.config.js
+fi

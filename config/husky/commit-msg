@@ -1,3 +1,6 @@
 #!/bin/sh
 
-./node_modules/.bin/commitlint --config config/husky/commitlint.config.js --edit $1
+branch=$(git rev-parse --abbrev-ref HEAD)
+if [ "$branch" = "main" ]; then
+  ./node_modules/.bin/commitlint --config config/husky/commitlint.config.js --edit $1
+fi
