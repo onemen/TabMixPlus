@@ -25,7 +25,17 @@ var TMP_tabDNDObserver = {
 
     const makeCode = (function() {
       let _make;
-      if (Tabmix.isVersion(1340)) {
+      if (Tabmix.isVersion(1360)) {
+        // @ts-expect-error
+        // eslint-disable-next-line no-unused-vars
+        const isTab = element => element.tagName == "tab";
+
+        // @ts-expect-error
+        // eslint-disable-next-line no-unused-vars
+        const isTabGroupLabel = element => element.classList?.contains("tab-group-label") ?? false;
+
+        _make = eval(Tabmix._localMakeCode);
+      } else if (Tabmix.isVersion(1340)) {
         // Since Firefox 134, tabs.js contains scoped constants for group drop actions:
         // - GROUP_DROP_ACTION_CREATE: used in on_drop and triggerDragOverCreateGroup
         // - GROUP_DROP_ACTION_APPEND: used in on_drop and _animateTabMove
@@ -198,7 +208,8 @@ var TMP_tabDNDObserver = {
         'index >= oldIndex',
       Tabmix.isVersion(1330) ?
         `!tabmixHandleMove ? $& : ${Tabmix.isVersion(1340) ? "newIndex" : "index"} > -1 && (RTL_UI !== directionForward)` :
-        `!tabmixHandleMove ? $& : newIndex > -1 && (RTL_UI !== ${Tabmix.isVersion(1300) ? "directionMove" : "ltrMove"})`
+        `!tabmixHandleMove ? $& : newIndex > -1 && (RTL_UI !== ${Tabmix.isVersion(1300) ? "directionMove" : "ltrMove"})`,
+      {check: !Tabmix.isVersion(1360)}
     );
 
     if (Tabmix.isVersion(1300)) {
@@ -222,7 +233,25 @@ var TMP_tabDNDObserver = {
         '($1MovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth))',
       );
 
-      if (Tabmix.isVersion(1330)) {
+      if (Tabmix.isVersion(1360)) {
+        _animateTabMove._replace(
+          /leastMovingTabPos =[^;]*/,
+          'leastMovingTabPos = firstMovingTabScreen + translate + (this._rtlMode ? (this.verticalMode ? tabSize : leftTabWidth) : 0)'
+        )._replace(
+          /mostMovingTabPos =[^;]*/,
+          'mostMovingTabPos = lastMovingTabScreen + translate + (this._rtlMode ? 0 : (this.verticalMode ? tabSize : rightTabWidth))'
+        )._replace(
+          'tabSize,',
+          'this.verticalMode ? tabSize : (directionForward ? rightTabWidth : leftTabWidth),'
+        )._replace(
+          'overlapSize = p2 + s2 - p1;',
+          `if (p1 + s1 > p2 + s2) {
+             $&
+           } else {
+             overlapSize = s1;
+           }`
+        );
+      } else if (Tabmix.isVersion(1330)) {
         // Firefox 133+
         _animateTabMove._replace(
           'lastMovingTabScreen + tabSize *',
