@@ -3,27 +3,14 @@
 /* exported install, uninstall, startup, shutdown */
 "use strict";
 
-(function(g) {
-  g.AddonManager = ChromeUtils.importESModule("resource://gre/modules/AddonManager.sys.mjs").AddonManager;
-}(this));
-
-ChromeUtils.defineModuleGetter(this, "ChromeManifest",
-  "chrome://tabmix-resource/content/bootstrap/ChromeManifest.jsm");
-
-ChromeUtils.defineModuleGetter(this, "Overlays",
-  "chrome://tabmix-resource/content/bootstrap/Overlays.jsm");
-
-ChromeUtils.defineModuleGetter(this, "PreferencesLoader",
-  "chrome://tabmix-resource/content/bootstrap/PreferencesLoader.jsm");
-
-ChromeUtils.defineModuleGetter(this, "ScriptsLoader",
-  "chrome://tabmix-resource/content/bootstrap/ScriptsLoader.jsm");
-
-ChromeUtils.defineModuleGetter(this, "TabmixWidgets",
-  "chrome://tabmix-resource/content/bootstrap/TabmixWidgets.jsm");
-
-ChromeUtils.defineModuleGetter(this, "TabmixChromeUtils",
-  "chrome://tabmix-resource/content/ChromeUtils.jsm");
+ChromeUtils.defineESModuleGetters(this, {
+  AddonManager: "resource://gre/modules/AddonManager.sys.mjs",
+  ChromeManifest: "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mjs",
+  Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs",
+  PreferencesLoader: "chrome://tabmix-resource/content/bootstrap/PreferencesLoader.sys.mjs",
+  ScriptsLoader: "chrome://tabmix-resource/content/bootstrap/ScriptsLoader.sys.mjs",
+  TabmixWidgets: "chrome://tabmix-resource/content/bootstrap/TabmixWidgets.sys.mjs",
+});
 
 const appinfo = Services.appinfo;
 const options = {
@@ -137,9 +124,10 @@ async function startup(data, reason) {
   /** @type {any} */
   const lazy = {};
 
-  TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-    isVersion: "chrome://tabmix-resource/content/BrowserVersion.jsm",
-    SingleWindowModeUtils: "chrome://tabmix-resource/content/SingleWindowModeUtils.jsm"
+  // TODO: move this to the top ChromeUtils.defineESModuleGetters
+  ChromeUtils.defineESModuleGetters(lazy, {
+    isVersion: "chrome://tabmix-resource/content/BrowserVersion.sys.mjs",
+    SingleWindowModeUtils: "chrome://tabmix-resource/content/SingleWindowModeUtils.sys.mjs",
   });
 
   const chromeManifest = new ChromeManifest(() => {

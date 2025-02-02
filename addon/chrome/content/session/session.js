@@ -180,7 +180,7 @@ TabmixSessionData = {
   getTabValue: function TMP_sData_getTabValue(tab, id, parse) {
     var existingData = parse ? null : "";
     try {
-      var tabData = TabmixSvc.ss.getTabValue(tab, id);
+      var tabData = SessionStore.getTabValue(tab, id);
       if (tabData !== "" && tabData != "{}" && tabData != "null") {
         if (parse)
           existingData = JSON.parse(tabData);
@@ -197,7 +197,7 @@ TabmixSessionData = {
   getWindowValue: function TMP_sData_getWindowValue(win, id, parse) {
     var existingData = parse ? {} : "";
     try {
-      var data = TabmixSvc.ss.getWindowValue(win, id);
+      var data = SessionStore.getWindowValue(win, id);
       if (data) {
         if (parse)
           existingData = JSON.parse(data);
@@ -296,7 +296,7 @@ TabmixSessionManager = {
       }
     };
 
-    TabmixSvc.ss.promiseInitialized
+    SessionStore.promiseInitialized
         .then(() => TMP_TabView.init())
         .then(initializeSM)
         .then(() => Tabmix.sessionInitialized())
@@ -432,7 +432,7 @@ TabmixSessionManager = {
     // initialize closed window list broadcaster
     var status = this.isPrivateWindow ? isFirstWindow || this.isPrivateSession : Tabmix.isFirstWindowInSession;
     var disabled = this.enableManager ? status || this.isClosedWindowsEmpty() :
-      TabmixSvc.ss.getClosedWindowCount() === 0;
+      SessionStore.getClosedWindowCount() === 0;
     Tabmix.setItem("tmp_closedwindows", "disabled", disabled || null);
 
     if (!this.isPrivateWindow)
@@ -987,7 +987,7 @@ TabmixSessionManager = {
     } catch {
       let decodedString;
       try {
-        // we defined lazy getter for _decode to import from Decode.jsm module
+        // we defined lazy getter for _decode to import from Decode.sys.mjs module
         decodedString = this._decode.unescape(encodedString);
       } catch (er) {
         let msg = "Tabmix is unable to decode " + key;
@@ -2788,7 +2788,7 @@ TabmixSessionManager = {
 
     var tabState;
     try {
-      tabState = JSON.parse(TabmixSvc.ss.getTabState(aTab));
+      tabState = JSON.parse(SessionStore.getTabState(aTab));
     } catch {}
     var data = this.serializeHistory(tabState);
     if (!data)
@@ -2888,7 +2888,7 @@ TabmixSessionManager = {
 
   get canRestoreLastSession() {
     return this.enableManager ? TabmixSvc.sm.lastSessionPath && !this.containerEmpty(TabmixSvc.sm.lastSessionPath) :
-      TabmixSvc.ss.canRestoreLastSession;
+      SessionStore.canRestoreLastSession;
   },
 
   restoreLastSession: function SM_restoreLastSession() {
@@ -2898,7 +2898,7 @@ TabmixSessionManager = {
     if (this.enableManager)
       this.loadSession(TabmixSvc.sm.lastSessionPath, "sessionrestore", false);
     else
-      TabmixSvc.ss.restoreLastSession();
+      SessionStore.restoreLastSession();
   },
 
   setLastSession(restoring) {
@@ -2922,7 +2922,7 @@ TabmixSessionManager = {
       TabmixSvc.sm.lastSessionPath = null;
       // Since Firefox 27 SessionStore LastSession.clear send
       // NOTIFY_LAST_SESSION_CLEARED
-      TabmixSvc.ss.canRestoreLastSession = false;
+      SessionStore.canRestoreLastSession = false;
       Tabmix.setItem("Browser:RestoreLastSession", "disabled", true);
     }
 

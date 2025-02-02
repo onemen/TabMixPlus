@@ -498,7 +498,8 @@ export type RequestFromFrontend =
   | GetExternalPowerTracksRequest
   | GetSymbolTableRequest
   | QuerySymbolicationApiRequest
-  | GetPageFaviconsRequest;
+  | GetPageFaviconsRequest
+  | OpenScriptInTabDebuggerRequest;
 
 type StatusQueryRequest = { type: "STATUS_QUERY" };
 type EnableMenuButtonRequest = { type: "ENABLE_MENU_BUTTON" };
@@ -526,6 +527,13 @@ type QuerySymbolicationApiRequest = {
 type GetPageFaviconsRequest = {
   type: "GET_PAGE_FAVICONS";
   pageUrls: Array<string>;
+};
+type OpenScriptInTabDebuggerRequest = {
+  type: "OPEN_SCRIPT_IN_DEBUGGER";
+  tabId: number;
+  scriptUrl: string;
+  line: number;
+  column: number;
 };
 
 export type MessageToFrontend<R> =
@@ -558,7 +566,8 @@ export type ResponseToFrontend =
   | GetExternalPowerTracksResponse
   | GetSymbolTableResponse
   | QuerySymbolicationApiResponse
-  | GetPageFaviconsResponse;
+  | GetPageFaviconsResponse
+  | OpenScriptInTabDebuggerResponse;
 
 type StatusQueryResponse = {
   menuButtonIsEnabled: boolean;
@@ -587,6 +596,7 @@ type GetExternalPowerTracksResponse = Array<object>;
 type GetSymbolTableResponse = SymbolTableAsTuple;
 type QuerySymbolicationApiResponse = string;
 type GetPageFaviconsResponse = Array<ProfilerFaviconData | null>;
+type OpenScriptInTabDebuggerResponse = void;
 
 /**
  * This represents an event channel that can talk to a content page on the web.

@@ -1,6 +1,5 @@
 import importGlobals from './import-globals.js';
 import lazyGetterNameMatch from './lazy-getter-name-match.js';
-import useMjsModules from './use-mjs-modules.js';
 import validLazy from './valid-lazy.js';
 
 export default {
@@ -89,7 +88,6 @@ export default {
   rules: {
     "import-globals": importGlobals,
     "lazy-getter-name-match": lazyGetterNameMatch,
-    "use-mjs-modules": useMjsModules,
     "valid-lazy": validLazy,
   },
 };

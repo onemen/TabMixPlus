@@ -7,19 +7,12 @@ ChromeUtils.defineESModuleGetters(this, {
   E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
   clearTimeout: "resource://gre/modules/Timer.sys.mjs",
   setTimeout: "resource://gre/modules/Timer.sys.mjs",
+
+  ContentSvc: "chrome://tabmix-resource/content/ContentSvc.sys.mjs",
+  LinkNodeUtils: "chrome://tabmix-resource/content/LinkNodeUtils.sys.mjs",
+  ContextMenu: "chrome://tabmix-resource/content/ContextMenu.sys.mjs",
+  TabmixUtils: "chrome://tabmix-resource/content/Utils.sys.mjs",
 });
-
-ChromeUtils.defineModuleGetter(this, "ContentSvc",
-  "chrome://tabmix-resource/content/ContentSvc.jsm");
-
-ChromeUtils.defineModuleGetter(this, "LinkNodeUtils",
-  "chrome://tabmix-resource/content/LinkNodeUtils.jsm");
-
-ChromeUtils.defineModuleGetter(this, "ContextMenu",
-  "chrome://tabmix-resource/content/ContextMenu.jsm");
-
-ChromeUtils.defineModuleGetter(this, "TabmixUtils",
-  "chrome://tabmix-resource/content/Utils.jsm");
 
 var PROCESS_TYPE_CONTENT = Services.appinfo.processType == Services.appinfo.PROCESS_TYPE_CONTENT;
 
@@ -178,8 +171,8 @@ var FaviconLoader = {
     }
   },
 
-  // based on LinkHandlerChild.jsm
-  // we can't call addRootIcon from LinkHandlerChild.jsm directly since our current
+  // based on LinkHandlerChild.sys.mjs
+  // we can't call addRootIcon from LinkHandlerChild.sys.mjs directly since our current
   // pageURI (document.documentURIObject) is about:blank
   addRootIcon(pageURI) {
     if (
@@ -320,7 +313,7 @@ var TabmixClickEventHandler = {
     if (typeof event.tabmix_openLinkWithHistory == "boolean")
       json.tabmix_openLinkWithHistory = true;
 
-    // see getHrefFromNodeOnClick in tabmix's ContentClick.jsm
+    // see getHrefFromNodeOnClick in tabmix's ContentClick.sys.mjs
     // for the case there is no href
     /** @type {LinkNode} */
     let linkNode = href ? node : LinkNodeUtils.getNodeWithOnClick(event.target);

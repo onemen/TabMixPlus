@@ -18,11 +18,13 @@ interface TabmixKnownModules {}
 // @ts-expect-error - override `namespace ChromeUtils` from `gecko/lib.gecko.dom.d.ts`
 interface ChromeUtils {
   defineLazyGetter(aTarget: any, aName: any, aLambda: any): void;
+  /** @deprecated - removed in Firefox 136 */
   defineModuleGetter: (target: any, variable: string, path: string) => void;
   defineESModuleGetters: (target: any, mappings: any) => void;
   generateQI(interfaces: any[]): MozQueryInterface;
   getClassName(obj: any, unwrap?: boolean): string;
   import<S extends keyof TabmixKnownModules>(module: S): TabmixKnownModules[S];
+  /** @deprecated - removed in Firefox 136 */
   import(aResourceURI: string): any;
   importESModule<S extends keyof TabmixKnownModules>(aResourceURI: S): TabmixKnownModules[S];
   nondeterministicGetWeakSetKeys<T extends object>(aSet: WeakSet<T>): T[];

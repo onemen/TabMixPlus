@@ -2,7 +2,7 @@
 /* exported load, accept, onInput, onSelect, openPopup */
 "use strict";
 
-const {TabmixSvc} = ChromeUtils.import("chrome://tabmix-resource/content/TabmixSvc.jsm");
+const {TabmixSvc} = ChromeUtils.importESModule("chrome://tabmix-resource/content/TabmixSvc.sys.mjs");
 
 const gPref = TabmixSvc.prefBranch;
 

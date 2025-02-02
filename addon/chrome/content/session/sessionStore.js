@@ -44,11 +44,11 @@ var TMP_SessionStore = {
   getTitleFromTabState(aTab) {
     /** @type {SessionStoreNS.TabDataEntry} */
     let data = {};
-    data.title = TabmixSvc.ss.getLazyTabValue(aTab, "title");
+    data.title = SessionStore.getLazyTabValue(aTab, "title");
     if (data.title) {
-      data.url = TabmixSvc.ss.getLazyTabValue(aTab, "url");
+      data.url = SessionStore.getLazyTabValue(aTab, "url");
     } else {
-      let tabData = JSON.parse(TabmixSvc.ss.getTabState(aTab));
+      let tabData = JSON.parse(SessionStore.getTabState(aTab));
       data = this.getActiveEntryData(tabData);
     }
     if (Tabmix.isBlankNewTab(data.url)) {
@@ -60,9 +60,9 @@ var TMP_SessionStore = {
   getUrlFromTabState(aTab) {
     /** @type {SessionStoreNS.TabDataEntry} */
     let data = {};
-    data.url = TabmixSvc.ss.getLazyTabValue(aTab, "url");
+    data.url = SessionStore.getLazyTabValue(aTab, "url");
     if (!data.url) {
-      let tabData = JSON.parse(TabmixSvc.ss.getTabState(aTab));
+      let tabData = JSON.parse(SessionStore.getTabState(aTab));
       data = this.getActiveEntryData(tabData);
     }
     return data.url;
@@ -73,11 +73,11 @@ var TMP_SessionStore = {
     if (!aTab.hasAttribute("pending"))
       return false;
     let entries;
-    let url = TabmixSvc.ss.getLazyTabValue(aTab, "url");
+    let url = SessionStore.getLazyTabValue(aTab, "url");
     if (url) {
       entries = [{url}];
     } else {
-      let tabData = JSON.parse(TabmixSvc.ss.getTabState(aTab));
+      let tabData = JSON.parse(SessionStore.getTabState(aTab));
       entries = tabData && tabData.entries;
     }
     if (entries && entries.length > 1)
@@ -215,7 +215,7 @@ var TMP_SessionStore = {
     } else if (Tabmix.numberOfWindows(false, null) > 1) {
       if ((Tabmix.prefs.getBoolPref("sessions.manager") ||
            Tabmix.prefs.getBoolPref("sessions.crashRecovery")) &&
-          TabmixSvc.ss.getClosedWindowCount() > 0) {
+          SessionStore.getClosedWindowCount() > 0) {
         Services.prefs.setBoolPref("browser.sessionstore.resume_session_once", true);
       }
       afterSessionRestore = true;
@@ -323,7 +323,7 @@ var TMP_ClosedTabs = {
         "getClosedTabCountForWindow" :
         "getClosedTabCount";
     // exclude closed groups from closed windows until Bug 1932941 fixed
-    return window.__SSi ? TabmixSvc.ss[name](window) - this.getClosedTabCountFromClosedGroupInClosedWindows() : 0;
+    return window.__SSi ? SessionStore[name](window) - this.getClosedTabCountFromClosedGroupInClosedWindows() : 0;
   },
 
   getClosedTabCountFromClosedGroupInClosedWindows() {
@@ -343,8 +343,8 @@ var TMP_ClosedTabs = {
   get getClosedTabData() {
     if (window.__SSi) {
       return Tabmix.isVersion(1170) ?
-        TabmixSvc.ss.getClosedTabData() :
-        TabmixSvc.ss.getClosedTabDataForWindow(window);
+        SessionStore.getClosedTabData() :
+        SessionStore.getClosedTabDataForWindow(window);
     }
     return [];
   },
@@ -356,7 +356,7 @@ var TMP_ClosedTabs = {
         "browser.sessionstore.closedTabsFromClosedWindows"
       );
       if (restoreClosedTabsFromClosedWindows) {
-        closedTabsData.push(...TabmixSvc.ss.getClosedTabDataFromClosedWindows());
+        closedTabsData.push(...SessionStore.getClosedTabDataFromClosedWindows());
       }
     }
     return closedTabsData;
@@ -767,11 +767,11 @@ var TMP_ClosedTabs = {
         break;
       case "delete":
         if (source.closedWindow) {
-          TabmixSvc.ss.forgetClosedTabById(index, source);
+          SessionStore.forgetClosedTabById(index, source);
         } else if (source.closedGroup) {
           this.getClosedTabAtIndex(source, index);
         } else {
-          TabmixSvc.ss.forgetClosedTab(source, index);
+          SessionStore.forgetClosedTab(source, index);
         }
         break;
       case "original":
@@ -802,11 +802,11 @@ var TMP_ClosedTabs = {
     if (Tabmix.isVersion(1170)) {
       const closedTabsData = this.allClosedTabData;
       for (const {closedId, sourceClosedId, sourceWindowId} of closedTabsData) {
-        TabmixSvc.ss.forgetClosedTabById(closedId, {sourceClosedId, sourceWindowId});
+        SessionStore.forgetClosedTabById(closedId, {sourceClosedId, sourceWindowId});
       }
     } else {
       while (this.count) {
-        TabmixSvc.ss.forgetClosedTab(window, 0);
+        SessionStore.forgetClosedTab(window, 0);
       }
     }
   },
@@ -1134,10 +1134,10 @@ Tabmix.closedObjectsUtils = {
 
   forgetClosedWindow(index) {
     if (index < 0) {
-      while (TabmixSvc.ss.getClosedWindowCount() > 0)
-        TabmixSvc.ss.forgetClosedWindow(0);
+      while (SessionStore.getClosedWindowCount() > 0)
+        SessionStore.forgetClosedWindow(0);
     } else {
-      TabmixSvc.ss.forgetClosedWindow(index);
+      SessionStore.forgetClosedWindow(index);
     }
   },
 
@@ -1283,11 +1283,11 @@ Tabmix.closedObjectsUtils = {
 
   // enable/disable the Recently Closed Windows button
   toggleRecentlyClosedWindowsButton() {
-    Tabmix.setItem("tmp_closedwindows", "disabled", TabmixSvc.ss.getClosedWindowCount() === 0 || null);
+    Tabmix.setItem("tmp_closedwindows", "disabled", SessionStore.getClosedWindowCount() === 0 || null);
   },
 
   updateView(popup) {
-    if (TabmixSvc.ss.getClosedWindowCount() > 0) {
+    if (SessionStore.getClosedWindowCount() > 0) {
       if (popup.parentNode.id === "appMenu-library-recentlyClosedWindows") {
         this.updateAppmenuView(popup, "Windows");
       } else {

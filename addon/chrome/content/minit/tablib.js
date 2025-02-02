@@ -539,14 +539,6 @@ Tabmix.tablib = {
       ).toCode();
     }
 
-    // TODO: test if this still a problem
-    // when selecting different tab fast with the mouse sometimes original onxblmousedown can call this function
-    // before our mousedown handler can prevent it
-    // Tabmix.changeCode(tabBar, "gBrowser.tabContainer._selectNewTab")._replace(
-    //   '{',
-    //   '{if(!Tabmix.prefs.getBoolPref("selectTabOnMouseDown") && Tabmix.callerTrace("onxblmousedown")) return;'
-    // ).toCode();
-
     if (!Tabmix.isVersion(1160)) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")._replace(
         /(})(\)?)$/,
@@ -865,7 +857,7 @@ Tabmix.tablib = {
   populateUndoWindowSubmenu(undoPopup, panel, isAppMenu = Boolean(panel)) {
     const isSubviewbutton = undoPopup.__tagName === "toolbarbutton";
     undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
-    let undoItems = TabmixSvc.ss.getClosedWindowData();
+    let undoItems = SessionStore.getClosedWindowData();
     const childNodes = panel?.childNodes ?? undoPopup.childNodes;
     for (let i = 0; i < childNodes.length - (isAppMenu ? 0 : 1); i++) {
       /** @type {TabmixClosedTabsNS.Menuitem} */ // @ts-expect-error
@@ -1019,7 +1011,7 @@ Tabmix.tablib = {
         }
       }
       try {
-        const tabState = aTabData ? aTabData.state : JSON.parse(TabmixSvc.ss.getTabState(aTab));
+        const tabState = aTabData ? aTabData.state : JSON.parse(SessionStore.getTabState(aTab));
         newTab = this.addTrustedTab("about:blank", {index: gBrowser.tabs.length});
         newTab.linkedBrowser.stop();
         if (aHref) {
@@ -1032,7 +1024,7 @@ Tabmix.tablib = {
           }
         }
         tabState.pinned = false;
-        TabmixSvc.ss.setTabState(newTab, JSON.stringify(tabState));
+        SessionStore.setTabState(newTab, JSON.stringify(tabState));
       } catch (ex) {
         Tabmix.assert(ex);
       }
@@ -1060,9 +1052,9 @@ Tabmix.tablib = {
             let otherTab = otherGBrowser.selectedTab;
             if (aTabData) {
               // restore closed tab to new window
-              TabmixSvc.ss.setTabState(otherTab, aTabData);
+              SessionStore.setTabState(otherTab, aTabData);
             } else {
-              TabmixSvc.ss.duplicateTab(otherWin, aTab);
+              SessionStore.duplicateTab(otherWin, aTab);
               otherGBrowser.removeTab(otherTab, {animate: false});
             }
           }

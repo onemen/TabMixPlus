@@ -277,7 +277,7 @@ TabmixSessionManager._saveTabviewData = function SM__saveTabviewData() {
 TabmixSessionManager._setTabviewData = function SM__setTabviewData(id, data) {
   if (typeof data != "string")
     data = JSON.stringify(data);
-  TabmixSvc.ss.setWindowValue(window, id, data);
+  SessionStore.setWindowValue(window, id, data);
   if (!this.enableBackup)
     return;
   if (data !== "" && data != "{}")
@@ -316,7 +316,7 @@ TabmixSessionManager._setTabviewTab = function SM__setTabviewTab(aTab, tabdata, 
           // remove any old data
           aTab._tabViewTabItem._reconnected = false;
           try {
-            TabmixSvc.ss.deleteTabValue(aTab, id);
+            SessionStore.deleteTabValue(aTab, id);
           } catch {}
           if (tabdata.extData)
             delete tabdata.extData["tabview-tab"];
@@ -456,7 +456,7 @@ TabmixSessionManager._prepareTabviewData = function SM__prepareTabviewData(loadO
           return;
         let data = {groupID};
         data = JSON.stringify(data);
-        TabmixSvc.ss.setTabValue(tab, "tabview-tab", data);
+        SessionStore.setTabValue(tab, "tabview-tab", data);
         if (this.enableBackup)
           this.setLiteral(this.getNodeForTab(tab), "tabview-tab", data);
       }

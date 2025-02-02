@@ -38,7 +38,7 @@ Tabmix.startup = function TMP_startup() {
 // we call this function from gBrowserInit._delayedStartup, see setup.js
 Tabmix.beforeDelayedStartup = function() {
   if (this.isFirstWindow) {
-    ChromeUtils.import("chrome://tabmix-resource/content/extensions/AddonManager.jsm");
+    ChromeUtils.importESModule("chrome://tabmix-resource/content/extensions/AddonManager.sys.mjs");
     TMP_SessionStore.setService(1, true);
   }
 };
@@ -217,15 +217,6 @@ Tabmix.afterDelayedStartup = function() {
     }, 500);
   }
 };
-
-/**
- TODO:
- add missing properties:
-    _updateAttrib
-    _onOpenTimeout
-    _tabEvents
-    tabsAlreadyOpened
- */
 
 /** @type {TabmixEventListener} */ // @ts-expect-error
 var TMP_eventListener = {
@@ -625,7 +616,7 @@ var TMP_eventListener = {
     Tabmix.restoreTabState(tab);
 
     // don't mark new tab as unread
-    let url = TabmixSvc.ss.getLazyTabValue(tab, "url") || tab.linkedBrowser.currentURI.spec;
+    let url = SessionStore.getLazyTabValue(tab, "url") || tab.linkedBrowser.currentURI.spec;
     if (Tabmix.isBlankNewTab(url))
       tab.setAttribute("visited", true);
   },

@@ -114,7 +114,8 @@ var Tabmix = {
       this[aModule + "Initialized"] = false;
     var self = this;
     ChromeUtils.defineLazyGetter(aObject, aName, () => {
-      let tmp = ChromeUtils.import("chrome://tabmix-resource/content/" + aModule + ".jsm");
+      /** @type {any} */ // @ts-expect-error - importESModule
+      let tmp = ChromeUtils.importESModule("chrome://tabmix-resource/content/" + aModule + ".sys.mjs");
       let Obj = tmp[aSymbol];
       if ("prototype" in tmp[aSymbol])
         Obj = new Obj();

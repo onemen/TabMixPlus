@@ -190,7 +190,7 @@ declare namespace TabmixNS {
   let originalFunctions: (OriginalFunctions & Record<string, (...args: unknown[]) => unknown>) | Record<string, any>;
   function destroy(): void;
 
-  // imported from log.jsm
+  // imported from log.sys.mjs
   const assert: TabmixModules.Log["assert"];
   const callerName: TabmixModules.Log["callerName"];
   const callerTrace: TabmixModules.Log["callerTrace"];
@@ -354,8 +354,9 @@ declare var Shortcuts: Shortcuts;
 declare var TabmixUtils: TabmixUtils;
 
 interface TabmixKnownModules {
-  "chrome://tabmix-resource/content/ChromeUtils.jsm": {TabmixChromeUtils: TabmixChromeUtilsType};
-  "chrome://tabmix-resource/content/Places.jsm": {TabmixPlacesUtils: TabmixPlacesUtils};
-  "chrome://tabmix-resource/content/Shortcuts.jsm": {Shortcuts: Shortcuts};
-  "chrome://tabmix-resource/content/TabmixSvc.jsm": {TabmixSvc: TabmixModules.TabmixSvc};
+  "chrome://tabmix-resource/content/ChromeUtils.sys.mjs": {TabmixChromeUtils: TabmixChromeUtilsType};
+  "chrome://tabmix-resource/content/Places.sys.mjs": {TabmixPlacesUtils: TabmixPlacesUtils};
+  "chrome://tabmix-resource/content/Shortcuts.sys.mjs": {Shortcuts: Shortcuts};
+  "chrome://tabmix-resource/content/TabmixSvc.sys.mjs": {TabmixSvc: TabmixModules.TabmixSvc};
+  "chrome://tabmix-resource/content/extensions/AddonManager.sys.mjs": {TabmixAddonManager: {init: () => void}};
 }

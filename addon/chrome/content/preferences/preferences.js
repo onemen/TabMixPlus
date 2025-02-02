@@ -793,11 +793,11 @@ window.gIncompatiblePane = {
   },
 
   checkForIncompatible(aShowList) {
-    const {CompatibilityCheck} = ChromeUtils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm");
+    const {CompatibilityCheck} = ChromeUtils.importESModule("chrome://tabmix-resource/content/extensions/CompatibilityCheck.sys.mjs");
     return new CompatibilityCheck(window, aShowList, true);
   },
 
-  // call back function from CompatibilityCheck.jsm
+  // call back function from CompatibilityCheck.sys.mjs
   hide_IncompatibleNotice(aHide, aFocus) {
     if (this.paneButton.collapsed != aHide) {
       this.paneButton.collapsed = aHide;

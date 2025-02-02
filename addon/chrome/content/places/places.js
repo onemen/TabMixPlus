@@ -11,7 +11,7 @@ var TMP_Places = {
 
   get PlacesUtils() {
     return Tabmix.lazyGetter(this, "PlacesUtils", () => {
-      const {TabmixPlacesUtils} = ChromeUtils.import("chrome://tabmix-resource/content/Places.jsm");
+      const {TabmixPlacesUtils} = ChromeUtils.importESModule("chrome://tabmix-resource/content/Places.sys.mjs");
       // we get here only after the window was loaded
       // so we can safely call our 'onWindowOpen' initialization t make sure its done
       if (!Tabmix.initialization.onWindowOpen.initialized) {

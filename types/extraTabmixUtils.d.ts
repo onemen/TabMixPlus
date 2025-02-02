@@ -133,7 +133,7 @@ declare namespace TabmixNS {
   function prepareLoadOnStartup(uriToLoad?: string | string[] | null): void;
   function set_BrowserOpenTab(): void;
 
-  // ScriptsLoader.jsm;
+  // ScriptsLoader.sys.mjs;
   let isAfterMozAfterPaint: boolean;
   let promiseOverlayLoaded: Promise<void>;
   function copyTabData(newTab: Tab, oldTab: Tab): void;
@@ -546,5 +546,6 @@ interface OriginalFunctions {
 }
 
 interface TabmixKnownModules {
-  "chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm": {CompatibilityCheck: typeof CompatibilityCheck};
+  "chrome://tabmix-resource/content/extensions/CompatibilityCheck.sys.mjs": {CompatibilityCheck: typeof CompatibilityCheck};
+  "chrome://tabmix-resource/content/ContentClick.sys.mjs": {TabmixContentClick: typeof ContentClickModule};
 }

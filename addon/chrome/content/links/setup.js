@@ -125,7 +125,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     // look for installed extensions that are incompatible with tabmix
     if (this.isFirstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {
-        const {CompatibilityCheck} = ChromeUtils.import("chrome://tabmix-resource/content/extensions/CompatibilityCheck.jsm");
+        const {CompatibilityCheck} = ChromeUtils.importESModule("chrome://tabmix-resource/content/extensions/CompatibilityCheck.sys.mjs");
         return new CompatibilityCheck(aWindow, true);
       }, 0, window);
     }
@@ -144,7 +144,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
   // we need to add our keys before browser.xhtml loads our overlay,
   // and look for our Shortcuts
-  const {Shortcuts} = ChromeUtils.import("chrome://tabmix-resource/content/Shortcuts.jsm");
+  const {Shortcuts} = ChromeUtils.importESModule("chrome://tabmix-resource/content/Shortcuts.sys.mjs");
   Shortcuts.onWindowOpen(window);
 
   // return true if all tabs in the window are blank

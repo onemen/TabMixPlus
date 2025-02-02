@@ -77,47 +77,9 @@ export default [
 
   stylisticJs.configs["all-flat"],
 
-  // mozilla rules for jsm files
-  // see Bug 1905959 - Move jsm rule handling out of eslint-plugin-mozilla to the top-level config
-  {
-    name: "tabmix/jsm-files",
-    files: ["**/*.jsm"],
-    plugins: {mozilla: eslintPluginMozilla},
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-        ...mozillaGlobals.sysmjs.globals,
-      },
-    },
-    rules: {
-      "mozilla/lazy-getter-object-name": "error",
-      "mozilla/mark-exported-symbols-as-used": "error",
-      "mozilla/reject-eager-module-in-lazy-getter": "error",
-      "mozilla/reject-global-this": "error",
-      "mozilla/reject-globalThis-modification": "error",
-      // For all system modules, we expect no properties to need importing,
-      // hence reject everything.
-      "mozilla/reject-importGlobalProperties": ["error", "everything"],
-      "mozilla/reject-mixing-eager-and-lazy": "error",
-      "mozilla/reject-top-level-await": "error",
-      // TODO: Bug 1575506 turn `builtinGlobals` on here.
-      // We can enable builtinGlobals for jsms due to their scopes.
-      "no-redeclare": ["error", {builtinGlobals: false}],
-      // Modules and workers are far easier to check for no-unused-vars on a
-      // global scope, than our content files. Hence we turn that on here.
-      "no-unused-vars": [
-        "error",
-        {
-          argsIgnorePattern: "^_",
-          vars: "all",
-        },
-      ],
-    },
-  },
-
   {
     name: "tabmix/stylistic-rules",
-    files: ["**/*.js", "**/*.jsm", "**/*.xhtml"],
+    files: ["**/*.js", "**/*.sys.mjs", "**/*.xhtml"],
     rules: {
       // turn off some stylistic rules
       ...stylisticRules,
@@ -206,7 +168,7 @@ export default [
 
   {
     name: "tabmix/main-rules",
-    files: ["**/*.js", "**/*.jsm", "**/*.xhtml"],
+    files: ["**/*.js", "**/*.sys.mjs", "**/*.xhtml"],
     plugins: {
       mozilla: eslintPluginMozilla,
       tabmix: eslintPluginTabmix,
@@ -229,7 +191,6 @@ export default [
 
       "tabmix/import-globals": "error",
       "tabmix/lazy-getter-name-match": "error",
-      "tabmix/use-mjs-modules": "error",
       "tabmix/valid-lazy": "error",
 
       "accessor-pairs": "error",
@@ -303,7 +264,7 @@ export default [
   // globals
   {
     name: "tabmix/default-globals",
-    files: ["**/*.js", "**/*.jsm", "**/*.xhtml"],
+    files: ["**/*.js", "**/*.sys.mjs", "**/*.xhtml"],
     ignores: ["**/**/*.config.js"],
     languageOptions: {
       globals: {
@@ -314,6 +275,15 @@ export default [
         event: "off",
         name: "off",
       },
+    },
+  },
+
+  {
+    name: "tabmix/sourceType",
+    files: ["**/*.sys.mjs"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
     },
   },
 

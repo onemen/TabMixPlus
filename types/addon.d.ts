@@ -741,6 +741,7 @@ declare namespace SessionStoreNS {
   type ClosedTabData = {closedId: number; sourceClosedId: number; sourceWindowId: string; pos: number; title: string; state: TabData};
   type ClosedTabsByWindow = Record<string, ClosedTabData[]>;
   interface WindowState {
+    _restoring?: boolean;
     _closedTabs: ClosedTabData[];
     _lastClosedTabGroupCount: number;
     busy?: boolean;
@@ -795,6 +796,7 @@ declare namespace SessionStoreNS {
     function getLazyTabValue(aTab: Tab, aKey: string): string;
     function getTabState(aTab: Tab): string;
     function getWindowById(aSessionStoreId: string): Window;
+    function getWindowState(aWindow: Window): {windows: WindowState[]};
     function setTabState(aTab: Tab, aState: string | TabData): void;
   }
   export namespace SessionStoreInternal {

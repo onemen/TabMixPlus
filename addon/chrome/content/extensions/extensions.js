@@ -39,12 +39,12 @@ var TMP_extensionsCompatibility = {
         Tabmix.extensions.tabGroupManager = true;
         window.TMP_TabGroupsManager = {};
         window.TMP_TabGroupsManager.tabmixSessionsManager = function() {};
-        const tmp = ChromeUtils.import("chrome://tabmix-resource/content/extensions/TabGroupsManager.jsm");
+        const tmp = ChromeUtils.importESModule("chrome://tabmix-resource/content/extensions/TabGroupsManager.sys.mjs");
         tmp.TMP_TabGroupsManager.changeCode = Tabmix.changeCode;
         tmp.TMP_TabGroupsManager.init(window, gBrowser.tabContainer);
       }
     } catch (ex) {
-      Tabmix.assert(ex, "error in TabGroupsManager.jsm");
+      Tabmix.assert(ex, "error in TabGroupsManager.sys.mjs");
     }
 
     // fix for Cluster Tabs - Cluster Tab look for TM_init

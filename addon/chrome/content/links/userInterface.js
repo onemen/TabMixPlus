@@ -312,7 +312,7 @@ Tabmix.checkCurrent = function TMP_checkCurrent(url) {
 Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   const attributes = ["protected", "_locked", "fixed-label", "label-uri", "reload-data"];
   attributes.forEach(att => {
-    const value = TabmixSvc.ss.getCustomTabValue(aTab, att);
+    const value = SessionStore.getCustomTabValue(aTab, att);
     this.setItem(aTab, att, value || null);
   });
 
