@@ -73,7 +73,6 @@ declare namespace TabmixNS {
   function afterDelayedStartup(): void;
   function beforeDelayedStartup(): void;
   function getAfterTabsButtonsWidth(): void;
-  function sessionInitialized(): void;
   function startup(): void;
   // lazygetters for modules (jsm files)
   const SlideshowInitialized: boolean;
@@ -124,13 +123,11 @@ declare namespace TabmixNS {
   let isWindowAfterSessionRestore: boolean;
 
   // setup.js
-  let _callPrepareLoadOnStartup: boolean;
   function _updateCloseButtons(this: MockedGeckoTypes.TabContainer, skipUpdateScrollStatus: boolean, aUrl?: string | null): void;
   function beforeStartup(tabBrowser: MockedGeckoTypes.TabBrowser, aTabContainer: MockedGeckoTypes.TabContainer): void;
   function beforeBrowserInitOnLoad(): void;
   function BrowserOpenTab(): void;
   function linkHandling_init(): void;
-  function prepareLoadOnStartup(uriToLoad?: string | string[] | null): void;
   function set_BrowserOpenTab(): void;
 
   // ScriptsLoader.sys.mjs;
@@ -167,7 +164,7 @@ declare namespace TabmixNS {
     index: number;
     pinned?: boolean;
     userContextId?: number;
-    userTypedValue: string;
+    userTypedValue: string | null;
     userTypedClear: number;
   };
 
@@ -203,7 +200,6 @@ declare namespace AllTabs {
 declare namespace AutoReload {
   function initTab(aTab: Tab): void;
   function onTabReloaded(aTab: Tab, aBrowser: Browser): void;
-  function restorePendingTabs(aTab: Tab): void;
   function toggle(aTab: Tab): void;
   function addEventListener(popup: ClosedObjectsUtils.PopupElement): void;
   function onPopupShowing(aPopup: ClosedObjectsUtils.PopupElement, aTab: Tab): void;
@@ -265,6 +261,9 @@ declare namespace ClosedObjectsUtils {
     readonly lastChild: Menuitem;
     openPopup: OpenPopup;
     readonly parentNode: CustomPanelView;
+    panelMultiView: HTMLElement & {
+      goBack(): void;
+    };
     scrollBox: ScrollBox;
     readonly triggerNode: Menuitem;
     dataset: {
@@ -493,7 +492,7 @@ declare namespace TabsUtils {
   function getTabsCount(num?: number): number;
   const events: string[];
   function init(): void;
-  function addPendingObserver(): void;
+  function addTabsObserver(): void;
   function onUnload(): void;
   function handleEvent(aEvent: MouseEvent): void;
   function initializeTabmixUI(): void;

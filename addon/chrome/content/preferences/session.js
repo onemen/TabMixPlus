@@ -22,8 +22,10 @@ var gSessionPane = {
   },
 
   isSessionStoreEnabled(onStart) {
-    var sessionStoreEnabled = Services.prefs.getIntPref("browser.startup.page") == 3 ||
-        Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
+    // ##### always show build-in session manager panel #####
+    // var sessionStoreEnabled = Services.prefs.getIntPref("browser.startup.page") == 3 ||
+    //     Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
+    const sessionStoreEnabled = true;
     $("sessionsOptions").checked = sessionStoreEnabled;
     $("sessionsPanel").setAttribute("manager", !sessionStoreEnabled ? "tabmix" : "firefox");
     if (!onStart || sessionStoreEnabled)

@@ -77,6 +77,7 @@ var TMP_Places = {
     if ("gBrowser" in window) {
       gBrowser.tabContainer.removeEventListener("SSTabRestored", this);
       this.restoringTabs = [];
+      this.tabRestoreQueue = [];
     }
     this.stopObserver();
   },
@@ -245,8 +246,11 @@ var TMP_Places = {
     // restore_on_demand - type int:
     // when the number of tabs to load exceed the number in the preference we
     // instruct SessionStore to use restore on demand for the current set of tabs.
-    const tabCount = this.restoringTabs.length + bmGroup.length;
-    const [loadProgressively, restoreOnDemand] = this.getPreferences(tabCount);
+    const [loadProgressively, restoreOnDemand] = this.getPreferences(bmGroup.length);
+    const sessionStoreRestoreOnDemand = Services.prefs.getBoolPref(
+      "browser.sessionstore.restore_on_demand"
+    );
+    const hideTempTabs = restoreOnDemand && !sessionStoreRestoreOnDemand;
 
     /** @type {Tab | undefined} */
     var tabToSelect;
@@ -262,10 +266,8 @@ var TMP_Places = {
     }
     var tabPos, index;
     var multiple = bmGroup.length > 1;
-    /** @type {Map<Tab, string>} */
-    let tabsMapWithUrl = new Map();
-    /** @type {SessionStoreNS.TabData[]} */
-    let tabsData = [];
+    /** @type {Map<Tab, SessionStoreNS.TabData>} */
+    let tabsInfo = new Map();
     let savePrincipal = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
     bmGroup.forEach((url, i) => {
       let aTab = reuseTabs[i];
@@ -304,19 +306,17 @@ var TMP_Places = {
         );
         let params = {
           skipAnimation: multiple,
-          allowInheritPrincipal: true,
           noInitialLabel: this._titlefrombookmark,
           index: prevTab._tPos + 1,
           skipBackgroundNotify: loadProgressively,
           skipLoad: loadProgressively && tabToSelect,
           preferredRemoteType,
+          triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
         };
-        // PlacesUIUtils.openTabset use SystemPrincipal
         aTab = gBrowser.addTrustedTab(loadProgressively ? "about:blank" : url, params);
       }
       this.asyncSetTabTitle(aTab, url, true);
       if (loadProgressively) {
-        tabsMapWithUrl.set(aTab, url);
         /** @type {SessionStoreNS.TabDataEntry} */
         let entry = {url, title: aTab.label};
         if (savePrincipal) {
@@ -324,16 +324,22 @@ var TMP_Places = {
         }
         // make SessionStore load the tab with proper loadFlags by setting
         // userTypedValue and userTypedClear
-        tabsData.push({
+        const tabData = {
           entries: [entry],
-          index: 0,
+          index: 1,
           userTypedValue: url,
           userTypedClear: 1,
-        });
+        };
+        tabsInfo.set(aTab, tabData);
       }
 
-      if (!tabToSelect)
+      if (!tabToSelect) {
         tabToSelect = aTab;
+      }
+      if (hideTempTabs && aTab !== tabToSelect) {
+        aTab.setAttribute("tabmix_temp_pendingtab", "true");
+        gBrowser.hideTab(aTab);
+      }
       TMP_LastTab.attachTab(aTab, prevTab);
       prevTab = aTab;
       aTab.initialize();
@@ -366,11 +372,12 @@ var TMP_Places = {
     removeTabs.forEach(tab => gBrowser.removeTab(tab));
 
     if (loadProgressively) {
-      this.restoreTabs(tabsMapWithUrl, tabsData, this.bookmarksOnDemand || restoreOnDemand);
+      this.restoreTabs(tabsInfo, this.bookmarksOnDemand || restoreOnDemand, relatedToCurrent);
     }
   },
 
   getPreferences(tabCount) {
+    tabCount += this.restoringTabs.length + this.tabRestoreQueue.length;
     // negative value indicate that the feature is disabled
     const progressively = Tabmix.prefs.getIntPref("load_tabs_progressively");
     if (progressively < 0) {
@@ -387,23 +394,61 @@ var TMP_Places = {
     return [tabCount > progressively, tabCount > onDemand];
   },
 
-  restoreTabs(tabsMapWithUrl, tabsData, restoreOnDemand) {
-    const tabs = Array.from(tabsMapWithUrl.keys());
-    this.restoringTabs.push(...tabs);
+  restoreTabs(tabsInfo, restoreOnDemand, relatedToCurrent) {
     this.bookmarksOnDemand = restoreOnDemand;
+    const sessionStoreRestoreOnDemand = Services.prefs.getBoolPref(
+      "browser.sessionstore.restore_on_demand"
+    );
 
-    tabs.forEach(tab => {
-      if (tab._restoreState) {
-        TabmixSvc.SessionStore._resetTabRestoringState(tab);
+    if (sessionStoreRestoreOnDemand === restoreOnDemand) {
+      for (const [tab, tabData] of tabsInfo) {
+        this.restoringTabs.push(tab);
+        SessionStore.setTabState(tab, tabData);
       }
-    });
-    TabmixSvc.SessionStore.restoreTabs(window, tabs, tabsData, 0);
+    } else if (restoreOnDemand) {
+      // sessionstore.restore_on_demand is off but we want restore_on_demand for bookmarks
+      let prevTab = gBrowser.selectedTab;
+      const tabDataList = [...tabsInfo.values()];
+      const tabs = gBrowser.createTabsForSessionRestore(
+        true,
+        1,
+        tabDataList,
+        []
+      );
+      // need to set it again in case it set back to false before we add restoringTabs
+      this.bookmarksOnDemand = restoreOnDemand;
+      this.restoringTabs.push(...tabs);
+      tabs.forEach((tab, i) => {
+        if (relatedToCurrent) {
+          gBrowser.moveTabTo(tab, prevTab._tPos + 1);
+          prevTab = tab;
+        }
+        /** @type {TabmixNS.TabData} */ // @ts-expect-error
+        const tabData = tabDataList[i];
+        SessionStore.setTabState(tab, tabData);
+      });
+    } else {
+      // sessionstore.restore_on_demand is on but we want bookmarks to restoe progressively
+      for (const [tab, tabData] of tabsInfo) {
+        SessionStore.setTabState(tab, tabData);
+        if (tab.selected) {
+          this.restoringTabs.push(tab);
+        } else {
+          this.tabRestoreQueue.push(tab);
+          this.restoreNextTab();
+        }
+      }
+    }
 
     // set icon on pending tabs that are not about: pages
-    const pendingData = Array.from(tabsMapWithUrl.entries()).filter(
-      ([tab, url]) => tab.hasAttribute("pending") && !url.startsWith("about")
+    const pendingData = Array.from(tabsInfo.entries()).filter(
+      ([tab, tabData]) => (tab.hasAttribute("tabmix_temp_pendingtab") ||
+          tab.hasAttribute("pending")) &&
+        !tabData.userTypedValue?.startsWith("about")
     );
-    for (let [tab, pageUrl] of pendingData) {
+    for (let [tab, {userTypedValue}] of pendingData) {
+      /** @type {string}  */ // @ts-expect-error - we set userTypedValue to bookmarks url above
+      const pageUrl = userTypedValue;
       const entryURI = Services.io.newURI(pageUrl);
       PlacesUtils.favicons.getFaviconURLForPage(entryURI, iconURI => {
         if (!iconURI) {
@@ -411,10 +456,23 @@ var TMP_Places = {
           iconURI = Services.io.newURI(`${pageUrl.replace(/\/$/, "")}/favicon.ico`);
         }
         // skip tab that already restored
-        if (tab.hasAttribute("pending")) {
+        if (
+          tab.hasAttribute("tabmix_temp_pendingtab") && tab.linkedBrowser ||
+          tab.hasAttribute("pending")
+        ) {
           const message = {iconUrl: iconURI.spec, pageUrl};
-          tab.linkedBrowser.messageManager
-              .sendAsyncMessage("Tabmix:SetPendingTabIcon", message);
+          tab.linkedBrowser.messageManager.sendAsyncMessage(
+            "Tabmix:SetPendingTabIcon",
+            message
+          );
+          // fallback in case somehow we don't get the image back
+          if (tab.hasAttribute("tabmix_temp_pendingtab")) {
+            setTimeout(() => {
+              if (tab.parentElement) {
+                gBrowser.removeTab(tab, {animate: false});
+              }
+            }, 1000);
+          }
         }
       });
     }
@@ -422,24 +480,57 @@ var TMP_Places = {
 
   bookmarksOnDemand: false,
   restoringTabs: [],
+  tabRestoreQueue: [],
 
   resetRestoreState(tab) {
     if (tab._restoreState) {
-      TabmixSvc.SessionStore._resetTabRestoringState(tab);
+      gBrowser.discardBrowser(tab, true);
     }
     this.updateRestoringTabsList(tab);
   },
 
   updateRestoringTabsList(tab) {
-    if (!this.restoringTabs.length && !this.bookmarksOnDemand) {
+    if (
+      !this.restoringTabs.length &&
+      !this.tabRestoreQueue.length &&
+      !this.bookmarksOnDemand
+    ) {
       return;
     }
     let index = this.restoringTabs.indexOf(tab);
     if (index > -1) {
       this.restoringTabs.splice(index, 1);
     }
+    if (this.tabRestoreQueue.length) {
+      this.restoreNextTab();
+    }
     if (!this.restoringTabs.length) {
       this.bookmarksOnDemand = false;
+    }
+  },
+
+  restoreNextTab() {
+    if (this.restoringTabs.length >= 3) {
+      return;
+    }
+
+    const tab = this.tabRestoreQueue.shift();
+    if (tab) {
+      this.restoringTabs.push(tab);
+      gBrowser.reloadTab(tab);
+    }
+  },
+
+  // for unloaded pending tab, we copy the image from temporary tab
+  addImageToLazyPendingTab(tab) {
+    if (tab.selected || !tab.hasAttribute("tabmix_temp_pendingtab")) {
+      return;
+    }
+    const bookmarkUrl = tab.getAttribute("tabmix_bookmarkUrl");
+    const restoringTab = this.restoringTabs.find(t => t.getAttribute("tabmix_bookmarkUrl") === bookmarkUrl);
+    if (restoringTab && restoringTab !== tab && tab.hasAttribute("image")) {
+      restoringTab.setAttribute("image", tab.getAttribute("image") ?? "");
+      gBrowser.removeTab(tab, {animate: false});
     }
   },
 

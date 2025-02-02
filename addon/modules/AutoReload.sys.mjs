@@ -281,38 +281,6 @@ export const AutoReload = {
     _setItem(aTab, "_reload", aTab.autoReloadEnabled || null);
   },
 
-  /**
-   *  called by Tabmix.restoreTabState for pending tabs
-   */
-  restoringTabs: new WeakSet(),
-  restorePendingTabs(tab) {
-    if (this.restoringTabs.has(tab) || !tab.hasAttribute("pending")) {
-      return;
-    }
-
-    this.restoringTabs.add(tab);
-    tab.addEventListener(
-      "SSTabRestored",
-      () => {
-        this.restoringTabs.delete(tab);
-      },
-      {once: true}
-    );
-
-    if (tab.linkedPanel) {
-      TabmixSvc.SessionStore.restoreTabContent(tab);
-    } else {
-      tab.addEventListener(
-        "SSTabRestoring",
-        () => {
-          TabmixSvc.SessionStore.restoreTabContent(tab);
-        },
-        {once: true}
-      );
-      tab.ownerGlobal.gBrowser._insertBrowser(tab);
-    }
-  },
-
   confirm(window, tab, isRemote) {
     if (tab.postDataAcceptedByUser)
       return true;

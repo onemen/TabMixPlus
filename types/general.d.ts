@@ -347,6 +347,7 @@ declare namespace MockedGeckoTypes {
     clearMultiSelectedTabs: () => void;
     closingTabsEnum: ClosingTabsEnum;
     duplicateTab: (aTab: BrowserTab, aRestoreTabImmediately: boolean, aOptions?: {inBackground?: boolean; index?: number}) => BrowserTab;
+    discardBrowser: (aTab: BrowserTab, aForceDiscard?: boolean) => void;
     getBrowserAtIndex: (aIndex: number) => ChromeBrowser;
     getBrowserForTab: (tab: BrowserTab) => ChromeBrowser;
     getNotificationBox: (browser?: ChromeBrowser) => NotificationBox;
@@ -461,7 +462,13 @@ declare namespace MockedGeckoTypes {
     gBrowser: TabBrowser;
   }
 
-  type MozTabbrowserTabGroup = {color: string; collapsed: boolean; id: string; label: string};
+  interface MozTabbrowserTabGroup extends MozXULElement {
+    addTabs: (tabs: BrowserTab[]) => void;
+    color: string;
+    collapsed: boolean;
+    id: string;
+    label: string;
+  }
 
   interface TabsPanel extends TabsListBase {
     prototype: TabsListBase;
@@ -774,7 +781,7 @@ interface E10SUtils {
   SERIALIZED_SYSTEMPRINCIPAL: string;
   DEFAULT_REMOTE_TYPE: string;
   getRemoteTypeForURI: (aUri: string, aMultiProcess?: boolean, aRemoteSubframes?: boolean, aPreferredRemoteType?: string, aCurrentUri?: string | null, aOriginAttributes?: Params) => string;
-  predictOriginAttributes: ({window, browser, userContextId, geckoViewSessionContextId, privateBrowsingId}: {window?: Window; browser?: MockedGeckoTypes.ChromeBrowser; userContextId?: string; geckoViewSessionContextId?: string; privateBrowsingId?: string}) => {privateBrowsingId: string; userContextId: string; geckoViewSessionContextId: string};
+  predictOriginAttributes: ({window, browser, userContextId, geckoViewSessionContextId, privateBrowsingId}: {window?: Window; browser?: MockedGeckoTypes.ChromeBrowser; userContextId?: number | undefined; geckoViewSessionContextId?: string; privateBrowsingId?: string}) => {privateBrowsingId: string; userContextId: string; geckoViewSessionContextId: string};
   serializeCSP: (csp: nsIContentSecurityPolicy) => string;
   serializeReferrerInfo: (referrerInfo: nsIReferrerInfo) => string;
 }
@@ -932,7 +939,7 @@ declare var BrowserWindowTracker: {
   getTopWindow: (options?: {private?: boolean; allowPopups?: boolean}) => Window | null;
 };
 declare var BrowserUtils: BrowserUtils;
-declare var Components: nsIXPCComponents;
+declare var Components: nsIXPCComponents & {Exception(message?: string, name?: string): Error};
 declare var ctrlTab: {
   init: () => void;
   uninit: () => void;

@@ -43,31 +43,6 @@ Tabmix.beforeDelayedStartup = function() {
   }
 };
 
-// after TabmixSessionManager and SessionStore initialized
-Tabmix.sessionInitialized = function() {
-  var SM = TabmixSessionManager;
-  if (SM.enableManager) {
-    window.restoreLastSession = function restoreLastSession() {
-      TabmixSessionManager.restoreLastSession();
-    };
-
-    this.setItem("Browser:RestoreLastSession", "disabled",
-      !SM.canRestoreLastSession || SM.isPrivateWindow);
-  }
-
-  const tab = gBrowser.tabContainer.allTabs[0];
-  if (!tab.selected) {
-    tab.removeAttribute("visited");
-    tab.removeAttribute("tabmix_selectedID");
-    Tabmix.setTabStyle(tab);
-  }
-
-  TMP_ClosedTabs.setButtonDisableState();
-  if (this.isFirstWindowInSession) {
-    Tabmix.closedObjectsUtils.toggleRecentlyClosedWindowsButton();
-  }
-};
-
 /** @this {typeof TabmixNS} */ // @ts-ignore
 Tabmix.getAfterTabsButtonsWidth = function() {
   this.afterTabsButtonsWidthReady = false;
@@ -122,13 +97,16 @@ Tabmix.getAfterTabsButtonsWidth = function() {
 };
 
 Tabmix.afterDelayedStartup = function() {
-  if (this._callPrepareLoadOnStartup) {
-    gBrowserInit.uriToLoadPromise
-        .then(uriToLoad => this.prepareLoadOnStartup(uriToLoad))
-        .then(() => TabmixSessionManager.init());
-  } else {
-    this.prepareLoadOnStartup();
-    TabmixSessionManager.init();
+  const tab = gBrowser.tabContainer.allTabs[0];
+  if (!tab.selected) {
+    tab.removeAttribute("visited");
+    tab.removeAttribute("tabmix_selectedID");
+    Tabmix.setTabStyle(tab);
+  }
+
+  TMP_ClosedTabs.setButtonDisableState();
+  if (this.isFirstWindowInSession) {
+    Tabmix.closedObjectsUtils.toggleRecentlyClosedWindowsButton();
   }
 
   // focus address-bar area if the selected tab is blank when Firefox starts

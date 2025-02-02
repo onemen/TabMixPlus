@@ -318,23 +318,25 @@ var TMP_ClosedTabs = {
    * Get closed tabs count
    */
   get count() {
-    const name =
-      !Tabmix.isVersion(1170) ?
-        "getClosedTabCountForWindow" :
-        "getClosedTabCount";
-    // exclude closed groups from closed windows until Bug 1932941 fixed
-    return window.__SSi ? SessionStore[name](window) - this.getClosedTabCountFromClosedGroupInClosedWindows() : 0;
-  },
-
-  getClosedTabCountFromClosedGroupInClosedWindows() {
-    if (!Tabmix.isVersion(1350)) {
+    if (!window.__SSi) {
       return 0;
     }
-    return Object.values(TabmixSvc.SessionStore._closedWindows)
+
+    if (!Tabmix.isVersion(1170)) {
+      return SessionStore.getClosedTabCountForWindow(window);
+    }
+
+    if (Tabmix.isVersion(1360) || !Tabmix.isVersion(1350)) {
+      return SessionStore.getClosedTabCount(window);
+    }
+
+    const closedTabCountFromClosedGroupInClosedWindows = SessionStore.getClosedWindowData()
         .map(winData => winData.closedGroups)
         .flat()
         .map(group => group.tabs.length)
         .reduce((a, b) => a + b, 0);
+
+    return SessionStore.getClosedTabCount(window) - closedTabCountFromClosedGroupInClosedWindows;
   },
 
   /**
@@ -359,6 +361,7 @@ var TMP_ClosedTabs = {
         closedTabsData.push(...SessionStore.getClosedTabDataFromClosedWindows());
       }
     }
+
     return closedTabsData;
   },
 
@@ -379,21 +382,162 @@ var TMP_ClosedTabs = {
     return window;
   },
 
-  getSingleClosedTabData(source, index) {
-    if (!Tabmix.isVersion(1170)) {
-      return this.getClosedTabData[index];
+  // copy of function from SessionStore.sys.mjs SessionStoreInternal._resolveClosedDataSource
+  _resolveClosedDataSource(source) {
+    let winData;
+    if (source instanceof Ci.nsIDOMWindow) {
+      winData = SessionStore.getWindowState(source);
+    } else if ("sourceWindow" in source && source.sourceWindow instanceof Ci.nsIDOMWindow) {
+      winData = SessionStore.getWindowState(source.sourceWindow);
+    } else if ("sourceClosedId" in source && typeof source.sourceClosedId == "number") {
+      const closedWindowData = SessionStore.getClosedWindowData().find(
+        closedData => closedData.closedId == source.sourceClosedId
+      );
+      if (!closedWindowData) {
+        throw Components.Exception("No such closed window", Cr.NS_ERROR_INVALID_ARG);
+      }
+      return closedWindowData;
+    } else if ("sourceWindowId" in source && typeof source.sourceWindowId == "string") {
+      let win = SessionStore.getWindowById(source.sourceWindowId);
+      winData = SessionStore.getWindowState(win);
+    } else {
+      throw Components.Exception("Invalid source object", Cr.NS_ERROR_INVALID_ARG);
+    }
+    /** @type {SessionStoreNS.WindowStateData} */ // @ts-expect-error
+    const result = winData.windows[0];
+    return result;
+  },
+
+  // copy of function from SessionStore.sys.mjs SessionStoreInternal._getStateForClosedTabsAndClosedGroupTabs
+  // @ts-expect-error
+  _getStateForClosedTabsAndClosedGroupTabs(winData, aIndex) {
+    const closedGroups = winData.closedGroups ?? [];
+    const closedTabs = winData._closedTabs ?? [];
+
+    // Merge tabs and groups into a single sorted array of tabs sorted by
+    // closedAt
+    /** @type {SessionStoreNS.ClosedTabData[]} */
+    let result = [];
+    let groupIdx = 0;
+    let tabIdx = 0;
+    let current = 0;
+    let totalLength = closedGroups.length + closedTabs.length;
+
+    while (current < totalLength) {
+      /** @type {SessionStoreNS.ClosedGroup} */ // @ts-expect-error
+      let group = closedGroups[groupIdx];
+      /** @type {SessionStoreNS.ClosedTabData} */ // @ts-expect-error
+      let tab = closedTabs[tabIdx];
+
+      if (
+        groupIdx < closedGroups.length &&
+        (tabIdx >= closedTabs.length || group?.closedAt > tab?.closedAt)
+      ) {
+        // eslint-disable-next-line no-loop-func
+        group.tabs.forEach((groupTab, idx) => {
+          groupTab._originalStateIndex = idx;
+          groupTab._originalGroupStateIndex = groupIdx;
+          result.push(groupTab);
+        });
+        groupIdx++;
+      } else {
+        tab._originalStateIndex = tabIdx;
+        result.push(tab);
+        tabIdx++;
+      }
+
+      current++;
+      // @ts-ignore
+      if (current > aIndex) {
+        break;
+      }
     }
 
-    const sourceWinData = TabmixSvc.SessionStore._resolveClosedDataSource(source);
+    if (aIndex !== undefined) {
+      const tabData = result[aIndex];
+      if (tabData) {
+        return tabData;
+      }
+      throw new Error(`ClosedTabData not found for index ${aIndex}`);
+    }
+
+    return result;
+  },
+
+  // copy of function from SessionStore.sys.mjs SessionStoreInternal._getClosedTabStateFromUnifiedIndex
+  _getClosedTabStateFromUnifiedIndex(sourceWinData, tabState) {
+    let closedTabSet, closedTabIndex;
+    // eslint-disable-next-line no-eq-null
+    if (tabState._originalGroupStateIndex == null) {
+      closedTabSet = sourceWinData._closedTabs;
+    } else {
+      closedTabSet =
+        // @ts-ignore
+        sourceWinData.closedGroups[tabState._originalGroupStateIndex].tabs;
+    }
+    closedTabIndex = tabState._originalStateIndex;
+
+    return {closedTabSet, closedTabIndex};
+  },
+
+  // copy of function from SessionStore.sys.mjs SessionStoreInternal.getPreferredRemoteType
+  getPreferredRemoteType(url, aWindow, userContextId) {
+    return E10SUtils.getRemoteTypeForURI(
+      url,
+      aWindow.gMultiProcessBrowser,
+      aWindow.gFissionBrowser,
+      E10SUtils.DEFAULT_REMOTE_TYPE,
+      null,
+      E10SUtils.predictOriginAttributes({
+        window: aWindow,
+        userContextId,
+      })
+    );
+  },
+
+  getSingleClosedTabData(source, index) {
+    if (!Tabmix.isVersion(1170)) {
+      return {tabData: this.getClosedTabData[index], closedTabIndex: index};
+    }
+
+    const sourceWinData = this._resolveClosedDataSource(source);
+
+    if (!Tabmix.isVersion(1350)) {
+      const closedIndex = source.closedWindow && !source.restoreAll ?
+        sourceWinData._closedTabs.findIndex(
+          tabData => tabData.closedId == index
+        ) :
+        index;
+      return {
+        tabData: sourceWinData._closedTabs[closedIndex],
+        closedTabIndex: closedIndex,
+      };
+    }
+
+    let closedTabState;
     if (source.closedWindow) {
-      return sourceWinData._closedTabs.find(tabData => tabData.closedId == index);
-    } else if (Tabmix.isVersion(1350)) {
-      return TabmixSvc.SessionStore._getStateForClosedTabsAndClosedGroupTabs(
+      const closedTabs = this._getStateForClosedTabsAndClosedGroupTabs(
         sourceWinData,
-        index
+        undefined
+      );
+      closedTabState = source.restoreAll ?
+        closedTabs[index] :
+        closedTabs.find(tabData => tabData.closedId == index);
+    } else {
+      closedTabState = this._getStateForClosedTabsAndClosedGroupTabs(
+        sourceWinData,
+        index || 0
       );
     }
-    return sourceWinData._closedTabs[index];
+
+    if (!closedTabState) {
+      return {tabData: undefined, closedTabIndex: -1};
+    }
+
+    const {closedTabSet, closedTabIndex} =
+        this._getClosedTabStateFromUnifiedIndex(sourceWinData, closedTabState);
+
+    return {tabData: closedTabSet[closedTabIndex], closedTabIndex};
   },
 
   getUrl: function ct_getUrl(aTabData) {
@@ -420,37 +564,28 @@ var TMP_ClosedTabs = {
       parent.setAttribute("context", "tm_undocloseContextMenu");
     }
 
-    const closedTabsByWindow = this.allClosedTabData.reduce(
-      /** @param {SessionStoreNS.ClosedTabsByWindow} acc */
-      (acc, tabData) => {
-        const {sourceClosedId, sourceWindowId} = tabData;
-        const key = typeof sourceClosedId === "number" ? `closedWindow${sourceClosedId}` : sourceWindowId;
-        if (!acc[key]) {
-          acc[key] = [];
-        }
-        acc[key].push(tabData);
-        return acc;
-      }, {});
-
+    const closedTabsInfo = {tabs: this.allClosedTabData.slice(), index: {value: -1}};
     const childNodes = parent.childNodes;
     const isSubviewbutton = aPopup.__tagName === "toolbarbutton";
     for (let i = 0; i < childNodes.length - (isAppMenu ? 0 : 1); i++) {
       /** @type {TabmixClosedTabsNS.Menuitem} */ // @ts-expect-error
       let m = childNodes[i];
       if (isSubviewbutton && m.id.startsWith("closed-tabs-tab-group")) {
-        const groupId = m.id.replace("closed-tabs-tab-group-", "");
-        m.nextElementSibling?.setAttribute("data-group-id", groupId);
-        const subview = m.querySelector(".panel-subview-body");
+        /** @type {ClosedObjectsUtils.PopupElement} */ // @ts-ignore
+        const popupItem = m;
+        const groupId = popupItem.id.replace("closed-tabs-tab-group-", "");
+        popupItem.nextElementSibling?.setAttribute("data-group-id", groupId);
+        const subview = popupItem.querySelector(".panel-subview-body");
         subview.setAttribute("context", "tm_undocloseContextMenu");
         subview.hidePopup = aPopup.hidePopup;
-        this.updateTabGroupItems(m, closedTabsByWindow, isSubviewbutton);
+        this.updateTabGroupItems(popupItem, closedTabsInfo, isSubviewbutton);
       } else if (m.tagName === "menu") {
-        this.updateTabGroupItems(m.menupopup, closedTabsByWindow, isSubviewbutton);
+        this.updateTabGroupItems(m.menupopup, closedTabsInfo, isSubviewbutton);
       } else if (
         !m.previousElementSibling?.id.startsWith("closed-tabs-tab-group") &&
         m.tagName !== "menuseparator"
       ) {
-        this.updateMenuItem(m, closedTabsByWindow);
+        this.updateMenuItem(m, closedTabsInfo);
         if (isSubviewbutton) {
           m.value = i;
           m.setAttribute("class", "bookmark-item subviewbutton subviewbutton-iconic");
@@ -503,49 +638,76 @@ var TMP_ClosedTabs = {
     return true;
   },
 
-  updateTabGroupItems(parent, closedTabsByWindow, isSubviewbutton) {
+  closeTabGroupView(parent, groupId) {
+    if (this.keepMenuOpen && groupId) {
+      const panel = parent.panelMultiView;
+      panel.goBack();
+      panel.querySelector(`[data-group-id="${groupId}"]`).remove();
+      parent.remove();
+    }
+  },
+
+  updateTabGroupItems(parent, closedTabsInfo, isSubviewbutton) {
     const tagName = isSubviewbutton ? "toolbarbutton" : "menuitem";
     const items = parent.querySelectorAll(tagName);
     for (const item of Array.from(items).slice(0, -1)) {
-      this.updateMenuItem(item, closedTabsByWindow);
+      this.updateMenuItem(item, closedTabsInfo);
     }
-    this.addMenuItem(parent, isSubviewbutton, {
+    const {id, ...source} = items.item(0)?.closedGroup ?? {id: ""};
+    const clearTabGroup = this.addMenuItem(parent, isSubviewbutton, {
       id: "clearTabGroup",
       label: "Clear tab group",
       tagName,
       command: () => {
-        const {id, ...source} = items.item(0)?.closedGroup ?? {id: ""};
-        TabmixSvc.SessionStore.forgetClosedTabGroup(source, id);
+        SessionStore.forgetClosedTabGroup(source, id);
+        this.closeTabGroupView(parent, id);
       },
+    });
+    clearTabGroup.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
+    const reopenTabGroupItem = parent.lastChild;
+    reopenTabGroupItem.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
+    reopenTabGroupItem.addEventListener("command", () => {
+      this.closeTabGroupView(parent, id);
     });
   },
 
-  updateMenuItem(item, closedTabsByWindow) {
-    const index = Number(item.getAttribute("value"));
+  updateMenuItem(item, closedTabsInfo) {
+    const closedTab = closedTabsInfo.tabs[++closedTabsInfo.index.value];
 
-    const {sourceWindowId, sourceClosedId} = this.getSource(item);
-    const windowKey = typeof sourceClosedId === "number" ? `closedWindow${sourceClosedId}` : sourceWindowId;
-    const closedTabsForWindow = closedTabsByWindow[windowKey];
-    if (closedTabsForWindow) {
-      const tabData = sourceClosedId ?
-        closedTabsForWindow.find(data => data.closedId === index) :
-        closedTabsForWindow.at(index);
+    // workaround for bug 1932941 - missing "source-closed-id"
+    if (typeof closedTab?.sourceClosedId == "number" && !item.hasAttribute("source-closed-id")) {
+      const url = closedTab.state.entries[closedTab.state.index - 1]?.url;
+      const targetURI = item.getAttribute("targetURI");
+      if (url === targetURI) {
+        item.removeAttribute("source-window-id");
+        item.setAttribute("source-closed-id", closedTab.sourceClosedId);
+        item.setAttribute("value", closedTab.closedId);
+      } else {
+        console.log("Tabmix Error: unable to set source-closed-id", item, url, targetURI);
+      }
+    }
 
-      if (tabData && item.hasAttribute("targetURI")) {
-        this.getTitle(tabData, item.getAttribute("targetURI") ?? "").then(title => {
+    if (closedTab) {
+      if (closedTab && item.hasAttribute("targetURI")) {
+        this.getTitle(closedTab, item.getAttribute("targetURI") ?? "").then(title => {
           item.setAttribute("label", title);
         });
       }
-      if (tabData?.state.groupId) {
+      if (closedTab?.state.groupId) {
         item.closedGroup = {
-          id: tabData.state.groupId,
-          sourceClosedId: tabData.sourceClosedId,
-          sourceWindowId: tabData.sourceWindowId,
+          id: closedTab.state.groupId,
+          sourceClosedId: closedTab.sourceClosedId,
+          sourceWindowId: closedTab.sourceWindowId,
         };
       }
     } else {
-      console.log("Tabmix Error: unable to find closed tab data", item,
-        {sourceWindowId, sourceClosedId, windowKey, closedTabsForWindow, closedTabsByWindow});
+      console.log("Tabmix Error: unable to find closed tab data",
+        item,
+        {
+          index: closedTabsInfo.index.value,
+          closedTabs: closedTabsInfo.tabs[++closedTabsInfo.index.value]
+        }
+      );
     }
     item.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
     item.removeAttribute("oncommand");
@@ -554,38 +716,37 @@ var TMP_ClosedTabs = {
     item.removeEventListener("click", RecentlyClosedTabsAndWindowsMenuUtils._undoCloseMiddleClick);
   },
 
-  repopulateGroupItems(popup) {
+  repopulateGroupItems(popup, itemToRemove) {
     this.setPopupWidth(popup);
+
+    const deletedIndex = Number(itemToRemove.getAttribute("value"));
+    let key = "", shortcut = "";
+    if (deletedIndex === 0) {
+      key = itemToRemove.getAttribute("key") ?? "";
+      shortcut = itemToRemove.getAttribute("shortcut") ?? "";
+    }
+    itemToRemove.remove();
+
+    const panelBody = popup.closest("[mainViewId]");
+    /** @type {ClosedObjectsUtils.Menuitem[]} */ // @ts-ignore
+    const menuItems = panelBody?.querySelectorAll("[source-window-id]");
+    for (const item of menuItems) {
+      // we can not rely on the item order to set the index
+      const index = Number(item.getAttribute("value"));
+      if (index > deletedIndex) {
+        item.setAttribute("value", index - 1);
+        if (deletedIndex === 0 && index === 1) {
+          item.setAttribute("key", key);
+          item.setAttribute("shortcut", shortcut);
+        }
+      }
+    }
+
     const groupId = popup.parentNode.id.replace("closed-tabs-tab-group-", "");
-    const group = TabmixSvc.SessionStore.getClosedTabGroups().find(g => g.id === groupId);
-    const items = Array.from(popup.querySelectorAll("toolbarbutton"));
-    if (!group) {
-      const panel = popup.parentNode.panelMultiView;
-      panel.goBack();
-      panel.querySelector(`[data-group-id="${groupId}"]`).remove();
-      popup.parentNode.remove();
-      return true;
+    const group = SessionStore.getClosedTabGroups().find(g => g.id === groupId);
+    if (!group || group.tabs.length === 0) {
+      this.closeTabGroupView(popup.parentNode, groupId);
     }
-    items.at(-1)?.remove();
-    for (let i = 0; i < items.length - 1; i++) {
-      const item = items[i];
-      const closedTabData = group.tabs[i];
-      if (!item || !closedTabData) {
-        return false;
-      }
-      delete item._tabmix_middleClicked;
-      const {url, title} = TMP_SessionStore.getActiveEntryData(closedTabData.state);
-      if (!url || !title) {
-        return false;
-      }
-      item.setAttribute("targetURI", url);
-      item.setAttribute("label", title);
-      item.addEventListener("command", this, {capture: true, once: true});
-      this.getTitle(closedTabData, item.getAttribute("targetURI") ?? "").then(newTitle => {
-        item.setAttribute("label", newTitle);
-      });
-    }
-    return true;
   },
 
   addMenuItem(popup, isSubviewbutton, {id, label, command, val, keyId, tagName}) {
@@ -721,9 +882,7 @@ var TMP_ClosedTabs = {
         if (popup.parentNode?.id === "appMenu-library-recentlyClosedTabs") {
           Tabmix.closedObjectsUtils.updateAppmenuView(popup, "Tabs");
         } else if (popup.parentNode.id.startsWith("closed-tabs-tab-group")) {
-          if (!this.repopulateGroupItems(popup)) {
-            popup.hidePopup();
-          }
+          this.repopulateGroupItems(popup, item);
         } else {
           this.setPopupWidth(popup);
           Tabmix.closedObjectsUtils.populateClosedTabsMenu(popup.parentNode);
@@ -737,7 +896,7 @@ var TMP_ClosedTabs = {
   },
 
   addBookmarks: function ct_addBookmarks(source, index) {
-    var tabData = this.getSingleClosedTabData(source, index);
+    const {tabData} = this.getSingleClosedTabData(source, index);
     if (!tabData) {
       console.log(`Tabmix Error: unable to add bookmark from closed tab at index ${index}`);
       return;
@@ -749,7 +908,7 @@ var TMP_ClosedTabs = {
   },
 
   copyTabUrl: function ct_copyTabUrl(source, index) {
-    var tabData = this.getSingleClosedTabData(source, index);
+    const {tabData} = this.getSingleClosedTabData(source, index);
     if (!tabData) {
       console.log(`Tabmix Error: unable to copy url from closed tab at index ${index}`);
       return;
@@ -766,10 +925,10 @@ var TMP_ClosedTabs = {
         this.restoreToNewWindow(source, index);
         break;
       case "delete":
-        if (source.closedWindow) {
+        if (source.closedGroup) {
+          this.removeClosedTabData(source, index);
+        } else if (source.closedWindow) {
           SessionStore.forgetClosedTabById(index, source);
-        } else if (source.closedGroup) {
-          this.getClosedTabAtIndex(source, index);
         } else {
           SessionStore.forgetClosedTab(source, index);
         }
@@ -791,11 +950,11 @@ var TMP_ClosedTabs = {
 
   removeAllClosedTabs() {
     if (Tabmix.isVersion(1350)) {
-      const closedGroups = TabmixSvc.SessionStore.getClosedTabGroups({closedTabsFromClosedWindows: false});
+      const closedGroups = SessionStore.getClosedTabGroups({closedTabsFromClosedWindows: false});
       for (const group of closedGroups) {
         const tabData = group.tabs[0];
         if (tabData) {
-          TabmixSvc.SessionStore.forgetClosedTabGroup(tabData, group.id);
+          SessionStore.forgetClosedTabGroup(tabData, group.id);
         }
       }
     }
@@ -817,44 +976,27 @@ var TMP_ClosedTabs = {
    * @param index     Integer value - 0 or grater index to remove
    * @returns         closed tab data at aIndex.
    */
-  getClosedTabAtIndex: function ct_getClosedTabAtIndex(source, index) {
-    const winData = Tabmix.isVersion(1170) ?
-      TabmixSvc.SessionStore._resolveClosedDataSource(source) :
-      TabmixSvc.SessionStore._windows[window.__SSi];
-    const closedTabs = winData?._closedTabs;
-    /** @type {number} */
-    const closedIndex =
-      source.closedWindow && !source.restoreAll ?
-        closedTabs?.findIndex(tabData => tabData.closedId == index) :
-        index;
-    if (closedIndex < 0) {
+  removeClosedTabData(source, index) {
+    const {tabData, closedTabIndex} = this.getSingleClosedTabData(source, index);
+
+    if (!tabData) {
       return null;
     }
 
-    if (!Tabmix.isVersion(1350)) {
-      const tabData = TabmixSvc.SessionStore.removeClosedTabData(winData, closedTabs, closedIndex);
-      TabmixSvc.SessionStore._notifyOfClosedObjectsChange();
-      return tabData;
+    if (tabData.state.groupId) {
+      // workaround to forget closed tab from closed group - Bug 1945238
+      const tabToForget = SessionStore.undoCloseTab(source, source.closedWindow ? closedTabIndex : index);
+      gBrowser.hideTab(tabToForget);
+      gBrowser.removeTab(tabToForget, {skipSessionStore: true});
+    } else {
+      SessionStore.forgetClosedTab(source, closedTabIndex);
     }
 
-    const closedTabState = TabmixSvc.SessionStore._getStateForClosedTabsAndClosedGroupTabs(
-      winData,
-      closedIndex
-    );
-    if (!closedTabState) {
-      return null;
-    }
-    const {closedTabSet, closedTabIndex} =
-        TabmixSvc.SessionStore._getClosedTabStateFromUnifiedIndex(winData, closedTabState);
-    const closedTab = TabmixSvc.SessionStore.removeClosedTabData(winData, closedTabSet, closedTabIndex);
-    TabmixSvc.SessionStore._cleanupOrphanedClosedGroups(winData);
-
-    TabmixSvc.SessionStore._notifyOfClosedObjectsChange();
-    return closedTab;
+    return tabData;
   },
 
   restoreToNewWindow(source, index) {
-    const tabData = this.getClosedTabAtIndex(source, index);
+    const tabData = this.removeClosedTabData(source, index);
     if (tabData) {
       // we pass the current tab as a place holder for tabData
       const state = JSON.stringify(tabData ? tabData.state : {});
@@ -901,7 +1043,7 @@ var TMP_ClosedTabs = {
     if (!Tabmix.prefs.getBoolPref("undoClose") || this.count === 0) return null;
 
     // get tab data
-    const tabData = this.getClosedTabAtIndex(aSource, aIndex);
+    const tabData = this.removeClosedTabData(aSource, aIndex);
     if (!tabData) {
       console.error(`Tabmix Error: unable to restore closed tab from index ${aIndex}`);
       return null;
@@ -944,7 +1086,7 @@ var TMP_ClosedTabs = {
       preferredRemoteType = E10SUtils.DEFAULT_REMOTE_TYPE;
       const url = this.getUrl(tabData);
       if (url) {
-        preferredRemoteType = TabmixSvc.SessionStore.getPreferredRemoteType(
+        preferredRemoteType = this.getPreferredRemoteType(
           url,
           window,
           state.userContextId
@@ -978,7 +1120,7 @@ var TMP_ClosedTabs = {
     }
 
     // restore tab content
-    TabmixSvc.SessionStore.restoreTab(newTab, state);
+    SessionStore.setTabState(newTab, state);
 
     if (TMP_TabView.exist("afterUndoCloseTab")) {
       TabView.afterUndoCloseTab();
@@ -1015,7 +1157,7 @@ var TMP_ClosedTabs = {
   // workaround for bug 1868452 - Key key_undoCloseTab of menuitem could not be found
   fix_bug_1868452(item) {
     if (
-      Tabmix.isVersion(1160) &&
+      Tabmix.isVersion(1160) && !Tabmix.isVersion(1330) &&
       item?.getAttribute("key") === "key_undoCloseTab" &&
       !document.getElementById("key_undoCloseTab") &&
       document.getElementById("key_restoreLastClosedTabOrWindowOrSession")

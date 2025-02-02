@@ -156,8 +156,6 @@ export const TabmixSvc = {
       const {DynamicRules} = ChromeUtils.importESModule("chrome://tabmix-resource/content/DynamicRules.sys.mjs");
       DynamicRules.init(aWindow);
 
-      ChromeUtils.importESModule("chrome://tabmix-resource/content/TabRestoreQueue.sys.mjs");
-
       if (lazy.isVersion(1300)) {
         const {VerticalTabs} = ChromeUtils.importESModule("chrome://tabmix-resource/content/VerticalTabs.sys.mjs");
         VerticalTabs.init(aWindow);
@@ -214,6 +212,8 @@ export const TabmixSvc = {
   },
 
   sm: {
+    TAB_STATE_NEEDS_RESTORE: 1,
+    TAB_STATE_RESTORING: 2,
     lastSessionPath: null,
     status: "",
     crashed: false,
@@ -304,19 +304,10 @@ ChromeUtils.defineLazyGetter(TabmixSvc, "console", () => {
 ChromeUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", () => {
   // Don't ChromeUtils.import here it can not import variables that
   // are not in EXPORTED_SYMBOLS
-  // // eslint-disable-next-line mozilla/use-chromeutils-import
-  // return Cu.import("resource:///modules/sessionstore/SessionStore.jsm");
-  return {};
+  // eslint-disable-next-line mozilla/use-chromeutils-import
+  return lazy.isVersion(1360) ? {} : Cu.import("resource:///modules/sessionstore/SessionStore.jsm");
 });
 
 ChromeUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
   return this.SessionStoreGlobal.SessionStoreInternal;
-});
-
-ChromeUtils.defineLazyGetter(TabmixSvc.sm, "TAB_STATE_NEEDS_RESTORE", () => {
-  return TabmixSvc.SessionStoreGlobal.TAB_STATE_NEEDS_RESTORE;
-});
-
-ChromeUtils.defineLazyGetter(TabmixSvc.sm, "TAB_STATE_RESTORING", () => {
-  return TabmixSvc.SessionStoreGlobal.TAB_STATE_RESTORING;
 });

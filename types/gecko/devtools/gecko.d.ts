@@ -386,6 +386,7 @@ declare var PathUtils: PathUtilsInterface;
 declare var Cu: MockedExports.Cu;
 declare var Cc: MockedExports.Cc;
 declare var Ci: MockedExports.Ci;
+declare var Cr: MockedExports.Cr;
 declare var Services: MockedExports.Services;
 
 /**

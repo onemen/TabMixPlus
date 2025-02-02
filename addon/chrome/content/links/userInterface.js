@@ -339,10 +339,10 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
       aTab.autoReloadURI = uri;
       aTab.autoReloadTime = Number(time);
       if (pending) {
-        this.autoReload.restorePendingTabs(aTab);
+        gBrowser.reloadTab(aTab);
       }
     } else {
-      console.warn(`Invalid reloadData format: ${reloadData} +for tab ${aTab.label}`);
+      console.warn(`Invalid reloadData format: ${reloadData} for tab ${aTab.label}`);
     }
   }
 

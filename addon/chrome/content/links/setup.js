@@ -48,74 +48,6 @@ Tabmix.beforeBrowserInitOnLoad = function() {
   }
 
   try {
-    var SM = TabmixSessionManager;
-    SM.initializePrivateStateVars();
-
-    var firstWindow = this.isFirstWindowInSession || SM.firstNonPrivateWindow;
-    var disabled = TMP_SessionStore.isSessionStoreEnabled() ||
-                      this.extensions.sessionManager;
-    var sessionManager = this.prefs.getBoolPref("sessions.manager");
-    var willRestore = firstWindow && !disabled && (sessionManager &&
-                      this.prefs.getIntPref("sessions.onStart") <= 1 ||
-                      this.prefs.getBoolPref("sessions.crashRecovery") &&
-                      this.prefs.prefHasUserValue("sessions.crashed"));
-    var notRestore = firstWindow && !disabled && sessionManager &&
-                      this.prefs.getIntPref("sessions.onStart") > 1 &&
-                      (!this.prefs.getBoolPref("sessions.onStart.restorePinned") ||
-                        this.prefs.getBoolPref("sessions.restore.concatenate"));
-
-    // Set SessionStore._loadState to running on first window in the session
-    // to prevent it from restoring last session or pinned tabs.
-    let setStateRunning = (willRestore || notRestore) &&
-        this.isFirstWindowInSession && !this.isWindowAfterSessionRestore;
-    // RunState exist since Firefox 34, bug 1020831
-    if (setStateRunning) {
-      let RunState = TabmixSvc.SessionStoreGlobal.RunState || {
-        get isStopped() {
-          return TabmixSvc.SessionStore._loadState === 0; // STATE_STOPPED
-        },
-        setRunning() {
-          TabmixSvc.SessionStore._loadState = 1; // STATE_RUNNING
-        }
-      };
-      if (RunState.isStopped) {
-        RunState.setRunning();
-        SM.notifyObservers = true;
-      }
-    }
-
-    var prepareLoadOnStartup = willRestore && !(SM.isPrivateWindow || this.isWindowAfterSessionRestore);
-    var willOverrideHomepage = willRestore && !SM.isPrivateWindow;
-    if (willOverrideHomepage) {
-      // Prevent the default homepage from loading if we're going to restore a session
-      let hasFirstArgument = window.arguments && window.arguments[0];
-      if (hasFirstArgument) {
-        let defaultArgs = Cc["@mozilla.org/browser/clh;1"]
-            .getService(Ci.nsIBrowserHandler).defaultArgs;
-        if (window.arguments[0] == defaultArgs) {
-          SM.overrideHomepage = window.arguments[0];
-          window.arguments[0] = null;
-        }
-      }
-    }
-
-    Tabmix._callPrepareLoadOnStartup = prepareLoadOnStartup;
-    if (prepareLoadOnStartup) {
-      Tabmix.prepareLoadOnStartup = function(uriToLoad) {
-        if (uriToLoad && uriToLoad != TabmixSvc.aboutBlank) {
-          let tabs = gBrowser.tabs;
-          for (let tab of tabs) {
-            tab.loadOnStartup = true;
-          }
-        }
-        if (uriToLoad == TabmixSvc.aboutBlank || "tabmixdata" in window) {
-          gBrowser.selectedBrowser.stop();
-        }
-      };
-    } else {
-      Tabmix.prepareLoadOnStartup = function() { };
-    }
-
     if (Tabmix.isAfterMozAfterPaint) {
       Tabmix.beforeDelayedStartup();
     } else {
@@ -232,7 +164,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   }
   TabmixTabbar.scrollButtonsMode = tabscroll;
 
-  if (TabmixSvc.SessionStore._isWindowLoaded(window)) {
+  if (!SessionStore.getWindowState(window).windows[0]?._restoring) {
     TabmixTabbar.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll] || "scrollbutton";
   }
 

@@ -441,10 +441,10 @@ Tabmix.tabsUtils = {
 
     Tabmix.multiRow.init();
     Tabmix.initialization.run("beforeStartup", gBrowser, this.tabBar);
-    this.addPendingObserver();
+    this.addTabsObserver();
   },
 
-  addPendingObserver() {
+  addTabsObserver() {
     const tabsMutate = (/** @type {MutationRecord[]} */ aMutations) => {
       for (let mutation of aMutations) {
         /** @type {Tab} */ // @ts-expect-error
@@ -452,11 +452,13 @@ Tabmix.tabsUtils = {
         if (tab.getAttribute("pending") === "true") {
           tab.removeAttribute("visited");
           Tabmix.setTabStyle(tab);
+        } else if (mutation.attributeName === "image") {
+          TMP_Places.addImageToLazyPendingTab(tab);
         }
       }
     };
     let Observer = new MutationObserver(tabsMutate);
-    Observer.observe(this.tabBar, {subtree: true, attributeFilter: ["pending"]});
+    Observer.observe(this.tabBar, {subtree: true, attributeFilter: ["pending", "image"]});
   },
 
   onUnload() {
@@ -1320,8 +1322,6 @@ window.gTMPprefObserver = {
             tab.linkedBrowser.tabmix_allowLoad = !tab.hasAttribute("locked");
           }
         }
-        // force Sessionstore to save our changes
-        TabmixSvc.SessionStore.saveStateDelayed(window);
         break;
       }
       case "extensions.tabmix.extraIcons.autoreload":

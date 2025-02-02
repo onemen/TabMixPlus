@@ -89,6 +89,8 @@ interface Window {
   FillHistoryMenu(event: Event): void;
   gBrowser: MockedGeckoTypes.TabBrowser;
   gMiddleClickNewTabUsesPasteboard: boolean;
+  gFissionBrowser: boolean;
+  gMultiProcessBrowser: boolean;
   gTMPprefObserver: gTMPprefObserver;
   isBlankPageURL: (aURL: string) => boolean;
   OpenBrowserWindow: (options: {private?: boolean; [key: string]: unknown}) => void;
@@ -338,6 +340,7 @@ interface QuerySelectorMap {
 declare namespace TabmixClosedTabsNS {
   type ClosedTabData = SessionStoreNS.ClosedTabData;
   type ClosedDataSource = SessionStoreNS.ClosedDataSource;
+  type WindowStateData = SessionStoreNS.WindowStateData;
   type TabData = SessionStoreNS.TabData;
 
   type PanelView = ClosedObjectsUtils.CustomPanelView;
@@ -346,24 +349,29 @@ declare namespace TabmixClosedTabsNS {
   type ButtonEvent = Omit<MouseEvent, "target"> & {target: HTMLButtonElement};
   type ClosedGroup = {id: string; sourceClosedId: number; sourceWindowId: string};
   type MenuItemInClosedGroup = HTMLElement & {closedGroup: ClosedGroup; _tabmix_middleClicked?: boolean};
+  type ClosedTabsInfo = {tabs: ClosedTabData[]; index: {value: number}};
 
   let _buttonBroadcaster: HTMLElement | null;
   const buttonBroadcaster: HTMLElement;
   function setButtonType(menuOnly: boolean): void;
   function setButtonDisableState(aState?: boolean): void;
   const count: number;
-  function getClosedTabCountFromClosedGroupInClosedWindows(): number;
   const getClosedTabData: ClosedTabData[];
   const allClosedTabData: ClosedTabData[];
   function getSource(item: HTMLElement): ClosedDataSource;
-  function getSingleClosedTabData(source: ClosedDataSource, index: number): ClosedTabData | undefined;
+  function _resolveClosedDataSource(source: ClosedDataSource): WindowStateData;
+  function _getStateForClosedTabsAndClosedGroupTabs<Index extends number | undefined>(winData: WindowStateData, aIndex?: Index): Index extends number ? ClosedTabData : ClosedTabData[];
+  function _getClosedTabStateFromUnifiedIndex(winData: WindowStateData, tabState: ClosedTabData): {closedTabSet: ClosedTabData[]; closedTabIndex: number};
+  function getPreferredRemoteType(url: string, aWindow: Window, userContextId?: number): string;
+  function getSingleClosedTabData(source: ClosedDataSource, index: number): {tabData: ClosedTabData | undefined; closedTabIndex: number};
   function getUrl(aTabData: ClosedTabData): string;
   function getTitle(aTabData: ClosedTabData, aUri: string): Promise<string>;
   let keepMenuOpen: boolean;
   function populateUndoSubmenu(aPopup: PanelView, panel: Popup, isAppMenu?: boolean): boolean;
-  function updateTabGroupItems(menu: Menuitem | Popup, closedTabsByWindow: SessionStoreNS.ClosedTabsByWindow, isSubviewbutton: boolean): void;
-  function updateMenuItem(item: Menuitem | MenuItemInClosedGroup, closedTabs: SessionStoreNS.ClosedTabsByWindow): void;
-  function repopulateGroupItems(popup: Popup): boolean;
+  function closeTabGroupView(parent: Popup | ClosedObjectsUtils.CustomPanelView, groupId: string): void;
+  function updateTabGroupItems(menu: Popup, closedTabsInfo: ClosedTabsInfo, isSubviewbutton: boolean): void;
+  function updateMenuItem(item: Menuitem | MenuItemInClosedGroup, closedTabsInfo: ClosedTabsInfo): void;
+  function repopulateGroupItems(popup: Popup, item: Menuitem): void;
   function addMenuItem(popup: PanelView | Menuitem | Popup, isSubviewbutton: boolean, options: {id: string; label: string; command?: () => void; val?: number; keyId?: string; tagName?: string}): Element;
   function handleEvent(event: PopupEvent): void;
   function handleButtonEvent(event: ButtonEvent): void;
@@ -377,7 +385,7 @@ declare namespace TabmixClosedTabsNS {
   function copyTabUrl(source: ClosedDataSource, index: number): void;
   function restoreTab(source: ClosedDataSource, index: number, where: string): void;
   function removeAllClosedTabs(): void;
-  function getClosedTabAtIndex(source: ClosedDataSource, index: number): ClosedTabData | null;
+  function removeClosedTabData(source: ClosedDataSource, index: number): ClosedTabData | null;
   function restoreToNewWindow(source: ClosedDataSource, index: number): void;
   function restoreAllClosedTabs(): void;
   function _undoCloseTab(aSource: ClosedDataSource, aIndex: number, aWhere: string, aSelectRestoredTab: boolean, aBlankTabToReuse?: Tab | null, multiple?: boolean): Tab | null;
@@ -564,11 +572,14 @@ declare namespace TabmixPlacesNS {
   function getPrefByDocumentURI(aWindow: Window): string;
   function openGroup(bmGroup: string[], aWhere: WhereToOpen): void;
   function getPreferences(tabCount: number): [boolean, boolean];
-  function restoreTabs(tabsMapWithUrl: Map<Tab, string>, tabsData: SessionStoreNS.TabData[], restoreOnDemand: boolean): void;
+  function restoreTabs(tabsInfo: Map<Tab, SessionStoreNS.TabData>, restoreOnDemand: boolean, relatedToCurrent: boolean): void;
   let bookmarksOnDemand: boolean;
   let restoringTabs: Tab[];
+  let tabRestoreQueue: Tab[];
   function resetRestoreState(tab: Tab): void;
   function updateRestoringTabsList(tab: Tab): void;
+  function restoreNextTab(): void;
+  function addImageToLazyPendingTab(tab: Tab): void;
   function setTabTitle(aTab: Tab, aUrl: string, title: string): void;
   function asyncSetTabTitle(tab: Tab, url?: string, initial?: boolean, reset?: boolean): Promise<boolean>;
   function asyncGetTabTitle(aTab: Tab, aUrl: string, title?: string): Promise<string>;
@@ -610,7 +621,7 @@ declare namespace TabmixSessionStoreNS {
   type TabData = SessionStoreNS.TabData;
   type TabDataEntry = SessionStoreNS.TabDataEntry;
 
-  function asyncGetTabTitleForClosedWindow(aUndoItem: SessionStoreNS.ClosedWindowState): Promise<string>;
+  function asyncGetTabTitleForClosedWindow(aUndoItem: SessionStoreNS.WindowStateData): Promise<string>;
   function getActiveEntryData(aData: TabData): TabDataEntry;
   function getTitleFromTabState(aTab: Tab): string;
   function getUrlFromTabState(aTab: Tab): string;
@@ -732,14 +743,24 @@ type UndocloseTabButtonObserver = typeof UndocloseTabButtonObserverNS;
 
 // this namespace is for all SessionStore useage in Tabmix
 declare namespace SessionStoreNS {
-  type ClosedDataSource = Window | {sourceClosedId?: number; sourceWindowId?: string; closedWindow?: boolean; restoreAll?: boolean; closedGroup?: {id: string} | undefined};
+  type ClosedDataSource = Window | {sourceWindow?: Window; sourceClosedId?: number; sourceWindowId?: string; closedWindow?: boolean; restoreAll?: boolean; closedGroup?: {id: string} | undefined};
   type ClosedGroup = Group & {tabs: ClosedTabData[]};
-  type Group = {collapsed: boolean; color: string; id: string; name: string};
+  type Group = {closedAt: number; collapsed: boolean; color: string; id: string; name: string};
   type WindowSource = Window | {sourceWindow: Window; private: boolean; closedTabsFromAllWindows: boolean; closedTabsFromClosedWindows: boolean};
   type TabDataEntry = {url: string; title: string; triggeringPrincipal_base64?: string};
   type TabData = TabmixNS.TabData;
-  type ClosedTabData = {closedId: number; sourceClosedId: number; sourceWindowId: string; pos: number; title: string; state: TabData};
-  type ClosedTabsByWindow = Record<string, ClosedTabData[]>;
+  type ClosedTabData = {
+    _originalStateIndex: number;
+    _originalGroupStateIndex: number;
+    closedId: number;
+    closedAt: number;
+    pos: number;
+    sourceClosedId: number;
+    sourceWindowId: string;
+    state: TabData;
+    title: string;
+  };
+
   interface WindowState {
     _restoring?: boolean;
     _closedTabs: ClosedTabData[];
@@ -761,11 +782,12 @@ declare namespace SessionStoreNS {
     zIndex?: number;
   }
 
-  interface ClosedWindowState extends Omit<WindowState, "busy"> {
+  interface WindowStateData extends Omit<WindowState, "busy"> {
     title: string;
     closedAt: number;
     closedId: number;
   }
+
   export namespace SessionStoreGlobal {
     const RunState: {
       isStopped: boolean;
@@ -775,7 +797,7 @@ declare namespace SessionStoreNS {
   export namespace SessionStoreApi {
     /** @deprecated - use RunState instead */
     let _loadState: number;
-    function duplicateTab(aWindow: Window, aTab: Tab, aDelta?: number, aRestoreImmediately?: boolean, aOptions?: {inBackground?: boolean; index?: number}): void;
+    function duplicateTab(aWindow: Window, aTab: Tab, aDelta?: number, aRestoreImmediately?: boolean, aOptions?: {inBackground?: boolean; index?: number}): Tab;
     function forgetClosedTab(aSource: ClosedDataSource, aIndex: number): void;
     function forgetClosedTabById(aClosedId: number, aSourceOptions: ClosedDataSource): void;
     function forgetClosedTabGroup(source: ClosedDataSource, tabGroupId: string): void;
@@ -789,26 +811,28 @@ declare namespace SessionStoreNS {
     function getClosedTabDataFromClosedWindows(): ClosedTabData[];
     function getClosedTabGroups(aOptions?: Partial<WindowSource>): ClosedGroup[];
     function getClosedWindowCount(): number;
-    function getClosedWindowData(): ClosedWindowState[];
+    function getClosedWindowData(): WindowStateData[];
     function getCustomTabValue(aTab: Tab, aKey: string): string;
     function getInternalObjectState(aBrowser: MockedGeckoTypes.ChromeBrowser): number;
     function getLastClosedTabCount(aWindow: Window): number;
     function getLazyTabValue(aTab: Tab, aKey: string): string;
     function getTabState(aTab: Tab): string;
     function getWindowById(aSessionStoreId: string): Window;
-    function getWindowState(aWindow: Window): {windows: WindowState[]};
+    function getWindowState(aWindow: nsIDOMWindow): {windows: WindowStateData[]};
     function setTabState(aTab: Tab, aState: string | TabData): void;
+    function undoCloseTab(aSource: ClosedDataSource, aIndex: number, aTargetWindow?: Window): Tab;
+    function undoClosedTabFromClosedWindow(aSource: ClosedDataSource, aClosedId: number, aTargetWindow?: Window): void;
   }
   export namespace SessionStoreInternal {
     const _windows: Record<SSi, WindowState>;
-    const _closedWindows: ClosedWindowState[];
+    const _closedWindows: WindowStateData[];
     let _closedObjectsChanged: boolean;
     function _cleanupOrphanedClosedGroups(winData: WindowState): void;
     function _isWindowLoaded(aWindow: Window): boolean;
     function _notifyOfClosedObjectsChange(): void;
     function _getStateForClosedTabsAndClosedGroupTabs(winData: WindowState, aIndex: number): ClosedTabData;
     function _getClosedTabStateFromUnifiedIndex(winData: WindowState, tabState: ClosedTabData): {closedTabSet: ClosedTabData[]; closedTabIndex: number};
-    function _resolveClosedDataSource(source: ClosedDataSource): ClosedWindowState;
+    function _resolveClosedDataSource(source: ClosedDataSource): WindowStateData;
     function _resetTabRestoringState(tab: Tab): void;
     function _setWindowStateReady(aWindow: Window): void;
     function getClosedTabGroup(source: ClosedDataSource, tabGroupId: string | undefined): ClosedGroup | undefined;
@@ -834,6 +858,7 @@ declare namespace MockedGeckoTypes {
 
   interface TabBrowser {
     addTabsProgressListener(listener: typeof TabmixProgressListenerNS.listener): void;
+    createTabsForSessionRestore: (restoreTabsLazily: boolean, selectTab: number, tabDataList: TabmixNS.TabData[], tabGroupDataList: any[]) => NonEmptyArray<BrowserTab>;
     removeTabsProgressListener: (listener: typeof TabmixProgressListenerNS.listener) => void;
   }
 
@@ -887,7 +912,7 @@ declare namespace TabmixModules {
   }
 }
 
-declare var SessionStore: TabmixModules.TabmixSvc["SessionStore"];
+declare var SessionStore: TabmixModules.Api;
 
 interface EventTypeMap<T extends HTMLElement> {
   click: GenericEvent<T, MouseEvent>;
