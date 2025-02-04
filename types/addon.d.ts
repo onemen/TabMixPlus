@@ -754,6 +754,8 @@ declare namespace SessionStoreNS {
     _originalGroupStateIndex: number;
     closedId: number;
     closedAt: number;
+    closedInGroup: boolean;
+    closedInTabGroupId: string | null;
     pos: number;
     sourceClosedId: number;
     sourceWindowId: string;

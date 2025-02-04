@@ -250,7 +250,8 @@ declare namespace MockedGeckoTypes {
     _unlockTabSizing: () => void;
     _updateCloseButtons(skipUpdateScrollStatus?: boolean, aUrl?: string): void;
     advanceSelectedTab: (dir: number, wrap: boolean) => void;
-    readonly allTabs: NonEmptyArray<BrowserTab>;
+    get allTabs(): Tabs;
+    get allGroups(): MozTabbrowserTabGroup[];
     // see declaration in addon.d.ts
     // arrowScrollbox: ArrowScrollbox;
     getDropEffectForTabDrag: (event: DragEvent) => string;
@@ -397,6 +398,7 @@ declare namespace MockedGeckoTypes {
     replaceTabWithWindow: (tab: BrowserTab) => Window | null;
     set selectedTabs(tabs: Tabs);
     get selectedTabs(): Tabs;
+    get tabGroups(): MozTabbrowserTabGroup[];
     selectedTab: BrowserTab;
     setInitialTabTitle: (tab: BrowserTab, title: string, options: Record<string, unknown>) => void;
     setTabTitle: (tab: BrowserTab) => boolean;

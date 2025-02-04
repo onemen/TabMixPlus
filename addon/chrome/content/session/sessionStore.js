@@ -693,9 +693,10 @@ var TMP_ClosedTabs = {
           item.setAttribute("label", title);
         });
       }
-      if (closedTab?.state.groupId) {
+      const groupId = Tabmix.isVersion(1360) ? closedTab.closedInTabGroupId : closedTab.state.groupId;
+      if (groupId) {
         item.closedGroup = {
-          id: closedTab.state.groupId,
+          id: groupId,
           sourceClosedId: closedTab.sourceClosedId,
           sourceWindowId: closedTab.sourceWindowId,
         };
@@ -1075,7 +1076,8 @@ var TMP_ClosedTabs = {
 
     let userContextId = state.userContextId ?? "";
     let validBlankTabToReuse =
-      !createLazyBrowser && aBlankTabToReuse?.getAttribute("usercontextid") === userContextId ?
+      // compare userContextId with == to match "" and 0
+      !createLazyBrowser && (aBlankTabToReuse?.getAttribute("usercontextid") ?? "") == userContextId ?
         aBlankTabToReuse :
         null;
 
@@ -1094,6 +1096,7 @@ var TMP_ClosedTabs = {
       }
     }
 
+    let tabGroup = Tabmix.isVersion(1360) ? gBrowser.tabGroups.find(g => g.id == state.groupId) : undefined;
     let newTab = validBlankTabToReuse ??
       gBrowser.addTrustedTab("about:blank", {
         createLazyBrowser,
@@ -1105,8 +1108,14 @@ var TMP_ClosedTabs = {
         index: gBrowser.tabs.length,
         skipLoad: true,
         preferredRemoteType,
+        tabGroup,
       });
-    if (!validBlankTabToReuse && aBlankTabToReuse) {
+
+    if (validBlankTabToReuse) {
+      if (tabGroup) {
+        tabGroup.addTabs([validBlankTabToReuse]);
+      }
+    } else if (aBlankTabToReuse) {
       gBrowser.removeTab(aBlankTabToReuse, {animate: false});
     }
 
