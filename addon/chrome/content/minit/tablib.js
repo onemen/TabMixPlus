@@ -366,7 +366,7 @@ Tabmix.tablib = {
     }
 
     if (!Tabmix.isVersion(1300)) {
-      Object.defineProperty(gBrowser, 'pinnedTabCount', {
+      Object.defineProperty(gBrowser, "pinnedTabCount", {
         get: function pinnedTabCount() {
           return gBrowser._numPinnedTabs;
         },

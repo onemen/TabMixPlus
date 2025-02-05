@@ -6,6 +6,7 @@ var gAppearancePane = {
   _tabmixCustomizeToolbar: null,
   init() {
     var browserWindow = Tabmix.getTopWin();
+    const isZen = TabmixSvc.isZen;
     // disable options for position the tabbar and scroll mode if TreeStyleTab extension installed
     if (browserWindow.Tabmix.tabsUtils.isVerticalTabBar) {
       const floorpVerticalTabbar = Tabmix.isVersion({fp: "128.0.0"});
@@ -16,8 +17,9 @@ var gAppearancePane = {
         description.style.width = "25em";
       }
       const tabBarDisplay = $("tabBarDisplay");
+      const tabBarPosition = $("tabBarPosition");
       Tabmix.setItem(tabBarDisplay, "tstInstalled", true);
-      Tabmix.setItem("tabBarPosition", "disabled", true);
+      Tabmix.setItem(tabBarPosition, "disabled", true);
       Tabmix.setItem("tabsScroll", "disabled", true);
       Tabmix.setItem("maxrow", "disabled", true);
       Tabmix.setItem("pinnedTabScroll", "disabled", true);
@@ -26,11 +28,15 @@ var gAppearancePane = {
       $("theme-background").disabled = true;
 
       if (Tabmix.isVersion(1330) || floorpVerticalTabbar) {
+        const nextItem = isZen ? tabBarPosition.parentElement : tabBarDisplay.firstChild;
+        tabBarDisplay.insertBefore(description, nextItem);
+      }
+
+      if (!isZen && (Tabmix.isVersion(1330) || floorpVerticalTabbar)) {
         const hideTabbar = $("hideTabbar");
         Tabmix.setItem(hideTabbar, "disabled", true);
         Tabmix.setItem(hideTabbar.previousElementSibling, "disabled", true);
         Tabmix.setItem("show-hideTabbar-context-menu", "disabled", true);
-        tabBarDisplay.insertBefore(description, tabBarDisplay.firstChild);
       }
     }
 
@@ -47,10 +53,10 @@ var gAppearancePane = {
     }
 
     let treeStyleTab = browserWindow.Tabmix.extensions.treeStyleTab;
-    let disableButtonOnLefSide = !browserWindow.Tabmix.defaultCloseButtons || treeStyleTab;
+    let disableButtonOnLefSide = !browserWindow.Tabmix.defaultCloseButtons || treeStyleTab || isZen;
     let comment = $("onLeftDisabled");
     Tabmix.setItem("tabXLeft", "disabled", disableButtonOnLefSide || null);
-    Tabmix.setItem(comment, "hidden", !disableButtonOnLefSide || null);
+    Tabmix.setItem(comment, "hidden", !disableButtonOnLefSide || isZen || null);
     if (treeStyleTab) {
       comment.value = comment.getAttribute("tst") ?? "";
     }

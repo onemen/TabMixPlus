@@ -28,6 +28,10 @@ const CSS_URLS = [
   "chrome://tabmix-os/skin/browser.css",
 ];
 
+if (Services.appinfo.name == "Zen") {
+  CSS_URLS.push("chrome://tabmixplus/content/overlay/zen_browser.css");
+}
+
 const SCRIPTS = [
   "chrome://tabmixplus/content/broadcaster.js",
   "chrome://tabmixplus/content/utils.js",

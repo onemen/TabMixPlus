@@ -297,6 +297,10 @@ ChromeUtils.defineLazyGetter(TabmixSvc, "isFloorp", () => {
   return Services.appinfo.name == "Floorp";
 });
 
+ChromeUtils.defineLazyGetter(TabmixSvc, "isZen", () => {
+  return Services.appinfo.name == "Zen";
+});
+
 ChromeUtils.defineLazyGetter(TabmixSvc, "console", () => {
   return ChromeUtils.importESModule("chrome://tabmix-resource/content/log.sys.mjs").console;
 });

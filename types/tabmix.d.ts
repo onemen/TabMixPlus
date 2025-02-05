@@ -292,6 +292,7 @@ declare namespace TabmixModules {
     isMac: boolean;
     isWaterfox: boolean;
     isWindows: boolean;
+    isZen: boolean;
     loadDefaultPreferences(): void;
     newtabUrl: string;
     prefBranch: nsIPrefBranchXpcom;
