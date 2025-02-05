@@ -31,8 +31,12 @@
         TabmixSessionManager.sessionUtil("save", "allwindows");
         event.stopPropagation();
         break;
+      case "History:UndoCloseTab":
+        event.stopPropagation();
+        undoCloseTab();
+        break;
     }
-  });
+  }, {capture: true});
 
   const contextMenuPopup = document.getElementById("contentAreaContextMenu");
   contextMenuPopup.addEventListener(

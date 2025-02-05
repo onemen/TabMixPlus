@@ -844,7 +844,7 @@ Tabmix.tablib = {
     Tabmix.changeCode(window, "window.undoCloseTab")._replace(
       /tab = SessionStore\.undoCloseTab.*\n.*true;/,
       `tab = TMP_ClosedTabs._undoCloseTab(
-            sourceWindow,
+            ${Tabmix.isVersion(1170) ? "sourceWindow" : "window"},
             index,
             "original",
             !tab,

@@ -421,9 +421,6 @@ var TabmixContext = {
       }
     }, {once: true});
 
-    // we can't disable menus with command attribute
-    $id("context_undoCloseTab").removeAttribute("command");
-
     // insert IE Tab menu-items before Bookmarks menu-items
     if ("gIeTab" in window) { // no need to do this fix for IE Tab 2
       let IeTab = window.IeTab;
