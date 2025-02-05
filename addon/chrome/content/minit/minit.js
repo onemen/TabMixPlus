@@ -1488,6 +1488,10 @@ Tabmix.navToolbox = {
       modules.BrowserUtils = "resource://gre/modules/BrowserUtils.sys.mjs";
     }
 
+    if (Tabmix.isVersion(1370)) {
+      modules.BrowserSearchTelemetry = "resource:///modules/BrowserSearchTelemetry.sys.mjs";
+    }
+
     const lazy = {};
     ChromeUtils.defineESModuleGetters(lazy, modules);
 
