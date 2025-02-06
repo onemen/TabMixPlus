@@ -963,7 +963,9 @@ Tabmix.allTabs = {
 
   insertSortButton() {
     const sortTabsButton = document.getElementById("allTabsMenu_sortTabsButton");
-    const tabsSeparator = document.getElementById("allTabsMenu-tabsSeparator");
+    const tabsSeparator =
+      document.getElementById("allTabsMenu-groupsSeparator") ??
+      document.getElementById("allTabsMenu-tabsSeparator");
     if (sortTabsButton.nextSibling !== tabsSeparator) {
       const searchTabs = document.getElementById("allTabsMenu-searchTabs");
       if ([...searchTabs.classList].includes("subviewbutton-iconic")) {
