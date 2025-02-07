@@ -44,7 +44,7 @@
 }
 
 @media (-moz-platform: macos) {
-  :root:not([lwtheme]) #TabsToolbar[tabmix-multibar] {
+  :root:not([lwtheme]) #TabsToolbar[tabmix-flowing="multibar"] {
     background-repeat: repeat;
     background-color: rgb(225, 225, 225);
     background-image: linear-gradient(rgb(232, 232, 232), rgb(211, 211, 211));

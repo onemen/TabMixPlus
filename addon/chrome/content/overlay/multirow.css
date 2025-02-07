@@ -48,7 +48,7 @@
 }
 
 /* waterfox with userChrome enabled set overflow: hidden */
-#TabsToolbar[tabmix-multibar] {
+#TabsToolbar[tabmix-flowing="multibar"] {
   height: auto !important;
   overflow: unset !important;
 }
@@ -132,38 +132,29 @@
 }
 
 /* :::: make sure all buttons align to the top row :::: */
-#TabsToolbar[tabmix-multibar] #TabsToolbar-customization-target,
-#TabsToolbar[tabmix-multibar] .titlebar-buttonbox,
-#TabsToolbar[tabmix-multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+#TabsToolbar[tabmix-flowing="multibar"] #TabsToolbar-customization-target,
+#TabsToolbar[tabmix-flowing="multibar"] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   align-items: flex-start;
 }
 
-@media (-moz-platform: windows) {
-  #TabsToolbar[tabmix-multibar] .titlebar-buttonbox {
-    display: flex;
-    align-items: center !important;
-    height: var(--tab-min-height_mlt);
-    margin-block: 3px;
-  }
+#TabsToolbar[tabmix-flowing="multibar"] .titlebar-buttonbox-container {
+  height: calc(var(--tab-min-height_mlt));
+  margin-block: 0;
 }
 
-@media (-moz-platform: macos) {
-  #TabsToolbar[tabmix-flowing="multibar"] .titlebar-buttonbox-container {
-    align-items: flex-start !important;
-    margin-top: calc((var(--tab-min-height_mlt) - 16px) / 2 + 3px);
-  }
+#TabsToolbar[tabmix-multibar] .titlebar-buttonbox-container {
+  height: calc(var(--tab-min-height_mlt) + 6px);
 }
 
 :root[uidensity=compact] {
   --private-browsing-indicator-margin-top: 9px;
 }
 
-
-:root:not([uidensity=compact]) #TabsToolbar[tabmix-multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+:root:not([uidensity=compact]) #TabsToolbar[tabmix-flowing="multibar"] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-margin-top-proton) !important;
 }
 
-:root[uidensity=compact] #TabsToolbar[tabmix-multibar] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+:root[uidensity=compact] #TabsToolbar[tabmix-flowing="multibar"] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-margin-top-proton-compact) !important;
 }
 

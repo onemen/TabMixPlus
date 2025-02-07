@@ -26,7 +26,6 @@ var TabmixTabbar = {
     // update our broadcaster
     Tabmix.setItem("tabmix_flowing", "tabmix-flowing", val);
 
-    Tabmix.setItem("TabsToolbar", "tabmix-multibar", val == "multibar" || null);
     Tabmix.setItem("TabsToolbar", "tabmix-flowing", val);
     Tabmix.setItem("tabmix-scrollbox", "orient", val == "multibar" ? "vertical" : "horizontal");
 
@@ -575,6 +574,7 @@ Tabmix.tabsUtils = {
       // set multibar also at _enterVerticalMode
       Tabmix.setItem(this.tabBar, "tabmix-multibar", multibar);
       Tabmix.setItem("tabmix-bottom-toolbox", "tabmix-multibar", multibar);
+      Tabmix.setItem("TabsToolbar", "tabmix-multibar", multibar);
     }
 
     TabmixTabbar.visibleRows = rows;
@@ -1915,14 +1915,14 @@ window.gTMPprefObserver = {
 
     const selectorType = Tabmix.isVersion(1330) ? "." : "#";
     this.insertRule(
-      `#TabsToolbar[tabmix-multibar] ${selectorType}private-browsing-indicator-with-label {
+      `#TabsToolbar[tabmix-flowing="multibar"] ${selectorType}private-browsing-indicator-with-label {
         align-items: flex-start;
         margin-top: var(--private-browsing-indicator-margin-top, 12px);
       }`
     );
 
     this.insertRule(
-      `#TabsToolbar[tabmix-multibar] ${selectorType}private-browsing-indicator-with-label > image {
+      `#TabsToolbar[tabmix-flowing="multibar"] ${selectorType}private-browsing-indicator-with-label > image {
         margin-top: 2px;
       }`
     );
@@ -2005,6 +2005,16 @@ window.gTMPprefObserver = {
           --tabmix-multirow-margin: ${blockMargin.margin};
         }`
     );
+
+    /* TODO: - need to test
+
+    this was disable to fix issue 100
+    // maybe i can set padding-block to top row and padding bottom on bottom rows
+    Unable to click a tab top of the screen when there's more than one row of tabs #10
+    */
+    // #tabbrowser-tabs[tabmix-multibar] #tabbrowser-arrowscrollbox {
+    //   padding-block: 3px;
+    // }
 
     const customtitlebar = Tabmix.isVersion(1350) ? "customtitlebar" : "tabsintitlebar";
     this.insertRule(
