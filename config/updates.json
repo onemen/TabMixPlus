@@ -6,182 +6,189 @@
           "version": "1.0.0-pre.1",
           "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.0.0-pre.1/tab_mix_plus-dev-build.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.2",
           "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.0.0-pre.2/tab_mix_plus-dev-build.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.3",
           "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.0.0-pre.3/tab_mix_plus-dev-build.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.4",
           "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.0.0-pre.4/tab_mix_plus-dev-build.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.5",
           "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.0.0-pre.5/tab_mix_plus-dev-build.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.6",
           "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.0.0-pre.6/tab_mix_plus-dev-build.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.7",
           "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.0.0-pre.7/tab_mix_plus-dev-build.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.8",
           "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.0.0-pre.8/tab_mix_plus-dev-build.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.9",
           "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.0.0-pre.9/tab_mix_plus-dev-build.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.10",
           "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.0.0-pre.10/tab_mix_plus-dev-build.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.11",
           "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.0.0-pre.11/tab_mix_plus-dev-build.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.12",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.0.0-pre.12.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.13",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.0.0-pre.13.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.14",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.0.0-pre.14.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.15",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.0.0-pre.15.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.16",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.0.0-pre.16.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.17",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.0.0-pre.17.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.0.0-pre.18",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.0.0-pre.18.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.19.1",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.19.1.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.20.0",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.20.0.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.21.1",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.21.1.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.22.0",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.22.0.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "78"}
+            "gecko": { "strict_min_version": "78" }
           }
         },
         {
           "version": "1.23.0",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.23.0.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "115"}
+            "gecko": { "strict_min_version": "115" }
           }
         },
         {
           "version": "1.24.0",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.24.0.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "115"}
+            "gecko": { "strict_min_version": "115" }
           }
         },
         {
           "version": "1.25.0",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.25.0.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "115"}
+            "gecko": { "strict_min_version": "115" }
           }
         },
         {
           "version": "1.26.0",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.26.0a.xpi",
           "browser_specific_settings": {
-            "gecko": {"strict_min_version": "115"}
+            "gecko": { "strict_min_version": "115" }
+          }
+        },
+        {
+          "version": "1.27.0",
+          "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.27.0.xpi",
+          "browser_specific_settings": {
+            "gecko": { "strict_min_version": "115" }
           }
         }
       ]
