@@ -448,11 +448,18 @@ Tabmix.tabsUtils = {
       for (let mutation of aMutations) {
         /** @type {Tab} */ // @ts-expect-error
         const tab = mutation.target;
-        if (tab.getAttribute("pending") === "true") {
-          tab.removeAttribute("visited");
-          Tabmix.setTabStyle(tab);
-        } else if (mutation.attributeName === "image") {
-          TMP_Places.addImageToLazyPendingTab(tab);
+        if (tab.tagName !== "tab") {
+          return;
+        }
+        switch (mutation.attributeName) {
+          case "pending":
+            if (tab.getAttribute("pending") === "true") {
+              tab.removeAttribute("visited");
+              Tabmix.setTabStyle(tab);
+            }
+            break;
+          case "image":
+            TMP_Places.addImageToLazyPendingTab(tab);
         }
       }
     };
