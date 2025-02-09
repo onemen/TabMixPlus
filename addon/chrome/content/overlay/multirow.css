@@ -143,7 +143,7 @@
 }
 
 #TabsToolbar[tabmix-multibar] .titlebar-buttonbox-container {
-  height: calc(var(--tab-min-height_mlt) + 6px);
+  height: calc(var(--tab-min-height_mlt) + var(--tabmix-titlebar-buttonbox-offset));
 }
 
 :root[uidensity=compact] {

@@ -1941,7 +1941,7 @@ window.gTMPprefObserver = {
       block: "3.5px",
       inline: "3.5px",
     } : {
-      block: "calc(var(--toolbarbutton-inner-padding) - 3px)",
+      block: `calc(var(--toolbarbutton-inner-padding) - ${TabmixSvc.isWaterfox ? 6 : 3}px)`,
       inline: "calc(var(--toolbarbutton-inner-padding) - 6px)",
     };
 
@@ -2012,9 +2012,10 @@ window.gTMPprefObserver = {
 
   toolbarbuttonTopMargin() {
     // adjust margin-top on toolbarbutton for multirow
-    const margin = Tabmix.isVersion(1280) ? "4px" : "3.5px";
+    const margin = TabmixSvc.isWaterfox ? "0px" : Tabmix.isVersion(1280) ? "4px" : "3.5px";
     this.insertRule(
       `:root {
+          --tabmix-titlebar-buttonbox-offset: ${TabmixSvc.isWaterfox ? 0 : 6}px;
           --tabmix-button-margin-top-proton: ${margin};
           --tabmix-button-margin-top-proton-compact: ${margin};
         }`
