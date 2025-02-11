@@ -333,7 +333,7 @@ var TMP_ClosedTabs = {
     const closedTabCountFromClosedGroupInClosedWindows = SessionStore.getClosedWindowData()
         .map(winData => winData.closedGroups)
         .flat()
-        .map(group => group.tabs.length)
+        .map(group => group?.tabs.length)
         .reduce((a, b) => a + b, 0);
 
     return SessionStore.getClosedTabCount(window) - closedTabCountFromClosedGroupInClosedWindows;
