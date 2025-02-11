@@ -13,7 +13,7 @@
 }
 
 :root[lwtheme] #tabmix-bottom-toolbox {
-  background-color: var(--lwt-accent-color);
+  background-color: var(--tabmix-bottom-toolbox-color, var(--lwt-accent-color));
 }
 
 :root[lwtheme-image] #tabmix-bottom-toolbox > toolbox {
@@ -23,7 +23,7 @@
 }
 
 :root[lwtheme] #tabmix-bottom-toolbox > toolbox:-moz-window-inactive {
-  background-color: var(--lwt-accent-color-inactive, var(--lwt-accent-color));
+  background-color: var(--tabmix-bottom-toolbox-color, var(--lwt-accent-color-inactive, var(--lwt-accent-color)));
 }
 
 @media (-moz-platform: windows) {

@@ -71,6 +71,7 @@ interface GetByMap {
   "scrollbutton-down": HTMLButtonElement;
   "tab-close-button": HTMLButtonElement;
   "fullscr-bottom-toggler": HTMLElement & {initialized: boolean};
+  "navigator-toolbox": HTMLElement;
   "tabmix-bottom-toolbox": HTMLElement;
   "nav-bar-overflow-button": HTMLButtonElement;
 }

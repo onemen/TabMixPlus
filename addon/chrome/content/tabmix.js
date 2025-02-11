@@ -499,8 +499,12 @@ var TMP_eventListener = {
       gTMPprefObserver.tabBarPositionChanged(1);
 
     // for light weight themes
-    if (TabmixTabbar.isMultiRow || TabmixTabbar.position == 1)
+    if (TabmixTabbar.isMultiRow || TabmixTabbar.position == 1) {
       Tabmix.setItem("main-window", "tabmix_lwt", true);
+      const value = Tabmix.prefs.getIntPref("theme_background") !== 2 || null;
+      Tabmix.setItem("navigator-toolbox", "tabmix_lwt_background", value);
+      Tabmix.setItem("tabmix-bottom-toolbox", "tabmix_lwt_background", value);
+    }
 
     // make sure "extensions.tabmix.undoClose" is true if "browser.sessionstore.max_tabs_undo" is not zero
     var sessionstoreUndoClose = Services.prefs.getIntPref("browser.sessionstore.max_tabs_undo") > 0;

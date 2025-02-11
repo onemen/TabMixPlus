@@ -1061,8 +1061,20 @@ Tabmix.bottomToolbarUtils = {
         document.getElementById("customization-container")?.nextSibling ??
         document.getElementById("browser-bottombox");
     referenceNode?.parentNode?.insertBefore(fragment, referenceNode);
+    const toolbox = document.getElementById("tabmix-bottom-toolbox");
+    // for theme style
+    const value = Tabmix.prefs.getIntPref("theme_background") !== 2 || null;
+    Tabmix.setItem(toolbox, "tabmix_lwt_background", value);
+    const navigatorToolboxStyle = getComputedStyle(document.getElementById("navigator-toolbox"));
+    if (navigatorToolboxStyle) {
+      const backgroundColor = navigatorToolboxStyle.getPropertyValue("background-color");
+      toolbox.style.setProperty("--tabmix-bottom-toolbox-color", backgroundColor);
+      if (backgroundColor === "rgba(0, 0, 0, 0)") {
+        toolbox.firstElementChild?.style.setProperty("--tabmix-bottom-toolbox-color", backgroundColor);
+      }
+    }
     Object.defineProperty(this, "toolbox", {
-      value: document.getElementById("tabmix-bottom-toolbox"),
+      value: toolbox,
       configurable: true,
       enumerable: true
     });
@@ -1604,7 +1616,10 @@ window.gTMPprefObserver = {
       case "extensions.tabmix.pinnedTabScroll":
         gBrowser.tabContainer._positionPinnedTabs();
         break;
-      case "extensions.tabmix.theme_background":
+      case "extensions.tabmix.theme_background": {
+        const value = prefValue !== 2 || null;
+        Tabmix.setItem("navigator-toolbox", "tabmix_lwt_background", value);
+        Tabmix.setItem("tabmix-bottom-toolbox", "tabmix_lwt_background", value);
         this.dynamicRules.themeBackground.style.cssText = "";
         if (prefValue === 0) {
           this.dynamicRules.themeBackground.style.setProperty("background-repeat", "repeat-y");
@@ -1612,6 +1627,7 @@ window.gTMPprefObserver = {
           this.dynamicRules.themeBackground.style.setProperty("background-size", "cover");
         }
         break;
+      }
       case "browser.tabs.onTop":
         if (TabmixTabbar.position == 1 && Services.prefs.getBoolPref(prefName)) {
           Services.prefs.setBoolPref(prefName, false);
@@ -1938,8 +1954,8 @@ window.gTMPprefObserver = {
     const lwtheme = Tabmix.isVersion(1260) ? "is([lwtheme], [lwtheme-image])" : "-moz-lwtheme";
     // theme background style for multi-row
     this.insertRule(
-      `:root[tabmix_lwt]:${lwtheme} #navigator-toolbox,
-       :root[tabmix_lwt]:${lwtheme} #tabmix-bottom-toolbox > toolbox {
+      `:root[tabmix_lwt]:${lwtheme} #navigator-toolbox[tabmix_lwt_background],
+       :root[tabmix_lwt]:${lwtheme} #tabmix-bottom-toolbox[tabmix_lwt_background] > toolbox {
          ${Tabmix.prefs.getIntPref("theme_background") === 0 ?
               "background-repeat: repeat-y;" : "background-size: cover;"
           }
