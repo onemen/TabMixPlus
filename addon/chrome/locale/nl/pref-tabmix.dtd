@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Startpagina weergeven">
 <!ENTITY startupBlankPage.label "Een blanco pagina weergeven">
 <!ENTITY startupLastSession1.label "Vensters en tabbladen van laatste sessie weergeven">
-<!ENTITY ss.enable.label "Ingebouwde sessieherstelmogelijkheid Firefox gebruiken">
-<!ENTITY ss.enable.tooltip "Vink dit uit om de Tab Mix Sessiebeheerder te gebruiken">
 <!ENTITY ss.advanced_setting "Geavanceerde instellingen">
 <!ENTITY ss.advanced_setting.warning "Wijzig hier niets, tenzij u weet wat u doet">
 <!ENTITY ss.interval "Minimale tijdsinterval tussen twee statusopslagen">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Alle sites">
 <!ENTITY ss.privacy_level.unencrypted "Alleen onversleutelde sites">
 <!ENTITY ss.privacy_level.nosites "Geen enkele site">
-<!ENTITY sessionManger.enable "Sessiebeheerder inschakelen">
 <!ENTITY crashRecovery.enable "Vastloopherstel inschakelen">
-<!ENTITY sm.StartExit "Starten/Afsluiten">
-<!ENTITY sm.restore "Herstellen">
-<!ENTITY sm.preserve "Bewaren">
 <!ENTITY sm.start "Wanneer de browser start:">
-<!ENTITY sm.start.restore "Herstellen">
-<!ENTITY sm.start.ask "Vragen voor herstellen">
-<!ENTITY sm.start.nothing "Niet herstellen">
-<!ENTITY sm.exit "Wanneer de browser wordt afgesloten:">
-<!ENTITY sm.exit.save "Sessie bewaren">
-<!ENTITY sm.exit.ask "Vragen voor bewaren">
-<!ENTITY sm.exit.nothing "Niet bewaren">
-<!ENTITY sm.startup "Opstartsessie:">
-<!ENTITY sm.lastsession "Laatste sessie">
-<!ENTITY sm.previouslast "Voorlaatste sessie">
-<!ENTITY sm.chooseifempty "Een andere kiezen indien leeg">
-<!ENTITY sm.restore.options "Bij het herstellen van sessies:">
-<!ENTITY sm.restore.overwrite "Bestaande vensters overschrijven">
-<!ENTITY sm.restore.overwriteTabs "ook tabbladen overschrijven">
-<!ENTITY sm.restore.closedWinList "Vensters in lijst met gesloten vensters bewaren">
-<!ENTITY sm.restore.merge "Meerdere vensters tot één samenvoegen">
-<!ENTITY sm.restore.bypassCache "Cache negeren bij herstellen">
-<!ENTITY sm.notrestore.label "Indien sessies niet hersteld worden bij starten">
-<!ENTITY sm.restorePinned1.label "Uw vastgezette tabbladen van laatste sessie herstellen">
 <!ENTITY sm.preserve.options "Bewaren van tabbladen:">
 <!ENTITY sm.preserve.history "Geschiedenis">
 <!ENTITY sm.preserve.protect "Status beschermen">
 <!ENTITY sm.preserve.locked "Status op slot zetten">
 <!ENTITY sm.preserve.permission "Toestemmingen">
 <!ENTITY sm.preserve.scroll1 "Schuifpositie">
-<!ENTITY sm.restore.winOptions "Bewaren van vensters:">
-<!ENTITY sm.restore.selectedTab "Geselecteerde tabblad">
-<!ENTITY sm.restore.closedTabs "Lijst met gesloten tabbladen">
 <!ENTITY incompatible.extensions "Enkele van de geïnstalleerde extensies werken niet samen met Tab Mix Plus. Het wordt aanbevolen deze extensies uit te schakelen of te deïnstalleren.">
 <!ENTITY incompatible.button.label "Lijst weergeven">

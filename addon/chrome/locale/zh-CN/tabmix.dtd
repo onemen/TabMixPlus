@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "从列表中删除">
 <!ENTITY deletelist.accesskey "D">
 <!ENTITY settings.label "设置">
-<!ENTITY saveWindow.label "保存当前窗口">
-<!ENTITY saveAllWindows.label "保存所有窗口">
 <!ENTITY sm.context.overwrite "替换并覆盖现有的窗口">
 <!ENTITY sm.context.overwrite.key "O">
 <!ENTITY sm.context.restore.new "在新窗口中恢复">

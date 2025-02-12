@@ -23,14 +23,6 @@
   const mainCommandSet = document.getElementById("mainCommandSet");
   mainCommandSet?.addEventListener("command", (/** @type {PopupEvent} */ event) => {
     switch (event.target.id) {
-      case "TabmixSessionUtils:SaveThisWindow":
-        TabmixSessionManager.sessionUtil("save", "thiswindow");
-        event.stopPropagation();
-        break;
-      case "TabmixSessionUtils:SaveAllWindow":
-        TabmixSessionManager.sessionUtil("save", "allwindows");
-        event.stopPropagation();
-        break;
       case "History:UndoCloseTab":
         event.stopPropagation();
         undoCloseTab();

@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Kuvatakse avalehte">
 <!ENTITY startupBlankPage.label "Kuvatakse tühja lehte">
 <!ENTITY startupLastSession1.label "Kuvatakse viimati lahti olnud aknaid ja kaarte">
-<!ENTITY ss.enable.label "Kasuta Firefoxi sisseehitatud seansi taastamise funktsiooni">
-<!ENTITY ss.enable.tooltip "Tab Mix Plus'i Seansside halduri kasutamiseks eemalda märgistus">
 <!ENTITY ss.advanced_setting "Täpsemad sätted">
 <!ENTITY ss.advanced_setting.warning "Ära neid sätteid muuda, kui sa pole kindel, mida sa teed">
 <!ENTITY ss.interval "Väikseim ajavahe kahe salvestamise vahel">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Kõik saidid">
 <!ENTITY ss.privacy_level.unencrypted "Ainult krüptimata saidid">
 <!ENTITY ss.privacy_level.nosites "Mitte ükski sait">
-<!ENTITY sessionManger.enable "Luba Seansside halduri kasutamine">
 <!ENTITY crashRecovery.enable "Luba krahhieelse olukorra taastamine">
-<!ENTITY sm.StartExit "Käivitumine/Väljumine">
-<!ENTITY sm.restore "Taastamine">
-<!ENTITY sm.preserve "Meelde jätmine">
 <!ENTITY sm.start "Brauseri käivitumisel:">
-<!ENTITY sm.start.restore "Taasta">
-<!ENTITY sm.start.ask "Küsi enne taastamist">
-<!ENTITY sm.start.nothing "Ära taasta">
-<!ENTITY sm.exit "Brauserist väljumisel:">
-<!ENTITY sm.exit.save "Salvesta seanss">
-<!ENTITY sm.exit.ask "Küsi enne salvestamist">
-<!ENTITY sm.exit.nothing "Ära salvesta">
-<!ENTITY sm.startup "Käivitus-seanss">
-<!ENTITY sm.lastsession "Viimane seanss">
-<!ENTITY sm.previouslast "Eelviimane">
-<!ENTITY sm.chooseifempty "Vali mõni muu, kui see on tühi">
-<!ENTITY sm.restore.options "Seansside taastamisel:">
-<!ENTITY sm.restore.overwrite "Kirjuta üle olemasolevad aknad">
-<!ENTITY sm.restore.overwriteTabs "Ja kaardid">
-<!ENTITY sm.restore.closedWinList "Salvesta suletud akende loendis olevad aknad">
-<!ENTITY sm.restore.merge "Ühenda kõik aknad">
-<!ENTITY sm.restore.bypassCache "Taastamisel ära kasuta vahemälu">
-<!ENTITY sm.notrestore.label "Kui käivitumisel seanssi ei taastata, siis">
-<!ENTITY sm.restorePinned1.label "Taasta oma viimase seansi püsikaardid">
 <!ENTITY sm.preserve.options "Jäta meelde kaartide:">
 <!ENTITY sm.preserve.history "Ajalugu">
 <!ENTITY sm.preserve.protect "Kaitstuse olek">
 <!ENTITY sm.preserve.locked "Lukustatuse olek">
 <!ENTITY sm.preserve.permission "Kasutada lubamised">
 <!ENTITY sm.preserve.scroll1 "Kerimise olek">
-<!ENTITY sm.restore.winOptions "Jäta meelde akende:">
-<!ENTITY sm.restore.selectedTab "Valitud kaart">
-<!ENTITY sm.restore.closedTabs "Suletud kaartide loend">
 <!ENTITY incompatible.extensions "Mõni sinu lisa ei ühildu Tab Max Plusiga; on soovitatav, et sa kas keelad või eemaldad need lisad.">
 <!ENTITY incompatible.button.label "Näita nimekirja">

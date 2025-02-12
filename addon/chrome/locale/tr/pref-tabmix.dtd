@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Başlangıç sayfasını göster">
 <!ENTITY startupBlankPage.label "Boş sayfa göster">
 <!ENTITY startupLastSession1.label "Son seferdeki pencere ve sekmeleri göster">
-<!ENTITY ss.enable.label "Firefox'un dahili Oturum Geri Yükleme özelliğini kullan">
-<!ENTITY ss.enable.tooltip "Tab Mix Oturum Yöneticisini kullanmak için işareti kaldırın">
 <!ENTITY ss.advanced_setting "Gelişmiş Ayarlar">
 <!ENTITY ss.advanced_setting.warning "Ne yaptığınızı bilmiyorsanız, bunları değiştirmeyin">
 <!ENTITY ss.interval "İki durum kaydı arasındaki en az süre">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Tüm sitelerde">
 <!ENTITY ss.privacy_level.unencrypted "Şifrelenmemiş sitelerde">
 <!ENTITY ss.privacy_level.nosites "Hiçbir sitede">
-<!ENTITY sessionManger.enable "Oturum Yöneticisi etkin">
 <!ENTITY crashRecovery.enable "Çökme Kurtarma etkin">
-<!ENTITY sm.StartExit "Başlatma/Kapatma">
-<!ENTITY sm.restore "Geri Yükleme">
-<!ENTITY sm.preserve "Muhafaza Etme">
 <!ENTITY sm.start "Tarayıcı başladığında:">
-<!ENTITY sm.start.restore "Geri yükle">
-<!ENTITY sm.start.ask "Geri yüklemeden önce sor">
-<!ENTITY sm.start.nothing "Geri yükleme">
-<!ENTITY sm.exit "Tarayıcı kapatıldığında:">
-<!ENTITY sm.exit.save "Oturumu kaydet">
-<!ENTITY sm.exit.ask "Kaydetmeden önce sor">
-<!ENTITY sm.exit.nothing "Kaydetme">
-<!ENTITY sm.startup "Başlangıç oturumu:">
-<!ENTITY sm.lastsession "Son oturum">
-<!ENTITY sm.previouslast "Sondan bir önceki">
-<!ENTITY sm.chooseifempty "Boşsa başka birini seç">
-<!ENTITY sm.restore.options "Oturumlar geri yüklenirken:">
-<!ENTITY sm.restore.overwrite "Geçerli pencerelerin üzerine yaz">
-<!ENTITY sm.restore.overwriteTabs "Sekmelerin de">
-<!ENTITY sm.restore.closedWinList "Pencereleri kapatılan pencereler listesine kaydet">
-<!ENTITY sm.restore.merge "Pencereleri tek pencerede birleştir">
-<!ENTITY sm.restore.bypassCache "Geri yüklerken önbelleği atla">
-<!ENTITY sm.notrestore.label "Başlangıçta geri yüklenmediğinde">
-<!ENTITY sm.restorePinned1.label "Son seferdeki sabitlenmiş sekmeleri geri yükle">
 <!ENTITY sm.preserve.options "Sekmelerde muhafaza et:">
 <!ENTITY sm.preserve.history "Geçmişi">
 <!ENTITY sm.preserve.protect "Korunma durumunu">
 <!ENTITY sm.preserve.locked "Kilit durumunu">
 <!ENTITY sm.preserve.permission "İzinleri">
 <!ENTITY sm.preserve.scroll1 "Kaydırma pozisyonunu">
-<!ENTITY sm.restore.winOptions "Pencerelerde muhafaza et:">
-<!ENTITY sm.restore.selectedTab "Seçili sekmeyi">
-<!ENTITY sm.restore.closedTabs "Kapanan sekmeler listesini">
 <!ENTITY incompatible.extensions "Eklentilerinizden bazıları Tab Mix Plus ile uyumsuz, bu eklentileri etkisizleştirmeniz ya da kaldırmanız önerilir.">
 <!ENTITY incompatible.button.label "Listeyi göster">

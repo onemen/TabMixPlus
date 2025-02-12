@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Προβολή κενής σελίδας">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Χρήση ενσωματωμένης αποκατάστασης συνεδρίας">
-<!ENTITY ss.enable.tooltip "Απεπιλέξτε για να επιτραπεί η χρήση του διαχειριστή συνεδρίας του Tabmix">
 <!ENTITY ss.advanced_setting "Ρυθμίσεις για προχωρημένους">
 <!ENTITY ss.advanced_setting.warning "Μην τις αλλάξετε, εκτός κι αν ξέρετε τι κάνετε">
 <!ENTITY ss.interval "Ελάχιστο μεσοδιάστημα χρόνου μεταξύ της αποθήκευσης δύο καταστάσεων">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Όλες τις σελίδες">
 <!ENTITY ss.privacy_level.unencrypted "Μη κρυπτογραφημένες σελίδες μόνο">
 <!ENTITY ss.privacy_level.nosites "Καμία σελίδα">
-<!ENTITY sessionManger.enable "Ενεργοποίηση διαχειριστή συνεδρίας">
 <!ENTITY crashRecovery.enable "Ενεργοποίηση επαναφοράς μετά από κατάρρευση">
-<!ENTITY sm.StartExit "Εκκίνηση/Κλείσιμο">
-<!ENTITY sm.restore "Επαναφορά">
-<!ENTITY sm.preserve "Διατήρηση">
 <!ENTITY sm.start "Στην εκκίνηση του περιηγητή:">
-<!ENTITY sm.start.restore "Επαναφορά">
-<!ENTITY sm.start.ask "Ερώτηση πριν την επαναφορά">
-<!ENTITY sm.start.nothing "Να μην γίνεται επαναφορά">
-<!ENTITY sm.exit "Στο κλείσιμο του περιηγητή:">
-<!ENTITY sm.exit.save "Αποθήκευση συνεδρίας">
-<!ENTITY sm.exit.ask "Ερώτηση πριν την αποθήκευση">
-<!ENTITY sm.exit.nothing "Να μην γίνεται αποθήκευση">
-<!ENTITY sm.startup "Συνεδρία εκκίνησης:">
-<!ENTITY sm.lastsession "Τελευταία συνεδρία">
-<!ENTITY sm.previouslast "Προτελευταία">
-<!ENTITY sm.chooseifempty "Επιλογή άλλης αν είναι κενή">
-<!ENTITY sm.restore.options "Στην επαναφορά συνεδριών:">
-<!ENTITY sm.restore.overwrite "Αντικατάσταση ήδη υπαρχόντων παραθύρων">
-<!ENTITY sm.restore.overwriteTabs "και καρτελών">
-<!ENTITY sm.restore.closedWinList "Αποθήκευση παραθύρων της λίστας κλεισμένων παραθύρων">
-<!ENTITY sm.restore.merge "Συνένωση όλων των παραθύρων σε ένα">
-<!ENTITY sm.restore.bypassCache "Παράκαμψη λανθάνουσας κατά την επαναφορά">
-<!ENTITY sm.notrestore.label "Όταν δεν γίνεται επαναφορά κατά την εκκίνηση">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Διατήρηση καρτελών:">
 <!ENTITY sm.preserve.history "Ιστορικό">
 <!ENTITY sm.preserve.protect "Κατάσταση προστασίας">
 <!ENTITY sm.preserve.locked "Κατάσταση κλειδώματος">
 <!ENTITY sm.preserve.permission "Δικαιώματα">
 <!ENTITY sm.preserve.scroll1 "Θέση κύλισης">
-<!ENTITY sm.restore.winOptions "Διατήρηση παραθύρων">
-<!ENTITY sm.restore.selectedTab "Επιλεγμένη καρτέλα">
-<!ENTITY sm.restore.closedTabs "Λίστα κλεισμένων καρτελών">
 <!ENTITY incompatible.extensions "Μερικές από τις επεκτάσεις σας είναι ασύμβατες με το Tab Mix Plus, προτείνεται να τις απενεργοποιήσετε ή απεγκαταστήσετε.">
 <!ENTITY incompatible.button.label "Προβολή λίστας">

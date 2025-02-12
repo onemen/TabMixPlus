@@ -22,7 +22,6 @@ var TabmixContentHandler = {
     "Tabmix:restorePermissions",
     "Tabmix:resetContentName",
     "Tabmix:updateHistoryTitle",
-    "Tabmix:collectScrollPosition",
     "Tabmix:setScrollPosition",
     "Tabmix:collectReloadData",
     "Tabmix:isFrameInContent",
@@ -64,14 +63,6 @@ var TabmixContentHandler = {
           let history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
           TabmixUtils.updateHistoryTitle(history.legacySHistory, data.title);
         }
-        break;
-      }
-      case "Tabmix:collectScrollPosition": {
-        let scroll = {
-          scrollX: content.scrollX,
-          scrollY: content.scrollY
-        };
-        sendAsyncMessage("Tabmix:updateScrollPosition", {scroll});
         break;
       }
       case "Tabmix:setScrollPosition": {

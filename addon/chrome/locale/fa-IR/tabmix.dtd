@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "پاک کردن از لیست">
 <!ENTITY deletelist.accesskey "ز">
 <!ENTITY settings.label "تنظیمات">
-<!ENTITY saveWindow.label "ذخیره کردن این پنجره">
-<!ENTITY saveAllWindows.label "ذخیره کردن تمام پنجره ها">
 <!ENTITY sm.context.overwrite "بازگردانی،بازنویسی پنجره(های) فعلی">
 <!ENTITY sm.context.overwrite.key "ر">
 <!ENTITY sm.context.restore.new "بازگردانی در پنجره(های) جدید">

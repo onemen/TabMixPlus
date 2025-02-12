@@ -17,6 +17,7 @@ interface Element {
   getElementsByClassName<K extends keyof GetByMap>(name: K): NonEmptyCollection_G<GetByMap[K]>;
   // it is ok to allow setAttribute to convert the value to string for us
   setAttribute(name: string, value: string | boolean | number): void;
+  label: string;
 }
 
 interface NodeList {
@@ -161,7 +162,6 @@ declare namespace MockedGeckoTypes {
     _restoreState: number;
     _tabmix_downloadingTimeout: number | null;
     _tabmixState?: {noBookmart?: boolean};
-    _tPosInGroup?: number;
     autoReloadEnabled?: boolean;
     autoReloadTimerID: number | null;
     autoReloadURI?: string;
@@ -248,7 +248,7 @@ declare namespace MockedGeckoTypes {
     _tabClipWidth: number;
     _tabDropIndicator: HTMLElement;
     _unlockTabSizing: () => void;
-    _updateCloseButtons(skipUpdateScrollStatus?: boolean, aUrl?: string): void;
+    _updateCloseButtons(skipUpdateScrollStatus?: boolean, aUrl?: string | null): void;
     advanceSelectedTab: (dir: number, wrap: boolean) => void;
     get allTabs(): Tabs;
     get allGroups(): MozTabbrowserTabGroup[];
@@ -277,7 +277,6 @@ declare namespace MockedGeckoTypes {
 
     // Tabmix
     __showbuttonTab?: BrowserTab;
-    tabmix_updateCloseButtons: TabContainer["_updateCloseButtons"];
 
     // replacment for private methods
     _clearDragOverCreateGroupTimer: () => void;

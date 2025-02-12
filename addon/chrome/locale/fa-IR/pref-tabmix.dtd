@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "نمایش یک صفحه خالی">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "استفاده از برنامه بازگردانی نشست داخلی فایرفاکس">
-<!ENTITY ss.enable.tooltip "با انتخاب نکردن این گزینه هر دو مدیر نشست هزمان استفاده خواهند شد">
 <!ENTITY ss.advanced_setting "تنظیمات پیشرفته">
 <!ENTITY ss.advanced_setting.warning "فقط در صورتی این گزینه را تغییر دهید که از کار خود مطمئن باشید">
 <!ENTITY ss.interval "حداقل زمان بین دو ذخیره">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "تمام سایت ها">
 <!ENTITY ss.privacy_level.unencrypted "فقط سایت های رمزبندی نشده">
 <!ENTITY ss.privacy_level.nosites "هیچ سایتی">
-<!ENTITY sessionManger.enable "فعال کردن مدیریت نشست">
 <!ENTITY crashRecovery.enable "فعال کردن بازیافت نشست قفل شده">
-<!ENTITY sm.StartExit "شروع/خروج">
-<!ENTITY sm.restore "بازگردانی">
-<!ENTITY sm.preserve "محافظت کردن">
 <!ENTITY sm.start "هنگام اجرای مروگر:">
-<!ENTITY sm.start.restore "بازگردانی">
-<!ENTITY sm.start.ask "پرسیدن سوال قبل از بازگردانی">
-<!ENTITY sm.start.nothing "بازگردانی نکن">
-<!ENTITY sm.exit "هنگام بستن مرورگر:">
-<!ENTITY sm.exit.save "ذخیره نشست">
-<!ENTITY sm.exit.ask "پرسیدن سوال قبل از ذخیره کردن">
-<!ENTITY sm.exit.nothing "ذخیره نکن">
-<!ENTITY sm.startup "نشست اولیه:">
-<!ENTITY sm.lastsession "آخرین نشست">
-<!ENTITY sm.previouslast "یکی مانده به آخر">
-<!ENTITY sm.chooseifempty "انتخاب یکی دیگر در صورت خالی بودن">
-<!ENTITY sm.restore.options "هنگام بازگردانی نشست ها:">
-<!ENTITY sm.restore.overwrite "باز نویسی روی پنجره ها و تب های">
-<!ENTITY sm.restore.overwriteTabs "فعلی">
-<!ENTITY sm.restore.closedWinList "پنجره های موجود در لیست پنجره های بسته شده را ذخیره کن">
-<!ENTITY sm.restore.merge "ترکیب کردن پنجره های">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
-<!ENTITY sm.notrestore.label "When not restoring on start">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "نگاه داشتن تب ها:">
 <!ENTITY sm.preserve.history "تاریخچه">
 <!ENTITY sm.preserve.protect "وضعیت محافظت شده">
 <!ENTITY sm.preserve.locked "وضعیت قفل">
 <!ENTITY sm.preserve.permission "مجوزها">
 <!ENTITY sm.preserve.scroll1 "Scroll Position">
-<!ENTITY sm.restore.winOptions "نگاه داشتن پنجره ها:">
-<!ENTITY sm.restore.selectedTab "تب های انتخاب شده">
-<!ENTITY sm.restore.closedTabs "لیست تب های بسته شده">
 <!ENTITY incompatible.extensions "سازگار نیستند.بهتر است آنها را پاک یا غیرفعال کنید Tab Mix Plus بعضی از اکستنشن های شما با">
 <!ENTITY incompatible.button.label "نمایش لیست">

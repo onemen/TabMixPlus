@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Mostrar su página de inicio">
 <!ENTITY startupBlankPage.label "Mostrar página en blanco">
 <!ENTITY startupLastSession1.label "Mostrar ventana y pestañas de última sesión">
-<!ENTITY ss.enable.label "Utilizar la funcionalidad interna de restaurar sesión de Firefox">
-<!ENTITY ss.enable.tooltip "Deseleccionar si se quiere utilizar el Administrador de sesiones de Tabmix">
 <!ENTITY ss.advanced_setting "Predisposiciones avanzadas">
 <!ENTITY ss.advanced_setting.warning "No debe cambiarlas salvo que realmente sepa lo que está haciendo">
 <!ENTITY ss.interval "Mínimo intervalo de tiempo entre guardado de dos estados consecutivos">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Todos los sitios">
 <!ENTITY ss.privacy_level.unencrypted "Sólo sitios no encriptados">
 <!ENTITY ss.privacy_level.nosites "Ningún sitio">
-<!ENTITY sessionManger.enable "Activar Administrador de sesiones">
 <!ENTITY crashRecovery.enable "Activar Restaurar tras cierre anómalo">
-<!ENTITY sm.StartExit "Inicio/cierre">
-<!ENTITY sm.restore "Restaurar">
-<!ENTITY sm.preserve "Conservar">
 <!ENTITY sm.start "Al iniciarse el navegador:">
-<!ENTITY sm.start.restore "Restaurar">
-<!ENTITY sm.start.ask "Preguntar antes de restaurar">
-<!ENTITY sm.start.nothing "No restaurar">
-<!ENTITY sm.exit "Al cerrar el navegador:">
-<!ENTITY sm.exit.save "Guardar sesión">
-<!ENTITY sm.exit.ask "Preguntar antes de guardar">
-<!ENTITY sm.exit.nothing "No guardar">
-<!ENTITY sm.startup "Sesión de inicio:">
-<!ENTITY sm.lastsession "Última sesión">
-<!ENTITY sm.previouslast "Penúltima sesión">
-<!ENTITY sm.chooseifempty "Elegir otra si está vacía">
-<!ENTITY sm.restore.options "Al restaurar sesiones:">
-<!ENTITY sm.restore.overwrite "Sobrescribir ventanas existentes">
-<!ENTITY sm.restore.overwriteTabs "y pestañas">
-<!ENTITY sm.restore.closedWinList "Guardar ventanas en lista de ventanas cerradas">
-<!ENTITY sm.restore.merge "Combinar varias ventanas en una">
-<!ENTITY sm.restore.bypassCache "Evitar la caché al restaurar">
-<!ENTITY sm.notrestore.label "Cuando no se restaura al iniciar">
-<!ENTITY sm.restorePinned1.label "Restaurar sus pestañas fijas de la última sesión">
 <!ENTITY sm.preserve.options "Conservar pestañas:">
 <!ENTITY sm.preserve.history "Historial">
 <!ENTITY sm.preserve.protect "Estatus de protección">
 <!ENTITY sm.preserve.locked "Estatus de bloqueo">
 <!ENTITY sm.preserve.permission "Permisos">
 <!ENTITY sm.preserve.scroll1 "Posición de rotación">
-<!ENTITY sm.restore.winOptions "Conservar para ventanas:">
-<!ENTITY sm.restore.selectedTab "Pestaña seleccionada">
-<!ENTITY sm.restore.closedTabs "Lista de pestañas cerradas">
 <!ENTITY incompatible.extensions "Algunas de sus extensiones son incompatibles con Tab Mix Plus, le recomendamos desactivarlas o desinstalarlas.">
 <!ENTITY incompatible.button.label "Mostrar la lista">

@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Mostrar uma página em branco">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Usara funcionalidade de restauro de sessão do Firefox">
-<!ENTITY ss.enable.tooltip "De-seleccionar para permitir o uso do Gestor de sessões do Tabmix">
 <!ENTITY ss.advanced_setting "Definições avançadas">
 <!ENTITY ss.advanced_setting.warning "Não alterar, a menos que saiba o que está a fazer">
 <!ENTITY ss.interval "Intervalo de tempo para guardar dois estados">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Todos os sítios">
 <!ENTITY ss.privacy_level.unencrypted "Apenas sítios não cifrados">
 <!ENTITY ss.privacy_level.nosites "Nenhum sítio">
-<!ENTITY sessionManger.enable "Activar o gestor de sessões">
 <!ENTITY crashRecovery.enable "Activar recuperação">
-<!ENTITY sm.StartExit "Iniciar/Sair">
-<!ENTITY sm.restore "Restaurar">
-<!ENTITY sm.preserve "Preservar">
 <!ENTITY sm.start "Quando o navegador inicia:">
-<!ENTITY sm.start.restore "Restaurar">
-<!ENTITY sm.start.ask "Perguntar antes de restaurar">
-<!ENTITY sm.start.nothing "Não restaurar">
-<!ENTITY sm.exit "Quando o navegador sai:">
-<!ENTITY sm.exit.save "Guardar sessão">
-<!ENTITY sm.exit.ask "Perguntar antes de guardar">
-<!ENTITY sm.exit.nothing "Não guardar">
-<!ENTITY sm.startup "Sessão de abertura:">
-<!ENTITY sm.lastsession "Última sessão">
-<!ENTITY sm.previouslast "Anterior ao último">
-<!ENTITY sm.chooseifempty "Escolher outra se vazia">
-<!ENTITY sm.restore.options "Ao restaurar sessões:">
-<!ENTITY sm.restore.overwrite "Sobrescrever janelas">
-<!ENTITY sm.restore.overwriteTabs "E separadores">
-<!ENTITY sm.restore.closedWinList "Guardar janelas na lista de janelas encerradas">
-<!ENTITY sm.restore.merge "Juntar múltiplas janelas numa só">
-<!ENTITY sm.restore.bypassCache "Bypass cache ao restaurar">
-<!ENTITY sm.notrestore.label "Quando não restaurar ao iniciar">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Preservar separadores:">
 <!ENTITY sm.preserve.history "Histórico">
 <!ENTITY sm.preserve.protect "Estado da protecção">
 <!ENTITY sm.preserve.locked "Bloquear estado">
 <!ENTITY sm.preserve.permission "Permissões">
 <!ENTITY sm.preserve.scroll1 "Deslocar posição">
-<!ENTITY sm.restore.winOptions "Preservar janelas:">
-<!ENTITY sm.restore.selectedTab "Separador seleccionado">
-<!ENTITY sm.restore.closedTabs "Lista de separadores fechados">
 <!ENTITY incompatible.extensions "Algumas das suas extensões são incompatíveis com o Tab Mix Plus, é recomendado que desactive ou desinstale essas extensões.">
 <!ENTITY incompatible.button.label "Mostrar lista">

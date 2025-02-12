@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Показване на началната страница">
 <!ENTITY startupBlankPage.label "Показване на празна страница">
 <!ENTITY startupLastSession1.label "Показване на прозорците и подпрозорците от последния път">
-<!ENTITY ss.enable.label "Използване на вградената функция на Firefox за възстановяване на сесии">
-<!ENTITY ss.enable.tooltip "Премахнете тази отметка, за да позволите използването на Мениджъра на сесии Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Допълнителни настройки">
 <!ENTITY ss.advanced_setting.warning "Не променяйте тези параметри, ако не знаете какво точно правите">
 <!ENTITY ss.interval "Минимален интервал между запазване на сесии">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "За всички сайтове">
 <!ENTITY ss.privacy_level.unencrypted "Само за нешифровани сайтове">
 <!ENTITY ss.privacy_level.nosites "Без записване">
-<!ENTITY sessionManger.enable "Включване на Мениджъра на сесии">
 <!ENTITY crashRecovery.enable "Възстановяване на сесия след крах на Firefox">
-<!ENTITY sm.StartExit "Пускане/Изход">
-<!ENTITY sm.restore "Възстановяване">
-<!ENTITY sm.preserve "Запазване">
 <!ENTITY sm.start "При пускането на браузъра:">
-<!ENTITY sm.start.restore "Възстановяване на сесията">
-<!ENTITY sm.start.ask "Потвърждение преди възстановяването">
-<!ENTITY sm.start.nothing "Без възстановяване на сесията">
-<!ENTITY sm.exit "При изход от браузъра:">
-<!ENTITY sm.exit.save "Запис на сесията">
-<!ENTITY sm.exit.ask "Потвърждение преди записа">
-<!ENTITY sm.exit.nothing "Без запис">
-<!ENTITY sm.startup "Избор на начална сесия:">
-<!ENTITY sm.lastsession "Последната сесия">
-<!ENTITY sm.previouslast "Сесията преди последната">
-<!ENTITY sm.chooseifempty "Избор на друга, ако избраната сесия е празна">
-<!ENTITY sm.restore.options "При възстановяването на сесии:">
-<!ENTITY sm.restore.overwrite "Замяна на съществуващите прозорци">
-<!ENTITY sm.restore.overwriteTabs "и подпрозорци">
-<!ENTITY sm.restore.closedWinList "Запис на прозорците в списъка на затворени прозорци">
-<!ENTITY sm.restore.merge "Обединяване на няколко прозорци в един">
-<!ENTITY sm.restore.bypassCache "Игнориране на кеша при възстановяване">
-<!ENTITY sm.notrestore.label "Когато не се възстановява при стартирането">
-<!ENTITY sm.restorePinned1.label "Възстановяване на забодените от последния път подпрозорци">
 <!ENTITY sm.preserve.options "Запазване на следните параметри на подпрозорците:">
 <!ENTITY sm.preserve.history "Историята">
 <!ENTITY sm.preserve.protect "Статуса на защита">
 <!ENTITY sm.preserve.locked "Статуса на заключване">
 <!ENTITY sm.preserve.permission "Разрешенията">
 <!ENTITY sm.preserve.scroll1 "Позицията при прелистването">
-<!ENTITY sm.restore.winOptions "Запазване на следните параметри на прозорците:">
-<!ENTITY sm.restore.selectedTab "Активен подпрозорец">
-<!ENTITY sm.restore.closedTabs "Списък на затворени подпрозорци">
 <!ENTITY incompatible.extensions "Някои от добавките Ви са несъвместими с Таб Mix Plus. Препоръчително е да изключите или деинсталирате тези добавки.">
 <!ENTITY incompatible.button.label "Показване на списъка">

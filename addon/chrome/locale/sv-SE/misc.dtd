@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Välj tid från listan eller ange egen tid">
 <!ENTITY specifyreload.label "Ange tid mellan varje uppdatering">
-<!ENTITY sanitizer.entry "Tab Mix Plus sparade historiker">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "Vill du verkligen radera ALLA dina sparade sessioner, inklusive säkerhetskopior?">

@@ -182,7 +182,3 @@ interface JSWindowActorChild {
   onProcessedClick: (json: Params) => void;
   seenTabIcon: boolean;
 }
-
-interface mozIDOMWindowProxy {
-  _callBackFunction?: (data: {button: number; checked: boolean; label: string; value: number}) => void;
-}

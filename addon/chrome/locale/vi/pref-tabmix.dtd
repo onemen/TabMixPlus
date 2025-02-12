@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Hiện một trang trống">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Sử dụng tính năng “Khôi phục Phiên” có sẵn trong Firefox">
-<!ENTITY ss.enable.tooltip "Không chọn để cho phép sử dụng với Quản lí Phiên của Tabmix">
 <!ENTITY ss.advanced_setting "Thiết lập Nâng cao">
 <!ENTITY ss.advanced_setting.warning "Đừng thay đổi những mục này, trừ khi bạn biết mình đang làm gì">
 <!ENTITY ss.interval "Khoảng thời gian tối thiểu giữa hai lần lưu trạng thái">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Tất cả các trang">
 <!ENTITY ss.privacy_level.unencrypted "Chỉ các trang không được mã hóa">
 <!ENTITY ss.privacy_level.nosites "Không trang nào cả">
-<!ENTITY sessionManger.enable "Bật “Quản lí Phiên”">
 <!ENTITY crashRecovery.enable "Bật “Khôi phục Đổ vỡ”">
-<!ENTITY sm.StartExit "Khởi động/Thoát">
-<!ENTITY sm.restore "Khôi phục">
-<!ENTITY sm.preserve "Bảo toàn">
 <!ENTITY sm.start "Khi Trình Duyệt Khởi Động:">
-<!ENTITY sm.start.restore "Khôi phục">
-<!ENTITY sm.start.ask "Hỏi trước khi Khôi phục">
-<!ENTITY sm.start.nothing "Không khôi phục">
-<!ENTITY sm.exit "Khi Trình Duyệt Thoát:">
-<!ENTITY sm.exit.save "Lưu phiên">
-<!ENTITY sm.exit.ask "Hỏi trước khi Lưu">
-<!ENTITY sm.exit.nothing "Không lưu">
-<!ENTITY sm.startup "Phiên khởi động:">
-<!ENTITY sm.lastsession "Phiên cuối">
-<!ENTITY sm.previouslast "Trước tới Cuối">
-<!ENTITY sm.chooseifempty "Chọn cái khác nếu trống">
-<!ENTITY sm.restore.options "Khi Khôi Phục Phiên:">
-<!ENTITY sm.restore.overwrite "Ghi đè các cửa sổ hiện tại">
-<!ENTITY sm.restore.overwriteTabs "Và thẻ">
-<!ENTITY sm.restore.closedWinList "Lưu cửa sổ trong danh sách cửa sổ đã đóng">
-<!ENTITY sm.restore.merge "Trộn nhiều cửa sổ lại thành một">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
-<!ENTITY sm.notrestore.label "Khi không khôi phục lúc khởi động">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Bảo toàn các Thẻ:">
 <!ENTITY sm.preserve.history "Lược sử">
 <!ENTITY sm.preserve.protect "Bảo vệ Trạng thái">
 <!ENTITY sm.preserve.locked "Khóa trạng thái">
 <!ENTITY sm.preserve.permission "Quyền hạn">
 <!ENTITY sm.preserve.scroll1 "Vị trí Cuộn">
-<!ENTITY sm.restore.winOptions "Bảo toàn Cửa sổ:">
-<!ENTITY sm.restore.selectedTab "Thẻ được chọn">
-<!ENTITY sm.restore.closedTabs "Danh sách các thẻ đã đóng">
 <!ENTITY incompatible.extensions "Một số phần mở rộng của bạn không tương thích với Tab Mix Plus, bạn nên vô hiệu hóa hoặc gỡ bỏ các phần mở rộng đó.">
 <!ENTITY incompatible.button.label "Hiện danh sách">

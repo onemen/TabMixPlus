@@ -546,12 +546,6 @@ var TabmixContext = {
     Tabmix.showItem("context_unpinTab", !multiselectionContext && show && aTab.pinned);
     Tabmix.showItem("context_pinSelectedTabs", multiselectionContext && show && !aTab.pinned);
     Tabmix.showItem("context_unpinSelectedTabs", multiselectionContext && show && aTab.pinned);
-    setTimeout(() => {
-      // we need to set our show/hide after tabGroups extension
-      let tabViewMenu = document.getElementById("context_tabViewMenu") ||
-          document.getElementById("tabGroups-context_tabViewMenu");
-      Tabmix.showItem(tabViewMenu, Tabmix.prefs.getBoolPref("moveToGroup") && !aTab.pinned);
-    });
     Tabmix.showItem("context_moveTabOptions", Tabmix.prefs.getBoolPref("moveTabOptions"));
 
     // make sure not to show menu items that are hidden by Firefox
@@ -1267,7 +1261,7 @@ var TabmixAllTabs = {
     if (typeof window.colorfulTabs == "object") {
       let rule = "none";
       if (window.colorfulTabs.clrAllTabsPopPref) {
-        let tabClr = TabmixSessionData.getTabValue(tab, "tabClr");
+        let tabClr = SessionStore.getCustomTabValue(tab, "tabClr");
         if (tabClr)
           rule = "linear-gradient(rgba(255,255,255,.7),rgba(#1,.5),rgb(#1)),linear-gradient(rgb(#1),rgb(#1))"
               .replace(/#1/g, tabClr);

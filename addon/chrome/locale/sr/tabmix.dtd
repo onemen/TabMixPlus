@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Избриши из листе">
 <!ENTITY deletelist.accesskey "И">
 <!ENTITY settings.label "Подешавања">
-<!ENTITY saveWindow.label "Сачувај овај прозор">
-<!ENTITY saveAllWindows.label "Сачувај све прозоре">
 <!ENTITY sm.context.overwrite "Обнови, пиши преко текућег/-их прозора">
 <!ENTITY sm.context.overwrite.key "г">
 <!ENTITY sm.context.restore.new "Обнови у новом/-им прозору/-има">

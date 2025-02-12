@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Șterge din listă">
 <!ENTITY deletelist.accesskey "t">
 <!ENTITY settings.label "Configurație">
-<!ENTITY saveWindow.label "Salvează această fereastră">
-<!ENTITY saveAllWindows.label "Salvează toate ferestrele">
 <!ENTITY sm.context.overwrite "Restaurează suprascriind fereastra existentă">
 <!ENTITY sm.context.overwrite.key "s">
 <!ENTITY sm.context.restore.new "Restaurează într-o fereastră nouă">

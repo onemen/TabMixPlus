@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Show a blank page">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Use Firefox&apos;s built-in Session Restore feature">
-<!ENTITY ss.enable.tooltip "Uncheck to allow the use with Tab Mix Plus Session Manager">
 <!ENTITY ss.advanced_setting "Advanced Setting">
 <!ENTITY ss.advanced_setting.warning "Don&apos;t change these, unless you know what you&apos;re doing">
 <!ENTITY ss.interval "Minimum time interval between two state saves">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "All sites">
 <!ENTITY ss.privacy_level.unencrypted "Unencrypted sites only">
 <!ENTITY ss.privacy_level.nosites "No sites at all">
-<!ENTITY sessionManger.enable "Enable Session Manager">
 <!ENTITY crashRecovery.enable "Enable Crash Recovery">
-<!ENTITY sm.StartExit "Start/Exit">
-<!ENTITY sm.restore "Restore">
-<!ENTITY sm.preserve "Preserve">
 <!ENTITY sm.start "When Browser Starts:">
-<!ENTITY sm.start.restore "Restore">
-<!ENTITY sm.start.ask "Ask Before Restoring">
-<!ENTITY sm.start.nothing "Don&apos;t Restore">
-<!ENTITY sm.exit "When Browser Exits:">
-<!ENTITY sm.exit.save "Save Session">
-<!ENTITY sm.exit.ask "Ask Before Saving">
-<!ENTITY sm.exit.nothing "Don&apos;t Save">
-<!ENTITY sm.startup "Startup Session:">
-<!ENTITY sm.lastsession "Last Session">
-<!ENTITY sm.previouslast "Previous to Last">
-<!ENTITY sm.chooseifempty "Choose another if empty">
-<!ENTITY sm.restore.options "When Restoring Sessions:">
-<!ENTITY sm.restore.overwrite "Overwrite existing windows">
-<!ENTITY sm.restore.overwriteTabs "And tabs">
-<!ENTITY sm.restore.closedWinList "Save windows in closed windows list">
-<!ENTITY sm.restore.merge "Join multiple windows into one">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
-<!ENTITY sm.notrestore.label "When not restoring on start">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Preserve Tabs:">
 <!ENTITY sm.preserve.history "History">
 <!ENTITY sm.preserve.protect "Protect Status">
 <!ENTITY sm.preserve.locked "Lock Status">
 <!ENTITY sm.preserve.permission "Permissions">
 <!ENTITY sm.preserve.scroll1 "Scroll Position">
-<!ENTITY sm.restore.winOptions "Preserve Windows:">
-<!ENTITY sm.restore.selectedTab "Selected tab">
-<!ENTITY sm.restore.closedTabs "Closed tabs list">
 <!ENTITY incompatible.extensions "Some of your extensions are incompatible with Tab Mix Plus, it is recommended that you will disable or uninstall those extensions.">
 <!ENTITY incompatible.button.label "Show List">

@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Vali ajavahemik loendist või sisesta oma ajavahemik">
 <!ENTITY specifyreload.label "Määra uuestilaadimiste ajavahe">
-<!ENTITY sanitizer.entry "Tab Mix Plus'i salvestatud seansid">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "Kas oled kindel, et tahad kustutada KÕIK salvestatud seansid ja varufailid?">

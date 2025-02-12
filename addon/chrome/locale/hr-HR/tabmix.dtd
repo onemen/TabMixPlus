@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Obriši sa popisa">
 <!ENTITY deletelist.accesskey "b">
 <!ENTITY settings.label "Postavke">
-<!ENTITY saveWindow.label "Spremi ovaj prozor">
-<!ENTITY saveAllWindows.label "Spremi sve prozore">
 <!ENTITY sm.context.overwrite "Vrati, Prepiši postojeći prozor(e)">
 <!ENTITY sm.context.overwrite.key "V">
 <!ENTITY sm.context.restore.new "Vrati u novi prozor(e)">

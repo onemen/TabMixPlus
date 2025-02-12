@@ -1,12 +1,6 @@
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 
-const lazy = {};
-ChromeUtils.defineESModuleGetters(lazy, {
-  //
-  PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
-});
-
 const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 
 var KeyConfig;
@@ -47,20 +41,6 @@ export const Shortcuts = {
       }
     },
     ucatab: {command: 13},
-    saveWindow: {
-      id: "key_tm_sm_saveone",
-      useInMenu: true,
-      default: "VK_F1 accel",
-      sessionKey: true,
-      command: "TabmixSessionUtils:SaveThisWindow"
-    },
-    saveSession: {
-      id: "key_tm_sm_saveone",
-      useInMenu: true,
-      default: "VK_F9 accel",
-      sessionKey: true,
-      command: "TabmixSessionUtils:SaveAllWindow"
-    },
     switchToLast: {command: 32},
     slideShow: {
       id: "key_tm_slideShow",
@@ -133,8 +113,6 @@ export const Shortcuts = {
         removeleft="&clicktab.removetoLeft;"
         removeright="&clicktab.removetoRight;"
         ucatab="&clicktab.ucatab;"
-        saveWindow="&saveWindow.label;"
-        saveSession="&saveAllWindows.label;"
         switchToLast="&shortcuts.switchToLast;"
         slideShow="&shortcuts.slideshow;"
         toggleFLST="&shortcuts.toggleFLST;"
@@ -215,7 +193,6 @@ export const Shortcuts = {
     }
 
     this.prefs.addObserver("shortcuts", this);
-    this.prefs.addObserver("sessions.manager", this);
     Services.obs.addObserver(this, "quit-application");
   },
 
@@ -226,7 +203,6 @@ export const Shortcuts = {
         break;
       case "quit-application":
         this.prefs.removeObserver("shortcuts", this);
-        this.prefs.removeObserver("sessions.manager", this);
         Services.obs.removeObserver(this, "quit-application");
         if (this.keyConfigInstalled)
           KeyConfig.deinit();
@@ -236,9 +212,9 @@ export const Shortcuts = {
 
   onPrefChange: function TMP_SC_onPrefChange(aData) {
     try {
-      if (this.updatingShortcuts ||
-          aData != "shortcuts" && aData != "sessions.manager")
+      if (this.updatingShortcuts || aData != "shortcuts") {
         return;
+      }
       this.updatingShortcuts = true;
       // instead of locking the preference just revert any changes user made
       if (aData == "shortcuts" && !this.prefsChangedByTabmix) {
@@ -350,8 +326,6 @@ export const Shortcuts = {
     let document = aWindow.document;
     let keyset = document.getElementById("mainKeyset");
     let keyAtt = this.keyParse(aKeyData.value || "d&");
-    if (aKeyData.sessionKey && aKeyData.blocked)
-      keyAtt.disabled = true;
     let disabled = keyAtt.disabled;
     let id = aKeyData.id || "key_tm_" + aKey;
     let keyItem = document.getElementById(id);
@@ -413,24 +387,17 @@ export const Shortcuts = {
 
   _getChangedKeys: function TMP_SC__getChangedKeys(aOptions) {
     let shortcuts = !aOptions.onChange && this.prefBackup || this._getShortcutsPref();
-    let disableSessionKeys = lazy.PrivateBrowsingUtils.permanentPrivateBrowsing ||
-        !this.prefs.getBoolPref("sessions.manager");
     let changedKeys = {}, onOpen = aOptions.onOpen;
     for (let key of Object.keys(this.keys)) {
       let keyData = this.keys[key];
       let _default = keyData.default || "";
       let currentValue = onOpen ? _default : keyData.value;
       let newValue = shortcuts[key] || _default;
-      let updateBlockState = keyData.sessionKey && !/^d&/.test(newValue) &&
-          (onOpen ? disableSessionKeys :
-            disableSessionKeys != keyData.blocked);
-      if (keyData.sessionKey)
-        keyData.blocked = disableSessionKeys;
       // on start report all tabmix keys and disabled by default shortcut as
       // changed so _updateKey can move these shortcuts to removedShortcuts
       if (!keyData.reserved &&
           (onOpen && keyData.id?.startsWith("key_tm") || currentValue != newValue ||
-          updateBlockState || onOpen && /^d&/.test(_default))) {
+          onOpen && /^d&/.test(_default))) {
         keyData.value = newValue;
         changedKeys[key] = keyData;
       }

@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Vis en blank side">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Brug indbygget sessions-genetablering">
-<!ENTITY ss.enable.tooltip "Fjern markering for at tillade brug af TabMix Sessionsadministration">
 <!ENTITY ss.advanced_setting "Avancerede indstillinger">
 <!ENTITY ss.advanced_setting.warning "Undlad at ændre disse med mindre du ved præcis hvad du laver">
 <!ENTITY ss.interval "Minimum tidsinterval mellem to tilstands-gem">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Alle sider">
 <!ENTITY ss.privacy_level.unencrypted "Kun ikke-krypterede sider">
 <!ENTITY ss.privacy_level.nosites "Slet ingen sider">
-<!ENTITY sessionManger.enable "Slå Sessionsadministration til">
 <!ENTITY crashRecovery.enable "Slå Genetablering af afbrudte til">
-<!ENTITY sm.StartExit "Start/afslut">
-<!ENTITY sm.restore "Genetabler">
-<!ENTITY sm.preserve "Bevar">
 <!ENTITY sm.start "Når browser starter:">
-<!ENTITY sm.start.restore "Genetabler">
-<!ENTITY sm.start.ask "Spørg før genetablering">
-<!ENTITY sm.start.nothing "Genetabler ikke">
-<!ENTITY sm.exit "Når browser afsluttes:">
-<!ENTITY sm.exit.save "Gem session">
-<!ENTITY sm.exit.ask "Spørg før der gemmes">
-<!ENTITY sm.exit.nothing "Gem ikke">
-<!ENTITY sm.startup "Opstartssession:">
-<!ENTITY sm.lastsession "Sidste session">
-<!ENTITY sm.previouslast "Foregående ift. sidste">
-<!ENTITY sm.chooseifempty "Vælg en anden hvis tom">
-<!ENTITY sm.restore.options "Ved genetablering af sessioner:">
-<!ENTITY sm.restore.overwrite "Overskriv eksisterende vinduer">
-<!ENTITY sm.restore.overwriteTabs "Og faneblade">
-<!ENTITY sm.restore.closedWinList "Gem vinduer i lukkede vinduer-listen">
-<!ENTITY sm.restore.merge "Foren flere vinduer til et">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
-<!ENTITY sm.notrestore.label "Når der ikke genetableres ved start">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Bevar faneblade:">
 <!ENTITY sm.preserve.history "Historik">
 <!ENTITY sm.preserve.protect "Beskyt status">
 <!ENTITY sm.preserve.locked "Lås status">
 <!ENTITY sm.preserve.permission "Tilladelser">
 <!ENTITY sm.preserve.scroll1 "Rulle-position på siden">
-<!ENTITY sm.restore.winOptions "Bevar vinduer:">
-<!ENTITY sm.restore.selectedTab "Valgte faneblad">
-<!ENTITY sm.restore.closedTabs "Lukkede faneblade-liste">
 <!ENTITY incompatible.extensions "Nogle af dine udvidelser er inkompatible med Tab Mix Plus, det anbefales at du deaktiverer eller afinstallerer de pågældende udvidelser.">
 <!ENTITY incompatible.button.label "Vis liste">

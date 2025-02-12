@@ -47,7 +47,6 @@ const SCRIPTS = [
   "chrome://tabmixplus/content/flst/lasttab.js",
   "chrome://tabmixplus/content/click/click.js",
   "chrome://tabmixplus/content/places/places.js",
-  "chrome://tabmixplus/content/session/session.js",
   "chrome://tabmixplus/content/session/sessionStore.js",
   "chrome://tabmixplus/content/extensions/extensions.js",
   "chrome://tabmixplus/content/tab/tabsBindings.js",

@@ -186,7 +186,6 @@ pref("extensions.tabmix.undoClose.keepMenuOpen", false);
 pref("extensions.tabmix.undoClosePosition", true);
 pref("extensions.tabmix.undoCloseButton.menuonly", false);
 
-pref("extensions.tabmix.moveToGroup", true); // from 2010-08-13 , for Firefox 4.0+ only
 pref("extensions.tabmix.newTabMenu", true);
 pref("extensions.tabmix.duplicateMenu", true); // 2008-04-12: changed from false to true
 pref("extensions.tabmix.duplicateinWinMenu", false);
@@ -239,6 +238,7 @@ pref("extensions.tabmix.mergeWindowContent", false);
 pref("extensions.tabmix.middleclickDelete", true);
 
 pref("extensions.tabmix.optionsToolMenu", true);
+pref("extensions.tabmix.closedWinToolsMenu", false);
 
 pref("extensions.tabmix.enablefiletype", true);
 // noinspection SpellCheckingInspection
@@ -249,43 +249,11 @@ pref("extensions.{dc572301-7619-498c-a57d-39143191b318}.description", "chrome://
 pref("extensions.tabmix.hideIcons", false);
 pref("extensions.tabmix.reloadEvery.onReloadButton", false);
 
-// session manager pref
-pref("extensions.tabmix.sessionToolsMenu", true);
-pref("extensions.tabmix.closedWinToolsMenu", false);
-
-pref("extensions.tabmix.sessions.crashRecovery", false);
-pref("extensions.tabmix.sessions.manager", false);
-pref("extensions.tabmix.sessions.restore.concatenate", false);
-pref("extensions.tabmix.sessions.restore.overwritetabs", true);
-pref("extensions.tabmix.sessions.restore.overwritewindows", true);
-pref("extensions.tabmix.sessions.restore.reloadall", false);
-pref("extensions.tabmix.sessions.restore.saveoverwrite", true);
-pref("extensions.tabmix.sessions.save.closedtabs", false);
-pref("extensions.tabmix.sessions.save.history", true);
-pref("extensions.tabmix.sessions.save.permissions", true);
-pref("extensions.tabmix.sessions.save.selectedtab", true);
-pref("extensions.tabmix.sessions.save.scrollposition", true);
-pref("extensions.tabmix.sessions.save.locked", true);
-pref("extensions.tabmix.sessions.save.protected", true);
-pref("extensions.tabmix.sessions.menu.showext", true);
-pref("extensions.tabmix.sessions.onClose", 0);
-pref("extensions.tabmix.sessions.onStart", 2);
-pref("extensions.tabmix.sessions.onStart.askifempty", true);
-pref("extensions.tabmix.sessions.onStart.loadsession", -1);
-pref("extensions.tabmix.sessions.onStart.sessionpath", "");
-pref("extensions.tabmix.sessions.onStart.restorePinned", true);
-// pref("extensions.tabmix.sessions.version", ""); removed on 2013-02-05 - not in use
-
 pref("extensions.tabmix.autoReloadContent", true);
 pref("extensions.tabmix.autoReloadMenu", false);
 pref("extensions.tabmix.custom_reload_list", "");
 pref("extensions.tabmix.reload_time", 60);
 pref("extensions.tabmix.reload_match_address", false);
-// The maximum number of daily sessions backups to
-// keep in <profile>/sessionbackups. Special values:
-// -1: unlimited
-//  0: no backups created (and deletes all existing backups)
-pref("extensions.tabmix.sessions.max_backups", 7);
 
 // removed from Firefox 4.0+, some other extensions may use this pref
 pref("browser.tabs.tabMinWidth", 100);

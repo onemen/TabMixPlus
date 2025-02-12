@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Prikaži praznu stranicu">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Koristi ugrađenu osobinu Vraćanja Prijava">
-<!ENTITY ss.enable.tooltip "Odznačite da biste dopustili korištenje s Tabmix Upraviteljem Prijava">
 <!ENTITY ss.advanced_setting "Napredne postavke">
 <!ENTITY ss.advanced_setting.warning "Nemojte ih mijenjati, osim ako znate što radite">
 <!ENTITY ss.interval "Minimalni vremenski razmaci prije spremanja dva stanja">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Sve stranice">
 <!ENTITY ss.privacy_level.unencrypted "Samo nekodirane stranice">
 <!ENTITY ss.privacy_level.nosites "Niti jednu stranicu">
-<!ENTITY sessionManger.enable "Omogući Upravitelja Prijavama">
 <!ENTITY crashRecovery.enable "Omogući Vraćanje nakon rušenja">
-<!ENTITY sm.StartExit "Pokreni/Izađi">
-<!ENTITY sm.restore "Vrati">
-<!ENTITY sm.preserve "Sačuvaj">
 <!ENTITY sm.start "Prilikom pokretanja preglednika:">
-<!ENTITY sm.start.restore "Vrati">
-<!ENTITY sm.start.ask "Pitaj prije vraćanja">
-<!ENTITY sm.start.nothing "Ne vraćaj">
-<!ENTITY sm.exit "Prilikom izlaska iz preglednika:">
-<!ENTITY sm.exit.save "Spremi Prijave">
-<!ENTITY sm.exit.ask "Pitaj prije spremanja">
-<!ENTITY sm.exit.nothing "Ne spremaj">
-<!ENTITY sm.startup "Početna Prijava:">
-<!ENTITY sm.lastsession "Zadnja Prijava">
-<!ENTITY sm.previouslast "Predzadnja Prijava">
-<!ENTITY sm.chooseifempty "Izaberi drugu ako je prazna">
-<!ENTITY sm.restore.options "Prilikom vraćanja Prijava:">
-<!ENTITY sm.restore.overwrite "Prebriši postojeći prozor">
-<!ENTITY sm.restore.overwriteTabs "I kartice">
-<!ENTITY sm.restore.closedWinList "Sačuvaj prozore u popisu zatvorenih prozora">
-<!ENTITY sm.restore.merge "Spoji više prozora u jedan">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
-<!ENTITY sm.notrestore.label "When not restoring on start">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Sačuvaj kartice:">
 <!ENTITY sm.preserve.history "Povijesti">
 <!ENTITY sm.preserve.protect "Zaštićenog statusa">
 <!ENTITY sm.preserve.locked "Zaključanog statusa">
 <!ENTITY sm.preserve.permission "Dopuštenja">
 <!ENTITY sm.preserve.scroll1 "Scroll Position">
-<!ENTITY sm.restore.winOptions "Sačuvaj prozore:">
-<!ENTITY sm.restore.selectedTab "Odabrane kartice">
-<!ENTITY sm.restore.closedTabs "Popisa zatvorenih kartica">
 <!ENTITY incompatible.extensions "Neka Vaša proširenja nisu kopaktibilna s Tab Mix Plus, preporučljivo je da onemogućite ili deinstalirate ta proširenja..">
 <!ENTITY incompatible.button.label "Prikaži popis">

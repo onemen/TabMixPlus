@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Válassza ki az időközt a listáról vagy írjon be egyet">
 <!ENTITY specifyreload.label "Újratöltési idő megadása">
-<!ENTITY sanitizer.entry "Személyes adatok törlése">
-<!ENTITY sanitizer.entry.accesskey "S">
-<!ENTITY sanitizer.entry.confirm "Valóban le kívánja törölni az összes elmentett munkamenetet és a biztonsági másolatokat is?">

@@ -332,12 +332,6 @@ export default [
   },
 
   {
-    name: "tabmix/dialogs-globals",
-    files: ["addon/chrome/content/dialogs/**"],
-    languageOptions: {globals: tabmixGlobals.dialog},
-  },
-
-  {
     name: "tabmix/overlay-and-scripts-globals",
     files: ["addon/chrome/content/overlay/**", "addon/chrome/content/scripts/**"],
     languageOptions: {globals: mozillaGlobals["frame-script"].globals},

@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Radera från listan">
 <!ENTITY deletelist.accesskey "b">
 <!ENTITY settings.label "Inställningar">
-<!ENTITY saveWindow.label "Spara detta fönster">
-<!ENTITY saveAllWindows.label "Spara alla fönster">
 <!ENTITY sm.context.overwrite "Återställ och skriv över befintliga fönster">
 <!ENTITY sm.context.overwrite.key "Å">
 <!ENTITY sm.context.restore.new "Återställ till nya fönster">

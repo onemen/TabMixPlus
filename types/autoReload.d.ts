@@ -2,6 +2,8 @@
 
 declare var gNumberInput: typeof NumberInput;
 
+interface DocumentElement extends Omit<HTMLDialogElement, "addEventListener" | "removeEventListener"> {}
+
 interface GetByMap {
   autoreload_minutes: HTMLNumberInputElement;
   autoreload_seconds: HTMLNumberInputElement;
@@ -11,4 +13,8 @@ interface GetByMap {
 interface GetClosestMap {
   ".combined-element": HTMLElement & {firstChild: HTMLNumberInputElement};
   ".container": HTMLElement;
+}
+
+interface WindowProxy {
+  arguments: any[];
 }

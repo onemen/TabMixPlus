@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "顯示首頁">
 <!ENTITY startupBlankPage.label "顯示空白頁">
 <!ENTITY startupLastSession1.label "顯示上次瀏覽的視窗和分頁">
-<!ENTITY ss.enable.label "使用 Firefox 內建的瀏覽狀態回復功能">
-<!ENTITY ss.enable.tooltip "取消勾選，可啟用 Tab Mix Plus 瀏覽狀態管理">
 <!ENTITY ss.advanced_setting "進階設定">
 <!ENTITY ss.advanced_setting.warning "請勿隨意調整以下設定值，除非您非常清楚您正在做什麼">
 <!ENTITY ss.interval "瀏覽狀態自動儲存的最小時間間隔：">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "儲存所有網站的隱私資料">
 <!ENTITY ss.privacy_level.unencrypted "僅儲存未加密站台的隱私資料">
 <!ENTITY ss.privacy_level.nosites "不儲存任何站台的隱私資料">
-<!ENTITY sessionManger.enable "啟用瀏覽狀態管理">
 <!ENTITY crashRecovery.enable "啟用異常終止狀態回復">
-<!ENTITY sm.StartExit "啟動/關閉">
-<!ENTITY sm.restore "還原設定">
-<!ENTITY sm.preserve "保存項目">
 <!ENTITY sm.start "啟動瀏覽器時：">
-<!ENTITY sm.start.restore "自動還原狀態">
-<!ENTITY sm.start.ask "詢問是否還原">
-<!ENTITY sm.start.nothing "不還原狀態">
-<!ENTITY sm.exit "關閉瀏覽器時：">
-<!ENTITY sm.exit.save "自動儲存狀態">
-<!ENTITY sm.exit.ask "詢問是否儲存">
-<!ENTITY sm.exit.nothing "不儲存狀態">
-<!ENTITY sm.startup "啟動時預設載入：">
-<!ENTITY sm.lastsession "最後的瀏覽狀態">
-<!ENTITY sm.previouslast "前次的瀏覽狀態">
-<!ENTITY sm.chooseifempty "該記錄不存在時，顯示列表讓我自行挑選">
-<!ENTITY sm.restore.options "還原瀏覽狀態時：">
-<!ENTITY sm.restore.overwrite "還原到目前的視窗">
-<!ENTITY sm.restore.overwriteTabs "及分頁">
-<!ENTITY sm.restore.closedWinList "先備份目前的瀏覽狀態至「已關閉視窗列表」">
-<!ENTITY sm.restore.merge "自動合併所有視窗">
-<!ENTITY sm.restore.bypassCache "還原時不使用快取的資料">
-<!ENTITY sm.notrestore.label "當關閉「啟動時還原」功能">
-<!ENTITY sm.restorePinned1.label "還原上次釘選的分頁">
 <!ENTITY sm.preserve.options "保存分頁：">
 <!ENTITY sm.preserve.history "瀏覽記錄">
 <!ENTITY sm.preserve.protect "保護狀態">
 <!ENTITY sm.preserve.locked "鎖定狀態">
 <!ENTITY sm.preserve.permission "內容允許狀態">
 <!ENTITY sm.preserve.scroll1 "頁面捲動位置">
-<!ENTITY sm.restore.winOptions "保存視窗：">
-<!ENTITY sm.restore.selectedTab "選取的分頁">
-<!ENTITY sm.restore.closedTabs "已關閉分頁列表">
 <!ENTITY incompatible.extensions "您所安裝的某些擴充套件不相容於 Tab Mix Plus，建議您可以停用或是移除這些擴充套件。">
 <!ENTITY incompatible.button.label "顯示列表">

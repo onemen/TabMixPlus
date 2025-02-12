@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Listeden bir süre seçin ya da istediğiniz süreyi girin">
 <!ENTITY specifyreload.label "Tazeleme Süresi Belirle">
-<!ENTITY sanitizer.entry "Tab Mix Plus kayıtlı oturumlar">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "Yedekler de dahil TÜM kayıtlı oturumları silmek istediğinize emin misiniz?">

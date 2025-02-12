@@ -27,26 +27,6 @@ var TMP_extensionsCompatibility = {
       gIeTab: false, /* for ieTab and ieTab2 */
     };
 
-    // sessionManager extension is restartless since version 0.8
-    Tabmix.extensions.__defineGetter__("sessionManager", () => {
-      return TabmixSvc.sessionManagerAddonInstalled ||
-        "com" in window && com.morac &&
-        typeof com.morac.SessionManagerAddon == "object";
-    });
-
-    try {
-      if ("TabGroupsManagerApiVer1" in window) {
-        Tabmix.extensions.tabGroupManager = true;
-        window.TMP_TabGroupsManager = {};
-        window.TMP_TabGroupsManager.tabmixSessionsManager = function() {};
-        const tmp = ChromeUtils.importESModule("chrome://tabmix-resource/content/extensions/TabGroupsManager.sys.mjs");
-        tmp.TMP_TabGroupsManager.changeCode = Tabmix.changeCode;
-        tmp.TMP_TabGroupsManager.init(window, gBrowser.tabContainer);
-      }
-    } catch (ex) {
-      Tabmix.assert(ex, "error in TabGroupsManager.sys.mjs");
-    }
-
     // fix for Cluster Tabs - Cluster Tab look for TM_init
     // https://addons.mozilla.org/en-US/firefox/addon/cluster-tabs-for-firefox/
     if ("GlaxChrome" in window && typeof window.GlaxChrome == "object") {
@@ -178,29 +158,9 @@ var TMP_extensionsCompatibility = {
       Tabmix.extensions.gIeTab = {obj: "gIeTab2", folder: "ietab2"};
     else if (typeof window.gIeTab == "object")
       Tabmix.extensions.gIeTab = {obj: "gIeTab", folder: "ietab"};
-
-    // prevent faviconize use its own adjustTabstrip/updateCloseButtons
-    // in Firefox 4.0 we check for faviconized tabs in TMP_TabView.firstTab
-    if ("faviconize" in window && "override" in window.faviconize) {
-      Tabmix.changeCode(TMP_TabView, "TMP_TabView.checkTabs")._replace(
-        '!tab.pinned',
-        '$& && !tab.hasAttribute("faviconized")'
-      ).toCode();
-
-      // change adjustTabstrip
-      window.faviconize.override.adjustTabstrip = function() { };
-    }
   },
 
   onWindowOpen: function TMP_EC_onWindowOpen() {
-    // https://addons.mozilla.org/firefox/addon/tabgroups-manager-revived
-    // TabGroupsManager.OverrideMethod set TabmixSessionManager.loadOneWindow to string by error
-    if (Tabmix.extensions.tabGroupManager &&
-        typeof TabmixSessionManager.loadOneWindow == "string") {
-      Tabmix._makeCode("TabmixSessionManager.loadOneWindow", TabmixSessionManager.loadOneWindow);
-      Tabmix.log("typeof TabmixSessionManager.loadOneWindow " + typeof TabmixSessionManager.loadOneWindow);
-    }
-
     this.setVerticalTabs();
 
     if ("openNewsfox" in window)
@@ -382,15 +342,6 @@ var TMP_extensionsCompatibility = {
         'SpeedDial.originalBrowserOpenTab(event, arguments.length > 1 && arguments[1]);'
       ).toCode();
       Tabmix.set_BrowserOpenTab();
-    }
-
-    // Classic Theme Restorer
-    // move appmenu-sessionmanager to its position
-    let ctrBox = document.getElementById("ctraddon_appmenubox_developer");
-    if (ctrBox) {
-      let sessionmanager = document.getElementById("appmenu-sessionmanager");
-      if (sessionmanager)
-        ctrBox.parentNode.insertBefore(sessionmanager, ctrBox.nextSibling);
     }
 
     // Redirect Remover 2.6.4
@@ -614,10 +565,12 @@ TMP_extensionsCompatibility.treeStyleTab = {
       // Added 2010-04-10
       // TST look for aTab.removeAttribute("tabxleft")
       Tabmix.changeCode(TabmixTabbar, "TabmixTabbar.updateSettings")._replace(
-        'TabmixSessionManager.updateTabProp(aTab);',
-        '$& \
-         gBrowser.treeStyleTab.initTabAttributes(aTab);\
-         Tabmix.TST_initTabContentsOrder(aTab);'
+        'Tabmix.setItem("main-window"[^;]*;',
+        `$&
+         for (const tab of tabBar.allTabs) {
+           gBrowser.treeStyleTab.initTabAttributes(aTab);
+           Tabmix.TST_initTabContentsOrder(aTab);'
+         }`
       ).toCode();
       // Added 2010-04-10
       Tabmix.changeCode(TMP_eventListener, "TMP_eventListener.onTabOpen")._replace(

@@ -53,8 +53,25 @@ interface nsIXPCComponents_Constructor {
   }
 }
 
+interface ComponentsExceptionOptions {
+  result?: number,
+  stack?: nsIStackFrame,
+  data?: object,
+}
+
+interface nsIException extends ExceptionMembers {}
+
 interface nsIXPCComponents_Exception {
-  (...args: ConstructorParameters<typeof Error>): Error;
+  (
+    message?: string,
+    resultOrOptions?: number | ComponentsExceptionOptions,
+    stack?: nsIStackFrame,
+    data?: object
+  ): nsIException;
+}
+
+interface nsIXPCComponents_ID {
+  (uuid: string): nsID
 }
 
 interface nsIXPCComponents_utils_Sandbox {

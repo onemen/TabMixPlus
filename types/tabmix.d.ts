@@ -27,6 +27,12 @@ interface CSSRule {
   readonly style: CSSStyleDeclaration;
 }
 
+interface HTMLDialogElement {
+  getButton(buttonId: string): HTMLButtonElement;
+  set defaultButton(buttonId: string);
+  get defaultButton(): string;
+}
+
 type RulesTypes = "max-rows" | "visibleRows" | "width" | "tabMinHeight" | "themeBackground";
 interface gTMPprefObserver {
   _marginStart: string;
@@ -152,7 +158,6 @@ type ItemOrId = string | Node | Element | AttributeProps | null | undefined;
 
 declare namespace TabmixNS {
   type LazyGetterReturnType<T extends (() => unknown) | unknown> = T extends () => infer R ? R : T;
-  type promptServiceReturnType = {button: number; checked: boolean; label: string; value: number};
   type ElementTypes = Node | HTMLElement | MockedGeckoTypes.BrowserTab;
 
   const _debug: boolean;
@@ -175,7 +180,6 @@ declare namespace TabmixNS {
   function lazyGetter<T extends (() => unknown) | unknown, O extends object, K extends keyof O & string>(obj: O, name: K, get: T, config?: {configurable?: boolean; enumerable?: boolean}): LazyGetterReturnType<T>;
   function backwardCompatibilityGetter(aObject: Record<string, unknown>, aOldName: string, aNewName: string): void;
   function informAboutChangeInTabmix(aOldName: string, aNewName: string): void;
-  function promptService(intParam: number[], strParam: string[], aWindow: Window, aCallBack?: (aResult: promptServiceReturnType) => void): promptServiceReturnType;
   function windowEnumerator(aWindowtype?: string | null): MockedGeckoTypes.nsISimpleEnumeratorWithWindow;
   function numberOfWindows(all?: boolean, aWindowtype?: string | null): number;
   const isFirstWindowInSession: boolean;
@@ -217,6 +221,7 @@ interface OriginalFunctions {
   gURLBar_handleCommand: gURLBar["handleCommand"];
   gURLBar__whereToOpen: gURLBar["_whereToOpen"];
   gURLBar_setURI: gURLBar["setURI"];
+  tabContainer_updateCloseButtons: MockedGeckoTypes.TabContainer["_updateCloseButtons"];
   isBlankPageURL: Window["isBlankPageURL"];
   newWindowButtonObserver_onDrop: newWindowButtonObserver["onDrop"];
   OpenBrowserWindow: Window["OpenBrowserWindow"];
@@ -283,7 +288,6 @@ declare namespace TabmixModules {
     getFormattedString: (aStringKey: string, aStringsArray: number[]) => string;
     getSingleWindowMode: () => boolean;
     getString: (key: string) => string;
-    getSMString: (key: string) => string;
     i10IdMap: I10Map;
     isCyberfox: boolean;
     isFloorp: boolean;
@@ -298,7 +302,6 @@ declare namespace TabmixModules {
     prefBranch: nsIPrefBranchXpcom;
     prefs: typeof PreferencesService;
     setCustomTabValue: (tab: MockedGeckoTypes.BrowserTab, key: string, value?: unknown) => void;
-    sanitized: boolean;
     setLabel: (property: string) => string;
     sortByRecentlyUsed: string;
     // SessionStore is declared in addon.d.ts
@@ -307,16 +310,11 @@ declare namespace TabmixModules {
     sm: {
       TAB_STATE_NEEDS_RESTORE: number;
       TAB_STATE_RESTORING: number;
-      crashed: boolean;
-      lastSessionPath: string | null;
-      settingPreference: boolean;
-      status: string;
     };
     // SessionStore is declared in addon.d.ts
     // ss: unknown;
     _defaultPreferencesLoaded: boolean;
     _strings: nsIStringBundle;
-    SMstrings: nsIStringBundle;
     tabStylePrefs: {
       [key: string]: TabStyle;
       progressMeter: TabStyle & {text: false};

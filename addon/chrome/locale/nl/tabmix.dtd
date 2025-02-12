@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Uit de lijst verwijderen">
 <!ENTITY deletelist.accesskey "V">
 <!ENTITY settings.label "Instellingen">
-<!ENTITY saveWindow.label "Dit venster bewaren">
-<!ENTITY saveAllWindows.label "Alle vensters bewaren">
 <!ENTITY sm.context.overwrite "Bestaand(e) venster(s) herstellen/overschrijven">
 <!ENTITY sm.context.overwrite.key "O">
 <!ENTITY sm.context.restore.new "Naar nieuw(e) venster(s) herstellen">

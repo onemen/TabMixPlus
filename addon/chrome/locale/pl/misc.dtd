@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Wybierz czas z listy lub wprowadź swój czas">
 <!ENTITY specifyreload.label "Czas odświeżania">
-<!ENTITY sanitizer.entry "Sesje Tab Mix Plusa">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "Czy na pewno chcesz usunąć wszystkie zapisane dane sesji i kopie zapasowe?">

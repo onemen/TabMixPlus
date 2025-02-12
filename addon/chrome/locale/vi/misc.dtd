@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Chọn thời gian từ danh sách hoặc tự nhập thời gian">
 <!ENTITY specifyreload.label "Chỉ định Thời gian Tải lại">
-<!ENTITY sanitizer.entry "“Phiên làm việc Đã lưu” Tab Mix Plus">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "Bạn có chắc rằng mình muốn xóa TẤT CẢ dữ liệu (bao gồm cả sao lưu) của các phiên làm việc đã lưu?">

@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "הצג דף ריק">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "השתמש בשחזור ההפעלות של פיירפוקס">
-<!ENTITY ss.enable.tooltip "אל תסמן על מנת לאפשר את מנהל ההפעלות של Tabmix.">
 <!ENTITY ss.advanced_setting "אפשרויות מתקדמות">
 <!ENTITY ss.advanced_setting.warning "אל תשנה כאן אלא אם כן אתה יודע מה אתה עושה">
 <!ENTITY ss.interval "מרווח זמן מינימלי בין שני מצבי שמירה">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "כל האתרים">
 <!ENTITY ss.privacy_level.unencrypted "אתרים לא מוצפנים בלבד">
 <!ENTITY ss.privacy_level.nosites "שום אתר">
-<!ENTITY sessionManger.enable "אפשר מנהל ההפעלות">
 <!ENTITY crashRecovery.enable "אפשר שחזור קריסות">
-<!ENTITY sm.StartExit "התחלה/יציאה">
-<!ENTITY sm.restore "שחזר">
-<!ENTITY sm.preserve "שימור">
 <!ENTITY sm.start "כשהדפדפן מותחל:">
-<!ENTITY sm.start.restore "שחזר">
-<!ENTITY sm.start.ask "שאל לפני שחזור">
-<!ENTITY sm.start.nothing "אל תשחזר">
-<!ENTITY sm.exit "כשהדפדפן נסגר:">
-<!ENTITY sm.exit.save "שמור הפעלה">
-<!ENTITY sm.exit.ask "שאל לפני שמירה">
-<!ENTITY sm.exit.nothing "אל תשמור">
-<!ENTITY sm.startup "הפעלה התחלתית:">
-<!ENTITY sm.lastsession "הפעלה אחרונה">
-<!ENTITY sm.previouslast "ראשון לאחרון">
-<!ENTITY sm.chooseifempty "בחר אחר אם נוכחי ריק">
-<!ENTITY sm.restore.options "כשהפעלה משוחזרת:">
-<!ENTITY sm.restore.overwrite "החלף חלונות נוכחיים">
-<!ENTITY sm.restore.overwriteTabs "ולשוניות">
-<!ENTITY sm.restore.closedWinList "שמור חלון ברשימת חלונות שנסגרו">
-<!ENTITY sm.restore.merge "מזג מספר חלונות לחלון אחד">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
-<!ENTITY sm.notrestore.label "When not restoring on start">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "שימור לשוניות:">
 <!ENTITY sm.preserve.history "היסטוריה">
 <!ENTITY sm.preserve.protect "מצב הגנה">
 <!ENTITY sm.preserve.locked "מצב נעילה">
 <!ENTITY sm.preserve.permission "הרשאה">
 <!ENTITY sm.preserve.scroll1 "מיקום גלילה">
-<!ENTITY sm.restore.winOptions "שימור חלונות:">
-<!ENTITY sm.restore.selectedTab "לשונית שנבחרה">
-<!ENTITY sm.restore.closedTabs "רשימת לשוניות שנסגרו">
 <!ENTITY incompatible.extensions "כמה תוספות לא תואמות עם Tab Mix Plus, מומלץ שתנטרל אותן.">
 <!ENTITY incompatible.button.label "הצג רשימה">

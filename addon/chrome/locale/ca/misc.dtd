@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Seleccioneu una freqüència de la llista o escriviu-ne una de pròpia">
 <!ENTITY specifyreload.label "Especifiqueu la freqüència per tornar a carregar">
-<!ENTITY sanitizer.entry "Sessions desades del Tab Mix Plus">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "Esteu segur que voleu suprimir TOTES les sessions desades, incloses les còpies de seguretat?">

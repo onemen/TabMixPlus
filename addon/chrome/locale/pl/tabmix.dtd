@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Usuń z listy">
 <!ENTITY deletelist.accesskey "U">
 <!ENTITY settings.label "Ustawienia">
-<!ENTITY saveWindow.label "Zapisz to okno">
-<!ENTITY saveAllWindows.label "Zapisz wszystkie okna">
 <!ENTITY sm.context.overwrite "Odtwórz, nadpisując istniejące okna">
 <!ENTITY sm.context.overwrite.key "O">
 <!ENTITY sm.context.restore.new "Odtwórz w nowych oknach">

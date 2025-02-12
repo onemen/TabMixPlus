@@ -106,7 +106,6 @@ interface Window {
     readonly sidebarVerticalTabsEnabled: boolean;
   };
   Tabmix: typeof TabmixNS;
-  TabmixSessionManager: TabmixSessionManager;
   TMP_Places: TabmixPlaces;
   URILoadingHelper: {
     getTargetWindow(window: Window, {skipPopups, forceNonPrivate}?: {skipPopups?: boolean; forceNonPrivate?: boolean}): Window | null;
@@ -626,8 +625,6 @@ declare namespace TabmixSessionStoreNS {
   function getTitleFromTabState(aTab: Tab): string;
   function getUrlFromTabState(aTab: Tab): string;
   function isBlankPendingTab(aTab: Tab): boolean;
-  function setService(msgNo: number, start: boolean): void;
-  function isSessionStoreEnabled(): boolean;
   let afterSwitchThemes: boolean;
   function setAfterSessionRestored(): void;
   function setSessionRestore(aEnable: boolean): void;
@@ -703,21 +700,6 @@ declare namespace TabmixProgressListenerNS {
   const listener: typeof TabWebProgressListener;
 }
 
-declare namespace TabmixTabViewNS {
-  let subScriptLoaded: boolean;
-  function init(): void;
-  const installed: boolean;
-  function exist(id: string): boolean;
-  function checkTabs(tabs: Tab[]): Tab | undefined;
-  function currentGroup(): Tab[];
-  function getTabPosInCurrentGroup(aTab: Tab): number;
-  function getIndexInVisibleTabsFromTab(aTab: Tab): number;
-
-  // from tabView.js
-  function _patchBrowserTabview(): void;
-  function _resetTabviewFrame(): void;
-}
-
 declare namespace UndocloseTabButtonObserverNS {
   type TabDragEvent = Omit<DragEvent, "target"> & {target: HTMLButtonElement};
   function onDragOver(aEvent: TabDragEvent): boolean;
@@ -738,7 +720,6 @@ type TabmixProgressListener = typeof TabmixProgressListenerNS;
 type TabmixSessionStore = typeof TabmixSessionStoreNS;
 type TabmixTabbar = typeof TabmixTabbarNS & {_failedToEnterVerticalMode?: boolean};
 type TabmixTabClickOptions = typeof TabmixTabClickOptionsNS;
-type TabmixTabView = typeof TabmixTabViewNS;
 type UndocloseTabButtonObserver = typeof UndocloseTabButtonObserverNS;
 
 // this namespace is for all SessionStore useage in Tabmix
@@ -806,6 +787,7 @@ declare namespace SessionStoreNS {
     function forgetClosedWindow(aIndex: number): void;
     function getClosedTabCount(aOptions?: WindowSource): number;
     function getClosedTabCountForWindow(aWindow: Window): number;
+    function getClosedTabCountFromClosedWindows(): number;
     function getClosedTabData(aOptions?: WindowSource): ClosedTabData[];
     /** @deprecated - use getClosedTabData with aOptions?: Source since Firefox 117 */
     function getClosedTabData(aWindow: Window, aAsString: boolean): ClosedTabData[];
@@ -923,32 +905,6 @@ interface EventTypeMap<T extends HTMLElement> {
 
 interface QuerySelectorMap {
   ".panel-subview-body": ClosedObjectsUtils.PopupElement;
-}
-
-interface TabmixSessionManager {
-  canRestoreLastSession: boolean;
-  disableSessionManager: boolean;
-  enableManager: boolean;
-  firstNonPrivateWindow: boolean;
-  notifyObservers: boolean;
-  isPrivateWindow: boolean;
-  windowClosed: boolean;
-  init: () => void;
-  initializePrivateStateVars: () => void;
-  onWindowClose: (isLastWindow: boolean) => void;
-  overrideHomepage: string | nsIArray | Tab | null;
-  privateTabChanged: (event: TabmixEventListenerNS.TabEvent) => void;
-  restoreLastSession: () => void;
-  sessionUtil: (action: string, what: string, sessionPath?: string) => void;
-  tabClosed: (tab: Tab) => void;
-  tabMoved: (aTab: Tab, oldPos: number, newPos: number) => void;
-  tabSelected: (needFlush: boolean) => void;
-  tabLoaded: (tab: Tab) => void;
-  shutDown: (aCanClose: boolean, aLastWindow: boolean, aSaveSession: boolean, aRemoveClosedTabs?: boolean, aKeepClosedWindows?: boolean, _flush?: boolean) => void;
-  updateTabProp: (aTab: Tab) => void;
-}
-interface TabmixSessionData {
-  getTabValue<T extends boolean | undefined = undefined>(tab: Tab, id: string, parse?: T): T extends true ? Record<string, unknown> : string;
 }
 
 /** globals installed by extensions */

@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Escolha a hora da lista ou escreva a sua própria hora">
 <!ENTITY specifyreload.label "Especificar Tempo de Actualização">
-<!ENTITY sanitizer.entry "Tab Mix Plus Sessões Guardadas">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "Tem a certeza que deseja eliminar TODAS as suas sessões guardadas incluindo backups?">

@@ -58,7 +58,7 @@ Tabmix.beforeBrowserInitOnLoad = function() {
     if (this.isFirstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
       setTimeout(function checkCompatibility(aWindow) {
         const {CompatibilityCheck} = ChromeUtils.importESModule("chrome://tabmix-resource/content/extensions/CompatibilityCheck.sys.mjs");
-        return new CompatibilityCheck(aWindow, true);
+        return new CompatibilityCheck(aWindow, true, false);
       }, 0, window);
     }
 
@@ -179,70 +179,3 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   TMP_extensionsCompatibility.preInit();
 };
 
-Tabmix._updateCloseButtons = function tabContainer_updateCloseButtons(skipUpdateScrollStatus, aUrl) {
-  // modes for close button on tabs - extensions.tabmix.tabs.closeButtons
-  // 1 - alltabs    = close buttons on all tabs
-  // 2 - hovertab   = close buttons on hover tab
-  // 3 - activetab  = close button on active tab only
-  // 4 - hoveractive = close buttons on hover and active tabs
-  // 5 - alltabs wider then  = close buttons on all tabs wider then
-
-  let oldValue = this.getAttribute("closebuttons");
-  var tabs = Tabmix.visibleTabs.tabs;
-  var tabsCount = Tabmix.tabsUtils.getTabsCount(tabs.length);
-  switch (Tabmix.tabsUtils.closeButtonsEnabled ? this.mCloseButtons : 0) {
-    case 0:
-      this.removeAttribute("closebuttons-hover");
-      this.setAttribute("closebuttons", "noclose");
-      break;
-    case 1:
-      this.removeAttribute("closebuttons-hover");
-      this.setAttribute("closebuttons", "alltabs");
-      break;
-    case 2:
-      this.setAttribute("closebuttons-hover", "alltabs");
-      this.setAttribute("closebuttons", "noclose");
-      break;
-    case 3:
-      this.removeAttribute("closebuttons-hover");
-      this.setAttribute("closebuttons", "activetab");
-      break;
-    case 4:
-      this.setAttribute("closebuttons-hover", "notactivetab");
-      this.setAttribute("closebuttons", "activetab");
-      break;
-    case 5:
-      this.removeAttribute("closebuttons-hover");
-      this.tabmix_updateCloseButtons();
-      break;
-  }
-
-  /**
-   *  Don't use return in this function
-   *  TreeStyleTab add some code at the end
-   */
-  let transitionend = Tabmix.callerTrace("onxbltransitionend");
-  if (tabsCount == 1) {
-    let tab = this.selectedItem;
-    if (!aUrl) {
-      let currentURI = gBrowser.currentURI;
-      aUrl = currentURI ? currentURI.spec : null;
-    }
-    // hide the close button if one of this condition is true:
-    //   - if "Do not close window when closing last tab" is set and the tab is blank,
-    //     about:blank or other new tab.
-    //   - if "Prevent last tab from closing" is set.
-    if (
-      Tabmix.tabsUtils._keepLastTab ||
-        !Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
-          (isBlankPageURL(tab.__newLastTab || null) ||
-            (!aUrl || isBlankPageURL(aUrl)) && gBrowser.isBlankNotBusyTab(tab))
-    ) {
-      this.setAttribute("closebuttons", "noclose");
-      this.removeAttribute("closebuttons-hover");
-    }
-  } else if (!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons") ||
-             transitionend) {
-    TabmixTabbar.updateScrollStatus(transitionend);
-  }
-};

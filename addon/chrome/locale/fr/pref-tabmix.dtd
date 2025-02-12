@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Afficher une page blanche">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Utiliser la fonctionnalité de restauration de sessions intégrée">
-<!ENTITY ss.enable.tooltip "Décocher pour autoriser l'utilisation avec le gestionnaire de sessions de Tabmix">
 <!ENTITY ss.advanced_setting "Réglages avancés">
 <!ENTITY ss.advanced_setting.warning "Ne les modifiez pas, à moins d'être certain de ce que vous faites">
 <!ENTITY ss.interval "Intervalle minimum de temps entre deux sauvegardes d'état">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Tous les sites">
 <!ENTITY ss.privacy_level.unencrypted "Les sites non chiffrés seulement">
 <!ENTITY ss.privacy_level.nosites "Aucun site">
-<!ENTITY sessionManger.enable "Activer le gestionnaire de sessions">
 <!ENTITY crashRecovery.enable "Activer la restauration après crash">
-<!ENTITY sm.StartExit "Démarrage/Fermeture">
-<!ENTITY sm.restore "Restaurer">
-<!ENTITY sm.preserve "Préserver">
 <!ENTITY sm.start "Quand le navigateur démarre :">
-<!ENTITY sm.start.restore "Restaurer">
-<!ENTITY sm.start.ask "Demander avant de restaurer">
-<!ENTITY sm.start.nothing "Ne pas restaurer">
-<!ENTITY sm.exit "Quand le navigateur est fermé :">
-<!ENTITY sm.exit.save "Enregistrer la session">
-<!ENTITY sm.exit.ask "Demander avant d'enregistrer la session">
-<!ENTITY sm.exit.nothing "Ne pas enregistrer">
-<!ENTITY sm.startup "Session de démarrage :">
-<!ENTITY sm.lastsession "Dernière session">
-<!ENTITY sm.previouslast "Avant-dernière">
-<!ENTITY sm.chooseifempty "Choisir une autre si vide">
-<!ENTITY sm.restore.options "À la restauration des sessions :">
-<!ENTITY sm.restore.overwrite "Écraser les fenêtres existantes">
-<!ENTITY sm.restore.overwriteTabs "Et les onglets">
-<!ENTITY sm.restore.closedWinList "Enregistrer les fenêtres dans la liste des fenêtres fermées">
-<!ENTITY sm.restore.merge "Regrouper plusieurs fenêtres en une seule">
-<!ENTITY sm.restore.bypassCache "Ne pas utiliser le cache lors d'une restauration">
-<!ENTITY sm.notrestore.label "En cas de non restauration au démarrage">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Conserver dans les onglets :">
 <!ENTITY sm.preserve.history "Historique">
 <!ENTITY sm.preserve.protect "États de protection">
 <!ENTITY sm.preserve.locked "États de verrouillage">
 <!ENTITY sm.preserve.permission "Permissions">
 <!ENTITY sm.preserve.scroll1 "Position de défilement">
-<!ENTITY sm.restore.winOptions "Conserver dans les fenêtres :">
-<!ENTITY sm.restore.selectedTab "L'onglet sélectionné">
-<!ENTITY sm.restore.closedTabs "La liste des onglets récemment fermés">
 <!ENTITY incompatible.extensions "Certaines de vos extensions sont incompatibles avec Tab Mix Plus, il est recommandé de désactiver ou désinstaller ces extensions.">
 <!ENTITY incompatible.button.label "Afficher la liste">

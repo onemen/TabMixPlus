@@ -143,7 +143,6 @@ export const RenameTab = {
     win.Tabmix.setItem(tab, "label-uri", url);
     TabmixSvc.setCustomTabValue(tab, "fixed-label", resetDefault ? null : label);
     TabmixSvc.setCustomTabValue(tab, "label-uri", url);
-    win.TabmixSessionManager.updateTabProp(tab);
 
     if (tab.label != label) {
       delete tab._labelIsInitialTitle;

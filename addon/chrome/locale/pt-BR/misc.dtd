@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Selecione um tempo da lista ou especifique um outro valor">
 <!ENTITY specifyreload.label "Especificar tempo de atualização">
-<!ENTITY sanitizer.entry "Histórico do Tab Mix Plus">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "Tem certeza que deseja apagar TODAS as sessões salvas incluindo os &quot;backups&quot;?">

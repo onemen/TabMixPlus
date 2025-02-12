@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "מחק מהרשימה">
 <!ENTITY deletelist.accesskey "מ">
 <!ENTITY settings.label "הגדרות">
-<!ENTITY saveWindow.label "שמור חלון זה">
-<!ENTITY saveAllWindows.label "שמור את כל החלונות">
 <!ENTITY sm.context.overwrite "שחזר על חלונות קיימים">
 <!ENTITY sm.context.overwrite.key "ע">
 <!ENTITY sm.context.restore.new "שחזר לחלונות חדשים">

@@ -1,4 +1,4 @@
-/* exported TMP_undocloseTabButtonObserver, TMP_TabView */
+/* exported TMP_undocloseTabButtonObserver */
 "use strict";
 
 /****    Drag and Drop observers    ****/
@@ -1072,66 +1072,6 @@ Tabmix.hidePopup = function TMP_hidePopup(aPopupMenu) {
       node.hidePopup();
     }
     node = node.parentNode;
-  }
-};
-
-// /** @type {TabmixTabView} */ // @ ts-expect-error - function from tabView.js are not in TMP_TabView
-/** @type {TabmixTabView} */
-var TMP_TabView = {
-  _patchBrowserTabview: () => {},
-  _resetTabviewFrame: () => {},
-  subScriptLoaded: false,
-  init() {
-    try {
-      if (this.installed) {
-        this._patchBrowserTabview();
-      }
-    } catch (ex) {
-      Tabmix.assert(ex);
-    }
-  },
-
-  get installed() {
-    let installed = typeof TabView == "object";
-    if (installed && !this.subScriptLoaded) {
-      Services.scriptloader.loadSubScript("chrome://tabmixplus/content/minit/tabView.js", window);
-    }
-    return installed;
-  },
-
-  exist(id) {
-    return this.installed && typeof TabView[id] == "function";
-  },
-
-  checkTabs(tabs) {
-    var firstTab;
-    for (const tab of tabs) {
-      if (!tab.collapsed && !tab.pinned) {
-        firstTab = tab;
-        break;
-      }
-    }
-    return firstTab;
-  },
-
-  // including _removingTabs
-  currentGroup() {
-    return Array.prototype.filter.call(gBrowser.tabs, tab => !tab.hidden);
-  },
-
-  // visibleTabs don't include  _removingTabs
-  getTabPosInCurrentGroup(aTab) {
-    if (aTab) {
-      let tabs = Array.prototype.filter.call(gBrowser.tabs, tab => !tab.hidden);
-      return tabs.indexOf(aTab);
-    }
-    return -1;
-  },
-
-  getIndexInVisibleTabsFromTab(aTab) {
-    if (aTab)
-      return Tabmix.visibleTabs.tabs.indexOf(aTab);
-    return -1;
   }
 };
 

@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Vybrať čas zo zoznamu alebo použiť vlastný">
 <!ENTITY specifyreload.label "Určiť čas znovunačítania">
-<!ENTITY sanitizer.entry "História Tab Mix Plus">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "Ste si istý, že chcete vymazať VŠETKY vaše uložené údaje relácií vrátane záloh?">

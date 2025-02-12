@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Üres oldal megjelenítése">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Beépített munkamenet-visszaállító használata">
-<!ENTITY ss.enable.tooltip "Kijelölés nélkül a TabMix Munkamenet-kezelője kerül engedélyezésre">
 <!ENTITY ss.advanced_setting "Haladó beállítások">
 <!ENTITY ss.advanced_setting.warning "Ne változtassa meg ezeket a beállításokat, csak ha biztosan tudja mit jelentenek ezek a beállítások.">
 <!ENTITY ss.interval "Időintervallum két állapotmentés között">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Minden oldalnál">
 <!ENTITY ss.privacy_level.unencrypted "Nem titkosított oldalaknál">
 <!ENTITY ss.privacy_level.nosites "Semmilyen oldalnál">
-<!ENTITY sessionManger.enable "Munkamenet-kezelő engedélyezése">
 <!ENTITY crashRecovery.enable "Hiba-helyreállító engedélyezése">
-<!ENTITY sm.StartExit "Indítás/Kilépés">
-<!ENTITY sm.restore "Visszaállítás">
-<!ENTITY sm.preserve "Védelem">
 <!ENTITY sm.start "Amikor a böngésző elindul">
-<!ENTITY sm.start.restore "Visszaállítás">
-<!ENTITY sm.start.ask "Kérdezzen visszaállítás előtt">
-<!ENTITY sm.start.nothing "Ne állítsa vissza">
-<!ENTITY sm.exit "Ha a böngésző kilép:">
-<!ENTITY sm.exit.save "Munkamenet mentése">
-<!ENTITY sm.exit.ask "Kérdezzen mentés előtt">
-<!ENTITY sm.exit.nothing "Ne mentse el">
-<!ENTITY sm.startup "Indítási munkamenet:">
-<!ENTITY sm.lastsession "Utolsó munkamenet">
-<!ENTITY sm.previouslast "Előzőtől az utolsóig">
-<!ENTITY sm.chooseifempty "Másikat választ, ha üres">
-<!ENTITY sm.restore.options "Munkamenetek visszaállításakor">
-<!ENTITY sm.restore.overwrite "Felülírja a létező ablakokat">
-<!ENTITY sm.restore.overwriteTabs "és lapokat">
-<!ENTITY sm.restore.closedWinList "Bezárt ablakok listájának mentése">
-<!ENTITY sm.restore.merge "Több ablak összefűzése eggyé">
-<!ENTITY sm.restore.bypassCache "Gyorsítótár figyelmen kívül hagyása visszaállításkor">
-<!ENTITY sm.notrestore.label "Ha nem állítható vissza induláskor">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Védett lapok">
 <!ENTITY sm.preserve.history "Előzmények">
 <!ENTITY sm.preserve.protect "Védelem állapota">
 <!ENTITY sm.preserve.locked "Zárolás állapota">
 <!ENTITY sm.preserve.permission "Engedélyek">
 <!ENTITY sm.preserve.scroll1 "Gördítősáv helye">
-<!ENTITY sm.restore.winOptions "Védett ablak">
-<!ENTITY sm.restore.selectedTab "Kiválasztott lap">
-<!ENTITY sm.restore.closedTabs "Bezárt lapok listája">
 <!ENTITY incompatible.extensions "Néhány telepített Kiterjesztés nem kompatibilis Tab Mix Plus kiterjesztéssel. Ajánlatos ezeket a Kiterjesztéseket letiltani vagy eltávolítani.">
 <!ENTITY incompatible.button.label "Listázás">

@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Διαγραφή από τη λίστα">
 <!ENTITY deletelist.accesskey "Δ">
 <!ENTITY settings.label "Ρυθμίσεις">
-<!ENTITY saveWindow.label "Αποθήκευση αυτού του παραθύρου">
-<!ENTITY saveAllWindows.label "Αποθήκευση όλων των παραθύρων">
 <!ENTITY sm.context.overwrite "Επαναφορά με αντικατάσταση των ήδη ανοιγμένων παραθύρων">
 <!ENTITY sm.context.overwrite.key "ο">
 <!ENTITY sm.context.restore.new "Επαναφορά σε νέο/α παράθυρο/α">

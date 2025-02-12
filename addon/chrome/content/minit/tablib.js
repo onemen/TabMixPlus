@@ -211,11 +211,10 @@ Tabmix.tablib = {
 
     Tabmix.changeCode(gBrowser, "gBrowser._endRemoveTab")._replace(
       'this._blurTab(aTab);',
-      'Tabmix.tablib.onRemoveTab(aTab); \
-       if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) { \
-         TMP_eventListener.onTabClose_updateTabBar(aTab);\
-       } \
-       $&'
+      `if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+         TMP_eventListener.onTabClose_updateTabBar(aTab);
+       }
+       $&`
     )._replace(
       // we call gURLBar.select from Tabmix.clearUrlBarIfNeeded
       // see TMP_BrowserOpenTab
@@ -236,8 +235,7 @@ Tabmix.tablib = {
 
       let newIndex = this.selectIndexAfterRemove(aTab);
       if (newIndex > -1) {
-        let tabs = TMP_TabView.currentGroup();
-        let tab = tabs[newIndex];
+        let tab = gBrowser.visibleTabs[newIndex];
         if (tab && !tab.closing) {
           this.selectedTab = tab;
           return;
@@ -546,6 +544,75 @@ Tabmix.tablib = {
         '$1$2'
       ).toCode();
     }
+
+    Tabmix.originalFunctions.tabContainer_updateCloseButtons = gBrowser.tabContainer._updateCloseButtons;
+    gBrowser.tabContainer._updateCloseButtons = function(skipUpdateScrollStatus, aUrl) {
+      // modes for close button on tabs - extensions.tabmix.tabs.closeButtons
+      // 1 - alltabs    = close buttons on all tabs
+      // 2 - hovertab   = close buttons on hover tab
+      // 3 - activetab  = close button on active tab only
+      // 4 - hoveractive = close buttons on hover and active tabs
+      // 5 - alltabs wider then  = close buttons on all tabs wider then
+
+      let oldValue = this.getAttribute("closebuttons");
+      var tabs = Tabmix.visibleTabs.tabs;
+      var tabsCount = Tabmix.tabsUtils.getTabsCount(tabs.length);
+      switch (Tabmix.tabsUtils.closeButtonsEnabled ? this.mCloseButtons : 0) {
+        case 0:
+          this.removeAttribute("closebuttons-hover");
+          this.setAttribute("closebuttons", "noclose");
+          break;
+        case 1:
+          this.removeAttribute("closebuttons-hover");
+          this.setAttribute("closebuttons", "alltabs");
+          break;
+        case 2:
+          this.setAttribute("closebuttons-hover", "alltabs");
+          this.setAttribute("closebuttons", "noclose");
+          break;
+        case 3:
+          this.removeAttribute("closebuttons-hover");
+          this.setAttribute("closebuttons", "activetab");
+          break;
+        case 4:
+          this.setAttribute("closebuttons-hover", "notactivetab");
+          this.setAttribute("closebuttons", "activetab");
+          break;
+        case 5:
+          this.removeAttribute("closebuttons-hover");
+          Tabmix.originalFunctions.tabContainer_updateCloseButtons.call(this, skipUpdateScrollStatus, aUrl);
+          break;
+      }
+
+      /**
+       *  Don't use return in this function
+       *  TreeStyleTab add some code at the end
+       */
+      let transitionend = Tabmix.callerTrace("onxbltransitionend");
+      if (tabsCount == 1) {
+        let tab = this.selectedItem;
+        if (!aUrl) {
+          let currentURI = gBrowser.currentURI;
+          aUrl = currentURI ? currentURI.spec : null;
+        }
+        // hide the close button if one of this condition is true:
+        //   - if "Do not close window when closing last tab" is set and the tab is blank,
+        //     about:blank or other new tab.
+        //   - if "Prevent last tab from closing" is set.
+        if (
+          Tabmix.tabsUtils._keepLastTab ||
+            !Services.prefs.getBoolPref("browser.tabs.closeWindowWithLastTab") &&
+              (isBlankPageURL(tab.__newLastTab || null) ||
+                (!aUrl || isBlankPageURL(aUrl)) && gBrowser.isBlankNotBusyTab(tab))
+        ) {
+          this.setAttribute("closebuttons", "noclose");
+          this.removeAttribute("closebuttons-hover");
+        }
+      } else if (!skipUpdateScrollStatus && oldValue != this.getAttribute("closebuttons") ||
+                 transitionend) {
+        TabmixTabbar.updateScrollStatus(transitionend);
+      }
+    };
   },
 
   change_utility: function change_utility() {
@@ -739,37 +806,6 @@ Tabmix.tablib = {
         Tabmix.originalFunctions.newWindowButtonObserver_onDrop.apply(this, args);
       }
     };
-
-    /**
-     * only apply for sessionManager
-    Tabmix.changeCode(window, "warnAboutClosingWindow")._replace(
-      /gBrowser\.warnAboutClosingTabs\(\n?\s*closingTabs,\n?\s* gBrowser\.closingTabsEnum\.ALL,?\n?\s*(source)?\n?\s*\)/g,
-      'Tabmix.tablib.closeWindow(true)'
-    )._replace(
-      /os\.notifyObservers\(null, "browser-lastwindow-close-granted"(?:, null)?\);/,
-      'if (!TabmixSvc.isMac && !Tabmix.tablib.closeWindow(true)) return false;\
-       $&'
-    ).toCode();
-
-    Tabmix.changeCode(window, "WindowIsClosing")._replace(
-      '{',
-      '{Tabmix._warnedBeforeClosing = false;'
-    )._replace(
-      /if \(!closeWindow\(false, warnAboutClosingWindow(, source)?\)\)/,
-      `let reallyClose = closeWindow(false, warnAboutClosingWindow$1);
-  if (reallyClose && !Tabmix._warnedBeforeClosing)
-    reallyClose = Tabmix.tablib.closeWindow();
-  if (!reallyClose)`
-    ).toCode();
-    */
-
-    Tabmix.changeCode(window, "goQuitApplication")._replace(
-      'Services.startup.quit',
-      'let closedByToolkit = Tabmix.callerTrace("toolkitCloseallOnUnload");' +
-      'if (!TabmixSessionManager.canQuitApplication(closedByToolkit))' +
-      '  return false;' +
-      '$&'
-    ).toCode();
 
     // if user changed mode to single window mode while having closed window
     // make sure that undoCloseWindow will open the closed window in the most recent non-private window
@@ -1261,7 +1297,6 @@ Tabmix.tablib = {
       }
       aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
       TabmixSvc.setCustomTabValue(aTab, "_locked", aTab.getAttribute("_locked"));
-      TabmixSessionManager.updateTabProp(aTab);
     };
 
     gBrowser.protectTab = function(aTab) {
@@ -1272,7 +1307,6 @@ Tabmix.tablib = {
       else
         aTab.setAttribute("protected", "true");
       TabmixSvc.setCustomTabValue(aTab, "protected", aTab.getAttribute("protected"));
-      TabmixSessionManager.updateTabProp(aTab);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();
       }
@@ -1295,7 +1329,6 @@ Tabmix.tablib = {
       aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
       TabmixSvc.setCustomTabValue(aTab, "_locked", aTab.getAttribute("_locked"));
       TabmixSvc.setCustomTabValue(aTab, "protected", aTab.getAttribute("protected"));
-      TabmixSessionManager.updateTabProp(aTab);
       if (TabmixTabbar.widthFitTitle) {
         TabmixTabbar.updateScrollStatus();
       }
@@ -1373,7 +1406,7 @@ Tabmix.tablib = {
     };
 
     gBrowser.selectIndexAfterRemove = function(oldTab) {
-      var tabs = TMP_TabView.currentGroup();
+      var tabs = gBrowser.visibleTabs;
       var currentIndex = tabs.indexOf(this._selectedTab);
       if (this._selectedTab != oldTab)
         return currentIndex;
@@ -1754,23 +1787,6 @@ Tabmix.tablib = {
       TMP_Places.currentTab = null;
   },
 
-  // make sure that our function don't break removeTab function
-  onRemoveTab: function TMP_onRemoveTab(tab) {
-    // Not in use since Firefox 27, see comment in TabmixTabClickOptions
-    if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
-        TabmixTabClickOptions._blockDblClick) {
-      setTimeout(() => {
-        TabmixTabClickOptions._blockDblClick = false;
-      }, 0);
-    }
-
-    try {
-      TabmixSessionManager.tabClosed(tab);
-    } catch (ex) {
-      Tabmix.assert(ex, "ERROR in TabmixSessionManager.tabClosed");
-    }
-  },
-
   closeLastTab: function TMP_closeLastTab() {
     if (TabmixSvc.isMac && window.location.href != AppConstants.BROWSER_CHROME_URL) {
       closeWindow(true);
@@ -1782,99 +1798,6 @@ Tabmix.tablib = {
     else
       closeWindow(true);
   },
-
-  /**
-  * only apply for sessionManager
-  closeWindow: function TMP_closeWindow(aCountOnlyBrowserWindows) {
-    // we use this flag in WindowIsClosing
-    Tabmix._warnedBeforeClosing = true;
-
-    // since that some pref can changed by _onQuitRequest we catch it first
-    // by observe browser-lastwindow-close-requested
-    function getSavedPref(aPrefName, type) {
-      let returnVal = {saved: false};
-      if (aPrefName in TabmixSessionManager.savedPrefs) {
-        returnVal.saved = true;
-        returnVal.value = TabmixSessionManager.savedPrefs[aPrefName];
-        returnVal.newValue = Services.prefs[type == "int" ? "getIntPref" : "getBoolPref"](aPrefName);
-        delete TabmixSessionManager.savedPrefs[aPrefName];
-      } else {
-        returnVal.value = Services.prefs[type == "int" ? "getIntPref" : "getBoolPref"](aPrefName);
-      }
-
-      return returnVal;
-    }
-
-    // check if "Save & Quit" or "warn About Closing Tabs" dialog was showed
-    // from BrowserGlue.prototype._onQuitRequest
-    function isAfterFirefoxPrompt() {
-      // There are several cases where Firefox won't show a dialog here:
-      // 1. There is only 1 tab open in 1 window
-      // 2. The session will be restored at startup, indicated by
-      //    browser.startup.page == 3 or browser.sessionstore.resume_session_once == true
-      // 3. browser.warnOnQuit == false
-      // 4. The browser is currently in Private Browsing mode
-      // we check for these cases first
-
-      if (!Services.prefs.getBoolPref("browser.warnOnQuit"))
-        return false;
-
-      if (Services.prefs.getBoolPref("browser.sessionstore.resume_session_once"))
-        return false;
-
-      // try to find non-private window
-      let nonPrivateWindow = BrowserWindowTracker.getTopWindow({private: false});
-      if (!nonPrivateWindow)
-        return false;
-
-      // last windows with tabs
-      var windowtype = aCountOnlyBrowserWindows ? "navigator:browser" : null;
-      if (window.gBrowser.browsers.length < 2 || Tabmix.numberOfWindows(false, windowtype) > 1)
-        return false;
-
-      // since this pref can change by _onQuitRequest we catch it first
-      // by observe browser-lastwindow-close-requested
-      let saveSessionPref = getSavedPref("browser.startup.page", "int");
-      if (saveSessionPref.saved && saveSessionPref.value == 3)
-        return false;
-
-      // we never get to this function by restart
-      // if we are still here we know that we are the last window
-      // before Firefox 63 the return value was based on "browser.showQuitWarning"
-      // if "browser.showQuitWarning" is true firefox show "Save & Quit"
-      // when we quit or close last browser window.
-      // if "browser.showQuitWarning" is false and we close last window firefox design
-      // to show warnAboutClosingTabs dialog but we block it in order to call warnAboutClosingTabs
-      // from here and catch display time here.
-
-      // from Firefox 63 always return true
-      return true;
-    }
-
-    // we always show our prompt on Mac
-    var showPrompt = TabmixSvc.isMac || !isAfterFirefoxPrompt();
-    // get caller caller name and make sure we are not on restart
-    var askBeforeSave = !Tabmix.callerTrace("restartApp", "restart");
-    var isLastWindow = Tabmix.isLastBrowserWindow;
-    var result = TabmixSessionManager.deinit(isLastWindow, askBeforeSave);
-    var canClose = result.canClose;
-    // we only show warnAboutClose if firefox or tabmix didn't do it already
-    // if showPrompt is false then prompt was shown by firefox code from BrowserGlue.prototype._onQuitRequest
-    // or from TabmixSessionManager.deinit
-    if (canClose && showPrompt && result.showMorePrompt) {
-      var pref = "extensions.tabmix.warnAboutClosingTabs.timeout";
-      var startTime = new Date().valueOf();
-      var oldTime = Services.prefs.prefHasUserValue(pref) ? Services.prefs.getCharPref(pref) : 0;
-      let closingTabs = Tabmix.tabsUtils.getTabsCount();
-      canClose = gBrowser.warnAboutClosingTabs(closingTabs, gBrowser.closingTabsEnum.ALL);
-      Services.prefs.setCharPref(pref, Number(oldTime) + (new Date().valueOf() - startTime));
-    }
-
-    TabmixSessionManager.windowIsClosing(canClose, isLastWindow, result.saveSession, result.removeClosedTabs);
-
-    return canClose;
-  },
-  */
 
   whereToOpenDrop(aEvent, aUri) {
     if (!aEvent) {

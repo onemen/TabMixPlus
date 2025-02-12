@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Mostra una pàgina en blanc">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Utilitza la funció de restauració de sessió integrada al Firefox">
-<!ENTITY ss.enable.tooltip "Desmarqueu aquesta opció per permetre l&apos;ús del Gestor de sessions del Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Paràmetres avançats">
 <!ENTITY ss.advanced_setting.warning "No canvieu aquests paràmetres si no sabeu què esteu fent">
 <!ENTITY ss.interval "Interval de temps mínim entre dos desaments d&apos;estat">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Tots els llocs">
 <!ENTITY ss.privacy_level.unencrypted "Només els llocs no xifrats">
 <!ENTITY ss.privacy_level.nosites "Cap lloc">
-<!ENTITY sessionManger.enable "Habilita el gestor de sessions">
 <!ENTITY crashRecovery.enable "Habilita la recuperació després de fallada">
-<!ENTITY sm.StartExit "Inici/Sortida">
-<!ENTITY sm.restore "Restauració">
-<!ENTITY sm.preserve "Conservació">
 <!ENTITY sm.start "En iniciar el navegador:">
-<!ENTITY sm.start.restore "Restaura">
-<!ENTITY sm.start.ask "Pregunta abans de restaurar">
-<!ENTITY sm.start.nothing "No la restauris">
-<!ENTITY sm.exit "En sortir del navegador:">
-<!ENTITY sm.exit.save "Desa la sessió">
-<!ENTITY sm.exit.ask "Pregunta abans de desar">
-<!ENTITY sm.exit.nothing "No la desis">
-<!ENTITY sm.startup "Sessió d&apos;inici:">
-<!ENTITY sm.lastsession "Última sessió">
-<!ENTITY sm.previouslast "Penúltima sessió">
-<!ENTITY sm.chooseifempty "Selecciona&apos;n una altra si és buida">
-<!ENTITY sm.restore.options "En restaurar les sessions:">
-<!ENTITY sm.restore.overwrite "Substitueix les finestres existents">
-<!ENTITY sm.restore.overwriteTabs "I les pestanyes">
-<!ENTITY sm.restore.closedWinList "Desa les finestres a la llista de finestres tancades">
-<!ENTITY sm.restore.merge "Uneix diverses finestres en una">
-<!ENTITY sm.restore.bypassCache "Omet la memòria cau en restaurar">
-<!ENTITY sm.notrestore.label "Quan no es restaura a l&apos;inici">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Conserva les pestanyes:">
 <!ENTITY sm.preserve.history "Historial">
 <!ENTITY sm.preserve.protect "Protegides">
 <!ENTITY sm.preserve.locked "Blocades">
 <!ENTITY sm.preserve.permission "Permisos">
 <!ENTITY sm.preserve.scroll1 "Posició de desplaçament">
-<!ENTITY sm.restore.winOptions "Conserva les finestres:">
-<!ENTITY sm.restore.selectedTab "Pestanya seleccionada">
-<!ENTITY sm.restore.closedTabs "Llista de pestanyes tancades">
 <!ENTITY incompatible.extensions "Alguns dels complements instal·lats són incompatibles amb el Tab Mix Plus, és recomanable que els inhabiliteu o els desinstal·leu.">
 <!ENTITY incompatible.button.label "Mostra la llista">

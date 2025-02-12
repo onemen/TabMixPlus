@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Smazat ze seznamu">
 <!ENTITY deletelist.accesskey "S">
 <!ENTITY settings.label "Nastavení">
-<!ENTITY saveWindow.label "Uložit toto okno">
-<!ENTITY saveAllWindows.label "Uložit všechna okna">
 <!ENTITY sm.context.overwrite "Obnovit, přepsat současná okna">
 <!ENTITY sm.context.overwrite.key "P">
 <!ENTITY sm.context.restore.new "Obnovit do nových oken">

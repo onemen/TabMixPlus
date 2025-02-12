@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "wyświetlaj stronę startową">
 <!ENTITY startupBlankPage.label "wyświetlaj pustą stronę">
 <!ENTITY startupLastSession1.label "wyświetlaj okna i karty z poprzedniej sesji">
-<!ENTITY ss.enable.label "Używaj menedżera sesji Firefoksa">
-<!ENTITY ss.enable.tooltip "Odznacz tę opcję, aby używać menedżera sesji Tab Mix Plusa">
 <!ENTITY ss.advanced_setting "Ustawienia zaawansowane">
 <!ENTITY ss.advanced_setting.warning "Nie zmieniaj tych ustawień, jeżeli nie masz o nich odpowiedniej wiedzy!">
 <!ENTITY ss.interval "Minimalna przerwa pomiędzy kolejnymi zapisami">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "wszystkich witryn">
 <!ENTITY ss.privacy_level.unencrypted "tylko witryn nieszyfrowanych">
 <!ENTITY ss.privacy_level.nosites "- nie zapisuj -">
-<!ENTITY sessionManger.enable "Włącz menedżera sesji">
 <!ENTITY crashRecovery.enable "Włącz odzyskiwanie sesji">
-<!ENTITY sm.StartExit "Uruchamianie/Zamykanie">
-<!ENTITY sm.restore "Odtwarzanie">
-<!ENTITY sm.preserve "Zachowywanie danych">
 <!ENTITY sm.start "Gdy przeglądarka jest uruchamiana:">
-<!ENTITY sm.start.restore "odtwarzaj sesję">
-<!ENTITY sm.start.ask "pytaj czy odtworzyć sesję">
-<!ENTITY sm.start.nothing "nie odtwarzaj">
-<!ENTITY sm.exit "Gdy przeglądarka jest zamykana:">
-<!ENTITY sm.exit.save "zapisuj sesję">
-<!ENTITY sm.exit.ask "pytaj czy zapisać sesję">
-<!ENTITY sm.exit.nothing "nie zapisuj">
-<!ENTITY sm.startup "Sesja startowa:">
-<!ENTITY sm.lastsession "ostatnia sesja">
-<!ENTITY sm.previouslast "przedostatnia sesja">
-<!ENTITY sm.chooseifempty "Wybierz inną, jeśli sesja startowa jest pusta">
-<!ENTITY sm.restore.options "Podczas odtwarzania sesji:">
-<!ENTITY sm.restore.overwrite "Nadpisuj istniejące okna">
-<!ENTITY sm.restore.overwriteTabs "i karty">
-<!ENTITY sm.restore.closedWinList "Zapisuj istniejące okna na liście zamkniętych okien">
-<!ENTITY sm.restore.merge "Połącz wszystkie okna w jedno">
-<!ENTITY sm.restore.bypassCache "Podczas przywracania pomijaj bufor">
-<!ENTITY sm.notrestore.label "Gdy nieodtwarzane podczas uruchamiania">
-<!ENTITY sm.restorePinned1.label "Odtwarzaj przypięte karty z poprzedniej sesji">
 <!ENTITY sm.preserve.options "Dla kart zachowaj następujące dane:">
 <!ENTITY sm.preserve.history "historię">
 <!ENTITY sm.preserve.protect "status zabezpieczenia">
 <!ENTITY sm.preserve.locked "status blokady">
 <!ENTITY sm.preserve.permission "zezwolenia">
 <!ENTITY sm.preserve.scroll1 "Pozycja przewijania">
-<!ENTITY sm.restore.winOptions "Dla okien zachowaj następujące dane:">
-<!ENTITY sm.restore.selectedTab "aktywną kartę">
-<!ENTITY sm.restore.closedTabs "listę zamkniętych kart">
 <!ENTITY incompatible.extensions "Niektóre z zainstalowanych rozszerzeń są niekompatybilne z Tab Mix Plusem. Zaleca się odinstalowanie lub wyłączenie tych rozszerzeń.">
 <!ENTITY incompatible.button.label "Wyświetl listę">

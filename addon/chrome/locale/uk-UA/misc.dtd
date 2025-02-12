@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Виберіть час зі списку чи введіть власний">
 <!ENTITY specifyreload.label "Визначення часу оновлення">
-<!ENTITY sanitizer.entry "Журнал Tab Mix Plus">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "Ви впевнені, що хочете знищити ВСІ збережені сесії, включаючи резервні копії?">

@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "リストから時間を選ぶか、自分の設定時間を入力">
 <!ENTITY specifyreload.label "再読み込み間隔の指定">
-<!ENTITY sanitizer.entry "Tab Mix Plus の保存セッション">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "すべての保存したセッションデータとバックアップが削除されますがよろしいですか？">

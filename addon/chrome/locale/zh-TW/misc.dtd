@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "由清單選擇時間或是輸入自訂的時間">
 <!ENTITY specifyreload.label "自訂頁面自動更新頻率">
-<!ENTITY sanitizer.entry "Tab Mix Plus 瀏覽狀態記錄">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "確定要刪除所有儲存的分頁資料（包含備份）嗎？">

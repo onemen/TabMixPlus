@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Elimina dalla lista">
 <!ENTITY deletelist.accesskey "E">
 <!ENTITY settings.label "Impostazioni">
-<!ENTITY saveWindow.label "Salva questa finestra">
-<!ENTITY saveAllWindows.label "Salva tutte le finestre">
 <!ENTITY sm.context.overwrite "Ripristina la sessione sostituendo schede/finestra attuali">
 <!ENTITY sm.context.overwrite.key "o">
 <!ENTITY sm.context.restore.new "Ripristina la sessione in una nuova finestra">

@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "從列表中移除">
 <!ENTITY deletelist.accesskey "D">
 <!ENTITY settings.label "設定值">
-<!ENTITY saveWindow.label "儲存目前視窗的瀏覽狀態">
-<!ENTITY saveAllWindows.label "儲存全部視窗的瀏覽狀態">
 <!ENTITY sm.context.overwrite "還原至目前視窗">
 <!ENTITY sm.context.overwrite.key "O">
 <!ENTITY sm.context.restore.new "還原至新的視窗">

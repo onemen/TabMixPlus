@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Показывать пустую страницу">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Использовать встроенную функцию восстановления сессий">
-<!ENTITY ss.enable.tooltip "Уберите галочку, чтобы использовать менеджер сессий Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Расширенные настройки">
 <!ENTITY ss.advanced_setting.warning "Не изменяйте эти параметры, если Вы не знаете, что делаете">
 <!ENTITY ss.interval "Минимальный интервал между сохранениями сессий">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Все сайты">
 <!ENTITY ss.privacy_level.unencrypted "Только незашифрованные сайты">
 <!ENTITY ss.privacy_level.nosites "Ни для каких сайтов">
-<!ENTITY sessionManger.enable "Включить менеджер сессий">
 <!ENTITY crashRecovery.enable "Включить защиту от вылетов">
-<!ENTITY sm.StartExit "Запуск/Выход">
-<!ENTITY sm.restore "Восстановление">
-<!ENTITY sm.preserve "Сохранение">
 <!ENTITY sm.start "При запуске браузера:">
-<!ENTITY sm.start.restore "Восстанавливать сессию">
-<!ENTITY sm.start.ask "Запрос на восстановление">
-<!ENTITY sm.start.nothing "Не восстанавливать сессию">
-<!ENTITY sm.exit "При выходе из браузера:">
-<!ENTITY sm.exit.save "Сохранять сессию">
-<!ENTITY sm.exit.ask "Запрос на сохранение">
-<!ENTITY sm.exit.nothing "Не сохранять сессию">
-<!ENTITY sm.startup "При запуске браузера открывать:">
-<!ENTITY sm.lastsession "Последнюю сессию">
-<!ENTITY sm.previouslast "Сессию, предшествующую последней">
-<!ENTITY sm.chooseifempty "Другую, если выбранная сессия пуста">
-<!ENTITY sm.restore.options "При восстановлении сессий:">
-<!ENTITY sm.restore.overwrite "Заменять существующие окна">
-<!ENTITY sm.restore.overwriteTabs "... и вкладки">
-<!ENTITY sm.restore.closedWinList "Сохранять окна в списке закрытых">
-<!ENTITY sm.restore.merge "Объединять несколько окон в одно">
-<!ENTITY sm.restore.bypassCache "Игнорировать кэш при восстановлении">
-<!ENTITY sm.notrestore.label "Когда не восстанавливается при старте">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Сохранять следующие параметры вкладок:">
 <!ENTITY sm.preserve.history "Журнал">
 <!ENTITY sm.preserve.protect "Статус защиты">
 <!ENTITY sm.preserve.locked "Статус блокировки">
 <!ENTITY sm.preserve.permission "Разрешения">
 <!ENTITY sm.preserve.scroll1 "Позиция прокрутки">
-<!ENTITY sm.restore.winOptions "Сохранять следующие параметры окон:">
-<!ENTITY sm.restore.selectedTab "Активная вкладка">
-<!ENTITY sm.restore.closedTabs "Список закрытых вкладок">
 <!ENTITY incompatible.extensions "Некоторые из ваших расширений не совместимы с Tab Mix Plus. Рекомендуется отключить или удалить эти расширения.">
 <!ENTITY incompatible.button.label "Показать список">

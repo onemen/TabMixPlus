@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Choisir l&apos;intervalle de temps désiré dans la liste ou entrer une valeur particulière">
 <!ENTITY specifyreload.label "Spécifier le temps de rechargement">
-<!ENTITY sanitizer.entry "Historique de Tab Mix Plus">
-<!ENTITY sanitizer.entry.accesskey "H">
-<!ENTITY sanitizer.entry.confirm "Voulez-vous vraiment effacer la totalité de vos sessions enregistrées y compris les sauvegardes ?">

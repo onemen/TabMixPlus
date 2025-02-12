@@ -2,7 +2,6 @@
 // Messages that will be received via the Frame Message Manager.
 const FMM_MESSAGES = [
   "Tabmix:restorePermissionsComplete",
-  "Tabmix:updateScrollPosition",
   "Tabmix:reloadTab",
   "Tabmix:getOpener",
   "Tabmix:contentDrop",
@@ -40,11 +39,6 @@ export const TabmixUtils = {
     switch (message.name) {
       case "Tabmix:restorePermissionsComplete":
         lazy.DocShellCapabilities.update(browser, message.data);
-        break;
-      case "Tabmix:updateScrollPosition":
-        win = browser.ownerGlobal;
-        tab = win.gBrowser.getTabForBrowser(browser);
-        win.TabmixSessionManager.updateScrollPosition(tab, message.data.scroll);
         break;
       case "Tabmix:reloadTab": {
         let postData = message.data.postData;

@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Visa startsidan">
 <!ENTITY startupBlankPage.label "Visa en tom sida">
 <!ENTITY startupLastSession1.label "Visa fönstren och flikarna från senaste gången">
-<!ENTITY ss.enable.label "Använd Firefoxs inbyggda sessionsåterställare">
-<!ENTITY ss.enable.tooltip "Avmarkera för att använda Tab Mix Plus egen sessionshanterare">
 <!ENTITY ss.advanced_setting "Avancerade inställningar">
 <!ENTITY ss.advanced_setting.warning "Ändra inte dessa om du inte vet vad du gör">
 <!ENTITY ss.interval "Min. tidsintervall mellan sparande av två sessioner">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Alla webbplatser">
 <!ENTITY ss.privacy_level.unencrypted "Endast okrypterade webbplatser">
 <!ENTITY ss.privacy_level.nosites "Inga webbplatser alls">
-<!ENTITY sessionManger.enable "Aktivera aktivitetshanteraren">
 <!ENTITY crashRecovery.enable "Aktivera återställning vid krasch">
-<!ENTITY sm.StartExit "Uppstart/Nedstängning">
-<!ENTITY sm.restore "Återställ">
-<!ENTITY sm.preserve "Behåll">
 <!ENTITY sm.start "När webbläsaren startar:">
-<!ENTITY sm.start.restore "Återställ">
-<!ENTITY sm.start.ask "Fråga innan återställning">
-<!ENTITY sm.start.nothing "Återställ inte">
-<!ENTITY sm.exit "När webbläsaren stängs:">
-<!ENTITY sm.exit.save "Spara session">
-<!ENTITY sm.exit.ask "Fråga innan sparning">
-<!ENTITY sm.exit.nothing "Spara inte">
-<!ENTITY sm.startup "Session vid uppstart:">
-<!ENTITY sm.lastsession "Senaste session">
-<!ENTITY sm.previouslast "Föregående till sista">
-<!ENTITY sm.chooseifempty "Välj en annan om den är tom">
-<!ENTITY sm.restore.options "Vid återställning av session:">
-<!ENTITY sm.restore.overwrite "Skriv över befintligt fönster">
-<!ENTITY sm.restore.overwriteTabs "och flikar">
-<!ENTITY sm.restore.closedWinList "Spara fönster i listan över stängda fönster">
-<!ENTITY sm.restore.merge "Slå ihop flera fönster till ett">
-<!ENTITY sm.restore.bypassCache "Kringgå cache vid återställning">
-<!ENTITY sm.notrestore.label "När ingen återställning görs vid start">
-<!ENTITY sm.restorePinned1.label "Återställ fastnålade flikar från senaste gången">
 <!ENTITY sm.preserve.options "Behåll flikar:">
 <!ENTITY sm.preserve.history "Historik">
 <!ENTITY sm.preserve.protect "Status för skydd">
 <!ENTITY sm.preserve.locked "Status för lås">
 <!ENTITY sm.preserve.permission "Behörigheter">
 <!ENTITY sm.preserve.scroll1 "Rullposition">
-<!ENTITY sm.restore.winOptions "Behåll fönster:">
-<!ENTITY sm.restore.selectedTab "Vald flik">
-<!ENTITY sm.restore.closedTabs "Listan över stängda fönster">
 <!ENTITY incompatible.extensions "Några installerade tillägg är inte kompatibla med Tab Mix Plus och det rekommenderas att du inaktiverar eller avinstallerar dem.">
 <!ENTITY incompatible.button.label "Visa lista">

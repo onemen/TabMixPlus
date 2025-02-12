@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Listeden sil">
 <!ENTITY deletelist.accesskey "S">
 <!ENTITY settings.label "Ayarlar">
-<!ENTITY saveWindow.label "Bu pencereyi kaydet">
-<!ENTITY saveAllWindows.label "Tüm pencereleri kaydet">
 <!ENTITY sm.context.overwrite "Geçerli pencere(lere) geri yükle">
 <!ENTITY sm.context.overwrite.key "M">
 <!ENTITY sm.context.restore.new "Yeni pencere(lere) geri yükle">

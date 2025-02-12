@@ -1,7 +1,6 @@
 /// <reference types="./general.d.ts" />
 /// <reference types="./tabmix.d.ts" />
 /// <reference types="./extraTabmixUtils.d.ts" />
-/// <reference types="./customDialog.d.ts" />
 
 type GeneralElement = HTMLElement;
 
@@ -31,6 +30,10 @@ interface Element {
   type: string;
 }
 
+interface HTMLMenuElement {
+  selectedItem: HTMLElement;
+}
+
 declare class ExtensionShortcutKeyMap {
   constructor();
   buildForAddonIds(addonIds: string[]): Promise<void>;
@@ -51,30 +54,27 @@ interface XULCommandDispatcher {
 }
 
 interface Window {
-  _sminstalled: boolean;
   $<K extends keyof GetByMap>(selectors: K | string): K extends keyof GetByMap ? GetByMap[K] : HTMLElement | null;
   getComputedStyle(elt: HTMLElement, pseudoElt?: string | null): CSSStyleDeclaration | null;
   notifyDefaultButtonLoaded(defaultButton: HTMLButtonElement): void;
   CustomizableUI: typeof CustomizableUI;
 }
 
-interface WindowProxy {
+interface WindowProxy extends mozIDOMWindowProxy {
   readonly opener: WindowProxy;
   openHelp: typeof Globals.openHelp;
+  gIncompatiblePane: IgIncompatiblePane;
+  Tabmix: typeof TabmixNS;
 }
 
 interface IgIncompatiblePane {
+  _initialized: boolean;
   lastSelected: string;
   paneButton: PrefPaneClass;
   init: () => void;
   deinit: () => void;
   handleEvent: (event: Event) => void;
   hide_IncompatibleNotice: (this: IgIncompatiblePane, aHide: boolean, aFocus: boolean) => void;
-}
-
-interface WindowProxy {
-  gIncompatiblePane: IgIncompatiblePane;
-  Tabmix: typeof TabmixNS;
 }
 
 /** classes in prefs-ce.js */
@@ -460,7 +460,6 @@ declare namespace MenuPaneNS {
   function updateShortcuts(aShortcuts: ShortcutParent, aCallBack: (shortcut: MozShortcutClass) => void): void;
   function setSlideShowLabel(): void;
   function editSlideShowKey(): void;
-  function updateSessionShortcuts(): void;
   function toggleLinkLabel(item: HTMLElement): void;
   function setInverseLinkLabel(): void;
 }
@@ -550,10 +549,6 @@ declare namespace SessionPaneNS {
   };
 
   function init(): void;
-  function updateSessionShortcuts(): void;
-  function isSessionStoreEnabled(onStart: boolean): void;
-  function setSessionsOptions(item: PreferenceElement): void;
-  function setSessionpath(val: number): void;
 }
 
 /** function in the preference window global scope */
@@ -668,7 +663,6 @@ interface GetByMap {
   "showBmkTabs": CheckboxClass & Element;
   "unmuteTab": CheckboxClass & Element;
   "session": SessionPaneNS.SessionsTabs;
-  "sessionsOptions": CheckboxClass & Element;
   "stylestabs": CustomGroupElement<HTMLElement>;
   "stylespanels": Omit<HTMLElement, "childNodes"> & {childNodes: HTMLCollectionBase_G<TabstylepanelClass>};
 
@@ -718,9 +712,6 @@ interface BrowserWindow extends MockedGeckoTypes.BrowserWindow {
   gNavigatorBundle: gNavigatorBundle;
   gTMPprefObserver: gTMPprefObserver;
   Tabmix: typeof TabmixNS;
-  TMP_TabView: {
-    installed: boolean;
-  };
 }
 
 interface TabmixKnownModules {

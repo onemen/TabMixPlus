@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Aktualisierungsintervall aus der Liste auswählen oder eigenes angeben">
 <!ENTITY specifyreload.label "Aktualisierungsintervall">
-<!ENTITY sanitizer.entry "Chronik von Tab Mix Plus">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "Sind Sie sicher, dass Sie ALLE Ihre gesicherten Sitzungs-Daten einschließlich Backups löschen möchten?">

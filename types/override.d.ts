@@ -33,10 +33,12 @@ interface ChromeUtils {
 // @ts-expect-error - override `namespace ChromeUtils` from `gecko/lib.gecko.dom.d.ts`
 declare var ChromeUtils: ChromeUtils;
 
+interface DocumentElement extends HTMLElement {}
+
 interface Document {
   readonly commandDispatcher: XULCommandDispatcher;
   readonly defaultView: WindowProxy;
-  readonly documentElement: Element;
+  readonly documentElement: DocumentElement;
   getElementsByClassName<K extends keyof GetByMap>(name: K): NonEmptyCollection_G<GetByMap[K]>;
 }
 

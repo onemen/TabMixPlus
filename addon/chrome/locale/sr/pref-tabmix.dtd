@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Прикажи празну страницу">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Користи Фајерфоксову уграђену могућност обнављања сесија">
-<!ENTITY ss.enable.tooltip "Одштиклирајте да бисте омогућили употребу са Tab Mix Plus управљачем сесија">
 <!ENTITY ss.advanced_setting "Напредна подешавања">
 <!ENTITY ss.advanced_setting.warning "Немојте да мењате ова подешавања, уколико нисте сигурни шта радите">
 <!ENTITY ss.interval "Најмањи временски интервал између чувања два стања">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Све сајтове">
 <!ENTITY ss.privacy_level.unencrypted "Само нешифрованe сајтовe">
 <!ENTITY ss.privacy_level.nosites "Ниједан сајт">
-<!ENTITY sessionManger.enable "Омогући управљача сесијама">
 <!ENTITY crashRecovery.enable "Омогући опоравак од грешке">
-<!ENTITY sm.StartExit "Покрени/изађи">
-<!ENTITY sm.restore "Обнови">
-<!ENTITY sm.preserve "Очувај">
 <!ENTITY sm.start "При покретању прегледача:">
-<!ENTITY sm.start.restore "Обнови сесију">
-<!ENTITY sm.start.ask "Питај пре него што обновиш">
-<!ENTITY sm.start.nothing "Не обнављај сесију">
-<!ENTITY sm.exit "При затварању прегледача:">
-<!ENTITY sm.exit.save "Сачувај сесију">
-<!ENTITY sm.exit.ask "Питај пре него што сачуваш">
-<!ENTITY sm.exit.nothing "Не чувај сесију">
-<!ENTITY sm.startup "Почетна сесија:">
-<!ENTITY sm.lastsession "Последња сесија">
-<!ENTITY sm.previouslast "Претпоследња">
-<!ENTITY sm.chooseifempty "Изабери неку другу сесију ако је празно">
-<!ENTITY sm.restore.options "При обнављању сесија:">
-<!ENTITY sm.restore.overwrite "Пиши преко постојећих прозора">
-<!ENTITY sm.restore.overwriteTabs "и картицa">
-<!ENTITY sm.restore.closedWinList "Сачувај прозоре у списку затворених прозора">
-<!ENTITY sm.restore.merge "Споји више прозора у један">
-<!ENTITY sm.restore.bypassCache "Прескочи кеш приликом враћања">
-<!ENTITY sm.notrestore.label "Када се не враћају картице при покретању">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "За картице очувај:">
 <!ENTITY sm.preserve.history "Историјат">
 <!ENTITY sm.preserve.protect "Заштићени статус">
 <!ENTITY sm.preserve.locked "Закључани статус">
 <!ENTITY sm.preserve.permission "Дозволе">
 <!ENTITY sm.preserve.scroll1 "Позиција клизача">
-<!ENTITY sm.restore.winOptions "За прозоре очувај:">
-<!ENTITY sm.restore.selectedTab "Означену картицу">
-<!ENTITY sm.restore.closedTabs "Листу затворених картица">
 <!ENTITY incompatible.extensions "Неки од ваших додатака нису компатибилни са Tab Mix Plus-ом, па је препоручљиво да их деинсталирате или онемогућите.">
 <!ENTITY incompatible.button.label "Прикажи списак">

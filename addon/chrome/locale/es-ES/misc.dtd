@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Elija zona horaria de la lista o introduzca la suya">
 <!ENTITY specifyreload.label "Especificar tiempo de recarga">
-<!ENTITY sanitizer.entry "Historial de Tab Mix Plus">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "¿Está seguro de querer borrar TODOS los datos de sus sesiones guardadas, incluyendo copias de seguridad?">

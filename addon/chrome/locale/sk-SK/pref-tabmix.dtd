@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Zobraziť domovskú stránku">
 <!ENTITY startupBlankPage.label "Zobraziť prázdnu stránku">
 <!ENTITY startupLastSession1.label "Ukázať okná a karty z poslednej doby">
-<!ENTITY ss.enable.label "Použiť zabudovanú obnovu relácie">
-<!ENTITY ss.enable.tooltip "Odznačiť pre použitie s Tabmix Manažér relácie">
 <!ENTITY ss.advanced_setting "Pokročilé nastavenia">
 <!ENTITY ss.advanced_setting.warning "Nemeniť, len ak viete, čo robíte">
 <!ENTITY ss.interval "Minimálny časový interval medzi dvoma stavmi uložený">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Všetky stránky">
 <!ENTITY ss.privacy_level.unencrypted "Len nezabezpečené stránky">
 <!ENTITY ss.privacy_level.nosites "Vôbec žiadne stránky">
-<!ENTITY sessionManger.enable "Zapnúť Manažér relácie">
 <!ENTITY crashRecovery.enable "Zapnúť Zotavenie po páde">
-<!ENTITY sm.StartExit "Štart/Zatvoriť">
-<!ENTITY sm.restore "Obnoviť">
-<!ENTITY sm.preserve "Zachovať">
 <!ENTITY sm.start "Pri spustení prehliadača:">
-<!ENTITY sm.start.restore "Obnoviť">
-<!ENTITY sm.start.ask "Opýtať sa pred obnovením">
-<!ENTITY sm.start.nothing "Neobnovovať">
-<!ENTITY sm.exit "Pri zatvorení prehliadača:">
-<!ENTITY sm.exit.save "Uložiť reláciu">
-<!ENTITY sm.exit.ask "Opýtať sa pred uložením">
-<!ENTITY sm.exit.nothing "Neukladať">
-<!ENTITY sm.startup "Začiatok relácie:">
-<!ENTITY sm.lastsession "Posledná relácia">
-<!ENTITY sm.previouslast "Predchádzajúca">
-<!ENTITY sm.chooseifempty "Vybrať inú ak nie je">
-<!ENTITY sm.restore.options "Pri obnovení relácie:">
-<!ENTITY sm.restore.overwrite "Nahradiť stávajúce okno">
-<!ENTITY sm.restore.overwriteTabs "a karty">
-<!ENTITY sm.restore.closedWinList "Uložiť okno do zoznamu zatvorených okien">
-<!ENTITY sm.restore.merge "Zlúčiť všetky okná do jedného">
-<!ENTITY sm.restore.bypassCache "Obísť vyrovnávaciu pamäť pri obnove">
-<!ENTITY sm.notrestore.label "Keď sa neobnoví pri spustení">
-<!ENTITY sm.restorePinned1.label "Obnoviť pripnuté karty z poslednej doby">
 <!ENTITY sm.preserve.options "Zachovať karty:">
 <!ENTITY sm.preserve.history "História">
 <!ENTITY sm.preserve.protect "Chrániť stav">
 <!ENTITY sm.preserve.locked "Zamknúť stav">
 <!ENTITY sm.preserve.permission "Povolenia">
 <!ENTITY sm.preserve.scroll1 "Poloha skrolovania">
-<!ENTITY sm.restore.winOptions "Zachovať okná:">
-<!ENTITY sm.restore.selectedTab "Zvolené karty">
-<!ENTITY sm.restore.closedTabs "Zoznam zatvorených kariet">
 <!ENTITY incompatible.extensions "Niektoré vaše rozšírenia sú nekompatibilné s Tab Mix Plus, odporúčame ich zakázať alebo odinštalovať.">
 <!ENTITY incompatible.button.label "Zobraziť zoznam">

@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Избиране на време от списъка или въвеждане на собствено време">
 <!ENTITY specifyreload.label "Определяне на времето за презареждане">
-<!ENTITY sanitizer.entry "Записани сесии">
-<!ENTITY sanitizer.entry.accesskey "З">
-<!ENTITY sanitizer.entry.confirm "Сигурни ли сте, че искате да изтриете ВСИЧКИ запазени сесии, включително и архивираните?">

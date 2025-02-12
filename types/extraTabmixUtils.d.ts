@@ -92,7 +92,7 @@ declare namespace TabmixNS {
   let contentAreaClick: typeof ContentAreaClick;
 
   // extensions.js
-  let extensions: {treeStyleTab: boolean; tabGroupManager: boolean; verticalTabs: boolean; verticalTabBar: boolean; ieTab2: boolean; gIeTab: false | {obj: "gIeTab2" | "gIeTab"; folder: "ietab2" | "ietab"}; sessionManager: boolean};
+  let extensions: {treeStyleTab: boolean; tabGroupManager: boolean; verticalTabs: boolean; verticalTabBar: boolean; ieTab2: boolean; gIeTab: false | {obj: "gIeTab2" | "gIeTab"; folder: "ietab2" | "ietab"}};
 
   // lasttab.js
   let keyModifierDown: boolean;
@@ -112,18 +112,11 @@ declare namespace TabmixNS {
   let onContentLoaded: typeof OnContentLoaded;
   function whereToOpenLink(event: MouseEvent, ignoreButton: boolean, ignoreAlt: boolean): WhereToOpen;
 
-  // session.js
-  const BUTTON_OK: number;
-  const CHECKBOX_CHECKED: number;
-  const HIDE_CHECKBOX: number;
-  const HIDE_MENUANDTEXT: number;
-
   // sessionStore.js
   let closedObjectsUtils: typeof ClosedObjectsUtils;
   let isWindowAfterSessionRestore: boolean;
 
   // setup.js
-  function _updateCloseButtons(this: MockedGeckoTypes.TabContainer, skipUpdateScrollStatus: boolean, aUrl?: string | null): void;
   function beforeStartup(tabBrowser: MockedGeckoTypes.TabBrowser, aTabContainer: MockedGeckoTypes.TabContainer): void;
   function beforeBrowserInitOnLoad(): void;
   function BrowserOpenTab(): void;
@@ -451,7 +444,6 @@ declare namespace Tablib {
   function addNewFunctionsTo_gBrowser(): void;
   function getTabTitle(aTab: Tab, url: string): boolean;
   function onTabTitleChanged(aTab: Tab, aBrowser: Browser, isUrlTitle?: boolean): void;
-  function onRemoveTab(tab: Tab): void;
   function closeLastTab(): void;
   function whereToOpenDrop(aEvent: MouseEvent | DragEvent, aUri: string): string;
   function setURLBarFocus(): void;

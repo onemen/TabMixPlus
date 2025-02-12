@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "se afișează pagina de start">
 <!ENTITY startupBlankPage.label "se afișează o pagină vidă">
 <!ENTITY startupLastSession1.label "se afișează ferestrele și filele deschise ultima dată">
-<!ENTITY ss.enable.label "Se folosește facilitatea internă a Firefox de restaurare a sesiunilor">
-<!ENTITY ss.enable.tooltip "Se demarchează pentru a permite utilizarea gestionarului de sesiuni al Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Opțiuni complexe">
 <!ENTITY ss.advanced_setting.warning "Nu modificați aceste opțiuni decât dacă știți sigur ce înseamnă!">
 <!ENTITY ss.interval "Intervalul minim dintre două salvări ale stării sesiunii">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "toate saiturile">
 <!ENTITY ss.privacy_level.unencrypted "numai saiturile necriptate">
 <!ENTITY ss.privacy_level.nosites "niciun sait">
-<!ENTITY sessionManger.enable "Se activează Gestionarul de sesiuni">
 <!ENTITY crashRecovery.enable "Se activează recuperarea după o eșuare">
-<!ENTITY sm.StartExit "Lansare/Închidere">
-<!ENTITY sm.restore "Restaurare">
-<!ENTITY sm.preserve "Conservare">
 <!ENTITY sm.start "La lansarea navigatorului:">
-<!ENTITY sm.start.restore "Se restaurează o sesiune de pornire">
-<!ENTITY sm.start.ask "Se solicită confirmare înaintea restaurării">
-<!ENTITY sm.start.nothing "Nu se restaurează nimic">
-<!ENTITY sm.exit "La închiderea navigatorului:">
-<!ENTITY sm.exit.save "Se salvează sesiunea curentă">
-<!ENTITY sm.exit.ask "Se solicită confirmare înaintea salvării">
-<!ENTITY sm.exit.nothing "Nu se salvează nimic">
-<!ENTITY sm.startup "Se alege ca sesiune de pornire:">
-<!ENTITY sm.lastsession "ultima sesiune">
-<!ENTITY sm.previouslast "penultima sesiune">
-<!ENTITY sm.chooseifempty "Se alege altă sesiune dacă cea de pornire este vidă">
-<!ENTITY sm.restore.options "La restaurarea sesiunilor:">
-<!ENTITY sm.restore.overwrite "Se înlocuiesc ferestrele">
-<!ENTITY sm.restore.overwriteTabs "și filele existente">
-<!ENTITY sm.restore.closedWinList "Se salvează ferestrele în lista ferestrelor închise">
-<!ENTITY sm.restore.merge "Se combină mai multe ferestre într-una singură">
-<!ENTITY sm.restore.bypassCache "Se ignoră memoria „cache”">
-<!ENTITY sm.notrestore.label "Dacă nicio sesiune nu se restaurează la pornire">
-<!ENTITY sm.restorePinned1.label "Restaurează filele fixate ultima dată">
 <!ENTITY sm.preserve.options "Se memorează din file:">
 <!ENTITY sm.preserve.history "Istoricul">
 <!ENTITY sm.preserve.protect "Starea de protecție">
 <!ENTITY sm.preserve.locked "Starea de blocare">
 <!ENTITY sm.preserve.permission "Permisiunile">
 <!ENTITY sm.preserve.scroll1 "Poziția în pagină">
-<!ENTITY sm.restore.winOptions "Se memorează din ferestre:">
-<!ENTITY sm.restore.selectedTab "Filele selectate">
-<!ENTITY sm.restore.closedTabs "Lista filelor închise">
 <!ENTITY incompatible.extensions "Unele extensii sunt incompatibile cu Tab Mix Plus. Este recomandat să dezactivați sau să dezinstalați aceste extensii.">
 <!ENTITY incompatible.button.label "Afișează lista">

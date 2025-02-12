@@ -3,6 +3,6 @@
   "include": ["**/*.js", "**/*.sys.mjs"],
   "compilerOptions": {
     "typeRoots": ["../../../../types"],
-    "types": ["general.d.ts", "customDialog.d.ts", "autoReload.d.ts", "tabmix.d.ts"]
+    "types": ["general.d.ts", "autoReload.d.ts", "tabmix.d.ts"]
   }
 }

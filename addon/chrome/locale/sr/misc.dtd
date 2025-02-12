@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Изаберите време са списка или упишите своје време ---">
 <!ENTITY specifyreload.label "Унесите време поновног учитавања">
-<!ENTITY sanitizer.entry "Сачуване сесије Tab Mix Plus-а">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "Желите ли да избришете СВЕ сачуване сесије, укључујући резервне копије?">

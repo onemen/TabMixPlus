@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "Selecteer een tijd uit de lijst of voer zelf een tijd in">
 <!ENTITY specifyreload.label "Specificeer het tijdsinterval voor herladen">
-<!ENTITY sanitizer.entry "Tab Mix Plus geschiedenis">
-<!ENTITY sanitizer.entry.accesskey "T">
-<!ENTITY sanitizer.entry.confirm "ALLE opgeslagen sessiegegevens inclusief back-ups werkelijk verwijderen?">

@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Mostrar a sua página inicial">
 <!ENTITY startupBlankPage.label "Mostrar página em branco">
 <!ENTITY startupLastSession1.label "Mostrar suas janelas e abas pela última vez">
-<!ENTITY ss.enable.label "Usar Restaurador de Sessão nativo">
-<!ENTITY ss.enable.tooltip "Desmarque para permitir o uso com o Restaurador de Sessão do Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Configuração Avançada">
 <!ENTITY ss.advanced_setting.warning "Não modifique a não ser que saiba o que está fazendo...">
 <!ENTITY ss.interval "Intervalo mínimo de tempo entre salvar dois estados">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Todas as páginas">
 <!ENTITY ss.privacy_level.unencrypted "Somente páginas não criptografadas">
 <!ENTITY ss.privacy_level.nosites "Nenhuma página">
-<!ENTITY sessionManger.enable "Ativar Gerenciador de Sessões">
 <!ENTITY crashRecovery.enable "Ativar Recuperação de Falhas">
-<!ENTITY sm.StartExit "Iniciar/Sair">
-<!ENTITY sm.restore "Restaurar">
-<!ENTITY sm.preserve "Preservar">
 <!ENTITY sm.start "Ao iniciar o navegador:">
-<!ENTITY sm.start.restore "Restaurar">
-<!ENTITY sm.start.ask "Confirmar antes de restaurar">
-<!ENTITY sm.start.nothing "Não restaurar">
-<!ENTITY sm.exit "Ao sair do navegador:">
-<!ENTITY sm.exit.save "Salvar Sessão">
-<!ENTITY sm.exit.ask "Confirmar antes de salvar">
-<!ENTITY sm.exit.nothing "Não salvar">
-<!ENTITY sm.startup "Sessão inicial:">
-<!ENTITY sm.lastsession "Última sessão">
-<!ENTITY sm.previouslast "Anterior à última">
-<!ENTITY sm.chooseifempty "Escolher outra se não existir">
-<!ENTITY sm.restore.options "Ao restaurar sessões:">
-<!ENTITY sm.restore.overwrite "Substituir janelas existentes">
-<!ENTITY sm.restore.overwriteTabs "E abas">
-<!ENTITY sm.restore.closedWinList "Salvar janelas na lista de janelas fechadas">
-<!ENTITY sm.restore.merge "Unir múltiplas janelas em uma só">
-<!ENTITY sm.restore.bypassCache "Limpar o cache ao restaurar">
-<!ENTITY sm.notrestore.label "Se não restaurar ao iniciar">
-<!ENTITY sm.restorePinned1.label "Restaurar as abas fixadas pela última vez">
 <!ENTITY sm.preserve.options "Preservar abas:">
 <!ENTITY sm.preserve.history "Histórico">
 <!ENTITY sm.preserve.protect "Estado de proteção">
 <!ENTITY sm.preserve.locked "Estado de trancamento">
 <!ENTITY sm.preserve.permission "Permissões">
 <!ENTITY sm.preserve.scroll1 "Posição da barra de rolagem">
-<!ENTITY sm.restore.winOptions "Preservar janelas:">
-<!ENTITY sm.restore.selectedTab "Aba selecionada">
-<!ENTITY sm.restore.closedTabs "Lista de abas fechadas">
 <!ENTITY incompatible.extensions "Alguma das suas extensões são incompatíveis com a Tab Mix Plus, é recomendável que você desative ou desinstale essas extensões">
 <!ENTITY incompatible.button.label "Mostrar lista">

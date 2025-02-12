@@ -24,7 +24,6 @@
                                                                                             type="int"/>
       <preference id="pref_showOnTabbar"       name="extensions.tabmix.showTabContextMenuOnTabbar"
                                                                                             type="bool"/>
-      <preference id="pref_showMoveToGroup"    name="extensions.tabmix.moveToGroup"         type="bool"/>
       <preference id="pref_showNewTab"         name="extensions.tabmix.newTabMenu"          type="bool"/>
       <preference id="pref_showDuplicate"      name="extensions.tabmix.duplicateMenu"       type="bool"/>
       <preference id="pref_showDuplicateinWin" name="extensions.tabmix.duplicateinWinMenu"  type="bool"/>
@@ -79,14 +78,10 @@
       <preference id="pref_showUndoCloseContent"
                   name="extensions.tabmix.undoCloseTabContent"                              type="bool"/>
       <preference id="pref_optionsToolsMenu"   name="extensions.tabmix.optionsToolMenu"     type="bool"/>
-      <preference id="pref_sessionToolsMenu"   name="extensions.tabmix.sessionToolsMenu"    type="bool"/>
       <preference id="pref_closedWinToolsMenu" name="extensions.tabmix.closedWinToolsMenu"  type="bool"/>
       <preference id="pref_shortcuts"          name="extensions.tabmix.shortcuts"           type="string"
                   onchange="gMenuPane.initializeShortcuts();"/>
       <preference id="pref_slideshow"          name="extensions.tabmix.slideDelay"          type="int"/>
-      <preference id="pref_sessionManager1"
-                  name="extensions.tabmix.sessions.manager"                                 type="bool"
-                  onchange="if (typeof gSessionPane == 'undefined') gMenuPane.updateSessionShortcuts();"/>
    </preferences>
 
 
@@ -125,8 +120,6 @@
                 <checkbox_tmp id="shareTabURL" data-lazy-l10n-id="tab-context-share-url" preference="pref_shareTabURL"/>
                 <!-- Merge Windows -->
                 <checkbox_tmp id="showMergeWin" label="&mergeContext.label;" preference="pref_showMergeWin"/>
-                <!-- move to group -->
-                <checkbox_tmp id="moveToGroup" preference="pref_showMoveToGroup"/>
                 <!-- Rename tab -->
                 <checkbox_tmp id="showRenametab" label="&renametab.label;" preference="pref_showRenametab"/>
                 <!-- Copy tab Url -->
@@ -219,8 +212,6 @@
               <vbox align="start">
                 <checkbox_tmp id="optionsToolsMenu" preference="pref_optionsToolsMenu"
                           label="&page.header.title;…"/>
-                <checkbox_tmp hidden="true" id="sessionToolsMenu" preference="pref_sessionToolsMenu"
-                          label="&session.Tools;"/>
                 <checkbox_tmp id="closedWinToolsMenu" preference="pref_closedWinToolsMenu"
                           label="&closedWin.label;"/>
               </vbox>
@@ -283,8 +274,6 @@
             <shortcut id="undoCloseTab"    label="&clicktab.uctab;"/>
             <shortcut id="clearClosedTabs"/>
             <shortcut id="ucatab"          label="&clicktab.ucatab;"/>
-            <shortcut id="saveWindow"      label="&saveWindow.label;"/>
-            <shortcut id="saveSession"     label="&saveAllWindows.label;"/>
             <shortcut id="switchToLast"    label="&shortcuts.switchToLast;"/>
             <shortcut id="toggleFLST"      label="&shortcuts.toggleFLST;"
                       tooltiptext="&shortcuts.toggleFLST.tooltip;"/>

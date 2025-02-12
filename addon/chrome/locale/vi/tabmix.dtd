@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Xóa khỏi danh sách">
 <!ENTITY deletelist.accesskey "X">
 <!ENTITY settings.label "Thiết lập">
-<!ENTITY saveWindow.label "Lưu Cửa Sổ Này">
-<!ENTITY saveAllWindows.label "Lưu Tất cả Cửa sổ">
 <!ENTITY sm.context.overwrite "Khôi phục, Ghi đè Cửa sổ Đang mở">
 <!ENTITY sm.context.overwrite.key "O">
 <!ENTITY sm.context.restore.new "Khôi Phục sang Cửa Sổ Mới">

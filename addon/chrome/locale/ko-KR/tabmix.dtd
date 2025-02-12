@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "목록에서 지우기">
 <!ENTITY deletelist.accesskey "D">
 <!ENTITY settings.label "설정">
-<!ENTITY saveWindow.label "이 창을 저장하기">
-<!ENTITY saveAllWindows.label "모든 창을 저장하기">
 <!ENTITY sm.context.overwrite "복구하기, 현재 창에 덮어쓰기">
 <!ENTITY sm.context.overwrite.key "O">
 <!ENTITY sm.context.restore.new "새 창으로 복구하기">

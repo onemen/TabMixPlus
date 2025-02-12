@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Startseite anzeigen">
 <!ENTITY startupBlankPage.label "Leere Seite anzeigen">
 <!ENTITY startupLastSession1.label "Fenster und Tabs der letzten Sitzung anzeigen">
-<!ENTITY ss.enable.label "Integrierte Sitzungswiederherstellung von Firefox verwenden">
-<!ENTITY ss.enable.tooltip "Deaktivieren, um den TMP-Sitzungs-Manager zu verwenden">
 <!ENTITY ss.advanced_setting "Erweiterte Einstellungen">
 <!ENTITY ss.advanced_setting.warning "Für erfahrene Benutzer! Ändern Sie diese nur, wenn Sie wissen, was sie bewirken.">
 <!ENTITY ss.interval "Minimales Zeitintervall zwischen zwei Sicherungsvorgängen">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "für alle Websites">
 <!ENTITY ss.privacy_level.unencrypted "nur für unverschlüsselte Websites">
 <!ENTITY ss.privacy_level.nosites "nie">
-<!ENTITY sessionManger.enable "TMP-Sitzungs-Manager aktivieren">
 <!ENTITY crashRecovery.enable "Wiederherstellung nach Absturz aktivieren">
-<!ENTITY sm.StartExit "Start/Beenden">
-<!ENTITY sm.restore "Wiederherstellen">
-<!ENTITY sm.preserve "Erhalten">
 <!ENTITY sm.start "Beim Start des Browsers:">
-<!ENTITY sm.start.restore "Browser-Sitzung wiederherstellen">
-<!ENTITY sm.start.ask "Vor der Wiederherstellung bestätigen">
-<!ENTITY sm.start.nothing "Browser-Sitzung nicht wiederherstellen">
-<!ENTITY sm.exit "Beim Beenden des Browsers:">
-<!ENTITY sm.exit.save "Browser-Sitzung sichern">
-<!ENTITY sm.exit.ask "Vor dem Sichern bestätigen">
-<!ENTITY sm.exit.nothing "Browser-Sitzung nicht sichern">
-<!ENTITY sm.startup "Startsitzung auswählen:">
-<!ENTITY sm.lastsession "letzte Sitzung">
-<!ENTITY sm.previouslast "vorletzte Sitzung">
-<!ENTITY sm.chooseifempty "Andere Sitzung wählen, falls diese leer sein sollte">
-<!ENTITY sm.restore.options "Bei der Wiederherstellung einer Sitzung:">
-<!ENTITY sm.restore.overwrite "Bestehende Fenster überschreiben">
-<!ENTITY sm.restore.overwriteTabs "Tabs ebenfalls überschreiben">
-<!ENTITY sm.restore.closedWinList "Überschriebene Fenster in der Liste geschlossener Fenster speichern">
-<!ENTITY sm.restore.merge "Mehrere Fenster bei der Wiederherstellung zu einem zusammenführen">
-<!ENTITY sm.restore.bypassCache "Beim Wiederherstellen Cache ignorieren">
-<!ENTITY sm.notrestore.label "Falls beim Start nichts wiederhergestellt wird">
-<!ENTITY sm.restorePinned1.label "Angeheftete Tabs wieder herstellen">
 <!ENTITY sm.preserve.options "Für Tabs erhalten:">
 <!ENTITY sm.preserve.history "die Chronik">
 <!ENTITY sm.preserve.protect "den Geschützt-Status">
 <!ENTITY sm.preserve.locked "den Gesperrt-Status">
 <!ENTITY sm.preserve.permission "die Berechtigungen">
 <!ENTITY sm.preserve.scroll1 "die Position der Seite">
-<!ENTITY sm.restore.winOptions "Für Fenster erhalten:">
-<!ENTITY sm.restore.selectedTab "den aktiven Tab">
-<!ENTITY sm.restore.closedTabs "die Liste kürzlich geschlossener Tabs">
 <!ENTITY incompatible.extensions "Einige Ihrer Erweiterungen sind nicht mit Tab Mix Plus kompatibel. Es wird empfohlen, diese Erweiterungen zu deaktivieren oder zu deinstallieren.">
 <!ENTITY incompatible.button.label "Liste anzeigen">

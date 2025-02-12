@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Excluir da lista">
 <!ENTITY deletelist.accesskey "D">
 <!ENTITY settings.label "Configurações">
-<!ENTITY saveWindow.label "Salvar essa janela">
-<!ENTITY saveAllWindows.label "Salvar todas as janelas">
 <!ENTITY sm.context.overwrite "Restaurar, substituir janela(s) existente(s)">
 <!ENTITY sm.context.overwrite.key "S">
 <!ENTITY sm.context.restore.new "Restaurar em nova(s) janela(s)">

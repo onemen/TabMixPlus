@@ -16,6 +16,7 @@
   max-height: 11px !important;
 }
 
+.fit-content,
 tabpanels {
   width: fit-content;
 }

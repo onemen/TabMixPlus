@@ -10,13 +10,6 @@
  *                   code modified by onemen 2010-03-22 - work with new AddonManager for firefox 4.0
  */
 
-const TMP_BUTTON_CANCEL = 1;
-const TMP_BUTTON_EXTRA1 = 2;
-const TMP_HIDE_MENUANDTEXT = 2;
-const TMP_CHECKBOX_UNCHECKED = 0;
-const TMP_CHECKBOX_CHECKED = 1;
-const TMP_HIDE_CHECKBOX = 2;
-
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {AddonManager} from "resource://gre/modules/AddonManager.sys.mjs";
 
@@ -87,64 +80,69 @@ CompatibilityCheck.prototype = {
       this.dialogCallback(emptyList);
   },
 
-  warnAboutIncompatible: function TMP_EX_warnAboutIncompatible() {
-    var list = this.list;
+  async warnAboutIncompatible() {
+    const list = this.list;
     try {
       list.sort();
     } catch {}
 
-    var outStr = "";
+    let outStr = "";
     for (let i = 0; i < list.length; i++) {
       let name = list[i]._name;
       name = name.charAt(0).toUpperCase() + name.substr(1);
       outStr += " - " + name + " " + list[i]._version + "\n";
     }
 
-    var showatStart = TabmixSvc.prefBranch.getBoolPref("disableIncompatible");
-    var chkBoxState = showatStart ? TMP_CHECKBOX_CHECKED : TMP_CHECKBOX_UNCHECKED;
-
-    var title = TabmixSvc.getString("incompatible.title");
-    var msg = TabmixSvc.getString("incompatible.msg0") + "\n" +
+    const showatStart = TabmixSvc.prefBranch.getBoolPref("disableIncompatible");
+    const chkBoxState = {value: showatStart};
+    const title = TabmixSvc.getString("incompatible.title");
+    const msg = TabmixSvc.getString("incompatible.msg0") + "\n" +
               TabmixSvc.getString("incompatible.msg1") + "\n\n" + outStr + "\n\n";
-    var chkBoxLabel = TabmixSvc.getString("incompatible.chkbox.label");
-    var buttons = [TabmixSvc.setLabel("incompatible.button0"),
-      TabmixSvc.setLabel("incompatible.button1")];
-    buttons.push(TabmixSvc.setLabel("incompatible.button2"));
+    const chkBoxLabel = TabmixSvc.getString("incompatible.chkbox.label");
+    const buttonFlags = Services.prompt.BUTTON_POS_0 * Services.prompt.BUTTON_TITLE_IS_STRING +
+      Services.prompt.BUTTON_POS_1 * Services.prompt.BUTTON_TITLE_IS_STRING +
+      Services.prompt.BUTTON_POS_2 * Services.prompt.BUTTON_TITLE_IS_STRING +
+      Services.prompt.BUTTON_POS_2_DEFAULT;
 
-    // make promptService non modal on startup
-    var self = this;
-    var callBack = this.callbackDialog ? null :
-      function(aResult) {
-        aResult.showatStart = showatStart;
-        self.promptCallBack(aResult);
-      };
-    var result = this.window.Tabmix.promptService([TMP_BUTTON_EXTRA1, TMP_HIDE_MENUANDTEXT, chkBoxState],
-      [title, msg, "", chkBoxLabel, buttons.join("\n")], this.window, callBack);
-    if (!callBack)
-      this.promptCallBack(result);
+    const tabBrowser = this.window.gBrowser ?? this.window.opener.gBrowser;
+    const result = await Services.prompt.asyncConfirmEx(
+      tabBrowser.browsingContext, // browsingContext,
+      Ci.nsIPromptService.MODAL_TYPE_WINDOW, // modalType
+      title, // title
+      msg, // list of extensions
+      buttonFlags,
+      TabmixSvc.setLabel("incompatible.button0"), // button 0 label
+      TabmixSvc.setLabel("incompatible.button1"), // button 1 label
+      TabmixSvc.setLabel("incompatible.button2"), // button 2 label
+      chkBoxLabel, // checkbox label
+      chkBoxState // checkbox initial state
+    );
+    this.promptCallBack({
+      button: result.getProperty("buttonNumClicked"),
+      checked: result.getProperty("checked"),
+      showatStart,
+    });
   },
 
-  // we use non modal promptService on startup
-  promptCallBack: function TMP_EX_promptCallBack(aResult) {
+  async promptCallBack(aResult) {
     if (aResult.checked != aResult.showatStart) {
       TabmixSvc.prefBranch.setBoolPref("disableIncompatible", aResult.checked);
       Services.prefs.savePrefFile(null); // store the pref immediately
     }
 
     if (aResult.button != this.CANCEL) {
-      this.doDisable();
+      await this.disableExtensions();
       this.restart(aResult.button == this.DISABLE_AND_RESTART);
       this.dialogCallback(true); // we don't need this on startup
     }
   },
 
-  doDisable: function TMP_EX_doDisable() {
-    var list = this.list;
-    list.forEach(aAddonToDisable => {
-      AddonManager.getAddonByID(aAddonToDisable.id).then(aAddon => {
-        aAddon.userDisabled = true;
-      });
+  async disableExtensions() {
+    const promises = this.list.map(async({id}) => {
+      const addon = await AddonManager.getAddonByID(id);
+      await addon.disable();
     });
+    await Promise.all(promises);
   },
 
   restart: function TMP_EX_restart(aRestart) {
@@ -152,15 +150,6 @@ CompatibilityCheck.prototype = {
       var appStartup = Ci.nsIAppStartup;
       Cc["@mozilla.org/toolkit/app-startup;1"]
           .getService(appStartup).quit(appStartup.eRestart | appStartup.eAttemptQuit);
-    } else {
-      let title = TabmixSvc.getString("incompatible.title");
-      let msg = TabmixSvc.getString("incompatible.msg2");
-      let button = TabmixSvc.setLabel("sm.button.continue");
-      let buttons = ["", button].join("\n");
-      // make it not modal on startup
-      let callBack = this.callbackDialog ? null : function() {/* nothing to do */};
-      this.window.Tabmix.promptService([TMP_BUTTON_CANCEL, TMP_HIDE_MENUANDTEXT, TMP_HIDE_CHECKBOX],
-        [title, msg, "", "", buttons], this.window, callBack);
     }
   },
 

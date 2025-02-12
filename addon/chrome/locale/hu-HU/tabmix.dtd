@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Törlés a listáról">
 <!ENTITY deletelist.accesskey "T">
 <!ENTITY settings.label "Beállítások">
-<!ENTITY saveWindow.label "Aktuális ablak mentése">
-<!ENTITY saveAllWindows.label "Összes ablak mentése">
 <!ENTITY sm.context.overwrite "Visszaállítás, felülírva a meglévő ablakot...">
 <!ENTITY sm.context.overwrite.key "f">
 <!ENTITY sm.context.restore.new "Visszaállítás új ablakba">

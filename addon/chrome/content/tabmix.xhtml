@@ -21,11 +21,6 @@
     Tabmix.initialization.run("onContentLoaded", gBrowser.tabContainer);
   </script>
 
-  <commandset id="mainCommandSet">
-    <command id="TabmixSessionUtils:SaveThisWindow" observes="tmp_disableSave"/>
-    <command id="TabmixSessionUtils:SaveAllWindow" observes="tmp_disableSave"/>
-  </commandset>
-
    <!-- Menu in Tools Menu -->
    <menupopup id="menu_ToolsPopup">
       <menuitem id="tabmix-menu" label="&page.header.title;…" insertbefore="prefSep" tmp_iconic="menuitem-iconic tabmix-menu-icon"/>
@@ -35,7 +30,6 @@
             observes="tmp_closedwindows"
             tmp_iconic="menu-iconic closedwindows-icon">
          <menupopup id="tabmix-historyUndoWindowPopup"
-            context="tm_sessionmanagerContextMenu"
             placespopup="true"/>
       </menu>
    </menupopup>
@@ -180,12 +174,8 @@
 
   <!-- Tabmix Plus broadcasterset -->
   <broadcasterset id="mainBroadcasterSet" insertafter="mainKeyset">
-    <broadcaster id="tmp_menu_AllWindows" hidden="true"/>
-    <broadcaster id="tmp_contextmenu_ThisWindow" hidden="true"/>
-    <broadcaster id="tmp_contextmenu_AllWindows" hidden="true"/>
     <broadcaster id="tmp_closedwindows"/>
     <broadcaster id="tmp_undocloseButton"/>
-    <broadcaster id="tmp_sessionmanagerButton"/>
     <broadcaster id="tmp_disableSave"/>
     <broadcaster id="tabmix_flowing"/>
   </broadcasterset>

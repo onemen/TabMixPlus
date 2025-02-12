@@ -132,7 +132,6 @@ var gPrefWindow = {
   deinit() {
     window.removeEventListener("change", this);
     window.removeEventListener("beforeaccept", this);
-    TabmixSvc.sm.settingPreference = false;
     Shortcuts.prefsChangedByTabmix = false;
     window.gIncompatiblePane.deinit();
   },
@@ -151,7 +150,6 @@ var gPrefWindow = {
       case "beforeaccept":
         this.applyBlockedChanges();
         if (!this.instantApply) {
-          TabmixSvc.sm.settingPreference = true;
           Shortcuts.prefsChangedByTabmix = true;
         }
         break;
@@ -477,11 +475,6 @@ function setPrefAfterImport(aPref) {
   return false;
 }
 
-var sessionPrefs = ["browser.sessionstore.resume_from_crash",
-  "browser.startup.page",
-  "extensions.tabmix.sessions.manager",
-  "extensions.tabmix.sessions.crashRecovery"];
-
 ChromeUtils.defineLazyGetter(this, "gPreferenceList", () => {
   // other settings not in extensions.tabmix. branch that we save
   let otherPrefs = [
@@ -518,24 +511,14 @@ ChromeUtils.defineLazyGetter(this, "gPreferenceList", () => {
   return tabmixPrefs;
 });
 
-ChromeUtils.defineLazyGetter(window, "_sminstalled", () => {
-  return Tabmix.getTopWin().Tabmix.extensions.sessionManager;
-});
-
 function defaultSetting() {
   gPrefWindow.resetChanges();
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
   Shortcuts.prefsChangedByTabmix = true;
-  let SMinstalled = window._sminstalled;
-  let prefs = !SMinstalled ? gPreferenceList :
-    gPreferenceList.filter(pref => !sessionPrefs.includes(pref));
-  prefs.forEach(pref => {
+  gPreferenceList.forEach(pref => {
     Services.prefs.clearUserPref(pref);
   });
-  // we enable our session manager on default
-  // set resume_from_crash to false
-  Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", false);
 
   gPrefWindow.afterShortcutsChanged();
   Tabmix.prefs.clearUserPref("setDefault");
@@ -603,10 +586,8 @@ function toggleSyncPreference() {
   /** @type {"clearUserPref" | "setBoolPref"} */
   let fn = Tabmix.prefs.getBoolPref("syncPrefs") ? "clearUserPref" : "setBoolPref";
   Tabmix.prefs[fn]("syncPrefs", true);
-  let exclude = ["extensions.tabmix.sessions.onStart.sessionpath"];
   gPreferenceList.forEach(pref => {
-    if (!exclude.includes(pref))
-      Services.prefs[fn](sync + pref, true);
+    Services.prefs[fn](sync + pref, true);
   });
   Services.prefs.savePrefFile(null);
 }
@@ -682,16 +663,6 @@ function loadData(pattern) {
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
 
-  // disable both Firefox & Tabmix session manager to prevent our prefs observer to block the change
-  let SMinstalled = window._sminstalled;
-  if (!SMinstalled) {
-    Tabmix.prefs.setBoolPref("sessions.manager", false);
-    Tabmix.prefs.setBoolPref("sessions.crashRecovery", false);
-    Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", false);
-    Services.prefs.setIntPref("browser.startup.page", 0);
-    Services.prefs.savePrefFile(null);
-  }
-
   // set updateOpenedTabsLockState before lockallTabs and lockAppTabs
   let pref = "extensions.tabmix.updateOpenedTabsLockState=";
   let index = pattern.indexOf(pref + true) + pattern.indexOf(pref + false) + 1;
@@ -705,10 +676,8 @@ function loadData(pattern) {
     let valIndex = val.indexOf("=");
     if (valIndex > 0) {
       prefName = val.substring(0, valIndex);
-      if (!SMinstalled || !sessionPrefs.includes(prefName)) {
-        prefValue = val.substring(valIndex + 1, val.length);
-        setPrefByType(prefName, prefValue, true);
-      }
+      prefValue = val.substring(valIndex + 1, val.length);
+      setPrefByType(prefName, prefValue, true);
     }
   }
   gPrefWindow.afterShortcutsChanged();
@@ -768,6 +737,7 @@ function donate() {
 
 window.gIncompatiblePane = {
   lastSelected: "paneLinks",
+  _initialized: false,
 
   get paneButton() {
     return Tabmix.lazyGetter(this, "paneButton",
@@ -775,9 +745,15 @@ window.gIncompatiblePane = {
   },
 
   init() {
+    if (this._initialized) {
+      return;
+    }
+    this._initialized = true;
+
     let radioGroup = this.paneButton.parentNode;
     radioGroup.addEventListener("command", this);
     this.checkForIncompatible(false);
+    gPrefWindow.initPane("paneIncompatible");
   },
 
   deinit() {

@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Знищити зі списку">
 <!ENTITY deletelist.accesskey "D">
 <!ENTITY settings.label "Налаштування">
-<!ENTITY saveWindow.label "Зберегти дане вікно">
-<!ENTITY saveAllWindows.label "Зберегти всі вікна">
 <!ENTITY sm.context.overwrite "Відновити з заміною існуючих вікон">
 <!ENTITY sm.context.overwrite.key "O">
 <!ENTITY sm.context.restore.new "Відновити в нових вікнах">

@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Supprimer de la liste">
 <!ENTITY deletelist.accesskey "S">
 <!ENTITY settings.label "Réglages">
-<!ENTITY saveWindow.label "Enregistrer cette fenêtre">
-<!ENTITY saveAllWindows.label "Enregistrer toutes les fenêtres">
 <!ENTITY sm.context.overwrite "Restaurer, écraser la/les fenêtre(s) existante(s)">
 <!ENTITY sm.context.overwrite.key "e">
 <!ENTITY sm.context.restore.new "Restaurer dans une nouvelle fenêtre">

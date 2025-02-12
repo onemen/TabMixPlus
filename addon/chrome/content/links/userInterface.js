@@ -97,8 +97,8 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
     selectedTab.collapsed = true;
 
   var loadBlank = isBlankPageURL(url);
-  if (!TabmixSessionManager.isPrivateWindow && replaceLastTab && !loadBlank &&
-      typeof privateTab == "object") {
+  if (replaceLastTab && !loadBlank && typeof privateTab == "object" &&
+      !PrivateBrowsingUtils.isWindowPrivate(window)) {
     let privateTab = window.privateTab;
     if (privateTab.isTabPrivate(selectedTab) &&
         TabmixSvc.prefs.get("extensions.privateTab.makeNewEmptyTabsPrivate", 0) === 0) {

@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Slet fra listen">
 <!ENTITY deletelist.accesskey "e">
 <!ENTITY settings.label "Indstillinger">
-<!ENTITY saveWindow.label "Gem dette vindue">
-<!ENTITY saveAllWindows.label "Gem alle vinduer">
 <!ENTITY sm.context.overwrite "Genetabler, overskriv eksisterende vindue(r)">
 <!ENTITY sm.context.overwrite.key "o">
 <!ENTITY sm.context.restore.new "Genetabler til ny(e) vindue(r)">

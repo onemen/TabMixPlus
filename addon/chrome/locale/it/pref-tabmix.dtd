@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "mostra una pagina vuota">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Attiva il ripristino delle sessioni nativo del browser">
-<!ENTITY ss.enable.tooltip "Deselezionare per permettere il ripristino delle sessioni di Tab Mix Plus">
 <!ENTITY ss.advanced_setting "Impostazioni avanzate">
 <!ENTITY ss.advanced_setting.warning "Non modificare queste impostazioni se non si è utenti avanzati">
 <!ENTITY ss.interval "Intervallo minimo di tempo fra due stati">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "tutti i siti">
 <!ENTITY ss.privacy_level.unencrypted "i siti non cifrati">
 <!ENTITY ss.privacy_level.nosites "nessun sito">
-<!ENTITY sessionManger.enable "Attiva il ripristino delle sessioni di Tab Mix Plus">
 <!ENTITY crashRecovery.enable "Attiva il ripristino delle sessioni dopo crash">
-<!ENTITY sm.StartExit "Avvio/Chiusura">
-<!ENTITY sm.restore "Fase di ripristino">
-<!ENTITY sm.preserve "Fase di preservazione">
 <!ENTITY sm.start "Azione da effettuare quando si avvia il browser">
-<!ENTITY sm.start.restore "Ripristina">
-<!ENTITY sm.start.ask "Chiedi prima di ripristinare">
-<!ENTITY sm.start.nothing "Non ripristinare">
-<!ENTITY sm.exit "Azione da effettuare quando si chiude il browser">
-<!ENTITY sm.exit.save "Salva la sessione">
-<!ENTITY sm.exit.ask "Chiedi prima di salvare">
-<!ENTITY sm.exit.nothing "Non salvare">
-<!ENTITY sm.startup "Quando si avvia il browser ripristina:">
-<!ENTITY sm.lastsession "l&apos;ultima sessione">
-<!ENTITY sm.previouslast "la penultima sessione">
-<!ENTITY sm.chooseifempty "Permetti di selezionare un&apos;altra sessione se quella scelta fosse vuota">
-<!ENTITY sm.restore.options "Azione da effettuare quando si ripristinano le sessioni">
-<!ENTITY sm.restore.overwrite "Sovrascrivi le finestre esistenti">
-<!ENTITY sm.restore.overwriteTabs "comprese le schede">
-<!ENTITY sm.restore.closedWinList "Salva le finestre esistenti nella lista delle schede chiuse">
-<!ENTITY sm.restore.merge "Avvia la sessione unendo le varie finestre in una sola">
-<!ENTITY sm.restore.bypassCache "Bypassa la cache">
-<!ENTITY sm.notrestore.label "Se all&apos;avvio del browser non viene ripristinata alcuna sessione">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Dati da preservare per le schede">
 <!ENTITY sm.preserve.history "Cronologia">
 <!ENTITY sm.preserve.protect "Stato &apos;protetto&apos;">
 <!ENTITY sm.preserve.locked "Stato &apos;bloccato&apos;">
 <!ENTITY sm.preserve.permission "Permessi">
 <!ENTITY sm.preserve.scroll1 "Posizione di scorrimento e dimensione testo">
-<!ENTITY sm.restore.winOptions "Dati da preservare per le finestre">
-<!ENTITY sm.restore.selectedTab "Scheda selezionata">
-<!ENTITY sm.restore.closedTabs "Lista delle schede chiuse">
 <!ENTITY incompatible.extensions "Alcune delle estensioni installate sono incompatibili con Tab Mix Plus. Disattivare o disinstallare tali estensioni">
 <!ENTITY incompatible.button.label "Estensioni incompatibili">

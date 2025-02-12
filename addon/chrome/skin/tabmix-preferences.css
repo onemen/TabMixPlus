@@ -28,6 +28,8 @@ radio[pane=paneSession] {
 
 radio[pane=paneIncompatible] {
   list-style-image: url("chrome://global/skin/icons/error.svg") !important;
+  -moz-context-properties: fill;
+  fill: var(--in-content-danger-button-background, #e22850);
   visibility: collapse;
 }
 
@@ -278,18 +280,6 @@ tabbox > tabpanels:last-child {
   padding-bottom: 6px;
 }
 
-/* for Linux */
-#sessionManager-panels[linux] {
-  border-left: none !important;
-  border-right: none !important;
-  border-bottom: none !important;
-}
-
-#sessionManager-panels[linux] groupbox {
-  margin: 2px 5px;
-  padding: 0 5px;
-}
-
 /* for Mac */
 #TabMIxPreferences[mac] prefpane > .content-box > tabbox {
   height: var(--content-box-max-pane-height, 468px);
@@ -309,13 +299,6 @@ tabbox > tabpanels:last-child {
   background-image: none;
   padding-top: 2px;
   margin-bottom: 2px;
-}
-
-/* session panel */
-#sessionsPanel:not([manager]),
-#sessionsPanel[manager=tabmix] .firefox,
-#sessionsPanel[manager=firefox] .tabmix {
-  display: none;
 }
 
 #sessionsPanel > groupbox > vbox {

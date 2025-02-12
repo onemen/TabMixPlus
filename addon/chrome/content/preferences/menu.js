@@ -13,10 +13,6 @@ var gMenuPane = {
     $("togglePinTab").setAttribute("label", gPrefWindow.pinTabLabel);
     $("clearClosedTabs").setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
 
-    var browserWindow = Tabmix.getTopWin();
-    /** @type {Functions["getById"]} */
-    let $$ = id => browserWindow.document.getElementById(id);
-
     const [showBmkTab, showBmkTabs] = [$("showBmkTab"), $("showBmkTabs")];
     document.l10n?.translateElements([showBmkTab, showBmkTabs]).then(() => {
       showBmkTab.label = showBmkTab.label.replace("…", "");
@@ -35,15 +31,6 @@ var gMenuPane = {
       gPrefWindow.removeItemAndPrefById("pref_closeDuplicateTabs");
     }
 
-    // if Tabview exist copy its menu label
-    let tabViewMenu = browserWindow.TMP_TabView.installed &&
-        ($$("context_tabViewMenu") || $$("tabGroups-context_tabViewMenu"));
-    if (tabViewMenu) {
-      $("moveToGroup").label = tabViewMenu.getAttribute("label");
-    } else {
-      gPrefWindow.removeItemAndPrefById("pref_showMoveToGroup");
-    }
-
     this.setInverseLinkLabel();
 
     // we can not modify build-in key with reserved attribute
@@ -58,7 +45,6 @@ var gMenuPane = {
     if (!Shortcuts.keys.browserReload.id)
       $("browserReload").hidden = true;
     this.initializeShortcuts();
-    this.updateSessionShortcuts();
     this.setSlideShowLabel();
     let paneMenu = $("paneMenu");
     if (paneMenu.hasAttribute("editSlideShowKey")) {
@@ -114,13 +100,6 @@ var gMenuPane = {
     slideShow.editBox.focus();
     let shortcuts = $("shortcut-group");
     shortcuts.scrollTop = shortcuts.scrollHeight - shortcuts.clientHeight;
-  },
-
-  updateSessionShortcuts() {
-    const permanentPrivateBrowsing = this.PrivateBrowsingUtils.permanentPrivateBrowsing;
-    let block = !($Pref("pref_sessionManager") || $Pref("pref_sessionManager1")).value || permanentPrivateBrowsing;
-    $("saveWindow").blocked = block;
-    $("saveSession").blocked = block;
   },
 
   // for shortcuts panel

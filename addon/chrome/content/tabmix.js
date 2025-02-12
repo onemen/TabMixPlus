@@ -39,7 +39,6 @@ Tabmix.startup = function TMP_startup() {
 Tabmix.beforeDelayedStartup = function() {
   if (this.isFirstWindow) {
     ChromeUtils.importESModule("chrome://tabmix-resource/content/extensions/AddonManager.sys.mjs");
-    TMP_SessionStore.setService(1, true);
   }
 };
 
@@ -125,8 +124,6 @@ Tabmix.afterDelayedStartup = function() {
       }
     }
   }, 250);
-
-  TMP_TabView.init();
 
   TMP_Places.onDelayedStartup();
 
@@ -226,10 +223,6 @@ var TMP_eventListener = {
       case "TabAttrModified":
         this.onTabAttrModified(aEvent);
         break;
-      case "SSWindowClosing":
-        window.removeEventListener("SSWindowClosing", this);
-        TabmixSessionManager.onWindowClose(!Tabmix.numberOfWindows());
-        break;
       case "SSWindowRestored":
         TMP_ClosedTabs.setButtonDisableState();
         this.onSSWindowRestored();
@@ -267,9 +260,6 @@ var TMP_eventListener = {
         this.onFullScreen(enterFS);
         break;
       }
-      case "PrivateTab:PrivateChanged":
-        TabmixSessionManager.privateTabChanged(aEvent);
-        break;
     }
   },
 
@@ -309,7 +299,6 @@ var TMP_eventListener = {
       Tabmix.lazy_import(Tabmix, "MergeWindows", "MergeWindows", "MergeWindows");
       Tabmix.lazy_import(Tabmix, "autoReload", "AutoReload", "AutoReload");
       Tabmix.lazy_import(Tabmix, "renameTab", "RenameTab", "RenameTab");
-      Tabmix.lazy_import(TabmixSessionManager, "_decode", "Decode", "Decode");
       Tabmix.lazy_import(Tabmix, "docShellCapabilities",
         "DocShellCapabilities", "DocShellCapabilities");
       Tabmix.lazy_import(Tabmix, "Utils", "Utils", "TabmixUtils");
@@ -317,7 +306,7 @@ var TMP_eventListener = {
       Tabmix.assert(ex);
     }
 
-    this._tabEvents = ["SSTabRestoring", "SSTabRestored", "PrivateTab:PrivateChanged",
+    this._tabEvents = ["SSTabRestoring", "SSTabRestored",
       "TabOpen", "TabClose", "TabSelect", "TabMove", "TabUnpinned",
       "TabAttrModified", "TabBrowserInserted"];
 
@@ -358,7 +347,6 @@ var TMP_eventListener = {
 
   onWindowOpen: function TMP_EL_onWindowOpen() {
     window.addEventListener("unload", this);
-    window.addEventListener("SSWindowClosing", this);
     window.addEventListener("fullscreen", this, true);
 
     Tabmix.Utils.initMessageManager(window);
@@ -522,22 +510,6 @@ var TMP_eventListener = {
     // tabmix Options in Tools menu
     document.getElementById("tabmix-menu").hidden = !Tabmix.prefs.getBoolPref("optionsToolMenu");
     document.getElementById("tabmix-historyUndoWindowMenu").hidden = !Tabmix.prefs.getBoolPref("closedWinToolsMenu");
-
-    // ##### disable Session Manager #####
-    // TabmixSessionManager.updateSettings();
-
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._updateCloseButtons")._replace(
-      TabmixSvc.isZen ?
-        'this.visibleTabs[gBrowser._numVisiblePinTabs];' :
-        Tabmix.isVersion(1300) ?
-          'this.visibleTabs[gBrowser.pinnedTabCount];' :
-          'this._getVisibleTabs()[gBrowser._numPinnedTabs];',
-      'TMP_TabView.checkTabs(Tabmix.visibleTabs.tabs);'
-    ).toCode(false, tabBar, "tabmix_updateCloseButtons");
-
-    Tabmix.setNewFunction(tabBar, "_updateCloseButtons", Tabmix._updateCloseButtons);
-    // @ts-expect-error - it is ok to delete this function
-    delete Tabmix._updateCloseButtons;
 
     if (Tabmix.isVersion(1300) && window.SidebarController.sidebarVerticalTabsEnabled) {
       tabBar._updateCloseButtons();
@@ -792,7 +764,6 @@ var TMP_eventListener = {
   onTabClose: function TMP_EL_onTabClose(aEvent) {
     // aTab is the tab we are closing now
     var tab = aEvent.target;
-    tab._tPosInGroup = TMP_TabView.getTabPosInCurrentGroup(tab);
     TMP_LastTab.tabs = null;
     TMP_LastTab.detachTab(tab);
     TMP_Places.updateRestoringTabsList(tab);
@@ -843,10 +814,6 @@ var TMP_eventListener = {
 
   // TGM extension use it
   onTabClose_updateTabBar: function TMP_EL_onTabClose_updateTabBar(aTab) {
-    // if the tab is not in the current group we don't have to do anything here.
-    if (typeof aTab._tPosInGroup == "number" && aTab._tPosInGroup == -1)
-      return;
-
     var tabBar = gBrowser.tabContainer;
     function _updateTabstrip() {
       // underflow not always fires when Classic theme restorer installed
@@ -906,7 +873,6 @@ var TMP_eventListener = {
     }
 
     TMP_LastTab.OnSelect();
-    TabmixSessionManager.tabSelected(true);
   },
 
   updateDisplay(tab) {
@@ -928,7 +894,6 @@ var TMP_eventListener = {
     // moveTabTo call _positionPinnedTabs when pinned tab moves
     if (!tab.pinned)
       TabmixTabbar.setFirstTabInRow();
-    TabmixSessionManager.tabMoved(tab, aEvent.detail, tab._tPos);
   },
 
   onTabUnpinned: function TMP_EL_onTabUnpinned(aEvent) {
@@ -1037,13 +1002,8 @@ var TMP_eventListener = {
 
   onWindowClose: function TMP_EL_onWindowClose() {
     window.removeEventListener("unload", this);
-    window.removeEventListener("SSWindowClosing", this);
     window.removeEventListener("SSWindowRestored", this);
 
-    // notice that windows enumerator don't count this window
-    var isLastWindow = Tabmix.numberOfWindows() === 0;
-
-    TabmixSessionManager.shutDown(true, isLastWindow, true);
     Tabmix.closedObjectsUtils.removeObservers();
     TabmixTabClickOptions.toggleEventListener(false);
     TabmixContext.toggleEventListener(false);
@@ -1064,8 +1024,6 @@ var TMP_eventListener = {
     gBrowser.tabContainer.removeEventListener("wheel", this, true);
     gBrowser.tabContainer.arrowScrollbox.disconnectTabmix();
 
-    if (TMP_TabView.installed)
-      TMP_TabView._resetTabviewFrame();
     gBrowser.tabpanels.removeEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
 
     gTMPprefObserver.removeObservers();
@@ -1184,3 +1142,13 @@ Tabmix._deferredInitialized = (function() {
 
   return deferred;
 }());
+
+/**
+ * add backward compatibility getters to some of the main object/function/variable
+ * that we changed from version 0.3.8.5pre.110123a
+ * we only add this getters to objects the aren't in the name space
+ */
+Tabmix.backwardCompatibilityGetter(window, "TabDNDObserver", "TMP_tabDNDObserver");
+Tabmix.backwardCompatibilityGetter(window, "gSingleWindowMode", "Tabmix.singleWindowMode");
+Tabmix.backwardCompatibilityGetter(window, "TM_init", "Tabmix.startup");
+Tabmix.backwardCompatibilityGetter(window, "tabscroll", "TabmixTabbar.scrollButtonsMode");

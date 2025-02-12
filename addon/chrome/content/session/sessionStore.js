@@ -86,122 +86,6 @@ var TMP_SessionStore = {
       [TabmixSvc.aboutBlank, TabmixSvc.aboutNewtab, "about:home"].includes(entries[0].url);
   },
 
-  /**
-   * @brief         make sure that we don't enable both sessionStore and session manager
-   *
-   * @param msgNo   a Integer value - msg no. to show.
-   *                -1 when session manager extension enabled (see AddonManager.sys.mjs)
-   *
-   * @param start   a Boolean value - true if we call this function before startup.
-   *
-   * @returns       Nothing.
-   */
-  setService: function TMP_ss_setSessionService(msgNo, start) {
-    // ##### disable Session Manager #####
-    Services.prefs.lockPref("extensions.tabmix.sessions.manager");
-    Services.prefs.lockPref("extensions.tabmix.sessions.crashRecovery");
-    if (TabmixSessionManager.disableSessionManager) {
-      document.getElementById("tmp_disableSave").setAttribute("disabled", true);
-      return;
-    }
-    TabmixSvc.sm.settingPreference = true;
-
-    if (TabmixSvc.sm.settingPreference || Tabmix.prefs.prefHasUserValue("setDefault"))
-      return;
-    /*
-     * From 2008-03-10 we don't set browser.sessionstore.enabled to false anymore
-     * we use nsISessionStore service in TMP.
-     * if we use TMP session manager we set all other sessionstore pref to false to disable SessionRestore
-     *
-     * Bug 449596 - remove the browser.sessionstore.enabled pref
-     * so here we don't set it to true, we just clear user pref to the default
-     * if the pref exist in firefox this set the pref to true
-     * if the pref don't exist this will remove the pref
-     */
-    const TMP_SS_MANAGER = "extensions.tabmix.sessions.manager";
-    const TMP_SS_CRASHRECOVERY = "extensions.tabmix.sessions.crashRecovery";
-    var TMP_manager_enabled = Services.prefs.getBoolPref(TMP_SS_MANAGER);
-    var TMP_crashRecovery_enabled = Services.prefs.getBoolPref(TMP_SS_CRASHRECOVERY);
-    if (!TMP_manager_enabled && !TMP_crashRecovery_enabled) {
-      return;
-    }
-
-    TabmixSvc.sm.settingPreference = true;
-    // if session manager extension is install disable TMP session manager
-    if (msgNo == -1 || Tabmix.extensions.sessionManager) {
-      // update session manager settings according to current tabmix settings
-      if (TMP_manager_enabled) {
-        Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
-        switch (Tabmix.prefs.getIntPref("sessions.onStart")) {
-          case 0:
-            Services.prefs.setIntPref("extensions.sessionmanager.startup", 0);
-            Services.prefs.setIntPref("browser.startup.page", 3);
-            break;
-          case 1:
-            Services.prefs.setIntPref("extensions.sessionmanager.startup", 1);
-            break;
-            // default: nothing to do
-        }
-        switch (Tabmix.prefs.getIntPref("sessions.onClose")) {
-          case 0:
-            Services.prefs.setIntPref("extensions.sessionmanager.backup_session", 1);
-            break;
-          case 1:
-            Services.prefs.setIntPref("extensions.sessionmanager.backup_session", 2);
-            break;
-          default:
-            Services.prefs.setIntPref("extensions.sessionmanager.backup_session", 0);
-        }
-      }
-      if (TMP_crashRecovery_enabled) {
-        Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
-        Services.prefs.setBoolPref("browser.sessionstore.resume_from_crash", true);
-      }
-      TabmixSvc.sm.settingPreference = false;
-    } else if (this.isSessionStoreEnabled()) {
-      // ask the user to choose between TMP session manager and sessionstore
-      // we use non modal promptService on start up, so we disabled Tabmix session manager to let the startup
-      // process continue and set the appropriate preference after the dialog prompt dismissed.
-      if (start) {
-        Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
-        Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
-      }
-      let title = "TabMix " + TabmixSvc.getSMString("sm.title");
-      let msg = start ? TabmixSvc.getSMString("sm.disable.msg") + "\n\n" : "";
-      msg += TabmixSvc.getSMString("sm.disable.msg" + msgNo);
-      let buttons = TabmixSvc.getDialogStrings("Yes", "No").join("\n");
-      let self = this;
-      /** @param {TabmixNS.promptServiceReturnType} aResult */
-      let callBack = function(aResult) {
-        if (msgNo == 1 && aResult.button == 1 || msgNo == 2 && aResult.button === 0) {
-          self.setSessionRestore(false);
-          Services.prefs.setBoolPref(TMP_SS_MANAGER, TMP_manager_enabled);
-          Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, TMP_crashRecovery_enabled);
-        } else {
-          // we don't change any of sessionstore default setting
-          // the user will be ask on exit what to do.
-          // browser.warnOnQuit default value is true
-          Services.prefs.setBoolPref(TMP_SS_MANAGER, false);
-          Services.prefs.setBoolPref(TMP_SS_CRASHRECOVERY, false);
-        }
-        TabmixSvc.sm.settingPreference = false;
-      };
-      let result = Tabmix.promptService([Tabmix.BUTTON_OK, Tabmix.HIDE_MENUANDTEXT, Tabmix.HIDE_CHECKBOX],
-        [title, msg, "", "", buttons], window, start ? callBack : undefined);
-      if (!start)
-        callBack(result);
-    } else if (!Services.prefs.prefHasUserValue("browser.warnOnQuit ")) {
-      // browser.warnOnQuit default value is true
-      Services.prefs.setBoolPref("browser.warnOnQuit", false);
-      TabmixSvc.sm.settingPreference = false;
-    }
-  },
-
-  isSessionStoreEnabled() {
-    return Services.prefs.getIntPref("browser.startup.page") == 3 ||
-      Services.prefs.getBoolPref("browser.sessionstore.resume_from_crash");
-  },
-
   afterSwitchThemes: false,
   // we call this only one time on window load
   // and store the value in Tabmix.isWindowAfterSessionRestore
@@ -213,11 +97,6 @@ var TMP_SessionStore = {
     // When we close all browser windows without exit (non browser windows are opened)
     // Firefox reopen last closed window when a browser window opens
     } else if (Tabmix.numberOfWindows(false, null) > 1) {
-      if ((Tabmix.prefs.getBoolPref("sessions.manager") ||
-           Tabmix.prefs.getBoolPref("sessions.crashRecovery")) &&
-          SessionStore.getClosedWindowCount() > 0) {
-        Services.prefs.setBoolPref("browser.sessionstore.resume_session_once", true);
-      }
       afterSessionRestore = true;
     } else if (this.afterSwitchThemes) {
       afterSessionRestore = true;
@@ -952,6 +831,14 @@ var TMP_ClosedTabs = {
   removeAllClosedTabs() {
     if (Tabmix.isVersion(1350)) {
       const closedGroups = SessionStore.getClosedTabGroups({closedTabsFromClosedWindows: false});
+      if (Tabmix.isVersion(1360) && SessionStore.getClosedTabCountFromClosedWindows()) {
+        const uniqueGroups = new Map();
+        const closedTabsData = SessionStore.getClosedTabDataFromClosedWindows();
+        for (const {sourceClosedId, closedInTabGroupId: id} of closedTabsData) {
+          uniqueGroups.set(`${sourceClosedId},${id}`, {tabs: [{sourceClosedId}], id});
+        }
+        closedGroups.push(...uniqueGroups.values());
+      }
       for (const group of closedGroups) {
         const tabData = group.tabs[0];
         if (tabData) {
@@ -1061,10 +948,6 @@ var TMP_ClosedTabs = {
       aBlankTabToReuse = cTab;
     }
 
-    if (TMP_TabView.exist("prepareUndoCloseTab")) {
-      TabView.prepareUndoCloseTab(tabToRemove);
-    }
-
     if (tabToRemove) {
       tabToRemove.collapsed = true;
     }
@@ -1130,10 +1013,6 @@ var TMP_ClosedTabs = {
 
     // restore tab content
     SessionStore.setTabState(newTab, state);
-
-    if (TMP_TabView.exist("afterUndoCloseTab")) {
-      TabView.afterUndoCloseTab();
-    }
 
     const fromSameWindow = aSource === window || aSource.sourceWindowId === window.__SSi;
     // don't restore position for tabs from other windows

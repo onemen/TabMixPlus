@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Kustuta loendist">
 <!ENTITY deletelist.accesskey "D">
 <!ENTITY settings.label "Sätted">
-<!ENTITY saveWindow.label "Salvesta see aken">
-<!ENTITY saveAllWindows.label "Salvesta kõik aknad">
 <!ENTITY sm.context.overwrite "Taasta, kirjutades olemasoleva(d) akna(d) üle">
 <!ENTITY sm.context.overwrite.key "Ü">
 <!ENTITY sm.context.restore.new "Taasta uude aknasse (uutesse akendesse)">

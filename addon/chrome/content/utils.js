@@ -176,52 +176,6 @@ var Tabmix = {
     }
   },
 
-  promptService(intParam, strParam, aWindow, aCallBack) {
-    var dpb = Cc["@mozilla.org/embedcomp/dialogparam;1"]
-        .createInstance(Ci.nsIDialogParamBlock);
-    // intParam[0] - default button accept=0, cancel=1, extra1=2
-    // intParam[1] - show menuList= 1 , show textBox= 0, hide_both= 2
-    // intParam[2] - set checkbox checked  true=1 , false=0, hide=2
-    // intParam[3] - flag  - for menuList contents: flag to set menu selected item
-    //                     - for textBox rename: 1 , save: 0
-    ///XXX temp fix
-    // intParam[4] - flag  - 1 - use Tabmix.Sessions.createMenuForDialog
-
-    // we use non modal dialog when we call for prompt on startup
-    // when we don't have a callBack function use modal dialog
-    const modal = typeof aCallBack != "function";
-    var i;
-    for (i = 0; i < intParam.length; i++)
-      dpb.SetInt(i, intParam[i] ?? 0);
-    // strParam labels for: title, msg, testbox.value, checkbox.label, buttons[]
-    // buttons[]: labels array for each button
-    for (i = 0; i < strParam.length; i++)
-      dpb.SetString(i, strParam[i] ?? "");
-
-    if (typeof aWindow == "undefined") {
-      try {
-        aWindow = window;
-      } catch {
-        // @ts-expect-error - Services.ww.openWindow can be called with parent = null
-        aWindow = null;
-      }
-    }
-
-    // we add dependent to features to make this dialog float over the window on start
-    var dialog = Services.ww.openWindow(aWindow,
-      "chrome://tabmixplus/content/dialogs/promptservice.xhtml", "", "centerscreen" +
-           (modal ? ",modal" : ",dependent"), dpb);
-    if (!modal)
-      dialog._callBackFunction = aCallBack;
-
-    return {
-      button: dpb.GetInt(4),
-      checked: dpb.GetInt(5) == this.CHECKBOX_CHECKED,
-      label: dpb.GetString(5),
-      value: dpb.GetInt(6)
-    };
-  },
-
   windowEnumerator: function Tabmix_windowEnumerator(aWindowtype) {
     if (typeof aWindowtype == "undefined")
       aWindowtype = "navigator:browser";
@@ -233,9 +187,7 @@ var Tabmix = {
     var count = 0;
     while (enumerator.hasMoreElements()) {
       let win = enumerator.getNext();
-      let isClosed = "TabmixSessionManager" in win &&
-          win.TabmixSessionManager.windowClosed;
-      if (!isClosed) {
+      if (!win.closed) {
         count++;
         if (!all && count == 2)
           break;

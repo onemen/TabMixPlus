@@ -238,9 +238,7 @@ export const AutoReload = {
 
   _update(aTab, aValue) {
     _setItem(aTab, "reload-data", aValue);
-    let win = aTab.ownerGlobal;
     TabmixSvc.setCustomTabValue(aTab, "reload-data", aValue);
-    win.TabmixSessionManager.updateTabProp(aTab);
   },
 
   /**

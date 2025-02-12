@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "リストから削除">
 <!ENTITY deletelist.accesskey "D">
 <!ENTITY settings.label "設定">
-<!ENTITY saveWindow.label "このウィンドウを保存">
-<!ENTITY saveAllWindows.label "すべてのウィンドウを保存">
 <!ENTITY sm.context.overwrite "既存のウィンドウに上書きして復元する">
 <!ENTITY sm.context.overwrite.key "O">
 <!ENTITY sm.context.restore.new "新しいウィンドウに復元する">

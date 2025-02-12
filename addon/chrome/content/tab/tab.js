@@ -168,11 +168,6 @@ var TabmixTabbar = {
     // for light weight themes
     Tabmix.setItem("main-window", "tabmix_lwt", isMultiRow || this.position == 1 || null);
 
-    for (const tab of tabBar.allTabs) {
-      // treeStyleTab code come after SessionManager... look in extensions.js
-      TabmixSessionManager.updateTabProp(tab);
-    }
-
     if (tabBar.mCloseButtons == 5)
       tabBar._updateCloseButtons(true);
 
@@ -1512,45 +1507,8 @@ window.gTMPprefObserver = {
           Tabmix.prefs.setBoolPref("undoClose", value > 0);
         break;
       }
-      /*
-      // ##### disable Session Manager #####
-      case "browser.warnOnQuit":
-      case "browser.sessionstore.resume_from_crash":
-        if (!Services.prefs.getBoolPref(prefName))
-          return;
-
-        var TMP_sessionManager_enabled = Tabmix.prefs.getBoolPref("sessions.manager") ||
-                         Tabmix.prefs.getBoolPref("sessions.crashRecovery");
-        if (TMP_sessionManager_enabled)
-          Services.prefs.setBoolPref(prefName, false);
-        break;
-      case "browser.startup.page":
-        if (Services.prefs.getIntPref(prefName) != 3)
-          return;
-        TMP_sessionManager_enabled = Tabmix.prefs.getBoolPref("sessions.manager") ||
-                         Tabmix.prefs.getBoolPref("sessions.crashRecovery");
-
-        if (TMP_sessionManager_enabled)
-          Services.prefs.setIntPref(prefName, 1);
-        break;
-      case "extensions.tabmix.sessions.manager":
-      case "extensions.tabmix.sessions.crashRecovery":
-        TMP_SessionStore.setService(2, false);
-        /* falls through * /
-      case "extensions.tabmix.sessions.save.closedtabs":
-      case "extensions.tabmix.sessions.save.history":
-      case "extensions.tabmix.sessionToolsMenu":
-      case "extensions.tabmix.closedWinToolsMenu":
-        TabmixSessionManager.updateSettings();
-        break;
-      */
       case "extensions.tabmix.closedWinToolsMenu":
         document.getElementById("tabmix-historyUndoWindowMenu").hidden = !Services.prefs.getBoolPref(prefName);
-        break;
-      case "extensions.tabmix.sessions.save.permissions":
-        for (const tab of gBrowser.tabs) {
-          TabmixSessionManager.updateTabProp(tab);
-        }
         break;
       case "extensions.tabmix.optionsToolMenu":
         document.getElementById("tabmix-menu").hidden = !Services.prefs.getBoolPref(prefName);
@@ -2028,17 +1986,6 @@ window.gTMPprefObserver = {
           --tabmix-multirow-margin: ${blockMargin.margin};
         }`
     );
-
-    /* TODO: - need to test
-
-    this was disable to fix issue 100
-    // maybe i can set padding-block to top row and padding bottom on bottom rows
-    Unable to click a tab top of the screen when there's more than one row of tabs #10
-    */
-    // #tabbrowser-tabs[tabmix-multibar] #tabbrowser-arrowscrollbox {
-    //   padding-block: 3px;
-    // }
-
     const customtitlebar = Tabmix.isVersion(1350) ? "customtitlebar" : "tabsintitlebar";
     this.insertRule(
       `#main-window[${customtitlebar}][tabmix-tabbaronbottom] .tabbrowser-tabbox,
@@ -2581,9 +2528,6 @@ window.gTMPprefObserver = {
       Tabmix.prefs.setBoolPref("tabbar.dblclick_changesize", val);
       Tabmix.prefs.clearUserPref("dblClickTabbar_changesize");
     }
-    // 2014-12-25
-    // don't sync sessions.onStart.sessionpath
-    Services.prefs.clearUserPref("services.sync.prefs.sync.extensions.tabmix.sessions.onStart.sessionpath");
     // 2015-07-15
     if (Tabmix.prefs.prefHasUserValue("loadFolderAndReplace")) {
       Tabmix.prefs.setBoolPref("loadBookmarksAndReplace", Tabmix.prefs.getBoolPref("loadFolderAndReplace"));
@@ -2828,7 +2772,6 @@ TabmixProgressListener = {
           tab.removeAttribute("dontremovevisited");
 
         if (!tab.hasAttribute("busy")) {
-          TabmixSessionManager.tabLoaded(tab);
           // we need to remove width from tabs with url label from here
           if (tab.hasAttribute("width")) {
             Tabmix.tablib.onTabTitleChanged(tab, aBrowser);

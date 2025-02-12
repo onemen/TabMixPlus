@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "Zobrazit prázdnou stránku">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "Použít vestavěnou funkci obnovy relací prohlížeče Firefox">
-<!ENTITY ss.enable.tooltip "Pokud zrušíte zaškrtnutí tohoto pole, povolíte správce relací rozšíření Tab Mix Plus.">
 <!ENTITY ss.advanced_setting "Rozšířené nastavení">
 <!ENTITY ss.advanced_setting.warning "Neměňte, pokud si nejste jisti, co děláte.">
 <!ENTITY ss.interval "Minimální časový interval mezi dvěma stavy uložení">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "Všechny stránky">
 <!ENTITY ss.privacy_level.unencrypted "Pouze nezabezpečené stránky">
 <!ENTITY ss.privacy_level.nosites "Žádné stránky">
-<!ENTITY sessionManger.enable "Povolit Správce relací">
 <!ENTITY crashRecovery.enable "Povolit obnovu po pádu">
-<!ENTITY sm.StartExit "Spouštění/Zavírání">
-<!ENTITY sm.restore "Obnovit">
-<!ENTITY sm.preserve "Zachovat">
 <!ENTITY sm.start "Při spouštění prohlížeče:">
-<!ENTITY sm.start.restore "Obnovit">
-<!ENTITY sm.start.ask "Před obnovením se zeptat">
-<!ENTITY sm.start.nothing "Neobnovovat">
-<!ENTITY sm.exit "Při zavírání prohlížeče:">
-<!ENTITY sm.exit.save "Uložit relaci">
-<!ENTITY sm.exit.ask "Před uložením se zeptat">
-<!ENTITY sm.exit.nothing "Neukládat">
-<!ENTITY sm.startup "Relace po spuštění:">
-<!ENTITY sm.lastsession "Poslední relace">
-<!ENTITY sm.previouslast "Předposlední relace">
-<!ENTITY sm.chooseifempty "Vybrat jinou, není-li k dispozici žádná relace">
-<!ENTITY sm.restore.options "Při obnovování relací:">
-<!ENTITY sm.restore.overwrite "Přepsat stávající okna">
-<!ENTITY sm.restore.overwriteTabs "A panely">
-<!ENTITY sm.restore.closedWinList "Uložit okna do seznamu zavřených oken">
-<!ENTITY sm.restore.merge "Sloučit více oken do jednoho">
-<!ENTITY sm.restore.bypassCache "Při obnově relace obejít vyrovnávací paměť">
-<!ENTITY sm.notrestore.label "Pokud nedojde k obnově po spuštění">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "Zachovat panely:">
 <!ENTITY sm.preserve.history "Historie">
 <!ENTITY sm.preserve.protect "Stav Chránit">
 <!ENTITY sm.preserve.locked "Stav Zamknout">
 <!ENTITY sm.preserve.permission "Oprávnění">
 <!ENTITY sm.preserve.scroll1 "Pozice posuvníku">
-<!ENTITY sm.restore.winOptions "Zachovat okna:">
-<!ENTITY sm.restore.selectedTab "Vybraný panel">
-<!ENTITY sm.restore.closedTabs "Seznam zavřených panelů">
 <!ENTITY incompatible.extensions "Některá z rozšíření nejsou kompatibilní s rozšířením Tab Mix Plus, tato rozšíření doporučujeme zakázat nebo odinstalovat.">
 <!ENTITY incompatible.button.label "Zobrazit seznam">

@@ -259,8 +259,6 @@
 <!ENTITY startupHomePage1.label "Show your home page">
 <!ENTITY startupBlankPage.label "빈 페이지 열기">
 <!ENTITY startupLastSession1.label "Show your windows and tabs from last time">
-<!ENTITY ss.enable.label "내장된 세션 복구 기능 쓰기">
-<!ENTITY ss.enable.tooltip "선택하지 않으면 Tab Mix Plus 세션 관리자를 씁니다.">
 <!ENTITY ss.advanced_setting "고급 설정">
 <!ENTITY ss.advanced_setting.warning "이 설정에 대해 정확히 알지 못하면 건드리지 마십시오.">
 <!ENTITY ss.interval "아래의 간격으로 브라우저 상태를 저장하기">
@@ -269,39 +267,13 @@
 <!ENTITY ss.privacy_level.allsites "모든 사이트에서">
 <!ENTITY ss.privacy_level.unencrypted "암호화되지 않은 사이트만">
 <!ENTITY ss.privacy_level.nosites "저장 안함">
-<!ENTITY sessionManger.enable "세션 관리자 쓰기">
 <!ENTITY crashRecovery.enable "충돌 후 복구 쓰기">
-<!ENTITY sm.StartExit "켤 때/끌 때">
-<!ENTITY sm.restore "복구">
-<!ENTITY sm.preserve "보존">
 <!ENTITY sm.start "브라우저를 시작할 때:">
-<!ENTITY sm.start.restore "세션 복구하기">
-<!ENTITY sm.start.ask "복구할지 물어 보기">
-<!ENTITY sm.start.nothing "세션 복구 안함">
-<!ENTITY sm.exit "브라우저를 닫을 때:">
-<!ENTITY sm.exit.save "세션 저장하기">
-<!ENTITY sm.exit.ask "저장할지 물어 보기">
-<!ENTITY sm.exit.nothing "저장 안함">
-<!ENTITY sm.startup "시작 세션:">
-<!ENTITY sm.lastsession "마지막 세션">
-<!ENTITY sm.previouslast "끝에서 두번째 세션">
-<!ENTITY sm.chooseifempty "비어 있으면 다른 것 선택하기">
-<!ENTITY sm.restore.options "세션을 복구할 때:">
-<!ENTITY sm.restore.overwrite "현재 창에 덮어 씌우기">
-<!ENTITY sm.restore.overwriteTabs "탭에 덮어 씌우기">
-<!ENTITY sm.restore.closedWinList "닫은 창 목록에 저장하기">
-<!ENTITY sm.restore.merge "하나의 창에 여러개의 창 연결하기">
-<!ENTITY sm.restore.bypassCache "Bypass cache when restoring">
-<!ENTITY sm.notrestore.label "시작할 때 복구 안하기">
-<!ENTITY sm.restorePinned1.label "Restore your pinned tabs from last time">
 <!ENTITY sm.preserve.options "탭 상태 중 보존할 것:">
 <!ENTITY sm.preserve.history "방문 기록">
 <!ENTITY sm.preserve.protect "보호된 상태">
 <!ENTITY sm.preserve.locked "닫힌 상태">
 <!ENTITY sm.preserve.permission "기능 사용 여부">
 <!ENTITY sm.preserve.scroll1 "스크롤 위치">
-<!ENTITY sm.restore.winOptions "창 상태 중 보존할 것:">
-<!ENTITY sm.restore.selectedTab "선택된 탭">
-<!ENTITY sm.restore.closedTabs "닫은 탭 목록">
 <!ENTITY incompatible.extensions "몇몇 확장 기능이 Tab Mix Plus와 충돌합니다. 해당 확장 기능을 지우거나 끄는 것을 추천합니다.">
 <!ENTITY incompatible.button.label "목록 보이기">

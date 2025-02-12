@@ -81,8 +81,6 @@
 <!ENTITY deletelist.label "Suprimeix de la llista">
 <!ENTITY deletelist.accesskey "S">
 <!ENTITY settings.label "Paràmetres">
-<!ENTITY saveWindow.label "Desa aquesta finestra">
-<!ENTITY saveAllWindows.label "Desa totes les finestres">
 <!ENTITY sm.context.overwrite "Restaura substituint les finestres existents">
 <!ENTITY sm.context.overwrite.key "S">
 <!ENTITY sm.context.restore.new "Restaura en noves finestres">

@@ -41,25 +41,10 @@ export const TabmixSvc = {
     }
   },
 
-  getSMString(aStringKey) {
-    try {
-      return this.SMstrings.GetStringFromName(aStringKey);
-    } catch (e) {
-      dump("*** Failed to get string " + aStringKey + " in bundle: session-manager.properties\n");
-      throw e;
-    }
-  },
-
   setLabel(property) {
-    var label, key;
-    if (property.startsWith("sm.")) {
-      label = this.getSMString(property + ".label");
-      key = this.getSMString(property + ".accesskey");
-    } else {
-      label = this.getString(property + ".label");
-      key = this.getString(property + ".accesskey");
-    }
-    var accessKeyIndex = label.toLowerCase().indexOf(key.toLowerCase());
+    let label = this.getString(property + ".label");
+    const key = this.getString(property + ".accesskey");
+    const accessKeyIndex = label.toLowerCase().indexOf(key.toLowerCase());
     if (accessKeyIndex > -1)
       label = label.substr(0, accessKeyIndex) + "&" + label.substr(accessKeyIndex);
     return label;
@@ -217,14 +202,6 @@ export const TabmixSvc = {
     lastSessionPath: null,
     status: "",
     crashed: false,
-    get sanitized() {
-      delete this.sanitized;
-      return (this.sanitized = TabmixSvc.prefBranch.prefHasUserValue("sessions.sanitized"));
-    },
-    set sanitized(val) {
-      delete this.sanitized;
-      this.sanitized = val;
-    },
     private: true,
     settingPreference: false,
     statesToRestore: {},
@@ -262,10 +239,6 @@ ChromeUtils.defineLazyGetter(TabmixSvc, "prefBranch", () => {
 // string bundle
 ChromeUtils.defineLazyGetter(TabmixSvc, "_strings", () => {
   let properties = "chrome://tabmixplus/locale/tabmix.properties";
-  return Services.strings.createBundle(properties);
-});
-ChromeUtils.defineLazyGetter(TabmixSvc, "SMstrings", () => {
-  let properties = "chrome://tabmixplus/locale/session-manager.properties";
   return Services.strings.createBundle(properties);
 });
 

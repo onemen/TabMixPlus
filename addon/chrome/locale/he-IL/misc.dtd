@@ -12,6 +12,3 @@
 <!ENTITY tabmix.label "Tab Mix Plus">
 <!ENTITY reloadtime.label1 "בחר זמן מהרשימה או הכנס זמן משלך">
 <!ENTITY specifyreload.label "זמן טעינה מוגדר">
-<!ENTITY sanitizer.entry "רשימת לשוניות שמורות">
-<!ENTITY sanitizer.entry.accesskey "ר">
-<!ENTITY sanitizer.entry.confirm "אתה בטוח שברצונך למחוק את כל ההפעלות השמורות שלך כולל גיבויים?">
