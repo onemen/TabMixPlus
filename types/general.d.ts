@@ -1000,6 +1000,7 @@ declare namespace MockedExports {
   // nsIFilePicker is missing some types from lib.gecko.xpcom.d.ts
   interface nsIFilePicker extends nsIFilePickerXpcom {}
   interface FilePicker extends Pick<nsIFilePicker, "appendFilters" | "defaultExtension" | "defaultString"> {
+    file: nsIFile;
     init: (browsingContext: BrowsingContext, title: string | null, mode: number) => void;
   }
 

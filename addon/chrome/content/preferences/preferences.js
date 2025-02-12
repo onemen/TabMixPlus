@@ -644,7 +644,14 @@ function showFilePicker(mode) {
     }
     fp.appendFilters(nsIFilePicker.filterText);
     fp.open(result => {
-      resolve(result != nsIFilePicker.returnCancel ? fp.file : null);
+      if (result === nsIFilePicker.returnOK) {
+        const fileName = fp.file.leafName;
+        if (!fileName.endsWith(".txt")) {
+          fp.file.leafName = fileName + ".txt";
+        }
+        return resolve(fp.file);
+      }
+      return resolve(null);
     });
   });
 }
