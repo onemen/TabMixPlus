@@ -44,12 +44,6 @@
 }
 
 @media (-moz-platform: macos) {
-  #TabsToolbar[tabmix-flowing="multibar"]:not(:-moz-lwtheme) {
-    background-repeat: repeat;
-    background-color: rgb(225, 225, 225);
-    background-image: linear-gradient(rgb(232, 232, 232), rgb(211, 211, 211));
-  }
-
   /* for mac - look in pinstripe/browser/browser.css */
   #tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-label-container > .tab-label:not([selected="true"]):-moz-lwtheme,
   #tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]):-moz-lwtheme {
