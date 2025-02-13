@@ -212,7 +212,7 @@ var TMP_ClosedTabs = {
     const closedTabCountFromClosedGroupInClosedWindows = SessionStore.getClosedWindowData()
         .map(winData => winData.closedGroups)
         .flat()
-        .map(group => group?.tabs.length)
+        .map(group => group?.tabs.length ?? 0)
         .reduce((a, b) => a + b, 0);
 
     return SessionStore.getClosedTabCount(window) - closedTabCountFromClosedGroupInClosedWindows;
@@ -650,11 +650,6 @@ var TMP_ClosedTabs = {
   },
 
   handleEvent(event) {
-    if (event.originalTarget._tabmix_middleClicked) {
-      delete event.originalTarget._tabmix_middleClicked;
-      return;
-    }
-
     switch (event.type) {
       case "click":
         this.checkForMiddleClick(event);
@@ -663,7 +658,11 @@ var TMP_ClosedTabs = {
         // stop the event before it trigger the listener from
         // RecentlyClosedTabsAndWindowsMenuUtils.createEntry
         event.stopPropagation();
-        this.restoreCommand(event);
+        if (event.originalTarget._tabmix_middleClicked) {
+          delete event.originalTarget._tabmix_middleClicked;
+        } else {
+          this.restoreCommand(event);
+        }
         break;
     }
   },
