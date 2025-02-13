@@ -388,14 +388,18 @@ Tabmix.tablib = {
       const doPosition = Tabmix.isVersion(1300) ? "absPositionHorizontalTabs" : "doPosition";
       const floorpVerticalTabbar = Tabmix.isVersion({fp: "128.0.0"}) ? " && !verticalTabbarEnabled()" : "";
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
+        'const doPosition =',
+        'let doPosition =',
+        {check: Tabmix.isVersion({fp: "128.0.0"})}
+      )._replace(
+        `let ${doPosition} =`,
+        `let multiRowsPinnedTabs = numPinned > 0 && TabmixTabbar.isMultiRow && Tabmix.tabsUtils.lastPinnedTabRowNumber > 1;
+         $& !multiRowsPinnedTabs &&`
+      )._replace(
         'this._updateVerticalPinnedTabs();',
         `$&
          absPositionHorizontalTabs = false;`,
         {check: Tabmix.isVersion(1300)}
-      )._replace(
-        'const doPosition =',
-        'let doPosition =',
-        {check: Tabmix.isVersion({fp: "128.0.0"})}
       )._replace(
         'let layoutData = this._pinnedTabsLayoutCache;',
         'if (typeof this.arrowScrollbox.resetFirstTabInRow == "function")\

@@ -355,7 +355,7 @@ var TMP_tabDNDObserver = {
     )._replace(
       /(?:const|let) tabRect = children[^;]*;/g,
       `$&
-      newMarginY = TMP_tabDNDObserver.getDropIndicatorMarginY(ind, draggedTab?.pinned ? draggedTab.getBoundingClientRect() : tabRect, rect);`,
+      newMarginY = TMP_tabDNDObserver.getDropIndicatorMarginY(ind, tabRect, rect);`,
     )._replace(
       // there is bug in firefox when swapping margin for RTL
       /\[minMargin, maxMargin\]\s=[^;]*;/,
@@ -497,7 +497,7 @@ var TMP_tabDNDObserver = {
       return true;
     }
     const draggedTab = aEvent.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
-    if (draggedTab?.pinned) {
+    if (draggedTab?.pinned && Tabmix.tabsUtils.lastPinnedTabRowNumber === 1) {
       return false;
     }
     return TabmixTabbar.hasMultiRows || !draggedTab;
@@ -806,7 +806,7 @@ var TMP_tabDNDObserver = {
 
   getNewIndex(event, draggedTab) {
     /** @param {Tab} tab @param {number} top */
-    let getTabRowNumber = (tab, top) => (tab.pinned ? 1 : Tabmix.tabsUtils.getTabRowNumber(tab, top));
+    let getTabRowNumber = (tab, top) => Tabmix.tabsUtils.getTabRowNumber(tab, top);
     // if mX is less then the first tab return 0
     // check if mY is below the tab.... if yes go to next row
     // in the row find the closest tab by mX,

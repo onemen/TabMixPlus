@@ -845,6 +845,16 @@ Tabmix.tabsUtils = {
     return this.getTabRowNumber(Tabmix.visibleTabs.last, this.topTabY);
   },
 
+  get lastPinnedTabRowNumber() {
+    const pinnedTabCount = gBrowser.pinnedTabCount;
+    return pinnedTabCount ?
+      this.getTabRowNumber(
+        gBrowser.visibleTabs[pinnedTabCount - 1],
+        this.topTabY
+      ) :
+      1;
+  },
+
   getTabRowNumber(aTab, aTop) {
     if (!aTab) {
       return 1;
@@ -902,6 +912,13 @@ Tabmix.tabsUtils = {
             if (this._lastTabBarWidth !== tabBarWidth) {
               this._widthCache = {minWidth: 0, maxWidth: 0};
               this._lastTabBarWidth = tabBarWidth;
+            }
+            if (
+              gBrowser.pinnedTabCount &&
+              TabmixTabbar.isMultiRow &&
+              Tabmix.tabsUtils.lastPinnedTabRowNumber > 1
+            ) {
+              gBrowser.tabContainer._positionPinnedTabs();
             }
             this.updateOverflowMaxWidth();
             this.updateVerticalTabStrip();

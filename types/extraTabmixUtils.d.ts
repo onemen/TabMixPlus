@@ -498,6 +498,7 @@ declare namespace TabsUtils {
   function showNewTabButtonOnSide(aCondition: boolean, aValue: string): void;
   const topTabY: number;
   const lastTabRowNumber: number;
+  const lastPinnedTabRowNumber: number;
   function getTabRowNumber(aTab: Tab | HTMLButtonElement | undefined, aTop: number): number;
   const canScrollTabsLeft: boolean;
   const canScrollTabsRight: boolean;
