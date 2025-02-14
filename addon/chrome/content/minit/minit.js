@@ -25,7 +25,7 @@ var TMP_tabDNDObserver = {
 
     const makeCode = (function() {
       let _make;
-      if (Tabmix.isVersion(1360)) {
+      if (Tabmix.isVersion(1370)) {
         // @ts-expect-error
         // eslint-disable-next-line no-unused-vars
         const isTab = element => element.tagName == "tab";
@@ -209,7 +209,7 @@ var TMP_tabDNDObserver = {
       Tabmix.isVersion(1330) ?
         `!tabmixHandleMove ? $& : ${Tabmix.isVersion(1340) ? "newIndex" : "index"} > -1 && (RTL_UI !== directionForward)` :
         `!tabmixHandleMove ? $& : newIndex > -1 && (RTL_UI !== ${Tabmix.isVersion(1300) ? "directionMove" : "ltrMove"})`,
-      {check: !Tabmix.isVersion(1360)}
+      {check: !Tabmix.isVersion(1370)}
     );
 
     if (Tabmix.isVersion(1300)) {
@@ -233,7 +233,7 @@ var TMP_tabDNDObserver = {
         '($1MovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth))',
       );
 
-      if (Tabmix.isVersion(1360)) {
+      if (Tabmix.isVersion(1370)) {
         _animateTabMove._replace(
           /leastMovingTabPos =[^;]*/,
           'leastMovingTabPos = firstMovingTabScreen + translate + (this._rtlMode ? (this.verticalMode ? tabSize : leftTabWidth) : 0)'
