@@ -957,15 +957,14 @@ Tabmix.allTabs = {
 
   insertSortButton() {
     const sortTabsButton = document.getElementById("allTabsMenu_sortTabsButton");
-    const tabsSeparator =
-      document.getElementById("allTabsMenu-groupsSeparator") ??
-      document.getElementById("allTabsMenu-tabsSeparator");
-    if (sortTabsButton.nextSibling !== tabsSeparator) {
-      const searchTabs = document.getElementById("allTabsMenu-searchTabs");
+    const searchTabs = document.getElementById("allTabsMenu-searchTabs");
+    const panelSubview = searchTabs.parentElement;
+    const firstSeparator = panelSubview?.querySelector("toolbarseparator");
+    if (firstSeparator && sortTabsButton.nextSibling !== firstSeparator) {
       if ([...searchTabs.classList].includes("subviewbutton-iconic")) {
         sortTabsButton.classList.add("subviewbutton-iconic");
       }
-      tabsSeparator.parentNode?.insertBefore(sortTabsButton, tabsSeparator);
+      panelSubview?.insertBefore(sortTabsButton, firstSeparator);
 
       const panel = gTabsPanel.allTabsPanel;
 
