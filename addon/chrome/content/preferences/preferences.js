@@ -1,6 +1,6 @@
 /* global PrefWindow */
 /* exported defaultSetting, donate, exportData, importData, openHelp, setDialog,
-            showPane, toggleInstantApply, toggleSyncPreference, closeAll */
+            showPane, toggleInstantApply, toggleSyncPreference, closeAll, RTL_UI */
 "use strict";
 
 /***** Preference Dialog Functions *****/
@@ -799,7 +799,6 @@ window.gIncompatiblePane = {
 
 };
 
-// eslint-disable-next-line no-unused-vars
 ChromeUtils.defineLazyGetter(this, "RTL_UI", () => {
   return Services.locale.isAppLocaleRTL;
 });
