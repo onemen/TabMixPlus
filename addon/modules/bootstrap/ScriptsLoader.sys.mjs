@@ -162,7 +162,11 @@ export const ScriptsLoader = {
       const _xulAttributes = ["protected", "_locked", "fixed-label", "label-uri", "reload-data", "visited"];
 
       _xulAttributes.forEach(attr => {
-        this.setItem(newTab, attr, oldTab.hasAttribute(attr) ? oldTab.getAttribute(attr) : null);
+        const value = oldTab.hasAttribute(attr) ? oldTab.getAttribute(attr) : null;
+        if (value) {
+          lazy.SessionStore.setCustomTabValue(newTab, attr, value);
+        }
+        this.setItem(newTab, attr, value);
       });
 
       this.promiseOverlayLoaded.then(() => {

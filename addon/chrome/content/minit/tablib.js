@@ -1738,6 +1738,7 @@ Tabmix.tablib = {
     gBrowser.renameTab = aTab => Tabmix.renameTab.editTitle(aTab);
   },
 
+  tabEpochs: new WeakMap(),
   getTabTitle: function TMP_getTabTitle(aTab, url) {
     if (aTab?._tabmixState?.noBookmart) {
       aTab._tabmixState = {};
@@ -1751,11 +1752,16 @@ Tabmix.tablib = {
         TMP_Places.currentTab = tab;
     }
 
+    const newEpoch = (this.tabEpochs.get(aTab) ?? -1) + 1;
+    this.tabEpochs.set(aTab, newEpoch);
     TMP_Places.asyncSetTabTitle(aTab, url).then(foundTitle => {
       if (!foundTitle && aTab.linkedBrowser) {
-        // call setTabTile again to get the default title
-        aTab._tabmixState = {noBookmart: true};
-        gBrowser.setTabTitle(aTab);
+        const currentEpoch = this.tabEpochs.get(aTab);
+        if (currentEpoch === newEpoch) {
+          // call setTabTile again to get the default title
+          aTab._tabmixState = {noBookmart: true};
+          gBrowser.setTabTitle(aTab);
+        }
       }
     });
 
