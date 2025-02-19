@@ -212,7 +212,10 @@ var TMP_tabDNDObserver = {
       {check: !Tabmix.isVersion(1370)}
     );
 
-    if (Tabmix.isVersion(1300)) {
+    if (Tabmix.isVersion(1370)) {
+      gBrowser.tabContainer._animateTabMove = makeCode(_animateTabMove.value);
+    } else if (Tabmix.isVersion(1300)) {
+      // Firefox 133-136
       // NOTE: firstMovingTabScreen and lastMovingTabScreen was swapped in version 1330
       const referenceTabString = Tabmix.isVersion(1330) ?
         'referenceTabEdge = (directionForward ? lastMovingTabScreen + rightTabWidth : firstMovingTabScreen) + translate;' :
@@ -230,28 +233,10 @@ var TMP_tabDNDObserver = {
          }`
       )._replace(
         /\((.*)MovingTabScreen \+ tabSize\)/,
-        '($1MovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth))',
+        '($1MovingTabScreen + (this.verticalMode ? tabSize : rightTabWidth))'
       );
 
-      if (Tabmix.isVersion(1370)) {
-        _animateTabMove._replace(
-          /leastMovingTabPos =[^;]*/,
-          'leastMovingTabPos = firstMovingTabScreen + translate + (this._rtlMode ? (this.verticalMode ? tabSize : leftTabWidth) : 0)'
-        )._replace(
-          /mostMovingTabPos =[^;]*/,
-          'mostMovingTabPos = lastMovingTabScreen + translate + (this._rtlMode ? 0 : (this.verticalMode ? tabSize : rightTabWidth))'
-        )._replace(
-          'tabSize,',
-          'this.verticalMode ? tabSize : (directionForward ? rightTabWidth : leftTabWidth),'
-        )._replace(
-          'overlapSize = p2 + s2 - p1;',
-          `if (p1 + s1 > p2 + s2) {
-             $&
-           } else {
-             overlapSize = s1;
-           }`
-        );
-      } else if (Tabmix.isVersion(1330)) {
+      if (Tabmix.isVersion(1330)) {
         // Firefox 133+
         _animateTabMove._replace(
           'lastMovingTabScreen + tabSize *',
