@@ -149,6 +149,9 @@ Tabmix.multiRow = {
         ).toCode();
 
         Tabmix.changeCode(this, "scrollbox.scrollByIndex")._replace(
+          'rect[end] + 1',
+          'this.isMultiRow ? rect[start] + this.singleRowHeight + 1 : $&'
+        )._replace(
           /this.ensureElementIsVisible\(.*\);/,
           'this._ensureElementIsVisibleByIndex(targetElement, aInstant, index);'
         ).toCode();
