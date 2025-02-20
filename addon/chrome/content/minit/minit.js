@@ -11,7 +11,6 @@ var TMP_tabDNDObserver = {
   DRAG_LINK: 0,
   DRAG_TAB_TO_NEW_WINDOW: 1,
   DRAG_TAB_IN_SAME_WINDOW: 2,
-  TAB_DROP_TYPE: "application/x-moz-tabbrowser-tab",
   paddingLeft: 0,
   _multirowMargin: 0,
   _moveTabOnDragging: true,
@@ -114,19 +113,6 @@ var TMP_tabDNDObserver = {
         "isAnimatingMoveTogetherSelectedTabs",
         "handleEvent"
       );
-
-      gBrowser.tabContainer._moveTogetherSelectedTabs = Tabmix.getPrivateMethod(
-        "tabbrowser-tabs",
-        "moveTogetherSelectedTabs",
-        "_finishMoveTogetherSelectedTabs"
-      );
-      // prevent grouping selected tabs for multi row tabbar
-      Tabmix.originalFunctions._moveTogetherSelectedTabs = tabBar._moveTogetherSelectedTabs;
-      /** @type {typeof tabBar._moveTogetherSelectedTabs} */
-      tabBar._moveTogetherSelectedTabs = function(...args) {
-        if (TabmixTabbar.visibleRows > 1) return;
-        Tabmix.originalFunctions._moveTogetherSelectedTabs.apply(this, args);
-      };
     } else {
       // prevent grouping selected tabs for multi row tabbar
       Tabmix.originalFunctions._groupSelectedTabs = tabBar._groupSelectedTabs;
@@ -473,7 +459,7 @@ var TMP_tabDNDObserver = {
     gBrowser.tabContainer.on_dragleave = this.on_dragleave.bind(this);
   },
 
-  useTabmixDnD(aEvent) {
+  useTabmixDnD(event, tab) {
     const tabBar = gBrowser.tabContainer;
     if (tabBar.getAttribute("orient") !== "horizontal") {
       return false;
@@ -481,7 +467,8 @@ var TMP_tabDNDObserver = {
     if (!this._moveTabOnDragging) {
       return true;
     }
-    const draggedTab = aEvent.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
+    // don't use mozGetDataAt before gBrowser.tabContainer.startTabDrag
+    const draggedTab = tab ?? event.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
     if (draggedTab?.pinned && Tabmix.tabsUtils.lastPinnedTabRowNumber === 1) {
       return false;
     }
@@ -505,8 +492,24 @@ var TMP_tabDNDObserver = {
       return;
     }
 
+    // Prevent animation when grouping selected tabs for multi-row tab bar
+    const currentReduceMotion = gReduceMotionSetting;
+    const selectedTabs = gBrowser.selectedTabs;
+    if (selectedTabs.length > 1) {
+      if (TMP_tabDNDObserver.useTabmixDnD(event, tab)) {
+        gReduceMotionSetting = true;
+      } else if (tab.pinned && TabmixTabbar.hasMultiRows) {
+        // reduce motion if some of the selected tabs are not in the first row
+        const topY = Tabmix.tabsUtils.topTabY;
+        gReduceMotionSetting = selectedTabs.some(
+          t => !t.pinned && Tabmix.tabsUtils.getTabRowNumber(t, topY) > 1
+        );
+      }
+    }
+
     TabmixTabbar.removeShowButtonAttr();
     Tabmix.originalFunctions.on_dragstart.apply(this, [event]);
+    gReduceMotionSetting = currentReduceMotion;
 
     if (TabmixTabbar.visibleRows === 1 && TabmixTabbar.position === 0) {
       return;
@@ -757,10 +760,33 @@ var TMP_tabDNDObserver = {
     const {dragType, tab} = this.getDragType(sourceNode);
     const oldIndex = tab ? tab._tPos : -1;
     let newIndex = this._getDNDIndex(event, tab);
-    const mouseIndex = newIndex;
+    let mouseIndex = newIndex;
 
     if (newIndex < gBrowser.tabs.length) {
-      newIndex += this.getLeft_Right(event, newIndex, oldIndex, dragType);
+      newIndex += this.getLeft_Right(event, newIndex);
+      if (dragType == this.DRAG_TAB_IN_SAME_WINDOW &&
+        newIndex !== oldIndex && newIndex - oldIndex !== 1
+      ) {
+        const selectedTabs = gBrowser.selectedTabs;
+        if (selectedTabs.length > 1) {
+          const firstSelected = selectedTabs[0]._tPos;
+          const lastSelected = selectedTabs.at(-1)?._tPos ?? -1;
+          if (newIndex >= firstSelected && newIndex <= lastSelected + 1) {
+            newIndex =
+               newIndex > oldIndex ?
+                 Math.min(
+                   lastSelected + 2,
+                   tab?.pinned ? gBrowser.pinnedTabCount : Infinity,
+                   gBrowser.tabs.length - 1
+                 ) :
+                 Math.max(firstSelected - 1, tab?.pinned ? 0 : gBrowser.pinnedTabCount);
+            if (newIndex === firstSelected || newIndex === lastSelected + 1) {
+              newIndex = oldIndex;
+            }
+            mouseIndex = newIndex > oldIndex ? newIndex - 1 : newIndex;
+          }
+        }
+      }
     } else {
       newIndex =
         dragType != this.DRAG_TAB_IN_SAME_WINDOW &&
@@ -797,7 +823,9 @@ var TMP_tabDNDObserver = {
     // in the row find the closest tab by mX,
     // if no tab is match return gBrowser.tabs.length
     var mX = event.screenX, mY = event.screenY;
-    var tabs = Tabmix.visibleTabs.tabs;
+    var tabs = draggedTab?.pinned ?
+      Tabmix.visibleTabs.tabs.filter(tab => tab.pinned) :
+      Tabmix.visibleTabs.tabs;
     var numTabs = tabs.length;
     if (!TabmixTabbar.hasMultiRows) {
       const target = event.target.closest("tab.tabbrowser-tab");
@@ -845,23 +873,13 @@ var TMP_tabDNDObserver = {
     return numTabs;
   },
 
-  getLeft_Right(event, newIndex, oldIndex, dragType) {
+  getLeft_Right(event, newIndex) {
     var mX = event.screenX;
     /** @type {Tab} */ // @ts-expect-error - gBrowser.tabs[newIndex] is never undefined
     var tab = gBrowser.tabs[newIndex];
     const {width} = tab.getBoundingClientRect();
     const [_left, _right] = RTL_UI ? [1, 0] : [0, 1];
-    let left_right = mX < tab.screenX + width / 2 ? _left : _right;
-    const isCopy = event.dataTransfer.dropEffect == "copy";
-    if (
-      !isCopy &&
-      dragType == this.DRAG_TAB_IN_SAME_WINDOW &&
-      newIndex == oldIndex + 1
-    ) {
-      left_right = 1;
-    }
-
-    return left_right;
+    return mX < tab.screenX + width / 2 ? _left : _right;
   },
 
   getDragType(sourceNode) {
@@ -967,8 +985,8 @@ var TMP_tabDNDObserver = {
 
   getSourceNode: function TMP_getSourceNode(aDataTransfer) {
     var types = aDataTransfer.mozTypesAt(0);
-    if (types[0] == this.TAB_DROP_TYPE)
-      return aDataTransfer.mozGetDataAt(this.TAB_DROP_TYPE, 0);
+    if (types[0] == TAB_DROP_TYPE)
+      return aDataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
     return null;
   },
 }; // TMP_tabDNDObserver end

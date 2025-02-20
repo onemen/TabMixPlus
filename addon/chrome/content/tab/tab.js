@@ -864,12 +864,15 @@ Tabmix.tabsUtils = {
       return 1;
     }
     // some theme add marginTop/marginBottom to tabs
-    var cStyle = window.getComputedStyle(aTab) ?? {marginTop: "0px", marginBottom: "0px"};
+    var cStyle = window.getComputedStyle(aTab) ?? {marginTop: "0px", marginBottom: "0px", position: ""};
     var marginTop = parseInt(cStyle.marginTop) || 0;
     var marginBottom = parseInt(cStyle.marginBottom) || 0;
     height += marginTop + marginBottom;
 
     var tabBottom = top - marginTop + height;
+    if ("pinned" in aTab && cStyle.position === "absolute") {
+      aTop += this.tabBar.arrowScrollbox.scrollPosition;
+    }
     return Math.round((tabBottom - aTop) / height);
   },
 

@@ -73,6 +73,7 @@ interface CSSStyleDeclaration {
   paddingLeft: string;
   paddingRight: string;
   paddingTop: string;
+  position: string;
   width: string;
   transform: string;
   visibility: string;
@@ -949,6 +950,7 @@ declare var ctrlTab: {
 declare var gMultiProcessBrowser: boolean;
 declare var gNavToolbox: HTMLElement;
 declare var gReduceMotion: boolean;
+declare var gReduceMotionSetting: boolean;
 declare var HomePage: {
   get: (aWindow?: Window) => string;
 };

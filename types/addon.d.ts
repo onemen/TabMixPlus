@@ -212,11 +212,10 @@ declare namespace TabDNDObserverNS {
   let DRAG_LINK: number;
   let DRAG_TAB_TO_NEW_WINDOW: number;
   let DRAG_TAB_IN_SAME_WINDOW: number;
-  let TAB_DROP_TYPE: string;
   let paddingLeft: number;
   let _multirowMargin: number;
   function init(): void;
-  function useTabmixDnD(event: DragEvent): boolean;
+  function useTabmixDnD(event: DragEvent, tab?: Tab): boolean;
   function handleEvent(event: DragEvent): void;
   function on_dragstart(this: MockedGeckoTypes.TabContainer, event: DragEvent): void;
   function handleDragover(event: DragEvent): boolean;
@@ -228,7 +227,7 @@ declare namespace TabDNDObserverNS {
   function eventParams(event: DragEvent): DragEventParams;
   function _getDNDIndex(aEvent: DragEvent, tab: Tab | null): number;
   function getNewIndex(event: DragEvent, tab: Tab | null): number;
-  function getLeft_Right(event: DragEvent, newIndex: number, oldIndex: number, dragType: number): number;
+  function getLeft_Right(event: DragEvent, newIndex: number): number;
   function getDragType(sourceNode: HTMLLinkElement | Tab | null): {dragType: number; tab: Tab | null};
   function getDropIndicatorMarginX(draggedTab: Tab, newIndex: number, addWidth: boolean, tabRect: DOMRect, rect: DOMRect, defaultMargin: number): number;
   function getDropIndicatorMarginY(ind: HTMLElement, tabRect: DOMRect, rect: DOMRect): number;
