@@ -492,25 +492,11 @@ Tabmix.multiRow = {
         this.addEventListener("dragover", event => {
           if (TMP_tabDNDObserver.useTabmixDnD(event)) {
             TMP_tabDNDObserver._dragoverScrollButton(event);
-            const ind = gBrowser.tabContainer._tabDropIndicator;
-            let newMarginX, newMarginY;
-            const draggedTab = event.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
-            const rect = gBrowser.tabContainer.arrowScrollbox.getBoundingClientRect();
-            if (draggedTab?.pinned) {
-              const tabRect = gBrowser.tabs[gBrowser.pinnedTabCount - 1]?.getBoundingClientRect() ?? {right: 0, left: 0};
-              newMarginY = TMP_tabDNDObserver.getDropIndicatorMarginY(ind, draggedTab.getBoundingClientRect(), rect);
-              newMarginX = RTL_UI ? rect.right - tabRect.left : tabRect.right - rect.left;
-            } else {
-              newMarginX = event.originalTarget === this._scrollButtonDown ? rect.right - rect.left : 0;
-              newMarginY = event.originalTarget === this._scrollButtonUp ?
-                (TabmixTabbar.visibleRows - 1) * gBrowser.tabContainer.arrowScrollbox.singleRowHeight * -1 : 0;
+            const tooltip = document.getElementById("tabmix-tooltip");
+            if (tooltip.state == "closed") {
+              tooltip.label = "Drag to tab strip to drop";
+              tooltip.openPopup(document.getElementById("tabmix-scrollbox"), "after_start", 0, 0, false, false);
             }
-            ind.hidden = false;
-            newMarginX += ind.clientWidth / 2;
-            if (RTL_UI) {
-              newMarginX *= -1;
-            }
-            ind.style.transform = "translate(" + Math.round(newMarginX) + "px," + Math.round(newMarginY) + "px)";
           }
         });
 
@@ -518,7 +504,7 @@ Tabmix.multiRow = {
           event.preventDefault();
           event.stopPropagation();
           this.finishScroll(event);
-          gBrowser.tabContainer.on_drop(event);
+          document.getElementById("tabmix-tooltip")?.hidePopup();
         });
 
         this.addEventListener("dragexit", event => {
