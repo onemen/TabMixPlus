@@ -11,6 +11,7 @@ var TMP_tabDNDObserver = {
   DRAG_LINK: 0,
   DRAG_TAB_TO_NEW_WINDOW: 1,
   DRAG_TAB_IN_SAME_WINDOW: 2,
+  draggingTimeout: 0,
   paddingLeft: 0,
   _multirowMargin: 0,
   _moveTabOnDragging: true,
@@ -518,10 +519,6 @@ var TMP_tabDNDObserver = {
       return;
     }
 
-    if (TabmixTabbar.visibleRows > 1 && Tabmix.prefs.getBoolPref("tabScrollOnTopBottomDrag")) {
-      gBrowser.tabContainer.arrowScrollbox.setAttribute("tabmix_scrolling", "true");
-    }
-
     const scale = window.devicePixelRatio;
     let dragImageOffsetX = -16;
     let dragImageOffsetY = TabmixTabbar.visibleRows == 1 ? -16 : -30;
@@ -548,11 +545,39 @@ var TMP_tabDNDObserver = {
 
   // we call this function from gBrowser.tabContainer.on_dragover
   handleDragover(event) {
+    const tabBar = gBrowser.tabContainer;
+    const arrowScrollbox = tabBar.arrowScrollbox;
+    if (
+      TabmixTabbar.visibleRows > 1 &&
+      !arrowScrollbox.hasAttribute("tabmix-dragging")
+    ) {
+      const attribute = Tabmix.prefs.getBoolPref("tabScrollOnTopBottomDrag") ?
+        "enable-scroll-buttons" :
+        "true";
+      arrowScrollbox.setAttribute("tabmix-dragging", attribute);
+      const {top, bottom, left, right} = arrowScrollbox.scrollClientRect;
+      const scrollHeight = arrowScrollbox.singleRowHeight / 2;
+      arrowScrollbox._lockScroll =
+        event.screenY - top < scrollHeight || bottom - event.screenY < scrollHeight;
+      clearTimeout(this.draggingTimeout);
+      this.draggingTimeout = setTimeout(() => {
+        const panel = document.getElementById("customizationui-widget-panel");
+        if (panel) {
+          const panelRect = panel.getBoundingClientRect();
+          const overlap = {
+            x: Math.max(0, Math.min(right, panelRect.right) - Math.max(left, panelRect.left)),
+            y: Math.max(0, Math.min(bottom, panelRect.bottom) - Math.max(top, panelRect.top))
+          };
+          if (overlap.x > 0 && overlap.y > 0) {
+            panel.hidePopup();
+          }
+        }
+      }, tabBar._dragOverDelay);
+    }
     if (this._dragoverScrollButton(event)) {
       return true;
     }
 
-    const tabBar = gBrowser.tabContainer;
     const effects = tabBar.getDropEffectForTabDrag(event);
     const dt = event.dataTransfer;
     const isCopy = dt.dropEffect == "copy";
@@ -622,7 +647,8 @@ var TMP_tabDNDObserver = {
   },
 
   on_dragend(event) {
-    gBrowser.tabContainer.arrowScrollbox.removeAttribute("tabmix_scrolling");
+    gBrowser.tabContainer.arrowScrollbox.removeAttribute("tabmix-dragging");
+    clearTimeout(this.draggingTimeout);
     if (TMP_tabDNDObserver.finishButtonScroll(event)) {
       return;
     }
@@ -711,10 +737,14 @@ var TMP_tabDNDObserver = {
 
     switch (targetAnonid) {
       case "scrollbutton-up":
+        scrollDirection = tabStrip._lockScroll ? 0 : -1;
+        break;
       case "scrollbutton-up-right":
         scrollDirection = -1;
         break;
       case "scrollbutton-down":
+        scrollDirection = tabStrip._lockScroll ? 0 : 1;
+        break;
       case "scrollbutton-down-right":
         scrollDirection = 1;
         break;
@@ -756,6 +786,7 @@ var TMP_tabDNDObserver = {
     if (TabmixTabbar.hasMultiRows && buttonId?.startsWith("scrollbutton")) {
       event.stopPropagation();
       event.preventDefault();
+      gBrowser.tabContainer.arrowScrollbox._lockScroll = false;
       gBrowser.tabContainer.arrowScrollbox._finishScroll(event);
       return true;
     }

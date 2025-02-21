@@ -209,7 +209,7 @@
   transition: opacity 150ms ease;
 }
 
-#tabbrowser-arrowscrollbox[tabmix_scrolling] {
+#tabbrowser-arrowscrollbox[tabmix-dragging="enable-scroll-buttons"] {
   position: relative;
 
   &:not([scrolledtostart])::part(scrollbutton-up),

@@ -212,6 +212,7 @@ declare namespace TabDNDObserverNS {
   let DRAG_LINK: number;
   let DRAG_TAB_TO_NEW_WINDOW: number;
   let DRAG_TAB_IN_SAME_WINDOW: number;
+  let draggingTimeout: number;
   let paddingLeft: number;
   let _multirowMargin: number;
   function init(): void;
@@ -269,6 +270,7 @@ declare namespace TabmixArrowScrollboxNS {
     _pauseScroll(): void;
     _startScroll(index: number): void;
     _stopScroll(): void;
+    _lockScroll: boolean;
 
     _ensureElementIsVisibleAnimationFrame: number;
     _scrollButtonDownLeft: HTMLButtonElement;
