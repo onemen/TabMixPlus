@@ -319,6 +319,33 @@ Tabmix.multiRow = {
         return Math.round((amountToScroll + position) / rowHeight) * rowHeight - position;
       }
 
+      /** @type {ASB["_finishScroll"]} */
+      _finishScroll(event) {
+        if (!this.isMultiRow) {
+          return;
+        }
+        this.parentNode._tabDropIndicator.hidden = true;
+        const target = event.originalTarget;
+        const buttonId = target.getAttribute("anonid") ?? target.id;
+        /** @type {Record<string, number>} */
+        const idToIndex = {
+          "scrollbutton-up": -1,
+          "scrollbutton-up-right": -1,
+          "scrollbutton-down": 1,
+          "scrollbutton-down-right": 1,
+        };
+        const index = idToIndex[buttonId] || 0;
+        if (index) {
+          const distanceToRow = this._distanceToRow(0);
+          let amountToScroll;
+          if (distanceToRow * index < 0)
+            amountToScroll = this.singleRowHeight * index + distanceToRow;
+          else
+            amountToScroll = distanceToRow;
+          this.scrollByPixels(amountToScroll);
+        }
+      }
+
       /** @type {ASB["_enterVerticalMode"]} */
       _enterVerticalMode() {
         // when widthFitTitle is false we enter vertical mode only after we are in overflow
@@ -503,18 +530,18 @@ Tabmix.multiRow = {
           }
         });
 
+        const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
         this.addEventListener("drop", event => {
           event.preventDefault();
           event.stopPropagation();
-          this.finishScroll(event);
+          arrowScrollbox._finishScroll(event);
           document.getElementById("tabmix-tooltip")?.hidePopup();
         });
 
-        this.addEventListener("dragexit", event => {
-          this.finishScroll(event);
+        this.addEventListener("dragleave", event => {
+          arrowScrollbox._finishScroll(event);
         });
 
-        const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
         const hasAttribute = (/** @type {string} */ attr) => arrowScrollbox.hasAttribute(attr) || null;
         Tabmix.setItem(this, "scrolledtoend", hasAttribute("scrolledtoend"));
         Tabmix.setItem(this, "scrolledtostart", hasAttribute("scrolledtostart"));
@@ -595,30 +622,8 @@ Tabmix.multiRow = {
         tabstrip._scrollButtonUpRight = this._scrollButtonUp;
         tabstrip._scrollButtonUp = tabstrip.shadowRoot.getElementById("scrollbutton-up");
         tabstrip._scrollButtonDown = tabstrip.shadowRoot.getElementById("scrollbutton-down");
-        this.initializeAttributeInheritance();
-      }
 
-      /** @type {RSB["finishScroll"]} */
-      finishScroll(aEvent) {
-        if (!TMP_tabDNDObserver.useTabmixDnD(aEvent))
-          return;
-        gBrowser.tabContainer._tabDropIndicator.hidden = true;
-        let index;
-        const target = aEvent.originalTarget.getAttribute("anonid");
-        if (target === "scrollbutton-up-right")
-          index = -1;
-        else if (target === "scrollbutton-down-right")
-          index = 1;
-        if (index) {
-          const tabstrip = gBrowser.tabContainer.arrowScrollbox;
-          const distanceToRow = tabstrip._distanceToRow(0);
-          let amountToScroll;
-          if (distanceToRow * index < 0)
-            amountToScroll = tabstrip.singleRowHeight * index + distanceToRow;
-          else
-            amountToScroll = distanceToRow;
-          tabstrip.scrollByPixels(amountToScroll);
-        }
+        this.initializeAttributeInheritance();
       }
     }
     if (!customElements.get("tabmixscrollbox")) {

@@ -357,7 +357,10 @@ var TMP_tabDNDObserver = {
 
     const dropCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_drop")._replace(
       'var dt = event.dataTransfer;',
-      `const useTabmixDnD = TMP_tabDNDObserver.useTabmixDnD(event);
+      `if (TMP_tabDNDObserver.finishButtonScroll(event))  {
+        return;
+      }
+      const useTabmixDnD = TMP_tabDNDObserver.useTabmixDnD(event);
        if (useTabmixDnD) {
          TMP_tabDNDObserver.hideDragoverMessage();
        }
@@ -515,6 +518,10 @@ var TMP_tabDNDObserver = {
       return;
     }
 
+    if (TabmixTabbar.visibleRows > 1 && Tabmix.prefs.getBoolPref("tabScrollOnTopBottomDrag")) {
+      gBrowser.tabContainer.arrowScrollbox.setAttribute("tabmix_scrolling", "true");
+    }
+
     const scale = window.devicePixelRatio;
     let dragImageOffsetX = -16;
     let dragImageOffsetY = TabmixTabbar.visibleRows == 1 ? -16 : -30;
@@ -615,6 +622,10 @@ var TMP_tabDNDObserver = {
   },
 
   on_dragend(event) {
+    gBrowser.tabContainer.arrowScrollbox.removeAttribute("tabmix_scrolling");
+    if (TMP_tabDNDObserver.finishButtonScroll(event)) {
+      return;
+    }
     this.clearDragmark();
 
     // don't allow to open new window in single window mode
@@ -657,6 +668,9 @@ var TMP_tabDNDObserver = {
   },
 
   on_dragleave(event) {
+    if (TMP_tabDNDObserver.finishButtonScroll(event)) {
+      return;
+    }
     this._dragTime = 0;
     this.hideDragoverMessage();
     Tabmix.originalFunctions.on_dragleave.apply(gBrowser.tabContainer, [event]);
@@ -707,19 +721,23 @@ var TMP_tabDNDObserver = {
     }
     if (scrollDirection) {
       let scrollIncrement = TabmixTabbar.isMultiRow ?
-        Math.round(tabStrip.singleRowHeight / 8) : tabStrip.scrollIncrement;
+        Math.round(tabStrip.singleRowHeight / 10) : tabStrip.scrollIncrement;
       tabStrip.scrollByPixels((ltr ? scrollDirection : -scrollDirection) * scrollIncrement, true);
       event.preventDefault();
       event.stopPropagation();
 
       if (["scrollbutton-up", "scrollbutton-down"].includes(targetAnonid ?? "")) {
+        const ind = gBrowser.tabContainer._tabDropIndicator;
+        if (TabmixTabbar.hasMultiRows && Tabmix.prefs.getBoolPref("tabScrollOnTopBottomDrag")) {
+          ind.hidden = true;
+          return true;
+        }
         let arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
         let rect = arrowScrollbox.getBoundingClientRect();
         let scrollRect = arrowScrollbox.scrollClientRect;
         let minMargin = scrollRect.left - rect.left;
         let maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
         let newMargin = scrollDirection > 0 ? maxMargin : minMargin;
-        const ind = gBrowser.tabContainer._tabDropIndicator;
         ind.hidden = false;
         newMargin += ind.clientWidth / 2;
         if (RTL_UI) {
@@ -728,6 +746,17 @@ var TMP_tabDNDObserver = {
         ind.style.transform = "translate(" + Math.round(newMargin) + "px, 0px)";
       }
 
+      return true;
+    }
+    return false;
+  },
+
+  finishButtonScroll(event) {
+    const buttonId = event.originalTarget.id;
+    if (TabmixTabbar.hasMultiRows && buttonId?.startsWith("scrollbutton")) {
+      event.stopPropagation();
+      event.preventDefault();
+      gBrowser.tabContainer.arrowScrollbox._finishScroll(event);
       return true;
     }
     return false;

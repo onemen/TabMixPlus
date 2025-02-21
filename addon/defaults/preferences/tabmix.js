@@ -68,6 +68,7 @@ pref("extensions.tabmix.keepLastTab", false);
 pref("extensions.tabmix.tabBarMode", 1);
 pref("extensions.tabmix.tabBarMaxRow", 3);
 pref("extensions.tabmix.pinnedTabScroll", false);
+pref("extensions.tabmix.tabScrollOnTopBottomDrag", false);
 pref("extensions.tabmix.theme_background", 2);
 pref("extensions.tabmix.tabBarSpace", false);
 pref("extensions.tabmix.hideTabBarButton", true);
