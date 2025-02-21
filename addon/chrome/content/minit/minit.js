@@ -26,12 +26,16 @@ var TMP_tabDNDObserver = {
       let _make;
       if (Tabmix.isVersion(1370)) {
         // @ts-expect-error
-        // eslint-disable-next-line no-unused-vars
-        const isTab = element => element.tagName == "tab";
+        // eslint-disable-next-line
+        const isTab = element => !!(element?.tagName == "tab");
 
         // @ts-expect-error
-        // eslint-disable-next-line no-unused-vars
-        const isTabGroupLabel = element => element.classList?.contains("tab-group-label") ?? false;
+        // eslint-disable-next-line
+        const isTabGroup = element => !!(element?.tagName == "tab-group");
+
+        // @ts-expect-error
+        // eslint-disable-next-line
+        const isTabGroupLabel = element => !!element?.classList?.contains("tab-group-label");
 
         _make = eval(Tabmix._localMakeCode);
       } else if (Tabmix.isVersion(1340)) {
