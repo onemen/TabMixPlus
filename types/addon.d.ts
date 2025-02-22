@@ -223,7 +223,7 @@ declare namespace TabDNDObserverNS {
   function on_dragend(event: DragEvent): void;
   function on_dragleave(event: DragEvent): void;
   function _dragoverScrollButton(event: DragEvent): boolean;
-  function finishButtonScroll(event: DragEvent): boolean;
+  function postDraggingCleanup(event: DragEvent, skipCleanup?: boolean): boolean;
   function hideDragoverMessage(): void;
   function _getDropIndex(event: DragEvent, options?: {dragover?: boolean; children?: Tab[]}): DragEventParams | number;
   function eventParams(event: DragEvent): DragEventParams;
