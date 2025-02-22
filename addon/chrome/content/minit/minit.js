@@ -11,6 +11,7 @@ var TMP_tabDNDObserver = {
   DRAG_LINK: 0,
   DRAG_TAB_TO_NEW_WINDOW: 1,
   DRAG_TAB_IN_SAME_WINDOW: 2,
+  draggingTimeout: 0,
   paddingLeft: 0,
   _multirowMargin: 0,
   _moveTabOnDragging: true,
@@ -361,7 +362,12 @@ var TMP_tabDNDObserver = {
 
     const dropCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_drop")._replace(
       'var dt = event.dataTransfer;',
-      `const useTabmixDnD = TMP_tabDNDObserver.useTabmixDnD(event);
+      `if (TMP_tabDNDObserver.postDraggingCleanup(event))  {
+        event.stopPropagation();
+        event.preventDefault();
+        return;
+      }
+      const useTabmixDnD = TMP_tabDNDObserver.useTabmixDnD(event);
        if (useTabmixDnD) {
          TMP_tabDNDObserver.hideDragoverMessage();
        }
@@ -545,11 +551,38 @@ var TMP_tabDNDObserver = {
 
   // we call this function from gBrowser.tabContainer.on_dragover
   handleDragover(event) {
+    const tabBar = gBrowser.tabContainer;
+    const arrowScrollbox = tabBar.arrowScrollbox;
+    if (
+      TabmixTabbar.visibleRows > 1 &&
+      !arrowScrollbox.hasAttribute("tabmix-dragging")
+    ) {
+      const attribute = Tabmix.prefs.getBoolPref("tabScrollOnTopBottomDrag") ?
+        "enable-scroll-buttons" :
+        "true";
+      arrowScrollbox.setAttribute("tabmix-dragging", attribute);
+      arrowScrollbox._lockScroll = true;
+      clearTimeout(this.draggingTimeout);
+      this.draggingTimeout = setTimeout(() => {
+        arrowScrollbox._lockScroll = false;
+        const panel = document.getElementById("customizationui-widget-panel");
+        if (panel) {
+          const tabsRect = arrowScrollbox.scrollClientRect;
+          const panelRect = panel.getBoundingClientRect();
+          const overlap = {
+            x: Math.max(0, Math.min(tabsRect.right, panelRect.right) - Math.max(tabsRect.left, panelRect.left)),
+            y: Math.max(0, Math.min(tabsRect.bottom, panelRect.bottom) - Math.max(tabsRect.top, panelRect.top))
+          };
+          if (overlap.x > 0 && overlap.y > 0) {
+            panel.hidePopup();
+          }
+        }
+      }, tabBar._dragOverDelay);
+    }
     if (this._dragoverScrollButton(event)) {
       return true;
     }
 
-    const tabBar = gBrowser.tabContainer;
     const effects = tabBar.getDropEffectForTabDrag(event);
     const dt = event.dataTransfer;
     const isCopy = dt.dropEffect == "copy";
@@ -619,6 +652,7 @@ var TMP_tabDNDObserver = {
   },
 
   on_dragend(event) {
+    this.postDraggingCleanup(event);
     this.clearDragmark();
 
     // don't allow to open new window in single window mode
@@ -664,6 +698,10 @@ var TMP_tabDNDObserver = {
     this._dragTime = 0;
     this.hideDragoverMessage();
     Tabmix.originalFunctions.on_dragleave.apply(gBrowser.tabContainer, [event]);
+    let target = event.relatedTarget;
+    // @ts-ignore
+    while (target && target != gBrowser.tabContainer) target = target.parentNode;
+    this.postDraggingCleanup(event, Boolean(target));
   },
 
   _dragoverScrollButton(event) {
@@ -701,29 +739,37 @@ var TMP_tabDNDObserver = {
 
     switch (targetAnonid) {
       case "scrollbutton-up":
+        scrollDirection = tabStrip._lockScroll ? 0 : -1;
+        break;
       case "scrollbutton-up-right":
         scrollDirection = -1;
         break;
       case "scrollbutton-down":
+        scrollDirection = tabStrip._lockScroll ? 0 : 1;
+        break;
       case "scrollbutton-down-right":
         scrollDirection = 1;
         break;
     }
     if (scrollDirection) {
       let scrollIncrement = TabmixTabbar.isMultiRow ?
-        Math.round(tabStrip.singleRowHeight / 8) : tabStrip.scrollIncrement;
+        Math.round(tabStrip.singleRowHeight / 10) : tabStrip.scrollIncrement;
       tabStrip.scrollByPixels((ltr ? scrollDirection : -scrollDirection) * scrollIncrement, true);
       event.preventDefault();
       event.stopPropagation();
 
       if (["scrollbutton-up", "scrollbutton-down"].includes(targetAnonid ?? "")) {
+        const ind = gBrowser.tabContainer._tabDropIndicator;
+        if (TabmixTabbar.hasMultiRows && Tabmix.prefs.getBoolPref("tabScrollOnTopBottomDrag")) {
+          ind.hidden = true;
+          return true;
+        }
         let arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
         let rect = arrowScrollbox.getBoundingClientRect();
         let scrollRect = arrowScrollbox.scrollClientRect;
         let minMargin = scrollRect.left - rect.left;
         let maxMargin = Math.min(minMargin + scrollRect.width, scrollRect.right);
         let newMargin = scrollDirection > 0 ? maxMargin : minMargin;
-        const ind = gBrowser.tabContainer._tabDropIndicator;
         ind.hidden = false;
         newMargin += ind.clientWidth / 2;
         if (RTL_UI) {
@@ -732,6 +778,22 @@ var TMP_tabDNDObserver = {
         ind.style.transform = "translate(" + Math.round(newMargin) + "px, 0px)";
       }
 
+      return true;
+    }
+    return false;
+  },
+
+  postDraggingCleanup(event, skipCleanup = false) {
+    const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
+    if (!skipCleanup) {
+      clearTimeout(this.draggingTimeout);
+      arrowScrollbox.removeAttribute("tabmix-dragging");
+      arrowScrollbox._lockScroll = false;
+    }
+
+    // make sure scroll position is aligned to row
+    if (TabmixTabbar.hasMultiRows && event.originalTarget.id?.startsWith("scrollbutton")) {
+      arrowScrollbox._finishScroll(event);
       return true;
     }
     return false;

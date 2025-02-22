@@ -212,6 +212,7 @@ declare namespace TabDNDObserverNS {
   let DRAG_LINK: number;
   let DRAG_TAB_TO_NEW_WINDOW: number;
   let DRAG_TAB_IN_SAME_WINDOW: number;
+  let draggingTimeout: number;
   let paddingLeft: number;
   let _multirowMargin: number;
   function init(): void;
@@ -222,6 +223,7 @@ declare namespace TabDNDObserverNS {
   function on_dragend(event: DragEvent): void;
   function on_dragleave(event: DragEvent): void;
   function _dragoverScrollButton(event: DragEvent): boolean;
+  function postDraggingCleanup(event: DragEvent, skipCleanup?: boolean): boolean;
   function hideDragoverMessage(): void;
   function _getDropIndex(event: DragEvent, options?: {dragover?: boolean; children?: Tab[]}): DragEventParams | number;
   function eventParams(event: DragEvent): DragEventParams;
@@ -268,6 +270,7 @@ declare namespace TabmixArrowScrollboxNS {
     _pauseScroll(): void;
     _startScroll(index: number): void;
     _stopScroll(): void;
+    _lockScroll: boolean;
 
     _ensureElementIsVisibleAnimationFrame: number;
     _scrollButtonDownLeft: HTMLButtonElement;
@@ -301,6 +304,7 @@ declare namespace TabmixArrowScrollboxNS {
     _createScrollButtonContextMenu: (aEvent: PopupEvent) => void;
     _ensureElementIsVisibleByIndex: (this: ASB, element: Tab, instant: boolean, index: number) => void;
     _distanceToRow: (amountToScroll: number) => number;
+    _finishScroll: (this: ASB, event: DragEvent) => void;
     _enterVerticalMode: (this: ASB, blockUnderflow?: boolean) => void;
     _updateScrollButtonsDisabledState: (aRafCount?: number) => void;
     connectTabmix: (this: ASB) => void;
@@ -314,7 +318,7 @@ declare namespace TabmixArrowScrollboxNS {
   type RSBDragEvent = DragEvent & {originalTarget: HTMLButtonElement};
 
   interface CustomElementEventMap extends ElementEventMap {
-    dragexit: RSBDragEvent;
+    dragleave: RSBDragEvent;
     dragover: RSBDragEvent;
     drop: RSBDragEvent;
   }
@@ -324,7 +328,6 @@ declare namespace TabmixArrowScrollboxNS {
     addEventListener<K extends keyof CustomElementEventMap>(type: K, listener: (this: Element, ev: CustomElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions): void;
     addButtonListeners: (button: HTMLButtonElement, side: "left" | "right") => void;
     constructor: (this: RSB) => RSB;
-    finishScroll: (this: RSB, aEvent: RSBDragEvent) => void;
     fragment: Node;
     readonly shadowRoot: ShadowRoot;
   }

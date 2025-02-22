@@ -56,7 +56,7 @@ const widgets = {
       button.addEventListener("drop", event => {
         node.ownerGlobal.TMP_undocloseTabButtonObserver.onDrop(event);
       });
-      button.addEventListener("dragexit", event => {
+      button.addEventListener("dragleave", event => {
         node.ownerGlobal.TMP_undocloseTabButtonObserver.onDragExit(event);
       });
       dropmarker.addEventListener("command", event => {

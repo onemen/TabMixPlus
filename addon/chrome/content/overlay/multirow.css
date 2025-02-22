@@ -208,3 +208,29 @@
 #tabmix-scrollbox::part(overflow-end-indicator) {
   transition: opacity 150ms ease;
 }
+
+#tabbrowser-arrowscrollbox[tabmix-dragging="enable-scroll-buttons"] {
+  position: relative;
+
+  &:not([scrolledtostart])::part(scrollbutton-up),
+  &:not([scrolledtoend])::part(scrollbutton-down) {
+    display: flex !important;
+  }
+
+  &::part(scrollbutton-up),
+  &::part(scrollbutton-down) {
+    position: absolute;
+    width: 100%;
+    height: calc(var(--tab-min-height_mlt) / 2);
+    z-index: 1;
+    opacity: 0;
+  }
+
+  &::part(scrollbutton-up) {
+    top: 0;
+  }
+
+  &::part(scrollbutton-down) {
+    bottom: 0;
+  }
+}

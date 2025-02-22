@@ -40,6 +40,8 @@
                   name="toolkit.scrollbox.clickToScroll.scrollDelay"                            type="int"/>
       <preference id="pref_maxrow"            name="extensions.tabmix.tabBarMaxRow"             type="int"/>
       <preference id="pref_pinnedTabScroll"   name="extensions.tabmix.pinnedTabScroll"          type="bool"/>
+      <preference id="pref_tabScrollOnTopBottomDrag"   name="extensions.tabmix.tabScrollOnTopBottomDrag"
+                  type="bool"/>
       <preference id="pref_theme_background"  name="extensions.tabmix.theme_background"         type="int"/>
       <preference id="pref_currentTab"        name="extensions.tabmix.currentTab"               type="bool"/>
       <preference id="pref_unreadTab"         name="extensions.tabmix.unreadTab"                type="bool"/>
@@ -151,7 +153,7 @@
                 </menulist>
               </hbox>
             </box>
-            <vbox id="multi-rows-box" style="height: 54px;">
+            <vbox id="multi-rows-box" style="height: 80px;">
               <vbox id="multi-rows" class="indent">
                 <hbox align="center" id="maxbar">
                   <label value="&maxrow.label;" TSTdisabled="true"/>
@@ -159,6 +161,8 @@
                 </hbox>
                 <checkbox_tmp id="pinnedTabScroll" label="&pinnedTabScroll.label;"
                               preference="pref_pinnedTabScroll"/>
+                <checkbox_tmp id="tabScrollOnTopBottomDrag" label="Scroll tabs when dragged to top/bottom"
+                              preference="pref_tabScrollOnTopBottomDrag"/>
               </vbox>
               <hbox id="theme-background-box" align="center" hidden="true">
                 <label value="Theme background style:" style="margin-inline-end: 10px;" TSTdisabled="true"/>
