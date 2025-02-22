@@ -41,7 +41,7 @@ var gAppearancePane = {
     }
 
     if (window.opener.document.documentElement.hasAttribute("lwtheme")) {
-      Tabmix.setItem("multi-rows-box", "style", "height: 80px;");
+      Tabmix.setItem("multi-rows-box", "style", "height: 105.2px;");
       Tabmix.setItem("theme-background-box", "hidden", null);
     }
 
