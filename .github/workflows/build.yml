@@ -7,7 +7,7 @@ on:
 env:
   XPI_NAME: tab_mix_plus-dev-build
   PREVIOUS_TAG: ''
-  NOTES: 'This release includes an XPI file that is automatically generated after each push to the main branch.'
+  NOTES: 'This release includes an XPI file that is automatically generated after each push to the main branch.<br />It compatible with all supported versions of Firefox. (see [Browser Compatibility](https://onemen.github.io/tabmixplus-docs/other/installation/#browser-compatibility))'
 
 jobs:
   build-and-upload:
@@ -73,7 +73,6 @@ jobs:
           node -e '
             let content = fs.readFileSync("CHANGELOG.md", "utf8");
             let newContent = content.replace("### :wrench: Chores", "### :wrench: Maintenance").split("\n").slice(5);
-            newContent.unshift("${{ env.NOTES }}");
             newContent = newContent.map(line => {
               return line
                 .replace(" *(commit by [@onemen](https://github.com/onemen))*", "")
@@ -83,6 +82,7 @@ jobs:
                 .replace(/(-\s*)(\w)/g, (_, p1, p2) => p1 + p2.toUpperCase())
                 .replace(/(Bug|bug)\s(\d{5,7})/g, "[$&](https://bugzilla.mozilla.org/show_bug.cgi?id=$2)");
             });
+            newContent.unshift("${{ env.NOTES }}");
             fs.writeFileSync("CHANGELOG.md", newContent.join("\n"));
           '
 

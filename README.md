@@ -54,7 +54,7 @@ Since Firefox removed the internal component that loads _legacy_ extension, in o
    ![firefox](https://github.com/onemen/TabMixPlus/assets/3650909/e39c4d4e-5bec-47fe-96d7-faba7fab24b2)
    </details>
 
-   1.2. Install [configuration files](https://raw.githubusercontent.com/xiaoxiaoflood/firefox-scripts/master/fx-folder.zip) to your **Application Binary** folder.
+   1.2. Install [configuration files](https://github.com/onemen/TabMixPlus/releases/download/dev-build/fx-folder.zip) to your **Application Binary** folder.
 
    `fx-folder.zip` files are packed with paths used by Firefox for Windows, `Linux` and `MacOS` users should follow the instructions below.
    <details>
@@ -118,7 +118,7 @@ Since Firefox removed the internal component that loads _legacy_ extension, in o
 
    1.3. Create `chrome` folder in your **Profile Folder** (if one does not exist).
 
-   1.4. Extract [utils](https://raw.githubusercontent.com/xiaoxiaoflood/firefox-scripts/master/utils.zip) folder inside the `chrome` folder, the result should be `[PROFILE_NAME]/chrome/utils`, all the files should be in the `utils` folder (see the screenshot below).
+   1.4. Extract [utils](https://github.com/onemen/TabMixPlus/releases/download/dev-build/utils.zip) folder inside the `chrome` folder, the result should be `[PROFILE_NAME]/chrome/utils`, all the files should be in the `utils` folder (see the screenshot below).
 
    <details><summary>screenshoot</summary>
 
@@ -139,6 +139,7 @@ Since Firefox removed the internal component that loads _legacy_ extension, in o
 
     All **Tab Mix Plus** downloads are also located [here](https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/).
     >If you are using Firefox Beta, Developer Edition or Nightly we recommend using the latest **Tab Mix Plus** _development build_ (tags with **pre** or **test-build** in the title)
+     Note that the latest development build is compatible with all supported versions of Firefox. (see [Browser Compatibility](https://onemen.github.io/tabmixplus-docs/other/installation/#browser-compatibility))
 
 
 1. **Install XPI**
@@ -158,9 +159,9 @@ If <b>Tab Mix Plus</b> stops working after Firefox update was installed or when 
 
 * Uninstall **Tab Mix Plus**.
 * Close Firefox and **reinstall** the latest versions of these scripts (see instructions above):
-  * Install [configuration files](https://raw.githubusercontent.com/xiaoxiaoflood/firefox-scripts/master/fx-folder.zip) to your **Application Binary** folder.
+  * Install [configuration files](https://github.com/onemen/TabMixPlus/releases/download/dev-build/fx-folder.zip) to your **Application Binary** folder.
 
-  * Extract [utils](https://raw.githubusercontent.com/xiaoxiaoflood/firefox-scripts/master/utils.zip) folder to `chrome` in your in your **Profile Folder**.
+  * Extract [utils](https://github.com/onemen/TabMixPlus/releases/download/dev-build/utils.zip) folder to `chrome` in your in your **Profile Folder**.
 
 * Some users report that their Firefox is not able to install or use **Tab Mix Plus** unless they set `extensions.experiments.enabled` to **true** in `about:config`.
 
@@ -173,10 +174,11 @@ If <b>Tab Mix Plus</b> stops working after Firefox update was installed or when 
 
 Tab Mix Plus is fully compatible with the following browsers:
 
-  * Firefox 115 ESR - Firefox Nightly
-  * Waterfox G6 and beyond
-  * Floorp 11.9.0+
-  * LibreWolf 122+
+  * [Firefox](https://www.mozilla.org/en-US/firefox/all/#product-desktop-release) 115 ESR - Nightly
+  * [Zen Browser](https://zen-browser.app/) 1.7+
+  * [Waterfox](https://www.waterfox.net/) G6 and beyond
+  * [Floorp](https://floorp.app/) 11.9.0+
+  * [LibreWolf](https://librewolf.net/) 122+  
 
 > Firefox versions prior to 115 ESR are not supported.
 
