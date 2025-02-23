@@ -936,7 +936,8 @@ Tabmix.onContentLoaded = {
         // @ts-expect-error - Tabbrowser class
         window.Tabbrowser,
         "handleTabMove",
-        "adoptTab"
+        "adoptTab",
+        "window.Tabbrowser"
       );
     }
 

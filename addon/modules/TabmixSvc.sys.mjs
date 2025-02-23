@@ -189,8 +189,6 @@ export const TabmixSvc = {
             let timer = TabmixSvc.console._timers[id];
             timer.cancel();
           }
-          delete TabmixSvc.SessionStoreGlobal;
-          delete TabmixSvc.SessionStore;
           break;
       }
     }
@@ -276,15 +274,4 @@ ChromeUtils.defineLazyGetter(TabmixSvc, "isZen", () => {
 
 ChromeUtils.defineLazyGetter(TabmixSvc, "console", () => {
   return ChromeUtils.importESModule("chrome://tabmix-resource/content/log.sys.mjs").console;
-});
-
-ChromeUtils.defineLazyGetter(TabmixSvc, "SessionStoreGlobal", () => {
-  // Don't ChromeUtils.import here it can not import variables that
-  // are not in EXPORTED_SYMBOLS
-  // eslint-disable-next-line mozilla/use-chromeutils-import
-  return lazy.isVersion(1360) ? {} : Cu.import("resource:///modules/sessionstore/SessionStore.jsm");
-});
-
-ChromeUtils.defineLazyGetter(TabmixSvc, "SessionStore", function() {
-  return this.SessionStoreGlobal.SessionStoreInternal;
 });

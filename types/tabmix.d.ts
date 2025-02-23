@@ -329,6 +329,10 @@ declare namespace TabmixModules {
   }
 }
 
+interface TabmixBrowserDOMWindow {
+  init(window: Window): void;
+}
+
 interface TabmixPlacesUtils {
   asyncGetTitleFromBookmark(aUrl: string, aTitle: string): Promise<string>;
   applyCallBackOnUrl<T, C extends (...args: any[]) => T | Promise<T>>(aUrl: string, aCallBack: C): Promise<ReturnType<C>>;
@@ -353,6 +357,7 @@ declare var Shortcuts: Shortcuts;
 declare var TabmixUtils: TabmixUtils;
 
 interface TabmixKnownModules {
+  "chrome://tabmix-resource/content/BrowserDOMWindow.sys.mjs": {TabmixBrowserDOMWindow: TabmixBrowserDOMWindow};
   "chrome://tabmix-resource/content/ChromeUtils.sys.mjs": {TabmixChromeUtils: TabmixChromeUtilsType};
   "chrome://tabmix-resource/content/Places.sys.mjs": {TabmixPlacesUtils: TabmixPlacesUtils};
   "chrome://tabmix-resource/content/Shortcuts.sys.mjs": {Shortcuts: Shortcuts};

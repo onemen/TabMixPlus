@@ -701,64 +701,10 @@ Tabmix.tablib = {
      * we don't check isUrlForDownload for external links,
      * it is not likely that link in other application opened Firefox for downloading data
      */
-    const browserAccess = nsBrowserAccess.prototype;
-    // TreeStyleTab 0.16.2015111001 wrap openURI in nsBrowserAccess.prototype.__treestyletab__openURI
-    let TSTopenURI = Tabmix.extensions.treeStyleTab &&
-        typeof browserAccess.__treestyletab__openURI == "function" ? "__treestyletab__openURI" : "";
-
-    Tabmix.changeCode(browserAccess, "nsBrowserAccess.prototype._openURIInNewTab")._replace(
-      `if (aIsExternal && (!aURI || aURI.spec == "${TabmixSvc.aboutBlank}")) {`,
-      'let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser._selectedTab); \
-       $&'
-    )._replace(
-      Tabmix.isVersion(1260) ? 'win.BrowserCommands.openTab()' : 'win.BrowserOpenTab()',
-      'if (currentIsBlank) Tabmix.tablib.setURLBarFocus(); \
-      else $&'
-    )._replace(
-      '"browser.tabs.loadDivertedInBackground"',
-      'aIsExternal ? "extensions.tabmix.loadExternalInBackground" : $&'
-    )._replace(
-      'win.gBrowser.addTab',
-      'currentIsBlank ? win.gBrowser._selectedTab : $&'
-    )._replace(
-      'win.gBrowser.getBrowserForTab(tab);',
-      '$&\n' +
-      '    if (currentIsBlank && aURI) {\n' +
-      '      let loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_NONE;\n' +
-      '      if (aIsExternal) {\n' +
-      '        loadFlags |= Ci.nsIWebNavigation.LOAD_FLAGS_FROM_EXTERNAL;\n' +
-      '      }\n' +
-      '      gBrowser.fixupAndLoadURIString(aURI.spec, {\n' +
-      '        triggeringPrincipal: aTriggeringPrincipal,\n' +
-      '        referrerInfo: aReferrerInfo,\n' +
-      '        userContextId: aUserContextId,\n' +
-      '        csp: aCsp,\n' +
-      '        loadFlags,\n' +
-      '      });\n' +
-      '      browser.focus();\n' +
-      '    }'
-    ).toCode();
-
-    fnName = "nsBrowserAccess.prototype." + (TSTopenURI || "getContentWindowOrOpenURI");
-    Tabmix.changeCode(browserAccess, fnName)._replace(
-      'switch (aWhere) {',
-      '  if (Tabmix.singleWindowMode &&' +
-      '      aWhere == Ci.nsIBrowserDOMWindow.OPEN_NEWWINDOW) {' +
-      '      aWhere = Ci.nsIBrowserDOMWindow.OPEN_NEWTAB;' +
-      '  }' +
-      '  if (aWhere != Ci.nsIBrowserDOMWindow.OPEN_NEWWINDOW &&' +
-      '      aWhere != Ci.nsIBrowserDOMWindow.OPEN_PRINT_BROWSER &&' +
-      '      aWhere != Ci.nsIBrowserDOMWindow.OPEN_NEWTAB) {' +
-      '      let isLockTab = Tabmix.whereToOpen(null).lock;' +
-      '      if (isLockTab) {' +
-      '          aWhere = Ci.nsIBrowserDOMWindow.OPEN_NEWTAB;' +
-      '      }' +
-      '  }' +
-      '  $&'
-    )._replace(
-      '"browser.tabs.loadDivertedInBackground"',
-      'isExternal ? "extensions.tabmix.loadExternalInBackground" : $&', {flags: "g"}
-    ).toCode();
+    if (Tabmix.isFirstWindowInSession || !Tabmix.isVersion(1370)) {
+      const {TabmixBrowserDOMWindow} = ChromeUtils.importESModule("chrome://tabmix-resource/content/BrowserDOMWindow.sys.mjs");
+      TabmixBrowserDOMWindow.init(window);
+    }
 
     Tabmix.originalFunctions.FillHistoryMenu = window.FillHistoryMenu;
     if (Tabmix.isVersion(1290)) {

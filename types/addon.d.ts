@@ -885,7 +885,7 @@ declare namespace TabmixNS {
   function isAltKey(event: MouseEvent | TabmixLastTabNS.KeyEvent): boolean;
   function getBoundsWithoutFlushing(element: ElementTypesExtended): DOMRect;
   // function getPrivateMethod<T extends keyof PrivateMethods>(constructorName: string, methodName: T, nextMethodName: string): PrivateMethods[T];
-  function getPrivateMethod<T extends keyof PrivateMethods>(constructor: string | (new (...args: any[]) => any), methodName: T, nextMethodName: string): PrivateMethods[T];
+  function getPrivateMethod<T extends keyof PrivateMethods>(constructor: string | (new (...args: any[]) => any), methodName: T, nextMethodName: string, constructorName?: string): PrivateMethods[T];
 }
 
 declare namespace TabmixModules {

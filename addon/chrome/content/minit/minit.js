@@ -1596,14 +1596,14 @@ Tabmix.getPlacement = function(id) {
   return placement ? placement.position : -1;
 };
 
-Tabmix.getPrivateMethod = function(constructor, methhodName, nextMethodName) {
+Tabmix.getPrivateMethod = function(constructor, methhodName, nextMethodName, constructorName) {
   const errorMsg = `can't find ${constructor}.${methhodName} function`;
   const [name, firefoxClass] = typeof constructor === "string" ?
     [constructor, customElements.get(constructor)] :
-    [customElements.getName, constructor];
+    [constructorName || constructor.name, constructor];
   const method = function() {};
   if (!firefoxClass) {
-    console.error(`Tabmix Error: can't find ${name} custom element\n${errorMsg}`);
+    console.error(`Tabmix Error: can't find ${name} constructor element\n${errorMsg}`);
     return method;
   }
   const code = firefoxClass
@@ -1613,7 +1613,7 @@ Tabmix.getPrivateMethod = function(constructor, methhodName, nextMethodName) {
       ?.trim()
       .replace(/this\.#(\w*)/g, "this._$1");
   if (code) {
-    return eval(`(function ${code})`);
+    return eval(`(function _${methhodName}${code})`);
   }
   console.error(`Tabmix Error: ${errorMsg}`);
   return method;
