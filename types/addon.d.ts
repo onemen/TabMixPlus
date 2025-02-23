@@ -867,6 +867,8 @@ declare namespace Tablib {
 }
 
 interface PrivateMethods {
+  // gBrowser
+  handleTabMove: MockedGeckoTypes.TabBrowser["_handleTabMove"];
   // TabContainer
   clearDragOverCreateGroupTimer: MockedGeckoTypes.TabContainer["_clearDragOverCreateGroupTimer"];
   isAnimatingMoveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_isAnimatingMoveTogetherSelectedTabs"];
@@ -882,7 +884,8 @@ declare namespace TabmixNS {
   let tablib: typeof Tablib;
   function isAltKey(event: MouseEvent | TabmixLastTabNS.KeyEvent): boolean;
   function getBoundsWithoutFlushing(element: ElementTypesExtended): DOMRect;
-  function getPrivateMethod<T extends keyof PrivateMethods>(constructorName: string, methodName: T, nextMethodName: string): PrivateMethods[T];
+  // function getPrivateMethod<T extends keyof PrivateMethods>(constructorName: string, methodName: T, nextMethodName: string): PrivateMethods[T];
+  function getPrivateMethod<T extends keyof PrivateMethods>(constructor: string | (new (...args: any[]) => any), methodName: T, nextMethodName: string): PrivateMethods[T];
 }
 
 declare namespace TabmixModules {

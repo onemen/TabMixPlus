@@ -930,6 +930,16 @@ Tabmix.onContentLoaded = {
       TabmixTabbar.updateTabsInTitlebarAppearance();
     }
 
+    if (Tabmix.isVersion(1370)) {
+      // gBrowser.pinTab call gBrowser.#handleTabMove
+      gBrowser._handleTabMove = Tabmix.getPrivateMethod(
+        // @ts-expect-error - Tabbrowser class
+        window.Tabbrowser,
+        "handleTabMove",
+        "adoptTab"
+      );
+    }
+
     // we can't use TabPinned.
     // gBrowser.pinTab call _updateCloseButtons that call updateScrollStatus
     // before it dispatch TabPinned event.

@@ -329,6 +329,7 @@ declare namespace MockedGeckoTypes {
     };
     _blurTab: (tab: BrowserTab) => void;
     _endRemoveTab: (tab: BrowserTab) => void;
+    _handleTabMove: (tab: BrowserTab, moveActionCallback: () => void) => void;
     /** @deprecated replaced with pinnedTabCount in Firefox version 133 */
     readonly _numPinnedTabs: number;
     _lastRelatedTabMap: WeakMap<BrowserTab, BrowserTab>;
