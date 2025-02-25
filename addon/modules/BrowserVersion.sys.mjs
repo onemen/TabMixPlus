@@ -19,21 +19,22 @@ ChromeUtils.defineLazyGetter(lazy, "isZen", () => {
 
 const _versions = {};
 export function isVersion(aVersionNo, updateChannel) {
-  let firefox, waterfox, floorp, prefix = "";
+  let firefox, waterfox, floorp, zen, prefix = "";
   if (typeof aVersionNo === 'object') {
     firefox = aVersionNo.ff || 0;
     waterfox = aVersionNo.wf || "";
     floorp = aVersionNo.fp || "";
+    zen = aVersionNo.zen || "";
     updateChannel = aVersionNo.updateChannel || null;
 
-    if (!firefox && !waterfox && !floorp) {
+    if (!firefox && !waterfox && !floorp && !zen) {
       console.log('Tabmix: invalid version check ' + JSON.stringify(aVersionNo));
       return true;
     }
-    if (waterfox && !lazy.isWaterfox || floorp && !lazy.isFloorp) {
+    if (waterfox && !lazy.isWaterfox || floorp && !lazy.isFloorp || zen && !lazy.isZen) {
       return false;
     }
-    if (!firefox && !lazy.isWaterfox && !lazy.isFloorp) {
+    if (!firefox && !lazy.isWaterfox && !lazy.isFloorp && !lazy.isZen) {
       return false;
     }
     if (lazy.isWaterfox && waterfox) {
@@ -42,6 +43,9 @@ export function isVersion(aVersionNo, updateChannel) {
     } else if (lazy.isFloorp && floorp) {
       aVersionNo = floorp;
       prefix = "fp";
+    } else if (lazy.isZen && zen) {
+      aVersionNo = zen;
+      prefix = "zen";
     } else {
       aVersionNo = firefox;
     }
@@ -57,9 +61,9 @@ export function isVersion(aVersionNo, updateChannel) {
   if (typeof _versions[prefix + aVersionNo] == "boolean")
     return _versions[prefix + aVersionNo];
 
-  let v = isLibrewolf || lazy.isZen ? Services.appinfo.platformVersion : Services.appinfo.version;
+  let v = isLibrewolf || lazy.isZen && prefix !== "zen" ? Services.appinfo.platformVersion : Services.appinfo.version;
 
-  if (lazy.isWaterfox && waterfox || lazy.isFloorp && floorp) {
+  if (lazy.isWaterfox && waterfox || lazy.isFloorp && floorp || lazy.isZen && zen) {
     return (_versions[prefix + aVersionNo] = Services.vc.compare(v, aVersionNo) >= 0);
   }
 

@@ -990,6 +990,8 @@ class PrefWindow extends MozXULElement {
 
     this.disconnectedCallback = this.disconnectedCallback.bind(this);
 
+    this.fixMozTabsForZen();
+
     this.addEventListener("dialogaccept", () => {
       if (!this._fireEvent("beforeaccept", this)) {
         return false;
@@ -1086,6 +1088,41 @@ class PrefWindow extends MozXULElement {
         event.preventDefault();
       }
     }, true);
+  }
+
+  fixMozTabsForZen(doc = document) {
+    // workaround for bug in Zen https://github.com/zen-browser/desktop/issues/5668
+    if (!TabmixSvc.isZen) {
+      return;
+    }
+
+    const MozTabs = doc.ownerGlobal?.customElements.get("tabs");
+    // @ts-ignore
+    const setter = MozTabs?.prototype.__lookupSetter__("selectedIndex")?.toString();
+    // @ts-ignore
+    const getter = MozTabs?.prototype.__lookupGetter__("selectedIndex");
+    if (!getter || !setter || setter.includes("typeof ZenWorkspaces")) {
+      return;
+    }
+
+    const code = setter.replace(
+      'for (let otherTab of ZenWorkspaces.allStoredTabs) {',
+      `const tabs = typeof ZenWorkspaces === "object" ? ZenWorkspaces.allStoredTabs : this.allTabs;
+        for (let otherTab of tabs) {`
+    ).replace(
+      'set selectedIndex',
+      'function selectedIndex',
+    );
+
+    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", {Tabmix, TabmixSvc});
+
+    const descriptor = {
+      get: getter,
+      set: Tabmix._makeCode(null, code),
+      enumerable: true,
+      configurable: true
+    };
+    Object.defineProperty(MozTabs?.prototype, "selectedIndex", descriptor);
   }
 
   get fragment() {

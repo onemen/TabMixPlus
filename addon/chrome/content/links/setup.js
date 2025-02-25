@@ -146,7 +146,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   }
   tabContainer.mTabMaxWidth = max;
   tabContainer.mTabMinWidth = min;
-  TabmixTabbar.widthFitTitle = this.prefs.getBoolPref("flexTabs") && max != min;
+  TabmixTabbar.widthFitTitle = !TabmixSvc.isZen && this.prefs.getBoolPref("flexTabs") && max != min;
   if (TabmixTabbar.widthFitTitle) {
     this.setItem(tabContainer, "widthFitTitle", true);
     if (Tabmix.isVersion(1310)) {
@@ -178,4 +178,3 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
 
   TMP_extensionsCompatibility.preInit();
 };
-

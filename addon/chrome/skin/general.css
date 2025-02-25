@@ -67,7 +67,7 @@
 	transition: none !important;
 }
 
-#tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) > #tabbrowser-arrowscrollbox > tab-group:not([collapsed]) > .tabbrowser-tab[fadein]:not([pinned]),
-#tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) > #tabbrowser-arrowscrollbox > .tabbrowser-tab[fadein]:not([pinned]) {
+#tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) #tabbrowser-arrowscrollbox > tab-group:not([collapsed]) > .tabbrowser-tab[fadein]:not([pinned]),
+#tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) #tabbrowser-arrowscrollbox > .tabbrowser-tab[fadein]:not([pinned]) {
   max-width: var(--tabmix-tab-overflow-width, var(--tab-min-width)) !important;
 }

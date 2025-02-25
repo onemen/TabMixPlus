@@ -20,6 +20,9 @@
         persist="screenX screenY hide-RGB"
         onload="tabstyles.init();">
 <dialog buttons="accept,cancel,extra1,extra2">
+   <script>
+     window.opener.document.documentElement.fixMozTabsForZen(document);
+   </script>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-appearance-ce.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/checkbox_tmp-ce.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>

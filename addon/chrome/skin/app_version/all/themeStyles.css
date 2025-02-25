@@ -45,8 +45,8 @@
 
 @media (-moz-platform: macos) {
   /* for mac - look in pinstripe/browser/browser.css */
-  :root[lwtheme] #tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-label-container > .tab-label:not([selected="true"]),
-  :root[lwtheme] #tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]) {
+  :root[lwtheme] #tabbrowser-tabs #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-label-container > .tab-label:not([selected="true"]),
+  :root[lwtheme] #tabbrowser-tabs #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]) {
     opacity: .8;
   }
 }

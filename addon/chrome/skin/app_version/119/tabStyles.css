@@ -6,57 +6,57 @@
 **/
 
 /* :::: For current, unloaded, unread and other tab styles :::: */
-#tabbrowser-tabs[tabmix_currentStyle~="bold"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_currentStyle~="bold"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab[visuallyselected] .tab-text,
-#tabbrowser-tabs[tabmix_otherStyle~="bold"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_otherStyle~="bold"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([tabmix_tabState]):not([visuallyselected]) .tab-text,
-#tabbrowser-tabs[tabmix_unloadedStyle~="bold"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_unloadedStyle~="bold"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unloaded"] .tab-text,
-#tabbrowser-tabs[tabmix_unreadStyle~="bold"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_unreadStyle~="bold"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unread"] .tab-text {
   font-weight: bold !important;
 }
 
-#tabbrowser-tabs[tabmix_currentStyle~="not-bold"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_currentStyle~="not-bold"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab[visuallyselected] .tab-text,
-#tabbrowser-tabs[tabmix_otherStyle~="not-bold"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_otherStyle~="not-bold"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([tabmix_tabState]):not([visuallyselected]) .tab-text,
-#tabbrowser-tabs[tabmix_unloadedStyle~="not-bold"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_unloadedStyle~="not-bold"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unloaded"] .tab-text,
-#tabbrowser-tabs[tabmix_unreadStyle~="not-bold"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_unreadStyle~="not-bold"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unread"] .tab-text {
   font-weight: normal !important;
 }
 
-#tabbrowser-tabs[tabmix_currentStyle~="italic"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_currentStyle~="italic"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab[visuallyselected] .tab-text,
-#tabbrowser-tabs[tabmix_otherStyle~="italic"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_otherStyle~="italic"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([tabmix_tabState]):not([visuallyselected]) .tab-text,
-#tabbrowser-tabs[tabmix_unloadedStyle~="italic"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_unloadedStyle~="italic"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unloaded"] .tab-text,
-#tabbrowser-tabs[tabmix_unreadStyle~="italic"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_unreadStyle~="italic"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unread"] .tab-text {
   font-style: italic !important;
 }
 
-#tabbrowser-tabs[tabmix_currentStyle~="not-italic"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_currentStyle~="not-italic"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab[visuallyselected] .tab-text,
-#tabbrowser-tabs[tabmix_otherStyle~="not-italic"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_otherStyle~="not-italic"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([tabmix_tabState]):not([visuallyselected]) .tab-text,
-#tabbrowser-tabs[tabmix_unloadedStyle~="not-italic"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_unloadedStyle~="not-italic"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unloaded"] .tab-text,
-#tabbrowser-tabs[tabmix_unreadStyle~="not-italic"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_unreadStyle~="not-italic"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unread"] .tab-text {
   font-style: normal !important;
 }
 
-#tabbrowser-tabs[tabmix_currentStyle~="underline"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_currentStyle~="underline"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab[visuallyselected] .tab-text,
-#tabbrowser-tabs[tabmix_otherStyle~="underline"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_otherStyle~="underline"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([tabmix_tabState]):not([visuallyselected]) .tab-text,
-#tabbrowser-tabs[tabmix_unloadedStyle~="underline"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_unloadedStyle~="underline"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unloaded"] .tab-text,
-#tabbrowser-tabs[tabmix_unreadStyle~="underline"] > #tabbrowser-arrowscrollbox
+#tabbrowser-tabs[tabmix_unreadStyle~="underline"] #tabbrowser-arrowscrollbox
     .tabbrowser-tab:not([visuallyselected])[tabmix_tabState="unread"] .tab-text {
   text-decoration: underline !important;
 }

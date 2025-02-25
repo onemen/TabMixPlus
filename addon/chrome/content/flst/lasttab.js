@@ -369,7 +369,7 @@ var TMP_LastTab = {
   },
 
   PushSelectedTab: function TMP_LastTab_PushSelectedTab() {
-    var selectedTab = gBrowser.tabContainer.selectedItem;
+    var selectedTab = gBrowser.selectedTab;
     this.detachTab(selectedTab);
     this.TabHistory.push(selectedTab);
   },

@@ -2,7 +2,7 @@
 
 // Tabmix modules
 
-type BrowserVersion = (aVersionNo: number | {ff?: number; wf?: string; fp?: string; updateChannel?: string}, updateChannel?: string) => boolean;
+type BrowserVersion = (aVersionNo: number | {ff?: number; wf?: string; fp?: string; zen?: string; updateChannel?: string}, updateChannel?: string) => boolean;
 
 interface ChromeManifest {
   parse: (filename?: string, base?: string) => Promise<void>;

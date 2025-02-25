@@ -998,6 +998,10 @@ declare var UrlbarUtils: {
   stripUnsafeProtocolOnPaste(pasteData: string): string;
 };
 
+// for Zen Browserw
+declare var ZenWorkspaces: any;
+declare var gZenVerticalTabsManager: any;
+
 // merge types from lib.gecko.xpcom.d.ts with existing interface from gecko.d.ts
 declare namespace MockedExports {
   // nsIFilePicker is missing some types from lib.gecko.xpcom.d.ts

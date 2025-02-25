@@ -74,6 +74,7 @@ declare var TabmixSvc: TabmixModules.TabmixSvc;
 type SSi = "__SSi";
 
 interface Window {
+  uuid: string; // for Zen Browser
   __SSi: SSi;
   _tabmix_windowIsClosing: boolean;
   _gBrowser: MockedGeckoTypes.TabBrowser;

@@ -139,6 +139,17 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
         break;
     }
   }
+
+  if (replaceLastTab && Tabmix.isVersion({zen: "1.8.1*"})) {
+    const emptyTab = ZenWorkspaces._emptyTab;
+    if (emptyTab && gZenVerticalTabsManager._canReplaceNewTab &&
+       ZenWorkspaces._emptyTab.linkedBrowser.currentURI.spec === url
+    ) {
+      gBrowser.selectedTab = emptyTab;
+      return;
+    }
+  }
+
   TMP_extensionsCompatibility.treeStyleTab.onBeforeNewTabCommand(baseTab || selectedTab, openTabNext);
 
   Services.obs.notifyObservers(
@@ -181,6 +192,12 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
           if (loadBlank) {
             gBrowser.tabContainer.setAttribute("closebuttons", "noclose");
             gBrowser.tabContainer.removeAttribute("closebuttons-hover");
+          }
+
+          if (Tabmix.isVersion({zen: "1.8.1*"})) {
+            if (window.uuid) {
+              newTab.setAttribute('zen-workspace-id', ZenWorkspaces.activeWorkspace);
+            }
           }
         }
 
@@ -383,7 +400,7 @@ Tabmix.isPendingTab = function(aTab) {
 };
 
 Tabmix.setTabStyle = function(aTab, boldChanged) {
-  if (aTab.__duplicateFromWindow) {
+  if (aTab.__duplicateFromWindow || aTab.tagName !== "tab") {
     return;
   }
   if (!aTab)

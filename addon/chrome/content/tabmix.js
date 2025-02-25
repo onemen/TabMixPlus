@@ -549,7 +549,8 @@ var TMP_eventListener = {
   async onSSWindowRestored() {
     // make sure we are fully initialized
     await Tabmix._deferredInitialized.promise;
-    gBrowser.tabs.forEach(tab => {
+    const tabs = gBrowser.tabs.filter(t => t.tagName === "tab");
+    tabs.forEach(tab => {
       if (!tab.hasAttribute("pending")) {
         const url = tab.linkedBrowser.currentURI.spec;
         TMP_Places.asyncSetTabTitle(tab, url);
@@ -560,7 +561,7 @@ var TMP_eventListener = {
     if (this.tabsAlreadyOpened) {
       // make sure this code runs only once for this window
       delete this.tabsAlreadyOpened;
-      gBrowser.tabs.forEach(tab => {
+      tabs.forEach(tab => {
         if (tab.getAttribute("fadein") && tab.getAttribute("linkedpanel") !== "panel-1-1") {
           this.onTabOpen_delayUpdateTabBar(tab);
         }
@@ -756,7 +757,7 @@ var TMP_eventListener = {
       else
         TabmixTabbar.updateScrollStatus();
       // make sure selected new tabs stay visible
-      if (aTab == tabBar.selectedItem)
+      if (aTab === gBrowser.selectedTab)
         gBrowser.ensureTabIsVisible(aTab);
     }
   },

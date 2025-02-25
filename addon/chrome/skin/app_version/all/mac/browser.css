@@ -14,14 +14,14 @@
 
 /* prevent tabbrowser-tabs height from increasing by 2px when the tabs are
    in display: block */
-#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[tabmix-flowing="multibar"] >
-  #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"] .toolbarbutton-icon,
-#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[tabmix-flowing="multibar"] >
-  #tabbrowser-arrowscrollbox > #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"] .toolbarbutton-icon {
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[tabmix-flowing="multibar"]
+    #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"] .toolbarbutton-icon,
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[tabmix-flowing="multibar"]
+    #tabbrowser-arrowscrollbox #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"] .toolbarbutton-icon {
   margin: -2px 0;
 }
 
-#TabsToolbar[tabbaronbottom] #tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab[selected="true"] {
+#TabsToolbar[tabbaronbottom] #tabbrowser-tabs #tabbrowser-arrowscrollbox .tabbrowser-tab[selected="true"] {
   position: static !important;
 }
 
@@ -30,10 +30,10 @@
 }
 
 /* for mac - look in pinstripe/browser/browser.css */
-#tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab > * > .tab-progress-container > .tab-progress:not([selected="true"]),
-#tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-icon-image:not([selected="true"]),
-#tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-protect-icon:not([selected="true"]),
-#tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-lock-icon:not([selected="true"]),
-#tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-reload-icon:not([selected="true"]) {
+#tabbrowser-tabs #tabbrowser-arrowscrollbox .tabbrowser-tab > * > .tab-progress-container > .tab-progress:not([selected="true"]),
+#tabbrowser-tabs #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-icon-image:not([selected="true"]),
+#tabbrowser-tabs #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-protect-icon:not([selected="true"]),
+#tabbrowser-tabs #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-lock-icon:not([selected="true"]),
+#tabbrowser-tabs #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-icon > .tab-reload-icon:not([selected="true"]) {
   opacity: .8;
 }

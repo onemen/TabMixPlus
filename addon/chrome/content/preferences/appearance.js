@@ -38,6 +38,19 @@ var gAppearancePane = {
         Tabmix.setItem(hideTabbar.previousElementSibling, "disabled", true);
         Tabmix.setItem("show-hideTabbar-context-menu", "disabled", true);
       }
+
+      if (isZen) {
+        const clone = description.cloneNode(true);
+        const widthBox = $("width-box");
+        const parent = widthBox.parentNode;
+        parent?.insertBefore(clone, parent.firstChild);
+        for (const element of widthBox.childNodes) {
+          // @ts-ignore
+          element.disabled = true;
+        }
+        Tabmix.setItem("flexTabs", "disabled", true);
+        Tabmix.setItem("flexTabs_fitRow", "disabled", true);
+      }
     }
 
     if (window.opener.document.documentElement.hasAttribute("lwtheme")) {

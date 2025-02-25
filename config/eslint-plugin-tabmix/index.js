@@ -57,6 +57,9 @@ export default {
       TMP_SessionStore: true,
       TMP_tabDNDObserver: true,
       TMP_undocloseTabButtonObserver: true,
+
+      ZenWorkspaces: true,
+      gZenVerticalTabsManager: true,
     },
     preferences: {
       $: false,

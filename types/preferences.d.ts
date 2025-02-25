@@ -265,6 +265,7 @@ interface PrefWindowClass extends PrefWindowOverrideMozXULElement {
   set defaultButton(buttonId: DialogButtonsType);
   get defaultButton(): DialogButtonsType;
   getButton(aDlgType: DialogButtonsType): HTMLButtonElement;
+  fixMozTabsForZen(doc?: Document): void;
   lastSelected: string;
   maxContentSize: {width: number; height: number};
   maybeResize(aPaneElement: PrefPaneClass, targetSize: number, measurement: "height" | "width", padding: number, onlySizeUp: boolean): void;

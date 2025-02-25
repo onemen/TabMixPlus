@@ -20,7 +20,7 @@ Tabmix.tablib = {
   setLoadURI: function tabmix_tablib_setLoadURI(aBrowser) {
     const tabs = this._loadURIInitialized ? [gBrowser.getTabForBrowser(aBrowser)] : gBrowser.tabs;
     this._loadURIInitialized = true;
-    for (const tab of tabs) {
+    for (const tab of tabs.filter(t => t.tagName === "tab")) {
       const browser = tab.linkedBrowser;
       browser.tabmix_allowLoad = !TabmixTabbar.lockallTabs;
       if (tab.linkedPanel) {
@@ -205,7 +205,12 @@ Tabmix.tablib = {
     if (!Tabmix.extensions.tabGroupManager) {
       Tabmix.changeCode(gBrowser, "gBrowser._beginRemoveTab")._replace(
         /this\.addTrustedTab\(BROWSER_NEW_TAB_URL, {\s*skipAnimation: true,?\s*}\)/,
-        'TMP_BrowserOpenTab({}, null, true)'
+        'TMP_BrowserOpenTab({}, null, true)',
+        {check: !Tabmix.isVersion({zen: "1.8.1*"})}
+      )._replace(
+        'ZenWorkspaces.selectEmptyTab();',
+        'TMP_BrowserOpenTab({}, null, true)',
+        {check: Tabmix.isVersion({zen: "1.8.1*"})}
       ).toCode();
     }
 
@@ -544,7 +549,7 @@ Tabmix.tablib = {
     if (!Tabmix.isVersion(1160)) {
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")._replace(
         /(})(\)?)$/,
-        '          Tabmix.setTabStyle(this.selectedItem);\n' +
+        '          Tabmix.setTabStyle(gBrowser.selectedTab);\n' +
         '$1$2'
       ).toCode();
     }
@@ -594,7 +599,7 @@ Tabmix.tablib = {
        */
       let transitionend = Tabmix.callerTrace("onxbltransitionend");
       if (tabsCount == 1) {
-        let tab = this.selectedItem;
+        let tab = this.selectedItem ?? gBrowser.selectedTab;
         if (!aUrl) {
           let currentURI = gBrowser.currentURI;
           aUrl = currentURI ? currentURI.spec : null;

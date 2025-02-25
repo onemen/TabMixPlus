@@ -188,7 +188,7 @@
       if (gBrowser.tabContainer.hasAttribute("preventMouseHoverSelect")) {
         gBrowser.tabContainer.removeAttribute("preventMouseHoverSelect");
       } else if (aTab.mIsHover) {
-        aTab.container.selectedItem = aTab;
+        gBrowser.selectedTab = aTab;
       }
     };
 

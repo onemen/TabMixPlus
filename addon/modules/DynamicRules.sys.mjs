@@ -117,7 +117,7 @@ export const DynamicRules = {
     let selector = '#tabbrowser-tabs';
 
     name = name.replace("Tab", "");
-    return `${selector}[tabmix_#style~="#type"] > #tabbrowser-arrowscrollbox .tabbrowser-tab${this.tabState[name]}`
+    return `${selector}[tabmix_#style~="#type"] #tabbrowser-arrowscrollbox .tabbrowser-tab${this.tabState[name]}`
         .replace("#style", `${name}Style`)
         .replace("#type", rule);
   },
@@ -157,7 +157,7 @@ export const DynamicRules = {
     };
 
     styleRules.progressMeter = {
-      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] > #tabbrowser-arrowscrollbox .tabbrowser-tab > ' +
+      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] #tabbrowser-arrowscrollbox .tabbrowser-tab > ' +
           '.tab-stack > .tab-progress-container > .tab-progress::-moz-progress-bar' +
           '{\n  background-color: #bottomColor !important;\n}\n'
     };
@@ -252,8 +252,9 @@ export const DynamicRules = {
     lazy.TabmixSvc.tabStylePrefs = {};
     this.createTemplates();
 
-    lazy.TabmixSvc.forEachBrowserWindow(window => {
+    lazy.TabmixSvc.forEachBrowserWindow(async window => {
       let {Tabmix, TabmixTabbar, gBrowser, gTMPprefObserver} = window;
+      await Tabmix._deferredInitialized.promise;
       gTMPprefObserver.updateStyleAttributes();
 
       // update multi-row heights

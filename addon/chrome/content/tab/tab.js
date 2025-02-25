@@ -150,7 +150,7 @@ var TabmixTabbar = {
         TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(tabBar, "paddingLeft");
     }
 
-    this.widthFitTitle = Tabmix.prefs.getBoolPref("flexTabs") &&
+    this.widthFitTitle = !TabmixSvc.isZen && Tabmix.prefs.getBoolPref("flexTabs") &&
                     tabBar.mTabMaxWidth != tabBar.mTabMinWidth;
     Tabmix.setItem(tabBar, "widthFitTitle", this.widthFitTitle || null);
     if (Tabmix.isVersion(1310)) {
@@ -1856,7 +1856,7 @@ window.gTMPprefObserver = {
     // we add the rule after the first tab added
     if (typeof colorfulTabs == "object") {
       let padding = Tabmix.getStyle(gBrowser.tabs[0], "paddingBottom");
-      newRule = '#tabbrowser-tabs[tabmix-flowing="multibar"] > #tabbrowser-arrowscrollbox .tabbrowser-tab[selected=true]' +
+      newRule = '#tabbrowser-tabs[tabmix-flowing="multibar"] #tabbrowser-arrowscrollbox .tabbrowser-tab[selected=true]' +
                     ' {margin-bottom: -1px !important; padding-bottom: ' + (padding + 1) + 'px !important;}';
       let index = this.insertRule(newRule);
       const cssStyleRule = this.tabStyleSheet.cssRules[index];
@@ -1868,7 +1868,7 @@ window.gTMPprefObserver = {
 
     if (Tabmix.isVersion(1310)) {
       this.insertRule(
-        `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox) {
+        `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] #tabbrowser-arrowscrollbox::part(scrollbox) {
           margin-top: var(--tabmix-multirow-margin, 0);
           margin-bottom: var(--tabmix-multirow-margin, 0);
         }`
@@ -1889,7 +1889,7 @@ window.gTMPprefObserver = {
       shadowRoot.adoptedStyleSheets = [styleSheet];
     } else {
       this.insertRule(
-        `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] > #tabbrowser-arrowscrollbox::part(scrollbox-clip) {
+        `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] #tabbrowser-arrowscrollbox::part(scrollbox-clip) {
           overflow: clip;
           display: block;
           margin-top: var(--tabmix-multirow-margin, 0);
@@ -1899,7 +1899,7 @@ window.gTMPprefObserver = {
       );
 
       this.insertRule(
-        `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]) {
+        `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]) {
           flex: 0 0 auto !important;
           width: auto !important;
         }`
@@ -1985,7 +1985,7 @@ window.gTMPprefObserver = {
     );
 
     const blockMargin = Tabmix.tabsUtils.protonValues;
-    const cssText = `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] > #tabbrowser-arrowscrollbox
+    const cssText = `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] #tabbrowser-arrowscrollbox
       .tabbrowser-tab:not(:hover, [pinned]) > .tab-stack > .tab-content > .tab-close-button {
         padding-inline-start: 6px !important;
         width: 24px !important;
@@ -2024,7 +2024,7 @@ window.gTMPprefObserver = {
     // Firefox adds padding for single row when positionpinnedtabs is set.
     // padding-inline: var(--tab-shadow-max-size);
     this.insertRule(
-      `#tabbrowser-tabs:not([defaultScrollButtons])[orient=horizontal][positionpinnedtabs] > #tabbrowser-arrowscrollbox::part(scrollbox) {
+      `#tabbrowser-tabs:not([defaultScrollButtons])[orient=horizontal][positionpinnedtabs] #tabbrowser-arrowscrollbox::part(scrollbox) {
         padding-inline: 0;
       }`
     );

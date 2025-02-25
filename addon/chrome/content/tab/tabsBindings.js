@@ -9,9 +9,13 @@
      *  @param {Tab} aTab
      */
     function _notifyBackgroundTab(aTab) {
-      if (aTab.pinned || aTab.hidden || (Tabmix.isVersion(1190) ?
-        !this.hasAttribute("overflow") :
-        this.getAttribute("overflow") !== "true")) {
+      if (
+        TabmixSvc.isZen ?
+          aTab.hasAttribute("zen-essential") : aTab.pinned ||
+        aTab.hidden ||
+        (Tabmix.isVersion(1190) ?
+          !this.hasAttribute("overflow") : this.getAttribute("overflow") !== "true")
+      ) {
         return;
       }
 
@@ -21,7 +25,7 @@
             .promiseDocumentFlushed(() => {
               // @ts-expect-error
               let lastTabRect = this._lastTabToScrollIntoView.getBoundingClientRect();
-              let selectedTab = this.selectedItem;
+              let selectedTab = this.selectedItem ?? gBrowser.selectedTab;
               let tabRect;
               if (selectedTab.pinned) {
                 tabRect = null;

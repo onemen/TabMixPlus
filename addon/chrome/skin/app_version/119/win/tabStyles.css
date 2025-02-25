@@ -9,7 +9,7 @@
 **/
 
 /* Override Windows 10 rules */
-#tabbrowser-tabs[tabmix_currentStyle~="bg"] > #tabbrowser-arrowscrollbox .tabbrowser-tab[visuallyselected] > .tab-stack > .tab-background > .tab-background-middle {
+#tabbrowser-tabs[tabmix_currentStyle~="bg"] #tabbrowser-arrowscrollbox .tabbrowser-tab[visuallyselected] > .tab-stack > .tab-background > .tab-background-middle {
   background-size: auto 100%, auto 100%, auto 100%;
   background-clip: content-box;
 }
@@ -31,6 +31,6 @@
 }
 
 #tabbrowser-tabs:not([treestyletab-mode="vertical"])
-    > #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
+    #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-progress-container > .tab-progress {
   margin: 2px;
 }
