@@ -519,10 +519,15 @@ var TMP_ClosedTabs = {
 
   closeTabGroupView(parent, groupId) {
     if (this.keepMenuOpen && groupId) {
-      const panel = parent.panelMultiView;
-      panel.goBack();
-      panel.querySelector(`[data-group-id="${groupId}"]`).remove();
-      parent.remove();
+      if (this.count) {
+        const panel = parent.panelMultiView;
+        panel.goBack();
+        panel.querySelector(`[data-group-id="${groupId}"]`).remove();
+        parent.remove();
+      } else {
+        const popup = parent.closest(".cui-widget-panel");
+        popup?.hidePopup();
+      }
     }
   },
 
@@ -834,7 +839,9 @@ var TMP_ClosedTabs = {
         const uniqueGroups = new Map();
         const closedTabsData = SessionStore.getClosedTabDataFromClosedWindows();
         for (const {sourceClosedId, closedInTabGroupId: id} of closedTabsData) {
-          uniqueGroups.set(`${sourceClosedId},${id}`, {tabs: [{sourceClosedId}], id});
+          if (id) {
+            uniqueGroups.set(`${sourceClosedId},${id}`, {tabs: [{sourceClosedId}], id});
+          }
         }
         closedGroups.push(...uniqueGroups.values());
       }
