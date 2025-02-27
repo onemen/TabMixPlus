@@ -1074,10 +1074,6 @@ interface XULElement {
   container?: unknown;
 }
 
-interface XULCommandDispatcher {
-  focusedWindow: mozIDOMWindowProxy;
-}
-
 interface TabmixKnownModules {
   "resource://gre/modules/AddonManager.sys.mjs": {AddonManager: AddonManagerType};
   "resource://gre/modules/AppConstants.sys.mjs": {AppConstants: AppConstantsType};

@@ -49,7 +49,7 @@ interface Node {
   label?: string;
 }
 
-interface XULCommandDispatcher {
+interface customXULCommandDispatcher {
   advanceFocusIntoSubtree: (elt: PrefWindowClass | Element) => void;
 }
 

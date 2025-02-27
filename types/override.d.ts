@@ -35,8 +35,11 @@ declare var ChromeUtils: ChromeUtils;
 
 interface DocumentElement extends HTMLElement {}
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface customXULCommandDispatcher {}
+
 interface Document {
-  readonly commandDispatcher: XULCommandDispatcher;
+  readonly commandDispatcher: XULCommandDispatcher & customXULCommandDispatcher;
   readonly defaultView: WindowProxy;
   readonly documentElement: DocumentElement;
   getElementsByClassName<K extends keyof GetByMap>(name: K): NonEmptyCollection_G<GetByMap[K]>;

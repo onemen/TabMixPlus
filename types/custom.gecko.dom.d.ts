@@ -1,6 +1,7 @@
 /// <reference types="./override.d.ts" />
 /// <reference types="./gecko/tools/lib.gecko.dom.d.ts" />
 /// <reference types="./gecko/tools/lib.gecko.xpcom.d.ts" />
+/// <reference types="./gecko/tools/lib.gecko.xpidl.d.ts" />
 
 // helpers types
 type f<T> = Array<T>;
@@ -122,8 +123,6 @@ interface XULTab {
   label: string;
 }
 
-interface ContentSecurityPolicy extends nsIContentSecurityPolicy {}
-
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface createXULMap {}
 
@@ -158,10 +157,6 @@ interface Node {
   removeAttribute(name: string): void;
   setAttribute(name: string, value: string | boolean | number): void;
   readonly tagName: string;
-}
-
-interface XULCommandDispatcher {
-  focusedElement: Element;
 }
 
 /**
