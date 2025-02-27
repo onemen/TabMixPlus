@@ -720,7 +720,7 @@ Tabmix.tabsUtils = {
     }
 
     // TabmixTabbar.widthFitTitle is false when mTabMinWidth === mTabMaxWidth
-    if (this.checkNewtabButtonVisibility && !TabmixTabbar.widthFitTitle) {
+    if (this.checkNewtabButtonVisibility && !TabmixTabbar.widthFitTitle && !gBrowser.tabGroups?.length) {
       this.updateMinWidth();
       this.disAllowNewtabbutton = false;
       return;
@@ -728,7 +728,7 @@ Tabmix.tabsUtils = {
 
     const lastTab = Tabmix.visibleTabs.last;
     const tsboRect = this.tabBar.arrowScrollbox.scrollbox.getBoundingClientRect();
-    const tabstripEnd = tsboRect.x + tsboRect.width;
+    const tabstripEnd = tsboRect.right;
     // button is visible
     //         A: last tab and the button are in the same row:
     //            check if we have room for the button in this row
@@ -738,19 +738,14 @@ Tabmix.tabsUtils = {
       let sameRow = TabmixTabbar.inSameRow(lastTab, Tabmix.tabsNewtabButton);
       if (sameRow) {
         const buttonRect = Tabmix.tabsNewtabButton.getBoundingClientRect();
-        const buttonEnd = buttonRect.x + buttonRect.width;
+        const buttonEnd = buttonRect.right;
         this.disAllowNewtabbutton = buttonEnd > tabstripEnd;
       } else {
         this.disAllowNewtabbutton = true;
       }
       return;
     }
-    // button is NOT visible
-    //         A: 2 last tabs are in the same row:
-    //            check if we have room for the button in this row
-    //         B: 2 last tabs are NOT in the same row:
-    //            check if we have room for the last tab + button after
-    //            previous to last tab.
+
     // ignore the case that this tab width is larger then the tabbar
     let previousTab = Tabmix.visibleTabs.previous(lastTab);
     if (!previousTab) {
@@ -758,15 +753,27 @@ Tabmix.tabsUtils = {
       return;
     }
 
+    // 2 last elements:
+    // - last tab is single in its group: group label + last tab
+    // - last tab is not single in its group: prev tab + last tab
+    //
+    // Button not visible:
+    //   A: Last elements in same row: check room for button
+    //   B: Last elements Not in same row:
+    //      check room for last tab + button after prev element
+    const previousElement = lastTab.group?.tabs.length === 1 ?
+      lastTab.group.labelElement.parentElement :
+      previousTab;
+
     const tsboEnd = tabstripEnd + this._newTabButtonWidth(true);
-    if (TabmixTabbar.inSameRow(lastTab, previousTab)) {
-      const lastTabRect = lastTab.getBoundingClientRect();
-      const buttonEnd = lastTabRect.x + lastTabRect.width + this._newTabButtonWidth();
+    const lastTabRect = lastTab.getBoundingClientRect();
+    if (TabmixTabbar.inSameRow(lastTab, previousElement)) {
+      const buttonEnd = lastTabRect.right + this._newTabButtonWidth();
       this.disAllowNewtabbutton = buttonEnd > tsboEnd;
       return;
     }
-    const previousTabRect = previousTab.getBoundingClientRect();
-    const lastTabEnd = previousTabRect.x + previousTabRect.width + lastTab.getBoundingClientRect().width;
+    const previousElementRect = previousElement.getBoundingClientRect();
+    const lastTabEnd = previousElementRect.right + lastTabRect.width;
     // both last tab and new tab button are in the next row
     if (lastTabEnd > tsboEnd) {
       this.disAllowNewtabbutton = false;

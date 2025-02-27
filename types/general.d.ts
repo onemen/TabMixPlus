@@ -465,12 +465,42 @@ declare namespace MockedGeckoTypes {
     gBrowser: TabBrowser;
   }
 
+  type MozTextLabelContainer = HTMLElement;
+
+  interface MozTextLabel extends Omit<HTMLLabelElement, "control"> {
+    _onClick(event: MouseEvent): void;
+    get accessKey(): string;
+    set accessKey(val: string);
+    get textContent(): string;
+    set textContent(value: string);
+    get control(): string | null;
+    set control(value: string | null);
+    set labeledControlElement(value: Element | null);
+    get lastFormattedAccessKey(): string | null;
+    set lastFormattedAccessKey(value: string | null);
+    parentElement: MozTextLabelContainer;
+  }
+
   interface MozTabbrowserTabGroup extends MozXULElement {
-    addTabs: (tabs: BrowserTab[]) => void;
-    color: string;
-    collapsed: boolean;
-    id: string;
-    label: string;
+    get color(): string;
+    set color(code: string);
+    get id(): string;
+    set id(val: string);
+    get label(): string;
+    set label(val: string);
+    get name(): string;
+    set name(newName: string);
+    get collapsed(): boolean;
+    set collapsed(val: boolean);
+    lastSeenActive(): void;
+    tabs(): BrowserTab[];
+    get labelElement(): MozTextLabel;
+    addTabs(tabs: BrowserTab[]): void;
+    ungroupTabs(): void;
+    save(): void;
+    on_click(event: PointerEvent): void;
+    on_TabSelect(): void;
+    select(): void;
   }
 
   interface TabsPanel extends TabsListBase {

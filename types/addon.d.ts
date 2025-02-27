@@ -665,7 +665,7 @@ declare namespace TabmixTabbarNS {
   const singleRowHeight: number;
   let _waitAfterMaximized: boolean;
   function _handleResize(): void;
-  function inSameRow(tab1: Tab | null, tab2: Tab | HTMLButtonElement | null): boolean;
+  function inSameRow(tab1: Tab | null, tab2: Tab | HTMLButtonElement | MockedGeckoTypes.MozTextLabelContainer | null): boolean;
   function setFirstTabInRow(): void;
   function removeShowButtonAttr(): void;
   const _real_numPinnedTabs: number;
