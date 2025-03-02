@@ -96,7 +96,7 @@ export const TabmixBrowserDOMWindow = {
   getNsBrowserAccess(window) {
     return {
       constructor: window.nsBrowserAccess,
-      makeCode: eval(Tabmix._localMakeCode),
+      makeCode: window.eval(Tabmix._localMakeCode),
     };
   },
 
@@ -138,6 +138,10 @@ export const TabmixBrowserDOMWindow = {
       });
       browser.focus();
     }`
+    )._replace(
+      /Tabmix\./g,
+      'this.win.Tabmix.',
+      {check: isVersion(1370)}
     );
     return code.value;
   },
@@ -145,14 +149,6 @@ export const TabmixBrowserDOMWindow = {
   getContentWindowOrOpenURI(constructor, methodName) {
     const fullMethodName = `${constructor.name}.prototype.${methodName}`;
     const code = Tabmix.changeCode(constructor.prototype, fullMethodName)._replace(
-      /new ReferrerInfo/g,
-      'new lazy.ReferrerInfo',
-      {check: !isVersion(1370)}
-    )._replace(
-      /URILoadingHelper/g,
-      'lazy.URILoadingHelper',
-      {check: !isVersion(1370)}
-    )._replace(
       'switch (aWhere) {',
       `  if (Tabmix.singleWindowMode &&
           aWhere == Ci.nsIBrowserDOMWindow.OPEN_NEWWINDOW) {
@@ -173,7 +169,11 @@ export const TabmixBrowserDOMWindow = {
       {flags: "g", check: !isVersion(1370)},
     )._replace(
       '!lazy.loadDivertedInBackground',
-      'aIsExternal ? !lazy.loadExternalInBackground : $&',
+      'isExternal ? !lazy.loadExternalInBackground : $&',
+      {check: isVersion(1370)}
+    )._replace(
+      /Tabmix\./g,
+      'this.win.Tabmix.',
       {check: isVersion(1370)}
     );
     return code.value;
