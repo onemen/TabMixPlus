@@ -3,13 +3,6 @@ import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {XPCOMUtils} from "resource://gre/modules/XPCOMUtils.sys.mjs";
 
-// These imports are used internally by the BrowserDOMWindow class
-/* eslint-disable no-unused-vars */
-import {BrowserWindowTracker} from "resource:///modules/BrowserWindowTracker.sys.mjs";
-import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
-import {PrivateBrowsingUtils} from "resource://gre/modules/PrivateBrowsingUtils.sys.mjs";
-/* eslint-enable no-unused-vars */
-
 const lazy = {};
 /* eslint-disable tabmix/valid-lazy */
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -64,6 +57,12 @@ export const TabmixBrowserDOMWindow = {
   getBrowserDOMWindow(getPrivateMethod) {
     // BrowserDOMWindow.sys.mjs exist since Firefox 137
     const {BrowserDOMWindow} = ChromeUtils.importESModule("resource:///modules/BrowserDOMWindow.sys.mjs");
+
+    /* eslint-disable no-unused-vars */
+    const {BrowserWindowTracker} = ChromeUtils.importESModule("resource:///modules/BrowserWindowTracker.sys.mjs");
+    const {AppConstants} = ChromeUtils.importESModule("resource://gre/modules/AppConstants.sys.mjs");
+    const {PrivateBrowsingUtils} = ChromeUtils.importESModule("resource://gre/modules/PrivateBrowsingUtils.sys.mjs");
+    /* eslint-enable no-unused-vars */
 
     BrowserDOMWindow.prototype._openURIInNewTab = getPrivateMethod(
       BrowserDOMWindow,
