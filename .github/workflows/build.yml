@@ -60,7 +60,7 @@ jobs:
 
       - name: Create CHANGELOG
         if: ${{ steps.set_version.outputs.CHANGELOG_EXIST == 'true' }}
-        uses: requarks/changelog-action@v1.10.1
+        uses: requarks/changelog-action@v1.10.2
         with:
           token: ${{ github.token }}
           fromTag: 'dev-build'
@@ -76,6 +76,7 @@ jobs:
             newContent = newContent.map(line => {
               return line
                 .replace(" *(commit by [@onemen](https://github.com/onemen))*", "")
+                .replace(/PR (\[#\d+\].*)?\s?by \[@onemen\].*?\)/g, "$1")
                 .replace(/-\s*(\[.{9}\][^)]*\))\s-\s(.*)/g, "- $2 ($1)")
                 .replace(/__/g, "\\_\\_")
                 .replace(/followup/gi, "follow up")
