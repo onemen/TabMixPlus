@@ -485,7 +485,13 @@ Tabmix.tablib = {
           TabmixTabbar.hideMode === 1 &&
           gBrowser.visibleTabs.length === 1)
       ) {`,
-      {check: Tabmix.isVersion(1330)}
+      {check: Tabmix.isVersion(1330) && !Tabmix.isVersion(1380)}
+    )._replace(
+      /let hideTabsToolbar =([^;]*);/,
+      `let hideTabsToolbar =
+        TabmixTabbar.hideMode === 2 ||
+        (!isSingleTabWindow && TabmixTabbar.hideMode === 1 && hasSingleTab) || $1;`,
+      {check: Tabmix.isVersion(1380)}
     )._replace(
       /(})(\)?)$/,
       `const bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
