@@ -46,7 +46,7 @@ I encourage you to explore the new documentation website and share your feedback
 ## Installation
 
 1. **_Legacy_ extensions loader**<br />
-Since Firefox removed the internal component that loads _legacy_ extension, in order to install **Tab Mix Plus**, or any other _legacy_ extension, you have to install 3rd party helper scripts.
+Since Firefox removed the internal component that loads _legacy_ extension, in order to install **Tab Mix Plus**, or any other _legacy_ extension, you have to install 3rd party helper scripts. If you are using Waterfox, you can skip this and proceed to step 2.
 
    1.1. Open `about:support` and locate the path to your **Application Binary** and **Profile Folder**.
    <details><summary>screenshoot</summary>
