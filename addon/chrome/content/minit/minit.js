@@ -449,6 +449,11 @@ var TMP_tabDNDObserver = {
     gBrowser.tabContainer._finishAnimateTabMove = function(...args) {
       Tabmix.originalFunctions._finishAnimateTabMove.apply(this, args);
       this.removeAttribute("tabmix-movingBackgroundTab");
+      if (Tabmix.isVersion(1340)) {
+        // the original function call #clearDragOverCreateGroupTimer
+        // so we need to call our "private" version
+        this._clearDragOverCreateGroupTimer();
+      }
       const tabs = this.querySelectorAll("[tabmix-dragged]");
       tabs.forEach(tab => tab?.removeAttribute("tabmix-dragged"));
     };
