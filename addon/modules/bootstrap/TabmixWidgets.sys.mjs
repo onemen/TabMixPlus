@@ -1,5 +1,6 @@
 /* eslint-disable mozilla/balanced-listeners */
 
+/** @type {TabmixWidgetsModule.Lazy} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   CustomizableUI: "resource:///modules/CustomizableUI.sys.mjs",
@@ -31,15 +32,19 @@ const widgets = {
           observes="tmp_undocloseButton"/>
       </toolbaritem>`;
     },
+    /** @typedef {TabmixGlobals.ButtonEvent} ButtonEvent */
+    /** @typedef {TabmixGlobals.PopupEvent} PopupEvent */
+    /** @typedef {TabmixWidgetsModule.TabDragEvent} TabDragEvent */
+    /** @type {TabmixWidgetsModule.onBuild} */
     onBuild(node) {
       const [button, dropmarker] = node.children;
-      button.addEventListener("command", event => {
+      button.addEventListener("command", (/** @type {ButtonEvent} */ event) => {
         node.ownerGlobal.TMP_ClosedTabs.handleButtonEvent(event);
       });
-      button.addEventListener("click", event => {
+      button.addEventListener("click", (/** @type {ButtonEvent} */ event) => {
         node.ownerGlobal.TMP_ClosedTabs.handleButtonEvent(event);
       });
-      button.addEventListener("mousedown", event => {
+      button.addEventListener("mousedown", (/** @type {PopupEvent} */ event) => {
         node.ownerGlobal.TabmixAllTabs.checkForCtrlClick(event);
       });
       button.addEventListener("mouseup", event => {
@@ -47,19 +52,19 @@ const widgets = {
           node.ownerGlobal.setTimeout(() => button.removeAttribute("afterctrlclick"), 0);
         }
       });
-      button.addEventListener("dragover", event => {
+      button.addEventListener("dragover", (/** @type {TabDragEvent} */ event) => {
         node.ownerGlobal.TMP_undocloseTabButtonObserver.onDragOver(event);
       });
-      button.addEventListener("dragenter", event => {
+      button.addEventListener("dragenter", (/** @type {TabDragEvent} */ event) => {
         node.ownerGlobal.TMP_undocloseTabButtonObserver.onDragOver(event);
       });
-      button.addEventListener("drop", event => {
+      button.addEventListener("drop", (/** @type {TabDragEvent} */ event) => {
         node.ownerGlobal.TMP_undocloseTabButtonObserver.onDrop(event);
       });
-      button.addEventListener("dragleave", event => {
+      button.addEventListener("dragleave", (/** @type {TabDragEvent} */ event) => {
         node.ownerGlobal.TMP_undocloseTabButtonObserver.onDragExit(event);
       });
-      dropmarker.addEventListener("command", event => {
+      dropmarker.addEventListener("command", (/** @type {ButtonEvent} */ event) => {
         node.ownerGlobal.Tabmix.closedObjectsUtils.showSubView(event);
       });
     },
@@ -83,8 +88,9 @@ const widgets = {
           label="&closedwindowsbtn.label;"/>
       </toolbaritem>`;
     },
+    /** @type {TabmixWidgetsModule.onBuild} */
     onBuild(node) {
-      node.firstChild.addEventListener("command", event => {
+      node.firstChild.addEventListener("command", (/** @type {ButtonEvent} */ event) => {
         node.ownerGlobal.Tabmix.closedObjectsUtils.showSubView(event);
       });
     },
@@ -106,8 +112,9 @@ const widgets = {
         data-l10n-id="tabs-toolbar-list-all-tabs"/>
       </toolbaritem>`;
     },
+    /** @type {TabmixWidgetsModule.onBuild} */
     onBuild(node) {
-      node.firstChild.addEventListener("command", event => {
+      node.firstChild.addEventListener("command", (/** @type {GenericEvent<HTMLElement, Event>} */ event) => {
         node.ownerGlobal.Tabmix.allTabs.showAllTabsPanel(event);
       });
     },
@@ -131,27 +138,30 @@ const widgets = {
         cui-areatype="toolbar"
         removable="false"/>`;
     },
+    /** @type {TabmixWidgetsModule.onBuild} */
     onBuild(node, document) {
-      document.l10n?.translateElements([node]).then(() => {
+      document?.l10n?.translateElements([node]).then(() => {
         node.removeAttribute("data-l10n-id");
         node.removeAttribute("data-l10n-args");
         if (node.hasAttribute("label")) {
-          node.setAttribute("tooltiptext", node.getAttribute("label"));
+          node.setAttribute("tooltiptext", node.getAttribute("label") ?? "");
         } else if (node.hasAttribute("tooltiptext")) {
-          node.setAttribute("label", node.getAttribute("tooltiptext"));
+          node.setAttribute("label", node.getAttribute("tooltiptext") ?? "");
         }
       });
     },
   },
 };
 
+/** @param {TabmixWidgetsModule.Widget} widget */
 function on_build(widget) {
   const {markup, updateMarkup, localizeFiles, onBuild} = widget;
-  return function(document) {
+  return function(/** @type {Document & {ownerGlobal: Window}} */ document) {
     const MozXULElement = document.ownerGlobal.MozXULElement;
     const node = MozXULElement.parseXULToFragment(updateMarkup ?? markup, localizeFiles);
     const parent = document.createXULElement("box");
     parent.appendChild(node);
+    /** @type {TabmixWidgetsModule.WidgetElement} */ // @ts-ignore
     const child = parent.childNodes[0];
     if (onBuild) {
       onBuild(child, document);
@@ -160,6 +170,7 @@ function on_build(widget) {
   };
 }
 
+/** @param {TabmixWidgetsModule.Widget} widget */
 function createWidget(widget) {
   try {
     lazy.CustomizableUI.createWidget({
@@ -173,11 +184,12 @@ function createWidget(widget) {
   }
 }
 
+/** @type {TabmixWidgetsModule.TabmixWidgets} */
 export const TabmixWidgets = {
   create() {
     try {
       lazy.CustomizableUI.beginBatchUpdate();
-      Object.values(widgets).forEach(createWidget);
+      Object.values(widgets).forEach(w => createWidget(w));
     } finally {
       lazy.CustomizableUI.endBatchUpdate();
     }

@@ -1,6 +1,8 @@
 
+/** @type {ContentClickModule.Lazy} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
+  BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
   ClickHandlerParent: "resource:///actors/ClickHandlerParent.sys.mjs",
   E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
   PlacesUIUtils: "resource:///modules/PlacesUIUtils.sys.mjs",
@@ -13,7 +15,10 @@ ChromeUtils.defineESModuleGetters(lazy, {
 // imports as globals
 const internalChromeUtils = ChromeUtils;
 
+/** @type {ContentClickModule.ContentClickInternal} */
 var ContentClickInternal;
+
+/** @type {ContentClickModule.ContentClick} */
 export const TabmixContentClick = {
   init() {
     ContentClickInternal.init();
@@ -92,12 +97,15 @@ ContentClickInternal = {
   },
 
   functions: ["contentAreaClick"],
+
   initContentAreaClick: function TMP_initContentAreaClick() {
     this.functions.forEach(aFn => {
       lazy.ClickHandlerParent.prototype["tabmix_" + aFn] = lazy.ClickHandlerParent.prototype[aFn];
     });
 
+    /** @type {MockedExports.ClickHandlerParent["contentAreaClick"]}  */
     lazy.ClickHandlerParent.prototype.contentAreaClick = function contentAreaClick(json) {
+      // @ts-ignore
       this.tabmix_contentAreaClick.apply(this, arguments);
 
       // we add preventDefault in our content.js when 'where' is not the
@@ -110,13 +118,14 @@ ContentClickInternal = {
       // based on ClickHandlerParent.prototype.contentAreaClick
       let browser = this.manager.browsingContext.top.embedderElement;
       let window = browser.ownerGlobal;
-      var where = window.Tabmix.whereToOpenLink(json);
+      let where = lazy.BrowserUtils.whereToOpenLink(json);
       if (where != "current") {
         return;
       }
 
       let suppressTabsOnFileDownload =
           json.tabmixContentClick.suppressTabsOnFileDownload || false;
+      /** @type {MockedGeckoTypes.OpenLinkInParams} */
       let params = {
         charset: browser.characterSet,
         suppressTabsOnFileDownload,
@@ -136,10 +145,10 @@ ContentClickInternal = {
         params.globalHistoryOptions = json.globalHistoryOptions;
       } else {
         params.globalHistoryOptions = {
-          triggeringSponsoredURL: browser.getAttribute("triggeringSponsoredURL"),
+          triggeringSponsoredURL: browser.getAttribute("triggeringSponsoredURL") ?? "",
           triggeringSponsoredURLVisitTimeMS: browser.getAttribute(
             "triggeringSponsoredURLVisitTimeMS"
-          ),
+          ) ?? "",
         };
       }
 
@@ -165,7 +174,7 @@ ContentClickInternal = {
       const {epoch} = message.data;
       if (this.frameSearch.has(epoch)) {
         const frameSearch = this.frameSearch.get(epoch);
-        frameSearch.result(message.target, message.data);
+        frameSearch?.result(message.target, message.data);
       }
       return null;
     }
@@ -174,8 +183,8 @@ ContentClickInternal = {
 
     let {json, href, node} = message.data;
     // call getWrappedNode to add attribute functions to the wrapped node
-    let wrappedNode = this.getWrappedNode(node);
     let browser = message.target;
+    let wrappedNode = this.getWrappedNode(node, browser.ownerGlobal);
 
     // return value to the message caller
     if (!href && wrappedNode) {
@@ -194,7 +203,7 @@ ContentClickInternal = {
     let href = event.__hrefFromOnClick;
     let result = this._getParamsForLink(event, null, href, browser, true, wrappedOnClickNode);
     if (result.where == "default") {
-      event.__hrefFromOnClick = null;
+      delete event.__hrefFromOnClick;
       return false;
     }
 
@@ -232,15 +241,18 @@ ContentClickInternal = {
     this._browser = browser;
     this._window = browser.ownerGlobal;
 
-    let [where, suppressTabsOnFileDownload] =
+    let [whereWithData, suppressTabsOnFileDownload] =
         this.whereToOpen(event, href, wrappedNode, wrappedOnClickNode);
 
     // for debug
-    where = where.split("@")[0];
+    whereWithData = whereWithData.split("@")[0] ?? "";
     // we only use the format where.xxxx in window.contentAreaClick
     // see contentLinks.js
     if (clean)
-      where = where.split(".")[0];
+      whereWithData = whereWithData.split(".")[0] ?? "";
+
+    /** @type {ContentClickModule.WhereToOpenLink} */ // @ts-ignore
+    const where = whereWithData;
     if (where == "current")
       browser.tabmix_allowLoad = true;
 
@@ -271,8 +283,10 @@ ContentClickInternal = {
     };
   },
 
+  // @ts-ignore
   _data: null,
   resetData() {
+    // @ts-ignore
     this._data = null;
     this._browser = null;
     this._window = null;
@@ -283,9 +297,9 @@ ContentClickInternal = {
       return lazy.TabmixSvc.prefBranch.getIntPref("opentabforLinks");
     });
 
-    let tabBrowser = this._window.gBrowser;
+    let tabBrowser = this._window?.gBrowser;
     internalChromeUtils.defineLazyGetter(this, "currentTabLocked", () => {
-      return tabBrowser.selectedTab.hasAttribute("locked");
+      return tabBrowser?.selectedTab.hasAttribute("locked");
     });
   },
 
@@ -298,7 +312,10 @@ ContentClickInternal = {
    * @return                 wrapped node including attribute functions
    */
   getWrappedNode(node, focusedWindow, getTargetIsFrame) {
+    /** @type {ContentClickModule.wrapNode} */
     let wrapNode = function wrapNode(aNode, aGetTargetIsFrame) {
+      /** @type {ContentClickModule.ExtendedWrappedNode} */
+      // @ts-expect-error - We're extending the returned WrappedNode with additional methods
       let nObj = lazy.LinkNodeUtils.wrap(aNode, focusedWindow, aGetTargetIsFrame);
       nObj.hasAttribute = function(att) {
         return att in this._attributes;
@@ -315,88 +332,83 @@ ContentClickInternal = {
       return nObj;
     };
 
-    return node ? wrapNode(node, getTargetIsFrame) : null;
+    return node ? wrapNode(node, getTargetIsFrame ?? false) : null;
   },
 
   /**
    * @param event            A valid event union.
    * @param href             href string.
-   * @param wrappedNode      wrapped DOM node containing the URL to be opened.
-   * @param wrappedOnClickNode   wrapped DOM node containing onclick, may exist only
+   * @param node             wrapped DOM node containing the URL to be opened.
+   *                         or wrapped DOM node containing onclick, may exist only
    *                         when link node is null.
+   * @param wrappedNode      wrapped DOM node containing the URL to be opened.
    */
-  getData(event, href, wrappedNode, wrappedOnClickNode) {
-    let self = this;
-    function LinkData() {
-      this.event = event;
-      this.href = href;
-      this.wrappedNode = wrappedNode || null;
-      this.wrappedOnClickNode = wrappedOnClickNode || null;
-      this.targetAttr = wrappedNode && wrappedNode.target;
-      internalChromeUtils.defineLazyGetter(this, "currentURL", () => {
-        return self._browser.currentURI ? self._browser.currentURI.spec : "";
-      });
-      internalChromeUtils.defineLazyGetter(this, "onclick", function() {
-        if (this.wrappedNode && this.wrappedNode.hasAttribute("onclick"))
-          return this.wrappedNode.getAttribute("onclick");
-        return null;
-      });
-      internalChromeUtils.defineLazyGetter(this, "hrefFromOnClick", function() {
-        return self.getHrefFromOnClick(event, href, this.wrappedNode, this.onclick);
-      });
-      internalChromeUtils.defineLazyGetter(this, "isLinkToExternalDomain", function() {
-        /**
-         * Check if link refers to external domain.
-         * Get current page url
-         * if user click a link while the page is reloading node.ownerDocument.location can be null
-         */
-        let youtube = /www\.youtube\.com\/watch\?v=/;
-        let curpage = this.currentURL;
-        if (!youtube.test(curpage)) {
-          let node = this.wrappedNode || this.wrappedOnClickNode;
-          curpage = node.ownerDocument.URL || this.currentURL;
-        }
-        let nodeHref = this.hrefFromOnClick || this.href || self._window.XULBrowserWindow.overLink;
-        return self.isLinkToExternalDomain(curpage, nodeHref);
-      });
-    }
+  getData(event, href, node, wrappedNode) {
+    /** @typedef {ContentClickModule.LinkData} LinkData */
+    /** @type {LinkData} */
+    const data = {
+      event,
+      href,
+      node,
+      wrappedNode: wrappedNode || null,
+      targetAttr: wrappedNode && wrappedNode.target,
+      onclick: null,
+      currentURL: "",
+      hrefFromOnClick: null,
+      isLinkToExternalDomain: false
+    };
 
-    this._data = new LinkData();
+    internalChromeUtils.defineLazyGetter(data, "currentURL", () => {
+      return this._browser?.currentURI?.spec ?? "";
+    });
+
+    internalChromeUtils.defineLazyGetter(data, "onclick", () => {
+      if (wrappedNode?.hasAttribute("onclick")) {
+        return wrappedNode.getAttribute("onclick");
+      }
+      return null;
+    });
+
+    internalChromeUtils.defineLazyGetter(data, "hrefFromOnClick", () => {
+      return this.getHrefFromOnClick(event, href, wrappedNode, data.onclick);
+    });
+
+    internalChromeUtils.defineLazyGetter(data, "isLinkToExternalDomain", () => {
+      let youtube = /www\.youtube\.com\/watch\?v=/;
+      let curpage = data.currentURL;
+      if (!youtube.test(curpage)) {
+        curpage = node.ownerDocument.URL || data.currentURL;
+      }
+      let nodeHref = data.hrefFromOnClick || data.href || this._window?.XULBrowserWindow.overLink;
+      return nodeHref ? this.isLinkToExternalDomain(curpage, nodeHref) : false;
+    });
+
+    this._data = data;
   },
 
   whereToOpen: function TMP_whereToOpenLink(event, href, wrappedNode, wrappedOnClickNode) {
-    let eventWhere;
-    let TMP_tabshifted = aEvent => {
-      var where = eventWhere || this._window.Tabmix.whereToOpenLink(aEvent);
+    let eventWhere = "";
+    let TMP_tabshifted = (/** @type {typeof event} */ aEvent) => {
+      let where = eventWhere || lazy.BrowserUtils.whereToOpenLink(aEvent);
       return where == "tabshifted" ? "tabshifted" : "tab";
     };
 
-    ///XXX check again how SubmitToTab work
-    if (typeof this._window.SubmitToTab != 'undefined') {
-      let target = event.target;
-      if (HTMLButtonElement.isInstance(target) ||
-          HTMLInputElement.isInstance(target)) {
-        if (this._window.SubmitToTab.SubmitToTab.contentAreaClick(event) === false) {
-          return ["default@1"];
-        }
-      }
-    }
-
-    if (!wrappedNode && !wrappedOnClickNode)
+    const node = wrappedNode || wrappedOnClickNode;
+    if (!node)
       return ["default@2"];
 
     this.getPref();
-    this.getData(event, href, wrappedNode, wrappedOnClickNode);
+    this.getData(event, href, node, wrappedNode);
 
     // whereToOpenLink return save or window
-    eventWhere = this._window.Tabmix.whereToOpenLink(event);
+    eventWhere = lazy.BrowserUtils.whereToOpenLink(event);
     if (/^save|window/.test(eventWhere)) {
       // make sure to trigger hrefFromOnClick getter
       void this._data.hrefFromOnClick;
       return [eventWhere + "@2.1"];
     }
 
-    if (this.miscellaneous(wrappedNode || wrappedOnClickNode))
+    if (this.miscellaneous(node))
       return ["default@2.2"];
 
     /*
@@ -411,7 +423,7 @@ ContentClickInternal = {
       return ["default@4"];
 
     if (wrappedNode && wrappedNode.getAttribute("rel") == "sidebar" || targetAttr == "_search" ||
-        href.indexOf("mailto:") > -1) {
+        href && href.indexOf("mailto:") > -1) {
       return ["default@5"];
     }
 
@@ -423,7 +435,7 @@ ContentClickInternal = {
       // don't do anything if we are on gmail and let gmail take care of the download
       let url = this._data.currentURL;
       let isGmail = /^(http|https):\/\/mail.google.com/.test(url);
-      let isHttps = /^https/.test(href);
+      let isHttps = href ? /^https/.test(href) : false;
       if (isGmail || isHttps)
         return ["default@6", true];
       return ["current@7", true];
@@ -435,8 +447,8 @@ ContentClickInternal = {
       return ["current@9"];
 
     // don't mess with links that have onclick inside iFrame
-    let onClickInFrame = wrappedOnClickNode && wrappedOnClickNode.ownerGlobal.frameElement ||
-        onclick && wrappedNode.ownerGlobal.frameElement;
+    let onClickInFrame = wrappedOnClickNode?.ownerGlobal.frameElement ||
+        onclick && wrappedNode?.ownerGlobal.frameElement;
 
     /*
      * force a middle-clicked link to open in the current tab if certain conditions
@@ -514,7 +526,7 @@ ContentClickInternal = {
     if (typeof aEvent.tabmix_openLinkWithHistory == "boolean")
       return "2";
 
-    let [href, linkNode] = win.hrefAndLinkNodeForClickEvent(aEvent);
+    let [href, linkNode] = lazy.BrowserUtils.hrefAndLinkNodeForClickEvent(aEvent) ?? [null, null];
     if (!href) {
       let node = lazy.LinkNodeUtils.getNodeWithOnClick(aEvent.target);
       let wrappedOnClickNode = this.getWrappedNode(node, aFocusedWindow, aEvent.button === 0);
@@ -531,8 +543,8 @@ ContentClickInternal = {
       aEvent.getModifierState("AltGraph") ||
       aEvent.metaKey
     ) {
-      if (/^save|window|tab/.test(win.Tabmix.whereToOpenLink(aEvent)))
-        this.getHrefFromOnClick(aEvent, href, linkNode, linkNode.getAttribute("onclick"));
+      if (/^save|window|tab/.test(lazy.BrowserUtils.whereToOpenLink(aEvent)))
+        this.getHrefFromOnClick(aEvent, href, linkNode, linkNode?.getAttribute("onclick") ?? null);
       return "3";
     }
 
@@ -543,11 +555,11 @@ ContentClickInternal = {
     if (!this.currentTabLocked && this.targetPref === 0)
       return "4";
 
-    if (!linkNode)
+    let wrappedNode = this.getWrappedNode(linkNode, aFocusedWindow, true);
+    if (!linkNode || !wrappedNode)
       return "5";
 
-    let wrappedNode = this.getWrappedNode(linkNode, aFocusedWindow, true);
-    this.getData(aEvent, href, wrappedNode);
+    this.getData(aEvent, href, wrappedNode, wrappedNode);
 
     var currentHref = this._data.currentURL;
     // don't do anything on mail.google or google.com/reader
@@ -613,7 +625,7 @@ ContentClickInternal = {
         return "16";
       }
 
-      let where = this._window.Tabmix.whereToOpenLink(aEvent);
+      let where = lazy.BrowserUtils.whereToOpenLink(aEvent);
       aEvent.__where = where == "tabshifted" ? "tabshifted" : "tab";
       // in Firefox 17.0-20.0 we can't pass aEvent.__where to handleLinkClick
       // add 4th arguments with where value
@@ -673,7 +685,7 @@ ContentClickInternal = {
 
     // don't interrupt with fastdial links
     return "ownerDocument" in node &&
-        this._window.Tabmix.isNewTabUrls(node.ownerDocument.documentURI);
+        (this._window?.Tabmix.isNewTabUrls(node.ownerDocument.documentURI) ?? false);
   },
 
   /**
@@ -707,7 +719,7 @@ ContentClickInternal = {
     href = hrefFromOnClick || href;
 
     // prevent link with "custombutton" protocol to open new tab when custombutton extension exist
-    if (event.button != 2 && typeof custombuttons != 'undefined') {
+    if (event.button != 2 && typeof this._window?.custombuttons != 'undefined') {
       if (this.checkAttr(href, "custombutton://"))
         return true;
     }
@@ -733,7 +745,7 @@ ContentClickInternal = {
     if (this.checkAttr(href, "javascript:"))
       return false;
 
-    return this.isUrlForDownload(href);
+    return href ? this.isUrlForDownload(href) : false;
   },
 
   isUrlForDownload: function TMP_isUrlForDownload(linkHref) {
@@ -744,8 +756,8 @@ ContentClickInternal = {
     // always check if the link is an xpi link
     let filetype = ["xpi"];
     if (lazy.TabmixSvc.prefBranch.getBoolPref("enablefiletype")) {
-      let types = lazy.TabmixSvc.prefBranch.getCharPref("filetype");
-      types = types.toLowerCase().split(" ")
+      let typeString = lazy.TabmixSvc.prefBranch.getCharPref("filetype");
+      let types = typeString.toLowerCase().split(" ")
           .filter(t => !filetype.includes(t));
       filetype = [...filetype, ...types];
     }
@@ -758,20 +770,20 @@ ContentClickInternal = {
     }
 
     var testString, hrefExt, testExt;
-    for (var l = 0; l < filetype.length; l++) {
+    for (const type of filetype) {
       let doTest = true;
-      if (filetype[l].includes("/")) {
+      if (type.includes("/")) {
         // add \ before first ?
-        testString = filetype[l].replace(/^\/(.*)\/$/, "$1").replace(/^\?/, "\\?");
+        testString = type.replace(/^\/(.*)\/$/, "$1").replace(/^\?/, "\\?");
         hrefExt = linkHref;
-      } else if (filetype[l].includes('?')) {
+      } else if (type.includes('?')) {
         // escape any ? and make sure it starts with \.
-        testString = filetype[l].replace(/\?/g, "?").replace(/\?/g, "\\?")
+        testString = type.replace(/\?/g, "?").replace(/\?/g, "\\?")
             .replace(/^\./, "").replace(/^\\\./, "");
         testString = "\\." + testString;
         hrefExt = linkHref;
       } else {
-        testString = "\\." + filetype[l];
+        testString = "\\." + type;
         hrefExt = linkHrefExt;
         try {
           // prevent filetype catch if it is in the middle of a word
@@ -879,7 +891,7 @@ ContentClickInternal = {
    *
    */
   openExSiteLink: function TMP_openExSiteLink() {
-    if (this.targetPref != 2 || this._window.Tabmix.isNewTabUrls(this._data.currentURL))
+    if (this.targetPref != 2 || this._window?.Tabmix.isNewTabUrls(this._data.currentURL))
       return false;
 
     if (this.GoogleComLink())
@@ -889,9 +901,9 @@ ContentClickInternal = {
       return false;
 
     let {href, hrefFromOnClick, isLinkToExternalDomain, wrappedNode} = this._data;
-    return /^(http|about)/.test(hrefFromOnClick || href) &&
+    return /^(http|about)/.test(hrefFromOnClick || href || "") &&
         (isLinkToExternalDomain || wrappedNode &&
-        this.checkAttr(wrappedNode.getAttribute("onmousedown"), "return rwt"));
+        this.checkAttr(wrappedNode.getAttribute("onmousedown"), "return rwt")) || false;
   },
 
   /**
@@ -902,25 +914,28 @@ ContentClickInternal = {
               false to load link in current tab
    */
   openTabfromLink: function TMP_openTabfromLink() {
-    if (this._window.Tabmix.isNewTabUrls(this._data.currentURL))
+    if (this._window?.Tabmix.isNewTabUrls(this._data.currentURL))
       return false;
 
     if (this.GoogleComLink())
       return null;
 
     let {href, hrefFromOnClick} = this._data;
-    if (!/^(http|about)/.test(hrefFromOnClick || href))
+    if (!/^(http|about)/.test(hrefFromOnClick || href || ""))
       return null;
 
     // don't open new tab from facebook chat and settings
-    if (/www\.facebook\.com\/(?:ajax|settings)/.test(href))
+    if (/www\.facebook\.com\/(?:ajax|settings)/.test(href || ""))
       return false;
 
     let current = this._data.currentURL.toLowerCase();
     let youtube = /www\.youtube\.com\/watch\?v=/;
+    /** @param {string} _href  */
     let isYoutube = _href => youtube.test(current) && youtube.test(_href);
     const pathProp = "pathQueryRef";
+    /** @param {string} _href @param {string} att */
     let isSamePath = (_href, att) => makeURI(current)[pathProp].split(att)[0] == makeURI(_href)[pathProp].split(att)[0];
+    /** @param {string} _href @param {string} att */
     let isSame = (_href, att) => current.split(att)[0] == _href.split(att)[0];
 
     if (hrefFromOnClick) {
@@ -939,11 +954,11 @@ ContentClickInternal = {
         this.checkOnClick(true))
       // javascript links, do nothing!
       return null;
-    else if (isYoutube(href))
-      return !isSamePath(href, '&t=');
+    else if (isYoutube(href || ""))
+      return !isSamePath(href || "", '&t=');
 
     // when the links target is in the same page don't open new tab
-    return !isSame(href, '#');
+    return !isSame(href || "", '#');
   },
 
   /**
@@ -960,7 +975,7 @@ ContentClickInternal = {
     if (/calendar\/render/.test(location))
       return true;
 
-    var node = this._data.wrappedNode || this._data.wrappedOnClickNode;
+    var node = this._data.node;
     if (/\/intl\/\D{2,}\/options\/|search/.test(node.pathname))
       return true;
 
@@ -990,6 +1005,7 @@ ContentClickInternal = {
         Services.prefs.getBoolPref("browser.tabs.loadInBackground"))
       return;
 
+    /** @param {Window} aWindow */
     let isValidWindow = function(aWindow) {
       // window is valid only if both source and destination are in the same
       // privacy state and multiProcess state
@@ -998,8 +1014,11 @@ ContentClickInternal = {
         window.gMultiProcessBrowser == aWindow.gMultiProcessBrowser;
     };
 
-    let isMultiProcess;
+    /** @type {boolean} */
+    let isMultiProcess = false;
+    /** @type {Window[]} */
     let windows = [];
+    /** @param {Window} aWindow */
     let addValidWindow = aWindow => {
       windows.push(aWindow);
       isMultiProcess = isMultiProcess || aWindow.gMultiProcessBrowser;
@@ -1024,11 +1043,14 @@ ContentClickInternal = {
   frameSearch: new Map(),
 
   isFrameInContent(windows, frameData, isMultiProcess) {
+    /** @param {number} epoch */
     const deleteEpoch = epoch => {
       if (this.frameSearch.has(epoch)) {
         this.frameSearch.delete(epoch);
       }
     };
+
+    /** @type {ContentClickModule.FrameSearch} */
     const frameSearch = {
       epoch: 0,
       frameData: null,
@@ -1039,7 +1061,7 @@ ContentClickInternal = {
         this.frameData.epoch = this.epoch;
         this.windows = windows;
         let window = this.windows.shift();
-        this.next(window.gBrowser.tabs[0]);
+        this.next(window?.gBrowser.tabs[0]);
       },
       stop() {
         this.frameData = null;
@@ -1060,16 +1082,16 @@ ContentClickInternal = {
         }
       },
       next(tab) {
-        if (!tab && this.windows.length) {
+        if (!tab && this.windows?.length) {
           let window = this.windows.shift();
-          tab = window.gBrowser.tabs[0];
+          tab = window?.gBrowser.tabs[0];
         }
         if (tab && !tab.hasAttribute("pending")) {
           let browser = tab.linkedBrowser;
           if (browser.getAttribute("remote") == "true") {
             browser.messageManager
                 .sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
-          } else {
+          } else if (this.frameData) {
             let result = lazy.LinkNodeUtils.isFrameInContent(browser.contentWindow,
               this.frameData.href, this.frameData.name);
             this.result(browser, {result});
@@ -1111,6 +1133,7 @@ ContentClickInternal = {
    *
    */
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
+    /** @param {string} url */
     const fixupURI = url => {
       try {
         return Services.uriFixup.getFixupURIInfo(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE).preferredURI;
@@ -1118,6 +1141,7 @@ ContentClickInternal = {
       return null;
     };
 
+    /** @param {nsIURI | string} url */
     let getDomain = function getDomain(url) {
       if (typeof url != "string")
         url = url.toString();
@@ -1134,18 +1158,19 @@ ContentClickInternal = {
       }
 
       if (url.match(/^http/)) {
-        url = fixedURI || makeURI(url);
+        let maybeFixedURI = null;
+        maybeFixedURI = fixedURI || makeURI(url);
 
         // catch redirect
         const pathProp = "pathQueryRef";
-        const path = url[pathProp];
+        const path = maybeFixedURI[pathProp];
         if (path.match(/^\/r\/\?http/)) {
-          url = fixupURI(path.substr("/r/?".length));
+          maybeFixedURI = fixupURI(path.slice("/r/?".length));
         } else if (path.match(/^.*\?url=http/)) {
           // redirect in www.reddit.com
-          url = fixupURI(path.replace(/^.*\?url=/, ""));
+          maybeFixedURI = fixupURI(path.replace(/^.*\?url=/, ""));
         }
-        if (!url) {
+        if (!maybeFixedURI) {
           return null;
         }
         /* DONT DELETE
@@ -1157,12 +1182,12 @@ ContentClickInternal = {
         */
         let level;
         try {
-          var publicSuffix = Services.eTLD.getPublicSuffixFromHost(url.hostPort);
+          var publicSuffix = Services.eTLD.getPublicSuffixFromHost(maybeFixedURI.hostPort);
           level = !publicSuffix.includes(".") ? 2 : 3;
         } catch {
           level = 2;
         }
-        var host = url.hostPort.split(".");
+        var host = maybeFixedURI.hostPort.split(".");
         while (host.length > level)
           host.shift();
         return host.join(".");
@@ -1171,7 +1196,7 @@ ContentClickInternal = {
     };
 
     let targetDomain = getDomain(target);
-    return targetDomain && targetDomain != getDomain(curpage);
+    return targetDomain ? targetDomain != getDomain(curpage) : false;
   },
 
   /**
@@ -1206,9 +1231,9 @@ ContentClickInternal = {
     if (onclick) {
       this._hrefFromOnClick(href, node, onclick, result);
     } else {
-      let parent = node.parentNode;
+      let parent = node?.parentNode;
       if (parent && parent.hasAttribute("onclick"))
-        this._hrefFromOnClick(href, parent, parent.getAttribute("onclick"), result);
+        this._hrefFromOnClick(href, parent, parent.getAttribute("onclick") ?? "", result);
     }
 
     return (event.__hrefFromOnClick = result.__hrefFromOnClick);
@@ -1219,18 +1244,19 @@ ContentClickInternal = {
     if (!re.test(onclick))
       return;
 
-    let clickHref = onclick.replace(re, "").trim().replace(/;|'|"/g, "");
+    let maybeClickHref, newHref;
+    maybeClickHref = onclick.replace(re, "").trim().replace(/;|'|"/g, "");
     // special case for forum/ucp.php
-    if (clickHref == "this.firstChild.href")
-      clickHref = href;
-    let newHref;
+    if (maybeClickHref == "this.firstChild.href")
+      maybeClickHref = href;
     // get absolute href
     try {
-      newHref = makeURI(clickHref, null, makeURI(node.baseURI)).spec;
+      // @ts-expect-error - we cache the error if maybeClickHref is not valid
+      newHref = makeURI(maybeClickHref, null, makeURI(node.baseURI)).spec;
     } catch (ex) {
       // unexpected error
       lazy.TabmixSvc.console.log(ex +
-        "\nunexpected error from makeURLAbsolute\nurl " + clickHref);
+        "\nunexpected error from makeURLAbsolute\nurl " + maybeClickHref);
       return;
     }
 
@@ -1240,7 +1266,7 @@ ContentClickInternal = {
 
     // don't change the onclick if the href point to a different address
     // from the href we extract from the onclick
-    if (href && !href.includes(clickHref) &&
+    if (href && maybeClickHref && !href.includes(maybeClickHref) &&
         !this.checkAttr(href, "javascript"))
       return;
 
@@ -1248,6 +1274,7 @@ ContentClickInternal = {
   }
 };
 
+/** @type {ContentClickModule.makeURI} */
 function makeURI(aURL, aOriginCharset, aBaseURI) {
   return Services.io.newURI(aURL, aOriginCharset, aBaseURI);
 }

@@ -70,7 +70,7 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:collectReloadData": {
-        let postData = {isPostData: false, postData: "", referrerInfo: ""};
+        let postData = {isPostData: false};
         if (!Services.appinfo.sessionHistoryInParent) {
           const history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
           postData = TabmixUtils.getPostDataFromHistory(history.legacySHistory);

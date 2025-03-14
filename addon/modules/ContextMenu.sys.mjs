@@ -1,21 +1,24 @@
+/** @type {ContextMenuModule.Lazy} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   //
   TabmixUtils: "chrome://tabmix-resource/content/Utils.sys.mjs"
 });
 
+/** @type {TabmixContextMenu} */
 export const ContextMenu = {
-  getSelectedLinks(content, check) {
+  getSelectedLinks(content) {
     let doc = content.document;
     const NodeFilter = doc.defaultView.NodeFilter;
     // get focused window selection
     let selectionObject = lazy.TabmixUtils.focusedWindow(content).getSelection();
-    if (selectionObject.isCollapsed) {
+    if (selectionObject?.isCollapsed) {
       // nothing selected
       return new Map();
     }
 
     let filter = {
+      /** @param { Node } n */
       acceptNode(n) {
         if (n.nodeName == 'A' || n.nodeName == 'li') {
           return NodeFilter.FILTER_ACCEPT;
@@ -26,6 +29,7 @@ export const ContextMenu = {
 
     // do urlSecurityCheck for each link in the treeWalker....
     let secMan = Services.scriptSecurityManager;
+    /** @param {string} url */
     let securityCheck = function(url) {
       if (!url)
         return false;
@@ -42,11 +46,15 @@ export const ContextMenu = {
       return true;
     };
 
-    let range = selectionObject.getRangeAt(0).cloneContents();
-    let treeWalker = doc.createTreeWalker(range,
-      NodeFilter.SHOW_ELEMENT, filter, true);
-    let nextEpisode = treeWalker.nextNode();
     let urls = new Map();
+    let range = selectionObject?.getRangeAt(0).cloneContents();
+    if (!range) {
+      return urls;
+    }
+    /** @typedef {HTMLLinkElement & {firstChild: LinkNode}} LinkNode  */
+    /** @type {Omit<TreeWalker, "nextNode"> & {nextNode(): LinkNode}} */ // @ts-ignore
+    let treeWalker = doc.createTreeWalker(range, NodeFilter.SHOW_ELEMENT, filter);
+    let nextEpisode = treeWalker.nextNode();
     while (nextEpisode !== null) {
       let target = nextEpisode;
       if (nextEpisode.nodeName == "li") {
@@ -55,9 +63,6 @@ export const ContextMenu = {
       }
       let url = target.href;
       if (securityCheck(url)) {
-        if (check)
-          return [true];
-
         if (!urls.has(url)) {
           urls.set(url, target.getAttribute("data-usercontextid"));
         }

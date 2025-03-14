@@ -4,8 +4,10 @@ import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {TabListView} from "resource:///modules/syncedtabs/TabListView.sys.mjs";
 import {getChromeWindow} from "resource:///modules/syncedtabs/util.sys.mjs";
 
+/** @type {PlacesModule.Tabmix} */ // @ts-expect-error we add properties bellow
 const Tabmix = {};
 
+/** @type {TabmixModules.SyncedTabs} */
 export const SyncedTabs = {
   _initialized: false,
 
@@ -18,13 +20,16 @@ export const SyncedTabs = {
     Tabmix.gIeTab = aWindow.Tabmix.extensions.gIeTab;
     Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", {Tabmix, TabmixSvc});
 
-    this.tabListView(aWindow);
+    this.tabListView();
   },
 
   onQuitApplication() {
     this.functions.forEach(aFn => {
-      TabListView.prototype[aFn] = TabListView.prototype["tabmix_" + aFn];
-      delete TabListView.prototype["tabmix_" + aFn];
+      /** @type {TabmixModules.SyncedTabsTabmixFunctionsName} */
+      const tabmixName = `tabmix_${aFn}`;
+      // @ts-expect-error Function signatures are compatible at runtime
+      TabListView.prototype[aFn] = TabListView.prototype[tabmixName];
+      delete TabListView.prototype[tabmixName];
     });
     delete TabListView.prototype.tabmix_whereToOpen;
     delete TabListView.prototype.tabmix_inBackground;
@@ -33,12 +38,14 @@ export const SyncedTabs = {
   functions: ["onClick", "onOpenSelected", "adjustContextMenu", "onOpenSelectedFromContextMenu"],
   tabListView() {
     this.functions.forEach(aFn => {
-      TabListView.prototype["tabmix_" + aFn] = TabListView.prototype[aFn];
+      // @ts-expect-error Function signatures are compatible at runtime
+      TabListView.prototype[`tabmix_${aFn}`] = TabListView.prototype[aFn];
     });
 
+    /** @type {TabListViewNS["tabmix_whereToOpen"]} */
     TabListView.prototype.tabmix_whereToOpen = function(event) {
       let window = getChromeWindow(this._window);
-      let where = window.Tabmix.whereToOpenLink(event);
+      let where = window.BrowserUtils.whereToOpenLink(event);
       if (where == "current") {
         let pref = "extensions.tabmix.opentabfor.syncedTabs";
         if (window.Tabmix.whereToOpen(pref).inNew) {
@@ -68,6 +75,7 @@ export const SyncedTabs = {
         $&`
     ).toCode();
 
+    /** @type {TabListViewNS["onOpenSelected"]} */
     TabListView.prototype.onOpenSelected = function(url, event) {
       let {where, inBackground} = this.tabmix_whereToOpen(event);
       this.props.onOpenTab(url, where, {inBackground});
@@ -79,6 +87,7 @@ export const SyncedTabs = {
       '        $&'
     ).toCode();
 
+    /** @type {TabListViewNS["adjustContextMenu"]} */
     TabListView.prototype.adjustContextMenu = function(menu) {
       this.tabmix_adjustContextMenu(menu);
       if (menu.id == "SyncedTabsSidebarContext") {
@@ -91,6 +100,7 @@ export const SyncedTabs = {
             doc.getElementById(`${where}InPrivateWindow`) || {hidden: true};
         let openInTab = doc.getElementById(`${where}InTab`);
         let pref = "extensions.tabmix.opentabfor.syncedTabs";
+        // @ts-expect-error
         window.TMP_Places.contextMenu.update(open, openInWindow, openInPrivateWindow, openInTab, pref);
       }
     };

@@ -17,11 +17,11 @@ interface nsIInstalledApplication extends nsISupports {
 }
 
 interface nsIAboutThirdParty extends nsISupports {
-  readonly ModuleType_Unknown: 1;
-  readonly ModuleType_IME: 2;
-  readonly ModuleType_ShellExtension: 4;
-  readonly ModuleType_BlockedByUser: 8;
-  readonly ModuleType_BlockedByUserAtLaunch: 16;
+  readonly ModuleType_Unknown?: 1;
+  readonly ModuleType_IME?: 2;
+  readonly ModuleType_ShellExtension?: 4;
+  readonly ModuleType_BlockedByUser?: 8;
+  readonly ModuleType_BlockedByUserAtLaunch?: 16;
 
   lookupModuleType(aLeafName: string): u32;
   lookupApplication(aModulePath: string): nsIInstalledApplication;
@@ -42,20 +42,19 @@ interface nsIAboutWindowsMessages extends nsISupports {
 
 }  // global
 
-declare namespace nsIWindowsAlertNotification {
-
-enum ImagePlacement {
+declare enum nsIWindowsAlertNotification_ImagePlacement {
   eInline = 0,
   eHero = 1,
   eIcon = 2,
 }
 
-}
-
 declare global {
 
-interface nsIWindowsAlertNotification extends nsIAlertNotification, Enums<typeof nsIWindowsAlertNotification.ImagePlacement> {
-  handleActions: boolean;
+namespace nsIWindowsAlertNotification {
+  type ImagePlacement = nsIWindowsAlertNotification_ImagePlacement;
+}
+
+interface nsIWindowsAlertNotification extends nsIAlertNotification, Enums<typeof nsIWindowsAlertNotification_ImagePlacement> {
   imagePlacement: nsIWindowsAlertNotification.ImagePlacement;
 }
 
@@ -107,20 +106,20 @@ interface nsIGeolocationUIUtilsWin extends nsISupports {
 
 }  // global
 
-declare namespace nsIWindowsShellService {
-
-enum LaunchOnLoginEnabledEnumerator {
+declare enum nsIWindowsShellService_LaunchOnLoginEnabledEnumerator {
   LAUNCH_ON_LOGIN_DISABLED_BY_SETTINGS = 0,
   LAUNCH_ON_LOGIN_DISABLED = 1,
   LAUNCH_ON_LOGIN_ENABLED = 2,
   LAUNCH_ON_LOGIN_ENABLED_BY_POLICY = 3,
 }
 
-}
-
 declare global {
 
-interface nsIWindowsShellService extends nsIShellService, Enums<typeof nsIWindowsShellService.LaunchOnLoginEnabledEnumerator> {
+namespace nsIWindowsShellService {
+  type LaunchOnLoginEnabledEnumerator = nsIWindowsShellService_LaunchOnLoginEnabledEnumerator;
+}
+
+interface nsIWindowsShellService extends nsIShellService, Enums<typeof nsIWindowsShellService_LaunchOnLoginEnabledEnumerator> {
   createShortcut(aBinary: nsIFile, aArguments: string[], aDescription: string, aIconFile: nsIFile, aIconIndex: u16, aAppUserModelId: string, aShortcutFolder: string, aShortcutName: string): Promise<any>;
   getLaunchOnLoginShortcuts(): string[];
   pinCurrentAppToStartMenuAsync(aCheckOnly: boolean): Promise<any>;
@@ -218,11 +217,11 @@ interface nsITaskbarPreviewController extends nsISupports {
 // https://searchfox.org/mozilla-central/source/widget/nsITaskbarProgress.idl
 
 interface nsITaskbarProgress extends nsISupports {
-  readonly STATE_NO_PROGRESS: 0;
-  readonly STATE_INDETERMINATE: 1;
-  readonly STATE_NORMAL: 2;
-  readonly STATE_ERROR: 3;
-  readonly STATE_PAUSED: 4;
+  readonly STATE_NO_PROGRESS?: 0;
+  readonly STATE_INDETERMINATE?: 1;
+  readonly STATE_NORMAL?: 2;
+  readonly STATE_ERROR?: 3;
+  readonly STATE_PAUSED?: 4;
 
   setProgressState(state: nsTaskbarProgressState, currentValue?: u64, maxValue?: u64): void;
 }
@@ -238,7 +237,7 @@ interface nsITaskbarTabPreview extends nsITaskbarPreview {
 // https://searchfox.org/mozilla-central/source/widget/nsITaskbarWindowPreview.idl
 
 interface nsITaskbarWindowPreview extends nsITaskbarPreview {
-  readonly NUM_TOOLBAR_BUTTONS: 7;
+  readonly NUM_TOOLBAR_BUTTONS?: 7;
 
   getButton(index: u32): nsITaskbarPreviewButton;
   enableCustomDrawing: boolean;
@@ -283,25 +282,25 @@ interface nsIWindowsPackageManager extends nsISupports {
 // https://searchfox.org/mozilla-central/source/xpcom/ds/nsIWindowsRegKey.idl
 
 interface nsIWindowsRegKey extends nsISupports {
-  readonly ROOT_KEY_CLASSES_ROOT: 2147483648;
-  readonly ROOT_KEY_CURRENT_USER: 2147483649;
-  readonly ROOT_KEY_LOCAL_MACHINE: 2147483650;
-  readonly ACCESS_BASIC: 131072;
-  readonly ACCESS_QUERY_VALUE: 1;
-  readonly ACCESS_SET_VALUE: 2;
-  readonly ACCESS_CREATE_SUB_KEY: 4;
-  readonly ACCESS_ENUMERATE_SUB_KEYS: 8;
-  readonly ACCESS_NOTIFY: 16;
-  readonly ACCESS_READ: 131097;
-  readonly ACCESS_WRITE: 131078;
-  readonly ACCESS_ALL: 131103;
-  readonly WOW64_32: 512;
-  readonly WOW64_64: 256;
-  readonly TYPE_NONE: 0;
-  readonly TYPE_STRING: 1;
-  readonly TYPE_BINARY: 3;
-  readonly TYPE_INT: 4;
-  readonly TYPE_INT64: 11;
+  readonly ROOT_KEY_CLASSES_ROOT?: 2147483648;
+  readonly ROOT_KEY_CURRENT_USER?: 2147483649;
+  readonly ROOT_KEY_LOCAL_MACHINE?: 2147483650;
+  readonly ACCESS_BASIC?: 131072;
+  readonly ACCESS_QUERY_VALUE?: 1;
+  readonly ACCESS_SET_VALUE?: 2;
+  readonly ACCESS_CREATE_SUB_KEY?: 4;
+  readonly ACCESS_ENUMERATE_SUB_KEYS?: 8;
+  readonly ACCESS_NOTIFY?: 16;
+  readonly ACCESS_READ?: 131097;
+  readonly ACCESS_WRITE?: 131078;
+  readonly ACCESS_ALL?: 131103;
+  readonly WOW64_32?: 512;
+  readonly WOW64_64?: 256;
+  readonly TYPE_NONE?: 0;
+  readonly TYPE_STRING?: 1;
+  readonly TYPE_BINARY?: 3;
+  readonly TYPE_INT?: 4;
+  readonly TYPE_INT64?: 11;
 
   close(): void;
   open(rootKey: u32, relPath: string, mode: u32): void;
@@ -337,13 +336,13 @@ interface nsIXPCComponents_Interfaces {
   nsIInstalledApplication: nsJSIID<nsIInstalledApplication>;
   nsIAboutThirdParty: nsJSIID<nsIAboutThirdParty>;
   nsIAboutWindowsMessages: nsJSIID<nsIAboutWindowsMessages>;
-  nsIWindowsAlertNotification: nsJSIID<nsIWindowsAlertNotification, typeof nsIWindowsAlertNotification.ImagePlacement>;
+  nsIWindowsAlertNotification: nsJSIID<nsIWindowsAlertNotification, typeof nsIWindowsAlertNotification_ImagePlacement>;
   nsIWindowsAlertsService: nsJSIID<nsIWindowsAlertsService>;
   nsIDefaultAgent: nsJSIID<nsIDefaultAgent>;
   nsIWindowsMutex: nsJSIID<nsIWindowsMutex>;
   nsIWindowsMutexFactory: nsJSIID<nsIWindowsMutexFactory>;
   nsIGeolocationUIUtilsWin: nsJSIID<nsIGeolocationUIUtilsWin>;
-  nsIWindowsShellService: nsJSIID<nsIWindowsShellService, typeof nsIWindowsShellService.LaunchOnLoginEnabledEnumerator>;
+  nsIWindowsShellService: nsJSIID<nsIWindowsShellService, typeof nsIWindowsShellService_LaunchOnLoginEnabledEnumerator>;
   nsIWinTaskSchedulerService: nsJSIID<nsIWinTaskSchedulerService>;
   nsIJumpListBuilder: nsJSIID<nsIJumpListBuilder>;
   nsITaskbarOverlayIconController: nsJSIID<nsITaskbarOverlayIconController>;
@@ -375,8 +374,8 @@ type InOutParam<T> = { value: T };
 /** XPCOM out param is written to the passed in object's value property. */
 type OutParam<T> = { value?: T };
 
-/** A named type to enable interfaces to inherit from enums. */
-type Enums<enums> = enums;
+/** Enable interfaces to inherit from enums: pick variants as optional. */
+type Enums<enums> = Partial<Pick<enums, keyof enums>>;
 
 /** Callable accepts either form of a [function] interface. */
 type Callable<iface> = iface | Extract<iface[keyof iface], Function>

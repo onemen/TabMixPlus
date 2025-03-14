@@ -119,7 +119,7 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
       (MouseEvent.isInstance(event) || XULCommandEvent.isInstance(event))) {
     // don't replace 'window' to 'tab' in whereToOpenLink when singleWindowMode is on
     TabmixSvc.skipSingleWindowModeCheck = true;
-    where = Tabmix.whereToOpenLink(event, false, true);
+    where = BrowserUtils.whereToOpenLink(event, false, true);
     TabmixSvc.skipSingleWindowModeCheck = false;
     switch (where) {
       case "tabshifted":

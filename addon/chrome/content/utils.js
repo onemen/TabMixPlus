@@ -1,6 +1,6 @@
 "use strict";
 
-/** @type {TabmixTypes} */ // @ts-expect-error - TabmixTypes included properties added in another files
+/** @type {TabmixGlobal & Record<string, any>} */ // @ts-expect-error - TabmixGlobal included properties added in another files
 var Tabmix = {
   get prefs() {
     return this.lazyGetter(this, "prefs", Services.prefs.getBranch("extensions.tabmix."));
@@ -10,8 +10,8 @@ var Tabmix = {
     return this.lazyGetter(this, "defaultPrefs", Services.prefs.getDefaultBranch("extensions.tabmix."));
   },
 
-  isVersion(aVersionNo, updateChannel) {
-    return TabmixSvc.version.apply(null, [aVersionNo, updateChannel]);
+  isVersion(versionNo, updateChannel) {
+    return TabmixSvc.version.apply(null, [versionNo, updateChannel]);
   },
 
   isAltKey(event) {
@@ -68,7 +68,7 @@ var Tabmix = {
   },
 
   setFTLDataId(elementId, map = TabmixSvc.i10IdMap) {
-    /** @type {TabmixNS.convert} */
+    /** @type {TabmixGlobal["convert"]} */
     function convert(id, data = map[id]) {
       return data && !Tabmix.isVersion(data.before) ? convert(data.l10n) : id;
     }

@@ -1,5 +1,8 @@
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 
+const DEFAULT_AUTORELOADTIME = 60;
+
+/** @type {AutoReloadModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -8,9 +11,17 @@ ChromeUtils.defineESModuleGetters(lazy, {
   TabmixUtils: "chrome://tabmix-resource/content/Utils.sys.mjs",
 });
 
+/** @type {TabmixGlobal["setItem"]} */
 var _setItem = function() {};
 
+/** @type {AutoReloadModule.AutoReload} */
 export const AutoReload = {
+  _labels: {
+    minute: "",
+    minutes: "",
+    seconds: "",
+  },
+
   init() {
     _setItem = TabmixSvc.topWin().Tabmix.setItem;
   },
@@ -30,18 +41,22 @@ export const AutoReload = {
     var win = aTab.ownerGlobal;
     let popup = win.document.getElementById("autoreload_popup");
     let parent = aPopup.parentNode;
-    for (let i = 0; i < popup.childNodes.length; i++)
-      aPopup.appendChild(popup.childNodes[i].cloneNode(true));
-    if (parent.id != "reload-button") {
-      aPopup.childNodes[0].hidden = true;
-      aPopup.childNodes[1].hidden = true;
+    for (const item of popup.childNodes) {
+      if (item) {
+        aPopup.appendChild(item.cloneNode(true));
+      }
     }
-    aPopup.inited = true;
+    if (parent?.id != "reload-button") {
+      const [first, second] = aPopup.childNodes;
+      if (first) first.hidden = true;
+      if (second) second.hidden = true;
+    }
+    aPopup.initialized = true;
   },
 
   addEventListener(popup) {
     popup.listenersAdded = true;
-    popup.addEventListener("command", event => {
+    popup.addEventListener("command", (/** @type {TabmixGlobals.PopupEvent} */ event) => {
       event.stopPropagation();
       switch (event.target.dataset.command) {
         case "toggle":
@@ -63,18 +78,18 @@ export const AutoReload = {
     });
 
     popup.addEventListener("popuphidden", () => {
+      // @ts-ignore
       popup._tab = null;
     });
   },
 
   onPopupShowing(aPopup, aTab) {
     var menuItems = aPopup.childNodes;
+    // @ts-ignore
     aPopup._tab = null;
-    if (aTab.localName != "tab")
-      aTab = this._currentTab(aTab);
 
     // populate the menu on the first popupShowing
-    if (!aPopup.id && !aPopup.inited) {
+    if (!aPopup.id && !aPopup.initialized) {
       this.addClonePopup(aPopup, aTab);
     }
     if (!aPopup.listenersAdded) {
@@ -85,29 +100,30 @@ export const AutoReload = {
     if (aPopup._tab.autoReloadEnabled === undefined)
       this.initTab(aPopup._tab);
 
+    /** @type {HTMLElement} */ // @ts-ignore
     var enableItem = menuItems[2];
     if (!this._labels) {
       this._labels = {
-        minute: enableItem.getAttribute("minute"),
-        minutes: enableItem.getAttribute("minutes"),
-        seconds: enableItem.getAttribute("seconds")
+        minute: enableItem.getAttribute("minute") ?? "",
+        minutes: enableItem.getAttribute("minutes") ?? "",
+        seconds: enableItem.getAttribute("seconds") ?? ""
       };
     }
-    enableItem.setAttribute("checked", aPopup._tab.autoReloadEnabled);
-    this.setLabel(enableItem, aPopup._tab.autoReloadTime);
+    enableItem.setAttribute("checked", Boolean(aPopup._tab.autoReloadEnabled));
+    this.setLabel(enableItem, aPopup._tab.autoReloadTime ?? 0);
 
     this.updateCustomList(aPopup);
 
     var radio = aPopup.getElementsByAttribute("value", "*");
     for (let i = 0; i < radio.length; i++) {
-      _setItem(radio[i], "checked", radio[i].value == aPopup._tab.autoReloadTime || null);
+      _setItem(radio[i], "checked", radio[i]?.value == aPopup._tab.autoReloadTime || null);
     }
   },
 
   updateCustomList(aPopup) {
     let start = aPopup.getElementsByAttribute("anonid", "start_custom_list")[0];
     let end = aPopup.getElementsByAttribute("anonid", "end_custom_list")[0];
-    while (start.nextSibling && start.nextSibling != end) {
+    while (start?.nextSibling && start?.nextSibling != end) {
       start.nextSibling.remove();
     }
 
@@ -117,27 +133,21 @@ export const AutoReload = {
       if (!prefs.prefHasUserValue(pref))
         return [];
       let list = prefs.getCharPref(pref).split(",");
-      if (!list.every(val => val == parseInt(val))) {
+      if (list.some(val => isNaN(parseInt(val)))) {
         prefs.clearUserPref(pref);
         return [];
       }
-      let defaultList = ["30", "60", "120", "300", "900", "1800"];
-      list = list.filter(val => !defaultList.includes(val));
-      let newList = [];
-      list.forEach(val => {
-        if (parseInt(val) && !newList.includes(val))
-          newList.push(val);
-        if (newList.length > 6)
-          newList.shift();
-      });
-      prefs.setCharPref(pref, newList);
+      const defaultList = ["30", "60", "120", "300", "900", "1800"];
+      const newList = list.filter(val => !defaultList.includes(val) && parseInt(val));
+      newList.splice(0, newList.length - 6);
+      prefs.setCharPref(pref, newList.join(","));
       return newList;
     }
 
     let doc = aPopup.ownerGlobal.document;
-    getList().sort((a, b) => parseInt(a) > parseInt(b)).forEach(val => {
+    getList().sort((a, b) => parseInt(a) - parseInt(b)).forEach(val => {
       let mi = doc.createXULElement("menuitem");
-      this.setLabel(mi, val);
+      this.setLabel(mi, parseInt(val));
       mi.setAttribute("type", "radio");
       mi.setAttribute("value", val);
       aPopup.insertBefore(mi, end);
@@ -147,7 +157,7 @@ export const AutoReload = {
   setLabel(aItem, aSeconds) {
     var timeLabel = aItem.hasAttribute("_label") ? aItem.getAttribute("_label") + " " : "";
     if (aSeconds > 59) {
-      let minutes = parseInt(aSeconds / 60);
+      let minutes = Math.floor(aSeconds / 60);
       timeLabel += minutes + " " + this._labels[minutes > 1 ? "minutes" : "minute"];
       aSeconds -= 60 * minutes;
       if (aSeconds)
@@ -159,16 +169,12 @@ export const AutoReload = {
   },
 
   setTime(aTab, aReloadTime) {
-    if (aTab.localName != "tab")
-      aTab = this._currentTab(aTab);
     aTab.autoReloadTime = aReloadTime;
     TabmixSvc.prefBranch.setIntPref("reload_time", aTab.autoReloadTime);
     this._enable(aTab);
   },
 
   setCustomTime(aTab) {
-    if (aTab.localName != "tab")
-      aTab = this._currentTab(aTab);
     let result = {ok: false};
     var win = aTab.ownerGlobal;
     win.openDialog('chrome://tabmixplus/content/overlay/autoReload.xhtml', '_blank', 'chrome,modal,centerscreen', result);
@@ -179,25 +185,23 @@ export const AutoReload = {
   },
 
   enableAllTabs(aTabBrowser) {
-    const win = aTabBrowser.ownerGlobal;
-    const tabs = win.Tabmix.visibleTabs.tabs;
-    for (let i = 0; i < tabs.length; i++) {
-      let tab = tabs[i];
-      if (tab.autoReloadEnabled === undefined)
+    const tabs = aTabBrowser.ownerGlobal.Tabmix.visibleTabs.tabs;
+    for (const tab of tabs) {
+      if (tab.autoReloadEnabled === undefined) {
         this.initTab(tab);
-
-      if (!tab.autoReloadEnabled || tab.autoReloadURI != tab.linkedBrowser.currentURI.spec)
+      }
+      if (!tab.autoReloadEnabled || tab.autoReloadURI != tab.linkedBrowser.currentURI.spec) {
         this._enable(tab);
+      }
     }
   },
 
   disableAllTabs(aTabBrowser) {
-    const win = aTabBrowser.ownerGlobal;
-    const tabs = win.Tabmix.visibleTabs.tabs;
-    for (let i = 0; i < tabs.length; i++) {
-      let tab = tabs[i];
-      if (tab.autoReloadEnabled)
+    const tabs = aTabBrowser.ownerGlobal.Tabmix.visibleTabs.tabs;
+    for (const tab of tabs) {
+      if (tab.autoReloadEnabled) {
         this._disable(tab);
+      }
     }
   },
 
@@ -205,8 +209,6 @@ export const AutoReload = {
    * called from popup and from tabclick options
    */
   toggle(aTab) {
-    if (aTab.localName != "tab")
-      aTab = this._currentTab(aTab);
     if (aTab.autoReloadEnabled)
       this._disable(aTab);
     else
@@ -223,14 +225,14 @@ export const AutoReload = {
     aTab.autoReloadURI = url;
     var win = aTab.ownerGlobal;
     _clearTimeout(aTab, win);
-    aTab.autoReloadTimerID = win.setTimeout(_reloadTab, aTab.autoReloadTime * 1000, aTab);
+    aTab.autoReloadTimerID = win.setTimeout(_reloadTab, (aTab.autoReloadTime ?? DEFAULT_AUTORELOADTIME) * 1000, aTab);
     this._update(aTab, aTab.autoReloadURI + " " + aTab.autoReloadTime);
   },
 
   _disable(aTab) {
     aTab.autoReloadEnabled = false;
     _setItem(aTab, "_reload", null);
-    aTab.autoReloadURI = null;
+    aTab.autoReloadURI = "";
     aTab.postDataAcceptedByUser = false;
     _clearTimeout(aTab);
     this._update(aTab);
@@ -239,17 +241,6 @@ export const AutoReload = {
   _update(aTab, aValue) {
     _setItem(aTab, "reload-data", aValue);
     TabmixSvc.setCustomTabValue(aTab, "reload-data", aValue);
-  },
-
-  /**
-   * we supposed to get here only when using firefox 3
-   * keep it just to be on the safe side.
-   */
-  _currentTab(aTabContainer) {
-    if (aTabContainer && aTabContainer.localName == "tabs")
-      return aTabContainer.selectedItem;
-
-    throw new Error("Tabmix: unexpected argument");
   },
 
   /**
@@ -272,7 +263,7 @@ export const AutoReload = {
       if (!aTab.autoReloadEnabled)
         aTab.autoReloadEnabled = true;
 
-      aTab.autoReloadTimerID = win.setTimeout(_reloadTab, aTab.autoReloadTime * 1000, aTab);
+      aTab.autoReloadTimerID = win.setTimeout(_reloadTab, (aTab.autoReloadTime ?? DEFAULT_AUTORELOADTIME) * 1000, aTab);
     } else if (aTab.autoReloadEnabled) {
       aTab.autoReloadEnabled = false;
     }
@@ -295,26 +286,31 @@ export const AutoReload = {
     return resultOK;
   },
 
-  reloadRemoteTab(browser, data) {
-    var window = browser.ownerGlobal;
-
+  reloadRemoteTab(browser, serializeData) {
     if (Services.appinfo.sessionHistoryInParent) {
       const postData = lazy.TabmixUtils.getPostDataFromHistory(browser.browsingContext.sessionHistory);
-      data = {
-        ...data,
-        ...postData
-      };
+      Object.assign(serializeData, postData);
     }
 
+    const window = browser.ownerGlobal;
     let tab = window.gBrowser.getTabForBrowser(browser);
-    if (data.isPostData && !this.confirm(window, tab, false))
+    if (serializeData.isPostData && !this.confirm(window, tab, false)) {
       return;
+    }
 
-    data.referrerInfo = lazy.E10SUtils.deserializeReferrerInfo(data.referrerInfo);
+    /** @type {AutoReloadModule.ReloadData} */ // @ts-ignore
+    let data = {...serializeData};
+
+    // Convert serialized data to proper types
+    if (serializeData.postData) {
+      data.postData = lazy.TabmixUtils.makeInputStream(serializeData.postData);
+    }
+    data.referrerInfo = lazy.E10SUtils.deserializeReferrerInfo(serializeData.referrerInfo);
     doReloadTab(window, browser, tab, data);
   }
 };
 
+/** @type {AutoReloadModule._reloadTab} */
 function _reloadTab(aTab) {
   if (!aTab || !aTab.parentNode)
     return;
@@ -326,7 +322,7 @@ function _reloadTab(aTab) {
 
   var browser = aTab.linkedBrowser;
   if (browser.getAttribute("remote")) {
-    browser.messageManager.sendAsyncMessage("Tabmix:collectReloadData");
+    browser.messageManager.sendAsyncMessage("Tabmix:collectReloadData", {});
     return;
   }
 
@@ -337,7 +333,8 @@ function _reloadTab(aTab) {
     let sh = browser.webNavigation.sessionHistory;
     if (sh) {
       let entry = sh.getEntryAtIndex(sh.index, false);
-      data.postData = entry.QueryInterface(Ci.nsISHEntry).postData;
+      data.postData = entry.QueryInterface?.(Ci.nsISHEntry).postData ?? null;
+      data.isPostData = Boolean(data.postData);
       data.referrerInfo = browser.ownerDocument.referrerInfo;
       if (data.postData && !AutoReload.confirm(window, aTab))
         return;
@@ -352,10 +349,10 @@ function _reloadTab(aTab) {
 
 /**
  * when tab have beforeunload prompt, check if user canceled the reload
+ * @type {AutoReloadModule.beforeReload}
  */
 async function beforeReload(window, browser) {
   const gBrowser = window.gBrowser;
-  let prompt;
   const {permitUnload} = await browser.asyncPermitUnload("dontUnload");
   if (permitUnload) {
     return;
@@ -363,9 +360,8 @@ async function beforeReload(window, browser) {
   gBrowser.addEventListener("DOMModalDialogClosed", event => {
     const canUnload =
       event.target.nodeName != "browser" ||
-      (prompt ?
-        !prompt.args.inPermitUnload || prompt.args.ok :
-        !event.detail?.wasPermitUnload || event.detail.areLeaving);
+      !event.detail?.wasPermitUnload ||
+      event.detail.areLeaving;
     if (!canUnload) {
       // User canceled the reload disable AutoReload for this tab
       const tab = gBrowser.getTabForBrowser(browser);
@@ -374,6 +370,7 @@ async function beforeReload(window, browser) {
   }, {once: true});
 }
 
+/** @type {AutoReloadModule.doReloadTab} */
 function doReloadTab(window, browser, tab, data) {
   beforeReload(window, browser);
 
@@ -434,6 +431,7 @@ function doReloadTab(window, browser, tab, data) {
   }
 }
 
+/** @type {AutoReloadModule._observe} */
 function _observe(aSubject, aTopic) {
   if (aTopic == "common-dialog-loaded") {
     Services.obs.removeObserver(_observe, "common-dialog-loaded");
@@ -443,6 +441,7 @@ function _observe(aSubject, aTopic) {
   }
 }
 
+/** @type {AutoReloadModule._clearTimeout} */
 function _clearTimeout(aTab, aWindow) {
   if (aTab.autoReloadTimerID) {
     if (!aWindow)

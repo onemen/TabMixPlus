@@ -160,9 +160,12 @@
     const menupopup = event.target;
     const tab = TabContextMenu.contextTab ?? gBrowser.selectedTab;
     switch (menupopup.dataset.popup ?? menupopup.id) {
-      case "autoReload":
-        Tabmix.autoReload.onPopupShowing(event.target, tab);
+      case "autoReload": {
+        /** @type {TabmixGlobals.Popup} */ // @ts-expect-error - we extend ClosedObjectsUtils.PopupElement
+        const target = event.target;
+        Tabmix.autoReload.onPopupShowing(target, tab);
         break;
+      }
       case "tm-undoCloseList-menu":
         Tabmix.closedObjectsUtils.populateClosedTabsMenu(menupopup.parentNode);
         event.stopPropagation();

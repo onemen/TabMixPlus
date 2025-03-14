@@ -8,6 +8,7 @@ const FMM_MESSAGES = [
   "Tabmix:contextmenu",
 ];
 
+/** @type {TabmixUtilsModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -19,6 +20,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.sys.mjs",
 });
 
+// const {TabmixUtils} = ChromeUtils.importESModule("chrome://tabmix-resource/content/Utils.sys.mjs")
+
+/** @type {TabmixUtilsModule.TabmixUtils} */
 export const TabmixUtils = {
   initMessageManager(window) {
     let mm = window.getGroupMessageManager("browsers");
@@ -75,36 +79,38 @@ export const TabmixUtils = {
   },
 
   focusedWindow(content) {
+    /** @type {{value: Window}} */ // @ts-ignore
     let focusedWindow = {};
     Services.focus.getFocusedElementForWindow(content, true, focusedWindow);
     return focusedWindow.value;
   },
 
   makeInputStream(aString) {
-    let stream = Cc["@mozilla.org/io/string-input-stream;1"]
-        .createInstance(Ci.nsISupportsCString);
-    stream.data = aString;
-    return stream;
+    const stream = Cc["@mozilla.org/io/string-input-stream;1"]
+        .createInstance(Ci.nsIStringInputStream);
+    const stringStream = stream.QueryInterface(Ci.nsIStringInputStream);
+    stringStream.setUTF8Data(aString);
+    return stringStream;
   },
 
   // change current history title
   updateHistoryTitle(history, title) {
-    const shEntry = history.getEntryAtIndex(history.index).QueryInterface(Ci.nsISHEntry);
-    shEntry.title = title;
+    const shEntry = history.getEntryAtIndex(history.index).QueryInterface?.(Ci.nsISHEntry);
+    if (shEntry) {
+      shEntry.title = title;
+    }
   },
 
   getPostDataFromHistory(history) {
     const json = {};
-    const shEntry = history.getEntryAtIndex(history.index).QueryInterface(Ci.nsISHEntry);
-    if (shEntry) {
-      let postData = shEntry.postData;
-      if (postData) {
-        postData = postData.clone();
-        json.postData = lazy.NetUtil.readInputStreamToString(postData, postData.available());
-        json.referrerInfo = lazy.E10SUtils.serializeReferrerInfo(shEntry.referrerInfo);
-      }
-      json.isPostData = Boolean(json.postData);
+    const shEntry = history?.getEntryAtIndex(history.index).QueryInterface?.(Ci.nsISHEntry);
+    const postData = shEntry?.postData?.QueryInterface?.(Ci.nsICloneableInputStream);
+    if (shEntry && postData) {
+      const clone = postData.clone();
+      json.postData = lazy.NetUtil.readInputStreamToString(clone, clone.available());
+      json.referrerInfo = lazy.E10SUtils.serializeReferrerInfo(shEntry.referrerInfo);
     }
+    json.isPostData = Boolean(json.postData);
     return json;
   },
 };

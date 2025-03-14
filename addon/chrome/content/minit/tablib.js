@@ -35,14 +35,14 @@ Tabmix.tablib = {
     if (browser[`__tabmix_${methodName}`]) {
       return;
     }
-    /** @type {MockedGeckoTypes.ChromeBrowser["loadURI"]} */
+    /** @type {MockedGeckoTypes.loadURIFunction} */
     const loadURI_function = function(uri, params) {
       try {
         const tabmixResult = Tabmix.tablib._loadURI(browser, uri, params);
         if (tabmixResult) {
           return tabmixResult;
         }
-
+        // @ts-expect-error uri arg is string for fixupAndLoadURIString and nsIURI for loadURI
         original(uri, params);
       } catch (ex) {
         console.error(ex);
@@ -350,7 +350,7 @@ Tabmix.tablib = {
         if (typeof Tabmix.originalFunctions.switcher_updateDisplay != 'function') {
           Tabmix.originalFunctions.switcher_updateDisplay = switcher.updateDisplay;
         }
-        /** @this {TabmixNS.TabSwitcher} */
+        /** @this {MockedGeckoTypes.TabSwitcher} */
         switcher.updateDisplay = function(...args) {
           let visibleTab = this.visibleTab;
           Tabmix.originalFunctions.switcher_updateDisplay.apply(this, args);
@@ -904,7 +904,7 @@ Tabmix.tablib = {
   },
 
   addNewFunctionsTo_gBrowser: function addNewFunctionsTo_gBrowser() {
-    /** @type {TabmixNS._duplicateTab} */
+    /** @type {TabmixGlobal["_duplicateTab"]} */
     let duplicateTab = function(aTab, aHref = "", aTabData, disallowSelect, dontFocusUrlBar) {
       if (aTab.localName != "tab")
         aTab = this._selectedTab;
@@ -924,7 +924,7 @@ Tabmix.tablib = {
         } else if (typeof aTabData === "object") {
           state = aTabData;
         }
-        /** @type {{state: TabmixNS.TabData} | undefined} */
+        /** @type {{state: SessionStoreNS.TabData} | undefined} */
         const tabState = state ? {state} : undefined;
         newTab = this.SSS_duplicateTab(aTab, aHref, tabState);
       }
@@ -1002,7 +1002,7 @@ Tabmix.tablib = {
           this.removeEventListener("SSTabRestored", urlForDownload, true);
           let browser = this.linkedBrowser;
           browser.tabmix_allowLoad = true;
-          browser.loadURI(aHref);
+          browser.loadURI(Services.io.newURI(aHref));
         } catch (ex) {
           Tabmix.assert(ex);
         }
@@ -1148,12 +1148,14 @@ Tabmix.tablib = {
         return gContextMenu.tabmixLinkURL;
 
       if (!isValid(linkURL)) {
+        /** @type {ContentClickModule.ContentClickEvent} */
         let json = {
           button: 0,
           shiftKey: false,
           ctrlKey: false,
           metaKey: false,
           altKey: false,
+          // @ts-ignore
           target: {},
           tabmix_openLinkWithHistory: true
         };
@@ -1161,7 +1163,7 @@ Tabmix.tablib = {
         // see TabmixContext.updateMainContextMenu
         let result = Tabmix.ContentClick.getParamsForLink(json,
           target, linkURL, browser, gBrowser.selectedBrowser._contentWindow);
-        return result._href && isValid(result._href) ? result._href : null;
+        return result?._href && isValid(result._href) ? result._href : null;
       }
       return linkURL;
     };
@@ -1547,7 +1549,7 @@ Tabmix.tablib = {
       } else {
         let messageKey = "protectedtabs.closeWarning.";
         messageKey += numProtected < tabsToClose ? "3" : numProtected == 1 ? "1" : "2";
-        warningTitle = TabmixSvc.getFormattedString(messageKey, [tabsToClose, numProtected]);
+        warningTitle = TabmixSvc.getFormattedString(messageKey, [String(tabsToClose), String(numProtected)]);
         warningText = TabmixSvc.getString("protectedtabs.closeWarning.4");
         buttonLabel = TabmixSvc.getString("closeWindow.label");
         var chkBoxKey = shouldPrompt == 3 ? "window.closeWarning.2" : "protectedtabs.closeWarning.5";

@@ -1,7 +1,9 @@
 import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 
+/** @type {TabmixSvcModule.Lazy} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
+  BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
   FloorpPrefsObserver: "chrome://tabmix-resource/content/Floorp.sys.mjs",
   isVersion: "chrome://tabmix-resource/content/BrowserVersion.sys.mjs",
   SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
@@ -9,18 +11,23 @@ ChromeUtils.defineESModuleGetters(lazy, {
   TabmixPlacesUtils: "chrome://tabmix-resource/content/Places.sys.mjs",
 });
 
+/** @type {TabmixSvcModule.TabmixSvc} */
 export const TabmixSvc = {
   aboutBlank: "about:blank",
   aboutNewtab: "about:#".replace("#", "newtab"),
   newtabUrl: "browser.#.url".replace("#", "newtab"),
+
+  // @ts-expect-error - initialize tabStylePrefs
+  tabStylePrefs: {},
+  URILoadingHelperChanged: false,
 
   debugMode() {
     return this.prefBranch.prefHasUserValue("enableDebug") &&
       this.prefBranch.getBoolPref("enableDebug");
   },
 
-  version() {
-    return lazy.isVersion.apply(null, arguments);
+  version(versionNo, updateChannel) {
+    return lazy.isVersion.apply(null, [versionNo, updateChannel]);
   },
 
   getString(aStringKey) {
@@ -34,7 +41,7 @@ export const TabmixSvc = {
 
   getFormattedString(aStringKey, aStringsArray) {
     try {
-      return this._strings.formatStringFromName(aStringKey, aStringsArray, aStringsArray.length);
+      return this._strings.formatStringFromName(aStringKey, aStringsArray);
     } catch (e) {
       dump("*** Failed to format string " + aStringKey + " in bundle: tabmix.properties\n");
       throw e;
@@ -75,15 +82,6 @@ export const TabmixSvc = {
       return false;
     }
     return this.prefBranch.getBoolPref("singleWindow");
-  },
-
-  get direct2dDisabled() {
-    delete this.direct2dDisabled;
-    try {
-      // this pref exist only in windows
-      return (this.direct2dDisabled = Services.prefs.getBoolPref("gfx.direct2d.disabled"));
-    } catch {}
-    return (this.direct2dDisabled = false);
   },
 
   /**
@@ -137,7 +135,6 @@ export const TabmixSvc = {
       lazy.TabmixPlacesUtils.init(aWindow);
       lazy.SyncedTabs.init(aWindow);
 
-      TabmixSvc.tabStylePrefs = {};
       const {DynamicRules} = ChromeUtils.importESModule("chrome://tabmix-resource/content/DynamicRules.sys.mjs");
       DynamicRules.init(aWindow);
 
@@ -157,6 +154,10 @@ export const TabmixSvc = {
       }
 
       aWindow.gTMPprefObserver.setLink_openPrefs();
+
+      //  Bug 1742801 - move whereToOpenLink and getRootEvent implementations into BrowserUtils
+      //  Bug 1742889 - Rewrite consumers of whereToOpenLink to use BrowserUtils.whereToOpenLink
+      aWindow.Tabmix.onContentLoaded.change_whereToOpenLink(lazy.BrowserUtils);
     },
 
     addMissingPrefs() {
@@ -185,10 +186,8 @@ export const TabmixSvc = {
           Services.obs.removeObserver(this, "quit-application");
           lazy.TabmixPlacesUtils.onQuitApplication();
           lazy.SyncedTabs.onQuitApplication();
-          for (let id of Object.keys(TabmixSvc.console._timers)) {
-            let timer = TabmixSvc.console._timers[id];
-            timer.cancel();
-          }
+          Object.values(TabmixSvc.console._timers).forEach(timer => timer.cancel());
+          TabmixSvc.console._timers = {};
           break;
       }
     }
@@ -197,14 +196,6 @@ export const TabmixSvc = {
   sm: {
     TAB_STATE_NEEDS_RESTORE: 1,
     TAB_STATE_RESTORING: 2,
-    lastSessionPath: null,
-    status: "",
-    crashed: false,
-    private: true,
-    settingPreference: false,
-    statesToRestore: {},
-    restoreCount: -1,
-    observersWereNotified: false,
   },
 
   setCustomTabValue(tab, key, value) {

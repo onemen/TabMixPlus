@@ -3,7 +3,6 @@
   "include": ["**/*.js", "**/*.sys.mjs"],
   "exclude": ["**/*~*.*", "**/*.local.*"],
   "compilerOptions": {
-    "typeRoots": ["../../../../types"],
-    "types": ["preferences.d.ts"]
+    "types": ["index.d.ts", "preferences.d.ts"]
   }
 }

@@ -106,7 +106,7 @@ var TMP_Places = {
   openMenuItem(aUri, aEvent, aParams, aPref) {
     let pref = "extensions.tabmix.opentabfor." + aPref;
     let where = this.isBookmarklet(aUri) ? "current" :
-      this.fixWhereToOpen(aEvent, Tabmix.whereToOpenLink(aEvent, false, true), pref);
+      this.fixWhereToOpen(aEvent, BrowserUtils.whereToOpenLink(aEvent, false, true), pref);
     if (where == "current")
       Tabmix.getTopWin().gBrowser.selectedBrowser.tabmix_allowLoad = true;
     aParams.inBackground = Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
@@ -423,7 +423,7 @@ var TMP_Places = {
           gBrowser.moveTabTo(tab, prevTab._tPos + 1);
           prevTab = tab;
         }
-        /** @type {TabmixNS.TabData} */ // @ts-expect-error
+        /** @type {SessionStoreNS.TabData} */ // @ts-expect-error
         const tabData = tabDataList[i];
         SessionStore.setTabState(tab, tabData);
       });
@@ -706,7 +706,8 @@ var TMP_Places = {
     }
     /** @type {Promise<boolean>[]} */
     const promises = [];
-    const getBookmarkUrl = (/** @type {string} */ url) => (urls.includes(url) ? url : null);
+    /** @type {PlacesModule.Callback}  */
+    const getBookmarkUrl = url => (urls.includes(url) ? url : null);
     /** @type {(tab: Tab, url: string) => Promise<void>} */
     const updateTabs = async(tab, url) => {
       let bookmarkUrl = await this.PlacesUtils.applyCallBackOnUrl(url, getBookmarkUrl);
@@ -995,14 +996,6 @@ Tabmix.onContentLoaded = {
   },
 
   change_utilityOverlay() {
-    //  Bug 1742801 - move whereToOpenLink and getRootEvent implementations into BrowserUtils
-    //  Bug 1742889 - Rewrite consumers of whereToOpenLink to use BrowserUtils.whereToOpenLink
-    if (!TabmixSvc.whereToOpenLinkChanged) {
-      TabmixSvc.whereToOpenLinkChanged = true;
-      this.change_whereToOpenLink(BrowserUtils);
-    }
-    Tabmix.whereToOpenLink = BrowserUtils.whereToOpenLink.bind(BrowserUtils);
-
     /** @type {PrivateFunctionsNS.onContentLoaded._getWindow} */
     function getWindow(where, params = {}) {
       const forceNonPrivate = params.forceNonPrivate ?? false;

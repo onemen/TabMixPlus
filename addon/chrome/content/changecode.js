@@ -4,7 +4,7 @@
 // so we don't evaluate all code as strict mode code
 
 // aOptions can be: getter, setter or forceUpdate
-/** @type {TabmixNS.changeCode} */
+/** @type {TabmixGlobal["changeCode"]} */
 Tabmix.changeCode = function(aParent, afnName, aOptions) {
   let console = TabmixSvc.console;
   let debugMode = this._debugMode;
@@ -182,22 +182,23 @@ Tabmix.changeCode = function(aParent, afnName, aOptions) {
       const ex = this.getCallerData(Components.stack);
       if (notFoundCount && !this.silent) {
         let str = (notFoundCount > 1 ? "s" : "") + "\n    ";
-        ex.message = ex.fnName + " was unable to change " + aName + "." +
+        ex.message = ex.name + " was unable to change " + aName + "." +
             (this.errMsg || "\ncan't find string" + str + this.notFound.join("\n    ")) + errMsgContent;
         console.reportError(ex);
         if (debugMode) {
-          console.clog(ex.fnName + "\nfunction " + aName + " = " + this._value, ex);
+          console.clog(ex.name + "\nfunction " + aName + " = " + this._value, ex);
         }
       } else if (!this.needUpdate && debugMode) {
-        console.clog(ex.fnName + " no update needed to " + aName, ex);
+        console.clog(ex.name + " no update needed to " + aName, ex);
       }
       return false;
     },
 
     getCallerData(stack) {
       let caller = (stack.caller || {}).caller || {};
-      let {filename, lineNumber, columnNumber, name} = caller;
-      return {filename, lineNumber, columnNumber, fnName: name, message: ""};
+      const error = console.error(caller);
+      Object.assign(error, {name: caller.name, message: ""});
+      return error;
     },
 
     verifyPrivateMethodReplaced() {

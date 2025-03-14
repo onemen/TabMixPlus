@@ -1,5 +1,6 @@
 import {DownloadLastDir} from "resource://gre/modules/DownloadLastDir.sys.mjs";
 
+/** @type{DownloadLastDirModule.DownloadLastDir}  */
 export const TabmixDownloadLastDir = {
   _initialized: false,
   init() {
@@ -10,6 +11,7 @@ export const TabmixDownloadLastDir = {
     // original DownloadLastDir.sys.mjs query Ci.nsILoadContext on this.window,
     // it fails if we already closed the tab that initialized the download
     // with TypeError: can't access dead object
+    /** @type {TypedPropertyDescriptor<Window | null> & ThisType<DownloadLastDir>} */
     let descriptor = {
       get() {
         if (this._window) {

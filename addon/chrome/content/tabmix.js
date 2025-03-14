@@ -42,7 +42,7 @@ Tabmix.beforeDelayedStartup = function() {
   }
 };
 
-/** @this {typeof TabmixNS} */ // @ts-ignore
+/** @this {TabmixGlobal} */ // @ts-ignore
 Tabmix.getAfterTabsButtonsWidth = function() {
   this.afterTabsButtonsWidthReady = false;
   this.afterTabsButtonsWidth = this.isVersion({fp: "128.0.0"}) ? [40] : [35];
@@ -500,6 +500,7 @@ var TMP_eventListener = {
       Tabmix.prefs.setBoolPref("undoClose", sessionstoreUndoClose);
 
     // apply style on tabs
+    /** @type {DynamicRulesModule.RuleName[]} */
     let styles = ["currentTab", "unloadedTab", "unreadTab", "otherTab"];
     styles.forEach(ruleName => {
       gTMPprefObserver.updateTabsStyle(ruleName);

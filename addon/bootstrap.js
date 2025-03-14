@@ -1,4 +1,4 @@
-/// <reference types="../types/bootstrap.d.ts" />
+/// <reference types="../@types/bootstrap.d.ts" />
 
 /* exported install, uninstall, startup, shutdown */
 "use strict";

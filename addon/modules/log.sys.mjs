@@ -1,3 +1,4 @@
+/** @type {LogModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -7,6 +8,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
 
 var gNextID = 1;
 
+/** @type {LogModule.Console} */
 export const console = {
   getObject(aWindow, aMethod) {
     let msg = "";
@@ -23,13 +25,14 @@ export const console = {
       methodsList.shift();
     } else if (methodsList[0] == "document") {
       methodsList.shift();
-      rootID = methodsList.shift().replace(/getElementById\(|\)|'|"/g, "");
+      rootID = methodsList.shift()?.replace(/getElementById\(|\)|'|"/g, "");
     }
+    /** @type {any} */
     var obj;
     try {
       obj = aWindow;
       if (rootID)
-        obj = obj.document.getElementById(rootID);
+        obj = obj?.document.getElementById(rootID);
       methodsList.forEach(aFn => (obj = obj[aFn]));
     } catch {}
     return obj || {toString: () => "undefined"};
@@ -43,11 +46,12 @@ export const console = {
 
       const caller = this.caller;
       let logMethod = () => {
-        let result = "", isObj = typeof aMethod == "object";
+        const isObj = typeof aMethod == "object";
+        let result = "";
         if (typeof aMethod != "function") {
-          result = isObj ? aMethod.obj[aMethod.name] :
+          const method = isObj ? aMethod.obj[aMethod.name] :
             this.getObject(aWindow, aMethod);
-          result = " = " + result.toString();
+          result = " = " + method?.toString();
         }
         this.clog((isObj ? aMethod.fullName : aMethod) + result, caller);
       };
@@ -84,16 +88,13 @@ export const console = {
   // get functions names from Error().stack
   // excluding any internal caller (name start with TMP_console_)
   _getNames(aCount, stack) {
-    stack = this._getStackExcludingInternal(stack);
+    let stackList = this._getStackExcludingInternal(stack);
     if (!aCount)
       aCount = 1;
     else if (aCount < 0)
-      aCount = stack.length;
-    let names = [];
-    for (let i = 0, l = Math.min(aCount, stack.length); i < l; i++)
-      names.push(this._name(stack[i]));
-
-    return names;
+      aCount = stackList.length;
+    return stackList.slice(0, Math.min(aCount, stackList.length))
+        .map(n => this._name(n));
   },
 
   // get the name of the function that is in the nth place in Error().stack
@@ -106,15 +107,16 @@ export const console = {
   },
 
   _getStackExcludingInternal(stack) {
+    let stackList = [];
     if (!stack)
-      stack = Error().stack.split("\n").slice(2);
+      stackList = Error().stack?.split("\n").slice(2) ?? [];
     else
-      stack = stack.split("\n");
+      stackList = stack.split("\n");
     // cut internal callers
     let re = /TMP_console_.*/;
-    while (stack.length && stack[0].match(re))
-      stack.splice(0, 1);
-    return stack;
+    while (stackList[0]?.match(re))
+      stackList.splice(0, 1);
+    return stackList;
   },
 
   _char: "@",
@@ -155,20 +157,23 @@ export const console = {
     return false;
   },
 
-  callerTrace: function TMP_console_callerTrace(...args) {
+  // @ts-expect-error - we are using 2 overloads to this function
+  callerTrace: function TMP_console_callerTrace() {
     let stack = this._getStackExcludingInternal();
 
     let stackUtil = {
+      /** @param {...(string | string[])} names */
       contain(...names) {
         if (Array.isArray(names[0])) {
           names = names[0];
         }
-        let _isCallerInList = function(caller) {
+        let _isCallerInList = function(/** @type {string} */ caller) {
           return names.some(name => caller.startsWith(name + "@"));
         };
         return stack.some(_isCallerInList);
       },
     };
+    const args = Array.from(arguments);
     if (args.length) {
       return stackUtil.contain.apply(null, args);
     }
@@ -231,13 +236,16 @@ export const console = {
 
   // RegExp to remove path/to/profile/extensions from filename
   get _pathRegExp() {
+    // @ts-expect-error - this is a lazy getter
     delete this._pathRegExp;
     const path = Services.dirsvc.get("ProfD", Ci.nsIFile).path.replace(/\\/g, "/") + "/extensions/";
     return (this._pathRegExp = new RegExp("jar:|file:///|" + path, "g"));
   },
 
   _formatStack(stack) {
-    let lines = [], _char = this._char, re = this._pathRegExp;
+    /** @type {string[]} */
+    let lines = [];
+    let _char = this._char, re = this._pathRegExp;
     stack.forEach(line => {
       let atIndex = line.indexOf("@");
       let columnIndex = line.lastIndexOf(":");
@@ -281,36 +289,45 @@ export const console = {
   },
 
   error(error, message = "") {
+    const isException = error instanceof Components.Exception;
+    const isError = error instanceof Error;
     function CustomError() {
       Object.assign(this, error);
       this.name = "Tabmix Error";
-      this.message = `${message ? `\n${message}\n` : "\n"}${error.message};`;
+      const errorMessage = isException || isError ? error.message : String(error);
+      this.message = `${message ? `\n${message}\n` : "\n"}${errorMessage};`;
+      // @ts-expect-error - filename exist in Exception, fileName exist in Error
+      const {filename, fileName, lineNumber, columnNumber} = error ?? {};
+      this.fileName = filename ?? fileName;
+      this.lineNumber = lineNumber;
+      this.columnNumber = columnNumber;
     }
     CustomError.prototype = new Error();
     return new CustomError();
   },
 
   assert: function TMP_console_assert(aError, aMsg) {
+    // @ts-expect-error - we are ok here
     if (!aError || typeof aError.stack != "string") {
       let msg = aMsg ? aMsg + "\n" : "";
       this.trace(msg + (aError || ""), "errorFlag", this.caller);
       return;
     }
-    if (typeof aError == "object" &&
-        (aError instanceof Components.Exception ||
-         aError instanceof Error)) {
+    if (aError instanceof Components.Exception || aError instanceof Error) {
       this.reportError(aError, aMsg);
     }
 
-    let names = this._getNames(1, aError.stack);
+    // @ts-expect-error - we get the right values here
+    const {stack, message, location} = aError;
+    let names = this._getNames(1, stack);
     let errAt = " at " + names[0];
-    let location = aError.location ? "\n" + aError.location : "";
-    let assertionText = " ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + aError.message + location;
-    let stackText = "\nStack Trace:\n" + this._formatStack(aError.stack.split("\n"));
+    let errorLocation = location ? "\n" + location : "";
+    let assertionText = " ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + message + errorLocation;
+    let stackText = "\nStack Trace:\n" + this._formatStack(stack.split("\n"));
     this._logMessage(assertionText + stackText, "errorFlag");
   },
 
-  trace: function TMP_console_trace(aMsg, flag = "infoFlag", caller = null) {
+  trace: function TMP_console_trace(aMsg, flag = "infoFlag", caller) {
     let stack = this._formatStack(this._getStackExcludingInternal());
     let msg = aMsg ? aMsg + "\n" : "";
     this._logMessage(":\n" + msg + "Stack Trace:\n" + stack, flag, caller);
@@ -324,47 +341,40 @@ export const console = {
     return parent || {};
   },
 
-  reportError(ex = null, msg = "", filter) {
-    if (filter) {
+  reportError(ex, msg = "", filter) {
+    if (ex === null) {
+      ex = "reportError was called with null";
+    } else if (filter && (ex instanceof Components.Exception || ex instanceof Error)) {
       if (!ex.message || !ex.message.includes(filter)) {
         return;
       }
     }
-    if (ex === null) {
-      ex = "reportError was called with null";
-    }
     msg = ":\n" + (msg ? msg + "\n" : "");
-    if (typeof ex != "object" || typeof ex.message != "string") {
-      this._logMessage(msg + ex.toString(), "errorFlag");
-    } else {
-      let caller = ex;
-      if (typeof ex.filename == "undefined" && ex.fileName) {
-        ex.filename = ex.fileName;
-      }
-      if (!ex.filename || !ex.lineNumber) {
-        caller = this.caller;
-        ex.stack = caller.stack;
-      }
+
+    if (ex instanceof Components.Exception || ex instanceof Error) {
+      const caller = ex instanceof Error ? Object.assign({}, ex, {filename: ex.fileName}) : ex;
       this._logMessage(msg + ex.message, "errorFlag", caller);
+    } else {
+      this._logMessage(msg + ex?.toString(), "errorFlag");
     }
   },
 
-  _logMessage: function _logMessage(msg, flag = "infoFlag", caller = null) {
+  _logMessage: function _logMessage(msg, flag = "infoFlag", caller) {
     msg = msg.replace(/\r\n/g, "\n") + "\n";
-    if (typeof Ci.nsIScriptError[flag] == "undefined") {
+    /** @type {number | undefined} */ // @ts-ignore
+    const errorFlag = Ci.nsIScriptError[flag];
+    if (typeof errorFlag == "undefined") {
       Services.console.logStringMessage("Tabmix" + msg);
       return;
     }
-    if (!caller)
-      caller = this.caller;
-    let {filename, lineNumber, columnNumber} = caller;
+
+    let {filename = "", lineNumber, columnNumber} = caller ?? this.caller;
     let consoleMsg = Cc["@mozilla.org/scripterror;1"].createInstance(Ci.nsIScriptError);
     if (lazy.ContentSvc.version(1300)) {
-      consoleMsg.init("Tabmix" + msg, filename, lineNumber, columnNumber,
-        Ci.nsIScriptError[flag], "component javascript");
+      consoleMsg.init("Tabmix" + msg, filename, lineNumber, columnNumber, errorFlag, "component javascript");
     } else {
-      consoleMsg.init("Tabmix" + msg, filename, null, lineNumber, columnNumber,
-        Ci.nsIScriptError[flag], "component javascript");
+      // @ts-expect-error - bug 1910698 - Remove nsIScriptError.sourceLine
+      consoleMsg.init("Tabmix" + msg, filename, null, lineNumber, columnNumber, errorFlag, "component javascript");
     }
     Services.console.logMessage(consoleMsg);
   },

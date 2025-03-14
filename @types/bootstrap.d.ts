@@ -17,11 +17,10 @@ interface PopupNotifications {
 }
 
 interface Window {
-  _tabmix_PlacesUIUtils_openTabset?: (aItemsToOpen: {uri: string; isBookmark: boolean}[], aEvent: Event, aWindow: Window) => void;
   _tabmix_windowIsClosing: boolean;
   gBrowser: MockedGeckoTypes.TabBrowser;
   PopupNotifications: PopupNotifications;
-  Tabmix: typeof TabmixNS;
+  Tabmix: TabmixGlobal;
 }
 
 declare var ADDON_ENABLE: number;
@@ -64,18 +63,9 @@ interface PreferencesLoader {
   loadDefaultPreferences: () => void;
 }
 
-interface ScriptsLoader {
-  initForWindow: (window: Window, promiseOverlayLoaded: Promise<void>, params?: {chromeManifest: ChromeManifest; isOverflow: boolean; isEnabled: boolean}) => void;
-}
-
-interface TabmixWidgets {
-  create: () => void;
-  destroy: (uninstall?: boolean) => void;
-}
-
-declare const ChromeManifest: ChromeManifestClass;
-declare const Overlays: OverlaysClass;
+declare const ChromeManifest: TabmixModules.ChromeManifestClass;
+declare const Overlays: OverlaysModule.OverlaysClass;
 declare var PreferencesLoader: PreferencesLoader;
-declare var ScriptsLoader: ScriptsLoader;
-declare const TabmixChromeUtils: TabmixChromeUtilsType;
-declare var TabmixWidgets: TabmixWidgets;
+declare var ScriptsLoader: ScriptsLoaderModule.ScriptsLoader;
+declare const TabmixChromeUtils: TabmixModules.ChromeUtils;
+declare var TabmixWidgets: TabmixWidgetsModule.TabmixWidgets;

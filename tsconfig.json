@@ -1,10 +1,12 @@
 {
   "files": [],
   "compilerOptions": {
-    "rootDir": "."
+    "rootDir": ".",
+    "baseUrl": "."
   },
   "references": [
     {"path": "./addon"},
+    {"path": "./addon/modules"},
     {"path": "./addon/chrome/content"},
     {"path": "./addon/chrome/content/preferences"},
     {"path": "./addon/chrome/content/overlay"},

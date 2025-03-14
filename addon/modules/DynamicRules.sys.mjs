@@ -1,3 +1,4 @@
+/** @type {DynamicRulesModule.Lazy} */ // @ts-expect-error
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -9,7 +10,7 @@ ChromeUtils.defineLazyGetter(lazy, "Prefs", () => {
   return Services.prefs.getBranch("extensions.tabmix.styles.");
 });
 
-var TYPE;
+var TYPE = 1;
 ChromeUtils.defineLazyGetter(lazy, "SSS", () => {
   let sss = Cc['@mozilla.org/content/style-sheet-service;1']
       .getService(Ci.nsIStyleSheetService);
@@ -17,11 +18,13 @@ ChromeUtils.defineLazyGetter(lazy, "SSS", () => {
   return sss;
 });
 
+/** @type {Array<DynamicRulesModule.RuleName>} */
 const STYLENAMES = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
 
+/** @type {DynamicRulesModule.DynamicRules} */
 export const DynamicRules = {
 
-  // hold templates for our css rules
+  // @ts-expect-error - hold templates for our css rules
   cssTemplates: {},
 
   // hold the current state for each style according to its preference
@@ -37,11 +40,11 @@ export const DynamicRules = {
       return;
     this._initialized = true;
 
-    this.orient = aWindow.document.getElementById("tabbrowser-tabs").attributes.orient?.value ?? "horizontal";
+    this.orient = aWindow.document.getElementById("tabbrowser-tabs").getAttribute("orient") || "horizontal";
     this.windows10 = aWindow.navigator.oscpu.startsWith("Windows NT 10.0");
 
     lazy.Prefs.addObserver("", this);
-    STYLENAMES.forEach(function(pref) {
+    STYLENAMES.forEach(pref => {
       Services.prefs.addObserver("extensions.tabmix." + pref, this);
     }, this);
     Services.obs.addObserver(this, "browser-window-before-show");
@@ -53,6 +56,7 @@ export const DynamicRules = {
   observe(subject, topic, data) {
     switch (topic) {
       case "browser-window-before-show":
+        // @ts-expect-error - subject is ChromeWindow
         this.registerMutationObserver(subject);
         break;
       case "nsPref:changed":
@@ -65,10 +69,11 @@ export const DynamicRules = {
   },
 
   registerMutationObserver(window) {
+    /** @param {MutationRecord[]} aMutations */
     const tabsMutate = aMutations => {
       for (let mutation of aMutations) {
         if (mutation.attributeName == "orient") {
-          this.orient = mutation.target.orient || mutation.target.attributes.orient?.value || "horizontal";
+          this.orient = mutation.target?.getAttribute("orient") || "horizontal";
           this.updateStyleType();
           return;
         }
@@ -82,7 +87,8 @@ export const DynamicRules = {
   },
 
   onPrefChange(data) {
-    let prefName = data.split(".").pop();
+    /** @type {DynamicRulesModule.RuleName} */ // @ts-expect-error
+    let prefName = data.split(".").pop() || "";
     if (STYLENAMES.indexOf(prefName) > -1) {
       if (prefName == data)
         this.userChangedStyle(prefName, true);
@@ -95,10 +101,10 @@ export const DynamicRules = {
     Services.obs.removeObserver(this, "browser-window-before-show");
     Services.obs.removeObserver(this, "quit-application");
     lazy.Prefs.removeObserver("", this);
-    STYLENAMES.forEach(function(pref) {
+    STYLENAMES.forEach(pref => {
       Services.prefs.removeObserver("extensions.tabmix." + pref, this);
       this.unregisterSheet(pref);
-    }, this);
+    });
   },
 
   updateOpenedWindows(ruleName) {
@@ -154,16 +160,16 @@ export const DynamicRules = {
         text: `${this.getSelector("other", "text")}${tabTextRule}`,
         bg: `${this.getSelector("other", "bg")}${backgroundRule}`
       },
-    };
-
-    styleRules.progressMeter = {
-      bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] #tabbrowser-arrowscrollbox .tabbrowser-tab > ' +
-          '.tab-stack > .tab-progress-container > .tab-progress::-moz-progress-bar' +
-          '{\n  background-color: #bottomColor !important;\n}\n'
+      progressMeter: {
+        bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] #tabbrowser-arrowscrollbox .tabbrowser-tab > ' +
+            '.tab-stack > .tab-progress-container > .tab-progress::-moz-progress-bar' +
+            '{\n  background-color: #bottomColor !important;\n}\n'
+      }
     };
 
     this.cssTemplates = styleRules;
     for (let rule of Object.keys(this.cssTemplates)) {
+      // @ts-expect-error - we know these keys match DefaultPrefs
       this.userChangedStyle(rule);
     }
   },
@@ -210,11 +216,13 @@ export const DynamicRules = {
   updateStyles(name, prefObj) {
     let templates = this.cssTemplates[name];
 
-    const buttonSelector = rule => `${this.getSelector(name, rule)} > .tab-stack > .tab-content > .tab-close-button`;
-    const bgSelector = rule => `${this.getSelector(name, rule)}:hover > .tab-stack > .tab-background`;
+    const buttonSelector = (/** @type {string} */ rule) => `${this.getSelector(name, rule)} > .tab-stack > .tab-content > .tab-close-button`;
+    const bgSelector = (/** @type {string} */ rule) => `${this.getSelector(name, rule)}:hover > .tab-stack > .tab-background`;
 
+    /** @type {Record<string, string>} */
     let style = {};
     for (let rule of Object.keys(templates)) {
+      /** @type {string} */ // @ts-expect-error
       let cssText = templates[rule];
       if (rule == "text") {
         if (prefObj.text) {
@@ -249,6 +257,7 @@ export const DynamicRules = {
 
   // update background type tabbar orient changed
   updateStyleType() {
+    // @ts-expect-error - reset tabStylePrefs
     lazy.TabmixSvc.tabStylePrefs = {};
     this.createTemplates();
 
@@ -276,6 +285,7 @@ export const DynamicRules = {
     if (!enabled)
       return;
 
+    /** @type {Record<string, string>} */ // @ts-expect-error
     let style = this.styles[name];
     if (!style)
       return;
@@ -301,13 +311,18 @@ export const DynamicRules = {
   },
 
   get defaultPrefs() {
-    delete this.defaultPrefs;
-    let defaults = {};
+    if (this._defaultPrefs) {
+      return this._defaultPrefs;
+    }
+
+    /** @type {DynamicRulesModule.DefaultPrefs} */ // @ts-expect-error
+    const defaults = {};
     let getDefaultBranch = Services.prefs.getDefaultBranch("extensions.tabmix.styles.");
     STYLENAMES.forEach(pref => {
       defaults[pref] = getDefaultBranch.getCharPref(pref);
-    }, this);
-    return (this.defaultPrefs = defaults);
+    });
+    this._defaultPrefs = defaults;
+    return defaults;
   },
 
   handleError(error, ruleName) {
@@ -326,7 +341,10 @@ export const DynamicRules = {
       return defaultPrefValues;
     }
 
-    var currentPrefValues, prefValues = {};
+    /** @type {Partial<DynamicRulesModule.TabStyle> & {[key: string]: any}} */
+    let currentPrefValues = {};
+    /** @type {Partial<DynamicRulesModule.TabStyle> & {[key: string]: any}} */
+    const prefValues = {};
     let prefString = lazy.Prefs.getCharPref(ruleName);
     try {
       currentPrefValues = JSON.parse(prefString);
@@ -385,6 +403,10 @@ export const DynamicRules = {
 };
 
 // Converts a color string in the format "#RRGGBB" to rgba(r,g,b,a).
+/**
+ * @param {string} aColorCode
+ * @param {number | null} aOpacity
+ */
 function getRGBcolor(aColorCode, aOpacity) {
   let newRGB = [];
   let _length = aColorCode.length;
@@ -393,7 +415,7 @@ function getRGBcolor(aColorCode, aOpacity) {
     if (newRGB.length < 3)
       return null;
     for (let i = 0; i < newRGB.length; i++) {
-      let val = Number(newRGB[i].replace(/[\s]/g, ""));
+      let val = Number(newRGB[i]?.replace(/[\s]/g, ""));
       if (isNaN(val))
         return null;
     }
@@ -415,69 +437,96 @@ function getRGBcolor(aColorCode, aOpacity) {
 
   if (aOpacity !== null)
     newRGB[3] = aOpacity;
-  else if (newRGB[3] === undefined || newRGB[3] < 0 || newRGB[3] > 1)
+  else if (newRGB[3] === undefined || Number(newRGB[3]) < 0 || Number(newRGB[3]) > 1)
     newRGB[3] = 1;
   return "rgba(" + newRGB.join(",") + ")";
 }
 
-// get darkened color for close button hover state
-function getButtonColors({bgColor, bgTopColor}, value = 10) {
-  function parseRgba(rgbaString) {
-    const match = rgbaString.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+(?:\.\d+)?)\)/);
-    if (match) {
-      return {
-        r: parseInt(match[1]),
-        g: parseInt(match[2]),
-        b: parseInt(match[3]),
-        a: parseFloat(match[4])
-      };
-    }
-    return null;
-  }
+/** @type {DynamicRulesModule.ButtonColorProcessor} */
+const buttonColorProcessor = {
+  getButtonColors({bgColor, bgTopColor}, value = 10) {
+    return {
+      topColor: this.processColor(bgColor, value),
+      bottomColor: this.processColor(bgTopColor, value)
+    };
+  },
 
-  function rgbaToHsla(rgba) {
-    const r = rgba.r / 255;
-    const g = rgba.g / 255;
-    const b = rgba.b / 255;
+  parseRgba(rgbaString) {
+    const rgbaPattern = /rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+(?:\.\d+)?)\)/;
+    const match = rgbaString.trim().match(rgbaPattern);
+
+    if (!match?.[1] || !match[2] || !match[3] || !match[4]) {
+      return null;
+    }
+
+    return {
+      r: parseInt(match[1]),
+      g: parseInt(match[2]),
+      b: parseInt(match[3]),
+      a: parseFloat(match[4])
+    };
+  },
+
+  rgbaToHsla(rgba) {
+    const normalizedRGB = {
+      r: rgba.r / 255,
+      g: rgba.g / 255,
+      b: rgba.b / 255
+    };
+
+    const {r, g, b} = normalizedRGB;
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
     const delta = max - min;
-    let h;
-    if (delta === 0) {
-      h = 0;
-    } else if (max === r) {
-      h = (60 * ((g - b) / delta) + 360) % 360;
-    } else if (max === g) {
-      h = (60 * ((b - r) / delta) + 120) % 360;
-    } else if (max === b) {
-      h = (60 * ((r - g) / delta) + 240) % 360;
+
+    let h = 0;
+    if (delta !== 0) {
+      switch (max) {
+        case r:
+          h = (60 * ((g - b) / delta) + 360) % 360;
+          break;
+        case g:
+          h = (60 * ((b - r) / delta) + 120) % 360;
+          break;
+        case b:
+          h = (60 * ((r - g) / delta) + 240) % 360;
+          break;
+      }
     }
+
     const l = (max + min) / 2;
     const s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+
     return {
       h: Math.round(h),
       s: Math.round(s * 100) / 100,
       l: Math.round(l * 100) / 100,
       a: Math.round(rgba.a * 100) / 100
     };
-  }
+  },
 
-  function darkenRgba(rgba, amount) {
-    const hsla = rgbaToHsla(rgba);
-    hsla.l -= amount / 100;
-    if (hsla.l < 0) hsla.l = 0;
-    if (hsla.l > 100) hsla.l = 100;
+  darkenRgba(rgba, amount) {
+    const hsla = this.rgbaToHsla(rgba);
+    hsla.l = Math.max(0, Math.min(1, hsla.l - amount / 100));
     return hsla;
-  }
+  },
 
-  function hslaToString(hsla) {
+  hslaToString(hsla) {
     return `hsla(${hsla.h}, ${hsla.s * 100}%, ${hsla.l * 100}%, ${hsla.a})`;
-  }
+  },
 
-  const topColorRGB = parseRgba(bgTopColor.trim());
-  const bottomColorRGB = parseRgba(bgColor.trim());
-  return {
-    topColor: hslaToString(darkenRgba(topColorRGB, value)),
-    bottomColor: hslaToString(darkenRgba(bottomColorRGB, value)),
-  };
+  processColor(color, value) {
+    const rgba = this.parseRgba(color);
+    if (!rgba) {
+      console.error(`Invalid color format: ${color}`);
+      return color;
+    }
+    return this.hslaToString(this.darkenRgba(rgba, value));
+  }
+};
+
+// get darkened color for close button hover state
+/** @type {typeof buttonColorProcessor.getButtonColors} */
+function getButtonColors({bgColor, bgTopColor}, value = 10) {
+  return buttonColorProcessor.getButtonColors({bgColor, bgTopColor}, value);
 }

@@ -2,7 +2,6 @@
   "extends": "../../../../config/base.tsconfig.json",
   "include": ["**/*.js", "**/*.sys.mjs"],
   "compilerOptions": {
-    "typeRoots": ["../../../../types"],
-    "types": ["general.d.ts", "autoReload.d.ts", "tabmix.d.ts"]
+    "types": ["index.d.ts", "autoReload.d.ts", "tabmix.d.ts"]
   }
 }

@@ -1,3 +1,4 @@
+/** @type {FloorpModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 ChromeUtils.defineLazyGetter(lazy, "prefs", () => {
@@ -11,7 +12,9 @@ const PREFS = [
   "userChrome.padding.tabbar_height",
 ];
 
+/** @type {FloorpModule.Floorp} */
 export const FloorpPrefsObserver = {
+  _initialized: false,
   init() {
     if (this._initialized) {
       return;

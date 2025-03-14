@@ -1,5 +1,12 @@
+/// <reference types="./gecko/devtools/gecko.d.ts" />
 /// <reference types="./gecko/tools/lib.gecko.services.d.ts" />
+/// <reference types="./gecko/tools/lib.gecko.tweaks.d.ts" />
 /// <reference types="./custom.gecko.dom.d.ts" />
+
+type Tab = MockedGeckoTypes.BrowserTab;
+type Browser = MockedGeckoTypes.ChromeBrowser;
+type TabBrowser = MockedGeckoTypes.TabBrowser;
+type TabContainer = MockedGeckoTypes.TabContainer;
 
 // use these types instead of types from gecko.d.ts
 type nsIFilePickerXpcom = nsIFilePicker;
@@ -50,6 +57,7 @@ interface HTMLElement {
   __updatingViewAfterDelete?: boolean;
   addEventListener<K extends keyof EventTypeMap<T>, T extends HTMLElement>(type: K, listener: (this: T, ev: EventTypeMap<T>[K]) => unknown, options?: boolean | AddEventListenerOptions): void;
   firstChild: HTMLElement | null;
+  nextSibling: HTMLElement | null;
   previousSibling: HTMLElement | null;
   disabled?: boolean;
 }
@@ -84,13 +92,20 @@ type DragEventParams = {sourceNode: HTMLLinkElement | MockedGeckoTypes.BrowserTa
 
 declare namespace MockedGeckoTypes {
   interface BrowsingContext extends MockedExports.BrowsingContext {
+    opener?: CanonicalBrowsingContext;
+    reload: (loadFlags: number) => void;
     sessionHistory: nsISHistory | null;
   }
 
-  interface ChromeBrowser extends MockedExports.ChromeBrowser {
+  interface ChromeBrowser extends MockedExports.ChromeBrowser, nsIBrowser {
     _contentWindow: Window;
+    asyncPermitUnload: (action: string) => Promise<{permitUnload: boolean}>;
+    authPromptAbuseCounter?: {
+      baseDomain?: number;
+    };
     browsingContext: BrowsingContext;
     contentTitle?: string;
+    contentWindow: WindowProxy;
     readonly canGoForward: boolean;
     readonly canGoBack: boolean;
     readonly characterSet: string;
@@ -103,28 +118,40 @@ declare namespace MockedGeckoTypes {
     // fixupAndLoadURIString: (uri: string, loadURIOptions?: LoadURIOptions) => void;
     // loadURI: (uri: string, loadURIOptions?: LoadURIOptions) => void;
     messageManager: MockedExports.MessageManager;
+    mIconURL: string;
     // ignore null here
+    readonly ownerDocument: Document;
     readonly ownerGlobal: WindowProxy;
     reload: () => void;
+    sendMessageToActor: (messageName: string, data: object, type: string) => void;
     stop: () => void;
     set userTypedValue(val: string);
     get userTypedValue(): string | null;
+    webNavigation: MockedExports._nsIWebNavigation;
 
     // modified by Tab Mix Plus
     __tabmix__whereToOpen?: WhereToOpen;
     __tabmix_loadURI: boolean;
     __tabmix_fixupAndLoadURIString: boolean;
+    __tabmixScrollPosition?: {x: number | undefined; y: number | undefined} | null;
     tabmix_allowLoad?: boolean;
+  }
+
+  interface CustomElementEventMap extends ElementEventMap {
+    DOMModalDialogClosed: CustomEvent & {
+      target: Node;
+    };
   }
 
   interface Browser extends MockedExports.Browser {
     readonly currentURI: URI;
     selectedBrowser: ChromeBrowser;
+    addEventListener<K extends keyof CustomElementEventMap>(type: K, listener: (this: Element, ev: CustomElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions): void;
   }
 
   type Tabs = NonEmptyArray<BrowserTab>;
 
-  interface BrowserTab extends MockedExports.BrowserTab, Omit<Element, "ownerGlobal"> {
+  interface BrowserTab extends MockedExports.BrowserTab, Omit<Element, "ownerGlobal" | "nextSibling"> {
     readonly _isProtected: boolean;
     _labelIsInitialTitle?: boolean;
     _tPos: number;
@@ -150,6 +177,7 @@ declare namespace MockedGeckoTypes {
     get linkedPanel(): string;
     // mCorrespondingMenuitem: - see addon.d.ts
     readonly multiselected: boolean;
+    nextSibling: BrowserTab | undefined;
     owner: BrowserTab | null;
     // MockedExports.BrowserTab use null here - ignore it
     readonly ownerGlobal: WindowProxy;
@@ -180,6 +208,7 @@ declare namespace MockedGeckoTypes {
     readonly mouseHoverSelectDelay: number;
     mOverCloseButton?: boolean;
     onMouseCommand: (aEvent: MouseEvent, aSelectNewTab: boolean) => void;
+    postDataAcceptedByUser?: boolean;
     removeShowButton: (tab: BrowserTab) => void;
     setHoverState: (aEvent: MouseEvent, aHover: boolean) => void;
     setShowButton: (tab: BrowserTab) => void;
@@ -316,10 +345,14 @@ declare namespace MockedGeckoTypes {
   type ClosingTabsEnumValues = Exclude<EnumValues, string>;
 
   type Notification = {priority: number; label: string | {"l10n-id": string; "l10n-args": object} | DocumentFragment; eventCallback?: (event: "removed" | "dismissed" | "disconnected") => void; notificationIs?: string; telemetry?: string; telemetryFilter?: string[]};
+  type NotificationMessage = HTMLElement & {value: string};
   type NotificationButton = {label: string; accessKey: string; callback?: (notification: Element, button: object, buttonElement: HTMLButtonElement, event: Event) => boolean | void; link?: string; supportPage?: boolean; popup?: string; telemetry?: string; is?: string};
   interface NotificationBox {
-    PRIORITY_CRITICAL_HIGH: number;
-    appendNotification(aType: string, aNotification: Notification, aButtons: NotificationButton[]): HTMLElement;
+    PRIORITY_INFO_MEDIUM: 2;
+    PRIORITY_CRITICAL_HIGH: 3;
+    appendNotification(aType: string, aNotification: Notification, aButtons?: NotificationButton[], aDisableClickJackingDelay?: boolean): NotificationMessage;
+    getNotificationWithValue(value: string): Notification | null;
+    removeNotification(notification: NotificationMessage): void;
   }
 
   interface TabBrowser extends Browser {
@@ -338,11 +371,13 @@ declare namespace MockedGeckoTypes {
     _selectedTab: BrowserTab;
     _setTabLabel: (tab: BrowserTab, label: string, options?: {beforeTabOpen?: boolean; isContentTitle?: boolean; isURL?: boolean}) => boolean;
     _tabAttrModified: (tab: BrowserTab, changed: string[]) => void;
+    _windowIsClosing: boolean;
     addAdjacentNewTab: (tab: BrowserTab) => void;
     addRangeToMultiSelectedTabs: (start: BrowserTab, end: BrowserTab) => void;
     addTab: (url: string, params?: {index?: number; isPending?: boolean} | Record<string, unknown>) => BrowserTab;
     addToMultiSelectedTabs: (tab: BrowserTab) => BrowserTab;
     addTrustedTab: (aURI: string, params?: Params) => BrowserTab;
+    adoptTab: (aTab: BrowserTab, aIndex: number, aSelectTab: boolean) => BrowserTab;
     browsers: ChromeBrowser[];
     readonly canGoForward: boolean;
     readonly canGoBack: boolean;
@@ -351,6 +386,7 @@ declare namespace MockedGeckoTypes {
     duplicateTab: (aTab: BrowserTab, aRestoreTabImmediately: boolean, aOptions?: {inBackground?: boolean; index?: number}) => BrowserTab;
     discardBrowser: (aTab: BrowserTab, aForceDiscard?: boolean) => void;
     getBrowserAtIndex: (aIndex: number) => ChromeBrowser;
+    getBrowserForOuterWindowID(aID: number): ChromeBrowser;
     getBrowserForTab: (tab: BrowserTab) => ChromeBrowser;
     getNotificationBox: (browser?: ChromeBrowser) => NotificationBox;
     getTabForBrowser: (browser: ChromeBrowser) => BrowserTab;
@@ -364,6 +400,7 @@ declare namespace MockedGeckoTypes {
     hideTab: (aTab: BrowserTab, aSource?: string) => void;
     lastMultiSelectedTab: BrowserTab;
     moveTabTo: (tab: BrowserTab, index: number, keepRelatedTabs?: boolean) => void;
+    ownerGlobal: WindowProxy;
     pinTab: (tab: BrowserTab) => void;
     readonly pinnedTabCount: number;
     preloadedBrowser?: ChromeBrowser;
@@ -373,7 +410,7 @@ declare namespace MockedGeckoTypes {
       tab: BrowserTab,
       params?: {
         animate?: boolean;
-        triggeringEvent?: Event;
+        triggeringEvent?: Event | undefined;
         skipPermitUnload?: boolean;
         closeWindowWithLastTab?: boolean;
         prewarmed?: boolean;
@@ -403,6 +440,7 @@ declare namespace MockedGeckoTypes {
     selectedTab: BrowserTab;
     setInitialTabTitle: (tab: BrowserTab, title: string, options: Record<string, unknown>) => void;
     setTabTitle: (tab: BrowserTab) => boolean;
+    swapBrowsersAndCloseOther: (ourTab: BrowserTab, otherTab: BrowserTab) => boolean;
     tabContainer: TabContainer;
     tabLocalization: Localization;
     get tabbox(): TabBox;
@@ -410,6 +448,7 @@ declare namespace MockedGeckoTypes {
     tabs: Tabs;
     visibleTabs: Tabs;
     unpinTab: (tab: BrowserTab) => void;
+    updateBrowserRemotenessByURL: (aBrowser: ChromeBrowser, aURL: string, aOptions?: {newFrameloader?: boolean}) => boolean;
     set userTypedValue(val: string);
     get userTypedValue(): string | null;
     warnAboutClosingTabs: (tabsToClose: number, aCloseTabs: ClosingTabsEnumValues, aSource?: string) => boolean;
@@ -583,9 +622,15 @@ declare namespace MockedGeckoTypes {
     contextTab: BrowserTab;
   }
 
+  interface TabSwitcher {
+    updateDisplay: () => void;
+    visibleTab: Tab;
+  }
+
   interface OpenLinkInParams {
+    allowInheritPrincipal?: boolean;
     charset?: string;
-    csp?: nsIContentSecurityPolicy;
+    csp?: nsIContentSecurityPolicy | null;
     frameID?: number;
     globalHistoryOptions?: {
       triggeringSponsoredURL: string;
@@ -595,8 +640,8 @@ declare namespace MockedGeckoTypes {
     originPrincipal?: nsIPrincipal;
     originStoragePrincipal?: nsIPrincipal;
     private?: boolean;
-    triggeringPrincipal?: nsIPrincipal;
-    triggeringRemoteType?: string;
+    triggeringPrincipal?: nsIPrincipal | null;
+    triggeringRemoteType?: string | undefined;
     userContextId?: number;
     [key: string]: unknown;
   }
@@ -643,9 +688,10 @@ declare namespace MockedGeckoTypes {
   }
 
   interface BookmarksService extends nsINavBookmarksService {
-    fetch: (guidOrInfo: string | {uri?: string; title?: string; guid?: string}, onResult?: ((result: BookmarkInfo) => void) | null, options?: {concurrent?: boolean; includePath?: boolean; includeItemIds?: boolean}) => Promise<BookmarkInfo>;
+    fetch: (guidOrInfo: string | {url?: string; title?: string; guid?: string}, onResult?: ((result: BookmarkInfo) => void) | null, options?: {concurrent?: boolean; includePath?: boolean; includeItemIds?: boolean}) => Promise<BookmarkInfo>;
   }
 
+  // for PlacesUtils.sys.mjs
   interface PlacesUtils {
     bookmarks: BookmarksService;
     favicons: nsIFaviconService;
@@ -655,74 +701,15 @@ declare namespace MockedGeckoTypes {
 
   interface PlacesUIUtils {
     openTabset(aItemsToOpen: Array<{uri: string; isBookmark: boolean}>, aEvent: Event, aWindow: Window): void;
+    markPageAsFollowedLink(aURL: string): void;
     /** @deprecated removed since Firefox version 125 */
     showBookmarkPagesDialog(URIList: nsIURI[], hiddenRows?: string[], win?: Window): Promise<void>;
   }
-
-  /** Services */
-
-  // NOTE:
-  // we use here the interface from gecko/lib.gecko.services.d.ts
-  // and ignore the declared Services from gecko.d.ts
-
-  interface _nsIEventListenerService extends nsIEventListenerService {
-    /** @deprecated removed since Firefox version 125 */
-    addSystemEventListener: (element: Window | Document | Element, type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean) => void;
-    /** @deprecated removed since Firefox version 125 */
-    removeSystemEventListener: (element: Window | Document | Element, type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean) => void;
-  }
-
-  interface _nsIIOService extends nsIIOService {
-    newURI(aSpec: string, aOriginCharset?: string | null, aBaseURI?: nsIURI | null): nsIURI;
-  }
-
-  interface _nsIObserverService extends nsIObserverService {
-    notifyObservers(aSubject: nsISupports, aTopic: string, someData?: string): void;
-    notifyObservers(aSubject: nsISupports & {wrappedJSObject: Promise<void>}, aTopic: string, someData?: string): void;
-  }
-
-  type InOutParam<T> = {value: T};
-  interface _nsIPromptService extends nsIPromptService {
-    // for waterfox G6.0.17+
-    confirmEx2(aParent: mozIDOMWindowProxy, aDialogTitle: string, aText: string, aButtonFlags: u32, aButton0Title: string, aButton1Title: string, aButton2Title: string, aCheckMsg1: string, aCheckState1: InOutParam<boolean>, aCheckMsg2: string, aCheckState2: InOutParam<boolean>): i32;
-  }
-
-  interface nsISimpleEnumeratorWithWindow extends nsISimpleEnumerator {
-    getNext(): nsISupports & BrowserWindow;
-  }
-
-  interface GetWindowByTypeMap {
-    "mozilla:tabmixopt": TabmixOptionsWindow;
-    "mozilla:tabmixopt-appearance": Window;
-    "mozilla:tabmixopt-filetype": Window;
-    "mozilla:tabmixprompt": Window;
-    "navigator:browser": BrowserWindow;
-  }
-
-  interface _nsIWindowMediator extends Omit<nsIWindowMediator, "getMostRecentWindow"> {
-    getEnumerator(aWindowType: string | null): nsISimpleEnumeratorWithWindow;
-    getMostRecentWindow: <K extends keyof GetWindowByTypeMap>(selectors: K | string) => K extends keyof GetWindowByTypeMap ? GetWindowByTypeMap[K] : BrowserWindow;
-  }
-
-  interface _nsIPrefBranch extends nsIPrefBranchXpcom {
-    savePrefFile(aFile: nsIFile | null): void;
-  }
-
-  interface Services extends Omit<JSServices, "els" | "io" | "obs" | "prompt" | "wm" | "prefs"> {
-    els: _nsIEventListenerService;
-    io: _nsIIOService & nsINetUtil & nsISpeculativeConnect;
-    obs: _nsIObserverService;
-    prompt: _nsIPromptService;
-    wm: _nsIWindowMediator;
-    prefs: _nsIPrefBranch & nsIPrefService;
-  }
 }
-
-// @ts-ignore - we override Services from gecko.d.ts with lib.gecko.services.d.ts JSServices
-declare var Services: MockedGeckoTypes.Services;
 
 interface IgIncompatiblePane {
   checkForIncompatible: (aShowList: boolean) => void;
+  hide_IncompatibleNotice(aHide: boolean, aFocus: boolean): void;
 }
 
 interface TabmixOptionsWindow extends Window {
@@ -731,6 +718,11 @@ interface TabmixOptionsWindow extends Window {
     toolbarButtons: (window: Window) => void;
   };
   gIncompatiblePane: IgIncompatiblePane;
+}
+
+interface CustomXULPanel extends Node, Pick<XULPopupElement, "moveTo" | "openPopup" | "openPopupAtScreen"> {
+  _overlayLoaded: boolean;
+  state: string;
 }
 
 interface GetByMap {
@@ -764,43 +756,30 @@ declare module "PlacesUtils" {
 
 type OpenPopup = (anchorElement?: Element | null, options?: StringOrOpenPopupOptions, x?: number, y?: number, isContextMenu?: boolean, attributesOverride?: boolean, triggerEvent?: Event | null) => void;
 
-interface AppConstantsType {
-  BROWSER_CHROME_URL: string;
-  platform: string;
-}
+type ContentMouseEvent = Omit<MouseEvent, "composedTarget" | "originalTarget" | "target"> & {
+  composedTarget: ContentClickLinkElement;
+  originalTarget: ContentClickLinkElement;
+  target: ContentClickLinkElement;
+  tabmix_isMultiProcessBrowser?: boolean;
+  tabmix_openLinkWithHistory: boolean;
+};
 
-type ContentClickLinkElement = Omit<HTMLLinkElement, "parentNode" | "ownerDocument" | "ownerGlobal"> & {
+type ContentClickLinkElement = Omit<HTMLLinkElement, "parentNode" | "parentElement" | "ownerDocument" | "ownerGlobal"> & {
+  __tabmix?: boolean;
+  _attributes: string[];
+  host: string;
+  pathname: string;
   dataset: {isSponsoredLink: "true" | "false" | null};
+  parentElement: ContentClickLinkElement;
   parentNode: ContentClickLinkElement;
   readonly ownerDocument: Document;
   ownerGlobal: WindowProxy;
 };
 type ContentClickLinkData = [href: string | null, linkNode: ContentClickLinkElement | null, linkPrincipal: nsIPrincipal] | null;
 
-interface BrowserUtils {
-  hrefAndLinkNodeForClickEvent: (event: MouseEvent) => ContentClickLinkData;
-  whereToOpenLink: (event: MouseEvent) => WhereToOpen;
-}
-
 interface HistoryMenu {
   populateUndoSubmenu: () => void;
   populateUndoWindowSubmenu: () => void;
-}
-
-interface CustomizableUIListener {
-  onWidgetAfterDOMChange(aNode: Node, aNextNode: Node, aContainer: ParentNode, aWasRemoval: boolean): void;
-}
-
-interface CustomizableUI {
-  AREA_TABSTRIP: string;
-  addListener: (aListener: CustomizableUIListener) => void;
-  addShortcut(aShortcutNode: Node, aTargetNode?: Node): void;
-  addWidgetToArea: (aWidgetId: string, aArea: string, aPosition: number, aInitialAdd?: boolean) => void;
-  getWidgetIdsInArea: (aArea: string) => string[];
-  getPlacementOfWidget: (aWidgetId: string, aOnlyRegistered?: boolean, aDeadAreas?: boolean) => {area: string; position: number} | null;
-  moveWidgetWithinArea: (aWidgetId: string, aPosition: number) => void;
-  removeListener: (aListener: CustomizableUIListener) => void;
-  removeWidgetFromArea: (aWidgetId: string) => void;
 }
 
 interface CustomTitlebar {
@@ -810,15 +789,6 @@ interface CustomTitlebar {
   init: () => void;
 }
 
-interface E10SUtils {
-  SERIALIZED_SYSTEMPRINCIPAL: string;
-  DEFAULT_REMOTE_TYPE: string;
-  getRemoteTypeForURI: (aUri: string, aMultiProcess?: boolean, aRemoteSubframes?: boolean, aPreferredRemoteType?: string, aCurrentUri?: string | null, aOriginAttributes?: Params) => string;
-  predictOriginAttributes: ({window, browser, userContextId, geckoViewSessionContextId, privateBrowsingId}: {window?: Window; browser?: MockedGeckoTypes.ChromeBrowser; userContextId?: number | undefined; geckoViewSessionContextId?: string; privateBrowsingId?: string}) => {privateBrowsingId: string; userContextId: string; geckoViewSessionContextId: string};
-  serializeCSP: (csp: nsIContentSecurityPolicy) => string;
-  serializeReferrerInfo: (referrerInfo: nsIReferrerInfo) => string;
-}
-
 interface FullScreen {
   _mouseTargetRect: Partial<DOMRect>;
   _isChromeCollapsed: boolean;
@@ -826,6 +796,8 @@ interface FullScreen {
 }
 
 interface gBrowserInit {
+  _boundDelayedStartup(): void;
+  _delayedStartup(): void;
   delayedStartupFinished: boolean | ((subject: Window, topic: string) => void);
   uriToLoadPromise: Promise<string | string[] | null>;
 }
@@ -860,6 +832,7 @@ interface gURLBar extends HTMLElement {
   _whereToOpen: (event?: Event & {__tabmix__whereToOpen?: WhereToOpen}) => WhereToOpen;
   focused: boolean;
   handleCommand(event?: Event): void;
+  handleRevert(): void;
   onWidgetAfterDOMChange(aNode: Node): void;
   select: () => void;
   setURI: (uri?: string, dueToTabSwitch?: boolean, dueToSessionRestore?: boolean, dontShowSearchTerms?: boolean, isSameDocument?: boolean) => void;
@@ -876,10 +849,6 @@ interface newWindowButtonObserver {
   onDrop: (event: DragEvent) => void;
 }
 
-interface nsBrowserAccess {
-  __treestyletab__openURI: (...args: unknown[]) => unknown;
-}
-
 interface nsContextMenu {
   initOpenItems: () => void;
   openLinkInTab: (event: Event) => void;
@@ -888,13 +857,6 @@ interface nsContextMenu {
 interface PanelUI {
   _ensureShortcutsShown: (view: HTMLElement) => void;
   showSubView(view: string, anchor: HTMLElement, event?: Event): void;
-}
-
-interface PrivateBrowsingUtils {
-  isBrowserPrivate: (browser: MockedGeckoTypes.ChromeBrowser) => boolean;
-  isContentWindowPrivate: (window: Window) => boolean;
-  isWindowPrivate: (window: Window) => boolean;
-  permanentPrivateBrowsing: boolean;
 }
 
 interface StatusPanel {
@@ -907,6 +869,7 @@ interface TabBarVisibility {
 }
 
 interface XULBrowserWindow {
+  overLink: string;
   setOverLink: (url: string, options?: {hideStatusPanelImmediately?: boolean}) => void;
 }
 
@@ -914,8 +877,8 @@ interface XULBrowserWindow {
 declare function closeMenus(node: Node | null): void;
 declare function closeWindow(aClose: boolean, aPromptFunction?: (source: string) => boolean, aSource?: string): boolean;
 declare function FillHistoryMenu(event: Event): void;
-declare function handleDroppedLink(event: DragEvent, url: string, name: string, triggeringPrincipal: nsIPrincipal): void;
-declare function handleDroppedLink(event: DragEvent, links: nsIDroppedLinkItem[], triggeringPrincipal: nsIPrincipal): void;
+declare function handleDroppedLink(event: DragEvent | null, url: string, name: string, triggeringPrincipal: nsIPrincipal): void;
+declare function handleDroppedLink(event: DragEvent | null, links: nsIDroppedLinkItem[], triggeringPrincipal: nsIPrincipal): void;
 declare function isBlankPageURL(url: string | null): boolean;
 declare function middleMousePaste(event: MouseEvent): void;
 declare function OpenBrowserWindow(params?: {private?: boolean; features?: string; args?: nsIArray | nsISupportsString; remote?: boolean; fission?: boolean}): Window | null;
@@ -928,8 +891,8 @@ declare function urlSecurityCheck(aURL: string, aPrincipal: nsIPrincipal, aFlags
 declare function undoCloseWindow(index: number): void;
 declare function undoCloseTab(aIndex?: number, sourceWindowSSId?: string): MockedGeckoTypes.BrowserTab | null;
 
-declare var CustomizableUI: CustomizableUI;
-declare var E10SUtils: E10SUtils;
+declare var CustomizableUI: MockedExports.CustomizableUI;
+declare var E10SUtils: MockedExports.E10SUtils;
 declare var FullScreen: FullScreen;
 declare var gBrowser: MockedGeckoTypes.TabBrowser;
 declare var gBrowserInit: gBrowserInit;
@@ -944,7 +907,7 @@ declare var PanelUI: PanelUI;
 declare var PlacesCommandHook: MockedGeckoTypes.PlacesCommandHook;
 declare var PlacesUtils: MockedGeckoTypes.PlacesUtils;
 declare var PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils;
-declare var PrivateBrowsingUtils: PrivateBrowsingUtils;
+declare var PrivateBrowsingUtils: MockedExports.PrivateBrowsingUtils;
 declare var RTL_UI: boolean;
 declare var StatusPanel: StatusPanel;
 declare var TabBarVisibility: TabBarVisibility;
@@ -956,12 +919,6 @@ declare var HistoryMenu: {
   isInstance: IsInstance<HistoryMenu>;
 };
 
-declare var nsBrowserAccess: {
-  prototype: nsBrowserAccess;
-  new (): nsBrowserAccess;
-  isInstance: IsInstance<nsBrowserAccess>;
-};
-
 /** Window scope globals */
 declare var BROWSER_NEW_TAB_URL: string;
 declare var browserDragAndDrop: {
@@ -971,8 +928,14 @@ declare var BrowserHandler: nsIBrowserHandler;
 declare var BrowserWindowTracker: {
   getTopWindow: (options?: {private?: boolean; allowPopups?: boolean}) => Window | null;
 };
-declare var BrowserUtils: BrowserUtils;
-declare var Components: nsIXPCComponents & {Exception(message?: string, name?: string): Error};
+declare var BrowserUtils: MockedExports.BrowserUtils;
+declare var Components: nsIXPCComponents & {
+  Exception: {
+    (message?: string, resultOrOptions?: number | ComponentsExceptionOptions, stack?: nsIStackFrame, data?: object): nsIException;
+    prototype: nsIException;
+    new (message?: string, resultOrOptions?: number | ComponentsExceptionOptions, stack?: nsIStackFrame, data?: object): nsIException;
+  };
+};
 declare var ctrlTab: {
   init: () => void;
   uninit: () => void;
@@ -1032,51 +995,7 @@ declare var UrlbarUtils: {
 declare var ZenWorkspaces: any;
 declare var gZenVerticalTabsManager: any;
 
-// merge types from lib.gecko.xpcom.d.ts with existing interface from gecko.d.ts
-declare namespace MockedExports {
-  // nsIFilePicker is missing some types from lib.gecko.xpcom.d.ts
-  interface nsIFilePicker extends nsIFilePickerXpcom {}
-  interface FilePicker extends Pick<nsIFilePicker, "appendFilters" | "defaultExtension" | "defaultString"> {
-    file: nsIFile;
-    init: (browsingContext: BrowsingContext, title: string | null, mode: number) => void;
-  }
-
-  interface nsISupportsString {
-    number: string;
-  }
-
-  interface Cc {
-    "@mozilla.org/browser/clh;1": {getService(service: nsJSIID<nsIBrowserHandler>): nsIBrowserHandler};
-    "@mozilla.org/content/style-sheet-service;1": {getService(service: nsJSIID<nsIStyleSheetService>): nsIStyleSheetService};
-    "@mozilla.org/embedcomp/dialogparam;1": {createInstance(instance: nsJSIID<nsIDialogParamBlock>): nsIDialogParamBlock};
-    "@mozilla.org/file/local;1": {createInstance(instance: Ci["nsIFile"]): nsIFile};
-    "@mozilla.org/gfx/fontenumerator;1": {createInstance(instance: nsJSIID<nsIFontEnumerator>): nsIFontEnumerator};
-    "@mozilla.org/pref-localizedstring;1": {createInstance(instance: Ci["nsIPrefLocalizedString"]): nsIPrefLocalizedString};
-    "@mozilla.org/referrer-info;1": {createInstance(instance: nsJSIID<nsIReferrerInfo>): nsIReferrerInfo};
-    "@mozilla.org/supports-PRBool;1": {createInstance(instance: nsJSIID<nsISupportsPRBool>): nsISupportsPRBool};
-    "@mozilla.org/widget/clipboardhelper;1": {getService(service: nsJSIID<nsIClipboardHelper>): nsIClipboardHelper};
-  }
-
-  interface _nsIWebNavigation extends nsIWebNavigation {
-    sessionHistory: nsISupports & {legacySHistory: nsISHistory};
-  }
-
-  interface Ci extends Omit<nsIXPCComponents_Interfaces, "nsIFilePicker"> {
-    nsIWebNavigation: nsJSIID<_nsIWebNavigation> & {[key: string]: any};
-  }
-
-  interface Cu {
-    getGlobalForObject(obj: unknown): any;
-  }
-}
-
 interface XULElement {
   container?: unknown;
-}
-
-interface TabmixKnownModules {
-  "resource://gre/modules/AddonManager.sys.mjs": {AddonManager: AddonManagerType};
-  "resource://gre/modules/AppConstants.sys.mjs": {AppConstants: AppConstantsType};
-  "resource://gre/modules/PrivateBrowsingUtils.sys.mjs": {PrivateBrowsingUtils: PrivateBrowsingUtils};
-  "resource:///modules/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
+  isInstance: IsInstance<XULElement>;
 }

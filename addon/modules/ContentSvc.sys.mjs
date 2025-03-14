@@ -1,3 +1,4 @@
+/** @type {ContentSvcModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -5,11 +6,13 @@ ChromeUtils.defineESModuleGetters(lazy, {
   isVersion: "chrome://tabmix-resource/content/BrowserVersion.sys.mjs"
 });
 
+/** @type {Partial<TabmixModules.ContentSvc>} */
 export const ContentSvc = {
-  aboutNewtab: "about:#".replace("#", "newtab"),
+  aboutNewtab: "about:newtab",
 
   getString(aStringKey) {
     try {
+      // @ts-ignore
       return this._strings.GetStringFromName(aStringKey);
     } catch (e) {
       dump("*** Failed to get string " + aStringKey + " in bundle: tabmix.properties\n");
@@ -17,8 +20,8 @@ export const ContentSvc = {
     }
   },
 
-  version() {
-    return lazy.isVersion.apply(null, arguments);
+  version(versionNo, updateChannel) {
+    return lazy.isVersion.apply(null, [versionNo, updateChannel]);
   },
 
 };

@@ -14,6 +14,6 @@
     "modules/**"
   ],
   "compilerOptions": {
-    "types": ["../types/general.d.ts", "../types/tabmix.d.ts"]
+    "types": ["index.d.ts", "general.d.ts"]
   }
 }

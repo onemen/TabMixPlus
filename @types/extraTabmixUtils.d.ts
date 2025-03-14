@@ -1,8 +1,4 @@
-type DeferredPromise = {promise: Promise<void>; resolve: () => void; reject: () => void};
-type FunctionWithUnknown = (...args: unknown[]) => unknown;
-type FunctionWithAny = (...args: any[]) => any;
-type Tab = MockedGeckoTypes.BrowserTab;
-type Browser = MockedGeckoTypes.ChromeBrowser;
+/// <reference types="./modules.d.ts" />
 
 interface Functions {
   getById<K extends keyof GetByMap | string>(selectors: K): K extends keyof GetByMap ? GetByMap[K] : any | null;
@@ -43,144 +39,139 @@ declare namespace ChangeCodeNS {
     defineProperty(this: ChangeCodeClass, aObj?: Record<string, unknown>, aName?: string, aCode?: {setter?: string; getter?: string}): void;
     show(aObj?: Record<string, unknown>, aName?: string): void;
     isValidToChange(this: ChangeCodeClass, aName: string): boolean;
-    getCallerData(stack: nsIStackFrame, aOptions?: unknown): {filename: string; lineNumber: number; columnNumber: number; fnName: string; message: string};
+    getCallerData(stack: nsIStackFrame, aOptions?: unknown): Error;
     verifyPrivateMethodReplaced(this: ChangeCodeClass): void;
   }
 }
 
 declare var ChangeCodeClass: ChangeCodeNS.ChangeCodeClass;
 
-declare namespace TabmixNS {
+// more methods in addon.d.ts
+interface PrivateMethods {
+  // gBrowser
+  handleTabMove: MockedGeckoTypes.TabBrowser["_handleTabMove"];
+  // TabContainer
+  clearDragOverCreateGroupTimer: MockedGeckoTypes.TabContainer["_clearDragOverCreateGroupTimer"];
+  isAnimatingMoveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_isAnimatingMoveTogetherSelectedTabs"];
+  moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
+  setDragOverGroupColor: MockedGeckoTypes.TabContainer["_setDragOverGroupColor"];
+  triggerDragOverCreateGroup: MockedGeckoTypes.TabContainer["_triggerDragOverCreateGroup"];
+}
+
+interface TabmixGlobal {
   // from changedcode
-  let _debugMode: boolean;
-  let _localMakeCode: string;
-  function _makeCode(name: string | null, code: string): FunctionWithUnknown;
-  function changeCode(aParent: Record<string, any>, afnName: string, aOptions?: ChangeCodeNS.Options): ChangeCodeNS.ChangeCodeClass;
-  function nonStrictMode(aObj: Record<string, any>, aFn: string, aArg?: unknown): void;
-  function setNewFunction(aObj: Record<string, any>, aName: string, aCode: FunctionWithAny): void;
+  _debugMode: boolean;
+  _localMakeCode: string;
+  changeCode(aParent: Record<string, any>, afnName: string, aOptions?: ChangeCodeNS.Options): ChangeCodeNS.ChangeCodeClass;
+  nonStrictMode(aObj: Record<string, any>, aFn: string, aArg?: unknown): void;
+  setNewFunction(aObj: Record<string, any>, aName: string, aCode: FunctionWithAny): void;
+  // in modules.d.ts
+  // _makeCode
+  // getPrivateMethod
 
   // tabmix.js
-  let _lastTabOpenedTime: number;
-  let _deferredInitialized: DeferredPromise;
-  let afterTabsButtonsWidth: number[];
-  let afterTabsButtonsWidthReady: boolean;
-  let initialization: typeof TabmixInitialization;
-  let isFirstWindow: boolean;
-  let selectedTab: Tab | null;
-  let singleWindowMode: boolean;
-  let tabsNewtabButton: HTMLButtonElement;
-  let userTypedValue: string;
-  function afterDelayedStartup(): void;
-  function beforeDelayedStartup(): void;
-  function getAfterTabsButtonsWidth(): void;
-  function startup(): void;
-  // lazygetters for modules (jsm files)
-  const SlideshowInitialized: boolean;
-  let autoReload: typeof AutoReload;
-  let docShellCapabilities: typeof DocShellCapabilities;
-  let flst: typeof Flst;
-  let MergeWindows: typeof MergeWindowsModule;
-  let renameTab: typeof RenameTab;
-  let Utils: typeof UtilsModules;
+  _lastTabOpenedTime: number;
+  _deferredInitialized: DeferredPromise;
+  afterTabsButtonsWidth: number[];
+  afterTabsButtonsWidthReady: boolean;
+  initialization: typeof TabmixInitialization;
+  isFirstWindow: boolean;
+  selectedTab: Tab | null;
+  singleWindowMode: boolean;
+  tabsNewtabButton: HTMLButtonElement;
+  userTypedValue: string;
+  afterDelayedStartup(): void;
+  beforeDelayedStartup(): void;
+  getAfterTabsButtonsWidth(): void;
+  startup(): void;
+  // lazygetters for modules (sys.js files)
+  SlideshowInitialized: boolean;
+  autoReload: AutoReloadModule.AutoReload;
+  docShellCapabilities: typeof DocShellCapabilities;
+  flst: SlideshowModule.Flst;
+  MergeWindows: MergeWindowsModule.MergeWindows;
+  renameTab: typeof RenameTab;
+  Utils: typeof UtilsModules;
 
   // click.js
-  function openInverseLink(ev: Event): void;
-  let allTabs: typeof AllTabs;
+  openInverseLink(ev: Event): void;
+  allTabs: typeof AllTabs;
 
   // contentLinks.js
-  let ContentClick: typeof ContentClickModule;
-  let contentAreaClick: typeof ContentAreaClick;
+  ContentClick: ContentClickModule.ContentClick;
+  contentAreaClick: typeof ContentAreaClick;
 
   // extensions.js
-  let extensions: {treeStyleTab: boolean; tabGroupManager: boolean; verticalTabs: boolean; verticalTabBar: boolean; ieTab2: boolean; gIeTab: false | {obj: "gIeTab2" | "gIeTab"; folder: "ietab2" | "ietab"}};
+  extensions: {treeStyleTab: boolean; tabGroupManager: boolean; verticalTabs: boolean; verticalTabBar: boolean; ieTab2: boolean; gIeTab: false | {obj: "gIeTab2" | "gIeTab"; folder: "ietab2" | "ietab"}};
 
   // lasttab.js
-  let keyModifierDown: boolean;
-  let slideshow: {cancel(): void};
+  keyModifierDown: boolean;
+  slideshow: {cancel(): void};
 
   // minit.js
-  let navToolbox: typeof NavToolbox;
-  function getStyle(aObj: Element, aStyle: string): number;
-  function getMovingTabsWidth(movingTabs: Tab[]): number;
-  function getPlacement(id: string): number;
+  navToolbox: typeof NavToolbox;
+  getStyle(aObj: Element | Tab, aStyle: string): number;
+  getMovingTabsWidth(movingTabs: Tab[]): number;
+  getPlacement(id: string): number;
 
   // getPrivateMethod is in addon.d.ts
-  function hidePopup(aPopupMenu: XULPopupElement): void;
-  function whereToOpen(pref: string | boolean, altKey?: boolean): {inNew: boolean; lock: boolean};
+  hidePopup(aPopupMenu: XULPopupElement): void;
+  whereToOpen(pref: string | boolean, altKey?: boolean): {inNew: boolean; lock: boolean};
 
   // places.js
-  let onContentLoaded: typeof OnContentLoaded;
-  function whereToOpenLink(event: MouseEvent, ignoreButton: boolean, ignoreAlt: boolean): WhereToOpen;
+  onContentLoaded: typeof OnContentLoaded;
 
   // sessionStore.js
-  let closedObjectsUtils: typeof ClosedObjectsUtils;
-  let isWindowAfterSessionRestore: boolean;
+  closedObjectsUtils: typeof ClosedObjectsUtils;
+  isWindowAfterSessionRestore: boolean;
 
   // setup.js
-  function beforeStartup(tabBrowser: MockedGeckoTypes.TabBrowser, aTabContainer: MockedGeckoTypes.TabContainer): void;
-  function beforeBrowserInitOnLoad(): void;
-  function BrowserOpenTab(): void;
-  function linkHandling_init(): void;
-  function set_BrowserOpenTab(): void;
+  beforeStartup(tabBrowser: MockedGeckoTypes.TabBrowser, aTabContainer: MockedGeckoTypes.TabContainer): void;
+  beforeBrowserInitOnLoad(): void;
+  BrowserOpenTab(): void;
+  linkHandling_init(): void;
+  set_BrowserOpenTab(): void;
 
   // ScriptsLoader.sys.mjs;
-  let isAfterMozAfterPaint: boolean;
-  let promiseOverlayLoaded: Promise<void>;
-  function copyTabData(newTab: Tab, oldTab: Tab): void;
+  isAfterMozAfterPaint: boolean;
+  promiseOverlayLoaded: Promise<void>;
+  copyTabData(newTab: Tab, oldTab: Tab): void;
 
   // scrollbox.js
-  let multiRow: typeof MultiRow;
+  multiRow: typeof MultiRow;
 
   // tab.js
-  let _nextSelectedID: number;
-  let ltr: boolean;
-  let rtl: boolean;
-  let bottomToolbarUtils: typeof BottomToolbarUtils;
-  let contextMenuLinks: Map<string, string> | null;
-  let defaultCloseButtons: boolean;
-  let sideNewTabButton: HTMLButtonElement | null;
-  let tabsUtils: typeof TabsUtils;
-  let visibleTabs: typeof VisibleTabs;
+  _nextSelectedID: number;
+  ltr: boolean;
+  rtl: boolean;
+  bottomToolbarUtils: typeof BottomToolbarUtils;
+  contextMenuLinks: Map<string, string> | null;
+  defaultCloseButtons: boolean;
+  sideNewTabButton: HTMLButtonElement | null;
+  tabsUtils: typeof TabsUtils;
+  visibleTabs: typeof VisibleTabs;
 
   // tablib.js
-  interface TabSwitcher {
-    updateDisplay: () => void;
-    visibleTab: Tab;
-  }
-
-  type TabDataEntry = {url: string; title: string; triggeringPrincipal_base64?: string};
-  type TabData = {
-    attributes?: Record<string, string>;
-    entries: TabDataEntry[];
-    extData?: Record<string, string>;
-    groupId?: string;
-    index: number;
-    pinned?: boolean;
-    userContextId?: number;
-    userTypedValue: string | null;
-    userTypedClear: number;
-  };
-
-  const emptyTabTitle: string;
-  let newTabUrls: string[];
-  function _duplicateTab(this: MockedGeckoTypes.TabBrowser, aTab: Tab, aHref?: string, aTabData?: TabData | string, disallowSelect?: boolean, dontFocusUrlBar?: boolean): Tab | null;
-  function duplicateTab(aTab: Tab, aHref?: string, aTabData?: TabData | string, disallowSelect?: boolean, dontFocusUrlBar?: boolean): Tab | null;
-  function getOpenTabNextPref(aRelatedToCurrent?: boolean): boolean;
-  function isBlankNewTab(url: string): boolean;
-  function isNewTabUrls(aUrl: string): boolean;
-  function updateSwitcher(switcher: TabSwitcher): void;
+  readonly emptyTabTitle: string;
+  newTabUrls: string[];
+  _duplicateTab(this: MockedGeckoTypes.TabBrowser, aTab: Tab, aHref?: string, aTabData?: SessionStoreNS.TabData | string, disallowSelect?: boolean, dontFocusUrlBar?: boolean): Tab | null;
+  duplicateTab(aTab: Tab, aHref?: string, aTabData?: SessionStoreNS.TabData | string, disallowSelect?: boolean, dontFocusUrlBar?: boolean): Tab | null;
+  getOpenTabNextPref(aRelatedToCurrent?: boolean): boolean;
+  isBlankNewTab(url: string): boolean;
+  isNewTabUrls(aUrl: string): boolean;
+  updateSwitcher(switcher: MockedGeckoTypes.TabSwitcher): void;
 
   // userinterface.js
-  let handleTabbarVisibility: typeof HandleTabbarVisibility & Record<string, any>;
-  function checkCurrent(url: string): Partial<WhereToOpen>;
-  function clearUrlBarIfNeeded(aTab: Tab, aUrl: string, aTimeOut: boolean, replaceLastTab: boolean): void;
-  function isPendingTab(aTab: Tab): boolean;
-  function openOptionsDialog(panel?: string): void;
-  function openUILink_init(): void;
-  function restoreTabState(aTab: Tab): void;
-  function setTabStyle(aTab: Tab, boldChanged?: {value: boolean}): void;
-  function updateUrlBarValue(): void;
-  function urlBarOnBlur(): void;
+  handleTabbarVisibility: typeof HandleTabbarVisibility & Record<string, any>;
+  checkCurrent(url: string): Partial<WhereToOpen>;
+  clearUrlBarIfNeeded(aTab: Tab, aUrl: string, aTimeOut: boolean, replaceLastTab: boolean): void;
+  isPendingTab(aTab: Tab): boolean;
+  openOptionsDialog(panel?: string): void;
+  openUILink_init(): void;
+  restoreTabState(aTab: Tab): void;
+  setTabStyle(aTab: Tab, boldChanged?: {value: boolean}): void;
+  updateUrlBarValue(): void;
+  urlBarOnBlur(): void;
 }
 
 declare namespace AllTabs {
@@ -188,14 +179,6 @@ declare namespace AllTabs {
   function insertSortButton(): void;
   function sortTabsInList(): void;
   function showAllTabsPanel(event: GenericEvent<HTMLElement, Event>): void;
-}
-
-declare namespace AutoReload {
-  function initTab(aTab: Tab): void;
-  function onTabReloaded(aTab: Tab, aBrowser: Browser): void;
-  function toggle(aTab: Tab): void;
-  function addEventListener(popup: ClosedObjectsUtils.PopupElement): void;
-  function onPopupShowing(aPopup: ClosedObjectsUtils.PopupElement, aTab: Tab): void;
 }
 
 declare namespace BottomToolbarUtils {
@@ -211,62 +194,17 @@ declare namespace BottomToolbarUtils {
   function _update(): void;
 }
 
-type PopupEvent = Omit<MouseEvent, "target" | "originalTarget"> & {target: ClosedObjectsUtils.Menuitem; originalTarget: ClosedObjectsUtils.Menuitem};
+type PopupEvent = TabmixGlobals.PopupEvent;
 type MenuPopupEvent = Omit<MouseEvent, "target" | "originalTarget"> & {target: ClosedObjectsUtils.PopupElement; originalTarget: ClosedObjectsUtils.PopupElement};
 
 declare namespace ClosedObjectsUtils {
-  interface CustomPanelView extends HTMLElement {
-    lastChild: HTMLMenuElement;
-    menupopup: PopupElement;
-    panelMultiView: HTMLElement & {
-      goBack(): void;
-    };
-  }
-
-  type Menuitem = Omit<HTMLMenuElement, "parentNode"> & {
-    readonly parentNode: PopupElement;
-    readonly triggerNode: Menuitem;
-    menupopup: PopupElement;
-    value: number;
-    // extra props for popup menus
-    _tabmix_middleClicked?: boolean;
-    closedGroup?: null;
-    dataset: {
-      command?: string;
-      popup?: string;
-    };
-    mCorrespondingMenuitem?: Menuitem | null;
-    remove(): void;
-    tab: Tab;
-  };
-
-  interface ScrollBox extends Menuitem {
-    ensureElementIsVisible: (item: Menuitem) => void;
-  }
+  type CustomPanelView = TabmixGlobals.CustomPanelView;
+  type Menuitem = TabmixGlobals.Menuitem;
+  type ScrollBox = TabmixGlobals.ScrollBox;
+  type PopupElement = TabmixGlobals.PopupElement;
 
   type PopupOptions = Omit<OpenPopupOptions, "triggerEvent"> & {triggerEvent?: PopupEvent | null};
   type OpenPopup = (anchorElement?: Menuitem | null, options?: PopupOptions | string, x?: number, y?: number, isContextMenu?: boolean, attributesOverride?: boolean, triggerEvent?: PopupEvent) => void;
-
-  interface PopupElement extends Omit<HTMLElement, "childNodes" | "parentNode" | "firstChild" | "lastChild"> {
-    hasStatusListener?: boolean;
-    readonly childNodes: HTMLCollectionBase_G<Menuitem>;
-    readonly firstChild: Menuitem;
-    readonly lastChild: Menuitem;
-    openPopup: OpenPopup;
-    readonly parentNode: CustomPanelView;
-    panelMultiView: HTMLElement & {
-      goBack(): void;
-    };
-    scrollBox: ScrollBox;
-    readonly triggerNode: Menuitem;
-    dataset: {
-      command?: string;
-      popup?: string;
-    };
-    // from XULPopupElement
-    moveTo(left: number, top: number): void;
-    openPopupAtScreen(x?: number, y?: number, isContextMenu?: boolean, triggerEvent?: Event | null): void;
-  }
   type ButtonEvent = Omit<MouseEvent, "target"> & {target: HTMLButtonElement};
 
   let _initialized_closedTabs: boolean;
@@ -291,32 +229,6 @@ declare namespace ClosedObjectsUtils {
   function updateAppmenuView(panel: PopupElement, type: "Tabs" | "Windows"): void;
 }
 
-declare class CompatibilityCheck {
-  constructor(aWindow: Window, aShowList: boolean, aCallbackDialog?: boolean);
-}
-
-declare namespace ContentAreaClick {
-  function init(): void;
-  function _contentLinkClick(aEvent: MouseEvent): void;
-}
-
-declare namespace ContentClickModule {
-  interface SyntaticEvent {
-    button: number;
-    shiftKey: boolean;
-    ctrlKey: boolean;
-    metaKey: boolean;
-    altKey: boolean;
-    target: unknown;
-    tabmix_openLinkWithHistory: boolean;
-  }
-
-  function contentLinkClick(event: MouseEvent, browser: Browser, focusedWindow: mozIDOMWindowProxy): void;
-  function getParamsForLink(event: MouseEvent | SyntaticEvent, linkNode: EventTarget, href: string, browser: Browser, focusedWindow: Window): {where: string; _href: string; suppressTabsOnFileDownload: boolean; targetAttr: string};
-  function isLinkToExternalDomain(curpage: string, target: string): boolean;
-  function isUrlForDownload(url: string): boolean;
-}
-
 declare namespace DocShellCapabilities {
   function init(): void;
   function update(browser: Browser, data: any): void;
@@ -324,11 +236,6 @@ declare namespace DocShellCapabilities {
   function restore(tab: Tab, disallow: string[], reload: boolean): void;
   function onGet(nodes: HTMLCollectionBase_G<ClosedObjectsUtils.Menuitem>, tab: Tab): void;
   function onSet(tab: Tab, node: Node): void;
-}
-
-declare namespace Flst {
-  const slideShowTimer: nsITimer;
-  function cancel(): void;
 }
 
 declare namespace HandleTabbarVisibility {
@@ -341,10 +248,6 @@ declare namespace HandleTabbarVisibility {
   function on_popupshowing(event: Event & {target: XULPopupElement}): void;
 }
 
-declare namespace MergeWindowsModule {
-  function mergeWindows(aWindow: Window): void;
-}
-
 declare namespace MultiRow {
   function init(): void;
   function extandArrowscrollbox(): void;
@@ -353,11 +256,12 @@ declare namespace MultiRow {
 
 declare namespace NavToolbox {
   type _MouseEvent = MouseEvent & {__tabmix__whereToOpen?: WhereToOpen; target: EventTarget};
+  type OnWidgetAfterDOMChange = MockedExports.CustomizableUIListener["onWidgetAfterDOMChange"];
 
   let customizeStarted: boolean;
   let toolboxChanged: boolean;
   let resetUI: boolean;
-  let listener: {onWidgetAfterDOMChange: CustomizableUIListener["onWidgetAfterDOMChange"]};
+  let listener: {onWidgetAfterDOMChange: OnWidgetAfterDOMChange};
   let urlBarInitialized: boolean;
   function init(): void;
   function deinit(): void;
@@ -451,6 +355,61 @@ declare namespace Tablib {
   function reloadTabs(tabs: Tab[], skipTab?: Tab): void;
 }
 
+declare namespace TabmixClosedTabsNS {
+  type ClosedTabData = SessionStoreNS.ClosedTabData;
+  type ClosedDataSource = SessionStoreNS.ClosedDataSource;
+  type WindowStateData = SessionStoreNS.WindowStateData;
+  type TabData = SessionStoreNS.TabData;
+
+  type PanelView = ClosedObjectsUtils.CustomPanelView;
+  type Popup = ClosedObjectsUtils.PopupElement;
+  type Menuitem = ClosedObjectsUtils.Menuitem;
+  type ButtonEvent = TabmixGlobals.ButtonEvent;
+  type ClosedGroup = {id: string; sourceClosedId: number; sourceWindowId: string};
+  type MenuItemInClosedGroup = HTMLElement & {closedGroup: ClosedGroup; _tabmix_middleClicked?: boolean};
+  type ClosedTabsInfo = {tabs: ClosedTabData[]; index: {value: number}};
+
+  let _buttonBroadcaster: HTMLElement | null;
+  const buttonBroadcaster: HTMLElement;
+  function setButtonType(menuOnly: boolean): void;
+  function setButtonDisableState(aState?: boolean): void;
+  const count: number;
+  const getClosedTabData: ClosedTabData[];
+  const allClosedTabData: ClosedTabData[];
+  function getSource(item: HTMLElement): ClosedDataSource;
+  function _resolveClosedDataSource(source: ClosedDataSource): WindowStateData;
+  function _getStateForClosedTabsAndClosedGroupTabs<Index extends number | undefined>(winData: WindowStateData, aIndex?: Index): Index extends number ? ClosedTabData : ClosedTabData[];
+  function _getClosedTabStateFromUnifiedIndex(winData: WindowStateData, tabState: ClosedTabData): {closedTabSet: ClosedTabData[]; closedTabIndex: number};
+  function getPreferredRemoteType(url: string, aWindow: Window, userContextId?: number): string;
+  function getSingleClosedTabData(source: ClosedDataSource, index: number): {tabData: ClosedTabData | undefined; closedTabIndex: number};
+  function getUrl(aTabData: ClosedTabData): string;
+  function getTitle(aTabData: ClosedTabData, aUri: string): Promise<string>;
+  let keepMenuOpen: boolean;
+  function populateUndoSubmenu(aPopup: PanelView, panel: Popup, isAppMenu?: boolean): boolean;
+  function closeTabGroupView(parent: Popup | ClosedObjectsUtils.CustomPanelView, groupId: string): void;
+  function updateTabGroupItems(menu: Popup, closedTabsInfo: ClosedTabsInfo, isSubviewbutton: boolean): void;
+  function updateMenuItem(item: Menuitem | MenuItemInClosedGroup, closedTabsInfo: ClosedTabsInfo): void;
+  function repopulateGroupItems(popup: Popup, item: Menuitem): void;
+  function addMenuItem(popup: PanelView | Menuitem | Popup, isSubviewbutton: boolean, options: {id: string; label: string; command?: () => void; val?: number; keyId?: string; tagName?: string}): Element;
+  function handleEvent(event: PopupEvent): void;
+  const handleButtonEvent: TabmixGlobals.handleButtonEvent;
+  function restoreCommand(aEvent: PopupEvent): void;
+  function setPopupWidth(popup: Popup | Node): void;
+  function checkForMiddleClick(aEvent: PopupEvent): void;
+  function contextMenuOnPopupShowing(event: MenuPopupEvent, popup: Popup): void;
+  function contextMenuOnCommand(event: PopupEvent): void;
+  function doCommand(command: "restoreTab" | "addBookmarks" | "copyTabUrl", where: string, item: Menuitem, keepMenuOpen?: boolean): void;
+  function addBookmarks(source: ClosedDataSource, index: number): void;
+  function copyTabUrl(source: ClosedDataSource, index: number): void;
+  function restoreTab(source: ClosedDataSource, index: number, where: string): void;
+  function removeAllClosedTabs(): void;
+  function removeClosedTabData(source: ClosedDataSource, index: number): ClosedTabData | null;
+  function restoreToNewWindow(source: ClosedDataSource, index: number): void;
+  function restoreAllClosedTabs(): void;
+  function _undoCloseTab(aSource: ClosedDataSource, aIndex: number, aWhere: string, aSelectRestoredTab: boolean, aBlankTabToReuse?: Tab | null, multiple?: boolean): Tab | null;
+  function fix_bug_1868452(item: Menuitem): boolean;
+}
+
 type InitializationStep = {id: number; obj: string; initialized?: boolean};
 type InitializationSteps = Omit<typeof TabmixInitialization, "run" | "isValidWindow" | "_lastPhase">;
 declare namespace TabmixInitialization {
@@ -463,6 +422,38 @@ declare namespace TabmixInitialization {
   const afterDelayedStartup: InitializationStep;
   const isValidWindow: boolean;
   function run(aPhase: keyof InitializationSteps, ...rest: unknown[]): unknown;
+}
+
+declare namespace TabmixSessionStoreNS {
+  type TabData = SessionStoreNS.TabData;
+  type TabDataEntry = SessionStoreNS.TabDataEntry;
+
+  function asyncGetTabTitleForClosedWindow(aUndoItem: SessionStoreNS.WindowStateData): Promise<string>;
+  function getActiveEntryData(aData: TabData): TabDataEntry;
+  function getTitleFromTabState(aTab: Tab): string;
+  function getUrlFromTabState(aTab: Tab): string;
+  function isBlankPendingTab(aTab: Tab): boolean;
+  let afterSwitchThemes: boolean;
+  function setAfterSessionRestored(): void;
+  function setSessionRestore(aEnable: boolean): void;
+  function asyncGetTabTitle(aData: TabData, aUri: string, aTitle: string): Promise<string>;
+  function _getAttribute(aTabData: TabData, attrib: string): string;
+}
+
+declare namespace TabmixTabClickOptionsNS {
+  let _tabFlipTimeOut: number | undefined;
+  let _blockDblClick: boolean;
+  function isOverlayIcons(event: MouseEvent): boolean;
+  function onTabClick(aEvent: MouseEvent): void;
+  function clearTabFlipTimeOut(): void;
+  function onTabBarDblClick(aEvent: MouseEvent): void;
+  function clickAction(pref: string, clickOutTabs: boolean, aTab: Tab, event: MouseEvent): void;
+  function doCommand(command: number, aTab: Tab, clickOutTabs?: boolean, event?: MouseEvent): boolean;
+  function _tabMultiSelected(aTab: Tab): void;
+  function _tabRangeSelected(aTab: Tab, cumul: boolean): void;
+  function toggleEventListener(enable: boolean): void;
+  function blockDblclick(aEvent: MouseEvent): void;
+  function blockMouseDown(event: MouseEvent): boolean;
 }
 
 declare namespace TabsUtils {
@@ -535,10 +526,5 @@ declare namespace GlobalFunctions {
 }
 
 interface OriginalFunctions {
-  switcher_updateDisplay: TabmixNS.TabSwitcher["updateDisplay"];
-}
-
-interface TabmixKnownModules {
-  "chrome://tabmix-resource/content/extensions/CompatibilityCheck.sys.mjs": {CompatibilityCheck: typeof CompatibilityCheck};
-  "chrome://tabmix-resource/content/ContentClick.sys.mjs": {TabmixContentClick: typeof ContentClickModule};
+  switcher_updateDisplay: MockedGeckoTypes.TabSwitcher["updateDisplay"];
 }

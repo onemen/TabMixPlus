@@ -3,9 +3,11 @@ import {TabmixChromeUtils} from "chrome://tabmix-resource/content/ChromeUtils.sy
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 
 // AppConstants is used in modified PlacesUIUtils functions
+// @ts-ignore
 // eslint-disable-next-line no-unused-vars
 const AppConstants = ChromeUtils.importESModule("resource://gre/modules/AppConstants.sys.mjs").AppConstants;
 
+/** @type {PlacesModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -13,8 +15,6 @@ ChromeUtils.defineESModuleGetters(lazy, {
   BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
   PlacesUtils: "resource://gre/modules/PlacesUtils.sys.mjs",
   PlacesUIUtils: "resource:///modules/PlacesUIUtils.sys.mjs",
-  // eslint-disable-next-line tabmix/valid-lazy
-  PluralForm: "resource://gre/modules/PluralForm.sys.mjs",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
 });
 
@@ -26,6 +26,8 @@ TabmixChromeUtils.defineLazyModuleGetters(lazy, {
 });
 
 // this function is used by PlacesUIUtils functions that we evaluate here
+/** @param {Window} aWindow */
+// @ts-ignore
 // eslint-disable-next-line no-unused-vars
 function getBrowserWindow(aWindow) {
   return aWindow &&
@@ -39,7 +41,10 @@ function getTopWindow() {
   return lazy.BrowserWindowTracker.getTopWindow();
 }
 
+/** @type {PlacesModule.PlacesUtilsInternal} */
 var PlacesUtilsInternal;
+
+/** @type {PlacesModule.PlacesUtils} */
 export const TabmixPlacesUtils = Object.freeze({
   init(aWindow) {
     PlacesUtilsInternal.init(aWindow);
@@ -62,8 +67,10 @@ export const TabmixPlacesUtils = Object.freeze({
   },
 });
 
-var Tabmix = {};
+/** @type {PlacesModule.Tabmix} */ // @ts-expect-error we add properties bellow
+const Tabmix = {};
 
+/** @param {{value: string}} param */
 function makeCode({value: code}) {
   if (!code.startsWith("function")) {
     code = "function " + code;
@@ -72,6 +79,7 @@ function makeCode({value: code}) {
 }
 
 PlacesUtilsInternal = {
+  __index: 0,
   _timer: null,
   _initialized: false,
 
@@ -92,12 +100,17 @@ PlacesUtilsInternal = {
   },
 
   onQuitApplication() {
-    if (this._timer)
-      this._timer.clear();
+    if (this._timer) {
+      this._timer.cancel();
+      this._timer = null;
+    }
 
     this.functions.forEach(aFn => {
-      lazy.PlacesUIUtils[aFn] = lazy.PlacesUIUtils["tabmix_" + aFn];
-      delete lazy.PlacesUIUtils["tabmix_" + aFn];
+      /** @type {PlacesModule.TabmixFunctionsName} */
+      const tabmixName = `tabmix_${aFn}`;
+      // @ts-expect-error Function signatures are compatible at runtime
+      lazy.PlacesUIUtils[aFn] = lazy.PlacesUIUtils[tabmixName];
+      delete lazy.PlacesUIUtils[tabmixName];
     });
 
     this._removeObserver?.();
@@ -105,6 +118,7 @@ PlacesUtilsInternal = {
 
   functions: ["openTabset", "openNodeWithEvent", "_openNodeIn"],
   initPlacesUIUtils: function TMP_PC_initPlacesUIUtils(aWindow) {
+    /** @type {MockedGeckoTypes.PlacesUIUtils["openTabset"] | undefined} */
     let originalOpenTabset;
     try {
       originalOpenTabset = aWindow._tabmix_PlacesUIUtils_openTabset;
@@ -118,12 +132,14 @@ PlacesUtilsInternal = {
     }
 
     this.functions.forEach(aFn => {
+      // @ts-expect-error Function signatures are compatible at runtime
       lazy.PlacesUIUtils["tabmix_" + aFn] = lazy.PlacesUIUtils[aFn];
     });
 
     let code;
 
-    function updateOpenTabset(name, treeStyleTab) {
+    /** @type {PlacesModule.updateOpenTabset} */
+    function updateOpenTabset(name, treeStyleTab = false) {
       const isWaterfoxOverridePlacesUIUtils =
         TabmixSvc.version({wf: "115.9.0"}) &&
         !lazy.PrivateBrowsingUtils.isWindowPrivate(aWindow);
@@ -168,7 +184,7 @@ PlacesUtilsInternal = {
             str.indexOf("GroupBookmarkBehavior") > -1) {
           timer.cancel();
           this._timer = null;
-          this.__index = null;
+          this.__index = 0;
           updateOpenTabset("openTabset", true);
         }
       }, 50, Ci.nsITimer.TYPE_REPEATING_SLACK);
@@ -176,6 +192,7 @@ PlacesUtilsInternal = {
       updateOpenTabset("openTabset");
     }
 
+    /** @type {PlacesModule.TabmixFunctionsName} */
     let fnName = treeStyleTabInstalled && lazy.PlacesUIUtils.__treestyletab__openNodeWithEvent ?
       "__treestyletab__openNodeWithEvent" : "openNodeWithEvent";
     code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
@@ -253,7 +270,7 @@ PlacesUtilsInternal = {
   async applyCallBackOnUrl(aUrl, aCallBack) {
     let hasHref = aUrl.indexOf("#") > -1;
     let result = await aCallBack.apply(this, [aUrl]) ||
-        hasHref && await aCallBack.apply(this, aUrl.split("#"));
+        hasHref ? await aCallBack.apply(this, [aUrl.split("#")[0] ?? aUrl]) : null;
     // when IE Tab is installed try to find url with or without the prefix
     const ietab = Tabmix.gIeTab;
     if (!result && ietab) {
@@ -262,7 +279,7 @@ PlacesUtilsInternal = {
         let url = aUrl.startsWith(prefix) ?
           aUrl.replace(prefix, "") : prefix + aUrl;
         result = await aCallBack.apply(this, [url]) ||
-          hasHref && await aCallBack.apply(this, url.split("#"));
+          hasHref ? await aCallBack.apply(this, [url.split("#")[0] ?? url]) : null;
       }
     }
     return result;
@@ -274,7 +291,7 @@ PlacesUtilsInternal = {
     }
 
     try {
-      const getTitle = url => this.getBookmarkTitle(url);
+      const getTitle = (/** @type {string} */ url) => this.getBookmarkTitle(url);
       const title = await this.applyCallBackOnUrl(aUrl, getTitle);
       return title || aTitle;
     } catch (err) {

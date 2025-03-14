@@ -1062,7 +1062,7 @@ var TMP_tabDNDObserver = {
   },
 }; // TMP_tabDNDObserver end
 
-/** @type {UndocloseTabButtonObserver} */
+/** @type {TabmixWidgetsModule.UndocloseTabButtonObserver} */
 var TMP_undocloseTabButtonObserver = {
   onDragOver(aEvent) {
     var dt = aEvent.dataTransfer;
@@ -1161,7 +1161,7 @@ Tabmix.navToolbox = {
     gNavToolbox.addEventListener("beforecustomization", this);
     gNavToolbox.addEventListener("aftercustomization", this);
 
-    /** @type {CustomizableUIListener["onWidgetAfterDOMChange"]} */
+    /** @type {NavToolbox.OnWidgetAfterDOMChange} */
     const onWidgetAfterDOMChange = (aNode, aNextNode, aContainer, aWasRemoval) => {
       if (this.customizeStarted)
         return;
@@ -1429,7 +1429,7 @@ Tabmix.navToolbox = {
       // Use the standard UI link behaviors for clicks or Alt+Enter
       where = "tab";
       if (isMouseEvent || event && !altEnter)
-        where = Tabmix.whereToOpenLink(event, false, false);
+        where = BrowserUtils.whereToOpenLink(event, false, false);
       if (loadNewTab && where == "current" || !isMouseEvent && where == "window")
         where = "tab";
       else if (!isMouseEvent && !loadNewTab && /^tab/.test(where))

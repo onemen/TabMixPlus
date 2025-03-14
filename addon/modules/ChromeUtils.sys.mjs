@@ -1,9 +1,11 @@
+/** @type {ChromeUtilsModule.Lazy} */ // @ts-ignore
 const localLazy = {};
 
 ChromeUtils.defineLazyGetter(localLazy, "isVersion", () => {
   return ChromeUtils.importESModule("chrome://tabmix-resource/content/BrowserVersion.sys.mjs").isVersion;
 });
 
+/** @type {Record<string, [number, string]>} */
 const modulesMap = {
   // we only use SessionStore.jsm in TabmixSvc.jsm
   "resource:///modules/sessionstore/SessionStore.jsm": [1090, "resource:///modules/sessionstore/SessionStore.sys.mjs"],
@@ -12,6 +14,7 @@ const modulesMap = {
   "resource:///modules/OpenInTabsUtils.jsm": [1160, "resource:///modules/OpenInTabsUtils.sys.mjs"],
 };
 
+/** @type {ChromeUtilsModule.ChromeUtils} */
 export const TabmixChromeUtils = {
   get XPCOMUtils() {
     delete this.XPCOMUtils;
@@ -30,7 +33,9 @@ export const TabmixChromeUtils = {
   },
 
   defineLazyModuleGetters(lazy, modules) {
+    /** @type {Record<string, string>} */
     const esModules = {};
+    /** @type {Record<string, string>} */
     const JSMModules = {};
     for (let [name, module] of Object.entries(modules)) {
       const modulePath = this.esmModulePath(module);
@@ -49,13 +54,14 @@ export const TabmixChromeUtils = {
       }
     }
     if (Object.keys(JSMModules).length) {
-      this.XPCOMUtils.defineLazyModuleGetters(lazy, JSMModules);
+      this.XPCOMUtils?.defineLazyModuleGetters(lazy, JSMModules);
     }
   },
 
   import(module) {
     const modulePath = this.esmModulePath(module);
     if (modulePath) {
+      // @ts-ignore - its ok
       return ChromeUtils.importESModule(modulePath);
     }
     return ChromeUtils.import(module);

@@ -5,7 +5,7 @@
 /* exported getKeysForShortcut */
 "use strict";
 
-/** @type {Globals.getFormattedKey} */
+/** @type {ShortcutsModule.Shortcuts["getFormattedKey"]} */
 var getFormattedKey = key => Shortcuts.getFormattedKey(key);
 
 ///XXX TODO - add black list with shortcut (F1, Ctrl-Tab ....) that don't have DOM key element

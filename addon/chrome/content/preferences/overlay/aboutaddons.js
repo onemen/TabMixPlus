@@ -1,4 +1,4 @@
-/// <reference types="../../../../../types/aboutaddons.d.ts" />
+/// <reference types="../../../../../@types/aboutaddons.d.ts" />
 /* global windowRoot */
 "use strict";
 

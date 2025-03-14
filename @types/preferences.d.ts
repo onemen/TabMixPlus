@@ -1,8 +1,11 @@
-/// <reference types="./general.d.ts" />
-/// <reference types="./tabmix.d.ts" />
-/// <reference types="./extraTabmixUtils.d.ts" />
+// / <reference types="./overrideGecko.d.ts" />
+// / <reference types="./overrideGeckoDom.d.ts" />
+// / <reference types="./general.d.ts" />
+/// <reference types="./modules.d.ts" />
+// / <reference types="./tabmix.d.ts" />
 
 type GeneralElement = HTMLElement;
+type ShortcutKey = ShortcutsModule.ShortcutKey;
 
 interface GetByMapWithType {
   _PREF_CLASS_: PreferenceClass;
@@ -64,7 +67,7 @@ interface WindowProxy extends mozIDOMWindowProxy {
   readonly opener: WindowProxy;
   openHelp: typeof Globals.openHelp;
   gIncompatiblePane: IgIncompatiblePane;
-  Tabmix: typeof TabmixNS;
+  Tabmix: TabmixGlobal;
 }
 
 interface IgIncompatiblePane {
@@ -124,8 +127,8 @@ type PreferenceValue = string | number | boolean | nsIFile | null;
 
 // for inner functions
 declare namespace PreferenceNS {
-  function getValue(element: HTMLElement, attribute: string): PreferenceValue;
-  function setValue(element: HTMLElement, attribute: string, value: string | number | boolean): void;
+  function getValue(element: HTMLElement | PreferenceElement, attribute: string): PreferenceValue;
+  function setValue(element: HTMLElement | PreferenceElement, attribute: string, value: string | number | boolean): void;
 }
 
 interface PreferencOverrideMozXULElement extends Omit<MozXULElement, "parentNode"> {
@@ -144,9 +147,9 @@ interface PreferenceClass extends PreferencOverrideMozXULElement {
   batching: boolean;
   defaultValue: PreferenceValue;
   disabled: boolean;
-  getElementValue(aElement: HTMLElement): PreferenceValue;
-  getValueByType(aElement: HTMLElement): PreferenceValue;
-  isElementEditable(aElement: HTMLElement): boolean;
+  getElementValue(aElement: PreferenceElement): PreferenceValue;
+  getValueByType(aElement: HTMLElement | PreferenceElement): PreferenceValue;
+  isElementEditable(aElement: HTMLElement | PreferenceElement): boolean;
   inverted: boolean;
   locked: boolean;
   get name(): string;
@@ -156,7 +159,7 @@ interface PreferenceClass extends PreferencOverrideMozXULElement {
   get stringValue(): string;
   readonly preferences: PreferencesListClass;
   readonly: boolean;
-  setElementValue(aElement: HTMLElement): void;
+  setElementValue(aElement: HTMLElement | PreferenceElement): void;
   get tabIndex(): number;
   set tabIndex(val: number);
   get type(): string;
@@ -315,7 +318,7 @@ interface MozShortcutClass extends MozShortcutClassOverrideMozXULElement {
   updateFocus(this: MozShortcutClass, onFocus: boolean): void;
   updateNotification(): string;
   value: string;
-  valueFromPreferences(this: MozShortcutClass, aKeyData: ShortcutData): boolean | string;
+  valueFromPreferences(this: MozShortcutClass, aKeyData: ShortcutsModule.ShortcutData): boolean | string;
 }
 
 interface ShortcutEditBox extends HTMLInputElement {
@@ -349,7 +352,7 @@ interface TabstylepanelClass extends TabstylepanelClassOverrideMozXULElement {
   _getElementByAnonid<K extends keyof GetByMap | string>(aID: K): K extends keyof GetByMap ? GetByMap[K] : StyleElement | null;
   _getPrefs(this: TabstylepanelClass, aPrefString: string): void;
   _ondialogcancel(): void;
-  _prefValues: TabStyle | object;
+  _prefValues: DynamicRulesModule.TabStyle | object;
   _resetDefault(this: TabstylepanelClass, aResetOnlyStyle: boolean): void;
   _savePrefs(): void;
   _updateUseThisState(this: TabstylepanelClass, aEnabled: boolean): void;
@@ -454,7 +457,7 @@ declare namespace LinksPaneNS {
 }
 
 declare namespace MenuPaneNS {
-  const PrivateBrowsingUtils: PrivateBrowsingUtils;
+  const PrivateBrowsingUtils: MockedExports.PrivateBrowsingUtils;
   function init(): void;
   function initializeShortcuts(): void;
   let _slideShow: string;
@@ -570,7 +573,6 @@ declare namespace Globals {
   function _getKeyName(win: Window, aKey: HTMLElement): string;
   function _getLabel(elm: Element | Document, attr: string, value: string): string | null;
   function _getPath(elm: Node | Element): string;
-  function getFormattedKey(key?: ShortcutKey | null): string;
 
   // pref-filetype.js
   function SelectItemAt(index: number, focus: boolean): void;
@@ -712,24 +714,22 @@ interface BrowserWindow extends MockedGeckoTypes.BrowserWindow {
   gCustomizeMode: {enter: () => void};
   gNavigatorBundle: gNavigatorBundle;
   gTMPprefObserver: gTMPprefObserver;
-  Tabmix: typeof TabmixNS;
+  Tabmix: TabmixGlobal;
 }
 
 interface TabmixKnownModules {
-  "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mjs": {ChromeManifest: ChromeManifestClass};
-  "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs": {Overlays: OverlaysClass};
+  "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mjs": {ChromeManifest: TabmixModules.ChromeManifestClass};
+  "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs": {Overlays: OverlaysModule.OverlaysClass};
   "resource://gre/modules/DeferredTask.sys.mjs": {DeferredTask: DeferredTaskConstructor};
   "resource://gre/modules/ExtensionShortcuts.sys.mjs": {ExtensionShortcutKeyMap: typeof ExtensionShortcutKeyMap};
 }
 
-declare namespace TabmixNS {
-  function getTopWin(): BrowserWindow;
+interface TabmixGlobal {
+  getTopWin(): BrowserWindow;
 }
 
-declare var Tabmix: typeof TabmixNS;
-declare const TabmixChromeUtils: TabmixChromeUtilsType;
-
-declare var TabmixSvc: TabmixModules.TabmixSvc;
+declare var Tabmix: TabmixGlobal;
+declare var TabmixSvc: TabmixSvcModule.TabmixSvc;
 
 // lazy getters
 declare var gPreferenceList: string[];

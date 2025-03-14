@@ -3,6 +3,11 @@ import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 
 const isLibrewolf = AppConstants.MOZ_APP_NAME.toLowerCase() == "librewolf";
 
+/** @type {Partial<{
+  isWaterfox: boolean;
+  isFloorp: boolean;
+  isZen: boolean;
+}>} */
 const lazy = {};
 
 ChromeUtils.defineLazyGetter(lazy, "isWaterfox", () => {
@@ -17,7 +22,10 @@ ChromeUtils.defineLazyGetter(lazy, "isZen", () => {
   return Services.appinfo.name == "Zen";
 });
 
+/** @type {Record<string | number, boolean>} */
 const _versions = {};
+
+/** @type {BrowserVersion} */
 export function isVersion(aVersionNo, updateChannel) {
   let firefox, waterfox, floorp, zen, prefix = "";
   if (typeof aVersionNo === 'object') {
@@ -58,14 +66,16 @@ export function isVersion(aVersionNo, updateChannel) {
     return false;
   }
 
-  if (typeof _versions[prefix + aVersionNo] == "boolean")
-    return _versions[prefix + aVersionNo];
+  const cachedValue = _versions[prefix + aVersionNo];
+  if (typeof cachedValue === "boolean") {
+    return cachedValue;
+  }
 
   let v = isLibrewolf || lazy.isZen && prefix !== "zen" ? Services.appinfo.platformVersion : Services.appinfo.version;
 
   if (lazy.isWaterfox && waterfox || lazy.isFloorp && floorp || lazy.isZen && zen) {
-    return (_versions[prefix + aVersionNo] = Services.vc.compare(v, aVersionNo) >= 0);
+    return (_versions[prefix + aVersionNo] = Services.vc.compare(v, String(aVersionNo)) >= 0);
   }
 
-  return (_versions[aVersionNo] = Services.vc.compare(v, aVersionNo / 10 + ".0a1") >= 0);
+  return (_versions[aVersionNo] = Services.vc.compare(v, Number(aVersionNo) / 10 + ".0a1") >= 0);
 }

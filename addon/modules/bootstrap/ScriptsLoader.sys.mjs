@@ -2,6 +2,7 @@
  * Load Tabmix scripts to navigator:browser window.
  */
 
+/** @type {ScriptsLoaderModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -54,8 +55,9 @@ const SCRIPTS = [
 
 const initialized = new WeakSet();
 
+/** @type {ScriptsLoaderModule.ScriptsLoader} */
 export const ScriptsLoader = {
-  initForWindow(window, promiseOverlayLoaded, params = {}) {
+  initForWindow(window, promiseOverlayLoaded, params) {
     if (initialized.has(window)) {
       return;
     }
@@ -65,7 +67,7 @@ export const ScriptsLoader = {
     this._loadCSS(window);
     this._loadScripts(window, promiseOverlayLoaded);
     this._addListeners(window);
-    if (params.isEnabled) {
+    if (params?.isEnabled && params.chromeManifest) {
       this._updateAfterEnabled(window, params);
     }
   },
@@ -139,6 +141,8 @@ export const ScriptsLoader = {
     });
   },
 
+  _prepared: false,
+
   /**
    * initialize functions that can be called by events that fired before
    * our overlay is ready.
@@ -146,11 +150,12 @@ export const ScriptsLoader = {
    * @param window
    */
   _prepareBeforeOverlays(window) {
-    const {gBrowser, gBrowserInit, Tabmix} = window;
-
-    if (Tabmix.copyTabData) {
+    if (this._prepared) {
       return;
     }
+    this._prepared = true;
+
+    const {gBrowser, gBrowserInit, Tabmix} = window;
 
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
     /**
@@ -176,6 +181,10 @@ export const ScriptsLoader = {
     };
 
     Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
+    /**
+     *  @type {TabBrowser["swapBrowsersAndCloseOther"]}
+     *  @this {TabBrowser}
+     */
     const swapTab = function tabmix_swapBrowsersAndCloseOther(ourTab, otherTab) {
       // Do not allow transferring a private tab to a non-private window
       // and vice versa.

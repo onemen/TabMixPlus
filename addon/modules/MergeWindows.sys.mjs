@@ -3,11 +3,13 @@ import {TabmixChromeUtils} from "chrome://tabmix-resource/content/ChromeUtils.sy
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 
+/** @type{MergeWindowsModule.Lazy} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
   // Firefox 123 Bug 1864821 - Replace PromiseUtils.defer with Promise.withResolvers
   PromiseUtils: "resource://gre/modules/PromiseUtils.sys.mjs",
+  SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
 });
 
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
@@ -25,8 +27,10 @@ TabmixChromeUtils.defineLazyModuleGetters(lazy, {
 // Convert to module and modified by onemen                          //
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
+/** @type{MergeWindowsModule.MergeWindows}  */
 export const MergeWindows = {
   get prefs() {
+    // @ts-ignore
     delete this.prefs;
     return (this.prefs = Services.prefs.getBranch("extensions.tabmix."));
   },
@@ -38,14 +42,17 @@ export const MergeWindows = {
     var mergeAllWindows = this.prefs.getBoolPref("mergeAllWindows");
 
     // check if one or more tabs are selected to be merged
-    var selectedTabs = tabbrowser.tabContainer.getElementsByAttribute("mergeselected", true);
+    const selectedTabs = tabbrowser.tabContainer.getElementsByAttribute("mergeselected", "true");
     let options = {
-      skipPopup: !this.prefs.getBoolPref("mergePopups"),
+      multiple: mergeAllWindows && !selectedTabs.length,
+      normalWindowsCount: 0,
       private: this.isWindowPrivate(aWindow),
+      privateNotMatch: false, // getWindowsList will update the value
+      skipPopup: !this.prefs.getBoolPref("mergePopups"),
       tabsSelected: Boolean(selectedTabs.length),
-      multiple: mergeAllWindows && !selectedTabs.length
     };
     let {windows, normalWindowsCount} = this.getWindowsList(aWindow, options);
+
     if (!windows.length) {
       this.notify(aWindow, options.privateNotMatch);
     } else if (!normalWindowsCount && this.isPopupWindow(aWindow)) {
@@ -54,7 +61,7 @@ export const MergeWindows = {
     } else if (options.multiple) {
       options.normalWindowsCount = normalWindowsCount;
       this.mergeMultipleWindows(aWindow, windows, options);
-    } else {
+    } else if (windows[0]) {
       let tabsToMove = Array.prototype.slice.call(options.tabsSelected ? selectedTabs : tabbrowser.tabs);
       this.mergeTwoWindows(windows[0], aWindow, tabsToMove, options);
     }
@@ -70,11 +77,11 @@ export const MergeWindows = {
       if (aOptions.tabsSelected) {
         // merge tabs from the popup window into the current window
         // remove or move to new window tabs that wasn't selected
-        for (let i = tabbrowser.tabs.length - 1; i >= 0; i--) {
-          let tab = tabbrowser.tabs[i];
+        const tabs = tabbrowser.tabs.slice().reverse();
+        for (const tab of tabs) {
           if (tab.hasAttribute("mergeselected")) {
             tab.removeAttribute("mergeselected");
-            tab.label = tab.label.substr(4);
+            tab.label = tab.label.slice(4);
             tabbrowser._tabAttrModified(tab, ["label"]);
           } else if (canClose) {
             tabbrowser.removeTab(tab);
@@ -99,21 +106,22 @@ export const MergeWindows = {
       // if there is only one non-popup window.
       if (!aOptions.skipPopup || aOptions.normalWindowsCount == 1)
         aWindows.splice(aOptions.normalWindowsCount, 0, aTargetWindow);
+      /** @type {ChromeWindow} */ // @ts-expect-error - we have more than one window
       aTargetWindow = aWindows.shift();
     }
     this.concatTabsAndMerge(aTargetWindow, aWindows);
   },
 
   mergePopUpsToNewWindow(aWindows, aPrivate) {
-    const tabsToMove = aWindows.reduce((tabs, win) => [...tabs, ...win.gBrowser.tabs], []);
+    const tabsToMove = aWindows.flatMap(win => win.gBrowser.tabs);
     const firstTab = tabsToMove.shift();
 
     let features = "chrome,all,dialog=no";
     features += aPrivate ? ",private" : ",non-private";
-    let newWindow = aWindows[0].openDialog(AppConstants.BROWSER_CHROME_URL,
+    let newWindow = aWindows[0]?.openDialog(AppConstants.BROWSER_CHROME_URL,
       "_blank", features, firstTab);
 
-    if (tabsToMove.length) {
+    if (newWindow && tabsToMove.length) {
       newWindow.addEventListener(
         "before-initial-tab-adopted",
         () => {
@@ -125,9 +133,7 @@ export const MergeWindows = {
   },
 
   concatTabsAndMerge(aTargetWindow, aWindows) {
-    let tabsToMove = [];
-    for (let i = 0; i < aWindows.length; i++)
-      tabsToMove = tabsToMove.concat(Array.prototype.slice.call(aWindows[i].gBrowser.tabs));
+    const tabsToMove = aWindows.flatMap(win => win.gBrowser.tabs);
     this.swapTabs(aTargetWindow, tabsToMove);
   },
 
@@ -136,8 +142,13 @@ export const MergeWindows = {
   // and move to place by tabbrowser.addTab
   moveTabsFromPopups(tab, openerID, tabbrowser) {
     if (!tabbrowser) {
-      tabbrowser = tab.__tabmixTabBrowser;
-      delete tab.__tabmixTabBrowser;
+      if (tab.__tabmixTabBrowser) {
+        tabbrowser = tab.__tabmixTabBrowser;
+        delete tab.__tabmixTabBrowser;
+      } else {
+        console.log("Tabmix Error: moveTabsFromPopups: tabbrowser is undefined");
+        return;
+      }
     }
     let index = tabbrowser.tabs.length;
     let openerTab;
@@ -157,7 +168,7 @@ export const MergeWindows = {
     if (openerTab) {
       newTab.owner = openerTab;
     }
-    promise.resolve(tabToSelect ? newTab : null);
+    promise?.resolve(tabToSelect ? newTab : null);
   },
 
   // move tabs to a window
@@ -168,7 +179,7 @@ export const MergeWindows = {
       // after merge select currently selected tab or first merged tab
       let selectedTab = currentWindow.gBrowser.selectedTab;
       let tab = tabs.indexOf(selectedTab) > -1 ? selectedTab : tabs[0];
-      tab.setAttribute("_TMP_selectAfterMerge", true);
+      tab?.setAttribute("_TMP_selectAfterMerge", true);
     }
 
     var tabbrowser = aWindow.gBrowser;
@@ -178,8 +189,7 @@ export const MergeWindows = {
       tabbrowser.selectedTab._tPos + 1 : tabbrowser.tabs.length;
     const popups = [];
 
-    for (let i = 0; i < tabs.length; i++) {
-      let tab = tabs[i];
+    for (const tab of tabs) {
       let isPopup = !tab.ownerGlobal.toolbar.visible;
       if (isPopup) {
         popups.push(tab);
@@ -194,7 +204,7 @@ export const MergeWindows = {
     }
 
     const max_windows_undo = Services.prefs.getIntPref("browser.sessionstore.max_windows_undo");
-    const closedWindowCount = aWindow.SessionStore.getClosedWindowCount();
+    const closedWindowCount = lazy.SessionStore.getClosedWindowCount();
     const tempMax = Math.max(max_windows_undo, closedWindowCount + popups.length);
     Services.prefs.setIntPref("browser.sessionstore.max_windows_undo", tempMax);
 
@@ -210,7 +220,7 @@ export const MergeWindows = {
         openerWindowID = browser.browsingContext?.opener?.currentWindowGlobal?.outerWindowId;
         if (!openerWindowID && browser.getAttribute("remote") == "true") {
           tab.__tabmixTabBrowser = tabbrowser;
-          browser.messageManager.sendAsyncMessage("Tabmix:collectOpener");
+          browser.messageManager.sendAsyncMessage("Tabmix:collectOpener", {});
           waitToMessage = true;
         }
       }
@@ -223,20 +233,24 @@ export const MergeWindows = {
 
     if (popups.length) {
       const closedObjectsChangeObserver = {
+        /**
+         * @param {any} _
+         * @param {string} topic
+         */
         observe(_, topic) {
           if (topic !== "sessionstore-closed-objects-changed") {
             return;
           }
           Services.obs.removeObserver(closedObjectsChangeObserver, "sessionstore-closed-objects-changed");
-          while (aWindow.SessionStore.getClosedWindowCount() > closedWindowCount) {
-            aWindow.SessionStore.forgetClosedWindow(0);
+          while (lazy.SessionStore.getClosedWindowCount() > closedWindowCount) {
+            lazy.SessionStore.forgetClosedWindow(0);
           }
           Services.prefs.setIntPref("browser.sessionstore.max_windows_undo", max_windows_undo);
         }
       };
       Services.obs.addObserver(closedObjectsChangeObserver, "sessionstore-closed-objects-changed");
       // workaround to trigger SessionStore._handleClosedWindows
-      aWindow.SessionStore.getCurrentState();
+      lazy.SessionStore.getCurrentState();
     }
 
     if (notFocused) {
@@ -281,7 +295,7 @@ export const MergeWindows = {
                        "private" in aOptions;
 
     let privateNotMatch = 0;
-    let isSuitableBrowserWindow = win => {
+    let isSuitableBrowserWindow = (/** @type {ChromeWindow} */ win) => {
       let suitable = win != aWindow && !win.closed;
       if (!suitable || !checkPrivacy)
         return suitable;

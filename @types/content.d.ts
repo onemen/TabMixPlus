@@ -21,7 +21,7 @@ type ClickJSONData = {
   tabmixContentClick: ContentClickResult;
   globalHistoryOptions: {triggeringSponsoredURL: string};
 };
-type LinkNode = ContentClickLinkElement | WrappedNode | null;
+type LinkNode = ContentClickLinkElement | LinkNodeUtilsModule.WrappedNode | null;
 type ClickMessageData = {json: Partial<ClickJSONData>; href: string | null; node: LinkNode | null};
 
 type ContentClickResult = {
@@ -46,22 +46,15 @@ declare namespace FaviconLoaderNS {
 }
 
 declare namespace TabmixClickEventHandlerNS {
-  type ContentEvent = Omit<MouseEvent, "composedTarget" | "originalTarget" | "target"> & {
-    composedTarget: ContentClickLinkElement;
-    originalTarget: ContentClickLinkElement;
-    target: ContentClickLinkElement;
-    tabmix_isMultiProcessBrowser?: boolean;
-    tabmix_openLinkWithHistory: boolean;
-  };
   type GlobalThisType = Omit<typeof globalThis, "addEventListener"> & {
-    addEventListener(type: string, listener: (this: ContentClickLinkElement, ev: ContentEvent) => unknown, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: (this: ContentClickLinkElement, ev: ContentMouseEvent) => unknown, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: TabmixClickEventHandler, options?: boolean | AddEventListenerOptions): void;
   };
 
   function init(global: GlobalThisType): void;
-  function handleEvent(event: ContentEvent): void;
-  function getLinkData(event: ContentEvent): ContentClickLinkData;
-  function contentAreaClick(event: ContentEvent, linkData: ContentClickLinkData): void;
+  function handleEvent(event: ContentMouseEvent): void;
+  function getLinkData(event: ContentMouseEvent): ContentClickLinkData;
+  function contentAreaClick(event: ContentMouseEvent, linkData: ContentClickLinkData): void;
 }
 
 declare namespace ContextMenuHandlerNS {
@@ -91,15 +84,11 @@ declare function sendAsyncMessage(event: string, data: Partial<MessageData> | Pa
 declare function sendSyncMessage(messageName?: string | null, obj?: Partial<MessageData> | Partial<ClickMessageData>): unknown[];
 declare function sendSyncMessage(messageName: "TabmixContent:Click", obj: ClickMessageData): [ContentClickResult];
 
-interface ContextMenu {
-  getSelectedLinks(content: WindowProxy, check?: boolean): Map<string, string>;
-}
-
 interface WebNavigationFrames {
   getFrameId(bc: Window | BrowsingContext): number;
 }
 
-declare var ContextMenu: ContextMenu;
+declare var ContextMenu: TabmixContextMenu;
 declare var WebNavigationFrames: WebNavigationFrames;
 
 interface Document {

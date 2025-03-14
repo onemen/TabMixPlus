@@ -1,5 +1,6 @@
 import {PrivateBrowsingUtils} from "resource://gre/modules/PrivateBrowsingUtils.sys.mjs";
 
+/** @type {TabmixModules.SingleWindowModeUtils} */
 export const SingleWindowModeUtils = {
   /**
    * @brief Locate a browser window.
@@ -15,6 +16,7 @@ export const SingleWindowModeUtils = {
     // allow to open one normal window and one private window in single window mode
     const isPrivate = PrivateBrowsingUtils.isWindowPrivate(aExclude);
 
+    /** @param {Window} win */
     function isSuitableBrowserWindow(win) {
       return !win.closed && win.document.readyState == "complete" &&
               win.toolbar.visible && win != aExclude &&
@@ -69,13 +71,15 @@ export const SingleWindowModeUtils = {
       return;
     }
     const doc = newWindow.document.documentElement;
-    for (const attr of Object.keys(rect)) {
-      doc.setAttribute(attr, rect[attr]);
+    for (const [attr, rectVaslue] of Object.entries(rect)) {
+      if (rectVaslue) {
+        doc.setAttribute(attr, rectVaslue);
+      }
     }
     if (restorePosition) {
       const {width, height, screenX, screenY} = rect;
-      newWindow.resizeTo(width, height);
-      newWindow.moveTo(screenX, screenY);
+      newWindow.resizeTo(Number(width), Number(height));
+      newWindow.moveTo(Number(screenX), Number(screenY));
     }
     delete newWindow.__winRect;
   },
@@ -101,6 +105,7 @@ export const SingleWindowModeUtils = {
     const uriToLoad = args[0];
 
     let urls = [];
+    /** @type {Partial<TabmixModules.WindowParams>} */
     let params = { };
     if (uriToLoad instanceof Ci.nsIArray) {
       const count = uriToLoad.length;
@@ -149,6 +154,7 @@ export const SingleWindowModeUtils = {
       urls = uriToLoad ? uriToLoad.split("|") : ["about:blank"];
     }
 
+    /** @type {Tab} */
     let firstTabAdded;
     try {
       // open the tabs in current window
@@ -174,7 +180,7 @@ export const SingleWindowModeUtils = {
         newWindow.FullZoom.destroy = function() {};
       }
     } catch (ex) {
-      existingWindow.Tabmix.obj(ex);
+      existingWindow.Tabmix.assert(ex);
     }
     existingWindow.setTimeout(() => {
       try {
@@ -188,7 +194,7 @@ export const SingleWindowModeUtils = {
         // for the case the window is minimized or not in focus
         existingWindow.focus();
       } catch (ex) {
-        existingWindow.Tabmix.obj(ex);
+        existingWindow.Tabmix.assert(ex);
       }
     }, 0);
   }

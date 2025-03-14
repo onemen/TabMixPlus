@@ -13,7 +13,7 @@ var $ = id => document.getElementById(id);
 /** @param {string} id */
 var $Pref = id => {
   const preference = document.getElementById(id, "_PREF_CLASS_");
-  // only show error messgae when the element exist bt it is not a preference
+  // only show error message when the element exist bt it is not a preference
   if (preference && preference.nodeName !== "preference") {
     console.error(`Preference ${id} is not a preference!`);
   }

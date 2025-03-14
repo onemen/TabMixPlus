@@ -228,7 +228,7 @@ Tabmix.multiRow = {
         if (
           Tabmix.isVersion(1310) &&
           this.isMultiRow &&
-          Tabmix.callerName().startsWith("MozArrowScrollbox/overflowObserver")
+          Tabmix.callerName()?.startsWith("MozArrowScrollbox/overflowObserver")
         ) {
           // MozArrowScrollbox/overflowObserver doesn't calculate overflowing based MultiRow
           // the value that we return from here force it get the right overflowing state

@@ -3,15 +3,20 @@ import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {ChromeManifest} from "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mjs";
 import {Overlays} from "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs";
 
+/** @type {RenameTabModule.Lazy} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   //
   TabmixPlacesUtils: "chrome://tabmix-resource/content/Places.sys.mjs"
 });
 
+/** @type {RenameTabModule.RenameTab} */
 export const RenameTab = {
+  // @ts-expect-error - we initialize it later
   window: null,
-  panel: null,
+  // @ts-expect-error - we initialize it later
+  panel: undefined,
+  // @ts-expect-error - we initialize it later
   data: {},
   _element(aID) {
     return this.window.document.getElementById(aID);
@@ -31,39 +36,41 @@ export const RenameTab = {
       browser.contentTitle;
     this.data.url = browser.currentURI.spec;
 
+    /** @param {string} title  */
     const prepareDataAndShowPanel = title => {
       this.data.docTitle = title;
       if (!this.data.docTitle)
-        this.data.docTitle = this.window.isBlankPageURL(this.data.url) ?
+        this.data.docTitle = this.window?.isBlankPageURL(this.data.url) ?
           this.window.Tabmix.emptyTabTitle : this.data.url;
       this.data.modified = aTab.getAttribute("label-uri") || null;
       if (this.data.modified == this.data.url || this.data.modified == "*")
-        this.data.value = aTab.getAttribute("fixed-label");
+        this.data.value = aTab.getAttribute("fixed-label") ?? "";
       else
         this.data.value = this.data.docTitle;
 
       this.showPanel();
     };
 
-    lazy.TabmixPlacesUtils.asyncGetTitleFromBookmark(this.data.url, docTitle, null, aTab)
+    lazy.TabmixPlacesUtils.asyncGetTitleFromBookmark(this.data.url, docTitle ?? "")
         .then(title => prepareDataAndShowPanel(title));
   },
 
   showPanel: function TMP_renametab_showPanel() {
-    var popup = this._element("tabmixRenametab_panel");
-    if (popup) {
-      if (popup._overlayLoaded) {
-        this.panel = popup;
+    var currentPopup = this._element("tabmixRenametab_panel");
+    if (currentPopup) {
+      if (currentPopup._overlayLoaded) {
+        this.panel = currentPopup;
         this._doShowPanel();
       }
       return;
     }
 
-    popup = this.panel = this.window.document.createXULElement("panel");
+    const popup = this.panel = this.window.document.createXULElement("panel");
     popup._overlayLoaded = false;
     popup.id = "tabmixRenametab_panel";
-    popup.hidden = true; // prevent panel initialize. initialize before overlay break it.
-    this._element("mainPopupSet").appendChild(popup);
+    // prevent panel initialize. initialize before overlay break it.
+    popup.hidden = true;
+    this._element("mainPopupSet")?.appendChild(popup);
     const ov = new Overlays(new ChromeManifest(), this.window);
     ov.load("chrome://tabmixplus/content/overlay/renameTab.xhtml").then(() => {
       this.observe(null, "xul-overlay-merged");
@@ -83,7 +90,7 @@ export const RenameTab = {
     this.panel.addEventListener("input", this);
 
     this._element("tabmixRenametab_doneButton").setAttribute("data-l10n-id", "bookmark-panel-save-button");
-    this._element("tabmixRenametab_deleteButton").label = TabmixSvc.getDialogStrings("Cancel");
+    this._element("tabmixRenametab_deleteButton").setAttribute("label", TabmixSvc.getDialogStrings("Cancel")[0] ?? "");
 
     // reorder buttons for MacOS & Linux
     if (TabmixSvc.isLinux || TabmixSvc.isMac) {
@@ -116,14 +123,14 @@ export const RenameTab = {
 
     var image = this.data.tab.linkedBrowser.mIconURL || "chrome://tabmixplus/skin/tmp.png";
     this._element("tabmixRenametab_icon").setAttribute("src", image);
-    this._element("tabmixRenametab_titleField").value = this.data.value;
-    this._element("tabmixRenametab_defaultField").value = this.data.docTitle;
+    this._element("tabmixRenametab_titleField").setAttribute("value", this.data.value);
+    this._element("tabmixRenametab_defaultField").setAttribute("value", this.data.docTitle);
     this.window.Tabmix.setItem(popup, "modified", this.data.modified);
     var permanently = this._element("tabmixRenametab_checkbox");
     if (this.data.modified)
       permanently.checked = this.data.modified == "*";
 
-    this.data.permanently = permanently.checked;
+    this.data.permanently = permanently?.checked ?? false;
   },
 
   resetTitle() {
@@ -203,8 +210,11 @@ export const RenameTab = {
   onpopuphidden(aEvent) {
     if (aEvent.originalTarget == this.panel) {
       this.panel.removeEventListener("keypress", this);
+      // @ts-expect-error - reset panel
       this.window = null;
+      // @ts-expect-error - reset panel
       this.panel = null;
+      // @ts-expect-error - reset panel
       this.data = {};
     }
   },

@@ -15,6 +15,13 @@ import {AddonManager} from "resource://gre/modules/AddonManager.sys.mjs";
 
 var _initialized = false;
 
+/** @typedef {CompatibilityCheckModule.CompatibilityCheck} CompatibilityClass */
+
+/**
+* @constructor
+* @this {CompatibilityClass}
+* @type {CompatibilityCheckModule["constructor"]}
+*/
 export function CompatibilityCheck(aWindow, aShowList, aCallbackDialog) {
   if (_initialized && !aCallbackDialog)
     return;
@@ -26,22 +33,34 @@ export function CompatibilityCheck(aWindow, aShowList, aCallbackDialog) {
   this.getIncompatibleList();
 }
 
+/** @type {CompatibilityClass} */
 CompatibilityCheck.prototype = {
   DISABLE: 0,
   CANCEL: 1,
   DISABLE_AND_RESTART: 2,
   window: null,
-  showList: null,
+  showList: false,
   callbackDialog: null,
-  list: null,
+  /** @type {CompatibilityCheckModule.AddOn[]} */
+  list: [],
 
   // for new AddonManager since Firefox 4.0
   getIncompatibleList: function TMP_EX_getIncompatibleList() {
+    /**
+     * @param {AddonType} aAddon
+     * @param {"none"|"enable"|"disable"|"uninstall"|"install"|"upgrade"} aAction
+     */
     function isPending(aAddon, aAction) {
+      // @ts-ignore - AddonManager constants are defined in AddonManagerType
       var action = AddonManager["PENDING_" + aAction.toUpperCase()];
       return Boolean(aAddon.pendingOperations & action);
     }
 
+    /**
+     * @constructor
+     * @this {CompatibilityCheckModule.AddOn}
+     * @param {AddonType} addon
+     */
     function AddOn(addon) {
       this._name = addon.name;
       this.id = addon.id;
@@ -56,8 +75,7 @@ CompatibilityCheck.prototype = {
     var guid_list = this.getList();
     var self = this;
     AddonManager.getAddonsByTypes(["extension"]).then(aAddonsList => {
-      for (let i = 0; i < aAddonsList.length; i++) {
-        let addon = aAddonsList[i];
+      for (const addon of aAddonsList) {
         if (addon.id.toLowerCase() in guid_list) {
           let disabled = addon.userDisabled;
           if (!disabled && !isPending(addon, "disable") && !isPending(addon, "uninstall") ||
@@ -80,6 +98,7 @@ CompatibilityCheck.prototype = {
       this.dialogCallback(emptyList);
   },
 
+  /** @this {CompatibilityClass} */
   async warnAboutIncompatible() {
     const list = this.list;
     try {
@@ -87,14 +106,12 @@ CompatibilityCheck.prototype = {
     } catch {}
 
     let outStr = "";
-    for (let i = 0; i < list.length; i++) {
-      let name = list[i]._name;
-      name = name.charAt(0).toUpperCase() + name.substr(1);
-      outStr += " - " + name + " " + list[i]._version + "\n";
+    for (const {_name, _version} of list) {
+      const name = _name.charAt(0).toUpperCase() + _name.substr(1);
+      outStr += ` - ${name} ${_version}\n`;
     }
 
     const showatStart = TabmixSvc.prefBranch.getBoolPref("disableIncompatible");
-    const chkBoxState = {value: showatStart};
     const title = TabmixSvc.getString("incompatible.title");
     const msg = TabmixSvc.getString("incompatible.msg0") + "\n" +
               TabmixSvc.getString("incompatible.msg1") + "\n\n" + outStr + "\n\n";
@@ -104,7 +121,7 @@ CompatibilityCheck.prototype = {
       Services.prompt.BUTTON_POS_2 * Services.prompt.BUTTON_TITLE_IS_STRING +
       Services.prompt.BUTTON_POS_2_DEFAULT;
 
-    const tabBrowser = this.window.gBrowser ?? this.window.opener.gBrowser;
+    const tabBrowser = this.window?.gBrowser ?? this.window?.opener.gBrowser;
     const result = await Services.prompt.asyncConfirmEx(
       tabBrowser.browsingContext, // browsingContext,
       Ci.nsIPromptService.MODAL_TYPE_WINDOW, // modalType
@@ -115,7 +132,7 @@ CompatibilityCheck.prototype = {
       TabmixSvc.setLabel("incompatible.button1"), // button 1 label
       TabmixSvc.setLabel("incompatible.button2"), // button 2 label
       chkBoxLabel, // checkbox label
-      chkBoxState // checkbox initial state
+      showatStart // checkbox initial state
     );
     this.promptCallBack({
       button: result.getProperty("buttonNumClicked"),
@@ -153,9 +170,10 @@ CompatibilityCheck.prototype = {
     }
   },
 
+  /** @this {CompatibilityClass} */
   dialogCallback: function TMP_EX_dialogCallback(aHideButton) {
     if (this.callbackDialog) {
-      this.window.gIncompatiblePane.hide_IncompatibleNotice(aHideButton, this.showList);
+      this.window?.gIncompatiblePane.hide_IncompatibleNotice(aHideButton, this.showList);
     }
   },
 
@@ -168,6 +186,8 @@ CompatibilityCheck.prototype = {
      */
     // noinspection SpellCheckingInspection
     return {
+      'webext@tabmixplus.org': true, //   TAB Mix - Links
+      'rename_tab@tabmixplus.org': true, //   TAB Mix - Rename Tab
       '{00bdd586-51fb-4b06-9c23-af2fb7609bf3}': true, //   Basics
       '{b98719b3-76d6-4bec-aeed-3ab542b23bd7}': true, //   BlankLast
       '{47921160-3085-4023-a145-8ec466babfba}': true, //   Click2Tab

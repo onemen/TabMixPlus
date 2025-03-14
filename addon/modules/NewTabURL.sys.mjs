@@ -1,6 +1,7 @@
 
 import {TabmixChromeUtils} from "chrome://tabmix-resource/content/ChromeUtils.sys.mjs";
 
+/** @type {NewTabURLModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
@@ -12,6 +13,7 @@ const FIREFOX_PREF = "browser.#.url".replace("#", "newtab");
 const ABOUT_NEW_TAB = "about:#".replace("#", "newtab");
 
 // browser. newtab.url preference was removed by bug 1118285 (Firefox 41+)
+/** @type {NewTabURLModule.NewTabURL} */
 export const Tabmix_NewTabURL = {
   QueryInterface: ChromeUtils.generateQI([
     "nsIObserver",
@@ -30,7 +32,7 @@ export const Tabmix_NewTabURL = {
     switch (aTopic) {
       case "nsPref:changed":
         if (aData == FIREFOX_PREF)
-          this.updateNewTabURL(aData);
+          this.updateNewTabURL();
         break;
     }
   },

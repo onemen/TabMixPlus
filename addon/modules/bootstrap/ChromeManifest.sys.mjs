@@ -1,3 +1,6 @@
+// this imported to Tab Mix - as is
+// @ts-nocheck
+
 /**
  * A default map, which assumes a default value on get() if the key doesn't exist
  */

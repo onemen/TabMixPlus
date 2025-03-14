@@ -106,11 +106,11 @@ interface nsIStandaloneNativeMenu extends nsISupports {
 // https://searchfox.org/mozilla-central/source/widget/nsITaskbarProgress.idl
 
 interface nsITaskbarProgress extends nsISupports {
-  readonly STATE_NO_PROGRESS: 0;
-  readonly STATE_INDETERMINATE: 1;
-  readonly STATE_NORMAL: 2;
-  readonly STATE_ERROR: 3;
-  readonly STATE_PAUSED: 4;
+  readonly STATE_NO_PROGRESS?: 0;
+  readonly STATE_INDETERMINATE?: 1;
+  readonly STATE_NORMAL?: 2;
+  readonly STATE_ERROR?: 3;
+  readonly STATE_PAUSED?: 4;
 
   setProgressState(state: nsTaskbarProgressState, currentValue?: u64, maxValue?: u64): void;
 }
@@ -216,8 +216,8 @@ type InOutParam<T> = { value: T };
 /** XPCOM out param is written to the passed in object's value property. */
 type OutParam<T> = { value?: T };
 
-/** A named type to enable interfaces to inherit from enums. */
-type Enums<enums> = enums;
+/** Enable interfaces to inherit from enums: pick variants as optional. */
+type Enums<enums> = Partial<Pick<enums, keyof enums>>;
 
 /** Callable accepts either form of a [function] interface. */
 type Callable<iface> = iface | Extract<iface[keyof iface], Function>

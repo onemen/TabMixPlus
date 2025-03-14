@@ -8,7 +8,7 @@
  */
 
 /// <reference no-default-lib="true" />
-/// <reference lib="es2023" />
+/// <reference lib="es2024" />
 
 type HTMLCollectionOf<T> = any;
 type IsInstance<T> = (obj: any) => obj is T;
@@ -843,6 +843,7 @@ interface FailedCertSecurityInfo {
     certValidityRangeNotBefore?: DOMTimeStamp;
     channelStatus?: number;
     errorCodeString?: string;
+    errorIsOverridable?: boolean;
     errorMessage?: string;
     hasHPKP?: boolean;
     hasHSTS?: boolean;
@@ -2272,7 +2273,13 @@ interface NetErrorInfo {
     responseStatusText?: string;
 }
 
+interface NotificationAction {
+    action: string;
+    title: string;
+}
+
 interface NotificationOptions {
+    actions?: NotificationAction[];
     body?: string;
     data?: any;
     dir?: NotificationDirection;
@@ -3259,6 +3266,7 @@ interface RTCRtpReceiveParameters extends RTCRtpParameters {
 }
 
 interface RTCRtpSendParameters extends RTCRtpParameters {
+    degradationPreference?: RTCDegradationPreference;
     encodings: RTCRtpEncodingParameters[];
     transactionId?: string;
 }
@@ -3494,12 +3502,11 @@ interface SanitizerAttributeNamespace {
 interface SanitizerConfig {
     attributes?: SanitizerAttribute[];
     comments?: boolean;
-    customElements?: boolean;
+    dataAttributes?: boolean;
     elements?: SanitizerElementWithAttributes[];
     removeAttributes?: SanitizerAttribute[];
     removeElements?: SanitizerElement[];
     replaceWithChildrenElements?: SanitizerElement[];
-    unknownMarkup?: boolean;
 }
 
 interface SanitizerElementNamespace {
@@ -3561,7 +3568,7 @@ interface ServerSocketOptions {
 }
 
 interface SetHTMLOptions {
-    sanitizer?: SanitizerConfig;
+    sanitizer?: Sanitizer | SanitizerConfig | SanitizerPresets;
 }
 
 interface ShadowRootInit {
@@ -4979,6 +4986,7 @@ declare var AudioTrackList: {
 
 /** Available only in secure contexts. */
 interface AudioWorklet extends Worklet {
+    readonly port: MessagePort;
 }
 
 declare var AudioWorklet: {
@@ -7073,12 +7081,13 @@ declare var DelayNode: {
 };
 
 interface DeprecationReportBody extends ReportBody {
-    readonly anticipatedRemoval: DOMTimeStamp | null;
+    readonly anticipatedRemoval: any;
     readonly columnNumber: number | null;
     readonly id: string;
     readonly lineNumber: number | null;
     readonly message: string;
     readonly sourceFile: string | null;
+    toJSON(): any;
 }
 
 declare var DeprecationReportBody: {
@@ -7732,7 +7741,6 @@ interface Element extends Node, ARIAMixin, Animatable, ChildNode, GeometryUtils,
     setAttributeNodeNS(newAttr: Attr): Attr | null;
     setCapture(retargetToElement?: boolean): void;
     setCaptureAlways(retargetToElement?: boolean): void;
-    /** Available only in secure contexts. */
     setHTML(aInnerHTML: string, options?: SetHTMLOptions): void;
     setHTMLUnsafe(html: TrustedHTML | string): void;
     setPointerCapture(pointerId: number): void;
@@ -14572,6 +14580,7 @@ interface NotificationEventMap {
 }
 
 interface Notification extends EventTarget {
+    readonly actions: NotificationAction[];
     readonly body: string | null;
     readonly data: any;
     readonly dir: NotificationDirection;
@@ -14597,6 +14606,7 @@ declare var Notification: {
     prototype: Notification;
     new(title: string, options?: NotificationOptions): Notification;
     isInstance: IsInstance<Notification>;
+    readonly maxActions: number;
     readonly permission: NotificationPermission;
     requestPermission(permissionCallback?: NotificationPermissionCallback): Promise<NotificationPermission>;
 };
@@ -18391,14 +18401,21 @@ interface SVGZoomAndPan {
     readonly SVG_ZOOMANDPAN_MAGNIFY: 2;
 }
 
-/** Available only in secure contexts. */
 interface Sanitizer {
-    sanitize(input: SanitizerInput): DocumentFragment;
+    allowAttribute(attribute: SanitizerAttribute): void;
+    allowElement(element: SanitizerElementWithAttributes): void;
+    get(): SanitizerConfig;
+    removeAttribute(attribute: SanitizerAttribute): void;
+    removeElement(element: SanitizerElement): void;
+    removeUnsafe(): void;
+    replaceElementWithChildren(element: SanitizerElement): void;
+    setComments(allow: boolean): void;
+    setDataAttributes(allow: boolean): void;
 }
 
 declare var Sanitizer: {
     prototype: Sanitizer;
-    new(sanitizerConfig?: SanitizerConfig): Sanitizer;
+    new(configuration?: SanitizerConfig | SanitizerPresets): Sanitizer;
     isInstance: IsInstance<Sanitizer>;
 };
 
@@ -18573,7 +18590,7 @@ interface Selection {
     extend(node: Node, offset?: number): void;
     getComposedRanges(...shadowRoots: ShadowRoot[]): StaticRange[];
     getRangeAt(index: number): Range;
-    modify(alter: string, direction: string, granularity: string): void;
+    modify(alter?: string, direction?: string, granularity?: string): void;
     removeAllRanges(): void;
     removeRange(range: Range): void;
     removeSelectionListener(listenerToRemove: nsISelectionListener): void;
@@ -20359,10 +20376,9 @@ declare var URL: {
     new(url: string, base?: string): URL;
     isInstance: IsInstance<URL>;
     canParse(url: string, base?: string): boolean;
-    createObjectURL(blob: Blob): string;
-    createObjectURL(source: MediaSource): string;
+    createObjectURL(obj: Blob | MediaSource): string;
     fromURI(uri: URI): URL;
-    isValidObjectURL(url: string): boolean;
+    isBoundToBlob(url: string): boolean;
     parse(url: string, base?: string): URL | null;
     revokeObjectURL(url: string): void;
 };
@@ -23273,6 +23289,7 @@ interface Window extends EventTarget, AnimationFrameProvider, GlobalCrypto, Glob
     onvrdisplaypresentchange: ((this: Window, ev: Event) => any) | null;
     opener: any;
     readonly orientation: number;
+    readonly originAgentCluster: boolean;
     readonly outerHeight: number;
     readonly outerWidth: number;
     readonly pageXOffset: number;
@@ -24345,10 +24362,11 @@ declare namespace ChromeUtils {
     function clearMessagingLayerSecurityStateByPrincipal(principal: Principal): void;
     function clearMessagingLayerSecurityStateBySite(schemelessSite: string, pattern?: OriginAttributesPatternDictionary): void;
     function clearRecentJSDevError(): void;
-    function clearScriptCache(): void;
+    function clearResourceCache(chrome?: boolean): void;
+    function clearScriptCache(chrome?: boolean): void;
     function clearScriptCacheByPrincipal(principal: Principal): void;
     function clearScriptCacheBySite(schemelessSite: string, pattern?: OriginAttributesPatternDictionary): void;
-    function clearStyleSheetCache(): void;
+    function clearStyleSheetCache(chrome?: boolean): void;
     function clearStyleSheetCacheByPrincipal(principal: Principal): void;
     function clearStyleSheetCacheBySite(schemelessSite: string, pattern?: OriginAttributesPatternDictionary): void;
     function collectPerfStats(): Promise<string>;
@@ -24361,6 +24379,7 @@ declare namespace ChromeUtils {
     function defineESModuleGetters(aTarget: any, aModules: any, aOptions?: ImportESModuleOptionsDictionary): void;
     function defineLazyGetter(aTarget: any, aName: any, aLambda: any): void;
     function endWheelTransaction(): void;
+    function ensureHeadlessContentProcess(aRemoteType: string): Promise<nsIContentParentKeepAlive>;
     function ensureJSOracleStarted(): void;
     function fillNonDefaultOriginAttributes(originAttrs?: OriginAttributesDictionary): OriginAttributesDictionary;
     function generateQI(interfaces: any[]): MozQueryInterface;
@@ -25161,6 +25180,7 @@ declare var onvrdisplaydisconnect: ((this: Window, ev: Event) => any) | null;
 declare var onvrdisplaypresentchange: ((this: Window, ev: Event) => any) | null;
 declare var opener: any;
 declare var orientation: number;
+declare var originAgentCluster: boolean;
 declare var outerHeight: number;
 declare var outerWidth: number;
 declare var pageXOffset: number;
@@ -25517,7 +25537,6 @@ type RequestInfo = Request | string;
 type SanitizerAttribute = string | SanitizerAttributeNamespace;
 type SanitizerElement = string | SanitizerElementNamespace;
 type SanitizerElementWithAttributes = string | SanitizerElementNamespaceWithAttributes;
-type SanitizerInput = DocumentFragment | Document;
 type StackFrame = nsIStackFrame;
 type StringOrOpenPopupOptions = string | OpenPopupOptions;
 type StructuredClonable = any;
@@ -25575,7 +25594,7 @@ type CodecState = "closed" | "configured" | "unconfigured";
 type ColorGamut = "p3" | "rec2020" | "srgb";
 type ColorSpaceConversion = "default" | "none";
 type CompositeOperation = "accumulate" | "add" | "replace";
-type CompressionFormat = "deflate" | "deflate-raw" | "gzip";
+type CompressionFormat = "deflate" | "deflate-raw" | "gzip" | "zstd";
 type ConnectionType = "bluetooth" | "cellular" | "ethernet" | "none" | "other" | "unknown" | "wifi";
 type ConsoleLevel = "error" | "log" | "warning";
 type ConsoleLogLevel = "All" | "Clear" | "Debug" | "Dir" | "Dirxml" | "Error" | "Group" | "GroupEnd" | "Info" | "Log" | "Off" | "Profile" | "ProfileEnd" | "Time" | "TimeEnd" | "TimeLog" | "Trace" | "Warn";
@@ -25716,6 +25735,7 @@ type RTCBundlePolicy = "balanced" | "max-bundle" | "max-compat";
 type RTCCodecType = "decode" | "encode";
 type RTCDataChannelState = "closed" | "closing" | "connecting" | "open";
 type RTCDataChannelType = "arraybuffer" | "blob";
+type RTCDegradationPreference = "balanced" | "maintain-framerate" | "maintain-resolution";
 type RTCDtlsTransportState = "closed" | "connected" | "connecting" | "failed" | "new";
 type RTCEncodedVideoFrameType = "delta" | "empty" | "key";
 type RTCIceCandidateType = "host" | "prflx" | "relay" | "srflx";
@@ -25749,6 +25769,7 @@ type RequestPriority = "auto" | "high" | "low";
 type RequestRedirect = "error" | "follow" | "manual";
 type ResizeObserverBoxOptions = "border-box" | "content-box" | "device-pixel-content-box";
 type ResponseType = "basic" | "cors" | "default" | "error" | "opaque" | "opaqueredirect";
+type SanitizerPresets = "default";
 type ScreenColorGamut = "p3" | "rec2020" | "srgb";
 type ScrollBehavior = "auto" | "instant" | "smooth";
 type ScrollLogicalPosition = "center" | "end" | "nearest" | "start";

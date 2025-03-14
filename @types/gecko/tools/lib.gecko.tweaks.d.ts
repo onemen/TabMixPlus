@@ -23,6 +23,14 @@ interface Document {
   createXULElement(name: "browser"): XULBrowserElement;
 }
 
+type nsIGleanPingNoReason = {
+  [K in keyof nsIGleanPing]: K extends "submit" ? (_?: never) => void : nsIGleanPing[K];
+}
+
+type nsIGleanPingWithReason<T> = {
+  [K in keyof nsIGleanPing]: K extends "submit" ? (reason: T) => void : nsIGleanPing[K];
+}
+
 interface MessageListenerManagerMixin {
   // Overloads that define `data` arg as required, since it's ~always expected.
   addMessageListener(msg: string, listener: { receiveMessage(_: ReceiveMessageArgument & { data })});
@@ -92,15 +100,6 @@ interface nsXPCComponents_Utils {
   exportFunction<T>(func: T, ...any): T;
   getWeakReference<T>(value: T): { get(): T };
   waiveXrays<T>(object: T): T;
-}
-
-// TODO: remove after next TS update.
-interface PromiseConstructor {
-  withResolvers<T>(): {
-    promise: Promise<T>;
-    resolve: (value: T | PromiseLike<T>) => void;
-    reject: (reason?: any) => void;
-  };
 }
 
 type Sandbox = typeof globalThis & nsISupports;

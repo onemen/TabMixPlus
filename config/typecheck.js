@@ -3,7 +3,7 @@ import fs from "node:fs";
 
 const outputFile = "./tsc.local.txt";
 
-const typesFolder = 'types';
+const typesFolder = "@types";
 const LAST_RUN_FILE = "config/last_run.local.json";
 
 function getLastSavedCommit() {
@@ -41,6 +41,13 @@ Object.keys(colorsCode).forEach(name => {
   colors[name] = tagFunction;
 });
 
+function createClickableErrorFile(output) {
+  const cwd = process.cwd().replace(/\\/g, '/');
+  const formattedLines = output.trim().replace(/(addon\/[^(]*\(\d*,\d*\):)/g, `${cwd}/$&`);
+  fs.writeFileSync(outputFile, formattedLines);
+  console.log(`Typecheck results with clickable links saved to ${outputFile}`);
+}
+
 function runTsc(build) {
   const command = build ? `tsc --build` : `tsc --build --incremental`;
   let output;
@@ -50,10 +57,10 @@ function runTsc(build) {
     output = error.stdout;
   }
   if (output) {
-    fs.writeFileSync(outputFile, output);
     const errorCount = (output.match(/error TS\d+/g) || []).length;
     const errorsString = errorCount > 1 ? "errors" : "error";
-    console.log(colors.red`Typecheck completed with ${errorCount} ${errorsString}.`, `See ${outputFile} for details.`);
+    console.log(colors.red`Typecheck completed with ${errorCount} ${errorsString}.`);
+    createClickableErrorFile(output);
   } else {
     fs.writeFileSync(outputFile, "No errors found!", "utf8");
     console.log(colors.green`Typecheck completed successfully. No errors found!`);

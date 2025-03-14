@@ -3,6 +3,7 @@ import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {XPCOMUtils} from "resource://gre/modules/XPCOMUtils.sys.mjs";
 
+/** @type {BrowserDOMWindowModule.Lazy} */ // @ts-ignore
 const lazy = {};
 /* eslint-disable tabmix/valid-lazy */
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -18,6 +19,7 @@ ChromeUtils.defineLazyGetter(lazy, "ReferrerInfo", () => Components.Constructor(
 ));
 /* eslint-enable tabmix/valid-lazy */
 
+/** @type {TabmixGlobal} */ // @ts-expect-error we use loadSubScript to add Tabmix to the global scope
 const Tabmix = {};
 
 /**
@@ -26,6 +28,7 @@ const Tabmix = {};
   *
   * we don't check isUrlForDownload for external links,
   * it is not likely that link in other application opened Firefox for downloading data
+  * @type {BrowserDOMWindowModule.BrowserDOMWindow}
   */
 export const TabmixBrowserDOMWindow = {
   _initialized: false,
@@ -58,9 +61,11 @@ export const TabmixBrowserDOMWindow = {
     // BrowserDOMWindow.sys.mjs exist since Firefox 137
     const {BrowserDOMWindow} = ChromeUtils.importESModule("resource:///modules/BrowserDOMWindow.sys.mjs");
 
-    /* eslint-disable no-unused-vars */
+    /* eslint-disable no-unused-vars */ // @ts-ignore
     const {BrowserWindowTracker} = ChromeUtils.importESModule("resource:///modules/BrowserWindowTracker.sys.mjs");
+    // @ts-ignore
     const {AppConstants} = ChromeUtils.importESModule("resource://gre/modules/AppConstants.sys.mjs");
+    // @ts-ignore
     const {PrivateBrowsingUtils} = ChromeUtils.importESModule("resource://gre/modules/PrivateBrowsingUtils.sys.mjs");
     /* eslint-enable no-unused-vars */
 
@@ -95,6 +100,7 @@ export const TabmixBrowserDOMWindow = {
   getNsBrowserAccess(window) {
     return {
       constructor: window.nsBrowserAccess,
+      // @ts-expect-error
       makeCode: window.eval(Tabmix._localMakeCode),
     };
   },

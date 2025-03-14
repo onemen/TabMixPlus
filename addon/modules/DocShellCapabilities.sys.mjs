@@ -1,3 +1,4 @@
+/** @type{DocShellCapabilitiesModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -5,6 +6,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   TabStateCache: "resource:///modules/sessionstore/TabStateCache.sys.mjs",
 });
 
+/** @type{DocShellCapabilitiesModule.DocShellCapabilities} */
 export const DocShellCapabilities = {
   init() {
     //
@@ -35,25 +37,23 @@ export const DocShellCapabilities = {
     }
 
     browser.messageManager.sendAsyncMessage("Tabmix:restorePermissions",
-      {disallow: disallow.join(","), reload: reload || false});
+      {disallow, reload: reload || false});
   },
 
   /*** for tab context menu ***/
 
   onGet(nodes, tab) {
     let disallow = this.collect(tab);
-    for (let i = 0; i < nodes.length; i++) {
-      nodes[i].setAttribute("checked", !disallow.includes(nodes[i].value));
+    for (const element of nodes) {
+      element.setAttribute("checked", !disallow.includes(element.value));
     }
   },
 
   onSet(tab, node) {
-    let nodes = node.parentNode.childNodes;
-    let disallow = [];
-    for (let i = 0; i < nodes.length; i++) {
-      if (nodes[i].getAttribute("checked") != "true")
-        disallow.push(nodes[i].value);
-    }
-    this.restore(tab, disallow, true);
+    const parentNodes = node.parentNode?.childNodes ?? [];
+    const disallow = Array.from(parentNodes)
+        .filter(element => element?.getAttribute("checked") !== "true")
+        .map(element => element?.value);
+    this.restore(tab, disallow.join(","), true);
   }
 };

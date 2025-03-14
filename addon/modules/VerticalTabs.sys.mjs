@@ -1,3 +1,4 @@
+/** @type {VerticalTabsModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -5,7 +6,9 @@ ChromeUtils.defineESModuleGetters(lazy, {
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.sys.mjs",
 });
 
+/** @type {VerticalTabsModule.VerticalTabs} */
 export const VerticalTabs = {
+  _initialized: false,
   init() {
     if (this._initialized) {
       return;

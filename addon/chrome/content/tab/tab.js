@@ -2052,7 +2052,9 @@ window.gTMPprefObserver = {
   updateStyleAttributes() {
     let styles = ["current", "unloaded", "unread", "other"];
     styles.forEach(styleName => {
-      this.updateStyleAttribute(styleName + "Tab", styleName);
+      /** @type {DynamicRulesModule.RuleName}*/ // @ts-ignore
+      const ruleName = styleName + "Tab";
+      this.updateStyleAttribute(ruleName, styleName);
     });
   },
 
@@ -2686,10 +2688,6 @@ window.gTMPprefObserver = {
       blockedValues.push(26);
     TabmixSvc.blockedClickingOptions = blockedValues;
     this.updateTabClickingOptions();
-
-    // capture gfx.direct2d.disabled value on first window
-    // see getter at TabmixSvc
-    void TabmixSvc.direct2dDisabled;
   },
 
   updateTabClickingOptions() {

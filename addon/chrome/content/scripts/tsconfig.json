@@ -2,7 +2,6 @@
   "extends": "../../../../config/base.tsconfig.json",
   "include": ["**/*.js", "**/*.sys.mjs"],
   "compilerOptions": {
-    "typeRoots": ["../../../../types"],
-    "types": ["content.d.ts", "general.d.ts", "tabmix.d.ts"]
+    "types": ["content.d.ts", "index.d.ts"]
   }
 }

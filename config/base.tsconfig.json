@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "typeRoots": ["../@types"],
     "target": "ES2023",
     "lib": ["DOM", "ES2023"],
     "module": "commonjs",

@@ -1,5 +1,6 @@
 const ATTRIBS = ["href", "onclick", "onmousedown", "rel", "role"];
 
+/** @type {LinkNodeUtilsModule.LinkNodeUtils} */
 export const LinkNodeUtils = {
   isFrameInContent(content, href, name) {
     if (!content)
@@ -20,9 +21,10 @@ export const LinkNodeUtils = {
 
     let doc = node.ownerDocument;
     let frameElement = Boolean(node.ownerGlobal.frameElement);
+    /** @type {LinkNodeUtilsModule.WrappedNode} */
     let wrapper = {
       __tabmix: true,
-      baseURI: node.baseURI,
+      baseURI: node.baseURI || "",
       host: node.host,
       pathname: node.pathname,
       className: node.className,
@@ -35,26 +37,30 @@ export const LinkNodeUtils = {
         location: {href: doc.location ? doc.location.href : ""}
       },
       parentNode: {
-        baseURI: node.parentNode ? node.parentNode.baseURI : '',
+        baseURI: node.parentNode?.baseURI ?? "",
         _attributes: getAttributes(node.parentNode, ["onclick"])
       },
-      _focusedWindowHref: focusedWindow.top.location.href,
+      _focusedWindowHref: focusedWindow.top?.location.href || "",
       _attributes: getAttributes(node, ATTRIBS)
     };
-    if (getTargetIsFrame)
+    if (getTargetIsFrame) {
       wrapper.targetIsFrame = targetIsFrame(wrapper.target, focusedWindow);
+    }
     return wrapper;
   },
 
   getNodeWithOnClick(node) {
-    // for safety reason look only 3 level up
     let i = 0;
-    while (i < 3 && node && node.hasAttribute && !node.hasAttribute("onclick")) {
-      node = node.parentNode;
+    let current = node;
+    while (i < 3 && current && current.hasAttribute && !current.hasAttribute("onclick")) {
+      const parent = current.parentElement;
+      if (!parent) break;
+      current = parent;
       i++;
     }
-    if (node && node.hasAttribute && node.hasAttribute("onclick"))
-      return node;
+    if (current?.hasAttribute?.("onclick")) {
+      return current;
+    }
     return null;
   },
 
@@ -70,7 +76,7 @@ export const LinkNodeUtils = {
       blocked = re.test(currentHref);
       // youtube.com - added 2013-11-15
       if (!blocked && /youtube.com/.test(currentHref) &&
-          (!this.isGMEnabled(window) || !decodeURI(href).includes("return false;"))) {
+          (!this.isGMEnabled(window) || !decodeURI(href || "").includes("return false;"))) {
         blocked = true;
       // amazon.com search - added 2019-04-09
       } else if (!blocked && /amazon\.com\/s\?/.test(currentHref)) {
@@ -79,8 +85,10 @@ export const LinkNodeUtils = {
         // make sure external links in developer.mozilla.org open new tab
         let uri = Services.io.newURI(currentHref);
         let host = uri && uri.host;
-        blocked = host == "developer.mozilla.org" && linkNode.host != host &&
-            linkNode.classList.contains("external");
+        blocked = Boolean(
+          host === "developer.mozilla.org" &&
+          linkNode && linkNode.host != host && linkNode.classList.contains("external")
+        );
       }
     } catch {
       blocked = false;
@@ -92,45 +100,48 @@ export const LinkNodeUtils = {
 
   isGMEnabled(window) {
     window = window || Services.wm.getMostRecentWindow("navigator:browser");
-    if (this._GM_function.has(window)) {
-      return this._GM_function.get(window)();
-    }
-    return false;
+    const fn = this._GM_function.get(window);
+    return fn ? fn() : false;
   },
 };
 
+/** @type {(node: Element | null, attribs: string[]) => Record<string, string>} */
 function getAttributes(node, attribs) {
   if (!node) {
     return {};
   }
-  let wrapper = {};
+  /** @type {Record<string, string>} */
+  const wrapper = {};
   for (let att of attribs) {
     if (node.hasAttribute(att)) {
-      wrapper[att] = node.getAttribute(att);
+      wrapper[att] = node.getAttribute(att) || "";
     }
   }
   return wrapper;
 }
 
+/** @type {(targetAttr: string, focusedWindow: Window) => string} */
 function getTargetAttr(targetAttr, focusedWindow) {
-  // If link has no target attribute, check if there is a <base> with a target attribute
   if (!targetAttr) {
-    let b = focusedWindow.document.getElementsByTagName("base");
-    if (b.length)
-      targetAttr = b[0].getAttribute("target");
+    const bases = focusedWindow.document.getElementsByTagName("base");
+    if (bases.length) {
+      targetAttr = bases[0].getAttribute("target") || "";
+    }
   }
-  return targetAttr;
+  return targetAttr || "";
 }
 
 /**
  * @brief check if target attribute exist and point to frame in the document
  *        frame pool
+ * @type {(targetAttr: string | null, focusedWindow: Window) => boolean}
  */
 function targetIsFrame(targetAttr, focusedWindow) {
   if (targetAttr) {
-    let content = focusedWindow.top;
-    if (existsFrameName(content, targetAttr))
+    const content = focusedWindow.top;
+    if (content && existsFrameName(content, targetAttr)) {
       return true;
+    }
   }
   return false;
 }
@@ -143,6 +154,7 @@ function targetIsFrame(targetAttr, focusedWindow) {
  * @param targetFrame       The name of the frame that we are seeking.
  * @returns                 true if the frame exists within the given frame pool,
  *                          false if it does not.
+ * @type {(content: Window, targetFrame: string) => boolean}
  */
 function existsFrameName(content, targetFrame) {
   for (let i = 0; i < content.frames.length; i++) {

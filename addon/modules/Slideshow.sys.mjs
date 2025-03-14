@@ -1,5 +1,6 @@
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 
+/** @type {SlideshowModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
@@ -21,12 +22,15 @@ export function flst() {
   });
 }
 
+/** @type {SlideshowModule.Flst} */
 flst.prototype = {
+  // @ts-expect-error - we use lazy getter in the constructor
+  tabContainer: undefined,
   showAlert(msg, id) {
     try {
       msg = msg.replace(/F8|F9/, lazy.Shortcuts.getFormattedKeyForID(id));
       let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
-      alerts.showAlertNotification("chrome://tabmixplus/skin/tmp.png", "Tab Mix Plus", msg, false, "", null);
+      alerts.showAlertNotification("chrome://tabmixplus/skin/tmp.png", "Tab Mix Plus", msg, false, "");
     } catch {}
   },
 
@@ -53,6 +57,7 @@ flst.prototype = {
     }
   },
 
+  /** @this {SlideshowModule.Flst} */
   notify() {
     if (this.moreThenOneTab)
       this.tabContainer.advanceSelectedTab(1, true);
@@ -61,17 +66,14 @@ flst.prototype = {
   },
 
   cancel() {
-    this.slideShowTimer.cancel();
-    this.slideShowTimer = null;
+    this.slideShowTimer?.cancel();
+    this.slideShowTimer = undefined;
     this.showAlert(this.slideshowOff, "slideShow");
   },
 
   get moreThenOneTab() {
+    let visibleCount = 0;
     let tabs = this.tabContainer.allTabs;
-    for (let count = 0, i = 0; i < tabs.length; i++) {
-      if (!tabs[i].hidden && ++count == 2)
-        return true;
-    }
-    return false;
+    return tabs.some(tab => !tab.hidden && ++visibleCount === 2);
   }
 };

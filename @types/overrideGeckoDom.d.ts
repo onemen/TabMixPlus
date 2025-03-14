@@ -1,17 +1,39 @@
-// reference this file before "./gecko/lib.gecko.dom.d.ts"
+// reference this file before "./gecko/tools/lib.gecko.dom.d.ts"
 // to override `namespace ChromeUtils`
 
 // this interface add mising methods to AddonManager that are missing in lib.gecko.dom.d.ts
+type AddonType = Addon & {
+  disable(): void;
+  appDisabled: boolean;
+  pendingOperations: number;
+  userDisabled: boolean;
+};
+
+interface AddonManagerListener {
+  init(id: string): void;
+  onChange(aAddon: AddonType, aAction: "onEnabled" | "onDisabled"): void;
+  onEnabled(aAddon: AddonType): void;
+  onDisabled(aAddon: AddonType): void;
+  onInstalled(aAddon: AddonType): void;
+}
+
 interface AddonManagerType {
-  SIGNEDSTATE_NOT_REQUIRED: number | number;
-  getAddonByID(aID: string): Promise<Addon>;
-  getAddonsByTypes(aTypes?: string[]): Promise<Addon[]>;
-  shouldAutoUpdate(aAddon: Addon): boolean;
+  SIGNEDSTATE_NOT_REQUIRED: i32;
+  PENDING_NONE: i32;
+  PENDING_ENABLE: i32;
+  PENDING_DISABLE: i32;
+  PENDING_UNINSTALL: i32;
+  PENDING_INSTALL: i32;
+  PENDING_UPGRADE: i32;
+  getAddonByID(aID: string): Promise<AddonType>;
+  getAddonsByTypes(aTypes?: string[]): Promise<AddonType[]>;
+  shouldAutoUpdate(aAddon: AddonType): boolean;
+  addAddonListener(listener: any): void;
 }
 
 declare var AddonManager: AddonManagerType;
 
-// see tabmix.d.ts
+// see modules.d.ts
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface TabmixKnownModules {}
 
@@ -59,9 +81,21 @@ declare var document: Document;
 declare var performance: Performance;
 
 interface Window {
+  closeAll(): void;
   readonly document: Document;
-  readonly performance: Performance;
   CustomTitlebar: CustomTitlebar;
+  NodeFilter: typeof NodeFilter;
+  readonly performance: Performance;
   /** @deprecated - use CustomTitlebar instead from Firefox 135 */
   TabsInTitlebar: CustomTitlebar;
 }
+
+interface WindowProxy {
+  isChromeWindow: true;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface GetByMap {}
+
+// default getElementById override
+type GetElementByIdOverride<K extends keyof GetByMap | string> = K extends keyof GetByMap ? GetByMap[K] : (HTMLElement & HTMLInputElement & XULTab) | null;

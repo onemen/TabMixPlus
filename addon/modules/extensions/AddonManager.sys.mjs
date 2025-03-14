@@ -55,6 +55,7 @@ var Glitter = {
   },
 };
 
+/** @type {AddonManagerListener}  */
 var TabmixListener = {
   init(id) {
     if (id == GoogleNoTrackingUrl.id) {

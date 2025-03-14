@@ -1,4 +1,4 @@
-/// <reference types="./override.d.ts" />
+/// <reference types="./overrideGeckoDom.d.ts" />
 /// <reference types="./gecko/tools/lib.gecko.dom.d.ts" />
 /// <reference types="./gecko/tools/lib.gecko.xpcom.d.ts" />
 /// <reference types="./gecko/tools/lib.gecko.xpidl.d.ts" />
@@ -8,15 +8,19 @@ type f<T> = Array<T>;
 type NonEmptyArray<T> = T[] & {0: T};
 type Params = Record<string, unknown>;
 
+type XULDocumentFragment = DocumentFragment & {
+  attributes: NamedNodeMap;
+};
+
 // for class extending MozXULElement
 interface CustomElementConstructorOverride {
-  _fragment: DocumentFragment;
+  _fragment: XULDocumentFragment;
   get fragment(): Node;
   _flippedInheritedAttributes?: Record<string, unknown>;
   get inheritedAttributes(): Record<string, string>;
   insertFTLIfNeeded(id: string): Promise<void>;
   markup: string;
-  parseXULToFragment(markup: string, localizeFiles?: string[]): DocumentFragment;
+  parseXULToFragment(markup: string, localizeFiles?: string[]): XULDocumentFragment;
 
   prototype: MozXULElement;
   new (): MozXULElement;
@@ -75,6 +79,9 @@ interface GetByMap {
   "navigator-toolbox": HTMLElement;
   "tabmix-bottom-toolbox": HTMLElement;
   "nav-bar-overflow-button": HTMLButtonElement;
+
+  "start_custom_list": HTMLMenuElement & {nextSibling: HTMLMenuElement};
+  "end_custom_list": HTMLMenuElement & {nextSibling: HTMLMenuElement};
 }
 
 interface CustomSearchbar extends HTMLInputElement {
@@ -128,13 +135,13 @@ interface createXULMap {}
 
 interface Document {
   createXULElement<K extends keyof createXULMap | string>(selectors: K): K extends keyof createXULMap ? createXULMap[K] : HTMLElement;
-  getElementById<K extends keyof GetByMap | string>(selectors: K): K extends keyof GetByMap ? GetByMap[K] : (HTMLElement & HTMLInputElement & XULTab) | null;
+  getElementById<K extends keyof GetByMap | string>(selectors: K): GetElementByIdOverride<K>;
   getElementsByTagName<K extends keyof GetByTagNameMap>(localName: K): NonEmptyCollection_G<GetByTagNameMap[K]>;
   querySelector<K extends keyof QuerySelectorMap | string>(selectors: K): K extends keyof QuerySelectorMap ? QuerySelectorMap[K] : HTMLElement | null;
 }
 
 interface ShadowRoot {
-  getElementById<K extends keyof GetByMap | string>(selectors: K): K extends keyof GetByMap ? GetByMap[K] : (HTMLElement & HTMLInputElement & XULTab) | null;
+  getElementById<K extends keyof GetByMap | string>(selectors: K): GetElementByIdOverride<K>;
   querySelector<K extends keyof QuerySelectorMap | string>(selectors: K): K extends keyof QuerySelectorMap ? QuerySelectorMap[K] : HTMLElement | null;
 }
 
@@ -154,8 +161,10 @@ interface Node {
   hidePopup(cancel?: boolean): void;
   id?: string;
   localName: string;
+  remove(): void;
   removeAttribute(name: string): void;
   setAttribute(name: string, value: string | boolean | number): void;
+  style: CSSStyleDeclaration;
   readonly tagName: string;
 }
 
