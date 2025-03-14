@@ -2,5 +2,31 @@
 
 branch=$(git rev-parse --abbrev-ref HEAD)
 if [ "$branch" = "main" ]; then
-  ./node_modules/.bin/commitlint --config config/husky/commitlint.config.js --edit $1
+  # Read commit message
+  MSG=$(cat $1)
+  FIRST_LINE=$(head -n1 $1)
+
+  # Check pattern: keyword: message
+  if ! echo "$FIRST_LINE" | grep -qE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9-]+\))?: [a-z]'; then
+    echo "Error: Invalid commit format. Your commit must follow this pattern:"
+    echo "  type(optional-scope): message"
+    echo ""
+    echo "Where:"
+    echo "- type must be one of: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+    echo "- scope (if used) must be in parentheses"
+    echo "- message must start with lowercase"
+    echo ""
+    echo "Examples:"
+    echo "  feat: add new feature"
+    echo "  fix(browser): resolve crash on startup"
+    exit 1
+  fi
+
+  # Check length
+  if [ ${#FIRST_LINE} -gt 110 ]; then
+    echo "Error: First line of commit message is too long (${#FIRST_LINE} > 110)"
+    exit 1
+  fi
+
+  echo "Commit message validation passed"
 fi
