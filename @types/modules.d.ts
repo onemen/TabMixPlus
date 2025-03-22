@@ -61,6 +61,10 @@ interface Window {
     revampComponentsLoaded: boolean;
     readonly sidebarVerticalTabsEnabled: boolean;
   };
+  ToolbarDropHandler: {
+    onDragOver(event: DragEvent): void;
+    onDropNewWindowButtonObserver(event: DragEvent): void;
+  };
   UIEvent: typeof UIEvent;
   URILoadingHelper: MockedExports.URILoadingHelper;
   XMLHttpRequest: typeof XMLHttpRequest;

@@ -901,6 +901,7 @@ declare var gFissionBrowser: boolean;
 declare var gNavigatorBundle: gNavigatorBundle;
 declare var gTabsPanel: MockedGeckoTypes.gTabsPanel;
 declare var gURLBar: gURLBar;
+/** @deprecated replaced with ToolbarDropHandler from firefox on version 138 */
 declare var newWindowButtonObserver: newWindowButtonObserver;
 declare var TabContextMenu: MockedGeckoTypes.TabContextMenu;
 declare var PanelUI: PanelUI;
@@ -921,6 +922,7 @@ declare var HistoryMenu: {
 
 /** Window scope globals */
 declare var BROWSER_NEW_TAB_URL: string;
+/** @deprecated replaced with ToolbarDropHandler from firefox on version 138 */
 declare var browserDragAndDrop: {
   dropLinks: (aEvent: DragEvent, aDisallowInherit: boolean) => nsIDroppedLinkItem[];
 };

@@ -751,22 +751,33 @@ Tabmix.tablib = {
       document.getElementById("forward-button").childNodes[0]?.addEventListener("popupshowing", FillHistoryMenu);
     }
 
-    Tabmix.changeCode(newWindowButtonObserver, "newWindowButtonObserver.onDragOver")._replace(
-      '{',
-      '{ \
-       if (Tabmix.singleWindowMode) { \
-         if (!aEvent.target.hasAttribute("disabled")) \
-           aEvent.target.setAttribute("disabled", true);\
-         return; \
-       }'
-    ).toCode();
+    if (Tabmix.firstWindowInSession || !Tabmix.isVersion(1380)) {
+      const [parent, onDropName] = Tabmix.isVersion(1380) ?
+        [window.ToolbarDropHandler, "onDropNewWindowButtonObserver"] :
+        [newWindowButtonObserver, "onDrop"];
 
-    Tabmix.originalFunctions.newWindowButtonObserver_onDrop = newWindowButtonObserver.onDrop;
-    newWindowButtonObserver.onDrop = function onDrop(...args) {
-      if (!Tabmix.singleWindowMode) {
-        Tabmix.originalFunctions.newWindowButtonObserver_onDrop.apply(this, args);
-      }
-    };
+      const onDragOverNewWindowButton = parent.onDragOver;
+      parent.onDragOver = function(...args) {
+        const target = args[0].target;
+        console.log("ToolbarDropHandler.onDragOver", target.id);
+
+        if (Tabmix.singleWindowMode && target.id == "new-window-button") {
+          if (!target.hasAttribute("disabled"))
+            target.setAttribute("disabled", true);
+          return;
+        }
+        onDragOverNewWindowButton.apply(this, args);
+      };
+
+      // @ts-ignore
+      const onDropNewWindowButtonObserver = parent[onDropName];
+      // @ts-ignore
+      parent[onDropName] = function(...args) {
+        if (!Tabmix.singleWindowMode) {
+          onDropNewWindowButtonObserver.apply(this, args);
+        }
+      };
+    }
 
     // if user changed mode to single window mode while having closed window
     // make sure that undoCloseWindow will open the closed window in the most recent non-private window

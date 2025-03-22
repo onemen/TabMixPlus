@@ -135,7 +135,6 @@ interface OriginalFunctions {
   gURLBar_setURI: gURLBar["setURI"];
   tabContainer_updateCloseButtons: MockedGeckoTypes.TabContainer["_updateCloseButtons"];
   isBlankPageURL: Window["isBlankPageURL"];
-  newWindowButtonObserver_onDrop: newWindowButtonObserver["onDrop"];
   OpenBrowserWindow: Window["OpenBrowserWindow"];
   openLinkIn: Window["openLinkIn"];
   openInverseLink: nsContextMenu["openLinkInTab"];

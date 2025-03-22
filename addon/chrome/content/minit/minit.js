@@ -604,7 +604,9 @@ var TMP_tabDNDObserver = {
       if (targetTab.getAttribute("locked") && !gBrowser.isBlankNotBusyTab(targetTab)) {
         // Pass true to disallow dropping javascript: or data: urls
         try {
-          const links = browserDragAndDrop.dropLinks(event, true);
+          const links = Tabmix.isVersion(1380) ?
+            Services.droppedLinkHandler.dropLinks(event, true) :
+            browserDragAndDrop.dropLinks(event, true);
           const url = links.length && links[0]?.url ? links[0].url : null;
           disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
         } catch {}
