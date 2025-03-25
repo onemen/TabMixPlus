@@ -1197,7 +1197,6 @@ declare namespace ScriptsLoaderModule {
   type Params = {chromeManifest: TabmixModules.ChromeManifest; isOverflow: boolean; isEnabled: boolean};
 
   interface ScriptsLoader {
-    _prepared: boolean;
     initForWindow: (window: Window, promiseOverlayLoaded: Promise<void>, params?: Params) => void;
     _closeButtonAdded: boolean;
     _addCloseButton(): void;
