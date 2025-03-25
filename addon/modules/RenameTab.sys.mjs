@@ -123,8 +123,8 @@ export const RenameTab = {
 
     var image = this.data.tab.linkedBrowser.mIconURL || "chrome://tabmixplus/skin/tmp.png";
     this._element("tabmixRenametab_icon").setAttribute("src", image);
-    this._element("tabmixRenametab_titleField").setAttribute("value", this.data.value);
-    this._element("tabmixRenametab_defaultField").setAttribute("value", this.data.docTitle);
+    this._element("tabmixRenametab_titleField").value = this.data.value;
+    this._element("tabmixRenametab_defaultField").value = this.data.docTitle;
     this.window.Tabmix.setItem(popup, "modified", this.data.modified);
     var permanently = this._element("tabmixRenametab_checkbox");
     if (this.data.modified)
