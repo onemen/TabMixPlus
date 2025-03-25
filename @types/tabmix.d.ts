@@ -127,7 +127,7 @@ interface OriginalFunctions {
   FillHistoryMenu: Window["FillHistoryMenu"];
   FullScreen_showNavToolbox: FullScreen["showNavToolbox"];
   gBrowser_addTab: TabBrowser["addTab"];
-  gBrowser_blurTab: TabBrowser["_blurTab"];
+  gBrowser_findTabToBlurTo: TabBrowser["_findTabToBlurTo"];
   gBrowser_removeTab: TabBrowser["removeTab"];
   gBrowser_setInitialTabTitle: TabBrowser["setInitialTabTitle"];
   gURLBar_handleCommand: gURLBar["handleCommand"];
@@ -140,7 +140,8 @@ interface OriginalFunctions {
   openInverseLink: nsContextMenu["openLinkInTab"];
 
   _getDropIndex: TabContainer["_getDropIndex"];
-  _finishAnimateTabMove: TabContainer["_finishAnimateTabMove"];
+  _finishAnimateTabMove: TabContainer["finishAnimateTabMove"];
+  _invalidateCachedVisibleTabs: TabContainer["_invalidateCachedVisibleTabs"];
   _moveTogetherSelectedTabs: TabContainer["_moveTogetherSelectedTabs"];
   /** @deprecated replaced with TabContainer.#moveTogetherSelectedTabs in firefox 133 */
   _groupSelectedTabs: TabContainer["_groupSelectedTabs"];

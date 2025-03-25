@@ -1031,14 +1031,14 @@ var TMP_ClosedTabs = {
     // after we open new tab we only need to fix position if this condition is true
     // we prevent gBrowser.addTab from moving new tab when we call it from here
     if (aWhere == "current" || aWhere == "original" && restorePosition) {
-      gBrowser.moveTabTo(newTab, Math.min(gBrowser.tabs.length - 1, pos));
+      Tabmix.moveTabTo(newTab, {tabIndex: Math.min(gBrowser.tabs.length - 1, pos)});
     } else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) {
       let tab = gBrowser._lastRelatedTabMap.get(gBrowser.selectedTab) || gBrowser.selectedTab;
       let offset = newTab._tPos > tab._tPos ? 1 : 0;
-      gBrowser.moveTabTo(newTab, tab._tPos + offset);
+      Tabmix.moveTabTo(newTab, {tabIndex: tab._tPos + offset});
     } else if (aBlankTabToReuse && !Tabmix.getOpenTabNextPref()) {
       // move reused tab to the end
-      gBrowser.moveTabTo(newTab, gBrowser.tabs.length - 1);
+      Tabmix.moveTabTo(newTab, {tabIndex: gBrowser.tabs.length - 1});
     }
 
     if (aSelectRestoredTab) {

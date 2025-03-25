@@ -274,7 +274,7 @@ var TMP_extensionsCompatibility = {
       let codeToReplace = "gBrowser.moveTabTo(newTab, ++orgTab._tPos);";
       if (performAction.includes(codeToReplace)) {
         Tabmix.changeCode(FireGestures, "FireGestures._performAction")._replace(
-          codeToReplace, 'gBrowser.moveTabTo(newTab, orgTab._tPos + 1);'
+          codeToReplace, 'Tabmix.moveTabTo(newTab, {tabIndex: orgTab._tPos + 1});'
         ).toCode();
       }
 

@@ -55,6 +55,8 @@
     return;
   }
 
+  this.tabmixKey = new (Cu.getGlobalForObject(Services).Object)();
+
   this.mIsHover = false;
 
   this.mButtonId = 0;

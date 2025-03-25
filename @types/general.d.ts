@@ -14,6 +14,8 @@ type nsIPrefBranchXpcom = ReturnType<nsIPrefService["getBranch"]>;
 
 interface GetClosestMap {
   "tab.tabbrowser-tab": MockedGeckoTypes.BrowserTab;
+  "tab-group": MockedGeckoTypes.MozTabbrowserTabGroup;
+  ".tab-group-label": MockedGeckoTypes.MozTabGroupLabel;
 }
 
 interface Element {
@@ -88,7 +90,11 @@ interface CSSStyleDeclaration {
   [index: string]: string;
 }
 
-type DragEventParams = {sourceNode: HTMLLinkElement | MockedGeckoTypes.BrowserTab | null; dragType: number; tab: HTMLLinkElement | MockedGeckoTypes.BrowserTab | null; oldIndex: number; newIndex: number; mouseIndex: number; addWidth?: boolean};
+type AriaFocusableItem = MockedGeckoTypes.BrowserTab | MockedGeckoTypes.MozTabGroupLabel;
+type AriaFocusableItems = NonEmptyArray<AriaFocusableItem>;
+type DraggedElement = AriaFocusableItem | null;
+type DraggedSourceNode = DraggedElement | HTMLLinkElement | Element;
+type DragEventParams = {sourceNode: DraggedSourceNode; dragType: number; draggedElement: DraggedElement; newIndex: number; dropElement: Tab | undefined; dropBefore?: boolean; fromTabList?: boolean; dropOnStart?: boolean; groupLabelMargin?: number | undefined};
 
 declare namespace MockedGeckoTypes {
   interface BrowsingContext extends MockedExports.BrowsingContext {
@@ -151,25 +157,30 @@ declare namespace MockedGeckoTypes {
 
   type Tabs = NonEmptyArray<BrowserTab>;
 
+  type DragData = {
+    offsetX: number;
+    offsetY: number;
+    scrollPos: number;
+    screenX: number;
+    screenY: number;
+    movingTabs: BrowserTab[];
+    fromTabList: boolean;
+    tabGroupCreationColor: string;
+    expandGroupOnDrop: boolean;
+  };
+
   interface BrowserTab extends MockedExports.BrowserTab, Omit<Element, "ownerGlobal" | "nextSibling"> {
     readonly _isProtected: boolean;
     _labelIsInitialTitle?: boolean;
     _tPos: number;
-    _dragData: {
-      offsetX: number;
-      offsetY: number;
-      scrollPos: number;
-      screenX: number;
-      screenY: number;
-      movingTabs: BrowserTab[];
-      fromTabList: boolean;
-      tabGroupCreationColor: string;
-    };
+    _dragData: DragData;
     closing: boolean;
     readonly container: TabContainer;
     connectedCallback: () => void;
+    elementIndex: number;
     group: MozTabbrowserTabGroup | null;
     initialize: () => void;
+    isOpen: boolean;
     readonly isEmpty: boolean;
     label: string;
     linkedBrowser: ChromeBrowser;
@@ -177,7 +188,7 @@ declare namespace MockedGeckoTypes {
     get linkedPanel(): string;
     // mCorrespondingMenuitem: - see addon.d.ts
     readonly multiselected: boolean;
-    nextSibling: BrowserTab | undefined;
+    nextSibling: BrowserTab | MozTabbrowserTabGroup | undefined;
     owner: BrowserTab | null;
     // MockedExports.BrowserTab use null here - ignore it
     readonly ownerGlobal: WindowProxy;
@@ -218,16 +229,17 @@ declare namespace MockedGeckoTypes {
     tabmixKey: object;
   }
 
-  interface ArrowScrollbox extends Element {
+  interface ArrowScrollbox extends Omit<Element, "children"> {
     _boundsWithoutFlushing: (element: HTMLElement) => DOMRect;
     _canScrollToElement: (element: BrowserTab) => boolean;
     _distanceToRow: (amountToScroll: number) => number;
     _isRTLScrollbox: boolean;
-    _getScrollableElements: () => BrowserTab[];
+    _getScrollableElements: () => AriaFocusableItems;
     _prevMouseScrolls: boolean[];
     _scrollButtonDown: HTMLButtonElement;
     _scrollButtonUp: HTMLButtonElement;
-    ensureElementIsVisible: (tab: BrowserTab, instant?: boolean) => void;
+    children: NonEmptyArray<BrowserTab | MozTabbrowserTabGroup>;
+    ensureElementIsVisible: (tab: AriaFocusableItem, instant?: boolean) => void;
     readonly isRTLScrollbox: boolean;
     get lineScrollAmount(): number;
     offsetRatio: number;
@@ -247,7 +259,6 @@ declare namespace MockedGeckoTypes {
   type DNDCanvas = Element & {height: number};
 
   interface TabContainer extends Element {
-    _animateElement: ArrowScrollbox;
     _animateExpandedPinnedTabMove: (event: MouseEvent) => void;
     _animateTabMove: (event: MouseEvent) => void;
     _backgroundTabScrollPromise?: Promise<void>;
@@ -256,17 +267,23 @@ declare namespace MockedGeckoTypes {
     _dndPanel: DNDCanvas;
     _dragOverDelay: number;
     _expandSpacerBy: (pixels: number) => void;
+    /** @deprecated replaced with finishAnimateTabMove in firefox 138 */
     _finishAnimateTabMove: () => void;
+    finishAnimateTabMove: () => void;
     _finishMoveTogetherSelectedTabs: (tab: BrowserTab) => void;
     /** @deprecated replaced with _finishMoveTogetherSelectedTabs in firefox 133 */
     _finishGroupSelectedTabs: (tab: BrowserTab) => void;
+    /** @deprecated replaced with #getDragTarget in firefox 138 */
     _getDragTargetTab(event: DragEvent, options?: {ignoreTabSides?: boolean}): BrowserTab | null;
     // we are adding arguments to _getDropIndex see minit.js for details
-    _getDropIndex(event: DragEvent, ...rest: unknown[]): DragEventParams | number;
+    _getDropIndex(event: DragEvent): number;
+    _getDropIndex(event: DragEvent, options: {dragover?: boolean; getParams: true}): DragEventParams;
+    _getDropIndex(event: DragEvent, options?: {dragover?: boolean; getParams?: boolean}): number | DragEventParams;
     /** @deprecated replaced with #moveTogetherSelectedTabs in firefox 133 */
     _groupSelectedTabs: (tab: BrowserTab) => void;
     _handleTabSelect: (instant: boolean) => void;
     _invalidateCachedTabs: () => void;
+    _invalidateCachedVisibleTabs: () => void;
     get _isCustomizing(): boolean;
     _lastTabClosedByMouse: boolean;
     _lastTabToScrollIntoView?: BrowserTab;
@@ -280,6 +297,7 @@ declare namespace MockedGeckoTypes {
     _unlockTabSizing: () => void;
     _updateCloseButtons(skipUpdateScrollStatus?: boolean, aUrl?: string | null): void;
     advanceSelectedTab: (dir: number, wrap: boolean) => void;
+    get ariaFocusableItems(): AriaFocusableItems;
     get allTabs(): Tabs;
     get allGroups(): MozTabbrowserTabGroup[];
     // see declaration in addon.d.ts
@@ -307,14 +325,22 @@ declare namespace MockedGeckoTypes {
 
     // Tabmix
     __showbuttonTab?: BrowserTab;
+    _hasTabTempWidth: boolean;
+    _hasTabTempMaxWidth: boolean;
+    _rtlMode: boolean;
 
-    // replacment for private methods
+    // replacment for private methods and getters
     _clearDragOverCreateGroupTimer: () => void;
     _dragOverCreateGroupTimer: number;
+    _dragTime: number;
+    _expandGroupOnDrop(draggedTab: BrowserTab): void;
+    _getDragTarget(event: DragEvent, options?: {ignoreSides?: boolean}): BrowserTab | null;
     _isAnimatingMoveTogetherSelectedTabs: () => boolean;
+    _keepTabSizeLocked: boolean;
     _moveTogetherSelectedTabs: (tab: BrowserTab) => void;
     // using insteadof private method #setDragOverGroupColor since Firefox 133
     _setDragOverGroupColor: (groupColorCode: string) => void;
+    _setMovingTabMode(movingTab: boolean): void;
     _triggerDragOverCreateGroup: (dragData: BrowserTab["_dragData"], groupDropIndex: number) => void;
 
     /** @deprecated removed by bug 1923635 in firefox 133 */
@@ -341,6 +367,8 @@ declare namespace MockedGeckoTypes {
     GROUP_BY_TABMIX: 101;
   }
 
+  type isTabGroup = (element: Tab | MozTabbrowserTabGroup) => element is MozTabbrowserTabGroup;
+
   type EnumValues = ClosingTabsEnum[keyof ClosingTabsEnum];
   type ClosingTabsEnumValues = Exclude<EnumValues, string>;
 
@@ -355,13 +383,15 @@ declare namespace MockedGeckoTypes {
     removeNotification(notification: NotificationMessage): void;
   }
 
+  type moveTabToOptions = {elementIndex?: number; tabIndex?: number; forceUngrouped?: boolean; keepRelatedTabs?: boolean};
+
   interface TabBrowser extends Browser {
     // build in methods and properties
     _switcher: {
       visibleTab: BrowserTab;
     };
-    _blurTab: (tab: BrowserTab) => void;
     _endRemoveTab: (tab: BrowserTab) => void;
+    _findTabToBlurTo: (aTab: BrowserTab, aExcludeTabs?: BrowserTab[]) => BrowserTab | null;
     _handleTabMove: (tab: BrowserTab, moveActionCallback: () => void) => void;
     /** @deprecated replaced with pinnedTabCount in Firefox version 133 */
     readonly _numPinnedTabs: number;
@@ -374,7 +404,7 @@ declare namespace MockedGeckoTypes {
     _windowIsClosing: boolean;
     addAdjacentNewTab: (tab: BrowserTab) => void;
     addRangeToMultiSelectedTabs: (start: BrowserTab, end: BrowserTab) => void;
-    addTab: (url: string, params?: {index?: number; isPending?: boolean} | Record<string, unknown>) => BrowserTab;
+    addTab: (this: TabBrowser, url: string, params?: {index?: number; isPending?: boolean} | Record<string, unknown>) => BrowserTab;
     addToMultiSelectedTabs: (tab: BrowserTab) => BrowserTab;
     addTrustedTab: (aURI: string, params?: Params) => BrowserTab;
     adoptTab: (aTab: BrowserTab, aIndex: number, aSelectTab: boolean) => BrowserTab;
@@ -398,8 +428,13 @@ declare namespace MockedGeckoTypes {
     getTabsToTheStartFrom: (tab: BrowserTab) => BrowserTab[];
     getIcon: (tab: BrowserTab) => string;
     hideTab: (aTab: BrowserTab, aSource?: string) => void;
+    isTabGroupLabel: (element: DraggedSourceNode | EventTarget | undefined) => element is MozTabGroupLabel;
+    isTab: (element: DraggedSourceNode | MozTabbrowserTabGroup | EventTarget | undefined) => element is BrowserTab;
     lastMultiSelectedTab: BrowserTab;
-    moveTabTo: (tab: BrowserTab, index: number, keepRelatedTabs?: boolean) => void;
+    // keepRelatedTabs was used until Firefox 134
+    moveTabTo: (aTab: BrowserTab | MozTabbrowserTabGroup, options: moveTabToOptions) => void;
+    moveTabsBefore: (tabs: BrowserTab[], targetElement?: BrowserTab | MozTabbrowserTabGroup | null) => void;
+    moveTabsAfter: (tabs: BrowserTab[], targetElement?: BrowserTab | MozTabbrowserTabGroup | null) => void;
     ownerGlobal: WindowProxy;
     pinTab: (tab: BrowserTab) => void;
     readonly pinnedTabCount: number;
@@ -473,13 +508,10 @@ declare namespace MockedGeckoTypes {
     isBlankNotBusyTab: (tab: BrowserTab, aboutBlank?: boolean) => boolean;
     lockTab: (tab: BrowserTab) => void;
     openLinkWithHistory: () => void;
-    previousTab: (this: MockedGeckoTypes.TabBrowser, tab: BrowserTab) => void;
-    previousTabIndex: (tab: BrowserTab, tabs?: BrowserTab[]) => number;
     protectTab: (tab: BrowserTab) => void;
     reloadLeftTabs: (this: MockedGeckoTypes.TabBrowser, tab: BrowserTab) => void;
     reloadRightTabs: (this: MockedGeckoTypes.TabBrowser, tab: BrowserTab) => void;
     reloadAllTabsBut: (this: MockedGeckoTypes.TabBrowser, tab: BrowserTab) => void;
-    selectIndexAfterRemove: (tab: BrowserTab) => number;
     SelectToMerge: (tab: BrowserTab) => void;
     SSS_duplicateTab: (tab: BrowserTab, href: string, tabData?: {state: Params}) => BrowserTab | null;
     stopMouseHoverSelect: (tab: BrowserTab) => void;
@@ -492,8 +524,6 @@ declare namespace MockedGeckoTypes {
     restoreTab: () => void;
     /** @deprecated use gBrowser.removeTab instead */
     closeTab: (tab: BrowserTab) => void;
-    /** @deprecated use gBrowser.moveTabTo instead */
-    TMmoveTabTo: (tab: BrowserTab, index: number, keepRelatedTabs?: boolean) => void;
     /** @deprecated use Tabmix.renameTab.editTitle(aTab) instead */
     renameTab: (tab: BrowserTab) => void;
   }
@@ -520,7 +550,16 @@ declare namespace MockedGeckoTypes {
     parentElement: MozTextLabelContainer;
   }
 
-  interface MozTabbrowserTabGroup extends MozXULElement {
+  interface MozTabGroupLabel extends MozTextLabel {
+    _dragData: DragData;
+    elementIndex: number;
+    container: TabContainer;
+    group: MozTabbrowserTabGroup;
+    parentNode: HTMLElement & {closing: never};
+    pinned: never;
+  }
+
+  interface MozTabbrowserTabGroup extends Omit<MozXULElement, "previousSibling"> {
     get color(): string;
     set color(code: string);
     get id(): string;
@@ -532,14 +571,15 @@ declare namespace MockedGeckoTypes {
     get collapsed(): boolean;
     set collapsed(val: boolean);
     lastSeenActive(): void;
-    tabs(): BrowserTab[];
-    get labelElement(): MozTextLabel;
+    get tabs(): Tabs;
+    get labelElement(): MozTabGroupLabel;
     addTabs(tabs: BrowserTab[]): void;
     ungroupTabs(): void;
     save(): void;
     on_click(event: PointerEvent): void;
     on_TabSelect(): void;
     select(): void;
+    previousSibling: BrowserTab;
   }
 
   interface TabsPanel extends TabsListBase {
@@ -795,6 +835,10 @@ interface FullScreen {
   showNavToolbox: (trackMouse?: boolean) => void;
 }
 
+interface FirefoxViewHandler {
+  tab: Tab;
+}
+
 interface gBrowserInit {
   _boundDelayedStartup(): void;
   _delayedStartup(): void;
@@ -894,6 +938,7 @@ declare function undoCloseTab(aIndex?: number, sourceWindowSSId?: string): Mocke
 declare var CustomizableUI: MockedExports.CustomizableUI;
 declare var E10SUtils: MockedExports.E10SUtils;
 declare var FullScreen: FullScreen;
+declare var FirefoxViewHandler: FirefoxViewHandler;
 declare var gBrowser: MockedGeckoTypes.TabBrowser;
 declare var gBrowserInit: gBrowserInit;
 declare var gContextMenu: MockedGeckoTypes.gContextMenu;

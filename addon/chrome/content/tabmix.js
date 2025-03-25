@@ -125,6 +125,8 @@ Tabmix.afterDelayedStartup = function() {
     }
   }, 250);
 
+  Tabmix.tabsSelectionUtils.init();
+
   TMP_Places.onDelayedStartup();
 
   this.navToolbox.init();
@@ -312,7 +314,10 @@ var TMP_eventListener = {
 
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
 
-    gBrowser.selectedTab.tabmixKey = {};
+    // Add tabmixKey to all tabs
+    for (const tab of gBrowser.tabs) {
+      tab.tabmixKey = new (Cu.getGlobalForObject(Services).Object)();
+    }
     this.tabWidthCache.set(gBrowser.selectedTab.tabmixKey, 0);
 
     try {
@@ -343,6 +348,7 @@ var TMP_eventListener = {
     Tabmix.navToolbox.initializeSearchbar();
 
     gTMPprefObserver.addDynamicRules();
+    this.addGroupMutationObserver();
   },
 
   onWindowOpen: function TMP_EL_onWindowOpen() {
@@ -718,7 +724,6 @@ var TMP_eventListener = {
       }
     }
 
-    aTab.tabmixKey = {};
     this.tabWidthCache.set(aTab.tabmixKey, aTab.getBoundingClientRect().width);
 
     const newTime = performance.timeOrigin + performance.now();
@@ -1061,8 +1066,67 @@ var TMP_eventListener = {
     }
     updateAttrib("class", "tab-icon-image", "role", "presentation");
     updateAttrib("class", "tab-text", "role", "presentation");
-  }
+  },
 
+  addGroupMutationObserver() {
+    /** @param {MockedGeckoTypes.MozTabbrowserTabGroup} group */
+    const groupRemoved = group => {
+      const groupLabel = group.labelElement.parentNode;
+      if (groupLabel.hasAttribute("tabmix-firstTabInRow")) {
+        group.hidden = true;
+        const nextSibling = group.nextSibling;
+        if (nextSibling) {
+          group.nextSibling?.setAttribute("tabmix-firstTabInRow", true);
+        }
+        this.updateMultiRow();
+      }
+    };
+
+    // This observer manages the tabmix-firstTabInRow attribute which controls margin-inline-start
+    // for elements after pinned tabs in multi-row mode. It prevents layout flickering when groups
+    // are removed by immediately handling attribute transfers, rather than waiting for Firefox's
+    // delayed "TabGroupRemoved" event. It also handles group creation directly instead of relying
+    // on Firefox's "TabGroupCreate" event.
+    const groupObserver = new MutationObserver(mutationList => {
+      // Skip processing if not in multi-row mode with overflow and pinned tabs
+      if (!TabmixTabbar.hasMultiRows || !gBrowser.pinnedTabCount) {
+        return;
+      }
+      for (const mutation of mutationList) {
+        mutation.addedNodes.forEach(node => {
+          if (gBrowser.isTab(node)) {
+            // when tab removed from single tab group it was moved after the group
+            const group = node.previousSibling;
+            if (Tabmix.isTabGroup(group) && group.tabs.length === 0) {
+              groupRemoved(group);
+            }
+            const nextSibling = node.nextSibling;
+            if (nextSibling?.hasAttribute("tabmix-firstTabInRow") && TabmixTabbar.inSameRow(node, nextSibling)) {
+              node.setAttribute("tabmix-firstTabInRow", true);
+              nextSibling.removeAttribute("tabmix-firstTabInRow");
+            }
+          } else if (Tabmix.isTabGroup(node)) {
+            this.updateMultiRow();
+          }
+        });
+
+        mutation.removedNodes.forEach(node => {
+          if (Tabmix.isTabGroup(node)) {
+            groupRemoved(node);
+          }
+        });
+      }
+    });
+
+    const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
+    groupObserver.observe(arrowScrollbox, {childList: true});
+
+    window.addEventListener("unload", () => {
+      if (groupObserver) {
+        groupObserver.disconnect();
+      }
+    }, {once: true});
+  },
 };
 
 /**

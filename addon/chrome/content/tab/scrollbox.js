@@ -398,8 +398,10 @@ Tabmix.multiRow = {
         const end = Tabmix.ltr ? "right" : "left";
         const containerEnd = this.scrollClientRect[end];
         const topY = Tabmix.tabsUtils.topTabY;
-        const tabs = this._getScrollableElements();
-        let index, current = 0, previousTab;
+        const tabs = this._getScrollableElements().map(item => (gBrowser.isTabGroupLabel(item) ? item.parentNode : item));
+        let index, current = 0;
+        /** @type {Tab | HTMLElement | null} */
+        let previousTab = null;
         for (const tab of tabs) {
           let row = tab.closing ? -1 : Tabmix.tabsUtils.getTabRowNumber(tab, topY);
           if (row > current) {

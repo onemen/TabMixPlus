@@ -71,7 +71,7 @@ var TabmixTabClickOptions = {
         this._tabFlipTimeOut = setTimeout(
           function selectPreviousTab(aTab) {
             self.clearTabFlipTimeOut();
-            gBrowser.previousTab(aTab);
+            Tabmix.tabsSelectionUtils.selectPreviousTab(aTab);
             gBrowser.stopMouseHoverSelect(aTab);
             gBrowser.selectedBrowser.focus();
           }, tabFlipDelay, tab);
@@ -324,7 +324,7 @@ var TabmixTabClickOptions = {
           gBrowser.pinTab(aTab);
         break;
       case 32:
-        gBrowser.previousTab(gBrowser.selectedTab);
+        Tabmix.tabsSelectionUtils.selectPreviousTab(gBrowser.selectedTab);
         break;
       case 33:
         this._tabMultiSelected(aTab);

@@ -51,7 +51,11 @@ interface PrivateMethods {
   // gBrowser
   handleTabMove: MockedGeckoTypes.TabBrowser["_handleTabMove"];
   // TabContainer
+  animateExpandedPinnedTabMove: MockedGeckoTypes.TabContainer["_animateExpandedPinnedTabMove"];
   clearDragOverCreateGroupTimer: MockedGeckoTypes.TabContainer["_clearDragOverCreateGroupTimer"];
+  expandGroupOnDrop: MockedGeckoTypes.TabContainer["_expandGroupOnDrop"];
+  getDragTarget: MockedGeckoTypes.TabContainer["_getDragTarget"];
+  getDropIndex: MockedGeckoTypes.TabContainer["_getDropIndex"];
   isAnimatingMoveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_isAnimatingMoveTogetherSelectedTabs"];
   moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
   setDragOverGroupColor: MockedGeckoTypes.TabContainer["_setDragOverGroupColor"];
@@ -113,6 +117,7 @@ interface TabmixGlobal {
   getStyle(aObj: Element | Tab, aStyle: string): number;
   getMovingTabsWidth(movingTabs: Tab[]): number;
   getPlacement(id: string): number;
+  isTabGroup(element: DraggedSourceNode | MockedGeckoTypes.MozTabbrowserTabGroup | undefined): element is MockedGeckoTypes.MozTabbrowserTabGroup;
 
   // getPrivateMethod is in addon.d.ts
   hidePopup(aPopupMenu: XULPopupElement): void;
@@ -160,6 +165,19 @@ interface TabmixGlobal {
   isBlankNewTab(url: string): boolean;
   isNewTabUrls(aUrl: string): boolean;
   updateSwitcher(switcher: MockedGeckoTypes.TabSwitcher): void;
+  moveTabTo: MockedGeckoTypes.TabBrowser["moveTabTo"];
+  tabsSelectionUtils: {
+    _tabOrderMap: WeakMap<WeakKey, number>;
+    _counter: number;
+    init(): void;
+    trackTab(tab: Tab): void;
+    getTabOrder(tab: Tab): number | undefined;
+    getLastOpenedTab(tabs: Tab[]): Tab | null;
+    removeTab(tab: Tab): void;
+    getPreviousSelectedTab: (tab: Tab) => Tab | null;
+    selectPreviousTab: (tab: Tab) => void;
+    selectTabAfterRemove: (tab: Tab, aExcludeTabs?: Tab[]) => Tab | null;
+  };
 
   // userinterface.js
   handleTabbarVisibility: typeof HandleTabbarVisibility & Record<string, any>;
@@ -502,7 +520,7 @@ declare namespace TabsUtils {
   let _tab_overflow_width: number;
   function updateOverflowMaxWidth(): void;
   function updateScrollButtons(useTabmixButtons: boolean): void;
-  function isElementVisible(element: Tab | null | undefined): boolean;
+  function isElementVisible(element: AriaFocusableItem | null | undefined): boolean;
   const protonValues: {enabled: boolean; name: string; val: string; margin: string};
   function updateProtonValues(): void;
 }

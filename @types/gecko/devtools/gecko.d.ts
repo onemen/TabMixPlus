@@ -312,9 +312,14 @@ interface PathUtilsInterface {
   isAbsolute: (path: string) => boolean;
 }
 
-declare module "resource://devtools/client/shared/vendor/react.js" {
+declare module "resource://devtools/client/shared/vendor/react.mjs" {
   import * as React from "react";
   export = React;
+}
+
+declare module "resource://devtools/client/shared/vendor/react-dom.mjs" {
+  import * as ReactDOM from "react-dom";
+  export = ReactDOM;
 }
 
 declare module "resource://devtools/client/shared/vendor/react-dom-factories.js" {

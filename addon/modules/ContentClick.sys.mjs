@@ -1070,15 +1070,17 @@ ContentClickInternal = {
       },
       result(browser, data) {
         let window = browser.ownerGlobal;
-        let tab = window.gBrowser.getTabForBrowser(browser);
+        let {gBrowser, gURLBar, Tabmix} = window;
+        let tab = gBrowser.getTabForBrowser(browser);
         if (data.result) {
           this.stop();
-          window.gURLBar.handleRevert();
+          gURLBar.handleRevert();
           // Focus the matching window & tab
           window.focus();
-          window.gBrowser.selectedTab = tab;
+          gBrowser.selectedTab = tab;
         } else {
-          this.next(tab.nextSibling);
+          const nextTab = Tabmix.isTabGroup(tab.nextSibling) ? tab.nextSibling?.tabs[0] : tab.nextSibling;
+          this.next(nextTab);
         }
       },
       next(tab) {

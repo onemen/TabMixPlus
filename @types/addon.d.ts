@@ -200,36 +200,42 @@ declare namespace ExtensionsCompatibilityNS {
 }
 
 declare namespace TabDNDObserverNS {
+  let _dragOverDelay: number;
   let _moveTabOnDragging: boolean;
   let draglink: string;
   let LinuxMarginEnd: number;
-  let _dragTime: number;
-  let _dragOverDelay: number;
   let DRAG_LINK: number;
   let DRAG_TAB_TO_NEW_WINDOW: number;
   let DRAG_TAB_IN_SAME_WINDOW: number;
   let draggingTimeout: number;
   let paddingLeft: number;
   let _multirowMargin: number;
+  let _allVisibleItems: AriaFocusableItems | null;
+  let _cachedDnDValue: boolean | null;
+  const allVisibleItems: AriaFocusableItems;
   function init(): void;
   function useTabmixDnD(event: DragEvent, tab?: Tab): boolean;
   function handleEvent(event: DragEvent): void;
   function on_dragstart(this: MockedGeckoTypes.TabContainer, event: DragEvent): void;
   function handleDragover(event: DragEvent): boolean;
+  function handleDrop(event: DragEvent, draggedTab: Tab, movingTabs: Tab[]): void;
   function on_dragend(event: DragEvent): void;
   function on_dragleave(event: DragEvent): void;
   function _dragoverScrollButton(event: DragEvent): boolean;
   function postDraggingCleanup(event: DragEvent, skipCleanup?: boolean): boolean;
+  let _hideTooltipTimeout: number;
   function hideDragoverMessage(): void;
-  function _getDropIndex(event: DragEvent, options?: {dragover?: boolean; children?: Tab[]}): DragEventParams | number;
+  function showDragoverTooltip(message: string): void;
+  function _getDropIndex(event: DragEvent, options?: {dragover?: boolean; getParams?: boolean}): DragEventParams | number;
   function eventParams(event: DragEvent): DragEventParams;
-  function _getDNDIndex(aEvent: DragEvent, tab: Tab | null): number;
-  function getNewIndex(event: DragEvent, tab: Tab | null): number;
-  function getLeft_Right(event: DragEvent, newIndex: number): number;
-  function getDragType(sourceNode: HTMLLinkElement | Tab | null): {dragType: number; tab: Tab | null};
-  function getDropIndicatorMarginX(draggedTab: Tab, newIndex: number, addWidth: boolean, tabRect: DOMRect, rect: DOMRect, defaultMargin: number): number;
-  function getDropIndicatorMarginY(ind: HTMLElement, tabRect: DOMRect, rect: DOMRect): number;
-  function isLastTabInRow(newIndex: number, mouseIndex: number, children: Tab[]): boolean;
+  function getDropElement(aEvent: DragEvent, tab: DraggedElement): AriaFocusableItem | undefined;
+  function getNewIndex(event: DragEvent, tab: DraggedElement): number;
+  function getEventTarget(event: DragEvent): AriaFocusableItem | MockedGeckoTypes.MozTabbrowserTabGroup | undefined;
+  function isDropBefore(event: DragEvent, dropElement: AriaFocusableItem): boolean;
+  function getDragType(sourceNode: DraggedSourceNode): {dragType: number; tab: DraggedElement};
+  function getDropIndicatorMarginX(draggedTab: DraggedElement, newIndex: number, dropBefore: boolean, itemRect: DOMRect, rect: DOMRect, defaultMargin: number): number;
+  function getDropIndicatorMarginY(ind: HTMLElement, dropElement: AriaFocusableItem, rect: DOMRect): number;
+  function isLastTabInRow(dropElement: Tab | undefined, dragOverElement: AriaFocusableItem | undefined): boolean;
   function clearDragmark(): void;
   function getSourceNode(aDataTransfer: DataTransfer): HTMLLinkElement | Tab | null;
 }
@@ -265,7 +271,7 @@ declare namespace TabmixArrowScrollboxNS {
     _verticalMode: boolean;
     blockUnderflow: boolean;
     firstTabInRowMargin: number;
-    firstVisible: {tab: Tab | null; x: number; y: number};
+    firstVisible: {tab: Tab | HTMLElement | null; x: number; y: number};
     firstVisibleRow: number;
     isMultiRow: boolean;
     minOffset: number;
@@ -304,7 +310,7 @@ declare namespace TabmixArrowScrollboxNS {
   }
 
   type RSB = RightScrollBox;
-  export interface RightScrollBox extends MozXULElement, Omit<MockedGeckoTypes.ArrowScrollbox, "getElementsByTagName"> {
+  export interface RightScrollBox extends MozXULElement, Omit<MockedGeckoTypes.ArrowScrollbox, "getElementsByTagName" | "children"> {
     addEventListener<K extends keyof CustomElementEventMap>(type: K, listener: (this: Element, ev: CustomElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions): void;
     addButtonListeners: (button: HTMLButtonElement, side: "left" | "right") => void;
     constructor: (this: RSB) => RSB;
@@ -314,8 +320,10 @@ declare namespace TabmixArrowScrollboxNS {
 }
 
 interface QuerySelectorMap {
-  menuitem: TabmixClosedTabsNS.MenuItemInClosedGroup;
-  toolbarbutton: TabmixClosedTabsNS.MenuItemInClosedGroup;
+  "menuitem": TabmixClosedTabsNS.MenuItemInClosedGroup;
+  "toolbarbutton": TabmixClosedTabsNS.MenuItemInClosedGroup;
+  ".panel-subview-body": ClosedObjectsUtils.PopupElement;
+  "[tabmix_selectedID]": Tab;
 }
 
 declare namespace TabmixContextNS {
@@ -375,6 +383,7 @@ declare namespace TabmixEventListenerNS {
   function onTabBarScroll(aEvent: WheelEvent): void;
   function onWindowClose(): void;
   function setTabAttribute(aTab: Tab): void;
+  function addGroupMutationObserver(): void;
   function _updateAttrib(aGetAtt: string, aGetValue: string, aAtt: string, aValue: string): void;
 }
 
@@ -648,6 +657,7 @@ declare namespace MockedGeckoTypes {
 
   // arrowScrollbox: ArrowScrollbox;
   interface TabContainer {
+    _animateElement: ArrowScrollbox | TabmixArrowScrollboxNS.RightScrollBox;
     arrowScrollbox: TabmixArrowScrollboxNS.ArrowScrollbox;
   }
 
@@ -680,10 +690,6 @@ interface TabmixGlobal {
 interface EventTypeMap<T extends HTMLElement> {
   click: GenericEvent<T, MouseEvent>;
   ViewShowing: GenericEvent<ClosedObjectsUtils.CustomPanelView, MouseEvent>;
-}
-
-interface QuerySelectorMap {
-  ".panel-subview-body": ClosedObjectsUtils.PopupElement;
 }
 
 /** globals installed by extensions */

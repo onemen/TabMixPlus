@@ -1851,8 +1851,12 @@ window.gTMPprefObserver = {
     this.insertRule(newRule.trim(), "width");
 
     // rule for controlling margin-inline-start when we have pinned tab in multi-row
-    let marginStart = '#tabbrowser-tabs[positionpinnedtabs] > ' +
-                      `#tabbrowser-arrowscrollbox .tabbrowser-tab[tabmix-firstTabInRow="true"]{margin-inline-start: 0px;}`;
+    let selector = '#tabbrowser-tabs[positionpinnedtabs] > #tabbrowser-arrowscrollbox';
+    let marginStart =
+    `${selector} .tabbrowser-tab[tabmix-firstTabInRow="true"],
+     ${selector} .tab-group-label-container[tabmix-firstTabInRow="true"] {
+       margin-inline-start: 0px;
+    }`;
     this.insertRule(marginStart, "tabmix-firstTabInRow");
 
     this.insertRule(`:root { --tabs-lines: ` + Tabmix.prefs.getIntPref("tabBarMaxRow") + `;}`, 'max-rows');
@@ -2764,8 +2768,9 @@ TabmixProgressListener = {
             this.mTabBrowser.isBlankBrowser(aBrowser, true) &&
             !/^about/.test(uri) && !/^moz-extension:/.test(uri) && aStatus === 0;
         if (isDownLoading) {
-          if (tab.selected)
-            this.mTabBrowser.previousTab(tab);
+          if (tab.selected) {
+            Tabmix.tabsSelectionUtils.selectPreviousTab(tab);
+          }
           this.mTabBrowser.hideTab(tab);
           TabmixTabbar.updateScrollStatus();
           // let to unknownContentType dialog or nsIFilePicker time to open

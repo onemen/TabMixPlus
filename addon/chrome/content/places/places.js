@@ -294,7 +294,7 @@ var TMP_Places = {
         // move tab to place
         index = prevTab._tPos + 1;
         tabPos = aTab._tPos < index ? index - 1 : index;
-        gBrowser.moveTabTo(aTab, tabPos);
+        Tabmix.moveTabTo(aTab, {tabIndex: tabPos});
       } else {
         let preferredRemoteType = E10SUtils.getRemoteTypeForURI(
           url,
@@ -420,7 +420,7 @@ var TMP_Places = {
       this.restoringTabs.push(...tabs);
       tabs.forEach((tab, i) => {
         if (relatedToCurrent) {
-          gBrowser.moveTabTo(tab, prevTab._tPos + 1);
+          Tabmix.moveTabTo(tab, {tabIndex: prevTab._tPos + 1});
           prevTab = tab;
         }
         /** @type {SessionStoreNS.TabData} */ // @ts-expect-error

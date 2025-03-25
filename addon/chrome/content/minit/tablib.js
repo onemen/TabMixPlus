@@ -147,7 +147,8 @@ Tabmix.tablib = {
 
   change_gBrowser: function change_gBrowser() {
     Tabmix.originalFunctions.gBrowser_addTab = gBrowser.addTab;
-    gBrowser.addTab = function(uriString, options = {}, ...rest) {
+    /** @type {TabBrowser["addTab"]} */
+    function addTab(uriString, options = {}, ...rest) {
       let callerTrace = Tabmix.callerTrace(),
           isRestoringTab = callerTrace.contain("ssi_restoreWindow");
 
@@ -159,6 +160,9 @@ Tabmix.tablib = {
       }
 
       var t = Tabmix.originalFunctions.gBrowser_addTab.apply(this, [uriString, options, ...rest]);
+      if (!Tabmix.prefs.getBoolPref("openTabNextInverse")) {
+        this._lastRelatedTabMap = new WeakMap();
+      }
 
       if (isPending || isRestoringTab &&
           Services.prefs.getBoolPref("browser.sessionstore.restore_on_demand")) {
@@ -166,7 +170,8 @@ Tabmix.tablib = {
       }
 
       return t;
-    };
+    }
+    gBrowser.addTab = addTab;
 
     if (Tabmix.isVersion(1290)) {
       // this function is triggered by "context_openANewTab" command
@@ -174,11 +179,6 @@ Tabmix.tablib = {
         TMP_BrowserOpenTab({}, tab);
       };
     }
-
-    Tabmix.changeCode(gBrowser, "gBrowser._insertTabAtIndex")._replace(
-      /(?<!else )if \(openerTab\) \{/,
-      'if (openerTab && Tabmix.prefs.getBoolPref("openTabNextInverse")) {'
-    ).toCode();
 
     Tabmix.originalFunctions.gBrowser_removeTab = gBrowser.removeTab;
     gBrowser.removeTab = function(aTab, aParams = {}, ...args) {
@@ -231,22 +231,12 @@ Tabmix.tablib = {
        $&'
     ).toCode();
 
-    Tabmix.originalFunctions.gBrowser_blurTab = gBrowser._blurTab;
+    Tabmix.originalFunctions.gBrowser_findTabToBlurTo = gBrowser._findTabToBlurTo;
 
     /** @this {MockedGeckoTypes.TabBrowser} */
-    gBrowser._blurTab = function(aTab) {
-      if (!aTab.selected)
-        return;
-
-      let newIndex = this.selectIndexAfterRemove(aTab);
-      if (newIndex > -1) {
-        let tab = gBrowser.visibleTabs[newIndex];
-        if (tab && !tab.closing) {
-          this.selectedTab = tab;
-          return;
-        }
-      }
-      Tabmix.originalFunctions.gBrowser_blurTab.apply(this, [aTab]);
+    gBrowser._findTabToBlurTo = function(aTab, aExcludeTabs) {
+      return Tabmix.tabsSelectionUtils.selectTabAfterRemove(aTab, aExcludeTabs) ??
+        Tabmix.originalFunctions.gBrowser_findTabToBlurTo.apply(this, [aTab, aExcludeTabs]);
     };
 
     const $LF = '\n    ';
@@ -376,6 +366,18 @@ Tabmix.tablib = {
         configurable: true
       });
     }
+
+    Tabmix.moveTabTo = function(item, options) {
+      if (this.isVersion(1380)) {
+        gBrowser.moveTabTo(item, options);
+      } else {
+        const oldOptions = this.isVersion(1340) ?
+          {forceStandaloneTab: options.forceUngrouped} :
+          options.keepRelatedTabs;
+        // @ts-ignore - function signature before Firefox 138
+        gBrowser.moveTabTo(item, options.elementIndex ?? options.tabIndex, oldOptions);
+      }
+    };
   },
 
   change_tabContainer: function change_tabContainer() {
@@ -502,27 +504,31 @@ Tabmix.tablib = {
     ).toCode();
 
     if (!Tabmix.extensions.verticalTabs) {
+      const closingTab = Tabmix.isVersion(1380) ? "aClosingTab" : "aTab";
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._lockTabSizing")._replace(
         '{',
-        '{if (this.getAttribute("orient") != "horizontal" || !Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) return;'
+        `{
+        if (this.getAttribute("orient") != "horizontal" || !Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) {
+          return;
+        }`
       )._replace(
         /(var|let) isEndTab =|faviconize.o_lockTabSizing/,
-        '  if (TabmixTabbar.widthFitTitle) {' +
-        '    let tab = tabs.find(t => t._tPos === aTab._tPos + 1);' +
-        '    if (tab && !tab.pinned && !tab.collapsed) {' +
-        '      let tabWidth = aTab.getBoundingClientRect().width + "px";' +
-        '      tab.style.setProperty("width", tabWidth, "important");' +
-        '      tab.removeAttribute("width");' +
-        '      this._hasTabTempWidth = true;' +
-        '      gBrowser.addEventListener("mousemove", this, false);' +
-        '      window.addEventListener("mouseout", this, false);' +
-        '    }' +
-        '    return;' +
-        '  }' +
-        '  if (!Tabmix.tabsUtils.isSingleRow(tabs))' +
-        '    return;' +
-        '  this._tabDefaultMaxWidth = this.mTabMaxWidth;' +
-        '  $&'
+        `  if (${closingTab} && TabmixTabbar.widthFitTitle) {
+            let tab = tabs.find(t => t._tPos === ${closingTab}._tPos + 1);
+            if (tab && !tab.pinned && !tab.collapsed) {
+              let tabWidth = ${closingTab}.getBoundingClientRect().width + "px";
+              tab.style.setProperty("width", tabWidth, "important");
+              tab.removeAttribute("width");
+              this._hasTabTempWidth = true;
+              gBrowser.addEventListener("mousemove", this, false);
+              window.addEventListener("mouseout", this, false);
+            }
+            return;
+          }
+          if (!Tabmix.tabsUtils.isSingleRow(tabs))
+            return;
+          this._tabDefaultMaxWidth = this.mTabMaxWidth;
+          $&`
       ).toCode();
 
       // _expandSpacerBy not exist in Firefox 21
@@ -533,6 +539,21 @@ Tabmix.tablib = {
         ).toCode();
       }
 
+      if (Tabmix.isVersion(1380)) {
+        /**
+         * Starting Firefox 138, Firefox uses private property #keepTabSizeLocked
+         * the property is set to true when dragging tabs by startTabDrag that we
+         * don't modify, because it uses other private methids and properties.
+         * we use `tab._dragData.expandGroupOnDrop` to initialize the value of
+         * our _keepTabSizeLocked in on_dragstart, we reset our _keepTabSizeLocked
+         * back to false in on_drop.since #keepTabSizeLocked is never set to false
+         * we can not use Tabmix.originalFunctions._unlockTabSizing
+         *
+         * we set _keepTabSizeLocked before Tabmix.changeCode verifyPrivateMethodReplaced
+         *  _unlockTabSizing use #keepTabSizeLocked
+         */
+        tabBar._keepTabSizeLocked = false;
+      }
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._unlockTabSizing")._replace(
         '{', '{\n' +
         '          var updateScrollStatus = this.hasAttribute("using-closing-tabs-spacer") ||\n' +
@@ -561,6 +582,7 @@ Tabmix.tablib = {
     }
 
     Tabmix.originalFunctions.tabContainer_updateCloseButtons = gBrowser.tabContainer._updateCloseButtons;
+    /** @type {MockedGeckoTypes.TabContainer["_updateCloseButtons"]} */
     gBrowser.tabContainer._updateCloseButtons = function(skipUpdateScrollStatus, aUrl) {
       // modes for close button on tabs - extensions.tabmix.tabs.closeButtons
       // 1 - alltabs    = close buttons on all tabs
@@ -684,7 +706,7 @@ Tabmix.tablib = {
       let newTab = gBrowser.getTabForLastPanel();
       if (openTabNext) {
         let pos = newTab._tPos > aTab._tPos ? 1 : 0;
-        gBrowser.moveTabTo(newTab, aTab._tPos + pos);
+        Tabmix.moveTabTo(newTab, {tabIndex: aTab._tPos + pos});
       }
       let bgLoad = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
       let selectNewTab = where == "tab" ? !bgLoad : bgLoad;
@@ -952,7 +974,7 @@ Tabmix.tablib = {
       // move new tab to place before we select it
       if (openDuplicateNext) {
         let pos = newTab._tPos > aTab._tPos ? 1 : 0;
-        this.moveTabTo(newTab, aTab._tPos + pos);
+        Tabmix.moveTabTo(newTab, {tabIndex: aTab._tPos + pos});
       }
 
       var bgPref = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
@@ -1334,106 +1356,6 @@ Tabmix.tablib = {
       clipboard.copyString(this.getBrowserForTab(aTab).currentURI.spec);
     };
 
-    /** XXX need to fix this functions:
-    previousTabIndex
-    previousTab
-    selectIndexAfterRemove
-
-    to return tab instead of index
-    since we can have tab hidden or remove the index can change....
-  */
-    gBrowser.previousTabIndex = function _previousTabIndex(aTab, aTabs) {
-      var temp_id, tempIndex = -1, max_id = 0;
-      var tabs = aTabs || this.visibleTabs;
-      var items = Array.prototype.filter.call(this.tabContainer.getElementsByAttribute("tabmix_selectedID", "*"),
-        tab => !tab.hidden && !tab.closing);
-      for (var i = 0; i < items.length; ++i) {
-        if (aTab && items[i] != aTab) {
-          temp_id = parseInt(items[i].getAttribute("tabmix_selectedID") || 0);
-          if (temp_id && temp_id > max_id) {
-            max_id = temp_id;
-            tempIndex = tabs.indexOf(items[i]);
-          }
-        }
-      }
-
-      return tempIndex;
-    };
-
-    /** @this {MockedGeckoTypes.TabBrowser} */
-    gBrowser.previousTab = function(aTab) {
-      var tabs = this.visibleTabs;
-      if (tabs.length == 1)
-        return;
-      var tempIndex = this.previousTabIndex(aTab);
-
-      // if no tabmix_selectedID go to previous tab, from first tab go to the next tab
-      if (tempIndex == -1)
-        // @ts-expect-error - visibleTabs.next is a Tab when tabs.length > 1
-        this.selectedTab = aTab == tabs[0] ? Tabmix.visibleTabs.next(aTab) :
-          Tabmix.visibleTabs.previous(aTab);
-      else
-        // @ts-expect-error tab exist in tempIndex
-        this.selectedTab = tabs[tempIndex];
-
-      this.selectedBrowser.focus();
-    };
-
-    gBrowser.selectIndexAfterRemove = function(oldTab) {
-      var tabs = gBrowser.visibleTabs;
-      var currentIndex = tabs.indexOf(this._selectedTab);
-      if (this._selectedTab != oldTab)
-        return currentIndex;
-      var l = tabs.length;
-      if (l == 1)
-        return 0;
-      var mode = Tabmix.prefs.getIntPref("focusTab");
-      switch (mode) {
-        case 0: // first tab
-          return currentIndex === 0 ? 1 : 0;
-        case 1: // left tab
-          return currentIndex === 0 ? 1 : currentIndex - 1;
-        case 3: // last tab
-          return currentIndex == l - 1 ? currentIndex - 1 : l - 1;
-        case 6: {// last opened
-          let lastTabIndex = -1, maxID = -1;
-          tabs.forEach((tab, index) => {
-            if (tab == oldTab)
-              return;
-            let linkedPanel = tab.linkedPanel.replace('panel', '');
-            linkedPanel = linkedPanel.substr(linkedPanel.lastIndexOf("-") + 1);
-            let id = parseInt(linkedPanel);
-            if (id > maxID) {
-              maxID = id;
-              lastTabIndex = index;
-            }
-          });
-          return lastTabIndex;
-        }
-        case 4: {// last selected
-          let tempIndex = this.previousTabIndex(oldTab, tabs);
-          // if we don't find last selected we fall back to default
-          if (tempIndex > -1)
-            return tempIndex;
-        }
-        /* falls through */
-        case 2: // opener / right  (default )
-        case 5: // right tab
-          /* falls through */
-        default:
-          if (mode != 5 && Services.prefs.getBoolPref("browser.tabs.selectOwnerOnClose") && "owner" in oldTab) {
-            var owner = oldTab.owner;
-            if (owner && owner.parentNode && owner != oldTab && !owner.hidden) {
-              // oldTab and owner still exist just return its position
-              let tempIndex = tabs.indexOf(owner);
-              if (tempIndex > -1)
-                return tempIndex;
-            }
-          }
-      }
-      return currentIndex == l - 1 ? currentIndex - 1 : currentIndex + 1;
-    };
-
     gBrowser.stopMouseHoverSelect = function(aTab) {
       // add extra delay after tab removed or after tab flip before we select by hover
       // to let the user time to move the mouse
@@ -1704,7 +1626,6 @@ Tabmix.tablib = {
     // but treeStyleTab extension look for it
     gBrowser.restoreTab = function() { };
     gBrowser.closeTab = aTab => gBrowser.removeTab(aTab);
-    gBrowser.TMmoveTabTo = gBrowser.moveTabTo;
     gBrowser.renameTab = aTab => Tabmix.renameTab.editTitle(aTab);
   },
 
@@ -1858,4 +1779,179 @@ Tabmix.getOpenTabNextPref = function(aRelatedToCurrent = false) {
     Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") &&
       aRelatedToCurrent
   );
+};
+
+/**
+ * Utility service for tab selection and tracking tab history
+ * @type {TabmixGlobal["tabsSelectionUtils"]}
+ */
+Tabmix.tabsSelectionUtils = {
+  /** WeakMap to store tab opening order */
+  _tabOrderMap: new WeakMap(),
+
+  /** Counter for assigning sequential IDs to tabs */
+  _counter: 1,
+
+  init() {
+    // Track existing tabs
+    for (const tab of gBrowser.tabs) {
+      this.trackTab(tab);
+    }
+
+    /** @typedef {TabmixEventListenerNS.TabEvent} TabEvent */
+
+    gBrowser.tabContainer.addEventListener("TabOpen",
+      (/** @type {TabEvent} */event) => {
+        this.trackTab(event.target);
+      });
+
+    // Clean up when tabs are closed
+    gBrowser.tabContainer.addEventListener("TabClose",
+      (/** @type {TabEvent} */event) => {
+        this.removeTab(event.target);
+      });
+  },
+
+  /** Track a new tab by assigning it an order number */
+  trackTab(tab) {
+    if (!this._tabOrderMap.has(tab.tabmixKey)) {
+      this._tabOrderMap.set(tab.tabmixKey, ++this._counter);
+    }
+  },
+
+  /** Get the order number for a tab */
+  getTabOrder(tab) {
+    return this._tabOrderMap.get(tab.tabmixKey);
+  },
+
+  /** Find the most recently opened tab from a list of tabs */
+  getLastOpenedTab(tabs) {
+    if (!tabs || !tabs.length) {
+      return null;
+    }
+
+    let lastOpenedTab = null;
+    let maxOrder = -1;
+
+    for (const tab of tabs) {
+      const order = this.getTabOrder(tab);
+      if (order !== undefined && order > maxOrder) {
+        maxOrder = order;
+        lastOpenedTab = tab;
+      }
+    }
+
+    return lastOpenedTab;
+  },
+
+  /** Remove a tab from tracking when it's closed */
+  removeTab(tab) {
+    this._tabOrderMap.delete(tab.tabmixKey);
+  },
+
+  /** Get the previously selected tab */
+  getPreviousSelectedTab(aTab) {
+    if (!aTab) {
+      return null;
+    }
+
+    // Get all tabs with tabmix_selectedID that are visible and not closing
+    const selectedTabs = Array.from(
+      gBrowser.tabContainer.querySelectorAll('[tabmix_selectedID]')
+    ).filter(tab => !tab.hidden && !tab.closing && tab !== aTab);
+
+    // Find the tab with highest tabmix_selectedID that isn't the provided tab
+    let maxId = 0;
+    let previousTab = null;
+
+    for (const tab of selectedTabs) {
+      const selectedId = parseInt(tab.getAttribute("tabmix_selectedID") || "0");
+      if (selectedId > maxId) {
+        maxId = selectedId;
+        previousTab = tab;
+      }
+    }
+
+    return previousTab;
+  },
+
+  /** Select previously selected tab in sequence */
+  selectPreviousTab(aTab) {
+    const tabs = gBrowser.visibleTabs;
+    if (tabs.length == 1)
+      return;
+
+    const previousTab = this.getPreviousSelectedTab(aTab);
+
+    if (previousTab) {
+      gBrowser.selectedTab = previousTab;
+    } else {
+      // If no tabmix_selectedID, go to previous tab
+      // From first tab go to the next tab
+      // @ts-expect-error - visibleTabs.next is a Tab when tabs.length > 1
+      gBrowser.selectedTab = aTab == tabs[0] ?
+        Tabmix.visibleTabs.next(aTab) :
+        Tabmix.visibleTabs.previous(aTab);
+    }
+
+    gBrowser.selectedBrowser.focus();
+  },
+
+  /**
+   * Use Tab Mix preferences to determine which tab to select after removal.
+   * If no matching tab is found based on the preference, return null to let
+   * Firefox handle the default behavior.
+   */
+  selectTabAfterRemove(aTab, aExcludeTabs = []) {
+    if (!aTab.selected) {
+      return null;
+    }
+    if (FirefoxViewHandler.tab) {
+      aExcludeTabs.push(FirefoxViewHandler.tab);
+    }
+
+    const excludeTabs = new Set(aExcludeTabs);
+
+    // Get visible tabs and filter out the tab being closed for compatibility with
+    // Firefox versions before 138
+    const tabs = gBrowser.visibleTabs.filter(tab => tab !== aTab && !excludeTabs.has(tab));
+    // If there are no visible tabs, return null
+    if (tabs.length === 0) {
+      return null;
+    }
+
+    const selectedPos = gBrowser._selectedTab._tPos;
+
+    // Find the first visible tab before and after the selected position
+    const getVisibleTabBefore = () => tabs.slice().reverse().find(tab => tab._tPos < selectedPos) ?? null;
+    const getVisibleTabAfter = () => tabs.find(tab => tab._tPos > selectedPos) ?? null;
+
+    const mode = Tabmix.prefs.getIntPref("focusTab");
+    switch (mode) {
+      case 0: // first tab
+        return tabs[0] ?? null;
+
+      case 1: // left tab
+        return getVisibleTabBefore() ?? getVisibleTabAfter();
+
+      case 3: // last tab
+        return tabs.at(-1) ?? null;
+
+      case 6: // last opened
+        // Use the tab order service to find the most recently opened tab
+        // or return null to use Firefox default
+        return this.getLastOpenedTab(tabs);
+
+      case 4: // last selected
+        // if we don't find last selected we fall back to default
+        return this.getPreviousSelectedTab(aTab);
+
+      /* falls through */
+      case 5: // right tab
+        return getVisibleTabAfter() ?? getVisibleTabBefore();
+    }
+
+    // Let Firefox handle the default case
+    return null;
+  }
 };
