@@ -513,6 +513,7 @@ declare namespace TabsUtils {
   const canScrollTabsLeft: boolean;
   const canScrollTabsRight: boolean;
   function createTooltip(box: HTMLElement & {label: string}): void;
+  function tryRemoveTabmixScrollbox(): void;
   function isSingleRow(visibleTabs: Tab[]): boolean;
   let _resizeObserver: ResizeObserver | null;
   let _lastTabBarWidth: number;

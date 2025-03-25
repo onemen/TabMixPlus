@@ -891,6 +891,79 @@ Tabmix.tabsUtils = {
     return !this.tabBar.arrowScrollbox._scrollButtonDown.disabled;
   },
 
+  /**
+  * Determines if the tabmix-scrollbox can be safely removed.
+  *
+  * This function calculates whether tabs would fit within the maximum allowed rows
+  * after removing the scrollbox. It simulates the new tab layout by:
+  * 1. Measuring the width that would be gained by removing the scrollbox
+  * 2. Creating a virtual layout to check if tabs would fit in ≤ maxRow rows
+  * 3. Removing the scrollbox if conditions are met
+  */
+  tryRemoveTabmixScrollbox() {
+    const maxRow = Tabmix.prefs.getIntPref("tabBarMaxRow");
+    if (!TabmixTabbar.hasMultiRows || this.lastTabRowNumber - maxRow > 1) {
+      return;
+    }
+
+    const widthDelta = document.getElementById("tabmix-scrollbox").getBoundingClientRect().width;
+    if (widthDelta === 0) {
+      return;
+    }
+
+    const items = TMP_tabDNDObserver.allVisibleItems;
+    // Calculate new container width
+    const currentWidth = this.tabBar.getBoundingClientRect().width;
+    const newWidth = currentWidth + widthDelta;
+
+    // Create a virtual layout to simulate the new arrangement
+    let currentRowWidth = 0;
+    let rowCount = 1;
+
+    // Use gBrowser.pinnedTabCount to identify pinned items
+    const pinnedTabCount = gBrowser.pinnedTabCount;
+    const nonPinnedItems = items.slice(pinnedTabCount);
+    const firstNonPinned = nonPinnedItems[0];
+
+    // Check if pinned items have absolute positioning
+    const hasPinnedAbsolute = pinnedTabCount > 0 &&
+      window.getComputedStyle(items[0])?.position === 'absolute';
+
+    // Get margin-inline-start of first non-pinned item if it exists
+    let firstNonPinnedWidth = 0;
+    if (firstNonPinned) {
+      const item = gBrowser.isTabGroupLabel(firstNonPinned) ?
+        firstNonPinned.parentElement :
+        firstNonPinned;
+      firstNonPinnedWidth = item.getBoundingClientRect().width;
+      firstNonPinnedWidth += parseInt(window.getComputedStyle(item)?.marginInlineStart || "0");
+    }
+
+    // Determine which items to include in row calculation
+    const itemsToCalculate = hasPinnedAbsolute ? nonPinnedItems : items;
+
+    // Simulate placing items in the resized container
+    for (const item of itemsToCalculate) {
+      // For the first non-pinned item, account for its margin
+      const itemWidth = item === firstNonPinned ?
+        firstNonPinnedWidth :
+        item.getBoundingClientRect().width;
+
+      // If this item won't fit in current row, move to next row
+      if (currentRowWidth + itemWidth > newWidth) {
+        rowCount++;
+        currentRowWidth = itemWidth;
+      } else {
+        currentRowWidth += itemWidth;
+      }
+    }
+
+    if (rowCount <= maxRow) {
+      this.tabBar.arrowScrollbox.scrollbox.scrollTo({top: 0, behavior: "instant"});
+      document.getElementById("tabmix-scrollbox").removeAttribute("overflowing");
+    }
+  },
+
   createTooltip(box) {
     let rows = this.lastTabRowNumber;
     let active = this.getTabRowNumber(gBrowser.selectedTab, this.topTabY);

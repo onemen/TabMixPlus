@@ -73,6 +73,7 @@ interface CSSStyleDeclaration {
   flexWrap: string;
   height: string;
   marginBottom: string;
+  marginInlineStart: string;
   marginLeft: string;
   marginRight: string;
   marginTop: string;

@@ -826,6 +826,7 @@ var TMP_eventListener = {
       // underflow not always fires when Classic theme restorer installed
       let multibar = TabmixTabbar.multiRowState;
       if (multibar) {
+        Tabmix.tabsUtils.tryRemoveTabmixScrollbox();
         let lastTabRowNumber = Tabmix.tabsUtils.lastTabRowNumber;
         if (multibar == "true" &&
             lastTabRowNumber < TabmixTabbar.visibleRows) {
@@ -1080,6 +1081,7 @@ var TMP_eventListener = {
         }
         this.updateMultiRow();
       }
+      Tabmix.tabsUtils.tryRemoveTabmixScrollbox();
     };
 
     // This observer manages the tabmix-firstTabInRow attribute which controls margin-inline-start
