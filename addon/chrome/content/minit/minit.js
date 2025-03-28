@@ -92,16 +92,20 @@ var TMP_tabDNDObserver = {
 
     if (Tabmix.isVersion(1320)) {
       // create none private method in gBrowser.tabContainer
-      // we will use instead of #isContainerVerticalPinnedExpanded in:
+      // we will use instead of #isContainerVerticalPinnedGrid in:
       //  gBrowser.tabContainer.on_dragover
       //  gBrowser.tabContainer.on_drop
-      Object.defineProperty(gBrowser.tabContainer, "_isContainerVerticalPinnedExpanded", {
+      const name = Tabmix.isVersion(1380) ?
+        "_isContainerVerticalPinnedGrid" :
+        "_isContainerVerticalPinnedExpanded";
+      Object.defineProperty(gBrowser.tabContainer, name, {
         /** @param {Tab} tab */
         value(tab) {
           return (
             this.verticalMode &&
             tab.hasAttribute("pinned") &&
-            this.hasAttribute("expanded")
+            this.hasAttribute("expanded") &&
+            (Tabmix.isVersion(1380) ? !this.expandOnHover : true)
           );
         },
         configurable: true,
