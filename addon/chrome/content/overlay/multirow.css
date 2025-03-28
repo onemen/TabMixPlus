@@ -234,3 +234,15 @@
     bottom: 0;
   }
 }
+
+/* Firefox-specific media query - VSCode may show an error but this is valid in Firefox
+ *
+ * based on browser/themes/shared/tabbrowser/tabs.css
+ */
+@media not -moz-pref("sidebar.verticalTabs") {
+  .tabbrowser-tab[tabmix-movingtab-togroup] > .tab-stack > .tab-background > .tab-group-line {
+    display: flex;
+    background-color: light-dark(var(--dragover-tab-group-color), var(--dragover-tab-group-color-invert));
+    border-radius: 1px;
+  }
+}

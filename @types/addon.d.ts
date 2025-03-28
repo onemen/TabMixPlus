@@ -217,7 +217,7 @@ declare namespace TabDNDObserverNS {
   function useTabmixDnD(event: DragEvent, tab?: Tab): boolean;
   function handleEvent(event: DragEvent): void;
   function on_dragstart(this: MockedGeckoTypes.TabContainer, event: DragEvent): void;
-  function handleDragover(event: DragEvent): boolean;
+  function handleDragover(event: DragEvent, useTabmixDnD: boolean): boolean;
   function handleDrop(event: DragEvent, draggedTab: Tab, movingTabs: Tab[]): void;
   function on_dragend(event: DragEvent): void;
   function on_dragleave(event: DragEvent): void;

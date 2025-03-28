@@ -48,6 +48,10 @@ var gEventsPane = {
       gPrefWindow.removeItemAndPrefById("pref_closedTabsFromClosedWindows");
     }
 
+    if (!Tabmix.isVersion(1360)) {
+      $("openTabNextInGroup_control").parentNode.hidden = true;
+    }
+
     this.alignTabOpeningBoxes();
 
     this.openTabNext.on_change($Pref("pref_openTabNext"));
@@ -234,5 +238,27 @@ var gEventsPane = {
         $Pref("pref_relatedAfterCurrent").value = false;
       }
     },
+  },
+
+  openTabNextInGroup() {
+    let openNewTabNextEnabled = $("openNewTabNext").checked;
+    const value = openNewTabNextEnabled ? 0 : 2;
+    let inGroupCeckBox = $("openTabNextInGroup_control");
+    let openTabNextInGroup = $("openTabNextInGroup");
+    let preference = $Pref(openTabNextInGroup.getAttribute("preference"));
+    let checked = inGroupCeckBox.checked;
+    let enabled = checked && openNewTabNextEnabled;
+    if (!enabled) {
+      preference.value = -1;
+    } else if (preference.value == -1) {
+      openTabNextInGroup.value = value;
+      preference.value = value;
+    }
+    if (openTabNextInGroup.firstChild?.firstChild) {
+      openTabNextInGroup.firstChild.firstChild.hidden = checked;
+    }
+    openTabNextInGroup.querySelector('menuitem[value="-1"]').label = openTabNextInGroup.querySelector(`menuitem[value="${value}"]`).label;
+    inGroupCeckBox.checked = enabled;
+    gPrefWindow.setDisabled("openTabNextInGroup", !enabled);
   },
 };

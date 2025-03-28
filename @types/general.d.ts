@@ -340,7 +340,7 @@ declare namespace MockedGeckoTypes {
     _keepTabSizeLocked: boolean;
     _moveTogetherSelectedTabs: (tab: BrowserTab) => void;
     // using insteadof private method #setDragOverGroupColor since Firefox 133
-    _setDragOverGroupColor: (groupColorCode: string) => void;
+    _setDragOverGroupColor: (groupColorCode: string | null) => void;
     _setMovingTabMode(movingTab: boolean): void;
     _triggerDragOverCreateGroup: (dragData: BrowserTab["_dragData"], groupDropIndex: number) => void;
 
@@ -405,7 +405,7 @@ declare namespace MockedGeckoTypes {
     _windowIsClosing: boolean;
     addAdjacentNewTab: (tab: BrowserTab) => void;
     addRangeToMultiSelectedTabs: (start: BrowserTab, end: BrowserTab) => void;
-    addTab: (this: TabBrowser, url: string, params?: {index?: number; isPending?: boolean} | Record<string, unknown>) => BrowserTab;
+    addTab: (this: TabBrowser, url: string, params?: {index?: number; isPending?: boolean; ownerTab?: BrowserTab | null; relatedToCurrent?: boolean} | Record<string, unknown>) => BrowserTab;
     addToMultiSelectedTabs: (tab: BrowserTab) => BrowserTab;
     addTrustedTab: (aURI: string, params?: Params) => BrowserTab;
     adoptTab: (aTab: BrowserTab, aIndex: number, aSelectTab: boolean) => BrowserTab;

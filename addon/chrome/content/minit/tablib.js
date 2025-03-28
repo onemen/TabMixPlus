@@ -155,8 +155,18 @@ Tabmix.tablib = {
       let {index, isPending} = options || {};
 
       if (typeof index !== "number" &&
-          callerTrace.contain("ssi_restoreWindow", "duplicateTabIn ")) {
+          callerTrace.contain("duplicateTabIn", "ssi_restoreWindow")) {
         options.index = this.tabs.length;
+      }
+
+      // prevent SessionStore.duplicateTabIn from opening new tab next to the current
+      // tab when our preference is disabled
+      if (callerTrace.contain("duplicateTabIn") && callerTrace.contain("ssi_duplicateTab")) {
+        let openDuplicateNext = Tabmix.getOpenDuplicateNextPref();
+        if (!openDuplicateNext) {
+          options.relatedToCurrent = false;
+          options.ownerTab = null;
+        }
       }
 
       var t = Tabmix.originalFunctions.gBrowser_addTab.apply(this, [uriString, options, ...rest]);
@@ -684,21 +694,16 @@ Tabmix.tablib = {
       // see gBrowser.addTab
       // always set where to 'tabshifted' to prevent original function from
       // selecting the new tab
+      const originalWhere = where;
       if (where == "tab") {
-        arguments[1] = "tabshifted";
+        where = "tabshifted";
       }
 
       if (where == "window") {
         return Tabmix.originalFunctions.duplicateTabIn.apply(this, [aTab, where, delta]);
       }
 
-      let names = Tabmix.isVersion(1260) ?
-        ["gotoHistoryIndex", "forward", "back"] :
-        ["gotoHistoryIndex", "forward", "back"];
-      let pref = Tabmix.callerTrace(...names) ?
-        "browser.tabs.insertAfterCurrent" :
-        "extensions.tabmix.openDuplicateNext";
-      let openTabNext = Services.prefs.getBoolPref(pref);
+      let openTabNext = Tabmix.getOpenDuplicateNextPref();
       TMP_extensionsCompatibility.treeStyleTab.openNewTabNext(aTab, openTabNext, true);
 
       let result = Tabmix.originalFunctions.duplicateTabIn.apply(this, [aTab, where, delta]);
@@ -706,10 +711,10 @@ Tabmix.tablib = {
       let newTab = gBrowser.getTabForLastPanel();
       if (openTabNext) {
         let pos = newTab._tPos > aTab._tPos ? 1 : 0;
-        Tabmix.moveTabTo(newTab, {tabIndex: aTab._tPos + pos});
+        Tabmix.moveTabTo(newTab, {tabIndex: aTab._tPos + pos, forceUngrouped: !aTab.group});
       }
       let bgLoad = Tabmix.prefs.getBoolPref("loadDuplicateInBackground");
-      let selectNewTab = where == "tab" ? !bgLoad : bgLoad;
+      let selectNewTab = originalWhere === "tab" ? !bgLoad : bgLoad;
       if (selectNewTab) {
         gBrowser.selectedTab = newTab;
       }
@@ -781,8 +786,6 @@ Tabmix.tablib = {
       const onDragOverNewWindowButton = parent.onDragOver;
       parent.onDragOver = function(...args) {
         const target = args[0].target;
-        console.log("ToolbarDropHandler.onDragOver", target.id);
-
         if (Tabmix.singleWindowMode && target.id == "new-window-button") {
           if (!target.hasAttribute("disabled"))
             target.setAttribute("disabled", true);
@@ -1779,6 +1782,16 @@ Tabmix.getOpenTabNextPref = function(aRelatedToCurrent = false) {
     Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent") &&
       aRelatedToCurrent
   );
+};
+
+Tabmix.getOpenDuplicateNextPref = function() {
+  let names = Tabmix.isVersion(1260) ?
+    ["gotoHistoryIndex", "forward", "back"] :
+    ["gotoHistoryIndex", "BrowserForward", "BrowserBack"];
+  let pref = Tabmix.callerTrace(...names) ?
+    "browser.tabs.insertAfterCurrent" :
+    "extensions.tabmix.openDuplicateNext";
+  return Services.prefs.getBoolPref(pref);
 };
 
 /**

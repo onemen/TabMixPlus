@@ -135,6 +135,8 @@ var TMP_tabDNDObserver = {
         if (TabmixTabbar.visibleRows > 1) return;
         Tabmix.originalFunctions._groupSelectedTabs.apply(this, args);
       };
+
+      gBrowser.tabContainer._setDragOverGroupColor = () => {};
     }
 
     if (Tabmix.isVersion(1340)) {
@@ -183,46 +185,6 @@ var TMP_tabDNDObserver = {
         "getDropIndex",
         "getDropEffectForTabDrag"
       ));
-
-      // temporary fix until bug 1955361 lands
-      if (!tabBar.on_drop.toString().includes("let tabGroup")) {
-        Tabmix.changeCode(gBrowser, "gBrowser.loadTabs")._replace(
-          'newIndex,',
-          `$&
-          elementIndex,`
-        )._replace(
-          /fromExternal,/g,
-          `$&
-          tabGroup,`
-        )._replace(
-          'var targetTabIndex = -1;',
-          `$&
-          const {
-            LOAD_FLAGS_NONE,
-            LOAD_FLAGS_FROM_EXTERNAL,
-            LOAD_FLAGS_DISALLOW_INHERIT_PRINCIPAL,
-            LOAD_FLAGS_ALLOW_THIRD_PARTY_FIXUP,
-            LOAD_FLAGS_FIXUP_SCHEME_TYPOS,
-          } = Ci.nsIWebNavigation;
-
-          const elementIndexToTabIndex = (elementIndex) => {
-            if (elementIndex < 0) {
-              return -1;
-            }
-            if (elementIndex >= this.tabContainer.ariaFocusableItems.length) {
-              return this.tabs.length;
-            }
-            let element = this.tabContainer.ariaFocusableItems[elementIndex];
-            if (this.isTabGroupLabel(element)) {
-              element = element.group.tabs[0];
-            }
-            return element._tPos;
-          }
-          if (typeof elementIndex == "number") {
-            newIndex = elementIndexToTabIndex(elementIndex);
-          }`
-        ).toCode();
-      }
     } else {
       tabBar._getDragTarget = function(event, options = {}) {
         return this._getDragTargetTab(event, {ignoreTabSides: Boolean(options.ignoreSides)});
@@ -408,12 +370,13 @@ var TMP_tabDNDObserver = {
     const dragoverCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_dragover")._replace(
       'event.stopPropagation();',
       `$&
-      if (TMP_tabDNDObserver.handleDragover(event)) {
+      const useTabmixDnD = TMP_tabDNDObserver.useTabmixDnD(event)
+      if (TMP_tabDNDObserver.handleDragover(event, useTabmixDnD)) {
         return;
       }`
     )._replace(
       'if (effects == "move") {',
-      'if (effects == "move" && !TMP_tabDNDObserver.useTabmixDnD(event)) {'
+      'if (effects == "move" && !useTabmixDnD) {'
     )._replace(
       'var newMargin;',
       'var newMargin, newMarginY = 0;'
@@ -496,16 +459,8 @@ var TMP_tabDNDObserver = {
        }
       $&`.replace(/_newTranslateX/g, Tabmix.isVersion(1300) && !Tabmix.isVersion(1320) ? "newTranslate" : "newTranslateX"),
     )._replace(
-      'let newIndex = this._getDropIndex(event);',
-      'let {newIndex, dropBefore, dropElement, dropOnStart} = this._getDropIndex(event, {getParams: true});'
-    )._replace(
       /urls = links.map\(\(?link\)? => link.url\);/,
       `$&
-      newIndex += dropBefore || dropOnStart ? 0 : 1;
-      if (event.target.id === "tabmix-scrollbox") {
-        if (event.originalTarget.id === "scrollbutton-up") newIndex = 0;
-        else if (event.originalTarget.id === "scrollbutton-down") newIndex = this.allTabs.length + (this.allGroups?.length ?? 0);
-      }
       let firstUrl = urls[0];
       replace =
         gBrowser.isTab(targetTab) || Tabmix.ContentClick.isUrlForDownload(firstUrl);
@@ -522,19 +477,6 @@ var TMP_tabDNDObserver = {
         targetTab = null;
       }`
     );
-
-    // temporary fix until bug 1955361 lands
-    if (Tabmix.isVersion(1380) && !dropCode._value.includes("let tabGroup")) {
-      dropCode._replace(
-        "gBrowser.loadTabs(urls",
-        `let tabGroup = !dropOnStart && dropElement?.group;
-         $&`
-      )._replace(
-        ' userContextId,',
-        `tabGroup,
-        $&`
-      );
-    }
 
     /**
      * @param {"on_dragover" | "on_drop"} name
@@ -715,7 +657,7 @@ var TMP_tabDNDObserver = {
   },
 
   // we call this function from gBrowser.tabContainer.on_dragover
-  handleDragover(event) {
+  handleDragover(event, useTabmixDnD) {
     const tabBar = gBrowser.tabContainer;
     const arrowScrollbox = tabBar.arrowScrollbox;
     if (
@@ -792,8 +734,9 @@ var TMP_tabDNDObserver = {
       const {dragType, draggedElement, dropElement, dropOnStart, dropBefore} = this.eventParams(event);
       const draggedGroup = gBrowser.isTabGroupLabel(draggedElement) ? draggedElement.group : null;
       const draggedTab = draggedGroup?.tabs[0] ?? draggedElement;
+      const elementGroup = dropElement?.group;
+      const groupDropNotAllowed = draggedGroup && elementGroup;
 
-      const groupDropNotAllowed = draggedGroup && dropElement?.group;
       if (!groupDropNotAllowed) {
         this.hideDragoverMessage();
       }
@@ -807,7 +750,7 @@ var TMP_tabDNDObserver = {
         !isCopy &&
         !dropOnStart &&
         dragType == this.DRAG_TAB_IN_SAME_WINDOW &&
-        this.useTabmixDnD(event) &&
+        useTabmixDnD &&
         (
           // Prevent dropping on the same tab
           draggedTab === dropElement ||
@@ -815,7 +758,7 @@ var TMP_tabDNDObserver = {
           dropElement && dropElement === draggedGroup?.[dropBefore ? "nextSibling" : "previousSibling"] ||
           // Prevent dropping tab in its current position, but allow if moving between groups
           dropElement === draggedTab?.[dropBefore ? "nextSibling" : "previousSibling"] &&
-          draggedTab?.group?.id === dropElement?.group?.id
+          draggedTab?.group?.id === elementGroup?.id
         )
       ) {
         disAllowDrop = true;
@@ -826,6 +769,14 @@ var TMP_tabDNDObserver = {
         Tabmix.compare(event.screenX, Tabmix.itemEnd(gBrowser.tabs[0], !Tabmix.ltr), Tabmix.ltr)
       ) {
         disAllowDrop = true;
+      }
+
+      if (useTabmixDnD && draggedElement && draggedElement.container == tabBar) {
+        const color = !disAllowDrop && elementGroup && !dropOnStart ? elementGroup.color : null;
+        tabBar._setDragOverGroupColor(color);
+        draggedElement._dragData.movingTabs.forEach(tab => {
+          tab.toggleAttribute("tabmix-movingtab-togroup", Boolean(color));
+        });
       }
     }
 
@@ -1013,12 +964,17 @@ var TMP_tabDNDObserver = {
   },
 
   postDraggingCleanup(event, skipCleanup = false) {
-    const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
+    const tabBar = gBrowser.tabContainer;
+    const arrowScrollbox = tabBar.arrowScrollbox;
     if (!skipCleanup) {
       clearTimeout(this.draggingTimeout);
       arrowScrollbox.removeAttribute("tabmix-dragging");
       arrowScrollbox._lockScroll = false;
     }
+
+    const tabs = tabBar.querySelectorAll("[tabmix-movingtab-togroup]");
+    tabs.forEach(tab => tab?.removeAttribute("tabmix-movingtab-togroup"));
+    tabBar._setDragOverGroupColor(null);
 
     // make sure scroll position is aligned to row
     if (TabmixTabbar.hasMultiRows && event.originalTarget.id?.startsWith("scrollbutton")) {
@@ -1079,7 +1035,7 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    return getParams ? params : params.newIndex + (params.dropBefore ? 0 : 1);
+    return getParams ? params : params.newIndex + (params.dropBefore || params.dropOnStart ? 0 : 1);
   },
 
   eventParams(event) {

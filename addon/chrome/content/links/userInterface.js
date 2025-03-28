@@ -110,7 +110,11 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
   var loadInBackground = replaceLastTab ? false :
     Tabmix.prefs.getBoolPref("loadNewInBackground");
   let baseTab = aTab && aTab.localName == "tab" ? aTab : null;
-  let openTabNext = Boolean(baseTab) || !replaceLastTab && Tabmix.prefs.getBoolPref("openNewTabNext");
+  let inGroupPref = Tabmix.prefs.getIntPref("openTabNextInGroup");
+  let tabGroup = selectedTab.group;
+  let openTabNext = Boolean(baseTab) ||
+      !replaceLastTab &&
+      (Tabmix.prefs.getBoolPref("openNewTabNext") && (!tabGroup || inGroupPref !== 2));
 
   let where = "tab";
   // Let accel-click and middle-click on the new tab button toggle openTabNext preference
@@ -127,6 +131,7 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
         /* falls through */
       case "tab":
         openTabNext = !openTabNext;
+        inGroupPref = inGroupPref < 1 ? 2 : 0;
         break;
       case "current":
         where = "tab";
@@ -177,7 +182,15 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
 
         let newTab;
         if (where.startsWith("tab")) {
-          options.index = openTabNext ? (baseTab || selectedTab)._tPos + 1 : gBrowser.tabs.length;
+          if (openTabNext && !baseTab && tabGroup && inGroupPref > 0) {
+            // don't add new tab to the group when openTabNextInGroup is 1 or 2
+            // @ts-expect-error - group always have tabs
+            options.index = inGroupPref === 1 ? tabGroup.tabs.at(-1)._tPos + 1 : gBrowser.tabs.length;
+          } else {
+            const refTab = baseTab || selectedTab;
+            options.index = openTabNext ? refTab._tPos + 1 : gBrowser.tabs.length;
+            options.tabGroup = openTabNext ? refTab.group : null;
+          }
           newTab = gBrowser.addTrustedTab(url, options);
         } else {
           // openTrustedLinkIn set forceForeground to true if not set before

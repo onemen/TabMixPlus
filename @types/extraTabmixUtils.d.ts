@@ -162,6 +162,7 @@ interface TabmixGlobal {
   _duplicateTab(this: MockedGeckoTypes.TabBrowser, aTab: Tab, aHref?: string, aTabData?: SessionStoreNS.TabData | string, disallowSelect?: boolean, dontFocusUrlBar?: boolean): Tab | null;
   duplicateTab(aTab: Tab, aHref?: string, aTabData?: SessionStoreNS.TabData | string, disallowSelect?: boolean, dontFocusUrlBar?: boolean): Tab | null;
   getOpenTabNextPref(aRelatedToCurrent?: boolean): boolean;
+  getOpenDuplicateNextPref(): boolean;
   isBlankNewTab(url: string): boolean;
   isNewTabUrls(aUrl: string): boolean;
   updateSwitcher(switcher: MockedGeckoTypes.TabSwitcher): void;
@@ -336,8 +337,9 @@ type AddTabParams = {
   relatedToCurrent?: boolean;
   resolveOnNewTabCreated?: (value: unknown) => void;
   skipAnimation?: boolean;
-  url?: string;
+  tabGroup?: MockedGeckoTypes.MozTabbrowserTabGroup | null;
   triggeringPrincipal_base64?: string;
+  url?: string;
 };
 
 type loadURIArgs = [browser: Browser, uri: string | URI, params?: LoadURIOptions & AddTabParams];
