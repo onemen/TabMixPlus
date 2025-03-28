@@ -7,38 +7,43 @@ radio[pane] {
   padding: 5px 5px 1px 4px;
 }
 
-radio[pane=paneLinks] {
-  list-style-image: url(icons/links.png);
-}
-radio[pane=paneEvents] {
-  list-style-image: url(icons/events.png);
-}
-radio[pane=paneAppearance] {
-  list-style-image: url(icons/appearance.png);
-}
-radio[pane=paneMouse] {
-  list-style-image: url(icons/mouse.png);
-}
-radio[pane=paneMenu] {
-  list-style-image: url(icons/menu.png);
-}
-radio[pane=paneSession] {
-  list-style-image: url(icons/session-manager-24x24.png);
+radio[pane="paneLinks"] {
+  list-style-image: url("icons/links.png");
 }
 
-radio[pane=paneIncompatible] {
+radio[pane="paneEvents"] {
+  list-style-image: url("icons/events.png");
+}
+
+radio[pane="paneAppearance"] {
+  list-style-image: url("icons/appearance.png");
+}
+
+radio[pane="paneMouse"] {
+  list-style-image: url("icons/mouse.png");
+}
+
+radio[pane="paneMenu"] {
+  list-style-image: url("icons/menu.png");
+}
+
+radio[pane="paneSession"] {
+  list-style-image: url("icons/session-manager-24x24.png");
+}
+
+radio[pane="paneIncompatible"] {
   list-style-image: url("chrome://global/skin/icons/error.svg") !important;
   -moz-context-properties: fill;
   fill: var(--in-content-danger-button-background, #e22850);
   visibility: collapse;
 }
 
-radio[pane=paneIncompatible] .radio-icon {
+radio[pane="paneIncompatible"] .radio-icon {
   width: 24px;
   height: 24px;
 }
 
-radio[pane=paneIncompatible][show=true] {
+radio[pane="paneIncompatible"][show="true"] {
   visibility: visible;
 }
 
@@ -56,6 +61,11 @@ menulist {
 }
 
 .content-help,
+.dialog-button[icon="help"] {
+  list-style-image: url("chrome://tabmixplus/skin/question-16.png");
+}
+
+.content-help,
 .content-help:hover:active {
   opacity: 1;
 }
@@ -64,26 +74,21 @@ menulist {
   opacity: 0.7;
 }
 
-.content-help,
-.dialog-button[icon="help"] {
-  list-style-image: url("chrome://tabmixplus/skin/question-16.png");
-}
-
 .dialog-button[icon="help"] .button-icon {
   display: inline-flex !important; /* for Linux */
   margin-right: 6px;
 }
 
-.dialog-button[icon="help"][disabled=true] .button-icon{
-  opacity: 0.4;
-}
-
 .dialog-button[dlgtype="extra2"] .button-icon {
   margin-inline-start: 5px;
   order: 1;
-  list-style-image: url(arrow-up.svg);
+  list-style-image: url("arrow-up.svg");
   -moz-context-properties: fill;
-  fill: currentColor;
+  fill: currentcolor;
+}
+
+.dialog-button[icon="help"][disabled="true"] .button-icon{
+  opacity: 0.4;
 }
 
 .dialog-button-box > button,
@@ -98,7 +103,7 @@ menulist {
 .donate-button-container > .donate-button {
   appearance: none;
   cursor: pointer;
-  background: url(https://img.shields.io/badge/Donate-PayPal-green.svg) no-repeat center/100%;
+  background: url("https://img.shields.io/badge/Donate-PayPal-green.svg") no-repeat center/100%;
   min-height: 26px;
   width: 100px;
 }
@@ -117,31 +122,31 @@ tabpanel {
   margin-bottom: 0 !important;
 }
 
-tab.subtabs:focus-visible > .tab-middle > .tab-text {
-  outline: none;
-}
-
 .subtabs .tab-text {
   display: inline-block;
   min-width: 50px;
   text-align: center;
 }
 
+tab.subtabs:focus-visible > .tab-middle > .tab-text {
+  outline: none;
+}
+
 /* Tabmix toolbar button icons */
 #_btn_sessionmanager {
-  list-style-image: url(icons/session-manager-24x24.png);
+  list-style-image: url("icons/session-manager-24x24.png");
 }
 
 #_tabmix-closedTabsButton {
-  list-style-image: url(icons/closed-tabs-24x24.png);
+  list-style-image: url("icons/closed-tabs-24x24.png");
 }
 
 #_tabmix-closedWindowsButton {
-  list-style-image: url(icons/closed-win-24x24.png);
+  list-style-image: url("icons/closed-win-24x24.png");
 }
 
 #_tabmix-alltabs-button {
-  list-style-image: url(icons/tab-list-24x24.png);
+  list-style-image: url("icons/tab-list-24x24.png");
 }
 
 .tabmixbuttons {
@@ -156,11 +161,16 @@ tab.subtabs:focus-visible > .tab-middle > .tab-text {
 }
 
 /* Chromifox theme force button height to 25px */
-#TabMIxPreferences[chromifox=true] .spinbuttons-button {
+#TabMIxPreferences[chromifox="true"] .spinbuttons-button {
   max-height: 11px !important;
 }
 
 /***** for default theme *****/
+
+/* hide top tabbox tabs for link and session panel */
+.tabs-hidden > tab {
+  visibility: hidden;
+}
 
 /* fix small bug in firefox tabbox.css
    tabs moves left or right when selection changed
@@ -177,30 +187,21 @@ tab.subtabs:focus-visible > .tab-middle > .tab-text {
   padding-left: 2px ;
 }
 
-.subtabs[selected=true][first-tab=true] {
+.subtabs[selected="true"][first-tab="true"] {
   padding-right: 6px ;
   padding-left: 4px ;
 }
 
-.subtabs[selected=true][last-tab=true] {
+.subtabs[selected="true"][last-tab="true"] {
   padding-right: 4px;
 }
 
 #TabMIxPreferences:not([ubuntu]) .groupbox-panels:not(.tabclick) {
-  padding: 3px 3px 6px 3px;
+  padding: 3px 3px 6px;
 }
 
 .groupbox-tabbox {
   margin: 3px;
-}
-
-#TabMIxPreferences:not([linux]):not([mac]) .groupbox-tabbox > tabs {
-  margin-bottom: -2px;
-}
-
-/* hide top tabbox tabs for link and session panel */
-.tabs-hidden > tab {
-  visibility: hidden;
 }
 
 /* for locales with wide tabs, align right end with tabpanels */
@@ -208,8 +209,12 @@ tabbox > tabs {
   -moz-margin-end: 2px;
 }
 
+#TabMIxPreferences:not([linux], [mac]) .groupbox-tabbox > tabs {
+  margin-bottom: -2px;
+}
+
 .extraIcons .checkbox-icon {
-	padding: 2px 0 2px 0;
+	padding: 2px 0;
 	margin-top: 4px;
   margin-inline-end: 3px;
 	max-height: 11px !important;
@@ -217,16 +222,16 @@ tabbox > tabs {
 }
 
 #extraIcons-locked .checkbox-icon {
-  background-image: url(locked.png);
+  background-image: url("locked.png");
 }
 
 #extraIcons-protected .checkbox-icon {
-  background-image: url(protected.png);
+  background-image: url("protected.png");
   background-position: 10px 11px;
 }
 
 #extraIcons-autoreload .checkbox-icon {
-  background-image: url(autoreload.png);
+  background-image: url("autoreload.png");
   background-position: 10px 0;
 }
 
@@ -244,7 +249,7 @@ tabbox > tabs {
 }
 
 #tabBarDisplay[tstInstalled] label[TSTdisabled="true"] {
-  opacity: 50%;
+  opacity: 0.5;
 }
 
 /* rules to make the new option window look the same as the old one */
@@ -255,7 +260,12 @@ radio[pane] > image {
 
 prefpane {
   height: fit-content;
-  padding: 3px 1px 1px 1px;
+  padding: 3px 1px 1px;
+}
+
+tabbox {
+  flex: 1;
+  padding: 0 1px;
 }
 
 prefpane > .content-box > tabbox {
@@ -265,11 +275,6 @@ prefpane > .content-box > tabbox {
 
 prefwindow .paneSelector {
   min-width: 530px;
-}
-
-tabbox {
-  flex: 1;
-  padding: 0 1px;
 }
 
 tabbox > tabpanels {
@@ -310,7 +315,7 @@ tabbox > tabpanels:last-child {
   margin-bottom: 2px;
 }
 
-#sessionsPanel[manager=firefox] tab.firefox {
+#sessionsPanel[manager="firefox"] tab.firefox {
   visibility: hidden;
 }
 

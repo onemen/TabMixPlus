@@ -1,3 +1,5 @@
+/* stylelint-disable no-descending-specificity */
+
 /**
     Firefox all versions
 
@@ -5,31 +7,31 @@
 
 **/
 
-/*we need to make multirow work on all themes, this should help a bit*/
-#tabbrowser-tabs[tabmix-flowing=multibar][tabmix-multibar],
-#tabbrowser-tabs[tabmix-flowing=multibar][tabmix-multibar] .tabbrowser-strip,
-#tabbrowser-tabs:not([classic=v3])[tabmix-flowing=multibar][tabmix-multibar] .tabbrowser-tab,
-#tabbrowser-tabs[tabmix-flowing=multibar][tabmix-multibar] .tabs-left,
-#tabbrowser-tabs[tabmix-flowing=multibar][tabmix-multibar] .tabs-right {
+/* we need to make multirow work on all themes, this should help a bit */
+#tabbrowser-tabs[tabmix-flowing="multibar"][tabmix-multibar],
+#tabbrowser-tabs[tabmix-flowing="multibar"][tabmix-multibar] .tabbrowser-strip,
+#tabbrowser-tabs:not([classic="v3"])[tabmix-flowing="multibar"][tabmix-multibar] .tabbrowser-tab,
+#tabbrowser-tabs[tabmix-flowing="multibar"][tabmix-multibar] .tabs-left,
+#tabbrowser-tabs[tabmix-flowing="multibar"][tabmix-multibar] .tabs-right {
   max-height: none !important;
 }
 
-#tabbrowser-tabs[tabmix-flowing=multibar][tabmix-multibar=scrollbar] .tabbrowser-tab[collapsed=true] {
+#tabbrowser-tabs[tabmix-flowing="multibar"][tabmix-multibar="scrollbar"] .tabbrowser-tab[collapsed="true"] {
   display: none !important;
 }
 
-/* some theme align text to center this make all tab align to center in multi-rows*/
-#tabbrowser-tabs[tabmix-flowing=multibar] {
+/* some theme align text to center this make all tab align to center in multi-rows */
+#tabbrowser-tabs[tabmix-flowing="multibar"] {
   text-align: start !important;
 }
 
-/* fix background for multi-row*/
-#tabbrowser-tabs[tabmix-flowing=multibar][backgroundrepeat] {
+/* fix background for multi-row */
+#tabbrowser-tabs[tabmix-flowing="multibar"][backgroundrepeat] {
   background-repeat: repeat;
 }
 
 /* For Flowing tabs */
-#tabbrowser-tabs[tabmix-flowing=multibar] .tabbrowser-tab {
+#tabbrowser-tabs[tabmix-flowing="multibar"] .tabbrowser-tab {
   vertical-align: bottom;
 }
 
@@ -79,56 +81,56 @@
 }
 
 /*  :::::: Tabmix toolbar button :::::: */
-#tabmix-closedTabsButton { list-style-image: url(icons/closed-tabs-24x24.png); }
-#tabmix-closedTabsButton:hover { list-style-image: url(icons/closed-tabs-24x24-hovered.png); }
-#main-window:not([customizing]) #tabmix-closedTabsButton[disabled=true] { list-style-image: url(icons/closed-tabs-24x24-disabled.png); }
+#tabmix-closedTabsButton { list-style-image: url("icons/closed-tabs-24x24.png"); }
+#tabmix-closedTabsButton:hover { list-style-image: url("icons/closed-tabs-24x24-hovered.png"); }
+#main-window:not([customizing]) #tabmix-closedTabsButton[disabled="true"] { list-style-image: url("icons/closed-tabs-24x24-disabled.png"); }
 
-toolbar[iconsize=small] #tabmix-closedTabsButton, .closedtabs-icon > .menu-iconic-left { list-style-image: url(icons/closed-tabs-16x16.png); }
-toolbar[iconsize=small] #tabmix-closedTabsButton:hover, .closedtabs-icon:hover > .menu-iconic-left { list-style-image: url(icons/closed-tabs-16x16-hovered.png); }
-#main-window:not([customizing]) toolbar[iconsize=small] #tabmix-closedTabsButton[disabled=true], .closedtabs-icon[disabled=true] > .menu-iconic-left { list-style-image: url(icons/closed-tabs-16x16-disabled.png); }
+toolbar[iconsize="small"] #tabmix-closedTabsButton, .closedtabs-icon > .menu-iconic-left { list-style-image: url("icons/closed-tabs-16x16.png"); }
+toolbar[iconsize="small"] #tabmix-closedTabsButton:hover, .closedtabs-icon:hover > .menu-iconic-left { list-style-image: url("icons/closed-tabs-16x16-hovered.png"); }
+#main-window:not([customizing]) toolbar[iconsize="small"] #tabmix-closedTabsButton[disabled="true"], .closedtabs-icon[disabled="true"] > .menu-iconic-left { list-style-image: url("icons/closed-tabs-16x16-disabled.png"); }
 
-#tabmix-closedTabs-toolbaritem[cui-areatype="toolbar"] #tabmix-closedTabsButton[type=menu-button] .toolbarbutton-icon {
-  border-right: 1px solid rgba(0, 0, 0, 0.16);
+#tabmix-closedTabs-toolbaritem[cui-areatype="toolbar"] #tabmix-closedTabsButton[type="menu-button"] .toolbarbutton-icon {
+  border-right: 1px solid rgb(0 0 0 / 16%);
   border-radius: 0;
   padding-inline-end: 3px;
   width: calc(1 * var(--toolbarbutton-inner-padding) + 16px + 3px);
 }
 
-#wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabsButton[type=menu-button] {
+#wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabsButton[type="menu-button"] {
   align-items: flex-end;
 }
 
-#wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabs-dropmarker[type=menu-button] {
+#wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabs-dropmarker[type="menu-button"] {
   align-items: flex-start;
 }
 
-#tabmix-closedTabs-toolbaritem[cui-areatype=menu-panel] > #tabmix-closedTabs-dropmarker,
-#tabmix-closedTabs-dropmarker:not([type=menu-button]) {
+#tabmix-closedTabs-toolbaritem[cui-areatype="menu-panel"] > #tabmix-closedTabs-dropmarker,
+#tabmix-closedTabs-dropmarker:not([type="menu-button"]) {
   display: none;
 }
 
-#tabmix-closedWindowsButton { list-style-image: url(icons/closed-win-24x24.png); }
-#tabmix-closedWindowsButton:hover { list-style-image: url(icons/closed-win-24x24-hovered.png); }
-#main-window:not([customizing]) #tabmix-closedWindowsButton[disabled=true] { list-style-image: url(icons/closed-win-24x24-disabled.png); }
-toolbar[iconsize=small] #tabmix-closedWindowsButton, .closedwindows-icon > .menu-iconic-left { list-style-image: url(icons/closed-win-16x16.png); }
-toolbar[iconsize=small] #tabmix-closedWindowsButton:hover, .closedwindows-icon:hover > .menu-iconic-left { list-style-image: url(icons/closed-win-16x16-hovered.png)!important; }
-#main-window:not([customizing]) toolbar[iconsize=small] #tabmix-closedWindowsButton[disabled=true], .closedwindows-icon[disabled=true] > .menu-iconic-left { list-style-image: url(icons/closed-win-16x16-disabled.png)!important; }
+#tabmix-closedWindowsButton { list-style-image: url("icons/closed-win-24x24.png"); }
+#tabmix-closedWindowsButton:hover { list-style-image: url("icons/closed-win-24x24-hovered.png"); }
+#main-window:not([customizing]) #tabmix-closedWindowsButton[disabled="true"] { list-style-image: url("icons/closed-win-24x24-disabled.png"); }
+toolbar[iconsize="small"] #tabmix-closedWindowsButton, .closedwindows-icon > .menu-iconic-left { list-style-image: url("icons/closed-win-16x16.png"); }
+toolbar[iconsize="small"] #tabmix-closedWindowsButton:hover, .closedwindows-icon:hover > .menu-iconic-left { list-style-image: url("icons/closed-win-16x16-hovered.png")!important; }
+#main-window:not([customizing]) toolbar[iconsize="small"] #tabmix-closedWindowsButton[disabled="true"], .closedwindows-icon[disabled="true"] > .menu-iconic-left { list-style-image: url("icons/closed-win-16x16-disabled.png")!important; }
 
-#tabmix-alltabs-button { list-style-image: url(icons/tab-list-24x24.png)!important; }
-#tabmix-alltabs-button:hover { list-style-image: url(icons/tab-list-24x24-hovered.png) }
-#tabmix-alltabs-button[disabled=true] { list-style-image: url(icons/tab-list-24x24-disabled.png); }
-toolbar[iconsize=small] #tabmix-alltabs-button, .tabmix-tabslist-icon > .menu-iconic-left { list-style-image: url(icons/tab-list-16x16.png); }
-toolbar[iconsize=small] #tabmix-alltabs-button:hover, .tabmix-tabslist-icon:hover > .menu-iconic-left { list-style-image: url(icons/tab-list-16x16-hovered.png); }
-toolbar[iconsize=small] #tabmix-alltabs-button[disabled=true], .tabmix-tabslist-icon[disabled=true] > .menu-iconic-left { list-style-image: url(icons/tab-list-24x24-disabled.png); }
+#tabmix-alltabs-button { list-style-image: url("icons/tab-list-24x24.png")!important; }
+#tabmix-alltabs-button:hover { list-style-image: url("icons/tab-list-24x24-hovered.png") }
+#tabmix-alltabs-button[disabled="true"] { list-style-image: url("icons/tab-list-24x24-disabled.png"); }
+toolbar[iconsize="small"] #tabmix-alltabs-button, .tabmix-tabslist-icon > .menu-iconic-left { list-style-image: url("icons/tab-list-16x16.png"); }
+toolbar[iconsize="small"] #tabmix-alltabs-button:hover, .tabmix-tabslist-icon:hover > .menu-iconic-left { list-style-image: url("icons/tab-list-16x16-hovered.png"); }
+toolbar[iconsize="small"] #tabmix-alltabs-button[disabled="true"], .tabmix-tabslist-icon[disabled="true"] > .menu-iconic-left { list-style-image: url("icons/tab-list-24x24-disabled.png"); }
 
-.tabmix-menu-icon .menu-iconic-left { list-style-image: url(tmpsmall.png); }
+.tabmix-menu-icon .menu-iconic-left { list-style-image: url("tmpsmall.png"); }
 
-#btn_sessionmanager { list-style-image: url(icons/session-manager-24x24.png); }
-#btn_sessionmanager:hover { list-style-image: url(icons/session-manager-24x24-hovered.png); }
-#main-window:not([customizing]) #btn_sessionmanager[disabled=true] { list-style-image: url(icons/session-manager-24x24-disabled.png); }
-toolbar[iconsize=small] #btn_sessionmanager, .sessionmanager-icon > .menu-iconic-left { list-style-image: url(icons/session-manager-16x16.png); }
-toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > .menu-iconic-left { list-style-image: url(icons/session-manager-16x16-hovered.png); }
-#main-window:not([customizing]) toolbar[iconsize=small] #btn_sessionmanager[disabled=true], .sessionmanager-icon[disabled=true] > .menu-iconic-left { list-style-image: url(icons/session-manager-16x16-disabled.png); }
+#btn_sessionmanager { list-style-image: url("icons/session-manager-24x24.png"); }
+#btn_sessionmanager:hover { list-style-image: url("icons/session-manager-24x24-hovered.png"); }
+#main-window:not([customizing]) #btn_sessionmanager[disabled="true"] { list-style-image: url("icons/session-manager-24x24-disabled.png"); }
+toolbar[iconsize="small"] #btn_sessionmanager, .sessionmanager-icon > .menu-iconic-left { list-style-image: url("icons/session-manager-16x16.png"); }
+toolbar[iconsize="small"] #btn_sessionmanager:hover, .sessionmanager-icon:hover > .menu-iconic-left { list-style-image: url("icons/session-manager-16x16-hovered.png"); }
+#main-window:not([customizing]) toolbar[iconsize="small"] #btn_sessionmanager[disabled="true"], .sessionmanager-icon[disabled="true"] > .menu-iconic-left { list-style-image: url("icons/session-manager-16x16-disabled.png"); }
 
 /* for hashcoulouredtabs */
 #content[hashedtabs] .tabbrowser-tab:not([busy]) .tab-icon-image:not([src]) {
@@ -139,6 +141,7 @@ toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > 
  *****************************************************************************
  *                                non default theme
 */
+
 /* Chromifox Extreme */
 #tabbrowser-tabs[tabmix_skin="cfxec"] #tabbrowser-arrowscrollbox .tabbrowser-tab .tab-close-button {
   display: none !important;
@@ -154,7 +157,7 @@ toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > 
 #tabbrowser-tabs[tabmix_skin="phoenityaura"][tabmix-multibar] #tabbrowser-arrowscrollbox .tabbrowser-tab {
   height: 22px;
   max-height: 22px;
-  margin: 1px 0 1px;
+  margin: 1px 0;
 }
 
 #tabbrowser-tabs[tabmix_skin="CrystalFox"][tabmix-multibar] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([selected="true"]):hover,
@@ -168,17 +171,17 @@ toolbar[iconsize=small] #btn_sessionmanager:hover, .sessionmanager-icon:hover > 
 #tabbrowser-tabs[tabmix_skin="phoenityaura"][tabmix-multibar] #tabbrowser-arrowscrollbox .tabbrowser-tab[selected="true"] {
   height: 24px;
   max-height: 24px;
-  margin: 0 0 0;
+  margin: 0;
 }
 
 /* CrystalFox_Qute-BigRedBrent */
-#tabbrowser-tabs[tabmix_skin="CrystalFox"]:not([tabmix-multibar])[inline=true] #tabbrowser-arrowscrollbox > toolbarbutton,
+#tabbrowser-tabs[tabmix_skin="CrystalFox"]:not([tabmix-multibar])[inline="true"] #tabbrowser-arrowscrollbox > toolbarbutton,
 #tabbrowser-tabs[tabmix_skin="CrystalFox"][tabmix-multibar] #tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: top;
 }
 
 /* BlackFox_V1-Blue */
-#tabbrowser-tabs[tabmix_skin="BlackFox"]:not([tabmix-multibar])[inline=true] #tabbrowser-arrowscrollbox > toolbarbutton,
+#tabbrowser-tabs[tabmix_skin="BlackFox"]:not([tabmix-multibar])[inline="true"] #tabbrowser-arrowscrollbox > toolbarbutton,
 #tabbrowser-tabs[tabmix_skin="BlackFox"][tabmix-multibar] #tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: top;
 }

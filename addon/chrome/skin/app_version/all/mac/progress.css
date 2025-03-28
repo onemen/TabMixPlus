@@ -23,8 +23,8 @@
 .tab-progress > .progress-bar {
   appearance: none;
   border: 0;
-  border-top: 1px solid rgba(0,0,0,.4);
-  border-bottom: 1px solid rgba(0,0,0,.3);
+  border-top: 1px solid rgb(0 0 0 / 40%);
+  border-bottom: 1px solid rgb(0 0 0 / 30%);
   background-origin: border-box;
   background-color: Highlight;
 }

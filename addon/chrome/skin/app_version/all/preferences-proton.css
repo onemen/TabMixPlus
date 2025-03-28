@@ -9,7 +9,7 @@
 @namespace html url("http://www.w3.org/1999/xhtml");
 
 :root {
-  --shortcut-image-stroke: #ffffff;
+  --shortcut-image-stroke: #fff;
 
   /* for autoReload.xhtml */
   --combined-element-border-radius: 4px;
@@ -19,11 +19,11 @@
 /* for Zen browser */
 @media not (prefers-contrast) {
   :root:not([lwtheme]) {
-    --color-accent-primary: light-dark(rgb(0, 97, 224), rgb(0, 221, 255)) !important;
-    --in-content-button-background: color-mix(in srgb, currentColor 7%, transparent) !important;
-    --in-content-button-background-hover: color-mix(in srgb, currentColor 14%, transparent) !important;
-    --in-content-button-background-active: color-mix(in srgb, currentColor 21%, transparent) !important;
-    --in-content-primary-button-text-color: rgb(251,251,254) !important;
+    --color-accent-primary: light-dark(rgb(0 97 224), rgb(0 221 255)) !important;
+    --in-content-button-background: color-mix(in srgb, currentcolor 7%, transparent) !important;
+    --in-content-button-background-hover: color-mix(in srgb, currentcolor 14%, transparent) !important;
+    --in-content-button-background-active: color-mix(in srgb, currentcolor 21%, transparent) !important;
+    --in-content-primary-button-text-color: rgb(251 251 254) !important;
     --in-content-primary-button-text-color-hover: var(--in-content-primary-button-text-color) !important;
     --in-content-primary-button-text-color-active: var(--in-content-primary-button-text-color) !important;
     --in-content-primary-button-background: #0061e0 !important;
@@ -80,7 +80,7 @@ html|input[type="color"] {
   button:not(.primary, [default], [type="submit"], [autofocus]),
   html|input[type="color"],
   menulist {
-    border-color: ThreeDShadow;
+    border-color: ButtonBorder;
   }
 }
 
@@ -133,7 +133,7 @@ html|legend {
 
 /* override rules from common.css  */
 checkbox_tmp .checkbox-check {
-	margin-block: 0px;
+	margin-block: 0;
 }
 
 menulist {
@@ -170,7 +170,7 @@ radio[pane][selected="true"] {
 }
 
 prefpane {
-  padding: 3px 0 1px 0;
+  padding: 3px 0 1px;
 }
 
 prefpane > .content-box > tabbox {
@@ -191,7 +191,7 @@ prefpane > .content-box > tabbox {
 	padding-inline-start: 10px;
 }
 
-#TabMIxPreferences:not([linux]):not([mac]) .groupbox-tabbox:not(#mouseclick_tabbox) > tabs {
+#TabMIxPreferences:not([linux], [mac]) .groupbox-tabbox:not(#mouseclick_tabbox) > tabs {
   border-bottom: none;
 	margin-bottom: 4px;
 }
@@ -206,6 +206,7 @@ prefpane > .content-box > tabbox {
 /*  tabclicking options tabbox  */
 .mouseclick-panel {
   --mouseclick-border: 1px solid color-mix(in srgb, var(--in-content-accent-color) 41%, transparent);
+
   display: block;
   margin-top: 25px;
   margin-inline: 25px;

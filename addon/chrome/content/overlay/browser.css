@@ -1,3 +1,5 @@
+/* stylelint-disable no-descending-specificity */
+
 /**
  * xml-stylesheet for tabmix.xul
  *
@@ -24,18 +26,18 @@
    display: none !important;
 }
 
-#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded]):not([favhideclose="true"])[closebuttons="activetab"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
-#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded]):not([favhideclose="true"])[closebuttons="alltabs"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
+#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded]):not([favhideclose="true"])[closebuttons="activetab"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned], [isPermaTab="true"], [protected])[selected="true"] .tab-close-button,
+#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded]):not([favhideclose="true"])[closebuttons="alltabs"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned], [isPermaTab="true"], [protected]) .tab-close-button {
   display: inline-flex !important;
 }
 
-#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded])[favhideclose="true"][closebuttons="activetab"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[selected="true"] .tab-close-button,
-#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded])[favhideclose="true"][closebuttons="alltabs"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected]) .tab-close-button {
+#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded])[favhideclose="true"][closebuttons="activetab"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned], [faviconized="true"], [isPermaTab="true"], [protected])[selected="true"] .tab-close-button,
+#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded])[favhideclose="true"][closebuttons="alltabs"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned], [faviconized="true"], [isPermaTab="true"], [protected]) .tab-close-button {
   display: inline-flex !important;
 }
 
-#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded])[closebuttons-hover="notactivetab"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([selected="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button,
-#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded])[closebuttons-hover="alltabs"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([faviconized="true"]):not([isPermaTab="true"]):not([protected])[showbutton=on] .tab-close-button {
+#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded])[closebuttons-hover="notactivetab"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned], [faviconized="true"], [selected="true"], [isPermaTab="true"], [protected])[showbutton="on"] .tab-close-button,
+#tabbrowser-tabs:is(:not([orient="vertical"]), [orient="vertical"][expanded])[closebuttons-hover="alltabs"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned], [faviconized="true"], [isPermaTab="true"], [protected])[showbutton="on"] .tab-close-button {
   display: inline-flex !important;
 }
 
@@ -74,11 +76,11 @@
   order: 3 !important;
 }
 
-#tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button) {
+#tabbrowser-tabs:not([closebuttons="noclose"], [closebuttons-hover])[closebuttons-side="left"] #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button) {
   order: 5 !important;
 }
 
-#tabbrowser-tabs:not([closebuttons-side="left"]) #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button):not(.tab-icon-sound):not(.tab-label):not(.tab-label-container):not(label) {
+#tabbrowser-tabs:not([closebuttons-side="left"]) #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button, .tab-icon-sound, .tab-label, .tab-label-container, label) {
   order: 1;
 }
 
@@ -100,7 +102,7 @@
 }
 
 #tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] #tabbrowser-arrowscrollbox .tabbrowser-tab[selected="true"] > .tab-stack > .tab-content > .tab-close-button,
-#tabbrowser-tabs:not([closebuttons="noclose"]):not([closebuttons-hover])[closebuttons-side="left"] #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
+#tabbrowser-tabs:not([closebuttons="noclose"], [closebuttons-hover])[closebuttons-side="left"] #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > .tab-close-button {
   direction: rtl;
   order: 0 !important;
 }
@@ -190,10 +192,10 @@
 }
 
 /***  Tab opening animation  ***/
-.tab-progress-container > .tab-progress:not([fadein]):not([pinned]),
-.tab-icon:not([fadein]):not([pinned]) > .tab-protect-icon,
-.tab-icon:not([fadein]):not([pinned]) > .tab-lock-icon,
-.tab-icon:not([fadein]):not([pinned]) > .tab-reload-icon {
+.tab-progress-container > .tab-progress:not([fadein], [pinned]),
+.tab-icon:not([fadein], [pinned]) > .tab-protect-icon,
+.tab-icon:not([fadein], [pinned]) > .tab-lock-icon,
+.tab-icon:not([fadein], [pinned]) > .tab-reload-icon {
    display: none !important;
 }
 
@@ -204,13 +206,13 @@ so display: none !important; does not hide the button */
 }
 
 /* we don't remove top and bottom borders to prevent tab height from shrinking */
-.tabbrowser-tab:not([fadein]):not([pinned]) {
+.tabbrowser-tab:not([fadein], [pinned]) {
   border-left: none;
   border-right: none;
 }
 
 /*** backward compatibility with theme that still use old tabmix tab binding ***/
-.tabbrowser-tab:not([fadein]):not([pinned]) .tab-text-stack > .tab-progress {
+.tabbrowser-tab:not([fadein], [pinned]) .tab-text-stack > .tab-progress {
   display: none !important;
 }
 
@@ -233,25 +235,26 @@ so display: none !important; does not hide the button */
 }
 
 .tab-progress > .progress-bar:-moz-locale-dir(ltr) {
-  background-image: linear-gradient(to right, rgba(255,255,255,.1) 50%,
-                                        rgba(255,255,255,.4) 90%,
-                                        rgba(255,255,255,.8));
+  background-image: linear-gradient(to right, rgb(255 255 255 / 10%) 50%,
+                                        rgb(255 255 255 / 40%) 90%,
+                                        rgb(255 255 255 / 80%));
 }
 
 .tab-progress > .progress-bar:-moz-locale-dir(rtl) {
-  background-image: linear-gradient(to left, rgba(255,255,255,.1) 50%,
-                                        rgba(255,255,255,.4) 90%,
-                                        rgba(255,255,255,.8));
+  background-image: linear-gradient(to left, rgb(255 255 255 / 10%) 50%,
+                                        rgb(255 255 255 / 40%) 90%,
+                                        rgb(255 255 255 / 80%));
 }
 
 /* :::: widthFitTitle :::: */
+
 /* more dynamic rules are in tab.js addDynamicRules */
 #tabbrowser-tabs[orient="horizontal"][tabmix-flowing="multibar"][widthFitTitle] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]) {
   flex: 0 0 auto !important;
   width: auto !important;
 }
 
-#tabbrowser-tabs[orient="horizontal"]:not([widthFitTitle]) #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]):not([tiletabs-single="hidden"]) {
+#tabbrowser-tabs[orient="horizontal"]:not([widthFitTitle]) #tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned], [tiletabs-single="hidden"]) {
   flex: 1 1 0% !important;
 }
 
@@ -264,10 +267,12 @@ so display: none !important; does not hide the button */
 #TabsToolbar #tabbrowser-tabs:not([overflow], [hashiddentabs], [showalltabsbutton]) ~ #alltabs-button {
   display: none;
 }
+
 #TabsToolbar #tabbrowser-tabs[showalltabsbutton] ~ #alltabs-button {
   display: flex;
   align-items: center;
 }
+
 #TabsToolbar #tabbrowser-tabs:not([overflow], [showalltabsbutton])[using-closing-tabs-spacer] ~ #alltabs-button {
   /* temporary space to keep a tab's close button under the cursor */
   display: flex;
@@ -316,6 +321,7 @@ so display: none !important; does not hide the button */
   appearance: none !important;
   top: var(--tabmix-bottom-toolbox-top);
   width: 100%;
+
   /* look at browser.css for each platform
   background-image: none !important;
   */
@@ -336,7 +342,7 @@ so display: none !important; does not hide the button */
   appearance: none;
   min-width: 1px;
   min-height: 1px;
-  height: calc(var(--tab-min-height_mlt) * var(--tabmix-visiblerows, 1))
+  height: calc(var(--tab-min-height-mlt) * var(--tabmix-visiblerows, 1))
 }
 
 #tabmix-bottom-toolbox[tabmix-multibar] > toolbox {

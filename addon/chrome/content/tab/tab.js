@@ -1094,7 +1094,7 @@ Tabmix.tabsUtils = {
    *  @type {ProtonValues}
    */
   get protonValues() {
-    // rules to add proton --tab-block-margin to --tab-min-height_mlt
+    // rules to add proton --tab-block-margin to --tab-min-height-mlt
     // we update tab-block-margin dynamically by calling updateProtonValues
     // every time TabmixTabbar.visibleRows setter changed
 

@@ -11,8 +11,9 @@
 #tabbrowser-tabs[orient="vertical"][closebuttons="alltabs"] {
   & #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:is([pinned], [protected])) {
     & .tab-close-button {
-      display: block !important;
       --tab-inline-padding: 0 !important;
+
+      display: block !important;
       margin-inline-end: 0 !important;
     }
   }
@@ -21,32 +22,32 @@
 #tabbrowser-tabs[orient="vertical"][closebuttons="activetab"] {
   & #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:is([pinned], [protected]))[selected="true"] {
     & .tab-close-button {
-      display: block !important;
       --tab-inline-padding: 0 !important;
+
+      display: block !important;
       margin-inline-end: 0 !important;
     }
   }
 }
 
 #tabbrowser-tabs[orient="vertical"][closebuttons-hover="notactivetab"] {
-  & #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:is([pinned], [protected], [selected="true"]))[showbutton=on] {
+  & #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:is([pinned], [protected], [selected="true"]))[showbutton="on"] {
     & .tab-close-button {
-      display: block !important;
       --tab-inline-padding: 0 !important;
+
+      display: block !important;
       margin-inline-end: 0 !important;
     }
   }
 }
 
 #tabbrowser-tabs[orient="vertical"][closebuttons-hover="alltabs"] {
-  & #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:is([pinned], [protected]))[showbutton=on] {
+  & #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:is([pinned], [protected]))[showbutton="on"] {
     & .tab-close-button {
-      display: block !important;
       --tab-inline-padding: 0 !important;
+
+      display: block !important;
       margin-inline-end: 0 !important;
     }
   }
 }
-
-
-/* button on left????  */

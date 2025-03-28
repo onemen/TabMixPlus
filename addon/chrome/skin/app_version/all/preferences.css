@@ -6,6 +6,7 @@
 **/
 
 /* toolkit/content/xul.css */
+
 /********** preferences ********/
 
 prefwindow,
@@ -61,7 +62,7 @@ prefwindow[chromehidden~="toolbar"] .chromeclass-toolbar {
 
 .button-menu-dropmarker {
   direction: rtl;
-  appearance: button !important;
+  appearance: auto !important;
 }
 
 .button-menu-dropmarker .button-icon {

@@ -25,7 +25,7 @@
   position: static !important;
 }
 
-#tabbrowser-tabs[tabmix-multibar=true] #tabbrowser-arrowscrollbox > toolbarbutton {
+#tabbrowser-tabs[tabmix-multibar="true"] #tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;
 }
 
