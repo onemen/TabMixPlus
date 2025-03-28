@@ -26,6 +26,7 @@
       <preference id="pref_selectLocationBar"   name="extensions.tabmix.selectLocationBar"
                   type="bool" inverted="true"/>
       <preference id="pref_openNewTabNext"      name="extensions.tabmix.openNewTabNext"       type="bool"/>
+      <preference id="pref_openTabNextInGroup"  name="extensions.tabmix.openTabNextInGroup"   type="int"/>
       <preference id="pref_openTabNext"         name="browser.tabs.insertAfterCurrent"        type="bool"
                   onchange="gEventsPane.openTabNext.on_change(this)"/>
       <preference id="pref_relatedAfterCurrent" name="browser.tabs.insertRelatedAfterCurrent" type="bool"
@@ -164,7 +165,20 @@
                       preference="pref_selectLocationBar"/>
             <checkbox_tmp id="openNewTabNext" label="&openTabNext.label;"
                       tooltiptext="&openTabNext.tooltip1;"
+                      onsyncfrompreference="gEventsPane.openTabNextInGroup();"
                       preference="pref_openNewTabNext"/>
+            <hbox align="center" class="indent">
+              <checkbox_tmp id="openTabNextInGroup_control" label="When current tab is in a group:"
+                oncommand="gEventsPane.openTabNextInGroup();" observes="obs_openNewTabNext"/>
+              <menulist id="openTabNextInGroup" preference="pref_openTabNextInGroup">
+                <menupopup>
+                  <menuitem value="-1" label="Add at end of tabbar"/>
+                  <menuitem value="0" label="Add to the group after current tab"/>
+                  <menuitem value="1" label="Add after the group"/>
+                  <menuitem value="2" label="Add at end of tabbar"/>
+                </menupopup>
+              </menulist>
+            </hbox>
           </html:fieldset>
           <html:fieldset flex="1">
             <!-- Open links next to current tab -->
@@ -448,16 +462,14 @@
    </tabbox>
 
    <broadcasterset id="paneEvents:Broadcaster">
+      <broadcaster id="obs_openNewTabNext"/>
       <broadcaster id="obs_openTabNext_control"/>
       <broadcaster id="obs_mergePopups"/>
       <broadcaster id="obs_closeOnMerge"/>
       <broadcaster id="obs_ctrltab"/>
       <broadcaster id="obs_showTabList"/>
       <broadcaster id="obs_loadProgressively"/>
-  </broadcasterset>
-
-  <broadcasterset>
-    <broadcaster id="obs_replaceLastTabWith"/>
+      <broadcaster id="obs_replaceLastTabWith"/>
   </broadcasterset>
 
  </prefpane>

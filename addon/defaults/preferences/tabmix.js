@@ -38,6 +38,7 @@ pref("extensions.tabmix.replaceLastTabWith.newtab.url", "about:newtab");
 pref("extensions.tabmix.selectLocationBar", true);
 pref("extensions.tabmix.selectLocationBar.afterLastTabClosed", true);
 pref("extensions.tabmix.openNewTabNext", false);
+pref("extensions.tabmix.openTabNextInGroup", -1);
 // replaced with browser.tabs.insertAfterCurrent, see bug 1344749
 // pref("extensions.tabmix.openTabNext", false);
 pref("extensions.tabmix.openTabNextInverse", true);

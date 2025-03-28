@@ -293,6 +293,7 @@ interface CheckboxClass extends CheckboxClassOverrideMozXULElement {
   set checked(val: boolean);
   get disabled(): boolean;
   set disabled(val: boolean);
+  parentNode: HTMLElement;
 }
 
 interface MozShortcutClassOverrideMozXULElement extends Omit<MozXULElement, "parentNode"> {
@@ -445,6 +446,7 @@ declare namespace EventsPaneNS {
     function on_change(preference: PreferenceClass): void;
     function on_command(checked: boolean): void;
   }
+  function openTabNextInGroup(): void;
 }
 
 declare namespace LinksPaneNS {
@@ -642,6 +644,9 @@ interface GetByMap {
   "onToolbar": HTMLElement;
   "onPlate": HTMLElement;
   "openTabNext": CheckboxClass;
+  "openNewTabNext": CheckboxClass;
+  "openTabNextInGroup_control": CheckboxClass;
+  "openTabNextInGroup": HTMLMenuElement;
   "pane": PrefPaneClass;
   "paneDeck": CustomGroupElement<HTMLInputElement>;
   "paneIncompatible": PrefPaneClass;
