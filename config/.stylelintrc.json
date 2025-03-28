@@ -1,0 +1,51 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "declaration-property-value-no-unknown": null,
+    "media-query-no-invalid": null,
+    "selector-id-pattern": null,
+    "selector-class-pattern": null,
+    "selector-type-no-unknown": [
+      true,
+      {
+        "ignoreTypes": [
+          "tabbrowser-tabs",
+          "tabbrowser-tab",
+          "tabmix-scrollbox",
+          "checkbox",
+          "checkbox_tmp",
+          "colorbox",
+          "description",
+          "dialog",
+          "groupbox",
+          "hbox",
+          "html|input",
+          "html|fieldset",
+          "html|legend",
+          "menulist",
+          "menuseparator",
+          "prefpane",
+          "prefwindow",
+          "preference",
+          "preferences",
+          "radio",
+          "radiogroup",
+          "richlistbox",
+          "separator",
+          "shortcut",
+          "tab",
+          "tab-group",
+          "tabbox",
+          "tabpanel",
+          "tabs",
+          "tabpanels",
+          "toolbarbutton",
+          "toolbar",
+          "toolbox",
+          "vbox",
+          "windowdragbox"
+        ]
+      }
+    ]
+  }
+}

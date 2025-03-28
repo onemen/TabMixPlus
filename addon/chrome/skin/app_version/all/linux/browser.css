@@ -15,7 +15,7 @@
   background-image: -moz-image-rect(url("chrome://global/skin/icons/close.svg"), 0, 64, 16, 48);
 }
 
-/* set on linux we need to set vertical align even if the button is hidden*/
+/* set on linux we need to set vertical align even if the button is hidden */
 #tabbrowser-tabs[tabmix-multibar] #tabbrowser-arrowscrollbox > toolbarbutton {
   vertical-align: bottom;
 }

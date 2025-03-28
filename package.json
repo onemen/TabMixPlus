@@ -8,6 +8,7 @@
     "lint:test": "eslint --format stylish --cache --cache-location config/.eslintcache --cache-strategy content",
     "lint:clean": "eslint --format stylish",
     "prepare": "husky config/husky",
+    "stylelint": "stylelint --fix --config config/.stylelintrc.json \"addon/**/*.css\"",
     "tsc:clean": "node config/typecheck.js",
     "typecheck": "tsc --build > tsc.local.txt"
   },
@@ -23,9 +24,9 @@
   },
   "homepage": "https://github.com/onemen/TabMixPlus#readme",
   "devDependencies": {
-    "@eslint/js": "^9.22.0",
+    "@eslint/js": "^9.23.0",
     "@stylistic/eslint-plugin-js": "^4.2.0",
-    "eslint": "^9.22.0",
+    "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-html": "^8.1.2",
     "eslint-plugin-mozilla": "^4.0.0",
@@ -33,7 +34,9 @@
     "globals": "^16.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.0",
+    "stylelint": "^16.17.0",
+    "stylelint-config-standard": "^37.0.0",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.26.1"
+    "typescript-eslint": "^8.28.0"
   }
 }

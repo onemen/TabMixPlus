@@ -29,7 +29,7 @@
 @media (-moz-platform: windows) {
   #TabsToolbar[tabbaronbottom]:not(:-moz-lwtheme) {
     appearance: none;
-    border-top: 1px solid rgba(10, 31, 51, 0.35);
+    border-top: 1px solid rgb(10 31 51 / 35%);
   }
 }
 
@@ -45,8 +45,8 @@
 
 @media (-moz-platform: macos) {
   /* for mac - look in pinstripe/browser/browser.css */
-  #tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-label-container > .tab-label:not([selected="true"]):-moz-lwtheme,
-  #tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]):-moz-lwtheme {
+  #tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-label:not([selected="true"]):-moz-lwtheme,
+  #tabbrowser-tabs > #tabbrowser-arrowscrollbox .tabbrowser-tab:not(:hover) > * > * > .tab-label-container > .tab-label:not([selected="true"]):-moz-lwtheme {
     opacity: .8;
   }
 }

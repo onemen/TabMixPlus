@@ -30,7 +30,7 @@ shortcut {
 
 shortcut[focused="true"] .input-container {
   border-color: #0061e0;
-  box-shadow: inset 0 0 0 1px rgba(0, 97, 224, 0.75);
+  box-shadow: inset 0 0 0 1px rgb(0 97 224 / 75%);
 }
 
 .input-container[disabled] {
@@ -50,10 +50,15 @@ shortcut[focused="true"] .input-container {
 .shortcut-image {
   opacity: 0.75;
   cursor: default;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
+  -moz-context-properties: stroke;
   z-index: 2;
   position: relative;
+}
+
+.shortcut-image:hover {
+  opacity: 0.85;
 }
 
 shortcut:not([focused="true"]) .shortcut-image {
@@ -64,25 +69,8 @@ shortcut:not([focused="true"]) .shortcut-image {
   color: transparent;
 }
 
-.shortcut-image:hover {
-  opacity: 0.85;
-}
-
 .shortcut-image:hover:active {
   opacity: 1;
-}
-
-.shortcut-image[_hidden="true"],
-shortcut[default="true"] .shortcut-image[anonid="shortcut_reset"],
-shortcut[value=""] .shortcut-image[anonid="disable"],
-shortcut:not([value]) .shortcut-image[anonid="disable"] {
-  visibility: collapse;
-}
-
-.shortcut-image {
-  width: 16px;
-  height: 16px;
-  -moz-context-properties: stroke;
 }
 
 .shortcut-image[anonid="disable"] {
@@ -94,6 +82,13 @@ shortcut:not([value]) .shortcut-image[anonid="disable"] {
   background-image: url("chrome://tabmixplus/skin/refresh.svg");
   margin-inline-end: 2px;
   stroke: black;
+}
+
+.shortcut-image[_hidden="true"],
+shortcut[default="true"] .shortcut-image[anonid="shortcut_reset"],
+shortcut[value=""] .shortcut-image[anonid="disable"],
+shortcut:not([value]) .shortcut-image[anonid="disable"] {
+  visibility: collapse;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -109,7 +104,7 @@ shortcut:not([value]) .shortcut-image[anonid="disable"] {
 .shortcut-notificationbox,
 .shortcut-warning-container,
 shortcut[used="true"] > .shortcut-content {
-  color: rgb(145, 109, 21);
+  color: rgb(145 109 21);
 }
 
 .shortcut-notificationbox,
@@ -118,18 +113,17 @@ shortcut[used="true"] > .shortcut-content,
 shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > .shortcut-image,
 shortcut[used="true"] > .shortcut-content > .shortcut-edit-box > * > .textbox-input {
   /* yellow */
-  background-color: rgba(255, 255, 0, 0.1);
+  background-color: rgb(255 255 0 / 10%);
 }
 
 .shortcut-notificationbox {
   border-bottom: 2px solid;
-  border-bottom-color: rgba(28, 31, 37, 0.1);
+  border-bottom-color: rgb(28 31 37 / 10%);
 }
 
+.shortcut-notificationbox:empty,
 #shortcuts-panel[hide-shortcut-warning="true"]
-  shortcut:not(:focus-within)
-  > .shortcut-notificationbox,
-.shortcut-notificationbox:empty {
+  shortcut:not(:focus-within) > .shortcut-notificationbox {
   display: none;
 }
 

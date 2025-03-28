@@ -12,7 +12,7 @@
 }
 
 /* Chromifox theme force button height to 25px */
-#AppearanceTabBox[chromifox=true] .spinbuttons-button {
+#AppearanceTabBox[chromifox="true"] .spinbuttons-button {
   max-height: 11px !important;
 }
 

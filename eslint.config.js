@@ -17,8 +17,8 @@ if (workerConfig) {
   workerConfig.name = "mozilla/recommended/worker-files";
 }
 
-if (!stylisticJs.configs["all-flat"].name) {
-  stylisticJs.configs["all-flat"].name = "stylisticJs/configs/all-flat";
+if (!stylisticJs.configs.all.name) {
+  stylisticJs.configs.all.name = "stylisticJs/configs/all-flat";
 }
 
 const indentConfig = [
@@ -75,7 +75,7 @@ export default [
   },
   ...eslintPluginMozilla.configs["flat/recommended"],
 
-  stylisticJs.configs["all-flat"],
+  stylisticJs.configs.all,
 
   {
     name: "tabmix/stylistic-rules",

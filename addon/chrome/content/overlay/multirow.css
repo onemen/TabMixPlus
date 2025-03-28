@@ -1,16 +1,16 @@
-/****************************************************************************************/
-/* multirow / multiple tab lines - modified for Tab Mix Plus ****************************/
-/* all credits go to the original authors: **********************************************/
-/* https://www.reddit.com/r/FirefoxCSS/comments/7dclp7/multirow_tabs_in_ff57/ ***********/
-/* https://github.com/MrOtherGuy/firefox-csshacks/blob/master/chrome/multi-row_tabs.css */
-/****************************************************************************************/
+/***************************************************************************************
+ * multirow / multiple tab lines - modified for Tab Mix Plus ****************************
+ * all credits go to the original authors: **********************************************
+ * https://www.reddit.com/r/FirefoxCSS/comments/7dclp7/multirow_tabs_in_ff57/ ***********
+ * https://github.com/MrOtherGuy/firefox-csshacks/blob/master/chrome/multi-row_tabs.css**
+ ****************************************************************************************/
 
 @namespace html url("http://www.w3.org/1999/xhtml");
 
 :root {
-  --tab_min_width_mlt: 100px;
-  --tab_max_width_mlt: 200px;
-  --tab-min-height_mlt: calc(var(--tabmix-tab-min-height) + 2 * var(--tab-block-margin, 0px)) !important;
+  --tab-min-width-mlt: 100px;
+  --tab-max-width-mlt: 200px;
+  --tab-min-height-mlt: calc(var(--tabmix-tab-min-height) + 2 * var(--tab-block-margin, 0px)) !important;
   --tabmix-scrollbutton-padding: calc(var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding));
 }
 
@@ -19,12 +19,12 @@
 }
 
 .tabbrowser-tab {
-  height: var(--tab-min-height_mlt);
+  height: var(--tab-min-height-mlt);
 }
 
 /* hide default scroll buttons */
-#tabbrowser-arrowscrollbox:not([defaultScrollButtons]):not([tabmix-flowing="scrollbutton"]):not([tabmix-flowing="singlebar"])::part(overflow-start-indicator),
-#tabbrowser-arrowscrollbox:not([defaultScrollButtons]):not([tabmix-flowing="singlebar"])::part(overflow-end-indicator),
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons], [tabmix-flowing="scrollbutton"], [tabmix-flowing="singlebar"])::part(overflow-start-indicator),
+#tabbrowser-arrowscrollbox:not([defaultScrollButtons], [tabmix-flowing="singlebar"])::part(overflow-end-indicator),
 #tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-up),
 #tabbrowser-arrowscrollbox:not([defaultScrollButtons])::part(scrollbutton-down) {
   display: none;
@@ -41,10 +41,10 @@
   visibility: collapse;
 }
 
-#tabbrowser-arrowscrollbox[tabmix-flowing=multibar][orient=horizontal]::part(scrollbox) {
+#tabbrowser-arrowscrollbox[tabmix-flowing="multibar"][orient="horizontal"]::part(scrollbox) {
   display: flex;
   flex-wrap: wrap;
-  max-height: calc(var(--tab-min-height_mlt) * var(--tabs-lines));
+  max-height: calc(var(--tab-min-height-mlt) * var(--tabs-lines));
 }
 
 /* waterfox with userChrome enabled set overflow: hidden */
@@ -53,11 +53,11 @@
   overflow: unset !important;
 }
 
-#tabbrowser-tabs[tabmix-multibar][orient=horizontal] .tabbrowser-tab[usercontextid] > .tab-stack > .tab-background > .tab-context-line {
+#tabbrowser-tabs[tabmix-multibar][orient="horizontal"] .tabbrowser-tab[usercontextid] > .tab-stack > .tab-background > .tab-context-line {
   margin-top: -1px;
 }
 
-#tabbrowser-tabs[tabmix-multibar=scrollbar][orient=horizontal] .tabbrowser-tab[pinned] {
+#tabbrowser-tabs[tabmix-multibar="scrollbar"][orient="horizontal"] .tabbrowser-tab[pinned] {
   margin-top: -0.5px !important
 }
 
@@ -79,10 +79,6 @@
 }
 } */
 
-#navigator-toolbox:not(:hover) #tabmix-scrollbox:not([highlight])::part(scrollbutton-down) {
-  transition: background-color 1s ease-out 0s;
-}
-
 #tabmix-scrollbox[highlight]::part(scrollbutton-down) {
   background-color: highlight;
 }
@@ -99,6 +95,18 @@
 }
 */
 
+/* based on browser/themes/shared/tabs.inc.css */
+#tabmix-scrollbox::part(scrollbutton-up),
+#tabmix-scrollbox::part(scrollbutton-down) {
+  fill: var(--toolbarbutton-icon-fill, currentColor);
+  fill-opacity: var(--toolbarbutton-icon-fill-opacity, 1);
+}
+
+#tabmix-scrollbox[orient="vertical"]::part(scrollbutton-up),
+#tabmix-scrollbox[orient="vertical"]::part(scrollbutton-down) {
+  list-style-image: url("chrome://global/skin/icons/arrow-down.svg");
+}
+
 #tabmix-scrollbox:not([scrolledtostart])::part(scrollbutton-up):hover,
 #tabmix-scrollbox:not([scrolledtoend])::part(scrollbutton-down):hover {
   background-color: var(--toolbarbutton-hover-background);
@@ -111,21 +119,18 @@
   color: inherit;
 }
 
-/* based on browser/themes/shared/tabs.inc.css */
-#tabmix-scrollbox::part(scrollbutton-up),
-#tabmix-scrollbox::part(scrollbutton-down) {
-  fill: var(--toolbarbutton-icon-fill, currentColor);
-  fill-opacity: var(--toolbarbutton-icon-fill-opacity, 1);
-}
-
-#tabmix-scrollbox[orient=vertical]::part(scrollbutton-up),
-#tabmix-scrollbox[orient=vertical]::part(scrollbutton-down) {
-  list-style-image: url(chrome://global/skin/icons/arrow-down.svg);
+#navigator-toolbox:not(:hover) #tabmix-scrollbox:not([highlight])::part(scrollbutton-down) {
+  transition: background-color 1s ease-out 0s;
 }
 
 /* swap direction from the original rule
    we place the indicator left to the buttons
 */
+#tabmix-scrollbox::part(overflow-start-indicator),
+#tabmix-scrollbox::part(overflow-end-indicator) {
+  transition: opacity 150ms ease;
+}
+
 #tabmix-scrollbox:-moz-locale-dir(ltr)::part(overflow-start-indicator),
 #tabmix-scrollbox:-moz-locale-dir(rtl)::part(overflow-end-indicator) {
   transform: scaleX(-1);
@@ -138,38 +143,39 @@
 }
 
 #TabsToolbar[tabmix-flowing="multibar"] .titlebar-buttonbox-container {
-  height: calc(var(--tab-min-height_mlt));
+  height: calc(var(--tab-min-height-mlt));
   margin-block: 0;
 }
 
 #TabsToolbar[tabmix-multibar] .titlebar-buttonbox-container {
-  height: calc(var(--tab-min-height_mlt) + var(--tabmix-titlebar-buttonbox-offset));
+  height: calc(var(--tab-min-height-mlt) + var(--tabmix-titlebar-buttonbox-offset));
 }
 
-:root[uidensity=compact] {
+:root[uidensity="compact"] {
   --private-browsing-indicator-margin-top: 9px;
 }
 
-:root:not([uidensity=compact]) #TabsToolbar[tabmix-flowing="multibar"] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+:root:not([uidensity="compact"]) #TabsToolbar[tabmix-flowing="multibar"] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-margin-top-proton) !important;
 }
 
-:root[uidensity=compact] #TabsToolbar[tabmix-flowing="multibar"] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
+:root[uidensity="compact"] #TabsToolbar[tabmix-flowing="multibar"] .toolbarbutton-1:not([id="tabs-newtab-button"]) {
   margin-top: var(--tabmix-button-margin-top-proton-compact) !important;
 }
 
-#tabbrowser-tabs[orient=horizontal] > .tab-drop-indicator {
+#tabbrowser-tabs[orient="horizontal"] > .tab-drop-indicator {
   pointer-events: none;
 }
 
-#tabbrowser-tabs[tabmix-multibar][orient=horizontal] > .tab-drop-indicator {
-  margin-top: calc(var(--tab-min-height_mlt) * (var(--tabmix-visiblerows) - 1) + var(--tabmix-multirow-margin, 0));
+#tabbrowser-tabs[tabmix-multibar][orient="horizontal"] > .tab-drop-indicator {
+  margin-top: calc(var(--tab-min-height-mlt) * (var(--tabmix-visiblerows) - 1) + var(--tabmix-multirow-margin, 0));
 }
 
 /* browser/themes/shared/tabs.inc.css */
+
 /* Tab Overflow */
-#tabmix-scrollbox[orient=vertical]::part(overflow-start-indicator),
-#tabmix-scrollbox[orient=vertical]::part(overflow-end-indicator) {
+#tabmix-scrollbox[orient="vertical"]::part(overflow-start-indicator),
+#tabmix-scrollbox[orient="vertical"]::part(overflow-end-indicator) {
   display: none;
 }
 
@@ -177,12 +183,12 @@
 #tabmix-scrollbox:not([scrolledtoend])::part(overflow-end-indicator) {
   width: 7px; /* The width is the sum of the inline margins */
   background-image: radial-gradient(ellipse at bottom,
-                                    rgba(0,0,0,0.1) 0%,
-                                    rgba(0,0,0,0.1) 7.6%,
-                                    rgba(0,0,0,0) 87.5%);
+                                    rgb(0 0 0 / 10%) 0%,
+                                    rgb(0 0 0 / 10%) 7.6%,
+                                    rgb(0 0 0 / 0%) 87.5%);
   background-repeat: no-repeat;
   background-position: -3px;
-  border-left: .5px solid rgba(255,255,255,.2);
+  border-left: .5px solid rgb(255 255 255 / 20%);
   pointer-events: none;
   position: relative;
   z-index: 3; /* the selected tab's z-index + 1 */
@@ -204,24 +210,14 @@
   opacity: 0;
 }
 
-#tabmix-scrollbox::part(overflow-start-indicator),
-#tabmix-scrollbox::part(overflow-end-indicator) {
-  transition: opacity 150ms ease;
-}
-
 #tabbrowser-arrowscrollbox[tabmix-dragging="enable-scroll-buttons"] {
   position: relative;
-
-  &:not([scrolledtostart])::part(scrollbutton-up),
-  &:not([scrolledtoend])::part(scrollbutton-down) {
-    display: flex !important;
-  }
 
   &::part(scrollbutton-up),
   &::part(scrollbutton-down) {
     position: absolute;
     width: 100%;
-    height: calc(var(--tab-min-height_mlt) / 2);
+    height: calc(var(--tab-min-height-mlt) / 2);
     z-index: 1;
     opacity: 0;
   }
@@ -232,6 +228,20 @@
 
   &::part(scrollbutton-down) {
     bottom: 0;
+  }
+
+  &:not([scrolledtostart])::part(scrollbutton-up),
+  &:not([scrolledtoend])::part(scrollbutton-down) {
+    display: flex !important;
+  }
+}
+
+/* based on browser/themes/shared/tabbrowser/tabs.css */
+@media not -moz-pref("sidebar.verticalTabs") {
+  .tabbrowser-tab[tabmix-movingtab-togroup] > .tab-stack > .tab-background > .tab-group-line {
+    display: flex;
+    background-color: light-dark(var(--dragover-tab-group-color), var(--dragover-tab-group-color-invert));
+    border-radius: 1px;
   }
 }
 
