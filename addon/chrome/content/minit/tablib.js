@@ -218,7 +218,7 @@ Tabmix.tablib = {
         'TMP_BrowserOpenTab({}, null, true)',
         {check: !Tabmix.isVersion({zen: "1.8.1*"})}
       )._replace(
-        'ZenWorkspaces.selectEmptyTab();',
+        /ZenWorkspaces\.selectEmptyTab\([^)]*\);/,
         'TMP_BrowserOpenTab({}, null, true)',
         {check: Tabmix.isVersion({zen: "1.8.1*"})}
       ).toCode();
@@ -403,7 +403,7 @@ Tabmix.tablib = {
 
       let $LF = '\n      ';
       const doPosition = Tabmix.isVersion(1300) ? "absPositionHorizontalTabs" : "doPosition";
-      const floorpVerticalTabbar = Tabmix.isVersion({fp: "128.0.0"}) ? " && !verticalTabbarEnabled()" : "";
+      const doPositionRE = new RegExp(`if\\s*\\(\\s*${doPosition}(.*?)\\)\\s\\{`);
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")._replace(
         'const doPosition =',
         'let doPosition =',
@@ -426,13 +426,12 @@ Tabmix.tablib = {
         'scrollStartOffset:',
         '$& TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 :'
       )._replace(
-        `if (${doPosition}${floorpVerticalTabbar})`,
-        `if (${doPosition}${floorpVerticalTabbar} && TabmixTabbar.isMultiRow &&
-          Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
+        doPositionRE,
+        `if (${doPosition}$1 && TabmixTabbar.isMultiRow && Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
         ${doPosition} = false;
         this.toggleAttribute("positionpinnedtabs", false);
       }
-      if (${doPosition}${floorpVerticalTabbar} && TabmixTabbar.isMultiRow) {` + $LF +
+      if (${doPosition}$1 && TabmixTabbar.isMultiRow) {` + $LF +
         (Tabmix.isVersion(1190) ? '  this.toggleAttribute("positionpinnedtabs", true)' :
           '  this.setAttribute("positionpinnedtabs", "true");') + $LF +
         '  let layoutData = this._pinnedTabsLayoutCache;' + $LF +
