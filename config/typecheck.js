@@ -29,20 +29,20 @@ function getModifiedFiles() {
 
 const colors = {};
 const colorsCode = {
-  green: '\x1b[32m',
-  red: '\x1b[31m',
-  reset: '\x1b[0m'
+  green: "\x1b[32m",
+  red: "\x1b[31m",
+  reset: "\x1b[0m",
 };
 
 Object.keys(colorsCode).forEach(name => {
   const tagFunction = (strings, ...values) => {
-    return `${colorsCode[name]}${strings.reduce((acc, str, i) => acc + str + (values[i] || ''), '')}${colorsCode.reset}`;
+    return `${colorsCode[name]}${strings.reduce((acc, str, i) => acc + str + (values[i] || ""), "")}${colorsCode.reset}`;
   };
   colors[name] = tagFunction;
 });
 
 function createClickableErrorFile(output) {
-  const cwd = process.cwd().replace(/\\/g, '/');
+  const cwd = process.cwd().replace(/\\/g, "/");
   const formattedLines = output.trim().replace(/(addon\/[^(]*\(\d*,\d*\):)/g, `${cwd}/$&`);
   fs.writeFileSync(outputFile, formattedLines);
   console.log(`Typecheck results with clickable links saved to ${outputFile}`);
@@ -52,7 +52,7 @@ function runTsc(build) {
   const command = build ? `tsc --build` : `tsc --build --incremental`;
   let output;
   try {
-    output = child_process.execSync(command, {encoding: 'utf8'});
+    output = child_process.execSync(command, {encoding: "utf8"});
   } catch (error) {
     output = error.stdout;
   }

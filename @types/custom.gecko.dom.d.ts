@@ -168,7 +168,7 @@ interface Node {
   readonly tagName: string;
 }
 
-/**
+/*
  * for content.js
  * this types are here since it is also used by other files
  */

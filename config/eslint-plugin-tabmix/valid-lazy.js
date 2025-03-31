@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 /**
- * append TabmixChromeUtils to eslint-plugin-mozilla valid-lazy rule
- * items and callExpressionMultiDefinitions lists
+ * append TabmixChromeUtils to eslint-plugin-mozilla valid-lazy rule items and
+ * callExpressionMultiDefinitions lists
  */
 
 import MozillaHelpers from "eslint-plugin-mozilla/lib/helpers.js";
@@ -58,5 +58,5 @@ if (!createFunction.startsWith("function")) {
 
 export default {
   ...validLazy,
-  create: eval("(" + createFunction + ")")
+  create: eval("(" + createFunction + ")"),
 };

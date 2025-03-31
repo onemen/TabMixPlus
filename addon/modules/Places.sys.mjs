@@ -1,11 +1,12 @@
-
 import {TabmixChromeUtils} from "chrome://tabmix-resource/content/ChromeUtils.sys.mjs";
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 
 // AppConstants is used in modified PlacesUIUtils functions
 // @ts-ignore
 // eslint-disable-next-line no-unused-vars
-const AppConstants = ChromeUtils.importESModule("resource://gre/modules/AppConstants.sys.mjs").AppConstants;
+const AppConstants = ChromeUtils.importESModule(
+  "resource://gre/modules/AppConstants.sys.mjs"
+).AppConstants;
 
 /** @type {PlacesModule.Lazy} */ // @ts-ignore
 const lazy = {};
@@ -30,11 +31,11 @@ TabmixChromeUtils.defineLazyModuleGetters(lazy, {
 // @ts-ignore
 // eslint-disable-next-line no-unused-vars
 function getBrowserWindow(aWindow) {
-  return aWindow &&
-      aWindow.document.documentElement.getAttribute("windowtype") ==
-        "navigator:browser" ?
-    aWindow :
-    getTopWindow();
+  return (
+      aWindow && aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser"
+    ) ?
+      aWindow
+    : getTopWindow();
 }
 
 function getTopWindow() {
@@ -84,13 +85,18 @@ PlacesUtilsInternal = {
   _initialized: false,
 
   init(aWindow) {
-    if (this._initialized)
+    if (this._initialized) {
       return;
+    }
+
     this._initialized = true;
 
     Tabmix._debugMode = aWindow.Tabmix._debugMode;
     Tabmix.gIeTab = aWindow.Tabmix.extensions.gIeTab;
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", {Tabmix, TabmixSvc});
+    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", {
+      Tabmix,
+      TabmixSvc,
+    });
 
     try {
       this.initPlacesUIUtils(aWindow);
@@ -125,8 +131,10 @@ PlacesUtilsInternal = {
       lazy.PlacesUIUtils.openTabset.toString();
     } catch {
       if (aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser") {
-        TabmixSvc.console.log("Starting with Firefox 21 Imacros 8.3.0 break toString on PlacesUIUtils functions." +
-          "\nTabmix can't update PlacesUIUtils to work according to Tabmix preferences, use Imacros 8.3.1 and up.");
+        TabmixSvc.console.log(
+          "Starting with Firefox 21 Imacros 8.3.0 break toString on PlacesUIUtils functions." +
+            "\nTabmix can't update PlacesUIUtils to work according to Tabmix preferences, use Imacros 8.3.1 and up."
+        );
       }
       return;
     }
@@ -141,8 +149,7 @@ PlacesUtilsInternal = {
     /** @type {PlacesModule.updateOpenTabset} */
     function updateOpenTabset(name, treeStyleTab = false) {
       const isWaterfoxOverridePlacesUIUtils =
-        TabmixSvc.version({wf: "115.9.0"}) &&
-        !lazy.PrivateBrowsingUtils.isWindowPrivate(aWindow);
+        TabmixSvc.version({wf: "115.9.0"}) && !lazy.PrivateBrowsingUtils.isWindowPrivate(aWindow);
       if (isWaterfoxOverridePlacesUIUtils) {
         if (!originalOpenTabset) {
           // can not find original PlacesUIUtils.openTabset that Waterfox override
@@ -151,19 +158,19 @@ PlacesUtilsInternal = {
         lazy.PlacesUIUtils[name] = originalOpenTabset;
       }
       let openGroup = "    browserWindow.TMP_Places.openGroup(urls, where$1);";
-      code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils." + name)._replace(
-        'urls = []',
-        'behavior, $&', {check: treeStyleTab}
-      )._replace(
-        /let openGroupBookmarkBehavior =|TSTOpenGroupBookmarkBehavior =/,
-        '$& behavior =', {check: treeStyleTab, silent: true}
-      )._replace(
-        /browserWindow\.gBrowser\.loadTabs\([^;]+;/,
-        'var changeWhere = where == "tabshifted" && aEvent.target.localName != "menuitem";\n' +
-        '    if (changeWhere)\n' +
-        '      where = "current";\n' +
-        openGroup.replace("$1", treeStyleTab ? ", behavior" : "")
-      );
+      code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils." + name)
+        ._replace("urls = []", "behavior, $&", {check: treeStyleTab})
+        ._replace(
+          /let openGroupBookmarkBehavior =|TSTOpenGroupBookmarkBehavior =/,
+          "$& behavior =",
+          {check: treeStyleTab, silent: true}
+        )
+        ._replace(
+          /browserWindow\.gBrowser\.loadTabs\([^;]+;/,
+          `var changeWhere = where == "tabshifted" && aEvent.target.localName != "menuitem";
+    if (changeWhere) where = "current"\n` +
+            openGroup.replace("$1", treeStyleTab ? ", behavior" : "")
+        );
       lazy.PlacesUIUtils[name] = makeCode(code);
       if (isWaterfoxOverridePlacesUIUtils) {
         const {PrivateTab} = ChromeUtils.importESModule("resource:///modules/PrivateTab.sys.mjs");
@@ -171,64 +178,80 @@ PlacesUtilsInternal = {
       }
     }
     var treeStyleTabInstalled = "TreeStyleTabBookmarksService" in aWindow;
-    if (treeStyleTabInstalled &&
-        typeof lazy.PlacesUIUtils.__treestyletab__openTabset == "function") {
+    if (
+      treeStyleTabInstalled &&
+      typeof lazy.PlacesUIUtils.__treestyletab__openTabset == "function"
+    ) {
       updateOpenTabset("__treestyletab__openTabset");
     } else if (treeStyleTabInstalled) {
       // wait until TreeStyleTab changed PlacesUIUtils.openTabset
-      let timer = this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
+      let timer = (this._timer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer));
       this.__index = 0;
-      timer.initWithCallback(() => {
-        let str = lazy.PlacesUIUtils.openTabset.toString();
-        if (++this.__index > 10 || str.indexOf("TreeStyleTabBookmarksService") > -1 ||
-            str.indexOf("GroupBookmarkBehavior") > -1) {
-          timer.cancel();
-          this._timer = null;
-          this.__index = 0;
-          updateOpenTabset("openTabset", true);
-        }
-      }, 50, Ci.nsITimer.TYPE_REPEATING_SLACK);
-    } else { // TreeStyleTab not installed
+      timer.initWithCallback(
+        () => {
+          let str = lazy.PlacesUIUtils.openTabset.toString();
+          if (
+            ++this.__index > 10 ||
+            str.indexOf("TreeStyleTabBookmarksService") > -1 ||
+            str.indexOf("GroupBookmarkBehavior") > -1
+          ) {
+            timer.cancel();
+            this._timer = null;
+            this.__index = 0;
+            updateOpenTabset("openTabset", true);
+          }
+        },
+        50,
+        Ci.nsITimer.TYPE_REPEATING_SLACK
+      );
+    } else {
+      // TreeStyleTab not installed
       updateOpenTabset("openTabset");
     }
 
     /** @type {PlacesModule.TabmixFunctionsName} */
-    let fnName = treeStyleTabInstalled && lazy.PlacesUIUtils.__treestyletab__openNodeWithEvent ?
-      "__treestyletab__openNodeWithEvent" : "openNodeWithEvent";
+    let fnName =
+      treeStyleTabInstalled && lazy.PlacesUIUtils.__treestyletab__openNodeWithEvent ?
+        "__treestyletab__openNodeWithEvent"
+      : "openNodeWithEvent";
     code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
-      'this._openNodeIn',
-      'where = {where, event: aEvent};\n    $&'
+      "this._openNodeIn",
+      "where = {where, event: aEvent};\n    $&"
     );
     lazy.PlacesUIUtils[fnName] = makeCode(code);
 
     // Don't change "current" when user click context menu open (callee is PC_doCommand and aWhere is current)
     // we disable the open menu when the tab is lock
     // the 2nd check for aWhere == "current" is for non Firefox code that may call this function
-    code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils._openNodeIn")._replace(
-      /\)\n*\s*{/,
-      '$&\n' +
-      '    var TMP_Event;\n' +
-      '    if (arguments.length > 1 && typeof aWhere == "object") {\n' +
-      '      TMP_Event = aWhere.event;\n' +
-      '      aWhere = aWhere.where;\n' +
-      '    }\n'
-    )._replace(
-      'aWindow.openTrustedLinkIn',
-      'let browserWindow = getBrowserWindow(aWindow);\n' +
-      '      if (browserWindow && typeof aWindow.TMP_Places == "object") {\n' +
-      '        let TMP_Places = aWindow.TMP_Places;\n' +
-      '        if (TMP_Event) aWhere = TMP_Places.isBookmarklet(aNode.uri) ? "current" :\n' +
-      '                       TMP_Places.fixWhereToOpen(TMP_Event, aWhere);\n' +
-      '        else if (aWhere == "current" && !TMP_Places.isBookmarklet(aNode.uri)) {\n' +
-      '          if (!browserWindow.Tabmix.callerTrace("PC_doCommand")) {\n' +
-      '            aWhere = TMP_Places.fixWhereToOpen(null, aWhere);\n' +
-      '          }\n' +
-      '        }\n' +
-      '      }\n' +
-      '      if (browserWindow && aWhere == "current")\n' +
-      '        browserWindow.gBrowser.selectedBrowser.tabmix_allowLoad = true;\n' +
-      '      $&'
-    );
+    code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils._openNodeIn")
+      ._replace(
+        /\)\n*\s*{/,
+        `$&
+    var TMP_Event;
+    if (arguments.length > 1 && typeof aWhere == "object") {
+      TMP_Event = aWhere.event;
+      aWhere = aWhere.where;
+    }`
+      )
+      ._replace(
+        "aWindow.openTrustedLinkIn",
+        `let browserWindow = getBrowserWindow(aWindow);
+      if (browserWindow && typeof aWindow.TMP_Places == "object") {
+        let TMP_Places = aWindow.TMP_Places;
+        if (TMP_Event)
+          aWhere = TMP_Places.isBookmarklet(aNode.uri)
+            ? "current"
+            : TMP_Places.fixWhereToOpen(TMP_Event, aWhere);
+        else if (aWhere == "current" && !TMP_Places.isBookmarklet(aNode.uri)) {
+          if (!browserWindow.Tabmix.callerTrace("PC_doCommand")) {
+            aWhere = TMP_Places.fixWhereToOpen(null, aWhere);
+          }
+        }
+      }
+      if (browserWindow && aWhere == "current")
+        browserWindow.gBrowser.selectedBrowser.tabmix_allowLoad = true;
+      $&`
+      );
     lazy.PlacesUIUtils._openNodeIn = makeCode(code);
   },
 
@@ -262,24 +285,27 @@ PlacesUtilsInternal = {
         return title;
       }
     } catch (ex) {
-      TabmixSvc.console.reportError(ex, 'Error function name changed', 'not a function');
+      TabmixSvc.console.reportError(ex, "Error function name changed", "not a function");
     }
     return null;
   },
 
   async applyCallBackOnUrl(aUrl, aCallBack) {
     let hasHref = aUrl.indexOf("#") > -1;
-    let result = await aCallBack.apply(this, [aUrl]) ||
-        hasHref ? await aCallBack.apply(this, [aUrl.split("#")[0] ?? aUrl]) : null;
+    let result =
+      (await aCallBack.apply(this, [aUrl])) || hasHref ?
+        await aCallBack.apply(this, [aUrl.split("#")[0] ?? aUrl])
+      : null;
     // when IE Tab is installed try to find url with or without the prefix
     const ietab = Tabmix.gIeTab;
     if (!result && ietab) {
       let prefix = "chrome://" + ietab.folder + "/content/reloaded.html?url=";
       if (aUrl != prefix) {
-        let url = aUrl.startsWith(prefix) ?
-          aUrl.replace(prefix, "") : prefix + aUrl;
-        result = await aCallBack.apply(this, [url]) ||
-          hasHref ? await aCallBack.apply(this, [url.split("#")[0] ?? url]) : null;
+        let url = aUrl.startsWith(prefix) ? aUrl.replace(prefix, "") : prefix + aUrl;
+        result =
+          (await aCallBack.apply(this, [url])) || hasHref ?
+            await aCallBack.apply(this, [url.split("#")[0] ?? url])
+          : null;
       }
     }
     return result;
@@ -295,8 +321,8 @@ PlacesUtilsInternal = {
       const title = await this.applyCallBackOnUrl(aUrl, getTitle);
       return title || aTitle;
     } catch (err) {
-      TabmixSvc.console.reportError(err, 'Error form asyncGetTitleFromBookmark');
-      return '';
+      TabmixSvc.console.reportError(err, "Error form asyncGetTitleFromBookmark");
+      return "";
     }
   },
 };

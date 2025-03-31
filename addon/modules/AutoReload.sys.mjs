@@ -12,7 +12,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
 });
 
 /** @type {TabmixGlobal["setItem"]} */
-var _setItem = function() {};
+var _setItem = function () {};
 
 /** @type {AutoReloadModule.AutoReload} */
 export const AutoReload = {
@@ -34,9 +34,7 @@ export const AutoReload = {
     aTab.postDataAcceptedByUser = false;
   },
 
-  /**
-   * Popup command
-   */
+  /** Popup command */
   addClonePopup(aPopup, aTab) {
     var win = aTab.ownerGlobal;
     let popup = win.document.getElementById("autoreload_popup");
@@ -97,8 +95,9 @@ export const AutoReload = {
     }
     aPopup._tab = aTab;
 
-    if (aPopup._tab.autoReloadEnabled === undefined)
+    if (aPopup._tab.autoReloadEnabled === undefined) {
       this.initTab(aPopup._tab);
+    }
 
     /** @type {HTMLElement} */ // @ts-ignore
     var enableItem = menuItems[2];
@@ -106,7 +105,7 @@ export const AutoReload = {
       this._labels = {
         minute: enableItem.getAttribute("minute") ?? "",
         minutes: enableItem.getAttribute("minutes") ?? "",
-        seconds: enableItem.getAttribute("seconds") ?? ""
+        seconds: enableItem.getAttribute("seconds") ?? "",
       };
     }
     enableItem.setAttribute("checked", Boolean(aPopup._tab.autoReloadEnabled));
@@ -129,9 +128,12 @@ export const AutoReload = {
 
     // get the custom list and validate its values
     function getList() {
-      let prefs = TabmixSvc.prefBranch, pref = "custom_reload_list";
-      if (!prefs.prefHasUserValue(pref))
+      let prefs = TabmixSvc.prefBranch,
+        pref = "custom_reload_list";
+      if (!prefs.prefHasUserValue(pref)) {
         return [];
+      }
+
       let list = prefs.getCharPref(pref).split(",");
       if (list.some(val => isNaN(parseInt(val)))) {
         prefs.clearUserPref(pref);
@@ -145,13 +147,15 @@ export const AutoReload = {
     }
 
     let doc = aPopup.ownerGlobal.document;
-    getList().sort((a, b) => parseInt(a) - parseInt(b)).forEach(val => {
-      let mi = doc.createXULElement("menuitem");
-      this.setLabel(mi, parseInt(val));
-      mi.setAttribute("type", "radio");
-      mi.setAttribute("value", val);
-      aPopup.insertBefore(mi, end);
-    });
+    getList()
+      .sort((a, b) => parseInt(a) - parseInt(b))
+      .forEach(val => {
+        let mi = doc.createXULElement("menuitem");
+        this.setLabel(mi, parseInt(val));
+        mi.setAttribute("type", "radio");
+        mi.setAttribute("value", val);
+        aPopup.insertBefore(mi, end);
+      });
   },
 
   setLabel(aItem, aSeconds) {
@@ -160,11 +164,14 @@ export const AutoReload = {
       let minutes = Math.floor(aSeconds / 60);
       timeLabel += minutes + " " + this._labels[minutes > 1 ? "minutes" : "minute"];
       aSeconds -= 60 * minutes;
-      if (aSeconds)
+      if (aSeconds) {
         timeLabel += " ";
+      }
     }
-    if (aSeconds || !timeLabel)
+    if (aSeconds || !timeLabel) {
       timeLabel += aSeconds + " " + this._labels.seconds;
+    }
+
     aItem.setAttribute("label", timeLabel);
   },
 
@@ -177,7 +184,12 @@ export const AutoReload = {
   setCustomTime(aTab) {
     let result = {ok: false};
     var win = aTab.ownerGlobal;
-    win.openDialog('chrome://tabmixplus/content/overlay/autoReload.xhtml', '_blank', 'chrome,modal,centerscreen', result);
+    win.openDialog(
+      "chrome://tabmixplus/content/overlay/autoReload.xhtml",
+      "_blank",
+      "chrome,modal,centerscreen",
+      result
+    );
     if (result.ok) {
       aTab.autoReloadTime = TabmixSvc.prefBranch.getIntPref("reload_time");
       this._enable(aTab);
@@ -205,27 +217,32 @@ export const AutoReload = {
     }
   },
 
-  /**
-   * called from popup and from tabclick options
-   */
+  /** called from popup and from tabclick options */
   toggle(aTab) {
-    if (aTab.autoReloadEnabled)
+    if (aTab.autoReloadEnabled) {
       this._disable(aTab);
-    else
+    } else {
       this._enable(aTab);
+    }
   },
 
   _enable(aTab) {
     var browser = aTab.linkedBrowser;
     var url = browser.currentURI.spec;
-    if (url.match(/^about:/) || url.match(/^(http|https):\/\/mail.google.com/))
+    if (url.match(/^about:/) || url.match(/^(http|https):\/\/mail.google.com/)) {
       return;
+    }
+
     aTab.autoReloadEnabled = true;
     _setItem(aTab, "_reload", true);
     aTab.autoReloadURI = url;
     var win = aTab.ownerGlobal;
     _clearTimeout(aTab, win);
-    aTab.autoReloadTimerID = win.setTimeout(_reloadTab, (aTab.autoReloadTime ?? DEFAULT_AUTORELOADTIME) * 1000, aTab);
+    aTab.autoReloadTimerID = win.setTimeout(
+      _reloadTab,
+      (aTab.autoReloadTime ?? DEFAULT_AUTORELOADTIME) * 1000,
+      aTab
+    );
     this._update(aTab, aTab.autoReloadURI + " " + aTab.autoReloadTime);
   },
 
@@ -243,27 +260,34 @@ export const AutoReload = {
     TabmixSvc.setCustomTabValue(aTab, "reload-data", aValue);
   },
 
-  /**
-   *  called by TabmixProgressListener.listener
-   */
+  /** called by TabmixProgressListener.listener */
   onTabReloaded(aTab, aBrowser) {
     var win = aTab.ownerGlobal;
-    if (aTab.autoReloadTimerID)
+    if (aTab.autoReloadTimerID) {
       _clearTimeout(aTab, win);
+    }
 
-    if (!TabmixSvc.prefBranch.getBoolPref("reload_match_address") ||
-        aTab.autoReloadURI == aBrowser.currentURI.spec) {
+    if (
+      !TabmixSvc.prefBranch.getBoolPref("reload_match_address") ||
+      aTab.autoReloadURI == aBrowser.currentURI.spec
+    ) {
       if (aBrowser.__tabmixScrollPosition || null) {
-        aBrowser.messageManager
-            .sendAsyncMessage("Tabmix:setScrollPosition",
-              aBrowser.__tabmixScrollPosition);
+        aBrowser.messageManager.sendAsyncMessage(
+          "Tabmix:setScrollPosition",
+          aBrowser.__tabmixScrollPosition
+        );
         aBrowser.__tabmixScrollPosition = null;
       }
 
-      if (!aTab.autoReloadEnabled)
+      if (!aTab.autoReloadEnabled) {
         aTab.autoReloadEnabled = true;
+      }
 
-      aTab.autoReloadTimerID = win.setTimeout(_reloadTab, (aTab.autoReloadTime ?? DEFAULT_AUTORELOADTIME) * 1000, aTab);
+      aTab.autoReloadTimerID = win.setTimeout(
+        _reloadTab,
+        (aTab.autoReloadTime ?? DEFAULT_AUTORELOADTIME) * 1000,
+        aTab
+      );
     } else if (aTab.autoReloadEnabled) {
       aTab.autoReloadEnabled = false;
     }
@@ -271,24 +295,29 @@ export const AutoReload = {
   },
 
   confirm(window, tab, isRemote) {
-    if (tab.postDataAcceptedByUser)
+    if (tab.postDataAcceptedByUser) {
       return true;
-    let title = TabmixSvc.getString('confirm_autoreloadPostData_title');
-    let remote = isRemote ? '_remote' : '';
-    let msg = TabmixSvc.getString('confirm_autoreloadPostData' + remote);
+    }
+
+    let title = TabmixSvc.getString("confirm_autoreloadPostData_title");
+    let remote = isRemote ? "_remote" : "";
+    let msg = TabmixSvc.getString("confirm_autoreloadPostData" + remote);
     Services.obs.addObserver(_observe, "common-dialog-loaded");
     let resultOK = Services.prompt.confirm(window, title, msg);
-    if (resultOK)
+    if (resultOK) {
       tab.postDataAcceptedByUser = true;
-    else
+    } else {
       this._disable(tab);
+    }
 
     return resultOK;
   },
 
   reloadRemoteTab(browser, serializeData) {
     if (Services.appinfo.sessionHistoryInParent) {
-      const postData = lazy.TabmixUtils.getPostDataFromHistory(browser.browsingContext.sessionHistory);
+      const postData = lazy.TabmixUtils.getPostDataFromHistory(
+        browser.browsingContext.sessionHistory
+      );
       Object.assign(serializeData, postData);
     }
 
@@ -307,13 +336,14 @@ export const AutoReload = {
     }
     data.referrerInfo = lazy.E10SUtils.deserializeReferrerInfo(serializeData.referrerInfo);
     doReloadTab(window, browser, tab, data);
-  }
+  },
 };
 
 /** @type {AutoReloadModule._reloadTab} */
 function _reloadTab(aTab) {
-  if (!aTab || !aTab.parentNode)
+  if (!aTab || !aTab.parentNode) {
     return;
+  }
 
   if (aTab.autoReloadEnabled === false) {
     aTab.postDataAcceptedByUser = false;
@@ -336,8 +366,9 @@ function _reloadTab(aTab) {
       data.postData = entry.QueryInterface?.(Ci.nsISHEntry).postData ?? null;
       data.isPostData = Boolean(data.postData);
       data.referrerInfo = browser.ownerDocument.referrerInfo;
-      if (data.postData && !AutoReload.confirm(window, aTab))
+      if (data.postData && !AutoReload.confirm(window, aTab)) {
         return;
+      }
     }
   } catch {}
 
@@ -349,6 +380,7 @@ function _reloadTab(aTab) {
 
 /**
  * when tab have beforeunload prompt, check if user canceled the reload
+ *
  * @type {AutoReloadModule.beforeReload}
  */
 async function beforeReload(window, browser) {
@@ -357,17 +389,21 @@ async function beforeReload(window, browser) {
   if (permitUnload) {
     return;
   }
-  gBrowser.addEventListener("DOMModalDialogClosed", event => {
-    const canUnload =
-      event.target.nodeName != "browser" ||
-      !event.detail?.wasPermitUnload ||
-      event.detail.areLeaving;
-    if (!canUnload) {
-      // User canceled the reload disable AutoReload for this tab
-      const tab = gBrowser.getTabForBrowser(browser);
-      AutoReload._disable(tab);
-    }
-  }, {once: true});
+  gBrowser.addEventListener(
+    "DOMModalDialogClosed",
+    event => {
+      const canUnload =
+        event.target.nodeName != "browser" ||
+        !event.detail?.wasPermitUnload ||
+        event.detail.areLeaving;
+      if (!canUnload) {
+        // User canceled the reload disable AutoReload for this tab
+        const tab = gBrowser.getTabForBrowser(browser);
+        AutoReload._disable(tab);
+      }
+    },
+    {once: true}
+  );
 }
 
 /** @type {AutoReloadModule.doReloadTab} */
@@ -376,11 +412,11 @@ function doReloadTab(window, browser, tab, data) {
 
   browser.__tabmixScrollPosition = {
     x: data.scrollX,
-    y: data.scrollY
+    y: data.scrollY,
   };
 
-  let loadFlags = Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_PROXY |
-                  Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE;
+  let loadFlags =
+    Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_PROXY | Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_CACHE;
   if (Services.prefs.getIntPref("fission.webContentIsolationStrategy") < 2) {
     loadFlags |= Ci.nsIWebNavigation.LOAD_FLAGS_BYPASS_HISTORY;
   }
@@ -389,8 +425,7 @@ function doReloadTab(window, browser, tab, data) {
   let url = browser.currentURI;
   let urlSpec = url.spec;
   let {postData, referrerInfo} = data;
-  let loadURI =
-      window.gBrowser.updateBrowserRemotenessByURL(browser, urlSpec) || postData;
+  let loadURI = window.gBrowser.updateBrowserRemotenessByURL(browser, urlSpec) || postData;
   if (loadURI) {
     if (!postData) {
       postData = referrerInfo = null;
@@ -400,7 +435,7 @@ function doReloadTab(window, browser, tab, data) {
       flags: loadFlags,
       referrerInfo,
       triggeringPrincipal: browser.contentPrincipal,
-      postData
+      postData,
     });
     return;
   }
@@ -444,8 +479,10 @@ function _observe(aSubject, aTopic) {
 /** @type {AutoReloadModule._clearTimeout} */
 function _clearTimeout(aTab, aWindow) {
   if (aTab.autoReloadTimerID) {
-    if (!aWindow)
+    if (!aWindow) {
       aWindow = aTab.ownerGlobal;
+    }
+
     aWindow.clearTimeout(aTab.autoReloadTimerID);
   }
 }

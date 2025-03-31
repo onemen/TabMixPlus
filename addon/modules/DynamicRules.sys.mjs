@@ -3,7 +3,7 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   //
-  TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.sys.mjs"
+  TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.sys.mjs",
 });
 
 ChromeUtils.defineLazyGetter(lazy, "Prefs", () => {
@@ -12,18 +12,16 @@ ChromeUtils.defineLazyGetter(lazy, "Prefs", () => {
 
 var TYPE = 1;
 ChromeUtils.defineLazyGetter(lazy, "SSS", () => {
-  let sss = Cc['@mozilla.org/content/style-sheet-service;1']
-      .getService(Ci.nsIStyleSheetService);
+  let sss = Cc["@mozilla.org/content/style-sheet-service;1"].getService(Ci.nsIStyleSheetService);
   TYPE = sss.USER_SHEET;
   return sss;
 });
 
-/** @type {Array<DynamicRulesModule.RuleName>} */
+/** @type {DynamicRulesModule.RuleName[]} */
 const STYLENAMES = ["currentTab", "unloadedTab", "unreadTab", "otherTab", "progressMeter"];
 
 /** @type {DynamicRulesModule.DynamicRules} */
 export const DynamicRules = {
-
   // @ts-expect-error - hold templates for our css rules
   cssTemplates: {},
 
@@ -36,11 +34,14 @@ export const DynamicRules = {
   _initialized: false,
 
   init(aWindow) {
-    if (this._initialized)
+    if (this._initialized) {
       return;
+    }
+
     this._initialized = true;
 
-    this.orient = aWindow.document.getElementById("tabbrowser-tabs").getAttribute("orient") || "horizontal";
+    this.orient =
+      aWindow.document.getElementById("tabbrowser-tabs").getAttribute("orient") || "horizontal";
     this.windows10 = aWindow.navigator.oscpu.startsWith("Windows NT 10.0");
 
     lazy.Prefs.addObserver("", this);
@@ -81,19 +82,24 @@ export const DynamicRules = {
     };
     let Observer = new window.MutationObserver(tabsMutate);
     Observer.observe(window.gBrowser.tabContainer, {attributes: true});
-    window.addEventListener("unload", function unload() {
-      Observer.disconnect();
-    }, {once: true});
+    window.addEventListener(
+      "unload",
+      function unload() {
+        Observer.disconnect();
+      },
+      {once: true}
+    );
   },
 
   onPrefChange(data) {
     /** @type {DynamicRulesModule.RuleName} */ // @ts-expect-error
     let prefName = data.split(".").pop() || "";
     if (STYLENAMES.indexOf(prefName) > -1) {
-      if (prefName == data)
+      if (prefName == data) {
         this.userChangedStyle(prefName, true);
-      else
+      } else {
         this.registerSheet(prefName);
+      }
     }
   },
 
@@ -110,61 +116,65 @@ export const DynamicRules = {
   updateOpenedWindows(ruleName) {
     // update all opened windows
     lazy.TabmixSvc.forEachBrowserWindow(window => {
-      if (ruleName != "progressMeter")
+      if (ruleName != "progressMeter") {
         window.gTMPprefObserver.updateTabsStyle(ruleName);
-      else
+      } else {
         window.gTMPprefObserver.setProgressMeter();
+      }
     });
   },
 
   getSelector(name, rule) {
     // add more selectors to increase specificity of our rule in order to
     // override rules from Firefox and Waterfox
-    let selector = '#tabbrowser-tabs';
+    let selector = "#tabbrowser-tabs";
 
     name = name.replace("Tab", "");
     return `${selector}[tabmix_#style~="#type"] #tabbrowser-arrowscrollbox .tabbrowser-tab${this.tabState[name]}`
-        .replace("#style", `${name}Style`)
-        .replace("#type", rule);
+      .replace("#style", `${name}Style`)
+      .replace("#type", rule);
   },
 
   createTemplates() {
-    let bgImage = {bg: "linear-gradient(#topColor, #bottomColor)",};
-    let background = " {\n  appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
-    let backgroundRule = ' > .tab-stack > .tab-background' + background;
+    let bgImage = {bg: "linear-gradient(#topColor, #bottomColor)"};
+    let background =
+      " {\n  appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
+    let backgroundRule = " > .tab-stack > .tab-background" + background;
     let tabTextRule = " .tab-text {\n  color: #textColor !important;\n}\n";
 
-    const visuallyselected = lazy.TabmixSvc.version(1190) ? '[visuallyselected]' : '[visuallyselected="true"]';
+    const visuallyselected =
+      lazy.TabmixSvc.version(1190) ? "[visuallyselected]" : '[visuallyselected="true"]';
     const _notSelected = `:not(${visuallyselected})`;
     this.tabState = {
       current: visuallyselected,
       unloaded: '[tabmix_tabState="unloaded"]' + _notSelected,
       unread: '[tabmix_tabState="unread"]' + _notSelected,
-      other: ':not([tabmix_tabState])' + _notSelected,
+      other: ":not([tabmix_tabState])" + _notSelected,
     };
 
     let styleRules = {
       currentTab: {
         text: `${this.getSelector("current", "text")}${tabTextRule}`,
-        bg: `${this.getSelector("current", "bg")}${backgroundRule}`
+        bg: `${this.getSelector("current", "bg")}${backgroundRule}`,
       },
       unloadedTab: {
         text: `${this.getSelector("unloaded", "text")}${tabTextRule}`,
-        bg: `${this.getSelector("unloaded", "bg")}${backgroundRule}`
+        bg: `${this.getSelector("unloaded", "bg")}${backgroundRule}`,
       },
       unreadTab: {
         text: `${this.getSelector("unread", "text")}${tabTextRule}`,
-        bg: `${this.getSelector("unread", "bg")}${backgroundRule}`
+        bg: `${this.getSelector("unread", "bg")}${backgroundRule}`,
       },
       otherTab: {
         text: `${this.getSelector("other", "text")}${tabTextRule}`,
-        bg: `${this.getSelector("other", "bg")}${backgroundRule}`
+        bg: `${this.getSelector("other", "bg")}${backgroundRule}`,
       },
       progressMeter: {
-        bg: '#tabbrowser-tabs[tabmix_progressMeter="userColor"] #tabbrowser-arrowscrollbox .tabbrowser-tab > ' +
-            '.tab-stack > .tab-progress-container > .tab-progress::-moz-progress-bar' +
-            '{\n  background-color: #bottomColor !important;\n}\n'
-      }
+        bg:
+          '#tabbrowser-tabs[tabmix_progressMeter="userColor"] #tabbrowser-arrowscrollbox .tabbrowser-tab > ' +
+          ".tab-stack > .tab-progress-container > .tab-progress::-moz-progress-bar" +
+          "{\n  background-color: #bottomColor !important;\n}\n",
+      },
     };
 
     this.cssTemplates = styleRules;
@@ -175,8 +185,9 @@ export const DynamicRules = {
   },
 
   userChangedStyle(ruleName, notifyWindows) {
-    if (ruleName in this && this[ruleName] == "preventUpdate")
+    if (ruleName in this && this[ruleName] == "preventUpdate") {
       return;
+    }
 
     this[ruleName] = "preventUpdate";
     let prefObj;
@@ -199,25 +210,32 @@ export const DynamicRules = {
     }
 
     // update styles on start or when user changed or enable color
-    let changed = !val || // on start
-                  prefObj.bg && (!val.bg || // bgColor enabled
-                  val.bgColor != prefObj.bgColor || // bgColor changed
-                  val.bgTopColor != prefObj.bgTopColor) || // bgTopColor changed
-                  prefObj.text && (!val.text || // textColor enabled
-                  val.textColor != prefObj.textColor); // textColor changed
+    let changed =
+      !val || // on start
+      (prefObj.bg &&
+        (!val.bg || // bgColor enabled
+          val.bgColor != prefObj.bgColor || // bgColor changed
+          val.bgTopColor != prefObj.bgTopColor)) || // bgTopColor changed
+      (prefObj.text &&
+        (!val.text || // textColor enabled
+          val.textColor != prefObj.textColor)); // textColor changed
 
-    if (changed)
+    if (changed) {
       this.updateStyles(ruleName, prefObj);
+    }
 
-    if (notifyWindows)
+    if (notifyWindows) {
       this.updateOpenedWindows(ruleName);
+    }
   },
 
   updateStyles(name, prefObj) {
     let templates = this.cssTemplates[name];
 
-    const buttonSelector = (/** @type {string} */ rule) => `${this.getSelector(name, rule)} > .tab-stack > .tab-content > .tab-close-button`;
-    const bgSelector = (/** @type {string} */ rule) => `${this.getSelector(name, rule)}:hover > .tab-stack > .tab-background`;
+    const buttonSelector = (/** @type {string} */ rule) =>
+      `${this.getSelector(name, rule)} > .tab-stack > .tab-content > .tab-close-button`;
+    const bgSelector = (/** @type {string} */ rule) =>
+      `${this.getSelector(name, rule)}:hover > .tab-stack > .tab-background`;
 
     /** @type {Record<string, string>} */
     let style = {};
@@ -226,14 +244,16 @@ export const DynamicRules = {
       let cssText = templates[rule];
       if (rule == "text") {
         if (prefObj.text) {
-          style[rule] = cssText.replace(/#textColor/g, prefObj.textColor) +
-          `\n${buttonSelector(rule)} {
+          style[rule] =
+            cssText.replace(/#textColor/g, prefObj.textColor) +
+            `\n${buttonSelector(rule)} {
             fill: ${prefObj.textColor} !important;
           }`;
         }
       } else if (prefObj.bg) {
-        style[rule] = cssText.replace(/#bottomColor/g, prefObj.bgColor)
-            .replace(/#topColor/g, prefObj.bgTopColor);
+        style[rule] = cssText
+          .replace(/#bottomColor/g, prefObj.bgColor)
+          .replace(/#topColor/g, prefObj.bgTopColor);
 
         if (name !== "progressMeter") {
           const {topColor, bottomColor} = getButtonColors(prefObj, 10);
@@ -274,7 +294,7 @@ export const DynamicRules = {
     });
   },
 
-  /** create/update styleSheet for type of tab or progressMeter
+  /* create/update styleSheet for type of tab or progressMeter
    *  we get here in these cases
    *      - when we initialize this service
    *      - when user changed text or background color
@@ -282,19 +302,21 @@ export const DynamicRules = {
    */
   registerSheet(name) {
     let enabled = lazy.TabmixSvc.prefBranch.getBoolPref(name);
-    if (!enabled)
+    if (!enabled) {
       return;
+    }
 
     /** @type {Record<string, string>} */ // @ts-expect-error
     let style = this.styles[name];
-    if (!style)
+    if (!style) {
       return;
+    }
 
-    let cssText = '';
-    for (let rule of Object.keys(style))
+    let cssText = "";
+    for (let rule of Object.keys(style)) {
       cssText += "\n" + style[rule];
-    let styleSheet = Services.io.newURI(
-      "data:text/css," + encodeURIComponent(cssText));
+    }
+    let styleSheet = Services.io.newURI("data:text/css," + encodeURIComponent(cssText));
 
     if (!lazy.SSS.sheetRegistered(styleSheet, TYPE)) {
       this.unregisterSheet(name);
@@ -305,9 +327,9 @@ export const DynamicRules = {
 
   unregisterSheet(name) {
     let styleSheet = this.registered[name] || null;
-    if (styleSheet &&
-      lazy.SSS.sheetRegistered(styleSheet, TYPE))
+    if (styleSheet && lazy.SSS.sheetRegistered(styleSheet, TYPE)) {
       lazy.SSS.unregisterSheet(styleSheet, TYPE);
+    }
   },
 
   get defaultPrefs() {
@@ -327,7 +349,9 @@ export const DynamicRules = {
 
   handleError(error, ruleName) {
     console.error(lazy.TabmixSvc.console.error(error));
-    lazy.TabmixSvc.console.log('Error in preference "' + ruleName + '", value was reset to default');
+    lazy.TabmixSvc.console.log(
+      'Error in preference "' + ruleName + '", value was reset to default'
+    );
     lazy.Prefs.clearUserPref(ruleName);
   },
 
@@ -343,6 +367,7 @@ export const DynamicRules = {
 
     /** @type {Partial<DynamicRulesModule.TabStyle> & {[key: string]: any}} */
     let currentPrefValues = {};
+
     /** @type {Partial<DynamicRulesModule.TabStyle> & {[key: string]: any}} */
     const prefValues = {};
     let prefString = lazy.Prefs.getCharPref(ruleName);
@@ -358,7 +383,8 @@ export const DynamicRules = {
       currentPrefValues = defaultPrefValues;
     }
 
-    const reRGBA = /rgba\((?:\b(?:1?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\b,){3}(?:0?\.[0-9]?[0-9]|0|1)\)/;
+    const reRGBA =
+      /rgba\((?:\b(?:1?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])\b,){3}(?:0?\.[0-9]?[0-9]|0|1)\)/;
     const booleanItems = "italic,bold,underline,text,bg";
     const colorItems = "textColor,bgColor,bgTopColor";
 
@@ -380,14 +406,14 @@ export const DynamicRules = {
         let opacityValue = opacity in currentPrefValues ? currentPrefValues[opacity] : null;
         value = getRGBcolor(value, opacityValue);
       } else if (value !== undefined && typeof value != "boolean") {
-        if (/^true$|^false$/.test(value.replace(/[\s]/g, "")))
+        if (/^true$|^false$/.test(value.replace(/[\s]/g, ""))) {
           value = value == "true";
-        else
+        } else {
           value = undefined;
+        }
       }
       if (value === undefined) {
-        prefValues[item] = item == "bgTopColor" ? prefValues.bgColor :
-          defaultPrefValues[item];
+        prefValues[item] = item == "bgTopColor" ? prefValues.bgColor : defaultPrefValues[item];
       } else {
         prefValues[item] = value;
       }
@@ -398,8 +424,7 @@ export const DynamicRules = {
     }
 
     return prefValues;
-  }
-
+  },
 };
 
 // Converts a color string in the format "#RRGGBB" to rgba(r,g,b,a).
@@ -411,34 +436,46 @@ function getRGBcolor(aColorCode, aOpacity) {
   let newRGB = [];
   let _length = aColorCode.length;
   if (/^rgba|rgb/.test(aColorCode)) {
-    newRGB = aColorCode.replace(/rgba|rgb|\(|\)/g, "").split(",").splice(0, 4);
-    if (newRGB.length < 3)
+    newRGB = aColorCode
+      .replace(/rgba|rgb|\(|\)/g, "")
+      .split(",")
+      .splice(0, 4);
+    if (newRGB.length < 3) {
       return null;
+    }
+
     for (let i = 0; i < newRGB.length; i++) {
       let val = Number(newRGB[i]?.replace(/[\s]/g, ""));
-      if (isNaN(val))
+      if (isNaN(val)) {
         return null;
+      }
     }
-  } else if (/^#/.test(aColorCode) && _length == 4 || _length == 7) {
+  } else if ((/^#/.test(aColorCode) && _length === 4) || _length === 7) {
     aColorCode = aColorCode.replace("#", "");
-    let subLength = _length == 7 ? 2 : 1;
+    let subLength = _length === 7 ? 2 : 1;
     for (let i = 0; i < 3; i++) {
       let subS = aColorCode.substr(i * subLength, subLength);
-      if (_length == 4)
+      if (_length === 4) {
         subS += subS;
+      }
+
       var newNumber = parseInt(subS, 16);
-      if (isNaN(newNumber))
+      if (isNaN(newNumber)) {
         return null;
+      }
+
       newRGB.push(newNumber);
     }
   } else {
     return null;
   }
 
-  if (aOpacity !== null)
+  if (aOpacity !== null) {
     newRGB[3] = aOpacity;
-  else if (newRGB[3] === undefined || Number(newRGB[3]) < 0 || Number(newRGB[3]) > 1)
+  } else if (newRGB[3] === undefined || Number(newRGB[3]) < 0 || Number(newRGB[3]) > 1) {
     newRGB[3] = 1;
+  }
+
   return "rgba(" + newRGB.join(",") + ")";
 }
 
@@ -447,7 +484,7 @@ const buttonColorProcessor = {
   getButtonColors({bgColor, bgTopColor}, value = 10) {
     return {
       topColor: this.processColor(bgColor, value),
-      bottomColor: this.processColor(bgTopColor, value)
+      bottomColor: this.processColor(bgTopColor, value),
     };
   },
 
@@ -463,7 +500,7 @@ const buttonColorProcessor = {
       r: parseInt(match[1]),
       g: parseInt(match[2]),
       b: parseInt(match[3]),
-      a: parseFloat(match[4])
+      a: parseFloat(match[4]),
     };
   },
 
@@ -471,7 +508,7 @@ const buttonColorProcessor = {
     const normalizedRGB = {
       r: rgba.r / 255,
       g: rgba.g / 255,
-      b: rgba.b / 255
+      b: rgba.b / 255,
     };
 
     const {r, g, b} = normalizedRGB;
@@ -501,7 +538,7 @@ const buttonColorProcessor = {
       h: Math.round(h),
       s: Math.round(s * 100) / 100,
       l: Math.round(l * 100) / 100,
-      a: Math.round(rgba.a * 100) / 100
+      a: Math.round(rgba.a * 100) / 100,
     };
   },
 
@@ -522,7 +559,7 @@ const buttonColorProcessor = {
       return color;
     }
     return this.hslaToString(this.darkenRgba(rgba, value));
-  }
+  },
 };
 
 // get darkened color for close button hover state

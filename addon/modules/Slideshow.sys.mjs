@@ -5,7 +5,7 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   //
-  Shortcuts: "chrome://tabmix-resource/content/Shortcuts.sys.mjs"
+  Shortcuts: "chrome://tabmix-resource/content/Shortcuts.sys.mjs",
 });
 
 export function flst() {
@@ -30,7 +30,13 @@ flst.prototype = {
     try {
       msg = msg.replace(/F8|F9/, lazy.Shortcuts.getFormattedKeyForID(id));
       let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
-      alerts.showAlertNotification("chrome://tabmixplus/skin/tmp.png", "Tab Mix Plus", msg, false, "");
+      alerts.showAlertNotification(
+        "chrome://tabmixplus/skin/tmp.png",
+        "Tab Mix Plus",
+        msg,
+        false,
+        ""
+      );
     } catch {}
   },
 
@@ -51,18 +57,18 @@ flst.prototype = {
     } else if (this.moreThenOneTab) {
       let timerInterval = TabmixSvc.prefBranch.getIntPref("slideDelay") * 1000;
       this.slideShowTimer = Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer);
-      this.slideShowTimer.initWithCallback(this, timerInterval,
-        Ci.nsITimer.TYPE_REPEATING_SLACK);
+      this.slideShowTimer.initWithCallback(this, timerInterval, Ci.nsITimer.TYPE_REPEATING_SLACK);
       this.showAlert(this.slideshowOn, "slideShow");
     }
   },
 
   /** @this {SlideshowModule.Flst} */
   notify() {
-    if (this.moreThenOneTab)
+    if (this.moreThenOneTab) {
       this.tabContainer.advanceSelectedTab(1, true);
-    else
+    } else {
       this.cancel();
+    }
   },
 
   cancel() {
@@ -75,5 +81,5 @@ flst.prototype = {
     let visibleCount = 0;
     let tabs = this.tabContainer.allTabs;
     return tabs.some(tab => !tab.hidden && ++visibleCount === 2);
-  }
+  },
 };

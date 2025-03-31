@@ -20,7 +20,8 @@ var gEventsPane = {
     $("keepMenuOpen").label = TabmixSvc.getString("undoclosetab.keepOpen.label");
 
     var browserWindow = Tabmix.getTopWin();
-    let ctrlTab = browserWindow.document.getElementById("ctrlTab-panel") && "ctrlTab" in browserWindow;
+    let ctrlTab =
+      browserWindow.document.getElementById("ctrlTab-panel") && "ctrlTab" in browserWindow;
     if (!ctrlTab) {
       gPrefWindow.removeItemAndPrefById("pref_ctrltab.tabPreviews");
     }
@@ -30,7 +31,7 @@ var gEventsPane = {
     this.disableShowTabList();
 
     if (RTL_UI) {
-      /** @type {[Node,Node,Node,Node,Node,Node]} */ // @ts-expect-error - there are 6 labels in the list
+      /** @type {[Node, Node, Node, Node, Node, Node]} */ // @ts-expect-error - there are 6 labels in the list
       let focusTab = $("focusTab").firstChild?.childNodes;
       let [rightLabel, leftLabel] = [focusTab[2].label, focusTab[1].label];
       [focusTab[2].label, focusTab[1].label] = [leftLabel ?? "", rightLabel ?? ""];
@@ -65,6 +66,7 @@ var gEventsPane = {
     /** @type {Record<number, number>} */
     const widths = {};
     const rows = $("tabopening").querySelectorAll("hbox");
+
     /** @type {(fn: (col: Element, id: number) => void) => void} */
     function updateGrid(fn) {
       for (let row of rows) {
@@ -88,11 +90,12 @@ var gEventsPane = {
 
   disableShowTabList() {
     var ctrlTabPv = $Pref("pref_ctrltab.tabPreviews");
-    var disableShowTabList = $Pref("pref_ctrltab").booleanValue &&
-      ctrlTabPv && ctrlTabPv.booleanValue;
+    var disableShowTabList =
+      $Pref("pref_ctrltab").booleanValue && ctrlTabPv && ctrlTabPv.booleanValue;
     gPrefWindow.setDisabled("showTabList", disableShowTabList);
-    if (!$("obs_showTabList").hasAttribute("disabled"))
+    if (!$("obs_showTabList").hasAttribute("disabled")) {
       gPrefWindow.setDisabled("respondToMouse", disableShowTabList);
+    }
   },
 
   disableReplaceLastTabWith() {
@@ -110,8 +113,9 @@ var gEventsPane = {
     var idnum = item.getAttribute("idnum") || "";
     gPrefWindow.setDisabled("newTabUrlLabel" + idnum, !showTabUrlBox || disable);
     gPrefWindow.setDisabled("newTabUrl" + idnum, !showTabUrlBox || disable);
-    if (setFocus && showTabUrlBox)
+    if (setFocus && showTabUrlBox) {
       $("newTabUrl" + idnum).focus();
+    }
   },
 
   syncFromNewTabUrlPref(item) {
@@ -119,8 +123,10 @@ var gEventsPane = {
     // If the pref is set to the default, set the value to ""
     // to show the placeholder text
     let value = preference.value;
-    if (value && value.toString().toLowerCase() == TabmixSvc.aboutNewtab)
+    if (value && value.toString().toLowerCase() == TabmixSvc.aboutNewtab) {
       return "";
+    }
+
     return this.syncToNewTabUrlPref(value, TabmixSvc.aboutBlank);
   },
 
@@ -143,10 +149,11 @@ var gEventsPane = {
 
   editSlideShowKey() {
     document.getElementById("TabMIxPreferences").showPane($Pane("paneMenu"));
-    if (typeof gMenuPane == "object")
+    if (typeof gMenuPane == "object") {
       gMenuPane.editSlideShowKey();
-    else
+    } else {
       $("paneMenu").setAttribute("editSlideShowKey", true);
+    }
   },
 
   loadProgressively: {
@@ -179,8 +186,11 @@ var gEventsPane = {
 
     setOnDemandMinValue(item, prefValue) {
       if (item.id != "loadProgressively") {
-        Tabmix.setItem("restoreOnDemand", "decreaseDisabled",
-          prefValue <= Math.abs($Pref("pref_loadProgressively").numberValue) || null);
+        Tabmix.setItem(
+          "restoreOnDemand",
+          "decreaseDisabled",
+          prefValue <= Math.abs($Pref("pref_loadProgressively").numberValue) || null
+        );
         return;
       }
       const onDemand = $("restoreOnDemand");
@@ -190,12 +200,17 @@ var gEventsPane = {
       if (prefValue > Math.abs(restoreOnDemand.numberValue)) {
         restoreOnDemand.value = $("chk_restoreOnDemand").checked ? prefValue : -prefValue;
       }
-      Tabmix.setItem(onDemand, "decreaseDisabled", restoreOnDemand.numberValue <= newMinValue || null);
+      Tabmix.setItem(
+        onDemand,
+        "decreaseDisabled",
+        restoreOnDemand.numberValue <= newMinValue || null
+      );
     },
 
     setOnDemandDisabledState() {
-      const disabled = $Pref("pref_loadProgressively").numberValue < 0 ||
-                       $Pref("pref_restoreOnDemand").numberValue < 0;
+      const disabled =
+        $Pref("pref_loadProgressively").numberValue < 0 ||
+        $Pref("pref_restoreOnDemand").numberValue < 0;
       gPrefWindow.setDisabled("restoreOnDemand", disabled);
     },
   },
@@ -219,8 +234,7 @@ var gEventsPane = {
           relatedAfterCurrent.value = false;
         }
       } else {
-        openTabNext.value =
-            relatedAfterCurrent.value ? false : openTabNextCheckbox.checked;
+        openTabNext.value = relatedAfterCurrent.value ? false : openTabNextCheckbox.checked;
       }
 
       const checked = openTabNext.booleanValue || relatedAfterCurrent.booleanValue;
@@ -257,7 +271,8 @@ var gEventsPane = {
     if (openTabNextInGroup.firstChild?.firstChild) {
       openTabNextInGroup.firstChild.firstChild.hidden = checked;
     }
-    openTabNextInGroup.querySelector('menuitem[value="-1"]').label = openTabNextInGroup.querySelector(`menuitem[value="${value}"]`).label;
+    openTabNextInGroup.querySelector('menuitem[value="-1"]').label =
+      openTabNextInGroup.querySelector(`menuitem[value="${value}"]`).label;
     inGroupCeckBox.checked = enabled;
     gPrefWindow.setDisabled("openTabNextInGroup", !enabled);
   },

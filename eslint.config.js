@@ -1,9 +1,10 @@
 import js from "@eslint/js";
-import stylisticJs from "@stylistic/eslint-plugin-js";
+import stylistic from "@stylistic/eslint-plugin";
 import globals from "globals";
 
 import eslintPluginHtml from "eslint-plugin-html";
 import eslintPluginMozilla from "eslint-plugin-mozilla";
+import prettierRecommended from "eslint-plugin-prettier/recommended";
 import tseslint from "typescript-eslint";
 import eslintPluginTabmix from "./config/eslint-plugin-tabmix/index.js";
 
@@ -11,42 +12,15 @@ const mozillaGlobals = eslintPluginMozilla.environments;
 const tabmixGlobals = eslintPluginTabmix.environments;
 
 const workerConfig = eslintPluginMozilla.configs["flat/recommended"]
-    .filter(config => !config.name)
-    .find(config => config.files?.includes("**/?(*.)worker.?(m)js"));
+  .filter(config => !config.name)
+  .find(config => config.files?.includes("**/?(*.)worker.?(m)js"));
 if (workerConfig) {
   workerConfig.name = "mozilla/recommended/worker-files";
 }
 
-if (!stylisticJs.configs.all.name) {
-  stylisticJs.configs.all.name = "stylisticJs/configs/all-flat";
+if (!stylistic.configs.all.name) {
+  stylistic.configs.all.name = "stylisticJs/configs/all";
 }
-
-const indentConfig = [
-  "error",
-  2,
-  {
-    SwitchCase: 1,
-    VariableDeclarator: {var: 2, let: 2, const: 3},
-    outerIIFEBody: 1,
-    MemberExpression: 2,
-    FunctionDeclaration: {body: 1, parameters: "first"},
-    FunctionExpression: {body: 1, parameters: "first"},
-    CallExpression: {arguments: 1},
-    ArrayExpression: 1,
-    ObjectExpression: 1,
-  },
-];
-
-const stylisticRules = {
-  // turn off some stylistic rules
-  "@stylistic/js/array-element-newline": "off",
-  "@stylistic/js/array-bracket-newline": "off",
-  "@stylistic/js/lines-around-comment": "off",
-  "@stylistic/js/function-call-argument-newline": "off",
-  "@stylistic/js/function-paren-newline": "off",
-  "@stylistic/js/multiline-comment-style": "off",
-  "@stylistic/js/nonblock-statement-body-position": "off",
-};
 
 export default [
   {
@@ -75,94 +49,43 @@ export default [
   },
   ...eslintPluginMozilla.configs["flat/recommended"],
 
-  stylisticJs.configs.all,
+  prettierRecommended,
 
   {
     name: "tabmix/stylistic-rules",
     files: ["**/*.js", "**/*.sys.mjs", "**/*.xhtml"],
+    plugins: {
+      "@stylistic": stylistic,
+    },
     rules: {
-      // turn off some stylistic rules
-      ...stylisticRules,
-
-      "@stylistic/js/array-bracket-spacing": ["error", "never"],
-      "@stylistic/js/arrow-parens": ["error", "as-needed"],
-      "@stylistic/js/arrow-spacing": ["error", {before: true, after: true}],
-      "@stylistic/js/block-spacing": ["error", "never"],
-      "@stylistic/js/brace-style": ["error", "1tbs", {allowSingleLine: true}],
-      // TODO - maybe in the future
-      "@stylistic/js/comma-dangle": "off",
-      "@stylistic/js/comma-spacing": "error",
-      "@stylistic/js/comma-style": ["error", "last"],
-      "@stylistic/js/computed-property-spacing": ["error", "never"],
-      "@stylistic/js/dot-location": ["error", "property"],
-      "@stylistic/js/eol-last": "error",
-      "@stylistic/js/func-call-spacing": ["error", "never"],
-      "@stylistic/js/generator-star-spacing": ["error", "after"],
-      "@stylistic/js/indent": indentConfig,
-      "@stylistic/js/jsx-quotes": "off",
-      "@stylistic/js/key-spacing": ["error", {beforeColon: false, afterColon: true}],
-      "@stylistic/js/keyword-spacing": "error",
-      "@stylistic/js/linebreak-style": ["error", "unix"],
-      "@stylistic/js/max-len": ["off", 120, 4],
-      "@stylistic/js/max-statements-per-line": ["error", {max: 1}],
-      "@stylistic/js/multiline-ternary": "off",
-      "@stylistic/js/new-parens": "error",
-      "@stylistic/js/newline-per-chained-call": "off",
-      "@stylistic/js/no-confusing-arrow": ["error", {allowParens: true}],
-      "@stylistic/js/no-extra-parens": [
+      "@stylistic/lines-around-comment": [
         "error",
-        "all",
+        {beforeBlockComment: true, allowBlockStart: true, allowBlockEnd: true},
+      ],
+      "@stylistic/no-mixed-operators": [
+        "error",
         {
-          returnAssign: false,
-          enforceForArrowConditionals: false,
-          enforceForSequenceExpressions: false,
-          enforceForNewInMemberExpressions: false,
-          enforceForFunctionPrototypeMethods: false,
+          groups: [
+            // conflicting with prettier
+            // ["+", "-", "*", "/", "%", "**"],
+            ["&", "|", "^", "~", "<<", ">>", ">>>"],
+            ["==", "!=", "===", "!==", ">", ">=", "<", "<="],
+            ["&&", "||"],
+            ["in", "instanceof"],
+          ],
+          allowSamePrecedence: true,
         },
       ],
-      "@stylistic/js/no-extra-semi": "error",
-      "@stylistic/js/no-floating-decimal": "error",
-      "@stylistic/js/no-mixed-requires": ["off", false],
-      "@stylistic/js/no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
-      "@stylistic/js/no-multi-spaces": "error",
-      "@stylistic/js/no-multiple-empty-lines": ["error", {max: 1}],
-      "@stylistic/js/no-trailing-spaces": "error",
-      "@stylistic/js/no-whitespace-before-property": "error",
-      "@stylistic/js/object-curly-newline": [
-        "error",
-        {ObjectExpression: {multiline: true}, ObjectPattern: "never"},
-      ],
-      "@stylistic/js/object-curly-spacing": ["error", "never"],
-      "@stylistic/js/object-property-newline": ["error", {allowMultiplePropertiesPerLine: true}],
-      "@stylistic/js/one-var-declaration-per-line": "off",
-      "@stylistic/js/operator-linebreak": ["error", "after"],
-      "@stylistic/js/padded-blocks": ["error", "never"],
-      "@stylistic/js/padding-line-between-statements": [
+      "@stylistic/padding-line-between-statements": [
         "error",
         {blankLine: "never", prev: "*", next: "directive"},
         {blankLine: "always", prev: "directive", next: "*"},
       ],
-      // in Firefox i can use properties obj - {default: x, private: y}
-      "@stylistic/js/quote-props": ["off", "as-needed", {keywords: true}],
-      "@stylistic/js/quotes": ["off", "double"],
-      "@stylistic/js/rest-spread-spacing": "error",
-      "@stylistic/js/semi": "error",
-      "@stylistic/js/semi-spacing": ["error", {before: false, after: true}],
-      "@stylistic/js/space-before-blocks": ["error", "always"],
-      "@stylistic/js/space-before-function-paren": ["error", "never"],
-      "@stylistic/js/space-in-parens": ["error", "never"],
-      "@stylistic/js/space-infix-ops": "error",
-      "@stylistic/js/space-unary-ops": ["error", {words: true, nonwords: false}],
-      "@stylistic/js/spaced-comment": [
+      "@stylistic/spaced-comment": [
         "error",
         "always",
         {exceptions: ["-", "+", "/"], markers: ["/", "/XXX", "XXX", "****", "***", "**"]},
       ],
-      "@stylistic/js/switch-colon-spacing": ["error", {after: true, before: false}],
-      "@stylistic/js/template-curly-spacing": ["error", "never"],
-      "@stylistic/js/wrap-iife": "error",
-      "@stylistic/js/wrap-regex": "off",
-      "@stylistic/js/yield-star-spacing": ["error", "after"],
     },
   },
 
@@ -179,7 +102,7 @@ export default [
     },
     linterOptions: {reportUnusedDisableDirectives: "error"},
     rules: {
-      "prettier/prettier": "off",
+      "prettier/prettier": ["error", {experimentalTernaries: true}],
 
       // Enable some mozilla rules that are not enabled by mozilla/recommended.
       "mozilla/avoid-Date-timing": "error",
@@ -199,15 +122,9 @@ export default [
       "class-methods-use-this": "error",
       "complexity": ["off", 11],
       "consistent-this": ["error", "self"],
-      // TODO - currently there are more the 1000 errors if we enable "curly"
-      "curly": ["off", "all"],
+      "curly": ["error", "multi-line"],
       "dot-notation": ["error", {allowKeywords: true}],
-      "func-style": ["off", "declaration"],
       "guard-for-in": "error",
-      "lines-around-comment": [
-        "off",
-        {beforeBlockComment: true, allowBlockStart: true, allowBlockEnd: true},
-      ],
       "max-depth": ["off", 4],
       "max-nested-callbacks": ["off", 2],
       "max-params": ["off", 3],
@@ -230,7 +147,6 @@ export default [
       "no-new-func": "error",
       "no-octal-escape": "error",
       "no-proto": "error",
-      "no-restricted-globals": "off",
       "no-return-assign": ["error", "except-parens"],
       "no-shadow": ["error", {hoist: "all"}],
       "no-template-curly-in-string": "error",
@@ -300,10 +216,6 @@ export default [
     },
     rules: {
       "no-unused-vars": "error",
-      ...stylisticRules,
-      "@stylistic/js/indent": indentConfig,
-      "@stylistic/js/padded-blocks": ["error", "never"],
-      "@stylistic/js/space-before-function-paren": ["error", "never"],
     },
   },
 
@@ -326,9 +238,15 @@ export default [
         ...mozillaGlobals["browser-window"].globals,
         ...tabmixGlobals.extensions,
         ...tabmixGlobals.tabmix,
-        TabsPanel: false
+        TabsPanel: false,
       },
     },
+  },
+
+  {
+    name: "tabmix/dialogs-globals",
+    files: ["addon/chrome/content/dialogs/**"],
+    languageOptions: {globals: tabmixGlobals.dialog},
   },
 
   {
@@ -426,6 +344,9 @@ export default [
       name: "tabmix/override-typescript-eslint-rules",
       files: ["**/*.d.ts"],
       ignores: ["**/gecko/**/*.d.ts"],
+      plugins: {
+        "@stylistic": stylistic,
+      },
       rules: {
         "no-var": "off",
         "no-shadow": "off",
@@ -437,11 +358,7 @@ export default [
           "error",
           {allowInterfaces: "with-single-extends"},
         ],
-        ...stylisticRules,
-        "@stylistic/js/indent": "off",
-        "@stylistic/js/lines-between-class-members": "off",
-        "@stylistic/js/padded-blocks": "off",
-        "@stylistic/js/quotes": ["error", "double", {avoidEscape: true}],
+        "@stylistic/quotes": ["error", "double", {avoidEscape: true}],
       },
     },
   ],

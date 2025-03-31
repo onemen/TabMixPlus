@@ -1,9 +1,6 @@
-
 import {Preferences} from "resource://gre/modules/Preferences.sys.mjs";
 
-/**
- * load Tabmix preference to the default branch
- */
+/** load Tabmix preference to the default branch */
 export const PreferencesLoader = {
   _defaultPreferencesLoaded: false,
 
@@ -14,8 +11,11 @@ export const PreferencesLoader = {
     this._defaultPreferencesLoaded = true;
     const prefs = new Preferences({defaultBranch: true});
 
-    /** @type {(prefName: string, prefValue: string | number | boolean) =>void} */
-    const pref = function(prefName, prefValue) {
+    /**
+     * @param {string} prefName
+     * @param {string | number | boolean} prefValue
+     */
+    const pref = function (prefName, prefValue) {
       const setPref = () => {
         try {
           prefs.set(prefName, prefValue);
@@ -40,8 +40,10 @@ export const PreferencesLoader = {
           setPref();
           break;
         default:
-          console.error(`Tabmix Error: can't set pref ${prefName} to value '${prefValue}'; ` +
-              `it isn't a String, Number, or Boolean`);
+          console.error(
+            `Tabmix Error: can't set pref ${prefName} to value '${prefValue}'; ` +
+              `it isn't a String, Number, or Boolean`
+          );
       }
     };
 

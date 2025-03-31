@@ -49,13 +49,15 @@ var TabmixContentHandler = {
         SessionStoreUtils.restoreDocShellCapabilities(docShell, [...disallow].join(","));
         sendSyncMessage("Tabmix:restorePermissionsComplete", {
           disallow: data.disallow,
-          reload: data.reload
+          reload: data.reload,
         });
         break;
       }
       case "Tabmix:resetContentName": {
-        if (content.name)
+        if (content.name) {
           content.name = "";
+        }
+
         break;
       }
       case "Tabmix:updateHistoryTitle": {
@@ -92,7 +94,9 @@ var TabmixContentHandler = {
         let openerID = null;
         try {
           openerID = content.opener?.top?.docShell?.outerWindowID;
-        } catch {/* ignore permission errors */}
+        } catch {
+          /* ignore permission errors */
+        }
         sendSyncMessage("Tabmix:getOpener", {openerID});
         break;
       }
@@ -127,7 +131,7 @@ var TabmixContentHandler = {
         ctrlKey: event.ctrlKey,
         metaKey: event.metaKey,
         shiftKey: event.shiftKey,
-        altKey: event.altKey || event.getModifierState("AltGraph")
+        altKey: event.altKey || event.getModifierState("AltGraph"),
       },
       links,
     };
@@ -136,7 +140,7 @@ var TabmixContentHandler = {
       event.stopPropagation();
       event.preventDefault();
     }
-  }
+  },
 };
 
 /** @type {FaviconLoader} */
@@ -146,7 +150,7 @@ var FaviconLoader = {
     Object.defineProperty(this, "actor", {
       value: actor,
       configurable: true,
-      enumerable: true
+      enumerable: true,
     });
     return actor;
   },
@@ -168,8 +172,8 @@ var FaviconLoader = {
   addRootIcon(pageURI) {
     if (
       !this.actor.seenTabIcon &&
-        Services.prefs.getBoolPref("browser.chrome.guess_favicon", true) &&
-        Services.prefs.getBoolPref("browser.chrome.site_icons", true)
+      Services.prefs.getBoolPref("browser.chrome.guess_favicon", true) &&
+      Services.prefs.getBoolPref("browser.chrome.site_icons", true)
     ) {
       if (["http", "https"].includes(pageURI.scheme)) {
         this.actor.iconLoader.addDefaultIcon(pageURI);
@@ -183,8 +187,7 @@ var FaviconLoader = {
 
     // replace iconInfo.iconUri with the one we got from
     // PlacesUtils.favicons.getFaviconURLForPage
-    if (!iconUri.spec.startsWith("fake-favicon-uri:") &&
-        !iconUri.spec.endsWith("/favicon.ico")) {
+    if (!iconUri.spec.startsWith("fake-favicon-uri:") && !iconUri.spec.endsWith("/favicon.ico")) {
       const iconInfo = this.actor._iconLoader.iconInfos[0];
       iconInfo.iconUri = iconUri;
     }
@@ -198,19 +201,27 @@ var FaviconLoader = {
 /** @type {TabmixClickEventHandler} */
 var TabmixClickEventHandler = {
   init: function init(global) {
-    global.addEventListener("click", event => {
-      let linkData = this.getLinkData(event);
-      if (linkData) {
-        let [href, node] = linkData;
-        let currentHref = event.originalTarget.ownerDocument.documentURI;
-        const divertMiddleClick = event.button == 1 && ContentSvc.prefBranch.getBoolPref("middlecurrent");
-        const ctrlKey = AppConstants.platform == "macosx" ? event.metaKey : event.ctrlKey;
-        if (divertMiddleClick || ctrlKey ||
-            LinkNodeUtils.isSpecialPage(href, node, currentHref)) {
-          this.contentAreaClick(event, linkData);
+    global.addEventListener(
+      "click",
+      event => {
+        let linkData = this.getLinkData(event);
+        if (linkData) {
+          let [href, node] = linkData;
+          let currentHref = event.originalTarget.ownerDocument.documentURI;
+          const divertMiddleClick =
+            event.button == 1 && ContentSvc.prefBranch.getBoolPref("middlecurrent");
+          const ctrlKey = AppConstants.platform == "macosx" ? event.metaKey : event.ctrlKey;
+          if (
+            divertMiddleClick ||
+            ctrlKey ||
+            LinkNodeUtils.isSpecialPage(href, node, currentHref)
+          ) {
+            this.contentAreaClick(event, linkData);
+          }
         }
-      }
-    }, true);
+      },
+      true
+    );
     if (ContentSvc.version(1250)) {
       global.addEventListener("click", this, {capture: true, mozSystemGroup: true});
     } else {
@@ -230,8 +241,11 @@ var TabmixClickEventHandler = {
   getLinkData(event) {
     // tabmix_isMultiProcessBrowser is undefined for remote browser when
     // window.gMultiProcessBrowser is true
-    if (event.defaultPrevented || event.button == 2 ||
-        event.tabmix_isMultiProcessBrowser === false) {
+    if (
+      event.defaultPrevented ||
+      event.button == 2 ||
+      event.tabmix_isMultiProcessBrowser === false
+    ) {
       return null;
     }
 
@@ -240,9 +254,9 @@ var TabmixClickEventHandler = {
     let composedTarget = event.composedTarget;
     if (
       composedTarget.isContentEditable ||
-      composedTarget.ownerDocument && composedTarget.ownerDocument.designMode == "on" ||
-      ChromeUtils.getClassName(composedTarget) == "HTMLInputElement" ||
-      ChromeUtils.getClassName(composedTarget) == "HTMLTextAreaElement"
+      (composedTarget.ownerDocument && composedTarget.ownerDocument.designMode === "on") ||
+      ChromeUtils.getClassName(composedTarget) === "HTMLInputElement" ||
+      ChromeUtils.getClassName(composedTarget) === "HTMLTextAreaElement"
     ) {
       return null;
     }
@@ -250,8 +264,10 @@ var TabmixClickEventHandler = {
     let ownerDoc = event.originalTarget.ownerDocument;
 
     // let Firefox code handle click events from about pages
-    if (!ownerDoc || event.button == 0 &&
-        /^about:(certerror|blocked|neterror)$/.test(ownerDoc.documentURI)) {
+    if (
+      !ownerDoc ||
+      (event.button == 0 && /^about:(certerror|blocked|neterror)$/.test(ownerDoc.documentURI))
+    ) {
       return null;
     }
 
@@ -271,14 +287,13 @@ var TabmixClickEventHandler = {
     let [href, node, principal] = linkData;
     let ownerDoc = event.originalTarget.ownerDocument;
 
-    let serializeCSP = "", csp = ownerDoc.csp;
+    let serializeCSP = "",
+      csp = ownerDoc.csp;
     if (csp) {
       serializeCSP = E10SUtils.serializeCSP(csp);
     }
 
-    let referrerInfo = Cc["@mozilla.org/referrer-info;1"].createInstance(
-      Ci.nsIReferrerInfo
-    );
+    let referrerInfo = Cc["@mozilla.org/referrer-info;1"].createInstance(Ci.nsIReferrerInfo);
     if (node) {
       referrerInfo.initWithElement(node);
     } else {
@@ -301,8 +316,9 @@ var TabmixClickEventHandler = {
       referrerInfo: serializeReferrerInfo,
     };
 
-    if (typeof event.tabmix_openLinkWithHistory == "boolean")
+    if (typeof event.tabmix_openLinkWithHistory == "boolean") {
       json.tabmix_openLinkWithHistory = true;
+    }
 
     // see getHrefFromNodeOnClick in tabmix's ContentClick.sys.mjs
     // for the case there is no href
@@ -314,22 +330,26 @@ var TabmixClickEventHandler = {
         json.originStoragePrincipal = ownerDoc.effectiveStoragePrincipal;
         json.triggeringPrincipal = ownerDoc.nodePrincipal;
       }
-      linkNode = LinkNodeUtils.wrap(linkNode, TabmixUtils.focusedWindow(content),
-        Boolean(href && event.button === 0));
+      linkNode = LinkNodeUtils.wrap(
+        linkNode,
+        TabmixUtils.focusedWindow(content),
+        Boolean(href && event.button === 0)
+      );
     }
 
-    let result = sendSyncMessage("TabmixContent:Click",
-      {json, href, node: linkNode});
+    let result = sendSyncMessage("TabmixContent:Click", {json, href, node: linkNode});
     let data = result[0];
-    if (data.where == "default")
+    if (data.where == "default") {
       return;
+    }
 
     // prevent Firefox default action
     event.stopPropagation();
     event.preventDefault();
 
-    if (data.where == "handled")
+    if (data.where == "handled") {
       return;
+    }
 
     json.tabmixContentClick = data;
     href = data._href;
@@ -350,10 +370,7 @@ var TabmixClickEventHandler = {
         return;
       }
 
-      if (
-        !event.isTrusted &&
-        BrowserUtils.whereToOpenLink(event) != "current"
-      ) {
+      if (!event.isTrusted && BrowserUtils.whereToOpenLink(event) != "current") {
         ownerDoc.consumeTransientUserGestureActivation();
       }
 
@@ -377,7 +394,9 @@ var TabmixClickEventHandler = {
 
     // This might be middle mouse navigation, in which case pass this back:
     if (!href && event.button == 1 && isFromMiddleMousePasteHandler) {
-      docShell.domWindow.windowGlobalChild.getActor("MiddleMousePasteHandler").onProcessedClick(json);
+      docShell.domWindow.windowGlobalChild
+        .getActor("MiddleMousePasteHandler")
+        .onProcessedClick(json);
     }
   },
 };
@@ -408,7 +427,7 @@ var ContextMenuHandler = {
     }
 
     sendSyncMessage("Tabmix:contextmenu", {links});
-  }
+  },
 };
 
 const AMO = new RegExp("https://addons.mozilla.org/.+/firefox/addon/tab-mix-plus/");

@@ -5,11 +5,13 @@
 // This is loaded into all XUL windows. Wrap in a block to prevent
 // leaking to window scope.
 {
-  ChromeUtils.defineLazyGetter(this, "shortcutKeyMapPromise", async() => {
+  ChromeUtils.defineLazyGetter(this, "shortcutKeyMapPromise", async () => {
     const {ExtensionShortcutKeyMap} = ChromeUtils.importESModule(
       "resource://gre/modules/ExtensionShortcuts.sys.mjs"
     );
-    const {AddonManager} = ChromeUtils.importESModule("resource://gre/modules/AddonManager.sys.mjs");
+    const {AddonManager} = ChromeUtils.importESModule(
+      "resource://gre/modules/AddonManager.sys.mjs"
+    );
     const shortcutKeyMap = new ExtensionShortcutKeyMap();
     const addons = await AddonManager.getAddonsByTypes(["extension"]);
     await shortcutKeyMap.buildForAddonIds(addons.map(addon => addon.id));
@@ -17,8 +19,8 @@
   });
 
   /**
-   *  @param {string} shortcutString
-   *  @returns {Promise<string[] | null>}
+   * @param {string} shortcutString
+   * @returns {Promise<string[] | null>}
    */
   const getDuplicateShortcutAddonsName = async shortcutString => {
     const shortcutKeyMap = await shortcutKeyMapPromise;
@@ -44,7 +46,9 @@
         return;
       }
       this.textContent = "";
-      this.appendChild(MozXULElement.parseXULToFragment(`
+      this.appendChild(
+        MozXULElement.parseXULToFragment(
+          `
         <hbox class="shortcut-content">
           <description inherits="disabled=blocked"></description>
           <hbox class="input-container" inherits="disabled=blocked">
@@ -66,7 +70,10 @@
           inuse="&shortcuts.inuse;"
           otherExtension="&shortcuts.otherExtension;"
         ></vbox>
-      `, ["chrome://tabmixplus/locale/shortcuts.dtd"]));
+      `,
+          ["chrome://tabmixplus/locale/shortcuts.dtd"]
+        )
+      );
       this.initializeAttributeInheritance();
       // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
 
@@ -82,28 +89,37 @@
     }
 
     get editBox() {
-      return Tabmix.lazyGetter(this, "editBox", () => this.getElementsByAttribute("anonid", "editBox")[0]);
+      return Tabmix.lazyGetter(
+        this,
+        "editBox",
+        () => this.getElementsByAttribute("anonid", "editBox")[0]
+      );
     }
 
     get notificationbox() {
-      return Tabmix.lazyGetter(this, "notificationbox", () => this.getElementsByAttribute("anonid", "notificationbox")[0]);
+      return Tabmix.lazyGetter(
+        this,
+        "notificationbox",
+        () => this.getElementsByAttribute("anonid", "notificationbox")[0]
+      );
     }
 
     get keyid() {
-      return Shortcuts.keys[this.id]?.id || 'key_tm_' + this.id;
+      return Shortcuts.keys[this.id]?.id || "key_tm_" + this.id;
     }
 
     set blocked(val) {
       if (val != this.blocked) {
-        if (val)
+        if (val) {
           this.setAttribute("blocked", "true");
-        else
+        } else {
           this.removeAttribute("blocked");
+        }
       }
     }
 
     get blocked() {
-      return this.hasAttribute('blocked');
+      return this.hasAttribute("blocked");
     }
 
     set disabled(val) {
@@ -117,12 +133,13 @@
     }
 
     set value(val) {
-      if (this.value != val)
+      if (this.value != val) {
         this.setAttribute("value", val);
+      }
     }
 
     get value() {
-      return this.getAttribute('value') ?? "";
+      return this.getAttribute("value") ?? "";
     }
 
     set key(val) {
@@ -140,13 +157,15 @@
         const resetButton = this.getElementsByAttribute("anonid", "shortcut_reset")[0];
         resetButton.setAttribute("_hidden", false);
         const defaultKey = getFormattedKey(Shortcuts.keyParse(defaultVal));
-        resetButton.setAttribute("tooltiptext",
-          resetButton.getAttribute("tooltiptext") + "\nDefault is: " + defaultKey);
+        resetButton.setAttribute(
+          "tooltiptext",
+          resetButton.getAttribute("tooltiptext") + "\nDefault is: " + defaultKey
+        );
       }
       Object.defineProperty(this, "defaultPref", {
         value: defaultVal,
         configurable: true,
-        enumerable: true
+        enumerable: true,
       });
       return defaultVal;
     }
@@ -154,8 +173,10 @@
     /** @type {MozShortcutClass["valueFromPreferences"]} */
     valueFromPreferences(aKeyData) {
       this.description.textContent = this.getAttribute("label");
-      if (!aKeyData.value && !this._key)
+      if (!aKeyData.value && !this._key) {
         return false;
+      }
+
       this.key = Shortcuts.keyParse(aKeyData.value);
       // trigger this.defaultPref getter on first run
       this.setAttribute("default", this.defaultPref == aKeyData.value && !this.disabled);
@@ -166,7 +187,7 @@
     updateFocus(onFocus) {
       if (onFocus) {
         this.editBox.select();
-        const panel = $('shortcuts-panel');
+        const panel = $("shortcuts-panel");
         panel.shortcut?.removeAttribute("focused");
         panel.shortcut = this;
       }
@@ -187,6 +208,7 @@
         Shortcuts.prefsChangedByTabmix = true;
         $Pref("pref_shortcuts").value = shortcuts.value;
         Shortcuts.prefsChangedByTabmix = false;
+
         /** @param {MozShortcutClass} shortcut */
         const callBack = shortcut => shortcut.id && shortcut.updateNotification();
         gMenuPane.updateShortcuts(this.parentNode, callBack);
@@ -201,8 +223,9 @@
 
     /** @this {MozShortcutClass} */
     disableKey() {
-      if (!this.disabled)
+      if (!this.disabled) {
         this.applyNewValue("", true);
+      }
     }
 
     updateNotification() {
@@ -216,7 +239,7 @@
       /**
        * @param {string | null} label
        * @param {number} [_index]
-       * @param {*[]} [_array]
+       * @param {any[]} [_array]
        */
       function addDescription(label, _index, _array) {
         const node = document.createXULElement("description");
@@ -236,8 +259,9 @@
             addDescription(msg[i] ?? "");
           }
         }
-        if (!this.hasAttribute("used"))
+        if (!this.hasAttribute("used")) {
           this.setAttribute("used", true);
+        }
       } else {
         this.removeAttribute("used");
       }
@@ -248,7 +272,7 @@
     onKeyDown(event) {
       // prevents Alt+C from closing our preferences window
       // note: AltGraph+C does not close window
-      if (event.altKey && (event.keyCode === 67 || event.key === 'c')) {
+      if (event.altKey && (event.keyCode === 67 || event.key === "c")) {
         event.preventDefault();
         event.stopPropagation();
         this.handleKeyEvents(event, true);
@@ -257,8 +281,9 @@
 
       // handle Ctrl/Command + W
       const control = !event.shiftKey && (event.ctrlKey || event.metaKey);
-      if (control && event.keyCode == 87)
+      if (control && event.keyCode == 87) {
         this.handleKeyEvents(event, true);
+      }
     }
 
     /** @type {MozShortcutClass["handleKeyEvents"]} */
@@ -270,20 +295,20 @@
       const key = {modifiers: "", key: "", keycode: ""};
       const modifiers = ["ctrl", "meta", "alt", "altGr", "shift"];
 
-      key.modifiers = modifiers.filter(mod => event[mod + "Key"])
-          .join(",").replace("ctrl", "control");
+      key.modifiers = modifiers
+        .filter(mod => event[mod + "Key"])
+        .join(",")
+        .replace("ctrl", "control");
 
       if (!key.modifiers) {
         // Return and Esc blur the edit box
-        if (event.keyCode == event.DOM_VK_RETURN ||
-          event.keyCode == event.DOM_VK_ESCAPE) {
+        if (event.keyCode == event.DOM_VK_RETURN || event.keyCode == event.DOM_VK_ESCAPE) {
           this.editBox.blur();
           return;
         }
 
         // Delete and Backspace disable the key
-        if (event.keyCode == event.DOM_VK_DELETE ||
-          event.keyCode == event.DOM_VK_BACK_SPACE) {
+        if (event.keyCode == event.DOM_VK_DELETE || event.keyCode == event.DOM_VK_BACK_SPACE) {
           this.disableKey();
           return;
         }
@@ -299,8 +324,10 @@
         key.key = String.fromCharCode(event.charCode).toUpperCase();
       } else {
         const eKeyCode = event.keyCode;
-        if (eKeyCode == 8)
+        if (eKeyCode == 8) {
           key.keycode = "VK_BACK";
+        }
+
         for (const keycode of Object.keys(KeyboardEvent)) {
           // @ts-expect-error
           const val = KeyboardEvent[keycode];
@@ -310,8 +337,9 @@
             break;
           }
         }
-        if (!key.keycode)
+        if (!key.keycode) {
           return;
+        }
       }
 
       const newValue = Shortcuts.validateKey(key) || Shortcuts.keyStringify(this.key);

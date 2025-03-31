@@ -22,8 +22,9 @@ export const TabmixSvc = {
   URILoadingHelperChanged: false,
 
   debugMode() {
-    return this.prefBranch.prefHasUserValue("enableDebug") &&
-      this.prefBranch.getBoolPref("enableDebug");
+    return (
+      this.prefBranch.prefHasUserValue("enableDebug") && this.prefBranch.getBoolPref("enableDebug")
+    );
   },
 
   version(versionNo, updateChannel) {
@@ -52,13 +53,17 @@ export const TabmixSvc = {
     let label = this.getString(property + ".label");
     const key = this.getString(property + ".accesskey");
     const accessKeyIndex = label.toLowerCase().indexOf(key.toLowerCase());
-    if (accessKeyIndex > -1)
+    if (accessKeyIndex > -1) {
       label = label.substr(0, accessKeyIndex) + "&" + label.substr(accessKeyIndex);
+    }
+
     return label;
   },
 
   getDialogStrings(...keys) {
-    let stringBundle = Services.strings.createBundle("chrome://global/locale/commonDialogs.properties");
+    let stringBundle = Services.strings.createBundle(
+      "chrome://global/locale/commonDialogs.properties"
+    );
 
     return keys.map(key => {
       try {
@@ -85,10 +90,10 @@ export const TabmixSvc = {
   },
 
   /**
-   * call a callback for all currently opened browser windows
-   * (might miss the most recent one)
-   * @param aFunc
-   *        Callback each window is passed to
+   * call a callback for all currently opened browser windows (might miss the
+   * most recent one)
+   *
+   * @param aFunc Callback each window is passed to
    */
   forEachBrowserWindow(aFunc) {
     let windowsEnum = Services.wm.getEnumerator("navigator:browser");
@@ -101,20 +106,21 @@ export const TabmixSvc = {
   },
 
   windowStartup: {
-    QueryInterface: ChromeUtils.generateQI([
-      "nsIObserver",
-      "nsISupportsWeakReference",
-    ]),
+    QueryInterface: ChromeUtils.generateQI(["nsIObserver", "nsISupportsWeakReference"]),
 
     _initialized: false,
 
     init(aWindow) {
       // windowStartup must only be called once for each window
-      if ("firstWindowInSession" in aWindow.Tabmix)
+      if ("firstWindowInSession" in aWindow.Tabmix) {
         return;
+      }
+
       aWindow.Tabmix.firstWindowInSession = !this._initialized;
-      if (this._initialized)
+      if (this._initialized) {
         return;
+      }
+
       this._initialized = true;
 
       try {
@@ -135,11 +141,15 @@ export const TabmixSvc = {
       lazy.TabmixPlacesUtils.init(aWindow);
       lazy.SyncedTabs.init(aWindow);
 
-      const {DynamicRules} = ChromeUtils.importESModule("chrome://tabmix-resource/content/DynamicRules.sys.mjs");
+      const {DynamicRules} = ChromeUtils.importESModule(
+        "chrome://tabmix-resource/content/DynamicRules.sys.mjs"
+      );
       DynamicRules.init(aWindow);
 
       if (lazy.isVersion(1300)) {
-        const {VerticalTabs} = ChromeUtils.importESModule("chrome://tabmix-resource/content/VerticalTabs.sys.mjs");
+        const {VerticalTabs} = ChromeUtils.importESModule(
+          "chrome://tabmix-resource/content/VerticalTabs.sys.mjs"
+        );
         VerticalTabs.init(aWindow);
       }
 
@@ -190,7 +200,7 @@ export const TabmixSvc = {
           TabmixSvc.console._timers = {};
           break;
       }
-    }
+    },
   },
 
   sm: {
@@ -212,7 +222,7 @@ export const TabmixSvc = {
 
   get i10IdMap() {
     // map ftl key for older firefox versions
-    return { };
+    return {};
   },
 };
 

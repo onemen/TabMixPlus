@@ -11,7 +11,9 @@ var TMP_Places = {
 
   get PlacesUtils() {
     return Tabmix.lazyGetter(this, "PlacesUtils", () => {
-      const {TabmixPlacesUtils} = ChromeUtils.importESModule("chrome://tabmix-resource/content/Places.sys.mjs");
+      const {TabmixPlacesUtils} = ChromeUtils.importESModule(
+        "chrome://tabmix-resource/content/Places.sys.mjs"
+      );
       // we get here only after the window was loaded
       // so we can safely call our 'onWindowOpen' initialization t make sure its done
       if (!Tabmix.initialization.onWindowOpen.initialized) {
@@ -61,15 +63,16 @@ var TMP_Places = {
     if ("PlacesCommandHook" in window) {
       gBrowser.tabContainer.addEventListener("SSTabRestored", this);
 
-      Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.getUniquePages")._replace(
-        'browser.contentTitle || tab.label;',
-        'tab.getAttribute("fixed-label") || $&'
-      ).toCode();
+      Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.getUniquePages")
+        ._replace("browser.contentTitle || tab.label;", 'tab.getAttribute("fixed-label") || $&')
+        .toCode();
 
-      Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")._replace(
-        'info.title = info.title || url.href',
-        'info.title = gBrowser.selectedTab.getAttribute("fixed-label") || info.title || url.href'
-      ).toCode();
+      Tabmix.changeCode(PlacesCommandHook, "PlacesCommandHook.bookmarkPage")
+        ._replace(
+          "info.title = info.title || url.href",
+          'info.title = gBrowser.selectedTab.getAttribute("fixed-label") || info.title || url.href'
+        )
+        .toCode();
     }
   },
 
@@ -83,8 +86,9 @@ var TMP_Places = {
   },
 
   historyMenuItemsTitle: function TMP_PC_historyMenuItemsTitle(aEvent) {
-    if (!this._titlefrombookmark)
+    if (!this._titlefrombookmark) {
       return;
+    }
 
     var aMenuPopup = aEvent.target;
     const ids = ["historyMenuPopup", "appmenu_historyMenupopup"];
@@ -96,8 +100,9 @@ var TMP_Places = {
       if ("_placesNode" in item) {
         const url = item._placesNode.uri;
         this.getTitleFromBookmark(url).then(bookMarkName => {
-          if (bookMarkName)
+          if (bookMarkName) {
             item.setAttribute("label", bookMarkName);
+          }
         });
       }
     }
@@ -105,19 +110,23 @@ var TMP_Places = {
 
   openMenuItem(aUri, aEvent, aParams, aPref) {
     let pref = "extensions.tabmix.opentabfor." + aPref;
-    let where = this.isBookmarklet(aUri) ? "current" :
-      this.fixWhereToOpen(aEvent, BrowserUtils.whereToOpenLink(aEvent, false, true), pref);
-    if (where == "current")
+    let where =
+      this.isBookmarklet(aUri) ? "current" : (
+        this.fixWhereToOpen(aEvent, BrowserUtils.whereToOpenLink(aEvent, false, true), pref)
+      );
+    if (where == "current") {
       Tabmix.getTopWin().gBrowser.selectedBrowser.tabmix_allowLoad = true;
+    }
+
     aParams.inBackground = Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
     window.openTrustedLinkIn(aUri, where, aParams);
   },
 
   idsMap: {
     "PanelUI-historyItems": "history",
-    historyMenuPopup: "history",
-    bookmarksMenuPopup: "bookmarks",
-    BMB_bookmarksPopup: "bookmarks",
+    "historyMenuPopup": "history",
+    "bookmarksMenuPopup": "bookmarks",
+    "BMB_bookmarksPopup": "bookmarks",
   },
 
   openUILink(url, event, where, params) {
@@ -131,7 +140,7 @@ var TMP_Places = {
     if (node) {
       // if the id is not in the list, set pref to "bookmarks" when
       // _placesNode exist
-      let pref = this.idsMap[node.id] || node._placesNode && "bookmarks";
+      let pref = this.idsMap[node.id] || (node._placesNode && "bookmarks");
       if (pref) {
         this.openMenuItem(url, event, params, pref);
         return null;
@@ -154,26 +163,33 @@ var TMP_Places = {
 
   fixWhereToOpen(aEvent, aWhere, aPref) {
     var w = Tabmix.getTopWin();
-    if (!w)
+    if (!w) {
       return aWhere;
+    }
 
     var tabBrowser = w.gBrowser;
     var aTab = tabBrowser._selectedTab;
 
-    if (typeof aPref == "undefined")
+    if (typeof aPref == "undefined") {
       aPref = this.getPrefByDocumentURI(window);
+    }
 
     var _pref = w.Services.prefs;
     if (_pref.getBoolPref(aPref) || aTab.hasAttribute("locked")) {
-      if (aEvent && _pref.getBoolPref("extensions.tabmix.middlecurrent") &&
-          (MouseEvent.isInstance(aEvent) &&
-            (aEvent.button == 1 || aEvent.button === 0 && (aEvent.ctrlKey || aEvent.metaKey)) ||
-           XULCommandEvent.isInstance(aEvent) &&
+      if (
+        aEvent &&
+        _pref.getBoolPref("extensions.tabmix.middlecurrent") &&
+        ((MouseEvent.isInstance(aEvent) &&
+          (aEvent.button === 1 || (aEvent.button === 0 && (aEvent.ctrlKey || aEvent.metaKey)))) ||
+          (XULCommandEvent.isInstance(aEvent) &&
             // @ts-expect-error - we check here to make sure it is _placesNode
-            typeof aEvent.target._placesNode == "object" && (aEvent.ctrlKey || aEvent.metaKey)))
+            typeof aEvent.target._placesNode === "object" &&
+            (aEvent.ctrlKey || aEvent.metaKey)))
+      ) {
         aWhere = "current";
-      else if (aWhere == "current" && !tabBrowser.isBlankNotBusyTab(aTab))
+      } else if (aWhere == "current" && !tabBrowser.isBlankNotBusyTab(aTab)) {
         aWhere = "tab";
+      }
     }
 
     return aWhere;
@@ -184,17 +200,20 @@ var TMP_Places = {
       case "chrome://browser/content/places/places.xhtml": {
         let historyId = PlacesUtils.virtualHistoryGuid;
         let node = aWindow.PlacesOrganizer._places.selectedNode;
-        let historySelected = node.bookmarkGuid == historyId ||
-            node.parent && node.parent.bookmarkGuid == historyId;
-        if (!historySelected)
+        let historySelected =
+          node.bookmarkGuid == historyId || (node.parent && node.parent.bookmarkGuid === historyId);
+        if (!historySelected) {
           return this.prefBookmark;
+        }
       }
+
       /* falls through */
       case "chrome://browser/content/places/historySidebar.xhtml":
         return this.prefHistory;
       case AppConstants.BROWSER_CHROME_URL:
       case "chrome://browser/content/places/bookmarksSidebar.xhtml":
-        /* falls through */
+
+      /* falls through */
       default:
         break;
     }
@@ -209,29 +228,35 @@ var TMP_Places = {
   openGroup: function TMP_PC_openGroup(bmGroup, aWhere) {
     var openTabs = Tabmix.visibleTabs.tabs;
 
-    var doReplace = (/^tab/).test(aWhere) ? false :
-      Tabmix.prefs.getBoolPref("loadBookmarksAndReplace");
-    var loadInBackground = bmGroup.length > 1 ?
-      Tabmix.prefs.getBoolPref("loadBookmarksGroupInBackground") :
-      Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
+    var doReplace =
+      /^tab/.test(aWhere) ? false : Tabmix.prefs.getBoolPref("loadBookmarksAndReplace");
+    var loadInBackground =
+      bmGroup.length > 1 ?
+        Tabmix.prefs.getBoolPref("loadBookmarksGroupInBackground")
+      : Services.prefs.getBoolPref("browser.tabs.loadBookmarksInBackground");
     var openTabNext = Tabmix.getOpenTabNextPref();
 
     // catch tab for reuse
     /** @type {Tab[]} */
     const reuseTabs = [];
+
     /** @type {Tab[]} */
     const removeTabs = [];
     var tabIsBlank, canReplace;
     for (const aTab of openTabs) {
       tabIsBlank = gBrowser.isBlankNotBusyTab(aTab);
       // don't reuse collapsed tab if width fitTitle is set
-      canReplace = doReplace && !aTab.hasAttribute("locked") &&
-                    !aTab.hasAttribute("pinned") || tabIsBlank;
+      canReplace =
+        (doReplace && !aTab.hasAttribute("locked") && !aTab.hasAttribute("pinned")) || tabIsBlank;
       if (reuseTabs.length < bmGroup.length && canReplace) {
         reuseTabs.push(aTab);
-      } else if (doReplace && !aTab.hasAttribute("locked") &&
-                !aTab.hasAttribute("protected") &&
-                !aTab.hasAttribute("pinned") || tabIsBlank) {
+      } else if (
+        (doReplace &&
+          !aTab.hasAttribute("locked") &&
+          !aTab.hasAttribute("protected") &&
+          !aTab.hasAttribute("pinned")) ||
+        tabIsBlank
+      ) {
         aTab.collapsed = true;
         removeTabs.push(aTab);
       }
@@ -254,9 +279,11 @@ var TMP_Places = {
 
     /** @type {Tab | undefined} */
     var tabToSelect;
+
     /** @type {Tab} */
     let prevTab;
-    let relatedToCurrent = !doReplace && openTabNext && gBrowser._selectedTab._tPos < openTabs.length - 1;
+    let relatedToCurrent =
+      !doReplace && openTabNext && gBrowser._selectedTab._tPos < openTabs.length - 1;
     if (relatedToCurrent) {
       // open bookmarks after last related tab if exist
       let lastRelatedTab = gBrowser._lastRelatedTabMap.get(gBrowser.selectedTab);
@@ -266,6 +293,7 @@ var TMP_Places = {
     }
     var tabPos, index;
     var multiple = bmGroup.length > 1;
+
     /** @type {Map<Tab, SessionStoreNS.TabData>} */
     let tabsInfo = new Map();
     let savePrincipal = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
@@ -352,7 +380,7 @@ var TMP_Places = {
       const replaceCurrent =
         gBrowser.selectedTab.hasAttribute("reloadcurrent") ||
         removeTabs.includes(gBrowser.selectedTab);
-      if (!loadInBackground || doReplace && replaceCurrent) {
+      if (!loadInBackground || (doReplace && replaceCurrent)) {
         var old = gBrowser.selectedTab;
         gBrowser.selectedTab = tabToSelect;
         if (!multiple && old != tabToSelect) tabToSelect.owner = old;
@@ -409,12 +437,7 @@ var TMP_Places = {
       // sessionstore.restore_on_demand is off but we want restore_on_demand for bookmarks
       let prevTab = gBrowser.selectedTab;
       const tabDataList = [...tabsInfo.values()];
-      const tabs = gBrowser.createTabsForSessionRestore(
-        true,
-        1,
-        tabDataList,
-        []
-      );
+      const tabs = gBrowser.createTabsForSessionRestore(true, 1, tabDataList, []);
       // need to set it again in case it set back to false before we add restoringTabs
       this.bookmarksOnDemand = restoreOnDemand;
       this.restoringTabs.push(...tabs);
@@ -423,6 +446,7 @@ var TMP_Places = {
           Tabmix.moveTabTo(tab, {tabIndex: prevTab._tPos + 1});
           prevTab = tab;
         }
+
         /** @type {SessionStoreNS.TabData} */ // @ts-expect-error
         const tabData = tabDataList[i];
         SessionStore.setTabState(tab, tabData);
@@ -442,12 +466,12 @@ var TMP_Places = {
 
     // set icon on pending tabs that are not about: pages
     const pendingData = Array.from(tabsInfo.entries()).filter(
-      ([tab, tabData]) => (tab.hasAttribute("tabmix_temp_pendingtab") ||
-          tab.hasAttribute("pending")) &&
+      ([tab, tabData]) =>
+        (tab.hasAttribute("tabmix_temp_pendingtab") || tab.hasAttribute("pending")) &&
         !tabData.userTypedValue?.startsWith("about")
     );
     for (let [tab, {userTypedValue}] of pendingData) {
-      /** @type {string}  */ // @ts-expect-error - we set userTypedValue to bookmarks url above
+      /** @type {string} */ // @ts-expect-error - we set userTypedValue to bookmarks url above
       const pageUrl = userTypedValue;
       const entryURI = Services.io.newURI(pageUrl);
       PlacesUtils.favicons.getFaviconURLForPage(entryURI, iconURI => {
@@ -457,14 +481,11 @@ var TMP_Places = {
         }
         // skip tab that already restored
         if (
-          tab.hasAttribute("tabmix_temp_pendingtab") && tab.linkedBrowser ||
-          tab.hasAttribute("pending")
+          tab.hasAttribute("tabmix_temp_pendingtab") &&
+          (tab.linkedBrowser || tab.hasAttribute("pending"))
         ) {
           const message = {iconUrl: iconURI.spec, pageUrl};
-          tab.linkedBrowser.messageManager.sendAsyncMessage(
-            "Tabmix:SetPendingTabIcon",
-            message
-          );
+          tab.linkedBrowser.messageManager.sendAsyncMessage("Tabmix:SetPendingTabIcon", message);
           // fallback in case somehow we don't get the image back
           if (tab.hasAttribute("tabmix_temp_pendingtab")) {
             setTimeout(() => {
@@ -490,11 +511,7 @@ var TMP_Places = {
   },
 
   updateRestoringTabsList(tab) {
-    if (
-      !this.restoringTabs.length &&
-      !this.tabRestoreQueue.length &&
-      !this.bookmarksOnDemand
-    ) {
+    if (!this.restoringTabs.length && !this.tabRestoreQueue.length && !this.bookmarksOnDemand) {
       return;
     }
     let index = this.restoringTabs.indexOf(tab);
@@ -527,7 +544,9 @@ var TMP_Places = {
       return;
     }
     const bookmarkUrl = tab.getAttribute("tabmix_bookmarkUrl");
-    const restoringTab = this.restoringTabs.find(t => t.getAttribute("tabmix_bookmarkUrl") === bookmarkUrl);
+    const restoringTab = this.restoringTabs.find(
+      t => t.getAttribute("tabmix_bookmarkUrl") === bookmarkUrl
+    );
     if (restoringTab && restoringTab !== tab && tab.hasAttribute("image")) {
       restoringTab.setAttribute("image", tab.getAttribute("image") ?? "");
       gBrowser.removeTab(tab, {animate: false});
@@ -535,10 +554,14 @@ var TMP_Places = {
   },
 
   setTabTitle: function TMP_PC_setTabTitle(aTab, aUrl, title) {
-    if (!aTab || !aTab.parentNode)
+    if (!aTab || !aTab.parentNode) {
       return false;
-    if (!aUrl)
+    }
+
+    if (!aUrl) {
       aUrl = aTab.linkedBrowser.currentURI.spec;
+    }
+
     if (title != aTab.label) {
       aTab.setAttribute("tabmix_changed_label", title);
       gBrowser._setTabLabel(aTab, title);
@@ -602,15 +625,18 @@ var TMP_Places = {
   isUserRenameTab(aTab, aUrl) {
     if (aTab.hasAttribute("label-uri")) {
       let label = aTab.getAttribute("label-uri");
-      if (label == aUrl || label == "*")
+      if (label == aUrl || label == "*") {
         return true;
+      }
     }
     return false;
   },
 
   afterTabTitleChanged(bookmarkChanged = true) {
-    if (bookmarkChanged && !this._tabTitleChanged)
+    if (bookmarkChanged && !this._tabTitleChanged) {
       return;
+    }
+
     if (this.inUpdateBatch) {
       this._tabTitleChanged = true;
       return;
@@ -639,10 +665,7 @@ var TMP_Places = {
     if (!this._hasBookmarksObserver) {
       try {
         this.handlePlacesEvents = this.handlePlacesEvents.bind(this);
-        PlacesUtils.observers.addListener(
-          this.listeners,
-          this.handlePlacesEvents
-        );
+        PlacesUtils.observers.addListener(this.listeners, this.handlePlacesEvents);
         this._hasBookmarksObserver = true;
       } catch (ex) {
         Tabmix.reportError(ex, "Failed to add bookmarks observer:");
@@ -652,17 +675,16 @@ var TMP_Places = {
 
   stopObserver: function TMP_PC_stopObserver() {
     if (this._hasBookmarksObserver) {
-      PlacesUtils.observers.removeListener(
-        this.listeners,
-        this.handlePlacesEvents
-      );
+      PlacesUtils.observers.removeListener(this.listeners, this.handlePlacesEvents);
       this._hasBookmarksObserver = false;
     }
   },
 
   onDelayedStartup() {
-    if (!this._titlefrombookmark || !gBrowser.tabs)
+    if (!this._titlefrombookmark || !gBrowser.tabs) {
       return;
+    }
+
     this.startObserver();
   },
 
@@ -704,12 +726,15 @@ var TMP_Places = {
       this._batchData.add.push(...urls);
       return;
     }
+
     /** @type {Promise<boolean>[]} */
     const promises = [];
-    /** @type {PlacesModule.Callback}  */
+
+    /** @type {PlacesModule.Callback} */
     const getBookmarkUrl = url => (urls.includes(url) ? url : null);
+
     /** @type {(tab: Tab, url: string) => Promise<void>} */
-    const updateTabs = async(tab, url) => {
+    const updateTabs = async (tab, url) => {
       let bookmarkUrl = await this.PlacesUtils.applyCallBackOnUrl(url, getBookmarkUrl);
       if (bookmarkUrl) {
         tab.setAttribute("tabmix_bookmarkUrl", bookmarkUrl);
@@ -734,6 +759,7 @@ var TMP_Places = {
       this._batchData.remove.push(...urls);
       return;
     }
+
     /** @type {Promise<boolean>[]} */
     const promises = [];
     const attrib = "tabmix_bookmarkUrl";
@@ -769,8 +795,9 @@ var TMP_Places = {
   },
 
   handlePlacesEvents(aEvents) {
-    const events = aEvents.filter(ev => ev.id !== -1 ||
-      ev.itemType === Ci.nsINavBookmarksService.TYPE_BOOKMARK);
+    const events = aEvents.filter(
+      ev => ev.id !== -1 || ev.itemType === Ci.nsINavBookmarksService.TYPE_BOOKMARK
+    );
     for (const ev of events) {
       switch (ev.type) {
         case "bookmark-added":
@@ -790,18 +817,30 @@ var TMP_Places = {
   },
 
   // onItemChanged also fired when page is loaded (visited count changed ?)
-  onItemChanged: function TMP_PC_onItemChanged(itemId, property, isAnnotationProperty,
-                                               newValue, lastModified, itemType,
-                                               parentId, guid) {
-    if (itemId == -1 || itemType != Ci.nsINavBookmarksService.TYPE_BOOKMARK ||
-        property != "uri" && property != "title")
+  onItemChanged: function TMP_PC_onItemChanged(
+    itemId,
+    property,
+    isAnnotationProperty,
+    newValue,
+    lastModified,
+    itemType,
+    parentId,
+    guid
+  ) {
+    if (
+      itemId == -1 ||
+      itemType != Ci.nsINavBookmarksService.TYPE_BOOKMARK ||
+      (property !== "uri" && property !== "title")
+    ) {
       return;
+    }
 
     if (property == "uri" && newValue && !isBlankPageURL(newValue)) {
       this.addItemUrlToTabs(newValue);
     } else if (property == "title") {
-      PlacesUtils.bookmarks.fetch({guid}, null, {})
-          .then(({url}) => this.addItemUrlToTabs(url.href));
+      PlacesUtils.bookmarks
+        .fetch({guid}, null, {})
+        .then(({url}) => this.addItemUrlToTabs(url.href));
     }
   },
 
@@ -809,19 +848,22 @@ var TMP_Places = {
     this._batchData = {remove: [], add: []};
     this.inUpdateBatch = true;
 
-    if (TabmixTabbar.widthFitTitle &&
-        Tabmix.tabsUtils.isElementVisible(gBrowser._selectedTab))
+    if (TabmixTabbar.widthFitTitle && Tabmix.tabsUtils.isElementVisible(gBrowser._selectedTab)) {
       this.currentTab = gBrowser._selectedTab;
+    }
   },
 
   onEndUpdateBatch: function TMP_PC_onEndUpdateBatch() {
     var data = this._batchData;
     this.inUpdateBatch = false;
     var [removeURLs, addURLs] = [data.remove, data.add];
-    if (addURLs.length)
+    if (addURLs.length) {
       this.addItemUrlToTabs(addURLs);
-    if (removeURLs.length)
+    }
+
+    if (removeURLs.length) {
       this.removeItemUrlFromTabs(removeURLs);
+    }
 
     this._batchData = {remove: [], add: []};
 
@@ -853,46 +895,62 @@ var TMP_Places = {
     buildContextMenu: function TMP_PC_buildContextMenu() {
       var _open = document.getElementById("placesContext_open");
       var _openInWindow = document.getElementById("placesContext_open:newwindow");
-      var _openInPrivateWindow =
-        document.getElementById("placesContext_open:newprivatewindow") || {hidden: true};
+      var _openInPrivateWindow = document.getElementById("placesContext_open:newprivatewindow") || {
+        hidden: true,
+      };
       var _openInTab = document.getElementById("placesContext_open:newtab");
-      this.update(_open, _openInWindow, _openInPrivateWindow, _openInTab, TMP_Places.getPrefByDocumentURI(window));
+      this.update(
+        _open,
+        _openInWindow,
+        _openInPrivateWindow,
+        _openInTab,
+        TMP_Places.getPrefByDocumentURI(window)
+      );
     },
 
     // update context menu for bookmarks manager and sidebar
     // for bookmarks/places, history, sage and more.....
-    update: function TMP_contextMenu_update(open, openInWindow, openInPrivateWindow,
-                                            openInTab, pref) {
-    // if all 4 is hidden... probably "Open all in Tabs" is visible
-      if (open.hidden && openInWindow.hidden && openInPrivateWindow.hidden &&
-        openInTab.hidden) {
+    update: function TMP_contextMenu_update(
+      open,
+      openInWindow,
+      openInPrivateWindow,
+      openInTab,
+      pref
+    ) {
+      // if all 4 is hidden... probably "Open all in Tabs" is visible
+      if (open.hidden && openInWindow.hidden && openInPrivateWindow.hidden && openInTab.hidden) {
         return;
       }
 
       var w = Tabmix.getTopWin();
       if (w) {
         let where = w.Tabmix.whereToOpen(pref);
-        if (!openInPrivateWindow.hidden && !Tabmix.isNewWindowAllow(true))
+        if (!openInPrivateWindow.hidden && !Tabmix.isNewWindowAllow(true)) {
           openInPrivateWindow.hidden = true;
+        }
 
-        if (!openInWindow.hidden && !Tabmix.isNewWindowAllow(false))
+        if (!openInWindow.hidden && !Tabmix.isNewWindowAllow(false)) {
           openInWindow.hidden = true;
-        else if (openInWindow.hasAttribute("default"))
+        } else if (openInWindow.hasAttribute("default")) {
           openInWindow.removeAttribute("default");
+        }
 
         Tabmix.setItem(openInTab, "default", where.inNew ? "true" : null);
 
-        if (open.hidden != where.lock)
+        if (open.hidden != where.lock) {
           open.hidden = where.lock;
-        if (!open.hidden)
+        }
+
+        if (!open.hidden) {
           Tabmix.setItem(open, "default", !where.inNew ? "true" : null);
+        }
       } else {
         open.hidden = true;
         openInTab.hidden = true;
         openInWindow.hidden = false;
         openInWindow.setAttribute("default", true);
       }
-    }
+    },
   },
 };
 
@@ -903,31 +961,31 @@ Tabmix.onContentLoaded = {
   },
 
   change_miscellaneous() {
-    const [customTitlebar, updateTitlebar] = TabmixSvc.version(1350) ?
-      [window.CustomTitlebar, "CustomTitlebar._update"] :
-      [window.TabsInTitlebar, "TabsInTitlebar._update"];
+    const [customTitlebar, updateTitlebar] =
+      TabmixSvc.version(1350) ?
+        [window.CustomTitlebar, "CustomTitlebar._update"]
+      : [window.TabsInTitlebar, "TabsInTitlebar._update"];
 
     if ("_update" in customTitlebar) {
       if (!TabmixSvc.version(1350)) {
-        Tabmix.changeCode(TabmixTabbar, "TabmixTabbar.updateTabsInTitlebarAppearance")._replace(
-          'window.CustomTitlebar',
-          'window.TabsInTitlebar'
-        ).toCode();
+        Tabmix.changeCode(TabmixTabbar, "TabmixTabbar.updateTabsInTitlebarAppearance")
+          ._replace("window.CustomTitlebar", "window.TabsInTitlebar")
+          .toCode();
 
-        Tabmix.changeCode(TabmixTabbar, "TabmixTabbar.getTabsPosition")._replace(
-          /customtitlebar/g,
-          'tabsintitlebar'
-        ).toCode();
+        Tabmix.changeCode(TabmixTabbar, "TabmixTabbar.getTabsPosition")
+          ._replace(/customtitlebar/g, "tabsintitlebar")
+          .toCode();
       }
       // set option to Prevent double click on Tab-bar from changing window size.
-      Tabmix.changeCode(customTitlebar, updateTitlebar)._replace(
-        /(})(\)?)$/,
-        // when we get in and out of customTitlebar mode call updateScrollStatus
-        // force another update when rows number changed by Tabmix to update
-        // titlebar and titlebarContent height
-        '  TabmixTabbar.updateTabsInTitlebarAppearance();\n  ' +
-        '$1$2'
-      ).toCode();
+      Tabmix.changeCode(customTitlebar, updateTitlebar)
+        ._replace(
+          /(})(\)?)$/,
+          // when we get in and out of customTitlebar mode call updateScrollStatus
+          // force another update when rows number changed by Tabmix to update
+          // titlebar and titlebarContent height
+          "  TabmixTabbar.updateTabsInTitlebarAppearance();\n  $1$2"
+        )
+        .toCode();
       TabmixTabbar.updateTabsInTitlebarAppearance();
     }
 
@@ -945,18 +1003,23 @@ Tabmix.onContentLoaded = {
     // we can't use TabPinned.
     // gBrowser.pinTab call _updateCloseButtons that call updateScrollStatus
     // before it dispatch TabPinned event.
-    Tabmix.changeCode(gBrowser, "gBrowser.pinTab")._replace(
-      'this._updateTabBarForPinnedTabs();',
-      '  if (TabmixTabbar.widthFitTitle && aTab.hasAttribute("width"))' +
-      '    aTab.removeAttribute("width");' +
-      '  if (Tabmix.prefs.getBoolPref("lockAppTabs") &&' +
-      '      !aTab.hasAttribute("locked") && "lockTab" in this) {' +
-      '    this.lockTab(aTab);' +
-      '    aTab.setAttribute("_lockedAppTabs", "true");' +
-      '  }' +
-      '  $&' +
-      '  TabmixTabbar.updateScrollStatus();'
-    ).toCode();
+    Tabmix.changeCode(gBrowser, "gBrowser.pinTab")
+      ._replace(
+        "this._updateTabBarForPinnedTabs();",
+        `if (TabmixTabbar.widthFitTitle && aTab.hasAttribute("width"))
+        aTab.removeAttribute("width");
+      if (
+        Tabmix.prefs.getBoolPref("lockAppTabs") &&
+        !aTab.hasAttribute("locked") &&
+        "lockTab" in this
+      ) {
+        this.lockTab(aTab);
+        aTab.setAttribute("_lockedAppTabs", "true");
+      }
+      $&
+      TabmixTabbar.updateScrollStatus();`
+      )
+      .toCode();
   },
 
   change_whereToOpenLink(parent) {
@@ -965,34 +1028,45 @@ Tabmix.onContentLoaded = {
     // don't inverse focus when called from onPopupClick and One-Click Search
     // Bar Interface is on
     // when we are in single window mode set the function to return "tab"
-    let $LF = '\n    ';
-    Tabmix.changeCode(parent, "whereToOpenLink")._replace(
-      '{', '{\n' +
-      'if (e && e.tabmixContentClick) {\n' +
-      '  let {where, suppressTabsOnFileDownload} = e.tabmixContentClick;\n' +
-      '  return suppressTabsOnFileDownload ? "current" : where;\n' +
-      '}\n'
-    )._replace(
-      'let middle = !ignoreButton && e.button == 1;',
-      'let middle = !ignoreButton && e.button && e.button == 1;'
-    )._replace(
-      'return shift ? "tabshifted" : "tab";',
-      '{' + $LF +
-      'let callerTrace = TabmixSvc.console.callerTrace();' + $LF +
-      'let list = ["openUILink", "handleLinkClick", "BG_observe", "contentAreaClick",' + $LF +
-      '            "TMP_tabshifted", "TMP_whereToOpenLink", "TMP_contentLinkClick"];' + $LF +
-      'let pref = callerTrace.contain(list) ?' + $LF +
-      '    "extensions.tabmix.inversefocusLinks" : "extensions.tabmix.inversefocusOther";' + $LF +
-      'let notOneClickSearch = !Services.prefs.getBoolPref("browser.search.showOneOffButtons", false) ||' + $LF +
-      '                        !callerTrace.contain("onPopupClick");' + $LF +
-      'if (notOneClickSearch && Services.prefs.getBoolPref(pref, true))' + $LF +
-      '  shift = !shift;' + $LF +
-      '$&' + $LF +
-      '}'
-    )._replace(
-      'return "window";',
-      'return TabmixSvc.getSingleWindowMode() ? "tab" : "window";'
-    ).toCode();
+    Tabmix.changeCode(parent, "whereToOpenLink")
+      ._replace(
+        "{",
+        `{
+    if (e && e.tabmixContentClick) {
+      let { where, suppressTabsOnFileDownload } = e.tabmixContentClick;
+      return suppressTabsOnFileDownload ? "current" : where;
+    }`
+      )
+      ._replace(
+        "let middle = !ignoreButton && e.button == 1;",
+        "let middle = !ignoreButton && e.button && e.button == 1;"
+      )
+      ._replace(
+        'return shift ? "tabshifted" : "tab";',
+        `let callerTrace = TabmixSvc.console.callerTrace();
+        let list = [
+          "openUILink",
+          "handleLinkClick",
+          "BG_observe",
+          "contentAreaClick",
+          "TMP_tabshifted",
+          "TMP_whereToOpenLink",
+          "TMP_contentLinkClick",
+        ];
+        let pref = callerTrace.contain(list)
+          ? "extensions.tabmix.inversefocusLinks"
+          : "extensions.tabmix.inversefocusOther";
+        let notOneClickSearch =
+          !Services.prefs.getBoolPref(
+            "browser.search.showOneOffButtons",
+            false
+          ) || !callerTrace.contain("onPopupClick");
+        if (notOneClickSearch && Services.prefs.getBoolPref(pref, true))
+          shift = !shift;
+        $&`
+      )
+      ._replace('return "window";', 'return TabmixSvc.getSingleWindowMode() ? "tab" : "window";')
+      .toCode();
   },
 
   change_utilityOverlay() {
@@ -1035,10 +1109,7 @@ Tabmix.onContentLoaded = {
       const callerTrace = Tabmix.callerTrace();
       if (callerTrace.contain("BG_observe", "loadHomepage")) {
         params.inBackground = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
-      } else if (
-        where == "current" &&
-        callerTrace.contain("ReaderParent.toggleReaderMode")
-      ) {
+      } else if (where == "current" && callerTrace.contain("ReaderParent.toggleReaderMode")) {
         gBrowser.selectedBrowser.tabmix_allowLoad = true;
       }
 
@@ -1066,8 +1137,7 @@ Tabmix.onContentLoaded = {
     let com = window.com;
     if (typeof com == "object" && typeof com.tobwithu == "object") {
       let fn = ["wmn", "xnotifier"].filter(f => {
-        return typeof com.tobwithu[f] == "object" &&
-          typeof com.tobwithu[f][aName] == "function";
+        return typeof com.tobwithu[f] == "object" && typeof com.tobwithu[f][aName] == "function";
       });
       const obj = fn?.[0] ? com.tobwithu[fn[0]] : undefined;
       if (obj) {
@@ -1075,8 +1145,7 @@ Tabmix.onContentLoaded = {
       }
     }
     return [window, aName];
-  }
-
+  },
 };
 
 if (typeof E10SUtils !== "object") {

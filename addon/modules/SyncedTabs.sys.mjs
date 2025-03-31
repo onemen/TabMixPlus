@@ -12,13 +12,18 @@ export const SyncedTabs = {
   _initialized: false,
 
   init(aWindow) {
-    if (this._initialized)
+    if (this._initialized) {
       return;
+    }
+
     this._initialized = true;
 
     Tabmix._debugMode = aWindow.Tabmix._debugMode;
     Tabmix.gIeTab = aWindow.Tabmix.extensions.gIeTab;
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", {Tabmix, TabmixSvc});
+    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", {
+      Tabmix,
+      TabmixSvc,
+    });
 
     this.tabListView();
   },
@@ -43,7 +48,7 @@ export const SyncedTabs = {
     });
 
     /** @type {TabListViewNS["tabmix_whereToOpen"]} */
-    TabListView.prototype.tabmix_whereToOpen = function(event) {
+    TabListView.prototype.tabmix_whereToOpen = function (event) {
       let window = getChromeWindow(this._window);
       let where = window.BrowserUtils.whereToOpenLink(event);
       if (where == "current") {
@@ -61,34 +66,36 @@ export const SyncedTabs = {
         return TabmixSvc.prefBranch.getBoolPref("loadSyncedTabsInBackground");
       },
       enumerable: true,
-      configurable: true
+      configurable: true,
     });
 
-    const fnName = typeof TabListView.prototype._openAllClientTabs == "function" ?
-      "TabListView.prototype._openAllClientTabs" : "TabListView.prototype.onClick";
-    Tabmix.changeCode(TabListView.prototype, fnName)._replace(
-      'this.props.onOpenTabs(urls, where);',
-      `if (/^tab/.test(where)) {
+    const fnName =
+      typeof TabListView.prototype._openAllClientTabs == "function" ?
+        "TabListView.prototype._openAllClientTabs"
+      : "TabListView.prototype.onClick";
+    Tabmix.changeCode(TabListView.prototype, fnName)
+      ._replace(
+        "this.props.onOpenTabs(urls, where);",
+        `if (/^tab/.test(where)) {
           // reverse the background here since props.onOpenTabs reverse it again
           where = where == 'tab' ^ this.tabmix_inBackground ? "tab" : "tabshifted";
         }
         $&`
-    ).toCode();
+      )
+      .toCode();
 
     /** @type {TabListViewNS["onOpenSelected"]} */
-    TabListView.prototype.onOpenSelected = function(url, event) {
+    TabListView.prototype.onOpenSelected = function (url, event) {
       let {where, inBackground} = this.tabmix_whereToOpen(event);
       this.props.onOpenTab(url, where, {inBackground});
     };
 
-    Tabmix.changeCode(TabListView.prototype, "TabListView.prototype.onOpenSelectedFromContextMenu")._replace(
-      'private:',
-      'inBackground: this.tabmix_inBackground,\n' +
-      '        $&'
-    ).toCode();
+    Tabmix.changeCode(TabListView.prototype, "TabListView.prototype.onOpenSelectedFromContextMenu")
+      ._replace("private:", "inBackground: this.tabmix_inBackground,\n        $&")
+      .toCode();
 
     /** @type {TabListViewNS["adjustContextMenu"]} */
-    TabListView.prototype.adjustContextMenu = function(menu) {
+    TabListView.prototype.adjustContextMenu = function (menu) {
       this.tabmix_adjustContextMenu(menu);
       if (menu.id == "SyncedTabsSidebarContext") {
         let window = getChromeWindow(this._window);
@@ -96,12 +103,17 @@ export const SyncedTabs = {
         let where = "syncedTabsOpenSelected";
         let open = doc.getElementById(where);
         let openInWindow = doc.getElementById(`${where}InWindow`);
-        let openInPrivateWindow =
-            doc.getElementById(`${where}InPrivateWindow`) || {hidden: true};
+        let openInPrivateWindow = doc.getElementById(`${where}InPrivateWindow`) || {hidden: true};
         let openInTab = doc.getElementById(`${where}InTab`);
         let pref = "extensions.tabmix.opentabfor.syncedTabs";
-        // @ts-expect-error
-        window.TMP_Places.contextMenu.update(open, openInWindow, openInPrivateWindow, openInTab, pref);
+        window.TMP_Places.contextMenu.update(
+          // @ts-expect-error
+          open,
+          openInWindow,
+          openInPrivateWindow,
+          openInTab,
+          pref
+        );
       }
     };
   },

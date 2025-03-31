@@ -1,7 +1,7 @@
 /* exported TMP_BrowserOpenTab */
 "use strict";
 
-/**
+/*
  * chrome://tabmixplus/content/links/userInterface.js
  *
  * original code by Bradley Chapman
@@ -20,15 +20,20 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
     var filetypeWin = windowMediator.getMostRecentWindow("mozilla:tabmixopt-filetype");
     var promptWin = windowMediator.getMostRecentWindow("mozilla:tabmixprompt");
 
-    if (panel && !appearanceWin && !filetypeWin && !promptWin)
+    if (panel && !appearanceWin && !filetypeWin && !promptWin) {
       tabmixOptionsWin.showPane(panel);
+    }
 
     tabmixOptionsWin.gIncompatiblePane.checkForIncompatible(false);
 
     (appearanceWin || filetypeWin || promptWin || tabmixOptionsWin).focus();
   } else {
-    window.openDialog("chrome://tabmixplus/content/preferences/preferences.xhtml", "Tab Mix Plus",
-      "chrome,titlebar,toolbar,close,dialog=no,centerscreen", panel || null);
+    window.openDialog(
+      "chrome://tabmixplus/content/preferences/preferences.xhtml",
+      "Tab Mix Plus",
+      "chrome,titlebar,toolbar,close,dialog=no,centerscreen",
+      panel || null
+    );
   }
 };
 
@@ -36,8 +41,11 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
 // Speed-Dial, Fast-Dial, TabGroupManager
 /** @type {GlobalFunctions.TMP_BrowserOpenTab} */
 function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
-  var newTabContent = replaceLastTab ? Tabmix.prefs.getIntPref("replaceLastTabWith.type") :
-    Tabmix.prefs.getIntPref("loadOnNewTab.type");
+  var newTabContent =
+    replaceLastTab ?
+      Tabmix.prefs.getIntPref("replaceLastTabWith.type")
+    : Tabmix.prefs.getIntPref("loadOnNewTab.type");
+
   /** @type {string} */
   let url = "";
   let {event, url: passedURL = null} = eventOrObject ?? {};
@@ -58,7 +66,8 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
       var currentURI = gBrowser.currentURI;
       url = currentURI ? currentURI.spec : newTabUrl;
       break;
-    case 3: { // duplicate tab
+    case 3: {
+      // duplicate tab
       let currentUrl = gBrowser.currentURI.spec;
       let dupTab = Tabmix.duplicateTab(selectedTab, "", undefined, false, true);
       if (dupTab) {
@@ -66,21 +75,25 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
       }
       return;
     }
-    case 4: {// user url
+    case 4: {
+      // user url
       if (replaceLastTab || TabmixSvc.isCyberfox) {
-        let prefName = replaceLastTab ? "extensions.tabmix.replaceLastTabWith.newtab.url" :
-          TabmixSvc.newtabUrl;
+        let prefName =
+          replaceLastTab ? "extensions.tabmix.replaceLastTabWith.newtab.url" : TabmixSvc.newtabUrl;
         try {
           url = Services.prefs.getStringPref(prefName);
-          if (newTabUrl == "about:privatebrowsing" && url == TabmixSvc.aboutNewtab)
+          if (newTabUrl == "about:privatebrowsing" && url == TabmixSvc.aboutNewtab) {
             url = "about:privatebrowsing";
+          }
         } catch (ex) {
           Tabmix.assert(ex);
         }
       }
       // use this if we can't find the pref
-      if (!url)
+      if (!url) {
         url = newTabUrl;
+      }
+
       break;
     }
     default:
@@ -89,38 +102,53 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
   // if google.toolbar extension installed check google.toolbar.newtab pref
   if ("GTB_GoogleToolbarOverlay" in window) {
     try {
-      if (Services.prefs.getBoolPref("google.toolbar.newtab"))
+      if (Services.prefs.getBoolPref("google.toolbar.newtab")) {
         url = "chrome://google-toolbar/content/new-tab.html";
-    } catch {/* no pref - do noting */}
+      }
+    } catch {
+      /* no pref - do noting */
+    }
   }
-  if (TabmixTabbar.widthFitTitle && replaceLastTab && !selectedTab.collapsed)
+  if (TabmixTabbar.widthFitTitle && replaceLastTab && !selectedTab.collapsed) {
     selectedTab.collapsed = true;
+  }
 
   var loadBlank = isBlankPageURL(url);
-  if (replaceLastTab && !loadBlank && typeof privateTab == "object" &&
-      !PrivateBrowsingUtils.isWindowPrivate(window)) {
+  if (
+    replaceLastTab &&
+    !loadBlank &&
+    typeof privateTab == "object" &&
+    !PrivateBrowsingUtils.isWindowPrivate(window)
+  ) {
     let privateTab = window.privateTab;
-    if (privateTab.isTabPrivate(selectedTab) &&
-        TabmixSvc.prefs.get("extensions.privateTab.makeNewEmptyTabsPrivate", 0) === 0) {
+    if (
+      privateTab.isTabPrivate(selectedTab) &&
+      TabmixSvc.prefs.get("extensions.privateTab.makeNewEmptyTabsPrivate", 0) === 0
+    ) {
       privateTab.readyToOpenTab(false);
     }
   }
 
   // always select new tab when replacing last tab
-  var loadInBackground = replaceLastTab ? false :
-    Tabmix.prefs.getBoolPref("loadNewInBackground");
+  var loadInBackground = replaceLastTab ? false : Tabmix.prefs.getBoolPref("loadNewInBackground");
   let baseTab = aTab && aTab.localName == "tab" ? aTab : null;
   let inGroupPref = Tabmix.prefs.getIntPref("openTabNextInGroup");
   let tabGroup = selectedTab.group;
-  let openTabNext = Boolean(baseTab) ||
-      !replaceLastTab &&
-      (Tabmix.prefs.getBoolPref("openNewTabNext") && (!tabGroup || inGroupPref !== 2));
+  let openTabNext =
+    Boolean(baseTab) ||
+    (!replaceLastTab &&
+      Tabmix.prefs.getBoolPref("openNewTabNext") &&
+      (!tabGroup || inGroupPref !== 2));
 
   let where = "tab";
   // Let accel-click and middle-click on the new tab button toggle openTabNext preference
   // see bug 528005
-  if (event && !aTab && !replaceLastTab &&
-      (MouseEvent.isInstance(event) || XULCommandEvent.isInstance(event))) {
+  if (
+    event &&
+    !aTab &&
+    !replaceLastTab &&
+    (MouseEvent.isInstance(event) || XULCommandEvent.isInstance(event))
+  ) {
     // don't replace 'window' to 'tab' in whereToOpenLink when singleWindowMode is on
     TabmixSvc.skipSingleWindowModeCheck = true;
     where = BrowserUtils.whereToOpenLink(event, false, true);
@@ -128,7 +156,8 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
     switch (where) {
       case "tabshifted":
         loadInBackground = !loadInBackground;
-        /* falls through */
+
+      /* falls through */
       case "tab":
         openTabNext = !openTabNext;
         inGroupPref = inGroupPref < 1 ? 2 : 0;
@@ -147,15 +176,20 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
 
   if (replaceLastTab && Tabmix.isVersion({zen: "1.8.1*"})) {
     const emptyTab = ZenWorkspaces._emptyTab;
-    if (emptyTab && gZenVerticalTabsManager._canReplaceNewTab &&
-       ZenWorkspaces._emptyTab.linkedBrowser.currentURI.spec === url
+    if (
+      emptyTab &&
+      gZenVerticalTabsManager._canReplaceNewTab &&
+      ZenWorkspaces._emptyTab.linkedBrowser.currentURI.spec === url
     ) {
       gBrowser.selectedTab = emptyTab;
       return;
     }
   }
 
-  TMP_extensionsCompatibility.treeStyleTab.onBeforeNewTabCommand(baseTab || selectedTab, openTabNext);
+  TMP_extensionsCompatibility.treeStyleTab.onBeforeNewTabCommand(
+    baseTab || selectedTab,
+    openTabNext
+  );
 
   Services.obs.notifyObservers(
     {
@@ -175,7 +209,7 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
             url = clipboard;
             options.allowThirdPartyFixup = true;
             if (gBrowser.isBlankTab(gBrowser.selectedTab)) {
-              where = 'current';
+              where = "current";
             }
           }
         }
@@ -184,8 +218,9 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
         if (where.startsWith("tab")) {
           if (openTabNext && !baseTab && tabGroup && inGroupPref > 0) {
             // don't add new tab to the group when openTabNextInGroup is 1 or 2
-            // @ts-expect-error - group always have tabs
-            options.index = inGroupPref === 1 ? tabGroup.tabs.at(-1)._tPos + 1 : gBrowser.tabs.length;
+            options.index =
+              // @ts-expect-error - group always have tabs
+              inGroupPref === 1 ? tabGroup.tabs.at(-1)._tPos + 1 : gBrowser.tabs.length;
           } else {
             const refTab = baseTab || selectedTab;
             options.index = openTabNext ? refTab._tPos + 1 : gBrowser.tabs.length;
@@ -209,7 +244,7 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
 
           if (Tabmix.isVersion({zen: "1.8.1*"})) {
             if (window.uuid) {
-              newTab.setAttribute('zen-workspace-id', ZenWorkspaces.activeWorkspace);
+              newTab.setAttribute("zen-workspace-id", ZenWorkspaces.activeWorkspace);
             }
           }
         }
@@ -231,18 +266,22 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
 }
 
 Tabmix.selectedTab = null;
-Tabmix.clearUrlBarIfNeeded = function(aTab, aUrl, aTimeOut, replaceLastTab) {
+Tabmix.clearUrlBarIfNeeded = function (aTab, aUrl, aTimeOut, replaceLastTab) {
   // check if we need to focus the address bar on new tab
-  const needToClearUrlBar = !replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar") ||
-    replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed") ||
-    Tabmix.isBlankNewTab(aUrl) || aUrl == "about:privatebrowsing";
+  const needToClearUrlBar =
+    (!replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar")) ||
+    (replaceLastTab && Tabmix.prefs.getBoolPref("selectLocationBar.afterLastTabClosed")) ||
+    Tabmix.isBlankNewTab(aUrl) ||
+    aUrl === "about:privatebrowsing";
   if (!needToClearUrlBar) {
     return;
   }
 
   // Firefox always call gURLBar.select when it replacing last tab
-  if (!replaceLastTab && /about:home|(www\.)*(google|bing)\./.test(aUrl))
+  if (!replaceLastTab && /about:home|(www\.)*(google|bing)\./.test(aUrl)) {
     return;
+  }
+
   if (aTab.selected && !isBlankPageURL(aUrl)) {
     // clean the the address bar as if the user load about:blank tab
     this.selectedTab = aTab;
@@ -261,22 +300,25 @@ Tabmix.clearUrlBarIfNeeded = function(aTab, aUrl, aTimeOut, replaceLastTab) {
 };
 
 /**
- * @brief In TMP_BrowserOpenTab we empty and focus the urlbar
- *        if the user or onload from a page blur the urlbar before user typed new value
- *        we restore the current url
+ * In TMP_BrowserOpenTab we empty and focus the urlbar if the user or onload
+ * from a page blur the urlbar before user typed new value we restore the
+ * current url
  */
 Tabmix.urlBarOnBlur = function TMP_urlBarOnBlur() {
-  if (isBlankPageURL(gURLBar.value))
+  if (isBlankPageURL(gURLBar.value)) {
     gURLBar.value = "";
+  }
 
   let tab = this.selectedTab;
-  if (!tab)
+  if (!tab) {
     return;
+  }
 
   var browser = gBrowser.getBrowserForTab(tab);
   var url = this.userTypedValue;
-  if (!isBlankPageURL(url))
+  if (!isBlankPageURL(url)) {
     browser.userTypedValue = url;
+  }
 
   this.updateUrlBarValue();
 };
@@ -292,10 +334,9 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
 };
 
 /**
- * @brief openUILink handles clicks on UI elements that cause URLs to load
+ * openUILink handles clicks on UI elements that cause URLs to load
  *
  * called from Tabmix.linkHandling_init and from text.link.xul
- *
  */
 Tabmix.openUILink_init = function TMP_openUILink_init() {
   if ("openUILink" in window) {
@@ -308,19 +349,24 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
     TabmixSvc.URILoadingHelperChanged = true;
 
     // divert all the calls from places UI to use our preferences
-    this.changeCode(parentObj, "openUILink")._replace(
-      'aIgnoreAlt = params.ignoreAlt;',
-      'aIgnoreAlt = params.ignoreAlt || null;'
-    )._replace(
-      /this\.openLinkIn\(.*\);/,
-      'where = window.TMP_Places.openUILink(url, event, where, params);\n' +
-      '  if (where) {\n' +
-      '    try {\n      $&\n    } catch (ex) {  }\n' +
-      '  }\n'
-    )._replace(// fix incompatibility with Omnibar (O is not defined)
-      'O.handleSearchQuery',
-      'window.Omnibar.handleSearchQuery', {silent: true}
-    ).toCode();
+    this.changeCode(parentObj, "openUILink")
+      ._replace("aIgnoreAlt = params.ignoreAlt;", "aIgnoreAlt = params.ignoreAlt || null;")
+      ._replace(
+        /this\.openLinkIn\(.*\);/,
+        `where = window.TMP_Places.openUILink(url, event, where, params);
+    if (where) {
+      try {
+        this.openLinkIn(window, url, where, params);
+      } catch (ex) {  }
+    }`
+      )
+      ._replace(
+        // fix incompatibility with Omnibar (O is not defined)
+        "O.handleSearchQuery",
+        "window.Omnibar.handleSearchQuery",
+        {silent: true}
+      )
+      .toCode();
   }
 };
 
@@ -328,13 +374,15 @@ Tabmix.checkCurrent = function TMP_checkCurrent(url) {
   var opentabforLinks = Tabmix.prefs.getIntPref("opentabforLinks");
   if (opentabforLinks == 1 || gBrowser._selectedTab.hasAttribute("locked")) {
     let isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser._selectedTab);
-    if (!isBlankTab)
+    if (!isBlankTab) {
       return "tab";
+    }
   } else if (opentabforLinks == 2) {
     // Get current page url
     let curpage = gBrowser.currentURI.spec;
-    if (this.ContentClick.isLinkToExternalDomain(curpage, url))
+    if (this.ContentClick.isLinkToExternalDomain(curpage, url)) {
       return "tab";
+    }
   }
   return "current";
 };
@@ -347,10 +395,11 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   });
 
   if (aTab.hasAttribute("_locked")) {
-    if (aTab.getAttribute("_locked") == "true")
+    if (aTab.getAttribute("_locked") == "true") {
       aTab.setAttribute("locked", "true");
-    else
+    } else {
       aTab.removeAttribute("locked");
+    }
 
     aTab.linkedBrowser.tabmix_allowLoad = !aTab.hasAttribute("locked");
   }
@@ -400,7 +449,7 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   aTab.removeAttribute("maxwidth");
 };
 
-Tabmix.isPendingTab = function(aTab) {
+Tabmix.isPendingTab = function (aTab) {
   const pending = aTab.hasAttribute("pending") || aTab.hasAttribute("tabmix_pending");
   if (pending) {
     if (TMP_Places.restoringTabs.indexOf(aTab) > -1) {
@@ -412,33 +461,45 @@ Tabmix.isPendingTab = function(aTab) {
   return false;
 };
 
-Tabmix.setTabStyle = function(aTab, boldChanged) {
+Tabmix.setTabStyle = function (aTab, boldChanged) {
   if (aTab.__duplicateFromWindow || aTab.tagName !== "tab") {
     return;
   }
-  if (!aTab)
+  if (!aTab) {
     return;
+  }
+
   let style = null;
-  let isSelected = Tabmix.isVersion(1190) ?
-    aTab.hasAttribute("visuallyselected") :
-    aTab.getAttribute("visuallyselected") === "true";
+  let isSelected =
+    Tabmix.isVersion(1190) ?
+      aTab.hasAttribute("visuallyselected")
+    : aTab.getAttribute("visuallyselected") === "true";
   // if pending tab is blank we don't style it as unload or unread
-  if (!isSelected && Tabmix.prefs.getBoolPref("unloadedTab") &&
-      this.isPendingTab(aTab)) {
-    style = aTab.pinned || aTab.hasAttribute("visited") ||
-      TMP_SessionStore.isBlankPendingTab(aTab) ? "other" : "unloaded";
-  } else if (!isSelected && Tabmix.prefs.getBoolPref("unreadTab") &&
-      !aTab.hasAttribute("visited") && Boolean(aTab.linkedBrowser.browsingContext) && !aTab.isEmpty) {
+  if (!isSelected && Tabmix.prefs.getBoolPref("unloadedTab") && this.isPendingTab(aTab)) {
+    style =
+      aTab.pinned || aTab.hasAttribute("visited") || TMP_SessionStore.isBlankPendingTab(aTab) ?
+        "other"
+      : "unloaded";
+  } else if (
+    !isSelected &&
+    Tabmix.prefs.getBoolPref("unreadTab") &&
+    !aTab.hasAttribute("visited") &&
+    Boolean(aTab.linkedBrowser.browsingContext) &&
+    !aTab.isEmpty
+  ) {
     style = "unread";
   }
 
   let currentStyle = aTab.getAttribute("tabmix_tabState") || null;
-  if (style != "unread" && style != "unloaded")
+  if (style != "unread" && style != "unloaded") {
     style = null;
+  }
+
   this.setItem(aTab, "tabmix_tabState", style);
 
-  if (!boldChanged)
+  if (!boldChanged) {
     return;
+  }
 
   // return true if state changed
   boldChanged.value = currentStyle != style;

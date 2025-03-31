@@ -1,6 +1,4 @@
-/**
-* Load overlays in a similar way as XUL did for legacy XUL add-ons.
-*/
+/** Load overlays in a similar way as XUL did for legacy XUL add-ons. */
 
 /** @type {OverlaysModule.Lazy} */ // @ts-ignore
 const lazy = {};
@@ -10,19 +8,20 @@ ChromeUtils.defineESModuleGetters(lazy, {
 });
 
 /**
- * The overlays class, providing support for loading overlays like they used to work. This class
- * should likely be called through its static method Overlays.load()
+ * The overlays class, providing support for loading overlays like they used to
+ * work. This class should likely be called through its static method
+ * Overlays.load()
+ *
  * @type {OverlaysModule.Overlays}
  */
 export class Overlays {
   /**
-   * Load overlays for the given window using the overlay provider, which can for example be a
-   * ChromeManifest object.
+   * Load overlays for the given window using the overlay provider, which can
+   * for example be a ChromeManifest object.
    *
-   * @param {TabmixModules.ChromeManifest} overlayProvider
-   *                         The overlay provider that contains information
-   *                         about styles and overlays.
-   * @param {Window} window  The window to load into
+   * @param {TabmixModules.ChromeManifest} overlayProvider The overlay provider
+   *   that contains information about styles and overlays.
+   * @param {Window} window The window to load into
    */
   static load(overlayProvider, window) {
     const instance = new Overlays(overlayProvider, window);
@@ -32,11 +31,12 @@ export class Overlays {
   }
 
   /**
-   * Constructs the overlays instance. This class should be called via Overlays.load() instead.
+   * Constructs the overlays instance. This class should be called via
+   * Overlays.load() instead.
    *
-   * @param {TabmixModules.ChromeManifest} overlayProvider        The overlay provider that contains information
-   *                                                  about styles and overlays.
-   * @param {Window} window                      The window to load into
+   * @param {TabmixModules.ChromeManifest} overlayProvider The overlay provider
+   *   that contains information about styles and overlays.
+   * @param {Window} window The window to load into
    */
   constructor(overlayProvider, window) {
     this.overlayProvider = overlayProvider;
@@ -53,18 +53,16 @@ export class Overlays {
     }
   }
 
-  /**
-   * A shorthand to this.window.document
-   */
+  /** A shorthand to this.window.document */
   get document() {
     return this.window.document;
   }
 
   /**
-   * Loads the given urls into the window, recursively loading further overlays as provided by the
-   * overlayProvider.
+   * Loads the given urls into the window, recursively loading further overlays
+   * as provided by the overlayProvider.
    *
-   * @param {string | string[]} urls                         The urls to load
+   * @param {string | string[]} urls The urls to load
    */
   async load(urls) {
     const unloadedOverlays = new Set(this._collectOverlays(this.document).concat(urls));
@@ -89,7 +87,7 @@ export class Overlays {
         doc = await this.fetchOverlay(url);
         console.debug(`Applying ${url} to ${this.location}`);
       } catch (error) {
-        console.error('Tabmix', error);
+        console.error("Tabmix", error);
         // eslint-disable-next-line no-continue
         continue;
       }
@@ -97,13 +95,7 @@ export class Overlays {
       this._update(url, doc);
 
       // clean the document a bit
-      const emptyNodes = doc.evaluate(
-        "//text()[normalize-space(.) = '']",
-        doc,
-        null,
-        7,
-        null
-      );
+      const emptyNodes = doc.evaluate("//text()[normalize-space(.) = '']", doc, null, 7, null);
       for (const node of this._xpathToNodes(emptyNodes)) {
         node.remove();
       }
@@ -191,10 +183,7 @@ export class Overlays {
     }
 
     if (forwardReferences.length) {
-      console.warn(
-        `Could not resolve ${forwardReferences.length} references`,
-        forwardReferences
-      );
+      console.warn(`Could not resolve ${forwardReferences.length} references`, forwardReferences);
     }
 
     // Loading the sheets now to avoid race conditions with xbl bindings
@@ -213,8 +202,7 @@ export class Overlays {
             this._decksToResolve.set(element, attrValue);
           } else if (
             (element != this.document.documentElement ||
-            !["height", "screenX", "screenY", "sizemode", "width"].includes(
-              attrName)) &&
+              !["height", "screenX", "screenY", "sizemode", "width"].includes(attrName)) &&
             element.getAttribute(attrName) != attrValue.toString()
           ) {
             element.setAttribute(attrName, attrValue);
@@ -242,19 +230,15 @@ export class Overlays {
         }
       });
     } else {
-      this.document.defaultView.addEventListener(
-        "load",
-        this._finish.bind(this),
-        {once: true}
-      );
+      this.document.defaultView.addEventListener("load", this._finish.bind(this), {once: true});
     }
   }
 
   /**
    * update document according to changes in Firefox
    *
-   * @param {String} url        The document url
-   * @param {XMLDocument} doc   The html document
+   * @param {String} url The document url
+   * @param {XMLDocument} doc The html document
    */
   _update(url, doc) {
     if (url === "chrome://tabmixplus/content/tabmix.xhtml") {
@@ -271,11 +255,7 @@ export class Overlays {
     }
 
     for (const bar of this._toolbarsToResolve) {
-      const currentSet = Services.xulStore.getValue(
-        this.location,
-        bar.id,
-        "currentset"
-      );
+      const currentSet = Services.xulStore.getValue(this.location, bar.id, "currentset");
       if (currentSet) {
         // @ts-ignore
         bar.currentSet = currentSet;
@@ -293,13 +273,7 @@ export class Overlays {
    */
   _collectOverlays(doc) {
     const urls = [];
-    const instructions = doc.evaluate(
-      "/processing-instruction('xul-overlay')",
-      doc,
-      null,
-      7,
-      null
-    );
+    const instructions = doc.evaluate("/processing-instruction('xul-overlay')", doc, null, 7, null);
     for (const node of this._xpathToNodes(instructions)) {
       const match = node.nodeValue?.match(/href=["']([^"']*)["']/);
       if (match?.[1]) {
@@ -311,6 +285,7 @@ export class Overlays {
 
   /**
    * Fires a "load" event for the given listener, using the current window
+   *
    * @type {OverlaysModule.Overlays["_fireEventListener"]}
    */
   _fireEventListener(listener) {
@@ -325,12 +300,12 @@ export class Overlays {
   }
 
   /**
-   * Resolves forward references for the given node. If the node exists in the target document, it
-   * is merged in with the target node. If the node has no id it is inserted at documentElement
-   * level.
+   * Resolves forward references for the given node. If the node exists in the
+   * target document, it is merged in with the target node. If the node has no
+   * id it is inserted at documentElement level.
    *
-   * @param {Element} node          The DOM Element to resolve in the target document.
-   * @return {Boolean}              True, if the node was merged/inserted, false otherwise
+   * @param {Element} node The DOM Element to resolve in the target document.
+   * @returns {Boolean} True, if the node was merged/inserted, false otherwise
    */
   _resolveForwardReference(node) {
     if (node.id) {
@@ -346,9 +321,7 @@ export class Overlays {
           this._insertElement(this.document.documentElement, node);
           return true;
         }
-        console.debug(
-          `The node ${node.id} could not be found, deferring to later`
-        );
+        console.debug(`The node ${node.id} could not be found, deferring to later`);
         return false;
       }
 
@@ -360,10 +333,11 @@ export class Overlays {
   }
 
   /**
-   * Insert the node in the given parent, observing the insertbefore/insertafter/position attributes
+   * Insert the node in the given parent, observing the
+   * insertbefore/insertafter/position attributes
    *
-   * @param {Element} parent        The parent element to insert the node into.
-   * @param {Element} node          The node to insert.
+   * @param {Element} parent The parent element to insert the node into.
+   * @param {Element} node The node to insert.
    */
   _insertElement(parent, node) {
     // These elements need their values set before they are added to
@@ -383,7 +357,7 @@ export class Overlays {
       this._toolbarsToResolve.push(...node.querySelectorAll("toolbar"));
     }
 
-    const nodes = node.querySelectorAll('script');
+    const nodes = node.querySelectorAll("script");
     for (const script of nodes) {
       this.deferredLoad.push(...this.loadScript(script));
     }
@@ -430,12 +404,13 @@ export class Overlays {
   }
 
   /**
-   * Merge the node into the target, adhering to the removeelement attribute, merging further
-   * attributes into the target node, and merging children as appropriate for xul nodes. If a child
-   * has an id, it will be searched in the target document and recursively merged.
+   * Merge the node into the target, adhering to the removeelement attribute,
+   * merging further attributes into the target node, and merging children as
+   * appropriate for xul nodes. If a child has an id, it will be searched in the
+   * target document and recursively merged.
    *
-   * @param {Element} target        The node to merge into
-   * @param {Element} node          The node that is being merged
+   * @param {Element} target The node to merge into
+   * @param {Element} node The node that is being merged
    */
   _mergeElement(target, node) {
     for (const attribute of node.attributes) {
@@ -445,11 +420,7 @@ export class Overlays {
           return;
         }
 
-        target.setAttributeNS(
-          attribute.namespaceURI,
-          attribute.name,
-          attribute.value
-        );
+        target.setAttributeNS(attribute.namespaceURI, attribute.name, attribute.value);
       }
     }
 
@@ -462,6 +433,7 @@ export class Overlays {
     while (node.firstElementChild) {
       const child = node.firstElementChild;
       child.remove();
+
       /** @type {Element | null} */
       const elementInDocument = child.id ? this.document.getElementById(child.id) : null;
       const elementParent = elementInDocument?.parentNode;
@@ -476,8 +448,9 @@ export class Overlays {
   /**
    * Fetches the overlay from the given chrome:// or resource:// URL.
    *
-   * @param {String} srcUrl          The URL to load
-   * @return {Promise<XMLDocument>}  Returns a promise that is resolved with the XML document.
+   * @param {String} srcUrl The URL to load
+   * @returns {Promise<XMLDocument>} Returns a promise that is resolved with the
+   *   XML document.
    */
   fetchOverlay(srcUrl) {
     if (!srcUrl.startsWith("chrome://") && !srcUrl.startsWith("resource://")) {
@@ -501,9 +474,7 @@ export class Overlays {
         }
       } catch {
         xhr.abort();
-        reject(
-          new Error(`Failed to set system principal while fetching overlay ${srcUrl}`)
-        );
+        reject(new Error(`Failed to set system principal while fetching overlay ${srcUrl}`));
       }
 
       const on_error = () => reject(new Error(`Failed to load ${srcUrl} to ${this.location}`));
@@ -521,13 +492,12 @@ export class Overlays {
   }
 
   /**
-   * Loads scripts described by the given script node. The node can either have a src attribute, or
-   * be an inline script with textContent.
+   * Loads scripts described by the given script node. The node can either have
+   * a src attribute, or be an inline script with textContent.
    *
-   * @param {Element} node                          The <script> element to load the script from
-   * @return {OverlaysModule.DeferredLoad}        An object with listener and useCapture,
-   *                                                  describing load handlers the script creates
-   *                                                  when first run.
+   * @param {Element} node The <script> element to load the script from
+   * @returns {OverlaysModule.DeferredLoad} An object with listener and
+   *   useCapture, describing load handlers the script creates when first run.
    */
   loadScript(node) {
     /** @type {OverlaysModule.DeferredLoad} */
@@ -535,7 +505,7 @@ export class Overlays {
 
     const oldAddEventListener = this.window.addEventListener;
     if (this.document.readyState == "complete") {
-      this.window.addEventListener = function(
+      this.window.addEventListener = function (
         /** @type {string} */ type,
         /** @type {OverlaysModule.Listener} */ listener,
         /** @type {boolean | AddEventListenerOptions | undefined} */ useCapture,
@@ -575,8 +545,7 @@ export class Overlays {
     } else if (node.textContent) {
       console.debug(`Loading eval'd script into ${this.window.location}`);
       try {
-        const dataURL =
-          "data:application/javascript," + encodeURIComponent(node.textContent);
+        const dataURL = "data:application/javascript," + encodeURIComponent(node.textContent);
         // It would be great if we could have script errors show the right url, but for now
         // loadSubScript will have to do.
         Services.scriptloader.loadSubScript(dataURL, this.window);
@@ -608,12 +577,14 @@ export class Overlays {
 
   /**
    * Convert XPathResult to array of nodes, filtering out null values
+   *
    * @type {OverlaysModule.Overlays["_xpathToNodes"]}
    */
   _xpathToNodes(result) {
     return result?.snapshotLength ?
-      Array.from({length: result.snapshotLength}, (_, i) => result.snapshotItem(i))
-          .filter(node => node !== null) :
-      [];
+        Array.from({length: result.snapshotLength}, (_, i) => result.snapshotItem(i)).filter(
+          node => node !== null
+        )
+      : [];
   }
 }

@@ -44,7 +44,9 @@ const TabpanelsClass = customElements.get("tabpanels");
       this._getElementByAnonid = aID => this.getElementsByAttribute("anonid", aID)[0];
 
       this.textContent = "";
-      this.appendChild(MozXULElement.parseXULToFragment(`
+      this.appendChild(
+        MozXULElement.parseXULToFragment(
+          `
       <hbox align="center">
         <checkbox anonid="useThis" label="&useThis.label;: " oncommand="this.parentNode.parentNode._updateUseThisState(this.checked); event.stopPropagation();"></checkbox>
         <label></label>
@@ -71,7 +73,13 @@ const TabpanelsClass = customElements.get("tabpanels");
       <hbox align="center" class="reset-button-box">
         <button label="&settings.default;" oncommand="this.parentNode.parentNode._resetDefault();"></button>
       </hbox>
-    `, ["chrome://tabmixplus/locale/pref-tabmix.dtd", "chrome://tabmixplus/locale/pref-appearance.dtd"]));
+    `,
+          [
+            "chrome://tabmixplus/locale/pref-tabmix.dtd",
+            "chrome://tabmixplus/locale/pref-appearance.dtd",
+          ]
+        )
+      );
       // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
       this.initializeAttributeInheritance();
 
@@ -91,7 +99,8 @@ const TabpanelsClass = customElements.get("tabpanels");
           /Mac/.test(navigator.platform)
         )
       ) {
-        this._item = window.opener && window.opener.document.getElementById("pref_" + this.id, "_PREF_CLASS_");
+        this._item =
+          window.opener && window.opener.document.getElementById("pref_" + this.id, "_PREF_CLASS_");
         if (this._item) {
           this._initUseThisPref.optionvalue = checked = this._item.booleanValue;
           Tabmix.prefs.setBoolPref(this.id, checked);
@@ -115,7 +124,7 @@ const TabpanelsClass = customElements.get("tabpanels");
     }
 
     get prefName() {
-      return 'styles.' + this.id;
+      return "styles." + this.id;
     }
 
     set disabled(val) {
@@ -127,15 +136,17 @@ const TabpanelsClass = customElements.get("tabpanels");
     }
 
     get disabled() {
-      return this.getAttribute('disabled') === "true";
+      return this.getAttribute("disabled") === "true";
     }
 
     /** @type {TabstylepanelClass["_updateUseThisState"]} */
     _updateUseThisState(aEnabled) {
       Tabmix.prefs.setBoolPref(this.id, aEnabled);
       this.disabled = !aEnabled;
-      if ("text" in this._prefValues)
+      if ("text" in this._prefValues) {
         this.updateDisableState("text");
+      }
+
       this.updateDisableState("bg");
     }
 
@@ -171,8 +182,10 @@ const TabpanelsClass = customElements.get("tabpanels");
         }
       }
 
-      if ("text" in this._prefValues)
+      if ("text" in this._prefValues) {
         this.updateDisableState("text");
+      }
+
       this.updateDisableState("bg");
     }
 
@@ -195,24 +208,28 @@ const TabpanelsClass = customElements.get("tabpanels");
     _ondialogcancel() {
       Tabmix.prefs.setCharPref(this.prefName, this._initPrefValues);
       Tabmix.prefs.setBoolPref(this.id, this._initUseThisPref.prefvalue);
-      if (this._item)
+      if (this._item) {
         this._item.value = this._initUseThisPref.optionvalue;
+      }
     }
 
     /** @type {TabstylepanelClass["updateDisableState"]} */
     updateDisableState(aID) {
       const disableBg = this.disableBgColor && aID == "bg";
       const disabled = this.disabled || disableBg || !this._getElementByAnonid(aID)?.checked;
-      if (disableBg)
+      if (disableBg) {
         this._getElementByAnonid("bg").disabled = true;
+      }
+
       Tabmix.setItem(this, aID + "-disabled", disabled || null);
       if (aID === "text") {
         this._getElementByAnonid("textColor").updateColor();
       } else if (aID === "bg") {
         this._getElementByAnonid("bgColor").updateColor();
       }
-      if (aID == "bg")
+      if (aID == "bg") {
         this._getElementByAnonid("bgTopColor").updateColor();
+      }
     }
   }
 
@@ -221,13 +238,13 @@ const TabpanelsClass = customElements.get("tabpanels");
   class MozColorbox extends MozXULElement {
     static get inheritedAttributes() {
       return {
-        "[anonid=\"color\"]": "disabled",
-        "label[value=\"[RGB]:\"]": "disabled",
-        "[anonid=\"red\"]": "disabled",
-        "[anonid=\"green\"]": "disabled",
-        "[anonid=\"blue\"]": "disabled",
+        '[anonid="color"]': "disabled",
+        'label[value="[RGB]:"]': "disabled",
+        '[anonid="red"]': "disabled",
+        '[anonid="green"]': "disabled",
+        '[anonid="blue"]': "disabled",
         "label.opacity": "disabled",
-        "[anonid=\"opacity\"]": "disabled",
+        '[anonid="opacity"]': "disabled",
       };
     }
 
@@ -259,7 +276,9 @@ const TabpanelsClass = customElements.get("tabpanels");
       }
 
       this.setAttribute("align", "center");
-      this.appendChild(MozXULElement.parseXULToFragment(`
+      this.appendChild(
+        MozXULElement.parseXULToFragment(
+          `
       <spacer flex="1" class="visible"></spacer>
       <html:input anonid="color" class="visible" palettename="standard" type="color" inherits="disabled"></html:input>
       <label value="[RGB]:" inherits="disabled"></label>
@@ -268,14 +287,20 @@ const TabpanelsClass = customElements.get("tabpanels");
       <html:input anonid="blue" class="rgbcontrol" inherits="disabled" maxlength="3" size="3" type="number" required="required" min="0" max="255"></html:input>
       <label control="opacity" value="&opacity.label;[%]:" class="opacity" inherits="disabled"></label>
       <html:input anonid="opacity" class="opacity" inherits="disabled" maxlength="3" size="3" type="number" required="required" min="0" max="100"></html:input>
-    `, ["chrome://tabmixplus/locale/pref-tabmix.dtd", "chrome://tabmixplus/locale/pref-appearance.dtd"]));
+    `,
+          [
+            "chrome://tabmixplus/locale/pref-tabmix.dtd",
+            "chrome://tabmixplus/locale/pref-appearance.dtd",
+          ]
+        )
+      );
       // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
       this.initializeAttributeInheritance();
 
       /** @type {StyleElement[]} */
       this._RGB = [];
 
-      /** @typedef {("red" | "green" | "blue" | "opacity")} Colors */
+      /** @typedef {"red" | "green" | "blue" | "opacity"} Colors */
       /** @type {Colors[]} */
       const colors = ["red", "green", "blue", "opacity"];
       colors.forEach(id => {
@@ -311,7 +336,7 @@ const TabpanelsClass = customElements.get("tabpanels");
       const color = val.replace(/rgba|rgb|\(|\)/g, "").split(",");
       this._RGB.forEach((element, i) => {
         element.value =
-          i < lastIndex ? color[i] ?? "255" : String((parseFloat(color[i] ?? "1") || 1) * 100);
+          i < lastIndex ? (color[i] ?? "255") : String((parseFloat(color[i] ?? "1") || 1) * 100);
       });
       this.updateColor();
     }
@@ -332,16 +357,17 @@ const TabpanelsClass = customElements.get("tabpanels");
     /** @this {MozColorboxClass} */
     updateColor() {
       const orig = this.getColor(true),
-            rgbMatch = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i);
-      let hex = orig, a = "";
+        rgbMatch = orig.replace(/\s/g, "").match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i);
+      let hex = orig,
+        a = "";
       if (rgbMatch) {
         /** @type [string, string, string, string, string] */ // @ts-expect-error
         const rgb = rgbMatch;
         a = (rgb[4] || "").trim();
         hex =
-          (parseFloat(rgb[1]) | 1 << 8).toString(16).slice(1) +
-          (parseFloat(rgb[2]) | 1 << 8).toString(16).slice(1) +
-          (parseFloat(rgb[3]) | 1 << 8).toString(16).slice(1);
+          (parseFloat(rgb[1]) | (1 << 8)).toString(16).slice(1) +
+          (parseFloat(rgb[2]) | (1 << 8)).toString(16).slice(1) +
+          (parseFloat(rgb[3]) | (1 << 8)).toString(16).slice(1);
       }
       this._colorpicker.value = "#" + hex;
       this._colorpicker.style.opacity = a;

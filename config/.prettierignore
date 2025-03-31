@@ -1,2 +1,6 @@
 # ignore imported types
 **/gecko/**/*.*
+.vscode
+logs
+*.css
+*.xhtml

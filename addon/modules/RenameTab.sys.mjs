@@ -1,4 +1,3 @@
-
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {ChromeManifest} from "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mjs";
 import {Overlays} from "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs";
@@ -7,7 +6,7 @@ import {Overlays} from "chrome://tabmix-resource/content/bootstrap/Overlays.sys.
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   //
-  TabmixPlacesUtils: "chrome://tabmix-resource/content/Places.sys.mjs"
+  TabmixPlacesUtils: "chrome://tabmix-resource/content/Places.sys.mjs",
 });
 
 /** @type {RenameTabModule.RenameTab} */
@@ -23,36 +22,43 @@ export const RenameTab = {
   },
 
   editTitle(aTab) {
-    if (this.panel && this.panel.state != "closed")
+    if (this.panel && this.panel.state != "closed") {
       this.hidePopup();
+    }
 
     this.window = aTab.ownerGlobal;
     var gBrowser = this.window.gBrowser;
 
     this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser._selectedTab;
     var browser = gBrowser.getBrowserForTab(aTab);
-    let docTitle = aTab.hasAttribute("pending") ?
-      this.window.TMP_SessionStore.getTitleFromTabState(aTab) :
-      browser.contentTitle;
+    let docTitle =
+      aTab.hasAttribute("pending") ?
+        this.window.TMP_SessionStore.getTitleFromTabState(aTab)
+      : browser.contentTitle;
     this.data.url = browser.currentURI.spec;
 
-    /** @param {string} title  */
+    /** @param {string} title */
     const prepareDataAndShowPanel = title => {
       this.data.docTitle = title;
-      if (!this.data.docTitle)
-        this.data.docTitle = this.window?.isBlankPageURL(this.data.url) ?
-          this.window.Tabmix.emptyTabTitle : this.data.url;
+      if (!this.data.docTitle) {
+        this.data.docTitle =
+          this.window?.isBlankPageURL(this.data.url) ?
+            this.window.Tabmix.emptyTabTitle
+          : this.data.url;
+      }
       this.data.modified = aTab.getAttribute("label-uri") || null;
-      if (this.data.modified == this.data.url || this.data.modified == "*")
+      if (this.data.modified == this.data.url || this.data.modified == "*") {
         this.data.value = aTab.getAttribute("fixed-label") ?? "";
-      else
+      } else {
         this.data.value = this.data.docTitle;
+      }
 
       this.showPanel();
     };
 
-    lazy.TabmixPlacesUtils.asyncGetTitleFromBookmark(this.data.url, docTitle ?? "")
-        .then(title => prepareDataAndShowPanel(title));
+    lazy.TabmixPlacesUtils.asyncGetTitleFromBookmark(this.data.url, docTitle ?? "").then(title =>
+      prepareDataAndShowPanel(title)
+    );
   },
 
   showPanel: function TMP_renametab_showPanel() {
@@ -65,7 +71,7 @@ export const RenameTab = {
       return;
     }
 
-    const popup = this.panel = this.window.document.createXULElement("panel");
+    const popup = (this.panel = this.window.document.createXULElement("panel"));
     popup._overlayLoaded = false;
     popup.id = "tabmixRenametab_panel";
     // prevent panel initialize. initialize before overlay break it.
@@ -78,8 +84,9 @@ export const RenameTab = {
   },
 
   observe(aSubject, aTopic) {
-    if (aTopic != "xul-overlay-merged")
+    if (aTopic != "xul-overlay-merged") {
       return;
+    }
 
     this.panel._overlayLoaded = true;
     this.panel.hidden = false;
@@ -89,8 +96,14 @@ export const RenameTab = {
     this.panel.addEventListener("command", this);
     this.panel.addEventListener("input", this);
 
-    this._element("tabmixRenametab_doneButton").setAttribute("data-l10n-id", "bookmark-panel-save-button");
-    this._element("tabmixRenametab_deleteButton").setAttribute("label", TabmixSvc.getDialogStrings("Cancel")[0] ?? "");
+    this._element("tabmixRenametab_doneButton").setAttribute(
+      "data-l10n-id",
+      "bookmark-panel-save-button"
+    );
+    this._element("tabmixRenametab_deleteButton").setAttribute(
+      "label",
+      TabmixSvc.getDialogStrings("Cancel")[0] ?? ""
+    );
 
     // reorder buttons for MacOS & Linux
     if (TabmixSvc.isLinux || TabmixSvc.isMac) {
@@ -112,12 +125,17 @@ export const RenameTab = {
     } else {
       let screen = this.window.screen;
       const {height = 215, width = 330} = popup.getBoundingClientRect();
-      popup.openPopupAtScreen(screen.availLeft + (screen.availWidth - width) / 2,
-        screen.availTop + (screen.availHeight - height) / 2, false);
+      popup.openPopupAtScreen(
+        screen.availLeft + (screen.availWidth - width) / 2,
+        screen.availTop + (screen.availHeight - height) / 2,
+        false
+      );
       const {height: newHeight, width: newWidth} = popup.getBoundingClientRect();
       if (newWidth != width) {
-        popup.moveTo(screen.availLeft + (screen.availWidth - newWidth) / 2,
-          screen.availTop + (screen.availHeight - newHeight) / 2);
+        popup.moveTo(
+          screen.availLeft + (screen.availWidth - newWidth) / 2,
+          screen.availTop + (screen.availHeight - newHeight) / 2
+        );
       }
     }
 
@@ -127,8 +145,9 @@ export const RenameTab = {
     this._element("tabmixRenametab_defaultField").value = this.data.docTitle;
     this.window.Tabmix.setItem(popup, "modified", this.data.modified);
     var permanently = this._element("tabmixRenametab_checkbox");
-    if (this.data.modified)
+    if (this.data.modified) {
       permanently.checked = this.data.modified == "*";
+    }
 
     this.data.permanently = permanently?.checked ?? false;
   },
@@ -142,8 +161,11 @@ export const RenameTab = {
     var data = this.data;
     var tab = data.tab;
     var label = data.value;
-    var resetDefault = aReset || label == data.docTitle && !data.permanently;
-    var url = resetDefault ? null : data.permanently ? "*" : data.url;
+    var resetDefault = aReset || label == (data.docTitle && !data.permanently);
+    var url =
+      resetDefault ? null
+      : data.permanently ? "*"
+      : data.url;
 
     var win = this.window;
     win.Tabmix.setItem(tab, "fixed-label", resetDefault ? null : label);
@@ -168,8 +190,7 @@ export const RenameTab = {
         this.onNewTitle(event.target.value);
         break;
       case "keypress":
-        if (event.keyCode === event.DOM_VK_RETURN &&
-            event.target.localName !== "button") {
+        if (event.keyCode === event.DOM_VK_RETURN && event.target.localName !== "button") {
           this.update();
         }
         break;
@@ -221,11 +242,12 @@ export const RenameTab = {
 
   onNewTitle(aTitle) {
     this.data.value = aTitle;
-    if (!this.data.modified)
+    if (!this.data.modified) {
       this.window.Tabmix.setItem(this.panel, "modified", aTitle != this.data.docTitle || null);
+    }
   },
 
   hidePopup() {
     this.panel.hidePopup();
-  }
+  },
 };

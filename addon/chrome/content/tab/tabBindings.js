@@ -1,6 +1,6 @@
 "use strict";
 
-(function() {
+(function () {
   let tabbrowsertab = customElements.get("tabbrowser-tab");
 
   if (!tabbrowsertab) {
@@ -8,181 +8,188 @@
     return;
   }
 
-  let markup = tabbrowsertab.markup.replace(
-    '</vbox>',
-    `$&
+  let markup = tabbrowsertab.markup
+    .replace(
+      "</vbox>",
+      `$&
         <vbox class="tab-progress-container">
           <html:progress class="tab-progress" max="100" mode="normal"/>
         </vbox>`
-  ).replace(
-    /<.*class="tab-icon-image".*\/>/,
-    `$&
+    )
+    .replace(
+      /<.*class="tab-icon-image".*\/>/,
+      `$&
             <image class="tab-protect-icon"/>
             <image class="tab-lock-icon"/>
             <image class="tab-reload-icon"/>`
-  ).replace(
-    'tab-icon-stack',
-    'tab-icon tab-icon-stack'
-  );
+    )
+    .replace("tab-icon-stack", "tab-icon tab-icon-stack");
 
   tabbrowsertab._fragment = MozXULElement.parseXULToFragment(markup);
 
-  Tabmix.changeCode(tabbrowsertab, "inheritedAttributes", {getter: true})._replace(
-    '};',
-    '\n    ' +
-    `
-  ".tab-progress":"value=tab-progress,fadein,pinned,selected=visuallyselected",
-  ".tab-icon":"fadein,pinned,selected=visuallyselected",
-  ` +
-    '$&'
-  ).defineProperty();
+  Tabmix.changeCode(tabbrowsertab, "inheritedAttributes", {getter: true})
+    ._replace(
+      "};",
+      `  ".tab-progress":
+          "value=tab-progress,fadein,pinned,selected=visuallyselected",
+        ".tab-icon": "fadein,pinned,selected=visuallyselected"
+      $&`
+    )
+    .defineProperty();
 
   // workaround bug 1905267 - event.target.classList can be undefined when detaching tab by its label
   ["on_mouseover", "on_mouseout"].forEach(methodName => {
-    Tabmix.changeCode(tabbrowsertab.prototype, methodName)._replace(
-      'event.target.classList',
-      'event.target?.classList?'
-    ).toCode();
+    Tabmix.changeCode(tabbrowsertab.prototype, methodName)
+      ._replace("event.target.classList", "event.target?.classList?")
+      .toCode();
   });
 
   delete tabbrowsertab._flippedInheritedAttributes;
 
-  Tabmix.changeCode(tabbrowsertab.prototype, "initialize")._replace(
-    /(})(\)?)$/,
-    '\n    ' +
-    `
-  if ('tabmix_inited' in this) {
-    return;
-  }
+  Tabmix.changeCode(tabbrowsertab.prototype, "initialize")
+    ._replace(
+      /(})(\)?)$/,
+      `
+      if ('tabmix_inited' in this) {
+        return;
+      }
 
-  this.tabmixKey = new (Cu.getGlobalForObject(Services).Object)();
+      this.tabmixKey = new (Cu.getGlobalForObject(Services).Object)();
 
-  this.mIsHover = false;
+      this.mIsHover = false;
 
-  this.mButtonId = 0;
+      this.mButtonId = 0;
 
-  this.mFocusId = 0;
+      this.mFocusId = 0;
 
-  this.mSelect = 0;
+      this.mSelect = 0;
 
-  this.constructor.tabmix_init.call(this);
+      this.constructor.tabmix_init.call(this);
 
-  this.addEventListener("mouseover", (event) => {
-    this.onMouseOver(event);
-  });
+      this.addEventListener("mouseover", (event) => {
+        this.onMouseOver(event);
+      });
 
-  this.addEventListener("mouseout", (event) => {
-    this.onMouseOut(event);
-  });
+      this.addEventListener("mouseout", (event) => {
+        this.onMouseOut(event);
+      });
 
-  this.addEventListener("mousedown", (event) => {
-    if (event.button != 0) {
-      return;
-    }
+      this.addEventListener("mousedown", (event) => {
+        if (event.button != 0) {
+          return;
+        }
 
-    if (this.selected) {
-      this.style.MozUserFocus = 'ignore';
-      void this.clientTop; // just using this to flush style updates
-    }
-    // prevent chrome://global/content/bindings/tabbox.xml#tab mousedown handler
-    if (this.mOverCloseButton || TabmixTabClickOptions.isOverlayIcons(event)) {
-      event.stopPropagation();
-    } else if (this.mouseDownSelect) {
-      this.onMouseCommand(event);
-    } else {
-      event.stopPropagation();
-    }
-  }, true);
+        if (this.selected) {
+          this.style.MozUserFocus = 'ignore';
+          void this.clientTop; // just using this to flush style updates
+        }
+        // prevent chrome://global/content/bindings/tabbox.xml#tab mousedown handler
+        if (this.mOverCloseButton || TabmixTabClickOptions.isOverlayIcons(event)) {
+          event.stopPropagation();
+        } else if (this.mouseDownSelect) {
+          this.onMouseCommand(event);
+        } else {
+          event.stopPropagation();
+        }
+      }, true);
 
-  const callback = aMutations => {
-    for (let mutation of aMutations) {
-        this.attributeChangedCallback(mutation.attributeName, mutation.oldValue, mutation.target.getAttribute(mutation.attributeName));
-    }
-  };
-  const observer = new MutationObserver(callback);
-  observer.observe(this, {
-    attributeFilter: [ "tab-progress", "hover" ],
-    attributeOldValue: true
-  });
+      const callback = aMutations => {
+        for (let mutation of aMutations) {
+            this.attributeChangedCallback(mutation.attributeName, mutation.oldValue, mutation.target.getAttribute(mutation.attributeName));
+        }
+      };
+      const observer = new MutationObserver(callback);
+      observer.observe(this, {
+        attributeFilter: [ "tab-progress", "hover" ],
+        attributeOldValue: true
+      });
 
-  this.tabmix_inited = true;
-  ` +
-  '$1$2'
-  ).toCode();
+      this.tabmix_inited = true;
+  $1$2`
+    )
+    .toCode();
 
   Tabmix.setNewFunction(tabbrowsertab, "tabmix_init", function tabmix_init() {
     Object.defineProperties(this, {
-      '_isProtected': {
+      _isProtected: {
         get() {
-          return this.hasAttribute("protected") || this.pinned ||
-            "permaTabs" in window && this.hasAttribute("isPermaTab");
-        }
+          return (
+            this.hasAttribute("protected") ||
+            this.pinned ||
+            ("permaTabs" in window && this.hasAttribute("isPermaTab"))
+          );
+        },
       },
-      'mouseHoverSelect': {
+      mouseHoverSelect: {
         get() {
           try {
             return Tabmix.prefs.getBoolPref("mouseOverSelect");
           } catch {
             return false;
           }
-        }
+        },
       },
-      'mouseDownSelect': {
+      mouseDownSelect: {
         get() {
           try {
             return Tabmix.prefs.getBoolPref("selectTabOnMouseDown");
           } catch {
             return false;
           }
-        }
+        },
       },
-      'mouseHoverSelectDelay': {
+      mouseHoverSelectDelay: {
         get() {
           try {
             return Tabmix.prefs.getIntPref("mouseOverSelectDelay");
           } catch {
             return 250;
           }
-        }
+        },
       },
-      'tabXDelay': {
+      tabXDelay: {
         get() {
           try {
             return Tabmix.prefs.getIntPref("tabs.closeButtons.delay");
           } catch {
             return 0;
           }
-        }
+        },
       },
-      'baseY': {
+      baseY: {
         get() {
           const {height, y} = this.getBoundingClientRect();
           return height + y;
-        }
+        },
       },
-      '_restoreState': {
+      _restoreState: {
         get() {
           if (this.hasAttribute("pending") || this.hasAttribute("tabmix_pending")) {
             return TabmixSvc.sm.TAB_STATE_NEEDS_RESTORE;
           }
           return SessionStore.getInternalObjectState(this.linkedBrowser);
-        }
+        },
       },
     });
 
     /**
-     *  @this {Tab}
-     *  @param {MouseEvent} aEvent
+     * @param {MouseEvent} aEvent
+     * @this {Tab}
      */
-    this.onMouseOver = function(aEvent) {
+    this.onMouseOver = function (aEvent) {
       this.setHoverState(aEvent, true);
       this.mButtonId = window.setTimeout(this.setShowButton, this.tabXDelay, this);
-      if (this.mouseHoverSelect)
-        this.mFocusId = window.setTimeout(this.doMouseHoverSelect, this.mouseHoverSelectDelay, this);
+      if (this.mouseHoverSelect) {
+        this.mFocusId = window.setTimeout(
+          this.doMouseHoverSelect,
+          this.mouseHoverSelectDelay,
+          this
+        );
+      }
     };
 
     /** @param {Tab} aTab */
-    this.doMouseHoverSelect = function(aTab) {
+    this.doMouseHoverSelect = function (aTab) {
       if (!aTab || !aTab.parentNode) {
         return; // this tab already removed....
       }
@@ -195,43 +202,56 @@
     };
 
     /** @param {Tab} aTab */
-    this.setShowButton = function(aTab) {
-      if (!aTab || !aTab.parentNode)
-        return; // this tab already removed....
+    this.setShowButton = function (aTab) {
+      if (!aTab || !aTab.parentNode) {
+        return;
+      }
+      // this tab already removed....
 
       var pref = Tabmix.prefs.getIntPref("tabs.closeButtons");
-      if (pref != 2 && pref != 4)
+      if (pref != 2 && pref != 4) {
         return;
+      }
 
-      if (aTab.mIsHover && aTab.getAttribute("showbutton") != "on" &&
-        !aTab.hasAttribute("tabmix-dragged")) {
-        if (TabmixTabbar.widthFitTitle)
-          aTab.style.setProperty("width", Tabmix.getBoundsWithoutFlushing(aTab).width + "px", "important");
+      if (
+        aTab.mIsHover &&
+        aTab.getAttribute("showbutton") != "on" &&
+        !aTab.hasAttribute("tabmix-dragged")
+      ) {
+        if (TabmixTabbar.widthFitTitle) {
+          aTab.style.setProperty(
+            "width",
+            Tabmix.getBoundsWithoutFlushing(aTab).width + "px",
+            "important"
+          );
+        }
+
         aTab.setAttribute("showbutton", "on");
         aTab.container.__showbuttonTab = aTab;
       }
     };
 
     /**
-    *  @this {Tab}
-    *  @param {MouseEvent} aEvent
-    */
-    this.onMouseOut = function(aEvent) {
+     * @param {MouseEvent} aEvent
+     * @this {Tab}
+     */
+    this.onMouseOut = function (aEvent) {
       this.setHoverState(aEvent, false);
       if (this.mButtonId) {
         clearTimeout(this.mButtonId);
       }
       this.mButtonId = window.setTimeout(this.removeShowButton, this.tabXDelay, this);
-      if (this.mouseHoverSelect && this.mFocusId)
+      if (this.mouseHoverSelect && this.mFocusId) {
         clearTimeout(this.mFocusId);
+      }
     };
 
     /**
-    *  @this {Tab}
-    *  @param {MouseEvent} aEvent
-    *  @param {boolean} aOver
-    */
-    this.setHoverState = function(aEvent, aOver) {
+     * @param {MouseEvent} aEvent
+     * @param {boolean} aOver
+     * @this {Tab}
+     */
+    this.setHoverState = function (aEvent, aOver) {
       if (aEvent.target?.classList?.contains("tab-close-button")) {
         this.mOverCloseButton = aOver;
       }
@@ -239,9 +259,11 @@
     };
 
     /** @param {Tab} aTab */
-    this.removeShowButton = function(aTab) {
-      if (!aTab || !aTab.parentNode)
-        return; // this tab already removed....
+    this.removeShowButton = function (aTab) {
+      if (!aTab || !aTab.parentNode) {
+        return;
+      }
+      // this tab already removed....
 
       if (!aTab.mIsHover && aTab.hasAttribute("showbutton")) {
         aTab.removeAttribute("showbutton");
@@ -250,22 +272,23 @@
         // the close button
         aTab.setAttribute("showbutton_removed", true);
         setTimeout(tab => tab.removeAttribute("showbutton_removed"), 50, aTab);
-        if (aTab == aTab.container.__showbuttonTab)
+        if (aTab == aTab.container.__showbuttonTab) {
           delete aTab.container.__showbuttonTab;
+        }
       }
     };
 
     /**
-    *  @this {Tab}
-    *  @param {MouseEvent} aEvent
-    *  @param {boolean} aSelectNewTab
-    */
-    this.onMouseCommand = function(aEvent, aSelectNewTab) {
+     * @param {MouseEvent} aEvent
+     * @param {boolean} aSelectNewTab
+     * @this {Tab}
+     */
+    this.onMouseCommand = function (aEvent, aSelectNewTab) {
       var isSelected = this == this.container.selectedItem;
-      Tabmix.setItem(this, "clickOnCurrent",
-        isSelected && aEvent.detail == 1 || null);
-      if (isSelected)
+      Tabmix.setItem(this, "clickOnCurrent", (isSelected && aEvent.detail === 1) || null);
+      if (isSelected) {
         return;
+      }
 
       // don't allow mouse click/down with modifiers to select tab
       if (TabmixTabClickOptions.blockMouseDown(aEvent)) {
@@ -285,17 +308,17 @@
     };
 
     const TimeoutIds = {
-      mSelect: '',
-      mFocusId: '',
-      mButtonId: '',
-      autoReloadTimerID: '',
+      mSelect: "",
+      mFocusId: "",
+      mButtonId: "",
+      autoReloadTimerID: "",
     };
 
-    /** @type {Array<keyof typeof TimeoutIds>} */ // @ts-expect-error
+    /** @type {(keyof typeof TimeoutIds)[]} */ // @ts-expect-error
     const timeouts = Object.values(TimeoutIds);
 
     /** @this {Tab} */
-    this.clearTimeouts = function() {
+    this.clearTimeouts = function () {
       timeouts.forEach(aTimeout => {
         if (aTimeout in this && this[aTimeout]) {
           clearTimeout(this[aTimeout]);
@@ -313,4 +336,4 @@
       }
     });
   }
-}());
+})();

@@ -2,7 +2,7 @@
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   //
-  TabmixUtils: "chrome://tabmix-resource/content/Utils.sys.mjs"
+  TabmixUtils: "chrome://tabmix-resource/content/Utils.sys.mjs",
 });
 
 /** @type {TabmixContextMenu} */
@@ -18,28 +18,30 @@ export const ContextMenu = {
     }
 
     let filter = {
-      /** @param { Node } n */
-      acceptNode(n) {
-        if (n.nodeName == 'A' || n.nodeName == 'li') {
+      acceptNode(/** @type {Node} n */ n) {
+        if (n.nodeName == "A" || n.nodeName == "li") {
           return NodeFilter.FILTER_ACCEPT;
         }
         return NodeFilter.FILTER_SKIP;
-      }
+      },
     };
 
     // do urlSecurityCheck for each link in the treeWalker....
     let secMan = Services.scriptSecurityManager;
-    /** @param {string} url */
-    let securityCheck = function(url) {
-      if (!url)
-        return false;
 
-      if (!doc) // just in case....
+    /** @param {string} url */
+    let securityCheck = function (url) {
+      if (!url) {
+        return false;
+      }
+
+      if (!doc) {
+        // just in case....
         return true;
+      }
 
       try {
-        secMan.checkLoadURIStrWithPrincipal(
-          doc.nodePrincipal, url, secMan.STANDARD);
+        secMan.checkLoadURIStrWithPrincipal(doc.nodePrincipal, url, secMan.STANDARD);
       } catch {
         return false;
       }
@@ -51,7 +53,8 @@ export const ContextMenu = {
     if (!range) {
       return urls;
     }
-    /** @typedef {HTMLLinkElement & {firstChild: LinkNode}} LinkNode  */
+
+    /** @typedef {HTMLLinkElement & {firstChild: LinkNode}} LinkNode */
     /** @type {Omit<TreeWalker, "nextNode"> & {nextNode(): LinkNode}} */ // @ts-ignore
     let treeWalker = doc.createTreeWalker(range, NodeFilter.SHOW_ELEMENT, filter);
     let nextEpisode = treeWalker.nextNode();
@@ -70,5 +73,5 @@ export const ContextMenu = {
       nextEpisode = treeWalker.nextNode();
     }
     return urls;
-  }
+  },
 };

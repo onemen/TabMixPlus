@@ -8,8 +8,8 @@ this.$ = id => document.getElementById(id);
 const tabstyles = {
   pref: "appearance_tab",
   init() {
-    $("stylestabs").selectedIndex = Tabmix.prefs.prefHasUserValue(this.pref) ?
-      Tabmix.prefs.getIntPref(this.pref) : 0;
+    $("stylestabs").selectedIndex =
+      Tabmix.prefs.prefHasUserValue(this.pref) ? Tabmix.prefs.getIntPref(this.pref) : 0;
 
     window.addEventListener("dialogcancel", () => tabstyles.cancel());
     window.addEventListener("dialogaccept", () => tabstyles.save());
@@ -57,7 +57,7 @@ const tabstyles = {
     const extra = dialog.getButton("extra2");
     const item = $("hide-RGB");
     const wasShow = dialog.getAttribute("hide-RGB") != "true";
-    extra.label = item.value = item.getAttribute(wasShow ? 'show' : 'hide') ?? "";
+    extra.label = item.value = item.getAttribute(wasShow ? "show" : "hide") ?? "";
     dialog.setAttribute("hide-RGB", wasShow);
-  }
+  },
 };

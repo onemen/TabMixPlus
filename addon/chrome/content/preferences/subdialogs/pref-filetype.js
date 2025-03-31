@@ -3,29 +3,33 @@
 
 /** @type {RichListBox} */
 var list;
+
 /** @type {Omit<HTMLInputElement, "value"> & {value: string | null}} */
 var entry;
+
 /** @type {HTMLButtonElement} */
 var edit;
+
 /** @type {HTMLButtonElement} */
 var del;
+
 /** @type {HTMLButtonElement} */
 var add;
 
 function Init() {
   window.addEventListener("dialogaccept", () => Save());
-  window.addEventListener("dialogextra1", () => window.opener.openHelp('links#file-type-editor'));
+  window.addEventListener("dialogextra1", () => window.opener.openHelp("links#file-type-editor"));
 
   const prefwindow = window.opener.document.querySelector("prefwindow");
   const button = document.querySelector('[dlgtype="extra1"]');
   prefwindow.setButtonLabel("help", button);
 
   // set these once and refer to them later
-  list = document.getElementById('filetypeList');
-  entry = document.getElementById('filetypeEntry');
-  edit = document.getElementById('filetypeEdit');
-  del = document.getElementById('filetypeDelete');
-  add = document.getElementById('filetypeAdd');
+  list = document.getElementById("filetypeList");
+  entry = document.getElementById("filetypeEntry");
+  edit = document.getElementById("filetypeEdit");
+  del = document.getElementById("filetypeDelete");
+  add = document.getElementById("filetypeAdd");
 
   FillData();
 }
@@ -36,14 +40,14 @@ function FillData() {
     list.lastChild.remove();
   }
 
-  var data = Services.prefs.getCharPref(list.getAttribute('prefstring'));
+  var data = Services.prefs.getCharPref(list.getAttribute("prefstring"));
 
   if (!data.length) {
     setButtonDisable(del, true);
     return true;
   }
 
-  const items = data.replace(/\\\\/g, '\\').split(' ');
+  const items = data.replace(/\\\\/g, "\\").split(" ");
   // for (var i = 0; i < items.length; ++i) {
   for (let item of items) {
     if (item !== "") {
@@ -59,12 +63,13 @@ function FillData() {
 
 function Save() {
   var filetype = [];
-  for (var i = 0; i < list.getRowCount(); ++i)
+  for (var i = 0; i < list.getRowCount(); ++i) {
     filetype.push(list.getItemAtIndex(i).value.trim());
+  }
 
   try {
-    const data = filetype.join(" ").replace(/\\/g, '\\\\');
-    Services.prefs.setCharPref(list.getAttribute('prefstring'), data);
+    const data = filetype.join(" ").replace(/\\/g, "\\\\");
+    Services.prefs.setCharPref(list.getAttribute("prefstring"), data);
   } catch (ex) {
     Tabmix.assert(ex, "error in filetype: " + filetype);
   }
@@ -136,18 +141,21 @@ function Del() {
   if (!item) return;
   var index = list.getIndexOfItem(item);
   // if the list is not empty select next item or if we at the end the last item
-  if (list.getRowCount() > 1)
+  if (list.getRowCount() > 1) {
     SelectItemAt(index == list.getRowCount() - 1 ? index - 1 : index + 1, true);
-  else
+  } else {
     entry.value = null;
+  }
   item.remove();
 }
 
 function Restore() {
   Save();
   var pref = "filetype";
-  if (Tabmix.prefs.prefHasUserValue(pref))
+  if (Tabmix.prefs.prefHasUserValue(pref)) {
     Tabmix.prefs.clearUserPref(pref);
+  }
+
   FillData();
 }
 

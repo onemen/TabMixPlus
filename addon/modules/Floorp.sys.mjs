@@ -75,10 +75,7 @@ export const FloorpPrefsObserver = {
         break;
       }
       case "userChrome.padding.tabbar_height": {
-        if (
-          prefValue &&
-          Services.prefs.getIntPref("extensions.tabmix.tabBarMode") === 2
-        ) {
+        if (prefValue && Services.prefs.getIntPref("extensions.tabmix.tabBarMode") === 2) {
           Services.prefs.setBoolPref(data, false);
         }
         break;

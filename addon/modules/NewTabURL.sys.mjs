@@ -1,4 +1,3 @@
-
 import {TabmixChromeUtils} from "chrome://tabmix-resource/content/ChromeUtils.sys.mjs";
 
 /** @type {NewTabURLModule.Lazy} */ // @ts-ignore
@@ -6,7 +5,7 @@ const lazy = {};
 
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
   // AboutNewTab.sys.mjs exists since Firefox 116
-  AboutNewTab: "resource:///modules/AboutNewTab.jsm"
+  AboutNewTab: "resource:///modules/AboutNewTab.jsm",
 });
 
 const FIREFOX_PREF = "browser.#.url".replace("#", "newtab");
@@ -15,14 +14,12 @@ const ABOUT_NEW_TAB = "about:#".replace("#", "newtab");
 // browser. newtab.url preference was removed by bug 1118285 (Firefox 41+)
 /** @type {NewTabURLModule.NewTabURL} */
 export const Tabmix_NewTabURL = {
-  QueryInterface: ChromeUtils.generateQI([
-    "nsIObserver",
-    "nsISupportsWeakReference",
-  ]),
+  QueryInterface: ChromeUtils.generateQI(["nsIObserver", "nsISupportsWeakReference"]),
 
   init() {
-    if (Services.prefs.prefHasUserValue(FIREFOX_PREF))
+    if (Services.prefs.prefHasUserValue(FIREFOX_PREF)) {
       this.updateNewTabURL();
+    }
 
     // eslint-disable-next-line mozilla/balanced-observers
     Services.prefs.addObserver(FIREFOX_PREF, this, true);
@@ -31,8 +28,10 @@ export const Tabmix_NewTabURL = {
   observe(aSubject, aTopic, aData) {
     switch (aTopic) {
       case "nsPref:changed":
-        if (aData == FIREFOX_PREF)
+        if (aData == FIREFOX_PREF) {
           this.updateNewTabURL();
+        }
+
         break;
     }
   },
@@ -51,7 +50,7 @@ export const Tabmix_NewTabURL = {
         lazy.AboutNewTab.newTabURL = preferredURI.spec;
       }
     }
-  }
+  },
 };
 
 Tabmix_NewTabURL.init();

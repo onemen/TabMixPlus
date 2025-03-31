@@ -46,6 +46,7 @@ pref("extensions.tabmix.openDuplicateNext", true);
 pref("extensions.tabmix.moveSwitchToTabNext", false);
 pref("extensions.tabmix.focusTab", 2);
 pref("extensions.tabmix.protectedtabs.warnOnClose", true);
+
 /*
 2009-10-10
     swap prefs --> warn when closing window "extensions.tabmix.windows.warnOnClose" replaced with "browser.tabs.warnOnClose"
@@ -77,6 +78,7 @@ pref("extensions.tabmix.hideTabBarButton", true);
 // with firefox pref - browser.tabs.tabmanager.enabled
 // pref("extensions.tabmix.hideAllTabsButton", false);
 pref("extensions.tabmix.newTabButton", true);
+
 /*
 2009-01-31
 replaced with extensions.tabmix.newTabButton.position
@@ -86,6 +88,7 @@ replaced with extensions.tabmix.newTabButton.position
 pref("extensions.tabmix.newTabButton.leftside", false);
 */
 pref("extensions.tabmix.newTabButton.position", 2);
+
 /*
 2010-06-08
 change default to Never Hide tabbar
@@ -113,10 +116,22 @@ pref("extensions.tabmix.disableBackground", false);
 pref("extensions.tabmix.otherTab", false);
 pref("extensions.tabmix.progressMeter", true);
 
-pref("extensions.tabmix.styles.currentTab", '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
-pref("extensions.tabmix.styles.unloadedTab", '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":true,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
-pref("extensions.tabmix.styles.unreadTab", '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
-pref("extensions.tabmix.styles.otherTab", '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}');
+pref(
+  "extensions.tabmix.styles.currentTab",
+  '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}'
+);
+pref(
+  "extensions.tabmix.styles.unloadedTab",
+  '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":true,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}'
+);
+pref(
+  "extensions.tabmix.styles.unreadTab",
+  '{"italic":true,"bold":false,"underline":false,"text":true,"textColor":"rgba(204,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}'
+);
+pref(
+  "extensions.tabmix.styles.otherTab",
+  '{"italic":false,"bold":false,"underline":false,"text":true,"textColor":"rgba(0,0,0,1)","bg":false,"bgColor":"rgba(236,233,216,1)","bgTopColor":"rgba(236,233,216,1)"}'
+);
 pref("extensions.tabmix.styles.progressMeter", '{"bg":true,"bgColor":"rgba(170,170,255,1)"}');
 
 pref("extensions.tabmix.flexTabs", false);
@@ -130,6 +145,7 @@ pref("extensions.tabmix.tabs.closeButtons.onLeft", false);
 pref("extensions.tabmix.tabs.closeButtons.delay", 50);
 
 pref("extensions.tabmix.moveTabOnDragging", true);
+
 /*
 pref("extensions.tabmix.enableScrollSwitch", false);
  replaced by scrollTabs: 0 - scroll tabbar on overflow - default
@@ -166,6 +182,7 @@ pref("extensions.tabmix.mouseOverSelectDelay", 250);
 pref("extensions.tabmix.tabFlip", false);
 pref("extensions.tabmix.tabFlipDelay", 250);
 pref("extensions.tabmix.lockTabSizingOnClose", true);
+
 /*
  2008-09-23
 we replace extensions.tabmix.lasttab.handleCtrlTab
@@ -181,6 +198,7 @@ pref("extensions.tabmix.slideDelay", 10);
 
 pref("extensions.tabmix.undoClose", true);
 pref("extensions.tabmix.undoClose.keepMenuOpen", false);
+
 /*
  * we use browser.sessionstore.max_tabs_undo from 2008-02-26
  */
@@ -244,9 +262,15 @@ pref("extensions.tabmix.closedWinToolsMenu", false);
 
 pref("extensions.tabmix.enablefiletype", true);
 // noinspection SpellCheckingInspection
-pref("extensions.tabmix.filetype", "xpi zip rar exe tar jar gzip gz ace bin doc docx xls xlsx mdb ppt iso 7z cab arj lzh uue torrent /&disp=attd&/ /php?attachmentid=.*/ /php?act=Attach&type=post&id=.*/ /download\\.php?*/");
+pref(
+  "extensions.tabmix.filetype",
+  "xpi zip rar exe tar jar gzip gz ace bin doc docx xls xlsx mdb ppt iso 7z cab arj lzh uue torrent /&disp=attd&/ /php?attachmentid=.*/ /php?act=Attach&type=post&id=.*/ /download\\.php?*/"
+);
 
-pref("extensions.{dc572301-7619-498c-a57d-39143191b318}.description", "chrome://tabmixplus/locale/tabmix.properties");
+pref(
+  "extensions.{dc572301-7619-498c-a57d-39143191b318}.description",
+  "chrome://tabmixplus/locale/tabmix.properties"
+);
 
 pref("extensions.tabmix.hideIcons", false);
 pref("extensions.tabmix.reloadEvery.onReloadButton", false);
@@ -261,7 +285,7 @@ pref("extensions.tabmix.reload_match_address", false);
 pref("browser.tabs.tabMinWidth", 100);
 pref("browser.tabs.tabMaxWidth", 250);
 
-pref("extensions.tabmix.shortcuts", '{}');
+pref("extensions.tabmix.shortcuts", "{}");
 pref("extensions.tabmix.syncPrefs", false);
 
 pref("extensions.tabmix.showTabContextMenuOnTabbar", false);

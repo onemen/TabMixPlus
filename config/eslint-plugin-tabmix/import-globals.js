@@ -1,4 +1,3 @@
-
 /**
  * append TabmixChromeUtils to eslint-plugin-mozilla import-globals rule
  * callExpressionMultiDefinitions lists
@@ -22,20 +21,15 @@ const callExpressionMultiDefinitions = [
 /**
  * copied from eslint-plugin-mozilla/lib/globals.js
  *
- * Attempts to convert an CallExpressions that look like module imports
- * into global variable definitions.
+ * Attempts to convert an CallExpressions that look like module imports into
+ * global variable definitions.
  *
- * @param  {Object} node
- *         The AST node to convert.
- * @param  {boolean} isGlobal
- *         True if the current node is in the global scope.
+ * @param {Object} node The AST node to convert.
+ * @param {boolean} isGlobal True if the current node is in the global scope.
+ * @returns {Array} An array of objects that contain details about the globals:
  *
- * @return {Array}
- *         An array of objects that contain details about the globals:
- *         - {String} name
- *                    The name of the global.
- *         - {Boolean} writable
- *                     If the global is writeable or not.
+ *   - {String} name The name of the global.
+ *   - {Boolean} writable If the global is writeable or not.
  */
 function convertCallExpressionToGlobals(node, isGlobal) {
   const express = node.expression;
@@ -98,21 +92,21 @@ function convertCallExpressionToGlobals(node, isGlobal) {
     const arg = node.expression.arguments[1];
     if (arg.type === "ObjectExpression") {
       return arg.properties
-          .map(p => ({
-            name: p.type === "Property" && p.key.name,
-            writable: true,
-            explicit: true,
-          }))
-          .filter(g => g.name);
+        .map(p => ({
+          name: p.type === "Property" && p.key.name,
+          writable: true,
+          explicit: true,
+        }))
+        .filter(g => g.name);
     }
     if (arg.type === "ArrayExpression") {
       return arg.elements
-          .map(p => ({
-            name: p.type === "Literal" && p.value,
-            writable: true,
-            explicit: true,
-          }))
-          .filter(g => typeof g.name == "string");
+        .map(p => ({
+          name: p.type === "Literal" && p.value,
+          writable: true,
+          explicit: true,
+        }))
+        .filter(g => typeof g.name == "string");
     }
   }
 
@@ -135,7 +129,7 @@ function convertCallExpressionToGlobals(node, isGlobal) {
 
 export default {
   meta: {
-    messages: { },
+    messages: {},
     type: "problem",
   },
 
@@ -153,13 +147,9 @@ export default {
           const isGlobal = helpers.getIsGlobalThis(parents);
           let globals = [];
           globals = convertCallExpressionToGlobals(node, isGlobal);
-          helpers.addGlobals(
-            globals,
-            globalScope,
-            node.type !== "Program" && node
-          );
+          helpers.addGlobals(globals, globalScope, node.type !== "Program" && node);
         }
       },
     };
-  }
+  },
 };

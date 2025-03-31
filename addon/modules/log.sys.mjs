@@ -3,7 +3,7 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   //
-  ContentSvc: "chrome://tabmix-resource/content/ContentSvc.sys.mjs"
+  ContentSvc: "chrome://tabmix-resource/content/ContentSvc.sys.mjs",
 });
 
 var gNextID = 1;
@@ -12,27 +12,35 @@ var gNextID = 1;
 export const console = {
   getObject(aWindow, aMethod) {
     let msg = "";
-    if (!aWindow)
+    if (!aWindow) {
       msg += "aWindow is undefined";
-    if (typeof aMethod != "string")
+    }
+
+    if (typeof aMethod != "string") {
       msg += (msg ? "\n" : "") + "aMethod need to be a string";
+    }
+
     if (msg) {
       this.assert(msg);
       return {toString: () => msg};
     }
-    var rootID, methodsList = aMethod.split(".");
+    var rootID,
+      methodsList = aMethod.split(".");
     if (methodsList[0] == "window") {
       methodsList.shift();
     } else if (methodsList[0] == "document") {
       methodsList.shift();
       rootID = methodsList.shift()?.replace(/getElementById\(|\)|'|"/g, "");
     }
+
     /** @type {any} */
     var obj;
     try {
       obj = aWindow;
-      if (rootID)
+      if (rootID) {
         obj = obj?.document.getElementById(rootID);
+      }
+
       methodsList.forEach(aFn => (obj = obj[aFn]));
     } catch {}
     return obj || {toString: () => "undefined"};
@@ -41,16 +49,16 @@ export const console = {
   _timers: {},
   show(aMethod, aDelay, aWindow) {
     try {
-      if (typeof aDelay == "undefined")
+      if (typeof aDelay == "undefined") {
         aDelay = 500;
+      }
 
       const caller = this.caller;
       let logMethod = () => {
         const isObj = typeof aMethod == "object";
         let result = "";
         if (typeof aMethod != "function") {
-          const method = isObj ? aMethod.obj[aMethod.name] :
-            this.getObject(aWindow, aMethod);
+          const method = isObj ? aMethod.obj[aMethod.name] : this.getObject(aWindow, aMethod);
           result = " = " + method?.toString();
         }
         this.clog((isObj ? aMethod.fullName : aMethod) + result, caller);
@@ -60,21 +68,31 @@ export const console = {
         let timerID = gNextID++;
         let timer = Object.create(Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer));
         timer.clear = () => {
-          if (timerID in this._timers)
+          if (timerID in this._timers) {
             delete this._timers[timerID];
+          }
+
           timer.cancel();
         };
         if (aWindow) {
-          aWindow.addEventListener("unload", function unload() {
-            timer.clear();
-          }, {once: true});
+          aWindow.addEventListener(
+            "unload",
+            function unload() {
+              timer.clear();
+            },
+            {once: true}
+          );
         }
-        timer.initWithCallback({
-          notify: function notify() {
-            timer.clear();
-            logMethod();
-          }
-        }, aDelay, Ci.nsITimer.TYPE_ONE_SHOT);
+        timer.initWithCallback(
+          {
+            notify: function notify() {
+              timer.clear();
+              logMethod();
+            },
+          },
+          aDelay,
+          Ci.nsITimer.TYPE_ONE_SHOT
+        );
 
         this._timers[timerID] = timer;
       } else {
@@ -89,33 +107,38 @@ export const console = {
   // excluding any internal caller (name start with TMP_console_)
   _getNames(aCount, stack) {
     let stackList = this._getStackExcludingInternal(stack);
-    if (!aCount)
+    if (!aCount) {
       aCount = 1;
-    else if (aCount < 0)
+    } else if (aCount < 0) {
       aCount = stackList.length;
-    return stackList.slice(0, Math.min(aCount, stackList.length))
-        .map(n => this._name(n));
+    }
+
+    return stackList.slice(0, Math.min(aCount, stackList.length)).map(n => this._name(n));
   },
 
   // get the name of the function that is in the nth place in Error().stack
   // excluding any internal caller in the count
   getCallerNameByIndex(aIndex) {
     let fn = this._getStackExcludingInternal()[aIndex];
-    if (fn)
+    if (fn) {
       return this._name(fn);
+    }
+
     return null;
   },
 
   _getStackExcludingInternal(stack) {
     let stackList = [];
-    if (!stack)
+    if (!stack) {
       stackList = Error().stack?.split("\n").slice(2) ?? [];
-    else
+    } else {
       stackList = stack.split("\n");
+    }
     // cut internal callers
     let re = /TMP_console_.*/;
-    while (stackList[0]?.match(re))
+    while (stackList[0]?.match(re)) {
       stackList.splice(0, 1);
+    }
     return stackList;
   },
 
@@ -144,10 +167,13 @@ export const console = {
 
     try {
       let callerName = this.getCallerNameByIndex(1);
-      if (!callerName)
+      if (!callerName) {
         return false;
-      if (typeof arguments[0] == "object")
+      }
+
+      if (typeof arguments[0] == "object") {
         return arguments[0].indexOf(callerName) > -1;
+      }
 
       let args = Array.prototype.slice.call(arguments);
       return args.indexOf(callerName) > -1;
@@ -162,12 +188,11 @@ export const console = {
     let stack = this._getStackExcludingInternal();
 
     let stackUtil = {
-      /** @param {...(string | string[])} names */
-      contain(...names) {
+      contain(/** @type {string[]} */ ...names) {
         if (Array.isArray(names[0])) {
           names = names[0];
         }
-        let _isCallerInList = function(/** @type {string} */ caller) {
+        let _isCallerInList = function (/** @type {string} */ caller) {
           return names.some(name => caller.startsWith(name + "@"));
         };
         return stack.some(_isCallerInList);
@@ -210,17 +235,19 @@ export const console = {
       try {
         let val = aObj[prop];
         let type = typeof val;
-        if (type == "string")
+        if (type == "string") {
           val = "'" + val + "'";
+        }
+
         if (type == "function" && typeof level == "string") {
           val = val.toString();
-          let code = val.toString().indexOf("native code") > -1 ?
-            "[native code]" : "[code]";
+          let code = val.toString().indexOf("native code") > -1 ? "[native code]" : "[code]";
           val = val.substr(0, val.indexOf("(")) + "() { " + code + " }";
         }
         objS += offset + prop + "[" + type + "] =  " + val + "\n";
-        if (type == "object" && val !== null && level && typeof level == "boolean")
+        if (type == "object" && val !== null && level && typeof level == "boolean") {
           objS += this.obj(val, "", true, "deep") + "\n";
+        }
       } catch {
         objS += offset + prop + " =  [!!error retrieving property]\n";
       }
@@ -245,11 +272,15 @@ export const console = {
   _formatStack(stack) {
     /** @type {string[]} */
     let lines = [];
-    let _char = this._char, re = this._pathRegExp;
+    let _char = this._char,
+      re = this._pathRegExp;
     stack.forEach(line => {
       let atIndex = line.indexOf("@");
       let columnIndex = line.lastIndexOf(":");
-      let fileName = line.slice(atIndex + 1, columnIndex).split(" -> ").pop();
+      let fileName = line
+        .slice(atIndex + 1, columnIndex)
+        .split(" -> ")
+        .pop();
       if (fileName) {
         let lineNumber = parseInt(line.slice(columnIndex + 1));
         let colNumber;
@@ -263,10 +294,14 @@ export const console = {
         let index = line.indexOf(_char);
         let name = line.slice(0, index).split("(").shift();
         let formatted = '  File "' + fileName + '", line ' + lineNumber;
-        if (colNumber)
-          formatted += ', col ' + colNumber;
-        if (name)
-          formatted += ', in ' + name.replace("/<", "");
+        if (colNumber) {
+          formatted += ", col " + colNumber;
+        }
+
+        if (name) {
+          formatted += ", in " + name.replace("/<", "");
+        }
+
         lines.push(formatted);
       }
     });
@@ -284,7 +319,8 @@ export const console = {
     offset = !offset ? 0 : 1;
     let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
     let callerName = names[offset + 0];
-    let callerCallerName = aShowCaller && names[offset + 1] ? " (caller was " + names[offset + 1] + ")" : "";
+    let callerCallerName =
+      aShowCaller && names[offset + 1] ? " (caller was " + names[offset + 1] + ")" : "";
     this._logMessage(" " + callerName + callerCallerName + ":\n" + aMessage, "infoFlag", caller);
   },
 
@@ -321,9 +357,9 @@ export const console = {
     const {stack, message, location} = aError;
     let names = this._getNames(1, stack);
     let errAt = " at " + names[0];
-    let errorLocation = location ? "\n" + location : "";
-    let assertionText = " ERROR" + errAt + ":\n" + (aMsg ? aMsg + "\n" : "") + message + errorLocation;
-    let stackText = "\nStack Trace:\n" + this._formatStack(stack.split("\n"));
+    let errorLocation = location ? `\n${location}` : "";
+    let assertionText = ` ERROR${errAt}:\n${aMsg ? aMsg + "\n" : ""}${message}${errorLocation}`;
+    let stackText = `\nStack Trace:\n${this._formatStack(stack.split("\n"))}`;
     this._logMessage(assertionText + stackText, "errorFlag");
   },
 
@@ -336,8 +372,10 @@ export const console = {
   get caller() {
     let parent = Components.stack.caller;
     parent = parent.name == "_logMessage" ? parent.caller.caller : parent.caller;
-    if (parent?.name == "TMP_console_wrapper")
+    if (parent?.name == "TMP_console_wrapper") {
       parent = parent.caller.caller;
+    }
+
     return parent || {};
   },
 
@@ -361,6 +399,7 @@ export const console = {
 
   _logMessage: function _logMessage(msg, flag = "infoFlag", caller) {
     msg = msg.replace(/\r\n/g, "\n") + "\n";
+
     /** @type {number | undefined} */ // @ts-ignore
     const errorFlag = Ci.nsIScriptError[flag];
     if (typeof errorFlag == "undefined") {
@@ -371,16 +410,30 @@ export const console = {
     let {filename = "", lineNumber, columnNumber} = caller ?? this.caller;
     let consoleMsg = Cc["@mozilla.org/scripterror;1"].createInstance(Ci.nsIScriptError);
     if (lazy.ContentSvc.version(1300)) {
-      consoleMsg.init("Tabmix" + msg, filename, lineNumber, columnNumber, errorFlag, "component javascript");
+      consoleMsg.init(
+        "Tabmix" + msg,
+        filename,
+        lineNumber,
+        columnNumber,
+        errorFlag,
+        "component javascript"
+      );
     } else {
-      // @ts-expect-error - bug 1910698 - Remove nsIScriptError.sourceLine
-      consoleMsg.init("Tabmix" + msg, filename, null, lineNumber, columnNumber, errorFlag, "component javascript");
+      consoleMsg.init(
+        "Tabmix" + msg,
+        filename,
+        // @ts-expect-error - bug 1910698 - Remove nsIScriptError.sourceLine
+        null,
+        lineNumber,
+        columnNumber,
+        errorFlag,
+        "component javascript"
+      );
     }
     Services.console.logMessage(consoleMsg);
   },
-
 };
 
-(function(_this) {
+(function (_this) {
   _this.reportError = _this.reportError.bind(_this);
-}(console));
+})(console);

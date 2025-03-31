@@ -44,8 +44,9 @@ var TMP_LastTab = {
     tablist.style.visibility = "";
 
     var ietab = "chrome://ietab/content/reloaded.html?url=";
-    if (gBrowser.currentURI.spec.startsWith(ietab))
+    if (gBrowser.currentURI.spec.startsWith(ietab)) {
       tablist.focus();
+    }
 
     this.TabListLock = true;
   },
@@ -81,8 +82,9 @@ var TMP_LastTab = {
   },
 
   deinit() {
-    if (!this._inited)
+    if (!this._inited) {
       return;
+    }
 
     if (Tabmix.isVersion(1250)) {
       document.removeEventListener("keydown", this, {mozSystemGroup: true});
@@ -127,14 +129,16 @@ var TMP_LastTab = {
     }
   },
 
-  /**
+  /*
    * disallow mouse down on TabsToolbar to start dragging the window when one
    * of the key modifiers is down
    */
   disallowDragwindow(keyDown) {
-    if (Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
-        keyDown == Tabmix.keyModifierDown &&
-        keyDown != this.disallowDragState) {
+    if (
+      Tabmix.prefs.getBoolPref("tabbar.click_dragwindow") &&
+      keyDown == Tabmix.keyModifierDown &&
+      keyDown != this.disallowDragState
+    ) {
       this.updateDisallowDrag(keyDown);
     }
   },
@@ -142,16 +146,17 @@ var TMP_LastTab = {
   disallowDragState: false,
   updateDisallowDrag(disallow) {
     this.disallowDragState = disallow;
-    Tabmix.setItem("TabsToolbar-customization-target",
-      "tabmix-disallow-drag", disallow || null);
+    Tabmix.setItem("TabsToolbar-customization-target", "tabmix-disallow-drag", disallow || null);
   },
 
   ItemActive(event) {
     TabmixAllTabs.updateMenuItemActive(event.target);
     if (this.respondToMouseInTabList) {
       if (this.KeyboardNavigating) {
-        if (event.target.value != this.inverseIndex(this.TabIndex))
+        if (event.target.value != this.inverseIndex(this.TabIndex)) {
           this.tabs[this.TabIndex]?.mCorrespondingMenuitem?.removeAttribute("_moz-menuactive");
+        }
+
         this.KeyboardNavigating = false;
       }
       this.TabIndex = this.inverseIndex(Number(event.target.value));
@@ -162,48 +167,62 @@ var TMP_LastTab = {
 
   ItemInactive(event) {
     TabmixAllTabs.updateMenuItemInactive();
-    if (!this.respondToMouseInTabList && event.target.value == this.inverseIndex(this.TabIndex))
+    if (!this.respondToMouseInTabList && event.target.value == this.inverseIndex(this.TabIndex)) {
       event.target.setAttribute("_moz-menuactive", "true");
+    }
   },
 
   attachTab: function TMP_LastTab_attachTab(aTab, lastRelatedTab) {
-    if (!this._inited)
+    if (!this._inited) {
       return;
+    }
 
     this.detachTab(aTab);
     let index = this.TabHistory.findIndex(t => t === lastRelatedTab);
-    if (index < 0)
+    if (index < 0) {
       index = this.TabHistory.length - 1;
+    }
+
     this.TabHistory.splice(index, 0, aTab);
   },
 
   detachTab: function TMP_LastTab_detachTab(aTab) {
     var i = this.TabHistory.indexOf(aTab);
-    if (i >= 0)
+    if (i >= 0) {
       this.TabHistory.splice(i, 1);
+    }
   },
 
   isCtrlTab(event) {
-    return (this.handleCtrlTab || this.showTabList) &&
+    return (
+      (this.handleCtrlTab || this.showTabList) &&
       event.keyCode == event.DOM_VK_TAB &&
-      event.ctrlKey && !Tabmix.isAltKey(event) && !event.metaKey;
+      event.ctrlKey &&
+      !Tabmix.isAltKey(event) &&
+      !event.metaKey
+    );
   },
 
   OnKeyDown(event) {
     this.CtrlKey = event.ctrlKey && !Tabmix.isAltKey(event) && !event.metaKey;
-    Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || Tabmix.isAltKey(event) || event.metaKey;
+    Tabmix.keyModifierDown =
+      event.shiftKey || event.ctrlKey || Tabmix.isAltKey(event) || event.metaKey;
     this.OnKeyPress(event);
   },
 
   set tabs(val) {
-    if (val !== null)
+    if (val !== null) {
       return;
+    }
+
     this._tabs = null;
   },
 
   get tabs() {
-    if (this._tabs)
+    if (this._tabs) {
       return this._tabs;
+    }
+
     let list = this.handleCtrlTab ? this.TabHistory : gBrowser.tabs;
     this._tabs = Array.prototype.filter.call(list, tab => {
       return !tab.hidden && !tab.closing;
@@ -225,18 +244,21 @@ var TMP_LastTab = {
 
       if (this.TabListLock) {
         let tab = this.tabs[this.TabIndex];
-        if (tab)
+        if (tab) {
           tab.mCorrespondingMenuitem?.removeAttribute("_moz-menuactive");
+        }
       }
 
-      if (this.handleCtrlTab && event.shiftKey || !this.handleCtrlTab && !event.shiftKey) {
+      if ((this.handleCtrlTab && event.shiftKey) || (!this.handleCtrlTab && !event.shiftKey)) {
         this.TabIndex++;
-        if (this.TabIndex >= tabCount)
+        if (this.TabIndex >= tabCount) {
           this.TabIndex = 0;
+        }
       } else {
         this.TabIndex--;
-        if (this.TabIndex < 0)
+        if (this.TabIndex < 0) {
           this.TabIndex = tabCount - 1;
+        }
       }
 
       if (this.showTabList) {
@@ -246,8 +268,9 @@ var TMP_LastTab = {
             if (!this._timer) {
               this._timer = setTimeout(() => {
                 this._timer = null;
-                if (!this.TabListLock)
+                if (!this.TabListLock) {
                   this.DisplayTabList();
+                }
               }, 200);
             } else {
               this.DisplayTabList();
@@ -266,13 +289,13 @@ var TMP_LastTab = {
       }
       event.stopPropagation();
       event.preventDefault();
-    } else if (this.TabListLock && this.CtrlKey &&
-             event.keyCode == event.DOM_VK_SHIFT) {
+    } else if (this.TabListLock && this.CtrlKey && event.keyCode == event.DOM_VK_SHIFT) {
       // don't hide the tabs list popup when user press shift
       // return;
     } else {
-      if (this.TabListLock)
+      if (this.TabListLock) {
         this.TabList.hidePopup();
+      }
 
       gBrowser.tabbox.handleEvent(event);
     }
@@ -281,9 +304,12 @@ var TMP_LastTab = {
   OnKeyUp: function _LastTab_OnKeyUp(event) {
     var keyReleased = event.keyCode == event.DOM_VK_CONTROL;
     this.CtrlKey = event.ctrlKey && !Tabmix.isAltKey(event) && !event.metaKey;
-    Tabmix.keyModifierDown = event.shiftKey || event.ctrlKey || Tabmix.isAltKey(event) || event.metaKey;
-    if (!keyReleased)
+    Tabmix.keyModifierDown =
+      event.shiftKey || event.ctrlKey || Tabmix.isAltKey(event) || event.metaKey;
+    if (!keyReleased) {
       return;
+    }
+
     var tabToSelect;
     if (this._timer) {
       clearTimeout(this._timer);
@@ -304,8 +330,10 @@ var TMP_LastTab = {
       TabmixAllTabs.backupLabel = "";
 
       this.TabList.hidePopup();
-      if (tabToSelect)
+      if (tabToSelect) {
         TabmixAllTabs._tabSelectedFromList(tabToSelect);
+      }
+
       this.PushSelectedTab();
     }
     if (this.KeyLock) {
@@ -348,8 +376,9 @@ var TMP_LastTab = {
 
   OnSelect() {
     // session manager can select new tab before TMP_LastTab is init
-    if (!this._inited)
+    if (!this._inited) {
       return;
+    }
 
     var tabCount = this.TabHistory.length;
     if (tabCount != gBrowser.tabs.length) {
@@ -361,10 +390,12 @@ var TMP_LastTab = {
       }
       this.PushSelectedTab();
     } else if (!this.KeyLock) {
-      if (this.CtrlKey)
-        this.KeyLock = true; // allow other tab navigation methods to work
-      else
+      if (this.CtrlKey) {
+        this.KeyLock = true;
+      } else {
+        // allow other tab navigation methods to work
         this.PushSelectedTab();
+      }
     }
   },
 
@@ -401,8 +432,7 @@ var TMP_LastTab = {
 
   inverseIndex(index) {
     return this.handleCtrlTab ? index : this.tabs.length - 1 - index;
-  }
-
+  },
 };
 
 Tabmix.slideshow = {
@@ -410,5 +440,5 @@ Tabmix.slideshow = {
     if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) {
       Tabmix.flst.cancel();
     }
-  }
+  },
 };

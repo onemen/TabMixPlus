@@ -7,7 +7,11 @@ var Tabmix = {
   },
 
   get defaultPrefs() {
-    return this.lazyGetter(this, "defaultPrefs", Services.prefs.getDefaultBranch("extensions.tabmix."));
+    return this.lazyGetter(
+      this,
+      "defaultPrefs",
+      Services.prefs.getDefaultBranch("extensions.tabmix.")
+    );
   },
 
   isVersion(versionNo, updateChannel) {
@@ -20,15 +24,17 @@ var Tabmix = {
 
   // for debug
   debug: function TMP_utils_debug(aMessage, aShowCaller) {
-    if (this._debug)
+    if (this._debug) {
       this.log(aMessage, aShowCaller);
+    }
   },
 
   // Show/hide one item (specified via name or the item element itself).
   showItem(aItemOrId, aShow) {
     var item = typeof aItemOrId == "string" ? document.getElementById(aItemOrId) : aItemOrId;
-    if (item && item.hidden == Boolean(aShow))
+    if (item && item.hidden == Boolean(aShow)) {
       item.hidden = !aShow;
+    }
   },
 
   setItem(aItemOrId, aAttr, aVal) {
@@ -38,8 +44,9 @@ var Tabmix = {
         elem.removeAttribute(aAttr);
         return;
       }
-      if (typeof aVal == "boolean")
+      if (typeof aVal == "boolean") {
         aVal = aVal ? "true" : "false";
+      }
 
       if (!elem.hasAttribute(aAttr) || elem.getAttribute(aAttr) != aVal) {
         const stringVal = typeof aVal !== "string" ? String(aVal) : aVal;
@@ -57,14 +64,17 @@ var Tabmix = {
     let att = elem.getAttribute(aAttr);
     let array = att ? att.split(" ") : [];
     let index = array.indexOf(aValue);
-    if (aAdd && index == -1)
+    if (aAdd && index == -1) {
       array.push(aValue);
-    else if (!aAdd && index != -1)
+    } else if (!aAdd && index != -1) {
       array.splice(index, 1);
-    if (array.length)
+    }
+
+    if (array.length) {
       elem.setAttribute(aAttr, array.join(" "));
-    else
+    } else {
       elem.removeAttribute(aAttr);
+    }
   },
 
   setFTLDataId(elementId, map = TabmixSvc.i10IdMap) {
@@ -72,15 +82,19 @@ var Tabmix = {
     function convert(id, data = map[id]) {
       return data && !Tabmix.isVersion(data.before) ? convert(data.l10n) : id;
     }
+
     /** @type {(HTMLElement & HTMLInputElement & XULTab) | null | undefined} */
     const element = document.getElementById(elementId);
     if (!element) {
       console.error(`Tabmix setFTLDataId: ${elementId} not found`);
       return;
     }
+
     /** @type {(HTMLElement | null)[]} */
-    const nodes = element.hasAttribute("data-lazy-l10n-id") ?
-      [element] : [...element.querySelectorAll("[data-lazy-l10n-id]")];
+    const nodes =
+      element.hasAttribute("data-lazy-l10n-id") ?
+        [element]
+      : [...element.querySelectorAll("[data-lazy-l10n-id]")];
     nodes.forEach(el => {
       if (!el) return;
       const dataId = el.getAttribute("data-lazy-l10n-id");
@@ -106,45 +120,64 @@ var Tabmix = {
     // allow to open new window if:
     //   user are not in single window mode or
     //   there is no other window with the same privacy type
-    return !TabmixSvc.getSingleWindowMode() || !BrowserWindowTracker.getTopWindow({private: isPrivate});
+    return (
+      !TabmixSvc.getSingleWindowMode() || !BrowserWindowTracker.getTopWindow({private: isPrivate})
+    );
   },
 
   lazy_import(aObject, aName, aModule, aSymbol, aFlag, aArg) {
-    if (aFlag)
+    if (aFlag) {
       this[aModule + "Initialized"] = false;
+    }
+
     var self = this;
     ChromeUtils.defineLazyGetter(aObject, aName, () => {
-      /** @type {any} */ // @ts-expect-error - importESModule
-      let tmp = ChromeUtils.importESModule("chrome://tabmix-resource/content/" + aModule + ".sys.mjs");
+      /** @type {any} */
+      let tmp = ChromeUtils.importESModule(
+        // @ts-expect-error - importESModule
+        "chrome://tabmix-resource/content/" + aModule + ".sys.mjs"
+      );
       let Obj = tmp[aSymbol];
-      if ("prototype" in tmp[aSymbol])
+      if ("prototype" in tmp[aSymbol]) {
         Obj = new Obj();
-      else if ("init" in Obj)
+      } else if ("init" in Obj) {
         Obj.init.apply(Obj, aArg);
-      if (aFlag)
+      }
+
+      if (aFlag) {
         self[aModule + "Initialized"] = true;
+      }
+
       return Obj;
     });
   },
 
-  lazyGetter(obj, name, get, baseConfig = {
-    configurable: true,
-    enumerable: true,
-  }) {
+  lazyGetter(
+    obj,
+    name,
+    get,
+    baseConfig = {
+      configurable: true,
+      enumerable: true,
+    }
+  ) {
     if (!(name in obj)) {
-      console.error(`Tabmix.lazyGetter: "get ${name}" does not exist when calling:\n${Error().stack?.split("\n").slice(1, 2) ?? ""}`);
+      console.error(
+        `Tabmix.lazyGetter: "get ${name}" does not exist when calling:\n${Error().stack?.split("\n").slice(1, 2) ?? ""}`
+      );
     }
     const config = {
       ...baseConfig,
-      value: typeof get == "function" ? get() : get
+      value: typeof get == "function" ? get() : get,
     };
     Object.defineProperty(obj, name, config);
     return config.value;
   },
 
   backwardCompatibilityGetter(aObject, aOldName, aNewName) {
-    if (aOldName in aObject)
+    if (aOldName in aObject) {
       return;
+    }
 
     var self = this;
     Object.defineProperty(aObject, aOldName, {
@@ -153,7 +186,7 @@ var Tabmix = {
         delete aObject[aOldName];
         return (aObject[aOldName] = self.getObject(window, aNewName));
       },
-      configurable: true
+      configurable: true,
     });
   },
 
@@ -165,20 +198,25 @@ var Tabmix = {
     if (stackData && stackData.length == 2) {
       let [path = "", line = 0] = stackData[1]?.replace("chrome://", "").split(":") ?? [];
       let index = path.indexOf("/") - 1;
-      let extensionName = index > -1 ?
-        path.charAt(0).toUpperCase() + path.substr(1, index) + " " : "";
-      this.clog(err.message + "\n\n" + extensionName + "extension call " + aOldName +
-                 " from:\nfile: chrome://" + path + "\nline: " + line +
-                 "\n\nPlease inform Tabmix Plus developer" +
-                 (extensionName ? " and " + extensionName + "developer." : "."));
+      let extensionName =
+        index > -1 ? path.charAt(0).toUpperCase() + path.substr(1, index) + " " : "";
+      this.clog(
+        `${err.message}\n\n${extensionName}extension call ${aOldName} from:
+  file: chrome://${path}
+  line: ${line}
+
+  Report about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues${extensionName ? ` and ${extensionName} developer.` : "."}`
+      );
     } else {
       this.clog(err.message + "\n\n" + stack);
     }
   },
 
   windowEnumerator: function Tabmix_windowEnumerator(aWindowtype) {
-    if (typeof aWindowtype == "undefined")
+    if (typeof aWindowtype == "undefined") {
       aWindowtype = "navigator:browser";
+    }
+
     return Services.wm.getEnumerator(aWindowtype);
   },
 
@@ -189,8 +227,9 @@ var Tabmix = {
       let win = enumerator.getNext();
       if (!win.closed) {
         count++;
-        if (!all && count == 2)
+        if (!all && count == 2) {
           break;
+        }
       }
     }
     return count;
@@ -237,7 +276,7 @@ var Tabmix = {
 
   installChangecode() {
     Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", window);
-    this.installChangecode = function() {};
+    this.installChangecode = function () {};
   },
 
   _init() {
@@ -247,10 +286,22 @@ var Tabmix = {
     };
     window.addEventListener("unload", destroy);
 
-    var methods = ["changeCode", "setNewFunction", "nonStrictMode",
-      "getObject", "log", "getCallerNameByIndex", "callerName",
-      "clog", "isCallerInList", "callerTrace",
-      "obj", "assert", "trace", "reportError"];
+    var methods = [
+      "changeCode",
+      "setNewFunction",
+      "nonStrictMode",
+      "getObject",
+      "log",
+      "getCallerNameByIndex",
+      "callerName",
+      "clog",
+      "isCallerInList",
+      "callerTrace",
+      "obj",
+      "assert",
+      "trace",
+      "reportError",
+    ];
     methods.forEach(id => {
       this[id] = function TMP_console_wrapper() {
         return this._getMethod(id, arguments);
@@ -262,7 +313,7 @@ var Tabmix = {
   originalFunctions: {},
   destroy: function TMP_utils_destroy() {
     this.originalFunctions = {};
-  }
+  },
 };
 
 Tabmix._init();

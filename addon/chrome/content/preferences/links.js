@@ -7,14 +7,16 @@ var gLinksPane = {
     this.singleWindow($("singleWindow").checked);
     this.externalLinkValue($("externalLink").checked);
 
-    $("externalLinkTarget").querySelector('menuitem[value="-1"]').label = $("externalLinkTarget").querySelector('menuitem[value="3"]').label;
+    $("externalLinkTarget").querySelector('menuitem[value="-1"]').label =
+      $("externalLinkTarget").querySelector('menuitem[value="3"]').label;
     const config = {attributes: true};
-    const callback = function(/** @type {MutationRecord[]} */ mutationList) {
+    const callback = function (/** @type {MutationRecord[]} */ mutationList) {
       for (const mutation of mutationList) {
-        if (mutation.type === 'attributes' && mutation.attributeName == "label") {
+        if (mutation.type === "attributes" && mutation.attributeName == "label") {
           try {
             if (mutation.target?.label) {
-              $("externalLinkTarget").querySelector('menuitem[value="-1"]').label = mutation.target.label;
+              $("externalLinkTarget").querySelector('menuitem[value="-1"]').label =
+                mutation.target.label;
             }
           } catch (ex) {
             console.error(ex);
@@ -47,8 +49,10 @@ var gLinksPane = {
 
   updateExternalLinkCheckBox(external) {
     let preference = $Pref(external.getAttribute("preference"));
-    if (external.value == preference.value)
+    if (external.value == preference.value) {
       return;
+    }
+
     let checkbox = $("externalLink");
     let checked = preference.value != -1;
     if (checkbox.checked != checked) {
@@ -78,7 +82,10 @@ var gLinksPane = {
   },
 
   openFiletypeEditor() {
-    window.openDialog("chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.xhtml",
-      "filetypePrefsDialog", "modal,titlebar,toolbar,centerscreen");
-  }
+    window.openDialog(
+      "chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.xhtml",
+      "filetypePrefsDialog",
+      "modal,titlebar,toolbar,centerscreen"
+    );
+  },
 };

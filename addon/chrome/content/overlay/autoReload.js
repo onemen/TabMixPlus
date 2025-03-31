@@ -2,7 +2,9 @@
 /* exported load, accept, onInput, onSelect, openPopup */
 "use strict";
 
-const {TabmixSvc} = ChromeUtils.importESModule("chrome://tabmix-resource/content/TabmixSvc.sys.mjs");
+const {TabmixSvc} = ChromeUtils.importESModule(
+  "chrome://tabmix-resource/content/TabmixSvc.sys.mjs"
+);
 
 const gPref = TabmixSvc.prefBranch;
 
@@ -17,7 +19,7 @@ function load() {
   gNumberInput.inputExpr = gNumberInput.changeExpr = e => {
     const target = e.target;
     const outRange = target.validity.rangeOverflow || target.validity.rangeUnderflow;
-    if (outRange) target.oninput(e);// call default input logic
+    if (outRange) target.oninput(e); // call default input logic
     return !target.validity.valid && !outRange;
   };
 
@@ -37,8 +39,10 @@ function accept() {
   let defaultList = [60, 120, 300, 900, 1800];
   if (!list.concat(defaultList).includes(customReloadTime)) {
     list.push(customReloadTime);
-    if (list.length > 6)
+    if (list.length > 6) {
       list.shift();
+    }
+
     gPref.setCharPref("custom_reload_list", list.join(","));
   }
 
@@ -47,16 +51,18 @@ function accept() {
 
 function getCustomReloadTime() {
   let minutes;
-  if (document.getElementById("autoreload_minutes").value !== '')
+  if (document.getElementById("autoreload_minutes").value !== "") {
     minutes = parseInt(String(document.getElementById("autoreload_minutes").value));
-  else
+  } else {
     minutes = 0;
+  }
 
   let seconds;
-  if (document.getElementById("autoreload_seconds").value !== '')
+  if (document.getElementById("autoreload_seconds").value !== "") {
     seconds = parseInt(String(document.getElementById("autoreload_seconds").value));
-  else
+  } else {
     seconds = 0;
+  }
   return minutes * 60 + seconds;
 }
 
@@ -67,14 +73,17 @@ function updateOkButtonDisabledState() {
 /** @type {Globals.oninput} */
 function onInput(item) {
   item.value = parseInt(item.value.toString());
-  if (item.value.toString() === 'NaN') {
-    item.value = '';
+  if (item.value.toString() === "NaN") {
+    item.value = "";
   }
   let val = Number(item.value);
-  if (val < 0)
+  if (val < 0) {
     item.value = -item.value;
-  if (item.id == "autoreload_seconds" && val > 59)
+  }
+
+  if (item.id == "autoreload_seconds" && val > 59) {
     item.value = 59;
+  }
 
   updateOkButtonDisabledState();
 }

@@ -42,7 +42,15 @@ type CustomElement<T, Parent = HTMLElement> = Omit<T, "parentNode" | "value"> & 
 };
 
 type CustomNonNullable<T> = T extends null | undefined ? never : T;
-type GenericEvent<T, E extends Event, Parent = T extends {parentNode: infer P} ? (CustomNonNullable<P> extends HTMLElement ? CustomNonNullable<P> : HTMLElement) : HTMLElement> = Omit<E, "target" | "originalTarget"> & {
+type GenericEvent<
+  T,
+  E extends Event,
+  Parent = T extends {parentNode: infer P} ?
+    CustomNonNullable<P> extends HTMLElement ?
+      CustomNonNullable<P>
+    : HTMLElement
+  : HTMLElement,
+> = Omit<E, "target" | "originalTarget"> & {
   target: CustomElement<T, Parent>;
   originalTarget: CustomElement<T, Parent>;
 };

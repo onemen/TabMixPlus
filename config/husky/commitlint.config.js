@@ -1,4 +1,4 @@
 export default {
   extends: ["@commitlint/config-conventional"],
-  rules: {'header-max-length': [2, 'always', 110]}
+  rules: {"header-max-length": [2, "always", 110]},
 };

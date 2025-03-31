@@ -1,6 +1,4 @@
-/**
- * Load Tabmix scripts to navigator:browser window.
- */
+/** Load Tabmix scripts to navigator:browser window. */
 
 /** @type {ScriptsLoaderModule.Lazy} */ // @ts-ignore
 const lazy = {};
@@ -13,16 +11,14 @@ ChromeUtils.defineESModuleGetters(lazy, {
   Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs",
 });
 
-/**
- * stylesheets and scripts for navigator:browser
- */
+/** stylesheets and scripts for navigator:browser */
 const CSS_URLS = [
   lazy.isVersion(1190) ?
-    "chrome://tabmixplus/content/overlay/browser.css" :
-    "chrome://tabmixplus/content/overlay/browser_before_119.css",
+    "chrome://tabmixplus/content/overlay/browser.css"
+  : "chrome://tabmixplus/content/overlay/browser_before_119.css",
   lazy.isVersion(1260) ?
-    "chrome://tabmixplus/skin/app_version/all/themeStyles.css" :
-    "chrome://tabmixplus/skin/app_version/all/themeStyles_before_126.css",
+    "chrome://tabmixplus/skin/app_version/all/themeStyles.css"
+  : "chrome://tabmixplus/skin/app_version/all/themeStyles_before_126.css",
   "chrome://tabmixplus/content/overlay/multirow.css",
   "chrome://tabmixplus/skin/general.css",
   "chrome://tabmixplus/skin/tab.css",
@@ -81,9 +77,12 @@ export const ScriptsLoader = {
     // move it in the toolbar
     if (!this._closeButtonAdded) {
       const allTabsButtonPlacement = lazy.CustomizableUI.getPlacementOfWidget("alltabs-button");
-      const closeButtonPlacement = lazy.CustomizableUI.getPlacementOfWidget("tabmix-tabs-closebutton");
+      const closeButtonPlacement =
+        lazy.CustomizableUI.getPlacementOfWidget("tabmix-tabs-closebutton");
       if (!closeButtonPlacement || closeButtonPlacement.area !== allTabsButtonPlacement?.area) {
-        const {area, position} = allTabsButtonPlacement ?? {area: lazy.CustomizableUI.AREA_TABSTRIP};
+        const {area, position} = allTabsButtonPlacement ?? {
+          area: lazy.CustomizableUI.AREA_TABSTRIP,
+        };
         const finalPosition = typeof position === "number" ? position + 1 : undefined;
         lazy.CustomizableUI.addWidgetToArea("tabmix-tabs-closebutton", area, finalPosition);
       }
@@ -146,8 +145,8 @@ export const ScriptsLoader = {
   },
 
   /**
-   * initialize functions that can be called by events that fired before
-   * our overlay is ready.
+   * initialize functions that can be called by events that fired before our
+   * overlay is ready.
    *
    * @param window
    */
@@ -155,9 +154,10 @@ export const ScriptsLoader = {
     const {gBrowser, gBrowserInit, Tabmix} = window;
 
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
+
     /**
-     * @brief copy Tabmix data from old tab to new tab.
-     *        we use it before swapBrowsersAndCloseOther
+     * copy Tabmix data from old tab to new tab. we use it before
+     * swapBrowsersAndCloseOther
      */
     Tabmix.copyTabData = function TMP_copyTabData(newTab, oldTab) {
       /* prettier-ignore */
@@ -178,9 +178,10 @@ export const ScriptsLoader = {
     };
 
     Tabmix.originalFunctions.swapBrowsersAndCloseOther = gBrowser.swapBrowsersAndCloseOther;
+
     /**
-     *  @type {TabBrowser["swapBrowsersAndCloseOther"]}
-     *  @this {TabBrowser}
+     * @type {TabBrowser["swapBrowsersAndCloseOther"]}
+     * @this {TabBrowser}
      */
     const swapTab = function tabmix_swapBrowsersAndCloseOther(ourTab, otherTab) {
       // Do not allow transferring a private tab to a non-private window
@@ -229,7 +230,8 @@ export const ScriptsLoader = {
 
     // update tabs title
     gBrowser.tabs.forEach(tab => {
-      const url = lazy.SessionStore.getLazyTabValue(tab, "url") || tab.linkedBrowser.currentURI.spec;
+      const url =
+        lazy.SessionStore.getLazyTabValue(tab, "url") || tab.linkedBrowser.currentURI.spec;
       TMP_Places.asyncSetTabTitle(tab, url);
     });
   },

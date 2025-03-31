@@ -99,7 +99,8 @@ var gAppearancePane = {
     var indent = 23; // we have class="indent"
     if (
       hbox.parentNode &&
-      hbox.parentNode.getBoundingClientRect().width > label + menulist.getBoundingClientRect().width - indent
+      hbox.parentNode.getBoundingClientRect().width >
+        label + menulist.getBoundingClientRect().width - indent
     ) {
       menulist.parentNode?.removeAttribute("pack");
       menulist.parentNode?.removeAttribute("class");
@@ -126,28 +127,35 @@ var gAppearancePane = {
     MozXULElement.insertFTLIfNeeded("browser/waterfox.ftl");
     defaultPrefValue = "topabove";
     positionPref = "browser.tabs.toolbarposition";
-    position.appendChild(MozXULElement.parseXULToFragment(
-      `<menupopup>
+    position.appendChild(
+      MozXULElement.parseXULToFragment(
+        `<menupopup>
          <menuitem id="tabBarTopAbove" value="topabove" data-l10n-id="tab-bar-top-above"/>
          <menuitem id="tabBarTopBelow" value="topbelow" data-l10n-id="tab-bar-top-below"/>
          <menuitem id="tabBarBottomAbove" value="bottomabove" data-l10n-id="tab-bar-bottom-above"/>
          <menuitem id="tabBarBottomBelow" value="bottombelow" data-l10n-id="tab-bar-bottom-below"/>
        </menupopup>`
-    ));
+      )
+    );
     if (!Services.prefs.prefHasUserValue(positionPref)) {
-      document.l10n?.translateElements([$("tabBarTopAbove")]).then(() => {
-        position.setAttribute("label", $("tabBarTopAbove").label);
-      }).catch(e => console.error("error in _waterfoxPositionControl", e));
+      document.l10n
+        ?.translateElements([$("tabBarTopAbove")])
+        .then(() => {
+          position.setAttribute("label", $("tabBarTopAbove").label);
+        })
+        .catch(e => console.error("error in _waterfoxPositionControl", e));
     }
     position.setAttribute("preference", positionPref);
     position.setAttribute("value", Services.prefs.getCharPref(positionPref, defaultPrefValue));
     const preferences = $("paneAppearance").querySelector("preferences");
-    preferences.appendChild(MozXULElement.parseXULToFragment(
-      `<preference id="${positionPref}"
+    preferences.appendChild(
+      MozXULElement.parseXULToFragment(
+        `<preference id="${positionPref}"
                      name="${positionPref}"
                      type="wstring"
        />`
-    ));
+      )
+    );
   },
 
   tabCloseButtonChanged() {
@@ -172,7 +180,8 @@ var gAppearancePane = {
   tabsScrollChanged() {
     const multiRow = $Pref("pref_tabsScroll").value == 2;
     $("multi-rows").hidden = !multiRow;
-    $("theme-background-box").hidden = !multiRow || !window.opener.document.documentElement.hasAttribute("lwtheme");
+    $("theme-background-box").hidden =
+      !multiRow || !window.opener.document.documentElement.hasAttribute("lwtheme");
   },
 
   tabmixCustomizeToolbar() {
@@ -194,10 +203,11 @@ var gAppearancePane = {
       let button = aWindow.document.getElementById(id);
       let optionButton = $("_" + id).parentNode;
       if (optionButton) {
-        if (button)
+        if (button) {
           onToolbar.appendChild(optionButton);
-        else
+        } else {
           onPlate.appendChild(optionButton);
+        }
       } else {
         throw new Error(`Tabmix: _${id} parentNode not found`);
       }
@@ -227,17 +237,22 @@ var gAppearancePane = {
   // block width change on instantApply
   // user is force to hit apply
   userChangedWidth(item) {
-    gPrefWindow.widthChanged = $("minWidth").value != $Pref("pref_minWidth").valueFromPreferences ||
-                        $("maxWidth").value != $Pref("pref_maxWidth").valueFromPreferences;
-    if (!gPrefWindow.instantApply)
+    gPrefWindow.widthChanged =
+      $("minWidth").value != $Pref("pref_minWidth").valueFromPreferences ||
+      $("maxWidth").value != $Pref("pref_maxWidth").valueFromPreferences;
+    if (!gPrefWindow.instantApply) {
       return undefined;
+    }
+
     // block the change by returning the preference own value
     return $Pref(item.getAttribute("preference")).value;
   },
 
   changeTabsWidth() {
-    if (!gPrefWindow.widthChanged)
+    if (!gPrefWindow.widthChanged) {
       return;
+    }
+
     if (gPrefWindow.instantApply) {
       gPrefWindow.widthChanged = false;
     }
@@ -262,8 +277,10 @@ var gAppearancePane = {
   },
 
   openAdvanceAppearance() {
-    window.openDialog("chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xhtml",
-      "advanceAppearanceDialog", "modal,titlebar,toolbar,centerscreen");
-  }
-
+    window.openDialog(
+      "chrome://tabmixplus/content/preferences/subdialogs/pref-appearance.xhtml",
+      "advanceAppearanceDialog",
+      "modal,titlebar,toolbar,centerscreen"
+    );
+  },
 };

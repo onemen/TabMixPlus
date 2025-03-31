@@ -2,14 +2,13 @@ import {PrivateBrowsingUtils} from "resource://gre/modules/PrivateBrowsingUtils.
 
 /** @type {TabmixModules.SingleWindowModeUtils} */
 export const SingleWindowModeUtils = {
+  //
   /**
-   * @brief Locate a browser window.
+   * Locate a browser window.
    *
-   * @param aExclude  A scripted window object that we do not want to use.
-   *
-   * @returns         A scripted window object representing a browser
-   *                  window that is not the same as aExclude, and is
-   *                  additionally not a popup window.
+   * @param aExclude A scripted window object that we do not want to use.
+   * @returns A scripted window object representing a browser window that is not
+   *   the same as aExclude, and is additionally not a popup window.
    */
   getBrowserWindow(aExclude) {
     // on per-window private browsing mode,
@@ -18,30 +17,37 @@ export const SingleWindowModeUtils = {
 
     /** @param {Window} win */
     function isSuitableBrowserWindow(win) {
-      return !win.closed && win.document.readyState == "complete" &&
-              win.toolbar.visible && win != aExclude &&
-              PrivateBrowsingUtils.isWindowPrivate(win) == isPrivate;
+      return (
+        !win.closed &&
+        win.document.readyState == "complete" &&
+        win.toolbar.visible &&
+        win != aExclude &&
+        PrivateBrowsingUtils.isWindowPrivate(win) == isPrivate
+      );
     }
 
     const windows = Services.wm.getEnumerator("navigator:browser");
     while (windows.hasMoreElements()) {
       const win = windows.getNext();
-      if (isSuitableBrowserWindow(win))
+      if (isSuitableBrowserWindow(win)) {
         return win;
+      }
     }
     return null;
   },
 
   newWindow(aWindow) {
-    if (!aWindow.arguments || aWindow.arguments.length === 0)
+    if (!aWindow.arguments || aWindow.arguments.length === 0) {
       return false;
+    }
 
     aWindow.addEventListener("load", () => this.onLoad(aWindow), {once: true});
 
     const existingWindow = this.getBrowserWindow(aWindow);
     // no navigator:browser window open yet?
-    if (!existingWindow)
+    if (!existingWindow) {
       return false;
+    }
 
     existingWindow.focus();
     // save dimensions
@@ -51,7 +57,7 @@ export const SingleWindowModeUtils = {
       width: win.getAttribute("width"),
       height: win.getAttribute("height"),
       screenX: win.getAttribute("screenX"),
-      screenY: win.getAttribute("screenY")
+      screenY: win.getAttribute("screenY"),
     };
     // hide the new window
     aWindow.resizeTo(10, 10);
@@ -87,11 +93,14 @@ export const SingleWindowModeUtils = {
   onLoad(newWindow) {
     const existingWindow = this.getBrowserWindow(newWindow);
     // no navigator:browser window open yet?
-    if (!existingWindow)
+    if (!existingWindow) {
       return;
+    }
 
-    if (!newWindow.arguments || newWindow.arguments.length === 0)
+    if (!newWindow.arguments || newWindow.arguments.length === 0) {
       return;
+    }
+
     const args = newWindow.arguments;
 
     // don't close windows that was probably opened by extension
@@ -105,8 +114,9 @@ export const SingleWindowModeUtils = {
     const uriToLoad = args[0];
 
     let urls = [];
+
     /** @type {Partial<TabmixModules.WindowParams>} */
-    let params = { };
+    let params = {};
     if (uriToLoad instanceof Ci.nsIArray) {
       const count = uriToLoad.length;
       for (let i = 0; i < count; i++) {
@@ -161,12 +171,14 @@ export const SingleWindowModeUtils = {
       if (urls.length) {
         firstTabAdded = existingBrowser.selectedTab;
         const isBlankTab = existingBrowser.isBlankNotBusyTab(firstTabAdded);
-        if (isBlankTab)
+        if (isBlankTab) {
           existingWindow.openLinkIn(urls[0], "current", params);
-        else
+        } else {
           firstTabAdded = existingBrowser.addTrustedTab(urls[0], params);
-        for (let i = 1; i < urls.length; ++i)
+        }
+        for (let i = 1; i < urls.length; ++i) {
           existingBrowser.addTrustedTab(urls[i]);
+        }
       }
     } catch (ex) {
       console.error(ex);
@@ -176,8 +188,8 @@ export const SingleWindowModeUtils = {
       // if we don't add this here gBrowserInit.onUnload fails
       // gBrowserInit moved to browser-init.js on Firefox 127
       if (!newWindow.gBrowserInit._boundDelayedStartup) {
-        newWindow.FullZoom.init = function() {};
-        newWindow.FullZoom.destroy = function() {};
+        newWindow.FullZoom.init = function () {};
+        newWindow.FullZoom.destroy = function () {};
       }
     } catch (ex) {
       existingWindow.Tabmix.assert(ex);
@@ -197,5 +209,5 @@ export const SingleWindowModeUtils = {
         existingWindow.Tabmix.assert(ex);
       }
     }, 0);
-  }
+  },
 };

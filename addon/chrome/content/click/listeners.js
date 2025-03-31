@@ -1,6 +1,6 @@
 "use strict";
 
-(async function() {
+(async function () {
   await window.Tabmix.promiseOverlayLoaded;
 
   const menuToolsPopup = document.getElementById("menu_ToolsPopup");
@@ -8,27 +8,31 @@
     "popupshowing",
     () => {
       document
-          .getElementById("tabmix-menu")
-          .addEventListener("command", () => Tabmix.openOptionsDialog());
+        .getElementById("tabmix-menu")
+        .addEventListener("command", () => Tabmix.openOptionsDialog());
 
       document
-          .getElementById("tabmix-historyUndoWindowPopup")
-          .addEventListener("popupshowing", (/** @type {MenuPopupEvent} */ event) => {
-            Tabmix.closedObjectsUtils.populateClosedWindowsMenu(event.target.parentNode);
-          });
+        .getElementById("tabmix-historyUndoWindowPopup")
+        .addEventListener("popupshowing", (/** @type {MenuPopupEvent} */ event) => {
+          Tabmix.closedObjectsUtils.populateClosedWindowsMenu(event.target.parentNode);
+        });
     },
     {once: true}
   );
 
   const mainCommandSet = document.getElementById("mainCommandSet");
-  mainCommandSet?.addEventListener("command", (/** @type {PopupEvent} */ event) => {
-    switch (event.target.id) {
-      case "History:UndoCloseTab":
-        event.stopPropagation();
-        undoCloseTab();
-        break;
-    }
-  }, {capture: true});
+  mainCommandSet?.addEventListener(
+    "command",
+    (/** @type {PopupEvent} */ event) => {
+      switch (event.target.id) {
+        case "History:UndoCloseTab":
+          event.stopPropagation();
+          undoCloseTab();
+          break;
+      }
+    },
+    {capture: true}
+  );
 
   const contextMenuPopup = document.getElementById("contentAreaContextMenu");
   contextMenuPopup.addEventListener(
@@ -224,8 +228,8 @@
   });
 
   document
-      .getElementById("tm-tabsList-menu")
-      .addEventListener("click", (/** @type {PopupEvent} */ event) => {
-        TabmixAllTabs.removeTabFromList(event);
-      });
-}());
+    .getElementById("tm-tabsList-menu")
+    .addEventListener("click", (/** @type {PopupEvent} */ event) => {
+      TabmixAllTabs.removeTabFromList(event);
+    });
+})();

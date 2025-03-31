@@ -42,8 +42,10 @@ var gMenuPane = {
       }
     });
 
-    if (!Shortcuts.keys.browserReload.id)
+    if (!Shortcuts.keys.browserReload.id) {
       $("browserReload").hidden = true;
+    }
+
     this.initializeShortcuts();
     this.setSlideShowLabel();
     let paneMenu = $("paneMenu");
@@ -56,15 +58,19 @@ var gMenuPane = {
   },
 
   initializeShortcuts() {
-    if (Shortcuts.prefsChangedByTabmix)
+    if (Shortcuts.prefsChangedByTabmix) {
       return;
+    }
 
     let newValue = $Pref("pref_shortcuts").stringValue;
     let shortcuts = $("shortcut-group");
-    if (newValue == shortcuts.value)
+    if (newValue == shortcuts.value) {
       return;
+    }
+
     shortcuts.value = newValue;
     shortcuts.keys = JSON.parse(newValue);
+
     /** @param {MozShortcutClass} shortcut */
     let callBack = shortcut => {
       const shortcutData = Shortcuts.keys[shortcut.id];
@@ -94,9 +100,9 @@ var gMenuPane = {
     $("menu").selectedIndex = 3;
     let slideShow = $("slideShow");
     let item = $("hide-unused-shortcuts");
-    if (!slideShow.hasAttribute("value") &&
-        $("shortcuts-panel").getAttribute(item.id) == "true")
+    if (!slideShow.hasAttribute("value") && $("shortcuts-panel").getAttribute(item.id) == "true") {
       this.toggleLinkLabel(item);
+    }
     slideShow.editBox.focus();
     let shortcuts = $("shortcut-group");
     shortcuts.scrollTop = shortcuts.scrollHeight - shortcuts.clientHeight;
@@ -105,8 +111,8 @@ var gMenuPane = {
   // for shortcuts panel
   toggleLinkLabel(item) {
     var panel = $("shortcuts-panel");
-    var wasShow = panel.getAttribute(item.id) == 'false';
-    item.value = item.getAttribute(wasShow ? 'show' : 'hide') ?? '';
+    var wasShow = panel.getAttribute(item.id) == "false";
+    item.value = item.getAttribute(wasShow ? "show" : "hide") ?? "";
     panel.setAttribute(item.id, wasShow);
   },
 
@@ -120,7 +126,12 @@ var gMenuPane = {
   },
 
   get PrivateBrowsingUtils() {
-    return Tabmix.lazyGetter(this, "PrivateBrowsingUtils", () => ChromeUtils.importESModule("resource://gre/modules/PrivateBrowsingUtils.sys.mjs").PrivateBrowsingUtils
+    return Tabmix.lazyGetter(
+      this,
+      "PrivateBrowsingUtils",
+      () =>
+        ChromeUtils.importESModule("resource://gre/modules/PrivateBrowsingUtils.sys.mjs")
+          .PrivateBrowsingUtils
     );
   },
 };

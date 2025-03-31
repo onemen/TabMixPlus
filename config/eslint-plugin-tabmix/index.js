@@ -1,16 +1,16 @@
-import importGlobals from './import-globals.js';
-import lazyGetterNameMatch from './lazy-getter-name-match.js';
-import validLazy from './valid-lazy.js';
+import importGlobals from "./import-globals.js";
+import lazyGetterNameMatch from "./lazy-getter-name-match.js";
+import validLazy from "./valid-lazy.js";
 
 export default {
   meta: {
     name: "eslint-plugin-tabmix",
-    version: "1.2.0"
+    version: "1.2.0",
   },
   environments: {
-    extensions: {
+    "extensions": {
       //
-      TabView: false
+      TabView: false,
     },
     "extensions-js": {
       bgSaverPref: false,
@@ -38,7 +38,7 @@ export default {
       TreeStyleTabWindowHelper: false,
       TreeStyleTabBrowser: false,
     },
-    tabmix: {
+    "tabmix": {
       gTMPprefObserver: true,
       Tabmix: true,
       TabmixAllTabs: true,
@@ -61,7 +61,7 @@ export default {
       ZenWorkspaces: true,
       gZenVerticalTabsManager: true,
     },
-    preferences: {
+    "preferences": {
       $: false,
       $Pref: false,
       $Pane: false,

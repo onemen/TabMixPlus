@@ -3,7 +3,7 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   //
-  isVersion: "chrome://tabmix-resource/content/BrowserVersion.sys.mjs"
+  isVersion: "chrome://tabmix-resource/content/BrowserVersion.sys.mjs",
 });
 
 /** @type {Partial<TabmixModules.ContentSvc>} */
@@ -23,7 +23,6 @@ export const ContentSvc = {
   version(versionNo, updateChannel) {
     return lazy.isVersion.apply(null, [versionNo, updateChannel]);
   },
-
 };
 
 // Tabmix preference branch

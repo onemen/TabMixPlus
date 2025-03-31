@@ -10,16 +10,16 @@
  */
 
 /**
- * @brief Install the link-handling functions of Tab Mix Plus.
+ * Install the link-handling functions of Tab Mix Plus.
  *
- * @returns   Nothing.
+ * @returns Nothing.
  */
 Tabmix.linkHandling_init = function TMP_TBP_init() {
   this.set_BrowserOpenTab();
   this.openUILink_init();
 };
 
-Tabmix.set_BrowserOpenTab = function() {
+Tabmix.set_BrowserOpenTab = function () {
   if (this.isVersion(1260)) {
     window.BrowserCommands.openTab = TMP_BrowserOpenTab;
   } else {
@@ -28,7 +28,7 @@ Tabmix.set_BrowserOpenTab = function() {
   Tabmix.BrowserOpenTab = TMP_BrowserOpenTab;
 };
 
-Tabmix.beforeBrowserInitOnLoad = function() {
+Tabmix.beforeBrowserInitOnLoad = function () {
   try {
     TabmixSvc.windowStartup.init(window);
   } catch (ex) {
@@ -56,10 +56,16 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
     // look for installed extensions that are incompatible with tabmix
     if (this.isFirstWindowInSession && this.prefs.getBoolPref("disableIncompatible")) {
-      setTimeout(function checkCompatibility(aWindow) {
-        const {CompatibilityCheck} = ChromeUtils.importESModule("chrome://tabmix-resource/content/extensions/CompatibilityCheck.sys.mjs");
-        return new CompatibilityCheck(aWindow, true, false);
-      }, 0, window);
+      setTimeout(
+        function checkCompatibility(aWindow) {
+          const {CompatibilityCheck} = ChromeUtils.importESModule(
+            "chrome://tabmix-resource/content/extensions/CompatibilityCheck.sys.mjs"
+          );
+          return new CompatibilityCheck(aWindow, true, false);
+        },
+        0,
+        window
+      );
     }
 
     // add tabmix menu item to tab context menu before menumanipulator and MenuEdit initialize
@@ -71,30 +77,35 @@ Tabmix.beforeBrowserInitOnLoad = function() {
 
 // this must run before all
 Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
-  if (typeof tabBrowser == "undefined")
+  if (typeof tabBrowser == "undefined") {
     tabBrowser = gBrowser || window._gBrowser;
+  }
 
   // we need to add our keys before browser.xhtml loads our overlay,
   // and look for our Shortcuts
-  const {Shortcuts} = ChromeUtils.importESModule("chrome://tabmix-resource/content/Shortcuts.sys.mjs");
+  const {Shortcuts} = ChromeUtils.importESModule(
+    "chrome://tabmix-resource/content/Shortcuts.sys.mjs"
+  );
   Shortcuts.onWindowOpen(window);
 
   // return true if all tabs in the window are blank
-  tabBrowser.isBlankWindow = function() {
+  tabBrowser.isBlankWindow = function () {
     for (var i = 0; i < this.tabs.length; i++) {
-      if (!this.isBlankBrowser(this.getBrowserAtIndex(i)))
+      if (!this.isBlankBrowser(this.getBrowserAtIndex(i))) {
         return false;
+      }
     }
     return true;
   };
 
-  tabBrowser.isBlankTab = function(aTab) {
+  tabBrowser.isBlankTab = function (aTab) {
     return this.isBlankBrowser(this.getBrowserForTab(aTab));
   };
 
-  tabBrowser.isBlankNotBusyTab = function(aTab, aboutBlank) {
-    if (aTab.hasAttribute("busy"))
+  tabBrowser.isBlankNotBusyTab = function (aTab, aboutBlank) {
+    if (aTab.hasAttribute("busy")) {
       return false;
+    }
 
     return this.isBlankBrowser(this.getBrowserForTab(aTab), aboutBlank);
   };
@@ -106,23 +117,28 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
         return TMP_SessionStore.isBlankPendingTab(tab);
       }
 
-      if (!aBrowser || !aBrowser.currentURI)
+      if (!aBrowser || !aBrowser.currentURI) {
         return true;
-      if (aBrowser.canGoForward || aBrowser.canGoBack)
+      }
+
+      if (aBrowser.canGoForward || aBrowser.canGoBack) {
         return false;
-      return aboutBlank ? aBrowser.currentURI.spec == TabmixSvc.aboutBlank :
-        Tabmix.isNewTabUrls(aBrowser.currentURI.spec);
+      }
+
+      return aboutBlank ?
+          aBrowser.currentURI.spec == TabmixSvc.aboutBlank
+        : Tabmix.isNewTabUrls(aBrowser.currentURI.spec);
     } catch (ex) {
       Tabmix.assert(ex);
       return true;
     }
   };
 
-  tabBrowser.getBrowserForTabPanel = function(notificationbox) {
+  tabBrowser.getBrowserForTabPanel = function (notificationbox) {
     return notificationbox.getElementsByClassName("browserStack")[0].firstChild;
   };
 
-  tabBrowser.getTabForLastPanel = function() {
+  tabBrowser.getTabForLastPanel = function () {
     let notificationbox = this.tabpanels.lastChild;
     let browser = this.getBrowserForTabPanel(notificationbox);
     if (browser === gBrowser.preloadedBrowser && notificationbox.previousSibling) {
@@ -131,8 +147,8 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
     return this.getTabForBrowser(browser);
   };
 
-  var tabContainer = aTabContainer || tabBrowser.tabContainer ||
-      document.getElementById("tabbrowser-tabs");
+  var tabContainer =
+    aTabContainer || tabBrowser.tabContainer || document.getElementById("tabbrowser-tabs");
 
   // Firefox sessionStore and session manager extension start to add tab before our onWindowOpen run
   // so we initialize this before start
@@ -155,17 +171,23 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   }
 
   var tabscroll = this.prefs.getIntPref("tabBarMode");
-  if (document.documentElement.getAttribute("chromehidden")?.includes("toolbar"))
+  if (document.documentElement.getAttribute("chromehidden")?.includes("toolbar")) {
     tabscroll = 1;
-  if (tabscroll < 0 || tabscroll > 3 ||
-      tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window) {
+  }
+
+  if (
+    tabscroll < 0 ||
+    tabscroll > 3 ||
+    (tabscroll != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT && "TreeStyleTabBrowser" in window)
+  ) {
     this.prefs.setIntPref("tabBarMode", 1);
     tabscroll = 1;
   }
   TabmixTabbar.scrollButtonsMode = tabscroll;
 
   if (!SessionStore.getWindowState(window).windows[0]?._restoring) {
-    TabmixTabbar.flowing = ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll] || "scrollbutton";
+    TabmixTabbar.flowing =
+      ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll] || "scrollbutton";
   }
 
   // add flag that we are after SwitchThemes, we use it in Tabmix.isWindowAfterSessionRestore

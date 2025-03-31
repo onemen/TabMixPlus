@@ -16,9 +16,11 @@
       }
 
       this.textContent = "";
-      this.appendChild(MozXULElement.parseXULToFragment(`
+      this.appendChild(
+        MozXULElement.parseXULToFragment(`
       <checkbox class="checkbox" ></checkbox>
-    `));
+    `)
+      );
 
       if (!this.hasAttribute("preference-editable")) {
         this.setAttribute("preference-editable", "true");

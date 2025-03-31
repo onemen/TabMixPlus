@@ -3,24 +3,31 @@ const ATTRIBS = ["href", "onclick", "onmousedown", "rel", "role"];
 /** @type {LinkNodeUtilsModule.LinkNodeUtils} */
 export const LinkNodeUtils = {
   isFrameInContent(content, href, name) {
-    if (!content)
+    if (!content) {
       return false;
-    if (content.location.href == href && content.name == name)
+    }
+
+    if (content.location.href == href && content.name == name) {
       return true;
+    }
+
     for (let i = 0; i < content.frames.length; i++) {
       let frame = content.frames[i];
-      if (frame.location.href == href && frame.name == name)
+      if (frame.location.href == href && frame.name == name) {
         return true;
+      }
     }
     return false;
   },
 
   wrap(node, focusedWindow, getTargetIsFrame) {
-    if (!node || typeof node.__tabmix == "boolean")
+    if (!node || typeof node.__tabmix == "boolean") {
       return node;
+    }
 
     let doc = node.ownerDocument;
     let frameElement = Boolean(node.ownerGlobal.frameElement);
+
     /** @type {LinkNodeUtilsModule.WrappedNode} */
     let wrapper = {
       __tabmix: true,
@@ -34,14 +41,14 @@ export const LinkNodeUtils = {
         URL: doc.URL,
         documentURI: doc.documentURI,
         defaultView: {frameElement},
-        location: {href: doc.location ? doc.location.href : ""}
+        location: {href: doc.location ? doc.location.href : ""},
       },
       parentNode: {
         baseURI: node.parentNode?.baseURI ?? "",
-        _attributes: getAttributes(node.parentNode, ["onclick"])
+        _attributes: getAttributes(node.parentNode, ["onclick"]),
       },
       _focusedWindowHref: focusedWindow.top?.location.href || "",
-      _attributes: getAttributes(node, ATTRIBS)
+      _attributes: getAttributes(node, ATTRIBS),
     };
     if (getTargetIsFrame) {
       wrapper.targetIsFrame = targetIsFrame(wrapper.target, focusedWindow);
@@ -75,10 +82,13 @@ export const LinkNodeUtils = {
       let re = /duckduckgo.com|tvguide.com|google|yahoo.com|jetbrains.com|github.io|github.com/;
       blocked = re.test(currentHref);
       // youtube.com - added 2013-11-15
-      if (!blocked && /youtube.com/.test(currentHref) &&
-          (!this.isGMEnabled(window) || !decodeURI(href || "").includes("return false;"))) {
+      if (
+        !blocked &&
+        /youtube.com/.test(currentHref) &&
+        (!this.isGMEnabled(window) || !decodeURI(href || "").includes("return false;"))
+      ) {
         blocked = true;
-      // amazon.com search - added 2019-04-09
+        // amazon.com search - added 2019-04-09
       } else if (!blocked && /amazon\.com\/s\?/.test(currentHref)) {
         blocked = true;
       } else if (!blocked) {
@@ -87,7 +97,9 @@ export const LinkNodeUtils = {
         let host = uri && uri.host;
         blocked = Boolean(
           host === "developer.mozilla.org" &&
-          linkNode && linkNode.host != host && linkNode.classList.contains("external")
+            linkNode &&
+            linkNode.host != host &&
+            linkNode.classList.contains("external")
         );
       }
     } catch {
@@ -105,11 +117,15 @@ export const LinkNodeUtils = {
   },
 };
 
-/** @type {(node: Element | null, attribs: string[]) => Record<string, string>} */
+/**
+ * @param {Element | null} node
+ * @param {string[]} attribs
+ */
 function getAttributes(node, attribs) {
   if (!node) {
     return {};
   }
+
   /** @type {Record<string, string>} */
   const wrapper = {};
   for (let att of attribs) {
@@ -132,8 +148,8 @@ function getTargetAttr(targetAttr, focusedWindow) {
 }
 
 /**
- * @brief check if target attribute exist and point to frame in the document
- *        frame pool
+ * check if target attribute exist and point to frame in the document frame pool
+ *
  * @type {(targetAttr: string | null, focusedWindow: Window) => boolean}
  */
 function targetIsFrame(targetAttr, focusedWindow) {
@@ -147,14 +163,15 @@ function targetIsFrame(targetAttr, focusedWindow) {
 }
 
 /**
- * @brief Check a document's frame pool and determine if
+ * Check a document's frame pool and determine if
+ *
  * |targetFrame| is located inside of it.
  *
- * @param content           is a frame reference
- * @param targetFrame       The name of the frame that we are seeking.
- * @returns                 true if the frame exists within the given frame pool,
- *                          false if it does not.
  * @type {(content: Window, targetFrame: string) => boolean}
+ * @param content is a frame reference
+ * @param targetFrame The name of the frame that we are seeking.
+ * @returns true if the frame exists within the given frame pool, false if it
+ *   does not.
  */
 function existsFrameName(content, targetFrame) {
   for (let i = 0; i < content.frames.length; i++) {

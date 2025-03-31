@@ -99,19 +99,22 @@ var gMousePane = {
   setCheckedState(menulist) {
     let prefID = menulist.getAttribute("preference");
     let val = $Pref(prefID).numberValue;
-    if (val != -1)
+    if (val != -1) {
       menulist[prefID] = val;
+    }
+
     menulist.disabled = val == -1;
     menulist.previousSibling.checked = !menulist.disabled;
   },
 
   updateDblClickTabbar(pref) {
     let dblClickTabbar = $Pref("pref_dblclick_changesize");
-    if (pref.value && !dblClickTabbar.value)
+    if (pref.value && !dblClickTabbar.value) {
       dblClickTabbar.value = pref.value;
+    }
+
     let checkbox = $("dblclick_changesize")._checkbox;
     let image = checkbox.getElementsByClassName("checkbox-check")[0];
     Tabmix.setItem(image, "disabled", pref.value || null);
-  }
-
+  },
 };

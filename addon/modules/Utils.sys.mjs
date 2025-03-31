@@ -1,4 +1,3 @@
-
 // Messages that will be received via the Frame Message Manager.
 const FMM_MESSAGES = [
   "Tabmix:restorePermissionsComplete",
@@ -46,8 +45,10 @@ export const TabmixUtils = {
         break;
       case "Tabmix:reloadTab": {
         let postData = message.data.postData;
-        if (postData)
+        if (postData) {
           message.data.postData = this.makeInputStream(postData);
+        }
+
         lazy.AutoReload.reloadRemoteTab(browser, message.data);
         break;
       }
@@ -60,11 +61,15 @@ export const TabmixUtils = {
         const {json, links} = message.data;
         const url = links[0].url;
         win = browser.ownerGlobal;
-        const where = !lazy.TabmixSvc.isGlitterInstalled &&
-          win.Tabmix.tablib.whereToOpenDrop(json, url);
+        const where =
+          !lazy.TabmixSvc.isGlitterInstalled && win.Tabmix.tablib.whereToOpenDrop(json, url);
         if (where == "tab") {
           links[0].tabmixContentDrop = "tab";
-          browser.droppedLinkHandler(null, links, Services.scriptSecurityManager.getSystemPrincipal());
+          browser.droppedLinkHandler(
+            null,
+            links,
+            Services.scriptSecurityManager.getSystemPrincipal()
+          );
           // prevent default
           return true;
         }
@@ -86,8 +91,9 @@ export const TabmixUtils = {
   },
 
   makeInputStream(aString) {
-    const stream = Cc["@mozilla.org/io/string-input-stream;1"]
-        .createInstance(Ci.nsIStringInputStream);
+    const stream = Cc["@mozilla.org/io/string-input-stream;1"].createInstance(
+      Ci.nsIStringInputStream
+    );
     const stringStream = stream.QueryInterface(Ci.nsIStringInputStream);
     stringStream.setUTF8Data(aString);
     return stringStream;

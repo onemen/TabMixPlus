@@ -7,10 +7,7 @@ var TabmixTabClickOptions = {
   _blockDblClick: false,
 
   isOverlayIcons(event) {
-    const overlayIcons = [
-      "tab-sharing-icon-overlay",
-      "tab-icon-overlay",
-    ];
+    const overlayIcons = ["tab-sharing-icon-overlay", "tab-icon-overlay"];
     return overlayIcons.some(icon => event.target?.classList.contains(icon));
   },
 
@@ -19,13 +16,17 @@ var TabmixTabClickOptions = {
     if (!aEvent || !aEvent.originalTarget || !aEvent.target) {
       return;
     }
-    if (aEvent.button == 2)
-      return; // right click
+    if (aEvent.button == 2) {
+      return;
+    }
+    // right click
 
     var leftClick = aEvent.button === 0;
     if (leftClick && aEvent.detail > 1) {
-      if (this._tabFlipTimeOut)
+      if (this._tabFlipTimeOut) {
         this.clearTabFlipTimeOut();
+      }
+
       if (this._blockDblClick) {
         setTimeout(() => (this._blockDblClick = false), 0);
       }
@@ -37,9 +38,10 @@ var TabmixTabClickOptions = {
     this._blockDblClick = target.id === "tabs-newtab-button";
 
     // don't do anything if user left click on tab or tabbar button
-    if (leftClick &&
-        (isCloseButton || this.isOverlayIcons(aEvent) ||
-         target.localName == "toolbarbutton")) {
+    if (
+      leftClick &&
+      (isCloseButton || this.isOverlayIcons(aEvent) || target.localName == "toolbarbutton")
+    ) {
       return;
     }
 
@@ -56,25 +58,37 @@ var TabmixTabClickOptions = {
     // we replace click handler from tab binding with this to make sure that we
     // always call onMouseCommand (if we need to) before we call tab flip.
     // tabcontainer click handler run before tab click handler.
-    if (leftClick && !clickOutTabs && !tab.mouseDownSelect)
+    if (leftClick && !clickOutTabs && !tab.mouseDownSelect) {
       tab.onMouseCommand(aEvent, true);
+    }
 
     // for tab flip
     if (!clickOutTabs && leftClick && tab.hasAttribute("clickOnCurrent")) {
       tab.removeAttribute("clickOnCurrent");
       let tabFlip = Tabmix.prefs.getBoolPref("tabFlip");
-      if (tabFlip && !aEvent.shiftKey && !aEvent.ctrlKey && !Tabmix.isAltKey(aEvent) && !aEvent.metaKey) {
+      if (
+        tabFlip &&
+        !aEvent.shiftKey &&
+        !aEvent.ctrlKey &&
+        !Tabmix.isAltKey(aEvent) &&
+        !aEvent.metaKey
+      ) {
         let self = this;
         let tabFlipDelay = Tabmix.prefs.getIntPref("tabFlipDelay");
-        if (this._tabFlipTimeOut)
+        if (this._tabFlipTimeOut) {
           this.clearTabFlipTimeOut();
+        }
+
         this._tabFlipTimeOut = setTimeout(
           function selectPreviousTab(aTab) {
             self.clearTabFlipTimeOut();
             Tabmix.tabsSelectionUtils.selectPreviousTab(aTab);
             gBrowser.stopMouseHoverSelect(aTab);
             gBrowser.selectedBrowser.focus();
-          }, tabFlipDelay, tab);
+          },
+          tabFlipDelay,
+          tab
+        );
         return;
       }
     }
@@ -82,7 +96,7 @@ var TabmixTabClickOptions = {
     // handle multi-select
     if (!clickOutTabs) {
       const keyPress = [
-        aEvent.ctrlKey && !aEvent.metaKey || !aEvent.ctrlKey && aEvent.metaKey,
+        (aEvent.ctrlKey && !aEvent.metaKey) || (!aEvent.ctrlKey && aEvent.metaKey),
         aEvent.shiftKey,
         Tabmix.isAltKey(aEvent),
       ];
@@ -90,15 +104,17 @@ var TabmixTabClickOptions = {
       const keyPrefs = [
         Tabmix.prefs.getIntPref("ctrlClickTab"),
         Tabmix.prefs.getIntPref("shiftClickTab"),
-        Tabmix.prefs.getIntPref("altClickTab")
+        Tabmix.prefs.getIntPref("altClickTab"),
       ];
-      const press2Key = leftClick && pressedCount === 2 &&
+      const press2Key =
+        leftClick &&
+        pressedCount === 2 &&
         keyPrefs.some((x, i) => x === 33 && keyPress[i]) &&
         keyPrefs.some((x, i) => x === 34 && keyPress[i]);
       let middleMul;
       if (aEvent.button === 1 && pressedCount === 1) {
         const middleAndModifier = `${Tabmix.prefs.getIntPref("middleClickTab")},${keyPrefs[keyPress.findIndex(x => x)]}`;
-        middleMul = middleAndModifier === '33,34' || middleAndModifier === '34,33';
+        middleMul = middleAndModifier === "33,34" || middleAndModifier === "34,33";
       }
       if (press2Key || middleMul) {
         this._tabRangeSelected(tab, true);
@@ -111,22 +127,41 @@ var TabmixTabClickOptions = {
     var prefName;
     if (aEvent.button == 1) {
       prefName = "middle"; /* middle click*/
-    } else if (leftClick && aEvent.shiftKey && !aEvent.ctrlKey &&
-        !Tabmix.isAltKey(aEvent) && !aEvent.metaKey) {
+    } else if (
+      leftClick &&
+      aEvent.shiftKey &&
+      !aEvent.ctrlKey &&
+      !Tabmix.isAltKey(aEvent) &&
+      !aEvent.metaKey
+    ) {
       prefName = "shift"; /* shift click*/
-    } else if (leftClick && Tabmix.isAltKey(aEvent) && !aEvent.ctrlKey &&
-        !aEvent.shiftKey && !aEvent.metaKey) {
+    } else if (
+      leftClick &&
+      Tabmix.isAltKey(aEvent) &&
+      !aEvent.ctrlKey &&
+      !aEvent.shiftKey &&
+      !aEvent.metaKey
+    ) {
       prefName = "alt"; /* alt click*/
-      window.addEventListener("keyup", function TMP_onKeyup_onTabClick(event) {
-        event.stopPropagation();
-      }, {capture: true, once: true});
-    } else if (leftClick && (aEvent.ctrlKey && !aEvent.metaKey ||
-        !aEvent.ctrlKey && aEvent.metaKey) && !aEvent.shiftKey && !Tabmix.isAltKey(aEvent)) {
+      window.addEventListener(
+        "keyup",
+        function TMP_onKeyup_onTabClick(event) {
+          event.stopPropagation();
+        },
+        {capture: true, once: true}
+      );
+    } else if (
+      leftClick &&
+      ((aEvent.ctrlKey && !aEvent.metaKey) || (!aEvent.ctrlKey && aEvent.metaKey)) &&
+      !aEvent.shiftKey &&
+      !Tabmix.isAltKey(aEvent)
+    ) {
       prefName = "ctrl"; /* ctrl click*/
     }
 
-    if (prefName)
+    if (prefName) {
       this.clickAction(prefName, clickOutTabs, tab, aEvent);
+    }
   },
 
   clearTabFlipTimeOut() {
@@ -139,16 +174,20 @@ var TabmixTabClickOptions = {
     if (!aEvent || !aEvent.originalTarget || !aEvent.target) {
       return;
     }
-    if (aEvent.button !== 0 || aEvent.ctrlKey || aEvent.shiftKey ||
-        Tabmix.isAltKey(aEvent) || aEvent.metaKey) {
+    if (
+      aEvent.button !== 0 ||
+      aEvent.ctrlKey ||
+      aEvent.shiftKey ||
+      Tabmix.isAltKey(aEvent) ||
+      aEvent.metaKey
+    ) {
       return;
     }
 
     const target = aEvent.originalTarget;
     const isCloseButton = aEvent.target.classList.contains("tab-close-button");
     // don't do anything if user left click on tab or tabbar button
-    if (isCloseButton || this.isOverlayIcons(aEvent) ||
-        target.localName == "toolbarbutton") {
+    if (isCloseButton || this.isOverlayIcons(aEvent) || target.localName == "toolbarbutton") {
       return;
     }
 
@@ -223,10 +262,13 @@ var TabmixTabClickOptions = {
       case 11:
         Tabmix.renameTab.editTitle(aTab);
         break;
-      case 12: { // taken from tco
+      case 12: {
+        // taken from tco
         let SessionSaver = window.SessionSaver;
-        if (SessionSaver && SessionSaver.snapBackTab)
+        if (SessionSaver && SessionSaver.snapBackTab) {
           SessionSaver.snapBackTab(SessionSaver.snapback_noFX, SessionSaver.snapback_willFocus);
+        }
+
         break;
       }
       case 13:
@@ -253,7 +295,8 @@ var TabmixTabClickOptions = {
       case 20:
         gBrowser._reloadRightTabs(aTab);
         break;
-      case 21: { // taken from tco
+      case 21: {
+        // taken from tco
         let href;
         if (window.IeView && window.IeView.ieViewLaunch) {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
@@ -262,10 +305,15 @@ var TabmixTabClickOptions = {
           let ieTab = Tabmix.extensions.gIeTab;
           let gIeTabObj = window[ieTab.obj];
           if (typeof gIeTabObj.switchTabEngine == "function") {
-            if (!aTab.selected)
+            if (!aTab.selected) {
               gBrowser.selectedTab = aTab;
+            }
+
             // IeTab2.getBoolPref accept default value
-            gIeTabObj.switchTabEngine(aTab, gIeTabObj.getBoolPref(ieTab.folder + ".alwaysNewTab", false));
+            gIeTabObj.switchTabEngine(
+              aTab,
+              gIeTabObj.getBoolPref(ieTab.folder + ".alwaysNewTab", false)
+            );
           }
         } else if (window.ieview && window.ieview.launch) {
           href = gBrowser.getBrowserForTab(aTab).currentURI.spec;
@@ -301,27 +349,36 @@ var TabmixTabClickOptions = {
       case 29: {
         // changed on 2011-03-09 - open new tab when clicked on tabbar
         // or when the tab is locked
-        var opennewTab = clickOutTabs || aTab.hasAttribute("locked") && !gBrowser.isBlankNotBusyTab(aTab);
-        const clickEvent = new MouseEvent("click", {bubbles: true, cancelable: true, ctrlKey: opennewTab});
+        var opennewTab =
+          clickOutTabs || (aTab.hasAttribute("locked") && !gBrowser.isBlankNotBusyTab(aTab));
+        const clickEvent = new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+          ctrlKey: opennewTab,
+        });
         clickEvent.initEvent("click", true, true);
         middleMousePaste(clickEvent);
         if (opennewTab) {
           let tab = gBrowser.getTabForLastPanel();
-          if (!tab.selected)
+          if (!tab.selected) {
             gBrowser.selectedTab = tab;
+          }
         }
         break;
       }
       case 30: // enable/disable AutoReload
-        if (aTab.autoReloadEnabled === undefined)
+        if (aTab.autoReloadEnabled === undefined) {
           Tabmix.autoReload.initTab(aTab);
+        }
+
         Tabmix.autoReload.toggle(aTab);
         break;
       case 31: // pin/unpin tab
-        if (aTab.pinned)
+        if (aTab.pinned) {
           gBrowser.unpinTab(aTab);
-        else
+        } else {
           gBrowser.pinTab(aTab);
+        }
         break;
       case 32:
         Tabmix.tabsSelectionUtils.selectPreviousTab(gBrowser.selectedTab);
@@ -359,26 +416,31 @@ var TabmixTabClickOptions = {
     document.getElementById("TabsToolbar")[eventListener]("dblclick", this.blockDblclick, false);
   },
 
-  /**
+  /*
    * block dblclick on TabsToolbar when tabbar.dblclick_changesize is false
    * and tabbar.click_dragwindow is true
    */
   blockDblclick(aEvent) {
-    if (aEvent.button !== 0 || aEvent.target?.localName == "arrowscrollbox" ||
-        Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") ||
-        !Tabmix.prefs.getBoolPref("tabbar.click_dragwindow"))
+    if (
+      aEvent.button !== 0 ||
+      aEvent.target?.localName == "arrowscrollbox" ||
+      Tabmix.prefs.getBoolPref("tabbar.dblclick_changesize") ||
+      !Tabmix.prefs.getBoolPref("tabbar.click_dragwindow")
+    ) {
       return;
+    }
 
     aEvent.preventDefault();
   },
 
-  /**
+  /*
    * block mouse down with modifiers if the modifier is used by our clicking option
    */
   blockMouseDown(event) {
-    if (event.shiftKey && Tabmix.prefs.getIntPref("shiftClickTab") != -1 ||
-      Tabmix.isAltKey(event) && Tabmix.prefs.getIntPref("altClickTab") != -1 ||
-      (event.ctrlKey || event.metaKey) && Tabmix.prefs.getIntPref("ctrlClickTab") != -1
+    if (
+      (event.shiftKey && Tabmix.prefs.getIntPref("shiftClickTab") !== -1) ||
+      (Tabmix.isAltKey(event) && Tabmix.prefs.getIntPref("altClickTab") !== -1) ||
+      ((event.ctrlKey || event.metaKey) && Tabmix.prefs.getIntPref("ctrlClickTab") !== -1)
     ) {
       return true;
     }
@@ -402,7 +464,10 @@ var TabmixContext = {
 
     var tabContextMenu = $id("tabContextMenu");
     tabContextMenu.insertBefore($id("context_reloadTab"), $id("tabmix_reloadTabOptions_separator"));
-    tabContextMenu.insertBefore($id("context_reloadSelectedTabs"), $id("tabmix_reloadTabOptions_separator"));
+    tabContextMenu.insertBefore(
+      $id("context_reloadSelectedTabs"),
+      $id("tabmix_reloadTabOptions_separator")
+    );
     const closeTabSeparator = $id("tabmix_closeTab_separator");
     tabContextMenu.insertBefore($id("context_undoCloseTab"), closeTabSeparator);
     tabContextMenu.insertBefore($id("context_closeTab"), closeTabSeparator);
@@ -410,26 +475,36 @@ var TabmixContext = {
       tabContextMenu.insertBefore($id("context_closeDuplicateTabs"), closeTabSeparator);
     }
     tabContextMenu.insertBefore($id("context_closeTabOptions"), closeTabSeparator);
-    tabContextMenu.insertBefore($id("context_bookmarkSelectedTabs"), $id("context_bookmarkAllTabs"));
+    tabContextMenu.insertBefore(
+      $id("context_bookmarkSelectedTabs"),
+      $id("context_bookmarkAllTabs")
+    );
     tabContextMenu.insertBefore($id("context_bookmarkTab"), $id("context_bookmarkAllTabs"));
 
     const openTab = $id("context_openANewTab");
-    tabContextMenu.addEventListener("popupshowing", () => {
-      openTab.setAttribute("_newtab", openTab.getAttribute("label") ?? "");
-      if (!Tabmix.isVersion(1290)) {
-        openTab.setAttribute("oncommand", "Tabmix.BrowserOpenTab({ event });");
-      }
-    }, {once: true});
+    tabContextMenu.addEventListener(
+      "popupshowing",
+      () => {
+        openTab.setAttribute("_newtab", openTab.getAttribute("label") ?? "");
+        if (!Tabmix.isVersion(1290)) {
+          openTab.setAttribute("oncommand", "Tabmix.BrowserOpenTab({ event });");
+        }
+      },
+      {once: true}
+    );
 
     // insert IE Tab menu-items before Bookmarks menu-items
-    if ("gIeTab" in window) { // no need to do this fix for IE Tab 2
+    if ("gIeTab" in window) {
+      // no need to do this fix for IE Tab 2
       let IeTab = window.IeTab;
       var aFunction = "createTabbarMenu" in IeTab.prototype ? "createTabbarMenu" : "init";
       if (aFunction in IeTab.prototype) {
-        Tabmix.changeCode(IeTab.prototype, "IeTab.prototype." + aFunction)._replace(
-          'tabbarMenu.insertBefore(document.getElementById("ietab-tabbar-sep"), separator);',
-          'separator = document.getElementById("tabmix_lockTab_separator"); $&'
-        ).toCode();
+        Tabmix.changeCode(IeTab.prototype, "IeTab.prototype." + aFunction)
+          ._replace(
+            'tabbarMenu.insertBefore(document.getElementById("ietab-tabbar-sep"), separator);',
+            'separator = document.getElementById("tabmix_lockTab_separator"); $&'
+          )
+          .toCode();
       }
     }
 
@@ -441,8 +516,9 @@ var TabmixContext = {
       }
     }
 
-    if (Tabmix.prefs.getBoolPref("showTabContextMenuOnTabbar"))
+    if (Tabmix.prefs.getBoolPref("showTabContextMenuOnTabbar")) {
       this.updateTabbarContextMenu(true);
+    }
 
     // move tm-content-miscSep to its place (Firefox 32+)
     let sep = $id("tm-content-miscSep");
@@ -461,7 +537,9 @@ var TabmixContext = {
 
   toggleEventListener(enable) {
     const eventListener = enable ? "addEventListener" : "removeEventListener";
-    document.getElementById("contentAreaContextMenu").parentElement?.[eventListener]("popupshowing", this, true);
+    document
+      .getElementById("contentAreaContextMenu")
+      .parentElement?.[eventListener]("popupshowing", this, true);
     document.getElementById("contentAreaContextMenu")[eventListener]("popupshowing", this, false);
     document.getElementById("tabContextMenu")[eventListener]("popupshowing", this, false);
     document.getElementById("tabContextMenu")[eventListener]("popupshown", this, false);
@@ -499,8 +577,9 @@ var TabmixContext = {
 
   // Tab context menu popupshowing
   updateTabContextMenu: function TMP_updateTabContextMenu(event) {
-    if (event.originalTarget != document.getElementById("tabContextMenu"))
+    if (event.originalTarget != document.getElementById("tabContextMenu")) {
       return true;
+    }
 
     document.getElementById("tabContextMenu").addEventListener("popuphidden", this);
 
@@ -522,7 +601,9 @@ var TabmixContext = {
 
     const newTab = document.getElementById("context_openANewTab");
     Tabmix.showItem(newTab, Tabmix.prefs.getBoolPref("newTabMenu"));
-    const newTabMenuLabel = newTab.getAttribute("_newtab") + (clickOutTabs ? "" : "  " + newTab.getAttribute("_afterthis"));
+    const newTabMenuLabel =
+      newTab.getAttribute("_newtab") +
+      (clickOutTabs ? "" : "  " + newTab.getAttribute("_afterthis"));
     Tabmix.setItem(newTab, "label", newTabMenuLabel);
     if (!Tabmix.isVersion(1290)) {
       if (clickOutTabs) {
@@ -533,13 +614,31 @@ var TabmixContext = {
     }
 
     // Duplicate Commands
-    Tabmix.showItem("context_duplicateTab", !multiselectionContext && Tabmix.prefs.getBoolPref("duplicateMenu"));
-    Tabmix.showItem("context_duplicateTabs", multiselectionContext && Tabmix.prefs.getBoolPref("duplicateMenu"));
-    Tabmix.showItem("tm-duplicateinWin", Tabmix.prefs.getBoolPref("duplicateinWinMenu") && !Tabmix.singleWindowMode);
-    Tabmix.showItem("context_openTabInWindow", Tabmix.prefs.getBoolPref("detachTabMenu") && !Tabmix.singleWindowMode);
+    Tabmix.showItem(
+      "context_duplicateTab",
+      !multiselectionContext && Tabmix.prefs.getBoolPref("duplicateMenu")
+    );
+    Tabmix.showItem(
+      "context_duplicateTabs",
+      multiselectionContext && Tabmix.prefs.getBoolPref("duplicateMenu")
+    );
+    Tabmix.showItem(
+      "tm-duplicateinWin",
+      Tabmix.prefs.getBoolPref("duplicateinWinMenu") && !Tabmix.singleWindowMode
+    );
+    Tabmix.showItem(
+      "context_openTabInWindow",
+      Tabmix.prefs.getBoolPref("detachTabMenu") && !Tabmix.singleWindowMode
+    );
 
-    Tabmix.showItem("context_toggleMuteTab", !multiselectionContext && Tabmix.prefs.getBoolPref("muteTabMenu"));
-    Tabmix.showItem("context_toggleMuteTabs", multiselectionContext && Tabmix.prefs.getBoolPref("muteTabMenu"));
+    Tabmix.showItem(
+      "context_toggleMuteTab",
+      !multiselectionContext && Tabmix.prefs.getBoolPref("muteTabMenu")
+    );
+    Tabmix.showItem(
+      "context_toggleMuteTabs",
+      multiselectionContext && Tabmix.prefs.getBoolPref("muteTabMenu")
+    );
 
     var show = Tabmix.prefs.getBoolPref("pinTabMenu");
     Tabmix.showItem("context_pinTab", !multiselectionContext && show && !aTab.pinned);
@@ -549,15 +648,20 @@ var TabmixContext = {
     Tabmix.showItem("context_moveTabOptions", Tabmix.prefs.getBoolPref("moveTabOptions"));
 
     // make sure not to show menu items that are hidden by Firefox
-    Tabmix.setItem("context_sendTabToDevice", "tabmix_hide", !Tabmix.prefs.getBoolPref("sendTabToDevice") || null);
+    Tabmix.setItem(
+      "context_sendTabToDevice",
+      "tabmix_hide",
+      !Tabmix.prefs.getBoolPref("sendTabToDevice") || null
+    );
 
     const shareTabURL = event.originalTarget.querySelector(".share-tab-url-item");
     Tabmix.setItem(shareTabURL, "tabmix_hide", !Tabmix.prefs.getBoolPref("shareTabURL") || null);
 
-    Tabmix.showItem("tm-mergeWindowsTab",
+    Tabmix.showItem(
+      "tm-mergeWindowsTab",
       Tabmix.prefs.getBoolPref("showMergeWindow") &&
-      (!Tabmix.singleWindowMode ||
-      Tabmix.singleWindowMode && !isOneWindow));
+        (!Tabmix.singleWindowMode || (Tabmix.singleWindowMode && !isOneWindow))
+    );
     var showRenameTabMenu = Tabmix.prefs.getBoolPref("renameTabMenu");
     Tabmix.showItem("tm-renameTab", showRenameTabMenu);
     Tabmix.showItem("tm-copyTabUrl", Tabmix.prefs.getBoolPref("copyTabUrlMenu"));
@@ -567,15 +671,24 @@ var TabmixContext = {
     //  ---------------- menuseparator ---------------- //
 
     // Reload Commands
-    Tabmix.showItem("context_reloadTab", !multiselectionContext && Tabmix.prefs.getBoolPref("reloadTabMenu"));
-    Tabmix.showItem("context_reloadSelectedTabs", multiselectionContext && Tabmix.prefs.getBoolPref("reloadTabMenu"));
+    Tabmix.showItem(
+      "context_reloadTab",
+      !multiselectionContext && Tabmix.prefs.getBoolPref("reloadTabMenu")
+    );
+    Tabmix.showItem(
+      "context_reloadSelectedTabs",
+      multiselectionContext && Tabmix.prefs.getBoolPref("reloadTabMenu")
+    );
     this._showAutoReloadMenu("tm-autoreloadTab_menu", "autoReloadMenu", true);
     Tabmix.showItem("context_reloadTabOptions", Tabmix.prefs.getBoolPref("reloadTabOptions"));
 
     //  ---------------- menuseparator ---------------- //
 
     var undoClose = Tabmix.prefs.getBoolPref("undoClose");
-    Tabmix.showItem("context_undoCloseTab", Tabmix.prefs.getBoolPref("undoCloseTabMenu") && undoClose);
+    Tabmix.showItem(
+      "context_undoCloseTab",
+      Tabmix.prefs.getBoolPref("undoCloseTabMenu") && undoClose
+    );
     Tabmix.showItem("tm-undoCloseList", Tabmix.prefs.getBoolPref("undoCloseListMenu") && undoClose);
 
     //  ---------------- menuseparator ---------------- //
@@ -599,8 +712,14 @@ var TabmixContext = {
 
     //  ---------------- menuseparator ---------------- //
 
-    Tabmix.showItem("context_bookmarkTab", !multiselectionContext && Tabmix.prefs.getBoolPref("bookmarkTabMenu"));
-    Tabmix.showItem("context_bookmarkTabs", multiselectionContext && Tabmix.prefs.getBoolPref("bookmarkTabMenu"));
+    Tabmix.showItem(
+      "context_bookmarkTab",
+      !multiselectionContext && Tabmix.prefs.getBoolPref("bookmarkTabMenu")
+    );
+    Tabmix.showItem(
+      "context_bookmarkTabs",
+      multiselectionContext && Tabmix.prefs.getBoolPref("bookmarkTabMenu")
+    );
     Tabmix.showItem("context_bookmarkAllTabs", Tabmix.prefs.getBoolPref("bookmarkTabsMenu"));
 
     // we call this again when popupshown to make sure we don't show 2 menuseparator together
@@ -613,12 +732,13 @@ var TabmixContext = {
       if (aTab.hasAttribute("busy")) {
         let browser = gBrowser.getBrowserForTab(aTab);
         let url = browser.currentURI.spec;
-        TMP_Places.getTitleFromBookmark(url, browser.contentTitle)
-            .then(docTitle => {
-              if (!docTitle || docTitle == Tabmix.emptyTabTitle)
-                titleNotReady = true;
-              Tabmix.setItem("tm-renameTab", "disabled", titleNotReady);
-            });
+        TMP_Places.getTitleFromBookmark(url, browser.contentTitle).then(docTitle => {
+          if (!docTitle || docTitle == Tabmix.emptyTabTitle) {
+            titleNotReady = true;
+          }
+
+          Tabmix.setItem("tm-renameTab", "disabled", titleNotReady);
+        });
       } else {
         Tabmix.setItem("tm-renameTab", "disabled", titleNotReady);
       }
@@ -631,23 +751,33 @@ var TabmixContext = {
     if (Tabmix.isVersion(1350)) {
       noTabsToEnd = !gBrowser._getTabsToTheEndFrom(aTab).length;
       noTabsToStart = !gBrowser._getTabsToTheStartFrom(aTab).length;
-      unpinnedTabsToClose = multiselectionContext ?
-        gBrowser.visibleTabs.filter(t => !t.multiselected && !t.pinned && !t.hidden).length :
-        gBrowser.visibleTabs.filter(t => t != TabContextMenu.contextTab && !t.pinned && !t.hidden).length;
+      unpinnedTabsToClose =
+        multiselectionContext ?
+          gBrowser.visibleTabs.filter(t => !t.multiselected && !t.pinned && !t.hidden).length
+        : gBrowser.visibleTabs.filter(t => t != TabContextMenu.contextTab && !t.pinned && !t.hidden)
+            .length;
     } else {
       noTabsToEnd = !gBrowser.getTabsToTheEndFrom(aTab).length;
       noTabsToStart = !gBrowser.getTabsToTheStartFrom(aTab).length;
-      unpinnedTabsToClose = multiselectionContext ?
-        gBrowser.visibleTabs.filter(t => !t.multiselected && !t.pinned).length :
-        gBrowser.visibleTabs.filter(t => t != TabContextMenu.contextTab && !t.pinned).length;
+      unpinnedTabsToClose =
+        multiselectionContext ?
+          gBrowser.visibleTabs.filter(t => !t.multiselected && !t.pinned).length
+        : gBrowser.visibleTabs.filter(t => t != TabContextMenu.contextTab && !t.pinned).length;
     }
     let cIndex = Tabmix.visibleTabs.indexOf(aTab);
 
     // count unprotected tabs for closing
-    const selectedTabsCount = this.updateSelectedTabsCount("context_closeTab", multiselectionContext);
+    const selectedTabsCount = this.updateSelectedTabsCount(
+      "context_closeTab",
+      multiselectionContext
+    );
 
     var keepLastTab = tabsCount == 1 && Tabmix.prefs.getBoolPref("keepLastTab");
-    Tabmix.setItem("context_closeTab", "disabled", (multiselectionContext ? selectedTabsCount === 0 : protectedTab) || keepLastTab);
+    Tabmix.setItem(
+      "context_closeTab",
+      "disabled",
+      (multiselectionContext ? selectedTabsCount === 0 : protectedTab) || keepLastTab
+    );
     Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || !unpinnedTabsToClose);
     Tabmix.setItem("context_closeOtherTabs", "disabled", unpinnedTabsToClose < 1);
     Tabmix.setItem("context_closeTabsToTheEnd", "disabled", noTabsToEnd);
@@ -673,21 +803,24 @@ var TabmixContext = {
     Tabmix.setItem("tm-docShell", "disabled", clickOutTabs);
 
     var freezeTabMenu = document.getElementById("tm-freezeTab");
-    if (!freezeTabMenu.hidden)
+    if (!freezeTabMenu.hidden) {
       Tabmix.setItem(freezeTabMenu, "checked", lockedTab && protectedTab);
+    }
 
     var lockTabMenu = document.getElementById("tm-lockTab");
-    if (!lockTabMenu.hidden)
+    if (!lockTabMenu.hidden) {
       Tabmix.setItem(lockTabMenu, "checked", lockedTab);
+    }
 
     var protectTabMenu = document.getElementById("tm-protectTab");
-    if (!protectTabMenu.hidden)
+    if (!protectTabMenu.hidden) {
       Tabmix.setItem(protectTabMenu, "checked", protectedTab);
+    }
 
     return true;
   },
 
-  /**
+  /*
    * don't show 2 menuseparator together
    * this function is call by "popupshown" event
    * this is only for the case that other extensions popupshowing run after our TabmixContextMenu.updateTabContextMenu
@@ -702,7 +835,9 @@ var TabmixContext = {
     }
     const contextMenu = document.getElementById(id);
     // don't show 2 menuseparator together
-    var hideNextSeparator = true, lastVisible, hideMenu = true;
+    var hideNextSeparator = true,
+      lastVisible,
+      hideMenu = true;
     for (let mi = contextMenu.firstChild; mi; mi = mi.nextSibling) {
       if (mi.localName == "menuseparator") {
         if (!lastVisible || !hideNextSeparator) {
@@ -727,8 +862,9 @@ var TabmixContext = {
     }
 
     // hide the last visible menuseparator if it is the last visible in the menu
-    if (hideNextSeparator && lastVisible)
+    if (hideNextSeparator && lastVisible) {
       lastVisible.hidden = true;
+    }
 
     // if all the menu are hidden don't show the popup
     if (hideMenu) {
@@ -753,18 +889,20 @@ var TabmixContext = {
     }
 
     // hide open link in window in single window mode
-    const code = Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems")._replace(
-      /context-openlink",/, '$& !Tabmix.singleWindowMode &&'
-    )._replace(
-      /context-openlinkprivate",/, '$& (!Tabmix.singleWindowMode || !isWindowPrivate) &&'
-    );
+    const code = Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems")
+      ._replace(/context-openlink",/, "$& !Tabmix.singleWindowMode &&")
+      ._replace(
+        /context-openlinkprivate",/,
+        "$& (!Tabmix.singleWindowMode || !isWindowPrivate) &&"
+      );
 
     const make = eval(Tabmix._localMakeCode);
     nsContextMenu.prototype.initOpenItems = make(null, code.value);
 
-    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInPrivateWindow")._replace(
-      /(?:this\.window\.)?openLinkIn\(\n*\s*this\.linkURL,\n*\s*"window",/,
-      `var [win, where] = [${Tabmix.isVersion(1290) ? "this.window" : "window"}, "window"];
+    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInPrivateWindow")
+      ._replace(
+        /(?:this\.window\.)?openLinkIn\(\n*\s*this\.linkURL,\n*\s*"window",/,
+        `var [win, where] = [${Tabmix.isVersion(1290) ? "this.window" : "window"}, "window"];
       if (Tabmix.singleWindowMode) {
         let pbWindow = BrowserWindowTracker.getTopWindow({ private: true });
         if (pbWindow) {
@@ -773,18 +911,21 @@ var TabmixContext = {
         }
       }
       win.openLinkIn(this.linkURL, where,`
-    ).toCode();
+      )
+      .toCode();
 
-    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")._replace(
-      'userContextId:',
-      'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n' +
-            '      $&'
-    ).toCode(false, Tabmix.originalFunctions, "openInverseLink");
+    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")
+      ._replace(
+        "userContextId:",
+        'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n      $&'
+      )
+      .toCode(false, Tabmix.originalFunctions, "openInverseLink");
 
-    Tabmix.openInverseLink = function(ev) {
+    Tabmix.openInverseLink = function (ev) {
       var url = Tabmix.tablib.getValidUrl();
-      if (!url)
+      if (!url) {
         return;
+      }
 
       gContextMenu.linkURL = url;
       // originalFunctions.openInverseLink is a copy of original
@@ -795,7 +936,10 @@ var TabmixContext = {
 
   // Main context menu popupshowing
   updateMainContextMenu: function TMP_updateMainContextMenu(event) {
-    if (!gContextMenu || event.originalTarget != document.getElementById("contentAreaContextMenu")) {
+    if (
+      !gContextMenu ||
+      event.originalTarget != document.getElementById("contentAreaContextMenu")
+    ) {
       return true;
     }
 
@@ -810,20 +954,26 @@ var TabmixContext = {
       var protectedTab = tab.hasAttribute("protected");
       var lockedTab = tab.hasAttribute("locked");
 
-      /**
+      /*
        * from Firefox 4.0 2009-09-11 there is gContextMenu.openLinkInCurrent
        * Firefox only show this menu when the selection text is url see Bug 454518
        * we check if gContextMenu.linkURL contain URL
        */
       var onLink = gContextMenu.onLink || Boolean(gContextMenu.linkURL);
-      Tabmix.showItem("context-openlinkincurrent", Tabmix.prefs.getBoolPref("openLinkHere") && onLink);
+      Tabmix.showItem(
+        "context-openlinkincurrent",
+        Tabmix.prefs.getBoolPref("openLinkHere") && onLink
+      );
       var inverseLink = document.getElementById("tm-openinverselink");
       Tabmix.showItem(inverseLink, Tabmix.prefs.getBoolPref("openInverseLink") && onLink);
       if (!inverseLink.hidden) {
         let bgPref = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
         let focusType = bgPref ? "fg" : "bg";
         inverseLink.setAttribute("label", inverseLink.getAttribute(focusType + "label") ?? "");
-        inverseLink.setAttribute("accesskey", inverseLink.getAttribute(focusType + "accesskey") ?? "");
+        inverseLink.setAttribute(
+          "accesskey",
+          inverseLink.getAttribute(focusType + "accesskey") ?? ""
+        );
       }
       Tabmix.showItem("tm-linkWithhistory", Tabmix.prefs.getBoolPref("linkWithHistory") && onLink);
       var closeTabMenu = document.getElementById("tm-content-closetab");
@@ -831,14 +981,21 @@ var TabmixContext = {
       const selectedTabsCount = this.updateSelectedTabsCount(closeTabMenu, showCloseTab);
       Tabmix.showItem(closeTabMenu, showCloseTab);
       var keepLastTab = tabsCount == 1 && Tabmix.prefs.getBoolPref("keepLastTab");
-      Tabmix.setItem(closeTabMenu, "disabled", selectedTabsCount === 0 && protectedTab || keepLastTab);
+      Tabmix.setItem(
+        closeTabMenu,
+        "disabled",
+        (selectedTabsCount === 0 && protectedTab) || keepLastTab
+      );
 
       // for remote tab get call getValidUrl when it is safe to use CPOWs
       // getValidUrl may call getParamsForLink
-      if (tab.linkedBrowser.getAttribute("remote") == "true" &&
-          onLink && (Tabmix.prefs.getBoolPref("openLinkHere") ||
-                     Tabmix.prefs.getBoolPref("openInverseLink") ||
-                     Tabmix.prefs.getBoolPref("linkWithHistory"))) {
+      if (
+        tab.linkedBrowser.getAttribute("remote") == "true" &&
+        onLink &&
+        (Tabmix.prefs.getBoolPref("openLinkHere") ||
+          Tabmix.prefs.getBoolPref("openInverseLink") ||
+          Tabmix.prefs.getBoolPref("linkWithHistory"))
+      ) {
         gContextMenu.tabmixLinkURL = Tabmix.tablib.getValidUrl();
       }
 
@@ -851,47 +1008,78 @@ var TabmixContext = {
       Tabmix.setItem(lockTabMenu, "checked", lockedTab);
 
       var protectTabMenu = document.getElementById("tm-content-protectTab");
-      Tabmix.showItem(protectTabMenu, !contentClick && Tabmix.prefs.getBoolPref("protectTabContent"));
+      Tabmix.showItem(
+        protectTabMenu,
+        !contentClick && Tabmix.prefs.getBoolPref("protectTabContent")
+      );
       Tabmix.setItem(protectTabMenu, "checked", protectedTab);
 
       var duplicateTabMenu = document.getElementById("tm-duplicateTabContext");
-      Tabmix.showItem(duplicateTabMenu, !contentClick &&
+      Tabmix.showItem(
+        duplicateTabMenu,
+        !contentClick &&
           !gContextMenu.isTextSelected &&
-          Tabmix.prefs.getBoolPref("duplicateTabContent"));
+          Tabmix.prefs.getBoolPref("duplicateTabContent")
+      );
 
-      Tabmix.showItem("tm-detachTabContext", !contentClick &&
-          !gContextMenu.isTextSelected && !Tabmix.singleWindowMode &&
-          Tabmix.prefs.getBoolPref("detachTabContent"));
+      Tabmix.showItem(
+        "tm-detachTabContext",
+        !contentClick &&
+          !gContextMenu.isTextSelected &&
+          !Tabmix.singleWindowMode &&
+          Tabmix.prefs.getBoolPref("detachTabContent")
+      );
 
       var duplicateWinMenu = document.getElementById("tm-duplicateinWinContext");
-      Tabmix.showItem(duplicateWinMenu, !contentClick &&
-          !gContextMenu.isTextSelected && !Tabmix.singleWindowMode &&
-          Tabmix.prefs.getBoolPref("duplicateWinContent"));
+      Tabmix.showItem(
+        duplicateWinMenu,
+        !contentClick &&
+          !gContextMenu.isTextSelected &&
+          !Tabmix.singleWindowMode &&
+          Tabmix.prefs.getBoolPref("duplicateWinContent")
+      );
 
       var tabsListMenu = document.getElementById("tm-tabsList");
       Tabmix.showItem(tabsListMenu, !contentClick && Tabmix.prefs.getBoolPref("tabsList"));
 
       var undoCloseTabMenu = document.getElementById("tm-content-undoCloseTab");
       var undoClose = Tabmix.prefs.getBoolPref("undoClose");
-      Tabmix.showItem(undoCloseTabMenu, !contentClick &&
-          !gContextMenu.isTextSelected && undoClose && !closeTabsEmpty &&
-          Tabmix.prefs.getBoolPref("undoCloseTabContent"));
+      Tabmix.showItem(
+        undoCloseTabMenu,
+        !contentClick &&
+          !gContextMenu.isTextSelected &&
+          undoClose &&
+          !closeTabsEmpty &&
+          Tabmix.prefs.getBoolPref("undoCloseTabContent")
+      );
 
       var undoCloseListMenu = document.getElementById("tm-content-undoCloseList");
-      Tabmix.showItem(undoCloseListMenu, !contentClick &&
-          !gContextMenu.isTextSelected && undoClose && !closeTabsEmpty &&
-          Tabmix.prefs.getBoolPref("undoCloseListContent"));
+      Tabmix.showItem(
+        undoCloseListMenu,
+        !contentClick &&
+          !gContextMenu.isTextSelected &&
+          undoClose &&
+          !closeTabsEmpty &&
+          Tabmix.prefs.getBoolPref("undoCloseListContent")
+      );
 
       var isOneWindow = Tabmix.numberOfWindows() == 1;
       var mergeMenu = document.getElementById("tm-mergeWindows");
-      Tabmix.showItem(mergeMenu, !contentClick && !isOneWindow && Tabmix.prefs.getBoolPref("mergeWindowContent"));
+      Tabmix.showItem(
+        mergeMenu,
+        !contentClick && !isOneWindow && Tabmix.prefs.getBoolPref("mergeWindowContent")
+      );
 
-      this._showAutoReloadMenu("tm-autoreload_menu", "autoReloadContent",
-        !contentClick && !gContextMenu.isTextSelected);
+      this._showAutoReloadMenu(
+        "tm-autoreload_menu",
+        "autoReloadContent",
+        !contentClick && !gContextMenu.isTextSelected
+      );
 
-      Tabmix.showItem("tm-openAllLinks",
-        Tabmix.prefs.getBoolPref("openAllLinks") &&
-        !TabmixContext.openMultipleLinks(true));
+      Tabmix.showItem(
+        "tm-openAllLinks",
+        Tabmix.prefs.getBoolPref("openAllLinks") && !TabmixContext.openMultipleLinks(true)
+      );
     } catch (ex) {
       Tabmix.assert(ex);
     }
@@ -929,11 +1117,12 @@ var TabmixContext = {
   },
 
   updateSelectedTabsCount(itemOrId, isVisible) {
-    const selectedTabsCount = isVisible ?
-      ChromeUtils.nondeterministicGetWeakSetKeys(gBrowser._multiSelectedTabsSet).filter(
-        tab => tab.isConnected && !tab.closing && !tab.hasAttribute("protected")
-      ).length :
-      1;
+    const selectedTabsCount =
+      isVisible ?
+        ChromeUtils.nondeterministicGetWeakSetKeys(gBrowser._multiSelectedTabsSet).filter(
+          tab => tab.isConnected && !tab.closing && !tab.hasAttribute("protected")
+        ).length
+      : 1;
     const tabCountInfo = JSON.stringify({tabCount: selectedTabsCount || 1});
     Tabmix.setItem(itemOrId, "data-l10n-args", tabCountInfo);
     return selectedTabsCount;
@@ -951,8 +1140,8 @@ Tabmix.allTabs = {
     });
 
     document
-        .getElementById("allTabsMenu_sortTabsButton")
-        .addEventListener("command", () => this.sortTabsInList());
+      .getElementById("allTabsMenu_sortTabsButton")
+      .addEventListener("command", () => this.sortTabsInList());
   },
 
   insertSortButton() {
@@ -968,14 +1157,14 @@ Tabmix.allTabs = {
 
       const panel = gTabsPanel.allTabsPanel;
 
-      panel._removeTabFromList = function(event) {
+      panel._removeTabFromList = function (event) {
         if (event.button === 1 && Tabmix.prefs.getBoolPref("middleclickDelete")) {
           this.gBrowser.removeTab(event.target.tab, {animate: true});
         }
       };
 
       panel._original_createRow = panel._createRow;
-      panel._createRow = function(...args) {
+      panel._createRow = function (...args) {
         const row = this._original_createRow.apply(this, args);
         row.addEventListener("click", this._removeTabFromList.bind(this));
         return row;
@@ -988,30 +1177,32 @@ Tabmix.allTabs = {
       const TabsListBase = Object.getPrototypeOf(TabsPanel.prototype);
 
       if (Tabmix.isVersion(1350)) {
-        TabsListBase._tabmix_sortTabs = function() {
-          return this.gBrowser.tabs.slice()
-              .sort((a, b) => {
-                if (a.group?.id === b.group?.id) {
-                  return a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1;
-                }
-                const labelA = a.group ? a.group.label.toLowerCase() : a.label.toLowerCase();
-                const labelB = b.group ? b.group.label.toLowerCase() : b.label.toLowerCase();
-                return labelA > labelB ? 1 : -1;
-              });
+        TabsListBase._tabmix_sortTabs = function () {
+          return this.gBrowser.tabs.slice().sort((a, b) => {
+            if (a.group?.id === b.group?.id) {
+              return a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1;
+            }
+            const labelA = a.group ? a.group.label.toLowerCase() : a.label.toLowerCase();
+            const labelB = b.group ? b.group.label.toLowerCase() : b.label.toLowerCase();
+            return labelA > labelB ? 1 : -1;
+          });
         };
       } else {
-        TabsListBase._tabmix_sortTabs = function() {
-          return this.gBrowser.tabs.slice()
-              .sort((a, b) => (a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1));
+        TabsListBase._tabmix_sortTabs = function () {
+          return this.gBrowser.tabs
+            .slice()
+            .sort((a, b) => (a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1));
         };
       }
 
-      TabsListBase._populateDOM = function() {
+      TabsListBase._populateDOM = function () {
         let fragment = this.doc.createDocumentFragment();
         let currentGroupId;
 
-        const tabs = typeof sortTabsButton === "object" && sortTabsButton.checked ?
-          this._tabmix_sortTabs() : this.gBrowser.tabs;
+        const tabs =
+          typeof sortTabsButton === "object" && sortTabsButton.checked ?
+            this._tabmix_sortTabs()
+          : this.gBrowser.tabs;
 
         for (let tab of tabs) {
           if (this.filterFn(tab)) {
@@ -1029,7 +1220,7 @@ Tabmix.allTabs = {
       };
 
       if (!Tabmix.isVersion(1360)) {
-        TabsListBase._populate = function() {
+        TabsListBase._populate = function () {
           this._populateDOM();
           this._setupListeners();
         };
@@ -1049,11 +1240,7 @@ Tabmix.allTabs = {
     let anchor = event.target;
 
     setTimeout(() => {
-      PanelUI.showSubView(
-        gTabsPanel.kElements.allTabsView,
-        anchor,
-        event
-      );
+      PanelUI.showSubView(gTabsPanel.kElements.allTabsView, anchor, event);
     }, 0);
   },
 };
@@ -1093,8 +1280,10 @@ var TabmixAllTabs = {
       if (aButton.id == "tabmix-closedTabsButton") {
         undoCloseTab();
         aButton.setAttribute("afterctrlclick", true);
-      } else if (aButton.id == "tabmix-alltabs-button" ||
-          aButton.parentNode && aButton.parentNode.id == "allTabsMenu-allTabsView") {
+      } else if (
+        aButton.id == "tabmix-alltabs-button" ||
+        (aButton.parentNode && aButton.parentNode.id == "allTabsMenu-allTabsView")
+      ) {
         if (Tabmix.isVersion(1260)) {
           window.BrowserCommands.closeTabOrWindow();
         } else {
@@ -1110,8 +1299,10 @@ var TabmixAllTabs = {
   isAfterCtrlClick: function TMP_isAfterCtrlClick(aButton) {
     if (aButton.hasAttribute("afterctrlclick")) {
       aButton.removeAttribute("afterctrlclick");
-      if (aButton.hasAttribute("open"))
+      if (aButton.hasAttribute("open")) {
         aButton.removeAttribute("open");
+      }
+
       return true;
     }
     return false;
@@ -1121,8 +1312,9 @@ var TabmixAllTabs = {
     event.stopPropagation();
     event.preventDefault();
 
-    if (event.target.disabled)
+    if (event.target.disabled) {
       return;
+    }
 
     var tablist = document.getElementById("tabslist");
 
@@ -1145,8 +1337,9 @@ var TabmixAllTabs = {
   },
 
   createTabsList: function TMP_createTabsList(popup, aType) {
-    if (this.isAfterCtrlClick(popup.parentNode))
+    if (this.isAfterCtrlClick(popup.parentNode)) {
       return false;
+    }
 
     const contextMenuId = "tabContextMenu";
     if (popup.hasAttribute("context") && popup.getAttribute("context") != contextMenuId) {
@@ -1187,7 +1380,7 @@ var TabmixAllTabs = {
           this.Tab = tab;
           this.Index = index;
         };
-        TabSorting.prototype.toString = function() {
+        TabSorting.prototype.toString = function () {
           return this.Tab.label.toLowerCase();
         };
         const tabs = Tabmix.visibleTabs.tabs.map((tab, i) => new TabSorting(tab, i)).sort();
@@ -1215,17 +1408,21 @@ var TabmixAllTabs = {
         break;
       }
       case 3: {
-        TMP_LastTab.tabs.slice().reverse().forEach((tab, i) => {
-          if (!tab.hidden) {
-            this.createMenuItems(popup, tab, TMP_LastTab.tabs.length - 1 - i);
-          }
-        });
+        TMP_LastTab.tabs
+          .slice()
+          .reverse()
+          .forEach((tab, i) => {
+            if (!tab.hidden) {
+              this.createMenuItems(popup, tab, TMP_LastTab.tabs.length - 1 - i);
+            }
+          });
         break;
       }
     }
 
-    if (this._selectedItem)
+    if (this._selectedItem) {
       popup.addEventListener("popupshown", this);
+    }
   },
 
   _ensureElementIsVisible: function TMP__ensureElementIsVisible(event) {
@@ -1233,7 +1430,10 @@ var TabmixAllTabs = {
     popup.removeEventListener("popupshown", this);
     const scrollBox = popup.scrollBox;
     let items = Array.prototype.slice.call(popup.childNodes);
-    let element = items.indexOf(this._selectedItem) < popup.childElementCount / 2 ? popup.firstChild : popup.lastChild;
+    let element =
+      items.indexOf(this._selectedItem) < popup.childElementCount / 2 ?
+        popup.firstChild
+      : popup.lastChild;
     scrollBox.ensureElementIsVisible(element);
     if (this._selectedItem) {
       scrollBox.ensureElementIsVisible(this._selectedItem);
@@ -1247,8 +1447,9 @@ var TabmixAllTabs = {
     mi.setAttribute("statustext", url);
     mi.setAttribute("tooltiptext", tab.label + "\n" + url);
     this._setMenuitemAttributes(mi, tab, value);
-    if (tab.selected)
+    if (tab.selected) {
       this._selectedItem = mi;
+    }
 
     mi.value = value;
     tab.mCorrespondingMenuitem = mi;
@@ -1261,17 +1462,22 @@ var TabmixAllTabs = {
       let rule = "none";
       if (window.colorfulTabs.clrAllTabsPopPref) {
         let tabClr = SessionStore.getCustomTabValue(tab, "tabClr");
-        if (tabClr)
-          rule = "linear-gradient(rgba(255,255,255,.7),rgba(#1,.5),rgb(#1)),linear-gradient(rgb(#1),rgb(#1))"
-              .replace(/#1/g, tabClr);
+        if (tabClr) {
+          rule =
+            "linear-gradient(rgba(255,255,255,.7),rgba(#1,.5),rgb(#1)),linear-gradient(rgb(#1),rgb(#1))".replace(
+              /#1/g,
+              tabClr
+            );
+        }
       }
-      mi.style.setProperty('background-image', rule, 'important');
+      mi.style.setProperty("background-image", rule, "important");
     }
   },
 
   _setMenuitemAttributes(aMenuitem, aTab, value) {
-    if (!aMenuitem)
+    if (!aMenuitem) {
       return;
+    }
 
     const isRTL =
       window.windowUtils.getDirectionFromText(aTab.label) === Ci.nsIDOMWindowUtils.DIRECTION_RTL;
@@ -1294,15 +1500,17 @@ var TabmixAllTabs = {
       aMenuitem.removeAttribute("busy");
     }
 
-    if (aTab.hasAttribute("pending"))
+    if (aTab.hasAttribute("pending")) {
       aMenuitem.setAttribute("pending", aTab.getAttribute("pending") ?? "");
-    else
+    } else {
       aMenuitem.removeAttribute("pending");
+    }
 
-    if (aTab.selected)
+    if (aTab.selected) {
       aMenuitem.setAttribute("selected", "true");
-    else
+    } else {
       aMenuitem.removeAttribute("selected");
+    }
   },
 
   _tabOnTabClose: function TMP__tabOnTabClose(aEvent) {
@@ -1313,16 +1521,18 @@ var TabmixAllTabs = {
   },
 
   _tabsListOncommand: function TMP__tabsListOncommand(aEvent) {
-    if ("tab" in aEvent.originalTarget)
+    if ("tab" in aEvent.originalTarget) {
       this._tabSelectedFromList(aEvent.originalTarget.tab);
+    }
   },
 
   _tabSelectedFromList: function TMP__tabSelectedFromList(aTab) {
-    if (aTab.selected)
+    if (aTab.selected) {
       gBrowser.ensureTabIsVisible(aTab);
-    else
+    } else {
       // if we select another tab _handleTabSelect will call arrowScrollbox.ensureElementIsVisible
       gBrowser.selectedTab = aTab;
+    }
   },
 
   hideCommonList: function TMP_hideCommonList(popup) {
@@ -1346,9 +1556,7 @@ var TabmixAllTabs = {
     if (window.XULBrowserWindow) {
       window.XULBrowserWindow.setOverLink("");
       const contextmenu = document.getElementById("contentAreaContextMenu");
-      if (contextmenu.state === "open" &&
-        StatusPanel.isVisible
-      ) {
+      if (contextmenu.state === "open" && StatusPanel.isVisible) {
         StatusPanel.update();
       }
     }
@@ -1364,5 +1572,5 @@ var TabmixAllTabs = {
 
   updateStatusText: function TMP_updateStatusText(itemText) {
     XULBrowserWindow.setOverLink(itemText);
-  }
+  },
 };

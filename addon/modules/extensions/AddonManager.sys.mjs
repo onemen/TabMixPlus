@@ -1,6 +1,4 @@
-/**
- * original code by onemen
- */
+/** original code by onemen */
 
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {AddonManager} from "resource://gre/modules/AddonManager.sys.mjs";
@@ -14,14 +12,15 @@ var GoogleNoTrackingUrl = {
   id: "jid1-zUrvDCat3xoDSQ@jetpack",
   onEnabled() {
     const pref = "extensions." + this.id + "aggresiveGoogleImagesCleanup";
-    TabmixSvc.isFixedGoogleUrl = function(url) {
+    TabmixSvc.isFixedGoogleUrl = function (url) {
       const aggressiveWithImageUrls = TabmixSvc.prefs.get(pref, false);
       const isSearchResult = GOOGLE_REGEXP.test(url);
       const isImageSearchResult = GOOGLE_IMGRES_REGEXP.test(url);
       const isGooglePlusRedirect = GOOGLE_PLUS_REGEXP.test(url);
 
-      return isSearchResult || isGooglePlusRedirect ||
-        isImageSearchResult && aggressiveWithImageUrls;
+      return (
+        isSearchResult || isGooglePlusRedirect || (isImageSearchResult && aggressiveWithImageUrls)
+      );
     };
   },
   onDisabled() {
@@ -42,7 +41,7 @@ var PrivateTab = {
     TabmixSvc.forEachBrowserWindow(aWindow => {
       aWindow.TMP_eventListener.updateMultiRow(true);
     });
-  }
+  },
 };
 
 var Glitter = {
@@ -55,7 +54,7 @@ var Glitter = {
   },
 };
 
-/** @type {AddonManagerListener}  */
+/** @type {AddonManagerListener} */
 var TabmixListener = {
   init(id) {
     if (id == GoogleNoTrackingUrl.id) {
@@ -81,17 +80,21 @@ var TabmixListener = {
     this.onChange(aAddon, "onDisabled");
   },
   onInstalled(aAddon) {
-    if (!aAddon.isActive || aAddon.userDisabled || aAddon.appDisabled)
+    if (!aAddon.isActive || aAddon.userDisabled || aAddon.appDisabled) {
       return;
+    }
+
     this.onEnabled(aAddon);
-  }
+  },
 };
 
 export const TabmixAddonManager = {
   initialized: false,
   init() {
-    if (this.initialized)
+    if (this.initialized) {
       return;
+    }
+
     this.initialized = true;
 
     AddonManager.addAddonListener(TabmixListener);
@@ -102,7 +105,7 @@ export const TabmixAddonManager = {
         }
       });
     });
-  }
+  },
 };
 
 TabmixAddonManager.init();

@@ -1,13 +1,8 @@
-
 import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 
 const isLibrewolf = AppConstants.MOZ_APP_NAME.toLowerCase() == "librewolf";
 
-/** @type {Partial<{
-  isWaterfox: boolean;
-  isFloorp: boolean;
-  isZen: boolean;
-}>} */
+/** @type {TabmixModules.BrowserVersionLazy} */
 const lazy = {};
 
 ChromeUtils.defineLazyGetter(lazy, "isWaterfox", () => {
@@ -27,8 +22,12 @@ const _versions = {};
 
 /** @type {BrowserVersion} */
 export function isVersion(aVersionNo, updateChannel) {
-  let firefox, waterfox, floorp, zen, prefix = "";
-  if (typeof aVersionNo === 'object') {
+  let firefox,
+    waterfox,
+    floorp,
+    zen,
+    prefix = "";
+  if (typeof aVersionNo === "object") {
     firefox = aVersionNo.ff || 0;
     waterfox = aVersionNo.wf || "";
     floorp = aVersionNo.fp || "";
@@ -36,10 +35,10 @@ export function isVersion(aVersionNo, updateChannel) {
     updateChannel = aVersionNo.updateChannel || null;
 
     if (!firefox && !waterfox && !floorp && !zen) {
-      console.log('Tabmix: invalid version check ' + JSON.stringify(aVersionNo));
+      console.log("Tabmix: invalid version check " + JSON.stringify(aVersionNo));
       return true;
     }
-    if (waterfox && !lazy.isWaterfox || floorp && !lazy.isFloorp || zen && !lazy.isZen) {
+    if ((waterfox && !lazy.isWaterfox) || (floorp && !lazy.isFloorp) || (zen && !lazy.isZen)) {
       return false;
     }
     if (!firefox && !lazy.isWaterfox && !lazy.isFloorp && !lazy.isZen) {
@@ -71,9 +70,12 @@ export function isVersion(aVersionNo, updateChannel) {
     return cachedValue;
   }
 
-  let v = isLibrewolf || lazy.isZen && prefix !== "zen" ? Services.appinfo.platformVersion : Services.appinfo.version;
+  let v =
+    isLibrewolf || (lazy.isZen && prefix !== "zen") ?
+      Services.appinfo.platformVersion
+    : Services.appinfo.version;
 
-  if (lazy.isWaterfox && waterfox || lazy.isFloorp && floorp || lazy.isZen && zen) {
+  if ((lazy.isWaterfox && waterfox) || (lazy.isFloorp && floorp) || (lazy.isZen && zen)) {
     return (_versions[prefix + aVersionNo] = Services.vc.compare(v, String(aVersionNo)) >= 0);
   }
 

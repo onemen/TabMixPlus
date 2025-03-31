@@ -6,8 +6,7 @@ const ID = "{dc572301-7619-498c-a57d-39143191b318}";
 
 function updateAddonCard() {
   const htmlBrowser = window.docShell.chromeEventHandler;
-  const tabmixItem = htmlBrowser.contentDocument
-      .querySelector(`addon-card[addon-id="${ID}"]`);
+  const tabmixItem = htmlBrowser.contentDocument.querySelector(`addon-card[addon-id="${ID}"]`);
 
   // hide compatibility error message
   const messageBar = tabmixItem?.querySelector(".addon-card-message");
@@ -40,25 +39,36 @@ function updateAddonCard() {
   }
 }
 
-window.addEventListener("load", () => {
-  try {
-    updateAddonCard();
-  } catch (ex) {
-    console.error(ex);
-  }
-}, {once: true});
+window.addEventListener(
+  "load",
+  () => {
+    try {
+      updateAddonCard();
+    } catch (ex) {
+      console.error(ex);
+    }
+  },
+  {once: true}
+);
 
-(function() {
+(function () {
   const htmlBrowser = window.docShell.chromeEventHandler;
-  const targetNode = htmlBrowser.contentDocument.getElementById('content');
+  const targetNode = htmlBrowser.contentDocument.getElementById("content");
   const config = {childList: true, subtree: true};
-  const callback = function(/** @type {MutationRecord[]} */ mutationList) {
+  const callback = function (/** @type {MutationRecord[]} */ mutationList) {
     for (const mutation of mutationList) {
-      if (mutation.type === 'childList') {
+      if (mutation.type === "childList") {
         const node = mutation?.addedNodes[0];
-        const isAddonList = node?.nodeName == "DIV" || node?.nodeName == "ADDON-LIST" || node?.nodeName == "ADDON-CARD";
-        // @ts-expect-error - it is ok, querySelector exist
-        if (isAddonList && (node.querySelector(`addon-card[addon-id="${ID}"]`) || node.getAttribute('addon-id') == ID)) {
+        const isAddonList =
+          node?.nodeName == "DIV" ||
+          node?.nodeName == "ADDON-LIST" ||
+          node?.nodeName == "ADDON-CARD";
+        if (
+          isAddonList &&
+          // @ts-expect-error - it is ok, querySelector exist
+          (node.querySelector(`addon-card[addon-id="${ID}"]`) ||
+            node.getAttribute("addon-id") == ID)
+        ) {
           try {
             updateAddonCard();
             break;
@@ -71,4 +81,4 @@ window.addEventListener("load", () => {
   };
   const observer = new MutationObserver(callback);
   observer.observe(targetNode, config);
-}());
+})();

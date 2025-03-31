@@ -32,6 +32,7 @@ const widgets = {
           observes="tmp_undocloseButton"/>
       </toolbaritem>`;
     },
+
     /** @typedef {TabmixGlobals.ButtonEvent} ButtonEvent */
     /** @typedef {TabmixGlobals.PopupEvent} PopupEvent */
     /** @typedef {TabmixWidgetsModule.TabDragEvent} TabDragEvent */
@@ -88,6 +89,7 @@ const widgets = {
           label="&closedwindowsbtn.label;"/>
       </toolbaritem>`;
     },
+
     /** @type {TabmixWidgetsModule.onBuild} */
     onBuild(node) {
       node.firstChild.addEventListener("command", (/** @type {ButtonEvent} */ event) => {
@@ -112,20 +114,23 @@ const widgets = {
         data-l10n-id="tabs-toolbar-list-all-tabs"/>
       </toolbaritem>`;
     },
+
     /** @type {TabmixWidgetsModule.onBuild} */
     onBuild(node) {
-      node.firstChild.addEventListener("command", (/** @type {GenericEvent<HTMLElement, Event>} */ event) => {
-        node.ownerGlobal.Tabmix.allTabs.showAllTabsPanel(event);
-      });
+      node.firstChild.addEventListener(
+        "command",
+        (/** @type {GenericEvent<HTMLElement, Event>} */ event) => {
+          node.ownerGlobal.Tabmix.allTabs.showAllTabsPanel(event);
+        }
+      );
     },
   },
   tabsCloseButton: {
     id: "tabmix-tabs-closebutton",
     localizeFiles: [],
     get updateMarkup() {
-      const l10nId = lazy.isVersion(1310) ?
-        "tabbrowser-close-tabs-button" :
-        "tabbrowser-close-tabs-tooltip";
+      const l10nId =
+        lazy.isVersion(1310) ? "tabbrowser-close-tabs-button" : "tabbrowser-close-tabs-tooltip";
       const markup = this.markup.replace('command="cmd_close"', `$& data-l10n-id="${l10nId}"`);
       return markup;
     },
@@ -138,6 +143,7 @@ const widgets = {
         cui-areatype="toolbar"
         removable="false"/>`;
     },
+
     /** @type {TabmixWidgetsModule.onBuild} */
     onBuild(node, document) {
       document?.l10n?.translateElements([node]).then(() => {
@@ -156,11 +162,12 @@ const widgets = {
 /** @param {TabmixWidgetsModule.Widget} widget */
 function on_build(widget) {
   const {markup, updateMarkup, localizeFiles, onBuild} = widget;
-  return function(/** @type {Document & {ownerGlobal: Window}} */ document) {
+  return function (/** @type {Document & {ownerGlobal: Window}} */ document) {
     const MozXULElement = document.ownerGlobal.MozXULElement;
     const node = MozXULElement.parseXULToFragment(updateMarkup ?? markup, localizeFiles);
     const parent = document.createXULElement("box");
     parent.appendChild(node);
+
     /** @type {TabmixWidgetsModule.WidgetElement} */ // @ts-ignore
     const child = parent.childNodes[0];
     if (onBuild) {
@@ -177,7 +184,7 @@ function createWidget(widget) {
       id: widget.id,
       type: "custom",
       localized: false,
-      onBuild: on_build(widget)
+      onBuild: on_build(widget),
     });
   } catch (error) {
     console.log("Tabmix Error:\nCustomizableUI.createWidget failed for", widget.id, error);

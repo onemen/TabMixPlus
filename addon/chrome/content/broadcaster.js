@@ -11,30 +11,41 @@
         return;
       }
       this.textContent = "";
-      window.addEventListener("load", () => {
-        try {
-          const obs = Array.from(window.document.querySelectorAll(`[observes="${this.id}"]`) ?? []);
-          obs.forEach(el => {
-            for (let i = 0; i < this.attributes.length; i++) {
-              const name = this.attributes[i]?.name;
-              if (!el || !name || name === "id") break;
-              el.setAttribute(name, this.attributes[i]?.value ?? "");
-            }
-          });
-        } catch (ex) {
-          console.error(ex);
-        }
-      }, {once: true});
+      window.addEventListener(
+        "load",
+        () => {
+          try {
+            const obs = Array.from(
+              window.document.querySelectorAll(`[observes="${this.id}"]`) ?? []
+            );
+            obs.forEach(el => {
+              for (let i = 0; i < this.attributes.length; i++) {
+                const name = this.attributes[i]?.name;
+                if (!el || !name || name === "id") break;
+                el.setAttribute(name, this.attributes[i]?.value ?? "");
+              }
+            });
+          } catch (ex) {
+            console.error(ex);
+          }
+        },
+        {once: true}
+      );
       const config = {attributes: true};
-      const callback = function(/** @type {MutationRecord[]} */ mutationList) {
+      const callback = function (/** @type {MutationRecord[]} */ mutationList) {
         for (const mutation of mutationList) {
-          if (mutation.type === 'attributes' && mutation.target && mutation.attributeName) {
+          if (mutation.type === "attributes" && mutation.target && mutation.attributeName) {
             const name = mutation.target.hasAttribute(mutation.attributeName);
-            const obs = Array.from(window.document.querySelectorAll(`[observes="${mutation.target.id}"]`) ?? []);
+            const obs = Array.from(
+              window.document.querySelectorAll(`[observes="${mutation.target.id}"]`) ?? []
+            );
             for (const el of obs) {
               try {
                 if (name) {
-                  el?.setAttribute(mutation.attributeName, mutation.target.getAttribute(mutation.attributeName) ?? "");
+                  el?.setAttribute(
+                    mutation.attributeName,
+                    mutation.target.getAttribute(mutation.attributeName) ?? ""
+                  );
                 } else {
                   el?.removeAttribute(mutation.attributeName);
                 }
@@ -60,23 +71,28 @@
       if (!obs || !attr || !el) {
         return;
       }
-      window.addEventListener("load", () => {
-        try {
-          if (obs.hasAttribute(attr)) {
-            el.setAttribute(attr, obs.attributes.getNamedItem(attr)?.value ?? "");
+      window.addEventListener(
+        "load",
+        () => {
+          try {
+            if (obs.hasAttribute(attr)) {
+              el.setAttribute(attr, obs.attributes.getNamedItem(attr)?.value ?? "");
+            }
+          } catch (ex) {
+            console.error(ex);
           }
-        } catch (ex) {
-          console.error(ex);
-        }
-      }, {once: true});
+        },
+        {once: true}
+      );
       const config = {attributes: true};
-      const callback = function(/** @type {MutationRecord[]} */ mutationList) {
+      const callback = function (/** @type {MutationRecord[]} */ mutationList) {
         for (const mutation of mutationList) {
-          if (mutation.type === 'attributes' && mutation.target) {
+          if (mutation.type === "attributes" && mutation.target) {
             try {
               if (mutation.target.hasAttribute(attr)) {
-                if (mutation.target.getAttribute(attr) != el.getAttribute(attr))
+                if (mutation.target.getAttribute(attr) != el.getAttribute(attr)) {
                   el.setAttribute(attr, mutation.target.getAttribute(attr) ?? "");
+                }
               } else {
                 el.removeAttribute(attr);
               }

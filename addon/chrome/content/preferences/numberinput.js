@@ -45,7 +45,10 @@ const gNumberInput = {
           } else if (rangeOverflow && item.max) {
             item.value = item.max;
           } else {
-            const preference = document.getElementById(item.getAttribute("preference"), "_PREF_CLASS_");
+            const preference = document.getElementById(
+              item.getAttribute("preference"),
+              "_PREF_CLASS_"
+            );
             item.value = Number(preference?.valueFromPreferences ?? item.defaultValue);
           }
         }
@@ -66,10 +69,19 @@ const gNumberInput = {
         this.updateSpinnerDisabledState(item);
         break;
       case "keypress":
-        if (event.charCode == 0 || window.opener.Tabmix.isAltKey(event) || event.ctrlKey || event.metaKey) return;
-        if (!/\d/.test(event.key) ||
-            item.editor.textLength == item.maxLength &&
-              item.editor.selection.anchorOffset == item.editor.selection.focusOffset) {
+        if (
+          event.charCode == 0 ||
+          window.opener.Tabmix.isAltKey(event) ||
+          event.ctrlKey ||
+          event.metaKey
+        ) {
+          return;
+        }
+        if (
+          !/\d/.test(event.key) ||
+          (item.editor.textLength == item.maxLength &&
+            item.editor.selection.anchorOffset == item.editor.selection.focusOffset)
+        ) {
           event.stopPropagation();
           event.preventDefault();
         }
@@ -81,7 +93,7 @@ const gNumberInput = {
   },
 
   updateAllSpinners() {
-    window.document.querySelectorAll('input[type=number]').forEach(item => {
+    window.document.querySelectorAll("input[type=number]").forEach(item => {
       this.updateSpinnerDisabledState(item);
       item.defaultValue = item.value;
     });
@@ -95,5 +107,4 @@ const gNumberInput = {
     window.opener.Tabmix.setItem(item, "increaseDisabled", value >= max || null);
     window.opener.Tabmix.setItem(item, "decreaseDisabled", value <= min || null);
   },
-
 };

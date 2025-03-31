@@ -372,7 +372,7 @@ declare namespace SessionStoreNS {
     getClosedTabCountForWindow(aWindow: Window): number;
     getClosedTabCountFromClosedWindows(): number;
     getClosedTabData(aOptions?: WindowSource): ClosedTabData[];
-    /** @deprecated - use getClosedTabData with aOptions?: Source since Firefox 117 */
+    /** @deprecated use getClosedTabData with aOptions?: Source since Firefox 117 */
     getClosedTabData(aWindow: Window, aAsString: boolean): ClosedTabData[];
     getClosedTabDataForWindow(aWindow: Window): ClosedTabData[];
     getClosedTabDataFromClosedWindows(): ClosedTabData[];
@@ -1456,6 +1456,8 @@ interface TabmixGlobal {
 }
 
 declare namespace TabmixModules {
+  type BrowserVersionLazy = Partial<{isWaterfox: boolean; isFloorp: boolean; isZen: boolean}>;
+
   class DefaultMap<K, V> extends Map<K, V> {
     constructor(_default: () => V, iterable?: Iterable<[K, V]>);
     _default: () => V;
