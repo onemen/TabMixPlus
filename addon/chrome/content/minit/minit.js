@@ -1865,7 +1865,10 @@ Tabmix.navToolbox = {
     }
 
     if (Tabmix.isVersion(1370)) {
-      modules.BrowserSearchTelemetry = "resource:///modules/BrowserSearchTelemetry.sys.mjs";
+      modules.BrowserSearchTelemetry =
+        Tabmix.isVersion(1380) ?
+          "moz-src:///browser/components/search/BrowserSearchTelemetry.sys.mjs"
+        : "resource:///modules/BrowserSearchTelemetry.sys.mjs";
     }
 
     const lazy = {};
