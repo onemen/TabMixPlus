@@ -129,7 +129,6 @@ declare namespace MockedExports {
   }
 }
 
-// eslint-disable-next-line mozilla/no-define-cc-etc
 declare var Cr: MockedExports.Results;
 
 interface nsIDOMWindowUtils {

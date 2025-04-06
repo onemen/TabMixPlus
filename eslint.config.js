@@ -22,6 +22,13 @@ if (!stylistic.configs.all.name) {
   stylistic.configs.all.name = "stylisticJs/configs/all";
 }
 
+// mkake sure mozilla config ignores .d.ts files
+eslintPluginMozilla.configs["flat/recommended"].forEach(config => {
+  if (!config.files) {
+    config.ignores = [...(config.ignores ?? []), "**/*.d.ts"];
+  }
+});
+
 export default [
   {
     name: "tabmix/global-ignore",

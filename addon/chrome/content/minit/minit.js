@@ -751,6 +751,7 @@ var TMP_tabDNDObserver = {
           const links =
             Tabmix.isVersion(1380) ?
               Services.droppedLinkHandler.dropLinks(event, true)
+              // eslint-disable-next-line no-undef
             : browserDragAndDrop.dropLinks(event, true);
           const url = links.length && links[0]?.url ? links[0].url : null;
           disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
