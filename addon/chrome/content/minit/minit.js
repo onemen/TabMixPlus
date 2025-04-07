@@ -76,6 +76,15 @@ var TMP_tabDNDObserver = {
       TMP_tabDNDObserver._allVisibleItems = null;
     };
 
+    // invalidate _allVisibleItems before bug 1921814
+    if (!Tabmix.isVersion(1340)) {
+      Tabmix.originalFunctions._invalidateCachedTabs = tabBar._invalidateCachedTabs;
+      tabBar._invalidateCachedTabs = function () {
+        Tabmix.originalFunctions._invalidateCachedTabs.apply(this, arguments);
+        TMP_tabDNDObserver._allVisibleItems = null;
+      };
+    }
+
     if (Tabmix.isVersion(1310)) {
       // create none private method in gBrowser.tabContainer
       // we will use instead of #rtlMode in:

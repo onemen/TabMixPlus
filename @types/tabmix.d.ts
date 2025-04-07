@@ -141,6 +141,7 @@ interface OriginalFunctions {
 
   _getDropIndex: TabContainer["_getDropIndex"];
   _finishAnimateTabMove: TabContainer["finishAnimateTabMove"];
+  _invalidateCachedTabs: TabContainer["_invalidateCachedTabs"];
   _invalidateCachedVisibleTabs: TabContainer["_invalidateCachedVisibleTabs"];
   _moveTogetherSelectedTabs: TabContainer["_moveTogetherSelectedTabs"];
   /** @deprecated replaced with TabContainer.#moveTogetherSelectedTabs in firefox 133 */
