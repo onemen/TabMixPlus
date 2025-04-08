@@ -79,7 +79,6 @@ interface TabmixGlobal {
   get isLastBrowserWindow(): boolean;
   get isFirstWindowInSession(): boolean;
 
-  // non-getter properties and methods will follow
   firstWindowInSession?: boolean;
   _debug: boolean;
   isVersion(versionNo: versionInfo, updateChannel?: string): boolean;

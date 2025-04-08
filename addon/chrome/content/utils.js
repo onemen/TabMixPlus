@@ -275,7 +275,7 @@ var Tabmix = {
   },
 
   installChangecode() {
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", window);
+    TabmixSvc.initializeChangeCodeScript(Tabmix, {window});
     this.installChangecode = function () {};
   },
 
@@ -313,6 +313,10 @@ var Tabmix = {
   originalFunctions: {},
   destroy: function TMP_utils_destroy() {
     this.originalFunctions = {};
+    if (this._sandbox) {
+      Cu.nukeSandbox(this._sandbox);
+      this._sandbox = null;
+    }
   },
 };
 

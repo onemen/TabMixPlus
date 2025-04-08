@@ -996,7 +996,7 @@ Tabmix.onContentLoaded = {
         window.Tabbrowser,
         "handleTabMove",
         "adoptTab",
-        "window.Tabbrowser"
+        {constructorName: "window.Tabbrowser"}
       );
     }
 
@@ -1028,7 +1028,8 @@ Tabmix.onContentLoaded = {
     // don't inverse focus when called from onPopupClick and One-Click Search
     // Bar Interface is on
     // when we are in single window mode set the function to return "tab"
-    Tabmix.changeCode(parent, "whereToOpenLink")
+    const sandbox = Tabmix.getSandbox(parent);
+    Tabmix.changeCode(parent, "whereToOpenLink", {sandbox})
       ._replace(
         "{",
         `{

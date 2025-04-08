@@ -38,19 +38,16 @@ export const TabmixBrowserDOMWindow = {
     }
     this._initialized = true;
 
-    Tabmix._debugMode = window.Tabmix._debugMode;
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", {
-      Tabmix,
-      TabmixSvc,
+    const {constructor, scope = {}} =
+      isVersion(1370) ? this.getBrowserDOMWindow(window) : this.getNsBrowserAccess(window);
+
+    const sandbox = TabmixSvc.initializeChangeCodeScript(Tabmix, {
+      obj: constructor.prototype,
+      scope,
     });
 
-    const {constructor, makeCode} =
-      isVersion(1370) ?
-        this.getBrowserDOMWindow(window.Tabmix.getPrivateMethod)
-      : this.getNsBrowserAccess(window);
-
     const browserAccess = constructor.prototype;
-    browserAccess._openURIInNewTab = makeCode(null, this.openURIInNewTab(constructor));
+    this.openURIInNewTab(constructor, sandbox);
 
     // TreeStyleTab 0.16.2015111001 wrap openURI in nsBrowserAccess.prototype.__treestyletab__openURI
     let methodName =
@@ -60,19 +57,17 @@ export const TabmixBrowserDOMWindow = {
       ) ?
         "__treestyletab__openURI"
       : "getContentWindowOrOpenURI";
-    browserAccess[methodName] = makeCode(
-      null,
-      this.getContentWindowOrOpenURI(constructor, methodName)
-    );
+
+    this.getContentWindowOrOpenURI(constructor, methodName, sandbox);
   },
 
-  getBrowserDOMWindow(getPrivateMethod) {
+  getBrowserDOMWindow(window) {
     // BrowserDOMWindow.sys.mjs exist since Firefox 137
     const {BrowserDOMWindow} = ChromeUtils.importESModule(
       "resource:///modules/BrowserDOMWindow.sys.mjs"
     );
 
-    /* eslint-disable no-unused-vars */ // @ts-ignore
+    // @ts-ignore
     const {BrowserWindowTracker} = ChromeUtils.importESModule(
       "resource:///modules/BrowserWindowTracker.sys.mjs"
     );
@@ -84,8 +79,8 @@ export const TabmixBrowserDOMWindow = {
     const {PrivateBrowsingUtils} = ChromeUtils.importESModule(
       "resource://gre/modules/PrivateBrowsingUtils.sys.mjs"
     );
-    /* eslint-enable no-unused-vars */
 
+    const getPrivateMethod = window.Tabmix.getPrivateMethod;
     BrowserDOMWindow.prototype._openURIInNewTab = getPrivateMethod(
       BrowserDOMWindow,
       "openURIInNewTab",
@@ -108,23 +103,28 @@ export const TabmixBrowserDOMWindow = {
     );
     /* eslint-enable tabmix/valid-lazy */
 
+    const scope = {
+      AppConstants,
+      BrowserWindowTracker,
+      lazy,
+      PrivateBrowsingUtils,
+    };
+
     return {
       constructor: BrowserDOMWindow,
-      makeCode: eval(Tabmix._localMakeCode),
+      scope,
     };
   },
 
   getNsBrowserAccess(window) {
     return {
       constructor: window.nsBrowserAccess,
-      // @ts-expect-error
-      makeCode: window.eval(Tabmix._localMakeCode),
     };
   },
 
-  openURIInNewTab(constructor) {
+  openURIInNewTab(constructor, sandbox) {
     const fullMethodName = `${constructor.name}.prototype._openURIInNewTab`;
-    const code = Tabmix.changeCode(constructor.prototype, fullMethodName)
+    Tabmix.changeCode(constructor.prototype, fullMethodName, {sandbox})
       ._replace(
         `if (aIsExternal && (!aURI || aURI.spec == "about:blank")) {`,
         `let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser._selectedTab);
@@ -164,13 +164,13 @@ export const TabmixBrowserDOMWindow = {
       browser.focus();
     }`
       )
-      ._replace(/Tabmix\./g, "this.win.Tabmix.", {check: isVersion(1370)});
-    return code.value;
+      ._replace(/Tabmix\./g, "this.win.Tabmix.", {check: isVersion(1370)})
+      .toCode();
   },
 
-  getContentWindowOrOpenURI(constructor, methodName) {
+  getContentWindowOrOpenURI(constructor, methodName, sandbox) {
     const fullMethodName = `${constructor.name}.prototype.${methodName}`;
-    const code = Tabmix.changeCode(constructor.prototype, fullMethodName)
+    Tabmix.changeCode(constructor.prototype, fullMethodName, {sandbox})
       ._replace(
         "switch (aWhere) {",
         `  if (Tabmix.singleWindowMode &&
@@ -197,7 +197,7 @@ export const TabmixBrowserDOMWindow = {
         "isExternal ? !lazy.loadExternalInBackground : $&",
         {check: isVersion(1370)}
       )
-      ._replace(/Tabmix\./g, "this.win.Tabmix.", {check: isVersion(1370)});
-    return code.value;
+      ._replace(/Tabmix\./g, "this.win.Tabmix.", {check: isVersion(1370)})
+      .toCode();
   },
 };

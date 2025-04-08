@@ -340,16 +340,16 @@ Tabmix.updateUrlBarValue = function TMP_updateUrlBarValue() {
  */
 Tabmix.openUILink_init = function TMP_openUILink_init() {
   if ("openUILink" in window) {
-    /** @type {Window | Window["URILoadingHelper"]} */
-    let parentObj = window;
-    parentObj = window.URILoadingHelper;
     if (TabmixSvc.URILoadingHelperChanged) {
       return;
     }
     TabmixSvc.URILoadingHelperChanged = true;
 
+    /** @type {Window["URILoadingHelper"]} */
+    const parentObj = window.URILoadingHelper;
+    const sandbox = Tabmix.getSandbox(parentObj);
     // divert all the calls from places UI to use our preferences
-    this.changeCode(parentObj, "openUILink")
+    this.changeCode(parentObj, "openUILink", {sandbox})
       ._replace("aIgnoreAlt = params.ignoreAlt;", "aIgnoreAlt = params.ignoreAlt || null;")
       ._replace(
         /this\.openLinkIn\(.*\);/,

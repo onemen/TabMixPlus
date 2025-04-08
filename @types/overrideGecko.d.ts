@@ -1,5 +1,8 @@
 // reference this file before "./gecko/devtools/gecko.d.ts"
 
+type ExpandSandboxKeys = "lazy" | "_shared" | "_type" | "_id";
+type TabmixSandbox = Sandbox & Record<string, unknown> & Record<ExpandSandboxKeys, unknown>;
+
 // merge types from lib.gecko.xpcom.d.ts with existing interface from gecko.d.ts
 declare namespace MockedExports {
   // nsIFilePicker is missing some types from lib.gecko.xpcom.d.ts
@@ -122,7 +125,13 @@ declare namespace MockedExports {
     nsITimer: nsJSIID<_nsITimer>;
   }
 
-  interface Cu extends nsIXPCComponents_Utils {}
+  interface nsIXPCComponents_utils_Sandbox {
+    (principal: nsIPrincipal | nsIPrincipal[], options: object): TabmixSandbox;
+  }
+
+  interface Cu extends Omit<nsIXPCComponents_Utils, "Sandbox"> {
+    Sandbox: nsIXPCComponents_utils_Sandbox;
+  }
 
   interface Results extends nsIXPCComponents_Results {
     NS_ERROR_INVALID_ARG: 0x80070057;
@@ -130,6 +139,7 @@ declare namespace MockedExports {
 }
 
 declare var Cr: MockedExports.Results;
+declare var Cu: MockedExports.Cu;
 
 interface nsIDOMWindowUtils {
   // @ts-expect-error - overrid nsIDOMWindowUtils from lib.gecko.xpcom.d.ts

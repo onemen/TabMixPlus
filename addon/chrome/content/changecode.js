@@ -6,56 +6,84 @@
 // aOptions can be: getter, setter or forceUpdate
 /** @type {TabmixGlobal["changeCode"]} */
 Tabmix.changeCode = function (aParent, afnName, aOptions) {
-  let console = TabmixSvc.console;
-  let debugMode = this._debugMode;
-  let errMsgContent =
+  const console = TabmixSvc.console;
+  const debugMode = this._debugMode;
+  const errMsgContent =
     "\n\nTry Tabmix latest development version from https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/," +
     "\nReport about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues";
-  let customTitlebar =
+
+  // Constants used in toCode method for debug mode
+  // List of functions that we don't wrap with try-catch
+  const dontDebug = ["gBrowser.tabContainer._animateTabMove, gURLBar.handleCommand"];
+  const customTitlebarName =
     TabmixSvc.version(1350) ? "CustomTitlebar._update" : "TabsInTitlebar._update";
+  // List of functions that don't need a "return null" fallback in debug mode
+  const excludeReturn = [customTitlebarName, "gBrowser._blurTab"];
 
-  /**
-   * @class
-   * @param {ChangeCodeNS.ChangeCodeParams} aParams
-   * @this {ChangeCodeNS.ChangeCodeClass}
-   */
-  function ChangeCode(aParams) {
-    this.obj = aParams.obj;
-    this.fnName = aParams.fnName;
-    this.fullName = aParams.fullName;
+  /** @implements {ChangeCodeNS.ChangeCodeClass} */
+  class ChangeCode {
+    obj;
+    fnName;
+    fullName;
+    needUpdate;
+    silent;
+    _value = "";
+    errMsg = "";
+    sandbox;
 
-    let options = aParams.options;
-    this.needUpdate = (options && options.forceUpdate) || false;
-    this.silent = (options && options.silent) || false;
+    /** @type {"__lookupSetter__" | "__lookupGetter__" | ""} */
+    type = "";
 
-    if (options && (options.setter || options.getter)) {
-      this.type = options.setter ? "__lookupSetter__" : "__lookupGetter__";
-      this._value = this.obj[this.type](this.fnName).toString();
-    } else if (typeof this.obj[this.fnName] == "function") {
-      this._value = this.obj[this.fnName].toString();
-    } else {
-      this.errMsg = "\n" + this.fullName + " is undefined.";
+    /** @type {string[]} */
+    notFound = [];
+
+    /** @param {ChangeCodeNS.ChangeCodeParams} aParams */
+    constructor(aParams) {
+      this.obj = aParams.obj;
+      this.fnName = aParams.fnName;
+      this.fullName = aParams.fullName;
+
+      const {forceUpdate = false, silent = false, set, get, sandbox} = aParams.options ?? {};
+      this.needUpdate = forceUpdate;
+      this.silent = silent;
+
+      if (set || get) {
+        this.type = set ? "__lookupSetter__" : "__lookupGetter__";
+        this._value = this.obj[this.type](this.fnName).toString();
+      } else if (typeof this.obj[this.fnName] === "function") {
+        this._value = this.obj[this.fnName].toString();
+      } else {
+        this.errMsg = `\n${this.fullName} is undefined.`;
+      }
+
+      // While some modules set baseSandbox, not all do.
+      // This warning ensures we remember to pass the sandbox option
+      // for all module objects rather than maintaining a list of exceptions.
+      this.sandbox = sandbox;
+      if (
+        !this.sandbox &&
+        Cu.getGlobalForObject(this.obj)?.location?.href !== "chrome://browser/content/browser.xhtml"
+      ) {
+        const {filename, lineNumber} = Components.stack.caller.caller;
+        console.reportError(
+          `scripts from module must use global sandbox\n${aParams.fullName} - ${filename}:${lineNumber}`
+        );
+        // reuse the global sandbox
+        this.sandbox = Tabmix.getSandbox(Services);
+      }
+
+      this.verifyPrivateMethodReplaced();
+
+      this.notFound.length = 0;
     }
 
-    this.verifyPrivateMethodReplaced();
-
-    this.notFound.length = 0;
-  }
-
-  /** @type {Partial<ChangeCodeNS.ChangeCodeClass>} */
-  ChangeCode.prototype = {
-    notFound: [],
-    type: "",
-    _value: "",
-    errMsg: "",
-
-    /** @this {ChangeCodeNS.ChangeCodeClass} */
     get value() {
       this.isValidToChange(this.fullName);
       return this._value;
-    },
+    }
 
-    _replace: function TMP_utils__replace(substr, newString, aParams) {
+    /** @type {ChangeCodeNS.ChangeCodeClass["_replace"]} */
+    _replace(substr, newString, aParams) {
       // Don't insert new code before "use strict";
       if (substr == "{") {
         let re = /['|"]use strict['|"];/;
@@ -94,14 +122,12 @@ Tabmix.changeCode = function (aParent, afnName, aOptions) {
         this.notFound.push(substr);
       }
       return this;
-    },
+    }
 
-    toCode: function TMP_utils_toCode(aShow, aObj, aName) {
+    /** @type {ChangeCodeNS.ChangeCodeClass["toCode"]} */
+    toCode(aShow, aObj, aName) {
       try {
-        // list of function that we don't warp with try-catch
-        let dontDebug = ["gBrowser.tabContainer._animateTabMove, gURLBar.handleCommand"];
         if (debugMode && !dontDebug.includes(this.fullName)) {
-          let excludeReturn = [customTitlebar, "gBrowser._blurTab"];
           let addReturn = "",
             re = new RegExp("//.*", "g");
           if (
@@ -122,9 +148,9 @@ Tabmix.changeCode = function (aParent, afnName, aOptions) {
         let [obj, fnName] = [aObj || this.obj, aName || this.fnName];
         if (this.isValidToChange(this.fullName)) {
           if (obj) {
-            Tabmix.setNewFunction(obj, fnName, Tabmix._makeCode(null, this._value));
+            Tabmix.setNewFunction(obj, fnName, Tabmix._makeCode(this._value, this.sandbox));
           } else {
-            Tabmix._makeCode(fnName, this._value);
+            console.log("Error: unable to find object for " + this.fullName);
           }
         }
         if (aShow) {
@@ -138,8 +164,9 @@ Tabmix.changeCode = function (aParent, afnName, aOptions) {
 
         console.log(this._value);
       }
-    },
+    }
 
+    /** @type {ChangeCodeNS.ChangeCodeClass["defineProperty"]} */
     defineProperty(aObj, aName, aCode) {
       if (!this.type) {
         throw new Error("Tabmix:\n" + this.fullName + " don't have setter or getter");
@@ -158,32 +185,30 @@ Tabmix.changeCode = function (aParent, afnName, aOptions) {
         return p1 + (p2 + p3).replace(/\s/g, "_");
       };
 
-      /** @param {string} type */
+      /** @param {"set" | "get"} type */
       let setDescriptor = type => {
-        let fnType = "__lookup#ter__".replace("#", type);
-        type = type.toLowerCase();
+        const fnType = type === "set" ? "__lookupSetter__" : "__lookupGetter__";
 
-        /** @type {string} */
-        let code =
-          // @ts-expect-error
-          (aCode && aCode[type + "ter"]) || this.type == fnType ? this._value : obj[fnType](fnName);
+        /** @type {string | FunctionWithAny} */
+        let code = aCode?.[type] || (this.type == fnType ? this._value : obj[fnType](fnName));
 
         if (typeof code == "string") {
           // bug 1255925 - Give a name to getters/setters add space before the function name
           // replace function get Foo() to function get_Foo()
           code = code.replace(/^(function\s)?(get|set)(.*\()/, removeSpaces);
-          descriptor[type] = Tabmix._makeCode(null, code);
+          descriptor[type] = Tabmix._makeCode(code, this.sandbox);
         } else if (typeof code != "undefined") {
           descriptor[type] = code;
         }
       };
 
-      setDescriptor("Get");
-      setDescriptor("Set");
+      setDescriptor("get");
+      setDescriptor("set");
 
       Object.defineProperty(obj, fnName, descriptor);
-    },
+    }
 
+    /** @type {ChangeCodeNS.ChangeCodeClass["show"]} */
     show(aObj, aName = "") {
       if (aObj?.hasOwnProperty(aName)) {
         console.show({obj: aObj, name: aName, fullName: this.fullName});
@@ -191,8 +216,9 @@ Tabmix.changeCode = function (aParent, afnName, aOptions) {
         let win = typeof window != "undefined" ? window : undefined;
         console.show(this.fullName, 500, win);
       }
-    },
+    }
 
+    /** @type {ChangeCodeNS.ChangeCodeClass["isValidToChange"]} */
     isValidToChange(aName) {
       var notFoundCount = this.notFound.length;
       if (this.needUpdate && !notFoundCount) {
@@ -217,14 +243,17 @@ Tabmix.changeCode = function (aParent, afnName, aOptions) {
         console.clog(ex.name + " no update needed to " + aName, ex);
       }
       return false;
-    },
+    }
 
+    /** @type {ChangeCodeNS.ChangeCodeClass["getCallerData"]} */
     getCallerData(stack) {
+      // Using 'this' to satisfy the linter, even though it's not needed in this method
+      this.notFound = this.notFound || [];
       let caller = (stack.caller || {}).caller || {};
       const error = console.error(caller);
       Object.assign(error, {name: caller.name, message: ""});
       return error;
-    },
+    }
 
     verifyPrivateMethodReplaced() {
       const matches = this._value.match(/this\.#(\w+)/g);
@@ -232,17 +261,17 @@ Tabmix.changeCode = function (aParent, afnName, aOptions) {
         return;
       }
       const privateMethods = new Set(matches.map(match => match.replace("this.#", "")));
-      const parentName = afnName.split(".").slice(0, -1).join(".");
+      const parentName = this.fullName.split(".").slice(0, -1).join(".");
       const ex = this.getCallerData(Components.stack.caller);
       for (const methods of privateMethods) {
-        if (typeof aParent[`_${methods}`] === "undefined") {
+        if (typeof this.obj[`_${methods}`] === "undefined") {
           ex.message = `Implement replacement for private method #${methods} in ${parentName} it is used by ${this.fullName}${errMsgContent}`;
           console.reportError(ex);
         }
       }
       this._value = this._value.replace(/this\.#(\w+)/g, "this._$1");
-    },
-  };
+    }
+  }
 
   try {
     return new ChangeCode({
@@ -277,23 +306,86 @@ Tabmix.nonStrictMode = function (aObj, aFn, aArg) {
   aObj[aFn].apply(aObj, aArg || []);
 };
 
-(function (obj) {
-  let global = Cu.getGlobalForObject(obj);
-  let fn = global.eval;
-  Tabmix._makeCode = function (name, code) {
-    if (name) {
-      return fn(name + " = " + code);
-    }
-    if (code.startsWith("async") && !code.startsWith("async function")) {
-      return fn("(async function " + code.replace(/^async/, "") + ")");
-    }
-    if (!code.startsWith("function")) {
-      return fn("(function " + code + ")");
-    }
-    return fn("(" + code + ")");
-  };
+/** @this {TabmixGlobal} */ // @ts-expect-error typescript confused by this in the function
+Tabmix.getSandbox = function getSandbox(obj, shared = true) {
+  const global = Cu.getGlobalForObject(obj);
+  const location = global?.location?.href;
 
-  // make code with lazy run in local scope, to make sure local variables
-  // will be available in the code
-  Tabmix._localMakeCode = `(${Tabmix._makeCode.toString().replace(/fn/g, "eval")})`;
+  const inWindowContext =
+    location === "chrome://browser/content/browser.xhtml" ||
+    location === "chrome://tabmixplus/content/preferences/preferences.xhtml";
+
+  if (!inWindowContext) {
+    return TabmixSvc.createModuleSandbox(obj, shared);
+  }
+
+  // Currenly we don't have non shared window snadbox
+
+  // Check if we already have a sandbox for this window
+  let sandbox = this._sandbox;
+  if (sandbox) {
+    return sandbox;
+  }
+
+  const id = TabmixSvc._sandboxId++;
+
+  sandbox = Cu.Sandbox(Services.scriptSecurityManager.getSystemPrincipal(), {
+    sandboxName: `Tabmix sandbox for window ${id}`,
+    sandboxPrototype: global,
+    sameZoneAs: global,
+    wantXrays: true,
+  });
+
+  sandbox._id = id;
+  sandbox._type = "window";
+
+  this._sandbox = sandbox;
+  return sandbox;
+};
+
+Tabmix.expandSandbox = function ({obj, scope = {}, shared = true}) {
+  const sandbox = this.getSandbox(obj, shared);
+  // Add all scope properties to the shared sandbox
+  for (const [key, value] of Object.entries(scope)) {
+    // Special handling for 'lazy' object - merge instead of replace
+    if (key === "lazy" && sandbox.lazy && typeof value === "object") {
+      Object.assign(sandbox.lazy, value);
+    } else {
+      sandbox[key] = value;
+    }
+  }
+  return sandbox;
+};
+
+(function (obj) {
+  if (!obj.Tabmix._sandboxData) {
+    console.error("Error: _sandboxData is not defined");
+    obj.Tabmix._sandboxData = {obj, result: null};
+  }
+  const {_sandboxData} = obj.Tabmix;
+  const baseSandbox = Tabmix.expandSandbox(_sandboxData);
+  _sandboxData.result = baseSandbox;
+
+  let id = 0;
+  Tabmix._makeCode = function (code, sandbox = baseSandbox) {
+    let codeString;
+    if (code.startsWith("async") && !code.startsWith("async function")) {
+      codeString = `(async function ${code.replace(/^async/, "")})`;
+    } else if (!code.startsWith("function")) {
+      codeString = `(function ${code})`;
+    } else {
+      codeString = `(${code})`;
+    }
+
+    // to enable clickable link in the browser console enable debug mode by
+    // setting extensions.tabmix.enableDebug in about:config to true
+    const functionNameMatch = codeString.match(/\((?:async\s+)?function\s+(\w+)/);
+    const functionName = functionNameMatch ? functionNameMatch[1] : "anonymous_" + id++;
+    const readableFilename =
+      this._debugMode ?
+        `data:application/javascript,Tabmix_code_${functionName};${encodeURIComponent(codeString)}`
+      : `Tabmix_code_${functionName}.js`;
+
+    return Cu.evalInSandbox(codeString, sandbox, null, readableFilename, 1);
+  };
 })(this);

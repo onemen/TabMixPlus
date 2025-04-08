@@ -4,7 +4,7 @@ import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {TabListView} from "resource:///modules/syncedtabs/TabListView.sys.mjs";
 import {getChromeWindow} from "resource:///modules/syncedtabs/util.sys.mjs";
 
-/** @type {PlacesModule.Tabmix} */ // @ts-expect-error we add properties bellow
+/** @type {TabmixGlobal} */ // @ts-expect-error we add properties bellow
 const Tabmix = {};
 
 /** @type {TabmixModules.SyncedTabs} */
@@ -18,12 +18,8 @@ export const SyncedTabs = {
 
     this._initialized = true;
 
-    Tabmix._debugMode = aWindow.Tabmix._debugMode;
     Tabmix.gIeTab = aWindow.Tabmix.extensions.gIeTab;
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", {
-      Tabmix,
-      TabmixSvc,
-    });
+    TabmixSvc.initializeChangeCodeScript(Tabmix, {obj: TabListView.prototype});
 
     this.tabListView();
   },
@@ -69,11 +65,13 @@ export const SyncedTabs = {
       configurable: true,
     });
 
+    const sandbox = Tabmix.getSandbox(TabListView.prototype);
+
     const fnName =
       typeof TabListView.prototype._openAllClientTabs == "function" ?
         "TabListView.prototype._openAllClientTabs"
       : "TabListView.prototype.onClick";
-    Tabmix.changeCode(TabListView.prototype, fnName)
+    Tabmix.changeCode(TabListView.prototype, fnName, {sandbox})
       ._replace(
         "this.props.onOpenTabs(urls, where);",
         `if (/^tab/.test(where)) {
@@ -90,7 +88,11 @@ export const SyncedTabs = {
       this.props.onOpenTab(url, where, {inBackground});
     };
 
-    Tabmix.changeCode(TabListView.prototype, "TabListView.prototype.onOpenSelectedFromContextMenu")
+    Tabmix.changeCode(
+      TabListView.prototype,
+      "TabListView.prototype.onOpenSelectedFromContextMenu",
+      {sandbox}
+    )
       ._replace("private:", "inBackground: this.tabmix_inBackground,\n        $&")
       .toCode();
 

@@ -8,6 +8,10 @@ type I10MapValue = {before: number; l10n: string};
 type I10Map = Record<string, I10MapValue>;
 
 type WindowRect = {sizemode: string | null; height: string | null; width: string | null; screenX: string | null; screenY: string | null};
+type PrivateMethodOptions = {
+  constructorName: string;
+  sandbox: TabmixSandbox;
+};
 
 // Firefox modules
 
@@ -612,16 +616,16 @@ declare namespace BrowserDOMWindowModule {
   interface BrowserDOMWindow {
     _initialized: boolean;
     init(window: Window): void;
-    getBrowserDOMWindow(getPrivateMethod: TabmixGlobal["getPrivateMethod"]): {
+    getBrowserDOMWindow(window: Window): {
       constructor: typeof BrowserDOMWindowClass;
-      makeCode: TabmixGlobal["_makeCode"];
+      scope: Record<string, unknown>;
     };
     getNsBrowserAccess(window: Window): {
       constructor: typeof nsBrowserAccess;
-      makeCode: TabmixGlobal["_makeCode"];
+      scope?: undefined;
     };
-    openURIInNewTab(constructor: Constructor): string;
-    getContentWindowOrOpenURI(constructor: Constructor, methodName: string): string;
+    openURIInNewTab(constructor: Constructor, sandbox?: TabmixSandbox): void;
+    getContentWindowOrOpenURI(constructor: Constructor, methodName: string, sandbox?: TabmixSandbox): void;
   }
 }
 
@@ -1116,8 +1120,6 @@ declare namespace OverlaysModule {
 declare namespace PlacesModule {
   type importList = "BrowserUtils" | "BrowserWindowTracker" | "OpenInTabsUtils" | "PlacesUIUtils" | "PlacesUtils" | "PrivateBrowsingUtils";
   type Lazy = Pick<KnownModulesImports, importList>;
-  type gIeTab = false | {obj: "gIeTab2" | "gIeTab"; folder: "ietab2" | "ietab"};
-  type Tabmix = Pick<TabmixGlobal, "_debugMode" | "changeCode"> & {gIeTab: gIeTab};
   type FunctionsName = "openTabset" | "openNodeWithEvent" | "_openNodeIn";
   type TabmixFunctionsName = `tabmix_${FunctionsName}` | `__treestyletab__${FunctionsName}` | FunctionsName;
   type Callback = (url: string) => string | null | Promise<string | null>;
@@ -1139,7 +1141,7 @@ declare namespace PlacesModule {
     _removeObserver?: () => void;
     functions: readonly FunctionsName[];
 
-    initPlacesUIUtils(aWindow: Window): void;
+    initPlacesUIUtils(aWindow: Window, sandbox: TabmixSandbox): void;
     fetch: MockedGeckoTypes.BookmarksService["fetch"];
     getBookmarkTitle(url: string): Promise<string | null>;
     readonly titlefrombookmark: boolean;
@@ -1298,6 +1300,8 @@ declare namespace TabmixSvcModule {
   type importList = "BrowserUtils" | "FloorpPrefsObserver" | "isVersion" | "SessionStore" | "SyncedTabs" | "TabmixPlacesUtils";
   type Lazy = Pick<KnownModulesImports, importList> & {Platform: string};
 
+  type ChangeCodeScriptParams = {scope?: Record<string, unknown>} & ({obj: Record<string, unknown>; window?: never} | {obj?: never; window: Window});
+
   interface TabmixSvc {
     readonly aboutBlank: string;
     readonly aboutNewtab: string;
@@ -1328,6 +1332,11 @@ declare namespace TabmixSvcModule {
     setCustomTabValue: (tab: Tab, key: string, value?: unknown) => void;
     setLabel: (property: string) => string;
     skipSingleWindowModeCheck: boolean;
+    sandboxes: Map<object, TabmixSandbox>;
+    _sharedSandboxKey: object;
+    _sandboxId: number;
+    initializeChangeCodeScript(tabmixObj: TabmixGlobal, params: ChangeCodeScriptParams): TabmixSandbox;
+    createModuleSandbox(obj: object, shared?: boolean): TabmixSandbox;
     sm: {
       TAB_STATE_NEEDS_RESTORE: number;
       TAB_STATE_RESTORING: number;
@@ -1450,9 +1459,11 @@ interface TabmixGlobal {
   isAfterSSWindowRestored?: boolean;
 
   // from changedcode
-  _makeCode(name: string | null, code: string): FunctionWithUnknown;
-  getPrivateMethod<T extends keyof PrivateMethods>(constructor: string | (new (...args: any[]) => any), methodName: T, nextMethodName: string, constructorName?: string): PrivateMethods[T];
+  _makeCode(code: string, sandbox?: TabmixSandbox): FunctionWithAny;
+  getPrivateMethod<T extends keyof PrivateMethods>(constructor: string | (new (...args: any[]) => any), methodName: T, nextMethodName: string, options?: Partial<PrivateMethodOptions>): PrivateMethods[T];
   removedShortcuts: HTMLDivElement;
+
+  gIeTab: TabmixGlobals.gIeTab;
 }
 
 declare namespace TabmixModules {
@@ -1576,6 +1587,8 @@ declare namespace TabmixGlobals {
     moveTo(left: number, top: number): void;
     openPopupAtScreen(x?: number, y?: number, isContextMenu?: boolean, triggerEvent?: Event | null): void;
   }
+
+  type gIeTab = {obj: "gIeTab2" | "gIeTab"; folder: "ietab2" | "ietab"};
 }
 
 declare var SessionStore: SessionStoreNS.SessionStoreApi;

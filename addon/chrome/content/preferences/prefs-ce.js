@@ -1171,14 +1171,11 @@ class PrefWindow extends MozXULElement {
       )
       .replace("set selectedIndex", "function selectedIndex");
 
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", {
-      Tabmix,
-      TabmixSvc,
-    });
+    TabmixSvc.initializeChangeCodeScript(Tabmix, {obj: window});
 
     const descriptor = {
       get: getter,
-      set: Tabmix._makeCode(null, code),
+      set: Tabmix._makeCode(code),
       enumerable: true,
       configurable: true,
     };

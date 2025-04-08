@@ -29,7 +29,7 @@ TabmixChromeUtils.defineLazyModuleGetters(lazy, {
 // this function is used by PlacesUIUtils functions that we evaluate here
 /** @param {Window} aWindow */
 // @ts-ignore
-// eslint-disable-next-line no-unused-vars
+
 function getBrowserWindow(aWindow) {
   return (
       aWindow && aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser"
@@ -68,16 +68,8 @@ export const TabmixPlacesUtils = Object.freeze({
   },
 });
 
-/** @type {PlacesModule.Tabmix} */ // @ts-expect-error we add properties bellow
+/** @type {TabmixGlobal} */ // @ts-expect-error we use loadSubScript to add Tabmix to the global scope
 const Tabmix = {};
-
-/** @param {{value: string}} param */
-function makeCode({value: code}) {
-  if (!code.startsWith("function")) {
-    code = "function " + code;
-  }
-  return eval("(" + code + ")");
-}
 
 PlacesUtilsInternal = {
   __index: 0,
@@ -91,15 +83,14 @@ PlacesUtilsInternal = {
 
     this._initialized = true;
 
-    Tabmix._debugMode = aWindow.Tabmix._debugMode;
-    Tabmix.gIeTab = aWindow.Tabmix.extensions.gIeTab;
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", {
-      Tabmix,
-      TabmixSvc,
+    const sandbox = TabmixSvc.initializeChangeCodeScript(Tabmix, {
+      // @ts-expect-error - PlacesUIUtils dont have index signature on purpose
+      obj: lazy.PlacesUIUtils,
+      scope: {lazy, getBrowserWindow, getTopWindow},
     });
 
     try {
-      this.initPlacesUIUtils(aWindow);
+      this.initPlacesUIUtils(aWindow, sandbox);
     } catch (ex) {
       console.error("Tabmix Error:", ex);
     }
@@ -123,7 +114,7 @@ PlacesUtilsInternal = {
   },
 
   functions: ["openTabset", "openNodeWithEvent", "_openNodeIn"],
-  initPlacesUIUtils: function TMP_PC_initPlacesUIUtils(aWindow) {
+  initPlacesUIUtils: function TMP_PC_initPlacesUIUtils(aWindow, sandbox) {
     /** @type {MockedGeckoTypes.PlacesUIUtils["openTabset"] | undefined} */
     let originalOpenTabset;
     try {
@@ -144,8 +135,6 @@ PlacesUtilsInternal = {
       lazy.PlacesUIUtils["tabmix_" + aFn] = lazy.PlacesUIUtils[aFn];
     });
 
-    let code;
-
     /** @type {PlacesModule.updateOpenTabset} */
     function updateOpenTabset(name, treeStyleTab = false) {
       const isWaterfoxOverridePlacesUIUtils =
@@ -158,7 +147,7 @@ PlacesUtilsInternal = {
         lazy.PlacesUIUtils[name] = originalOpenTabset;
       }
       let openGroup = "    browserWindow.TMP_Places.openGroup(urls, where$1);";
-      code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils." + name)
+      Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils." + name, {sandbox})
         ._replace("urls = []", "behavior, $&", {check: treeStyleTab})
         ._replace(
           /let openGroupBookmarkBehavior =|TSTOpenGroupBookmarkBehavior =/,
@@ -170,8 +159,9 @@ PlacesUtilsInternal = {
           `var changeWhere = where == "tabshifted" && aEvent.target.localName != "menuitem";
     if (changeWhere) where = "current"\n` +
             openGroup.replace("$1", treeStyleTab ? ", behavior" : "")
-        );
-      lazy.PlacesUIUtils[name] = makeCode(code);
+        )
+        .toCode();
+
       if (isWaterfoxOverridePlacesUIUtils) {
         const {PrivateTab} = ChromeUtils.importESModule("resource:///modules/PrivateTab.sys.mjs");
         PrivateTab.overridePlacesUIUtils();
@@ -214,16 +204,14 @@ PlacesUtilsInternal = {
       treeStyleTabInstalled && lazy.PlacesUIUtils.__treestyletab__openNodeWithEvent ?
         "__treestyletab__openNodeWithEvent"
       : "openNodeWithEvent";
-    code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils." + fnName)._replace(
-      "this._openNodeIn",
-      "where = {where, event: aEvent};\n    $&"
-    );
-    lazy.PlacesUIUtils[fnName] = makeCode(code);
+    Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils." + fnName, {sandbox})
+      ._replace("this._openNodeIn", "where = {where, event: aEvent};\n    $&")
+      .toCode();
 
     // Don't change "current" when user click context menu open (callee is PC_doCommand and aWhere is current)
     // we disable the open menu when the tab is lock
     // the 2nd check for aWhere == "current" is for non Firefox code that may call this function
-    code = Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils._openNodeIn")
+    Tabmix.changeCode(lazy.PlacesUIUtils, "PlacesUIUtils._openNodeIn", {sandbox})
       ._replace(
         /\)\n*\s*{/,
         `$&
@@ -251,8 +239,8 @@ PlacesUtilsInternal = {
       if (browserWindow && aWhere == "current")
         browserWindow.gBrowser.selectedBrowser.tabmix_allowLoad = true;
       $&`
-      );
-    lazy.PlacesUIUtils._openNodeIn = makeCode(code);
+      )
+      .toCode();
   },
 
   // Lazy getter for titlefrombookmark preference

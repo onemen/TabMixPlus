@@ -888,22 +888,25 @@ var TabmixContext = {
       ChromeUtils.defineESModuleGetters(lazy, modules);
     }
 
+    const sandbox = Tabmix.expandSandbox({obj: nsContextMenu, scope: {lazy}});
     // hide open link in window in single window mode
-    const code = Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems")
-      ._replace(/context-openlink",/, "$& !Tabmix.singleWindowMode &&")
+    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems", {
+      sandbox,
+    })
+      ._replace(/context-openlink",/, "$& !window.Tabmix.singleWindowMode &&")
       ._replace(
         /context-openlinkprivate",/,
-        "$& (!Tabmix.singleWindowMode || !isWindowPrivate) &&"
-      );
+        "$& (!window.Tabmix.singleWindowMode || !isWindowPrivate) &&"
+      )
+      .toCode();
 
-    const make = eval(Tabmix._localMakeCode);
-    nsContextMenu.prototype.initOpenItems = make(null, code.value);
-
-    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInPrivateWindow")
+    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInPrivateWindow", {
+      sandbox,
+    })
       ._replace(
         /(?:this\.window\.)?openLinkIn\(\n*\s*this\.linkURL,\n*\s*"window",/,
         `var [win, where] = [${Tabmix.isVersion(1290) ? "this.window" : "window"}, "window"];
-      if (Tabmix.singleWindowMode) {
+      if (win.Tabmix.singleWindowMode) {
         let pbWindow = BrowserWindowTracker.getTopWindow({ private: true });
         if (pbWindow) {
           [win, where] = [pbWindow, "tab"];
@@ -914,7 +917,7 @@ var TabmixContext = {
       )
       .toCode();
 
-    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab")
+    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab", {sandbox})
       ._replace(
         "userContextId:",
         'inBackground: !Services.prefs.getBoolPref("browser.tabs.loadInBackground"),\n      $&'

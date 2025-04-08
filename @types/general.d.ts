@@ -955,6 +955,7 @@ declare var gFissionBrowser: boolean;
 declare var gNavigatorBundle: gNavigatorBundle;
 declare var gTabsPanel: MockedGeckoTypes.gTabsPanel;
 declare var gURLBar: gURLBar;
+declare var lazy: Record<string, unknown>;
 /** @deprecated replaced with ToolbarDropHandler from firefox on version 138 */
 declare var newWindowButtonObserver: newWindowButtonObserver;
 declare var TabContextMenu: MockedGeckoTypes.TabContextMenu;

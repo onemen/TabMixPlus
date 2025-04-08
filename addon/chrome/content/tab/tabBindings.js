@@ -27,7 +27,7 @@
 
   tabbrowsertab._fragment = MozXULElement.parseXULToFragment(markup);
 
-  Tabmix.changeCode(tabbrowsertab, "inheritedAttributes", {getter: true})
+  Tabmix.changeCode(tabbrowsertab, "inheritedAttributes", {get: true})
     ._replace(
       "};",
       `  ".tab-progress":

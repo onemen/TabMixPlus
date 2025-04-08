@@ -23,43 +23,34 @@ var TMP_tabDNDObserver = {
       return;
     }
 
-    const makeCode = (function () {
-      let _make;
+    const localSandbox = (function () {
+      let scope;
       if (Tabmix.isVersion(1370)) {
-        // @ts-expect-error
-        // eslint-disable-next-line
+        /* eslint-disable-next-line */ // @ts-expect-error
         const isTab = element => !!(element?.tagName == "tab");
 
-        // @ts-expect-error
-        // eslint-disable-next-line
+        /* eslint-disable-next-line */ // @ts-expect-error
         const isTabGroup = element => !!(element?.tagName == "tab-group");
 
-        // @ts-expect-error
-        // eslint-disable-next-line
+        /* eslint-disable-next-line */ // @ts-expect-error
         const isTabGroupLabel = element => !!element?.classList?.contains("tab-group-label");
 
-        _make = eval(Tabmix._localMakeCode);
+        scope = {
+          isTab,
+          isTabGroup,
+          isTabGroupLabel,
+        };
       } else if (Tabmix.isVersion(1340)) {
         // Since Firefox 134, tabs.js contains scoped constants for group drop actions:
         // - GROUP_DROP_ACTION_CREATE: used in on_drop and triggerDragOverCreateGroup
         // - GROUP_DROP_ACTION_APPEND: used in on_drop and _animateTabMove
-
-        // @ts-expect-error
-        // eslint-disable-next-line no-unused-vars
-        const GROUP_DROP_ACTION_CREATE = 0x1;
-        // @ts-expect-error
-        // eslint-disable-next-line no-unused-vars
-        const GROUP_DROP_ACTION_APPEND = 0x2;
-
-        _make = eval(Tabmix._localMakeCode);
-      } else {
-        _make = Tabmix._makeCode;
+        scope = {
+          GROUP_DROP_ACTION_CREATE: 0x1,
+          GROUP_DROP_ACTION_APPEND: 0x2,
+        };
       }
 
-      /** @param {string | Function} code */
-      return function (code) {
-        return _make(null, code.toString());
-      };
+      return Tabmix.expandSandbox({obj: window, scope});
     })();
 
     this._moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
@@ -162,12 +153,13 @@ var TMP_tabDNDObserver = {
 
       gBrowser.tabContainer._dragOverCreateGroupTimer = 0;
 
-      gBrowser.tabContainer._triggerDragOverCreateGroup = makeCode(
-        Tabmix.getPrivateMethod(
-          "tabbrowser-tabs",
-          "triggerDragOverCreateGroup",
-          "#clearDragOverCreateGroupTimer"
-        )
+      gBrowser.tabContainer._triggerDragOverCreateGroup = Tabmix.getPrivateMethod(
+        "tabbrowser-tabs",
+        "triggerDragOverCreateGroup",
+        "#clearDragOverCreateGroupTimer",
+        {
+          sandbox: localSandbox,
+        }
       );
     }
 
@@ -189,11 +181,21 @@ var TMP_tabDNDObserver = {
 
       tabBar._dragTime = 0;
 
-      tabBar._getDragTarget = makeCode(
-        Tabmix.getPrivateMethod("tabbrowser-tabs", "getDragTarget", "#getDropIndex")
+      tabBar._getDragTarget = Tabmix.getPrivateMethod(
+        "tabbrowser-tabs",
+        "getDragTarget",
+        "#getDropIndex",
+        {
+          sandbox: localSandbox,
+        }
       );
-      tabBar._getDropIndex = makeCode(
-        Tabmix.getPrivateMethod("tabbrowser-tabs", "getDropIndex", "getDropEffectForTabDrag")
+      tabBar._getDropIndex = Tabmix.getPrivateMethod(
+        "tabbrowser-tabs",
+        "getDropIndex",
+        "getDropEffectForTabDrag",
+        {
+          sandbox: localSandbox,
+        }
       );
     } else {
       tabBar._getDragTarget = function (event, options = {}) {
@@ -224,7 +226,9 @@ var TMP_tabDNDObserver = {
     //   is before (for dragging left) or after (for dragging right)
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
-    const _animateTabMove = Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove")
+    const _animateTabMove = Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove", {
+      sandbox: localSandbox,
+    })
       ._replace(
         /(?:const|let) draggedTab/,
         `let tabmixHandleMove = ${tabmixHandleMoveString()};
@@ -270,9 +274,7 @@ var TMP_tabDNDObserver = {
         {check: !Tabmix.isVersion(1370)}
       );
 
-    if (Tabmix.isVersion(1370)) {
-      gBrowser.tabContainer._animateTabMove = makeCode(_animateTabMove.value);
-    } else if (Tabmix.isVersion(1300)) {
+    if (Tabmix.isVersion(1300) && !Tabmix.isVersion(1370)) {
       // Firefox 133-136
       // NOTE: firstMovingTabScreen and lastMovingTabScreen was swapped in version 1330
       const referenceTabString =
@@ -350,9 +352,7 @@ var TMP_tabDNDObserver = {
         }
       }
 
-      if (Tabmix.isVersion(1340)) {
-        gBrowser.tabContainer._animateTabMove = makeCode(_animateTabMove.value);
-      } else {
+      if (!Tabmix.isVersion(1340)) {
         // Firefox 130 - 133
         _animateTabMove
           ._replace(
@@ -362,10 +362,9 @@ var TMP_tabDNDObserver = {
           ._replace(
             /let lastTabCenter = (.*)tabSize \/ 2;/,
             "let lastTabCenter = $1(this.verticalMode ? tabSize / 2 : rightTabWidth / 2);"
-          )
-          .toCode();
+          );
       }
-    } else {
+    } else if (!Tabmix.isVersion(1300)) {
       // helper function to get floorp strings for width in vertical mode
       /** @param {string} vertical @param {string} horizontal */
       const getWidthString = (vertical, horizontal) =>
@@ -392,13 +391,15 @@ var TMP_tabDNDObserver = {
         ._replace(
           /(?:const|let) rightTabCenter =.*;/,
           `let rightTabCenter = rightMovingTabScreenX + translateX + ${getWidthString("tabWidth / 2", "rightTabWidth / 2")};`
-        )
-        .toCode();
+        );
     }
+    _animateTabMove.toCode();
 
     const itemRect = Tabmix.isVersion(1380) ? "itemRect" : "tabRect";
 
-    const dragoverCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_dragover")
+    const dragoverCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_dragover", {
+      sandbox: localSandbox,
+    })
       ._replace(
         "event.stopPropagation();",
         `$&
@@ -463,7 +464,9 @@ var TMP_tabDNDObserver = {
         {check: Tabmix.isVersion(1380)}
       );
 
-    const dropCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_drop")
+    const dropCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_drop", {
+      sandbox: localSandbox,
+    })
       ._replace(
         "var dt = event.dataTransfer;",
         `if (TMP_tabDNDObserver.postDraggingCleanup(event))  {
@@ -531,7 +534,7 @@ var TMP_tabDNDObserver = {
      */
     function patchDragMethod(name, code) {
       if (Tabmix.isVersion(1320)) {
-        Tabmix.originalFunctions[`_tabmix_${name}`] = makeCode(code.value);
+        code.toCode(false, Tabmix.originalFunctions, `_tabmix_${name}`);
         Tabmix.originalFunctions[name] = gBrowser.tabContainer[name];
         gBrowser.tabContainer[name] = function tabmix_patchDragMethod(event) {
           const methodName = this.verticalMode ? name : `_tabmix_${name}`;
@@ -1884,38 +1887,26 @@ Tabmix.navToolbox = {
     const lazy = {};
     ChromeUtils.defineESModuleGetters(lazy, modules);
 
-    // we use local eval here to use lazy from the current scope
-    /** @param {{value: string}} params */
-    function makeCode({value: code}) {
-      if (!code.startsWith("function")) {
-        code = "function " + code;
-      }
-      return eval("(" + code + ")");
-    }
-
-    // we check browser.search.openintab also for search button click
-    if (!change_doSearch) {
-      return;
-    }
+    // Use custom sandbox for code evaluation
+    const searchbarSandbox = Tabmix.expandSandbox({obj: window, scope: {lazy}});
 
     // Personas Interactive Theme Engine 1.6.5
     let pIte = fnString.indexOf("BTPIServices") > -1;
 
-    obj[fn] = makeCode(
-      Tabmix.changeCode(obj, "searchbar." + fn)
-        ._replace(
-          "let params",
-          `aWhere = Tabmix.navToolbox.whereToOpenSearch(aWhere);
+    Tabmix.changeCode(obj, "searchbar." + fn, {sandbox: searchbarSandbox})
+      ._replace(
+        "let params",
+        `aWhere = Tabmix.navToolbox.whereToOpenSearch(aWhere);
       $&`
-        )
-        ._replace(
-          "openTrustedLinkIn",
-          `params.inBackground = params.inBackground || Tabmix.prefs.getBoolPref("loadSearchInBackground");
+      )
+      ._replace(
+        "openTrustedLinkIn",
+        `params.inBackground = params.inBackground || Tabmix.prefs.getBoolPref("loadSearchInBackground");
       $&`
-        )
-        ._replace(/searchbar\.currentEngine/g, "this.currentEngine", {check: pIte})
-        ._replace(/BTPIServices/g, "Services", {check: pIte})
-    );
+      )
+      ._replace(/searchbar\.currentEngine/g, "this.currentEngine", {check: pIte})
+      ._replace(/BTPIServices/g, "Services", {check: pIte})
+      .toCode();
   },
 
   toolbarButtons: function TMP_navToolbox_toolbarButtons() {
@@ -1977,7 +1968,12 @@ Tabmix.getPlacement = function (id) {
   return placement ? placement.position : -1;
 };
 
-Tabmix.getPrivateMethod = function (constructor, methhodName, nextMethodName, constructorName) {
+Tabmix.getPrivateMethod = function (
+  constructor,
+  methhodName,
+  nextMethodName,
+  {constructorName, sandbox} = {}
+) {
   const errorMsg = `can't find ${constructor}.${methhodName} function`;
   const [name, firefoxClass] =
     typeof constructor === "string" ?
@@ -1999,7 +1995,7 @@ Tabmix.getPrivateMethod = function (constructor, methhodName, nextMethodName, co
     .trim();
   if (code) {
     try {
-      return eval(`(function _${methhodName}${code})`);
+      return Tabmix._makeCode(`_${methhodName}${code}`, sandbox);
     } catch (error) {
       console.error(
         `Tabmix Error: getPrivateMethod failed to evaluate ${constructor}.${methhodName}`,

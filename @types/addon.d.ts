@@ -97,6 +97,7 @@ interface Window {
   gTMPprefObserver: gTMPprefObserver;
   gURLBar: gURLBar;
   isBlankPageURL: (aURL: string) => boolean;
+  lazy?: Record<string, unknown>;
   OpenBrowserWindow: (options: {private?: boolean; [key: string]: unknown}) => void;
   openLinkIn: (url: string | null | undefined, where: WhereToOpen, params?: Params) => void;
   PlacesOrganizer: {_places: XULTreeElement & {selectedNode: nsINavHistoryResultNode}};
