@@ -121,6 +121,7 @@ interface TabmixKnownModules {
   // Tabmix
   "chrome://tabmix-resource/content/BrowserDOMWindow.sys.mjs": {TabmixBrowserDOMWindow: BrowserDOMWindowModule.BrowserDOMWindow};
   "chrome://tabmix-resource/content/BrowserVersion.sys.mjs": {isVersion: BrowserVersion};
+  "chrome://tabmix-resource/content/Changecode.sys.mjs": {initializeChangeCodeClass: typeof ChangecodeModule.initializeChangeCodeClass};
   "chrome://tabmix-resource/content/ChromeUtils.sys.mjs": {TabmixChromeUtils: TabmixModules.ChromeUtils};
   "chrome://tabmix-resource/content/ContentClick.sys.mjs": {TabmixContentClick: ContentClickModule.ContentClick};
   "chrome://tabmix-resource/content/DownloadLastDir.sys.mjs": {TabmixDownloadLastDir: DownloadLastDirModule.DownloadLastDir};
@@ -550,6 +551,7 @@ interface KnownModulesImports {
   DocShellCapabilities: DocShellCapabilitiesModule.DocShellCapabilities;
   FloorpPrefsObserver: import("chrome://tabmix-resource/content/Floorp.sys.mjs").FloorpPrefsObserver;
   LinkNodeUtils: LinkNodeUtilsModule.LinkNodeUtils;
+  initializeChangeCodeClass: typeof ChangecodeModule.initializeChangeCodeClass;
   isVersion: BrowserVersion;
   MergeWindows: MergeWindowsModule.MergeWindows;
   Overlays: OverlaysModule.OverlaysClass;
@@ -608,7 +610,7 @@ declare namespace AutoReloadModule {
 }
 
 declare namespace BrowserDOMWindowModule {
-  type importList = "URILoadingHelper";
+  type importList = "initializeChangeCodeClass" | "URILoadingHelper";
   type Lazy = Pick<KnownModulesImports, importList>;
 
   type Constructor = typeof BrowserDOMWindowClass | typeof nsBrowserAccess;
@@ -631,11 +633,57 @@ declare namespace BrowserDOMWindowModule {
 
 type versionInfo = number | string | {ff?: number; wf?: string; fp?: string; zen?: string; updateChannel?: string};
 
-declare module "chrome://tabmix-resource/content/BrowserVersion.sys.mjs" {
-  export function isVersion(versionNo: versionInfo, updateChannel?: string | null): boolean;
-}
-
 type BrowserVersion = typeof import("chrome://tabmix-resource/content/BrowserVersion.sys.mjs").isVersion;
+
+declare namespace ChangecodeModule {
+  type ChangeCodeScriptParams = {scope?: Record<string, unknown>} & ({obj: Record<string, unknown>; window?: never} | {obj?: never; window: Window});
+  type ExpandTabmix = Pick<TabmixGlobal, "_debugMode" | "changeCode" | "setNewFunction" | "nonStrictMode" | "getSandbox" | "expandSandbox" | "makeCode">;
+
+  function initializeChangeCodeClass(tabmixObj: TabmixGlobal, params: ChangeCodeScriptParams): TabmixSandbox;
+  function createModuleSandbox(obj: object, shared?: boolean): TabmixSandbox;
+  function _makeCode(code: string, sandbox?: TabmixSandbox): FunctionWithAny;
+
+  type Options = {forceUpdate?: boolean; silent?: boolean; set?: boolean; get?: boolean; sandbox?: TabmixSandbox | undefined};
+  type ReplaceParams = {check?: boolean; flags?: "g"; silent?: boolean};
+  type Descriptor = {
+    configurable: boolean;
+    enumerable: boolean;
+    writable: boolean;
+    value?: FunctionWithUnknown;
+    get?: FunctionWithUnknown;
+    set?: FunctionWithUnknown;
+    [key: string]: unknown;
+  };
+  interface ChangeCodeParams {
+    obj: Record<string, any>;
+    fnName: string;
+    fullName: string;
+    options?: Options;
+    baseSandbox: TabmixSandbox;
+  }
+  interface ChangeCodeClass {
+    _errorStack: nsIStackFrame | null;
+    _value: string;
+    obj: Record<string, any>;
+    fnName: string;
+    fullName: string;
+    needUpdate: boolean;
+    silent: boolean;
+    type: "__lookupSetter__" | "__lookupGetter__" | "";
+    errMsg: string;
+    notFound: (string | RegExp)[];
+    sandbox: TabmixSandbox | undefined;
+
+    get value(): string;
+    _replace(this: ChangeCodeClass, substr: string | RegExp, newString: string, params?: ReplaceParams): ChangeCodeClass;
+    toCode(this: ChangeCodeClass, show?: boolean, overrideObj?: Record<string, any>, name?: string): void;
+    defineProperty(this: ChangeCodeClass, overrideObj?: Record<string, unknown>, name?: string, codeInfo?: {set?: string; get?: string}): void;
+    show(obj?: Record<string, unknown>, name?: string): void;
+    isValidToChange(this: ChangeCodeClass, name: string): boolean;
+    getCallerData(stack: nsIStackFrame, aOptions?: unknown): Error;
+    verifyPrivateMethodReplaced(this: ChangeCodeClass): void;
+  }
+}
 
 declare namespace ChromeUtilsModule {
   type Lazy = Pick<KnownModulesImports, "isVersion">;
@@ -1118,7 +1166,7 @@ declare namespace OverlaysModule {
 }
 
 declare namespace PlacesModule {
-  type importList = "BrowserUtils" | "BrowserWindowTracker" | "OpenInTabsUtils" | "PlacesUIUtils" | "PlacesUtils" | "PrivateBrowsingUtils";
+  type importList = "BrowserUtils" | "BrowserWindowTracker" | "OpenInTabsUtils" | "PlacesUIUtils" | "PlacesUtils" | "PrivateBrowsingUtils" | "initializeChangeCodeClass";
   type Lazy = Pick<KnownModulesImports, importList>;
   type FunctionsName = "openTabset" | "openNodeWithEvent" | "_openNodeIn";
   type TabmixFunctionsName = `tabmix_${FunctionsName}` | `__treestyletab__${FunctionsName}` | FunctionsName;
@@ -1300,8 +1348,6 @@ declare namespace TabmixSvcModule {
   type importList = "BrowserUtils" | "FloorpPrefsObserver" | "isVersion" | "SessionStore" | "SyncedTabs" | "TabmixPlacesUtils";
   type Lazy = Pick<KnownModulesImports, importList> & {Platform: string};
 
-  type ChangeCodeScriptParams = {scope?: Record<string, unknown>} & ({obj: Record<string, unknown>; window?: never} | {obj?: never; window: Window});
-
   interface TabmixSvc {
     readonly aboutBlank: string;
     readonly aboutNewtab: string;
@@ -1318,7 +1364,6 @@ declare namespace TabmixSvcModule {
     readonly prefBranch: nsIPrefBranchXpcom;
 
     blockedClickingOptions: number[];
-    debugMode: () => boolean;
     forEachBrowserWindow: (aFunc: (window: Window) => void) => void;
     getDialogStrings: (...keys: string[]) => string[];
     topWin: () => Window;
@@ -1332,11 +1377,6 @@ declare namespace TabmixSvcModule {
     setCustomTabValue: (tab: Tab, key: string, value?: unknown) => void;
     setLabel: (property: string) => string;
     skipSingleWindowModeCheck: boolean;
-    sandboxes: Map<object, TabmixSandbox>;
-    _sharedSandboxKey: object;
-    _sandboxId: number;
-    initializeChangeCodeScript(tabmixObj: TabmixGlobal, params: ChangeCodeScriptParams): TabmixSandbox;
-    createModuleSandbox(obj: object, shared?: boolean): TabmixSandbox;
     sm: {
       TAB_STATE_NEEDS_RESTORE: number;
       TAB_STATE_RESTORING: number;
@@ -1418,6 +1458,19 @@ declare namespace VerticalTabsModule {
 
 // export Tabmix modules
 
+declare module "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs" {
+  export class Overlays extends OverlaysModule.OverlaysClass {}
+}
+
+declare module "chrome://tabmix-resource/content/BrowserVersion.sys.mjs" {
+  export function isVersion(versionNo: versionInfo, updateChannel?: string | null): boolean;
+}
+
+declare module "chrome://tabmix-resource/content/Changecode.sys.mjs" {
+  const initializeChangeCodeClass: typeof ChangecodeModule.initializeChangeCodeClass;
+  export {initializeChangeCodeClass};
+}
+
 declare module "chrome://tabmix-resource/content/ChromeUtils.sys.mjs" {
   const TabmixChromeUtils: TabmixModules.ChromeUtils;
   export {TabmixChromeUtils};
@@ -1435,8 +1488,9 @@ declare module "chrome://tabmix-resource/content/Floorp.sys.mjs" {
   }
 }
 
-declare module "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs" {
-  export class Overlays extends OverlaysModule.OverlaysClass {}
+declare module "chrome://tabmix-resource/content/log.sys.mjs" {
+  const console: LogModule.Console;
+  export {console};
 }
 
 declare module "chrome://tabmix-resource/content/SyncedTabs.sys.mjs" {
@@ -1459,7 +1513,14 @@ interface TabmixGlobal {
   isAfterSSWindowRestored?: boolean;
 
   // from changedcode
-  _makeCode(code: string, sandbox?: TabmixSandbox): FunctionWithAny;
+  _debugMode: boolean;
+  _sandbox: TabmixSandbox;
+  changeCode(this: TabmixGlobal, parent: Record<string, any>, fnName: string, options?: ChangecodeModule.Options): ChangecodeModule.ChangeCodeClass;
+  nonStrictMode(obj: Record<string, any>, fn: string, arg?: any): void;
+  setNewFunction(obj: Record<string, any>, name: string, aCode: FunctionWithAny): void;
+  getSandbox(this: TabmixGlobal, obj: object, shared?: boolean): TabmixSandbox;
+  expandSandbox(this: TabmixGlobal, params: {obj: object; scope?: Record<string, unknown> | undefined; shared?: boolean}): TabmixSandbox;
+  makeCode(this: TabmixGlobal, code: string, sandbox?: TabmixSandbox): FunctionWithAny;
   getPrivateMethod<T extends keyof PrivateMethods>(constructor: string | (new (...args: any[]) => any), methodName: T, nextMethodName: string, options?: Partial<PrivateMethodOptions>): PrivateMethods[T];
   removedShortcuts: HTMLDivElement;
 

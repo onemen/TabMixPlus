@@ -300,7 +300,10 @@ export default [
 
   {
     name: "tabmix/modules/bootstrap-files",
-    files: ["addon/modules/bootstrap/**"],
+    files: ["addon/modules/bootstrap/**", "addon/modules/Changecode.sys.mjs"],
+    plugins: {
+      "@stylistic": stylistic,
+    },
     rules: {
       "mozilla/balanced-listeners": "error",
       "mozilla/no-aArgs": "error",
@@ -310,6 +313,10 @@ export default [
       "no-new-func": "off",
       "no-var": "error",
       "prefer-const": "error",
+      "prefer-template": "error",
+      "prefer-rest-params": "error",
+      "prefer-spread": "error",
+      "@stylistic/quotes": ["error", "double", {avoidEscape: true}],
     },
   },
 

@@ -204,7 +204,7 @@ export const ScriptsLoader = {
       }
 
       Tabmix.copyTabData(ourTab, otherTab);
-      return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, arguments);
+      return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, [ourTab, otherTab]);
     };
     Tabmix.setNewFunction(gBrowser, "swapBrowsersAndCloseOther", swapTab);
   },

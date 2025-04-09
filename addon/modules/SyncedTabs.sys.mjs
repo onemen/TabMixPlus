@@ -1,6 +1,6 @@
 /* eslint object-shorthand: "error" */
 
-import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
+import {initializeChangeCodeClass} from "chrome://tabmix-resource/content/Changecode.sys.mjs";
 import {TabListView} from "resource:///modules/syncedtabs/TabListView.sys.mjs";
 import {getChromeWindow} from "resource:///modules/syncedtabs/util.sys.mjs";
 
@@ -19,7 +19,7 @@ export const SyncedTabs = {
     this._initialized = true;
 
     Tabmix.gIeTab = aWindow.Tabmix.extensions.gIeTab;
-    TabmixSvc.initializeChangeCodeScript(Tabmix, {obj: TabListView.prototype});
+    initializeChangeCodeClass(Tabmix, {obj: TabListView.prototype});
 
     this.tabListView();
   },
@@ -59,7 +59,7 @@ export const SyncedTabs = {
 
     Object.defineProperty(TabListView.prototype, "tabmix_inBackground", {
       get() {
-        return TabmixSvc.prefBranch.getBoolPref("loadSyncedTabsInBackground");
+        return Services.prefs.getBoolPref("extensions.tabmix.loadSyncedTabsInBackground");
       },
       enumerable: true,
       configurable: true,

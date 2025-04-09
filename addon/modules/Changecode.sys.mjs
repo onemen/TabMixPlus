@@ -1,0 +1,475 @@
+import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
+import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
+import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
+
+/** @type {{console: LogModule.Console}} */ // @ts-ignore
+const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  console: "chrome://tabmix-resource/content/log.sys.mjs",
+});
+
+const DEBUGMODE = Services.prefs.getBoolPref("extensions.tabmix.debugMode", false);
+const errMsgContent =
+  "\n\nTry Tabmix latest development version from https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/," +
+  "\nReport about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues";
+
+// Constants used in toCode method for debug mode
+// List of functions that we don't wrap with try-catch
+const dontDebug = ["gBrowser.tabContainer._animateTabMove, gURLBar.handleCommand"];
+// List of functions that don't need a "return null" fallback in debug mode
+const customTitlebarName = isVersion(1350) ? "CustomTitlebar._update" : "TabsInTitlebar._update";
+const excludeReturn = [customTitlebarName, "gBrowser._blurTab"];
+
+const MODULE_SANDBOXES_SET = new Map();
+const SHARED_SANDBOX_KEY = new (Cu.getGlobalForObject(Services).Object)();
+let _sandboxId = 0;
+
+(function cleanup() {
+  function cleanupSandboxes() {
+    Services.obs.removeObserver(cleanupSandboxes, "quit-application");
+    for (const sandbox of MODULE_SANDBOXES_SET.values()) {
+      try {
+        Cu.nukeSandbox(sandbox);
+      } catch {}
+    }
+    MODULE_SANDBOXES_SET.clear();
+  }
+  Services.obs.addObserver(cleanupSandboxes, "quit-application");
+})();
+
+/** @typedef {ChangecodeModule.ChangeCodeClass} ChangeCodeClass */
+
+/** @implements {ChangeCodeClass} */
+class ChangeCode {
+  _errorStack = null;
+  _value = "";
+  obj;
+  fnName;
+  fullName;
+  needUpdate;
+  silent;
+  errMsg = "";
+  sandbox;
+
+  /** @type {"__lookupSetter__" | "__lookupGetter__" | ""} */
+  type = "";
+
+  /** @type {string[]} */
+  notFound = [];
+
+  /** @param {ChangecodeModule.ChangeCodeParams} params */
+  constructor(params) {
+    this.obj = params.obj;
+    this.fnName = params.fnName;
+    this.fullName = params.fullName;
+
+    const {forceUpdate = false, silent = false, set, get, sandbox} = params.options ?? {};
+    this.needUpdate = forceUpdate;
+    this.silent = silent;
+
+    if (set || get) {
+      this.type = set ? "__lookupSetter__" : "__lookupGetter__";
+      this._value = this.obj[this.type](this.fnName).toString();
+    } else if (typeof this.obj[this.fnName] === "function") {
+      this._value = this.obj[this.fnName].toString();
+    } else {
+      this.errMsg = `\n${this.fullName} is undefined.`;
+    }
+
+    // While some modules set baseSandbox, not all do.
+    // This warning ensures we remember to pass the sandbox option
+    // for all module objects rather than maintaining a list of exceptions.
+    if (sandbox) {
+      this.sandbox = sandbox;
+    } else {
+      const location = Cu.getGlobalForObject(this.obj)?.location?.href;
+      if (isInWindowContext(location)) {
+        this.sandbox = params.baseSandbox;
+      } else {
+        const {filename, lineNumber} = Components.stack.caller.caller;
+        lazy.console.reportError(
+          `scripts from module must use global sandbox\n${params.fullName} - ${filename}:${lineNumber}`
+        );
+        // fallback to the global sandbox
+        this.sandbox = createModuleSandbox(Services);
+      }
+    }
+
+    this.verifyPrivateMethodReplaced();
+
+    this.notFound.length = 0;
+  }
+
+  get value() {
+    this.isValidToChange(this.fullName);
+    return this._value;
+  }
+
+  /** @type {ChangeCodeClass["_replace"]} */
+  _replace(substr, newString, params) {
+    // Don't insert new code before "use strict";
+    if (substr == "{") {
+      const re = /['|"]use strict['|"];/;
+      const result = re.exec(this._value);
+      if (result) {
+        if (!newString.startsWith("$&")) {
+          newString = newString.replace(substr, `${result[0]}\n`);
+        }
+        substr = result[0];
+      }
+    }
+    let silent;
+    if (typeof params != "undefined") {
+      let doReplace, flags;
+      if (typeof params == "object") {
+        doReplace = "check" in params ? params.check : true;
+        flags = params.flags;
+        silent = params.silent;
+      } else if (typeof params == "boolean") {
+        doReplace = params;
+      }
+      if (!doReplace) {
+        return this;
+      }
+      if (flags && typeof substr == "string") {
+        substr = new RegExp(substr.replace(/[{[(\\^.$|?*+/)\]}]/g, "\\$&"), flags);
+      }
+    }
+
+    const exist =
+      typeof substr == "string" ? this._value.indexOf(substr) > -1 : substr.test(this._value);
+    if (exist) {
+      this._value = this._value.replace(substr, newString);
+      this.needUpdate = true;
+    } else if (!silent) {
+      if (!this._errorStack) {
+        this._errorStack = Components.stack;
+      }
+      this.notFound.push(substr);
+    }
+    return this;
+  }
+
+  /** @type {ChangeCodeClass["toCode"]} */
+  toCode(show, overrideObj, name) {
+    try {
+      if (DEBUGMODE && !dontDebug.includes(this.fullName)) {
+        let addReturn = "";
+        const re = new RegExp("//.*", "g");
+        if (
+          !excludeReturn.includes(this.fullName) &&
+          /return\s.+/.test(this._value.replace(re, ""))
+        ) {
+          addReturn = "\nreturn null\n";
+        }
+        this._value =
+          `${this._value.replace(/\([^)]*\)\s*{/, "$&\ntry {")} catch (ex) {` +
+          `   TabmixSvc.lazy.console.assert(ex, "outer try-catch in ${name || this.fullName}");}${
+            addReturn
+          } }`;
+      }
+      const [obj, fnName] = [overrideObj || this.obj, name || this.fnName];
+      if (this.isValidToChange(this.fullName)) {
+        if (obj) {
+          _setNewFunction(obj, fnName, _makeCode(this._value, this.sandbox));
+        } else {
+          lazy.console.log(`Error: unable to find object for ${this.fullName}`);
+        }
+      }
+      if (show) {
+        this.show(obj, fnName);
+      }
+    } catch (ex) {
+      lazy.console.reportError(
+        ex,
+        `${lazy.console.callerName()} failed to change ${this.fullName}\nError: `
+      );
+
+      lazy.console.log(this._value);
+    }
+  }
+
+  /** @type {ChangeCodeClass["defineProperty"]} */
+  defineProperty(overrideObj, name, codeInfo) {
+    if (!this.type) {
+      throw new Error(`Tabmix:\n${this.fullName} don't have setter or getter`);
+    }
+
+    if (!this.isValidToChange(this.fullName)) {
+      return;
+    }
+
+    const [obj, fnName] = [overrideObj || this.obj, name || this.fnName];
+
+    /** @type {Partial<ChangecodeModule.Descriptor>} */
+    const descriptor = {enumerable: true, configurable: true};
+
+    const removeSpaces = function (_match = "", p1 = "", p2 = "", p3 = "") {
+      return p1 + (p2 + p3).replace(/\s/g, "_");
+    };
+
+    /** @param {"set" | "get"} type */
+    const setDescriptor = type => {
+      const fnType = type === "set" ? "__lookupSetter__" : "__lookupGetter__";
+
+      /** @type {string | FunctionWithAny} */
+      let code = codeInfo?.[type] || (this.type == fnType ? this._value : obj[fnType](fnName));
+
+      if (typeof code == "string") {
+        // bug 1255925 - Give a name to getters/setters add space before the function name
+        // replace function get Foo() to function get_Foo()
+        code = code.replace(/^(function\s)?(get|set)(.*\()/, removeSpaces);
+        descriptor[type] = _makeCode(code, this.sandbox);
+      } else if (typeof code != "undefined") {
+        descriptor[type] = code;
+      }
+    };
+
+    setDescriptor("get");
+    setDescriptor("set");
+
+    Object.defineProperty(obj, fnName, descriptor);
+  }
+
+  /** @type {ChangeCodeClass["show"]} */
+  show(obj, name = "") {
+    if (obj?.hasOwnProperty(name)) {
+      lazy.console.show({obj, name, fullName: this.fullName});
+    } else if (typeof this.fullName == "string") {
+      const win = typeof window != "undefined" ? window : undefined;
+      lazy.console.show(this.fullName, 500, win);
+    }
+  }
+
+  /** @type {ChangeCodeClass["isValidToChange"]} */
+  isValidToChange(name) {
+    const notFoundCount = this.notFound.length;
+    if (this.needUpdate && !notFoundCount) {
+      return true;
+    }
+
+    const stack = this._errorStack ?? Components.stack;
+    if (notFoundCount && !this.silent) {
+      const ex = this.getCallerData(stack);
+      const str = `${notFoundCount > 1 ? "s" : ""}\n    `;
+      ex.message = `${ex.name} was unable to change ${name}.${
+        this.errMsg || `\ncan't find string${str}${this.notFound.join("\n    ")}`
+      }${errMsgContent}`;
+      lazy.console.reportError(ex);
+      if (DEBUGMODE) {
+        lazy.console.clog(`${ex.name}\nfunction ${name} = ${this._value}`, ex);
+      }
+    } else if (!this.needUpdate && DEBUGMODE) {
+      const ex = this.getCallerData(stack?.caller);
+      lazy.console.clog(`${ex.name} no update needed to ${name}`, ex);
+    }
+    return false;
+  }
+
+  /** @type {ChangeCodeClass["getCallerData"]} */
+  getCallerData(stack) {
+    const caller = stack.caller || {};
+    const error = lazy.console.error(caller);
+    Object.assign(error, {name: caller.name, message: ""});
+    return error;
+  }
+
+  verifyPrivateMethodReplaced() {
+    const matches = this._value.match(/this\.#(\w+)/g);
+    if (!matches) {
+      return;
+    }
+    const privateMethods = new Set(matches.map(match => match.replace("this.#", "")));
+    const parentName = this.fullName.split(".").slice(0, -1).join(".");
+    const ex = this.getCallerData(Components.stack.caller?.caller);
+    for (const methods of privateMethods) {
+      if (typeof this.obj[`_${methods}`] === "undefined") {
+        ex.message = `Implement replacement for private method #${methods} in ${parentName} it is used by ${this.fullName}${errMsgContent}`;
+        lazy.console.reportError(ex);
+      }
+    }
+    this._value = this._value.replace(/this\.#(\w+)/g, "this._$1");
+    this.needUpdate = true;
+  }
+}
+
+/** @type {TabmixGlobal["setNewFunction"]} */
+function _setNewFunction(obj, name, code) {
+  if (!Object.getOwnPropertyDescriptor(obj, name)) {
+    Object.defineProperty(obj, name, {
+      value: code,
+      writable: true,
+      configurable: true,
+    });
+  } else {
+    obj[name] = code;
+  }
+}
+
+/** @param {string} location */
+function isInWindowContext(location) {
+  return (
+    location === "chrome://browser/content/browser.xhtml" ||
+    location === "chrome://tabmixplus/content/preferences/preferences.xhtml"
+  );
+}
+
+/** @type {ChangecodeModule.createModuleSandbox} */
+function createModuleSandbox(obj, shared = true) {
+  const key = shared ? SHARED_SANDBOX_KEY : obj;
+  let sandbox = MODULE_SANDBOXES_SET.get(key);
+  if (sandbox) {
+    return sandbox;
+  }
+
+  const id = _sandboxId++;
+
+  sandbox = Cu.Sandbox(Services.scriptSecurityManager.getSystemPrincipal(), {
+    sandboxName: `Tabmix sandbox for module ${id}`,
+    wantGlobalProperties: ["ChromeUtils"],
+    wantXrays: false,
+  });
+
+  Object.assign(sandbox, {
+    AppConstants,
+    Cc,
+    Ci,
+    Cr,
+    Cu,
+    console: lazy.console,
+    sandbox,
+    TabmixSvc,
+    _shared: shared,
+    _id: id,
+    _type: "module",
+  });
+
+  MODULE_SANDBOXES_SET.set(key, sandbox);
+  return sandbox;
+}
+
+let scriptId = 0;
+
+/** @type {ChangecodeModule["_makeCode"]} */
+function _makeCode(code, sandbox) {
+  if (!sandbox) {
+    throw new Error("Error: _makeCode was called with sandbox");
+  }
+
+  let codeString;
+  if (code.startsWith("async") && !code.startsWith("async function")) {
+    codeString = `(async function ${code.replace(/^async/, "")})`;
+  } else if (!code.startsWith("function")) {
+    codeString = `(function ${code})`;
+  } else {
+    codeString = `(${code})`;
+  }
+
+  // to enable clickable link in the browser lazy.console enable debug mode by
+  // setting extensions.tabmix.enableDebug in about:config to true
+  const functionNameMatch = codeString.match(/\((?:async\s+)?function\s+(\w+)/);
+  const functionName = functionNameMatch ? functionNameMatch[1] : "anonymous_";
+  const filename = `${functionName}_${scriptId++}`;
+  const readableFilename =
+    DEBUGMODE ?
+      `data:application/javascript,Tabmix_code_${filename};${encodeURIComponent(codeString)}`
+    : `Tabmix_code_${filename}.js`;
+
+  return Cu.evalInSandbox(codeString, sandbox, null, readableFilename, 1);
+}
+
+/** @type {ChangecodeModule.ExpandTabmix} */
+const expandTabmix = {
+  _debugMode: DEBUGMODE,
+
+  // @ts-expect-error - when ChangeCode throw an error Tabmix.changeCode is null
+  changeCode(parent, fnName, options) {
+    try {
+      return new ChangeCode({
+        obj: parent,
+        fnName: fnName.split(".").pop() ?? "",
+        fullName: fnName,
+        options: options ?? {},
+        baseSandbox: this._sandbox,
+      });
+    } catch (/** @type {any} */ ex) {
+      lazy.console.clog(
+        `${lazy.console.callerName()} failed to change ${fnName}\nError: ${ex.message}`
+      );
+      if (DEBUGMODE) {
+        lazy.console.obj(parent, "aParent");
+      }
+    }
+    return null;
+  },
+
+  setNewFunction: _setNewFunction,
+
+  nonStrictMode(obj, fn, arg = []) {
+    obj[fn](...arg);
+  },
+
+  getSandbox(obj, shared = true) {
+    const global = Cu.getGlobalForObject(obj);
+    const location = global?.location?.href;
+
+    if (!isInWindowContext(location)) {
+      return createModuleSandbox(obj, shared);
+    }
+
+    // Currently we don't have non shared window sandbox
+
+    // Check if we already have a sandbox for this window
+    let sandbox = this._sandbox;
+    if (sandbox) {
+      return sandbox;
+    }
+
+    const id = _sandboxId++;
+
+    sandbox = Cu.Sandbox(Services.scriptSecurityManager.getSystemPrincipal(), {
+      sandboxName: `Tabmix sandbox for window ${id}`,
+      sandboxPrototype: global,
+      sameZoneAs: global,
+      wantXrays: true,
+    });
+
+    sandbox._id = id;
+    sandbox._type = "window";
+
+    return sandbox;
+  },
+
+  expandSandbox({obj, scope = {}, shared = true}) {
+    const sandbox = this.getSandbox(obj, shared);
+    // Add all scope properties to the shared sandbox
+    for (const [key, value] of Object.entries(scope)) {
+      // Special handling for 'lazy' object - merge instead of replace
+      if (key === "lazy" && sandbox.lazy && typeof value === "object") {
+        Object.assign(sandbox.lazy, value);
+      } else {
+        sandbox[key] = value;
+      }
+    }
+    return sandbox;
+  },
+
+  makeCode(code, sandbox) {
+    return _makeCode(code, sandbox ?? this._sandbox);
+  },
+};
+
+/** @type {ChangecodeModule.initializeChangeCodeClass} */
+export function initializeChangeCodeClass(tabmixObj, {obj, window, scope = {}}) {
+  if (!obj && !window) {
+    throw new Error("Error: obj and window are not defined");
+  }
+
+  // bound function to tabmixObj before creating the sandbox to make sure that
+  // if we are in winodw context the sanbox will be saved to tabmixObj.
+  Object.assign(tabmixObj, expandTabmix);
+  const baseSanbox = tabmixObj.expandSandbox({obj: window ?? obj, scope});
+  tabmixObj._sandbox = baseSanbox;
+
+  return baseSanbox;
+}

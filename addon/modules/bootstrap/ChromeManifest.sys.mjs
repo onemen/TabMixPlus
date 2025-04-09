@@ -209,7 +209,7 @@ export class ChromeManifest {
       dirparts.pop();
 
       try {
-        await this.parse(filename, base + "/" + dirparts.join("/"));
+        await this.parse(filename, `${base}/${dirparts.join("/")}`);
       } catch {
         console.log(`Could not read manifest '${base}/${filename}'.`);
       }

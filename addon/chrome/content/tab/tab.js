@@ -456,8 +456,6 @@ Tabmix.tabsUtils = {
       this.tabBar.setAttribute("tabmix_icons", attr.join(" "));
     }
 
-    Tabmix._debugMode = TabmixSvc.debugMode();
-
     // initialize first tab
     Tabmix._nextSelectedID = 1;
     TMP_eventListener.setTabAttribute(tab);

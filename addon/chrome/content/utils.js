@@ -275,7 +275,10 @@ var Tabmix = {
   },
 
   installChangecode() {
-    TabmixSvc.initializeChangeCodeScript(Tabmix, {window});
+    const {initializeChangeCodeClass} = ChromeUtils.importESModule(
+      "chrome://tabmix-resource/content/Changecode.sys.mjs"
+    );
+    initializeChangeCodeClass(Tabmix, {window});
     this.installChangecode = function () {};
   },
 
@@ -315,6 +318,7 @@ var Tabmix = {
     this.originalFunctions = {};
     if (this._sandbox) {
       Cu.nukeSandbox(this._sandbox);
+      // @ts-expect-error - nukeSandbox
       this._sandbox = null;
     }
   },

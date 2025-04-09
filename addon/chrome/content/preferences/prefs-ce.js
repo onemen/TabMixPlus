@@ -10,6 +10,12 @@ const {Overlays} = ChromeUtils.importESModule(
   "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs"
 );
 
+/** @type {BrowserDOMWindowModule.Lazy} */ // @ts-ignore
+const localLazy = {};
+ChromeUtils.defineESModuleGetters(localLazy, {
+  initializeChangeCodeClass: "chrome://tabmix-resource/content/Changecode.sys.mjs",
+});
+
 // delay connectedCallback() of tabs till tabs inserted into DOM so it won't be run multiple times and cause trouble.
 let delayTabsConnectedCallback = false;
 const TabsClass = customElements.get("tabs");
@@ -1171,11 +1177,11 @@ class PrefWindow extends MozXULElement {
       )
       .replace("set selectedIndex", "function selectedIndex");
 
-    TabmixSvc.initializeChangeCodeScript(Tabmix, {obj: window});
+    const sandbox = localLazy.initializeChangeCodeClass(Tabmix, {obj: window});
 
     const descriptor = {
       get: getter,
-      set: Tabmix._makeCode(code),
+      set: Tabmix.makeCode(code, sandbox),
       enumerable: true,
       configurable: true,
     };

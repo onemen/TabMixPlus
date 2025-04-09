@@ -21,12 +21,6 @@ export const TabmixSvc = {
   tabStylePrefs: {},
   URILoadingHelperChanged: false,
 
-  debugMode() {
-    return (
-      this.prefBranch.prefHasUserValue("enableDebug") && this.prefBranch.getBoolPref("enableDebug")
-    );
-  },
-
   version(versionNo, updateChannel) {
     return lazy.isVersion.apply(null, [versionNo, updateChannel]);
   },
@@ -197,76 +191,12 @@ export const TabmixSvc = {
           lazy.TabmixPlacesUtils.onQuitApplication();
           lazy.SyncedTabs.onQuitApplication();
 
-          // nuke all sandboxes
-          for (const sandbox of TabmixSvc.sandboxes.values()) {
-            try {
-              Cu.nukeSandbox(sandbox);
-            } catch {}
-          }
-          TabmixSvc.sandboxes.clear();
-
           // Cancel any console timers
           Object.values(TabmixSvc.console._timers).forEach(timer => timer.cancel());
           TabmixSvc.console._timers = {};
           break;
       }
     },
-  },
-
-  sandboxes: new Map(),
-  _sharedSandboxKey: new (Cu.getGlobalForObject(Services).Object)(),
-  _sandboxId: 0,
-
-  initializeChangeCodeScript(tabmixObj, {obj, window, scope = {}}) {
-    const isWindowContext = typeof window === "object";
-    const mainScope =
-      isWindowContext ? window : (
-        {
-          Tabmix: tabmixObj,
-          TabmixSvc: this,
-        }
-      );
-    tabmixObj._sandboxData = {obj: window ?? obj, scope, result: null};
-    tabmixObj._debugMode = this.debugMode();
-    Services.scriptloader.loadSubScript("chrome://tabmixplus/content/changecode.js", mainScope);
-
-    /** @type {TabmixSandbox} */ // @ts-expect-error - we set it in changecode.js
-    const sandbox = tabmixObj._sandboxData.result;
-    delete tabmixObj._sandboxData;
-    return sandbox;
-  },
-
-  createModuleSandbox(obj, shared = true) {
-    const key = shared ? this._sharedSandboxKey : obj;
-    let sandbox = this.sandboxes.get(key);
-    if (sandbox) {
-      return sandbox;
-    }
-
-    const id = this._sandboxId++;
-
-    sandbox = Cu.Sandbox(Services.scriptSecurityManager.getSystemPrincipal(), {
-      sandboxName: `Tabmix sandbox for module ${id}`,
-      wantGlobalProperties: ["ChromeUtils"],
-      wantXrays: false,
-    });
-
-    Object.assign(sandbox, {
-      AppConstants,
-      Cc,
-      Ci,
-      Cr,
-      Cu,
-      console,
-      sandbox,
-      TabmixSvc,
-      _shared: shared,
-      _id: id,
-      _type: "module",
-    });
-
-    this.sandboxes.set(key, sandbox);
-    return sandbox;
   },
 
   sm: {

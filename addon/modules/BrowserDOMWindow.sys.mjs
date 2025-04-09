@@ -1,12 +1,11 @@
 import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
-import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {XPCOMUtils} from "resource://gre/modules/XPCOMUtils.sys.mjs";
 
 /** @type {BrowserDOMWindowModule.Lazy} */ // @ts-ignore
 const lazy = {};
 /* eslint-disable tabmix/valid-lazy */
 ChromeUtils.defineESModuleGetters(lazy, {
-  //
+  initializeChangeCodeClass: "chrome://tabmix-resource/content/Changecode.sys.mjs",
   URILoadingHelper: "resource:///modules/URILoadingHelper.sys.mjs",
 });
 
@@ -41,7 +40,7 @@ export const TabmixBrowserDOMWindow = {
     const {constructor, scope = {}} =
       isVersion(1370) ? this.getBrowserDOMWindow(window) : this.getNsBrowserAccess(window);
 
-    const sandbox = TabmixSvc.initializeChangeCodeScript(Tabmix, {
+    const sandbox = lazy.initializeChangeCodeClass(Tabmix, {
       obj: constructor.prototype,
       scope,
     });

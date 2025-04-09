@@ -42,7 +42,7 @@ export const PreferencesLoader = {
         default:
           console.error(
             `Tabmix Error: can't set pref ${prefName} to value '${prefValue}'; ` +
-              `it isn't a String, Number, or Boolean`
+              "it isn't a String, Number, or Boolean"
           );
       }
     };

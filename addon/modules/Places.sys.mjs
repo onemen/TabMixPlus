@@ -17,6 +17,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   PlacesUtils: "resource://gre/modules/PlacesUtils.sys.mjs",
   PlacesUIUtils: "resource:///modules/PlacesUIUtils.sys.mjs",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
+  initializeChangeCodeClass: "chrome://tabmix-resource/content/Changecode.sys.mjs",
 });
 
 TabmixChromeUtils.defineLazyModuleGetters(lazy, {
@@ -83,7 +84,7 @@ PlacesUtilsInternal = {
 
     this._initialized = true;
 
-    const sandbox = TabmixSvc.initializeChangeCodeScript(Tabmix, {
+    const sandbox = lazy.initializeChangeCodeClass(Tabmix, {
       // @ts-expect-error - PlacesUIUtils dont have index signature on purpose
       obj: lazy.PlacesUIUtils,
       scope: {lazy, getBrowserWindow, getTopWindow},

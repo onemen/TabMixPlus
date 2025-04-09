@@ -530,7 +530,7 @@ var TMP_tabDNDObserver = {
 
     /**
      * @param {"on_dragover" | "on_drop"} name
-     * @param {ChangeCodeNS.ChangeCodeClass} code
+     * @param {ChangecodeModule.ChangeCodeClass} code
      */
     function patchDragMethod(name, code) {
       if (Tabmix.isVersion(1320)) {
@@ -1995,7 +1995,7 @@ Tabmix.getPrivateMethod = function (
     .trim();
   if (code) {
     try {
-      return Tabmix._makeCode(`_${methhodName}${code}`, sandbox);
+      return Tabmix.makeCode(`_${methhodName}${code}`, sandbox);
     } catch (error) {
       console.error(
         `Tabmix Error: getPrivateMethod failed to evaluate ${constructor}.${methhodName}`,

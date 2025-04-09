@@ -4,49 +4,6 @@ interface Functions {
   getById<K extends keyof GetByMap | string>(selectors: K): K extends keyof GetByMap ? GetByMap[K] : any | null;
 }
 
-declare namespace ChangeCodeNS {
-  type Options = {forceUpdate?: boolean; silent?: boolean; set?: boolean; get?: boolean; sandbox?: TabmixSandbox | undefined};
-  type ReplaceParams = {check?: boolean; flags?: "g"; silent?: boolean};
-  type Descriptor = {
-    configurable: boolean;
-    enumerable: boolean;
-    writable: boolean;
-    value?: FunctionWithUnknown;
-    get?: FunctionWithUnknown;
-    set?: FunctionWithUnknown;
-    [key: string]: unknown;
-  };
-  interface ChangeCodeParams {
-    obj: Record<string, any>;
-    fnName: string;
-    fullName: string;
-    options?: Options;
-  }
-  interface ChangeCodeClass {
-    obj: Record<string, any>;
-    fnName: string;
-    fullName: string;
-    needUpdate: boolean;
-    silent: boolean;
-    type: "__lookupSetter__" | "__lookupGetter__" | "";
-    _value: string;
-    errMsg: string;
-    notFound: (string | RegExp)[];
-    sandbox: TabmixSandbox | undefined;
-
-    get value(): string;
-    _replace(this: ChangeCodeClass, substr: string | RegExp, newString: string, aParams?: ReplaceParams): ChangeCodeClass;
-    toCode(this: ChangeCodeClass, aShow?: boolean, aObj?: Record<string, any>, aName?: string): void;
-    defineProperty(this: ChangeCodeClass, aObj?: Record<string, unknown>, aName?: string, aCode?: {set?: string; get?: string}): void;
-    show(aObj?: Record<string, unknown>, aName?: string): void;
-    isValidToChange(this: ChangeCodeClass, aName: string): boolean;
-    getCallerData(stack: nsIStackFrame, aOptions?: unknown): Error;
-    verifyPrivateMethodReplaced(this: ChangeCodeClass): void;
-  }
-}
-
-declare var ChangeCodeClass: ChangeCodeNS.ChangeCodeClass;
-
 // more methods in addon.d.ts
 interface PrivateMethods {
   // gBrowser
@@ -64,20 +21,7 @@ interface PrivateMethods {
 }
 
 interface TabmixGlobal {
-  // from changedcode
-  _debugMode: boolean;
-  changeCode(aParent: Record<string, any>, afnName: string, aOptions?: ChangeCodeNS.Options): ChangeCodeNS.ChangeCodeClass;
-  nonStrictMode(aObj: Record<string, any>, aFn: string, aArg?: unknown): void;
-  setNewFunction(aObj: Record<string, any>, aName: string, aCode: FunctionWithAny): void;
-
-  __sandboxResult: TabmixSandbox | null;
-  _sandbox: TabmixSandbox | null;
-  _sandboxData?: {obj: Record<string, unknown>; scope?: Record<string, unknown>; result?: TabmixSandbox | null} | null;
-  getSandbox(obj: object, shared?: boolean): TabmixSandbox;
-  expandSandbox(params: {obj: object; scope?: Record<string, unknown> | undefined; shared?: boolean}): TabmixSandbox;
-  // in modules.d.ts
-  // _makeCode
-  // getPrivateMethod
+  // see changedcode and getPrivateMethod in modules.d.ts
 
   // tabmix.js
   _lastTabOpenedTime: number;
