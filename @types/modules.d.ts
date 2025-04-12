@@ -300,6 +300,34 @@ declare namespace MockedExports {
     new (): TabListView;
     isInstance: IsInstance<TabListView>;
   };
+
+  type TelemetrySource = "tab_overflow" | "tab_group" | "tab_menu" | "drag" | "suggest" | "recent" | "unknown";
+  type TabMetricsContext = {
+    isUserTriggered: true;
+    telemetrySource: TelemetrySource;
+  };
+  interface TabMetricsSourceConstants {
+    TAB_OVERFLOW_MENU: "tab_overflow";
+    TAB_GROUP_MENU: "tab_group";
+    TAB_MENU: "tab_menu";
+    DRAG_AND_DROP: "drag";
+    SUGGEST: "suggest";
+    RECENT_TABS: "recent";
+    UNKNOWN: "unknown";
+  }
+
+  interface TabMetrics {
+    userTriggeredContext: (source: TelemetrySource | undefined) => TabMetricsContext;
+    METRIC_SOURCE: TabMetricsSourceConstants;
+    METRIC_TABS_LAYOUT: {
+      HORIZONTAL: "horizontal";
+      VERTICAL: "vertical";
+    };
+    METRIC_REOPEN_TYPE: {
+      SAVED: "saved";
+      DELETED: "deleted";
+    };
+  }
 }
 
 // this namespace is for all SessionStore useage in Tabmix

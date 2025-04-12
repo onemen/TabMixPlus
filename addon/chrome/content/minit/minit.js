@@ -15,6 +15,8 @@ var TMP_tabDNDObserver = {
   _multirowMargin: 0,
   _moveTabOnDragging: true,
   _hideTooltipTimeout: 0,
+  // @ts-expect-error - we add this property lazyly for Firefox 139+
+  TabMetrics: {},
 
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
@@ -39,7 +41,18 @@ var TMP_tabDNDObserver = {
           isTab,
           isTabGroup,
           isTabGroupLabel,
+          lazy: {},
         };
+
+        if (Tabmix.isVersion(1390)) {
+          const lazy = {};
+
+          ChromeUtils.defineESModuleGetters(lazy, {
+            // eslint-disable-next-line tabmix/valid-lazy
+            TabMetrics: "moz-src:///browser/components/tabbrowser/TabMetrics.sys.mjs",
+          });
+          scope.lazy = lazy;
+        }
       } else if (Tabmix.isVersion(1340)) {
         // Since Firefox 134, tabs.js contains scoped constants for group drop actions:
         // - GROUP_DROP_ACTION_CREATE: used in on_drop and triggerDragOverCreateGroup
@@ -206,6 +219,17 @@ var TMP_tabDNDObserver = {
         Boolean(element?.classList?.contains("tab-group-label"));
       // @ts-expect-error - override isTab for older versions
       gBrowser.isTab = element => Boolean(element?.tagName == "tab");
+    }
+
+    if (Tabmix.isVersion(1390)) {
+      ChromeUtils.defineESModuleGetters(this, {
+        TabMetrics: "moz-src:///browser/components/tabbrowser/TabMetrics.sys.mjs",
+      });
+    } else {
+      // @ts-expect-error - override TabMetrics for older versions
+      this.TabMetrics.userTriggeredContext = () => {};
+      // @ts-expect-error - override TabMetrics for older versions
+      this.TabMetrics.METRIC_SOURCE = {};
     }
 
     function tabmixHandleMoveString() {
@@ -856,6 +880,7 @@ var TMP_tabDNDObserver = {
   handleDrop(event, draggedTab, movingTabs) {
     let {dropElement, newIndex, dropBefore, fromTabList, dropOnStart} =
       gBrowser.tabContainer._getDropIndex(event, {getParams: true});
+    const telemetrySource = this.TabMetrics.METRIC_SOURCE.DRAG_AND_DROP;
     if (!Tabmix.isVersion(1370) || fromTabList) {
       const oldIndex = draggedTab[Tabmix.isVersion(1380) ? "elementIndex" : "_tPos"];
       newIndex += dropBefore ? 0 : 1;
@@ -872,17 +897,29 @@ var TMP_tabDNDObserver = {
       }
       for (let tab of movingTabs) {
         /** @type {MockedGeckoTypes.moveTabToOptions} */
-        const options = Tabmix.isVersion(1380) ? {elementIndex: newIndex} : {tabIndex: newIndex};
+        const options =
+          Tabmix.isVersion(1380) ? {elementIndex: newIndex, telemetrySource} : {tabIndex: newIndex};
         if (dropOnStart) {
           options.forceUngrouped = true;
         }
         Tabmix.moveTabTo(tab, options);
         if (moveLeft) newIndex++;
       }
-    } else if (dropBefore) {
-      gBrowser.moveTabsBefore(movingTabs, dropOnStart ? dropElement?.group : dropElement);
     } else {
-      gBrowser.moveTabsAfter(movingTabs, dropOnStart ? dropElement?.group : dropElement);
+      const dropMetricsContext = this.TabMetrics.userTriggeredContext(telemetrySource);
+      if (dropBefore) {
+        gBrowser.moveTabsBefore(
+          movingTabs,
+          dropOnStart ? dropElement?.group : dropElement,
+          dropMetricsContext
+        );
+      } else {
+        gBrowser.moveTabsAfter(
+          movingTabs,
+          dropOnStart ? dropElement?.group : dropElement,
+          dropMetricsContext
+        );
+      }
     }
     TabmixTabbar.updateScrollStatus();
     gBrowser.ensureTabIsVisible(draggedTab);

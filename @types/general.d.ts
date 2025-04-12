@@ -392,7 +392,7 @@ declare namespace MockedGeckoTypes {
     removeNotification(notification: NotificationMessage): void;
   }
 
-  type moveTabToOptions = {elementIndex?: number; tabIndex?: number; forceUngrouped?: boolean; keepRelatedTabs?: boolean};
+  type moveTabToOptions = {elementIndex?: number; tabIndex?: number; forceUngrouped?: boolean; keepRelatedTabs?: boolean; telemetrySource?: MockedExports.TelemetrySource};
 
   interface TabBrowser extends Browser {
     // build in methods and properties
@@ -442,8 +442,8 @@ declare namespace MockedGeckoTypes {
     lastMultiSelectedTab: BrowserTab;
     // keepRelatedTabs was used until Firefox 134
     moveTabTo: (aTab: BrowserTab | MozTabbrowserTabGroup, options: moveTabToOptions) => void;
-    moveTabsBefore: (tabs: BrowserTab[], targetElement?: BrowserTab | MozTabbrowserTabGroup | null) => void;
-    moveTabsAfter: (tabs: BrowserTab[], targetElement?: BrowserTab | MozTabbrowserTabGroup | null) => void;
+    moveTabsBefore: (tabs: BrowserTab[], targetElement?: BrowserTab | MozTabbrowserTabGroup | null, metricsContext?: MockedExports.TabMetricsContext) => void;
+    moveTabsAfter: (tabs: BrowserTab[], targetElement?: BrowserTab | MozTabbrowserTabGroup | null, metricsContext?: MockedExports.TabMetricsContext) => void;
     ownerGlobal: WindowProxy;
     pinTab: (tab: BrowserTab) => void;
     readonly pinnedTabCount: number;

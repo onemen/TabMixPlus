@@ -214,6 +214,7 @@ declare namespace TabDNDObserverNS {
   let _allVisibleItems: AriaFocusableItems | null;
   let _cachedDnDValue: boolean | null;
   const allVisibleItems: AriaFocusableItems;
+  const TabMetrics: MockedExports.TabMetrics;
   function init(): void;
   function useTabmixDnD(event: DragEvent, tab?: Tab): boolean;
   function handleEvent(event: DragEvent): void;
