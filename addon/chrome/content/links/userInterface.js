@@ -347,7 +347,7 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
 
     /** @type {Window["URILoadingHelper"]} */
     const parentObj = window.URILoadingHelper;
-    const sandbox = Tabmix.getSandbox(parentObj);
+    const sandbox = Tabmix.getSandbox(parentObj, {scope: {BrowserUtils}});
     // divert all the calls from places UI to use our preferences
     this.changeCode(parentObj, "openUILink", {sandbox})
       ._replace("aIgnoreAlt = params.ignoreAlt;", "aIgnoreAlt = params.ignoreAlt || null;")

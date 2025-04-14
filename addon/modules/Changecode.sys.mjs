@@ -82,8 +82,8 @@ class ChangeCode {
     if (sandbox) {
       this.sandbox = sandbox;
     } else {
-      const location = Cu.getGlobalForObject(this.obj)?.location?.href;
-      if (isInWindowContext(location)) {
+      const global = Cu.getGlobalForObject(this.obj);
+      if (isInWindowContext(global)) {
         this.sandbox = params.baseSandbox;
       } else {
         const {filename, lineNumber} = Components.stack.caller.caller;
@@ -91,7 +91,7 @@ class ChangeCode {
           `scripts from module must use global sandbox\n${params.fullName} - ${filename}:${lineNumber}`
         );
         // fallback to the global sandbox
-        this.sandbox = createModuleSandbox(Services);
+        this.sandbox = createModuleSandbox(Services, {shared: true});
       }
     }
 
@@ -306,20 +306,59 @@ function _setNewFunction(obj, name, code) {
   }
 }
 
-/** @param {string} location */
-function isInWindowContext(location) {
+/**
+ * @typedef {{location: {href: string}}} Context
+ * @param {Context | string} obj - Object with location property or href string
+ */
+function isInWindowContext(obj) {
+  const href = typeof obj === "string" ? obj : obj?.location?.href;
   return (
-    location === "chrome://browser/content/browser.xhtml" ||
-    location === "chrome://tabmixplus/content/preferences/preferences.xhtml"
+    href === "chrome://browser/content/browser.xhtml" ||
+    href === "chrome://tabmixplus/content/preferences/preferences.xhtml"
   );
 }
 
+/** @type {ChangecodeModule.updateSandboxWithScope} */
+function updateSandboxWithScope(sandbox, scope) {
+  if (!Object.keys(scope).length) {
+    return sandbox;
+  }
+
+  // Handle scope properties with special case for 'lazy'
+  const {lazy: scopeLazy, ...restScope} = scope;
+
+  // For regular properties, only add if they don't exist
+  for (const [key, value] of Object.entries(restScope)) {
+    if (!Object.prototype.hasOwnProperty.call(sandbox, key)) {
+      sandbox[key] = value;
+    }
+  }
+
+  // Special handling for 'lazy' object - only add if properties don't exist
+  if (typeof scopeLazy === "object" && scopeLazy !== null) {
+    if (sandbox.lazy) {
+      // Only add properties that don't exist
+      for (const [key, value] of Object.entries(scopeLazy)) {
+        if (!Object.prototype.hasOwnProperty.call(sandbox.lazy, key)) {
+          sandbox.lazy[key] = value;
+        }
+      }
+    } else {
+      // @ts-expect-error - We know what we're doing here
+      sandbox.lazy = scopeLazy;
+    }
+  }
+
+  return sandbox;
+}
+
 /** @type {ChangecodeModule.createModuleSandbox} */
-function createModuleSandbox(obj, shared = true) {
+function createModuleSandbox(obj, options = {}) {
+  const {shared = true, scope = {}} = options;
   const key = shared ? SHARED_SANDBOX_KEY : obj;
   let sandbox = MODULE_SANDBOXES_SET.get(key);
   if (sandbox) {
-    return sandbox;
+    return updateSandboxWithScope(sandbox, scope);
   }
 
   const id = _sandboxId++;
@@ -330,6 +369,7 @@ function createModuleSandbox(obj, shared = true) {
     wantXrays: false,
   });
 
+  // Initialize sandbox with base properties
   Object.assign(sandbox, {
     AppConstants,
     Cc,
@@ -342,6 +382,7 @@ function createModuleSandbox(obj, shared = true) {
     _shared: shared,
     _id: id,
     _type: "module",
+    ...scope,
   });
 
   MODULE_SANDBOXES_SET.set(key, sandbox);
@@ -409,20 +450,21 @@ const expandTabmix = {
     obj[fn](...arg);
   },
 
-  getSandbox(obj, shared = true) {
+  getSandbox(obj, options = {}) {
     const global = Cu.getGlobalForObject(obj);
-    const location = global?.location?.href;
 
-    if (!isInWindowContext(location)) {
-      return createModuleSandbox(obj, shared);
+    if (!isInWindowContext(global)) {
+      return createModuleSandbox(obj, options);
     }
 
     // Currently we don't have non shared window sandbox
 
+    const {scope = {}} = options;
+
     // Check if we already have a sandbox for this window
     let sandbox = this._sandbox;
     if (sandbox) {
-      return sandbox;
+      return updateSandboxWithScope(sandbox, scope);
     }
 
     const id = _sandboxId++;
@@ -437,21 +479,7 @@ const expandTabmix = {
     sandbox._id = id;
     sandbox._type = "window";
 
-    return sandbox;
-  },
-
-  expandSandbox({obj, scope = {}, shared = true}) {
-    const sandbox = this.getSandbox(obj, shared);
-    // Add all scope properties to the shared sandbox
-    for (const [key, value] of Object.entries(scope)) {
-      // Special handling for 'lazy' object - merge instead of replace
-      if (key === "lazy" && sandbox.lazy && typeof value === "object") {
-        Object.assign(sandbox.lazy, value);
-      } else {
-        sandbox[key] = value;
-      }
-    }
-    return sandbox;
+    return updateSandboxWithScope(sandbox, scope);
   },
 
   makeCode(code, sandbox) {
@@ -468,7 +496,7 @@ export function initializeChangeCodeClass(tabmixObj, {obj, window, scope = {}}) 
   // bound function to tabmixObj before creating the sandbox to make sure that
   // if we are in winodw context the sanbox will be saved to tabmixObj.
   Object.assign(tabmixObj, expandTabmix);
-  const baseSanbox = tabmixObj.expandSandbox({obj: window ?? obj, scope});
+  const baseSanbox = tabmixObj.getSandbox(window ?? obj, {scope});
   tabmixObj._sandbox = baseSanbox;
 
   return baseSanbox;

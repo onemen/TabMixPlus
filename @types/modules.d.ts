@@ -665,10 +665,12 @@ type BrowserVersion = typeof import("chrome://tabmix-resource/content/BrowserVer
 
 declare namespace ChangecodeModule {
   type ChangeCodeScriptParams = {scope?: Record<string, unknown>} & ({obj: Record<string, unknown>; window?: never} | {obj?: never; window: Window});
-  type ExpandTabmix = Pick<TabmixGlobal, "_debugMode" | "changeCode" | "setNewFunction" | "nonStrictMode" | "getSandbox" | "expandSandbox" | "makeCode">;
+  type ExpandTabmix = Pick<TabmixGlobal, "_debugMode" | "changeCode" | "setNewFunction" | "nonStrictMode" | "getSandbox" | "makeCode">;
+  type SandboxOptions = {shared?: boolean; scope?: Record<string, unknown> | undefined};
 
   function initializeChangeCodeClass(tabmixObj: TabmixGlobal, params: ChangeCodeScriptParams): TabmixSandbox;
-  function createModuleSandbox(obj: object, shared?: boolean): TabmixSandbox;
+  function updateSandboxWithScope(sandbox: TabmixSandbox, scope: Record<string, unknown>): TabmixSandbox;
+  function createModuleSandbox(obj: object, options?: SandboxOptions): TabmixSandbox;
   function _makeCode(code: string, sandbox?: TabmixSandbox): FunctionWithAny;
 
   type Options = {forceUpdate?: boolean; silent?: boolean; set?: boolean; get?: boolean; sandbox?: TabmixSandbox | undefined};
@@ -1546,8 +1548,7 @@ interface TabmixGlobal {
   changeCode(this: TabmixGlobal, parent: Record<string, any>, fnName: string, options?: ChangecodeModule.Options): ChangecodeModule.ChangeCodeClass;
   nonStrictMode(obj: Record<string, any>, fn: string, arg?: any): void;
   setNewFunction(obj: Record<string, any>, name: string, aCode: FunctionWithAny): void;
-  getSandbox(this: TabmixGlobal, obj: object, shared?: boolean): TabmixSandbox;
-  expandSandbox(this: TabmixGlobal, params: {obj: object; scope?: Record<string, unknown> | undefined; shared?: boolean}): TabmixSandbox;
+  getSandbox(this: TabmixGlobal, obj: object, options?: ChangecodeModule.SandboxOptions): TabmixSandbox;
   makeCode(this: TabmixGlobal, code: string, sandbox?: TabmixSandbox): FunctionWithAny;
   getPrivateMethod<T extends keyof PrivateMethods>(constructor: string | (new (...args: any[]) => any), methodName: T, nextMethodName: string, options?: Partial<PrivateMethodOptions>): PrivateMethods[T];
   removedShortcuts: HTMLDivElement;

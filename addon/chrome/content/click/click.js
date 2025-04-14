@@ -888,7 +888,7 @@ var TabmixContext = {
       ChromeUtils.defineESModuleGetters(lazy, modules);
     }
 
-    const sandbox = Tabmix.expandSandbox({obj: nsContextMenu, scope: {lazy}});
+    const sandbox = Tabmix.getSandbox(nsContextMenu, {scope: {lazy}});
     // hide open link in window in single window mode
     Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems", {
       sandbox,

@@ -63,7 +63,7 @@ var TMP_tabDNDObserver = {
         };
       }
 
-      return Tabmix.expandSandbox({obj: window, scope});
+      return Tabmix.getSandbox(window, {scope});
     })();
 
     this._moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
@@ -1925,7 +1925,7 @@ Tabmix.navToolbox = {
     ChromeUtils.defineESModuleGetters(lazy, modules);
 
     // Use custom sandbox for code evaluation
-    const searchbarSandbox = Tabmix.expandSandbox({obj: window, scope: {lazy}});
+    const searchbarSandbox = Tabmix.getSandbox(window, {scope: {lazy}});
 
     // Personas Interactive Theme Engine 1.6.5
     let pIte = fnString.indexOf("BTPIServices") > -1;
