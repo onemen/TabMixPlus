@@ -73,17 +73,78 @@ jobs:
           node -e '
             let content = fs.readFileSync("CHANGELOG.md", "utf8");
             content = content.replace(/dev-Build/g, "dev-build");
-            let newContent = content.replace("### :wrench: Chores", "### :wrench: Maintenance").split("\n").slice(5);
-            newContent = newContent.map(line => {
-              return line
-                .replace(" *(commit by [@onemen](https://github.com/onemen))*", "")
-                .replace(/PR (\[#\d+\].*)?\s?by \[@onemen\].*?\)/g, "$1")
-                .replace(/-\s*(\[.{9}\][^)]*\))\s-\s(.*)/g, "- $2 ($1)")
-                .replace(/__/g, "\\_\\_")
-                .replace(/followup/gi, "follow up")
-                .replace(/(-\s*)(\w)/g, (_, p1, p2) => p1 + p2.toUpperCase())
-                .replace(/(Bug|bug)\s(\d{5,7})/g, "[$&](https://bugzilla.mozilla.org/show_bug.cgi?id=$2)");
+
+            const contentLines = content.replace("### :wrench: Chores", "### :wrench: Maintenance").split("\n").slice(5);
+
+            let mainContentLines = [];
+            let footerLines = [];
+            let processingFooter = false;
+
+            for (const line of contentLines) {
+              if (line.match(/^\[.*\]:/)) {
+                processingFooter = true;
+              }
+
+              if (processingFooter) {
+                footerLines.push(line);
+              } else {
+                mainContentLines.push(line);
+              }
+            }
+
+            mainContentLines = mainContentLines.map(line => {
+              if (line.startsWith("- ")) {
+                return line
+                  .replace(/ \*\(commit by \[@[\w-]+\]\(https:\/\/github\.com\/[\w-]+\)\)\*/g, "")
+                  .replace(/PR (\[#\d+\].*)?\s?by \[@onemen\].*?\)/g, "$1")
+                  .replace(/-\s*(\[.{9}\][^)]*\))\s-\s(.*)/g, "- $2 ($1)")
+                  .replace(/__/g, "\\_\\_")
+                  .replace(/followup/gi, "follow up")
+                  .replace(/(-\s*)(\w)/g, (_, p1, p2) => p1 + p2.toUpperCase())
+                  .replace(/(Bug|bug)\s(\d{5,7})/g, "[$&](https://bugzilla.mozilla.org/show_bug.cgi?id=$2)");
+              }
+
+              return line;
             });
+
+            const titleMap = new Map();
+            const processedLines = [];
+
+            for (const line of mainContentLines) {
+              if (line.startsWith("- ") && line.includes("](https://github.com/onemen/TabMixPlus/commit/")) {
+                const titleMatch = line.match(/- (.+?)\s\(\[`[\w\d]+`\]/);
+                if (titleMatch) {
+                  const title = titleMatch[1];
+
+                  if (titleMap.has(title)) {
+                    const commitMatch = line.match(/\(\[`([\w\d]+)`\]\(https:\/\/github\.com\/onemen\/TabMixPlus\/commit\/([\w\d]+)\)\)/);
+                    if (commitMatch) {
+                      const existingLine = titleMap.get(title);
+                      const existingLineIndex = processedLines.indexOf(existingLine);
+
+                      const linkStr = `[\`${commitMatch[1]}\`](https://github.com/onemen/TabMixPlus/commit/${commitMatch[2]})`;
+
+                      let updatedLine;
+                      if (existingLine.endsWith(")")) {
+                        updatedLine = existingLine.replace(/\)$/,  `, ${linkStr})`);
+                      } else {
+                        updatedLine = `${existingLine} (${linkStr})`;
+                      }
+
+                      processedLines[existingLineIndex] = updatedLine;
+                      titleMap.set(title, updatedLine);
+                      continue;
+                    }
+                  } else {
+                    titleMap.set(title, line);
+                  }
+                }
+              }
+
+              processedLines.push(line);
+            }
+
+            const newContent = [...processedLines, ...footerLines];
             newContent.unshift("${{ env.NOTES }}");
             fs.writeFileSync("CHANGELOG.md", newContent.join("\n"));
           '
