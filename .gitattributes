@@ -1,0 +1,3 @@
+# Maintain executable permissions on scripts
+*.js text eol=lf
+.github/scripts/*.js text eol=lf

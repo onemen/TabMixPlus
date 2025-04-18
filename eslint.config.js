@@ -348,6 +348,22 @@ export default [
     },
   },
 
+  {
+    name: "tabmix/github-scripts",
+    files: [".github/scripts/**"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: globals.node,
+    },
+    rules: {
+      "mozilla/avoid-Date-timing": "off",
+      "no-continue": "off",
+      "no-var": "error",
+      "prefer-const": "error",
+    },
+  },
+
   // for .d.ts files only
   ...[
     ...tseslint.configs.recommended.map(conf => ({

@@ -19,6 +19,10 @@ jobs:
           fetch-depth: 0
           ref: main
 
+      - name: Make scripts executable
+        run: |
+          chmod +x .github/scripts/*.js
+
       - name: Set version in install.rdf
         id: set_version
         run: |
@@ -26,24 +30,8 @@ jobs:
           echo "PREVIOUS_TAG=$previous_tag" >> $GITHUB_ENV
           changelog_exist=$( [[ $(git rev-parse $previous_tag) != $(git rev-parse HEAD) ]] && echo true || echo false )
           echo "CHANGELOG_EXIST=$changelog_exist" >> $GITHUB_OUTPUT
-          function next_version() {
-            local version=$(echo $previous_tag | cut -c 2-)
-            if [[ $version =~ ^([0-9]+\.[0-9]+\.[0-9]+-pre\.)([0-9]+)$ ]]; then
-              local prefix=${BASH_REMATCH[1]}
-              local number=${BASH_REMATCH[2]}
-              let "number++"
-              echo "${prefix}${number}"
-            else
-              local IFS='.'
-              local -a parts=($version)
-              let "parts[-1]++"
-              echo "${parts[*]}"
-            fi
-          }
-          version=$(next_version)
-          date=$(date +'%Y%m%d.%H%M')
-          sed -i 's/10.0.0-unbundeled/'"$version"-"$date"'/; s/updates.json/updates-dev-build.json/' addon/install.rdf
-          echo "next version: $version-$date"
+          echo "CHANGELOG_EXIST=$changelog_exist" >> $GITHUB_ENV
+          node ./.github/scripts/calculate_version.js "$previous_tag"
 
       - name: Zip addon folder
         run: |
@@ -52,7 +40,7 @@ jobs:
 
       - name: Update dev-build tag
         run: |
-          if [ $(git rev-parse dev-build) != $(git rev-parse HEAD) ]; then
+          if [ $(git rev-parse dev-build 2>/dev/null || echo "") != $(git rev-parse HEAD) ]; then
             git tag -d dev-build || true
             git tag dev-build HEAD
             git push origin -f dev-build
@@ -67,101 +55,14 @@ jobs:
           toTag: ${{ env.PREVIOUS_TAG }}
           excludeTypes: ''
 
-      - name: Modify CHANGELOG
+      - name: Process CHANGELOG
         if: ${{ steps.set_version.outputs.CHANGELOG_EXIST == 'true' }}
-        run: |
-          node -e '
-            let content = fs.readFileSync("CHANGELOG.md", "utf8");
-            content = content.replace(/dev-Build/g, "dev-build");
-
-            const contentLines = content.replace("### :wrench: Chores", "### :wrench: Maintenance").split("\n").slice(5);
-
-            let mainContentLines = [];
-            let footerLines = [];
-            let processingFooter = false;
-
-            for (const line of contentLines) {
-              if (line.match(/^\[.*\]:/)) {
-                processingFooter = true;
-              }
-
-              if (processingFooter) {
-                footerLines.push(line);
-              } else {
-                mainContentLines.push(line);
-              }
-            }
-
-            mainContentLines = mainContentLines.map(line => {
-              if (line.startsWith("- ")) {
-                return line
-                  .replace(/ \*\(commit by \[@[\w-]+\]\(https:\/\/github\.com\/[\w-]+\)\)\*/g, "")
-                  .replace(/PR (\[#\d+\].*)?\s?by \[@onemen\].*?\)/g, "$1")
-                  .replace(/-\s*(\[.{9}\][^)]*\))\s-\s(.*)/g, "- $2 ($1)")
-                  .replace(/__/g, "\\_\\_")
-                  .replace(/followup/gi, "follow up")
-                  .replace(/(-\s*)(\w)/g, (_, p1, p2) => p1 + p2.toUpperCase())
-                  .replace(/(Bug|bug)\s(\d{5,7})/g, "[$&](https://bugzilla.mozilla.org/show_bug.cgi?id=$2)");
-              }
-
-              return line;
-            });
-
-            const titleMap = new Map();
-            const processedLines = [];
-
-            for (const line of mainContentLines) {
-              if (line.startsWith("- ") && line.includes("](https://github.com/onemen/TabMixPlus/commit/")) {
-                const titleMatch = line.match(/- (.+?)\s\(\[`[\w\d]+`\]/);
-                if (titleMatch) {
-                  const title = titleMatch[1];
-
-                  if (titleMap.has(title)) {
-                    const commitMatch = line.match(/\(\[`([\w\d]+)`\]\(https:\/\/github\.com\/onemen\/TabMixPlus\/commit\/([\w\d]+)\)\)/);
-                    if (commitMatch) {
-                      const existingLine = titleMap.get(title);
-                      const existingLineIndex = processedLines.indexOf(existingLine);
-
-                      const linkStr = `[\`${commitMatch[1]}\`](https://github.com/onemen/TabMixPlus/commit/${commitMatch[2]})`;
-
-                      let updatedLine;
-                      if (existingLine.endsWith(")")) {
-                        updatedLine = existingLine.replace(/\)$/,  `, ${linkStr})`);
-                      } else {
-                        updatedLine = `${existingLine} (${linkStr})`;
-                      }
-
-                      processedLines[existingLineIndex] = updatedLine;
-                      titleMap.set(title, updatedLine);
-                      continue;
-                    }
-                  } else {
-                    titleMap.set(title, line);
-                  }
-                }
-              }
-
-              processedLines.push(line);
-            }
-
-            const newContent = [...processedLines, ...footerLines];
-            newContent.unshift("${{ env.NOTES }}");
-            fs.writeFileSync("CHANGELOG.md", newContent.join("\n"));
-          '
+        run: node ./.github/scripts/process_changelog.js
 
       - name: Upload release asset to GitHub
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          if [ "${{ steps.set_version.outputs.CHANGELOG_EXIST }}" == "true" ]; then
-            cat CHANGELOG.md | sed 's/dev-Build/dev-build/g' > /tmp/CHANGELOG_FIXED.md
-            gh release edit dev-build --draft=false --notes-file=/tmp/CHANGELOG_FIXED.md
-          else
-            url=https://github.com/onemen/TabMixPlus/releases/tag/${{ env.PREVIOUS_TAG }}
-            notes="${{ env.NOTES }}<br /><br />No changes since [${{ env.PREVIOUS_TAG }}]($url)"
-            gh release edit dev-build --draft=false --notes="$notes"
-          fi
-          gh release upload dev-build /tmp/${{ env.XPI_NAME }}.xpi --clobber
+        run: node ./.github/scripts/create_github_release.js
 
       - name: Update tabmixplus-docs
         env:
