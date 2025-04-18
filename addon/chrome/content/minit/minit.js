@@ -15,8 +15,12 @@ var TMP_tabDNDObserver = {
   _multirowMargin: 0,
   _moveTabOnDragging: true,
   _hideTooltipTimeout: 0,
-  // @ts-expect-error - we add this property lazyly for Firefox 139+
-  TabMetrics: {},
+  // we add this property lazily for Firefox 138+
+  TabMetrics: {
+    userTriggeredContext: s => ({isUserTriggered: true, telemetrySource: s ?? "unknown"}),
+    // @ts-expect-error
+    METRIC_SOURCE: {},
+  },
 
   init: function TMP_tabDNDObserver_init() {
     var tabBar = gBrowser.tabContainer;
@@ -44,7 +48,7 @@ var TMP_tabDNDObserver = {
           lazy: {},
         };
 
-        if (Tabmix.isVersion(1390)) {
+        if (Tabmix.isVersion(1380)) {
           const lazy = {};
 
           ChromeUtils.defineESModuleGetters(lazy, {
@@ -210,6 +214,10 @@ var TMP_tabDNDObserver = {
           sandbox: localSandbox,
         }
       );
+
+      ChromeUtils.defineESModuleGetters(this, {
+        TabMetrics: "moz-src:///browser/components/tabbrowser/TabMetrics.sys.mjs",
+      });
     } else {
       tabBar._getDragTarget = function (event, options = {}) {
         return this._getDragTargetTab(event, {ignoreTabSides: Boolean(options.ignoreSides)});
@@ -219,17 +227,6 @@ var TMP_tabDNDObserver = {
         Boolean(element?.classList?.contains("tab-group-label"));
       // @ts-expect-error - override isTab for older versions
       gBrowser.isTab = element => Boolean(element?.tagName == "tab");
-    }
-
-    if (Tabmix.isVersion(1390)) {
-      ChromeUtils.defineESModuleGetters(this, {
-        TabMetrics: "moz-src:///browser/components/tabbrowser/TabMetrics.sys.mjs",
-      });
-    } else {
-      // @ts-expect-error - override TabMetrics for older versions
-      this.TabMetrics.userTriggeredContext = () => {};
-      // @ts-expect-error - override TabMetrics for older versions
-      this.TabMetrics.METRIC_SOURCE = {};
     }
 
     function tabmixHandleMoveString() {
