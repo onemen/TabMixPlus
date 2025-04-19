@@ -6,5 +6,5 @@ fi
 
 branch=$(git rev-parse --abbrev-ref HEAD)
 if [ "$branch" = "main" ]; then
-  ./node_modules/.bin/lint-staged --config ./config/husky/lint-staged.config.js
+  ./node_modules/.bin/lint-staged --concurrent true --config ./config/husky/lint-staged.config.js
 fi
