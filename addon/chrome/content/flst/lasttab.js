@@ -6,7 +6,7 @@
 // version 1.5 - October 26, 2005                                   //
 // The Initial Developer of the Original Code is Timothy Humphrey.  //
 //////////////////////////////////////////////////////////////////////
-/** @type {TabmixLastTab} */
+/** @type {TabmixLastTabNS.LastTab} */
 var TMP_LastTab = {
   CtrlKey: false,
   handleCtrlTab: true,

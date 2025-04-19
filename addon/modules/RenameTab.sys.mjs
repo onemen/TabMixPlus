@@ -76,6 +76,7 @@ export const RenameTab = {
     popup.id = "tabmixRenametab_panel";
     // prevent panel initialize. initialize before overlay break it.
     popup.hidden = true;
+    // @ts-expect-error - we can append the popup
     this._element("mainPopupSet")?.appendChild(popup);
     const ov = new Overlays(new ChromeManifest(), this.window);
     ov.load("chrome://tabmixplus/content/overlay/renameTab.xhtml").then(() => {

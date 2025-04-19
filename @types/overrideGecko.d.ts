@@ -1,34 +1,39 @@
 // reference this file before "./gecko/devtools/gecko.d.ts"
 
-type ExpandSandboxKeys = "lazy" | "_shared" | "_type" | "_id";
-type TabmixSandbox = Sandbox & Record<string, unknown> & Record<ExpandSandboxKeys, unknown>;
+interface TabmixSandbox extends nsIXPCComponents_utils_Sandbox {
+  [key: string]: unknown;
+  lazy: Record<string, unknown>;
+  _shared: unknown;
+  _type: unknown;
+  _id: unknown;
+}
 
 // merge types from lib.gecko.xpcom.d.ts with existing interface from gecko.d.ts
 declare namespace MockedExports {
   // nsIFilePicker is missing some types from lib.gecko.xpcom.d.ts
-  enum nsIFilePicker_Mode {
-    modeOpen = 0,
-    modeSave = 1,
-    modeGetFolder = 2,
-    modeOpenMultiple = 3,
-  }
-  enum nsIFilePicker_ResultCode {
-    returnOK = 0,
-    returnCancel = 1,
-    returnReplace = 2,
-  }
+  interface nsIFilePicker_Constants {
+    // From nsIFilePicker_Mode enum
+    readonly modeOpen: 0;
+    readonly modeSave: 1;
+    readonly modeGetFolder: 2;
+    readonly modeOpenMultiple: 3;
 
-  enum nsIFilePicker_CaptureTarget {
-    captureNone = 0,
-    captureDefault = 1,
-    captureUser = 2,
-    captureEnv = 3,
+    // From nsIFilePicker_ResultCode enum
+    readonly returnOK: 0;
+    readonly returnCancel: 1;
+    readonly returnReplace: 2;
+
+    // From nsIFilePicker_CaptureTarget enum
+    readonly captureNone: 0;
+    readonly captureDefault: 1;
+    readonly captureUser: 2;
+    readonly captureEnv: 3;
   }
-  type nsIFilePicker_Constants = typeof nsIFilePicker_Mode & typeof nsIFilePicker_ResultCode & typeof nsIFilePicker_CaptureTarget;
 
   interface nsIFilePicker extends nsIFilePickerXpcom {
     readonly filterText: 4;
   }
+
   interface FilePicker extends Pick<nsIFilePicker, "appendFilters" | "defaultExtension" | "defaultString"> {
     file: nsIFile;
     init: (browsingContext: BrowsingContext, title: string | null, mode: number) => void;

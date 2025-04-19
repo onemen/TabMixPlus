@@ -8,9 +8,9 @@ type f<T> = Array<T>;
 type NonEmptyArray<T> = T[] & {0: T};
 type Params = Record<string, unknown>;
 
-type XULDocumentFragment = DocumentFragment & {
+interface XULDocumentFragment extends DocumentFragment {
   attributes: NamedNodeMap;
-};
+}
 
 // for class extending MozXULElement
 interface CustomElementConstructorOverride {

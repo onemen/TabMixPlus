@@ -83,7 +83,7 @@ var Tabmix = {
       return data && !Tabmix.isVersion(data.before) ? convert(data.l10n) : id;
     }
 
-    /** @type {(HTMLElement & HTMLInputElement & XULTab) | null | undefined} */
+    /** @type {HTMLElement | null | undefined} */
     const element = document.getElementById(elementId);
     if (!element) {
       console.error(`Tabmix setFTLDataId: ${elementId} not found`);

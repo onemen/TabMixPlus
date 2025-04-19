@@ -291,10 +291,7 @@ declare namespace MockedExports {
     };
   };
 
-  type TabListView = typeof TabListViewNS & {
-    tabmix_whereToOpen?: (event: MouseEvent) => {where: string; inBackground: boolean | undefined};
-    tabmix_inBackground?: boolean;
-  };
+  type TabListView = TabListViewNS.TabListView;
   var TabListView: {
     prototype: TabListView;
     new (): TabListView;
@@ -333,9 +330,11 @@ declare namespace MockedExports {
 // this namespace is for all SessionStore useage in Tabmix
 declare namespace SessionStoreNS {
   type ClosedDataSource = Window | {sourceWindow?: Window; sourceClosedId?: number; sourceWindowId?: string; closedWindow?: boolean; restoreAll?: boolean; closedGroup?: {id: string} | undefined};
-  type ClosedGroup = Group & {tabs: ClosedTabData[]};
   type Group = {closedAt: number; collapsed: boolean; color: string; id: string; name: string};
   type WindowSource = Window | {sourceWindow: Window; private: boolean; closedTabsFromAllWindows: boolean; closedTabsFromClosedWindows: boolean};
+  interface ClosedGroup extends Group {
+    tabs: ClosedTabData[];
+  }
 
   type TabDataEntry = {url: string; title: string; triggeringPrincipal_base64?: string};
   type TabData = {
@@ -434,21 +433,29 @@ declare namespace SessionStoreNS {
 }
 
 declare namespace TabListViewNS {
-  const _window: Window;
-  const props: {
-    onOpenTab(url: string, where: string, options?: {inBackground?: boolean | undefined}): void;
-  };
-  function onClick(event: Event): void;
-  function onOpenSelected(url: string, event: MouseEvent): void;
-  function adjustContextMenu(menu: TabmixGlobals.PopupElement): void;
-  function onOpenSelectedFromContextMenu(event: Event): void;
-  function _openAllClientTabs(clientNode: Node, where: string): void;
-  const tabmix_onClick: (typeof TabListViewNS)["onClick"];
-  const tabmix_onOpenSelected: (typeof TabListViewNS)["onOpenSelected"];
-  const tabmix_adjustContextMenu: (typeof TabListViewNS)["adjustContextMenu"];
-  const tabmix_onOpenSelectedFromContextMenu: (typeof TabListViewNS)["onOpenSelectedFromContextMenu"];
-  function tabmix_whereToOpen(event: MouseEvent): {where: string; inBackground: boolean | undefined};
-  const tabmix_inBackground: boolean;
+  type ClickHandler = (event: Event) => void;
+  type OpenSelectedHandler = (url: string, event: MouseEvent) => void;
+  type AdjustContextMenuHandler = (menu: TabmixGlobals.PopupElement) => void;
+  type OpenSelectedFromContextMenuHandler = (event: Event) => void;
+
+  interface TabListView {
+    _window: Window;
+    props: {
+      onOpenTab(url: string, where: string, options?: {inBackground?: boolean | undefined}): void;
+    };
+    onClick: ClickHandler;
+    onOpenSelected: OpenSelectedHandler;
+    adjustContextMenu: AdjustContextMenuHandler;
+    onOpenSelectedFromContextMenu: OpenSelectedFromContextMenuHandler;
+    _openAllClientTabs(clientNode: Node, where: string): void;
+
+    tabmix_onClick: ClickHandler;
+    tabmix_onOpenSelected: OpenSelectedHandler;
+    tabmix_adjustContextMenu: AdjustContextMenuHandler;
+    tabmix_onOpenSelectedFromContextMenu: OpenSelectedFromContextMenuHandler;
+    tabmix_whereToOpen: (event: MouseEvent) => {where: string; inBackground: boolean | undefined};
+    tabmix_inBackground: boolean;
+  }
 }
 
 declare module "resource:///modules/AboutNewTab.sys.mjs" {
@@ -539,7 +546,9 @@ declare module "resource:///modules/SitePermissions.sys.mjs" {
 }
 
 declare module "resource:///modules/syncedtabs/TabListView.sys.mjs" {
-  export class TabListView extends MockedExports.TabListView {}
+  export class TabListView extends MockedExports.TabListView {
+    [key: string]: unknown;
+  }
 }
 
 declare module "resource:///modules/URILoadingHelper.sys.mjs" {
@@ -664,7 +673,19 @@ type versionInfo = number | string | {ff?: number; wf?: string; fp?: string; zen
 type BrowserVersion = typeof import("chrome://tabmix-resource/content/BrowserVersion.sys.mjs").isVersion;
 
 declare namespace ChangecodeModule {
-  type ChangeCodeScriptParams = {scope?: Record<string, unknown>} & ({obj: Record<string, unknown>; window?: never} | {obj?: never; window: Window});
+  interface ChangeCodeScriptParamsWithObj {
+    scope?: Record<string, unknown>;
+    obj: Record<string, unknown>;
+    window?: never;
+  }
+
+  interface ChangeCodeScriptParamsWithWindow {
+    scope?: Record<string, unknown>;
+    obj?: never;
+    window: Window;
+  }
+
+  type ChangeCodeScriptParams = ChangeCodeScriptParamsWithObj | ChangeCodeScriptParamsWithWindow;
   type ExpandTabmix = Pick<TabmixGlobal, "_debugMode" | "changeCode" | "setNewFunction" | "nonStrictMode" | "getSandbox" | "makeCode">;
   type SandboxOptions = {shared?: boolean; scope?: Record<string, unknown> | undefined};
 
@@ -775,14 +796,14 @@ declare namespace ContentClickModule {
   type MessageData = {epoch: number; json: ContentClickEvent; href?: string; node: ContentNode; result?: boolean};
   type FrameData = {href: string | null | undefined; name: string; epoch?: number};
 
-  type ExtendedWrappedNode = WrappedNode & {
+  interface ExtendedWrappedNode extends WrappedNode {
     hasAttribute(name: string): boolean;
     getAttribute(name: string): string | null;
     parentNode: WrappedNode["parentNode"] & {
       hasAttribute(name: string): boolean;
       getAttribute(name: string): string | null;
     };
-  };
+  }
 
   function wrapNode(aNode: EventTarget | ContentNode, aGetTargetIsFrame: boolean): ExtendedWrappedNode;
   function makeURI(aURL: string, aOriginCharset?: string | null, aBaseURI?: nsIURI | null): nsIURI;
@@ -882,10 +903,10 @@ declare namespace DocShellCapabilitiesModule {
     reload?: boolean;
   }
 
-  type MenuItem = Node & {
+  interface MenuItem extends Omit<Node, "parentNode"> {
     value: string;
     parentNode: {childNodes: HTMLCollectionBase_G<MenuItem>};
-  };
+  }
 
   interface DocShellCapabilities {
     init(): void;
@@ -905,10 +926,10 @@ declare namespace DownloadLastDirModule {
 }
 
 declare namespace DynamicRulesModule {
-  type Lazy = Pick<KnownModulesImports, "TabmixSvc"> & {
+  interface Lazy extends Pick<KnownModulesImports, "TabmixSvc"> {
     Prefs: MockedGeckoTypes._nsIPrefBranch;
     SSS: nsIStyleSheetService;
-  };
+  }
 
   interface StyleRule {
     text?: string;
@@ -1064,7 +1085,11 @@ interface Error {
 declare namespace LogModule {
   type Lazy = Pick<KnownModulesImports, "ContentSvc">;
 
-  type Caller = nsIStackFrame | (Error & {filename?: string});
+  interface CustomError extends Error {
+    filename?: string;
+  }
+
+  type Caller = nsIStackFrame | CustomError;
   type ShowMethod = ((...args: unknown[]) => unknown) | {obj: Record<string, unknown>; name: string; fullName: string} | string;
 
   interface Console {
@@ -1117,14 +1142,14 @@ declare namespace MergeWindowsModule {
     normalWindowsCount: number;
   }
 
-  type BrowserTab = Tab & {
+  interface BrowserTab extends Tab {
     __tabmixTabBrowser?: TabBrowser;
     _tabmix_movepopup_promise?: {
       promise: Promise<Tab | null>;
       resolve: (value: Tab | null) => void;
       reject: (reason?: any) => void;
     };
-  };
+  }
 
   interface MergeWindows {
     prefs: nsIPrefBranchXpcom;
@@ -1239,15 +1264,20 @@ declare namespace PlacesModule {
 declare namespace RenameTabModule {
   type Lazy = Pick<KnownModulesImports, "TabmixPlacesUtils">;
 
-  type Target = EventTarget & RenameTabPanel & {checked: boolean; value: string};
-  interface RenameEvent extends Omit<MouseEvent | InputEvent | Event, "target">, Omit<KeyboardEvent, "target"> {
+  type RenameEventListener = ((event: RenameEvent) => void) | {handleEvent(event: RenameEvent): void};
+  interface RenameTabPanel extends Omit<CustomXULPanel, "addEventListener" | "removeEventListener"> {
+    addEventListener(type: string, listener: RenameEventListener | null, options?: AddEventListenerOptions | boolean, wantsUntrusted?: boolean | null): void;
+    removeEventListener(type: string, listener: RenameEventListener | null, options?: EventListenerOptions | boolean): void;
+  }
+
+  interface Target extends RenameTabPanel {
+    checked: boolean;
+    value: string;
+  }
+
+  interface RenameEvent extends Omit<MouseEvent | InputEvent | Event, "target" | "originalTarget">, Omit<KeyboardEvent, "target" | "originalTarget"> {
     target: Target;
     originalTarget: Target;
-  }
-  type EventListener = ((event: RenameEvent) => void) | {handleEvent(event: RenameEvent): void};
-  interface RenameTabPanel extends Omit<CustomXULPanel, "addEventListener" | "removeEventListener"> {
-    addEventListener(type: string, listener: EventListener | null, options?: AddEventListenerOptions | boolean, wantsUntrusted?: boolean | null): void;
-    removeEventListener(type: string, listener: EventListener | null, options?: EventListenerOptions | boolean): void;
   }
 
   interface RenameTab {
@@ -1289,7 +1319,11 @@ declare namespace ScriptsLoaderModule {
 }
 
 declare namespace ShortcutsModule {
-  type KeyElement = Element & {_id: string; oncommand?: () => void; ownerGlobal: Window};
+  interface KeyElement extends Element {
+    _id: string;
+    oncommand?: () => void;
+    ownerGlobal: WindowProxy;
+  }
   type ShortcutKey = {modifiers: string; key: string; keycode: string; disabled?: boolean};
   type ShortcutData = {id?: string; default?: string; command?: number | ((tab: Tab) => void); label?: string; value?: string; reserved?: boolean; useInMenu?: boolean};
 
@@ -1376,7 +1410,9 @@ declare namespace SlideshowModule {
 
 declare namespace TabmixSvcModule {
   type importList = "BrowserUtils" | "FloorpPrefsObserver" | "isVersion" | "SessionStore" | "SyncedTabs" | "TabmixPlacesUtils";
-  type Lazy = Pick<KnownModulesImports, importList> & {Platform: string};
+  interface Lazy extends Pick<KnownModulesImports, importList> {
+    Platform: string;
+  }
 
   interface TabmixSvc {
     readonly aboutBlank: string;
@@ -1444,11 +1480,11 @@ declare namespace TabmixWidgetsModule {
   type importList = "CustomizableUI" | "isVersion";
   type Lazy = Pick<KnownModulesImports, importList>;
 
-  type WidgetElement = Omit<HTMLElement, "HTMLCollection"> & {
+  interface WidgetElement extends Omit<HTMLElement, "HTMLCollection"> {
     firstChild: HTMLElement;
     children: HTMLCollection & [HTMLButtonElement, HTMLElement];
-    ownerGlobal: Window;
-  };
+    ownerGlobal: WindowProxy;
+  }
 
   function onBuild(node: WidgetElement, document?: Document): void;
 
@@ -1465,7 +1501,9 @@ declare namespace TabmixWidgetsModule {
     destroy(uninstall?: boolean): void;
   }
 
-  type TabDragEvent = Omit<DragEvent, "target"> & {target: HTMLButtonElement};
+  interface TabDragEvent extends Omit<DragEvent, "target"> {
+    target: HTMLButtonElement;
+  }
   interface UndocloseTabButtonObserver {
     onDragOver(aEvent: TabDragEvent): boolean;
     onDragExit(aEvent: TabDragEvent): void;
@@ -1591,7 +1629,7 @@ declare namespace TabmixModules {
     version: BrowserVersion;
   }
 
-  type WindowParams = LoadURIOptions & {
+  interface WindowParams extends LoadURIOptions {
     allowInheritPrincipal?: boolean;
     allowThirdPartyFixup?: boolean;
     forceAboutBlankViewerInCurrent: boolean;
@@ -1599,7 +1637,7 @@ declare namespace TabmixModules {
     originPrincipal: nsIPrincipal;
     originStoragePrincipal: nsIPrincipal;
     userContextId?: number;
-  };
+  }
 
   interface SingleWindowModeUtils {
     getBrowserWindow(aExclude: Window): Window | null;
@@ -1621,11 +1659,21 @@ declare namespace TabmixModules {
 
 // global helpers
 declare namespace TabmixGlobals {
-  type ButtonEvent = Omit<MouseEvent, "target"> & {target: HTMLButtonElement};
   type checkForCtrlClick = (event: PopupEvent) => void;
   type handleButtonEvent = (event: ButtonEvent) => void;
-  type Popup = PopupElement & {_tab: Tab; initialized: boolean; listenersAdded: boolean; ownerGlobal: WindowProxy};
-  type PopupEvent = Omit<MouseEvent, "target" | "originalTarget"> & {target: Menuitem; originalTarget: Menuitem};
+  interface ButtonEvent extends Omit<MouseEvent, "target"> {
+    target: HTMLButtonElement;
+  }
+  interface Popup extends PopupElement {
+    _tab: Tab;
+    initialized: boolean;
+    listenersAdded: boolean;
+    ownerGlobal: WindowProxy;
+  }
+  interface PopupEvent extends Omit<MouseEvent, "target" | "originalTarget"> {
+    target: Menuitem;
+    originalTarget: Menuitem;
+  }
 
   interface CustomPanelView extends HTMLElement {
     lastChild: HTMLMenuElement;
@@ -1635,7 +1683,7 @@ declare namespace TabmixGlobals {
     };
   }
 
-  type Menuitem = Omit<HTMLMenuElement, "parentNode"> & {
+  interface Menuitem extends Omit<HTMLMenuElement, "parentNode"> {
     readonly parentNode: PopupElement;
     readonly triggerNode: Menuitem;
     menupopup: PopupElement;
@@ -1651,7 +1699,7 @@ declare namespace TabmixGlobals {
     ownerGlobal: WindowProxy;
     remove(): void;
     tab: Tab;
-  };
+  }
 
   interface ScrollBox extends Menuitem {
     ensureElementIsVisible: (item: Menuitem) => void;

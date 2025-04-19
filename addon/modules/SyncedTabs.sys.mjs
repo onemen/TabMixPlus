@@ -32,7 +32,9 @@ export const SyncedTabs = {
       TabListView.prototype[aFn] = TabListView.prototype[tabmixName];
       delete TabListView.prototype[tabmixName];
     });
+    // @ts-expect-error - Properties exist at runtime when this code is called
     delete TabListView.prototype.tabmix_whereToOpen;
+    // @ts-expect-error - Properties exist at runtime when this code is called
     delete TabListView.prototype.tabmix_inBackground;
   },
 
@@ -43,7 +45,7 @@ export const SyncedTabs = {
       TabListView.prototype[`tabmix_${aFn}`] = TabListView.prototype[aFn];
     });
 
-    /** @type {TabListViewNS["tabmix_whereToOpen"]} */
+    /** @type {TabListViewNS.TabListView["tabmix_whereToOpen"]} */
     TabListView.prototype.tabmix_whereToOpen = function (event) {
       let window = getChromeWindow(this._window);
       let where = window.BrowserUtils.whereToOpenLink(event);
@@ -82,7 +84,7 @@ export const SyncedTabs = {
       )
       .toCode();
 
-    /** @type {TabListViewNS["onOpenSelected"]} */
+    /** @type {TabListViewNS.TabListView["onOpenSelected"]} */
     TabListView.prototype.onOpenSelected = function (url, event) {
       let {where, inBackground} = this.tabmix_whereToOpen(event);
       this.props.onOpenTab(url, where, {inBackground});
@@ -96,7 +98,7 @@ export const SyncedTabs = {
       ._replace("private:", "inBackground: this.tabmix_inBackground,\n        $&")
       .toCode();
 
-    /** @type {TabListViewNS["adjustContextMenu"]} */
+    /** @type {TabListViewNS.TabListView["adjustContextMenu"]} */
     TabListView.prototype.adjustContextMenu = function (menu) {
       this.tabmix_adjustContextMenu(menu);
       if (menu.id == "SyncedTabsSidebarContext") {

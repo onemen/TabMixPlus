@@ -164,7 +164,10 @@ declare namespace BottomToolbarUtils {
 }
 
 type PopupEvent = TabmixGlobals.PopupEvent;
-type MenuPopupEvent = Omit<MouseEvent, "target" | "originalTarget"> & {target: ClosedObjectsUtils.PopupElement; originalTarget: ClosedObjectsUtils.PopupElement};
+interface MenuPopupEvent extends Omit<MouseEvent, "target" | "originalTarget"> {
+  target: ClosedObjectsUtils.PopupElement;
+  originalTarget: ClosedObjectsUtils.PopupElement;
+}
 
 declare namespace ClosedObjectsUtils {
   type CustomPanelView = TabmixGlobals.CustomPanelView;
@@ -172,9 +175,15 @@ declare namespace ClosedObjectsUtils {
   type ScrollBox = TabmixGlobals.ScrollBox;
   type PopupElement = TabmixGlobals.PopupElement;
 
-  type PopupOptions = Omit<OpenPopupOptions, "triggerEvent"> & {triggerEvent?: PopupEvent | null};
   type OpenPopup = (anchorElement?: Menuitem | null, options?: PopupOptions | string, x?: number, y?: number, isContextMenu?: boolean, attributesOverride?: boolean, triggerEvent?: PopupEvent) => void;
-  type ButtonEvent = Omit<MouseEvent, "target"> & {target: HTMLButtonElement};
+
+  interface PopupOptions extends Omit<OpenPopupOptions, "triggerEvent"> {
+    triggerEvent?: PopupEvent | null;
+  }
+
+  interface ButtonEvent extends Omit<MouseEvent, "target"> {
+    target: HTMLButtonElement;
+  }
 
   let _initialized_closedTabs: boolean;
   let _initialized_closedWindows: boolean;
@@ -224,7 +233,10 @@ declare namespace MultiRow {
 }
 
 declare namespace NavToolbox {
-  type _MouseEvent = MouseEvent & {__tabmix__whereToOpen?: WhereToOpen; target: EventTarget};
+  interface _MouseEvent extends MouseEvent {
+    __tabmix__whereToOpen?: WhereToOpen;
+    target: EventTarget;
+  }
   type OnWidgetAfterDOMChange = MockedExports.CustomizableUIListener["onWidgetAfterDOMChange"];
 
   let customizeStarted: boolean;
@@ -292,7 +304,8 @@ type AddTabParams = {
   url?: string;
 };
 
-type loadURIArgs = [browser: Browser, uri: string | URI, params?: LoadURIOptions & AddTabParams];
+interface LoadURIParams extends LoadURIOptions, AddTabParams {}
+type loadURIArgs = [browser: Browser, uri: string | URI, params?: LoadURIParams];
 
 declare namespace Tablib {
   const labels: string[];
@@ -336,8 +349,12 @@ declare namespace TabmixClosedTabsNS {
   type Menuitem = ClosedObjectsUtils.Menuitem;
   type ButtonEvent = TabmixGlobals.ButtonEvent;
   type ClosedGroup = {id: string; sourceClosedId: number; sourceWindowId: string};
-  type MenuItemInClosedGroup = HTMLElement & {closedGroup: ClosedGroup; _tabmix_middleClicked?: boolean};
   type ClosedTabsInfo = {tabs: ClosedTabData[]; index: {value: number}};
+
+  interface MenuItemInClosedGroup extends HTMLElement {
+    closedGroup: ClosedGroup;
+    _tabmix_middleClicked?: boolean;
+  }
 
   let _buttonBroadcaster: HTMLElement | null;
   const buttonBroadcaster: HTMLElement;

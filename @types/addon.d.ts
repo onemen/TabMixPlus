@@ -303,7 +303,9 @@ declare namespace TabmixArrowScrollboxNS {
     updateOverflow: (this: ASB, isOverflow: boolean) => void;
   }
 
-  type RSBDragEvent = DragEvent & {originalTarget: HTMLButtonElement};
+  interface RSBDragEvent extends DragEvent {
+    originalTarget: HTMLButtonElement;
+  }
 
   interface CustomElementEventMap extends ElementEventMap {
     dragleave: RSBDragEvent;
@@ -350,51 +352,68 @@ declare namespace TabmixContextNS {
 }
 
 declare namespace TabmixEventListenerNS {
-  type TabEvent = Omit<UIEvent | CustomEvent, "target"> & {target: Tab};
+  interface CustomUIEvent extends Omit<UIEvent, "target"> {
+    target: Tab;
+  }
 
-  let _onOpenTimeout: number | null;
-  let _tabEvents: string[];
-  function init(): void;
-  function handleEvent(aEvent: TabEvent | WheelEvent): void;
-  function toggleEventListener(aObj: MockedGeckoTypes.TabContainer, aArray: string[], aEnable: boolean, aHandler?: EventListenerOrEventListenerObject): void;
-  function _onLoad(aType: "load" | "DOMContentLoaded"): void;
-  function onContentLoaded(): void;
-  function onWindowOpen(): void;
-  let tabWidthCache: WeakMap<WeakKey, number>;
-  function onTabAttrModified(aEvent: TabEvent): void;
-  function onSSWindowRestored(): Promise<void>;
-  function onSSTabRestored(tab: Tab): void;
-  function onFullScreen(enterFS: boolean): void;
-  function showNavToolbox(): void;
-  function updateMouseTargetRect(): void;
-  function _updateMarginBottom(aMargin: string): void;
-  function _expandCallback(): void;
-  function toggleTabbarVisibility(aShow: boolean, aAnimate?: boolean): void;
-  function updateMultiRow(aReset?: boolean): void;
-  function onTabOpen(aEvent: TabEvent): void;
-  function onTabBrowserInserted(event: TabEvent): void;
-  let lastTimeTabOpened: number;
-  function onTabOpen_delayUpdateTabBar(aTab: Tab): void;
-  function onTabOpen_updateTabBar(aTab: Tab): void;
-  function onTabClose(aEvent: TabEvent): void;
-  function onTabClose_updateTabBar(aTab: Tab): void;
-  function onTabSelect(aEvent: TabEvent): void;
-  function updateDisplay(tab: Tab): void;
-  function onTabMove(aEvent: TabEvent): void;
-  function onTabUnpinned(aEvent: TabEvent): void;
-  function onTabBarScroll(aEvent: WheelEvent): void;
-  function onWindowClose(): void;
-  function setTabAttribute(aTab: Tab): void;
-  function addGroupMutationObserver(): void;
+  interface CustomEventWithTab extends Omit<CustomEvent, "target"> {
+    target: Tab;
+  }
+
+  type TabEvent = CustomUIEvent | CustomEventWithTab;
+
   function _updateAttrib(aGetAtt: string, aGetValue: string, aAtt: string, aValue: string): void;
+
+  interface EventListeners {
+    _onOpenTimeout: number | null;
+    _tabEvents: string[];
+    tabsAlreadyOpened?: boolean;
+    lastTimeTabOpened: number;
+    tabWidthCache: WeakMap<WeakKey, number>;
+
+    // Methods
+    init(): void;
+    handleEvent(aEvent: TabEvent | WheelEvent): void;
+    toggleEventListener(aObj: MockedGeckoTypes.TabContainer, aArray: string[], aEnable: boolean, aHandler?: EventListenerOrEventListenerObject): void;
+    _onLoad(aType: "load" | "DOMContentLoaded"): void;
+    onContentLoaded(): void;
+    onWindowOpen(): void;
+    onTabAttrModified(aEvent: TabEvent): void;
+    onSSWindowRestored(): Promise<void>;
+    onSSTabRestored(tab: Tab): void;
+    onFullScreen(enterFS: boolean): void;
+    showNavToolbox(): void;
+    updateMouseTargetRect(): void;
+    _updateMarginBottom(aMargin: string): void;
+    _expandCallback(): void;
+    toggleTabbarVisibility(aShow: boolean, aAnimate?: boolean): void;
+    updateMultiRow(aReset?: boolean): void;
+    onTabOpen(aEvent: TabEvent): void;
+    onTabBrowserInserted(event: TabEvent): void;
+    onTabOpen_delayUpdateTabBar(aTab: Tab): void;
+    onTabOpen_updateTabBar(aTab: Tab): void;
+    onTabClose(aEvent: TabEvent): void;
+    onTabClose_updateTabBar(aTab: Tab): void;
+    onTabSelect(aEvent: TabEvent): void;
+    updateDisplay(tab: Tab): void;
+    onTabMove(aEvent: TabEvent): void;
+    onTabUnpinned(aEvent: TabEvent): void;
+    onTabBarScroll(aEvent: WheelEvent): void;
+    onWindowClose(): void;
+    setTabAttribute(aTab: Tab): void;
+    addGroupMutationObserver(): void;
+  }
 }
 
 type OriginalNode = Node;
 declare namespace TabmixAllTabsNS {
   type PopupElement = ClosedObjectsUtils.PopupElement;
-  type ButtonEvent = Omit<MouseEvent, "target"> & {target: PopupElement};
   type TabEvent = PopupEvent;
   type Menuitem = ClosedObjectsUtils.Menuitem;
+
+  interface ButtonEvent extends Omit<MouseEvent, "target"> {
+    target: PopupElement;
+  }
 
   let _selectedItem: Menuitem | null;
   let backupLabel: string;
@@ -426,44 +445,54 @@ interface LastTabTabs {
 }
 
 declare namespace TabmixLastTabNS {
-  type KeyEvent = Omit<KeyboardEvent, "target"> & {target: TabmixAllTabsNS.Menuitem};
+  interface KeyEvent extends Omit<KeyboardEvent, "target"> {
+    target: TabmixAllTabsNS.Menuitem;
+  }
 
-  let CtrlKey: boolean;
-  let handleCtrlTab: boolean;
-  let KeyboardNavigating: boolean;
-  let KeyLock: boolean;
-  let respondToMouseInTabList: boolean;
-  let showTabList: boolean;
-  let SuppressTabListReset: boolean;
-  let TabHistory: Tab[];
-  let TabIndex: number;
-  const TabList: TabmixAllTabsNS.PopupElement;
-  let TabListLock: boolean;
-  let _inited: boolean;
-  function DisplayTabList(): void;
-  function init(): void;
-  function deinit(): void;
-  function handleEvent(event: KeyEvent): void;
-  function disallowDragwindow(keyDown: boolean): void;
-  let disallowDragState: boolean;
-  function updateDisallowDrag(disallow: boolean): void;
-  function ItemActive(event: KeyEvent): void;
-  function ItemInactive(event: KeyEvent): void;
-  function attachTab(aTab: Tab, lastRelatedTab?: Tab): void;
-  function detachTab(aTab: Tab): void;
-  function isCtrlTab(event: KeyEvent): boolean;
-  function OnKeyDown(event: KeyEvent): void;
-  let _tabs: Tab[] | null;
-  function OnKeyPress(event: KeyEvent): void;
-  let _timer: number | null;
-  function OnKeyUp(event: KeyEvent): void;
-  function onMenuCommand(event: PopupEvent): void;
-  function onPopupshowing(): void;
-  function onPopuphidden(): void;
-  function OnSelect(): void;
-  function PushSelectedTab(): void;
-  function ReadPreferences(): void;
-  function inverseIndex(index: number): number;
+  interface LastTab {
+    CtrlKey: boolean;
+    handleCtrlTab: boolean;
+    KeyboardNavigating: boolean;
+    KeyLock: boolean;
+    respondToMouseInTabList: boolean;
+    showTabList: boolean;
+    SuppressTabListReset: boolean;
+    TabHistory: Tab[];
+    TabIndex: number;
+    TabListLock: boolean;
+    _inited: boolean;
+    _tabs: Tab[] | null;
+    _timer: number | null;
+    disallowDragState: boolean;
+
+    // Getters and setters
+    get TabList(): TabmixAllTabsNS.PopupElement;
+    get tabs(): Tab[];
+    set tabs(val: null);
+
+    // Methods
+    DisplayTabList(): void;
+    init(): void;
+    deinit(): void;
+    handleEvent(event: KeyEvent): void;
+    disallowDragwindow(keyDown: boolean): void;
+    updateDisallowDrag(disallow: boolean): void;
+    ItemActive(event: KeyEvent): void;
+    ItemInactive(event: KeyEvent): void;
+    attachTab(aTab: Tab, lastRelatedTab?: Tab): void;
+    detachTab(aTab: Tab): void;
+    isCtrlTab(event: KeyEvent): boolean;
+    OnKeyDown(event: KeyEvent): void;
+    OnKeyPress(event: KeyEvent): void;
+    OnKeyUp(event: KeyEvent): void;
+    onMenuCommand(event: PopupEvent): void;
+    onPopupshowing(): void;
+    onPopuphidden(): void;
+    OnSelect(): void;
+    PushSelectedTab(): void;
+    ReadPreferences(): void;
+    inverseIndex(index: number): number;
+  }
 }
 
 declare namespace TabmixPlacesNS {
@@ -554,40 +583,50 @@ declare namespace TabmixPlacesInternalNS {
   }
 }
 
-declare namespace TabmixTabbarNS {
-  let _visibleRows: number;
-  let hideMode: number;
-  let lockallTabs: boolean;
-  let position: number;
-  const SCROLL_BUTTONS_HIDDEN: number;
-  const SCROLL_BUTTONS_LEFT_RIGHT: number;
-  const SCROLL_BUTTONS_MULTIROW: number;
-  const SCROLL_BUTTONS_RIGHT: number;
-  let flowing: string | null;
-  const isMultiRow: boolean;
-  const multiRowState: "scrollbar" | "true" | null;
-  const hasMultiRows: boolean;
-  let visibleRows: number;
-  function isButtonOnTabsToolBar(button: HTMLButtonElement): boolean;
-  function isButtonOnToolBar(button: HTMLButtonElement): boolean;
-  function newPrivateTabButton(): HTMLButtonElement | null;
-  let scrollButtonsMode: number;
-  let widthFitTitle: boolean;
-  function updateSettings(start?: boolean): void;
-  function setShowNewTabButtonAttr(): void;
-  let _updatingAppearance: boolean;
-  function updateTabsInTitlebarAppearance(): void;
-  let _updateScrollStatusTimeout: number | null;
-  function updateScrollStatus(delay?: boolean): void;
-  let _tabsPosition: "tabsonbottom" | "customtitlebar";
-  function getTabsPosition(): "tabsonbottom" | "customtitlebar";
-  const singleRowHeight: number;
-  let _waitAfterMaximized: boolean;
-  function _handleResize(): void;
-  function inSameRow(tab1: Tab | null, tab2: Tab | HTMLButtonElement | MockedGeckoTypes.MozTextLabelContainer | null): boolean;
-  function setFirstTabInRow(): void;
-  function removeShowButtonAttr(): void;
-  const _real_numPinnedTabs: number;
+interface TabmixTabbar {
+  // Properties
+  _visibleRows: number;
+  hideMode: number;
+  lockallTabs: boolean;
+  position: number;
+  scrollButtonsMode: number;
+  widthFitTitle: boolean;
+  _updateScrollStatusTimeout: number | null;
+  _updatingAppearance: boolean;
+  _tabsPosition: "tabsonbottom" | "customtitlebar";
+  singleRowHeight: number;
+  _waitAfterMaximized: boolean;
+  _real_numPinnedTabs: number;
+  _failedToEnterVerticalMode?: boolean;
+
+  // Constants
+  SCROLL_BUTTONS_HIDDEN: number;
+  SCROLL_BUTTONS_LEFT_RIGHT: number;
+  SCROLL_BUTTONS_MULTIROW: number;
+  SCROLL_BUTTONS_RIGHT: number;
+
+  // Getters/Setters
+  get flowing(): string | null;
+  set flowing(val: string | null);
+  get isMultiRow(): boolean;
+  get multiRowState(): "scrollbar" | "true" | null;
+  get hasMultiRows(): boolean;
+  get visibleRows(): number;
+  set visibleRows(rows: number);
+
+  // Methods
+  isButtonOnTabsToolBar(button: HTMLButtonElement): boolean;
+  isButtonOnToolBar(button: HTMLButtonElement): boolean;
+  newPrivateTabButton(): HTMLButtonElement | null;
+  updateSettings(start?: boolean): void;
+  setShowNewTabButtonAttr(): void;
+  updateTabsInTitlebarAppearance(): void;
+  updateScrollStatus(delay?: boolean): void;
+  getTabsPosition(): "tabsonbottom" | "customtitlebar";
+  _handleResize(): void;
+  inSameRow(tab1: Tab | null, tab2: Tab | HTMLButtonElement | MockedGeckoTypes.MozTextLabelContainer | null): boolean;
+  setFirstTabInRow(): void;
+  removeShowButtonAttr(): void;
 }
 
 declare namespace PrivateFunctionsNS {
@@ -627,13 +666,11 @@ type TabDNDObserver = typeof TabDNDObserverNS;
 type TabmixAllTabs = typeof TabmixAllTabsNS;
 type TabmixClosedTabs = typeof TabmixClosedTabsNS;
 type TabmixContext = typeof TabmixContextNS;
-type TabmixEventListener = typeof TabmixEventListenerNS & {tabsAlreadyOpened?: boolean};
-type TabmixLastTab = typeof TabmixLastTabNS & LastTabTabs;
+type TabmixEventListener = TabmixEventListenerNS.EventListeners;
 type TabmixPlaces = typeof TabmixPlacesNS;
 type TabmixprefObserver = typeof TabmixprefObserverNS;
 type TabmixProgressListener = typeof TabmixProgressListenerNS;
 type TabmixSessionStore = typeof TabmixSessionStoreNS;
-type TabmixTabbar = typeof TabmixTabbarNS & {_failedToEnterVerticalMode?: boolean};
 type TabmixTabClickOptions = typeof TabmixTabClickOptionsNS;
 
 // add types from namespaces that added in this file or in extraTabmixUtils.d.ts

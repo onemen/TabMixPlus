@@ -36,10 +36,13 @@ interface NodeList {
   [index: number]: HTMLElement;
 }
 
-type CustomElement<T, Parent = HTMLElement> = Omit<T, "parentNode" | "value"> & {
-  parentNode: Parent;
-  value: number;
-};
+type CustomElement<T, Parent = HTMLElement> =
+  T extends object ?
+    Omit<T, "parentNode" | "value"> & {
+      parentNode: Parent;
+      value: number;
+    }
+  : never;
 
 type CustomNonNullable<T> = T extends null | undefined ? never : T;
 type GenericEvent<
@@ -265,7 +268,9 @@ declare namespace MockedGeckoTypes {
     readonly startEndProps: ["top", "bottom"] | ["left", "right"];
   }
 
-  type DNDCanvas = Element & {height: number};
+  interface DNDCanvas extends Element {
+    height: number;
+  }
 
   interface TabContainer extends Element {
     _animateExpandedPinnedTabMove: (event: MouseEvent) => void;
@@ -382,8 +387,10 @@ declare namespace MockedGeckoTypes {
   type ClosingTabsEnumValues = Exclude<EnumValues, string>;
 
   type Notification = {priority: number; label: string | {"l10n-id": string; "l10n-args": object} | DocumentFragment; eventCallback?: (event: "removed" | "dismissed" | "disconnected") => void; notificationIs?: string; telemetry?: string; telemetryFilter?: string[]};
-  type NotificationMessage = HTMLElement & {value: string};
   type NotificationButton = {label: string; accessKey: string; callback?: (notification: Element, button: object, buttonElement: HTMLButtonElement, event: Event) => boolean | void; link?: string; supportPage?: boolean; popup?: string; telemetry?: string; is?: string};
+  interface NotificationMessage extends HTMLElement {
+    value: string;
+  }
   interface NotificationBox {
     PRIORITY_INFO_MEDIUM: 2;
     PRIORITY_CRITICAL_HIGH: 3;
@@ -805,15 +812,15 @@ declare module "PlacesUtils" {
 
 type OpenPopup = (anchorElement?: Element | null, options?: StringOrOpenPopupOptions, x?: number, y?: number, isContextMenu?: boolean, attributesOverride?: boolean, triggerEvent?: Event | null) => void;
 
-type ContentMouseEvent = Omit<MouseEvent, "composedTarget" | "originalTarget" | "target"> & {
+interface ContentMouseEvent extends Omit<MouseEvent, "composedTarget" | "originalTarget" | "target"> {
   composedTarget: ContentClickLinkElement;
   originalTarget: ContentClickLinkElement;
   target: ContentClickLinkElement;
   tabmix_isMultiProcessBrowser?: boolean;
   tabmix_openLinkWithHistory: boolean;
-};
+}
 
-type ContentClickLinkElement = Omit<HTMLLinkElement, "parentNode" | "parentElement" | "ownerDocument" | "ownerGlobal"> & {
+interface ContentClickLinkElement extends Omit<HTMLLinkElement, "parentNode" | "parentElement" | "ownerDocument" | "ownerGlobal"> {
   __tabmix?: boolean;
   _attributes: string[];
   host: string;
@@ -823,7 +830,7 @@ type ContentClickLinkElement = Omit<HTMLLinkElement, "parentNode" | "parentEleme
   parentNode: ContentClickLinkElement;
   readonly ownerDocument: Document;
   ownerGlobal: WindowProxy;
-};
+}
 type ContentClickLinkData = [href: string | null, linkNode: ContentClickLinkElement | null, linkPrincipal: nsIPrincipal] | null;
 
 interface HistoryMenu {

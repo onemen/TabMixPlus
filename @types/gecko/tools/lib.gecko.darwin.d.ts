@@ -46,6 +46,10 @@ interface nsIMacShellService extends nsIShellService {
 
 // https://searchfox.org/mozilla-central/source/widget/nsIMacDockSupport.idl
 
+interface nsIAppBundleLaunchOptions extends nsISupports {
+  readonly addsToRecentItems: boolean;
+}
+
 interface nsIMacDockSupport extends nsISupports {
   dockMenu: nsIStandaloneNativeMenu;
   activateApplication(aIgnoreOtherApplications: boolean): void;
@@ -53,6 +57,7 @@ interface nsIMacDockSupport extends nsISupports {
   setBadgeImage(aBadgeImage: imgIContainer, aPaintContext?: nsISVGPaintContext): void;
   readonly isAppInDock: boolean;
   ensureAppIsPinnedToDock(aAppPath?: string, aAppToReplacePath?: string): boolean;
+  launchAppBundle(aAppBundle: nsIFile, aArgs: string[], aLaunchOptions?: nsIAppBundleLaunchOptions): void;
 }
 
 // https://searchfox.org/mozilla-central/source/widget/nsIMacFinderProgress.idl
@@ -185,6 +190,7 @@ interface nsIXPCComponents_Interfaces {
   nsIAccessibleMacEvent: nsJSIID<nsIAccessibleMacEvent>;
   nsIKeychainMigrationUtils: nsJSIID<nsIKeychainMigrationUtils>;
   nsIMacShellService: nsJSIID<nsIMacShellService>;
+  nsIAppBundleLaunchOptions: nsJSIID<nsIAppBundleLaunchOptions>;
   nsIMacDockSupport: nsJSIID<nsIMacDockSupport>;
   nsIMacFinderProgressCanceledCallback: nsJSIID<nsIMacFinderProgressCanceledCallback>;
   nsIMacFinderProgress: nsJSIID<nsIMacFinderProgress>;

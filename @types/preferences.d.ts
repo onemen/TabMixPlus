@@ -7,6 +7,9 @@
 type GeneralElement = HTMLElement;
 type ShortcutKey = ShortcutsModule.ShortcutKey;
 
+// Helper type for elements that can be used with preferences
+type PreferenceCompatibleElement = HTMLElement | PreferenceElement | MousePaneNS.MenuList;
+
 interface GetByMapWithType {
   _PREF_CLASS_: PreferenceClass;
   _PREF_LIST_CLASS_: PreferencesListClass;
@@ -97,11 +100,9 @@ interface MozXULElement {
   ownerDocument: Document;
 }
 
-interface PreferencesListGetElementsByAttribute {
+interface extendedMozXULElement extends Omit<MozXULElement, "childNodes" | "getElementsByAttribute"> {
   getElementsByAttribute(name: "name", value: string): NonEmptyCollection_G<PreferenceClass>;
 }
-
-type extendedMozXULElement = Omit<MozXULElement, "childNodes"> & PreferencesListGetElementsByAttribute;
 
 interface PreferencesListOverrideMozXULElement extends extendedMozXULElement {
   childNodes: HTMLCollectionBase_G<PreferenceClass>;
@@ -127,8 +128,8 @@ type PreferenceValue = string | number | boolean | nsIFile | null;
 
 // for inner functions
 declare namespace PreferenceNS {
-  function getValue(element: HTMLElement | PreferenceElement, attribute: string): PreferenceValue;
-  function setValue(element: HTMLElement | PreferenceElement, attribute: string, value: string | number | boolean): void;
+  function getValue(element: PreferenceCompatibleElement, attribute: string): PreferenceValue;
+  function setValue(element: PreferenceCompatibleElement, attribute: string, value: string | number | boolean): void;
 }
 
 interface PreferencOverrideMozXULElement extends Omit<MozXULElement, "parentNode"> {
@@ -149,7 +150,7 @@ interface PreferenceClass extends PreferencOverrideMozXULElement {
   disabled: boolean;
   getElementValue(aElement: PreferenceElement): PreferenceValue;
   getValueByType(aElement: HTMLElement | PreferenceElement): PreferenceValue;
-  isElementEditable(aElement: HTMLElement | PreferenceElement): boolean;
+  isElementEditable(aElement: PreferenceCompatibleElement): boolean;
   inverted: boolean;
   locked: boolean;
   get name(): string;
@@ -159,7 +160,7 @@ interface PreferenceClass extends PreferencOverrideMozXULElement {
   get stringValue(): string;
   readonly preferences: PreferencesListClass;
   readonly: boolean;
-  setElementValue(aElement: HTMLElement | PreferenceElement): void;
+  setElementValue(aElement: HTMLElement | PreferenceElement | MousePaneNS.MenuList): void;
   get tabIndex(): number;
   set tabIndex(val: number);
   get type(): string;
@@ -171,7 +172,10 @@ interface PreferenceClass extends PreferencOverrideMozXULElement {
   set valueFromPreferences(val: PreferenceValue);
 }
 
-type PaneEvent = Omit<Event, "target"> & {target: PreferenceElement; sourceEvent: PaneEvent};
+interface PaneEvent extends Omit<Event, "target"> {
+  target: PreferenceElement;
+  sourceEvent: PaneEvent;
+}
 
 interface DeferredTask {
   arm(): void;
@@ -186,10 +190,10 @@ interface DeferredTaskConstructor {
 }
 
 // PreferenceElement: any element with attribute preference with value to preference
-type PreferenceElement = Omit<HTMLInputElement, "value"> & {
+interface PreferenceElement extends Omit<HTMLInputElement, "value"> {
   _deferredValueUpdateTask?: DeferredTask;
   value: string | number | boolean;
-};
+}
 
 interface ResizeObserver {
   disconnect(): void;
@@ -232,7 +236,11 @@ declare interface PrefPaneClass extends PrefPaneOverrideMozXULElement {
   writePreferences(this: PrefPaneClass, aFlushToDisk: boolean): void;
 }
 
-type WindowEvent = Omit<KeyboardEvent, "target" | "originalTarget"> & {originalTarget: HTMLElement; target: HTMLElement; sourceEvent: WindowEvent};
+interface WindowEvent extends Omit<KeyboardEvent, "target" | "originalTarget"> {
+  originalTarget: HTMLElement;
+  target: HTMLElement;
+  sourceEvent: WindowEvent;
+}
 type ButtonsTypeWithoutNone = "accept" | "cancel" | "extra1" | "extra2" | "help" | "disclosure";
 type DialogButtonsType = "accept" | "cancel" | "extra1" | "extra2" | "help" | "disclosure" | "none";
 
@@ -336,11 +344,11 @@ interface ShortcutParent extends Omit<HTMLFieldSetElement, "childNodes"> {
 }
 
 type StyleProps = "italic" | "bold" | "underline" | "text" | "textColor" | "bg" | "bgColor" | "bgTopColor";
-type StyleElement = Omit<HTMLInputElement, "checked"> & {
+interface StyleElement extends Omit<HTMLInputElement, "checked"> {
   checked?: string | boolean;
   color?: string | boolean;
   nextSibling: HTMLLabelElement;
-};
+}
 
 interface TabstylepanelClassOverrideMozXULElement extends Omit<MozXULElement, "parentNode"> {
   parentNode: Node;
@@ -365,7 +373,11 @@ interface TabstylepanelClass extends TabstylepanelClassOverrideMozXULElement {
 }
 
 type ColorElement = HTMLInputElement;
-type ColorEvent = Omit<Event, "target"> & {target: ColorElement; originalTarget: ColorElement; sourceEvent: ColorEvent};
+interface ColorEvent extends Omit<Event, "target"> {
+  target: ColorElement;
+  originalTarget: ColorElement;
+  sourceEvent: ColorEvent;
+}
 
 interface MozColorboxOverrideMozXULElement extends Omit<MozXULElement, "addEventListener" | "closest" | "parentNode"> {
   addEventListener(type: string, listener: (this: ColorElement, ev: ColorEvent) => any, options?: boolean | AddEventListenerOptions): void;
@@ -486,16 +498,20 @@ declare namespace MousePaneNS {
     tabbox: Tabbox;
   }
 
-  type MenuList = HTMLElement & {
+  interface MenuList extends Omit<HTMLElement, "firstChild" | "previousSibling"> {
     firstChild: HTMLMenuElement;
     previousSibling: HTMLInputElement;
-    // value: number;
-  } & Record<string, string | number>;
-  type Tabbox = HTMLElement & {
+    // Allow indexing with string to get number values
+    [key: string]: string | number | Element | NodeListOf<Element> | null | undefined | FunctionWithAny | any;
+  }
+  interface Tabbox extends HTMLElement {
     tabs: SelectControlElement;
     selectedTab: HTMLElement;
-  };
-  type OptionsTabs = HTMLElement & {_tabbox: Tabbox; tabbox: Tabbox};
+  }
+  interface OptionsTabs extends HTMLElement {
+    _tabbox: Tabbox;
+    tabbox: Tabbox;
+  }
 
   let _inited: boolean;
   const clickTab: MenuList;
@@ -505,9 +521,9 @@ declare namespace MousePaneNS {
   function panelSelectionChanged(event: Event & {target: SelectControlElement}, panel?: SelectControlElement): void;
   let _options: string[];
   function updatePanelPrefs(aIndex: number): void;
-  function updatePref(element: HTMLElement, prefID: string): void;
+  function updatePref(element: MenuList, prefID: string): void;
   function ensureElementIsVisible(aPopup: ArrowScrollbox): void;
-  function resetPreference(checkbox: PreferenceElement): void;
+  function resetPreference(checkbox: PreferenceElement | MousePaneNS.MenuList): void;
   function setCheckedState(menulist: MenuList): void;
   function updateDblClickTabbar(pref: PreferenceClass): void;
 }
@@ -515,7 +531,9 @@ declare namespace MousePaneNS {
 declare namespace PrefWindowNS {
   // add type fror preference elemnt, maybe it is the same as the PreferenceClass
   // it use to create it `customElements.define("preference", Preference);`
-  type PrefEvent = MouseEvent & {target: PreferenceClass};
+  interface PrefEvent extends MouseEvent {
+    target: PreferenceClass;
+  }
   let _initialized: boolean;
   const pinTabLabel: string;
   let instantApply: boolean;
@@ -548,11 +566,11 @@ declare namespace PrefWindowNS {
 }
 
 declare namespace SessionPaneNS {
-  type SessionsTabs = CustomGroupElement<HTMLElement> & {
+  interface SessionsTabs extends CustomGroupElement<HTMLElement> {
     parentNode: HTMLElement & {
       selectedTab: HTMLElement;
     };
-  };
+  }
 
   function init(): void;
 }

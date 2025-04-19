@@ -46,10 +46,10 @@ declare namespace FaviconLoaderNS {
 }
 
 declare namespace TabmixClickEventHandlerNS {
-  type GlobalThisType = Omit<typeof globalThis, "addEventListener"> & {
+  interface GlobalThisType extends Omit<typeof globalThis, "addEventListener"> {
     addEventListener(type: string, listener: (this: ContentClickLinkElement, ev: ContentMouseEvent) => unknown, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: TabmixClickEventHandler, options?: boolean | AddEventListenerOptions): void;
-  };
+  }
 
   function init(global: GlobalThisType): void;
   function handleEvent(event: ContentMouseEvent): void;

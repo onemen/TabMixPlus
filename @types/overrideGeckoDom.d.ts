@@ -2,12 +2,12 @@
 // to override `namespace ChromeUtils`
 
 // this interface add mising methods to AddonManager that are missing in lib.gecko.dom.d.ts
-type AddonType = Addon & {
+interface AddonType extends Addon {
   disable(): void;
   appDisabled: boolean;
   pendingOperations: number;
   userDisabled: boolean;
-};
+}
 
 interface AddonManagerListener {
   init(id: string): void;
@@ -98,4 +98,4 @@ interface WindowProxy {
 interface GetByMap {}
 
 // default getElementById override
-type GetElementByIdOverride<K extends keyof GetByMap | string> = K extends keyof GetByMap ? GetByMap[K] : (HTMLElement & HTMLInputElement & XULTab) | null;
+type GetElementByIdOverride<K extends keyof GetByMap | string> = K extends keyof GetByMap ? GetByMap[K] : HTMLElement | null;
