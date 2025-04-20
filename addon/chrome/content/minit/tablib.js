@@ -161,6 +161,13 @@ Tabmix.tablib = {
 
       let {index, isPending} = options || {};
 
+      // workaround for bug 1961516
+      if (callerTrace.contain("on_TabGroupCollapse") && !options.elementIndex) {
+        const group = this.selectedTab.group;
+        options.elementIndex =
+          group ? group.labelElement.elementIndex + 1 : this.tabs.length + this.tabGroups.length;
+      }
+
       if (typeof index !== "number" && callerTrace.contain("duplicateTabIn", "ssi_restoreWindow")) {
         options.index = this.tabs.length;
       }
@@ -2053,7 +2060,9 @@ Tabmix.tabsSelectionUtils = {
       }
     }
 
-    return previousTab;
+    // when previous selected tab is in collapsed group return null to fall
+    // back to default - select the next visible tab
+    return previousTab?.group?.collapsed ? null : previousTab;
   },
 
   /** Select previously selected tab in sequence */
