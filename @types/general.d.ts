@@ -284,6 +284,8 @@ declare namespace MockedGeckoTypes {
     /** @deprecated replaced with finishAnimateTabMove in firefox 138 */
     _finishAnimateTabMove: () => void;
     finishAnimateTabMove: () => void;
+    finishMoveTogetherSelectedTabs: (tab: BrowserTab) => void;
+    /** @deprecated replaced with _finishMoveTogetherSelectedTabs in firefox 138 */
     _finishMoveTogetherSelectedTabs: (tab: BrowserTab) => void;
     /** @deprecated replaced with _finishMoveTogetherSelectedTabs in firefox 133 */
     _finishGroupSelectedTabs: (tab: BrowserTab) => void;
@@ -301,6 +303,7 @@ declare namespace MockedGeckoTypes {
     get _isCustomizing(): boolean;
     _lastTabClosedByMouse: boolean;
     _lastTabToScrollIntoView?: BrowserTab;
+    _maxTabsPerRow: number;
     _notifyBackgroundTab: (aTab: BrowserTab) => void;
     _pinnedTabsLayoutCache: Record<string, unknown> | null;
     _positionPinnedTabs: () => void;
@@ -350,6 +353,9 @@ declare namespace MockedGeckoTypes {
     _expandGroupOnDrop(draggedTab: BrowserTab): void;
     _getDragTarget(event: DragEvent, options?: {ignoreSides?: boolean}): BrowserTab | null;
     _isAnimatingMoveTogetherSelectedTabs: () => boolean;
+    _isContainerVerticalPinnedGrid: boolean;
+    /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
+    _isContainerVerticalPinnedExpanded: boolean;
     _keepTabSizeLocked: boolean;
     _moveTogetherSelectedTabs: (tab: BrowserTab) => void;
     // using insteadof private method #setDragOverGroupColor since Firefox 133
@@ -400,6 +406,7 @@ declare namespace MockedGeckoTypes {
   }
 
   type moveTabToOptions = {elementIndex?: number; tabIndex?: number; forceUngrouped?: boolean; keepRelatedTabs?: boolean; telemetrySource?: MockedExports.TelemetrySource};
+  type TabMoveState = {tabIndex: number; elementIndex?: number; tabGroupId?: string};
 
   interface TabBrowser extends Browser {
     // build in methods and properties
@@ -408,11 +415,13 @@ declare namespace MockedGeckoTypes {
     };
     _endRemoveTab: (tab: BrowserTab) => void;
     _findTabToBlurTo: (aTab: BrowserTab, aExcludeTabs?: BrowserTab[]) => BrowserTab | null;
+    _getTabMoveState: (tab: BrowserTab) => TabMoveState | undefined;
     _handleTabMove: (tab: BrowserTab, moveActionCallback: () => void) => void;
     /** @deprecated replaced with pinnedTabCount in Firefox version 133 */
     readonly _numPinnedTabs: number;
     _lastRelatedTabMap: WeakMap<BrowserTab, BrowserTab>;
     _multiSelectedTabsSet: WeakSet<BrowserTab>;
+    _notifyOnTabMove: (tab: BrowserTab, previousTabState?: TabMoveState, currentTabState?: TabMoveState, metricsContext?: MockedExports.TabMetricsContext) => void;
     _removingTabs: Set<BrowserTab>;
     _selectedTab: BrowserTab;
     _setTabLabel: (tab: BrowserTab, label: string, options?: {beforeTabOpen?: boolean; isContentTitle?: boolean; isURL?: boolean}) => boolean;

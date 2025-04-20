@@ -1,6 +1,6 @@
-import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
+import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 
 /** @type {{console: LogModule.Console}} */ // @ts-ignore
 const lazy = {};
@@ -46,7 +46,7 @@ class ChangeCode {
   obj;
   fnName;
   fullName;
-  needUpdate;
+  needUpdate = false;
   silent;
   errMsg = "";
   sandbox;
@@ -95,7 +95,10 @@ class ChangeCode {
       }
     }
 
-    this.verifyPrivateMethodReplaced();
+    // Check for private methods and replace them
+    const result = verifyPrivateMethodReplaced(this._value, this.obj, this.fullName);
+    this._value = result.code;
+    this.needUpdate = this.needUpdate || result.needUpdate;
 
     this.notFound.length = 0;
   }
@@ -273,24 +276,6 @@ class ChangeCode {
     Object.assign(error, {name: caller.name, message: ""});
     return error;
   }
-
-  verifyPrivateMethodReplaced() {
-    const matches = this._value.match(/this\.#(\w+)/g);
-    if (!matches) {
-      return;
-    }
-    const privateMethods = new Set(matches.map(match => match.replace("this.#", "")));
-    const parentName = this.fullName.split(".").slice(0, -1).join(".");
-    const ex = this.getCallerData(Components.stack.caller?.caller);
-    for (const methods of privateMethods) {
-      if (typeof this.obj[`_${methods}`] === "undefined") {
-        ex.message = `Implement replacement for private method #${methods} in ${parentName} it is used by ${this.fullName}${errMsgContent}`;
-        lazy.console.reportError(ex);
-      }
-    }
-    this._value = this._value.replace(/this\.#(\w+)/g, "this._$1");
-    this.needUpdate = true;
-  }
 }
 
 /** @type {TabmixGlobal["setNewFunction"]} */
@@ -389,12 +374,41 @@ function createModuleSandbox(obj, options = {}) {
   return sandbox;
 }
 
+/** @type {ChangecodeModule["verifyPrivateMethodReplaced"]} */
+function verifyPrivateMethodReplaced(code, obj, fullName) {
+  const matches = code.match(/this\.#(\w+)/g);
+  if (!matches) {
+    return {code, needUpdate: false};
+  }
+
+  const privateMethods = new Set(matches.map(match => match.replace("this.#", "")));
+  const parts = fullName ? fullName.split(".") : [];
+  const methodName = parts.at(-1) || "";
+  const parentName = parts.slice(0, -1).join(".");
+  if (methodName) {
+    privateMethods.delete(methodName.replace(/^_/, ""));
+  }
+  const ex = lazy.console.error(Components.stack.caller?.caller);
+
+  for (const method of privateMethods) {
+    if (obj && typeof obj[`_${method}`] === "undefined") {
+      ex.message = `Implement replacement for private method #${method} in ${parentName} it is used by ${fullName || "makeCode"}${errMsgContent}`;
+      lazy.console.reportError(ex);
+    }
+  }
+
+  return {
+    code: code.replace(/this\.#(\w+)/g, "this._$1"),
+    needUpdate: true,
+  };
+}
+
 let scriptId = 0;
 
 /** @type {ChangecodeModule["_makeCode"]} */
 function _makeCode(code, sandbox) {
   if (!sandbox) {
-    throw new Error("Error: _makeCode was called with sandbox");
+    throw new Error("Error: _makeCode was called without sandbox");
   }
 
   let codeString;
@@ -482,8 +496,10 @@ const expandTabmix = {
     return updateSandboxWithScope(sandbox, scope);
   },
 
-  makeCode(code, sandbox) {
-    return _makeCode(code, sandbox ?? this._sandbox);
+  makeCode(code, obj, fullName, sandbox) {
+    // Verify and replace private methods before passing to _makeCode
+    const {code: updatedCode} = verifyPrivateMethodReplaced(code, obj, fullName);
+    return _makeCode(updatedCode, sandbox ?? this._sandbox);
   },
 };
 
@@ -494,7 +510,7 @@ export function initializeChangeCodeClass(tabmixObj, {obj, window, scope = {}}) 
   }
 
   // bound function to tabmixObj before creating the sandbox to make sure that
-  // if we are in winodw context the sanbox will be saved to tabmixObj.
+  // if we are in window context the sanbox will be saved to tabmixObj.
   Object.assign(tabmixObj, expandTabmix);
   const baseSanbox = tabmixObj.getSandbox(window ?? obj, {scope});
   tabmixObj._sandbox = baseSanbox;

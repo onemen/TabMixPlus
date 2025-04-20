@@ -29,6 +29,11 @@ var TMP_tabDNDObserver = {
       return;
     }
 
+    const tabContainerProps = {
+      parent: gBrowser.tabContainer,
+      parentName: "gBrowser.tabContainer",
+    };
+
     const localSandbox = (function () {
       let scope;
       if (Tabmix.isVersion(1370)) {
@@ -114,40 +119,44 @@ var TMP_tabDNDObserver = {
       //  gBrowser.tabContainer.on_drop
       const name =
         Tabmix.isVersion(1380) ?
-          "_isContainerVerticalPinnedGrid"
-        : "_isContainerVerticalPinnedExpanded";
-      Object.defineProperty(gBrowser.tabContainer, name, {
-        value(/** @type {Tab} */ tab) {
-          return (
-            this.verticalMode &&
-            tab.hasAttribute("pinned") &&
-            this.hasAttribute("expanded") &&
-            (Tabmix.isVersion(1380) ? !this.expandOnHover : true)
-          );
-        },
-        configurable: true,
-        enumerable: true,
+          "isContainerVerticalPinnedGrid"
+        : "isContainerVerticalPinnedExpanded";
+      gBrowser.tabContainer[`_${name}`] = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: name,
+        nextMethodName: "appendChild",
       });
 
-      gBrowser.tabContainer._animateExpandedPinnedTabMove = Tabmix.getPrivateMethod(
-        "tabbrowser-tabs",
-        "animateExpandedPinnedTabMove",
-        "_animateTabMove"
-      );
+      gBrowser.tabContainer._maxTabsPerRow = 0;
+
+      gBrowser.tabContainer._animateExpandedPinnedTabMove = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "animateExpandedPinnedTabMove",
+        nextMethodName: "_animateTabMove",
+      });
     }
 
     if (Tabmix.isVersion(1330)) {
-      gBrowser.tabContainer._setDragOverGroupColor = Tabmix.getPrivateMethod(
-        "tabbrowser-tabs",
-        "setDragOverGroupColor",
-        Tabmix.isVersion(1380) ? "finishAnimateTabMove" : "_finishAnimateTabMove"
-      );
+      gBrowser.tabContainer._setDragOverGroupColor = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "setDragOverGroupColor",
+        nextMethodName: Tabmix.isVersion(1380) ? "finishAnimateTabMove" : "_finishAnimateTabMove",
+      });
 
-      gBrowser.tabContainer._isAnimatingMoveTogetherSelectedTabs = Tabmix.getPrivateMethod(
-        "tabbrowser-tabs",
-        "isAnimatingMoveTogetherSelectedTabs",
-        "handleEvent"
-      );
+      gBrowser.tabContainer._moveTogetherSelectedTabs = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "moveTogetherSelectedTabs",
+        nextMethodName:
+          Tabmix.isVersion(1380) ?
+            "finishMoveTogetherSelectedTabs"
+          : "_finishMoveTogetherSelectedTabs",
+      });
+
+      gBrowser.tabContainer._isAnimatingMoveTogetherSelectedTabs = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "isAnimatingMoveTogetherSelectedTabs",
+        nextMethodName: "handleEvent",
+      });
     } else {
       // prevent grouping selected tabs for multi row tabbar
       Tabmix.originalFunctions._groupSelectedTabs = tabBar._groupSelectedTabs;
@@ -162,30 +171,28 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.isVersion(1340)) {
-      gBrowser.tabContainer._clearDragOverCreateGroupTimer = Tabmix.getPrivateMethod(
-        "tabbrowser-tabs",
-        "clearDragOverCreateGroupTimer",
-        "#setDragOverGroupColor"
-      );
-
       gBrowser.tabContainer._dragOverCreateGroupTimer = 0;
 
-      gBrowser.tabContainer._triggerDragOverCreateGroup = Tabmix.getPrivateMethod(
-        "tabbrowser-tabs",
-        "triggerDragOverCreateGroup",
-        "#clearDragOverCreateGroupTimer",
-        {
-          sandbox: localSandbox,
-        }
-      );
+      gBrowser.tabContainer._clearDragOverCreateGroupTimer = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "clearDragOverCreateGroupTimer",
+        nextMethodName: "#setDragOverGroupColor",
+      });
+
+      gBrowser.tabContainer._triggerDragOverCreateGroup = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "triggerDragOverCreateGroup",
+        nextMethodName: "#clearDragOverCreateGroupTimer",
+        sandbox: localSandbox,
+      });
     }
 
     if (Tabmix.isVersion(1380)) {
-      tabBar._expandGroupOnDrop = Tabmix.getPrivateMethod(
-        "tabbrowser-tabs",
-        "expandGroupOnDrop",
-        "on_drop"
-      );
+      tabBar._expandGroupOnDrop = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "expandGroupOnDrop",
+        nextMethodName: "on_drop",
+      });
 
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandGroupOnDrop")
         ._replace("isTabGroupLabel(draggedTab)", "gBrowser.isTabGroupLabel(draggedTab)")
@@ -198,22 +205,19 @@ var TMP_tabDNDObserver = {
 
       tabBar._dragTime = 0;
 
-      tabBar._getDragTarget = Tabmix.getPrivateMethod(
-        "tabbrowser-tabs",
-        "getDragTarget",
-        "#getDropIndex",
-        {
-          sandbox: localSandbox,
-        }
-      );
-      tabBar._getDropIndex = Tabmix.getPrivateMethod(
-        "tabbrowser-tabs",
-        "getDropIndex",
-        "getDropEffectForTabDrag",
-        {
-          sandbox: localSandbox,
-        }
-      );
+      tabBar._getDragTarget = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "getDragTarget",
+        nextMethodName: "#getDropIndex",
+        sandbox: localSandbox,
+      });
+
+      tabBar._getDropIndex = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "getDropIndex",
+        nextMethodName: "getDropEffectForTabDrag",
+        sandbox: localSandbox,
+      });
 
       ChromeUtils.defineESModuleGetters(this, {
         TabMetrics: "moz-src:///browser/components/tabbrowser/TabMetrics.sys.mjs",
@@ -227,6 +231,13 @@ var TMP_tabDNDObserver = {
         Boolean(element?.classList?.contains("tab-group-label"));
       // @ts-expect-error - override isTab for older versions
       gBrowser.isTab = element => Boolean(element?.tagName == "tab");
+    }
+
+    if (Tabmix.isVersion(1320)) {
+      // modify startTabDrag after all private method it uses modified above
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.startTabDrag", {
+        forceUpdate: true,
+      }).toCode();
     }
 
     function tabmixHandleMoveString() {
@@ -955,7 +966,9 @@ var TMP_tabDNDObserver = {
         return;
       }
 
-      if (Tabmix.isVersion(1330)) {
+      if (Tabmix.isVersion(1380)) {
+        tabBar.finishMoveTogetherSelectedTabs(draggedTab);
+      } else if (Tabmix.isVersion(1330)) {
         tabBar._finishMoveTogetherSelectedTabs(draggedTab);
       } else {
         tabBar._finishGroupSelectedTabs(draggedTab);
@@ -2002,37 +2015,32 @@ Tabmix.getPlacement = function (id) {
   return placement ? placement.position : -1;
 };
 
-Tabmix.getPrivateMethod = function (
-  constructor,
-  methhodName,
-  nextMethodName,
-  {constructorName, sandbox} = {}
-) {
-  const errorMsg = `can't find ${constructor}.${methhodName} function`;
-  const [name, firefoxClass] =
-    typeof constructor === "string" ?
-      [constructor, customElements.get(constructor)]
-    : [constructorName || constructor.name, constructor];
+Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodName, sandbox}) {
+  const firefoxClass = parent?.constructor;
+  const name = parentName || firefoxClass?.name;
+  const nonPrivateMethodNae = `${name}._${methodName}`;
+
+  const errorMsg = `can't find private function ${name}.#${methodName}`;
   const method = function () {};
   if (!firefoxClass) {
-    console.error(`Tabmix Error: can't find ${name} constructor element\n${errorMsg}`);
+    console.error(`Tabmix Error: can't find ${name} constructor for element\n${errorMsg}`);
     return method;
   }
+
   const code = firefoxClass
     .toString()
-    .split(` #${methhodName}`)[1] // function to extract from source code
+    .split(` #${methodName}`)[1] // function to extract from source code
     ?.split(` ${nextMethodName}`)[0] // next function in the source code
     ?.trim()
-    .replace(/this\.#(\w*)/g, "this._$1")
     // remove comments placed above the next method
     .replace(/\/\/.*$|\/\*[\s\S]*?\*\/\s*$/m, "")
     .trim();
   if (code) {
     try {
-      return Tabmix.makeCode(`_${methhodName}${code}`, sandbox);
+      return Tabmix.makeCode(`_${methodName}${code}`, parent, nonPrivateMethodNae, sandbox);
     } catch (error) {
       console.error(
-        `Tabmix Error: getPrivateMethod failed to evaluate ${constructor}.${methhodName}`,
+        `Tabmix Error: getPrivateMethod failed to evaluate ${nonPrivateMethodNae}`,
         error
       );
       return method;

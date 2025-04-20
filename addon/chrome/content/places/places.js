@@ -990,14 +990,31 @@ Tabmix.onContentLoaded = {
     }
 
     if (Tabmix.isVersion(1370)) {
+      const tabbrowserProps = {
+        parent: gBrowser,
+        parentName: "gBrowser",
+      };
+
+      if (Tabmix.isVersion(1380)) {
+        gBrowser._getTabMoveState = Tabmix.getPrivateMethod({
+          ...tabbrowserProps,
+          methodName: "getTabMoveState",
+          nextMethodName: "#notifyOnTabMove",
+        });
+
+        gBrowser._notifyOnTabMove = Tabmix.getPrivateMethod({
+          ...tabbrowserProps,
+          methodName: "notifyOnTabMove",
+          nextMethodName: "#handleTabMove",
+        });
+      }
+
       // gBrowser.pinTab call gBrowser.#handleTabMove
-      gBrowser._handleTabMove = Tabmix.getPrivateMethod(
-        // @ts-expect-error - Tabbrowser class
-        window.Tabbrowser,
-        "handleTabMove",
-        "adoptTab",
-        {constructorName: "window.Tabbrowser"}
-      );
+      gBrowser._handleTabMove = Tabmix.getPrivateMethod({
+        ...tabbrowserProps,
+        methodName: "handleTabMove",
+        nextMethodName: "adoptTab",
+      });
     }
 
     // we can't use TabPinned.

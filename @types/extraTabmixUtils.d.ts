@@ -7,7 +7,9 @@ interface Functions {
 // more methods in addon.d.ts
 interface PrivateMethods {
   // gBrowser
+  getTabMoveState: MockedGeckoTypes.TabBrowser["_getTabMoveState"];
   handleTabMove: MockedGeckoTypes.TabBrowser["_handleTabMove"];
+  notifyOnTabMove: MockedGeckoTypes.TabBrowser["_notifyOnTabMove"];
   // TabContainer
   animateExpandedPinnedTabMove: MockedGeckoTypes.TabContainer["_animateExpandedPinnedTabMove"];
   clearDragOverCreateGroupTimer: MockedGeckoTypes.TabContainer["_clearDragOverCreateGroupTimer"];
@@ -15,6 +17,9 @@ interface PrivateMethods {
   getDragTarget: MockedGeckoTypes.TabContainer["_getDragTarget"];
   getDropIndex: MockedGeckoTypes.TabContainer["_getDropIndex"];
   isAnimatingMoveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_isAnimatingMoveTogetherSelectedTabs"];
+  isContainerVerticalPinnedGrid: MockedGeckoTypes.TabContainer["_isContainerVerticalPinnedGrid"];
+  /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
+  isContainerVerticalPinnedExpanded: MockedGeckoTypes.TabContainer["_isContainerVerticalPinnedExpanded"];
   moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
   setDragOverGroupColor: MockedGeckoTypes.TabContainer["_setDragOverGroupColor"];
   triggerDragOverCreateGroup: MockedGeckoTypes.TabContainer["_triggerDragOverCreateGroup"];

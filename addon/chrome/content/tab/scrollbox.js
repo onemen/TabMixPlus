@@ -183,11 +183,13 @@ Tabmix.multiRow = {
           .toCode();
 
         if (Tabmix.isVersion(1310)) {
-          this._updateScrollButtonsDisabledState = Tabmix.getPrivateMethod(
-            "arrowscrollbox",
-            "updateScrollButtonsDisabledState",
-            "disconnectedCallback"
-          );
+          this._scrollButtonUpdatePending = false;
+          this._updateScrollButtonsDisabledState = Tabmix.getPrivateMethod({
+            parent: this,
+            parentName: "gBrowser.tabContainer.arrowscrollbox",
+            methodName: "updateScrollButtonsDisabledState",
+            nextMethodName: "disconnectedCallback",
+          });
         }
         Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")
           ._replace("if (this.isRTLScrollbox", "$& && !this.isMultiRow", {flags: "g"})

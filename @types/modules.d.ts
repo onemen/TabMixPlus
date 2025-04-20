@@ -8,9 +8,12 @@ type I10MapValue = {before: number; l10n: string};
 type I10Map = Record<string, I10MapValue>;
 
 type WindowRect = {sizemode: string | null; height: string | null; width: string | null; screenX: string | null; screenY: string | null};
-type PrivateMethodOptions = {
-  constructorName: string;
-  sandbox: TabmixSandbox;
+type PrivateMethodOptions<T> = {
+  parent: Record<string, any>;
+  parentName: string;
+  methodName: T;
+  nextMethodName: string;
+  sandbox?: TabmixSandbox;
 };
 
 // Firefox modules
@@ -692,6 +695,7 @@ declare namespace ChangecodeModule {
   function initializeChangeCodeClass(tabmixObj: TabmixGlobal, params: ChangeCodeScriptParams): TabmixSandbox;
   function updateSandboxWithScope(sandbox: TabmixSandbox, scope: Record<string, unknown>): TabmixSandbox;
   function createModuleSandbox(obj: object, options?: SandboxOptions): TabmixSandbox;
+  function verifyPrivateMethodReplaced(code: string, obj: Record<string, any> | null, fullName: string): {code: string; needUpdate: boolean};
   function _makeCode(code: string, sandbox?: TabmixSandbox): FunctionWithAny;
 
   type Options = {forceUpdate?: boolean; silent?: boolean; set?: boolean; get?: boolean; sandbox?: TabmixSandbox | undefined};
@@ -732,7 +736,6 @@ declare namespace ChangecodeModule {
     show(obj?: Record<string, unknown>, name?: string): void;
     isValidToChange(this: ChangeCodeClass, name: string): boolean;
     getCallerData(stack: nsIStackFrame, aOptions?: unknown): Error;
-    verifyPrivateMethodReplaced(this: ChangeCodeClass): void;
   }
 }
 
@@ -1587,8 +1590,8 @@ interface TabmixGlobal {
   nonStrictMode(obj: Record<string, any>, fn: string, arg?: any): void;
   setNewFunction(obj: Record<string, any>, name: string, aCode: FunctionWithAny): void;
   getSandbox(this: TabmixGlobal, obj: object, options?: ChangecodeModule.SandboxOptions): TabmixSandbox;
-  makeCode(this: TabmixGlobal, code: string, sandbox?: TabmixSandbox): FunctionWithAny;
-  getPrivateMethod<T extends keyof PrivateMethods>(constructor: string | (new (...args: any[]) => any), methodName: T, nextMethodName: string, options?: Partial<PrivateMethodOptions>): PrivateMethods[T];
+  makeCode(this: TabmixGlobal, code: string, obj: Record<string, any> | null, fullName: string, sandbox?: TabmixSandbox): FunctionWithAny;
+  getPrivateMethod<T extends keyof PrivateMethods>(options: PrivateMethodOptions<T>): PrivateMethods[T];
   removedShortcuts: HTMLDivElement;
 
   gIeTab: TabmixGlobals.gIeTab;

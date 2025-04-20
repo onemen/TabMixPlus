@@ -1181,7 +1181,7 @@ class PrefWindow extends MozXULElement {
 
     const descriptor = {
       get: getter,
-      set: Tabmix.makeCode(code, sandbox),
+      set: Tabmix.makeCode(code, null, "", sandbox),
       enumerable: true,
       configurable: true,
     };

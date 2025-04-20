@@ -80,11 +80,12 @@ export const TabmixBrowserDOMWindow = {
     );
 
     const getPrivateMethod = window.Tabmix.getPrivateMethod;
-    BrowserDOMWindow.prototype._openURIInNewTab = getPrivateMethod(
-      BrowserDOMWindow,
-      "openURIInNewTab",
-      "createContentWindow"
-    );
+    BrowserDOMWindow.prototype._openURIInNewTab = getPrivateMethod({
+      parent: BrowserDOMWindow.prototype,
+      parentName: "BrowserDOMWindow.prototype",
+      methodName: "openURIInNewTab",
+      nextMethodName: "createContentWindow",
+    });
 
     /* eslint-disable tabmix/valid-lazy */
     // @ts-ignore
