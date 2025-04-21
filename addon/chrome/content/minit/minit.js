@@ -774,6 +774,10 @@ var TMP_tabDNDObserver = {
       return true;
     }
 
+    if (!useTabmixDnD) {
+      return false;
+    }
+
     const effects = tabBar.getDropEffectForTabDrag(event);
     const dt = event.dataTransfer;
     const isCopy = dt.dropEffect == "copy";
@@ -845,7 +849,6 @@ var TMP_tabDNDObserver = {
         !isCopy &&
         !dropOnStart &&
         dragType == this.DRAG_TAB_IN_SAME_WINDOW &&
-        useTabmixDnD &&
         // Prevent dropping on the same tab
         (draggedTab === dropElement ||
           // Prevent dropping tab-group in its current position
@@ -865,7 +868,7 @@ var TMP_tabDNDObserver = {
         disAllowDrop = true;
       }
 
-      if (useTabmixDnD && draggedElement && draggedElement.container == tabBar) {
+      if (draggedElement && draggedElement.container == tabBar) {
         const color = !disAllowDrop && elementGroup && !dropOnStart ? elementGroup.color : null;
         tabBar._setDragOverGroupColor(color);
         draggedElement._dragData.movingTabs.forEach(tab => {
@@ -1227,7 +1230,12 @@ var TMP_tabDNDObserver = {
     const fromTabList =
       (tab?._dragData.fromTabList && dropTab !== dropTab?.group?.tabs[0]) || false;
     if (Tabmix.isVersion(1380)) {
-      newIndex = dropTab?.elementIndex ?? this.allVisibleItems.length;
+      if (dropTab?.group?.collapsed) {
+        newIndex = dropTab.group.labelElement.elementIndex;
+        dropOnStart = this.isDropBefore(event, dropTab.group.labelElement);
+      } else {
+        newIndex = dropTab?.elementIndex ?? this.allVisibleItems.length;
+      }
     }
 
     return {
@@ -1341,7 +1349,7 @@ var TMP_tabDNDObserver = {
       sourceNode.ownerDocument.documentElement.getAttribute("windowtype") == "navigator:browser" &&
       sourceNode.ownerGlobal.gBrowser.tabContainer == sourceNode.container
     ) {
-      /** @type {Tab | MockedGeckoTypes.MozTabGroupLabel} */ // @ts-expect-error
+      /** @type {AriaFocusableItem} */ // @ts-expect-error
       const tab = sourceNode;
       if (sourceNode.container === gBrowser.tabContainer) {
         return {dragType: this.DRAG_TAB_IN_SAME_WINDOW, tab};
@@ -1426,10 +1434,11 @@ var TMP_tabDNDObserver = {
     return newMarginY;
   },
 
-  isLastTabInRow(dropElement, dragOverElement) {
-    if (!dropElement || !dragOverElement) {
+  isLastTabInRow(dropTab, dragOverElement) {
+    if (!dropTab || !dragOverElement) {
       return false;
     }
+    const dropElement = dropTab?.group?.collapsed ? dropTab.group.labelElement : dropTab;
     const newIndex = dropElement.elementIndex;
     if (
       dropElement === dragOverElement ||

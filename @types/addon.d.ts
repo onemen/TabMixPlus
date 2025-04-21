@@ -237,7 +237,7 @@ declare namespace TabDNDObserverNS {
   function getDragType(sourceNode: DraggedSourceNode): {dragType: number; tab: DraggedElement};
   function getDropIndicatorMarginX(draggedTab: DraggedElement, newIndex: number, dropBefore: boolean, itemRect: DOMRect, rect: DOMRect, defaultMargin: number): number;
   function getDropIndicatorMarginY(ind: HTMLElement, dropElement: AriaFocusableItem, rect: DOMRect): number;
-  function isLastTabInRow(dropElement: Tab | undefined, dragOverElement: AriaFocusableItem | undefined): boolean;
+  function isLastTabInRow(dropTab: Tab | undefined, dragOverElement: AriaFocusableItem | undefined): boolean;
   function clearDragmark(): void;
   function getSourceNode(aDataTransfer: DataTransfer): HTMLLinkElement | Tab | null;
 }
