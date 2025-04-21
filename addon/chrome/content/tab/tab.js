@@ -477,6 +477,8 @@ Tabmix.tabsUtils = {
     Tabmix.multiRow.init();
     Tabmix.initialization.run("beforeStartup", gBrowser, this.tabBar);
     this.addTabsObserver();
+
+    this.patchInvalidateCachedVisibleTabs();
   },
 
   addTabsObserver() {
@@ -773,6 +775,13 @@ Tabmix.tabsUtils = {
       return;
     }
 
+    // there are to many edge cases with tab groups
+    // alway show the button on the side when there are groups
+    if (Tabmix.isVersion(1380) && this.tabBar.arrowScrollbox.querySelector("tab-group")) {
+      this.disAllowNewtabbutton = true;
+      return;
+    }
+
     // when Private-tab enabled/disabled we need to reset
     // tabsNewtabButton and afterTabsButtonsWidth
     if (!Tabmix.tabsNewtabButton || !Tabmix.afterTabsButtonsWidthReady) {
@@ -790,16 +799,22 @@ Tabmix.tabsUtils = {
       return;
     }
 
-    const lastTab = Tabmix.visibleTabs.last;
+    const allVisibleItems = Tabmix.tabsUtils.allVisibleItems;
+
+    /** @type {AriaFocusableItem} */ // @ts-expect-error - it can not be undefined
+    const lastEl = allVisibleItems.at(-1);
+    // Use parent elements if they are group labels
+    const lastElement = gBrowser.isTabGroupLabel(lastEl) ? lastEl.parentElement : lastEl;
+
     const tsboRect = this.tabBar.arrowScrollbox.scrollbox.getBoundingClientRect();
     const tabstripEnd = tsboRect.right;
     // button is visible
-    //         A: last tab and the button are in the same row:
+    //         A: last element and the button are in the same row:
     //            check if we have room for the button in this row
-    //         B: last tab and the button are NOT in the same row:
+    //         B: last element and the button are NOT in the same row:
     //            NG - hide the button
     if (!this.disAllowNewtabbutton) {
-      let sameRow = TabmixTabbar.inSameRow(lastTab, Tabmix.tabsNewtabButton);
+      let sameRow = TabmixTabbar.inSameRow(lastElement, Tabmix.tabsNewtabButton);
       if (sameRow) {
         const buttonRect = Tabmix.tabsNewtabButton.getBoundingClientRect();
         const buttonEnd = buttonRect.right;
@@ -810,38 +825,31 @@ Tabmix.tabsUtils = {
       return;
     }
 
-    // ignore the case that this tab width is larger then the tabbar
-    let previousTab = Tabmix.visibleTabs.previous(lastTab);
-    if (!previousTab) {
-      this.disAllowNewtabbutton = false;
-      return;
-    }
-
-    // 2 last elements:
-    // - last tab is single in its group: group label + last tab
-    // - last tab is not single in its group: prev tab + last tab
-    //
     // Button not visible:
     //   A: Last elements in same row: check room for button
     //   B: Last elements Not in same row:
     //      check room for last tab + button after prev element
+
+    /** @type {AriaFocusableItem} */ // @ts-expect-error - it can not be undefined
+    const previousEl = allVisibleItems.at(-2);
+    // Use parent elements if they are group labels
     const previousElement =
-      lastTab.group?.tabs.length === 1 ? lastTab.group.labelElement.parentElement : previousTab;
+      gBrowser.isTabGroupLabel(previousEl) ? previousEl.parentElement : previousEl;
 
     const tsboEnd = tabstripEnd + this._newTabButtonWidth(true);
-    const lastTabRect = lastTab.getBoundingClientRect();
-    if (TabmixTabbar.inSameRow(lastTab, previousElement)) {
-      const buttonEnd = lastTabRect.right + this._newTabButtonWidth();
+    const lastElementRect = lastElement.getBoundingClientRect();
+    if (TabmixTabbar.inSameRow(lastElement, previousElement)) {
+      const buttonEnd = lastElementRect.right + this._newTabButtonWidth();
       this.disAllowNewtabbutton = buttonEnd > tsboEnd;
       return;
     }
     const previousElementRect = previousElement.getBoundingClientRect();
-    const lastTabEnd = previousElementRect.right + lastTabRect.width;
-    // both last tab and new tab button are in the next row
-    if (lastTabEnd > tsboEnd) {
+    const lastElementEnd = previousElementRect.right + lastElementRect.width;
+    // both last element and new tab button are in the next row
+    if (lastElementEnd > tsboEnd) {
       this.disAllowNewtabbutton = false;
     } else {
-      this.disAllowNewtabbutton = lastTabEnd + this._newTabButtonWidth() > tsboEnd;
+      this.disAllowNewtabbutton = lastElementEnd + this._newTabButtonWidth() > tsboEnd;
     }
   },
 
@@ -983,7 +991,7 @@ Tabmix.tabsUtils = {
       return;
     }
 
-    const items = TMP_tabDNDObserver.allVisibleItems;
+    const items = this.allVisibleItems;
     // Calculate new container width
     const currentWidth = this.tabBar.getBoundingClientRect().width;
     const newWidth = currentWidth + widthDelta;
@@ -1206,6 +1214,50 @@ Tabmix.tabsUtils = {
       TabmixTabbar.visibleRows > 1;
     const margin = reduceMargin ? "1px" : "";
     document.documentElement.style.setProperty(this.protonValues.name, margin, "important");
+  },
+
+  _allVisibleItems: null,
+  get allVisibleItems() {
+    if (this._allVisibleItems !== null) {
+      return this._allVisibleItems;
+    }
+
+    this._allVisibleItems =
+      Tabmix.isVersion(1370) ? gBrowser.tabContainer.ariaFocusableItems
+      : Tabmix.isVersion(1300) ? gBrowser.tabContainer.visibleTabs
+      : gBrowser.tabContainer._getVisibleTabs();
+
+    if (!Tabmix.isVersion(1370)) {
+      let index = 0;
+      for (const item of this._allVisibleItems) {
+        item.elementIndex = index++;
+      }
+    }
+
+    return this._allVisibleItems;
+  },
+
+  invalidateAllVisibleItems() {
+    this._allVisibleItems = null;
+  },
+
+  // Function to patch tabBar._invalidateCachedVisibleTabs
+  patchInvalidateCachedVisibleTabs() {
+    const tabBar = gBrowser.tabContainer;
+    Tabmix.originalFunctions._invalidateCachedVisibleTabs = tabBar._invalidateCachedVisibleTabs;
+    tabBar._invalidateCachedVisibleTabs = function () {
+      Tabmix.originalFunctions._invalidateCachedVisibleTabs.apply(this, arguments);
+      Tabmix.tabsUtils.invalidateAllVisibleItems();
+    };
+
+    // invalidate _allVisibleItems before bug 1921814
+    if (!Tabmix.isVersion(1340)) {
+      Tabmix.originalFunctions._invalidateCachedTabs = tabBar._invalidateCachedTabs;
+      tabBar._invalidateCachedTabs = function () {
+        Tabmix.originalFunctions._invalidateCachedTabs.apply(this, arguments);
+        Tabmix.tabsUtils.invalidateAllVisibleItems();
+      };
+    }
   },
 };
 

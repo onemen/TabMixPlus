@@ -200,46 +200,44 @@ declare namespace ExtensionsCompatibilityNS {
   };
 }
 
-declare namespace TabDNDObserverNS {
-  let _dragOverDelay: number;
-  let _moveTabOnDragging: boolean;
-  let draglink: string;
-  let LinuxMarginEnd: number;
-  let DRAG_LINK: number;
-  let DRAG_TAB_TO_NEW_WINDOW: number;
-  let DRAG_TAB_IN_SAME_WINDOW: number;
-  let draggingTimeout: number;
-  let paddingLeft: number;
-  let _multirowMargin: number;
-  let _allVisibleItems: AriaFocusableItems | null;
-  let _cachedDnDValue: boolean | null;
-  const allVisibleItems: AriaFocusableItems;
-  const TabMetrics: MockedExports.TabMetrics;
-  function init(): void;
-  function useTabmixDnD(event: DragEvent, tab?: Tab): boolean;
-  function handleEvent(event: DragEvent): void;
-  function on_dragstart(this: MockedGeckoTypes.TabContainer, event: DragEvent): void;
-  function handleDragover(event: DragEvent, useTabmixDnD: boolean): boolean;
-  function handleDrop(event: DragEvent, draggedTab: Tab, movingTabs: Tab[]): void;
-  function on_dragend(event: DragEvent): void;
-  function on_dragleave(event: DragEvent): void;
-  function _dragoverScrollButton(event: DragEvent): boolean;
-  function postDraggingCleanup(event: DragEvent, skipCleanup?: boolean): boolean;
-  let _hideTooltipTimeout: number;
-  function hideDragoverMessage(): void;
-  function showDragoverTooltip(message: string): void;
-  function _getDropIndex(event: DragEvent, options?: {dragover?: boolean; getParams?: boolean}): DragEventParams | number;
-  function eventParams(event: DragEvent): DragEventParams;
-  function getDropElement(aEvent: DragEvent, tab: DraggedElement): AriaFocusableItem | undefined;
-  function getNewIndex(event: DragEvent, tab: DraggedElement): number;
-  function getEventTarget(event: DragEvent): AriaFocusableItem | MockedGeckoTypes.MozTabbrowserTabGroup | undefined;
-  function isDropBefore(event: DragEvent, dropElement: AriaFocusableItem): boolean;
-  function getDragType(sourceNode: DraggedSourceNode): {dragType: number; tab: DraggedElement};
-  function getDropIndicatorMarginX(draggedTab: DraggedElement, newIndex: number, dropBefore: boolean, itemRect: DOMRect, rect: DOMRect, defaultMargin: number): number;
-  function getDropIndicatorMarginY(ind: HTMLElement, dropElement: AriaFocusableItem, rect: DOMRect): number;
-  function isLastTabInRow(dropTab: Tab | undefined, dragOverElement: AriaFocusableItem | undefined): boolean;
-  function clearDragmark(): void;
-  function getSourceNode(aDataTransfer: DataTransfer): HTMLLinkElement | Tab | null;
+interface TabmixDNDObserver {
+  _dragOverDelay: number;
+  _moveTabOnDragging: boolean;
+  draglink: string;
+  LinuxMarginEnd: number;
+  DRAG_LINK: number;
+  DRAG_TAB_TO_NEW_WINDOW: number;
+  DRAG_TAB_IN_SAME_WINDOW: number;
+  draggingTimeout: number;
+  paddingLeft: number;
+  _multirowMargin: number;
+  _cachedDnDValue: boolean | null;
+  TabMetrics: MockedExports.TabMetrics;
+  init(): void;
+  useTabmixDnD(event: DragEvent, tab?: Tab): boolean;
+  handleEvent(event: DragEvent): void;
+  on_dragstart(this: MockedGeckoTypes.TabContainer, event: DragEvent): void;
+  handleDragover(event: DragEvent, useTabmixDnD: boolean): boolean;
+  handleDrop(event: DragEvent, draggedTab: Tab, movingTabs: Tab[]): void;
+  on_dragend(event: DragEvent): void;
+  on_dragleave(event: DragEvent): void;
+  _dragoverScrollButton(event: DragEvent): boolean;
+  postDraggingCleanup(event: DragEvent, skipCleanup?: boolean): boolean;
+  _hideTooltipTimeout: number;
+  hideDragoverMessage(): void;
+  showDragoverTooltip(message: string): void;
+  _getDropIndex(event: DragEvent, options?: {dragover?: boolean; getParams?: boolean}): DragEventParams | number;
+  eventParams(event: DragEvent): DragEventParams;
+  getDropElement(aEvent: DragEvent, tab: DraggedElement): AriaFocusableItem | undefined;
+  getNewIndex(event: DragEvent, tab: DraggedElement): number;
+  getEventTarget(event: DragEvent): AriaFocusableItem | MockedGeckoTypes.MozTabbrowserTabGroup | undefined;
+  isDropBefore(event: DragEvent, dropElement: AriaFocusableItem): boolean;
+  getDragType(sourceNode: DraggedSourceNode): {dragType: number; tab: DraggedElement};
+  getDropIndicatorMarginX(draggedTab: DraggedElement, newIndex: number, dropBefore: boolean, itemRect: DOMRect, rect: DOMRect, defaultMargin: number): number;
+  getDropIndicatorMarginY(ind: HTMLElement, dropElement: AriaFocusableItem, rect: DOMRect): number;
+  isLastTabInRow(dropTab: Tab | undefined, dragOverElement: AriaFocusableItem | undefined): boolean;
+  clearDragmark(): void;
+  getSourceNode(aDataTransfer: DataTransfer): HTMLLinkElement | Tab | null;
 }
 
 declare namespace TabmixArrowScrollboxNS {
@@ -624,7 +622,7 @@ interface TabmixTabbar {
   updateScrollStatus(delay?: boolean): void;
   getTabsPosition(): "tabsonbottom" | "customtitlebar";
   _handleResize(): void;
-  inSameRow(tab1: Tab | null, tab2: Tab | HTMLButtonElement | MockedGeckoTypes.MozTextLabelContainer | null): boolean;
+  inSameRow(tab1: Tab | MockedGeckoTypes.MozTextLabelContainer | undefined, tab2: Tab | HTMLButtonElement | MockedGeckoTypes.MozTextLabelContainer | null | undefined): boolean;
   setFirstTabInRow(): void;
   removeShowButtonAttr(): void;
 }
@@ -662,7 +660,6 @@ declare namespace TabmixProgressListenerNS {
 }
 
 type ExtensionsCompatibility = typeof ExtensionsCompatibilityNS;
-type TabDNDObserver = typeof TabDNDObserverNS;
 type TabmixAllTabs = typeof TabmixAllTabsNS;
 type TabmixClosedTabs = typeof TabmixClosedTabsNS;
 type TabmixContext = typeof TabmixContextNS;

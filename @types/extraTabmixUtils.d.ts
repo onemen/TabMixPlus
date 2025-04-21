@@ -108,7 +108,7 @@ interface TabmixGlobal {
   contextMenuLinks: Map<string, string> | null;
   defaultCloseButtons: boolean;
   sideNewTabButton: HTMLButtonElement | null;
-  tabsUtils: typeof TabsUtils;
+  tabsUtils: TabmixTabsUtils;
   visibleTabs: typeof VisibleTabs;
 
   // tablib.js
@@ -448,56 +448,60 @@ declare namespace TabmixTabClickOptionsNS {
   function blockMouseDown(event: MouseEvent): boolean;
 }
 
-declare namespace TabsUtils {
-  let _inUpdateVerticalTabStrip: boolean;
-  let _keepLastTab: boolean;
-  let _show_newtabbutton: string | null;
-  let checkNewtabButtonVisibility: boolean;
-  let closeButtonsEnabled: boolean;
-  let customTitlebar: CustomTitlebar;
+interface TabmixTabsUtils {
+  _inUpdateVerticalTabStrip: boolean;
+  _keepLastTab: boolean;
+  _show_newtabbutton: string | null;
+  checkNewtabButtonVisibility: boolean;
+  closeButtonsEnabled: boolean;
+  customTitlebar: CustomTitlebar;
 
-  let initialized: boolean;
-  const tabBar: MockedGeckoTypes.TabContainer;
-  const scrollClientRect: DOMRect;
-  function getInnerbox(): HTMLElement;
-  const inDOMFullscreen: boolean;
-  const visible: boolean;
-  const isVerticalTabBar: boolean;
-  const isVerticalTabs: boolean;
-  const getCollapsedState: {collapsed: boolean; toolbar: HTMLElement; tabBar: MockedGeckoTypes.TabContainer; toolbarCollapsed: boolean; tabBarCollapsed: boolean};
-  function getTabsCount(num?: number): number;
-  const events: string[];
-  function init(): void;
-  function addTabsObserver(): void;
-  function onUnload(): void;
-  function handleEvent(aEvent: MouseEvent): void;
-  function initializeTabmixUI(): void;
-  function updateVerticalTabStrip(params?: {reset?: boolean}): string | null;
-  function _newTabButtonWidth(onSide?: boolean): number;
-  let _widthCache: {minWidth: number; maxWidth: number; [key: number]: number};
-  function updateMinWidth(): void;
-  function adjustNewtabButtonVisibility(): void;
-  let disAllowNewtabbutton: boolean;
-  let overflow: boolean;
-  function showNewTabButtonOnSide(aCondition: boolean, aValue: string): void;
-  const topTabY: number;
-  const lastTabRowNumber: number;
-  const lastPinnedTabRowNumber: number;
-  function getTabRowNumber(aTab: Tab | HTMLButtonElement | MockedGeckoTypes.MozTextLabelContainer | undefined, aTop: number): number;
-  const canScrollTabsLeft: boolean;
-  const canScrollTabsRight: boolean;
-  function createTooltip(box: HTMLElement & {label: string}): void;
-  function tryRemoveTabmixScrollbox(): void;
-  function isSingleRow(visibleTabs: Tab[]): boolean;
-  let _resizeObserver: ResizeObserver | null;
-  let _lastTabBarWidth: number;
-  function resizeObserver(observe: boolean): void;
-  let _tab_overflow_width: number;
-  function updateOverflowMaxWidth(): void;
-  function updateScrollButtons(useTabmixButtons: boolean): void;
-  function isElementVisible(element: AriaFocusableItem | null | undefined): boolean;
-  const protonValues: {enabled: boolean; name: string; val: string; margin: string};
-  function updateProtonValues(): void;
+  initialized: boolean;
+  tabBar: MockedGeckoTypes.TabContainer;
+  scrollClientRect: DOMRect;
+  getInnerbox(): HTMLElement;
+  inDOMFullscreen: boolean;
+  visible: boolean;
+  isVerticalTabBar: boolean;
+  isVerticalTabs: boolean;
+  getCollapsedState: {collapsed: boolean; toolbar: HTMLElement; tabBar: MockedGeckoTypes.TabContainer; toolbarCollapsed: boolean; tabBarCollapsed: boolean};
+  getTabsCount(num?: number): number;
+  events: string[];
+  init(): void;
+  addTabsObserver(): void;
+  onUnload(): void;
+  handleEvent(aEvent: MouseEvent): void;
+  initializeTabmixUI(): void;
+  updateVerticalTabStrip(params?: {reset?: boolean}): string | null;
+  _newTabButtonWidth(onSide?: boolean): number;
+  _widthCache: {minWidth: number; maxWidth: number; [key: number]: number};
+  updateMinWidth(): void;
+  adjustNewtabButtonVisibility(): void;
+  disAllowNewtabbutton: boolean;
+  overflow: boolean;
+  showNewTabButtonOnSide(aCondition: boolean, aValue: string): void;
+  topTabY: number;
+  lastTabRowNumber: number;
+  lastPinnedTabRowNumber: number;
+  getTabRowNumber(aTab: Tab | HTMLButtonElement | MockedGeckoTypes.MozTextLabelContainer | undefined, aTop: number): number;
+  canScrollTabsLeft: boolean;
+  canScrollTabsRight: boolean;
+  createTooltip(box: HTMLElement & {label: string}): void;
+  tryRemoveTabmixScrollbox(): void;
+  isSingleRow(visibleTabs: Tab[]): boolean;
+  _resizeObserver: ResizeObserver | null;
+  _lastTabBarWidth: number;
+  resizeObserver(observe: boolean): void;
+  _tab_overflow_width: number;
+  updateOverflowMaxWidth(): void;
+  updateScrollButtons(useTabmixButtons: boolean): void;
+  isElementVisible(element: AriaFocusableItem | null | undefined): boolean;
+  protonValues: {enabled: boolean; name: string; val: string; margin: string};
+  updateProtonValues(): void;
+  _allVisibleItems: AriaFocusableItems | null;
+  allVisibleItems: AriaFocusableItems;
+  invalidateAllVisibleItems(): void;
+  patchInvalidateCachedVisibleTabs(): void;
 }
 
 declare namespace UtilsModules {

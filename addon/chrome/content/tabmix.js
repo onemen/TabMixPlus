@@ -1156,8 +1156,8 @@ var TMP_eventListener = {
         if (nextSibling) {
           group.nextSibling?.setAttribute("tabmix-firstTabInRow", true);
         }
-        this.updateMultiRow();
       }
+      this.updateMultiRow();
       Tabmix.tabsUtils.tryRemoveTabmixScrollbox();
     };
 
@@ -1167,8 +1167,7 @@ var TMP_eventListener = {
     // delayed "TabGroupRemoved" event. It also handles group creation directly instead of relying
     // on Firefox's "TabGroupCreate" event.
     const groupObserver = new MutationObserver(mutationList => {
-      // Skip processing if not in multi-row mode with overflow and pinned tabs
-      if (!TabmixTabbar.hasMultiRows || !gBrowser.pinnedTabCount) {
+      if (!TabmixTabbar.hasMultiRows) {
         return;
       }
       for (const mutation of mutationList) {

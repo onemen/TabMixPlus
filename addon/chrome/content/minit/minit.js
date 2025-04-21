@@ -2,7 +2,7 @@
 "use strict";
 
 /** Drag and Drop observers *** */
-/** @type {TabDNDObserver} */
+/** @type {TabmixDNDObserver} */
 var TMP_tabDNDObserver = {
   draglink: "",
   LinuxMarginEnd: 0,
@@ -82,21 +82,6 @@ var TMP_tabDNDObserver = {
         return width + tab.getBoundingClientRect().width;
       }, 0);
     };
-
-    Tabmix.originalFunctions._invalidateCachedVisibleTabs = tabBar._invalidateCachedVisibleTabs;
-    tabBar._invalidateCachedVisibleTabs = function () {
-      Tabmix.originalFunctions._invalidateCachedVisibleTabs.apply(this, arguments);
-      TMP_tabDNDObserver._allVisibleItems = null;
-    };
-
-    // invalidate _allVisibleItems before bug 1921814
-    if (!Tabmix.isVersion(1340)) {
-      Tabmix.originalFunctions._invalidateCachedTabs = tabBar._invalidateCachedTabs;
-      tabBar._invalidateCachedTabs = function () {
-        Tabmix.originalFunctions._invalidateCachedTabs.apply(this, arguments);
-        TMP_tabDNDObserver._allVisibleItems = null;
-      };
-    }
 
     if (Tabmix.isVersion(1310)) {
       // create none private method in gBrowser.tabContainer
@@ -549,7 +534,7 @@ var TMP_tabDNDObserver = {
       if (replace) {
         targetTab =
           event.target.closest("tab.tabbrowser-tab") ||
-          this.allVisibleItems[Math.min(newIndex, this.allVisibleItems.length - 1)];
+          Tabmix.tabsUtils.allVisibleItems[Math.min(newIndex, Tabmix.tabsUtils.allVisibleItems.length - 1)];
         if (gBrowser.isTabGroupLabel(targetTab)) {
           targetTab = targetTab.group.tabs[0];
         }
@@ -613,27 +598,6 @@ var TMP_tabDNDObserver = {
 
     Tabmix.originalFunctions.on_dragleave = gBrowser.tabContainer.on_dragleave;
     gBrowser.tabContainer.on_dragleave = this.on_dragleave.bind(this);
-  },
-
-  _allVisibleItems: null,
-  get allVisibleItems() {
-    if (this._allVisibleItems !== null) {
-      return this._allVisibleItems;
-    }
-
-    this._allVisibleItems =
-      Tabmix.isVersion(1370) ? gBrowser.tabContainer.ariaFocusableItems
-      : Tabmix.isVersion(1300) ? gBrowser.tabContainer.visibleTabs
-      : gBrowser.tabContainer._getVisibleTabs();
-
-    if (!Tabmix.isVersion(1370)) {
-      let index = 0;
-      for (const item of this._allVisibleItems) {
-        item.elementIndex = index++;
-      }
-    }
-
-    return this._allVisibleItems;
   },
 
   _cachedDnDValue: null,
@@ -1029,7 +993,9 @@ var TMP_tabDNDObserver = {
 
     const pinnedTabCount = gBrowser.pinnedTabCount;
     if (pinnedTabCount && targetAnonid === "scrollbutton-up") {
-      const pinnedTabRect = this.allVisibleItems[pinnedTabCount - 1]?.getBoundingClientRect() ?? {
+      const pinnedTabRect = Tabmix.tabsUtils.allVisibleItems[
+        pinnedTabCount - 1
+      ]?.getBoundingClientRect() ?? {
         right: 0,
         left: 0,
       };
@@ -1184,7 +1150,7 @@ var TMP_tabDNDObserver = {
         newIndex = pinnedTabCount - (isDraggedTabPinned ? 1 : 0);
 
         /** @type {AriaFocusableItem} */ // @ts-expect-error
-        const element = this.allVisibleItems[newIndex];
+        const element = Tabmix.tabsUtils.allVisibleItems[newIndex];
         dropElement = element;
         dropBefore = !isDraggedTabPinned;
         dropOnStart = !isDraggedTabPinned;
@@ -1234,7 +1200,7 @@ var TMP_tabDNDObserver = {
         newIndex = dropTab.group.labelElement.elementIndex;
         dropOnStart = this.isDropBefore(event, dropTab.group.labelElement);
       } else {
-        newIndex = dropTab?.elementIndex ?? this.allVisibleItems.length;
+        newIndex = dropTab?.elementIndex ?? Tabmix.tabsUtils.allVisibleItems.length;
       }
     }
 
@@ -1253,7 +1219,7 @@ var TMP_tabDNDObserver = {
   // when user drag after last tab we return undefined
   getDropElement(aEvent, draggedTab) {
     let indexInGroup = this.getNewIndex(aEvent, draggedTab);
-    const elements = this.allVisibleItems;
+    const elements = Tabmix.tabsUtils.allVisibleItems;
     const lastIndex = elements.length - 1;
     if (indexInGroup < 0) {
       indexInGroup = lastIndex;
@@ -1272,7 +1238,9 @@ var TMP_tabDNDObserver = {
       mY = event.screenY;
     const isPinnedTab = draggedTab?.pinned ?? false;
     const tabs =
-      isPinnedTab ? this.allVisibleItems.filter(tab => tab.pinned) : this.allVisibleItems;
+      isPinnedTab ?
+        Tabmix.tabsUtils.allVisibleItems.filter(tab => tab.pinned)
+      : Tabmix.tabsUtils.allVisibleItems;
     const numTabs = tabs.length;
     if (!TabmixTabbar.hasMultiRows) {
       const target = this.getEventTarget(event);
@@ -1375,7 +1343,9 @@ var TMP_tabDNDObserver = {
     if (TabmixTabbar.hasMultiRows) {
       // the case for dragging link or non-pinned tab to pinned tabs area is handeld in getNewIndex
       if (isPinnedTab && newIndex >= pinnedTabCount) {
-        const pinnedTabRect = this.allVisibleItems[pinnedTabCount - 1]?.getBoundingClientRect() ?? {
+        const pinnedTabRect = Tabmix.tabsUtils.allVisibleItems[
+          pinnedTabCount - 1
+        ]?.getBoundingClientRect() ?? {
           right: 0,
           left: 0,
         };
@@ -1391,7 +1361,7 @@ var TMP_tabDNDObserver = {
             scrollRect.right - rect.left
           );
         }
-        const firstNonPinnedTab = this.allVisibleItems[pinnedTabCount];
+        const firstNonPinnedTab = Tabmix.tabsUtils.allVisibleItems[pinnedTabCount];
         allTabsPinnedOffset = firstNonPinnedTab ? 0 : 8;
         if (firstNonPinnedTab) {
           const firstNonPinnedTabRect = firstNonPinnedTab.getBoundingClientRect();
@@ -1401,7 +1371,9 @@ var TMP_tabDNDObserver = {
         }
       }
       if ((isPinnedTab && newIndex >= pinnedTabCount) || allTabsPinnedOffset) {
-        const pinnedTabRect = this.allVisibleItems[pinnedTabCount - 1]?.getBoundingClientRect() ?? {
+        const pinnedTabRect = Tabmix.tabsUtils.allVisibleItems[
+          pinnedTabCount - 1
+        ]?.getBoundingClientRect() ?? {
           right: 0,
           left: 0,
         };
