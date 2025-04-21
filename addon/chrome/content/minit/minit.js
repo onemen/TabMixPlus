@@ -933,19 +933,22 @@ var TMP_tabDNDObserver = {
         return;
       }
 
-      if (Tabmix.isVersion(1380)) {
-        tabBar.finishMoveTogetherSelectedTabs(draggedTab);
-      } else if (Tabmix.isVersion(1330)) {
-        tabBar._finishMoveTogetherSelectedTabs(draggedTab);
-      } else {
-        tabBar._finishGroupSelectedTabs(draggedTab);
-      }
-      if (Tabmix.isVersion(1380)) {
-        tabBar.finishAnimateTabMove();
-        tabBar._expandGroupOnDrop(draggedTab);
-      } else {
+      if (!Tabmix.isVersion(1380)) {
+        if (Tabmix.isVersion(1330)) {
+          tabBar._finishMoveTogetherSelectedTabs(draggedTab);
+        } else {
+          tabBar._finishGroupSelectedTabs(draggedTab);
+        }
         tabBar._finishAnimateTabMove();
       }
+    }
+
+    // since Firefox 138 we need to reset drag state even if we use our
+    // own functions to handle the drag and drop
+    if (Tabmix.isVersion(1380)) {
+      tabBar.finishMoveTogetherSelectedTabs(draggedTab);
+      tabBar.finishAnimateTabMove();
+      tabBar._expandGroupOnDrop(draggedTab);
     }
 
     if (dt.mozUserCancelled || dt.dropEffect != "none" || tabBar._isCustomizing) {
