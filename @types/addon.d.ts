@@ -38,7 +38,7 @@ interface GetByMap {
   "tabmix-closedWindowsView": ClosedObjectsUtils.CustomPanelView;
   "tabmix-historyUndoWindowMenu": HTMLMenuElement;
   "tabmix-historyUndoWindowPopup": ClosedObjectsUtils.PopupElement;
-  "tabmix-firstTabInRow": Tab;
+  "tabmix-firstTabInRow": Tab | MockedGeckoTypes.GroupLabelContainer;
   "tabmix-menu": HTMLMenuElement;
   "tabmix-scrollbox": TabmixArrowScrollboxNS.RightScrollBox;
   "tabmix-tabs-closebutton": HTMLButtonElement;
@@ -326,6 +326,7 @@ interface QuerySelectorMap {
   "toolbarbutton": TabmixClosedTabsNS.MenuItemInClosedGroup;
   ".panel-subview-body": ClosedObjectsUtils.PopupElement;
   "[tabmix_selectedID]": Tab;
+  "[tabmix-firstTabInRow]": Tab | MockedGeckoTypes.GroupLabelContainer;
 }
 
 declare namespace TabmixContextNS {

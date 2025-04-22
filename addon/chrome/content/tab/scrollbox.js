@@ -496,10 +496,8 @@ Tabmix.multiRow = {
           return;
         }
         this.firstTabInRowMargin = 0;
-        // getElementsByAttribute return a live nodList
-        // each time we remove the attribute we remove node from the list
         const tabBar = this.parentNode;
-        const tabs = tabBar.getElementsByAttribute("tabmix-firstTabInRow", "*");
+        const tabs = tabBar.arrowScrollbox.querySelectorAll("[tabmix-firstTabInRow]");
         for (const tab of Array.from(tabs)) {
           tab.removeAttribute("tabmix-firstTabInRow");
         }

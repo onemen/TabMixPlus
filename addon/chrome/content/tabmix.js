@@ -1167,7 +1167,12 @@ var TMP_eventListener = {
     // delayed "TabGroupRemoved" event. It also handles group creation directly instead of relying
     // on Firefox's "TabGroupCreate" event.
     const groupObserver = new MutationObserver(mutationList => {
-      if (!TabmixTabbar.hasMultiRows) {
+      // Skip processing if not in multi-row mode with overflow and pinned tabs
+      // or new tab button is after last tab
+      if (
+        !TabmixTabbar.hasMultiRows ||
+        (!gBrowser.pinnedTabCount && Tabmix.prefs.getIntPref("newTabButton.position") !== 2)
+      ) {
         return;
       }
       for (const mutation of mutationList) {
@@ -1180,6 +1185,7 @@ var TMP_eventListener = {
             }
             const nextSibling = node.nextSibling;
             if (
+              !node.pinned &&
               nextSibling?.hasAttribute("tabmix-firstTabInRow") &&
               TabmixTabbar.inSameRow(node, nextSibling)
             ) {
@@ -1192,7 +1198,7 @@ var TMP_eventListener = {
         });
 
         mutation.removedNodes.forEach(node => {
-          if (Tabmix.isTabGroup(node)) {
+          if (Tabmix.isTabGroup(node) && node.tabs.length === 0) {
             groupRemoved(node);
           }
         });

@@ -575,12 +575,16 @@ declare namespace MockedGeckoTypes {
     parentElement: MozTextLabelContainer;
   }
 
+  interface GroupLabelContainer extends HTMLElement {
+    closing: never;
+  }
+
   interface MozTabGroupLabel extends MozTextLabel {
     _dragData: DragData;
     elementIndex: number;
     container: TabContainer;
     group: MozTabbrowserTabGroup;
-    parentNode: HTMLElement & {closing: never};
+    parentNode: GroupLabelContainer;
     pinned: never;
   }
 
