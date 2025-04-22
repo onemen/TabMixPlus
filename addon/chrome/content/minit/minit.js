@@ -820,7 +820,9 @@ var TMP_tabDNDObserver = {
             dropElement === draggedGroup?.[dropBefore ? "nextSibling" : "previousSibling"]) ||
           // Prevent dropping tab in its current position, but allow if moving between groups
           (dropElement === draggedTab?.[dropBefore ? "nextSibling" : "previousSibling"] &&
-            draggedTab?.group?.id === elementGroup?.id))
+            draggedTab?.group?.id === elementGroup?.id) ||
+          // Prevent dropping last tab after itself when not in a group
+          (!dropElement && draggedTab === gBrowser.tabs.at(-1) && !draggedTab.group))
       ) {
         disAllowDrop = true;
       } else if (
