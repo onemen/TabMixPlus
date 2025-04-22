@@ -13,14 +13,21 @@
           "version": "1.27.0",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.27.0.xpi",
           "browser_specific_settings": {
-            "gecko": { "strict_min_version": "1.0" }
+            "gecko": {"strict_min_version": "1.0"}
           }
         },
         {
           "version": "1.28.0",
           "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.28.0a.xpi",
           "browser_specific_settings": {
-            "gecko": { "strict_min_version": "1.0" }
+            "gecko": {"strict_min_version": "1.0"}
+          }
+        },
+        {
+          "version": "1.29.0",
+          "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.29.0.xpi",
+          "browser_specific_settings": {
+            "gecko": {"strict_min_version": "1.0"}
           }
         }
       ]
