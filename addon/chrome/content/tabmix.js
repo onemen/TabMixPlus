@@ -1161,7 +1161,9 @@ var TMP_eventListener = {
       Tabmix.tabsUtils.tryRemoveTabmixScrollbox();
     };
 
-    // This observer manages the tabmix-firstTabInRow attribute which controls margin-inline-start
+    // This observer manages:
+    // update `new tab button` position when the pref is to show new-tab-button after last tab
+    // the tabmix-firstTabInRow attribute which controls margin-inline-start
     // for elements after pinned tabs in multi-row mode. It prevents layout flickering when groups
     // are removed by immediately handling attribute transfers, rather than waiting for Firefox's
     // delayed "TabGroupRemoved" event. It also handles group creation directly instead of relying
@@ -1170,7 +1172,7 @@ var TMP_eventListener = {
       // Skip processing if not in multi-row mode with overflow and pinned tabs
       // or new tab button is after last tab
       if (
-        !TabmixTabbar.hasMultiRows ||
+        !TabmixTabbar.isMultiRow ||
         (!gBrowser.pinnedTabCount && Tabmix.prefs.getIntPref("newTabButton.position") !== 2)
       ) {
         return;

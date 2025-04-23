@@ -828,8 +828,13 @@ Tabmix.tabsUtils = {
     //   B: Last elements Not in same row:
     //      check room for last tab + button after prev element
 
-    /** @type {AriaFocusableItem} */ // @ts-expect-error - it can not be undefined
     const previousEl = allVisibleItems.at(-2);
+    // ignore the case that this tab width is larger then the tabbar
+    if (!previousEl) {
+      this.disAllowNewtabbutton = false;
+      return;
+    }
+
     // Use parent elements if they are group labels
     const previousElement =
       gBrowser.isTabGroupLabel(previousEl) ? previousEl.parentElement : previousEl;
