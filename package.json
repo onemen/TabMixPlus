@@ -4,8 +4,8 @@
   "description": "New Tab Mix Plus for modern Firefox",
   "type": "module",
   "scripts": {
-    "lint": "eslint --format stylish --fix --cache --cache-location config/.eslintcache --cache-strategy content",
-    "lint:test": "eslint --format stylish --cache --cache-location config/.eslintcache --cache-strategy content",
+    "lint": "eslint --format stylish --fix --cache --cache-location config/.eslintcache",
+    "lint:test": "eslint --format stylish --cache --cache-location config/.eslintcache",
     "lint:clean": "eslint --format stylish",
     "prepare": "husky config/husky",
     "stylelint": "stylelint --fix --config config/.stylelintrc.json \"addon/**/*.css\"",
