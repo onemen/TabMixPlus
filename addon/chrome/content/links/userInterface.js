@@ -219,7 +219,6 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
           if (openTabNext && !baseTab && tabGroup && inGroupPref > 0) {
             // don't add new tab to the group when openTabNextInGroup is 1 or 2
             options.index =
-              // @ts-expect-error - group always have tabs
               inGroupPref === 1 ? tabGroup.tabs.at(-1)._tPos + 1 : gBrowser.tabs.length;
           } else {
             const refTab = baseTab || selectedTab;

@@ -1190,7 +1190,7 @@ Tabmix.tablib = {
 
     /** @param {Tab} contextTab */
     gBrowser.duplicateTabsToWindow = function (contextTab) {
-      /** @type {NonEmptyArray<Tab>} */
+      /** @type {Tabs} */ // @ts-expect-error - tabs are never empty
       const tabs = contextTab.multiselected ? this.selectedTabs : [contextTab];
       this.clearMultiSelectedTabs();
 

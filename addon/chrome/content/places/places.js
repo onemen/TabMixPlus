@@ -228,8 +228,11 @@ var TMP_Places = {
   openGroup: function TMP_PC_openGroup(bmGroup, aWhere) {
     var openTabs = Tabmix.visibleTabs.tabs;
 
-    var doReplace =
-      /^tab/.test(aWhere) ? false : Tabmix.prefs.getBoolPref("loadBookmarksAndReplace");
+    const selectedTab = gBrowser.selectedTab;
+    const doReplace =
+      /^tab/.test(aWhere) ? false : (
+        Tabmix.prefs.getBoolPref("loadBookmarksAndReplace") && !selectedTab.group
+      );
     var loadInBackground =
       bmGroup.length > 1 ?
         Tabmix.prefs.getBoolPref("loadBookmarksGroupInBackground")
@@ -242,11 +245,12 @@ var TMP_Places = {
 
     /** @type {Tab[]} */
     const removeTabs = [];
-    var tabIsBlank, canReplace;
-    for (const aTab of openTabs) {
-      tabIsBlank = gBrowser.isBlankNotBusyTab(aTab);
+    // we don't reused blank tabs from group to avoid group removal
+    const unGroupedTabs = openTabs.filter(tab => !tab.group);
+    for (const aTab of unGroupedTabs) {
+      const tabIsBlank = gBrowser.isBlankNotBusyTab(aTab);
       // don't reuse collapsed tab if width fitTitle is set
-      canReplace =
+      const canReplace =
         (doReplace && !aTab.hasAttribute("locked") && !aTab.hasAttribute("pinned")) || tabIsBlank;
       if (reuseTabs.length < bmGroup.length && canReplace) {
         reuseTabs.push(aTab);
@@ -282,14 +286,16 @@ var TMP_Places = {
 
     /** @type {Tab} */
     let prevTab;
-    let relatedToCurrent =
-      !doReplace && openTabNext && gBrowser._selectedTab._tPos < openTabs.length - 1;
+    let relatedToCurrent = !doReplace && openTabNext && selectedTab._tPos < openTabs.length - 1;
     if (relatedToCurrent) {
       // open bookmarks after last related tab if exist
-      let lastRelatedTab = gBrowser._lastRelatedTabMap.get(gBrowser.selectedTab);
-      prevTab = lastRelatedTab || gBrowser.selectedTab;
+      let lastRelatedTab = gBrowser._lastRelatedTabMap.get(selectedTab);
+      prevTab = lastRelatedTab || selectedTab;
     } else {
       prevTab = Tabmix.visibleTabs.last;
+    }
+    if (prevTab.group) {
+      prevTab = prevTab.group.tabs.at(-1);
     }
     var tabPos, index;
     var multiple = bmGroup.length > 1;
@@ -322,7 +328,7 @@ var TMP_Places = {
         // move tab to place
         index = prevTab._tPos + 1;
         tabPos = aTab._tPos < index ? index - 1 : index;
-        Tabmix.moveTabTo(aTab, {tabIndex: tabPos});
+        Tabmix.moveTabTo(aTab, {tabIndex: tabPos, forceUngrouped: true});
       } else {
         let preferredRemoteType = E10SUtils.getRemoteTypeForURI(
           url,
@@ -378,10 +384,9 @@ var TMP_Places = {
     // focus the first tab if prefs say to
     if (tabToSelect) {
       const replaceCurrent =
-        gBrowser.selectedTab.hasAttribute("reloadcurrent") ||
-        removeTabs.includes(gBrowser.selectedTab);
+        selectedTab.hasAttribute("reloadcurrent") || removeTabs.includes(selectedTab);
       if (!loadInBackground || (doReplace && replaceCurrent)) {
-        var old = gBrowser.selectedTab;
+        const old = selectedTab;
         gBrowser.selectedTab = tabToSelect;
         if (!multiple && old != tabToSelect) tabToSelect.owner = old;
         var reloadCurrent = old.hasAttribute("reloadcurrent");

@@ -4,6 +4,7 @@
 /// <reference types="./custom.gecko.dom.d.ts" />
 
 type Tab = MockedGeckoTypes.BrowserTab;
+type Tabs = NonEmptyArray<Tab>;
 type Browser = MockedGeckoTypes.ChromeBrowser;
 type TabBrowser = MockedGeckoTypes.TabBrowser;
 type TabContainer = MockedGeckoTypes.TabContainer;
@@ -166,8 +167,6 @@ declare namespace MockedGeckoTypes {
     selectedBrowser: ChromeBrowser;
     addEventListener<K extends keyof CustomElementEventMap>(type: K, listener: (this: Element, ev: CustomElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions): void;
   }
-
-  type Tabs = NonEmptyArray<BrowserTab>;
 
   type DragData = {
     offsetX: number;

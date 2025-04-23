@@ -800,8 +800,6 @@ Tabmix.tabsUtils = {
     }
 
     const allVisibleItems = Tabmix.tabsUtils.allVisibleItems;
-
-    /** @type {AriaFocusableItem} */ // @ts-expect-error - it can not be undefined
     const lastEl = allVisibleItems.at(-1);
     // Use parent elements if they are group labels
     const lastElement = gBrowser.isTabGroupLabel(lastEl) ? lastEl.parentElement : lastEl;

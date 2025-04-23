@@ -5,7 +5,11 @@
 
 // helpers types
 type f<T> = Array<T>;
-type NonEmptyArray<T> = T[] & {0: T};
+interface NonEmptyArray<T> extends Array<T> {
+  0: T;
+  at(index: -1 | 0): T;
+  at(index: number): T | undefined;
+}
 type Params = Record<string, unknown>;
 
 interface XULDocumentFragment extends DocumentFragment {
