@@ -60,12 +60,12 @@ export const TabmixPlacesUtils = Object.freeze({
     return PlacesUtilsInternal.applyCallBackOnUrl(aUrl, aCallBack);
   },
 
-  getTitleFromBookmark(aUrl, aTitle) {
-    return PlacesUtilsInternal.asyncGetTitleFromBookmark(aUrl, aTitle);
+  getTitleFromBookmark(url, title, titlefrombookmark) {
+    return PlacesUtilsInternal.asyncGetTitleFromBookmark(url, title, titlefrombookmark);
   },
 
-  asyncGetTitleFromBookmark(aUrl, aTitle) {
-    return PlacesUtilsInternal.asyncGetTitleFromBookmark(aUrl, aTitle);
+  asyncGetTitleFromBookmark(url, title, titlefrombookmark) {
+    return PlacesUtilsInternal.asyncGetTitleFromBookmark(url, title, titlefrombookmark);
   },
 });
 
@@ -300,15 +300,15 @@ PlacesUtilsInternal = {
     return result;
   },
 
-  async asyncGetTitleFromBookmark(aUrl, aTitle) {
-    if (!this.titlefrombookmark || !aUrl) {
-      return aTitle;
+  async asyncGetTitleFromBookmark(url, title, titlefrombookmark) {
+    if ((!this.titlefrombookmark && !titlefrombookmark) || !url) {
+      return title;
     }
 
     try {
-      const getTitle = (/** @type {string} */ url) => this.getBookmarkTitle(url);
-      const title = await this.applyCallBackOnUrl(aUrl, getTitle);
-      return title || aTitle;
+      const getTitle = (/** @type {string} */ _url) => this.getBookmarkTitle(_url);
+      const titleFromBookmark = await this.applyCallBackOnUrl(url, getTitle);
+      return titleFromBookmark || title;
     } catch (err) {
       TabmixSvc.console.reportError(err, "Error form asyncGetTitleFromBookmark");
       return "";

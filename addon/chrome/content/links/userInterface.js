@@ -428,7 +428,7 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
   if (pending) {
     const url = TMP_SessionStore.getUrlFromTabState(aTab);
     if (url) {
-      TMP_Places.asyncSetTabTitle(aTab, url, true).then(tabTitleChanged => {
+      TMP_Places.asyncSetTabTitle(aTab, {url, initial: true}).then(tabTitleChanged => {
         if (tabTitleChanged) {
           TabmixTabbar.updateScrollStatus();
         }

@@ -349,7 +349,7 @@ var TMP_Places = {
         };
         aTab = gBrowser.addTrustedTab(loadProgressively ? "about:blank" : url, params);
       }
-      this.asyncSetTabTitle(aTab, url, true);
+      this.asyncSetTabTitle(aTab, {url, initial: true, titlefrombookmark: loadProgressively});
       if (loadProgressively) {
         /** @type {SessionStoreNS.TabDataEntry} */
         let entry = {url, title: aTab.label};
@@ -576,40 +576,44 @@ var TMP_Places = {
     return false;
   },
 
-  asyncSetTabTitle(tab, url, initial, reset) {
+  async asyncSetTabTitle(tab, options = {}) {
     if (!tab) {
-      return Promise.resolve(false);
+      return false;
     }
-    if (!url) {
-      url = tab.linkedBrowser.currentURI.spec;
+
+    const {
+      initial,
+      reset,
+      titlefrombookmark = false,
+      url = tab.linkedBrowser.currentURI.spec,
+    } = options;
+
+    const newTitle = await this.asyncGetTabTitle(tab, url, {titlefrombookmark});
+    // only call setTabTitle if we found one to avoid loop
+    if (!newTitle) {
+      if (reset && !tab.hasAttribute("pending")) {
+        gBrowser.setTabTitle(tab);
+      }
+      return false;
     }
-    return this.asyncGetTabTitle(tab, url).then(newTitle => {
-      // only call setTabTitle if we found one to avoid loop
-      if (!newTitle) {
-        if (reset && !tab.hasAttribute("pending")) {
-          gBrowser.setTabTitle(tab);
-        }
-        return false;
+    if (newTitle != tab.label) {
+      this.setTabTitle(tab, url, newTitle);
+      if (initial) {
+        tab._labelIsInitialTitle = true;
       }
-      if (newTitle != tab.label) {
-        this.setTabTitle(tab, url, newTitle);
-        if (initial) {
-          tab._labelIsInitialTitle = true;
-        }
-      }
-      return true;
-    });
+    }
+    return true;
   },
 
-  async asyncGetTabTitle(aTab, aUrl, title = "") {
+  async asyncGetTabTitle(aTab, aUrl, {title = "", titlefrombookmark} = {}) {
     aTab.removeAttribute("tabmix_bookmarkUrl");
     if (this.isUserRenameTab(aTab, aUrl)) {
-      return Promise.resolve(aTab.getAttribute("fixed-label") ?? "");
+      return aTab.getAttribute("fixed-label") ?? "";
     }
 
     await Tabmix.promiseOverlayLoaded;
 
-    let newTitle = await this.getTitleFromBookmark(aUrl);
+    let newTitle = await this.getTitleFromBookmark(aUrl, "", titlefrombookmark);
     if (aTab && newTitle) {
       aTab.setAttribute("tabmix_bookmarkUrl", aUrl);
     }
@@ -619,12 +623,12 @@ var TMP_Places = {
     return newTitle || title;
   },
 
-  getTitleFromBookmark(aUrl, aTitle = "") {
-    return this.PlacesUtils.asyncGetTitleFromBookmark(aUrl, aTitle);
+  getTitleFromBookmark(url, title = "", titlefrombookmark) {
+    return this.PlacesUtils.asyncGetTitleFromBookmark(url, title, titlefrombookmark);
   },
 
-  asyncGetTitleFromBookmark(aUrl, aTitle) {
-    return this.PlacesUtils.asyncGetTitleFromBookmark(aUrl, aTitle);
+  asyncGetTitleFromBookmark(url, title, titlefrombookmark) {
+    return this.PlacesUtils.asyncGetTitleFromBookmark(url, title, titlefrombookmark);
   },
 
   isUserRenameTab(aTab, aUrl) {
@@ -743,7 +747,7 @@ var TMP_Places = {
       let bookmarkUrl = await this.PlacesUtils.applyCallBackOnUrl(url, getBookmarkUrl);
       if (bookmarkUrl) {
         tab.setAttribute("tabmix_bookmarkUrl", bookmarkUrl);
-        promises.push(this.asyncSetTabTitle(tab, url));
+        promises.push(this.asyncSetTabTitle(tab, {url}));
       }
     };
 
@@ -775,7 +779,7 @@ var TMP_Places = {
         tab.removeAttribute(attrib);
         if (!this.isUserRenameTab(tab, url)) {
           if (tab.hasAttribute("pending")) {
-            promises.push(this.asyncSetTabTitle(tab, url));
+            promises.push(this.asyncSetTabTitle(tab, {url}));
           } else {
             gBrowser.setTabTitle(tab);
           }
@@ -792,7 +796,7 @@ var TMP_Places = {
       tab.removeAttribute("tabmix_bookmarkUrl");
       let url = tab.linkedBrowser.currentURI.spec;
       if (!this.isUserRenameTab(tab, url)) {
-        promises.push(this.asyncSetTabTitle(tab, url, false, true));
+        promises.push(this.asyncSetTabTitle(tab, {url, initial: false, reset: true}));
       }
     }
     await Promise.all(promises);
@@ -1143,7 +1147,7 @@ Tabmix.onContentLoaded = {
       if (w && where !== "window" && where !== "save") {
         const latestTab = w.gBrowser.getTabForLastPanel();
         const targetTab = latestTab !== lastCreatedTab ? latestTab : w.gBrowser.selectedTab;
-        w.TMP_Places.asyncSetTabTitle(targetTab, url, true).then(() => {
+        w.TMP_Places.asyncSetTabTitle(targetTab, {url, initial: true}).then(() => {
           if (where == "current") {
             w.gBrowser.ensureTabIsVisible(w.gBrowser.selectedTab);
           }

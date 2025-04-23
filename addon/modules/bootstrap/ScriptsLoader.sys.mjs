@@ -232,7 +232,7 @@ export const ScriptsLoader = {
     gBrowser.tabs.forEach(tab => {
       const url =
         lazy.SessionStore.getLazyTabValue(tab, "url") || tab.linkedBrowser.currentURI.spec;
-      TMP_Places.asyncSetTabTitle(tab, url);
+      TMP_Places.asyncSetTabTitle(tab, {url});
     });
   },
 };

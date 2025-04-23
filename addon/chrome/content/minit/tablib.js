@@ -1799,7 +1799,7 @@ Tabmix.tablib = {
 
     const newEpoch = (this.tabEpochs.get(aTab) ?? -1) + 1;
     this.tabEpochs.set(aTab, newEpoch);
-    TMP_Places.asyncSetTabTitle(aTab, url).then(foundTitle => {
+    TMP_Places.asyncSetTabTitle(aTab, {url}).then(foundTitle => {
       if (!foundTitle && aTab.linkedBrowser) {
         const currentEpoch = this.tabEpochs.get(aTab);
         if (currentEpoch === newEpoch) {

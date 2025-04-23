@@ -546,10 +546,10 @@ declare namespace TabmixPlacesNS {
   function restoreNextTab(): void;
   function addImageToLazyPendingTab(tab: Tab): void;
   function setTabTitle(aTab: Tab, aUrl: string, title: string): void;
-  function asyncSetTabTitle(tab: Tab, url?: string, initial?: boolean, reset?: boolean): Promise<boolean>;
-  function asyncGetTabTitle(aTab: Tab, aUrl: string, title?: string): Promise<string>;
-  function getTitleFromBookmark(aUrl: string, aTitle?: string): Promise<string>;
-  function asyncGetTitleFromBookmark(aUrl: string, aTitle: string): Promise<string>;
+  function asyncSetTabTitle(tab: Tab, options?: {url?: string; initial?: boolean; reset?: boolean; titlefrombookmark?: boolean}): Promise<boolean>;
+  function asyncGetTabTitle(tab: Tab, url: string, options?: {title?: string; titlefrombookmark?: boolean}): Promise<string>;
+  function getTitleFromBookmark(url: string, title?: string, titlefrombookmark?: boolean): Promise<string>;
+  function asyncGetTitleFromBookmark(url: string, title: string, titlefrombookmark?: boolean): Promise<string>;
   function isUserRenameTab(aTab: Tab, aUrl: string): boolean;
   function afterTabTitleChanged(bookmarkChanged?: boolean): void;
   function startObserver(): void;

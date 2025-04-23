@@ -1236,8 +1236,8 @@ declare namespace PlacesModule {
     init(aWindow: Window): void;
     onQuitApplication(): void;
     applyCallBackOnUrl(aUrl: string, aCallBack: Callback): Promise<string | null>;
-    getTitleFromBookmark(aUrl: string, aTitle: string): Promise<string>;
-    asyncGetTitleFromBookmark(aUrl: string, aTitle: string): Promise<string>;
+    getTitleFromBookmark(aUrl: string, aTitle: string, titlefrombookmark?: boolean): Promise<string>;
+    asyncGetTitleFromBookmark(url: string, title: string, titlefrombookmark?: boolean): Promise<string>;
   }>;
 
   interface PlacesUtilsInternal extends Omit<PlacesUtils, "getTitleFromBookmark"> {

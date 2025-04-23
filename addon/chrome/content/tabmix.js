@@ -587,7 +587,7 @@ var TMP_eventListener = {
     tabs.forEach(tab => {
       if (!tab.hasAttribute("pending")) {
         const url = tab.linkedBrowser.currentURI.spec;
-        TMP_Places.asyncSetTabTitle(tab, url);
+        TMP_Places.asyncSetTabTitle(tab, {url});
       }
       Tabmix.restoreTabState(tab);
     });
