@@ -1,0 +1,190 @@
+{
+  "releases": {
+    "1.0.0-pre.1": {
+      "version": "1.0.0-pre.1",
+      "release_date": 1631350382000,
+      "esr_version": "78",
+      "firefox_version": "92"
+    },
+    "1.0.0-pre.2": {
+      "version": "1.0.0-pre.2",
+      "release_date": 1632503391000,
+      "esr_version": "78",
+      "firefox_version": "92"
+    },
+    "1.0.0-pre.3": {
+      "version": "1.0.0-pre.3",
+      "release_date": 1634211805000,
+      "esr_version": "78",
+      "firefox_version": "93"
+    },
+    "1.0.0-pre.4": {
+      "version": "1.0.0-pre.4",
+      "release_date": 1637045847000,
+      "esr_version": "78",
+      "firefox_version": "94"
+    },
+    "1.0.0-pre.5": {
+      "version": "1.0.0-pre.5",
+      "release_date": 1644137271000,
+      "esr_version": "78",
+      "firefox_version": "97"
+    },
+    "1.0.0-pre.6": {
+      "version": "1.0.0-pre.6",
+      "release_date": 1647076732000,
+      "esr_version": "78",
+      "firefox_version": "98"
+    },
+    "1.0.0-pre.7": {
+      "version": "1.0.0-pre.7",
+      "release_date": 1648964999000,
+      "esr_version": "78",
+      "firefox_version": "99"
+    },
+    "1.0.0-pre.8": {
+      "version": "1.0.0-pre.8",
+      "release_date": 1655011902000,
+      "esr_version": "78",
+      "firefox_version": "102"
+    },
+    "1.0.0-pre.9": {
+      "version": "1.0.0-pre.9",
+      "release_date": 1658044927000,
+      "esr_version": "78",
+      "firefox_version": "103"
+    },
+    "1.0.0-pre.10": {
+      "version": "1.0.0-pre.10",
+      "release_date": 1664608899000,
+      "esr_version": "78",
+      "firefox_version": "105"
+    },
+    "1.0.0-pre.11": {
+      "version": "1.0.0-pre.11",
+      "release_date": 1668751251000,
+      "esr_version": "78",
+      "firefox_version": "107"
+    },
+    "1.0.0-pre.12": {
+      "version": "1.0.0-pre.12",
+      "release_date": 1672649746000,
+      "esr_version": "78",
+      "firefox_version": "109"
+    },
+    "1.0.0-pre.13": {
+      "version": "1.0.0-pre.13",
+      "release_date": 1676626020000,
+      "esr_version": "78",
+      "firefox_version": "110"
+    },
+    "1.0.0-pre.14": {
+      "version": "1.0.0-pre.14",
+      "release_date": 1678808789000,
+      "esr_version": "78",
+      "firefox_version": "111"
+    },
+    "1.0.0-pre.15": {
+      "version": "1.0.0-pre.15",
+      "release_date": 1683796983000,
+      "esr_version": "78",
+      "firefox_version": "113"
+    },
+    "1.0.0-pre.16": {
+      "version": "1.0.0-pre.16",
+      "release_date": 1686990568000,
+      "esr_version": "78",
+      "firefox_version": "114"
+    },
+    "1.0.0-pre.17": {
+      "version": "1.0.0-pre.17",
+      "release_date": 1693735002000,
+      "esr_version": "78",
+      "firefox_version": "117"
+    },
+    "1.0.0-pre.18": {
+      "version": "1.0.0-pre.18",
+      "release_date": 1706553045000,
+      "esr_version": "78",
+      "firefox_version": "122"
+    },
+    "1.19.1": {
+      "version": "1.19.1",
+      "release_date": 1710089030000,
+      "esr_version": "78",
+      "firefox_version": "124"
+    },
+    "1.19.0": {
+      "version": "1.19.0",
+      "release_date": 1710097230604,
+      "esr_version": "78",
+      "firefox_version": "124"
+    },
+    "1.20.0": {
+      "version": "1.20.0",
+      "release_date": 1716015435000,
+      "esr_version": "78",
+      "firefox_version": "126"
+    },
+    "1.21.0": {
+      "version": "1.21.0",
+      "release_date": 1720164639385,
+      "esr_version": "78",
+      "firefox_version": "128"
+    },
+    "1.21.1": {
+      "version": "1.21.1",
+      "release_date": 1720194091000,
+      "esr_version": "78",
+      "firefox_version": "128"
+    },
+    "1.22.0": {
+      "version": "1.22.0",
+      "release_date": 1723023836000,
+      "esr_version": "78",
+      "firefox_version": "129"
+    },
+    "1.23.0": {
+      "version": "1.23.0",
+      "release_date": 1725940558000,
+      "esr_version": "115",
+      "firefox_version": "130"
+    },
+    "1.24.0": {
+      "version": "1.24.0",
+      "release_date": 1728455458000,
+      "esr_version": "115",
+      "firefox_version": "131"
+    },
+    "1.25.0": {
+      "version": "1.25.0",
+      "release_date": 1731154454000,
+      "esr_version": "115",
+      "firefox_version": "132"
+    },
+    "1.26.0": {
+      "version": "1.26.0",
+      "release_date": 1733751145000,
+      "esr_version": "115",
+      "firefox_version": "133"
+    },
+    "1.27.0": {
+      "version": "1.27.0",
+      "release_date": 1738915814000,
+      "esr_version": "115",
+      "firefox_version": "135"
+    },
+    "1.28.0": {
+      "version": "1.28.0",
+      "release_date": 1740932256000,
+      "esr_version": "115",
+      "firefox_version": "136"
+    },
+    "1.29.0": {
+      "version": "1.29.0",
+      "release_date": 1743431424000,
+      "esr_version": "115",
+      "firefox_version": "137"
+    }
+  }
+}
