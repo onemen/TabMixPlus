@@ -1227,7 +1227,7 @@ Tabmix.tabsUtils = {
 
     this._allVisibleItems =
       Tabmix.isVersion(1370) ? gBrowser.tabContainer.ariaFocusableItems
-      : Tabmix.isVersion(1300) ? gBrowser.tabContainer.visibleTabs
+      : Tabmix.isVersion(1330) ? gBrowser.tabContainer.visibleTabs
       : gBrowser.tabContainer._getVisibleTabs();
 
     if (!Tabmix.isVersion(1370)) {
@@ -1408,7 +1408,7 @@ Tabmix.bottomToolbarUtils = {
 Tabmix.visibleTabs = {
   get tabs() {
     const getVisibleTabs =
-      Tabmix.isVersion(1300) ?
+      Tabmix.isVersion(1330) ?
         () => gBrowser.tabContainer.visibleTabs
       : () => gBrowser.tabContainer._getVisibleTabs();
     Object.defineProperty(this, "tabs", {
