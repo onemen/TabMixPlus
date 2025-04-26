@@ -278,7 +278,7 @@ Tabmix.tablib = {
       if (tab.hasAttribute("tabmix_changed_label")) {
         titlePromise = Promise.resolve(tab.getAttribute("tabmix_changed_label"));
       } else {
-        titlePromise = window.TMP_Places.asyncGetTabTitle(tab, aBrowser.currentURI.spec, title);
+        titlePromise = window.TMP_Places.asyncGetTabTitle(tab, aBrowser.currentURI.spec, {title});
       }
       return titlePromise.then(newTitle => {
         title = newTitle;
