@@ -222,7 +222,11 @@ var TMP_tabDNDObserver = {
       // modify startTabDrag after all private method it uses modified above
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer.startTabDrag", {
         forceUpdate: true,
-      }).toCode();
+      })
+        ._replace("this.selectedItem = tab;", "if (this.verticalMode) {$&}", {
+          check: Tabmix.isVersion(1400),
+        })
+        .toCode();
     }
 
     function tabmixHandleMoveString() {
