@@ -72,6 +72,14 @@ var TMP_tabDNDObserver = {
         };
       }
 
+      if (Tabmix.isVersion({fp: "128.0.0"})) {
+        const verticalTabbarEnabled = () => Services.prefs.getIntPref("floorp.tabbar.style") === 2;
+        scope = {
+          ...scope,
+          verticalTabbarEnabled,
+        };
+      }
+
       return Tabmix.getSandbox(window, {scope});
     })();
 
