@@ -15,9 +15,6 @@ ChromeUtils.defineLazyGetter(lazy, "ReferrerInfo", () =>
 );
 /* eslint-enable tabmix/valid-lazy */
 
-/** @type {TabmixGlobal} */ // @ts-expect-error we use loadSubScript to add Tabmix to the global scope
-const Tabmix = {};
-
 /**
  * don't open link from external application in new window when in single window
  * mode don't open link from external application in current tab if the tab is
@@ -40,13 +37,20 @@ export const TabmixBrowserDOMWindow = {
     const {constructor, scope = {}} =
       isVersion(1370) ? this.getBrowserDOMWindow(window) : this.getNsBrowserAccess(window);
 
-    const sandbox = lazy.initializeChangeCodeClass(Tabmix, {
-      obj: constructor.prototype,
-      scope,
-    });
+    /** @type {TabmixGlobal} */ // @ts-expect-error initializeChangeCodeClass will update Tabmix
+    let tabmixObj = {};
+
+    if (isVersion(1370)) {
+      lazy.initializeChangeCodeClass(tabmixObj, {
+        obj: constructor.prototype,
+        scope,
+      });
+    } else {
+      tabmixObj = window.Tabmix;
+    }
 
     const browserAccess = constructor.prototype;
-    this.openURIInNewTab(constructor, sandbox);
+    this.openURIInNewTab(constructor, tabmixObj);
 
     // TreeStyleTab 0.16.2015111001 wrap openURI in nsBrowserAccess.prototype.__treestyletab__openURI
     let methodName =
@@ -57,7 +61,7 @@ export const TabmixBrowserDOMWindow = {
         "__treestyletab__openURI"
       : "getContentWindowOrOpenURI";
 
-    this.getContentWindowOrOpenURI(constructor, methodName, sandbox);
+    this.getContentWindowOrOpenURI(constructor, methodName, tabmixObj);
   },
 
   getBrowserDOMWindow(window) {
@@ -122,9 +126,10 @@ export const TabmixBrowserDOMWindow = {
     };
   },
 
-  openURIInNewTab(constructor, sandbox) {
+  openURIInNewTab(constructor, tabmixObj) {
     const fullMethodName = `${constructor.name}.prototype._openURIInNewTab`;
-    Tabmix.changeCode(constructor.prototype, fullMethodName, {sandbox})
+    tabmixObj
+      .changeCode(constructor.prototype, fullMethodName, {sandbox: tabmixObj._sandbox})
       ._replace(
         `if (aIsExternal && (!aURI || aURI.spec == "about:blank")) {`,
         `let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser._selectedTab);
@@ -168,9 +173,10 @@ export const TabmixBrowserDOMWindow = {
       .toCode();
   },
 
-  getContentWindowOrOpenURI(constructor, methodName, sandbox) {
+  getContentWindowOrOpenURI(constructor, methodName, tabmixObj) {
     const fullMethodName = `${constructor.name}.prototype.${methodName}`;
-    Tabmix.changeCode(constructor.prototype, fullMethodName, {sandbox})
+    tabmixObj
+      .changeCode(constructor.prototype, fullMethodName, {sandbox: tabmixObj._sandbox})
       ._replace(
         "switch (aWhere) {",
         `  if (Tabmix.singleWindowMode &&

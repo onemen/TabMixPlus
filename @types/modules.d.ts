@@ -666,8 +666,8 @@ declare namespace BrowserDOMWindowModule {
       constructor: typeof nsBrowserAccess;
       scope?: undefined;
     };
-    openURIInNewTab(constructor: Constructor, sandbox?: TabmixSandbox): void;
-    getContentWindowOrOpenURI(constructor: Constructor, methodName: string, sandbox?: TabmixSandbox): void;
+    openURIInNewTab(constructor: Constructor, tabmixObj: TabmixGlobal): void;
+    getContentWindowOrOpenURI(constructor: Constructor, methodName: string, tabmixObj: TabmixGlobal): void;
   }
 }
 
