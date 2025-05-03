@@ -1899,6 +1899,9 @@ window.gTMPprefObserver = {
           Services.prefs.setBoolPref("browser.tabs.insertAfterCurrent", false);
         }
         break;
+      case "extensions.tabmix.tabContextMenu.menuOrder":
+        TabmixContext.updateMenuOrder();
+        break;
       default:
         break;
     }

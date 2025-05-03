@@ -1,3 +1,4 @@
+import {TabContextConfig} from "chrome://tabmix-resource/content/TabContextConfig.sys.mjs";
 import {Preferences} from "resource://gre/modules/Preferences.sys.mjs";
 
 /** load Tabmix preference to the default branch */
@@ -50,6 +51,17 @@ export const PreferencesLoader = {
     try {
       const path = "chrome://tabmix-prefs/content/tabmix.js";
       Services.scriptloader.loadSubScript(path, {pref});
+    } catch (ex) {
+      console.error("Tabmix Error:", ex);
+    }
+
+    // Initialize tab context menu preferences
+    try {
+      for (const [id, config] of Object.entries(TabContextConfig.prefList)) {
+        const [name, defaultVisible = true] = config;
+        const prefName = name || id.replace(/^context_|^tm-/, "");
+        pref(`extensions.tabmix.${prefName}`, defaultVisible);
+      }
     } catch (ex) {
       console.error("Tabmix Error:", ex);
     }

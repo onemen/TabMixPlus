@@ -28,6 +28,7 @@ interface Element {
   // it is ok to allow setAttribute to convert the value to string for us
   setAttribute(name: string, value: string | boolean | number): void;
   label: string;
+  _originalOrder?: number;
 }
 
 interface NodeList {
@@ -556,6 +557,7 @@ declare namespace MockedGeckoTypes {
     // override lib.gecko.dom.d.ts Document | null
     readonly document: Document;
     gBrowser: TabBrowser;
+    TabContextMenu: MockedGeckoTypes.TabContextMenu;
   }
 
   type MozTextLabelContainer = HTMLElement;
@@ -688,6 +690,7 @@ declare namespace MockedGeckoTypes {
 
   interface TabContextMenu {
     contextTab: BrowserTab;
+    updateContextMenu: (tabContextMenu: HTMLElement) => void;
   }
 
   interface TabSwitcher {

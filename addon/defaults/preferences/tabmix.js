@@ -206,48 +206,24 @@ pref("extensions.tabmix.undoClose.keepMenuOpen", false);
 pref("extensions.tabmix.undoClosePosition", true);
 pref("extensions.tabmix.undoCloseButton.menuonly", false);
 
-pref("extensions.tabmix.newTabMenu", true);
-pref("extensions.tabmix.duplicateMenu", true); // 2008-04-12: changed from false to true
-pref("extensions.tabmix.duplicateinWinMenu", false);
-pref("extensions.tabmix.detachTabMenu", false);
-pref("extensions.tabmix.muteTabMenu", true);
-pref("extensions.tabmix.pinTabMenu", true);
-pref("extensions.tabmix.renameTabMenu", false);
-pref("extensions.tabmix.reloadTabMenu", true);
-pref("extensions.tabmix.reloadTabOptions", true);
-pref("extensions.tabmix.closeTabMenu", true);
-pref("extensions.tabmix.closeDuplicateTabs", true);
-pref("extensions.tabmix.closeTabOptions", true);
+// Tab Context Menu preference moved to TabContextConfig.sys.mjs
+
+// Main Context Menu preference
 pref("extensions.tabmix.closeTabContent", false);
-pref("extensions.tabmix.undoCloseTabMenu", true);
-pref("extensions.tabmix.undoCloseListMenu", true);
 pref("extensions.tabmix.undoCloseTabContent", true);
 pref("extensions.tabmix.undoCloseListContent", false);
-pref("extensions.tabmix.lockTabMenu", true);
-pref("extensions.tabmix.protectTabMenu", true);
 pref("extensions.tabmix.lockTabContent", false);
 pref("extensions.tabmix.protectTabContent", false);
-pref("extensions.tabmix.docShellMenu", false);
 pref("extensions.tabmix.freezeTabContent", false);
-pref("extensions.tabmix.freezeTabMenu", false);
 pref("extensions.tabmix.tabsList", false);
 pref("extensions.tabmix.duplicateWinContent", false);
 pref("extensions.tabmix.duplicateTabContent", false);
 pref("extensions.tabmix.detachTabContent", false);
 pref("extensions.tabmix.openAllLinks", true);
-pref("extensions.tabmix.bookmarkTabsMenu", true);
-pref("extensions.tabmix.bookmarkTabMenu", true);
 pref("extensions.tabmix.linkWithHistory", false);
-pref("extensions.tabmix.selectAllTabs", true);
-pref("extensions.tabmix.showMergeWindow", false);
 pref("extensions.tabmix.openLinkHere", false);
 pref("extensions.tabmix.openInverseLink", true);
-pref("extensions.tabmix.copyTabUrlMenu", true);
-
-pref("extensions.tabmix.reopenInContainer", true);
-pref("extensions.tabmix.moveTabOptions", true);
-pref("extensions.tabmix.sendTabToDevice", true);
-pref("extensions.tabmix.shareTabURL", true);
+pref("extensions.tabmix.autoReloadContent", true);
 
 pref("extensions.tabmix.warnOnclose", true);
 pref("extensions.tabmix.closeOnSelect", true);
@@ -275,8 +251,6 @@ pref(
 pref("extensions.tabmix.hideIcons", false);
 pref("extensions.tabmix.reloadEvery.onReloadButton", false);
 
-pref("extensions.tabmix.autoReloadContent", true);
-pref("extensions.tabmix.autoReloadMenu", false);
 pref("extensions.tabmix.custom_reload_list", "");
 pref("extensions.tabmix.reload_time", 60);
 pref("extensions.tabmix.reload_match_address", false);
@@ -289,5 +263,6 @@ pref("extensions.tabmix.shortcuts", "{}");
 pref("extensions.tabmix.syncPrefs", false);
 
 pref("extensions.tabmix.showTabContextMenuOnTabbar", false);
+pref("extensions.tabmix.tabContextMenu.menuOrder", 0);
 
 pref("extensions.tabmix.instantApply", false);

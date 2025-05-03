@@ -1,8 +1,4 @@
-// / <reference types="./overrideGecko.d.ts" />
-// / <reference types="./overrideGeckoDom.d.ts" />
-// / <reference types="./general.d.ts" />
 /// <reference types="./modules.d.ts" />
-// / <reference types="./tabmix.d.ts" />
 
 type GeneralElement = HTMLElement;
 type ShortcutKey = ShortcutsModule.ShortcutKey;
@@ -471,7 +467,7 @@ declare namespace LinksPaneNS {
 }
 
 declare namespace MenuPaneNS {
-  const PrivateBrowsingUtils: MockedExports.PrivateBrowsingUtils;
+  type Dataset = {prefKey: string};
   function init(): void;
   function initializeShortcuts(): void;
   let _slideShow: string;
@@ -480,6 +476,10 @@ declare namespace MenuPaneNS {
   function editSlideShowKey(): void;
   function toggleLinkLabel(item: HTMLElement): void;
   function setInverseLinkLabel(): void;
+  const PrivateBrowsingUtils: MockedExports.PrivateBrowsingUtils;
+  function generateTabContextMenuItems(): void;
+  function handleSpecialLabels(browserWindow: BrowserWindow): void;
+  function sortMenuItems(container: HTMLElement): void;
 }
 
 declare namespace MousePaneNS {
@@ -580,9 +580,9 @@ declare namespace Globals {
   type Pref = {name: string; value: any; type: number};
   const PrefFn: Map<number, "" | "getCharPref" | "getIntPref" | "getBoolPref">;
   function getPrefByType(prefName: string): string | number | boolean | null;
-  function setPrefByType(prefName: string, newValue: any, atImport: boolean): void;
+  function setPrefByType(prefName: string, newValue: any, browserWindow: BrowserWindow, atImport: boolean): void;
   function setPref(aPref: Pref): void;
-  function setPrefAfterImport(aPref: Pref): boolean;
+  function setPrefAfterImport(aPref: Pref, browserWindow: BrowserWindow): boolean;
   function toggleInstantApply(item: CheckBoxElement): void;
   function loadData(pattern: string[]): void;
   function showPane(paneID: string): void;
@@ -619,6 +619,7 @@ interface PanelItemButton extends HTMLButtonElement {
 
 interface QuerySelectorMap {
   ".content-box": HTMLElement;
+  "checkbox": HTMLInputElement;
   "deck": HTMLElement;
   "dialog": HTMLDialogElement & {ownerGlobal: Window};
   "description": HTMLElement;
@@ -630,6 +631,7 @@ interface QuerySelectorMap {
 }
 
 interface createXULMap {
+  checkbox: HTMLInputElement;
   preference: PreferenceClass;
   preferences: PreferencesListClass;
   radio: HTMLInputElement;
@@ -696,6 +698,8 @@ interface GetByMap {
   "saveWindow": MozShortcutClass;
   "slideShow": MozShortcutClass;
 
+  "tab-context-menu-container": HTMLElement & {_columns: HTMLElement[]; _itemsPerColumn: number};
+
   // for pref-appearance.xhtml
   "color": StyleElement;
   "red": StyleElement;
@@ -738,6 +742,7 @@ interface BrowserWindow extends MockedGeckoTypes.BrowserWindow {
   gNavigatorBundle: gNavigatorBundle;
   gTMPprefObserver: gTMPprefObserver;
   Tabmix: TabmixGlobal;
+  TabmixContext: TabmixContextTypes;
 }
 
 interface TabmixKnownModules {

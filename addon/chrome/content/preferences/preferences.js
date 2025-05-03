@@ -443,14 +443,14 @@ function getPrefByType(prefName) {
 }
 
 /** @type {Globals.setPrefByType} */
-function setPrefByType(prefName, newValue, atImport) {
+function setPrefByType(prefName, newValue, browserWindow, atImport) {
   let pref = {
     name: prefName,
     value: newValue,
     type: Services.prefs.getPrefType(prefName),
   };
   try {
-    if (!atImport || !setPrefAfterImport(pref)) {
+    if (!atImport || !setPrefAfterImport(pref, browserWindow)) {
       setPref(pref);
     }
   } catch (ex) {
@@ -471,7 +471,7 @@ function setPref(aPref) {
 }
 
 /** @type {Globals.setPrefAfterImport} */
-function setPrefAfterImport(aPref) {
+function setPrefAfterImport(aPref, browserWindow) {
   // in prev version we use " " for to export string to file
   aPref.value = aPref.value.replace(/^"*|"*$/g, "");
 
@@ -509,7 +509,7 @@ function setPrefAfterImport(aPref) {
       aPref.value = /true/i.test(aPref.value);
     }
 
-    let prefsUtil = Tabmix.getTopWin().gTMPprefObserver;
+    let prefsUtil = browserWindow.gTMPprefObserver;
     prefsUtil.preventUpdate = true;
     setPref(aPref);
     prefsUtil.preventUpdate = false;
@@ -740,6 +740,7 @@ function loadData(pattern) {
     pattern.splice(1, 0, pattern.splice(index, 1)[0] ?? "");
   }
 
+  const browserWindow = Tabmix.getTopWin();
   var prefName, prefValue;
   for (const val of pattern) {
     Shortcuts.prefsChangedByTabmix = true;
@@ -747,11 +748,10 @@ function loadData(pattern) {
     if (valIndex > 0) {
       prefName = val.substring(0, valIndex);
       prefValue = val.substring(valIndex + 1, val.length);
-      setPrefByType(prefName, prefValue, true);
+      setPrefByType(prefName, prefValue, browserWindow, true);
     }
   }
   gPrefWindow.afterShortcutsChanged();
-  var browserWindow = Tabmix.getTopWin();
   browserWindow.gTMPprefObserver.updateTabClickingOptions();
   Tabmix.prefs.clearUserPref("setDefault");
   Services.prefs.savePrefFile(null);

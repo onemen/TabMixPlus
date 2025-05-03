@@ -21,7 +21,6 @@ interface GetByMap {
   "appMenu-multiView": HTMLElement;
   "back-button": HTMLButtonElement;
   "contentAreaContextMenu": ContextMenu;
-  "context_openANewTab": HTMLMenuElement;
   "forward-button": HTMLButtonElement;
   "fullscr-toggler": HTMLElement;
   "history-menu": HTMLMenuElement;
@@ -32,7 +31,6 @@ interface GetByMap {
   "PanelUI-menu-button": HTMLButtonElement;
   "privateTab-afterTabs-openNewPrivateTab": HTMLButtonElement;
   "privateTab-toolbar-openNewPrivateTab": HTMLButtonElement;
-  "tabContextMenu": ContextMenu;
   "tabmix-closedTabsButton": HTMLButtonElement;
   "tabmix-closedTabsView": ClosedObjectsUtils.CustomPanelView;
   "tabmix-closedWindowsView": ClosedObjectsUtils.CustomPanelView;
@@ -47,7 +45,6 @@ interface GetByMap {
   "titlebar": HTMLElement;
   "tm-autoreload_menu": HTMLMenuElement;
   "tm-autoreloadTab_menu": HTMLMenuElement;
-  "tm-content-closetab": HTMLMenuElement;
   "tm-freezeTab": HTMLMenuElement;
   "tm-lockTab": HTMLMenuElement;
   "tm-tabsList-menu": ClosedObjectsUtils.PopupElement;
@@ -58,14 +55,20 @@ interface GetByMap {
   "tmp_undocloseButton": HTMLElement;
   "viewToolbarsMenuSeparator": HTMLElement;
   "widget-overflow-list": HTMLElement;
+
+  // TabmixContext
+  "tabContextMenu": ContextMenu;
+  "closeTabOptions": HTMLMenuElement;
+  "context_closeOtherTabs": HTMLMenuElement;
+  "tm-closeAllTabs": HTMLMenuElement;
+  "tm-closeSimilar": HTMLMenuElement;
+  "context_openANewTab": HTMLMenuElement;
+  "tm-content-miscSep": HTMLElement;
+  "tm-content-closetab": HTMLMenuElement;
 }
 
 interface createXULMap {
   menuitem: TabmixAllTabsNS.Menuitem;
-}
-
-interface ContextMenu extends XULPopupElement {
-  showHideSeparators: () => void;
 }
 
 declare var AppConstants: AppConstantsType;
@@ -327,27 +330,6 @@ interface QuerySelectorMap {
   ".panel-subview-body": ClosedObjectsUtils.PopupElement;
   "[tabmix_selectedID]": Tab;
   "[tabmix-firstTabInRow]": Tab | MockedGeckoTypes.GroupLabelContainer;
-}
-
-declare namespace TabmixContextNS {
-  interface ContextEvent extends Omit<MouseEvent, "target" | "originalTarget"> {
-    target: ContextMenu;
-    originalTarget: ContextMenu & {triggerNode: {parentNode: {tab: Tab}}};
-  }
-
-  let _originalTabbarContextMenu: string | null;
-  const _showHideSeparators: string[];
-  function buildTabContextMenu(): void;
-  function updateTabbarContextMenu(show: boolean): void;
-  function toggleEventListener(enable: boolean): void;
-  function handleEvent(this: typeof TabmixContextNS, aEvent: ContextEvent): void;
-  function updateTabContextMenu(event: ContextEvent): boolean;
-  function contextMenuShown(id: "contentAreaContextMenu" | "tabContextMenu"): void;
-  function _prepareContextMenu(): void;
-  function updateMainContextMenu(event: ContextEvent): boolean;
-  function _showAutoReloadMenu(menuId: "tm-autoreload_menu" | "tm-autoreloadTab_menu", pref: string, test: boolean): void;
-  function openMultipleLinks(check?: boolean): boolean;
-  function updateSelectedTabsCount(itemOrId: HTMLElement | string, isVisible: boolean): number;
 }
 
 declare namespace TabmixEventListenerNS {
@@ -663,7 +645,6 @@ declare namespace TabmixProgressListenerNS {
 type ExtensionsCompatibility = typeof ExtensionsCompatibilityNS;
 type TabmixAllTabs = typeof TabmixAllTabsNS;
 type TabmixClosedTabs = typeof TabmixClosedTabsNS;
-type TabmixContext = typeof TabmixContextNS;
 type TabmixEventListener = TabmixEventListenerNS.EventListeners;
 type TabmixPlaces = typeof TabmixPlacesNS;
 type TabmixprefObserver = typeof TabmixprefObserverNS;

@@ -10,55 +10,28 @@
 
   <popupset id="mainPopupSet">
     <menupopup id="tabContextMenu">
-        <menuitem id="context_openANewTab" insertbefore="context_reloadTab"
-                 _afterthis="(&afterthis.label;)"
-                 tmp_iconic="menuitem-iconic tabmix-newtab-menu-icon menuitem-with-favicon"/>
-        <menuitem id="tm-duplicateinWin" insertafter="context_duplicateTabs"
-                 label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"/>
-<!--
-        <menuitem id="context_reloadTab">
-        <menuitem id="context_reloadSelectedTabs">
-        <menuitem id="context_toggleMuteTab">
-        <menuitem id="context_toggleMuteSelectedTabs">
-        <menuitem id="context_pinTab">
-        <menuitem id="context_unpinTab"/>
-        <menuitem id="context_pinSelectedTabs"/>
-        <menuitem id="context_unpinSelectedTabs"/>
-        <menuitem id="context_duplicateTab"/>
-        <menuitem id="context_duplicateTabs"/>
-        <menuseparator/>
-        <menuitem id="context_selectAllTabs"/>
-        <menuitem id="context_bookmarkSelectedTabs"/>
-        <menuitem id="context_bookmarkTab"/>
--->
-
-        <menuitem id="tm-mergeWindowsTab" insertbefore="context_reopenInContainer"
-                 key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;"/>
-        <menuitem id="tm-renameTab" insertbefore="context_reopenInContainer"
-                 label="&renametab.label;" accesskey="&renametab.accesskey;"/>
-        <menuitem id="tm-copyTabUrl" insertbefore="context_reopenInContainer"
-                 label="&copytaburl.label;" accesskey="&copytaburl.accesskey;"/>
-<!--
-        <menu id="context_reopenInContainer"/>
-        <menu id="context_moveTabOptions">
-          <menupopup id="moveTabOptionsMenu">
-            <menuitem id="context_moveToStart"/>
-            <menuitem id="context_moveToEnd"/>
-            <menuitem id="context_openTabInWindow"/>
-          </menupopup>
+        <menuitem id="context_openANewTab"
+                 _afterthis="(&afterthis.label;)"/>
+        <menu id="tm-undoCloseList"
+                 tmp_iconic="menu-iconic closedtabs-icon"
+                 label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;">
+          <menupopup id="tm-undoCloseList-menu"/>
         </menu>
-        <menu id="context_sendTabToDevice"/>
-        <menuseparator>
-
-        TabmixContext.buildTabContextMenu move context_reloadTab to this location
-        <menuitem id="context_reloadTab"/>
--->
-        <menu id="tm-autoreloadTab_menu" insertbefore="context_closeTabOptions"
+        <menuitem id="tm-duplicateinWin"
+                 label="&duplicateinWin.label;" accesskey="&duplicateinWin.accesskey;"/>
+        <menuitem id="tm-mergeWindowsTab"
+                 key="key_tm_mergeWin" label="&mergeContext.label;" accesskey="&mergeContext.accesskey;"/>
+        <menuitem id="tm-renameTab"
+                 label="&renametab.label;" accesskey="&renametab.accesskey;"/>
+        <menuitem id="tm-copyTabUrl"
+                 label="&copytaburl.label;" accesskey="&copytaburl.accesskey;"/>
+        <menu id="tm-autoreloadTab_menu"
               labelTab="&autoReloadTab.label;" accesskeyTab="&autoReloadTab.accesskey;"
               labelSite="&autoReloadSite.label;" accesskeySite="&autoReloadSite.accesskey;">
            <menupopup data-popup="autoReload"/>
         </menu>
-        <menu id="context_reloadTabOptions" insertbefore="context_closeTabOptions"
+        <menu id="context_reloadTabOptions"
+            tabmix=""
             label="Reload Multiple Tabs">
           <menupopup id="reloadTabOptions">
             <!-- add menu item to reload selected tabs -->
@@ -72,30 +45,14 @@
                     label="&reloadother.label;" accesskey="&reloadother.accesskey;"/>
           </menupopup>
         </menu>
-        <menuseparator id="tabmix_reloadTabOptions_separator" insertbefore="context_closeTabOptions" type="tabmix"/>
-
-        <menu id="tm-undoCloseList" insertbefore="context_closeTabOptions"
-                 tmp_iconic="menu-iconic closedtabs-icon"
-                 label="&undoCloseListMenu.label;" accesskey="&undoCloseListMenu.accesskey;">
-          <menupopup id="tm-undoCloseList-menu"/>
-        </menu>
-<!--
-        <menuitem id="context_closeTab"/>
-        <menu id="context_closeTabOptions">
-          <menupopup id="closeTabOptions">
-            <menuitem id="context_closeTabsToTheStart"/>
-            <menuitem id="context_closeTabsToTheEnd"/>
-            <menuitem id="context_closeOtherTabs"/>
-          </menupopup>
-        </menu>
--->
-        <menuitem id="tm-closeAllTabs" insertbefore="context_closeOtherTabs"
+        <menuseparator id="tabmix_reloadTabOptions_separator"/>
+        <menuitem id="tm-closeAllTabs"
                  label="&closeAllTabsMenu.label;" accesskey="&closeall.accesskey;"/>
-        <menuitem id="tm-closeSimilar" insertbefore="context_closeOtherTabs"
+        <menuitem id="tm-closeSimilar"
                  label="&closeSimilarTab.label;" accesskey="&closeSimilarTab.accesskey;"/>
 
-        <menuseparator id="tabmix_closeTab_separator" insertbefore="context_undoCloseTab" type="tabmix"/>
-        <menu id="tm-docShell" insertbefore="context_undoCloseTab"
+        <menuseparator id="tabmix_closeTab_separator"/>
+        <menu id="tm-docShell"
                 label="&docShellMenu.label;" accesskey="&docShellMenu.accesskey;">
          <menupopup id="tabmix-docShell-popup">
            <menuitem label="&allowImage.label;" value="Images" class="menuitem-iconic" type="checkbox" checked="true" />
@@ -105,19 +62,15 @@
            <menuitem label="&allowJavascript.label;" value="Javascript" class="menuitem-iconic" type="checkbox" checked="true" />
          </menupopup>
         </menu>
-        <menuitem id="tm-freezeTab" insertbefore="context_undoCloseTab"
+        <menuitem id="tm-freezeTab"
                   label="&freezeTabMenu.label;" accesskey="&freezeTabMenu.accesskey;" type="checkbox"/>
-        <menuitem id="tm-protectTab" insertbefore="context_undoCloseTab"
+        <menuitem id="tm-protectTab"
                   label="&protectTabMenu.label;" accesskey="&protectTabMenu.accesskey;" type="checkbox"/>
-        <menuitem id="tm-lockTab" insertbefore="context_undoCloseTab"
+        <menuitem id="tm-lockTab"
                   label="&lockTabMenu.label;" accesskey="&lockTabMenu.accesskey;" type="checkbox"/>
-        <menuseparator id="tabmix_lockTab_separator" insertbefore="context_undoCloseTab" type="tabmix"/>
-
-<!--
-        TabmixContext.buildTabContextMenu
-        move context_bookmarkSelectedTabs and context_bookmarkTab to this location
--->
+        <menuseparator id="tabmix_lockTab_separator"/>
         <menuitem id="context_bookmarkAllTabs"
+                  tabmix=""
                   command="Browser:BookmarkAllTabs"
                   data-lazy-l10n-id="menu-bookmarks-all-tabs"/>
 

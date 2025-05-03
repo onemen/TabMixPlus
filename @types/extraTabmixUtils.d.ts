@@ -402,6 +402,42 @@ declare namespace TabmixClosedTabsNS {
   function fix_bug_1868452(item: Menuitem): boolean;
 }
 
+interface ContextMenu extends XULPopupElement {
+  showHideSeparators: () => void;
+}
+
+interface TabmixContextEvent extends Omit<MouseEvent, "target" | "originalTarget"> {
+  target: ContextMenu;
+  originalTarget: ContextMenu & {triggerNode: {parentNode: {tab: Tab}}};
+}
+
+interface TabmixContextTypes {
+  _originalTabbarContextMenu: string | null;
+  _currentMenuOrder: number;
+  _originalOrderSaved: boolean;
+  _showHideSeparators: string[];
+
+  $id: Functions["getById"];
+
+  buildTabContextMenu(): void;
+  _saveOriginalMenuOrder(): void;
+  updateMenuOrder(): void;
+  _tabmixMenuOrder: [item: string, reference: string, where?: "insertbefore" | "insertafter"][];
+  _setTabmixOrder(): void;
+  _setFirefoxOrder(): void;
+  updateTabbarContextMenu(show: boolean): void;
+  toggleEventListener(enable: boolean): void;
+  handleEvent(aEvent: TabmixContextEvent): void;
+  readonly tabContextConfig: TabContextConfigModule.Exports;
+  updateTabContextMenu(event: TabmixContextEvent): boolean;
+  contextMenuShown(id: "contentAreaContextMenu" | "tabContextMenu"): void;
+  _prepareContextMenu(): void;
+  updateMainContextMenu(event: TabmixContextEvent): boolean;
+  _showAutoReloadMenu(menuId: "tm-autoreload_menu" | "tm-autoreloadTab_menu", showMenu: boolean): void;
+  openMultipleLinks(check?: boolean): boolean;
+  updateSelectedTabsCount(itemOrId: HTMLElement | string, isVisible: boolean): number;
+}
+
 type InitializationStep = {id: number; obj: string; initialized?: boolean};
 type InitializationSteps = Omit<typeof TabmixInitialization, "run" | "isValidWindow" | "_lastPhase">;
 declare namespace TabmixInitialization {

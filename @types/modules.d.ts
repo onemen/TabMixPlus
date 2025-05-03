@@ -133,6 +133,7 @@ interface TabmixKnownModules {
   "chrome://tabmix-resource/content/extensions/AddonManager.sys.mjs": {TabmixAddonManager: {init: () => void}};
   "chrome://tabmix-resource/content/log.sys.mjs": {console: LogModule.Console};
   "chrome://tabmix-resource/content/Places.sys.mjs": {TabmixPlacesUtils: PlacesModule.PlacesUtils};
+  "chrome://tabmix-resource/content/TabContextConfig.sys.mjs": {TabContextConfig: TabContextConfigModule.Exports};
   "chrome://tabmix-resource/content/Shortcuts.sys.mjs": {Shortcuts: ShortcutsModule.Shortcuts};
   "chrome://tabmix-resource/content/TabmixSvc.sys.mjs": {TabmixSvc: TabmixSvcModule.TabmixSvc};
   "chrome://tabmix-resource/content/NewTabURL.sys.mjs": {TabmixNewTabURL: NewTabURLModule.NewTabURL};
@@ -291,6 +292,7 @@ declare namespace MockedExports {
   const XPCOMUtilsSYSMJS: {
     XPCOMUtils: {
       defineLazyModuleGetters<T extends Record<string, string>>(obj: object, modules: T): void;
+      defineLazyPreferenceGetter(aObject: object, aName: string, aPreference: string, aDefaultPrefValue: unknown, aOnUpdate: (aPreference: string, previousValue: unknown, newValue: unknown) => void, aTransform?: (aPreference: string) => unknown): void;
     };
   };
 
@@ -1264,6 +1266,22 @@ declare namespace PlacesModule {
   }
 }
 
+declare namespace TabContextConfigModule {
+  type PrefList = {
+    [id: string]: [string, boolean?];
+  };
+
+  type AppName = "waterfox" | "zen" | "firefox" | "floorp";
+  type Forks = "waterfox" | "zen" | "floorp";
+  type ForkItems = Record<AppName, TabContextConfigModule.PrefList>;
+
+  type Exports = {
+    prefList: PrefList;
+    selectors: Record<string, string>;
+    forksExtraIds: string[];
+  };
+}
+
 declare namespace RenameTabModule {
   type Lazy = Pick<KnownModulesImports, "TabmixPlacesUtils">;
 
@@ -1564,6 +1582,11 @@ declare module "chrome://tabmix-resource/content/log.sys.mjs" {
   export {console};
 }
 
+declare module "chrome://tabmix-resource/content/TabContextConfig.sys.mjs" {
+  const TabContextConfig: TabContextConfigModule.Exports;
+  export {TabContextConfig};
+}
+
 declare module "chrome://tabmix-resource/content/SyncedTabs.sys.mjs" {
   export interface SyncedTabs {
     init(window: Window): void;
@@ -1619,7 +1642,7 @@ declare namespace TabmixModules {
   }
 
   interface ChromeUtils {
-    defineLazyGetter(aTarget: any, aName: any, aLambda: any): void;
+    defineLazyGetter(aTarget: any, aName: any, aLambda: () => any): void;
     import<S extends keyof TabmixKnownModules>(module: S): TabmixKnownModules[S];
     defineLazyModuleGetters(aObject: object | Record<string, unknown>, aModules: Record<string, string>): void;
   }

@@ -448,40 +448,32 @@ var TabmixTabClickOptions = {
   },
 };
 
-/** @type {TabmixContext} */
+/** @type {TabmixContextTypes} */
 var TabmixContext = {
   _originalTabbarContextMenu: "null",
+  _currentMenuOrder: 1, // browser initial order is Firefox build-in order
+  _originalOrderSaved: false,
+
+  $id(id) {
+    return document.getElementById(id);
+  },
+
   // Create new items in the tab bar context menu
   buildTabContextMenu: function TMP_buildTabContextMenu() {
-    /** @type {Functions["getById"]} */
-    var $id = id => document.getElementById(id);
-
     MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
     MozXULElement.insertFTLIfNeeded("browser/menubar.ftl");
     Tabmix.setFTLDataId("tabContextMenu");
 
     Tabmix.setFTLDataId("context_reopenInContainer");
 
-    var tabContextMenu = $id("tabContextMenu");
-    tabContextMenu.insertBefore($id("context_reloadTab"), $id("tabmix_reloadTabOptions_separator"));
-    tabContextMenu.insertBefore(
-      $id("context_reloadSelectedTabs"),
-      $id("tabmix_reloadTabOptions_separator")
-    );
-    const closeTabSeparator = $id("tabmix_closeTab_separator");
-    tabContextMenu.insertBefore($id("context_undoCloseTab"), closeTabSeparator);
-    tabContextMenu.insertBefore($id("context_closeTab"), closeTabSeparator);
-    if (Tabmix.isVersion(1270)) {
-      tabContextMenu.insertBefore($id("context_closeDuplicateTabs"), closeTabSeparator);
-    }
-    tabContextMenu.insertBefore($id("context_closeTabOptions"), closeTabSeparator);
-    tabContextMenu.insertBefore(
-      $id("context_bookmarkSelectedTabs"),
-      $id("context_bookmarkAllTabs")
-    );
-    tabContextMenu.insertBefore($id("context_bookmarkTab"), $id("context_bookmarkAllTabs"));
+    // move extra close options to closeTabOptions submenu
+    const closeTabOptions = this.$id("closeTabOptions");
+    const closeOtherTabs = this.$id("context_closeOtherTabs");
+    closeTabOptions.insertBefore(this.$id("tm-closeAllTabs"), closeOtherTabs);
+    closeTabOptions.insertBefore(this.$id("tm-closeSimilar"), closeOtherTabs);
 
-    const openTab = $id("context_openANewTab");
+    const openTab = this.$id("context_openANewTab");
+    const tabContextMenu = this.$id("tabContextMenu");
     tabContextMenu.addEventListener(
       "popupshowing",
       () => {
@@ -489,6 +481,12 @@ var TabmixContext = {
         if (!Tabmix.isVersion(1290)) {
           openTab.setAttribute("oncommand", "Tabmix.BrowserOpenTab({ event });");
         }
+
+        // Save the original Firefox menu order before making any changes
+        this._saveOriginalMenuOrder();
+
+        // Reorder the menu items if needed
+        this.updateMenuOrder();
       },
       {once: true}
     );
@@ -519,10 +517,138 @@ var TabmixContext = {
     if (Tabmix.prefs.getBoolPref("showTabContextMenuOnTabbar")) {
       this.updateTabbarContextMenu(true);
     }
+  },
 
-    // move tm-content-miscSep to its place (Firefox 32+)
-    let sep = $id("tm-content-miscSep");
-    sep.parentNode.insertBefore(sep, $id("tm-content-closetab"));
+  // Save the original Firefox menu order
+  _saveOriginalMenuOrder() {
+    if (this._originalOrderSaved) {
+      return;
+    }
+    this._originalOrderSaved = true;
+
+    const tabContextMenu = document.getElementById("tabContextMenu");
+    if (!tabContextMenu) return;
+
+    try {
+      tabContextMenu.insertBefore(
+        this.$id("tm-undoCloseList"),
+        this.$id("context_undoCloseTab").nextSibling
+      );
+
+      // Save the original order of all menu items
+      Array.from(tabContextMenu.children).forEach((node, index) => {
+        node._originalOrder = index + 1;
+      });
+    } catch (ex) {
+      console.error("Tabmix Error: Failed to save tab context menu original menu order", ex);
+    }
+  },
+
+  // Set menu order based on preference
+  updateMenuOrder() {
+    if (!this._originalOrderSaved) {
+      return;
+    }
+
+    const menuOrder = Tabmix.prefs.getIntPref("tabContextMenu.menuOrder");
+    if (this._currentMenuOrder !== menuOrder) {
+      this._currentMenuOrder = menuOrder;
+      if (menuOrder === 0) {
+        this._setTabmixOrder();
+      } else {
+        this._setFirefoxOrder();
+      }
+      this.contextMenuShown("tabContextMenu");
+    }
+  },
+
+  // Define the order of menu items in Tabmix order
+  // Format: [itemId, referenceId, insertafter]
+  _tabmixMenuOrder: [
+    ["tm-duplicateinWin", "context_duplicateTabs", "insertafter"],
+
+    // Tab management section
+    ["tm-mergeWindowsTab", "context_reopenInContainer"],
+    ["tm-renameTab", "context_reopenInContainer"],
+    ["tm-copyTabUrl", "context_reopenInContainer"],
+
+    // Reload options
+    ["tm-autoreloadTab_menu", "context_closeTabOptions"],
+    ["context_reloadTabOptions", "context_closeTabOptions"],
+    ["tabmix_reloadTabOptions_separator", "context_closeTabOptions"],
+    ["context_reloadTab", "tabmix_reloadTabOptions_separator"],
+    ["context_reloadSelectedTabs", "tabmix_reloadTabOptions_separator"],
+
+    // Close options
+    ["tm-undoCloseList", "context_closeTabOptions"],
+
+    // miscellaneous items
+    ["tabmix_closeTab_separator", "context_undoCloseTab"],
+    ["tm-docShell", "context_undoCloseTab"],
+    ["tm-freezeTab", "context_undoCloseTab"],
+    ["tm-protectTab", "context_undoCloseTab"],
+    ["tm-lockTab", "context_undoCloseTab"],
+    ["tabmix_lockTab_separator", "context_undoCloseTab"],
+
+    // Move Close menu to place
+    ["context_undoCloseTab", "tabmix_closeTab_separator"],
+    ["context_closeTab", "tabmix_closeTab_separator"],
+    ["context_closeDuplicateTabs", "tabmix_closeTab_separator"], // from Firefox 127
+    ["context_closeTabOptions", "tabmix_closeTab_separator"],
+
+    // Move bookmarks menu together
+    ["context_bookmarkSelectedTabs", "context_bookmarkAllTabs"],
+    ["context_bookmarkTab", "context_bookmarkAllTabs"],
+  ],
+
+  // Set menu items in Tabmix preferred order
+  _setTabmixOrder() {
+    const tabContextMenu = this.$id("tabContextMenu");
+    for (const menuItem of this._tabmixMenuOrder) {
+      const [itemId, referenceId, where] = menuItem;
+      const item = this.$id(itemId);
+      const reference = this.$id(referenceId);
+      if (item?.parentNode && reference) {
+        try {
+          tabContextMenu.insertBefore(
+            item,
+            // item will append to the end if reference.nextSibling is null
+            where === "insertafter" ? reference.nextSibling : reference
+          );
+        } catch (error) {
+          console.log(
+            "Tabmix Error: Failed to move tab context menu item",
+            // @ts-ignore
+            error?.message,
+            itemId,
+            referenceId,
+            where
+          );
+        }
+      }
+    }
+  },
+
+  // Set menu items in Firefox original order
+  _setFirefoxOrder() {
+    try {
+      const tabContextMenu = this.$id("tabContextMenu");
+
+      // Sort the children based on their original order
+      const children = Array.from(tabContextMenu.children);
+      children.sort((a, b) => {
+        const orderA = a._originalOrder || 999;
+        const orderB = b._originalOrder || 999;
+        return orderA - orderB;
+      });
+
+      // Reappend in the original order
+      for (const child of children) {
+        tabContextMenu.appendChild(child);
+      }
+    } catch (ex) {
+      console.error("Tabmix Error: Failed to restore tab context menu to Firefox menu order", ex);
+    }
   },
 
   updateTabbarContextMenu(show) {
@@ -575,15 +701,78 @@ var TabmixContext = {
     }
   },
 
+  get tabContextConfig() {
+    return Tabmix.lazyGetter(this, "tabContextConfig", () => {
+      const {TabContextConfig} = ChromeUtils.importESModule(
+        "chrome://tabmix-resource/content/TabContextConfig.sys.mjs"
+      );
+
+      if (TabmixSvc.isWaterfox) {
+        // waterfox use extra preference to activate some tabFeature
+        // and its eventlistener also run on sub menu popupshowing
+        const tabContextMenu = document.getElementById("tabContextMenu");
+        const items = tabContextMenu?.querySelectorAll(".tabFeature") ?? [];
+        TabContextConfig.forksExtraIds = ["toggleTabPrivateState"].concat(
+          [...items].map(item => item.id)
+        );
+      }
+
+      return TabContextConfig;
+    });
+  },
+
   // Tab context menu popupshowing
   updateTabContextMenu: function TMP_updateTabContextMenu(event) {
     if (event.originalTarget != document.getElementById("tabContextMenu")) {
       return true;
     }
 
-    document.getElementById("tabContextMenu").addEventListener("popuphidden", this);
-
     const tabContextMenu = event.originalTarget;
+    tabContextMenu.addEventListener("popuphidden", this);
+
+    const {prefList, selectors, forksExtraIds} = this.tabContextConfig;
+
+    /**
+     * Checks if a menu item should be hidden based on the tabContextMenu
+     * preference
+     *
+     * @param {string} id - The menu item ID
+     * @param {string} [prefname] - preference key to use (optional)
+     */
+    const isItemVisible = (id, prefname) => {
+      if (!prefname) {
+        let name;
+        if (prefList[id]) {
+          name = prefList[id][0] || id;
+        } else {
+          const relatedId = id.replace(/SelectedTabs$|Tabs$/, "Tab");
+          if (prefList[relatedId]) {
+            name = prefList[relatedId]?.[0] || relatedId;
+          } else {
+            console.log("Tabmix Error: unknown menu item", id);
+            return true;
+          }
+        }
+        prefname = name.replace(/^context_|^tm-/, "");
+      }
+      return Tabmix.prefs.getBoolPref(prefname);
+    };
+
+    /**
+     * @param {HTMLElement | string} iteOrId
+     * @param {{key?: string; is?: boolean}} [options]
+     */
+    function showItem(iteOrId, {key, is: condition = true} = {}) {
+      const item = typeof iteOrId === "string" ? document.getElementById(iteOrId) : iteOrId;
+      if (item && !condition) {
+        Tabmix.showItem(item, false);
+      } else if (item) {
+        Tabmix.showItem(item, isItemVisible(item.id, key));
+      } else {
+        console.error("Tabmix Error: Missing menu item", iteOrId, key ?? "");
+      }
+    }
+
     const origTriggerNode = tabContextMenu.triggerNode;
     let triggerNode = origTriggerNode && origTriggerNode.parentNode;
     if (triggerNode && triggerNode.parentNode) {
@@ -600,7 +789,7 @@ var TabmixContext = {
     var isOneWindow = Tabmix.numberOfWindows() == 1;
 
     const newTab = document.getElementById("context_openANewTab");
-    Tabmix.showItem(newTab, Tabmix.prefs.getBoolPref("newTabMenu"));
+    showItem(newTab);
     const newTabMenuLabel =
       newTab.getAttribute("_newtab") +
       (clickOutTabs ? "" : "  " + newTab.getAttribute("_afterthis"));
@@ -613,118 +802,102 @@ var TabmixContext = {
       }
     }
 
-    // Duplicate Commands
-    Tabmix.showItem(
-      "context_duplicateTab",
-      !multiselectionContext && Tabmix.prefs.getBoolPref("duplicateMenu")
-    );
-    Tabmix.showItem(
-      "context_duplicateTabs",
-      multiselectionContext && Tabmix.prefs.getBoolPref("duplicateMenu")
-    );
-    Tabmix.showItem(
-      "tm-duplicateinWin",
-      Tabmix.prefs.getBoolPref("duplicateinWinMenu") && !Tabmix.singleWindowMode
-    );
-    Tabmix.showItem(
-      "context_openTabInWindow",
-      Tabmix.prefs.getBoolPref("detachTabMenu") && !Tabmix.singleWindowMode
-    );
-
-    Tabmix.showItem(
-      "context_toggleMuteTab",
-      !multiselectionContext && Tabmix.prefs.getBoolPref("muteTabMenu")
-    );
-    Tabmix.showItem(
-      "context_toggleMuteTabs",
-      multiselectionContext && Tabmix.prefs.getBoolPref("muteTabMenu")
-    );
-
-    var show = Tabmix.prefs.getBoolPref("pinTabMenu");
-    Tabmix.showItem("context_pinTab", !multiselectionContext && show && !aTab.pinned);
-    Tabmix.showItem("context_unpinTab", !multiselectionContext && show && aTab.pinned);
-    Tabmix.showItem("context_pinSelectedTabs", multiselectionContext && show && !aTab.pinned);
-    Tabmix.showItem("context_unpinSelectedTabs", multiselectionContext && show && aTab.pinned);
-    Tabmix.showItem("context_moveTabOptions", Tabmix.prefs.getBoolPref("moveTabOptions"));
-
+    // these menu hidden state controlled by the browse (Firefox, Waterfox ...)
     // make sure not to show menu items that are hidden by Firefox
-    Tabmix.setItem(
+    const itemsIds = new Set([
       "context_sendTabToDevice",
-      "tabmix_hide",
-      !Tabmix.prefs.getBoolPref("sendTabToDevice") || null
-    );
+      "shareTabURL", // no ID in Firefox
+      "context_moveTabToNewGroup",
+      "context_moveTabToGroup",
+      "context_ungroupTab",
+      "context_playTab",
+      "context_playSelectedTabs",
+      TabmixSvc.isZen ? "context_zenUnloadTab" : "context_unloadTab",
+      "context_fullscreenAutohide", // no ID in Firefox < 129
+      "context_fullscreenExit", // no ID in Firefox < 129
+      ...forksExtraIds,
+    ]);
+    for (const id of Array.from(itemsIds)) {
+      const item =
+        selectors[id] ? tabContextMenu.querySelector(selectors[id]) : document.getElementById(id);
+      const isActivePref = TabmixSvc.isWaterfox && item?.getAttribute("preference");
+      const isVisibleByWaterfox = isActivePref ? Services.prefs.getBoolPref(isActivePref) : true;
+      Tabmix.setItem(item, "tabmix_hide", !isVisibleByWaterfox || !isItemVisible(id) || null);
+    }
 
-    const shareTabURL = event.originalTarget.querySelector(".share-tab-url-item");
-    Tabmix.setItem(shareTabURL, "tabmix_hide", !Tabmix.prefs.getBoolPref("shareTabURL") || null);
+    // Duplicate Commands
+    if (!TabmixSvc.isWaterfox) {
+      // context_duplicateTab is included in forksExtraIds
+      showItem("context_duplicateTab", {is: !multiselectionContext});
+    }
+    showItem("context_duplicateTabs", {is: multiselectionContext});
+    showItem("tm-duplicateinWin", {is: !Tabmix.singleWindowMode});
+    showItem("context_openTabInWindow", {is: !Tabmix.singleWindowMode});
 
-    Tabmix.showItem(
-      "tm-mergeWindowsTab",
-      Tabmix.prefs.getBoolPref("showMergeWindow") &&
-        (!Tabmix.singleWindowMode || (Tabmix.singleWindowMode && !isOneWindow))
-    );
-    var showRenameTabMenu = Tabmix.prefs.getBoolPref("renameTabMenu");
-    Tabmix.showItem("tm-renameTab", showRenameTabMenu);
-    Tabmix.showItem("tm-copyTabUrl", Tabmix.prefs.getBoolPref("copyTabUrlMenu"));
-    Tabmix.showItem("context_reopenInContainer", Tabmix.prefs.getBoolPref("reopenInContainer"));
-    Tabmix.showItem("context_selectAllTabs", Tabmix.prefs.getBoolPref("selectAllTabs"));
+    showItem("context_toggleMuteTab", {is: !multiselectionContext});
+    showItem("context_toggleMuteSelectedTabs", {is: multiselectionContext});
+
+    showItem("context_pinTab", {is: !multiselectionContext && !aTab.pinned});
+    showItem("context_unpinTab", {key: "pinTabMenu", is: !multiselectionContext && aTab.pinned});
+    showItem("context_pinSelectedTabs", {is: multiselectionContext && !aTab.pinned});
+    showItem("context_unpinSelectedTabs", {
+      key: "pinTab",
+      is: multiselectionContext && aTab.pinned,
+    });
+    showItem("context_moveTabOptions");
+
+    showItem("tm-mergeWindowsTab", {
+      is: !Tabmix.singleWindowMode || (Tabmix.singleWindowMode && !isOneWindow),
+    });
+
+    showItem("tm-renameTab");
+    showItem("tm-copyTabUrl", {is: !TabmixSvc.isWaterfox});
+    showItem("context_reopenInContainer");
+    showItem("context_selectAllTabs");
 
     //  ---------------- menuseparator ---------------- //
 
     // Reload Commands
-    Tabmix.showItem(
-      "context_reloadTab",
-      !multiselectionContext && Tabmix.prefs.getBoolPref("reloadTabMenu")
-    );
-    Tabmix.showItem(
-      "context_reloadSelectedTabs",
-      multiselectionContext && Tabmix.prefs.getBoolPref("reloadTabMenu")
-    );
-    this._showAutoReloadMenu("tm-autoreloadTab_menu", "autoReloadMenu", true);
-    Tabmix.showItem("context_reloadTabOptions", Tabmix.prefs.getBoolPref("reloadTabOptions"));
+    showItem("context_reloadTab", {is: !multiselectionContext});
+    showItem("context_reloadSelectedTabs", {is: multiselectionContext});
+    this._showAutoReloadMenu("tm-autoreloadTab_menu", isItemVisible("tm-autoreloadTab_menu"));
+    showItem("context_reloadTabOptions");
 
     //  ---------------- menuseparator ---------------- //
 
     var undoClose = Tabmix.prefs.getBoolPref("undoClose");
-    Tabmix.showItem(
-      "context_undoCloseTab",
-      Tabmix.prefs.getBoolPref("undoCloseTabMenu") && undoClose
-    );
-    Tabmix.showItem("tm-undoCloseList", Tabmix.prefs.getBoolPref("undoCloseListMenu") && undoClose);
+    showItem("context_undoCloseTab", {is: undoClose});
+    showItem("tm-undoCloseList", {is: undoClose});
 
     //  ---------------- menuseparator ---------------- //
 
     // Close tab Commands
-    Tabmix.showItem("context_closeTab", Tabmix.prefs.getBoolPref("closeTabMenu"));
+    showItem("context_closeTab");
     if (Tabmix.isVersion(1270)) {
-      const showCloseDuplicateTabs =
-        Tabmix.prefs.getBoolPref("closeDuplicateTabs") &&
-        Services.prefs.getBoolPref("browser.tabs.context.close-duplicate.enabled");
-      Tabmix.showItem("context_closeDuplicateTabs", showCloseDuplicateTabs);
+      const showCloseDuplicateTabs = Services.prefs.getBoolPref(
+        "browser.tabs.context.close-duplicate.enabled"
+      );
+      showItem("context_closeDuplicateTabs", {is: showCloseDuplicateTabs});
     }
-    Tabmix.showItem("context_closeTabOptions", Tabmix.prefs.getBoolPref("closeTabOptions"));
+    showItem("context_closeTabOptions");
 
     //  ---------------- menuseparator ---------------- //
 
-    Tabmix.showItem("tm-docShell", Tabmix.prefs.getBoolPref("docShellMenu"));
-    Tabmix.showItem("tm-freezeTab", Tabmix.prefs.getBoolPref("freezeTabMenu"));
-    Tabmix.showItem("tm-protectTab", Tabmix.prefs.getBoolPref("protectTabMenu"));
-    Tabmix.showItem("tm-lockTab", Tabmix.prefs.getBoolPref("lockTabMenu"));
+    showItem("tm-docShell");
+    showItem("tm-freezeTab");
+    showItem("tm-protectTab");
+    showItem("tm-lockTab");
 
     //  ---------------- menuseparator ---------------- //
 
-    Tabmix.showItem(
-      "context_bookmarkTab",
-      !multiselectionContext && Tabmix.prefs.getBoolPref("bookmarkTabMenu")
-    );
-    Tabmix.showItem(
-      "context_bookmarkTabs",
-      multiselectionContext && Tabmix.prefs.getBoolPref("bookmarkTabMenu")
-    );
-    Tabmix.showItem("context_bookmarkAllTabs", Tabmix.prefs.getBoolPref("bookmarkTabsMenu"));
+    showItem("context_bookmarkTab", {is: !multiselectionContext});
+    showItem("context_bookmarkSelectedTabs", {is: multiselectionContext});
+    showItem("context_bookmarkAllTabs");
 
     // we call this again when popupshown to make sure we don't show 2 menuseparator together
     TabmixContext.contextMenuShown("tabContextMenu");
 
+    const showRenameTabMenu = isItemVisible("tm-renameTab");
     if (showRenameTabMenu) {
       // disabled rename if the title not ready yet
       /** @type {boolean | undefined} */
@@ -847,15 +1020,9 @@ var TabmixContext = {
             lastVisible = mi;
           }
         } else if (hideNextSeparator) {
-          if (lastVisible.getAttribute("type") == "tabmix" && mi.getAttribute("type") != "tabmix") {
-            mi.hidden = false;
-            lastVisible.hidden = true;
-            lastVisible = mi;
-          } else {
-            mi.hidden = true;
-          }
+          mi.hidden = true;
         }
-      } else if (!mi.hidden && !mi.collapsed) {
+      } else if (!mi.hidden && !mi.collapsed && mi.getAttribute("tabmix_hide") !== "true") {
         hideNextSeparator = false;
         hideMenu = false;
       }
@@ -878,6 +1045,9 @@ var TabmixContext = {
     }
 
     nsContextMenu._tabmix_initialized = true;
+
+    let sep = this.$id("tm-content-miscSep");
+    sep.parentNode?.insertBefore(sep, this.$id("tm-content-closetab"));
 
     const lazy = {};
     if (Tabmix.isVersion(1290)) {
@@ -1073,11 +1243,11 @@ var TabmixContext = {
         !contentClick && !isOneWindow && Tabmix.prefs.getBoolPref("mergeWindowContent")
       );
 
-      this._showAutoReloadMenu(
-        "tm-autoreload_menu",
-        "autoReloadContent",
-        !contentClick && !gContextMenu.isTextSelected
-      );
+      const showMenu =
+        Tabmix.prefs.getBoolPref("autoReloadContent") &&
+        !contentClick &&
+        !gContextMenu.isTextSelected;
+      this._showAutoReloadMenu("tm-autoreload_menu", showMenu);
 
       Tabmix.showItem(
         "tm-openAllLinks",
@@ -1092,8 +1262,7 @@ var TabmixContext = {
     return true;
   },
 
-  _showAutoReloadMenu: function TMP__autoReloadMenu(menuId, pref, test) {
-    let showMenu = Tabmix.prefs.getBoolPref(pref) && test;
+  _showAutoReloadMenu: function TMP__autoReloadMenu(menuId, showMenu) {
     let menu = document.getElementById(menuId);
     if (showMenu) {
       let entity = Tabmix.prefs.getBoolPref("reload_match_address") ? "Site" : "Tab";

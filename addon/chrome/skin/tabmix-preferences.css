@@ -363,3 +363,20 @@ html|fieldset[flex="1"] {
   -moz-padding-start: 1px;
   font-weight: 600;
 }
+
+#tab-context-menu-container {
+  overflow: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+  max-height: 390px;
+}
+
+#tab-context-menu-container .checkbox-label {
+  font-size: 10px;
+}
+
+#tab-context-menu-container *[data-source="tabmix"] .checkbox-label {
+  font-weight: 600;
+}
