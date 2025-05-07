@@ -1,5 +1,5 @@
 /// <reference types="./gecko/devtools/gecko.d.ts" />
-/// <reference types="./gecko/tools/lib.gecko.services.d.ts" />
+/// <reference types="./gecko/tools/generated/lib.gecko.services.d.ts" />
 /// <reference types="./gecko/tools/lib.gecko.tweaks.d.ts" />
 /// <reference types="./custom.gecko.dom.d.ts" />
 

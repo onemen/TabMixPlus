@@ -1,6 +1,6 @@
 /// <reference types="./overrideGeckoDom.d.ts" />
-/// <reference types="./gecko/tools/lib.gecko.dom.d.ts" />
-/// <reference types="./gecko/tools/lib.gecko.xpcom.d.ts" />
+/// <reference types="./gecko/tools/generated/lib.gecko.dom.d.ts" />
+/// <reference types="./gecko/tools/generated/lib.gecko.xpcom.d.ts" />
 /// <reference types="./gecko/tools/lib.gecko.xpidl.d.ts" />
 
 // helpers types

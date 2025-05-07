@@ -1,4 +1,4 @@
-/// <reference types="./gecko/tools/lib.gecko.xpcom.d.ts" />
+/// <reference types="./gecko/tools/generated/lib.gecko.xpcom.d.ts" />
 
 interface WindowProxy {
   readonly docShell: nsIDocShell;

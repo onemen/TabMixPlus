@@ -1,4 +1,4 @@
-// reference this file before "./gecko/tools/lib.gecko.dom.d.ts"
+// reference this file before "./gecko/tools/generated/lib.gecko.dom.d.ts"
 // to override `namespace ChromeUtils`
 
 // this interface add mising methods to AddonManager that are missing in lib.gecko.dom.d.ts
@@ -54,6 +54,11 @@ interface ChromeUtils {
 
 // @ts-expect-error - override `namespace ChromeUtils` from `gecko/lib.gecko.dom.d.ts`
 declare var ChromeUtils: ChromeUtils;
+
+// @ts-ignore - lib.gecko.dom.d.ts set hidden to:  boolean | number | string | null;
+interface HTMLElement {
+  hidden: boolean | null;
+}
 
 interface DocumentElement extends HTMLElement {}
 
