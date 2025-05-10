@@ -353,6 +353,8 @@ declare namespace SessionStoreNS {
     userContextId?: number;
     userTypedValue: string | null;
     userTypedClear: number;
+    image?: string;
+    iconLoadingPrincipal?: nsIPrincipal;
   };
 
   type ClosedTabData = {

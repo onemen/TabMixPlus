@@ -519,7 +519,7 @@ declare namespace TabmixPlacesNS {
   function getPrefByDocumentURI(aWindow: Window): string;
   function openGroup(bmGroup: string[], aWhere: WhereToOpen): void;
   function getPreferences(tabCount: number): [boolean, boolean];
-  function restoreTabs(tabsInfo: Map<Tab, SessionStoreNS.TabData>, restoreOnDemand: boolean, relatedToCurrent: boolean): void;
+  function restoreTabs(tabsInfo: {tab: Tab; url: string}[], restoreOnDemand: boolean, relatedToCurrent: boolean): void;
   let bookmarksOnDemand: boolean;
   let restoringTabs: Tab[];
   let tabRestoreQueue: Tab[];

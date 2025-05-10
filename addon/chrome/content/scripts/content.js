@@ -143,6 +143,7 @@ var TabmixContentHandler = {
   },
 };
 
+// not in use from Firefox 139
 /** @type {FaviconLoader} */
 var FaviconLoader = {
   get actor() {

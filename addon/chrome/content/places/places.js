@@ -300,9 +300,8 @@ var TMP_Places = {
     var tabPos, index;
     var multiple = bmGroup.length > 1;
 
-    /** @type {Map<Tab, SessionStoreNS.TabData>} */
-    let tabsInfo = new Map();
-    let savePrincipal = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
+    /** @type {{tab: Tab; url: string}[]} */
+    const tabsInfo = [];
     bmGroup.forEach((url, i) => {
       let aTab = reuseTabs[i];
       if (aTab) {
@@ -349,23 +348,8 @@ var TMP_Places = {
         };
         aTab = gBrowser.addTrustedTab(loadProgressively ? "about:blank" : url, params);
       }
+      tabsInfo.push({tab: aTab, url});
       this.asyncSetTabTitle(aTab, {url, initial: true, titlefrombookmark: loadProgressively});
-      if (loadProgressively) {
-        /** @type {SessionStoreNS.TabDataEntry} */
-        let entry = {url, title: aTab.label};
-        if (savePrincipal) {
-          entry.triggeringPrincipal_base64 = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
-        }
-        // make SessionStore load the tab with proper loadFlags by setting
-        // userTypedValue and userTypedClear
-        const tabData = {
-          entries: [entry],
-          index: 1,
-          userTypedValue: url,
-          userTypedClear: 1,
-        };
-        tabsInfo.set(aTab, tabData);
-      }
 
       if (!tabToSelect) {
         tabToSelect = aTab;
@@ -427,21 +411,65 @@ var TMP_Places = {
     return [tabCount > progressively, tabCount > onDemand];
   },
 
-  restoreTabs(tabsInfo, restoreOnDemand, relatedToCurrent) {
+  async restoreTabs(tabsInfo, restoreOnDemand, relatedToCurrent) {
     this.bookmarksOnDemand = restoreOnDemand;
     const sessionStoreRestoreOnDemand = Services.prefs.getBoolPref(
       "browser.sessionstore.restore_on_demand"
     );
+    const savePrincipal = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
+    const iconLoadingPrincipal = Services.scriptSecurityManager.getSystemPrincipal();
+
+    const tabDataPromises = tabsInfo.map(async ({tab, url}) => {
+      if (!url) return null;
+
+      /** @type {SessionStoreNS.TabDataEntry} */
+      let entry = {url, title: tab.label};
+      if (savePrincipal) {
+        entry.triggeringPrincipal_base64 = savePrincipal;
+      }
+
+      // make SessionStore load the tab with proper loadFlags by setting
+      // userTypedValue and userTypedClear
+      /** @type {SessionStoreNS.TabData} */
+      const tabData = {
+        entries: [entry],
+        index: 1,
+        userTypedValue: url,
+        userTypedClear: 1,
+      };
+
+      // Load favicon if needed
+      if (Tabmix.isVersion(1390) && !tab.selected && !url.startsWith("about")) {
+        const entryURI = Services.io.newURI(url);
+        const result = await PlacesUtils.favicons.getFaviconForPage(entryURI, 16).catch(() => null);
+        let iconURL = result?.dataURI?.spec;
+        if (iconURL) {
+          // iconURL is data:image/x-icon;base64, we can use it without iconLoadingPrincipal
+          tabData.image = iconURL;
+        } else {
+          // fallback to favicon.ico
+          iconURL = result?.uri?.spec || `${url.replace(/\/$/, "")}/favicon.ico`;
+          setTimeout(() => {
+            gBrowser.setIcon(tab, iconURL, undefined, iconLoadingPrincipal);
+          }, 100);
+        }
+      }
+      return {tab, tabData};
+    });
+
+    // Wait for all tab data to be processed
+    const results = await Promise.all(tabDataPromises);
+    const validResults = results.filter(result => result !== null);
 
     if (sessionStoreRestoreOnDemand === restoreOnDemand) {
-      for (const [tab, tabData] of tabsInfo) {
+      for (const {tab, tabData} of validResults) {
         this.restoringTabs.push(tab);
         SessionStore.setTabState(tab, tabData);
       }
     } else if (restoreOnDemand) {
       // sessionstore.restore_on_demand is off but we want restore_on_demand for bookmarks
       let prevTab = gBrowser.selectedTab;
-      const tabDataList = [...tabsInfo.values()];
+      const tabDataList = validResults.map(result => result.tabData);
       const tabs = gBrowser.createTabsForSessionRestore(true, 1, tabDataList, []);
       // need to set it again in case it set back to false before we add restoringTabs
       this.bookmarksOnDemand = restoreOnDemand;
@@ -456,9 +484,16 @@ var TMP_Places = {
         const tabData = tabDataList[i];
         SessionStore.setTabState(tab, tabData);
       });
+      if (Tabmix.isVersion(1390)) {
+        gBrowser.tabs.forEach(tab => {
+          if (tab.parentElement && tab.hasAttribute("tabmix_temp_pendingtab")) {
+            gBrowser.removeTab(tab, {animate: false});
+          }
+        });
+      }
     } else {
-      // sessionstore.restore_on_demand is on but we want bookmarks to restoe progressively
-      for (const [tab, tabData] of tabsInfo) {
+      // sessionstore.restore_on_demand is on but we want bookmarks to restore progressively
+      for (const {tab, tabData} of validResults) {
         SessionStore.setTabState(tab, tabData);
         if (tab.selected) {
           this.restoringTabs.push(tab);
@@ -469,16 +504,20 @@ var TMP_Places = {
       }
     }
 
+    if (Tabmix.isVersion(1390)) {
+      return;
+    }
+
     // set icon on pending tabs that are not about: pages
-    const pendingData = Array.from(tabsInfo.entries()).filter(
-      ([tab, tabData]) =>
+    // const pendingData = Array.from(tabsInfo.entries()).filter(
+    const pendingData = tabsInfo.filter(
+      ({tab, url}) =>
         (tab.hasAttribute("tabmix_temp_pendingtab") || tab.hasAttribute("pending")) &&
-        !tabData.userTypedValue?.startsWith("about")
+        !url?.startsWith("about")
     );
-    for (let [tab, {userTypedValue}] of pendingData) {
-      /** @type {string} */ // @ts-expect-error - we set userTypedValue to bookmarks url above
-      const pageUrl = userTypedValue;
+    for (let {tab, url: pageUrl} of pendingData) {
       const entryURI = Services.io.newURI(pageUrl);
+      // @ts-expect-error - getFaviconURLForPage was removed by bug 1915762 in Firefox 139
       PlacesUtils.favicons.getFaviconURLForPage(entryURI, iconURI => {
         if (!iconURI) {
           // fallback to favicon.ico
@@ -486,8 +525,8 @@ var TMP_Places = {
         }
         // skip tab that already restored
         if (
-          tab.hasAttribute("tabmix_temp_pendingtab") &&
-          (tab.linkedBrowser || tab.hasAttribute("pending"))
+          (tab.hasAttribute("tabmix_temp_pendingtab") && tab.linkedBrowser) ||
+          tab.hasAttribute("pending")
         ) {
           const message = {iconUrl: iconURI.spec, pageUrl};
           tab.linkedBrowser.messageManager.sendAsyncMessage("Tabmix:SetPendingTabIcon", message);
@@ -543,6 +582,7 @@ var TMP_Places = {
     }
   },
 
+  // not in use from Firefox 139
   // for unloaded pending tab, we copy the image from temporary tab
   addImageToLazyPendingTab(tab) {
     if (tab.selected || !tab.hasAttribute("tabmix_temp_pendingtab")) {

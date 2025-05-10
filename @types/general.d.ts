@@ -498,6 +498,7 @@ declare namespace MockedGeckoTypes {
     get selectedTabs(): Tabs;
     get tabGroups(): MozTabbrowserTabGroup[];
     selectedTab: BrowserTab;
+    setIcon(tab: BrowserTab, iconURL: string, originalURL?: string, loadingPrincipal?: nsIPrincipal, clearImageFirst?: boolean): void;
     setInitialTabTitle: (tab: BrowserTab, title: string, options: Record<string, unknown>) => void;
     setTabTitle: (tab: BrowserTab) => boolean;
     swapBrowsersAndCloseOther: (ourTab: BrowserTab, otherTab: BrowserTab) => boolean;
