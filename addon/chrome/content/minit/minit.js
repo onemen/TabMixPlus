@@ -232,7 +232,7 @@ var TMP_tabDNDObserver = {
         forceUpdate: true,
       })
         ._replace("this.selectedItem = tab;", "if (this.verticalMode) {$&}", {
-          check: Tabmix.isVersion(1400),
+          check: Tabmix.isVersion(1390),
         })
         .toCode();
     }
