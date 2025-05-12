@@ -17,7 +17,7 @@ var gMenuPane = {
 
     Tabmix.setFTLDataId("paneMenu");
 
-    if (Tabmix.isVersion(1340)) {
+    if (Tabmix.isVersion(1340) && !Tabmix.isVersion(1400)) {
       MozXULElement.insertFTLIfNeeded("preview/tabUnload.ftl");
     }
 
