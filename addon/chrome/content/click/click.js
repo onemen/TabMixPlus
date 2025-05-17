@@ -1055,6 +1055,10 @@ var TabmixContext = {
         ContextualIdentityService: "resource://gre/modules/ContextualIdentityService.sys.mjs",
         PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
       };
+      if (Tabmix.isVersion(1400)) {
+        // @ts-ignore
+        modules.LinkPreview = "moz-src:///browser/components/genai/LinkPreview.sys.mjs";
+      }
       ChromeUtils.defineESModuleGetters(lazy, modules);
     }
 
