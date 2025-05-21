@@ -215,14 +215,17 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
         }
 
         let newTab;
+
+        /** @type {"tabIndex"} */ // @ts-expect-error - we have only tabIndex type in AddTabParams
+        let tabIndexKey = Tabmix.isVersion(1400) ? "tabIndex" : "index";
         if (where.startsWith("tab")) {
           if (openTabNext && !baseTab && tabGroup && inGroupPref > 0) {
             // don't add new tab to the group when openTabNextInGroup is 1 or 2
-            options.index =
+            options[tabIndexKey] =
               inGroupPref === 1 ? tabGroup.tabs.at(-1)._tPos + 1 : gBrowser.tabs.length;
           } else {
             const refTab = baseTab || selectedTab;
-            options.index = openTabNext ? refTab._tPos + 1 : gBrowser.tabs.length;
+            options[tabIndexKey] = openTabNext ? refTab._tPos + 1 : gBrowser.tabs.length;
             options.tabGroup = openTabNext ? refTab.group : null;
           }
           newTab = gBrowser.addTrustedTab(url, options);

@@ -175,7 +175,11 @@ export const MergeWindows = {
     const promise = tab._tabmix_movepopup_promise;
     delete tab._tabmix_movepopup_promise;
     const tabToSelect = tab.hasAttribute("_TMP_selectAfterMerge");
-    const newTab = tabbrowser.adoptTab(tab, index, false);
+    const newTab =
+      TabmixSvc.version(1380) ?
+        tabbrowser.adoptTab(tab, {tabIndex: index, selectTab: false})
+        // @ts-expect-error
+      : tabbrowser.adoptTab(tab, index, false);
     if (openerTab) {
       newTab.owner = openerTab;
     }
@@ -207,7 +211,11 @@ export const MergeWindows = {
       if (isPopup) {
         popups.push(tab);
       } else {
-        let newTab = tabbrowser.adoptTab(tab, newIndex, false);
+        let newTab =
+          TabmixSvc.version(1380) ?
+            tabbrowser.adoptTab(tab, {tabIndex: newIndex, selectTab: false})
+            // @ts-expect-error
+          : tabbrowser.adoptTab(tab, newIndex, false);
         if (tab.hasAttribute("_TMP_selectAfterMerge")) {
           tab.removeAttribute("_TMP_selectAfterMerge");
           tabToSelect = newTab;

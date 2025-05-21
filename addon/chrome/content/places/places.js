@@ -340,7 +340,7 @@ var TMP_Places = {
         let params = {
           skipAnimation: multiple,
           noInitialLabel: this._titlefrombookmark,
-          index: prevTab._tPos + 1,
+          [Tabmix.isVersion(1400) ? "tabIndex" : "index"]: prevTab._tPos + 1,
           skipBackgroundNotify: loadProgressively,
           skipLoad: loadProgressively && tabToSelect,
           preferredRemoteType,

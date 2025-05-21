@@ -295,7 +295,7 @@ type AddTabParams = {
   background?: boolean;
   charset?: string | null;
   inBackground?: boolean;
-  index?: number;
+  tabIndex?: number;
   flags?: number;
   forceForeground?: boolean;
   ownerTab?: Tab | null;

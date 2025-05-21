@@ -429,10 +429,11 @@ declare namespace MockedGeckoTypes {
     _windowIsClosing: boolean;
     addAdjacentNewTab: (tab: BrowserTab) => void;
     addRangeToMultiSelectedTabs: (start: BrowserTab, end: BrowserTab) => void;
-    addTab: (this: TabBrowser, url: string, params?: {index?: number; elementIndex?: number; isPending?: boolean; ownerTab?: BrowserTab | null; relatedToCurrent?: boolean} | Record<string, unknown>) => BrowserTab;
+    // params.index was removed in Firefox 140
+    addTab: (this: TabBrowser, url: string, params?: {tabIndex?: number; elementIndex?: number; isPending?: boolean; ownerTab?: BrowserTab | null; relatedToCurrent?: boolean} | Record<string, unknown>) => BrowserTab;
     addToMultiSelectedTabs: (tab: BrowserTab) => BrowserTab;
     addTrustedTab: (aURI: string, params?: Params) => BrowserTab;
-    adoptTab: (aTab: BrowserTab, aIndex: number, aSelectTab: boolean) => BrowserTab;
+    adoptTab: (aTab: BrowserTab, params?: {elementIndex?: number; tabIndex?: number; selectTab?: boolean}) => BrowserTab;
     browsers: ChromeBrowser[];
     readonly canGoForward: boolean;
     readonly canGoBack: boolean;

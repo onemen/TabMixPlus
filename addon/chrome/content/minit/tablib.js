@@ -159,7 +159,9 @@ Tabmix.tablib = {
       let callerTrace = Tabmix.callerTrace(),
         isRestoringTab = callerTrace.contain("ssi_restoreWindow");
 
-      let {index, isPending} = options || {};
+      let isPending = options.isPending ?? false;
+      // @ts-expect-error options.index was removed in Firefox 140
+      let tabIndex = Tabmix.isVersion(1400) ? options.tabIndex : options.index;
 
       // workaround for bug 1961516
       if (callerTrace.contain("on_TabGroupCollapse") && !options.elementIndex) {
@@ -168,8 +170,16 @@ Tabmix.tablib = {
           group ? group.labelElement.elementIndex + 1 : this.tabs.length + this.tabGroups.length;
       }
 
-      if (typeof index !== "number" && callerTrace.contain("duplicateTabIn", "ssi_restoreWindow")) {
-        options.index = this.tabs.length;
+      if (
+        typeof tabIndex !== "number" &&
+        callerTrace.contain("duplicateTabIn", "ssi_restoreWindow")
+      ) {
+        if (Tabmix.isVersion(1400)) {
+          options.tabIndex = this.tabs.length;
+        } else {
+          // @ts-expect-error options.index was removed in Firefox 140
+          options.index = this.tabs.length;
+        }
       }
 
       // prevent SessionStore.duplicateTabIn from opening new tab next to the current
@@ -1134,7 +1144,9 @@ Tabmix.tablib = {
       }
       try {
         const tabState = aTabData ? aTabData.state : JSON.parse(SessionStore.getTabState(aTab));
-        newTab = this.addTrustedTab("about:blank", {index: gBrowser.tabs.length});
+        newTab = this.addTrustedTab("about:blank", {
+          [Tabmix.isVersion(1400) ? "tabIndex" : "index"]: gBrowser.tabs.length,
+        });
         newTab.linkedBrowser.stop();
         if (aHref) {
           if (Tabmix.ContentClick.isUrlForDownload(aHref)) {

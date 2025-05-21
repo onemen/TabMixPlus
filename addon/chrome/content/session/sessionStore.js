@@ -1019,7 +1019,7 @@ var TMP_ClosedTabs = {
         noInitialLabel: true,
         pinned: state.pinned,
         userContextId,
-        index: gBrowser.tabs.length,
+        [Tabmix.isVersion(1400) ? "tabIndex" : "index"]: gBrowser.tabs.length,
         skipLoad: true,
         preferredRemoteType,
         tabGroup,
