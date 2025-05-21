@@ -349,7 +349,11 @@ var TMP_Places = {
         aTab = gBrowser.addTrustedTab(loadProgressively ? "about:blank" : url, params);
       }
       tabsInfo.push({tab: aTab, url});
-      this.asyncSetTabTitle(aTab, {url, initial: true, titlefrombookmark: loadProgressively});
+      this.asyncSetTabTitle(aTab, {url, initial: true, titlefrombookmark: loadProgressively}).then(
+        () => {
+          aTab._tabmixState = {};
+        }
+      );
 
       if (!tabToSelect) {
         tabToSelect = aTab;
