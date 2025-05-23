@@ -1719,10 +1719,6 @@ declare namespace TabmixGlobals {
     // extra props for popup menus
     _tabmix_middleClicked?: boolean;
     closedGroup?: null;
-    dataset: {
-      command?: string;
-      popup?: string;
-    };
     mCorrespondingMenuitem?: Menuitem | null;
     ownerGlobal: WindowProxy;
     remove(): void;

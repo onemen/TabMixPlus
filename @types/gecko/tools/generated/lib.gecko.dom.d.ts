@@ -1493,6 +1493,7 @@ interface IdentityCredentialInit {
 }
 
 interface IdentityCredentialRequestOptions {
+    mode?: IdentityCredentialRequestOptionsMode;
     providers: IdentityProviderRequestOptions[];
 }
 
@@ -3634,6 +3635,10 @@ interface SetHTMLOptions {
     sanitizer?: Sanitizer | SanitizerConfig | SanitizerPresets;
 }
 
+interface SetHTMLUnsafeOptions {
+    sanitizer?: Sanitizer | SanitizerConfig | SanitizerPresets;
+}
+
 interface ShadowRootInit {
     clonable?: boolean;
     delegatesFocus?: boolean;
@@ -3772,6 +3777,10 @@ interface TaskControllerInit {
 
 interface TaskPriorityChangeEventInit extends EventInit {
     previousPriority: TaskPriority;
+}
+
+interface TaskSignalAnyInit {
+    priority?: TaskPriority | TaskSignal;
 }
 
 interface TestInterfaceAsyncIterableSingleOptions {
@@ -7491,7 +7500,7 @@ interface Document extends Node, DocumentOrShadowRoot, FontFaceSource, GeometryU
     hasFocus(): boolean;
     hasStorageAccess(): Promise<boolean>;
     importNode(node: Node, deep?: boolean): Node;
-    insertAnonymousContent(aForce?: boolean): AnonymousContent;
+    insertAnonymousContent(): AnonymousContent;
     isActive(): boolean;
     mozCancelFullScreen(): Promise<void>;
     mozSetImageElement(aImageElementId: string, aImageElement: Element | null): void;
@@ -7536,7 +7545,7 @@ declare var Document: {
     readonly KEYPRESS_EVENT_MODEL_CONFLATED: 2;
     isInstance: IsInstance<Document>;
     parseHTML(html: string, options?: SetHTMLOptions): Document;
-    parseHTMLUnsafe(html: TrustedHTML | string): Document;
+    parseHTMLUnsafe(html: TrustedHTML | string, options?: SetHTMLUnsafeOptions): Document;
 };
 
 interface DocumentFragment extends Node, NonElementParentNode, ParentNode {
@@ -7816,7 +7825,7 @@ interface Element extends Node, ARIAMixin, Animatable, ChildNode, GeometryUtils,
     setCapture(retargetToElement?: boolean): void;
     setCaptureAlways(retargetToElement?: boolean): void;
     setHTML(aInnerHTML: string, options?: SetHTMLOptions): void;
-    setHTMLUnsafe(html: TrustedHTML | string): void;
+    setHTMLUnsafe(html: TrustedHTML | string, options?: SetHTMLUnsafeOptions): void;
     setPointerCapture(pointerId: number): void;
     toggleAttribute(name: string, force?: boolean): boolean;
     webkitMatchesSelector(selector: string): boolean;
@@ -8639,6 +8648,7 @@ declare var GPUBuffer: {
 interface GPUCanvasContext {
     readonly canvas: HTMLCanvasElement | OffscreenCanvas;
     configure(configuration: GPUCanvasConfiguration): void;
+    getConfiguration(): GPUCanvasConfiguration | null;
     getCurrentTexture(): GPUTexture;
     unconfigure(): void;
 }
@@ -9631,6 +9641,7 @@ interface GlobalEventHandlersEventMap {
     "pointermove": Event;
     "pointerout": Event;
     "pointerover": Event;
+    "pointerrawupdate": Event;
     "pointerup": Event;
     "progress": Event;
     "ratechange": Event;
@@ -9732,6 +9743,8 @@ interface GlobalEventHandlers {
     onpointermove: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     onpointerout: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     onpointerover: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    /** Available only in secure contexts. */
+    onpointerrawupdate: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     onpointerup: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     onprogress: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     onratechange: ((this: GlobalEventHandlers, ev: Event) => any) | null;
@@ -15362,6 +15375,7 @@ declare var PerformanceObserverEntryList: {
 };
 
 interface PerformancePaintTiming extends PerformanceEntry, PaintTimingMixin {
+    toJSON(): any;
 }
 
 declare var PerformancePaintTiming: {
@@ -18847,7 +18861,8 @@ interface ShadowRoot extends DocumentFragment, DocumentOrShadowRoot {
     getHTML(options?: GetHTMLOptions): string;
     importNodeAndAppendChildAt(parentNode: Node, node: Node, deep?: boolean): Node;
     isUAWidget(): boolean;
-    setHTMLUnsafe(html: TrustedHTML | string): void;
+    setHTML(aInnerHTML: string, options?: SetHTMLOptions): void;
+    setHTMLUnsafe(html: TrustedHTML | string, options?: SetHTMLUnsafeOptions): void;
     setIsUAWidget(): void;
     addEventListener<K extends keyof ShadowRootEventMap>(type: K, listener: (this: ShadowRoot, ev: ShadowRootEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -19566,6 +19581,7 @@ declare var TaskSignal: {
     prototype: TaskSignal;
     new(): TaskSignal;
     isInstance: IsInstance<TaskSignal>;
+    any(signals: AbortSignal[], init?: TaskSignalAnyInit): TaskSignal;
 };
 
 interface TestFunctions {
@@ -25445,6 +25461,8 @@ declare var onpointerleave: ((this: Window, ev: Event) => any) | null;
 declare var onpointermove: ((this: Window, ev: Event) => any) | null;
 declare var onpointerout: ((this: Window, ev: Event) => any) | null;
 declare var onpointerover: ((this: Window, ev: Event) => any) | null;
+/** Available only in secure contexts. */
+declare var onpointerrawupdate: ((this: Window, ev: Event) => any) | null;
 declare var onpointerup: ((this: Window, ev: Event) => any) | null;
 declare var onprogress: ((this: Window, ev: Event) => any) | null;
 declare var onratechange: ((this: Window, ev: Event) => any) | null;
@@ -25709,7 +25727,7 @@ type DistanceModelType = "exponential" | "inverse" | "linear";
 type EncodedAudioChunkType = "delta" | "key";
 type EncodedVideoChunkType = "delta" | "key";
 type EndingType = "native" | "transparent";
-type EventCallbackDebuggerNotificationType = "global" | "node" | "websocket" | "worker" | "xhr";
+type EventCallbackDebuggerNotificationType = "closewatcher" | "global" | "node" | "websocket" | "worker" | "xhr";
 type FetchState = "aborted" | "complete" | "errored" | "requesting" | "responding";
 type FileSystemHandleKind = "directory" | "file";
 type FileType = "directory" | "other" | "regular";
@@ -25769,6 +25787,7 @@ type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
 type IDBRequestReadyState = "done" | "pending";
 type IDBTransactionDurability = "default" | "relaxed" | "strict";
 type IDBTransactionMode = "cleanup" | "readonly" | "readwrite" | "readwriteflush" | "versionchange";
+type IdentityCredentialRequestOptionsMode = "active" | "passive";
 type IdentityLoginTargetType = "popup" | "redirect";
 type ImageOrientation = "flipY" | "from-image" | "none";
 type ImportESModuleTargetGlobal = "contextual" | "current" | "devtools" | "shared";
@@ -25797,7 +25816,7 @@ type MediaSessionPlaybackState = "none" | "paused" | "playing";
 type MediaSourceEndOfStreamError = "decode" | "network";
 type MediaSourceReadyState = "closed" | "ended" | "open";
 type MediaStreamTrackState = "ended" | "live";
-type MozContentPolicyType = "beacon" | "csp_report" | "font" | "image" | "imageset" | "json" | "main_frame" | "media" | "object" | "object_subrequest" | "other" | "ping" | "script" | "speculative" | "stylesheet" | "sub_frame" | "web_manifest" | "websocket" | "xml_dtd" | "xmlhttprequest" | "xslt";
+type MozContentPolicyType = "beacon" | "csp_report" | "font" | "image" | "imageset" | "json" | "main_frame" | "media" | "object" | "other" | "ping" | "script" | "speculative" | "stylesheet" | "sub_frame" | "web_manifest" | "websocket" | "xml_dtd" | "xmlhttprequest" | "xslt";
 type MozUrlClassificationFlags = "any_basic_tracking" | "any_social_tracking" | "any_strict_tracking" | "consentmanager" | "cryptomining" | "cryptomining_content" | "emailtracking" | "emailtracking_content" | "fingerprinting" | "fingerprinting_content" | "socialtracking" | "socialtracking_facebook" | "socialtracking_linkedin" | "socialtracking_twitter" | "tracking" | "tracking_ad" | "tracking_analytics" | "tracking_content" | "tracking_social";
 type NavigationFocusReset = "after-transition" | "manual";
 type NavigationHistoryBehavior = "auto" | "push" | "replace";

@@ -140,6 +140,7 @@ interface nsIWindowsShellService extends nsIShellService, Enums<typeof nsIWindow
   canSetDefaultBrowserUserChoice(): boolean;
   checkAllProgIDsExist(): boolean;
   checkBrowserUserChoiceHashes(): boolean;
+  checkCurrentProcessAUMIDForTesting(): string;
   isDefaultHandlerFor(aFileExtensionOrProtocol: string): boolean;
   queryCurrentDefaultHandlerFor(aFileExtensionOrProtocol: string): string;
 }
@@ -268,7 +269,7 @@ interface nsIWindowsUIUtils extends nsISupports {
   setWindowIconNoData(aWindow: mozIDOMWindowProxy): void;
   readonly inWin10TabletMode: boolean;
   readonly inWin11TabletMode: boolean;
-  shareUrl(shareTitle: string, urlToShare: string): void;
+  shareUrl(urlToShare: string, shareTitle: string): void;
 }
 
 // https://searchfox.org/mozilla-central/source/toolkit/system/windowsPackageManager/nsIWindowsPackageManager.idl

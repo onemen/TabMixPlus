@@ -294,7 +294,8 @@ interface nsIAccessibleEvent extends nsISupports {
   readonly EVENT_LIVE_REGION_REMOVED?: 39;
   readonly EVENT_INNER_REORDER?: 40;
   readonly EVENT_LIVE_REGION_CHANGED?: 41;
-  readonly EVENT_LAST_ENTRY?: 42;
+  readonly EVENT_ERRORMESSAGE_CHANGED?: 42;
+  readonly EVENT_LAST_ENTRY?: 43;
 
   readonly eventType: u32;
   readonly accessible: nsIAccessible;
@@ -828,6 +829,7 @@ interface nsIAlertNotification extends nsISupports {
   actions: nsIAlertAction[];
   readonly actionable: boolean;
   readonly source: string;
+  readonly origin: string;
   opaqueRelaunchData: string;
   loadImage(aTimeout: u32, aListener: nsIAlertNotificationImageListener, aUserData?: nsISupports): nsICancelable;
   getAction(aName: string): nsIAlertAction;
@@ -1924,7 +1926,6 @@ declare enum nsIContentPolicy_nsContentPolicyType {
   TYPE_SUBDOCUMENT = 7,
   TYPE_PING = 10,
   TYPE_XMLHTTPREQUEST = 11,
-  TYPE_OBJECT_SUBREQUEST = 12,
   TYPE_DTD = 13,
   TYPE_FONT = 14,
   TYPE_MEDIA = 15,
@@ -2768,6 +2769,7 @@ interface nsIDOMWindowUtils extends nsISupports {
   readonly orientationLock: u32;
   getWheelScrollTarget(): Element;
   readonly dragSession: nsIDragSession;
+  microTaskLevel: u32;
 }
 
 interface nsITranslationNodeList extends nsISupports {
@@ -3638,7 +3640,7 @@ interface nsIQuotaManagerService extends nsISupports {
   initializePersistentOrigin(aPrincipal: nsIPrincipal): nsIQuotaRequest;
   initializeTemporaryOrigin(aPersistenceType: string, aPrincipal: nsIPrincipal, aCreateIfNonExistent?: boolean): nsIQuotaRequest;
   initializePersistentClient(aPrincipal: nsIPrincipal, aClientType: string): nsIQuotaRequest;
-  initializeTemporaryClient(aPersistenceType: string, aPrincipal: nsIPrincipal, aClientType: string): nsIQuotaRequest;
+  initializeTemporaryClient(aPersistenceType: string, aPrincipal: nsIPrincipal, aClientType: string, aCreateIfNonExistent?: boolean): nsIQuotaRequest;
   getFullOriginMetadata(aPersistenceType: string, aPrincipal: nsIPrincipal): nsIQuotaRequest;
   getUsage(aCallback: nsIQuotaUsageCallback, aGetAll?: boolean): nsIQuotaUsageRequest;
   getUsageForPrincipal(aPrincipal: nsIPrincipal, aCallback: nsIQuotaUsageCallback): nsIQuotaUsageRequest;
@@ -4693,10 +4695,15 @@ type nsIGleanPingTestCallback = Callable<{
   call(aReason: string): void;
 }>
 
+type nsIGleanPingSubmitCallback = Callable<{
+  call(): Promise<any>;
+}>
+
 interface nsIGleanPing extends nsISupports {
   submit(aReason?: string): void;
   testBeforeNextSubmit(aCallback: nsIGleanPingTestCallback): void;
   setEnabled(aValue: boolean): void;
+  testSubmission(aTestCallback: nsIGleanPingTestCallback, aSubmitCallback: nsIGleanPingSubmitCallback, aSubmitTimeoutMs?: u32): Promise<any>;
 }
 
 // https://searchfox.org/mozilla-central/source/gfx/src/nsIFontEnumerator.idl
@@ -5027,9 +5034,9 @@ type imgIContainerCallback = Callable<{
 interface nsIMozIconURI extends nsIURI {
   readonly iconURL: nsIURL;
   readonly imageSize: u32;
+  readonly imageScale: u32;
+  readonly imageDark: boolean;
   readonly stockIcon: string;
-  readonly iconSize: string;
-  readonly iconState: string;
   readonly contentType: string;
   readonly fileExtension: string;
 }
@@ -6274,6 +6281,14 @@ declare enum nsILoadInfo_StoragePermissionState {
   StoragePermissionAllowListed = 2,
 }
 
+declare enum nsILoadInfo_IPAddressSpace {
+  Unknown = 0,
+  Local = 1,
+  Private = 2,
+  Public = 3,
+  Invalid = 4,
+}
+
 declare enum nsILoadInfo_CrossOriginOpenerPolicy {
   OPENER_POLICY_UNSAFE_NONE = 0,
   OPENER_POLICY_SAME_ORIGIN = 1,
@@ -6316,13 +6331,14 @@ declare global {
 
 namespace nsILoadInfo {
   type StoragePermissionState = nsILoadInfo_StoragePermissionState;
+  type IPAddressSpace = nsILoadInfo_IPAddressSpace;
   type CrossOriginOpenerPolicy = nsILoadInfo_CrossOriginOpenerPolicy;
   type CrossOriginEmbedderPolicy = nsILoadInfo_CrossOriginEmbedderPolicy;
   type SchemelessInputType = nsILoadInfo_SchemelessInputType;
   type HTTPSUpgradeTelemetryType = nsILoadInfo_HTTPSUpgradeTelemetryType;
 }
 
-interface nsILoadInfo extends nsISupports, Enums<typeof nsILoadInfo_StoragePermissionState & typeof nsILoadInfo_CrossOriginOpenerPolicy & typeof nsILoadInfo_CrossOriginEmbedderPolicy & typeof nsILoadInfo_SchemelessInputType & typeof nsILoadInfo_HTTPSUpgradeTelemetryType> {
+interface nsILoadInfo extends nsISupports, Enums<typeof nsILoadInfo_StoragePermissionState & typeof nsILoadInfo_IPAddressSpace & typeof nsILoadInfo_CrossOriginOpenerPolicy & typeof nsILoadInfo_CrossOriginEmbedderPolicy & typeof nsILoadInfo_SchemelessInputType & typeof nsILoadInfo_HTTPSUpgradeTelemetryType> {
   readonly SEC_ONLY_FOR_EXPLICIT_CONTENTSEC_CHECK?: 0;
   readonly SEC_REQUIRE_SAME_ORIGIN_INHERITS_SEC_CONTEXT?: 1;
   readonly SEC_REQUIRE_SAME_ORIGIN_DATA_IS_BLOCKED?: 2;
@@ -6416,6 +6432,8 @@ interface nsILoadInfo extends nsISupports, Enums<typeof nsILoadInfo_StoragePermi
   isOn3PCBExceptionList: boolean;
   readonly cookiePolicy: u32;
   cookieJarSettings: nsICookieJarSettings;
+  ipAddressSpace: nsILoadInfo.IPAddressSpace;
+  parentIpAddressSpace: nsILoadInfo.IPAddressSpace;
   storagePermission: nsILoadInfo.StoragePermissionState;
   isMetaRefresh: boolean;
   readonly forceInheritPrincipal: boolean;
@@ -8938,6 +8956,8 @@ interface nsICertOverrideService extends nsISupports {
   clearAllOverrides(): void;
   getOverrides(): nsICertOverride[];
   setDisableAllSecurityChecksAndLetAttackersInterceptMyData(aDisable: boolean): void;
+  setDisableAllSecurityChecksAndLetAttackersInterceptMyDataForUserContext(aUserContextId: u32, aDisable: boolean): void;
+  resetDisableAllSecurityChecksAndLetAttackersInterceptMyDataForUserContext(aUserContextId: u32): void;
   readonly securityCheckDisabled: boolean;
 }
 
@@ -9021,7 +9041,7 @@ type nsIClientAuthDialogCallback = Callable<{
 }>
 
 interface nsIClientAuthDialogService extends nsISupports {
-  chooseCertificate(hostname: string, certArray: nsIX509Cert[], loadContext: nsILoadContext, callback: nsIClientAuthDialogCallback): void;
+  chooseCertificate(hostname: string, certArray: nsIX509Cert[], loadContext: nsILoadContext, caNames: u8[][], callback: nsIClientAuthDialogCallback): void;
 }
 
 // https://searchfox.org/mozilla-central/source/security/manager/ssl/nsIClientAuthRememberService.idl
@@ -9940,7 +9960,7 @@ namespace nsINavHistoryService {
 }
 
 interface nsINavHistoryService extends nsISupports, Enums<typeof nsINavHistoryService_TransitionType> {
-  readonly DATABASE_SCHEMA_VERSION?: 78;
+  readonly DATABASE_SCHEMA_VERSION?: 80;
   readonly DATABASE_STATUS_OK?: 0;
   readonly DATABASE_STATUS_CREATE?: 1;
   readonly DATABASE_STATUS_CORRUPT?: 2;
@@ -11151,7 +11171,7 @@ interface nsIContentAnalysisResponse extends nsIContentAnalysisResult, Enums<typ
   readonly requestToken: string;
   readonly userActionId: string;
   readonly isCachedResponse: boolean;
-  readonly isAgentResponse: boolean;
+  readonly isSyntheticResponse: boolean;
   acknowledge(aCaa: nsIContentAnalysisAcknowledgement): void;
 }
 
@@ -11209,7 +11229,7 @@ interface nsIContentAnalysisRequest extends nsISupports, Enums<typeof nsIContent
   readonly reason: nsIContentAnalysisRequest.Reason;
   readonly operationTypeForDisplay: nsIContentAnalysisRequest.OperationType;
   readonly operationDisplayString: string;
-  readonly dataTransfer: DataTransfer;
+  dataTransfer: DataTransfer;
   readonly transferable: nsITransferable;
   readonly textContent: string;
   readonly filePath: string;
@@ -11247,6 +11267,7 @@ interface nsIContentAnalysis extends nsISupports {
   isSetByEnterprisePolicy: boolean;
   analyzeContentRequests(aCars: nsIContentAnalysisRequest[], aAutoAcknowledge: boolean): Promise<any>;
   analyzeContentRequestsCallback(aCars: nsIContentAnalysisRequest[], aAutoAcknowledge: boolean, callback: nsIContentAnalysisCallback): void;
+  analyzeBatchContentRequest(aCar: nsIContentAnalysisRequest, aAutoAcknowledge: boolean): Promise<any>;
   analyzeContentRequestPrivate(aRequest: nsIContentAnalysisRequest, aAutoAcknowledge: boolean, aCallback: nsIContentAnalysisCallback): void;
   cancelRequestsByUserAction(aUserActionId: string): void;
   cancelAllRequestsAssociatedWithUserAction(aUserActionId: string): void;
@@ -11374,6 +11395,25 @@ interface nsICrashService extends nsISupports {
 
 interface nsIFinalizationWitnessService extends nsISupports {
   make(aTopic: string, aString: string): any;
+}
+
+// https://searchfox.org/mozilla-central/source/toolkit/components/media/nsIWindowsMediaFoundationCDMOriginsListService.idl
+
+interface nsIOriginStatusEntry extends nsISupports {
+  readonly origin: string;
+  readonly status: i32;
+}
+
+interface nsIOriginsListLoadCallback extends nsISupports {
+  onOriginsListLoaded(aEntries: nsIArray): void;
+}
+
+interface nsIWindowsMediaFoundationCDMOriginsListService extends nsISupports {
+  readonly ORIGIN_BLOCKED?: 0;
+  readonly ORIGIN_ALLOWED?: 1;
+
+  setCallback(aCallback: nsIOriginsListLoadCallback): void;
+  removeCallback(aCallback: nsIOriginsListLoadCallback): void;
 }
 
 // https://searchfox.org/mozilla-central/source/toolkit/modules/nsIBrowserWindowTracker.idl
@@ -11513,6 +11553,8 @@ declare enum nsISearchService_DefaultEngineChangeReason {
   CHANGE_REASON_UITOUR = 12,
   CHANGE_REASON_ENGINE_UPDATE = 13,
   CHANGE_REASON_USER_PRIVATE_PREF_ENABLED = 14,
+  CHANGE_REASON_ENGINE_IGNORE_LIST_UPDATED = 15,
+  CHANGE_REASON_NO_EXISTING_DEFAULT_ENGINE = 16,
 }
 
 declare global {
@@ -12838,10 +12880,10 @@ interface nsIDragSession extends nsISupports {
   updateDragEffect(): void;
   updateDragImage(aImage: Node, aImageX: i32, aImageY: i32): void;
   setDragEndPoint(aScreenX: i32, aScreenY: i32): void;
-  setDragEndPointForTests(aScreenX: i32, aScreenY: i32): void;
+  setDragEndPointForTests(aScreenX: float, aScreenY: float): void;
   endDragSession(aDoneDrag: boolean, aKeyModifiers?: u32): void;
   sendStoreDropTargetAndDelayEndDragSession(aEvent: DragEvent): void;
-  sendDispatchToDropTargetAndResumeEndDragSession(aShouldDrop: boolean): void;
+  sendDispatchToDropTargetAndResumeEndDragSession(aShouldDrop: boolean, aAllowedFiles: nsIFile[]): void;
 }
 
 // https://searchfox.org/mozilla-central/source/widget/nsIFilePicker.idl
@@ -14660,7 +14702,6 @@ declare enum nsIXULRuntime_ContentWin32kLockdownState {
   MissingRemoteWebGL = 5,
   MissingNonNativeTheming = 6,
   DisabledByEnvVar = 7,
-  DisabledBySafeMode = 8,
   DisabledByE10S = 9,
   DisabledByUserPref = 10,
   EnabledByUserPref = 11,
@@ -15587,6 +15628,7 @@ interface nsIXPCComponents_Interfaces {
   nsITypeAheadFind: nsJSIID<nsITypeAheadFind>;
   nsIFOG: nsJSIID<nsIFOG>;
   nsIGleanPingTestCallback: nsJSIID<nsIGleanPingTestCallback>;
+  nsIGleanPingSubmitCallback: nsJSIID<nsIGleanPingSubmitCallback>;
   nsIGleanPing: nsJSIID<nsIGleanPing>;
   nsIFontEnumerator: nsJSIID<nsIFontEnumerator>;
   nsIParserUtils: nsJSIID<nsIParserUtils>;
@@ -15729,7 +15771,7 @@ interface nsIXPCComponents_Interfaces {
   nsILoadContextInfoFactory: nsJSIID<nsILoadContextInfoFactory>;
   nsILoadGroup: nsJSIID<nsILoadGroup>;
   nsILoadGroupChild: nsJSIID<nsILoadGroupChild>;
-  nsILoadInfo: nsJSIID<nsILoadInfo, typeof nsILoadInfo_StoragePermissionState & typeof nsILoadInfo_CrossOriginOpenerPolicy & typeof nsILoadInfo_CrossOriginEmbedderPolicy & typeof nsILoadInfo_SchemelessInputType & typeof nsILoadInfo_HTTPSUpgradeTelemetryType>;
+  nsILoadInfo: nsJSIID<nsILoadInfo, typeof nsILoadInfo_StoragePermissionState & typeof nsILoadInfo_IPAddressSpace & typeof nsILoadInfo_CrossOriginOpenerPolicy & typeof nsILoadInfo_CrossOriginEmbedderPolicy & typeof nsILoadInfo_SchemelessInputType & typeof nsILoadInfo_HTTPSUpgradeTelemetryType>;
   nsIMIMEInputStream: nsJSIID<nsIMIMEInputStream>;
   nsIMockNetworkLayerController: nsJSIID<nsIMockNetworkLayerController>;
   nsIMultiPartChannel: nsJSIID<nsIMultiPartChannel>;
@@ -16104,6 +16146,9 @@ interface nsIXPCComponents_Interfaces {
   nsICookieRule: nsJSIID<nsICookieRule>;
   nsICrashService: nsJSIID<nsICrashService>;
   nsIFinalizationWitnessService: nsJSIID<nsIFinalizationWitnessService>;
+  nsIOriginStatusEntry: nsJSIID<nsIOriginStatusEntry>;
+  nsIOriginsListLoadCallback: nsJSIID<nsIOriginsListLoadCallback>;
+  nsIWindowsMediaFoundationCDMOriginsListService: nsJSIID<nsIWindowsMediaFoundationCDMOriginsListService>;
   nsIVisibleTab: nsJSIID<nsIVisibleTab>;
   nsIBrowserWindowTracker: nsJSIID<nsIBrowserWindowTracker>;
   nsIRegion: nsJSIID<nsIRegion>;

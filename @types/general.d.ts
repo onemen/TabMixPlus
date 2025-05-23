@@ -842,7 +842,6 @@ interface ContentClickLinkElement extends Omit<HTMLLinkElement, "parentNode" | "
   _attributes: string[];
   host: string;
   pathname: string;
-  dataset: {isSponsoredLink: "true" | "false" | null};
   parentElement: ContentClickLinkElement;
   parentNode: ContentClickLinkElement;
   readonly ownerDocument: Document;

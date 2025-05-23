@@ -72,6 +72,12 @@ interface Document {
   getElementsByClassName<K extends keyof GetByMap>(name: K): NonEmptyCollection_G<GetByMap[K]>;
 }
 
+interface DOMStringMap {
+  isSponsoredLink?: string;
+  command?: string;
+  popup?: string;
+}
+
 // overide lib.gecko.dom.d.ts DragEvent, don't set dataTransfer to null
 interface DragEvent extends MouseEvent {
   readonly dataTransfer: DataTransfer;
