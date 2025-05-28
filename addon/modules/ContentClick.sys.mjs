@@ -1,10 +1,17 @@
+import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
+
+const PlacesUIUtils =
+  isVersion(1410) ?
+    "moz-src:///browser/components/places/PlacesUIUtils.sys.mjs"
+  : "resource:///modules/PlacesUIUtils.sys.mjs";
+
 /** @type {ContentClickModule.Lazy} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
   ClickHandlerParent: "resource:///actors/ClickHandlerParent.sys.mjs",
   E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
-  PlacesUIUtils: "resource:///modules/PlacesUIUtils.sys.mjs",
+  PlacesUIUtils,
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
   LinkNodeUtils: "chrome://tabmix-resource/content/LinkNodeUtils.sys.mjs",
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.sys.mjs",

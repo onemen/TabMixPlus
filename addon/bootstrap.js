@@ -146,7 +146,11 @@ async function startup(data, reason) {
   /** @type {MockedGeckoTypes.PlacesUIUtils["openTabset"]} */
   let _tabmix_PlacesUIUtils_openTabset = () => {};
   if (lazy.isVersion({wf: "115.9.0"})) {
-    const {PlacesUIUtils} = ChromeUtils.importESModule("resource:///modules/PlacesUIUtils.sys.mjs");
+    const PlacesUIUtilsURL =
+      lazy.isVersion(1410) ?
+        "moz-src:///browser/components/places/PlacesUIUtils.sys.mjs"
+      : "resource:///modules/PlacesUIUtils.sys.mjs";
+    const {PlacesUIUtils} = ChromeUtils.importESModule(PlacesUIUtilsURL);
     _tabmix_PlacesUIUtils_openTabset = PlacesUIUtils.openTabset;
   }
 

@@ -8,6 +8,11 @@ const AppConstants = ChromeUtils.importESModule(
   "resource://gre/modules/AppConstants.sys.mjs"
 ).AppConstants;
 
+const PlacesUIUtils =
+  TabmixSvc.version(1410) ?
+    "moz-src:///browser/components/places/PlacesUIUtils.sys.mjs"
+  : "resource:///modules/PlacesUIUtils.sys.mjs";
+
 /** @type {PlacesModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
@@ -15,7 +20,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   // eslint-disable-next-line tabmix/valid-lazy
   BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
   PlacesUtils: "resource://gre/modules/PlacesUtils.sys.mjs",
-  PlacesUIUtils: "resource:///modules/PlacesUIUtils.sys.mjs",
+  PlacesUIUtils,
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
   initializeChangeCodeClass: "chrome://tabmix-resource/content/Changecode.sys.mjs",
 });

@@ -118,6 +118,7 @@ interface TabmixKnownModules {
   "resource:///modules/BrowserDOMWindow.sys.mjs": {BrowserDOMWindow: typeof BrowserDOMWindowClass};
   "resource:///modules/BrowserWindowTracker.sys.mjs": import("resource:///modules/BrowserWindowTracker.sys.mjs").BrowserWindowTracker;
   "resource:///modules/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
+  "moz-src:///browser/components/places/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
   "resource://gre/modules/Preferences.sys.mjs": {Preferences: typeof MockedExports.PreferencesClass};
   "resource://gre/modules/PrivateBrowsingUtils.sys.mjs": {PrivateBrowsingUtils: MockedExports.PrivateBrowsingUtils};
   "resource://gre/modules/XPCOMUtils.sys.mjs": typeof import("resource://gre/modules/XPCOMUtils.sys.mjs");
