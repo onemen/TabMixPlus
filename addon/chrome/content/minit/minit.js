@@ -1908,7 +1908,10 @@ Tabmix.navToolbox = {
       // Bug 1793414 (Firefox 107) - MozSearchbar calls into BrowserSearch where it doesn't need to
       // add references to lazy.FormHistory and lazy.SearchSuggestionController
       FormHistory: "resource://gre/modules/FormHistory.sys.mjs",
-      SearchSuggestionController: "resource://gre/modules/SearchSuggestionController.sys.mjs",
+      SearchSuggestionController:
+        Tabmix.isVersion(1400) ?
+          "moz-src:///toolkit/components/search/SearchSuggestionController.sys.mjs"
+        : "resource://gre/modules/SearchSuggestionController.sys.mjs",
     };
 
     if (Tabmix.isVersion(1210) && !Tabmix.isVersion(1220)) {
