@@ -356,6 +356,7 @@ declare namespace MockedGeckoTypes {
     _isContainerVerticalPinnedGrid: boolean;
     /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
     _isContainerVerticalPinnedExpanded: boolean;
+
     _keepTabSizeLocked: boolean;
     _moveTogetherSelectedTabs: (tab: BrowserTab) => void;
     // using insteadof private method #setDragOverGroupColor since Firefox 133
@@ -419,6 +420,7 @@ declare namespace MockedGeckoTypes {
     _handleTabMove: (tab: BrowserTab, moveActionCallback: () => void) => void;
     /** @deprecated replaced with pinnedTabCount in Firefox version 133 */
     readonly _numPinnedTabs: number;
+    _isLastTabInWindow: (tab: BrowserTab) => boolean;
     _lastRelatedTabMap: WeakMap<BrowserTab, BrowserTab>;
     _multiSelectedTabsSet: WeakSet<BrowserTab>;
     _notifyOnTabMove: (tab: BrowserTab, previousTabState?: TabMoveState, currentTabState?: TabMoveState, metricsContext?: MockedExports.TabMetricsContext) => void;

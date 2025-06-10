@@ -238,6 +238,15 @@ Tabmix.tablib = {
     };
 
     if (!Tabmix.extensions.tabGroupManager) {
+      if (Tabmix.isVersion(1410)) {
+        gBrowser._isLastTabInWindow = Tabmix.getPrivateMethod({
+          parent: gBrowser,
+          parentName: "gBrowser",
+          methodName: "isLastTabInWindow",
+          nextMethodName: "_hasBeforeUnload",
+        });
+      }
+
       Tabmix.changeCode(gBrowser, "gBrowser._beginRemoveTab")
         ._replace(
           /this\.addTrustedTab\(BROWSER_NEW_TAB_URL, {\s*skipAnimation: true,?\s*}\)/,
