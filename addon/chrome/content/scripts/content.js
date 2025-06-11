@@ -5,9 +5,6 @@ const {AppConstants} = ChromeUtils.importESModule("resource://gre/modules/AppCon
 ChromeUtils.defineESModuleGetters(this, {
   BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
   E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
-  clearTimeout: "resource://gre/modules/Timer.sys.mjs",
-  setTimeout: "resource://gre/modules/Timer.sys.mjs",
-
   ContentSvc: "chrome://tabmix-resource/content/ContentSvc.sys.mjs",
   LinkNodeUtils: "chrome://tabmix-resource/content/LinkNodeUtils.sys.mjs",
   ContextMenu: "chrome://tabmix-resource/content/ContextMenu.sys.mjs",
@@ -431,92 +428,6 @@ var ContextMenuHandler = {
   },
 };
 
-const AMO = new RegExp("https://addons.mozilla.org/.+/firefox/addon/tab-mix-plus/");
-const BITBUCKET = "https://bitbucket.org/onemen/tabmixplus/issues?status=new&status=open";
-
-/** @type {TabmixPageHandler} */
-var TabmixPageHandler = {
-  _timeoutID: 0,
-
-  init(global) {
-    global.addEventListener("DOMContentLoaded", this);
-  },
-
-  handleEvent(event) {
-    const doc = content.document;
-    if (event.target != doc) {
-      return;
-    }
-
-    let uri = doc.documentURI.toLowerCase();
-    if (AMO.exec(uri)) {
-      if (event.type == "DOMContentLoaded") {
-        this.count = 0;
-        content.addEventListener("pageshow", this);
-        this.createAMOButton();
-      }
-      this.moveAMOButton(event.type);
-    } else if (uri == BITBUCKET) {
-      this.styleBitbucket();
-    }
-  },
-
-  buttonID: "tabmixplus-bug-report",
-  createAMOButton() {
-    const doc = content.document;
-    const email = doc.querySelector('ul>li>.email[href="mailto:tabmix.onemen@gmail.com"]');
-    if (email && !doc.getElementById(this.buttonID)) {
-      const bugReport = doc.createElement("a");
-      bugReport.href = BITBUCKET;
-      bugReport.textContent = ContentSvc.getString("bugReport.label");
-      bugReport.id = this.buttonID;
-      bugReport.className = "button";
-      bugReport.target = "_blank";
-      bugReport.style.marginBottom = "4px";
-      let ul = email.parentNode?.parentNode;
-      if (ul) {
-        ul.parentNode?.insertBefore(bugReport, ul);
-      }
-    }
-  },
-
-  count: 0,
-  moveAMOButton(eventType) {
-    const doc = content.document;
-    // add-review is null on DOMContentLoaded
-    const addReview = doc.getElementById("add-review");
-    if (eventType != "pageshow" && !addReview && this.count++ < 10) {
-      this._timeoutID = setTimeout(() => {
-        // make sure content exist after timeout
-        if (content) {
-          this.moveAMOButton("timeout");
-        }
-      }, 250);
-      return;
-    }
-    if (eventType == "pageshow" || addReview) {
-      content.removeEventListener("pageshow", this);
-    }
-    if (addReview && this._timeoutID) {
-      clearTimeout(this._timeoutID);
-      this._timeoutID = null;
-    }
-    let button = doc.getElementById(this.buttonID);
-    if (addReview && button) {
-      addReview.parentNode?.insertBefore(button, addReview);
-    }
-  },
-
-  styleBitbucket() {
-    let createIssue = content.document.getElementById("create-issue-contextual");
-    if (createIssue) {
-      createIssue.classList.remove("aui-button-subtle");
-      createIssue.classList.add("aui-button-primary");
-    }
-  },
-};
-
 TabmixContentHandler.init();
 TabmixClickEventHandler.init(this);
 ContextMenuHandler.init(this);
-TabmixPageHandler.init(this);

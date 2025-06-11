@@ -62,22 +62,10 @@ declare namespace ContextMenuHandlerNS {
   function prepareContextMenu(event: MouseEvent): void;
 }
 
-declare namespace TabmixPageHandlerNS {
-  let _timeoutID: number | null;
-  function init(global: typeof globalThis): void;
-  function handleEvent(event: MouseEvent): void;
-  let buttonID: string;
-  function createAMOButton(): void;
-  let count: number;
-  function moveAMOButton(eventType: string): void;
-  function styleBitbucket(): void;
-}
-
 type TabmixContentHandler = typeof TabmixContentHandlerNS;
 type FaviconLoader = typeof FaviconLoaderNS;
 type TabmixClickEventHandler = typeof TabmixClickEventHandlerNS;
 type ContextMenuHandler = typeof ContextMenuHandlerNS;
-type TabmixPageHandler = typeof TabmixPageHandlerNS;
 
 declare function addMessageListener(event: string, listener: TabmixContentHandler): void;
 declare function sendAsyncMessage(event: string, data: Partial<MessageData> | Partial<ClickJSONData>): void;
