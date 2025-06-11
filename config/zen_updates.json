@@ -4,42 +4,42 @@
       "updates": [
         {
           "version": "1.26.0",
-          "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.26.0a.xpi",
+          "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.26.0/tab_mix_plus-1.26.0a.xpi",
           "browser_specific_settings": {
             "gecko": {"strict_min_version": "1.0"}
           }
         },
         {
           "version": "1.27.0",
-          "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.27.0.xpi",
+          "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.27.0/tab_mix_plus-1.27.0.xpi",
           "browser_specific_settings": {
             "gecko": {"strict_min_version": "1.0"}
           }
         },
         {
           "version": "1.28.0",
-          "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.28.0a.xpi",
+          "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.28.0/tab_mix_plus-1.28.0a.xpi",
           "browser_specific_settings": {
             "gecko": {"strict_min_version": "1.0"}
           }
         },
         {
           "version": "1.29.0",
-          "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.29.0.xpi",
+          "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.29.0/tab_mix_plus-1.29.0.xpi",
           "browser_specific_settings": {
             "gecko": {"strict_min_version": "1.0"}
           }
         },
         {
           "version": "1.30.1",
-          "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.30.1.xpi",
+          "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.30.1/tab_mix_plus-1.30.1.xpi",
           "browser_specific_settings": {
             "gecko": {"strict_min_version": "1.0"}
           }
         },
         {
           "version": "1.31.0",
-          "update_link": "https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/tab_mix_plus-1.31.0.xpi",
+          "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.31.0/tab_mix_plus-1.31.0.xpi",
           "browser_specific_settings": {
             "gecko": {"strict_min_version": "1.0"}
           }

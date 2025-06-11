@@ -69,10 +69,3 @@ jobs:
           GH_TOKEN: ${{ secrets.TABMIXPLUS_DOCS_TOKEN }}
         run: |
           gh workflow run --repo onemen/tabmixplus-docs --ref main deploy.yml
-
-      - name: Upload to Bitbucket
-        run: |
-          curl --request POST \
-          --url 'https://api.bitbucket.org/2.0/repositories/onemen/tabmixplus-for-firefox/downloads' \
-          --header 'Authorization: Bearer ${{ secrets.BITBUCKET_ACCESS_TOKEN }}' \
-          -F 'files=@/tmp/${{ env.XPI_NAME }}.xpi'

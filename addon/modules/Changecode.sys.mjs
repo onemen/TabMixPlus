@@ -10,7 +10,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
 
 const DEBUGMODE = Services.prefs.getBoolPref("extensions.tabmix.debugMode", false);
 const errMsgContent =
-  "\n\nTry Tabmix latest development version from https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/," +
+  "\n\nTry Tabmix latest development version from https://github.com/onemen/TabMixPlus/releases/tag/dev-build," +
   "\nReport about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues";
 
 // Constants used in toCode method for debug mode

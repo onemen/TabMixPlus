@@ -136,8 +136,7 @@ Since Firefox removed the internal component that loads _legacy_ extension, in o
 1. **Download XPI**
 
     Download xpi file from our [releases](https://github.com/onemen/TabMixPlus/releases) page to your local computer.
-
-    All **Tab Mix Plus** downloads are also located [here](https://bitbucket.org/onemen/tabmixplus-for-firefox/downloads/).
+    
     >If you are using Firefox Beta, Developer Edition or Nightly we recommend using the latest **Tab Mix Plus** _development build_ (tags with **pre** or **test-build** in the title)
      Note that the latest development build is compatible with all supported versions of Firefox. (see [Browser Compatibility](https://onemen.github.io/tabmixplus-docs/other/installation/#browser-compatibility))
 
