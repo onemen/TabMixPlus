@@ -95,6 +95,12 @@ interface Window {
   Tabmix: TabmixGlobal;
   TabmixTabClickOptions: typeof TabmixTabClickOptionsNS;
   TMP_SessionStore: typeof TabmixSessionStoreNS;
+
+  // Firefox 141+
+  SessionWindowUI: {
+    undoCloseWindow(aIndex: number): Window | null;
+    undoCloseTab(window: Window, aIndex: number, sourceWindowSSId: string): Tab | null;
+  };
 }
 
 declare var nsBrowserAccess: {

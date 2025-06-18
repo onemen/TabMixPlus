@@ -897,24 +897,70 @@ Tabmix.tablib = {
 
     // if user changed mode to single window mode while having closed window
     // make sure that undoCloseWindow will open the closed window in the most recent non-private window
-    Tabmix.changeCode(window, "undoCloseWindow")
-      ._replace(
-        "window = SessionStore.undoCloseWindow(aIndex || 0);",
-        `{if (Tabmix.singleWindowMode) {
-          window = BrowserWindowTracker.getTopWindow({private: false});
-       }
-       if (window) {
-        window.focus();
-        let index = aIndex || 0;
-        let closedWindows = SessionStore.getClosedWindowData();
-        SessionStore.forgetClosedWindow(index);
-        let state = closedWindows.splice(index, 1).shift();
-        state = JSON.stringify({windows: [state]});
-        SessionStore.setWindowState(window, state, false);
-       }
-       else $&}`
-      )
-      .toCode();
+    if (Tabmix.isVersion(1410) && Tabmix.isFirstWindowInSession) {
+      const lazy = {};
+      const modules = {
+        BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.sys.mjs",
+        PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
+        SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
+        TabMetrics: "moz-src:///browser/components/tabbrowser/TabMetrics.sys.mjs",
+      };
+      ChromeUtils.defineESModuleGetters(lazy, modules);
+      const sandbox = Tabmix.getSandbox(window.SessionWindowUI, {scope: {lazy, Tabmix}});
+
+      Tabmix.changeCode(window.SessionWindowUI, "undoCloseWindow", {sandbox})
+        ._replace(
+          "restoredWindow = lazy.SessionStore.undoCloseWindow(aIndex || 0);",
+          `{if (Tabmix.singleWindowMode) {
+            restoredWindow = lazy.BrowserWindowTracker.getTopWindow({private: false});
+        }
+        if (restoredWindow) {
+          restoredWindow.focus();
+          let index = aIndex || 0;
+          let closedWindows = lazy.SessionStore.getClosedWindowData();
+          lazy.SessionStore.forgetClosedWindow(index);
+          let state = closedWindows.splice(index, 1).shift();
+          state = JSON.stringify({windows: [state]});
+          lazy.SessionStore.setWindowState(restoredWindow, state, false);
+        }
+        else $&}`
+        )
+        .toCode();
+
+      Tabmix.changeCode(window.SessionWindowUI, "undoCloseTab", {sandbox})
+        ._replace(
+          /tab\s*=\s*lazy\.SessionStore\.undoCloseTab\([\s\S]*?\);\s*tabsRemoved\s*=\s*true;/,
+          `tab = window.TMP_ClosedTabs._undoCloseTab(
+                ${Tabmix.isVersion(1170) ? "sourceWindow" : "window"},
+                index,
+                "original",
+                !tab,
+                !tab ? undefined : null,
+                tabsToRemove.length > 1
+              );`
+        )
+        .toCode();
+    }
+    if (!Tabmix.isVersion(1410)) {
+      Tabmix.changeCode(window, "undoCloseWindow")
+        ._replace(
+          "window = SessionStore.undoCloseWindow(aIndex || 0);",
+          `{if (Tabmix.singleWindowMode) {
+            window = BrowserWindowTracker.getTopWindow({private: false});
+        }
+        if (window) {
+          window.focus();
+          let index = aIndex || 0;
+          let closedWindows = SessionStore.getClosedWindowData();
+          SessionStore.forgetClosedWindow(index);
+          let state = closedWindows.splice(index, 1).shift();
+          state = JSON.stringify({windows: [state]});
+          SessionStore.setWindowState(window, state, false);
+        }
+        else $&}`
+        )
+        .toCode();
+    }
 
     Tabmix.changeCode(HistoryMenu.prototype, "HistoryMenu.prototype.populateUndoSubmenu")
       ._replace('"menuitem"', 'undoPopup.__tagName || "menuitem"')
@@ -966,19 +1012,21 @@ Tabmix.tablib = {
       return url === "about:newtab" || Tabmix.originalFunctions.isBlankPageURL.apply(null, [url]);
     };
 
-    Tabmix.changeCode(window, "window.undoCloseTab")
-      ._replace(
-        /tab = SessionStore\.undoCloseTab.*\n.*true;/,
-        `tab = TMP_ClosedTabs._undoCloseTab(
-            ${Tabmix.isVersion(1170) ? "sourceWindow" : "window"},
-            index,
-            "original",
-            !tab,
-            !tab ? undefined : null,
-            tabsToRemove.length > 1
-          );`
-      )
-      .toCode();
+    if (!Tabmix.isVersion(1410)) {
+      Tabmix.changeCode(window, "window.undoCloseTab")
+        ._replace(
+          /tab = SessionStore\.undoCloseTab.*\n.*true;/,
+          `tab = TMP_ClosedTabs._undoCloseTab(
+              ${Tabmix.isVersion(1170) ? "sourceWindow" : "window"},
+              index,
+              "original",
+              !tab,
+              !tab ? undefined : null,
+              tabsToRemove.length > 1
+            );`
+        )
+        .toCode();
+    }
   },
 
   populateUndoWindowSubmenu(undoPopup, panel, isAppMenu = Boolean(panel)) {
