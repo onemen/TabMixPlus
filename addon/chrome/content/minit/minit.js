@@ -180,6 +180,20 @@ var TMP_tabDNDObserver = {
       });
     }
 
+    if (Tabmix.isVersion(1410)) {
+      tabBar._updateTabStylesOnDrag = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "updateTabStylesOnDrag",
+        nextMethodName: "#animateExpandedPinnedTabMove",
+      });
+
+      tabBar._resetTabsAfterDrop = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "resetTabsAfterDrop",
+        nextMethodName: "#moveTogetherSelectedTabs",
+      });
+    }
+
     if (Tabmix.isVersion(1380)) {
       tabBar._expandGroupOnDrop = Tabmix.getPrivateMethod({
         ...tabContainerProps,

@@ -22,8 +22,10 @@ interface PrivateMethods {
   /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
   isContainerVerticalPinnedExpanded: MockedGeckoTypes.TabContainer["_isContainerVerticalPinnedExpanded"];
   moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
+  resetTabsAfterDrop: MockedGeckoTypes.TabContainer["_resetTabsAfterDrop"];
   setDragOverGroupColor: MockedGeckoTypes.TabContainer["_setDragOverGroupColor"];
   triggerDragOverCreateGroup: MockedGeckoTypes.TabContainer["_triggerDragOverCreateGroup"];
+  updateTabStylesOnDrag: MockedGeckoTypes.TabContainer["_updateTabStylesOnDrag"];
 }
 
 interface TabmixGlobal {
