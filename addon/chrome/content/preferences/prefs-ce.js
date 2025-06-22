@@ -34,6 +34,19 @@ if (TabClass) {
   });
 }
 
+/** @type {GetFunction} */
+function getFunction(element, eventType, eventCode) {
+  // @ts-ignore
+  let fn = element[eventType];
+  if (!fn) {
+    const code = `function ${eventType}(event) {${eventCode}}`;
+    fn = Tabmix.makeCode(code, null, "", Tabmix._sandbox);
+    // @ts-ignore
+    element[eventType] = fn;
+  }
+  return fn;
+}
+
 const PREFS = Services.prefs;
 
 /** @type {PreferencesListClass} */
@@ -501,9 +514,9 @@ class Preference extends MozXULElement {
     if (onsyncfrompreference) {
       // Value changed, synthesize an event
       try {
+        const f = getFunction(aElement, "syncfrompreference", onsyncfrompreference);
         const event = document.createEvent("Events");
         event.initEvent("syncfrompreference", true, true);
-        const f = new Function("event", onsyncfrompreference);
         rv = f.call(aElement, event);
       } catch (e) {
         console.error(e);
@@ -558,9 +571,9 @@ class Preference extends MozXULElement {
     if (onsynctopreference) {
       // Value changed, synthesize an event
       try {
+        const f = getFunction(aElement, "synctopreference", onsynctopreference);
         const event = document.createEvent("Events");
         event.initEvent("synctopreference", true, true);
-        const f = new Function("event", onsynctopreference);
         const rv = f.call(aElement, event);
         if (rv !== undefined) {
           return rv;
@@ -1152,6 +1165,8 @@ class PrefWindow extends MozXULElement {
       },
       true
     );
+
+    localLazy.initializeChangeCodeClass(Tabmix, {obj: window});
   }
 
   fixMozTabsForZen(doc = document) {
@@ -1177,11 +1192,9 @@ class PrefWindow extends MozXULElement {
       )
       .replace("set selectedIndex", "function selectedIndex");
 
-    const sandbox = localLazy.initializeChangeCodeClass(Tabmix, {obj: window});
-
     const descriptor = {
       get: getter,
-      set: Tabmix.makeCode(code, null, "", sandbox),
+      set: Tabmix.makeCode(code, null, "", Tabmix._sandbox),
       enumerable: true,
       configurable: true,
     };
@@ -1286,7 +1299,8 @@ class PrefWindow extends MozXULElement {
     for (const type of eventTypes) {
       const command = this.hasAttribute(`on${type}`) && this.getAttribute(`on${type}`);
       if (command) {
-        const f = new Function("event", command);
+        const code = `function ${type}(event) {${command}}`;
+        const f = Tabmix.makeCode(code, null, "", Tabmix._sandbox);
         this.addEventListener(type, event => f.call(this, event));
       }
     }
@@ -1820,8 +1834,9 @@ class PrefWindow extends MozXULElement {
       const event = document.createEvent("Events");
       event.initEvent(aEventName, true, true);
       let cancel = !aTarget.dispatchEvent(event);
-      if (aTarget.hasAttribute("on" + aEventName)) {
-        const fn = new Function("event", aTarget.getAttribute("on" + aEventName) ?? "");
+      const eventType = "on" + aEventName;
+      if (aTarget.hasAttribute(eventType)) {
+        const fn = getFunction(aTarget, aEventName, aTarget.getAttribute(eventType) ?? "");
         const rv = fn.call(aTarget, event);
         if (!rv) {
           cancel = true;

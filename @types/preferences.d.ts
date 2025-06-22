@@ -81,6 +81,8 @@ interface IgIncompatiblePane {
 
 /** classes in prefs-ce.js */
 
+type GetFunction = (element: PrefWindowClass | PrefPaneClass | HTMLElement | PreferenceElement | MousePaneNS.MenuList, eventType: string, eventCode: string) => FunctionWithAny;
+
 // for testing...
 type BindThis<T extends object> = {
   [K in keyof T]: T[K] extends (...args: any) => any ? (this: T, ...args: Parameters<T[K]>) => ReturnType<T[K]> : T[K];
