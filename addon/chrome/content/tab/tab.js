@@ -523,7 +523,10 @@ Tabmix.tabsUtils = {
           !TabmixSvc.isMac &&
           aEvent.target?.localName === "arrowscrollbox"
         ) {
-          let displayAppButton = !document.getElementById("titlebar").hidden;
+          let displayAppButton =
+            document.getElementById("titlebar") ?
+              !document.getElementById("titlebar").hidden
+            : false;
           if (this.customTitlebar.enabled || displayAppButton) {
             return;
           }
