@@ -21,10 +21,6 @@ var gMenuPane = {
       MozXULElement.insertFTLIfNeeded("preview/tabUnload.ftl");
     }
 
-    if (!Tabmix.isVersion(1270)) {
-      gPrefWindow.removeItemAndPrefById("pref_closeDuplicateTabs");
-    }
-
     this.setInverseLinkLabel();
 
     // we can not modify build-in key with reserved attribute
