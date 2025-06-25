@@ -25,21 +25,21 @@ declare namespace MockedExports {
    */
   interface KnownModules {
     Services: typeof import("Services");
-    // "resource://gre/modules/AppConstants.sys.mjs": typeof import("resource://gre/modules/AppConstants.sys.mjs");
-    // "resource:///modules/CustomizableUI.sys.mjs": typeof import("resource:///modules/CustomizableUI.sys.mjs");
-    // "resource:///modules/CustomizableWidgets.sys.mjs": typeof import("resource:///modules/CustomizableWidgets.sys.mjs");
-    // "resource://devtools/shared/loader/Loader.sys.mjs": typeof import("resource://devtools/shared/loader/Loader.sys.mjs");
-    // "resource://devtools/shared/performance-new/errors.sys.mjs": typeof import("resource://devtools/shared/performance-new/errors.sys.mjs");
-    // "resource://devtools/shared/performance-new/prefs-presets.sys.mjs": typeof import("resource://devtools/shared/performance-new/prefs-presets.sys.mjs");
-    // "resource://devtools/shared/performance-new/recording-utils.sys.mjs": typeof import("resource://devtools/shared/performance-new/recording-utils.sys.mjs");
-    // "resource://devtools/client/performance-new/shared/background.sys.mjs": typeof import("resource://devtools/client/performance-new/shared/background.sys.mjs");
-    // "resource://devtools/client/performance-new/shared/symbolication.sys.mjs": typeof import("resource://devtools/client/performance-new/shared/symbolication.sys.mjs");
-    // "resource://devtools/shared/loader/browser-loader.sys.mjs": any;
-    // "resource://devtools/client/performance-new/popup/menu-button.sys.mjs": typeof import("resource://devtools/client/performance-new/popup/menu-button.sys.mjs");
-    // "resource://devtools/client/performance-new/shared/typescript-lazy-load.sys.mjs": typeof import("resource://devtools/client/performance-new/shared/typescript-lazy-load.sys.mjs");
-    // "resource://devtools/client/performance-new/popup/logic.sys.mjs": typeof import("resource://devtools/client/performance-new/popup/logic.sys.mjs");
-    // "resource:///modules/PanelMultiView.sys.mjs": typeof import("resource:///modules/PanelMultiView.sys.mjs");
-    // "resource://gre/modules/PlacesUtils.sys.mjs": typeof import("resource://gre/modules/PlacesUtils.sys.mjs");
+    "resource://gre/modules/AppConstants.sys.mjs": typeof import("resource://gre/modules/AppConstants.sys.mjs");
+    "resource:///modules/CustomizableUI.sys.mjs": typeof import("resource:///modules/CustomizableUI.sys.mjs");
+    "resource:///modules/CustomizableWidgets.sys.mjs": typeof import("resource:///modules/CustomizableWidgets.sys.mjs");
+    "resource://devtools/shared/loader/Loader.sys.mjs": typeof import("resource://devtools/shared/loader/Loader.sys.mjs");
+    "resource://devtools/shared/performance-new/errors.sys.mjs": typeof import("resource://devtools/shared/performance-new/errors.sys.mjs");
+    "resource://devtools/shared/performance-new/prefs-presets.sys.mjs": typeof import("resource://devtools/shared/performance-new/prefs-presets.sys.mjs");
+    "resource://devtools/shared/performance-new/recording-utils.sys.mjs": typeof import("resource://devtools/shared/performance-new/recording-utils.sys.mjs");
+    "resource://devtools/shared/performance-new/symbolication.sys.mjs": typeof import("resource://devtools/shared/performance-new/symbolication.sys.mjs");
+    "resource://devtools/client/performance-new/shared/background.sys.mjs": typeof import("resource://devtools/client/performance-new/shared/background.sys.mjs");
+    "resource://devtools/shared/loader/browser-loader.sys.mjs": any;
+    "resource://devtools/client/performance-new/popup/menu-button.sys.mjs": typeof import("resource://devtools/client/performance-new/popup/menu-button.sys.mjs");
+    "resource://devtools/client/performance-new/shared/typescript-lazy-load.sys.mjs": typeof import("resource://devtools/client/performance-new/shared/typescript-lazy-load.sys.mjs");
+    "resource://devtools/client/performance-new/popup/logic.sys.mjs": typeof import("resource://devtools/client/performance-new/popup/logic.sys.mjs");
+    "resource:///modules/PanelMultiView.sys.mjs": typeof import("resource:///modules/PanelMultiView.sys.mjs");
+    "resource://gre/modules/PlacesUtils.sys.mjs": typeof import("resource://gre/modules/PlacesUtils.sys.mjs");
   }
 
   interface ChromeUtils {
@@ -363,8 +363,8 @@ declare module "resource://devtools/client/performance-new/shared/background.sys
   export = Background;
 }
 
-declare module "resource://devtools/client/performance-new/shared/symbolication.sys.mjs" {
-  import * as PerfSymbolication from "devtools/client/performance-new/shared/symbolication.sys.mjs";
+declare module "resource://devtools/shared/performance-new/symbolication.sys.mjs" {
+  import * as PerfSymbolication from "devtools/shared/performance-new/symbolication.sys.mjs";
   export = PerfSymbolication;
 }
 

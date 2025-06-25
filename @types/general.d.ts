@@ -425,6 +425,7 @@ declare namespace MockedGeckoTypes {
     _isLastTabInWindow: (tab: BrowserTab) => boolean;
     _lastRelatedTabMap: WeakMap<BrowserTab, BrowserTab>;
     _multiSelectedTabsSet: WeakSet<BrowserTab>;
+    _notifyPinnedStatus: (tab: BrowserTab, params: {telemetrySource?: string}) => void;
     _notifyOnTabMove: (tab: BrowserTab, previousTabState?: TabMoveState, currentTabState?: TabMoveState, metricsContext?: MockedExports.TabMetricsContext) => void;
     _removingTabs: Set<BrowserTab>;
     _selectedTab: BrowserTab;

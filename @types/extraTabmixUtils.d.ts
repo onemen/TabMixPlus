@@ -10,6 +10,7 @@ interface PrivateMethods {
   getTabMoveState: MockedGeckoTypes.TabBrowser["_getTabMoveState"];
   handleTabMove: MockedGeckoTypes.TabBrowser["_handleTabMove"];
   isLastTabInWindow: MockedGeckoTypes.TabBrowser["_isLastTabInWindow"];
+  notifyPinnedStatus: MockedGeckoTypes.TabBrowser["_notifyPinnedStatus"];
   notifyOnTabMove: MockedGeckoTypes.TabBrowser["_notifyOnTabMove"];
   // TabContainer
   animateExpandedPinnedTabMove: MockedGeckoTypes.TabContainer["_animateExpandedPinnedTabMove"];

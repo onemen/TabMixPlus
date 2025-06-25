@@ -1070,6 +1070,15 @@ Tabmix.onContentLoaded = {
       });
     }
 
+    if (Tabmix.isVersion(1410)) {
+      gBrowser._notifyPinnedStatus = Tabmix.getPrivateMethod({
+        parent: gBrowser,
+        parentName: "gBrowser",
+        methodName: "notifyPinnedStatus",
+        nextMethodName: "pinTab",
+      });
+    }
+
     // we can't use TabPinned.
     // gBrowser.pinTab call _updateCloseButtons that call updateScrollStatus
     // before it dispatch TabPinned event.
