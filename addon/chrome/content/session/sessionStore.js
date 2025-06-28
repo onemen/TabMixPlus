@@ -703,7 +703,7 @@ var TMP_ClosedTabs = {
           !showSubView &&
           !TabmixAllTabs.isAfterCtrlClick(event.target)
         ) {
-          undoCloseTab();
+          Tabmix.undoCloseTab();
         }
         break;
     }

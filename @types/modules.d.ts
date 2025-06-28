@@ -99,7 +99,7 @@ interface Window {
   // Firefox 141+
   SessionWindowUI: {
     undoCloseWindow(aIndex: number): Window | null;
-    undoCloseTab(window: Window, aIndex: number, sourceWindowSSId: string): Tab | null;
+    undoCloseTab(window: Window, aIndex?: number, sourceWindowSSId?: string): Tab | null;
   };
 }
 

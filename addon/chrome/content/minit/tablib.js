@@ -1851,7 +1851,7 @@ Tabmix.tablib = {
 
     /* DEPRECATED */
     // we keep this function to stay compatible with other extensions that use it
-    gBrowser.undoRemoveTab = () => undoCloseTab();
+    gBrowser.undoRemoveTab = () => Tabmix.undoCloseTab();
     // Tabmix don't use this function anymore
     // but treeStyleTab extension look for it
     gBrowser.restoreTab = function () {};
@@ -2043,6 +2043,14 @@ Tabmix.getOpenDuplicateNextPref = function () {
       "browser.tabs.insertAfterCurrent"
     : "extensions.tabmix.openDuplicateNext";
   return Services.prefs.getBoolPref(pref);
+};
+
+Tabmix.undoCloseTab = function (index, sourceWindow) {
+  if (!Tabmix.isVersion(1410)) {
+    return undoCloseTab(index, sourceWindow);
+  }
+
+  return window.SessionWindowUI.undoCloseTab(window, index, sourceWindow);
 };
 
 /**

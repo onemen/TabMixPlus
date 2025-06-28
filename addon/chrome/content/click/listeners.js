@@ -27,7 +27,7 @@
       switch (event.target.id) {
         case "History:UndoCloseTab":
           event.stopPropagation();
-          undoCloseTab();
+          Tabmix.undoCloseTab();
           break;
       }
     },

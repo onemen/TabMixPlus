@@ -138,6 +138,7 @@ interface TabmixGlobal {
     selectPreviousTab: (tab: Tab) => void;
     selectTabAfterRemove: (tab: Tab, aExcludeTabs?: Tab[]) => Tab | null;
   };
+  undoCloseTab(aIndex?: number, sourceWindowSSId?: string): MockedGeckoTypes.BrowserTab | null;
 
   // userinterface.js
   handleTabbarVisibility: typeof HandleTabbarVisibility & Record<string, any>;
