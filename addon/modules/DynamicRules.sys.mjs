@@ -130,7 +130,7 @@ export const DynamicRules = {
     let selector = "#tabbrowser-tabs";
 
     name = name.replace("Tab", "");
-    return `${selector}[tabmix_#style~="#type"] #tabbrowser-arrowscrollbox .tabbrowser-tab${this.tabState[name]}`
+    return `${selector}[tabmix_#style~="#type"] arrowscrollbox .tabbrowser-tab${this.tabState[name]}`
       .replace("#style", `${name}Style`)
       .replace("#type", rule);
   },

@@ -2033,7 +2033,7 @@ Tabmix.getPlacement = function (id) {
 Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodName, sandbox}) {
   const firefoxClass = parent?.constructor;
   const name = parentName || firefoxClass?.name;
-  const nonPrivateMethodNae = `${name}._${methodName}`;
+  const nonPrivateMethodName = `${name}._${methodName}`;
 
   const errorMsg = `can't find private function ${name}.#${methodName}`;
   const method = function () {};
@@ -2042,20 +2042,22 @@ Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodN
     return method;
   }
 
-  const code = firefoxClass
+  let code = firefoxClass
     .toString()
     .split(` #${methodName}`)[1] // function to extract from source code
     ?.split(` ${nextMethodName}`)[0] // next function in the source code
-    ?.trim()
-    // remove comments placed above the next method
-    .replace(/\/\/.*$|\/\*[\s\S]*?\*\/\s*$/m, "")
-    .trim();
+    ?.trim();
   if (code) {
     try {
-      return Tabmix.makeCode(`_${methodName}${code}`, parent, nonPrivateMethodNae, sandbox);
+      const codeWithoutCommnets = code.split("\n");
+      while (codeWithoutCommnets.at(-1)?.trim().startsWith("//")) {
+        codeWithoutCommnets.pop();
+      }
+      code = codeWithoutCommnets.join("\n").trim();
+      return Tabmix.makeCode(`_${methodName}${code}`, parent, nonPrivateMethodName, sandbox);
     } catch (error) {
       console.error(
-        `Tabmix Error: getPrivateMethod failed to evaluate ${nonPrivateMethodNae}`,
+        `Tabmix Error: getPrivateMethod failed to evaluate ${nonPrivateMethodName}`,
         error
       );
       return method;

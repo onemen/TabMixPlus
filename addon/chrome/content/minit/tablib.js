@@ -276,7 +276,8 @@ Tabmix.tablib = {
       ._replace(
         "this.tabContainer._updateCloseButtons();",
         `if (!wasPinned) TabmixTabbar.setFirstTabInRow();
-        $&`
+        $&`,
+        {check: !Tabmix.isVersion(1410)}
       )
       .toCode();
 
@@ -437,41 +438,46 @@ Tabmix.tablib = {
         attributeFilter: ["inFullscreen", "inDOMFullscreen"],
       });
 
-      const doPosition = Tabmix.isVersion(1300) ? "absPositionHorizontalTabs" : "doPosition";
-      const doPositionRE = new RegExp(`if\\s*\\(\\s*${doPosition}(.*?)\\)\\s\\{`);
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")
-        ._replace("const doPosition =", "let doPosition =", {
-          check: Tabmix.isVersion({fp: "128.0.0"}),
-        })
-        ._replace(
-          `let ${doPosition} =`,
-          `let multiRowsPinnedTabs = numPinned > 0 && TabmixTabbar.isMultiRow && Tabmix.tabsUtils.lastPinnedTabRowNumber > 1;
+      if (Tabmix.isVersion(1410)) {
+        gBrowser.tabContainer._positionPinnedTabs = () => {
+          // TODO: handle pinned tabs in multi-row
+        };
+      } else {
+        const doPosition = Tabmix.isVersion(1300) ? "absPositionHorizontalTabs" : "doPosition";
+        const doPositionRE = new RegExp(`if\\s*\\(\\s*${doPosition}(.*?)\\)\\s\\{`);
+        Tabmix.changeCode(tabBar, "gBrowser.tabContainer._positionPinnedTabs")
+          ._replace("const doPosition =", "let doPosition =", {
+            check: Tabmix.isVersion({fp: "128.0.0"}),
+          })
+          ._replace(
+            `let ${doPosition} =`,
+            `let multiRowsPinnedTabs = numPinned > 0 && TabmixTabbar.isMultiRow && Tabmix.tabsUtils.lastPinnedTabRowNumber > 1;
       $& !multiRowsPinnedTabs &&`
-        )
-        ._replace(
-          "this._updateVerticalPinnedTabs();",
-          `$&
+          )
+          ._replace(
+            "this._updateVerticalPinnedTabs();",
+            `$&
         absPositionHorizontalTabs = false;`,
-          {check: Tabmix.isVersion(1300)}
-        )
-        ._replace(
-          "let layoutData = this._pinnedTabsLayoutCache;",
-          `if (typeof this.arrowScrollbox.resetFirstTabInRow == "function")
+            {check: Tabmix.isVersion(1300)}
+          )
+          ._replace(
+            "let layoutData = this._pinnedTabsLayoutCache;",
+            `if (typeof this.arrowScrollbox.resetFirstTabInRow == "function")
             this.arrowScrollbox.resetFirstTabInRow();
         $&`
-        )
-        ._replace(
-          "scrollStartOffset:",
-          "$& TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 :"
-        )
-        ._replace(
-          doPositionRE,
-          `if (${doPosition}$1 && TabmixTabbar.isMultiRow && Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
+          )
+          ._replace(
+            "scrollStartOffset:",
+            "$& TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT ? 0 :"
+          )
+          ._replace(
+            doPositionRE,
+            `if (${doPosition}$1 && TabmixTabbar.isMultiRow && Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
         ${doPosition} = false;
         this.toggleAttribute("positionpinnedtabs", false);
       }
       if (${doPosition}$1 && TabmixTabbar.isMultiRow) {` +
-            `
+              `
         ${
           Tabmix.isVersion(1190) ?
             'this.toggleAttribute("positionpinnedtabs", true)'
@@ -503,23 +509,24 @@ Tabmix.tablib = {
         TMP_tabDNDObserver.paddingLeft = Tabmix.getStyle(this, "paddingLeft");
         this.arrowScrollbox.setFirstTabInRow();
       } else $&`
-        )
-        ._replace(
-          "let width = 0;",
-          // firefox add a gap between the last pinned tab and the first visible tab
-          `let width = TabmixTabbar.scrollButtonsMode !== TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&
+          )
+          ._replace(
+            "let width = 0;",
+            // firefox add a gap between the last pinned tab and the first visible tab
+            `let width = TabmixTabbar.scrollButtonsMode !== TabmixTabbar.SCROLL_BUTTONS_LEFT_RIGHT &&
              Tabmix.tabsUtils.protonValues.enabled ? 12 : 0;`
-        )
-        ._replace(
-          /(})(\)?)$/,
-          `  if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {
+          )
+          ._replace(
+            /(})(\)?)$/,
+            `  if (TabmixTabbar.scrollButtonsMode != TabmixTabbar.SCROLL_BUTTONS_MULTIROW) {
         TMP_tabDNDObserver.paddingLeft = parseInt(
           this.style.getPropertyValue("--tab-overflow-pinned-tabs-width") || 0
         );
       }
     $1$2`
-        )
-        .toCode();
+          )
+          .toCode();
+      }
     }
 
     Tabmix.changeCode(tabBar, "gBrowser.tabContainer._handleNewTab")

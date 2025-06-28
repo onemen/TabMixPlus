@@ -416,6 +416,10 @@ Tabmix.multiRow = {
 
       /** @type {ASB["setFirstTabInRow"]} */
       setFirstTabInRow(scroll) {
+        if (Tabmix.isVersion(1410)) {
+          return;
+        }
+
         const firstVisibleRow = Math.round(this.scrollPosition / this.singleRowHeight) + 1;
         if (scroll) {
           if (this.firstVisibleRow === firstVisibleRow) {
