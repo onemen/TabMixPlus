@@ -197,6 +197,12 @@
       "release_date": 1748241742310,
       "esr_version": "115",
       "firefox_version": "139"
+    },
+    "1.32.0": {
+      "version": "1.32.0",
+      "release_date": 1751092344357,
+      "esr_version": "128",
+      "firefox_version": "140"
     }
   }
 }
