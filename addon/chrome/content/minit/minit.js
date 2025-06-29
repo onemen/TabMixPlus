@@ -187,6 +187,14 @@ var TMP_tabDNDObserver = {
         nextMethodName: "#animateExpandedPinnedTabMove",
       });
 
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._updateTabStylesOnDrag")
+        ._replace(
+          "let isPinned = tab.pinned;",
+          `if (TMP_tabDNDObserver.useTabmixDnD(event)) {return;}
+          $&`
+        )
+        .toCode();
+
       tabBar._resetTabsAfterDrop = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "resetTabsAfterDrop",
