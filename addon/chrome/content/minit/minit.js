@@ -180,7 +180,7 @@ var TMP_tabDNDObserver = {
       });
     }
 
-    if (Tabmix.isVersion(1410)) {
+    if (Tabmix.isVersion(1420)) {
       tabBar._updateTabStylesOnDrag = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "updateTabStylesOnDrag",
