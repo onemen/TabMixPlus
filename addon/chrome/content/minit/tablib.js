@@ -249,7 +249,7 @@ Tabmix.tablib = {
 
       Tabmix.changeCode(gBrowser, "gBrowser._beginRemoveTab")
         ._replace(
-          /this\.addTrustedTab\(BROWSER_NEW_TAB_URL, {\s*skipAnimation: true,?\s*}\)/,
+          /this\.addTrustedTab\(BROWSER_NEW_TAB_URL,\s*\{\s*skipAnimation:\s*true,[\s\S]*?\}\)/,
           "TMP_BrowserOpenTab({}, null, true)",
           {check: !Tabmix.isVersion({zen: "1.8.1*"})}
         )
