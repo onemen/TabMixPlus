@@ -545,10 +545,7 @@ export class Overlays {
     } else if (node.textContent) {
       console.debug(`Loading eval'd script into ${this.window.location}`);
       try {
-        const dataURL = `data:application/javascript,${encodeURIComponent(node.textContent)}`;
-        // It would be great if we could have script errors show the right url, but for now
-        // loadSubScript will have to do.
-        Services.scriptloader.loadSubScript(dataURL, this.window);
+        Cu.evalInSandbox(node.textContent, this.window.Tabmix._sandbox);
       } catch (ex) {
         console.error(ex);
         console.log("node.textContent", node.textContent);
