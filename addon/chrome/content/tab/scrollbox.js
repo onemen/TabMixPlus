@@ -416,10 +416,6 @@ Tabmix.multiRow = {
 
       /** @type {ASB["setFirstTabInRow"]} */
       setFirstTabInRow(scroll) {
-        if (Tabmix.isVersion(1410)) {
-          return;
-        }
-
         const firstVisibleRow = Math.round(this.scrollPosition / this.singleRowHeight) + 1;
         if (scroll) {
           if (this.firstVisibleRow === firstVisibleRow) {
@@ -607,6 +603,7 @@ Tabmix.multiRow = {
             Tabmix.setItem(this, "scrolledtostart", hasAttribute("scrolledtostart"));
           }
         });
+        // @ts-expect-error - we modify the arrowScrollbox
         scrollButtonsStateObserver.observe(arrowScrollbox, {attributes: true});
       }
 

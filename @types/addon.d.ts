@@ -241,6 +241,7 @@ interface TabmixDNDObserver {
   isLastTabInRow(dropTab: Tab | undefined, dragOverElement: AriaFocusableItem | undefined): boolean;
   clearDragmark(): void;
   getSourceNode(aDataTransfer: DataTransfer): HTMLLinkElement | Tab | null;
+  resetTabsAfterDrop(draggedTab: Tab): void;
 }
 
 declare namespace TabmixArrowScrollboxNS {
@@ -315,7 +316,7 @@ declare namespace TabmixArrowScrollboxNS {
   }
 
   type RSB = RightScrollBox;
-  export interface RightScrollBox extends MozXULElement, Omit<MockedGeckoTypes.ArrowScrollbox, "getElementsByTagName" | "children"> {
+  export interface RightScrollBox extends MozXULElement, Omit<MockedGeckoTypes.ArrowScrollbox, "appendChild" | "contains" | "insertBefore" | "prepend" | "getElementsByTagName" | "children"> {
     addEventListener<K extends keyof CustomElementEventMap>(type: K, listener: (this: Element, ev: CustomElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions): void;
     addButtonListeners: (button: HTMLButtonElement, side: "left" | "right") => void;
     constructor: (this: RSB) => RSB;
@@ -378,6 +379,7 @@ declare namespace TabmixEventListenerNS {
     onTabSelect(aEvent: TabEvent): void;
     updateDisplay(tab: Tab): void;
     onTabMove(aEvent: TabEvent): void;
+    onTabPinned(aEvent: TabEvent): void;
     onTabUnpinned(aEvent: TabEvent): void;
     onTabBarScroll(aEvent: WheelEvent): void;
     onWindowClose(): void;
@@ -697,7 +699,7 @@ interface PrivateMethods {
   updateScrollButtonsDisabledState: TabmixArrowScrollboxNS.ArrowScrollbox["_updateScrollButtonsDisabledState"];
 }
 
-type ElementTypesExtended = ElementTypes | TabmixAllTabsNS.PopupElement;
+type ElementTypesExtended = ElementTypes | TabmixAllTabsNS.PopupElement | MockedGeckoTypes.ArrowScrollbox;
 
 interface TabmixGlobal {
   tablib: typeof Tablib;

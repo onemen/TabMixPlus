@@ -254,6 +254,9 @@ var TMP_eventListener = {
       case "TabMove":
         this.onTabMove(aEvent);
         break;
+      case "TabPinned":
+        this.onTabPinned(aEvent);
+        break;
       case "TabUnpinned":
         this.onTabUnpinned(aEvent);
         break;
@@ -329,6 +332,10 @@ var TMP_eventListener = {
       "TabAttrModified",
       "TabBrowserInserted",
     ];
+
+    if (Tabmix.isVersion(1410)) {
+      this._tabEvents.push("TabPinned");
+    }
 
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
 
@@ -966,7 +973,12 @@ var TMP_eventListener = {
     }
   },
 
+  onTabPinned() {
+    Tabmix.tabsUtils.updatefirstTabInRowMargin();
+  },
+
   onTabUnpinned: function TMP_EL_onTabUnpinned(aEvent) {
+    Tabmix.tabsUtils.updatefirstTabInRowMargin();
     var tab = aEvent.target;
     // we unlock the tab on unpinned only if we have this flag on
     // see TMP_eventListener.onContentLoaded
@@ -1208,6 +1220,7 @@ var TMP_eventListener = {
     });
 
     const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
+    // @ts-expect-error - we modify the arrowScrollbox
     groupObserver.observe(arrowScrollbox, {childList: true});
 
     window.addEventListener(

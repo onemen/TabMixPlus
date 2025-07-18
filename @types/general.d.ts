@@ -179,6 +179,7 @@ declare namespace MockedGeckoTypes {
     fromTabList: boolean;
     tabGroupCreationColor: string;
     expandGroupOnDrop: boolean;
+    nextTab?: BrowserTab;
   };
 
   interface BrowserTab extends MockedExports.BrowserTab, Omit<Element, "ownerGlobal" | "nextSibling"> {
@@ -241,7 +242,9 @@ declare namespace MockedGeckoTypes {
     tabmixKey: object;
   }
 
-  interface ArrowScrollbox extends Omit<Element, "children"> {
+  type ScrollboxElement = BrowserTab | MozTabbrowserTabGroup;
+
+  interface ArrowScrollbox extends Omit<Element, "children" | "appendChild" | "contains" | "insertBefore" | "prepend"> {
     _boundsWithoutFlushing: (element: HTMLElement) => DOMRect;
     _canScrollToElement: (element: BrowserTab) => boolean;
     _distanceToRow: (amountToScroll: number) => number;
@@ -250,7 +253,7 @@ declare namespace MockedGeckoTypes {
     _prevMouseScrolls: boolean[];
     _scrollButtonDown: HTMLButtonElement;
     _scrollButtonUp: HTMLButtonElement;
-    children: NonEmptyArray<BrowserTab | MozTabbrowserTabGroup>;
+    children: NonEmptyArray<ScrollboxElement>;
     ensureElementIsVisible: (tab: AriaFocusableItem, instant?: boolean) => void;
     readonly isRTLScrollbox: boolean;
     get lineScrollAmount(): number;
@@ -266,6 +269,17 @@ declare namespace MockedGeckoTypes {
     readonly singleRowHeight: number;
     smoothScroll: boolean;
     readonly startEndProps: ["top", "bottom"] | ["left", "right"];
+
+    appendChild(tab: ScrollboxElement): ScrollboxElement;
+    contains(tab: ScrollboxElement): boolean;
+    insertBefore(tab: ScrollboxElement, child: ScrollboxElement | null): ScrollboxElement;
+    prepend(...tabs: ScrollboxElement[]): void;
+    _tabmix_originals: {
+      appendChild?: ArrowScrollbox["appendChild"];
+      contains: ArrowScrollbox["contains"];
+      insertBefore?: ArrowScrollbox["insertBefore"];
+      prepend?: ArrowScrollbox["prepend"];
+    };
   }
 
   interface DNDCanvas extends Element {
@@ -508,6 +522,7 @@ declare namespace MockedGeckoTypes {
     setInitialTabTitle: (tab: BrowserTab, title: string, options: Record<string, unknown>) => void;
     setTabTitle: (tab: BrowserTab) => boolean;
     swapBrowsersAndCloseOther: (ourTab: BrowserTab, otherTab: BrowserTab) => boolean;
+    pinnedTabsContainer: ArrowScrollbox;
     tabContainer: TabContainer;
     tabLocalization: Localization;
     get tabbox(): TabBox;
@@ -617,6 +632,7 @@ declare namespace MockedGeckoTypes {
     on_TabSelect(): void;
     select(): void;
     previousSibling: BrowserTab;
+    pinned: never;
   }
 
   interface TabsPanel extends TabsListBase {

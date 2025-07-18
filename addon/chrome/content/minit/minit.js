@@ -256,6 +256,22 @@ var TMP_tabDNDObserver = {
         ._replace("this.selectedItem = tab;", "if (this.verticalMode) {$&}", {
           check: Tabmix.isVersion(1390),
         })
+        ._replace(
+          "this._updateTabStylesOnDrag(tab, event);",
+          `$&
+           if (tab.pinned && TabmixTabbar.isMultiRow && Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
+             const {width} = window.windowUtils.getBoundsWithoutFlushing(tab);
+             const nextTab = this.visibleTabs[gBrowser.pinnedTabCount];
+             if (nextTab) {
+               nextTab.style.setProperty("margin-inline-start", width + 12 + "px", "important");
+               tab._dragData.nextTab = nextTab;
+             }
+           }
+          `,
+          {
+            check: Tabmix.isVersion(1420),
+          }
+        )
         .toCode();
     }
 
@@ -284,6 +300,14 @@ var TMP_tabDNDObserver = {
         /(?:const|let) draggedTab/,
         `let tabmixHandleMove = ${tabmixHandleMoveString()};
       $&`
+      )
+      ._replace("allTabs.at(this._rtlMode ? -1 : 0)", "TabmixTabbar.isMultiRow ? tabs[0] : $&", {
+        check: Tabmix.isVersion(1420),
+      })
+      ._replace(
+        "allTabs.at(this._rtlMode ? 0 : -1)",
+        "TabmixTabbar.isMultiRow ? tabs.at(-1) : $&",
+        {check: Tabmix.isVersion(1420)}
       )
       ._replace(
         "this.selectedItem = draggedTab;",
@@ -530,6 +554,21 @@ var TMP_tabDNDObserver = {
          TMP_tabDNDObserver.hideDragoverMessage();
        }
        $&`
+      )
+      ._replace(
+        "this._resetTabsAfterDrop(draggedTab?.ownerDocument);",
+        `$&
+        TMP_tabDNDObserver.resetTabsAfterDrop(draggedTab);`,
+        {check: Tabmix.isVersion(1420)}
+      )
+      ._replace(
+        // Don't pin/unpin tabs when dropping pinned tab on multi-row tabbar
+        "let shouldTranslate =",
+        `if (TabmixTabbar.isMultiRow) {
+           shouldPin = shouldUnpin = false;
+         }
+         $&`,
+        {check: Tabmix.isVersion(1420)}
       )
       ._replace(
         /(duplicatedTab|newTab) = gBrowser\.duplicateTab\(tab\);/,
@@ -949,7 +988,11 @@ var TMP_tabDNDObserver = {
       (Tabmix.singleWindowMode && gBrowser.tabs.length > 1);
 
     let tabBar = gBrowser.tabContainer;
+
+    let dt = event.dataTransfer;
+    let draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
     if (!disableDetachTab) {
+      this.resetTabsAfterDrop(draggedTab);
       // fall back to default Firefox event handler
       // it will call #expandGroupOnDrop
       Tabmix.originalFunctions.on_dragend.apply(tabBar, [event]);
@@ -957,9 +1000,6 @@ var TMP_tabDNDObserver = {
     }
 
     event.stopPropagation();
-
-    var dt = event.dataTransfer;
-    var draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
 
     if (!useTabmixDnD) {
       // Prevent this code from running if a tabdrop animation is
@@ -985,6 +1025,10 @@ var TMP_tabDNDObserver = {
       tabBar.finishMoveTogetherSelectedTabs(draggedTab);
       tabBar.finishAnimateTabMove();
       tabBar._expandGroupOnDrop(draggedTab);
+    }
+    if (Tabmix.isVersion(1420)) {
+      this.resetTabsAfterDrop(draggedTab);
+      tabBar._resetTabsAfterDrop(draggedTab.ownerDocument);
     }
 
     if (dt.mozUserCancelled || dt.dropEffect != "none" || tabBar._isCustomizing) {
@@ -1477,6 +1521,12 @@ var TMP_tabDNDObserver = {
     }
 
     return null;
+  },
+
+  resetTabsAfterDrop(draggedTab) {
+    if (draggedTab?._dragData?.nextTab) {
+      draggedTab._dragData.nextTab.style.removeProperty("margin-inline-start");
+    }
   },
 }; // TMP_tabDNDObserver end
 

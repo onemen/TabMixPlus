@@ -30,6 +30,8 @@ var TabmixTabbar = {
     Tabmix.setItem("tabmix-scrollbox", "orient", val == "multibar" ? "vertical" : "horizontal");
 
     Tabmix.tabsUtils.resizeObserver(val == "multibar");
+
+    Tabmix.tabsUtils.positionPinnedTabs();
   },
 
   get flowing() {
@@ -609,7 +611,10 @@ Tabmix.tabsUtils = {
     // we must adjustNewtabButtonVisibility before get lastTabRowNumber
     this.adjustNewtabButtonVisibility();
     // this.lastTabRowNumber is null when we hide the tabbar
-    let rows = reset || this.tabBar.allTabs.length == 1 ? 1 : this.lastTabRowNumber || 1;
+    let rows =
+      reset || this.tabBar.allTabs.length == 1 || !TabmixTabbar.isMultiRow ?
+        1
+      : this.lastTabRowNumber || 1;
 
     let currentMultibar = TabmixTabbar.multiRowState || null;
     let maxRow = Tabmix.prefs.getIntPref("tabBarMaxRow");
@@ -626,9 +631,9 @@ Tabmix.tabsUtils = {
 
     let multibar;
     if (rows == 1) {
+      // removeAttribute "tabmix-multibar"
       multibar = null;
     } else if (rows > maxRow) {
-      // removeAttribute "tabmix-multibar"
       [multibar, rows] = ["scrollbar", maxRow];
     } else {
       multibar = "true";
@@ -963,7 +968,12 @@ Tabmix.tabsUtils = {
     height += marginTop + marginBottom;
 
     var tabBottom = top - marginTop + height;
-    if ("pinned" in aTab && cStyle.position === "absolute") {
+    if (
+      "pinned" in aTab &&
+      (Tabmix.isVersion(1410) ?
+        aTab.parentElement?.id === "pinned-tabs-container"
+      : cStyle.position === "absolute")
+    ) {
       aTop += this.tabBar.arrowScrollbox.scrollPosition;
     }
     return Math.round((tabBottom - aTop) / height);
@@ -1263,6 +1273,150 @@ Tabmix.tabsUtils = {
         Tabmix.originalFunctions._invalidateCachedTabs.apply(this, arguments);
         Tabmix.tabsUtils.invalidateAllVisibleItems();
       };
+    }
+  },
+
+  positionPinnedTabs() {
+    if (!Tabmix.isVersion(1410)) {
+      return;
+    }
+
+    // Firefox 141+ places all pinned tabs in a separate container.
+    // To maintain Tab Mix Plus multi-row behavior, we support three modes:
+    // - Single row: Default Firefox behavior; no changes needed.
+    // - Multi-row with pinnedTabScroll enabled:
+    //   - Move pinned tabs to the start of "tabbrowser-arrowscrollbox".
+    //   - Override scrollbox insert methods to handle pinned tabs correctly.
+    // - Multi-row with fixed pinned tabs:
+    //   - Set "pinned-tabs-container" to position: absolute.
+    //   - Use the "tabmix-firstTabInRow" class to position the first unpinned
+    //     tab after the pinned tabs.
+
+    const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
+    if (Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
+      this.updatePinnedTabsContainer();
+      arrowScrollbox.resetFirstTabInRow();
+    } else if (!gBrowser.pinnedTabCount || !TabmixTabbar.isMultiRow) {
+      gBrowser.tabContainer.removeAttribute("positionpinnedtabs");
+      arrowScrollbox.resetFirstTabInRow();
+    } else {
+      this.updatefirstTabInRowMargin();
+    }
+  },
+
+  _pinnedTabsContainer: "pinned-tabs-container",
+  updatePinnedTabsContainer() {
+    if (!Tabmix.isVersion(1410)) {
+      return;
+    }
+
+    const pinnedTabScroll = Tabmix.prefs.getBoolPref("pinnedTabScroll");
+    const isMultiRow = TabmixTabbar.isMultiRow;
+    const pinnedTabsContainer = gBrowser.pinnedTabsContainer;
+    const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
+
+    // Save originals only once
+    if (!pinnedTabsContainer._tabmix_originals) {
+      pinnedTabsContainer._tabmix_originals = {
+        appendChild: pinnedTabsContainer.appendChild,
+        contains: pinnedTabsContainer.contains,
+        insertBefore: pinnedTabsContainer.insertBefore,
+      };
+    }
+    if (!arrowScrollbox._tabmix_originals) {
+      arrowScrollbox._tabmix_originals = {
+        contains: arrowScrollbox.contains,
+        prepend: arrowScrollbox.prepend,
+      };
+    }
+
+    // Determine the target container id
+    const targetId =
+      pinnedTabScroll && isMultiRow ? "tabbrowser-arrowscrollbox" : "pinned-tabs-container";
+
+    if (this._pinnedTabsContainer === targetId) {
+      // nothing to do
+      return;
+    }
+
+    // Patch new container's methods if needed
+    if (targetId === "tabbrowser-arrowscrollbox") {
+      Object.assign(pinnedTabsContainer, {
+        //
+
+        /** @type {MockedGeckoTypes.ArrowScrollbox["appendChild"]} */
+        appendChild(tab) {
+          return arrowScrollbox.insertBefore(
+            tab,
+            [...arrowScrollbox.children].find(t => !t.pinned) ?? null
+          );
+        },
+
+        /** @type {MockedGeckoTypes.ArrowScrollbox["contains"]} */
+        contains(node) {
+          return new Error().stack?.match(/^on_drop@/m) ?
+              Boolean(node?.closest("#tabbrowser-arrowscrollbox .tabbrowser-tab[pinned]"))
+            : pinnedTabsContainer._tabmix_originals.contains.apply(this, [node]);
+        },
+
+        /** @type {MockedGeckoTypes.ArrowScrollbox["insertBefore"]} */
+        insertBefore(...args) {
+          return arrowScrollbox.insertBefore(...args);
+        },
+      });
+      Object.assign(arrowScrollbox, {
+        //
+
+        /** @type {MockedGeckoTypes.ArrowScrollbox["contains"]} */
+        contains(node) {
+          return new Error().stack?.match(/^on_drop@/m) ?
+              Boolean(node?.closest("#tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned])"))
+            : arrowScrollbox._tabmix_originals.contains.apply(this, [node]);
+        },
+
+        /** @type {MockedGeckoTypes.ArrowScrollbox["prepend"]} */
+        prepend(...tabs) {
+          let firstNormal = [...arrowScrollbox.children].find(t => !t.pinned && !tabs.includes(t));
+          tabs.forEach(tab => arrowScrollbox.insertBefore(tab, firstNormal ?? null));
+        },
+      });
+    } else {
+      // Restore previous container's methods
+      Object.assign(pinnedTabsContainer, pinnedTabsContainer._tabmix_originals);
+      Object.assign(arrowScrollbox, arrowScrollbox._tabmix_originals);
+    }
+
+    // Update the current container id
+    this._pinnedTabsContainer = targetId;
+
+    // Move pinned tabs to the correct container if needed
+    if (gBrowser.pinnedTabCount) {
+      const container = targetId === "pinned-tabs-container" ? pinnedTabsContainer : arrowScrollbox;
+      container.prepend(...gBrowser.tabContainer.visibleTabs.slice(0, gBrowser.pinnedTabCount));
+    }
+  },
+
+  updatefirstTabInRowMargin() {
+    if (!Tabmix.isVersion(1410) || !TabmixTabbar.isMultiRow) {
+      return;
+    }
+
+    const doPosition =
+      gBrowser.pinnedTabCount > 0 &&
+      TabmixTabbar.isMultiRow &&
+      !Tabmix.prefs.getBoolPref("pinnedTabScroll");
+
+    const margin = doPosition ? gBrowser.pinnedTabsContainer.getBoundingClientRect().width + 12 : 0;
+    gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]?.style.setProperty(
+      "margin-inline-start",
+      margin + "px",
+      "important"
+    );
+    const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
+    arrowScrollbox.firstTabInRowMargin = margin;
+    gBrowser.tabContainer.toggleAttribute("positionpinnedtabs", doPosition);
+    if (doPosition) {
+      arrowScrollbox.setFirstTabInRow();
     }
   },
 };
@@ -1711,7 +1865,7 @@ window.gTMPprefObserver = {
           case 1: // Display close buttons on all tabs (Default)
             Tabmix.prefs.setIntPref("tabs.closeButtons", 1);
             break;
-          case 2: // Don’t display any close buttons
+          case 2: // Don't display any close buttons
             break;
           case 3: // Display a single close button at the end of the tab strip
             break;
@@ -1843,7 +1997,13 @@ window.gTMPprefObserver = {
         break;
       }
       case "extensions.tabmix.pinnedTabScroll":
-        gBrowser.tabContainer._positionPinnedTabs();
+        if (Tabmix.isVersion(1410)) {
+          Tabmix.tabsUtils.updatePinnedTabsContainer();
+          Tabmix.tabsUtils.updatefirstTabInRowMargin();
+          // gBrowser.tabContainer.arrowScrollbox.setFirstTabInRow();
+        } else {
+          gBrowser.tabContainer._positionPinnedTabs();
+        }
         break;
       case "extensions.tabmix.theme_background": {
         const value = prefValue !== 2 || null;
@@ -2130,7 +2290,8 @@ window.gTMPprefObserver = {
     this.insertRule(newRule.trim(), "width");
 
     // rule for controlling margin-inline-start when we have pinned tab in multi-row
-    let selector = "#tabbrowser-tabs[positionpinnedtabs] > #tabbrowser-arrowscrollbox";
+    let selector =
+      "#tabbrowser-tabs[orient=horizontal][positionpinnedtabs][tabmix-multibar] > #tabbrowser-arrowscrollbox";
     let marginStart = `${selector} .tabbrowser-tab[tabmix-firstTabInRow="true"],
      ${selector} .tab-group-label-container[tabmix-firstTabInRow="true"] {
        margin-inline-start: 0px;
@@ -2169,8 +2330,24 @@ window.gTMPprefObserver = {
     }
 
     if (Tabmix.isVersion(1310)) {
+      let pinnedTabsContainer = "";
+      if (Tabmix.isVersion(1410)) {
+        pinnedTabsContainer = `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] #pinned-tabs-container::part(scrollbox),\n`;
+        this.insertRule(
+          `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] #pinned-tabs-container {
+            position: absolute;
+          }`
+        );
+
+        this.insertRule(
+          `#tabbrowser-tabs:not([positionpinnedtabs])[tabmix-flowing="multibar"][orient=horizontal] .tabbrowser-tab[pinned] + .tabbrowser-tab:not([pinned]) {
+            margin-inline-start: 12px;
+          }`
+        );
+      }
+
       this.insertRule(
-        `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] #tabbrowser-arrowscrollbox::part(scrollbox) {
+        `${pinnedTabsContainer}#tabbrowser-tabs[tabmix-multibar][orient=horizontal] #tabbrowser-arrowscrollbox::part(scrollbox) {
           margin-top: var(--tabmix-multirow-margin, 0);
           margin-bottom: var(--tabmix-multirow-margin, 0);
         }`

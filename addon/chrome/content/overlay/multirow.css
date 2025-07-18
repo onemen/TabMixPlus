@@ -47,12 +47,6 @@
   max-height: calc(var(--tab-min-height-mlt) * var(--tabs-lines));
 }
 
-#tabbrowser-tabs[tabmix-multibar="true"][orient="horizontal"] #pinned-tabs-container::part(items-wrapper) {
-  margin-block-start: 3px;
-  flex-wrap: wrap;
-  width: var(--tabmix-multirow-pinned-tabs-container-width);
-}
-
 /* waterfox with userChrome enabled set overflow: hidden */
 #TabsToolbar[tabmix-flowing="multibar"] {
   height: auto !important;

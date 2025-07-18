@@ -53,17 +53,8 @@ var gAppearancePane = {
       }
     }
 
-    if (Tabmix.isVersion(1410)) {
-      gPrefWindow.removeItemAndPrefById("pref_pinnedTabScroll");
-      Tabmix.setItem("multi-rows-box", "style", "height: 55px;");
-    }
-
     if (window.opener.document.documentElement.hasAttribute("lwtheme")) {
-      Tabmix.setItem(
-        "multi-rows-box",
-        "style",
-        Tabmix.isVersion(1410) ? "height: 80px;" : "height: 105.2px;"
-      );
+      Tabmix.setItem("multi-rows-box", "style", "height: 105.2px;");
       Tabmix.setItem("theme-background-box", "hidden", null);
     }
 

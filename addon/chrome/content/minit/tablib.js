@@ -440,8 +440,11 @@ Tabmix.tablib = {
 
       if (Tabmix.isVersion(1410)) {
         gBrowser.tabContainer._positionPinnedTabs = () => {
-          // TODO: handle pinned tabs in multi-row
+          // not in use since firefox 141, see Tabmix.tabsUtils: positionPinnedTabs, updatefirstTabInRowMargin
         };
+
+        Tabmix.tabsUtils.positionPinnedTabs();
+        Tabmix.tabsUtils.updateVerticalTabStrip();
       } else {
         const doPosition = Tabmix.isVersion(1300) ? "absPositionHorizontalTabs" : "doPosition";
         const doPositionRE = new RegExp(`if\\s*\\(\\s*${doPosition}(.*?)\\)\\s\\{`);

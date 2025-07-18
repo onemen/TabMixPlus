@@ -543,6 +543,10 @@ interface TabmixTabsUtils {
   allVisibleItems: AriaFocusableItems;
   invalidateAllVisibleItems(): void;
   patchInvalidateCachedVisibleTabs(): void;
+  positionPinnedTabs(): void;
+  _pinnedTabsContainer: string;
+  updatePinnedTabsContainer(): void;
+  updatefirstTabInRowMargin(): void;
 }
 
 declare namespace UtilsModules {
