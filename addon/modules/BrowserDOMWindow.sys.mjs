@@ -3,11 +3,18 @@ import {XPCOMUtils} from "resource://gre/modules/XPCOMUtils.sys.mjs";
 
 /** @type {BrowserDOMWindowModule.Lazy} */ // @ts-ignore
 const lazy = {};
+
 /* eslint-disable tabmix/valid-lazy */
 ChromeUtils.defineESModuleGetters(lazy, {
   initializeChangeCodeClass: "chrome://tabmix-resource/content/Changecode.sys.mjs",
   URILoadingHelper: "resource:///modules/URILoadingHelper.sys.mjs",
 });
+
+if (isVersion(1420)) {
+  ChromeUtils.defineESModuleGetters(lazy, {
+    TaskbarTabsUtils: "resource:///modules/taskbartabs/TaskbarTabsUtils.sys.mjs",
+  });
+}
 
 // @ts-ignore
 ChromeUtils.defineLazyGetter(lazy, "ReferrerInfo", () =>
