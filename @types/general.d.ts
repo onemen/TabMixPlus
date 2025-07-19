@@ -724,7 +724,7 @@ declare namespace MockedGeckoTypes {
   interface OpenLinkInParams {
     allowInheritPrincipal?: boolean;
     charset?: string;
-    csp?: nsIContentSecurityPolicy | null;
+    policyContainer?: nsIContentSecurityPolicy | null;
     frameID?: number;
     globalHistoryOptions?: {
       triggeringSponsoredURL: string;
@@ -738,6 +738,9 @@ declare namespace MockedGeckoTypes {
     triggeringRemoteType?: string | undefined;
     userContextId?: number;
     [key: string]: unknown;
+
+    /** @deprecated - use policyContainer */
+    csp?: nsIContentSecurityPolicy | null;
   }
 
   interface gContextMenu {

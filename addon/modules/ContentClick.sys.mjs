@@ -60,6 +60,16 @@ export const TabmixContentClick = {
 };
 Object.freeze(TabmixContentClick);
 
+const policyContainerName = isVersion(1420) ? "policyContainer" : "csp";
+const deserializePolicyContainer =
+  isVersion(1420) ?
+    //
+    /** @param {MockedExports.ContentClickEvent} data */
+    data =>
+      data.policyContainer ? lazy.E10SUtils.deserializePolicyContainer(data.policyContainer) : null
+  : /** @param {MockedExports.ContentClickEvent} data */
+    data => (data.csp ? lazy.E10SUtils.deserializeCSP(data.csp) : null);
+
 ContentClickInternal = {
   _timer: null,
   _initialized: false,
@@ -142,7 +152,7 @@ ContentClickInternal = {
         originPrincipal: json.originPrincipal,
         originStoragePrincipal: json.originStoragePrincipal,
         triggeringPrincipal: json.triggeringPrincipal,
-        csp: json.csp ? lazy.E10SUtils.deserializeCSP(json.csp) : null,
+        [policyContainerName]: deserializePolicyContainer(json),
         frameID: json.frameID,
         openerBrowser: browser,
         hasValidUserGestureActivation: true,
@@ -234,7 +244,7 @@ ContentClickInternal = {
       originPrincipal: event.originPrincipal,
       originStoragePrincipal: event.originStoragePrincipal,
       triggeringPrincipal: event.triggeringPrincipal,
-      csp: event.csp ? lazy.E10SUtils.deserializeCSP(event.csp) : null,
+      [policyContainerName]: deserializePolicyContainer(event),
       frameID: event.frameID,
       suppressTabsOnFileDownload: result.suppressTabsOnFileDownload,
       openerBrowser: browser,

@@ -1,3 +1,4 @@
+import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
 import {PrivateBrowsingUtils} from "resource://gre/modules/PrivateBrowsingUtils.sys.mjs";
 
 /** @type {TabmixModules.SingleWindowModeUtils} */
@@ -114,6 +115,7 @@ export const SingleWindowModeUtils = {
     const uriToLoad = args[0];
 
     let urls = [];
+    let policyContainerName = isVersion(1420) ? "policyContainer" : "csp";
 
     /** @type {Partial<TabmixModules.WindowParams>} */
     let params = {};
@@ -127,7 +129,7 @@ export const SingleWindowModeUtils = {
         userContextId: args[5],
         triggeringPrincipal: args[8] || Services.scriptSecurityManager.getSystemPrincipal(),
         allowInheritPrincipal: args[9],
-        csp: args[10],
+        [policyContainerName]: args[10],
         fromExternal: true,
       };
     } else if (newWindow.XULElement.isInstance(uriToLoad)) {
@@ -145,7 +147,7 @@ export const SingleWindowModeUtils = {
       //  [7]: originStoragePrincipal (nsIPrincipal)
       //  [8]: triggeringPrincipal (nsIPrincipal)
       //  [9]: allowInheritPrincipal (bool)
-      //  [10]: csp (nsIContentSecurityPolicy)
+      //  [10]: policyContainer (nsIPolicyContainer)
       params = {
         referrerInfo: args[2] || null,
         postData: args[3] || null,
@@ -156,7 +158,7 @@ export const SingleWindowModeUtils = {
         forceAboutBlankViewerInCurrent: Boolean(args[6]),
         triggeringPrincipal: args[8],
         allowInheritPrincipal: args[9] !== false,
-        csp: args[10],
+        [policyContainerName]: args[10],
       };
       urls = [uriToLoad];
     } else {

@@ -9,7 +9,7 @@ type ClickJSONData = {
   altKey: boolean;
   href: string | null;
   title: string | null;
-  csp: string;
+  policyContainer: string;
   referrerInfo: string;
   frameID: number;
   triggeringPrincipal: nsIPrincipal | null;
@@ -20,6 +20,9 @@ type ClickJSONData = {
   originStoragePrincipal: nsIPrincipal;
   tabmixContentClick: ContentClickResult;
   globalHistoryOptions: {triggeringSponsoredURL: string};
+
+  /** @deprecated - use policyContainer */
+  csp: string;
 };
 type LinkNode = ContentClickLinkElement | LinkNodeUtilsModule.WrappedNode | null;
 type ClickMessageData = {json: Partial<ClickJSONData>; href: string | null; node: LinkNode | null};

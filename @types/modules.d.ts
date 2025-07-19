@@ -158,7 +158,7 @@ declare namespace MockedExports {
     // Additional properties not in MouseEvent
     href: string | null;
     title: string | null;
-    csp: string;
+    policyContainer: string;
     referrerInfo: string;
     frameID: number;
     triggeringPrincipal: nsIPrincipal | null;
@@ -176,6 +176,9 @@ declare namespace MockedExports {
     __where: "tabshifted" | "tab";
     bookmark: string;
     tabmixContentClick: ContentClickResult;
+
+    /** @deprecated - use policyContainer instead */
+    csp: string;
   }
 
   type ContentClickResult = {
@@ -232,12 +235,17 @@ declare namespace MockedExports {
   interface E10SUtils {
     SERIALIZED_SYSTEMPRINCIPAL: string;
     DEFAULT_REMOTE_TYPE: string;
-    deserializeCSP(csp_b64?: string | null): nsIContentSecurityPolicy;
+    deserializePolicyContainer(csp_b64?: string | null): nsIContentSecurityPolicy;
     deserializeReferrerInfo(referrerInfo_b64?: string | null): nsIReferrerInfo;
     getRemoteTypeForURI: (aUri: string, aMultiProcess?: boolean, aRemoteSubframes?: boolean, aPreferredRemoteType?: string, aCurrentUri?: string | null, aOriginAttributes?: Params) => string;
     predictOriginAttributes: ({window, browser, userContextId, geckoViewSessionContextId, privateBrowsingId}: {window?: Window; browser?: MockedGeckoTypes.ChromeBrowser; userContextId?: number | undefined; geckoViewSessionContextId?: string; privateBrowsingId?: string}) => {privateBrowsingId: string; userContextId: string; geckoViewSessionContextId: string};
-    serializeCSP: (csp: nsIContentSecurityPolicy) => string;
+    serializePolicyContainer: (csp: nsIContentSecurityPolicy) => string;
     serializeReferrerInfo: (referrerInfo: nsIReferrerInfo) => string;
+
+    /** @deprecated - use deserializePolicyContainer instead */
+    deserializeCSP(csp_b64?: string | null): nsIContentSecurityPolicy;
+    /** @deprecated - use serializePolicyContainer instead */
+    serializeCSP: (csp: nsIContentSecurityPolicy) => string;
   }
 
   interface Preferences {

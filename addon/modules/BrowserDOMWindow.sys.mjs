@@ -170,7 +170,7 @@ export const TabmixBrowserDOMWindow = {
         triggeringPrincipal: aTriggeringPrincipal,
         referrerInfo: aReferrerInfo,
         userContextId: aUserContextId,
-        csp: aCsp,
+        ${isVersion(1420) ? `policyContainer: aPolicyContainer` : `csp: aCsp`},
         loadFlags,
       });
       browser.focus();

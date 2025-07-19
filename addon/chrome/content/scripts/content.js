@@ -285,10 +285,14 @@ var TabmixClickEventHandler = {
     let [href, node, principal] = linkData;
     let ownerDoc = event.originalTarget.ownerDocument;
 
-    let serializeCSP = "",
-      csp = ownerDoc.csp;
-    if (csp) {
-      serializeCSP = E10SUtils.serializeCSP(csp);
+    let policyContainerName = ContentSvc.version(1420) ? "policyContainer" : "csp";
+    // @ts-expect-error
+    let policyContainer = ownerDoc[policyContainerName];
+    if (policyContainer) {
+      policyContainer =
+        ContentSvc.version(1420) ?
+          E10SUtils.serializePolicyContainer(policyContainer)
+        : E10SUtils.serializeCSP(policyContainer);
     }
 
     let referrerInfo = Cc["@mozilla.org/referrer-info;1"].createInstance(Ci.nsIReferrerInfo);
@@ -310,7 +314,7 @@ var TabmixClickEventHandler = {
       altKey: event.altKey || event.getModifierState("AltGraph"),
       href: null,
       title: null,
-      csp: serializeCSP,
+      [policyContainerName]: policyContainer,
       referrerInfo: serializeReferrerInfo,
     };
 
