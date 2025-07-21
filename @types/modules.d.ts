@@ -177,7 +177,7 @@ declare namespace MockedExports {
     bookmark: string;
     tabmixContentClick: ContentClickResult;
 
-    /** @deprecated - use policyContainer instead */
+    /** @deprecated replaced with policyContainer in firefox 142 */
     csp: string;
   }
 
@@ -242,9 +242,9 @@ declare namespace MockedExports {
     serializePolicyContainer: (csp: nsIContentSecurityPolicy) => string;
     serializeReferrerInfo: (referrerInfo: nsIReferrerInfo) => string;
 
-    /** @deprecated - use deserializePolicyContainer instead */
+    /** @deprecated replaced with deserializePolicyContainer in firefox 142 */
     deserializeCSP(csp_b64?: string | null): nsIContentSecurityPolicy;
-    /** @deprecated - use serializePolicyContainer instead */
+    /** @deprecated replaced with serializePolicyContainer in firefox 142 */
     serializeCSP: (csp: nsIContentSecurityPolicy) => string;
   }
 
@@ -414,8 +414,6 @@ declare namespace SessionStoreNS {
   }
 
   interface SessionStoreApi {
-    /** @deprecated - use RunState instead */
-    _loadState: number;
     deleteCustomTabValue(aTab: Tab, aKey: string): void;
     duplicateTab(aWindow: Window, aTab: Tab, aDelta?: number, aRestoreImmediately?: boolean, aOptions?: {inBackground?: boolean; index?: number}): Tab;
     forgetClosedTab(aSource: ClosedDataSource, aIndex: number): void;
@@ -426,8 +424,6 @@ declare namespace SessionStoreNS {
     getClosedTabCountForWindow(aWindow: Window): number;
     getClosedTabCountFromClosedWindows(): number;
     getClosedTabData(aOptions?: WindowSource): ClosedTabData[];
-    /** @deprecated use getClosedTabData with aOptions?: Source since Firefox 117 */
-    getClosedTabData(aWindow: Window, aAsString: boolean): ClosedTabData[];
     getClosedTabDataForWindow(aWindow: Window): ClosedTabData[];
     getClosedTabDataFromClosedWindows(): ClosedTabData[];
     getClosedTabGroups(aOptions?: Partial<WindowSource>): ClosedGroup[];

@@ -481,11 +481,7 @@ Tabmix.tablib = {
       }
       if (${doPosition}$1 && TabmixTabbar.isMultiRow) {` +
               `
-        ${
-          Tabmix.isVersion(1190) ?
-            'this.toggleAttribute("positionpinnedtabs", true)'
-          : 'this.setAttribute("positionpinnedtabs", "true");'
-        }
+        this.toggleAttribute("positionpinnedtabs", true);
         let layoutData = this._pinnedTabsLayoutCache;
         if (!layoutData) {
           layoutData = { pinnedTabWidth: tabs[0].getBoundingClientRect().width };
@@ -659,12 +655,6 @@ Tabmix.tablib = {
         .toCode();
     }
 
-    if (!Tabmix.isVersion(1160)) {
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._setPositionalAttributes")
-        ._replace(/(})(\)?)$/, "          Tabmix.setTabStyle(gBrowser.selectedTab);\$1$2")
-        .toCode();
-    }
-
     Tabmix.originalFunctions.tabContainer_updateCloseButtons =
       gBrowser.tabContainer._updateCloseButtons;
 
@@ -807,9 +797,7 @@ Tabmix.tablib = {
       return result;
     };
 
-    let fnObj = Tabmix.isVersion(1260) ? window.BrowserCommands : window;
-    let fnName = Tabmix.isVersion(1260) ? "closeTabOrWindow" : "BrowserCloseTabOrWindow";
-    Tabmix.changeCode(fnObj, fnName)
+    Tabmix.changeCode(window.BrowserCommands, "closeTabOrWindow")
       ._replace(
         "closeWindow(true);", // Mac
         "Tabmix.tablib.closeLastTab();",
@@ -941,7 +929,7 @@ Tabmix.tablib = {
         ._replace(
           /tab\s*=\s*lazy\.SessionStore\.undoCloseTab\([\s\S]*?\);\s*tabsRemoved\s*=\s*true;/,
           `tab = window.TMP_ClosedTabs._undoCloseTab(
-                ${Tabmix.isVersion(1170) ? "sourceWindow" : "window"},
+                sourceWindow,
                 index,
                 "original",
                 !tab,
@@ -978,8 +966,7 @@ Tabmix.tablib = {
         // workaround for bug 1868452 - Key key_undoCloseTab of menuitem could not be found
         "undoPopup.appendChild(tabsFragment);",
         `TMP_ClosedTabs.fix_bug_1868452(tabsFragment.firstChild);
-      $&`,
-        {check: Tabmix.isVersion(1160)}
+      $&`
       )
       ._replace(
         /(})(\)?)$/,
@@ -1027,7 +1014,7 @@ Tabmix.tablib = {
         ._replace(
           /tab = SessionStore\.undoCloseTab.*\n.*true;/,
           `tab = TMP_ClosedTabs._undoCloseTab(
-              ${Tabmix.isVersion(1170) ? "sourceWindow" : "window"},
+              sourceWindow,
               index,
               "original",
               !tab,
@@ -1772,31 +1759,29 @@ Tabmix.tablib = {
       )
       .toCode();
 
-    if (Tabmix.isVersion(1270)) {
-      Tabmix.changeCode(gBrowser, "gBrowser._removeDuplicateTabs")
-        ._replace(
-          "if (!this.warnAboutClosingTabs",
-          `const tabsCount = tabs.length;
+    Tabmix.changeCode(gBrowser, "gBrowser._removeDuplicateTabs")
+      ._replace(
+        "if (!this.warnAboutClosingTabs",
+        `const tabsCount = tabs.length;
         tabs = tabs.filter(tab => !tab._isProtected);
         const protectedCount = tabsCount - tabs.length;
         $&`
-        )
-        ._replace("{ l10nArgs:", "{ protectedCount, l10nArgs:")
-        .toCode();
+      )
+      ._replace("{ l10nArgs:", "{ protectedCount, l10nArgs:")
+      .toCode();
 
-      Tabmix.changeCode(window.ConfirmationHint, "ConfirmationHint.show")
-        ._replace(
-          "const DURATION",
-          `if (options.protectedCount) {
+    Tabmix.changeCode(window.ConfirmationHint, "ConfirmationHint.show")
+      ._replace(
+        "const DURATION",
+        `if (options.protectedCount) {
            this._panel.classList.add("with-description");
            this._description.hidden = false;
            const description = options.protectedCount === 1 ? "1 duplicate tab is protected" : options.protectedCount + " duplicate tabs are protected";
            this._description.setAttribute("value", description);
          }
          $&`
-        )
-        .toCode();
-    }
+      )
+      .toCode();
 
     Tabmix.changeCode(gBrowser, "gBrowser.warnAboutClosingTabs")
       ._replace(
@@ -2025,22 +2010,7 @@ Tabmix.getOpenTabNextPref = function (aRelatedToCurrent = false) {
 };
 
 Tabmix.getOpenDuplicateNextPref = function () {
-  let names =
-    Tabmix.isVersion(1260) ?
-      ["gotoHistoryIndex", "forward", "back"]
-    : ["gotoHistoryIndex", "BrowserForward", "BrowserBack"];
-  let pref =
-    Tabmix.callerTrace(...names) ?
-      "browser.tabs.insertAfterCurrent"
-    : "extensions.tabmix.openDuplicateNext";
-  return Services.prefs.getBoolPref(pref);
-};
-
-Tabmix.getOpenDuplicateNextPref = function () {
-  let names =
-    Tabmix.isVersion(1260) ?
-      ["gotoHistoryIndex", "forward", "back"]
-    : ["gotoHistoryIndex", "BrowserForward", "BrowserBack"];
+  let names = ["gotoHistoryIndex", "forward", "back"];
   let pref =
     Tabmix.callerTrace(...names) ?
       "browser.tabs.insertAfterCurrent"

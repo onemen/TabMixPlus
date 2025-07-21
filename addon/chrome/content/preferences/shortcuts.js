@@ -57,9 +57,7 @@ function _getKeyName(win, aKey) {
     val;
 
   // don't use dynamic label for key name
-  const undoCloseTabID =
-    Tabmix.isVersion(1160) ? "key_restoreLastClosedTabOrWindowOrSession" : "key_undoCloseTab";
-  const skip = [undoCloseTabID, "key_undoCloseWindow"];
+  const skip = ["key_restoreLastClosedTabOrWindowOrSession", "key_undoCloseWindow"];
   if (!skip.includes(aKey.id)) {
     let fButton = doc.getElementById("titlebar");
     val =

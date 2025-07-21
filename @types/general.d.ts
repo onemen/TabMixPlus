@@ -565,6 +565,7 @@ declare namespace MockedGeckoTypes {
     TMP_selectNewForegroundTab: (tab: BrowserTab, loadInBackground?: boolean | string, url?: string, addOwner?: boolean) => void;
     updateTitlebar: () => void;
 
+    /** see DEPRECATED in tablib.js */
     /** @deprecated use TMP_ClosedTabs.undoCloseTab instead */
     undoRemoveTab: () => BrowserTab | null;
     /** @deprecated Tabmix don't use this function unknownmore but treeStyleTab extension look for it */
@@ -739,7 +740,7 @@ declare namespace MockedGeckoTypes {
     userContextId?: number;
     [key: string]: unknown;
 
-    /** @deprecated - use policyContainer */
+    /** @deprecated replaced with policyContainer in firefox 142 */
     csp?: nsIContentSecurityPolicy | null;
   }
 
@@ -761,8 +762,6 @@ declare namespace MockedGeckoTypes {
     bookmarkLink: (url: string, title: string) => Promise<void>;
     bookmarkPage: () => Promise<void>;
     bookmarkTabs: () => Promise<void>;
-    /** @deprecated removed since Firefox version 125 */
-    get uniqueCurrentPages(): nsIURI[];
   }
 
   interface BookmarkInfo {
@@ -799,8 +798,6 @@ declare namespace MockedGeckoTypes {
   interface PlacesUIUtils {
     openTabset(aItemsToOpen: Array<{uri: string; isBookmark: boolean}>, aEvent: Event, aWindow: Window): void;
     markPageAsFollowedLink(aURL: string): void;
-    /** @deprecated removed since Firefox version 125 */
-    showBookmarkPagesDialog(URIList: nsIURI[], hiddenRows?: string[], win?: Window): Promise<void>;
   }
 }
 

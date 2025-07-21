@@ -182,13 +182,13 @@ If <b>Tab Mix Plus</b> stops working after Firefox update was installed or when 
 
 Tab Mix Plus is fully compatible with the following browsers:
 
-  * [Firefox](https://www.mozilla.org/en-US/firefox/all/#product-desktop-release) 115 ESR - Nightly
+  * [Firefox](https://www.mozilla.org/en-US/firefox/all/#product-desktop-release) 128 ESR - Nightly
   * [Zen Browser](https://zen-browser.app/) 1.7+
-  * [Waterfox](https://www.waterfox.net/) G6 and beyond
+  * [Waterfox](https://www.waterfox.net/) 6.5.0+
   * [Floorp](https://floorp.app/) 11.9.0+
   * [LibreWolf](https://librewolf.net/) 122+
 
-> Firefox versions prior to 115 ESR are not supported.
+> Firefox versions prior to 128 ESR are not supported.
 
 > For **Pale Moon** download **Tab Mix Plus** from [here](https://addons.palemoon.org/addon/tab-mix-plus/)
 

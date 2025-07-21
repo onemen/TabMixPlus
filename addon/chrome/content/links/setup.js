@@ -20,11 +20,7 @@ Tabmix.linkHandling_init = function TMP_TBP_init() {
 };
 
 Tabmix.set_BrowserOpenTab = function () {
-  if (this.isVersion(1260)) {
-    window.BrowserCommands.openTab = TMP_BrowserOpenTab;
-  } else {
-    window.BrowserOpenTab = TMP_BrowserOpenTab;
-  }
+  window.BrowserCommands.openTab = TMP_BrowserOpenTab;
   Tabmix.BrowserOpenTab = TMP_BrowserOpenTab;
 };
 

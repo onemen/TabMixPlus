@@ -53,17 +53,10 @@ var TMP_LastTab = {
 
   init() {
     this._inited = true;
-    if (Tabmix.isVersion(1250)) {
-      document.removeEventListener("keydown", gBrowser.tabbox, {mozSystemGroup: true});
-      document.addEventListener("keydown", this, {mozSystemGroup: true});
-      document.addEventListener("keyup", this, {mozSystemGroup: true});
-      window.addEventListener("blur", this, {capture: true, mozSystemGroup: true});
-    } else {
-      Services.els.removeSystemEventListener(document, "keydown", gBrowser.tabbox, false);
-      Services.els.addSystemEventListener(document, "keydown", this, false);
-      Services.els.addSystemEventListener(document, "keyup", this, false);
-      Services.els.addSystemEventListener(window, "blur", this, true);
-    }
+    document.removeEventListener("keydown", gBrowser.tabbox, {mozSystemGroup: true});
+    document.addEventListener("keydown", this, {mozSystemGroup: true});
+    document.addEventListener("keyup", this, {mozSystemGroup: true});
+    window.addEventListener("blur", this, {capture: true, mozSystemGroup: true});
 
     // if session manager select other tab then the first one we need to build
     // TabHistory in two steps to maintain natural Ctrl-Tab order.
@@ -86,15 +79,9 @@ var TMP_LastTab = {
       return;
     }
 
-    if (Tabmix.isVersion(1250)) {
-      document.removeEventListener("keydown", this, {mozSystemGroup: true});
-      document.removeEventListener("keyup", this, {mozSystemGroup: true});
-      window.removeEventListener("blur", this, {capture: true, mozSystemGroup: true});
-    } else {
-      Services.els.removeSystemEventListener(document, "keydown", this, false);
-      Services.els.removeSystemEventListener(document, "keyup", this, false);
-      Services.els.removeSystemEventListener(window, "blur", this, true);
-    }
+    document.removeEventListener("keydown", this, {mozSystemGroup: true});
+    document.removeEventListener("keyup", this, {mozSystemGroup: true});
+    window.removeEventListener("blur", this, {capture: true, mozSystemGroup: true});
   },
 
   handleEvent(event) {

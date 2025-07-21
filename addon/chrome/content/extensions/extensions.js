@@ -337,11 +337,7 @@ var TMP_extensionsCompatibility = {
 
     // override the aioCloseWindow function
     if (typeof aioCloseWindow == "function") {
-      window.aioCloseWindow =
-        Tabmix.isVersion(1260) ?
-          window.BrowserCommands.tryToCloseWindow
-          // eslint-disable-next-line no-undef
-        : BrowserTryToCloseWindow;
+      window.aioCloseWindow = window.BrowserCommands.tryToCloseWindow;
     }
   },
 

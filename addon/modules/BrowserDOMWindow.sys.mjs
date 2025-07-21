@@ -143,7 +143,7 @@ export const TabmixBrowserDOMWindow = {
       $&`
       )
       ._replace(
-        isVersion(1260) ? "win.BrowserCommands.openTab()" : "win.BrowserOpenTab()",
+        "win.BrowserCommands.openTab()",
         `if (currentIsBlank) Tabmix.tablib.setURLBarFocus();
       else $&`
       )

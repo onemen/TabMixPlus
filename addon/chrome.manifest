@@ -36,7 +36,6 @@ locale    tabmixplus   zh-TW         chrome/locale/zh-TW/
 
 skin      tabmixplus   classic/1.0   chrome/skin/
 
-skin      tabmix-version tabmixplus  chrome/skin/app_version/91/         platformversion>=91
 skin      tabmix-version tabmixplus  chrome/skin/app_version/119/        platformversion>=119
 skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/win/   os=WINNT
 skin      tabmix-os    classic/1.0   chrome://tabmix-version/skin/mac/   os=Darwin

@@ -3,7 +3,6 @@
 /** @type {OverlaysModule.Lazy} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  isVersion: "chrome://tabmix-resource/content/BrowserVersion.sys.mjs",
   setTimeout: "resource://gre/modules/Timer.sys.mjs",
 });
 
@@ -91,8 +90,6 @@ export class Overlays {
         // eslint-disable-next-line no-continue
         continue;
       }
-
-      this._update(url, doc);
 
       // clean the document a bit
       const emptyNodes = doc.evaluate("//text()[normalize-space(.) = '']", doc, null, 7, null);
@@ -231,21 +228,6 @@ export class Overlays {
       });
     } else {
       this.document.defaultView.addEventListener("load", this._finish.bind(this), {once: true});
-    }
-  }
-
-  /**
-   * update document according to changes in Firefox
-   *
-   * @param {String} url The document url
-   * @param {XMLDocument} doc The html document
-   */
-  _update(url, doc) {
-    if (url === "chrome://tabmixplus/content/tabmix.xhtml") {
-      if (!lazy.isVersion(1160)) {
-        const menu = doc.getElementById("tm-content-undoCloseTab");
-        menu?.setAttribute("key", "key_undoCloseTab");
-      }
     }
   }
 

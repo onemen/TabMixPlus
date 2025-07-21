@@ -21,7 +21,7 @@ type ClickJSONData = {
   tabmixContentClick: ContentClickResult;
   globalHistoryOptions: {triggeringSponsoredURL: string};
 
-  /** @deprecated - use policyContainer */
+  /** @deprecated replaced with policyContainer in firefox 142 */
   csp: string;
 };
 type LinkNode = ContentClickLinkElement | LinkNodeUtilsModule.WrappedNode | null;

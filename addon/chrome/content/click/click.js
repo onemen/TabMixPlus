@@ -334,11 +334,7 @@ var TabmixTabClickOptions = {
         PlacesCommandHook.bookmarkPage();
         break;
       case 26:
-        if (Tabmix.isVersion(1250)) {
-          PlacesCommandHook.bookmarkTabs();
-        } else {
-          PlacesUIUtils.showBookmarkPagesDialog(PlacesCommandHook.uniqueCurrentPages);
-        }
+        PlacesCommandHook.bookmarkTabs();
         break;
       case 27:
         gBrowser.duplicateTabToWindow(aTab, true);
@@ -873,12 +869,10 @@ var TabmixContext = {
 
     // Close tab Commands
     showItem("context_closeTab");
-    if (Tabmix.isVersion(1270)) {
-      const showCloseDuplicateTabs = Services.prefs.getBoolPref(
-        "browser.tabs.context.close-duplicate.enabled"
-      );
-      showItem("context_closeDuplicateTabs", {is: showCloseDuplicateTabs});
-    }
+    const showCloseDuplicateTabs = Services.prefs.getBoolPref(
+      "browser.tabs.context.close-duplicate.enabled"
+    );
+    showItem("context_closeDuplicateTabs", {is: showCloseDuplicateTabs});
     showItem("context_closeTabOptions");
 
     //  ---------------- menuseparator ---------------- //
@@ -1460,13 +1454,7 @@ var TabmixAllTabs = {
         aButton.id == "tabmix-alltabs-button" ||
         (aButton.parentNode && aButton.parentNode.id == "allTabsMenu-allTabsView")
       ) {
-        if (Tabmix.isVersion(1260)) {
-          window.BrowserCommands.closeTabOrWindow();
-        } else {
-          // @ts-expect-error - BrowserCloseTabOrWindow removed in Firefox 126
-          // eslint-disable-next-line no-undef
-          BrowserCloseTabOrWindow();
-        }
+        window.BrowserCommands.closeTabOrWindow();
         aButton.setAttribute("afterctrlclick", true);
       }
     }

@@ -100,10 +100,6 @@ export const Shortcuts = {
 
     this.KeyboardEvent = Object.keys(aWindow.KeyboardEvent);
 
-    if (!TabmixSvc.version(1160)) {
-      this.keys.undoCloseTab.id = "key_undoCloseTab";
-    }
-
     // update keys initial value and label
     let $ = (/** @type {string} */ id) => aWindow.document.getElementById(id);
     let container = $("TabsToolbar");

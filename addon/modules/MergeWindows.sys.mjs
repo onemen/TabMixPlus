@@ -6,8 +6,6 @@ import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
-  // Firefox 123 Bug 1864821 - Replace PromiseUtils.defer with Promise.withResolvers
-  PromiseUtils: "resource://gre/modules/PromiseUtils.sys.mjs",
   SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
 });
 
@@ -231,8 +229,7 @@ export const MergeWindows = {
 
     const promises = [Promise.resolve(tabToSelect)];
     for (const tab of popups) {
-      const deferred =
-        TabmixSvc.version(1230) ? Promise.withResolvers() : lazy.PromiseUtils.defer();
+      const deferred = Promise.withResolvers();
       promises.push(deferred.promise);
       tab._tabmix_movepopup_promise = deferred;
 

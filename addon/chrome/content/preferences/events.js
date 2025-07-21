@@ -43,12 +43,6 @@ var gEventsPane = {
     $("syncedTabs").label = syncedTabs;
     $("selectSyncedTabs").label = syncedTabs;
 
-    if (!Tabmix.isVersion(1170)) {
-      $("closedTabsFrom-separator").remove();
-      gPrefWindow.removeItemAndPrefById("pref_closedTabsFromAllWindows");
-      gPrefWindow.removeItemAndPrefById("pref_closedTabsFromClosedWindows");
-    }
-
     if (!Tabmix.isVersion(1360)) {
       $("openTabNextInGroup_control").parentNode.hidden = true;
     }

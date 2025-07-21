@@ -2407,12 +2407,10 @@ window.gTMPprefObserver = {
       }`
     );
 
-    // Firefox 126, Bug 1884792 - Remove chrome-only :-moz-lwtheme pseudo-class
-    const lwtheme = Tabmix.isVersion(1260) ? "is([lwtheme], [lwtheme-image])" : "-moz-lwtheme";
     // theme background style for multi-row
     this.insertRule(
-      `:root[tabmix_lwt]:${lwtheme} #navigator-toolbox[tabmix_lwt_background],
-       :root[tabmix_lwt]:${lwtheme} #tabmix-bottom-toolbox[tabmix_lwt_background] > toolbox {
+      `:root[tabmix_lwt]:is([lwtheme], [lwtheme-image]) #navigator-toolbox[tabmix_lwt_background],
+       :root[tabmix_lwt]:is([lwtheme], [lwtheme-image]) #tabmix-bottom-toolbox[tabmix_lwt_background] > toolbox {
          ${
            Tabmix.prefs.getIntPref("theme_background") === 0 ?
              "background-repeat: repeat-y;"
@@ -3391,9 +3389,7 @@ TabmixProgressListener = {
             Tabmix.prefs.getBoolPref("unreadTabreload") &&
             tab.hasAttribute("visited") &&
             !tab.hasAttribute("dontremovevisited") &&
-            (Tabmix.isVersion(1190) ?
-              !tab.hasAttribute("visuallyselected")
-            : tab.getAttribute("visuallyselected") !== "true")
+            !tab.hasAttribute("visuallyselected")
           ) {
             tab.removeAttribute("visited");
           }

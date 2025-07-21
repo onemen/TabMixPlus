@@ -13,11 +13,7 @@
       if (
         TabmixSvc.isZen ?
           aTab.hasAttribute("zen-essential")
-        : aTab.pinned ||
-          aTab.hidden ||
-          (Tabmix.isVersion(1190) ?
-            !this.hasAttribute("overflow")
-          : this.getAttribute("overflow") !== "true")
+        : aTab.pinned || aTab.hidden || !this.hasAttribute("overflow")
       ) {
         return;
       }

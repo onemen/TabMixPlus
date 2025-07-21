@@ -699,12 +699,7 @@ function showFilePicker(mode) {
       fp.defaultExtension = "txt";
       fp.defaultString = "TMPpref";
     }
-    if (Tabmix.isVersion(1250)) {
-      fp.init(window.browsingContext, null, mode);
-    } else {
-      // @ts-expect-error - we don't use it from Firefox 125
-      fp.init(window, null, mode);
-    }
+    fp.init(window.browsingContext, null, mode);
     fp.appendFilters(nsIFilePicker.filterText);
     fp.open(result => {
       if (result === nsIFilePicker.returnOK) {

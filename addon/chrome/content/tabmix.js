@@ -1025,13 +1025,10 @@ var TMP_eventListener = {
     if (shouldMoveFocus) {
       aEvent.stopPropagation();
       aEvent.preventDefault();
-      if (
-        (Tabmix.isVersion(1170) ? aEvent?.inputSource : aEvent?.mozInputSource) ==
-        MouseEvent.MOZ_SOURCE_MOUSE
-      ) {
+      if (aEvent?.inputSource == MouseEvent.MOZ_SOURCE_MOUSE) {
         direction = direction > 0 ? 1 : -1;
         tabBar.advanceSelectedTab(direction, true);
-        if (Tabmix.isVersion(1270) && Tabmix.tabsUtils.isVerticalTabs) {
+        if (Tabmix.tabsUtils.isVerticalTabs) {
           gBrowser.selectedTab.scrollIntoView({
             block: "nearest",
             behavior: "smooth",

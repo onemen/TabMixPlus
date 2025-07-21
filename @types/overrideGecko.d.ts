@@ -191,12 +191,7 @@ declare namespace MockedGeckoTypes {
   // we use here the interface from gecko/lib.gecko.services.d.ts
   // and ignore the declared Services from gecko.d.ts
 
-  interface _nsIEventListenerService extends nsIEventListenerService {
-    /** @deprecated removed since Firefox version 125 */
-    addSystemEventListener: (element: Window | Document | Element, type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean) => void;
-    /** @deprecated removed since Firefox version 125 */
-    removeSystemEventListener: (element: Window | Document | Element, type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean) => void;
-  }
+  interface _nsIEventListenerService extends nsIEventListenerService {}
 
   interface _nsIIOService extends nsIIOService {
     newURI(aSpec: string, aOriginCharset?: string | null, aBaseURI?: nsIURI | null): nsIURI;

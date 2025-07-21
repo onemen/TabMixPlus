@@ -162,10 +162,7 @@ async function startup(data, reason) {
       if (document.documentElement) {
         const isBrowser =
           document.documentElement.getAttribute("windowtype") === "navigator:browser";
-        const isOverflow =
-          lazy.isVersion(1190) ?
-            isBrowser && win.gBrowser.tabContainer.hasAttribute("overflow")
-          : isBrowser && win.gBrowser.tabContainer.getAttribute("overflow") === "true";
+        const isOverflow = isBrowser && win.gBrowser.tabContainer.hasAttribute("overflow");
         const promiseOverlayLoaded = Overlays.load(chromeManifest, win);
         if (isBrowser) {
           ScriptsLoader.initForWindow(win, promiseOverlayLoaded, {

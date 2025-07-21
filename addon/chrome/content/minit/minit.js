@@ -1984,18 +1984,10 @@ Tabmix.navToolbox = {
         Tabmix.isVersion(1400) ?
           "moz-src:///toolkit/components/search/SearchSuggestionController.sys.mjs"
         : "resource://gre/modules/SearchSuggestionController.sys.mjs",
-    };
-
-    if (Tabmix.isVersion(1210) && !Tabmix.isVersion(1220)) {
-      // Bug 1866616 add usage for UrlbarPrefs.sys.mjs only in Firefox 121
-      modules.UrlbarPrefs = "resource:///modules/UrlbarPrefs.sys.mjs";
-    }
-
-    if (Tabmix.isVersion(1270)) {
       // Bug 1742889 (Firefox 127) - Rewrite consumers of whereToOpenLink to use BrowserUtils.whereToOpenLink
       // add references to lazy.BrowserUtils
-      modules.BrowserUtils = "resource://gre/modules/BrowserUtils.sys.mjs";
-    }
+      BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
+    };
 
     if (Tabmix.isVersion(1370)) {
       modules.BrowserSearchTelemetry =

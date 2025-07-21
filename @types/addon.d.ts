@@ -160,9 +160,6 @@ interface Window {
 
   /** Floorp */
   gFloorpObservePreference: (prefName: string, callback: () => void) => void;
-
-  /** @deprecated - removed from firefox on version 126 */
-  BrowserOpenTab: (options: {event: MouseEvent; url: string}) => void;
 }
 
 /* Tabmix modules */

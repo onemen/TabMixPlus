@@ -472,10 +472,7 @@ Tabmix.setTabStyle = function (aTab, boldChanged) {
   }
 
   let style = null;
-  let isSelected =
-    Tabmix.isVersion(1190) ?
-      aTab.hasAttribute("visuallyselected")
-    : aTab.getAttribute("visuallyselected") === "true";
+  let isSelected = aTab.hasAttribute("visuallyselected");
   // if pending tab is blank we don't style it as unload or unread
   if (!isSelected && Tabmix.prefs.getBoolPref("unloadedTab") && this.isPendingTab(aTab)) {
     style =

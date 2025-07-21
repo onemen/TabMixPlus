@@ -142,8 +142,7 @@ export const DynamicRules = {
     let backgroundRule = " > .tab-stack > .tab-background" + background;
     let tabTextRule = " .tab-text {\n  color: #textColor !important;\n}\n";
 
-    const visuallyselected =
-      lazy.TabmixSvc.version(1190) ? "[visuallyselected]" : '[visuallyselected="true"]';
+    const visuallyselected = "[visuallyselected]";
     const _notSelected = `:not(${visuallyselected})`;
     this.tabState = {
       current: visuallyselected,
