@@ -1,3 +1,21 @@
+Tab Mix Plus License and Payment Notice
+======================================
+
+Tab Mix Plus is open source software, released under the Mozilla Public License, version 2.0 (see below).
+
+**Sustainable Development Notice (Effective with version 1.32):**
+To support ongoing development and compatibility updates, we kindly request that users
+of Tab Mix Plus version 1.32 and newer contribute a monthly payment of $2 (or $1 if needed).
+This is a voluntary "Trust Plan"—there are no technical or legal restrictions on use,
+and the extension remains open source.
+Your support ensures continued improvements and compatibility with new Firefox versions.
+
+- Versions 1.31 and earlier remain free and are compatible with Firefox up to version 139.
+- For more information and payment instructions, see: https://onemen.github.io/tabmixplus-docs/update/
+
+Thank you for supporting Tab Mix Plus!
+
+---
 The following license applies to all files:
 
 /* ***** BEGIN LICENSE BLOCK *****

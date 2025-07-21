@@ -2,6 +2,11 @@
 
 <hr />
 
+![update-header](https://github.com/user-attachments/assets/bbc5b5bb-0e2e-47aa-a1c5-6310548d8d02)
+[Read more](https://onemen.github.io/tabmixplus-docs/update)
+
+<hr />
+
 **Tab Mix Plus** is a very popular _legacy_ extension for the Mozilla Firefox browser that enhances Firefox's tab browsing abilities. It includes such features as duplicating tabs, controlling tab focus, tab clicking options, undo closed tabs and windows, plus much more.
 
 **Session Manager** feature is not included at the moment since it requires complete rewrite.
@@ -33,6 +38,10 @@ I encourage you to explore the new documentation website and share your feedback
 
 ---
 
+### 🚨 Important 🚨<!-- omit in toc -->
+**Update Your Firefox Scripts for Firefox 142 Compatibility**
+
+---
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -136,7 +145,7 @@ Since Firefox removed the internal component that loads _legacy_ extension, in o
 1. **Download XPI**
 
     Download xpi file from our [releases](https://github.com/onemen/TabMixPlus/releases) page to your local computer.
-    
+
     >If you are using Firefox Beta, Developer Edition or Nightly we recommend using the latest **Tab Mix Plus** _development build_ (tags with **pre** or **test-build** in the title)
      Note that the latest development build is compatible with all supported versions of Firefox. (see [Browser Compatibility](https://onemen.github.io/tabmixplus-docs/other/installation/#browser-compatibility))
 
@@ -177,7 +186,7 @@ Tab Mix Plus is fully compatible with the following browsers:
   * [Zen Browser](https://zen-browser.app/) 1.7+
   * [Waterfox](https://www.waterfox.net/) G6 and beyond
   * [Floorp](https://floorp.app/) 11.9.0+
-  * [LibreWolf](https://librewolf.net/) 122+  
+  * [LibreWolf](https://librewolf.net/) 122+
 
 > Firefox versions prior to 115 ESR are not supported.
 
