@@ -275,9 +275,9 @@ Tabmix.tablib = {
       )
       ._replace(
         "this.tabContainer._updateCloseButtons();",
-        `if (!wasPinned) TabmixTabbar.setFirstTabInRow();
-        $&`,
-        {check: !Tabmix.isVersion(1410)}
+        `if (Tabmix.isVersion(1410)) Tabmix.tabsUtils.updatefirstTabInRowMargin();
+        else if (!wasPinned) TabmixTabbar.setFirstTabInRow();
+        $&`
       )
       .toCode();
 

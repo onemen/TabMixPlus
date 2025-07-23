@@ -57,7 +57,7 @@
   margin-top: -1px;
 }
 
-#tabbrowser-tabs[tabmix-multibar="scrollbar"][orient="horizontal"] .tabbrowser-tab[pinned] {
+#tabbrowser-tabs[tabmix-multibar="scrollbar"][orient="horizontal"] #tabbrowser-arrowscrollbox:not(#pinned-tabs-container ~ #tabbrowser-arrowscrollbox) .tabbrowser-tab[pinned] {
   margin-top: -0.5px !important
 }
 

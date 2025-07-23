@@ -187,14 +187,6 @@ var TMP_tabDNDObserver = {
         nextMethodName: "#animateExpandedPinnedTabMove",
       });
 
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._updateTabStylesOnDrag")
-        ._replace(
-          "let isPinned = tab.pinned;",
-          `if (TMP_tabDNDObserver.useTabmixDnD(event)) {return;}
-          $&`
-        )
-        .toCode();
-
       tabBar._resetTabsAfterDrop = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "resetTabsAfterDrop",
@@ -258,16 +250,20 @@ var TMP_tabDNDObserver = {
         })
         ._replace(
           "this._updateTabStylesOnDrag(tab, event);",
-          `$&
-           if (tab.pinned && TabmixTabbar.isMultiRow && Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
-             const {width} = window.windowUtils.getBoundsWithoutFlushing(tab);
-             const nextTab = this.visibleTabs[gBrowser.pinnedTabCount];
-             if (nextTab) {
-               nextTab.style.setProperty("margin-inline-start", width + 12 + "px", "important");
-               tab._dragData.nextTab = nextTab;
-             }
-           }
-          `,
+          `if (!TMP_tabDNDObserver.useTabmixDnD(event)) {
+        $&
+      }
+      if (tab.pinned && TabmixTabbar.isMultiRow && Tabmix.prefs.getBoolPref("pinnedTabScroll") && Tabmix.prefs.getBoolPref("moveTabOnDragging")) {
+        const width = movingTabs.reduce(
+          (w, t) => w + window.windowUtils.getBoundsWithoutFlushing(t).width,
+          0
+        );
+        const nextTab = this.visibleTabs[gBrowser.pinnedTabCount];
+        if (nextTab) {
+          nextTab.style.setProperty("margin-inline-start", width + 12 + "px", "important");
+          tab._dragData.nextTab = nextTab;
+        }
+      }`,
           {
             check: Tabmix.isVersion(1420),
           }

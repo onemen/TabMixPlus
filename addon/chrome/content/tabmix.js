@@ -973,8 +973,11 @@ var TMP_eventListener = {
     }
   },
 
-  onTabPinned() {
+  onTabPinned(event) {
     Tabmix.tabsUtils.updatefirstTabInRowMargin();
+    if (event.target.selected && Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
+      gBrowser.tabContainer.arrowScrollbox.scrollbox.scrollTop = 0;
+    }
   },
 
   onTabUnpinned: function TMP_EL_onTabUnpinned(aEvent) {
