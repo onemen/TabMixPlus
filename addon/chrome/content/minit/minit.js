@@ -180,20 +180,6 @@ var TMP_tabDNDObserver = {
       });
     }
 
-    if (Tabmix.isVersion(1420)) {
-      tabBar._updateTabStylesOnDrag = Tabmix.getPrivateMethod({
-        ...tabContainerProps,
-        methodName: "updateTabStylesOnDrag",
-        nextMethodName: "#animateExpandedPinnedTabMove",
-      });
-
-      tabBar._resetTabsAfterDrop = Tabmix.getPrivateMethod({
-        ...tabContainerProps,
-        methodName: "resetTabsAfterDrop",
-        nextMethodName: "#moveTogetherSelectedTabs",
-      });
-    }
-
     if (Tabmix.isVersion(1380)) {
       tabBar._expandGroupOnDrop = Tabmix.getPrivateMethod({
         ...tabContainerProps,
@@ -239,6 +225,31 @@ var TMP_tabDNDObserver = {
       // @ts-expect-error - override isTab for older versions
       gBrowser.isTab = element => Boolean(element?.tagName == "tab");
     }
+
+    if (Tabmix.isVersion(1420)) {
+      tabBar._updateTabStylesOnDrag = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "updateTabStylesOnDrag",
+        nextMethodName: "#animateExpandedPinnedTabMove",
+      });
+
+      tabBar._resetTabsAfterDrop = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "resetTabsAfterDrop",
+        nextMethodName: "#moveTogetherSelectedTabs",
+      });
+    }
+
+    if (Tabmix.isVersion(1430)) {
+      tabBar._onDragIntoPinnedContainer = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "onDragIntoPinnedContainer",
+        nextMethodName: "#triggerDragOverCreateGroup",
+      });
+    }
+
+    // change code starts here
+    // ------------------------------------------------------------------------
 
     if (Tabmix.isVersion(1320)) {
       // modify startTabDrag after all private method it uses modified above
@@ -298,10 +309,10 @@ var TMP_tabDNDObserver = {
       $&`
       )
       ._replace("allTabs.at(this._rtlMode ? -1 : 0)", "TabmixTabbar.isMultiRow ? tabs[0] : $&", {
-        check: Tabmix.isVersion(1420),
+        check: Tabmix.isVersion(1420) && !Tabmix.isVersion(1430),
       })
       ._replace(
-        "allTabs.at(this._rtlMode ? 0 : -1)",
+        Tabmix.isVersion(1430) ? "allTabs.at(-1)" : "allTabs.at(this._rtlMode ? 0 : -1)",
         "TabmixTabbar.isMultiRow ? tabs.at(-1) : $&",
         {check: Tabmix.isVersion(1420)}
       )

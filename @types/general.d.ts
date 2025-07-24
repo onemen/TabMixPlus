@@ -370,6 +370,7 @@ declare namespace MockedGeckoTypes {
     _isContainerVerticalPinnedGrid: boolean;
     /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
     _isContainerVerticalPinnedExpanded: boolean;
+    _onDragIntoPinnedContainer(): void;
     _resetTabsAfterDrop(draggedTabDocument: Document): void;
     _updateTabStylesOnDrag(tab: BrowserTab, event: DragEvent): void;
 

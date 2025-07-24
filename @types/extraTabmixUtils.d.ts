@@ -20,6 +20,7 @@ interface PrivateMethods {
   getDropIndex: MockedGeckoTypes.TabContainer["_getDropIndex"];
   isAnimatingMoveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_isAnimatingMoveTogetherSelectedTabs"];
   isContainerVerticalPinnedGrid: MockedGeckoTypes.TabContainer["_isContainerVerticalPinnedGrid"];
+  onDragIntoPinnedContainer: MockedGeckoTypes.TabContainer["_onDragIntoPinnedContainer"];
   /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
   isContainerVerticalPinnedExpanded: MockedGeckoTypes.TabContainer["_isContainerVerticalPinnedExpanded"];
   moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
