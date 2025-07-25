@@ -1186,7 +1186,11 @@ var TMP_tabDNDObserver = {
 
   _getDropIndex(event, {dragover = false, getParams = false} = {}) {
     const tabBar = gBrowser.tabContainer;
-    if (!dragover && !this.useTabmixDnD(event)) {
+    if (
+      !dragover &&
+      !this.useTabmixDnD(event) &&
+      (!Tabmix.isVersion(1420) || event.dataTransfer.dropEffect !== "copy")
+    ) {
       return Tabmix.originalFunctions._getDropIndex.apply(tabBar, [event]);
     }
     const params = this.eventParams(event);
