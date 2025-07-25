@@ -241,9 +241,9 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.isVersion(1430)) {
-      tabBar._onDragIntoPinnedContainer = Tabmix.getPrivateMethod({
+      tabBar._checkWithinPinnedContainerBounds = Tabmix.getPrivateMethod({
         ...tabContainerProps,
-        methodName: "onDragIntoPinnedContainer",
+        methodName: "checkWithinPinnedContainerBounds",
         nextMethodName: "#triggerDragOverCreateGroup",
       });
     }

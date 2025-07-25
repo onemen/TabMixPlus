@@ -361,6 +361,7 @@ declare namespace MockedGeckoTypes {
     _rtlMode: boolean;
 
     // replacment for private methods and getters
+    _checkWithinPinnedContainerBounds(): void;
     _clearDragOverCreateGroupTimer: () => void;
     _dragOverCreateGroupTimer: number;
     _dragTime: number;
@@ -370,7 +371,6 @@ declare namespace MockedGeckoTypes {
     _isContainerVerticalPinnedGrid: boolean;
     /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
     _isContainerVerticalPinnedExpanded: boolean;
-    _onDragIntoPinnedContainer(): void;
     _resetTabsAfterDrop(draggedTabDocument: Document): void;
     _updateTabStylesOnDrag(tab: BrowserTab, event: DragEvent): void;
 
