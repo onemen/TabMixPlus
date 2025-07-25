@@ -3,10 +3,16 @@ export default {
   "*": files => {
     const commands = [];
 
-    // ESLint (Flat config handles file filtering)
-    commands.push(
-      `eslint --fix --format stylish --cache --cache-location config/.eslintcache --no-warn-ignored ${files.join(" ")}`
+    // Filter for lintable files, excluding config directory
+    const lintableFiles = files.filter(
+      f => /\.(js|mjs|ts|jsx|tsx|html|xhtml)$/.test(f) && !f.startsWith("config/")
     );
+
+    if (lintableFiles.length) {
+      commands.push(
+        `eslint --fix --format stylish --cache --cache-location config/.eslintcache --no-warn-ignored --report-unused-disable-directives --max-warnings 0 ${lintableFiles.join(" ")}`
+      );
+    }
 
     // stylelint only for addon/**/*.css
     const stylelintFiles = files.filter(f => /^addon\/.*\.css$/.test(f));

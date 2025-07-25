@@ -1,10 +1,18 @@
 #!/bin/sh
 
-if (exec < /dev/tty) ; then
-  exec >/dev/tty 2>&1;
+# Skip hooks during rebase, merge, cherry-pick, etc.
+if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ] || [ -f .git/MERGE_HEAD ] || [ -f .git/CHERRY_PICK_HEAD ]; then
+  exit 0
 fi
+
+# Ensure we're in the right directory
+cd "$(git rev-parse --show-toplevel)"
+
+# Add node_modules to PATH if not already there
+export PATH="./node_modules/.bin:$PATH"
 
 branch=$(git rev-parse --abbrev-ref HEAD)
 if [ "$branch" = "main" ]; then
-  ./node_modules/.bin/lint-staged --concurrent true --no-stash --config ./config/husky/lint-staged.config.js
+  # Use npx for better IDE compatibility
+  npx lint-staged --concurrent 2 --no-stash --config ./config/husky/lint-staged.config.js
 fi
