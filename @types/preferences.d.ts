@@ -320,6 +320,8 @@ interface MozShortcutClass extends MozShortcutClassOverrideMozXULElement {
   handleKeyEvents(this: MozShortcutClass, event: MouseEvent & KeyboardEvent & {[key: string]: any}, ctrl_w: boolean): void;
   get key(): ShortcutKey;
   set key(val: ShortcutKey);
+  get label(): string;
+  set label(val: string);
   notificationbox: HTMLElement;
   onKeyDown(this: MozShortcutClass, event: MouseEvent & KeyboardEvent): void;
   updateFocus(this: MozShortcutClass, onFocus: boolean): void;

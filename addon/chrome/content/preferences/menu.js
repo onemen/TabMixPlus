@@ -17,6 +17,8 @@ var gMenuPane = {
 
     Tabmix.setFTLDataId("paneMenu");
 
+    $("clearClosedTabs").setAttribute("label", TabmixSvc.getString("undoclosetab.clear.label"));
+
     if (Tabmix.isVersion(1340) && !Tabmix.isVersion(1400)) {
       MozXULElement.insertFTLIfNeeded("preview/tabUnload.ftl");
     }
@@ -273,6 +275,7 @@ var gMenuPane = {
     document.l10n?.translateElements([pinTab, unpinTab]).then(() => {
       pinTab.removeAttribute("data-l10n-id");
       pinTab.label += "/" + unpinTab.label;
+      $("togglePinTab").label = pinTab.label;
     });
 
     const [showBmkTab, showBmkTabs] = [$("context_bookmarkAllTabs"), $("context_bookmarkTab")];

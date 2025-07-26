@@ -132,6 +132,15 @@
       return !this._key || this._key.disabled;
     }
 
+    set label(val) {
+      this.description.textContent = val;
+      this.setAttribute("label", val ?? "");
+    }
+
+    get label() {
+      return this.getAttribute("label") ?? "";
+    }
+
     set value(val) {
       if (this.value != val) {
         this.setAttribute("value", val);
@@ -172,7 +181,7 @@
 
     /** @type {MozShortcutClass["valueFromPreferences"]} */
     valueFromPreferences(aKeyData) {
-      this.description.textContent = this.getAttribute("label");
+      this.description.textContent = this.label;
       if (!aKeyData.value && !this._key) {
         return false;
       }
