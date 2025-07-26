@@ -1353,6 +1353,11 @@ declare namespace ScriptsLoaderModule {
 }
 
 declare namespace ShortcutsModule {
+  type Lazy = {
+    PlatformKeys: nsIStringBundle;
+    Keys: nsIStringBundle;
+  };
+
   interface KeyElement extends Element {
     _id: string;
     oncommand?: () => void;

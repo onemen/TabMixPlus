@@ -5,6 +5,17 @@ const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 
 /** @typedef {keyof typeof ShortcutsKeys} Keys */
 
+/** @type {ShortcutsModule.Lazy} */ // @ts-ignore
+const lazy = {};
+
+ChromeUtils.defineLazyGetter(lazy, "PlatformKeys", () => {
+  return Services.strings.createBundle("chrome://global-platform/locale/platformKeys.properties");
+});
+
+ChromeUtils.defineLazyGetter(lazy, "Keys", () => {
+  return Services.strings.createBundle("chrome://global/locale/keys.properties");
+});
+
 export const ShortcutsKeys = {
   newTab: {id: "key_newNavigatorTab", default: "T accel"},
   dupTab: {id: "key_tm_dupTab", useInMenu: true, default: "F #modifiers", command: 3},
@@ -820,8 +831,7 @@ function getFormattedKey(key) {
   }
   if (key.keycode) {
     try {
-      let localeKeys = Services.strings.createBundle("chrome://global/locale/keys.properties");
-      val += localeKeys.GetStringFromName(key.keycode);
+      val += lazy.Keys.GetStringFromName(key.keycode);
     } catch {
       val += "<" + key.keycode + ">";
     }
@@ -837,16 +847,17 @@ let gPlatformKeys = {};
 
 /** @type {ShortcutsModule.getPlatformKeys} */
 function getPlatformKeys(key) {
-  if (typeof gPlatformKeys[key] == "string") {
-    return gPlatformKeys[key];
+  if (key === "VK_META") {
+    key = "VK_COMMAND_OR_WIN";
   }
 
-  let val,
-    platformKeys = Services.strings.createBundle(
-      "chrome://global-platform/locale/platformKeys.properties"
-    );
+  let val = gPlatformKeys[key];
+  if (val) {
+    return val;
+  }
+
   if (key != "VK_ACCEL") {
-    val = platformKeys.GetStringFromName(key);
+    val = lazy.PlatformKeys.GetStringFromName(key);
   } else {
     val = getPlatformKeys("VK_" + getPlatformAccel().toUpperCase());
   }
