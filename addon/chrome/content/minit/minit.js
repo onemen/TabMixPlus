@@ -490,7 +490,7 @@ var TMP_tabDNDObserver = {
         return;
       }`
       )
-      ._replace('if (effects == "move") {', 'if (effects == "move" && !useTabmixDnD) {')
+      ._replace(/if \((dropEffect|effects) == "move"\) \{/, 'if ($1 == "move" && !useTabmixDnD) {')
       ._replace("var newMargin;", "var newMargin, newMarginY = 0;")
       ._replace(
         /(?:const|let) newIndex = this\._getDropIndex\(event.*\);/,
@@ -541,7 +541,7 @@ var TMP_tabDNDObserver = {
       )
       ._replace(
         // don't hide drop indicator when dragging link over group label
-        /(effects == "link"[\s\S]*?)(ind\.hidden = true;)/,
+        /((dropEffect|effects) == "link"[\s\S]*?)(ind\.hidden = true;)/,
         "$1ind.hidden = !overGroupLabel;",
         {check: Tabmix.isVersion(1380)}
       );
