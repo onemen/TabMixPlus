@@ -230,7 +230,7 @@ var TMP_ClosedTabs = {
   /** Get closed tabs data */
   get getClosedTabData() {
     if (window.__SSi) {
-      SessionStore.getClosedTabData();
+      return SessionStore.getClosedTabData();
     }
     return [];
   },
