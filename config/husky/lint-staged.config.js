@@ -10,7 +10,7 @@ export default {
 
     if (lintableFiles.length) {
       commands.push(
-        `eslint --fix --format stylish --cache --cache-location config/.eslintcache --no-warn-ignored --report-unused-disable-directives --max-warnings 0 ${lintableFiles.join(" ")}`
+        `npx eslint --no-warn-ignored --report-unused-disable-directives --max-warnings 0 ${lintableFiles.join(" ")}`
       );
     }
 

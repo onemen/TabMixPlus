@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # Skip hooks during rebase, merge, cherry-pick, etc.
 if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ] || [ -f .git/MERGE_HEAD ] || [ -f .git/CHERRY_PICK_HEAD ]; then
   exit 0

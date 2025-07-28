@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # Skip hooks during rebase, merge, cherry-pick, etc.
 if [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ] || [ -f .git/MERGE_HEAD ] || [ -f .git/CHERRY_PICK_HEAD ]; then
   exit 0
@@ -12,7 +10,7 @@ if [ "$branch" = "main" ]; then
   FIRST_LINE=$(head -n1 $1)
 
   # Check pattern: keyword: message
-  if ! echo "$FIRST_LINE" | grep -qE '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9-]+\))?: [a-z]'; then
+  if ! echo "$FIRST_LINE" | grep -qE "^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9-]+\))?: ([a-z]|['\"\`])"; then
     echo "Error: Invalid commit format. Your commit must follow this pattern:"
     echo "  type(optional-scope): message"
     echo ""
