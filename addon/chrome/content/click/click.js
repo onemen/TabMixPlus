@@ -1033,47 +1033,57 @@ var TabmixContext = {
     }
   },
 
+  contextMenu_initialized: false,
   _prepareContextMenu() {
-    if (!nsContextMenu || nsContextMenu._tabmix_initialized) {
+    if (!nsContextMenu || this.contextMenu_initialized) {
       return;
     }
 
-    nsContextMenu._tabmix_initialized = true;
+    this.contextMenu_initialized = true;
 
     let sep = this.$id("tm-content-miscSep");
     sep.parentNode?.insertBefore(sep, this.$id("tm-content-closetab"));
 
-    const lazy = {};
-    if (Tabmix.isVersion(1290)) {
-      const modules = {
-        ContextualIdentityService: "resource://gre/modules/ContextualIdentityService.sys.mjs",
-        PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
-      };
-      if (Tabmix.isVersion(1400)) {
-        // @ts-ignore
-        modules.LinkPreview = "moz-src:///browser/components/genai/LinkPreview.sys.mjs";
+    let sandbox;
+    if (nsContextMenu._tabmix_initialized) {
+      sandbox = Tabmix.getSandbox(nsContextMenu);
+    } else {
+      const lazy = {};
+      if (Tabmix.isVersion(1290)) {
+        const modules = {
+          ContextualIdentityService: "resource://gre/modules/ContextualIdentityService.sys.mjs",
+          PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
+        };
+        if (Tabmix.isVersion(1400)) {
+          // @ts-ignore
+          modules.LinkPreview = "moz-src:///browser/components/genai/LinkPreview.sys.mjs";
+        }
+        ChromeUtils.defineESModuleGetters(lazy, modules);
       }
-      ChromeUtils.defineESModuleGetters(lazy, modules);
-    }
 
-    const sandbox = Tabmix.getSandbox(nsContextMenu, {scope: {lazy}});
-    // hide open link in window in single window mode
-    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems", {
-      sandbox,
-    })
-      ._replace(/context-openlink",/, "$& !window.Tabmix.singleWindowMode &&")
-      ._replace(
-        /context-openlinkprivate",/,
-        "$& (!window.Tabmix.singleWindowMode || !isWindowPrivate) &&"
+      sandbox = Tabmix.getSandbox(nsContextMenu, {scope: {lazy}});
+
+      // hide open link in window in single window mode
+      Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems", {
+        sandbox,
+      })
+        ._replace(/context-openlink",/, "$& !window.Tabmix.singleWindowMode &&")
+        ._replace(
+          /context-openlinkprivate",/,
+          "$& (!window.Tabmix.singleWindowMode || !isWindowPrivate) &&"
+        )
+        .toCode();
+
+      Tabmix.changeCode(
+        nsContextMenu.prototype,
+        "nsContextMenu.prototype.openLinkInPrivateWindow",
+        {
+          sandbox,
+        }
       )
-      .toCode();
-
-    Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInPrivateWindow", {
-      sandbox,
-    })
-      ._replace(
-        /(?:this\.window\.)?openLinkIn\(\n*\s*this\.linkURL,\n*\s*"window",/,
-        `var [win, where] = [${Tabmix.isVersion(1290) ? "this.window" : "window"}, "window"];
+        ._replace(
+          /(?:this\.window\.)?openLinkIn\(\n*\s*this\.linkURL,\n*\s*"window",/,
+          `var [win, where] = [${Tabmix.isVersion(1290) ? "this.window" : "window"}, "window"];
       if (win.Tabmix.singleWindowMode) {
         let pbWindow = BrowserWindowTracker.getTopWindow({ private: true });
         if (pbWindow) {
@@ -1082,8 +1092,11 @@ var TabmixContext = {
         }
       }
       win.openLinkIn(this.linkURL, where,`
-      )
-      .toCode();
+        )
+        .toCode();
+
+      nsContextMenu._tabmix_initialized = true;
+    }
 
     Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.openLinkInTab", {sandbox})
       ._replace(

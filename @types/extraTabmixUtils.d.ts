@@ -437,6 +437,7 @@ interface TabmixContextTypes {
   readonly tabContextConfig: TabContextConfigModule.Exports;
   updateTabContextMenu(event: TabmixContextEvent): boolean;
   contextMenuShown(id: "contentAreaContextMenu" | "tabContextMenu"): void;
+  contextMenu_initialized: boolean;
   _prepareContextMenu(): void;
   updateMainContextMenu(event: TabmixContextEvent): boolean;
   _showAutoReloadMenu(menuId: "tm-autoreload_menu" | "tm-autoreloadTab_menu", showMenu: boolean): void;
