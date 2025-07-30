@@ -1,4 +1,5 @@
 /** Load overlays in a similar way as XUL did for legacy XUL add-ons. */
+import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
 
 /** @type {OverlaysModule.Lazy} */ // @ts-ignore
 const lazy = {};
@@ -197,12 +198,25 @@ export class Overlays {
           const attrValue = xulStore.getValue(this.location, id, attrName);
           if (attrName == "selectedIndex" && element.localName == "deck") {
             this._decksToResolve.set(element, attrValue);
-          } else if (
-            (element != this.document.documentElement ||
-              !["height", "screenX", "screenY", "sizemode", "width"].includes(attrName)) &&
-            element.getAttribute(attrName) != attrValue.toString()
-          ) {
-            element.setAttribute(attrName, attrValue);
+          } else {
+            // Skip corrupted "-moz-missing" values in Firefox 143+ (Bug 1979014)
+            // Also skip "false" values for boolean attributes since CSS changed
+            // from [attr="true"] to [attr]
+            const isValidValue =
+              !isVersion(1430) ||
+              (!String(attrValue).startsWith("-moz-missing") && attrValue !== "false");
+
+            // Check if attribute should be persisted
+            const isDimensionAttribute =
+              element === this.document.documentElement &&
+              ["height", "screenX", "screenY", "sizemode", "width"].includes(attrName);
+
+            // Check if attribute value has actually changed
+            const isChanged = element.getAttribute(attrName) != attrValue.toString();
+
+            if (isValidValue && !isDimensionAttribute && isChanged) {
+              element.setAttribute(attrName, attrValue);
+            }
           }
         }
       }
