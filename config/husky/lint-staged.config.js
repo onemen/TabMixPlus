@@ -4,13 +4,15 @@ export default {
     const commands = [];
 
     // Filter for lintable files, excluding config directory
-    const lintableFiles = files.filter(
-      f => /\.(js|mjs|ts|jsx|tsx|html|xhtml)$/.test(f) && !f.startsWith("config/")
-    );
+    const lintableFiles = files
+      .filter(
+        f => /\.(js|cjs|mjs|ts|jsx|tsx|html|xhtml|d\.ts)$/.test(f) && !f.startsWith("@types/gecko/")
+      )
+      .map(f => `"${f}"`);
 
     if (lintableFiles.length) {
       commands.push(
-        `npx eslint --no-warn-ignored --report-unused-disable-directives --max-warnings 0 ${lintableFiles.join(" ")}`
+        `eslint --no-warn-ignored --report-unused-disable-directives --max-warnings 0 ${lintableFiles.join(" ")}`
       );
     }
 
