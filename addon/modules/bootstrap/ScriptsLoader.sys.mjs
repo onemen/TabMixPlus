@@ -1,4 +1,5 @@
 /** Load Tabmix scripts to navigator:browser window. */
+import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
 
 /** @type {ScriptsLoaderModule.Lazy} */ // @ts-ignore
 const lazy = {};
@@ -17,6 +18,9 @@ const CSS_URLS = [
   "chrome://tabmixplus/content/overlay/multirow.css",
   "chrome://tabmixplus/skin/general.css",
   "chrome://tabmixplus/skin/tab.css",
+  isVersion(1430) ?
+    "chrome://tabmixplus/skin/menuitem-icons.css"
+  : "chrome://tabmixplus/skin/menuitem-icons-before-143.css",
   "chrome://tabmix-os/skin/browser.css",
 ];
 

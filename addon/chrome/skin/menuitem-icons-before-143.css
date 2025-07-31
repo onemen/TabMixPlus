@@ -1,0 +1,28 @@
+/**
+    Firefox versions 128 - 142
+    legacy use of menu-icon class with list-style-image
+    Bug 1979338 - replaced <xul:image> for menu icons with <html:img>
+    https://bugzilla.mozilla.org/show_bug.cgi?id=1979338
+
+    for ALL platforms
+
+**/
+
+toolbar[iconsize="small"] #tabmix-closedTabsButton, .closedtabs-icon > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/closed-tabs-16x16.png"); }
+toolbar[iconsize="small"] #tabmix-closedTabsButton:hover, .closedtabs-icon:hover > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/closed-tabs-16x16-hovered.png"); }
+#main-window:not([customizing]) toolbar[iconsize="small"] #tabmix-closedTabsButton[disabled="true"], .closedtabs-icon[disabled="true"] > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/closed-tabs-16x16-disabled.png"); }
+
+toolbar[iconsize="small"] #tabmix-closedWindowsButton, .closedwindows-icon > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/closed-win-16x16.png"); }
+toolbar[iconsize="small"] #tabmix-closedWindowsButton:hover, .closedwindows-icon:hover > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/closed-win-16x16-hovered.png")!important; }
+#main-window:not([customizing]) toolbar[iconsize="small"] #tabmix-closedWindowsButton[disabled="true"], .closedwindows-icon[disabled="true"] > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/closed-win-16x16-disabled.png")!important; }
+
+toolbar[iconsize="small"] #tabmix-alltabs-button, .tabmix-tabslist-icon > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/tab-list-16x16.png"); }
+toolbar[iconsize="small"] #tabmix-alltabs-button:hover, .tabmix-tabslist-icon:hover > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/tab-list-16x16-hovered.png"); }
+toolbar[iconsize="small"] #tabmix-alltabs-button[disabled="true"], .tabmix-tabslist-icon[disabled="true"] > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/tab-list-24x24-disabled.png"); }
+
+.tabmix-menu-icon :is(.menu-iconic-left, .menu-icon) { list-style-image: url("tmpsmall.png"); }
+.tabmix-menu-icon .menu-icon { list-style-image: url("tmpsmall.png"); }
+
+toolbar[iconsize="small"] #btn_sessionmanager, .sessionmanager-icon > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/session-manager-16x16.png"); }
+toolbar[iconsize="small"] #btn_sessionmanager:hover, .sessionmanager-icon:hover > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/session-manager-16x16-hovered.png"); }
+#main-window:not([customizing]) toolbar[iconsize="small"] #btn_sessionmanager[disabled="true"], .sessionmanager-icon[disabled="true"] > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/session-manager-16x16-disabled.png"); }

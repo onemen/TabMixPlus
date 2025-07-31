@@ -85,10 +85,6 @@
 #tabmix-closedTabsButton:hover { list-style-image: url("icons/closed-tabs-24x24-hovered.png"); }
 #main-window:not([customizing]) #tabmix-closedTabsButton[disabled="true"] { list-style-image: url("icons/closed-tabs-24x24-disabled.png"); }
 
-toolbar[iconsize="small"] #tabmix-closedTabsButton, .closedtabs-icon > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/closed-tabs-16x16.png"); }
-toolbar[iconsize="small"] #tabmix-closedTabsButton:hover, .closedtabs-icon:hover > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/closed-tabs-16x16-hovered.png"); }
-#main-window:not([customizing]) toolbar[iconsize="small"] #tabmix-closedTabsButton[disabled="true"], .closedtabs-icon[disabled="true"] > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/closed-tabs-16x16-disabled.png"); }
-
 #tabmix-closedTabs-toolbaritem[cui-areatype="toolbar"] #tabmix-closedTabsButton[type="menu-button"] .toolbarbutton-icon {
   border-right: 1px solid rgb(0 0 0 / 16%);
   border-radius: 0;
@@ -112,26 +108,14 @@ toolbar[iconsize="small"] #tabmix-closedTabsButton:hover, .closedtabs-icon:hover
 #tabmix-closedWindowsButton { list-style-image: url("icons/closed-win-24x24.png"); }
 #tabmix-closedWindowsButton:hover { list-style-image: url("icons/closed-win-24x24-hovered.png"); }
 #main-window:not([customizing]) #tabmix-closedWindowsButton[disabled="true"] { list-style-image: url("icons/closed-win-24x24-disabled.png"); }
-toolbar[iconsize="small"] #tabmix-closedWindowsButton, .closedwindows-icon > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/closed-win-16x16.png"); }
-toolbar[iconsize="small"] #tabmix-closedWindowsButton:hover, .closedwindows-icon:hover > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/closed-win-16x16-hovered.png")!important; }
-#main-window:not([customizing]) toolbar[iconsize="small"] #tabmix-closedWindowsButton[disabled="true"], .closedwindows-icon[disabled="true"] > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/closed-win-16x16-disabled.png")!important; }
 
 #tabmix-alltabs-button { list-style-image: url("icons/tab-list-24x24.png")!important; }
 #tabmix-alltabs-button:hover { list-style-image: url("icons/tab-list-24x24-hovered.png") }
 #tabmix-alltabs-button[disabled="true"] { list-style-image: url("icons/tab-list-24x24-disabled.png"); }
-toolbar[iconsize="small"] #tabmix-alltabs-button, .tabmix-tabslist-icon > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/tab-list-16x16.png"); }
-toolbar[iconsize="small"] #tabmix-alltabs-button:hover, .tabmix-tabslist-icon:hover > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/tab-list-16x16-hovered.png"); }
-toolbar[iconsize="small"] #tabmix-alltabs-button[disabled="true"], .tabmix-tabslist-icon[disabled="true"] > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/tab-list-24x24-disabled.png"); }
-
-.tabmix-menu-icon :is(.menu-iconic-left, .menu-icon) { list-style-image: url("tmpsmall.png"); }
-.tabmix-menu-icon .menu-icon { list-style-image: url("tmpsmall.png"); }
 
 #btn_sessionmanager { list-style-image: url("icons/session-manager-24x24.png"); }
 #btn_sessionmanager:hover { list-style-image: url("icons/session-manager-24x24-hovered.png"); }
 #main-window:not([customizing]) #btn_sessionmanager[disabled="true"] { list-style-image: url("icons/session-manager-24x24-disabled.png"); }
-toolbar[iconsize="small"] #btn_sessionmanager, .sessionmanager-icon > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/session-manager-16x16.png"); }
-toolbar[iconsize="small"] #btn_sessionmanager:hover, .sessionmanager-icon:hover > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/session-manager-16x16-hovered.png"); }
-#main-window:not([customizing]) toolbar[iconsize="small"] #btn_sessionmanager[disabled="true"], .sessionmanager-icon[disabled="true"] > :is(.menu-iconic-left, .menu-icon) { list-style-image: url("icons/session-manager-16x16-disabled.png"); }
 
 /* for hashcoulouredtabs */
 #content[hashedtabs] .tabbrowser-tab:not([busy]) .tab-icon-image:not([src]) {
