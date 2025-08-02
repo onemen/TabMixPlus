@@ -62,6 +62,21 @@ var TMP_tabDNDObserver = {
           });
           scope.lazy = lazy;
         }
+
+        if (Tabmix.isVersion(1430)) {
+          // @ts-expect-error
+          const elementToMove = element => {
+            if (isTab(element)) {
+              return element;
+            }
+            if (isTabGroupLabel(element)) {
+              return element.closest(".tab-group-label-container");
+            }
+            throw new Error(`Element "${element.tagName}" is not expected to move`);
+          };
+          // @ts-expect-error
+          scope.elementToMove = elementToMove;
+        }
       } else if (Tabmix.isVersion(1340)) {
         // Since Firefox 134, tabs.js contains scoped constants for group drop actions:
         // - GROUP_DROP_ACTION_CREATE: used in on_drop and triggerDragOverCreateGroup
@@ -133,7 +148,10 @@ var TMP_tabDNDObserver = {
       gBrowser.tabContainer._setDragOverGroupColor = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "setDragOverGroupColor",
-        nextMethodName: Tabmix.isVersion(1380) ? "finishAnimateTabMove" : "_finishAnimateTabMove",
+        nextMethodName:
+          Tabmix.isVersion(1430) ? "#resetGroupTarget"
+          : Tabmix.isVersion(1380) ? "finishAnimateTabMove"
+          : "_finishAnimateTabMove",
       });
 
       gBrowser.tabContainer._moveTogetherSelectedTabs = Tabmix.getPrivateMethod({
@@ -163,7 +181,8 @@ var TMP_tabDNDObserver = {
       gBrowser.tabContainer._setDragOverGroupColor = () => {};
     }
 
-    if (Tabmix.isVersion(1340)) {
+    // these methods renamed in firefox 143 see code below
+    if (Tabmix.isVersion(1340) && !Tabmix.isVersion(1430)) {
       gBrowser.tabContainer._dragOverCreateGroupTimer = 0;
 
       gBrowser.tabContainer._clearDragOverCreateGroupTimer = Tabmix.getPrivateMethod({
@@ -184,7 +203,7 @@ var TMP_tabDNDObserver = {
       tabBar._expandGroupOnDrop = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "expandGroupOnDrop",
-        nextMethodName: "on_drop",
+        nextMethodName: Tabmix.isVersion(1430) ? "#setIsDraggingTabGroup" : "on_drop",
       });
 
       Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandGroupOnDrop")
@@ -241,10 +260,37 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.isVersion(1430)) {
+      gBrowser.tabContainer._dragOverGroupingTimer = 0;
+
       tabBar._checkWithinPinnedContainerBounds = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "checkWithinPinnedContainerBounds",
-        nextMethodName: "#triggerDragOverCreateGroup",
+        nextMethodName: "#triggerDragOverGrouping",
+      });
+
+      gBrowser.tabContainer._clearDragOverGroupingTimer = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "clearDragOverGroupingTimer",
+        nextMethodName: "#setDragOverGroupColor",
+      });
+
+      gBrowser.tabContainer._triggerDragOverGrouping = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "triggerDragOverGrouping",
+        nextMethodName: "#clearDragOverGroupingTimer",
+        sandbox: localSandbox,
+      });
+
+      gBrowser.tabContainer._setIsDraggingTabGroup = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "setIsDraggingTabGroup",
+        nextMethodName: "on_drop",
+      });
+
+      gBrowser.tabContainer._resetGroupTarget = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "resetGroupTarget",
+        nextMethodName: "finishAnimateTabMove",
       });
     }
 
@@ -655,7 +701,11 @@ var TMP_tabDNDObserver = {
     gBrowser.tabContainer[finishAnimateTabMove] = function (...args) {
       Tabmix.originalFunctions._finishAnimateTabMove.apply(this, args);
       this.removeAttribute("tabmix-movingBackgroundTab");
-      if (Tabmix.isVersion(1340)) {
+      if (Tabmix.isVersion(1430)) {
+        // the original function call #clearDragOverGroupingTimer
+        // so we need to call our "private" version
+        this._clearDragOverGroupingTimer();
+      } else if (Tabmix.isVersion(1340)) {
         // the original function call #clearDragOverCreateGroupTimer
         // so we need to call our "private" version
         this._clearDragOverCreateGroupTimer();
@@ -2110,11 +2160,17 @@ Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodN
     ?.trim();
   if (code) {
     try {
-      const codeWithoutCommnets = code.split("\n");
-      while (codeWithoutCommnets.at(-1)?.trim().startsWith("//")) {
-        codeWithoutCommnets.pop();
+      // remove comments at the beginning of the next method
+      const codeWithoutComments = code.split("\n");
+      while (codeWithoutComments.at(-1)?.trim().startsWith("//")) {
+        codeWithoutComments.pop();
       }
-      code = codeWithoutCommnets.join("\n").trim();
+      code = codeWithoutComments
+        .join("\n")
+        .trim()
+        // remove jsdoc comments at the beginning of the next method
+        .replace(/\/\*\*[\s\S]*\*\/$/, "")
+        .trim();
       return Tabmix.makeCode(`_${methodName}${code}`, parent, nonPrivateMethodName, sandbox);
     } catch (error) {
       console.error(
