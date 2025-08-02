@@ -15,19 +15,26 @@ interface PrivateMethods {
   // TabContainer
   animateExpandedPinnedTabMove: MockedGeckoTypes.TabContainer["_animateExpandedPinnedTabMove"];
   checkWithinPinnedContainerBounds: MockedGeckoTypes.TabContainer["_checkWithinPinnedContainerBounds"];
-  clearDragOverCreateGroupTimer: MockedGeckoTypes.TabContainer["_clearDragOverCreateGroupTimer"];
+  clearDragOverGroupingTimer: MockedGeckoTypes.TabContainer["_clearDragOverGroupingTimer"];
   expandGroupOnDrop: MockedGeckoTypes.TabContainer["_expandGroupOnDrop"];
   getDragTarget: MockedGeckoTypes.TabContainer["_getDragTarget"];
   getDropIndex: MockedGeckoTypes.TabContainer["_getDropIndex"];
   isAnimatingMoveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_isAnimatingMoveTogetherSelectedTabs"];
   isContainerVerticalPinnedGrid: MockedGeckoTypes.TabContainer["_isContainerVerticalPinnedGrid"];
-  /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
-  isContainerVerticalPinnedExpanded: MockedGeckoTypes.TabContainer["_isContainerVerticalPinnedExpanded"];
   moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
+  resetGroupTarget: MockedGeckoTypes.TabContainer["_resetGroupTarget"];
   resetTabsAfterDrop: MockedGeckoTypes.TabContainer["_resetTabsAfterDrop"];
   setDragOverGroupColor: MockedGeckoTypes.TabContainer["_setDragOverGroupColor"];
-  triggerDragOverCreateGroup: MockedGeckoTypes.TabContainer["_triggerDragOverCreateGroup"];
+  setIsDraggingTabGroup: MockedGeckoTypes.TabContainer["_setIsDraggingTabGroup"];
+  triggerDragOverGrouping: MockedGeckoTypes.TabContainer["_triggerDragOverGrouping"];
   updateTabStylesOnDrag: MockedGeckoTypes.TabContainer["_updateTabStylesOnDrag"];
+
+  /** @deprecated replaced with _clearDragOverGroupingTimer in firefox 143 */
+  clearDragOverCreateGroupTimer: MockedGeckoTypes.TabContainer["_clearDragOverCreateGroupTimer"];
+  /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
+  isContainerVerticalPinnedExpanded: MockedGeckoTypes.TabContainer["_isContainerVerticalPinnedExpanded"];
+  /** @deprecated replaced with _triggerDragOverGrouping in firefox 143 */
+  triggerDragOverCreateGroup: MockedGeckoTypes.TabContainer["_triggerDragOverCreateGroup"];
 }
 
 interface TabmixGlobal {

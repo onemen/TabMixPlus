@@ -15,6 +15,7 @@ interface GetClosestMap {
   ".container": HTMLElement;
 }
 
+// @ts-ignore
 interface WindowProxy {
   arguments: any[];
 }

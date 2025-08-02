@@ -207,6 +207,7 @@ declare namespace MockedGeckoTypes {
     readonly ownerGlobal: WindowProxy;
     readonly pinned: boolean;
     selected: boolean;
+    readonly visible: boolean;
 
     // modified by Tab Mix Plus
     __duplicateFromWindow?: boolean;
@@ -295,25 +296,16 @@ declare namespace MockedGeckoTypes {
     _dndPanel: DNDCanvas;
     _dragOverDelay: number;
     _expandSpacerBy: (pixels: number) => void;
-    /** @deprecated replaced with finishAnimateTabMove in firefox 138 */
-    _finishAnimateTabMove: () => void;
     finishAnimateTabMove: () => void;
     finishMoveTogetherSelectedTabs: (tab: BrowserTab) => void;
-    /** @deprecated replaced with _finishMoveTogetherSelectedTabs in firefox 138 */
-    _finishMoveTogetherSelectedTabs: (tab: BrowserTab) => void;
-    /** @deprecated replaced with _finishMoveTogetherSelectedTabs in firefox 133 */
-    _finishGroupSelectedTabs: (tab: BrowserTab) => void;
-    /** @deprecated replaced with #getDragTarget in firefox 138 */
-    _getDragTargetTab(event: DragEvent, options?: {ignoreTabSides?: boolean}): BrowserTab | null;
     // we are adding arguments to _getDropIndex see minit.js for details
     _getDropIndex(event: DragEvent): number;
     _getDropIndex(event: DragEvent, options: {dragover?: boolean; getParams: true}): DragEventParams;
     _getDropIndex(event: DragEvent, options?: {dragover?: boolean; getParams?: boolean}): number | DragEventParams;
-    /** @deprecated replaced with #moveTogetherSelectedTabs in firefox 133 */
-    _groupSelectedTabs: (tab: BrowserTab) => void;
     _handleTabSelect: (instant: boolean) => void;
     _invalidateCachedTabs: () => void;
     _invalidateCachedVisibleTabs: () => void;
+    _setIsDraggingTabGroup(tabGroup: MozTabbrowserTabGroup, isDragging: boolean): void;
     get _isCustomizing(): boolean;
     _lastTabClosedByMouse: boolean;
     _lastTabToScrollIntoView?: BrowserTab;
@@ -321,6 +313,7 @@ declare namespace MockedGeckoTypes {
     _notifyBackgroundTab: (aTab: BrowserTab) => void;
     _pinnedTabsLayoutCache: Record<string, unknown> | null;
     _positionPinnedTabs: () => void;
+    _resetGroupTarget(element: BrowserTab | MozTabGroupLabel): void;
     _selectNewTab: (aNewTab: BrowserTab, aFallbackDir?: number, aWrap?: boolean) => void;
     _scrollButtonWidth: number;
     _tabClipWidth: number;
@@ -360,29 +353,45 @@ declare namespace MockedGeckoTypes {
     _hasTabTempMaxWidth: boolean;
     _rtlMode: boolean;
 
-    // replacment for private methods and getters
+    // replacement for private methods and getters
     _checkWithinPinnedContainerBounds(): void;
-    _clearDragOverCreateGroupTimer: () => void;
-    _dragOverCreateGroupTimer: number;
+    _clearDragOverGroupingTimer: () => void;
+    _dragOverGroupingTimer: number;
     _dragTime: number;
     _expandGroupOnDrop(draggedTab: BrowserTab): void;
     _getDragTarget(event: DragEvent, options?: {ignoreSides?: boolean}): BrowserTab | null;
     _isAnimatingMoveTogetherSelectedTabs: () => boolean;
     _isContainerVerticalPinnedGrid: boolean;
-    /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
-    _isContainerVerticalPinnedExpanded: boolean;
     _resetTabsAfterDrop(draggedTabDocument: Document): void;
     _updateTabStylesOnDrag(tab: BrowserTab, event: DragEvent): void;
 
     _keepTabSizeLocked: boolean;
     _moveTogetherSelectedTabs: (tab: BrowserTab) => void;
-    // using insteadof private method #setDragOverGroupColor since Firefox 133
+    // using instead of private method #setDragOverGroupColor since Firefox 133
     _setDragOverGroupColor: (groupColorCode: string | null) => void;
     _setMovingTabMode(movingTab: boolean): void;
-    _triggerDragOverCreateGroup: (dragData: BrowserTab["_dragData"], groupDropIndex: number) => void;
+    _triggerDragOverGrouping: (dragData: BrowserTab["_dragData"], groupDropIndex: number) => void;
 
+    /** @deprecated replaced with finishAnimateTabMove in firefox 138 */
+    _finishAnimateTabMove: () => void;
+    /** @deprecated replaced with _finishMoveTogetherSelectedTabs in firefox 138 */
+    _finishMoveTogetherSelectedTabs: (tab: BrowserTab) => void;
+    /** @deprecated replaced with _finishMoveTogetherSelectedTabs in firefox 133 */
+    _finishGroupSelectedTabs: (tab: BrowserTab) => void;
+    /** @deprecated replaced with _clearDragOverGroupingTimer in firefox 143 */
+    _clearDragOverCreateGroupTimer: () => void;
+    /** @deprecated replaced with _dragOverGroupingTimer in firefox 143 */
+    _dragOverCreateGroupTimer: number;
+    /** @deprecated replaced with #getDragTarget in firefox 138 */
+    _getDragTargetTab(event: DragEvent, options?: {ignoreTabSides?: boolean}): BrowserTab | null;
+    /** @deprecated replaced with #moveTogetherSelectedTabs in firefox 133 */
+    _groupSelectedTabs: (tab: BrowserTab) => void;
     /** @deprecated removed by bug 1923635 in firefox 133 */
     _getVisibleTabs: () => Tabs;
+    /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
+    _isContainerVerticalPinnedExpanded: boolean;
+    /** @deprecated replaced with _triggerDragOverGrouping in firefox 143 */
+    _triggerDragOverCreateGroup: (dragData: BrowserTab["_dragData"], groupDropIndex: number) => void;
   }
 
   interface TabBox {
@@ -626,7 +635,10 @@ declare namespace MockedGeckoTypes {
     set collapsed(val: boolean);
     lastSeenActive(): void;
     get tabs(): Tabs;
+    isTabVisibleInGroup(tab: BrowserTab): boolean;
     get labelElement(): MozTabGroupLabel;
+    get isBeingDragged(): boolean;
+    set isBeingDragged(val: boolean);
     addTabs(tabs: BrowserTab[]): void;
     ungroupTabs(): void;
     save(): void;
