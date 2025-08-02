@@ -12,7 +12,7 @@
 **Session Manager** feature is not included at the moment since it requires complete rewrite.
 
 >If you are interested in keeping **Tab Mix Plus** working, please donate.
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?hosted_button_id=W25388CZ3MNU8)
+  [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M71J13A4)
 
 ---
 

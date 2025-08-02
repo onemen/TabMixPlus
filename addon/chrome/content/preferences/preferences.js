@@ -795,7 +795,7 @@ function openHelp(helpTopic) {
 function donate() {
   const recentWindow = Tabmix.getTopWin();
   const tabBrowser = recentWindow.gBrowser;
-  const url = "https://www.paypal.com/donate?hosted_button_id=W25388CZ3MNU8";
+  const url = "https://ko-fi.com/M4M71J13A4";
   const where = tabBrowser.selectedTab.isEmpty ? "current" : "tab";
   recentWindow.openTrustedLinkIn(url, where);
 }

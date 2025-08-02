@@ -103,8 +103,8 @@ menulist {
 .donate-button-container > .donate-button {
   appearance: none;
   cursor: pointer;
-  background: url("https://img.shields.io/badge/Donate-PayPal-green.svg") no-repeat center/100%;
-  min-height: 26px;
+  background: url("https://ko-fi.com/img/githubbutton_sm.svg") no-repeat center/100%;
+  font-size: 26px;
   width: 100px;
 }
 
