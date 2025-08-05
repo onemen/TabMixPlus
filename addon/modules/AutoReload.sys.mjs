@@ -432,7 +432,7 @@ function doReloadTab(window, browser, tab, data) {
     }
     browser.tabmix_allowLoad = true;
     browser.loadURI(url, {
-      flags: loadFlags,
+      [TabmixSvc.version(1430) ? "loadFlags" : "flags"]: loadFlags,
       referrerInfo,
       triggeringPrincipal: browser.contentPrincipal,
       postData,
