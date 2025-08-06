@@ -1,10 +1,13 @@
 /* eslint-disable mozilla/balanced-listeners */
+import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
 
 /** @type {TabmixWidgetsModule.Lazy} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  CustomizableUI: "resource:///modules/CustomizableUI.sys.mjs",
-  isVersion: "chrome://tabmix-resource/content/BrowserVersion.sys.mjs",
+  CustomizableUI:
+    isVersion(1430) ?
+      "moz-src:///browser/components/customizableui/CustomizableUI.sys.mjs"
+    : "resource:///modules/CustomizableUI.sys.mjs",
 });
 
 const widgets = {
@@ -130,7 +133,7 @@ const widgets = {
     localizeFiles: [],
     get updateMarkup() {
       const l10nId =
-        lazy.isVersion(1310) ? "tabbrowser-close-tabs-button" : "tabbrowser-close-tabs-tooltip";
+        isVersion(1310) ? "tabbrowser-close-tabs-button" : "tabbrowser-close-tabs-tooltip";
       const markup = this.markup.replace('command="cmd_close"', `$& data-l10n-id="${l10nId}"`);
       return markup;
     },

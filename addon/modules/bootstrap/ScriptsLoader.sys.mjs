@@ -5,7 +5,10 @@ import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
-  CustomizableUI: "resource:///modules/CustomizableUI.sys.mjs",
+  CustomizableUI:
+    isVersion(1430) ?
+      "moz-src:///browser/components/customizableui/CustomizableUI.sys.mjs"
+    : "resource:///modules/CustomizableUI.sys.mjs",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
   SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
   Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs",

@@ -1516,7 +1516,7 @@ declare namespace TabmixUtilsModule {
 }
 
 declare namespace TabmixWidgetsModule {
-  type importList = "CustomizableUI" | "isVersion";
+  type importList = "CustomizableUI";
   type Lazy = Pick<KnownModulesImports, importList>;
 
   interface WidgetElement extends Omit<HTMLElement, "HTMLCollection"> {
