@@ -1306,17 +1306,7 @@ Tabmix.initialization = {
 };
 
 // A promise resolved once initialization is complete
-Tabmix._deferredInitialized = (function () {
-  /** @type {DeferredPromise} */
-  let deferred = {};
-
-  deferred.promise = new Promise((resolve, reject) => {
-    deferred.resolve = resolve;
-    deferred.reject = reject;
-  });
-
-  return deferred;
-})();
+Tabmix._deferredInitialized = Promise.withResolvers();
 
 /*
  * add backward compatibility getters to some of the main object/function/variable
