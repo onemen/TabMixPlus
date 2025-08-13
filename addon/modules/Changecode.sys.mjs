@@ -273,7 +273,8 @@ class ChangeCode {
   getCallerData(stack) {
     const caller = stack.caller || {};
     const error = lazy.console.error(caller);
-    Object.assign(error, {name: caller.name, message: ""});
+    const name = caller.name ?? caller.caller?.name ?? "unknown";
+    Object.assign(error, {name, message: ""});
     return error;
   }
 }

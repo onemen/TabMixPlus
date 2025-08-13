@@ -1,6 +1,6 @@
 "use strict";
 
-(function () {
+(function tabBindings() {
   let tabbrowsertab = customElements.get("tabbrowser-tab");
 
   if (!tabbrowsertab) {
@@ -37,12 +37,13 @@
     )
     .defineProperty();
 
-  // workaround bug 1905267 - event.target.classList can be undefined when detaching tab by its label
-  ["on_mouseover", "on_mouseout"].forEach(methodName => {
-    Tabmix.changeCode(tabbrowsertab.prototype, methodName)
-      ._replace("event.target.classList", "event.target?.classList?")
-      .toCode();
-  });
+  (Tabmix.isVersion(1430) ? ["on_mouseover"] : ["on_mouseover", "on_mouseout"]).forEach(
+    methodName => {
+      Tabmix.changeCode(tabbrowsertab.prototype, methodName)
+        ._replace("event.target.classList", "event.target?.classList?")
+        .toCode();
+    }
+  );
 
   delete tabbrowsertab._flippedInheritedAttributes;
 
@@ -84,7 +85,7 @@
           void this.clientTop; // just using this to flush style updates
         }
         // prevent chrome://global/content/bindings/tabbox.xml#tab mousedown handler
-        if (this.mOverCloseButton || TabmixTabClickOptions.isOverlayIcons(event)) {
+        if (event.target?.classList?.contains("tab-close-button") || TabmixTabClickOptions.isOverlayIcons(event)) {
           event.stopPropagation();
         } else if (this.mouseDownSelect) {
           this.onMouseCommand(event);

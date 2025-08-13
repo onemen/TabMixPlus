@@ -231,6 +231,7 @@ declare namespace MockedGeckoTypes {
     readonly mouseDownSelect: boolean;
     readonly mouseHoverSelect: boolean;
     readonly mouseHoverSelectDelay: number;
+    /** @deprecated removed in firefox 143 */
     mOverCloseButton?: boolean;
     onMouseCommand: (aEvent: MouseEvent, aSelectNewTab: boolean) => void;
     postDataAcceptedByUser?: boolean;
