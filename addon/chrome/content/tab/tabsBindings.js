@@ -2,7 +2,7 @@
 
 (function () {
   Tabmix.setNewFunction(
-    gBrowser.tabContainer,
+    document.getElementById("tabbrowser-tabs"),
     "_notifyBackgroundTab",
 
     /**

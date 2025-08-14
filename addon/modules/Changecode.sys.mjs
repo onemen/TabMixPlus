@@ -504,6 +504,20 @@ const expandTabmix = {
   },
 };
 
+/** @type {ChangecodeModule.getSandbox} */
+export function getSandbox(window, options = {}) {
+  if (window?._tabmix_sandbox || window?.Tabmix?._sandbox) {
+    return window._tabmix_sandbox ?? window.Tabmix._sandbox;
+  }
+
+  // @ts-expect-error - its ok
+  const sandbox = expandTabmix.getSandbox(window, options);
+  window._tabmix_sandbox = sandbox;
+  // @ts-expect-error - reset the value
+  expandTabmix._sandbox = null;
+  return sandbox;
+}
+
 /** @type {ChangecodeModule.initializeChangeCodeClass} */
 export function initializeChangeCodeClass(tabmixObj, {obj, window, scope = {}}) {
   if (!obj && !window) {
@@ -511,10 +525,14 @@ export function initializeChangeCodeClass(tabmixObj, {obj, window, scope = {}}) 
   }
 
   // bound function to tabmixObj before creating the sandbox to make sure that
-  // if we are in window context the sanbox will be saved to tabmixObj.
+  // if we are in window context the sandbox will be saved to tabmixObj.
   Object.assign(tabmixObj, expandTabmix);
-  const baseSanbox = tabmixObj.getSandbox(window ?? obj, {scope});
-  tabmixObj._sandbox = baseSanbox;
+  if (window?._tabmix_sandbox) {
+    tabmixObj._sandbox = window._tabmix_sandbox;
+    window._tabmix_sandbox = null;
+  }
+  const baseSandbox = tabmixObj.getSandbox(window ?? obj, {scope});
+  tabmixObj._sandbox = baseSandbox;
 
-  return baseSanbox;
+  return baseSandbox;
 }

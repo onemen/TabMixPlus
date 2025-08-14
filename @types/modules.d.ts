@@ -51,6 +51,7 @@ interface GetByMap {
 interface Window {
   arguments: any[];
   BrowserUtils: MockedExports.BrowserUtils;
+  DOMParser: typeof DOMParser;
   FullZoom: {
     init(): void;
     destroy(): void;
@@ -87,6 +88,7 @@ interface Window {
 
   __winRect?: WindowRect;
   _tabmix_PlacesUIUtils_openTabset?: MockedGeckoTypes.PlacesUIUtils["openTabset"];
+  _tabmix_sandbox: TabmixSandbox | null;
   gIncompatiblePane: IgIncompatiblePane;
   TabmixAllTabs: {checkForCtrlClick: TabmixGlobals.checkForCtrlClick};
   TMP_ClosedTabs: {handleButtonEvent: TabmixGlobals.handleButtonEvent};
@@ -515,6 +517,7 @@ declare module "resource://gre/modules/DownloadLastDir.sys.mjs" {
 
 declare module "resource://gre/modules/NetUtil.sys.mjs" {
   export interface NetUtil {
+    newChannel(aWhatToLoad: {uri: nsIURI | nsIFile; loadingNode?: Node; loadingPrincipal?: nsIPrincipal; triggeringPrincipal?: nsIPrincipal; securityFlags?: u32; contentPolicyType?: nsContentPolicyType; loadUsingSystemPrincipal?: boolean}): nsIChannel;
     readInputStreamToString(aInputStream: nsIInputStream, aCount: number, aOptions?: {charset?: string; replacement?: string}): string;
   }
 }
@@ -605,6 +608,7 @@ interface KnownModulesImports {
   ContentSvc: TabmixModules.ContentSvc;
   DocShellCapabilities: DocShellCapabilitiesModule.DocShellCapabilities;
   FloorpPrefsObserver: import("chrome://tabmix-resource/content/Floorp.sys.mjs").FloorpPrefsObserver;
+  getSandbox: typeof ChangecodeModule.getSandbox;
   LinkNodeUtils: LinkNodeUtilsModule.LinkNodeUtils;
   initializeChangeCodeClass: typeof ChangecodeModule.initializeChangeCodeClass;
   isVersion: BrowserVersion;
@@ -707,6 +711,7 @@ declare namespace ChangecodeModule {
   type ExpandTabmix = Pick<TabmixGlobal, "_debugMode" | "changeCode" | "setNewFunction" | "nonStrictMode" | "getSandbox" | "makeCode">;
   type SandboxOptions = {shared?: boolean; scope?: Record<string, unknown> | undefined};
 
+  function getSandbox(window: Window, params?: {scope?: Record<string, unknown>}): TabmixSandbox;
   function initializeChangeCodeClass(tabmixObj: TabmixGlobal, params: ChangeCodeScriptParams): TabmixSandbox;
   function updateSandboxWithScope(sandbox: TabmixSandbox, scope: Record<string, unknown>): TabmixSandbox;
   function createModuleSandbox(obj: object, options?: SandboxOptions): TabmixSandbox;
@@ -1197,7 +1202,7 @@ declare namespace NewTabURLModule {
 }
 
 declare namespace OverlaysModule {
-  type importList = "isVersion" | "setTimeout";
+  type importList = "getSandbox" | "NetUtil" | "setTimeout";
   type Lazy = Pick<KnownModulesImports, importList>;
 
   type ChromeManifest = TabmixModules.ChromeManifest;

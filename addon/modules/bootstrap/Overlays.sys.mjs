@@ -4,6 +4,8 @@ import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs
 /** @type {OverlaysModule.Lazy} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
+  getSandbox: "chrome://tabmix-resource/content/Changecode.sys.mjs",
+  NetUtil: "resource://gre/modules/NetUtil.sys.mjs",
   setTimeout: "resource://gre/modules/Timer.sys.mjs",
 });
 
@@ -456,34 +458,25 @@ export class Overlays {
     }
 
     return new Promise((resolve, reject) => {
-      const xhr = new this.window.XMLHttpRequest();
-      xhr.overrideMimeType("application/xml");
-      xhr.open("GET", srcUrl, true);
+      const uri = Services.io.newURI(srcUrl);
+      const stream = lazy.NetUtil.newChannel({
+        uri,
+        loadUsingSystemPrincipal: true,
+      }).open();
+      const count = stream.available();
+      const text = lazy.NetUtil.readInputStreamToString(stream, count, {
+        charset: "UTF-8",
+      });
+      stream.close();
+      const parser = new this.window.DOMParser();
+      parser.forceEnableXULXBL();
+      const doc = parser.parseFromSafeString(text.trim(), "application/xml");
 
-      // Elevate the request, so DTDs will work. Should not be a security issue since we
-      // only load chrome, resource and file URLs, and that is our privileged chrome package.
-      try {
-        if (xhr.channel) {
-          xhr.channel.owner = Services.scriptSecurityManager.getSystemPrincipal();
-        } else {
-          reject(new Error(`XHR channel not available for ${srcUrl}`));
-        }
-      } catch {
-        xhr.abort();
-        reject(new Error(`Failed to set system principal while fetching overlay ${srcUrl}`));
+      if (doc.documentElement.tagName === "parsererror") {
+        reject(new Error(`XML parse error in ${srcUrl}`));
+      } else {
+        resolve(doc);
       }
-
-      const on_error = () => reject(new Error(`Failed to load ${srcUrl} to ${this.location}`));
-
-      xhr.onload = () => {
-        if (xhr.responseXML) {
-          resolve(xhr.responseXML);
-        } else {
-          on_error();
-        }
-      };
-      xhr.onerror = on_error;
-      xhr.send(null);
     });
   }
 
@@ -541,7 +534,7 @@ export class Overlays {
     } else if (node.textContent) {
       console.debug(`Loading eval'd script into ${this.window.location}`);
       try {
-        Cu.evalInSandbox(node.textContent, this.window.Tabmix._sandbox);
+        Cu.evalInSandbox(node.textContent, lazy.getSandbox(this.window));
       } catch (ex) {
         console.error(ex);
         console.log("node.textContent", node.textContent);

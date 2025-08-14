@@ -329,12 +329,18 @@
     };
   });
 
-  if (gBrowser?.tabs?.forEach) {
+  function connectTabs() {
     gBrowser.tabs.forEach(t => {
       if (t?.tabmix_inited !== true) {
         t._initialized = false;
         t.connectedCallback();
       }
     });
+  }
+
+  if (document.readyState === "complete") {
+    connectTabs();
+  } else {
+    window.addEventListener("load", () => connectTabs());
   }
 })();

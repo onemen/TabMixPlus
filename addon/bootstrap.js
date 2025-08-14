@@ -176,31 +176,48 @@ async function startup(data, reason) {
   }
 
   /** @type {DocumentObserver} */
+  const documentInsertedObserver = {
+    observe(document) {
+      if (
+        document.ownerGlobal &&
+        document.documentElement?.getAttribute("windowtype") === "navigator:browser"
+      ) {
+        const win = document.ownerGlobal;
+        document.addEventListener(
+          "DOMContentLoaded",
+          () => {
+            const isSingleWindowMode = Services.prefs.getBoolPref("extensions.tabmix.singleWindow");
+            if (isSingleWindowMode && lazy.SingleWindowModeUtils.newWindow(win)) {
+              win._tabmix_windowIsClosing = true;
+              return;
+            }
+
+            const promiseOverlayLoaded = Overlays.load(chromeManifest, win);
+            win._tabmix_PlacesUIUtils_openTabset = _tabmix_PlacesUIUtils_openTabset;
+            ScriptsLoader.initForWindow(win, promiseOverlayLoaded);
+          },
+          {once: true}
+        );
+      }
+    },
+  };
+
+  /** @type {DocumentObserver} */
   const documentObserver = {
     observe(document) {
       if (document.documentElement && document.ownerGlobal) {
-        const isSingleWindowMode = Services.prefs.getBoolPref("extensions.tabmix.singleWindow");
         const isBrowser =
           document.documentElement.getAttribute("windowtype") === "navigator:browser";
-        const win = document.ownerGlobal;
-
-        let stopInitialization;
-        if (isBrowser && isSingleWindowMode) {
-          stopInitialization = lazy.SingleWindowModeUtils.newWindow(win);
-        }
-
-        if (stopInitialization) {
-          win._tabmix_windowIsClosing = true;
-        } else {
-          const promiseOverlayLoaded = Overlays.load(chromeManifest, win);
-          if (isBrowser) {
-            win._tabmix_PlacesUIUtils_openTabset = _tabmix_PlacesUIUtils_openTabset;
-            ScriptsLoader.initForWindow(win, promiseOverlayLoaded);
-          }
+        if (!isBrowser) {
+          const win = document.ownerGlobal;
+          Overlays.load(chromeManifest, win);
         }
       }
     },
   };
+
+  // eslint-disable-next-line mozilla/balanced-observers
+  Services.obs.addObserver(documentInsertedObserver, "initial-document-element-inserted");
 
   // eslint-disable-next-line mozilla/balanced-observers
   Services.obs.addObserver(documentObserver, "chrome-document-loaded");

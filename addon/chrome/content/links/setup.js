@@ -181,7 +181,7 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser, aTabContainer) {
   }
   TabmixTabbar.scrollButtonsMode = tabscroll;
 
-  if (!SessionStore.getWindowState(window).windows[0]?._restoring) {
+  if (window.__SSi && !SessionStore.getWindowState(window).windows[0]?._restoring) {
     TabmixTabbar.flowing =
       ["singlebar", "scrollbutton", "multibar", "scrollbutton"][tabscroll] || "scrollbutton";
   }
