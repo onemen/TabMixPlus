@@ -44,7 +44,7 @@ input[type="number"]:invalid {
 /* textboxes */
 
 input:is([type="text"], [type="number"]) {
-  /* overide default styles of 32px */
+  /* override default styles of 32px */
   --input-text-min-height: 24px;
 
   appearance: none;
@@ -63,8 +63,12 @@ input:is([type="text"], [type="number"]) {
 
 input:is([type="text"], [type="number"]):focus,
 richlistbox:focus-visible {
+  --tabmix-focus-outline-color: var(--in-content-focus-outline-color);
+  /* stylelint-disable-next-line declaration-block-no-duplicate-custom-properties */
+  --tabmix-focus-outline-color: var(--focus-outline-color);
+
   border-color: transparent;
-  outline: 2px solid var(--in-content-focus-outline-color);
+  outline: 2px solid var(--tabmix-focus-outline-color);
   outline-offset: -1px; /* Prevents antialising around the corners */
 }
 

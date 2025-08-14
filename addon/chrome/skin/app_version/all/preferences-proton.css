@@ -13,7 +13,10 @@
 
   /* for autoReload.xhtml */
   --combined-element-border-radius: 4px;
-  --combined-element-outline: 1px solid var(--in-content-focus-outline-color);
+  --tabmix-focus-outline-color: var(--in-content-focus-outline-color);
+  /* stylelint-disable-next-line declaration-block-no-duplicate-custom-properties */
+  --tabmix-focus-outline-color: var(--focus-outline-color);
+  --combined-element-outline: 1px solid var(--tabmix-focus-outline-color);
 }
 
 /* for Zen browser */
