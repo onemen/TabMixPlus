@@ -421,7 +421,11 @@ Tabmix.multiRow = {
           if (this.firstVisibleRow === firstVisibleRow) {
             return;
           }
-        } else if (this.firstVisible.tab) {
+        } else if (
+          this.firstVisible.tab &&
+          this.firstVisible.tab.parentNode === gBrowser.tabContainer.arrowScrollbox &&
+          !this.firstVisible.tab.pinned
+        ) {
           const rect = this.firstVisible.tab.getBoundingClientRect();
           if (this.firstVisible.x === rect.left && this.firstVisible.y === rect.top) {
             return;
@@ -440,7 +444,7 @@ Tabmix.multiRow = {
         let index,
           current = 0;
 
-        /** @type {Tab | HTMLElement | null} */
+        /** @type {typeof this.firstVisible.tab} */
         let previousTab = null;
         for (const tab of tabs) {
           let row = tab.closing ? -1 : Tabmix.tabsUtils.getTabRowNumber(tab, topY);

@@ -163,14 +163,15 @@ async function startup(data, reason) {
         const isBrowser =
           document.documentElement.getAttribute("windowtype") === "navigator:browser";
         const isOverflow = isBrowser && win.gBrowser.tabContainer.hasAttribute("overflow");
-        const promiseOverlayLoaded = Overlays.load(chromeManifest, win);
+        const promiseOverlayLoaded = Promise.withResolvers();
         if (isBrowser) {
-          ScriptsLoader.initForWindow(win, promiseOverlayLoaded, {
+          ScriptsLoader.initForWindow(win, promiseOverlayLoaded.promise, {
             chromeManifest,
             isOverflow,
             isEnabled: true,
           });
         }
+        Overlays.load(chromeManifest, win, promiseOverlayLoaded);
       }
     }
   }
@@ -192,9 +193,11 @@ async function startup(data, reason) {
               return;
             }
 
-            const promiseOverlayLoaded = Overlays.load(chromeManifest, win);
             win._tabmix_PlacesUIUtils_openTabset = _tabmix_PlacesUIUtils_openTabset;
-            ScriptsLoader.initForWindow(win, promiseOverlayLoaded);
+
+            const promiseOverlayLoaded = Promise.withResolvers();
+            ScriptsLoader.initForWindow(win, promiseOverlayLoaded.promise);
+            Overlays.load(chromeManifest, win, promiseOverlayLoaded);
           },
           {once: true}
         );

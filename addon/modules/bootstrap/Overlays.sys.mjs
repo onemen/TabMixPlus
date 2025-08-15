@@ -24,12 +24,13 @@ export class Overlays {
    * @param {TabmixModules.ChromeManifest} overlayProvider The overlay provider
    *   that contains information about styles and overlays.
    * @param {Window} window The window to load into
+   * @param {PromiseWithResolvers<any>} promiseOverlayLoaded
    */
-  static load(overlayProvider, window) {
+  static load(overlayProvider, window, promiseOverlayLoaded) {
     const instance = new Overlays(overlayProvider, window);
 
     const urls = overlayProvider.overlay.get(instance.location, false);
-    return instance.load(urls);
+    return instance.load(urls, promiseOverlayLoaded);
   }
 
   /**
@@ -65,8 +66,9 @@ export class Overlays {
    * as provided by the overlayProvider.
    *
    * @param {string | string[]} urls The urls to load
+   * @param {PromiseWithResolvers<void>} promiseOverlayLoaded
    */
-  async load(urls) {
+  load(urls, promiseOverlayLoaded = Promise.withResolvers()) {
     const unloadedOverlays = new Set(this._collectOverlays(this.document).concat(urls));
     let forwardReferences = [];
     const unloadedSheets = [];
@@ -78,7 +80,8 @@ export class Overlays {
     }
 
     if (!unloadedOverlays.size && !unloadedSheets.length) {
-      return;
+      promiseOverlayLoaded.resolve();
+      return promiseOverlayLoaded.promise;
     }
 
     for (const url of unloadedOverlays) {
@@ -86,7 +89,7 @@ export class Overlays {
 
       let doc;
       try {
-        doc = await this.fetchOverlay(url);
+        doc = this.fetchOverlay(url);
         console.debug(`Applying ${url} to ${this.location}`);
       } catch (error) {
         console.error("Tabmix", error);
@@ -245,6 +248,9 @@ export class Overlays {
     } else {
       this.document.defaultView.addEventListener("load", this._finish.bind(this), {once: true});
     }
+
+    promiseOverlayLoaded.resolve();
+    return promiseOverlayLoaded.promise;
   }
 
   _finish() {
@@ -447,8 +453,7 @@ export class Overlays {
    * Fetches the overlay from the given chrome:// or resource:// URL.
    *
    * @param {String} srcUrl The URL to load
-   * @returns {Promise<XMLDocument>} Returns a promise that is resolved with the
-   *   XML document.
+   * @returns {XMLDocument} Returns XML document.
    */
   fetchOverlay(srcUrl) {
     if (!srcUrl.startsWith("chrome://") && !srcUrl.startsWith("resource://")) {
@@ -457,27 +462,24 @@ export class Overlays {
       );
     }
 
-    return new Promise((resolve, reject) => {
-      const uri = Services.io.newURI(srcUrl);
-      const stream = lazy.NetUtil.newChannel({
-        uri,
-        loadUsingSystemPrincipal: true,
-      }).open();
-      const count = stream.available();
-      const text = lazy.NetUtil.readInputStreamToString(stream, count, {
-        charset: "UTF-8",
-      });
-      stream.close();
-      const parser = new this.window.DOMParser();
-      parser.forceEnableXULXBL();
-      const doc = parser.parseFromSafeString(text.trim(), "application/xml");
-
-      if (doc.documentElement.tagName === "parsererror") {
-        reject(new Error(`XML parse error in ${srcUrl}`));
-      } else {
-        resolve(doc);
-      }
+    const uri = Services.io.newURI(srcUrl);
+    const stream = lazy.NetUtil.newChannel({
+      uri,
+      loadUsingSystemPrincipal: true,
+    }).open();
+    const count = stream.available();
+    const text = lazy.NetUtil.readInputStreamToString(stream, count, {
+      charset: "UTF-8",
     });
+    stream.close();
+    const parser = new this.window.DOMParser();
+    parser.forceEnableXULXBL();
+    const doc = parser.parseFromSafeString(text.trim(), "application/xml");
+
+    if (doc.documentElement.tagName === "parsererror") {
+      throw new Error(`XML parse error in ${srcUrl}`);
+    }
+    return doc;
   }
 
   /**

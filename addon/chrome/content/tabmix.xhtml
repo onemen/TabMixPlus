@@ -18,7 +18,7 @@
     // we can call our initializer with 'onContentLoaded' flag
     Tabmix.initialization.init.initialized = false;
     TMP_eventListener.init();
-    Tabmix.initialization.run("onContentLoaded", gBrowser.tabContainer);
+    Tabmix.initialization.run("onContentLoaded", document.getElementById("tabbrowser-tabs"));
   </script>
 
    <!-- Menu in Tools Menu -->

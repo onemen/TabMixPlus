@@ -612,6 +612,7 @@ declare namespace MockedGeckoTypes {
 
   interface GroupLabelContainer extends HTMLElement {
     closing: never;
+    pinned: never;
   }
 
   interface MozTabGroupLabel extends MozTextLabel {

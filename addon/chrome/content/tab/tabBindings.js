@@ -341,6 +341,6 @@
   if (document.readyState === "complete") {
     connectTabs();
   } else {
-    window.addEventListener("load", () => connectTabs());
+    window.addEventListener("load", () => connectTabs(), {once: true});
   }
 })();

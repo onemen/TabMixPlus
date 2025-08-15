@@ -272,7 +272,7 @@ declare namespace TabmixArrowScrollboxNS {
     _verticalMode: boolean;
     blockUnderflow: boolean;
     firstTabInRowMargin: number;
-    firstVisible: {tab: Tab | HTMLElement | null; x: number; y: number};
+    firstVisible: {tab: Tab | MockedGeckoTypes.GroupLabelContainer | null; x: number; y: number};
     firstVisibleRow: number;
     isMultiRow: boolean;
     minOffset: number;

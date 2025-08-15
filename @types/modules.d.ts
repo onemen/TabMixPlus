@@ -1220,7 +1220,7 @@ declare namespace OverlaysModule {
     window: Window;
     readonly document: Document;
     constructor(overlayProvider: ChromeManifest, window: Window): void;
-    load(urls: string | string[]): Promise<void>;
+    load(urls: string | string[], promiseOverlayLoaded?: PromiseWithResolvers<void>): Promise<void>;
     _update(url: string, doc: Document): void;
     _finish(): void;
     _collectOverlays(doc: Document): string[];
@@ -1236,7 +1236,7 @@ declare namespace OverlaysModule {
 
   interface OverlaysClass {
     prototype: Overlays;
-    load(overlayProvider: ChromeManifest, window: Window): Promise<void>;
+    load(overlayProvider: ChromeManifest, window: Window, promiseOverlayLoaded?: PromiseWithResolvers<void>): Promise<void>;
     new (overlayProvider: ChromeManifest, window: Window): Overlays;
     isInstance: IsInstance<Overlays>;
   }

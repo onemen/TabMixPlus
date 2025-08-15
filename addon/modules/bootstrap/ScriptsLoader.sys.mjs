@@ -107,6 +107,13 @@ export const ScriptsLoader = {
     window.Tabmix.promiseOverlayLoaded = promiseOverlayLoaded;
 
     Services.scriptloader.loadSubScript("chrome://tabmixplus/content/click/listeners.js", window);
+
+    // we need to add our keys before browser.xhtml loads our overlay,
+    // and look for our Shortcuts
+    const {Shortcuts} = ChromeUtils.importESModule(
+      "chrome://tabmix-resource/content/Shortcuts.sys.mjs"
+    );
+    Shortcuts.onWindowOpen(window);
   },
 
   _addListeners(window) {
