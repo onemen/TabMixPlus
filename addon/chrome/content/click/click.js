@@ -1673,7 +1673,10 @@ var TabmixAllTabs = {
       aMenuitem.setAttribute("busy", aTab.getAttribute("busy") ?? "");
       aMenuitem.removeAttribute("image");
     } else {
-      aMenuitem.setAttribute("image", gBrowser.getIcon(aTab));
+      const icon = gBrowser.getIcon(aTab);
+      if (icon) {
+        aMenuitem.setAttribute("image", icon);
+      }
       aMenuitem.removeAttribute("busy");
     }
 
