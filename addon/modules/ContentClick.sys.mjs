@@ -167,6 +167,10 @@ ContentClickInternal = {
           triggeringSponsoredURLVisitTimeMS:
             browser.getAttribute("triggeringSponsoredURLVisitTimeMS") ?? "",
         };
+        const triggeringSource = browser.getAttribute("triggeringSource");
+        if (isVersion(1430) && triggeringSource) {
+          params.globalHistoryOptions.triggeringSource = triggeringSource;
+        }
       }
 
       if (json.originAttributes.userContextId) {

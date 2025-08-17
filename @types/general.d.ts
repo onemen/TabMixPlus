@@ -743,6 +743,7 @@ declare namespace MockedGeckoTypes {
     policyContainer?: nsIContentSecurityPolicy | null;
     frameID?: number;
     globalHistoryOptions?: {
+      triggeringSource?: string;
       triggeringSponsoredURL: string;
       triggeringSponsoredURLVisitTimeMS: string;
     };

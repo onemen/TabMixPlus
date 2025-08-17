@@ -169,6 +169,7 @@ declare namespace MockedExports {
     originPrincipal: nsIPrincipal;
     originStoragePrincipal: nsIPrincipal;
     globalHistoryOptions?: {
+      triggeringSource: string;
       triggeringSponsoredURL: string;
       triggeringSponsoredURLVisitTimeMS: string;
     };

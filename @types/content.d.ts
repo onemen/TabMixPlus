@@ -19,7 +19,10 @@ type ClickJSONData = {
   originPrincipal: nsIPrincipal;
   originStoragePrincipal: nsIPrincipal;
   tabmixContentClick: ContentClickResult;
-  globalHistoryOptions: {triggeringSponsoredURL: string};
+  globalHistoryOptions: {
+    triggeringSource?: string;
+    triggeringSponsoredURL: string;
+  };
 
   /** @deprecated replaced with policyContainer in firefox 142 */
   csp: string;

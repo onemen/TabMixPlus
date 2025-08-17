@@ -382,6 +382,9 @@ var TabmixClickEventHandler = {
         node?.dataset.isSponsoredLink === "true"
       ) {
         json.globalHistoryOptions = {triggeringSponsoredURL: href};
+        if (ContentSvc.version(1430)) {
+          json.globalHistoryOptions.triggeringSource = "newtab";
+        }
       }
 
       event.preventMultipleActions();
