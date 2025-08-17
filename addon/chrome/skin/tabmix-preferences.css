@@ -105,7 +105,7 @@ menulist {
   cursor: pointer;
   background: url("https://ko-fi.com/img/githubbutton_sm.svg") no-repeat center/100%;
   font-size: 26px;
-  width: 100px;
+  width: 165px;
 }
 
 .donate-button-container > .donate-button:hover {
