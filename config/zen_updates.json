@@ -57,6 +57,13 @@
           "browser_specific_settings": {
             "gecko": {"strict_min_version": "1.0"}
           }
+        },
+        {
+          "version": "1.34.0",
+          "update_link": "https://github.com/onemen/TabMixPlus/releases/download/v1.34.0/tab_mix_plus-1.34.0.xpi",
+          "browser_specific_settings": {
+            "gecko": {"strict_min_version": "1.0"}
+          }
         }
       ]
     }
