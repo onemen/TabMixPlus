@@ -532,7 +532,7 @@ interface TabmixTabsUtils {
   topTabY: number;
   lastTabRowNumber: number;
   lastPinnedTabRowNumber: number;
-  getTabRowNumber(aTab: Tab | HTMLButtonElement | MockedGeckoTypes.MozTextLabelContainer | undefined, aTop: number): number;
+  getTabRowNumber(aTab: MockedGeckoTypes.TabbrowserElement | undefined, aTop: number): number;
   canScrollTabsLeft: boolean;
   canScrollTabsRight: boolean;
   createTooltip(box: HTMLElement & {label: string}): void;

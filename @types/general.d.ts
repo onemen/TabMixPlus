@@ -14,6 +14,7 @@ type nsIFilePickerXpcom = nsIFilePicker;
 type nsIPrefBranchXpcom = ReturnType<nsIPrefService["getBranch"]>;
 
 interface GetClosestMap {
+  "tab": MockedGeckoTypes.BrowserTab;
   "tab.tabbrowser-tab": MockedGeckoTypes.BrowserTab;
   "tab-group": MockedGeckoTypes.MozTabbrowserTabGroup;
   ".tab-group-label": MockedGeckoTypes.MozTabGroupLabel;
@@ -91,6 +92,7 @@ interface CSSStyleDeclaration {
   marginRight: string;
   marginTop: string;
   maxHeight: string;
+  maxWidth: string;
   listStyleImage: string;
   opacity: string | number;
   paddingBottom: string;
@@ -176,13 +178,14 @@ declare namespace MockedGeckoTypes {
     screenX: number;
     screenY: number;
     movingTabs: BrowserTab[];
+    modifyPinned: boolean;
     fromTabList: boolean;
     tabGroupCreationColor: string;
     expandGroupOnDrop: boolean;
     nextTab?: BrowserTab;
   };
 
-  interface BrowserTab extends MockedExports.BrowserTab, Omit<Element, "ownerGlobal" | "nextSibling"> {
+  interface BrowserTab extends MockedExports.BrowserTab, Omit<Element, "ownerGlobal" | "nextSibling" | "previousSibling"> {
     readonly _isProtected: boolean;
     _labelIsInitialTitle?: boolean;
     _tPos: number;
@@ -205,6 +208,7 @@ declare namespace MockedGeckoTypes {
     owner: BrowserTab | null;
     // MockedExports.BrowserTab use null here - ignore it
     readonly ownerGlobal: WindowProxy;
+    previousSibling: BrowserTab | MozTabbrowserTabGroup | undefined;
     readonly pinned: boolean;
     selected: boolean;
     readonly visible: boolean;
@@ -331,6 +335,7 @@ declare namespace MockedGeckoTypes {
     mCloseButtons: number;
     mTabMaxWidth: number;
     mTabMinWidth: number;
+    pinnedDropIndicator: Element;
     set selectedItem(val: BrowserTab);
     get selectedItem(): BrowserTab;
     set selectedIndex(val: number);
@@ -595,6 +600,7 @@ declare namespace MockedGeckoTypes {
   }
 
   type MozTextLabelContainer = HTMLElement;
+  type TabbrowserElement = Tab | HTMLButtonElement | MozTextLabelContainer | MozTabbrowserTabGroup;
 
   interface MozTextLabel extends Omit<HTMLLabelElement, "control"> {
     _onClick(event: MouseEvent): void;
@@ -647,7 +653,7 @@ declare namespace MockedGeckoTypes {
     on_click(event: PointerEvent): void;
     on_TabSelect(): void;
     select(): void;
-    previousSibling: BrowserTab;
+    previousSibling: BrowserTab | MozTabbrowserTabGroup;
     pinned: never;
   }
 

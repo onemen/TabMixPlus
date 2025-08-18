@@ -35,6 +35,11 @@
   -moz-margin-start: 0;
   -moz-margin-end: 0;
   -moz-padding-end: 15px;
+}
+
+/* #pinned-tabs-container exist since Firefox 142 */
+#TabsToolbar[tabmix-tabBarSpace]:not(:has(#pinned-tabs-container)) #tabbrowser-arrowscrollbox[orient="horizontal"],
+#TabsToolbar[tabmix-tabBarSpace]:has(#pinned-tabs-container[orient="horizontal"]) {
   -moz-padding-start: 15px;
 }
 

@@ -306,6 +306,13 @@ var TMP_tabDNDObserver = {
           check: Tabmix.isVersion(1390),
         })
         ._replace(
+          /this\._keepTabSizeLocked[\s\S]*_lockTabSizing\(\);/,
+          `if (!TabmixTabbar.widthFitTitle) {
+            $&
+          }`,
+          {check: Tabmix.isVersion(1430)}
+        )
+        ._replace(
           "this._updateTabStylesOnDrag(tab, event);",
           `if (!TMP_tabDNDObserver.useTabmixDnD(event)) {
         $&
@@ -548,7 +555,7 @@ var TMP_tabDNDObserver = {
           if (groupLabelMargin && newIndex > 0) {
             dropElement = children[newIndex - 1];
           }
-          newMarginY = TMP_tabDNDObserver.getDropIndicatorMarginY(ind, dropElement ?? children.at(-1), rect);`
+          newMarginY = TMP_tabDNDObserver.getDropIndicatorMarginY(ind, dropElement ?? children.at(-1), rect, draggedTab);`
       )
       ._replace(
         // there is bug in firefox when swapping margin for RTL
@@ -567,11 +574,11 @@ var TMP_tabDNDObserver = {
       )
       ._replace(
         RegExp(`newMargin = (rect.right - ${itemRect}.left|${itemRect}.right - rect.left)`, "g"),
-        `newMargin = TMP_tabDNDObserver.getDropIndicatorMarginX(draggedTab, newIndex, dropBefore, ${itemRect}, rect, $1)`
+        `newMargin = TMP_tabDNDObserver.getDropIndicatorMarginX(draggedTab, dropElement, newIndex, dropBefore, ${itemRect}, rect, $1)`
       )
       ._replace(
         RegExp(`newMargin = (rect.right - ${itemRect}.right|${itemRect}.left - rect.left)`, "g"),
-        `newMargin = groupLabelMargin || TMP_tabDNDObserver.getDropIndicatorMarginX(draggedTab, newIndex, dropBefore, ${itemRect}, rect, $1)`
+        `newMargin = groupLabelMargin || TMP_tabDNDObserver.getDropIndicatorMarginX(draggedTab, dropElement, newIndex, dropBefore, ${itemRect}, rect, $1)`
       )
       ._replace(
         'ind.style.transform = "translate(" + Math.round(newMargin) + "px)";',
@@ -610,18 +617,20 @@ var TMP_tabDNDObserver = {
       )
       ._replace(
         "this._resetTabsAfterDrop(draggedTab?.ownerDocument);",
-        `$&
-        TMP_tabDNDObserver.resetTabsAfterDrop(draggedTab);`,
+        `if (draggedTab?.container != this || !useTabmixDnD) {
+          $&
+          TMP_tabDNDObserver.resetTabsAfterDrop(draggedTab);
+        }`,
         {check: Tabmix.isVersion(1420)}
       )
       ._replace(
-        // Don't pin/unpin tabs when dropping pinned tab on multi-row tabbar
+        // We only implemented pin/unpin on multi-row tabbar from Firefox 143
         "let shouldTranslate =",
         `if (TabmixTabbar.isMultiRow) {
            shouldPin = shouldUnpin = false;
          }
          $&`,
-        {check: Tabmix.isVersion(1420)}
+        {check: Tabmix.isVersion(1420) && !Tabmix.isVersion(1430)}
       )
       ._replace(
         /(duplicatedTab|newTab) = gBrowser\.duplicateTab\(tab\);/,
@@ -630,8 +639,16 @@ var TMP_tabDNDObserver = {
       ._replace(
         "} else if (draggedTab && draggedTab.container == this) {",
         `gBrowser.ensureTabIsVisible(${Tabmix.isVersion(1380) ? "duplicatedDraggedTab" : "draggedTabCopy"});
-      } else if (draggedTab && draggedTab.container == this && useTabmixDnD) {
+      // } else if (draggedTab && draggedTab.container == this && useTabmixDnD && !this.pinnedDropIndicator?.hasAttribute("interactive")) {
+      } else if (draggedTab && draggedTab.container == this && useTabmixDnD && !draggedTab._dragData.modifyPinned) {
         TMP_tabDNDObserver.handleDrop(event, draggedTab, movingTabs);
+        if (Tabmix.isVersion(1420)) {
+          // Starting with Firefox 143, we disable the pinned-drop-indicator hide transition
+          // to prevent DOM layout shifts during drop operations. We require all elements to
+          // stay in their dragOver positions until handleDrop processing is complete.
+          this._resetTabsAfterDrop(draggedTab?.ownerDocument);
+          TMP_tabDNDObserver.resetTabsAfterDrop(draggedTab);
+        }
       $&`
       )
       ._replace(
@@ -795,7 +812,7 @@ var TMP_tabDNDObserver = {
         this.setAttribute("tabmix-movingBackgroundTab", true);
         tab.setAttribute("tabmix-dragged", true);
       }
-      // we don't collape the group on multi-row to prevent changing the number of rows
+      // we don't collapse the group on multi-row to prevent changing the number of rows
       if (useTabmixDnD && tab._dragData.expandGroupOnDrop) {
         this._expandGroupOnDrop(tab);
         if (Tabmix.isVersion(1430) && tab.group) {
@@ -911,7 +928,7 @@ var TMP_tabDNDObserver = {
 
     // disAllowDrop drop when user drag link over tabbrowser-tabs multi-row margin
     if (effects == "link" && !targetTab && !disAllowDrop && TabmixTabbar.visibleRows > 1) {
-      const {top, bottom} = tabBar.arrowScrollbox.getBoundingClientRect();
+      const {top, bottom} = arrowScrollbox.getBoundingClientRect();
       if (
         event.clientY < top + this._multirowMargin ||
         event.clientY > bottom - this._multirowMargin
@@ -974,11 +991,63 @@ var TMP_tabDNDObserver = {
           tab.toggleAttribute("tabmix-movingtab-togroup", Boolean(color));
         });
       }
+
+      // based on gBrowser.tabContainer.#checkWithinPinnedContainerBounds
+      if (Tabmix.isVersion(1430) && effects == "move") {
+        const pinnedTabCount = gBrowser.pinnedTabCount;
+
+        // don't show pinned drop indicator when dragging first tab away from pinned area
+        const screenX = draggedElement?._dragData.screenX;
+        const translateX = screenX ? event.screenX - screenX : 0;
+        const movedToPinned = tabBar._rtlMode ? translateX > 0 : translateX < 0;
+
+        /** @type {Tab} */ // @ts-ignore
+        const firstNonPinnedTab = tabBar.allTabs[pinnedTabCount];
+        const firstNonPinnedElement = firstNonPinnedTab?.group?.labelElement ?? firstNonPinnedTab;
+        const {left, right} =
+          firstNonPinnedElement ?
+            window.windowUtils.getBoundsWithoutFlushing(firstNonPinnedElement)
+          : {right: 0, left: 0};
+        const inVisibleRange = firstNonPinnedTab === dropElement && dropBefore && movedToPinned;
+        const inPinnedRange =
+          inVisibleRange && (tabBar._rtlMode ? event.screenX > right : event.screenX < left);
+
+        if (
+          gBrowser.isTab(draggedElement) &&
+          ((inVisibleRange && !tabBar.pinnedDropIndicator.hasAttribute("visible")) ||
+            (inPinnedRange && !tabBar.pinnedDropIndicator.hasAttribute("interactive")))
+        ) {
+          // On drag into pinned container
+          if (!pinnedTabCount) {
+            let tabbrowserTabsRect = window.windowUtils.getBoundsWithoutFlushing(tabBar);
+            // The tabbrowser container expands with the expansion of the
+            // drop indicator - prevent that by setting maxWidth first.
+            tabBar.style.maxWidth = tabbrowserTabsRect.width + "px";
+            tabBar.pinnedDropIndicator.setAttribute("visible", "");
+            tabBar.pinnedDropIndicator.toggleAttribute("interactive", inPinnedRange);
+          }
+        } else if (!inPinnedRange) {
+          tabBar.pinnedDropIndicator.removeAttribute("interactive");
+        }
+
+        // hide drop indicator when pinnedDropIndicator is interactive
+        const modifyPinned =
+          dropElement ?
+            draggedElement?.pinned !== dropElement.pinned
+          : (draggedElement?.pinned ?? false);
+        const interactive = tabBar.pinnedDropIndicator.hasAttribute("interactive");
+        disAllowDrop = modifyPinned ? false : disAllowDrop || interactive;
+        if (gBrowser.isTab(draggedElement)) {
+          draggedElement._dragData.modifyPinned = interactive || modifyPinned;
+        }
+      }
     }
 
     if (disAllowDrop) {
       this.clearDragmark();
-      dt.effectAllowed = "none";
+      if (!TabmixTabbar.isMultiRow || !tabBar.pinnedDropIndicator?.hasAttribute("interactive")) {
+        dt.effectAllowed = "none";
+      }
     }
 
     dt.mozCursor = mozCursor;
@@ -990,6 +1059,7 @@ var TMP_tabDNDObserver = {
   handleDrop(event, draggedTab, movingTabs) {
     let {dropElement, newIndex, dropBefore, fromTabList, dropOnStart} =
       gBrowser.tabContainer._getDropIndex(event, {getParams: true});
+
     const telemetrySource = this.TabMetrics.METRIC_SOURCE.DRAG_AND_DROP;
     if (!Tabmix.isVersion(1370) || fromTabList) {
       const oldIndex = draggedTab[Tabmix.isVersion(1380) ? "elementIndex" : "_tPos"];
@@ -1263,7 +1333,11 @@ var TMP_tabDNDObserver = {
         if (rect) {
           if (params.dropOnStart) {
             const offset = gBrowser.pinnedTabCount ? 0 : 3;
-            params.groupLabelMargin = tabBar._rtlMode ? rect.right - offset : rect.left + offset;
+            const sbRect = gBrowser.tabContainer.arrowScrollbox.getBoundingClientRect();
+            params.groupLabelMargin =
+              tabBar._rtlMode ?
+                sbRect.right - rect.right + offset
+              : rect.left - sbRect.left + offset;
           } else {
             params.groupLabelMargin = tabBar._rtlMode ? rect.left : rect.right;
           }
@@ -1292,20 +1366,38 @@ var TMP_tabDNDObserver = {
       const pinnedTabCount = gBrowser.pinnedTabCount;
       const isDraggedTabPinned = tab?.pinned ?? false;
       const isDropElementPinned = dropElement?.pinned ?? false;
-      // prevent mixing pinned and unpinned tabs
       if (isDraggedTabPinned !== isDropElementPinned) {
-        newIndex = pinnedTabCount - (isDraggedTabPinned ? 1 : 0);
+        if (Tabmix.isVersion(1420)) {
+          newIndex = pinnedTabCount - (isDraggedTabPinned ? 0 : 1);
+          dropBefore = !isDropElementPinned;
+        } else {
+          // prevent mixing pinned and unpinned tabs
+          newIndex = pinnedTabCount - (isDraggedTabPinned ? 1 : 0);
+          dropBefore = !isDraggedTabPinned;
+          dropOnStart = !isDraggedTabPinned;
+        }
 
         /** @type {AriaFocusableItem} */ // @ts-expect-error
         const element = Tabmix.tabsUtils.allVisibleItems[newIndex];
         dropElement = element;
-        dropBefore = !isDraggedTabPinned;
-        dropOnStart = !isDraggedTabPinned;
       } else if (gBrowser.isTabGroupLabel(dropElement)) {
-        newIndex = dropElement.group.tabs[0]._tPos;
-        // first non pinned tab element is group and dragging element before it
+        const group = dropElement.group;
+        newIndex = group.tabs[0]._tPos;
+        // dropOnStart is true when:
+        // 1. Dragging before the first non-pinned element, OR
+        // 2. Dragging before a group that is first in its row
         dropOnStart =
           dropElement.elementIndex === pinnedTabCount && this.isDropBefore(event, dropElement);
+        if (!dropOnStart) {
+          const previousElement = group.previousSibling;
+          const focusableItem =
+            gBrowser.isTab(previousElement) ? previousElement
+            : previousElement?.collapsed ? previousElement
+            : previousElement?.tabs.at(-1);
+          if (focusableItem) {
+            dropOnStart = !TabmixTabbar.inSameRow(dropElement, focusableItem);
+          }
+        }
       } else {
         newIndex = dropElement._tPos;
         dropBefore = this.isDropBefore(event, dropElement);
@@ -1400,6 +1492,14 @@ var TMP_tabDNDObserver = {
         return startIndex + index;
       }
     } else {
+      // when dragging unpinned tab to pinned area return index of the last pinned tab
+      if (Tabmix.isVersion(1420) && draggedTab && !draggedTab.pinned) {
+        let dropElement = event.target.closest("tab");
+        if (dropElement?.pinned) {
+          return gBrowser.pinnedTabCount - 1;
+        }
+      }
+
       // adjust mouseY position when it is in the margin area
       const tabStrip = gBrowser.tabContainer.arrowScrollbox;
       const singleRowHeight = tabStrip.singleRowHeight;
@@ -1480,27 +1580,50 @@ var TMP_tabDNDObserver = {
    * when dragging pinned tab out of the pinned tab area show drop indicator
    * after the last pinned tab
    */
-  getDropIndicatorMarginX(draggedTab, newIndex, dropBefore, itemRect, rect, defaultMargin) {
+  getDropIndicatorMarginX(
+    draggedTab,
+    dropElement,
+    newIndex,
+    dropBefore,
+    itemRect,
+    rect,
+    defaultMargin
+  ) {
     const margin = defaultMargin + (dropBefore ? 0 : itemRect.width);
     const pinnedTabCount = gBrowser.pinnedTabCount;
     if (pinnedTabCount === 0) {
       return margin;
     }
+
+    const getMarginAfterLastPinned = (offset = 0) => {
+      const pinnedTabRect = Tabmix.tabsUtils.allVisibleItems[
+        pinnedTabCount - 1
+      ]?.getBoundingClientRect() ?? {
+        right: 0,
+        left: 0,
+      };
+      return RTL_UI ?
+          rect.right - pinnedTabRect.left + offset
+        : pinnedTabRect.right - rect.left + offset;
+    };
+
     const isPinnedTab = gBrowser.isTab(draggedTab) ? draggedTab.pinned : false;
     if (TabmixTabbar.hasMultiRows) {
-      // the case for dragging link or non-pinned tab to pinned tabs area is handeld in getNewIndex
-      if (isPinnedTab && newIndex >= pinnedTabCount) {
-        const pinnedTabRect = Tabmix.tabsUtils.allVisibleItems[
-          pinnedTabCount - 1
-        ]?.getBoundingClientRect() ?? {
-          right: 0,
-          left: 0,
-        };
-        return RTL_UI ? rect.right - pinnedTabRect.left : pinnedTabRect.right - rect.left;
+      // In Firefox 143 we allow to drag pinned tab after last pinned tab to unpin it
+      // the case for dragging link or non-pinned tab to pinned tabs area is handled in getNewIndex
+      if (!Tabmix.isVersion(1430) && isPinnedTab && newIndex >= pinnedTabCount) {
+        return getMarginAfterLastPinned();
       }
     } else {
       let allTabsPinnedOffset = 0;
-      if (!isPinnedTab) {
+      const firstNonPinnedTab = Tabmix.tabsUtils.allVisibleItems[pinnedTabCount];
+      if (Tabmix.isVersion(1430) && isPinnedTab && !firstNonPinnedTab && !dropElement) {
+        allTabsPinnedOffset = 30;
+      } else if (!isPinnedTab) {
+        if (Tabmix.isVersion(1430) && newIndex < pinnedTabCount) {
+          return getMarginAfterLastPinned();
+        }
+
         if (gBrowser.tabContainer.hasAttribute("overflow")) {
           let scrollRect = gBrowser.tabContainer.arrowScrollbox.scrollClientRect;
           return Math.min(
@@ -1508,7 +1631,6 @@ var TMP_tabDNDObserver = {
             scrollRect.right - rect.left
           );
         }
-        const firstNonPinnedTab = Tabmix.tabsUtils.allVisibleItems[pinnedTabCount];
         allTabsPinnedOffset = firstNonPinnedTab ? 0 : 8;
         if (firstNonPinnedTab) {
           const firstNonPinnedTabRect = firstNonPinnedTab.getBoundingClientRect();
@@ -1517,27 +1639,26 @@ var TMP_tabDNDObserver = {
             : Math.max(margin, firstNonPinnedTabRect.left - rect.left);
         }
       }
-      if ((isPinnedTab && newIndex >= pinnedTabCount) || allTabsPinnedOffset) {
-        const pinnedTabRect = Tabmix.tabsUtils.allVisibleItems[
-          pinnedTabCount - 1
-        ]?.getBoundingClientRect() ?? {
-          right: 0,
-          left: 0,
-        };
-        return RTL_UI ?
-            rect.right - pinnedTabRect.left + allTabsPinnedOffset
-          : pinnedTabRect.right - rect.left + allTabsPinnedOffset;
+      if (
+        (!Tabmix.isVersion(1430) && isPinnedTab && newIndex >= pinnedTabCount) ||
+        allTabsPinnedOffset
+      ) {
+        return getMarginAfterLastPinned(allTabsPinnedOffset);
       }
     }
     return margin;
   },
 
-  getDropIndicatorMarginY(ind, dropElement, rect) {
+  getDropIndicatorMarginY(ind, dropElement, rect, draggedTab) {
     if (TabmixTabbar.visibleRows === 1) {
       return 0;
     }
 
-    const item = gBrowser.isTabGroupLabel(dropElement) ? dropElement.parentElement : dropElement;
+    const item =
+      Tabmix.isVersion(1430) && draggedTab.pinned && !dropElement.pinned ? draggedTab
+      : gBrowser.isTabGroupLabel(dropElement) ? dropElement.parentElement
+      : dropElement;
+
     const itemRect = item.getBoundingClientRect();
     let newMarginY;
     if (TabmixTabbar.position == 1) {

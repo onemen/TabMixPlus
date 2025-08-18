@@ -331,7 +331,7 @@ var TabmixTabbar = {
     if (
       !Tabmix.tabsUtils.isVerticalTabs &&
       this.isMultiRow &&
-      Tabmix.tabsUtils.overflow &&
+      (Tabmix.tabsUtils.overflow || Tabmix.isVersion(1410)) &&
       tabBar.allTabs[0].pinned
     ) {
       tabBar.arrowScrollbox.setFirstTabInRow();
@@ -1366,7 +1366,12 @@ Tabmix.tabsUtils = {
         /** @type {MockedGeckoTypes.ArrowScrollbox["contains"]} */
         contains(node) {
           return new Error().stack?.match(/^on_drop@/m) ?
-              Boolean(node?.closest("#tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned])"))
+              node === this ||
+                Boolean(
+                  node?.closest(
+                    "#tabbrowser-arrowscrollbox .tabbrowser-tab:not([pinned]), #tabbrowser-arrowscrollbox toolbarbutton"
+                  )
+                )
             : arrowScrollbox._tabmix_originals.contains.apply(this, [node]);
         },
 
@@ -2336,8 +2341,38 @@ window.gTMPprefObserver = {
         );
 
         this.insertRule(
-          `#tabbrowser-tabs:not([positionpinnedtabs])[tabmix-flowing="multibar"][orient=horizontal] .tabbrowser-tab[pinned] + .tabbrowser-tab:not([pinned]) {
-            margin-inline-start: 12px;
+          `#tabbrowser-tabs[positionpinnedtabs][tabmix-flowing="multibar"][orient=horizontal]:has(#tabbrowser-arrowscrollbox .tabbrowser-tab:not([hidden])) #pinned-tabs-container {
+             margin-inline-end: 12px;
+          }`
+        );
+
+        this.insertRule(
+          `#tabbrowser-tabs:not([positionpinnedtabs])[tabmix-flowing="multibar"][orient=horizontal] .tabbrowser-tab[pinned] {
+            /* Rule for non-pinned tab following a pinned tab */
+            & + .tabbrowser-tab:not([pinned]) {
+              margin-inline-start: 12px;
+            }
+
+            /* Rule for tab-group label following a pinned tab */
+            & + tab-group .tab-group-label-container {
+              margin-inline-start: 15px;
+            }
+          }`
+        );
+      }
+
+      if (Tabmix.isVersion(1430)) {
+        this.insertRule(
+          `#tabbrowser-tabs[tabmix-multibar][orient="horizontal"] > #pinned-drop-indicator {
+            &:not([visible]) {
+              transition-property: none !important;
+            }
+
+            &[visible] {
+              align-self: flex-start;
+              margin-top: var(--tabmix-multirow-margin, 0);
+              margin-bottom: var(--tabmix-multirow-margin, 0);
+            }
           }`
         );
       }
