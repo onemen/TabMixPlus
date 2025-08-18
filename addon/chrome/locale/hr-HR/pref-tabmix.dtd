@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "na svima">
 <!ENTITY showTabX.current "na trenutnoj">
 <!ENTITY showTabX.hover "na označenoj">
-<!ENTITY showTabX.alwaysExeption "na svim karticam širim od">
+<!ENTITY showTabX.alwaysException "na svim karticam širim od">
 <!ENTITY showTabX.currentHover "na trenutnoj &amp; označenoj">
 <!ENTITY minWidth.label "Širina kartice:">
 <!ENTITY widthTo.label "sa">

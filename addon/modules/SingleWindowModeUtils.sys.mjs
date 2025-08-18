@@ -78,9 +78,9 @@ export const SingleWindowModeUtils = {
       return;
     }
     const doc = newWindow.document.documentElement;
-    for (const [attr, rectVaslue] of Object.entries(rect)) {
-      if (rectVaslue) {
-        doc.setAttribute(attr, rectVaslue);
+    for (const [attr, rectValue] of Object.entries(rect)) {
+      if (rectValue) {
+        doc.setAttribute(attr, rectValue);
       }
     }
     if (restorePosition) {

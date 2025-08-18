@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "בהכל">
 <!ENTITY showTabX.current "בנוכחי">
 <!ENTITY showTabX.hover "כשמוצבע">
-<!ENTITY showTabX.alwaysExeption "בכל לשונית רחבה מ">
+<!ENTITY showTabX.alwaysException "בכל לשונית רחבה מ">
 <!ENTITY showTabX.currentHover "בנוכחי ובמוצבע">
 <!ENTITY minWidth.label "רוחב לשונית">
 <!ENTITY widthTo.label "על">

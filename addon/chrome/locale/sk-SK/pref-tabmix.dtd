@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "na všetkých kartách">
 <!ENTITY showTabX.current "na aktuálnej karte">
 <!ENTITY showTabX.hover "pri prejdení myšou cez kartu">
-<!ENTITY showTabX.alwaysExeption "na všetkých kartách širšie než">
+<!ENTITY showTabX.alwaysException "na všetkých kartách širšie než">
 <!ENTITY showTabX.currentHover "na aktuálnej &amp; presne">
 <!ENTITY minWidth.label "Šírka kariet:">
 <!ENTITY widthTo.label "až">

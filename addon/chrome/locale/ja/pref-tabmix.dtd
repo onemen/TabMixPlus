@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "すべてのタブ">
 <!ENTITY showTabX.current "現在のタブ">
 <!ENTITY showTabX.hover "設定以上の時間マウスオーバーしたタブ">
-<!ENTITY showTabX.alwaysExeption "設定以上の幅のタブ">
+<!ENTITY showTabX.alwaysException "設定以上の幅のタブ">
 <!ENTITY showTabX.currentHover "現在のタブと設定以上の時間マウスオーバーしたタブ">
 <!ENTITY minWidth.label "タブ幅:">
 <!ENTITY widthTo.label "から">

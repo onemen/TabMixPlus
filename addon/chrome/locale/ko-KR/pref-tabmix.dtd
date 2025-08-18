@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "모든 탭">
 <!ENTITY showTabX.current "현재 탭">
 <!ENTITY showTabX.hover "커서가 닿은 탭">
-<!ENTITY showTabX.alwaysExeption "모든 탭이 다음보다 길 때">
+<!ENTITY showTabX.alwaysException "모든 탭이 다음보다 길 때">
 <!ENTITY showTabX.currentHover "현재 탭과 커서가 닿은 탭">
 <!ENTITY minWidth.label "탭 너비:">
 <!ENTITY widthTo.label "에서">

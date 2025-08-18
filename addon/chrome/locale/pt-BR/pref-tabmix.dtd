@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "em todas as abas">
 <!ENTITY showTabX.current "na aba atual">
 <!ENTITY showTabX.hover "quando apontar o mouse">
-<!ENTITY showTabX.alwaysExeption "em todas as abas maiores que">
+<!ENTITY showTabX.alwaysException "em todas as abas maiores que">
 <!ENTITY showTabX.currentHover "na aba atual e apontada por">
 <!ENTITY minWidth.label "Tamanho da aba">
 <!ENTITY widthTo.label "para">

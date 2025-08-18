@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "trên tất cả">
 <!ENTITY showTabX.current "trên hiện tại">
 <!ENTITY showTabX.hover "khi rê chuột trên">
-<!ENTITY showTabX.alwaysExeption "trên tất cả thẻ rộng hơn">
+<!ENTITY showTabX.alwaysException "trên tất cả thẻ rộng hơn">
 <!ENTITY showTabX.currentHover "trên hiện tại &amp; khi rê chuột trên">
 <!ENTITY minWidth.label "Độ rộng Thẻ:">
 <!ENTITY widthTo.label "tới">

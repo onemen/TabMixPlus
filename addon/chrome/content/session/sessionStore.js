@@ -10,7 +10,7 @@
 /** @type {TabmixSessionStore} */
 var TMP_SessionStore = {
   // get title for closed window from bookmark title or user tab title
-  // this funcion return promise to work with Firefox 60 async bookmarks.fetch
+  // this function return promise to work with Firefox 60 async bookmarks.fetch
   asyncGetTabTitleForClosedWindow(aUndoItem) {
     let selectedTab = aUndoItem.selected && aUndoItem.tabs[aUndoItem.selected - 1];
     if (!selectedTab || !selectedTab.entries || selectedTab.entries.length === 0) {
@@ -468,7 +468,7 @@ var TMP_ClosedTabs = {
     }
 
     if (panel?.__updatingViewAfterDelete) {
-      // we are repopulateing the list after user removed an item
+      // we are repopulating the list after user removed an item
       // the menuitem already exist
       return true;
     }

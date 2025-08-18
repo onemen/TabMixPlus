@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "in allen Tabs (Firefox-Standard)">
 <!ENTITY showTabX.current "nur im aktiven Tab">
 <!ENTITY showTabX.hover "bei Mauszeiger über einem Tab nach">
-<!ENTITY showTabX.alwaysExeption "in allen Tabs breiter als">
+<!ENTITY showTabX.alwaysException "in allen Tabs breiter als">
 <!ENTITY showTabX.currentHover "im aktiven Tab und bei Mauszeiger über einem Tab">
 <!ENTITY minWidth.label "Tabs-Breite:">
 <!ENTITY widthTo.label "bis">

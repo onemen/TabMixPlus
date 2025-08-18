@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "На всех вкладках">
 <!ENTITY showTabX.current "Только на текущей вкладке">
 <!ENTITY showTabX.hover "Только при наведении курсора мыши:">
-<!ENTITY showTabX.alwaysExeption "На всех вкладках шире чем">
+<!ENTITY showTabX.alwaysException "На всех вкладках шире чем">
 <!ENTITY showTabX.currentHover "На текущей вкладке и вкладке при наведении курсора мыши">
 <!ENTITY minWidth.label "Ширина вкладок: от">
 <!ENTITY widthTo.label "до">

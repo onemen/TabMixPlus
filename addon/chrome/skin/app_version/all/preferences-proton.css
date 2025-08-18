@@ -206,7 +206,7 @@ prefpane > .content-box > tabbox {
   padding-inline: 0.75em;
 }
 
-/*  tabclicking options tabbox  */
+/*  tab clicking options tabbox  */
 .mouseclick-panel {
   --mouseclick-border: 1px solid color-mix(in srgb, var(--in-content-accent-color) 41%, transparent);
 

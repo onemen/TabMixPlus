@@ -217,7 +217,7 @@ export const AutoReload = {
     }
   },
 
-  /** called from popup and from tabclick options */
+  /** called from popup and from tab click options */
   toggle(aTab) {
     if (aTab.autoReloadEnabled) {
       this._disable(aTab);

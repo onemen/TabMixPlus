@@ -35,7 +35,7 @@ overlay   chrome://browser/content/places/places.xhtml           chrome://tabmix
  * restartApplication: Restarts the application, keeping it in
  * safe mode if it is already in safe mode.
  */
-/** @type {Bootstarp.restartApplication} */
+/** @type {Bootstrap.restartApplication} */
 function restartApplication() {
   const cancelQuit = Cc["@mozilla.org/supports-PRBool;1"].createInstance(Ci.nsISupportsPRBool);
   Services.obs.notifyObservers(cancelQuit, "quit-application-requested", "restart");
@@ -54,7 +54,7 @@ function restartApplication() {
 
 let invalidateCachesOnRestart = false;
 
-/** @type {Bootstarp.showRestartNotification} */
+/** @type {Bootstrap.showRestartNotification} */
 function showRestartNotification(verb, window) {
   if (!window.gBrowser.selectedBrowser) {
     return;
@@ -109,14 +109,14 @@ async function updateAddon(id) {
   }
 }
 
-/** @type {Bootstarp.install} */
+/** @type {Bootstrap.install} */
 async function install(data) {
   await updateAddon(data.id);
 }
 
 function uninstall() {}
 
-/** @type {Bootstarp.startup} */
+/** @type {Bootstrap.startup} */
 async function startup(data, reason) {
   /** @type {any} */
   const lazy = {};
@@ -226,7 +226,7 @@ async function startup(data, reason) {
   Services.obs.addObserver(documentObserver, "chrome-document-loaded");
 }
 
-/** @type {Bootstarp.shutdown} */
+/** @type {Bootstrap.shutdown} */
 function shutdown(data, reason) {
   const window = Services.wm.getMostRecentWindow("navigator:browser");
   if (reason === ADDON_DISABLE) {

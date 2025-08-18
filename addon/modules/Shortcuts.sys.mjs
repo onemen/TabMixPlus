@@ -200,7 +200,7 @@ export const Shortcuts = {
       }
     }
 
-    // Firefox load lables from tabContextMenu.ftl lazily
+    // Firefox load labels from tabContextMenu.ftl lazily
     const contextMutate = (/** @type {MutationRecord[]} */ aMutations) => {
       for (let mutation of aMutations) {
         if (

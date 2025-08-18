@@ -246,7 +246,7 @@ declare namespace HandleTabbarVisibility {
 
 declare namespace MultiRow {
   function init(): void;
-  function extandArrowscrollbox(): void;
+  function enhanceArrowScrollbox(): void;
   function addScrollBoxButtons(): void;
 }
 
@@ -509,7 +509,6 @@ interface TabmixTabsUtils {
   initialized: boolean;
   tabBar: MockedGeckoTypes.TabContainer;
   scrollClientRect: DOMRect;
-  getInnerbox(): HTMLElement;
   inDOMFullscreen: boolean;
   visible: boolean;
   isVerticalTabBar: boolean;
@@ -555,7 +554,7 @@ interface TabmixTabsUtils {
   positionPinnedTabs(): void;
   _pinnedTabsContainer: string;
   updatePinnedTabsContainer(): void;
-  updatefirstTabInRowMargin(): void;
+  updateFirstTabInRowMargin(): void;
 }
 
 declare namespace UtilsModules {

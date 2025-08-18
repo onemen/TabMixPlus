@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "a totes">
 <!ENTITY showTabX.current "a l'actual">
 <!ENTITY showTabX.hover "en col·locar-hi el ratolí durant">
-<!ENTITY showTabX.alwaysExeption "a totes les pestanyes més amples de">
+<!ENTITY showTabX.alwaysException "a totes les pestanyes més amples de">
 <!ENTITY showTabX.currentHover "a l'actual i en col·locar-hi el ratolí durant">
 <!ENTITY minWidth.label "Amplada de les pestanyes:">
 <!ENTITY widthTo.label "a">

@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "на све">
 <!ENTITY showTabX.current "на текућу">
 <!ENTITY showTabX.hover "на показану више од">
-<!ENTITY showTabX.alwaysExeption "на све картице шире од">
+<!ENTITY showTabX.alwaysException "на све картице шире од">
 <!ENTITY showTabX.currentHover "на текућу и показану више од">
 <!ENTITY minWidth.label "Ширина картице:">
 <!ENTITY widthTo.label "до">

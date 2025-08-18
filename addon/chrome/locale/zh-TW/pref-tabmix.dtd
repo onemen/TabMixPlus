@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "在全部的分頁">
 <!ENTITY showTabX.current "在目前的分頁">
 <!ENTITY showTabX.hover "在指到的分頁">
-<!ENTITY showTabX.alwaysExeption "當分頁標籤寬度大於">
+<!ENTITY showTabX.alwaysException "當分頁標籤寬度大於">
 <!ENTITY showTabX.currentHover "在目前的與指到的分頁">
 <!ENTITY minWidth.label "分頁標籤寬度：">
 <!ENTITY widthTo.label "至">

@@ -554,7 +554,7 @@ ContentClickInternal = {
 
     if (this.currentTabLocked || this.targetPref == 1) {
       // tab is locked
-      let openNewTab = this.openTabfromLink();
+      let openNewTab = this.openTabFromLink();
       if (openNewTab !== null) {
         return [(openNewTab ? TMP_tabshifted(event) : "default") + "@16"];
       }
@@ -694,7 +694,7 @@ ContentClickInternal = {
     // when a tab is locked or preference is to open in new tab
     // we check that link is not a Javascript or have a onclick function
     if (this.currentTabLocked || this.targetPref === 1) {
-      openNewTab = this.openTabfromLink();
+      openNewTab = this.openTabFromLink();
     } else if (this.openExSiteLink()) {
       // open links to other sites in a tab only if certain conditions are met. See the
       // function comment for more details.
@@ -1030,7 +1030,7 @@ ContentClickInternal = {
    * @returns null if the caller need to handled the click, true to load link in
    *   new tab false to load link in current tab
    */
-  openTabfromLink: function TMP_openTabfromLink() {
+  openTabFromLink: function TMP_openTabFromLink() {
     if (this._window?.Tabmix.isNewTabUrls(this._data.currentURL)) {
       return false;
     }

@@ -382,10 +382,6 @@ Tabmix.tabsUtils = {
     return this.tabBar.arrowScrollbox.scrollClientRect;
   },
 
-  getInnerbox() {
-    return this.tabBar.arrowScrollbox.scrollbox;
-  },
-
   get inDOMFullscreen() {
     return document.documentElement.hasAttribute("inDOMFullscreen") ?? false;
   },
@@ -1300,7 +1296,7 @@ Tabmix.tabsUtils = {
       gBrowser.tabContainer.removeAttribute("positionpinnedtabs");
       arrowScrollbox.resetFirstTabInRow();
     } else {
-      this.updatefirstTabInRowMargin();
+      this.updateFirstTabInRowMargin();
     }
   },
 
@@ -1396,7 +1392,7 @@ Tabmix.tabsUtils = {
     }
   },
 
-  updatefirstTabInRowMargin() {
+  updateFirstTabInRowMargin() {
     if (!Tabmix.isVersion(1410) || !TabmixTabbar.isMultiRow) {
       return;
     }
@@ -1999,7 +1995,7 @@ window.gTMPprefObserver = {
       case "extensions.tabmix.pinnedTabScroll":
         if (Tabmix.isVersion(1410)) {
           Tabmix.tabsUtils.updatePinnedTabsContainer();
-          Tabmix.tabsUtils.updatefirstTabInRowMargin();
+          Tabmix.tabsUtils.updateFirstTabInRowMargin();
           // gBrowser.tabContainer.arrowScrollbox.setFirstTabInRow();
         } else {
           gBrowser.tabContainer._positionPinnedTabs();
@@ -2046,7 +2042,7 @@ window.gTMPprefObserver = {
         Tabmix.tabsUtils.updateProtonValues();
         break;
       case "browser.tabs.insertAfterCurrent":
-        // browser.tabs.insertAfterCurrent defult is false, in the case both pref
+        // browser.tabs.insertAfterCurrent default is false, in the case both pref
         // is true turn browser.tabs.insertRelatedAfterCurrent off
         if (
           !Services.wm.getMostRecentWindow("mozilla:tabmixopt") &&
@@ -3225,7 +3221,7 @@ window.gTMPprefObserver = {
       }
     });
 
-    // block item in tabclicking options that are not in use
+    // block item in tab clicking options that are not in use
     var blockedValues = [];
     if (!("SessionSaver" in window && window.SessionSaver.snapBackTab)) {
       blockedValues.push(12);

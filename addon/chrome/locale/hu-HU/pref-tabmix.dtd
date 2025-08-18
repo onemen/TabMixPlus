@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "összesen">
 <!ENTITY showTabX.current "az aktuálison">
 <!ENTITY showTabX.hover "csak a mutatotton, ennyi idő után:">
-<!ENTITY showTabX.alwaysExeption "minden lapon amely szélesebb, mint:">
+<!ENTITY showTabX.alwaysException "minden lapon amely szélesebb, mint:">
 <!ENTITY showTabX.currentHover "aktuálison és mutatotton">
 <!ENTITY minWidth.label "Szélesség (30~250) minimum:">
 <!ENTITY widthTo.label "maximum:">

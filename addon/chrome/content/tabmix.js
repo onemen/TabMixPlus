@@ -974,14 +974,14 @@ var TMP_eventListener = {
   },
 
   onTabPinned(event) {
-    Tabmix.tabsUtils.updatefirstTabInRowMargin();
+    Tabmix.tabsUtils.updateFirstTabInRowMargin();
     if (event.target.selected && Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
       gBrowser.tabContainer.arrowScrollbox.scrollbox.scrollTop = 0;
     }
   },
 
   onTabUnpinned: function TMP_EL_onTabUnpinned(aEvent) {
-    Tabmix.tabsUtils.updatefirstTabInRowMargin();
+    Tabmix.tabsUtils.updateFirstTabInRowMargin();
     var tab = aEvent.target;
     // we unlock the tab on unpinned only if we have this flag on
     // see TMP_eventListener.onContentLoaded

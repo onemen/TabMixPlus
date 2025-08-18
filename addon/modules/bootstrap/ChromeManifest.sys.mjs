@@ -43,7 +43,7 @@ class DefaultMap extends Map {
  */
 export class ChromeManifest {
   /**
-   * Constucts the chrome.manifest parser
+   * Constructs the chrome.manifest parser
    *
    * @param {Function} loader An asynchronous function that will load further
    *   files, e.g. those included via the |manifest| instruction. The function

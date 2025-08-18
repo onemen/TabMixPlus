@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "pe toate filele">
 <!ENTITY showTabX.current "pe fila curentă">
 <!ENTITY showTabX.hover "pe fila survolată timp de">
-<!ENTITY showTabX.alwaysExeption "pe toate filele mai lungi de">
+<!ENTITY showTabX.alwaysException "pe toate filele mai lungi de">
 <!ENTITY showTabX.currentHover "pe fila curentă și pe cea survolată timp de">
 <!ENTITY minWidth.label "Lungime filă:  de la">
 <!ENTITY widthTo.label "la">

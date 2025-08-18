@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "wyświetlaj na wszystkich etykietach kart">
 <!ENTITY showTabX.current "wyświetlaj tylko na etykiecie aktywnej karty">
 <!ENTITY showTabX.hover "wyświetlaj po wskazaniu kursorem myszy etykiety karty po">
-<!ENTITY showTabX.alwaysExeption "wyświetlaj na wszystkich etykietach kart szerszych niż">
+<!ENTITY showTabX.alwaysException "wyświetlaj na wszystkich etykietach kart szerszych niż">
 <!ENTITY showTabX.currentHover "wyświetlaj na aktywnej i wskazanej kursorem myszy etykiecie karty po">
 <!ENTITY minWidth.label "Szerokość etykiety karty:">
 <!ENTITY widthTo.label "do">

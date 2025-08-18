@@ -1,4 +1,4 @@
-declare namespace Bootstarp {
+declare namespace Bootstrap {
   function restartApplication(): boolean | undefined;
   function showRestartNotification(verb: string, window: Window): void;
   function install(data: {id: string}): Promise<void>;

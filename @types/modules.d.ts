@@ -901,7 +901,7 @@ declare namespace ContentClickModule {
     divertMiddleClick(): boolean;
     divertTargetedLink(): boolean;
     openExSiteLink(): boolean;
-    openTabfromLink(): boolean | null;
+    openTabFromLink(): boolean | null;
     GoogleComLink(): boolean;
     isFrameInContent(windows: Window[], frameData: FrameData, isMultiProcess: boolean): void;
     checkAttr(attr: string | null | undefined, string: string): boolean;

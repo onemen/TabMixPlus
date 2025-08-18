@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "روی همه">
 <!ENTITY showTabX.current "روی تب فعلی">
 <!ENTITY showTabX.hover "روی تب های جاری بیش از">
-<!ENTITY showTabX.alwaysExeption "روی تمام تب ها عریض تر از">
+<!ENTITY showTabX.alwaysException "روی تمام تب ها عریض تر از">
 <!ENTITY showTabX.currentHover "روی تب فعلی و تب های جاری بیش از">
 <!ENTITY minWidth.label "عرض:">
 <!ENTITY widthTo.label "در">

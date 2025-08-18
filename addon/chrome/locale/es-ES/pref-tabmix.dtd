@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "en todas">
 <!ENTITY showTabX.current "en la enfocada">
 <!ENTITY showTabX.hover "en la señalada con ratón">
-<!ENTITY showTabX.alwaysExeption "en todas las pestañas con anchura mayor que">
+<!ENTITY showTabX.alwaysException "en todas las pestañas con anchura mayor que">
 <!ENTITY showTabX.currentHover "en la seleccionada y la señalada por puntero">
 <!ENTITY minWidth.label "Ancho de:">
 <!ENTITY widthTo.label "hasta">

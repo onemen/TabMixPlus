@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "på alla">
 <!ENTITY showTabX.current "på nuvarande">
 <!ENTITY showTabX.hover "vid pekning i">
-<!ENTITY showTabX.alwaysExeption "på alla flikar bredare än">
+<!ENTITY showTabX.alwaysException "på alla flikar bredare än">
 <!ENTITY showTabX.currentHover "på nuvarande och pekning i">
 <!ENTITY minWidth.label "Flikbredd:">
 <!ENTITY widthTo.label "till">

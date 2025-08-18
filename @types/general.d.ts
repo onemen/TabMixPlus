@@ -215,7 +215,7 @@ declare namespace MockedGeckoTypes {
     _initialized: boolean;
     _restoreState: number;
     _tabmix_downloadingTimeout: number | null;
-    _tabmixState?: {noBookmart?: boolean};
+    _tabmixState?: {noBookmark?: boolean};
     autoReloadEnabled?: boolean;
     autoReloadTimerID: number | null;
     autoReloadURI?: string;

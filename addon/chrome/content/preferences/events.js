@@ -222,7 +222,7 @@ var gEventsPane = {
       const openTabNextCheckbox = $("openTabNext");
 
       if (preference === openTabNext) {
-        // browser.tabs.insertAfterCurrent defult is false, in the case both pref
+        // browser.tabs.insertAfterCurrent default is false, in the case both pref
         // is true turn off browser.tabs.insertRelatedAfterCurrent
         if (openTabNext.value && relatedAfterCurrent.value) {
           relatedAfterCurrent.value = false;
@@ -251,10 +251,10 @@ var gEventsPane = {
   openTabNextInGroup() {
     let openNewTabNextEnabled = $("openNewTabNext").checked;
     const value = openNewTabNextEnabled ? 0 : 2;
-    let inGroupCeckBox = $("openTabNextInGroup_control");
+    let inGroupCheckBox = $("openTabNextInGroup_control");
     let openTabNextInGroup = $("openTabNextInGroup");
     let preference = $Pref(openTabNextInGroup.getAttribute("preference"));
-    let checked = inGroupCeckBox.checked;
+    let checked = inGroupCheckBox.checked;
     let enabled = checked && openNewTabNextEnabled;
     if (!enabled) {
       preference.value = -1;
@@ -267,7 +267,7 @@ var gEventsPane = {
     }
     openTabNextInGroup.querySelector('menuitem[value="-1"]').label =
       openTabNextInGroup.querySelector(`menuitem[value="${value}"]`).label;
-    inGroupCeckBox.checked = enabled;
+    inGroupCheckBox.checked = enabled;
     gPrefWindow.setDisabled("openTabNextInGroup", !enabled);
   },
 };

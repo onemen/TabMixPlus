@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "sur tous">
 <!ENTITY showTabX.current "sur l&apos;onglet courant">
 <!ENTITY showTabX.hover "au survol après">
-<!ENTITY showTabX.alwaysExeption "sur tous les onglets plus larges que">
+<!ENTITY showTabX.alwaysException "sur tous les onglets plus larges que">
 <!ENTITY showTabX.currentHover "sur l&apos;onglet courant et au survol après">
 <!ENTITY minWidth.label "Largeur :">
 <!ENTITY widthTo.label "à">

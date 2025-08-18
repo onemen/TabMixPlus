@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "在所有标签页">
 <!ENTITY showTabX.current "在当前标签页">
 <!ENTITY showTabX.hover "鼠标指向标签页并延时">
-<!ENTITY showTabX.alwaysExeption "当所有标签页宽度超过">
+<!ENTITY showTabX.alwaysException "当所有标签页宽度超过">
 <!ENTITY showTabX.currentHover "在当前标签页且鼠标指向并延时">
 <!ENTITY minWidth.label "标签页宽度:">
 <!ENTITY widthTo.label "至">

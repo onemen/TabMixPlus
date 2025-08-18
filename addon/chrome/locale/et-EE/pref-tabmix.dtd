@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "kõikidel kaartidel">
 <!ENTITY showTabX.current "praegusel kaardil">
 <!ENTITY showTabX.hover "kaardil, millele on osutatud">
-<!ENTITY showTabX.alwaysExeption "kõikidel kaartidel, mis on laiemad kui">
+<!ENTITY showTabX.alwaysException "kõikidel kaartidel, mis on laiemad kui">
 <!ENTITY showTabX.currentHover "praegusel kaardil ja sellel, millele on osutatud">
 <!ENTITY minWidth.label "Kaardi laius:">
 <!ENTITY widthTo.label "kuni">

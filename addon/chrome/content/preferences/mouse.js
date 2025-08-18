@@ -24,9 +24,9 @@ var gMousePane = {
 
     $("ClickTabPinTab").label = gPrefWindow.pinTabLabel;
 
-    // Init tabclicking options
+    // Init tab clicking options
     var menuPopup = this.clickTab.firstChild;
-    // block item in tabclicking options that are not in use
+    // block item in tab clicking options that are not in use
     var blocked = TabmixSvc.blockedClickingOptions;
     for (const commandId of blocked) {
       let item = menuPopup.getElementsByAttribute("value", commandId)[0];

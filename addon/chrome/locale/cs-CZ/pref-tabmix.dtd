@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "na všechny">
 <!ENTITY showTabX.current "na současný">
 <!ENTITY showTabX.hover "při přejetí myši přes panel">
-<!ENTITY showTabX.alwaysExeption "na všechny panely širší než">
+<!ENTITY showTabX.alwaysException "na všechny panely širší než">
 <!ENTITY showTabX.currentHover "na současný a při přejetí myši přes panel">
 <!ENTITY minWidth.label "Šířka panelu:">
 <!ENTITY widthTo.label "až">

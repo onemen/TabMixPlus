@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "Tümünde">
 <!ENTITY showTabX.current "Geçerli olanda">
 <!ENTITY showTabX.hover "Bu süre kadar üzerinde durulunca:">
-<!ENTITY showTabX.alwaysExeption "Bundan geniş tüm sekmelerde:">
+<!ENTITY showTabX.alwaysException "Bundan geniş tüm sekmelerde:">
 <!ENTITY showTabX.currentHover "Geçerli olan ve bu süre kadar durulunca">
 <!ENTITY minWidth.label "Sekme genişliği:">
 <!ENTITY widthTo.label "ile">

@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "on all">
 <!ENTITY showTabX.current "on current">
 <!ENTITY showTabX.hover "on pointed for">
-<!ENTITY showTabX.alwaysExeption "on all tabs wider than">
+<!ENTITY showTabX.alwaysException "on all tabs wider than">
 <!ENTITY showTabX.currentHover "on current &amp; pointed for">
 <!ENTITY minWidth.label "Tab Width:">
 <!ENTITY widthTo.label "to">

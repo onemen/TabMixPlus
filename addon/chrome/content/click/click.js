@@ -345,16 +345,16 @@ var TabmixTabClickOptions = {
       case 29: {
         // changed on 2011-03-09 - open new tab when clicked on tabbar
         // or when the tab is locked
-        var opennewTab =
+        const openNewTab =
           clickOutTabs || (aTab.hasAttribute("locked") && !gBrowser.isBlankNotBusyTab(aTab));
         const clickEvent = new MouseEvent("click", {
           bubbles: true,
           cancelable: true,
-          ctrlKey: opennewTab,
+          ctrlKey: openNewTab,
         });
         clickEvent.initEvent("click", true, true);
         middleMousePaste(clickEvent);
-        if (opennewTab) {
+        if (openNewTab) {
           let tab = gBrowser.getTabForLastPanel();
           if (!tab.selected) {
             gBrowser.selectedTab = tab;
@@ -638,7 +638,7 @@ var TabmixContext = {
         return orderA - orderB;
       });
 
-      // Reappend in the original order
+      // append in the original order
       for (const child of children) {
         tabContextMenu.appendChild(child);
       }

@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "på alle">
 <!ENTITY showTabX.current "på nuværende">
 <!ENTITY showTabX.hover "på udpeget til">
-<!ENTITY showTabX.alwaysExeption "på alle faneblade bredere end">
+<!ENTITY showTabX.alwaysException "på alle faneblade bredere end">
 <!ENTITY showTabX.currentHover "på nuværende &amp; peget på">
 <!ENTITY minWidth.label "Bredde:">
 <!ENTITY widthTo.label "til">

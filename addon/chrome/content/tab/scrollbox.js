@@ -4,7 +4,7 @@
 Tabmix.multiRow = {
   init() {
     try {
-      this.extandArrowscrollbox();
+      this.enhanceArrowScrollbox();
     } catch (ex) {
       Tabmix.reportError(ex);
     }
@@ -16,7 +16,7 @@ Tabmix.multiRow = {
     }
   },
 
-  extandArrowscrollbox() {
+  enhanceArrowScrollbox() {
     /** @typedef {TabmixArrowScrollboxNS.ArrowScrollbox} This */
     /** @typedef {TabmixArrowScrollboxNS.ArrowScrollbox} ASB */
 

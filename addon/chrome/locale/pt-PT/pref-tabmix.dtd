@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "em todos">
 <!ENTITY showTabX.current "no actual">
 <!ENTITY showTabX.hover "apontada a">
-<!ENTITY showTabX.alwaysExeption "em todos os separadores mais largos que">
+<!ENTITY showTabX.alwaysException "em todos os separadores mais largos que">
 <!ENTITY showTabX.currentHover "no actual &amp; apontado para">
 <!ENTITY minWidth.label "Largura do separador:">
 <!ENTITY widthTo.label "para">

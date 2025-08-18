@@ -275,7 +275,7 @@ Tabmix.tablib = {
       )
       ._replace(
         "this.tabContainer._updateCloseButtons();",
-        `if (Tabmix.isVersion(1410)) Tabmix.tabsUtils.updatefirstTabInRowMargin();
+        `if (Tabmix.isVersion(1410)) Tabmix.tabsUtils.updateFirstTabInRowMargin();
         else if (!wasPinned) TabmixTabbar.setFirstTabInRow();
         $&`
       )
@@ -428,7 +428,7 @@ Tabmix.tablib = {
   change_tabContainer: function change_tabContainer() {
     let tabBar = gBrowser.tabContainer;
     if (!Tabmix.extensions.verticalTabs) {
-      // foolows the example from gBrowser.tabContainer.init
+      // follows the example from gBrowser.tabContainer.init
       let handleResize = () => {
         TabmixTabbar._handleResize();
       };
@@ -440,7 +440,7 @@ Tabmix.tablib = {
 
       if (Tabmix.isVersion(1410)) {
         gBrowser.tabContainer._positionPinnedTabs = () => {
-          // not in use since firefox 141, see Tabmix.tabsUtils: positionPinnedTabs, updatefirstTabInRowMargin
+          // not in use since firefox 141, see Tabmix.tabsUtils: positionPinnedTabs, updateFirstTabInRowMargin
         };
 
         Tabmix.tabsUtils.positionPinnedTabs();
@@ -620,7 +620,7 @@ Tabmix.tablib = {
         /*
          * Starting Firefox 138, Firefox uses private property #keepTabSizeLocked
          * the property is set to true when dragging tabs by startTabDrag that we
-         * don't modify, because it uses other private methids and properties.
+         * don't modify, because it uses other private methods and properties.
          * we use `tab._dragData.expandGroupOnDrop` to initialize the value of
          * our _keepTabSizeLocked in on_dragstart, we reset our _keepTabSizeLocked
          * back to false in on_drop.since #keepTabSizeLocked is never set to false
@@ -993,7 +993,7 @@ Tabmix.tablib = {
     }
 
     Tabmix.originalFunctions.gURLBar_setURI = gURLBar.setURI;
-    gURLBar.setURI = function tabmix_gURLBarsetURI(...args) {
+    gURLBar.setURI = function tabmix_gURLBarSetURI(...args) {
       if (
         Tabmix.selectedTab == gBrowser.selectedTab &&
         Tabmix.userTypedValue &&
@@ -1059,7 +1059,7 @@ Tabmix.tablib = {
     }
 
     if (panel?.__updatingViewAfterDelete) {
-      // we are repopulateing the the list after user removed an item
+      // we are repopulating the the list after user removed an item
       // the menuitem already exist
       return;
     }
@@ -1849,7 +1849,7 @@ Tabmix.tablib = {
 
   tabEpochs: new WeakMap(),
   getTabTitle: function TMP_getTabTitle(aTab, url) {
-    if (aTab?._tabmixState?.noBookmart) {
+    if (aTab?._tabmixState?.noBookmark) {
       aTab._tabmixState = {};
       return false;
     }
@@ -1868,7 +1868,7 @@ Tabmix.tablib = {
         const currentEpoch = this.tabEpochs.get(aTab);
         if (currentEpoch === newEpoch) {
           // call setTabTile again to get the default title
-          aTab._tabmixState = {noBookmart: true};
+          aTab._tabmixState = {noBookmark: true};
           gBrowser.setTabTitle(aTab);
         }
       }

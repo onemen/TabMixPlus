@@ -1,6 +1,6 @@
 import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 
-const isLibrewolf = AppConstants.MOZ_APP_NAME.toLowerCase() == "librewolf";
+const isLibreWolf = AppConstants.MOZ_APP_NAME.toLowerCase() == "librewolf";
 
 /** @type {TabmixModules.BrowserVersionLazy} */
 const lazy = {};
@@ -71,7 +71,7 @@ export function isVersion(aVersionNo, updateChannel) {
   }
 
   let v =
-    isLibrewolf || (lazy.isZen && prefix !== "zen") ?
+    isLibreWolf || (lazy.isZen && prefix !== "zen") ?
       Services.appinfo.platformVersion
     : Services.appinfo.version;
 

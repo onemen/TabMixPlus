@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "на всички подпрозорци">
 <!ENTITY showTabX.current "само на текущия подпрозорец">
 <!ENTITY showTabX.hover "само при посочване с курсора на мишката">
-<!ENTITY showTabX.alwaysExeption "на всички подпрозорци, които са по-широки от">
+<!ENTITY showTabX.alwaysException "на всички подпрозорци, които са по-широки от">
 <!ENTITY showTabX.currentHover "на текущия подпрозорец и на подпрозореца, посочен с курсора на мишката">
 <!ENTITY minWidth.label "Ширина на подпрозореца от">
 <!ENTITY widthTo.label "до">

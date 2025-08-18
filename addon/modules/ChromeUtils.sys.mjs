@@ -34,8 +34,8 @@ export const TabmixChromeUtils = {
     if (module.endsWith(".sys.mjs")) {
       return module;
     }
-    const [varsion, modulePath] = modulesMap[module] ?? [];
-    if (varsion && localLazy.isVersion(varsion)) {
+    const [version, modulePath] = modulesMap[module] ?? [];
+    if (version && localLazy.isVersion(version)) {
       return modulePath;
     }
     return null;

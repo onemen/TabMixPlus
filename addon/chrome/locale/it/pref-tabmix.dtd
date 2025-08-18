@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "sempre">
 <!ENTITY showTabX.current "nella scheda attuale">
 <!ENTITY showTabX.hover "solo nelle schede selezionate dal mouse per ms">
-<!ENTITY showTabX.alwaysExeption "nelle schede più larghe di">
+<!ENTITY showTabX.alwaysException "nelle schede più larghe di">
 <!ENTITY showTabX.currentHover "nella scheda attuale solo se selezionata dal mouse per ms">
 <!ENTITY minWidth.label "Larghezza cartellino delle schede (da 22 a 1000). Da">
 <!ENTITY widthTo.label "a">

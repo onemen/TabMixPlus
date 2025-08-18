@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "σε όλες">
 <!ENTITY showTabX.current "στην τρέχουσα">
 <!ENTITY showTabX.hover "στην εστιασμένη">
-<!ENTITY showTabX.alwaysExeption "σε όλες τις καρτέλες που έχουν πλάτος μεγαλύτερο από">
+<!ENTITY showTabX.alwaysException "σε όλες τις καρτέλες που έχουν πλάτος μεγαλύτερο από">
 <!ENTITY showTabX.currentHover "στην τρέχουσα και εστιασμένη για">
 <!ENTITY minWidth.label "Πλάτος:">
 <!ENTITY widthTo.label "σε">

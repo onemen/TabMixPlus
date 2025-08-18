@@ -175,7 +175,7 @@
 <!ENTITY showTabX.always "op alle tabbladen">
 <!ENTITY showTabX.current "op huidige tabblad">
 <!ENTITY showTabX.hover "waar de muis boven hangt na">
-<!ENTITY showTabX.alwaysExeption "op alle tabbladen die breder zijn dan">
+<!ENTITY showTabX.alwaysException "op alle tabbladen die breder zijn dan">
 <!ENTITY showTabX.currentHover "op het huidige &amp; aangewezen">
 <!ENTITY minWidth.label "Breedte:">
 <!ENTITY widthTo.label "tot">
