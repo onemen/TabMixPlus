@@ -98,7 +98,7 @@ interface TabmixGlobal {
   isWindowAfterSessionRestore: boolean;
 
   // setup.js
-  beforeStartup(tabBrowser: MockedGeckoTypes.TabBrowser, aTabContainer: MockedGeckoTypes.TabContainer): void;
+  beforeStartup(tabBrowser: MockedGeckoTypes.TabBrowser): void;
   beforeBrowserInitOnLoad(): void;
   BrowserOpenTab(): void;
   linkHandling_init(): void;

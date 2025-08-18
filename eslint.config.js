@@ -307,7 +307,6 @@ export default [
     rules: {
       "mozilla/balanced-listeners": "error",
       "mozilla/no-aArgs": "error",
-      "mozilla/var-only-at-top-level": "error",
 
       "class-methods-use-this": "off",
       "no-new-func": "off",

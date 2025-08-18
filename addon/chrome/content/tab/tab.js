@@ -473,7 +473,7 @@ Tabmix.tabsUtils = {
     }
 
     Tabmix.multiRow.init();
-    Tabmix.initialization.run("beforeStartup", gBrowser, this.tabBar);
+    Tabmix.initialization.run("beforeStartup", gBrowser);
     this.addTabsObserver();
 
     this.patchInvalidateCachedVisibleTabs();

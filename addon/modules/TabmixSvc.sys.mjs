@@ -135,11 +135,6 @@ export const TabmixSvc = {
       lazy.TabmixPlacesUtils.init(aWindow);
       lazy.SyncedTabs.init(aWindow);
 
-      const {DynamicRules} = ChromeUtils.importESModule(
-        "chrome://tabmix-resource/content/DynamicRules.sys.mjs"
-      );
-      DynamicRules.init(aWindow);
-
       if (lazy.isVersion(1300)) {
         const {VerticalTabs} = ChromeUtils.importESModule(
           "chrome://tabmix-resource/content/VerticalTabs.sys.mjs"

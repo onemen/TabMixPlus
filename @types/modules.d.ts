@@ -608,6 +608,7 @@ interface KnownModulesImports {
   AutoReload: AutoReloadModule.AutoReload;
   ContentSvc: TabmixModules.ContentSvc;
   DocShellCapabilities: DocShellCapabilitiesModule.DocShellCapabilities;
+  DynamicRules: DynamicRulesModule.DynamicRules;
   FloorpPrefsObserver: import("chrome://tabmix-resource/content/Floorp.sys.mjs").FloorpPrefsObserver;
   getSandbox: typeof ChangecodeModule.getSandbox;
   LinkNodeUtils: LinkNodeUtilsModule.LinkNodeUtils;
@@ -1341,7 +1342,7 @@ declare namespace RenameTabModule {
 }
 
 declare namespace ScriptsLoaderModule {
-  type importList = "CustomizableUI" | "PrivateBrowsingUtils" | "SessionStore" | "isVersion" | "Overlays";
+  type importList = "CustomizableUI" | "DynamicRules" | "PrivateBrowsingUtils" | "SessionStore" | "isVersion" | "Overlays";
   type Lazy = Pick<KnownModulesImports, importList>;
 
   type Params = {chromeManifest: TabmixModules.ChromeManifest; isOverflow: boolean; isEnabled: boolean};
@@ -1352,6 +1353,7 @@ declare namespace ScriptsLoaderModule {
     _addCloseButton(): void;
     _loadCSS(window: Window): void;
     _loadScripts(window: Window, promiseOverlayLoaded: Promise<void>): void;
+    _initTabsStyle(window: Window): void;
     _addListeners(window: Window): void;
     _prepareBeforeOverlays(window: Window): void;
     _updateAfterEnabled(window: Window, params: Params): Promise<void>;

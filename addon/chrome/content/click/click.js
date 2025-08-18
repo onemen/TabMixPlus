@@ -16,10 +16,10 @@ var TabmixTabClickOptions = {
     if (!aEvent || !aEvent.originalTarget || !aEvent.target) {
       return;
     }
+    // right click
     if (aEvent.button == 2) {
       return;
     }
-    // right click
 
     var leftClick = aEvent.button === 0;
     if (leftClick && aEvent.detail > 1) {

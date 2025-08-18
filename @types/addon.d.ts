@@ -99,7 +99,7 @@ interface Window {
   gMultiProcessBrowser: boolean;
   gTMPprefObserver: gTMPprefObserver;
   gURLBar: gURLBar;
-  isBlankPageURL: (aURL: string) => boolean;
+  isBlankPageURL: (aURL: string | null) => boolean;
   lazy?: Record<string, unknown>;
   OpenBrowserWindow: (options: {private?: boolean; [key: string]: unknown}) => void;
   openLinkIn: (url: string | null | undefined, where: WhereToOpen, params?: Params) => void;
@@ -328,6 +328,7 @@ interface QuerySelectorMap {
   ".panel-subview-body": ClosedObjectsUtils.PopupElement;
   "[tabmix_selectedID]": Tab;
   "[tabmix-firstTabInRow]": Tab | MockedGeckoTypes.GroupLabelContainer;
+  ".tabbrowser-tab": Tab;
 }
 
 declare namespace TabmixEventListenerNS {
