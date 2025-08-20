@@ -569,7 +569,11 @@ Tabmix.tablib = {
         /(})(\)?)$/,
         `const bottomToolbox = document.getElementById("tabmix-bottom-toolbox");
       if (bottomToolbox) {
-        bottomToolbox.collapsed = ${Tabmix.isVersion(1330) ? "hideTabstrip" : "collapse"};
+        bottomToolbox.collapsed = ${
+          Tabmix.isVersion(1380) ? "hideTabsToolbar"
+          : Tabmix.isVersion(1330) ? "hideTabstrip"
+          : "collapse"
+        };
       }
       $1$2`
       )
