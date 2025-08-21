@@ -809,7 +809,9 @@ Tabmix.tabsUtils = {
     const lastElement = gBrowser.isTabGroupLabel(lastEl) ? lastEl.parentElement : lastEl;
 
     const tsboRect = this.tabBar.arrowScrollbox.scrollbox.getBoundingClientRect();
-    const tabstripEnd = tsboRect.right;
+    const rtl = Tabmix.rtl;
+    const end = rtl ? "left" : "right";
+
     // button is visible
     //         A: last element and the button are in the same row:
     //            check if we have room for the button in this row
@@ -819,8 +821,9 @@ Tabmix.tabsUtils = {
       let sameRow = TabmixTabbar.inSameRow(lastElement, Tabmix.tabsNewtabButton);
       if (sameRow) {
         const buttonRect = Tabmix.tabsNewtabButton.getBoundingClientRect();
-        const buttonEnd = buttonRect.right;
-        this.disAllowNewtabbutton = buttonEnd > tabstripEnd;
+        const tabstripEnd = tsboRect[end];
+        const buttonEnd = buttonRect[end];
+        this.disAllowNewtabbutton = rtl ? buttonEnd < tabstripEnd : buttonEnd > tabstripEnd;
       } else {
         this.disAllowNewtabbutton = true;
       }
@@ -843,20 +846,27 @@ Tabmix.tabsUtils = {
     const previousElement =
       gBrowser.isTabGroupLabel(previousEl) ? previousEl.parentElement : previousEl;
 
-    const tsboEnd = tabstripEnd + this._newTabButtonWidth(true);
     const lastElementRect = lastElement.getBoundingClientRect();
+    const buttonWidth = this._newTabButtonWidth();
+    const sideButtonWidth = this._newTabButtonWidth(true);
+    const tsboEnd = tsboRect[end] + (rtl ? -sideButtonWidth : sideButtonWidth);
+
     if (TabmixTabbar.inSameRow(lastElement, previousElement)) {
-      const buttonEnd = lastElementRect.right + this._newTabButtonWidth();
-      this.disAllowNewtabbutton = buttonEnd > tsboEnd;
+      const buttonEnd = lastElementRect[end] + (rtl ? -buttonWidth : buttonWidth);
+      this.disAllowNewtabbutton = rtl ? buttonEnd < tsboEnd : buttonEnd > tsboEnd;
       return;
     }
+
     const previousElementRect = previousElement.getBoundingClientRect();
-    const lastElementEnd = previousElementRect.right + lastElementRect.width;
+    const lastElementEnd =
+      previousElementRect[end] + (rtl ? -lastElementRect.width : lastElementRect.width);
+
     // both last element and new tab button are in the next row
-    if (lastElementEnd > tsboEnd) {
+    if (rtl ? lastElementEnd < tsboEnd : lastElementEnd > tsboEnd) {
       this.disAllowNewtabbutton = false;
     } else {
-      this.disAllowNewtabbutton = lastElementEnd + this._newTabButtonWidth() > tsboEnd;
+      const finalButtonEnd = lastElementEnd + (rtl ? -buttonWidth : buttonWidth);
+      this.disAllowNewtabbutton = rtl ? finalButtonEnd < tsboEnd : finalButtonEnd > tsboEnd;
     }
   },
 
