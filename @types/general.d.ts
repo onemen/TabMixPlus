@@ -283,7 +283,7 @@ declare namespace MockedGeckoTypes {
     _tabmix_originals: {
       appendChild?: ArrowScrollbox["appendChild"];
       contains: ArrowScrollbox["contains"];
-      insertBefore?: ArrowScrollbox["insertBefore"];
+      insertBefore: ArrowScrollbox["insertBefore"];
       prepend?: ArrowScrollbox["prepend"];
     };
   }

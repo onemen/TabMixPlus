@@ -1098,6 +1098,15 @@ Tabmix.onContentLoaded = {
       $&
       TabmixTabbar.updateScrollStatus();`
       )
+      ._replace(
+        "this.pinnedTabsContainer.insertBefore(aTab, periphery);",
+        `if (Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
+           this.pinnedTabsContainer.appendChild(aTab);
+         } else {
+           $&
+         }`,
+        {check: Tabmix.isVersion(1440)}
+      )
       .toCode();
   },
 

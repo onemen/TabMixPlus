@@ -1333,6 +1333,7 @@ Tabmix.tabsUtils = {
       arrowScrollbox._tabmix_originals = {
         contains: arrowScrollbox.contains,
         prepend: arrowScrollbox.prepend,
+        insertBefore: arrowScrollbox.insertBefore,
       };
     }
 
@@ -1366,8 +1367,11 @@ Tabmix.tabsUtils = {
         },
 
         /** @type {MockedGeckoTypes.ArrowScrollbox["insertBefore"]} */
-        insertBefore(...args) {
-          return arrowScrollbox.insertBefore(...args);
+        insertBefore(newNode, referenceNode) {
+          if (referenceNode?.pinned) {
+            return arrowScrollbox.insertBefore(newNode, referenceNode);
+          }
+          return this.appendChild(newNode);
         },
       });
       Object.assign(arrowScrollbox, {
