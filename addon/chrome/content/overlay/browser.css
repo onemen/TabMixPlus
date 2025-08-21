@@ -135,9 +135,9 @@
   vertical-align: bottom;
 }
 
-#TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"])
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not(:is([customizing="true"], [customizing=""]))
   #tabbrowser-tabs:not([overflow]) #tabbrowser-arrowscrollbox > #tabs-newtab-button[command="cmd_newNavigatorTab"],
-#TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not([customizing="true"])
+#TabsToolbar[tabmix-show-newtabbutton="aftertabs"]:not(:is([customizing="true"], [customizing=""]))
   #tabbrowser-tabs:not([overflow]) #tabbrowser-arrowscrollbox #tabbrowser-arrowscrollbox-periphery > #tabs-newtab-button[command="cmd_newNavigatorTab"] {
   display: flex;
   align-items: center;
@@ -185,7 +185,7 @@
   visibility: collapse; /* missing rule form privateTab */
 }
 
-#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="aftertabs"]:not([customizing="true"])
+#TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="aftertabs"]:not(:is([customizing="true"], [customizing=""]))
      #tabbrowser-tabs #tabbrowser-arrowscrollbox > #privateTab-afterTabs-openNewPrivateTab,
 #TabsToolbar[tabmix-show-newtabbutton*="side"] > #privateTab-toolbar-openNewPrivateTab {
   visibility: visible;
@@ -358,13 +358,13 @@ so display: none !important; does not hide the button */
   visibility: collapse;
 }
 
-#main-window[tabmix-tabbaronbottom] #toolbar-menubar[autohide="true"][inactive="true"]:not([customizing="true"]) {
+#main-window[tabmix-tabbaronbottom] #toolbar-menubar[autohide="true"][inactive="true"]:not(:is([customizing="true"], [customizing=""])) {
 	min-height: initial !important;
 	height: initial !important;
 	appearance: initial !important;
 }
 
-#main-window[tabmix-tabbaronbottom] #toolbar-menubar[autohide="true"][inactive="true"]:not([customizing="true"]) > #menubar-items > * {
+#main-window[tabmix-tabbaronbottom] #toolbar-menubar[autohide="true"][inactive="true"]:not(:is([customizing="true"], [customizing=""])) > #menubar-items > * {
   opacity: 0;
 }
 

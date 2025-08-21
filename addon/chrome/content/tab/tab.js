@@ -2536,6 +2536,7 @@ window.gTMPprefObserver = {
         }`
     );
     const customtitlebar = Tabmix.isVersion(1350) ? "customtitlebar" : "tabsintitlebar";
+    const customizing = Tabmix.isVersion(1290) ? "customizing" : 'customizing="true"';
     this.insertRule(
       `#main-window[${customtitlebar}][tabmix-tabbaronbottom] .tabbrowser-tabbox,
        #main-window[${customtitlebar}] #TabsToolbar-customization-target[tabmix-disallow-drag] {
@@ -2543,7 +2544,7 @@ window.gTMPprefObserver = {
        }`
     );
     this.insertRule(
-      `#main-window[${customtitlebar}] #toolbar-menubar[autohide="true"][inactive="true"]:not([customizing="true"]) + #TabsToolbar {
+      `#main-window[${customtitlebar}] #toolbar-menubar[autohide="true"][inactive="true"]:not([${customizing}]) + #TabsToolbar {
           --tabmix-multirow-margin: 0px;
         }`
     );
