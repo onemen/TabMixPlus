@@ -310,7 +310,7 @@ var TMP_tabDNDObserver = {
           `if (!TabmixTabbar.widthFitTitle) {
             $&
           }`,
-          {check: Tabmix.isVersion(1430)}
+          {check: Tabmix.isVersion(1430) && !Tabmix.isVersion(1440)}
         )
         ._replace(
           "this._updateTabStylesOnDrag(tab, event);",
