@@ -927,13 +927,18 @@ Tabmix.tabsUtils = {
   },
 
   showNewTabButtonOnSide(aCondition, aValue) {
-    if (this._show_newtabbutton) {
-      Tabmix.setItem(
-        "TabsToolbar",
-        "tabmix-show-newtabbutton",
-        aCondition ? aValue : this._show_newtabbutton
-      );
+    let value = null;
+    if (this._show_newtabbutton === null) {
+      value = null;
+    } else if (
+      (this._show_newtabbutton === "aftertabs" || aValue === "aftertabs") &&
+      window.innerWidth < 750
+    ) {
+      value = "temporary-right-side";
+    } else {
+      value = aCondition ? aValue : this._show_newtabbutton;
     }
+    Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton", value);
   },
 
   get topTabY() {
@@ -2825,7 +2830,7 @@ window.gTMPprefObserver = {
     if (gBrowser.tabContainer.verticalMode && Tabmix.tabsUtils.isVerticalTabs) {
       Tabmix.setItem("new-tab-button", "collapsed", attrValue ? null : true);
     } else {
-      Tabmix.setItem("TabsToolbar", "tabmix-show-newtabbutton", attrValue);
+      Tabmix.tabsUtils.showNewTabButtonOnSide(true, attrValue);
     }
   },
 

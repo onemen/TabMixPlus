@@ -528,7 +528,7 @@ interface TabmixTabsUtils {
   adjustNewtabButtonVisibility(): void;
   disAllowNewtabbutton: boolean;
   overflow: boolean;
-  showNewTabButtonOnSide(aCondition: boolean, aValue: string): void;
+  showNewTabButtonOnSide(aCondition: boolean, aValue: string | null): void;
   topTabY: number;
   lastTabRowNumber: number;
   lastPinnedTabRowNumber: number;
