@@ -608,6 +608,9 @@ var TMP_eventListener = {
         }
       });
     }
+    setTimeout(() => {
+      gBrowser.tabContainer.arrowScrollbox.ensureElementIsVisible(gBrowser.selectedTab);
+    }, 0);
   },
 
   onSSTabRestored(tab) {
