@@ -347,7 +347,7 @@ Tabmix.multiRow = {
 
         const rowHeight = this.singleRowHeight;
         const position = this.scrollPosition;
-        return Math.round(((amountToScroll + position) / rowHeight) * rowHeight) - position;
+        return Math.round((amountToScroll + position) / rowHeight) * rowHeight - position;
       }
 
       /** @type {ASB["_finishScroll"]} */
