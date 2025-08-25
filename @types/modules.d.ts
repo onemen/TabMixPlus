@@ -134,7 +134,6 @@ interface TabmixKnownModules {
   "chrome://tabmix-resource/content/BrowserDOMWindow.sys.mjs": {TabmixBrowserDOMWindow: BrowserDOMWindowModule.BrowserDOMWindow};
   "chrome://tabmix-resource/content/BrowserVersion.sys.mjs": {isVersion: BrowserVersion};
   "chrome://tabmix-resource/content/Changecode.sys.mjs": {initializeChangeCodeClass: typeof ChangecodeModule.initializeChangeCodeClass};
-  "chrome://tabmix-resource/content/ChromeUtils.sys.mjs": {TabmixChromeUtils: TabmixModules.ChromeUtils};
   "chrome://tabmix-resource/content/ContentClick.sys.mjs": {TabmixContentClick: ContentClickModule.ContentClick};
   "chrome://tabmix-resource/content/DownloadLastDir.sys.mjs": {TabmixDownloadLastDir: DownloadLastDirModule.DownloadLastDir};
   "chrome://tabmix-resource/content/DynamicRules.sys.mjs": {DynamicRules: DynamicRulesModule.DynamicRules};
@@ -1584,11 +1583,6 @@ declare module "chrome://tabmix-resource/content/BrowserVersion.sys.mjs" {
 declare module "chrome://tabmix-resource/content/Changecode.sys.mjs" {
   const initializeChangeCodeClass: typeof ChangecodeModule.initializeChangeCodeClass;
   export {initializeChangeCodeClass};
-}
-
-declare module "chrome://tabmix-resource/content/ChromeUtils.sys.mjs" {
-  const TabmixChromeUtils: TabmixModules.ChromeUtils;
-  export {TabmixChromeUtils};
 }
 
 declare module "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mjs" {

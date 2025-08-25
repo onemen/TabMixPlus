@@ -4,7 +4,7 @@ import {XPCOMUtils} from "resource://gre/modules/XPCOMUtils.sys.mjs";
 /** @type {BrowserDOMWindowModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
-/* eslint-disable tabmix/valid-lazy */
+/* eslint-disable mozilla/valid-lazy */
 ChromeUtils.defineESModuleGetters(lazy, {
   initializeChangeCodeClass: "chrome://tabmix-resource/content/Changecode.sys.mjs",
   URILoadingHelper: "resource:///modules/URILoadingHelper.sys.mjs",
@@ -20,7 +20,7 @@ if (isVersion(1420)) {
 ChromeUtils.defineLazyGetter(lazy, "ReferrerInfo", () =>
   Components.Constructor("@mozilla.org/referrer-info;1", "nsIReferrerInfo", "init")
 );
-/* eslint-enable tabmix/valid-lazy */
+/* eslint-enable mozilla/valid-lazy */
 
 /**
  * don't open link from external application in new window when in single window
@@ -98,7 +98,7 @@ export const TabmixBrowserDOMWindow = {
       nextMethodName: "createContentWindow",
     });
 
-    /* eslint-disable tabmix/valid-lazy */
+    /* eslint-disable mozilla/valid-lazy */
     // @ts-ignore
     XPCOMUtils.defineLazyPreferenceGetter(
       lazy,
@@ -112,7 +112,7 @@ export const TabmixBrowserDOMWindow = {
       "loadExternalInBackground",
       "extensions.tabmix.loadExternalInBackground"
     );
-    /* eslint-enable tabmix/valid-lazy */
+    /* eslint-enable mozilla/valid-lazy */
 
     const scope = {
       AppConstants,

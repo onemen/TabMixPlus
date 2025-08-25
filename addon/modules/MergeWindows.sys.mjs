@@ -1,17 +1,12 @@
-import {TabmixChromeUtils} from "chrome://tabmix-resource/content/ChromeUtils.sys.mjs";
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 
 /** @type {MergeWindowsModule.Lazy} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
+  BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.sys.mjs",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
   SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
-});
-
-TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-  // BrowserWindowTracker.sys.mjs exist since Firefox 116
-  BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
 });
 
 //////////////////////////////////////////////////////////////////////

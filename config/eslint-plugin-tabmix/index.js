@@ -1,6 +1,4 @@
-import importGlobals from "./import-globals.js";
 import lazyGetterNameMatch from "./lazy-getter-name-match.js";
-import validLazy from "./valid-lazy.js";
 
 export default {
   meta: {
@@ -42,7 +40,6 @@ export default {
       gTMPprefObserver: true,
       Tabmix: true,
       TabmixAllTabs: true,
-      TabmixChromeUtils: true,
       TabmixContext: true,
       TabmixProgressListener: true,
       TabmixSvc: true,
@@ -75,13 +72,10 @@ export default {
       Services: false,
       Shortcuts: false,
       Tabmix: false,
-      TabmixChromeUtils: true,
       TabmixSvc: false,
     },
   },
   rules: {
-    "import-globals": importGlobals,
     "lazy-getter-name-match": lazyGetterNameMatch,
-    "valid-lazy": validLazy,
   },
 };

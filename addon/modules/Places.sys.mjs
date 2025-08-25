@@ -1,4 +1,3 @@
-import {TabmixChromeUtils} from "chrome://tabmix-resource/content/ChromeUtils.sys.mjs";
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 
 // AppConstants is used in modified PlacesUIUtils functions
@@ -17,19 +16,15 @@ const PlacesUIUtils =
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
-  // eslint-disable-next-line tabmix/valid-lazy
+  // eslint-disable-next-line mozilla/valid-lazy
   BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
+  BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.sys.mjs",
+  // eslint-disable-next-line mozilla/valid-lazy
+  OpenInTabsUtils: "resource:///modules/OpenInTabsUtils.sys.mjs",
   PlacesUtils: "resource://gre/modules/PlacesUtils.sys.mjs",
   PlacesUIUtils,
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
   initializeChangeCodeClass: "chrome://tabmix-resource/content/Changecode.sys.mjs",
-});
-
-TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-  // BrowserWindowTracker.sys.mjs and OpenInTabsUtils.sys.mjs exist since Firefox 116
-  BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.jsm",
-  // eslint-disable-next-line tabmix/valid-lazy
-  OpenInTabsUtils: "resource:///modules/OpenInTabsUtils.jsm",
 });
 
 // this function is used by PlacesUIUtils functions that we evaluate here

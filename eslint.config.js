@@ -117,11 +117,8 @@ export default [
       "mozilla/balanced-observers": "error",
       "mozilla/no-aArgs": "off",
       "mozilla/reject-chromeutils-import": "off",
-      "mozilla/valid-lazy": "off",
 
-      "tabmix/import-globals": "error",
       "tabmix/lazy-getter-name-match": "error",
-      "tabmix/valid-lazy": "error",
 
       "accessor-pairs": "error",
       "array-callback-return": "error",

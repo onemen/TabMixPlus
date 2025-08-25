@@ -14,9 +14,6 @@ export function flst() {
   this.slideshowOn = TabmixSvc.getString("slideshowOn.label");
   this.slideshowOff = TabmixSvc.getString("slideshowOff.label");
 
-  // prevents eslint-plugin-tabmix import-globals.js from identify internal
-  // imports as globals
-
   ChromeUtils.defineLazyGetter(this, "tabContainer", () => {
     return TabmixSvc.topWin().gBrowser.tabContainer;
   });

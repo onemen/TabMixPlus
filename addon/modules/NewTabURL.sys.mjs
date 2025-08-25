@@ -1,11 +1,8 @@
-import {TabmixChromeUtils} from "chrome://tabmix-resource/content/ChromeUtils.sys.mjs";
-
 /** @type {NewTabURLModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
-TabmixChromeUtils.defineLazyModuleGetters(lazy, {
-  // AboutNewTab.sys.mjs exists since Firefox 116
-  AboutNewTab: "resource:///modules/AboutNewTab.jsm",
+ChromeUtils.defineESModuleGetters(lazy, {
+  AboutNewTab: "resource:///modules/AboutNewTab.sys.mjs",
 });
 
 const FIREFOX_PREF = "browser.#.url".replace("#", "newtab");

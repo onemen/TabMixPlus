@@ -17,10 +17,6 @@ ChromeUtils.defineESModuleGetters(lazy, {
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.sys.mjs",
 });
 
-// prevents eslint-plugin-tabmix import-globals.js from identify internal
-// imports as globals
-const internalChromeUtils = ChromeUtils;
-
 /** @type {ContentClickModule.ContentClickInternal} */
 var ContentClickInternal;
 
@@ -330,12 +326,12 @@ ContentClickInternal = {
   },
 
   getPref() {
-    internalChromeUtils.defineLazyGetter(this, "targetPref", () => {
+    ChromeUtils.defineLazyGetter(this, "targetPref", () => {
       return lazy.TabmixSvc.prefBranch.getIntPref("opentabforLinks");
     });
 
     let tabBrowser = this._window?.gBrowser;
-    internalChromeUtils.defineLazyGetter(this, "currentTabLocked", () => {
+    ChromeUtils.defineLazyGetter(this, "currentTabLocked", () => {
       return tabBrowser?.selectedTab.hasAttribute("locked");
     });
   },
@@ -394,22 +390,22 @@ ContentClickInternal = {
       isLinkToExternalDomain: false,
     };
 
-    internalChromeUtils.defineLazyGetter(data, "currentURL", () => {
+    ChromeUtils.defineLazyGetter(data, "currentURL", () => {
       return this._browser?.currentURI?.spec ?? "";
     });
 
-    internalChromeUtils.defineLazyGetter(data, "onclick", () => {
+    ChromeUtils.defineLazyGetter(data, "onclick", () => {
       if (wrappedNode?.hasAttribute("onclick")) {
         return wrappedNode.getAttribute("onclick");
       }
       return null;
     });
 
-    internalChromeUtils.defineLazyGetter(data, "hrefFromOnClick", () => {
+    ChromeUtils.defineLazyGetter(data, "hrefFromOnClick", () => {
       return this.getHrefFromOnClick(event, href, wrappedNode, data.onclick);
     });
 
-    internalChromeUtils.defineLazyGetter(data, "isLinkToExternalDomain", () => {
+    ChromeUtils.defineLazyGetter(data, "isLinkToExternalDomain", () => {
       let youtube = /www\.youtube\.com\/watch\?v=/;
       let curpage = data.currentURL;
       if (!youtube.test(curpage)) {

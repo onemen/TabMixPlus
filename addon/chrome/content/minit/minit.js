@@ -60,7 +60,7 @@ var TMP_tabDNDObserver = {
           const lazy = {};
 
           ChromeUtils.defineESModuleGetters(lazy, {
-            // eslint-disable-next-line tabmix/valid-lazy
+            // eslint-disable-next-line mozilla/valid-lazy
             TabMetrics: "moz-src:///browser/components/tabbrowser/TabMetrics.sys.mjs",
           });
           scope.lazy = lazy;
