@@ -455,9 +455,9 @@ Tabmix.multiRow = {
               tab.setAttribute("tabmix-firstTabInRow", true);
             } else if (previousTab) {
               // remove the margin when the tab have place in the previous row
+              const tabWidth = tab.getBoundingClientRect().width;
               const tabEnd =
-                previousTab.getBoundingClientRect()[end] +
-                (Tabmix.ltr ? tab.getBoundingClientRect().width : 0);
+                previousTab.getBoundingClientRect()[end] + (Tabmix.ltr ? tabWidth : -tabWidth);
               if (!Tabmix.compare(tabEnd, containerEnd, Tabmix.rtl)) {
                 tab.removeAttribute("tabmix-firstTabInRow");
                 // continue

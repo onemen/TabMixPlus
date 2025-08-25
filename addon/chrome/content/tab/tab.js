@@ -1103,12 +1103,12 @@ Tabmix.tabsUtils = {
               this._widthCache = {minWidth: 0, maxWidth: 0};
               this._lastTabBarWidth = tabBarWidth;
             }
-            if (
-              gBrowser.pinnedTabCount &&
-              TabmixTabbar.isMultiRow &&
-              Tabmix.tabsUtils.lastPinnedTabRowNumber > 1
-            ) {
-              gBrowser.tabContainer._positionPinnedTabs();
+            if (gBrowser.pinnedTabCount && TabmixTabbar.isMultiRow) {
+              if (gBrowser.pinnedTabsContainer?.hasAttribute("overflowing")) {
+                this.updateFirstTabInRowMargin();
+              } else if (Tabmix.tabsUtils.lastPinnedTabRowNumber > 1) {
+                gBrowser.tabContainer._positionPinnedTabs();
+              }
             }
             this.updateOverflowMaxWidth();
             this.updateVerticalTabStrip();
@@ -1426,7 +1426,9 @@ Tabmix.tabsUtils = {
       TabmixTabbar.isMultiRow &&
       !Tabmix.prefs.getBoolPref("pinnedTabScroll");
 
-    const margin = doPosition ? gBrowser.pinnedTabsContainer.getBoundingClientRect().width + 12 : 0;
+    const pinnedTabsContainer = gBrowser.pinnedTabsContainer;
+    const offset = pinnedTabsContainer.hasAttribute("overflowing") ? 0 : 12;
+    const margin = doPosition ? pinnedTabsContainer.getBoundingClientRect().width + offset : 0;
     gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]?.style.setProperty(
       "margin-inline-start",
       margin + "px",
@@ -1835,6 +1837,10 @@ window.gTMPprefObserver = {
         gBrowser.tabContainer.setAttribute("no-animation", "");
         this.dynamicRules.width.style.setProperty("max-width", tabMaxWidth + "px", "important");
         this.dynamicRules.width.style.setProperty("min-width", tabMinWidth + "px", "important");
+        this.dynamicRules.tabMaxWidthVar.style.setProperty(
+          "--tabmix-tab-max-width",
+          `${tabMaxWidth}px`
+        );
         Tabmix.tabsUtils.updateOverflowMaxWidth();
         setTimeout(() => gBrowser.tabContainer.removeAttribute("no-animation"), 0);
         TabmixTabbar.updateSettings(false);
@@ -2020,7 +2026,7 @@ window.gTMPprefObserver = {
         if (Tabmix.isVersion(1410)) {
           Tabmix.tabsUtils.updatePinnedTabsContainer();
           Tabmix.tabsUtils.updateFirstTabInRowMargin();
-          // gBrowser.tabContainer.arrowScrollbox.setFirstTabInRow();
+          TMP_tabDNDObserver._pinnedTabScroll = Services.prefs.getBoolPref(prefName);
         } else {
           gBrowser.tabContainer._positionPinnedTabs();
         }
@@ -2308,6 +2314,7 @@ window.gTMPprefObserver = {
     let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
     newRule = newRule.replace("#1", String(_min)).replace("#2", String(_max));
     this.insertRule(newRule.trim(), "width");
+    this.insertRule(`:root { --tabmix-tab-max-width: ${_max}px; }`, "tabMaxWidthVar");
 
     // rule for controlling margin-inline-start when we have pinned tab in multi-row
     let selector =
@@ -2350,17 +2357,23 @@ window.gTMPprefObserver = {
     }
 
     if (Tabmix.isVersion(1310)) {
-      let pinnedTabsContainer = "";
       if (Tabmix.isVersion(1410)) {
-        pinnedTabsContainer = `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] #pinned-tabs-container::part(scrollbox),\n`;
         this.insertRule(
           `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] #pinned-tabs-container {
             position: absolute;
           }`
         );
 
+        // adding margin-bottom here can mess with _checkPinnedStateChangeOnOverflow
+        // pinnedContainerRect.bottom check
         this.insertRule(
-          `#tabbrowser-tabs[positionpinnedtabs][tabmix-flowing="multibar"][orient=horizontal]:has(#tabbrowser-arrowscrollbox .tabbrowser-tab:not([hidden])) #pinned-tabs-container {
+          `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] #pinned-tabs-container::part(scrollbox) {
+            margin-top: var(--tabmix-multirow-margin, 0);
+          }`
+        );
+
+        this.insertRule(
+          `#tabbrowser-tabs[positionpinnedtabs][tabmix-flowing="multibar"][orient=horizontal]:has(#tabbrowser-arrowscrollbox .tabbrowser-tab:not([hidden])) #pinned-tabs-container:not([overflowing]) {
              margin-inline-end: 12px;
           }`
         );
@@ -2397,7 +2410,7 @@ window.gTMPprefObserver = {
       }
 
       this.insertRule(
-        `${pinnedTabsContainer}#tabbrowser-tabs[tabmix-multibar][orient=horizontal] #tabbrowser-arrowscrollbox::part(scrollbox) {
+        `#tabbrowser-tabs[tabmix-multibar][orient=horizontal] #tabbrowser-arrowscrollbox::part(scrollbox) {
           margin-top: var(--tabmix-multirow-margin, 0);
           margin-bottom: var(--tabmix-multirow-margin, 0);
         }`

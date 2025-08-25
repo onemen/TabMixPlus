@@ -171,6 +171,7 @@ interface XULPopupElement {
 }
 
 interface GetClosestMap {
+  arrowscrollbox: MockedGeckoTypes.TabContainer["arrowScrollbox"];
   menupopup: ClosedObjectsUtils.PopupElement;
 }
 
@@ -208,10 +209,13 @@ interface TabmixDNDObserver {
   DRAG_LINK: number;
   DRAG_TAB_TO_NEW_WINDOW: number;
   DRAG_TAB_IN_SAME_WINDOW: number;
+  ALL_TABS_PINNED_OFFSET: number;
+  NO_NON_PINNED_OFFSET: number;
   draggingTimeout: number;
   paddingLeft: number;
   _multirowMargin: number;
   _cachedDnDValue: boolean | null;
+  _pinnedTabScroll: boolean;
   TabMetrics: MockedExports.TabMetrics;
   init(): void;
   useTabmixDnD(event: DragEvent, tab?: Tab): boolean;
@@ -230,11 +234,12 @@ interface TabmixDNDObserver {
   eventParams(event: DragEvent): DragEventParams;
   getDropElement(aEvent: DragEvent, tab: DraggedElement): AriaFocusableItem | undefined;
   getNewIndex(event: DragEvent, tab: DraggedElement): number;
+  _determinePinnedStateChange(event: DragEvent, tab: DraggedElement, pinnedTabCount: number): boolean;
   getEventTarget(event: DragEvent): AriaFocusableItem | MockedGeckoTypes.MozTabbrowserTabGroup | undefined;
   isDropBefore(event: DragEvent, dropElement: AriaFocusableItem): boolean;
   getDragType(sourceNode: DraggedSourceNode): {dragType: number; tab: DraggedElement};
   getDropIndicatorMarginX(draggedTab: DraggedElement, dropElement: AriaFocusableItem, newIndex: number, dropBefore: boolean, itemRect: DOMRect, rect: DOMRect, defaultMargin: number): number;
-  getDropIndicatorMarginY(ind: HTMLElement, dropElement: AriaFocusableItem, rect: DOMRect, draggedTab: Tab): number;
+  getDropIndicatorMarginY(ind: HTMLElement, dropElement: AriaFocusableItem, rect: DOMRect): number;
   isLastTabInRow(dropTab: Tab | undefined, dragOverElement: AriaFocusableItem | undefined): boolean;
   clearDragmark(): void;
   getSourceNode(aDataTransfer: DataTransfer): HTMLLinkElement | Tab | null;

@@ -171,6 +171,16 @@ declare namespace MockedGeckoTypes {
     addEventListener<K extends keyof CustomElementEventMap>(type: K, listener: (this: Element, ev: CustomElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions): void;
   }
 
+  type PinnedTabsContainerInfo = {
+    pinnedEnd: number;
+    pinnedStart: number;
+    containerBottom: number;
+    containerEnd: number;
+    containerStart: number;
+    containerTop: number;
+    changePinnedState?: boolean;
+  };
+
   type DragData = {
     offsetX: number;
     offsetY: number;
@@ -183,6 +193,7 @@ declare namespace MockedGeckoTypes {
     tabGroupCreationColor: string;
     expandGroupOnDrop: boolean;
     nextTab?: BrowserTab;
+    pinnedTabsContainerInfo: PinnedTabsContainerInfo | null;
   };
 
   interface BrowserTab extends MockedExports.BrowserTab, Omit<Element, "ownerGlobal" | "nextSibling" | "previousSibling"> {
@@ -335,6 +346,7 @@ declare namespace MockedGeckoTypes {
     mCloseButtons: number;
     mTabMaxWidth: number;
     mTabMinWidth: number;
+    pinnedTabsContainer: ArrowScrollbox;
     pinnedDropIndicator: Element;
     set selectedItem(val: BrowserTab);
     get selectedItem(): BrowserTab;

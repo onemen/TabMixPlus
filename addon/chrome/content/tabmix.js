@@ -977,6 +977,14 @@ var TMP_eventListener = {
   },
 
   onTabPinned(event) {
+    requestAnimationFrame(() => {
+      if (
+        gBrowser.pinnedTabsContainer.hasAttribute("overflowing") &&
+        gBrowser.tabs[gBrowser.pinnedTabCount - 1]?.selected
+      ) {
+        gBrowser.pinnedTabsContainer.ensureElementIsVisible(gBrowser.selectedTab, true);
+      }
+    });
     Tabmix.tabsUtils.updateFirstTabInRowMargin();
     if (event.target.selected && Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
       gBrowser.tabContainer.arrowScrollbox.scrollbox.scrollTop = 0;
@@ -1046,6 +1054,16 @@ var TMP_eventListener = {
       !Tabmix.tabsUtils.isVerticalTabs &&
       !Tabmix.extensions.treeStyleTab
     ) {
+      aEvent.stopPropagation();
+      aEvent.preventDefault();
+
+      if (!Tabmix.tabsUtils.overflow) {
+        return;
+      }
+
+      tabStrip = aEvent.target?.closest("arrowscrollbox") ?? tabBar.arrowScrollbox;
+      const isTabstrip = tabStrip?.id === "tabbrowser-arrowscrollbox";
+
       /**
        * this code is based on arrowscrollbox.js on_wheel event handler
        *
@@ -1055,7 +1073,7 @@ var TMP_eventListener = {
       let scrollByDelta = function (delta, useInstant) {
         let instant;
         let scrollAmount = 0;
-        if (TabmixTabbar.isMultiRow) {
+        if (isTabstrip && TabmixTabbar.isMultiRow) {
           delta = delta > 0 ? 1 : -1;
           scrollAmount = delta * tabStrip.singleRowHeight + tabStrip._distanceToRow(0);
         } else if (aEvent.deltaMode == aEvent.DOM_DELTA_PIXEL) {
@@ -1072,13 +1090,6 @@ var TMP_eventListener = {
         }
         tabStrip.scrollByPixels(scrollAmount, useInstant && instant);
       };
-
-      aEvent.stopPropagation();
-      aEvent.preventDefault();
-
-      if (!Tabmix.tabsUtils.overflow) {
-        return;
-      }
 
       if (orient == "vertical") {
         scrollByDelta(direction, false);

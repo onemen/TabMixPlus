@@ -46,7 +46,7 @@ export default [
       "manifest.json",
       "logs/",
       ".vscode",
-      "**/*.local.*",
+      "**/*local*/**",
     ],
   },
 

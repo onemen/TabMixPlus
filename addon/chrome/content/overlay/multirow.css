@@ -256,3 +256,13 @@
     border-radius: 1px;
   }
 }
+
+@media (width <= 1250px) {
+  #pinned-tabs-container[orient="horizontal"] {
+    max-width: calc(80vw - max(20vw, var(--tabmix-tab-max-width, 250px)));
+  }
+
+  #tabbrowser-arrowscrollbox[orient="horizontal"] {
+    min-width: max(20vw, var(--tabmix-tab-max-width, 250px));
+  }
+}

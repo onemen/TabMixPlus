@@ -20,7 +20,7 @@ interface HTMLDialogElement {
   get defaultButton(): string;
 }
 
-type RulesTypes = "max-rows" | "visibleRows" | "width" | "tabMinHeight" | "themeBackground";
+type RulesTypes = "max-rows" | "tabMaxWidthVar" | "visibleRows" | "width" | "tabMinHeight" | "themeBackground";
 interface gTMPprefObserver {
   _marginStart: string;
   _singleWindowUI_initialized: boolean;
