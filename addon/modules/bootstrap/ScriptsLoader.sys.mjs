@@ -64,7 +64,11 @@ export const ScriptsLoader = {
     }
     initialized.add(window);
 
-    this._addCloseButton();
+    try {
+      this._addCloseButton(window);
+    } catch (/** @type {any} */ error) {
+      console.log("Tabmix was unable to install the tabmix-tabs-closebutton.", error.message);
+    }
     this._loadCSS(window);
     this._loadScripts(window, promiseOverlayLoaded);
     this._initTabsStyle(window);
@@ -75,23 +79,27 @@ export const ScriptsLoader = {
   },
 
   _closeButtonAdded: false,
-  _addCloseButton() {
+  _addCloseButton(window) {
     // since Firefox version 132, we need to allow tabmix-tabs-closebutton to move to nav-bar
     // when vertical tabs are enabled
     // we create it as widget and add it to the proper area TabsToolbar or nav-bar
     // we add it after alltabs-button by default but keep its position if user
     // move it in the toolbar
     if (!this._closeButtonAdded) {
-      const allTabsButtonPlacement = lazy.CustomizableUI.getPlacementOfWidget("alltabs-button");
-      const closeButtonPlacement =
-        lazy.CustomizableUI.getPlacementOfWidget("tabmix-tabs-closebutton");
-      if (!closeButtonPlacement || closeButtonPlacement.area !== allTabsButtonPlacement?.area) {
-        const {area, position} = allTabsButtonPlacement ?? {
-          area: lazy.CustomizableUI.AREA_TABSTRIP,
-        };
-        const finalPosition = typeof position === "number" ? position + 1 : undefined;
-        lazy.CustomizableUI.addWidgetToArea("tabmix-tabs-closebutton", area, finalPosition);
-      }
+      // trigger CustomizableUI load
+      const tabstripArea = lazy.CustomizableUI.AREA_TABSTRIP;
+      window.requestAnimationFrame(() => {
+        const allTabsButtonPlacement = lazy.CustomizableUI.getPlacementOfWidget("alltabs-button");
+        const closeButtonPlacement =
+          lazy.CustomizableUI.getPlacementOfWidget("tabmix-tabs-closebutton");
+        if (!closeButtonPlacement || closeButtonPlacement.area !== allTabsButtonPlacement?.area) {
+          const {area, position} = allTabsButtonPlacement ?? {
+            area: tabstripArea,
+          };
+          const finalPosition = typeof position === "number" ? position + 1 : undefined;
+          lazy.CustomizableUI.addWidgetToArea("tabmix-tabs-closebutton", area, finalPosition);
+        }
+      });
     }
     this._closeButtonAdded = true;
   },
