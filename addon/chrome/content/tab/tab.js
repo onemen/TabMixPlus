@@ -685,13 +685,13 @@ Tabmix.tabsUtils = {
       gTMPprefObserver.dynamicRules.width.style.getPropertyValue("min-width")
     );
     const currentMaxWidth = parseFloat(
-      gTMPprefObserver.dynamicRules.width.style.getPropertyValue("max-width")
+      gTMPprefObserver.dynamicRules.width.style.getPropertyValue("--tabmix-inline-max-width")
     );
 
     /** @param {number} width */
     const setNewMinWidth = width => {
       if (width !== currentMinWidth) {
-        // since we prevent tab animation whe we change min/max width we need to remove closing tabs
+        // since we prevent tab animation when we change min/max width we need to remove closing tabs
         // to avoid bug 608589
         for (let tab of gBrowser._removingTabs) {
           gBrowser._endRemoveTab(tab);
@@ -704,7 +704,7 @@ Tabmix.tabsUtils = {
         );
         if (minWidth === this.tabBar.mTabMaxWidth || width > currentMaxWidth) {
           gTMPprefObserver.dynamicRules.width.style.setProperty(
-            "max-width",
+            "--tabmix-inline-max-width",
             this._widthCache.maxWidth + "px",
             "important"
           );
@@ -1835,8 +1835,12 @@ window.gTMPprefObserver = {
         gBrowser.tabContainer.mTabMaxWidth = tabMaxWidth;
         gBrowser.tabContainer.mTabMinWidth = tabMinWidth;
         gBrowser.tabContainer.setAttribute("no-animation", "");
-        this.dynamicRules.width.style.setProperty("max-width", tabMaxWidth + "px", "important");
         this.dynamicRules.width.style.setProperty("min-width", tabMinWidth + "px", "important");
+        this.dynamicRules.width.style.setProperty(
+          "--tabmix-inline-max-width",
+          tabMaxWidth + "px",
+          "important"
+        );
         this.dynamicRules.tabMaxWidthVar.style.setProperty(
           "--tabmix-tab-max-width",
           `${tabMaxWidth}px`
@@ -2308,8 +2312,23 @@ window.gTMPprefObserver = {
     let newRule = `#tabbrowser-arrowscrollbox:not([orient="vertical"]) > tab-group:not([collapsed]) > .tabbrowser-tab[fadein]${tst}:not([pinned]),
       #tabbrowser-arrowscrollbox:not([orient="vertical"]) > .tabbrowser-tab[fadein]${tst}:not([pinned]) {
         min-width: #1px !important;
-        max-width: #2px !important;
+        --tabmix-inline-max-width: #2px;
+        max-width: var(--tabmix-inline-max-width) !important;
       }`;
+
+    if (Tabmix.isVersion(1430)) {
+      newRule = newRule.replace(
+        "max-width: var(--tabmix-inline-max-width) !important;",
+        `:root:has(#tabbrowser-tabs:not([tabmix-multibar])[movingtab]) & {
+          max-width: var(--tabmix-inline-max-width);
+        }
+
+        :root:is(:has(#tabbrowser-tabs[tabmix-multibar]), :not(:has(#tabbrowser-tabs[movingtab]))) & {
+          max-width: var(--tabmix-inline-max-width) !important;
+        }`
+      );
+    }
+
     let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
     let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
     newRule = newRule.replace("#1", String(_min)).replace("#2", String(_max));

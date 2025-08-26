@@ -336,7 +336,7 @@ var TMP_tabDNDObserver = {
           `if (!TabmixTabbar.widthFitTitle) {
             $&
           }`,
-          {check: Tabmix.isVersion(1430) && !Tabmix.isVersion(1440)}
+          {check: Tabmix.isVersion(1420) && !Tabmix.isVersion(1430)}
         )
         ._replace(
           "this._updateTabStylesOnDrag(tab, event);",
@@ -385,7 +385,8 @@ var TMP_tabDNDObserver = {
       ._replace(
         /(?:const|let) draggedTab/,
         `let tabmixHandleMove = ${tabmixHandleMoveString()};
-      $&`
+        $&`,
+        {check: !Tabmix.isVersion(1370)}
       )
       ._replace("allTabs.at(this._rtlMode ? -1 : 0)", "TabmixTabbar.isMultiRow ? tabs[0] : $&", {
         check: Tabmix.isVersion(1420) && !Tabmix.isVersion(1430),
@@ -393,7 +394,7 @@ var TMP_tabDNDObserver = {
       ._replace(
         Tabmix.isVersion(1430) ? "allTabs.at(-1)" : "allTabs.at(this._rtlMode ? 0 : -1)",
         "TabmixTabbar.isMultiRow ? tabs.at(-1) : $&",
-        {check: Tabmix.isVersion(1420)}
+        {check: Tabmix.isVersion(1420) && !Tabmix.isVersion(1440)}
       )
       ._replace(
         "this.selectedItem = draggedTab;",

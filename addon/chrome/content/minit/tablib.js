@@ -585,7 +585,10 @@ Tabmix.tablib = {
         ._replace(
           "{",
           `{
-      if (this.getAttribute("orient") != "horizontal" || !Tabmix.prefs.getBoolPref("lockTabSizingOnClose")) {
+      if (
+        this.getAttribute("orient") != "horizontal" ||
+        (!Tabmix.prefs.getBoolPref("lockTabSizingOnClose") && Tabmix.callerName() === "removeTab")
+      ) {
         return;
       }`
         )
