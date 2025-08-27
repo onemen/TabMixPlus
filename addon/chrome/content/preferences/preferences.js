@@ -98,6 +98,10 @@ var gPrefWindow = {
     $("instantApply").setAttribute("checked", Tabmix.prefs.getBoolPref("instantApply"));
     positionDonateButton();
 
+    if (Tabmix.isVersion({wf: "140.2.0"})) {
+      prefWindow.setAttribute("waterfox", "");
+    }
+
     this.updateMaxHeight();
   },
 

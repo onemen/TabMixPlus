@@ -2759,7 +2759,7 @@ window.gTMPprefObserver = {
         for (const item of items) {
           item.removeAttribute("class");
         }
-      } else {
+      } else if (!Tabmix.isVersion({wf: "140.2.0"})) {
         for (const item of items) {
           item.setAttribute("class", item.getAttribute("tmp_iconic") ?? "");
         }

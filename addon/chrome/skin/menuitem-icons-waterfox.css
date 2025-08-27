@@ -1,0 +1,35 @@
+
+/**
+    Waterfox versions 6.6+
+
+    for ALL platforms
+
+**/
+
+@media not -moz-pref("userChrome.icon.disabled") {
+  @media -moz-pref("userChrome.icon.menu") {
+    @media -moz-pref("userChrome.icon.global_menu") {
+
+      menu[tmp_iconic~="closedtabs-icon"] { --menuitem-image: url("chrome://tabmixplus/skin/icons/closed-tabs-16x16.png"); }
+      menu[tmp_iconic~="closedtabs-icon"]:hover { --menuitem-image: url("chrome://tabmixplus/skin/icons/closed-tabs-16x16-hovered.png"); }
+      menu[tmp_iconic~="closedtabs-icon"][disabled="true"] { --menuitem-image: url("chrome://tabmixplus/skin/icons/closed-tabs-16x16-disabled.png"); }
+
+      menu[tmp_iconic~="closedwindows-icon"] { --menuitem-image: url("chrome://tabmixplus/skin/icons/closed-win-16x16.png"); }
+      menu[tmp_iconic~="closedwindows-icon"]:hover { --menuitem-image: url("chrome://tabmixplus/skin/icons/closed-win-16x16-hovered.png")!important; }
+      #main-window:not([customizing]) menu[tmp_iconic~="closedwindows-icon"][disabled="true"] { --menuitem-image: url("chrome://tabmixplus/skin/icons/closed-win-16x16-disabled.png")!important; }
+
+      menu[tmp_iconic~="tabmix-tabslist-icon"] { --menuitem-image: url("chrome://tabmixplus/skin/icons/tab-list-16x16.png"); }
+      menu[tmp_iconic~="tabmix-tabslist-icon"]:hover { --menuitem-image: url("chrome://tabmixplus/skin/icons/tab-list-16x16-hovered.png"); }
+
+      menuitem[tmp_iconic~="tabmix-menu-icon"] { --menuitem-image: url("chrome://tabmixplus/skin/tmpsmall.png"); }
+
+      menu[tmp_iconic~="sessionmanager-icon"] > .menu-icon { --menuitem-icon: url("chrome://tabmixplus/skin/icons/session-manager-16x16.png"); }
+      menu[tmp_iconic~="sessionmanager-icon"]:hover > .menu-icon { --menuitem-icon: url("chrome://tabmixplus/skin/icons/session-manager-16x16-hovered.png"); }
+      menu[tmp_iconic~="sessionmanager-icon"][disabled="true"] > .menu-icon { --menuitem-icon: url("chrome://tabmixplus/skin/icons/session-manager-16x16-disabled.png"); }
+    }
+  }
+}
+
+menuitem[checked="true"] .menu-text {
+  padding-inline-start: 24px;
+}

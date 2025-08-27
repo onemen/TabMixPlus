@@ -380,3 +380,11 @@ html|fieldset[flex="1"] {
 #tab-context-menu-container *[data-source="tabmix"] .checkbox-label {
   font-weight: 600;
 }
+
+/* For Waterfox 6.6+ */
+
+prefwindow[waterfox] #tm-settings {
+  menuitem:not([checked="true"]) .menu-icon {
+    display: none;
+  }
+}

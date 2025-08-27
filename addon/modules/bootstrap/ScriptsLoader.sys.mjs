@@ -30,6 +30,10 @@ const CSS_URLS = [
   "chrome://tabmix-os/skin/browser.css",
 ];
 
+if (isVersion({wf: "140.2.0"})) {
+  CSS_URLS.push("chrome://tabmixplus/skin/menuitem-icons-waterfox.css");
+}
+
 if (isZen) {
   CSS_URLS.push("chrome://tabmixplus/content/overlay/zen_browser.css");
 }
