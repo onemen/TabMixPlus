@@ -4,3 +4,4 @@
 logs
 *.css
 *.xhtml
+**/*local*/**

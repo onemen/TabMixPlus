@@ -2,9 +2,9 @@ import js from "@eslint/js";
 import stylistic from "@stylistic/eslint-plugin";
 import globals from "globals";
 
+import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginHtml from "eslint-plugin-html";
 import eslintPluginMozilla from "eslint-plugin-mozilla";
-import prettierRecommended from "eslint-plugin-prettier/recommended";
 import tseslint from "typescript-eslint";
 import eslintPluginTabmix from "./config/eslint-plugin-tabmix/index.js";
 
@@ -22,7 +22,7 @@ if (!stylistic.configs.all.name) {
   stylistic.configs.all.name = "stylisticJs/configs/all";
 }
 
-// mkake sure mozilla config ignores .d.ts files
+// make sure mozilla config ignores .d.ts files
 eslintPluginMozilla.configs["flat/recommended"].forEach(config => {
   if (!config.files) {
     config.ignores = [...(config.ignores ?? []), "**/*.d.ts"];
@@ -39,9 +39,6 @@ export default [
       "**/*׳¢׳•׳×׳§*.*",
       "**/*עותק*.*",
       "**/private/*",
-      "./config/*",
-      "!./config/eslint-plugin-tabmix/*",
-      "!./config/typecheck.cjs",
       "eslint_result.js",
       "manifest.json",
       "logs/",
@@ -55,8 +52,6 @@ export default [
     ...js.configs.recommended,
   },
   ...eslintPluginMozilla.configs["flat/recommended"],
-
-  prettierRecommended,
 
   {
     name: "tabmix/stylistic-rules",
@@ -109,8 +104,6 @@ export default [
     },
     linterOptions: {reportUnusedDisableDirectives: "error"},
     rules: {
-      "prettier/prettier": ["error", {experimentalTernaries: true}],
-
       // Enable some mozilla rules that are not enabled by mozilla/recommended.
       "mozilla/avoid-Date-timing": "error",
       "mozilla/balanced-listeners": "off",
@@ -209,11 +202,9 @@ export default [
 
   {
     name: "tabmix/config-files",
-    // All .eslintrc.js files are in the node environment, so turn that
-    // on here.
-    // https://github.com/eslint/eslint/issues/13008
-    // All files in eslint-plugin-tabmix are in the node environment.
-    files: ["**/**/*.config.js", "config/eslint-plugin-tabmix/**", "config/*.{js,cjs,mjs,ts}"],
+    // this file is in the node environment, so turn that on here.
+    // All files in config are in the node environment.
+    files: ["**/**/*.config.js", "config/**/*.{js,cjs,mjs,ts}"],
     languageOptions: {
       sourceType: "module",
       globals: globals.node,
@@ -389,4 +380,5 @@ export default [
       },
     },
   ],
+  eslintConfigPrettier, // Add at the end to disable formatting rules
 ];

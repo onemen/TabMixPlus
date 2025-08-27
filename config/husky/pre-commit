@@ -6,11 +6,4 @@ fi
 # Ensure we're in the right directory
 cd "$(git rev-parse --show-toplevel)"
 
-# Add node_modules to PATH if not already there
-export PATH="./node_modules/.bin:$PATH"
-
-branch=$(git rev-parse --abbrev-ref HEAD)
-if [ "$branch" = "main" ]; then
-  # Use npx for better IDE compatibility
-  npx lint-staged --concurrent 2 --no-stash --config ./config/husky/lint-staged.config.js
-fi
+node ./config/husky/run-linters.js
