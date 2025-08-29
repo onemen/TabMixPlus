@@ -453,12 +453,16 @@ declare namespace MockedGeckoTypes {
   type moveTabToOptions = {elementIndex?: number; tabIndex?: number; forceUngrouped?: boolean; keepRelatedTabs?: boolean; telemetrySource?: MockedExports.TelemetrySource};
   type TabMoveState = {tabIndex: number; elementIndex?: number; tabGroupId?: string};
 
+  type CachedTitleInfoIds = "mainWindowTitle" | "privateWindowTitle" | "privateWindowSuffixForContent";
+
   interface TabBrowser extends Browser {
     // build in methods and properties
     _switcher: {
       visibleTab: BrowserTab;
     };
+    _cachedTitleInfo: Record<CachedTitleInfoIds, string> | null;
     _endRemoveTab: (tab: BrowserTab) => void;
+    _determineContentTitle: (browser: ChromeBrowser) => string;
     _findTabToBlurTo: (aTab: BrowserTab, aExcludeTabs?: BrowserTab[]) => BrowserTab | null;
     _getTabMoveState: (tab: BrowserTab) => TabMoveState | undefined;
     _handleTabMove: (tab: BrowserTab, moveActionCallback: () => void) => void;
@@ -469,6 +473,7 @@ declare namespace MockedGeckoTypes {
     _multiSelectedTabsSet: WeakSet<BrowserTab>;
     _notifyPinnedStatus: (tab: BrowserTab, params: {telemetrySource?: string}) => void;
     _notifyOnTabMove: (tab: BrowserTab, previousTabState?: TabMoveState, currentTabState?: TabMoveState, metricsContext?: MockedExports.TabMetricsContext) => void;
+    _populateTitleCache: () => void;
     _removingTabs: Set<BrowserTab>;
     _selectedTab: BrowserTab;
     _setTabLabel: (tab: BrowserTab, label: string, options?: {beforeTabOpen?: boolean; isContentTitle?: boolean; isURL?: boolean}) => boolean;
@@ -493,6 +498,7 @@ declare namespace MockedGeckoTypes {
     getBrowserForTab: (tab: BrowserTab) => ChromeBrowser;
     getNotificationBox: (browser?: ChromeBrowser) => NotificationBox;
     getTabForBrowser: (browser: ChromeBrowser) => BrowserTab;
+    getWindowTitleForBrowser: (browser: ChromeBrowser) => string;
     _getTabsToTheEndFrom: (tab: BrowserTab) => BrowserTab[];
     _getTabsToTheStartFrom: (tab: BrowserTab) => BrowserTab[];
     /** @deprecated replaced with _getTabsToTheEndFrom in firefox 135 */

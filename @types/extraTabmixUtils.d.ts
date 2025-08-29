@@ -7,11 +7,13 @@ interface Functions {
 // more methods in addon.d.ts
 interface PrivateMethods {
   // gBrowser
+  determineContentTitle: MockedGeckoTypes.TabBrowser["_determineContentTitle"];
   getTabMoveState: MockedGeckoTypes.TabBrowser["_getTabMoveState"];
   handleTabMove: MockedGeckoTypes.TabBrowser["_handleTabMove"];
   isLastTabInWindow: MockedGeckoTypes.TabBrowser["_isLastTabInWindow"];
   notifyPinnedStatus: MockedGeckoTypes.TabBrowser["_notifyPinnedStatus"];
   notifyOnTabMove: MockedGeckoTypes.TabBrowser["_notifyOnTabMove"];
+  populateTitleCache: MockedGeckoTypes.TabBrowser["_populateTitleCache"];
   // TabContainer
   animateExpandedPinnedTabMove: MockedGeckoTypes.TabContainer["_animateExpandedPinnedTabMove"];
   checkWithinPinnedContainerBounds: MockedGeckoTypes.TabContainer["_checkWithinPinnedContainerBounds"];

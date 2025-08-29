@@ -291,21 +291,57 @@ Tabmix.tablib = {
       );
     };
 
-    Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")
-      ._replace(
-        "if (title) {",
-        `let titlePromise;
-      if (tab.hasAttribute("tabmix_changed_label")) {
-        titlePromise = Promise.resolve(tab.getAttribute("tabmix_changed_label"));
-      } else {
-        titlePromise = window.TMP_Places.asyncGetTabTitle(tab, aBrowser.currentURI.spec, {title});
-      }
-      return titlePromise.then(newTitle => {
-        title = newTitle;
-      $&`
-      )
-      ._replace(/(})(\)?)$/, "});\$1$2")
-      .toCode(false, gBrowser, "asyncGetWindowTitleForBrowser");
+    if (Tabmix.isVersion(1440)) {
+      gBrowser._cachedTitleInfo = null;
+
+      gBrowser._populateTitleCache = Tabmix.getPrivateMethod({
+        parent: gBrowser,
+        parentName: "gBrowser",
+        methodName: "populateTitleCache",
+        nextMethodName: "#determineContentTitle",
+      });
+
+      gBrowser._determineContentTitle = Tabmix.getPrivateMethod({
+        parent: gBrowser,
+        parentName: "gBrowser",
+        methodName: "determineContentTitle",
+        nextMethodName: "getWindowTitleForBrowser",
+      });
+
+      Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")
+        ._replace(
+          "let docElement = document.documentElement;",
+          `
+        let titlePromise;
+        let tab = this.getTabForBrowser(browser);
+        if (tab.hasAttribute("tabmix_changed_label")) {
+          titlePromise = Promise.resolve(tab.getAttribute("tabmix_changed_label"));
+        } else {
+          titlePromise = window.TMP_Places.asyncGetTabTitle(tab, browser.currentURI.spec, {title: contentTitle});
+        }
+        return titlePromise.then(newTitle => {
+          contentTitle = newTitle;
+        $&`
+        )
+        ._replace(/(})(\)?)$/, "});\$1$2")
+        .toCode(false, gBrowser, "asyncGetWindowTitleForBrowser");
+    } else {
+      Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")
+        ._replace(
+          "if (title) {",
+          `let titlePromise;
+        if (tab.hasAttribute("tabmix_changed_label")) {
+          titlePromise = Promise.resolve(tab.getAttribute("tabmix_changed_label"));
+        } else {
+          titlePromise = window.TMP_Places.asyncGetTabTitle(tab, aBrowser.currentURI.spec, {title});
+        }
+        return titlePromise.then(newTitle => {
+          title = newTitle;
+        $&`
+        )
+        ._replace(/(})(\)?)$/, "});\$1$2")
+        .toCode(false, gBrowser, "asyncGetWindowTitleForBrowser");
+    }
 
     /** @this {MockedGeckoTypes.TabBrowser} */
     gBrowser.updateTitlebar = function () {
