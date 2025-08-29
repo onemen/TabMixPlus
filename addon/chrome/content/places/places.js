@@ -421,7 +421,6 @@ var TMP_Places = {
       "browser.sessionstore.restore_on_demand"
     );
     const savePrincipal = E10SUtils.SERIALIZED_SYSTEMPRINCIPAL;
-    const iconLoadingPrincipal = Services.scriptSecurityManager.getSystemPrincipal();
 
     const tabDataPromises = tabsInfo.map(async ({tab, url}) => {
       if (!url) return null;
@@ -454,7 +453,12 @@ var TMP_Places = {
           // fallback to favicon.ico
           iconURL = result?.uri?.spec || `${url.replace(/\/$/, "")}/favicon.ico`;
           setTimeout(() => {
-            gBrowser.setIcon(tab, iconURL, undefined, iconLoadingPrincipal);
+            if (Tabmix.isVersion(1440)) {
+              gBrowser.setIcon(tab, iconURL);
+            } else {
+              const iconLoadingPrincipal = Services.scriptSecurityManager.getSystemPrincipal();
+              gBrowser.setIcon(tab, iconURL, undefined, iconLoadingPrincipal);
+            }
           }, 100);
         }
       }
