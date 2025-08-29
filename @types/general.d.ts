@@ -380,6 +380,9 @@ declare namespace MockedGeckoTypes {
     _getDragTarget(event: DragEvent, options?: {ignoreSides?: boolean}): BrowserTab | null;
     _isAnimatingMoveTogetherSelectedTabs: () => boolean;
     _isContainerVerticalPinnedGrid: boolean;
+    _isMovingTab(): boolean;
+    _pinnedDropIndicatorTimeout: number | null;
+    _resetPinnedDropIndicator(): void;
     _resetTabsAfterDrop(draggedTabDocument: Document): void;
     _updateTabStylesOnDrag(tab: BrowserTab, event: DragEvent): void;
 

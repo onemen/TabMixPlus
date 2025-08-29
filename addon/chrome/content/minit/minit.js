@@ -288,6 +288,19 @@ var TMP_tabDNDObserver = {
     if (Tabmix.isVersion(1430)) {
       gBrowser.tabContainer._dragOverGroupingTimer = 0;
 
+      // this block is nested here since these methods are use by some of the
+      // methods in 1430 block
+      if (Tabmix.isVersion(1440)) {
+        gBrowser.tabContainer._pinnedDropIndicatorTimeout = null;
+        gBrowser.tabContainer._isMovingTab = () => gBrowser.tabContainer.hasAttribute("movingtab");
+
+        gBrowser.tabContainer._resetPinnedDropIndicator = Tabmix.getPrivateMethod({
+          ...tabContainerProps,
+          methodName: "resetPinnedDropIndicator",
+          nextMethodName: "#resetTabsAfterDrop",
+        });
+      }
+
       tabBar._checkWithinPinnedContainerBounds = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "checkWithinPinnedContainerBounds",

@@ -23,8 +23,11 @@ interface PrivateMethods {
   getDropIndex: MockedGeckoTypes.TabContainer["_getDropIndex"];
   isAnimatingMoveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_isAnimatingMoveTogetherSelectedTabs"];
   isContainerVerticalPinnedGrid: MockedGeckoTypes.TabContainer["_isContainerVerticalPinnedGrid"];
+  isMovingTab: MockedGeckoTypes.TabContainer["_isMovingTab"];
   moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
   resetGroupTarget: MockedGeckoTypes.TabContainer["_resetGroupTarget"];
+  pinnedDropIndicatorTimeout: MockedGeckoTypes.TabContainer["_pinnedDropIndicatorTimeout"];
+  resetPinnedDropIndicator: MockedGeckoTypes.TabContainer["_resetPinnedDropIndicator"];
   resetTabsAfterDrop: MockedGeckoTypes.TabContainer["_resetTabsAfterDrop"];
   setDragOverGroupColor: MockedGeckoTypes.TabContainer["_setDragOverGroupColor"];
   setIsDraggingTabGroup: MockedGeckoTypes.TabContainer["_setIsDraggingTabGroup"];
