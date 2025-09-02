@@ -345,13 +345,6 @@ var TMP_tabDNDObserver = {
           check: Tabmix.isVersion(1390),
         })
         ._replace(
-          /this\._keepTabSizeLocked[\s\S]*_lockTabSizing\(\);/,
-          `if (!TabmixTabbar.widthFitTitle) {
-            $&
-          }`,
-          {check: Tabmix.isVersion(1420) && !Tabmix.isVersion(1430)}
-        )
-        ._replace(
           "this._updateTabStylesOnDrag(tab, event);",
           `if (!TMP_tabDNDObserver.useTabmixDnD(event)) {
         $&
