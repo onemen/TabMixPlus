@@ -47,6 +47,7 @@ class ChangeCode {
   fnName;
   fullName;
   needUpdate = false;
+  changed = false;
   silent;
   errMsg = "";
   sandbox;
@@ -99,6 +100,7 @@ class ChangeCode {
     const result = verifyPrivateMethodReplaced(this._value, this.obj, this.fullName);
     this._value = result.code;
     this.needUpdate = this.needUpdate || result.needUpdate;
+    this._privateChanged = result.needUpdate;
 
     this.notFound.length = 0;
   }
@@ -144,6 +146,7 @@ class ChangeCode {
     if (exist) {
       this._value = this._value.replace(substr, newString);
       this.needUpdate = true;
+      this.changed = true;
     } else if (!silent) {
       if (!this._errorStack) {
         this._errorStack = Components.stack;
@@ -247,6 +250,25 @@ class ChangeCode {
   /** @type {ChangeCodeClass["isValidToChange"]} */
   isValidToChange(name) {
     const notFoundCount = this.notFound.length;
+
+    if (
+      this.needUpdate &&
+      !this.changed &&
+      !notFoundCount &&
+      !this.silent &&
+      ![
+        "gBrowser.tabContainer.arrowScrollbox.on_touchmove",
+        "gBrowser.tabContainer.arrowScrollbox.on_touchstart",
+      ].includes(name)
+    ) {
+      const {changed, needUpdate} = this;
+      console.debug(
+        "Tabmix:",
+        `${name} does not have any changes,\ncheck again if it need to be modified`,
+        {changed, needUpdate}
+      );
+    }
+
     if (this.needUpdate && !notFoundCount) {
       return true;
     }
@@ -375,6 +397,10 @@ function createModuleSandbox(obj, options = {}) {
   return sandbox;
 }
 
+// store list of private methods
+/** @type {Set<string>} */
+export const privateMethodsList = new Set();
+
 /** @type {ChangecodeModule["verifyPrivateMethodReplaced"]} */
 function verifyPrivateMethodReplaced(code, obj, fullName) {
   const matches = code.match(/this\.#(\w+)/g);
@@ -396,6 +422,7 @@ function verifyPrivateMethodReplaced(code, obj, fullName) {
       ex.message = `Implement replacement for private method #${method} in ${parentName} it is used by ${fullName || "makeCode"}${errMsgContent}`;
       lazy.console.reportError(ex);
     }
+    privateMethodsList.add(`${parentName}._${method}`);
   }
 
   return {
@@ -437,6 +464,11 @@ function _makeCode(code, sandbox) {
 /** @type {ChangecodeModule.ExpandTabmix} */
 const expandTabmix = {
   _debugMode: DEBUGMODE,
+
+  privateMethodTransformState: {
+    planned: privateMethodsList,
+    replaced: new Set(),
+  },
 
   // @ts-expect-error - when ChangeCode throw an error Tabmix.changeCode is null
   changeCode(parent, fnName, options) {

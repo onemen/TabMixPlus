@@ -740,6 +740,7 @@ declare namespace ChangecodeModule {
   interface ChangeCodeClass {
     _errorStack: nsIStackFrame | null;
     _value: string;
+    changed: boolean;
     obj: Record<string, any>;
     fnName: string;
     fullName: string;
@@ -1635,6 +1636,10 @@ interface TabmixGlobal {
   getSandbox(this: TabmixGlobal, obj: object, options?: ChangecodeModule.SandboxOptions): TabmixSandbox;
   makeCode(this: TabmixGlobal, code: string, obj: Record<string, any> | null, fullName: string, sandbox?: TabmixSandbox): FunctionWithAny;
   getPrivateMethod<T extends keyof PrivateMethods>(options: PrivateMethodOptions<T>): PrivateMethods[T];
+  privateMethodTransformState: {
+    planned: Set<string>;
+    replaced: Set<string>;
+  };
   removedShortcuts: HTMLDivElement;
 
   gIeTab: TabmixGlobals.gIeTab;

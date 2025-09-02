@@ -1322,6 +1322,42 @@ Tabmix.initialization = {
 // A promise resolved once initialization is complete
 Tabmix._deferredInitialized = Promise.withResolvers();
 
+Tabmix._deferredInitialized.promise.then(() => {
+  const {planned, replaced} = Tabmix.privateMethodTransformState;
+
+  /** @param {string} name */
+  function exist(name) {
+    const obj = Tabmix.getObject(window, name);
+    return obj?.toString() !== "undefined";
+  }
+
+  const missing = [];
+  const unnecessary = [];
+
+  for (const method of planned) {
+    if (!replaced.has(method) && !exist(method)) {
+      missing.push(method);
+    }
+  }
+
+  for (const method of replaced) {
+    if (!planned.has(method)) {
+      unnecessary.push(method);
+    }
+  }
+
+  if (missing.length || unnecessary.length) {
+    console.debug(
+      [
+        missing.length ? `❌ Missing replacements:\n${missing.join("\n")}` : null,
+        unnecessary.length ? `\n⚠️ Unnecessary replacements:\n${unnecessary.join("\n")}` : null,
+      ]
+        .filter(Boolean)
+        .join("\n")
+    );
+  }
+});
+
 /*
  * add backward compatibility getters to some of the main object/function/variable
  * that we changed from version 0.3.8.5pre.110123a

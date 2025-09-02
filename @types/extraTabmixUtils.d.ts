@@ -16,8 +16,6 @@ interface PrivateMethods {
   populateTitleCache: MockedGeckoTypes.TabBrowser["_populateTitleCache"];
   // TabContainer
   animateExpandedPinnedTabMove: MockedGeckoTypes.TabContainer["_animateExpandedPinnedTabMove"];
-  checkWithinPinnedContainerBounds: MockedGeckoTypes.TabContainer["_checkWithinPinnedContainerBounds"];
-  clearDragOverGroupingTimer: MockedGeckoTypes.TabContainer["_clearDragOverGroupingTimer"];
   expandGroupOnDrop: MockedGeckoTypes.TabContainer["_expandGroupOnDrop"];
   getDragTarget: MockedGeckoTypes.TabContainer["_getDragTarget"];
   getDropIndex: MockedGeckoTypes.TabContainer["_getDropIndex"];
@@ -25,13 +23,10 @@ interface PrivateMethods {
   isContainerVerticalPinnedGrid: MockedGeckoTypes.TabContainer["_isContainerVerticalPinnedGrid"];
   isMovingTab: MockedGeckoTypes.TabContainer["_isMovingTab"];
   moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
-  resetGroupTarget: MockedGeckoTypes.TabContainer["_resetGroupTarget"];
   pinnedDropIndicatorTimeout: MockedGeckoTypes.TabContainer["_pinnedDropIndicatorTimeout"];
-  resetPinnedDropIndicator: MockedGeckoTypes.TabContainer["_resetPinnedDropIndicator"];
   resetTabsAfterDrop: MockedGeckoTypes.TabContainer["_resetTabsAfterDrop"];
   setDragOverGroupColor: MockedGeckoTypes.TabContainer["_setDragOverGroupColor"];
   setIsDraggingTabGroup: MockedGeckoTypes.TabContainer["_setIsDraggingTabGroup"];
-  triggerDragOverGrouping: MockedGeckoTypes.TabContainer["_triggerDragOverGrouping"];
   updateTabStylesOnDrag: MockedGeckoTypes.TabContainer["_updateTabStylesOnDrag"];
 
   /** @deprecated replaced with _clearDragOverGroupingTimer in firefox 143 */

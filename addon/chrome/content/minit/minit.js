@@ -121,6 +121,8 @@ var TMP_tabDNDObserver = {
         configurable: true,
         enumerable: true,
       });
+
+      Tabmix.privateMethodTransformState.replaced.add("gBrowser.tabContainer._rtlMode");
     }
 
     if (Tabmix.isVersion(1320)) {
@@ -139,6 +141,7 @@ var TMP_tabDNDObserver = {
       });
 
       gBrowser.tabContainer._maxTabsPerRow = 0;
+      Tabmix.privateMethodTransformState.replaced.add("gBrowser.tabContainer._maxTabsPerRow");
 
       gBrowser.tabContainer._animateExpandedPinnedTabMove = Tabmix.getPrivateMethod({
         ...tabContainerProps,
@@ -148,6 +151,10 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.isVersion(1330)) {
+      // we use this function in our code
+      Tabmix.privateMethodTransformState.planned.add(
+        "gBrowser.tabContainer._setDragOverGroupColor"
+      );
       gBrowser.tabContainer._setDragOverGroupColor = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "setDragOverGroupColor",
@@ -184,9 +191,12 @@ var TMP_tabDNDObserver = {
       gBrowser.tabContainer._setDragOverGroupColor = () => {};
     }
 
-    // these methods renamed in firefox 143 see code below
-    if (Tabmix.isVersion(1340) && !Tabmix.isVersion(1430)) {
+    // we don't modify _animateTabMove since Firefox 140
+    if (Tabmix.isVersion(1340) && !Tabmix.isVersion(1400)) {
       gBrowser.tabContainer._dragOverCreateGroupTimer = 0;
+      Tabmix.privateMethodTransformState.replaced.add(
+        "gBrowser.tabContainer._dragOverCreateGroupTimer"
+      );
 
       gBrowser.tabContainer._clearDragOverCreateGroupTimer = Tabmix.getPrivateMethod({
         ...tabContainerProps,
@@ -219,6 +229,9 @@ var TMP_tabDNDObserver = {
       };
 
       tabBar._dragTime = 0;
+
+      Tabmix.privateMethodTransformState.replaced.add("gBrowser.tabContainer._setMovingTabMode");
+      Tabmix.privateMethodTransformState.replaced.add("gBrowser.tabContainer._dragTime");
 
       tabBar._getDragTarget = Tabmix.getPrivateMethod({
         ...tabContainerProps,
@@ -286,59 +299,80 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.isVersion(1430)) {
-      gBrowser.tabContainer._dragOverGroupingTimer = 0;
-
-      // this block is nested here since these methods are use by some of the
-      // methods in 1430 block
-      if (Tabmix.isVersion(1440)) {
-        gBrowser.tabContainer._pinnedDropIndicatorTimeout = null;
-        gBrowser.tabContainer._isMovingTab = () => gBrowser.tabContainer.hasAttribute("movingtab");
-
-        gBrowser.tabContainer._resetPinnedDropIndicator = Tabmix.getPrivateMethod({
-          ...tabContainerProps,
-          methodName: "resetPinnedDropIndicator",
-          nextMethodName: "#resetTabsAfterDrop",
-        });
-      }
-
-      tabBar._checkWithinPinnedContainerBounds = Tabmix.getPrivateMethod({
-        ...tabContainerProps,
-        methodName: "checkWithinPinnedContainerBounds",
-        nextMethodName: "#triggerDragOverGrouping",
-      });
-
-      gBrowser.tabContainer._clearDragOverGroupingTimer = Tabmix.getPrivateMethod({
-        ...tabContainerProps,
-        methodName: "clearDragOverGroupingTimer",
-        nextMethodName: "#setDragOverGroupColor",
-      });
-
-      gBrowser.tabContainer._triggerDragOverGrouping = Tabmix.getPrivateMethod({
-        ...tabContainerProps,
-        methodName: "triggerDragOverGrouping",
-        nextMethodName: "#clearDragOverGroupingTimer",
-        sandbox: localSandbox,
-      });
-
       gBrowser.tabContainer._setIsDraggingTabGroup = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "setIsDraggingTabGroup",
         nextMethodName: "on_drop",
       });
-
-      gBrowser.tabContainer._resetGroupTarget = Tabmix.getPrivateMethod({
-        ...tabContainerProps,
-        methodName: "resetGroupTarget",
-        nextMethodName: "finishAnimateTabMove",
-      });
     }
 
-    // change code starts here
-    // ------------------------------------------------------------------------
+    /**
+     * @param {"on_dragover" | "on_drop"} name
+     * @param {ChangecodeModule.ChangeCodeClass} code
+     */
+    function patchDragMethod(name, code) {
+      if (Tabmix.isVersion(1320)) {
+        code.toCode(false, Tabmix.originalFunctions, `_tabmix_${name}`);
+        Tabmix.originalFunctions[name] = gBrowser.tabContainer[name];
+        gBrowser.tabContainer[name] = function tabmix_patchDragMethod(event) {
+          const methodName = this.verticalMode ? name : `_tabmix_${name}`;
+          Tabmix.originalFunctions[methodName].apply(this, [event]);
+        };
+      } else {
+        code.toCode(false, gBrowser.tabContainer, name);
+      }
+    }
 
+    this.change_startTabDrag(localSandbox);
+    if (!Tabmix.isVersion(1400)) {
+      this.change_animateTabMove(localSandbox);
+    }
+    const dragoverCode = this.change_on_dragover(localSandbox);
+    const dropCode = this.change_on_drop(localSandbox);
+
+    patchDragMethod("on_dragover", dragoverCode);
+    patchDragMethod("on_drop", dropCode);
+
+    Tabmix.originalFunctions._getDropIndex = gBrowser.tabContainer._getDropIndex;
+    // @ts-expect-error - Complex function overload with bind
+    gBrowser.tabContainer._getDropIndex = this._getDropIndex.bind(this);
+
+    const finishAnimateTabMove =
+      Tabmix.isVersion(1380) ? "finishAnimateTabMove" : "_finishAnimateTabMove";
+    Tabmix.originalFunctions._finishAnimateTabMove = gBrowser.tabContainer[finishAnimateTabMove];
+    gBrowser.tabContainer[finishAnimateTabMove] = function (...args) {
+      Tabmix.originalFunctions._finishAnimateTabMove.apply(this, args);
+      this.removeAttribute("tabmix-movingBackgroundTab");
+      // we don't modify _animateTabMove since Firefox 140
+      if (Tabmix.isVersion(1340) && !Tabmix.isVersion(1400)) {
+        // the original function call #clearDragOverCreateGroupTimer
+        // so we need to call our "private" version
+        this._clearDragOverCreateGroupTimer();
+      }
+      const tabs = this.querySelectorAll("[tabmix-dragged]");
+      tabs.forEach(tab => tab?.removeAttribute("tabmix-dragged"));
+    };
+
+    this._dragOverDelay = tabBar._dragOverDelay;
+    this.draglink = `Hold ${TabmixSvc.isMac ? "⌘" : "Ctrl"} to replace locked tab with link Url`;
+
+    // without this the Indicator is not visible on the first drag
+    tabBar._tabDropIndicator.style.transform = "translate(0px, 0px)";
+
+    Tabmix.originalFunctions.on_dragstart = gBrowser.tabContainer.on_dragstart;
+    gBrowser.tabContainer.on_dragstart = this.on_dragstart.bind(tabBar);
+
+    Tabmix.originalFunctions.on_dragend = gBrowser.tabContainer.on_dragend;
+    gBrowser.tabContainer.on_dragend = this.on_dragend.bind(this);
+
+    Tabmix.originalFunctions.on_dragleave = gBrowser.tabContainer.on_dragleave;
+    gBrowser.tabContainer.on_dragleave = this.on_dragleave.bind(this);
+  },
+
+  change_startTabDrag() {
     if (Tabmix.isVersion(1320)) {
       // modify startTabDrag after all private method it uses modified above
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.startTabDrag", {
+      Tabmix.changeCode(gBrowser.tabContainer, "gBrowser.tabContainer.startTabDrag", {
         forceUpdate: true,
       })
         ._replace("this.selectedItem = tab;", "if (this.verticalMode) {$&}", {
@@ -366,7 +400,9 @@ var TMP_tabDNDObserver = {
         )
         .toCode();
     }
+  },
 
+  change_animateTabMove(localSandbox) {
     function tabmixHandleMoveString() {
       const baseTest = 'this.getAttribute("orient") === "horizontal" && TabmixTabbar.widthFitTitle';
       if (Tabmix.isVersion(1300)) {
@@ -385,9 +421,13 @@ var TMP_tabDNDObserver = {
     //   is before (for dragging left) or after (for dragging right)
     //   the middle of a background tab, the dragged tab would take that
     //   tab's position when dropped.
-    const _animateTabMove = Tabmix.changeCode(tabBar, "gBrowser.tabContainer._animateTabMove", {
-      sandbox: localSandbox,
-    })
+    const _animateTabMove = Tabmix.changeCode(
+      gBrowser.tabContainer,
+      "gBrowser.tabContainer._animateTabMove",
+      {
+        sandbox: localSandbox,
+      }
+    )
       ._replace(
         /(?:const|let) draggedTab/,
         `let tabmixHandleMove = ${tabmixHandleMoveString()};
@@ -570,12 +610,18 @@ var TMP_tabDNDObserver = {
         );
     }
     _animateTabMove.toCode();
+  },
 
+  change_on_dragover(localSandbox) {
     const itemRect = Tabmix.isVersion(1380) ? "itemRect" : "tabRect";
 
-    const dragoverCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_dragover", {
-      sandbox: localSandbox,
-    })
+    const dragoverCode = Tabmix.changeCode(
+      gBrowser.tabContainer,
+      "gBrowser.tabContainer.on_dragover",
+      {
+        sandbox: localSandbox,
+      }
+    )
       ._replace(
         "event.stopPropagation();",
         `$&
@@ -640,7 +686,11 @@ var TMP_tabDNDObserver = {
         {check: Tabmix.isVersion(1380)}
       );
 
-    const dropCode = Tabmix.changeCode(tabBar, "gBrowser.tabContainer.on_drop", {
+    return dragoverCode;
+  },
+
+  change_on_drop(localSandbox) {
+    const dropCode = Tabmix.changeCode(gBrowser.tabContainer, "gBrowser.tabContainer.on_drop", {
       sandbox: localSandbox,
     })
       ._replace(
@@ -737,63 +787,7 @@ var TMP_tabDNDObserver = {
       }`
       );
 
-    /**
-     * @param {"on_dragover" | "on_drop"} name
-     * @param {ChangecodeModule.ChangeCodeClass} code
-     */
-    function patchDragMethod(name, code) {
-      if (Tabmix.isVersion(1320)) {
-        code.toCode(false, Tabmix.originalFunctions, `_tabmix_${name}`);
-        Tabmix.originalFunctions[name] = gBrowser.tabContainer[name];
-        gBrowser.tabContainer[name] = function tabmix_patchDragMethod(event) {
-          const methodName = this.verticalMode ? name : `_tabmix_${name}`;
-          Tabmix.originalFunctions[methodName].apply(this, [event]);
-        };
-      } else {
-        code.toCode(false, gBrowser.tabContainer, name);
-      }
-    }
-
-    patchDragMethod("on_dragover", dragoverCode);
-    patchDragMethod("on_drop", dropCode);
-
-    Tabmix.originalFunctions._getDropIndex = gBrowser.tabContainer._getDropIndex;
-    // @ts-expect-error - Complex function overload with bind
-    gBrowser.tabContainer._getDropIndex = this._getDropIndex.bind(this);
-
-    const finishAnimateTabMove =
-      Tabmix.isVersion(1380) ? "finishAnimateTabMove" : "_finishAnimateTabMove";
-    Tabmix.originalFunctions._finishAnimateTabMove = gBrowser.tabContainer[finishAnimateTabMove];
-    gBrowser.tabContainer[finishAnimateTabMove] = function (...args) {
-      Tabmix.originalFunctions._finishAnimateTabMove.apply(this, args);
-      this.removeAttribute("tabmix-movingBackgroundTab");
-      if (Tabmix.isVersion(1430)) {
-        // the original function call #clearDragOverGroupingTimer
-        // so we need to call our "private" version
-        this._clearDragOverGroupingTimer();
-      } else if (Tabmix.isVersion(1340)) {
-        // the original function call #clearDragOverCreateGroupTimer
-        // so we need to call our "private" version
-        this._clearDragOverCreateGroupTimer();
-      }
-      const tabs = this.querySelectorAll("[tabmix-dragged]");
-      tabs.forEach(tab => tab?.removeAttribute("tabmix-dragged"));
-    };
-
-    this._dragOverDelay = tabBar._dragOverDelay;
-    this.draglink = `Hold ${TabmixSvc.isMac ? "⌘" : "Ctrl"} to replace locked tab with link Url`;
-
-    // without this the Indicator is not visible on the first drag
-    tabBar._tabDropIndicator.style.transform = "translate(0px, 0px)";
-
-    Tabmix.originalFunctions.on_dragstart = gBrowser.tabContainer.on_dragstart;
-    gBrowser.tabContainer.on_dragstart = this.on_dragstart.bind(tabBar);
-
-    Tabmix.originalFunctions.on_dragend = gBrowser.tabContainer.on_dragend;
-    gBrowser.tabContainer.on_dragend = this.on_dragend.bind(this);
-
-    Tabmix.originalFunctions.on_dragleave = gBrowser.tabContainer.on_dragleave;
-    gBrowser.tabContainer.on_dragleave = this.on_dragleave.bind(this);
+    return dropCode;
   },
 
   _cachedDnDValue: null,
@@ -2477,6 +2471,8 @@ Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodN
   const firefoxClass = parent?.constructor;
   const name = parentName || firefoxClass?.name;
   const nonPrivateMethodName = `${name}._${methodName}`;
+
+  Tabmix.privateMethodTransformState.replaced.add(`${parentName}._${methodName}`);
 
   const errorMsg = `can't find private function ${name}.#${methodName}`;
   const method = function () {};

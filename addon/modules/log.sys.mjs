@@ -43,7 +43,7 @@ export const console = {
 
       methodsList.forEach(aFn => (obj = obj[aFn]));
     } catch {}
-    return obj || {toString: () => "undefined"};
+    return typeof obj !== "undefined" ? obj : {toString: () => "undefined"};
   },
 
   _timers: {},

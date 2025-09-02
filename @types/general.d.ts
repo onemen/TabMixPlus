@@ -329,7 +329,6 @@ declare namespace MockedGeckoTypes {
     _notifyBackgroundTab: (aTab: BrowserTab) => void;
     _pinnedTabsLayoutCache: Record<string, unknown> | null;
     _positionPinnedTabs: () => void;
-    _resetGroupTarget(element: BrowserTab | MozTabGroupLabel): void;
     _selectNewTab: (aNewTab: BrowserTab, aFallbackDir?: number, aWrap?: boolean) => void;
     _scrollButtonWidth: number;
     _tabClipWidth: number;
@@ -372,9 +371,6 @@ declare namespace MockedGeckoTypes {
     _rtlMode: boolean;
 
     // replacement for private methods and getters
-    _checkWithinPinnedContainerBounds(): void;
-    _clearDragOverGroupingTimer: () => void;
-    _dragOverGroupingTimer: number;
     _dragTime: number;
     _expandGroupOnDrop(draggedTab: BrowserTab): void;
     _getDragTarget(event: DragEvent, options?: {ignoreSides?: boolean}): BrowserTab | null;
@@ -382,7 +378,6 @@ declare namespace MockedGeckoTypes {
     _isContainerVerticalPinnedGrid: boolean;
     _isMovingTab(): boolean;
     _pinnedDropIndicatorTimeout: number | null;
-    _resetPinnedDropIndicator(): void;
     _resetTabsAfterDrop(draggedTabDocument: Document): void;
     _updateTabStylesOnDrag(tab: BrowserTab, event: DragEvent): void;
 
@@ -391,7 +386,6 @@ declare namespace MockedGeckoTypes {
     // using instead of private method #setDragOverGroupColor since Firefox 133
     _setDragOverGroupColor: (groupColorCode: string | null) => void;
     _setMovingTabMode(movingTab: boolean): void;
-    _triggerDragOverGrouping: (dragData: BrowserTab["_dragData"], groupDropIndex: number) => void;
 
     /** @deprecated replaced with finishAnimateTabMove in firefox 138 */
     _finishAnimateTabMove: () => void;

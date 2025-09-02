@@ -183,10 +183,14 @@ Tabmix.multiRow = {
           .toCode();
 
         if (Tabmix.isVersion(1310)) {
+          Tabmix.privateMethodTransformState.planned.add(
+            "gBrowser.tabContainer.arrowScrollbox._updateScrollButtonsDisabledState"
+          );
+
           this._scrollButtonUpdatePending = false;
           this._updateScrollButtonsDisabledState = Tabmix.getPrivateMethod({
             parent: this,
-            parentName: "gBrowser.tabContainer.arrowscrollbox",
+            parentName: "gBrowser.tabContainer.arrowScrollbox",
             methodName: "updateScrollButtonsDisabledState",
             nextMethodName: "disconnectedCallback",
           });
@@ -199,11 +203,11 @@ Tabmix.multiRow = {
           Tabmix.isVersion(1310) ? "this.#verticalMode" : (
             'this.getAttribute("orient") == "vertical"'
           );
-        Tabmix.changeCode(this, "scrollbox.on_touchstart")
+        Tabmix.changeCode(this, "gBrowser.tabContainer.arrowScrollbox.on_touchstart")
           ._replace(codeToReplace, "this._verticalMode", {silent: true})
           .toCode();
 
-        Tabmix.changeCode(this, "scrollbox.on_touchmove")
+        Tabmix.changeCode(this, "gBrowser.tabContainer.arrowScrollbox.on_touchmove")
           ._replace(codeToReplace, "this._verticalMode", {silent: true})
           .toCode();
 

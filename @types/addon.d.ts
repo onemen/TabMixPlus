@@ -218,6 +218,10 @@ interface TabmixDNDObserver {
   _pinnedTabScroll: boolean;
   TabMetrics: MockedExports.TabMetrics;
   init(): void;
+  change_startTabDrag(localSandbox: TabmixSandbox): void;
+  change_animateTabMove(localSandbox: TabmixSandbox): void;
+  change_on_dragover(localSandbox: TabmixSandbox): ChangecodeModule.ChangeCodeClass;
+  change_on_drop(localSandbox: TabmixSandbox): ChangecodeModule.ChangeCodeClass;
   useTabmixDnD(event: DragEvent, tab?: Tab): boolean;
   handleEvent(event: DragEvent): void;
   on_dragstart(this: MockedGeckoTypes.TabContainer, event: DragEvent): void;
