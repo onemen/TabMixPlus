@@ -1056,6 +1056,7 @@ class PrefWindow extends MozXULElement {
 
     this.disconnectedCallback = this.disconnectedCallback.bind(this);
 
+    localLazy.initializeChangeCodeClass(Tabmix, {obj: window});
     this.fixMozTabsForZen();
 
     this.addEventListener("dialogaccept", () => {
@@ -1165,13 +1166,12 @@ class PrefWindow extends MozXULElement {
       },
       true
     );
-
-    localLazy.initializeChangeCodeClass(Tabmix, {obj: window});
   }
 
   fixMozTabsForZen(doc = document) {
     // workaround for bug in Zen https://github.com/zen-browser/desktop/issues/5668
-    if (!TabmixSvc.isZen) {
+    // fixed in version 1.10.3t
+    if (!TabmixSvc.isZen || Tabmix.isVersion({zen: "1.10.3t"})) {
       return;
     }
 

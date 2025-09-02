@@ -394,11 +394,19 @@ var TMP_tabDNDObserver = {
         $&`,
         {check: !Tabmix.isVersion(1370)}
       )
-      ._replace("allTabs.at(this._rtlMode ? -1 : 0)", "TabmixTabbar.isMultiRow ? tabs[0] : $&", {
-        check: Tabmix.isVersion(1420) && !Tabmix.isVersion(1430),
-      })
       ._replace(
-        Tabmix.isVersion(1430) ? "allTabs.at(-1)" : "allTabs.at(this._rtlMode ? 0 : -1)",
+        Tabmix.isVersion({zen: "1.15*"}) ?
+          "tabs.at(this._rtlMode ? -1 : 0)"
+        : "allTabs.at(this._rtlMode ? -1 : 0)",
+        "TabmixTabbar.isMultiRow ? tabs[0] : $&",
+        {
+          check: Tabmix.isVersion(1420) && !Tabmix.isVersion(1430),
+        }
+      )
+      ._replace(
+        Tabmix.isVersion(1430) ? "allTabs.at(-1)"
+        : Tabmix.isVersion({zen: "1.15*"}) ? "tabs.at(this._rtlMode ? 0 : -1)"
+        : "allTabs.at(this._rtlMode ? 0 : -1)",
         "TabmixTabbar.isMultiRow ? tabs.at(-1) : $&",
         {check: Tabmix.isVersion(1420) && !Tabmix.isVersion(1440)}
       )
