@@ -96,7 +96,26 @@ function showRestartNotification(verb, window) {
   );
 }
 
-/** @param {string} id */
+/*
+ * toggle content script listeners for the case user disabled the extension
+ * without restart
+ */
+/** @type {Bootstrap.toggleContentListeners} */
+function toggleContentListeners(enabled) {
+  const enumerator = Services.wm.getEnumerator("navigator:browser");
+  while (enumerator.hasMoreElements()) {
+    const win = enumerator.getNext();
+    if (win.gBrowser) {
+      for (const browser of win.gBrowser.browsers) {
+        browser.messageManager.sendAsyncMessage("Tabmix:toggleContentListeners", {
+          enabled,
+        });
+      }
+    }
+  }
+}
+
+/** @type {Bootstrap.updateAddon} */
 async function updateAddon(id) {
   const addon = await AddonManager.getAddonByID(id);
   if (addon?.__AddonInternal__) {
@@ -111,13 +130,17 @@ async function updateAddon(id) {
 
 /** @type {Bootstrap.install} */
 async function install(data) {
+  Overlays.setEnabled(true);
   await updateAddon(data.id);
 }
 
-function uninstall() {}
+function uninstall() {
+  Overlays.setEnabled(false);
+}
 
 /** @type {Bootstrap.startup} */
 async function startup(data, reason) {
+  Overlays.setEnabled(true);
   /** @type {any} */
   const lazy = {};
 
@@ -136,6 +159,10 @@ async function startup(data, reason) {
 
   PreferencesLoader.loadDefaultPreferences();
   TabmixWidgets.create();
+
+  if (reason === ADDON_ENABLE) {
+    toggleContentListeners(true);
+  }
 
   const window = Services.wm.getMostRecentWindow("navigator:browser");
   if (reason === ADDON_UPGRADE || reason === ADDON_DOWNGRADE) {
@@ -228,6 +255,12 @@ async function startup(data, reason) {
 
 /** @type {Bootstrap.shutdown} */
 function shutdown(data, reason) {
+  Overlays.setEnabled(false);
+
+  if (reason === ADDON_DISABLE || reason === ADDON_UNINSTALL) {
+    toggleContentListeners(false);
+  }
+
   const window = Services.wm.getMostRecentWindow("navigator:browser");
   if (reason === ADDON_DISABLE) {
     showRestartNotification("disabled", window);

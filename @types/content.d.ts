@@ -40,6 +40,7 @@ type ContentClickResult = {
 declare namespace TabmixContentHandlerNS {
   let MESSAGES: string[];
   function init(): void;
+  function uninit(): void;
   function receiveMessage(params: {name: string; data: MessageData}): void;
   function onDrop(event: DragEvent): void;
 }
@@ -57,23 +58,38 @@ declare namespace TabmixClickEventHandlerNS {
     addEventListener(type: string, listener: TabmixClickEventHandler, options?: boolean | AddEventListenerOptions): void;
   }
 
-  function init(global: GlobalThisType): void;
+  var _boundClickHandler: ((event: ContentMouseEvent) => void) | null;
+
+  function init(): void;
+  function uninit(): void;
+  function clickHandler(event: ContentMouseEvent): void;
   function handleEvent(event: ContentMouseEvent): void;
   function getLinkData(event: ContentMouseEvent): ContentClickLinkData;
   function contentAreaClick(event: ContentMouseEvent, linkData: ContentClickLinkData): void;
 }
 
 declare namespace ContextMenuHandlerNS {
-  function init(global: typeof globalThis): void;
+  function init(): void;
+  function uninit(): void;
   function prepareContextMenu(event: MouseEvent): void;
+}
+
+declare namespace GeneralHandlerNS {
+  var _initialized: boolean;
+  function start(): void;
+  function init(): void;
+  function uninit(): void;
+  function receiveMessage(params: {name: string; data: {enabled: boolean}}): void;
 }
 
 type TabmixContentHandler = typeof TabmixContentHandlerNS;
 type FaviconLoader = typeof FaviconLoaderNS;
 type TabmixClickEventHandler = typeof TabmixClickEventHandlerNS;
 type ContextMenuHandler = typeof ContextMenuHandlerNS;
+type GeneralHandler = typeof GeneralHandlerNS;
 
-declare function addMessageListener(event: string, listener: TabmixContentHandler): void;
+declare function addMessageListener(event: string, listener: TabmixContentHandler | GeneralHandler): void;
+declare function removeMessageListener(event: string, listener: TabmixContentHandler): void;
 declare function sendAsyncMessage(event: string, data: Partial<MessageData> | Partial<ClickJSONData>): void;
 declare function sendSyncMessage(messageName?: string | null, obj?: Partial<MessageData> | Partial<ClickMessageData>): unknown[];
 declare function sendSyncMessage(messageName: "TabmixContent:Click", obj: ClickMessageData): [ContentClickResult];

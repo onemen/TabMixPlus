@@ -1237,8 +1237,10 @@ declare namespace OverlaysModule {
   }
 
   interface OverlaysClass {
+    disabled: boolean;
     prototype: Overlays;
     load(overlayProvider: ChromeManifest, window: Window, promiseOverlayLoaded?: PromiseWithResolvers<void>): Promise<void>;
+    setEnabled(val: boolean): void;
     new (overlayProvider: ChromeManifest, window: Window): Overlays;
     isInstance: IsInstance<Overlays>;
   }

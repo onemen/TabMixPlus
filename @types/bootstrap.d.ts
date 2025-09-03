@@ -1,6 +1,8 @@
 declare namespace Bootstrap {
   function restartApplication(): boolean | undefined;
   function showRestartNotification(verb: string, window: Window): void;
+  function toggleContentListeners(enabled: boolean): void;
+  function updateAddon(id: string): Promise<void>;
   function install(data: {id: string}): Promise<void>;
   function uninstall(): void;
   function startup(data: {id: string}, reason: number): Promise<void>;

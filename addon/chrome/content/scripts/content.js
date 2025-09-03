@@ -34,6 +34,13 @@ var TabmixContentHandler = {
     }
   },
 
+  uninit() {
+    this.MESSAGES.forEach(m => removeMessageListener(m, this));
+    if (PROCESS_TYPE_CONTENT) {
+      removeEventListener("drop", this.onDrop);
+    }
+  },
+
   receiveMessage({name, data}) {
     // The docShell might be gone. Don't process messages,
     // that will just lead to errors anyway.
@@ -198,29 +205,35 @@ var FaviconLoader = {
 
 /** @type {TabmixClickEventHandler} */
 var TabmixClickEventHandler = {
-  init: function init(global) {
-    global.addEventListener(
-      "click",
-      event => {
-        let linkData = this.getLinkData(event);
-        if (linkData) {
-          let [href, node] = linkData;
-          let currentHref = event.originalTarget.ownerDocument.documentURI;
-          const divertMiddleClick =
-            event.button == 1 && ContentSvc.prefBranch.getBoolPref("middlecurrent");
-          const ctrlKey = AppConstants.platform == "macosx" ? event.metaKey : event.ctrlKey;
-          if (
-            divertMiddleClick ||
-            ctrlKey ||
-            LinkNodeUtils.isSpecialPage(href, node, currentHref)
-          ) {
-            this.contentAreaClick(event, linkData);
-          }
-        }
-      },
-      true
-    );
-    global.addEventListener("click", this, {capture: true, mozSystemGroup: true});
+  _boundClickHandler: null,
+
+  init() {
+    this._boundClickHandler = this.clickHandler.bind(this);
+    addEventListener("click", this._boundClickHandler, true);
+    addEventListener("click", this, {capture: true, mozSystemGroup: true});
+  },
+
+  uninit() {
+    if (!this._boundClickHandler) {
+      return;
+    }
+    removeEventListener("click", this._boundClickHandler, true);
+    removeEventListener("click", this, {capture: true, mozSystemGroup: true});
+    this._boundClickHandler = null;
+  },
+
+  clickHandler(event) {
+    let linkData = this.getLinkData(event);
+    if (linkData) {
+      let [href, node] = linkData;
+      let currentHref = event.originalTarget.ownerDocument.documentURI;
+      const divertMiddleClick =
+        event.button == 1 && ContentSvc.prefBranch.getBoolPref("middlecurrent");
+      const ctrlKey = AppConstants.platform == "macosx" ? event.metaKey : event.ctrlKey;
+      if (divertMiddleClick || ctrlKey || LinkNodeUtils.isSpecialPage(href, node, currentHref)) {
+        this.contentAreaClick(event, linkData);
+      }
+    }
   },
 
   handleEvent(event) {
@@ -403,8 +416,12 @@ var TabmixClickEventHandler = {
 
 /** @type {ContextMenuHandler} */
 var ContextMenuHandler = {
-  init(global) {
-    global.addEventListener("contextmenu", this.prepareContextMenu, {
+  init() {
+    addEventListener("contextmenu", this.prepareContextMenu, {capture: true, mozSystemGroup: true});
+  },
+
+  uninit() {
+    removeEventListener("contextmenu", this.prepareContextMenu, {
       capture: true,
       mozSystemGroup: true,
     });
@@ -425,6 +442,42 @@ var ContextMenuHandler = {
   },
 };
 
-TabmixContentHandler.init();
-TabmixClickEventHandler.init(this);
-ContextMenuHandler.init(this);
+/** @type {GeneralHandler} */
+const generalHandler = {
+  _initialized: false,
+
+  start() {
+    addMessageListener("Tabmix:toggleContentListeners", this);
+    this.init();
+  },
+
+  init() {
+    if (!this._initialized) {
+      this._initialized = true;
+      TabmixContentHandler.init();
+      TabmixClickEventHandler.init();
+      ContextMenuHandler.init();
+    }
+  },
+
+  uninit() {
+    if (this._initialized) {
+      this._initialized = false;
+      TabmixContentHandler.uninit();
+      TabmixClickEventHandler.uninit();
+      ContextMenuHandler.uninit();
+    }
+  },
+
+  receiveMessage({name, data}) {
+    if (name === "Tabmix:toggleContentListeners") {
+      if (data.enabled) {
+        this.init();
+      } else {
+        this.uninit();
+      }
+    }
+  },
+};
+
+generalHandler.start();

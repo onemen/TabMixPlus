@@ -17,6 +17,8 @@ ChromeUtils.defineESModuleGetters(lazy, {
  * @type {OverlaysModule.Overlays}
  */
 export class Overlays {
+  static disabled = false;
+
   /**
    * Load overlays for the given window using the overlay provider, which can
    * for example be a ChromeManifest object.
@@ -27,10 +29,19 @@ export class Overlays {
    * @param {PromiseWithResolvers<any>} promiseOverlayLoaded
    */
   static load(overlayProvider, window, promiseOverlayLoaded) {
+    if (this.disabled) {
+      return Promise.resolve();
+    }
+
     const instance = new Overlays(overlayProvider, window);
 
     const urls = overlayProvider.overlay.get(instance.location, false);
     return instance.load(urls, promiseOverlayLoaded);
+  }
+
+  /** @param {boolean} val */
+  static setEnabled(val) {
+    this.disabled = !val;
   }
 
   /**
