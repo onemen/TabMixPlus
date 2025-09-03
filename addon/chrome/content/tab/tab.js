@@ -42,6 +42,17 @@ var TabmixTabbar = {
     return this.flowing == "multibar";
   },
 
+  set multiRowState(val) {
+    Tabmix.setItem("tabbrowser-tabs", "tabmix-multibar", val);
+    Tabmix.setItem("tabmix-bottom-toolbox", "tabmix-multibar", val);
+    Tabmix.setItem("TabsToolbar", "tabmix-multibar", val);
+    // workaround incompatibility with waterfox lepton style
+    // https://github.com/BrowserWorks/waterfox/issues/3890
+    if (Tabmix.isVersion({wf: "140.2.0"})) {
+      Tabmix.setItem("TabsToolbar", "multibar", val);
+    }
+  },
+
   get multiRowState() {
     /** @type {"scrollbar" | "true" | null} */ // @ts-expect-error
     const val = gBrowser.tabContainer.getAttribute("tabmix-multibar");
@@ -625,6 +636,7 @@ Tabmix.tabsUtils = {
       rows = this.lastTabRowNumber;
     }
 
+    /** @type {"scrollbar" | "true" | null} */
     let multibar;
     if (rows == 1) {
       // removeAttribute "tabmix-multibar"
@@ -637,9 +649,7 @@ Tabmix.tabsUtils = {
 
     if (currentMultibar != multibar) {
       // set multibar also at _enterVerticalMode
-      Tabmix.setItem(this.tabBar, "tabmix-multibar", multibar);
-      Tabmix.setItem("tabmix-bottom-toolbox", "tabmix-multibar", multibar);
-      Tabmix.setItem("TabsToolbar", "tabmix-multibar", multibar);
+      TabmixTabbar.multiRowState = multibar;
     }
 
     TabmixTabbar.visibleRows = rows;

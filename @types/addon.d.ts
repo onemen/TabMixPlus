@@ -599,6 +599,7 @@ interface TabmixTabbar {
   get flowing(): string | null;
   set flowing(val: string | null);
   get isMultiRow(): boolean;
+  set multiRowState(val: "scrollbar" | "true" | null);
   get multiRowState(): "scrollbar" | "true" | null;
   get hasMultiRows(): boolean;
   get visibleRows(): number;

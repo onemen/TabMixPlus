@@ -406,10 +406,8 @@ Tabmix.multiRow = {
           // for the case last tab in row fill the all strip and the button
           // is on the next row
           Tabmix.tabsUtils.disAllowNewtabbutton = false;
-          const tabBar = this.parentNode;
           // set multibar also at updateVerticalTabStrip
-          Tabmix.setItem(tabBar, "tabmix-multibar", true);
-          Tabmix.setItem("tabmix-bottom-toolbox", "tabmix-multibar", true);
+          TabmixTabbar.multiRowState = "true";
           const multibar = Tabmix.tabsUtils.updateVerticalTabStrip();
           if (multibar === null) {
             TabmixTabbar._failedToEnterVerticalMode = true;

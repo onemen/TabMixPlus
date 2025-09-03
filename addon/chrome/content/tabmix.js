@@ -825,14 +825,13 @@ var TMP_eventListener = {
     TMP_LastTab.tabs = null;
     TMP_LastTab.detachTab(tab);
     TMP_Places.updateRestoringTabsList(tab);
-    var tabBar = gBrowser.tabContainer;
 
     // if we close the 2nd tab and tabbar is hide when there is only one tab
     // reset all scroll and multi-row parameter
     // strip already collapsed at this point
     if (TabmixTabbar.hideMode == 1) {
       if (Tabmix.tabsUtils.getTabsCount() == 2) {
-        tabBar.removeAttribute("tabmix-multibar");
+        TabmixTabbar.multiRowState = null;
       }
     }
 
