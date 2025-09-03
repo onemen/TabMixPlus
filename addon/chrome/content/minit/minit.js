@@ -1282,7 +1282,7 @@ var TMP_tabDNDObserver = {
   },
 
   _dragoverScrollButton(event) {
-    if (!Tabmix.tabsUtils.overflow || event.target.id === gBrowser.pinnedTabsContainer.id) {
+    if (!Tabmix.tabsUtils.overflow || event.target.id === gBrowser.pinnedTabsContainer?.id) {
       return false;
     }
 
