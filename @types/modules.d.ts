@@ -1447,12 +1447,13 @@ declare namespace SlideshowModule {
   interface Flst {
     tabContainer: MockedGeckoTypes.TabContainer;
     slideShowTimer?: nsITimer;
+    slideshowOn: string;
 
     showAlert(msg: string, id: string): void;
     toggle(): void;
     toggleSlideshow(): void;
     notify(this: SlideshowModule.Flst): void;
-    cancel(): void;
+    cancel(options?: {showAlert?: boolean}): void;
     get moreThenOneTab(): boolean;
   }
 }
@@ -1645,6 +1646,9 @@ interface TabmixGlobal {
   removedShortcuts: HTMLDivElement;
 
   gIeTab: TabmixGlobals.gIeTab;
+
+  // lasttab.js
+  slideshow: {cancel: SlideshowModule.Flst["cancel"]};
 }
 
 declare namespace TabmixModules {

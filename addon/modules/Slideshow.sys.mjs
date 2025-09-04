@@ -32,7 +32,9 @@ flst.prototype = {
         "Tab Mix Plus",
         msg,
         false,
-        ""
+        "",
+        undefined,
+        id
       );
     } catch {}
   },
@@ -68,10 +70,12 @@ flst.prototype = {
     }
   },
 
-  cancel() {
+  cancel({showAlert = true} = {}) {
     this.slideShowTimer?.cancel();
     this.slideShowTimer = undefined;
-    this.showAlert(this.slideshowOff, "slideShow");
+    if (showAlert) {
+      this.showAlert(this.slideshowOff, "slideShow");
+    }
   },
 
   get moreThenOneTab() {

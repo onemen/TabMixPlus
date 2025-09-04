@@ -77,7 +77,7 @@ interface TabmixGlobal {
 
   // lasttab.js
   keyModifierDown: boolean;
-  slideshow: {cancel(): void};
+  // slideshow - see modules.d.ts TabmixGlobal.slideshow
 
   // minit.js
   navToolbox: typeof NavToolbox;

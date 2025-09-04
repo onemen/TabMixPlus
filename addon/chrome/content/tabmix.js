@@ -1142,7 +1142,7 @@ var TMP_eventListener = {
     TabmixProgressListener.listener.mTabBrowser = null;
     gBrowser.removeTabsProgressListener(TabmixProgressListener.listener);
 
-    Tabmix.slideshow.cancel();
+    Tabmix.slideshow.cancel({showAlert: false});
     Tabmix.navToolbox.deinit();
     Tabmix.Utils.deinit(window);
     Tabmix.tabsUtils.onUnload();

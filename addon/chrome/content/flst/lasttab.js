@@ -423,9 +423,9 @@ var TMP_LastTab = {
 };
 
 Tabmix.slideshow = {
-  cancel() {
+  cancel(options) {
     if (Tabmix.SlideshowInitialized && Tabmix.flst.slideShowTimer) {
-      Tabmix.flst.cancel();
+      Tabmix.flst.cancel(options);
     }
   },
 };
