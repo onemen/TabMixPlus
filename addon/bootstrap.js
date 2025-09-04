@@ -130,7 +130,6 @@ async function updateAddon(id) {
 
 /** @type {Bootstrap.install} */
 async function install(data) {
-  Overlays.setEnabled(true);
   await updateAddon(data.id);
 }
 
@@ -141,6 +140,7 @@ function uninstall() {
 /** @type {Bootstrap.startup} */
 async function startup(data, reason) {
   Overlays.setEnabled(true);
+
   /** @type {any} */
   const lazy = {};
 
