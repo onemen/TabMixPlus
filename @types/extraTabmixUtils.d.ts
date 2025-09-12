@@ -8,6 +8,7 @@ interface Functions {
 interface PrivateMethods {
   // gBrowser
   determineContentTitle: MockedGeckoTypes.TabBrowser["_determineContentTitle"];
+  determineTaskbarTabTitle: MockedGeckoTypes.TabBrowser["_determineTaskbarTabTitle"];
   getTabMoveState: MockedGeckoTypes.TabBrowser["_getTabMoveState"];
   handleTabMove: MockedGeckoTypes.TabBrowser["_handleTabMove"];
   isLastTabInWindow: MockedGeckoTypes.TabBrowser["_isLastTabInWindow"];

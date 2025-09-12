@@ -460,6 +460,7 @@ declare namespace MockedGeckoTypes {
     _cachedTitleInfo: Record<CachedTitleInfoIds, string> | null;
     _endRemoveTab: (tab: BrowserTab) => void;
     _determineContentTitle: (browser: ChromeBrowser) => string;
+    _determineTaskbarTabTitle: (profileIdentifier: string) => string;
     _findTabToBlurTo: (aTab: BrowserTab, aExcludeTabs?: BrowserTab[]) => BrowserTab | null;
     _getTabMoveState: (tab: BrowserTab) => TabMoveState | undefined;
     _handleTabMove: (tab: BrowserTab, moveActionCallback: () => void) => void;
@@ -475,6 +476,9 @@ declare namespace MockedGeckoTypes {
     _selectedTab: BrowserTab;
     _setTabLabel: (tab: BrowserTab, label: string, options?: {beforeTabOpen?: boolean; isContentTitle?: boolean; isURL?: boolean}) => boolean;
     _tabAttrModified: (tab: BrowserTab, changed: string[]) => void;
+    _taskbarTab: {name: string; userContextId: string} | null;
+    _taskbarTabTitle: string | null;
+    _taskbarTabTitleLastProfile: string | null;
     _windowIsClosing: boolean;
     addAdjacentNewTab: (tab: BrowserTab) => void;
     addRangeToMultiSelectedTabs: (start: BrowserTab, end: BrowserTab) => void;
