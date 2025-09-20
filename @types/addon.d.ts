@@ -202,7 +202,6 @@ declare namespace ExtensionsCompatibilityNS {
 }
 
 interface TabmixDNDObserver {
-  _dragOverDelay: number;
   _moveTabOnDragging: boolean;
   draglink: string;
   LinuxMarginEnd: number;
@@ -217,14 +216,22 @@ interface TabmixDNDObserver {
   _cachedDnDValue: boolean | null;
   _pinnedTabScroll: boolean;
   TabMetrics: MockedExports.TabMetrics;
+
+  _pinnedDropIndicator: HTMLElement;
+  _tabDropIndicator: HTMLElement;
+  tabContainerProps: {parent: MockedGeckoTypes.TabDragAndDrop; parentName: string} | {parent: MockedGeckoTypes.TabContainer; parentName: string};
+  tabDragAndDrop: MockedGeckoTypes.TabDragAndDrop | MockedGeckoTypes.TabContainer;
+
   init(): void;
+  createSandbox(): TabmixSandbox;
+  convertPrivateMethods(localSandbox: TabmixSandbox): void;
   change_startTabDrag(localSandbox: TabmixSandbox): void;
   change_animateTabMove(localSandbox: TabmixSandbox): void;
-  change_on_dragover(localSandbox: TabmixSandbox): ChangecodeModule.ChangeCodeClass;
-  change_on_drop(localSandbox: TabmixSandbox): ChangecodeModule.ChangeCodeClass;
+  change_on_dragover(localSandbox: TabmixSandbox): {dragoverCode: ChangecodeModule.ChangeCodeClass; dragoverName: "handle_dragover" | "on_dragover"};
+  change_on_drop(localSandbox: TabmixSandbox): {dropCode: ChangecodeModule.ChangeCodeClass; dropName: "handle_drop" | "on_drop"};
   useTabmixDnD(event: DragEvent, tab?: Tab): boolean;
   handleEvent(event: DragEvent): void;
-  on_dragstart(this: MockedGeckoTypes.TabContainer, event: DragEvent): void;
+  on_dragstart(this: MockedGeckoTypes.TabDragAndDrop | MockedGeckoTypes.TabContainer, event: DragEvent): void;
   handleDragover(event: DragEvent, useTabmixDnD: boolean): boolean;
   handleDrop(event: DragEvent, draggedTab: Tab, movingTabs: Tab[]): void;
   on_dragend(event: DragEvent): void;

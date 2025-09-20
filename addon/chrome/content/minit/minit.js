@@ -6,7 +6,6 @@
 var TMP_tabDNDObserver = {
   draglink: "",
   LinuxMarginEnd: 0,
-  _dragOverDelay: 350,
   DRAG_LINK: 0,
   DRAG_TAB_TO_NEW_WINDOW: 1,
   DRAG_TAB_IN_SAME_WINDOW: 2,
@@ -26,80 +25,14 @@ var TMP_tabDNDObserver = {
   },
 
   init: function TMP_tabDNDObserver_init() {
-    var tabBar = gBrowser.tabContainer;
     if (Tabmix.extensions.verticalTabBar) {
       this.useTabmixDnD = () => false;
       return;
     }
 
-    const tabContainerProps = {
-      parent: gBrowser.tabContainer,
-      parentName: "gBrowser.tabContainer",
-    };
+    const localSandbox = this.createSandbox();
 
-    const localSandbox = (function () {
-      let scope;
-      if (Tabmix.isVersion(1370)) {
-        /* eslint-disable-next-line */ // @ts-expect-error
-        const isTab = element => !!(element?.tagName == "tab");
-
-        /* eslint-disable-next-line */ // @ts-expect-error
-        const isTabGroup = element => !!(element?.tagName == "tab-group");
-
-        /* eslint-disable-next-line */ // @ts-expect-error
-        const isTabGroupLabel = element => !!element?.classList?.contains("tab-group-label");
-
-        scope = {
-          isTab,
-          isTabGroup,
-          isTabGroupLabel,
-          lazy: {},
-        };
-
-        if (Tabmix.isVersion(1380)) {
-          const lazy = {};
-
-          ChromeUtils.defineESModuleGetters(lazy, {
-            // eslint-disable-next-line mozilla/valid-lazy
-            TabMetrics: "moz-src:///browser/components/tabbrowser/TabMetrics.sys.mjs",
-          });
-          scope.lazy = lazy;
-        }
-
-        if (Tabmix.isVersion(1430)) {
-          // @ts-expect-error
-          const elementToMove = element => {
-            if (isTab(element)) {
-              return element;
-            }
-            if (isTabGroupLabel(element)) {
-              return element.closest(".tab-group-label-container");
-            }
-            throw new Error(`Element "${element.tagName}" is not expected to move`);
-          };
-          // @ts-expect-error
-          scope.elementToMove = elementToMove;
-        }
-      } else if (Tabmix.isVersion(1340)) {
-        // Since Firefox 134, tabs.js contains scoped constants for group drop actions:
-        // - GROUP_DROP_ACTION_CREATE: used in on_drop and triggerDragOverCreateGroup
-        // - GROUP_DROP_ACTION_APPEND: used in on_drop and _animateTabMove
-        scope = {
-          GROUP_DROP_ACTION_CREATE: 0x1,
-          GROUP_DROP_ACTION_APPEND: 0x2,
-        };
-      }
-
-      if (Tabmix.isVersion({fp: "128.0.0"})) {
-        const verticalTabbarEnabled = () => Services.prefs.getIntPref("floorp.tabbar.style") === 2;
-        scope = {
-          ...scope,
-          verticalTabbarEnabled,
-        };
-      }
-
-      return Tabmix.getSandbox(window, {scope});
-    })();
+    this.convertPrivateMethods(localSandbox);
 
     this._moveTabOnDragging = Tabmix.prefs.getBoolPref("moveTabOnDragging");
 
@@ -109,12 +42,173 @@ var TMP_tabDNDObserver = {
       }, 0);
     };
 
+    /**
+     * @param {TabDragAndDrop | TabContainer} container
+     * @param {"on_dragover"
+     *   | "on_drop"
+     *   | "handle_dragover"
+     *   | "handle_drop"} name
+     * @param {ChangecodeModule.ChangeCodeClass} code
+     */
+    function patchDragMethod(container, name, code) {
+      if (Tabmix.isVersion(1320)) {
+        code.toCode(false, Tabmix.originalFunctions, `_tabmix_${name}`);
+        Tabmix.originalFunctions[name] = container[name];
+        container[name] = function tabmix_patchDragMethod(event) {
+          const tabbrowserTabs = this._tabbrowserTabs ?? this;
+          const methodName = tabbrowserTabs.verticalMode ? name : `_tabmix_${name}`;
+          Tabmix.originalFunctions[methodName].apply(this, [event]);
+        };
+      } else {
+        code.toCode(false, gBrowser.tabContainer, name);
+      }
+    }
+
+    this.change_startTabDrag(localSandbox);
+    if (!Tabmix.isVersion(1400)) {
+      this.change_animateTabMove(localSandbox);
+    }
+    const {dragoverCode, dragoverName} = this.change_on_dragover(localSandbox);
+    const {dropCode, dropName} = this.change_on_drop(localSandbox);
+
+    patchDragMethod(this.tabDragAndDrop, dragoverName, dragoverCode);
+    patchDragMethod(this.tabDragAndDrop, dropName, dropCode);
+
+    Tabmix.originalFunctions._getDropIndex = this.tabDragAndDrop._getDropIndex;
+    // @ts-expect-error - Complex function overload with bind
+    this.tabDragAndDrop._getDropIndex = this._getDropIndex.bind(this);
+
+    const finishAnimateTabMove =
+      Tabmix.isVersion(1380) ? "finishAnimateTabMove" : "_finishAnimateTabMove";
+    Tabmix.originalFunctions._finishAnimateTabMove = this.tabDragAndDrop[finishAnimateTabMove];
+    this.tabDragAndDrop[finishAnimateTabMove] = function (...args) {
+      Tabmix.originalFunctions._finishAnimateTabMove.apply(this, args);
+      const tabbrowserTabs = this._tabbrowserTabs ?? this;
+      tabbrowserTabs.removeAttribute("tabmix-movingBackgroundTab");
+      // we don't modify _animateTabMove since Firefox 140
+      if (Tabmix.isVersion(1340) && !Tabmix.isVersion(1400)) {
+        // the original function call #clearDragOverCreateGroupTimer
+        // so we need to call our "private" version
+        this._clearDragOverCreateGroupTimer();
+      }
+      const tabs = tabbrowserTabs.querySelectorAll("[tabmix-dragged]");
+      tabs.forEach(tab => tab?.removeAttribute("tabmix-dragged"));
+    };
+
+    this.draglink = `Hold ${TabmixSvc.isMac ? "⌘" : "Ctrl"} to replace locked tab with link Url`;
+
+    // without this the Indicator is not visible on the first drag
+    this._tabDropIndicator.style.transform = "translate(0px, 0px)";
+
+    if (Tabmix.isVersion(1450)) {
+      Tabmix.originalFunctions.on_dragstart = this.tabDragAndDrop.handle_dragstart;
+      this.tabDragAndDrop.handle_dragstart = this.on_dragstart.bind(this.tabDragAndDrop);
+
+      Tabmix.originalFunctions.on_dragend = this.tabDragAndDrop.handle_dragend;
+      this.tabDragAndDrop.handle_dragend = this.on_dragend.bind(this);
+
+      Tabmix.originalFunctions.on_dragleave = this.tabDragAndDrop.handle_dragleave;
+      this.tabDragAndDrop.handle_dragleave = this.on_dragleave.bind(this);
+    } else {
+      Tabmix.originalFunctions.on_dragstart = gBrowser.tabContainer.on_dragstart;
+      gBrowser.tabContainer.on_dragstart = this.on_dragstart.bind(gBrowser.tabContainer);
+
+      Tabmix.originalFunctions.on_dragend = gBrowser.tabContainer.on_dragend;
+      gBrowser.tabContainer.on_dragend = this.on_dragend.bind(this);
+
+      Tabmix.originalFunctions.on_dragleave = gBrowser.tabContainer.on_dragleave;
+      gBrowser.tabContainer.on_dragleave = this.on_dragleave.bind(this);
+    }
+  },
+
+  createSandbox() {
+    let scope;
+    if (Tabmix.isVersion(1370)) {
+      /* eslint-disable-next-line */ // @ts-expect-error
+      const isTab = element => !!(element?.tagName == "tab");
+
+      /* eslint-disable-next-line */ // @ts-expect-error
+      const isTabGroup = element => !!(element?.tagName == "tab-group");
+
+      /* eslint-disable-next-line */ // @ts-expect-error
+      const isTabGroupLabel = element => !!element?.classList?.contains("tab-group-label");
+
+      scope = {
+        isTab,
+        isTabGroup,
+        isTabGroupLabel,
+        lazy: {},
+      };
+
+      if (Tabmix.isVersion(1380)) {
+        const lazy = {};
+
+        ChromeUtils.defineESModuleGetters(lazy, {
+          // eslint-disable-next-line mozilla/valid-lazy
+          TabMetrics: "moz-src:///browser/components/tabbrowser/TabMetrics.sys.mjs",
+        });
+        scope.lazy = lazy;
+      }
+
+      if (Tabmix.isVersion(1430)) {
+        // @ts-expect-error
+        const elementToMove = element => {
+          if (isTab(element)) {
+            return element;
+          }
+          if (isTabGroupLabel(element)) {
+            return element.closest(".tab-group-label-container");
+          }
+          throw new Error(`Element "${element.tagName}" is not expected to move`);
+        };
+        // @ts-expect-error
+        scope.elementToMove = elementToMove;
+      }
+    } else if (Tabmix.isVersion(1340)) {
+      // Since Firefox 134, tabs.js contains scoped constants for group drop actions:
+      // - GROUP_DROP_ACTION_CREATE: used in on_drop and triggerDragOverCreateGroup
+      // - GROUP_DROP_ACTION_APPEND: used in on_drop and _animateTabMove
+      scope = {
+        GROUP_DROP_ACTION_CREATE: 0x1,
+        GROUP_DROP_ACTION_APPEND: 0x2,
+      };
+    }
+
+    if (Tabmix.isVersion({fp: "128.0.0"})) {
+      const verticalTabbarEnabled = () => Services.prefs.getIntPref("floorp.tabbar.style") === 2;
+      scope = {
+        ...scope,
+        verticalTabbarEnabled,
+      };
+    }
+
+    return Tabmix.getSandbox(window, {scope});
+  },
+
+  convertPrivateMethods(localSandbox) {
+    const tabBar = gBrowser.tabContainer;
+
+    const tabContainerProps = (this.tabContainerProps =
+      Tabmix.isVersion(1450) ?
+        {
+          parent: tabBar.tabDragAndDrop,
+          parentName: "gBrowser.tabContainer.tabDragAndDrop",
+        }
+      : {parent: tabBar, parentName: "gBrowser.tabContainer"});
+
+    if (Tabmix.isVersion(1450)) {
+      this.tabDragAndDrop = tabBar.tabDragAndDrop;
+      this.tabDragAndDrop._tabbrowserTabs = tabBar;
+    } else {
+      this.tabDragAndDrop = tabBar;
+    }
+
     if (Tabmix.isVersion(1310)) {
-      // create none private method in gBrowser.tabContainer
+      // create none private method in TabDragAndDrop
       // we will use instead of #rtlMode in:
-      //  gBrowser.tabContainer._animateTabMove
-      //  gBrowser.tabContainer.on_dragover
-      Object.defineProperty(gBrowser.tabContainer, "_rtlMode", {
+      //  TabDragAndDrop._animateTabMove
+      //  TabDragAndDrop.on_dragover
+      Object.defineProperty(this.tabDragAndDrop, "_rtlMode", {
         get() {
           return !this.verticalMode && RTL_UI;
         },
@@ -122,40 +216,42 @@ var TMP_tabDNDObserver = {
         enumerable: true,
       });
 
-      Tabmix.privateMethodTransformState.replaced.add("gBrowser.tabContainer._rtlMode");
+      Tabmix.privateMethodTransformState.replaced.add(`${tabContainerProps.parentName}._rtlMode`);
     }
 
     if (Tabmix.isVersion(1320)) {
-      // create none private method in gBrowser.tabContainer
+      // create none private method in TabDragAndDrop
       // we will use instead of #isContainerVerticalPinnedGrid in:
-      //  gBrowser.tabContainer.on_dragover
-      //  gBrowser.tabContainer.on_drop
+      //  TabDragAndDrop.on_dragover
+      //  TabDragAndDrop.on_drop
       const name =
         Tabmix.isVersion(1380) ?
           "isContainerVerticalPinnedGrid"
         : "isContainerVerticalPinnedExpanded";
-      gBrowser.tabContainer[`_${name}`] = Tabmix.getPrivateMethod({
+      this.tabDragAndDrop[`_${name}`] = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: name,
-        nextMethodName: "appendChild",
+        nextMethodName: Tabmix.isVersion(1450) ? "#isMovingTab" : "appendChild",
       });
 
-      gBrowser.tabContainer._maxTabsPerRow = 0;
-      Tabmix.privateMethodTransformState.replaced.add("gBrowser.tabContainer._maxTabsPerRow");
+      this.tabDragAndDrop._maxTabsPerRow = 0;
+      Tabmix.privateMethodTransformState.replaced.add(
+        `${tabContainerProps.parentName}._maxTabsPerRow`
+      );
 
-      gBrowser.tabContainer._animateExpandedPinnedTabMove = Tabmix.getPrivateMethod({
+      this.tabDragAndDrop._animateExpandedPinnedTabMove = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "animateExpandedPinnedTabMove",
-        nextMethodName: "_animateTabMove",
+        nextMethodName: Tabmix.isVersion(1450) ? "#animateTabMove" : "_animateTabMove",
       });
     }
 
     if (Tabmix.isVersion(1330)) {
       // we use this function in our code
       Tabmix.privateMethodTransformState.planned.add(
-        "gBrowser.tabContainer._setDragOverGroupColor"
+        `${tabContainerProps.parentName}._setDragOverGroupColor`
       );
-      gBrowser.tabContainer._setDragOverGroupColor = Tabmix.getPrivateMethod({
+      this.tabDragAndDrop._setDragOverGroupColor = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "setDragOverGroupColor",
         nextMethodName:
@@ -164,19 +260,19 @@ var TMP_tabDNDObserver = {
           : "_finishAnimateTabMove",
       });
 
-      gBrowser.tabContainer._moveTogetherSelectedTabs = Tabmix.getPrivateMethod({
+      this.tabDragAndDrop._moveTogetherSelectedTabs = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "moveTogetherSelectedTabs",
         nextMethodName:
-          Tabmix.isVersion(1380) ?
-            "finishMoveTogetherSelectedTabs"
+          Tabmix.isVersion(1450) ? "#isAnimatingMoveTogetherSelectedTabs"
+          : Tabmix.isVersion(1380) ? "finishMoveTogetherSelectedTabs"
           : "_finishMoveTogetherSelectedTabs",
       });
 
-      gBrowser.tabContainer._isAnimatingMoveTogetherSelectedTabs = Tabmix.getPrivateMethod({
+      this.tabDragAndDrop._isAnimatingMoveTogetherSelectedTabs = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "isAnimatingMoveTogetherSelectedTabs",
-        nextMethodName: "handleEvent",
+        nextMethodName: Tabmix.isVersion(1450) ? "finishMoveTogetherSelectedTabs" : "handleEvent",
       });
     } else {
       // prevent grouping selected tabs for multi row tabbar
@@ -213,37 +309,43 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.isVersion(1380)) {
-      tabBar._expandGroupOnDrop = Tabmix.getPrivateMethod({
+      this.tabDragAndDrop._expandGroupOnDrop = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "expandGroupOnDrop",
-        nextMethodName: Tabmix.isVersion(1430) ? "#setIsDraggingTabGroup" : "on_drop",
+        nextMethodName:
+          Tabmix.isVersion(1450) ? "#triggerDragOverGrouping"
+          : Tabmix.isVersion(1430) ? "#setIsDraggingTabGroup"
+          : "on_drop",
       });
 
-      Tabmix.changeCode(tabBar, "gBrowser.tabContainer._expandGroupOnDrop")
+      Tabmix.changeCode(this.tabDragAndDrop, `${tabContainerProps.parentName}._expandGroupOnDrop`)
         ._replace("isTabGroupLabel(draggedTab)", "gBrowser.isTabGroupLabel(draggedTab)")
         .toCode();
 
-      gBrowser.tabContainer._setMovingTabMode = function (movingTab) {
-        this.toggleAttribute("movingtab", movingTab);
+      this.tabDragAndDrop._setMovingTabMode = function (movingTab) {
+        const tabbrowserTabs = this._tabbrowserTabs ?? this;
+        tabbrowserTabs.toggleAttribute("movingtab", movingTab);
         gNavToolbox.toggleAttribute("movingtab", movingTab);
       };
 
-      tabBar._dragTime = 0;
+      this.tabDragAndDrop._dragTime = 0;
 
-      Tabmix.privateMethodTransformState.replaced.add("gBrowser.tabContainer._setMovingTabMode");
-      Tabmix.privateMethodTransformState.replaced.add("gBrowser.tabContainer._dragTime");
+      Tabmix.privateMethodTransformState.replaced.add(
+        `${tabContainerProps.parentName}._setMovingTabMode`
+      );
+      Tabmix.privateMethodTransformState.replaced.add(`${tabContainerProps.parentName}._dragTime`);
 
-      tabBar._getDragTarget = Tabmix.getPrivateMethod({
+      this.tabDragAndDrop._getDragTarget = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "getDragTarget",
-        nextMethodName: "#getDropIndex",
+        nextMethodName: Tabmix.isVersion(1450) ? "#isContainerVerticalPinnedGrid" : "#getDropIndex",
         sandbox: localSandbox,
       });
 
-      tabBar._getDropIndex = Tabmix.getPrivateMethod({
+      this.tabDragAndDrop._getDropIndex = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "getDropIndex",
-        nextMethodName: "getDropEffectForTabDrag",
+        nextMethodName: Tabmix.isVersion(1450) ? "#getDragTarget" : "getDropEffectForTabDrag",
         sandbox: localSandbox,
       });
 
@@ -272,16 +374,18 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.isVersion(1420)) {
-      tabBar._updateTabStylesOnDrag = Tabmix.getPrivateMethod({
+      this.tabDragAndDrop._updateTabStylesOnDrag = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "updateTabStylesOnDrag",
-        nextMethodName: "#animateExpandedPinnedTabMove",
+        nextMethodName:
+          Tabmix.isVersion(1450) ? "#moveTogetherSelectedTabs" : "#animateExpandedPinnedTabMove",
       });
 
-      tabBar._resetTabsAfterDrop = Tabmix.getPrivateMethod({
+      this.tabDragAndDrop._resetTabsAfterDrop = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "resetTabsAfterDrop",
-        nextMethodName: "#moveTogetherSelectedTabs",
+        nextMethodName:
+          Tabmix.isVersion(1450) ? "getDropEffectForTabDrag" : "#moveTogetherSelectedTabs",
       });
 
       // Update the first tab's margin when the pinned tabs container overflows
@@ -299,85 +403,98 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.isVersion(1430)) {
-      gBrowser.tabContainer._setIsDraggingTabGroup = Tabmix.getPrivateMethod({
+      this.tabDragAndDrop._setIsDraggingTabGroup = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "setIsDraggingTabGroup",
-        nextMethodName: "on_drop",
+        nextMethodName: Tabmix.isVersion(1450) ? "#expandGroupOnDrop" : "on_drop",
       });
     }
 
-    /**
-     * @param {"on_dragover" | "on_drop"} name
-     * @param {ChangecodeModule.ChangeCodeClass} code
-     */
-    function patchDragMethod(name, code) {
-      if (Tabmix.isVersion(1320)) {
-        code.toCode(false, Tabmix.originalFunctions, `_tabmix_${name}`);
-        Tabmix.originalFunctions[name] = gBrowser.tabContainer[name];
-        gBrowser.tabContainer[name] = function tabmix_patchDragMethod(event) {
-          const methodName = this.verticalMode ? name : `_tabmix_${name}`;
-          Tabmix.originalFunctions[methodName].apply(this, [event]);
-        };
-      } else {
-        code.toCode(false, gBrowser.tabContainer, name);
-      }
+    if (Tabmix.isVersion(1450)) {
+      const tabDnD = this.tabDragAndDrop;
+      tabDnD._maxTabsPerRow = null;
+      tabDnD._dragOverGroupingTimer = null;
+      tabDnD._dragToPinPromoCard = null;
+      tabDnD._pinnedDropIndicatorTimeout = null;
+
+      tabDnD._pinnedDropIndicator = document.getElementById("pinned-drop-indicator");
+      tabDnD._dragToPinPromoCard = document.getElementById("drag-to-pin-promo-card");
+      tabDnD._tabDropIndicator = tabDnD._tabbrowserTabs.querySelector(".tab-drop-indicator");
+
+      this._tabDropIndicator = tabDnD._tabDropIndicator;
+      this._pinnedDropIndicator = tabDnD._pinnedDropIndicator;
+
+      tabDnD._isMovingTab = function () {
+        return this._tabbrowserTabs.hasAttribute("movingtab");
+      };
+
+      tabDnD._resetGroupTarget = function (element) {
+        element?.removeAttribute("dragover-groupTarget");
+      };
+
+      tabDnD._clearDragOverGroupingTimer = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "clearDragOverGroupingTimer",
+        nextMethodName: "#setDragOverGroupColor",
+      });
+
+      tabDnD._clearPinnedDropIndicatorTimer = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "clearPinnedDropIndicatorTimer",
+        nextMethodName: "#resetPinnedDropIndicator",
+      });
+
+      tabDnD._resetPinnedDropIndicator = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "resetPinnedDropIndicator",
+        nextMethodName: "finishAnimateTabMove",
+      });
+
+      tabDnD._checkWithinPinnedContainerBounds = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "checkWithinPinnedContainerBounds",
+        nextMethodName: "#clearPinnedDropIndicatorTimer",
+      });
+
+      tabDnD._triggerDragOverGrouping = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "triggerDragOverGrouping",
+        nextMethodName: "#clearDragOverGroupingTimer",
+      });
+
+      tabDnD._setDragOverGroupColor = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "setDragOverGroupColor",
+        nextMethodName: "#resetGroupTarget",
+      });
+
+      tabDnD._animateTabMove = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "animateTabMove",
+        nextMethodName: "#checkWithinPinnedContainerBounds",
+      });
+    } else {
+      this._pinnedDropIndicator = tabBar.pinnedDropIndicator;
+      this._tabDropIndicator = tabBar._tabDropIndicator;
     }
-
-    this.change_startTabDrag(localSandbox);
-    if (!Tabmix.isVersion(1400)) {
-      this.change_animateTabMove(localSandbox);
-    }
-    const dragoverCode = this.change_on_dragover(localSandbox);
-    const dropCode = this.change_on_drop(localSandbox);
-
-    patchDragMethod("on_dragover", dragoverCode);
-    patchDragMethod("on_drop", dropCode);
-
-    Tabmix.originalFunctions._getDropIndex = gBrowser.tabContainer._getDropIndex;
-    // @ts-expect-error - Complex function overload with bind
-    gBrowser.tabContainer._getDropIndex = this._getDropIndex.bind(this);
-
-    const finishAnimateTabMove =
-      Tabmix.isVersion(1380) ? "finishAnimateTabMove" : "_finishAnimateTabMove";
-    Tabmix.originalFunctions._finishAnimateTabMove = gBrowser.tabContainer[finishAnimateTabMove];
-    gBrowser.tabContainer[finishAnimateTabMove] = function (...args) {
-      Tabmix.originalFunctions._finishAnimateTabMove.apply(this, args);
-      this.removeAttribute("tabmix-movingBackgroundTab");
-      // we don't modify _animateTabMove since Firefox 140
-      if (Tabmix.isVersion(1340) && !Tabmix.isVersion(1400)) {
-        // the original function call #clearDragOverCreateGroupTimer
-        // so we need to call our "private" version
-        this._clearDragOverCreateGroupTimer();
-      }
-      const tabs = this.querySelectorAll("[tabmix-dragged]");
-      tabs.forEach(tab => tab?.removeAttribute("tabmix-dragged"));
-    };
-
-    this._dragOverDelay = tabBar._dragOverDelay;
-    this.draglink = `Hold ${TabmixSvc.isMac ? "⌘" : "Ctrl"} to replace locked tab with link Url`;
-
-    // without this the Indicator is not visible on the first drag
-    tabBar._tabDropIndicator.style.transform = "translate(0px, 0px)";
-
-    Tabmix.originalFunctions.on_dragstart = gBrowser.tabContainer.on_dragstart;
-    gBrowser.tabContainer.on_dragstart = this.on_dragstart.bind(tabBar);
-
-    Tabmix.originalFunctions.on_dragend = gBrowser.tabContainer.on_dragend;
-    gBrowser.tabContainer.on_dragend = this.on_dragend.bind(this);
-
-    Tabmix.originalFunctions.on_dragleave = gBrowser.tabContainer.on_dragleave;
-    gBrowser.tabContainer.on_dragleave = this.on_dragleave.bind(this);
   },
 
   change_startTabDrag() {
     if (Tabmix.isVersion(1320)) {
       // modify startTabDrag after all private method it uses modified above
-      Tabmix.changeCode(gBrowser.tabContainer, "gBrowser.tabContainer.startTabDrag", {
+      Tabmix.changeCode(this.tabDragAndDrop, `${this.tabContainerProps.parentName}.startTabDrag`, {
         forceUpdate: true,
       })
         ._replace("this.selectedItem = tab;", "if (this.verticalMode) {$&}", {
-          check: Tabmix.isVersion(1390),
+          check: Tabmix.isVersion(1390) && !Tabmix.isVersion(1450),
         })
+        ._replace(
+          "this._tabbrowserTabs.selectedItem = tab;",
+          "if (this._tabbrowserTabs.verticalMode) {$&}",
+          {
+            check: Tabmix.isVersion(1450),
+          }
+        )
         ._replace(
           "this._updateTabStylesOnDrag(tab, event);",
           `if (!TMP_tabDNDObserver.useTabmixDnD(event)) {
@@ -615,9 +732,11 @@ var TMP_tabDNDObserver = {
   change_on_dragover(localSandbox) {
     const itemRect = Tabmix.isVersion(1380) ? "itemRect" : "tabRect";
 
-    const dragoverCode = Tabmix.changeCode(
-      gBrowser.tabContainer,
-      "gBrowser.tabContainer.on_dragover",
+    const dragoverName = Tabmix.isVersion(1450) ? "handle_dragover" : "on_dragover";
+
+    const code = Tabmix.changeCode(
+      this.tabDragAndDrop,
+      `${this.tabContainerProps.parentName}.${dragoverName}`,
       {
         sandbox: localSandbox,
       }
@@ -686,13 +805,18 @@ var TMP_tabDNDObserver = {
         {check: Tabmix.isVersion(1380)}
       );
 
-    return dragoverCode;
+    return {dragoverCode: code, dragoverName};
   },
 
   change_on_drop(localSandbox) {
-    const dropCode = Tabmix.changeCode(gBrowser.tabContainer, "gBrowser.tabContainer.on_drop", {
-      sandbox: localSandbox,
-    })
+    const thisContainer = Tabmix.isVersion(1450) ? "this._tabbrowserTabs" : "this";
+    const dropName = Tabmix.isVersion(1450) ? "handle_drop" : "on_drop";
+
+    const code = Tabmix.changeCode(
+      this.tabDragAndDrop,
+      `${this.tabContainerProps.parentName}.${dropName}`,
+      {sandbox: localSandbox}
+    )
       ._replace(
         "var dt = event.dataTransfer;",
         `if (TMP_tabDNDObserver.postDraggingCleanup(event))  {
@@ -708,7 +832,7 @@ var TMP_tabDNDObserver = {
       )
       ._replace(
         "this._resetTabsAfterDrop(draggedTab?.ownerDocument);",
-        `if (draggedTab?.container != this || !useTabmixDnD) {
+        `if (draggedTab?.container != ${thisContainer} || !useTabmixDnD) {
           $&
           TMP_tabDNDObserver.resetTabsAfterDrop(draggedTab);
         }`,
@@ -719,9 +843,9 @@ var TMP_tabDNDObserver = {
         "$1 = Tabmix.duplicateTab(tab);"
       )
       ._replace(
-        "} else if (draggedTab && draggedTab.container == this) {",
+        `} else if (draggedTab && draggedTab.container == ${thisContainer}) {`,
         `gBrowser.ensureTabIsVisible(${Tabmix.isVersion(1380) ? "duplicatedDraggedTab" : "draggedTabCopy"});
-      } else if (draggedTab && draggedTab.container == this && useTabmixDnD && !draggedTab._dragData.modifyPinned) {
+      } else if (draggedTab && draggedTab.container == ${thisContainer} && useTabmixDnD && !draggedTab._dragData.modifyPinned) {
         TMP_tabDNDObserver.handleDrop(event, draggedTab, movingTabs);
         if (Tabmix.isVersion(1420)) {
           // Starting with Firefox 143, we disable the pinned-drop-indicator hide transition
@@ -742,7 +866,7 @@ var TMP_tabDNDObserver = {
         {check: Tabmix.isVersion(1420) && !Tabmix.isVersion(1430)}
       )
       ._replace(
-        "this.arrowScrollbox.contains(event.target)",
+        `${thisContainer}.arrowScrollbox.contains(event.target)`,
         `$& &&
          (!Tabmix.prefs.getBoolPref("pinnedTabScroll") ||
          TMP_tabDNDObserver.getNewIndex(event, draggedTab) >= numPinned)`,
@@ -754,8 +878,8 @@ var TMP_tabDNDObserver = {
         Tabmix.isVersion(1320) ? "let shouldTranslate"
         : Tabmix.isVersion(1300) ? "if (oldTranslate && oldTranslate"
         : "if (oldTranslateX && oldTranslateX",
-        `let refTab = Tabmix.isVersion(1380) ? this.ariaFocusableItems[dropIndex] : this.allTabs[dropIndex];
-       if (!this.verticalMode && refTab) {
+        `let refTab = Tabmix.isVersion(1380) ? ${thisContainer}.ariaFocusableItems[dropIndex] : ${thisContainer}.allTabs[dropIndex];
+       if (!${thisContainer}.verticalMode && refTab) {
          let firstMovingTab = RTL_UI ? movingTabs[movingTabs.length - 1] : movingTabs[0];
            _newTranslateX = RTL_UI && dropIndex < firstMovingTab.elementIndex || !RTL_UI && dropIndex > firstMovingTab.elementIndex
              ? refTab.screenX + refTab.getBoundingClientRect().width - firstMovingTab.screenX - draggedTab._dragData.shiftWidth
@@ -787,7 +911,7 @@ var TMP_tabDNDObserver = {
       }`
       );
 
-    return dropCode;
+    return {dropCode: code, dropName};
   },
 
   _cachedDnDValue: null,
@@ -795,8 +919,7 @@ var TMP_tabDNDObserver = {
     if (this._cachedDnDValue !== null) {
       return this._cachedDnDValue;
     }
-    const tabBar = gBrowser.tabContainer;
-    if (tabBar.getAttribute("orient") !== "horizontal") {
+    if (gBrowser.tabContainer.getAttribute("orient") !== "horizontal") {
       this._cachedDnDValue = false;
       return false;
     }
@@ -804,7 +927,7 @@ var TMP_tabDNDObserver = {
       this._cachedDnDValue = true;
       return true;
     }
-    // don't use mozGetDataAt before gBrowser.tabContainer.startTabDrag
+    // don't use mozGetDataAt before gBrowser.tabContainer.tabDragAndDrop.startTabDrag
     const draggedTab = tab ?? event.dataTransfer.mozGetDataAt(TAB_DROP_TYPE, 0);
     if (draggedTab?.pinned && Tabmix.tabsUtils.lastPinnedTabRowNumber === 1) {
       this._cachedDnDValue = false;
@@ -825,10 +948,11 @@ var TMP_tabDNDObserver = {
     }
   },
 
-  // on_dragstart is bound to gBrowser.tabContainer
+  // on_dragstart is bound to gBrowser.tabContainer.tabDragAndDrop
   on_dragstart(event) {
+    const tabbrowserTabs = this._tabbrowserTabs ?? this;
     const tab = this._getDragTarget(event);
-    if (!tab || this._isCustomizing) {
+    if (!tab || tabbrowserTabs._isCustomizing) {
       return;
     }
 
@@ -853,7 +977,7 @@ var TMP_tabDNDObserver = {
     tab._dragData.pinnedTabsContainerInfo = null;
     if (Tabmix.isVersion(1380)) {
       if (!tab.selected && !Tabmix.prefs.getBoolPref("selectTabOnMouseDown")) {
-        this.setAttribute("tabmix-movingBackgroundTab", true);
+        tabbrowserTabs.setAttribute("tabmix-movingBackgroundTab", true);
         tab.setAttribute("tabmix-dragged", true);
       }
       // we don't collapse the group on multi-row to prevent changing the number of rows
@@ -873,30 +997,30 @@ var TMP_tabDNDObserver = {
     const scale = window.devicePixelRatio;
     let dragImageOffsetX = -16;
     let dragImageOffsetY = TabmixTabbar.visibleRows == 1 ? -16 : -30;
-    let toDrag = this._dndCanvas;
+    let toDrag = tabbrowserTabs._dndCanvas;
     if (Tabmix.isVersion(1380) && gBrowser.isTabGroupLabel(tab)) {
       return;
     } else if (gMultiProcessBrowser) {
       const platform = AppConstants.platform;
       if (platform !== "win" && platform !== "macosx") {
-        toDrag = this._dndPanel;
+        toDrag = tabbrowserTabs._dndPanel;
       }
     } else {
       dragImageOffsetX *= scale;
       dragImageOffsetY *= scale;
     }
     if (TabmixTabbar.position == 1) {
-      dragImageOffsetY = this._dndCanvas.height - dragImageOffsetY;
+      dragImageOffsetY = tabbrowserTabs._dndCanvas.height - dragImageOffsetY;
     }
     const captureListener = function () {
       event.dataTransfer.updateDragImage(toDrag, dragImageOffsetX, dragImageOffsetY);
     };
-    PageThumbs.captureToCanvas(tab.linkedBrowser, this._dndCanvas)
+    PageThumbs.captureToCanvas(tab.linkedBrowser, tabbrowserTabs._dndCanvas)
       .then(captureListener)
       .catch(e => console.error(e));
   },
 
-  // we call this function from gBrowser.tabContainer.on_dragover
+  // we call this function from gBrowser.tabContainer.tabDragAndDrop.handle_dragstart
   handleDragover(event, useTabmixDnD) {
     const tabBar = gBrowser.tabContainer;
     const arrowScrollbox = tabBar.arrowScrollbox;
@@ -926,7 +1050,7 @@ var TMP_tabDNDObserver = {
             panel.hidePopup();
           }
         }
-      }, tabBar._dragOverDelay);
+      }, Services.prefs.getIntPref("browser.tabs.dragDrop.selectTab.delayMS"));
     }
     if (this._dragoverScrollButton(event)) {
       return true;
@@ -947,10 +1071,10 @@ var TMP_tabDNDObserver = {
       return true;
     }
 
-    const effects = tabBar.getDropEffectForTabDrag(event);
+    const effects = this.tabDragAndDrop.getDropEffectForTabDrag(event);
     const dt = event.dataTransfer;
     const isCopy = dt.dropEffect == "copy";
-    const targetTab = tabBar._getDragTarget(event, {ignoreSides: true});
+    const targetTab = this.tabDragAndDrop._getDragTarget(event, {ignoreSides: true});
 
     let disAllowDrop = false;
     let mozCursor = effects == "link" ? "auto" : "default";
@@ -1060,13 +1184,13 @@ var TMP_tabDNDObserver = {
 
       if (draggedElement && draggedElement.container == tabBar) {
         const color = !disAllowDrop && elementGroup && !dropOnStart ? elementGroup.color : null;
-        tabBar._setDragOverGroupColor(color);
+        this.tabDragAndDrop._setDragOverGroupColor(color);
         draggedElement._dragData.movingTabs.forEach(tab => {
           tab.toggleAttribute("tabmix-movingtab-togroup", Boolean(color));
         });
       }
 
-      // based on gBrowser.tabContainer.#checkWithinPinnedContainerBounds
+      // based on gBrowser.tabContainer.tabDragAndDrop.#checkWithinPinnedContainerBounds
       if (Tabmix.isVersion(1430) && effects == "move") {
         const pinnedTabCount = gBrowser.pinnedTabCount;
 
@@ -1084,23 +1208,24 @@ var TMP_tabDNDObserver = {
         if (
           firstNonPinnedTab === dropElement &&
           dropBefore &&
-          tabBar.pinnedDropIndicator.hasAttribute("visible")
+          this._pinnedDropIndicator.hasAttribute("visible")
         ) {
           translateX -= window.windowUtils.getBoundsWithoutFlushing(
-            tabBar.pinnedDropIndicator
+            this._pinnedDropIndicator
           ).width;
         }
-        const movedToPinned = tabBar._rtlMode ? translateX > 0 : translateX < 0;
+        const movedToPinned = this.tabDragAndDrop._rtlMode ? translateX > 0 : translateX < 0;
 
         const inVisibleRange = firstNonPinnedTab === dropElement && dropBefore && movedToPinned;
         const inPinnedRange =
-          inVisibleRange && (tabBar._rtlMode ? event.clientX > right : event.clientX < left);
+          inVisibleRange &&
+          (this.tabDragAndDrop._rtlMode ? event.clientX > right : event.clientX < left);
 
         const isTab = gBrowser.isTab(draggedElement);
         if (
           isTab &&
-          ((inVisibleRange && !tabBar.pinnedDropIndicator.hasAttribute("visible")) ||
-            (inPinnedRange && !tabBar.pinnedDropIndicator.hasAttribute("interactive")))
+          ((inVisibleRange && !this._pinnedDropIndicator.hasAttribute("visible")) ||
+            (inPinnedRange && !this._pinnedDropIndicator.hasAttribute("interactive")))
         ) {
           // On drag into pinned container
           if (!pinnedTabCount) {
@@ -1108,11 +1233,11 @@ var TMP_tabDNDObserver = {
             // The tabbrowser container expands with the expansion of the
             // drop indicator - prevent that by setting maxWidth first.
             tabBar.style.maxWidth = tabbrowserTabsRect.width + "px";
-            tabBar.pinnedDropIndicator.setAttribute("visible", "");
-            tabBar.pinnedDropIndicator.toggleAttribute("interactive", inPinnedRange);
+            this._pinnedDropIndicator.setAttribute("visible", "");
+            this._pinnedDropIndicator.toggleAttribute("interactive", inPinnedRange);
           }
         } else if (!inPinnedRange) {
-          tabBar.pinnedDropIndicator.removeAttribute("interactive");
+          this._pinnedDropIndicator.removeAttribute("interactive");
         }
 
         // hide drop indicator when pinnedDropIndicator is interactive
@@ -1122,7 +1247,7 @@ var TMP_tabDNDObserver = {
             draggedElement.pinned !== dropElement.pinned
           : (draggedElement.pinned ?? false));
 
-        const interactive = tabBar.pinnedDropIndicator.hasAttribute("interactive");
+        const interactive = this._pinnedDropIndicator.hasAttribute("interactive");
 
         // When dragging a pinned tab out of its container, if the cursor lands
         // on the first pixel of the scroll button,a mismatch can occur between
@@ -1149,7 +1274,7 @@ var TMP_tabDNDObserver = {
 
     if (disAllowDrop) {
       this.clearDragmark();
-      if (!TabmixTabbar.isMultiRow || !tabBar.pinnedDropIndicator?.hasAttribute("interactive")) {
+      if (!TabmixTabbar.isMultiRow || !this._pinnedDropIndicator?.hasAttribute("interactive")) {
         dt.effectAllowed = "none";
       }
     }
@@ -1158,11 +1283,11 @@ var TMP_tabDNDObserver = {
     return disAllowDrop;
   },
 
-  // called from gBrowser.tabContainer.on_drop when dragging tabs within the same window
+  // called from gBrowser.tabContainer.tabDragAndDrop.handle_drop when dragging tabs within the same window
   // and when Tabmix's custom drag and drop handling is active (useTabmixDnD === true)
   handleDrop(event, draggedTab, movingTabs) {
     let {dropElement, newIndex, dropBefore, fromTabList, dropOnStart} =
-      gBrowser.tabContainer._getDropIndex(event, {getParams: true});
+      this.tabDragAndDrop._getDropIndex(event, {getParams: true});
 
     const telemetrySource = this.TabMetrics.METRIC_SOURCE.DRAG_AND_DROP;
     if (!Tabmix.isVersion(1370) || fromTabList) {
@@ -1221,7 +1346,7 @@ var TMP_tabDNDObserver = {
       (window.bug489729 && Services.prefs.getBoolPref("extensions.bug489729.disable_detach_tab")) ||
       (Tabmix.singleWindowMode && gBrowser.tabs.length > 1);
 
-    let tabBar = gBrowser.tabContainer;
+    let tabDnD = this.tabDragAndDrop;
 
     let dt = event.dataTransfer;
     let draggedTab = dt.mozGetDataAt(TAB_DROP_TYPE, 0);
@@ -1229,7 +1354,7 @@ var TMP_tabDNDObserver = {
       this.resetTabsAfterDrop(draggedTab);
       // fall back to default Firefox event handler
       // it will call #expandGroupOnDrop
-      Tabmix.originalFunctions.on_dragend.apply(tabBar, [event]);
+      Tabmix.originalFunctions.on_dragend.apply(tabDnD, [event]);
       return;
     }
 
@@ -1245,39 +1370,39 @@ var TMP_tabDNDObserver = {
 
       if (!Tabmix.isVersion(1380)) {
         if (Tabmix.isVersion(1330)) {
-          tabBar._finishMoveTogetherSelectedTabs(draggedTab);
+          tabDnD._finishMoveTogetherSelectedTabs(draggedTab);
         } else {
-          tabBar._finishGroupSelectedTabs(draggedTab);
+          tabDnD._finishGroupSelectedTabs(draggedTab);
         }
-        tabBar._finishAnimateTabMove();
+        tabDnD._finishAnimateTabMove();
       }
     }
 
     // since Firefox 138 we need to reset drag state even if we use our
     // own functions to handle the drag and drop
     if (Tabmix.isVersion(1380)) {
-      tabBar.finishMoveTogetherSelectedTabs(draggedTab);
-      tabBar.finishAnimateTabMove();
-      tabBar._expandGroupOnDrop(draggedTab);
+      tabDnD.finishMoveTogetherSelectedTabs(draggedTab);
+      tabDnD.finishAnimateTabMove();
+      tabDnD._expandGroupOnDrop(draggedTab);
     }
     if (Tabmix.isVersion(1420)) {
       this.resetTabsAfterDrop(draggedTab);
-      tabBar._resetTabsAfterDrop(draggedTab.ownerDocument);
+      tabDnD._resetTabsAfterDrop(draggedTab.ownerDocument);
     }
 
-    if (dt.mozUserCancelled || dt.dropEffect != "none" || tabBar._isCustomizing) {
+    if (dt.mozUserCancelled || dt.dropEffect != "none" || gBrowser.tabContainer._isCustomizing) {
       delete draggedTab._dragData;
     }
   },
 
   on_dragleave(event) {
     this._cachedDnDValue = null;
-    gBrowser.tabContainer._dragTime = 0;
+    this.tabDragAndDrop._dragTime = 0;
     this.hideDragoverMessage();
-    Tabmix.originalFunctions.on_dragleave.apply(gBrowser.tabContainer, [event]);
+    Tabmix.originalFunctions.on_dragleave.apply(this.tabDragAndDrop, [event]);
     let target = event.relatedTarget;
     // @ts-ignore
-    while (target && target != gBrowser.tabContainer) target = target.parentNode;
+    while (target && target != this.tabDragAndDrop) target = target.parentNode;
     this.postDraggingCleanup(event, Boolean(target));
   },
 
@@ -1294,8 +1419,7 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    let tabBar = gBrowser.tabContainer;
-    let tabStrip = tabBar.arrowScrollbox;
+    let tabStrip = gBrowser.tabContainer.arrowScrollbox;
     let ltr = Tabmix.ltr || TabmixTabbar.visibleRows > 1;
     let scrollDirection, targetAnonid;
     if (TabmixTabbar.scrollButtonsMode !== TabmixTabbar.SCROLL_BUTTONS_HIDDEN) {
@@ -1345,7 +1469,7 @@ var TMP_tabDNDObserver = {
       event.stopPropagation();
 
       if (["scrollbutton-up", "scrollbutton-down"].includes(targetAnonid ?? "")) {
-        const ind = gBrowser.tabContainer._tabDropIndicator;
+        const ind = this._tabDropIndicator;
         if (TabmixTabbar.hasMultiRows && Tabmix.prefs.getBoolPref("tabScrollOnTopBottomDrag")) {
           ind.hidden = true;
           return true;
@@ -1380,7 +1504,7 @@ var TMP_tabDNDObserver = {
 
     const tabs = tabBar.querySelectorAll("[tabmix-movingtab-togroup]");
     tabs.forEach(tab => tab?.removeAttribute("tabmix-movingtab-togroup"));
-    tabBar._setDragOverGroupColor(null);
+    this.tabDragAndDrop._setDragOverGroupColor(null);
 
     // make sure scroll position is aligned to row
     if (
@@ -1416,13 +1540,12 @@ var TMP_tabDNDObserver = {
   },
 
   _getDropIndex(event, {dragover = false, getParams = false} = {}) {
-    const tabBar = gBrowser.tabContainer;
     if (
       !dragover &&
       !this.useTabmixDnD(event) &&
       (!Tabmix.isVersion(1420) || event.dataTransfer.dropEffect !== "copy")
     ) {
-      return Tabmix.originalFunctions._getDropIndex.apply(tabBar, [event]);
+      return Tabmix.originalFunctions._getDropIndex.apply(this.tabDragAndDrop, [event]);
     }
     const params = this.eventParams(event);
     if (dragover) {
@@ -1443,11 +1566,11 @@ var TMP_tabDNDObserver = {
             const offset = gBrowser.pinnedTabCount ? 0 : 3;
             const sbRect = gBrowser.tabContainer.arrowScrollbox.getBoundingClientRect();
             params.groupLabelMargin =
-              tabBar._rtlMode ?
+              this.tabDragAndDrop._rtlMode ?
                 sbRect.right - rect.right + offset
               : rect.left - sbRect.left + offset;
           } else {
-            params.groupLabelMargin = tabBar._rtlMode ? rect.left : rect.right;
+            params.groupLabelMargin = this.tabDragAndDrop._rtlMode ? rect.left : rect.right;
           }
         }
       }
@@ -1457,7 +1580,6 @@ var TMP_tabDNDObserver = {
   },
 
   eventParams(event) {
-    const tabBar = gBrowser.tabContainer;
     const dt = event.dataTransfer;
     const sourceNode = this.getSourceNode(dt);
     const {dragType, tab} = this.getDragType(sourceNode);
@@ -1542,7 +1664,7 @@ var TMP_tabDNDObserver = {
       newIndex = gBrowser.tabs.length;
     }
 
-    const dropTab = tabBar.allTabs[newIndex];
+    const dropTab = gBrowser.tabContainer.allTabs[newIndex];
     const fromTabList =
       (tab?._dragData.fromTabList && dropTab !== dropTab?.group?.tabs[0]) || false;
 
@@ -1898,7 +2020,7 @@ var TMP_tabDNDObserver = {
   },
 
   clearDragmark() {
-    gBrowser.tabContainer._tabDropIndicator.hidden = true;
+    this._tabDropIndicator.hidden = true;
   },
 
   getSourceNode: function TMP_getSourceNode(aDataTransfer) {
@@ -2481,6 +2603,38 @@ Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodN
     return method;
   }
 
+  /** @param {string} text */
+  function cleanTrailingComments(text) {
+    let changed = true;
+
+    while (changed) {
+      changed = false;
+      text = text.trimEnd();
+      const lines = text.split("\n");
+
+      // 🧹 Remove all trailing single-line comments
+      while (lines.at(-1)?.trim().startsWith("//")) {
+        lines.pop();
+        changed = true;
+      }
+
+      text = lines.join("\n").trimEnd();
+
+      // 🧼 Remove trailing block comment if last line ends with */
+      const lastLine = lines.at(-1)?.trim() ?? "";
+      if (lastLine.endsWith("*/")) {
+        const endIndex = text.lastIndexOf("*/");
+        const startIndex = text.lastIndexOf("/*", endIndex);
+        if (startIndex !== -1) {
+          text = text.slice(0, startIndex) + text.slice(endIndex + 2);
+          changed = true;
+        }
+      }
+    }
+
+    return text.trimEnd();
+  }
+
   let code = firefoxClass
     .toString()
     .split(` #${methodName}`)[1] // function to extract from source code
@@ -2488,17 +2642,7 @@ Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodN
     ?.trim();
   if (code) {
     try {
-      // remove comments at the beginning of the next method
-      const codeWithoutComments = code.split("\n");
-      while (codeWithoutComments.at(-1)?.trim().startsWith("//")) {
-        codeWithoutComments.pop();
-      }
-      code = codeWithoutComments
-        .join("\n")
-        .trim()
-        // remove jsdoc comments at the beginning of the next method
-        .replace(/\/\*\*[\s\S]*\*\/$/, "")
-        .trim();
+      code = cleanTrailingComments(code);
       return Tabmix.makeCode(`_${methodName}${code}`, parent, nonPrivateMethodName, sandbox);
     } catch (error) {
       console.error(

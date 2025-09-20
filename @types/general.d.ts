@@ -8,6 +8,7 @@ type Tabs = NonEmptyArray<Tab>;
 type Browser = MockedGeckoTypes.ChromeBrowser;
 type TabBrowser = MockedGeckoTypes.TabBrowser;
 type TabContainer = MockedGeckoTypes.TabContainer;
+type TabDragAndDrop = MockedGeckoTypes.TabDragAndDrop;
 
 // use these types instead of types from gecko.d.ts
 type nsIFilePickerXpcom = nsIFilePicker;
@@ -303,36 +304,25 @@ declare namespace MockedGeckoTypes {
     height: number;
   }
 
-  interface TabContainer extends Element {
-    _animateExpandedPinnedTabMove: (event: MouseEvent) => void;
-    _animateTabMove: (event: MouseEvent) => void;
+  interface TabContainer extends Element, TabDragAndDropMethods {
     _backgroundTabScrollPromise?: Promise<void>;
     _blockDblClick?: boolean;
     _dndCanvas: DNDCanvas;
     _dndPanel: DNDCanvas;
     _dragOverDelay: number;
     _expandSpacerBy: (pixels: number) => void;
-    finishAnimateTabMove: () => void;
-    finishMoveTogetherSelectedTabs: (tab: BrowserTab) => void;
-    // we are adding arguments to _getDropIndex see minit.js for details
-    _getDropIndex(event: DragEvent): number;
-    _getDropIndex(event: DragEvent, options: {dragover?: boolean; getParams: true}): DragEventParams;
-    _getDropIndex(event: DragEvent, options?: {dragover?: boolean; getParams?: boolean}): number | DragEventParams;
     _handleTabSelect: (instant: boolean) => void;
     _invalidateCachedTabs: () => void;
     _invalidateCachedVisibleTabs: () => void;
-    _setIsDraggingTabGroup(tabGroup: MozTabbrowserTabGroup, isDragging: boolean): void;
     get _isCustomizing(): boolean;
     _lastTabClosedByMouse: boolean;
     _lastTabToScrollIntoView?: BrowserTab;
-    _maxTabsPerRow: number;
     _notifyBackgroundTab: (aTab: BrowserTab) => void;
     _pinnedTabsLayoutCache: Record<string, unknown> | null;
     _positionPinnedTabs: () => void;
     _selectNewTab: (aNewTab: BrowserTab, aFallbackDir?: number, aWrap?: boolean) => void;
     _scrollButtonWidth: number;
     _tabClipWidth: number;
-    _tabDropIndicator: HTMLElement;
     _unlockTabSizing: () => void;
     _updateCloseButtons(skipUpdateScrollStatus?: boolean, aUrl?: string | null): void;
     advanceSelectedTab: (dir: number, wrap: boolean) => void;
@@ -341,12 +331,11 @@ declare namespace MockedGeckoTypes {
     get allGroups(): MozTabbrowserTabGroup[];
     // see declaration in addon.d.ts
     // arrowScrollbox: ArrowScrollbox;
-    getDropEffectForTabDrag: (event: DragEvent) => string;
     mCloseButtons: number;
     mTabMaxWidth: number;
     mTabMinWidth: number;
     pinnedTabsContainer: ArrowScrollbox;
-    pinnedDropIndicator: Element;
+    pinnedDropIndicator: HTMLElement;
     set selectedItem(val: BrowserTab);
     get selectedItem(): BrowserTab;
     set selectedIndex(val: number);
@@ -359,6 +348,14 @@ declare namespace MockedGeckoTypes {
     on_dragend: (event: DragEvent) => void;
     on_dragstart: (event: DragEvent) => void;
     on_drop: (event: DragEvent) => void;
+    handle_dragover: never;
+    handle_dragleave: never;
+    handle_dragend: never;
+    handle_dragstart: never;
+    handle_drop: never;
+
+    tabDragAndDrop: TabDragAndDrop;
+    _tabbrowserTabs: never;
 
     // TGM extension
     _onDelayTabHide?: number;
@@ -368,24 +365,46 @@ declare namespace MockedGeckoTypes {
     __showbuttonTab?: BrowserTab;
     _hasTabTempWidth: boolean;
     _hasTabTempMaxWidth: boolean;
-    _rtlMode: boolean;
-
-    // replacement for private methods and getters
-    _dragTime: number;
-    _expandGroupOnDrop(draggedTab: BrowserTab): void;
-    _getDragTarget(event: DragEvent, options?: {ignoreSides?: boolean}): BrowserTab | null;
-    _isAnimatingMoveTogetherSelectedTabs: () => boolean;
-    _isContainerVerticalPinnedGrid: boolean;
-    _isMovingTab(): boolean;
-    _pinnedDropIndicatorTimeout: number | null;
-    _resetTabsAfterDrop(draggedTabDocument: Document): void;
-    _updateTabStylesOnDrag(tab: BrowserTab, event: DragEvent): void;
-
     _keepTabSizeLocked: boolean;
-    _moveTogetherSelectedTabs: (tab: BrowserTab) => void;
-    // using instead of private method #setDragOverGroupColor since Firefox 133
-    _setDragOverGroupColor: (groupColorCode: string | null) => void;
+  }
+
+  interface TabBox {
+    handleEvent(event: Event): void;
+  }
+
+  interface TabDragAndDrop extends TabDragAndDropMethods {
+    _tabbrowserTabs: TabContainer;
+
+    on_dragover: never;
+    on_dragleave: never;
+    on_dragend: never;
+    on_dragstart: never;
+    on_drop: never;
+    handle_dragover: (event: DragEvent) => void;
+    handle_dragleave: (event: DragEvent) => void;
+    handle_dragend: (event: DragEvent) => void;
+    handle_dragstart: (event: DragEvent) => void;
+    handle_drop: (event: DragEvent) => void;
+
+    verticalMode: never;
+  }
+
+  interface TabDragAndDropMethods extends TabDragAndDropPrivateMethods {
+    _dragTime: number;
+    _dragOverGroupingTimer: number | null;
+    _dragToPinPromoCard: HTMLElement | null;
+    _isMovingTab(): boolean;
+    _maxTabsPerRow: number | null;
+    _pinnedDropIndicatorTimeout: number | null;
+    _pinnedDropIndicator: HTMLElement;
+    _resetGroupTarget(element: HTMLElement): void;
+    _rtlMode: boolean;
     _setMovingTabMode(movingTab: boolean): void;
+    _tabDropIndicator: HTMLElement;
+
+    finishAnimateTabMove: () => void;
+    finishMoveTogetherSelectedTabs: (tab: BrowserTab) => void;
+    getDropEffectForTabDrag: (event: DragEvent) => string;
 
     /** @deprecated replaced with finishAnimateTabMove in firefox 138 */
     _finishAnimateTabMove: () => void;
@@ -393,8 +412,6 @@ declare namespace MockedGeckoTypes {
     _finishMoveTogetherSelectedTabs: (tab: BrowserTab) => void;
     /** @deprecated replaced with _finishMoveTogetherSelectedTabs in firefox 133 */
     _finishGroupSelectedTabs: (tab: BrowserTab) => void;
-    /** @deprecated replaced with _clearDragOverGroupingTimer in firefox 143 */
-    _clearDragOverCreateGroupTimer: () => void;
     /** @deprecated replaced with _dragOverGroupingTimer in firefox 143 */
     _dragOverCreateGroupTimer: number;
     /** @deprecated replaced with #getDragTarget in firefox 138 */
@@ -403,14 +420,38 @@ declare namespace MockedGeckoTypes {
     _groupSelectedTabs: (tab: BrowserTab) => void;
     /** @deprecated removed by bug 1923635 in firefox 133 */
     _getVisibleTabs: () => Tabs;
+  }
+
+  /// for use in Tabmix.getPrivateMethod
+  interface TabDragAndDropPrivateMethods {
+    _animateTabMove: (event: MouseEvent) => void;
+    _animateExpandedPinnedTabMove: (event: MouseEvent) => void;
+    _checkWithinPinnedContainerBounds(params: {firstMovingTabScreen: number; lastMovingTabScreen: number; pinnedTabsStartEdge: number; pinnedTabsEndEdge: number; translate: number; draggedTab: BrowserTab}): void;
+    _clearDragOverGroupingTimer: () => void;
+    _clearPinnedDropIndicatorTimer: () => void;
+    _expandGroupOnDrop(draggedTab: BrowserTab): void;
+    _getDragTarget(event: DragEvent, options?: {ignoreSides?: boolean}): BrowserTab | null;
+    // we are adding arguments to _getDropIndex see minit.js for details
+    _getDropIndex(event: DragEvent): number;
+    _getDropIndex(event: DragEvent, options: {dragover?: boolean; getParams: true}): DragEventParams;
+    _getDropIndex(event: DragEvent, options?: {dragover?: boolean; getParams?: boolean}): number | DragEventParams;
+    _isAnimatingMoveTogetherSelectedTabs: () => boolean;
+    _isContainerVerticalPinnedGrid: boolean;
+    _moveTogetherSelectedTabs: (tab: BrowserTab) => void;
+    _resetPinnedDropIndicator: () => void;
+    _resetTabsAfterDrop(draggedTabDocument: Document): void;
+    // using instead of private method #setDragOverGroupColor since Firefox 133
+    _setDragOverGroupColor: (groupColorCode: string | null) => void;
+    _setIsDraggingTabGroup(tabGroup: MozTabbrowserTabGroup, isDragging: boolean): void;
+    _triggerDragOverGrouping(dropElement: BrowserTab | MozTabGroupLabel): void;
+    _updateTabStylesOnDrag(tab: BrowserTab, event: DragEvent): void;
+
+    /** @deprecated replaced with _clearDragOverGroupingTimer in firefox 143 */
+    _clearDragOverCreateGroupTimer: () => void;
     /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
     _isContainerVerticalPinnedExpanded: boolean;
     /** @deprecated replaced with _triggerDragOverGrouping in firefox 143 */
     _triggerDragOverCreateGroup: (dragData: BrowserTab["_dragData"], groupDropIndex: number) => void;
-  }
-
-  interface TabBox {
-    handleEvent(event: Event): void;
   }
 
   interface Tabpanels extends HTMLElement {
@@ -452,26 +493,18 @@ declare namespace MockedGeckoTypes {
 
   type CachedTitleInfoIds = "mainWindowTitle" | "privateWindowTitle" | "privateWindowSuffixForContent";
 
-  interface TabBrowser extends Browser {
+  interface TabBrowser extends Browser, TabBrowserPrivateMethods {
     // build in methods and properties
     _switcher: {
       visibleTab: BrowserTab;
     };
     _cachedTitleInfo: Record<CachedTitleInfoIds, string> | null;
     _endRemoveTab: (tab: BrowserTab) => void;
-    _determineContentTitle: (browser: ChromeBrowser) => string;
-    _determineTaskbarTabTitle: (profileIdentifier: string) => string;
     _findTabToBlurTo: (aTab: BrowserTab, aExcludeTabs?: BrowserTab[]) => BrowserTab | null;
-    _getTabMoveState: (tab: BrowserTab) => TabMoveState | undefined;
-    _handleTabMove: (tab: BrowserTab, moveActionCallback: () => void) => void;
     /** @deprecated replaced with pinnedTabCount in Firefox version 133 */
     readonly _numPinnedTabs: number;
-    _isLastTabInWindow: (tab: BrowserTab) => boolean;
     _lastRelatedTabMap: WeakMap<BrowserTab, BrowserTab>;
     _multiSelectedTabsSet: WeakSet<BrowserTab>;
-    _notifyPinnedStatus: (tab: BrowserTab, params: {telemetrySource?: string}) => void;
-    _notifyOnTabMove: (tab: BrowserTab, previousTabState?: TabMoveState, currentTabState?: TabMoveState, metricsContext?: MockedExports.TabMetricsContext) => void;
-    _populateTitleCache: () => void;
     _removingTabs: Set<BrowserTab>;
     _selectedTab: BrowserTab;
     _setTabLabel: (tab: BrowserTab, label: string, options?: {beforeTabOpen?: boolean; isContentTitle?: boolean; isURL?: boolean}) => boolean;
@@ -609,6 +642,18 @@ declare namespace MockedGeckoTypes {
     closeTab: (tab: BrowserTab) => void;
     /** @deprecated use Tabmix.renameTab.editTitle(aTab) instead */
     renameTab: (tab: BrowserTab) => void;
+  }
+
+  /// for use in Tabmix.getPrivateMethod
+  interface TabBrowserPrivateMethods {
+    _determineContentTitle: (browser: ChromeBrowser) => string;
+    _determineTaskbarTabTitle: (profileIdentifier: string) => string;
+    _getTabMoveState: (tab: BrowserTab) => TabMoveState | undefined;
+    _handleTabMove: (tab: BrowserTab, moveActionCallback: () => void) => void;
+    _isLastTabInWindow: (tab: BrowserTab) => boolean;
+    _notifyPinnedStatus: (tab: BrowserTab, params: {telemetrySource?: string}) => void;
+    _notifyOnTabMove: (tab: BrowserTab, previousTabState?: TabMoveState, currentTabState?: TabMoveState, metricsContext?: MockedExports.TabMetricsContext) => void;
+    _populateTitleCache: () => void;
   }
 
   interface BrowserWindow extends MockedExports.BrowserWindow {
@@ -864,6 +909,7 @@ interface GetByMap {
   "browser": MockedGeckoTypes.TabBrowser;
   "tabmix_bookmarkUrl": MockedGeckoTypes.BrowserTab;
   "new-tab-button": HTMLButtonElement;
+  "pinned-drop-indicator": HTMLElement;
   "placesContext": XULPopupElement;
   "placesContext_open": HTMLElement;
   "placesContext_open:newprivatewindow": HTMLElement;

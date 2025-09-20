@@ -19,7 +19,6 @@ type PrivateMethodOptions<T> = {
 // Firefox modules
 
 interface PrivateMethods {
-  // BrowserDOMWindow
   openURIInNewTab: BrowserDOMWindow["prototype"]["_openURIInNewTab"];
 }
 

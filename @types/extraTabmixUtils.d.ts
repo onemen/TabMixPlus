@@ -4,39 +4,13 @@ interface Functions {
   getById<K extends keyof GetByMap | string>(selectors: K): K extends keyof GetByMap ? GetByMap[K] : any | null;
 }
 
-// more methods in addon.d.ts
-interface PrivateMethods {
-  // gBrowser
-  determineContentTitle: MockedGeckoTypes.TabBrowser["_determineContentTitle"];
-  determineTaskbarTabTitle: MockedGeckoTypes.TabBrowser["_determineTaskbarTabTitle"];
-  getTabMoveState: MockedGeckoTypes.TabBrowser["_getTabMoveState"];
-  handleTabMove: MockedGeckoTypes.TabBrowser["_handleTabMove"];
-  isLastTabInWindow: MockedGeckoTypes.TabBrowser["_isLastTabInWindow"];
-  notifyPinnedStatus: MockedGeckoTypes.TabBrowser["_notifyPinnedStatus"];
-  notifyOnTabMove: MockedGeckoTypes.TabBrowser["_notifyOnTabMove"];
-  populateTitleCache: MockedGeckoTypes.TabBrowser["_populateTitleCache"];
-  // TabContainer
-  animateExpandedPinnedTabMove: MockedGeckoTypes.TabContainer["_animateExpandedPinnedTabMove"];
-  expandGroupOnDrop: MockedGeckoTypes.TabContainer["_expandGroupOnDrop"];
-  getDragTarget: MockedGeckoTypes.TabContainer["_getDragTarget"];
-  getDropIndex: MockedGeckoTypes.TabContainer["_getDropIndex"];
-  isAnimatingMoveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_isAnimatingMoveTogetherSelectedTabs"];
-  isContainerVerticalPinnedGrid: MockedGeckoTypes.TabContainer["_isContainerVerticalPinnedGrid"];
-  isMovingTab: MockedGeckoTypes.TabContainer["_isMovingTab"];
-  moveTogetherSelectedTabs: MockedGeckoTypes.TabContainer["_moveTogetherSelectedTabs"];
-  pinnedDropIndicatorTimeout: MockedGeckoTypes.TabContainer["_pinnedDropIndicatorTimeout"];
-  resetTabsAfterDrop: MockedGeckoTypes.TabContainer["_resetTabsAfterDrop"];
-  setDragOverGroupColor: MockedGeckoTypes.TabContainer["_setDragOverGroupColor"];
-  setIsDraggingTabGroup: MockedGeckoTypes.TabContainer["_setIsDraggingTabGroup"];
-  updateTabStylesOnDrag: MockedGeckoTypes.TabContainer["_updateTabStylesOnDrag"];
+type StripUnderscore<T extends string> = T extends `_${infer Rest}` ? Rest : T;
+type TransformPrivateMethods<T> = {
+  [K in keyof T as K extends string ? StripUnderscore<K> : never]: T[K];
+};
 
-  /** @deprecated replaced with _clearDragOverGroupingTimer in firefox 143 */
-  clearDragOverCreateGroupTimer: MockedGeckoTypes.TabContainer["_clearDragOverCreateGroupTimer"];
-  /** @deprecated replaced with _isContainerVerticalPinnedGrid in firefox 138 */
-  isContainerVerticalPinnedExpanded: MockedGeckoTypes.TabContainer["_isContainerVerticalPinnedExpanded"];
-  /** @deprecated replaced with _triggerDragOverGrouping in firefox 143 */
-  triggerDragOverCreateGroup: MockedGeckoTypes.TabContainer["_triggerDragOverCreateGroup"];
-}
+/// more methods in addon.d.ts
+interface PrivateMethods extends TransformPrivateMethods<MockedGeckoTypes.TabBrowserPrivateMethods>, TransformPrivateMethods<MockedGeckoTypes.TabDragAndDropPrivateMethods> {}
 
 interface TabmixGlobal {
   // see changedcode and getPrivateMethod in modules.d.ts
