@@ -66,9 +66,18 @@ export const TabmixBrowserDOMWindow = {
         typeof browserAccess.__treestyletab__openURI == "function"
       ) ?
         "__treestyletab__openURI"
+      : isVersion(1450) ? "_getContentWindowOrOpenURI"
       : "getContentWindowOrOpenURI";
 
     this.getContentWindowOrOpenURI(constructor, methodName, tabmixObj);
+
+    if (isVersion(1450)) {
+      // replace this.#getContentWindowOrOpenURI with this._getContentWindowOrOpenURI
+      const parent = "BrowserDOMWindow.prototype";
+      const options = {sandbox: tabmixObj._sandbox, silent: true};
+      tabmixObj.changeCode(browserAccess, `${parent}.createContentWindow`, options).toCode();
+      tabmixObj.changeCode(browserAccess, `${parent}.openURI`, options).toCode();
+    }
   },
 
   getBrowserDOMWindow(window) {
@@ -97,6 +106,15 @@ export const TabmixBrowserDOMWindow = {
       methodName: "openURIInNewTab",
       nextMethodName: "createContentWindow",
     });
+
+    if (isVersion(1450)) {
+      BrowserDOMWindow.prototype._getContentWindowOrOpenURI = getPrivateMethod({
+        parent: BrowserDOMWindow.prototype,
+        parentName: "BrowserDOMWindow.prototype",
+        methodName: "getContentWindowOrOpenURI",
+        nextMethodName: "createContentWindowInFrame",
+      });
+    }
 
     /* eslint-disable mozilla/valid-lazy */
     // @ts-ignore

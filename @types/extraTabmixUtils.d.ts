@@ -4,11 +4,6 @@ interface Functions {
   getById<K extends keyof GetByMap | string>(selectors: K): K extends keyof GetByMap ? GetByMap[K] : any | null;
 }
 
-type StripUnderscore<T extends string> = T extends `_${infer Rest}` ? Rest : T;
-type TransformPrivateMethods<T> = {
-  [K in keyof T as K extends string ? StripUnderscore<K> : never]: T[K];
-};
-
 /// more methods in addon.d.ts
 interface PrivateMethods extends TransformPrivateMethods<MockedGeckoTypes.TabBrowserPrivateMethods>, TransformPrivateMethods<MockedGeckoTypes.TabDragAndDropPrivateMethods> {}
 

@@ -16,17 +16,24 @@ type PrivateMethodOptions<T> = {
   sandbox?: TabmixSandbox;
 };
 
+type StripUnderscore<T extends string> = T extends `_${infer Rest}` ? Rest : T;
+type TransformPrivateMethods<T> = {
+  [K in keyof T as K extends string ? StripUnderscore<K> : never]: T[K];
+};
+
 // Firefox modules
 
-interface PrivateMethods {
-  openURIInNewTab: BrowserDOMWindow["prototype"]["_openURIInNewTab"];
-}
+interface PrivateMethods extends TransformPrivateMethods<BrowserDOMWindowPrivateMethods> {}
 
 /* nsBrowserAccess replaced with BrowserDOMWindow in firefox 137 */
-interface BrowserDOMWindow {
+interface BrowserDOMWindow extends BrowserDOMWindowPrivateMethods {
   [key: string]: any;
   __treestyletab__openURI: (...args: any[]) => void;
-  _openURIInNewTab(...args: any[]): void;
+}
+
+interface BrowserDOMWindowPrivateMethods {
+  _getContentWindowOrOpenURI(aURI: nsIURI, aOpenWindowInfo: nsIOpenWindowInfo, aWhere: i16, aFlags: i32, aTriggeringPrincipal: nsIPrincipal, aPolicyContainer: nsISerializable, aSkipLoad: boolean): BrowsingContext;
+  _openURIInNewTab(aURI: nsIURI, aReferrerInfo: nsIReferrerInfo, aIsPrivate: boolean, aIsExternal: boolean, aForceNotRemote?: boolean, aUserContextId?: number, aOpenWindowInfo?: nsIOpenWindowInfo, aOpenerBrowser?: Element, aTriggeringPrincipal?: nsIPrincipal, aName?: string, aPolicyContainer?: nsISerializable, skipLoad?: boolean, aWhere?: i16): nsIBrowser | null;
 }
 
 interface createXULMap {
