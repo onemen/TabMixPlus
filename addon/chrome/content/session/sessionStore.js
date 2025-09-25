@@ -1310,7 +1310,7 @@ Tabmix.closedObjectsUtils = {
         if (Tabmix.isVersion(1410)) {
           window.SessionWindowUI.undoCloseWindow(index);
         } else {
-          undoCloseWindow(index);
+          window.undoCloseWindow(index);
         }
     }
   },

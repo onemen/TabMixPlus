@@ -1072,10 +1072,6 @@ declare function pref(name: string, defaultValue: number | string | boolean): vo
 declare function readFromClipboard(): string;
 declare function setTimeout<T extends unknown[], U>(callback: (...args: T) => U, timeout: number, ...args: T): number;
 declare function urlSecurityCheck(aURL: string, aPrincipal: nsIPrincipal, aFlags?: nsIScriptSecurityManager): void;
-/** @deprecated undoCloseWindow moved to SessionWindowUI.undoCloseWindow in firefox 141 */
-declare function undoCloseWindow(index: number): void;
-/** @deprecated undoCloseTab moved to SessionWindowUI.undoCloseTab in firefox 141 */
-declare function undoCloseTab(aIndex?: number, sourceWindowSSId?: string): MockedGeckoTypes.BrowserTab | null;
 
 declare var CustomizableUI: MockedExports.CustomizableUI;
 declare var E10SUtils: MockedExports.E10SUtils;

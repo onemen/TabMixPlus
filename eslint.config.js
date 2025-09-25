@@ -4,6 +4,7 @@ import globals from "globals";
 
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginHtml from "eslint-plugin-html";
+import eslintPluginJsonc from "eslint-plugin-jsonc";
 import eslintPluginMozilla from "eslint-plugin-mozilla";
 import tseslint from "typescript-eslint";
 import eslintPluginTabmix from "./config/eslint-plugin-tabmix/index.js";
@@ -38,7 +39,7 @@ export default [
       "**/*~*.*",
       "**/*׳¢׳•׳×׳§*.*",
       "**/*עותק*.*",
-      "**/private/*",
+      "**/private/**",
       "eslint_result.js",
       "manifest.json",
       "logs/",
@@ -51,6 +52,8 @@ export default [
     name: "eslint/configs/recommended",
     ...js.configs.recommended,
   },
+
+  ...eslintPluginJsonc.configs["flat/recommended-with-jsonc"],
   ...eslintPluginMozilla.configs["flat/recommended"],
 
   {

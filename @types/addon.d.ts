@@ -113,6 +113,11 @@ interface Window {
   TMP_Places: TabmixPlaces;
   XULBrowserWindow: XULBrowserWindow;
 
+  /** @deprecated undoCloseWindow moved to SessionWindowUI.undoCloseWindow in firefox 141 */
+  undoCloseWindow(index: number): void;
+  /** @deprecated undoCloseTab moved to SessionWindowUI.undoCloseTab in firefox 141 */
+  undoCloseTab(aIndex?: number, sourceWindowSSId?: string): MockedGeckoTypes.BrowserTab | null;
+
   /** globals installed by extensions */
   bug489729: unknown;
   com: {

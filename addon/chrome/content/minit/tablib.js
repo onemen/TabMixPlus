@@ -2073,7 +2073,7 @@ Tabmix.getOpenDuplicateNextPref = function () {
 
 Tabmix.undoCloseTab = function (index, sourceWindow) {
   if (!Tabmix.isVersion(1410)) {
-    return undoCloseTab(index, sourceWindow);
+    return window.undoCloseTab(index, sourceWindow);
   }
 
   return window.SessionWindowUI.undoCloseTab(window, index, sourceWindow);
