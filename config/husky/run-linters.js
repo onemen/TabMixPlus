@@ -97,7 +97,14 @@ async function main() {
 
   // Run prettier
   if (prettierFiles.length) {
-    const code = runCmd("prettier", "bin/prettier.cjs", ["--check", ...prettierFiles]);
+    const code = runCmd("prettier", "bin/prettier.cjs", [
+      "--check",
+      "--config",
+      "config/prettier.config.js",
+      "--ignore-path",
+      "config/.prettierignore",
+      ...prettierFiles,
+    ]);
     commands.push(code);
   }
 

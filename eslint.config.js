@@ -1,4 +1,3 @@
-import js from "@eslint/js";
 import stylistic from "@stylistic/eslint-plugin";
 import globals from "globals";
 
@@ -6,7 +5,6 @@ import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginHtml from "eslint-plugin-html";
 import eslintPluginJsonc from "eslint-plugin-jsonc";
 import eslintPluginMozilla from "eslint-plugin-mozilla";
-import tseslint from "typescript-eslint";
 import eslintPluginTabmix from "./config/eslint-plugin-tabmix/index.js";
 
 const mozillaGlobals = eslintPluginMozilla.environments;
@@ -48,13 +46,11 @@ export default [
     ],
   },
 
-  {
-    name: "eslint/configs/recommended",
-    ...js.configs.recommended,
-  },
-
+  // Base configs - provides the foundation
   ...eslintPluginJsonc.configs["flat/recommended-with-jsonc"],
   ...eslintPluginMozilla.configs["flat/recommended"],
+  // TODO: need to add some missing jsodc ....
+  // eslintPluginMozilla.configs["flat/valid-jsdoc"],
 
   {
     name: "tabmix/stylistic-rules",
@@ -71,8 +67,6 @@ export default [
         "error",
         {
           groups: [
-            // conflicting with prettier
-            // ["+", "-", "*", "/", "%", "**"],
             ["&", "|", "^", "~", "<<", ">>", ">>>"],
             ["==", "!=", "===", "!==", ">", ">=", "<", "<="],
             ["&&", "||"],
@@ -98,61 +92,38 @@ export default [
     name: "tabmix/main-rules",
     files: ["**/*.js", "**/*.sys.mjs", "**/*.xhtml"],
     plugins: {
-      mozilla: eslintPluginMozilla,
       tabmix: eslintPluginTabmix,
     },
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "script",
     },
-    linterOptions: {reportUnusedDisableDirectives: "error"},
+    linterOptions: {reportUnusedDisableDirectives: "warn"},
     rules: {
+      // -- Mozilla Rules --
       // Enable some mozilla rules that are not enabled by mozilla/recommended.
       "mozilla/avoid-Date-timing": "error",
-      "mozilla/balanced-listeners": "off",
       "mozilla/balanced-observers": "error",
+      // Explicitly disable some recommended rules
+      "mozilla/balanced-listeners": "off",
       "mozilla/no-aArgs": "off",
       "mozilla/reject-chromeutils-import": "off",
+      "mozilla/import-globals": "off",
 
+      // -- Custom Tabmix Rules --
       "tabmix/lazy-getter-name-match": "error",
 
-      "accessor-pairs": "error",
-      "array-callback-return": "error",
-      "block-scoped-var": "error",
+      // -- General Rule Overrides & Additions --
+      // These are rules that are either not in recommended or are configured differently.
       "class-methods-use-this": "error",
-      "complexity": ["off", 11],
+      "complexity": "off",
       "consistent-this": ["error", "self"],
       "curly": ["error", "multi-line"],
-      "dot-notation": ["error", {allowKeywords: true}],
-      "guard-for-in": "error",
-      "max-depth": ["off", 4],
-      "max-nested-callbacks": ["off", 2],
-      "max-params": ["off", 3],
-      "max-statements": ["off", 10],
-      "no-alert": "error",
       "no-console": "off",
       "no-continue": "error",
-      "no-div-regex": "error",
-      "no-duplicate-imports": ["error", {includeExports: true}],
-      "no-eq-null": "error",
       "no-eval": "off",
-      "no-extend-native": "error",
-      "no-extra-label": "error",
-      "no-implicit-coercion": "error",
-      "no-inner-declarations": ["error", "functions"],
-      "no-label-var": "error",
-      "no-loop-func": "error",
       "no-nested-ternary": "off",
-      "no-new": "error",
-      "no-new-func": "error",
-      "no-octal-escape": "error",
-      "no-proto": "error",
-      "no-return-assign": ["error", "except-parens"],
       "no-shadow": ["error", {hoist: "all"}],
-      "no-template-curly-in-string": "error",
-      "no-undef-init": "error",
-      "no-unmodified-loop-condition": "error",
-      "no-unused-expressions": "error",
       "no-unused-vars": [
         "error",
         {
@@ -164,16 +135,7 @@ export default [
         },
       ],
       "no-use-before-define": ["error", "nofunc"],
-      "no-useless-computed-key": "error",
-      "no-useless-constructor": "error",
-      "no-useless-rename": "error",
-      "no-warning-comments": ["off", {terms: ["todo", "fixme", "xxx"], location: "start"}],
-      "operator-assignment": ["error", "always"],
-      "prefer-arrow-callback": ["error", {allowNamedFunctions: true}],
-      "require-await": "error",
       "strict": ["error", "global"],
-      "symbol-description": "error",
-      "yoda": ["error", "never"],
     },
   },
 
@@ -251,13 +213,23 @@ export default [
   {
     name: "tabmix/overlay-and-scripts-globals",
     files: ["addon/chrome/content/overlay/**", "addon/chrome/content/scripts/**"],
-    languageOptions: {globals: mozillaGlobals["frame-script"].globals},
+    languageOptions: {
+      globals: {
+        ...mozillaGlobals["frame-script"].globals,
+        ...tabmixGlobals.tabmix,
+      },
+    },
   },
 
   {
     name: "tabmix/preferences-globals",
     files: ["addon/chrome/content/preferences/**"],
-    languageOptions: {globals: tabmixGlobals.preferences},
+    languageOptions: {
+      globals: {
+        ...tabmixGlobals.preferences,
+        ...tabmixGlobals.tabmix,
+      },
+    },
   },
 
   {
@@ -315,6 +287,7 @@ export default [
     files: ["addon/bootstrap.js"],
     languageOptions: {
       globals: {
+        ...tabmixGlobals.tabmix,
         ADDON_ENABLE: false,
         ADDON_DISABLE: false,
         ADDON_DOWNGRADE: false,
@@ -354,34 +327,5 @@ export default [
     },
   },
 
-  // for .d.ts files only
-  ...[
-    ...tseslint.configs.recommended.map(conf => ({
-      ...conf,
-      files: ["**/*.d.ts"],
-      ignores: ["**/gecko/**/*.d.ts"],
-    })),
-    {
-      name: "tabmix/override-typescript-eslint-rules",
-      files: ["**/*.d.ts"],
-      ignores: ["**/gecko/**/*.d.ts"],
-      plugins: {
-        "@stylistic": stylistic,
-      },
-      rules: {
-        "no-var": "off",
-        "no-shadow": "off",
-        "no-unused-vars": "off",
-        "@typescript-eslint/ban-ts-comment": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-misused-new": "off",
-        "@typescript-eslint/no-empty-object-type": [
-          "error",
-          {allowInterfaces: "with-single-extends"},
-        ],
-        "@stylistic/quotes": ["error", "double", {avoidEscape: true}],
-      },
-    },
-  ],
   eslintConfigPrettier, // Add at the end to disable formatting rules
 ];

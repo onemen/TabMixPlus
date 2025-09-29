@@ -315,7 +315,6 @@ var TMP_ClosedTabs = {
         groupIdx < closedGroups.length &&
         (tabIdx >= closedTabs.length || group?.closedAt > tab?.closedAt)
       ) {
-        // eslint-disable-next-line no-loop-func
         group.tabs.forEach((groupTab, idx) => {
           groupTab._originalStateIndex = idx;
           groupTab._originalGroupStateIndex = groupIdx;
@@ -349,7 +348,7 @@ var TMP_ClosedTabs = {
   // copy of function from SessionStore.sys.mjs SessionStoreInternal._getClosedTabStateFromUnifiedIndex
   _getClosedTabStateFromUnifiedIndex(sourceWinData, tabState) {
     let closedTabSet, closedTabIndex;
-    // eslint-disable-next-line no-eq-null
+
     if (tabState._originalGroupStateIndex == null) {
       closedTabSet = sourceWinData._closedTabs;
     } else {

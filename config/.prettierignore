@@ -5,3 +5,4 @@ logs
 *.css
 *.xhtml
 **/*local*/**
+pnpm-lock.yaml 

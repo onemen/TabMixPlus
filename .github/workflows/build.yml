@@ -2,12 +2,15 @@ name: dev-build
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 env:
   XPI_NAME: tab_mix_plus-dev-build
-  PREVIOUS_TAG: ''
-  NOTES: 'This release includes an XPI file that is automatically generated after each push to the main branch.<br />It compatible with all supported versions of Firefox. (see [Browser Compatibility](https://onemen.github.io/tabmixplus-docs/other/installation/#browser-compatibility))'
+  PREVIOUS_TAG: ""
+  NOTES:
+    "This release includes an XPI file that is automatically generated after each push to the main
+    branch.<br />It compatible with all supported versions of Firefox. (see [Browser
+    Compatibility](https://onemen.github.io/tabmixplus-docs/other/installation/#browser-compatibility))"
 
 jobs:
   build-and-upload:
@@ -51,9 +54,9 @@ jobs:
         uses: requarks/changelog-action@v1.10.2
         with:
           token: ${{ github.token }}
-          fromTag: 'dev-build'
+          fromTag: "dev-build"
           toTag: ${{ env.PREVIOUS_TAG }}
-          excludeTypes: ''
+          excludeTypes: ""
 
       - name: Process CHANGELOG
         if: ${{ steps.set_version.outputs.CHANGELOG_EXIST == 'true' }}

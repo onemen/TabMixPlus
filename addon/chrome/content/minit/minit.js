@@ -124,13 +124,13 @@ var TMP_tabDNDObserver = {
   createSandbox() {
     let scope;
     if (Tabmix.isVersion(1370)) {
-      /* eslint-disable-next-line */ // @ts-expect-error
+      // @ts-expect-error
       const isTab = element => !!(element?.tagName == "tab");
 
-      /* eslint-disable-next-line */ // @ts-expect-error
+      // @ts-expect-error
       const isTabGroup = element => !!(element?.tagName == "tab-group");
 
-      /* eslint-disable-next-line */ // @ts-expect-error
+      // @ts-expect-error
       const isTabGroupLabel = element => !!element?.classList?.contains("tab-group-label");
 
       scope = {

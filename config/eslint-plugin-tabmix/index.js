@@ -57,6 +57,20 @@ export default {
 
       ZenWorkspaces: true,
       gZenVerticalTabsManager: true,
+
+      // manually added globals to fix no-undef errors
+      Overlays: false,
+      ChromeManifest: false,
+      PreferencesLoader: false,
+      TabmixWidgets: false,
+      ScriptsLoader: false,
+      shortcutKeyMapPromise: false,
+      TabmixUtils: false,
+      LinkNodeUtils: false,
+      ContentSvc: false,
+      BrowserUtils: false,
+      E10SUtils: false,
+      ContextMenu: false,
     },
     "preferences": {
       $: false,
@@ -67,6 +81,7 @@ export default {
       gMenuPane: false,
       gNumberInput: false,
       gPrefWindow: false,
+      gPreferenceList: false,
       MozXULElement: false,
       RTL_UI: false,
       Services: false,

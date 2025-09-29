@@ -6,8 +6,6 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-pnpm-lock.yaml
-
 # Coverage directory used by tools like istanbul
 coverage
 *.lcov
