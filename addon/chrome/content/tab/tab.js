@@ -2521,6 +2521,10 @@ window.gTMPprefObserver = {
     const reduceButtonHeight =
       TabmixSvc.isWaterfox && Services.prefs.getBoolPref("userChrome.theme.enable", false);
     const buttonsMarginBlock = reduceButtonHeight ? "-4px !important" : "0";
+    const paddingBlockOffset =
+      Tabmix.isVersion(1450) ? 5.5
+      : TabmixSvc.isWaterfox ? 6
+      : 3;
 
     if (TabmixSvc.isWaterfox) {
       this.insertRule(
@@ -2537,21 +2541,69 @@ window.gTMPprefObserver = {
           inline: "3.5px",
         }
       : {
-          block: `calc(var(--toolbarbutton-inner-padding) - ${TabmixSvc.isWaterfox ? 6 : 3}px)`,
+          block: `calc(var(--toolbarbutton-inner-padding) - ${paddingBlockOffset}px)`,
           inline: "calc(var(--toolbarbutton-inner-padding) - 6px)",
         };
 
-    this.insertRule(
-      `#tabmix-scrollbox::part(scrollbutton-up),
-       #tabmix-scrollbox::part(scrollbutton-down) {
-         appearance: none;
-         background-clip: padding-box;
-         border: 4px solid transparent;
-         border-radius: calc(var(--tab-border-radius) + 4px);
-         margin: ${buttonsMarginBlock};
-         padding: ${padding.block} ${padding.inline};
-       }`
-    );
+    if (Tabmix.isVersion(1450)) {
+      this.insertRule(
+        `#tabmix-scrollbox {
+           &::part(scrollbutton-up),
+           &::part(scrollbutton-down) {
+             --arrowscrollbox-scrollicon-border-radius: var(--tab-border-radius);
+             --arrowscrollbox-scrollicon-hover-background-color: var(--toolbarbutton-hover-background);
+             --arrowscrollbox-scrollicon-active-background-color: var(--toolbarbutton-active-background);
+             --arrowscrollbox-scrollicon-padding: var(--toolbarbutton-inner-padding) 2px;
+
+             appearance: none;
+             margin: ${buttonsMarginBlock};
+             padding: ${padding.block} ${padding.inline} !important;
+           }
+
+           &[highlight]::part(scrollbutton-down) {
+             --arrowscrollbox-scrollicon-background-color: SelectedItem;
+           }
+
+           #navigator-toolbox:not(:hover) &:not([highlight])::part(scrollbutton-down) {
+             --arrowscrollbox-scrollicon-transition: 1s background-color ease-out;
+           }
+         }`
+      );
+    } else {
+      this.insertRule(
+        `#tabmix-scrollbox {
+           &::part(scrollbutton-up),
+           &::part(scrollbutton-down) {
+             appearance: none;
+             background-clip: padding-box;
+             border: 4px solid transparent;
+             border-radius: calc(var(--tab-border-radius) + 4px);
+             margin: ${buttonsMarginBlock};
+             padding: ${padding.block} ${padding.inline};
+           }
+
+           &[highlight]::part(scrollbutton-down) {
+             background-color: highlight;
+           }
+
+           &:not([scrolledtostart])::part(scrollbutton-up):hover,
+           &:not([scrolledtoend])::part(scrollbutton-down):hover {
+             background-color: var(--toolbarbutton-hover-background);
+             color: inherit;
+           }
+
+           &:not([scrolledtostart])::part(scrollbutton-up):hover:active,
+           &:not([scrolledtoend])::part(scrollbutton-down):hover:active {
+             background-color: var(--toolbarbutton-active-background, var(--toolbarbutton-hover-background));
+             color: inherit;
+           }
+
+           #navigator-toolbox:not(:hover) &:not([highlight])::part(scrollbutton-down) {
+             transition: background-color 1s ease-out 0s;
+           }
+         }`
+      );
+    }
 
     this.insertRule(
       `#tabmix-scrollbox[tabmix-flowing=multibar]::part(scrollbutton-up),

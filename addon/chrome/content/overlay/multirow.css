@@ -77,11 +77,12 @@
   margin: 0 0 var(--tabs-navbar-shadow-size) !important;
   padding: var(--tabmix-scrollbutton-padding) !important;
 }
-} */
+}
 
 #tabmix-scrollbox[highlight]::part(scrollbutton-down) {
   background-color: highlight;
 }
+*/
 
 /* see tab.js  in this.dynamicProtonRules
 #tabmix-scrollbox::part(scrollbutton-up),
@@ -107,6 +108,7 @@
   list-style-image: url("chrome://global/skin/icons/arrow-down.svg");
 }
 
+/* see tab.js  in this.dynamicProtonRules
 #tabmix-scrollbox:not([scrolledtostart])::part(scrollbutton-up):hover,
 #tabmix-scrollbox:not([scrolledtoend])::part(scrollbutton-down):hover {
   background-color: var(--toolbarbutton-hover-background);
@@ -122,6 +124,7 @@
 #navigator-toolbox:not(:hover) #tabmix-scrollbox:not([highlight])::part(scrollbutton-down) {
   transition: background-color 1s ease-out 0s;
 }
+*/
 
 /* swap direction from the original rule
    we place the indicator left to the buttons
