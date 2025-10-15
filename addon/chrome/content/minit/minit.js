@@ -174,7 +174,7 @@ var TMP_tabDNDObserver = {
       };
     }
 
-    if (Tabmix.isVersion({fp: "128.0.0"})) {
+    if (Tabmix.isVersion({fp: "128.0.0"}) && !Tabmix.isVersion({fp: "143.0.0"})) {
       const verticalTabbarEnabled = () => Services.prefs.getIntPref("floorp.tabbar.style") === 2;
       scope = {
         ...scope,
@@ -525,7 +525,7 @@ var TMP_tabDNDObserver = {
       if (Tabmix.isVersion(1300)) {
         return `!this.verticalMode && ${baseTest}`;
       }
-      if (Tabmix.isVersion({fp: "128.0.0"})) {
+      if (Tabmix.isVersion({fp: "128.0.0"}) && !Tabmix.isVersion({fp: "143.0.0"})) {
         return `!verticalTabbarEnabled() &&  ${baseTest}`;
       }
       return baseTest;
@@ -701,7 +701,7 @@ var TMP_tabDNDObserver = {
       // helper function to get floorp strings for width in vertical mode
       /** @param {string} vertical @param {string} horizontal */
       const getWidthString = (vertical, horizontal) =>
-        Tabmix.isVersion({fp: "128.0.0"}) ?
+        Tabmix.isVersion({fp: "128.0.0"}) && !Tabmix.isVersion({fp: "143.0.0"}) ?
           `(verticalTabbarEnabled() ? ${vertical} : ${horizontal})`
         : horizontal;
       _animateTabMove

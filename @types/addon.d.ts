@@ -164,6 +164,7 @@ interface Window {
   };
 
   /** Floorp */
+  /** @deprecated gFloorpObservePreference removed in Floorp 143 */
   gFloorpObservePreference: (prefName: string, callback: () => void) => void;
 }
 

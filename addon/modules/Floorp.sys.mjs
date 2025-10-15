@@ -1,3 +1,5 @@
+import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
+
 /** @type {FloorpModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
@@ -6,11 +8,12 @@ ChromeUtils.defineLazyGetter(lazy, "prefs", () => {
   return new Preferences("");
 });
 
-const PREFS = [
-  "extensions.tabmix.tabBarMode",
-  "floorp.tabbar.style",
-  "userChrome.padding.tabbar_height",
-];
+const isFirefoxVerticalMode = isVersion({fp: "143.0.0"});
+
+const PREFS = ["extensions.tabmix.tabBarMode", "userChrome.padding.tabbar_height"];
+if (!isFirefoxVerticalMode) {
+  PREFS.push("floorp.tabbar.style");
+}
 
 /** @type {FloorpModule.Floorp} */
 export const FloorpPrefsObserver = {
@@ -38,12 +41,19 @@ export const FloorpPrefsObserver = {
   },
 
   onPrefChange(data) {
-    const prefValue = lazy.prefs.get(data);
-
     // when in vertical mode exit
-    if (Services.prefs.getIntPref("floorp.tabbar.style") === 2 && data !== "floorp.tabbar.style") {
+    if (isFirefoxVerticalMode) {
+      if (Services.prefs.getBoolPref("sidebar.verticalTabs")) {
+        return;
+      }
+    } else if (
+      Services.prefs.getIntPref("floorp.tabbar.style") === 2 &&
+      data !== "floorp.tabbar.style"
+    ) {
       return;
     }
+
+    const prefValue = lazy.prefs.get(data);
 
     switch (data) {
       case "extensions.tabmix.tabBarMode": {
@@ -52,7 +62,9 @@ export const FloorpPrefsObserver = {
         if (prefValue === 2) {
           Services.prefs.setBoolPref(backupPref, Services.prefs.getBoolPref(pref));
           Services.prefs.setBoolPref(pref, false);
-          Services.prefs.setIntPref("floorp.tabbar.style", 0);
+          if (!isFirefoxVerticalMode) {
+            Services.prefs.setIntPref("floorp.tabbar.style", 0);
+          }
         } else if (Services.prefs.prefHasUserValue(backupPref)) {
           Services.prefs.setBoolPref(pref, Services.prefs.getBoolPref(backupPref));
           Services.prefs.clearUserPref(backupPref);

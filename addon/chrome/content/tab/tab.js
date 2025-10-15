@@ -903,7 +903,8 @@ Tabmix.tabsUtils = {
     // we may get here after tabBar overflow/underflow already finished
     if (
       val != this.overflow ||
-      val != document.getElementById("tabmix-scrollbox").hasAttribute("overflowing")
+      val != document.getElementById("tabmix-scrollbox").hasAttribute("overflowing") ||
+      val != this.tabBar.arrowScrollbox.overflowing
     ) {
       let tabBar = this.tabBar;
       let tabstrip = tabBar.arrowScrollbox;
@@ -2478,7 +2479,7 @@ window.gTMPprefObserver = {
     }
 
     this.insertRule(`:root { --tabmix-tab-min-height: var(--tab-min-height);}`, "tabMinHeight");
-    if (Tabmix.isVersion({fp: "128.0.0"})) {
+    if (Tabmix.isVersion({fp: "128.0.0"}) && !Tabmix.isVersion({fp: "143.0.0"})) {
       window.gFloorpObservePreference("floorp.browser.tabs.tabMinHeight", () => {
         const height = Services.prefs.getIntPref("floorp.browser.tabs.tabMinHeight", 30);
         this.dynamicRules.tabMinHeight.style.setProperty("--tabmix-tab-min-height", height + "px");
