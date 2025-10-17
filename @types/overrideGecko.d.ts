@@ -1,5 +1,7 @@
 // reference this file before "./gecko/devtools/gecko.d.ts"
 
+/// <reference types="./AppConstantsTypeGlobal.d.ts" />
+
 interface TabmixSandbox extends nsIXPCComponents_utils_Sandbox {
   [key: string]: unknown;
   lazy: Record<string, unknown>;
@@ -154,27 +156,8 @@ interface nsIDOMWindowUtils {
 // override gecko.d.ts types
 declare namespace MockedExports {
   interface AppConstantsSYSMJS {
-    AppConstants: {
-      platform: string;
-      MOZ_APP_NAME: string;
-      MOZ_APP_VERSION: string;
-      DEBUG: boolean;
-      NIGHTLY_BUILD: boolean;
-      RELEASE_OR_BETA: boolean;
-      EARLY_BETA_OR_EARLIER: boolean;
-    };
+    AppConstants: AppConstantsType;
   }
-}
-
-interface AppConstantsType {
-  readonly BROWSER_CHROME_URL: string;
-  readonly DEBUG: boolean;
-  readonly EARLY_BETA_OR_EARLIER: boolean;
-  readonly MOZ_APP_NAME: string;
-  readonly MOZ_APP_VERSION: string;
-  readonly NIGHTLY_BUILD: boolean;
-  readonly RELEASE_OR_BETA: boolean;
-  readonly platform: string;
 }
 
 declare module "resource://gre/modules/AppConstants.sys.mjs" {

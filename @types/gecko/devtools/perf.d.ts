@@ -49,23 +49,9 @@ export interface Commands {
   client: any;
   targetCommand: {
     targetFront: {
-      // @backward-compat { version 140 } This trait is used to support Firefox < 140
-      getTrait(
-        traitName: "useBulkTransferForPerformanceProfile"
-      ): boolean | undefined;
       getTrait(traitName: string): unknown;
     };
   };
-}
-
-/* @backward-compat { version 140 } This interface is only useful for Firefox <
- * 140. Starting Firefox 140 a gzipped ArrayBuffer is used in all cases, then
- * this interface can be replaced by MockedExports.ProfileAndAdditionalInformation
- * directly after we stop supporting older versions.
- */
-export interface ProfileAndAdditionalInformation {
-  profile: ArrayBuffer | MinimallyTypedGeckoProfile;
-  additionalInformation?: MockedExports.ProfileGenerationAdditionalInformation;
 }
 
 /**
@@ -73,14 +59,15 @@ export interface ProfileAndAdditionalInformation {
  */
 export interface PerfFront {
   startProfiler: (options: RecordingSettings) => Promise<boolean>;
-  getProfileAndStopProfiler: () => Promise<ProfileAndAdditionalInformation>;
+  getProfileAndStopProfiler: () => Promise<MockedExports.ProfileAndAdditionalInformation>;
 
-  /* Note that this front also has getProfileAndStopProfilerBulk and
+  /* Note that this front also has startCaptureAndStopProfiler and
    * getPreviouslyRetrievedAdditionalInformation, but we don't
    * want to be able to call these functions directly, so they're commented out
    * in this interface, only specified for documentation purposes. */
-  // getProfileAndStopProfilerBulk: () => Promise<ArrayBuffer>
-  // getPreviouslyRetrievedAdditionalInformation: () => Promise<MockedExports.ProfileGenerationAdditionalInformation>;
+  // startCaptureAndStopProfiler: () => Promise<number>;
+  // getPreviouslyCapturedProfileDataBulk: (handle: number) => Promise<ArrayBuffer>;
+  // getPreviouslyRetrievedAdditionalInformation: (handle: number) => Promise<MockedExports.ProfileGenerationAdditionalInformation>;
   stopProfilerAndDiscardProfile: () => Promise<void>;
   getSymbolTable: (
     path: string,
@@ -108,14 +95,7 @@ export interface PreferenceFront {
 }
 
 export interface RootTraits {
-  // @backward-compat { version 140 }
-  // In Firefox >= 140, this will be true, and will be missing in older
-  // versions. The functionality controlled by this property can be cleaned up
-  // once Firefox 140 hits release.
-  useBulkTransferForPerformanceProfile?: boolean;
-
-  // There are other properties too, but we don't list them here as they're not
-  // related to the performance panel.
+  // There are no traits used by the performance front end at the moment.
 }
 
 export type RecordingState =
@@ -192,17 +172,6 @@ export interface Library {
   arch: string;
 }
 
-/**
- * Only provide types for the GeckoProfile as much as we need it. There is no
- * reason to maintain a full type definition here.
- * @backward-compat { version 140 } This interface is only useful for Firefox <
- * 140. Starting Firefox 140 a gzipped ArrayBuffer is used in all cases.
- */
-export interface MinimallyTypedGeckoProfile {
-  libs: Library[];
-  processes: MinimallyTypedGeckoProfile[];
-}
-
 export type GetSymbolTableCallback = (
   debugName: string,
   breakpadId: string
@@ -218,7 +187,7 @@ export interface SymbolicationService {
  * profile has been obtained.
  */
 export type OnProfileReceived = (
-  profileAndAdditionalInformation: ProfileAndAdditionalInformation | null,
+  profileAndAdditionalInformation: MockedExports.ProfileAndAdditionalInformation | null,
   error?: Error | string
 ) => void;
 
@@ -607,9 +576,7 @@ type StatusQueryResponse = {
 };
 type EnableMenuButtonResponse = void;
 
-/* @backward-compat { version 140 } When the target is < v140, this is a JS
- * object. Starting v140 this is an ArrayBuffer containing a gzipped profile. */
-type GetProfileResponse = ArrayBuffer | MinimallyTypedGeckoProfile;
+type GetProfileResponse = ArrayBuffer;
 type GetExternalMarkersResponse = Array<object>;
 type GetExternalPowerTracksResponse = Array<object>;
 type GetSymbolTableResponse = SymbolTableAsTuple;
@@ -653,9 +620,7 @@ export type ProfilerBrowserInfo = {
 export type ProfileCaptureResult =
   | {
       type: "SUCCESS";
-      /* @backward-compat { version 140 } When the target is < v140, this is a JS
-       * object. Starting v140 this is an ArrayBuffer containing a gzipped profile. */
-      profile: MinimallyTypedGeckoProfile | ArrayBuffer;
+      profile: ArrayBuffer;
     }
   | {
       type: "ERROR";

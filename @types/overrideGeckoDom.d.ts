@@ -50,6 +50,7 @@ interface ChromeUtils {
   import(aResourceURI: string): any;
   importESModule<S extends keyof TabmixKnownModules>(aResourceURI: S): TabmixKnownModules[S];
   nondeterministicGetWeakSetKeys<T extends object>(aSet: WeakSet<T>): T[];
+  now(): number;
 }
 
 // @ts-expect-error - override `namespace ChromeUtils` from `gecko/lib.gecko.dom.d.ts`

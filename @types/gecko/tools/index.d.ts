@@ -24,6 +24,8 @@
 /// Order of references matters here, for overriding type signatures.
 /// <reference types="./lib.gecko.tweaks.d.ts" />
 
+import type {} from "./lib.gecko.augmentations.d.ts";
+
 declare global {
   const Cc: nsXPCComponents_Classes;
   const Ci: nsIXPCComponents_Interfaces;
