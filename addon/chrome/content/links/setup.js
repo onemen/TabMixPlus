@@ -12,7 +12,7 @@
 /**
  * Install the link-handling functions of Tab Mix Plus.
  *
- * @returns Nothing.
+ * @returns {void} Nothing.
  */
 Tabmix.linkHandling_init = function TMP_TBP_init() {
   this.set_BrowserOpenTab();

@@ -43,7 +43,7 @@ export const DocShellCapabilities = {
     });
   },
 
-  /** for tab context menu ** */
+  /** for tab context menu */
 
   onGet(nodes, tab) {
     let disallow = this.collect(tab);

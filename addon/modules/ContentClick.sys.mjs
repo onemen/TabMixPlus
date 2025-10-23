@@ -336,14 +336,6 @@ ContentClickInternal = {
     });
   },
 
-  /**
-   * @param node json received from message.data, contain wrapped node, or The
-   *   DOM node containing the URL to be opened.
-   * @param focusedWindow focused window, see LinkNodeUtils.
-   * @param getTargetIsFrame boolean, if true add targetIsFrame to the wrapped
-   *   node.
-   * @returns wrapped node including attribute functions
-   */
   getWrappedNode(node, focusedWindow, getTargetIsFrame) {
     /** @type {ContentClickModule.wrapNode} */
     let wrapNode = function wrapNode(aNode, aGetTargetIsFrame) {
@@ -368,13 +360,6 @@ ContentClickInternal = {
     return node ? wrapNode(node, getTargetIsFrame ?? false) : null;
   },
 
-  /**
-   * @param event A valid event union.
-   * @param href href string.
-   * @param node wrapped DOM node containing the URL to be opened. or wrapped
-   *   DOM node containing onclick, may exist only when link node is null.
-   * @param wrappedNode wrapped DOM node containing the URL to be opened.
-   */
   getData(event, href, node, wrappedNode) {
     /** @typedef {ContentClickModule.LinkData} LinkData */
     /** @type {LinkData} */
@@ -718,7 +703,11 @@ ContentClickInternal = {
     return "18";
   },
 
-  /** hock the proper Greasemonkey function into Tabmix.isGMEnabled */
+  /**
+   * hock the proper Greasemonkey function into Tabmix.isGMEnabled
+   *
+   * @returns {void}
+   */
   isGreasemonkeyInstalled: function TMP_isGreasemonkeyInstalled(window) {
     var GM_function;
     // Greasemonkey >= 0.9.10
@@ -736,6 +725,11 @@ ContentClickInternal = {
     lazy.LinkNodeUtils._GM_function.set(window, GM_function);
   },
 
+  /**
+   * @param {ContentClickModule.ExtendedWrappedNode
+   *   | ContentClickLinkElement} node
+   * @returns {boolean}
+   */
   miscellaneous(node) {
     if ("className" in node && node.host !== "github.com") {
       // don't interrupt with noscript
@@ -774,7 +768,7 @@ ContentClickInternal = {
   /**
    * Suppress tabs that may be created by installing Greasemonkey script
    *
-   * @returns true if the link is a script.
+   * @returns {boolean} true if the link is a script.
    */
   isGreasemonkeyScript: function TMP_isGreasemonkeyScript(href) {
     if (lazy.LinkNodeUtils.isGMEnabled(this._window)) {
@@ -790,7 +784,7 @@ ContentClickInternal = {
    *
    * This code borrows from Cusser's Disable Targets for Downloads extension.
    *
-   * @returns true if the link was handled by this function.
+   * @returns {boolean} true if the link was handled by this function.
    */
   suppressTabsOnFileDownload: function TMP_suppressTabsOnFileDownload() {
     // if we are in google search don't prevent new tab
@@ -917,7 +911,8 @@ ContentClickInternal = {
    *   mouse button was pressed OR the left mouse button and one of the
    *   Ctrl/Meta keys was pressed
    *
-   * @returns true if the function handled the click, false if it didn't.
+   * @returns {boolean} true if the function handled the click, false if it
+   *   didn't.
    */
   divertMiddleClick: function TMP_divertMiddleClick() {
     // middlecurrent - A Boolean value that controls how middle clicks are handled.
@@ -953,7 +948,8 @@ ContentClickInternal = {
    *   function call 'window.open' or the function call 'return
    *   top.js.OpenExtLink'
    *
-   * @returns true if the function handled the click, false if it didn't.
+   * @returns {boolean} true if the function handled the click, false if it
+   *   didn't.
    */
   divertTargetedLink: function TMP_divertTargetedLink() {
     let href = this._data.hrefFromOnClick || this._data.href;
@@ -994,7 +990,8 @@ ContentClickInternal = {
    *   do not match OR the link node has an 'onmousedown' attribute that
    *   contains the text 'return rwt'
    *
-   * @returns true to load link in new tab false to load link in current tab
+   * @returns {boolean} true to load link in new tab false to load link in
+   *   current tab
    */
   openExSiteLink: function TMP_openExSiteLink() {
     if (this.targetPref != 2 || this._window?.Tabmix.isNewTabUrls(this._data.currentURL)) {
@@ -1023,8 +1020,8 @@ ContentClickInternal = {
    * Open links in new tabs when tab is lock or preference is to always open tab
    * from links.
    *
-   * @returns null if the caller need to handled the click, true to load link in
-   *   new tab false to load link in current tab
+   * @returns {boolean | null} null if the caller need to handled the click,
+   *   true to load link in new tab false to load link in current tab
    */
   openTabFromLink: function TMP_openTabFromLink() {
     if (this._window?.Tabmix.isNewTabUrls(this._data.currentURL)) {
@@ -1091,7 +1088,7 @@ ContentClickInternal = {
    * Test if target link is special Google.com link preferences ,
    * advanced_search ...
    *
-   * @returns true it is Google special link false for all other links
+   * @returns {boolean} true it is Google special link false for all other links
    */
   GoogleComLink: function TMP_GoogleComLink() {
     var location = this._data.currentURL;
@@ -1137,6 +1134,8 @@ ContentClickInternal = {
    * Checks to see if handleLinkClick reload an existing tab without focusing it
    * for link with target. Search in the browser content and its frames for
    * content with matching name and href
+   *
+   * @returns {void}
    */
   selectExistingTab: function TMP_selectExistingTab(window, href, targetFrame) {
     if (
@@ -1187,6 +1186,7 @@ ContentClickInternal = {
   frameSearch: new Map(),
 
   isFrameInContent(windows, frameData, isMultiProcess) {
+    /** @returns {void} */
     /** @param {number} epoch */
     const deleteEpoch = epoch => {
       if (this.frameSearch.has(epoch)) {
@@ -1262,9 +1262,9 @@ ContentClickInternal = {
   /**
    * Check for certain JavaScript strings inside an attribute.
    *
-   * @param attr The attribute to check.
-   * @param string The string to check for.
-   * @returns true if the strings are present, false if they aren't.
+   * @param {string} attr The attribute to check.
+   * @param {string} string The string to check for.
+   * @returns {boolean} true if the strings are present, false if they aren't.
    */
   checkAttr: function TMP_checkAttr(attr, string) {
     if (typeof attr == "string") {
@@ -1277,9 +1277,9 @@ ContentClickInternal = {
   /**
    * Check if link refers to external domain.
    *
-   * @param target The target link.
-   * @param curpage The current page url
-   * @returns true when curpage and target are in different domains
+   * @param {string} curpage - The current page url
+   * @param {string} target - The target link.
+   * @returns {boolean} true when curpage and target are in different domains
    */
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
     /** @param {string} url */
@@ -1353,7 +1353,12 @@ ContentClickInternal = {
     return targetDomain ? targetDomain != getDomain(curpage) : false;
   },
 
-  /** check if the link contain special onclick function. */
+  /**
+   * check if the link contain special onclick function.
+   *
+   * @param {boolean} more
+   * @returns {boolean}
+   */
   checkOnClick: function TMP_checkOnClick(more) {
     let {onclick} = this._data;
     if (onclick) {

@@ -168,10 +168,10 @@ function targetIsFrame(targetAttr, focusedWindow) {
  * |targetFrame| is located inside of it.
  *
  * @type {(content: Window, targetFrame: string) => boolean}
- * @param content is a frame reference
- * @param targetFrame The name of the frame that we are seeking.
- * @returns true if the frame exists within the given frame pool, false if it
- *   does not.
+ * @param {Window} content is a frame reference
+ * @param {string} targetFrame The name of the frame that we are seeking.
+ * @returns {boolean} true if the frame exists within the given frame pool,
+ *   false if it does not.
  */
 function existsFrameName(content, targetFrame) {
   for (let i = 0; i < content.frames.length; i++) {

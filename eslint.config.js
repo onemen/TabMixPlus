@@ -49,8 +49,7 @@ export default [
   // Base configs - provides the foundation
   ...eslintPluginJsonc.configs["flat/recommended-with-jsonc"],
   ...eslintPluginMozilla.configs["flat/recommended"],
-  // TODO: need to add some missing jsodc ....
-  // eslintPluginMozilla.configs["flat/valid-jsdoc"],
+  eslintPluginMozilla.configs["flat/valid-jsdoc"],
 
   {
     name: "tabmix/stylistic-rules",

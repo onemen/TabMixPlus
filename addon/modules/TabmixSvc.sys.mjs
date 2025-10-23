@@ -87,7 +87,7 @@ export const TabmixSvc = {
    * call a callback for all currently opened browser windows (might miss the
    * most recent one)
    *
-   * @param aFunc Callback each window is passed to
+   * @param {function(Window)} aFunc - Callback each window is passed to
    */
   forEachBrowserWindow(aFunc) {
     let windowsEnum = Services.wm.getEnumerator("navigator:browser");

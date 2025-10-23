@@ -755,8 +755,16 @@ var TabmixContext = {
     };
 
     /**
+     * /**
+     *
+     * @typedef {object} ShowItemOptions
+     * @property {string} [key] - The key property.
+     * @property {boolean} [is] - The is property.
+     */
+
+    /**
      * @param {HTMLElement | string} iteOrId
-     * @param {{key?: string; is?: boolean}} [options]
+     * @param {ShowItemOptions} [options]
      */
     function showItem(iteOrId, {key, is: condition = true} = {}) {
       const item = typeof iteOrId === "string" ? document.getElementById(iteOrId) : iteOrId;

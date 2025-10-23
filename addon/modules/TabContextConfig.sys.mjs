@@ -98,7 +98,7 @@ const FORKS_MENU_ITEMS = {
  * Mapping for menu items without IDs Maps a unique identifier to a
  * querySelector string
  *
- * @type {Object<string, string>}
+ * @type {{[key: string]: string}}
  */
 const TAB_CONTEXT_MENU_SELECTORS = {
   shareTabURL: ".share-tab-url-item",

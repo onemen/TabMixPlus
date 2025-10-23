@@ -173,11 +173,15 @@ declare namespace ClosedObjectsUtils {
     target: HTMLButtonElement;
   }
 
+  type ViewType = "Tabs" | "Windows";
+  type InitializedViewType = `_initialized_closed${ViewType}`;
+  type PopulateClosedViewType = `populateClosed${ViewType}Menu`;
+
   let _initialized_closedTabs: boolean;
   let _initialized_closedWindows: boolean;
   let initialized: boolean;
   function init(this: typeof ClosedObjectsUtils): void;
-  function initObjectPanel(viewType: "Tabs" | "Windows"): void;
+  function initObjectPanel(viewType: ViewType): void;
   function checkForMiddleClick(event: GenericEvent<Menuitem, MouseEvent>): void;
   function forgetClosedWindow(index: number): void;
   function observe(subject: nsISupports, topic: string): void;
@@ -192,7 +196,7 @@ declare namespace ClosedObjectsUtils {
   function showSubView(event: ButtonEvent): void;
   function toggleRecentlyClosedWindowsButton(): void;
   function updateView(popup: PopupElement): void;
-  function updateAppmenuView(panel: PopupElement, type: "Tabs" | "Windows"): void;
+  function updateAppmenuView(panel: PopupElement, type: ViewType): void;
 }
 
 declare namespace DocShellCapabilities {

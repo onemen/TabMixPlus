@@ -138,14 +138,7 @@ var TMP_SessionStore = {
     }
   },
 
-  /**
-   * update tab title from user name or bookmark.
-   *
-   * @param aTabData an object value - tabData from SessionStore
-   * @param aUri string value - url address
-   * @param aTitle string value - title
-   * @returns tab title - string.
-   */
+  /** update tab title from user name or bookmark. */
   asyncGetTabTitle(aData, aUri, aTitle) {
     var fixedLabelUri = this._getAttribute(aData, "label-uri");
     if (fixedLabelUri == aUri || fixedLabelUri == "*") {
@@ -155,13 +148,7 @@ var TMP_SessionStore = {
     return TMP_Places.asyncGetTitleFromBookmark(aUri, aTitle);
   },
 
-  /**
-   * get custom tab value from SessionStore
-   *
-   * @param aTabData an object value - tabData from SessionStore
-   * @param attrib attribute name as string
-   * @returns attribute value as string or empty string.
-   */
+  /** get custom tab value from SessionStore */
   _getAttribute: function TMP_ss__getAttribute(aTabData, attrib) {
     return aTabData.extData?.[attrib] ?? "";
   },
@@ -857,13 +844,7 @@ var TMP_ClosedTabs = {
     }
   },
 
-  /**
-   * fetch the data of closed tab, while removing it from the array
-   *
-   * @param source optional sessionstore id to identify the source window
-   * @param index Integer value - 0 or grater index to remove
-   * @returns closed tab data at aIndex.
-   */
+  /** fetch the data of closed tab, while removing it from the array */
   removeClosedTabData(source, index) {
     const {tabData, closedTabIndex} = this.getSingleClosedTabData(source, index);
 
@@ -1115,7 +1096,7 @@ Tabmix.closedObjectsUtils = {
   },
 
   initObjectPanel(viewType) {
-    /** @type {`_initialized_closed${typeof viewType}`} */
+    /** @type {ClosedObjectsUtils.InitializedViewType} */
     const wasInitialized = `_initialized_closed${viewType}`;
     if (this[wasInitialized]) {
       return;
@@ -1141,7 +1122,7 @@ Tabmix.closedObjectsUtils = {
     panelview.menupopup = body;
 
     panelview.addEventListener("ViewShowing", () => {
-      /** @type {`populateClosed${typeof viewType}Menu`} */
+      /** @type {ClosedObjectsUtils.PopulateClosedViewType} */
       const method = `populateClosed${viewType}Menu`;
       this[method](panelview);
     });
@@ -1150,9 +1131,6 @@ Tabmix.closedObjectsUtils = {
   /**
    * catch middle click from closed windows list, delete window from the list or
    * restore according to the pref
-   *
-   * @param event a valid event union.
-   * @returns noting.
    */
   checkForMiddleClick(event) {
     if (event.button != 1) {

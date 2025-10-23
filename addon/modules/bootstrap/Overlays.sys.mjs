@@ -320,7 +320,7 @@ export class Overlays {
    * id it is inserted at documentElement level.
    *
    * @param {Element} node The DOM Element to resolve in the target document.
-   * @returns {Boolean} True, if the node was merged/inserted, false otherwise
+   * @returns {boolean} True, if the node was merged/inserted, false otherwise
    */
   _resolveForwardReference(node) {
     if (node.id) {
@@ -463,7 +463,7 @@ export class Overlays {
   /**
    * Fetches the overlay from the given chrome:// or resource:// URL.
    *
-   * @param {String} srcUrl The URL to load
+   * @param {string} srcUrl The URL to load
    * @returns {XMLDocument} Returns XML document.
    */
   fetchOverlay(srcUrl) {

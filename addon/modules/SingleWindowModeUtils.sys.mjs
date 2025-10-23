@@ -7,9 +7,11 @@ export const SingleWindowModeUtils = {
   /**
    * Locate a browser window.
    *
-   * @param aExclude A scripted window object that we do not want to use.
-   * @returns A scripted window object representing a browser window that is not
-   *   the same as aExclude, and is additionally not a popup window.
+   * @param {Window} aExclude - A scripted window object that we do not want to
+   *   use.
+   * @returns {Window | null} A scripted window object representing a browser
+   *   window that is not the same as aExclude, and is additionally not a popup
+   *   window.
    */
   getBrowserWindow(aExclude) {
     // on per-window private browsing mode,

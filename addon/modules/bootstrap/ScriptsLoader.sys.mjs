@@ -215,7 +215,7 @@ export const ScriptsLoader = {
    * initialize functions that can be called by events that fired before our
    * overlay is ready.
    *
-   * @param window
+   * @param {Window} window
    */
   _prepareBeforeOverlays(window) {
     const {gBrowser, gBrowserInit, Tabmix} = window;

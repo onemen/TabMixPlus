@@ -3,7 +3,7 @@
             showPane, toggleInstantApply, toggleSyncPreference, closeAll, RTL_UI */
 "use strict";
 
-/** Preference Dialog Functions **** */
+/** Preference Dialog Functions */
 /** @type {Globals.PrefFn} */
 const PrefFn = new Map([
   [0, ""],

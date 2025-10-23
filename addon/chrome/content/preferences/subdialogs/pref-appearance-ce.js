@@ -361,7 +361,7 @@ const TabpanelsClass = customElements.get("tabpanels");
       let hex = orig,
         a = "";
       if (rgbMatch) {
-        /** @type [string, string, string, string, string] */ // @ts-expect-error
+        /** @type {[string, string, string, string, string]} */ // @ts-expect-error
         const rgb = rgbMatch;
         a = (rgb[4] || "").trim();
         hex =

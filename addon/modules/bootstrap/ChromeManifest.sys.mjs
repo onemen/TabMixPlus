@@ -21,8 +21,8 @@ class DefaultMap extends Map {
   /**
    * Get the given key, creating if necessary
    *
-   * @param {String} key The key of the map to get
-   * @param {Boolean} create True, if the key should be created in case it
+   * @param {string} key The key of the map to get
+   * @param {boolean} create True, if the key should be created in case it
    *   doesn't exist.
    */
   get(key, create = true) {
@@ -49,7 +49,7 @@ export class ChromeManifest {
    *   files, e.g. those included via the |manifest| instruction. The function
    *   will take the file as an argument and should resolve with the string
    *   contents of that file
-   * @param {Object} options Object describing the current system. The keys are
+   * @param {object} options Object describing the current system. The keys are
    *   manifest instructions
    */
   constructor(loader, options) {
@@ -73,8 +73,8 @@ export class ChromeManifest {
   /**
    * Parse the given file.
    *
-   * @param {String} filename The filename to load
-   * @param {String} base The relative directory this file is expected to be in.
+   * @param {string} filename The filename to load
+   * @param {string} base The relative directory this file is expected to be in.
    * @returns {Promise} Resolved when loading completes
    */
   async parse(filename = "chrome.manifest", base = "") {
@@ -84,8 +84,8 @@ export class ChromeManifest {
   /**
    * Parse the given string.
    *
-   * @param {String} data The file data to load
-   * @param {String} base The relative directory this file is expected to be in.
+   * @param {string} data The file data to load
+   * @param {string} base The relative directory this file is expected to be in.
    * @returns {Promise} Resolved when loading completes
    */
   async parseString(data, base = "") {
@@ -137,8 +137,8 @@ export class ChromeManifest {
   /**
    * Ensure the flags provided for the instruction match our options
    *
-   * @param {String[]} flags An array of raw flag values in the form key=value.
-   * @returns {Boolean} True, if the flags match the options provided in the
+   * @param {string[]} flags An array of raw flag values in the form key=value.
+   * @returns {boolean} True, if the flags match the options provided in the
    *   constructor
    */
   _parseFlags(flags) {
@@ -198,9 +198,9 @@ export class ChromeManifest {
   /**
    * Parse the manifest instruction, to load other files
    *
-   * @param {String} base The base directory the manifest file is in
-   * @param {String} filename The file and path to load
-   * @param {...String} flags The flags for this instruction
+   * @param {string} base The base directory the manifest file is in
+   * @param {string} filename The file and path to load
+   * @param {...string} flags The flags for this instruction
    * @returns {Promise} Promise resolved when the manifest is loaded
    */
   async _parseManifest(base, filename, ...flags) {
@@ -220,9 +220,9 @@ export class ChromeManifest {
   /**
    * Parse the component instruction, to load xpcom components
    *
-   * @param {String} classid The xpcom class id to load
-   * @param {String} location The file location of this component
-   * @param {...String} flags The flags for this instruction
+   * @param {string} classid The xpcom class id to load
+   * @param {string} location The file location of this component
+   * @param {...string} flags The flags for this instruction
    */
   _parseComponent(classid, location, ...flags) {
     if (this._parseFlags(flags)) {
@@ -233,9 +233,9 @@ export class ChromeManifest {
   /**
    * Parse the contract instruction, to load xpcom contract ids
    *
-   * @param {String} contractid The xpcom contract id to load
-   * @param {String} location The file location of this component
-   * @param {...String} flags The flags for this instruction
+   * @param {string} contractid The xpcom contract id to load
+   * @param {string} location The file location of this component
+   * @param {...string} flags The flags for this instruction
    */
   _parseContract(contractid, location, ...flags) {
     if (this._parseFlags(flags)) {
@@ -246,10 +246,10 @@ export class ChromeManifest {
   /**
    * Parse the category instruction, to set up xpcom categories
    *
-   * @param {String} category The name of the category
-   * @param {String} entryName The category entry name
-   * @param {String} value The category entry value
-   * @param {...String} flags The flags for this instruction
+   * @param {string} category The name of the category
+   * @param {string} entryName The category entry name
+   * @param {string} value The category entry value
+   * @param {...string} flags The flags for this instruction
    */
   _parseCategory(category, entryName, value, ...flags) {
     if (this._parseFlags(flags)) {
@@ -260,10 +260,10 @@ export class ChromeManifest {
   /**
    * Parse the content instruction, to set chrome content locations
    *
-   * @param {String} shortname The content short name, e.g.
+   * @param {string} shortname The content short name, e.g.
    *   chrome://shortname/content/
-   * @param {String} location The location for this content registration
-   * @param {...String} flags The flags for this instruction
+   * @param {string} location The location for this content registration
+   * @param {...string} flags The flags for this instruction
    */
   _parseContent(shortname, location, ...flags) {
     if (this._parseFlags(flags)) {
@@ -274,10 +274,11 @@ export class ChromeManifest {
   /**
    * Parse the locale instruction, to set chrome locale locations
    *
-   * @param {String} shortname The locale short name, e.g.
+   * @param {string} shortname The locale short name, e.g.
    *   chrome://shortname/locale/
-   * @param {String} location The location for this locale registration
-   * @param {...String} flags The flags for this instruction
+   * @param {string} locale The locale for this locale registration
+   * @param {string} location The location for this locale registration
+   * @param {...string} flags The flags for this instruction
    */
   _parseLocale(shortname, locale, location, ...flags) {
     if (this._parseFlags(flags)) {
@@ -288,10 +289,11 @@ export class ChromeManifest {
   /**
    * Parse the skin instruction, to set chrome skin locations
    *
-   * @param {String} shortname The skin short name, e.g.
+   * @param {string} packagename The skin short name, e.g.
    *   chrome://shortname/skin/
-   * @param {String} location The location for this skin registration
-   * @param {...String} flags The flags for this instruction
+   * @param {string} skinname The name of the skin
+   * @param {string} location The location for this skin registration
+   * @param {...string} flags The flags for this instruction
    */
   _parseSkin(packagename, skinname, location, ...flags) {
     if (this._parseFlags(flags)) {
@@ -302,10 +304,10 @@ export class ChromeManifest {
   /**
    * Parse the resource instruction, to set up resource uri substitutions
    *
-   * @param {String} packagename The resource package name, e.g.
+   * @param {string} packagename The resource package name, e.g.
    *   resource://packagename/
-   * @param {String} url The location for this content registration
-   * @param {...String} flags The flags for this instruction
+   * @param {string} location The location for this content registration
+   * @param {...string} flags The flags for this instruction
    */
   _parseResource(packagename, location, ...flags) {
     if (this._parseFlags(flags)) {
@@ -316,9 +318,9 @@ export class ChromeManifest {
   /**
    * Parse the overlay instruction, to set up xul overlays
    *
-   * @param {String} targetUrl The chrome target url
-   * @param {String} overlayUrl The url of the xul overlay
-   * @param {...String} flags The flags for this instruction
+   * @param {string} targetUrl The chrome target url
+   * @param {string} overlayUrl The url of the xul overlay
+   * @param {...string} flags The flags for this instruction
    */
   _parseOverlay(targetUrl, overlayUrl, ...flags) {
     if (this._parseFlags(flags)) {
@@ -329,9 +331,9 @@ export class ChromeManifest {
   /**
    * Parse the style instruction, to add stylesheets into chrome windows
    *
-   * @param {String} uri The uri of the chrome window
-   * @param {String} sheet The uri of the css sheet
-   * @param {...String} flags The flags for this instruction
+   * @param {string} uri The uri of the chrome window
+   * @param {string} sheet The uri of the css sheet
+   * @param {...string} flags The flags for this instruction
    */
   _parseStyle(uri, sheet, ...flags) {
     if (this._parseFlags(flags)) {
@@ -342,9 +344,9 @@ export class ChromeManifest {
   /**
    * Parse the override instruction, to set chrome uri overrides
    *
-   * @param {String} uri The uri being overridden
-   * @param {String} newuri The replacement uri for the original location
-   * @param {...String} flags The flags for this instruction
+   * @param {string} uri The uri being overridden
+   * @param {string} newuri The replacement uri for the original location
+   * @param {...string} flags The flags for this instruction
    */
   _parseOverride(uri, newuri, ...flags) {
     if (this._parseFlags(flags)) {

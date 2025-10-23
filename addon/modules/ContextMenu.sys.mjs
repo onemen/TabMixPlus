@@ -55,7 +55,7 @@ export const ContextMenu = {
     }
 
     /** @typedef {HTMLLinkElement & {firstChild: LinkNode}} LinkNode */
-    /** @type {Omit<TreeWalker, "nextNode"> & {nextNode(): LinkNode}} */ // @ts-ignore
+    /** @type {Omit<TreeWalker, "nextNode"> & {nextNode: () => LinkNode}} */ // @ts-ignore
     let treeWalker = doc.createTreeWalker(range, NodeFilter.SHOW_ELEMENT, filter);
     let nextEpisode = treeWalker.nextNode();
     while (nextEpisode !== null) {
