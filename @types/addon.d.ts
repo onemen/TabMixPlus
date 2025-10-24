@@ -219,16 +219,19 @@ interface TabmixDNDObserver {
   draggingTimeout: number;
   paddingLeft: number;
   _multirowMargin: number;
+  _multiselectStacking: boolean;
   _cachedDnDValue: boolean | null;
   _pinnedTabScroll: boolean;
   TabMetrics: MockedExports.TabMetrics;
 
   _pinnedDropIndicator: HTMLElement;
   _tabDropIndicator: HTMLElement;
-  tabContainerProps: {parent: MockedGeckoTypes.TabDragAndDrop; parentName: string} | {parent: MockedGeckoTypes.TabContainer; parentName: string};
+  tabDnDPrototype: MockedGeckoTypes.TabDragAndDropConstructor["prototype"] | MockedGeckoTypes.TabContainer;
+  tabContainerProps: {parent: TabmixDNDObserver["tabDnDPrototype"]; parentName: string} | {parent: MockedGeckoTypes.TabContainer; parentName: string};
   tabDragAndDrop: MockedGeckoTypes.TabDragAndDrop | MockedGeckoTypes.TabContainer;
 
   init(): void;
+  deinit(): void;
   createSandbox(): TabmixSandbox;
   convertPrivateMethods(localSandbox: TabmixSandbox): void;
   change_startTabDrag(localSandbox: TabmixSandbox): void;

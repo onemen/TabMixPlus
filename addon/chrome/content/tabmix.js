@@ -1115,6 +1115,7 @@ var TMP_eventListener = {
     TabmixContext.toggleEventListener(false);
     Tabmix.handleTabbarVisibility.toggleEventListener(false);
 
+    TMP_tabDNDObserver.deinit();
     TMP_Places.deinit();
     TMP_LastTab.deinit();
 

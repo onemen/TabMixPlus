@@ -312,6 +312,7 @@ declare namespace MockedGeckoTypes {
     _dragOverDelay: number;
     _expandSpacerBy: (pixels: number) => void;
     _handleTabSelect: (instant: boolean) => void;
+    _initializeDragAndDrop: () => void;
     _invalidateCachedTabs: () => void;
     _invalidateCachedVisibleTabs: () => void;
     get _isCustomizing(): boolean;
@@ -331,6 +332,7 @@ declare namespace MockedGeckoTypes {
     get allGroups(): MozTabbrowserTabGroup[];
     // see declaration in addon.d.ts
     // arrowScrollbox: ArrowScrollbox;
+    boundObserve: nsIObserver;
     mCloseButtons: number;
     mTabMaxWidth: number;
     mTabMinWidth: number;
@@ -373,7 +375,10 @@ declare namespace MockedGeckoTypes {
   }
 
   interface TabDragAndDrop extends TabDragAndDropMethods {
+    readonly constructor: TabDragAndDropConstructor;
     _tabbrowserTabs: TabContainer;
+
+    init: () => void;
 
     on_dragover: never;
     on_dragleave: never;
@@ -387,6 +392,11 @@ declare namespace MockedGeckoTypes {
     handle_drop: (event: DragEvent) => void;
 
     verticalMode: never;
+  }
+
+  interface TabDragAndDropConstructor {
+    new (tabContainer: TabContainer): TabDragAndDrop;
+    prototype: TabDragAndDrop;
   }
 
   interface TabDragAndDropMethods extends TabDragAndDropPrivateMethods {
@@ -1074,11 +1084,13 @@ declare function setTimeout<T extends unknown[], U>(callback: (...args: T) => U,
 declare function urlSecurityCheck(aURL: string, aPrincipal: nsIPrincipal, aFlags?: nsIScriptSecurityManager): void;
 
 declare var CustomizableUI: MockedExports.CustomizableUI;
+declare var DynamicShortcutTooltip: Record<string, unknown>;
 declare var E10SUtils: MockedExports.E10SUtils;
 declare var FullScreen: FullScreen;
 declare var FirefoxViewHandler: FirefoxViewHandler;
 declare var gBrowser: MockedGeckoTypes.TabBrowser;
 declare var gBrowserInit: gBrowserInit;
+declare var gClickAndHoldListenersOnElement: Record<string, unknown>;
 declare var gContextMenu: MockedGeckoTypes.gContextMenu;
 declare var gFissionBrowser: boolean;
 declare var gNavigatorBundle: gNavigatorBundle;

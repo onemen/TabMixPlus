@@ -71,17 +71,17 @@ var TMP_tabDNDObserver = {
     const {dragoverCode, dragoverName} = this.change_on_dragover(localSandbox);
     const {dropCode, dropName} = this.change_on_drop(localSandbox);
 
-    patchDragMethod(this.tabDragAndDrop, dragoverName, dragoverCode);
-    patchDragMethod(this.tabDragAndDrop, dropName, dropCode);
+    patchDragMethod(this.tabDnDPrototype, dragoverName, dragoverCode);
+    patchDragMethod(this.tabDnDPrototype, dropName, dropCode);
 
-    Tabmix.originalFunctions._getDropIndex = this.tabDragAndDrop._getDropIndex;
+    Tabmix.originalFunctions._getDropIndex = this.tabDnDPrototype._getDropIndex;
     // @ts-expect-error - Complex function overload with bind
-    this.tabDragAndDrop._getDropIndex = this._getDropIndex.bind(this);
+    this.tabDnDPrototype._getDropIndex = this._getDropIndex.bind(this);
 
     const finishAnimateTabMove =
       Tabmix.isVersion(1380) ? "finishAnimateTabMove" : "_finishAnimateTabMove";
-    Tabmix.originalFunctions._finishAnimateTabMove = this.tabDragAndDrop[finishAnimateTabMove];
-    this.tabDragAndDrop[finishAnimateTabMove] = function (...args) {
+    Tabmix.originalFunctions._finishAnimateTabMove = this.tabDnDPrototype[finishAnimateTabMove];
+    this.tabDnDPrototype[finishAnimateTabMove] = function (...args) {
       Tabmix.originalFunctions._finishAnimateTabMove.apply(this, args);
       const tabbrowserTabs = this._tabbrowserTabs ?? this;
       tabbrowserTabs.removeAttribute("tabmix-movingBackgroundTab");
@@ -101,14 +101,14 @@ var TMP_tabDNDObserver = {
     this._tabDropIndicator.style.transform = "translate(0px, 0px)";
 
     if (Tabmix.isVersion(1450)) {
-      Tabmix.originalFunctions.on_dragstart = this.tabDragAndDrop.handle_dragstart;
-      this.tabDragAndDrop.handle_dragstart = this.on_dragstart.bind(this.tabDragAndDrop);
+      Tabmix.originalFunctions.on_dragstart = this.tabDnDPrototype.handle_dragstart;
+      this.tabDnDPrototype.handle_dragstart = this.on_dragstart;
 
-      Tabmix.originalFunctions.on_dragend = this.tabDragAndDrop.handle_dragend;
-      this.tabDragAndDrop.handle_dragend = this.on_dragend.bind(this);
+      Tabmix.originalFunctions.on_dragend = this.tabDnDPrototype.handle_dragend;
+      this.tabDnDPrototype.handle_dragend = this.on_dragend.bind(this);
 
-      Tabmix.originalFunctions.on_dragleave = this.tabDragAndDrop.handle_dragleave;
-      this.tabDragAndDrop.handle_dragleave = this.on_dragleave.bind(this);
+      Tabmix.originalFunctions.on_dragleave = this.tabDnDPrototype.handle_dragleave;
+      this.tabDnDPrototype.handle_dragleave = this.on_dragleave.bind(this);
     } else {
       Tabmix.originalFunctions.on_dragstart = gBrowser.tabContainer.on_dragstart;
       gBrowser.tabContainer.on_dragstart = this.on_dragstart.bind(gBrowser.tabContainer);
@@ -118,6 +118,54 @@ var TMP_tabDNDObserver = {
 
       Tabmix.originalFunctions.on_dragleave = gBrowser.tabContainer.on_dragleave;
       gBrowser.tabContainer.on_dragleave = this.on_dragleave.bind(this);
+    }
+
+    // prevent multiselectStacking when using multi-row tabs
+    if (Tabmix.isVersion(1460)) {
+      const tabBar = gBrowser.tabContainer;
+
+      /** @this {TabContainer} */
+      tabBar._initializeDragAndDrop = function () {
+        const tabStacking =
+          Services.prefs.getBoolPref("browser.tabs.dragDrop.multiselectStacking", true) &&
+          Services.prefs.getBoolPref("extensions.tabmix.moveTabOnDragging") &&
+          Services.prefs.getIntPref("extensions.tabmix.tabBarMode") !== 2;
+
+        TMP_tabDNDObserver._multiselectStacking = tabStacking;
+
+        if (
+          (tabStacking && this.tabDragAndDrop.constructor === window.TabStacking) ||
+          (!tabStacking && this.tabDragAndDrop.constructor === window.TabDragAndDrop)
+        ) {
+          return;
+        }
+
+        this.tabDragAndDrop =
+          tabStacking ? new window.TabStacking(this) : new window.TabDragAndDrop(this);
+        this.tabDragAndDrop.init();
+      };
+
+      Tabmix.changeCode(tabBar, "gBrowser.tabContainer.observe", {
+        sandbox: localSandbox,
+      })
+        ._replace(
+          'aData == "browser.tabs.dragDrop.multiselectStacking"',
+          `$& || aData == "extensions.tabmix.moveTabOnDragging" || aData == "extensions.tabmix.tabBarMode"`
+        )
+        .toCode();
+
+      Services.prefs.addObserver("extensions.tabmix.moveTabOnDragging", tabBar.boundObserve);
+      Services.prefs.addObserver("extensions.tabmix.tabBarMode", tabBar.boundObserve);
+
+      tabBar._initializeDragAndDrop();
+    }
+  },
+
+  deinit() {
+    if (Tabmix.isVersion(1460)) {
+      const tabBar = gBrowser.tabContainer;
+      Services.prefs.removeObserver("extensions.tabmix.moveTabOnDragging", tabBar.boundObserve);
+      Services.prefs.removeObserver("extensions.tabmix.tabBarMode", tabBar.boundObserve);
     }
   },
 
@@ -138,6 +186,8 @@ var TMP_tabDNDObserver = {
         isTabGroup,
         isTabGroupLabel,
         lazy: {},
+        DynamicShortcutTooltip: {},
+        gClickAndHoldListenersOnElement: {},
       };
 
       if (Tabmix.isVersion(1380)) {
@@ -164,6 +214,10 @@ var TMP_tabDNDObserver = {
         // @ts-expect-error
         scope.elementToMove = elementToMove;
       }
+      if (Tabmix.isVersion(1460)) {
+        scope.DynamicShortcutTooltip = DynamicShortcutTooltip;
+        scope.gClickAndHoldListenersOnElement = gClickAndHoldListenersOnElement;
+      }
     } else if (Tabmix.isVersion(1340)) {
       // Since Firefox 134, tabs.js contains scoped constants for group drop actions:
       // - GROUP_DROP_ACTION_CREATE: used in on_drop and triggerDragOverCreateGroup
@@ -187,30 +241,29 @@ var TMP_tabDNDObserver = {
 
   convertPrivateMethods(localSandbox) {
     const tabBar = gBrowser.tabContainer;
-
-    const tabContainerProps = (this.tabContainerProps =
-      Tabmix.isVersion(1450) ?
-        {
-          parent: tabBar.tabDragAndDrop,
-          parentName: "gBrowser.tabContainer.tabDragAndDrop",
-        }
-      : {parent: tabBar, parentName: "gBrowser.tabContainer"});
-
     if (Tabmix.isVersion(1460)) {
       this.tabDragAndDrop = tabBar.tabDragAndDrop;
+      this.tabDnDPrototype = window.TabDragAndDrop.prototype;
     } else if (Tabmix.isVersion(1450)) {
       this.tabDragAndDrop = tabBar.tabDragAndDrop;
+      this.tabDnDPrototype = tabBar.tabDragAndDrop;
       this.tabDragAndDrop._tabbrowserTabs = tabBar;
     } else {
       this.tabDragAndDrop = tabBar;
+      this.tabDnDPrototype = tabBar;
     }
+    const tabContainerProps = (this.tabContainerProps = {
+      parent: this.tabDnDPrototype,
+      parentName:
+        Tabmix.isVersion(1450) ? "gBrowser.tabContainer.tabDragAndDrop" : "gBrowser.tabContainer",
+    });
 
-    if (Tabmix.isVersion(1310)) {
+    if (Tabmix.isVersion(1310) && !Tabmix.isVersion(1460)) {
       // create none private method in TabDragAndDrop
       // we will use instead of #rtlMode in:
       //  TabDragAndDrop._animateTabMove
       //  TabDragAndDrop.on_dragover
-      Object.defineProperty(this.tabDragAndDrop, "_rtlMode", {
+      Object.defineProperty(this.tabDnDPrototype, "_rtlMode", {
         get() {
           return !this.verticalMode && RTL_UI;
         },
@@ -230,18 +283,18 @@ var TMP_tabDNDObserver = {
         Tabmix.isVersion(1380) ?
           "isContainerVerticalPinnedGrid"
         : "isContainerVerticalPinnedExpanded";
-      this.tabDragAndDrop[`_${name}`] = Tabmix.getPrivateMethod({
+      this.tabDnDPrototype[`_${name}`] = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: name,
         nextMethodName: Tabmix.isVersion(1450) ? "#isMovingTab" : "appendChild",
       });
 
-      this.tabDragAndDrop._maxTabsPerRow = 0;
+      this.tabDnDPrototype._maxTabsPerRow = 0;
       Tabmix.privateMethodTransformState.replaced.add(
         `${tabContainerProps.parentName}._maxTabsPerRow`
       );
 
-      this.tabDragAndDrop._animateExpandedPinnedTabMove = Tabmix.getPrivateMethod({
+      this.tabDnDPrototype._animateExpandedPinnedTabMove = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "animateExpandedPinnedTabMove",
         nextMethodName: Tabmix.isVersion(1450) ? "#animateTabMove" : "_animateTabMove",
@@ -254,7 +307,7 @@ var TMP_tabDNDObserver = {
         Tabmix.privateMethodTransformState.planned.add(
           `${tabContainerProps.parentName}._setDragOverGroupColor`
         );
-        this.tabDragAndDrop._setDragOverGroupColor = Tabmix.getPrivateMethod({
+        this.tabDnDPrototype._setDragOverGroupColor = Tabmix.getPrivateMethod({
           ...tabContainerProps,
           methodName: "setDragOverGroupColor",
           nextMethodName:
@@ -263,7 +316,7 @@ var TMP_tabDNDObserver = {
             : "_finishAnimateTabMove",
         });
 
-        this.tabDragAndDrop._moveTogetherSelectedTabs = Tabmix.getPrivateMethod({
+        this.tabDnDPrototype._moveTogetherSelectedTabs = Tabmix.getPrivateMethod({
           ...tabContainerProps,
           methodName: "moveTogetherSelectedTabs",
           nextMethodName:
@@ -273,7 +326,7 @@ var TMP_tabDNDObserver = {
         });
       }
 
-      this.tabDragAndDrop._isAnimatingMoveTogetherSelectedTabs = Tabmix.getPrivateMethod({
+      this.tabDnDPrototype._isAnimatingMoveTogetherSelectedTabs = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "isAnimatingMoveTogetherSelectedTabs",
         nextMethodName: Tabmix.isVersion(1450) ? "finishMoveTogetherSelectedTabs" : "handleEvent",
@@ -314,7 +367,7 @@ var TMP_tabDNDObserver = {
 
     if (Tabmix.isVersion(1380)) {
       if (!Tabmix.isVersion(1460)) {
-        this.tabDragAndDrop._expandGroupOnDrop = Tabmix.getPrivateMethod({
+        this.tabDnDPrototype._expandGroupOnDrop = Tabmix.getPrivateMethod({
           ...tabContainerProps,
           methodName: "expandGroupOnDrop",
           nextMethodName:
@@ -323,7 +376,7 @@ var TMP_tabDNDObserver = {
             : "on_drop",
         });
 
-        this.tabDragAndDrop._getDragTarget = Tabmix.getPrivateMethod({
+        this.tabDnDPrototype._getDragTarget = Tabmix.getPrivateMethod({
           ...tabContainerProps,
           methodName: "getDragTarget",
           nextMethodName:
@@ -331,7 +384,7 @@ var TMP_tabDNDObserver = {
           sandbox: localSandbox,
         });
 
-        this.tabDragAndDrop._getDropIndex = Tabmix.getPrivateMethod({
+        this.tabDnDPrototype._getDropIndex = Tabmix.getPrivateMethod({
           ...tabContainerProps,
           methodName: "getDropIndex",
           nextMethodName: Tabmix.isVersion(1450) ? "#getDragTarget" : "getDropEffectForTabDrag",
@@ -339,17 +392,17 @@ var TMP_tabDNDObserver = {
         });
       }
 
-      Tabmix.changeCode(this.tabDragAndDrop, `${tabContainerProps.parentName}._expandGroupOnDrop`)
+      Tabmix.changeCode(this.tabDnDPrototype, `${tabContainerProps.parentName}._expandGroupOnDrop`)
         ._replace("isTabGroupLabel(draggedTab)", "gBrowser.isTabGroupLabel(draggedTab)")
         .toCode();
 
-      this.tabDragAndDrop._setMovingTabMode = function (movingTab) {
+      this.tabDnDPrototype._setMovingTabMode = function (movingTab) {
         const tabbrowserTabs = this._tabbrowserTabs ?? this;
         tabbrowserTabs.toggleAttribute("movingtab", movingTab);
         gNavToolbox.toggleAttribute("movingtab", movingTab);
       };
 
-      this.tabDragAndDrop._dragTime = 0;
+      this.tabDnDPrototype._dragTime = 0;
 
       Tabmix.privateMethodTransformState.replaced.add(
         `${tabContainerProps.parentName}._setMovingTabMode`
@@ -382,14 +435,14 @@ var TMP_tabDNDObserver = {
 
     if (Tabmix.isVersion(1420)) {
       if (!Tabmix.isVersion(1460)) {
-        this.tabDragAndDrop._updateTabStylesOnDrag = Tabmix.getPrivateMethod({
+        this.tabDnDPrototype._updateTabStylesOnDrag = Tabmix.getPrivateMethod({
           ...tabContainerProps,
           methodName: "updateTabStylesOnDrag",
           nextMethodName:
             Tabmix.isVersion(1450) ? "#moveTogetherSelectedTabs" : "#animateExpandedPinnedTabMove",
         });
 
-        this.tabDragAndDrop._resetTabsAfterDrop = Tabmix.getPrivateMethod({
+        this.tabDnDPrototype._resetTabsAfterDrop = Tabmix.getPrivateMethod({
           ...tabContainerProps,
           methodName: "resetTabsAfterDrop",
           nextMethodName:
@@ -412,7 +465,7 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.isVersion(1430) && !Tabmix.isVersion(1460)) {
-      this.tabDragAndDrop._setIsDraggingTabGroup = Tabmix.getPrivateMethod({
+      this.tabDnDPrototype._setIsDraggingTabGroup = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "setIsDraggingTabGroup",
         nextMethodName: Tabmix.isVersion(1450) ? "#expandGroupOnDrop" : "on_drop",
@@ -420,9 +473,9 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.isVersion(1460)) {
-      const tabDnD = this.tabDragAndDrop;
-      tabDnD._pinnedDropIndicatorTimeout = null;
+      this.tabDnDPrototype._pinnedDropIndicatorTimeout = null;
 
+      const tabDnD = this.tabDragAndDrop;
       this._tabDropIndicator = tabDnD._tabDropIndicator;
       this._pinnedDropIndicator = tabDnD._pinnedDropIndicator;
     } else if (Tabmix.isVersion(1450)) {
@@ -497,7 +550,7 @@ var TMP_tabDNDObserver = {
   change_startTabDrag() {
     if (Tabmix.isVersion(1320)) {
       // modify startTabDrag after all private method it uses modified above
-      Tabmix.changeCode(this.tabDragAndDrop, `${this.tabContainerProps.parentName}.startTabDrag`, {
+      Tabmix.changeCode(this.tabDnDPrototype, `${this.tabContainerProps.parentName}.startTabDrag`, {
         forceUpdate: true,
       })
         ._replace("this.selectedItem = tab;", "if (this.verticalMode) {$&}", {
@@ -514,8 +567,14 @@ var TMP_tabDNDObserver = {
           "this._updateTabStylesOnDrag(tab, event);",
           `if (!TMP_tabDNDObserver.useTabmixDnD(event)) {
         $&
-      }
-      if (tab.pinned && TabmixTabbar.isMultiRow && Tabmix.prefs.getBoolPref("pinnedTabScroll") && Tabmix.prefs.getBoolPref("moveTabOnDragging")) {
+      }`,
+          {
+            check: Tabmix.isVersion(1420) && !Tabmix.isVersion(1460),
+          }
+        )
+        ._replace(
+          "if (isMovingInTabStrip) {",
+          `if (tab.pinned && TabmixTabbar.isMultiRow && Tabmix.prefs.getBoolPref("pinnedTabScroll") && Tabmix.prefs.getBoolPref("moveTabOnDragging")) {
         const width = movingTabs.reduce(
           (w, t) => w + window.windowUtils.getBoundsWithoutFlushing(t).width,
           0
@@ -525,7 +584,8 @@ var TMP_tabDNDObserver = {
           nextTab.style.setProperty("margin-inline-start", width + 12 + "px", "important");
           tab._dragData.nextTab = nextTab;
         }
-      }`,
+      }
+      $&`,
           {
             check: Tabmix.isVersion(1420),
           }
@@ -750,7 +810,7 @@ var TMP_tabDNDObserver = {
     const dragoverName = Tabmix.isVersion(1450) ? "handle_dragover" : "on_dragover";
 
     const code = Tabmix.changeCode(
-      this.tabDragAndDrop,
+      this.tabDnDPrototype,
       `${this.tabContainerProps.parentName}.${dragoverName}`,
       {
         sandbox: localSandbox,
@@ -763,6 +823,15 @@ var TMP_tabDNDObserver = {
       if (TMP_tabDNDObserver.handleDragover(event, useTabmixDnD)) {
         return;
       }`
+      )
+      ._replace(
+        "this._updateTabStylesOnDrag(draggedTab, dropEffect);",
+        `if (TMP_tabDNDObserver._multiselectStacking || !TMP_tabDNDObserver.useTabmixDnD(event)) {
+          $&
+        }`,
+        {
+          check: Tabmix.isVersion(1460),
+        }
       )
       ._replace(/if \((dropEffect|effects) == "move"\) \{/, 'if ($1 == "move" && !useTabmixDnD) {')
       ._replace("var newMargin;", "var newMargin, newMarginY = 0;")
@@ -828,7 +897,7 @@ var TMP_tabDNDObserver = {
     const dropName = Tabmix.isVersion(1450) ? "handle_drop" : "on_drop";
 
     const code = Tabmix.changeCode(
-      this.tabDragAndDrop,
+      this.tabDnDPrototype,
       `${this.tabContainerProps.parentName}.${dropName}`,
       {sandbox: localSandbox}
     )

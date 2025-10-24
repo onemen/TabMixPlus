@@ -75,6 +75,8 @@ interface Window {
     revampComponentsLoaded: boolean;
     readonly sidebarVerticalTabsEnabled: boolean;
   };
+  TabDragAndDrop: MockedGeckoTypes.TabDragAndDropConstructor;
+  TabStacking: MockedGeckoTypes.TabDragAndDropConstructor;
   ToolbarDropHandler: {
     onDragOver(event: DragEvent): void;
     onDropNewWindowButtonObserver(event: DragEvent): void;
