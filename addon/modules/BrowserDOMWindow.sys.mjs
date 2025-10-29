@@ -16,6 +16,12 @@ if (isVersion(1420)) {
   });
 }
 
+if (isVersion(1450)) {
+  ChromeUtils.defineESModuleGetters(lazy, {
+    NimbusFeatures: "resource://nimbus/ExperimentAPI.sys.mjs",
+  });
+}
+
 // @ts-ignore
 ChromeUtils.defineLazyGetter(lazy, "ReferrerInfo", () =>
   Components.Constructor("@mozilla.org/referrer-info;1", "nsIReferrerInfo", "init")
