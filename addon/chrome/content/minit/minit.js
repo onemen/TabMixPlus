@@ -579,7 +579,7 @@ var TMP_tabDNDObserver = {
           (w, t) => w + window.windowUtils.getBoundsWithoutFlushing(t).width,
           0
         );
-        const nextTab = this.visibleTabs[gBrowser.pinnedTabCount];
+        const nextTab = ${Tabmix.isVersion(1450) ? "this._tabbrowserTabs" : "this"}.visibleTabs[gBrowser.pinnedTabCount];
         if (nextTab) {
           nextTab.style.setProperty("margin-inline-start", width + 12 + "px", "important");
           tab._dragData.nextTab = nextTab;
