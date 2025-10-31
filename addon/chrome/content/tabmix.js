@@ -1194,7 +1194,7 @@ var TMP_eventListener = {
     // are removed by immediately handling attribute transfers, rather than waiting for Firefox's
     // delayed "TabGroupRemoved" event. It also handles group creation directly instead of relying
     // on Firefox's "TabGroupCreate" event.
-    const groupObserver = new MutationObserver(mutationList => {
+    const arrowScrollboxChildrenObserver = new MutationObserver(mutationList => {
       // Skip processing if not in multi-row mode with overflow and pinned tabs
       // or new tab button is after last tab
       if (
@@ -1220,7 +1220,7 @@ var TMP_eventListener = {
               node.setAttribute("tabmix-firstTabInRow", true);
               nextSibling.removeAttribute("tabmix-firstTabInRow");
             }
-          } else if (Tabmix.isTabGroup(node)) {
+          } else if (Tabmix.isTabGroup(node) || node?.tagName === "tab-split-view-wrapper") {
             this.updateMultiRow();
           }
         });
@@ -1228,6 +1228,8 @@ var TMP_eventListener = {
         mutation.removedNodes.forEach(node => {
           if (Tabmix.isTabGroup(node) && node.tabs.length === 0) {
             groupRemoved(node);
+          } else if (node?.tagName === "tab-split-view-wrapper") {
+            this.updateMultiRow();
           }
         });
       }
@@ -1235,13 +1237,13 @@ var TMP_eventListener = {
 
     const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
     // @ts-expect-error - we modify the arrowScrollbox
-    groupObserver.observe(arrowScrollbox, {childList: true});
+    arrowScrollboxChildrenObserver.observe(arrowScrollbox, {childList: true});
 
     window.addEventListener(
       "unload",
       () => {
-        if (groupObserver) {
-          groupObserver.disconnect();
+        if (arrowScrollboxChildrenObserver) {
+          arrowScrollboxChildrenObserver.disconnect();
         }
       },
       {once: true}

@@ -789,9 +789,13 @@ Tabmix.tabsUtils = {
       return;
     }
 
-    // there are to many edge cases with tab groups
-    // alway show the button on the side when there are groups
-    if (Tabmix.isVersion(1380) && this.tabBar.arrowScrollbox.querySelector("tab-group")) {
+    // there are to many edge cases with tab groups and split view
+    // always show the button on the side when there are groups or split view
+    if (
+      Tabmix.isVersion(1380) &&
+      (this.tabBar.arrowScrollbox.querySelector("tab-group") ||
+        this.tabBar.arrowScrollbox.querySelector("tab-split-view-wrapper"))
+    ) {
       this.disAllowNewtabbutton = true;
       return;
     }
