@@ -129,6 +129,9 @@ Tabmix.beforeStartup = function TMP_beforeStartup(tabBrowser) {
 
   tabBrowser.getTabForLastPanel = function () {
     let notificationbox = this.tabpanels.lastChild;
+    if (notificationbox.tagName === "splitter" && notificationbox.previousSibling) {
+      notificationbox = notificationbox.previousSibling;
+    }
     let browser = this.getBrowserForTabPanel(notificationbox);
     if (browser === gBrowser.preloadedBrowser && notificationbox.previousSibling) {
       browser = this.getBrowserForTabPanel(notificationbox.previousSibling);
