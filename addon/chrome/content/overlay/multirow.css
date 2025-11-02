@@ -269,3 +269,13 @@
     min-width: max(20vw, var(--tabmix-tab-max-width, 250px));
   }
 }
+
+#tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper {
+  .tabbrowser-tab {
+    --tab-min-height-mlt: calc(var(--tabmix-tab-min-height) - 2 * 2px) !important;
+  }
+
+  :root[uidensity="compact"] & .tab-background {
+    --tab-min-height: 25px !important;
+  }
+}

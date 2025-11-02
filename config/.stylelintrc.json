@@ -35,6 +35,7 @@
           "shortcut",
           "tab",
           "tab-group",
+          "tab-split-view-wrapper",
           "tabbox",
           "tabpanel",
           "tabs",
