@@ -22,6 +22,7 @@
 /// <reference types="./generated/lib.gecko.win32.d.ts" />
 
 /// Order of references matters here, for overriding type signatures.
+/// <reference types="./lib.gecko.esnext.d.ts" />
 /// <reference types="./lib.gecko.tweaks.d.ts" />
 
 import type {} from "./lib.gecko.augmentations.d.ts";
