@@ -543,12 +543,14 @@ const buttonColorProcessor = {
 
   darkenRgba(rgba, amount) {
     const hsla = this.rgbaToHsla(rgba);
-    hsla.l = Math.max(0, Math.min(1, hsla.l - amount / 100));
+    const l = Math.max(0, Math.min(1, hsla.l - amount / 100));
+    hsla.l = Math.round(l * 100) / 100;
     return hsla;
   },
 
   hslaToString(hsla) {
-    return `hsla(${hsla.h}, ${hsla.s * 100}%, ${hsla.l * 100}%, ${hsla.a})`;
+    const round = (/** @type {number} */ value) => Math.round(value * 100);
+    return `hsla(${hsla.h}, ${round(hsla.s)}%, ${round(hsla.l)}%, ${hsla.a})`;
   },
 
   processColor(color, value) {
