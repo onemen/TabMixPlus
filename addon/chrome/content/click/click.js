@@ -836,7 +836,6 @@ var TabmixContext = {
     }
     showItem("context_duplicateTabs", {is: multiselectionContext});
     showItem("tm-duplicateinWin", {is: !Tabmix.singleWindowMode});
-    showItem("context_openTabInWindow", {is: !Tabmix.singleWindowMode});
 
     showItem("context_toggleMuteTab", {is: !multiselectionContext});
     showItem("context_toggleMuteSelectedTabs", {is: multiselectionContext});
@@ -962,7 +961,11 @@ var TabmixContext = {
     Tabmix.setItem("context_undoCloseTab", "disabled", closeTabsEmpty);
     Tabmix.setItem("tm-undoCloseList", "disabled", closeTabsEmpty);
 
-    Tabmix.setItem("context_openTabInWindow", "disabled", tabsCount == 1);
+    Tabmix.setItem(
+      "context_openTabInWindow",
+      "disabled",
+      tabsCount == 1 || Tabmix.singleWindowMode
+    );
     Tabmix.setItem("tm-mergeWindowsTab", "disabled", isOneWindow);
 
     if (Tabmix.rtl) {

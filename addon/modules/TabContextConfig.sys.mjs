@@ -24,7 +24,7 @@ const TAB_CONTEXT_MENU_PREFLIST = {
   "context_closeDuplicateTabs": ["closeDuplicateTabs"],
   "context_closeTab": ["closeTabMenu"],
   "context_closeTabOptions": ["closeTabOptions"],
-  "context_openTabInWindow": ["detachTabMenu", false],
+  // "context_openTabInWindow": ["detachTabMenu", false],
   "context_duplicateTab": ["duplicateMenu"],
   // "context_duplicateTabs",
   "context_fullscreenAutohide": [""], // Special case - no ID in Firefox < 129
