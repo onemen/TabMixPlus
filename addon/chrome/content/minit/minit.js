@@ -1275,7 +1275,7 @@ var TMP_tabDNDObserver = {
       }
 
       // based on gBrowser.tabContainer.tabDragAndDrop.#checkWithinPinnedContainerBounds
-      if (Tabmix.isVersion(1430) && effects == "move") {
+      if (Tabmix.isVersion(1430) && effects == "move" && draggedTab?.container == tabBar) {
         const pinnedTabCount = gBrowser.pinnedTabCount;
 
         /** @type {Tab} */ // @ts-ignore
