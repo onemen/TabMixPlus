@@ -359,7 +359,8 @@ Tabmix.multiRow = {
         if (!this.isMultiRow) {
           return;
         }
-        this.parentNode._tabDropIndicator.hidden = true;
+
+        TMP_tabDNDObserver._tabDropIndicator.hidden = true;
         const target = event.originalTarget;
         const buttonId = target.getAttribute("anonid") ?? target.id;
 

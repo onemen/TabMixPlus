@@ -2944,7 +2944,7 @@ window.gTMPprefObserver = {
 
     TabmixTabbar.position = aPosition;
     Tabmix.bottomToolbarUtils.init();
-    gBrowser.tabContainer._tabDropIndicator.removeAttribute("style");
+    TMP_tabDNDObserver._tabDropIndicator.removeAttribute("style");
     var tabsToolbar = document.getElementById("TabsToolbar");
     // setting tabbaronbottom attribute triggers Tabmix.bottomToolbarUtils.resizeObserver
     let onbottom = TabmixTabbar.position == 1 || null;
