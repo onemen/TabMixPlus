@@ -55,7 +55,7 @@ export default {
       TMP_tabDNDObserver: true,
       TMP_undocloseTabButtonObserver: true,
 
-      ZenWorkspaces: true,
+      gZenWorkspaces: true,
       gZenVerticalTabsManager: true,
 
       // manually added globals to fix no-undef errors

@@ -1180,14 +1180,14 @@ class PrefWindow extends MozXULElement {
     const setter = MozTabs?.prototype.__lookupSetter__("selectedIndex")?.toString();
     // @ts-ignore
     const getter = MozTabs?.prototype.__lookupGetter__("selectedIndex");
-    if (!getter || !setter || setter.includes("typeof ZenWorkspaces")) {
+    if (!getter || !setter || setter.includes("typeof gZenWorkspaces")) {
       return;
     }
 
     const code = setter
       .replace(
-        "for (let otherTab of ZenWorkspaces.allStoredTabs) {",
-        `const tabs = typeof ZenWorkspaces === "object" ? ZenWorkspaces.allStoredTabs : this.allTabs;
+        "for (let otherTab of gZenWorkspaces.allStoredTabs) {",
+        `const tabs = typeof gZenWorkspaces === "object" ? gZenWorkspaces.allStoredTabs : this.allTabs;
         for (let otherTab of tabs) {`
       )
       .replace("set selectedIndex", "function selectedIndex");

@@ -16,9 +16,17 @@
   <script type="text/javascript">
     // with bootstrap.js we get here after DOMContentLoaded was fired
     // we can call our initializer with 'onContentLoaded' flag
-    Tabmix.initialization.init.initialized = false;
-    TMP_eventListener.init();
-    Tabmix.initialization.run("onContentLoaded", document.getElementById("tabbrowser-tabs"));
+    function initTabmix() {
+      Tabmix.initialization.init.initialized = false;
+      TMP_eventListener.init();
+      Tabmix.initialization.run("onContentLoaded", document.getElementById("tabbrowser-tabs"));
+    }
+
+    if (TabmixSvc.version({zen: "1.17"})) {
+      window.addEventListener("AfterWorkspacesSessionRestore", initTabmix, {once: true});
+    } else {
+      initTabmix();
+    }
   </script>
 
    <!-- Menu in Tools Menu -->

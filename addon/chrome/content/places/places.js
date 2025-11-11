@@ -1109,7 +1109,12 @@ Tabmix.onContentLoaded = {
          } else {
            $&
          }`,
-        {check: Tabmix.isVersion(1440)}
+        {check: Tabmix.isVersion(1440) && !TabmixSvc.isZen}
+      )
+      ._replace(
+        "this.pinnedTabsContainer.insertBefore(aTab, this.pinnedTabsContainer.lastChild)",
+        `(Tabmix.prefs.getBoolPref("pinnedTabScroll") && TabmixTabbar.isMultiRow ? this.pinnedTabsContainer.appendChild(aTab) : $&)`,
+        {check: Tabmix.isVersion(1440) && TabmixSvc.isZen}
       )
       .toCode();
   },

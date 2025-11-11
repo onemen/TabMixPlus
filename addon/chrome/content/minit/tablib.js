@@ -253,9 +253,13 @@ Tabmix.tablib = {
           "TMP_BrowserOpenTab({}, null, true)",
           {check: !Tabmix.isVersion({zen: "1.8.1*"})}
         )
-        ._replace(/ZenWorkspaces\.selectEmptyTab\([^)]*\);/, "TMP_BrowserOpenTab({}, null, true)", {
-          check: Tabmix.isVersion({zen: "1.8.1*"}),
-        })
+        ._replace(
+          /gZenWorkspaces\.selectEmptyTab\([^)]*\);/,
+          "TMP_BrowserOpenTab({}, null, true)",
+          {
+            check: Tabmix.isVersion({zen: "1.8.1*"}),
+          }
+        )
         .toCode();
     }
 

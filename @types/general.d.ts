@@ -1190,7 +1190,7 @@ declare var UrlbarUtils: {
 };
 
 // for Zen Browserw
-declare var ZenWorkspaces: any;
+declare var gZenWorkspaces: any;
 declare var gZenVerticalTabsManager: any;
 
 interface XULElement {

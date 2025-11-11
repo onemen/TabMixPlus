@@ -127,7 +127,11 @@ Tabmix.multiRow = {
         });
 
         this.addEventListener("scroll", () => {
-          const tabBar = this.parentNode;
+          const tabBar = gBrowser.tabContainer;
+          if (gBrowser.tabContainer.verticalMode) {
+            return;
+          }
+
           tabBar._unlockTabSizing();
           if (Tabmix.isVersion(1310)) {
             this._updateScrollButtonsDisabledState();
