@@ -1028,11 +1028,11 @@ interface gURLBar extends HTMLElement {
   handleCommand(event?: Event): void;
   handleRevert(): void;
   onWidgetAfterDOMChange(aNode: Node): void;
+  parentNode: Node;
   select: () => void;
   setURI: (uri?: string, dueToTabSwitch?: boolean, dueToSessionRestore?: boolean, dontShowSearchTerms?: boolean, isSameDocument?: boolean) => void;
-  textbox: Node & {
-    parentNode: Node;
-  };
+  /** @deprecated - gURLBar converted to custom element on Firefox 147 */
+  textbox: Node & {parentNode: Node};
   untrimmedValue: string;
   view: UrlbarView;
   value: string;
