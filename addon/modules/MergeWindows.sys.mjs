@@ -284,26 +284,26 @@ export const MergeWindows = {
     return lazy.PrivateBrowsingUtils.isWindowPrivate(aWindow);
   },
 
-  /*
-   * Get windows that match the most search in recent order (ZOrder).
+  /**
+   * Get windows that match the search, in most-recently-used (Z-order) order.
    *
-   * @param aWindow a window to skip.
+   * @param {ChromeWindow} aWindow - The window to exclude from the search.
+   * @param {MergeWindowsModule.MergeOptions} aOptions - An object specifying
+   *   search options:
    *
-   * @param aOptions an object accepting the arguments for the search.
-   *        Set the private property to true in order to restrict the
-   *        search to private windows only, or to false in order to
-   *        restrict the search to non-private windows only.  To search
-   *        in both groups, don't specify the private property.
+   *   - `private`: `true` to search private windows, `false` for non-private. Omit
+   *       to search both.
+   *   - `skipPopup`: `true` to exclude popup windows from the results.
+   *   - `multiple`: `true` to get all suitable windows.
    *
-   *        set skipPopup property to true when the preference is not
-   *        to merge popups.
+   * @returns {MergeWindowsModule.WindowsList} An object containing the list of
+   *   windows.
    *
-   *        set multiple property to true to get all suitable windows
-   *
-   * @return
-   *        multiple is true all non-popup windows then all popup windows
-   *        multiple is false most recent non-popup windows or most recent
-   *        popup windows
+   *   - If `aOptions.multiple` is `true`, returns all matching non-popup windows
+   *       followed by all matching popup windows.
+   *   - If `aOptions.multiple` is `false`, returns only the most recent matching
+   *       non-popup window, or the most recent matching popup if no non-popups
+   *       are found.
    */
   getWindowsList(aWindow, aOptions) {
     let checkPrivacy = typeof aOptions == "object" && "private" in aOptions;
