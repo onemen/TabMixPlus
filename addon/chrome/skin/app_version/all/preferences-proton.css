@@ -208,15 +208,13 @@ prefpane > .content-box > tabbox {
 
 /*  tab clicking options tabbox  */
 .mouseclick-panel {
-  --mouseclick-border: 1px solid color-mix(in srgb, var(--in-content-accent-color) 41%, transparent);
-
   display: block;
   margin-top: 25px;
   margin-inline: 25px;
 }
 
 #mouseclick_tabbox {
- border: 2px solid var(--in-content-border-color);
+ border: 2px groove ThreeDFace;
  border-radius: 4px;
  padding: 0;
 }
