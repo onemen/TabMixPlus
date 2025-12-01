@@ -318,6 +318,7 @@ declare namespace MockedExports {
     XPCOMUtils: {
       defineLazyModuleGetters<T extends Record<string, string>>(obj: object, modules: T): void;
       defineLazyPreferenceGetter(aObject: object, aName: string, aPreference: string, aDefaultPrefValue: unknown, aOnUpdate: (aPreference: string, previousValue: unknown, newValue: unknown) => void, aTransform?: (aPreference: string) => unknown): void;
+      defineLazyServiceGetters<T extends Record<string, [string, Function]>>(obj: object, services: T): void;
     };
   };
 
@@ -630,6 +631,18 @@ interface KnownModulesImports {
   TabmixUtils: TabmixUtilsModule.TabmixUtils;
   TabmixSvc: TabmixSvcModule.TabmixSvc;
   TabmixPlacesUtils: PlacesModule.PlacesUtils;
+}
+
+interface MiscellaneousImports {
+  // services
+  AlertsService: nsIAlertsService & {
+    /** @deprecated remove since Firefox 147 - see Bug 1369833 */
+    showAlertNotification(aImageURL: string, aTitle: string, aText: string, aTextClickable?: boolean, aCookie?: string, aAlertListener?: nsIObserver, aName?: string, aDir?: string, aLang?: string, aData?: string, aPrincipal?: nsIPrincipal, aInPrivateBrowsing?: boolean, aRequireInteraction?: boolean): void;
+  };
+  AlertNotification: {
+    prototype: nsIAlertNotification;
+    new (options: {imageURL?: string; title?: string; text?: string; textClickable?: boolean; cookie?: string; name?: string}): nsIAlertNotification;
+  };
 }
 
 // Tab Mix modules
@@ -1450,7 +1463,7 @@ declare namespace ShortcutsModule {
 }
 
 declare namespace SlideshowModule {
-  type Lazy = Pick<KnownModulesImports, "Shortcuts">;
+  type Lazy = Pick<KnownModulesImports, "isVersion" | "Shortcuts"> & Pick<MiscellaneousImports, "AlertsService" | "AlertNotification">;
 
   interface Flst {
     tabContainer: MockedGeckoTypes.TabContainer;

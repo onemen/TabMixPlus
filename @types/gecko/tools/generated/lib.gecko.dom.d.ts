@@ -715,6 +715,7 @@ interface DecodedStreamDebugInfo {
     instance?: string;
     lastAudio?: number;
     lastOutputTime?: number;
+    lastReportedPosition?: number;
     playing?: number;
     startTime?: number;
 }
@@ -1573,6 +1574,11 @@ interface ImageDecoderInit {
 interface ImageEncodeOptions {
     quality?: number;
     type?: string;
+}
+
+interface ImageSize {
+    height: number;
+    width: number;
 }
 
 interface ImageText {
@@ -13348,6 +13354,7 @@ interface ImageTrack {
     readonly frameCount: number;
     readonly repetitionCount: number;
     selected: boolean;
+    getSizes(): ImageSize[];
 }
 
 declare var ImageTrack: {
@@ -19539,7 +19546,7 @@ declare var SVGSwitchElement: {
     isInstance: IsInstance<SVGSwitchElement>;
 };
 
-interface SVGSymbolElement extends SVGElement, SVGFitToViewBox, SVGTests {
+interface SVGSymbolElement extends SVGGraphicsElement, SVGFitToViewBox, SVGTests {
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGSymbolElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGSymbolElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -25875,6 +25882,8 @@ declare namespace CSS {
 
 declare namespace ChromeUtils {
     var aliveUtilityProcesses: number;
+    var cpuTimeSinceProcessStart: number;
+    var currentProcessMemoryUsage: number;
     var domProcessChild: nsIDOMProcessChild | null;
     var recentJSDevError: any;
     function CreateOriginAttributesFromOriginSuffix(suffix: string): OriginAttributesDictionary;
@@ -26242,7 +26251,7 @@ interface CreateScriptURLCallback {
 }
 
 interface CustomElementConstructor {
-    (): any;
+    new (...params: any[]): HTMLElement;
 }
 
 interface CustomElementCreationCallback {

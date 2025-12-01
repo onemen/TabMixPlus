@@ -1,11 +1,24 @@
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
+import {XPCOMUtils} from "resource://gre/modules/XPCOMUtils.sys.mjs";
 
 /** @type {SlideshowModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
-  //
+  isVersion: "chrome://tabmix-resource/content/BrowserVersion.sys.mjs",
   Shortcuts: "chrome://tabmix-resource/content/Shortcuts.sys.mjs",
+});
+
+XPCOMUtils.defineLazyServiceGetters(lazy, {
+  AlertsService: ["@mozilla.org/alerts-service;1", Ci.nsIAlertsService],
+});
+
+ChromeUtils.defineLazyGetter(lazy, "AlertNotification", () => {
+  return Components.Constructor(
+    "@mozilla.org/alert-notification;1",
+    "nsIAlertNotification",
+    "initWithObject"
+  );
 });
 
 export function flst() {
@@ -26,17 +39,23 @@ flst.prototype = {
   showAlert(msg, id) {
     try {
       msg = msg.replace(/F8|F9/, lazy.Shortcuts.getFormattedKeyForID(id));
-      let alerts = Cc["@mozilla.org/alerts-service;1"].getService(Ci.nsIAlertsService);
-      alerts.showAlertNotification(
-        "chrome://tabmixplus/skin/tmp.png",
-        "Tab Mix Plus",
-        msg,
-        false,
-        "",
-        undefined,
-        id
-      );
-    } catch {}
+      const imageURL = "chrome://tabmixplus/skin/tmp.png";
+      const title = "Tab Mix Plus";
+      lazy.isVersion(1470) ?
+        lazy.AlertsService.showAlert(
+          new lazy.AlertNotification({
+            imageURL,
+            title,
+            text: msg,
+            textClickable: false,
+            cookie: id,
+            name: id,
+          })
+        )
+      : lazy.AlertsService.showAlertNotification(imageURL, title, msg, false, "", undefined, id);
+    } catch (error) {
+      console.log("Tabmix showAlert error:", error);
+    }
   },
 
   // toggle flst on/off

@@ -340,6 +340,11 @@ interface GleanImpl {
     tabAssignedContainer: GleanEventWithExtras<{ from_container_id?: string, to_container_id?: string }>;
   }
 
+  browserCustomkeys: {
+    actions: Record<"change"|"clear"|"reset"|"reset_all", GleanCounter>;
+    opened: GleanCounter;
+  }
+
   downloads: {
     panelShown: GleanCounter;
     addedFileExtension: GleanEventWithExtras<{ value?: string }>;
@@ -3123,6 +3128,9 @@ interface GleanImpl {
     lenientThis: GleanCounter;
     mathMlDeprecatedMathSpaceValue2: GleanCounter;
     mathMlDeprecatedMathVariant: GleanCounter;
+    mathMlDeprecatedMoExplicitAccent: GleanCounter;
+    mathMlDeprecatedMoverNonExplicitAccent: GleanCounter;
+    mathMlDeprecatedMunderNonExplicitAccentunder: GleanCounter;
     motionEvent: GleanCounter;
     mouseEventMozPressure: GleanCounter;
     mozInputSource: GleanCounter;
@@ -3171,6 +3179,9 @@ interface GleanImpl {
     lenientThis: GleanCounter;
     mathMlDeprecatedMathSpaceValue2: GleanCounter;
     mathMlDeprecatedMathVariant: GleanCounter;
+    mathMlDeprecatedMoExplicitAccent: GleanCounter;
+    mathMlDeprecatedMoverNonExplicitAccent: GleanCounter;
+    mathMlDeprecatedMunderNonExplicitAccentunder: GleanCounter;
     motionEvent: GleanCounter;
     mouseEventMozPressure: GleanCounter;
     mozInputSource: GleanCounter;
@@ -5469,9 +5480,6 @@ interface GleanImpl {
   }
 
   cookieBanners: {
-    googleGdprChoiceCookie: Record<string, GleanString>;
-    googleGdprChoiceCookieEvent: GleanEventWithExtras<{ choice?: string, region?: string, search_domain?: string }>;
-    googleGdprChoiceCookieEventPbm: GleanEventWithExtras<{ choice?: string }>;
     normalWindowServiceMode: Record<"disabled"|"invalid"|"reject"|"reject_or_accept", GleanBoolean>;
     privateWindowServiceMode: Record<"disabled"|"invalid"|"reject"|"reject_or_accept", GleanBoolean>;
     serviceDetectOnly: GleanBoolean;
@@ -5884,13 +5892,17 @@ interface GleanImpl {
   }
 
   firefoxAiRuntime: {
-    engineCreationFailure: GleanEventWithExtras<{ engineId?: string, error?: string, featureId?: string, modelId?: string, taskName?: string }>;
+    engineCreationFailure: GleanEventWithExtras<{ engineId?: string, error?: string, featureId?: string, flow_id?: string, modelId?: string, taskName?: string }>;
     engineCreationSuccess: Record<"about-inference"|"autofill-ml"|"default-engine"|"ml-suggest-intent"|"ml-suggest-ner"|"pdfjs"|"smart-intent"|"smart-tab-embedding-engine"|"smart-tab-topic-engine"|"webextension"|"wllamapreview", GleanTimingDistribution>;
-    engineRun: GleanEventWithExtras<{ backend?: string, cores?: string, cpu_milliseconds?: string, cpu_utilization?: string, engine_id?: string, feature_id?: string, memory_bytes?: string, model_id?: string, wall_milliseconds?: string }>;
+    engineCreationSuccessFlow: GleanEventWithExtras<{ duration?: string, engineId?: string, flow_id?: string }>;
+    engineRun: GleanEventWithExtras<{ backend?: string, cores?: string, cpu_milliseconds?: string, cpu_utilization?: string, engine_id?: string, feature_id?: string, flow_id?: string, memory_bytes?: string, model_id?: string, wall_milliseconds?: string }>;
     modelDeletion: GleanEventWithExtras<{ deletedBy?: string, error?: string, modelId?: string, modelRevision?: string }>;
     modelDownload: GleanEventWithExtras<{ duration?: string, engineId?: string, error?: string, featureId?: string, modelDownloadId?: string, modelId?: string, modelRevision?: string, step?: string, when?: string }>;
-    runInferenceFailure: GleanEventWithExtras<{ engineId?: string, featureId?: string, modelId?: string }>;
+    runInferenceFailure: GleanEventWithExtras<{ engineId?: string, featureId?: string, flow_id?: string, modelId?: string }>;
     runInferenceSuccess: Record<"about-inference"|"autofill-ml"|"default-engine"|"ml-suggest-intent"|"ml-suggest-ner"|"pdfjs"|"smart-intent"|"smart-tab-embedding-engine"|"smart-tab-topic-engine"|"webextension"|"wllamapreview", GleanTimingDistribution>;
+    runInferenceSuccessFlow: GleanEventWithExtras<{ flow_id?: string, inference_time?: string, tokenizing_time?: string }>;
+    sessionEnd: GleanEventWithExtras<{ duration?: string, feature_id?: string, flow_id?: string, status?: string }>;
+    sessionStart: GleanEventWithExtras<{ feature_id?: string, flow_id?: string, interaction?: string }>;
   }
 
   modelManagement: {
@@ -5926,7 +5938,7 @@ interface GleanImpl {
     remoteSettingsSyncError: GleanEventWithExtras<{ collection?: string, force_sync?: string, reason?: string, trigger?: string }>;
     startupDatabaseConsistency: GleanEventWithExtras<{ db_active_count?: string, primary?: string, store_active_count?: string, total_db_count?: string, total_store_count?: string, trigger?: string }>;
     unenrollFailed: GleanEventWithExtras<{ experiment?: string, reason?: string }>;
-    unenrollment: GleanEventWithExtras<{ branch?: string, changed_pref?: string, conflicting_slug?: string, experiment?: string, locale?: string, pref_name?: string, pref_type?: string, reason?: string }>;
+    unenrollment: GleanEventWithExtras<{ about_config_change?: string, branch?: string, changed_pref?: string, conflicting_slug?: string, experiment?: string, locale?: string, pref_name?: string, pref_type?: string, reason?: string }>;
     validationFailed: GleanEventWithExtras<{ branch?: string, experiment?: string, l10n_ids?: string, locale?: string, reason?: string }>;
   }
 
@@ -6698,16 +6710,7 @@ interface GleanImpl {
   }
 
   searchSuggestions: {
-    abortedRequests: Record<string, GleanCounter>;
-    failedRequests: Record<string, GleanCounter>;
     latency: Record<string, GleanTimingDistribution>;
-    successfulRequests: Record<string, GleanCounter>;
-  }
-
-  searchSuggestionsOhttp: {
-    enabled: GleanBoolean;
-    latency: Record<string, GleanTimingDistribution>;
-    requestCounter: GleanDualLabeledCounter;
   }
 
   legacyTelemetry: {

@@ -122,6 +122,7 @@ declare namespace MockedExports {
   }
 
   interface Ci extends Omit<nsIXPCComponents_Interfaces, "nsIFilePicker"> {
+    nsIAlertsService: nsJSIID<nsIAlertsService>;
     nsIAppStartup: nsJSIID<_nsIAppStartup, typeof nsIAppStartup_IDLShutdownPhase>;
     nsIFilePicker: nsJSIID<nsIFilePicker, nsIFilePicker_Constants>;
     nsIPromptService: nsJSIID<MockedGeckoTypes._nsIPromptService>;
