@@ -1127,10 +1127,12 @@ Tabmix.tabsUtils = {
             }
             this.updateOverflowMaxWidth();
             this.updateVerticalTabStrip();
-            if (Tabmix.isVersion(1370)) {
-              gURLBar.onWidgetAfterDOMChange(gURLBar.parentNode);
-            } else if (Tabmix.isVersion(1340)) {
-              gURLBar.onWidgetAfterDOMChange(gURLBar.textbox.parentNode);
+            if (!Tabmix.isVersion(1470)) {
+              if (Tabmix.isVersion(1370)) {
+                gURLBar.onWidgetAfterDOMChange(gURLBar.parentNode);
+              } else if (Tabmix.isVersion(1340)) {
+                gURLBar.onWidgetAfterDOMChange(gURLBar.textbox.parentNode);
+              }
             }
             break;
           }
