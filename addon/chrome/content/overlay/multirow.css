@@ -261,12 +261,16 @@
 }
 
 @media (width <= 1250px) {
+  :root {
+    --tabmix-safe-tab-width: clamp(20vw, var(--tabmix-tab-max-width, 250px), 40vw);
+  }
+
   #pinned-tabs-container[orient="horizontal"] {
-    max-width: calc(80vw - max(20vw, var(--tabmix-tab-max-width, 250px)));
+    max-width: calc(80vw - var(--tabmix-safe-tab-width));
   }
 
   #tabbrowser-arrowscrollbox[orient="horizontal"] {
-    min-width: max(20vw, var(--tabmix-tab-max-width, 250px));
+    min-width: max(20vw, var(--tabmix-safe-tab-width));
   }
 }
 
