@@ -2498,7 +2498,7 @@ window.gTMPprefObserver = {
     this.insertRule(
       `#TabsToolbar[tabmix-flowing="multibar"] ${selectorType}private-browsing-indicator-with-label {
         align-items: flex-start;
-        margin-top: var(--private-browsing-indicator-margin-top, 12px);
+        margin-top: var(--tabmix-private-browsing-indicator-margin-top, 12px);
       }`
     );
 
@@ -2659,7 +2659,7 @@ window.gTMPprefObserver = {
 
     TMP_tabDNDObserver._multirowMargin = parseInt(blockMargin.margin);
 
-    // Firefox adds padding for single row when positionpinnedtabs is set.
+    // Firefox before 140 adds padding for single row when positionpinnedtabs is set.
     // padding-inline: var(--tab-shadow-max-size);
     this.insertRule(
       `#tabbrowser-tabs:not([defaultScrollButtons])[orient=horizontal][positionpinnedtabs] #tabbrowser-arrowscrollbox::part(scrollbox) {

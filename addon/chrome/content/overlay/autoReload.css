@@ -19,18 +19,18 @@ html|fieldset {
 }
 
 .combined-element {
-  background-color: var(--in-content-box-background);
-  border: 1px solid var(--in-content-box-border-color);
-  border-radius: var(--combined-element-border-radius);
+  background-color: var(--background-color-canvas);
+  border: 1px solid var(--tabmix-border-color);
+  border-radius: var(--tabmix-combined-element-border-radius);
 }
 
 .combined-element:focus-within {
-  border-color: var(--in-content-focus-outline-color);
-  outline: var(--combined-element-outline);
+  border-color: var(--focus-outline-color);
+  outline: var(--tabmix-combined-element-outline);
 }
 
 .select-button {
-  background-color: var(--in-content-button-background);
+  background-color: var(--tabmix-button-background-color-ghost-hover);
   background-image: url("chrome://global/skin/icons/arrow-down.svg");
   background-repeat: no-repeat;
   background-size: 8px;
@@ -42,13 +42,13 @@ html|fieldset {
 }
 
 .select-button:hover {
-  background-color: var(--in-content-button-background-hover);
-  color: var(--in-content-button-text-color-hover);
+  background-color: var(--tabmix-button-background-color-hover);
+  color: var(--tabmix-button-text-color-hover);
   border-color: transparent;
 }
 
 .select-button:hover:active {
-  background-color: var(--in-content-button-background-active);
+  background-color: var(--tabmix-button-background-color-active);
 }
 
 .select-menupopup {
@@ -75,7 +75,7 @@ input[type="number"]:focus {
 }
 
 input[type="number"]::-moz-number-spin-box {
-  border-inline-end: 1px solid var(--in-content-box-border-color);
+  border-inline-end: 1px solid var(--tabmix-border-color);
   border-start-end-radius: 0;
   border-end-end-radius: 0;
 }

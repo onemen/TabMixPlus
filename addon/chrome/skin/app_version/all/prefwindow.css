@@ -63,12 +63,12 @@
 
   radio[pane]:hover {
     background-color: #E0E8F6;
-    color: var(--in-content-button-text-color-hover);
+    color: var(--tabmix-button-text-color-hover);
     appearance: none;
   }
 
   radio[pane][selected="true"] {
     background-color: #C1D2EE;
-    color: var(--in-content-button-text-color-hover);
+    color: var(--tabmix-button-text-color-hover);
     appearance: none;
   }

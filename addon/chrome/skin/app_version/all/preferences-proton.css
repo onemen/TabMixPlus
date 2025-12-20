@@ -12,26 +12,23 @@
   --shortcut-image-stroke: #fff;
 
   /* for autoReload.xhtml */
-  --combined-element-border-radius: 4px;
-  --tabmix-focus-outline-color: var(--in-content-focus-outline-color);
-  /* stylelint-disable-next-line declaration-block-no-duplicate-custom-properties */
-  --tabmix-focus-outline-color: var(--focus-outline-color);
-  --combined-element-outline: 1px solid var(--tabmix-focus-outline-color);
+  --tabmix-combined-element-border-radius: 4px;
+  --tabmix-combined-element-outline: 1px solid var(--focus-outline-color);
 }
 
 /* for Zen browser */
 @media not (prefers-contrast) {
   :root:not([lwtheme]) {
     --color-accent-primary: light-dark(rgb(0 97 224), rgb(0 221 255)) !important;
-    --in-content-button-background: color-mix(in srgb, currentcolor 7%, transparent) !important;
-    --in-content-button-background-hover: color-mix(in srgb, currentcolor 14%, transparent) !important;
-    --in-content-button-background-active: color-mix(in srgb, currentcolor 21%, transparent) !important;
-    --in-content-primary-button-text-color: rgb(251 251 254) !important;
-    --in-content-primary-button-text-color-hover: var(--in-content-primary-button-text-color) !important;
-    --in-content-primary-button-text-color-active: var(--in-content-primary-button-text-color) !important;
-    --in-content-primary-button-background: #0061e0 !important;
-    --in-content-primary-button-background-hover: #0250bb !important;
-    --in-content-primary-button-background-active: #053e94 !important;
+    --tabmix-button-background-color-ghost-hover: color-mix(in srgb, currentcolor 7%, transparent) !important;
+    --tabmix-button-background-color-hover: color-mix(in srgb, currentcolor 14%, transparent) !important;
+    --tabmix-button-background-color-active: color-mix(in srgb, currentcolor 21%, transparent) !important;
+    --tabmix-button-text-color-primary: rgb(251 251 254) !important;
+    --tabmix-button-text-color-primary-hover: var(--tabmix-button-text-color-primary) !important;
+    --tabmix-button-text-color-primary-active: var(--tabmix-button-text-color-primary) !important;
+    --tabmix-button-background-color-primary: #0061e0 !important;
+    --tabmix-button-background-color-primary-hover: #0250bb !important;
+    --tabmix-button-background-color-primary-active: #053e94 !important;
   }
 }
 
@@ -73,7 +70,7 @@ button {
 }
 
 html|input[type="color"] {
-  border: 1px solid var(--in-content-box-border-color);
+  border: 1px solid var(--tabmix-border-color);
   min-height: initial;
   padding: 4px;
   margin: 2px 4px;
@@ -154,17 +151,17 @@ menulist {
 }
 
 radio[pane]:hover {
-  background-color: var(--in-content-button-background-hover);
+  background-color: var(--tabmix-button-background-color-hover);
  }
 
 radio[pane][selected="true"] {
-  background-color: var(--in-content-button-background);
-  color: var(--in-content-accent-color);
+  background-color: var(--tabmix-button-background-color-ghost-hover);
+  color: var(--tabmix-color-accent-primary);
  }
 
  radio[pane]:hover:active,
  radio[pane][selected="true"]:hover {
-  background-color: var(--in-content-button-background-active);
+  background-color: var(--tabmix-button-background-color-active);
  }
 
 /* override rules from skin/tabmix-preferences.css */
@@ -178,16 +175,16 @@ prefpane {
 
 prefpane > .content-box > tabbox {
   height: unset;
-  min-height: var(--content-box-max-pane-height, 505px);
+  min-height: var(--tabmix-content-box-max-pane-height, 505px);
 }
 
 #TabMIxPreferences[mac] prefpane > .content-box > tabbox {
-  min-height: var(--content-box-max-pane-height, 505px);
+  min-height: var(--tabmix-content-box-max-pane-height, 505px);
 }
 
 #TabMIxPreferences[linux] prefpane > .content-box > tabbox {
   width: 560px;
-  min-height: var(--content-box-max-pane-height, 540px);
+  min-height: var(--tabmix-content-box-max-pane-height, 540px);
 }
 
 .prefWindow-dlgbuttons {

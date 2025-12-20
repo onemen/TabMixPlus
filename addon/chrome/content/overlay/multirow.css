@@ -70,61 +70,19 @@
   opacity: 0.4;
 }
 
-/* see tab.js  in this.dynamicProtonRules
-#tabmix-scrollbox::part(scrollbutton-up),
-#tabmix-scrollbox::part(scrollbutton-down) {
-  appearance: none;
-  margin: 0 0 var(--tabs-navbar-shadow-size) !important;
-  padding: var(--tabmix-scrollbutton-padding) !important;
-}
-}
-
-#tabmix-scrollbox[highlight]::part(scrollbutton-down) {
-  background-color: highlight;
-}
-*/
-
-/* see tab.js  in this.dynamicProtonRules
-#tabmix-scrollbox::part(scrollbutton-up),
-#tabmix-scrollbox::part(scrollbutton-down) {
-  appearance: none;
-  background-clip: padding-box;
-  border: 4px solid transparent;
-  border-radius: calc(var(--tab-border-radius) + 4px);
-  margin: 0;
-  padding: calc(var(--toolbarbutton-inner-padding) - 2px) calc(var(--toolbarbutton-inner-padding) - 6px);
-}
-*/
+/* see this.dynamicProtonRules in tab.js for more css rules */
 
 /* based on browser/themes/shared/tabs.inc.css */
 #tabmix-scrollbox::part(scrollbutton-up),
 #tabmix-scrollbox::part(scrollbutton-down) {
   fill: var(--toolbarbutton-icon-fill, currentColor);
-  fill-opacity: var(--toolbarbutton-icon-fill-opacity, 1);
+  fill-opacity: 1;
 }
 
 #tabmix-scrollbox[orient="vertical"]::part(scrollbutton-up),
 #tabmix-scrollbox[orient="vertical"]::part(scrollbutton-down) {
   list-style-image: url("chrome://global/skin/icons/arrow-down.svg");
 }
-
-/* see tab.js  in this.dynamicProtonRules
-#tabmix-scrollbox:not([scrolledtostart])::part(scrollbutton-up):hover,
-#tabmix-scrollbox:not([scrolledtoend])::part(scrollbutton-down):hover {
-  background-color: var(--toolbarbutton-hover-background);
-  color: inherit;
-}
-
-#tabmix-scrollbox:not([scrolledtostart])::part(scrollbutton-up):hover:active,
-#tabmix-scrollbox:not([scrolledtoend])::part(scrollbutton-down):hover:active {
-  background-color: var(--toolbarbutton-active-background, var(--toolbarbutton-hover-background));
-  color: inherit;
-}
-
-#navigator-toolbox:not(:hover) #tabmix-scrollbox:not([highlight])::part(scrollbutton-down) {
-  transition: background-color 1s ease-out 0s;
-}
-*/
 
 /* swap direction from the original rule
    we place the indicator left to the buttons
@@ -155,7 +113,7 @@
 }
 
 :root[uidensity="compact"] {
-  --private-browsing-indicator-margin-top: 9px;
+  --tabmix-private-browsing-indicator-margin-top: 9px;
 }
 
 :root:not([uidensity="compact"]) #TabsToolbar[tabmix-flowing="multibar"] .toolbarbutton-1:not([id="tabs-newtab-button"]) {

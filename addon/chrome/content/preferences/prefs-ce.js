@@ -1921,7 +1921,7 @@ class PrefWindow extends MozXULElement {
     if (contentSize > this.maxContentSize[measurement]) {
       this.maxContentSize[measurement] = contentSize;
       this._paneDeckContainer.style.setProperty(
-        `--content-box-max-pane-${measurement}`,
+        `--tabmix-content-box-max-pane-${measurement}`,
         `${contentSize}px`
       );
     }

@@ -1,13 +1,8 @@
 /* custom properties for autoReload.xhtml */
 
+@import url("chrome://tabmixplus/skin/app_version/all/variable_migration.css");
+
 :root {
-  --in-content-box-background: rgb(255 255 255);
-  --in-content-box-border-color: rgb(169 169 169);
-  --in-content-focus-outline-color: rgb(10 132 255);
-  --in-content-button-background: rgb(207 207 216 / 33%);
-  --in-content-button-background-hover: rgb(229 241 251);
-  --in-content-button-background-active: rgb(204 228 247);
-  --in-content-button-text-color-hover: rgb(0 0 0);
-  --combined-element-border-radius: 0;
-  --combined-element-outline: none;
+  --tabmix-combined-element-border-radius: 0;
+  --tabmix-combined-element-outline: none;
 }

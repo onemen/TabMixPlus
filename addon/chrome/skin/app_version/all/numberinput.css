@@ -4,9 +4,9 @@
 @namespace html url("http://www.w3.org/1999/xhtml");
 
 :root {
-  --input-padding-inline: 2px;
-  --input-spinner-offset: 14px;
-  --input-width-offset: calc(var(--input-spinner-offset) + var(--input-padding-inline) + 2px);
+  --tabmix-input-padding-inline: 2px;
+  --tabmix-input-spinner-offset: 14px;
+  --tabmix-input-width-offset: calc(var(--tabmix-input-spinner-offset) + var(--tabmix-input-padding-inline) + 2px);
 }
 
 input[type="number"]:not(:disabled)[increaseDisabled]::-moz-number-spin-up,
@@ -23,7 +23,7 @@ input[type="number"]::-moz-number-spin-up,
 input[type="number"]::-moz-number-spin-down {
   border: 0;
   border-radius: 0;
-  background-color: var(--in-content-button-background);
+  background-color: var(--tabmix-button-background-color-ghost-hover);
   background-image: url("chrome://global/skin/icons/arrow-down.svg");
   background-repeat: no-repeat;
   background-size: 8px;
@@ -48,14 +48,14 @@ input:is([type="text"], [type="number"]) {
   --input-text-min-height: 24px;
 
   appearance: none;
-  border: 1px solid var(--in-content-box-border-color);
+  border: 1px solid var(--tabmix-border-color);
   border-radius: 4px;
   color: inherit;
-  background-color: var(--in-content-box-background);
+  background-color: var(--background-color-canvas);
   font-family: inherit;
   font-size: inherit;
   padding-block: 2px;
-  padding-inline: var(--input-padding-inline) 0;
+  padding-inline: var(--tabmix-input-padding-inline) 0;
   margin: 2px 4px;
 }
 
@@ -63,12 +63,8 @@ input:is([type="text"], [type="number"]) {
 
 input:is([type="text"], [type="number"]):focus,
 richlistbox:focus-visible {
-  --tabmix-focus-outline-color: var(--in-content-focus-outline-color);
-  /* stylelint-disable-next-line declaration-block-no-duplicate-custom-properties */
-  --tabmix-focus-outline-color: var(--focus-outline-color);
-
   border-color: transparent;
-  outline: 2px solid var(--tabmix-focus-outline-color);
+  outline: 2px solid var(--focus-outline-color);
   outline-offset: -1px; /* Prevents antialising around the corners */
 }
 
@@ -85,7 +81,7 @@ input:is([type="text"], [type="number"]):disabled {
 input[type="number"]::-moz-number-spin-box {
   height: 100%;
   max-height: 100%;
-  border-inline-start: 1px solid var(--in-content-box-border-color);
+  border-inline-start: 1px solid var(--tabmix-border-color);
   width: calc(1em + 2px);
   border-start-end-radius: 4px;
   border-end-end-radius: 4px;
@@ -101,29 +97,29 @@ input[type="number"]::-moz-number-spin-up {
 
 input[type="number"]:enabled::-moz-number-spin-up:hover,
 input[type="number"]:enabled::-moz-number-spin-down:hover {
-  background-color: var(--in-content-button-background-hover);
-  color: var(--in-content-button-text-color-hover);
+  background-color: var(--tabmix-button-background-color-hover);
+  color: var(--tabmix-button-text-color-hover);
 }
 
 /* fix width issue with some theme/fonts */
 input[type="number"][size="2"] {
-  width: calc(2ch + var(--input-width-offset));
+  width: calc(2ch + var(--tabmix-input-width-offset));
 }
 
 input[type="number"][size="3"] {
-  width: calc(3ch + var(--input-width-offset));
+  width: calc(3ch + var(--tabmix-input-width-offset));
 }
 
 input[type="number"][size="4"] {
-  width: calc(4ch + var(--input-width-offset));
+  width: calc(4ch + var(--tabmix-input-width-offset));
 }
 
 input[type="number"][size="5"] {
-  width: calc(5ch + var(--input-width-offset));
+  width: calc(5ch + var(--tabmix-input-width-offset));
 }
 
 input[type="number"][size="6"] {
-  width: calc(6ch + var(--input-width-offset));
+  width: calc(6ch + var(--tabmix-input-width-offset));
 }
 
 /* show badge New on help buttons */

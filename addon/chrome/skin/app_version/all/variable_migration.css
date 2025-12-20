@@ -1,0 +1,37 @@
+/**
+    this file is for variable migration only.
+    It should contain only variables that have been renamed or removed in recent Firefox versions.
+    Do not add new variables here.
+
+    import this file before other CSS files that use the variables defined here.
+*/
+
+:root {
+  /**
+   * Firefox 147+ (Bug 1988865)
+   * Replace --border-color with --in-content-box-border-color
+   */
+  --tabmix-border-color: var(--border-color, var(--in-content-box-border-color));
+
+  /**
+  * Firefox 133+ (Bug 1916815)
+  * Replace --in-content-accent-color with --color-accent-primary
+  */
+  --tabmix-color-accent-primary: var(--color-accent-primary, var(--in-content-accent-color));
+
+  /**
+   * Firefox 143+ (Bug 1861505)
+   * Replace --in-content-button* variables with button Design Tokens
+   */
+  --tabmix-button-background-color-active: var(--button-background-color-active, var(--in-content-button-background-active));
+  --tabmix-button-background-color-hover: var(--button-background-color-hover, var(--in-content-button-background-hover));
+  --tabmix-button-background-color-ghost-hover: var(--button-background-color-ghost-hover, var(--in-content-button-background));
+  --tabmix-button-text-color-hover: var(--button-text-color-hover, var(--in-content-button-text-color-hover));
+  --tabmix-icon-color-critical: var(--icon-color-critical, var(--in-content-danger-button-background));
+  --tabmix-button-background-color-primary: var(--button-background-color-primary, var(--in-content-primary-button-background));
+  --tabmix-button-background-color-primary-active: var(--button-background-color-primary-active, var(--in-content-primary-button-background-active));
+  --tabmix-button-background-color-primary-hover: var(--button-background-color-primary-hover, var(--in-content-primary-button-background-hover));
+  --tabmix-button-text-color-primary: var(--button-text-color-primary, var(--in-content-primary-button-text-color));
+  --tabmix-button-text-color-primary-active: var(--button-text-color-primary-active, var(--in-content-primary-button-text-color-active));
+  --tabmix-button-text-color-primary-hover: var(--button-text-color-primary-hover, var(--in-content-primary-button-text-color-hover));
+}

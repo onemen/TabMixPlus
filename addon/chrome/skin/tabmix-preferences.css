@@ -34,7 +34,7 @@ radio[pane="paneSession"] {
 radio[pane="paneIncompatible"] {
   list-style-image: url("chrome://global/skin/icons/error.svg") !important;
   -moz-context-properties: fill;
-  fill: var(--in-content-danger-button-background, #e22850);
+  fill: var(--tabmix-icon-color-critical, #e22850);
   visibility: collapse;
 }
 
@@ -270,7 +270,7 @@ tabbox {
 
 prefpane > .content-box > tabbox {
   min-width: 525px;
-  min-height: var(--content-box-max-pane-height, 464px);
+  min-height: var(--tabmix-content-box-max-pane-height, 464px);
 }
 
 prefwindow .paneSelector {
@@ -287,7 +287,7 @@ tabbox > tabpanels:last-child {
 
 /* for Mac */
 #TabMIxPreferences[mac] prefpane > .content-box > tabbox {
-  height: var(--content-box-max-pane-height, 468px);
+  height: var(--tabmix-content-box-max-pane-height, 468px);
 }
 
 #TabMIxPreferences[mac] .groupbox-tabbox {
