@@ -812,6 +812,7 @@ var TabmixContext = {
       "context_sendTabToDevice",
       "shareTabURL", // no ID in Firefox
       "context_moveTabToNewGroup",
+      "context_moveSplitViewToNewGroup",
       "context_moveTabToGroup",
       "context_ungroupTab",
       "context_playTab",

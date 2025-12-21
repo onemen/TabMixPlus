@@ -251,6 +251,17 @@ var gMenuPane = {
     // Fix new tab label
     document.l10n?.setAttributes($("context_openANewTab"), "menu-file-new-tab");
 
+    // Fix moveTabToNewGroup
+    if (Tabmix.isVersion(1470)) {
+      const contextMoveTabToGroup = $("context_moveTabToGroup");
+      contextMoveTabToGroup.setAttribute("data-l10n-id", "tab-context-move-tab-to-group");
+      contextMoveTabToGroup.setAttribute("data-l10n-args", '{"tabCount":1}');
+      document.l10n?.translateElements([contextMoveTabToGroup]).then(() => {
+        contextMoveTabToGroup.removeAttribute("data-l10n-id");
+        contextMoveTabToGroup.removeAttribute("data-l10n-args");
+      });
+    }
+
     // Fix reload tab every label
     const reloadTabEvery = browserWindow.document.querySelector("#tm-autoreloadTab_menu");
     const label = reloadTabEvery?.getAttribute("labelTab") || "Reload Tab Every";

@@ -32,6 +32,7 @@ const TAB_CONTEXT_MENU_PREFLIST = {
   "context_moveTabOptions": ["moveTabOptions"],
   "context_moveTabToGroup": [""],
   "context_moveTabToNewGroup": [""],
+  ...(isVersion(1480) ? {context_moveSplitViewToNewGroup: [""]} : null),
   "context_openANewTab": ["newTabMenu"],
   "context_pinTab": ["pinTabMenu"],
   // "context_pinSelectedTabs",
