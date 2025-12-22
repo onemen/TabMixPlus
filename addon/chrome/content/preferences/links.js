@@ -7,6 +7,10 @@ var gLinksPane = {
     this.singleWindow($("singleWindow").checked);
     this.externalLinkValue($("externalLink").checked);
 
+    if (!Tabmix.isVersion(1460)) {
+      $("externalLinkTarget").querySelector('menuitem[value="7"]').remove();
+    }
+
     $("externalLinkTarget").querySelector('menuitem[value="-1"]').label =
       $("externalLinkTarget").querySelector('menuitem[value="3"]').label;
     const config = {attributes: true};
