@@ -812,7 +812,6 @@ var TabmixContext = {
       "context_sendTabToDevice",
       "shareTabURL", // no ID in Firefox
       "context_moveTabToNewGroup",
-      "context_moveSplitViewToNewGroup",
       "context_moveTabToGroup",
       "context_ungroupTab",
       "context_playTab",
@@ -821,6 +820,7 @@ var TabmixContext = {
       "context_fullscreenAutohide", // no ID in Firefox < 129
       "context_fullscreenExit", // no ID in Firefox < 129
       ...forksExtraIds,
+      ...(Tabmix.isVersion(1480) ? ["context_moveSplitViewToNewGroup"] : []),
     ]);
     for (const id of Array.from(itemsIds)) {
       const item =
