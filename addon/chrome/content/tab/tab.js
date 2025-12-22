@@ -817,10 +817,10 @@ Tabmix.tabsUtils = {
       return;
     }
 
-    const allVisibleItems = Tabmix.tabsUtils.allVisibleItems;
+    const allVisibleItems = this.allVisibleItems;
     const lastEl = allVisibleItems.at(-1);
     // Use parent elements if they are group labels
-    const lastElement = gBrowser.isTabGroupLabel(lastEl) ? lastEl.parentElement : lastEl;
+    const lastElement = this.getDragAndDropElement(lastEl);
 
     const tsboRect = this.tabBar.arrowScrollbox.scrollbox.getBoundingClientRect();
     const rtl = Tabmix.rtl;
@@ -857,8 +857,7 @@ Tabmix.tabsUtils = {
     }
 
     // Use parent elements if they are group labels
-    const previousElement =
-      gBrowser.isTabGroupLabel(previousEl) ? previousEl.parentElement : previousEl;
+    const previousElement = this.getDragAndDropElement(previousEl);
 
     const lastElementRect = lastElement.getBoundingClientRect();
     const buttonWidth = this._newTabButtonWidth();
@@ -1054,8 +1053,7 @@ Tabmix.tabsUtils = {
     // Get margin-inline-start of first non-pinned item if it exists
     let firstNonPinnedWidth = 0;
     if (firstNonPinned) {
-      const item =
-        gBrowser.isTabGroupLabel(firstNonPinned) ? firstNonPinned.parentElement : firstNonPinned;
+      const item = this.getDragAndDropElement(firstNonPinned);
       firstNonPinnedWidth = item.getBoundingClientRect().width;
       firstNonPinnedWidth += parseInt(window.getComputedStyle(item)?.marginInlineStart || "0");
     }
@@ -1281,6 +1279,19 @@ Tabmix.tabsUtils = {
     }
 
     return this._allVisibleItems;
+  },
+
+  get dragAndDropElements() {
+    if (Tabmix.isVersion(1480)) {
+      return gBrowser.tabContainer.dragAndDropElements;
+    }
+    return this.allVisibleItems;
+  },
+
+  getDragAndDropElement(element) {
+    return gBrowser.isTabGroupLabel(element) ?
+        element.closest(".tab-group-label-container")
+      : (element?.splitview ?? element);
   },
 
   invalidateAllVisibleItems() {

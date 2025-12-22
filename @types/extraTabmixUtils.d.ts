@@ -523,6 +523,8 @@ interface TabmixTabsUtils {
   updateProtonValues(): void;
   _allVisibleItems: AriaFocusableItems | null;
   allVisibleItems: AriaFocusableItems;
+  dragAndDropElements: DragAndDropElements;
+  getDragAndDropElement(element: DragAndDropElement): TabContainerChild;
   invalidateAllVisibleItems(): void;
   patchInvalidateCachedVisibleTabs(): void;
   positionPinnedTabs(): void;

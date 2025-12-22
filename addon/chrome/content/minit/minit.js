@@ -2065,7 +2065,7 @@ var TMP_tabDNDObserver = {
       return 0;
     }
 
-    const item = gBrowser.isTabGroupLabel(dropElement) ? dropElement.parentElement : dropElement;
+    const item = Tabmix.tabsUtils.getDragAndDropElement(dropElement);
 
     const itemRect = item.getBoundingClientRect();
     let newMarginY;

@@ -445,9 +445,7 @@ Tabmix.multiRow = {
         const end = Tabmix.ltr ? "right" : "left";
         const containerEnd = this.scrollClientRect[end];
         const topY = Tabmix.tabsUtils.topTabY;
-        const tabs = this._getScrollableElements().map(item =>
-          gBrowser.isTabGroupLabel(item) ? item.parentNode : item
-        );
+        const tabs = this._getScrollableElements().map(Tabmix.tabsUtils.getDragAndDropElement);
         let index,
           current = 0;
 
