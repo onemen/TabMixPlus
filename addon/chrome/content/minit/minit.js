@@ -1797,7 +1797,7 @@ var TMP_tabDNDObserver = {
     const tabs =
       isPinnedTab ?
         Tabmix.tabsUtils.allVisibleItems.filter(tab => tab.pinned)
-      : Tabmix.tabsUtils.allVisibleItems;
+      : Tabmix.tabsUtils.allVisibleItems.map(Tabmix.tabsUtils.getDragAndDropElement);
     const numTabs = tabs.length;
     const pinnedTabCount = gBrowser.pinnedTabCount;
 
