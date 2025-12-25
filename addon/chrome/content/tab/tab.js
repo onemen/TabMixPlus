@@ -488,6 +488,14 @@ Tabmix.tabsUtils = {
     this.addTabsObserver();
 
     this.patchInvalidateCachedVisibleTabs();
+
+    if (!Tabmix.isVersion(1440)) {
+      Object.defineProperty(this, "getDragAndDropElement", {
+        value(/** @type {DragAndDropElement} */ element) {
+          return gBrowser.isTabGroupLabel(element) ? element.parentNode : element;
+        },
+      });
+    }
   },
 
   addTabsObserver() {
@@ -978,6 +986,15 @@ Tabmix.tabsUtils = {
     if (!aTab) {
       return 1;
     }
+    if ([...aTab.classList].includes("tab-group-label")) {
+      console.warn(
+        "Tabmix warning, getTabRowNumber was called with a 'tab-group-label' instead of 'group-label-container' from",
+        TabmixSvc.console.getCallerNameByIndex(1)
+      );
+      // @ts-ignore
+      aTab = this.getDragAndDropElement(aTab);
+    }
+
     let {top, height} = aTab.getBoundingClientRect();
     if (!height) {
       return 1;
@@ -1290,7 +1307,7 @@ Tabmix.tabsUtils = {
 
   getDragAndDropElement(element) {
     return gBrowser.isTabGroupLabel(element) ?
-        element.closest(".tab-group-label-container")
+        element.group.labelContainerElement
       : (element?.splitview ?? element);
   },
 

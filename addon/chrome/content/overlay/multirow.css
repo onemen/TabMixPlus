@@ -202,19 +202,7 @@
   .tabbrowser-tab[tabmix-movingtab-togroup] > .tab-stack > .tab-background > .tab-group-line {
     display: flex;
     background-color: light-dark(var(--dragover-tab-group-color), var(--dragover-tab-group-color-invert));
-    border-radius: 1px;
-  }
-}
-
-/* Firefox-specific media query - VSCode may show an error but this is valid in Firefox
- *
- * based on browser/themes/shared/tabbrowser/tabs.css
- */
-@media not -moz-pref("sidebar.verticalTabs") {
-  .tabbrowser-tab[tabmix-movingtab-togroup] > .tab-stack > .tab-background > .tab-group-line {
-    display: flex;
-    background-color: light-dark(var(--dragover-tab-group-color), var(--dragover-tab-group-color-invert));
-    border-radius: 1px;
+    border-radius: var(--border-radius-xsmall, 1px);
   }
 }
 
@@ -251,6 +239,11 @@
 
   .tabbrowser-tab:last-child > .tab-stack > .tab-background {
     margin-inline-start: -2px;
+  }
+
+  tab-group & .tabbrowser-tab > .tab-stack > .tab-background > .tab-group-line,
+  & .tabbrowser-tab[tabmix-movingtab-togroup] > .tab-stack > .tab-background > .tab-group-line {
+    inset-block-end: -2px;
   }
 
   &:not(:has([dragtarget])) {

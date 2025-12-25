@@ -99,7 +99,7 @@ interface TabmixGlobal {
   windowEnumerator(aWindowtype?: string | null): MockedGeckoTypes.nsISimpleEnumeratorWithWindow;
   numberOfWindows(all?: boolean, aWindowtype?: string | null): number;
   compare(a: number, b: number, lessThan: boolean): boolean;
-  itemEnd(item: Tab | HTMLElement, end: boolean): number;
+  itemEnd(item: Tab | MockedGeckoTypes.MozTabSplitViewWrapper | HTMLElement, end: boolean): number;
   _getMethod(id: string, args: IArguments): unknown;
   installChangecode(): void;
   _init(): void;

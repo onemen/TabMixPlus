@@ -117,7 +117,7 @@ type DraggedSourceNode = DraggedElement | HTMLLinkElement | Element;
 type TabContainerElement = DraggedSourceNode | MockedGeckoTypes.MozTabbrowserTabGroup | EventTarget | undefined;
 /* Notice: this type contain tab-group-label-container not the labe */
 type TabContainerChild = MockedGeckoTypes.BrowserTab | MockedGeckoTypes.GroupLabelContainer | MockedGeckoTypes.MozTabSplitViewWrapper;
-type DragEventParams = {sourceNode: DraggedSourceNode; dragType: number; draggedElement: DraggedElement; newIndex: number; dropElement: Tab | MockedGeckoTypes.MozTabSplitViewWrapper | undefined; dropBefore?: boolean; fromTabList?: boolean; dropOnStart?: boolean; groupLabelMargin?: number | undefined};
+type DragEventParams = {sourceNode: DraggedSourceNode; dragType: number; draggedElement: DraggedElement; newIndex: number; dropElement: DragAndDropElement | undefined; dropBefore?: boolean; fromTabList?: boolean; dropOnStart?: boolean; groupLabelMargin?: number | undefined};
 
 declare namespace MockedGeckoTypes {
   interface BrowsingContext extends MockedExports.BrowsingContext {
@@ -730,6 +730,7 @@ declare namespace MockedGeckoTypes {
     get tabsAndSplitViews(): Tabs | MozTabSplitViewWrapper[];
     isTabVisibleInGroup(tab: BrowserTab): boolean;
     get labelElement(): MozTabGroupLabel;
+    get labelContainerElement(): GroupLabelContainer;
     get isBeingDragged(): boolean;
     set isBeingDragged(val: boolean);
     addTabs(tabs: BrowserTab[]): void;
@@ -738,8 +739,9 @@ declare namespace MockedGeckoTypes {
     on_click(event: PointerEvent): void;
     on_TabSelect(): void;
     select(): void;
-    previousSibling: BrowserTab | MozTabbrowserTabGroup;
+    previousSibling: BrowserTab | MozTabbrowserTabGroup | MozTabSplitViewWrapper;
     pinned: never;
+    group: never;
   }
 
   interface MozTabSplitViewWrapper extends MozXULElement {

@@ -2044,6 +2044,7 @@ Tabmix.newTabUrls = [
   TabmixSvc.aboutNewtab,
   TabmixSvc.aboutBlank,
   "about:privatebrowsing",
+  "about:opentabs",
   "chrome://abouttab/content/text.html",
   "chrome://abouttab/content/tab.html",
   "chrome://google-toolbar/content/new-tab.html",

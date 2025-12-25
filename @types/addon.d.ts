@@ -238,10 +238,11 @@ interface TabmixDNDObserver {
   change_animateTabMove(localSandbox: TabmixSandbox): void;
   change_on_dragover(localSandbox: TabmixSandbox): {dragoverCode: ChangecodeModule.ChangeCodeClass; dragoverName: "handle_dragover" | "on_dragover"};
   change_on_drop(localSandbox: TabmixSandbox): {dropCode: ChangecodeModule.ChangeCodeClass; dropName: "handle_drop" | "on_drop"};
-  useTabmixDnD(event: DragEvent, tab?: Tab): boolean;
+  useTabmixDnD(event: DragEvent, tab?: Tab | MockedGeckoTypes.MozTabSplitViewWrapper): boolean;
   handleEvent(event: DragEvent): void;
   on_dragstart(this: MockedGeckoTypes.TabDragAndDrop | MockedGeckoTypes.TabContainer, event: DragEvent): void;
   handleDragover(event: DragEvent, useTabmixDnD: boolean): boolean;
+  _getGroupColor(elementGroup: MockedGeckoTypes.MozTabbrowserTabGroup | null | undefined, dropElement: DragAndDropElement | undefined): string;
   handleDrop(event: DragEvent, draggedTab: Tab, movingTabs: Tab[]): void;
   on_dragend(event: DragEvent): void;
   on_dragleave(event: DragEvent): void;
@@ -252,15 +253,16 @@ interface TabmixDNDObserver {
   showDragoverTooltip(message: string): void;
   _getDropIndex(event: DragEvent, options?: {dragover?: boolean; getParams?: boolean}): DragEventParams | number;
   eventParams(event: DragEvent): DragEventParams;
-  getDropElement(aEvent: DragEvent, tab: DraggedElement): AriaFocusableItem | undefined;
+  getDropElement(aEvent: DragEvent, tab: DraggedElement): DragAndDropElement | undefined;
   getNewIndex(event: DragEvent, tab: DraggedElement): number;
   _determinePinnedStateChange(event: DragEvent, tab: DraggedElement, pinnedTabCount: number): boolean;
   getEventTarget(event: DragEvent): AriaFocusableItem | MockedGeckoTypes.MozTabbrowserTabGroup | undefined;
-  isDropBefore(event: DragEvent, dropElement: AriaFocusableItem): boolean;
+  isDropBefore(event: DragEvent, dropElement: DragAndDropElement): boolean;
   getDragType(sourceNode: DraggedSourceNode): {dragType: number; tab: DraggedElement};
   getDropIndicatorMarginX(draggedTab: DraggedElement, dropElement: AriaFocusableItem, newIndex: number, dropBefore: boolean, itemRect: DOMRect, rect: DOMRect, defaultMargin: number): number;
   getDropIndicatorMarginY(ind: HTMLElement, dropElement: AriaFocusableItem, rect: DOMRect): number;
-  isLastTabInRow(dropTab: Tab | undefined, dragOverElement: AriaFocusableItem | undefined): boolean;
+  isLastTabInRow(dropTab: DragAndDropElement | undefined, dragOverElement: DragAndDropElement | undefined): boolean;
+  isDragAfterGroup(event: DragEvent, dropElement: DragAndDropElement | undefined): boolean;
   clearDragmark(): void;
   getSourceNode(aDataTransfer: DataTransfer): HTMLLinkElement | Tab | null;
   resetTabsAfterDrop(draggedTab: Tab): void;
@@ -723,7 +725,7 @@ interface PrivateMethods {
   updateScrollButtonsDisabledState: TabmixArrowScrollboxNS.ArrowScrollbox["_updateScrollButtonsDisabledState"];
 }
 
-type ElementTypesExtended = ElementTypes | TabmixAllTabsNS.PopupElement | MockedGeckoTypes.ArrowScrollbox | MockedGeckoTypes.BrowserTab;
+type ElementTypesExtended = ElementTypes | TabmixAllTabsNS.PopupElement | MockedGeckoTypes.ArrowScrollbox | MockedGeckoTypes.BrowserTab | MockedGeckoTypes.MozTabSplitViewWrapper;
 
 interface TabmixGlobal {
   tablib: typeof Tablib;
