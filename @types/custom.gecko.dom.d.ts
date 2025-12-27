@@ -43,7 +43,7 @@ interface CustomElementRegistry {
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface GetByTagNameMap {}
 
-interface MozXULElement extends Omit<Element, "parentNode" | "value">, CustomElementConstructorOverride {
+interface MozXULElement extends Omit<Element, "value">, CustomElementConstructorOverride {
   connectedCallback(): void;
   delayConnectedCallback(): boolean;
   disconnectedCallback(): void;
@@ -149,10 +149,12 @@ interface ShadowRoot {
   querySelector<K extends keyof QuerySelectorMap | string>(selectors: K): K extends keyof QuerySelectorMap ? QuerySelectorMap[K] : HTMLElement | null;
 }
 
+// @ts-ignore - add to interface from lib.gecko.dom.d.ts
 interface HTMLInputElement {
   readonly nextSibling: HTMLElement | HTMLInputElement | Element | null;
 }
 
+// @ts-ignore - add to interface from lib.gecko.dom.d.ts
 interface Node {
   className: string;
   classList: DOMTokenList;

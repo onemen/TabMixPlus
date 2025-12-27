@@ -4,7 +4,7 @@
 "use strict";
 
 /** Preference Dialog Functions */
-/** @type {Globals.PrefFn} */
+/** @type {typeof Globals.PrefFn} */
 const PrefFn = new Map([
   [0, ""],
   [32, "getCharPref"],
@@ -430,7 +430,7 @@ var gPrefWindow = {
   },
 };
 
-/** @type {Globals.getPrefByType} */
+/** @type {typeof Globals.getPrefByType} */
 function getPrefByType(prefName) {
   try {
     var fn = PrefFn.get(Services.prefs.getPrefType(prefName));
@@ -446,7 +446,7 @@ function getPrefByType(prefName) {
   return null;
 }
 
-/** @type {Globals.setPrefByType} */
+/** @type {typeof Globals.setPrefByType} */
 function setPrefByType(prefName, newValue, browserWindow, atImport) {
   let pref = {
     name: prefName,
@@ -462,7 +462,7 @@ function setPrefByType(prefName, newValue, browserWindow, atImport) {
   }
 }
 
-/** @type {Globals.setPref} */
+/** @type {typeof Globals.setPref} */
 function setPref(aPref) {
   let fn = PrefFn.get(aPref.type);
   if (fn == "getCharPref") {
@@ -474,7 +474,7 @@ function setPref(aPref) {
   }
 }
 
-/** @type {Globals.setPrefAfterImport} */
+/** @type {typeof Globals.setPrefAfterImport} */
 function setPrefAfterImport(aPref, browserWindow) {
   // in prev version we use " " for to export string to file
   aPref.value = aPref.value.replace(/^"*|"*$/g, "");
@@ -610,7 +610,7 @@ function updateInstantApply() {
   gPrefWindow.setButtons(!gPrefWindow.changes.size);
 }
 
-/** @type {Globals.toggleInstantApply} */
+/** @type {typeof Globals.toggleInstantApply} */
 function toggleInstantApply(item) {
   const preference = $Pref("pref_instantApply");
   if (preference._running) return;
@@ -718,7 +718,7 @@ function showFilePicker(mode) {
   });
 }
 
-/** @type {Globals.loadData} */
+/** @type {typeof Globals.loadData} */
 function loadData(pattern) {
   if (pattern[0] != "tabmixplus") {
     //  Can not import because it is not a valid file.
@@ -758,14 +758,14 @@ function loadData(pattern) {
 }
 
 // this function is called from Tabmix.openOptionsDialog if the dialog already opened
-/** @type {Globals.showPane} */
+/** @type {typeof Globals.showPane} */
 function showPane(paneID) {
   let pane = $Pane(paneID);
   const paneToLoad = !pane || pane.nodeName != "prefpane" ? $Pane(prefWindow.lastSelected) : pane;
   prefWindow.showPane(paneToLoad);
 }
 
-/** @type {Globals.openHelp} */
+/** @type {typeof Globals.openHelp} */
 function openHelp(helpTopic) {
   var helpPage = "https://onemen.github.io/tabmixplus-docs/";
   // Check if the help page already open in the top window
@@ -823,14 +823,14 @@ window.gIncompatiblePane = {
     this._initialized = true;
 
     let radioGroup = this.paneButton.parentNode;
-    radioGroup.addEventListener("command", this);
+    radioGroup?.addEventListener("command", this);
     this.checkForIncompatible(false);
     gPrefWindow.initPane("paneIncompatible");
   },
 
   deinit() {
     let radioGroup = this.paneButton.parentNode;
-    radioGroup.removeEventListener("command", this);
+    radioGroup?.removeEventListener("command", this);
   },
 
   handleEvent(aEvent) {

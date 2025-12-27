@@ -160,14 +160,14 @@ function Restore() {
 }
 
 // select new item and focus the list
-/** @type {Globals.SelectItemAt} */
+/** @type {typeof Globals.SelectItemAt} */
 function SelectItemAt(index, focus) {
   list.ensureIndexIsVisible(index);
   list.selectedIndex = index;
   if (focus) list.focus();
 }
 
-/** @type {Globals.setButtonDisable} */
+/** @type {typeof Globals.setButtonDisable} */
 function setButtonDisable(button, set) {
   if (set) {
     button.setAttribute("disabled", true);

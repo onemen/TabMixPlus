@@ -1,8 +1,14 @@
 {
   "extends": "../../config/base.tsconfig.json",
-  "include": ["**/*.js", "**/*.sys.mjs"],
+  "include": [
+    "**/*.js",
+    "**/*.sys.mjs",
+    "../../@types/index.d.ts",
+    "../../@types/addon.d.ts",
+    "../../@types/overrideGeckoDom.d.ts"
+  ],
   "exclude": [],
   "compilerOptions": {
-    "types": ["index.d.ts", "addon.d.ts"]
+    "types": ["modules"]
   }
 }

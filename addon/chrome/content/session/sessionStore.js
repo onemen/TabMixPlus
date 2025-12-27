@@ -154,7 +154,7 @@ var TMP_SessionStore = {
   },
 };
 
-/** @type {TabmixClosedTabsNS} */
+/** @type {typeof TabmixClosedTabsNS} */
 var TMP_ClosedTabs = {
   _buttonBroadcaster: null,
   get buttonBroadcaster() {

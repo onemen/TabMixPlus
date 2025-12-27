@@ -25,13 +25,18 @@ const TabpanelsClass = customElements.get("tabpanels");
       };
     }
 
-    /** @this {TabstylepanelClass} */
     constructor() {
       super();
 
-      this.addEventListener("command", () => {
-        this._savePrefs();
-      });
+      this.addEventListener(
+        "command",
+        /** @type {TabstylepanelListeners} */ () => {
+          this._savePrefs();
+        }
+      );
+
+      /** @param {string} aID */ // @ts-ignore - error in typescript 5.*
+      this._getElementByAnonid = aID => this.getElementsByAttribute("anonid", aID)[0];
     }
 
     /** @this {TabstylepanelClass} */
@@ -39,9 +44,6 @@ const TabpanelsClass = customElements.get("tabpanels");
       if (this.delayConnectedCallback()) {
         return;
       }
-
-      /** @param {string} aID */ // @ts-expect-error - we override getElementsByAttribute return type
-      this._getElementByAnonid = aID => this.getElementsByAttribute("anonid", aID)[0];
 
       this.textContent = "";
       this.appendChild(
@@ -189,11 +191,11 @@ const TabpanelsClass = customElements.get("tabpanels");
       this.updateDisableState("bg");
     }
 
-    /** @this {TabstylepanelClass} */
     _savePrefs() {
       /** @type {Record<string, boolean | string>} */
       const newPrefSValue = {};
-      for (const _id of Object.keys(this._prefValues)) {
+      for (const _id of Object.keys(this._prefValues ?? {})) {
+        /** @type {StyleElement | null} */ // @ts-ignore - just in case
         const item = this._getElementByAnonid(_id);
         if (typeof item?.checked === "boolean") {
           newPrefSValue[_id] = item.checked;
@@ -235,6 +237,10 @@ const TabpanelsClass = customElements.get("tabpanels");
 
   customElements.define("tabstylepanel", MozTabstylepanel);
 
+  /**
+   * @class
+   * @type {MozColorboxOverrideMozXULElement}
+   */
   class MozColorbox extends MozXULElement {
     static get inheritedAttributes() {
       return {
@@ -248,28 +254,36 @@ const TabpanelsClass = customElements.get("tabpanels");
       };
     }
 
-    /** @this {MozColorboxClass} */
     constructor() {
       super();
 
-      this.addEventListener("change", event => {
-        const item = event.originalTarget;
-        if (item.type == "color") {
-          this.updateRgba(item.value);
-        }
-        this.update(event);
-      });
+      /** @type {StyleElement[]} */
+      this._RGB = [];
 
-      this.addEventListener("input", event => {
-        const item = event.originalTarget;
-        if (item?.type === "color") {
-          this.updateRgba(item.value);
+      this.addEventListener(
+        "change",
+        /** @type {MozColorboxListeners} */
+        event => {
+          const item = event.originalTarget;
+          if (item.type == "color") {
+            this.updateRgba(item.value);
+          }
+          this.update(event);
         }
-        this.update(event);
-      });
+      );
+
+      this.addEventListener(
+        "input",
+        /** @type {MozColorboxListeners} */ event => {
+          const item = event.originalTarget;
+          if (item?.type === "color") {
+            this.updateRgba(item.value);
+          }
+          this.update(event);
+        }
+      );
     }
 
-    /** @this {MozColorboxClass} */
     connectedCallback() {
       if (this.delayConnectedCallback()) {
         return;
@@ -297,9 +311,6 @@ const TabpanelsClass = customElements.get("tabpanels");
       // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
       this.initializeAttributeInheritance();
 
-      /** @type {StyleElement[]} */
-      this._RGB = [];
-
       /** @typedef {"red" | "green" | "blue" | "opacity"} Colors */
       /** @type {Colors[]} */
       const colors = ["red", "green", "blue", "opacity"];
@@ -308,10 +319,10 @@ const TabpanelsClass = customElements.get("tabpanels");
       });
 
       this._colorpicker = this.getElementsByAttribute("anonid", "color")[0];
+      /** @type {TabstylepanelClass} */ // @ts-expect-error
       this._parent = this.closest("tabstylepanel");
     }
 
-    /** @this {MozColorboxClass} */
     get rgba() {
       const lastIndex = this._RGB.length - 1;
       const rgba = this._RGB.map((c, i) => {
@@ -320,7 +331,7 @@ const TabpanelsClass = customElements.get("tabpanels");
       return rgba;
     }
 
-    /** @type {MozColorboxClass["updateRgba"]} */
+    /** @param {string} val */
     updateRgba(val) {
       // colorpicker use rgb hexadecimal format
       const color = val.replace("#", "");
@@ -330,7 +341,6 @@ const TabpanelsClass = customElements.get("tabpanels");
       });
     }
 
-    /** @this {MozColorboxClass} */
     set color(val) {
       const lastIndex = this._RGB.length - 1;
       const color = val.replace(/rgba|rgb|\(|\)/g, "").split(",");
@@ -345,7 +355,7 @@ const TabpanelsClass = customElements.get("tabpanels");
       return this.getColor();
     }
 
-    /** @type {MozColorboxClass["getColor"]} */
+    /** @param {boolean} [format] */
     getColor(format) {
       const rgba = this.rgba;
       if (format) {
@@ -354,7 +364,6 @@ const TabpanelsClass = customElements.get("tabpanels");
       return "rgba(#1)".replace("#1", rgba.join(","));
     }
 
-    /** @this {MozColorboxClass} */
     updateColor() {
       const orig = this.getColor(true),
         rgbMatch = orig.replace(/\s/g, "").match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i);
@@ -369,14 +378,18 @@ const TabpanelsClass = customElements.get("tabpanels");
           (parseFloat(rgb[2]) | (1 << 8)).toString(16).slice(1) +
           (parseFloat(rgb[3]) | (1 << 8)).toString(16).slice(1);
       }
-      this._colorpicker.value = "#" + hex;
-      this._colorpicker.style.opacity = a;
+      if (this._colorpicker) {
+        this._colorpicker.value = "#" + hex;
+        this._colorpicker.style.opacity = a;
+      }
     }
 
-    /** @type {MozColorboxClass["update"]} */
+    /** @param {ColorEvent} event */
     update(event) {
       this.updateColor();
-      this._parent._savePrefs();
+      if (this._parent) {
+        this._parent._savePrefs();
+      }
       event.stopPropagation();
     }
   }

@@ -48,6 +48,7 @@ export class Overlays {
    * Constructs the overlays instance. This class should be called via
    * Overlays.load() instead.
    *
+   * @class
    * @param {TabmixModules.ChromeManifest} overlayProvider The overlay provider
    *   that contains information about styles and overlays.
    * @param {Window} window The window to load into
@@ -56,9 +57,13 @@ export class Overlays {
     this.overlayProvider = overlayProvider;
     this.window = window;
     this._decksToResolve = new Map();
+    /** @type {Element[]} */
     this._toolbarsToResolve = [];
+    /** @type {OverlaysModule.DeferredLoad} */
     this.deferredLoad = [];
+    /** @type {Set<string>} */
     this.persistedIDs = new Set();
+    /** @type {Element[]} */
     this.unloadedScripts = [];
     if (window.location.protocol == "about:") {
       this.location = window.location.protocol + window.location.pathname;

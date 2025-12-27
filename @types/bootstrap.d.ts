@@ -54,7 +54,6 @@ interface Addon {
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 type Callable<iface> = iface | Extract<iface[keyof iface], Function>;
 type DocumentObserver = Callable<{
   observe(aSubject: nsISupports & Document, aTopic: string, aData: string): void;

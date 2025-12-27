@@ -110,224 +110,228 @@
     )
     .toCode();
 
-  Tabmix.setNewFunction(tabbrowsertab, "tabmix_init", function tabmix_init() {
-    Object.defineProperties(this, {
-      _isProtected: {
-        get() {
-          return (
-            this.hasAttribute("protected") ||
-            this.pinned ||
-            ("permaTabs" in window && this.hasAttribute("isPermaTab"))
-          );
+  Tabmix.setNewFunction(
+    tabbrowsertab,
+    "tabmix_init",
+    /** @this {Tab} */ function () {
+      Object.defineProperties(this, {
+        _isProtected: {
+          get() {
+            return (
+              this.hasAttribute("protected") ||
+              this.pinned ||
+              ("permaTabs" in window && this.hasAttribute("isPermaTab"))
+            );
+          },
         },
-      },
-      mouseHoverSelect: {
-        get() {
-          try {
-            return Tabmix.prefs.getBoolPref("mouseOverSelect");
-          } catch {
-            return false;
-          }
+        mouseHoverSelect: {
+          get() {
+            try {
+              return Tabmix.prefs.getBoolPref("mouseOverSelect");
+            } catch {
+              return false;
+            }
+          },
         },
-      },
-      mouseDownSelect: {
-        get() {
-          try {
-            return Tabmix.prefs.getBoolPref("selectTabOnMouseDown");
-          } catch {
-            return false;
-          }
+        mouseDownSelect: {
+          get() {
+            try {
+              return Tabmix.prefs.getBoolPref("selectTabOnMouseDown");
+            } catch {
+              return false;
+            }
+          },
         },
-      },
-      mouseHoverSelectDelay: {
-        get() {
-          try {
-            return Tabmix.prefs.getIntPref("mouseOverSelectDelay");
-          } catch {
-            return 250;
-          }
+        mouseHoverSelectDelay: {
+          get() {
+            try {
+              return Tabmix.prefs.getIntPref("mouseOverSelectDelay");
+            } catch {
+              return 250;
+            }
+          },
         },
-      },
-      tabXDelay: {
-        get() {
-          try {
-            return Tabmix.prefs.getIntPref("tabs.closeButtons.delay");
-          } catch {
-            return 0;
-          }
+        tabXDelay: {
+          get() {
+            try {
+              return Tabmix.prefs.getIntPref("tabs.closeButtons.delay");
+            } catch {
+              return 0;
+            }
+          },
         },
-      },
-      baseY: {
-        get() {
-          const {height, y} = this.getBoundingClientRect();
-          return height + y;
+        baseY: {
+          get() {
+            const {height, y} = this.getBoundingClientRect();
+            return height + y;
+          },
         },
-      },
-      _restoreState: {
-        get() {
-          if (this.hasAttribute("pending") || this.hasAttribute("tabmix_pending")) {
-            return TabmixSvc.sm.TAB_STATE_NEEDS_RESTORE;
-          }
-          return SessionStore.getInternalObjectState(this.linkedBrowser);
+        _restoreState: {
+          get() {
+            if (this.hasAttribute("pending") || this.hasAttribute("tabmix_pending")) {
+              return TabmixSvc.sm.TAB_STATE_NEEDS_RESTORE;
+            }
+            return SessionStore.getInternalObjectState(this.linkedBrowser);
+          },
         },
-      },
-    });
-
-    /**
-     * @param {MouseEvent} aEvent
-     * @this {Tab}
-     */
-    this.onMouseOver = function (aEvent) {
-      this.setHoverState(aEvent, true);
-      this.mButtonId = window.setTimeout(this.setShowButton, this.tabXDelay, this);
-      if (this.mouseHoverSelect) {
-        this.mFocusId = window.setTimeout(
-          this.doMouseHoverSelect,
-          this.mouseHoverSelectDelay,
-          this
-        );
-      }
-    };
-
-    /** @param {Tab} aTab */
-    this.doMouseHoverSelect = function (aTab) {
-      if (!aTab || !aTab.parentNode) {
-        return; // this tab already removed....
-      }
-
-      if (gBrowser.tabContainer.hasAttribute("preventMouseHoverSelect")) {
-        gBrowser.tabContainer.removeAttribute("preventMouseHoverSelect");
-      } else if (aTab.mIsHover) {
-        gBrowser.selectedTab = aTab;
-      }
-    };
-
-    /** @param {Tab} aTab */
-    this.setShowButton = function (aTab) {
-      if (!aTab || !aTab.parentNode) {
-        return;
-      }
-      // this tab already removed....
-
-      var pref = Tabmix.prefs.getIntPref("tabs.closeButtons");
-      if (pref != 2 && pref != 4) {
-        return;
-      }
-
-      if (
-        aTab.mIsHover &&
-        aTab.getAttribute("showbutton") != "on" &&
-        !aTab.hasAttribute("tabmix-dragged")
-      ) {
-        if (TabmixTabbar.widthFitTitle) {
-          aTab.style.setProperty(
-            "width",
-            Tabmix.getBoundsWithoutFlushing(aTab).width + "px",
-            "important"
-          );
-        }
-
-        aTab.setAttribute("showbutton", "on");
-        aTab.container.__showbuttonTab = aTab;
-      }
-    };
-
-    /**
-     * @param {MouseEvent} aEvent
-     * @this {Tab}
-     */
-    this.onMouseOut = function (aEvent) {
-      this.setHoverState(aEvent, false);
-      if (this.mButtonId) {
-        clearTimeout(this.mButtonId);
-      }
-      this.mButtonId = window.setTimeout(this.removeShowButton, this.tabXDelay, this);
-      if (this.mouseHoverSelect && this.mFocusId) {
-        clearTimeout(this.mFocusId);
-      }
-    };
-
-    /**
-     * @param {MouseEvent} aEvent
-     * @param {boolean} aOver
-     * @this {Tab}
-     */
-    this.setHoverState = function (aEvent, aOver) {
-      if (aEvent.target?.classList?.contains("tab-close-button")) {
-        this.mOverCloseButton = aOver;
-      }
-      this.mIsHover = aOver;
-    };
-
-    /** @param {Tab} aTab */
-    this.removeShowButton = function (aTab) {
-      if (!aTab || !aTab.parentNode) {
-        return;
-      }
-      // this tab already removed....
-
-      if (!aTab.mIsHover && aTab.hasAttribute("showbutton")) {
-        aTab.removeAttribute("showbutton");
-        aTab.style.removeProperty("width");
-        // we use this in Linux to prevent underflow that triggered by hiding
-        // the close button
-        aTab.setAttribute("showbutton_removed", true);
-        setTimeout(tab => tab.removeAttribute("showbutton_removed"), 50, aTab);
-        if (aTab == aTab.container.__showbuttonTab) {
-          delete aTab.container.__showbuttonTab;
-        }
-      }
-    };
-
-    /**
-     * @param {MouseEvent} aEvent
-     * @param {boolean} aSelectNewTab
-     * @this {Tab}
-     */
-    this.onMouseCommand = function (aEvent, aSelectNewTab) {
-      var isSelected = this == this.container.selectedItem;
-      Tabmix.setItem(this, "clickOnCurrent", (isSelected && aEvent.detail === 1) || null);
-      if (isSelected) {
-        return;
-      }
-
-      // don't allow mouse click/down with modifiers to select tab
-      if (TabmixTabClickOptions.blockMouseDown(aEvent)) {
-        aEvent.stopPropagation();
-      } else if (aSelectNewTab) {
-        this.container._selectNewTab(this);
-        let isTabFocused = false;
-        try {
-          isTabFocused = document.commandDispatcher.focusedElement == this;
-        } catch {}
-        if (!isTabFocused) {
-          this.setAttribute("ignorefocus", "true");
-          this.mSelect = setTimeout(() => this.removeAttribute("ignorefocus"), 0);
-        }
-      }
-      // on mousedown event fall through to default mousedown from tabbox.xml
-    };
-
-    const TimeoutIds = {
-      mSelect: "",
-      mFocusId: "",
-      mButtonId: "",
-      autoReloadTimerID: "",
-    };
-
-    /** @type {(keyof typeof TimeoutIds)[]} */ // @ts-expect-error
-    const timeouts = Object.values(TimeoutIds);
-
-    /** @this {Tab} */
-    this.clearTimeouts = function () {
-      timeouts.forEach(aTimeout => {
-        if (aTimeout in this && this[aTimeout]) {
-          clearTimeout(this[aTimeout]);
-          this[aTimeout] = null;
-        }
       });
-    };
-  });
+
+      /**
+       * @param {MouseEvent} aEvent
+       * @this {Tab}
+       */
+      this.onMouseOver = function (aEvent) {
+        this.setHoverState(aEvent, true);
+        this.mButtonId = window.setTimeout(this.setShowButton, this.tabXDelay, this);
+        if (this.mouseHoverSelect) {
+          this.mFocusId = window.setTimeout(
+            this.doMouseHoverSelect,
+            this.mouseHoverSelectDelay,
+            this
+          );
+        }
+      };
+
+      /** @param {Tab} aTab */
+      this.doMouseHoverSelect = function (aTab) {
+        if (!aTab || !aTab.parentNode) {
+          return; // this tab already removed....
+        }
+
+        if (gBrowser.tabContainer.hasAttribute("preventMouseHoverSelect")) {
+          gBrowser.tabContainer.removeAttribute("preventMouseHoverSelect");
+        } else if (aTab.mIsHover) {
+          gBrowser.selectedTab = aTab;
+        }
+      };
+
+      /** @param {Tab} aTab */
+      this.setShowButton = function (aTab) {
+        if (!aTab || !aTab.parentNode) {
+          return;
+        }
+        // this tab already removed....
+
+        var pref = Tabmix.prefs.getIntPref("tabs.closeButtons");
+        if (pref != 2 && pref != 4) {
+          return;
+        }
+
+        if (
+          aTab.mIsHover &&
+          aTab.getAttribute("showbutton") != "on" &&
+          !aTab.hasAttribute("tabmix-dragged")
+        ) {
+          if (TabmixTabbar.widthFitTitle) {
+            aTab.style.setProperty(
+              "width",
+              Tabmix.getBoundsWithoutFlushing(aTab).width + "px",
+              "important"
+            );
+          }
+
+          aTab.setAttribute("showbutton", "on");
+          aTab.container.__showbuttonTab = aTab;
+        }
+      };
+
+      /**
+       * @param {MouseEvent} aEvent
+       * @this {Tab}
+       */
+      this.onMouseOut = function (aEvent) {
+        this.setHoverState(aEvent, false);
+        if (this.mButtonId) {
+          clearTimeout(this.mButtonId);
+        }
+        this.mButtonId = window.setTimeout(this.removeShowButton, this.tabXDelay, this);
+        if (this.mouseHoverSelect && this.mFocusId) {
+          clearTimeout(this.mFocusId);
+        }
+      };
+
+      /**
+       * @param {MouseEvent} aEvent
+       * @param {boolean} aOver
+       * @this {Tab}
+       */
+      this.setHoverState = function (aEvent, aOver) {
+        if (aEvent.target?.classList?.contains("tab-close-button")) {
+          this.mOverCloseButton = aOver;
+        }
+        this.mIsHover = aOver;
+      };
+
+      /** @param {Tab} aTab */
+      this.removeShowButton = function (aTab) {
+        if (!aTab || !aTab.parentNode) {
+          return;
+        }
+        // this tab already removed....
+
+        if (!aTab.mIsHover && aTab.hasAttribute("showbutton")) {
+          aTab.removeAttribute("showbutton");
+          aTab.style.removeProperty("width");
+          // we use this in Linux to prevent underflow that triggered by hiding
+          // the close button
+          aTab.setAttribute("showbutton_removed", true);
+          setTimeout(tab => tab.removeAttribute("showbutton_removed"), 50, aTab);
+          if (aTab == aTab.container.__showbuttonTab) {
+            delete aTab.container.__showbuttonTab;
+          }
+        }
+      };
+
+      /**
+       * @param {MouseEvent} aEvent
+       * @param {boolean} aSelectNewTab
+       * @this {Tab}
+       */
+      this.onMouseCommand = function (aEvent, aSelectNewTab) {
+        var isSelected = this == this.container.selectedItem;
+        Tabmix.setItem(this, "clickOnCurrent", (isSelected && aEvent.detail === 1) || null);
+        if (isSelected) {
+          return;
+        }
+
+        // don't allow mouse click/down with modifiers to select tab
+        if (TabmixTabClickOptions.blockMouseDown(aEvent)) {
+          aEvent.stopPropagation();
+        } else if (aSelectNewTab) {
+          this.container._selectNewTab(this);
+          let isTabFocused = false;
+          try {
+            isTabFocused = document.commandDispatcher.focusedElement == this;
+          } catch {}
+          if (!isTabFocused) {
+            this.setAttribute("ignorefocus", "true");
+            this.mSelect = setTimeout(() => this.removeAttribute("ignorefocus"), 0);
+          }
+        }
+        // on mousedown event fall through to default mousedown from tabbox.xml
+      };
+
+      const TimeoutIds = {
+        mSelect: "",
+        mFocusId: "",
+        mButtonId: "",
+        autoReloadTimerID: "",
+      };
+
+      /** @type {(keyof typeof TimeoutIds)[]} */ // @ts-expect-error
+      const timeouts = Object.values(TimeoutIds);
+
+      /** @this {Tab} */
+      this.clearTimeouts = function () {
+        timeouts.forEach(aTimeout => {
+          if (aTimeout in this && this[aTimeout]) {
+            clearTimeout(this[aTimeout]);
+            this[aTimeout] = null;
+          }
+        });
+      };
+    }
+  );
 
   function connectTabs() {
     gBrowser.tabs.forEach(t => {

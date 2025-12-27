@@ -35,7 +35,7 @@ overlay   chrome://browser/content/places/places.xhtml           chrome://tabmix
  * restartApplication: Restarts the application, keeping it in
  * safe mode if it is already in safe mode.
  */
-/** @type {Bootstrap.restartApplication} */
+/** @type {typeof Bootstrap.restartApplication} */
 function restartApplication() {
   const cancelQuit = Cc["@mozilla.org/supports-PRBool;1"].createInstance(Ci.nsISupportsPRBool);
   Services.obs.notifyObservers(cancelQuit, "quit-application-requested", "restart");
@@ -54,7 +54,7 @@ function restartApplication() {
 
 let invalidateCachesOnRestart = false;
 
-/** @type {Bootstrap.showRestartNotification} */
+/** @type {typeof Bootstrap.showRestartNotification} */
 function showRestartNotification(verb, window) {
   if (!window.gBrowser.selectedBrowser) {
     return;
@@ -100,7 +100,7 @@ function showRestartNotification(verb, window) {
  * toggle content script listeners for the case user disabled the extension
  * without restart
  */
-/** @type {Bootstrap.toggleContentListeners} */
+/** @type {typeof Bootstrap.toggleContentListeners} */
 function toggleContentListeners(enabled) {
   const enumerator = Services.wm.getEnumerator("navigator:browser");
   while (enumerator.hasMoreElements()) {
@@ -115,7 +115,7 @@ function toggleContentListeners(enabled) {
   }
 }
 
-/** @type {Bootstrap.updateAddon} */
+/** @type {typeof Bootstrap.updateAddon} */
 async function updateAddon(id) {
   const addon = await AddonManager.getAddonByID(id);
   if (addon?.__AddonInternal__) {
@@ -128,7 +128,7 @@ async function updateAddon(id) {
   }
 }
 
-/** @type {Bootstrap.install} */
+/** @type {typeof Bootstrap.install} */
 async function install(data) {
   await updateAddon(data.id);
 }
@@ -137,7 +137,7 @@ function uninstall() {
   Overlays.setEnabled(false);
 }
 
-/** @type {Bootstrap.startup} */
+/** @type {typeof Bootstrap.startup} */
 async function startup(data, reason) {
   Overlays.setEnabled(true);
 
@@ -190,6 +190,7 @@ async function startup(data, reason) {
         const isBrowser =
           document.documentElement.getAttribute("windowtype") === "navigator:browser";
         const isOverflow = isBrowser && win.gBrowser.tabContainer.hasAttribute("overflow");
+        /** @type {PromiseWithResolvers<void>} */
         const promiseOverlayLoaded = Promise.withResolvers();
         if (isBrowser) {
           ScriptsLoader.initForWindow(win, promiseOverlayLoaded.promise, {
@@ -222,6 +223,7 @@ async function startup(data, reason) {
 
             win._tabmix_PlacesUIUtils_openTabset = _tabmix_PlacesUIUtils_openTabset;
 
+            /** @type {PromiseWithResolvers<void>} */
             const promiseOverlayLoaded = Promise.withResolvers();
             ScriptsLoader.initForWindow(win, promiseOverlayLoaded.promise);
             Overlays.load(chromeManifest, win, promiseOverlayLoaded);
@@ -253,7 +255,7 @@ async function startup(data, reason) {
   Services.obs.addObserver(documentObserver, "chrome-document-loaded");
 }
 
-/** @type {Bootstrap.shutdown} */
+/** @type {typeof Bootstrap.shutdown} */
 function shutdown(data, reason) {
   Overlays.setEnabled(false);
 

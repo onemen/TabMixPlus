@@ -10,8 +10,10 @@
     "format": "prettier --config config/prettier.config.js --ignore-path config/.prettierignore --write .",
     "prepare": "husky config/husky",
     "stylelint": "stylelint --fix --config config/.stylelintrc.json \"addon/**/*.css\"",
-    "tsc:clean": "node config/typecheck.js",
-    "typecheck": "tsc --build > tsc.local.txt"
+    "tsc:clean": "node config/typecheck.js tsc",
+    "tsgo:clean": "node config/typecheck.js tsgo",
+    "typecheck": "tsc --build > tsc.local.txt",
+    "tsgo": "tsgo --build > tsc.local.txt"
   },
   "prettier": "./config/prettier.config.js",
   "repository": {
@@ -29,6 +31,7 @@
     "@eslint/js": "9.39.1",
     "@stylistic/eslint-plugin": "^5.5.0",
     "@stylistic/eslint-plugin-js": "^4.4.1",
+    "@typescript/native-preview": "7.0.0-dev.20251229.1",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-html": "^8.1.3",

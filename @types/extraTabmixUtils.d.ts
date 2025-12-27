@@ -20,7 +20,7 @@ interface TabmixGlobal {
   selectedTab: Tab | null;
   singleWindowMode: boolean;
   tabsNewtabButton: HTMLButtonElement;
-  userTypedValue: string;
+  userTypedValue: string | null;
   afterDelayedStartup(): void;
   beforeDelayedStartup(): void;
   getAfterTabsButtonsWidth(): void;

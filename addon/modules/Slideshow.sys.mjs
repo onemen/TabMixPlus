@@ -21,6 +21,7 @@ ChromeUtils.defineLazyGetter(lazy, "AlertNotification", () => {
   );
 });
 
+/** @this {SlideshowModule.Flst} */
 export function flst() {
   this.flstOn = TabmixSvc.getString("flstOn.label");
   this.flstOff = TabmixSvc.getString("flstOff.label");

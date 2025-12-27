@@ -39,7 +39,7 @@ const widgets = {
     /** @typedef {TabmixGlobals.ButtonEvent} ButtonEvent */
     /** @typedef {TabmixGlobals.PopupEvent} PopupEvent */
     /** @typedef {TabmixWidgetsModule.TabDragEvent} TabDragEvent */
-    /** @type {TabmixWidgetsModule.onBuild} */
+    /** @type {typeof TabmixWidgetsModule.onBuild} */
     onBuild(node) {
       const [button, dropmarker] = node.children;
       button.addEventListener("command", (/** @type {ButtonEvent} */ event) => {
@@ -93,7 +93,7 @@ const widgets = {
       </toolbaritem>`;
     },
 
-    /** @type {TabmixWidgetsModule.onBuild} */
+    /** @type {typeof TabmixWidgetsModule.onBuild} */
     onBuild(node) {
       node.firstChild.addEventListener("command", (/** @type {ButtonEvent} */ event) => {
         node.ownerGlobal.Tabmix.closedObjectsUtils.showSubView(event);
@@ -118,7 +118,7 @@ const widgets = {
       </toolbaritem>`;
     },
 
-    /** @type {TabmixWidgetsModule.onBuild} */
+    /** @type {typeof TabmixWidgetsModule.onBuild} */
     onBuild(node) {
       node.firstChild.addEventListener(
         "command",
@@ -147,7 +147,7 @@ const widgets = {
         removable="false"/>`;
     },
 
-    /** @type {TabmixWidgetsModule.onBuild} */
+    /** @type {typeof TabmixWidgetsModule.onBuild} */
     onBuild(node, document) {
       document?.l10n?.translateElements([node]).then(() => {
         node.removeAttribute("data-l10n-id");

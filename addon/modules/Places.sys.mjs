@@ -136,7 +136,7 @@ PlacesUtilsInternal = {
       lazy.PlacesUIUtils["tabmix_" + aFn] = lazy.PlacesUIUtils[aFn];
     });
 
-    /** @type {PlacesModule.updateOpenTabset} */
+    /** @type {typeof PlacesModule.updateOpenTabset} */
     function updateOpenTabset(name, treeStyleTab = false) {
       const isWaterfoxOverridePlacesUIUtils =
         TabmixSvc.version({wf: "115.9.0"}) && !lazy.PrivateBrowsingUtils.isWindowPrivate(aWindow);

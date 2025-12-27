@@ -77,6 +77,7 @@
       this.initializeAttributeInheritance();
       // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
 
+      /** @type {ShortcutKey | null} */
       this._key = null;
 
       this.editBox.shortcut = this;

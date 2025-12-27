@@ -39,7 +39,7 @@ export const AutoReload = {
     var win = aTab.ownerGlobal;
     let popup = win.document.getElementById("autoreload_popup");
     let parent = aPopup.parentNode;
-    for (const item of popup.childNodes) {
+    for (const item of popup?.childNodes ?? []) {
       if (item) {
         aPopup.appendChild(item.cloneNode(true));
       }
@@ -339,7 +339,7 @@ export const AutoReload = {
   },
 };
 
-/** @type {AutoReloadModule._reloadTab} */
+/** @type {typeof AutoReloadModule._reloadTab} */
 function _reloadTab(aTab) {
   if (!aTab || !aTab.parentNode) {
     return;
@@ -356,6 +356,7 @@ function _reloadTab(aTab) {
     return;
   }
 
+  /** @type {AutoReloadModule.AutoReloadData} */
   var data = {};
   var window = aTab.ownerGlobal;
 
@@ -381,7 +382,7 @@ function _reloadTab(aTab) {
 /**
  * when tab have beforeunload prompt, check if user canceled the reload
  *
- * @type {AutoReloadModule.beforeReload}
+ * @type {typeof AutoReloadModule.beforeReload}
  */
 async function beforeReload(window, browser) {
   const gBrowser = window.gBrowser;
@@ -406,7 +407,7 @@ async function beforeReload(window, browser) {
   );
 }
 
-/** @type {AutoReloadModule.doReloadTab} */
+/** @type {typeof AutoReloadModule.doReloadTab} */
 function doReloadTab(window, browser, tab, data) {
   beforeReload(window, browser);
 
@@ -466,17 +467,19 @@ function doReloadTab(window, browser, tab, data) {
   }
 }
 
-/** @type {AutoReloadModule._observe} */
+/** @type {typeof AutoReloadModule._observe} */
 function _observe(aSubject, aTopic) {
   if (aTopic == "common-dialog-loaded") {
     Services.obs.removeObserver(_observe, "common-dialog-loaded");
     let icon = aSubject.document.getElementById("info.icon");
-    icon.classList.add("alert-icon");
-    icon.classList.remove("question-icon");
+    if (icon) {
+      icon.classList.add("alert-icon");
+      icon.classList.remove("question-icon");
+    }
   }
 }
 
-/** @type {AutoReloadModule._clearTimeout} */
+/** @type {typeof AutoReloadModule._clearTimeout} */
 function _clearTimeout(aTab, aWindow) {
   if (aTab.autoReloadTimerID) {
     if (!aWindow) {

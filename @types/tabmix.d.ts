@@ -81,7 +81,7 @@ interface TabmixGlobal {
 
   firstWindowInSession?: boolean;
   _debug: boolean;
-  isVersion(versionNo: versionInfo, updateChannel?: string): boolean;
+  isVersion: TabmixModules.BrowserVersion["isVersion"];
   isAltKey(event: MouseEvent): boolean;
   debug(aMessage: string, aShowCaller?: boolean): void;
   showItem(aItemOrId: ItemOrId, aShow?: boolean): void;

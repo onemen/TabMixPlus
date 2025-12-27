@@ -1,6 +1,6 @@
 {
   "extends": "../config/base.tsconfig.json",
-  "include": ["*.js"],
+  "include": ["*.js", "../@types/index.d.ts", "../@types/general.d.ts"],
   "exclude": [
     "node_modules",
     "**/gecko/**/*.d.ts",
@@ -14,6 +14,6 @@
     "modules/**"
   ],
   "compilerOptions": {
-    "types": ["index.d.ts", "general.d.ts"]
+    "types": ["addon"]
   }
 }

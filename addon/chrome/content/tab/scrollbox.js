@@ -20,7 +20,21 @@ Tabmix.multiRow = {
     /** @typedef {TabmixArrowScrollboxNS.ArrowScrollbox} This */
     /** @typedef {TabmixArrowScrollboxNS.ArrowScrollbox} ASB */
 
-    class TabmixArrowScrollbox {
+    /** @type {CustomElementConstructorOverride} */ // @ts-ignore
+    const MozArrowScrollbox =
+      customElements.get("arrowscrollbox") ?? gBrowser.tabContainer.arrowScrollbox.constructor;
+
+    /** @type {ASB} */
+    class TabmixArrowScrollbox extends MozArrowScrollbox {
+      /** @type {ASB["parentNode"]} */ // @ts-ignore
+      parentNode;
+      /** @type {ASB["scrollbox"]} */ // @ts-ignore
+      scrollbox;
+      /** @type {ASB["scrollClientRect"]} */ // @ts-ignore
+      scrollClientRect;
+      /** @type {ASB["shadowRoot"]} */ // @ts-ignore
+      shadowRoot;
+
       /** @type {ASB["connectTabmix"]} */
       connectTabmix() {
         if (this.tabmixInitialized) {
@@ -144,6 +158,7 @@ Tabmix.multiRow = {
 
         this.tabmixPrefObserver = {
           scrollbox: this,
+          /** @type {ObserveFunction} */
           observe(subject, topic, data) {
             switch (data) {
               case "toolkit.scrollbox.smoothScroll":
@@ -243,12 +258,10 @@ Tabmix.multiRow = {
         Services.prefs.removeObserver("toolkit.scrollbox.", this.tabmixPrefObserver);
       }
 
-      /** @this {This} */
       get _verticalMode() {
         return this.isMultiRow || this.getAttribute("orient") === "vertical";
       }
 
-      /** @this {This} */
       get startEndProps() {
         return this._verticalMode ? ["top", "bottom"] : ["left", "right"];
       }
@@ -257,12 +270,10 @@ Tabmix.multiRow = {
         return this._verticalMode ? false : Tabmix.rtl;
       }
 
-      /** @this {This} */
       get isMultiRow() {
         return this.getAttribute("tabmix-flowing") === "multibar";
       }
 
-      /** @this {This} */
       get scrollClientSize() {
         const scrollClientSize =
           this.scrollbox[this._verticalMode ? "clientHeightDouble" : "clientWidthDouble"];
@@ -281,17 +292,14 @@ Tabmix.multiRow = {
         return scrollClientSize;
       }
 
-      /** @this {This} */
       get scrollSize() {
         return this._verticalMode ? this.scrollbox.scrollHeight : this.scrollbox.scrollWidth;
       }
 
-      /** @this {This} */
       get scrollPosition() {
         return this._verticalMode ? this.scrollbox.scrollTop : this.scrollbox.scrollLeft;
       }
 
-      /** @this {This} */
       get singleRowHeight() {
         if (this._singleRowHeight) {
           return this._singleRowHeight;
@@ -563,16 +571,17 @@ Tabmix.multiRow = {
       /** @type {RSB["constructor"]} */
       constructor() {
         super();
-        this.attachShadow({mode: "open"});
-        this.shadowRoot.appendChild(this.fragment);
+
+        const shadowRoot = this.shadowRoot || this.attachShadow({mode: "open"});
+        shadowRoot.appendChild(this.fragment);
 
         this.textContent = "";
-        this._scrollButtonUp = this.shadowRoot.getElementById("scrollbutton-up");
-        this._scrollButtonDown = this.shadowRoot.getElementById("scrollbutton-down");
+        this._scrollButtonUp = shadowRoot.getElementById("scrollbutton-up");
+        this._scrollButtonDown = shadowRoot.getElementById("scrollbutton-down");
         this.addButtonListeners(this._scrollButtonUp, "left");
         this.addButtonListeners(this._scrollButtonDown, "right");
 
-        this.addEventListener("dragover", event => {
+        this.addEventListener("dragover", (/** @type {DragEvent} */ event) => {
           if (TMP_tabDNDObserver.useTabmixDnD(event)) {
             TMP_tabDNDObserver._dragoverScrollButton(event);
             const tooltip = document.getElementById("tabmix-tooltip");
@@ -591,14 +600,14 @@ Tabmix.multiRow = {
         });
 
         const arrowScrollbox = gBrowser.tabContainer.arrowScrollbox;
-        this.addEventListener("drop", event => {
+        this.addEventListener("drop", (/** @type {DragEvent} */ event) => {
           event.preventDefault();
           event.stopPropagation();
           arrowScrollbox._finishScroll(event);
           document.getElementById("tabmix-tooltip")?.hidePopup();
         });
 
-        this.addEventListener("dragleave", event => {
+        this.addEventListener("dragleave", (/** @type {DragEvent} */ event) => {
           arrowScrollbox._finishScroll(event);
         });
 

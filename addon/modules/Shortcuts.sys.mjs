@@ -49,7 +49,9 @@ export const ShortcutsKeys = {
 
   /**
    * @type {{
-   *   command: (this: Window & {TMP_ClosedTabs: TabmixClosedTabsNS}) => void;
+   *   command: (
+   *     this: Window & {TMP_ClosedTabs: typeof TabmixClosedTabsNS}
+   *   ) => void;
    * }}
    */
   clearClosedTabs: {
@@ -791,12 +793,12 @@ KeyConfig = {
   },
 };
 
-/** @type {ShortcutsModule.getPref} */
+/** @type {typeof ShortcutsModule.getPref} */
 function getPref(name) {
   return Services.prefs.getStringPref(name);
 }
 
-/** @type {ShortcutsModule.setPref} */
+/** @type {typeof ShortcutsModule.setPref} */
 function setPref(name, value) {
   Services.prefs.setStringPref(name, value);
 }
@@ -845,7 +847,7 @@ function getFormattedKey(key) {
 /** @type {ShortcutsModule.PlatformKeys} */
 let gPlatformKeys = {};
 
-/** @type {ShortcutsModule.getPlatformKeys} */
+/** @type {typeof ShortcutsModule.getPlatformKeys} */
 function getPlatformKeys(key) {
   if (key === "VK_META") {
     key = "VK_COMMAND_OR_WIN";

@@ -1,7 +1,12 @@
 {
   "extends": "../../../../config/base.tsconfig.json",
-  "include": ["**/*.js", "**/*.sys.mjs"],
+  "include": [
+    "**/*.js",
+    "**/*.sys.mjs",
+    "../../../../@types/content.d.ts",
+    "../../../../@types/index.d.ts"
+  ],
   "compilerOptions": {
-    "types": ["content.d.ts", "index.d.ts"]
+    "types": ["scripts"]
   }
 }

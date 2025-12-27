@@ -224,6 +224,7 @@ export const MergeWindows = {
 
     const promises = [Promise.resolve(tabToSelect)];
     for (const tab of popups) {
+      /** @type {PromiseWithResolvers<MockedGeckoTypes.BrowserTab | null>} */
       const deferred = Promise.withResolvers();
       promises.push(deferred.promise);
       tab._tabmix_movepopup_promise = deferred;

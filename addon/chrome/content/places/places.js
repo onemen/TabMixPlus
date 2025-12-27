@@ -1168,7 +1168,7 @@ Tabmix.onContentLoaded = {
   },
 
   change_utilityOverlay() {
-    /** @type {PrivateFunctionsNS.onContentLoaded._getWindow} */
+    /** @type {typeof PrivateFunctionsNS.onContentLoaded._getWindow} */
     function getWindow(where, params = {}) {
       const forceNonPrivate = params.forceNonPrivate ?? false;
       // Establish which window we'll load the link in.
@@ -1200,7 +1200,7 @@ Tabmix.onContentLoaded = {
     let [fnObj, fnName] = this.getXnotifierFunction("openLinkIn");
     Tabmix.originalFunctions.openLinkIn = fnObj[fnName];
 
-    /** @type {PrivateFunctionsNS.onContentLoaded._openLinkIn} */
+    /** @type {typeof PrivateFunctionsNS.onContentLoaded._openLinkIn} */
     fnObj[fnName] = function openLinkIn(url, _where, params = {}) {
       const {w, where} = getWindow(_where, params);
 

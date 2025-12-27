@@ -10,6 +10,9 @@
       return {".checkbox": "label,align,style,accesskey,crop,flex,disabled"};
     }
 
+    /** @type {HTMLInputElement} */ // @ts-ignore - we know it is never undefined
+    _checkbox;
+
     connectedCallback() {
       if (this._initialized) {
         return;
@@ -34,12 +37,10 @@
       this._initialized = true;
     }
 
-    /** @this {CheckboxClass} */
     set label(val) {
       this._checkbox.label = val;
     }
 
-    /** @this {CheckboxClass} */
     get label() {
       return this._checkbox.label;
     }
@@ -48,27 +49,22 @@
       this.checked = val;
     }
 
-    /** @this {CheckboxClass} */
     get value() {
       return this._checkbox.checked;
     }
 
-    /** @this {CheckboxClass} */
     set checked(val) {
       this._checkbox.checked = val;
     }
 
-    /** @this {CheckboxClass} */
     get checked() {
       return this._checkbox.checked;
     }
 
-    /** @this {CheckboxClass} */
     set disabled(val) {
       this._checkbox.disabled = val;
     }
 
-    /** @this {CheckboxClass} */
     get disabled() {
       return this._checkbox.disabled;
     }

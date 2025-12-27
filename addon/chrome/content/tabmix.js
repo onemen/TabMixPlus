@@ -1163,7 +1163,7 @@ var TMP_eventListener = {
       }
     }
 
-    /** @type {TabmixEventListenerNS._updateAttrib} */
+    /** @type {typeof TabmixEventListenerNS._updateAttrib} */
     function updateAttrib(aGetAtt, aGetValue, aAtt, aValue) {
       let node = aTab.getElementsByAttribute(aGetAtt, aGetValue)[0];
       Tabmix.setItem(node, aAtt, aValue);

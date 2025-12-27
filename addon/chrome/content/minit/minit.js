@@ -2781,7 +2781,7 @@ Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodN
    */
 
   const errorMsg = `can't find private function ${name}.#${methodName}`;
-  /** @type {PrivateMethod<methodName>} */ // @ts-expect-error
+  /** @type {PrivateMethod<typeof methodName>} */ // @ts-expect-error
   const method = function () {};
   if (!firefoxClass) {
     console.error(`Tabmix Error: can't find ${name} constructor for element\n${errorMsg}`);
@@ -2828,7 +2828,7 @@ Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodN
   if (code) {
     try {
       code = cleanTrailingComments(code);
-      return /** @type {PrivateMethod<methodName>} */ (
+      return /** @type {PrivateMethod<typeof methodName>} */ (
         Tabmix.makeCode(`_${methodName}${code}`, parent, nonPrivateMethodName, sandbox)
       );
     } catch (error) {

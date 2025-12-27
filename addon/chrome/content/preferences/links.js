@@ -69,7 +69,7 @@ var gLinksPane = {
   },
 
   singleWindow(enableSingleWindow) {
-    /** @type {LinksPaneNS.updateStatus} */
+    /** @type {typeof LinksPaneNS.updateStatus} */
     function updateStatus(itemId, testVal, test, newVal) {
       var item = $(itemId);
       if (test ? item.value == testVal : item.value != testVal) {

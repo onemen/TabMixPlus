@@ -14,6 +14,8 @@ type TabDragAndDrop = MockedGeckoTypes.TabDragAndDrop;
 type nsIFilePickerXpcom = nsIFilePicker;
 type nsIPrefBranchXpcom = ReturnType<nsIPrefService["getBranch"]>;
 
+type ObserveFunction = (subject: unknown, topic: string, data: string) => void;
+
 interface GetClosestMap {
   "tab": MockedGeckoTypes.BrowserTab;
   "tab.tabbrowser-tab": MockedGeckoTypes.BrowserTab;
@@ -38,7 +40,6 @@ interface NodeList {
   readonly length: number;
   item(index: number): HTMLElement | null;
   forEach(callbackfn: (value: HTMLElement | null, key: number, parent: NodeList) => void, thisArg?: unknown): void;
-  [index: number]: HTMLElement;
 }
 
 type CustomElement<T, Parent = HTMLElement> =
@@ -71,6 +72,7 @@ interface EventTypeMap<T extends HTMLElement> {
   underflow: GenericEvent<T, UIEvent>;
 }
 
+// @ts-ignore - add to interface from lib.gecko.dom.d.ts
 interface HTMLElement {
   __updatingViewAfterDelete?: boolean;
   addEventListener<K extends keyof EventTypeMap<T>, T extends HTMLElement>(type: K, listener: (this: T, ev: EventTypeMap<T>[K]) => unknown, options?: boolean | AddEventListenerOptions): void;
@@ -96,7 +98,7 @@ interface CSSStyleDeclaration {
   maxHeight: string;
   maxWidth: string;
   listStyleImage: string;
-  opacity: string | number;
+  opacity: string;
   paddingBottom: string;
   paddingLeft: string;
   paddingRight: string;
@@ -146,15 +148,16 @@ declare namespace MockedGeckoTypes {
     // we overrife these see addon.d.ts
     // fixupAndLoadURIString: (uri: string, loadURIOptions?: LoadURIOptions) => void;
     // loadURI: (uri: string, loadURIOptions?: LoadURIOptions) => void;
+    loadURI: (uri: nsIURI, loadURIOptions?: LoadURIOptions & AddTabParams) => Tab | null;
     messageManager: MockedExports.MessageManager;
     mIconURL: string;
     // ignore null here
     readonly ownerDocument: Document;
-    readonly ownerGlobal: WindowProxy;
+    readonly ownerGlobal: Window;
     reload: () => void;
     sendMessageToActor: (messageName: string, data: object, type: string) => void;
     stop: () => void;
-    set userTypedValue(val: string);
+    set userTypedValue(val: string | null);
     get userTypedValue(): string | null;
     webNavigation: MockedExports._nsIWebNavigation;
 
@@ -257,6 +260,8 @@ declare namespace MockedGeckoTypes {
     /** @deprecated removed in firefox 143 */
     mOverCloseButton?: boolean;
     onMouseCommand: (aEvent: MouseEvent, aSelectNewTab: boolean) => void;
+    onMouseOver: (aEvent: MouseEvent) => void;
+    onMouseOut: (aEvent: MouseEvent) => void;
     postDataAcceptedByUser?: boolean;
     removeShowButton: (tab: BrowserTab) => void;
     setHoverState: (aEvent: MouseEvent, aHover: boolean) => void;
@@ -744,7 +749,7 @@ declare namespace MockedGeckoTypes {
     group: never;
   }
 
-  interface MozTabSplitViewWrapper extends MozXULElement {
+  interface MozTabSplitViewWrapper extends Omit<MozXULElement, "parentNode"> {
     _dragData: DragData;
     closing: never;
     elementIndex: number;
@@ -1232,6 +1237,7 @@ declare var UrlbarUtils: {
 declare var gZenWorkspaces: any;
 declare var gZenVerticalTabsManager: any;
 
+// @ts-ignore - add to interface from lib.gecko.dom.d.ts
 interface XULElement {
   container?: unknown;
   isInstance: IsInstance<XULElement>;

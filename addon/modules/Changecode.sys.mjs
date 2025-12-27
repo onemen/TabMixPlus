@@ -326,7 +326,7 @@ function isInWindowContext(obj) {
   );
 }
 
-/** @type {ChangecodeModule.updateSandboxWithScope} */
+/** @type {typeof ChangecodeModule.updateSandboxWithScope} */
 function updateSandboxWithScope(sandbox, scope) {
   if (!Object.keys(scope).length) {
     return sandbox;
@@ -360,7 +360,7 @@ function updateSandboxWithScope(sandbox, scope) {
   return sandbox;
 }
 
-/** @type {ChangecodeModule.createModuleSandbox} */
+/** @type {typeof ChangecodeModule.createModuleSandbox} */
 function createModuleSandbox(obj, options = {}) {
   const {shared = true, scope = {}} = options;
   const key = shared ? SHARED_SANDBOX_KEY : obj;
@@ -401,7 +401,7 @@ function createModuleSandbox(obj, options = {}) {
 /** @type {Set<string>} */
 export const privateMethodsList = new Set();
 
-/** @type {ChangecodeModule["verifyPrivateMethodReplaced"]} */
+/** @type {typeof ChangecodeModule.verifyPrivateMethodReplaced} */
 function verifyPrivateMethodReplaced(code, obj, fullName) {
   const matches = code.match(/this\.#(\w+)/g);
   if (!matches) {
@@ -433,7 +433,7 @@ function verifyPrivateMethodReplaced(code, obj, fullName) {
 
 let scriptId = 0;
 
-/** @type {ChangecodeModule["_makeCode"]} */
+/** @type {typeof ChangecodeModule._makeCode} */
 function _makeCode(code, sandbox) {
   if (!sandbox) {
     throw new Error("Error: _makeCode was called without sandbox");
@@ -536,7 +536,7 @@ const expandTabmix = {
   },
 };
 
-/** @type {ChangecodeModule.getSandbox} */
+/** @type {typeof ChangecodeModule.getSandbox} */
 export function getSandbox(window, options = {}) {
   if (window?._tabmix_sandbox || window?.Tabmix?._sandbox) {
     return window._tabmix_sandbox ?? window.Tabmix._sandbox;
@@ -550,7 +550,7 @@ export function getSandbox(window, options = {}) {
   return sandbox;
 }
 
-/** @type {ChangecodeModule.initializeChangeCodeClass} */
+/** @type {typeof ChangecodeModule.initializeChangeCodeClass} */
 export function initializeChangeCodeClass(tabmixObj, {obj, window, scope = {}}) {
   if (!obj && !window) {
     throw new Error("Error: obj and window are not defined");

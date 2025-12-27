@@ -6,6 +6,8 @@ const outputFile = "./tsc.local.txt";
 const typesFolder = "@types";
 const LAST_RUN_FILE = "config/last_run.local.json";
 
+const tool = process.argv[2] === "tsc" ? "tsc" : "tsgo";
+
 const colors = {};
 const colorsCode = {
   green: "\x1b[32m",
@@ -75,7 +77,7 @@ async function main() {
     saveLastCommit(lastCommitSha);
 
     const lintCommand = "eslint --config config/eslint.dts.config.js --format stylish @types";
-    const tscCommand = "tsc --build";
+    const tscCommand = `${tool} --build`;
 
     const lintPromise = execAsync(lintCommand);
     const tscPromise = execAsync(tscCommand);
@@ -108,7 +110,7 @@ async function main() {
   } else {
     console.log("No changes in @types folder. Running incremental typecheck.");
     try {
-      await execAsync("tsc --build --incremental");
+      await execAsync(`${tool} --build --incremental`);
       fs.writeFileSync(outputFile, "No errors found!", "utf8");
       console.log(colors.green`Typecheck completed successfully. No errors found!`);
     } catch (error) {

@@ -1,7 +1,13 @@
 {
   "extends": "../../../../config/base.tsconfig.json",
-  "include": ["**/*.js", "**/*.sys.mjs"],
+  "include": [
+    "**/*.js",
+    "**/*.sys.mjs",
+    "../../../../@types/index.d.ts",
+    "../../../../@types/autoReload.d.ts",
+    "../../../../@types/tabmix.d.ts"
+  ],
   "compilerOptions": {
-    "types": ["index.d.ts", "autoReload.d.ts", "tabmix.d.ts"]
+    "types": ["overlay"]
   }
 }

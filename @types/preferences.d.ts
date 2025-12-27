@@ -12,6 +12,11 @@ interface GetByMapWithType {
   _PANE_CLASS_: PrefPaneClass;
 }
 
+interface GetClosestMap {
+  "preference": PreferenceClass;
+  "[preference]": PreferenceElement;
+}
+
 interface Document {
   getElementById<K extends keyof GetByMap | string>(selectors: K): K extends keyof GetByMap ? GetByMap[K] : GeneralElement;
   getElementById<K extends keyof GetByMapWithType>(selectors: string, type: K): K extends keyof GetByMapWithType ? GetByMapWithType[K] : GeneralElement;
@@ -76,7 +81,6 @@ interface IgIncompatiblePane {
   init: () => void;
   deinit: () => void;
   handleEvent: (event: Event) => void;
-  hide_IncompatibleNotice: (this: IgIncompatiblePane, aHide: boolean, aFocus: boolean) => void;
 }
 
 /** classes in prefs-ce.js */
@@ -98,15 +102,7 @@ interface MozXULElement {
   ownerDocument: Document;
 }
 
-interface extendedMozXULElement extends Omit<MozXULElement, "childNodes" | "getElementsByAttribute"> {
-  getElementsByAttribute(name: "name", value: string): NonEmptyCollection_G<PreferenceClass>;
-}
-
-interface PreferencesListOverrideMozXULElement extends extendedMozXULElement {
-  childNodes: HTMLCollectionBase_G<PreferenceClass>;
-}
-
-declare interface PreferencesListClass extends PreferencesListOverrideMozXULElement {
+declare interface PreferencesListClass extends MozXULElement {
   observerFunction: (subject: nsISupports, topic: string, data: string) => void;
   service: Prefs;
   rootBranch: Prefs;
@@ -114,11 +110,11 @@ declare interface PreferencesListClass extends PreferencesListOverrideMozXULElem
   rootBranchInternal: Prefs;
   _constructedChildrenCount: number;
   _constructAfterChildrenCalled: boolean;
-  _preferenceChildren: HTMLCollectionBase_G<PreferenceClass>;
-  get type(): string;
-  get instantApply(): boolean;
-  observe(this: PreferencesListClass, aSubject: nsISupports, aTopic: string, aData: string): void;
-  _constructAfterChildren(this: PreferencesListClass): void;
+  _preferenceChildren: HTMLCollectionOf<PreferenceClass>;
+  readonly type: string;
+  readonly instantApply: boolean;
+  observe(aSubject: nsISupports, aTopic: string, aData: string): void;
+  _constructAfterChildren(): void;
   fireChangedEvent(aPreference: PreferenceClass): void;
 }
 
@@ -130,11 +126,7 @@ declare namespace PreferenceNS {
   function setValue(element: PreferenceCompatibleElement, attribute: string, value: string | number | boolean): void;
 }
 
-interface PreferencOverrideMozXULElement extends Omit<MozXULElement, "parentNode"> {
-  parentNode: PreferencesListClass;
-}
-
-interface PreferenceClass extends PreferencOverrideMozXULElement {
+interface PreferenceClass extends MozXULElement {
   _branch: nsIPrefBranchXpcom;
   _constructed: boolean;
   _lastValue?: PreferenceValue;
@@ -199,14 +191,7 @@ interface ResizeObserver {
   unobserve(target: PrefPaneClass): void;
 }
 
-interface PrefPaneOverrideMozXULElement extends Omit<MozXULElement, "addEventListener" | "childNodes"> {
-  addEventListener(type: string, listener: (this: PreferenceElement, ev: PaneEvent) => any, options?: boolean | AddEventListenerOptions): void;
-  childNodes: HTMLCollectionBase_G<PanelItemButton>;
-  parentNode: HTMLElement;
-  value: string;
-}
-
-declare interface PrefPaneClass extends PrefPaneOverrideMozXULElement {
+declare interface PrefPaneClass extends MozXULElement {
   _content: HTMLElement;
   _deferredValueUpdateElements: Set<PreferenceElement>;
   _initialized: boolean;
@@ -224,13 +209,14 @@ declare interface PrefPaneClass extends PrefPaneOverrideMozXULElement {
   get loaded(): boolean;
   set loaded(val: boolean);
   readonly preferenceElements: HTMLCollectionBase_G<PreferenceElement>;
-  readonly preferences: PreferenceClass[];
+  readonly preferences: NonEmptyCollection_G<PreferenceClass>;
   preferenceForElement(aElement: PreferenceElement): PreferenceClass;
   get selected(): boolean;
   set selected(val: boolean);
   get src(): string;
   set src(val: string);
   userChangedValue(this: PrefPaneClass, aElement: PreferenceElement): void;
+  value: string; // not in use just to make it compatible as Element
   writePreferences(this: PrefPaneClass, aFlushToDisk: boolean): void;
 }
 
@@ -242,13 +228,9 @@ interface WindowEvent extends Omit<KeyboardEvent, "target" | "originalTarget"> {
 type ButtonsTypeWithoutNone = "accept" | "cancel" | "extra1" | "extra2" | "help" | "disclosure";
 type DialogButtonsType = "accept" | "cancel" | "extra1" | "extra2" | "help" | "disclosure" | "none";
 
-interface PrefWindowOverrideMozXULElement extends Omit<MozXULElement, "addEventListener" | "appendChild"> {
+interface PrefWindowClass extends MozXULElement {
   addEventListener(type: string, listener: (this: HTMLElement, ev: WindowEvent) => any, options?: boolean | AddEventListenerOptions): void;
-  appendChild(child: HTMLElement | PrefPaneClass): PrefPaneClass;
-  get fragment(): HTMLElement & {lastElementChild: HTMLElement};
-}
-
-interface PrefWindowClass extends PrefWindowOverrideMozXULElement {
+  parentNode: Node | null;
   _buttons: {[key in DialogButtonsType]: HTMLButtonElement};
   _configureButtons(aButtons: string): void;
   _currentPane: PrefPaneClass | null;
@@ -372,6 +354,8 @@ interface TabstylepanelClass extends TabstylepanelClassOverrideMozXULElement {
   updateDisableState(this: TabstylepanelClass, aID: string): void;
 }
 
+type TabstylepanelListeners = (this: TabstylepanelClass) => void;
+
 type ColorElement = HTMLInputElement;
 interface ColorEvent extends Omit<Event, "target"> {
   target: ColorElement;
@@ -391,11 +375,11 @@ interface MozColorbox extends MozColorboxOverrideMozXULElement {
   _parent: TabstylepanelClass;
   getColor(format?: boolean): string;
   update(this: MozColorbox, event: ColorEvent): void;
-  updateColor(): void;
+  updateColor(this: MozColorbox): void;
   updateRgba(this: MozColorbox, val: string): void;
 }
 
-interface MozColorboxClass extends MozColorbox {}
+type MozColorboxListeners = (this: MozColorbox, event: ColorEvent) => void;
 
 /** pref-filetype.js */
 interface RichListBox extends Omit<MozXULElement, "getElementsByAttribute" | "lastChild"> {
@@ -672,7 +656,7 @@ interface GetByMap {
   "openTabNextInGroup_control": CheckboxClass;
   "openTabNextInGroup": HTMLMenuElement;
   "pane": PrefPaneClass;
-  "paneDeck": CustomGroupElement<HTMLInputElement>;
+  "paneDeck": CustomGroupElement<PrefPaneClass>;
   "paneIncompatible": PrefPaneClass;
   "paneMenu": PrefPaneClass;
   "paneDeckContainer": HTMLElement;
@@ -715,9 +699,9 @@ interface GetByMap {
   "underline": StyleElement;
   "text": StyleElement;
   "bg": StyleElement;
-  "textColor": MozColorboxClass;
-  "bgColor": MozColorboxClass;
-  "bgTopColor": MozColorboxClass;
+  "textColor": MozColorbox;
+  "bgColor": MozColorbox;
+  "bgTopColor": MozColorbox;
   "_unloadedTab": HTMLElement;
   "_unreadTab": HTMLElement;
   "_otherTab": HTMLElement;

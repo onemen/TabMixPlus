@@ -28,6 +28,7 @@ export default [
         "error",
         {allowInterfaces: "with-single-extends"},
       ],
+      "@typescript-eslint/no-unsafe-function-type": "off",
       "@stylistic/quotes": ["error", "double", {avoidEscape: true}],
     },
   },

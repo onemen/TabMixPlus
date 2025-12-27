@@ -270,7 +270,7 @@ interface TabmixDNDObserver {
 
 declare namespace TabmixArrowScrollboxNS {
   type ASB = ArrowScrollbox;
-  export interface ArrowScrollbox extends MockedGeckoTypes.ArrowScrollbox {
+  interface ArrowScrollbox extends MockedGeckoTypes.ArrowScrollbox {
     _arrowScrollAnim: {
       scrollbox: ASB;
       requestHandle: number;
@@ -340,7 +340,7 @@ declare namespace TabmixArrowScrollboxNS {
   }
 
   type RSB = RightScrollBox;
-  export interface RightScrollBox extends MozXULElement, Omit<MockedGeckoTypes.ArrowScrollbox, "appendChild" | "contains" | "insertBefore" | "prepend" | "getElementsByTagName" | "children"> {
+  interface RightScrollBox extends MozXULElement, Omit<MockedGeckoTypes.ArrowScrollbox, "appendChild" | "contains" | "insertBefore" | "prepend" | "getElementsByTagName" | "children"> {
     addEventListener<K extends keyof CustomElementEventMap>(type: K, listener: (this: Element, ev: CustomElementEventMap[K]) => unknown, options?: boolean | AddEventListenerOptions): void;
     addButtonListeners: (button: HTMLButtonElement, side: "left" | "right") => void;
     constructor: (this: RSB) => RSB;
@@ -444,6 +444,17 @@ declare namespace TabmixAllTabsNS {
   function updateMenuItemActive(item: Menuitem | null): void;
   function updateMenuItemInactive(): void;
   function updateStatusText(itemText: string): void;
+
+  interface TabSorting {
+    Tab: Tab;
+    Index: number;
+    toString(): string;
+  }
+  interface TabSortingConstructor {
+    new (tab: Tab, index: number): TabSorting;
+    prototype: TabSorting;
+  }
+  type TabSortingConstructorFn = (this: TabSorting, tab: Tab, index: number) => void;
 }
 
 interface LastTabTabs {

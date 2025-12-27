@@ -337,7 +337,7 @@ ContentClickInternal = {
   },
 
   getWrappedNode(node, focusedWindow, getTargetIsFrame) {
-    /** @type {ContentClickModule.wrapNode} */
+    /** @type {typeof ContentClickModule.wrapNode} */
     let wrapNode = function wrapNode(aNode, aGetTargetIsFrame) {
       /** @type {ContentClickModule.ExtendedWrappedNode} */
       // @ts-expect-error - We're extending the returned WrappedNode with additional methods
@@ -1450,7 +1450,7 @@ ContentClickInternal = {
   },
 };
 
-/** @type {ContentClickModule.makeURI} */
+/** @type {typeof ContentClickModule.makeURI} */
 function makeURI(aURL, aOriginCharset, aBaseURI) {
   return Services.io.newURI(aURL, aOriginCharset, aBaseURI);
 }

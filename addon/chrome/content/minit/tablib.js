@@ -38,7 +38,7 @@ Tabmix.tablib = {
       return;
     }
 
-    /** @type {MockedGeckoTypes.loadURIFunction} */
+    /** @type {typeof MockedGeckoTypes.loadURIFunction} */
     const loadURI_function = function (uri, params) {
       try {
         const tabmixResult = Tabmix.tablib._loadURI(browser, uri, params);
@@ -887,7 +887,7 @@ Tabmix.tablib = {
         .childNodes[0]?.removeEventListener("popupshowing", FillHistoryMenu);
     }
 
-    /** @type {FillHistoryMenu} */
+    /** @type {typeof FillHistoryMenu} */
     let fillHistoryMenu = function FillHistoryMenu(parentOrEvent) {
       /** @type {EventTarget} */ // @ts-expect-error - make type of parent same as EventTarget
       let parent = Tabmix.isVersion(1290) ? parentOrEvent.target : parentOrEvent;

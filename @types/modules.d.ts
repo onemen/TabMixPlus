@@ -21,6 +21,20 @@ type TransformPrivateMethods<T> = {
   [K in keyof T as K extends string ? StripUnderscore<K> : never]: T[K];
 };
 
+declare namespace ClassHelpers {
+  /** Generic constructor type. T = instance type A = argument tuple */
+  type Constructor<T, A extends any[] = any[]> = {
+    new (...args: A): T;
+    prototype: T;
+  };
+
+  /**
+   * Helper that converts a plain function into its constructor type. Ensures the returned type has `new` and
+   * `prototype`.
+   */
+  function getConstructor<T, A extends any[] = any[]>(fn: (...args: A) => void): Constructor<T, A>;
+}
+
 // Firefox modules
 
 interface PrivateMethods extends TransformPrivateMethods<BrowserDOMWindowPrivateMethods> {}
@@ -57,6 +71,7 @@ interface GetByMap {
 interface Window {
   arguments: any[];
   BrowserUtils: MockedExports.BrowserUtils;
+  canQuitApplication(): boolean;
   DOMParser: typeof DOMParser;
   FullZoom: {
     init(): void;
@@ -64,7 +79,6 @@ interface Window {
   };
   gBrowser: MockedGeckoTypes.TabBrowser;
   gBrowserInit: gBrowserInit;
-  canQuitApplication(): boolean;
   handleLinkClick(event: MouseEvent, href: string, linkNode: ContentClickLinkElement | null, _tabmixOptions?: {where: string}): boolean;
   KeyboardEvent: KeyboardEvent;
   MozXULElement: typeof MozXULElement;
@@ -132,15 +146,15 @@ interface TabmixKnownModules {
   "resource://gre/modules/AddonManager.sys.mjs": {AddonManager: AddonManagerType};
   "resource://gre/modules/AppConstants.sys.mjs": {AppConstants: AppConstantsType};
   "resource:///modules/BrowserDOMWindow.sys.mjs": {BrowserDOMWindow: typeof BrowserDOMWindowClass};
-  "resource:///modules/BrowserWindowTracker.sys.mjs": import("resource:///modules/BrowserWindowTracker.sys.mjs").BrowserWindowTracker;
+  "resource:///modules/BrowserWindowTracker.sys.mjs": {BrowserWindowTracker: MockedExports.BrowserWindowTracker};
   "resource:///modules/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
   "moz-src:///browser/components/places/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
   "resource://gre/modules/Preferences.sys.mjs": {Preferences: typeof MockedExports.PreferencesClass};
   "resource://gre/modules/PrivateBrowsingUtils.sys.mjs": {PrivateBrowsingUtils: MockedExports.PrivateBrowsingUtils};
-  "resource://gre/modules/XPCOMUtils.sys.mjs": typeof import("resource://gre/modules/XPCOMUtils.sys.mjs");
+  "resource://gre/modules/XPCOMUtils.sys.mjs": typeof MockedExports.XPCOMUtilsSYSMJS;
   // Tabmix
   "chrome://tabmix-resource/content/BrowserDOMWindow.sys.mjs": {TabmixBrowserDOMWindow: BrowserDOMWindowModule.BrowserDOMWindow};
-  "chrome://tabmix-resource/content/BrowserVersion.sys.mjs": {isVersion: BrowserVersion};
+  "chrome://tabmix-resource/content/BrowserVersion.sys.mjs": {isVersion: TabmixModules.BrowserVersion["isVersion"]};
   "chrome://tabmix-resource/content/Changecode.sys.mjs": {initializeChangeCodeClass: typeof ChangecodeModule.initializeChangeCodeClass};
   "chrome://tabmix-resource/content/ContentClick.sys.mjs": {TabmixContentClick: ContentClickModule.ContentClick};
   "chrome://tabmix-resource/content/DownloadLastDir.sys.mjs": {TabmixDownloadLastDir: DownloadLastDirModule.DownloadLastDir};
@@ -157,9 +171,26 @@ interface TabmixKnownModules {
 }
 
 declare namespace MockedExports {
+  interface KnownModules {
+    "resource:///modules/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
+    "moz-src:///browser/components/places/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
+  }
+
+  interface AboutNewTab {
+    get newTabURL(): string;
+    set newTabURL(url: string);
+    resetNewTabURL(): void;
+  }
+
   interface BrowserUtils {
     hrefAndLinkNodeForClickEvent: (event: MouseEvent) => ContentClickLinkData;
     whereToOpenLink: (event: MouseEvent, ignoreButton?: boolean, ignoreAlt?: boolean) => WhereToOpen;
+  }
+
+  interface BrowserWindowTracker {
+    getTopWindow(): ChromeWindow;
+    readonly orderedWindows: ChromeWindow[];
+    windowCount: number;
   }
 
   // ContentClickLinkElement;
@@ -258,6 +289,16 @@ declare namespace MockedExports {
     serializeCSP: (csp: nsIContentSecurityPolicy) => string;
   }
 
+  interface NetUtil {
+    newChannel(aWhatToLoad: {uri: nsIURI | nsIFile; loadingNode?: Node; loadingPrincipal?: nsIPrincipal; triggeringPrincipal?: nsIPrincipal; securityFlags?: u32; contentPolicyType?: nsContentPolicyType; loadUsingSystemPrincipal?: boolean}): nsIChannel;
+    readInputStreamToString(aInputStream: nsIInputStream, aCount: number, aOptions?: {charset?: string; replacement?: string}): string;
+  }
+
+  interface OpenInTabsUtils {
+    openTabs(urls: string[], params: Record<string, unknown>): Promise<void>;
+    openNodeInTabs(aNodes: nsINavHistoryResultNode[], params: Record<string, unknown>): Promise<void>;
+  }
+
   interface Preferences {
     get<T = unknown>(prefName: string | string[], defaultValue?: T, valueType?: null): T;
     _get(prefName: string, defaultValue: unknown, valueType?: unknown): unknown;
@@ -309,6 +350,25 @@ declare namespace MockedExports {
     };
   };
 
+  interface PromiseUtils {
+    defer(): DeferredPromise;
+  }
+
+  type setTimeout = (callback: (...args: any[]) => void, delay?: number, ...args: any[]) => number;
+  // export {setTimeout};
+
+  interface SitePermissions {
+    clearTemporaryBlockPermissions(browser: MockedGeckoTypes.ChromeBrowser): void;
+  }
+
+  interface TabState {
+    collect(tab: Tab, extData?: Record<string, unknown>): SessionStoreNS.TabData;
+  }
+
+  interface TabStateCache {
+    update(permanentKey: object, newData: Record<string, unknown>): void;
+  }
+
   interface URILoadingHelper {
     getTargetWindow(window: Window, {skipPopups, forceNonPrivate}?: {skipPopups?: boolean; forceNonPrivate?: boolean}): Window | null;
     openUILink(window: Window, url: string, event: Event, aIgnoreButton: boolean | {ignoreButton: boolean; ignoreAlt: boolean}, aIgnoreAlt: boolean, aAllowThirdPartyFixup: boolean, aPostData: unknown, aReferrerInfo: unknown): void;
@@ -318,7 +378,6 @@ declare namespace MockedExports {
     XPCOMUtils: {
       defineLazyModuleGetters<T extends Record<string, string>>(obj: object, modules: T): void;
       defineLazyPreferenceGetter(aObject: object, aName: string, aPreference: string, aDefaultPrefValue: unknown, aOnUpdate: (aPreference: string, previousValue: unknown, newValue: unknown) => void, aTransform?: (aPreference: string) => unknown): void;
-      /* eslint-disable-next-line @typescript-eslint/no-unsafe-function-type */
       defineLazyServiceGetters<T extends Record<string, [string, Function]>>(obj: object, services: T): void;
     };
   };
@@ -368,7 +427,7 @@ declare namespace SessionStoreNS {
     tabs: ClosedTabData[];
   }
 
-  type TabDataEntry = {url: string; title: string; triggeringPrincipal_base64?: string};
+  type TabDataEntry = {url: string; title?: string; triggeringPrincipal_base64?: string};
   type TabData = {
     attributes?: Record<string, string>;
     disallow?: string[];
@@ -488,28 +547,12 @@ declare namespace TabListViewNS {
   }
 }
 
-declare module "resource:///modules/AboutNewTab.sys.mjs" {
-  export interface AboutNewTab {
-    get newTabURL(): string;
-    set newTabURL(url: string);
-    resetNewTabURL(): void;
-  }
-}
-
 declare module "resource://gre/modules/AddonManager.sys.mjs" {
   const AddonManagerSYSMJS: {
     AddonManager: AddonManagerType;
   };
 
   export = AddonManagerSYSMJS;
-}
-
-declare module "resource:///modules/BrowserWindowTracker.sys.mjs" {
-  export interface BrowserWindowTracker {
-    getTopWindow(): ChromeWindow;
-    readonly orderedWindows: ChromeWindow[];
-    windowCount: number;
-  }
 }
 
 declare module "resource://gre/modules/DownloadLastDir.sys.mjs" {
@@ -525,20 +568,6 @@ declare module "resource://gre/modules/DownloadLastDir.sys.mjs" {
   }
 }
 
-declare module "resource://gre/modules/NetUtil.sys.mjs" {
-  export interface NetUtil {
-    newChannel(aWhatToLoad: {uri: nsIURI | nsIFile; loadingNode?: Node; loadingPrincipal?: nsIPrincipal; triggeringPrincipal?: nsIPrincipal; securityFlags?: u32; contentPolicyType?: nsContentPolicyType; loadUsingSystemPrincipal?: boolean}): nsIChannel;
-    readInputStreamToString(aInputStream: nsIInputStream, aCount: number, aOptions?: {charset?: string; replacement?: string}): string;
-  }
-}
-
-declare module "resource:///modules/OpenInTabsUtils.sys.mjs" {
-  export interface OpenInTabsUtils {
-    openTabs(urls: string[], params: Record<string, unknown>): Promise<void>;
-    openNodeInTabs(aNodes: nsINavHistoryResultNode[], params: Record<string, unknown>): Promise<void>;
-  }
-}
-
 declare module "resource://gre/modules/Preferences.sys.mjs" {
   export class Preferences extends MockedExports.PreferencesClass {}
 }
@@ -547,43 +576,10 @@ declare module "resource://gre/modules/PrivateBrowsingUtils.sys.mjs" {
   export = MockedExports.PrivateBrowsingUtilsSYSMJS;
 }
 
-declare module "resource://gre/modules/PromiseUtils.sys.mjs" {
-  export interface PromiseUtils {
-    defer(): DeferredPromise;
-  }
-}
-
-declare module "resource://gre/modules/Timer.sys.mjs" {
-  type setTimeout = (callback: (...args: any[]) => void, delay?: number, ...args: any[]) => number;
-  export {setTimeout};
-}
-
-declare module "resource:///modules/sessionstore/TabState.sys.mjs" {
-  export interface TabState {
-    collect(tab: Tab, extData?: Record<string, unknown>): SessionStoreNS.TabData;
-  }
-}
-
-declare module "resource:///modules/sessionstore/TabStateCache.sys.mjs" {
-  export interface TabStateCache {
-    update(permanentKey: object, newData: Record<string, unknown>): void;
-  }
-}
-
-declare module "resource:///modules/SitePermissions.sys.mjs" {
-  export interface SitePermissions {
-    clearTemporaryBlockPermissions(browser: MockedGeckoTypes.ChromeBrowser): void;
-  }
-}
-
 declare module "resource:///modules/syncedtabs/TabListView.sys.mjs" {
   export class TabListView extends MockedExports.TabListView {
     [key: string]: unknown;
   }
-}
-
-declare module "resource:///modules/URILoadingHelper.sys.mjs" {
-  export interface URILoadingHelper extends MockedExports.URILoadingHelper {}
 }
 
 declare module "resource:///modules/syncedtabs/util.sys.mjs" {
@@ -596,39 +592,39 @@ declare module "resource://gre/modules/XPCOMUtils.sys.mjs" {
 
 interface KnownModulesImports {
   // firefox
-  AboutNewTab: import("resource:///modules/AboutNewTab.sys.mjs").AboutNewTab;
+  AboutNewTab: MockedExports.AboutNewTab;
   BrowserUtils: MockedExports.BrowserUtils;
-  BrowserWindowTracker: import("resource:///modules/BrowserWindowTracker.sys.mjs").BrowserWindowTracker;
+  BrowserWindowTracker: MockedExports.BrowserWindowTracker;
   ClickHandlerParent: typeof MockedExports.ClickHandlerParent;
   CustomizableUI: MockedExports.CustomizableUI;
   E10SUtils: MockedExports.E10SUtils;
-  NetUtil: import("resource://gre/modules/NetUtil.sys.mjs").NetUtil;
-  OpenInTabsUtils: import("resource:///modules/OpenInTabsUtils.sys.mjs").OpenInTabsUtils;
+  NetUtil: MockedExports.NetUtil;
+  OpenInTabsUtils: MockedExports.OpenInTabsUtils;
   PlacesUtils: MockedGeckoTypes.PlacesUtils;
   PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils & PlacesModule.ExtraPlacesUIUtils;
   PrivateBrowsingUtils: MockedExports.PrivateBrowsingUtils;
-  PromiseUtils: import("resource://gre/modules/PromiseUtils.sys.mjs").PromiseUtils;
-  SitePermissions: import("resource:///modules/SitePermissions.sys.mjs").SitePermissions;
-  TabState: import("resource:///modules/sessionstore/TabState.sys.mjs").TabState;
-  TabStateCache: import("resource:///modules/sessionstore/TabStateCache.sys.mjs").TabStateCache;
-  URILoadingHelper: import("resource:///modules/URILoadingHelper.sys.mjs").URILoadingHelper;
+  PromiseUtils: MockedExports.PromiseUtils;
+  setTimeout: MockedExports.setTimeout;
+  SitePermissions: MockedExports.SitePermissions;
+  TabState: MockedExports.TabState;
+  TabStateCache: MockedExports.TabStateCache;
+  URILoadingHelper: MockedExports.URILoadingHelper;
 
   // tabmix
   AutoReload: AutoReloadModule.AutoReload;
   ContentSvc: TabmixModules.ContentSvc;
   DocShellCapabilities: DocShellCapabilitiesModule.DocShellCapabilities;
   DynamicRules: DynamicRulesModule.DynamicRules;
-  FloorpPrefsObserver: import("chrome://tabmix-resource/content/Floorp.sys.mjs").FloorpPrefsObserver;
+  FloorpPrefsObserver: TabmixModules.FloorpPrefsObserver;
   getSandbox: typeof ChangecodeModule.getSandbox;
   LinkNodeUtils: LinkNodeUtilsModule.LinkNodeUtils;
   initializeChangeCodeClass: typeof ChangecodeModule.initializeChangeCodeClass;
-  isVersion: BrowserVersion;
+  isVersion: TabmixModules.BrowserVersion["isVersion"];
   MergeWindows: MergeWindowsModule.MergeWindows;
   Overlays: OverlaysModule.OverlaysClass;
   SessionStore: SessionStoreNS.SessionStoreApi;
-  setTimeout: import("resource://gre/modules/Timer.sys.mjs").setTimeout;
   Shortcuts: ShortcutsModule.Shortcuts;
-  SyncedTabs: import("chrome://tabmix-resource/content/SyncedTabs.sys.mjs").SyncedTabs;
+  SyncedTabs: TabmixModules.SyncedTabs;
   TabmixUtils: TabmixUtilsModule.TabmixUtils;
   TabmixSvc: TabmixSvcModule.TabmixSvc;
   TabmixPlacesUtils: PlacesModule.PlacesUtils;
@@ -680,14 +676,23 @@ declare namespace AutoReloadModule {
     _disable(tab: Tab): void;
     _update(tab: Tab, value?: string): void;
     onTabReloaded(tab: Tab, browser: Browser): void;
-    confirm(window: Window, tab: Tab, isRemote?: boolean): boolean;
+    confirm(window: Window & mozIDOMWindowProxy, tab: Tab, isRemote?: boolean): boolean;
     reloadRemoteTab(browser: Browser, serializeData: serializedReloadData): void;
+  }
+
+  interface AutoReloadData {
+    postData: nsIInputStream | null;
+    isPostData: boolean;
+    referrerInfo: nsIReferrerInfo;
+    scrollX: number;
+    scrollY: number;
   }
 
   function _reloadTab(tab: Tab): void;
   function beforeReload(window: Window, browser: Browser): Promise<void>;
   function doReloadTab(window: Window, browser: Browser, tab: Tab, data: ReloadData): void;
-  function _observe(subject: Window, topic: string): void;
+  function _observe(aSubject: nsISupports & Window, aTopic: string, aData: string): void;
+  // const _observe: nsIObserver;
   function _clearTimeout(tab: Tab, window?: Window): void;
 }
 
@@ -712,10 +717,6 @@ declare namespace BrowserDOMWindowModule {
     getContentWindowOrOpenURI(constructor: Constructor, methodName: string, tabmixObj: TabmixGlobal): void;
   }
 }
-
-type versionInfo = number | string | {ff?: number; wf?: string; fp?: string; zen?: string; updateChannel?: string};
-
-type BrowserVersion = typeof import("chrome://tabmix-resource/content/BrowserVersion.sys.mjs").isVersion;
 
 declare namespace ChangecodeModule {
   interface ChangeCodeScriptParamsWithObj {
@@ -795,14 +796,7 @@ declare namespace ChromeUtilsModule {
 }
 
 declare namespace CompatibilityCheckModule {
-  function constructor(aWindow: Window, aShowList: boolean, aCallbackDialog: boolean): void;
-
-  interface AddOn {
-    _name: string;
-    id: string;
-    _version: string;
-    toString(): string;
-  }
+  type Constructor = (this: CompatibilityCheck, aWindow: Window, aShowList: boolean, aCallbackDialog: boolean) => void;
 
   interface CompatibilityCheck {
     window: Window | null;
@@ -827,6 +821,24 @@ declare namespace CompatibilityCheckModule {
     prototype: CompatibilityCheck;
     new (aWindow: Window, aShowList: boolean, aCallbackDialog?: boolean): CompatibilityCheck;
   };
+
+  interface AddOnInit {
+    name: string;
+    id: string;
+    version: string;
+  }
+
+  interface AddOn {
+    _name: string;
+    id: string;
+    _version: string;
+    toString(this: AddOn): string;
+  }
+  interface AddOnConstructor {
+    new (addon: AddOnInit): AddOn;
+    prototype: AddOn;
+  }
+  type AddonConstructorFn = (this: AddOn, addon: AddOnInit) => void;
 }
 
 declare namespace ContentAreaClick {
@@ -1132,10 +1144,6 @@ interface Error {
 declare namespace LogModule {
   type Lazy = Pick<KnownModulesImports, "ContentSvc">;
 
-  interface CustomError extends Error {
-    filename?: string;
-  }
-
   type Caller = nsIStackFrame | CustomError;
   type ShowMethod = ((...args: unknown[]) => unknown) | {obj: Record<string, unknown>; name: string; fullName: string} | string;
 
@@ -1168,6 +1176,17 @@ declare namespace LogModule {
     show(aMethod: ShowMethod, aDelay?: number, aWindow?: Window): void;
     trace(aMsg: string, flag?: string, caller?: Caller): void;
     [key: string]: unknown;
+  }
+
+  interface CustomError extends Error {
+    filename?: string;
+  }
+
+  type CustomErrorConstructorFn = (this: CustomError, error?: any, message?: string, isException?: boolean, isError?: boolean) => void;
+
+  interface CustomErrorConstructor {
+    new (error?: any, message?: string, isException?: boolean, isError?: boolean): CustomError;
+    prototype: CustomError;
   }
 }
 
@@ -1468,8 +1487,11 @@ declare namespace SlideshowModule {
 
   interface Flst {
     tabContainer: MockedGeckoTypes.TabContainer;
-    slideShowTimer?: nsITimer;
+    slideShowTimer: nsITimer | undefined;
+    flstOn: string;
+    flstOff: string;
     slideshowOn: string;
+    slideshowOff: string;
 
     showAlert(msg: string, id: string): void;
     toggle(): void;
@@ -1523,7 +1545,7 @@ declare namespace TabmixSvcModule {
       [K in DynamicRulesModule.RuleName]: DynamicRulesModule.TabStyle;
     };
     URILoadingHelperChanged: boolean;
-    version: BrowserVersion;
+    version: TabmixModules.BrowserVersion["isVersion"];
     windowStartup: {
       QueryInterface: MozQueryInterface;
       _initialized: boolean;
@@ -1537,13 +1559,14 @@ declare namespace TabmixSvcModule {
 declare namespace TabmixUtilsModule {
   type importList = "E10SUtils" | "NetUtil" | "AutoReload" | "DocShellCapabilities" | "MergeWindows" | "TabmixSvc";
   type Lazy = Pick<KnownModulesImports, importList>;
+  type PostData = {isPostData: boolean; postData: string | null; referrerInfo: string | null};
   interface TabmixUtils {
     initMessageManager(window: Window): void;
     deinit(window: Window): void;
     receiveMessage(message: ReceiveMessageArgument & {target: Browser}): boolean | null;
     focusedWindow(content: Window): Window;
     makeInputStream(aString: string): nsIInputStream;
-    getPostDataFromHistory(sessionHistory: nsISHistory | null): {isPostData: boolean; postData: string | null; referrerInfo: string | null};
+    getPostDataFromHistory(sessionHistory: nsISHistory | null): PostData;
     updateHistoryTitle(legacySHistory: nsISHistory, title: string): void;
   }
 }
@@ -1603,7 +1626,8 @@ declare module "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs" {
 }
 
 declare module "chrome://tabmix-resource/content/BrowserVersion.sys.mjs" {
-  export function isVersion(versionNo: versionInfo, updateChannel?: string | null): boolean;
+  const isVersion: TabmixModules.BrowserVersion["isVersion"];
+  export {isVersion};
 }
 
 declare module "chrome://tabmix-resource/content/Changecode.sys.mjs" {
@@ -1616,13 +1640,6 @@ declare module "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mj
   export {ChromeManifest};
 }
 
-declare module "chrome://tabmix-resource/content/Floorp.sys.mjs" {
-  export interface FloorpPrefsObserver {
-    init(): void;
-    observe(subject: unknown, topic: string, data: string): void;
-  }
-}
-
 declare module "chrome://tabmix-resource/content/log.sys.mjs" {
   const console: LogModule.Console;
   export {console};
@@ -1631,14 +1648,6 @@ declare module "chrome://tabmix-resource/content/log.sys.mjs" {
 declare module "chrome://tabmix-resource/content/TabContextConfig.sys.mjs" {
   const TabContextConfig: TabContextConfigModule.Exports;
   export {TabContextConfig};
-}
-
-declare module "chrome://tabmix-resource/content/SyncedTabs.sys.mjs" {
-  export interface SyncedTabs {
-    init(window: Window): void;
-    observe(subject: unknown, topic: string, data: string): void;
-    onQuitApplication(): void;
-  }
 }
 
 declare module "chrome://tabmix-resource/content/TabmixSvc.sys.mjs" {
@@ -1682,6 +1691,11 @@ declare namespace TabmixModules {
     get(key: K, create?: boolean): V;
   }
 
+  type versionInfo = number | string | {ff?: number; wf?: string; fp?: string; zen?: string; updateChannel?: string};
+  interface BrowserVersion {
+    isVersion(versionNo: versionInfo, updateChannel?: string | null): boolean;
+  }
+
   interface ChromeManifest {
     parse: (filename?: string, base?: string) => Promise<void>;
     overlay: DefaultMap<string, string[]>;
@@ -1705,7 +1719,12 @@ declare namespace TabmixModules {
     readonly aboutNewtab: "about:newtab";
     getString: (key: string) => string;
     prefBranch: nsIPrefBranchXpcom;
-    version: BrowserVersion;
+    version: BrowserVersion["isVersion"];
+  }
+
+  interface FloorpPrefsObserver {
+    init(): void;
+    observe(subject: unknown, topic: string, data: string): void;
   }
 
   interface WindowParams extends LoadURIOptions {

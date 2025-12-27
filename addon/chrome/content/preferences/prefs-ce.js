@@ -1,3 +1,5 @@
+// / <reference path="../../../../@types/prefs_ce.d.ts" />
+
 /* exported PrefWindow */
 /* eslint no-var: 2, prefer-const: 2, no-new-func: 0, class-methods-use-this: 0 */
 "use strict";
@@ -49,39 +51,39 @@ function getFunction(element, eventType, eventCode) {
 
 const PREFS = Services.prefs;
 
-/** @type {PreferencesListClass} */
+/** @implements {PreferencesListClass} */
 class Preferences extends MozXULElement {
-  /** @this {PreferencesListClass} */
+  service = PREFS;
+  rootBranch = PREFS;
+  defaultBranch = this.service.getDefaultBranch("");
+  rootBranchInternal = PREFS;
+
+  /*
+   * We want to call _constructAfterChildren after all child
+   * <preference> elements have been constructed. To do this, we get
+   * and store the node list of all child <preference> elements in the
+   * constructor, and maintain a count which is incremented in the
+   * constructor of <preference>. _constructAfterChildren is called
+   * when the count matches the length of the list.
+   */
+  _constructedChildrenCount = 0;
+
+  /*
+   * Some <preference> elements are added dynamically after
+   *   _constructAfterChildren has already been called - we want to
+   *   avoid looping over all of them again in this case so we remember
+   *   if we already called it.
+   */
+  _constructAfterChildrenCalled = false;
+
   constructor() {
     super();
 
     // Bug 1570744
-    this.observerFunction = /** @param {observerArgs} args */ (...args) => {
+    /** @type {PreferencesListClass["observerFunction"]} */
+    this.observerFunction = (...args) => {
       this.observe(...args);
     };
-
-    this.service = PREFS;
-    this.rootBranch = PREFS;
-    this.defaultBranch = this.service.getDefaultBranch("");
-    this.rootBranchInternal = PREFS;
-
-    /*
-     * We want to call _constructAfterChildren after all child
-     * <preference> elements have been constructed. To do this, we get
-     * and store the node list of all child <preference> elements in the
-     * constructor, and maintain a count which is incremented in the
-     * constructor of <preference>. _constructAfterChildren is called
-     * when the count matches the length of the list.
-     */
-    this._constructedChildrenCount = 0;
-
-    /*
-     * Some <preference> elements are added dynamically after
-     *   _constructAfterChildren has already been called - we want to
-     *   avoid looping over all of them again in this case so we remember
-     *   if we already called it.
-     */
-    this._constructAfterChildrenCalled = false;
 
     this._preferenceChildren = this.getElementsByTagName("preference");
   }
@@ -104,15 +106,13 @@ class Preferences extends MozXULElement {
 
   /** @type {PreferencesListClass["observe"]} */
   observe(_aSubject, _aTopic, aData) {
-    for (let i = 0; i < this.childNodes.length; ++i) {
-      const preference = this.childNodes[i];
+    for (const preference of this._preferenceChildren) {
       if (preference?.name == aData) {
         preference.value = preference.valueFromPreferences;
       }
     }
   }
 
-  /** @type {PreferencesListClass["_constructAfterChildren"]} */
   _constructAfterChildren() {
     // This method will be called after the last of the child
     // <preference> elements is constructed. Its purpose is to propagate
@@ -142,8 +142,16 @@ class Preferences extends MozXULElement {
   }
 }
 
-/** @type {PreferenceClass} */
+/** @implements {PreferenceClass} */
 class Preference extends MozXULElement {
+  _constructed = false;
+  _running = false;
+  _useDefault = false;
+  batching = false;
+
+  /** @type {PreferenceValue} */
+  _value = null;
+
   constructor() {
     super();
 
@@ -154,13 +162,7 @@ class Preference extends MozXULElement {
     });
   }
 
-  /** @this {PreferenceClass} */
   connectedCallback() {
-    this._constructed = false;
-    this._value = null;
-    this._useDefault = false;
-    this.batching = false;
-
     window.addEventListener("unload", this.disconnectedCallback);
 
     // if the element has been inserted without the name attribute set,
@@ -213,8 +215,6 @@ class Preference extends MozXULElement {
       // This is the last <preference>, time to updateElements() on all of them.
       this.preferences._constructAfterChildren();
     }
-
-    // this._initialized = true;
   }
 
   disconnectedCallback() {
@@ -232,9 +232,10 @@ class Preference extends MozXULElement {
     return this.getAttribute("instantApply") == "true" || this.preferences.instantApply;
   }
 
-  /** @this {PreferenceClass} */
   get preferences() {
-    return this.parentNode;
+    /** @type {PreferencesListClass} */ // @ts-expect-error - override default parentNode
+    const parentNode = this.parentNode;
+    return parentNode;
   }
 
   get name() {
@@ -278,7 +279,6 @@ class Preference extends MozXULElement {
     this.setAttribute("readonly", val);
   }
 
-  /** @this {PreferenceClass} */
   get value() {
     return this._value;
   }
@@ -295,21 +295,27 @@ class Preference extends MozXULElement {
     if (typeof this.value != "boolean" && this.prefExists) {
       throw new Error(`Tabmix:\n ${this.name} is not a boolean preference`);
     }
-    return this.value;
+    /** @type {boolean} */ // @ts-ignore - we check above that is boolean
+    const value = this.value;
+    return value;
   }
 
   get numberValue() {
     if (typeof this.value != "number" && this.prefExists) {
       throw new Error(`Tabmix:\n ${this.name} is not a number preference`);
     }
-    return this.value;
+    /** @type {number} */ // @ts-ignore - we check above that is number
+    const value = this.value;
+    return value;
   }
 
   get stringValue() {
     if (typeof this.value != "string" && this.prefExists) {
       throw new Error(`Tabmix:\n ${this.name} is not a string preference`);
     }
-    return this.value;
+    /** @type {string} */ // @ts-ignore - we check above that is string
+    const value = this.value;
+    return value;
   }
 
   get locked() {
@@ -381,7 +387,6 @@ class Preference extends MozXULElement {
     return this._useDefault ? this.preferences.defaultBranch : this.preferences.rootBranch;
   }
 
-  /** @type {PreferenceClass["valueFromPreferences"]} @this {PreferenceClass} */
   get valueFromPreferences() {
     try {
       // Force a resync of value with preferences.
@@ -472,7 +477,7 @@ class Preference extends MozXULElement {
     }
   }
 
-  /** @type {PreferenceClass["_setValue"]} @this {PreferenceClass} */
+  /** @type {PreferenceClass["_setValue"]} */
   _setValue(aValue) {
     if (this.value !== aValue) {
       this._value = aValue;
@@ -539,10 +544,11 @@ class Preference extends MozXULElement {
      * on the XUL element using DOM apis and assuming the element's
      * constructor or property getters appropriately handle this state.
      */
-    /** @type {PreferenceNS.setValue} */
+
+    /** @type {typeof PreferenceNS.setValue} */
     function setValue(element, attribute, value) {
       if (attribute in element) {
-        // @ts-expect-error
+        // @ts-expect-error - `attribute in element` is safe
         element[attribute] = value;
       } else {
         element.setAttribute(attribute, value);
@@ -595,10 +601,11 @@ class Preference extends MozXULElement {
      * is not present in the API, then assume its value is contained in
      * an attribute, as is the case before a binding has been attached.
      */
-    /** @type {PreferenceNS.getValue} */
+
+    /** @type {typeof PreferenceNS.getValue} */
     function getValue(element, attribute) {
       if (attribute in element) {
-        // @ts-expect-error
+        // @ts-expect-error - `attribute in element` is safe
         return element[attribute];
       }
       return element.getAttribute(attribute);
@@ -649,15 +656,20 @@ class Preference extends MozXULElement {
   }
 }
 
-/** @type {PrefPaneClass} */
+/** @implements {PrefPaneClass} */
 class PrefPane extends MozXULElement {
-  /** @this {PrefPaneClass} */
+  _resizeObserver = null;
+  _initialized = false;
+  _loaded = false;
+  value = "";
+
+  /** @type {Set<PreferenceElement>} */
+  _deferredValueUpdateElements = new Set();
+
   constructor() {
     super();
 
-    this._resizeObserver = null;
-
-    this.addEventListener("command", event => {
+    this.addEventListener("command", (/** @type {PaneEvent} */ event) => {
       // This "command" event handler tracks changes made to preferences by
       // the user in this window.
       if (event.sourceEvent) {
@@ -667,7 +679,7 @@ class PrefPane extends MozXULElement {
       this.userChangedValue(event.target);
     });
 
-    this.addEventListener("select", event => {
+    this.addEventListener("select", (/** @type {PaneEvent} */ event) => {
       // This "select" event handler tracks changes made to colorpicker
       // preferences by the user in this window.
       if (event.target.localName == "colorpicker") {
@@ -675,13 +687,13 @@ class PrefPane extends MozXULElement {
       }
     });
 
-    this.addEventListener("change", event => {
+    this.addEventListener("change", (/** @type {PaneEvent} */ event) => {
       // This "change" event handler tracks changes made to preferences by
       // the user in this window.
       this.userChangedValue(event.target);
     });
 
-    this.addEventListener("input", event => {
+    this.addEventListener("input", (/** @type {PaneEvent} */ event) => {
       // This "input" event handler tracks changes made to preferences by
       // the user in this window.
       this.userChangedValue(event.target);
@@ -705,7 +717,6 @@ class PrefPane extends MozXULElement {
     return {".content-box": "flex"};
   }
 
-  /** @this {PrefPaneClass} */
   get fragment() {
     if (!this._fragment) {
       this._fragment = MozXULElement.parseXULToFragment(`
@@ -716,7 +727,6 @@ class PrefPane extends MozXULElement {
     return this.ownerDocument.importNode(this._fragment, true);
   }
 
-  /** @this {PrefPaneClass} */
   connectedCallback() {
     if (this._initialized || !this.loaded) {
       return;
@@ -724,13 +734,12 @@ class PrefPane extends MozXULElement {
 
     const fragment = this.fragment;
     this._content = fragment.querySelector(".content-box");
+    /** @type {HTMLCollectionBase_G<PanelItemButton>} */ // @ts-expect-error - override default Node type
     const childNodes = [...this.childNodes];
     this.appendChild(fragment);
     this._content.append(...childNodes);
 
     this.initializeAttributeInheritance();
-
-    this._deferredValueUpdateElements = new Set();
 
     this._initialized = true;
   }
@@ -781,12 +790,12 @@ class PrefPane extends MozXULElement {
     if (box[0]) {
       const tab = box[0].selectedTab;
       if (tab && tab.hasAttribute("helpTopic")) {
-        return tab.getAttribute("helpTopic");
+        return tab.getAttribute("helpTopic") ?? "";
       }
     }
 
     // otherwise, return the helpTopic of the current panel
-    return this.getAttribute("helpTopic");
+    return this.getAttribute("helpTopic") ?? "";
   }
 
   get loaded() {
@@ -797,7 +806,6 @@ class PrefPane extends MozXULElement {
     this._loaded = val;
   }
 
-  /** @type {PrefPaneClass["DeferredTask"]} */
   get DeferredTask() {
     const {DeferredTask} = ChromeUtils.importESModule(
       "resource://gre/modules/DeferredTask.sys.mjs"
@@ -811,7 +819,6 @@ class PrefPane extends MozXULElement {
     return DeferredTask;
   }
 
-  /** @this {PrefPaneClass} */
   get contentHeight() {
     const {
       height = "0",
@@ -858,12 +865,8 @@ class PrefPane extends MozXULElement {
 
   /** @type {PrefPaneClass["getPreferenceElement"]} */
   getPreferenceElement(aStartElement) {
-    let temp = aStartElement;
-    while (temp && temp.nodeType == Node.ELEMENT_NODE && !temp.hasAttribute("preference")) {
-      // @ts-expect-error
-      temp = temp.parentNode;
-    }
-    return temp && temp.nodeType == Node.ELEMENT_NODE ? temp : aStartElement;
+    const preferenceAncestor = aStartElement.closest("[preference]");
+    return preferenceAncestor ? preferenceAncestor : aStartElement;
   }
 
   /** @type {PrefPaneClass["_deferredValueUpdate"]} */
@@ -875,7 +878,6 @@ class PrefPane extends MozXULElement {
     this._deferredValueUpdateElements.delete(aElement);
   }
 
-  /** @this {PrefPaneClass} */
   _finalizeDeferredElements() {
     for (const el of this._deferredValueUpdateElements) {
       if (el._deferredValueUpdateTask) {
@@ -909,8 +911,9 @@ class PrefPane extends MozXULElement {
   }
 }
 
-/** @type {MozXULElement} */ // @ts-expect-error
+/** @type {MozXULElement} */ // @ts-ignore
 const _MozRadio = customElements.get("radio");
+
 class PaneButton extends _MozRadio {
   static get thisInheritedAttributes() {
     return {
@@ -935,7 +938,6 @@ class PaneButton extends _MozRadio {
    */
   getElementForAttrInheritance(selector) {
     if (selector in PaneButton.thisInheritedAttributes) {
-      /** @type {Element} */
       return this.querySelector(selector);
     }
     return super.getElementForAttrInheritance(selector);
@@ -1034,7 +1036,7 @@ class PaneButton extends _MozRadio {
   }
 }
 
-/** @type {PrefWindowClass} */
+/** @implements {PrefWindowClass} */
 class PrefWindow extends MozXULElement {
   /*
    * Derived bindings can set this to true to cause us to skip
@@ -1043,14 +1045,21 @@ class PrefWindow extends MozXULElement {
    */
   _instantApplyInitialized = false;
 
+  /** @type {PrefWindowClass["_buttons"]} */ // @ts-expect-error - set buttons type
+  _buttons = {};
+  buttons = "";
+
   // Controls whether changed pref values take effect immediately.
   instantApply = false;
 
+  /** @type {PrefPaneClass | null} */
   _currentPane = null;
+
+  /** @type {Element[]} */
+  _l10nButtons = [];
 
   _initialized = false;
 
-  /** @this {PrefWindowClass} */
   constructor() {
     super();
 
@@ -1135,7 +1144,7 @@ class PrefWindow extends MozXULElement {
       return true;
     });
 
-    this.addEventListener("command", event => {
+    this.addEventListener("command", (/** @type {WindowEvent} */ event) => {
       const paneId = event.originalTarget.getAttribute("pane");
       if (paneId) {
         const pane = $Pane(paneId);
@@ -1145,7 +1154,7 @@ class PrefWindow extends MozXULElement {
 
     this.addEventListener(
       "keypress",
-      event => {
+      (/** @type {WindowEvent} */ event) => {
         if ((event.ctrlKey || event.metaKey) && event.key == "w") {
           if (this.instantApply) {
             window.close();
@@ -1266,6 +1275,7 @@ class PrefWindow extends MozXULElement {
     const otherChildren = [...this.children].filter(child => child.tagName != "prefpane");
     const fragment = this.fragment;
     const deck = fragment.querySelector("deck");
+    /** @type {HTMLElement} */ // @ts-ignore
     const fragmentLastChild = fragment.lastElementChild;
     this.appendChild(fragment);
     deck.append(...childrenPrefpane);
@@ -1363,8 +1373,6 @@ class PrefWindow extends MozXULElement {
       }
     });
 
-    this._l10nButtons = [];
-
     Object.defineProperty(this, "buttons", {
       get: () => {
         return this.getAttribute("buttons");
@@ -1374,276 +1382,12 @@ class PrefWindow extends MozXULElement {
       },
     });
 
-    Object.defineProperty(this, "defaultButton", {
-      get: () => {
-        if (this.hasAttribute("defaultButton")) {
-          return this.getAttribute("defaultButton");
-        }
-
-        return "accept"; // default to the accept button
-      },
-      set: val => {
-        this._setDefaultButton(val);
-      },
-    });
-
-    this.cancelDialog = function () {
-      return this._doButtonCommand("cancel");
-    };
-
-    /** @type {PrefWindowClass["getButton"]} */
-    this.getButton = function (aDlgType) {
-      return this._buttons[aDlgType];
-    };
-
-    this.postLoadInit = () => {
-      const focusInit = () => {
-        const defaultButton = this.getButton(this.defaultButton);
-
-        // give focus to the first focusable element in the dialog
-        let focusedElt = document.commandDispatcher.focusedElement;
-        if (!focusedElt) {
-          document.commandDispatcher.advanceFocusIntoSubtree(this);
-          focusedElt = document.commandDispatcher.focusedElement;
-          if (focusedElt) {
-            const initialFocusedElt = focusedElt;
-            while (
-              focusedElt.localName == "tab" ||
-              focusedElt.getAttribute("noinitialfocus") == "true"
-            ) {
-              document.commandDispatcher.advanceFocusIntoSubtree(focusedElt);
-              focusedElt = document.commandDispatcher.focusedElement;
-              if (focusedElt) {
-                if (focusedElt == initialFocusedElt) {
-                  if (focusedElt.getAttribute("noinitialfocus") == "true") {
-                    focusedElt.blur();
-                  }
-                  break;
-                }
-              }
-            }
-
-            if (initialFocusedElt.localName == "tab") {
-              if (focusedElt.hasAttribute("dlgtype")) {
-                // We don't want to focus on anonymous OK, Cancel, etc. buttons,
-                // so return focus to the tab itself
-                initialFocusedElt.focus();
-              }
-            } else if (
-              !/Mac/.test(navigator.platform) &&
-              focusedElt.hasAttribute("dlgtype") &&
-              focusedElt != defaultButton
-            ) {
-              defaultButton.focus();
-            }
-          }
-        }
-
-        try {
-          if (defaultButton) {
-            window.notifyDefaultButtonLoaded(defaultButton);
-          }
-        } catch {}
-      };
-
-      // Give focus after onload completes, see bug 103197.
-      setTimeout(focusInit, 0);
-
-      if (this._l10nButtons.length) {
-        document.l10n?.translateElements(this._l10nButtons).then(() => {
-          this.sizeToContent();
-        });
-      }
-    };
-
     // for things that we need to initialize after onload fires
     if (document.readyState === "complete") {
       this.postLoadInit();
     } else {
       window.addEventListener("load", () => this.postLoadInit());
     }
-
-    /** @type {PrefWindowClass["_configureButtons"]} */
-    this._configureButtons = aButtons => {
-      // by default, get all the anonymous button elements
-      /** @type {PrefWindowClass["_buttons"]} */
-      const buttons = {};
-      this._buttons = buttons;
-      buttons.accept = document.getElementsByAttribute("dlgtype", "accept")[0];
-      buttons.cancel = document.getElementsByAttribute("dlgtype", "cancel")[0];
-      buttons.extra1 = document.getElementsByAttribute("dlgtype", "extra1")[0];
-      buttons.extra2 = document.getElementsByAttribute("dlgtype", "extra2")[0];
-      buttons.help = document.getElementsByAttribute("dlgtype", "help")[0];
-      buttons.disclosure = document.getElementsByAttribute("dlgtype", "disclosure")[0];
-
-      for (const button of Object.values(buttons)) {
-        customElements.upgrade(button);
-      }
-      // look for any overriding explicit button elements
-      const exBtns = this.getElementsByAttribute("dlgtype", "*");
-      for (const button of exBtns) {
-        /** @type {DialogButtonsType} */ // @ts-expect-error
-        const dlgtype = button.getAttribute("dlgtype");
-        if (buttons[dlgtype] != button) {
-          buttons[dlgtype].hidden = true; // hide the anonymous button
-          buttons[dlgtype] = button;
-        }
-      }
-      // add the label and oncommand handler to each button
-      for (const [dlgtype, button] of Object.entries(buttons)) {
-        button.addEventListener("command", this._handleButtonCommand, true);
-        // don't override custom labels with pre-defined labels on explicit buttons
-        if (!button.hasAttribute("label")) {
-          // dialog attributes override the default labels in dialog.properties
-          if (this.hasAttribute("buttonlabel" + dlgtype)) {
-            button.setAttribute("label", this.getAttribute("buttonlabel" + dlgtype) ?? "");
-            if (this.hasAttribute("buttonaccesskey" + dlgtype)) {
-              button.setAttribute(
-                "accesskey",
-                this.getAttribute("buttonaccesskey" + dlgtype) ?? ""
-              );
-            }
-          } else if (this.hasAttribute("buttonid" + dlgtype)) {
-            document.l10n?.setAttributes(button, this.getAttribute("buttonid" + dlgtype) ?? "");
-            this._l10nButtons.push(button);
-          } else if (dlgtype != "extra1" && dlgtype != "extra2") {
-            this.setButtonLabel(dlgtype, button);
-          }
-        }
-        // allow specifying alternate icons in the dialog header
-        if (!button.hasAttribute("icon")) {
-          // if there's an icon specified, use that
-          if (this.hasAttribute("buttonicon" + dlgtype)) {
-            button.setAttribute("icon", this.getAttribute("buttonicon" + dlgtype) ?? "");
-          } else {
-            // otherwise set defaults
-            switch (dlgtype) {
-              case "accept":
-                button.setAttribute("icon", "accept");
-                break;
-              case "cancel":
-                button.setAttribute("icon", "cancel");
-                break;
-              case "disclosure":
-                button.setAttribute("icon", "properties");
-                break;
-              case "help":
-                button.setAttribute("icon", "help");
-                break;
-              default:
-                break;
-            }
-          }
-        }
-      }
-      // ensure that hitting enter triggers the default button command
-      // eslint-disable-next-line no-self-assign
-      this.defaultButton = this.defaultButton;
-      // if there is a special button configuration, use it
-      if (aButtons) {
-        // expect a comma delimited list of dlgtype values
-        const list = aButtons.split(",");
-        // mark shown dlgtypes as true
-        /** @type {Record<ButtonsTypeWithoutNone, boolean>} */
-        const shown = {
-          accept: false,
-          cancel: false,
-          help: false,
-          disclosure: false,
-          extra1: false,
-          extra2: false,
-        };
-        for (let i = 0; i < list.length; ++i) {
-          // @ts-expect-error
-          shown[list[i].replace(/ /g, "")] = true;
-        }
-        // hide/show the buttons we want
-        for (const dlgtype of Object.keys(buttons)) {
-          // @ts-expect-error
-          buttons[dlgtype].hidden = !shown[dlgtype];
-        }
-        // show the spacer on Windows only when the extra2 button is present
-        if (/Win/.test(navigator.platform)) {
-          const spacer = document.getElementsByAttribute("anonid", "spacer")[0];
-          spacer?.removeAttribute("hidden");
-          spacer?.setAttribute("flex", shown.extra2 ? "1" : "0");
-        }
-      }
-    };
-
-    /** @type {PrefWindowClass["_setDefaultButton"]} */
-    this.setButtonLabel = (dlgtype, button) => {
-      button.setAttribute("label", this.mStrBundle.GetStringFromName("button-" + dlgtype));
-      const accessKey = this.mStrBundle.GetStringFromName("accesskey-" + dlgtype);
-      if (accessKey) {
-        button.setAttribute("accesskey", accessKey);
-      }
-    };
-
-    /** @type {PrefWindowClass["_setDefaultButton"]} */
-    this._setDefaultButton = aNewDefault => {
-      // remove the default attribute from the previous default button, if any
-      const oldDefaultButton = this.getButton(this.defaultButton);
-      if (oldDefaultButton) {
-        oldDefaultButton.removeAttribute("default");
-      }
-
-      const newDefaultButton = this.getButton(aNewDefault);
-      if (newDefaultButton) {
-        this.setAttribute("defaultButton", aNewDefault);
-        newDefaultButton.setAttribute("default", "true");
-      } else {
-        this.setAttribute("defaultButton", "none");
-        if (aNewDefault != "none") {
-          dump("invalid new default button: " + aNewDefault + ", assuming: none\n");
-        }
-      }
-    };
-
-    /** @type {PrefWindowClass["_handleButtonCommand"]} */
-    this._handleButtonCommand = aEvent =>
-      // @ts-expect-error
-      this._doButtonCommand(aEvent.target.getAttribute("dlgtype"));
-
-    /** @type {PrefWindowClass["_doButtonCommand"]} */
-    this._doButtonCommand = aDlgType => {
-      const button = this.getButton(aDlgType);
-      if (!button.disabled) {
-        const noCancel = this._fireButtonEvent(aDlgType);
-        if (noCancel) {
-          if (aDlgType == "accept" || aDlgType == "cancel") {
-            const closingEvent = new CustomEvent("dialogclosing", {
-              bubbles: true,
-              detail: {button: aDlgType},
-            });
-            this.dispatchEvent(closingEvent);
-            window.close();
-          }
-        }
-        return noCancel;
-      }
-      return true;
-    };
-
-    /** @type {PrefWindowClass["_fireButtonEvent"]} */
-    this._fireButtonEvent = function (aDlgType) {
-      const event = document.createEvent("Events");
-      event.initEvent("dialog" + aDlgType, true, true);
-      // handle dom event handlers
-      return this.dispatchEvent(event);
-    };
-
-    /** @type {PrefWindowClass["_hitEnter"]} */
-    this._hitEnter = function (evt) {
-      if (evt.defaultPrevented) {
-        return;
-      }
-
-      const btn = this.getButton(this.defaultButton);
-      if (btn) {
-        this._doButtonCommand(this.defaultButton);
-      }
-    };
 
     this._configureButtons(this.buttons);
 
@@ -1750,7 +1494,6 @@ class PrefWindow extends MozXULElement {
     Services.xulStore.setValue(document.documentURI, "persist", "lastSelected", val);
   }
 
-  /** @this {PrefWindowClass} */
   get currentPane() {
     if (!this._currentPane) {
       this._currentPane = this.preferencePanes[0];
@@ -1759,9 +1502,278 @@ class PrefWindow extends MozXULElement {
     return this._currentPane;
   }
 
-  /** @this {PrefWindowClass} */
   set currentPane(val) {
     this._currentPane = val;
+  }
+
+  get defaultButton() {
+    const attributeValue = this.getAttribute("defaultButton") ?? "accept";
+    return /** @type {DialogButtonsType} */ (attributeValue);
+  }
+
+  set defaultButton(val) {
+    this._setDefaultButton(val);
+  }
+
+  cancelDialog() {
+    return this._doButtonCommand("cancel");
+  }
+
+  /** @type {PrefWindowClass["getButton"]} */
+  getButton(aDlgType) {
+    return this._buttons[aDlgType];
+  }
+
+  postLoadInit() {
+    const focusInit = () => {
+      const defaultButton = this.getButton(this.defaultButton);
+
+      // give focus to the first focusable element in the dialog
+      let focusedElt = document.commandDispatcher.focusedElement;
+      if (!focusedElt) {
+        document.commandDispatcher.advanceFocusIntoSubtree(this);
+        focusedElt = document.commandDispatcher.focusedElement;
+        if (focusedElt) {
+          const initialFocusedElt = focusedElt;
+          while (
+            focusedElt.localName == "tab" ||
+            focusedElt.getAttribute("noinitialfocus") == "true"
+          ) {
+            document.commandDispatcher.advanceFocusIntoSubtree(focusedElt);
+            focusedElt = document.commandDispatcher.focusedElement;
+            if (focusedElt) {
+              if (focusedElt == initialFocusedElt) {
+                if (focusedElt.getAttribute("noinitialfocus") == "true") {
+                  focusedElt.blur();
+                }
+                break;
+              }
+            }
+          }
+
+          if (initialFocusedElt.localName == "tab") {
+            if (focusedElt.hasAttribute("dlgtype")) {
+              // We don't want to focus on anonymous OK, Cancel, etc. buttons,
+              // so return focus to the tab itself
+              initialFocusedElt.focus();
+            }
+          } else if (
+            !/Mac/.test(navigator.platform) &&
+            focusedElt.hasAttribute("dlgtype") &&
+            focusedElt != defaultButton
+          ) {
+            defaultButton.focus();
+          }
+        }
+      }
+
+      try {
+        if (defaultButton) {
+          window.notifyDefaultButtonLoaded(defaultButton);
+        }
+      } catch {}
+    };
+
+    // Give focus after onload completes, see bug 103197.
+    setTimeout(focusInit, 0);
+
+    if (this._l10nButtons.length) {
+      document.l10n?.translateElements(this._l10nButtons).then(() => {
+        this.sizeToContent();
+      });
+    }
+  }
+
+  /** @type {PrefWindowClass["_configureButtons"]} */
+  _configureButtons(aButtons) {
+    // by default, get all the anonymous button elements
+    /** @type {Record<string, HTMLButtonElement>} */
+    const buttons = {
+      accept: document.getElementsByAttribute("dlgtype", "accept")[0],
+      cancel: document.getElementsByAttribute("dlgtype", "cancel")[0],
+      extra1: document.getElementsByAttribute("dlgtype", "extra1")[0],
+      extra2: document.getElementsByAttribute("dlgtype", "extra2")[0],
+      help: document.getElementsByAttribute("dlgtype", "help")[0],
+      disclosure: document.getElementsByAttribute("dlgtype", "disclosure")[0],
+    };
+
+    /** @type {PrefWindowClass["_buttons"]} */ // @ts-expect-error - just cast the right type
+    this._buttons = buttons;
+
+    for (const button of Object.values(buttons)) {
+      customElements.upgrade(button);
+    }
+    // look for any overriding explicit button elements
+    const exBtns = this.getElementsByAttribute("dlgtype", "*");
+    for (const button of exBtns) {
+      /** @type {DialogButtonsType} */ // @ts-expect-error
+      const dlgtype = button.getAttribute("dlgtype");
+      if (buttons[dlgtype] && buttons[dlgtype] !== button) {
+        buttons[dlgtype].hidden = true; // hide the anonymous button
+        buttons[dlgtype] = button;
+      }
+    }
+    // add the label and oncommand handler to each button
+    for (const [dlgtype, button] of Object.entries(buttons)) {
+      button.addEventListener(
+        "command",
+        (/** @type {WindowEvent} */ event) => this._handleButtonCommand(event),
+        true
+      );
+      // don't override custom labels with pre-defined labels on explicit buttons
+      if (!button.hasAttribute("label")) {
+        // dialog attributes override the default labels in dialog.properties
+        if (this.hasAttribute("buttonlabel" + dlgtype)) {
+          button.setAttribute("label", this.getAttribute("buttonlabel" + dlgtype) ?? "");
+          if (this.hasAttribute("buttonaccesskey" + dlgtype)) {
+            button.setAttribute("accesskey", this.getAttribute("buttonaccesskey" + dlgtype) ?? "");
+          }
+        } else if (this.hasAttribute("buttonid" + dlgtype)) {
+          document.l10n?.setAttributes(button, this.getAttribute("buttonid" + dlgtype) ?? "");
+          this._l10nButtons.push(button);
+        } else if (dlgtype != "extra1" && dlgtype != "extra2") {
+          this.setButtonLabel(dlgtype, button);
+        }
+      }
+      // allow specifying alternate icons in the dialog header
+      if (!button.hasAttribute("icon")) {
+        // if there's an icon specified, use that
+        if (this.hasAttribute("buttonicon" + dlgtype)) {
+          button.setAttribute("icon", this.getAttribute("buttonicon" + dlgtype) ?? "");
+        } else {
+          // otherwise set defaults
+          switch (dlgtype) {
+            case "accept":
+              button.setAttribute("icon", "accept");
+              break;
+            case "cancel":
+              button.setAttribute("icon", "cancel");
+              break;
+            case "disclosure":
+              button.setAttribute("icon", "properties");
+              break;
+            case "help":
+              button.setAttribute("icon", "help");
+              break;
+            default:
+              break;
+          }
+        }
+      }
+    }
+    // ensure that hitting enter triggers the default button command
+    // eslint-disable-next-line no-self-assign
+    this.defaultButton = this.defaultButton;
+    // if there is a special button configuration, use it
+    if (aButtons) {
+      // expect a comma delimited list of dlgtype values
+      const list = aButtons.split(",");
+      // mark shown dlgtypes as true
+      /** @type {Record<string, boolean>} */
+      const shown = {
+        accept: false,
+        cancel: false,
+        help: false,
+        disclosure: false,
+        extra1: false,
+        extra2: false,
+      };
+      for (const button of list) {
+        shown[button.replace(/ /g, "")] = true;
+      }
+      // hide/show the buttons we want
+      for (const dlgtype of Object.keys(buttons)) {
+        if (buttons[dlgtype]) {
+          buttons[dlgtype].hidden = !shown[dlgtype];
+        }
+      }
+      // show the spacer on Windows only when the extra2 button is present
+      if (/Win/.test(navigator.platform)) {
+        const spacer = document.getElementsByAttribute("anonid", "spacer")[0];
+        spacer?.removeAttribute("hidden");
+        // eslint-disable-next-line dot-notation
+        spacer?.setAttribute("flex", shown["extra2"] ? "1" : "0");
+      }
+    }
+  }
+
+  /** @type {PrefWindowClass["setButtonLabel"]} */
+  setButtonLabel(dlgtype, button) {
+    button.setAttribute("label", this.mStrBundle.GetStringFromName("button-" + dlgtype));
+    const accessKey = this.mStrBundle.GetStringFromName("accesskey-" + dlgtype);
+    if (accessKey) {
+      button.setAttribute("accesskey", accessKey);
+    }
+  }
+
+  /** @type {PrefWindowClass["_setDefaultButton"]} */
+  _setDefaultButton(aNewDefault) {
+    // remove the default attribute from the previous default button, if any
+    const oldDefaultButton = this.getButton(this.defaultButton);
+    if (oldDefaultButton) {
+      oldDefaultButton.removeAttribute("default");
+    }
+
+    const newDefaultButton = this.getButton(aNewDefault);
+    if (newDefaultButton) {
+      this.setAttribute("defaultButton", aNewDefault);
+      newDefaultButton.setAttribute("default", "true");
+    } else {
+      this.setAttribute("defaultButton", "none");
+      if (aNewDefault != "none") {
+        dump("invalid new default button: " + aNewDefault + ", assuming: none\n");
+      }
+    }
+  }
+
+  /** @type {PrefWindowClass["_handleButtonCommand"]} */
+  _handleButtonCommand(aEvent) {
+    const dlgType = aEvent.target.getAttribute("dlgtype");
+    if (dlgType === null) {
+      console.error("Missing 'dlgtype' attribute on event target.");
+      return false;
+    }
+    return this._doButtonCommand(/** @type {DialogButtonsType} */ (dlgType));
+  }
+
+  /** @type {PrefWindowClass["_doButtonCommand"]} */
+  _doButtonCommand(aDlgType) {
+    const button = this.getButton(aDlgType);
+    if (!button.disabled) {
+      const noCancel = this._fireButtonEvent(aDlgType);
+      if (noCancel) {
+        if (aDlgType == "accept" || aDlgType == "cancel") {
+          const closingEvent = new CustomEvent("dialogclosing", {
+            bubbles: true,
+            detail: {button: aDlgType},
+          });
+          this.dispatchEvent(closingEvent);
+          window.close();
+        }
+      }
+      return noCancel;
+    }
+    return true;
+  }
+
+  /** @type {PrefWindowClass["_fireButtonEvent"]} */
+  _fireButtonEvent(aDlgType) {
+    const event = document.createEvent("Events");
+    event.initEvent("dialog" + aDlgType, true, true);
+    // handle dom event handlers
+    return this.dispatchEvent(event);
+  }
+
+  /** @type {PrefWindowClass["_hitEnter"]} */
+  _hitEnter(evt) {
+    if (evt.defaultPrevented) {
+      return;
+    }
+
+    const btn = this.getButton(this.defaultButton);
+    if (btn) {
+      this._doButtonCommand(this.defaultButton);
+    }
   }
 
   /** @type {PrefWindowClass["_makePaneButton"]} */

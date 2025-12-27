@@ -16,11 +16,7 @@ var _initialized = false;
 
 /** @typedef {CompatibilityCheckModule.CompatibilityCheck} CompatibilityClass */
 
-/**
- * @class
- * @type {CompatibilityCheckModule["constructor"]}
- * @this {CompatibilityClass}
- */
+/** @type {CompatibilityCheckModule.Constructor} */
 export function CompatibilityCheck(aWindow, aShowList, aCallbackDialog) {
   if (_initialized && !aCallbackDialog) {
     return;
@@ -63,20 +59,18 @@ CompatibilityCheck.prototype = {
       return Boolean(aAddon.pendingOperations & action);
     }
 
-    /**
-     * @class
-     * @param {AddonType} addon
-     * @this {CompatibilityCheckModule.AddOn}
-     */
-    function AddOn(addon) {
+    /** @type {CompatibilityCheckModule.AddonConstructorFn} */
+    function AddOnImpl(addon) {
       this._name = addon.name;
       this.id = addon.id;
       this._version = addon.version;
     }
-    AddOn.prototype = {
-      toString() {
-        return this._name.toLowerCase();
-      },
+
+    /** @type {CompatibilityCheckModule.AddOnConstructor} */
+    const AddOn = /** @type {any} */ (AddOnImpl);
+
+    AddOn.prototype.toString = function () {
+      return this._name.toLowerCase();
     };
 
     var guid_list = this.getList();

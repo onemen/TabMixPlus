@@ -2793,7 +2793,7 @@ window.gTMPprefObserver = {
       return;
     }
 
-    /** @type {TabmixprefObserverNS._updateStatus} */
+    /** @type {typeof TabmixprefObserverNS._updateStatus} */
     function updateStatus(pref, testVal, test, newVal) {
       try {
         var prefValue = Services.prefs.getIntPref(pref);
@@ -3015,7 +3015,7 @@ window.gTMPprefObserver = {
 
   // we replace some Tabmix settings with Firefox settings
   updateSettings() {
-    /** @type {TabmixprefObserverNS.getPrefByType} */
+    /** @type {typeof TabmixprefObserverNS.getPrefByType} */
     function getPrefByType(prefName, aDefault, aType) {
       /**
        * @type {Map<
@@ -3190,7 +3190,7 @@ window.gTMPprefObserver = {
       Tabmix.prefs.setIntPref("replaceLastTabWith.type", val);
     }
     // Changing our preference to use New Tab Page as default starting from Firefox 12
-    /** @type {TabmixprefObserverNS._setNewTabUrl} */
+    /** @type {typeof TabmixprefObserverNS._setNewTabUrl} */
     function _setNewTabUrl(oldPref, newPref, controlPref) {
       if (Services.prefs.prefHasUserValue(oldPref)) {
         const prefValue = Services.prefs.getStringPref(oldPref);
@@ -3310,7 +3310,7 @@ window.gTMPprefObserver = {
     }
     // 2021-04-05
     // Bug 1692303 - Migrate old ctrlTab pref to new ctrlTab pref
-    /** @type {TabmixprefObserverNS.migrateCtrlTab} */
+    /** @type {typeof TabmixprefObserverNS.migrateCtrlTab} */
     function migrateCtrlTab(oldPrefName) {
       if (Services.prefs.prefHasUserValue(oldPrefName)) {
         let newPrefValue = Services.prefs.getBoolPref(oldPrefName);
@@ -3362,7 +3362,7 @@ window.gTMPprefObserver = {
       }
     }
 
-    /** @type {TabmixprefObserverNS._getVersion} */
+    /** @type {typeof TabmixprefObserverNS._getVersion} */
     let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {
       let oldVersion = TabmixSvc.prefs.get("extensions.tabmix.version", "");
       let showNewVersionTab;

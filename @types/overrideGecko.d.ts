@@ -154,18 +154,10 @@ interface nsIDOMWindowUtils {
   readonly AUTHOR_SHEET: 2;
 }
 
-// override gecko.d.ts types
-declare namespace MockedExports {
-  interface AppConstantsSYSMJS {
-    AppConstants: AppConstantsType;
-  }
-}
-
 declare module "resource://gre/modules/AppConstants.sys.mjs" {
-  // @ts-ignore
-  export = AppConstantsType;
-  const AppConstants: AppConstantsType;
-  export {AppConstants};
+  const AppConstantsSYSMJS: {AppConstants: AppConstantsType};
+  // @ts-expect-error - override gecko.d.ts export
+  export = AppConstantsSYSMJS;
 }
 
 declare namespace MockedGeckoTypes {

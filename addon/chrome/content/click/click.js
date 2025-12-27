@@ -1561,14 +1561,13 @@ var TabmixAllTabs = {
   createCommonList: function TMP_createCommonList(popup, aType, side) {
     switch (aType) {
       case 1: {
-        /**
-         * @param {Tab} tab
-         * @param {number} index
-         */
-        let TabSorting = function _tabSorting(tab, index) {
+        /** @type {TabmixAllTabsNS.TabSortingConstructorFn} */
+        const TabSortingImpl = function (tab, index) {
           this.Tab = tab;
           this.Index = index;
         };
+        /** @type {TabmixAllTabsNS.TabSortingConstructor} */
+        const TabSorting = /** @type {any} */ (TabSortingImpl);
         TabSorting.prototype.toString = function () {
           return this.Tab.label.toLowerCase();
         };

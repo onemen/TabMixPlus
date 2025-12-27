@@ -7,7 +7,7 @@
 var getFormattedKey = key => Shortcuts.getFormattedKey(key);
 
 ///XXX TODO - add black list with shortcut (F1, Ctrl-Tab ....) that don't have DOM key element
-/** @type {Globals.getKeysForShortcut} */
+/** @type {typeof Globals.getKeysForShortcut} */
 function getKeysForShortcut(shortcut, id, win) {
   if (!win) {
     win = Services.wm.getMostRecentWindow("navigator:browser");
@@ -50,7 +50,7 @@ function getKeysForShortcut(shortcut, id, win) {
   return usedKeys.filter((v, i, a) => a.indexOf(v) === i).join("\n");
 }
 
-/** @type {Globals._getKeyName} */
+/** @type {typeof Globals._getKeyName} */
 function _getKeyName(win, aKey) {
   let doc = win.document;
   let command = "",
@@ -123,7 +123,7 @@ function _getKeyName(win, aKey) {
   return (keynameId || id).replace(/key_|cmd_/, "");
 }
 
-/** @type {Globals._getLabel} */
+/** @type {typeof Globals._getLabel} */
 function _getLabel(elm, attr, value) {
   if (!elm) {
     return null;
@@ -138,7 +138,7 @@ function _getLabel(elm, attr, value) {
   return null;
 }
 
-/** @type {Globals._getPath} */
+/** @type {typeof Globals._getPath} */
 function _getPath(elm) {
   let names = [];
   while (

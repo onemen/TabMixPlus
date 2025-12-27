@@ -327,7 +327,8 @@ export const console = {
   error(error, message = "") {
     const isException = error instanceof Components.Exception;
     const isError = error instanceof Error;
-    function CustomError() {
+    /** @type {LogModule.CustomErrorConstructorFn} */
+    function CustomErrorImpl() {
       Object.assign(this, error);
       this.name = "Tabmix Error";
       const errorMessage = isException || isError ? error.message : String(error);
@@ -338,6 +339,8 @@ export const console = {
       this.lineNumber = lineNumber;
       this.columnNumber = columnNumber;
     }
+    /** @type {LogModule.CustomErrorConstructor} */
+    var CustomError = /** @type {any} */ (CustomErrorImpl);
     CustomError.prototype = new Error();
     return new CustomError();
   },

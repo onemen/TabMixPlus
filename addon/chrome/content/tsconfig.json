@@ -1,6 +1,12 @@
 {
   "extends": "../../../config/base.tsconfig.json",
-  "include": ["**/*.js", "**/*.sys.mjs"],
+  "include": [
+    "**/*.js",
+    "**/*.sys.mjs",
+    "../../../@types/index.d.ts",
+    "../../../@types/general.d.ts",
+    "../../../@types/addon.d.ts"
+  ],
   "exclude": [
     "node_modules",
     "**/gecko/**/*.d.ts",
@@ -14,6 +20,6 @@
     "**/scripts"
   ],
   "compilerOptions": {
-    "types": ["index.d.ts", "general.d.ts", "addon.d.ts"]
+    "types": ["chrome"]
   }
 }

@@ -39,7 +39,7 @@ Tabmix.openOptionsDialog = function TMP_openDialog(panel) {
 
 // Don't change this function name other extensions using it
 // Speed-Dial, Fast-Dial, TabGroupManager
-/** @type {GlobalFunctions.TMP_BrowserOpenTab} */
+/** @type {typeof GlobalFunctions.TMP_BrowserOpenTab} */
 function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
   var newTabContent =
     replaceLastTab ?

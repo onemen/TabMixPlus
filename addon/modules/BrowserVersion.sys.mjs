@@ -20,7 +20,7 @@ ChromeUtils.defineLazyGetter(lazy, "isZen", () => {
 /** @type {Record<string | number, boolean>} */
 const _versions = {};
 
-/** @type {BrowserVersion} */
+/** @type {TabmixModules.BrowserVersion["isVersion"]} */
 export function isVersion(aVersionNo, updateChannel) {
   let firefox,
     waterfox,

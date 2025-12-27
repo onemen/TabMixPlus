@@ -70,7 +70,7 @@ function updateOkButtonDisabledState() {
   document.documentElement.getButton("accept").disabled = getCustomReloadTime() === 0;
 }
 
-/** @type {Globals.oninput} */
+/** @type {typeof Globals.oninput} */
 function onInput(item) {
   item.value = parseInt(item.value.toString());
   if (item.value.toString() === "NaN") {
@@ -88,7 +88,7 @@ function onInput(item) {
   updateOkButtonDisabledState();
 }
 
-/** @type {Globals.onSelect} */
+/** @type {typeof Globals.onSelect} */
 function onSelect(event) {
   const item = event.target;
   const input = item.closest(".combined-element").firstChild;
@@ -97,7 +97,7 @@ function onSelect(event) {
   updateOkButtonDisabledState();
 }
 
-/** @type {Globals.openPopup} */
+/** @type {typeof Globals.openPopup} */
 function openPopup(button) {
   const popup = button.nextElementSibling;
   if (popup.state !== "closed") {

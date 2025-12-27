@@ -108,6 +108,7 @@ export const TabmixUtils = {
   },
 
   getPostDataFromHistory(history) {
+    /** @type {TabmixUtilsModule.PostData} */
     const json = {};
     const shEntry = history?.getEntryAtIndex(history.index).QueryInterface?.(Ci.nsISHEntry);
     const postData = shEntry?.postData?.QueryInterface?.(Ci.nsICloneableInputStream);
