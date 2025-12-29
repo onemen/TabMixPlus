@@ -3366,6 +3366,7 @@ window.gTMPprefObserver = {
     let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {
       let oldVersion = TabmixSvc.prefs.get("extensions.tabmix.version", "");
       let showNewVersionTab;
+      let isDevBuild = false;
       if (currentVersion != oldVersion) {
         // reset current preference in case it is not a string
         Tabmix.prefs.clearUserPref("version");
@@ -3374,11 +3375,11 @@ window.gTMPprefObserver = {
         // show the new version page for all official versions and for development
         // versions if auto update is on for Tabmix and the new version is from a
         // different date then the installed version
-        let isDevBuild = /[A-Za-z]/.test(currentVersion);
+        isDevBuild = /[A-Za-z-]/.test(currentVersion);
         if (!isDevBuild) {
           showNewVersionTab = true;
         } else if (shouldAutoUpdate || oldVersion === "") {
-          let re = /[A-Za-z]*(\d{3,}).*$/;
+          let re = /^(.*)\.\d{6}$/;
           let subs = (/** @type {string} */ str) => {
             let obj = re.exec(str) ?? str;
             return typeof obj == "string" ? obj : (obj[1] ?? str);
@@ -3389,11 +3390,13 @@ window.gTMPprefObserver = {
       if (showNewVersionTab) {
         // open Tabmix page in a new tab
         window.setTimeout(() => {
-          let b = Tabmix.getTopWin().gBrowser;
-          b.selectedTab = b.addTrustedTab(
-            "https://onemen.github.io/tabmixplus-docs/version_update?version=" + currentVersion
+          const version = isDevBuild ? currentVersion.split("-")[0] + " dev-build" : currentVersion;
+          window.openDialog(
+            "chrome://tabmixplus/content/preferences/subdialogs/update.xhtml",
+            "tabmix-new-version-dialog",
+            "modal,titlebar,toolbar=no,centerscreen",
+            version
           );
-          b.selectedTab.loadOnStartup = true;
         }, 1000);
         // noting more to do at the moment
       }
