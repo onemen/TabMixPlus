@@ -6,7 +6,22 @@ function loadUpdateVersion() {
 
   /** @type {Browser & HTMLElement} */ // @ts-ignore
   const browser = document.getElementById("tmp-update-browser");
-  browser.setAttribute("src", `${updateUrl}/${version ? `?version=${version}` : ""}`);
+
+  if (version) {
+    const {AppConstants} = ChromeUtils.importESModule(
+      "resource://gre/modules/AppConstants.sys.mjs"
+    );
+
+    const info = [
+      Services.appinfo.name,
+      Services.appinfo.platformVersion,
+      AppConstants.MOZ_APP_VERSION_DISPLAY,
+    ].join(",");
+
+    browser.setAttribute("src", `${updateUrl}/?version=${version}&info=${info}`);
+  } else {
+    browser.setAttribute("src", updateUrl);
+  }
 
   window.addEventListener("DOMContentLoaded", () => handleContentEvents(browser), {once: true});
 }

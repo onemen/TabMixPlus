@@ -664,7 +664,7 @@ declare namespace TabmixprefObserverNS {
 
   function _updateStatus(pref: string, testVal: number, test: boolean, newVal: number): void;
   function getPrefByType<K extends keyof PrefMap>(prefName: string, aDefault: PrefMap[K], aType: K): PrefMap[K];
-  function _getVersion(currentVersion: string, shouldAutoUpdate: boolean): void;
+  function _getVersion(currentVersion: string): void;
   function _setNewTabUrl(oldPref: string, newPref: string, controlPref?: string): void;
   function migrateCtrlTab(oldPrefName: string): void;
 }

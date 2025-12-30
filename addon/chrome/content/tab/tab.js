@@ -3363,10 +3363,9 @@ window.gTMPprefObserver = {
     }
 
     /** @type {typeof TabmixprefObserverNS._getVersion} */
-    let getVersion = function _getVersion(currentVersion, shouldAutoUpdate) {
+    let getVersion = function _getVersion(currentVersion) {
       let oldVersion = TabmixSvc.prefs.get("extensions.tabmix.version", "");
       let showNewVersionTab;
-      let isDevBuild = false;
       if (currentVersion != oldVersion) {
         // reset current preference in case it is not a string
         Tabmix.prefs.clearUserPref("version");
@@ -3375,10 +3374,10 @@ window.gTMPprefObserver = {
         // show the new version page for all official versions and for development
         // versions if auto update is on for Tabmix and the new version is from a
         // different date then the installed version
-        isDevBuild = /[A-Za-z-]/.test(currentVersion);
+        let isDevBuild = /[A-Za-z-]/.test(currentVersion);
         if (!isDevBuild) {
           showNewVersionTab = true;
-        } else if (shouldAutoUpdate || oldVersion === "") {
+        } else {
           let re = /^(.*)\.\d{6}$/;
           let subs = (/** @type {string} */ str) => {
             let obj = re.exec(str) ?? str;
@@ -3388,23 +3387,19 @@ window.gTMPprefObserver = {
         }
       }
       if (showNewVersionTab) {
-        // open Tabmix page in a new tab
         window.setTimeout(() => {
-          const version = isDevBuild ? currentVersion.split("-")[0] + " dev-build" : currentVersion;
           window.openDialog(
             "chrome://tabmixplus/content/preferences/subdialogs/update.xhtml",
             "tabmix-new-version-dialog",
             "modal,titlebar,toolbar=no,centerscreen",
-            version
+            currentVersion
           );
         }, 1000);
-        // noting more to do at the moment
       }
     };
     AddonManager.getAddonByID("{dc572301-7619-498c-a57d-39143191b318}").then(aAddon => {
       try {
-        let shouldAutoUpdate = AddonManager.shouldAutoUpdate(aAddon);
-        getVersion(aAddon.version, shouldAutoUpdate);
+        getVersion(aAddon.version);
       } catch (ex) {
         Tabmix.assert(ex);
       }
