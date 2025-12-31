@@ -1,8 +1,8 @@
+import js from "@eslint/js";
 import stylistic from "@stylistic/eslint-plugin";
 import globals from "globals";
 
 import eslintConfigPrettier from "eslint-config-prettier";
-import eslintPluginHtml from "eslint-plugin-html";
 import eslintPluginJsonc from "eslint-plugin-jsonc";
 import eslintPluginMozilla from "eslint-plugin-mozilla";
 import eslintPluginTabmix from "./config/eslint-plugin-tabmix/index.js";
@@ -238,15 +238,28 @@ export default [
   },
 
   // overrides rules
+
   {
-    name: "tabmix/xhtml-files",
-    files: ["**/*.html", "**/*.xhtml"],
-    plugins: {html: eslintPluginHtml},
+    name: "tabmix/xhtml-container",
+    files: ["**/*.xhtml", "**/*.html"],
+    plugins: {tabmix: eslintPluginTabmix},
+    processor: "tabmix/xhtml",
+    // Do NOT put JS rules here; this block just handles the "extraction"
+  },
+
+  {
+    name: "tabmix/xhtml-internal-js",
+    files: ["**/*.xhtml/*.js", "**/*.html/*.js"],
+    ...js.configs.recommended,
+    languageOptions: {
+      globals: {
+        ...tabmixGlobals.tabmix,
+      },
+    },
     rules: {
-      // Curly brackets are required for all the tree via recommended.js,
-      // however these files aren't auto-fixable at the moment.
+      "no-unused-vars": "warn",
+      "no-undef": "error",
       "curly": "off",
-      "no-new-func": "off",
       "strict": "off",
     },
   },

@@ -1,6 +1,7 @@
 import {execFile} from "node:child_process";
 import {join} from "node:path";
 import {promisify} from "node:util";
+import {rm} from "node:fs/promises";
 
 const execFileAsync = promisify(execFile);
 
@@ -9,10 +10,12 @@ const env = {...process.env, FORCE_COLOR: process.stdout.isTTY ? "1" : "0"};
 async function runCmd(cmd, innerPath, args) {
   const fullPath = join(process.cwd(), "node_modules", cmd, innerPath);
   try {
+    console.time(cmd);
     const {stdout, stderr} = await execFileAsync("node", [fullPath, ...args], {
       env,
       windowsHide: true,
     });
+    console.timeEnd(cmd);
     return {cmd, success: true, stdout, stderr};
   } catch (error) {
     return {
@@ -85,11 +88,31 @@ async function main() {
   const commands = [];
   // Run eslint
   if (eslintFiles.length) {
+    const CONFIG_FILES_TO_WATCH = [
+      "eslint.config.js",
+      "package.json",
+      "config/eslint-plugin-tabmix",
+    ];
+
+    const shouldClearEslintCache = stagedFiles =>
+      stagedFiles.some(file =>
+        CONFIG_FILES_TO_WATCH.some(configPath => file.startsWith(configPath))
+      );
+
+    if (shouldClearEslintCache(files)) {
+      await rm("config/.eslintcache", {force: true});
+    }
+
     const code = runCmd("eslint", "bin/eslint.js", [
       "--no-warn-ignored",
       "--report-unused-disable-directives",
       "--max-warnings",
       "0",
+      "--cache",
+      "--cache-strategy",
+      "content",
+      "--cache-location",
+      "config/.eslintcache",
       ...eslintFiles,
     ]);
     commands.push(code);
