@@ -242,6 +242,7 @@ declare namespace MockedGeckoTypes {
     _restoreState: number;
     _tabmix_downloadingTimeout: number | null;
     _tabmixState?: {noBookmark?: boolean};
+    _updateData: {version: string; support: {users: string; amount: string; date: string} | null} | undefined;
     autoReloadEnabled?: boolean;
     autoReloadTimerID: number | null;
     autoReloadURI?: string;

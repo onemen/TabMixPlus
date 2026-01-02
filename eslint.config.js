@@ -43,6 +43,8 @@ export default [
       "logs/",
       ".vscode",
       "**/*local*/**",
+      "**/*.d.ts",
+      "**/@types/**",
     ],
   },
 
@@ -191,6 +193,7 @@ export default [
       "addon/chrome/content/places/**",
       "addon/chrome/content/session/**",
       "addon/chrome/content/tab/**",
+      "addon/chrome/content/update/**",
     ],
     languageOptions: {
       globals: {
@@ -340,4 +343,11 @@ export default [
   },
 
   eslintConfigPrettier, // Add at the end to disable formatting rules
+
+  {
+    name: "tabmix/force-ignore-dts",
+    files: ["**/*.d.ts"],
+    ignores: ["**/*.d.ts"],
+    rules: {},
+  },
 ];

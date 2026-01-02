@@ -1,0 +1,377 @@
+:root {
+  --sl-font-system-sans: system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif;
+  --sl-text-h2: 2.1875rem;
+}
+
+body {
+  font-family: var(--sl-font-system-sans);
+  text-rendering: optimizelegibility;
+  -webkit-tap-highlight-color: transparent;
+  background-color: #fff;
+  color: #1f2937;
+  margin: 0;
+  padding: 20px;
+  line-height: 1.75;
+
+  @media (prefers-color-scheme: dark) {
+    background-color: #111827;
+    color: #d1d5db;
+  }
+}
+
+a {
+  color: hsl(233.7deg 90% 60.8%);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+h1,
+h2 {
+  font-size: var(--sl-text-h2);
+  font-weight: 600;
+  margin-block: 1.625rem 0;
+}
+
+h2 {
+  &.font-bold {
+    font-weight: 600;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    border-color: #374151;
+    color: #f3f4f6;
+  }
+}
+
+p {
+  margin-block: 0;
+
+  & + p {
+    margin-top: 1rem;
+  }
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+li {
+  margin-bottom: 0.25rem;
+}
+
+.container {
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Semantic Styles */
+#update-container {
+  padding-top: 1.5rem;
+  font-family: var(--sl-font-system-sans);
+}
+
+.gradient-text {
+  color: transparent;
+  background-clip: text;
+  background-image: linear-gradient(to right, #14b8a6, #06b6d4);
+}
+
+header {
+  text-align: center;
+
+  h1 {
+    margin-bottom: 1rem;
+    font-size: 3rem;
+    line-height: 1;
+    font-weight: 600;
+    color: #1f2937;
+    margin-block: 0;
+
+    @media (prefers-color-scheme: dark) {
+      color: #f3f4f6;
+    }
+  }
+}
+
+.subtitle {
+  font-weight: 300;
+  color: #4b5563;
+
+  @media (prefers-color-scheme: dark) {
+    color: #d1d5db;
+  }
+}
+
+.version-text {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 300;
+  color: #6b7280;
+
+  @media (prefers-color-scheme: dark) {
+    color: #d1d5db;
+  }
+}
+
+#firefox-version-info {
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  color: #4b5563;
+
+  @media (prefers-color-scheme: dark) {
+    color: #d1d5db;
+  }
+}
+
+.highlight {
+  font-weight: 600;
+  color: #027c72;
+
+  @media (prefers-color-scheme: dark) {
+    color: #2dd4bf;
+  }
+}
+
+.update-card {
+  margin-top: 2rem;
+  border-radius: 0.75rem;
+  padding: 2rem;
+  box-shadow:
+    0 25px 50px -12px rgb(0 0 0 / 25%),
+    0 25px 50px -12px rgb(107 114 128 / 30%);
+
+  @media (prefers-color-scheme: dark) {
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 40%);
+  }
+}
+
+.card-content {
+  text-align: center;
+}
+
+.payment-notice {
+  font-weight: 700;
+  color: #dc2626;
+
+  @media (prefers-color-scheme: dark) {
+    color: #f87171;
+  }
+}
+
+.thank-you-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.thank-you-text {
+  text-align: left;
+
+  p strong {
+    color: #1f2937;
+
+    @media (prefers-color-scheme: dark) {
+      color: #fff;
+    }
+  }
+}
+
+.details-container {
+  margin-top: 1.5rem;
+  padding: 1rem 0;
+
+  > * + * {
+    margin-top: 1.5rem;
+  }
+}
+
+.details-card {
+  margin-top: 0.75rem;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow:
+    0 25px 50px -12px rgb(0 0 0 / 25%),
+    0 25px 50px -12px rgb(107 114 128 / 30%);
+
+  @media (prefers-color-scheme: dark) {
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 50%);
+  }
+}
+
+.link-underline {
+  text-decoration: underline;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+
+  &:hover {
+    color: #115e59;
+  }
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-teal-600 {
+  color: #0d9488;
+}
+
+.intro-text {
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+}
+
+/* Button */
+.support-button {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #00c4b4;
+  color: white;
+  font-weight: bold;
+  line-height: 28px;
+  padding: 0.75rem 3rem;
+  border-radius: 9999px;
+  transition: background-color 0.2s;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #00a896;
+    text-decoration: none;
+    color: white;
+  }
+
+  img {
+    height: 1.5rem;
+    width: auto;
+    margin-right: 0.5rem;
+  }
+}
+
+/* Details/Summary */
+details {
+  margin-bottom: 1rem;
+
+  &[open] {
+    > div {
+      animation: slide-down 0.3s ease-out;
+    }
+
+    > summary::before {
+      transform: translateY(-50%) rotate(45deg);
+    }
+  }
+}
+
+summary {
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+  padding-left: 40px;
+  font-weight: 500;
+  color: #374151;
+
+  --arrow-color: white;
+  --circle-color: #00c4b4;
+
+  &:hover {
+    color: #111827;
+
+    @media (prefers-color-scheme: dark) {
+      color: #f3f4f6;
+    }
+  }
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  /* stylelint-disable-next-line no-descending-specificity */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 13px;
+    z-index: 1;
+
+    /* Triangle shape approximation */
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid var(--arrow-color);
+    border-bottom: 2px solid var(--arrow-color);
+    transition: transform 0.2s ease-in-out;
+    transform: translateY(-50%) rotate(-45deg);
+    top: 50%;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    background-color: var(--circle-color);
+    border-radius: 50%;
+    z-index: 0;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: #d1d5db;
+  }
+}
+
+/* Animations from Update.astro */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animated-title {
+  animation: slide-up 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  opacity: 0;
+  display: inline-block;
+
+  &:nth-of-type(1) {
+    animation-delay: 0s;
+  }
+
+  &:nth-of-type(2) {
+    animation-delay: 0.2s;
+  }
+}
+
+#version-title-span.animated-title {
+  animation-delay: 0.4s;
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

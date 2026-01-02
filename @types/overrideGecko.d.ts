@@ -12,6 +12,11 @@ interface TabmixSandbox extends nsIXPCComponents_utils_Sandbox {
 
 // merge types from lib.gecko.xpcom.d.ts with existing interface from gecko.d.ts
 declare namespace MockedExports {
+  interface BrowsingContext {
+    browserId: number;
+    topChromeWindow: WindowProxy | null;
+  }
+
   // nsIFilePicker is missing some types from lib.gecko.xpcom.d.ts
   interface nsIFilePicker_Constants {
     // From nsIFilePicker_Mode enum

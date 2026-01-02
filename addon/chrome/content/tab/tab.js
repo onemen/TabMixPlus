@@ -3388,12 +3388,7 @@ window.gTMPprefObserver = {
       }
       if (showNewVersionTab) {
         window.setTimeout(() => {
-          window.openDialog(
-            "chrome://tabmixplus/content/preferences/subdialogs/update.xhtml",
-            "tabmix-new-version-dialog",
-            "modal,titlebar,toolbar=no,centerscreen",
-            currentVersion
-          );
+          gTMPprefObserver.showUpdatePage(currentVersion);
         }, 1000);
       }
     };
@@ -3425,6 +3420,58 @@ window.gTMPprefObserver = {
 
     TabmixSvc.blockedClickingOptions = blockedValues;
     this.updateTabClickingOptions();
+  },
+
+  async showUpdatePage(currentVersion) {
+    /** @type {Record<string, string>} */
+    const platformMap = {
+      win: "Windows",
+      macosx: "macOS",
+      linux: "Linux",
+      android: "Android",
+    };
+
+    // save tabmix version, operating system, browser name and version
+    const payload = {
+      version: currentVersion,
+      os: platformMap[AppConstants.platform] || AppConstants.platform,
+      browser: Services.appinfo.name,
+      browserVersion: Services.appinfo.platformVersion,
+      browserDisplayVersion: AppConstants.MOZ_APP_VERSION_DISPLAY,
+    };
+
+    /** @type {Tab["_updateData"]} */
+    const updateData = {
+      version: currentVersion,
+      support: null,
+    };
+
+    try {
+      const response = await fetch("https://tabmixplus.netlify.app/api/sync", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Tabmix-Origin": "TM-Extension-Handshake",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        /** @type {Tab["_updateData"]} */ // @ts-ignore
+        const result = await response.json();
+        if (result?.support) {
+          updateData.support = result.support;
+        }
+      }
+    } catch (e) {
+      console.error("Tab Mix Plus: Failed to sync update data", e);
+    }
+
+    const b = Tabmix.getTopWin().gBrowser;
+    const tab = b.addTrustedTab("chrome://tabmixplus/content/update/update.xhtml");
+    tab._updateData = updateData;
+    tab.loadOnStartup = true;
+    b.selectedTab = tab;
   },
 
   updateTabClickingOptions() {

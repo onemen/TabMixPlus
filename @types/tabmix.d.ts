@@ -53,6 +53,7 @@ interface gTMPprefObserver {
   showReloadEveryOnReloadButton: () => void;
   tabBarPositionChanged: (aPosition: number) => boolean;
   toolbarbuttonTopMargin: () => void;
+  showUpdatePage: (currentVersion: string) => void;
   updateTabClickingOptions: () => void;
   updateTabsStyle: (ruleName: DynamicRulesModule.RuleName) => void;
   updateSettings: () => void;
