@@ -177,8 +177,8 @@
       });
 
       /**
-       * @param {MouseEvent} aEvent
        * @this {Tab}
+       * @param {MouseEvent} aEvent
        */
       this.onMouseOver = function (aEvent) {
         this.setHoverState(aEvent, true);
@@ -236,8 +236,8 @@
       };
 
       /**
-       * @param {MouseEvent} aEvent
        * @this {Tab}
+       * @param {MouseEvent} aEvent
        */
       this.onMouseOut = function (aEvent) {
         this.setHoverState(aEvent, false);
@@ -251,9 +251,9 @@
       };
 
       /**
+       * @this {Tab}
        * @param {MouseEvent} aEvent
        * @param {boolean} aOver
-       * @this {Tab}
        */
       this.setHoverState = function (aEvent, aOver) {
         if (aEvent.target?.classList?.contains("tab-close-button")) {
@@ -283,9 +283,9 @@
       };
 
       /**
+       * @this {Tab}
        * @param {MouseEvent} aEvent
        * @param {boolean} aSelectNewTab
-       * @this {Tab}
        */
       this.onMouseCommand = function (aEvent, aSelectNewTab) {
         var isSelected = this == this.container.selectedItem;

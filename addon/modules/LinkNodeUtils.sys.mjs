@@ -97,9 +97,9 @@ export const LinkNodeUtils = {
         let host = uri && uri.host;
         blocked = Boolean(
           host === "developer.mozilla.org" &&
-            linkNode &&
-            linkNode.host != host &&
-            linkNode.classList.contains("external")
+          linkNode &&
+          linkNode.host != host &&
+          linkNode.classList.contains("external")
         );
       }
     } catch {

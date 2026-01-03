@@ -10,6 +10,8 @@ import eslintPluginTabmix from "./config/eslint-plugin-tabmix/index.js";
 const mozillaGlobals = eslintPluginMozilla.environments;
 const tabmixGlobals = eslintPluginTabmix.environments;
 
+eslintConfigPrettier.name = "prettier/disable_formatting_rules";
+
 const workerConfig = eslintPluginMozilla.configs["flat/recommended"]
   .filter(config => !config.name)
   .find(config => config.files?.includes("**/?(*.)worker.?(m)js"));
@@ -28,10 +30,14 @@ eslintPluginMozilla.configs["flat/recommended"].forEach(config => {
   }
 });
 
+// use flat/valid-jsdoc only on js files
+eslintPluginMozilla.configs["flat/valid-jsdoc"].files = ["**/*.js", "**/*.sys.mjs"];
+
 export default [
   {
     name: "tabmix/global-ignore",
     ignores: [
+      ".github",
       ".hg",
       "**/*~/*",
       "**/*~*.*",
@@ -43,6 +49,7 @@ export default [
       "logs/",
       ".vscode",
       "**/*local*/**",
+      "**/*local*.*",
       "**/*.d.ts",
       "**/@types/**",
     ],
@@ -108,7 +115,6 @@ export default [
       // Explicitly disable some recommended rules
       "mozilla/balanced-listeners": "off",
       "mozilla/no-aArgs": "off",
-      "mozilla/reject-chromeutils-import": "off",
       "mozilla/import-globals": "off",
 
       // -- Custom Tabmix Rules --
@@ -207,12 +213,6 @@ export default [
   },
 
   {
-    name: "tabmix/dialogs-globals",
-    files: ["addon/chrome/content/dialogs/**"],
-    languageOptions: {globals: tabmixGlobals.dialog},
-  },
-
-  {
     name: "tabmix/overlay-and-scripts-globals",
     files: ["addon/chrome/content/overlay/**", "addon/chrome/content/scripts/**"],
     languageOptions: {
@@ -270,6 +270,7 @@ export default [
   {
     name: "tabmix/overlay-and-scripts-files",
     files: ["addon/chrome/content/overlay/**", "addon/chrome/content/scripts/**"],
+    plugins: {mozilla: eslintPluginMozilla},
     rules: {
       //
       "mozilla/reject-eager-module-in-lazy-getter": "error", // recommended

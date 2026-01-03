@@ -6,8 +6,8 @@
     "_notifyBackgroundTab",
 
     /**
-     * @param {Tab} aTab
      * @this {typeof gBrowser.tabContainer}
+     * @param {Tab} aTab
      */
     function _notifyBackgroundTab(aTab) {
       if (
