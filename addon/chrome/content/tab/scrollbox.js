@@ -453,7 +453,9 @@ Tabmix.multiRow = {
         const end = Tabmix.ltr ? "right" : "left";
         const containerEnd = this.scrollClientRect[end];
         const topY = Tabmix.tabsUtils.topTabY;
-        const tabs = this._getScrollableElements().map(Tabmix.tabsUtils.getDragAndDropElement);
+        const tabs = Array.from(
+          new Set(this._getScrollableElements().map(Tabmix.tabsUtils.getDragAndDropElement))
+        );
         let index,
           current = 0;
 

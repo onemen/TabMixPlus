@@ -2386,6 +2386,7 @@ window.gTMPprefObserver = {
     let selector =
       "#tabbrowser-tabs[orient=horizontal][positionpinnedtabs][tabmix-multibar] > #tabbrowser-arrowscrollbox";
     let marginStart = `${selector} .tabbrowser-tab[tabmix-firstTabInRow="true"],
+     ${selector} tab-split-view-wrapper[tabmix-firstTabInRow="true"],
      ${selector} .tab-group-label-container[tabmix-firstTabInRow="true"] {
        margin-inline-start: 0px;
     }`;

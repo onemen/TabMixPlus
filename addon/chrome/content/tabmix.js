@@ -1220,7 +1220,11 @@ var TMP_eventListener = {
               node.setAttribute("tabmix-firstTabInRow", true);
               nextSibling.removeAttribute("tabmix-firstTabInRow");
             }
-          } else if (Tabmix.isTabGroup(node) || node?.tagName === "tab-split-view-wrapper") {
+          } else if (Tabmix.isTabGroup(node)) {
+            this.updateMultiRow();
+          } else if (gBrowser.isSplitViewWrapper(node)) {
+            const tab = node.tabs[0];
+            tab?.removeAttribute("tabmix-firstTabInRow");
             this.updateMultiRow();
           }
         });
