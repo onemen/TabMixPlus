@@ -1053,7 +1053,9 @@ var TMP_tabDNDObserver = {
     if (!tab || tabbrowserTabs._isCustomizing) {
       return;
     }
-    if (tab.splitview) {
+    if (Tabmix.isVersion(1480) && tab.splitview) {
+      // Bug 1986948 Implement dragging behavior of the two tabs contained in a
+      // splitview for Firefox 148
       tab = tab.splitview;
     }
 
