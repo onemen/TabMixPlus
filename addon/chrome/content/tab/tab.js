@@ -3422,6 +3422,48 @@ window.gTMPprefObserver = {
     this.updateTabClickingOptions();
   },
 
+  async checkScriptsUpdateNeeded() {
+    try {
+      const versionFile = PathUtils.join(
+        PathUtils.profileDir,
+        "chrome",
+        "utils",
+        "versionInfo.json"
+      );
+
+      if (!(await IOUtils.exists(versionFile))) {
+        return true;
+      }
+
+      let remoteInfo;
+      try {
+        const gistID = "e02ec904dd82a73cec4c229a7cbb552e";
+        const url = `https://gist.githubusercontent.com/onemen/${gistID}/raw/versionInfo.json`;
+        const response = await fetch(url, {cache: "no-store"});
+        if (response.ok) {
+          remoteInfo = await response.json();
+        }
+      } catch (e) {
+        console.error("TabMix: Failed to fetch versionInfo.json", e);
+      }
+
+      if (!remoteInfo) {
+        return false;
+      }
+
+      const content = await IOUtils.readUTF8(versionFile);
+      const localInfo = JSON.parse(content);
+
+      return Object.entries(remoteInfo).some(([key, {date}]) => {
+        const localDate = localInfo[key]?.date;
+        return !localDate || localDate < date;
+      });
+    } catch (e) {
+      console.error("TabMix: Error checking scripts update", e);
+      return true;
+    }
+  },
+
   async showUpdatePage(currentVersion) {
     /** @type {Record<string, string>} */
     const platformMap = {
@@ -3444,6 +3486,7 @@ window.gTMPprefObserver = {
     const updateData = {
       version: currentVersion,
       support: null,
+      showScriptsUpdate: await this.checkScriptsUpdateNeeded(),
     };
 
     try {

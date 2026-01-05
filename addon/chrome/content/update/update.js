@@ -13,7 +13,9 @@ function setSupportMessage({users, amount, date}) {
     {tag: "strong", text: `$${amount}`},
     " in ",
     {tag: "strong", text: date},
-    ", which is encouraging, but my monthly goal to continue development is $3,000.",
+    ", which is encouraging, but my monthly goal to continue development is ",
+    {tag: "strong", text: "$3,000"},
+    ".",
   ];
 
   parts.forEach(part => {
@@ -38,7 +40,7 @@ window.addEventListener(
     const tab = chromeWin?.gBrowser.getTabForBrowser(browser);
     if (!tab) return;
 
-    const {version, support} = tab?._updateData ?? {};
+    const {version, support, showScriptsUpdate} = tab?._updateData ?? {};
 
     // update title
     const versionTitleSpan = document.getElementById("version-title-span");
@@ -56,6 +58,10 @@ window.addEventListener(
     // support message
     if (support) {
       setSupportMessage(support);
+    }
+
+    if (showScriptsUpdate) {
+      document.querySelector(".layout")?.classList.add("visible-aside");
     }
   },
   {once: true}

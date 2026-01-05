@@ -159,6 +159,11 @@ interface nsIDOMWindowUtils {
   readonly AUTHOR_SHEET: 2;
 }
 
+interface PathUtilsInterface {
+  join(...paths: string[]): string;
+  profileDir: string;
+}
+
 declare module "resource://gre/modules/AppConstants.sys.mjs" {
   const AppConstantsSYSMJS: {AppConstants: AppConstantsType};
   // @ts-expect-error - override gecko.d.ts export

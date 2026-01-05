@@ -26,7 +26,7 @@ jobs:
         run: |
           chmod +x .github/scripts/*.js
 
-      - name: Set version in install.rdf
+      - name: Calculate version and update install.rdf
         id: set_version
         run: |
           previous_tag=$(git tag --sort=-creatordate | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
@@ -34,7 +34,10 @@ jobs:
           changelog_exist=$( [[ $(git rev-parse $previous_tag) != $(git rev-parse HEAD) ]] && echo true || echo false )
           echo "CHANGELOG_EXIST=$changelog_exist" >> $GITHUB_OUTPUT
           echo "CHANGELOG_EXIST=$changelog_exist" >> $GITHUB_ENV
-          node ./.github/scripts/calculate_version.js "$previous_tag"
+          node ./.github/scripts/prepare_install_rdf.js "$previous_tag"
+
+      - name: Update Firefox version info
+        run: node ./.github/scripts/prepare_build.js
 
       - name: Zip addon folder
         run: |
