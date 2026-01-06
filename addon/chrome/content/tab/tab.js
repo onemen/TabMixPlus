@@ -2383,9 +2383,10 @@ window.gTMPprefObserver = {
     this.insertRule(`:root { --tabmix-tab-max-width: ${_max}px; }`, "tabMaxWidthVar");
 
     // rule for controlling margin-inline-start when we have pinned tab in multi-row
+    // avoid set margin-inline-start to tabs in collapsed group
     let selector =
       "#tabbrowser-tabs[orient=horizontal][positionpinnedtabs][tabmix-multibar] > #tabbrowser-arrowscrollbox";
-    let marginStart = `${selector} .tabbrowser-tab[tabmix-firstTabInRow="true"],
+    let marginStart = `${selector} .tabbrowser-tab[tabmix-firstTabInRow="true"]:not(tab-group[collapsed] > :not([visuallyselected])),
      ${selector} tab-split-view-wrapper[tabmix-firstTabInRow="true"],
      ${selector} .tab-group-label-container[tabmix-firstTabInRow="true"] {
        margin-inline-start: 0px;

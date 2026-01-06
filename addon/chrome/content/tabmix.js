@@ -1230,7 +1230,14 @@ var TMP_eventListener = {
         });
 
         mutation.removedNodes.forEach(node => {
-          if (Tabmix.isTabGroup(node) && node.tabs.length === 0) {
+          if (
+            gBrowser.isTab(node) &&
+            !node.selected &&
+            !node.visible &&
+            node.hasAttribute("tabmix-firstTabInRow")
+          ) {
+            node.removeAttribute("tabmix-firstTabInRow");
+          } else if (Tabmix.isTabGroup(node) && node.tabs.length === 0) {
             groupRemoved(node);
           } else if (node?.tagName === "tab-split-view-wrapper") {
             this.updateMultiRow();
