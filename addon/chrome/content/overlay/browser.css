@@ -76,11 +76,16 @@
   order: 3 !important;
 }
 
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="notactivetab"] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([selected="true"]) > .tab-stack > .tab-content > .tab-note-icon,
+#tabbrowser-tabs[closebuttons-side="left"][closebuttons-hover="alltabs"] #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > .tab-note-icon {
+  order: 3 !important;
+}
+
 #tabbrowser-tabs:not([closebuttons="noclose"], [closebuttons-hover])[closebuttons-side="left"] #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button) {
   order: 5 !important;
 }
 
-#tabbrowser-tabs:not([closebuttons-side="left"]) #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button, .tab-icon-sound, .tab-label, .tab-label-container, label) {
+#tabbrowser-tabs:not([closebuttons-side="left"]) #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > *:not(.tab-close-button, .tab-icon-sound, .tab-label, .tab-label-container, label, .tab-note-icon) {
   order: 1;
 }
 
@@ -89,7 +94,8 @@
   order: 2;
 }
 
-#tabbrowser-tabs:not([closebuttons-side="left"]) #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-sound {
+#tabbrowser-tabs:not([closebuttons-side="left"]) #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > .tab-icon-sound,
+#tabbrowser-tabs:not([closebuttons-side="left"]) #tabbrowser-arrowscrollbox .tabbrowser-tab > .tab-stack > .tab-content > .tab-note-icon {
   order: 3;
 }
 
