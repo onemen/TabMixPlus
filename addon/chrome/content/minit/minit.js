@@ -548,6 +548,7 @@ var TMP_tabDNDObserver = {
     } else {
       this._pinnedDropIndicator = tabBar.pinnedDropIndicator;
       this._tabDropIndicator = tabBar._tabDropIndicator;
+      this.tabDragAndDrop._resetGroupTarget = () => {};
     }
   },
 
@@ -1314,6 +1315,9 @@ var TMP_tabDNDObserver = {
           : "transparent";
 
         this.tabDragAndDrop._setDragOverGroupColor(color);
+        if (gBrowser.isTabGroupLabel(dropElement)) {
+          dropElement.toggleAttribute("dragover-groupTarget", true);
+        }
         draggedElement._dragData.movingTabs
           .map(tab => (gBrowser.isSplitViewWrapper(tab) ? tab.tabs : tab))
           .flat()
@@ -1420,20 +1424,37 @@ var TMP_tabDNDObserver = {
     if (!elementGroup || !dropElement) {
       return "transparent";
     }
+    const [first, last] = [elementGroup.tabs[0], elementGroup.tabs.at(-1)];
+    if (elementGroup.collapsed || !first.visible) {
+      return elementGroup.color;
+    }
     const dropIndex = dropElement.elementIndex;
-    const groupStart = elementGroup.tabs[0].elementIndex;
-    const groupEnd = elementGroup.tabs.at(-1).elementIndex;
+    const groupStart = first.elementIndex;
+    const groupEnd = last.visible ? last.elementIndex : groupStart;
     return dropIndex >= groupStart && dropIndex <= groupEnd ? elementGroup.color : "transparent";
   },
 
   // called from gBrowser.tabContainer.tabDragAndDrop.handle_drop when dragging tabs within the same window
   // and when Tabmix's custom drag and drop handling is active (useTabmixDnD === true)
   handleDrop(event, draggedTab, movingTabs) {
-    let {dropElement, newIndex, dropBefore, fromTabList, dropOnStart} =
+    let {dropElement, newIndex, dropBefore, fromTabList, dropOnStart, dropIntoCollapsedTabGroup} =
       this.tabDragAndDrop._getDropIndex(event, {getParams: true});
 
     const telemetrySource = this.TabMetrics.METRIC_SOURCE.DRAG_AND_DROP;
-    if (!Tabmix.isVersion(1370) || fromTabList) {
+
+    if (
+      dropIntoCollapsedTabGroup &&
+      gBrowser.isTabGroupLabel(dropElement) &&
+      gBrowser.isTab(draggedTab)
+    ) {
+      // If the dragged tab is the active tab in a collapsed tab group
+      // and the user dropped it onto the label of its tab group, leave
+      // the dragged tab where it was. Otherwise, drop it into the target
+      // tab group.
+      if (dropElement.group != draggedTab.group) {
+        dropElement.group.addTabs(movingTabs, telemetrySource);
+      }
+    } else if (!Tabmix.isVersion(1370) || fromTabList) {
       const oldIndex = draggedTab[Tabmix.isVersion(1380) ? "elementIndex" : "_tPos"];
       newIndex += dropBefore ? 0 : 1;
       const moveLeft = newIndex < oldIndex;
@@ -1647,6 +1668,7 @@ var TMP_tabDNDObserver = {
 
     const tabs = tabBar.querySelectorAll("[tabmix-movingtab-togroup]");
     tabs.forEach(tab => tab?.removeAttribute("tabmix-movingtab-togroup"));
+    this.tabDragAndDrop._resetGroupTarget(document.querySelector("[dragover-groupTarget]"));
     this.tabDragAndDrop._setDragOverGroupColor(null);
 
     // make sure scroll position is aligned to row
@@ -1828,15 +1850,27 @@ var TMP_tabDNDObserver = {
         dropElement
       : gBrowser.tabContainer.allTabs[newIndex];
 
-    const dropTab = targetTab?.splitview ?? targetTab;
+    let dropTab = targetTab?.splitview ?? targetTab;
+    let dropIntoCollapsedTabGroup = false;
 
     const fromTabList =
       (tab?._dragData.fromTabList && dropTab !== dropTab?.group?.tabs[0]) || false;
 
     if (Tabmix.isVersion(1380)) {
-      if (dropTab?.group && dropTab.group.collapsed) {
-        newIndex = dropTab.group.labelElement.elementIndex;
-        dropOnStart = this.isDropBefore(event, dropTab.group.labelElement);
+      const group = dropTab?.group;
+      if (group?.collapsed && tab?.group !== group) {
+        newIndex = group.labelElement.elementIndex;
+        if (Tabmix.isVersion(1430)) {
+          dropTab = group.labelElement;
+          dropIntoCollapsedTabGroup = true;
+          dropOnStart = false;
+          dropBefore = false;
+          if (group === gBrowser.selectedTab.group) {
+            newIndex = gBrowser.selectedTab.elementIndex;
+          }
+        } else {
+          dropOnStart = this.isDropBefore(event, group.labelElement);
+        }
       } else {
         newIndex = dropTab?.elementIndex ?? Tabmix.tabsUtils.dragAndDropElements.length;
       }
@@ -1851,6 +1885,7 @@ var TMP_tabDNDObserver = {
       dropElement: dropTab,
       fromTabList,
       dropOnStart,
+      dropIntoCollapsedTabGroup,
     };
   },
 
@@ -2146,6 +2181,13 @@ var TMP_tabDNDObserver = {
       return 0;
     }
 
+    if (Tabmix.isVersion(1430) && gBrowser.isTabGroupLabel(dropElement)) {
+      const group = dropElement.group;
+      if (group.collapsed && gBrowser.selectedTab.group === group) {
+        dropElement = gBrowser.selectedTab;
+      }
+    }
+
     const item = Tabmix.tabsUtils.getDragAndDropElement(dropElement);
 
     const itemRect = item.getBoundingClientRect();
@@ -2200,7 +2242,12 @@ var TMP_tabDNDObserver = {
    */
   isDragAfterGroup(event, dropElement) {
     if (dropElement?.group && !this.getEventTarget(event)) {
-      const next = Tabmix.tabsUtils.dragAndDropElements[dropElement.elementIndex + 1];
+      const elementIndex =
+        // @ts-ignore dropElement is tab in a group
+        dropElement.visible ?
+          dropElement.elementIndex
+        : dropElement.group.labelElement.elementIndex;
+      const next = Tabmix.tabsUtils.dragAndDropElements[elementIndex + 1];
       const isLastInRow = next ? this.isLastTabInRow(next, dropElement) : true;
       return isLastInRow ? next?.group !== dropElement.group : false;
     }

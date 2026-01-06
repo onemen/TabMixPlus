@@ -119,7 +119,7 @@ type DraggedSourceNode = DraggedElement | HTMLLinkElement | Element;
 type TabContainerElement = DraggedSourceNode | MockedGeckoTypes.MozTabbrowserTabGroup | EventTarget | undefined;
 /* Notice: this type contain tab-group-label-container not the labe */
 type TabContainerChild = MockedGeckoTypes.BrowserTab | MockedGeckoTypes.GroupLabelContainer | MockedGeckoTypes.MozTabSplitViewWrapper;
-type DragEventParams = {sourceNode: DraggedSourceNode; dragType: number; draggedElement: DraggedElement; newIndex: number; dropElement: DragAndDropElement | undefined; dropBefore?: boolean; fromTabList?: boolean; dropOnStart?: boolean; groupLabelMargin?: number | undefined};
+type DragEventParams = {sourceNode: DraggedSourceNode; dragType: number; draggedElement: DraggedElement; newIndex: number; dropElement: DragAndDropElement | undefined; dropBefore?: boolean; fromTabList?: boolean; dropOnStart?: boolean; groupLabelMargin?: number | undefined; dropIntoCollapsedTabGroup: boolean};
 
 declare namespace MockedGeckoTypes {
   interface BrowsingContext extends MockedExports.BrowsingContext {
@@ -421,7 +421,7 @@ declare namespace MockedGeckoTypes {
     _maxTabsPerRow: number | null;
     _pinnedDropIndicatorTimeout: number | null;
     _pinnedDropIndicator: HTMLElement;
-    _resetGroupTarget(element: HTMLElement): void;
+    _resetGroupTarget(element: HTMLElement | null): void;
     _rtlMode: boolean;
     _setMovingTabMode(movingTab: boolean): void;
     _tabDropIndicator: HTMLElement;
@@ -570,9 +570,9 @@ declare namespace MockedGeckoTypes {
     isSplitViewWrapper: (element: TabContainerElement) => element is MozTabSplitViewWrapper;
     lastMultiSelectedTab: BrowserTab;
     // keepRelatedTabs was used until Firefox 134
-    moveTabTo: (aTab: BrowserTab | MozTabbrowserTabGroup, options: moveTabToOptions) => void;
-    moveTabsBefore: (tabs: BrowserTab[], targetElement?: TabContainerElement, metricsContext?: MockedExports.TabMetricsContext) => void;
-    moveTabsAfter: (tabs: BrowserTab[], targetElement?: TabContainerElement, metricsContext?: MockedExports.TabMetricsContext) => void;
+    moveTabTo: (aTab: BrowserTab | MozTabbrowserTabGroup | MozTabSplitViewWrapper, options: moveTabToOptions) => void;
+    moveTabsBefore: (tabs: (BrowserTab | MozTabSplitViewWrapper)[], targetElement?: TabContainerElement, metricsContext?: MockedExports.TabMetricsContext) => void;
+    moveTabsAfter: (tabs: (BrowserTab | MozTabSplitViewWrapper)[], targetElement?: TabContainerElement, metricsContext?: MockedExports.TabMetricsContext) => void;
     ownerGlobal: WindowProxy;
     pinTab: (tab: BrowserTab) => void;
     readonly pinnedTabCount: number;
@@ -739,7 +739,7 @@ declare namespace MockedGeckoTypes {
     get labelContainerElement(): GroupLabelContainer;
     get isBeingDragged(): boolean;
     set isBeingDragged(val: boolean);
-    addTabs(tabs: BrowserTab[]): void;
+    addTabs(tabsOrSplitViews: (MozTabSplitViewWrapper | BrowserTab)[], metricsContext: MockedExports.TelemetrySource): void;
     ungroupTabs(): void;
     save(): void;
     on_click(event: PointerEvent): void;
