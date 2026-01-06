@@ -204,6 +204,12 @@
     background-color: light-dark(var(--dragover-tab-group-color), var(--dragover-tab-group-color-invert));
     border-radius: var(--border-radius-xsmall, 1px);
   }
+
+  .tab-group-overflow-count-container {
+    #tabbrowser-tabs[tabmix-multibar] tab-group[collapsed][hasmultipletabs][hasactivetab] > & {
+      display: flex;
+    }
+  }
 }
 
 @media (width <= 1250px) {

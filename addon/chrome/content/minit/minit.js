@@ -600,6 +600,13 @@ var TMP_tabDNDObserver = {
             check: Tabmix.isVersion(1420),
           }
         )
+        ._replace(
+          "} else if (isTabGroupLabel(tab)",
+          `$& && !TMP_tabDNDObserver.useTabmixDnD(event)`,
+          {
+            check: Tabmix.isVersion(1400),
+          }
+        )
         .toCode();
     }
   },
