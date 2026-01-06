@@ -71,9 +71,3 @@
 #tabbrowser-tabs[no-animation] .tabbrowser-tab:not([pinned]) {
 	transition: none !important;
 }
-
-/* this rul need to have higher specificity then the rule in gTMPprefObserver.dynamicRules.width */
-#TabsToolbar #tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) #tabbrowser-arrowscrollbox > .tabbrowser-tab[fadein]:not([pinned]),
-#TabsToolbar #tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) #tabbrowser-arrowscrollbox > tab-group:not([collapsed]) > .tabbrowser-tab[fadein]:not([pinned]) {
-  max-width: var(--tabmix-tab-overflow-width, var(--tab-min-width)) !important;
-}

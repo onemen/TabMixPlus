@@ -2339,8 +2339,14 @@ window.gTMPprefObserver = {
         .replace(/%faviconized%/g, ':not([faviconized="true"])')
         .replace(/%faviconized1%/g, ':not([faviconized="true"])');
       this.insertRule(newRule);
-      newRule = `#tabbrowser-arrowscrollbox > tab-group:not([collapsed]) > .tabbrowser-tab[faviconized="true"][protected]:not([pinned]),
-        #tabbrowser-arrowscrollbox > .tabbrowser-tab[faviconized="true"][protected]:not([pinned]) {
+      let tabSelector = `.tabbrowser-tab[faviconized="true"][protected]:not([pinned])`;
+      // Bug 1949401 (Firefox 142) - Active Tabs should remain active for collapsed Tab groups
+      let groupSelector =
+        Tabmix.isVersion(1420) ?
+          `tab-group > ${tabSelector}:is(tab-group:not([collapsed]) > *, [visuallyselected])`
+        : `tab-group:not([collapsed]) > ${tabSelector}`;
+      newRule = `#tabbrowser-arrowscrollbox > ${groupSelector},
+        #tabbrowser-arrowscrollbox > ${tabSelector} {
           max-width: 36px !important;
         }`;
       this.insertRule(newRule.trim());
@@ -2356,8 +2362,14 @@ window.gTMPprefObserver = {
   addDynamicRules() {
     // tab width rules
     let tst = Tabmix.extensions.treeStyleTab ? ":not([treestyletab-collapsed='true'])" : "";
-    let newRule = `#tabbrowser-arrowscrollbox:not([orient="vertical"]) > tab-group:not([collapsed]) > .tabbrowser-tab[fadein]${tst}:not([pinned]),
-      #tabbrowser-arrowscrollbox:not([orient="vertical"]) > .tabbrowser-tab[fadein]${tst}:not([pinned]) {
+    let tabSelector = `.tabbrowser-tab[fadein]${tst}:not([pinned])`;
+    // Bug 1949401 (Firefox 142) - Active Tabs should remain active for collapsed Tab groups
+    let groupSelector =
+      Tabmix.isVersion(1420) ?
+        `tab-group > ${tabSelector}:is(tab-group:not([collapsed]) > *, [visuallyselected])`
+      : `tab-group:not([collapsed]) > ${tabSelector}`;
+    let newRule = `#tabbrowser-arrowscrollbox:not([orient="vertical"]) > ${groupSelector},
+      #tabbrowser-arrowscrollbox:not([orient="vertical"]) > ${tabSelector} {
         min-width: #1px !important;
         --tabmix-inline-max-width: #2px;
         max-width: var(--tabmix-inline-max-width) !important;
@@ -2375,6 +2387,14 @@ window.gTMPprefObserver = {
         }`
       );
     }
+
+    /* this rule need to have higher specificity then the rule in gTMPprefObserver.dynamicRules.width */
+    this.insertRule(
+      `#TabsToolbar #tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) #tabbrowser-arrowscrollbox > ${tabSelector},
+       #TabsToolbar #tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) #tabbrowser-arrowscrollbox > ${groupSelector} {
+        max-width: var(--tabmix-tab-overflow-width, var(--tab-min-width)) !important;
+      }`
+    );
 
     let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
     let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
