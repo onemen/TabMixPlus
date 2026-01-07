@@ -591,7 +591,7 @@ var TMP_tabDNDObserver = {
         );
         const nextTab = ${Tabmix.isVersion(1450) ? "this._tabbrowserTabs" : "this"}.visibleTabs[gBrowser.pinnedTabCount];
         if (nextTab) {
-          nextTab.style.setProperty("margin-inline-start", width + 12 + "px", "important");
+          nextTab.style.setProperty("margin-inline-start", width + ${Tabmix.isVersion(1430) ? 0 : 12} + "px", "important");
           tab._dragData.nextTab = nextTab;
         }
       }

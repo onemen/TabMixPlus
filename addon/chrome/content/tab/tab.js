@@ -1474,7 +1474,8 @@ Tabmix.tabsUtils = {
       !Tabmix.prefs.getBoolPref("pinnedTabScroll");
 
     const pinnedTabsContainer = gBrowser.pinnedTabsContainer;
-    const offset = pinnedTabsContainer.hasAttribute("overflowing") ? 0 : 12;
+    const offset =
+      Tabmix.isVersion(1430) || pinnedTabsContainer.hasAttribute("overflowing") ? 0 : 12;
     const margin = doPosition ? pinnedTabsContainer.getBoundingClientRect().width + offset : 0;
     gTMPprefObserver.dynamicRules["tabmix-firstTabInRow"]?.style.setProperty(
       "margin-inline-start",
@@ -2460,25 +2461,37 @@ window.gTMPprefObserver = {
           }`
         );
 
-        this.insertRule(
-          `#tabbrowser-tabs[positionpinnedtabs][tabmix-flowing="multibar"][orient=horizontal]:has(#tabbrowser-arrowscrollbox .tabbrowser-tab:not([hidden])) #pinned-tabs-container:not([overflowing]) {
-             margin-inline-end: 12px;
-          }`
-        );
+        if (Tabmix.isVersion(1430)) {
+          this.insertRule(
+            `#tabbrowser-tabs[positionpinnedtabs][tabmix-multibar][orient=horizontal] .tab-group-label-container[tabmix-firstTabInRow="true"] {
+              padding-inline-start: 3px;
 
-        this.insertRule(
-          `#tabbrowser-tabs:not([positionpinnedtabs])[tabmix-flowing="multibar"][orient=horizontal] .tabbrowser-tab[pinned] {
-            /* Rule for non-pinned tab following a pinned tab */
-            & + .tabbrowser-tab:not([pinned]) {
-              margin-inline-start: 12px;
-            }
+              &::after {
+                inset-inline-start: 3px;
+              }
+            }`
+          );
+        } else {
+          this.insertRule(
+            `#tabbrowser-tabs[positionpinnedtabs][tabmix-flowing="multibar"][orient=horizontal]:has(#tabbrowser-arrowscrollbox .tabbrowser-tab:not([hidden])) #pinned-tabs-container:not([overflowing]) {
+               margin-inline-end: 12px;
+            }`
+          );
 
-            /* Rule for tab-group label following a pinned tab */
-            & + tab-group .tab-group-label-container {
-              margin-inline-start: 15px;
-            }
-          }`
-        );
+          this.insertRule(
+            `#tabbrowser-tabs:not([positionpinnedtabs])[tabmix-flowing="multibar"][orient=horizontal] .tabbrowser-tab[pinned] {
+              /* Rule for non-pinned tab following a pinned tab */
+              & + .tabbrowser-tab:not([pinned]) {
+                margin-inline-start: 12px;
+              }
+
+              /* Rule for tab-group label following a pinned tab */
+              & + tab-group .tab-group-label-container {
+                margin-inline-start: 15px;
+              }
+            }`
+          );
+        }
       }
 
       if (Tabmix.isVersion(1430)) {
