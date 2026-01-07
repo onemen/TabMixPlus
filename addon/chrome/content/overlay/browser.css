@@ -150,16 +150,25 @@
   visibility: visible;
 }
 
-/* override firefox rule from browser.css */
-#tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow]) ~ #new-tab-button {
-  display: flex;
-  align-items: center;
-}
+#TabsToolbar:not([collapsed]) {
+  /* override firefox rule from browser.css */
+  #tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow]) ~ #new-tab-button {
+    display: flex;
+    align-items: center;
+  }
 
-#TabsToolbar[tabmix-show-newtabbutton*="side"] #tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow]) ~ #new-tab-button,
-#TabsToolbar[tabmix-show-newtabbutton="aftertabs"] #tabbrowser-tabs[overflow] ~ #new-tab-button,
-#TabsToolbar[tabmix-show-newtabbutton*="side"] #new-tab-button {
-  visibility: visible;
+  &[tabmix-show-newtabbutton*="side"] {
+    #tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow]) ~ #new-tab-button,
+    #new-tab-button {
+      visibility: visible;
+    }
+  }
+
+  &[tabmix-show-newtabbutton="aftertabs"] {
+    #tabbrowser-tabs[overflow] ~ #new-tab-button {
+      visibility: visible;
+    }
+  }
 }
 
 #TabsToolbar:not([customizing])[tabmix-show-newtabbutton*="aftertabs"] #new-tab-button,
@@ -193,7 +202,7 @@
 
 #TabsToolbar[currentset*="privateTab-toolbar-openNewPrivateTab"][tabmix-show-newtabbutton*="aftertabs"]:not(:is([customizing="true"], [customizing=""]))
      #tabbrowser-tabs #tabbrowser-arrowscrollbox > #privateTab-afterTabs-openNewPrivateTab,
-#TabsToolbar[tabmix-show-newtabbutton*="side"] > #privateTab-toolbar-openNewPrivateTab {
+#TabsToolbar:not([collapsed])[tabmix-show-newtabbutton*="side"] > #privateTab-toolbar-openNewPrivateTab {
   visibility: visible;
 }
 
