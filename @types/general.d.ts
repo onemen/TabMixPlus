@@ -119,7 +119,7 @@ type DraggedSourceNode = DraggedElement | HTMLLinkElement | Element;
 type TabContainerElement = DraggedSourceNode | MockedGeckoTypes.MozTabbrowserTabGroup | EventTarget | undefined;
 /* Notice: this type contain tab-group-label-container not the labe */
 type TabContainerChild = MockedGeckoTypes.BrowserTab | MockedGeckoTypes.GroupLabelContainer | MockedGeckoTypes.MozTabSplitViewWrapper;
-type DragEventParams = {sourceNode: DraggedSourceNode; dragType: number; draggedElement: DraggedElement; newIndex: number; dropElement: DragAndDropElement | undefined; dropBefore?: boolean; fromTabList?: boolean; dropOnStart?: boolean; groupLabelMargin?: number | undefined; dropIntoCollapsedTabGroup: boolean};
+type DragEventParams = {sourceNode: DraggedSourceNode; dragType: number; draggedElement: DraggedElement; newIndex: number; dropElement: DragAndDropElement | undefined; dropBefore?: boolean; fromTabList?: boolean; dropOnStart?: boolean; groupLabelMargin?: number | undefined; dragOutOfGroup?: boolean; dropIntoCollapsedTabGroup?: boolean};
 
 declare namespace MockedGeckoTypes {
   interface BrowsingContext extends MockedExports.BrowsingContext {

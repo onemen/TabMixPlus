@@ -1235,8 +1235,14 @@ var TMP_tabDNDObserver = {
       !disAllowDrop &&
       !["scrollbutton-up", "scrollbutton-down"].includes(event.originalTarget.id)
     ) {
-      const {dragType, draggedElement, dropElement, dropOnStart, dropBefore} =
+      const {dragType, draggedElement, dropElement, dropOnStart, dropBefore, dragOutOfGroup} =
         this.eventParams(event);
+      if (dragOutOfGroup) {
+        this.clearDragmark();
+        this._updateGroupColorOnDraggedTab(draggedElement, dropElement, "transparent");
+        return true;
+      }
+
       const draggedGroup = gBrowser.isTabGroupLabel(draggedElement) ? draggedElement.group : null;
       const draggedTab = draggedGroup?.tabs[0] ?? draggedElement;
       const elementGroup = dropElement?.group;
@@ -1304,27 +1310,16 @@ var TMP_tabDNDObserver = {
         disAllowDrop = true;
       }
 
-      if (draggedElement && draggedElement.container == tabBar) {
-        const color =
-          (
-            (!disAllowDrop || draggedElement.group === elementGroup) &&
-            !dropOnStart &&
-            !dragAfterGroup
-          ) ?
-            this._getGroupColor(elementGroup, dropElement)
-          : "transparent";
+      const color =
+        (
+          (!disAllowDrop || draggedElement?.group === elementGroup) &&
+          !dropOnStart &&
+          !dragAfterGroup
+        ) ?
+          this._getGroupColor(elementGroup, dropElement)
+        : "transparent";
 
-        this.tabDragAndDrop._setDragOverGroupColor(color);
-        if (gBrowser.isTabGroupLabel(dropElement)) {
-          dropElement.toggleAttribute("dragover-groupTarget", true);
-        }
-        draggedElement._dragData.movingTabs
-          .map(tab => (gBrowser.isSplitViewWrapper(tab) ? tab.tabs : tab))
-          .flat()
-          .forEach(tab => {
-            tab.toggleAttribute("tabmix-movingtab-togroup", true);
-          });
-      }
+      this._updateGroupColorOnDraggedTab(draggedElement, dropElement, color);
 
       // based on gBrowser.tabContainer.tabDragAndDrop.#checkWithinPinnedContainerBounds
       if (Tabmix.isVersion(1430) && effects == "move" && draggedTab?.container == tabBar) {
@@ -1418,6 +1413,23 @@ var TMP_tabDNDObserver = {
 
     dt.mozCursor = mozCursor;
     return disAllowDrop;
+  },
+
+  _updateGroupColorOnDraggedTab(draggedElement, dropElement, color) {
+    if (draggedElement?.container !== gBrowser.tabContainer) {
+      return;
+    }
+
+    this.tabDragAndDrop._setDragOverGroupColor(color);
+    if (gBrowser.isTabGroupLabel(dropElement)) {
+      dropElement.toggleAttribute("dragover-groupTarget", true);
+    }
+    draggedElement._dragData.movingTabs
+      .map(tab => (gBrowser.isSplitViewWrapper(tab) ? tab.tabs : tab))
+      .flat()
+      .forEach(tab => {
+        tab.toggleAttribute("tabmix-movingtab-togroup", true);
+      });
   },
 
   _getGroupColor(elementGroup, dropElement) {
@@ -1767,7 +1779,41 @@ var TMP_tabDNDObserver = {
     let dropBefore = true;
     let dropOnStart = false;
     let isBetweenGroups = false;
+    let dragOutOfGroup = false;
     let dropElement = this.getDropElement(event, tab);
+
+    // drag tab out of group to empty area at the end of a row
+    if (
+      tab?.group &&
+      !this.getEventTarget(event) &&
+      !event.target.closest(".tab-group-overflow-count-container")
+    ) {
+      const group = tab.group;
+      const collapsedWithActivetab = gBrowser.selectedTab.group === group && group.collapsed;
+      if (group.tabs.at(-1) === tab || collapsedWithActivetab) {
+        const nextTab = Tabmix.tabsUtils.dragAndDropElements[tab.elementIndex + 1];
+        if (nextTab) {
+          const rect = tab.getBoundingClientRect();
+          const overflowWidth =
+            collapsedWithActivetab && group.tabs.length > 1 ?
+              (group.querySelector(".tab-group-overflow-count-container")?.getBoundingClientRect()
+                .width ?? 0)
+            : 0;
+          // skip gap between tabs
+          const gap = 6;
+          const isAfter =
+            RTL_UI ?
+              event.clientX < rect.left - overflowWidth - gap
+            : event.clientX > rect.right + overflowWidth + gap;
+          if (isAfter) {
+            dropElement = nextTab;
+            dropBefore = true;
+            dragOutOfGroup = true;
+          }
+        }
+      }
+    }
+
     if (dropElement) {
       const pinnedTabCount = gBrowser.pinnedTabCount;
       const isDraggedTabPinned = tab?.pinned ?? false;
@@ -1814,7 +1860,7 @@ var TMP_tabDNDObserver = {
       } else {
         newIndex =
           gBrowser.isSplitViewWrapper(dropElement) ? dropElement.elementIndex : dropElement._tPos;
-        dropBefore = this.isDropBefore(event, dropElement);
+        dropBefore = dragOutOfGroup || this.isDropBefore(event, dropElement);
       }
       if (
         dragType == this.DRAG_TAB_IN_SAME_WINDOW &&
@@ -1885,6 +1931,7 @@ var TMP_tabDNDObserver = {
       dropElement: dropTab,
       fromTabList,
       dropOnStart,
+      dragOutOfGroup,
       dropIntoCollapsedTabGroup,
     };
   },

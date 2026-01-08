@@ -242,6 +242,7 @@ interface TabmixDNDObserver {
   handleEvent(event: DragEvent): void;
   on_dragstart(this: MockedGeckoTypes.TabDragAndDrop | MockedGeckoTypes.TabContainer, event: DragEvent): void;
   handleDragover(event: DragEvent, useTabmixDnD: boolean): boolean;
+  _updateGroupColorOnDraggedTab(draggedElement: DraggedElement, dropElement: DragAndDropElement | undefined, color: string | null): void;
   _getGroupColor(elementGroup: MockedGeckoTypes.MozTabbrowserTabGroup | null | undefined, dropElement: DragAndDropElement | undefined): string;
   handleDrop(event: DragEvent, draggedTab: Tab, movingTabs: (MockedGeckoTypes.MozTabSplitViewWrapper | Tab)[]): void;
   on_dragend(event: DragEvent): void;
