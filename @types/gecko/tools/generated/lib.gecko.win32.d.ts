@@ -381,4 +381,4 @@ type Enums<enums> = Partial<Pick<enums, keyof enums>>;
 /** Callable accepts either form of a [function] interface. */
 type Callable<iface> = iface | Extract<iface[keyof iface], Function>
 
-export { };
+export {};
