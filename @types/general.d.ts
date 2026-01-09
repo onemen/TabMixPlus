@@ -764,7 +764,7 @@ declare namespace MockedGeckoTypes {
     hasActiveTab: boolean;
     container: HTMLElement;
     readonly group: MozTabbrowserTabGroup | null;
-    readonly tabs: BrowserTab[];
+    readonly tabs: NonEmptyArray<BrowserTab>;
     readonly panels: Tabpanels[];
     readonly visible: boolean;
     addTabs(tabs: BrowserTab[]): void;

@@ -248,7 +248,7 @@ var TMP_Places = {
     // we don't reused blank tabs from group to avoid group removal
     const unGroupedTabs = openTabs.filter(tab => !tab.group);
     for (const aTab of unGroupedTabs) {
-      const tabIsBlank = gBrowser.isBlankNotBusyTab(aTab);
+      const tabIsBlank = !aTab.splitview && gBrowser.isBlankNotBusyTab(aTab);
       // don't reuse collapsed tab if width fitTitle is set
       const canReplace =
         (doReplace && !aTab.hasAttribute("locked") && !aTab.hasAttribute("pinned")) || tabIsBlank;
@@ -296,6 +296,8 @@ var TMP_Places = {
     }
     if (prevTab.group) {
       prevTab = prevTab.group.tabs.at(-1);
+    } else if (prevTab.splitview) {
+      prevTab = prevTab.splitview.tabs.at(-1);
     }
     var tabPos, index;
     var multiple = bmGroup.length > 1;
