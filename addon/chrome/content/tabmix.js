@@ -1221,6 +1221,15 @@ var TMP_eventListener = {
               nextSibling.removeAttribute("tabmix-firstTabInRow");
             }
           } else if (Tabmix.isTabGroup(node)) {
+            if (!Tabmix.isVersion(1480)) {
+              Object.defineProperty(node, "tabsAndSplitViews", {
+                get() {
+                  return Array.from(node.children).filter(
+                    child => child.matches("tab") || child.tagName == "tab-split-view-wrapper"
+                  );
+                },
+              });
+            }
             this.updateMultiRow();
           } else if (gBrowser.isSplitViewWrapper(node)) {
             const tab = node.tabs[0];

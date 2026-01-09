@@ -1436,7 +1436,8 @@ var TMP_tabDNDObserver = {
     if (!elementGroup || !dropElement) {
       return "transparent";
     }
-    const [first, last] = [elementGroup.tabs[0], elementGroup.tabs.at(-1)];
+    const children = elementGroup.tabsAndSplitViews;
+    const [first, last] = [children[0], children.at(-1)];
     if (elementGroup.collapsed || !first.visible) {
       return elementGroup.color;
     }
@@ -1733,7 +1734,7 @@ var TMP_tabDNDObserver = {
       // next to it instead of the next row
       const useGroupLabel =
         group &&
-        group.tabs[0] === tab &&
+        group.tabsAndSplitViews[0] === tab &&
         this.isLastTabInRow(tab, group.labelElement) &&
         !gBrowser.isTab(this.getEventTarget(event));
       if (params.dropOnStart || useGroupLabel) {
@@ -1790,12 +1791,12 @@ var TMP_tabDNDObserver = {
     ) {
       const group = tab.group;
       const collapsedWithActivetab = gBrowser.selectedTab.group === group && group.collapsed;
-      if (group.tabs.at(-1) === tab || collapsedWithActivetab) {
+      if (group.tabsAndSplitViews.at(-1) === tab || collapsedWithActivetab) {
         const nextTab = Tabmix.tabsUtils.dragAndDropElements[tab.elementIndex + 1];
         if (nextTab) {
           const rect = tab.getBoundingClientRect();
           const overflowWidth =
-            collapsedWithActivetab && group.tabs.length > 1 ?
+            collapsedWithActivetab && group.tabsAndSplitViews.length > 1 ?
               (group.querySelector(".tab-group-overflow-count-container")?.getBoundingClientRect()
                 .width ?? 0)
             : 0;
@@ -1845,10 +1846,22 @@ var TMP_tabDNDObserver = {
 
         if (!dropOnStart) {
           const previousElement = group.previousSibling;
-          const focusableItem =
-            gBrowser.isTab(previousElement) ? previousElement
-            : previousElement?.collapsed ? previousElement
-            : previousElement?.tabs.at(-1);
+          let focusableItem;
+          if (gBrowser.isTab(previousElement)) {
+            focusableItem = previousElement;
+          } else if (Tabmix.isTabGroup(previousElement)) {
+            if (previousElement.collapsed) {
+              focusableItem =
+                gBrowser.selectedTab.group === previousElement ?
+                  tabOrSplitview(gBrowser.selectedTab)
+                : previousElement.labelElement;
+            } else {
+              focusableItem = previousElement.tabsAndSplitViews.at(-1);
+            }
+          } else if (gBrowser.isSplitViewWrapper(previousElement)) {
+            focusableItem = previousElement.tabs.at(-1);
+          }
+
           if (focusableItem) {
             dropOnStart = !TabmixTabbar.inSameRow(
               Tabmix.tabsUtils.getDragAndDropElement(dropElement),

@@ -733,13 +733,13 @@ declare namespace MockedGeckoTypes {
     set collapsed(val: boolean);
     lastSeenActive(): void;
     get tabs(): Tabs;
-    get tabsAndSplitViews(): Tabs | MozTabSplitViewWrapper[];
+    get tabsAndSplitViews(): NonEmptyArray<MozTabSplitViewWrapper | BrowserTab>;
     isTabVisibleInGroup(tab: BrowserTab): boolean;
     get labelElement(): MozTabGroupLabel;
     get labelContainerElement(): GroupLabelContainer;
     get isBeingDragged(): boolean;
     set isBeingDragged(val: boolean);
-    addTabs(tabsOrSplitViews: (MozTabSplitViewWrapper | BrowserTab)[], metricsContext: MockedExports.TelemetrySource): void;
+    addTabs(tabsOrSplitViews: (MozTabSplitViewWrapper | BrowserTab)[], metricsContext?: MockedExports.TelemetrySource): void;
     ungroupTabs(): void;
     save(): void;
     on_click(event: PointerEvent): void;
