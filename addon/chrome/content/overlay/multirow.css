@@ -14,6 +14,11 @@
   --tabmix-scrollbutton-padding: calc(var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding));
 }
 
+/* Automatically reduce tab-block-margin when in multi-row horizontal mode */
+:root:has(#tabbrowser-tabs[orient="horizontal"][tabmix-multibar]) {
+  --tab-block-margin: 1px;
+}
+
 #tabbrowser-tabs {
   min-height: unset !important;
 }
@@ -227,16 +232,15 @@
 }
 
 #tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper {
-  .tabbrowser-tab {
-    --tab-min-height-mlt: calc(var(--tabmix-tab-min-height) - 2 * 2px) !important;
-  }
+  margin-block: 0;
+  padding: 0;
 
   :root[uidensity="compact"] & .tab-background {
     --tab-min-height: 25px !important;
   }
 
   .tabbrowser-tab > .tab-stack > .tab-background {
-    transition: all 500ms ease;
+    margin-block: var(--tab-block-margin);
   }
 
   .tabbrowser-tab:first-child > .tab-stack > .tab-background {
@@ -247,9 +251,22 @@
     margin-inline-start: -2px;
   }
 
+  /* remove border on tab and move it to .tab-background */
+  &:not([hasactivetab]) {
+    & .tabbrowser-tab {
+      &:last-child {
+        border-inline-start: none;
+
+        .tab-background {
+          border-inline-start: 1px solid var(--toolbarbutton-icon-fill);
+        }
+      }
+    }
+  }
+
   tab-group & .tabbrowser-tab > .tab-stack > .tab-background > .tab-group-line,
   & .tabbrowser-tab[tabmix-movingtab-togroup] > .tab-stack > .tab-background > .tab-group-line {
-    inset-block-end: -3px;
+    inset-block-end: var(--tab-group-line-toolbar-border-distance);
   }
 
   &:not(:has([dragtarget])) {

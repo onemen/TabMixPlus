@@ -520,7 +520,6 @@ interface TabmixTabsUtils {
   updateScrollButtons(useTabmixButtons: boolean): void;
   isElementVisible(element: AriaFocusableItem | null | undefined): boolean;
   protonValues: {enabled: boolean; name: string; val: string; margin: string};
-  updateProtonValues(): void;
   _allVisibleItems: AriaFocusableItems | null;
   allVisibleItems: AriaFocusableItems;
   dragAndDropElements: DragAndDropElements;

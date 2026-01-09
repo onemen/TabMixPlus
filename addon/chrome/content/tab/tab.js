@@ -75,7 +75,6 @@ var TabmixTabbar = {
         "--tabmix-visiblerows",
         String(rows)
       );
-      Tabmix.tabsUtils.updateProtonValues();
     }
   },
 
@@ -603,8 +602,6 @@ Tabmix.tabsUtils = {
       // when Vertical Tabs Reloaded installed CustomTitlebar/TabsInTitlebar was not initialized
       this.customTitlebar.init();
     }
-
-    this.updateProtonValues();
   },
 
   updateVerticalTabStrip({reset = false} = {}) {
@@ -1236,45 +1233,13 @@ Tabmix.tabsUtils = {
     return true;
   },
 
-  /**
-   * @typedef {{name: string; val: string; margin: string; enabled: boolean}} ProtonValues
-   *
-   * @type {ProtonValues}
-   */
-  get protonValues() {
-    // rules to add proton --tab-block-margin to --tab-min-height-mlt
-    // we update tab-block-margin dynamically by calling updateProtonValues
-    // every time TabmixTabbar.visibleRows setter changed
-
-    // 91+: no @media --tab-block-margin: 4px;
-    const blockMargin = Object.entries({
-      91: {name: "--tab-block-margin", val: "4px", margin: "3px"},
-    }).reduce(
-      (acc, [version, val]) => {
-        return Tabmix.isVersion(Number(version) * 10) ? val : acc;
-      },
-      {name: "", val: "", margin: ""}
-    );
-
-    const _protonValues = {...blockMargin, enabled: true};
-    Object.defineProperty(Tabmix.tabsUtils, "protonValues", {
-      configurable: true,
-      enumerable: true,
-      value: _protonValues,
-    });
-    return _protonValues;
-  },
-
-  updateProtonValues() {
-    // we reduce tab-block-margin to 1px on tab-background to minimize gap between rows,
-    // and add the difference to #tabbrowser-arrowscrollbox margin top/bottom
-    // with --tabmix-multirow-margin
-    const reduceMargin =
-      this.protonValues.enabled &&
-      gBrowser.tabContainer.getAttribute("orient") !== "vertical" &&
-      TabmixTabbar.visibleRows > 1;
-    const margin = reduceMargin ? "1px" : "";
-    document.documentElement.style.setProperty(this.protonValues.name, margin, "important");
+  // properties to add proton --tab-block-margin to --tab-min-height-mlt
+  // see multirow.css
+  protonValues: {
+    enabled: true,
+    name: "--tab-block-margin",
+    val: "4px",
+    margin: "3px",
   },
 
   _allVisibleItems: null,
@@ -2119,9 +2084,6 @@ window.gTMPprefObserver = {
         break;
       case "extensions.tabmix.showTabContextMenuOnTabbar":
         TabmixContext.updateTabbarContextMenu(Services.prefs.getBoolPref(prefName));
-        break;
-      case "browser.proton.enabled":
-        Tabmix.tabsUtils.updateProtonValues();
         break;
       case "browser.tabs.insertAfterCurrent":
         // browser.tabs.insertAfterCurrent default is false, in the case both pref
