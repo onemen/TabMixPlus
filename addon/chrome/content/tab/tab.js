@@ -1139,6 +1139,11 @@ Tabmix.tabsUtils = {
             }
             this.updateOverflowMaxWidth();
             this.updateVerticalTabStrip();
+            // some edge cases require 2nd calculation of --tabmix-tab-overflow-width
+            if (!TabmixTabbar.widthFitTitle && Tabmix.prefs.getBoolPref("flexTabs_fitRow")) {
+              this.updateOverflowMaxWidth();
+              this.updateVerticalTabStrip();
+            }
             if (!Tabmix.isVersion(1470)) {
               if (Tabmix.isVersion(1370)) {
                 gURLBar.onWidgetAfterDOMChange(gURLBar.parentNode);
