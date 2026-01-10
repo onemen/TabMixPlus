@@ -924,6 +924,12 @@ var TabmixContext = {
     let tabsCount = Tabmix.visibleTabs.tabs.length;
     let noTabsToEnd, noTabsToStart, unpinnedTabsToClose;
     if (Tabmix.isVersion(1350)) {
+      console.log(
+        "gBrowser._getTabsToTheEndFrom(aTab)",
+        gBrowser._getTabsToTheEndFrom(aTab),
+        aTab._tPos
+      );
+
       noTabsToEnd = !gBrowser._getTabsToTheEndFrom(aTab).length;
       noTabsToStart = !gBrowser._getTabsToTheStartFrom(aTab).length;
       unpinnedTabsToClose =
@@ -951,35 +957,36 @@ var TabmixContext = {
     Tabmix.setItem(
       "context_closeTab",
       "disabled",
-      (multiselectionContext ? selectedTabsCount === 0 : protectedTab) || keepLastTab
+      (multiselectionContext ? selectedTabsCount === 0 : protectedTab) || keepLastTab || null
     );
-    Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || !unpinnedTabsToClose);
-    Tabmix.setItem("context_closeOtherTabs", "disabled", unpinnedTabsToClose < 1);
-    Tabmix.setItem("context_closeTabsToTheEnd", "disabled", noTabsToEnd);
-    Tabmix.setItem("context_closeTabsToTheStart", "disabled", noTabsToStart);
+
+    Tabmix.setItem("tm-closeAllTabs", "disabled", keepLastTab || !unpinnedTabsToClose || null);
+    Tabmix.setItem("context_closeOtherTabs", "disabled", unpinnedTabsToClose < 1 || null);
+    Tabmix.setItem("context_closeTabsToTheEnd", "disabled", noTabsToEnd || null);
+    Tabmix.setItem("context_closeTabsToTheStart", "disabled", noTabsToStart || null);
 
     var closeTabsEmpty = TMP_ClosedTabs.count < 1;
-    Tabmix.setItem("context_undoCloseTab", "disabled", closeTabsEmpty);
-    Tabmix.setItem("tm-undoCloseList", "disabled", closeTabsEmpty);
+    Tabmix.setItem("context_undoCloseTab", "disabled", closeTabsEmpty || null);
+    Tabmix.setItem("tm-undoCloseList", "disabled", closeTabsEmpty || null);
 
     Tabmix.setItem(
       "context_openTabInWindow",
       "disabled",
-      tabsCount == 1 || Tabmix.singleWindowMode
+      tabsCount == 1 || Tabmix.singleWindowMode || null
     );
     Tabmix.setItem("tm-mergeWindowsTab", "disabled", isOneWindow);
 
     if (Tabmix.rtl) {
       cIndex = tabsCount - 1 - cIndex;
     }
-    Tabmix.setItem("tm-reloadRight", "disabled", tabsCount == 1 || cIndex == tabsCount - 1);
-    Tabmix.setItem("tm-reloadLeft", "disabled", tabsCount == 1 || cIndex === 0);
-    Tabmix.setItem("tm-reloadOther", "disabled", tabsCount == 1);
-    Tabmix.setItem("context_reloadAllTabs", "disabled", tabsCount == 1);
+    Tabmix.setItem("tm-reloadRight", "disabled", tabsCount == 1 || cIndex == tabsCount - 1 || null);
+    Tabmix.setItem("tm-reloadLeft", "disabled", tabsCount == 1 || cIndex === 0 || null);
+    Tabmix.setItem("tm-reloadOther", "disabled", tabsCount == 1 || null);
+    Tabmix.setItem("context_reloadAllTabs", "disabled", tabsCount == 1 || null);
     // Disable "Reload Multiple Tabs" if all sub menuitems are disabled
-    Tabmix.setItem("context_reloadTabOptions", "disabled", tabsCount == 1);
+    Tabmix.setItem("context_reloadTabOptions", "disabled", tabsCount == 1 || null);
 
-    Tabmix.setItem("tm-docShell", "disabled", clickOutTabs);
+    Tabmix.setItem("tm-docShell", "disabled", clickOutTabs || null);
 
     var freezeTabMenu = document.getElementById("tm-freezeTab");
     if (!freezeTabMenu.hidden) {
@@ -1180,7 +1187,7 @@ var TabmixContext = {
       Tabmix.setItem(
         closeTabMenu,
         "disabled",
-        (selectedTabsCount === 0 && protectedTab) || keepLastTab
+        (selectedTabsCount === 0 && protectedTab) || keepLastTab || null
       );
 
       // for remote tab get call getValidUrl when it is safe to use CPOWs
