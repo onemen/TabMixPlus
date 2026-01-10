@@ -8,8 +8,6 @@
 @namespace html url("http://www.w3.org/1999/xhtml");
 
 :root {
-  --tab-min-width-mlt: 100px;
-  --tab-max-width-mlt: 200px;
   --tab-min-height-mlt: calc(var(--tabmix-tab-min-height) + 2 * var(--tab-block-margin, 0px)) !important;
   --tabmix-scrollbutton-padding: calc(var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding));
 }
@@ -234,6 +232,37 @@
 #tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper {
   margin-block: 0;
   padding: 0;
+
+  /**
+   * extend max-width to include width for note and media icons on split view tabs
+   *
+   * Note Logic (0, 20, or 40)
+   * Media Logic (0, 24, or 48)
+  */
+  --extra-note: 0px;
+  --extra-media: 0px;
+
+  &:has(> .tabbrowser-tab[tab-note]) {
+    --extra-note: 20px;
+  }
+
+  &:has(> .tabbrowser-tab:is([muted], [soundplaying], [activemedia-blocked])) {
+    --extra-media: 24px;
+  }
+
+  &:has(> .tabbrowser-tab[tab-note] + .tabbrowser-tab[tab-note]) {
+    --extra-note: 40px;
+  }
+
+  &:has(> .tabbrowser-tab:is([muted], [soundplaying], [activemedia-blocked]) + .tabbrowser-tab:is([muted], [soundplaying], [activemedia-blocked])) {
+    --extra-media: 48px;
+  }
+
+  --base-width: calc((var(--tab-min-width-pref, var(--tab-min-width)) + var(--tab-min-width-uidensity)) * 2 + 6px);
+  --total-min-required: calc(var(--base-width) + var(--extra-note) + var(--extra-media));
+
+  min-width: var(--total-min-required) !important;
+  max-width: max(var(--tabmix-inline-max-width, var(--tab-max-width)), var(--total-min-required)) !important;
 
   :root[uidensity="compact"] & .tab-background {
     --tab-min-height: 25px !important;

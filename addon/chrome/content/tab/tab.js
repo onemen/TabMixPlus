@@ -700,7 +700,9 @@ Tabmix.tabsUtils = {
       gTMPprefObserver.dynamicRules.width.style.getPropertyValue("min-width")
     );
     const currentMaxWidth = parseFloat(
-      gTMPprefObserver.dynamicRules.width.style.getPropertyValue("--tabmix-inline-max-width")
+      gTMPprefObserver.dynamicRules.inlineMaxWidth.style.getPropertyValue(
+        "--tabmix-inline-max-width"
+      )
     );
 
     /** @param {number} width */
@@ -718,7 +720,7 @@ Tabmix.tabsUtils = {
           "important"
         );
         if (minWidth === this.tabBar.mTabMaxWidth || width > currentMaxWidth) {
-          gTMPprefObserver.dynamicRules.width.style.setProperty(
+          gTMPprefObserver.dynamicRules.inlineMaxWidth.style.setProperty(
             "--tabmix-inline-max-width",
             this._widthCache.maxWidth + "px",
             "important"
@@ -1854,7 +1856,7 @@ window.gTMPprefObserver = {
         gBrowser.tabContainer.mTabMinWidth = tabMinWidth;
         gBrowser.tabContainer.setAttribute("no-animation", "");
         this.dynamicRules.width.style.setProperty("min-width", tabMinWidth + "px", "important");
-        this.dynamicRules.width.style.setProperty(
+        this.dynamicRules.inlineMaxWidth.style.setProperty(
           "--tabmix-inline-max-width",
           tabMaxWidth + "px",
           "important"
@@ -2330,18 +2332,28 @@ window.gTMPprefObserver = {
 
   addDynamicRules() {
     // tab width rules
+    let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
+    let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
+
+    let inlineMaxRule = `#tabbrowser-tabs[orient="horizontal"] {
+        --tabmix-inline-max-width: ${_max}px;
+      }`;
+    this.insertRule(inlineMaxRule, "inlineMaxWidth");
+
     let tst = Tabmix.extensions.treeStyleTab ? ":not([treestyletab-collapsed='true'])" : "";
     let tabSelector = `.tabbrowser-tab[fadein]${tst}:not([pinned])`;
+
     // Bug 1949401 (Firefox 142) - Active Tabs should remain active for collapsed Tab groups
     let groupSelector =
       Tabmix.isVersion(1420) ?
         `tab-group > ${tabSelector}:is(tab-group:not([collapsed]) > *, [visuallyselected]):not(
          :root:has(#tabbrowser-tabs:not([tabmix-multibar])) tab-group[movingtabgroup] > *)`
       : `tab-group:not([collapsed]) > ${tabSelector}`;
+
     let newRule = `#tabbrowser-arrowscrollbox:not([orient="vertical"]) > ${groupSelector},
+      #tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper > ${tabSelector},
       #tabbrowser-arrowscrollbox:not([orient="vertical"]) > ${tabSelector} {
-        min-width: #1px !important;
-        --tabmix-inline-max-width: #2px;
+        min-width: calc(${_min}px + var(--tab-min-width-extra-icons, 0px) + var(--tab-min-width-uidensity, 0px)) !important;
         max-width: var(--tabmix-inline-max-width) !important;
       }`;
 
@@ -2358,19 +2370,16 @@ window.gTMPprefObserver = {
       );
     }
 
+    this.insertRule(newRule.trim(), "width");
+    this.insertRule(`:root { --tabmix-tab-max-width: ${_max}px; }`, "tabMaxWidthVar");
+
     /* this rule need to have higher specificity then the rule in gTMPprefObserver.dynamicRules.width */
     this.insertRule(
       `#TabsToolbar #tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) #tabbrowser-arrowscrollbox > ${tabSelector},
        #TabsToolbar #tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) #tabbrowser-arrowscrollbox > ${groupSelector} {
-        max-width: var(--tabmix-tab-overflow-width, var(--tab-min-width)) !important;
+        max-width: var(--tabmix-tab-overflow-width, var(--tab-min-width-pref, var(--tab-min-width))) !important;
       }`
     );
-
-    let _max = Services.prefs.getIntPref("browser.tabs.tabMaxWidth");
-    let _min = Services.prefs.getIntPref("browser.tabs.tabMinWidth");
-    newRule = newRule.replace("#1", String(_min)).replace("#2", String(_max));
-    this.insertRule(newRule.trim(), "width");
-    this.insertRule(`:root { --tabmix-tab-max-width: ${_max}px; }`, "tabMaxWidthVar");
 
     // rule for controlling margin-inline-start when we have pinned tab in multi-row
     // avoid set margin-inline-start to tabs in collapsed group
