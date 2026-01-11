@@ -984,17 +984,17 @@ var TabmixContext = {
 
     var freezeTabMenu = document.getElementById("tm-freezeTab");
     if (!freezeTabMenu.hidden) {
-      Tabmix.setItem(freezeTabMenu, "checked", lockedTab && protectedTab);
+      Tabmix.setItem(freezeTabMenu, "checked", (lockedTab && protectedTab) || null);
     }
 
     var lockTabMenu = document.getElementById("tm-lockTab");
     if (!lockTabMenu.hidden) {
-      Tabmix.setItem(lockTabMenu, "checked", lockedTab);
+      Tabmix.setItem(lockTabMenu, "checked", lockedTab || null);
     }
 
     var protectTabMenu = document.getElementById("tm-protectTab");
     if (!protectTabMenu.hidden) {
-      Tabmix.setItem(protectTabMenu, "checked", protectedTab);
+      Tabmix.setItem(protectTabMenu, "checked", protectedTab || null);
     }
 
     return true;
