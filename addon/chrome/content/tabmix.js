@@ -1221,7 +1221,7 @@ var TMP_eventListener = {
               nextSibling.removeAttribute("tabmix-firstTabInRow");
             }
           } else if (Tabmix.isTabGroup(node)) {
-            if (!Tabmix.isVersion(1480)) {
+            if (!Tabmix.isVersion(1480) && node.tabsAndSplitViews === undefined) {
               Object.defineProperty(node, "tabsAndSplitViews", {
                 get() {
                   return Array.from(node.children).filter(
