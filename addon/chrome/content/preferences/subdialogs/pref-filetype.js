@@ -169,9 +169,5 @@ function SelectItemAt(index, focus) {
 
 /** @type {typeof Globals.setButtonDisable} */
 function setButtonDisable(button, set) {
-  if (set) {
-    button.setAttribute("disabled", true);
-  } else {
-    button.removeAttribute("disabled");
-  }
+  button.toggleAttribute("disabled", Boolean(set));
 }

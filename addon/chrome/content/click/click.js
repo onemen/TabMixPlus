@@ -924,12 +924,6 @@ var TabmixContext = {
     let tabsCount = Tabmix.visibleTabs.tabs.length;
     let noTabsToEnd, noTabsToStart, unpinnedTabsToClose;
     if (Tabmix.isVersion(1350)) {
-      console.log(
-        "gBrowser._getTabsToTheEndFrom(aTab)",
-        gBrowser._getTabsToTheEndFrom(aTab),
-        aTab._tPos
-      );
-
       noTabsToEnd = !gBrowser._getTabsToTheEndFrom(aTab).length;
       noTabsToStart = !gBrowser._getTabsToTheStartFrom(aTab).length;
       unpinnedTabsToClose =

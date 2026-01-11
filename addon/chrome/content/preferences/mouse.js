@@ -73,8 +73,8 @@ var gMousePane = {
     // start drag window on OpenSuSe
     if (TabmixSvc.isLinux) {
       let disabled = panel == "alt";
-      Tabmix.setItem(this.clickTabbar, "disabled", disabled);
-      Tabmix.setItem(this.clickTabbar.previousSibling, "disabled", disabled);
+      Tabmix.setItem(this.clickTabbar, "disabled", disabled || null);
+      Tabmix.setItem(this.clickTabbar.previousSibling, "disabled", disabled || null);
     }
   },
 

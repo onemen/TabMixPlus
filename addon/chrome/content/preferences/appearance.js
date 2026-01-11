@@ -160,8 +160,8 @@ var gAppearancePane = {
 
   tabCloseButtonChanged() {
     var tabCbValue = $Pref("pref_tabCloseButton").value;
-    Tabmix.setItem("tabDelayCheck", "hidden", tabCbValue != 2 && tabCbValue != 4);
-    Tabmix.setItem("tabWidthBox", "hidden", tabCbValue != 5);
+    Tabmix.setItem("tabDelayCheck", "hidden", (tabCbValue != 2 && tabCbValue != 4) || null);
+    Tabmix.setItem("tabWidthBox", "hidden", tabCbValue != 5 || null);
   },
 
   setTabCloseButtonUI() {

@@ -327,11 +327,7 @@ class Preference extends MozXULElement {
   }
 
   set disabled(val) {
-    if (val) {
-      this.setAttribute("disabled", "true");
-    } else {
-      this.removeAttribute("disabled");
-    }
+    this.toggleAttribute("disabled", Boolean(val));
 
     if (!this.id) {
       return;
@@ -969,11 +965,7 @@ class PaneButton extends _MozRadio {
   }
 
   set disabled(val) {
-    if (val) {
-      this.setAttribute("disabled", "true");
-    } else {
-      this.removeAttribute("disabled");
-    }
+    this.toggleAttribute("disabled", Boolean(val));
   }
 
   get tabIndex() {

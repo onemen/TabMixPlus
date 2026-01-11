@@ -130,11 +130,7 @@ const TabpanelsClass = customElements.get("tabpanels");
     }
 
     set disabled(val) {
-      if (val) {
-        this.setAttribute("disabled", "true");
-      } else {
-        this.removeAttribute("disabled");
-      }
+      this.toggleAttribute("disabled", Boolean(val));
     }
 
     get disabled() {
