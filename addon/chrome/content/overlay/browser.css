@@ -331,7 +331,7 @@ so display: none !important; does not hide the button */
 
 /* we don't need rule for toolbar-drag - when tabbar on bottom */
 #TabsToolbar[tabbaronbottom] {
-  display: block;
+  display: flex;
   position: fixed !important;
   appearance: none !important;
   top: var(--tabmix-bottom-toolbox-top);
