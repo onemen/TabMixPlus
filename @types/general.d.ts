@@ -725,6 +725,8 @@ declare namespace MockedGeckoTypes {
     set color(code: string);
     get id(): string;
     set id(val: string);
+    get hasActiveTab(): boolean;
+    set hasActiveTab(val: boolean);
     get label(): string;
     set label(val: string);
     get name(): string;
@@ -739,6 +741,7 @@ declare namespace MockedGeckoTypes {
     get labelContainerElement(): GroupLabelContainer;
     get isBeingDragged(): boolean;
     set isBeingDragged(val: boolean);
+    overflowContainer: HTMLElement;
     addTabs(tabsOrSplitViews: (MozTabSplitViewWrapper | BrowserTab)[], metricsContext?: MockedExports.TelemetrySource): void;
     ungroupTabs(): void;
     save(): void;

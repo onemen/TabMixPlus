@@ -1244,8 +1244,15 @@ var TMP_tabDNDObserver = {
       }
 
       const draggedGroup = gBrowser.isTabGroupLabel(draggedElement) ? draggedElement.group : null;
+
+      const getElementGroup = () => {
+        if (dropElement?.group) return dropElement.group;
+        const target = this.getEventTarget(event);
+        return Tabmix.isTabGroup(target) ? target : target?.group;
+      };
+
       const draggedTab = draggedGroup?.tabsAndSplitViews[0] ?? draggedElement;
-      const elementGroup = dropElement?.group;
+      const elementGroup = getElementGroup();
       const dragAfterGroup = this.isDragAfterGroup(event, dropElement);
 
       const notAllowed = {flag: false, tooltip: ""};
@@ -1421,7 +1428,7 @@ var TMP_tabDNDObserver = {
     }
 
     this.tabDragAndDrop._setDragOverGroupColor(color);
-    if (gBrowser.isTabGroupLabel(dropElement)) {
+    if (color !== "transparent" && gBrowser.isTabGroupLabel(dropElement)) {
       dropElement.toggleAttribute("dragover-groupTarget", true);
     }
     draggedElement._dragData.movingTabs
@@ -1930,6 +1937,8 @@ var TMP_tabDNDObserver = {
         } else {
           dropOnStart = this.isDropBefore(event, group.labelElement);
         }
+      } else if (group?.collapsed && !dropTab.visible) {
+        newIndex = group.labelElement.elementIndex;
       } else {
         newIndex = dropTab?.elementIndex ?? Tabmix.tabsUtils.dragAndDropElements.length;
       }
@@ -1983,7 +1992,7 @@ var TMP_tabDNDObserver = {
 
     if (!TabmixTabbar.hasMultiRows) {
       const target = this.getEventTarget(event);
-      const tabTarget = Tabmix.isTabGroup(target) ? target.tabs[0] : target;
+      const tabTarget = Tabmix.isTabGroup(target) ? target.tabsAndSplitViews[0] : target;
       const startIndex = tabTarget?.elementIndex ?? 0;
       const index = tabs
         .slice(startIndex, numTabs)
@@ -2098,7 +2107,7 @@ var TMP_tabDNDObserver = {
     const target =
       maybeTabTarget ??
       (Tabmix.isVersion(1370) ?
-        event.target.closest(".tab-group-label")
+        (event.target.closest(".tab-group-label") ?? event.target.closest("tab-group"))
       : event.target.closest("tab-group"));
     return target;
   },
@@ -2148,12 +2157,25 @@ var TMP_tabDNDObserver = {
     rect,
     defaultMargin
   ) {
-    const margin = defaultMargin + (dropBefore ? 0 : itemRect.width);
+    const elements = Tabmix.tabsUtils.dragAndDropElements;
+
+    // handle the case last element is collapsed grout that include the selected tab
+    // we need to move the indicator after tab-group-overflow-count-container
+    let groupOffset = 0;
+    if (!dropElement && newIndex >= gBrowser.tabs.length) {
+      const lastElement = elements.at(-1);
+      if (lastElement?.group?.collapsed && lastElement?.group?.hasActiveTab) {
+        const container = lastElement?.group.overflowContainer;
+        groupOffset = container.getBoundingClientRect().width;
+      }
+    }
+
+    const margin = defaultMargin + groupOffset + (dropBefore ? 0 : itemRect.width);
     const pinnedTabCount = gBrowser.pinnedTabCount;
     if (pinnedTabCount === 0) {
       return margin;
     }
-    const firstNonPinnedTab = Tabmix.tabsUtils.dragAndDropElements[pinnedTabCount];
+    const firstNonPinnedTab = elements[pinnedTabCount];
 
     // Handle dragging between pinned/unpinned containers
     if (draggedTab?._dragData?.pinnedTabsContainerInfo?.changePinnedState) {
@@ -2181,9 +2203,10 @@ var TMP_tabDNDObserver = {
 
     // Helper: margin after last pinned tab
     function getMarginAfterLastPinned(offset = 0) {
-      const pinnedTabRect = Tabmix.tabsUtils.dragAndDropElements[
-        pinnedTabCount - 1
-      ]?.getBoundingClientRect() ?? {right: 0, left: 0};
+      const pinnedTabRect = elements[pinnedTabCount - 1]?.getBoundingClientRect() ?? {
+        right: 0,
+        left: 0,
+      };
       return RTL_UI ?
           rect.right - pinnedTabRect.left + offset
         : pinnedTabRect.right - rect.left + offset;
