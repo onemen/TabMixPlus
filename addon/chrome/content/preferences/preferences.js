@@ -578,6 +578,15 @@ ChromeUtils.defineLazyGetter(this, "gPreferenceList", () => {
 });
 
 function defaultSetting() {
+  if (
+    !Services.prompt.confirm(
+      window,
+      "Tab Mix Plus",
+      "Are you sure you want to reset your Tab Mix Plus preferences to default?"
+    )
+  ) {
+    return;
+  }
   gPrefWindow.resetChanges();
   // set flag to prevent TabmixTabbar.updateSettings from run for each change
   Tabmix.prefs.setBoolPref("setDefault", true);
