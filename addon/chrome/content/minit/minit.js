@@ -1244,7 +1244,7 @@ var TMP_tabDNDObserver = {
       }
 
       const draggedGroup = gBrowser.isTabGroupLabel(draggedElement) ? draggedElement.group : null;
-      const draggedTab = draggedGroup?.tabs[0] ?? draggedElement;
+      const draggedTab = draggedGroup?.tabsAndSplitViews[0] ?? draggedElement;
       const elementGroup = dropElement?.group;
       const dragAfterGroup = this.isDragAfterGroup(event, dropElement);
 
