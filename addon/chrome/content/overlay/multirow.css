@@ -258,7 +258,7 @@
     --extra-media: 48px;
   }
 
-  --base-width: calc((var(--tab-min-width-pref, var(--tab-min-width)) + var(--tab-min-width-uidensity)) * 2 + 6px);
+  --base-width: calc((var(--tab-min-width-pref, var(--tab-min-width)) + var(--tab-min-width-uidensity, 0px)) * 2 + 6px);
   --total-min-required: calc(var(--base-width) + var(--extra-note) + var(--extra-media));
 
   min-width: var(--total-min-required) !important;
