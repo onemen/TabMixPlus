@@ -627,6 +627,14 @@ Tabmix.tablib = {
           : "collapse"
         };
       }
+      let menubar = document.getElementById("toolbar-menubar");
+      if (
+        (TabmixTabbar.hideMode !== 0) &&
+        menubar?.hasAttribute("autohide") &&
+        menubar?.getAttribute("autohide") !== "false"
+      ) {
+        window.dispatchEvent(new Event("resize"));
+      }
       $1$2`
       )
       .toCode();

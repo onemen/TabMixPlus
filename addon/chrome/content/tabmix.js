@@ -277,6 +277,13 @@ var TMP_eventListener = {
           TabBarVisibility.update();
         }
         break;
+      case "toolbarvisibilitychange": {
+        // trigger toolbarbuttons overflow/underflow when we hide the tabbar
+        if (document.getElementById("TabsToolbar").collapsed && TabmixTabbar.hideMode !== 0) {
+          window.dispatchEvent(new Event("resize"));
+        }
+        break;
+      }
     }
   },
 
@@ -412,6 +419,8 @@ var TMP_eventListener = {
     }
 
     gBrowser.tabpanels.addEventListener("click", Tabmix.contentAreaClick._contentLinkClick, true);
+
+    document.getElementById("toolbar-menubar")?.addEventListener("toolbarvisibilitychange", this);
 
     // init tabmix functions
     try {
@@ -1147,6 +1156,10 @@ var TMP_eventListener = {
       Tabmix.contentAreaClick._contentLinkClick,
       true
     );
+
+    document
+      .getElementById("toolbar-menubar")
+      ?.removeEventListener("toolbarvisibilitychange", this);
 
     gTMPprefObserver.removeObservers();
     gTMPprefObserver.dynamicRules = {};
