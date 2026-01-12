@@ -519,6 +519,9 @@ Tabmix.handleTabbarVisibility = {
       const template = document.getElementById("tabmix_hideTabbar_menu-container");
       this.contextMenu.appendChild(template.content.cloneNode(true));
       hideTabbarMenu = document.getElementById("tabmix_hideTabbar_menu");
+      if (!Tabmix.isVersion(1460)) {
+        hideTabbarMenu.querySelector(`menuitem[value="3"]`)?.setAttribute("hidden", "true");
+      }
     }
     return {
       hideTabbarMenu,

@@ -194,7 +194,9 @@
         TMP_LastTab.onPopupshowing();
         break;
       case "tabmix_hideTabbar_popup":
-        menupopup.children[TabmixTabbar.hideMode]?.setAttribute("checked", "true");
+        menupopup
+          .querySelector(`menuitem[value="${TabmixTabbar.hideMode}"]`)
+          ?.setAttribute("checked", "true");
         break;
       case "tabmix-rows-tooltip":
         Tabmix.tabsUtils.createTooltip(menupopup);

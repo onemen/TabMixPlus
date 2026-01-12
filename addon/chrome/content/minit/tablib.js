@@ -612,7 +612,9 @@ Tabmix.tablib = {
         /let hideTabsToolbar =([^;]*);/,
         `let hideTabsToolbar =
         TabmixTabbar.hideMode === 2 ||
-        (!isSingleTabWindow && TabmixTabbar.hideMode === 1 && hasSingleTab) || $1;`,
+        (!isSingleTabWindow && TabmixTabbar.hideMode === 1 && hasSingleTab) ||
+        (!isSingleTabWindow && TabmixTabbar.hideMode === 3 && (hasSingleTab || (gBrowser.visibleTabs.length === 2 && gBrowser.selectedTab.splitview))) ||
+        $1;`,
         {check: Tabmix.isVersion(1380)}
       )
       ._replace(

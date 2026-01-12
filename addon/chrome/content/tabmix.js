@@ -271,6 +271,12 @@ var TMP_eventListener = {
         this.onFullScreen(enterFS);
         break;
       }
+      case "TabSplitViewActivate":
+      case "TabSplitViewDeactivate":
+        if (TabmixTabbar.hideMode === 3) {
+          TabBarVisibility.update();
+        }
+        break;
     }
   },
 
@@ -335,6 +341,11 @@ var TMP_eventListener = {
 
     if (Tabmix.isVersion(1410)) {
       this._tabEvents.push("TabPinned");
+    }
+
+    if (Tabmix.isVersion(1460)) {
+      this._tabEvents.push("TabSplitViewActivate");
+      this._tabEvents.push("TabSplitViewDeactivate");
     }
 
     this.toggleEventListener(gBrowser.tabContainer, this._tabEvents, true);
