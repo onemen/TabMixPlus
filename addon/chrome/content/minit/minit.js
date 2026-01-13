@@ -914,8 +914,8 @@ var TMP_tabDNDObserver = {
     const thisContainer = Tabmix.isVersion(1450) ? "this._tabbrowserTabs" : "this";
     const dropName = Tabmix.isVersion(1450) ? "handle_drop" : "on_drop";
     const refTab =
-      Tabmix.isVersion(1470) ? `this._tabbrowserTabs.dragAndDropElements[dropIndex]`
-      : Tabmix.isVersion(1380) ? `this._tabbrowserTabs.ariaFocusableItems[dropIndex]`
+      Tabmix.isVersion(1470) ? `${thisContainer}.dragAndDropElements[dropIndex]`
+      : Tabmix.isVersion(1380) ? `${thisContainer}.ariaFocusableItems[dropIndex]`
       : `this.allTabs[dropIndex]`;
 
     const code = Tabmix.changeCode(
