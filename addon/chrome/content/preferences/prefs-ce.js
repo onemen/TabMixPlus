@@ -323,7 +323,7 @@ class Preference extends MozXULElement {
   }
 
   get disabled() {
-    return this.getAttribute("disabled") == "true";
+    return this.hasAttribute("disabled");
   }
 
   set disabled(val) {
@@ -961,7 +961,7 @@ class PaneButton extends _MozRadio {
   }
 
   get disabled() {
-    return this.getAttribute("disabled") == "true";
+    return this.hasAttribute("disabled");
   }
 
   set disabled(val) {

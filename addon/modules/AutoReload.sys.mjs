@@ -16,6 +16,7 @@ var _setItem = function () {};
 
 /** @type {AutoReloadModule.AutoReload} */
 export const AutoReload = {
+  _labelsInitialized: false,
   _labels: {
     minute: "",
     minutes: "",
@@ -101,14 +102,15 @@ export const AutoReload = {
 
     /** @type {HTMLElement} */ // @ts-ignore
     var enableItem = menuItems[2];
-    if (!this._labels) {
+    if (!this._labelsInitialized) {
       this._labels = {
         minute: enableItem.getAttribute("minute") ?? "",
         minutes: enableItem.getAttribute("minutes") ?? "",
         seconds: enableItem.getAttribute("seconds") ?? "",
       };
+      this._labelsInitialized = true;
     }
-    enableItem.setAttribute("checked", Boolean(aPopup._tab.autoReloadEnabled));
+    enableItem.toggleAttribute("checked", Boolean(aPopup._tab.autoReloadEnabled));
     this.setLabel(enableItem, aPopup._tab.autoReloadTime ?? 0);
 
     this.updateCustomList(aPopup);

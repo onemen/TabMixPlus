@@ -1937,7 +1937,7 @@ var TMP_tabDNDObserver = {
         } else {
           dropOnStart = this.isDropBefore(event, group.labelElement);
         }
-      } else if (group?.collapsed && !dropTab.visible) {
+      } else if (group?.collapsed && !dropTab?.visible) {
         newIndex = group.labelElement.elementIndex;
       } else {
         newIndex = dropTab?.elementIndex ?? Tabmix.tabsUtils.dragAndDropElements.length;

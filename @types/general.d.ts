@@ -718,6 +718,7 @@ declare namespace MockedGeckoTypes {
     parentNode: GroupLabelContainer;
     pinned: never;
     splitview: never;
+    visible: never;
   }
 
   interface MozTabbrowserTabGroup extends Omit<MozXULElement, "previousSibling"> {

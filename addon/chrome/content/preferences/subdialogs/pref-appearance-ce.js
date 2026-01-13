@@ -134,7 +134,7 @@ const TabpanelsClass = customElements.get("tabpanels");
     }
 
     get disabled() {
-      return this.getAttribute("disabled") === "true";
+      return this.hasAttribute("disabled");
     }
 
     /** @type {TabstylepanelClass["_updateUseThisState"]} */

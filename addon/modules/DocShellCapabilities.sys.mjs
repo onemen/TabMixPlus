@@ -48,14 +48,14 @@ export const DocShellCapabilities = {
   onGet(nodes, tab) {
     let disallow = this.collect(tab);
     for (const element of nodes) {
-      element.setAttribute("checked", !disallow.includes(element.value));
+      element.toggleAttribute("checked", !disallow.includes(element.value));
     }
   },
 
   onSet(tab, node) {
     const parentNodes = node.parentNode?.childNodes ?? [];
     const disallow = Array.from(parentNodes)
-      .filter(element => element?.getAttribute("checked") !== "true")
+      .filter(element => !element?.hasAttribute("checked"))
       .map(element => element?.value);
     this.restore(tab, disallow.join(","), true);
   },

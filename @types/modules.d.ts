@@ -659,6 +659,7 @@ declare namespace AutoReloadModule {
   type ReloadData = {scrollX: number; scrollY: number; isPostData: boolean; postData: nsIInputStream | null; referrerInfo: nsIReferrerInfo | null};
 
   interface AutoReload {
+    _labelsInitialized: boolean;
     _labels: {minute: string; minutes: string; seconds: string};
     init(): void;
     initTab(tab: Tab): void;
@@ -963,8 +964,9 @@ declare namespace DocShellCapabilitiesModule {
   }
 
   interface MenuItem extends Omit<Node, "parentNode"> {
-    value: string;
     parentNode: {childNodes: HTMLCollectionBase_G<MenuItem>};
+    toggleAttribute(name: string, force?: boolean): boolean;
+    value: string;
   }
 
   interface DocShellCapabilities {

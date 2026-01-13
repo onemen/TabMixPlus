@@ -94,8 +94,8 @@ var gPrefWindow = {
     var paneButton = prefWindow.getElementsByAttribute("pane", "broadcasters")[0];
     paneButton.collapsed = true;
 
-    $("syncPrefs").setAttribute("checked", Tabmix.prefs.getBoolPref("syncPrefs"));
-    $("instantApply").setAttribute("checked", Tabmix.prefs.getBoolPref("instantApply"));
+    $("syncPrefs").toggleAttribute("checked", Tabmix.prefs.getBoolPref("syncPrefs"));
+    $("instantApply").toggleAttribute("checked", Tabmix.prefs.getBoolPref("instantApply"));
     positionDonateButton();
 
     if (Tabmix.isVersion({wf: "140.2.0"})) {
@@ -604,7 +604,7 @@ function defaultSetting() {
 // update instantApply after import or reset
 function updateInstantApply() {
   const menuItem = $("instantApply");
-  const checked = menuItem.getAttribute("checked") === "true";
+  const checked = menuItem.hasAttribute("checked");
 
   // update any left over items with its preference value
   for (let preference of gPrefWindow.changes) {
@@ -613,7 +613,7 @@ function updateInstantApply() {
   }
 
   if (Tabmix.prefs.getBoolPref("instantApply") !== checked) {
-    menuItem.setAttribute("checked", !checked);
+    menuItem.toggleAttribute("checked", !checked);
     prefWindow.instantApply = !checked;
   }
   gPrefWindow.setButtons(!gPrefWindow.changes.size);
@@ -623,8 +623,7 @@ function updateInstantApply() {
 function toggleInstantApply(item) {
   const preference = $Pref("pref_instantApply");
   if (preference._running) return;
-  const checked =
-    item.localName === "menuitem" ? item.getAttribute("checked") === "true" : item.value;
+  const checked = item.localName === "menuitem" ? item.hasAttribute("checked") : item.value;
 
   // apply all pending changes before we change mode to instantApply
   if (checked) gPrefWindow.onApply();

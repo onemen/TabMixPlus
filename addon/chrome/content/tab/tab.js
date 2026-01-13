@@ -2843,7 +2843,7 @@ window.gTMPprefObserver = {
     Tabmix.singleWindowMode = Tabmix.prefs.getBoolPref("singleWindow");
     var newWindowButton = document.getElementById("new-window-button");
     if (newWindowButton) {
-      newWindowButton.setAttribute("disabled", Tabmix.singleWindowMode);
+      newWindowButton.toggleAttribute("disabled", Tabmix.singleWindowMode);
     }
 
     const val = Tabmix.singleWindowMode || null;

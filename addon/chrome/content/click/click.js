@@ -1198,18 +1198,18 @@ var TabmixContext = {
 
       var freezeTabMenu = document.getElementById("tm-content-freezeTab");
       Tabmix.showItem(freezeTabMenu, !contentClick && Tabmix.prefs.getBoolPref("freezeTabContent"));
-      Tabmix.setItem(freezeTabMenu, "checked", protectedTab && lockedTab);
+      Tabmix.setItem(freezeTabMenu, "checked", (protectedTab && lockedTab) || null);
 
       var lockTabMenu = document.getElementById("tm-content-lockTab");
       Tabmix.showItem(lockTabMenu, !contentClick && Tabmix.prefs.getBoolPref("lockTabContent"));
-      Tabmix.setItem(lockTabMenu, "checked", lockedTab);
+      Tabmix.setItem(lockTabMenu, "checked", lockedTab || null);
 
       var protectTabMenu = document.getElementById("tm-content-protectTab");
       Tabmix.showItem(
         protectTabMenu,
         !contentClick && Tabmix.prefs.getBoolPref("protectTabContent")
       );
-      Tabmix.setItem(protectTabMenu, "checked", protectedTab);
+      Tabmix.setItem(protectTabMenu, "checked", protectedTab || null);
 
       var duplicateTabMenu = document.getElementById("tm-duplicateTabContext");
       Tabmix.showItem(
