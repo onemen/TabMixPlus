@@ -52,8 +52,6 @@ function restartApplication() {
   return undefined;
 }
 
-let invalidateCachesOnRestart = false;
-
 /** @type {typeof Bootstrap.showRestartNotification} */
 function showRestartNotification(verb, window) {
   if (!window.gBrowser.selectedBrowser) {
@@ -81,9 +79,7 @@ function showRestartNotification(verb, window) {
       {
         label: "Not Now",
         accessKey: "N",
-        callback: () => {
-          invalidateCachesOnRestart = true;
-        },
+        callback: () => {},
       },
     ],
     {
@@ -166,6 +162,7 @@ async function startup(data, reason) {
 
   const window = Services.wm.getMostRecentWindow("navigator:browser");
   if (reason === ADDON_UPGRADE || reason === ADDON_DOWNGRADE) {
+    Services.appinfo.invalidateCachesOnRestart();
     showRestartNotification("upgraded", window);
     return;
   }
@@ -265,12 +262,11 @@ function shutdown(data, reason) {
 
   const window = Services.wm.getMostRecentWindow("navigator:browser");
   if (reason === ADDON_DISABLE) {
+    Services.appinfo.invalidateCachesOnRestart();
     showRestartNotification("disabled", window);
   } else if (reason === ADDON_UNINSTALL /* && window.Tabmix */) {
-    showRestartNotification("uninstalled", window);
-  } else if (invalidateCachesOnRestart) {
     Services.appinfo.invalidateCachesOnRestart();
-    invalidateCachesOnRestart = false;
+    showRestartNotification("uninstalled", window);
   }
 
   TabmixWidgets.destroy(reason === ADDON_UNINSTALL);
