@@ -3443,18 +3443,8 @@ window.gTMPprefObserver = {
   },
 
   async checkScriptsUpdateNeeded() {
+    const result = {updateNeeded: false, latestDate: ""};
     try {
-      const versionFile = PathUtils.join(
-        PathUtils.profileDir,
-        "chrome",
-        "utils",
-        "versionInfo.json"
-      );
-
-      if (!(await IOUtils.exists(versionFile))) {
-        return true;
-      }
-
       let remoteInfo;
       try {
         const gistID = "e02ec904dd82a73cec4c229a7cbb552e";
@@ -3468,19 +3458,38 @@ window.gTMPprefObserver = {
       }
 
       if (!remoteInfo) {
-        return false;
+        return result;
+      }
+
+      const dates = Object.values(remoteInfo)
+        .map(info => info.date)
+        .sort();
+      result.latestDate = dates.at(-1);
+
+      const versionFile = PathUtils.join(
+        PathUtils.profileDir,
+        "chrome",
+        "utils",
+        "versionInfo.json"
+      );
+
+      if (!(await IOUtils.exists(versionFile))) {
+        result.updateNeeded = true;
+        return result;
       }
 
       const content = await IOUtils.readUTF8(versionFile);
       const localInfo = JSON.parse(content);
 
-      return Object.entries(remoteInfo).some(([key, {date}]) => {
+      result.updateNeeded = Object.entries(remoteInfo).some(([key, {date}]) => {
         const localDate = localInfo[key]?.date;
         return !localDate || localDate < date;
       });
+      return result;
     } catch (e) {
       console.error("TabMix: Error checking scripts update", e);
-      return true;
+      result.updateNeeded = true;
+      return result;
     }
   },
 
@@ -3502,11 +3511,14 @@ window.gTMPprefObserver = {
       browserDisplayVersion: AppConstants.MOZ_APP_VERSION_DISPLAY,
     };
 
+    const {updateNeeded, latestDate} = await this.checkScriptsUpdateNeeded();
+
     /** @type {Tab["_updateData"]} */
     const updateData = {
       version: currentVersion,
       support: null,
-      showScriptsUpdate: await this.checkScriptsUpdateNeeded(),
+      showScriptsUpdate: updateNeeded,
+      scriptsUpdateDate: latestDate,
     };
 
     try {

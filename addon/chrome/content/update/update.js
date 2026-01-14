@@ -29,6 +29,38 @@ function setSupportMessage({users, amount, date}) {
   });
 }
 
+/** @param {string | null | undefined} scriptsUpdateDate */
+function setUpdateTime(scriptsUpdateDate) {
+  const time = document.querySelector("time.date-badge");
+  if (!time) {
+    return;
+  }
+
+  if (scriptsUpdateDate) {
+    const parts = scriptsUpdateDate.split("-");
+    const date = new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+    if (parts.length === 3 && !isNaN(date.getTime())) {
+      const shortDate = date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+      const longDate = date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      time.setAttribute("datetime", scriptsUpdateDate);
+      time.setAttribute("title", `Updated ${shortDate}`);
+      time.setAttribute("aria-label", `Updated ${longDate}`);
+      // @ts-ignore
+      time.lastChild.textContent = `Updated ${shortDate}`;
+      return;
+    }
+  }
+  time.hidden = true;
+}
+
 window.addEventListener(
   "DOMContentLoaded",
   () => {
@@ -40,7 +72,7 @@ window.addEventListener(
     const tab = chromeWin?.gBrowser.getTabForBrowser(browser);
     if (!tab) return;
 
-    const {version, support, showScriptsUpdate} = tab?._updateData ?? {};
+    const {version, support, showScriptsUpdate, scriptsUpdateDate} = tab?._updateData ?? {};
 
     // update title
     const versionTitleSpan = document.getElementById("version-title-span");
@@ -62,6 +94,7 @@ window.addEventListener(
 
     if (showScriptsUpdate) {
       document.querySelector(".layout")?.classList.add("visible-aside");
+      setUpdateTime(scriptsUpdateDate);
     }
   },
   {once: true}
