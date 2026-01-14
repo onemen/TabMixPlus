@@ -3389,7 +3389,14 @@ window.gTMPprefObserver = {
         // different date then the installed version
         let isDevBuild = /[A-Za-z-]/.test(currentVersion);
         if (!isDevBuild) {
-          showNewVersionTab = true;
+          const versionRegex = /^\d+\.\d+\.\d+$/;
+          if (!versionRegex.test(currentVersion) || !versionRegex.test(oldVersion)) {
+            showNewVersionTab = true;
+          } else {
+            const [c0 = 0, c1 = 0, c2 = 0] = currentVersion.split(".").map(Number);
+            const [o0 = 0, o1 = 0, o2 = 0] = oldVersion.split(".").map(Number);
+            showNewVersionTab = c0 !== o0 || c1 !== o1 || c2 - o2 > 1;
+          }
         } else {
           let re = /^(.*)\.\d{6}$/;
           let subs = (/** @type {string} */ str) => {
