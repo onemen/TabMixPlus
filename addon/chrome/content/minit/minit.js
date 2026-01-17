@@ -121,7 +121,7 @@ var TMP_tabDNDObserver = {
     }
 
     // prevent multiselectStacking when using multi-row tabs
-    if (Tabmix.isVersion(1460)) {
+    if (Tabmix.isVersion(1460) && !Tabmix.isVersion(1490)) {
       const tabBar = gBrowser.tabContainer;
 
       /** @this {TabContainer} */
@@ -158,7 +158,7 @@ var TMP_tabDNDObserver = {
       Services.prefs.addObserver("extensions.tabmix.tabBarMode", tabBar.boundObserve);
 
       tabBar._initializeDragAndDrop();
-    } else {
+    } else if (!Tabmix.isVersion(1460)) {
       // @ts-expect-error - use typescript element is MozTabSplitViewWrapper
       gBrowser.isSplitViewWrapper = () => false;
     }
@@ -1098,6 +1098,9 @@ var TMP_tabDNDObserver = {
           tab.group.isBeingDragged = false;
         }
       }
+    }
+    if (Tabmix.isVersion(1490) && useTabmixDnD && gBrowser.isTab(tab)) {
+      this.finishMoveTogetherSelectedTabs(tab);
     }
     gReduceMotionSetting = currentReduceMotion;
 
