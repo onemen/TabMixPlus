@@ -179,7 +179,7 @@ Tabmix.afterDelayedStartup = function () {
         label: "Disable Debug Mode",
         accessKey: "D",
         callback() {
-          Tabmix.prefs.setBoolPref("enableDebug", false);
+          Services.prefs.setBoolPref("extensions.tabmix.debugMode", false);
         },
       },
     ];
