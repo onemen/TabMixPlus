@@ -151,6 +151,7 @@ interface TabmixKnownModules {
   "moz-src:///browser/components/places/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
   "resource://gre/modules/Preferences.sys.mjs": {Preferences: typeof MockedExports.PreferencesClass};
   "resource://gre/modules/PrivateBrowsingUtils.sys.mjs": {PrivateBrowsingUtils: MockedExports.PrivateBrowsingUtils};
+  "resource://gre/modules/WebNavigation.sys.mjs": {WebNavigationManager: MockedExports.WebNavigationManager};
   "resource://gre/modules/XPCOMUtils.sys.mjs": typeof MockedExports.XPCOMUtilsSYSMJS;
   // Tabmix
   "chrome://tabmix-resource/content/BrowserDOMWindow.sys.mjs": {TabmixBrowserDOMWindow: BrowserDOMWindowModule.BrowserDOMWindow};
@@ -369,19 +370,6 @@ declare namespace MockedExports {
     update(permanentKey: object, newData: Record<string, unknown>): void;
   }
 
-  interface URILoadingHelper {
-    getTargetWindow(window: Window, {skipPopups, forceNonPrivate}?: {skipPopups?: boolean; forceNonPrivate?: boolean}): Window | null;
-    openUILink(window: Window, url: string, event: Event, aIgnoreButton: boolean | {ignoreButton: boolean; ignoreAlt: boolean}, aIgnoreAlt: boolean, aAllowThirdPartyFixup: boolean, aPostData: unknown, aReferrerInfo: unknown): void;
-  }
-
-  const XPCOMUtilsSYSMJS: {
-    XPCOMUtils: {
-      defineLazyModuleGetters<T extends Record<string, string>>(obj: object, modules: T): void;
-      defineLazyPreferenceGetter(aObject: object, aName: string, aPreference: string, aDefaultPrefValue: unknown, aOnUpdate: (aPreference: string, previousValue: unknown, newValue: unknown) => void, aTransform?: (aPreference: string) => unknown): void;
-      defineLazyServiceGetters<T extends Record<string, [string, Function]>>(obj: object, services: T): void;
-    };
-  };
-
   type TabListView = TabListViewNS.TabListView;
   var TabListView: {
     prototype: TabListView;
@@ -416,6 +404,23 @@ declare namespace MockedExports {
       DELETED: "deleted";
     };
   }
+
+  interface URILoadingHelper {
+    getTargetWindow(window: Window, {skipPopups, forceNonPrivate}?: {skipPopups?: boolean; forceNonPrivate?: boolean}): Window | null;
+    openUILink(window: Window, url: string, event: Event, aIgnoreButton: boolean | {ignoreButton: boolean; ignoreAlt: boolean}, aIgnoreAlt: boolean, aAllowThirdPartyFixup: boolean, aPostData: unknown, aReferrerInfo: unknown): void;
+  }
+
+  interface WebNavigationManager {
+    setRecentTabTransitionData(tabTransitionData: {auto_bookmark: boolean}, browser?: MockedGeckoTypes.ChromeBrowser): void;
+  }
+
+  const XPCOMUtilsSYSMJS: {
+    XPCOMUtils: {
+      defineLazyModuleGetters<T extends Record<string, string>>(obj: object, modules: T): void;
+      defineLazyPreferenceGetter(aObject: object, aName: string, aPreference: string, aDefaultPrefValue: unknown, aOnUpdate: (aPreference: string, previousValue: unknown, newValue: unknown) => void, aTransform?: (aPreference: string) => unknown): void;
+      defineLazyServiceGetters<T extends Record<string, [string, Function]>>(obj: object, services: T): void;
+    };
+  };
 }
 
 // this namespace is for all SessionStore useage in Tabmix

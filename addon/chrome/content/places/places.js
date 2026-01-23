@@ -23,6 +23,15 @@ var TMP_Places = {
     });
   },
 
+  get WebNavigationManager() {
+    return Tabmix.lazyGetter(
+      this,
+      "WebNavigationManager",
+      ChromeUtils.importESModule("resource://gre/modules/WebNavigation.sys.mjs")
+        .WebNavigationManager
+    );
+  },
+
   addEvent: function TMP_PC_addEvent() {
     window.addEventListener("load", this);
     window.addEventListener("unload", this);
@@ -396,7 +405,9 @@ var TMP_Places = {
 
     if (loadProgressively) {
       this.restoreTabs(tabsInfo, this.bookmarksOnDemand || restoreOnDemand, relatedToCurrent);
+      return [];
     }
+    return tabsInfo.map(({tab}) => tab);
   },
 
   getPreferences(tabCount) {
@@ -512,6 +523,19 @@ var TMP_Places = {
           this.restoreNextTab();
         }
       }
+    }
+
+    // Bug 1623654 - Set auto_bookmark transition type when opening a bookmark
+    // PlacesUIUtils.openTabset
+    if (Tabmix.isVersion(1490)) {
+      setTimeout(() => {
+        tabsInfo.forEach(({tab}) => {
+          const browser = tab.linkedBrowser;
+          if (browser && !browser.currentURI.spec.startsWith("javascript:")) {
+            this.WebNavigationManager.setRecentTabTransitionData({auto_bookmark: true}, browser);
+          }
+        });
+      }, 100);
     }
 
     if (Tabmix.isVersion(1390)) {

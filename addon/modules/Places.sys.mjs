@@ -27,6 +27,14 @@ ChromeUtils.defineESModuleGetters(lazy, {
   initializeChangeCodeClass: "chrome://tabmix-resource/content/Changecode.sys.mjs",
 });
 
+if (TabmixSvc.version(1490)) {
+  // eslint-disable-next-line mozilla/valid-lazy
+  ChromeUtils.defineLazyGetter(lazy, "WebNavigationManager", () => {
+    return ChromeUtils.importESModule("resource://gre/modules/WebNavigation.sys.mjs")
+      .WebNavigationManager;
+  });
+}
+
 // this function is used by PlacesUIUtils functions that we evaluate here
 /** @param {Window} aWindow */
 // @ts-ignore
@@ -156,10 +164,13 @@ PlacesUtilsInternal = {
           {check: treeStyleTab, silent: true}
         )
         ._replace(
-          /browserWindow\.gBrowser\.loadTabs\([^;]+;/,
+          'var loadInBackground = where == "tabshifted";',
           `var changeWhere = where == "tabshifted" && aEvent.target.localName != "menuitem";
-    if (changeWhere) where = "current"\n` +
-            openGroup.replace("$1", treeStyleTab ? ", behavior" : "")
+    if (changeWhere) where = "current"`
+        )
+        ._replace(
+          /browserWindow\.gBrowser\.loadTabs\([^;]+;/,
+          openGroup.replace("$1", treeStyleTab ? ", behavior" : "")
         )
         .toCode();
 

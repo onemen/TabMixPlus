@@ -592,6 +592,7 @@ declare namespace TabmixPlacesNS {
   function onItemMoved(): void;
   const contextMenu: typeof TabmixPlacesInternalNS.ContextMenu;
   const PlacesUtils: PlacesModule.PlacesUtils;
+  const WebNavigationManager: MockedExports.WebNavigationManager;
 }
 
 declare namespace TabmixPlacesInternalNS {
