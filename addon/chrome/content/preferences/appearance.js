@@ -53,6 +53,10 @@ var gAppearancePane = {
       }
     }
 
+    if (!Tabmix.isVersion(1460)) {
+      $("hideTabbar.onetaborsplit").setAttribute("hidden", true);
+    }
+
     if (window.opener.document.documentElement.hasAttribute("lwtheme")) {
       Tabmix.setItem("multi-rows-box", "style", "height: 105.2px;");
       Tabmix.setItem("theme-background-box", "hidden", null);
