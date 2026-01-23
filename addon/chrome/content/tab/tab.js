@@ -2346,11 +2346,16 @@ window.gTMPprefObserver = {
     // Bug 1949401 (Firefox 142) - Active Tabs should remain active for collapsed Tab groups
     let groupSelector =
       Tabmix.isVersion(1420) ?
-        `tab-group > ${tabSelector}:is(tab-group:not([collapsed]) > *, [visuallyselected]):not(
-         :root:has(#tabbrowser-tabs:not([tabmix-multibar])) tab-group[movingtabgroup] > *)`
+        `tab-group > ${tabSelector}:is(tab-group:not([collapsed]) > *, [visuallyselected])`
       : `tab-group:not([collapsed]) > ${tabSelector}`;
 
-    let newRule = `#tabbrowser-arrowscrollbox:not([orient="vertical"]) > ${groupSelector},
+    let combinedGroupSelector =
+      Tabmix.isVersion(1420) ?
+        `#tabbrowser-tabs[orient="horizontal"][tabmix-multibar] ${groupSelector},
+         #tabbrowser-tabs[orient="horizontal"]:not([tabmix-multibar]) tab-group:not([movingtabgroup]) > ${tabSelector}:is(tab-group:not([collapsed]) > *, [visuallyselected])`
+      : `#tabbrowser-arrowscrollbox:not([orient="vertical"]) > ${groupSelector}`;
+
+    let newRule = `${combinedGroupSelector},
       #tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper > ${tabSelector},
       #tabbrowser-arrowscrollbox:not([orient="vertical"]) > ${tabSelector} {
         min-width: calc(${_min}px + var(--tab-min-width-extra-icons, 0px) + var(--tab-min-width-uidensity, 0px)) !important;
