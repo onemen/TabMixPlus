@@ -183,10 +183,6 @@ var TabmixTabbar = {
       Tabmix.setItem(tabBar.arrowScrollbox, "widthFitTitle", this.widthFitTitle || null);
     }
 
-    document
-      .getElementById("tabbrowser-arrowscrollbox-periphery")
-      ?.toggleAttribute("tabmix-shrinkLastRow", Tabmix.prefs.getBoolPref("flexTabs_shrinkLastRow"));
-
     if (Tabmix.prefs.getIntPref("tabs.closeButtons") == 5 && this.widthFitTitle) {
       Tabmix.prefs.setIntPref("tabs.closeButtons", 1);
     }

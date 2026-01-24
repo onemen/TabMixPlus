@@ -280,6 +280,14 @@
     margin-inline-start: -2px;
   }
 
+  :root:has(#tabbrowser-tabs[tabmix-multibar]:not([tabmix-tabsFitRow], [widthFitTitle])) & {
+    max-width: var(--total-min-required) !important;
+  }
+
+  :root:has(#tabbrowser-tabs[tabmix-multibar][tabmix-tabsFitRow]) & {
+    flex: 1 1 0%;
+  }
+
   /* remove border on tab and move it to .tab-background */
   &:not([hasactivetab]) {
     & .tabbrowser-tab {
