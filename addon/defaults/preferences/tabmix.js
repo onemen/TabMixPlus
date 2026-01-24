@@ -136,6 +136,7 @@ pref("extensions.tabmix.styles.progressMeter", '{"bg":true,"bgColor":"rgba(170,1
 
 pref("extensions.tabmix.flexTabs", false);
 pref("extensions.tabmix.flexTabs_fitRow", true);
+pref("extensions.tabmix.flexTabs_shrinkLastRow", true);
 
 pref("extensions.tabmix.titlefrombookmark", false);
 

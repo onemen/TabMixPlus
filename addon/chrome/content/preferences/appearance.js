@@ -50,6 +50,7 @@ var gAppearancePane = {
         }
         Tabmix.setItem("flexTabs", "disabled", true);
         Tabmix.setItem("flexTabs_fitRow", "disabled", true);
+        Tabmix.setItem("flexTabs_shrinkLastRow", "disabled", true);
       }
     }
 
@@ -179,6 +180,12 @@ var gAppearancePane = {
     } else {
       $("alltabsItem").disabled = false;
     }
+    this.setShrinkLastRow();
+  },
+
+  setShrinkLastRow() {
+    const enabled = $Pref("pref_flexTabs_fitRow").value && !$Pref("pref_flexTabs").value;
+    Tabmix.setItem("flexTabs_shrinkLastRow", "disabled", !enabled || null);
   },
 
   tabsScrollChanged() {

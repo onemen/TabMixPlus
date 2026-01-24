@@ -56,6 +56,7 @@ interface gTMPprefObserver {
   checkScriptsUpdateNeeded: () => Promise<{updateNeeded: boolean; latestDate: string}>;
   showUpdatePage: (currentVersion: string) => Promise<void>;
   updateTabClickingOptions: () => void;
+  updateTabsFitRow: () => void;
   updateTabsStyle: (ruleName: DynamicRulesModule.RuleName) => void;
   updateSettings: () => void;
   updateStyleAttributes: () => void;

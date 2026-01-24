@@ -183,6 +183,10 @@ var TabmixTabbar = {
       Tabmix.setItem(tabBar.arrowScrollbox, "widthFitTitle", this.widthFitTitle || null);
     }
 
+    document
+      .getElementById("tabbrowser-arrowscrollbox-periphery")
+      ?.toggleAttribute("tabmix-shrinkLastRow", Tabmix.prefs.getBoolPref("flexTabs_shrinkLastRow"));
+
     if (Tabmix.prefs.getIntPref("tabs.closeButtons") == 5 && this.widthFitTitle) {
       Tabmix.prefs.setIntPref("tabs.closeButtons", 1);
     }
@@ -1139,13 +1143,7 @@ Tabmix.tabsUtils = {
                 gBrowser.tabContainer._positionPinnedTabs();
               }
             }
-            this.updateOverflowMaxWidth();
             this.updateVerticalTabStrip();
-            // some edge cases require 2nd calculation of --tabmix-tab-overflow-width
-            if (!TabmixTabbar.widthFitTitle && Tabmix.prefs.getBoolPref("flexTabs_fitRow")) {
-              this.updateOverflowMaxWidth();
-              this.updateVerticalTabStrip();
-            }
             if (!Tabmix.isVersion(1470)) {
               if (Tabmix.isVersion(1370)) {
                 gURLBar.onWidgetAfterDOMChange(gURLBar.parentNode);
@@ -1162,26 +1160,6 @@ Tabmix.tabsUtils = {
       this._resizeObserver.observe(this.tabBar);
     } else {
       this._resizeObserver.unobserve(this.tabBar);
-    }
-  },
-
-  _tab_overflow_width: 250,
-  updateOverflowMaxWidth() {
-    if (!TabmixTabbar.widthFitTitle && Tabmix.prefs.getBoolPref("flexTabs_fitRow")) {
-      const tsbo = this.tabBar.arrowScrollbox.scrollbox;
-      const tsboBaseWidth = tsbo.getBoundingClientRect().width;
-      const minWidth = parseFloat(
-        gTMPprefObserver.dynamicRules.width.style.getPropertyValue("min-width")
-      );
-      const maxTabsInRow = Math.floor(tsboBaseWidth / minWidth);
-      const newMaxWidth = Math.floor((1000 * tsboBaseWidth) / maxTabsInRow) / 1000;
-      if (this._tab_overflow_width !== newMaxWidth) {
-        this._tab_overflow_width = newMaxWidth;
-        const root = document.querySelector(":root");
-        this.tabBar.setAttribute("no-animation", "");
-        root?.style.setProperty("--tabmix-tab-overflow-width", newMaxWidth + "px");
-        setTimeout(() => this.tabBar.removeAttribute("no-animation"), 0);
-      }
     }
   },
 
@@ -1865,7 +1843,6 @@ window.gTMPprefObserver = {
           "--tabmix-tab-max-width",
           `${tabMaxWidth}px`
         );
-        Tabmix.tabsUtils.updateOverflowMaxWidth();
         setTimeout(() => gBrowser.tabContainer.removeAttribute("no-animation"), 0);
         TabmixTabbar.updateSettings(false);
         // we need this timeout when there are many tabs
@@ -1887,14 +1864,14 @@ window.gTMPprefObserver = {
         }
         break;
       }
+      case "extensions.tabmix.flexTabs":
+        TabmixTabbar.updateSettings(false);
+        this.updateTabsFitRow();
+        break;
       case "extensions.tabmix.flexTabs_fitRow":
-        if (prefValue) {
-          Tabmix.tabsUtils.updateOverflowMaxWidth();
-        } else {
-          Tabmix.tabsUtils._tab_overflow_width = 250;
-          const root = document.querySelector(":root");
-          root?.style.removeProperty("--tabmix-tab-overflow-width");
-        }
+      case "extensions.tabmix.flexTabs_shrinkLastRow":
+        this.updateTabsFitRow();
+        TabmixTabbar.updateSettings(false);
         break;
       case "browser.tabs.tabClipWidth":
         gBrowser.tabContainer._tabClipWidth = Services.prefs.getIntPref(prefName);
@@ -2082,7 +2059,6 @@ window.gTMPprefObserver = {
       case "extensions.tabmix.tabBarSpace":
       case "browser.tabs.tabmanager.enabled":
       case "extensions.tabmix.newTabButton":
-      case "extensions.tabmix.flexTabs":
       case "extensions.tabmix.setDefault":
         TabmixTabbar.updateSettings(false);
         break;
@@ -2380,9 +2356,9 @@ window.gTMPprefObserver = {
 
     /* this rule need to have higher specificity then the rule in gTMPprefObserver.dynamicRules.width */
     this.insertRule(
-      `#TabsToolbar #tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) #tabbrowser-arrowscrollbox > ${tabSelector},
-       #TabsToolbar #tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([widthFitTitle]) #tabbrowser-arrowscrollbox > ${groupSelector} {
-        max-width: var(--tabmix-tab-overflow-width, var(--tab-min-width-pref, var(--tab-min-width))) !important;
+      `#TabsToolbar #tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([tabmix-tabsFitRow]):not([widthFitTitle]) #tabbrowser-arrowscrollbox > ${tabSelector},
+       #TabsToolbar #tabbrowser-tabs[orient="horizontal"][tabmix-multibar]:not([tabmix-tabsFitRow]):not([widthFitTitle]) #tabbrowser-arrowscrollbox > ${groupSelector} {
+         max-width: var(--tab-min-width-pref, var(--tab-min-width)) !important;
       }`
     );
 
@@ -3579,6 +3555,16 @@ window.gTMPprefObserver = {
       } else {
         Services.prefs.setIntPref(prefName, 0);
       }
+    }
+  },
+
+  updateTabsFitRow() {
+    if (!TabmixTabbar.widthFitTitle && Tabmix.prefs.getBoolPref("flexTabs_fitRow")) {
+      const attributeValue =
+        Tabmix.prefs.getBoolPref("flexTabs_shrinkLastRow") ? "shrinkLastRow" : "allRows";
+      gBrowser.tabContainer.setAttribute("tabmix-tabsFitRow", attributeValue);
+    } else {
+      gBrowser.tabContainer.removeAttribute("tabmix-tabsFitRow");
     }
   },
 };

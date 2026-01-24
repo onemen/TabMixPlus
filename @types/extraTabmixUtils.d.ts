@@ -515,8 +515,6 @@ interface TabmixTabsUtils {
   _resizeObserver: ResizeObserver | null;
   _lastTabBarWidth: number;
   resizeObserver(observe: boolean): void;
-  _tab_overflow_width: number;
-  updateOverflowMaxWidth(): void;
   updateScrollButtons(useTabmixButtons: boolean): void;
   isElementVisible(element: AriaFocusableItem | null | undefined): boolean;
   protonValues: {enabled: boolean; name: string; val: string; margin: string};

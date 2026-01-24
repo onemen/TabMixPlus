@@ -147,7 +147,7 @@ Tabmix.afterDelayedStartup = function () {
   TMP_extensionsCompatibility.onDelayedStartup();
 
   gTMPprefObserver.setMenuIcons();
-
+  gTMPprefObserver.updateTabsFitRow();
   TabmixTabbar.updateSettings(true);
   gTMPprefObserver.setTabIconMargin();
   gTMPprefObserver.setCloseButtonMargin();

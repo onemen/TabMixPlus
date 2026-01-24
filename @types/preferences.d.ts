@@ -410,6 +410,7 @@ declare namespace AppearancePaneNS {
   function _waterfoxPositionControl(): void;
   function tabCloseButtonChanged(): void;
   function setTabCloseButtonUI(): void;
+  function setShrinkLastRow(): void;
   function tabsScrollChanged(): void;
   function tabmixCustomizeToolbar(): void;
   function toolbarButtons(aWindow: Window): void;
