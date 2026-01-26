@@ -877,9 +877,7 @@ var TabmixContext = {
 
     // Close tab Commands
     showItem("context_closeTab");
-    const showCloseDuplicateTabs = Services.prefs.getBoolPref(
-      "browser.tabs.context.close-duplicate.enabled"
-    );
+    const showCloseDuplicateTabs = Tabmix.prefs.getBoolPref("closeDuplicateTabs");
     showItem("context_closeDuplicateTabs", {is: showCloseDuplicateTabs});
     showItem("context_closeTabOptions");
 
