@@ -340,3 +340,7 @@
 #tabbrowser-tabs:not([tabmix-multibar])[tabmix-flowing="multibar"][orient="horizontal"] {
   --tab-group-line-toolbar-border-distance: 3px;
 }
+
+#tabbrowser-tabs[tabmix-multibar][tabmix-tabsFitRow] tab-group > .tabbrowser-tab[fadein] {
+  transition: none !important;
+}

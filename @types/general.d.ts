@@ -540,7 +540,7 @@ declare namespace MockedGeckoTypes {
     addAdjacentNewTab: (tab: BrowserTab) => void;
     addRangeToMultiSelectedTabs: (start: BrowserTab, end: BrowserTab) => void;
     // params.index was removed in Firefox 140
-    addTab: (this: TabBrowser, url: string, params?: {tabIndex?: number; elementIndex?: number; isPending?: boolean; ownerTab?: BrowserTab | null; relatedToCurrent?: boolean} | Record<string, unknown>) => BrowserTab;
+    addTab: (this: TabBrowser, url: string, params?: {tabIndex?: number; elementIndex?: number; isPending?: boolean; ownerTab?: BrowserTab | null; relatedToCurrent?: boolean; skipAnimation?: boolean} | Record<string, unknown>) => BrowserTab;
     addToMultiSelectedTabs: (tab: BrowserTab) => BrowserTab;
     addTrustedTab: (aURI: string, params?: Params) => BrowserTab;
     adoptTab: (aTab: BrowserTab, params?: {elementIndex?: number; tabIndex?: number; selectTab?: boolean}) => BrowserTab;

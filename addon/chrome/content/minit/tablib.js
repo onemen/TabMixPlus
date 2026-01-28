@@ -192,6 +192,10 @@ Tabmix.tablib = {
         }
       }
 
+      if (gBrowser.tabContainer.hasAttribute("tabmix-tabsFitRow") && TabmixTabbar.hasMultiRows) {
+        options.skipAnimation = true;
+      }
+
       var t = Tabmix.originalFunctions.gBrowser_addTab.apply(this, [uriString, options, ...rest]);
       if (!Tabmix.prefs.getBoolPref("openTabNextInverse")) {
         this._lastRelatedTabMap = new WeakMap();
@@ -233,6 +237,9 @@ Tabmix.tablib = {
       }
       if (typeof aTab.clearTimeouts == "function") {
         aTab.clearTimeouts();
+      }
+      if (gBrowser.tabContainer.hasAttribute("tabmix-tabsFitRow") && TabmixTabbar.hasMultiRows) {
+        aParams.animate = false;
       }
       return Tabmix.originalFunctions.gBrowser_removeTab.apply(this, [aTab, aParams, ...args]);
     };
