@@ -9,6 +9,6 @@
   ],
   "exclude": [],
   "compilerOptions": {
-    "types": ["modules"]
+    "types": []
   }
 }

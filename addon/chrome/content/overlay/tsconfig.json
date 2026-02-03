@@ -8,6 +8,6 @@
     "../../../../@types/tabmix.d.ts"
   ],
   "compilerOptions": {
-    "types": ["overlay"]
+    "types": []
   }
 }
