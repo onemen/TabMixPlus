@@ -581,7 +581,7 @@ var TMP_tabDNDObserver = {
         ._replace(
           "if (isTabGroupLabel(tab)) {",
           "if (isTabGroupLabel(tab) || isSplitViewWrapper(tab)) {",
-          {check: Tabmix.isVersion(1480), silent: true}
+          {check: Tabmix.isVersion(1480) && !Tabmix.isVersion(1490), silent: true}
         )
         ._replace(
           "if (isMovingInTabStrip) {",
