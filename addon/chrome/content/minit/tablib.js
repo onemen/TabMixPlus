@@ -221,14 +221,13 @@ Tabmix.tablib = {
 
     Tabmix.originalFunctions.gBrowser_removeTab = gBrowser.removeTab;
     gBrowser.removeTab = function (aTab, aParams = {}, ...args) {
-      let result;
       if (!aTab || aTab.hasAttribute("protected")) {
-        return result;
+        return undefined;
       }
       let lastTabInGroup = this.visibleTabs.length == 1;
       if (lastTabInGroup) {
         if (Tabmix.prefs.getBoolPref("keepLastTab")) {
-          return result;
+          return undefined;
         }
         // fix bug in TGM when closing last tab in a group with animation
         if (Tabmix.extensions.tabGroupManager) {
@@ -1162,7 +1161,7 @@ Tabmix.tablib = {
         aTab = this._selectedTab;
       }
 
-      var newTab = null;
+      var newTab;
       let copyToNewWindow = window != aTab.ownerGlobal;
       let openDuplicateNext =
         !disallowSelect && !copyToNewWindow && Tabmix.prefs.getBoolPref("openDuplicateNext");
@@ -1731,10 +1730,13 @@ Tabmix.tablib = {
       warnOnClose,
       {checkboxLabel2 = "", restoreSession = null} = {}
     ) {
-      let warningTitle = "",
-        buttonLabel = "",
-        chkBoxLabel = "",
-        warningText = "";
+      /** @type {string} */
+      let warningTitle;
+      /** @type {string} */
+      let buttonLabel;
+      /** @type {string} */
+      let chkBoxLabel;
+      let warningText = "";
       if (shouldPrompt === 1) {
         // @ts-expect-error - return types are strings
         [warningTitle, buttonLabel, chkBoxLabel] = gBrowser.tabLocalization.formatValuesSync([

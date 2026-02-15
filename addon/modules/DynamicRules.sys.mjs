@@ -365,7 +365,7 @@ export const DynamicRules = {
     }
 
     /** @type {Partial<DynamicRulesModule.TabStyle> & {[key: string]: any}} */
-    let currentPrefValues = {};
+    let currentPrefValues;
 
     /** @type {Partial<DynamicRulesModule.TabStyle> & {[key: string]: any}} */
     const prefValues = {};

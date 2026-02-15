@@ -1091,7 +1091,7 @@ var TMP_eventListener = {
        */
       let scrollByDelta = function (delta, useInstant) {
         let instant;
-        let scrollAmount = 0;
+        let scrollAmount;
         if (isTabstrip && TabmixTabbar.isMultiRow) {
           delta = delta > 0 ? 1 : -1;
           scrollAmount = delta * tabStrip.singleRowHeight + tabStrip._distanceToRow(0);

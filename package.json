@@ -28,25 +28,25 @@
   },
   "homepage": "https://github.com/onemen/TabMixPlus#readme",
   "devDependencies": {
-    "@eslint/js": "9.39.2",
-    "@stylistic/eslint-plugin": "^5.7.1",
+    "@eslint/js": "10.0.1",
+    "@stylistic/eslint-plugin": "^5.8.0",
     "@stylistic/eslint-plugin-js": "^4.4.1",
-    "@typescript/native-preview": "7.0.0-dev.20260203.1",
-    "eslint": "9.39.2",
+    "@typescript/native-preview": "7.0.0-dev.20260213.1",
+    "eslint": "10.0.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jsdoc": "61.5.0",
-    "eslint-plugin-jsonc": "^2.21.0",
+    "eslint-plugin-jsdoc": "62.5.4",
+    "eslint-plugin-jsonc": "^2.21.1",
     "eslint-plugin-mozilla": "^4.3.4",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-tabmix": "workspace:./config/eslint-plugin-tabmix",
-    "globals": "^16.5.0",
+    "globals": "^17.3.0",
     "husky": "^9.1.7",
     "prettier": "^3.8.1",
     "prettier-plugin-jsdoc": "^1.8.0",
     "stylelint": "^17.0.0",
     "stylelint-config-standard": "^40.0.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.3"
+    "typescript-eslint": "^8.55.0"
   },
   "resolutions": {
     "js-yaml": ">=4.1.1"

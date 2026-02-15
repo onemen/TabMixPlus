@@ -1310,8 +1310,8 @@ ContentClickInternal = {
       }
 
       if (url.match(/^http/)) {
-        let maybeFixedURI = null;
-        maybeFixedURI = fixedURI || makeURI(url);
+        /** @type {nsIURI | null} */
+        let maybeFixedURI = fixedURI || makeURI(url);
 
         // catch redirect
         const pathProp = "pathQueryRef";

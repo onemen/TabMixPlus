@@ -948,7 +948,7 @@ Tabmix.tabsUtils = {
   },
 
   showNewTabButtonOnSide(aCondition, aValue) {
-    let value = null;
+    let value;
     if (this._show_newtabbutton === null) {
       value = null;
     } else if (

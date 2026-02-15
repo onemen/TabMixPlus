@@ -1786,7 +1786,7 @@ var TMP_tabDNDObserver = {
       gBrowser.isTabGroupLabel(tab) ? tabOrSplitview(tab.group.tabs[0]) : tabOrSplitview(tab);
     const oldIndex = getIndex(draggedElm);
 
-    let newIndex = -1;
+    let newIndex;
     let dropBefore = true;
     let dropOnStart = false;
     let isBetweenGroups = false;

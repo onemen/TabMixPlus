@@ -632,13 +632,9 @@ var TMP_Places = {
     }
   },
 
-  setTabTitle: function TMP_PC_setTabTitle(aTab, aUrl, title) {
+  setTabTitle(aTab, title) {
     if (!aTab || !aTab.parentNode) {
       return false;
-    }
-
-    if (!aUrl) {
-      aUrl = aTab.linkedBrowser.currentURI.spec;
     }
 
     if (title != aTab.label) {
@@ -671,7 +667,7 @@ var TMP_Places = {
       return false;
     }
     if (newTitle != tab.label) {
-      this.setTabTitle(tab, url, newTitle);
+      this.setTabTitle(tab, newTitle);
       if (initial) {
         tab._labelIsInitialTitle = true;
       }

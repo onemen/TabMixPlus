@@ -128,7 +128,7 @@ export const console = {
   },
 
   _getStackExcludingInternal(stack) {
-    let stackList = [];
+    let stackList;
     if (!stack) {
       stackList = Error().stack?.split("\n").slice(2) ?? [];
     } else {
