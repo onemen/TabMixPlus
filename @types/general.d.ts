@@ -614,7 +614,7 @@ declare namespace MockedGeckoTypes {
     setIcon(tab: BrowserTab, iconURL: string, originalURL?: string, loadingPrincipal?: nsIPrincipal, clearImageFirst?: boolean): void;
     setInitialTabTitle: (tab: BrowserTab, title: string, options: Record<string, unknown>) => void;
     setTabTitle: (tab: BrowserTab) => boolean;
-    swapBrowsersAndCloseOther: (ourTab: BrowserTab, otherTab: BrowserTab) => boolean;
+    swapBrowsersAndCloseOther: (ourTab: BrowserTab, otherTab: BrowserTab, zenCloseOther?: boolean) => boolean;
     pinnedTabsContainer: ArrowScrollbox;
     tabContainer: TabContainer;
     tabLocalization: Localization;

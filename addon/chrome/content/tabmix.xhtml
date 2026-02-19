@@ -23,7 +23,13 @@
     }
 
     if (TabmixSvc.version({zen: "1.17"})) {
-      window.addEventListener("AfterWorkspacesSessionRestore", initTabmix, {once: true});
+      window.addEventListener("AfterWorkspacesSessionRestore", () => {
+        setTimeout(async () => {
+          initTabmix();
+          await Tabmix._deferredInitialized.promise;
+          window.gBrowser.tabContainer._updateCloseButtons();
+        }, 100);
+      }, {once: true});
     } else {
       initTabmix();
     }

@@ -191,6 +191,7 @@ export default [
     files: [
       "addon/chrome/content/**.js",
       "addon/chrome/content/**.xhtml",
+      "addon/chrome/content/**/*.xhtml/*.js",
       "addon/chrome/content/click/**",
       "addon/chrome/content/extensions/**",
       "addon/chrome/content/flst/**",

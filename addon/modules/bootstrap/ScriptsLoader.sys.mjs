@@ -250,7 +250,11 @@ export const ScriptsLoader = {
      * @type {TabBrowser["swapBrowsersAndCloseOther"]}
      * @this {TabBrowser}
      */
-    const swapTab = function tabmix_swapBrowsersAndCloseOther(ourTab, otherTab) {
+    const swapTab = function tabmix_swapBrowsersAndCloseOther(
+      ourTab,
+      otherTab,
+      zenCloseOther = false
+    ) {
       // Do not allow transferring a private tab to a non-private window
       // and vice versa.
       if (
@@ -271,7 +275,11 @@ export const ScriptsLoader = {
       }
 
       Tabmix.copyTabData(ourTab, otherTab);
-      return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, [ourTab, otherTab]);
+      return Tabmix.originalFunctions.swapBrowsersAndCloseOther.apply(this, [
+        ourTab,
+        otherTab,
+        zenCloseOther,
+      ]);
     };
     Tabmix.setNewFunction(gBrowser, "swapBrowsersAndCloseOther", swapTab);
   },

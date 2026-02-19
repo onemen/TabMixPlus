@@ -25,7 +25,7 @@ var TMP_tabDNDObserver = {
   },
 
   init: function TMP_tabDNDObserver_init() {
-    if (Tabmix.extensions.verticalTabBar) {
+    if (Tabmix.extensions.verticalTabBar || Tabmix.isVersion({zen: "1.18*"})) {
       this.useTabmixDnD = () => false;
       return;
     }
