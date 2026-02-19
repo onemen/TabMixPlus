@@ -418,7 +418,8 @@ Tabmix.tablib = {
       Tabmix.originalFunctions.gBrowser_setInitialTabTitle.apply(this, [aTab, ...rest]);
     };
 
-    Tabmix.changeCode(gBrowser, "gBrowser._setTabLabel")
+    const sandbox = Tabmix.getSandbox(window, {scope: {TAB_LABEL_MAX_LENGTH: 256}});
+    Tabmix.changeCode(gBrowser, "gBrowser._setTabLabel", {sandbox})
       ._replace("{ beforeTabOpen, isContentTitle", "{ beforeTabOpen, isContentTitle, urlTitle")
       ._replace(
         /aLabel = aLabel\.substring\(0, 500\).*;/,
