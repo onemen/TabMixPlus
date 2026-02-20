@@ -468,6 +468,9 @@ export namespace schema {
         DisableProfileRefresh: {
             type: string;
         };
+        DisableRemoteImprovements: {
+            type: string;
+        };
         DisableSafeMode: {
             type: string;
         };

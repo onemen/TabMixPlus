@@ -1214,21 +1214,6 @@ export const FeatureManifest: {
             };
         };
     };
-    newtabRefinedCardsLayout: {
-        description: string;
-        owner: string;
-        hasExposure: boolean;
-        variables: {
-            enabled: {
-                type: string;
-                setPref: {
-                    branch: string;
-                    pref: string;
-                };
-                description: string;
-            };
-        };
-    };
     newTabSectionsExperiment: {
         description: string;
         owner: string;
@@ -1536,6 +1521,18 @@ export const FeatureManifest: {
                     branch: string;
                     pref: string;
                 };
+                description: string;
+            };
+        };
+    };
+    adsBackend: {
+        description: string;
+        owner: string;
+        hasExposure: boolean;
+        allowCoenrollment: boolean;
+        variables: {
+            flags: {
+                type: string;
                 description: string;
             };
         };
@@ -1874,16 +1871,6 @@ export const FeatureManifest: {
                     branch: string;
                     pref: string;
                 };
-                description: string;
-            };
-            recsPersonalized: {
-                type: string;
-                fallbackPref: string;
-                description: string;
-            };
-            spocsPersonalized: {
-                type: string;
-                fallbackPref: string;
                 description: string;
             };
             discoveryStreamConfig: {
@@ -5500,6 +5487,21 @@ export const FeatureManifest: {
             };
         };
     };
+    tabNotes: {
+        description: string;
+        owner: string;
+        hasExposure: boolean;
+        variables: {
+            enabled: {
+                type: string;
+                description: string;
+                setPref: {
+                    branch: string;
+                    pref: string;
+                };
+            };
+        };
+    };
     tabGroups: {
         description: string;
         owner: string;
@@ -5850,14 +5852,6 @@ export const FeatureManifest: {
         hasExposure: boolean;
         variables: {
             enabled: {
-                type: string;
-                setPref: {
-                    branch: string;
-                    pref: string;
-                };
-                description: string;
-            };
-            variant: {
                 type: string;
                 setPref: {
                     branch: string;
