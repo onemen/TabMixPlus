@@ -1103,8 +1103,12 @@ Tabmix.tablib = {
   populateUndoWindowSubmenu(undoPopup, panel, isAppMenu = Boolean(panel)) {
     const isSubviewbutton = undoPopup.__tagName === "toolbarbutton";
     undoPopup.setAttribute("context", "tm_undocloseWindowContextMenu");
-    let undoItems = SessionStore.getClosedWindowData();
+    const undoItems = SessionStore.getClosedWindowData();
     const childNodes = panel?.childNodes ?? undoPopup.childNodes;
+    const labelId =
+      Tabmix.isVersion(1500) ?
+        "recently-closed-window-panel-tooltip"
+      : "recently-closed-undo-close-window-label";
     for (let i = 0; i < childNodes.length - (isAppMenu ? 0 : 1); i++) {
       /** @type {TabmixClosedTabsNS.Menuitem} */ // @ts-expect-error
       let m = childNodes[i];
@@ -1112,10 +1116,10 @@ Tabmix.tablib = {
       if (undoItem && m.hasAttribute("targetURI")) {
         TMP_SessionStore.asyncGetTabTitleForClosedWindow(undoItem).then(title => {
           let otherTabsCount = undoItem.tabs.length - 1;
-          let menuLabel = this.recentlyClosed.formatValueSync(
-            "recently-closed-undo-close-window-label",
-            {tabCount: otherTabsCount, winTitle: title}
-          );
+          let menuLabel = this.recentlyClosed.formatValueSync(labelId, {
+            tabCount: otherTabsCount,
+            winTitle: title,
+          });
           m.setAttribute("label", menuLabel ?? "");
         });
       }

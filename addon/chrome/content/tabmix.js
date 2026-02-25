@@ -233,6 +233,7 @@ var TMP_eventListener = {
         break;
       case "SSWindowRestored":
         TMP_ClosedTabs.setButtonDisableState();
+        Tabmix.closedObjectsUtils.toggleRecentlyClosedWindowsButton();
         this.onSSWindowRestored();
         break;
       case "SSTabRestoring":
