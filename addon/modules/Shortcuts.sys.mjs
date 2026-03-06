@@ -81,6 +81,15 @@ export const ShortcutsKeys = {
       this.Tabmix.flst.toggle();
     },
   },
+  openOptions: {
+    id: "key_tm_openOptions",
+    default: "O alt",
+
+    /** @this {Window} */
+    command() {
+      this.Tabmix.openOptionsDialog();
+    },
+  },
 };
 
 /** @type {ShortcutsModule.KeyConfig} */
@@ -150,6 +159,7 @@ export const Shortcuts = {
         switchToLast="&shortcuts.switchToLast;"
         slideShow="&shortcuts.slideshow;"
         toggleFLST="&shortcuts.toggleFLST;"
+        openOptions="Open Tab Mix Plus Options"
       />
       `,
       [
