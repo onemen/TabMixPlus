@@ -71,28 +71,39 @@ async function main() {
   const modifiedFiles = getModifiedFiles();
 
   if (lastCommitSha !== lastSavedSha || modifiedFiles) {
-    console.log(
-      "Changes detected in @types folder. Running full typecheck and lint in parallel..."
-    );
     saveLastCommit(lastCommitSha);
 
-    const lintCommand = "eslint --config config/eslint.dts.config.js --format stylish @types";
-    const tscCommand = `${tool} --build`;
+    const needLint =
+      lastCommitSha !== lastSavedSha ||
+      !!modifiedFiles.split("\n").filter(line => !line.includes("@types/gecko")).length;
 
-    const lintPromise = execAsync(lintCommand);
+    let lintPromise = Promise.resolve();
+    if (needLint) {
+      console.log(
+        "Changes detected in @types folder. Running full typecheck and lint in parallel..."
+      );
+      const lintCommand = "eslint --config config/eslint.dts.config.js --format stylish @types";
+      lintPromise = execAsync(lintCommand);
+    } else {
+      console.log("Changes detected in @types folder. Running full typecheck...");
+    }
+
+    const tscCommand = `${tool} --build`;
     const tscPromise = execAsync(tscCommand);
 
     const results = await Promise.allSettled([lintPromise, tscPromise]);
     const [lintResult, tscResult] = results;
 
-    console.log("--- ESLint for .d.ts files ---");
-    if (lintResult.status === "rejected") {
-      console.log(colors.red`Failed.`);
-      console.log(lintResult.reason.stdout); // ESLint errors are in stdout
-    } else {
-      console.log(colors.green`Completed successfully.`);
-      if (lintResult.value) {
-        console.log(lintResult.value);
+    if (needLint) {
+      console.log("--- ESLint for .d.ts files ---");
+      if (lintResult.status === "rejected") {
+        console.log(colors.red`Failed.`);
+        console.log(lintResult.reason.stdout); // ESLint errors are in stdout
+      } else {
+        console.log(colors.green`Completed successfully.`);
+        if (lintResult.value) {
+          console.log(lintResult.value);
+        }
       }
     }
 
