@@ -267,6 +267,10 @@ interface TabmixDNDObserver {
   clearDragmark(): void;
   getSourceNode(aDataTransfer: DataTransfer): HTMLLinkElement | Tab | null;
   resetTabsAfterDrop(draggedTab: Tab): void;
+
+  _pinnedDropIndicatorTimeout: number | null;
+  _clearPinnedDropIndicatorTimer(): void;
+  _resetPinnedDropIndicator(): void;
 }
 
 declare namespace TabmixArrowScrollboxNS {

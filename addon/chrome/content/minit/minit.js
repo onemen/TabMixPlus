@@ -476,12 +476,27 @@ var TMP_tabDNDObserver = {
       });
     }
 
-    if (Tabmix.isVersion(1460)) {
-      this.tabDnDPrototype._pinnedDropIndicatorTimeout = null;
+    this._pinnedDropIndicatorTimeout = null;
+    this._clearPinnedDropIndicatorTimer = () => {};
+    this._resetPinnedDropIndicator = () => {};
 
+    if (Tabmix.isVersion(1460)) {
       const tabDnD = this.tabDragAndDrop;
       this._tabDropIndicator = tabDnD._tabDropIndicator;
       this._pinnedDropIndicator = tabDnD._pinnedDropIndicator;
+
+      this._clearPinnedDropIndicatorTimer = () => {
+        if (this._pinnedDropIndicatorTimeout) {
+          clearTimeout(this._pinnedDropIndicatorTimeout);
+          this._pinnedDropIndicatorTimeout = null;
+        }
+      };
+
+      this._resetPinnedDropIndicator = () => {
+        this._clearPinnedDropIndicatorTimer();
+        this._pinnedDropIndicator.removeAttribute("visible");
+        this._pinnedDropIndicator.removeAttribute("interactive");
+      };
     } else if (Tabmix.isVersion(1450)) {
       const tabDnD = this.tabDragAndDrop;
       tabDnD._maxTabsPerRow = null;
@@ -953,6 +968,7 @@ var TMP_tabDNDObserver = {
         `gBrowser.ensureTabIsVisible(${Tabmix.isVersion(1380) ? "duplicatedDraggedTab" : "draggedTabCopy"});
       } else if (draggedTab && draggedTab.container == ${thisContainer} && useTabmixDnD && !draggedTab._dragData.modifyPinned) {
         TMP_tabDNDObserver.handleDrop(event, draggedTab, movingTabs);
+        TMP_tabDNDObserver._resetPinnedDropIndicator();
         if (Tabmix.isVersion(1420)) {
           // Starting with Firefox 143, we disable the pinned-drop-indicator hide transition
           // to prevent DOM layout shifts during drop operations. We require all elements to
@@ -1086,6 +1102,7 @@ var TMP_tabDNDObserver = {
     TabmixTabbar.removeShowButtonAttr();
     Tabmix.originalFunctions.on_dragstart.apply(this, [event]);
     tab._dragData.pinnedTabsContainerInfo = null;
+    TMP_tabDNDObserver._clearPinnedDropIndicatorTimer();
     if (Tabmix.isVersion(1380)) {
       if (!tab.selected && !Tabmix.prefs.getBoolPref("selectTabOnMouseDown")) {
         tabbrowserTabs.setAttribute("tabmix-movingBackgroundTab", true);
@@ -1357,26 +1374,53 @@ var TMP_tabDNDObserver = {
           ).width;
         }
         const movedToPinned = this.tabDragAndDrop._rtlMode ? translateX > 0 : translateX < 0;
-
-        const inVisibleRange = tabOrSplitView === dropElement && dropBefore && movedToPinned;
+        const buffer = 20;
+        const inVisibleRange =
+          tabOrSplitView === dropElement &&
+          dropBefore &&
+          movedToPinned &&
+          (this.tabDragAndDrop._rtlMode ?
+            event.clientX > right - buffer
+          : event.clientX < left + buffer);
         const inPinnedRange =
           inVisibleRange &&
           (this.tabDragAndDrop._rtlMode ? event.clientX > right : event.clientX < left);
+        const isVisible = this._pinnedDropIndicator.hasAttribute("visible");
+        const isInteractive = this._pinnedDropIndicator.hasAttribute("interactive");
 
         const isTab = gBrowser.isTab(draggedElement);
         if (
-          isTab &&
-          ((inVisibleRange && !this._pinnedDropIndicator.hasAttribute("visible")) ||
-            (inPinnedRange && !this._pinnedDropIndicator.hasAttribute("interactive")))
+          this._pinnedDropIndicatorTimeout &&
+          !inPinnedRange &&
+          !inVisibleRange &&
+          !isVisible &&
+          !isInteractive
         ) {
+          this._resetPinnedDropIndicator();
+        } else if (isTab && ((inVisibleRange && !isVisible) || (inPinnedRange && !isInteractive))) {
           // On drag into pinned container
           if (!pinnedTabCount) {
             let tabbrowserTabsRect = window.windowUtils.getBoundsWithoutFlushing(tabBar);
             // The tabbrowser container expands with the expansion of the
             // drop indicator - prevent that by setting maxWidth first.
             tabBar.style.maxWidth = tabbrowserTabsRect.width + "px";
-            this._pinnedDropIndicator.setAttribute("visible", "");
-            this._pinnedDropIndicator.toggleAttribute("interactive", inPinnedRange);
+
+            if (Tabmix.isVersion(1460)) {
+              if (isVisible) {
+                this._pinnedDropIndicator.setAttribute("interactive", "");
+              } else if (!this._pinnedDropIndicatorTimeout) {
+                let interactionDelay = Services.prefs.getIntPref(
+                  "browser.tabs.dragDrop.pinInteractionCue.delayMS"
+                );
+                this._pinnedDropIndicatorTimeout = setTimeout(() => {
+                  this._pinnedDropIndicator.setAttribute("visible", "");
+                  this._pinnedDropIndicator.setAttribute("interactive", "");
+                }, interactionDelay);
+              }
+            } else {
+              this._pinnedDropIndicator.setAttribute("visible", "");
+              this._pinnedDropIndicator.toggleAttribute("interactive", inPinnedRange);
+            }
           }
         } else if (!inPinnedRange) {
           this._pinnedDropIndicator.removeAttribute("interactive");
@@ -1526,6 +1570,7 @@ var TMP_tabDNDObserver = {
     this._cachedDnDValue = null;
     this.postDraggingCleanup(event);
     this.clearDragmark();
+    this._resetPinnedDropIndicator();
 
     // don't allow to open new window in single window mode
     // respect bug489729 extension preference
