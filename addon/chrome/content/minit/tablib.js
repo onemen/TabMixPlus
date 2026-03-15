@@ -1411,10 +1411,7 @@ Tabmix.tablib = {
       };
 
       let browser = gBrowser.selectedBrowser;
-      if (
-        browser.getAttribute("remote") == "true" &&
-        typeof gContextMenu.tabmixLinkURL != "undefined"
-      ) {
+      if (TabmixSvc.isRemoteBrowser(browser) && typeof gContextMenu.tabmixLinkURL != "undefined") {
         return gContextMenu.tabmixLinkURL;
       }
 
@@ -1970,7 +1967,7 @@ Tabmix.tablib = {
     }
 
     if (
-      aBrowser.getAttribute("remote") == "true" &&
+      TabmixSvc.isRemoteBrowser(aBrowser) &&
       aTab._restoreState == 2 &&
       this.labels.indexOf(aTab.label) > -1
     ) {

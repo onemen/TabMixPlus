@@ -1540,6 +1540,7 @@ declare namespace TabmixSvcModule {
     i10IdMap: I10Map;
     isFixedGoogleUrl: (url: string) => boolean;
     isGlitterInstalled?: boolean;
+    isRemoteBrowser: (browser: MockedGeckoTypes.ChromeBrowser) => boolean;
     newtabUrl: string;
     setCustomTabValue: (tab: Tab, key: string, value?: unknown) => void;
     setLabel: (property: string) => string;

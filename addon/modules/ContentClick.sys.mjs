@@ -289,7 +289,7 @@ ContentClickInternal = {
     }
 
     let targetAttr = wrappedNode && wrappedNode.target;
-    if (href && browser.getAttribute("remote") == "true" && where == "default" && targetAttr) {
+    if (href && lazy.TabmixSvc.isRemoteBrowser(browser) && where == "default" && targetAttr) {
       let win = this._window;
       win.setTimeout(() => {
         // don't try to select new tab if the original browser is no longer
@@ -1235,7 +1235,7 @@ ContentClickInternal = {
         }
         if (tab && !tab.hasAttribute("pending")) {
           let browser = tab.linkedBrowser;
-          if (browser.getAttribute("remote") == "true") {
+          if (lazy.TabmixSvc.isRemoteBrowser(browser)) {
             browser.messageManager.sendAsyncMessage("Tabmix:isFrameInContent", this.frameData);
           } else if (this.frameData) {
             let result = lazy.LinkNodeUtils.isFrameInContent(

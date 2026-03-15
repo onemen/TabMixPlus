@@ -144,6 +144,7 @@ declare namespace MockedGeckoTypes {
     readonly currentURI: URI;
     droppedLinkHandler: typeof handleDroppedLink;
     getAttribute(name: string): string | null;
+    hasAttribute(name: string): boolean;
     focus(): void;
     // we overrife these see addon.d.ts
     // fixupAndLoadURIString: (uri: string, loadURIOptions?: LoadURIOptions) => void;

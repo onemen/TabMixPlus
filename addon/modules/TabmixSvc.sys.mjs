@@ -217,6 +217,12 @@ export const TabmixSvc = {
   },
 };
 
+if (lazy.isVersion(1500)) {
+  TabmixSvc.isRemoteBrowser = browser => browser.hasAttribute("remote");
+} else {
+  TabmixSvc.isRemoteBrowser = browser => browser.getAttribute("remote") == "true";
+}
+
 ChromeUtils.defineLazyGetter(TabmixSvc, "prefs", () => {
   const {Preferences} = ChromeUtils.importESModule("resource://gre/modules/Preferences.sys.mjs");
   return new Preferences("");

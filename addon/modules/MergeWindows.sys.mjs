@@ -233,7 +233,7 @@ export const MergeWindows = {
       if (placePopupNextToOpener) {
         let browser = tab.linkedBrowser;
         openerWindowID = browser.browsingContext?.opener?.currentWindowGlobal?.outerWindowId;
-        if (!openerWindowID && browser.getAttribute("remote") == "true") {
+        if (!openerWindowID && TabmixSvc.isRemoteBrowser(browser)) {
           tab.__tabmixTabBrowser = tabbrowser;
           browser.messageManager.sendAsyncMessage("Tabmix:collectOpener", {});
           waitToMessage = true;
