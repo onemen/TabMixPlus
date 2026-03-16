@@ -2643,8 +2643,10 @@ interface OscillatorOptions extends AudioNodeOptions {
 }
 
 interface PCErrorData {
+    errorDetail?: string;
     message: string;
     name: PCError;
+    sdpLineNumber?: number;
 }
 
 interface PageRevealEventInit extends EventInit {
@@ -3320,6 +3322,18 @@ interface RTCEncodedVideoFrameMetadata {
 
 interface RTCEncodedVideoFrameOptions {
     metadata?: RTCEncodedVideoFrameMetadata;
+}
+
+interface RTCErrorEventInit extends EventInit {
+    error: RTCError;
+}
+
+interface RTCErrorInit {
+    errorDetail: RTCErrorDetailType;
+    receivedAlert?: number;
+    sctpCauseCode?: number;
+    sdpLineNumber?: number;
+    sentAlert?: number;
 }
 
 interface RTCIceCandidateInit {
@@ -5892,8 +5906,31 @@ declare var CSSCustomPropertyRegisteredEvent: {
     isInstance: IsInstance<CSSCustomPropertyRegisteredEvent>;
 };
 
+interface CSSFontFaceDescriptors extends CSSStyleDeclaration {
+    ascentOverride: string;
+    descentOverride: string;
+    fontDisplay: string;
+    fontFamily: string;
+    fontFeatureSettings: string;
+    fontLanguageOverride: string;
+    fontStretch: string;
+    fontStyle: string;
+    fontVariationSettings: string;
+    fontWeight: string;
+    lineGapOverride: string;
+    sizeAdjust: string;
+    src: string;
+    unicodeRange: string;
+}
+
+declare var CSSFontFaceDescriptors: {
+    prototype: CSSFontFaceDescriptors;
+    new(): CSSFontFaceDescriptors;
+    isInstance: IsInstance<CSSFontFaceDescriptors>;
+};
+
 interface CSSFontFaceRule extends CSSRule {
-    readonly style: CSSStyleDeclaration;
+    readonly style: CSSFontFaceDescriptors;
 }
 
 declare var CSSFontFaceRule: {
@@ -6631,6 +6668,9 @@ interface CSSStyleProperties extends CSSStyleDeclaration {
     animationIterationCount: string;
     animationName: string;
     animationPlayState: string;
+    animationRange: string;
+    animationRangeEnd: string;
+    animationRangeStart: string;
     animationTimeline: string;
     animationTimingFunction: string;
     appearance: string;
@@ -8905,6 +8945,7 @@ interface Document extends Node, ARIANotifyMixin, DocumentOrShadowRoot, FontFace
     createEvent(eventInterface: "PromiseRejectionEvent"): PromiseRejectionEvent;
     createEvent(eventInterface: "RTCDTMFToneChangeEvent"): RTCDTMFToneChangeEvent;
     createEvent(eventInterface: "RTCDataChannelEvent"): RTCDataChannelEvent;
+    createEvent(eventInterface: "RTCErrorEvent"): RTCErrorEvent;
     createEvent(eventInterface: "RTCPeerConnectionIceErrorEvent"): RTCPeerConnectionIceErrorEvent;
     createEvent(eventInterface: "RTCPeerConnectionIceEvent"): RTCPeerConnectionIceEvent;
     createEvent(eventInterface: "RTCTrackEvent"): RTCTrackEvent;
@@ -17766,6 +17807,30 @@ declare var RTCEncodedVideoFrame: {
     isInstance: IsInstance<RTCEncodedVideoFrame>;
 };
 
+interface RTCError extends DOMException {
+    readonly errorDetail: RTCErrorDetailType;
+    readonly receivedAlert: number | null;
+    readonly sctpCauseCode: number | null;
+    readonly sdpLineNumber: number | null;
+    readonly sentAlert: number | null;
+}
+
+declare var RTCError: {
+    prototype: RTCError;
+    new(init: RTCErrorInit, message?: string): RTCError;
+    isInstance: IsInstance<RTCError>;
+};
+
+interface RTCErrorEvent extends Event {
+    readonly error: RTCError;
+}
+
+declare var RTCErrorEvent: {
+    prototype: RTCErrorEvent;
+    new(type: string, eventInitDict: RTCErrorEventInit): RTCErrorEvent;
+    isInstance: IsInstance<RTCErrorEvent>;
+};
+
 interface RTCIceCandidate {
     readonly address: string | null;
     readonly candidate: string;
@@ -22722,6 +22787,7 @@ declare var ViewTransitionTypeSet: {
 interface VisualViewportEventMap {
     "resize": Event;
     "scroll": Event;
+    "scrollend": Event;
 }
 
 interface VisualViewport extends EventTarget {
@@ -22730,6 +22796,7 @@ interface VisualViewport extends EventTarget {
     readonly offsetTop: number;
     onresize: ((this: VisualViewport, ev: Event) => any) | null;
     onscroll: ((this: VisualViewport, ev: Event) => any) | null;
+    onscrollend: ((this: VisualViewport, ev: Event) => any) | null;
     readonly pageLeft: number;
     readonly pageTop: number;
     readonly scale: number;
@@ -26442,6 +26509,7 @@ declare namespace InspectorUtils {
     function getCSSRegisteredProperties(document: Document): InspectorCSSPropertyDefinition[];
     function getCSSRegisteredProperty(document: Document, name: string): InspectorCSSPropertyDefinition | null;
     function getCSSValuesForProperty(property: string): string[];
+    function getCSSWideKeywords(): string[];
     function getChildrenForNode(node: Node, showingAnonymousContent: boolean, includeAssignedNodes: boolean): Node[];
     function getContentState(element: Element): number;
     function getGridContainerType(aElement: Element): number;
@@ -27724,6 +27792,7 @@ type RTCDataChannelType = "arraybuffer" | "blob";
 type RTCDegradationPreference = "balanced" | "maintain-framerate" | "maintain-resolution";
 type RTCDtlsTransportState = "closed" | "connected" | "connecting" | "failed" | "new";
 type RTCEncodedVideoFrameType = "delta" | "empty" | "key";
+type RTCErrorDetailType = "data-channel-failure" | "dtls-failure" | "fingerprint-failure" | "hardware-encoder-error" | "hardware-encoder-not-available" | "sctp-failure" | "sdp-syntax-error";
 type RTCIceCandidateType = "host" | "prflx" | "relay" | "srflx";
 type RTCIceComponent = "rtcp" | "rtp";
 type RTCIceConnectionState = "checking" | "closed" | "completed" | "connected" | "disconnected" | "failed" | "new";

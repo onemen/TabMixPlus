@@ -758,6 +758,9 @@ export namespace schema {
                 Chatbot: {
                     type: string;
                 };
+                SmartWindow: {
+                    type: string;
+                };
                 LinkPreviews: {
                     type: string;
                 };
@@ -1412,6 +1415,35 @@ export namespace schema {
         };
         ShowHomeButton: {
             type: string;
+        };
+        SitePolicies: {
+            type: string;
+            items: {
+                type: string;
+                properties: {
+                    Match: {
+                        type: string;
+                        items: {
+                            type: string;
+                        };
+                    };
+                    Exceptions: {
+                        type: string;
+                        items: {
+                            type: string;
+                        };
+                    };
+                    Policies: {
+                        type: string;
+                        properties: {
+                            DisableJit: {
+                                type: string;
+                            };
+                        };
+                    };
+                };
+                required: string[];
+            };
         };
         SkipTermsOfUse: {
             type: string;
