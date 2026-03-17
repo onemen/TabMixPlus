@@ -468,12 +468,14 @@ var TabmixContext = {
     closeTabOptions.insertBefore(this.$id("tm-closeAllTabs"), closeOtherTabs);
     closeTabOptions.insertBefore(this.$id("tm-closeSimilar"), closeOtherTabs);
 
-    const openTab = this.$id("context_openANewTab");
     const tabContextMenu = this.$id("tabContextMenu");
     tabContextMenu.addEventListener(
       "popupshowing",
       () => {
-        openTab.setAttribute("_newtab", openTab.getAttribute("label") ?? "");
+        const openTab = this.$id("context_openANewTab");
+        document.l10n?.translateElements([openTab]).then(() => {
+          openTab.setAttribute("_newtab", openTab.getAttribute("label") ?? "");
+        });
         if (!Tabmix.isVersion(1290)) {
           openTab.setAttribute("oncommand", "Tabmix.BrowserOpenTab({ event });");
         }
@@ -787,17 +789,21 @@ var TabmixContext = {
     }
     let multiselectionContext = TabContextMenu.contextTab?.multiselected;
 
-    const clickOutTabs = triggerNode && triggerNode.localName == "tabs";
+    const clickOutTabs = ["tabs", "zen-workspace"].includes(triggerNode?.localName);
     var aTab = clickOutTabs ? gBrowser.selectedTab : TabContextMenu.contextTab;
 
     var isOneWindow = Tabmix.numberOfWindows() == 1;
 
     const newTab = document.getElementById("context_openANewTab");
     showItem(newTab);
-    const newTabMenuLabel =
-      newTab.getAttribute("_newtab") +
-      (clickOutTabs ? "" : "  " + newTab.getAttribute("_afterthis"));
-    Tabmix.setItem(newTab, "label", newTabMenuLabel);
+    document.l10n?.translateFragment(newTab).then(() => {
+      setTimeout(() => {
+        const newTabMenuLabel =
+          newTab.getAttribute("_newtab") +
+          (clickOutTabs ? "" : "  " + newTab.getAttribute("_afterthis"));
+        Tabmix.setItem(newTab, "label", newTabMenuLabel);
+      }, 0);
+    });
     if (!Tabmix.isVersion(1290)) {
       if (clickOutTabs) {
         Tabmix.setItem(newTab, "oncommand", "TMP_BrowserOpenTab();");
