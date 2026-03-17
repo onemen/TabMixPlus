@@ -545,7 +545,7 @@ declare namespace VisibleTabs {
 }
 
 declare namespace GlobalFunctions {
-  function TMP_BrowserOpenTab(eventOrObject?: {event?: MouseEvent; url?: string}, aTab?: Tab, replaceLastTab?: boolean): void;
+  function TMP_BrowserOpenTab(eventOrObject?: {event?: MouseEvent; url?: string; addAdjacentNewTab?: boolean}, aTab?: Tab, replaceLastTab?: boolean): void;
 }
 
 interface OriginalFunctions {

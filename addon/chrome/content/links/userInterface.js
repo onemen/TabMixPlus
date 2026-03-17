@@ -174,6 +174,14 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
     }
   }
 
+  if (
+    !eventOrObject?.addAdjacentNewTab &&
+    window.gZenUIManager?.handleNewTab(werePassedURL, searchClipboard, where)
+  ) {
+    gBrowser.selectedBrowser.tabmix_lock_tab_for_zen_floating_urlbar = true;
+    return;
+  }
+
   if (replaceLastTab && Tabmix.isVersion({zen: "1.8.1*"})) {
     const emptyTab = gZenWorkspaces._emptyTab;
     if (

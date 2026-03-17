@@ -79,8 +79,17 @@ Tabmix.tablib = {
       browser.tabmix_allowLoad = true;
       return true;
     }
+
+    const lockForZenUrlbar = browser.tabmix_lock_tab_for_zen_floating_urlbar === true;
+    if (lockForZenUrlbar) {
+      delete browser.tabmix_lock_tab_for_zen_floating_urlbar;
+      window.gZenUIManager._lastTab = null;
+      gURLBar.handleRevert();
+      browser.focus();
+    }
+
     var allowLoad = this.isException(
-      browser.tabmix_allowLoad !== false || uri.startsWith("javascript:")
+      (!lockForZenUrlbar && browser.tabmix_allowLoad !== false) || uri.startsWith("javascript:")
     );
 
     let allowedUrls = [
@@ -110,7 +119,8 @@ Tabmix.tablib = {
 
       return gBrowser.isBlankBrowser(browser);
     })();
-    var isLockedTab = tab.hasAttribute("locked");
+
+    const isLockedTab = tab.hasAttribute("locked") || lockForZenUrlbar;
     if (allowLoad || isBlankTab || !isLockedTab) {
       browser.tabmix_allowLoad = uri == TabmixSvc.aboutBlank || !isLockedTab;
       return true;
@@ -215,7 +225,7 @@ Tabmix.tablib = {
     if (Tabmix.isVersion(1290)) {
       // this function is triggered by "context_openANewTab" command
       gBrowser.addAdjacentNewTab = function (tab) {
-        TMP_BrowserOpenTab({}, tab);
+        TMP_BrowserOpenTab({addAdjacentNewTab: true}, tab);
       };
     }
 

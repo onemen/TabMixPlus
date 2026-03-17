@@ -125,6 +125,12 @@ interface Window {
     undoCloseWindow(aIndex: number): Window | null;
     undoCloseTab(window: Window, aIndex?: number, sourceWindowSSId?: string): Tab | null;
   };
+
+  // Zen
+  gZenUIManager: {
+    _lastTab: Tab | null;
+    handleNewTab(werePassedURL: boolean, searchClipboard: boolean, where: string, overridePreferance?: boolean): boolean;
+  };
 }
 
 declare var nsBrowserAccess: {

@@ -168,6 +168,7 @@ declare namespace MockedGeckoTypes {
     __tabmix_fixupAndLoadURIString: boolean;
     __tabmixScrollPosition?: {x: number | undefined; y: number | undefined} | null;
     tabmix_allowLoad?: boolean;
+    tabmix_lock_tab_for_zen_floating_urlbar?: boolean;
   }
 
   interface CustomElementEventMap extends ElementEventMap {
@@ -1080,7 +1081,7 @@ interface gURLBar extends HTMLElement {
   onWidgetAfterDOMChange(aNode: Node): void;
   parentNode: Node;
   select: () => void;
-  setURI: (uri?: string, dueToTabSwitch?: boolean, dueToSessionRestore?: boolean, dontShowSearchTerms?: boolean, isSameDocument?: boolean) => void;
+  setURI(options?: {uri?: nsIURI | null; dueToTabSwitch?: boolean; dueToSessionRestore?: boolean; hideSearchTerms?: boolean; isSameDocument?: boolean}): void;
   /** @deprecated - gURLBar converted to custom element on Firefox 147 */
   textbox: Node & {parentNode: Node};
   untrimmedValue: string;
