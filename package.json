@@ -34,8 +34,8 @@
     "@typescript/native-preview": "7.0.0-dev.20260223.1",
     "eslint": "10.0.3",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jsdoc": "62.7.1",
-    "eslint-plugin-jsonc": "^3.1.1",
+    "eslint-plugin-jsdoc": "62.8.0",
+    "eslint-plugin-jsonc": "^3.1.2",
     "eslint-plugin-mozilla": "^4.4.0",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-tabmix": "workspace:./config/eslint-plugin-tabmix",
@@ -50,7 +50,7 @@
   },
   "resolutions": {
     "ajv@8": ">=8.18.0",
-    "flatted": ">=3.4.0",
+    "flatted": ">=3.4.2",
     "js-yaml": ">=4.1.1",
     "minimatch": ">=10.2.3"
   }
