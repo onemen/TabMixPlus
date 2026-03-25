@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ref: main
@@ -54,7 +54,7 @@ jobs:
 
       - name: Create CHANGELOG
         if: ${{ steps.set_version.outputs.CHANGELOG_EXIST == 'true' }}
-        uses: requarks/changelog-action@v1.10.2
+        uses: requarks/changelog-action@v1.10.3
         with:
           token: ${{ github.token }}
           fromTag: "dev-build"
