@@ -1,3 +1,9 @@
 autoInstallPeers: true
 saveExact: true
 minimumReleaseAge: 5000
+minimumReleaseAgeExclude:
+  - 'picomatch@4.0.4'
+  - 'typescript'
+  - 'typescript-eslint'
+  - '@typescript-eslint/*'
+  - '@typescript/native-preview*'
