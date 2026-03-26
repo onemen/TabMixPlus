@@ -1084,7 +1084,7 @@ Tabmix.onContentLoaded = {
         gBrowser._notifyOnTabMove = Tabmix.getPrivateMethod({
           ...tabbrowserProps,
           methodName: "notifyOnTabMove",
-          nextMethodName: "#handleTabMove",
+          nextMethodName: Tabmix.isVersion(1510) ? "handleTabMove" : "#handleTabMove",
         });
       }
 
