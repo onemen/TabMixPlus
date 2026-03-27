@@ -3,6 +3,7 @@ saveExact: true
 minimumReleaseAge: 5000
 minimumReleaseAgeExclude:
   - 'picomatch@4.0.4'
+  - 'brace-expansion@5.0.5'
   - 'typescript'
   - 'typescript-eslint'
   - '@typescript-eslint/*'
