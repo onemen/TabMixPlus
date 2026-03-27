@@ -65,7 +65,7 @@ var TabmixContentHandler = {
         break;
       }
       case "Tabmix:updateHistoryTitle": {
-        if (!Services.appinfo.sessionHistoryInParent) {
+        if (!ContentSvc.version(1500) && !Services.appinfo.sessionHistoryInParent) {
           let history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
           TabmixUtils.updateHistoryTitle(history.legacySHistory, data.title);
         }
@@ -77,7 +77,7 @@ var TabmixContentHandler = {
       }
       case "Tabmix:collectReloadData": {
         let postData = {isPostData: false};
-        if (!Services.appinfo.sessionHistoryInParent) {
+        if (!ContentSvc.version(1500) && !Services.appinfo.sessionHistoryInParent) {
           const history = docShell.QueryInterface(Ci.nsIWebNavigation).sessionHistory;
           postData = TabmixUtils.getPostDataFromHistory(history.legacySHistory);
         }

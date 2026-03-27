@@ -656,7 +656,7 @@ interface MiscellaneousImports {
 // Tab Mix modules
 
 declare namespace AutoReloadModule {
-  type importList = "E10SUtils" | "SitePermissions" | "TabmixUtils";
+  type importList = "E10SUtils" | "SitePermissions" | "isVersion" | "TabmixUtils";
   type Lazy = Pick<KnownModulesImports, importList>;
 
   interface Popup extends Omit<TabmixGlobals.PopupElement, "ownerGlobal"> {

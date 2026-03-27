@@ -8,6 +8,7 @@ const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
   SitePermissions: "resource:///modules/SitePermissions.sys.mjs",
+  isVersion: "chrome://tabmix-resource/content/BrowserVersion.sys.mjs",
   TabmixUtils: "chrome://tabmix-resource/content/Utils.sys.mjs",
 });
 
@@ -316,7 +317,7 @@ export const AutoReload = {
   },
 
   reloadRemoteTab(browser, serializeData) {
-    if (Services.appinfo.sessionHistoryInParent) {
+    if (lazy.isVersion(1500) || Services.appinfo.sessionHistoryInParent) {
       const postData = lazy.TabmixUtils.getPostDataFromHistory(
         browser.browsingContext.sessionHistory
       );

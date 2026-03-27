@@ -1253,7 +1253,7 @@ Tabmix.tablib = {
         try {
           this.removeEventListener("SSTabRestored", updateNewHistoryTitle, true);
           let browser = this.linkedBrowser;
-          if (Services.appinfo.sessionHistoryInParent) {
+          if (Tabmix.isVersion(1500) || Services.appinfo.sessionHistoryInParent) {
             const history = browser.browsingContext.sessionHistory;
             if (history) {
               const shEntry = history

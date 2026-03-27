@@ -177,6 +177,13 @@ declare namespace MockedGeckoTypes {
   // we use here the interface from gecko/lib.gecko.services.d.ts
   // and ignore the declared Services from gecko.d.ts
 
+  type _appinfo = nsICrashReporter &
+    nsIXULAppInfo &
+    nsIXULRuntime & {
+      /** @deprecated removed in firefox 150 */
+      readonly sessionHistoryInParent: boolean;
+    };
+
   interface _nsIEventListenerService extends nsIEventListenerService {}
 
   interface _nsIIOService extends nsIIOService {
@@ -221,7 +228,8 @@ declare namespace MockedGeckoTypes {
     savePrefFile(aFile: nsIFile | null): void;
   }
 
-  interface Services extends Omit<JSServices, "els" | "io" | "obs" | "prompt" | "wm" | "prefs"> {
+  interface Services extends Omit<JSServices, "appinfo" | "els" | "io" | "obs" | "prompt" | "wm" | "prefs"> {
+    appinfo: _appinfo;
     els: _nsIEventListenerService;
     io: _nsIIOService & nsINetUtil & nsISpeculativeConnect;
     obs: _nsIObserverService;
