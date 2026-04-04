@@ -145,11 +145,13 @@ declare namespace MockedGeckoTypes {
     droppedLinkHandler: typeof handleDroppedLink;
     getAttribute(name: string): string | null;
     hasAttribute(name: string): boolean;
+    getTabBrowser: () => TabBrowser;
     focus(): void;
     // we overrife these see addon.d.ts
     // fixupAndLoadURIString: (uri: string, loadURIOptions?: LoadURIOptions) => void;
     // loadURI: (uri: string, loadURIOptions?: LoadURIOptions) => void;
     loadURI: (uri: nsIURI, loadURIOptions?: LoadURIOptions & AddTabParams) => Tab | null;
+    lastLocationChange: number;
     messageManager: MockedExports.MessageManager;
     mIconURL: string;
     // ignore null here
@@ -526,6 +528,7 @@ declare namespace MockedGeckoTypes {
     };
     _cachedTitleInfo: Record<CachedTitleInfoIds, string> | null;
     _endRemoveTab: (tab: BrowserTab) => void;
+    _defaultDropLinkHandler: typeof handleDroppedLink;
     _findTabToBlurTo: (aTab: BrowserTab, aExcludeTabs?: BrowserTab[]) => BrowserTab | null;
     /** @deprecated replaced with pinnedTabCount in Firefox version 133 */
     readonly _numPinnedTabs: number;
@@ -571,11 +574,13 @@ declare namespace MockedGeckoTypes {
     isTabGroupLabel: (element: TabContainerElement) => element is MozTabGroupLabel;
     isSplitViewWrapper: (element: TabContainerElement) => element is MozTabSplitViewWrapper;
     lastMultiSelectedTab: BrowserTab;
+    loadTabs: (aURIs: string[], params?: Params) => BrowserTab[];
     // keepRelatedTabs was used until Firefox 134
     moveTabTo: (aTab: BrowserTab | MozTabbrowserTabGroup | MozTabSplitViewWrapper, options: moveTabToOptions) => void;
     moveTabsBefore: (tabs: (BrowserTab | MozTabSplitViewWrapper)[], targetElement?: TabContainerElement, metricsContext?: MockedExports.TabMetricsContext) => void;
     moveTabsAfter: (tabs: (BrowserTab | MozTabSplitViewWrapper)[], targetElement?: TabContainerElement, metricsContext?: MockedExports.TabMetricsContext) => void;
     ownerGlobal: WindowProxy;
+    OpenInTabsUtils: MockedExports.OpenInTabsUtils;
     pinTab: (tab: BrowserTab) => void;
     readonly pinnedTabCount: number;
     preloadedBrowser?: ChromeBrowser;
@@ -1122,8 +1127,9 @@ interface XULBrowserWindow {
 declare function closeMenus(node: Node | null): void;
 declare function closeWindow(aClose: boolean, aPromptFunction?: (source: string) => boolean, aSource?: string): boolean;
 declare function FillHistoryMenu(event: Event): void;
-declare function handleDroppedLink(event: DragEvent | null, url: string, name: string, triggeringPrincipal: nsIPrincipal): void;
-declare function handleDroppedLink(event: DragEvent | null, links: nsIDroppedLinkItem[], triggeringPrincipal: nsIPrincipal): void;
+declare function handleDroppedLink(event: DragEvent | null, url: string, name: string | nsIPrincipal, triggeringPrincipal?: nsIPrincipal): void;
+/* since Firefox 151 handleDroppedLink is a closure used in gBrowser._defaultDropLinkHandler */
+declare function inner_handleDroppedLink(tabbrowser: MockedGeckoTypes.TabBrowser, browser: MockedGeckoTypes.ChromeBrowser, event: DragEvent | null, url: string, nameOrTriggeringPrincipal: string | nsIPrincipal, triggeringPrincipal?: nsIPrincipal): void;
 declare function isBlankPageURL(url: string | null): boolean;
 declare function middleMousePaste(event: MouseEvent): void;
 declare function OpenBrowserWindow(params?: {private?: boolean; features?: string; args?: nsIArray | nsISupportsString; remote?: boolean; fission?: boolean}): Window | null;
@@ -1238,6 +1244,7 @@ declare var UrlbarUtils: {
     TAB_SWITCH: number;
   };
   stripUnsafeProtocolOnPaste(pasteData: string): string;
+  getShortcutOrURIAndPostData(url: string): Promise<{url: string; postData: nsIInputStream | null; mayInheritPrincipal: boolean}>;
 };
 
 // for Zen Browserw

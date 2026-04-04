@@ -828,19 +828,7 @@ Tabmix.tablib = {
       return result;
     };
 
-    Tabmix.changeCode(window, "handleDroppedLink")
-      ._replace(
-        "let lastLocationChange = gBrowser.selectedBrowser.lastLocationChange;",
-        `let tabmixContentDrop = event ? event.tabmixContentDrop : links[0].tabmixContentDrop;
-  $&`
-      )
-      ._replace(
-        "replace: true",
-        'replace: (tabmixContentDrop || Tabmix.tablib.whereToOpenDrop(event, urls[0])) != "tab"'
-      )
-      .toCode();
-    // update current browser
-    gBrowser.selectedBrowser.droppedLinkHandler = handleDroppedLink;
+    this.updateHandleDroppedLink();
 
     Tabmix.originalFunctions.duplicateTabIn = window.duplicateTabIn;
     // TreeStyleTab eval of this function use delta
@@ -1108,6 +1096,118 @@ Tabmix.tablib = {
         )
         .toCode();
     }
+  },
+
+  updateHandleDroppedLink() {
+    /** @type {typeof handleDroppedLink} */
+    let _defaultDropLinkHandler;
+    if (Tabmix.isVersion(1510)) {
+      /** since Firefox 151 handleDroppedLink exist inside tabbrowser.js block */
+
+      /** @type {typeof inner_handleDroppedLink} */
+      async function _handleDroppedLink(
+        tabbrowser,
+        browser,
+        event,
+        urlOrLinks,
+        nameOrTriggeringPrincipal,
+        triggeringPrincipal
+      ) {
+        // If links are dropped in content process, event.preventDefault() should be
+        // called in the content process. Otherwise, we do it here.
+        if (event) {
+          // Keep the event from being handled by the dragDrop listeners
+          // built-in to gecko if they happen to be above us.
+          event.preventDefault();
+        }
+        let links;
+        if (Array.isArray(urlOrLinks)) {
+          links = urlOrLinks;
+          // @ts-expect-error - if we are nameOrTriggeringPrincipal is a principal
+          triggeringPrincipal = nameOrTriggeringPrincipal;
+        } else {
+          links = [{url: urlOrLinks, nameOrTriggeringPrincipal, type: ""}];
+        }
+
+        let lastLocationChange = browser.lastLocationChange;
+
+        let userContextId = browser.getAttribute("usercontextid");
+
+        // event is null if links are dropped in content process.
+        // inBackground should be false, as it's loading into current browser.
+        let inBackground = false;
+        if (event) {
+          inBackground = Services.prefs.getBoolPref("browser.tabs.loadInBackground");
+          if (event.shiftKey) {
+            inBackground = !inBackground;
+          }
+        }
+
+        if (links.length >= Services.prefs.getIntPref("browser.tabs.maxOpenBeforeWarn")) {
+          // Sync dialog cannot be used inside drop event handler.
+          let answer = await tabbrowser.OpenInTabsUtils.promiseConfirmOpenInTabs(
+            links.length,
+            window
+          );
+          if (!answer) {
+            return;
+          }
+        }
+
+        let urls = [];
+        let postDatas = [];
+        for (let link of links) {
+          let data = await UrlbarUtils.getShortcutOrURIAndPostData(link.url);
+          urls.push(data.url);
+          postDatas.push(data.postData);
+        }
+        if (lastLocationChange == browser.lastLocationChange) {
+          let tabmixContentDrop = event ? event.tabmixContentDrop : links[0].tabmixContentDrop;
+          let replace =
+            (tabmixContentDrop || Tabmix.tablib.whereToOpenDrop(event, urls[0] ?? "")) != "tab";
+          tabbrowser.loadTabs(urls, {
+            inBackground,
+            replace,
+            allowThirdPartyFixup: false,
+            postDatas,
+            userContextId,
+            targetTab: tabbrowser.getTabForBrowser(browser),
+            triggeringPrincipal,
+          });
+        }
+      }
+
+      /** @this {MockedGeckoTypes.ChromeBrowser} */
+      gBrowser._defaultDropLinkHandler = function (...args) {
+        // The droppedLinkHandler gets invoked with `this` being the browser
+        // element on which the drop took place.
+        // eslint-disable-next-line consistent-this
+        let browser = this;
+        let tabbrowser = browser.getTabBrowser();
+        _handleDroppedLink(tabbrowser, browser, ...args);
+      };
+
+      _defaultDropLinkHandler = gBrowser._defaultDropLinkHandler;
+    } else {
+      Tabmix.changeCode(window, "handleDroppedLink")
+        ._replace(
+          "let lastLocationChange = gBrowser.selectedBrowser.lastLocationChange;",
+          `let tabmixContentDrop = event ? event.tabmixContentDrop : links[0].tabmixContentDrop;
+      $&`
+        )
+        ._replace(
+          "replace: true",
+          'replace: (tabmixContentDrop || Tabmix.tablib.whereToOpenDrop(event, urls[0])) != "tab"'
+        )
+        .toCode();
+
+      _defaultDropLinkHandler = handleDroppedLink;
+    }
+    // update browsers
+    gBrowser.tabs.forEach(tab => {
+      const browser = tab.linkedBrowser;
+      browser.droppedLinkHandler = _defaultDropLinkHandler;
+    });
   },
 
   populateUndoWindowSubmenu(undoPopup, panel, isAppMenu = Boolean(panel)) {

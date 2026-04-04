@@ -319,13 +319,14 @@ declare namespace Tablib {
   function change_gBrowser(): void;
   function change_tabContainer(): void;
   function change_utility(): void;
+  function updateHandleDroppedLink(): void;
   // for function populateUndoWindowSubmenu see addon.d.ts
   function addNewFunctionsTo_gBrowser(): void;
   const tabEpochs: WeakMap<Tab, number>;
   function getTabTitle(aTab: Tab, url: string): boolean;
   function onTabTitleChanged(aTab: Tab, aBrowser: Browser, isUrlTitle?: boolean): void;
   function closeLastTab(): void;
-  function whereToOpenDrop(aEvent: MouseEvent | DragEvent, aUri: string): string;
+  function whereToOpenDrop(aEvent: MouseEvent | DragEvent | null, aUri: string): string;
   function setURLBarFocus(): void;
   function reloadTabs(tabs: Tab[], skipTab?: Tab): void;
 }

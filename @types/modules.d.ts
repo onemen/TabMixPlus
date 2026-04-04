@@ -304,6 +304,7 @@ declare namespace MockedExports {
   interface OpenInTabsUtils {
     openTabs(urls: string[], params: Record<string, unknown>): Promise<void>;
     openNodeInTabs(aNodes: nsINavHistoryResultNode[], params: Record<string, unknown>): Promise<void>;
+    promiseConfirmOpenInTabs(numTabsToOpen: number, aWindow: Window): Promise<boolean>;
   }
 
   interface Preferences {

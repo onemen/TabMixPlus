@@ -85,6 +85,9 @@ interface DragEvent extends MouseEvent {
   initDragEvent(type: string, canBubble?: boolean, cancelable?: boolean, aView?: Window | null, aDetail?: number, aScreenX?: number, aScreenY?: number, aClientX?: number, aClientY?: number, aCtrlKey?: boolean, aAltKey?: boolean, aShiftKey?: boolean, aMetaKey?: boolean, aButton?: number, aRelatedTarget?: EventTarget | null, aDataTransfer?: DataTransfer): void;
   originalTarget: EventTarget;
   target: EventTarget;
+
+  // tabmix
+  tabmixContentDrop: "tab" | undefined;
 }
 
 // override lib.gecko.dom.d.ts Document | null to prevent nullcheck of documnet
