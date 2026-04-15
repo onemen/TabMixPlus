@@ -207,6 +207,7 @@ tab.subtabs:focus-visible > .tab-middle > .tab-text {
 /* for locales with wide tabs, align right end with tabpanels */
 tabbox > tabs {
   -moz-margin-end: 2px;
+  border-bottom: 1px solid var(--border-color, light-dark(#bfbfc9, #5b5b66));
 }
 
 #TabMIxPreferences:not([linux], [mac]) .groupbox-tabbox > tabs {
