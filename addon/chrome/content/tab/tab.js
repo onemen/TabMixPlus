@@ -3582,6 +3582,7 @@ TabmixProgressListener = {
   listener: {
     mTabBrowser: null,
     showProgressOnTab: false,
+    tabWidthState: new WeakMap(),
 
     onProgressChange(
       aBrowser,
@@ -3711,6 +3712,55 @@ TabmixProgressListener = {
         if (tab.getAttribute("locked")) {
           aBrowser.messageManager.sendAsyncMessage("Tabmix:resetContentName", {});
         }
+      }
+
+      // add min-width to prevent flickering to the multi-row layout
+      // when title changed on load
+      if (aStateFlags & nsIWebProgressListener.STATE_START) {
+        // @ts-expect-error
+        const url = aRequest.QueryInterface(Ci.nsIChannel).URI.spec;
+        if (
+          TabmixTabbar.hasMultiRows &&
+          TabmixTabbar.widthFitTitle &&
+          url === aBrowser.currentURI.spec &&
+          url !== TabmixSvc.aboutBlank &&
+          aStateFlags & nsIWebProgressListener.STATE_IS_DOCUMENT
+        ) {
+          const value = tab.style.getPropertyValue("min-width");
+          const priority = tab.style.getPropertyPriority("min-width");
+          this.tabWidthState.set(tab, {value, priority});
+          const currentWidth = tab.getBoundingClientRect().width + "px";
+          tab.style.setProperty("min-width", currentWidth, "important");
+        }
+      } else if (aStateFlags & nsIWebProgressListener.STATE_STOP) {
+        // wait for last onLocationChange, it may call another title change
+        // that can trigger flickering to the multi-row layout
+        tab.ownerGlobal.setTimeout(() => {
+          this.cleanupTabWidth(tab);
+        }, 200);
+      }
+    },
+
+    onLocationChange(aBrowser, aWebProgress) {
+      // Ensure this is the top-level document and that the load is finished
+      if (aWebProgress.isTopLevel && !aWebProgress.isLoadingDocument) {
+        aBrowser.ownerGlobal.setTimeout(() => {
+          if (this.mTabBrowser) {
+            this.cleanupTabWidth(this.mTabBrowser.getTabForBrowser(aBrowser));
+          }
+        }, 200);
+      }
+    },
+
+    cleanupTabWidth(tab) {
+      let saved = tab && this.tabWidthState.get(tab);
+      if (saved) {
+        if (saved.value) {
+          tab.style.setProperty("min-width", saved.value, saved.priority);
+        } else {
+          tab.style.removeProperty("min-width");
+        }
+        this.tabWidthState.delete(tab);
       }
     },
   },

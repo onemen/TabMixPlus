@@ -109,6 +109,7 @@ declare namespace MockedExports {
   interface _nsIWebProgressListener extends nsIWebProgressListener {
     readonly STATE_START: 1;
     readonly STATE_STOP: 16;
+    readonly STATE_IS_DOCUMENT: 131072;
     readonly STATE_IS_NETWORK: 262144;
     readonly STATE_IS_WINDOW: 524288;
     readonly STATE_RESTORING: 16777216;

@@ -678,8 +678,11 @@ declare namespace TabmixprefObserverNS {
 declare namespace TabWebProgressListener {
   let mTabBrowser: MockedGeckoTypes.TabBrowser | null;
   let showProgressOnTab: boolean;
+  let tabWidthState: WeakMap<Tab, {value: string; priority: string}>;
+  function cleanupTabWidth(tab: Tab): void;
   function onProgressChange(aBrowser: Browser, aWebProgress: nsIWebProgress, aRequest: nsIRequest, aCurSelfProgress: i32, aMaxSelfProgress: i32, aCurTotalProgress: i32, aMaxTotalProgress: i32): void;
   function onStateChange(aBrowser: Browser, aWebProgress: nsIWebProgress, aRequest: nsIRequest, aStateFlags: u32, aStatus: nsresult): void;
+  function onLocationChange(aBrowser: Browser, aWebProgress: nsIWebProgress, aRequest: nsIRequest, aLocation: nsIURI, aFlags?: u32): void;
 }
 
 declare namespace TabmixProgressListenerNS {
