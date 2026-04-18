@@ -344,3 +344,12 @@
 #tabbrowser-tabs[tabmix-multibar][tabmix-tabsFitRow] tab-group > .tabbrowser-tab[fadein] {
   transition: none !important;
 }
+
+/*
+ * make tabs-newtab-button use fixed width and padding, to prevent the width
+ * different to interfere with adjustNewtabButtonVisibility calculations
+ */
+#tabbrowser-arrowscrollbox[tabmix-flowing="multibar"] #tabs-newtab-button {
+  --toolbarbutton-inner-padding: calc((var(--tab-min-height) - 16px) / 2);
+  --toolbarbutton-outer-padding: 2px;
+}

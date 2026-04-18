@@ -453,7 +453,9 @@ Tabmix.tabsUtils = {
     this._keepLastTab = Tabmix.prefs.getBoolPref("keepLastTab");
     this.closeButtonsEnabled = Tabmix.prefs.getBoolPref("tabs.closeButtons.enable");
 
-    Tabmix.getAfterTabsButtonsWidth();
+    // without this delay the button width can get wrong value for non-maximized windows
+    setTimeout(() => Tabmix.getAfterTabsButtonsWidth(), 0);
+
     Tabmix.tabsNewtabButton = document.getElementById("tabs-newtab-button");
     this._show_newtabbutton = "aftertabs";
 
@@ -879,12 +881,13 @@ Tabmix.tabsUtils = {
 
     const previousElementRect = previousElement.getBoundingClientRect();
     const lastElementEnd =
-      previousElementRect[end] + (rtl ? -lastElementRect.width : lastElementRect.width);
+      previousElementRect[end] + (rtl ? -lastElementRect.width - 1 : lastElementRect.width + 1);
 
-    // both last element and new tab button are in the next row
     if (rtl ? lastElementEnd < tsboEnd : lastElementEnd > tsboEnd) {
+      // both last element and new tab button are in the next row
       this.disAllowNewtabbutton = false;
     } else {
+      // if both last tabs and the button fit into the previous row
       const finalButtonEnd = lastElementEnd + (rtl ? -buttonWidth : buttonWidth);
       this.disAllowNewtabbutton = rtl ? finalButtonEnd < tsboEnd : finalButtonEnd > tsboEnd;
     }
