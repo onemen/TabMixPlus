@@ -500,7 +500,10 @@ interface TabmixTabsUtils {
   _newTabButtonWidth(onSide?: boolean): number;
   _widthCache: {minWidth: number; maxWidth: number; [key: number]: number};
   updateMinWidth(): void;
+  _pendingNewTabButtonUpdate: number | null;
+  _isAdjustingNewTabButton: boolean;
   adjustNewtabButtonVisibility(): void;
+  _applyNewtabButtonVisibility(): void;
   disAllowNewtabbutton: boolean;
   overflow: boolean;
   showNewTabButtonOnSide(aCondition: boolean, aValue: string | null): void;

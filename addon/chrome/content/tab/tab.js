@@ -780,11 +780,10 @@ Tabmix.tabsUtils = {
     setNewMinWidth(newMinWidth);
   },
 
-  /*
-   * check that we have enough room to show new tab button after the last tab
-   * in the current row. we don't want the button to be on the next row when the
-   * tab is on the current row
-   */
+  // Debounce timer holder
+  _pendingNewTabButtonUpdate: null,
+  _isAdjustingNewTabButton: false,
+
   adjustNewtabButtonVisibility() {
     if (
       !TabmixTabbar.isMultiRow ||
@@ -826,6 +825,40 @@ Tabmix.tabsUtils = {
       return;
     }
 
+    // exit if we already in the process of adjusting the layout
+    if (
+      this._isAdjustingNewTabButton ||
+      (this._inUpdateVerticalTabStrip && Tabmix.callerName() !== "updateVerticalTabStrip") ||
+      TabmixTabbar._waitAfterMaximized
+    ) {
+      return;
+    }
+
+    if (this._pendingNewTabButtonUpdate) {
+      clearTimeout(this._pendingNewTabButtonUpdate);
+    }
+
+    this._pendingNewTabButtonUpdate = setTimeout(() => {
+      this._pendingNewTabButtonUpdate = null;
+
+      requestAnimationFrame(() => {
+        this._isAdjustingNewTabButton = true;
+
+        try {
+          this._applyNewtabButtonVisibility();
+        } finally {
+          this._isAdjustingNewTabButton = false;
+        }
+      });
+    }, 40);
+  },
+
+  /*
+   * check that we have enough room to show new tab button after the last tab
+   * in the current row. we don't want the button to be on the next row when the
+   * tab is on the current row
+   */
+  _applyNewtabButtonVisibility() {
     const allVisibleItems = this.allVisibleItems;
     const lastEl = allVisibleItems.at(-1);
     // Use parent elements if they are group labels
@@ -956,7 +989,7 @@ Tabmix.tabsUtils = {
       value = null;
     } else if (
       (this._show_newtabbutton === "aftertabs" || aValue === "aftertabs") &&
-      window.innerWidth < 750
+      window.innerWidth < 600
     ) {
       value = "temporary-right-side";
     } else {
