@@ -10,7 +10,116 @@ ChromeUtils.defineESModuleGetters(lazy, {
     : "resource:///modules/CustomizableUI.sys.mjs",
 });
 
+const OPTIONS_WIDGET_ID = "tabmix-closedTabs-toolbaritem";
+const TABMIX_UUID = "{dc572301-7619-498c-a57d-39143191b318}";
+
+/** @type {typeof TabmixWidgetsModule.onBuild} */
+function buildOptionsWidget(node, document) {
+  const extension = {
+    id: `${TABMIX_UUID}`,
+    name: "Tab Mix Plus",
+    tabManager: {
+      addActiveTabPermission: () => true,
+      activateScripts: (/** @type {Tab} */ tab) => {
+        tab.ownerGlobal.Tabmix.openOptionsDialog();
+      },
+    },
+  };
+
+  /**
+   * @typedef {HTMLElement & {
+   *   _actionButton: HTMLElement;
+   *   render(): void;
+   *   setExtension(extension: object): void;
+   * }} UnifiedExtensionsItem
+   */
+
+  /** @type {UnifiedExtensionsItem} */ // @ts-expect-error - custom element
+  const item = document.createElement("unified-extensions-item");
+  item.setExtension(extension);
+
+  node.appendChild(item);
+
+  node.ownerGlobal.setTimeout(() => {
+    /** @type {UnifiedExtensionsItem} */ // @ts-expect-error - custom element: unified-extensions-item
+    const container = node.firstChild;
+
+    // Override the render method of THIS SPECIFIC instance
+    const originalRender = container.render;
+    container.render = function (...args) {
+      // Run the original render logic first
+      originalRender.apply(this, args);
+
+      // Now it's guaranteed that _actionButton exists
+      this._actionButton.disabled = false;
+
+      [
+        ".unified-extensions-item-message-default",
+        ".unified-extensions-item-message-hover",
+      ].forEach(selector => {
+        const label = this.querySelector(selector);
+        if (label) {
+          label.removeAttribute("data-l10n-id");
+          label.textContent = "Click to open Options";
+        }
+      });
+    };
+
+    // If it has already rendered, trigger it now
+    if (container.isConnected) {
+      container.render();
+    }
+
+    // many search in firefox that look for this class need the parent from here
+    container.classList.remove("unified-extensions-item");
+
+    // render set src asynchronously
+    const image = document.querySelector(`[data-extensionid="${TABMIX_UUID}"] > image`);
+    if (image) {
+      image.setAttribute("src", "chrome://tabmixplus/skin/tmp.png");
+    }
+  }, 0);
+}
+
 const widgets = {
+  optionsWidget: {
+    id: `_${OPTIONS_WIDGET_ID}_-browser-action`,
+    localizeFiles: [],
+
+    get markup() {
+      return `
+  <toolbaritem
+    class="toolbaritem-combined-buttons unified-extensions-item chromeclass-toolbar-additional"
+    view-button-id="_${OPTIONS_WIDGET_ID}_-BAP"
+    data-extensionid="${TABMIX_UUID}"
+    id="_${OPTIONS_WIDGET_ID}_-browser-action"
+    widget-id="_${OPTIONS_WIDGET_ID}_-browser-action"
+    widget-type="custom"
+    removable="true"
+    overflows="true"
+    label="Tab Mix Plus"
+    tooltiptext="Tab Mix Plus"
+    cui-areatype="toolbar"
+  >
+  </toolbaritem>`;
+    },
+    /** @type {typeof TabmixWidgetsModule.onBuild} */
+    onBuild(node, document) {
+      const placement = lazy.CustomizableUI.getPlacementOfWidget(node.id);
+      if (
+        placement?.area === lazy.CustomizableUI.AREA_NAVBAR &&
+        document.readyState !== "complete"
+      ) {
+        node.ownerGlobal.addEventListener(
+          "DOMContentLoaded",
+          () => buildOptionsWidget(node, document),
+          {once: true}
+        );
+      } else {
+        node.ownerGlobal.requestAnimationFrame(() => buildOptionsWidget(node, document));
+      }
+    },
+  },
   closedTabs: {
     id: "tabmix-closedTabs-toolbaritem",
     localizeFiles: ["chrome://tabmixplus/locale/tabmix.dtd"],

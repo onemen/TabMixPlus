@@ -44,6 +44,7 @@
           "toolbar",
           "toolbox",
           "vbox",
+          "unified-extensions-item",
           "windowdragbox"
         ]
       }

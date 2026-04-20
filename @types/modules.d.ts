@@ -265,6 +265,7 @@ declare namespace MockedExports {
   }
 
   interface CustomizableUI {
+    AREA_NAVBAR: string;
     AREA_TABSTRIP: string;
     addListener: (aListener: CustomizableUIListener) => void;
     addShortcut(aShortcutNode: Node, aTargetNode?: Node): void;
@@ -1596,7 +1597,7 @@ declare namespace TabmixWidgetsModule {
     ownerGlobal: WindowProxy;
   }
 
-  function onBuild(node: WidgetElement, document?: Document): void;
+  function onBuild(node: WidgetElement, document: Document): void;
 
   type Widget = {
     id: string;
