@@ -10,7 +10,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
     : "resource:///modules/CustomizableUI.sys.mjs",
 });
 
-const OPTIONS_WIDGET_ID = "tabmix-closedTabs-toolbaritem";
+const OPTIONS_WIDGET_ID = "tabmix-options-toolbaritem";
 const TABMIX_UUID = "{dc572301-7619-498c-a57d-39143191b318}";
 
 /** @type {typeof TabmixWidgetsModule.onBuild} */
