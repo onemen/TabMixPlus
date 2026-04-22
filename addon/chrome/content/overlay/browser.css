@@ -138,6 +138,7 @@
   display: none;
   border: none;
   margin: 0;
+  padding: 0;
   vertical-align: bottom;
 }
 
@@ -174,6 +175,9 @@
 #TabsToolbar:not([customizing])[tabmix-show-newtabbutton*="aftertabs"] #new-tab-button,
 #TabsToolbar:not([tabmix-show-newtabbutton]) #new-tab-button {
   visibility: collapse;
+  border: none;
+  margin: 0;
+  padding: 0;
 }
 
 /*** Private-tab compatibility ***/

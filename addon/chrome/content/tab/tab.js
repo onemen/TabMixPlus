@@ -914,16 +914,16 @@ Tabmix.tabsUtils = {
 
     const previousElementRect = previousElement.getBoundingClientRect();
     const lastElementEnd =
-      previousElementRect[end] + (rtl ? -lastElementRect.width - 1 : lastElementRect.width + 1);
+      previousElementRect[end] + (rtl ? -lastElementRect.width : lastElementRect.width);
 
-    if (rtl ? lastElementEnd < tsboEnd : lastElementEnd > tsboEnd) {
-      // both last element and new tab button are in the next row
-      this.disAllowNewtabbutton = false;
-    } else {
-      // if both last tabs and the button fit into the previous row
-      const finalButtonEnd = lastElementEnd + (rtl ? -buttonWidth : buttonWidth);
-      this.disAllowNewtabbutton = rtl ? finalButtonEnd < tsboEnd : finalButtonEnd > tsboEnd;
-    }
+    const buttonAfterTabsEnd = lastElementEnd + (rtl ? -buttonWidth : buttonWidth);
+
+    // Disallow the new‑tab button that appears after the tabs when the last tab
+    // fits in the previous row but the button would wrap to the next row.
+    this.disAllowNewtabbutton =
+      rtl ?
+        buttonAfterTabsEnd < tsboEnd && lastElementEnd >= tsboEnd
+      : buttonAfterTabsEnd > tsboEnd && lastElementEnd <= tsboEnd;
   },
 
   get disAllowNewtabbutton() {
