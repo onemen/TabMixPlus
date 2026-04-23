@@ -75,54 +75,29 @@
 /* for tabmix option menu in unified-extensions-list */
 toolbaritem[data-extensionid="{dc572301-7619-498c-a57d-39143191b318}"] {
   & > unified-extensions-item {
-    display: contents !important;
-    margin: 0 !important;
+    display: contents;
   }
 
-  .unified-extensions-item-row-wrapper > .subviewbutton {
+  .unified-extensions-item-action-button.subviewbutton {
     margin: 0;
   }
 
-  /* Specific override when placed in the toolbar */
+  .unified-extensions-item-menu-button.subviewbutton {
+    flex-grow: 0;
+    margin: 0;
+  }
+
   &:is([cui-areatype="toolbar"]) {
-    .unified-extensions-item-action-button {
-      padding: 0 1px !important;
-
-      .unified-extensions-item-icon {
-        margin: 0;
-        padding: 5px;
-        width: 28px;
-        height: 28px;
-      }
-
-      .unified-extensions-item-contents {
-        display: none !important;
-      }
-
-      &:hover  {
-        background-color: transparent;
-
-        > .unified-extensions-item-icon {
-          border-radius: var(--toolbarbutton-border-radius);
-          background-color: var(--toolbarbutton-hover-background);
-          color: inherit;
-          outline-color: var(--toolbarbutton-hover-outline-color);
-        }
-      }
-
-      &:hover:active  {
-        background-color: transparent;
-
-        > .unified-extensions-item-icon {
-          background-color: var(--toolbarbutton-active-background);
-          color: inherit;
-          outline-color: var(--toolbarbutton-active-outline-color);
-        }
-      }
+    .unified-extensions-item-icon {
+      margin: 0;
     }
+  }
 
-    .unified-extensions-item-menu-button {
-      display: none !important;
+  &:is(:not([cui-areatype="toolbar"])) {
+    .unified-extensions-item-icon {
+      height: var(--uei-icon-size);
+      width: var(--uei-icon-size);
+      margin-inline-end: 6px;
     }
   }
 }

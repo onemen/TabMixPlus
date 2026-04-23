@@ -79,6 +79,9 @@ interface Window {
   };
   gBrowser: MockedGeckoTypes.TabBrowser;
   gBrowserInit: gBrowserInit;
+  gUnifiedExtensions: {
+    _updateWidgetClassName(aWidgetId: string, inPanel: boolean): void;
+  };
   handleLinkClick(event: MouseEvent, href: string, linkNode: ContentClickLinkElement | null, _tabmixOptions?: {where: string}): boolean;
   KeyboardEvent: KeyboardEvent;
   MozXULElement: typeof MozXULElement;
@@ -267,6 +270,7 @@ declare namespace MockedExports {
   interface CustomizableUI {
     AREA_NAVBAR: string;
     AREA_TABSTRIP: string;
+    TYPE_TOOLBAR: string;
     addListener: (aListener: CustomizableUIListener) => void;
     addShortcut(aShortcutNode: Node, aTargetNode?: Node): void;
     addWidgetToArea: (aWidgetId: string, aArea: string, aPosition: number | undefined, aInitialAdd?: boolean) => void;
@@ -274,6 +278,7 @@ declare namespace MockedExports {
     createWidget(widget: {id: string; type: string; localized: boolean; onBuild(aDoc: Document): Element}): Element;
     destroyWidget(aWidgetId: string): void;
     endBatchUpdate(): void;
+    getAreaType: (aArea: string) => string;
     getWidgetIdsInArea: (aArea: string) => string[];
     getPlacementOfWidget: (aWidgetId: string, aOnlyRegistered?: boolean, aDeadAreas?: boolean) => {area: string; position: number} | null;
     moveWidgetWithinArea: (aWidgetId: string, aPosition: number) => void;

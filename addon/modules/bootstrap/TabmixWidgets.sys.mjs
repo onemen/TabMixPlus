@@ -14,7 +14,27 @@ const OPTIONS_WIDGET_ID = "tabmix-options-toolbaritem";
 const TABMIX_UUID = "{dc572301-7619-498c-a57d-39143191b318}";
 
 /** @type {typeof TabmixWidgetsModule.onBuild} */
-function buildOptionsWidget(node, document) {
+async function buildOptionsWidget(node, document) {
+  const window = node.ownerGlobal;
+
+  // get current placement of the widget
+  const CustomizableUI = lazy.CustomizableUI;
+  const placement = CustomizableUI.getPlacementOfWidget(node.id) ?? {
+    area: "",
+  };
+  const inPanel = CustomizableUI.getAreaType(placement.area) !== CustomizableUI.TYPE_TOOLBAR;
+
+  // without this await there is an issue in floorp when the button is
+  // placed on the nav-bar
+  await new Promise(resolve => {
+    const notReady = document.readyState !== "complete";
+    if (!inPanel && notReady) {
+      window.addEventListener("DOMContentLoaded", () => resolve(null), {once: true});
+    } else {
+      window.requestAnimationFrame(resolve);
+    }
+  });
+
   const extension = {
     id: `${TABMIX_UUID}`,
     name: "Tab Mix Plus",
@@ -27,58 +47,42 @@ function buildOptionsWidget(node, document) {
   };
 
   /**
-   * @typedef {HTMLElement & {
+   * @type {HTMLElement & {
    *   _actionButton: HTMLElement;
-   *   render(): void;
    *   setExtension(extension: object): void;
-   * }} UnifiedExtensionsItem
-   */
-
-  /** @type {UnifiedExtensionsItem} */ // @ts-expect-error - custom element
+   * }}
+   */ // @ts-expect-error - custom element
   const item = document.createElement("unified-extensions-item");
   item.setExtension(extension);
 
   node.appendChild(item);
 
-  node.ownerGlobal.setTimeout(() => {
-    /** @type {UnifiedExtensionsItem} */ // @ts-expect-error - custom element: unified-extensions-item
-    const container = node.firstChild;
+  // Now it's guaranteed that _actionButton exists
+  item._actionButton.disabled = false;
 
-    // Override the render method of THIS SPECIFIC instance
-    const originalRender = container.render;
-    container.render = function (...args) {
-      // Run the original render logic first
-      originalRender.apply(this, args);
-
-      // Now it's guaranteed that _actionButton exists
-      this._actionButton.disabled = false;
-
-      [
-        ".unified-extensions-item-message-default",
-        ".unified-extensions-item-message-hover",
-      ].forEach(selector => {
-        const label = this.querySelector(selector);
-        if (label) {
-          label.removeAttribute("data-l10n-id");
-          label.textContent = "Click to open Options";
-        }
-      });
-    };
-
-    // If it has already rendered, trigger it now
-    if (container.isConnected) {
-      container.render();
+  ["default", "hover"].forEach(selector => {
+    const label = item.querySelector(`.unified-extensions-item-message-${selector}`);
+    if (label) {
+      label.removeAttribute("data-l10n-id");
+      label.textContent = "Click to open Options";
     }
+  });
 
-    // many search in firefox that look for this class need the parent from here
-    container.classList.remove("unified-extensions-item");
+  // Firefox code use node.closest(".unified-extensions-item") to get the toolbaritem
+  // we must remove it from here
+  item.classList.remove("unified-extensions-item");
 
-    // render set src asynchronously
-    const image = document.querySelector(`[data-extensionid="${TABMIX_UUID}"] > image`);
-    if (image) {
-      image.setAttribute("src", "chrome://tabmixplus/skin/tmp.png");
-    }
-  }, 0);
+  // toggle subviewbutton / toolbarbutton-1
+  window.gUnifiedExtensions._updateWidgetClassName(node.id, inPanel);
+
+  // fix some style on the image
+  // don't remove unified-extensions-item-icon class
+  // unified-extensions-item code use it
+  const image = item.querySelector(".unified-extensions-item-icon");
+  image?.classList.add("toolbarbutton-icon");
+  // the button image is visibly missing when the button is in the nav-bar,
+  // unified-extensions-item render() set src asynchronously
+  image?.setAttribute("src", "chrome://tabmixplus/skin/tmp.png");
 }
 
 const widgets = {
@@ -103,22 +107,7 @@ const widgets = {
   >
   </toolbaritem>`;
     },
-    /** @type {typeof TabmixWidgetsModule.onBuild} */
-    onBuild(node, document) {
-      const placement = lazy.CustomizableUI.getPlacementOfWidget(node.id);
-      if (
-        placement?.area === lazy.CustomizableUI.AREA_NAVBAR &&
-        document.readyState !== "complete"
-      ) {
-        node.ownerGlobal.addEventListener(
-          "DOMContentLoaded",
-          () => buildOptionsWidget(node, document),
-          {once: true}
-        );
-      } else {
-        node.ownerGlobal.requestAnimationFrame(() => buildOptionsWidget(node, document));
-      }
-    },
+    onBuild: buildOptionsWidget,
   },
   closedTabs: {
     id: "tabmix-closedTabs-toolbaritem",
