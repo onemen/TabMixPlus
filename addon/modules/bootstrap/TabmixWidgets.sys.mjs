@@ -10,19 +10,21 @@ ChromeUtils.defineESModuleGetters(lazy, {
     : "resource:///modules/CustomizableUI.sys.mjs",
 });
 
-const OPTIONS_WIDGET_ID = "tabmix-options-toolbaritem";
+const OPTIONS_WIDGET_NAME = "tabmix-options-toolbaritem";
+const OPTIONS_WIDGET_ID = `_${OPTIONS_WIDGET_NAME}_-browser-action`;
 const TABMIX_UUID = "{dc572301-7619-498c-a57d-39143191b318}";
+
+function isOptionWidgetInPanle() {
+  const CustomizableUI = lazy.CustomizableUI;
+  const area = CustomizableUI.getPlacementOfWidget(OPTIONS_WIDGET_ID)?.area ?? "";
+  return CustomizableUI.getAreaType(area) !== CustomizableUI.TYPE_TOOLBAR;
+}
 
 /** @type {typeof TabmixWidgetsModule.onBuild} */
 async function buildOptionsWidget(node, document) {
   const window = node.ownerGlobal;
 
-  // get current placement of the widget
-  const CustomizableUI = lazy.CustomizableUI;
-  const placement = CustomizableUI.getPlacementOfWidget(node.id) ?? {
-    area: "",
-  };
-  const inPanel = CustomizableUI.getAreaType(placement.area) !== CustomizableUI.TYPE_TOOLBAR;
+  const inPanel = isOptionWidgetInPanle();
 
   // without this await there is an issue in floorp when the button is
   // placed on the nav-bar
@@ -87,17 +89,17 @@ async function buildOptionsWidget(node, document) {
 
 const widgets = {
   optionsWidget: {
-    id: `_${OPTIONS_WIDGET_ID}_-browser-action`,
+    id: OPTIONS_WIDGET_ID,
     localizeFiles: [],
 
     get markup() {
       return `
   <toolbaritem
     class="toolbaritem-combined-buttons unified-extensions-item chromeclass-toolbar-additional"
-    view-button-id="_${OPTIONS_WIDGET_ID}_-BAP"
+    view-button-id="_${OPTIONS_WIDGET_NAME}_-BAP"
     data-extensionid="${TABMIX_UUID}"
-    id="_${OPTIONS_WIDGET_ID}_-browser-action"
-    widget-id="_${OPTIONS_WIDGET_ID}_-browser-action"
+    id="${OPTIONS_WIDGET_ID}"
+    widget-id="${OPTIONS_WIDGET_ID}"
     widget-type="custom"
     removable="true"
     overflows="true"
@@ -316,4 +318,6 @@ export const TabmixWidgets = {
       lazy.CustomizableUI.endBatchUpdate();
     }
   },
+
+  isOptionWidgetInPanle,
 };

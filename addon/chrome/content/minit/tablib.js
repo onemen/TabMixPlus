@@ -16,6 +16,7 @@ Tabmix.tablib = {
     this.change_tabContainer();
     this.change_utility();
     this.addNewFunctionsTo_gBrowser();
+    this.generalFunctions();
   },
 
   _loadURIInitialized: false,
@@ -2033,6 +2034,21 @@ Tabmix.tablib = {
     gBrowser.restoreTab = function () {};
     gBrowser.closeTab = aTab => gBrowser.removeTab(aTab);
     gBrowser.renameTab = aTab => Tabmix.renameTab.editTitle(aTab);
+  },
+
+  generalFunctions() {
+    // make sure clicking on unified-extensions-button open the panel
+    // even when there is no other extension in the panel
+    const {TabmixWidgets} = ChromeUtils.importESModule(
+      "chrome://tabmix-resource/content/bootstrap/TabmixWidgets.sys.mjs"
+    );
+    const original_hasExtensionsInPanel = gUnifiedExtensions.hasExtensionsInPanel;
+    gUnifiedExtensions.hasExtensionsInPanel = function (
+      policies = gUnifiedExtensions.getActivePolicies()
+    ) {
+      const inPanel = TabmixWidgets.isOptionWidgetInPanle();
+      return original_hasExtensionsInPanel.call(this, policies) || inPanel;
+    };
   },
 
   tabEpochs: new WeakMap(),

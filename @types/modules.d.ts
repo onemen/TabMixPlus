@@ -68,6 +68,12 @@ interface GetByMap {
   tabmixRenametab_titleField: HTMLInputElement;
 }
 
+interface UnifiedExtensions {
+  _updateWidgetClassName(aWidgetId: string, inPanel: boolean): void;
+  hasExtensionsInPanel(policies?: WebExtensionPolicy[]): boolean;
+  getActivePolicies(skipPBMCheck?: boolean): WebExtensionPolicy[];
+}
+
 interface Window {
   arguments: any[];
   BrowserUtils: MockedExports.BrowserUtils;
@@ -79,9 +85,7 @@ interface Window {
   };
   gBrowser: MockedGeckoTypes.TabBrowser;
   gBrowserInit: gBrowserInit;
-  gUnifiedExtensions: {
-    _updateWidgetClassName(aWidgetId: string, inPanel: boolean): void;
-  };
+  gUnifiedExtensions: UnifiedExtensions;
   handleLinkClick(event: MouseEvent, href: string, linkNode: ContentClickLinkElement | null, _tabmixOptions?: {where: string}): boolean;
   KeyboardEvent: KeyboardEvent;
   MozXULElement: typeof MozXULElement;
@@ -163,6 +167,7 @@ interface TabmixKnownModules {
   "resource://gre/modules/WebNavigation.sys.mjs": {WebNavigationManager: MockedExports.WebNavigationManager};
   "resource://gre/modules/XPCOMUtils.sys.mjs": typeof MockedExports.XPCOMUtilsSYSMJS;
   // Tabmix
+  "chrome://tabmix-resource/content/bootstrap/TabmixWidgets.sys.mjs": {TabmixWidgets: TabmixWidgetsModule.TabmixWidgets};
   "chrome://tabmix-resource/content/BrowserDOMWindow.sys.mjs": {TabmixBrowserDOMWindow: BrowserDOMWindowModule.BrowserDOMWindow};
   "chrome://tabmix-resource/content/BrowserVersion.sys.mjs": {isVersion: TabmixModules.BrowserVersion["isVersion"]};
   "chrome://tabmix-resource/content/Changecode.sys.mjs": {initializeChangeCodeClass: typeof ChangecodeModule.initializeChangeCodeClass};
@@ -1615,6 +1620,7 @@ declare namespace TabmixWidgetsModule {
   interface TabmixWidgets {
     create(): void;
     destroy(uninstall?: boolean): void;
+    isOptionWidgetInPanle(): boolean;
   }
 
   interface TabDragEvent extends Omit<DragEvent, "target"> {

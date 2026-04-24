@@ -322,6 +322,7 @@ declare namespace Tablib {
   function updateHandleDroppedLink(): void;
   // for function populateUndoWindowSubmenu see addon.d.ts
   function addNewFunctionsTo_gBrowser(): void;
+  function generalFunctions(): void;
   const tabEpochs: WeakMap<Tab, number>;
   function getTabTitle(aTab: Tab, url: string): boolean;
   function onTabTitleChanged(aTab: Tab, aBrowser: Browser, isUrlTitle?: boolean): void;

@@ -1200,6 +1200,7 @@ declare var gMultiProcessBrowser: boolean;
 declare var gNavToolbox: HTMLElement;
 declare var gReduceMotion: boolean;
 declare var gReduceMotionSetting: boolean;
+declare var gUnifiedExtensions: UnifiedExtensions;
 declare var HomePage: {
   get: (aWindow?: Window) => string;
 };
