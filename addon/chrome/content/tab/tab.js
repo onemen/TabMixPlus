@@ -955,7 +955,12 @@ Tabmix.tabsUtils = {
       let tabBar = this.tabBar;
       let tabstrip = tabBar.arrowScrollbox;
       Tabmix.setItem("tabmix-scrollbox", "overflowing", val || null);
-      this.showNewTabButtonOnSide(val, "right-side");
+
+      // new tab button is in the right place when we get here from
+      // updateVerticalTabStrip function
+      if (Tabmix.callerName() !== "updateVerticalTabStrip") {
+        this.showNewTabButtonOnSide(val, "right-side");
+      }
 
       // arrowScrollbox and tabbrowser-tabs overflow/underflow listeners skip vertical event
       // when event.detail is 0
