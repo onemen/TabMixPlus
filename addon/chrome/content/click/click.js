@@ -1075,6 +1075,10 @@ var TabmixContext = {
           // @ts-ignore
           modules.LinkPreview = "moz-src:///browser/components/genai/LinkPreview.sys.mjs";
         }
+        if (Tabmix.isVersion(1520)) {
+          // @ts-ignore
+          modules.AIWindow = "moz-src:///browser/components/aiwindow/ui/modules/AIWindow.sys.mjs";
+        }
         ChromeUtils.defineESModuleGetters(lazy, modules);
       }
 
