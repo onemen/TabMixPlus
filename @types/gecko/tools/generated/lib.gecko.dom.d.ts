@@ -7,8 +7,6 @@
  * If you're updating some of the sources, see README for instructions.
  */
 
-/// <reference no-default-lib="true" />
-
 type HTMLCollectionOf<T> = any;
 type IsInstance<T> = (obj: any) => obj is T;
 type NodeListOf<T> = any;
