@@ -156,7 +156,9 @@ declare namespace MockedGeckoTypes {
     mIconURL: string;
     // ignore null here
     readonly ownerDocument: Document;
+    /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
     readonly ownerGlobal: Window;
+    readonly documentGlobal: Window;
     reload: () => void;
     sendMessageToActor: (messageName: string, data: object, type: string) => void;
     stop: () => void;
@@ -210,7 +212,7 @@ declare namespace MockedGeckoTypes {
     pinnedTabsContainerInfo: PinnedTabsContainerInfo | null;
   };
 
-  interface BrowserTab extends MockedExports.BrowserTab, Omit<Element, "ownerGlobal" | "nextSibling" | "previousSibling"> {
+  interface BrowserTab extends MockedExports.BrowserTab, Omit<Element, "ownerGlobal" | "documentGlobal" | "nextSibling" | "previousSibling"> {
     readonly _isProtected: boolean;
     _labelIsInitialTitle?: boolean;
     _tPos: number;
@@ -232,7 +234,9 @@ declare namespace MockedGeckoTypes {
     nextSibling: BrowserTab | MozTabbrowserTabGroup | undefined;
     owner: BrowserTab | null;
     // MockedExports.BrowserTab use null here - ignore it
+    /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
     readonly ownerGlobal: WindowProxy;
+    readonly documentGlobal: WindowProxy;
     previousSibling: BrowserTab | MozTabbrowserTabGroup | undefined;
     readonly pinned: boolean;
     selected: boolean;
@@ -579,7 +583,9 @@ declare namespace MockedGeckoTypes {
     moveTabTo: (aTab: BrowserTab | MozTabbrowserTabGroup | MozTabSplitViewWrapper, options: moveTabToOptions) => void;
     moveTabsBefore: (tabs: (BrowserTab | MozTabSplitViewWrapper)[], targetElement?: TabContainerElement, metricsContext?: MockedExports.TabMetricsContext) => void;
     moveTabsAfter: (tabs: (BrowserTab | MozTabSplitViewWrapper)[], targetElement?: TabContainerElement, metricsContext?: MockedExports.TabMetricsContext) => void;
+    /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
     ownerGlobal: WindowProxy;
+    documentGlobal: WindowProxy;
     OpenInTabsUtils: MockedExports.OpenInTabsUtils;
     pinTab: (tab: BrowserTab) => void;
     readonly pinnedTabCount: number;
@@ -1011,7 +1017,7 @@ interface ContentMouseEvent extends Omit<MouseEvent, "composedTarget" | "origina
   tabmix_openLinkWithHistory: boolean;
 }
 
-interface ContentClickLinkElement extends Omit<HTMLLinkElement, "parentNode" | "parentElement" | "ownerDocument" | "ownerGlobal"> {
+interface ContentClickLinkElement extends Omit<HTMLLinkElement, "parentNode" | "parentElement" | "ownerDocument" | "ownerGlobal" | "documentGlobal"> {
   __tabmix?: boolean;
   _attributes: string[];
   host: string;
@@ -1019,7 +1025,9 @@ interface ContentClickLinkElement extends Omit<HTMLLinkElement, "parentNode" | "
   parentElement: ContentClickLinkElement;
   parentNode: ContentClickLinkElement;
   readonly ownerDocument: Document;
+  /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
   ownerGlobal: WindowProxy;
+  documentGlobal: WindowProxy;
 }
 type ContentClickLinkData = [href: string | null, linkNode: ContentClickLinkElement | null, linkPrincipal: nsIPrincipal] | null;
 

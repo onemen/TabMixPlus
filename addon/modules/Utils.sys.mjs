@@ -12,6 +12,7 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
+  getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
   NetUtil: "resource://gre/modules/NetUtil.sys.mjs",
   AutoReload: "chrome://tabmix-resource/content/AutoReload.sys.mjs",
   DocShellCapabilities: "chrome://tabmix-resource/content/DocShellCapabilities.sys.mjs",
@@ -53,14 +54,14 @@ export const TabmixUtils = {
         break;
       }
       case "Tabmix:getOpener":
-        win = browser.ownerGlobal;
+        win = lazy.getGlobal(browser);
         tab = win.gBrowser.getTabForBrowser(browser);
         lazy.MergeWindows.moveTabsFromPopups(tab, message.data.openerID);
         break;
       case "Tabmix:contentDrop": {
         const {json, links} = message.data;
         const url = links[0].url;
-        win = browser.ownerGlobal;
+        win = lazy.getGlobal(browser);
         const where =
           !lazy.TabmixSvc.isGlitterInstalled && win.Tabmix.tablib.whereToOpenDrop(json, url);
         if (where == "tab") {
@@ -76,7 +77,7 @@ export const TabmixUtils = {
         return false;
       }
       case "Tabmix:contextmenu": {
-        browser.ownerGlobal.Tabmix.contextMenuLinks = message.data.links;
+        lazy.getGlobal(browser).Tabmix.contextMenuLinks = message.data.links;
         break;
       }
     }

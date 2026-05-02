@@ -1,5 +1,11 @@
 const ATTRIBS = ["href", "onclick", "onmousedown", "rel", "role"];
 
+/** @type {LinkNodeUtilsModule.Lazy} */ // @ts-ignore
+const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
+});
+
 /** @type {LinkNodeUtilsModule.LinkNodeUtils} */
 export const LinkNodeUtils = {
   isFrameInContent(content, href, name) {
@@ -26,7 +32,7 @@ export const LinkNodeUtils = {
     }
 
     let doc = node.ownerDocument;
-    let frameElement = Boolean(node.ownerGlobal.frameElement);
+    let frameElement = Boolean(lazy.getGlobal(node).frameElement);
 
     /** @type {LinkNodeUtilsModule.WrappedNode} */
     let wrapper = {
@@ -37,6 +43,7 @@ export const LinkNodeUtils = {
       className: node.className,
       target: getTargetAttr(node.target, focusedWindow),
       ownerGlobal: {frameElement},
+      documentGlobal: {frameElement},
       ownerDocument: {
         URL: doc.URL,
         documentURI: doc.documentURI,

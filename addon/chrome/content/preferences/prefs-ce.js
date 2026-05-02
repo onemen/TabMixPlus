@@ -1176,7 +1176,7 @@ class PrefWindow extends MozXULElement {
       return;
     }
 
-    const MozTabs = doc.ownerGlobal?.customElements.get("tabs");
+    const MozTabs = Tabmix.getGlobal(doc)?.customElements.get("tabs");
     // @ts-ignore
     const setter = MozTabs?.prototype.__lookupSetter__("selectedIndex")?.toString();
     // @ts-ignore

@@ -54,6 +54,8 @@ export default {
     // manually added globals to fix no-undef errors
     Overlays: false,
     ChromeManifest: false,
+    getGlobal: false,
+    GlobalKey: false,
     PreferencesLoader: false,
     TabmixWidgets: false,
     ScriptsLoader: false,

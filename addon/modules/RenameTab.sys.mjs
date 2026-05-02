@@ -5,7 +5,7 @@ import {Overlays} from "chrome://tabmix-resource/content/bootstrap/Overlays.sys.
 /** @type {RenameTabModule.Lazy} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  //
+  getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
   TabmixPlacesUtils: "chrome://tabmix-resource/content/Places.sys.mjs",
 });
 
@@ -26,7 +26,7 @@ export const RenameTab = {
       this.hidePopup();
     }
 
-    this.window = aTab.ownerGlobal;
+    this.window = lazy.getGlobal(aTab);
     var gBrowser = this.window.gBrowser;
 
     this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser._selectedTab;

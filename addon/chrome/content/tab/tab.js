@@ -3696,7 +3696,7 @@ TabmixProgressListener = {
           this.mTabBrowser.hideTab(tab);
           TabmixTabbar.updateScrollStatus();
           // let to unknownContentType dialog or nsIFilePicker time to open
-          tab._tabmix_downloadingTimeout = tab.ownerGlobal.setTimeout(
+          tab._tabmix_downloadingTimeout = Tabmix.getGlobal(tab).setTimeout(
             () => {
               tab._tabmix_downloadingTimeout = null;
               if (this && this.mTabBrowser && tab && tab.parentNode) {
@@ -3773,7 +3773,7 @@ TabmixProgressListener = {
       } else if (aStateFlags & nsIWebProgressListener.STATE_STOP) {
         // wait for last onLocationChange, it may call another title change
         // that can trigger flickering to the multi-row layout
-        tab.ownerGlobal.setTimeout(() => {
+        Tabmix.getGlobal(tab).setTimeout(() => {
           this.cleanupTabWidth(tab);
         }, 200);
       }
@@ -3782,7 +3782,7 @@ TabmixProgressListener = {
     onLocationChange(aBrowser, aWebProgress) {
       // Ensure this is the top-level document and that the load is finished
       if (aWebProgress.isTopLevel && !aWebProgress.isLoadingDocument) {
-        aBrowser.ownerGlobal.setTimeout(() => {
+        Tabmix.getGlobal(aBrowser).setTimeout(() => {
           if (this.mTabBrowser) {
             this.cleanupTabWidth(this.mTabBrowser.getTabForBrowser(aBrowser));
           }

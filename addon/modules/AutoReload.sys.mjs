@@ -7,8 +7,9 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
-  SitePermissions: "resource:///modules/SitePermissions.sys.mjs",
+  getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
   isVersion: "chrome://tabmix-resource/content/BrowserVersion.sys.mjs",
+  SitePermissions: "resource:///modules/SitePermissions.sys.mjs",
   TabmixUtils: "chrome://tabmix-resource/content/Utils.sys.mjs",
 });
 
@@ -38,7 +39,7 @@ export const AutoReload = {
 
   /** Popup command */
   addClonePopup(aPopup, aTab) {
-    var win = aTab.ownerGlobal;
+    var win = lazy.getGlobal(aTab);
     let popup = win.document.getElementById("autoreload_popup");
     let parent = aPopup.parentNode;
     for (const item of popup?.childNodes ?? []) {
@@ -66,10 +67,10 @@ export const AutoReload = {
           this.setCustomTime(popup._tab);
           break;
         case "enableAllTabs":
-          this.enableAllTabs(popup.ownerGlobal.gBrowser);
+          this.enableAllTabs(lazy.getGlobal(popup).gBrowser);
           break;
         case "disableAllTabs":
-          this.disableAllTabs(popup.ownerGlobal.gBrowser);
+          this.disableAllTabs(lazy.getGlobal(popup).gBrowser);
           break;
         default:
           this.setTime(popup._tab, event.originalTarget.value);
@@ -149,7 +150,7 @@ export const AutoReload = {
       return newList;
     }
 
-    let doc = aPopup.ownerGlobal.document;
+    let doc = lazy.getGlobal(aPopup).document;
     getList()
       .sort((a, b) => parseInt(a) - parseInt(b))
       .forEach(val => {
@@ -186,7 +187,7 @@ export const AutoReload = {
 
   setCustomTime(aTab) {
     let result = {ok: false};
-    var win = aTab.ownerGlobal;
+    var win = lazy.getGlobal(aTab);
     win.openDialog(
       "chrome://tabmixplus/content/overlay/autoReload.xhtml",
       "_blank",
@@ -200,7 +201,7 @@ export const AutoReload = {
   },
 
   enableAllTabs(aTabBrowser) {
-    const tabs = aTabBrowser.ownerGlobal.Tabmix.visibleTabs.tabs;
+    const tabs = lazy.getGlobal(aTabBrowser).Tabmix.visibleTabs.tabs;
     for (const tab of tabs) {
       if (tab.autoReloadEnabled === undefined) {
         this.initTab(tab);
@@ -212,7 +213,7 @@ export const AutoReload = {
   },
 
   disableAllTabs(aTabBrowser) {
-    const tabs = aTabBrowser.ownerGlobal.Tabmix.visibleTabs.tabs;
+    const tabs = lazy.getGlobal(aTabBrowser).Tabmix.visibleTabs.tabs;
     for (const tab of tabs) {
       if (tab.autoReloadEnabled) {
         this._disable(tab);
@@ -239,7 +240,7 @@ export const AutoReload = {
     aTab.autoReloadEnabled = true;
     _setItem(aTab, "_reload", true);
     aTab.autoReloadURI = url;
-    var win = aTab.ownerGlobal;
+    var win = lazy.getGlobal(aTab);
     _clearTimeout(aTab, win);
     aTab.autoReloadTimerID = win.setTimeout(
       _reloadTab,
@@ -265,7 +266,7 @@ export const AutoReload = {
 
   /** called by TabmixProgressListener.listener */
   onTabReloaded(aTab, aBrowser) {
-    var win = aTab.ownerGlobal;
+    var win = lazy.getGlobal(aTab);
     if (aTab.autoReloadTimerID) {
       _clearTimeout(aTab, win);
     }
@@ -324,7 +325,7 @@ export const AutoReload = {
       Object.assign(serializeData, postData);
     }
 
-    const window = browser.ownerGlobal;
+    const window = lazy.getGlobal(browser);
     let tab = window.gBrowser.getTabForBrowser(browser);
     if (serializeData.isPostData && !this.confirm(window, tab, false)) {
       return;
@@ -361,7 +362,7 @@ function _reloadTab(aTab) {
 
   /** @type {AutoReloadModule.AutoReloadData} */
   var data = {};
-  var window = aTab.ownerGlobal;
+  var window = lazy.getGlobal(aTab);
 
   try {
     let sh = browser.webNavigation.sessionHistory;
@@ -486,7 +487,7 @@ function _observe(aSubject, aTopic) {
 function _clearTimeout(aTab, aWindow) {
   if (aTab.autoReloadTimerID) {
     if (!aWindow) {
-      aWindow = aTab.ownerGlobal;
+      aWindow = lazy.getGlobal(aTab);
     }
 
     aWindow.clearTimeout(aTab.autoReloadTimerID);

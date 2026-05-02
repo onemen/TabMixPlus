@@ -8,6 +8,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
     isVersion(1430) ?
       "moz-src:///browser/components/customizableui/CustomizableUI.sys.mjs"
     : "resource:///modules/CustomizableUI.sys.mjs",
+  getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
 });
 
 const OPTIONS_WIDGET_NAME = "tabmix-options-toolbaritem";
@@ -22,7 +23,7 @@ function isOptionWidgetInPanle() {
 
 /** @type {typeof TabmixWidgetsModule.onBuild} */
 async function buildOptionsWidget(node, document) {
-  const window = node.ownerGlobal;
+  const window = lazy.getGlobal(node);
 
   const inPanel = isOptionWidgetInPanle();
 
@@ -43,7 +44,7 @@ async function buildOptionsWidget(node, document) {
     tabManager: {
       addActiveTabPermission: () => true,
       activateScripts: (/** @type {Tab} */ tab) => {
-        tab.ownerGlobal.Tabmix.openOptionsDialog();
+        lazy.getGlobal(tab).Tabmix.openOptionsDialog();
       },
     },
   };
@@ -143,33 +144,33 @@ const widgets = {
     onBuild(node) {
       const [button, dropmarker] = node.children;
       button.addEventListener("command", (/** @type {ButtonEvent} */ event) => {
-        node.ownerGlobal.TMP_ClosedTabs.handleButtonEvent(event);
+        lazy.getGlobal(node).TMP_ClosedTabs.handleButtonEvent(event);
       });
       button.addEventListener("click", (/** @type {ButtonEvent} */ event) => {
-        node.ownerGlobal.TMP_ClosedTabs.handleButtonEvent(event);
+        lazy.getGlobal(node).TMP_ClosedTabs.handleButtonEvent(event);
       });
       button.addEventListener("mousedown", (/** @type {PopupEvent} */ event) => {
-        node.ownerGlobal.TabmixAllTabs.checkForCtrlClick(event);
+        lazy.getGlobal(node).TabmixAllTabs.checkForCtrlClick(event);
       });
       button.addEventListener("mouseup", event => {
         if (event.target == button) {
-          node.ownerGlobal.setTimeout(() => button.removeAttribute("afterctrlclick"), 0);
+          lazy.getGlobal(node).setTimeout(() => button.removeAttribute("afterctrlclick"), 0);
         }
       });
       button.addEventListener("dragover", (/** @type {TabDragEvent} */ event) => {
-        node.ownerGlobal.TMP_undocloseTabButtonObserver.onDragOver(event);
+        lazy.getGlobal(node).TMP_undocloseTabButtonObserver.onDragOver(event);
       });
       button.addEventListener("dragenter", (/** @type {TabDragEvent} */ event) => {
-        node.ownerGlobal.TMP_undocloseTabButtonObserver.onDragOver(event);
+        lazy.getGlobal(node).TMP_undocloseTabButtonObserver.onDragOver(event);
       });
       button.addEventListener("drop", (/** @type {TabDragEvent} */ event) => {
-        node.ownerGlobal.TMP_undocloseTabButtonObserver.onDrop(event);
+        lazy.getGlobal(node).TMP_undocloseTabButtonObserver.onDrop(event);
       });
       button.addEventListener("dragleave", (/** @type {TabDragEvent} */ event) => {
-        node.ownerGlobal.TMP_undocloseTabButtonObserver.onDragExit(event);
+        lazy.getGlobal(node).TMP_undocloseTabButtonObserver.onDragExit(event);
       });
       dropmarker.addEventListener("command", (/** @type {ButtonEvent} */ event) => {
-        node.ownerGlobal.Tabmix.closedObjectsUtils.showSubView(event);
+        lazy.getGlobal(node).Tabmix.closedObjectsUtils.showSubView(event);
       });
     },
   },
@@ -196,7 +197,7 @@ const widgets = {
     /** @type {typeof TabmixWidgetsModule.onBuild} */
     onBuild(node) {
       node.firstChild.addEventListener("command", (/** @type {ButtonEvent} */ event) => {
-        node.ownerGlobal.Tabmix.closedObjectsUtils.showSubView(event);
+        lazy.getGlobal(node).Tabmix.closedObjectsUtils.showSubView(event);
       });
     },
   },
@@ -223,7 +224,7 @@ const widgets = {
       node.firstChild.addEventListener(
         "command",
         (/** @type {GenericEvent<HTMLElement, Event>} */ event) => {
-          node.ownerGlobal.Tabmix.allTabs.showAllTabsPanel(event);
+          lazy.getGlobal(node).Tabmix.allTabs.showAllTabsPanel(event);
         }
       );
     },
@@ -265,8 +266,10 @@ const widgets = {
 /** @param {TabmixWidgetsModule.Widget} widget */
 function on_build(widget) {
   const {markup, updateMarkup, localizeFiles, onBuild} = widget;
-  return function (/** @type {Document & {ownerGlobal: Window}} */ document) {
-    const MozXULElement = document.ownerGlobal.MozXULElement;
+  return function (
+    /** @type {Document & {ownerGlobal: Window; documentGlobal: Window}} */ document
+  ) {
+    const MozXULElement = lazy.getGlobal(document).MozXULElement;
     const node = MozXULElement.parseXULToFragment(updateMarkup ?? markup, localizeFiles);
     const parent = document.createXULElement("box");
     parent.appendChild(node);

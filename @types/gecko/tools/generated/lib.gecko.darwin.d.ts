@@ -9,7 +9,7 @@
 
 declare global {
 
-// https://searchfox.org/mozilla-central/source/accessible/interfaces/nsIAccessibleMacInterface.idl
+// https://searchfox.org/firefox-main/source/accessible/interfaces/nsIAccessibleMacInterface.idl
 
 interface nsIAccessibleMacNSObjectWrapper extends nsISupports {
 }
@@ -31,13 +31,13 @@ interface nsIAccessibleMacEvent extends nsISupports {
   readonly data: any;
 }
 
-// https://searchfox.org/mozilla-central/source/browser/components/migration/nsIKeychainMigrationUtils.idl
+// https://searchfox.org/firefox-main/source/browser/components/migration/nsIKeychainMigrationUtils.idl
 
 interface nsIKeychainMigrationUtils extends nsISupports {
   getGenericPassword(aServiceName: string, aAccountName: string): string;
 }
 
-// https://searchfox.org/mozilla-central/source/browser/components/shell/nsIMacShellService.idl
+// https://searchfox.org/firefox-main/source/browser/components/shell/nsIMacShellService.idl
 
 interface nsIMacShellService extends nsIShellService {
   showDesktopPreferences(): void;
@@ -45,7 +45,7 @@ interface nsIMacShellService extends nsIShellService {
   getAvailableApplicationsForProtocol(protocol: string): string[][];
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsIMacDockSupport.idl
+// https://searchfox.org/firefox-main/source/widget/nsIMacDockSupport.idl
 
 interface nsIAppBundleLaunchOptions extends nsISupports {
   readonly addsToRecentItems: boolean;
@@ -61,7 +61,7 @@ interface nsIMacDockSupport extends nsISupports {
   launchAppBundle(aAppBundle: nsIFile, aArgs: string[], aLaunchOptions?: nsIAppBundleLaunchOptions): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsIMacFinderProgress.idl
+// https://searchfox.org/firefox-main/source/widget/nsIMacFinderProgress.idl
 
 type nsIMacFinderProgressCanceledCallback = Callable<{
   canceled(): void;
@@ -73,7 +73,7 @@ interface nsIMacFinderProgress extends nsISupports {
   end(): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsIMacSharingService.idl
+// https://searchfox.org/firefox-main/source/widget/nsIMacSharingService.idl
 
 interface nsIMacSharingService extends nsISupports {
   getSharingProviders(pageUrl: string): any;
@@ -81,13 +81,13 @@ interface nsIMacSharingService extends nsISupports {
   openSharingPreferences(): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsIMacUserActivityUpdater.idl
+// https://searchfox.org/firefox-main/source/widget/nsIMacUserActivityUpdater.idl
 
 interface nsIMacUserActivityUpdater extends nsISupports {
   updateLocation(pageUrl: string, pageTitle: string, window: nsIBaseWindow): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsIMacWebAppUtils.idl
+// https://searchfox.org/firefox-main/source/widget/nsIMacWebAppUtils.idl
 
 type nsITrashAppCallback = Callable<{
   trashAppFinished(rv: nsresult): void;
@@ -99,7 +99,7 @@ interface nsIMacWebAppUtils extends nsISupports {
   trashApp(path: string, callback: nsITrashAppCallback): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsIStandaloneNativeMenu.idl
+// https://searchfox.org/firefox-main/source/widget/nsIStandaloneNativeMenu.idl
 
 interface nsIStandaloneNativeMenu extends nsISupports {
   init(aElement: Element): void;
@@ -109,7 +109,7 @@ interface nsIStandaloneNativeMenu extends nsISupports {
   dump(): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsITaskbarProgress.idl
+// https://searchfox.org/firefox-main/source/widget/nsITaskbarProgress.idl
 
 interface nsITaskbarProgress extends nsISupports {
   readonly STATE_NO_PROGRESS?: 0;
@@ -121,7 +121,7 @@ interface nsITaskbarProgress extends nsISupports {
   setProgressState(state: nsTaskbarProgressState, currentValue?: u64, maxValue?: u64): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsITouchBarHelper.idl
+// https://searchfox.org/firefox-main/source/widget/nsITouchBarHelper.idl
 
 interface nsITouchBarHelper extends nsISupports {
   readonly activeUrl: string;
@@ -135,7 +135,7 @@ interface nsITouchBarHelper extends nsISupports {
   insertRestrictionInUrlbar(aToken: string): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsITouchBarInput.idl
+// https://searchfox.org/firefox-main/source/widget/nsITouchBarInput.idl
 
 type nsITouchBarInputCallback = Callable<{
   onCommand(): void;
@@ -152,7 +152,7 @@ interface nsITouchBarInput extends nsISupports {
   children: nsIArray;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsITouchBarUpdater.idl
+// https://searchfox.org/firefox-main/source/widget/nsITouchBarUpdater.idl
 
 interface nsITouchBarUpdater extends nsISupports {
   updateTouchBarInputs(aWindow: nsIBaseWindow, aInputs: nsITouchBarInput[]): void;
@@ -162,14 +162,14 @@ interface nsITouchBarUpdater extends nsISupports {
   showPopover(aWindow: nsIBaseWindow, aPopover: nsITouchBarInput, aShowing: boolean): void;
 }
 
-// https://searchfox.org/mozilla-central/source/xpcom/base/nsIMacPreferencesReader.idl
+// https://searchfox.org/firefox-main/source/xpcom/base/nsIMacPreferencesReader.idl
 
 interface nsIMacPreferencesReader extends nsISupports {
   policiesEnabled(): boolean;
   readPreferences(): any;
 }
 
-// https://searchfox.org/mozilla-central/source/xpcom/io/nsILocalFileMac.idl
+// https://searchfox.org/firefox-main/source/xpcom/io/nsILocalFileMac.idl
 
 interface nsILocalFileMac extends nsIFile {
   launchWithDoc(aDocToLoad: nsIFile, aLaunchInBackground: boolean): void;

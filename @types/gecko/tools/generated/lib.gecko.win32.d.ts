@@ -9,7 +9,7 @@
 
 declare global {
 
-// https://searchfox.org/mozilla-central/source/toolkit/components/aboutthirdparty/nsIAboutThirdParty.idl
+// https://searchfox.org/firefox-main/source/toolkit/components/aboutthirdparty/nsIAboutThirdParty.idl
 
 interface nsIInstalledApplication extends nsISupports {
   readonly name: string;
@@ -32,13 +32,13 @@ interface nsIAboutThirdParty extends nsISupports {
   loadModuleForTesting(aModulePath: string): void;
 }
 
-// https://searchfox.org/mozilla-central/source/toolkit/components/aboutwindowsmessages/nsIAboutWindowsMessages.idl
+// https://searchfox.org/firefox-main/source/toolkit/components/aboutwindowsmessages/nsIAboutWindowsMessages.idl
 
 interface nsIAboutWindowsMessages extends nsISupports {
   getMessages(currentWindow: mozIDOMWindowProxy, messages: OutParam<string[][]>, windowTitles: OutParam<string[]>): void;
 }
 
-// https://searchfox.org/mozilla-central/source/toolkit/components/alerts/nsIWindowsAlertsService.idl
+// https://searchfox.org/firefox-main/source/toolkit/components/alerts/nsIWindowsAlertsService.idl
 
 }  // global
 
@@ -64,7 +64,7 @@ interface nsIWindowsAlertsService extends nsIAlertsService {
   removeAllNotificationsForInstall(): void;
 }
 
-// https://searchfox.org/mozilla-central/source/toolkit/mozapps/defaultagent/nsIDefaultAgent.idl
+// https://searchfox.org/firefox-main/source/toolkit/mozapps/defaultagent/nsIDefaultAgent.idl
 
 interface nsIDefaultAgent extends nsISupports {
   registerTask(aUniqueToken: string): void;
@@ -82,7 +82,7 @@ interface nsIDefaultAgent extends nsISupports {
   agentDisabled(): boolean;
 }
 
-// https://searchfox.org/mozilla-central/source/toolkit/mozapps/defaultagent/nsIWindowsMutex.idl
+// https://searchfox.org/firefox-main/source/toolkit/mozapps/defaultagent/nsIWindowsMutex.idl
 
 interface nsIWindowsMutex extends nsISupports {
   tryLock(): void;
@@ -94,15 +94,15 @@ interface nsIWindowsMutexFactory extends nsISupports {
   createMutex(aName: string): nsIWindowsMutex;
 }
 
-// https://searchfox.org/mozilla-central/source/dom/geolocation/nsIGeolocationUIUtilsWin.idl
+// https://searchfox.org/firefox-main/source/dom/geolocation/nsIGeolocationUIUtilsWin.idl
 
 interface nsIGeolocationUIUtilsWin extends nsISupports {
   dismissPrompts(aBC: BrowsingContext): void;
 }
 
-// https://searchfox.org/mozilla-central/source/netwerk/socket/nsINamedPipeService.idl
+// https://searchfox.org/firefox-main/source/netwerk/socket/nsINamedPipeService.idl
 
-// https://searchfox.org/mozilla-central/source/browser/components/shell/nsIWindowsShellService.idl
+// https://searchfox.org/firefox-main/source/browser/components/shell/nsIWindowsShellService.idl
 
 }  // global
 
@@ -145,7 +145,7 @@ interface nsIWindowsShellService extends nsIShellService, Enums<typeof nsIWindow
   queryCurrentDefaultHandlerFor(aFileExtensionOrProtocol: string): string;
 }
 
-// https://searchfox.org/mozilla-central/source/toolkit/components/taskscheduler/nsIWinTaskSchedulerService.idl
+// https://searchfox.org/firefox-main/source/toolkit/components/taskscheduler/nsIWinTaskSchedulerService.idl
 
 interface nsIWinTaskSchedulerService extends nsISupports {
   registerTask(aFolderName: string, aTaskName: string, aDefinitionXML: string, aUpdateExisting?: boolean): void;
@@ -158,7 +158,7 @@ interface nsIWinTaskSchedulerService extends nsISupports {
   deleteFolder(aParentFolderName: string, aSubFolderName: string): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsIJumpListBuilder.idl
+// https://searchfox.org/firefox-main/source/widget/nsIJumpListBuilder.idl
 
 interface nsIJumpListBuilder extends nsISupports {
   obtainAndCacheFavicon(faviconURL: nsIURI): string;
@@ -169,15 +169,15 @@ interface nsIJumpListBuilder extends nsISupports {
   clearJumpList(): Promise<any>;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsIPrintSettingsWin.idl
+// https://searchfox.org/firefox-main/source/widget/nsIPrintSettingsWin.idl
 
-// https://searchfox.org/mozilla-central/source/widget/nsITaskbarOverlayIconController.idl
+// https://searchfox.org/firefox-main/source/widget/nsITaskbarOverlayIconController.idl
 
 interface nsITaskbarOverlayIconController extends nsISupports {
   setOverlayIcon(statusIcon: imgIContainer, statusDescription: string, paintContext?: nsISVGPaintContext): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsITaskbarPreview.idl
+// https://searchfox.org/firefox-main/source/widget/nsITaskbarPreview.idl
 
 interface nsITaskbarPreview extends nsISupports {
   controller: nsITaskbarPreviewController;
@@ -187,7 +187,7 @@ interface nsITaskbarPreview extends nsISupports {
   invalidate(): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsITaskbarPreviewButton.idl
+// https://searchfox.org/firefox-main/source/widget/nsITaskbarPreviewButton.idl
 
 interface nsITaskbarPreviewButton extends nsISupports {
   tooltip: string;
@@ -198,7 +198,7 @@ interface nsITaskbarPreviewButton extends nsISupports {
   visible: boolean;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsITaskbarPreviewController.idl
+// https://searchfox.org/firefox-main/source/widget/nsITaskbarPreviewController.idl
 
 type nsITaskbarPreviewCallback = Callable<{
   done(aCanvas: nsISupports, aDrawBorder: boolean): void;
@@ -215,7 +215,7 @@ interface nsITaskbarPreviewController extends nsISupports {
   onClick(button: nsITaskbarPreviewButton): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsITaskbarProgress.idl
+// https://searchfox.org/firefox-main/source/widget/nsITaskbarProgress.idl
 
 interface nsITaskbarProgress extends nsISupports {
   readonly STATE_NO_PROGRESS?: 0;
@@ -227,7 +227,7 @@ interface nsITaskbarProgress extends nsISupports {
   setProgressState(state: nsTaskbarProgressState, currentValue?: u64, maxValue?: u64): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsITaskbarTabPreview.idl
+// https://searchfox.org/firefox-main/source/widget/nsITaskbarTabPreview.idl
 
 interface nsITaskbarTabPreview extends nsITaskbarPreview {
   title: string;
@@ -235,7 +235,7 @@ interface nsITaskbarTabPreview extends nsITaskbarPreview {
   move(aNext: nsITaskbarTabPreview): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsITaskbarWindowPreview.idl
+// https://searchfox.org/firefox-main/source/widget/nsITaskbarWindowPreview.idl
 
 interface nsITaskbarWindowPreview extends nsITaskbarPreview {
   readonly NUM_TOOLBAR_BUTTONS?: 7;
@@ -244,7 +244,7 @@ interface nsITaskbarWindowPreview extends nsITaskbarPreview {
   enableCustomDrawing: boolean;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsIWinTaskbar.idl
+// https://searchfox.org/firefox-main/source/widget/nsIWinTaskbar.idl
 
 interface nsIWinTaskbar extends nsISupports {
   readonly available: boolean;
@@ -259,7 +259,7 @@ interface nsIWinTaskbar extends nsISupports {
   setGroupIdForWindow(aParent: mozIDOMWindow, aIdentifier: string): void;
 }
 
-// https://searchfox.org/mozilla-central/source/widget/nsIWindowsUIUtils.idl
+// https://searchfox.org/firefox-main/source/widget/nsIWindowsUIUtils.idl
 
 interface nsIWindowsUIUtils extends nsISupports {
   readonly systemSmallIconSize: i32;
@@ -272,7 +272,7 @@ interface nsIWindowsUIUtils extends nsISupports {
   shareUrl(urlToShare: string, shareTitle: string): void;
 }
 
-// https://searchfox.org/mozilla-central/source/toolkit/system/windowsPackageManager/nsIWindowsPackageManager.idl
+// https://searchfox.org/firefox-main/source/toolkit/system/windowsPackageManager/nsIWindowsPackageManager.idl
 
 interface nsIWindowsPackageManager extends nsISupports {
   findUserInstalledPackages(prefix: string[]): string[];
@@ -280,7 +280,7 @@ interface nsIWindowsPackageManager extends nsISupports {
   campaignId(): Promise<any>;
 }
 
-// https://searchfox.org/mozilla-central/source/xpcom/ds/nsIWindowsRegKey.idl
+// https://searchfox.org/firefox-main/source/xpcom/ds/nsIWindowsRegKey.idl
 
 interface nsIWindowsRegKey extends nsISupports {
   readonly ROOT_KEY_CLASSES_ROOT?: 2147483648;
@@ -327,7 +327,7 @@ interface nsIWindowsRegKey extends nsISupports {
   writeBinaryValue(name: string, data: string): void;
 }
 
-// https://searchfox.org/mozilla-central/source/toolkit/xre/nsIWinAppHelper.idl
+// https://searchfox.org/firefox-main/source/toolkit/xre/nsIWinAppHelper.idl
 
 interface nsIWinAppHelper extends nsISupports {
   readonly userCanElevate: boolean;

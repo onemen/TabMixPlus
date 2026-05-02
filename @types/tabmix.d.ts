@@ -78,6 +78,7 @@ type ElementTypes = Node | HTMLElement | Tab;
 interface TabmixGlobal {
   get prefs(): nsIPrefBranchXpcom;
   get defaultPrefs(): nsIPrefBranchXpcom;
+  get getGlobal(): GlobalAccessModule.GetGlobal;
   get isSingleBrowserWindow(): boolean;
   get isLastBrowserWindow(): boolean;
   get isFirstWindowInSession(): boolean;

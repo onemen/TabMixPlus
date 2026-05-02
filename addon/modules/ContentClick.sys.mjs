@@ -11,6 +11,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
   ClickHandlerParent: "resource:///actors/ClickHandlerParent.sys.mjs",
   E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
+  getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
   PlacesUIUtils,
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
   LinkNodeUtils: "chrome://tabmix-resource/content/LinkNodeUtils.sys.mjs",
@@ -131,7 +132,7 @@ ContentClickInternal = {
 
       // based on ClickHandlerParent.prototype.contentAreaClick
       let browser = this.manager.browsingContext.top.embedderElement;
-      let window = browser.ownerGlobal;
+      let window = lazy.getGlobal(browser);
       let where = lazy.BrowserUtils.whereToOpenLink(json);
       if (where != "current") {
         return;
@@ -202,7 +203,7 @@ ContentClickInternal = {
     let {json, href, node} = message.data;
     // call getWrappedNode to add attribute functions to the wrapped node
     let browser = message.target;
-    let wrappedNode = this.getWrappedNode(node, browser.ownerGlobal);
+    let wrappedNode = this.getWrappedNode(node, lazy.getGlobal(browser));
 
     // return value to the message caller
     if (!href && wrappedNode) {
@@ -252,7 +253,7 @@ ContentClickInternal = {
       triggeringRemoteType: lazy.ClickHandlerParent.manager?.domProcess?.remoteType,
     };
 
-    let win = browser.ownerGlobal;
+    let win = lazy.getGlobal(browser);
     win.openLinkIn(href, result.where, params);
 
     return true;
@@ -265,7 +266,7 @@ ContentClickInternal = {
 
   _getParamsForLink(event, wrappedNode, href, browser, clean, wrappedOnClickNode) {
     this._browser = browser;
-    this._window = browser.ownerGlobal;
+    this._window = lazy.getGlobal(browser);
 
     let [whereWithData, suppressTabsOnFileDownload] = this.whereToOpen(
       event,
@@ -479,8 +480,8 @@ ContentClickInternal = {
 
     // don't mess with links that have onclick inside iFrame
     let onClickInFrame =
-      wrappedOnClickNode?.ownerGlobal.frameElement ||
-      (onclick && wrappedNode?.ownerGlobal.frameElement);
+      lazy.getGlobal(wrappedOnClickNode)?.frameElement ||
+      (onclick && lazy.getGlobal(wrappedNode)?.frameElement);
 
     /*
      * force a middle-clicked link to open in the current tab if certain conditions
@@ -646,7 +647,7 @@ ContentClickInternal = {
     }
 
     // don't mess with links that have onclick inside iFrame
-    if (this._data.onclick && linkNode.ownerGlobal.frameElement) {
+    if (this._data.onclick && lazy.getGlobal(linkNode).frameElement) {
       return "13";
     }
 
@@ -1213,7 +1214,7 @@ ContentClickInternal = {
         deleteEpoch(this.epoch);
       },
       result(browser, data) {
-        let window = browser.ownerGlobal;
+        let window = lazy.getGlobal(browser);
         let {gBrowser, gURLBar, Tabmix} = window;
         let tab = gBrowser.getTabForBrowser(browser);
         if (data.result) {

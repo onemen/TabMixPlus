@@ -5,6 +5,7 @@ import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.sys.mjs",
+  getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
   SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
 });
@@ -200,7 +201,7 @@ export const MergeWindows = {
     const popups = [];
 
     for (const tab of tabs) {
-      let isPopup = !tab.ownerGlobal.toolbar.visible;
+      let isPopup = !lazy.getGlobal(tab).toolbar.visible;
       if (isPopup) {
         popups.push(tab);
       } else {

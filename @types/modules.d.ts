@@ -168,6 +168,7 @@ interface TabmixKnownModules {
   "resource://gre/modules/XPCOMUtils.sys.mjs": typeof MockedExports.XPCOMUtilsSYSMJS;
   // Tabmix
   "chrome://tabmix-resource/content/bootstrap/TabmixWidgets.sys.mjs": {TabmixWidgets: TabmixWidgetsModule.TabmixWidgets};
+  "chrome://tabmix-resource/content/globalAccess.sys.mjs": {getGlobal: GlobalAccessModule.GetGlobal; globalKey: GlobalAccessModule.GlobalKey};
   "chrome://tabmix-resource/content/BrowserDOMWindow.sys.mjs": {TabmixBrowserDOMWindow: BrowserDOMWindowModule.BrowserDOMWindow};
   "chrome://tabmix-resource/content/BrowserVersion.sys.mjs": {isVersion: TabmixModules.BrowserVersion["isVersion"]};
   "chrome://tabmix-resource/content/Changecode.sys.mjs": {initializeChangeCodeClass: typeof ChangecodeModule.initializeChangeCodeClass};
@@ -636,6 +637,7 @@ interface KnownModulesImports {
   // tabmix
   AutoReload: AutoReloadModule.AutoReload;
   ContentSvc: TabmixModules.ContentSvc;
+  getGlobal: GlobalAccessModule.GetGlobal;
   DocShellCapabilities: DocShellCapabilitiesModule.DocShellCapabilities;
   DynamicRules: DynamicRulesModule.DynamicRules;
   FloorpPrefsObserver: TabmixModules.FloorpPrefsObserver;
@@ -668,14 +670,17 @@ interface MiscellaneousImports {
 // Tab Mix modules
 
 declare namespace AutoReloadModule {
-  type importList = "E10SUtils" | "SitePermissions" | "isVersion" | "TabmixUtils";
+  type importList = "E10SUtils" | "SitePermissions" | "isVersion" | "getGlobal" | "TabmixUtils";
   type Lazy = Pick<KnownModulesImports, importList>;
 
-  interface Popup extends Omit<TabmixGlobals.PopupElement, "ownerGlobal"> {
+  // TODO: update ommit
+  interface Popup extends Omit<TabmixGlobals.PopupElement, "ownerGlobal" | "documentGlobal"> {
     _tab: Tab;
     initialized: boolean;
     listenersAdded: boolean;
+    /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
     ownerGlobal: Window;
+    documentGlobal: Window;
   }
 
   type serializedReloadData = {scrollX: number; scrollY: number; isPostData: boolean; postData: string | null; referrerInfo: string | null};
@@ -918,7 +923,7 @@ declare namespace ContentClickModule {
     next(tab?: Tab): void;
   }
 
-  type importList = "BrowserUtils" | "ClickHandlerParent" | "E10SUtils" | "PlacesUIUtils" | "PrivateBrowsingUtils" | "LinkNodeUtils" | "TabmixSvc";
+  type importList = "BrowserUtils" | "ClickHandlerParent" | "E10SUtils" | "getGlobal" | "PlacesUIUtils" | "PrivateBrowsingUtils" | "LinkNodeUtils" | "TabmixSvc";
   type Lazy = Pick<KnownModulesImports, importList>;
 
   interface ContentClick {
@@ -979,7 +984,7 @@ declare namespace ContextMenuModule {
 }
 
 declare namespace DocShellCapabilitiesModule {
-  type Lazy = Pick<KnownModulesImports, "TabState" | "TabStateCache">;
+  type Lazy = Pick<KnownModulesImports, "getGlobal" | "TabState" | "TabStateCache">;
 
   interface CapabilitiesData {
     disallow?: string;
@@ -1003,6 +1008,8 @@ declare namespace DocShellCapabilitiesModule {
 }
 
 declare namespace DownloadLastDirModule {
+  type Lazy = Pick<KnownModulesImports, "getGlobal">;
+
   interface DownloadLastDir {
     _initialized: boolean;
     init(): void;
@@ -1119,8 +1126,19 @@ declare namespace FloorpModule {
   }
 }
 
+declare namespace GlobalAccessModule {
+  function getGlobal(node: null | undefined): null;
+  function getGlobal<T extends {ownerGlobal: any; documentGlobal: any}>(node: T): T["documentGlobal"];
+  function getGlobal<T extends {ownerGlobal: any; documentGlobal: any}>(node: T | null | undefined): T["documentGlobal"] | null;
+
+  type GetGlobal = typeof getGlobal;
+  type GlobalKey = "ownerGlobal" | "documentGlobal";
+}
+
 // for LinkNodeUtils.sys.mjs and content.js
 declare namespace LinkNodeUtilsModule {
+  type Lazy = Pick<KnownModulesImports, "getGlobal">;
+
   interface WrappedNode {
     __tabmix: boolean;
     baseURI: string;
@@ -1128,7 +1146,9 @@ declare namespace LinkNodeUtilsModule {
     pathname: string;
     className: string;
     target: string | null;
+    /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
     ownerGlobal: {frameElement: boolean};
+    documentGlobal: {frameElement: boolean};
     ownerDocument: {
       URL: string;
       documentURI: string;
@@ -1216,7 +1236,7 @@ declare namespace LogModule {
 }
 
 declare namespace MergeWindowsModule {
-  type importList = "BrowserWindowTracker" | "PrivateBrowsingUtils" | "PromiseUtils" | "SessionStore";
+  type importList = "BrowserWindowTracker" | "getGlobal" | "PrivateBrowsingUtils" | "PromiseUtils" | "SessionStore";
   type Lazy = Pick<KnownModulesImports, importList>;
 
   interface MergeOptions {
@@ -1371,7 +1391,7 @@ declare namespace TabContextConfigModule {
 }
 
 declare namespace RenameTabModule {
-  type Lazy = Pick<KnownModulesImports, "TabmixPlacesUtils">;
+  type Lazy = Pick<KnownModulesImports, "getGlobal" | "TabmixPlacesUtils">;
 
   type RenameEventListener = ((event: RenameEvent) => void) | {handleEvent(event: RenameEvent): void};
   interface RenameTabPanel extends Omit<CustomXULPanel, "addEventListener" | "removeEventListener"> {
@@ -1410,7 +1430,7 @@ declare namespace RenameTabModule {
 }
 
 declare namespace ScriptsLoaderModule {
-  type importList = "CustomizableUI" | "DynamicRules" | "PrivateBrowsingUtils" | "SessionStore" | "isVersion" | "Overlays";
+  type importList = "CustomizableUI" | "getGlobal" | "DynamicRules" | "PrivateBrowsingUtils" | "SessionStore" | "isVersion" | "Overlays";
   type Lazy = Pick<KnownModulesImports, importList>;
 
   type Params = {chromeManifest: TabmixModules.ChromeManifest; isOverflow: boolean; isEnabled: boolean};
@@ -1429,7 +1449,7 @@ declare namespace ScriptsLoaderModule {
 }
 
 declare namespace ShortcutsModule {
-  type Lazy = {
+  type Lazy = Pick<KnownModulesImports, "getGlobal"> & {
     PlatformKeys: nsIStringBundle;
     Keys: nsIStringBundle;
   };
@@ -1437,7 +1457,9 @@ declare namespace ShortcutsModule {
   interface KeyElement extends Element {
     _id: string;
     oncommand?: () => void;
+    /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
     ownerGlobal: WindowProxy;
+    documentGlobal: WindowProxy;
   }
   type ShortcutKey = {modifiers: string; key: string; keycode: string; disabled?: boolean};
   type ShortcutData = {id?: string; default?: string; command?: number | ((tab: Tab) => void); label?: string; value?: string; reserved?: boolean; useInMenu?: boolean};
@@ -1583,7 +1605,7 @@ declare namespace TabmixSvcModule {
 }
 
 declare namespace TabmixUtilsModule {
-  type importList = "E10SUtils" | "NetUtil" | "AutoReload" | "DocShellCapabilities" | "MergeWindows" | "TabmixSvc";
+  type importList = "E10SUtils" | "getGlobal" | "NetUtil" | "AutoReload" | "DocShellCapabilities" | "MergeWindows" | "TabmixSvc";
   type Lazy = Pick<KnownModulesImports, importList>;
   type PostData = {isPostData: boolean; postData: string | null; referrerInfo: string | null};
   interface TabmixUtils {
@@ -1598,13 +1620,15 @@ declare namespace TabmixUtilsModule {
 }
 
 declare namespace TabmixWidgetsModule {
-  type importList = "CustomizableUI";
+  type importList = "CustomizableUI" | "getGlobal";
   type Lazy = Pick<KnownModulesImports, importList>;
 
   interface WidgetElement extends Omit<HTMLElement, "HTMLCollection"> {
     firstChild: HTMLElement;
     children: HTMLCollection & [HTMLButtonElement, HTMLElement];
+    /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
     ownerGlobal: WindowProxy;
+    documentGlobal: WindowProxy;
   }
 
   function onBuild(node: WidgetElement, document: Document): void;
@@ -1793,7 +1817,9 @@ declare namespace TabmixGlobals {
     _tab: Tab;
     initialized: boolean;
     listenersAdded: boolean;
+    /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
     ownerGlobal: WindowProxy;
+    documentGlobal: WindowProxy;
   }
   interface PopupEvent extends Omit<MouseEvent, "target" | "originalTarget"> {
     target: Menuitem;
@@ -1817,7 +1843,9 @@ declare namespace TabmixGlobals {
     _tabmix_middleClicked?: boolean;
     closedGroup?: null;
     mCorrespondingMenuitem?: Menuitem | null;
+    /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
     ownerGlobal: WindowProxy;
+    documentGlobal: WindowProxy;
     remove(): void;
     tab: Tab;
   }

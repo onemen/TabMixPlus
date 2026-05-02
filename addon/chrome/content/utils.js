@@ -14,6 +14,15 @@ var Tabmix = {
     );
   },
 
+  get getGlobal() {
+    return this.lazyGetter(this, "getGlobal", () => {
+      const {getGlobal} = ChromeUtils.importESModule(
+        "chrome://tabmix-resource/content/globalAccess.sys.mjs"
+      );
+      return getGlobal;
+    });
+  },
+
   isVersion(versionNo, updateChannel) {
     return TabmixSvc.version.apply(null, [versionNo, updateChannel]);
   },

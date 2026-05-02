@@ -30,9 +30,9 @@ function updateAddonCard() {
       optionsButton.addEventListener("click", event => {
         event.stopPropagation();
         try {
-          windowRoot?.ownerGlobal?.Tabmix.openOptionsDialog();
+          Tabmix.getGlobal(windowRoot)?.Tabmix.openOptionsDialog();
         } catch (ex) {
-          windowRoot?.ownerGlobal?.Tabmix.reportError(ex);
+          Tabmix.getGlobal(windowRoot)?.Tabmix.reportError(ex);
         }
       });
     }

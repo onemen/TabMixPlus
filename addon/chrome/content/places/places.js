@@ -1196,7 +1196,7 @@ Tabmix.onContentLoaded = {
       // Establish which window we'll load the link in.
       let w;
       if (where == "current" && params.targetBrowser) {
-        w = params.targetBrowser.ownerGlobal;
+        w = Tabmix.getGlobal(params.targetBrowser);
       } else {
         w = window.URILoadingHelper.getTargetWindow(window, {forceNonPrivate});
       }

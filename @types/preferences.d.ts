@@ -610,7 +610,11 @@ interface QuerySelectorMap {
   ".content-box": HTMLElement;
   "checkbox": HTMLInputElement;
   "deck": HTMLElement;
-  "dialog": HTMLDialogElement & {ownerGlobal: Window};
+  "dialog": HTMLDialogElement & {
+    /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
+    ownerGlobal: Window;
+    documentGlobal: Window;
+  };
   "description": HTMLElement;
   'panel-item[action="preferences"]': HTMLElement & {button: PanelItemButton};
   "prefwindow": PrefWindowClass;

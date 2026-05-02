@@ -69,6 +69,7 @@ interface customXULCommandDispatcher {}
 interface Document {
   readonly commandDispatcher: XULCommandDispatcher & customXULCommandDispatcher;
   readonly defaultView: WindowProxy;
+  readonly documentGlobal: WindowProxy | null;
   readonly documentElement: DocumentElement;
   getElementsByClassName<K extends keyof GetByMap>(name: K): NonEmptyCollection_G<GetByMap[K]>;
 }
@@ -88,6 +89,10 @@ interface DragEvent extends MouseEvent {
 
   // tabmix
   tabmixContentDrop: "tab" | undefined;
+}
+
+interface EventTarget {
+  readonly documentGlobal: WindowProxy | null;
 }
 
 // override lib.gecko.dom.d.ts Document | null to prevent nullcheck of documnet

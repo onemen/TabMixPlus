@@ -79,7 +79,7 @@ declare namespace MockedExports {
   }
 
   // This is the thing in window.gBrowser, defined in
-  // https://searchfox.org/mozilla-central/source/browser/base/content/tabbrowser.js
+  // https://searchfox.org/firefox-main/source/browser/components/tabbrowser/content/tabbrowser.js
   interface Browser {
     addWebTab: (url: string, options: any) => BrowserTab;
     contentPrincipal: any;
@@ -91,7 +91,7 @@ declare namespace MockedExports {
   }
 
   // This is a tab in a browser, defined in
-  // https://searchfox.org/mozilla-central/rev/6b8a3f804789fb865f42af54e9d2fef9dd3ec74d/browser/base/content/tabbrowser.js#2580
+  // https://searchfox.org/firefox-main/source/browser/components/tabbrowser/content/tabbrowser.js#2580
   interface BrowserTab {
     linkedBrowser: ChromeBrowser;
   }
@@ -101,7 +101,7 @@ declare namespace MockedExports {
     focus(): void;
   }
 
-  // The thing created in https://searchfox.org/mozilla-central/rev/6b8a3f804789fb865f42af54e9d2fef9dd3ec74d/browser/base/content/tabbrowser.js#2088
+  // The thing created in https://searchfox.org/firefox-main/source/browser/components/tabbrowser/content/tabbrowser.js#2088
   // This is linked to BrowserTab.
   interface ChromeBrowser {
     browsingContext?: BrowsingContext;

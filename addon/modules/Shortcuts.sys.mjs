@@ -8,6 +8,10 @@ const NS_XUL = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul";
 /** @type {ShortcutsModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
+ChromeUtils.defineESModuleGetters(lazy, {
+  getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
+});
+
 ChromeUtils.defineLazyGetter(lazy, "PlatformKeys", () => {
   return Services.strings.createBundle("chrome://global-platform/locale/platformKeys.properties");
 });
@@ -315,7 +319,7 @@ export const Shortcuts = {
 
   onCommand: function TMP_SC_onCommand(aKey) {
     try {
-      let win = aKey.ownerGlobal;
+      let win = lazy.getGlobal(aKey);
       let command = this.keys[aKey._id]?.command;
       if (typeof command == "function") {
         command.apply(win, [win.gBrowser.selectedTab]);

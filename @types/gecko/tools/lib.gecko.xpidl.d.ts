@@ -7,7 +7,7 @@
 
 /**
  * Generic IDs are created by most code which passes a nsID to js.
- * https://searchfox.org/mozilla-central/source/js/xpconnect/src/XPCJSID.cpp#24
+ * https://searchfox.org/firefox-main/source/js/xpconnect/src/XPCJSID.cpp#24
  */
 interface nsID<uuid = string> {
   readonly number: uuid;
@@ -16,7 +16,7 @@ interface nsID<uuid = string> {
 /**
  * In addition to nsID, interface IIDs support instanceof type guards,
  * and expose constants defined on the class, including variants from enums.
- * https://searchfox.org/mozilla-central/source/js/xpconnect/src/XPCJSID.cpp#45
+ * https://searchfox.org/firefox-main/source/js/xpconnect/src/XPCJSID.cpp#45
  */
 type nsJSIID<iface, enums = {}> = nsID &
   Constants<iface> &

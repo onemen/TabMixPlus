@@ -6,6 +6,7 @@
 ChromeUtils.defineESModuleGetters(this, {
   AddonManager: "resource://gre/modules/AddonManager.sys.mjs",
   ChromeManifest: "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mjs",
+  getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
   Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs",
   PreferencesLoader: "chrome://tabmix-resource/content/bootstrap/PreferencesLoader.sys.mjs",
   ScriptsLoader: "chrome://tabmix-resource/content/bootstrap/ScriptsLoader.sys.mjs",
@@ -204,11 +205,8 @@ async function startup(data, reason) {
   /** @type {DocumentObserver} */
   const documentInsertedObserver = {
     observe(document) {
-      if (
-        document.ownerGlobal &&
-        document.documentElement?.getAttribute("windowtype") === "navigator:browser"
-      ) {
-        const win = document.ownerGlobal;
+      const win = getGlobal(document);
+      if (win && document.documentElement?.getAttribute("windowtype") === "navigator:browser") {
         document.addEventListener(
           "DOMContentLoaded",
           () => {
@@ -234,11 +232,11 @@ async function startup(data, reason) {
   /** @type {DocumentObserver} */
   const documentObserver = {
     observe(document) {
-      if (document.documentElement && document.ownerGlobal) {
+      const win = getGlobal(document);
+      if (win && document.documentElement) {
         const isBrowser =
           document.documentElement.getAttribute("windowtype") === "navigator:browser";
         if (!isBrowser) {
-          const win = document.ownerGlobal;
           Overlays.load(chromeManifest, win);
         }
       }

@@ -1,5 +1,11 @@
 import {DownloadLastDir} from "resource://gre/modules/DownloadLastDir.sys.mjs";
 
+/** @type {DownloadLastDirModule.Lazy} */ // @ts-ignore
+const lazy = {};
+ChromeUtils.defineESModuleGetters(lazy, {
+  getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
+});
+
 /** @type {DownloadLastDirModule.DownloadLastDir} */
 export const TabmixDownloadLastDir = {
   _initialized: false,
@@ -24,7 +30,7 @@ export const TabmixDownloadLastDir = {
             this._window.QueryInterface(Ci.nsIInterfaceRequestor);
           } catch {
             let win = Services.wm.getMostRecentWindow("navigator:browser");
-            return win ? win.gBrowser.selectedTab.ownerGlobal : null;
+            return win ? lazy.getGlobal(win.gBrowser.selectedTab) : null;
           }
         }
         return this._window;

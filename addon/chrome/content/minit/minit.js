@@ -2173,9 +2173,9 @@ var TMP_tabDNDObserver = {
       (sourceNode.localName == "tab" ||
         (Tabmix.isVersion(1380) && gBrowser.isTabGroupLabel(sourceNode)) ||
         (Tabmix.isVersion(1480) && gBrowser.isSplitViewWrapper(sourceNode))) &&
-      sourceNode.ownerGlobal?.isChromeWindow &&
+      Tabmix.getGlobal(sourceNode)?.isChromeWindow &&
       sourceNode.ownerDocument.documentElement.getAttribute("windowtype") == "navigator:browser" &&
-      sourceNode.ownerGlobal.gBrowser.tabContainer == sourceNode.container
+      Tabmix.getGlobal(sourceNode)?.gBrowser.tabContainer == sourceNode.container
     ) {
       /** @type {AriaFocusableItem} */ // @ts-expect-error
       const tab = sourceNode;

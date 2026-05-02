@@ -69,3 +69,5 @@ declare const Overlays: OverlaysModule.OverlaysClass;
 declare var PreferencesLoader: PreferencesLoader;
 declare var ScriptsLoader: ScriptsLoaderModule.ScriptsLoader;
 declare var TabmixWidgets: TabmixWidgetsModule.TabmixWidgets;
+declare var getGlobal: GlobalAccessModule.GetGlobal;
+declare var GlobalKey: GlobalAccessModule.GlobalKey;

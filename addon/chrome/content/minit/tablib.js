@@ -1278,7 +1278,7 @@ Tabmix.tablib = {
       }
 
       var newTab;
-      let copyToNewWindow = window != aTab.ownerGlobal;
+      let copyToNewWindow = window != Tabmix.getGlobal(aTab);
       let openDuplicateNext =
         !disallowSelect && !copyToNewWindow && Tabmix.prefs.getBoolPref("openDuplicateNext");
       TMP_extensionsCompatibility.treeStyleTab.openNewTabNext(aTab, openDuplicateNext);

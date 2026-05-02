@@ -2,6 +2,7 @@
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
+  getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
   TabState: "resource:///modules/sessionstore/TabState.sys.mjs",
   TabStateCache: "resource:///modules/sessionstore/TabStateCache.sys.mjs",
 });
@@ -21,7 +22,7 @@ export const DocShellCapabilities = {
   },
 
   collect(tab) {
-    let window = tab.ownerGlobal;
+    let window = lazy.getGlobal(tab);
     if (window && window.__SSi) {
       let tabState = lazy.TabState.collect(tab);
       return tabState.disallow || "";

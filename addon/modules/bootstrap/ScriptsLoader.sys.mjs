@@ -10,6 +10,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
       "moz-src:///browser/components/customizableui/CustomizableUI.sys.mjs"
     : "resource:///modules/CustomizableUI.sys.mjs",
   DynamicRules: "chrome://tabmix-resource/content/DynamicRules.sys.mjs",
+  getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
   SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
   Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs",
@@ -259,7 +260,7 @@ export const ScriptsLoader = {
       // and vice versa.
       if (
         lazy.PrivateBrowsingUtils.isWindowPrivate(window) !==
-        lazy.PrivateBrowsingUtils.isWindowPrivate(otherTab.ownerGlobal)
+        lazy.PrivateBrowsingUtils.isWindowPrivate(lazy.getGlobal(otherTab))
       ) {
         return false;
       }
