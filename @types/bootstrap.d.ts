@@ -64,7 +64,6 @@ interface PreferencesLoader {
   loadDefaultPreferences: () => void;
 }
 
-declare const ChromeManifest: TabmixModules.ChromeManifestClass;
 declare const Overlays: OverlaysModule.OverlaysClass;
 declare var PreferencesLoader: PreferencesLoader;
 declare var ScriptsLoader: ScriptsLoaderModule.ScriptsLoader;

@@ -1307,7 +1307,7 @@ declare namespace OverlaysModule {
     unloadedScripts: Element[];
     window: Window;
     readonly document: Document;
-    constructor(overlayProvider: ChromeManifest, window: Window): void;
+    constructor(window: Window, overlayProvider?: ChromeManifest): void;
     load(urls: string | string[], promiseOverlayLoaded?: PromiseWithResolvers<void>): Promise<void>;
     _update(url: string, doc: Document): void;
     _finish(): void;
@@ -1325,9 +1325,9 @@ declare namespace OverlaysModule {
   interface OverlaysClass {
     disabled: boolean;
     prototype: Overlays;
-    load(overlayProvider: ChromeManifest, window: Window, promiseOverlayLoaded?: PromiseWithResolvers<void>): Promise<void>;
+    load(window: Window, overlayProvider?: ChromeManifest, promiseOverlayLoaded?: PromiseWithResolvers<void>): Promise<void>;
     setEnabled(val: boolean): void;
-    new (overlayProvider: ChromeManifest, window: Window): Overlays;
+    new (window: Window, overlayProvider?: ChromeManifest): Overlays;
     isInstance: IsInstance<Overlays>;
   }
   const OverlaysClass: OverlaysClass;
@@ -1686,11 +1686,6 @@ declare module "chrome://tabmix-resource/content/Changecode.sys.mjs" {
   export {initializeChangeCodeClass};
 }
 
-declare module "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mjs" {
-  const ChromeManifest: TabmixModules.ChromeManifestClass;
-  export {ChromeManifest};
-}
-
 declare module "chrome://tabmix-resource/content/log.sys.mjs" {
   const console: LogModule.Console;
   export {console};
@@ -1736,27 +1731,14 @@ interface TabmixGlobal {
 declare namespace TabmixModules {
   type BrowserVersionLazy = Partial<{isWaterfox: boolean; isFloorp: boolean; isZen: boolean}>;
 
-  class DefaultMap<K, V> extends Map<K, V> {
-    constructor(_default: () => V, iterable?: Iterable<[K, V]>);
-    _default: () => V;
-    get(key: K, create?: boolean): V;
-  }
-
   type versionInfo = number | string | {ff?: number; wf?: string; fp?: string; zen?: string; updateChannel?: string};
   interface BrowserVersion {
     isVersion(versionNo: versionInfo, updateChannel?: string | null): boolean;
   }
 
   interface ChromeManifest {
-    parse: (filename?: string, base?: string) => Promise<void>;
-    overlay: DefaultMap<string, string[]>;
-    style: DefaultMap<string, string[]>;
-  }
-
-  interface ChromeManifestClass {
-    prototype: ChromeManifest;
-    new (loader?: (url: string) => string, options?: Record<string, unknown>): ChromeManifest;
-    isInstance: IsInstance<ChromeManifest>;
+    overlay: Map<string, string[]>;
+    style: Map<string, string[]>;
   }
 
   interface ChromeUtils {

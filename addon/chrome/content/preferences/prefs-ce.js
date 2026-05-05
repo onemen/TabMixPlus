@@ -5,9 +5,6 @@
 "use strict";
 
 const {AppConstants} = ChromeUtils.importESModule("resource://gre/modules/AppConstants.sys.mjs");
-const {ChromeManifest} = ChromeUtils.importESModule(
-  "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mjs"
-);
 const {Overlays} = ChromeUtils.importESModule(
   "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs"
 );
@@ -1797,7 +1794,7 @@ class PrefWindow extends MozXULElement {
       delayTabsConnectedCallback = true;
       const src = aPaneElement.src;
       if (src) {
-        const ov = new Overlays(new ChromeManifest(), window.document.defaultView);
+        const ov = new Overlays(window.document.defaultView);
         ov.load(src).then(() => this._paneLoaded(aPaneElement));
       } else {
         this._paneLoaded(aPaneElement);

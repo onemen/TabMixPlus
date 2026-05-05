@@ -23,19 +23,18 @@ export class Overlays {
    * Load overlays for the given window using the overlay provider, which can
    * for example be a ChromeManifest object.
    *
+   * @param {Window} window The window to load into
    * @param {TabmixModules.ChromeManifest} overlayProvider The overlay provider
    *   that contains information about styles and overlays.
-   * @param {Window} window The window to load into
    * @param {PromiseWithResolvers<any>} promiseOverlayLoaded
    */
-  static load(overlayProvider, window, promiseOverlayLoaded) {
+  static load(window, overlayProvider, promiseOverlayLoaded) {
     if (this.disabled) {
       return Promise.resolve();
     }
 
-    const instance = new Overlays(overlayProvider, window);
-
-    const urls = overlayProvider.overlay.get(instance.location, false);
+    const instance = new Overlays(window, overlayProvider);
+    const urls = overlayProvider.overlay.get(instance.location) ?? [];
     return instance.load(urls, promiseOverlayLoaded);
   }
 
@@ -49,13 +48,13 @@ export class Overlays {
    * Overlays.load() instead.
    *
    * @class
+   * @param {Window} window The window to load into
    * @param {TabmixModules.ChromeManifest} overlayProvider The overlay provider
    *   that contains information about styles and overlays.
-   * @param {Window} window The window to load into
    */
-  constructor(overlayProvider, window) {
-    this.overlayProvider = overlayProvider;
+  constructor(window, overlayProvider = {overlay: new Map(), style: new Map()}) {
     this.window = window;
+    this.overlayProvider = overlayProvider;
     this._decksToResolve = new Map();
     /** @type {Element[]} */
     this._toolbarsToResolve = [];
@@ -91,7 +90,7 @@ export class Overlays {
     const xulStore = Services.xulStore;
 
     // Load css styles from the registry
-    for (const sheet of this.overlayProvider.style.get(this.location, false)) {
+    for (const sheet of this.overlayProvider.style?.get(this.location) ?? []) {
       unloadedSheets.push(sheet);
     }
 
@@ -132,7 +131,7 @@ export class Overlays {
       }
 
       // Load css styles from the registry
-      for (const sheet of this.overlayProvider.style.get(url, false)) {
+      for (const sheet of this.overlayProvider.style?.get(url) ?? []) {
         unloadedSheets.push(sheet);
       }
 
@@ -156,7 +155,7 @@ export class Overlays {
       t_unloadedOverlays.push(...this._collectOverlays(doc));
 
       // Prepare loading further nested xul overlays from the registry
-      for (const overlayUrl of this.overlayProvider.overlay.get(url, false)) {
+      for (const overlayUrl of this.overlayProvider.overlay?.get(url) ?? []) {
         t_unloadedOverlays.push(overlayUrl);
       }
 

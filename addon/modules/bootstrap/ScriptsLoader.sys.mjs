@@ -293,7 +293,7 @@ export const ScriptsLoader = {
     gBrowser.tabs.forEach(tab => {
       const browser = tab.linkedBrowser;
       if (browser.currentURI.spec == "about:addons" && browser.contentWindow) {
-        lazy.Overlays.load(chromeManifest, browser.contentWindow);
+        lazy.Overlays.load(browser.contentWindow, chromeManifest);
       }
     });
 

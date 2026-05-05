@@ -1,5 +1,4 @@
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
-import {ChromeManifest} from "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mjs";
 import {Overlays} from "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs";
 
 /** @type {RenameTabModule.Lazy} */ // @ts-ignore
@@ -78,7 +77,7 @@ export const RenameTab = {
     popup.hidden = true;
     // @ts-expect-error - we can append the popup
     this._element("mainPopupSet")?.appendChild(popup);
-    const ov = new Overlays(new ChromeManifest(), this.window);
+    const ov = new Overlays(this.window);
     ov.load("chrome://tabmixplus/content/overlay/renameTab.xhtml").then(() => {
       this.observe(null, "xul-overlay-merged");
     });

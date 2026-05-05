@@ -5,7 +5,6 @@
 
 ChromeUtils.defineESModuleGetters(this, {
   AddonManager: "resource://gre/modules/AddonManager.sys.mjs",
-  ChromeManifest: "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mjs",
   getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
   Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs",
   PreferencesLoader: "chrome://tabmix-resource/content/bootstrap/PreferencesLoader.sys.mjs",
@@ -13,24 +12,17 @@ ChromeUtils.defineESModuleGetters(this, {
   TabmixWidgets: "chrome://tabmix-resource/content/bootstrap/TabmixWidgets.sys.mjs",
 });
 
-const appinfo = Services.appinfo;
-const options = {
-  application: appinfo.ID,
-  appversion: appinfo.version,
-  platformversion: appinfo.platformVersion,
-  os: appinfo.OS,
-  osversion: Services.sysinfo.getProperty("version"),
-  abi: appinfo.XPCOMABI,
+const chromeManifest = {
+  // prettier-ignore
+  overlay: new Map([
+    ["chrome://browser/content/browser.xhtml", ["chrome://tabmixplus/content/tabmix.xhtml"]],
+    ["about:addons", ["chrome://tabmixplus/content/preferences/overlay/aboutaddons.xhtml"]],
+    ["chrome://browser/content/places/bookmarksSidebar.xhtml", ["chrome://tabmixplus/content/places/places.xhtml"]],
+    ["chrome://browser/content/places/historySidebar.xhtml", ["chrome://tabmixplus/content/places/places.xhtml"]],
+    ["chrome://browser/content/places/places.xhtml", ["chrome://tabmixplus/content/places/places.xhtml"]],
+  ]),
+  style: new Map(),
 };
-
-const man = `
-overlay   chrome://browser/content/browser.xhtml                 chrome://tabmixplus/content/tabmix.xhtml
-overlay   about:addons                                           chrome://tabmixplus/content/preferences/overlay/aboutaddons.xhtml
-
-overlay   chrome://browser/content/places/bookmarksSidebar.xhtml chrome://tabmixplus/content/places/places.xhtml
-overlay   chrome://browser/content/places/historySidebar.xhtml   chrome://tabmixplus/content/places/places.xhtml
-overlay   chrome://browser/content/places/places.xhtml           chrome://tabmixplus/content/places/places.xhtml
-`;
 
 /*
  * restartApplication: Restarts the application, keeping it in
@@ -147,11 +139,6 @@ async function startup(data, reason) {
     SingleWindowModeUtils: "chrome://tabmix-resource/content/SingleWindowModeUtils.sys.mjs",
   });
 
-  const chromeManifest = new ChromeManifest(() => {
-    return man;
-  }, options);
-  await chromeManifest.parse();
-
   updateAddon(data.id);
 
   PreferencesLoader.loadDefaultPreferences();
@@ -197,7 +184,7 @@ async function startup(data, reason) {
             isEnabled: true,
           });
         }
-        Overlays.load(chromeManifest, win, promiseOverlayLoaded);
+        Overlays.load(win, chromeManifest, promiseOverlayLoaded);
       }
     }
   }
@@ -221,7 +208,7 @@ async function startup(data, reason) {
             /** @type {PromiseWithResolvers<void>} */
             const promiseOverlayLoaded = Promise.withResolvers();
             ScriptsLoader.initForWindow(win, promiseOverlayLoaded.promise);
-            Overlays.load(chromeManifest, win, promiseOverlayLoaded);
+            Overlays.load(win, chromeManifest, promiseOverlayLoaded);
           },
           {once: true}
         );
@@ -237,7 +224,7 @@ async function startup(data, reason) {
         const isBrowser =
           document.documentElement.getAttribute("windowtype") === "navigator:browser";
         if (!isBrowser) {
-          Overlays.load(chromeManifest, win);
+          Overlays.load(win, chromeManifest);
         }
       }
     },

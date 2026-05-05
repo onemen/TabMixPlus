@@ -739,7 +739,6 @@ interface BrowserWindow extends MockedGeckoTypes.BrowserWindow {
 }
 
 interface TabmixKnownModules {
-  "chrome://tabmix-resource/content/bootstrap/ChromeManifest.sys.mjs": {ChromeManifest: TabmixModules.ChromeManifestClass};
   "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs": {Overlays: OverlaysModule.OverlaysClass};
   "resource://gre/modules/DeferredTask.sys.mjs": {DeferredTask: DeferredTaskConstructor};
   "resource://gre/modules/ExtensionShortcuts.sys.mjs": {ExtensionShortcutKeyMap: typeof ExtensionShortcutKeyMap};
