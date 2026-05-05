@@ -72,6 +72,8 @@ interface Document {
   readonly documentGlobal: WindowProxy | null;
   readonly documentElement: DocumentElement;
   getElementsByClassName<K extends keyof GetByMap>(name: K): NonEmptyCollection_G<GetByMap[K]>;
+  /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
+  readonly ownerGlobal: WindowProxy | null;
 }
 
 interface DOMStringMap {
@@ -93,6 +95,8 @@ interface DragEvent extends MouseEvent {
 
 interface EventTarget {
   readonly documentGlobal: WindowProxy | null;
+  /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
+  readonly ownerGlobal: WindowProxy | null;
 }
 
 // override lib.gecko.dom.d.ts Document | null to prevent nullcheck of documnet
