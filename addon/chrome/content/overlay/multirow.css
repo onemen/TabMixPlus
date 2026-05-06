@@ -9,7 +9,9 @@
 
 :root {
   --tab-min-height-mlt: calc(var(--tabmix-tab-min-height) + 2 * var(--tab-block-margin, 0px)) !important;
-  --tabmix-scrollbutton-padding: calc(var(--toolbarbutton-inner-padding) + var(--toolbarbutton-outer-padding));
+  --tabmix-toolbarbutton-padding-inner: var(--toolbarbutton-padding-inner, var(--toolbarbutton-inner-padding));
+  --tabmix-toolbarbutton-padding-outer: var(--toolbarbutton-padding-outer, var(--toolbarbutton-outer-padding));
+  --tabmix-scrollbutton-padding: calc(var(--tabmix-toolbarbutton-padding-inner) + var(--tabmix-toolbarbutton-padding-outer));
 }
 
 /* Automatically reduce tab-block-margin when in multi-row horizontal mode */
@@ -350,6 +352,10 @@
  * different to interfere with adjustNewtabButtonVisibility calculations
  */
 #tabbrowser-arrowscrollbox[tabmix-flowing="multibar"] #tabs-newtab-button {
+  --toolbarbutton-padding-inner: calc((var(--tab-min-height) - 16px) / 2);
+  --toolbarbutton-padding-outer: 2px;
+
+  /* for version before Firefox 152 */
   --toolbarbutton-inner-padding: calc((var(--tab-min-height) - 16px) / 2);
   --toolbarbutton-outer-padding: 2px;
 }

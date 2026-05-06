@@ -2609,19 +2609,25 @@ window.gTMPprefObserver = {
           inline: "3.5px",
         }
       : {
-          block: `calc(var(--toolbarbutton-inner-padding) - ${paddingBlockOffset}px)`,
-          inline: "calc(var(--toolbarbutton-inner-padding) - 6px)",
+          block: `calc(var(--tabmix-toolbarbutton-padding-inner) - ${paddingBlockOffset}px)`,
+          inline: "calc(var(--tabmix-toolbarbutton-padding-inner) - 6px)",
         };
 
     if (Tabmix.isVersion(1450)) {
+      const scrollicon =
+        Tabmix.isVersion(1520) ?
+          `--arrowscrollbox-scrollicon-hover-background-color: var(--toolbarbutton-background-color-hover);
+          --arrowscrollbox-scrollicon-active-background-color: var(--toolbarbutton-background-color-active);
+          --arrowscrollbox-scrollicon-padding: var(--tabmix-toolbarbutton-padding-inner) 2px;`
+        : `--arrowscrollbox-scrollicon-hover-background-color: var(--toolbarbutton-hover-background);
+          --arrowscrollbox-scrollicon-active-background-color: var(--toolbarbutton-active-background);
+          --arrowscrollbox-scrollicon-padding: var(--tabmix-toolbarbutton-padding-inner) 2px;`;
       this.insertRule(
         `#tabmix-scrollbox {
            &::part(scrollbutton-up),
            &::part(scrollbutton-down) {
              --arrowscrollbox-scrollicon-border-radius: var(--tab-border-radius);
-             --arrowscrollbox-scrollicon-hover-background-color: var(--toolbarbutton-hover-background);
-             --arrowscrollbox-scrollicon-active-background-color: var(--toolbarbutton-active-background);
-             --arrowscrollbox-scrollicon-padding: var(--toolbarbutton-inner-padding) 2px;
+             ${scrollicon}
 
              appearance: none;
              margin: ${buttonsMarginBlock};

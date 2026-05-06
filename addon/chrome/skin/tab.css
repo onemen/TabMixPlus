@@ -89,7 +89,7 @@
   border-right: 1px solid rgb(0 0 0 / 16%);
   border-radius: 0;
   padding-inline-end: 3px;
-  width: calc(1 * var(--toolbarbutton-inner-padding) + 16px + 3px);
+  width: calc(1 * var(--tabmix-toolbarbutton-padding-inner) + 16px + 3px);
 }
 
 #wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabsButton[type="menu-button"] {
