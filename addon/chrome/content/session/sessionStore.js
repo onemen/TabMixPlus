@@ -350,17 +350,19 @@ var TMP_ClosedTabs = {
 
   // copy of function from SessionStore.sys.mjs SessionStoreInternal.getPreferredRemoteType
   getPreferredRemoteType(url, aWindow, userContextId) {
-    return E10SUtils.getRemoteTypeForURI(
-      url,
-      aWindow.gMultiProcessBrowser,
-      aWindow.gFissionBrowser,
-      E10SUtils.DEFAULT_REMOTE_TYPE,
-      null,
-      E10SUtils.predictOriginAttributes({
-        window: aWindow,
-        userContextId,
-      })
-    );
+    return Tabmix.isVersion(1530) ?
+        ChromeUtils.predictRemoteTypeForURI(url, {window, userContextId})
+      : E10SUtils.getRemoteTypeForURI(
+          url,
+          aWindow.gMultiProcessBrowser,
+          aWindow.gFissionBrowser,
+          E10SUtils.DEFAULT_REMOTE_TYPE,
+          null,
+          E10SUtils.predictOriginAttributes({
+            window: aWindow,
+            userContextId,
+          })
+        );
   },
 
   getSingleClosedTabData(source, index) {

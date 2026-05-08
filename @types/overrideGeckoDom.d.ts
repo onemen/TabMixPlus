@@ -51,6 +51,14 @@ interface ChromeUtils {
   importESModule<S extends keyof TabmixKnownModules>(aResourceURI: S): TabmixKnownModules[S];
   nondeterministicGetWeakSetKeys<T extends object>(aSet: WeakSet<T>): T[];
   now(): number;
+  predictRemoteTypeForURI(
+    uri: string,
+    options: {
+      window?: Window;
+      userContextId?: number | undefined;
+      preferredRemoteType?: string;
+    }
+  ): string;
 }
 
 // @ts-expect-error - override `namespace ChromeUtils` from `gecko/lib.gecko.dom.d.ts`

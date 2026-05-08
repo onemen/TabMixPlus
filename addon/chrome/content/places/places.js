@@ -340,14 +340,17 @@ var TMP_Places = {
         tabPos = aTab._tPos < index ? index - 1 : index;
         Tabmix.moveTabTo(aTab, {tabIndex: tabPos, forceUngrouped: true});
       } else {
-        let preferredRemoteType = E10SUtils.getRemoteTypeForURI(
-          url,
-          gMultiProcessBrowser,
-          gFissionBrowser,
-          E10SUtils.DEFAULT_REMOTE_TYPE,
-          null,
-          E10SUtils.predictOriginAttributes({window})
-        );
+        let preferredRemoteType =
+          Tabmix.isVersion(1530) ?
+            ChromeUtils.predictRemoteTypeForURI(url, {window})
+          : E10SUtils.getRemoteTypeForURI(
+              url,
+              gMultiProcessBrowser,
+              gFissionBrowser,
+              E10SUtils.DEFAULT_REMOTE_TYPE,
+              null,
+              E10SUtils.predictOriginAttributes({window})
+            );
         let params = {
           skipAnimation: multiple,
           noInitialLabel: this._titlefrombookmark,

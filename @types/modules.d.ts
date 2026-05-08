@@ -298,7 +298,9 @@ declare namespace MockedExports {
     DEFAULT_REMOTE_TYPE: string;
     deserializePolicyContainer(csp_b64?: string | null): nsIContentSecurityPolicy;
     deserializeReferrerInfo(referrerInfo_b64?: string | null): nsIReferrerInfo;
+    /** @deprecated replaced with ChromeUtils.predictRemoteTypeForURI in firefox 152 */
     getRemoteTypeForURI: (aUri: string, aMultiProcess?: boolean, aRemoteSubframes?: boolean, aPreferredRemoteType?: string, aCurrentUri?: string | null, aOriginAttributes?: Params) => string;
+    /** @deprecated replaced with ChromeUtils.predictRemoteTypeForURI in firefox 152 */
     predictOriginAttributes: ({window, browser, userContextId, geckoViewSessionContextId, privateBrowsingId}: {window?: Window; browser?: MockedGeckoTypes.ChromeBrowser; userContextId?: number | undefined; geckoViewSessionContextId?: string; privateBrowsingId?: string}) => {privateBrowsingId: string; userContextId: string; geckoViewSessionContextId: string};
     serializePolicyContainer: (csp: nsIContentSecurityPolicy) => string;
     serializeReferrerInfo: (referrerInfo: nsIReferrerInfo) => string;
