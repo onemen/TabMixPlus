@@ -684,7 +684,6 @@ declare namespace AutoReloadModule {
   }
 
   type serializedReloadData = {scrollX: number; scrollY: number; isPostData: boolean; postData: string | null; referrerInfo: string | null};
-  type ReloadData = {scrollX: number; scrollY: number; isPostData: boolean; postData: nsIInputStream | null; referrerInfo: nsIReferrerInfo | null};
 
   interface AutoReload {
     _labelsInitialized: boolean;
@@ -712,14 +711,14 @@ declare namespace AutoReloadModule {
   interface AutoReloadData {
     postData: nsIInputStream | null;
     isPostData: boolean;
-    referrerInfo: nsIReferrerInfo;
+    referrerInfo: nsIReferrerInfo | null;
     scrollX: number;
     scrollY: number;
   }
 
   function _reloadTab(tab: Tab): void;
   function beforeReload(window: Window, browser: Browser): Promise<void>;
-  function doReloadTab(window: Window, browser: Browser, tab: Tab, data: ReloadData): void;
+  function doReloadTab(window: Window, browser: Browser, tab: Tab, data: AutoReloadData): void;
   function _observe(aSubject: nsISupports & Window, aTopic: string, aData: string): void;
   // const _observe: nsIObserver;
   function _clearTimeout(tab: Tab, window?: Window): void;

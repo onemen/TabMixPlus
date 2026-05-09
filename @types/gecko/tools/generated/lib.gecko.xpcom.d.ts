@@ -1954,7 +1954,8 @@ declare enum nsIContentPolicy_nsContentPolicyType {
   TYPE_JSON = 62,
   TYPE_INTERNAL_JSON_PRELOAD = 63,
   TYPE_INTERNAL_IMAGE_NOTIFICATION = 64,
-  TYPE_END = 65,
+  TYPE_TEXT = 65,
+  TYPE_INTERNAL_TEXT_PRELOAD = 66,
 }
 
 declare global {

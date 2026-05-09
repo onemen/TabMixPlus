@@ -46,7 +46,7 @@ var TMP_SessionStore = {
 
   getTitleFromTabState(aTab) {
     /** @type {SessionStoreNS.TabDataEntry} */
-    let data = {};
+    let data = {url: ""};
     data.title = SessionStore.getLazyTabValue(aTab, "title");
     if (data.title) {
       data.url = SessionStore.getLazyTabValue(aTab, "url");
@@ -62,7 +62,7 @@ var TMP_SessionStore = {
 
   getUrlFromTabState(aTab) {
     /** @type {SessionStoreNS.TabDataEntry} */
-    let data = {};
+    let data = {url: ""};
     data.url = SessionStore.getLazyTabValue(aTab, "url");
     if (!data.url) {
       let tabData = JSON.parse(SessionStore.getTabState(aTab));

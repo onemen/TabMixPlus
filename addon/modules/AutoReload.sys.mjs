@@ -331,7 +331,7 @@ export const AutoReload = {
       return;
     }
 
-    /** @type {AutoReloadModule.ReloadData} */ // @ts-ignore
+    /** @type {AutoReloadModule.AutoReloadData} */ // @ts-ignore
     let data = {...serializeData};
 
     // Convert serialized data to proper types
@@ -361,7 +361,13 @@ function _reloadTab(aTab) {
   }
 
   /** @type {AutoReloadModule.AutoReloadData} */
-  var data = {};
+  var data = {
+    postData: null,
+    isPostData: false,
+    referrerInfo: null,
+    scrollX: 0,
+    scrollY: 0,
+  };
   var window = lazy.getGlobal(aTab);
 
   try {

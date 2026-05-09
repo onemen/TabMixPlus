@@ -110,7 +110,11 @@ export const TabmixUtils = {
 
   getPostDataFromHistory(history) {
     /** @type {TabmixUtilsModule.PostData} */
-    const json = {};
+    const json = {
+      isPostData: false,
+      postData: null,
+      referrerInfo: null,
+    };
     const shEntry = history?.getEntryAtIndex(history.index).QueryInterface?.(Ci.nsISHEntry);
     const postData = shEntry?.postData?.QueryInterface?.(Ci.nsICloneableInputStream);
     if (shEntry && postData) {
