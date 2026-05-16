@@ -99,6 +99,10 @@ interface EventTarget {
   readonly ownerGlobal: WindowProxy | null;
 }
 
+interface WindowRoot {
+  readonly window: WindowProxy | null;
+}
+
 // override lib.gecko.dom.d.ts Document | null to prevent nullcheck of documnet
 // documnet if document is null the browser will throw an error
 declare var document: Document;

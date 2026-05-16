@@ -29,10 +29,12 @@ function updateAddonCard() {
       optionsButton._tabmix_command_installed = true;
       optionsButton.addEventListener("click", event => {
         event.stopPropagation();
+        // ownerGlobal removed since Firefox 152
+        const chromeWindow = windowRoot?.ownerGlobal ?? windowRoot?.window;
         try {
-          Tabmix.getGlobal(windowRoot)?.Tabmix.openOptionsDialog();
+          chromeWindow?.Tabmix.openOptionsDialog();
         } catch (ex) {
-          Tabmix.getGlobal(windowRoot)?.Tabmix.reportError(ex);
+          console.error("Tabmix Error: failed to open dialog\n", ex);
         }
       });
     }
