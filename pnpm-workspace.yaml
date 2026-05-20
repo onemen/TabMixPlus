@@ -2,14 +2,13 @@ autoInstallPeers: true
 saveExact: true
 minimumReleaseAge: 7200
 minimumReleaseAgeExclude:
-  - 'fast-uri@3.1.2'
-  - 'stylelint@17.11.0'
   - 'typescript'
   - 'typescript-eslint'
   - '@typescript-eslint/*'
   - '@typescript/native-preview*'
 
 overrides:
-  fast-uri: 3.1.2
+  fast-uri: '3.1.2'
+  'brace-expansion@5.0.5': '>=5.0.6'
 
 trustPolicy: no-downgrade
