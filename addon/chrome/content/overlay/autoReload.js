@@ -1,5 +1,5 @@
 /* global gNumberInput */
-/* exported load, accept, onInput, onSelect, openPopup */
+/* exported adjustPopupWidth, load, accept, onInput, onSelect, openPopup */
 "use strict";
 
 const {TabmixSvc} = ChromeUtils.importESModule(
@@ -9,6 +9,13 @@ const {TabmixSvc} = ChromeUtils.importESModule(
 const gPref = TabmixSvc.prefBranch;
 
 function load() {
+  const {createHandleOnEvent} = ChromeUtils.importESModule(
+    "chrome://tabmix-resource/content/HandleOnEvent.sys.mjs"
+  );
+
+  const {discoverEventTypes} = createHandleOnEvent(window);
+  discoverEventTypes();
+
   document.documentElement.addEventListener("dialogaccept", accept.bind(null));
   const customReloadTime = gPref.getIntPref("reload_time");
   document.getElementById("autoreload_minutes").value = String(Math.floor(customReloadTime / 60));
@@ -49,6 +56,12 @@ function accept() {
   window.arguments[0].ok = true;
 }
 
+/** @type {typeof AdjustPopupWidth} */
+function adjustPopupWidth(event) {
+  const item = event.target;
+  item.style.width = item.parentNode?.getBoundingClientRect().width + "px";
+}
+
 function getCustomReloadTime() {
   let minutes;
   if (document.getElementById("autoreload_minutes").value !== "") {
@@ -70,8 +83,9 @@ function updateOkButtonDisabledState() {
   document.documentElement.getButton("accept").disabled = getCustomReloadTime() === 0;
 }
 
-/** @type {typeof Globals.oninput} */
-function onInput(item) {
+/** @type {typeof Oninput} */
+function onInput(event) {
+  const item = event.target;
   item.value = parseInt(item.value.toString());
   if (item.value.toString() === "NaN") {
     item.value = "";
@@ -97,8 +111,9 @@ function onSelect(event) {
   updateOkButtonDisabledState();
 }
 
-/** @type {typeof Globals.openPopup} */
-function openPopup(button) {
+/** @type {typeof OpenPopup} */
+function openPopup(event) {
+  const button = event.target;
   const popup = button.nextElementSibling;
   if (popup.state !== "closed") {
     popup.hidePopup();
@@ -106,3 +121,5 @@ function openPopup(button) {
     popup.openPopup(button.closest(".container"), "after_start", 0, -1);
   }
 }
+
+window.addEventListener("load", load);

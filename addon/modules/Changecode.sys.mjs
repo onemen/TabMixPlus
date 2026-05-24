@@ -319,10 +319,13 @@ function _setNewFunction(obj, name, code) {
  * @param {Context | string} obj - Object with location property or href string
  */
 function isInWindowContext(obj) {
-  const href = typeof obj === "string" ? obj : obj?.location?.href;
+  const global = Cu.getGlobalForObject(obj);
   return (
-    href === "chrome://browser/content/browser.xhtml" ||
-    href === "chrome://tabmixplus/content/preferences/preferences.xhtml"
+    global &&
+    typeof global === "object" &&
+    "document" in global &&
+    "location" in global &&
+    "windowUtils" in global
   );
 }
 

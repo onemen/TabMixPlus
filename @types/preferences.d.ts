@@ -25,6 +25,7 @@ interface Document {
 
 interface EventTarget {
   contentDocument: MockedGeckoTypes.ChromeBrowser & Document;
+  id?: string;
   localName: string;
 }
 
@@ -74,6 +75,11 @@ interface WindowProxy extends mozIDOMWindowProxy {
   Tabmix: TabmixGlobal;
 }
 
+interface XULMenuItemElement extends HTMLElement {
+  checked: boolean;
+  value: boolean;
+}
+
 interface IgIncompatiblePane {
   _initialized: boolean;
   lastSelected: string;
@@ -85,7 +91,9 @@ interface IgIncompatiblePane {
 
 /** classes in prefs-ce.js */
 
-type GetFunction = (element: PrefWindowClass | PrefPaneClass | HTMLElement | PreferenceElement | MousePaneNS.MenuList, eventType: string, eventCode: string) => FunctionWithAny;
+interface EventTarget {
+  getAttribute(name: string): string | null;
+}
 
 // for testing...
 type BindThis<T extends object> = {
@@ -183,6 +191,7 @@ interface DeferredTaskConstructor {
 interface PreferenceElement extends Omit<HTMLInputElement, "value"> {
   _deferredValueUpdateTask?: DeferredTask;
   value: string | number | boolean;
+  tabbox?: MousePaneNS.Tabbox;
 }
 
 interface ResizeObserver {
@@ -344,7 +353,7 @@ interface TabstylepanelClass extends TabstylepanelClassOverrideMozXULElement {
   _getPrefs(this: TabstylepanelClass, aPrefString: string): void;
   _ondialogcancel(): void;
   _prefValues: DynamicRulesModule.TabStyle | object;
-  _resetDefault(this: TabstylepanelClass, aResetOnlyStyle: boolean): void;
+  _resetDefault(this: TabstylepanelClass, aResetOnlyStyle?: boolean): void;
   _savePrefs(): void;
   _updateUseThisState(this: TabstylepanelClass, aEnabled: boolean): void;
   get disabled(): boolean;
@@ -497,17 +506,19 @@ declare namespace MousePaneNS {
     tabs: SelectControlElement;
     selectedTab: HTMLElement;
   }
-  interface OptionsTabs extends HTMLElement {
+  interface OptionsTabs extends PreferenceElement {
+    selectedIndex: number;
     _tabbox: Tabbox;
     tabbox: Tabbox;
   }
+
+  type PanelEvent = Event & {target: SelectControlElement};
 
   let _inited: boolean;
   const clickTab: MenuList;
   const clickTabbar: MenuList;
   function init(): void;
-  function tabSelectionChanged(event: MouseEvent & {target: OptionsTabs}): void;
-  function panelSelectionChanged(event: Event & {target: SelectControlElement}, panel?: SelectControlElement): void;
+  function tabSelectionChanged(event: TabSelectEvent): void;
   let _options: string[];
   function updatePanelPrefs(aIndex: number): void;
   function updatePref(element: MenuList, prefID: string): void;
@@ -517,12 +528,17 @@ declare namespace MousePaneNS {
   function updateDblClickTabbar(pref: PreferenceClass): void;
 }
 
+// add type fror preference elemnt, maybe it is the same as the PreferenceClass
+// it use to create it `customElements.define("preference", Preference);`
+interface PrefEvent extends MouseEvent {
+  target: PreferenceClass;
+}
+
+interface MenuItemEvent extends MouseEvent {
+  target: HTMLElement;
+}
+
 declare namespace PrefWindowNS {
-  // add type fror preference elemnt, maybe it is the same as the PreferenceClass
-  // it use to create it `customElements.define("preference", Preference);`
-  interface PrefEvent extends MouseEvent {
-    target: PreferenceClass;
-  }
   let _initialized: boolean;
   const pinTabLabel: string;
   let instantApply: boolean;
@@ -548,11 +564,13 @@ declare namespace PrefWindowNS {
   function initBroadcasters(paneID: string): void;
   function updateBroadcaster(aPreference: PreferenceClass, aBroadcaster?: Node): void;
   function setDisabled(itemOrId: Node | PreferenceElement | string, val: boolean | null): void;
-  function tabSelectionChanged(event: MouseEvent & {target: MousePaneNS.OptionsTabs}): void;
+  function tabSelectionChanged(event: TabSelectEvent): void;
   function afterShortcutsChanged(): void;
   function syncfrompreference(item: PreferenceElement): boolean;
   function synctopreference(item: PreferenceElement, checkedVal: boolean): PreferenceValue;
 }
+
+type TabSelectEvent = MouseEvent & {target: MousePaneNS.OptionsTabs};
 
 declare namespace SessionPaneNS {
   interface SessionsTabs extends CustomGroupElement<HTMLElement> {
@@ -572,10 +590,10 @@ declare namespace Globals {
   function setPrefByType(prefName: string, newValue: any, browserWindow: BrowserWindow, atImport: boolean): void;
   function setPref(aPref: Pref): void;
   function setPrefAfterImport(aPref: Pref, browserWindow: BrowserWindow): boolean;
-  function toggleInstantApply(item: CheckBoxElement): void;
+  function toggleInstantApply(event: WindowEvent & {target: CheckBoxElement | XULMenuItemElement}): void;
   function loadData(pattern: string[]): void;
   function showPane(paneID: string): void;
-  function openHelp(helpTopic: string): void;
+  function openHelp(helpTopic?: string): void;
 
   /** shortcuts methods */
   function getKeysForShortcut(shortcut: string, id: string, win?: Window): string | null;

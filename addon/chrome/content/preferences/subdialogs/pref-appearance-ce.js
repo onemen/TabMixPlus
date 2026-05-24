@@ -28,6 +28,9 @@ const TabpanelsClass = customElements.get("tabpanels");
     constructor() {
       super();
 
+      // @ts-expect-error - fixMozTabsForZen exists on the main window's documentElement
+      window.opener?.document?.documentElement?.fixMozTabsForZen(document);
+
       this.addEventListener(
         "command",
         /** @type {TabstylepanelListeners} */ () => {
@@ -50,7 +53,7 @@ const TabpanelsClass = customElements.get("tabpanels");
         MozXULElement.parseXULToFragment(
           `
       <hbox align="center">
-        <checkbox anonid="useThis" label="&useThis.label;: " oncommand="this.parentNode.parentNode._updateUseThisState(this.checked); event.stopPropagation();"></checkbox>
+        <checkbox anonid="useThis" label="&useThis.label;: " data-evt-command="this.parentNode.parentNode._updateUseThisState(this.checked); event.stopPropagation();"></checkbox>
         <label></label>
       </hbox>
       <separator class="groove"></separator>
@@ -61,9 +64,9 @@ const TabpanelsClass = customElements.get("tabpanels");
       </hbox>
       <vbox flex="1">
         <colorbox anonid="textColor" inherits="disabled=text-disabled,_hidebox">
-          <checkbox anonid="text" class="visible" inherits="disabled" label="&textcolor.label;:" oncommand="this.parentNode.parentNode.parentNode.updateDisableState(this.getAttribute('anonid'))"></checkbox>
+          <checkbox anonid="text" class="visible" inherits="disabled" label="&textcolor.label;:" data-evt-command="this.parentNode.parentNode.parentNode.updateDisableState(this.getAttribute('anonid'))"></checkbox>
         </colorbox>
-        <checkbox_tmp anonid="bg" inherits="disabled" label="&bgColor.label;:" oncommand="this.parentNode.parentNode.updateDisableState(this.getAttribute('anonid'))"></checkbox_tmp>
+        <checkbox_tmp anonid="bg" inherits="disabled" label="&bgColor.label;:" data-evt-command="this.parentNode.parentNode.updateDisableState(this.getAttribute('anonid'))"></checkbox_tmp>
         <colorbox anonid="bgTopColor" class="bgTop" inherits="disabled=bg-disabled,hidden=_hidebox">
           <label value="&bgTopColor.label;:" class="visible" inherits="disabled=bg-disabled"></label>
         </colorbox>
@@ -73,7 +76,7 @@ const TabpanelsClass = customElements.get("tabpanels");
       </vbox>
       <separator class="groove"></separator>
       <hbox align="center" class="reset-button-box">
-        <button label="&settings.default;" oncommand="this.parentNode.parentNode._resetDefault();"></button>
+        <button label="&settings.default;" data-evt-command="this.parentNode.parentNode._resetDefault();"></button>
       </hbox>
     `,
           [
@@ -82,6 +85,20 @@ const TabpanelsClass = customElements.get("tabpanels");
           ]
         )
       );
+
+      // const {createHandleOnEvent} = ChromeUtils.importESModule(
+      //   "chrome://tabmix-resource/content/HandleOnEvent.sys.mjs"
+      // );
+      // // const {handleOnEvent} = createHandleOnEvent(window);
+
+      // // this.addEventListener("command", (/** @type {PaneEvent} */ event) => {
+      // //   handleOnEvent(event, "command");
+      // // });
+      // console.log("------------------------------------------");
+
+      // const {discoverEventTypes} = createHandleOnEvent(window);
+      // discoverEventTypes();
+
       // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
       this.initializeAttributeInheritance();
 

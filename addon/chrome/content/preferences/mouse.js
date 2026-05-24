@@ -44,17 +44,16 @@ var gMousePane = {
   },
 
   tabSelectionChanged(event) {
-    if (event.target.localName != "tabpanels") {
+    const panel = event.target;
+    if (panel.localName != "tabpanels") {
       return;
     }
     gPrefWindow.tabSelectionChanged(event);
 
     if (this._inited) {
-      this.updatePanelPrefs(event.target._tabbox.tabs.selectedIndex);
+      this.updatePanelPrefs(panel._tabbox.tabs.selectedIndex);
     }
-  },
 
-  panelSelectionChanged(event, panel = event.target) {
     if (panel.tabbox && panel.selectedIndex !== 0) {
       event.stopPropagation();
       panel.selectedIndex = 0;

@@ -8,7 +8,7 @@
 <overlay id="IncompatiblePaneOverlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-  <prefpane id="paneIncompatible" onpaneload="gIncompatiblePane.init();" helpTopic="introduction">
+  <prefpane id="paneIncompatible" data-evt-paneload="gIncompatiblePane.init();" helpTopic="introduction">
 
     <tabbox>
       <tabs class="tabs-hidden">
@@ -23,7 +23,7 @@
             </description>
             <spacer flex="1"/>
             <button class="font-bold" label="&incompatible.button.label;…"
-                    oncommand="gIncompatiblePane.checkForIncompatible(true);"/>
+                    data-evt-command="gIncompatiblePane.checkForIncompatible(true);"/>
           </hbox >
         </groupbox>
       </tabpanels>

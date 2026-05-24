@@ -9,7 +9,7 @@
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
          xmlns:html="http://www.w3.org/1999/xhtml">
 
-  <prefpane id="paneLinks" onpaneload="gLinksPane.init();" helpTopic="Links">
+  <prefpane id="paneLinks" data-evt-paneload="gLinksPane.init();" helpTopic="Links">
 
     <!-- scripts -->
     <script type="application/javascript" src="chrome://tabmixplus/content/preferences/links.js"/>
@@ -26,7 +26,7 @@
       <preference id="pref_filetypeEnable"     name="extensions.tabmix.enablefiletype" type="bool"/>
       <preference id="pref_opentabforLinks"    name="extensions.tabmix.opentabforLinks" type="int"
                   notChecked="0"
-                  onchange="gPrefWindow.setDisabled('obs_opentabforAllLinks', this.value == 1);"/>
+                  data-evt-change="gPrefWindow.setDisabled('obs_opentabforAllLinks', this.value == 1);"/>
     </preferences>
 
     <tabbox>
@@ -50,13 +50,13 @@
               </menulist>
             </hbox>
             <checkbox_tmp id="externalLink" label="&externalLink.useSeparate.label;"
-                      oncommand="gLinksPane.externalLinkValue(this.checked);"/>
+                      data-evt-command="gLinksPane.externalLinkValue(this.checked);"/>
             <hbox align="center" class="indent">
               <!-- Open external links in: New Window, New Tab, Current Browser -->
               <label flex="1" value="&externalLinkTarget.label;" control="externalLinkTarget" observes="obs_externalLink"/>
               <menulist id="externalLinkTarget" preference="pref_externalLinkTarget" observes="obs_externalLink"
                         style="width: 170px;"
-                        onsyncfrompreference="gLinksPane.updateExternalLinkCheckBox(this);">
+                        data-evt-syncfrompreference="gLinksPane.updateExternalLinkCheckBox(this);">
                 <menupopup>
                   <menuitem value="-1" label="&linkTarget.tab;">
                     <observes element="generalWindowOpen" attribute="label"/>
@@ -85,17 +85,17 @@
               <checkbox_tmp id="filetypeEnable" label="&download.label;" preference="pref_filetypeEnable"/>
               <spacer flex="1"/>
               <button class="content-help"
-                      oncommand="openHelp('links#file-type-editor');"/>
+                      data-evt-command="openHelp('links#file-type-editor');"/>
               <button id="advancedSetting" label="&edit.label;…" observes="obs_filetypeEnable"
-                      oncommand="gLinksPane.openFiletypeEditor();"/>
+                      data-evt-command="gLinksPane.openFiletypeEditor();"/>
             </hbox>
             <!-- Special control of links -->
             <separator/>
             <checkbox_tmp id="forceLinkToTab" label="&speLink.label;"
                           preference="pref_opentabforLinks"
                           control="opentabforLinks"
-                          onsyncfrompreference="return gPrefWindow.syncfrompreference(this);"
-                          onsynctopreference="return gPrefWindow.synctopreference(this, 1);"/>
+                          data-evt-syncfrompreference="return gPrefWindow.syncfrompreference(this);"
+                          data-evt-synctopreference="return gPrefWindow.synctopreference(this, 1);"/>
             <radiogroup id="opentabforLinks" align="start" preference="pref_opentabforLinks" class="indent">
               <radio value="1" label="&speLink.allLinks;" observes="obs_opentabforLinks"/>
               <radio value="2" label="&speLink.external;" observes="obs_opentabforLinks"/>

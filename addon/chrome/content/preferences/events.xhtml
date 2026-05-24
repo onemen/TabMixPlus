@@ -11,7 +11,7 @@
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
          xmlns:html="http://www.w3.org/1999/xhtml">
 
-  <prefpane id="paneEvents" onpaneload="gEventsPane.init();">
+  <prefpane id="paneEvents" data-evt-paneload="gEventsPane.init();">
 
     <!-- scripts -->
     <script type="application/javascript" src="chrome://tabmixplus/content/preferences/events.js"/>
@@ -21,16 +21,16 @@
       <preference id="pref_events"              name="extensions.tabmix.events.selectedTabIndex"
                                                                                               type="int"/>
       <preference id="pref_loadOnNewTab"        name="extensions.tabmix.loadOnNewTab.type"    type="int"
-                  onchange="gEventsPane.newTabUrl(this, false, true);"/>
+                  data-evt-change="gEventsPane.newTabUrl(this, false, true);"/>
       <preference id="pref_newTabUrl"           name="browser.newtab.url"                     type="string"/>
       <preference id="pref_selectLocationBar"   name="extensions.tabmix.selectLocationBar"
                   type="bool" inverted="true"/>
       <preference id="pref_openNewTabNext"      name="extensions.tabmix.openNewTabNext"       type="bool"/>
       <preference id="pref_openTabNextInGroup"  name="extensions.tabmix.openTabNextInGroup"   type="int"/>
       <preference id="pref_openTabNext"         name="browser.tabs.insertAfterCurrent"        type="bool"
-                  onchange="gEventsPane.openTabNext.on_change(this)"/>
+                  data-evt-change="gEventsPane.openTabNext.on_change(this)"/>
       <preference id="pref_relatedAfterCurrent" name="browser.tabs.insertRelatedAfterCurrent" type="bool"
-                  onchange="gEventsPane.openTabNext.on_change(this)"/>
+                  data-evt-change="gEventsPane.openTabNext.on_change(this)"/>
       <preference id="pref_openTabNextInverse"  name="extensions.tabmix.openTabNextInverse"   type="bool"/>
       <preference id="pref_openDuplicateNext"   name="extensions.tabmix.openDuplicateNext"    type="bool"/>
       <preference id="pref_moveSwitchToTabNext" name="extensions.tabmix.moveSwitchToTabNext"  type="bool"/>
@@ -54,7 +54,7 @@
       <preference id="pref_midcurrent"          name="extensions.tabmix.middlecurrent" type="bool"/>
       <preference id="pref_selectTab"           name="browser.tabs.loadInBackground"
                   inverted="true" type="bool"
-                  onchange="if (typeof gMenuPane == 'object') gMenuPane.setInverseLinkLabel();"/>
+                  data-evt-change="if (typeof gMenuPane == 'object') gMenuPane.setInverseLinkLabel();"/>
       <preference id="pref_selectTabUrl"        name="extensions.tabmix.loadUrlInBackground"
                   type="bool" inverted="true"/>
       <preference id="pref_selectSyncedTabs"    name="extensions.tabmix.loadSyncedTabsInBackground"
@@ -82,11 +82,11 @@
       <preference id="pref_warnOnCloseProtected"
                   name="extensions.tabmix.protectedtabs.warnOnClose"                          type="bool"/>
       <preference id="pref_keepWindow" name="browser.tabs.closeWindowWithLastTab" type="bool"
-                  onchange="gEventsPane.disableReplaceLastTabWith();" inverted="true"/>
+                  data-evt-change="gEventsPane.disableReplaceLastTabWith();" inverted="true"/>
       <preference id="pref_keepLastTab"             name="extensions.tabmix.keepLastTab"          type="bool"
-                  onchange="gEventsPane.disableReplaceLastTabWith();"/>
+                  data-evt-change="gEventsPane.disableReplaceLastTabWith();"/>
       <preference id="pref_replaceLastTabWith"  name="extensions.tabmix.replaceLastTabWith.type"   type="int"
-                  onchange="gEventsPane.newTabUrl(this, false, true);"/>
+                  data-evt-change="gEventsPane.newTabUrl(this, false, true);"/>
       <preference id="pref_newTabUrl_1"         name="extensions.tabmix.replaceLastTabWith.newtab.url"
                   type="wstring"/>
       <preference id="pref_afterLastTabClosed"  name="extensions.tabmix.selectLocationBar.afterLastTabClosed"
@@ -109,9 +109,9 @@
       <preference id="pref_closedTabsFromClosedWindows"
                   name="browser.sessionstore.closedTabsFromClosedWindows"                     type="bool"/>
       <preference id="pref_ctrltab"             name="browser.ctrlTab.sortByRecentlyUsed"     type="bool"
-                  onchange="gEventsPane.disableShowTabList();"/>
+                  data-evt-change="gEventsPane.disableShowTabList();"/>
       <preference id="pref_ctrltab.tabPreviews" name="extensions.tabmix.lasttab.tabPreviews"  type="bool"
-                  onchange="gEventsPane.disableShowTabList();"/>
+                  data-evt-change="gEventsPane.disableShowTabList();"/>
       <preference id="pref_showTabList"         name="extensions.tabmix.lasttab.showTabList"  type="bool"/>
       <preference id="pref_respondToMouse"
                   name="extensions.tabmix.lasttab.respondToMouseInTabList"                    type="bool"/>
@@ -122,8 +122,7 @@
     </preferences>
 
     <!-- pane content -->
-    <tabbox
-            onselect="gPrefWindow.tabSelectionChanged(event);">
+    <tabbox id="eventsTabbox">
       <tabs id="events">
         <tab label="&newTabs.label;"    class="subtabs" helpTopic="Events_-_New_Tabs"/>
         <tab label="&tabOpen.label;"    class="subtabs" helpTopic="Events_-_tab_opening"/>
@@ -152,11 +151,11 @@
               <label id="newTabUrlLabel" value="&location.label.1;:" control="newTabUrl"/>
               <html:input id="newTabUrl" type="text" class="padded uri-element" flex="1"
                        style="width: 227px;"
-                       onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
-                       onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
+                       data-evt-syncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
+                       data-evt-synctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
                        placeholder="&newtab.placeholder.label;"
                        preference="pref_newTabUrl"
-                       onkeydown="gEventsPane.onNewTabKeyDown(event);"/>
+                       data-evt-keydown="gEventsPane.onNewTabKeyDown(event);"/>
             </hbox>
             <hbox class="indent" align="center">
               <label value="Address must starts with 'https://', 'http://' or 'about:'"/>
@@ -165,11 +164,11 @@
                       preference="pref_selectLocationBar"/>
             <checkbox_tmp id="openNewTabNext" label="&openTabNext.label;"
                       tooltiptext="&openTabNext.tooltip1;"
-                      onsyncfrompreference="gEventsPane.openTabNextInGroup();"
+                      data-evt-syncfrompreference="gEventsPane.openTabNextInGroup();"
                       preference="pref_openNewTabNext"/>
             <hbox align="center" class="indent">
               <checkbox_tmp id="openTabNextInGroup_control" label="When current tab is in a group:"
-                oncommand="gEventsPane.openTabNextInGroup();" observes="obs_openNewTabNext"/>
+                data-evt-command="gEventsPane.openTabNextInGroup();" observes="obs_openNewTabNext"/>
               <menulist id="openTabNextInGroup" preference="pref_openTabNextInGroup">
                 <menupopup>
                   <menuitem value="-1" label="Add at end of tabbar"/>
@@ -184,7 +183,7 @@
             <!-- Open links next to current tab -->
             <checkbox_tmp id="openTabNext" label="&openOtherTabNext.label;"
                       tooltiptext="&openTabNext.tooltip;"
-                      oncommand="gEventsPane.openTabNext.on_command(this.checked);"/>
+                      data-evt-command="gEventsPane.openTabNext.on_command(this.checked);"/>
             <checkbox_tmp class="indent" id="relatedAfterCurrent" label="&relatedAfterCurrent.label;"
                       preference="pref_relatedAfterCurrent" observes="obs_openTabNext_control"/>
             <checkbox_tmp class="indent" id="openTabNextInverse" label="&openTabNextInverse.label;"
@@ -202,10 +201,10 @@
             <hbox align="center">
               <checkbox_tmp id="chk_loadProgressively" label="&loadTabsProgressively.label; &openMoreThan.label;"
                             preference="pref_loadProgressively" control="loadProgressively"
-                            onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
-                            onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"/>
+                            data-evt-syncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
+                            data-evt-synctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"/>
               <html:input id="loadProgressively" maxlength="3" size="3" preference="pref_loadProgressively"
-                       onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
+                       data-evt-syncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
                        observes="obs_loadProgressively"
                        type="number" required="required" min="1" maxwidth="42"/>
               <label value="&tabs.label;"/>
@@ -213,11 +212,11 @@
             <hbox align="center" class="indent">
               <checkbox_tmp id="chk_restoreOnDemand" label="&restoreOnDemand.label; &openMoreThan.label;"
                             preference="pref_restoreOnDemand" control="restoreOnDemand"
-                            onsyncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
-                            onsynctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"
+                            data-evt-syncfrompreference="return gEventsPane.loadProgressively.syncToCheckBox(this);"
+                            data-evt-synctopreference="return gEventsPane.loadProgressively.syncFromCheckBox(this);"
                             observes="obs_loadProgressively"/>
               <html:input id="restoreOnDemand" maxlength="3" size="3" preference="pref_restoreOnDemand"
-                       onsyncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
+                       data-evt-syncfrompreference="return gEventsPane.loadProgressively.syncFromPref(this);"
                        type="number" required="required" min="1" maxwidth="42"/>
               <label value="&tabs.label;" observes="obs_loadProgressively"/>
             </hbox>
@@ -360,11 +359,11 @@
               <hbox class="indent" align="center">
                 <label id="newTabUrlLabel_1" value="&location.label.1;:" control="newTabUrl_1"/>
                  <html:input id="newTabUrl_1" type="text" class="padded uri-element" flex="1"
-                          onsyncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
-                          onsynctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
+                          data-evt-syncfrompreference="return gEventsPane.syncFromNewTabUrlPref(this);"
+                          data-evt-synctopreference="return gEventsPane.syncToNewTabUrlPref(this.value);"
                           placeholder="&newtab.placeholder.label;"
                           preference="pref_newTabUrl_1"
-                          onkeydown="gEventsPane.onNewTabKeyDown(event);"/>
+                          data-evt-keydown="gEventsPane.onNewTabKeyDown(event);"/>
               </hbox>
               <checkbox_tmp class="indent" align="center" id="afterLastTabClosed" label="&focusContent.label;"
                         preference="pref_afterLastTabClosed" observes="obs_replaceLastTabWith"/>
@@ -425,7 +424,7 @@
                   <label control="undoCloseCache" value="&undoCloseCache.label;" observes="obs_undoClose"/>
                   <html:input id="undoCloseCache" maxlength="3" size="3" preference="pref_undoCloseCache"
                            type="number" required="required" observes="obs_undoClose" min="0"
-                           onsynctopreference="return gPrefWindow.blockOnInstantApply(this);"/>
+                           data-evt-synctopreference="return gPrefWindow.blockOnInstantApply(this);"/>
                 </hbox>
                 <checkbox_tmp id="undoClosepos" label="&undoClosepos.label;" preference="pref_undoClosepos" observes="obs_undoClose"/>
                 <checkbox_tmp id="menuonlybutton" label="&menuonlybutton.label;" preference="pref_menuonlybutton" observes="obs_undoClose"/>
@@ -447,7 +446,7 @@
                       observes="obs_showTabList"/>
             <separator class="groove"/>
             <vbox align="start">
-              <label value="&shortcuts.slideshow;" class="indent text-link" onclick="gEventsPane.editSlideShowKey();"/>
+              <label value="&shortcuts.slideshow;" class="indent text-link" data-evt-click="gEventsPane.editSlideShowKey();"/>
             </vbox>
          </html:fieldset>
          <html:fieldset flex="1">

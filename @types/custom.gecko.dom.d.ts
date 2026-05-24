@@ -159,6 +159,7 @@ interface Node {
   className: string;
   classList: DOMTokenList;
   collapsed: boolean;
+  readonly dataset: DOMStringMap;
   fileName: string;
   getAttribute(name: string): string | null;
   getBoundingClientRect(): DOMRect;

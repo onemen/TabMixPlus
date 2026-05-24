@@ -55,15 +55,15 @@
             <html:input flex="1" focused="true" class="shortcut-edit-box" anonid="editBox"
               inherits="value,disabled=blocked" context=" "
               placeholder="&shortcuts.placeholder;"
-              onkeydown="this.shortcut.onKeyDown(event);"
-              onkeypress="this.shortcut.handleKeyEvents(event);"
-              onfocus="this.shortcut.updateFocus(true);"
-              onmousedown="event.stopPropagation(); event.preventDefault(); this.select();"
-              onchange="event.stopPropagation();"/>
+              data-evt-keydown="this.shortcut.onKeyDown(event);"
+              data-evt-keypress="this.shortcut.handleKeyEvents(event);"
+              data-evt-focus="this.shortcut.updateFocus(true);"
+              data-evt-mousedown="event.stopPropagation(); event.preventDefault(); this.select();"
+              data-evt-change="event.stopPropagation();"/>
             <image anonid="shortcut_reset" class="shortcut-image" tooltiptext="&shortcuts.reset;" _hidden="true"
-              onclick="resetKey();"/>
+              data-evt-click="resetKey();"/>
             <image anonid="disable" class="shortcut-image" tooltiptext="&shortcuts.clear;"
-              onclick="disableKey();"/>
+              data-evt-click="disableKey();"/>
           </hbox>
         </hbox>
         <vbox anonid="notificationbox" class="shortcut-notificationbox" flex="1"

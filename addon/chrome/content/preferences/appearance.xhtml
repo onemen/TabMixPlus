@@ -13,7 +13,7 @@
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
          xmlns:html="http://www.w3.org/1999/xhtml">
 
-  <prefpane id="paneAppearance" onpaneload="gAppearancePane.init();">
+  <prefpane id="paneAppearance" data-evt-paneload="gAppearancePane.init();">
 
     <!-- scripts -->
     <script type="application/javascript" src="chrome://tabmixplus/content/preferences/appearance.js"/>
@@ -34,7 +34,7 @@
                   name="extensions.tabmix.hideTabbar.showContextMenu"                           type="bool"/>
       <preference id="pref_tabBarPosition"    name="extensions.tabmix.tabBarPosition"           type="int"/>
       <preference id="pref_tabsScroll"        name="extensions.tabmix.tabBarMode"               type="int"
-                  onchange="gAppearancePane.tabsScrollChanged();"/>
+                  data-evt-change="gAppearancePane.tabsScrollChanged();"/>
       <preference id="pref_smoothScroll"      name="toolkit.scrollbox.smoothScroll"             type="bool"/>
       <preference id="pref_scrollDelay"
                   name="toolkit.scrollbox.clickToScroll.scrollDelay"                            type="int"/>
@@ -57,15 +57,15 @@
       <preference id="pref_showTabX"          name="extensions.tabmix.tabs.closeButtons.enable" type="bool"/>
       <preference id="pref_tabXLeft"          name="extensions.tabmix.tabs.closeButtons.onLeft" type="bool"/>
       <preference id="pref_tabCloseButton"    name="extensions.tabmix.tabs.closeButtons"        type="int"
-                  onchange="gAppearancePane.tabCloseButtonChanged();"/>
+                  data-evt-change="gAppearancePane.tabCloseButtonChanged();"/>
       <preference id="pref_tabXDelay"         name="extensions.tabmix.tabs.closeButtons.delay"  type="int"/>
       <preference id="pref_tabClipWidth"      name="browser.tabs.tabClipWidth"                  type="int"/>
       <preference id="pref_minWidth"          name="browser.tabs.tabMinWidth"                   type="int"/>
       <preference id="pref_maxWidth"          name="browser.tabs.tabMaxWidth"                   type="int"/>
       <preference id="pref_flexTabs"          name="extensions.tabmix.flexTabs"                 type="bool"
-                  onchange="gAppearancePane.setTabCloseButtonUI();"/>
+                  data-evt-change="gAppearancePane.setTabCloseButtonUI();"/>
       <preference id="pref_flexTabs_fitRow"   name="extensions.tabmix.flexTabs_fitRow"          type="bool"
-                  onchange="gAppearancePane.setShrinkLastRow();"/>
+                  data-evt-change="gAppearancePane.setShrinkLastRow();"/>
       <preference id="pref_flexTabs_shrinkLastRow"
                                               name="extensions.tabmix.flexTabs_shrinkLastRow"   type="bool"/>
       <preference id="pref_bookastitle"       name="extensions.tabmix.titlefrombookmark"        type="bool"/>
@@ -74,8 +74,7 @@
     </preferences>
 
     <!-- pane content -->
-    <tabbox
-            onselect="gPrefWindow.tabSelectionChanged(event);">
+    <tabbox id="appearanceTabbox">
       <tabs id="appearance">
         <tab label="&tabBarAppearance.label;" class="subtabs" helpTopic="Display_-_Tab_bar"/>
         <tab label="&tabAppearance.label;" class="subtabs" helpTopic="Display_-_Tab"/>
@@ -98,7 +97,7 @@
                   <menuitem value="2" id="newTabButton.position.afterlast" label="&newTabButton.position.afterlast.label;"/>
                 </menupopup>
               </menulist>
-              <button id="customizeToolbar"  label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"
+              <button id="customizeToolbar"  label="&toolbar.button.label;…" data-evt-command="gAppearancePane.tabmixCustomizeToolbar();"
                       tooltiptext="&dragNewTabButton.tooltip;"/>
             </hbox>
             <!-- tab-close-button on tabbar -->
@@ -206,9 +205,9 @@
               <vbox flex="1" align="end">
                 <hbox>
                   <button class="content-help"
-                          oncommand="openHelp('display-tab#customize_styles');"/>
+                          data-evt-command="openHelp('display-tab#customize_styles');"/>
                   <button id="advancedAppearance" label="&setstyles.label;…"
-                          oncommand="gAppearancePane.openAdvanceAppearance();"/>
+                          data-evt-command="gAppearancePane.openAdvanceAppearance();"/>
                 </hbox>
               </vbox>
             </hbox>
@@ -266,10 +265,10 @@
             <hbox id="width-box" align="center">
               <label value="&minWidth.label;" style="margin-inline-start: 0;"/>
               <html:input id="minWidth" size="4" maxlength="3" preference="pref_minWidth" type="number" required="required"
-                       onsynctopreference="return gAppearancePane.userChangedWidth(this);" min="40"/>
+                       data-evt-synctopreference="return gAppearancePane.userChangedWidth(this);" min="40"/>
               <label value="&widthTo.label;"/>
               <html:input id="maxWidth" size="4" maxlength="4" preference="pref_maxWidth" type="number" required="required"
-                       onsynctopreference="return gAppearancePane.userChangedWidth(this);" min="40"/>
+                       data-evt-synctopreference="return gAppearancePane.userChangedWidth(this);" min="40"/>
               <label value="&widthPixels.label;"/>
             </hbox>
             <checkbox_tmp id="flexTabs" label="&flexTabs.label;"  preference="pref_flexTabs"/>
@@ -282,7 +281,7 @@
           <html:fieldset flex="1" class="grid">
             <hbox align="start">
               <description class="font-bold" style="width: &toolbar.description.width;">&toolbar.description;</description>
-              <button label="&toolbar.button.label;…" oncommand="gAppearancePane.tabmixCustomizeToolbar();"/>
+              <button label="&toolbar.button.label;…" data-evt-command="gAppearancePane.tabmixCustomizeToolbar();"/>
             </hbox>
             <spacer flex="1"/>
             <html:fieldset id="onToolbar">

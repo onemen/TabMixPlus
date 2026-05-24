@@ -16,25 +16,24 @@
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html="http://www.w3.org/1999/xhtml"
         title="&filetype.options;"
-        onload="Init()"
         persist="screenX screenY">
 <dialog buttons="accept,cancel,extra1">
    <script type="application/javascript" src="chrome://tabmixplus/content/utils.js"/>
    <script type="application/javascript" src="chrome://tabmixplus/content/preferences/subdialogs/pref-filetype.js"/>
 
    <html:fieldset class="filetype-content">
-        <richlistbox id="filetypeList" rows="10" style="height: 18em;" seltype="single" prefstring="extensions.tabmix.filetype" onselect="Select();"/>
+        <richlistbox id="filetypeList" rows="10" style="height: 18em;" seltype="single" prefstring="extensions.tabmix.filetype" data-evt-select="Select();"/>
         <hbox flex="1" align="center">
          <label value="&filetype.new;"/>
-         <html:input id="filetypeEntry" type="text" oninput="Input();"/>
+         <html:input id="filetypeEntry" type="text" data-evt-input="Input();"/>
         </hbox>
         <hbox flex="1" pack="center">
-         <button id="filetypeAdd" label="&filetype.add;" disabled="true" oncommand="Add();"/>
-         <button id="filetypeEdit" label="&filetype.edit;" disabled="true" oncommand="Mod();"/>
-         <button id="filetypeDelete" label="&filetype.delete;" oncommand="Del();"/>
+         <button id="filetypeAdd" label="&filetype.add;" disabled="true" data-command="Add"/>
+         <button id="filetypeEdit" label="&filetype.edit;" disabled="true" data-command="Mod"/>
+         <button id="filetypeDelete" label="&filetype.delete;" data-command="Del"/>
         </hbox>
         <hbox>
-         <button id="filetypeRestore" label="&settings.default;" oncommand="Restore();"/>
+         <button id="filetypeRestore" label="&settings.default;" data-command="Restore"/>
         </hbox>
    </html:fieldset>
    <separator class="filetype-separator"/>

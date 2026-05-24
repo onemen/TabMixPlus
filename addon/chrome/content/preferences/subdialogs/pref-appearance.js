@@ -61,3 +61,14 @@ const tabstyles = {
     dialog.setAttribute("hide-RGB", wasShow);
   },
 };
+
+window.addEventListener("load", () => {
+  tabstyles.init();
+
+  // add event listener to data-evt-command
+  const {createHandleOnEvent} = ChromeUtils.importESModule(
+    "chrome://tabmix-resource/content/HandleOnEvent.sys.mjs"
+  );
+  const {discoverEventTypes} = createHandleOnEvent(window);
+  discoverEventTypes();
+});

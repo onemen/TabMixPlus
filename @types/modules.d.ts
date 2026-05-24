@@ -177,6 +177,7 @@ interface TabmixKnownModules {
   "chrome://tabmix-resource/content/DynamicRules.sys.mjs": {DynamicRules: DynamicRulesModule.DynamicRules};
   "chrome://tabmix-resource/content/extensions/CompatibilityCheck.sys.mjs": {CompatibilityCheck: typeof CompatibilityCheckModule.CompatibilityCheck};
   "chrome://tabmix-resource/content/extensions/AddonManager.sys.mjs": {TabmixAddonManager: {init: () => void}};
+  "chrome://tabmix-resource/content/HandleOnEvent.sys.mjs": {createHandleOnEvent: HandleOnEventModule.CreateHandleOnEvent};
   "chrome://tabmix-resource/content/log.sys.mjs": {console: LogModule.Console};
   "chrome://tabmix-resource/content/Places.sys.mjs": {TabmixPlacesUtils: PlacesModule.PlacesUtils};
   "chrome://tabmix-resource/content/TabContextConfig.sys.mjs": {TabContextConfig: TabContextConfigModule.Exports};
@@ -1132,6 +1133,12 @@ declare namespace GlobalAccessModule {
 
   type GetGlobal = typeof getGlobal;
   type GlobalKey = "ownerGlobal" | "documentGlobal";
+}
+
+declare namespace HandleOnEventModule {
+  type GetFunction = <T>(element: T, eventName: string, eventCode: string) => FunctionWithAny;
+  type HandleOnEvent = <T = Element | EventTarget>(event: Event | null, eventName: string, options?: {attrName?: string; element?: T}) => any;
+  type CreateHandleOnEvent = (window: Window) => {getFunction: GetFunction; handleOnEvent: HandleOnEvent; discoverEventTypes: () => void};
 }
 
 // for LinkNodeUtils.sys.mjs and content.js

@@ -231,7 +231,7 @@ var gPrefWindow = {
     // widthPrefs handled in gAppearancePane.changeTabsWidth
     const changes = [...this.changes].filter(c => !this.widthPrefs.includes(c));
     // in instantApply all the changes in this.changes are blocked changes
-    // with: onsynctopreference="return gPrefWindow.blockOnInstantApply(this);"/>
+    // with: data-evt-synctopreference="return gPrefWindow.blockOnInstantApply(this);"/>
     for (let preference of changes) {
       this.changes.delete(preference);
       const element = document.querySelector(`[preference=${preference.id}]`);
@@ -381,7 +381,7 @@ var gPrefWindow = {
 
   tabSelectionChanged(event) {
     var tabs = event.target?.tabbox?.tabs;
-    if (tabs?.localName != "tabs" || !tabs.tabbox.hasAttribute("onselect")) {
+    if (tabs?.localName != "tabs" || tabs.classList.contains("tabs-hidden")) {
       return;
     }
 
@@ -620,7 +620,8 @@ function updateInstantApply() {
 }
 
 /** @type {typeof Globals.toggleInstantApply} */
-function toggleInstantApply(item) {
+function toggleInstantApply(event) {
+  const item = event.target;
   const preference = $Pref("pref_instantApply");
   if (preference._running) return;
   const checked = item.localName === "menuitem" ? item.hasAttribute("checked") : item.value;
@@ -916,3 +917,5 @@ function closeAll() {
     window.close();
   }
 }
+
+window.addEventListener("load", setDialog);

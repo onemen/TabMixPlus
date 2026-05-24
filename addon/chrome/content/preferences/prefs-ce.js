@@ -1,5 +1,3 @@
-// / <reference path="../../../../@types/prefs_ce.d.ts" />
-
 /* exported PrefWindow */
 /* eslint no-var: 2, prefer-const: 2, no-new-func: 0, class-methods-use-this: 0 */
 "use strict";
@@ -8,6 +6,11 @@ const {AppConstants} = ChromeUtils.importESModule("resource://gre/modules/AppCon
 const {Overlays} = ChromeUtils.importESModule(
   "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs"
 );
+const {createHandleOnEvent} = ChromeUtils.importESModule(
+  "chrome://tabmix-resource/content/HandleOnEvent.sys.mjs"
+);
+
+const {getFunction, handleOnEvent, discoverEventTypes} = createHandleOnEvent(window);
 
 /** @type {BrowserDOMWindowModule.Lazy} */ // @ts-ignore
 const localLazy = {};
@@ -31,19 +34,6 @@ if (TabClass) {
       return this.parentNode;
     },
   });
-}
-
-/** @type {GetFunction} */
-function getFunction(element, eventType, eventCode) {
-  // @ts-ignore
-  let fn = element[eventType];
-  if (!fn) {
-    const code = `function ${eventType}(event) {${eventCode}}`;
-    fn = Tabmix.makeCode(code, null, "", Tabmix._sandbox);
-    // @ts-ignore
-    element[eventType] = fn;
-  }
-  return fn;
 }
 
 const PREFS = Services.prefs;
@@ -505,22 +495,14 @@ class Preference extends MozXULElement {
       return;
     }
 
-    let rv;
-    const onsyncfrompreference =
-      aElement.hasAttribute("onsyncfrompreference") &&
-      aElement.getAttribute("onsyncfrompreference");
-    if (onsyncfrompreference) {
-      // Value changed, synthesize an event
+    let val;
+    if ("evtSyncfrompreference" in aElement.dataset) {
       try {
-        const f = getFunction(aElement, "syncfrompreference", onsyncfrompreference);
-        const event = document.createEvent("Events");
-        event.initEvent("syncfrompreference", true, true);
-        rv = f.call(aElement, event);
+        val = handleOnEvent(null, "syncfrompreference", {element: aElement});
       } catch (e) {
         console.error(e);
       }
     }
-    let val = rv;
     if (val === undefined) {
       val = this.instantApply ? this.valueFromPreferences : this.value;
     }
@@ -565,15 +547,9 @@ class Preference extends MozXULElement {
 
   /** @type {PreferenceClass["getElementValue"]} */
   getElementValue(aElement) {
-    const onsynctopreference =
-      aElement.hasAttribute("onsynctopreference") && aElement.getAttribute("onsynctopreference");
-    if (onsynctopreference) {
-      // Value changed, synthesize an event
+    if ("evtSynctopreference" in aElement.dataset) {
       try {
-        const f = getFunction(aElement, "synctopreference", onsynctopreference);
-        const event = document.createEvent("Events");
-        event.initEvent("synctopreference", true, true);
-        const rv = f.call(aElement, event);
+        const rv = handleOnEvent(null, "synctopreference", {element: aElement});
         if (rv !== undefined) {
           return rv;
         }
@@ -672,11 +648,14 @@ class PrefPane extends MozXULElement {
       this.userChangedValue(event.target);
     });
 
-    this.addEventListener("select", (/** @type {PaneEvent} */ event) => {
-      // This "select" event handler tracks changes made to colorpicker
-      // preferences by the user in this window.
+    this.addEventListener("select", (/** @type {TabSelectEvent} */ event) => {
+      // This "select" event handler tracks changes made the user in this window
       if (event.target.localName == "colorpicker") {
         this.userChangedValue(event.target);
+      } else if (event.target.parentNode?.id?.endsWith("Tabbox")) {
+        gPrefWindow.tabSelectionChanged(event);
+      } else if (event.target.id === "mouseclick_tabpanels") {
+        gMousePane.tabSelectionChanged(event);
       }
     });
 
@@ -1133,12 +1112,22 @@ class PrefWindow extends MozXULElement {
       return true;
     });
 
+    // --- Pane-switching "command" handler (capture phase) ---
+    // This listener must run before any other "command" logic.
+    // It detects <button pane="..."> clicks and switches panes immediately.
+    // We register it in capture mode so it fires before the generic data-ev-command
+    // command that we listen to by calling discoverEventTypes.
     this.addEventListener("command", (/** @type {WindowEvent} */ event) => {
-      const paneId = event.originalTarget.getAttribute("pane");
+      const item = event.target;
+      const paneId = item.getAttribute("pane");
       if (paneId) {
         const pane = $Pane(paneId);
         this.showPane(pane);
       }
+    });
+
+    this.addEventListener("paneload", () => {
+      discoverEventTypes();
     });
 
     this.addEventListener(
@@ -1212,7 +1201,7 @@ class PrefWindow extends MozXULElement {
           </deck>
         </hbox>
         <hbox class="prefWindow-dlgbuttons donate-button-container">
-          <button class="donate-button dialog-button" onclick="donate();"/>
+          <button class="donate-button dialog-button" data-evt-click="donate();"/>
         </hbox>
         <hbox anonid="dlg-buttons" class="prefWindow-dlgbuttons" pack="end">` +
           this.osButtons +
@@ -1296,11 +1285,11 @@ class PrefWindow extends MozXULElement {
       "dialogdisclosure",
     ];
     for (const type of eventTypes) {
-      const command = this.hasAttribute(`on${type}`) && this.getAttribute(`on${type}`);
+      const attrName = "data-evt-" + type.toLowerCase();
+      const command = this.getAttribute(attrName);
       if (command) {
-        const code = `function ${type}(event) {${command}}`;
-        const f = Tabmix.makeCode(code, null, "", Tabmix._sandbox);
-        this.addEventListener(type, event => f.call(this, event));
+        const fn = getFunction(this, type, command);
+        this.addEventListener(type, event => fn.call(this, event));
       }
     }
 
@@ -1830,15 +1819,13 @@ class PrefWindow extends MozXULElement {
 
   /** @type {PrefWindowClass["_fireEvent"]} */
   _fireEvent(aEventName, aTarget) {
-    // Panel loaded, synthesize a load event.
     try {
       const event = document.createEvent("Events");
       event.initEvent(aEventName, true, true);
       let cancel = !aTarget.dispatchEvent(event);
-      const eventType = "on" + aEventName;
-      if (aTarget.hasAttribute(eventType)) {
-        const fn = getFunction(aTarget, aEventName, aTarget.getAttribute(eventType) ?? "");
-        const rv = fn.call(aTarget, event);
+      const attrName = "data-evt-" + aEventName.toLowerCase();
+      if (aTarget.hasAttribute(attrName)) {
+        const rv = handleOnEvent(event, aEventName, {element: aTarget});
         if (!rv) {
           cancel = true;
         }

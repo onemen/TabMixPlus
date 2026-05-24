@@ -9,7 +9,7 @@
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
          xmlns:html="http://www.w3.org/1999/xhtml">
 
-  <prefpane id="paneMouse" onpaneload="gMousePane.init();">
+   <prefpane id="paneMouse" data-evt-paneload="gMousePane.init();">
     <!-- scripts -->
     <script type="application/javascript" src="chrome://tabmixplus/content/preferences/mouse.js"/>
 
@@ -46,14 +46,13 @@
       <preference id="pref_altClickTabbar"    name="extensions.tabmix.altClickTabbar"     type="int"/>
       <preference id="pref_click_dragwindow"       name="extensions.tabmix.tabbar.click_dragwindow"
                   type="bool" inverted="true"
-                  onchange="gMousePane.updateDblClickTabbar(this);"/>
+                  data-evt-change="gMousePane.updateDblClickTabbar(this);"/>
       <preference id="pref_dblclick_changesize"    name="extensions.tabmix.tabbar.dblclick_changesize"
                   type="bool" inverted="true"/>
     </preferences>
 
     <!-- pane content -->
-    <tabbox
-            onselect="gPrefWindow.tabSelectionChanged(event);">
+    <tabbox id="mouseTabbox">
       <tabs id="mouse">
         <tab label="&mouseGesture.label;" class="subtabs" helpTopic="Mouse_-_Mouse_Gestures"/>
         <tab label="&mouseClick.label;" class="subtabs" helpTopic="Mouse_-_Mouse_Clicking"/>
@@ -91,8 +90,8 @@
                <checkbox_tmp id="enableTabsScroll" label="&tabbarscrolling.caption;"
                              preference="pref_tabbarscrolling"
                              control="tabbarscrolling"
-                             onsyncfrompreference="return gPrefWindow.syncfrompreference(this);"
-                             onsynctopreference="return gPrefWindow.synctopreference(this, 1);"/>
+                             data-evt-syncfrompreference="return gPrefWindow.syncfrompreference(this);"
+                             data-evt-synctopreference="return gPrefWindow.synctopreference(this, 1);"/>
             </html:legend>
             <separator class="thin"/>
             <label value="&tabbarscrolling.holdShift.label;" observes="obs_tabbarscrolling"/>
@@ -111,7 +110,7 @@
               <label value="Scroll by" observes="obs_useScrollByTabs"/>
               <html:input id="tabFlipDelay" size="2" maxlength="2" preference="pref_scrollByTabs" observes="obs_useScrollByTabs"
                           type="number" required="required" min="1" max="6"
-                          onsyncfrompreference="this.nextSibling.value=this.value==='1'?'tab':'tabs'"/>
+                          data-evt-syncfrompreference="this.nextSibling.value=this.value==='1'?'tab':'tabs'"/>
               <label value="tab(s)" observes="obs_useScrollByTabs"/>
             </hbox>
           </html:fieldset>
@@ -119,8 +118,7 @@
         <tabpanel class="mouseclick-panel" align="start">
           <label value="&clicktab.label;" class="bold-label"/>
           <spacer style="height: 1em;"/>
-          <tabbox id="mouseclick_tabbox" class="groupbox-tabbox" flex="0"
-                  onselect="gMousePane.tabSelectionChanged(event);">
+          <tabbox id="mouseclick_tabbox" class="groupbox-tabbox" flex="0">
             <tabs id="tabclick">
               <tab label="&double.label;" linkedpanel="pl" class="subtabs"/>
               <tab label="&middle.label;" linkedpanel="pl" class="subtabs"/>
@@ -128,14 +126,13 @@
               <tab label="&shift.label;"  linkedpanel="pl" class="subtabs"/>
               <tab label="&alt.label;"    linkedpanel="pl" class="subtabs"/>
             </tabs>
-            <tabpanels class="groupbox-panels tabclick" flex="0" selectedIndex="0"
-                  onselect="gMousePane.panelSelectionChanged(event);">
+            <tabpanels id="mouseclick_tabpanels" class="groupbox-panels tabclick" flex="0" selectedIndex="0">
               <tabpanel id="_tabpanel">
                 <spacer style="height: 8px;"/>
                 <!-- click on a tab -->
-                <checkbox_tmp label="&ontab.label;" control="ClickTab" align="center" flex="1" oncommand="gMousePane.resetPreference(this);"/>
-                <menulist id="ClickTab" class="indent" onsyncfrompreference="gMousePane.setCheckedState(this);" sizetopopup="pref">
-                  <menupopup class="clicktab-popup" onpopupshown="gMousePane.ensureElementIsVisible(this);">
+                <checkbox_tmp label="&ontab.label;" control="ClickTab" align="center" flex="1" data-evt-command="gMousePane.resetPreference(this);"/>
+                <menulist id="ClickTab" class="indent" data-evt-syncfrompreference="gMousePane.setCheckedState(this);" sizetopopup="pref">
+                  <menupopup class="clicktab-popup" data-evt-popupshown="gMousePane.ensureElementIsVisible(this);">
                     <menuitem value="-1" label="&clicktab.default;" hidden="true"/>
                     <menuitem value="0" label="&clicktab.nothing;"/>
                       <menuseparator/>
@@ -181,9 +178,9 @@
                 </menulist>
                 <spacer style="height: 16px;"/>
                 <!-- click on a tabbar -->
-                <checkbox_tmp label="&ontabbar.label;" control="ClickTabbar" oncommand="gMousePane.resetPreference(this);"/>
+                <checkbox_tmp label="&ontabbar.label;" control="ClickTabbar" data-evt-command="gMousePane.resetPreference(this);"/>
                 <!-- we will clone the menupopup from ClickTab on startup -->
-                <menulist id="ClickTabbar" class="indent" onsyncfrompreference="gMousePane.setCheckedState(this);" sizetopopup="pref"/>
+                <menulist id="ClickTabbar" class="indent" data-evt-syncfrompreference="gMousePane.setCheckedState(this);" sizetopopup="pref"/>
                 <!-- place holder to set tabbox width -->
                 <checkbox_tmp label="&ontabbar.dblClick.label;" style="visibility: hidden;"/>
               </tabpanel>

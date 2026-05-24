@@ -13,7 +13,7 @@
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
          xmlns:html="http://www.w3.org/1999/xhtml">
 
-  <prefpane id="paneMenu" onpaneload="gMenuPane.init();">
+  <prefpane id="paneMenu" data-evt-paneload="gMenuPane.init();">
     <!-- scripts -->
     <script type="application/javascript" src="chrome://tabmixplus/content/preferences/menu.js"/>
     <script type="application/javascript" src="chrome://tabmixplus/content/preferences/shortcuts.js"/>
@@ -26,11 +26,11 @@
                   name="extensions.tabmix.showTabContextMenuOnTabbar"                       type="bool"/>
       <preference id="pref_tabContextMenu_menuOrder"
                   name="extensions.tabmix.tabContextMenu.menuOrder"                         type="int"
-                  onchange="gMenuPane.sortMenuItems(this);"/>
+                  data-evt-change="gMenuPane.sortMenuItems(this);"/>
       <preference id="pref_showLinkHere"       name="extensions.tabmix.openLinkHere"        type="bool"/>
       <preference id="pref_selectTab1"         name="browser.tabs.loadInBackground"
                                                                            inverted="true"  type="bool"
-                  onchange="if (typeof gEventsPane == 'undefined') gMenuPane.setInverseLinkLabel();"/>
+                  data-evt-change="if (typeof gEventsPane == 'undefined') gMenuPane.setInverseLinkLabel();"/>
       <preference id="pref_showInverseLink"    name="extensions.tabmix.openInverseLink"     type="bool"/>
       <preference id="pref_openAllLinks"       name="extensions.tabmix.openAllLinks"        type="bool"/>
       <preference id="pref_linkWithHist"       name="extensions.tabmix.linkWithHistory"     type="bool"/>
@@ -53,14 +53,13 @@
       <preference id="pref_optionsToolsMenu"   name="extensions.tabmix.optionsToolMenu"     type="bool"/>
       <preference id="pref_closedWinToolsMenu" name="extensions.tabmix.closedWinToolsMenu"  type="bool"/>
       <preference id="pref_shortcuts"          name="extensions.tabmix.shortcuts"           type="string"
-                  onchange="gMenuPane.initializeShortcuts();"/>
+                  data-evt-change="gMenuPane.initializeShortcuts();"/>
       <preference id="pref_slideshow"          name="extensions.tabmix.slideDelay"          type="int"/>
    </preferences>
 
 
     <!-- pane content -->
-    <tabbox
-            onselect="gPrefWindow.tabSelectionChanged(event);">
+    <tabbox id="menuTabbox">
       <tabs id="menu">
         <tab label="&context.tab;" class="subtabs" helpTopic="Menu_-_Tab_Context_Menu"/>
         <tab label="&context.main;" class="subtabs" helpTopic="Menu_-_Main_Context_Menu"/>
@@ -151,7 +150,7 @@
         <tabpanel id="shortcuts-panel" hide-shortcut-warning="true"
               hide-unused-shortcuts="false" usedKeys="false"
               persist="hide-shortcut-warning hide-unused-shortcuts"
-              onmousedown="if (event.originalTarget.className == 'shortcut-image') return;
+              data-evt-mousedown="if (event.originalTarget.className == 'shortcut-image') return;
                   var shortcut = this.shortcut || null;
                   if (shortcut) {shortcut.updateFocus(false); this.shortcut = null;}"
         >
@@ -160,7 +159,7 @@
             <spacer flex="1"/>
             <label value="&shortcuts.hideUnused;" show="&shortcuts.showAll;" hide="&shortcuts.hideUnused;"
                    class="text-link" id="hide-unused-shortcuts" persist="value"
-                   onmousedown="gMenuPane.toggleLinkLabel(this);"/>
+                   data-evt-mousedown="gMenuPane.toggleLinkLabel(this);"/>
           </hbox>
           <hbox class="global-warning shortcut-warning-container" align="center">
             <vbox>
@@ -171,7 +170,7 @@
             </description>
             <label value="&shortcuts.showDetails;" show="&shortcuts.showDetails;" hide="&shortcuts.hideDetails;"
                    class="text-link" id="hide-shortcut-warning" persist="value"
-                   onmousedown="gMenuPane.toggleLinkLabel(this);"/>
+                   data-evt-mousedown="gMenuPane.toggleLinkLabel(this);"/>
           </hbox>
           <html:fieldset id="shortcut-group" class="grid" style="overflow: auto; height:18em;" flex="1">
             <shortcut id="openOptions"     label="Open Tab Mix Plus Options"/>

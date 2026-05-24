@@ -171,3 +171,13 @@ function SelectItemAt(index, focus) {
 function setButtonDisable(button, set) {
   button.toggleAttribute("disabled", Boolean(set));
 }
+
+window.addEventListener("load", Init);
+window.addEventListener("select", Select);
+window.addEventListener("input", Input);
+window.addEventListener("command", (/** @type {WindowEvent} */ event) => {
+  const command = event.target.dataset.command;
+  if (command) {
+    window[command]();
+  }
+});
