@@ -51,7 +51,6 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
   let {event, url: passedURL = null} = eventOrObject ?? {};
 
   let werePassedURL = Boolean(passedURL);
-  let searchClipboard = window.gMiddleClickNewTabUsesPasteboard && event?.button == 1;
   var newTabUrl = BROWSER_NEW_TAB_URL;
   var selectedTab = gBrowser.selectedTab;
   switch (newTabContent) {
@@ -140,6 +139,11 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
       Tabmix.prefs.getBoolPref("openNewTabNext") &&
       (!tabGroup || inGroupPref !== 2));
 
+  let searchClipboard =
+    event?.button == 1 &&
+    (Tabmix.isVersion(1510) ? Services.prefs.getBoolPref("middlemouse.paste") : true) &&
+    gMiddleClickNewTabUsesPasteboard;
+
   let where = "tab";
   // Let accel-click and middle-click on the new tab button toggle openTabNext preference
   // see bug 528005
@@ -159,8 +163,10 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
 
       /* falls through */
       case "tab":
-        openTabNext = !openTabNext;
-        inGroupPref = inGroupPref < 1 ? 2 : 0;
+        if (Tabmix.callerName() !== "handleNewTabMiddleClick" || !searchClipboard) {
+          openTabNext = !openTabNext;
+          inGroupPref = inGroupPref < 1 ? 2 : 0;
+        }
         break;
       case "current":
         where = "tab";
@@ -268,7 +274,9 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
         }
 
         gBrowser.selectedBrowser.focus();
-        Tabmix.clearUrlBarIfNeeded(newTab, url, false, replaceLastTab);
+        if (!searchClipboard) {
+          Tabmix.clearUrlBarIfNeeded(newTab, url, false, replaceLastTab);
+        }
       }),
     },
     "browser-open-newtab-start"

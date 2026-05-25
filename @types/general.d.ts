@@ -1159,6 +1159,7 @@ declare var gClickAndHoldListenersOnElement: Record<string, unknown>;
 declare var gContextMenu: MockedGeckoTypes.gContextMenu;
 declare var gFissionBrowser: boolean;
 declare var gNavigatorBundle: gNavigatorBundle;
+declare var gMiddleClickNewTabUsesPasteboard: boolean;
 declare var gTabsPanel: MockedGeckoTypes.gTabsPanel;
 declare var gURLBar: gURLBar;
 declare var lazy: Record<string, unknown>;
