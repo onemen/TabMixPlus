@@ -238,11 +238,10 @@ PlacesUtilsInternal = {
         `let browserWindow = getBrowserWindow(aWindow);
       if (browserWindow && typeof aWindow.TMP_Places == "object") {
         let TMP_Places = aWindow.TMP_Places;
-        if (TMP_Event)
-          aWhere = TMP_Places.isBookmarklet(aNode.uri)
-            ? "current"
-            : TMP_Places.fixWhereToOpen(TMP_Event, aWhere);
-        else if (aWhere == "current" && !TMP_Places.isBookmarklet(aNode.uri)) {
+        // Don't modify bookmarklets - they should execute with their natural behavior
+        if (TMP_Event && !TMP_Places.isBookmarklet(aNode.uri)) {
+          aWhere = TMP_Places.fixWhereToOpen(TMP_Event, aWhere);
+        } else if (aWhere == "current" && !TMP_Places.isBookmarklet(aNode.uri)) {
           if (!browserWindow.Tabmix.callerTrace("PC_doCommand")) {
             aWhere = TMP_Places.fixWhereToOpen(null, aWhere);
           }
