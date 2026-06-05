@@ -111,8 +111,8 @@ export const SyncedTabs = {
         let openInTab = doc.getElementById(`${where}InTab`);
         let pref = "extensions.tabmix.opentabfor.syncedTabs";
         window.TMP_Places.contextMenu.update(
-          // @ts-expect-error
           open,
+          // @ts-expect-error
           openInWindow,
           openInPrivateWindow,
           openInTab,

@@ -204,8 +204,8 @@ var TMP_Places = {
     return aWhere;
   },
 
-  getPrefByDocumentURI(aWindow) {
-    switch (aWindow.document.documentURI) {
+  getPrefByDocumentURI(aWindow, uri) {
+    switch (uri || aWindow?.document.documentURI) {
       case "chrome://browser/content/places/places.xhtml": {
         let historyId = PlacesUtils.virtualHistoryGuid;
         let node = aWindow.PlacesOrganizer._places.selectedNode;
@@ -218,7 +218,10 @@ var TMP_Places = {
 
       /* falls through */
       case "chrome://browser/content/places/historySidebar.xhtml":
+      case "chrome://browser/content/sidebar/sidebar-history.html":
         return this.prefHistory;
+      case "chrome://browser/content/sidebar/sidebar-bookmarks.html":
+        return this.prefBookmark;
       case AppConstants.BROWSER_CHROME_URL:
       case "chrome://browser/content/places/bookmarksSidebar.xhtml":
 
@@ -960,13 +963,31 @@ var TMP_Places = {
     toggleEventListener(enable) {
       const eventListener = enable ? "addEventListener" : "removeEventListener";
       window[eventListener]("unload", this, false);
-      document.getElementById("placesContext")[eventListener]("popupshowing", this, false);
+      // document.getElementById("placesContext")[eventListener]("popupshowing", this, false);
+      const placesContext = document.getElementById("placesContext");
+      if (placesContext) {
+        placesContext[eventListener]("popupshowing", this, false);
+      } else {
+        // new sidebar use separated context menu for history and bookmarks
+        // sidebar-history-context-menu
+        // sidebar-bookmarks-context-menu
+        const isSidebar = window.location.href.startsWith(
+          "chrome://browser/content/sidebar/sidebar"
+        );
+        const top = window.browsingContext.topChromeWindow;
+        const mainPopupSet = top?.document.getElementById("mainPopupSet");
+        if (isSidebar && mainPopupSet) {
+          mainPopupSet[eventListener]("popupshowing", this, false);
+        } else {
+          console.log("Tabmix Error: unknown sidebar");
+        }
+      }
     },
 
     handleEvent(aEvent) {
       switch (aEvent.type) {
         case "popupshowing":
-          this.buildContextMenu();
+          this.buildContextMenu(aEvent);
           break;
         case "unload":
           this.toggleEventListener(false);
@@ -974,18 +995,59 @@ var TMP_Places = {
       }
     },
 
-    buildContextMenu: function TMP_PC_buildContextMenu() {
-      var _open = document.getElementById("placesContext_open");
-      var _openInWindow = document.getElementById("placesContext_open:newwindow");
-      var _openInPrivateWindow = document.getElementById("placesContext_open:newprivatewindow") || {
+    // Map from context menu id → item ids
+    CONTEXT_MENU_MAP: {
+      "placesContext": {
+        open: "placesContext_open",
+        openInWindow: "placesContext_open:newwindow",
+        openInPrivateWindow: "placesContext_open:newprivatewindow",
+        openInTab: "placesContext_open:newtab",
+      },
+
+      "sidebar-bookmarks-context-menu": {
+        open: "",
+        openInWindow: "sidebar-bookmarks-context-open-in-window",
+        openInPrivateWindow: "sidebar-bookmarks-context-open-in-private-window",
+        openInTab: "sidebar-bookmarks-context-open-in-tab",
+      },
+
+      "sidebar-history-context-menu": {
+        open: "",
+        openInWindow: "sidebar-history-context-open-in-window",
+        openInPrivateWindow: "sidebar-history-context-open-in-private-window",
+        openInTab: "sidebar-history-context-open-in-tab",
+      },
+    },
+
+    buildContextMenu(event) {
+      const popup = event.target;
+      if (!popup) {
+        return;
+      }
+
+      const map = this.CONTEXT_MENU_MAP[popup.id ?? ""];
+      if (!map) {
+        return;
+      }
+
+      /** @type {(id: string) => HTMLElement} */ // @ts-expect-error - all item exist
+      const get =
+        popup.id === "placesContext" ?
+          id => popup.ownerDocument.getElementById(id)
+        : id => popup.querySelector("#" + id);
+
+      const open = map.open ? get(map.open) : null;
+      const openInWindow = get(map.openInWindow);
+      const openInPrivateWindow = get(map.openInPrivateWindow) || {
         hidden: true,
       };
-      var _openInTab = document.getElementById("placesContext_open:newtab");
+      const openInTab = get(map.openInTab);
+
       this.update(
-        _open,
-        _openInWindow,
-        _openInPrivateWindow,
-        _openInTab,
+        open,
+        openInWindow,
+        openInPrivateWindow,
+        openInTab,
         TMP_Places.getPrefByDocumentURI(window)
       );
     },
@@ -1000,7 +1062,7 @@ var TMP_Places = {
       pref
     ) {
       // if all 4 is hidden... probably "Open all in Tabs" is visible
-      if (open.hidden && openInWindow.hidden && openInPrivateWindow.hidden && openInTab.hidden) {
+      if (open?.hidden && openInWindow.hidden && openInPrivateWindow.hidden && openInTab.hidden) {
         return;
       }
 
@@ -1019,15 +1081,17 @@ var TMP_Places = {
 
         Tabmix.setItem(openInTab, "default", where.inNew ? "true" : null);
 
-        if (open.hidden != where.lock) {
-          open.hidden = where.lock;
-        }
+        if (open) {
+          if (open.hidden != where.lock) {
+            open.hidden = where.lock;
+          }
 
-        if (!open.hidden) {
-          Tabmix.setItem(open, "default", !where.inNew ? "true" : null);
+          if (!open.hidden) {
+            Tabmix.setItem(open, "default", !where.inNew ? "true" : null);
+          }
         }
       } else {
-        open.hidden = true;
+        if (open) open.hidden = true;
         openInTab.hidden = true;
         openInWindow.hidden = false;
         openInWindow.setAttribute("default", true);
@@ -1189,6 +1253,18 @@ Tabmix.onContentLoaded = {
         $&`
       )
       ._replace('return "window";', 'return TabmixSvc.getSingleWindowMode() ? "tab" : "window";')
+      ._replace(
+        'return "current";',
+        `if (e) {
+          const win = Tabmix.getTopWin();
+          if (e && win && Tabmix.callerName() === "navigateToLink" && !win.TMP_Places.isBookmarklet(e.originalTarget.url)) {
+            const pref =  win.TMP_Places.getPrefByDocumentURI(null, e.target.ownerDocument.documentURI);
+            return win.TMP_Places.fixWhereToOpen(e, "current", pref);
+          }
+        }
+        $&`,
+        {flags: "g"}
+      )
       .toCode();
   },
 

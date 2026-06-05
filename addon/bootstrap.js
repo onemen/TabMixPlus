@@ -17,7 +17,9 @@ const chromeManifest = {
   overlay: new Map([
     ["chrome://browser/content/browser.xhtml", ["chrome://tabmixplus/content/tabmix.xhtml"]],
     ["about:addons", ["chrome://tabmixplus/content/preferences/overlay/aboutaddons.xhtml"]],
+    ["chrome://browser/content/sidebar/sidebar-bookmarks.html", ["chrome://tabmixplus/content/places/places.xhtml"]],
     ["chrome://browser/content/places/bookmarksSidebar.xhtml", ["chrome://tabmixplus/content/places/places.xhtml"]],
+    ["chrome://browser/content/sidebar/sidebar-history.html", ["chrome://tabmixplus/content/places/places.xhtml"]],
     ["chrome://browser/content/places/historySidebar.xhtml", ["chrome://tabmixplus/content/places/places.xhtml"]],
     ["chrome://browser/content/places/places.xhtml", ["chrome://tabmixplus/content/places/places.xhtml"]],
   ]),

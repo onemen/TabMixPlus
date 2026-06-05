@@ -559,7 +559,7 @@ declare namespace TabmixPlacesNS {
   function openUILink(url: string, event: MouseEvent & {target: EventTarget & {parentNode: PlacesNode}}, where: WhereToOpen, params: Partial<OpenLinksParams>): string | null;
   function isBookmarklet(url: string): boolean;
   function fixWhereToOpen(aEvent: Event, aWhere: WhereToOpen, aPref: string): WhereToOpen;
-  function getPrefByDocumentURI(aWindow: Window): string;
+  function getPrefByDocumentURI(aWindow: Window, uri?: string): string;
   function openGroup(bmGroup: string[], aWhere: WhereToOpen): void;
   function getPreferences(tabCount: number): [boolean, boolean];
   function restoreTabs(tabsInfo: {tab: Tab; url: string}[], restoreOnDemand: boolean, relatedToCurrent: boolean): void;
@@ -600,11 +600,14 @@ declare namespace TabmixPlacesNS {
 }
 
 declare namespace TabmixPlacesInternalNS {
+  type menuNames = "open" | "openInWindow" | "openInPrivateWindow" | "openInTab";
+  type MenuEvent = Event & {target: XULElement};
   namespace ContextMenu {
+    const CONTEXT_MENU_MAP: Record<string, Record<menuNames, string>>;
     function toggleEventListener(enable: boolean): void;
-    function handleEvent(aEvent: Event): void;
-    function buildContextMenu(): void;
-    function update(open: HTMLElement, openInWindow: HTMLElement, openInPrivateWindow: HTMLElement | {hidden: boolean}, openInTab: HTMLElement, pref: string): void;
+    function handleEvent(aEvent: MenuEvent): void;
+    function buildContextMenu(event: MenuEvent): void;
+    function update(open: HTMLElement | null, openInWindow: HTMLElement, openInPrivateWindow: HTMLElement | {hidden: boolean}, openInTab: HTMLElement, pref: string): void;
   }
 }
 
