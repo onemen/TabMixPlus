@@ -462,7 +462,7 @@ declare namespace MockedGeckoTypes {
     _clearDragOverGroupingTimer: () => void;
     _clearPinnedDropIndicatorTimer: () => void;
     _expandGroupOnDrop(draggedTab: BrowserTab): void;
-    _getDragTarget(event: DragEvent, options?: {ignoreSides?: boolean}): BrowserTab | MozTabSplitViewWrapper | null;
+    _getDragTarget(event: DragEvent, options?: {ignoreSides?: boolean; findClosestTarget?: boolean}): BrowserTab | MozTabSplitViewWrapper | null;
     // we are adding arguments to _getDropIndex see minit.js for details
     _getDropIndex(event: DragEvent): number;
     _getDropIndex(event: DragEvent, options: {dragover?: boolean; getParams: true}): DragEventParams;

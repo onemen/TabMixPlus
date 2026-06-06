@@ -1073,7 +1073,7 @@ var TMP_tabDNDObserver = {
   // on_dragstart is bound to gBrowser.tabContainer.tabDragAndDrop
   on_dragstart(event) {
     const tabbrowserTabs = this._tabbrowserTabs ?? this;
-    let tab = this._getDragTarget(event);
+    let tab = this._getDragTarget(event, {findClosestTarget: false});
     if (!tab || tabbrowserTabs._isCustomizing) {
       return;
     }
