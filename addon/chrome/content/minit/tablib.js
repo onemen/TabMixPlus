@@ -1227,10 +1227,14 @@ Tabmix.tablib = {
       if (undoItem && m.hasAttribute("targetURI")) {
         TMP_SessionStore.asyncGetTabTitleForClosedWindow(undoItem).then(title => {
           let otherTabsCount = undoItem.tabs.length - 1;
-          let menuLabel = this.recentlyClosed.formatValueSync(labelId, {
+          let formatArgs = {
             tabCount: otherTabsCount,
             winTitle: title,
-          });
+          };
+          if (Tabmix.isVersion(1500)) {
+            formatArgs.closedAt = undoItem.closedAt;
+          }
+          let menuLabel = this.recentlyClosed.formatValueSync(labelId, formatArgs);
           m.setAttribute("label", menuLabel ?? "");
         });
       }
