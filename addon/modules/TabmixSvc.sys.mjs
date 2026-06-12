@@ -215,6 +215,66 @@ export const TabmixSvc = {
     // map ftl key for older firefox versions
     return {};
   },
+
+  parseXULToFragment(window, str, entities = []) {
+    if (!lazy.isVersion(1530)) {
+      return window.MozXULElement.parseXULToFragment(str, entities);
+    }
+
+    // this code copied from MozXULElement.parseXULToFragment (customElements.js)
+    //
+    // use DOMParser without DOMParser.forceEnableXULXBL()
+    // since it throw an error when used with dtd entities from Firefox 153
+    const parser = new window.DOMParser();
+    let doc = parser.parseFromSafeString(
+      `
+    ${
+      entities.length ?
+        `<!DOCTYPE bindings [
+      ${entities.reduce((preamble, url, index) => {
+        return (
+          preamble +
+          `<!ENTITY % _dtd-${index} SYSTEM "${url}">
+          %_dtd-${index};
+          `
+        );
+      }, "")}
+    ]>`
+      : ""
+    }
+    <box xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+         xmlns:html="http://www.w3.org/1999/xhtml">
+      ${str}
+    </box>
+  `,
+      "application/xml"
+    );
+
+    if (doc.documentElement.localName === "parsererror") {
+      throw new Error("not well-formed XML");
+    }
+
+    // The XUL/XBL parser is set to ignore all-whitespace nodes, whereas (X)HTML
+    // does not do this. Most XUL code assumes that the whitespace has been
+    // stripped out, so we simply remove all text nodes after using the parser.
+    let nodeIterator = doc.createNodeIterator(doc, NodeFilter.SHOW_TEXT);
+    let currentNode = nodeIterator.nextNode();
+    while (currentNode) {
+      // Remove whitespace-only nodes. Regex is taken from:
+      // https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Whitespace_in_the_DOM
+      if (currentNode.textContent && !/[^\t\n\r ]/.test(currentNode.textContent)) {
+        currentNode.remove();
+      }
+
+      currentNode = nodeIterator.nextNode();
+    }
+    // We use a range here so that we don't access the inner DOM elements from
+    // JavaScript before they are imported and inserted into a document.
+    let range = doc.createRange();
+    // @ts-expect-error - box always exist
+    range.selectNodeContents(doc.querySelector("box"));
+    return range.extractContents();
+  },
 };
 
 if (lazy.isVersion(1500)) {

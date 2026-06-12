@@ -1,5 +1,6 @@
 /* eslint-disable mozilla/balanced-listeners */
 import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
+import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 
 /** @type {TabmixWidgetsModule.Lazy} */ // @ts-ignore
 const lazy = {};
@@ -196,7 +197,7 @@ const widgets = {
 
     /** @type {typeof TabmixWidgetsModule.onBuild} */
     onBuild(node) {
-      node.firstChild.addEventListener("command", (/** @type {ButtonEvent} */ event) => {
+      node.addEventListener("command", (/** @type {ButtonEvent} */ event) => {
         lazy.getGlobal(node).Tabmix.closedObjectsUtils.showSubView(event);
       });
     },
@@ -221,12 +222,9 @@ const widgets = {
 
     /** @type {typeof TabmixWidgetsModule.onBuild} */
     onBuild(node) {
-      node.firstChild.addEventListener(
-        "command",
-        (/** @type {GenericEvent<HTMLElement, Event>} */ event) => {
-          lazy.getGlobal(node).Tabmix.allTabs.showAllTabsPanel(event);
-        }
-      );
+      node.addEventListener("command", (/** @type {GenericEvent<HTMLElement, Event>} */ event) => {
+        lazy.getGlobal(node).Tabmix.allTabs.showAllTabsPanel(event);
+      });
     },
   },
   tabsCloseButton: {
@@ -269,8 +267,8 @@ function on_build(widget) {
   return function (
     /** @type {Document & {ownerGlobal: Window; documentGlobal: Window}} */ document
   ) {
-    const MozXULElement = lazy.getGlobal(document).MozXULElement;
-    const node = MozXULElement.parseXULToFragment(updateMarkup ?? markup, localizeFiles);
+    const win = lazy.getGlobal(document);
+    const node = TabmixSvc.parseXULToFragment(win, updateMarkup ?? markup, localizeFiles);
     const parent = document.createXULElement("box");
     parent.appendChild(node);
 

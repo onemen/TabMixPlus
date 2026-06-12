@@ -47,7 +47,8 @@
       }
       this.textContent = "";
       this.appendChild(
-        MozXULElement.parseXULToFragment(
+        TabmixSvc.parseXULToFragment(
+          window,
           `
         <hbox class="shortcut-content">
           <description inherits="disabled=blocked"></description>
@@ -61,9 +62,9 @@
               data-evt-mousedown="event.stopPropagation(); event.preventDefault(); this.select();"
               data-evt-change="event.stopPropagation();"/>
             <image anonid="shortcut_reset" class="shortcut-image" tooltiptext="&shortcuts.reset;" _hidden="true"
-              data-evt-click="resetKey();"/>
+              data-evt-click="this.closest('shortcut').resetKey();"/>
             <image anonid="disable" class="shortcut-image" tooltiptext="&shortcuts.clear;"
-              data-evt-click="disableKey();"/>
+              data-evt-click="this.closest('shortcut').disableKey();"/>
           </hbox>
         </hbox>
         <vbox anonid="notificationbox" class="shortcut-notificationbox" flex="1"

@@ -131,7 +131,8 @@ export const Shortcuts = {
     let container = $("TabsToolbar");
 
     /** @type {XULDocumentFragment} */ // @ts-ignore
-    let box = aWindow.MozXULElement.parseXULToFragment(
+    let box = TabmixSvc.parseXULToFragment(
+      aWindow,
       `
       <div hidden="true"
         dupTab="&duplicateTabMenu.label;"
@@ -164,8 +165,8 @@ export const Shortcuts = {
         slideShow="&shortcuts.slideshow;"
         toggleFLST="&shortcuts.toggleFLST;"
         openOptions="Open Tab Mix Plus Options"
-      />
-      `,
+        />
+       `,
       [
         "chrome://tabmixplus/locale/tabmix.dtd",
         "chrome://tabmixplus/locale/pref-tabmix.dtd",

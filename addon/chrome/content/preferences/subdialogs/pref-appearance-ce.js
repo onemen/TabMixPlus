@@ -50,7 +50,8 @@ const TabpanelsClass = customElements.get("tabpanels");
 
       this.textContent = "";
       this.appendChild(
-        MozXULElement.parseXULToFragment(
+        TabmixSvc.parseXULToFragment(
+          window,
           `
       <hbox align="center">
         <checkbox anonid="useThis" label="&useThis.label;: " data-evt-command="this.parentNode.parentNode._updateUseThisState(this.checked); event.stopPropagation();"></checkbox>
@@ -85,19 +86,6 @@ const TabpanelsClass = customElements.get("tabpanels");
           ]
         )
       );
-
-      // const {createHandleOnEvent} = ChromeUtils.importESModule(
-      //   "chrome://tabmix-resource/content/HandleOnEvent.sys.mjs"
-      // );
-      // // const {handleOnEvent} = createHandleOnEvent(window);
-
-      // // this.addEventListener("command", (/** @type {PaneEvent} */ event) => {
-      // //   handleOnEvent(event, "command");
-      // // });
-      // console.log("------------------------------------------");
-
-      // const {discoverEventTypes} = createHandleOnEvent(window);
-      // discoverEventTypes();
 
       // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
       this.initializeAttributeInheritance();
@@ -304,7 +292,8 @@ const TabpanelsClass = customElements.get("tabpanels");
 
       this.setAttribute("align", "center");
       this.appendChild(
-        MozXULElement.parseXULToFragment(
+        TabmixSvc.parseXULToFragment(
+          window,
           `
       <spacer flex="1" class="visible"></spacer>
       <html:input anonid="color" class="visible" palettename="standard" type="color" inherits="disabled"></html:input>
@@ -321,6 +310,7 @@ const TabpanelsClass = customElements.get("tabpanels");
           ]
         )
       );
+
       // XXX: Implement `this.inheritAttribute()` for the [inherits] attribute in the markup above!
       this.initializeAttributeInheritance();
 

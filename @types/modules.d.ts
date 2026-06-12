@@ -1609,6 +1609,7 @@ declare namespace TabmixSvcModule {
       addMissingPrefs(): void;
       observe(subject: nsISupports, topic: string, data: string): void;
     };
+    parseXULToFragment(window: Window, markup: string, dtdList: string[]): DocumentFragment;
   }
 }
 

@@ -488,7 +488,9 @@ export class Overlays {
     });
     stream.close();
     const parser = new this.window.DOMParser();
-    parser.forceEnableXULXBL();
+    if (!isVersion(1530)) {
+      parser.forceEnableXULXBL();
+    }
     const doc = parser.parseFromSafeString(text.trim(), "application/xml");
 
     if (doc.documentElement.tagName === "parsererror") {
