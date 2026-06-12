@@ -1256,8 +1256,8 @@ Tabmix.onContentLoaded = {
       ._replace(
         'return "current";',
         `if (e) {
-          const win = Tabmix.getTopWin();
-          if (e && win && Tabmix.callerName() === "navigateToLink" && !win.TMP_Places.isBookmarklet(e.originalTarget.url)) {
+          const win = Services.wm.getMostRecentWindow("navigator:browser");
+          if (e && win && win.Tabmix.callerName() === "navigateToLink" && !win.TMP_Places.isBookmarklet(e.originalTarget.url)) {
             const pref =  win.TMP_Places.getPrefByDocumentURI(null, e.target.ownerDocument.documentURI);
             return win.TMP_Places.fixWhereToOpen(e, "current", pref);
           }
