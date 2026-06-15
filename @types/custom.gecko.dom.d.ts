@@ -18,7 +18,7 @@ interface XULDocumentFragment extends DocumentFragment {
 
 // for class extending MozXULElement
 interface CustomElementConstructorOverride {
-  _fragment: XULDocumentFragment;
+  _fragment: XULDocumentFragment | undefined;
   get fragment(): Node;
   _flippedInheritedAttributes?: Record<string, unknown>;
   get inheritedAttributes(): Record<string, string>;

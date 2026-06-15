@@ -1230,10 +1230,8 @@ Tabmix.tablib = {
           let formatArgs = {
             tabCount: otherTabsCount,
             winTitle: title,
+            ...(Tabmix.isVersion(1500) ? {closedAt: undoItem.closedAt} : null),
           };
-          if (Tabmix.isVersion(1500)) {
-            formatArgs.closedAt = undoItem.closedAt;
-          }
           let menuLabel = this.recentlyClosed.formatValueSync(labelId, formatArgs);
           m.setAttribute("label", menuLabel ?? "");
         });
