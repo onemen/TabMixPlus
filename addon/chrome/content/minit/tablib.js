@@ -2059,7 +2059,7 @@ Tabmix.tablib = {
     gUnifiedExtensions.hasExtensionsInPanel = function (
       policies = gUnifiedExtensions.getActivePolicies()
     ) {
-      const inPanel = TabmixWidgets.isOptionWidgetInPanle();
+      const inPanel = TabmixWidgets.isOptionWidgetInPanel();
       return original_hasExtensionsInPanel.call(this, policies) || inPanel;
     };
   },

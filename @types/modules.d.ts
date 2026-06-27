@@ -1653,7 +1653,7 @@ declare namespace TabmixWidgetsModule {
   interface TabmixWidgets {
     create(): void;
     destroy(uninstall?: boolean): void;
-    isOptionWidgetInPanle(): boolean;
+    isOptionWidgetInPanel(): boolean;
   }
 
   interface TabDragEvent extends Omit<DragEvent, "target"> {

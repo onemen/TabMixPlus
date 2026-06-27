@@ -16,7 +16,7 @@ const OPTIONS_WIDGET_NAME = "tabmix-options-toolbaritem";
 const OPTIONS_WIDGET_ID = `_${OPTIONS_WIDGET_NAME}_-browser-action`;
 const TABMIX_UUID = "{dc572301-7619-498c-a57d-39143191b318}";
 
-function isOptionWidgetInPanle() {
+function isOptionWidgetInPanel() {
   const CustomizableUI = lazy.CustomizableUI;
   const area = CustomizableUI.getPlacementOfWidget(OPTIONS_WIDGET_ID)?.area ?? "";
   return CustomizableUI.getAreaType(area) !== CustomizableUI.TYPE_TOOLBAR;
@@ -26,7 +26,7 @@ function isOptionWidgetInPanle() {
 async function buildOptionsWidget(node, document) {
   const window = lazy.getGlobal(node);
 
-  const inPanel = isOptionWidgetInPanle();
+  const inPanel = isOptionWidgetInPanel();
 
   // without this await there is an issue in floorp when the button is
   // placed on the nav-bar
@@ -320,5 +320,5 @@ export const TabmixWidgets = {
     }
   },
 
-  isOptionWidgetInPanle,
+  isOptionWidgetInPanel,
 };
