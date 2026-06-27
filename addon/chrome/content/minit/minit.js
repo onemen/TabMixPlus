@@ -1507,7 +1507,7 @@ var TMP_tabDNDObserver = {
     let {dropElement, newIndex, dropBefore, fromTabList, dropOnStart, dropIntoCollapsedTabGroup} =
       this.tabDragAndDrop._getDropIndex(event, {getParams: true});
 
-    const telemetrySource = this.TabMetrics.METRIC_SOURCE.DRAG_AND_DROP;
+    const metricsContext = this.TabMetrics.METRIC_SOURCE.DRAG_AND_DROP;
 
     if (
       dropIntoCollapsedTabGroup &&
@@ -1519,7 +1519,7 @@ var TMP_tabDNDObserver = {
       // the dragged tab where it was. Otherwise, drop it into the target
       // tab group.
       if (dropElement.group != draggedTab.group) {
-        dropElement.group.addTabs(movingTabs, telemetrySource);
+        dropElement.group.addTabs(movingTabs, metricsContext);
       }
     } else if (!Tabmix.isVersion(1370) || fromTabList) {
       const oldIndex = draggedTab[Tabmix.isVersion(1380) ? "elementIndex" : "_tPos"];
@@ -1537,8 +1537,14 @@ var TMP_tabDNDObserver = {
       }
       for (let tab of movingTabs) {
         /** @type {MockedGeckoTypes.moveTabToOptions} */
-        const options =
-          Tabmix.isVersion(1380) ? {elementIndex: newIndex, telemetrySource} : {tabIndex: newIndex};
+        let options = {elementIndex: newIndex, metricsContext};
+        if (!Tabmix.isVersion(1540)) {
+          if (Tabmix.isVersion(1380)) {
+            options = {elementIndex: newIndex, telemetrySource: metricsContext};
+          } else {
+            options = {tabIndex: newIndex};
+          }
+        }
         if (dropOnStart) {
           options.forceUngrouped = true;
         }
@@ -1546,7 +1552,7 @@ var TMP_tabDNDObserver = {
         if (moveLeft) newIndex++;
       }
     } else {
-      const dropMetricsContext = this.TabMetrics.userTriggeredContext(telemetrySource);
+      const dropMetricsContext = this.TabMetrics.userTriggeredContext(metricsContext);
       if (dropBefore) {
         gBrowser.moveTabsBefore(
           movingTabs,

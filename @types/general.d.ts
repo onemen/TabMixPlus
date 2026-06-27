@@ -520,7 +520,15 @@ declare namespace MockedGeckoTypes {
     removeNotification(notification: NotificationMessage): void;
   }
 
-  type moveTabToOptions = {elementIndex?: number; tabIndex?: number; forceUngrouped?: boolean; keepRelatedTabs?: boolean; telemetrySource?: MockedExports.TelemetrySource};
+  type moveTabToOptions = {
+    elementIndex?: number;
+    tabIndex?: number;
+    forceUngrouped?: boolean;
+    keepRelatedTabs?: boolean;
+    metricsContext?: MockedExports.TelemetrySource;
+    /** @deprecated replace with metricsContext in Firefox 154 */
+    telemetrySource?: MockedExports.TelemetrySource;
+  };
   type TabMoveState = {tabIndex: number; elementIndex?: number; tabGroupId?: string};
 
   type CachedTitleInfoIds = "mainWindowTitle" | "privateWindowTitle" | "privateWindowSuffixForContent";
@@ -693,7 +701,14 @@ declare namespace MockedGeckoTypes {
     _getTabMoveState: (tab: BrowserTab) => TabMoveState | undefined;
     _handleTabMove: (tab: BrowserTab, moveActionCallback: () => void) => void;
     _isLastTabInWindow: (tab: BrowserTab) => boolean;
-    _notifyPinnedStatus: (tab: BrowserTab, params: {telemetrySource?: string}) => void;
+    _notifyPinnedStatus: (
+      tab: BrowserTab,
+      params: {
+        metricsContext: MockedExports.TelemetrySource;
+        /** @deprecated replace with metricsContext in Firefox 154 */
+        telemetrySource?: MockedExports.TelemetrySource;
+      }
+    ) => void;
     _notifyOnTabMove: (tab: BrowserTab, previousTabState?: TabMoveState, currentTabState?: TabMoveState, metricsContext?: MockedExports.TabMetricsContext) => void;
     _populateTitleCache: () => void;
   }
