@@ -65,6 +65,7 @@ export default {
     BrowserUtils: false,
     E10SUtils: false,
     ContextMenu: false,
+    UrlbarShared: false,
   },
   "preferences": {
     $: false,

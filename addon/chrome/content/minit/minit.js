@@ -2654,7 +2654,8 @@ Tabmix.navToolbox = {
     let result = this.view.getResultFromElement(element);
     if (
       Tabmix.prefs.getBoolPref("moveSwitchToTabNext") &&
-      result?.type === UrlbarUtils.RESULT_TYPE.TAB_SWITCH &&
+      result?.type ===
+        (Tabmix.isVersion(1540) ? UrlbarShared : UrlbarUtils).RESULT_TYPE.TAB_SWITCH &&
       this.hasAttribute("actiontype")
     ) {
       prevTab = gBrowser.selectedTab;
@@ -2719,7 +2720,9 @@ Tabmix.navToolbox = {
       return;
     }
 
-    if (result.type === UrlbarUtils.RESULT_TYPE.TAB_SWITCH) {
+    if (
+      result.type === (Tabmix.isVersion(1540) ? UrlbarShared : UrlbarUtils).RESULT_TYPE.TAB_SWITCH
+    ) {
       // move switched to tab only when it is in the same window
       const resultUrl = result.payload?.url;
       const inSameWindow = gBrowser.browsers.some(browser => {

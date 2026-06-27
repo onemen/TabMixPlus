@@ -1260,6 +1260,11 @@ declare var UrlbarUtils: {
   stripUnsafeProtocolOnPaste(pasteData: string): string;
   getShortcutOrURIAndPostData(url: string): Promise<{url: string; postData: nsIInputStream | null; mayInheritPrincipal: boolean}>;
 };
+declare var UrlbarShared: {
+  RESULT_TYPE: {
+    TAB_SWITCH: number;
+  };
+};
 
 // for Zen Browserw
 declare var gZenWorkspaces: {
