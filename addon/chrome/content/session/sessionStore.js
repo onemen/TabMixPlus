@@ -880,7 +880,10 @@ var TMP_ClosedTabs = {
 
   restoreAllClosedTabs() {
     const closedTabCount = this.count;
-    const isConfirmed = OpenInTabsUtils.confirmOpenInTabs(closedTabCount);
+    const isConfirmed = (
+      Tabmix.isVersion(1510) ?
+        gBrowser.OpenInTabsUtils
+      : OpenInTabsUtils).confirmOpenInTabs(closedTabCount);
     if (!isConfirmed) {
       return;
     }
