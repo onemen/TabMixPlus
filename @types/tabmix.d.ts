@@ -130,12 +130,16 @@ interface OriginalFunctions {
   FillHistoryMenu: Window["FillHistoryMenu"];
   FullScreen_showNavToolbox: FullScreen["showNavToolbox"];
   gBrowser_addTab: TabBrowser["addTab"];
+  gBrowser_addTrustedTab: TabBrowser["addTrustedTab"];
+  gBrowser__blurTab: TabBrowser["_blurTab"];
   gBrowser_findTabToBlurTo: TabBrowser["_findTabToBlurTo"];
   gBrowser_removeTab: TabBrowser["removeTab"];
   gBrowser_setInitialTabTitle: TabBrowser["setInitialTabTitle"];
+  gBrowser__updateTabBarForPinnedTabs: TabBrowser["_updateTabBarForPinnedTabs"];
   gURLBar_handleCommand: gURLBar["handleCommand"];
   gURLBar__whereToOpen: gURLBar["_whereToOpen"];
   gURLBar_setURI: gURLBar["setURI"];
+  gZenWorkspaces_selectEmptyTab: any;
   tabContainer_updateCloseButtons: MockedGeckoTypes.TabContainer["_updateCloseButtons"];
   isBlankPageURL: Window["isBlankPageURL"];
   OpenBrowserWindow: Window["OpenBrowserWindow"];

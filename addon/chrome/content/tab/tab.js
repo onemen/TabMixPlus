@@ -516,11 +516,26 @@ Tabmix.tabsUtils = {
             break;
           case "image":
             TMP_Places.addImageToLazyPendingTab(tab);
+            break;
+          case "pinned": {
+            if (TabmixTabbar.widthFitTitle && tab.hasAttribute("width")) {
+              tab.removeAttribute("width");
+            }
+            const lockTabFn =
+              Tabmix.prefs.getBoolPref("lockAppTabs") && !tab.hasAttribute("locked") ?
+                Tabmix.getGlobal(tab)?.gBrowser?.lockTab
+              : false;
+            if (lockTabFn) {
+              lockTabFn(tab);
+              tab.setAttribute("_lockedAppTabs", "true");
+            }
+            break;
+          }
         }
       }
     };
     let Observer = new MutationObserver(tabsMutate);
-    Observer.observe(this.tabBar, {subtree: true, attributeFilter: ["pending", "image"]});
+    Observer.observe(this.tabBar, {subtree: true, attributeFilter: ["pending", "pinned", "image"]});
   },
 
   onUnload() {
@@ -1407,6 +1422,11 @@ Tabmix.tabsUtils = {
 
         /** @type {MockedGeckoTypes.ArrowScrollbox["insertBefore"]} */
         insertBefore(newNode, referenceNode) {
+          if (Tabmix.isVersion(1440) && Tabmix.callerName()?.startsWith("pinTab/")) {
+            if (!TabmixSvc.isZen || TabmixTabbar.isMultiRow) {
+              return this.appendChild(newNode);
+            }
+          }
           if (referenceNode?.pinned) {
             return arrowScrollbox.insertBefore(newNode, referenceNode);
           }

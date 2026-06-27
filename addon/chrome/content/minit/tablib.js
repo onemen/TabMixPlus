@@ -255,52 +255,53 @@ Tabmix.tablib = {
     };
 
     if (!Tabmix.extensions.tabGroupManager) {
-      if (Tabmix.isVersion(1410)) {
-        gBrowser._isLastTabInWindow = Tabmix.getPrivateMethod({
-          parent: gBrowser,
-          parentName: "gBrowser",
-          methodName: "isLastTabInWindow",
-          nextMethodName: "_hasBeforeUnload",
-        });
-      }
+      Tabmix.originalFunctions.gBrowser_addTrustedTab = gBrowser.addTrustedTab;
+      gBrowser.addTrustedTab = function (...args) {
+        if (Tabmix.callerName() === "_beginRemoveTab") {
+          return TMP_BrowserOpenTab({}, null, true);
+        }
+        return Tabmix.originalFunctions.gBrowser_addTrustedTab.apply(this, args);
+      };
 
-      Tabmix.changeCode(gBrowser, "gBrowser._beginRemoveTab")
+      if (Tabmix.isVersion({zen: "1.8.1*"}) && typeof gZenWorkspaces === "object") {
+        Tabmix.originalFunctions.gZenWorkspaces_selectEmptyTab = gZenWorkspaces.selectEmptyTab;
+        gZenWorkspaces.selectEmptyTab = function (...args) {
+          if (Tabmix.callerName() === "_beginRemoveTab") {
+            return TMP_BrowserOpenTab({}, null, true);
+          }
+          return Tabmix.originalFunctions.gZenWorkspaces_selectEmptyTab.apply(this, ...args);
+        };
+      }
+    }
+
+    if (Tabmix.isVersion(1410)) {
+      Tabmix.originalFunctions.gBrowser__blurTab = gBrowser._blurTab;
+      gBrowser._blurTab = function (tab, ...rest) {
+        if (
+          Tabmix.callerName() === "_endRemoveTab" &&
+          window.matchMedia("(prefers-reduced-motion: no-preference)")?.matches
+        ) {
+          TMP_eventListener.onTabClose_updateTabBar(tab);
+        }
+        return Tabmix.originalFunctions.gBrowser__blurTab.apply(this, [tab, ...rest]);
+      };
+    } else {
+      Tabmix.changeCode(gBrowser, "gBrowser._endRemoveTab")
         ._replace(
-          /this\.addTrustedTab\(BROWSER_NEW_TAB_URL,\s*\{\s*skipAnimation:\s*true,[\s\S]*?\}\)/,
-          "TMP_BrowserOpenTab({}, null, true)",
-          {check: !Tabmix.isVersion({zen: "1.8.1*"})}
+          "this._blurTab(aTab);",
+          `if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+           TMP_eventListener.onTabClose_updateTabBar(aTab);
+         }
+         $&`
         )
         ._replace(
-          /gZenWorkspaces\.selectEmptyTab\([^)]*\);/,
-          "TMP_BrowserOpenTab({}, null, true)",
-          {
-            check: Tabmix.isVersion({zen: "1.8.1*"}),
-          }
+          "this.tabContainer._updateCloseButtons();",
+          `if (Tabmix.isVersion(1410)) Tabmix.tabsUtils.updateFirstTabInRowMargin();
+          else if (!wasPinned) TabmixTabbar.setFirstTabInRow();
+          $&`
         )
         .toCode();
     }
-
-    Tabmix.changeCode(gBrowser, "gBrowser._endRemoveTab")
-      ._replace(
-        "this._blurTab(aTab);",
-        `if (window.matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-         TMP_eventListener.onTabClose_updateTabBar(aTab);
-       }
-       $&`
-      )
-      ._replace(
-        // we call gURLBar.select from Tabmix.clearUrlBarIfNeeded
-        // see TMP_BrowserOpenTab
-        "gURLBar.select();",
-        "{/* see TMP_BrowserOpenTab */}"
-      )
-      ._replace(
-        "this.tabContainer._updateCloseButtons();",
-        `if (Tabmix.isVersion(1410)) Tabmix.tabsUtils.updateFirstTabInRowMargin();
-        else if (!wasPinned) TabmixTabbar.setFirstTabInRow();
-        $&`
-      )
-      .toCode();
 
     Tabmix.originalFunctions.gBrowser_findTabToBlurTo = gBrowser._findTabToBlurTo;
 
@@ -386,6 +387,11 @@ Tabmix.tablib = {
         ._replace("{", "{\ntry {")
         ._replace(/(})(\)?)$/, "} catch (ex) {}\n$1$2")
         .toCode();
+    }
+
+    if (Tabmix.isVersion(1540)) {
+      gBrowser._dataURLRegEx = /^data:[^,]+;base64,/i;
+      gBrowser._nonPrintingRegEx = /^[\p{Z}\p{C}\p{M}\u{115f}\u{1160}\u{2800}\u{3164}\u{ffa0}]*$/u;
     }
 
     var obj, fnName;
@@ -745,6 +751,11 @@ Tabmix.tablib = {
 
     /** @type {MockedGeckoTypes.TabContainer["_updateCloseButtons"]} */
     gBrowser.tabContainer._updateCloseButtons = function (skipUpdateScrollStatus, aUrl) {
+      // handle first tab in row after _endRemoveTab
+      if (Tabmix.isVersion(1410) && Tabmix.callerName() === "_endRemoveTab") {
+        Tabmix.tabsUtils.updateFirstTabInRowMargin();
+      }
+
       // modes for close button on tabs - extensions.tabmix.tabs.closeButtons
       // 1 - alltabs    = close buttons on all tabs
       // 2 - hovertab   = close buttons on hover tab

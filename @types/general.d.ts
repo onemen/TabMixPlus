@@ -530,14 +530,17 @@ declare namespace MockedGeckoTypes {
     _switcher: {
       visibleTab: BrowserTab;
     };
+    _blurTab: (aTab: Tab) => void;
     _cachedTitleInfo: Record<CachedTitleInfoIds, string> | null;
     _endRemoveTab: (tab: BrowserTab) => void;
     _defaultDropLinkHandler: typeof handleDroppedLink;
+    _dataURLRegEx: RegExp;
     _findTabToBlurTo: (aTab: BrowserTab, aExcludeTabs?: BrowserTab[]) => BrowserTab | null;
     /** @deprecated replaced with pinnedTabCount in Firefox version 133 */
     readonly _numPinnedTabs: number;
     _lastRelatedTabMap: WeakMap<BrowserTab, BrowserTab>;
     _multiSelectedTabsSet: WeakSet<BrowserTab>;
+    _nonPrintingRegEx: RegExp;
     _removingTabs: Set<BrowserTab>;
     _selectedTab: BrowserTab;
     _setTabLabel: (tab: BrowserTab, label: string, options?: {beforeTabOpen?: boolean; isContentTitle?: boolean; isURL?: boolean}) => boolean;
@@ -545,6 +548,7 @@ declare namespace MockedGeckoTypes {
     _taskbarTab: {name: string; userContextId: string} | null;
     _taskbarTabTitle: string | null;
     _taskbarTabTitleLastProfile: string | null;
+    _updateTabBarForPinnedTabs: () => void;
     _windowIsClosing: boolean;
     addAdjacentNewTab: (tab: BrowserTab) => void;
     addRangeToMultiSelectedTabs: (start: BrowserTab, end: BrowserTab) => void;
@@ -1258,7 +1262,11 @@ declare var UrlbarUtils: {
 };
 
 // for Zen Browserw
-declare var gZenWorkspaces: any;
+declare var gZenWorkspaces: {
+  _emptyTab: Tab;
+  activeWorkspace: string;
+  selectEmptyTab: (newTabTarget: string) => void;
+};
 declare var gZenVerticalTabsManager: any;
 
 // @ts-ignore - add to interface from lib.gecko.dom.d.ts

@@ -1154,58 +1154,14 @@ Tabmix.onContentLoaded = {
           nextMethodName: Tabmix.isVersion(1510) ? "handleTabMove" : "#handleTabMove",
         });
       }
-
-      // gBrowser.pinTab call gBrowser.#handleTabMove
-      gBrowser._handleTabMove = Tabmix.getPrivateMethod({
-        ...tabbrowserProps,
-        methodName: "handleTabMove",
-        nextMethodName: "adoptTab",
-      });
     }
 
-    if (Tabmix.isVersion(1410)) {
-      gBrowser._notifyPinnedStatus = Tabmix.getPrivateMethod({
-        parent: gBrowser,
-        parentName: "gBrowser",
-        methodName: "notifyPinnedStatus",
-        nextMethodName: "pinTab",
-      });
-    }
-
-    // we can't use TabPinned.
-    // gBrowser.pinTab call _updateCloseButtons that call updateScrollStatus
-    // before it dispatch TabPinned event.
-    Tabmix.changeCode(gBrowser, "gBrowser.pinTab")
-      ._replace(
-        "this._updateTabBarForPinnedTabs();",
-        `if (TabmixTabbar.widthFitTitle && aTab.hasAttribute("width"))
-        aTab.removeAttribute("width");
-      if (
-        Tabmix.prefs.getBoolPref("lockAppTabs") &&
-        !aTab.hasAttribute("locked") &&
-        "lockTab" in this
-      ) {
-        this.lockTab(aTab);
-        aTab.setAttribute("_lockedAppTabs", "true");
-      }
-      $&
-      TabmixTabbar.updateScrollStatus();`
-      )
-      ._replace(
-        "this.pinnedTabsContainer.insertBefore(aTab, periphery);",
-        `if (Tabmix.prefs.getBoolPref("pinnedTabScroll")) {
-           this.pinnedTabsContainer.appendChild(aTab);
-         } else {
-           $&
-         }`,
-        {check: Tabmix.isVersion(1440) && !TabmixSvc.isZen}
-      )
-      ._replace(
-        "this.pinnedTabsContainer.insertBefore(aTab, this.pinnedTabsContainer.lastChild)",
-        `(Tabmix.prefs.getBoolPref("pinnedTabScroll") && TabmixTabbar.isMultiRow ? this.pinnedTabsContainer.appendChild(aTab) : $&)`,
-        {check: Tabmix.isVersion(1440) && TabmixSvc.isZen}
-      )
-      .toCode();
+    Tabmix.originalFunctions.gBrowser__updateTabBarForPinnedTabs =
+      gBrowser._updateTabBarForPinnedTabs;
+    gBrowser._updateTabBarForPinnedTabs = function (...args) {
+      Tabmix.originalFunctions.gBrowser__updateTabBarForPinnedTabs.apply(this, args);
+      TabmixTabbar.updateScrollStatus();
+    };
   },
 
   change_whereToOpenLink(parent) {
