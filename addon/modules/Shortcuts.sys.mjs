@@ -447,7 +447,9 @@ export const Shortcuts = {
     }
 
     for (let [att, val] of Object.entries(validKeyAtt)) {
-      keyItem.setAttribute(att, val || "");
+      if (att !== "disabled" || val) {
+        keyItem.setAttribute(att, val || "");
+      }
     }
 
     // remove existing acceltext from menus
