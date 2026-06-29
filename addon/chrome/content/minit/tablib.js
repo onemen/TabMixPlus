@@ -389,7 +389,7 @@ Tabmix.tablib = {
         .toCode();
     }
 
-    if (Tabmix.isVersion(1540)) {
+    if (Tabmix.isVersion(1530)) {
       gBrowser._dataURLRegEx = /^data:[^,]+;base64,/i;
       gBrowser._nonPrintingRegEx = /^[\p{Z}\p{C}\p{M}\u{115f}\u{1160}\u{2800}\u{3164}\u{ffa0}]*$/u;
     }
