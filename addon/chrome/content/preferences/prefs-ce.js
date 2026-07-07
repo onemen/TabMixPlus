@@ -63,6 +63,13 @@ class Preferences extends MozXULElement {
    */
   _constructAfterChildrenCalled = false;
 
+  // Track whether the child <preference> list has been initialized.
+  _preferenceChildrenInitialized = false;
+
+  // Observe the subtree until the child <preference> elements are available.
+  /** @type {MutationObserver | null} */
+  _preferenceChildrenObserver = null;
+
   constructor() {
     super();
 
@@ -72,7 +79,43 @@ class Preferences extends MozXULElement {
       this.observe(...args);
     };
 
-    this._preferenceChildren = this.getElementsByTagName("preference");
+    this._preferenceChildren = [];
+  }
+
+  _initializePreferenceChildren() {
+    /** @type {HTMLCollectionOf<PreferenceClass>} */
+    this._preferenceChildren = Array.from(this.querySelectorAll("preference"));
+    if (!this._preferenceChildren.length) {
+      if (!this._preferenceChildrenObserver) {
+        this._preferenceChildrenObserver = new MutationObserver(() => {
+          if (this._preferenceChildrenInitialized) {
+            return;
+          }
+          this._initializePreferenceChildren();
+        });
+        this._preferenceChildrenObserver.observe(this, {childList: true, subtree: true});
+      }
+      return;
+    }
+
+    this._preferenceChildrenInitialized = true;
+    this._preferenceChildrenObserver?.disconnect();
+    this._preferenceChildrenObserver = null;
+
+    if (
+      this._constructedChildrenCount > 0 &&
+      this._constructedChildrenCount == this._preferenceChildren.length
+    ) {
+      this._constructAfterChildren();
+    }
+  }
+
+  connectedCallback() {
+    if (this._preferenceChildrenInitialized) {
+      return;
+    }
+
+    this._initializePreferenceChildren();
   }
 
   get type() {
@@ -101,6 +144,11 @@ class Preferences extends MozXULElement {
   }
 
   _constructAfterChildren() {
+    // Ensure this runs only once even if both initialization paths reach it.
+    if (this._constructAfterChildrenCalled) {
+      return;
+    }
+
     // This method will be called after the last of the child
     // <preference> elements is constructed. Its purpose is to propagate
     // the values to the associated form elements. Sometimes the code for

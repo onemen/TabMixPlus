@@ -118,7 +118,9 @@ declare interface PreferencesListClass extends MozXULElement {
   rootBranchInternal: Prefs;
   _constructedChildrenCount: number;
   _constructAfterChildrenCalled: boolean;
-  _preferenceChildren: HTMLCollectionOf<PreferenceClass>;
+  _preferenceChildrenInitialized: boolean;
+  _preferenceChildrenObserver: MutationObserver | null;
+  _preferenceChildren: PreferenceClass[];
   readonly type: string;
   readonly instantApply: boolean;
   observe(aSubject: nsISupports, aTopic: string, aData: string): void;
