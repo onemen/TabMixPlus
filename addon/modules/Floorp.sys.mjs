@@ -1,13 +1,5 @@
 import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
 
-/** @type {FloorpModule.Lazy} */ // @ts-ignore
-const lazy = {};
-
-ChromeUtils.defineLazyGetter(lazy, "prefs", () => {
-  const {Preferences} = ChromeUtils.importESModule("resource://gre/modules/Preferences.sys.mjs");
-  return new Preferences("");
-});
-
 const isFirefoxVerticalMode = isVersion({fp: "143.0.0"});
 
 const PREFS = ["extensions.tabmix.tabBarMode", "userChrome.padding.tabbar_height"];
@@ -53,12 +45,11 @@ export const FloorpPrefsObserver = {
       return;
     }
 
-    const prefValue = lazy.prefs.get(data);
-
     switch (data) {
       case "extensions.tabmix.tabBarMode": {
         const pref = "userChrome.padding.tabbar_height";
         const backupPref = `${pref}._backup`;
+        const prefValue = Services.prefs.getIntPref(data);
         if (prefValue === 2) {
           Services.prefs.setBoolPref(backupPref, Services.prefs.getBoolPref(pref));
           Services.prefs.setBoolPref(pref, false);
@@ -75,6 +66,7 @@ export const FloorpPrefsObserver = {
         const pref = "extensions.tabmix.tabBarMode";
         const backupPref = `${pref}._backup`;
         const tabmixInMultiRow = Services.prefs.getIntPref(pref) === 2;
+        const prefValue = Services.prefs.getIntPref(data);
         if (prefValue === 0 && Services.prefs.prefHasUserValue(backupPref)) {
           Services.prefs.setIntPref(pref, Services.prefs.getIntPref(backupPref));
           Services.prefs.clearUserPref(backupPref);
@@ -87,6 +79,7 @@ export const FloorpPrefsObserver = {
         break;
       }
       case "userChrome.padding.tabbar_height": {
+        const prefValue = Services.prefs.getBoolPref(data);
         if (prefValue && Services.prefs.getIntPref("extensions.tabmix.tabBarMode") === 2) {
           Services.prefs.setBoolPref(data, false);
         }

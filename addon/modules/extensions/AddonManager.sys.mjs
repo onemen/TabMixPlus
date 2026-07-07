@@ -13,7 +13,7 @@ var GoogleNoTrackingUrl = {
   onEnabled() {
     const pref = "extensions." + this.id + "aggresiveGoogleImagesCleanup";
     TabmixSvc.isFixedGoogleUrl = function (url) {
-      const aggressiveWithImageUrls = TabmixSvc.prefs.get(pref, false);
+      const aggressiveWithImageUrls = Services.prefs.getBoolPref(pref, false);
       const isSearchResult = GOOGLE_REGEXP.test(url);
       const isImageSearchResult = GOOGLE_IMGRES_REGEXP.test(url);
       const isGooglePlusRedirect = GOOGLE_PLUS_REGEXP.test(url);

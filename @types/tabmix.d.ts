@@ -38,8 +38,9 @@ interface gTMPprefObserver {
   OBSERVING: string[];
   observe: (aSubject: nsISupports, aTopic: string, aData: string) => void;
   preventUpdate: boolean;
-  prefsValues: Record<string, unknown>;
   removeObservers: () => void;
+  getValue: (prefName: string) => string | number | boolean | undefined;
+  prefsValues: Record<string, unknown>;
   setMenuIcons: () => void;
   setAutoHidePref: () => void;
   setCloseButtonMargin: () => void;

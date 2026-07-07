@@ -275,7 +275,7 @@ class Preference extends MozXULElement {
   }
 
   get prefExists() {
-    return typeof TabmixSvc.prefs.get(this.name) !== "undefined";
+    return Services.prefs.getPrefType(this.name) !== Services.prefs.PREF_INVALID;
   }
 
   get booleanValue() {

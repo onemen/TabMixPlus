@@ -122,7 +122,7 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
     let privateTab = window.privateTab;
     if (
       privateTab.isTabPrivate(selectedTab) &&
-      TabmixSvc.prefs.get("extensions.privateTab.makeNewEmptyTabsPrivate", 0) === 0
+      Services.prefs.getIntPref("extensions.privateTab.makeNewEmptyTabsPrivate", 0) === 0
     ) {
       privateTab.readyToOpenTab(false);
     }

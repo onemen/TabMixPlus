@@ -1,5 +1,4 @@
 import {TabContextConfig} from "chrome://tabmix-resource/content/TabContextConfig.sys.mjs";
-import {Preferences} from "resource://gre/modules/Preferences.sys.mjs";
 
 /** load Tabmix preference to the default branch */
 export const PreferencesLoader = {
@@ -10,7 +9,8 @@ export const PreferencesLoader = {
       return;
     }
     this._defaultPreferencesLoaded = true;
-    const prefs = new Preferences({defaultBranch: true});
+
+    const defaultBranch = Services.prefs.getDefaultBranch("");
 
     /**
      * @param {string} prefName
@@ -19,13 +19,30 @@ export const PreferencesLoader = {
     const pref = function (prefName, prefValue) {
       const setPref = () => {
         try {
-          prefs.set(prefName, prefValue);
+          switch (typeof prefValue) {
+            case "string":
+              defaultBranch.setCharPref(prefName, prefValue);
+              break;
+
+            case "number":
+              defaultBranch.setIntPref(prefName, prefValue);
+              break;
+
+            case "boolean":
+              defaultBranch.setBoolPref(prefName, prefValue);
+              break;
+
+            default:
+              console.error(
+                `Tabmix Error: can't set pref ${prefName} to value '${prefValue}'; ` +
+                  "it isn't a String, Number, or Boolean"
+              );
+          }
         } catch (ex1) {
           console.log(prefName, prefValue, ex1);
           try {
-            // current value is invalid or deleted by the user
             Services.prefs.clearUserPref(prefName);
-            prefs.set(prefName, prefValue);
+            setPref();
           } catch (ex2) {
             console.error(`Tabmix errored twice when trying to set ${prefName} default`);
             console.error("Tabmix Error", ex1);
@@ -34,18 +51,7 @@ export const PreferencesLoader = {
         }
       };
 
-      switch (prefValue.constructor.name) {
-        case "String":
-        case "Number":
-        case "Boolean":
-          setPref();
-          break;
-        default:
-          console.error(
-            `Tabmix Error: can't set pref ${prefName} to value '${prefValue}'; ` +
-              "it isn't a String, Number, or Boolean"
-          );
-      }
+      setPref();
     };
 
     try {

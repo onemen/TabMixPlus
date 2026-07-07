@@ -1757,6 +1757,21 @@ window.gTMPprefObserver = {
     }
   },
 
+  getValue(prefName) {
+    let branch = Services.prefs;
+    switch (branch.getPrefType(prefName)) {
+      case Ci.nsIPrefBranch.PREF_STRING:
+        return branch.getStringPref(prefName);
+
+      case Ci.nsIPrefBranch.PREF_INT:
+        return branch.getIntPref(prefName);
+
+      case Ci.nsIPrefBranch.PREF_BOOL:
+        return branch.getBoolPref(prefName);
+    }
+    return undefined;
+  },
+
   /*
    * Observer-function
    * subject: [wrapped nsISupports :: nsIPrefBranch], nsIPrefBranch Internal
@@ -1764,10 +1779,10 @@ window.gTMPprefObserver = {
    */
   prefsValues: {},
   observe: function TMP_pref_observer(subject, topic, prefName) {
-    if (this.preventUpdate || this.prefsValues[prefName] === TabmixSvc.prefs.get(prefName)) {
+    if (this.preventUpdate || this.prefsValues[prefName] === this.getValue(prefName)) {
       return;
     }
-    const prefValue = TabmixSvc.prefs.get(prefName);
+    const prefValue = this.getValue(prefName);
     this.prefsValues[prefName] = prefValue;
 
     // if we don't have a valid window (closed)
@@ -3421,7 +3436,7 @@ window.gTMPprefObserver = {
 
     /** @type {typeof TabmixprefObserverNS._getVersion} */
     let getVersion = function _getVersion(currentVersion) {
-      let oldVersion = TabmixSvc.prefs.get("extensions.tabmix.version", "");
+      let oldVersion = Tabmix.prefs.getCharPref("version", "");
       let showNewVersionTab;
       if (currentVersion != oldVersion) {
         // reset current preference in case it is not a string

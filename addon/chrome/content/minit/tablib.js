@@ -951,7 +951,6 @@ Tabmix.tablib = {
       const [parent, onDropName] =
         Tabmix.isVersion(1380) ?
           [window.ToolbarDropHandler, "onDropNewWindowButtonObserver"]
-          // eslint-disable-next-line no-undef
         : [newWindowButtonObserver, "onDrop"];
 
       const onDragOverNewWindowButton = parent.onDragOver;

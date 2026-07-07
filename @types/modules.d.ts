@@ -1118,8 +1118,6 @@ declare namespace DynamicRulesModule {
 }
 
 declare namespace FloorpModule {
-  type Lazy = {prefs: MockedExports.Preferences};
-
   interface Floorp {
     _initialized: boolean;
     init(): void;
