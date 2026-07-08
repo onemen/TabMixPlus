@@ -1068,7 +1068,10 @@ var TabmixContext = {
       const lazy = {};
       if (Tabmix.isVersion(1290)) {
         const modules = {
-          ContextualIdentityService: "resource://gre/modules/ContextualIdentityService.sys.mjs",
+          ContextualIdentityService:
+            Tabmix.isVersion(1540) ?
+              "moz-src:///toolkit/components/contextualidentity/ContextualIdentityService.sys.mjs"
+            : "resource://gre/modules/ContextualIdentityService.sys.mjs",
           PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
         };
         if (Tabmix.isVersion(1400)) {
