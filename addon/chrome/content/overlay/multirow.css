@@ -8,7 +8,7 @@
 @namespace html url("http://www.w3.org/1999/xhtml");
 
 :root {
-  --tab-min-height-mlt: calc(var(--tabmix-tab-min-height) + 2 * var(--tab-block-margin, 0px)) !important;
+  --tab-min-height-mlt: calc(var(--tabmix-tab-min-height) + 2 * var(--tab-margin-block, var(--tab-block-margin, 0px))) !important;
   --tabmix-toolbarbutton-padding-inner: var(--toolbarbutton-padding-inner, var(--toolbarbutton-inner-padding));
   --tabmix-toolbarbutton-padding-outer: var(--toolbarbutton-padding-outer, var(--toolbarbutton-outer-padding));
   --tabmix-scrollbutton-padding: calc(var(--tabmix-toolbarbutton-padding-inner) + var(--tabmix-toolbarbutton-padding-outer));
@@ -16,7 +16,8 @@
 
 /* Automatically reduce tab-block-margin when in multi-row horizontal mode */
 :root:has(#tabbrowser-tabs[orient="horizontal"][tabmix-multibar]) {
-  --tab-block-margin: 1px;
+  --tab-margin-block: 1px;
+  --tab-block-margin: var(--tab-margin-block);
 }
 
 #tabbrowser-tabs {
@@ -271,7 +272,7 @@
   }
 
   .tabbrowser-tab > .tab-stack > .tab-background {
-    margin-block: var(--tab-block-margin);
+    margin-block: var(--tab-margin-block, var(--tab-block-margin));
   }
 
   .tabbrowser-tab:first-child > .tab-stack > .tab-background {

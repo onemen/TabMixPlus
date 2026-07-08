@@ -1270,11 +1270,11 @@ Tabmix.tabsUtils = {
     return true;
   },
 
-  // properties to add proton --tab-block-margin to --tab-min-height-mlt
+  // properties to add proton --tab-margin-block to --tab-min-height-mlt
   // see multirow.css
   protonValues: {
     enabled: true,
-    name: "--tab-block-margin",
+    name: "--tab-margin-block",
     val: "4px",
     margin: "3px",
   },
