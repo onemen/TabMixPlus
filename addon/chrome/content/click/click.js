@@ -462,13 +462,72 @@ var TabmixContext = {
 
     Tabmix.setFTLDataId("context_reopenInContainer");
 
-    // move extra close options to closeTabOptions submenu
-    const closeTabOptions = this.$id("closeTabOptions");
-    const closeOtherTabs = this.$id("context_closeOtherTabs");
-    closeTabOptions.insertBefore(this.$id("tm-closeAllTabs"), closeOtherTabs);
-    closeTabOptions.insertBefore(this.$id("tm-closeSimilar"), closeOtherTabs);
+    if (Tabmix.isVersion(1540)) {
+      /** @param {"classic" | "altstructure"} name */
+      function addTabmixItemsToLayouts(name) {
+        const layout = TabContextMenu.MENU_SECTIONS[name];
+        // Add Tabmix close items to Firefox layout's closeTabOptions section
+        const items = layout.closeTabOptions[0].items;
+        let index = items.findIndex(item => item === "#context_closeOtherTabs");
+        items.splice(index, 0, "#tm-closeAllTabs", "#tm-closeSimilar");
+
+        // Add all other Tabmix items before tabContextMenu fullscreen section
+        index = layout.tabContextMenu.findIndex(s => s.name === "fullscreen");
+        layout.tabContextMenu.splice(index, 0, {
+          name: "tabmix-general-section",
+          items: [
+            "#tm-undoCloseList",
+            "#tabmix_closeTab_separator",
+            "#tm-duplicateinWin",
+            "#tm-mergeWindowsTab",
+            "#tm-renameTab",
+            "#tm-copyTabUrl",
+            "#tm-autoreloadTab_menu",
+            "#context_reloadTabOptions",
+            "#tabmix_reloadTabOptions_separator",
+            "#tm-docShell",
+            "#tm-freezeTab",
+            "#tm-protectTab",
+            "#tm-lockTab",
+            "#tabmix_lockTab_separator",
+            "#context_bookmarkAllTabs",
+          ],
+        });
+      }
+      addTabmixItemsToLayouts("classic");
+      addTabmixItemsToLayouts("altstructure");
+
+      const menuOrder = Tabmix.prefs.getIntPref("tabContextMenu.menuOrder");
+      if (menuOrder === 0) {
+        TabContextMenu._tabContextMenuArranged = false;
+        TabContextMenu._ensureMenuArranged(this.$id("tabContextMenu"));
+        this._setTabmixOrder();
+      }
+    } else {
+      // move extra close options to closeTabOptions submenu
+      const closeTabOptions = this.$id("closeTabOptions");
+      const closeOtherTabs = this.$id("context_closeOtherTabs");
+      closeTabOptions.insertBefore(this.$id("tm-closeAllTabs"), closeOtherTabs);
+      closeTabOptions.insertBefore(this.$id("tm-closeSimilar"), closeOtherTabs);
+    }
 
     const tabContextMenu = this.$id("tabContextMenu");
+
+    const {prefList} = this.tabContextConfig;
+    const missingItems = Array.from(tabContextMenu.children)
+      .filter(
+        item =>
+          !prefList[item.id] &&
+          !prefList[item.id.slice(0, -1)] &&
+          item.tagName !== "menuseparator" &&
+          !item.hidden
+      )
+      .map(item => item.id);
+
+    if (missingItems.length) {
+      console.warn("Tabmix tabContextConfig is missing these items:", missingItems.join(","));
+    }
+
     tabContextMenu.addEventListener(
       "popupshowing",
       () => {
@@ -480,11 +539,13 @@ var TabmixContext = {
           openTab.setAttribute("oncommand", "Tabmix.BrowserOpenTab({ event });");
         }
 
-        // Save the original Firefox menu order before making any changes
-        this._saveOriginalMenuOrder();
+        if (!Tabmix.isVersion(1540)) {
+          // Save the original Firefox menu order before making any changes
+          this._saveOriginalMenuOrder();
 
-        // Reorder the menu items if needed
-        this.updateMenuOrder();
+          // Reorder the menu items if needed
+          this.updateMenuOrder();
+        }
       },
       {once: true}
     );
@@ -519,7 +580,7 @@ var TabmixContext = {
 
   // Save the original Firefox menu order
   _saveOriginalMenuOrder() {
-    if (this._originalOrderSaved) {
+    if (this._originalOrderSaved || Tabmix.isVersion(1540)) {
       return;
     }
     this._originalOrderSaved = true;
@@ -544,20 +605,34 @@ var TabmixContext = {
 
   // Set menu order based on preference
   updateMenuOrder() {
-    if (!this._originalOrderSaved) {
+    const menuOrder = Tabmix.prefs.getIntPref("tabContextMenu.menuOrder");
+    const altstructure = Services.prefs.getBoolPref(
+      "browser.tabs.contextmenu.altstructure.enabled",
+      false
+    );
+    const layout = altstructure ? menuOrder + 10 : menuOrder;
+    if (this._currentMenuOrder === layout) {
       return;
     }
+    this._currentMenuOrder = layout;
 
-    const menuOrder = Tabmix.prefs.getIntPref("tabContextMenu.menuOrder");
-    if (this._currentMenuOrder !== menuOrder) {
-      this._currentMenuOrder = menuOrder;
+    if (Tabmix.isVersion(1540)) {
+      TabContextMenu._tabContextMenuArranged = false;
+      TabContextMenu._ensureMenuArranged(this.$id("tabContextMenu"));
       if (menuOrder === 0) {
         this._setTabmixOrder();
-      } else {
+      }
+    } else {
+      if (!this._originalOrderSaved) {
+        return;
+      }
+      if (menuOrder === 0) {
+        this._setTabmixOrder();
+      } else if (menuOrder === 1) {
         this._setFirefoxOrder();
       }
-      this.contextMenuShown("tabContextMenu");
     }
+    this.contextMenuShown("tabContextMenu");
   },
 
   // Define the order of menu items in Tabmix order
@@ -591,7 +666,8 @@ var TabmixContext = {
     // Move Close menu to place
     ["context_undoCloseTab", "tabmix_closeTab_separator"],
     ["context_closeTab", "tabmix_closeTab_separator"],
-    ["context_closeDuplicateTabs", "tabmix_closeTab_separator"], // from Firefox 127
+    // Since Firefox 154 with altstructure.enabled this menuitem is in context_closeTabOptions
+    // ["context_closeDuplicateTabs", "tabmix_closeTab_separator"],
     ["context_closeTabOptions", "tabmix_closeTab_separator"],
 
     // Move bookmarks menu together
@@ -602,8 +678,16 @@ var TabmixContext = {
   // Set menu items in Tabmix preferred order
   _setTabmixOrder() {
     const tabContextMenu = this.$id("tabContextMenu");
-    for (const menuItem of this._tabmixMenuOrder) {
-      const [itemId, referenceId, where] = menuItem;
+
+    const itemsInfo = this._tabmixMenuOrder.slice();
+    if (
+      !Tabmix.isVersion(1540) ||
+      !Services.prefs.getBoolPref("browser.tabs.contextmenu.altstructure.enabled")
+    ) {
+      itemsInfo.push(["context_closeDuplicateTabs", "context_closeTabOptions"]);
+    }
+
+    for (const [itemId, referenceId, where] of itemsInfo) {
       const item = this.$id(itemId);
       const reference = this.$id(referenceId);
       if (item?.parentNode && reference) {
@@ -757,8 +841,6 @@ var TabmixContext = {
     };
 
     /**
-     * /**
-     *
      * @typedef {object} ShowItemOptions
      * @property {string} [key] - The key property.
      * @property {boolean} [is] - The is property.
@@ -812,7 +894,7 @@ var TabmixContext = {
       }
     }
 
-    // these menu hidden state controlled by the browse (Firefox, Waterfox ...)
+    // these menu hidden state controlled by the browser (Firefox, Waterfox ...)
     // make sure not to show menu items that are hidden by Firefox
     const itemsIds = new Set([
       "context_sendTabToDevice",
@@ -827,6 +909,16 @@ var TabmixContext = {
       "context_fullscreenExit", // no ID in Firefox < 129
       ...forksExtraIds,
       ...(Tabmix.isVersion(1480) ? ["context_moveSplitViewToNewGroup"] : []),
+      // hide context_askChat on classic menu when pref is off
+      ...((
+        Tabmix.isVersion(1500) && (!Tabmix.isVersion(1540) || !TabContextMenu._altTabContextMenu)
+      ) ?
+        ["context_askChat"]
+      : []),
+      // hide context_askChatSummarize on alt menu when pref is off
+      ...(Tabmix.isVersion(1540) && TabContextMenu._altTabContextMenu ?
+        ["context_askChatSummarize"]
+      : []),
     ]);
     for (const id of Array.from(itemsIds)) {
       const item =

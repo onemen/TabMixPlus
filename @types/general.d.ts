@@ -888,7 +888,25 @@ declare namespace MockedGeckoTypes {
     };
   }
 
+  type PopupSection = {
+    name: string;
+    items: Array<string | string[]>;
+  };
+
+  type MenuSection = {
+    tabContextMenu: NonEmptyArray<PopupSection>;
+    closeTabOptions: NonEmptyArray<PopupSection>;
+    [key: string]: any;
+  };
+
   interface TabContextMenu {
+    MENU_SECTIONS: {
+      classic: MenuSection;
+      altstructure: MenuSection;
+    };
+    _altTabContextMenu: boolean;
+    _tabContextMenuArranged: boolean;
+    _ensureMenuArranged(aPopupMenu: ContextMenu): void;
     contextTab: BrowserTab;
     updateContextMenu: (tabContextMenu: HTMLElement) => void;
   }

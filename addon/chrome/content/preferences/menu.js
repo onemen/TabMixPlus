@@ -23,6 +23,10 @@ var gMenuPane = {
       MozXULElement.insertFTLIfNeeded("preview/tabUnload.ftl");
     }
 
+    if (Tabmix.isVersion(1500)) {
+      MozXULElement.insertFTLIfNeeded("browser/genai.ftl");
+    }
+
     this.setInverseLinkLabel();
 
     // we can not modify build-in key with reserved attribute
@@ -48,6 +52,10 @@ var gMenuPane = {
 
     $("tabContextMenu_menuOrder").querySelector("[data-build-in]").label =
       `${Services.appinfo.name} build-in order`;
+
+    if (!Tabmix.isVersion(1540)) {
+      gPrefWindow.removeItemAndPrefById("pref_altTabContextMenu");
+    }
 
     this.generateTabContextMenuItems();
 
@@ -122,13 +130,13 @@ var gMenuPane = {
     showInverseLink.setAttribute("label", label);
   },
 
-  get PrivateBrowsingUtils() {
+  get TabContextConfig() {
     return Tabmix.lazyGetter(
       this,
-      "PrivateBrowsingUtils",
+      "TabContextConfig",
       () =>
-        ChromeUtils.importESModule("resource://gre/modules/PrivateBrowsingUtils.sys.mjs")
-          .PrivateBrowsingUtils
+        ChromeUtils.importESModule("chrome://tabmix-resource/content/TabContextConfig.sys.mjs")
+          .TabContextConfig
     );
   },
 
@@ -164,14 +172,11 @@ var gMenuPane = {
     }
 
     // Import the menu ID list and selectors
-    const {TabContextConfig} = ChromeUtils.importESModule(
-      "chrome://tabmix-resource/content/TabContextConfig.sys.mjs"
-    );
-    const prefList = TabContextConfig.prefList;
+    const {prefList, selectors} = this.TabContextConfig;
 
     /** @type {Element[]} */
     const itemsWithOutIds = [];
-    for (const [id, selector] of Object.entries(TabContextConfig.selectors)) {
+    for (const [id, selector] of Object.entries(selectors)) {
       const item = tabContextMenu.querySelector(selector);
       if (item) {
         item.setAttribute("data-selector-id", id);
@@ -187,7 +192,7 @@ var gMenuPane = {
     // Filter items that are in our predefined lists
     // Direct ID match or match by selector
     const filteredItems = allItems.filter(
-      item => prefList[item.id] || itemsWithOutIds.includes(item)
+      item => (prefList[item.id] || itemsWithOutIds.includes(item)) && this.filterAskChat(item.id)
     );
 
     // Calculate items per column based on filtered items
@@ -195,55 +200,20 @@ var gMenuPane = {
 
     // Create checkboxes for each item in menu order
     filteredItems.forEach((menuItem, index) => {
-      // Get the ID (either direct or from selector match)
-      let id = menuItem.id || menuItem.getAttribute("data-selector-id");
-      if (!id) {
-        console.log("Tabmix Error: Missing id for tab context menu item", menuItem);
+      const checkbox = this.createCheckbox(menuItem, preferences, prefList);
+      if (!checkbox) {
         return;
-      }
-
-      const checkbox = document.createXULElement("checkbox");
-      checkbox.id = id;
-
-      // Get label and label data from menu item, replace any numeric values
-      // with 1 using regex to avoid plural forms of menu items
-      checkbox.setAttribute("label", menuItem.label ?? "__MISSING__LABEL__:" + id);
-      const args = menuItem.getAttribute("data-l10n-args");
-      if (args) {
-        const normalizedArgs = args.replace(/":\s*(\d+)/g, '": 1');
-        checkbox.setAttribute("data-l10n-args", normalizedArgs);
-      }
-      const l10nId =
-        menuItem.getAttribute("data-l10n-id") || menuItem.getAttribute("data-lazy-l10n-id");
-      if (l10nId) {
-        checkbox.setAttribute("data-l10n-id", l10nId);
-      }
-
-      // Determine if this is a Tabmix item
-      if (id.startsWith("tm-") || menuItem.hasAttribute("tabmix")) {
-        checkbox.setAttribute("data-source", "tabmix");
       }
 
       // Add to appropriate column
       columns[Math.floor(index / itemsPerColumn)]?.appendChild(checkbox);
-
-      // Add preference and connect it to checkbox
-      const prefKey = id.replace(/^context_|^tm-/, "");
-      const prefId = `pref_${prefKey}`;
-      checkbox.setAttribute("preference", prefId);
-      const preference = document.createXULElement("preference");
-      preference.id = prefId;
-      const prefname = `extensions.tabmix.${prefList[id]?.[0] || prefKey}`;
-      preference.setAttribute("name", prefname);
-      preference.setAttribute("type", "bool");
-      preferences.appendChild(preference);
     });
 
     this.handleSpecialLabels(browserWindow);
+    this.clearAccesskey();
 
     const container = document.getElementById("tab-context-menu-container");
     container._columns = columns;
-    container._itemsPerColumn = itemsPerColumn;
   },
 
   /** Handle special cases for menu item labels */
@@ -306,6 +276,17 @@ var gMenuPane = {
     }
   },
 
+  clearAccesskey() {
+    const container = document.getElementById("tab-context-menu-container");
+    const checkboxes = Array.from(container.querySelectorAll("checkbox"));
+    document.l10n?.translateElements(checkboxes).then(() => {
+      for (const cb of checkboxes) {
+        cb.removeAttribute("data-l10n-id");
+        cb.removeAttribute("accesskey");
+      }
+    });
+  },
+
   /** Sorts menu items based on the current menu order preference */
   sortMenuItems() {
     const browserWindow = Tabmix.getTopWin();
@@ -314,18 +295,106 @@ var gMenuPane = {
       return;
     }
 
+    const {prefList} = this.TabContextConfig;
+    const preferences = $("paneMenu").querySelector("preferences");
+
+    const allItems = Array.from(tabContextMenu.children).filter(
+      item =>
+        (prefList[item.id] || item.hasAttribute("data-selector-id")) && this.filterAskChat(item.id)
+    );
+
+    const itemsPerColumn = Math.ceil(allItems.length / 3);
+
     const container = document.getElementById("tab-context-menu-container");
-    const itemsPerColumn = container._itemsPerColumn;
-    const allItems = Array.from(tabContextMenu.children);
+    container.querySelectorAll("checkbox").forEach(checkbox => (checkbox.hidden = true));
     let index = 0;
     allItems.forEach(menuItem => {
       if (menuItem.tagName === "menuseparator") return;
       const id = menuItem.id || menuItem.getAttribute("data-selector-id");
-      const checkbox = id ? document.getElementById(id) : null;
+      const checkbox =
+        id ?
+          (document.getElementById(id) ?? this.createCheckbox(menuItem, preferences, prefList))
+        : null;
       if (checkbox) {
+        checkbox.hidden = false;
         container._columns[Math.floor(index / itemsPerColumn)]?.appendChild(checkbox);
         index++;
       }
     });
+    this.clearAccesskey();
+  },
+
+  createCheckbox(menuItem, preferences, prefList) {
+    // Get the ID (either direct or from selector match)
+    let id = menuItem.id || menuItem.getAttribute("data-selector-id");
+    if (!id) {
+      console.log("Tabmix Error: Missing id for tab context menu item", menuItem);
+      return null;
+    }
+
+    const checkbox = document.createXULElement("checkbox");
+    checkbox.id = id;
+
+    // Get label and label data from menu item, replace any numeric values
+    // with 1 using regex to avoid plural forms of menu items
+    checkbox.setAttribute("label", menuItem.label ?? "__MISSING__LABEL__:" + id);
+    const args = menuItem.getAttribute("data-l10n-args");
+    if (args) {
+      const normalizedArgs = args.replace(/":\s*(\d+)/g, '": 1');
+      checkbox.setAttribute("data-l10n-args", normalizedArgs);
+    }
+    const l10nId =
+      menuItem.getAttribute("data-l10n-id") || menuItem.getAttribute("data-lazy-l10n-id");
+    if (l10nId) {
+      checkbox.setAttribute("data-l10n-id", l10nId);
+    }
+
+    // context_askChat change its label based on user preferences
+    // use constant label for it
+    if (Tabmix.isVersion(1500)) {
+      if (id === "context_askChat") {
+        checkbox.setAttribute("data-l10n-id", "genai-menu-ask-generic-2");
+      }
+      if (id === "context_askChatSummarize") {
+        document.l10n?.formatValue("genai-menu-summarize-page").then(translatedText => {
+          checkbox.setAttribute("label", translatedText ?? "Summarize Page");
+        });
+      }
+    }
+
+    // Determine if this is a Tabmix item
+    if (id.startsWith("tm-") || menuItem.hasAttribute("tabmix")) {
+      checkbox.setAttribute("data-source", "tabmix");
+    }
+
+    // add new checkbox the DOM, the caller will move it to its place
+    document.getElementById(`column-1`).appendChild(checkbox);
+
+    // Add preference and connect it to checkbox
+    const prefKey = id.replace(/^context_|^tm-/, "");
+    const prefId = `pref_${prefKey}`;
+    checkbox.setAttribute("preference", prefId);
+    const preference = document.createXULElement("preference");
+    preference.id = prefId;
+    const prefname = `extensions.tabmix.${prefList[id]?.[0] || prefKey}`;
+    preference.setAttribute("name", prefname);
+    preference.setAttribute("type", "bool");
+    preferences.appendChild(preference);
+
+    return checkbox;
+  },
+
+  filterAskChat(id) {
+    const altstructure =
+      Tabmix.isVersion(1540) &&
+      Services.prefs.getBoolPref("browser.tabs.contextmenu.altstructure.enabled");
+
+    if (id === "context_askChat" && (!Tabmix.isVersion(1500) || altstructure)) {
+      return false;
+    }
+    if (id === "context_askChatSummarize" && (!Tabmix.isVersion(1500) || !altstructure)) {
+      return false;
+    }
+    return true;
   },
 };

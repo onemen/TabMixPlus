@@ -18,6 +18,8 @@ const isWaterfox = appName == "waterfox";
  */
 const TAB_CONTEXT_MENU_PREFLIST = {
   // Firefox items
+  ...(isVersion(1500) ? {context_askChat: [""]} : null),
+  ...(isVersion(1540) ? {context_askChatSummarize: [""]} : null),
   "context_bookmarkAllTabs": ["bookmarkTabsMenu"],
   "context_bookmarkTab": ["bookmarkTabMenu"],
   // "context_bookmarkSelectedTabs",

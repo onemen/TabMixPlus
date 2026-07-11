@@ -1720,6 +1720,7 @@ window.gTMPprefObserver = {
       }
     };
     addObserver("browser.ctrlTab.sortByRecentlyUsed", true);
+    addObserver("browser.tabs.contextmenu.altstructure.enabled", Tabmix.isVersion(1540));
 
     try {
       // add Observer
@@ -2157,6 +2158,7 @@ window.gTMPprefObserver = {
           Services.prefs.setBoolPref("browser.tabs.insertAfterCurrent", false);
         }
         break;
+      case "browser.tabs.contextmenu.altstructure.enabled":
       case "extensions.tabmix.tabContextMenu.menuOrder":
         TabmixContext.updateMenuOrder();
         break;

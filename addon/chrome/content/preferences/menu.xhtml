@@ -27,6 +27,9 @@
       <preference id="pref_tabContextMenu_menuOrder"
                   name="extensions.tabmix.tabContextMenu.menuOrder"                         type="int"
                   data-evt-change="gMenuPane.sortMenuItems(this);"/>
+      <preference id="pref_altTabContextMenu"
+                  name="browser.tabs.contextmenu.altstructure.enabled"                      type="bool"
+                  data-evt-change="gMenuPane.sortMenuItems(this);"/>
       <preference id="pref_showLinkHere"       name="extensions.tabmix.openLinkHere"        type="bool"/>
       <preference id="pref_selectTab1"         name="browser.tabs.loadInBackground"
                                                                            inverted="true"  type="bool"
@@ -71,6 +74,7 @@
           <html:fieldset flex="1" style="display: flex; flex-direction: column">
             <html:legend>&showtabBarContext.label;</html:legend>
             <checkbox_tmp id="showOnTabbar" label="&showOnTabbar.label;" preference="pref_showOnTabbar"/>
+            <checkbox_tmp id="_altTabContextMenu" label="Enable alternate tab context menu structure" preference="pref_altTabContextMenu"/>
             <hbox align="center">
               <label value="Order of items in the context menu:" control="tabContextMenu_menuOrder"/>
               <menulist id="tabContextMenu_menuOrder" orient="horizontal" preference="pref_tabContextMenu_menuOrder"

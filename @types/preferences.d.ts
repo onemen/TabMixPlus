@@ -476,10 +476,13 @@ declare namespace MenuPaneNS {
   function editSlideShowKey(): void;
   function toggleLinkLabel(item: HTMLElement): void;
   function setInverseLinkLabel(): void;
-  const PrivateBrowsingUtils: MockedExports.PrivateBrowsingUtils;
+  const TabContextConfig: TabContextConfigModule.Exports;
   function generateTabContextMenuItems(): void;
   function handleSpecialLabels(browserWindow: BrowserWindow): void;
+  function clearAccesskey(): void;
   function sortMenuItems(container: HTMLElement): void;
+  function createCheckbox(menuItem: Element, preferences: HTMLElement, prefList: TabContextConfigModule.PrefList): HTMLInputElement | null;
+  function filterAskChat(id: string): boolean;
 }
 
 declare namespace MousePaneNS {
