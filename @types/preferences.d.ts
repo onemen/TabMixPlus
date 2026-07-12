@@ -13,6 +13,7 @@ interface GetByMapWithType {
 }
 
 interface GetClosestMap {
+  "prefpane": PrefPaneClass;
   "preference": PreferenceClass;
   "[preference]": PreferenceElement;
 }
@@ -118,9 +119,7 @@ declare interface PreferencesListClass extends MozXULElement {
   rootBranchInternal: Prefs;
   _constructedChildrenCount: number;
   _constructAfterChildrenCalled: boolean;
-  _preferenceChildrenInitialized: boolean;
-  _preferenceChildrenObserver: MutationObserver | null;
-  _preferenceChildren: PreferenceClass[];
+  _preferenceChildren: HTMLCollectionOf<PreferenceClass>;
   readonly type: string;
   readonly instantApply: boolean;
   observe(aSubject: nsISupports, aTopic: string, aData: string): void;
@@ -210,6 +209,7 @@ declare interface PrefPaneClass extends MozXULElement {
   _finalizeDeferredElements(): void;
   _loaded: boolean;
   _resizeObserver: ResizeObserver | null;
+  connected: boolean;
   readonly contentHeight: number;
   readonly contentWidth: number;
   readonly DeferredTask: DeferredTaskConstructor;

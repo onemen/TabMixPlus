@@ -63,13 +63,6 @@ class Preferences extends MozXULElement {
    */
   _constructAfterChildrenCalled = false;
 
-  // Track whether the child <preference> list has been initialized.
-  _preferenceChildrenInitialized = false;
-
-  // Observe the subtree until the child <preference> elements are available.
-  /** @type {MutationObserver | null} */
-  _preferenceChildrenObserver = null;
-
   constructor() {
     super();
 
@@ -82,40 +75,9 @@ class Preferences extends MozXULElement {
     this._preferenceChildren = [];
   }
 
-  _initializePreferenceChildren() {
-    /** @type {HTMLCollectionOf<PreferenceClass>} */
-    this._preferenceChildren = Array.from(this.querySelectorAll("preference"));
-    if (!this._preferenceChildren.length) {
-      if (!this._preferenceChildrenObserver) {
-        this._preferenceChildrenObserver = new MutationObserver(() => {
-          if (this._preferenceChildrenInitialized) {
-            return;
-          }
-          this._initializePreferenceChildren();
-        });
-        this._preferenceChildrenObserver.observe(this, {childList: true, subtree: true});
-      }
-      return;
-    }
-
-    this._preferenceChildrenInitialized = true;
-    this._preferenceChildrenObserver?.disconnect();
-    this._preferenceChildrenObserver = null;
-
-    if (
-      this._constructedChildrenCount > 0 &&
-      this._constructedChildrenCount == this._preferenceChildren.length
-    ) {
-      this._constructAfterChildren();
-    }
-  }
-
   connectedCallback() {
-    if (this._preferenceChildrenInitialized) {
-      return;
-    }
-
-    this._initializePreferenceChildren();
+    /** @type {HTMLCollectionOf<PreferenceClass>} */
+    this._preferenceChildren = this.getElementsByTagName("preference");
   }
 
   get type() {
@@ -144,11 +106,6 @@ class Preferences extends MozXULElement {
   }
 
   _constructAfterChildren() {
-    // Ensure this runs only once even if both initialization paths reach it.
-    if (this._constructAfterChildrenCalled) {
-      return;
-    }
-
     // This method will be called after the last of the child
     // <preference> elements is constructed. Its purpose is to propagate
     // the values to the associated form elements. Sometimes the code for
@@ -198,6 +155,12 @@ class Preference extends MozXULElement {
   }
 
   connectedCallback() {
+    // only connect preference element that already appended to the DOM
+    // see Prefpane and PrefWindow connectedCallback
+    if (!this.closest("prefpane").connected) {
+      return;
+    }
+
     window.addEventListener("unload", this.disconnectedCallback);
 
     // if the element has been inserted without the name attribute set,
@@ -679,6 +642,7 @@ class PrefPane extends MozXULElement {
   _initialized = false;
   _loaded = false;
   value = "";
+  connected = false;
 
   /** @type {Set<PreferenceElement>} */
   _deferredValueUpdateElements = new Set();
@@ -757,6 +721,8 @@ class PrefPane extends MozXULElement {
     /** @type {HTMLCollectionBase_G<PanelItemButton>} */ // @ts-expect-error - override default Node type
     const childNodes = [...this.childNodes];
     this.appendChild(fragment);
+    // flag pane as connected
+    this.connected = !!this.src;
     this._content.append(...childNodes);
 
     this.initializeAttributeInheritance();
@@ -1297,6 +1263,7 @@ class PrefWindow extends MozXULElement {
       }
     };
 
+    /** @type {PrefPane[]} */ // @ts-ignore
     const childrenPrefpane = [...this.children].filter(child => child.tagName == "prefpane");
     const otherChildren = [...this.children].filter(child => child.tagName != "prefpane");
     const fragment = this.fragment;
@@ -1304,6 +1271,10 @@ class PrefWindow extends MozXULElement {
     /** @type {HTMLElement} */ // @ts-ignore
     const fragmentLastChild = fragment.lastElementChild;
     this.appendChild(fragment);
+    // flag inline pane as connected
+    childrenPrefpane.map(pane => {
+      if (!pane.src) pane.connected = true;
+    });
     deck.append(...childrenPrefpane);
     fragmentLastChild.append(...otherChildren);
 
