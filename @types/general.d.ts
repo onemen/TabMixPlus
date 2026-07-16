@@ -568,6 +568,7 @@ declare namespace MockedGeckoTypes {
     browsers: ChromeBrowser[];
     readonly canGoForward: boolean;
     readonly canGoBack: boolean;
+    clearRelatedTabs: () => void;
     clearMultiSelectedTabs: () => void;
     closingTabsEnum: ClosingTabsEnum;
     duplicateTab: (aTab: BrowserTab, aRestoreTabImmediately: boolean, aOptions?: {inBackground?: boolean; index?: number}) => BrowserTab;

@@ -1014,7 +1014,10 @@ var TMP_ClosedTabs = {
     if (aWhere === "current" || (aWhere === "original" && restorePosition)) {
       Tabmix.moveTabTo(newTab, {tabIndex: Math.min(gBrowser.tabs.length - 1, pos)});
     } else if (aWhere != "end" && Tabmix.getOpenTabNextPref()) {
-      let tab = gBrowser._lastRelatedTabMap.get(gBrowser.selectedTab) || gBrowser.selectedTab;
+      let tab =
+        Tabmix.isVersion(1530) ?
+          gBrowser.selectedTab
+        : gBrowser._lastRelatedTabMap.get(gBrowser.selectedTab) || gBrowser.selectedTab;
       let offset = newTab._tPos > tab._tPos ? 1 : 0;
       Tabmix.moveTabTo(newTab, {tabIndex: tab._tPos + offset});
     } else if (aBlankTabToReuse && !Tabmix.getOpenTabNextPref()) {

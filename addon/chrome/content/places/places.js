@@ -301,7 +301,8 @@ var TMP_Places = {
     let relatedToCurrent = !doReplace && openTabNext && selectedTab._tPos < openTabs.length - 1;
     if (relatedToCurrent) {
       // open bookmarks after last related tab if exist
-      let lastRelatedTab = gBrowser._lastRelatedTabMap.get(selectedTab);
+      let lastRelatedTab =
+        Tabmix.isVersion(1530) ? selectedTab : gBrowser._lastRelatedTabMap.get(selectedTab);
       prevTab = lastRelatedTab || selectedTab;
     } else {
       prevTab = Tabmix.visibleTabs.last;
