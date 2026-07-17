@@ -147,7 +147,9 @@ PlacesUtilsInternal = {
     /** @type {typeof PlacesModule.updateOpenTabset} */
     function updateOpenTabset(name, treeStyleTab = false) {
       const isWaterfoxOverridePlacesUIUtils =
-        TabmixSvc.version({wf: "115.9.0"}) && !lazy.PrivateBrowsingUtils.isWindowPrivate(aWindow);
+        TabmixSvc.version({wf: "115.9.0"}) &&
+        !TabmixSvc.version({wf: "153.0"}) &&
+        !lazy.PrivateBrowsingUtils.isWindowPrivate(aWindow);
       if (isWaterfoxOverridePlacesUIUtils) {
         if (!originalOpenTabset) {
           // can not find original PlacesUIUtils.openTabset that Waterfox override

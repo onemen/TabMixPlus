@@ -159,7 +159,7 @@ async function startup(data, reason) {
 
   /** @type {MockedGeckoTypes.PlacesUIUtils["openTabset"]} */
   let _tabmix_PlacesUIUtils_openTabset = () => {};
-  if (lazy.isVersion({wf: "115.9.0"})) {
+  if (lazy.isVersion({wf: "115.9.0"}) && !lazy.isVersion({wf: "153.0"})) {
     const PlacesUIUtilsURL =
       lazy.isVersion(1410) ?
         "moz-src:///browser/components/places/PlacesUIUtils.sys.mjs"

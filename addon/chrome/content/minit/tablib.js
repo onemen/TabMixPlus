@@ -1996,14 +1996,22 @@ Tabmix.tablib = {
       )
       ._replace(
         /(?<!const )buttonPressed = ps\.confirmEx[^;]*;/,
-        "buttonPressed = Tabmix.tablib.showClosingTabsPrompt(promptType, tabsToClose, numProtected, flags, warnOnClose);"
+        "buttonPressed = Tabmix.tablib.showClosingTabsPrompt(promptType, tabsToClose, numProtected, flags, warnOnClose);",
+        {check: !Tabmix.isVersion({wf: "153.0"})}
       )
       ._replace(
         /(?<!const )buttonPressed = ps\.confirmEx2[^;]*;/,
         "buttonPressed = Tabmix.tablib.showClosingTabsPrompt(promptType, tabsToClose, numProtected, flags, warnOnClose, {checkboxLabel2,  restoreSession});",
-        {check: Tabmix.isVersion({wf: "115.13.0"})}
+        {check: Tabmix.isVersion({wf: "115.13.0"}) && !Tabmix.isVersion({wf: "153.0"})}
       )
-      ._replace("aCloseTabs == this.closingTabsEnum.ALL &&", "")
+      ._replace(
+        /var buttonPressed = ps\.confirmEx2[^;]*;/,
+        `var buttonPressed = Tabmix.tablib.showClosingTabsPrompt(promptType, tabsToClose, numProtected, flags, warnOnClose, {checkboxLabel2: closingWindow ? restoreCheckbox : null,  restoreSession});`,
+        {check: Tabmix.isVersion({wf: "153.0"})}
+      )
+      ._replace("aCloseTabs == this.closingTabsEnum.ALL &&", "", {
+        check: !Tabmix.isVersion({wf: "153.0"}),
+      })
       ._replace(
         "Services.prefs.setBoolPref(pref, false);",
         "Services.prefs.setBoolPref(prefName, false);"
