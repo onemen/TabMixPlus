@@ -54,7 +54,12 @@ interface gTMPprefObserver {
   showReloadEveryOnReloadButton: () => void;
   tabBarPositionChanged: (aPosition: number) => boolean;
   toolbarbuttonTopMargin: () => void;
-  checkScriptsUpdateNeeded: () => Promise<{updateNeeded: boolean; latestDate: string}>;
+  checkScriptsUpdateNeeded: () => Promise<{
+    fxFolder: {updateNeeded: boolean; date: string; remoteHash: string};
+    utils: {updateNeeded: boolean; date: string; remoteHash: string};
+  }>;
+  computeFilesHash: (files: string[], baseDir: string) => string;
+  fetchUpdateSupport: (currentVersion: string) => Promise<{users: string; amount: string; date: string} | null>;
   showUpdatePage: (currentVersion: string) => Promise<void>;
   updateTabClickingOptions: () => void;
   updateTabsFitRow: () => void;

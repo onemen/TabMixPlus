@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Tab Mix Plus - New Version Installed</title>
-    <link rel="shortcut icon" href="chrome://tabmixplus/skin/tmpsmall.png" type="image/x-icon"/>
+    <link rel="shortcut icon" href="chrome://tabmixplus/skin/tmpsmall.png" type="image/x-icon" />
     <link rel="stylesheet" href="chrome://tabmixplus/content/update/update.css" />
     <script type="application/javascript" src="chrome://tabmixplus/content/update/update.js" />
   </head>
@@ -25,32 +25,39 @@
       </header>
       <aside class="card message-container">
         <h3>Important</h3>
-        <p class="message-title">
-          Update Your Firefox Scripts for Firefox Compatibility
-        </p>
-        <div class="message-content">
-          <time
-            class="date-badge"
-            datetime="2025-11-30"
-            title="Updated Nov 30, 2025"
-            aria-label="Updated November 30, 2025"
-          >
-            <span class="date-icon" aria-hidden="true">🕒</span>
-            Updated Nov 30, 2025
-          </time>
-          <p>
-            <span>Download</span>
-            <a href="https://github.com/onemen/TabMixPlus/releases/download/dev-build/fx-folder.zip"
-              >Configuration files</a
-            >
-          </p>
-          <p>
-            <span>Download</span>
-            <a href="https://github.com/onemen/TabMixPlus/releases/download/dev-build/utils.zip"
-              >Utils</a
-            >
-          </p>
+        <p class="message-title">Update Your Firefox Scripts for Firefox Compatibility</p>
+        <div id="config-section" class="scripts-section" hidden="hidden">
+          <p class="scripts-label">Configuration files (requires manual install)</p>
+          <time class="scripts-date" id="config-update-date" datetime="" hidden="hidden"></time>
+          <div class="button-group">
+            <button id="btn-download-config" class="action-button download-button">Download</button>
+          </div>
+          <label class="skip-checkbox">
+            <input type="checkbox" id="skip-config" />
+            <span>Don't show again for this update</span>
+          </label>
         </div>
+        <div id="utils-section" class="scripts-section" hidden="hidden">
+          <p class="scripts-label">Utils (auto install to profile)</p>
+          <time class="scripts-date" id="utils-update-date" datetime="" hidden="hidden"></time>
+          <div class="button-group">
+            <button id="btn-download-utils" class="action-button download-button">Download</button>
+            <button id="btn-install-utils" class="action-button install-button">Install</button>
+          </div>
+          <label class="skip-checkbox">
+            <input type="checkbox" id="skip-utils" />
+            <span>Don't show again for this update</span>
+          </label>
+        </div>
+        <div id="install-status" class="install-status" hidden="hidden">
+          <p id="install-status-text"></p>
+        </div>
+        <button id="btn-restart" class="action-button restart-button" hidden="hidden">
+          Restart Firefox
+        </button>
+        <button id="btn-remind-tomorrow" class="action-button remind-button" hidden="hidden">
+          Remind me Tomorrow
+        </button>
       </aside>
       <main class="container">
         <section id="update-container">
@@ -107,8 +114,8 @@
                     <strong class="font-bold text-teal-600">$1/month</strong>.
                   </li>
                   <li>
-                    <strong>No subscriptions:</strong> I use a <strong>Trust Plan</strong> — you track
-                    your own payments, and I trust your support.
+                    <strong>No subscriptions:</strong> I use a <strong>Trust Plan</strong> — you
+                    track your own payments, and I trust your support.
                   </li>
                   <li>
                     <strong>Still open source:</strong> Tab Mix Plus remains open source — view,
@@ -126,7 +133,8 @@
                   <strong>$1-$2/month</strong> to support my ongoing development.
                 </p>
                 <p>
-                  Version 1.31 and earlier remain free and compatible with Firefox up to version 139.
+                  Version 1.31 and earlier remain free and compatible with Firefox up to version
+                  139.
                 </p>
               </div>
             </details>
@@ -136,19 +144,19 @@
                 <p class="intro-text">Hey there,</p>
                 <p>
                   It's hard to believe, but it's been 21 years since I launched
-                  <span class="font-bold text-teal-600">Tab Mix Plus</span> back in the early days of
-                  Firefox! My passion has always been to make your browsing experience smoother and
-                  more efficient by enhancing Firefox's tab abilities.
+                  <span class="font-bold text-teal-600">Tab Mix Plus</span> back in the early days
+                  of Firefox! My passion has always been to make your browsing experience smoother
+                  and more efficient by enhancing Firefox's tab abilities.
                 </p>
                 <p>
-                  But keeping <span class="font-bold text-teal-600">Tab Mix Plus</span> top-notch and
-                  evolving with web standards takes continuous effort. New features take time to
+                  But keeping <span class="font-bold text-teal-600">Tab Mix Plus</span> top-notch
+                  and evolving with web standards takes continuous effort. New features take time to
                   develop, and Firefox changes require my attention all the time. That's where you
                   come in, my friend.
                 </p>
                 <p>
-                  A small, monthly donation—think the price of your morning coffee—could make a world
-                  of difference.
+                  A small, monthly donation—think the price of your morning coffee—could make a
+                  world of difference.
                 </p>
                 <p>
                   Sincerely, thank you for your unwavering support. Together, let's keep Firefox a
@@ -176,8 +184,8 @@
           <p>
             I am maintaining <strong>Tab Mix Plus</strong> since Firefox 1.0.<br />
             I continue to improve <strong>Tab Mix Plus</strong> by fixing bugs and compatibility
-            problems with other extensions and themes, as well as other Firefox's based browsers like
-            <a href="https://zen-browser.app/" rel="nofollow" target="_blank">Zen Browser</a>,
+            problems with other extensions and themes, as well as other Firefox's based browsers
+            like <a href="https://zen-browser.app/" rel="nofollow" target="_blank">Zen Browser</a>,
             <a href="https://www.waterfox.net/" rel="nofollow" target="_blank">Waterfox</a>,
             <a href="https://floorp.app/" rel="nofollow" target="_blank">Floorp</a> and
             <a href="https://librewolf.net/" rel="nofollow" target="_blank">LibreWolf</a>.
@@ -191,8 +199,8 @@
           <h2 id="releases--change-log">Releases / Change Log</h2>
           <p>
             Visit our
-            <a href="https://onemen.github.io/tabmixplus-docs/releases/latest">Releases</a> pages for
-            Complete List of Changes and Bugs Fixed. <br />
+            <a href="https://onemen.github.io/tabmixplus-docs/releases/latest">Releases</a> pages
+            for Complete List of Changes and Bugs Fixed. <br />
             Visit <strong>Tab Mix Plus</strong>
             <a href="https://onemen.github.io/tabmixplus-docs/help/links">Help</a>.
           </p>
@@ -200,7 +208,10 @@
           <h2 id="bug-report">Bug report</h2>
           <p>
             To report a bug first go to our
-            <a href="https://github.com/onemen/TabMixPlus/discussions" rel="nofollow" target="_blank"
+            <a
+              href="https://github.com/onemen/TabMixPlus/discussions"
+              rel="nofollow"
+              target="_blank"
               >discussions</a
             >
             section of our repository. You can also look at our
@@ -216,8 +227,8 @@
           <h2 id="development-channel">Development Channel</h2>
           <p>
             The Development Channel lets you test an experimental new version of this add-on before
-            it's released to the general public. Note that the latest development build is compatible
-            with all supported versions of Firefox. (see
+            it's released to the general public. Note that the latest development build is
+            compatible with all supported versions of Firefox. (see
             <a
               href="https://onemen.github.io/tabmixplus-docs/other/installation#browser-compatibility"
               >Browser Compatibility</a
@@ -228,7 +239,8 @@
 
           <h2 id="contribute-code">Contribute code</h2>
           <p>
-            Anyone who wants to contribute code or assist in any other way can contact me directly via
+            Anyone who wants to contribute code or assist in any other way can contact me directly
+            via
             <a href="mailto:tabmix.onemen@gmail.com">tabmix.onemen@gmail.com</a>, or by opening pull
             request or issue at our
             <a href="https://github.com/onemen/TabMixPlus" rel="nofollow" target="_blank"

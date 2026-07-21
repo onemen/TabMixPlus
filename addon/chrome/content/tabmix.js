@@ -642,6 +642,15 @@ var TMP_eventListener = {
     if (Tabmix.isBlankNewTab(url)) {
       tab.setAttribute("visited", true);
     }
+
+    // remove update.xhtml tab from previous sessions
+    const UPDATE_URL = "chrome://tabmixplus/content/update/update.xhtml";
+    const updateTab =
+      !tab._tabmixShowUpdatePage && tab.linkedBrowser?.currentURI?.spec === UPDATE_URL;
+
+    if (updateTab) {
+      gBrowser.removeTab(tab);
+    }
   },
 
   onFullScreen: function TMP_EL_onFullScreen(enterFS) {

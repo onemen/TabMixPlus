@@ -72,6 +72,7 @@ class Preferences extends MozXULElement {
       this.observe(...args);
     };
 
+    /** @type {HTMLCollectionOf<PreferenceClass> | any[]} */
     this._preferenceChildren = [];
   }
 

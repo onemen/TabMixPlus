@@ -3439,7 +3439,7 @@ window.gTMPprefObserver = {
     /** @type {typeof TabmixprefObserverNS._getVersion} */
     let getVersion = function _getVersion(currentVersion) {
       let oldVersion = Tabmix.prefs.getCharPref("version", "");
-      let showNewVersionTab;
+      let showUpdateTab = false;
       if (currentVersion != oldVersion) {
         // reset current preference in case it is not a string
         Tabmix.prefs.clearUserPref("version");
@@ -3452,11 +3452,11 @@ window.gTMPprefObserver = {
         if (!isDevBuild) {
           const versionRegex = /^\d+\.\d+\.\d+$/;
           if (!versionRegex.test(currentVersion) || !versionRegex.test(oldVersion)) {
-            showNewVersionTab = true;
+            showUpdateTab = true;
           } else {
             const [c0 = 0, c1 = 0, c2 = 0] = currentVersion.split(".").map(Number);
             const [o0 = 0, o1 = 0, o2 = 0] = oldVersion.split(".").map(Number);
-            showNewVersionTab = c0 !== o0 || c1 !== o1 || c2 - o2 > 1;
+            showUpdateTab = c0 !== o0 || c1 !== o1 || c2 - o2 > 1;
           }
         } else {
           let re = /^(.*)\.\d{6}$/;
@@ -3464,13 +3464,25 @@ window.gTMPprefObserver = {
             let obj = re.exec(str) ?? str;
             return typeof obj == "string" ? obj : (obj[1] ?? str);
           };
-          showNewVersionTab = subs(currentVersion) != subs(oldVersion);
+          showUpdateTab = subs(currentVersion) != subs(oldVersion);
         }
       }
-      if (showNewVersionTab) {
+
+      // check for firefox-scripts for update daily
+      if (!showUpdateTab) {
+        // eslint-disable-next-line mozilla/avoid-Date-timing
+        const today = new Date().toISOString().slice(0, 10);
+        const lastCheck = Tabmix.prefs.getCharPref("lastScriptsCheckDate", "");
+        if (lastCheck !== today) {
+          showUpdateTab = true;
+          currentVersion = "";
+        }
+      }
+
+      if (showUpdateTab) {
         window.setTimeout(() => {
           gTMPprefObserver.showUpdatePage(currentVersion);
-        }, 1000);
+        }, 100);
       }
     };
     AddonManager.getAddonByID("{dc572301-7619-498c-a57d-39143191b318}").then(aAddon => {
@@ -3503,58 +3515,139 @@ window.gTMPprefObserver = {
     this.updateTabClickingOptions();
   },
 
+  computeFilesHash(files, baseDir) {
+    const sorted = [...files].sort((a, b) => a.localeCompare(b));
+
+    const os = Services.appinfo.OS;
+    const nativeBase = os === "WINNT" ? baseDir.replace(/\//g, "\\") : baseDir;
+
+    const baseFile = Cc["@mozilla.org/file/local;1"].createInstance(Ci.nsIFile);
+    baseFile.initWithPath(nativeBase);
+
+    const hasher = Cc["@mozilla.org/security/hash;1"].createInstance(Ci.nsICryptoHash);
+    hasher.init(Ci.nsICryptoHash.SHA256);
+
+    const encoder = new TextEncoder();
+    const binStream = Cc["@mozilla.org/binaryinputstream;1"].createInstance(
+      Ci.nsIBinaryInputStream
+    );
+
+    for (const relative of sorted) {
+      const pathBytes = encoder.encode(relative + "\n");
+      hasher.update(pathBytes, pathBytes.length);
+
+      const file = baseFile.clone();
+      for (const part of relative.split("/")) {
+        file.append(part);
+      }
+
+      const fis = Cc["@mozilla.org/network/file-input-stream;1"].createInstance(
+        Ci.nsIFileInputStream
+      );
+      fis.init(file, 0x01, 0o444, 0);
+      binStream.setInputStream(fis);
+
+      const count = fis.available();
+      const data = new ArrayBuffer(count);
+      binStream.readArrayBuffer(count, data);
+      hasher.update(new Uint8Array(data), count);
+
+      fis.close();
+    }
+
+    const base64 = hasher.finish(true);
+    const binary = atob(base64);
+    let hex = "";
+    for (let i = 0; i < binary.length; i++) {
+      hex += binary.charCodeAt(i).toString(16).padStart(2, "0");
+    }
+    return hex;
+  },
+
   async checkScriptsUpdateNeeded() {
-    const result = {updateNeeded: false, latestDate: ""};
+    /**
+     * @type {{
+     *   fxFolder: {updateNeeded: boolean; date: string; remoteHash: string};
+     *   utils: {updateNeeded: boolean; date: string; remoteHash: string};
+     * }}
+     */
+    const result = {
+      fxFolder: {updateNeeded: false, date: "", remoteHash: ""},
+      utils: {updateNeeded: false, date: "", remoteHash: ""},
+    };
     try {
+      /** @type {Record<string, {date: string; hash: string}> | undefined} */
       let remoteInfo;
       try {
         const gistID = "e02ec904dd82a73cec4c229a7cbb552e";
-        const url = `https://gist.githubusercontent.com/onemen/${gistID}/raw/versionInfo.json`;
+        const url = `https://gist.githubusercontent.com/onemen/${gistID}/raw/firefoxScriptsHashes.json`;
         const response = await fetch(url, {cache: "no-store"});
         if (response.ok) {
+          // @ts-ignore response.json() type
           remoteInfo = await response.json();
         }
       } catch (e) {
-        console.error("TabMix: Failed to fetch versionInfo.json", e);
+        console.error("TabMix: Failed to fetch firefoxScriptsHashes.json", e);
       }
 
       if (!remoteInfo) {
         return result;
       }
 
-      const dates = Object.values(remoteInfo)
-        .map(info => info.date)
-        .sort();
-      result.latestDate = dates.at(-1);
+      const fxFolderFiles = ["config.js", "defaults/pref/config-prefs.js"];
+      const utilsFiles = [
+        "BootstrapLoader.js",
+        "chrome.manifest",
+        "RDFDataSource.sys.mjs",
+        "RDFManifestConverter.sys.mjs",
+        "userChrome.js",
+        "xPref.sys.mjs",
+      ];
 
-      const versionFile = PathUtils.join(
-        PathUtils.profileDir,
-        "chrome",
-        "utils",
-        "versionInfo.json"
-      );
+      const greDir = Services.dirsvc.get("GreD", Ci.nsIFile).path;
+      const utilsDir = PathUtils.join(PathUtils.profileDir, "chrome", "utils");
 
-      if (!(await IOUtils.exists(versionFile))) {
-        result.updateNeeded = true;
-        return result;
+      const localHashes = {
+        "fx-folder": this.computeFilesHash(fxFolderFiles, greDir),
+        "utils": this.computeFilesHash(utilsFiles, utilsDir),
+      };
+
+      for (const key of ["fx-folder", "utils"]) {
+        const remote = remoteInfo[key];
+        if (remote) {
+          const target = key === "fx-folder" ? result.fxFolder : result.utils;
+          target.date = remote.date;
+          target.remoteHash = remote.hash;
+          const hashMismatch =
+            key === "fx-folder" ?
+              localHashes["fx-folder"] !== remote.hash
+            : localHashes.utils !== remote.hash;
+          const skipHash = Tabmix.prefs.getCharPref(`skippedHash.${key}`, "");
+
+          // Reset skip pref when remote hash changed or local files already match gist
+          if (skipHash && (skipHash !== remote.hash || !hashMismatch)) {
+            Tabmix.prefs.clearUserPref(`skippedHash.${key}`);
+          }
+
+          target.updateNeeded = hashMismatch && skipHash !== remote.hash;
+        }
       }
 
-      const content = await IOUtils.readUTF8(versionFile);
-      const localInfo = JSON.parse(content);
+      // Waterfox doesn't need config files — no fx-folder updates
+      if (TabmixSvc.isWaterfox) {
+        result.fxFolder.updateNeeded = false;
+      }
 
-      result.updateNeeded = Object.entries(remoteInfo).some(([key, {date}]) => {
-        const localDate = localInfo[key]?.date;
-        return !localDate || localDate < date;
-      });
       return result;
     } catch (e) {
       console.error("TabMix: Error checking scripts update", e);
-      result.updateNeeded = true;
+      result.fxFolder.updateNeeded = true;
+      result.utils.updateNeeded = true;
       return result;
     }
   },
 
-  async showUpdatePage(currentVersion) {
+  async fetchUpdateSupport(currentVersion) {
     /** @type {Record<string, string>} */
     const platformMap = {
       win: "Windows",
@@ -3563,23 +3656,12 @@ window.gTMPprefObserver = {
       android: "Android",
     };
 
-    // save tabmix version, operating system, browser name and version
     const payload = {
       version: currentVersion,
       os: platformMap[AppConstants.platform] || AppConstants.platform,
       browser: Services.appinfo.name,
       browserVersion: Services.appinfo.platformVersion,
       browserDisplayVersion: AppConstants.MOZ_APP_VERSION_DISPLAY,
-    };
-
-    const {updateNeeded, latestDate} = await this.checkScriptsUpdateNeeded();
-
-    /** @type {Tab["_updateData"]} */
-    const updateData = {
-      version: currentVersion,
-      support: null,
-      showScriptsUpdate: updateNeeded,
-      scriptsUpdateDate: latestDate,
     };
 
     try {
@@ -3595,16 +3677,34 @@ window.gTMPprefObserver = {
       if (response.ok) {
         /** @type {Tab["_updateData"]} */ // @ts-ignore
         const result = await response.json();
-        if (result?.support) {
-          updateData.support = result.support;
-        }
+        return result?.support ?? null;
       }
     } catch (e) {
       console.error("Tab Mix Plus: Failed to sync update data", e);
     }
+    return null;
+  },
+
+  async showUpdatePage(currentVersion) {
+    const scriptsInfo = await this.checkScriptsUpdateNeeded();
+    const support = currentVersion ? await this.fetchUpdateSupport(currentVersion) : null;
+
+    const updateNeeded = scriptsInfo.fxFolder.updateNeeded || scriptsInfo.utils.updateNeeded;
+
+    if (!currentVersion && !updateNeeded) {
+      return;
+    }
+
+    const updateData = {
+      version: currentVersion,
+      support,
+      showScriptsUpdate: updateNeeded,
+      scriptsInfo,
+    };
 
     const b = Tabmix.getTopWin().gBrowser;
     const tab = b.addTrustedTab("chrome://tabmixplus/content/update/update.xhtml");
+    tab._tabmixShowUpdatePage = true;
     tab._updateData = updateData;
     tab.loadOnStartup = true;
     b.selectedTab = tab;

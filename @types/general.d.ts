@@ -249,8 +249,9 @@ declare namespace MockedGeckoTypes {
     _initialized: boolean;
     _restoreState: number;
     _tabmix_downloadingTimeout: number | null;
+    _tabmixShowUpdatePage: boolean;
     _tabmixState?: {noBookmark?: boolean};
-    _updateData: {version: string; support: {users: string; amount: string; date: string} | null; showScriptsUpdate: boolean; scriptsUpdateDate: string | null} | undefined;
+    _updateData: {version: string; support: {users: string; amount: string; date: string} | null; showScriptsUpdate: boolean; scriptsInfo: {fxFolder: {updateNeeded: boolean; date: string; remoteHash: string}; utils: {updateNeeded: boolean; date: string; remoteHash: string}}} | undefined;
     autoReloadEnabled?: boolean;
     autoReloadTimerID: number | null;
     autoReloadURI?: string;
