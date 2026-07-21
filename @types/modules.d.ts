@@ -160,14 +160,12 @@ interface TabmixKnownModules {
   "resource://gre/modules/AppConstants.sys.mjs": {AppConstants: AppConstantsType};
   "resource:///modules/BrowserDOMWindow.sys.mjs": {BrowserDOMWindow: typeof BrowserDOMWindowClass};
   "resource:///modules/BrowserWindowTracker.sys.mjs": {BrowserWindowTracker: MockedExports.BrowserWindowTracker};
-  "resource://gre/modules/Downloads.sys.mjs": {Downloads: {fetch(url: string, target: string): Promise<void>; getPreferredDownloadsDirectory(): Promise<string>}};
   "resource:///modules/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
   "moz-src:///browser/components/places/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
   "resource://gre/modules/Preferences.sys.mjs": {Preferences: typeof MockedExports.PreferencesClass};
   "resource://gre/modules/PrivateBrowsingUtils.sys.mjs": {PrivateBrowsingUtils: MockedExports.PrivateBrowsingUtils};
   "resource://gre/modules/WebNavigation.sys.mjs": {WebNavigationManager: MockedExports.WebNavigationManager};
   "resource://gre/modules/XPCOMUtils.sys.mjs": typeof MockedExports.XPCOMUtilsSYSMJS;
-  "resource://gre/modules/NetUtil.sys.mjs": {NetUtil: {asyncCopy(inputStream: unknown, outputStream: unknown, callback: (statusCode: number) => void): void}};
   // Tabmix
   "chrome://tabmix-resource/content/bootstrap/TabmixWidgets.sys.mjs": {TabmixWidgets: TabmixWidgetsModule.TabmixWidgets};
   "chrome://tabmix-resource/content/globalAccess.sys.mjs": {getGlobal: GlobalAccessModule.GetGlobal; globalKey: GlobalAccessModule.GlobalKey};

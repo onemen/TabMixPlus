@@ -1,13 +1,7 @@
-/* Ensure the hidden attribute is respected */
-[hidden] {
-  display: none !important;
-}
-
 :root {
   color-scheme: light dark;
 
-  --sl-font-system-sans:
-    system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif;
+  --sl-font-system-sans: system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif;
   --sl-text-h2: 2.1875rem;
 }
 
@@ -22,32 +16,6 @@ body {
   line-height: 1.75;
 }
 
-h1,
-h2 {
-  font-size: var(--sl-text-h2);
-  font-weight: 600;
-  margin-block: 1.625rem 0;
-}
-
-main {
-  grid-area: main;
-}
-
-header {
-  grid-area: header;
-  padding-top: 1.5rem;
-  text-align: center;
-
-  h1 {
-    margin-bottom: 1rem;
-    font-size: 3rem;
-    line-height: 1;
-    font-weight: 600;
-    color: light-dark(#1f2937, #f3f4f6);
-    margin-block: 0;
-  }
-}
-
 .layout {
   display: grid;
   justify-items: center;
@@ -58,13 +26,13 @@ header {
     /* Desktop (>1100px): 1 column */
     grid-template:
       "header" auto
-      "main" 1fr / 1fr;
+      "main"   1fr / 1fr;
 
     /* Mobile (<=1100px): also 1 column */
     @media (width <= 1100px) {
       grid-template:
         "header" auto
-        "main" auto / 1fr;
+        "main"   auto / 1fr;
     }
 
     aside {
@@ -77,34 +45,14 @@ header {
     /* Desktop (>1100px): 2‑column layout */
     grid-template:
       ".      header" auto
-      "aside  main" 1fr / 19rem 1fr;
+      "aside  main"   1fr / 19rem 1fr;
 
     /* Mobile (<=1100px): 1 column but aside included */
     @media (width <= 1100px) {
       grid-template:
         "header" auto
-        "aside" auto
-        "main" auto / 1fr;
-    }
-  }
-
-  /* SCRIPTS UPDATE ONLY: centered card, no header/main */
-  &.scripts-update-only {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 80vh;
-    padding-top: 6vh;
-
-    header,
-    main {
-      display: none;
-    }
-
-    aside {
-      display: block;
-      width: 100%;
-      max-width: 26rem;
+        "aside"  auto
+        "main"   auto / 1fr;
     }
   }
 }
@@ -116,6 +64,13 @@ a {
   &:hover {
     text-decoration: underline;
   }
+}
+
+h1,
+h2 {
+  font-size: var(--sl-text-h2);
+  font-weight: 600;
+  margin-block: 1.625rem 0;
 }
 
 h2 {
@@ -180,6 +135,35 @@ li {
     font-weight: 700;
   }
 
+  .message-content {
+    margin-top: 1rem;
+    display: inline-grid;
+    gap: 0.5rem;
+
+    /* Date badge (pill) for sidebar important notices */
+    .date-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: #edd1fa;
+      color: light-dark(#b91c1c, #f87171);
+      border-radius: 999px;
+      vertical-align: middle;
+      box-shadow: 0 1px 0 rgb(0 0 0 / 2%);
+    }
+
+    p {
+      margin-top: 0;
+
+      span {
+        font-weight: 700;
+      }
+    }
+  }
+
   @media (width <= 1100px) {
     padding-block: 1rem;
     width: 42rem;
@@ -187,129 +171,16 @@ li {
     .message-title {
       margin-top: 0.6125rem;
     }
-  }
 
-  /* Action Buttons (Download / Install) */
-  .scripts-section {
-    margin-top: 0.75rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid light-dark(#e5e7eb, #374151);
-
-    &:first-of-type {
-      margin-top: 1rem;
-      border-top: none;
-      padding-top: 0;
+    .message-content {
+      margin-top: 0.5rem;
+      gap: 0.25rem;
     }
   }
+}
 
-  .scripts-label {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: light-dark(#374151, #d1d5db);
-    margin-bottom: 0.5rem;
-  }
-
-  .scripts-date {
-    display: block;
-    font-size: 0.75rem;
-    color: light-dark(#6b7280, #9ca3af);
-    margin-bottom: 0.25rem;
-  }
-
-  .button-group {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
-
-  .skip-checkbox {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-    margin-top: 0.5rem;
-    font-size: 0.75rem;
-    color: light-dark(#6b7280, #9ca3af);
-    cursor: pointer;
-
-    input {
-      margin: 0;
-      cursor: pointer;
-    }
-
-    &:hover {
-      color: light-dark(#4b5563, #d1d5db);
-    }
-  }
-
-  .action-button {
-    flex: 1;
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 0.375rem;
-    font-weight: 600;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  .download-button {
-    background-color: #2563eb;
-    color: white;
-
-    &:hover {
-      background-color: #1d4ed8;
-    }
-  }
-
-  .install-button {
-    background-color: #059669;
-    color: white;
-
-    &:hover {
-      background-color: #047857;
-    }
-  }
-
-  .restart-button {
-    margin-top: 0.75rem;
-    width: 100%;
-    background-color: #dc2626;
-    color: white;
-
-    &:hover {
-      background-color: #b91c1c;
-    }
-  }
-
-  .remind-button {
-    margin-top: 0.5rem;
-    width: 100%;
-    background-color: light-dark(#e5e7eb, #374151);
-    color: light-dark(#374151, #d1d5db);
-    border: none;
-    border-radius: 0.375rem;
-    padding: 0.5rem 1rem;
-    font-weight: 600;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    display: block;
-
-    &:hover {
-      background-color: light-dark(#d1d5db, #4b5563);
-    }
-  }
-
-  .install-status {
-    margin-top: 0.75rem;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    white-space: pre-wrap;
-
-    p {
-      margin: 0;
-    }
-  }
+main {
+  grid-area: main;
 }
 
 /* Semantic Styles */
@@ -323,7 +194,20 @@ li {
   background-image: linear-gradient(to right, #14b8a6, #06b6d4);
 }
 
-/* aside */
+header {
+  grid-area: header;
+  padding-top: 1.5rem;
+  text-align: center;
+
+  h1 {
+    margin-bottom: 1rem;
+    font-size: 3rem;
+    line-height: 1;
+    font-weight: 600;
+    color: light-dark(#1f2937, #f3f4f6);
+    margin-block: 0;
+  }
+}
 
 .subtitle {
   font-weight: 300;
@@ -492,7 +376,7 @@ summary {
 
   /* stylelint-disable-next-line no-descending-specificity */
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     left: 13px;
     z-index: 1;
@@ -508,7 +392,7 @@ summary {
   }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     left: 5px;
     top: 50%;

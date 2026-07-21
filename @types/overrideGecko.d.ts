@@ -82,11 +82,6 @@ declare namespace MockedExports {
     "@mozilla.org/io/string-input-stream;1": {createInstance(instance: nsJSIID<nsIStringInputStream>): nsIStringInputStream};
     "@mozilla.org/timer;1": {createInstance(instance: nsJSIID<_nsITimer>): _nsITimer};
     "@mozilla.org/widget/clipboardhelper;1": {getService(service: nsJSIID<nsIClipboardHelper>): nsIClipboardHelper};
-    "@mozilla.org/security/hash;1": {createInstance(instance: nsJSIID<nsICryptoHash>): nsICryptoHash};
-    "@mozilla.org/binaryinputstream;1": {createInstance(instance: nsJSIID<nsIBinaryInputStream>): nsIBinaryInputStream};
-    "@mozilla.org/network/file-input-stream;1": {createInstance(instance: nsJSIID<nsIFileInputStream>): nsIFileInputStream};
-    "@mozilla.org/libjar/zip-reader;1": {createInstance(instance: nsJSIID<nsIZipReader>): nsIZipReader};
-    "@mozilla.org/network/file-output-stream;1": {createInstance(instance: nsJSIID<nsIFileOutputStream>): nsIFileOutputStream};
   }
 
   interface _nsIWebNavigation extends nsIWebNavigation {
