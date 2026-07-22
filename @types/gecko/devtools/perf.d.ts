@@ -123,7 +123,7 @@ export type PageContext =
   | "aboutprofiling"
   | "aboutprofiling-remote";
 
-export type PrefPostfix = "" | ".remote";
+export type PrefPostfix = "" | ".remote" | ".aboutlogging";
 
 export interface State {
   recordingState: RecordingState;
@@ -433,7 +433,7 @@ export type ProfilerViewMode = "full" | "active-tab" | "origins";
  * Panel string identifier in the profiler frontend.
  *
  * To be synchronized with:
- * https://github.com/firefox-devtools/profiler/blob/b7fe97217b5d3ae770e2b7025738a075eba9ec34/src/app-logic/tabs-handling.js#L12
+ * https://github.com/firefox-devtools/profiler/blob/efb21b91b6d95f2566079426f62e0040c5214fb8/src/app-logic/tabs-handling.ts#L10
  */
 export type ProfilerPanel =
   | "calltree"
@@ -468,7 +468,7 @@ export interface Presets {
   [presetName: string]: PresetDefinition;
 }
 
-// Should be kept in sync with the types in https://github.com/firefox-devtools/profiler/blob/main/src/app-logic/web-channel.js .
+// Should be kept in sync with the types in https://github.com/firefox-devtools/profiler/blob/main/src/app-logic/web-channel.ts .
 // Compatibility is handled as follows:
 //  - The front-end needs to worry about compatibility and handle older browser versions.
 //  - The browser can require the latest front-end version and does not need to keep any legacy functionality for older front-end versions.
@@ -487,7 +487,8 @@ export type RequestFromFrontend =
   | QuerySymbolicationApiRequest
   | GetPageFaviconsRequest
   | OpenScriptInTabDebuggerRequest
-  | GetJSSourcesRequest;
+  | GetJSSourcesRequest
+  | GetSourceMapRequest;
 
 type StatusQueryRequest = { type: "STATUS_QUERY" };
 type EnableMenuButtonRequest = { type: "ENABLE_MENU_BUTTON" };
@@ -525,7 +526,11 @@ type OpenScriptInTabDebuggerRequest = {
 };
 type GetJSSourcesRequest = {
   type: "GET_JS_SOURCES";
-  sourceUuids: Array<string>;
+  sourceIds: Array<string>;
+};
+type GetSourceMapRequest = {
+  type: "GET_SOURCE_MAP";
+  sourceId: string;
 };
 
 export type MessageToFrontend<R> =
@@ -560,7 +565,8 @@ export type ResponseToFrontend =
   | QuerySymbolicationApiResponse
   | GetPageFaviconsResponse
   | OpenScriptInTabDebuggerResponse
-  | GetJSSourcesResponse;
+  | GetJSSourcesResponse
+  | GetSourceMapResponse;
 
 type StatusQueryResponse = {
   menuButtonIsEnabled: boolean;
@@ -580,6 +586,11 @@ type StatusQueryResponse = {
   //   Shipped in Firefox 121.
   //   Adds support for the following message types:
   //    - GET_EXTERNAL_POWER_TRACKS
+  // Version 7:
+  //   Adds support for the following message types:
+  //    - GET_SOURCE_MAP
+  //   Renames the following message parameters:
+  //    - GET_JS_SOURCES: sourceUuids -> sourceIds
   version: number;
 };
 type EnableMenuButtonResponse = void;
@@ -593,6 +604,9 @@ type GetPageFaviconsResponse = Array<ProfilerFaviconData | null>;
 type OpenScriptInTabDebuggerResponse = void;
 type GetJSSourceReponseItem = { sourceText: string } | { error: string };
 type GetJSSourcesResponse = Array<GetJSSourceReponseItem>;
+// The response is a parsed source map object. The exact shape follows the
+// source map spec and is intentionally left untyped here.
+type GetSourceMapResponse = object;
 
 /**
  * This represents an event channel that can talk to a content page on the web.
@@ -617,8 +631,14 @@ export class ProfilerWebChannel {
   ) => void;
 }
 
+type JSSourceInfo = {
+  sourceText?: string;
+  url?: string;
+  sourceMapURL?: string;
+};
+
 type JSSources = Partial<{
-  [sourceUuid: string]: string;
+  [sourceId: string]: JSSourceInfo;
 }>;
 
 /**

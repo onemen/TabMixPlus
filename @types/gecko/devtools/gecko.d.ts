@@ -163,8 +163,14 @@ declare namespace MockedExports {
     arch: string;
   }
 
+  type JSSourceInfo = {
+    sourceText?: string;
+    url?: string;
+    sourceMapURL?: string;
+  };
+
   type JSSources = Partial<{
-    [sourceUuid: string]: string;
+    [sourceId: string]: JSSourceInfo;
   }>;
 
   interface ProfileGenerationAdditionalInformation {
