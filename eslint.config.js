@@ -103,7 +103,6 @@ export default [
       tabmix: eslintPluginTabmix,
     },
     languageOptions: {
-      ecmaVersion: "latest",
       sourceType: "script",
     },
     linterOptions: {reportUnusedDisableDirectives: "warn"},
@@ -141,7 +140,7 @@ export default [
           varsIgnorePattern: "^ignored",
         },
       ],
-      "no-use-before-define": ["error", "nofunc"],
+      "no-use-before-define": ["error", {functions: false}],
       "strict": ["error", "global"],
     },
   },
@@ -150,7 +149,7 @@ export default [
   {
     name: "tabmix/default-globals",
     files: ["**/*.js", "**/*.sys.mjs", "**/*.xhtml"],
-    ignores: ["**/**/*.config.js"],
+    ignores: ["**/*.config.js"],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -167,7 +166,6 @@ export default [
     name: "tabmix/sourceType",
     files: ["**/*.sys.mjs"],
     languageOptions: {
-      ecmaVersion: "latest",
       sourceType: "module",
     },
   },
@@ -176,13 +174,10 @@ export default [
     name: "tabmix/config-files",
     // this file is in the node environment, so turn that on here.
     // All files in config are in the node environment.
-    files: ["**/**/*.config.js", "config/**/*.{js,cjs,mjs,ts}"],
+    files: ["**/*.config.js", "config/**/*.{js,cjs,mjs,ts}"],
     languageOptions: {
       sourceType: "module",
       globals: globals.node,
-    },
-    rules: {
-      "no-unused-vars": "error",
     },
   },
 
@@ -322,6 +317,9 @@ export default [
   {
     name: "tabmix/eslint-plugin-tabmix-files",
     files: ["config/eslint-plugin-tabmix/**"],
+    languageOptions: {
+      sourceType: "module",
+    },
     rules: {
       "no-var": "error",
       "prefer-const": "error",
@@ -332,7 +330,6 @@ export default [
     name: "tabmix/github-scripts",
     files: [".github/scripts/**"],
     languageOptions: {
-      ecmaVersion: "latest",
       sourceType: "module",
       globals: globals.node,
     },
@@ -345,11 +342,4 @@ export default [
   },
 
   eslintConfigPrettier, // Add at the end to disable formatting rules
-
-  {
-    name: "tabmix/force-ignore-dts",
-    files: ["**/*.d.ts"],
-    ignores: ["**/*.d.ts"],
-    rules: {},
-  },
 ];
