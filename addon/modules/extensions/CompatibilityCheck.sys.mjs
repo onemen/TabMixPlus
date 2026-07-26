@@ -46,12 +46,7 @@ CompatibilityCheck.prototype = {
   getIncompatibleList: function TMP_EX_getIncompatibleList() {
     /**
      * @param {AddonType} aAddon
-     * @param {"none"
-     *   | "enable"
-     *   | "disable"
-     *   | "uninstall"
-     *   | "install"
-     *   | "upgrade"} aAction
+     * @param {"none" | "enable" | "disable" | "uninstall" | "install" | "upgrade"} aAction
      */
     function isPending(aAddon, aAction) {
       // @ts-ignore - AddonManager constants are defined in AddonManagerType

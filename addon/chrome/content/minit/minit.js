@@ -44,10 +44,7 @@ var TMP_tabDNDObserver = {
 
     /**
      * @param {TabDragAndDrop | TabContainer} container
-     * @param {"on_dragover"
-     *   | "on_drop"
-     *   | "handle_dragover"
-     *   | "handle_drop"} name
+     * @param {"on_dragover" | "on_drop" | "handle_dragover" | "handle_drop"} name
      * @param {ChangecodeModule.ChangeCodeClass} code
      */
     function patchDragMethod(container, name, code) {

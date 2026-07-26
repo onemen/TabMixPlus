@@ -727,8 +727,7 @@ ContentClickInternal = {
   },
 
   /**
-   * @param {ContentClickModule.ExtendedWrappedNode
-   *   | ContentClickLinkElement} node
+   * @param {ContentClickModule.ExtendedWrappedNode | ContentClickLinkElement} node
    * @returns {boolean}
    */
   miscellaneous(node) {
