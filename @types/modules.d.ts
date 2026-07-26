@@ -161,11 +161,19 @@ interface TabmixKnownModules {
   "resource:///modules/BrowserDOMWindow.sys.mjs": {BrowserDOMWindow: typeof BrowserDOMWindowClass};
   "resource:///modules/BrowserWindowTracker.sys.mjs": {BrowserWindowTracker: MockedExports.BrowserWindowTracker};
   "resource:///modules/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
-  "moz-src:///browser/components/places/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
   "resource://gre/modules/Preferences.sys.mjs": {Preferences: typeof MockedExports.PreferencesClass};
   "resource://gre/modules/PrivateBrowsingUtils.sys.mjs": {PrivateBrowsingUtils: MockedExports.PrivateBrowsingUtils};
   "resource://gre/modules/WebNavigation.sys.mjs": {WebNavigationManager: MockedExports.WebNavigationManager};
   "resource://gre/modules/XPCOMUtils.sys.mjs": typeof MockedExports.XPCOMUtilsSYSMJS;
+
+  "moz-src:///browser/components/places/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
+  "moz-src:///browser/components/syncedtabs/TabListView.sys.mjs": {TabListView: MockedExports.TabListViewClass};
+  "moz-src:///browser/components/syncedtabs/util.sys.mjs": {getChromeWindow(window: Window): ChromeWindow};
+
+  /** @deprecated replaced with moz-src: in firefox 155 */
+  "resource:///modules/syncedtabs/TabListView.sys.mjs": {TabListView: MockedExports.TabListViewClass};
+  "resource:///modules/syncedtabs/util.sys.mjs": {getChromeWindow(window: Window): ChromeWindow};
+
   // Tabmix
   "chrome://tabmix-resource/content/bootstrap/TabmixWidgets.sys.mjs": {TabmixWidgets: TabmixWidgetsModule.TabmixWidgets};
   "chrome://tabmix-resource/content/globalAccess.sys.mjs": {getGlobal: GlobalAccessModule.GetGlobal; globalKey: GlobalAccessModule.GlobalKey};
@@ -393,12 +401,15 @@ declare namespace MockedExports {
     update(permanentKey: object, newData: Record<string, unknown>): void;
   }
 
-  type TabListView = TabListViewNS.TabListView;
-  var TabListView: {
+  type TabListView = TabListViewNS.TabListView & {
+    [key: string]: unknown;
+  };
+  var TabListViewClass: {
     prototype: TabListView;
     new (): TabListView;
     isInstance: IsInstance<TabListView>;
   };
+  type TabListViewClass = typeof TabListViewClass;
 
   type TelemetrySource = "tab_overflow" | "tab_group" | "tab_menu" | "drag" | "suggest" | "recent" | "unknown";
   type TabMetricsContext = {
@@ -602,16 +613,6 @@ declare module "resource://gre/modules/Preferences.sys.mjs" {
 
 declare module "resource://gre/modules/PrivateBrowsingUtils.sys.mjs" {
   export = MockedExports.PrivateBrowsingUtilsSYSMJS;
-}
-
-declare module "resource:///modules/syncedtabs/TabListView.sys.mjs" {
-  export class TabListView extends MockedExports.TabListView {
-    [key: string]: unknown;
-  }
-}
-
-declare module "resource:///modules/syncedtabs/util.sys.mjs" {
-  export function getChromeWindow(window: Window): ChromeWindow;
 }
 
 declare module "resource://gre/modules/XPCOMUtils.sys.mjs" {

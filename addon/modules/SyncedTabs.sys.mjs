@@ -1,8 +1,21 @@
 /* eslint object-shorthand: "error" */
 
+import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
 import {initializeChangeCodeClass} from "chrome://tabmix-resource/content/Changecode.sys.mjs";
-import {TabListView} from "resource:///modules/syncedtabs/TabListView.sys.mjs";
-import {getChromeWindow} from "resource:///modules/syncedtabs/util.sys.mjs";
+
+const tabListViewPath =
+  isVersion(1550) ?
+    "moz-src:///browser/components/syncedtabs/TabListView.sys.mjs"
+  : "resource:///modules/syncedtabs/TabListView.sys.mjs";
+// eslint-disable-next-line mozilla/use-static-import
+const {TabListView} = ChromeUtils.importESModule(tabListViewPath);
+
+const utilPath =
+  isVersion(1550) ?
+    "moz-src:///browser/components/syncedtabs/util.sys.mjs"
+  : "resource:///modules/syncedtabs/util.sys.mjs";
+// eslint-disable-next-line mozilla/use-static-import
+const {getChromeWindow} = ChromeUtils.importESModule(utilPath);
 
 /** @type {TabmixGlobal} */ // @ts-expect-error we add properties bellow
 const Tabmix = {};
