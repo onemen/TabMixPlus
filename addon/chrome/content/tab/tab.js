@@ -2754,7 +2754,7 @@ window.gTMPprefObserver = {
        }`
     );
     this.insertRule(
-      `#main-window[${customtitlebar}] #toolbar-menubar[autohide="true"][inactive="true"]:not([${customizing}]) + #TabsToolbar {
+      `#main-window[${customtitlebar}] #toolbar-menubar[autohide][inactive="true"]:not([autohide="false"]) + #TabsToolbar:not([${customizing}]) {
           --tabmix-multirow-margin: 0px;
         }`
     );
