@@ -137,9 +137,23 @@ export const DynamicRules = {
 
   createTemplates() {
     let bgImage = {bg: "linear-gradient(#topColor, #bottomColor)"};
-    let background =
-      " {\n  appearance: none;\n  background-image: " + bgImage.bg + " !important;\n}\n";
-    let backgroundRule = " > .tab-stack > .tab-background" + background;
+
+    let novaStyle =
+      lazy.TabmixSvc.version(1550) ?
+        `&:is([selected]:not([multiselected])) {
+        @media (not (prefers-contrast)) and (-moz-pref("browser.nova.enabled")) {
+          background-clip: border-box !important;
+        }
+      }`
+      : "";
+    let selectedBackgroundRule = ` > .tab-stack > .tab-background {
+        background-image: ${bgImage.bg} !important;
+        ${novaStyle};
+      }`;
+
+    let backgroundRule = ` > .tab-stack > .tab-background {
+      background-image: ${bgImage.bg} !important;
+    }`;
     let tabTextRule = " .tab-text {\n  color: #textColor !important;\n}\n";
 
     const visuallyselected = "[visuallyselected]";
@@ -154,7 +168,7 @@ export const DynamicRules = {
     let styleRules = {
       currentTab: {
         text: `${this.getSelector("current", "text")}${tabTextRule}`,
-        bg: `${this.getSelector("current", "bg")}${backgroundRule}`,
+        bg: `${this.getSelector("current", "bg")}${selectedBackgroundRule}`,
       },
       unloadedTab: {
         text: `${this.getSelector("unloaded", "text")}${tabTextRule}`,

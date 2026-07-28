@@ -52,6 +52,12 @@ html|input[type="color"] {
   width: 38px;
 }
 
+html|input[type="number"] {
+  --tabmix-input-width-offset: calc(var(--tabmix-input-spinner-offset) + var(--tabmix-input-padding-inline) + 6px);
+
+  font-size: 11px !important;
+}
+
 .rgbcontrol {
   margin-left: -1px;
   margin-right: 0;
