@@ -1980,7 +1980,20 @@ Tabmix.tablib = {
            const description = options.protectedCount === 1 ? "1 duplicate tab is protected" : options.protectedCount + " duplicate tabs are protected";
            this._description.setAttribute("value", description);
          }
-         $&`
+         $&`,
+        {check: !Tabmix.isVersion(1520)}
+      )
+      ._replace("l10nArgs,", "protectedCount,\n      l10nArgs,", {check: Tabmix.isVersion(1520)})
+      ._replace(
+        "const DURATION",
+        `if (protectedCount) {
+           this._panel.classList.add("with-description");
+           this._description.hidden = false;
+           const description = protectedCount === 1 ? "1 duplicate tab is protected" : protectedCount + " duplicate tabs are protected";
+           this._description.setAttribute("value", description);
+         }
+         $&`,
+        {check: Tabmix.isVersion(1520)}
       )
       .toCode();
 
