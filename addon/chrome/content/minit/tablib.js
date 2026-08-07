@@ -238,7 +238,16 @@ Tabmix.tablib = {
       let lastTabInGroup = this.visibleTabs.length == 1;
       if (lastTabInGroup) {
         if (Tabmix.prefs.getBoolPref("keepLastTab")) {
-          return undefined;
+          // WebScrapBook extension open single tab window to Capture page,
+          // it can close it automatically after capture we need to allow it
+          // to close the last tab we check the document title:
+          //   "Extension: (WebScrapBook) - Capture page — Firefox Nightly"
+          const title = aTab.ownerDocument?.title.toLowerCase();
+          const isWebScrapBookCapturePage =
+            title?.includes("webscrapbook") && title?.includes("capture page");
+          if (!isWebScrapBookCapturePage) {
+            return undefined;
+          }
         }
         // fix bug in TGM when closing last tab in a group with animation
         if (Tabmix.extensions.tabGroupManager) {
