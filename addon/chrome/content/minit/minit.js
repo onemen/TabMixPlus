@@ -393,6 +393,17 @@ var TMP_tabDNDObserver = {
         });
       }
 
+      // _expandGroupOnDrop use #releaseSpaceInScrolledContent, add this block here before
+      // Tabmix.changeCode check if it is exist
+      if (Tabmix.isVersion(1550)) {
+        this.tabDnDPrototype._releaseSpaceInScrolledContent = Tabmix.getPrivateMethod({
+          ...tabContainerProps,
+          methodName: "releaseSpaceInScrolledContent",
+          nextMethodName: "#marginBoxExtent",
+          sandbox: localSandbox,
+        });
+      }
+
       Tabmix.changeCode(this.tabDnDPrototype, `${tabContainerProps.parentName}._expandGroupOnDrop`)
         ._replace("isTabGroupLabel(draggedTab)", "gBrowser.isTabGroupLabel(draggedTab)")
         .toCode();
@@ -949,7 +960,7 @@ var TMP_tabDNDObserver = {
        $&`
       )
       ._replace(
-        "this._resetTabsAfterDrop(draggedTab?.ownerDocument);",
+        `this._resetTabsAfterDrop(${Tabmix.isVersion(1550) ? "draggedTab" : "draggedTab?.ownerDocument"});`,
         `if (draggedTab?.container != ${thisContainer} || !useTabmixDnD) {
           $&
           TMP_tabDNDObserver.resetTabsAfterDrop(draggedTab);
@@ -970,7 +981,7 @@ var TMP_tabDNDObserver = {
           // Starting with Firefox 143, we disable the pinned-drop-indicator hide transition
           // to prevent DOM layout shifts during drop operations. We require all elements to
           // stay in their dragOver positions until handleDrop processing is complete.
-          this._resetTabsAfterDrop(draggedTab?.ownerDocument);
+          this._resetTabsAfterDrop(${Tabmix.isVersion(1550) ? "draggedTab" : "draggedTab?.ownerDocument"});
           TMP_tabDNDObserver.resetTabsAfterDrop(draggedTab);
         }
       $&`
@@ -1621,7 +1632,7 @@ var TMP_tabDNDObserver = {
     }
     if (Tabmix.isVersion(1420)) {
       this.resetTabsAfterDrop(draggedTab);
-      tabDnD._resetTabsAfterDrop(draggedTab.ownerDocument);
+      tabDnD._resetTabsAfterDrop(Tabmix.isVersion(1550) ? draggedTab : draggedTab.ownerDocument);
     }
 
     if (dt.mozUserCancelled || dt.dropEffect != "none" || gBrowser.tabContainer._isCustomizing) {

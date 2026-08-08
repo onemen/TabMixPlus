@@ -470,7 +470,10 @@ declare namespace MockedGeckoTypes {
     _isAnimatingMoveTogetherSelectedTabs: () => boolean;
     _isContainerVerticalPinnedGrid: boolean;
     _moveTogetherSelectedTabs: (tab: BrowserTab) => void;
+    _releaseSpaceInScrolledContent: (periphery: Element) => void;
     _resetPinnedDropIndicator: () => void;
+    _resetTabsAfterDrop(draggedTab: Tab): void;
+    /** @deprecated argumnt is Tab since firefox 155 */
     _resetTabsAfterDrop(draggedTabDocument: Document): void;
     // using instead of private method #setDragOverGroupColor since Firefox 133
     _setDragOverGroupColor: (groupColorCode: string | null) => void;
