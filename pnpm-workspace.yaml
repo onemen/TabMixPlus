@@ -1,22 +1,28 @@
 autoInstallPeers: true
 saveExact: true
-minimumReleaseAge: 7200
+minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
   - 'typescript'
   - 'typescript-eslint'
   - '@typescript-eslint/*'
   - '@typescript/native-preview*'
-  - fast-uri@3.1.4
-  - brace-expansion@5.0.8
+  - fast-uri@3.1.5
+  - brace-expansion@5.0.9
   - js-yaml@5.2.2
+  - nanoid@3.3.18
+  - postcss@8.5.26
+  - eslint-plugin-mozilla@5.0.1
 
 catalog:
   eslint: ^10.7.0
 
 overrides:
   eslint: 'catalog:'
-  brace-expansion: '>=5.0.8'
-  fast-uri@3: '>=3.1.4 <4.0.0'
+  brace-expansion: '>=5.0.9'
+  fast-uri@3: '>=3.1.5 <4.0.0'
   js-yaml: '>=5.2.2'
+  nanoid@3: '>=3.3.17 <4.0.0'
+  postcss@8: '>=8.5.23 <9.0.0'
 
+blockExoticSubdeps: true
 trustPolicy: no-downgrade
