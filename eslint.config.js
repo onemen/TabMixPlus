@@ -204,6 +204,12 @@ export default [
         ...tabmixGlobals.tabmix,
         lazy: false,
         TabsPanel: false,
+
+        // deprecated Firefox globals
+        browserDragAndDrop: false, // deprecated in Firefox 138
+        handleDroppedLink: false, // deprecated in Firefox 151
+        newWindowButtonObserver: false, // deprecated in Firefox 138
+        OpenInTabsUtils: false, // deprecated in Firefox 151
       },
     },
   },
