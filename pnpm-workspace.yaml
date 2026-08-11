@@ -1,6 +1,6 @@
 autoInstallPeers: true
 saveExact: true
-minimumReleaseAge: 7200
+minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
   - 'typescript'
   - 'typescript-eslint'
@@ -24,4 +24,5 @@ overrides:
   nanoid@3: '>=3.3.17 <4.0.0'
   postcss@8: '>=8.5.23 <9.0.0'
 
+blockExoticSubdeps: true
 trustPolicy: no-downgrade
