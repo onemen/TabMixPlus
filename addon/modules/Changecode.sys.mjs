@@ -442,8 +442,20 @@ function _makeCode(code, sandbox) {
     throw new Error("Error: _makeCode was called without sandbox");
   }
 
+  const isArrow =
+    /^\s*[^=]+=\s*[a-zA-Z_$][a-zA-Z0-9_$]*\s*=>/.test(code) || // x = y =>
+    /^\s*[^=]+=\s*\([^)]*\)\s*=>/.test(code); // x = (y)=>
+
   let codeString;
-  if (code.startsWith("async") && !code.startsWith("async function")) {
+  if (isArrow) {
+    const cleaned = code
+      // Fix missing parentheses around single param
+      .replace(/\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=>/g, "($1) =>")
+      // Remove trailing semicolon before wrapping
+      .replace(/;+\s*$/, "");
+    // Arrow functions must be wrapped directly
+    codeString = `(${cleaned})`;
+  } else if (code.startsWith("async") && !code.startsWith("async function")) {
     codeString = `(async function ${code.replace(/^async/, "")})`;
   } else if (!code.startsWith("function")) {
     codeString = `(function ${code})`;
@@ -461,7 +473,12 @@ function _makeCode(code, sandbox) {
       `data:application/javascript,Tabmix_code_${filename};${encodeURIComponent(codeString)}`
     : `Tabmix_code_${filename}.js`;
 
-  return Cu.evalInSandbox(codeString, sandbox, null, readableFilename, 1);
+  try {
+    return Cu.evalInSandbox(codeString, sandbox, null, readableFilename, 1);
+  } catch (error) {
+    console.log(4, {code: codeString, error});
+    throw error;
+  }
 }
 
 /** @type {ChangecodeModule.ExpandTabmix} */

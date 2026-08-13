@@ -573,6 +573,45 @@ var TMP_tabDNDObserver = {
       this._tabDropIndicator = tabBar._tabDropIndicator;
       this.tabDragAndDrop._resetGroupTarget = () => {};
     }
+
+    if (Tabmix.isVersion(1550)) {
+      this.tabDnDPrototype._dropAnimationEndTime = 0;
+      this.tabDnDPrototype._staleDragCheckTimer = null;
+
+      Object.defineProperty(this.tabDnDPrototype, "_dragSession", {
+        get() {
+          return Cc["@mozilla.org/widget/dragservice;1"]
+            .getService(Ci.nsIDragService)
+            .getCurrentSession(window);
+        },
+        configurable: true,
+        enumerable: true,
+      });
+
+      this.tabDnDPrototype._recoverFromStaleDrag = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "recoverFromStaleDrag",
+        nextMethodName: "_getDropIndex",
+      });
+
+      this.tabDnDPrototype._onMouseDown = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "onMouseDown",
+        nextMethodName: "#recoverFromStaleDrag",
+      });
+
+      this.tabDnDPrototype._startStaleDragCheck = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "startStaleDragCheck",
+        nextMethodName: "#stopStaleDragCheck",
+      });
+
+      this.tabDnDPrototype._stopStaleDragCheck = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "stopStaleDragCheck",
+        nextMethodName: "#onMouseDown",
+      });
+    }
   },
 
   change_startTabDrag() {

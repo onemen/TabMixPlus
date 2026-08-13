@@ -425,6 +425,7 @@ declare namespace MockedGeckoTypes {
     _dragTime: number;
     _dragOverGroupingTimer: number | null;
     _dragToPinPromoCard: HTMLElement | null;
+    _dropAnimationEndTime: number;
     _isMovingTab(): boolean;
     _maxTabsPerRow: number | null;
     _pinnedDropIndicatorTimeout: number | null;
@@ -432,6 +433,7 @@ declare namespace MockedGeckoTypes {
     _resetGroupTarget(element: HTMLElement | null): void;
     _rtlMode: boolean;
     _setMovingTabMode(movingTab: boolean): void;
+    _staleDragCheckTimer: number | null;
     _tabDropIndicator: HTMLElement;
 
     finishAnimateTabMove: () => void;
@@ -470,6 +472,8 @@ declare namespace MockedGeckoTypes {
     _isAnimatingMoveTogetherSelectedTabs: () => boolean;
     _isContainerVerticalPinnedGrid: boolean;
     _moveTogetherSelectedTabs: (tab: BrowserTab) => void;
+    _onMouseDown(event: MouseEvent): void;
+    _recoverFromStaleDrag(): void;
     _releaseSpaceInScrolledContent: (periphery: Element) => void;
     _resetPinnedDropIndicator: () => void;
     _resetTabsAfterDrop(draggedTab: Tab): void;
@@ -478,6 +482,8 @@ declare namespace MockedGeckoTypes {
     // using instead of private method #setDragOverGroupColor since Firefox 133
     _setDragOverGroupColor: (groupColorCode: string | null) => void;
     _setIsDraggingTabGroup(tabGroup: MozTabbrowserTabGroup, isDragging: boolean): void;
+    _startStaleDragCheck(): void;
+    _stopStaleDragCheck(): void;
     _triggerDragOverGrouping(dropElement: BrowserTab | MozTabGroupLabel): void;
     _updateTabStylesOnDrag(tab: BrowserTab, event: DragEvent): void;
 

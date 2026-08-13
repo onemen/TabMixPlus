@@ -5170,8 +5170,6 @@ interface nsIRemoteTab extends nsISupports, Enums<typeof nsIRemoteTab_Navigation
   readonly browsingContext: BrowsingContext;
   /** <!-- binding_to(idl, attribute, XPIDL_nsIRemoteTab_hasPresented) --> */
   readonly hasPresented: boolean;
-  /** <!-- binding_to(idl, method, XPIDL_nsIRemoteTab_transmitPermissionsForPrincipal) --> */
-  transmitPermissionsForPrincipal(aPrincipal: nsIPrincipal): void;
   /** <!-- binding_to(idl, method, XPIDL_nsIRemoteTab_createAboutBlankDocumentViewer) --> */
   createAboutBlankDocumentViewer(aPrincipal: nsIPrincipal, aPartitionedPrincipal: nsIPrincipal): void;
   /** <!-- binding_to(idl, method, XPIDL_nsIRemoteTab_maybeCancelContentJSExecution) --> */

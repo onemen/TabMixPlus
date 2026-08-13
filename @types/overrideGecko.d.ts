@@ -82,6 +82,7 @@ declare namespace MockedExports {
     "@mozilla.org/io/string-input-stream;1": {createInstance(instance: nsJSIID<nsIStringInputStream>): nsIStringInputStream};
     "@mozilla.org/timer;1": {createInstance(instance: nsJSIID<_nsITimer>): _nsITimer};
     "@mozilla.org/widget/clipboardhelper;1": {getService(service: nsJSIID<nsIClipboardHelper>): nsIClipboardHelper};
+    "@mozilla.org/widget/dragservice;1": {getService(service: nsJSIID<nsIDragService>): nsIDragService};
   }
 
   interface _nsIWebNavigation extends nsIWebNavigation {
