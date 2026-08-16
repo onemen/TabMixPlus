@@ -69,11 +69,6 @@ export const ScriptsLoader = {
     }
     initialized.add(window);
 
-    try {
-      this._addCloseButton(window);
-    } catch (/** @type {any} */ error) {
-      console.log("Tabmix was unable to install the tabmix-tabs-closebutton.", error.message);
-    }
     this._loadCSS(window);
     this._loadScripts(window, promiseOverlayLoaded);
     this._initTabsStyle(window);
@@ -83,17 +78,26 @@ export const ScriptsLoader = {
     }
   },
 
-  _closeButtonAdded: false,
-  _addCloseButton(window) {
+  _closeButtonInitialized: false,
+  _prepareTabbarCloseButton(window) {
     // since Firefox version 132, we need to allow tabmix-tabs-closebutton to move to nav-bar
     // when vertical tabs are enabled
     // we create it as widget and add it to the proper area TabsToolbar or nav-bar
     // we add it after alltabs-button by default but keep its position if user
     // move it in the toolbar
-    if (!this._closeButtonAdded) {
-      // trigger CustomizableUI load
-      const tabstripArea = lazy.CustomizableUI.AREA_TABSTRIP;
-      window.requestAnimationFrame(() => {
+    if (this._closeButtonInitialized) {
+      return;
+    }
+    this._closeButtonInitialized = true;
+
+    const pref = "extensions.tabmix.hideTabBarButton";
+
+    function handleObserver() {
+      if (Services.prefs.getBoolPref(pref)) {
+        lazy.CustomizableUI.removeWidgetFromArea("tabmix-tabs-closebutton");
+      } else {
+        // trigger CustomizableUI load
+        const tabstripArea = lazy.CustomizableUI.AREA_TABSTRIP;
         const allTabsButtonPlacement = lazy.CustomizableUI.getPlacementOfWidget("alltabs-button");
         const closeButtonPlacement =
           lazy.CustomizableUI.getPlacementOfWidget("tabmix-tabs-closebutton");
@@ -104,9 +108,22 @@ export const ScriptsLoader = {
           const finalPosition = typeof position === "number" ? position + 1 : undefined;
           lazy.CustomizableUI.addWidgetToArea("tabmix-tabs-closebutton", area, finalPosition);
         }
-      });
+        window.document
+          .getElementById("tabmix-tabs-closebutton")
+          ?.toggleAttribute("collapsed", false);
+      }
     }
-    this._closeButtonAdded = true;
+
+    Services.prefs.addObserver(pref, handleObserver);
+    window.addEventListener(
+      "unload",
+      () => {
+        Services.prefs.removeObserver(pref, handleObserver);
+      },
+      {once: true}
+    );
+
+    handleObserver();
   },
 
   _loadCSS(window) {
@@ -205,6 +222,14 @@ export const ScriptsLoader = {
           if (!preparedForWindow) {
             this._prepareBeforeOverlays(window);
             preparedForWindow = true;
+            try {
+              this._prepareTabbarCloseButton(window);
+            } catch (/** @type {any} */ error) {
+              console.log(
+                "Tabmix was unable to install the tabmix-tabs-closebutton.",
+                error.message
+              );
+            }
           }
         },
         {capture: true, once: true}

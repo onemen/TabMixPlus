@@ -1445,8 +1445,8 @@ declare namespace ScriptsLoaderModule {
 
   interface ScriptsLoader {
     initForWindow: (window: Window, promiseOverlayLoaded: Promise<void>, params?: Params) => void;
-    _closeButtonAdded: boolean;
-    _addCloseButton(window: Window): void;
+    _closeButtonInitialized: boolean;
+    _prepareTabbarCloseButton(window: Window): void;
     _loadCSS(window: Window): void;
     _loadScripts(window: Window, promiseOverlayLoaded: Promise<void>): void;
     _initTabsStyle(window: Window): void;
