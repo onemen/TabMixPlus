@@ -86,6 +86,10 @@ class ChangeCode {
       const global = Cu.getGlobalForObject(this.obj);
       if (isInWindowContext(global)) {
         this.sandbox = params.baseSandbox;
+      } else if (isVersion(1560) && this.obj.constructor.name === "Tabbrowser") {
+        // @ts-expect-error - Tabmix exists
+        const tabmix = this.obj?.documentGlobal.Tabmix;
+        this.sandbox = tabmix._gBrowser_sandbox;
       } else {
         const {filename, lineNumber} = Components.stack.caller.caller;
         lazy.console.reportError(

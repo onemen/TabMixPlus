@@ -1719,6 +1719,7 @@ interface TabmixGlobal {
   // from changedcode
   _debugMode: boolean;
   _sandbox: TabmixSandbox;
+  _gBrowser_sandbox: TabmixSandbox;
   changeCode(this: TabmixGlobal, parent: Record<string, any>, fnName: string, options?: ChangecodeModule.Options): ChangecodeModule.ChangeCodeClass;
   nonStrictMode(obj: Record<string, any>, fn: string, arg?: any): void;
   setNewFunction(obj: Record<string, any>, name: string, aCode: FunctionWithAny): void;

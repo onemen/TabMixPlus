@@ -12,11 +12,27 @@ Tabmix.tablib = {
     }
 
     this._inited = true;
+    this.initializegBrowserSandbox();
     this.change_gBrowser();
     this.change_tabContainer();
     this.change_utility();
     this.addNewFunctionsTo_gBrowser();
     this.generalFunctions();
+  },
+
+  initializegBrowserSandbox() {
+    // from Firefox 156 gBrowser is a module and we need to use module sandbox
+    if (!Tabmix.isVersion(1560)) {
+      return;
+    }
+    const lazy = {};
+    ChromeUtils.defineESModuleGetters(lazy, {
+      // eslint-disable-next-line mozilla/valid-lazy
+      PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
+    });
+    Tabmix._gBrowser_sandbox = Tabmix.getSandbox(gBrowser, {
+      scope: {lazy, TAB_LABEL_MAX_LENGTH: 256},
+    });
   },
 
   _loadURIInitialized: false,
@@ -347,18 +363,19 @@ Tabmix.tablib = {
         parentName: "gBrowser",
         methodName: "determineContentTitle",
         nextMethodName: "getWindowTitleForBrowser",
+        ...(Tabmix.isVersion(1560) ? {sandbox: Tabmix._gBrowser_sandbox} : null),
       });
 
       Tabmix.changeCode(gBrowser, "gBrowser.getWindowTitleForBrowser")
         ._replace(
-          "let docElement = document.documentElement;",
+          `let docElement = ${Tabmix.isVersion(1560) ? "this." : ""}document.documentElement;`,
           `
         let titlePromise;
         let tab = this.getTabForBrowser(browser);
         if (tab.hasAttribute("tabmix_changed_label")) {
           titlePromise = Promise.resolve(tab.getAttribute("tabmix_changed_label"));
         } else {
-          titlePromise = window.TMP_Places.asyncGetTabTitle(tab, browser.currentURI.spec, {title: contentTitle});
+          titlePromise = ${Tabmix.isVersion(1560) ? "tab.documentGlobal" : "window"}.TMP_Places.asyncGetTabTitle(tab, browser.currentURI.spec, {title: contentTitle});
         }
         return titlePromise.then(newTitle => {
           contentTitle = newTitle;
@@ -430,7 +447,7 @@ Tabmix.tablib = {
         aTab.removeAttribute("tabmix_changed_label");
         if (noChange)
           Tabmix.tablib.onTabTitleChanged(aTab, browser, title == urlTitle);
-      } else if (noChange) window.TMP_Places.currentTab = null;
+      } else if (noChange) ${Tabmix.isVersion(1560) ? "aTab.documentGlobal" : "window"}.TMP_Places.currentTab = null;
       $&`
       )
       ._replace("{ isContentTitle", "{ isContentTitle, urlTitle")
@@ -444,7 +461,10 @@ Tabmix.tablib = {
       Tabmix.originalFunctions.gBrowser_setInitialTabTitle.apply(this, [aTab, ...rest]);
     };
 
-    const sandbox = Tabmix.getSandbox(window, {scope: {TAB_LABEL_MAX_LENGTH: 256}});
+    const sandbox =
+      Tabmix.isVersion(1560) ?
+        Tabmix._gBrowser_sandbox
+      : Tabmix.getSandbox(window, {scope: {TAB_LABEL_MAX_LENGTH: 256}});
     Tabmix.changeCode(gBrowser, "gBrowser._setTabLabel", {sandbox})
       ._replace("{ beforeTabOpen, isContentTitle", "{ beforeTabOpen, isContentTitle, urlTitle")
       ._replace(

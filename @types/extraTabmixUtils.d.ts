@@ -311,6 +311,7 @@ declare namespace Tablib {
   let _inited: boolean;
   function init(): void;
   let _loadURIInitialized: boolean;
+  function initializegBrowserSandbox(): void;
   function setLoadURI(aBrowser: Browser): void;
   function loadURIWrapper(browser: Browser, methodName: "loadURI" | "fixupAndLoadURIString"): void;
   function _loadURI(...args: loadURIArgs): Tab | null;
