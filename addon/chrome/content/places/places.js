@@ -177,7 +177,7 @@ var TMP_Places = {
     }
 
     var tabBrowser = w.gBrowser;
-    var aTab = tabBrowser._selectedTab;
+    var aTab = tabBrowser.selectedTab;
 
     if (typeof aPref == "undefined") {
       aPref = this.getPrefByDocumentURI(window);
@@ -934,8 +934,8 @@ var TMP_Places = {
     this._batchData = {remove: [], add: []};
     this.inUpdateBatch = true;
 
-    if (TabmixTabbar.widthFitTitle && Tabmix.tabsUtils.isElementVisible(gBrowser._selectedTab)) {
-      this.currentTab = gBrowser._selectedTab;
+    if (TabmixTabbar.widthFitTitle && Tabmix.tabsUtils.isElementVisible(gBrowser.selectedTab)) {
+      this.currentTab = gBrowser.selectedTab;
     }
   },
 

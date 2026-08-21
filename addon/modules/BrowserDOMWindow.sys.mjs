@@ -163,7 +163,7 @@ export const TabmixBrowserDOMWindow = {
       .changeCode(constructor.prototype, fullMethodName, {sandbox: tabmixObj._sandbox})
       ._replace(
         `if (aIsExternal && (!aURI || aURI.spec == "about:blank")) {`,
-        `let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser._selectedTab);
+        `let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser.selectedTab);
       $&`
       )
       ._replace(
@@ -181,7 +181,7 @@ export const TabmixBrowserDOMWindow = {
         "loadInBackground = aIsExternal ? lazy.loadExternalInBackground : lazy.loadDivertedInBackground",
         {check: isVersion(1370)}
       )
-      ._replace("win.gBrowser.addTab", "currentIsBlank ? win.gBrowser._selectedTab : $&")
+      ._replace("win.gBrowser.addTab", "currentIsBlank ? win.gBrowser.selectedTab : $&")
       ._replace(
         "win.gBrowser.getBrowserForTab(tab);",
         `$&

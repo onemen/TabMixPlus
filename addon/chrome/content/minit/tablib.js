@@ -12,7 +12,7 @@ Tabmix.tablib = {
     }
 
     this._inited = true;
-    this.initializegBrowserSandbox();
+    this.convertPrivateMethods();
     this.change_gBrowser();
     this.change_tabContainer();
     this.change_utility();
@@ -20,18 +20,47 @@ Tabmix.tablib = {
     this.generalFunctions();
   },
 
-  initializegBrowserSandbox() {
+  convertPrivateMethods() {
+    if (Tabmix.isVersion(1530)) {
+      gBrowser._dataURLRegEx = /^data:[^,]+;base64,/i;
+      gBrowser._nonPrintingRegEx = /^[\p{Z}\p{C}\p{M}\u{115f}\u{1160}\u{2800}\u{3164}\u{ffa0}]*$/u;
+    }
+
     // from Firefox 156 gBrowser is a module and we need to use module sandbox
     if (!Tabmix.isVersion(1560)) {
       return;
     }
+
+    gBrowser._shortenURLRegEx = /^[^:]+:\/\/(?:www\.)?/;
+
     const lazy = {};
     ChromeUtils.defineESModuleGetters(lazy, {
-      // eslint-disable-next-line mozilla/valid-lazy
+      /* eslint-disable mozilla/valid-lazy */
       PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
+      AsyncTabSwitcher: "moz-src:///browser/components/tabbrowser/AsyncTabSwitcher.sys.mjs",
+      /* eslint-enable mozilla/valid-lazy */
     });
     Tabmix._gBrowser_sandbox = Tabmix.getSandbox(gBrowser, {
       scope: {lazy, TAB_LABEL_MAX_LENGTH: 256},
+    });
+
+    const browserProps = {
+      parent: gBrowser,
+      parentName: "gBrowser",
+    };
+
+    gBrowser._setTabLabel = Tabmix.getPrivateMethod({
+      ...browserProps,
+      methodName: "setTabLabel",
+      nextMethodName: "loadTabs",
+      sandbox: Tabmix._gBrowser_sandbox,
+    });
+
+    gBrowser._removeDuplicateTabs = Tabmix.getPrivateMethod({
+      ...browserProps,
+      methodName: "removeDuplicateTabs",
+      nextMethodName: "removeAllDuplicateTabs",
+      sandbox: Tabmix._gBrowser_sandbox,
     });
   },
 
@@ -415,11 +444,6 @@ Tabmix.tablib = {
         .toCode();
     }
 
-    if (Tabmix.isVersion(1530)) {
-      gBrowser._dataURLRegEx = /^data:[^,]+;base64,/i;
-      gBrowser._nonPrintingRegEx = /^[\p{Z}\p{C}\p{M}\u{115f}\u{1160}\u{2800}\u{3164}\u{ffa0}]*$/u;
-    }
-
     var obj, fnName;
     if (Tabmix.extensions.ieTab2) {
       [obj, fnName] = [Tabmix.originalFunctions, "oldSetTabTitle"];
@@ -453,18 +477,35 @@ Tabmix.tablib = {
       ._replace("{ isContentTitle", "{ isContentTitle, urlTitle")
       .toCode();
 
-    Tabmix.originalFunctions.gBrowser_setInitialTabTitle = gBrowser.setInitialTabTitle;
-    gBrowser.setInitialTabTitle = function (aTab, ...rest) {
-      if (aTab._labelIsInitialTitle && aTab.hasAttribute("tabmix_changed_label")) {
-        return;
-      }
-      Tabmix.originalFunctions.gBrowser_setInitialTabTitle.apply(this, [aTab, ...rest]);
-    };
-
     const sandbox =
       Tabmix.isVersion(1560) ?
         Tabmix._gBrowser_sandbox
       : Tabmix.getSandbox(window, {scope: {TAB_LABEL_MAX_LENGTH: 256}});
+
+    if (Tabmix.isVersion(1560)) {
+      Tabmix.changeCode(gBrowser, "gBrowser.setInitialTabTitle", {sandbox})
+        ._replace(
+          ") {",
+          `$&
+    if (aTab._labelIsInitialTitle && aTab.hasAttribute("tabmix_changed_label")) {
+      return;
+    }`
+        )
+        .toCode();
+
+      Tabmix.changeCode(gBrowser, "gBrowser.setTabLabelForAuthPrompts", {
+        forceUpdate: true,
+      }).toCode();
+    } else {
+      Tabmix.originalFunctions.gBrowser_setInitialTabTitle = gBrowser.setInitialTabTitle;
+      gBrowser.setInitialTabTitle = function (aTab, ...rest) {
+        if (aTab._labelIsInitialTitle && aTab.hasAttribute("tabmix_changed_label")) {
+          return;
+        }
+        Tabmix.originalFunctions.gBrowser_setInitialTabTitle.apply(this, [aTab, ...rest]);
+      };
+    }
+
     Tabmix.changeCode(gBrowser, "gBrowser._setTabLabel", {sandbox})
       ._replace("{ beforeTabOpen, isContentTitle", "{ beforeTabOpen, isContentTitle, urlTitle")
       ._replace(
@@ -1318,7 +1359,7 @@ Tabmix.tablib = {
     /** @type {TabmixGlobal["_duplicateTab"]} */
     let duplicateTab = function (aTab, aHref = "", aTabData, disallowSelect, dontFocusUrlBar) {
       if (aTab.localName != "tab") {
-        aTab = this._selectedTab;
+        aTab = this.selectedTab;
       }
 
       var newTab;
@@ -1455,7 +1496,7 @@ Tabmix.tablib = {
 
     gBrowser.duplicateTabToWindow = function (aTab, aMoveTab, aTabData) {
       if (aTab.localName != "tab") {
-        aTab = this._selectedTab;
+        aTab = this.selectedTab;
       }
 
       if (Tabmix.singleWindowMode) {
@@ -1612,7 +1653,7 @@ Tabmix.tablib = {
 
     gBrowser.closeGroupTabs = function TMP_closeGroupTabs(aTab) {
       if (aTab.localName != "tab") {
-        aTab = this._selectedTab;
+        aTab = this.selectedTab;
       }
 
       var URL = this.getBrowserForTab(aTab).currentURI.spec;
@@ -1647,11 +1688,11 @@ Tabmix.tablib = {
 
     gBrowser.reloadLeftTabs = function (aTab) {
       if (aTab.localName != "tab") {
-        aTab = this._selectedTab;
+        aTab = this.selectedTab;
       }
 
       var childNodes = this.visibleTabs;
-      if (aTab._tPos > this._selectedTab._tPos) {
+      if (aTab._tPos > this.selectedTab._tPos) {
         this.selectedTab = aTab;
       }
 
@@ -1661,11 +1702,11 @@ Tabmix.tablib = {
 
     gBrowser.reloadRightTabs = function (aTab) {
       if (aTab.localName != "tab") {
-        aTab = this._selectedTab;
+        aTab = this.selectedTab;
       }
 
       var childNodes = this.visibleTabs;
-      if (aTab._tPos < this._selectedTab._tPos) {
+      if (aTab._tPos < this.selectedTab._tPos) {
         this.selectedTab = aTab;
       }
 
@@ -1675,7 +1716,7 @@ Tabmix.tablib = {
 
     gBrowser.reloadAllTabsBut = function (aTab) {
       if (aTab.localName != "tab") {
-        aTab = this._selectedTab;
+        aTab = this.selectedTab;
       } else {
         this.selectedTab = aTab;
       }
@@ -1684,7 +1725,7 @@ Tabmix.tablib = {
 
     gBrowser.lockTab = function (aTab) {
       if (aTab.localName != "tab") {
-        aTab = this._selectedTab;
+        aTab = this.selectedTab;
       }
 
       if (aTab.hasAttribute("locked")) {
@@ -1701,7 +1742,7 @@ Tabmix.tablib = {
 
     gBrowser.protectTab = function (aTab) {
       if (aTab.localName != "tab") {
-        aTab = this._selectedTab;
+        aTab = this.selectedTab;
       }
 
       if (aTab.hasAttribute("protected")) {
@@ -1717,7 +1758,7 @@ Tabmix.tablib = {
 
     gBrowser.freezeTab = function (aTab) {
       if (aTab.localName != "tab") {
-        aTab = this._selectedTab;
+        aTab = this.selectedTab;
       }
 
       if (!aTab.hasAttribute("protected") || !aTab.hasAttribute("locked")) {
@@ -1742,7 +1783,7 @@ Tabmix.tablib = {
     gBrowser.SelectToMerge = function (aTab) {
       if (Tabmix.singleWindowMode && Tabmix.numberOfWindows() == 1) return;
       if (aTab.localName != "tab") {
-        aTab = this._selectedTab;
+        aTab = this.selectedTab;
       }
 
       if (aTab.hasAttribute("mergeselected")) {
@@ -1760,7 +1801,7 @@ Tabmix.tablib = {
 
     gBrowser.copyTabUrl = function (aTab) {
       if (aTab.localName != "tab") {
-        aTab = this._selectedTab;
+        aTab = this.selectedTab;
       }
 
       var clipboard = Cc["@mozilla.org/widget/clipboardhelper;1"].getService(Ci.nsIClipboardHelper);
@@ -2202,7 +2243,7 @@ Tabmix.tablib = {
     let browser = gBrowser.selectedBrowser;
     let where = "current";
     if (aUri != browser.currentURI.spec) {
-      let tab = gBrowser._selectedTab;
+      let tab = gBrowser.selectedTab;
       let isCopy =
         "dataTransfer" in aEvent ?
           aEvent.dataTransfer.dropEffect === "copy"
@@ -2437,7 +2478,7 @@ Tabmix.tabsSelectionUtils = {
       return null;
     }
 
-    const selectedPos = gBrowser._selectedTab._tPos;
+    const selectedPos = gBrowser.selectedTab._tPos;
 
     // Find the first visible tab before and after the selected position
     const getVisibleTabBefore = () =>

@@ -200,7 +200,7 @@ var TabmixTabClickOptions = {
 
     const clickOutTabs = aEvent.target.localName == "arrowscrollbox";
 
-    const tab = clickOutTabs ? gBrowser._selectedTab : aEvent.target.closest("tab.tabbrowser-tab");
+    const tab = clickOutTabs ? gBrowser.selectedTab : aEvent.target.closest("tab.tabbrowser-tab");
     this.clickAction("dbl", clickOutTabs, tab, aEvent);
   },
 

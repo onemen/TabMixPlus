@@ -560,12 +560,14 @@ declare namespace MockedGeckoTypes {
     _nonPrintingRegEx: RegExp;
     _removingTabs: Set<BrowserTab>;
     _selectedTab: BrowserTab;
-    _setTabLabel: (tab: BrowserTab, label: string, options?: {beforeTabOpen?: boolean; isContentTitle?: boolean; isURL?: boolean}) => boolean;
+    // _setTabLabel: (tab: BrowserTab, label: string, options?: {beforeTabOpen?: boolean; isContentTitle?: boolean; isURL?: boolean}) => boolean;
+    _shortenURLRegEx: RegExp;
     _tabAttrModified: (tab: BrowserTab, changed: string[]) => void;
     _taskbarTab: {name: string; userContextId: string} | null;
     _taskbarTabTitle: string | null;
     _taskbarTabTitleLastProfile: string | null;
     _updateTabBarForPinnedTabs: () => void;
+    /** @deprecated replaced with private filed #windowIsClosing in firefox 156 */
     _windowIsClosing: boolean;
     addAdjacentNewTab: (tab: BrowserTab) => void;
     addRangeToMultiSelectedTabs: (start: BrowserTab, end: BrowserTab) => void;
@@ -721,6 +723,8 @@ declare namespace MockedGeckoTypes {
     ) => void;
     _notifyOnTabMove: (tab: BrowserTab, previousTabState?: TabMoveState, currentTabState?: TabMoveState, metricsContext?: MockedExports.TabMetricsContext) => void;
     _populateTitleCache: () => void;
+    _removeDuplicateTabs: (aConfirmationAnchor: object, tabs: Tab[], aCloseTabs: number, options: Record<string, unknown>) => void;
+    _setTabLabel: (tab: BrowserTab, label: string, options?: {beforeTabOpen?: boolean; isContentTitle?: boolean; isURL?: boolean}) => boolean;
   }
 
   interface BrowserWindow extends MockedExports.BrowserWindow {

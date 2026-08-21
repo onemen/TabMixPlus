@@ -390,8 +390,8 @@ Tabmix.openUILink_init = function TMP_openUILink_init() {
 
 Tabmix.checkCurrent = function TMP_checkCurrent(url) {
   var opentabforLinks = Tabmix.prefs.getIntPref("opentabforLinks");
-  if (opentabforLinks == 1 || gBrowser._selectedTab.hasAttribute("locked")) {
-    let isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser._selectedTab);
+  if (opentabforLinks == 1 || gBrowser.selectedTab.hasAttribute("locked")) {
+    let isBlankTab = gBrowser.isBlankNotBusyTab(gBrowser.selectedTab);
     if (!isBlankTab) {
       return "tab";
     }

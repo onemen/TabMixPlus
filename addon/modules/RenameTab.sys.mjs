@@ -28,7 +28,7 @@ export const RenameTab = {
     this.window = lazy.getGlobal(aTab);
     var gBrowser = this.window.gBrowser;
 
-    this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser._selectedTab;
+    this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser.selectedTab;
     var browser = gBrowser.getBrowserForTab(aTab);
     let docTitle =
       aTab.hasAttribute("pending") ?

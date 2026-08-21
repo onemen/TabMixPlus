@@ -122,7 +122,7 @@ var TabmixTabbar = {
     this.scrollButtonsMode = tabscroll;
     var isMultiRow = tabscroll == this.SCROLL_BUTTONS_MULTIROW;
 
-    var currentVisible = start ? true : Tabmix.tabsUtils.isElementVisible(gBrowser._selectedTab);
+    var currentVisible = start ? true : Tabmix.tabsUtils.isElementVisible(gBrowser.selectedTab);
 
     if (prevTabscroll != tabscroll) {
       // update pointer to the button object that we are going to use
@@ -1892,7 +1892,7 @@ window.gTMPprefObserver = {
         break;
       case "browser.tabs.tabMaxWidth":
       case "browser.tabs.tabMinWidth": {
-        var currentVisible = Tabmix.tabsUtils.isElementVisible(gBrowser._selectedTab);
+        var currentVisible = Tabmix.tabsUtils.isElementVisible(gBrowser.selectedTab);
         let tabMaxWidth = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMaxWidth"));
         let tabMinWidth = Math.max(16, Services.prefs.getIntPref("browser.tabs.tabMinWidth"));
         if (tabMaxWidth < tabMinWidth) {
@@ -2079,7 +2079,7 @@ window.gTMPprefObserver = {
         maxRowVar.style.setProperty("--tabs-lines", String(row));
         // maxRow changed
         if (TabmixTabbar.isMultiRow) {
-          let isVisible = Tabmix.tabsUtils.isElementVisible(gBrowser._selectedTab);
+          let isVisible = Tabmix.tabsUtils.isElementVisible(gBrowser.selectedTab);
           // we hide the button to see if tabs can fits to fewer rows without the scroll buttons
           if (Tabmix.tabsUtils.overflow && row > TabmixTabbar.visibleRows) {
             Tabmix.tabsUtils.overflow = false;
@@ -2216,7 +2216,7 @@ window.gTMPprefObserver = {
   setTabIconMargin: function TMP_PO_setTabIconMargin() {
     var [sMarginStart, sMarginEnd] =
       Tabmix.rtl ? ["margin-right", "margin-left"] : ["margin-left", "margin-right"];
-    var icon = gBrowser._selectedTab.getElementsByClassName("tab-icon-image")[0];
+    var icon = gBrowser.selectedTab.getElementsByClassName("tab-icon-image")[0];
     if (!icon) {
       return;
     }
@@ -2309,7 +2309,7 @@ window.gTMPprefObserver = {
 
   setCloseButtonMargin: function TMP_PO_setCloseButtonMargin() {
     var sMarginEnd = Tabmix.rtl ? "margin-left" : "margin-right";
-    var icon = gBrowser._selectedTab.getElementsByClassName("tab-close-button")[0];
+    var icon = gBrowser.selectedTab.getElementsByClassName("tab-close-button")[0];
     if (!icon) {
       return;
     }

@@ -2503,7 +2503,7 @@ var TMP_undocloseTabButtonObserver = {
 /* ::::::::::     miscellaneous     :::::::::: */
 
 Tabmix.whereToOpen = function TMP_whereToOpen(pref, altKey) {
-  var aTab = gBrowser._selectedTab;
+  var aTab = gBrowser.selectedTab;
   var isBlankTab = gBrowser.isBlankNotBusyTab(aTab);
   var isLockTab = !isBlankTab && aTab.hasAttribute("locked");
 

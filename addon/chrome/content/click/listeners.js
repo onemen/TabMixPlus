@@ -57,25 +57,25 @@
           gBrowser.removeCurrentTab();
           break;
         case "tm-duplicateTabContext":
-          Tabmix.duplicateTab(gBrowser._selectedTab);
+          Tabmix.duplicateTab(gBrowser.selectedTab);
           break;
         case "tm-duplicateinWinContext":
-          gBrowser.duplicateTabToWindow(gBrowser._selectedTab, false);
+          gBrowser.duplicateTabToWindow(gBrowser.selectedTab, false);
           break;
         case "tm-detachTabContext":
-          gBrowser.duplicateTabToWindow(gBrowser._selectedTab, true);
+          gBrowser.duplicateTabToWindow(gBrowser.selectedTab, true);
           break;
         case "tm-mergeWindows":
           Tabmix.MergeWindows.mergeWindows(window);
           break;
         case "tm-content-freezeTab":
-          gBrowser.freezeTab(gBrowser._selectedTab);
+          gBrowser.freezeTab(gBrowser.selectedTab);
           break;
         case "tm-content-protectTab":
-          gBrowser.protectTab(gBrowser._selectedTab);
+          gBrowser.protectTab(gBrowser.selectedTab);
           break;
         case "tm-content-lockTab":
-          gBrowser.lockTab(gBrowser._selectedTab);
+          gBrowser.lockTab(gBrowser.selectedTab);
           break;
       }
     },

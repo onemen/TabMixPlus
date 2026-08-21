@@ -874,7 +874,7 @@ var TMP_ClosedTabs = {
     if (tabData) {
       // we pass the current tab as a place holder for tabData
       const state = JSON.stringify(tabData ? tabData.state : {});
-      gBrowser.duplicateTabToWindow(gBrowser._selectedTab, false, state);
+      gBrowser.duplicateTabToWindow(gBrowser.selectedTab, false, state);
     }
   },
 
@@ -926,7 +926,7 @@ var TMP_ClosedTabs = {
     let {state, pos} = tabData;
 
     var tabToRemove = null;
-    var cTab = gBrowser._selectedTab;
+    var cTab = gBrowser.selectedTab;
     var isCurrentBlank = gBrowser.isBlankNotBusyTab(cTab);
     if (aWhere == "current" && !isCurrentBlank) {
       tabToRemove = cTab;

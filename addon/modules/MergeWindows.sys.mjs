@@ -92,8 +92,11 @@ export const MergeWindows = {
       [aTargetWindow, aTabs] = [aWindow, aTargetWindow.gBrowser.tabs];
     }
     this.swapTabs(aTargetWindow, aTabs);
-    // _endRemoveTab set _windowIsClosing if the last tab moved to a different window
-    if (canClose && !tabbrowser._windowIsClosing) {
+    // Firefox 156 (bug 2064194) made Tabbrowser.#windowIsClosing private, so it
+    // can no longer be read here. That flag is only set when the last tab is
+    // closed or adopted out, which can't happen in this branch (canClose
+    // requires unselected tabs to remain). Guard against double-closing instead.
+    if (canClose && !aWindow.closed) {
       aWindow.close();
     }
   },
