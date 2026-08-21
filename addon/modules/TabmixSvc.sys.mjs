@@ -1,3 +1,4 @@
+import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
 import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 
 /** @type {TabmixSvcModule.Lazy} */ // @ts-ignore
@@ -5,8 +6,10 @@ const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
   FloorpPrefsObserver: "chrome://tabmix-resource/content/Floorp.sys.mjs",
-  isVersion: "chrome://tabmix-resource/content/BrowserVersion.sys.mjs",
-  SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
+  SessionStore:
+    isVersion(1560) ?
+      "moz-src:///browser/components/sessionstore/SessionStore.sys.mjs"
+    : "resource:///modules/sessionstore/SessionStore.sys.mjs",
   SyncedTabs: "chrome://tabmix-resource/content/SyncedTabs.sys.mjs",
   TabmixPlacesUtils: "chrome://tabmix-resource/content/Places.sys.mjs",
 });
@@ -22,7 +25,7 @@ export const TabmixSvc = {
   URILoadingHelperChanged: false,
 
   version(versionNo, updateChannel) {
-    return lazy.isVersion.apply(null, [versionNo, updateChannel]);
+    return isVersion(versionNo, updateChannel);
   },
 
   getString(aStringKey) {
@@ -135,7 +138,7 @@ export const TabmixSvc = {
       lazy.TabmixPlacesUtils.init(aWindow);
       lazy.SyncedTabs.init(aWindow);
 
-      if (lazy.isVersion(1300)) {
+      if (isVersion(1300)) {
         const {VerticalTabs} = ChromeUtils.importESModule(
           "chrome://tabmix-resource/content/VerticalTabs.sys.mjs"
         );
@@ -148,7 +151,7 @@ export const TabmixSvc = {
         Services.prefs.lockPref("extensions.tabmix.tabBarPosition");
       }
 
-      if (lazy.isVersion({fp: "128.0.0"})) {
+      if (isVersion({fp: "128.0.0"})) {
         lazy.FloorpPrefsObserver.init();
       }
 
@@ -168,7 +171,7 @@ export const TabmixSvc = {
         ChromeUtils.importESModule("chrome://tabmix-resource/content/NewTabURL.sys.mjs");
       }
 
-      if (lazy.isVersion(1310)) {
+      if (isVersion(1310)) {
         prefs.setBoolPref("browser.tabs.tabmanager.enabled", true);
       }
     },
@@ -217,7 +220,7 @@ export const TabmixSvc = {
   },
 
   parseXULToFragment(window, str, entities = []) {
-    if (!lazy.isVersion(1530)) {
+    if (!isVersion(1530)) {
       return window.MozXULElement.parseXULToFragment(str, entities);
     }
 
@@ -277,7 +280,7 @@ export const TabmixSvc = {
   },
 };
 
-if (lazy.isVersion(1500)) {
+if (isVersion(1500)) {
   TabmixSvc.isRemoteBrowser = browser => browser.hasAttribute("remote");
 } else {
   TabmixSvc.isRemoteBrowser = browser => browser.getAttribute("remote") == "true";

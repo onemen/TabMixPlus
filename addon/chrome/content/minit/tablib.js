@@ -1012,7 +1012,10 @@ Tabmix.tablib = {
       const modules = {
         BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.sys.mjs",
         PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
-        SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
+        SessionStore:
+          Tabmix.isVersion(1560) ?
+            "moz-src:///browser/components/sessionstore/SessionStore.sys.mjs"
+          : "resource:///modules/sessionstore/SessionStore.sys.mjs",
         TabMetrics: "moz-src:///browser/components/tabbrowser/TabMetrics.sys.mjs",
       };
       ChromeUtils.defineESModuleGetters(lazy, modules);

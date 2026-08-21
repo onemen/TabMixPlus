@@ -12,7 +12,10 @@ ChromeUtils.defineESModuleGetters(lazy, {
   DynamicRules: "chrome://tabmix-resource/content/DynamicRules.sys.mjs",
   getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
-  SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
+  SessionStore:
+    isVersion(1560) ?
+      "moz-src:///browser/components/sessionstore/SessionStore.sys.mjs"
+    : "resource:///modules/sessionstore/SessionStore.sys.mjs",
   Overlays: "chrome://tabmix-resource/content/bootstrap/Overlays.sys.mjs",
 });
 

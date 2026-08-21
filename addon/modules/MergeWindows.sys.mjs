@@ -7,7 +7,10 @@ ChromeUtils.defineESModuleGetters(lazy, {
   BrowserWindowTracker: "resource:///modules/BrowserWindowTracker.sys.mjs",
   getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
-  SessionStore: "resource:///modules/sessionstore/SessionStore.sys.mjs",
+  SessionStore:
+    TabmixSvc.version(1560) ?
+      "moz-src:///browser/components/sessionstore/SessionStore.sys.mjs"
+    : "resource:///modules/sessionstore/SessionStore.sys.mjs",
 });
 
 //////////////////////////////////////////////////////////////////////
