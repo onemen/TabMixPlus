@@ -216,6 +216,8 @@ declare namespace MockedGeckoTypes {
     readonly _isProtected: boolean;
     _labelIsInitialTitle?: boolean;
     _tPos: number;
+    /** Firefox 156+ - bug 1837253, public index getter (backed by internal _index) */
+    index: number;
     _dragData: DragData;
     closing: boolean;
     readonly container: TabContainer;

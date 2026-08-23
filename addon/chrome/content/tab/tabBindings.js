@@ -8,6 +8,22 @@
     return;
   }
 
+  // Bug 1837253 - Firefox 156+ removed the tab's `_tPos` property and replaced
+  // it with a public `index` getter backed by an internal `_index` write path.
+  // Add `_tPos` as a compatibility getter that maps to `index`, so the many
+  // places in Tabmix that read `tab._tPos` keep working unchanged on 156+.
+  // Older versions (e.g. Firefox 153 ESR) still set an own `_tPos` property on
+  // every tab, so no shim is needed there.
+  if (Tabmix.isVersion(1560)) {
+    Object.defineProperty(tabbrowsertab.prototype, "_tPos", {
+      /** @this {Tab} */
+      get() {
+        return this.index;
+      },
+      configurable: true,
+    });
+  }
+
   let markup = tabbrowsertab.markup
     .replace(
       "</vbox>",
