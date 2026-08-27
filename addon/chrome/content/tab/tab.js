@@ -3527,6 +3527,21 @@ window.gTMPprefObserver = {
         .sort();
       result.latestDate = dates.at(-1);
 
+      // new updater already exist
+      const updaterUI = PathUtils.join(
+        PathUtils.profileDir,
+        "chrome",
+        "utils",
+        "updater",
+        "ui",
+        "updater.html"
+      );
+
+      if (await IOUtils.exists(updaterUI)) {
+        result.updateNeeded = false;
+        return result;
+      }
+
       const versionFile = PathUtils.join(
         PathUtils.profileDir,
         "chrome",
