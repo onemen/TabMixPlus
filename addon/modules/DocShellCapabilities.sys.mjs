@@ -1,10 +1,18 @@
+import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
+
 /** @type {DocShellCapabilitiesModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
-  TabState: "resource:///modules/sessionstore/TabState.sys.mjs",
-  TabStateCache: "resource:///modules/sessionstore/TabStateCache.sys.mjs",
+  TabState:
+    isVersion(1560) ?
+      "moz-src:///browser/components/sessionstore/TabState.sys.mjs"
+    : "resource:///modules/sessionstore/TabState.sys.mjs",
+  TabStateCache:
+    isVersion(1560) ?
+      "moz-src:///browser/components/sessionstore/TabStateCache.sys.mjs"
+    : "resource:///modules/sessionstore/TabStateCache.sys.mjs",
 });
 
 /** @type {DocShellCapabilitiesModule.DocShellCapabilities} */
