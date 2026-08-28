@@ -328,7 +328,18 @@ Tabmix.tablib = {
       }
     }
 
-    if (Tabmix.isVersion(1410)) {
+    if (Tabmix.isVersion(1560)) {
+      gBrowser._blurTab = function (tab) {
+        if (
+          Tabmix.callerName() === "_endRemoveTab" &&
+          window.matchMedia("(prefers-reduced-motion: no-preference)")?.matches
+        ) {
+          TMP_eventListener.onTabClose_updateTabBar(tab);
+        }
+        // @ts-ignore
+        this.selectedTab = this._findTabToBlurTo(tab);
+      };
+    } else if (Tabmix.isVersion(1410)) {
       Tabmix.originalFunctions.gBrowser__blurTab = gBrowser._blurTab;
       gBrowser._blurTab = function (tab, ...rest) {
         if (
