@@ -116,21 +116,9 @@ declare namespace MockedExports {
     readonly STATE_RESTORING: 16777216;
   }
 
-  enum nsIAppStartup_IDLShutdownPhase {
-    SHUTDOWN_PHASE_NOTINSHUTDOWN = 0,
-    SHUTDOWN_PHASE_APPSHUTDOWNCONFIRMED = 1,
-    SHUTDOWN_PHASE_APPSHUTDOWNNETTEARDOWN = 2,
-    SHUTDOWN_PHASE_APPSHUTDOWNTEARDOWN = 3,
-    SHUTDOWN_PHASE_APPSHUTDOWN = 4,
-    SHUTDOWN_PHASE_APPSHUTDOWNQM = 5,
-    SHUTDOWN_PHASE_APPSHUTDOWNRELEMETRY = 6,
-    SHUTDOWN_PHASE_XPCOMWILLSHUTDOWN = 7,
-    SHUTDOWN_PHASE_XPCOMSHUTDOWN = 8,
-  }
-
-  interface Ci extends Omit<nsIXPCComponents_Interfaces, "nsIFilePicker"> {
+  interface Ci extends Omit<nsIXPCComponents_Interfaces, "nsIFilePicker" | "nsIAppStartup"> {
     nsIAlertsService: nsJSIID<nsIAlertsService>;
-    nsIAppStartup: nsJSIID<_nsIAppStartup, typeof nsIAppStartup_IDLShutdownPhase>;
+    nsIAppStartup: nsJSIID<_nsIAppStartup>;
     nsIFilePicker: nsJSIID<nsIFilePicker, nsIFilePicker_Constants>;
     nsIPromptService: nsJSIID<MockedGeckoTypes._nsIPromptService>;
     nsIStringInputStream: nsJSIID<nsIStringInputStream>;

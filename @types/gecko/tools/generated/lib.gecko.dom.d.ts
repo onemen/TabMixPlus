@@ -1246,6 +1246,20 @@ interface DisplayNameResult {
     values?: string[];
 }
 
+interface DocumentLanguageMetadata {
+    /** <!-- binding_to(idl, attribute, WEBIDL_DocumentLanguageMetadata_htmlLangAttribute) --> */
+    htmlLangAttribute: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_DocumentLanguageMetadata_textSample) --> */
+    textSample: string;
+}
+
+interface DocumentLanguageMetadataRequestOptions {
+    /** <!-- binding_to(idl, attribute, WEBIDL_DocumentLanguageMetadataRequestOptions_textSampleMinCodeUnits) --> */
+    textSampleMinCodeUnits: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_DocumentLanguageMetadataRequestOptions_textSampleTargetCodeUnits) --> */
+    textSampleTargetCodeUnits: number;
+}
+
 interface DocumentPictureInPictureEventInit extends EventInit {
     /** <!-- binding_to(idl, attribute, WEBIDL_DocumentPictureInPictureEventInit_window) --> */
     window: Window;
@@ -1277,6 +1291,13 @@ interface DoubleRange {
 interface DragEventInit extends MouseEventInit {
     /** <!-- binding_to(idl, attribute, WEBIDL_DragEventInit_dataTransfer) --> */
     dataTransfer?: DataTransfer | null;
+}
+
+interface DrawSnapshotOptions {
+    /** <!-- binding_to(idl, attribute, WEBIDL_DrawSnapshotOptions_drawView) --> */
+    drawView?: boolean;
+    /** <!-- binding_to(idl, attribute, WEBIDL_DrawSnapshotOptions_resetScrollPosition) --> */
+    resetScrollPosition?: boolean;
 }
 
 interface DynamicsCompressorOptions extends AudioNodeOptions {
@@ -1375,6 +1396,11 @@ interface EncodedVideoChunkMetadata {
     decoderConfig?: VideoDecoderConfig;
     /** <!-- binding_to(idl, attribute, WEBIDL_EncodedVideoChunkMetadata_svc) --> */
     svc?: SvcOutputMetadata;
+}
+
+interface EncoderDebugInfo {
+    /** <!-- binding_to(idl, attribute, WEBIDL_EncoderDebugInfo_encoderName) --> */
+    encoderName?: string;
 }
 
 interface ErrorEventInit extends EventInit {
@@ -1609,6 +1635,8 @@ interface FontFaceDescriptors {
     variationSettings?: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_FontFaceDescriptors_weight) --> */
     weight?: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_FontFaceDescriptors_width) --> */
+    width?: string;
 }
 
 interface FontFaceSetIteratorResult {
@@ -2511,6 +2539,13 @@ interface ImageText {
 interface ImportESModuleOptionsDictionary {
     /** <!-- binding_to(idl, attribute, WEBIDL_ImportESModuleOptionsDictionary_global) --> */
     global?: ImportESModuleTargetGlobal;
+}
+
+interface ImportNodeOptions {
+    /** <!-- binding_to(idl, attribute, WEBIDL_ImportNodeOptions_customElementRegistry) --> */
+    customElementRegistry?: CustomElementRegistry;
+    /** <!-- binding_to(idl, attribute, WEBIDL_ImportNodeOptions_selfOnly) --> */
+    selfOnly?: boolean;
 }
 
 interface InferenceSessionRunOptions {
@@ -4818,32 +4853,6 @@ interface PredictRemoteTypeOptions {
     window?: Window | null;
 }
 
-interface PrivateAttributionConversionOptions {
-    /** <!-- binding_to(idl, attribute, WEBIDL_PrivateAttributionConversionOptions_ads) --> */
-    ads?: string[];
-    /** <!-- binding_to(idl, attribute, WEBIDL_PrivateAttributionConversionOptions_histogramSize) --> */
-    histogramSize: number;
-    /** <!-- binding_to(idl, attribute, WEBIDL_PrivateAttributionConversionOptions_impression) --> */
-    impression?: PrivateAttributionImpressionType;
-    /** <!-- binding_to(idl, attribute, WEBIDL_PrivateAttributionConversionOptions_lookbackDays) --> */
-    lookbackDays?: number;
-    /** <!-- binding_to(idl, attribute, WEBIDL_PrivateAttributionConversionOptions_sources) --> */
-    sources?: string[];
-    /** <!-- binding_to(idl, attribute, WEBIDL_PrivateAttributionConversionOptions_task) --> */
-    task: string;
-}
-
-interface PrivateAttributionImpressionOptions {
-    /** <!-- binding_to(idl, attribute, WEBIDL_PrivateAttributionImpressionOptions_ad) --> */
-    ad: string;
-    /** <!-- binding_to(idl, attribute, WEBIDL_PrivateAttributionImpressionOptions_index) --> */
-    index: number;
-    /** <!-- binding_to(idl, attribute, WEBIDL_PrivateAttributionImpressionOptions_target) --> */
-    target: string;
-    /** <!-- binding_to(idl, attribute, WEBIDL_PrivateAttributionImpressionOptions_type) --> */
-    type?: PrivateAttributionImpressionType;
-}
-
 interface ProcessActorChildOptions extends JSActorSidedOptions {
     /** <!-- binding_to(idl, attribute, WEBIDL_ProcessActorChildOptions_observers) --> */
     observers?: string[];
@@ -5149,6 +5158,8 @@ interface RTCCodecStats extends RTCStats {
 }
 
 interface RTCConfiguration {
+    /** <!-- binding_to(idl, attribute, WEBIDL_RTCConfiguration_alwaysNegotiateDataChannels) --> */
+    alwaysNegotiateDataChannels?: boolean;
     /** <!-- binding_to(idl, attribute, WEBIDL_RTCConfiguration_bundlePolicy) --> */
     bundlePolicy?: RTCBundlePolicy;
     /** <!-- binding_to(idl, attribute, WEBIDL_RTCConfiguration_certificates) --> */
@@ -5166,6 +5177,8 @@ interface RTCConfiguration {
 }
 
 interface RTCConfigurationInternal {
+    /** <!-- binding_to(idl, attribute, WEBIDL_RTCConfigurationInternal_alwaysNegotiateDataChannels) --> */
+    alwaysNegotiateDataChannels?: boolean;
     /** <!-- binding_to(idl, attribute, WEBIDL_RTCConfigurationInternal_bundlePolicy) --> */
     bundlePolicy?: RTCBundlePolicy;
     /** <!-- binding_to(idl, attribute, WEBIDL_RTCConfigurationInternal_certificatesProvided) --> */
@@ -5940,6 +5953,8 @@ interface RTCTransportStats extends RTCStats {
     packetsSent?: number;
     /** <!-- binding_to(idl, attribute, WEBIDL_RTCTransportStats_remoteCertificateId) --> */
     remoteCertificateId?: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_RTCTransportStats_selectedCandidatePairChanges) --> */
+    selectedCandidatePairChanges?: number;
     /** <!-- binding_to(idl, attribute, WEBIDL_RTCTransportStats_selectedCandidatePairId) --> */
     selectedCandidatePairId?: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_RTCTransportStats_srtpCipher) --> */
@@ -6403,6 +6418,8 @@ interface SizeToContentConstraints {
 interface SocketOptions {
     /** <!-- binding_to(idl, attribute, WEBIDL_SocketOptions_binaryType) --> */
     binaryType?: TCPSocketBinaryType;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SocketOptions_connectionFlags) --> */
+    connectionFlags?: number;
     /** <!-- binding_to(idl, attribute, WEBIDL_SocketOptions_useSecureTransport) --> */
     useSecureTransport?: boolean;
 }
@@ -7235,7 +7252,7 @@ interface ViewTimelineOptions {
     /** <!-- binding_to(idl, attribute, WEBIDL_ViewTimelineOptions_inset) --> */
     inset?: string | (CSSKeywordish | CSSNumericValue)[];
     /** <!-- binding_to(idl, attribute, WEBIDL_ViewTimelineOptions_subject) --> */
-    subject?: Element;
+    subject: Element;
 }
 
 interface WaveShaperOptions extends AudioNodeOptions {
@@ -7373,9 +7390,9 @@ interface WebTransportErrorInit {
 
 interface WebTransportHash {
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportHash_algorithm) --> */
-    algorithm?: string;
+    algorithm: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportHash_value) --> */
-    value?: BufferSource;
+    value: BufferSource;
 }
 
 interface WebTransportOptions {
@@ -7383,6 +7400,8 @@ interface WebTransportOptions {
     allowPooling?: boolean;
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportOptions_congestionControl) --> */
     congestionControl?: WebTransportCongestionControl;
+    /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportOptions_protocols) --> */
+    protocols?: string[];
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportOptions_requireUnreliable) --> */
     requireUnreliable?: boolean;
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportOptions_serverCertificateHashes) --> */
@@ -7398,9 +7417,14 @@ interface WebTransportReceiveStreamStats {
     timestamp?: DOMHighResTimeStamp;
 }
 
-interface WebTransportSendStreamOptions {
-    /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportSendStreamOptions_sendOrder) --> */
-    sendOrder?: number | null;
+interface WebTransportSendOptions {
+    /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportSendOptions_sendGroup) --> */
+    sendGroup?: WebTransportSendGroup | null;
+    /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportSendOptions_sendOrder) --> */
+    sendOrder?: number;
+}
+
+interface WebTransportSendStreamOptions extends WebTransportSendOptions {
 }
 
 interface WebTransportSendStreamStats {
@@ -8193,6 +8217,10 @@ interface Animation extends EventTarget {
     readonly playState: AnimationPlayState;
     /** <!-- binding_to(idl, attribute, WEBIDL_Animation_playbackRate) --> */
     playbackRate: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_Animation_rangeEnd) --> */
+    rangeEnd: any;
+    /** <!-- binding_to(idl, attribute, WEBIDL_Animation_rangeStart) --> */
+    rangeStart: any;
     /** <!-- binding_to(idl, attribute, WEBIDL_Animation_ready) --> */
     readonly ready: Promise<Animation>;
     /** <!-- binding_to(idl, attribute, WEBIDL_Animation_replaceState) --> */
@@ -8536,6 +8564,8 @@ interface AudioEncoder extends EventTarget {
     encode(data: AudioData): void;
     /** <!-- binding_to(idl, method, WEBIDL_AudioEncoder_flush) --> */
     flush(): Promise<void>;
+    /** <!-- binding_to(idl, method, WEBIDL_AudioEncoder_mozRequestDebugInfo) --> */
+    mozRequestDebugInfo(): Promise<EncoderDebugInfo>;
     /** <!-- binding_to(idl, method, WEBIDL_AudioEncoder_reset) --> */
     reset(): void;
     addEventListener<K extends keyof AudioEncoderEventMap>(type: K, listener: (this: AudioEncoder, ev: AudioEncoderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -9524,14 +9554,14 @@ interface CSSFontFaceDescriptors extends CSSStyleDeclaration {
     fontFeatureSettings: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSFontFaceDescriptors_fontLanguageOverride) --> */
     fontLanguageOverride: string;
-    /** <!-- binding_to(idl, attribute, WEBIDL_CSSFontFaceDescriptors_fontStretch) --> */
-    fontStretch: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSFontFaceDescriptors_fontStyle) --> */
     fontStyle: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSFontFaceDescriptors_fontVariationSettings) --> */
     fontVariationSettings: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSFontFaceDescriptors_fontWeight) --> */
     fontWeight: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CSSFontFaceDescriptors_fontWidth) --> */
+    fontWidth: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSFontFaceDescriptors_lineGapOverride) --> */
     lineGapOverride: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSFontFaceDescriptors_sizeAdjust) --> */
@@ -10588,6 +10618,8 @@ interface CSSStyleProperties extends CSSStyleDeclaration {
     MozHyphens: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_MozImageDecoding) --> */
     MozImageDecoding: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_MozLineScrollAmount) --> */
+    MozLineScrollAmount: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_MozMarginEnd) --> */
     MozMarginEnd: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_MozMarginStart) --> */
@@ -11062,6 +11094,8 @@ interface CSSStyleProperties extends CSSStyleDeclaration {
     fontVariationSettings: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_fontWeight) --> */
     fontWeight: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_fontWidth) --> */
+    fontWidth: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_forcedColorAdjust) --> */
     forcedColorAdjust: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_gap) --> */
@@ -12077,6 +12111,8 @@ interface CanonicalBrowsingContext extends BrowsingContext {
     readonly scopedPrefs: nsIScopedPrefs | null;
     /** <!-- binding_to(idl, attribute, WEBIDL_CanonicalBrowsingContext_secureBrowserUI) --> */
     readonly secureBrowserUI: nsISecureBrowserUI | null;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CanonicalBrowsingContext_serviceWorkersDisabledByPolicy) --> */
+    readonly serviceWorkersDisabledByPolicy: boolean;
     /** <!-- binding_to(idl, attribute, WEBIDL_CanonicalBrowsingContext_sessionHistory) --> */
     readonly sessionHistory: nsISHistory | null;
     /** <!-- binding_to(idl, attribute, WEBIDL_CanonicalBrowsingContext_targetTopLevelLinkClicksToBlank) --> */
@@ -14608,7 +14644,7 @@ interface Document extends Node, ARIANotifyMixin, DocumentOrShadowRoot, FontFace
     /** <!-- binding_to(idl, method, WEBIDL_Document_hasStorageAccess) --> */
     hasStorageAccess(): Promise<boolean>;
     /** <!-- binding_to(idl, method, WEBIDL_Document_importNode) --> */
-    importNode(node: Node, deep?: boolean): Node;
+    importNode(node: Node, options?: boolean | ImportNodeOptions): Node;
     /** <!-- binding_to(idl, method, WEBIDL_Document_insertAnonymousContent) --> */
     insertAnonymousContent(): AnonymousContent;
     /** <!-- binding_to(idl, method, WEBIDL_Document_isActive) --> */
@@ -15754,6 +15790,8 @@ declare var File: {
     createFromFileName(fileName: string, options?: ChromeFilePropertyBag): Promise<File>;
     /** <!-- binding_to(idl, method, WEBIDL_File_createFromNsIFile) --> */
     createFromNsIFile(file: nsIFile, options?: ChromeFilePropertyBag): Promise<File>;
+    /** <!-- binding_to(idl, method, WEBIDL_File_createFromNsIInputStream) --> */
+    createFromNsIInputStream(inputStream: nsIInputStream, size: number, options?: ChromeFilePropertyBag): File;
 };
 
 /** <!-- binding_to(idl, class, WEBIDL_FileList) --> */
@@ -16173,8 +16211,6 @@ interface FontFace {
     sizeAdjust: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_FontFace_status) --> */
     readonly status: FontFaceLoadStatus;
-    /** <!-- binding_to(idl, attribute, WEBIDL_FontFace_stretch) --> */
-    stretch: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_FontFace_style) --> */
     style: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_FontFace_unicodeRange) --> */
@@ -16185,6 +16221,8 @@ interface FontFace {
     variationSettings: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_FontFace_weight) --> */
     weight: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_FontFace_width) --> */
+    width: string;
     /** <!-- binding_to(idl, method, WEBIDL_FontFace_load) --> */
     load(): Promise<FontFace>;
 }
@@ -18869,6 +18907,10 @@ interface HTMLElement extends Element, ElementCSSInlineStyle, ElementOffsetAttri
     autocapitalize: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_HTMLElement_autocorrect) --> */
     autocorrect: boolean;
+    /** <!-- binding_to(idl, attribute, WEBIDL_HTMLElement_containerTiming) --> */
+    containerTiming: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_HTMLElement_containerTimingIgnore) --> */
+    containerTimingIgnore: boolean;
     /** <!-- binding_to(idl, attribute, WEBIDL_HTMLElement_contentEditable) --> */
     contentEditable: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_HTMLElement_dir) --> */
@@ -20818,6 +20860,8 @@ interface HTMLTemplateElement extends HTMLElement {
     readonly content: DocumentFragment;
     /** <!-- binding_to(idl, attribute, WEBIDL_HTMLTemplateElement_shadowRootClonable) --> */
     shadowRootClonable: boolean;
+    /** <!-- binding_to(idl, attribute, WEBIDL_HTMLTemplateElement_shadowRootCustomElementRegistry) --> */
+    shadowRootCustomElementRegistry: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_HTMLTemplateElement_shadowRootDelegatesFocus) --> */
     shadowRootDelegatesFocus: boolean;
     /** <!-- binding_to(idl, attribute, WEBIDL_HTMLTemplateElement_shadowRootMode) --> */
@@ -21387,6 +21431,10 @@ interface IDBIndex {
     getAllRecords(options?: IDBGetAllOptions): IDBRequest;
     /** <!-- binding_to(idl, method, WEBIDL_IDBIndex_getKey) --> */
     getKey(query: any): IDBRequest;
+    /** <!-- binding_to(idl, method, WEBIDL_IDBIndex_mozGetAll) --> */
+    mozGetAll(queryOrOptions?: any, count?: number): IDBRequest;
+    /** <!-- binding_to(idl, method, WEBIDL_IDBIndex_mozGetAllKeys) --> */
+    mozGetAllKeys(queryOrOptions?: any, count?: number): IDBRequest;
     /** <!-- binding_to(idl, method, WEBIDL_IDBIndex_openCursor) --> */
     openCursor(query?: any, direction?: IDBCursorDirection): IDBRequest;
     /** <!-- binding_to(idl, method, WEBIDL_IDBIndex_openKeyCursor) --> */
@@ -21465,6 +21513,8 @@ interface IDBObjectStore {
     getKey(key: any): IDBRequest;
     /** <!-- binding_to(idl, method, WEBIDL_IDBObjectStore_index) --> */
     index(name: string): IDBIndex;
+    /** <!-- binding_to(idl, method, WEBIDL_IDBObjectStore_mozGetAll) --> */
+    mozGetAll(queryOrOptions?: any, count?: number): IDBRequest;
     /** <!-- binding_to(idl, method, WEBIDL_IDBObjectStore_openCursor) --> */
     openCursor(range?: any, direction?: IDBCursorDirection): IDBRequest;
     /** <!-- binding_to(idl, method, WEBIDL_IDBObjectStore_openKeyCursor) --> */
@@ -21913,6 +21963,8 @@ declare var InferenceSession: {
     isInstance: IsInstance<InferenceSession>;
     /** <!-- binding_to(idl, method, WEBIDL_InferenceSession_create) --> */
     create(uriOrBuffer: string | Uint8Array, options?: InferenceSessionSessionOptions): Promise<InferenceSession>;
+    /** <!-- binding_to(idl, method, WEBIDL_InferenceSession_isAvailable) --> */
+    isAvailable(): boolean;
 };
 
 /** <!-- binding_to(idl, class, WEBIDL_InputEvent) --> */
@@ -24038,6 +24090,25 @@ declare var MatchPatternSet: {
     isInstance: IsInstance<MatchPatternSet>;
 };
 
+/** <!-- binding_to(idl, class, WEBIDL_MathMLAnchorElement) --> */
+interface MathMLAnchorElement extends MathMLElement, HyperlinkElementUtils {
+    /** <!-- binding_to(idl, attribute, WEBIDL_MathMLAnchorElement_href) --> */
+    href: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_MathMLAnchorElement_target) --> */
+    target: string;
+    addEventListener<K extends keyof MathMLElementEventMap>(type: K, listener: (this: MathMLAnchorElement, ev: MathMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof MathMLElementEventMap>(type: K, listener: (this: MathMLAnchorElement, ev: MathMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var MathMLAnchorElement: {
+    prototype: MathMLAnchorElement;
+    new(): MathMLAnchorElement;
+    /** <!-- binding_to(idl, attribute, WEBIDL_MathMLAnchorElement_isInstance) --> */
+    isInstance: IsInstance<MathMLAnchorElement>;
+};
+
 interface MathMLElementEventMap extends ElementEventMap, GlobalEventHandlersEventMap, OnErrorEventHandlerForNodesEventMap, TouchEventHandlersEventMap {
 }
 
@@ -25766,8 +25837,6 @@ interface Navigator extends GlobalPrivacyControl, NavigatorAutomationInformation
     readonly permissions: Permissions;
     /** <!-- binding_to(idl, attribute, WEBIDL_Navigator_plugins) --> */
     readonly plugins: PluginArray;
-    /** <!-- binding_to(idl, attribute, WEBIDL_Navigator_privateAttribution) --> */
-    readonly privateAttribution: PrivateAttribution;
     /** <!-- binding_to(idl, attribute, WEBIDL_Navigator_productSub) --> */
     readonly productSub: string;
     /**
@@ -27036,6 +27105,31 @@ declare var Performance: {
     isInstance: IsInstance<Performance>;
 };
 
+/** <!-- binding_to(idl, class, WEBIDL_PerformanceContainerTiming) --> */
+interface PerformanceContainerTiming extends PerformanceEntry, PaintTimingMixin {
+    /** <!-- binding_to(idl, attribute, WEBIDL_PerformanceContainerTiming_firstRenderTime) --> */
+    readonly firstRenderTime: DOMHighResTimeStamp;
+    /** <!-- binding_to(idl, attribute, WEBIDL_PerformanceContainerTiming_identifier) --> */
+    readonly identifier: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_PerformanceContainerTiming_intersectionRect) --> */
+    readonly intersectionRect: DOMRectReadOnly;
+    /** <!-- binding_to(idl, attribute, WEBIDL_PerformanceContainerTiming_lastPaintedElement) --> */
+    readonly lastPaintedElement: Element | null;
+    /** <!-- binding_to(idl, attribute, WEBIDL_PerformanceContainerTiming_rootElement) --> */
+    readonly rootElement: HTMLElement | null;
+    /** <!-- binding_to(idl, attribute, WEBIDL_PerformanceContainerTiming_size) --> */
+    readonly size: number;
+    /** <!-- binding_to(idl, method, WEBIDL_PerformanceContainerTiming_toJSON) --> */
+    toJSON(): any;
+}
+
+declare var PerformanceContainerTiming: {
+    prototype: PerformanceContainerTiming;
+    new(): PerformanceContainerTiming;
+    /** <!-- binding_to(idl, attribute, WEBIDL_PerformanceContainerTiming_isInstance) --> */
+    isInstance: IsInstance<PerformanceContainerTiming>;
+};
+
 /** <!-- binding_to(idl, class, WEBIDL_PerformanceEntry) --> */
 interface PerformanceEntry {
     /** <!-- binding_to(idl, attribute, WEBIDL_PerformanceEntry_duration) --> */
@@ -27254,6 +27348,8 @@ interface PerformanceResourceTiming extends PerformanceEntry {
     readonly contentType: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_PerformanceResourceTiming_decodedBodySize) --> */
     readonly decodedBodySize: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_PerformanceResourceTiming_deliveryType) --> */
+    readonly deliveryType: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_PerformanceResourceTiming_domainLookupEnd) --> */
     readonly domainLookupEnd: DOMHighResTimeStamp;
     /** <!-- binding_to(idl, attribute, WEBIDL_PerformanceResourceTiming_domainLookupStart) --> */
@@ -28047,30 +28143,14 @@ declare var PrecompiledScript: {
     isInstance: IsInstance<PrecompiledScript>;
 };
 
-/**
- * <!-- binding_to(idl, class, WEBIDL_PrivateAttribution) -->
- * Available only in secure contexts.
- */
-interface PrivateAttribution {
-    /** <!-- binding_to(idl, method, WEBIDL_PrivateAttribution_measureConversion) --> */
-    measureConversion(options: PrivateAttributionConversionOptions): void;
-    /** <!-- binding_to(idl, method, WEBIDL_PrivateAttribution_saveImpression) --> */
-    saveImpression(options: PrivateAttributionImpressionOptions): void;
-}
-
-declare var PrivateAttribution: {
-    prototype: PrivateAttribution;
-    new(): PrivateAttribution;
-    /** <!-- binding_to(idl, attribute, WEBIDL_PrivateAttribution_isInstance) --> */
-    isInstance: IsInstance<PrivateAttribution>;
-};
-
 /** <!-- binding_to(idl, class, WEBIDL_ProcessMessageManager) --> */
 interface ProcessMessageManager extends MessageSender, ProcessScriptLoader {
     /** <!-- binding_to(idl, attribute, WEBIDL_ProcessMessageManager_isInProcess) --> */
     readonly isInProcess: boolean;
     /** <!-- binding_to(idl, attribute, WEBIDL_ProcessMessageManager_osPid) --> */
     readonly osPid: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_ProcessMessageManager_processParent) --> */
+    readonly processParent: nsIDOMProcessParent;
 }
 
 declare var ProcessMessageManager: {
@@ -28874,13 +28954,13 @@ interface RTCSctpTransport extends EventTarget {
     /** <!-- binding_to(idl, attribute, WEBIDL_RTCSctpTransport_maxChannels) --> */
     readonly maxChannels: number | null;
     /** <!-- binding_to(idl, attribute, WEBIDL_RTCSctpTransport_maxMessageSize) --> */
-    readonly maxMessageSize: number;
+    readonly maxMessageSize: number | null;
     /** <!-- binding_to(idl, attribute, WEBIDL_RTCSctpTransport_onstatechange) --> */
     onstatechange: ((this: RTCSctpTransport, ev: Event) => any) | null;
     /** <!-- binding_to(idl, attribute, WEBIDL_RTCSctpTransport_state) --> */
     readonly state: RTCSctpTransportState;
     /** <!-- binding_to(idl, attribute, WEBIDL_RTCSctpTransport_transport) --> */
-    readonly transport: RTCDtlsTransport;
+    readonly transport: RTCDtlsTransport | null;
     addEventListener<K extends keyof RTCSctpTransportEventMap>(type: K, listener: (this: RTCSctpTransport, ev: RTCSctpTransportEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof RTCSctpTransportEventMap>(type: K, listener: (this: RTCSctpTransport, ev: RTCSctpTransportEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -29360,11 +29440,9 @@ declare var Response: {
 };
 
 /** <!-- binding_to(idl, class, WEBIDL_SVGAElement) --> */
-interface SVGAElement extends SVGGraphicsElement, SVGURIReference {
+interface SVGAElement extends SVGGraphicsElement, HyperlinkElementUtils, SVGURIReference {
     /** <!-- binding_to(idl, attribute, WEBIDL_SVGAElement_download) --> */
     download: string;
-    /** <!-- binding_to(idl, attribute, WEBIDL_SVGAElement_hreflang) --> */
-    hreflang: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_SVGAElement_ping) --> */
     ping: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_SVGAElement_referrerPolicy) --> */
@@ -29375,10 +29453,6 @@ interface SVGAElement extends SVGGraphicsElement, SVGURIReference {
     readonly relList: DOMTokenList;
     /** <!-- binding_to(idl, attribute, WEBIDL_SVGAElement_target) --> */
     readonly target: SVGAnimatedString;
-    /** <!-- binding_to(idl, attribute, WEBIDL_SVGAElement_text) --> */
-    text: string;
-    /** <!-- binding_to(idl, attribute, WEBIDL_SVGAElement_type) --> */
-    type: string;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGAElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGAElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -35867,6 +35941,8 @@ interface VideoEncoder extends EventTarget {
     encode(frame: VideoFrame, options?: VideoEncoderEncodeOptions): void;
     /** <!-- binding_to(idl, method, WEBIDL_VideoEncoder_flush) --> */
     flush(): Promise<void>;
+    /** <!-- binding_to(idl, method, WEBIDL_VideoEncoder_mozRequestDebugInfo) --> */
+    mozRequestDebugInfo(): Promise<EncoderDebugInfo>;
     /** <!-- binding_to(idl, method, WEBIDL_VideoEncoder_reset) --> */
     reset(): void;
     addEventListener<K extends keyof VideoEncoderEventMap>(type: K, listener: (this: VideoEncoder, ev: VideoEncoderEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -36010,12 +36086,12 @@ interface ViewTimeline extends ScrollTimeline {
     /** <!-- binding_to(idl, attribute, WEBIDL_ViewTimeline_startOffset) --> */
     readonly startOffset: CSSNumericValue | null;
     /** <!-- binding_to(idl, attribute, WEBIDL_ViewTimeline_subject) --> */
-    readonly subject: Element | null;
+    readonly subject: Element;
 }
 
 declare var ViewTimeline: {
     prototype: ViewTimeline;
-    new(options?: ViewTimelineOptions): ViewTimeline;
+    new(options: ViewTimelineOptions): ViewTimeline;
     /** <!-- binding_to(idl, attribute, WEBIDL_ViewTimeline_isInstance) --> */
     isInstance: IsInstance<ViewTimeline>;
 };
@@ -40248,10 +40324,14 @@ interface WebTransport {
     readonly congestionControl: WebTransportCongestionControl;
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransport_datagrams) --> */
     readonly datagrams: WebTransportDatagramDuplexStream;
+    /** <!-- binding_to(idl, attribute, WEBIDL_WebTransport_draining) --> */
+    readonly draining: Promise<void>;
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransport_incomingBidirectionalStreams) --> */
     readonly incomingBidirectionalStreams: ReadableStream;
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransport_incomingUnidirectionalStreams) --> */
     readonly incomingUnidirectionalStreams: ReadableStream;
+    /** <!-- binding_to(idl, attribute, WEBIDL_WebTransport_protocol) --> */
+    readonly protocol: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransport_ready) --> */
     readonly ready: Promise<void>;
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransport_reliability) --> */
@@ -40260,8 +40340,12 @@ interface WebTransport {
     close(closeInfo?: WebTransportCloseInfo): void;
     /** <!-- binding_to(idl, method, WEBIDL_WebTransport_createBidirectionalStream) --> */
     createBidirectionalStream(options?: WebTransportSendStreamOptions): Promise<WebTransportBidirectionalStream>;
+    /** <!-- binding_to(idl, method, WEBIDL_WebTransport_createSendGroup) --> */
+    createSendGroup(): WebTransportSendGroup;
     /** <!-- binding_to(idl, method, WEBIDL_WebTransport_createUnidirectionalStream) --> */
     createUnidirectionalStream(options?: WebTransportSendStreamOptions): Promise<WebTransportSendStream>;
+    /** <!-- binding_to(idl, method, WEBIDL_WebTransport_exportKeyingMaterial) --> */
+    exportKeyingMaterial(label: BufferSource, context?: BufferSource): Promise<Uint8Array>;
     /** <!-- binding_to(idl, method, WEBIDL_WebTransport_getStats) --> */
     getStats(): Promise<WebTransportStats>;
 }
@@ -40310,6 +40394,8 @@ interface WebTransportDatagramDuplexStream {
     readonly readable: ReadableStream;
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportDatagramDuplexStream_writable) --> */
     readonly writable: WritableStream;
+    /** <!-- binding_to(idl, method, WEBIDL_WebTransportDatagramDuplexStream_createWritable) --> */
+    createWritable(options?: WebTransportSendOptions): WebTransportDatagramsWritable;
 }
 
 declare var WebTransportDatagramDuplexStream: {
@@ -40317,6 +40403,24 @@ declare var WebTransportDatagramDuplexStream: {
     new(): WebTransportDatagramDuplexStream;
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportDatagramDuplexStream_isInstance) --> */
     isInstance: IsInstance<WebTransportDatagramDuplexStream>;
+};
+
+/**
+ * <!-- binding_to(idl, class, WEBIDL_WebTransportDatagramsWritable) -->
+ * Available only in secure contexts.
+ */
+interface WebTransportDatagramsWritable extends WritableStream {
+    /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportDatagramsWritable_sendGroup) --> */
+    sendGroup: WebTransportSendGroup | null;
+    /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportDatagramsWritable_sendOrder) --> */
+    sendOrder: number;
+}
+
+declare var WebTransportDatagramsWritable: {
+    prototype: WebTransportDatagramsWritable;
+    new(): WebTransportDatagramsWritable;
+    /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportDatagramsWritable_isInstance) --> */
+    isInstance: IsInstance<WebTransportDatagramsWritable>;
 };
 
 /**
@@ -40354,12 +40458,30 @@ declare var WebTransportReceiveStream: {
 };
 
 /**
+ * <!-- binding_to(idl, class, WEBIDL_WebTransportSendGroup) -->
+ * Available only in secure contexts.
+ */
+interface WebTransportSendGroup {
+    /** <!-- binding_to(idl, method, WEBIDL_WebTransportSendGroup_getStats) --> */
+    getStats(): Promise<WebTransportSendStreamStats>;
+}
+
+declare var WebTransportSendGroup: {
+    prototype: WebTransportSendGroup;
+    new(): WebTransportSendGroup;
+    /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportSendGroup_isInstance) --> */
+    isInstance: IsInstance<WebTransportSendGroup>;
+};
+
+/**
  * <!-- binding_to(idl, class, WEBIDL_WebTransportSendStream) -->
  * Available only in secure contexts.
  */
 interface WebTransportSendStream extends WritableStream {
+    /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportSendStream_sendGroup) --> */
+    sendGroup: WebTransportSendGroup | null;
     /** <!-- binding_to(idl, attribute, WEBIDL_WebTransportSendStream_sendOrder) --> */
-    sendOrder: number | null;
+    sendOrder: number;
     /** <!-- binding_to(idl, method, WEBIDL_WebTransportSendStream_getStats) --> */
     getStats(): Promise<WebTransportSendStreamStats>;
 }
@@ -40949,7 +41071,7 @@ interface WindowGlobalParent extends WindowContext {
     /** <!-- binding_to(idl, attribute, WEBIDL_WindowGlobalParent_rootFrameLoader) --> */
     readonly rootFrameLoader: FrameLoader | null;
     /** <!-- binding_to(idl, method, WEBIDL_WindowGlobalParent_drawSnapshot) --> */
-    drawSnapshot(rect: DOMRect | null, scale: number, backgroundColor: string, resetScrollPosition?: boolean): Promise<ImageBitmap>;
+    drawSnapshot(rect: DOMRect | null, scale: number, backgroundColor: string, options?: DrawSnapshotOptions): Promise<ImageBitmap>;
     /** <!-- binding_to(idl, method, WEBIDL_WindowGlobalParent_getActor) --> */
     getActor(name: string): JSWindowActorParent;
     /** <!-- binding_to(idl, method, WEBIDL_WindowGlobalParent_getExistingActor) --> */
@@ -40958,6 +41080,8 @@ interface WindowGlobalParent extends WindowContext {
     hasActivePeerConnections(): boolean;
     /** <!-- binding_to(idl, method, WEBIDL_WindowGlobalParent_permitUnload) --> */
     permitUnload(action?: PermitUnloadAction, timeout?: number): Promise<boolean>;
+    /** <!-- binding_to(idl, method, WEBIDL_WindowGlobalParent_requestDocumentLanguageMetadata) --> */
+    requestDocumentLanguageMetadata(options: DocumentLanguageMetadataRequestOptions): Promise<DocumentLanguageMetadata | null>;
     /** <!-- binding_to(idl, method, WEBIDL_WindowGlobalParent_updateFullscreenKeyboardLockStatus) --> */
     updateFullscreenKeyboardLockStatus(status: FullscreenKeyboardLock): void;
 }
@@ -42457,6 +42581,8 @@ declare namespace ChromeUtils {
     function importESModule(aResourceURI: string, aOptions?: ImportESModuleOptionsDictionary): any;
     /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_invalidateResourceCache) --> */
     function invalidateResourceCache(): void;
+    /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_isBlobURLValid) --> */
+    function isBlobURLValid(principal: Principal, uriString: string): boolean;
     /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_isClassifierBlockingErrorCode) --> */
     function isClassifierBlockingErrorCode(aError: number): boolean;
     /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_isDOMObject) --> */
@@ -42524,6 +42650,8 @@ declare namespace ChromeUtils {
     function unregisterWindowActor(aName: string): void;
     /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_unwaiveXrays) --> */
     function unwaiveXrays(val: any): any;
+    /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_validateServiceWorkerScope) --> */
+    function validateServiceWorkerScope(principal: Principal, uri: URI): void;
     /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_vsyncEnabled) --> */
     function vsyncEnabled(): boolean;
     /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_waiveXrays) --> */
@@ -44507,7 +44635,7 @@ type ForcedColorsOverride = "active" | "none";
 type FullscreenKeyboardLock = "browser" | "none";
 type GPUAddressMode = "clamp-to-edge" | "mirror-repeat" | "repeat";
 type GPUAutoLayoutMode = "auto";
-type GPUBlendFactor = "constant" | "dst" | "dst-alpha" | "one" | "one-minus-constant" | "one-minus-dst" | "one-minus-dst-alpha" | "one-minus-src" | "one-minus-src-alpha" | "src" | "src-alpha" | "src-alpha-saturated" | "zero";
+type GPUBlendFactor = "constant" | "dst" | "dst-alpha" | "one" | "one-minus-constant" | "one-minus-dst" | "one-minus-dst-alpha" | "one-minus-src" | "one-minus-src-alpha" | "one-minus-src1" | "one-minus-src1-alpha" | "src" | "src-alpha" | "src-alpha-saturated" | "src1" | "src1-alpha" | "zero";
 type GPUBlendOperation = "add" | "max" | "min" | "reverse-subtract" | "subtract";
 type GPUBufferBindingType = "read-only-storage" | "storage" | "uniform";
 type GPUBufferMapState = "mapped" | "pending" | "unmapped";
@@ -44622,7 +44750,6 @@ type PrefersColorSchemeOverride = "dark" | "light" | "none";
 type PrefersReducedMotionOverride = "no-preference" | "none" | "reduce";
 type PremultiplyAlpha = "default" | "none" | "premultiply";
 type PresentationStyle = "attachment" | "inline" | "unspecified";
-type PrivateAttributionImpressionType = "click" | "view";
 type PromiseDebuggingState = "fulfilled" | "pending" | "rejected";
 type PushEncryptionKeyName = "auth" | "p256dh";
 type RTCBundlePolicy = "balanced" | "max-bundle" | "max-compat";
@@ -44712,7 +44839,7 @@ type VisibilityState = "hidden" | "visible";
 type WakeLockType = "screen";
 type WebGLPowerPreference = "default" | "high-performance" | "low-power";
 type WebIDLProcType = "browser" | "extension" | "file" | "forkServer" | "gmpPlugin" | "gpu" | "inference" | "ipdlUnitTest" | "preallocated" | "privilegedabout" | "privilegedmozilla" | "rdd" | "socket" | "unknown" | "utility" | "vr" | "web" | "webIsolated" | "webServiceWorker" | "withCoopCoep";
-type WebIDLUtilityActorName = "audioDecoder_AppleMedia" | "audioDecoder_Generic" | "audioDecoder_WMF" | "jSOracle" | "mfMediaEngineCDM" | "pkcs11Module" | "unknown" | "windowsFileDialog" | "windowsUtils";
+type WebIDLUtilityActorName = "audioDecoder_AppleMedia" | "audioDecoder_Generic" | "audioDecoder_WMF" | "hwInference" | "jSOracle" | "mfMediaEngineCDM" | "pkcs11Module" | "unknown" | "windowsFileDialog" | "windowsUtils";
 type WebTransportCongestionControl = "default" | "low-latency" | "throughput";
 type WebTransportErrorSource = "session" | "stream";
 type WebTransportReliabilityMode = "pending" | "reliable-only" | "supports-unreliable";
