@@ -22,9 +22,9 @@ Object.keys(colorsCode).forEach(name => {
   colors[name] = tagFunction;
 });
 
-function execAsync(command) {
+function execAsync(command, args = []) {
   return new Promise((resolve, reject) => {
-    child_process.exec(command, {encoding: "utf8"}, (error, stdout, stderr) => {
+    child_process.execFile(command, args, {encoding: "utf8"}, (error, stdout, stderr) => {
       if (error) {
         // Attach stdout/stderr to the error object for logging
         error.stdout = stdout;
@@ -82,14 +82,18 @@ async function main() {
       console.log(
         "Changes detected in @types folder. Running full typecheck and lint in parallel..."
       );
-      const lintCommand = "eslint --config config/eslint.dts.config.js --format stylish @types";
-      lintPromise = execAsync(lintCommand);
+      lintPromise = execAsync("eslint", [
+        "--config",
+        "config/eslint.dts.config.js",
+        "--format",
+        "stylish",
+        "@types",
+      ]);
     } else {
       console.log("Changes detected in @types folder. Running full typecheck...");
     }
 
-    const tscCommand = `${tool} --build`;
-    const tscPromise = execAsync(tscCommand);
+    const tscPromise = execAsync(tool, ["--build"]);
 
     const results = await Promise.allSettled([lintPromise, tscPromise]);
     const [lintResult, tscResult] = results;
@@ -121,7 +125,7 @@ async function main() {
   } else {
     console.log("No changes in @types folder. Running incremental typecheck.");
     try {
-      await execAsync(`${tool} --build --incremental`);
+      await execAsync(tool, ["--build", "--incremental"]);
       fs.writeFileSync(outputFile, "No errors found!", "utf8");
       console.log(colors.green`Typecheck completed successfully. No errors found!`);
     } catch (error) {
