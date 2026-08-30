@@ -1140,6 +1140,10 @@ interface UrlbarView {
 }
 
 interface gURLBar extends HTMLElement {
+  controller: {
+    whereToOpen: (event?: Event & {__tabmix__whereToOpen?: WhereToOpen}) => WhereToOpen;
+  };
+  /** @deprecated - replaced with gURLBar.controller.whereToOpen on Firefox 155 */
   _whereToOpen: (event?: Event & {__tabmix__whereToOpen?: WhereToOpen}) => WhereToOpen;
   focused: boolean;
   handleCommand(event?: Event): void;

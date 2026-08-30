@@ -2671,8 +2671,11 @@ Tabmix.navToolbox = {
       Tabmix.originalFunctions.gURLBar_handleCommand = gURLBar.handleCommand;
       gURLBar.handleCommand = this.handleCommand.bind(gURLBar);
 
-      Tabmix.originalFunctions.gURLBar__whereToOpen = gURLBar._whereToOpen;
-      gURLBar._whereToOpen = function (event) {
+      /**
+       * @type {typeof gURLBar.controller.whereToOpen}
+       * @this {typeof gURLBar.controller}
+       */
+      const whereToOpen = function (event) {
         if (event?.__tabmix__whereToOpen) {
           return event.__tabmix__whereToOpen;
         }
@@ -2683,6 +2686,14 @@ Tabmix.navToolbox = {
         }
         return Tabmix.originalFunctions.gURLBar__whereToOpen.apply(this, [event]);
       };
+
+      if (Tabmix.isVersion(1550)) {
+        Tabmix.originalFunctions.gURLBar__whereToOpen = gURLBar.controller.whereToOpen;
+        gURLBar.controller.whereToOpen = whereToOpen;
+      } else {
+        Tabmix.originalFunctions.gURLBar__whereToOpen = gURLBar._whereToOpen;
+        gURLBar._whereToOpen = whereToOpen;
+      }
 
       this.on_mouseup = this.on_mouseup.bind(gURLBar.view);
       const rows = gURLBar.view.panel.querySelector(".urlbarView-results");
