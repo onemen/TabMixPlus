@@ -1136,6 +1136,15 @@ Tabmix.onContentLoaded = {
       TabmixTabbar.updateTabsInTitlebarAppearance();
     }
 
+    if (Tabmix.isVersion(1560)) {
+      gBrowser._updateTabBarForPinnedTabs = Tabmix.getPrivateMethod({
+        parent: gBrowser,
+        parentName: "gBrowser",
+        methodName: "updateTabBarForPinnedTabs",
+        nextMethodName: "#notifyPinnedStatus",
+        sandbox: Tabmix._gBrowser_sandbox,
+      });
+    }
     Tabmix.originalFunctions.gBrowser__updateTabBarForPinnedTabs =
       gBrowser._updateTabBarForPinnedTabs;
     gBrowser._updateTabBarForPinnedTabs = function (...args) {

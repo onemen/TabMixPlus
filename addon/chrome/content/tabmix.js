@@ -1403,6 +1403,16 @@ Tabmix._deferredInitialized.promise.then(() => {
         .join("\n")
     );
   }
+
+  // Report any originalFunctions entries that were never captured — calling
+  // them later would throw on `undefined.apply`.
+  for (const [key, value] of Object.entries(Tabmix.originalFunctions)) {
+    if (typeof value !== "function") {
+      console.error(
+        `❌ Tabmix.originalFunctions.${key} is ${String(value)}; a patched call site will crash at runtime`
+      );
+    }
+  }
 });
 
 /*
