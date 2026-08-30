@@ -38,3 +38,6 @@ node_modules/
 test/*
 
 **/tsconfig.tsbuildinfo
+
+# ignore local AGENTS.md
+AGENTS.md
