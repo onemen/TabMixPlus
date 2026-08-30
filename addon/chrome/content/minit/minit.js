@@ -190,6 +190,9 @@ var TMP_tabDNDObserver = {
         lazy: {},
         DynamicShortcutTooltip: {},
         gClickAndHoldListenersOnElement: {},
+        // from Firefox 155
+        STALE_DRAG_CHECK_INTERVAL_MS: 1000,
+        DROP_ANIMATION_GRACE_MS: 1000,
       };
 
       if (Tabmix.isVersion(1380)) {
