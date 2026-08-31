@@ -57,7 +57,12 @@ function resolveBinPath(binName) {
 }
 
 function runTool(binName, args) {
-  return execAsync(process.execPath, [resolveBinPath(binName), ...args]);
+  const binPath = resolveBinPath(binName);
+  // JS scripts run via node; native binaries (e.g. tsgo) are invoked directly.
+  const isScript = /\.(js|mjs|cjs)$/.test(binPath);
+  return isScript
+    ? execAsync(process.execPath, [binPath, ...args])
+    : execAsync(binPath, args);
 }
 
 function getLastSavedCommit() {
@@ -74,11 +79,11 @@ function saveLastCommit(commit) {
 }
 
 function getLastCommitSha() {
-  return child_process.execSync(`git log -1 --format=%H ${typesFolder}`).toString().trim();
+  return child_process.execFileSync("git", ["log", "-1", "--format=%H", typesFolder]).toString().trim();
 }
 
 function getModifiedFiles() {
-  return child_process.execSync(`git status --porcelain ${typesFolder}`).toString().trim();
+  return child_process.execFileSync("git", ["status", "--porcelain", typesFolder]).toString().trim();
 }
 
 function createClickableErrorFile(output) {
