@@ -56,12 +56,25 @@ function resolveBinPath(binName) {
   return path.join(path.dirname(pkgJsonPath), relPath);
 }
 
+function isNodeScript(binPath) {
+  if (/\.(m|c)?js$/.test(binPath)) return true;
+  const fd = fs.openSync(binPath, "r");
+  try {
+    const buffer = Buffer.alloc(64);
+    const bytesRead = fs.readSync(fd, buffer, 0, buffer.length, 0);
+    const firstLine = buffer.subarray(0, bytesRead).toString("utf8").split("\n", 1)[0];
+    return firstLine.startsWith("#!") && firstLine.includes("node");
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
 function runTool(binName, args) {
   const binPath = resolveBinPath(binName);
-  // JS scripts run via node; native binaries (e.g. tsgo) are invoked directly.
-  const isScript = /\.(js|mjs|cjs)$/.test(binPath);
-  return isScript
-    ? execAsync(process.execPath, [binPath, ...args])
+  // JS scripts (including extensionless launchers with a node shebang, e.g. tsc/tsgo)
+  // run via node; genuine native binaries are invoked directly.
+  return isNodeScript(binPath) ?
+      execAsync(process.execPath, [binPath, ...args])
     : execAsync(binPath, args);
 }
 
@@ -79,11 +92,17 @@ function saveLastCommit(commit) {
 }
 
 function getLastCommitSha() {
-  return child_process.execFileSync("git", ["log", "-1", "--format=%H", typesFolder]).toString().trim();
+  return child_process
+    .execFileSync("git", ["log", "-1", "--format=%H", typesFolder])
+    .toString()
+    .trim();
 }
 
 function getModifiedFiles() {
-  return child_process.execFileSync("git", ["status", "--porcelain", typesFolder]).toString().trim();
+  return child_process
+    .execFileSync("git", ["status", "--porcelain", typesFolder])
+    .toString()
+    .trim();
 }
 
 function createClickableErrorFile(output) {
