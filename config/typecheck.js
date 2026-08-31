@@ -1,5 +1,9 @@
 import child_process from "node:child_process";
 import fs from "node:fs";
+import path from "node:path";
+import {createRequire} from "node:module";
+
+const require = createRequire(import.meta.url);
 
 const outputFile = "./tsc.local.txt";
 
@@ -35,6 +39,25 @@ function execAsync(command, args = []) {
       }
     });
   });
+}
+
+// npm/pnpm expose CLI tools as .cmd shims on Windows, which execFile can't launch directly.
+// Resolve each tool's actual JS entry point and run it via `node` instead of relying on PATH shims.
+const TOOL_PACKAGES = {
+  eslint: "eslint",
+  tsc: "typescript",
+  tsgo: "@typescript/native-preview",
+};
+
+function resolveBinPath(binName) {
+  const pkgJsonPath = require.resolve(`${TOOL_PACKAGES[binName]}/package.json`);
+  const {bin} = JSON.parse(fs.readFileSync(pkgJsonPath, "utf8"));
+  const relPath = typeof bin === "string" ? bin : bin[binName];
+  return path.join(path.dirname(pkgJsonPath), relPath);
+}
+
+function runTool(binName, args) {
+  return execAsync(process.execPath, [resolveBinPath(binName), ...args]);
 }
 
 function getLastSavedCommit() {
@@ -82,7 +105,7 @@ async function main() {
       console.log(
         "Changes detected in @types folder. Running full typecheck and lint in parallel..."
       );
-      lintPromise = execAsync("eslint", [
+      lintPromise = runTool("eslint", [
         "--config",
         "config/eslint.dts.config.js",
         "--format",
@@ -93,7 +116,7 @@ async function main() {
       console.log("Changes detected in @types folder. Running full typecheck...");
     }
 
-    const tscPromise = execAsync(tool, ["--build"]);
+    const tscPromise = runTool(tool, ["--build"]);
 
     const results = await Promise.allSettled([lintPromise, tscPromise]);
     const [lintResult, tscResult] = results;
@@ -125,7 +148,7 @@ async function main() {
   } else {
     console.log("No changes in @types folder. Running incremental typecheck.");
     try {
-      await execAsync(tool, ["--build", "--incremental"]);
+      await runTool(tool, ["--build", "--incremental"]);
       fs.writeFileSync(outputFile, "No errors found!", "utf8");
       console.log(colors.green`Typecheck completed successfully. No errors found!`);
     } catch (error) {
