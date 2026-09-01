@@ -253,7 +253,7 @@ Tabmix.tablib = {
       }
 
       var t = Tabmix.originalFunctions.gBrowser_addTab.apply(this, [uriString, options, ...rest]);
-      if (!Tabmix.prefs.getBoolPref("openTabNextInverse")) {
+      if (!Tabmix.isVersion(1560) && !Tabmix.prefs.getBoolPref("openTabNextInverse")) {
         this.clearRelatedTabs();
       }
 

@@ -1,4 +1,4 @@
-/* globals pref */
+/* globals pref, isVersion */
 /* eslint strict: 0 */
 
 pref("extensions.tabmix.disableIncompatible", true);
@@ -41,7 +41,7 @@ pref("extensions.tabmix.openNewTabNext", false);
 pref("extensions.tabmix.openTabNextInGroup", -1);
 // replaced with browser.tabs.insertAfterCurrent, see bug 1344749
 // pref("extensions.tabmix.openTabNext", false);
-pref("extensions.tabmix.openTabNextInverse", true);
+if (!isVersion(1560)) pref("extensions.tabmix.openTabNextInverse", true);
 pref("extensions.tabmix.openDuplicateNext", true);
 pref("extensions.tabmix.moveSwitchToTabNext", false);
 pref("extensions.tabmix.focusTab", 2);

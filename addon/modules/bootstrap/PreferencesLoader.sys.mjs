@@ -1,3 +1,4 @@
+import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
 import {TabContextConfig} from "chrome://tabmix-resource/content/TabContextConfig.sys.mjs";
 
 /** load Tabmix preference to the default branch */
@@ -56,7 +57,8 @@ export const PreferencesLoader = {
 
     try {
       const path = "chrome://tabmix-prefs/content/tabmix.js";
-      Services.scriptloader.loadSubScript(path, {pref});
+      // isVersion is exposed so defaults can be set per browser version
+      Services.scriptloader.loadSubScript(path, {pref, isVersion});
     } catch (ex) {
       console.error("Tabmix Error:", ex);
     }
