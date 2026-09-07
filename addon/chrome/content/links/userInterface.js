@@ -218,7 +218,11 @@ function TMP_BrowserOpenTab(eventOrObject, aTab, replaceLastTab = false) {
 
         if (!werePassedURL && searchClipboard) {
           let clipboard = readFromClipboard();
-          clipboard = UrlbarUtils.stripUnsafeProtocolOnPaste(clipboard).trim();
+          const stripUnsafeProtocolOnPaste =
+            Tabmix.isVersion(1550) ?
+              UrlbarShared.stripUnsafeProtocolOnPaste
+            : UrlbarUtils.stripUnsafeProtocolOnPaste;
+          clipboard = stripUnsafeProtocolOnPaste(clipboard).trim();
           if (clipboard) {
             url = clipboard;
             options.allowThirdPartyFixup = true;

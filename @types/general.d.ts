@@ -1317,6 +1317,7 @@ declare var UrlbarShared: {
   RESULT_TYPE: {
     TAB_SWITCH: number;
   };
+  stripUnsafeProtocolOnPaste(pasteData: string): string;
 };
 
 // for Zen Browserw
