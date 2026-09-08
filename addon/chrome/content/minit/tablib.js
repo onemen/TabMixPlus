@@ -35,11 +35,31 @@ Tabmix.tablib = {
 
     const lazy = {};
     ChromeUtils.defineESModuleGetters(lazy, {
-      /* eslint-disable mozilla/valid-lazy */
+      /* eslint-disable mozilla/valid-lazy -- accessed in sandbox-evaluated code */
       PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
       AsyncTabSwitcher: "moz-src:///browser/components/tabbrowser/AsyncTabSwitcher.sys.mjs",
-      /* eslint-enable mozilla/valid-lazy */
+      // used by the reconstructed #determineTaskbarTabTitle
+      ContextualIdentityService:
+        "moz-src:///toolkit/components/contextualidentity/ContextualIdentityService.sys.mjs",
+      TaskbarTabs: "resource:///modules/taskbartabs/TaskbarTabs.sys.mjs",
+      TaskbarTabsUtils: "resource:///modules/taskbartabs/TaskbarTabsUtils.sys.mjs",
     });
+    // #determineContentTitle / #determineTaskbarTabTitle read these lazy
+    // pref getters (module-lazy in Tabbrowser.sys.mjs since Firefox 156);
+    // mirror them so the reconstructed methods see the same values.
+    XPCOMUtils.defineLazyPreferenceGetter(
+      lazy,
+      "shouldExposeContentTitle",
+      "privacy.exposeContentTitleInWindow",
+      true
+    );
+    XPCOMUtils.defineLazyPreferenceGetter(
+      lazy,
+      "shouldExposeContentTitlePbm",
+      "privacy.exposeContentTitleInWindow.pbm",
+      true
+    );
+    /* eslint-enable mozilla/valid-lazy */
     Tabmix._gBrowser_sandbox = Tabmix.getSandbox(gBrowser, {
       scope: {lazy, TAB_LABEL_MAX_LENGTH: 256},
     });
@@ -387,6 +407,7 @@ Tabmix.tablib = {
         parentName: "gBrowser",
         methodName: "determineTaskbarTabTitle",
         nextMethodName: "#determineContentTitle",
+        ...(Tabmix.isVersion(1560) ? {sandbox: Tabmix._gBrowser_sandbox} : null),
       });
 
       gBrowser._determineContentTitle = Tabmix.getPrivateMethod({

@@ -1231,6 +1231,7 @@ declare var PrivateBrowsingUtils: MockedExports.PrivateBrowsingUtils;
 declare var RTL_UI: boolean;
 declare var StatusPanel: StatusPanel;
 declare var TabBarVisibility: TabBarVisibility;
+declare var XPCOMUtils: typeof MockedExports.XPCOMUtilsSYSMJS.XPCOMUtils;
 declare var XULBrowserWindow: XULBrowserWindow;
 
 declare var HistoryMenu: {

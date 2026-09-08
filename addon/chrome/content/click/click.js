@@ -1416,9 +1416,12 @@ var TabmixContext = {
   },
 
   updateSelectedTabsCount(itemOrId, isVisible) {
+    // Since Firefox 156 (bug 2064194) gBrowser._multiSelectedTabsSet is the
+    // private field #multiSelectedTabsSet with no public replacement, count
+    // the selected tabs with the public selectedTabs getter instead.
     const selectedTabsCount =
       isVisible ?
-        ChromeUtils.nondeterministicGetWeakSetKeys(gBrowser._multiSelectedTabsSet).filter(
+        gBrowser.selectedTabs.filter(
           tab => tab.isConnected && !tab.closing && !tab.hasAttribute("protected")
         ).length
       : 1;

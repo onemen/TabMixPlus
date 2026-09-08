@@ -452,7 +452,7 @@ declare namespace MockedExports {
   const XPCOMUtilsSYSMJS: {
     XPCOMUtils: {
       defineLazyModuleGetters<T extends Record<string, string>>(obj: object, modules: T): void;
-      defineLazyPreferenceGetter(aObject: object, aName: string, aPreference: string, aDefaultPrefValue: unknown, aOnUpdate: (aPreference: string, previousValue: unknown, newValue: unknown) => void, aTransform?: (aPreference: string) => unknown): void;
+      defineLazyPreferenceGetter(aObject: object, aName: string, aPreference: string, aDefaultPrefValue?: unknown, aOnUpdate?: (aPreference: string, previousValue: unknown, newValue: unknown) => void, aTransform?: (aPreference: string) => unknown): void;
       defineLazyServiceGetters<T extends Record<string, [string, Function]>>(obj: object, services: T): void;
     };
   };
