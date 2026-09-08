@@ -1190,6 +1190,14 @@ Tabmix.tablib = {
     if (Tabmix.isVersion(1510)) {
       /** since Firefox 151 handleDroppedLink exist inside tabbrowser.js block */
 
+      const lazy = {OpenInTabsUtils: gBrowser.OpenInTabsUtils, UrlbarUtils};
+      if (Tabmix.isVersion(1560)) {
+        ChromeUtils.defineESModuleGetters(lazy, {
+          OpenInTabsUtils: "moz-src:///browser/components/tabbrowser/OpenInTabsUtils.sys.mjs",
+          UrlbarUtils: "moz-src:///browser/components/urlbar/UrlbarUtils.sys.mjs",
+        });
+      }
+
       /** @type {typeof inner_handleDroppedLink} */
       async function _handleDroppedLink(
         tabbrowser,
@@ -1231,10 +1239,7 @@ Tabmix.tablib = {
 
         if (links.length >= Services.prefs.getIntPref("browser.tabs.maxOpenBeforeWarn")) {
           // Sync dialog cannot be used inside drop event handler.
-          let answer = await tabbrowser.OpenInTabsUtils.promiseConfirmOpenInTabs(
-            links.length,
-            window
-          );
+          let answer = await lazy.OpenInTabsUtils.promiseConfirmOpenInTabs(links.length, window);
           if (!answer) {
             return;
           }
@@ -1243,7 +1248,7 @@ Tabmix.tablib = {
         let urls = [];
         let postDatas = [];
         for (let link of links) {
-          let data = await UrlbarUtils.getShortcutOrURIAndPostData(link.url);
+          let data = await lazy.UrlbarUtils.getShortcutOrURIAndPostData(link.url);
           urls.push(data.url);
           postDatas.push(data.postData);
         }
@@ -1264,7 +1269,7 @@ Tabmix.tablib = {
       }
 
       /** @this {MockedGeckoTypes.ChromeBrowser} */
-      gBrowser._defaultDropLinkHandler = function (...args) {
+      _defaultDropLinkHandler = function (...args) {
         // The droppedLinkHandler gets invoked with `this` being the browser
         // element on which the drop took place.
         // eslint-disable-next-line consistent-this
@@ -1273,7 +1278,48 @@ Tabmix.tablib = {
         _handleDroppedLink(tabbrowser, browser, ...args);
       };
 
-      _defaultDropLinkHandler = gBrowser._defaultDropLinkHandler;
+      if (Tabmix.isVersion(1560)) {
+        /**
+         * Since Firefox 156 (bug 2049770) gBrowser is an instance of the
+         * Tabbrowser class from
+         * moz-src:///browser/components/tabbrowser/Tabbrowser.sys.mjs. The
+         * default handler is stored in the private field
+         * #defaultDropLinkHandler and assigned to each browser in
+         * #setupInitialBrowserAndTab and #insertBrowser. We can't replace a
+         * private field (we would have to patch all the private methods/fields
+         * it uses recursively), so we assign our handler directly on every
+         * browser element:
+         *
+         * - existing browsers are updated at the end of this function (this
+         *   covers also the initial browser created in
+         *   #setupInitialBrowserAndTab, which runs before Tabmix loads);
+         * - new browsers are covered by the TabBrowserInserted listener below.
+         *   Firefox dispatches that event on the tab at the end of
+         *   #insertBrowser, right after `browser.droppedLinkHandler =
+         *   this.#defaultDropLinkHandler;`. #insertBrowser runs from many
+         *   places (addTab, lazy session-restore tabs, insertBrowser,
+         *   swapBrowsersAndCloseOther) and they are all covered.
+         */
+        /** @param {Event} event */
+        const onTabBrowserInserted = event => {
+          const {target: tab} = /** @type {{target: Tab}} */ (/** @type {unknown} */ (event));
+          tab.linkedBrowser.droppedLinkHandler = _defaultDropLinkHandler;
+        };
+        gBrowser.tabContainer.addEventListener("TabBrowserInserted", onTabBrowserInserted, {
+          capture: true,
+        });
+        window.addEventListener(
+          "unload",
+          function onWindowUnload() {
+            gBrowser.tabContainer.removeEventListener("TabBrowserInserted", onTabBrowserInserted, {
+              capture: true,
+            });
+          },
+          {once: true}
+        );
+      } else {
+        gBrowser._defaultDropLinkHandler = _defaultDropLinkHandler;
+      }
     } else {
       Tabmix.changeCode(window, "handleDroppedLink")
         ._replace(
@@ -1289,10 +1335,13 @@ Tabmix.tablib = {
 
       _defaultDropLinkHandler = handleDroppedLink;
     }
-    // update browsers
+    // update existing browsers (also covers the initial browser created in
+    // #setupInitialBrowserAndTab / init before Tabmix was loaded)
     gBrowser.tabs.forEach(tab => {
       const browser = tab.linkedBrowser;
-      browser.droppedLinkHandler = _defaultDropLinkHandler;
+      if (browser) {
+        browser.droppedLinkHandler = _defaultDropLinkHandler;
+      }
     });
   },
 

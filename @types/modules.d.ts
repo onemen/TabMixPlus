@@ -167,6 +167,7 @@ interface TabmixKnownModules {
   "resource://gre/modules/XPCOMUtils.sys.mjs": typeof MockedExports.XPCOMUtilsSYSMJS;
 
   "moz-src:///browser/components/places/PlacesUIUtils.sys.mjs": {PlacesUIUtils: MockedGeckoTypes.PlacesUIUtils};
+  "moz-src:///browser/components/tabbrowser/OpenInTabsUtils.sys.mjs": {OpenInTabsUtils: MockedExports.OpenInTabsUtils};
   "moz-src:///browser/components/syncedtabs/TabListView.sys.mjs": {TabListView: MockedExports.TabListViewClass};
   "moz-src:///browser/components/syncedtabs/util.sys.mjs": {getChromeWindow(window: Window): ChromeWindow};
 
