@@ -886,7 +886,9 @@ ContentClickInternal = {
           if (testExt.test(hrefExt)) {
             doTest = false;
           }
-        } catch {}
+        } catch {
+          // ignore: extension-supplied pattern is not a valid RegExp
+        }
       }
       try {
         if (doTest) {
@@ -895,7 +897,9 @@ ContentClickInternal = {
             return true;
           }
         }
-      } catch {}
+      } catch {
+        // ignore: extension-supplied pattern is not a valid RegExp
+      }
     }
     return false;
   },
@@ -1288,7 +1292,9 @@ ContentClickInternal = {
     const fixupURI = url => {
       try {
         return Services.uriFixup.getFixupURIInfo(url, Ci.nsIURIFixup.FIXUP_FLAG_NONE).preferredURI;
-      } catch {}
+      } catch {
+        // ignore: not fixable to a valid URI, callers treat null as "not a URL"
+      }
       return null;
     };
 

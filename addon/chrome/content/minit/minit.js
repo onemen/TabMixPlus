@@ -1288,7 +1288,9 @@ var TMP_tabDNDObserver = {
             : browserDragAndDrop.dropLinks(event, true);
           const url = links.length && links[0]?.url ? links[0].url : null;
           disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
-        } catch {}
+        } catch {
+          // ignore: drop-link probing is best-effort; default to allowing drop
+        }
 
         if (disAllowDrop) {
           // show Drag & Drop message

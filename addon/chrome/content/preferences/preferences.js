@@ -571,7 +571,9 @@ ChromeUtils.defineLazyGetter(this, "gPreferenceList", () => {
       if (fn && fn in prefs) {
         return prefs[fn](pref) !== undefined;
       }
-    } catch {}
+    } catch {
+      // ignore: pref does not exist - reported as "not set"
+    }
     return false;
   });
   return tabmixPrefs;

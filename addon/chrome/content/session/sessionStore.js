@@ -729,7 +729,11 @@ var TMP_ClosedTabs = {
     const menuItem = event.originalTarget;
     const commandData = menuItem.getAttribute("commandData");
     if (!commandData) {
-      throw new Error("missing commandData in contextMenuOnCommand");
+      // a command menuitem without commandData can only be a Tabmix/template
+      // bug - log it and recover instead of throwing inside the popup's
+      // command handler, which would spam the console on every menu use
+      Tabmix.console.error("missing commandData in contextMenuOnCommand", menuItem);
+      return;
     }
     const [command, where = ""] = commandData.split(",");
     const popup = menuItem.parentNode;
@@ -740,7 +744,7 @@ var TMP_ClosedTabs = {
     if (validCommand) {
       this.doCommand(validCommand, where, popup.triggerNode);
     } else {
-      throw new Error(`Unexpected command in contextMenuOnCommand ${command}`);
+      Tabmix.console.error(`Unexpected command in contextMenuOnCommand: ${command}`);
     }
   },
 

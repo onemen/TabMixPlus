@@ -408,7 +408,9 @@ class Preference extends MozXULElement {
         default:
           this._reportUnknownType();
       }
-    } catch {}
+    } catch {
+      // ignore: pref missing from the branch - caller handles undefined
+    }
     return null;
   }
 
@@ -1568,7 +1570,9 @@ class PrefWindow extends MozXULElement {
         if (defaultButton) {
           window.notifyDefaultButtonLoaded(defaultButton);
         }
-      } catch {}
+      } catch {
+        // ignore: notifyDefaultButtonLoaded is an optional embedder hook
+      }
     };
 
     // Give focus after onload completes, see bug 103197.

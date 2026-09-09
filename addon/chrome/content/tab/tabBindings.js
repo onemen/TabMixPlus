@@ -318,7 +318,9 @@
           let isTabFocused = false;
           try {
             isTabFocused = document.commandDispatcher.focusedElement == this;
-          } catch {}
+          } catch {
+            // ignore: no commandDispatcher in this window type
+          }
           if (!isTabFocused) {
             this.setAttribute("ignorefocus", "true");
             this.mSelect = setTimeout(() => this.removeAttribute("ignorefocus"), 0);

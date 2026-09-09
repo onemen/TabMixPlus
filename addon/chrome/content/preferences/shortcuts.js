@@ -97,7 +97,9 @@ function _getKeyName(win, aKey) {
     const u8arr = new Uint8Array(id.split("").map(c => c.charCodeAt(0)));
     const utf8decoder = new TextDecoder("utf-8");
     id = utf8decoder.decode(u8arr);
-  } catch {}
+  } catch {
+    // ignore: id stays null for non-utf8 artifacts
+  }
 
   /** @type {{action: number} & Record<string, string>} */ // @ts-expect-error
   let keyname = {
