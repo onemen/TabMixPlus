@@ -544,6 +544,11 @@ ContentClickInternal = {
     return ["default@17"];
   },
 
+  // Used by Tabmix.contentAreaClick._contentLinkClick (contentLinks.js) for clicks on
+  // tabpanels of a NON-remote browser (gMultiProcessBrowser == false).
+  // e10s is always on in every supported configuration (min Firefox 128), so this path
+  // is currently unreachable - see _contentLinkClick below. We keep it as a reference
+  // for the day Firefox makes window-level remote browsing optional again.
   contentLinkClick(event, browser, focusedWindow) {
     this._contentLinkClick(event, browser, focusedWindow);
     if (event.__hrefFromOnClick) {
@@ -556,6 +561,12 @@ ContentClickInternal = {
    * For non-remote browser: handle left-clicks on links when preference is to
    * open new tabs from links links that are not handled here go on to the page
    * code and then to contentAreaClick
+   *
+   * UNREACHABLE on Firefox 128+: the first check returns "1" as soon as
+   * window.gMultiProcessBrowser is true, and e10s is always on (all Firefox
+   * forks we support keep browser.tabs.remote.autostart enabled). The parallel
+   * decision tree for remote browsers is whereToOpen() - keep both trees in
+   * sync if this one ever runs again.
    */
   _contentLinkClick: function TMP_contentLinkClick(aEvent, aBrowser, aFocusedWindow) {
     let ownerDoc = aBrowser.ownerDocument;
