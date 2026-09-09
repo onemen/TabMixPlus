@@ -1367,6 +1367,13 @@ ContentClickInternal = {
   /**
    * check if the link contain special onclick function.
    *
+   * The "return " prefix is intentionally broad: any inline handler of the form
+   * onclick="return something(...)" (confirm dialogs, site tracking, wrappers
+   * like the old top.js.OpenExtLink) means the page runs its own click JS and
+   * may depend on handling the navigation itself - in that case Tabmix steps
+   * aside and lets the page/Firefox handle the click instead of forcing the
+   * link into a new tab.
+   *
    * @param {boolean} more
    * @returns {boolean}
    */
