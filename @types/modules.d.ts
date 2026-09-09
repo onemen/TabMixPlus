@@ -643,6 +643,8 @@ interface KnownModulesImports {
   // tabmix
   AutoReload: AutoReloadModule.AutoReload;
   ContentSvc: TabmixModules.ContentSvc;
+  /** the console export of logger.sys.mjs */
+  console: LogModule.Console;
   getGlobal: GlobalAccessModule.GetGlobal;
   DocShellCapabilities: DocShellCapabilitiesModule.DocShellCapabilities;
   DynamicRules: DynamicRulesModule.DynamicRules;
@@ -928,7 +930,7 @@ declare namespace ContentClickModule {
     next(tab?: Tab): void;
   }
 
-  type importList = "BrowserUtils" | "ClickHandlerParent" | "E10SUtils" | "getGlobal" | "PlacesUIUtils" | "PrivateBrowsingUtils" | "LinkNodeUtils" | "TabmixSvc";
+  type importList = "BrowserUtils" | "ClickHandlerParent" | "E10SUtils" | "getGlobal" | "PlacesUIUtils" | "PrivateBrowsingUtils" | "LinkNodeUtils" | "console" | "TabmixSvc";
   type Lazy = Pick<KnownModulesImports, importList>;
 
   interface ContentClick {
@@ -1022,7 +1024,7 @@ declare namespace DownloadLastDirModule {
 }
 
 declare namespace DynamicRulesModule {
-  interface Lazy extends Pick<KnownModulesImports, "TabmixSvc"> {
+  interface Lazy extends Pick<KnownModulesImports, "TabmixSvc" | "console"> {
     Prefs: MockedGeckoTypes._nsIPrefBranch;
     SSS: nsIStyleSheetService;
   }
@@ -1338,7 +1340,7 @@ declare namespace OverlaysModule {
 }
 
 declare namespace PlacesModule {
-  type importList = "BrowserUtils" | "BrowserWindowTracker" | "OpenInTabsUtils" | "PlacesUIUtils" | "PlacesUtils" | "PrivateBrowsingUtils" | "initializeChangeCodeClass";
+  type importList = "BrowserUtils" | "BrowserWindowTracker" | "OpenInTabsUtils" | "PlacesUIUtils" | "PlacesUtils" | "PrivateBrowsingUtils" | "initializeChangeCodeClass" | "console";
   type Lazy = Pick<KnownModulesImports, importList>;
   type FunctionsName = "openTabset" | "openNodeWithEvent" | "_openNodeIn";
   type TabmixFunctionsName = `tabmix_${FunctionsName}` | `__treestyletab__${FunctionsName}` | FunctionsName;
@@ -1454,6 +1456,7 @@ declare namespace ScriptsLoaderModule {
 
 declare namespace ShortcutsModule {
   type Lazy = Pick<KnownModulesImports, "getGlobal"> & {
+    console: LogModule.Console;
     PlatformKeys: nsIStringBundle;
     Keys: nsIStringBundle;
   };

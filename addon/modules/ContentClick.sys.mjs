@@ -15,6 +15,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   PlacesUIUtils,
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
   LinkNodeUtils: "chrome://tabmix-resource/content/LinkNodeUtils.sys.mjs",
+  console: "chrome://tabmix-resource/content/logger.sys.mjs",
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.sys.mjs",
 });
 
@@ -79,12 +80,12 @@ ContentClickInternal = {
 
     try {
       if (typeof lazy.ClickHandlerParent.prototype.contentAreaClick !== "function") {
-        lazy.TabmixSvc.console.log("ClickHandlerParent.contentAreaClick is not a function");
+        lazy.console.log("ClickHandlerParent.contentAreaClick is not a function");
         this.functions = [];
         return;
       }
     } catch {
-      lazy.TabmixSvc.console.log("Unable to use ClickHandlerParent.sys.mjs");
+      lazy.console.log("Unable to use ClickHandlerParent.sys.mjs");
       this.functions = [];
       return;
     }
@@ -1432,9 +1433,7 @@ ContentClickInternal = {
       newHref = makeURI(maybeClickHref, null, makeURI(node.baseURI)).spec;
     } catch (ex) {
       // unexpected error
-      lazy.TabmixSvc.console.log(
-        ex + "\nunexpected error from makeURLAbsolute\nurl " + maybeClickHref
-      );
+      lazy.console.log(ex + "\nunexpected error from makeURLAbsolute\nurl " + maybeClickHref);
       return;
     }
 
