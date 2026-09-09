@@ -34,7 +34,7 @@ function updateAddonCard() {
         try {
           chromeWindow?.Tabmix.openOptionsDialog();
         } catch (ex) {
-          console.error("Tabmix Error: failed to open dialog\n", ex);
+          console.error(`[Tabmix] failed to open dialog\n`, ex);
         }
       });
     }
@@ -47,7 +47,7 @@ window.addEventListener(
     try {
       updateAddonCard();
     } catch (ex) {
-      console.error(ex);
+      console.error("[Tabmix]", ex);
     }
   },
   {once: true}
@@ -75,7 +75,7 @@ window.addEventListener(
             updateAddonCard();
             break;
           } catch (ex) {
-            console.error(ex);
+            console.error("[Tabmix]", ex);
           }
         }
       }

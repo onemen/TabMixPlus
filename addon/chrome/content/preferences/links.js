@@ -23,7 +23,7 @@ var gLinksPane = {
                 mutation.target.label;
             }
           } catch (ex) {
-            console.error(ex);
+            Tabmix.console.error(ex);
           }
         }
       }

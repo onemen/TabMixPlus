@@ -114,7 +114,7 @@ Tabmix.tablib = {
         // @ts-expect-error uri arg is string for fixupAndLoadURIString and nsIURI for loadURI
         original(uri, params);
       } catch (ex) {
-        console.error(ex);
+        Tabmix.console.error(ex);
       }
       return null;
     };

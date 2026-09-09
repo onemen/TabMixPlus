@@ -1,6 +1,10 @@
 /* eslint no-var: 2, prefer-const: 2 */
 "use strict";
 
+const tabmixLogger = ChromeUtils.importESModule(
+  "chrome://tabmix-resource/content/logger.sys.mjs"
+).logger;
+
 // This is loaded into all XUL windows. Wrap in a block to prevent
 // leaking to window scope.
 {
@@ -26,7 +30,7 @@
               }
             });
           } catch (ex) {
-            console.error(ex);
+            tabmixLogger.error(ex);
           }
         },
         {once: true}
@@ -50,7 +54,7 @@
                   el?.removeAttribute(mutation.attributeName);
                 }
               } catch (ex) {
-                console.error(ex);
+                tabmixLogger.error(ex);
               }
             }
           }
@@ -79,7 +83,7 @@
               el.setAttribute(attr, obs.attributes.getNamedItem(attr)?.value ?? "");
             }
           } catch (ex) {
-            console.error(ex);
+            tabmixLogger.error(ex);
           }
         },
         {once: true}
@@ -97,7 +101,7 @@
                 el.removeAttribute(attr);
               }
             } catch (ex) {
-              console.error(ex);
+              tabmixLogger.error(ex);
             }
           }
         }

@@ -67,7 +67,7 @@ var Tabmix = {
   setAttributeList(aItemOrId, aAttr, aValue, aAdd) {
     let elem = typeof aItemOrId == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     if (!elem) {
-      console.error(`Tabmix setAttributeList: ${aItemOrId} not found`);
+      this.console.error(`setAttributeList: ${aItemOrId} not found`);
       return;
     }
     let att = elem.getAttribute(aAttr);
@@ -95,7 +95,7 @@ var Tabmix = {
     /** @type {HTMLElement | null | undefined} */
     const element = document.getElementById(elementId);
     if (!element) {
-      console.error(`Tabmix setFTLDataId: ${elementId} not found`);
+      this.console.error(`setFTLDataId: ${elementId} not found`);
       return;
     }
 
@@ -108,7 +108,7 @@ var Tabmix = {
       if (!el) return;
       const dataId = el.getAttribute("data-lazy-l10n-id");
       if (!dataId) {
-        console.error(`Tabmix setFTLDataId: ${elementId} has no data-lazy-l10n-id`);
+        this.console.error(`setFTLDataId: ${elementId} has no data-lazy-l10n-id`);
         return;
       }
       const l10Id = convert(dataId);
@@ -171,8 +171,8 @@ var Tabmix = {
     }
   ) {
     if (!(name in obj)) {
-      console.error(
-        `Tabmix.lazyGetter: "get ${name}" does not exist when calling:\n${Error().stack?.split("\n").slice(1, 2) ?? ""}`
+      this.console.error(
+        `lazyGetter: "get ${name}" does not exist when calling:\n${Error().stack?.split("\n").slice(1, 2) ?? ""}`
       );
     }
     const config = {

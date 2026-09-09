@@ -4,7 +4,7 @@
   let tabbrowsertab = customElements.get("tabbrowser-tab");
 
   if (!tabbrowsertab) {
-    console.error("Tabmix: tabbrowser-tab not found in tabBindings.js");
+    Tabmix.console.error("tabbrowser-tab not found in tabBindings.js");
     return;
   }
 

@@ -1271,7 +1271,7 @@ Tabmix.initialization = {
       }
 
       if (!phase.initialized) {
-        console.debug("Tabmix initializer:", {key, phase});
+        Tabmix.console.debug("initializer:", {key, phase});
         phase.initialized = true;
         try {
           let obj = getObj(phase.obj);
@@ -1316,7 +1316,7 @@ Tabmix._deferredInitialized.promise.then(() => {
   }
 
   if (missing.length || unnecessary.length) {
-    console.debug(
+    Tabmix.console.debug(
       [
         missing.length ? `❌ Missing replacements:\n${missing.join("\n")}` : null,
         unnecessary.length ? `\n⚠️ Unnecessary replacements:\n${unnecessary.join("\n")}` : null,
@@ -1330,7 +1330,7 @@ Tabmix._deferredInitialized.promise.then(() => {
   // them later would throw on `undefined.apply`.
   for (const [key, value] of Object.entries(Tabmix.originalFunctions)) {
     if (typeof value !== "function") {
-      console.error(
+      Tabmix.console.error(
         `❌ Tabmix.originalFunctions.${key} is ${String(value)}; a patched call site will crash at runtime`
       );
     }

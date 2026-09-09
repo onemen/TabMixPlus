@@ -980,7 +980,7 @@ var TMP_Places = {
         if (isSidebar && mainPopupSet) {
           mainPopupSet[eventListener]("popupshowing", this, false);
         } else {
-          console.log("Tabmix Error: unknown sidebar");
+          Tabmix.console.error("unknown sidebar");
         }
       }
     },
