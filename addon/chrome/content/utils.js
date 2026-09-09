@@ -266,20 +266,21 @@ var Tabmix = {
   },
 
   show(aMethod, aDelay, aWindow) {
-    TabmixSvc.console.show(aMethod, aDelay, aWindow || window);
+    this.console.show(aMethod, aDelay, aWindow || window);
   },
 
-  // console._removeInternal use this function name to remove it from
-  // caller list
+  // console._getStackExcludingInternal skips frames whose name starts with
+  // TMP_console_ - the wrapper keeps that name so caller introspection stays
+  // accurate for code outside of utils.js.
   _getMethod: function TMP_console_wrapper(id, args) {
     if (["changeCode", "setNewFunction"].indexOf(id) > -1) {
       this.installChangecode();
       return this[id].apply(this, args);
     }
-    if (typeof TabmixSvc.console[id] == "function") {
-      return TabmixSvc.console[id].apply(TabmixSvc.console, args);
+    if (typeof this.console[id] == "function") {
+      return this.console[id].apply(this.console, args);
     }
-    TabmixSvc.console.trace("unexpected method " + id);
+    this.console.trace("unexpected method " + id);
     return null;
   },
 
@@ -334,3 +335,6 @@ var Tabmix = {
 
 Tabmix._init();
 Tabmix.lazy_import(window, "TabmixSvc", "TabmixSvc", "TabmixSvc");
+// All Tabmix.console methods (assert, log, callerName, ...) resolve lazily on
+// first use; content code reaches the logger module only through Tabmix.
+Tabmix.lazy_import(Tabmix, "console", "logger", "console");
