@@ -285,11 +285,11 @@ class ChangeCode {
       }${errMsgContent}`;
       lazy.console.reportError(ex);
       if (DEBUGMODE) {
-        lazy.console.clog(`${ex.name}\nfunction ${name} = ${this._value}`, ex);
+        lazy.console.log(`${ex.name}\nfunction ${name} = ${this._value}`, false, false, ex);
       }
     } else if (!this.needUpdate && DEBUGMODE) {
       const ex = this.getCallerData(stack?.caller);
-      lazy.console.clog(`${ex.name} no update needed to ${name}`, ex);
+      lazy.console.log(`${ex.name} no update needed to ${name}`, false, false, ex);
     }
     return false;
   }
@@ -504,7 +504,7 @@ const expandTabmix = {
         baseSandbox: this._sandbox,
       });
     } catch (/** @type {any} */ ex) {
-      lazy.console.clog(
+      lazy.console.log(
         `${lazy.console.callerName()} failed to change ${fnName}\nError: ${ex.message}`
       );
       if (DEBUGMODE) {

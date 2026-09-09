@@ -119,7 +119,6 @@ interface TabmixGlobal {
   callerName: LogModule.Console["callerName"];
   callerTrace: LogModule.Console["callerTrace"];
   log: LogModule.Console["log"];
-  clog: LogModule.Console["clog"];
   obj: LogModule.Console["obj"];
   getObject: LogModule.Console["getObject"];
   reportError: LogModule.Console["reportError"];

@@ -1217,18 +1217,17 @@ declare namespace LogModule {
     callerName(): string | null;
     callerTrace(): {contain(...names: (string | string[])[]): boolean};
     callerTrace(...args: (string | string[])[]): boolean;
-    clog(aMessage: string, caller?: Caller): void;
     debug(...data: any[]): void;
     error(...data: any[]): void;
-    makeError(error: unknown, msg?: string): CustomError;
-    warn(...data: any[]): void;
     getCallerNameByIndex(aIndex: number): string | null;
     getObject(aWindow: Window | null | undefined, aMethod: string): object | {toString(): string};
     log(aMessage: string, aShowCaller?: boolean, offset?: number | boolean, caller?: Caller): void;
+    makeError(error: unknown, msg?: string): CustomError;
     obj(aObj: Record<string, any>, aMessage?: string, aDisallowLog?: boolean, level?: boolean | string): void;
     reportError(ex: unknown, msg?: string, filter?: string): void;
     show(aMethod: ShowMethod, aDelay?: number, aWindow?: Window): void;
     trace(aMsg: string, flag?: string, caller?: Caller): void;
+    warn(...data: any[]): void;
     [key: string]: unknown;
   }
 
