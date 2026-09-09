@@ -648,10 +648,9 @@ export const Shortcuts = {
   // add id for key Browser:Reload
   _setReloadKeyId(aWindow) {
     let reload = aWindow.document.getElementsByAttribute("command", "Browser:Reload");
-    if (!reload) {
+    if (!reload || !reload.length) {
       return;
     }
-
     [...reload].some(key => {
       if (key.getAttribute("keycode") != "VK_F5") {
         return false;
