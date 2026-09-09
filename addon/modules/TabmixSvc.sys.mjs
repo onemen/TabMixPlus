@@ -11,6 +11,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
       "moz-src:///browser/components/sessionstore/SessionStore.sys.mjs"
     : "resource:///modules/sessionstore/SessionStore.sys.mjs",
   SyncedTabs: "chrome://tabmix-resource/content/SyncedTabs.sys.mjs",
+  console: "chrome://tabmix-resource/content/logger.sys.mjs",
   TabmixPlacesUtils: "chrome://tabmix-resource/content/Places.sys.mjs",
 });
 
@@ -33,7 +34,7 @@ export const TabmixSvc = {
       return this._strings.GetStringFromName(aStringKey);
     } catch (e) {
       dump("*** Failed to get string " + aStringKey + " in bundle: tabmix.properties\n");
-      this.console.warn("Failed to get string " + aStringKey + " in bundle: tabmix.properties");
+      lazy.console.warn("Failed to get string " + aStringKey + " in bundle: tabmix.properties");
       throw e;
     }
   },
@@ -43,7 +44,7 @@ export const TabmixSvc = {
       return this._strings.formatStringFromName(aStringKey, aStringsArray);
     } catch (e) {
       dump("*** Failed to format string " + aStringKey + " in bundle: tabmix.properties\n");
-      this.console.warn("Failed to format string " + aStringKey + " in bundle: tabmix.properties");
+      lazy.console.warn("Failed to format string " + aStringKey + " in bundle: tabmix.properties");
       throw e;
     }
   },
@@ -68,7 +69,7 @@ export const TabmixSvc = {
       try {
         return stringBundle.GetStringFromName(key);
       } catch {
-        this.console.log("Failed to get string " + key + " in bundle: commonDialogs.properties");
+        lazy.console.log("Failed to get string " + key + " in bundle: commonDialogs.properties");
         return key;
       }
     });
@@ -127,7 +128,7 @@ export const TabmixSvc = {
         // we must call this before any other tabmix function
         aWindow.gTMPprefObserver.updateSettings();
       } catch (ex) {
-        TabmixSvc.console.assert(ex);
+        lazy.console.assert(ex);
       }
 
       this.addMissingPrefs();
@@ -192,8 +193,8 @@ export const TabmixSvc = {
           lazy.SyncedTabs.onQuitApplication();
 
           // Cancel any console timers
-          Object.values(TabmixSvc.console._timers).forEach(timer => timer.cancel());
-          TabmixSvc.console._timers = {};
+          Object.values(lazy.console._timers).forEach(timer => timer.cancel());
+          lazy.console._timers = {};
           break;
       }
     },
@@ -328,8 +329,4 @@ ChromeUtils.defineLazyGetter(TabmixSvc, "isFloorp", () => {
 
 ChromeUtils.defineLazyGetter(TabmixSvc, "isZen", () => {
   return Services.appinfo.name == "Zen";
-});
-
-ChromeUtils.defineLazyGetter(TabmixSvc, "console", () => {
-  return ChromeUtils.importESModule("chrome://tabmix-resource/content/logger.sys.mjs").console;
 });

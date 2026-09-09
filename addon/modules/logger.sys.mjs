@@ -9,9 +9,10 @@
  * `maxLogLevelPref`.
  *
  * Modules import the `logger` instance directly; the `console` export keeps the
- * method surface that has always been exposed (as Tabmix.console /
- * TabmixSvc.console), implemented on top of `logger`. Content code reaches it
- * through the Tabmix.console lazy getter (Tabmix.lazy_import in utils.js).
+ * method surface exposed as Tabmix.console, implemented on top of `logger`.
+ * Content code reaches it through the Tabmix.console lazy getter
+ * (Tabmix.lazy_import in utils.js); TabmixSvc uses the same module export
+ * through its own lazy getters.
  *
  * Caller introspection (`callerName`, `callerTrace`, ...) is used by runtime
  * logic, not only for logging, so it stays implemented on Error().stack.
