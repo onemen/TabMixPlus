@@ -33,16 +33,12 @@ export const DynamicRules = {
 
   _initialized: false,
 
-  init(aWindow) {
+  init(_aWindow) {
     if (this._initialized) {
       return;
     }
 
     this._initialized = true;
-
-    this.orient =
-      aWindow.document.getElementById("tabbrowser-tabs").getAttribute("orient") || "horizontal";
-    this.windows10 = aWindow.navigator.oscpu.startsWith("Windows NT 10.0");
 
     lazy.Prefs.addObserver("", this);
     STYLENAMES.forEach(pref => {
@@ -74,7 +70,6 @@ export const DynamicRules = {
     const tabsMutate = aMutations => {
       for (let mutation of aMutations) {
         if (mutation.attributeName == "orient") {
-          this.orient = mutation.target?.getAttribute("orient") || "horizontal";
           this.updateStyleType();
           return;
         }

@@ -1058,8 +1058,6 @@ declare namespace DynamicRulesModule {
     styles: Record<string, StyleRule | null>;
     registered: Record<string, any>;
     _initialized: boolean;
-    orient: string;
-    windows10: boolean;
     tabState: {[key: string]: string};
     init(aWindow: Window): void;
     observe(subject: unknown, topic: string, data: string): void;
