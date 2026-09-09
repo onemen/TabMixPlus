@@ -125,7 +125,10 @@ export default [
       "complexity": "off",
       "consistent-this": ["error", "self"],
       "curly": ["error", "multi-line"],
-      "no-console": "off",
+      // All output must go through the Tabmix logger (Tabmix.console in
+      // content, logger.sys.mjs in modules) so every message carries the
+      // [Tabmix:<level>] prefix.
+      "no-console": "error",
       "no-continue": "error",
       "no-eval": "off",
       "no-nested-ternary": "off",
@@ -266,6 +269,26 @@ export default [
       "no-undef": "error",
       "curly": "off",
       "strict": "off",
+    },
+  },
+
+  {
+    // Files where `console` is already the Tabmix logger export (imported
+    // as `logger as console` or via a lazy getter) or where no Tabmix global
+    // exists at call time; the call sites carry the prefix through other
+    // means, so the global no-console rule must be relaxed for them.
+    name: "tabmix/console-exceptions",
+    files: [
+      "addon/modules/logger.sys.mjs",
+      "addon/modules/Changecode.sys.mjs",
+      "addon/modules/DynamicRules.sys.mjs",
+      "addon/modules/bootstrap/*.sys.mjs",
+      "addon/chrome/content/scripts/content.js",
+      "addon/chrome/content/broadcaster.js",
+      "addon/chrome/content/preferences/overlay/aboutaddons.js",
+    ],
+    rules: {
+      "no-console": "off",
     },
   },
 

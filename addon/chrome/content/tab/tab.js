@@ -1042,8 +1042,8 @@ Tabmix.tabsUtils = {
       return 1;
     }
     if ([...aTab.classList].includes("tab-group-label")) {
-      console.warn(
-        "Tabmix warning, getTabRowNumber was called with a 'tab-group-label' instead of 'group-label-container' from",
+      Tabmix.console.warn(
+        "getTabRowNumber was called with a 'tab-group-label' instead of 'group-label-container' from",
         Tabmix.console.getCallerNameByIndex(1)
       );
       // @ts-ignore
