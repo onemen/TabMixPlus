@@ -34,14 +34,20 @@ export const LinkNodeUtils = {
     let doc = node.ownerDocument;
     let frameElement = Boolean(lazy.getGlobal(node).frameElement);
 
+    // SVG elements expose className and target as SVGAnimatedString objects, not
+    // strings - normalize so consumers of the wrapper (e.g. ContentClick.miscellaneous)
+    // can always use string methods on them.
+    let className = typeof node.className == "string" ? node.className : "";
+    let target = typeof node.target == "string" ? node.target : "";
+
     /** @type {LinkNodeUtilsModule.WrappedNode} */
     let wrapper = {
       __tabmix: true,
       baseURI: node.baseURI || "",
       host: node.host,
       pathname: node.pathname,
-      className: node.className,
-      target: getTargetAttr(node.target, focusedWindow),
+      className,
+      target: getTargetAttr(target, focusedWindow),
       ownerGlobal: {frameElement},
       documentGlobal: {frameElement},
       ownerDocument: {
