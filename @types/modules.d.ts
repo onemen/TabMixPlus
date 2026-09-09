@@ -187,7 +187,7 @@ interface TabmixKnownModules {
   "chrome://tabmix-resource/content/extensions/CompatibilityCheck.sys.mjs": {CompatibilityCheck: typeof CompatibilityCheckModule.CompatibilityCheck};
   "chrome://tabmix-resource/content/extensions/AddonManager.sys.mjs": {TabmixAddonManager: {init: () => void}};
   "chrome://tabmix-resource/content/HandleOnEvent.sys.mjs": {createHandleOnEvent: HandleOnEventModule.CreateHandleOnEvent};
-  "chrome://tabmix-resource/content/log.sys.mjs": {console: LogModule.Console};
+  "chrome://tabmix-resource/content/logger.sys.mjs": {console: LogModule.Console};
   "chrome://tabmix-resource/content/Places.sys.mjs": {TabmixPlacesUtils: PlacesModule.PlacesUtils};
   "chrome://tabmix-resource/content/TabContextConfig.sys.mjs": {TabContextConfig: TabContextConfigModule.Exports};
   "chrome://tabmix-resource/content/Shortcuts.sys.mjs": {Shortcuts: ShortcutsModule.Shortcuts};
@@ -1201,12 +1201,9 @@ declare namespace LogModule {
 
   interface Console {
     _char: string;
-    _formatStack(stack: string[]): string;
     _getNames(aCount?: number, stack?: string): string[];
     _getStackExcludingInternal(stack?: string): string[];
-    _logMessage(msg: string, flag: string, caller?: Caller | nsIException): void;
     _name(fn: string): string;
-    _pathRegExp: RegExp;
     _timers: Record<number, nsITimer & {clear(): void}>;
 
     columnNumber?: number;
@@ -1219,7 +1216,7 @@ declare namespace LogModule {
     callerTrace(): {contain(...names: (string | string[])[]): boolean};
     callerTrace(...args: (string | string[])[]): boolean;
     clog(aMessage: string, caller?: Caller): void;
-    error(error: unknown, msg?: string): Error;
+    error(error: unknown, msg?: string): CustomError;
     getCallerNameByIndex(aIndex: number): string | null;
     getObject(aWindow: Window | null | undefined, aMethod: string): object | {toString(): string};
     log(aMessage: string, aShowCaller?: boolean, offset?: number | boolean, caller?: Caller): void;
@@ -1694,7 +1691,7 @@ declare module "chrome://tabmix-resource/content/Changecode.sys.mjs" {
   export {initializeChangeCodeClass};
 }
 
-declare module "chrome://tabmix-resource/content/log.sys.mjs" {
+declare module "chrome://tabmix-resource/content/logger.sys.mjs" {
   const console: LogModule.Console;
   export {console};
 }

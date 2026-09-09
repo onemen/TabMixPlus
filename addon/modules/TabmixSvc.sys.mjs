@@ -329,5 +329,5 @@ ChromeUtils.defineLazyGetter(TabmixSvc, "isZen", () => {
 });
 
 ChromeUtils.defineLazyGetter(TabmixSvc, "console", () => {
-  return ChromeUtils.importESModule("chrome://tabmix-resource/content/log.sys.mjs").console;
+  return ChromeUtils.importESModule("chrome://tabmix-resource/content/logger.sys.mjs").console;
 });
