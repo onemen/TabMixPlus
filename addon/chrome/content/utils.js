@@ -280,7 +280,7 @@ var Tabmix = {
     if (typeof this.console[id] == "function") {
       return this.console[id].apply(this.console, args);
     }
-    this.console.trace("unexpected method " + id);
+    this.console.error("unexpected method " + id);
     return null;
   },
 

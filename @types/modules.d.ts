@@ -1208,12 +1208,7 @@ declare namespace LogModule {
     _name(fn: string): string;
     _timers: Record<number, nsITimer & {clear(): void}>;
 
-    columnNumber?: number;
-    filename?: string;
-    lineNumber?: number;
-
     assert(aError: unknown, aMsg?: string): void;
-    readonly caller: nsIStackFrame;
     callerName(): string | null;
     callerTrace(): {contain(...names: (string | string[])[]): boolean};
     callerTrace(...args: (string | string[])[]): boolean;
@@ -1226,7 +1221,6 @@ declare namespace LogModule {
     obj(aObj: Record<string, any>, aMessage?: string, aDisallowLog?: boolean, level?: boolean | string): void;
     reportError(ex: unknown, msg?: string, filter?: string): void;
     show(aMethod: ShowMethod, aDelay?: number, aWindow?: Window): void;
-    trace(aMsg: string, flag?: string, caller?: Caller): void;
     warn(...data: any[]): void;
     [key: string]: unknown;
   }
