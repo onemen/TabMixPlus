@@ -25,6 +25,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
   PlacesUIUtils,
   PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
   initializeChangeCodeClass: "chrome://tabmix-resource/content/Changecode.sys.mjs",
+  console: "chrome://tabmix-resource/content/logger.sys.mjs",
 });
 
 if (TabmixSvc.version(1490)) {
@@ -131,7 +132,7 @@ PlacesUtilsInternal = {
       lazy.PlacesUIUtils.openTabset.toString();
     } catch {
       if (aWindow.document.documentElement.getAttribute("windowtype") == "navigator:browser") {
-        TabmixSvc.console.log(
+        lazy.console.log(
           "Starting with Firefox 21 Imacros 8.3.0 break toString on PlacesUIUtils functions." +
             "\nTabmix can't update PlacesUIUtils to work according to Tabmix preferences, use Imacros 8.3.1 and up."
         );
@@ -286,7 +287,7 @@ PlacesUtilsInternal = {
         return title;
       }
     } catch (ex) {
-      TabmixSvc.console.reportError(ex, "Error function name changed", "not a function");
+      lazy.console.reportError(ex, "Error function name changed", "not a function");
     }
     return null;
   },
@@ -322,7 +323,7 @@ PlacesUtilsInternal = {
       const titleFromBookmark = await this.applyCallBackOnUrl(url, getTitle);
       return titleFromBookmark || title;
     } catch (err) {
-      TabmixSvc.console.reportError(err, "Error form asyncGetTitleFromBookmark");
+      lazy.console.reportError(err, "Error form asyncGetTitleFromBookmark");
       return "";
     }
   },

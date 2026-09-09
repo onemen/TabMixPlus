@@ -3,6 +3,7 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   //
+  console: "chrome://tabmix-resource/content/logger.sys.mjs",
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.sys.mjs",
 });
 
@@ -355,10 +356,8 @@ export const DynamicRules = {
   },
 
   handleError(error, ruleName) {
-    console.error(lazy.TabmixSvc.console.error(error));
-    lazy.TabmixSvc.console.log(
-      'Error in preference "' + ruleName + '", value was reset to default'
-    );
+    console.error(lazy.console.error(error));
+    lazy.console.log('Error in preference "' + ruleName + '", value was reset to default');
     lazy.Prefs.clearUserPref(ruleName);
   },
 

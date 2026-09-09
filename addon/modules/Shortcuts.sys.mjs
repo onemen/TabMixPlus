@@ -10,6 +10,7 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
+  console: "chrome://tabmix-resource/content/logger.sys.mjs",
 });
 
 ChromeUtils.defineLazyGetter(lazy, "PlatformKeys", () => {
@@ -301,7 +302,7 @@ export const Shortcuts = {
 
       this.updatingShortcuts = false;
     } catch (ex) {
-      TabmixSvc.console.assert(ex);
+      lazy.console.assert(ex);
     }
   },
 
@@ -328,7 +329,7 @@ export const Shortcuts = {
         win.TabmixTabClickOptions.doCommand(command, win.gBrowser.selectedTab);
       }
     } catch (ex) {
-      TabmixSvc.console.assert(ex);
+      lazy.console.assert(ex);
     }
   },
 
@@ -503,9 +504,7 @@ export const Shortcuts = {
       shortcuts = JSON.parse(getPref("extensions.tabmix.shortcuts"));
     } catch {}
     if (shortcuts === null) {
-      TabmixSvc.console.log(
-        "failed to read shortcuts preference.\nAll shortcuts was resets to default"
-      );
+      lazy.console.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
       shortcuts = {};
       updatePreference = true;
     }
