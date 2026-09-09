@@ -351,7 +351,7 @@ var TMP_ClosedTabs = {
   // copy of function from SessionStore.sys.mjs SessionStoreInternal.getPreferredRemoteType
   getPreferredRemoteType(url, aWindow, userContextId) {
     return Tabmix.isVersion(1530) ?
-        ChromeUtils.predictRemoteTypeForURI(url, {window, userContextId})
+        ChromeUtils.predictRemoteTypeForURI(url, {window: aWindow, userContextId})
       : E10SUtils.getRemoteTypeForURI(
           url,
           aWindow.gMultiProcessBrowser,
