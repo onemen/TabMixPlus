@@ -5,7 +5,7 @@ import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 /** @type {{console: LogModule.Console}} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  console: "chrome://tabmix-resource/content/log.sys.mjs",
+  console: "chrome://tabmix-resource/content/logger.sys.mjs",
 });
 
 const DEBUGMODE = Services.prefs.getBoolPref("extensions.tabmix.debugMode", false);

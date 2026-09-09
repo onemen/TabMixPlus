@@ -1,9 +1,29 @@
-/** @type {LogModule.Lazy} */ // @ts-ignore
-const lazy = {};
+/**
+ * Tabmix logging and caller-introspection utilities.
+ *
+ * All user-visible output goes through a single `ConsoleAPI` instance
+ * (`logger`) created with `console.createInstance({prefix: "Tabmix"})`, so
+ * every message is natively rendered as `[Tabmix:<level>]` in the Browser
+ * Console and can be filtered by one click on the prefix. Log level is
+ * controlled by the `extensions.tabmix.log.level` pref through
+ * `maxLogLevelPref`.
+ *
+ * The `console` export keeps the method surface that has always been exposed
+ * (as Tabmix.console / TabmixSvc.console), implemented on top of `logger`:
+ * content code reaches it through the Tabmix.console lazy getter (utils.js
+ * proxy and Tabmix.lazy_import), modules import it directly.
+ *
+ * Caller introspection (`callerName`, `callerTrace`, ...) is used by runtime
+ * logic, not only for logging, so it stays implemented on Error().stack.
+ *
+ * `console.createInstance` is available since Firefox 87 on the WebIDL global,
+ * in every privileged context including content scripts.
+ */
 
-ChromeUtils.defineESModuleGetters(lazy, {
-  //
-  ContentSvc: "chrome://tabmix-resource/content/ContentSvc.sys.mjs",
+/** @type {ConsoleInstance} */
+const logger = globalThis.console.createInstance({
+  prefix: "Tabmix",
+  maxLogLevelPref: "extensions.tabmix.log.level",
 });
 
 var gNextID = 1;
@@ -61,7 +81,7 @@ export const console = {
           const method = isObj ? aMethod.obj[aMethod.name] : this.getObject(aWindow, aMethod);
           result = " = " + method?.toString();
         }
-        this.clog((isObj ? aMethod.fullName : aMethod) + result, caller);
+        this.log((isObj ? aMethod.fullName : aMethod) + result, false, false, caller);
       };
 
       if (aDelay >= 0) {
@@ -204,9 +224,8 @@ export const console = {
       return stackUtil.contain.apply(null, args);
     }
     return stackUtil;
-  },
+  } /*
 
-  /*
   options = {
     msg: msg
     log: true / false; default true
@@ -214,7 +233,7 @@ export const console = {
     deep: true / false default false
     offset; for internal use only true / false default false
   }
-  */
+  */,
   obj: function TMP_console_obj(aObj, aMessage, aDisallowLog, level) {
     if (!aObj || typeof aObj != "object") {
       let msg = "log.obj was called with non-object argument\n";
@@ -224,7 +243,7 @@ export const console = {
       let type = aObj === null ? "null" : typeof aObj;
       msg += "typeof aObj is '" + type + "'\n'" + aObj + "'";
       if (!aDisallowLog) {
-        this.log(msg, true, false, this.caller);
+        logger.error(msg);
       }
       return msg;
     }
@@ -257,73 +276,12 @@ export const console = {
       objS = aMessage + "======================\\n" + objS;
     } else {
       let msg = aMessage + "=============== Object Properties ===============\n";
-      this.log(msg + objS, true, false, this.caller);
+      logger.info(msg + objS);
     }
     return objS;
   },
 
-  // RegExp to remove path/to/profile/extensions from filename
-  get _pathRegExp() {
-    // @ts-expect-error - this is a lazy getter
-    delete this._pathRegExp;
-    const path = Services.dirsvc.get("ProfD", Ci.nsIFile).path.replace(/\\/g, "/") + "/extensions/";
-    return (this._pathRegExp = new RegExp("jar:|file:///|" + path, "g"));
-  },
-
-  _formatStack(stack) {
-    /** @type {string[]} */
-    let lines = [];
-    let _char = this._char,
-      re = this._pathRegExp;
-    stack.forEach(line => {
-      let atIndex = line.indexOf("@");
-      let columnIndex = line.lastIndexOf(":");
-      let fileName = line
-        .slice(atIndex + 1, columnIndex)
-        .split(" -> ")
-        .pop();
-      if (fileName) {
-        let lineNumber = parseInt(line.slice(columnIndex + 1));
-        let colNumber;
-        if (fileName.replace("://", "///").indexOf(":") > -1) {
-          colNumber = lineNumber;
-          columnIndex = fileName.lastIndexOf(":");
-          lineNumber = parseInt(fileName.slice(columnIndex + 1));
-          fileName = fileName.slice(0, columnIndex);
-        }
-        fileName = decodeURI(fileName).replace(re, "");
-        let index = line.indexOf(_char);
-        let name = line.slice(0, index).split("(").shift();
-        let formatted = '  File "' + fileName + '", line ' + lineNumber;
-        if (colNumber) {
-          formatted += ", col " + colNumber;
-        }
-
-        if (name) {
-          formatted += ", in " + name.replace("/<", "");
-        }
-
-        lines.push(formatted);
-      }
-    });
-
-    return lines.join("\n");
-  },
-
   /* logMessage */
-
-  clog(aMessage, caller) {
-    this._logMessage(":\n" + aMessage, "infoFlag", caller);
-  },
-
-  log: function TMP_console_log(aMessage, aShowCaller, offset, caller) {
-    offset = !offset ? 0 : 1;
-    let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
-    let callerName = names[offset + 0];
-    let callerCallerName =
-      aShowCaller && names[offset + 1] ? " (caller was " + names[offset + 1] + ")" : "";
-    this._logMessage(" " + callerName + callerCallerName + ":\n" + aMessage, "infoFlag", caller);
-  },
 
   error(error, message = "") {
     const isException = error instanceof Components.Exception;
@@ -346,31 +304,53 @@ export const console = {
     return new CustomError();
   },
 
+  clog(aMessage, caller) {
+    this.log(aMessage, false, false, caller);
+  },
+
+  log: function TMP_console_log(aMessage, aShowCaller, offset, caller) {
+    if (caller) {
+      // caller passed explicitly (show/obj paths) - use its name if we can
+      const name = caller.name || caller.filename || "";
+      logger.info(name ? `${name}: ${aMessage}` : aMessage);
+      return;
+    }
+    offset = !offset ? 0 : 1;
+    let names = this._getNames(aShowCaller ? 2 + offset : 1 + offset);
+    let callerName = names[offset + 0];
+    let callerCallerName =
+      aShowCaller && names[offset + 1] ? " (caller was " + names[offset + 1] + ")" : "";
+    logger.info(" " + callerName + callerCallerName + ":\n" + aMessage);
+  },
+
   assert: function TMP_console_assert(aError, aMsg) {
     // @ts-expect-error - we are ok here
     if (!aError || typeof aError.stack != "string") {
       let msg = aMsg ? aMsg + "\n" : "";
-      this.trace(msg + (aError || ""), "errorFlag", this.caller);
+      logger.error(msg + (aError || ""));
       return;
     }
     if (aError instanceof Components.Exception || aError instanceof Error) {
       this.reportError(aError, aMsg);
+      return;
     }
 
     // @ts-expect-error - we get the right values here
-    const {stack, message, location} = aError;
+    const {stack, message} = aError;
     let names = this._getNames(1, stack);
     let errAt = " at " + names[0];
-    let errorLocation = location ? `\n${location}` : "";
-    let assertionText = ` ERROR${errAt}:\n${aMsg ? aMsg + "\n" : ""}${message}${errorLocation}`;
-    let stackText = `\nStack Trace:\n${this._formatStack(stack.split("\n"))}`;
-    this._logMessage(assertionText + stackText, "errorFlag");
+    let assertionText = ` ERROR${errAt}:\n${aMsg ? aMsg + "\n" : ""}${message}`;
+    logger.error(assertionText);
   },
 
-  trace: function TMP_console_trace(aMsg, flag = "infoFlag", caller) {
-    let stack = this._formatStack(this._getStackExcludingInternal());
+  trace: function TMP_console_trace(aMsg, _flag = "infoFlag", _caller) {
+    // `flag` and `caller` args are kept for compatibility with existing call
+    // sites; severity is decided by the logger method, not by callers.
     let msg = aMsg ? aMsg + "\n" : "";
-    this._logMessage(":\n" + msg + "Stack Trace:\n" + stack, flag, caller);
+    if (msg) {
+      logger.info(msg);
+    }
+    logger.trace();
   },
 
   get caller() {
@@ -385,56 +365,20 @@ export const console = {
 
   reportError(ex, msg = "", filter) {
     if (ex === null) {
-      ex = "reportError was called with null";
-    } else if (filter && (ex instanceof Components.Exception || ex instanceof Error)) {
+      logger.error(msg || "reportError was called with null");
+      return;
+    }
+    if (filter && (ex instanceof Components.Exception || ex instanceof Error)) {
       if (!ex.message || !ex.message.includes(filter)) {
         return;
       }
     }
-    msg = ":\n" + (msg ? msg + "\n" : "");
 
-    if (ex instanceof Components.Exception || ex instanceof Error) {
-      const caller = ex instanceof Error ? Object.assign({}, ex, {filename: ex.fileName}) : ex;
-      this._logMessage(msg + ex.message, "errorFlag", caller);
+    if (msg) {
+      logger.error(msg, ex);
     } else {
-      this._logMessage(msg + ex?.toString(), "errorFlag");
+      logger.error(ex);
     }
-  },
-
-  _logMessage: function _logMessage(msg, flag = "infoFlag", caller) {
-    msg = msg.replace(/\r\n/g, "\n") + "\n";
-
-    /** @type {number | undefined} */ // @ts-ignore
-    const errorFlag = Ci.nsIScriptError[flag];
-    if (typeof errorFlag == "undefined") {
-      Services.console.logStringMessage("Tabmix" + msg);
-      return;
-    }
-
-    let {filename = "", lineNumber, columnNumber} = caller ?? this.caller;
-    let consoleMsg = Cc["@mozilla.org/scripterror;1"].createInstance(Ci.nsIScriptError);
-    if (lazy.ContentSvc.version(1300)) {
-      consoleMsg.init(
-        "Tabmix" + msg,
-        filename,
-        lineNumber,
-        columnNumber,
-        errorFlag,
-        "component javascript"
-      );
-    } else {
-      consoleMsg.init(
-        "Tabmix" + msg,
-        filename,
-        // @ts-expect-error - bug 1910698 - Remove nsIScriptError.sourceLine
-        null,
-        lineNumber,
-        columnNumber,
-        errorFlag,
-        "component javascript"
-      );
-    }
-    Services.console.logMessage(consoleMsg);
   },
 };
 
