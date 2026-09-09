@@ -112,6 +112,8 @@ interface TabmixGlobal {
   destroy(): void;
 
   // imported from logger.sys.mjs
+  /** lazy - resolves on first use to the logger module's console export */
+  console: LogModule.Console;
   show: LogModule.Console["show"];
   assert: LogModule.Console["assert"];
   callerName: LogModule.Console["callerName"];
