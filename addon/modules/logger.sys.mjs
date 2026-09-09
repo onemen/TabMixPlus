@@ -35,7 +35,7 @@ export const logger = globalThis.console.createInstance({
   maxLogLevelPref: "extensions.tabmix.log.level",
 });
 
-var gNextID = 1;
+let nextTimerId = 1;
 
 /** @type {LogModule.Console} */
 export const console = {
@@ -82,7 +82,8 @@ export const console = {
         aDelay = 500;
       }
 
-      const caller = this.caller;
+      // skip this.show and this.caller when annotating the log line
+      const caller = Components.stack.caller.caller;
       let logMethod = () => {
         const isObj = typeof aMethod == "object";
         let result = "";
@@ -94,7 +95,7 @@ export const console = {
       };
 
       if (aDelay >= 0) {
-        let timerID = gNextID++;
+        let timerID = nextTimerId++;
         let timer = Object.create(Cc["@mozilla.org/timer;1"].createInstance(Ci.nsITimer));
         timer.clear = () => {
           if (timerID in this._timers) {
@@ -326,16 +327,6 @@ export const console = {
     logger.error(assertionText);
   },
 
-  trace: function TMP_console_trace(aMsg, _flag = "infoFlag", _caller) {
-    // `flag` and `caller` args are kept for compatibility with existing call
-    // sites; severity is decided by the logger method, not by callers.
-    let msg = aMsg ? aMsg + "\n" : "";
-    if (msg) {
-      logger.info(msg);
-    }
-    logger.trace();
-  },
-
   warn(.../** @type {any[]} */ data) {
     logger.warn(...data);
   },
@@ -346,15 +337,6 @@ export const console = {
 
   error(.../** @type {any[]} */ data) {
     logger.error(...data);
-  },
-
-  get caller() {
-    let parent = Components.stack.caller;
-    if (parent?.name == "TMP_console_wrapper") {
-      parent = parent.caller.caller;
-    }
-
-    return parent || {};
   },
 
   reportError(ex, msg = "", filter) {
@@ -375,7 +357,3 @@ export const console = {
     }
   },
 };
-
-(function (_this) {
-  _this.reportError = _this.reportError.bind(_this);
-})(console);
