@@ -279,7 +279,6 @@ export const DynamicRules = {
           const {topColor, bottomColor} = getButtonColors(prefObj, 15);
           style[rule] += `\n${bgSelector(rule)} {
             background-image: linear-gradient(${topColor}, ${bottomColor}) !important;
-            outline: red !important;
           }`;
         }
       }
