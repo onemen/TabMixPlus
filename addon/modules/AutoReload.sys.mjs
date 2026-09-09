@@ -444,6 +444,17 @@ function doReloadTab(window, browser, tab, data) {
   let url = browser.currentURI;
   let urlSpec = url.spec;
   let {postData, referrerInfo} = data;
+  // loadURI when the remoteness changed, or when we re-submit a POST after a
+  // regular reload - modeled on Firefox's reloadWithFlags:
+  // updateBrowserRemotenessByURL returns a strict boolean ("whether the browser
+  // changed"), so `|| postData` is safe:
+  // - remoteness changed        -> true, even with no POST: loadURI re-navigates
+  //   because the new frameloader has no session history to reload
+  // - remoteness kept + POST    -> postData stream: plain reload() cannot
+  //   re-submit it reliably, loadURI can
+  // - remoteness kept, no POST  -> falsy: plain sessionHistory.reload() below.
+  //   A falsy result here can never carry POST data - if postData existed the
+  //   || would have made the result truthy.
   let loadURI = window.gBrowser.updateBrowserRemotenessByURL(browser, urlSpec) || postData;
   if (loadURI) {
     if (!postData) {
