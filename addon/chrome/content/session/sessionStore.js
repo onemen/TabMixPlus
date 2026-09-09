@@ -566,9 +566,12 @@ var TMP_ClosedTabs = {
         };
       }
     } else {
+      // do not advance closedTabsInfo.index here - it is shared by all menu items
+      // in the popup, consuming another entry here would misalign every
+      // subsequent item with the wrong closed tab data
       console.log("Tabmix Error: unable to find closed tab data", item, {
         index: closedTabsInfo.index.value,
-        closedTabs: closedTabsInfo.tabs[++closedTabsInfo.index.value],
+        closedTabsCount: closedTabsInfo.tabs.length,
       });
     }
     item.setAttribute("closemenu", this.keepMenuOpen ? "none" : "auto");
