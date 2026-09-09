@@ -1177,7 +1177,7 @@ Tabmix.onContentLoaded = {
       )
       ._replace(
         'return shift ? "tabshifted" : "tab";',
-        `let callerTrace = TabmixSvc.console.callerTrace();
+        `let callerTrace = Tabmix.console.callerTrace();
         let list = [
           "openUILink",
           "handleLinkClick",

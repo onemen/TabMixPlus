@@ -1560,7 +1560,7 @@ declare namespace SlideshowModule {
 }
 
 declare namespace TabmixSvcModule {
-  type importList = "BrowserUtils" | "FloorpPrefsObserver" | "isVersion" | "SessionStore" | "SyncedTabs" | "TabmixPlacesUtils";
+  type importList = "BrowserUtils" | "FloorpPrefsObserver" | "console" | "isVersion" | "SessionStore" | "SyncedTabs" | "TabmixPlacesUtils";
   interface Lazy extends Pick<KnownModulesImports, importList> {
     Platform: string;
   }
@@ -1576,7 +1576,6 @@ declare namespace TabmixSvcModule {
     readonly isWindows: boolean;
     readonly isZen: boolean;
     readonly _strings: nsIStringBundle;
-    readonly console: LogModule.Console;
     readonly prefs: MockedExports.Preferences;
     readonly prefBranch: nsIPrefBranchXpcom;
 
