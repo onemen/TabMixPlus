@@ -209,7 +209,7 @@ var Tabmix = {
       let index = path.indexOf("/") - 1;
       let extensionName =
         index > -1 ? path.charAt(0).toUpperCase() + path.slice(1, index + 1) + " " : "";
-      this.clog(
+      this.log(
         `${err.message}\n\n${extensionName}extension call ${aOldName} from:
   file: chrome://${path}
   line: ${line}
@@ -217,7 +217,7 @@ var Tabmix = {
   Report about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues${extensionName ? ` and ${extensionName} developer.` : "."}`
       );
     } else {
-      this.clog(err.message + "\n\n" + stack);
+      this.log(err.message + "\n\n" + stack);
     }
   },
 
@@ -306,8 +306,6 @@ var Tabmix = {
       "log",
       "getCallerNameByIndex",
       "callerName",
-      "clog",
-      "isCallerInList",
       "callerTrace",
       "obj",
       "assert",

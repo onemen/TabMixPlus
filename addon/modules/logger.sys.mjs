@@ -187,32 +187,6 @@ export const console = {
     return this.getCallerNameByIndex(1);
   },
 
-  // return true if the caller name of the calling function is in the
-  // arguments list
-  isCallerInList: function TMP_console_isCallerInList() {
-    if (!arguments.length) {
-      this.assert("no arguments in Tabmix.isCallerInList");
-      return false;
-    }
-
-    try {
-      let callerName = this.getCallerNameByIndex(1);
-      if (!callerName) {
-        return false;
-      }
-
-      if (typeof arguments[0] == "object") {
-        return arguments[0].indexOf(callerName) > -1;
-      }
-
-      let args = Array.prototype.slice.call(arguments);
-      return args.indexOf(callerName) > -1;
-    } catch (ex) {
-      this.assert(ex, "Error we can't check for caller name");
-    }
-    return false;
-  },
-
   // @ts-expect-error - we are using 2 overloads to this function
   callerTrace: function TMP_console_callerTrace() {
     let stack = this._getStackExcludingInternal();
@@ -315,10 +289,6 @@ export const console = {
     var CustomError = /** @type {any} */ (CustomErrorImpl);
     CustomError.prototype = new Error();
     return new CustomError();
-  },
-
-  clog(aMessage, caller) {
-    this.log(aMessage, false, false, caller);
   },
 
   log: function TMP_console_log(aMessage, aShowCaller, offset, caller) {
