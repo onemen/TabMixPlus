@@ -502,7 +502,9 @@ export const Shortcuts = {
     let updatePreference = false;
     try {
       shortcuts = JSON.parse(getPref("extensions.tabmix.shortcuts"));
-    } catch {}
+    } catch {
+      // ignore: falls through to the "resets to default" message below
+    }
     if (shortcuts === null) {
       lazy.console.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
       shortcuts = {};
@@ -751,7 +753,9 @@ KeyConfig = {
     }
     try {
       prefValue = getPref("keyconfig.main." + aPrefName).split("][");
-    } catch {}
+    } catch {
+      // ignore: pref missing - the key keeps its default binding
+    }
     if (!prefValue) {
       newValue = keyData.default;
       // @ts-ignore - test work with string array since it coerced all values to strings

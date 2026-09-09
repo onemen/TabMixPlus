@@ -328,7 +328,9 @@ var TMP_Places = {
               loadFlags: Ci.nsIWebNavigation.LOAD_FLAGS_NONE,
               triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
             });
-          } catch {}
+          } catch {
+            // ignore: nothing else we can do for this bookmark container
+          }
         }
         this.resetRestoreState(aTab);
         aTab.collapsed = false;

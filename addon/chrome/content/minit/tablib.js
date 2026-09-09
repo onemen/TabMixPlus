@@ -174,7 +174,9 @@ Tabmix.tablib = {
       try {
         let newURI = Services.io.newURI(uri);
         allowLoad = browser.currentURI.equalsExceptRef(newURI);
-      } catch {}
+      } catch {
+        // ignore: malformed or relative uri - treat as "different page"
+      }
     }
     let isBlankTab = (function () {
       // first tab is busy when browser window starts on Firefox 51
@@ -2342,7 +2344,9 @@ Tabmix.tablib = {
       if (tab != skipTab && tab._restoreState != 2) {
         try {
           tab.linkedBrowser.reload();
-        } catch {}
+        } catch {
+          // ignore: browser already gone mid-close
+        }
       }
     }
   },

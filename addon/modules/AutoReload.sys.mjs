@@ -390,7 +390,9 @@ function _reloadTab(aTab) {
         return;
       }
     }
-  } catch {}
+  } catch {
+    // ignore: browser not fully initialized (e.g. pending tab) - defaults apply
+  }
 
   let contentWindow = browser.contentWindow;
   data.scrollX = contentWindow.scrollX;

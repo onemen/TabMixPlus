@@ -103,7 +103,9 @@ CompatibilityCheck.prototype = {
     const list = this.list;
     try {
       list.sort();
-    } catch {}
+    } catch {
+      // ignore: sorting is cosmetic - any order is fine for the report
+    }
 
     let outStr = "";
     for (const {_name, _version} of list) {

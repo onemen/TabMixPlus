@@ -128,6 +128,7 @@ var TabmixContentHandler = {
         return {url, name, type};
       });
     } catch {
+      // ignore: no accessible frame data - skip building this entry
       return;
     }
     let data = {
@@ -378,6 +379,7 @@ var TabmixClickEventHandler = {
         const secMan = Services.scriptSecurityManager;
         secMan.checkLoadURIStrWithPrincipal(principal, href);
       } catch {
+        // ignore: load not permitted for this principal - skip the link
         return;
       }
 

@@ -243,7 +243,9 @@ var TMP_extensionsCompatibility = {
           ._replace("preventBubble()" /* fix bug in superDargandGo */, "stopPropagation()")
           .toCode();
       }
-    } catch {}
+    } catch {
+      // ignore: the extension is not installed or changed its code
+    }
 
     try {
       if ("TreeStyleTabService" in window) {
@@ -510,7 +512,9 @@ TMP_extensionsCompatibility.treeStyleTab = {
     Tabmix.TST_initTabContentsOrder = function () {
       try {
         this.initTabContentsOrder.apply(this, arguments);
-      } catch {}
+      } catch (ex) {
+        Tabmix.console.warn("treeStyleTab.initTabContentsOrder failed:", ex);
+      }
     }.bind(gBrowser.treeStyleTab);
 
     if ("TreeStyleTabBrowser" in window) {
