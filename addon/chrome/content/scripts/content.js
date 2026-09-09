@@ -5,6 +5,7 @@ const {AppConstants} = ChromeUtils.importESModule("resource://gre/modules/AppCon
 ChromeUtils.defineESModuleGetters(this, {
   BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
   E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
+  console: "chrome://tabmix-resource/content/logger.sys.mjs",
   ContentSvc: "chrome://tabmix-resource/content/ContentSvc.sys.mjs",
   LinkNodeUtils: "chrome://tabmix-resource/content/LinkNodeUtils.sys.mjs",
   ContextMenu: "chrome://tabmix-resource/content/ContextMenu.sys.mjs",

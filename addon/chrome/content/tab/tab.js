@@ -1044,7 +1044,7 @@ Tabmix.tabsUtils = {
     if ([...aTab.classList].includes("tab-group-label")) {
       console.warn(
         "Tabmix warning, getTabRowNumber was called with a 'tab-group-label' instead of 'group-label-container' from",
-        TabmixSvc.console.getCallerNameByIndex(1)
+        Tabmix.console.getCallerNameByIndex(1)
       );
       // @ts-ignore
       aTab = this.getDragAndDropElement(aTab);
@@ -3416,8 +3416,8 @@ window.gTMPprefObserver = {
       } catch {
         let {preferredURI} = Services.uriFixup.getFixupURIInfo(value);
         Services.prefs.setCharPref("browser.newtab.url", preferredURI.spec);
-        console.log("TabMix: Invalid 'browser.newtab.url'", value);
-        console.log("TabMix: Fixed 'browser.newtab.url' to", preferredURI.spec);
+        Tabmix.console.warn("Invalid 'browser.newtab.url'", value);
+        Tabmix.console.warn("Fixed 'browser.newtab.url' to", preferredURI.spec);
       }
     }
     // 2026-09-01
@@ -3507,7 +3507,7 @@ window.gTMPprefObserver = {
           remoteInfo = await response.json();
         }
       } catch (e) {
-        console.error("TabMix: Failed to fetch versionInfo.json", e);
+        Tabmix.console.error("Failed to fetch versionInfo.json", e);
       }
 
       if (!remoteInfo) {
@@ -3555,7 +3555,7 @@ window.gTMPprefObserver = {
       });
       return result;
     } catch (e) {
-      console.error("TabMix: Error checking scripts update", e);
+      Tabmix.console.error("Error checking scripts update", e);
       result.updateNeeded = true;
       return result;
     }
@@ -3607,7 +3607,7 @@ window.gTMPprefObserver = {
         }
       }
     } catch (e) {
-      console.error("Tab Mix Plus: Failed to sync update data", e);
+      Tabmix.console.error("Failed to sync update data", e);
     }
 
     const b = Tabmix.getTopWin().gBrowser;

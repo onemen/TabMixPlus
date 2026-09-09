@@ -443,7 +443,7 @@ Tabmix.restoreTabState = function TMP_restoreTabState(aTab) {
         gBrowser.reloadTab(aTab);
       }
     } else {
-      console.warn(`Invalid reloadData format: ${reloadData} for tab ${aTab.label}`);
+      Tabmix.console.warn(`Invalid reloadData format: ${reloadData} for tab ${aTab.label}`);
     }
   }
 
@@ -589,7 +589,7 @@ Tabmix.handleTabbarVisibility = {
       this.contextMenu.insertBefore(hideTabbarMenu, target);
       separator.hidden = Boolean(targetElement);
     } else {
-      console.log("Tabmix: no target found to insert 'Hide the tab bar' menu");
+      Tabmix.console.warn("no target found to insert 'Hide the tab bar' menu");
     }
   },
 };

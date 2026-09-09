@@ -297,7 +297,7 @@ class ChangeCode {
   /** @type {ChangeCodeClass["getCallerData"]} */
   getCallerData(stack) {
     const caller = stack.caller || {};
-    const error = lazy.console.error(caller);
+    const error = lazy.console.makeError(caller);
     const name = caller.name ?? caller.caller?.name ?? "unknown";
     Object.assign(error, {name, message: ""});
     return error;
@@ -421,7 +421,7 @@ function verifyPrivateMethodReplaced(code, obj, fullName) {
   if (methodName) {
     privateMethods.delete(methodName.replace(/^_/, ""));
   }
-  const ex = lazy.console.error(Components.stack.caller?.caller);
+  const ex = lazy.console.makeError(Components.stack.caller?.caller);
 
   for (const method of privateMethods) {
     if (obj && typeof obj[`_${method}`] === "undefined") {

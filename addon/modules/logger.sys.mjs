@@ -291,7 +291,11 @@ export const console = {
 
   /* logMessage */
 
-  error(error, message = "") {
+  /**
+   * Build a "Tabmix Error" object from an exception (legacy builder; kept
+   * because Changecode attaches caller data to it).
+   */
+  makeError(error, message = "") {
     const isException = error instanceof Components.Exception;
     const isError = error instanceof Error;
     /** @type {LogModule.CustomErrorConstructorFn} */
@@ -359,6 +363,18 @@ export const console = {
       logger.info(msg);
     }
     logger.trace();
+  },
+
+  warn(.../** @type {any[]} */ data) {
+    logger.warn(...data);
+  },
+
+  debug(.../** @type {any[]} */ data) {
+    logger.debug(...data);
+  },
+
+  error(.../** @type {any[]} */ data) {
+    logger.error(...data);
   },
 
   get caller() {
