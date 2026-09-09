@@ -691,7 +691,7 @@ class PrefPane extends MozXULElement {
           const preference = this.preferenceForElement(element);
           preference.setElementValue(element);
         } catch {
-          dump("*** No preference found for " + element.getAttribute("preference") + "\n");
+          Tabmix.console.warn("No preference found for " + element.getAttribute("preference"));
         }
       }
     });
@@ -1718,7 +1718,7 @@ class PrefWindow extends MozXULElement {
     } else {
       this.setAttribute("defaultButton", "none");
       if (aNewDefault != "none") {
-        dump("invalid new default button: " + aNewDefault + ", assuming: none\n");
+        Tabmix.console.warn("invalid new default button: " + aNewDefault + ", assuming: none");
       }
     }
   }

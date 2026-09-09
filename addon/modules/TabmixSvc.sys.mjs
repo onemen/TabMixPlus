@@ -33,6 +33,7 @@ export const TabmixSvc = {
       return this._strings.GetStringFromName(aStringKey);
     } catch (e) {
       dump("*** Failed to get string " + aStringKey + " in bundle: tabmix.properties\n");
+      this.console.warn("Failed to get string " + aStringKey + " in bundle: tabmix.properties");
       throw e;
     }
   },
@@ -42,6 +43,7 @@ export const TabmixSvc = {
       return this._strings.formatStringFromName(aStringKey, aStringsArray);
     } catch (e) {
       dump("*** Failed to format string " + aStringKey + " in bundle: tabmix.properties\n");
+      this.console.warn("Failed to format string " + aStringKey + " in bundle: tabmix.properties");
       throw e;
     }
   },
