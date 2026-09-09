@@ -1,4 +1,5 @@
 import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
+import {logger as console} from "chrome://tabmix-resource/content/logger.sys.mjs";
 import {PrivateBrowsingUtils} from "resource://gre/modules/PrivateBrowsingUtils.sys.mjs";
 
 /** @type {TabmixModules.SingleWindowModeUtils} */

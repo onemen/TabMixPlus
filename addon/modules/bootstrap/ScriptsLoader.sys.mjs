@@ -228,7 +228,7 @@ export const ScriptsLoader = {
             try {
               this._prepareTabbarCloseButton(window);
             } catch (/** @type {any} */ error) {
-              console.log(
+              console.warn(
                 "Tabmix was unable to install the tabmix-tabs-closebutton.",
                 error.message
               );

@@ -1,4 +1,5 @@
 import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
+import {logger as console} from "chrome://tabmix-resource/content/logger.sys.mjs";
 import {TabContextConfig} from "chrome://tabmix-resource/content/TabContextConfig.sys.mjs";
 
 /** load Tabmix preference to the default branch */
@@ -35,19 +36,19 @@ export const PreferencesLoader = {
 
             default:
               console.error(
-                `Tabmix Error: can't set pref ${prefName} to value '${prefValue}'; ` +
+                `can't set pref ${prefName} to value '${prefValue}'; ` +
                   "it isn't a String, Number, or Boolean"
               );
           }
         } catch (ex1) {
-          console.log(prefName, prefValue, ex1);
+          console.error("Failed to set default pref", prefName, prefValue, ex1);
           try {
             Services.prefs.clearUserPref(prefName);
             setPref();
           } catch (ex2) {
-            console.error(`Tabmix errored twice when trying to set ${prefName} default`);
-            console.error("Tabmix Error", ex1);
-            console.error("Tabmix Error", ex2);
+            console.error(`Errored twice when trying to set ${prefName} default`);
+            console.error("first error:", ex1);
+            console.error("second error:", ex2);
           }
         }
       };
@@ -60,7 +61,7 @@ export const PreferencesLoader = {
       // isVersion is exposed so defaults can be set per browser version
       Services.scriptloader.loadSubScript(path, {pref, isVersion});
     } catch (ex) {
-      console.error("Tabmix Error:", ex);
+      console.error(ex);
     }
 
     // Initialize tab context menu preferences
@@ -71,7 +72,7 @@ export const PreferencesLoader = {
         pref(`extensions.tabmix.${prefName}`, defaultVisible);
       }
     } catch (ex) {
-      console.error("Tabmix Error:", ex);
+      console.error(ex);
     }
   },
 };

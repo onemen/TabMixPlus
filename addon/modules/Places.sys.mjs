@@ -102,7 +102,7 @@ PlacesUtilsInternal = {
     try {
       this.initPlacesUIUtils(aWindow, sandbox);
     } catch (ex) {
-      console.error("Tabmix Error:", ex);
+      lazy.console.error(ex);
     }
   },
 

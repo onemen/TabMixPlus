@@ -1,4 +1,5 @@
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
+import {logger as console} from "chrome://tabmix-resource/content/logger.sys.mjs";
 import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 
 /** @type {MergeWindowsModule.Lazy} */ // @ts-ignore
@@ -156,7 +157,7 @@ export const MergeWindows = {
         tabbrowser = tab.__tabmixTabBrowser;
         delete tab.__tabmixTabBrowser;
       } else {
-        console.log("Tabmix Error: moveTabsFromPopups: tabbrowser is undefined");
+        console.error("moveTabsFromPopups: tabbrowser is undefined");
         return;
       }
     }

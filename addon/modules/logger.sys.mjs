@@ -8,10 +8,10 @@
  * controlled by the `extensions.tabmix.log.level` pref through
  * `maxLogLevelPref`.
  *
- * The `console` export keeps the method surface that has always been exposed
- * (as Tabmix.console / TabmixSvc.console), implemented on top of `logger`:
- * content code reaches it through the Tabmix.console lazy getter (utils.js
- * proxy and Tabmix.lazy_import), modules import it directly.
+ * Modules import the `logger` instance directly; the `console` export keeps the
+ * method surface that has always been exposed (as Tabmix.console /
+ * TabmixSvc.console), implemented on top of `logger`. Content code reaches it
+ * through the Tabmix.console lazy getter (Tabmix.lazy_import in utils.js).
  *
  * Caller introspection (`callerName`, `callerTrace`, ...) is used by runtime
  * logic, not only for logging, so it stays implemented on Error().stack.
@@ -20,9 +20,17 @@
  * in every privileged context including content scripts.
  */
 
-/** @type {ConsoleInstance} */
-const logger = globalThis.console.createInstance({
+/**
+ * The raw ConsoleAPI instance. New code should prefer this over the legacy
+ * `console` export below. The initial level is "all" - matching the old
+ * log.sys.mjs that always printed - and users can quiet it down by setting the
+ * `extensions.tabmix.log.level` pref (e.g. "Debug", "Warn", "Error").
+ *
+ * @type {ConsoleInstance}
+ */
+export const logger = globalThis.console.createInstance({
   prefix: "Tabmix",
+  maxLogLevel: "All",
   maxLogLevelPref: "extensions.tabmix.log.level",
 });
 
