@@ -1,6 +1,7 @@
 /* eslint-disable mozilla/balanced-listeners */
 import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
+import {logger as console} from "chrome://tabmix-resource/content/logger.sys.mjs";
 
 /** @type {TabmixWidgetsModule.Lazy} */ // @ts-ignore
 const lazy = {};
@@ -291,7 +292,7 @@ function createWidget(widget) {
       onBuild: on_build(widget),
     });
   } catch (error) {
-    console.log("Tabmix Error:\nCustomizableUI.createWidget failed for", widget.id, error);
+    console.error("CustomizableUI.createWidget failed for", widget.id, error);
   }
 }
 

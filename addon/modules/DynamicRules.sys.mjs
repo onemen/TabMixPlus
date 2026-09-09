@@ -563,7 +563,7 @@ const buttonColorProcessor = {
   processColor(color, value) {
     const rgba = this.parseRgba(color);
     if (!rgba) {
-      console.error(`Invalid color format: ${color}`);
+      lazy.console.error(`Invalid color format: ${color}`);
       return color;
     }
     return this.hslaToString(this.darkenRgba(rgba, value));

@@ -1,4 +1,5 @@
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
+import {logger as console} from "chrome://tabmix-resource/content/logger.sys.mjs";
 import {XPCOMUtils} from "resource://gre/modules/XPCOMUtils.sys.mjs";
 
 /** @type {SlideshowModule.Lazy} */ // @ts-ignore
@@ -55,7 +56,7 @@ flst.prototype = {
         )
       : lazy.AlertsService.showAlertNotification(imageURL, title, msg, false, "", undefined, id);
     } catch (error) {
-      console.log("Tabmix showAlert error:", error);
+      console.error("showAlert error:", error);
     }
   },
 

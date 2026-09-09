@@ -266,11 +266,10 @@ class ChangeCode {
       ].includes(name)
     ) {
       const {changed, needUpdate} = this;
-      console.debug(
-        "Tabmix:",
-        `${name} does not have any changes,\ncheck again if it need to be modified`,
-        {changed, needUpdate}
-      );
+      console.debug(`${name} does not have any changes,\ncheck again if it need to be modified`, {
+        changed,
+        needUpdate,
+      });
     }
 
     if (this.needUpdate && !notFoundCount) {
@@ -480,7 +479,7 @@ function _makeCode(code, sandbox) {
   try {
     return Cu.evalInSandbox(codeString, sandbox, null, readableFilename, 1);
   } catch (error) {
-    console.log(4, {code: codeString, error});
+    console.error("evalInSandbox failed for", filename, error);
     throw error;
   }
 }
