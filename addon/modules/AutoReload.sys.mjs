@@ -307,7 +307,15 @@ export const AutoReload = {
     let remote = isRemote ? "_remote" : "";
     let msg = TabmixSvc.getString("confirm_autoreloadPostData" + remote);
     Services.obs.addObserver(_observe, "common-dialog-loaded");
-    let resultOK = Services.prompt.confirm(window, title, msg);
+    let resultOK;
+    try {
+      resultOK = Services.prompt.confirm(window, title, msg);
+    } finally {
+      // _observe removes itself when the dialog loads; this is a no-op then,
+      // but prevents leaking the observer if the prompt throws before the
+      // dialog ever loads (dead window, shutdown)
+      Services.obs.removeObserver(_observe, "common-dialog-loaded");
+    }
     if (resultOK) {
       tab.postDataAcceptedByUser = true;
     } else {
