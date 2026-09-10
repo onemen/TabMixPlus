@@ -11,7 +11,6 @@ coverage
 *.lcov
 
 # temp files
-**/test/*
 **/draft/*
 *~.*
 *~*
@@ -33,9 +32,6 @@ node_modules/
 
 **/sysmjs.txt
 **/usedmjs.json
-
-#hide test folder
-test/*
 
 **/tsconfig.tsbuildinfo
 

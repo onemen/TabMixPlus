@@ -1,0 +1,200 @@
+/**
+ * Profile factory — builds a fresh test profile with:
+ * 1. `chrome/utils/` (userChromeJS loader, copied from the reference profile)
+ * 2. `chrome/tabmix-e2e.uc.js` (the privileged test bridge)
+ * 3. `extensions/{dc572301-7619-498c-a57d-39143191b318}` (Tab Mix Plus, UNPACKED COPY)
+ * 4. user.js with deterministic prefs
+ *
+ * NOTE: the addon is *copied* (never linked) into the profile. Symlinks/junctions
+ * from /addon previously caused the working copy to be deleted by the browser.
+ */
+
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import {fileURLToPath} from "node:url";
+import {ADDON_DIR, ARTIFACTS_DIR, PROFILE_PREFS, UCJS_PREFS} from "./config.mjs";
+
+/** The privileged test bridge script (copied into profile chrome/). */
+const BRIDGE_SRC = fileURLToPath(new URL("../bridge/tabmix-e2e.uc.js", import.meta.url));
+/** The privileged client page (copied into profile chrome/utils/). */
+const CLIENT_PAGE_SRC = fileURLToPath(new URL("../bridge/client.xhtml", import.meta.url));
+
+const EXTENSION_ID = "{dc572301-7619-498c-a57d-39143191b318}";
+
+/** The reference profile that ships a working userChromeJS utils/ loader. */
+const REFERENCE_UTILS_DIR =
+  "C:/Users/Hadar/AppData/Roaming/Mozilla/Firefox/Profiles/oxc75ep9.firefox-changes-log/chrome/utils";
+
+/** Files copied from the reference utils dir (loader core only). */
+const UTILS_FILES = [
+  "chrome.manifest",
+  "userChrome.js",
+  "BootstrapLoader.js",
+  "xPref.sys.mjs",
+  "RDFDataSource.sys.mjs",
+  "RDFManifestConverter.sys.mjs",
+];
+
+/**
+ * Copy userChrome.js with a safe-getters patch.
+ *
+ * config.js loads BootstrapLoader.js BEFORE userChrome.js in the same
+ * autoconfig sandbox global; BootstrapLoader pins a non-configurable
+ * `AppConstants` there, so userChrome.js's own defineESModuleGetters(this,
+ * {...AppConstants...}) throws "can't redefine non-configurable property" and
+ * the whole .uc.js loader dies. Patch the call to skip already-defined keys.
+ *
+ * @param {string} src - source userChrome.js path
+ * @param {string} dest - destination path in the profile
+ */
+function patchUserChromeGetters(src, dest) {
+  const source = fs.readFileSync(src, "utf-8");
+  const patched = source.replace(
+    /ChromeUtils\.defineESModuleGetters\(this, \{([^}]*)\}\);/,
+    (_, body) =>
+      "for (const [__k, __u] of Object.entries({" + body + "})) {\n" +
+      "  if (!(__k in this)) ChromeUtils.defineESModuleGetters(this, {[__k]: __u});\n" +
+      "}"
+  );
+  if (patched === source) {
+    throw new Error("patchUserChromeGetters: defineESModuleGetters block not found");
+  }
+  // Wrap the whole script and report its fate to a pref (the autoconfig
+  // sandbox swallows errors; prefs are the most reliable channel from there).
+  const flagOk =
+    "\n;try { Services.prefs.setStringPref('tabmix.e2e.ucjsLoaded', 'ok'); } catch (e) {}\n";
+  const flagErr =
+    "  try {\n" +
+    "    Services.prefs.setStringPref('tabmix.e2e.ucjsLoaded',\n" +
+    "      'ERR: ' + e.message + ' @ ' + (e.filename || '?') + ':' + (e.lineNumber || '?'));\n" +
+    "  } catch (e2) {}\n";
+  fs.writeFileSync(dest, "try {\n" + patched + "\n} catch (e) {\n" + flagErr + "}" + flagOk);
+}
+
+/**
+ * Create a fresh temp profile directory.
+ *
+ * @param {string} tag - short tag for the temp prefix
+ * @returns {string} profile dir path
+ */
+export function createProfileDir(tag = "tmp") {
+  return fs.mkdtempSync(path.join(os.tmpdir(), `tmp-e2e-${tag}-`));
+}
+
+/**
+ * Populate a profile dir: utils loader + bridge script + addon copy + user.js.
+ *
+ * @param {string} profileDir - existing (empty) profile dir
+ * @param {{headless?: boolean}} [opts]
+ */
+export function populateProfile(profileDir, opts = {}) {
+  const chromeDir = path.join(profileDir, "chrome");
+  const utilsDir = path.join(chromeDir, "utils");
+
+  // 1. userChromeJS loader (from the reference profile).
+  fs.mkdirSync(utilsDir, {recursive: true});
+  for (const name of UTILS_FILES) {
+    const src = path.join(REFERENCE_UTILS_DIR, name);
+    if (!fs.existsSync(src)) {
+      throw new Error(`utils loader file missing: ${src}`);
+    }
+    if (name === "userChrome.js") {
+      patchUserChromeGetters(src, path.join(utilsDir, name));
+    } else {
+      fs.copyFileSync(src, path.join(utilsDir, name));
+    }
+  }
+  // Register the privileged client page:
+  //   chrome://tabmix-e2e/content/client.xhtml
+  // The utils manifest is auto-registered by config.js at startup (before
+  // any .uc.js runs), and its paths are relative to utils/ — so the client
+  // page must live IN utils/ for `./` to resolve.
+  fs.appendFileSync(
+    path.join(utilsDir, "chrome.manifest"),
+    "\n# Tab Mix Plus E2E client page\ncontent tabmix-e2e ./\n"
+  );
+  fs.copyFileSync(CLIENT_PAGE_SRC, path.join(utilsDir, "client.xhtml"));
+  fs.copyFileSync(
+    fileURLToPath(new URL("../bridge/client.js", import.meta.url)),
+    path.join(utilsDir, "client.js")
+  );
+
+  // 2. The E2E bridge as a .uc.js script in profile chrome/ (loader scans it).
+  fs.copyFileSync(BRIDGE_SRC, path.join(chromeDir, "tabmix-e2e.uc.js"));
+
+  // 3. Tab Mix Plus — UNPACKED COPY into extensions/{id}.
+  const extDir = path.join(profileDir, "extensions", EXTENSION_ID);
+  fs.cpSync(ADDON_DIR, extDir, {
+    recursive: true,
+    filter: src => {
+      const rel = path.relative(ADDON_DIR, src);
+      if (!rel) return true;
+      // skip build artifacts and junk
+      return !/(^|[\\/])(tsconfig\.tsbuildinfo|\.DS_Store)$/.test(rel) &&
+        !/(^|[\\/])node_modules([\\/]|$)/.test(rel);
+    },
+  });
+  // install.rdf bloats nothing but is required for legacy sideload.
+  if (!fs.existsSync(path.join(extDir, "install.rdf"))) {
+    throw new Error("addon copy is missing install.rdf");
+  }
+
+  // 4. user.js
+  const prefs = {
+    ...PROFILE_PREFS,
+    ...UCJS_PREFS,
+    // Pretend Tabmix already showed its version-update page (a fresh profile
+    // would otherwise open chrome://tabmixplus/content/update/update.xhtml at
+    // startup and disturb every suite).
+    "extensions.tabmix.version": "9.9.9-test",
+  };
+  const lines = Object.entries(prefs).map(([k, v]) => prefLine(k, v));
+  fs.writeFileSync(path.join(profileDir, "user.js"), lines.join("\n") + "\n");
+}
+
+/**
+ * Serialize one pref line for user.js.
+ *
+ * @param {string} key
+ * @param {boolean|number|string} value
+ */
+function prefLine(key, value) {
+  if (typeof value === "boolean") return `user_pref("${key}", ${value});`;
+  if (typeof value === "number") return `user_pref("${key}", ${value});`;
+  return `user_pref("${key}", ${JSON.stringify(value)});`;
+}
+
+/**
+ * Post-launch profile hygiene: delete compatibility.ini + startupCache so the
+ * unpacked legacy extension re-scans on next start (same as firefox-updater).
+ *
+ * @param {string} profileDir
+ */
+export function removeProfileCompatibilityIni(profileDir) {
+  const filePath = path.join(profileDir, "compatibility.ini");
+  try {
+    fs.unlinkSync(filePath);
+  } catch {
+    // may not exist yet
+  }
+}
+
+/**
+ * Remove a profile dir (best effort).
+ *
+ * @param {string} profileDir
+ */
+export function deleteProfile(profileDir) {
+  try {
+    fs.rmSync(profileDir, {recursive: true, force: true});
+  } catch {
+    // best effort
+  }
+}
+
+/** Where failure artifacts (screenshots, logs) go. */
+export function artifactsDir() {
+  fs.mkdirSync(ARTIFACTS_DIR, {recursive: true});
+  return ARTIFACTS_DIR;
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Privileged E2E client page (chrome://tabmix-e2e/content/client.xhtml).
+
+  Opened as a top-level tab document; BiDi can evaluate inside it and its
+  script runs with system privileges, forwarding calls into the real browser
+  window (Services.wm). No addon code is modified.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>tabmix-e2e client</title>
+    <script type="application/javascript" src="chrome://tabmix-e2e/content/client.js" />
+  </head>
+  <body>
+    <p>tabmix-e2e client page</p>
+  </body>
+</html>
