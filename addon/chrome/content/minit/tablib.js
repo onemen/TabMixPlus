@@ -331,7 +331,9 @@ Tabmix.tablib = {
     if (!Tabmix.extensions.tabGroupManager) {
       Tabmix.originalFunctions.gBrowser_addTrustedTab = gBrowser.addTrustedTab;
       gBrowser.addTrustedTab = function (...args) {
-        if (Tabmix.callerName() === "_beginRemoveTab") {
+        console.log("Tabmix.callerName()", Tabmix.callerName());
+
+        if (/^#?_?beginRemoveTab$/.test(Tabmix.callerName() ?? "")) {
           return TMP_BrowserOpenTab({}, null, true);
         }
         return Tabmix.originalFunctions.gBrowser_addTrustedTab.apply(this, args);
@@ -340,7 +342,7 @@ Tabmix.tablib = {
       if (Tabmix.isVersion({zen: "1.8.1*"}) && typeof gZenWorkspaces === "object") {
         Tabmix.originalFunctions.gZenWorkspaces_selectEmptyTab = gZenWorkspaces.selectEmptyTab;
         gZenWorkspaces.selectEmptyTab = function (...args) {
-          if (Tabmix.callerName() === "_beginRemoveTab") {
+          if (/^#?_?beginRemoveTab$/.test(Tabmix.callerName() ?? "")) {
             return TMP_BrowserOpenTab({}, null, true);
           }
           return Tabmix.originalFunctions.gZenWorkspaces_selectEmptyTab.apply(this, ...args);
