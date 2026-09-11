@@ -1266,6 +1266,8 @@ declare var ctrlTab: {
 declare var gMultiProcessBrowser: boolean;
 declare var gNavToolbox: HTMLElement;
 declare var gReduceMotion: boolean;
+declare var gReduceMotionOverride: boolean | undefined;
+/** @deprecated - bug 2052772, firefox 158 - replace gReduceMotionSetting with gReduceMotionOverride */
 declare var gReduceMotionSetting: boolean;
 declare var gUnifiedExtensions: UnifiedExtensions;
 declare var HomePage: {

@@ -1134,17 +1134,25 @@ var TMP_tabDNDObserver = {
     }
 
     // Prevent animation when grouping selected tabs for multi-row tab bar
-    const currentReduceMotion = gReduceMotionSetting;
+    const useOverride = Tabmix.isVersion(1580);
+    const currentReduceMotion = useOverride ? gReduceMotionOverride : gReduceMotionSetting;
+    const setReduceMotion = (/** @type {boolean | undefined} */ value) => {
+      if (useOverride) {
+        gReduceMotionOverride = value;
+      } else if (value !== undefined) {
+        gReduceMotionSetting = value;
+      }
+    };
     const selectedTabs = gBrowser.selectedTabs;
     const useTabmixDnD = TMP_tabDNDObserver.useTabmixDnD(event, tab);
     if (selectedTabs.length > 1) {
       if (useTabmixDnD) {
-        gReduceMotionSetting = true;
+        setReduceMotion(true);
       } else if (tab.pinned && TabmixTabbar.hasMultiRows) {
         // reduce motion if some of the selected tabs are not in the first row
         const topY = Tabmix.tabsUtils.topTabY;
-        gReduceMotionSetting = selectedTabs.some(
-          t => !t.pinned && Tabmix.tabsUtils.getTabRowNumber(t, topY) > 1
+        setReduceMotion(
+          selectedTabs.some(t => !t.pinned && Tabmix.tabsUtils.getTabRowNumber(t, topY) > 1)
         );
       }
     }
@@ -1169,7 +1177,7 @@ var TMP_tabDNDObserver = {
     if (Tabmix.isVersion(1490) && useTabmixDnD && gBrowser.isTab(tab)) {
       this.finishMoveTogetherSelectedTabs(tab);
     }
-    gReduceMotionSetting = currentReduceMotion;
+    setReduceMotion(currentReduceMotion);
 
     if (TabmixTabbar.visibleRows === 1 && TabmixTabbar.position === 0) {
       return;
