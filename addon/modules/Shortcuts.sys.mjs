@@ -692,8 +692,7 @@ KeyConfig = {
     let oldReloadId = "xxx_key29_Browser:Reload";
     this.keyIdsMap[oldReloadId] = "browserReload";
 
-    /** @type {ShortcutsModule.KeysEntries} */ // @ts-expect-error
-    const entries = Object.entries(this.keys);
+    const entries = /** @type {ShortcutsModule.KeysEntries} */ (Object.entries(Shortcuts.keys));
     for (let [key, keyData] of entries) {
       this.keyIdsMap[keyData.id || "key_tm_" + key] = key;
     }
