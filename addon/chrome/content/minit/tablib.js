@@ -331,8 +331,6 @@ Tabmix.tablib = {
     if (!Tabmix.extensions.tabGroupManager) {
       Tabmix.originalFunctions.gBrowser_addTrustedTab = gBrowser.addTrustedTab;
       gBrowser.addTrustedTab = function (...args) {
-        console.log("Tabmix.callerName()", Tabmix.callerName());
-
         if (/^#?_?beginRemoveTab$/.test(Tabmix.callerName() ?? "")) {
           return TMP_BrowserOpenTab({}, null, true);
         }
