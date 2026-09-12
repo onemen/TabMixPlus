@@ -461,7 +461,7 @@ function getRGBcolor(aColorCode, aOpacity) {
     aColorCode = aColorCode.replace("#", "");
     let subLength = _length === 7 ? 2 : 1;
     for (let i = 0; i < 3; i++) {
-      let subS = aColorCode.substr(i * subLength, subLength);
+      let subS = aColorCode.slice(i * subLength, (i + 1) * subLength);
       if (_length === 4) {
         subS += subS;
       }

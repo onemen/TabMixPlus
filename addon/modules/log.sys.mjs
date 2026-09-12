@@ -144,11 +144,12 @@ export const console = {
 
   _char: "@",
   _name(fn) {
-    let fnName = fn.substr(0, fn.indexOf(this._char));
+    // substr(0, -1) returned "" when the separator is missing; clamp to 0
+    let fnName = fn.slice(0, Math.max(fn.indexOf(this._char), 0));
     if (fn && !fnName) {
       // get file name and line number
       let lastIndexOf = fn.lastIndexOf("/");
-      fnName = lastIndexOf > -1 ? fn.substr(lastIndexOf + 1) : "?";
+      fnName = lastIndexOf > -1 ? fn.slice(lastIndexOf + 1) : "?";
     }
     return fnName;
   },
@@ -242,7 +243,7 @@ export const console = {
         if (type == "function" && typeof level == "string") {
           val = val.toString();
           let code = val.toString().indexOf("native code") > -1 ? "[native code]" : "[code]";
-          val = val.substr(0, val.indexOf("(")) + "() { " + code + " }";
+          val = val.slice(0, Math.max(val.indexOf("("), 0)) + "() { " + code + " }";
         }
         objS += offset + prop + "[" + type + "] =  " + val + "\n";
         if (type == "object" && val !== null && level && typeof level == "boolean") {
