@@ -267,3 +267,6 @@ pref("extensions.tabmix.showTabContextMenuOnTabbar", false);
 pref("extensions.tabmix.tabContextMenu.menuOrder", 0);
 
 pref("extensions.tabmix.instantApply", false);
+
+// Console logger level: "Debug", "Info", "Warn", "Error" or "Off" (default "All").
+pref("extensions.tabmix.log.level", "All");
