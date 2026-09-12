@@ -21,18 +21,27 @@
  * in every privileged context including content scripts.
  */
 
+// Pref name for the logger level, exposed through maxLogLevelPref below.
+const LOG_LEVEL_PREF = "extensions.tabmix.log.level";
+
+// defaults/preferences/tabmix.js is not always applied (e.g. temporary
+// installs), and Console warns when maxLogLevelPref points at a pref that
+// does not exist - so create the default here on first use. "All" keeps the
+// old log.sys.mjs always-print behavior until the user quiets it down.
+if (Services.prefs.getPrefType(LOG_LEVEL_PREF) === Services.prefs.PREF_INVALID) {
+  Services.prefs.setStringPref(LOG_LEVEL_PREF, "All");
+}
+
 /**
  * The raw ConsoleAPI instance. New code should prefer this over the legacy
- * `console` export below. The initial level is "all" - matching the old
- * log.sys.mjs that always printed - and users can quiet it down by setting the
- * `extensions.tabmix.log.level` pref (e.g. "Debug", "Warn", "Error").
+ * `console` export below.
  *
  * @type {ConsoleInstance}
  */
 export const logger = globalThis.console.createInstance({
   prefix: "Tabmix",
   maxLogLevel: "All",
-  maxLogLevelPref: "extensions.tabmix.log.level",
+  maxLogLevelPref: LOG_LEVEL_PREF,
 });
 
 let nextTimerId = 1;
