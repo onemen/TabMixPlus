@@ -34,7 +34,7 @@ export async function openBridgePage(browser, timeoutMs = 60_000) {
   // wait for its external script to register __e2eClient. Hijacking another
   // page is the fallback (BiDi goto to the chrome URL can stall), so it only
   // runs after a grace period with a short navigation timeout.
-  const HIJACK_GRACE_MS = 3_000;
+  const HIJACK_GRACE_MS = 2_000;
   const HIJACK_TIMEOUT_MS = 2_000;
   const POLL_MS = 250;
   let lastError = null;
