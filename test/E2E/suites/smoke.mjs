@@ -1,12 +1,18 @@
 /**
- * E2E smoke suite — proves the engine concept end to end:
+ * E2E smoke suite — the permanent "is Tabmix alive on Firefox X?" gate: run
+ * after every Firefox update and before every merge (P0 tier in
+ * docs/test-plan.md).
  *
  * 1. A fresh profile is built (utils loader + unpacked addon copy + user.js).
  * 2. Firefox (Nightly by default) launches under puppeteer-core / BiDi.
- * 3. The userChromeJS bridge runs and opens the privileged client tab.
- * 4. Tab Mix Plus is active (`window.Tabmix` exists) in the main window.
+ * 3. The userChromeJS bridge runs and opens the privileged client tab — failing
+ *    here means the TEST INFRA broke, not Tabmix.
+ * 4. Tab Mix Plus is active (`window.Tabmix` exists) in the main window — failing
+ *    here is the early warning that a Firefox update broke the addon
+ *    bootstrap.
  * 5. Basic tab operations work through gBrowser in the real window.
- * 6. Console is clean of addon errors (captured by the bridge).
+ * 6. Console is clean of addon errors (captured by the bridge) — catches failed
+ *    getPrivateMethod reconstructions and sandbox scope changes at boot.
  */
 
 import path from "node:path";

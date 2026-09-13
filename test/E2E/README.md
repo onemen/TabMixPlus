@@ -48,7 +48,7 @@ test/E2E/
     bridgeClient.mjs   finds the client tab, evalInMain helpers
     assert.mjs         check()/summary()/waitForValue helpers
   suites/
-    smoke.mjs          concept verification (first suite)
+    smoke.mjs          the P0 gate: Tabmix alive, console clean (see docs/test-plan.md)
   artifacts/           screenshots + failure logs (gitignored)
 ```
 
