@@ -11,7 +11,8 @@
     "prepare": "husky config/husky",
     "stylelint": "stylelint --fix --config config/.stylelintrc.json \"addon/**/*.css\"",
     "tsc:clean": "node config/typecheck.js tsc7",
-    "typecheck": "node node_modules/typescript7/bin/tsc --build > tsc.local.txt"
+    "typecheck": "node node_modules/typescript7/bin/tsc --build > tsc.local.txt",
+    "check:decisions": "node config/check-decisions.mjs"
   },
   "prettier": "./config/prettier.config.js",
   "repository": {
