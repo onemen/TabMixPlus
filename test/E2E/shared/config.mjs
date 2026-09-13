@@ -1,9 +1,10 @@
 /**
  * E2E shared config — browsers, paths, launch prefs.
  *
- * Browser binaries follow C:\code\TabMixPlus-Hub\firefox-updater\src\helpers\paths.js
- * (all installed on this machine). A local override file
- * `test/E2E/shared/config.local.mjs` may export a partial deep patch.
+ * Browser binaries follow
+ * C:\code\TabMixPlus-Hub\firefox-updater\src\helpers\paths.js (all installed on
+ * this machine). A local override file `test/E2E/shared/config.local.mjs` may
+ * export a partial deep patch.
  */
 
 import fs from "node:fs";
@@ -14,7 +15,10 @@ export const TEST_DIR = fileURLToPath(new URL("../..", import.meta.url)); // tes
 export const REPO_ROOT = fileURLToPath(new URL("../../../", import.meta.url)); // TabMixPlus/
 export const ADDON_DIR = path.join(REPO_ROOT, "addon");
 
-/** Firefox install roots per firefox-updater paths.js (dirs containing firefox.exe). */
+/**
+ * Firefox install roots per firefox-updater paths.js (dirs containing
+ * firefox.exe).
+ */
 export const FIREFOX_BINARIES = {
   nightly: "C:/Program Files/Firefox Nightly/firefox.exe",
   dev: "C:/Program Files/Firefox Developer Edition/firefox.exe",
@@ -71,6 +75,50 @@ export const UCJS_PREFS = {
   "userChromeJS.utilities.enabled": true,
 };
 
+/** Friendly browser names for run banners. */
+export const BROWSER_NAMES = {
+  nightly: "Firefox Nightly",
+  dev: "Firefox Developer Edition",
+  beta: "Firefox Beta",
+  release: "Firefox (official release)",
+  esr: "Firefox ESR",
+};
+
+/**
+ * Read the running browser's identity — version, update channel, OS — by
+ * evaluating in the browser. All lookups are best effort: a missing piece is
+ * reported as "unknown" instead of failing the suite.
+ *
+ * @param {Function} evalAsyncInMain - (page, source) => Promise<value>, from
+ *   bridgeClient
+ * @param {import("puppeteer-core").Page} page - the bridge client page
+ * @returns {Promise<{version: string; channel: string; os: string}>}
+ */
+export async function readBrowserInfo(evalAsyncInMain, page) {
+  try {
+    const info = await evalAsyncInMain(
+      page,
+      `
+      const appInfo = Services.appinfo;
+      ({
+        version: appInfo.version,
+        channel: appInfo.defaultUpdateChannel,
+        os: appInfo.OS + " " + Services.sysinfo.getProperty("version", "") +
+          (appInfo.OS === "WINNT" ?
+            " (Windows build " + Services.sysinfo.getProperty("version") + ")" : ""),
+      });
+    `
+    );
+    return {
+      version: info?.version ?? "unknown",
+      channel: info?.channel ?? "unknown",
+      os: info?.os || "unknown",
+    };
+  } catch {
+    return {version: "unknown", channel: "unknown", os: "unknown"};
+  }
+}
+
 /**
  * Resolve the browser binary for a channel name; an explicit path wins.
  *
@@ -79,8 +127,8 @@ export const UCJS_PREFS = {
  * @returns {string} absolute path to the browser executable
  */
 export function resolveBrowser(channel, binaryOverride) {
-  const value = binaryOverride || process.env.FIREFOX_BINARY ||
-    FIREFOX_BINARIES[channel || DEFAULT_BROWSER];
+  const value =
+    binaryOverride || process.env.FIREFOX_BINARY || FIREFOX_BINARIES[channel || DEFAULT_BROWSER];
   if (!value) {
     throw new Error(`No browser binary for channel "${channel || DEFAULT_BROWSER}"`);
   }
@@ -92,8 +140,8 @@ export function resolveBrowser(channel, binaryOverride) {
 }
 
 /**
- * Merge a local override file (config.local.mjs) over the base config.
- * Only used by callers that need the resolved object; deep patch style.
+ * Merge a local override file (config.local.mjs) over the base config. Only
+ * used by callers that need the resolved object; deep patch style.
  *
  * @returns {Promise<object>} partial patch object (may be empty)
  */
@@ -102,6 +150,7 @@ export async function loadLocalOverrides() {
   if (!fs.existsSync(localPath)) {
     return {};
   }
+  // eslint-disable-next-line no-unsanitized/method -- local file URL built via pathToFileURL
   const mod = await import(pathToFileURL(localPath).href);
   return mod.default || mod;
 }

@@ -1,3 +1,9 @@
+/*
+ * chrome-sandbox script (userChromeJS) - not a module. Timestamps and the
+ * console service handle below are intentional for this environment.
+ */
+/* eslint-disable strict, mozilla/avoid-Date-timing, mozilla/use-services */
+
 // ==UserScript==
 // @name         tabmix-e2e bridge
 // @description  Privileged bridge for the Tab Mix Plus E2E engine: window
@@ -57,7 +63,7 @@
 
   // ── 1. open the client page in a background trusted tab (best effort) ──
   try {
-    const tab = w.gBrowser.addTrustedTab(CLIENT_URL, {
+    w.gBrowser.addTrustedTab(CLIENT_URL, {
       triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
     });
     // Keep it in the background; suites find it via window.__e2eClient.
@@ -69,9 +75,7 @@
 
   // ── 2. console capture (once per process) ─────────────────────────────
   try {
-    const ConsoleService = Cc["@mozilla.org/consoleservice;1"].getService(
-      Ci.nsIConsoleService
-    );
+    const ConsoleService = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
     const listener = {
       observe(message) {
         try {

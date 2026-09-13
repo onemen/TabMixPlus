@@ -4,12 +4,15 @@
  * Firefox BiDi refuses navigation to most chrome:// URLs, does not expose
  * chrome windows as puppeteer pages, and inline scripts in chrome XHTML
  * documents do not execute — but a chrome-privileged page registered via a
- * chrome manifest, with its logic in an EXTERNAL script file, works when a
- * tab navigates to it (same pattern as Tabmix's own update.xhtml/update.js).
+ * chrome manifest, with its logic in an EXTERNAL script file, works when a tab
+ * navigates to it (same pattern as Tabmix's own update.xhtml/update.js).
  *
  * The privileged client page exposes `window.__e2eEval` / `__e2eEvalAsync` /
  * `__e2eScreenshot`, which forward evaluations into the main browser window.
  */
+
+// page.evaluate() callbacks below run in the browser, not in Node.
+/* global window, document, location */
 
 /**
  * Attach to (or open) the privileged E2E client page.
@@ -21,7 +24,7 @@
  * chrome:// gotos are refused.
  *
  * @param {import("puppeteer-core").Browser} browser
- * @param {number} [timeoutMs=60_000]
+ * @param {number} [timeoutMs=60_000] Default is `60_000`
  * @returns {Promise<import("puppeteer-core").Page>} the client page
  */
 export async function openBridgePage(browser, timeoutMs = 60_000) {
@@ -84,8 +87,8 @@ export async function openBridgePage(browser, timeoutMs = 60_000) {
 const CLIENT_URL = "chrome://tabmix-e2e/content/client.xhtml";
 
 /**
- * Evaluate an expression in the MAIN browser window via the client page.
- * The expression source is evaluated as `return (<source>);`.
+ * Evaluate an expression in the MAIN browser window via the client page. The
+ * expression source is evaluated as `return (<source>);`.
  *
  * @param {import("puppeteer-core").Page} bridgePage - the client tab's page
  * @param {string} source - JS expression evaluated in the main window scope
@@ -122,8 +125,8 @@ export async function evalAsyncInMain(bridgePage, source) {
  * @param {import("puppeteer-core").Page} bridgePage
  * @param {string} source
  * @param {number} timeoutMs
- * @param {number} [intervalMs=500]
- * @returns {Promise<unknown|null>}
+ * @param {number} [intervalMs=500] Default is `500`
+ * @returns {Promise<unknown | null>}
  */
 export async function waitForValueInMain(bridgePage, source, timeoutMs, intervalMs = 500) {
   const deadline = Date.now() + timeoutMs;
@@ -143,7 +146,7 @@ export async function waitForValueInMain(bridgePage, source, timeoutMs, interval
  * Screenshot the main window through the bridge (drawWindow).
  *
  * @param {import("puppeteer-core").Page} bridgePage
- * @returns {Promise<string|null>} PNG data URL or null
+ * @returns {Promise<string | null>} PNG data URL or null
  */
 export async function screenshotMain(bridgePage) {
   try {

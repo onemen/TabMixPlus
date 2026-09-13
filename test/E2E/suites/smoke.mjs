@@ -11,8 +11,19 @@
 
 import path from "node:path";
 import {createCounter, check, summary} from "../shared/assert.mjs";
-import {resolveBrowser, ARTIFACTS_DIR} from "../shared/config.mjs";
-import {createProfileDir, populateProfile, deleteProfile, artifactsDir} from "../shared/profileFactory.mjs";
+import {
+  resolveBrowser,
+  ARTIFACTS_DIR,
+  DEFAULT_BROWSER,
+  BROWSER_NAMES,
+  readBrowserInfo,
+} from "../shared/config.mjs";
+import {
+  createProfileDir,
+  populateProfile,
+  deleteProfile,
+  artifactsDir,
+} from "../shared/profileFactory.mjs";
 import {launchFirefox, attachProcessLogging, closeBrowser} from "../shared/launch.mjs";
 import {
   openBridgePage,
@@ -28,12 +39,13 @@ export const name = "smoke";
  * @param {object} opts
  * @param {string} [opts.browser] - channel name (nightly/dev/beta/release/esr)
  * @param {string} [opts.binary] - explicit binary path
- * @param {boolean} [opts.headless=true]
- * @param {boolean} [opts.keepProfile=false]
+ * @param {boolean} [opts.headless=true] Default is `true`
+ * @param {boolean} [opts.keepProfile=false] Default is `false`
  * @returns {Promise<boolean>} success
  */
 export async function run({browser: channel, binary, headless = true, keepProfile = false} = {}) {
   const counter = createCounter();
+  const channelKey = channel || DEFAULT_BROWSER;
   const exe = resolveBrowser(channel, binary);
   console.log(`Smoke suite — browser: ${exe}`);
 
@@ -44,7 +56,7 @@ export async function run({browser: channel, binary, headless = true, keepProfil
   const procLogs = [];
   let browser = null;
   let processTag = null;
-  let bridgePage = null;
+  let bridgePage;
 
   try {
     ({browser, processTag} = await launchFirefox({binary: exe, profileDir, headless}));
@@ -62,30 +74,52 @@ export async function run({browser: channel, binary, headless = true, keepProfil
     );
     check(counter, Boolean(bridge), "tabmix-e2e bridge is injected (userChromeJS loader ran)");
 
+    // Browser identity for the run log: name, version, update channel, OS.
+    const info = await readBrowserInfo(evalAsyncInMain, bridgePage);
+    console.log(
+      `  browser under test: ${BROWSER_NAMES[channelKey] ?? "custom binary"} ` +
+        `${info.version} (update channel: ${info.channel}, ${info.os})`
+    );
+
     // 2. Tab Mix Plus active?
-    const tabmix = await waitForValueInMain(bridgePage, `(() => {
+    const tabmix = await waitForValueInMain(
+      bridgePage,
+      `(() => {
       if (typeof window.Tabmix === "undefined") return null;
       return {
         hasIsVersion: typeof window.Tabmix.isVersion === "function",
         promiseOverlayLoaded: typeof window.Tabmix.promiseOverlayLoaded?.then === "function",
+        firefoxVersion: Services.appinfo.version,
         versionBucket: window.Tabmix.isVersion(156) ? "156+" : "pre-156",
       };
-    })()`, 45_000);
+    })()`,
+      45_000
+    );
     check(counter, Boolean(tabmix), "window.Tabmix exists (addon bootstrap ran)");
     check(counter, Boolean(tabmix?.hasIsVersion), "Tabmix.isVersion is a function");
     check(counter, Boolean(tabmix?.promiseOverlayLoaded), "Tabmix.promiseOverlayLoaded exposed");
     if (tabmix?.versionBucket) {
-      console.log(`  isVersion bucket: ${tabmix.versionBucket}`);
+      console.log(
+        `  isVersion bucket: ${tabmix.versionBucket} (Firefox ${tabmix.firefoxVersion ?? "?"}) — ` +
+          (tabmix.versionBucket === "156+" ?
+            "addon runs the private-method / moz-src code paths"
+          : "addon runs the legacy tabbrowser.js code paths")
+      );
     }
 
     // 3. Wait for the addon overlay to finish, then exercise gBrowser.
-    await evalAsyncInMain(bridgePage, `
+    await evalAsyncInMain(
+      bridgePage,
+      `
       if (window.Tabmix?.promiseOverlayLoaded) {
         await window.Tabmix.promiseOverlayLoaded;
       }
-    `).catch(() => {});
+    `
+    ).catch(() => {});
 
-    const tabTest = await evalAsyncInMain(bridgePage, `
+    const tabTest = await evalAsyncInMain(
+      bridgePage,
+      `
       const results = {};
       try {
         results.tabCountBefore = gBrowser.tabs.length;
@@ -104,7 +138,8 @@ export async function run({browser: channel, binary, headless = true, keepProfil
         results.error = String(e);
       }
       return results;
-    `);
+    `
+    );
     check(counter, tabTest?.ok === true, "gBrowser addTab/removeTab works", tabTest?.error);
     check(counter, tabTest?.tabCountAfter === tabTest?.tabCountBefore + 1, "tab count incremented");
     check(counter, tabTest?.selectedIsNew === true, "new tab became selected");
@@ -113,7 +148,8 @@ export async function run({browser: channel, binary, headless = true, keepProfil
 
     // 4. Console errors captured by the bridge (ignoring benign noise).
     const consoleErrors = await evalInMain(bridgePage, "window.__tabmixE2E.consoleErrors");
-    const benign = /RSLoader|RemoteSettings|PrivateBrowsingUtils|occlusion|onboarding|telemetry|GMP|WebMIDI|autofill/i;
+    const benign =
+      /RSLoader|RemoteSettings|PrivateBrowsingUtils|occlusion|onboarding|telemetry|GMP|WebMIDI|autofill/i;
     const realErrors = (consoleErrors || []).filter(e => !benign.test(e.text));
     check(
       counter,

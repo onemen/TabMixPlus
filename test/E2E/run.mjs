@@ -2,15 +2,12 @@
 /**
  * E2E runner CLI — local entry point.
  *
- * Usage:
- *   node test/E2E/run.mjs --suite=smoke
- *   node test/E2E/run.mjs --suite=smoke --browser=nightly --headed
- *   node test/E2E/run.mjs --suite=smoke --binary="C:/path/to/firefox.exe"
- *   node test/E2E/run.mjs --list
+ * Usage: node test/E2E/run.mjs --suite=smoke node test/E2E/run.mjs
+ * --suite=smoke --browser=nightly --headed node test/E2E/run.mjs --suite=smoke
+ * --binary="C:/path/to/firefox.exe" node test/E2E/run.mjs --list
  *
- * Env overrides:
- *   FIREFOX_BINARY=/path/to/exe     (config.mjs resolveBrowser)
- *   TMP_E2E_BROWSER=nightly         (default channel when --browser omitted)
+ * Env overrides: FIREFOX_BINARY=/path/to/exe (config.mjs resolveBrowser)
+ * TMP_E2E_BROWSER=nightly (default channel when --browser omitted)
  */
 
 import path from "node:path";
@@ -22,19 +19,39 @@ const SUITES_DIR = path.join(TEST_DIR, "suites");
 
 /** Parse --key=value style args. */
 function parseArgs() {
-  const opts = {suite: "smoke", browser: null, binary: null, headed: false, keepProfile: false, list: false};
+  const opts = {
+    suite: "smoke",
+    browser: null,
+    binary: null,
+    headed: false,
+    keepProfile: false,
+    list: false,
+  };
   for (const arg of process.argv.slice(2)) {
     const m = arg.match(/^--([a-zA-Z]+)(?:=(.*))?$/);
     if (!m) continue;
     const [, key, value] = m;
     switch (key) {
-      case "suite": opts.suite = value; break;
-      case "browser": opts.browser = value; break;
-      case "binary": opts.binary = value; break;
-      case "headed": opts.headed = true; break;
-      case "keep-profile": opts.keepProfile = true; break;
-      case "list": opts.list = true; break;
-      default: break;
+      case "suite":
+        opts.suite = value;
+        break;
+      case "browser":
+        opts.browser = value;
+        break;
+      case "binary":
+        opts.binary = value;
+        break;
+      case "headed":
+        opts.headed = true;
+        break;
+      case "keep-profile":
+        opts.keepProfile = true;
+        break;
+      case "list":
+        opts.list = true;
+        break;
+      default:
+        break;
     }
   }
   return opts;
@@ -54,6 +71,7 @@ async function main() {
   const suitePath = path.join(SUITES_DIR, `${opts.suite}.mjs`);
   let suite;
   try {
+    // eslint-disable-next-line no-unsanitized/method -- local file URL built via pathToFileURL
     suite = await import(pathToFileURL(suitePath).href);
   } catch (err) {
     console.error(`Suite not found or failed to load: ${suitePath}\n  ${err.message}`);

@@ -1,6 +1,6 @@
 /**
- * Tiny assertion + reporting helpers shared by all E2E suites.
- * (Same shape as firefox-scripts test/e2e/shared/helpers.mjs.)
+ * Tiny assertion + reporting helpers shared by all E2E suites. (Same shape as
+ * firefox-scripts test/e2e/shared/helpers.mjs.)
  */
 
 /** @returns {{passed: number; failed: number; failures: string[]}} */
@@ -50,7 +50,7 @@ export function summary(counter) {
  * @param {import("puppeteer-core").Page} page
  * @param {() => unknown} condition - serialized into the page
  * @param {number} timeoutMs
- * @param {number} [intervalMs=500]
+ * @param {number} [intervalMs=500] Default is `500`
  * @returns {Promise<boolean>}
  */
 export async function waitForCondition(page, condition, timeoutMs, intervalMs = 500) {
@@ -72,8 +72,8 @@ export async function waitForCondition(page, condition, timeoutMs, intervalMs = 
  * @param {import("puppeteer-core").Page} page
  * @param {() => unknown} fn
  * @param {number} timeoutMs
- * @param {number} [intervalMs=500]
- * @returns {Promise<unknown|null>}
+ * @param {number} [intervalMs=500] Default is `500`
+ * @returns {Promise<unknown | null>}
  */
 export async function waitForValue(page, fn, timeoutMs, intervalMs = 500) {
   const deadline = Date.now() + timeoutMs;

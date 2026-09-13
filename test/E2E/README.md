@@ -97,6 +97,9 @@ Per run the profile factory:
   `PrivateBrowsingUtils.sys.mjs … can't access property "QueryInterface"` with
   `Window.docShell is null` (a closing window raced the profile teardown), and
   `Dynamically enable window occlusion 1` (headless mode banner).
+- Process-stderr lines from platform code (`resource://gre/`, `resource://app/`, `shell_windows`,
+  occlusion banners) are tagged `[ff:platform]` instead of `[ff:err]` — see `attachProcessLogging`
+  in `shared/launch.mjs`. Only `[ff:err]` lines deserve eyes.
 
 ## The bridge
 

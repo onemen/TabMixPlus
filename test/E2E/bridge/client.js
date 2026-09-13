@@ -1,5 +1,4 @@
 /* global Services */
-/* eslint-disable no-undef */
 /**
  * Privileged E2E client script (chrome://tabmix-e2e/content/client.js).
  *
@@ -32,8 +31,8 @@
   };
 
   /**
-   * Run a sync expression inside the main browser window.
-   * The source is evaluated as `return (<source>);`.
+   * Run a sync expression inside the main browser window. The source is
+   * evaluated as `return (<source>);`.
    */
   window.__e2eEval = function (source) {
     return window.__e2eWrap(main => {
@@ -42,8 +41,8 @@
   };
 
   /**
-   * Run an async body inside the main browser window.
-   * The source becomes the body of `async () => { <source> }`.
+   * Run an async body inside the main browser window. The source becomes the
+   * body of `async () => { <source> }`.
    */
   window.__e2eEvalAsync = async function (source) {
     const main = window.__e2eMainWindow();
@@ -51,24 +50,19 @@
       return {__e2eError: "no navigator:browser window"};
     }
     try {
-      const result = await new main.Function(
-        "return (async () => { " + source + " })();"
-      ).call(main);
+      const result = await new main.Function("return (async () => { " + source + " })();").call(
+        main
+      );
       return {value: structuredClone(result === undefined ? null : result)};
     } catch (e) {
       return {__e2eError: String((e && e.stack) || e)};
     }
   };
 
-  /**
-   * Screenshot the main window (drawWindow) as a PNG data URL.
-   */
+  /** Screenshot the main window (drawWindow) as a PNG data URL. */
   window.__e2eScreenshot = function () {
     return window.__e2eWrap(main => {
-      const canvas = main.document.createElementNS(
-        "http://www.w3.org/1999/xhtml",
-        "canvas"
-      );
+      const canvas = main.document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
       canvas.width = main.innerWidth;
       canvas.height = main.innerHeight;
       const ctx = canvas.getContext("2d");

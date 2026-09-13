@@ -347,5 +347,20 @@ export default [
     },
   },
 
+  {
+    name: "tabmix/test-engine",
+    // E2E engine: Node-side runners/helpers (test/E2E/**/*.mjs). Browser-side
+    // files under bridge/ are chrome scripts and must NOT match this block.
+    files: ["test/E2E/**/*.mjs"],
+    languageOptions: {
+      sourceType: "module",
+      globals: globals.node,
+    },
+    rules: {
+      "no-console": "off", // the CLI output is the interface
+      "mozilla/avoid-Date-timing": "off", // Date.now() run-tagging is fine here
+    },
+  },
+
   eslintConfigPrettier, // Add at the end to disable formatting rules
 ];

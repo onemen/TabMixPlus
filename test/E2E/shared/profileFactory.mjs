@@ -1,12 +1,15 @@
 /**
  * Profile factory — builds a fresh test profile with:
+ *
  * 1. `chrome/utils/` (userChromeJS loader, copied from the reference profile)
  * 2. `chrome/tabmix-e2e.uc.js` (the privileged test bridge)
- * 3. `extensions/{dc572301-7619-498c-a57d-39143191b318}` (Tab Mix Plus, UNPACKED COPY)
+ * 3. `extensions/{dc572301-7619-498c-a57d-39143191b318}` (Tab Mix Plus, UNPACKED
+ *    COPY)
  * 4. user.js with deterministic prefs
  *
- * NOTE: the addon is *copied* (never linked) into the profile. Symlinks/junctions
- * from /addon previously caused the working copy to be deleted by the browser.
+ * NOTE: the addon is _copied_ (never linked) into the profile.
+ * Symlinks/junctions from /addon previously caused the working copy to be
+ * deleted by the browser.
  */
 
 import fs from "node:fs";
@@ -53,7 +56,9 @@ function patchUserChromeGetters(src, dest) {
   const patched = source.replace(
     /ChromeUtils\.defineESModuleGetters\(this, \{([^}]*)\}\);/,
     (_, body) =>
-      "for (const [__k, __u] of Object.entries({" + body + "})) {\n" +
+      "for (const [__k, __u] of Object.entries({" +
+      body +
+      "})) {\n" +
       "  if (!(__k in this)) ChromeUtils.defineESModuleGetters(this, {[__k]: __u});\n" +
       "}"
   );
@@ -86,9 +91,8 @@ export function createProfileDir(tag = "tmp") {
  * Populate a profile dir: utils loader + bridge script + addon copy + user.js.
  *
  * @param {string} profileDir - existing (empty) profile dir
- * @param {{headless?: boolean}} [opts]
  */
-export function populateProfile(profileDir, opts = {}) {
+export function populateProfile(profileDir) {
   const chromeDir = path.join(profileDir, "chrome");
   const utilsDir = path.join(chromeDir, "utils");
 
@@ -131,8 +135,10 @@ export function populateProfile(profileDir, opts = {}) {
       const rel = path.relative(ADDON_DIR, src);
       if (!rel) return true;
       // skip build artifacts and junk
-      return !/(^|[\\/])(tsconfig\.tsbuildinfo|\.DS_Store)$/.test(rel) &&
-        !/(^|[\\/])node_modules([\\/]|$)/.test(rel);
+      return (
+        !/(^|[\\/])(tsconfig\.tsbuildinfo|\.DS_Store)$/.test(rel) &&
+        !/(^|[\\/])node_modules([\\/]|$)/.test(rel)
+      );
     },
   });
   // install.rdf bloats nothing but is required for legacy sideload.
@@ -157,7 +163,7 @@ export function populateProfile(profileDir, opts = {}) {
  * Serialize one pref line for user.js.
  *
  * @param {string} key
- * @param {boolean|number|string} value
+ * @param {boolean | number | string} value
  */
 function prefLine(key, value) {
   if (typeof value === "boolean") return `user_pref("${key}", ${value});`;

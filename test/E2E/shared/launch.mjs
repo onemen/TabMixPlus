@@ -2,8 +2,9 @@
  * Launcher — puppeteer-core + Firefox (WebDriver BiDi).
  *
  * Pattern from firefox-updater/src/services/firefoxPuppeteer.js:
+ *
  * - protocol: "webDriverBiDi"
- * - ignoreDefaultArgs: ["--disable-extensions"]  (so the sideloaded addon loads)
+ * - ignoreDefaultArgs: ["--disable-extensions"] (so the sideloaded addon loads)
  * - -new-instance -no-remote
  * - process-tag (`--puppeteer-<tag>`) for orphan cleanup on crash
  * - compatibility.ini purge for profile hygiene
@@ -16,6 +17,9 @@ import puppeteer from "puppeteer-core";
 import {PROFILE_PREFS} from "./config.mjs";
 import {removeProfileCompatibilityIni} from "./profileFactory.mjs";
 
+// the screenshotMain evaluate() callback runs in the browser, not in Node.
+/* global window */
+
 /** Every Firefox exe started by this run carries this tag in its command line. */
 function makeProcessTag() {
   return `--puppeteer-tabmix-e2e-${process.pid}-${Date.now()}`;
@@ -27,20 +31,15 @@ function makeProcessTag() {
  * @param {object} opts
  * @param {string} opts.binary - absolute path to firefox.exe
  * @param {string} opts.profileDir - profile directory (userDataDir)
- * @param {boolean} [opts.headless=true]
- * @param {Record<string, boolean|number|string>} [opts.extraPrefs] - merged over PROFILE_PREFS
- * @param {number} [opts.width=1400]
- * @param {number} [opts.height=900]
- * @returns {Promise<{browser: import("puppeteer-core").Browser, processTag: string}>}
+ * @param {boolean} [opts.headless=true] Default is `true`
+ * @param {Record<string, boolean | number | string>} [opts.extraPrefs] - merged
+ *   over PROFILE_PREFS
+ * @returns {Promise<{
+ *   browser: import("puppeteer-core").Browser;
+ *   processTag: string;
+ * }>}
  */
-export async function launchFirefox({
-  binary,
-  profileDir,
-  headless = true,
-  extraPrefs = {},
-  width = 1400,
-  height = 900,
-}) {
+export async function launchFirefox({binary, profileDir, headless = true, extraPrefs = {}}) {
   const processTag = makeProcessTag();
 
   // puppeteer-core syncs extraPrefsFirefox into user.js AFTER we write ours,
@@ -80,10 +79,19 @@ export async function launchFirefox({
  * Mirror the Firefox process stdout/stderr into the test log — autoconfig and
  * startup JS errors surface there (pattern from firefox-scripts helpers.mjs).
  *
+ * stderr lines whose source is clearly Firefox platform code (resource://gre/,
+ * resource://app/, known subsystem banners) are tagged `[ff:platform]` instead
+ * of `[ff:err]` — platform noise, not the addon or the test. Anything else on
+ * stderr stays `[ff:err]` and deserves eyes.
+ *
  * @param {import("puppeteer-core").Browser} browser
- * @param {string[]} [sink] - optional array to also collect lines (returned on failure)
- * @param {string} [label="ff"]
+ * @param {string[]} [sink] - optional array to also collect lines (returned on
+ *   failure)
+ * @param {string} [label="ff"] Default is `"ff"`
  */
+const PLATFORM_STDERR =
+  /resource:\/\/(?:gre|app)\/|shell_windows|window occlusion|Dynamically enable|docShell is null/i;
+
 export function attachProcessLogging(browser, sink = null, label = "ff") {
   const proc = browser.process?.();
   if (!proc?.stdout || !proc?.stderr) return;
@@ -96,8 +104,9 @@ export function attachProcessLogging(browser, sink = null, label = "ff") {
       buf = lines.pop();
       for (const line of lines) {
         if (!line.trim()) continue;
-        if (sink) sink.push(`[${label}:${name}] ${line}`);
-        console.log(`  [${label}:${name}] ${line}`);
+        const tag = name === "err" && PLATFORM_STDERR.test(line) ? "platform" : name;
+        if (sink) sink.push(`[${label}:${tag}] ${line}`);
+        console.log(`  [${label}:${tag}] ${line}`);
       }
     });
   };
@@ -106,8 +115,8 @@ export function attachProcessLogging(browser, sink = null, label = "ff") {
 }
 
 /**
- * Kill any Firefox processes whose command line carries one of the tags.
- * Used on launch failure and as a safety net after browser.close().
+ * Kill any Firefox processes whose command line carries one of the tags. Used
+ * on launch failure and as a safety net after browser.close().
  *
  * @param {string[]} tags
  * @returns {Promise<number>} number of killed pids
@@ -133,7 +142,10 @@ async function findPidsByTag(tags) {
     ` } | Select-Object -ExpandProperty ProcessId`;
   try {
     const out = await runCapture("powershell.exe", ["-NoProfile", "-Command", script]);
-    return out.split(/\s+/).map(s => parseInt(s, 10)).filter(Number.isInteger);
+    return out
+      .split(/\s+/)
+      .map(s => parseInt(s, 10))
+      .filter(Number.isInteger);
   } catch {
     return [];
   }
@@ -142,7 +154,9 @@ async function findPidsByTag(tags) {
 function taskkill(pid) {
   return new Promise((resolve, reject) => {
     const proc = spawn("taskkill", ["/PID", String(pid), "/F"], {stdio: "ignore"});
-    proc.on("exit", code => (code === 0 ? resolve() : reject(new Error(`taskkill ${pid} -> ${code}`))));
+    proc.on("exit", code =>
+      code === 0 ? resolve() : reject(new Error(`taskkill ${pid} -> ${code}`))
+    );
     proc.on("error", reject);
   });
 }
@@ -160,7 +174,7 @@ function runCapture(cmd, args) {
 /**
  * Close the browser and clean up stray processes.
  *
- * @param {import("puppeteer-core").Browser|null} browser
+ * @param {import("puppeteer-core").Browser | null} browser
  * @param {string[]} tags - process tags from launchFirefox
  */
 export async function closeBrowser(browser, tags = []) {
@@ -184,7 +198,7 @@ export async function closeBrowser(browser, tags = []) {
  * @param {import("puppeteer-core").Page} page
  * @param {string} name - file name (png)
  * @param {string} artifactsDir
- * @returns {Promise<string|null>} written path or null
+ * @returns {Promise<string | null>} written path or null
  */
 export async function saveScreenshot(page, name, artifactsDir) {
   try {
