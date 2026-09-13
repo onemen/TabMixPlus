@@ -53,17 +53,37 @@ export async function run({browser: channel, binary, headless = true, keepProfil
   populateProfile(profileDir);
   console.log(`  profile: ${profileDir}`);
 
+  // Phase timing marks - printed only with --timing (or TMP_E2E_TIMING=1).
+  const phases = [];
+  const timing = process.env.TMP_E2E_TIMING === "1";
+  const runStart = Date.now();
+  let phaseStart = runStart;
+  const mark = label => {
+    const now = Date.now();
+    phases.push({name: label, ms: now - phaseStart});
+    phaseStart = now;
+  };
+  const printTimings = () => {
+    if (!timing) return;
+    console.log("  phase timings:");
+    for (const p of phases) console.log(`    ${String(p.ms).padStart(6)}ms  ${p.name}`);
+    console.log(`    ${String(Date.now() - runStart).padStart(6)}ms  total`);
+  };
+
   const procLogs = [];
   let browser = null;
   let processTag = null;
   let bridgePage;
 
   try {
+    mark("profile setup (before launch)");
     ({browser, processTag} = await launchFirefox({binary: exe, profileDir, headless}));
+    mark("firefox launch (puppeteer attach)");
     attachProcessLogging(browser, procLogs);
 
     // Attach to the privileged client tab opened by the .uc.js bridge.
     bridgePage = await openBridgePage(browser);
+    mark("bridge tab attach");
     check(counter, true, "attached to the privileged E2E client tab over BiDi");
 
     // 1. The bridge script ran in the main window (marker + console capture).
@@ -73,6 +93,7 @@ export async function run({browser: channel, binary, headless = true, keepProfil
       30_000
     );
     check(counter, Boolean(bridge), "tabmix-e2e bridge is injected (userChromeJS loader ran)");
+    mark("bridge marker wait");
 
     // Browser identity for the run log: name, version, update channel, OS.
     const info = await readBrowserInfo(evalAsyncInMain, bridgePage);
@@ -80,6 +101,7 @@ export async function run({browser: channel, binary, headless = true, keepProfil
       `  browser under test: ${BROWSER_NAMES[channelKey] ?? "custom binary"} ` +
         `${info.version} (update channel: ${info.channel}, ${info.os})`
     );
+    mark("tabmix bootstrap wait (window.Tabmix + overlay)");
 
     // 2. Tab Mix Plus active?
     const tabmix = await waitForValueInMain(
@@ -145,6 +167,7 @@ export async function run({browser: channel, binary, headless = true, keepProfil
     check(counter, tabTest?.selectedIsNew === true, "new tab became selected");
     check(counter, tabTest?.tabCountClosed === tabTest?.tabCountBefore, "tab removed again");
     check(counter, tabTest?.tabmixTabsUtils === true, "Tabmix.tabsUtils is available");
+    mark("gBrowser tab operations");
 
     // 4. Console errors captured by the bridge (ignoring benign noise).
     const consoleErrors = await evalInMain(bridgePage, "window.__tabmixE2E.consoleErrors");
@@ -161,6 +184,7 @@ export async function run({browser: channel, binary, headless = true, keepProfil
       console.log("  console errors:");
       for (const e of realErrors) console.log(`    - ${e.text.slice(0, 200)}`);
     }
+    mark("console error check");
 
     // 5. Screenshot artifact (best effort).
     const shot = await screenshotMain(bridgePage);
@@ -170,6 +194,7 @@ export async function run({browser: channel, binary, headless = true, keepProfil
       fs.writeFileSync(out, Buffer.from(shot.split(",")[1], "base64"));
       console.log(`  screenshot: ${path.relative(process.cwd(), out)}`);
     }
+    mark("screenshot");
   } catch (err) {
     check(counter, false, "smoke suite completed without exception", String(err));
     try {
@@ -182,12 +207,16 @@ export async function run({browser: channel, binary, headless = true, keepProfil
       // ignore
     }
   } finally {
+    mark("teardown start");
     await closeBrowser(browser, processTag ? [processTag] : []);
+    mark("browser close");
     if (!keepProfile) {
       deleteProfile(profileDir);
     } else {
       console.log(`  profile kept: ${profileDir}`);
     }
+    mark("profile cleanup");
+    printTimings();
   }
 
   return summary(counter);

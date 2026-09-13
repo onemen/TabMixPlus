@@ -29,7 +29,45 @@
  */
 export async function openBridgePage(browser, timeoutMs = 60_000) {
   const deadline = Date.now() + timeoutMs;
+  const started = Date.now();
+  // The bridge's own client tab is the happy path: recognize it by URL, then
+  // wait for its external script to register __e2eClient. Hijacking another
+  // page is the fallback (BiDi goto to the chrome URL can stall), so it only
+  // runs after a grace period with a short navigation timeout.
+  const HIJACK_GRACE_MS = 3_000;
+  const HIJACK_TIMEOUT_MS = 2_000;
+  const POLL_MS = 250;
   let lastError = null;
+
+  /**
+   * True when the page is the client (script registered) or the client tab
+   * still loading its script ("pending"); false for any other page.
+   */
+  const classify = async page => {
+    try {
+      return await page.evaluate(
+        () =>
+          Boolean(window.__e2eClient) ||
+          (location.href === "chrome://tabmix-e2e/content/client.xhtml" ? "pending" : false)
+      );
+    } catch {
+      return false; // not evaluable (chrome window shim, mid-navigation)
+    }
+  };
+
+  /** Poll a single already-open client page until its script registers. */
+  const waitForClientScript = async (page, ms) => {
+    const until = Date.now() + ms;
+    while (Date.now() < until) {
+      try {
+        if (await page.evaluate(() => Boolean(window.__e2eClient))) return true;
+      } catch {
+        // transient
+      }
+      await new Promise(r => setTimeout(r, POLL_MS));
+    }
+    return false;
+  };
 
   while (Date.now() < deadline) {
     let pages = [];
@@ -39,44 +77,48 @@ export async function openBridgePage(browser, timeoutMs = 60_000) {
       // session not ready yet
     }
 
-    // 1. Prefer a page that already IS the client.
+    // 1. A page that already IS the client — done.
+    // 2. The bridge's own tab, still loading its script — wait for it.
     for (const page of pages) {
-      try {
-        const isClient = await page.evaluate(() => Boolean(window.__e2eClient));
-        if (isClient) {
-          return page;
-        }
-      } catch {
-        // mid-navigation
+      const kind = await classify(page);
+      if (kind === true) return page;
+      if (kind === "pending" && (await waitForClientScript(page, 10_000))) {
+        return page;
       }
     }
 
-    // 2. Hijack the first page that allows evaluation and is not the client.
-    for (const page of pages) {
-      try {
-        const info = await page.evaluate(() => ({
-          href: location.href,
-          ready: document.readyState,
-        }));
-        if (info.ready === "complete" || info.ready === "interactive") {
-          try {
-            await page.goto(CLIENT_URL, {
-              waitUntil: "domcontentloaded",
-              timeout: 15_000,
-            });
-            const isClient = await page.evaluate(() => Boolean(window.__e2eClient));
-            if (isClient) return page;
-            lastError = new Error("navigation succeeded but client script missing");
-          } catch (e) {
-            lastError = e;
-          }
+    // 3. Fallback after the grace period: hijack ONE ready page per
+    // iteration. BiDi's goto to the chrome URL often stalls past its timeout
+    // while the navigation still happens - the next poll (250ms) picks up the
+    // result, so trying more pages in the same iteration only adds stalls.
+    if (Date.now() - started >= HIJACK_GRACE_MS) {
+      for (const page of pages) {
+        let ready;
+        try {
+          const info = await page.evaluate(() => ({
+            href: location.href,
+            ready: document.readyState,
+          }));
+          ready = info.ready === "complete" || info.ready === "interactive";
+        } catch {
+          continue; // page not evaluable - try the next one
         }
-      } catch {
-        // page not evaluable (chrome window shim) — try next
+        if (!ready) continue;
+        try {
+          await page.goto(CLIENT_URL, {
+            waitUntil: "domcontentloaded",
+            timeout: HIJACK_TIMEOUT_MS,
+          });
+          if (await waitForClientScript(page, 5_000)) return page;
+          lastError = new Error("navigation succeeded but client script missing");
+        } catch (e) {
+          lastError = e;
+        }
+        break; // one page per iteration; re-poll before trying another
       }
     }
 
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise(r => setTimeout(r, POLL_MS));
   }
   throw new Error(
     `E2E client page not reachable within ${timeoutMs}ms` +

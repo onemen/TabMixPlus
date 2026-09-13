@@ -92,6 +92,31 @@ export async function launchFirefox({binary, profileDir, headless = true, extraP
 const PLATFORM_STDERR =
   /resource:\/\/(?:gre|app)\/|shell_windows|window occlusion|Dynamically enable|docShell is null/i;
 
+/**
+ * Print one process line, wrapping long lines IDE-style: the continuation goes
+ * on the next line, indented under the content (past the tag prefix), breaking
+ * at the last space so words stay whole.
+ *
+ * @param {string} line - already-tagged line, e.g. " [ff:platform] ..."
+ */
+function printWrapped(line) {
+  const width = Number(process.stdout?.columns) || 140;
+  if (line.length <= width) {
+    console.log(line);
+    return;
+  }
+  const tagEnd = line.indexOf("] ");
+  const indent = " ".repeat(tagEnd > 0 ? tagEnd + 2 : 2);
+  let rest = line;
+  while (rest.length > width) {
+    let cut = rest.lastIndexOf(" ", width);
+    if (cut <= indent.length) cut = width; // no space to break at - hard cut
+    console.log(rest.slice(0, cut));
+    rest = indent + rest.slice(cut).trimStart();
+  }
+  if (rest.trim()) console.log(rest);
+}
+
 export function attachProcessLogging(browser, sink = null, label = "ff") {
   const proc = browser.process?.();
   if (!proc?.stdout || !proc?.stderr) return;
@@ -105,8 +130,9 @@ export function attachProcessLogging(browser, sink = null, label = "ff") {
       for (const line of lines) {
         if (!line.trim()) continue;
         const tag = name === "err" && PLATFORM_STDERR.test(line) ? "platform" : name;
-        if (sink) sink.push(`[${label}:${tag}] ${line}`);
-        console.log(`  [${label}:${tag}] ${line}`);
+        const tagged = `  [${label}:${tag}] ${line}`;
+        if (sink) sink.push(tagged);
+        printWrapped(tagged);
       }
     });
   };

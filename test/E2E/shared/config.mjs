@@ -93,20 +93,26 @@ export const BROWSER_NAMES = {
  *   bridgeClient
  * @param {import("puppeteer-core").Page} page - the bridge client page
  * @returns {Promise<{version: string; channel: string; os: string}>}
- */
-export async function readBrowserInfo(evalAsyncInMain, page) {
+ */ export async function readBrowserInfo(evalAsyncInMain, page) {
   try {
+    // __e2eEvalAsync evaluates its source as an async FUNCTION BODY - an
+    // explicit `return` is required (a bare object expression returns nothing).
     const info = await evalAsyncInMain(
       page,
       `
       const appInfo = Services.appinfo;
-      ({
+      const osName = appInfo.OS === "WINNT" ? "Windows" : appInfo.OS;
+      // sysinfo "version" is the kernel version string ("10.0" on Win10/11),
+      // not a marketing build number - label it as such.
+      let osVersion = "";
+      try {
+        osVersion = " (" + Services.sysinfo.getProperty("version") + ")";
+      } catch {}
+      return {
         version: appInfo.version,
         channel: appInfo.defaultUpdateChannel,
-        os: appInfo.OS + " " + Services.sysinfo.getProperty("version", "") +
-          (appInfo.OS === "WINNT" ?
-            " (Windows build " + Services.sysinfo.getProperty("version") + ")" : ""),
-      });
+        os: osName + osVersion,
+      };
     `
     );
     return {
