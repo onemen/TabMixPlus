@@ -27,8 +27,9 @@ TEST-PLAN.local.md). The first deliverable — the E2E engine and smoke suite �
    is a later milestone, introduced `workflow_dispatch`-first so nothing runs unattended before it
    is trusted.
 3. **Test-suite work happens on `wip/test-suite`**, never directly on main; it lands when the
-   maintainer decides (squash, merge, or cherry-pick per slice). Untested engine code is clearly
-   marked as such — the phase-1 engine has not been maintainer-reviewed yet.
+   maintainer decides (squash, merge, or cherry-pick per slice). Engine code carries its
+   verification status — the phase-1 smoke suite was maintainer-verified on Nightly (11/11,
+   2026-09-13) before landing.
 4. **No merge without coverage**: once the suite lands on main, every change merged to main carries
    a test matching its priority tier in docs/test-plan.md (P0 smoke + verify-internals at minimum).
 

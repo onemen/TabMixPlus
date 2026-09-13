@@ -5,7 +5,8 @@ WebDriver BiDi. Phase-1 engine of the test suite — see [docs/test-plan.md](../
 for priorities and the planned suites; this README covers only the engine: run commands,
 prerequisites, and platform gotchas.
 
-**Status: smoke suite 11/11 PASS on Firefox Nightly 156+ and official release.**
+**Status: smoke suite 11/11 PASS on Firefox Nightly 156+ and official release; verified by the
+maintainer on Windows 11 (2026-09-13).**
 
 ## Run the smoke test
 
@@ -84,12 +85,18 @@ Per run the profile factory:
   guarded loop (`if (!(k in this)) …`) and wraps the script in try/catch reporting its fate to the
   `tabmix.e2e.ucjsLoaded` pref (the autoconfig sandbox swallows errors).
 - **`.uc.js` scripts run in a Cu sandbox**, so top-level `window` is not the real chrome window —
-  the bridge resolves everything through `Services.wm`.
-- Puppeteer overwrites `user.js` at launch; test prefs must go through `extraPrefsFirefox` (the
-  launcher merges `PROFILE_PREFS` there).
+  the bridge resolves everything through `Services.wm`.- Puppeteer overwrites `user.js` at launch;
+  test prefs must go through `extraPrefsFirefox` (the launcher merges `PROFILE_PREFS` there).
 - `ignoreDefaultArgs: ["--disable-extensions"]` is mandatory or the sideloaded legacy extension
   never boots; `-remote-allow-system-access` is required for BiDi script evaluation on privileged
   pages.
+- Benign console noise on a fresh profile (already filtered by the smoke suite's regex — extend it,
+  don't clear it): repeated
+  `shell_windows::taskbar::shortcut Error matching shortcut: HRESULT(0x80004005)` (headless profile
+  has no taskbar shortcut to match),
+  `PrivateBrowsingUtils.sys.mjs … can't access property "QueryInterface"` with
+  `Window.docShell is null` (a closing window raced the profile teardown), and
+  `Dynamically enable window occlusion 1` (headless mode banner).
 
 ## The bridge
 

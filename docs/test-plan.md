@@ -6,9 +6,9 @@ currently in flight. Decisions (repo-local tests, local-first, CI later) are rec
 TEST-PLAN.local.md — edit this file, not that one.
 
 > **Status:** the E2E engine (phase 1) exists on `wip/test-suite` — see
-> [test/E2E/README.md](../test/E2E/README.md) for how it works and how to run it. It has **not**
-> been maintainer-reviewed or manually exercised yet; treat its "11/11 PASS" as the author's claim,
-> not a verified gate.
+> [test/E2E/README.md](../test/E2E/README.md) for how it works and how to run it. The smoke suite
+> passed 11/11 on Firefox Nightly, verified manually on Windows 11 (2026-09-13). Remaining before
+> the coverage rule activates: unit tests, verify-firefox-internals, and the P2 suites.
 
 ## Priority tiers
 
