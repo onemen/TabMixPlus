@@ -163,7 +163,7 @@ class Report {
 }
 
 /** All addon source files the scanner should inspect. */
-function addonFiles() {
+export function addonFiles() {
   const out = [];
   const walk = dir => {
     for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {
