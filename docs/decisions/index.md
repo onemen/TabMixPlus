@@ -38,6 +38,8 @@ Open these before proposing a new primitive, surface, or architecture change.
   mechanism superseded by [0002](./0002-firefox-link-manual-and-path-map.md)
 - [0002](./0002-firefox-link-manual-and-path-map.md) — `firefox_code.local` is created manually;
   `config/.firefox-link.local.json` maps every Firefox channel to its unpack path; no setup script
+- [0003](./0003-local-first-test-suite.md) — tests live in this repo, local-first on Windows 11; CI
+  automation is a later `workflow_dispatch`-first milestone; no merge without coverage
 - [0004](./0004-commit-convention.md) — commit subjects follow Conventional Commits; Firefox
   followups are `chore: followup bug NNNNNNN - <title>`; issue fixes carry `(closes #NNN)`
 

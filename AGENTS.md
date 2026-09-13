@@ -67,6 +67,13 @@ An unpack must contain `chrome/browser/content/browser/browser.xhtml`; 156+ unpa
 - our overrides of firefox types are in `@types/overrideGecko.d.ts`
 - run `tsc --build` to check types; it prints errors to the terminal
 
+## Testing
+
+The test plan — priority tiers, the coverage rule for worktree changes, and the local-first E2E
+suite — lives in [docs/test-plan.md](./docs/test-plan.md); decisions in
+[ADR 0003](./docs/decisions/0003-local-first-test-suite.md). Engine details and run commands:
+[test/E2E/README.md](./test/E2E/README.md).
+
 ## Tab Mix Plus
 
 - modify Firefox-specific DOM APIs and XUL/XHTML elements by injecting and replacing firefox
