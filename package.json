@@ -12,7 +12,8 @@
     "stylelint": "stylelint --fix --config config/.stylelintrc.json \"addon/**/*.css\"",
     "tsc:clean": "node config/typecheck.js tsc7",
     "typecheck": "node node_modules/typescript7/bin/tsc --build > tsc.local.txt",
-    "check:decisions": "node config/check-decisions.mjs"
+    "check:decisions": "node config/check-decisions.mjs",
+    "test:internals": "node test/internals/verify-firefox-internals.mjs"
   },
   "prettier": "./config/prettier.config.js",
   "repository": {
