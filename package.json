@@ -12,8 +12,10 @@
     "stylelint": "stylelint --fix --config config/.stylelintrc.json \"addon/**/*.css\"",
     "tsc:clean": "node config/typecheck.js tsc7",
     "typecheck": "node node_modules/typescript7/bin/tsc --build > tsc.local.txt",
+    "typecheck:clean": "node node_modules/typescript7/bin/tsc --build",
     "check:decisions": "node config/check-decisions.mjs"
   },
+  "packageManager": "pnpm@12.4.1",
   "prettier": "./config/prettier.config.js",
   "repository": {
     "type": "git",
