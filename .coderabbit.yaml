@@ -1,0 +1,16 @@
+# CodeRabbit review configuration (free OSS tier).
+# Repo YAML overrides org settings; docs: docs.coderabbit.ai/reference/configuration-template
+#
+# Auto-review is DISABLED deliberately: the free plan allows ~1 review/hour and
+# the bot and CLI share that quota, so every push would burn it on trivial
+# changes. Reviews are triggered on demand via `@coderabbitai review` (or the
+# local `cr` CLI for batched combined-branch reviews). Groq (ai-review.yml)
+# covers the always-on advisory pass instead.
+reviews:
+  # No status comments (e.g. "Review skipped / looks good") while auto_review
+  # is off — keep PRs free of bot chatter; `@coderabbitai review` still works.
+  review_status: false
+  auto_review:
+    enabled: false
+  path_filters:
+    - '!logs/**'
