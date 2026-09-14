@@ -28,3 +28,8 @@ overrides:
 
 blockExoticSubdeps: true
 trustPolicy: no-downgrade
+# semver@6 predates provenance for that major (semver@7 has it), so pnpm's
+# no-downgrade policy flags it as a false-positive "package takeover" —
+# pnpm#10202. Trust is fine; exclude from the policy.
+trustPolicyExclude:
+  - semver@6.3.1
