@@ -6,9 +6,9 @@
  * Validates, against every Firefox channel unpack listed in
  * config/.firefox-link.local.json (plus the active firefox_code.local link):
  *
- * 1. @tabmix-anchor markers — every "File#symbol" anchor written above code copied
- *    from Firefox must still resolve: the file exists in the unpack and the
- *    symbol text is present.
+ * 1. Anchors — every entry in the ANCHORS table (code copied from Firefox must
+ *    still resolve: the file exists in the unpack and the symbol text is
+ *    present; stale table entries whose addon copy is gone are warnings).
  * 2. getPrivateMethod call sites — every `Tabmix.getPrivateMethod({ parentName,
  *    methodName })` target must exist as a `#method` private member in the
  *    parent's source file, in the era where that code path runs.
@@ -59,8 +59,74 @@ const PARENT_FILES = {
   },
 };
 
-const ANCHOR_RE = /@tabmix-anchor\s+([\w./-]+)#([\w.]+)/g;
 const ADDON_EXT = new Set([".js", ".jsm", ".mjs"]);
+
+/**
+ * Anchors — code copied from Firefox source. Each entry pins the addon file
+ * (repo-relative, / separators) to the Firefox file it was copied from.
+ *
+ * Data lives here instead of as comments in the addon sources (the previous
+ *
+ * @type {{
+ *   addonFile: string;
+ *   symbol: string;
+ *   addonSymbol?: string;
+ *   upstream: string;
+ *   diffs: string;
+ * }[]}
+ * @tabmix-anchor JSDoc markers were moved out — they belong to the test, not
+ * to the shipped code); the checker fails when the upstream file or symbol
+ * disappears from a channel's omni unpack. Deliberate diffs from upstream are
+ * documented next to each entry.
+ */
+export const ANCHORS = [
+  {
+    addonFile: "addon/chrome/content/session/sessionStore.js",
+    symbol: "resolveClosedDataSource",
+    addonSymbol: "_resolveClosedDataSource",
+    upstream: "moz-src/browser/components/sessionstore/SessionStore.sys.mjs",
+    diffs:
+      "uses public getWindowState / getClosedWindowData and returns " +
+      "winData.windows[0]; keeps the 'sourceWindow' in source guard",
+  },
+  {
+    addonFile: "addon/chrome/content/session/sessionStore.js",
+    symbol: "getStateForClosedTabsAndClosedGroupTabs",
+    addonSymbol: "_getStateForClosedTabsAndClosedGroupTabs",
+    upstream: "moz-src/browser/components/sessionstore/SessionStore.sys.mjs",
+    diffs: "throws when no tab data exists for aIndex, upstream returns undefined",
+  },
+  {
+    addonFile: "addon/chrome/content/session/sessionStore.js",
+    symbol: "getClosedTabStateFromUnifiedIndex",
+    addonSymbol: "_getClosedTabStateFromUnifiedIndex",
+    upstream: "moz-src/browser/components/sessionstore/SessionStore.sys.mjs",
+    diffs: "identical",
+  },
+  {
+    addonFile: "addon/chrome/content/session/sessionStore.js",
+    symbol: "getPreferredRemoteType",
+    upstream: "moz-src/browser/components/sessionstore/SessionStore.sys.mjs",
+    diffs: "153+ branch identical; the pre-153 E10SUtils branch predates upstream",
+  },
+  {
+    addonFile: "addon/modules/TabmixSvc.sys.mjs",
+    symbol: "parseXULToFragment",
+    upstream: "chrome/toolkit/content/global/customElements.js",
+    diffs:
+      "uses a plain DOMParser (no forceEnableXULXBL) since the forced parser " +
+      "throws with dtd entities from Firefox 153",
+  },
+];
+
+/**
+ * True when the addon file still carries the anchor's symbol — the anchor is
+ * obsolete once the copy is removed or renamed and should be pruned from this
+ * table (a stale entry is reported as a warning).
+ */
+export function addonDeclaresSymbol(src, symbol) {
+  return new RegExp(`(?:^|[^\\w$])${symbol}\\s*\\(`).test(src);
+}
 
 class Report {
   constructor(channel) {
@@ -512,27 +578,46 @@ function gateActiveSomewhereInEra(gates, lo, hi) {
   return [...points].some(v => gates.every(c => evalVersionGate(c, v)));
 }
 
+/**
+ * Anchors: every registered copy must still resolve against the unpack (file
+ *
+ * - symbol), and every registered copy must still exist in the addon (stale
+ *   entries are warnings — prune the table when a copy is removed).
+ */
 function verifyAnchors(report, root) {
-  for (const file of addonFiles()) {
-    const src = fs.readFileSync(file, "utf8");
-    for (const m of src.matchAll(ANCHOR_RE)) {
-      const [, fileRef, symbol] = m;
-      const rel = path.relative(ROOT, file);
-      const target = resolveUnpackFile(root, fileRef);
-      if (!target) {
-        report.failMsg(`anchor ${fileRef}#${symbol}: file not found in unpack (from ${rel})`);
-        continue;
-      }
-      const leaf = symbol.split(".").at(-1);
-      if (!fs.readFileSync(target, "utf8").includes(leaf)) {
-        report.failMsg(
-          `anchor ${fileRef}#${symbol}: symbol "${leaf}" not found in unpack file (from ${rel})`
-        );
-        continue;
-      }
-      report.ok(`anchor ${fileRef}#${symbol}`);
+  for (const anchor of ANCHORS) {
+    const addonSymbol = anchor.addonSymbol ?? anchor.symbol;
+    const addonPath = path.join(ROOT, anchor.addonFile);
+    if (!fs.existsSync(addonPath)) {
+      report.failMsg(`anchor ${addonSymbol}: addon file ${anchor.addonFile} not found`);
+      continue;
     }
+    if (!addonDeclaresSymbol(fs.readFileSync(addonPath, "utf8"), addonSymbol)) {
+      report.warnMsg(
+        `anchor ${addonSymbol}: not found in ${anchor.addonFile} — remove the stale table entry`
+      );
+      continue;
+    }
+
+    const target = resolveUnpackFile(root, anchor.upstream);
+    if (!target) {
+      report.failMsg(`anchor ${addonSymbol}: upstream file ${anchor.upstream} not found in unpack`);
+      continue;
+    }
+    if (!fs.readFileSync(target, "utf8").includes(anchor.symbol)) {
+      report.failMsg(
+        `anchor ${addonSymbol}: upstream symbol "${anchor.symbol}" not found in unpack file ` +
+          `${anchor.upstream} — Firefox renamed it; re-verify the copy against the new source`
+      );
+      continue;
+    }
+    report.ok(`anchor ${addonSymbol} ← ${anchor.upstream}${diffSuffix(anchor)}`);
   }
+}
+
+/** Short human-readable diff note for the report line. */
+function diffSuffix(anchor) {
+  return anchor.diffs && anchor.diffs !== "identical" ? " (diff: " + anchor.diffs + ")" : "";
 }
 
 function verifyCallSites(report, root, era) {

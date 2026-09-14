@@ -31,7 +31,7 @@ Every change merged from a `wip/*` branch must carry its covering test (ADR 0003
 | perf regex/style caching (`wip/perf`)                         | unit: cached vs uncached result equivalence                         |
 | arch: ContentClick re-entrancy fix (`wip/arch`)               | click E2E (ctrl+shift range, re-entrant path)                       |
 | arch: `verifyPrivateMethodReplaced` call-site                 | Changecode unit                                                     |
-| fix-b9 `@tabmix-anchor` markers                               | verify-firefox-internals parses the markers                         |
+| fix-b9 firefox-source copies                                  | verify-firefox-internals checks the ANCHORS table                   |
 | fix-b11 getSandbox lifecycle audit                            | sandbox lifecycle unit                                              |
 | E2E engine itself (`wip/test-suite`)                          | its own smoke suite (dogfood)                                       |
 
