@@ -46,7 +46,13 @@ async function runFile(file) {
   for (const {name: testName, test} of tests) {
     try {
       const ok = await test();
-      if (ok === false) throw new Error("test returned false");
+      // Strict success: the documented contract is `return true` — a test
+      // that falls through with undefined must not count as a green PASS.
+      if (ok !== true) {
+        throw new Error(
+          `test returned ${ok === undefined ? "undefined" : JSON.stringify(ok)} — tests must return true`
+        );
+      }
       counters.passed++;
       console.log(`  PASS: ${testName}`);
     } catch (err) {

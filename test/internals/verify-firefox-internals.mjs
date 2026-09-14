@@ -194,19 +194,46 @@ function unpackRoot(p) {
 function channels(filter) {
   const list = [];
   const active = unpackRoot(path.join(ROOT, "firefox_code.local"));
-  if (active) list.push({key: "active", root: active});
+  if (active) list.push({key: "active", root: active, alias: []});
 
   const cfgPath = path.join(ROOT, "config", ".firefox-link.local.json");
+  let configuredKeys = [];
   if (fs.existsSync(cfgPath)) {
     const cfg = JSON.parse(fs.readFileSync(cfgPath, "utf8"));
+    configuredKeys = Object.keys(cfg.channels ?? {});
     for (const [key, p] of Object.entries(cfg.channels ?? {})) {
       const root = unpackRoot(p);
       if (!root) continue;
-      if (list.some(c => c.root === root)) continue; // same unpack as active
-      list.push({key, root});
+      // Same unpack already reachable under another key (usually via the
+      // active link): keep the alias on the first entry instead of dropping
+      // it, so `--channel <key>` still selects it.
+      const dup = list.find(c => c.root === root);
+      if (dup) {
+        dup.alias.push(key);
+        continue;
+      }
+      list.push({key, root, alias: []});
     }
   }
-  return filter ? list.filter(c => c.key === filter) : list;
+
+  // A requested --channel key must be satisfiable: an unknown key (typo) or
+  // a known key whose unpack cannot be read (stale path) is an error, not a
+  // silent skip — a skipped channel must never yield PASS.
+  if (filter) {
+    const validKeys = new Set(["active", ...configuredKeys]);
+    if (!validKeys.has(filter)) {
+      console.error(`--channel ${filter}: unknown channel (known: ${[...validKeys].join(", ")})`);
+      process.exit(1);
+    }
+    if (!list.some(c => c.key === filter || c.alias.includes(filter))) {
+      console.error(
+        `--channel ${filter}: no readable unpack — check the path in config/.firefox-link.local.json`
+      );
+      process.exit(1);
+    }
+    return list.filter(c => c.key === filter || c.alias.includes(filter));
+  }
+  return list;
 }
 
 /**
@@ -340,9 +367,69 @@ function spreadParentNames(src) {
     const block = balancedBlock(src, m.index + m[0].length - 1);
     if (!block) continue;
     const entry = blockEntries(block).find(e => /^\s*parentName\s*:/.test(e));
-    if (entry) map.set(m[1], stringsIn(entry));
+    // store the raw entry (it may be a version ternary — parsed per site)
+    if (entry) map.set(m[1], entry);
   }
   return map;
+}
+
+/** Split `text` on the given single-char separators at nesting depth 0. */
+function splitTopLevel(text, seps) {
+  const parts = [];
+  let depth = 0;
+  let start = 0;
+  let q = null;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) {
+      if (ch === "\\") i++;
+      else if (ch === q) q = null;
+      continue;
+    }
+    if (ch === '"' || ch === "'" || ch === "`") {
+      q = ch;
+      continue;
+    }
+    if (ch === "(" || ch === "[" || ch === "{") depth++;
+    else if (ch === ")" || ch === "]" || ch === "}") depth--;
+    else if (depth === 0 && seps.includes(ch)) {
+      parts.push(text.slice(start, i));
+      start = i + 1;
+    }
+  }
+  parts.push(text.slice(start));
+  return parts;
+}
+
+/**
+ * Parse a parentName entry into per-branch candidates: `{name, gate}` where
+ * gate is an isVersion condition string (null when unconditional). Handles
+ * ternaries — `cond ? "A" : "B"`, chained (`C1 ? A : C2 ? B : C`) and nested —
+ * by AND-ing the negated conditions of earlier branches, mirroring
+ * composeElseIf. A branch whose condition cannot be negated conservatively
+ * counts as unconditional (over-checked, never silently skipped).
+ */
+export function parseParentCandidates(entry) {
+  const value = entry.replace(/^\s*parentName\s*:/, "").trim();
+  const out = [];
+  const walk = (text, gate) => {
+    const parts = splitTopLevel(text, ["?", ":"]);
+    if (parts.length === 3) {
+      const [cond, thenBranch, elseBranch] = parts;
+      const condText = cond.trim();
+      walk(thenBranch.trim(), gate ? `(${gate}) && (${condText})` : condText);
+      const negated = negateSimple(condText);
+      const elseGate = negated ?? null; // un-negatable → treat as unconditional
+      walk(
+        elseBranch.trim(),
+        gate ? `(${gate}) && (${negated ?? "true"})`.replace(" && (true)", "") : elseGate
+      );
+    } else {
+      for (const s of stringsIn(text)) out.push({name: s, gate});
+    }
+  };
+  walk(value, null);
+  return out;
 }
 
 /** One getPrivateMethod call site extracted from addon source. */
@@ -363,17 +450,31 @@ export function callSites(src) {
     const rawName = /methodName:\s*("([^"]+)"|[A-Za-z_$][\w$]*)/.exec(body)?.[1];
     const methodName = rawName?.startsWith('"') ? rawName.slice(1, -1) : null;
 
-    // parentName candidates: inline value(s) plus every spread object's value(s).
-    const parentNames = [];
+    // parentName candidates: inline value(s) plus every spread object's
+    // value(s), each with the version gate its branch carries.
+    const parentCandidates = [];
     for (const entry of blockEntries(body)) {
-      if (/^\s*parentName\s*:/.test(entry)) parentNames.push(...stringsIn(entry));
+      if (/^\s*parentName\s*:/.test(entry)) parentCandidates.push(...parseParentCandidates(entry));
     }
     for (const sp of body.matchAll(/\.\.\.(\w+)/g)) {
-      if (spreads.has(sp[1])) parentNames.push(...spreads.get(sp[1]));
+      if (spreads.has(sp[1])) parentCandidates.push(...parseParentCandidates(spreads.get(sp[1])));
     }
+    const seen = new Set();
+    const candidates = parentCandidates.filter(c => {
+      const key = `${c.name}\u0000${c.gate ?? ""}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
 
     const line = src.slice(0, m.index).split("\n").length;
-    sites.push({methodName, parentNames: [...new Set(parentNames)], line, offset: m.index});
+    sites.push({
+      methodName,
+      parentNames: candidates.map(c => c.name),
+      parentCandidates: candidates,
+      line,
+      offset: m.index,
+    });
   }
   return sites;
 }
@@ -656,12 +757,15 @@ function verifyCallSites(report, root, era) {
         continue;
       }
 
-      // Era check passes when ANY parentName candidate maps to a file that
-      // declares the private method (the addon picks the parent at runtime).
-      const mapped = site.parentNames
-        .map(p => ({parent: p, eraFile: PARENT_FILES[p]?.[era]}))
+      // Era mapping per candidate. A version-gated candidate is checked only
+      // at Firefox versions where its branch is selected (the runtime picks
+      // the parent by version), so a match in one candidate cannot mask a
+      // rename in the other — but a candidate that is never live on this era
+      // is not required here.
+      const mapped = site.parentCandidates
+        .map(c => ({...c, eraFile: PARENT_FILES[c.name]?.[era]}))
         .filter(c => c.eraFile);
-      if (!site.parentNames.length) {
+      if (!site.parentCandidates.length) {
         report.failMsg(`${rel}:${site.line} ${site.methodName}: parentName not resolvable`);
         continue;
       }
@@ -672,25 +776,52 @@ function verifyCallSites(report, root, era) {
         continue;
       }
 
-      const hasPrivate = mapped.some(
-        c =>
-          fs.existsSync(path.join(root, c.eraFile)) &&
-          new RegExp(`#${site.methodName}\\b`).test(
-            fs.readFileSync(path.join(root, c.eraFile), "utf8")
+      const eraBounds = era === "156+" ? [1560, 9999] : [1020, 1559];
+      const gateAt = (cand, v) => (cand.gate ? evalVersionGate(cand.gate, v) : true);
+      const inEra = v => v >= eraBounds[0] && v <= eraBounds[1];
+      const points = new Set([eraBounds[0], eraBounds[1]]);
+      for (const cand of mapped) {
+        if (!cand.gate) continue;
+        for (const m of cand.gate.matchAll(/isVersion\((\d+)\)/g)) {
+          const n = Number(m[1]);
+          if (inEra(n)) points.add(n);
+          if (inEra(n - 1)) points.add(n - 1);
+        }
+      }
+      const versions = [...points].sort((a, b) => a - b);
+      const activeAt = v => mapped.filter(c => gateAt(c, v));
+      if (!versions.some(v => activeAt(v).length)) {
+        report.skipMsg(
+          `${rel}:${site.line} ${site.methodName} — parent is version-gated off on ${era}`
+        );
+        continue;
+      }
+
+      const failingVersions = versions.filter(
+        v =>
+          activeAt(v).length &&
+          !activeAt(v).every(
+            c =>
+              fs.existsSync(path.join(root, c.eraFile)) &&
+              new RegExp(`#${site.methodName}\\b`).test(
+                fs.readFileSync(path.join(root, c.eraFile), "utf8")
+              )
           )
       );
       checked++;
-      const where = mapped.map(c => `${c.parent} in ${path.basename(c.eraFile)}`).join(" or ");
-      if (hasPrivate) {
+      const where = mapped.map(c => `${c.name} in ${path.basename(c.eraFile)}`).join(" or ");
+      const versionNote = failingVersions.length ? ` (Firefox ${failingVersions.join(", ")})` : "";
+      if (!failingVersions.length) {
         report.ok(`${site.methodName} ← ${where}`);
       } else if (required) {
         report.failMsg(
-          `${site.methodName} ← ${where}: private method not found — Firefox renamed it; ` +
-            `getPrivateMethod will fail at runtime`
+          `${site.methodName} ← ${where}: private method not found${versionNote} — ` +
+            `Firefox renamed it; getPrivateMethod will fail at runtime`
         );
       } else {
         report.warnMsg(
-          `${site.methodName} ← ${where}: not private in ${era} sources (falls back to public methods)`
+          `${site.methodName} ← ${where}: not private in ${era} sources${versionNote} ` +
+            `(falls back to public methods)`
         );
       }
     }

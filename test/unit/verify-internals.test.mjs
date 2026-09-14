@@ -82,12 +82,42 @@ export const tests = [
   {
     name: "balancedBlock handles nested calls and template literals",
     async test() {
-      const src =
-        'getPrivateMethod({parentName: isVersion(1600) ? "a" : "b", methodName: "x(`y`)"})';
+      // A real template literal whose content contains closing delimiters —
+      // the scanner must stay in template mode until the backtick, or the `)`
+      // inside it would end the block early.
+      const src = "getPrivateMethod({methodName: `x) y} z]`})";
       const open = src.indexOf("(");
       const body = balancedBlock(src, open);
-      if (!body.includes('methodName: "x(`y`)"')) {
-        throw new Error(`unbalanced scan: ${JSON.stringify(body)}`);
+      const expected = "{methodName: `x) y} z]`}";
+      if (body !== expected) {
+        throw new Error(
+          `unbalanced scan: expected ${JSON.stringify(expected)}, got ${JSON.stringify(body)}`
+        );
+      }
+      return true;
+    },
+  },
+  {
+    name: "parseParentCandidates gates ternary parentName branches by version",
+    // tabContainerProps.parentName is a ternary: on 156+ BOTH branches are
+    // era-live (1450+ and <1450), so the checker must evaluate each branch at
+    // the Firefox versions where the runtime actually selects it — a match in
+    // one branch must not mask a rename in the other.
+    async test() {
+      const {parseParentCandidates} = await import("../internals/verify-firefox-internals.mjs");
+      const entry =
+        'parentName: Tabmix.isVersion(1450) ? "gBrowser.tabContainer.tabDragAndDrop" : "gBrowser.tabContainer"';
+      const cands = parseParentCandidates(entry);
+      if (cands.length !== 2) {
+        throw new Error(`expected 2 candidates, got ${cands.length}`);
+      }
+      const gated = cands.find(c => c.name.includes("tabDragAndDrop"));
+      if (!gated?.gate || !gated.gate.includes("1450")) {
+        throw new Error(`gated branch missing its condition: ${JSON.stringify(gated)}`);
+      }
+      const plain = cands.find(c => c.name === "gBrowser.tabContainer");
+      if (!plain?.gate || !plain.gate.includes("1450")) {
+        throw new Error(`else branch missing negated condition: ${JSON.stringify(plain)}`);
       }
       return true;
     },
