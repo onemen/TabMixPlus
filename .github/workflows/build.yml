@@ -4,6 +4,13 @@ on:
   push:
     branches: [main]
 
+# Least privilege: the workflow pushes the dev-build tag and edits the
+# release, so `contents: write` is required — but nothing else. The
+# tabmixplus-docs dispatch authenticates with its own TABMIXPLUS_DOCS_TOKEN
+# secret, not github.token.
+permissions:
+  contents: write
+
 # Actions are pinned to full SHAs (supply-chain hardening, review §7); the
 # comment names the tag each SHA points at. Dependabot can refresh these if
 # .github/dependabot.yml is ever added.
