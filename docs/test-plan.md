@@ -125,9 +125,9 @@ in `test/E2E/artifacts/` (gitignored); unit-test output is console-only.
 Anchors for code copied from Firefox live in the `ANCHORS` table at the top of
 `test/internals/verify-firefox-internals.mjs` (upstream file + symbol, addon copy name when it
 differs, documented deliberate diffs) — not as comments in the addon sources. When a copied function
-needs a version branch (`if (Tabmix.isVersion(1600)) … else …`), keep both arms anchored: the
-checker's `activeVersionGates` parser gives `getPrivateMethod` call sites in each arm their own
-gate, and the E2E internals suite exercises whichever arm the running browser takes.
+needs a version branch (`if (Tabmix.isVersion(N)) … else …`, for any real bucket N), keep both arms
+anchored: the checker's `activeVersionGates` parser gives `getPrivateMethod` call sites in each arm
+their own gate, and the E2E internals suite exercises whichever arm the running browser takes.
 
 ## Implementation order
 

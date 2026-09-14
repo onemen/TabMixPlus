@@ -123,17 +123,55 @@ export const tests = [
     },
   },
   {
+    name: "parseParentCandidates handles chained ternaries",
+    async test() {
+      const {parseParentCandidates} = await import("../internals/verify-firefox-internals.mjs");
+      const entry =
+        'parentName: Tabmix.isVersion(1500) ? "parentA" : Tabmix.isVersion(1400) ? "parentB" : "parentC"';
+      const cands = parseParentCandidates(entry);
+      const byName = new Map(cands.map(c => [c.name, c.gate]));
+      if (cands.length !== 3) {
+        throw new Error(`expected 3 candidates, got ${JSON.stringify(cands)}`);
+      }
+      if (!byName.get("parentA")?.includes("1500")) {
+        throw new Error(`parentA gate wrong: ${JSON.stringify(byName)}`);
+      }
+      if (!byName.get("parentB")?.includes("1500") || !byName.get("parentB")?.includes("1400")) {
+        throw new Error(`parentB gate must be (!1500) && (1400): ${JSON.stringify(byName)}`);
+      }
+      if (!byName.get("parentC")?.includes("1400")) {
+        throw new Error(`parentC gate must carry the last negation: ${JSON.stringify(byName)}`);
+      }
+      return true;
+    },
+  },
+  {
+    name: "parseParentCandidates keeps gates through parentheses",
+    async test() {
+      const {parseParentCandidates} = await import("../internals/verify-firefox-internals.mjs");
+      const entry = 'parentName: (Tabmix.isVersion(1450)) ? ("parentA") : ("parentB")';
+      const cands = parseParentCandidates(entry);
+      const a = cands.find(c => c.name === "parentA");
+      if (!a?.gate?.includes("1450")) {
+        throw new Error(`parenthesized then-branch lost its gate: ${JSON.stringify(cands)}`);
+      }
+      return true;
+    },
+  },
+  {
     name: "activeVersionGates parses both arms of an isVersion if/else",
     // Regression guard for version-branch refactors: when a copied Firefox
-    // function gains `if (Tabmix.isVersion(1600)) {new code} else {old code}`,
+    // function gains `if (Tabmix.isVersion(N)) {new code} else {old code}`,
     // a getPrivateMethod call inside EITHER arm must get a gate — else-arms
     // must not inherit the if-arm's condition (this is why the checker keeps
-    // working when you split copied code by Firefox version).
+    // working when you split copied code by Firefox version). N is any real
+    // version bucket (here 1450, like the addon's own code) — the parser is
+    // bucket-agnostic and cannot be tested against future buckets.
     async test() {
       const {activeVersionGates} = await import("../internals/verify-firefox-internals.mjs");
       const src = [
         "function f() {",
-        "  if (Tabmix.isVersion(1600)) {",
+        "  if (Tabmix.isVersion(1450)) {",
         '    h({parentName: "gBrowser", methodName: "newName"});',
         "  } else {",
         '    h({parentName: "gBrowser", methodName: "oldName"});',
@@ -143,7 +181,7 @@ export const tests = [
       const gates = activeVersionGates(src, [src.indexOf("newName"), src.indexOf("oldName")]);
       const [newGate, oldGate] = [...gates.values()];
       const conds = [...gates.values()].flat();
-      if (!conds.some(c => c.includes("isVersion(1600)"))) {
+      if (!conds.some(c => c.includes("isVersion(1450)"))) {
         throw new Error(`no isVersion gate found: ${JSON.stringify([...gates.values()])}`);
       }
       if (newGate.length !== 1 || oldGate.length !== 1) {

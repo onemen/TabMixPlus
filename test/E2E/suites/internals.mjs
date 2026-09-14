@@ -120,7 +120,7 @@ export async function run({browser: channel, binary, headless = true, keepProfil
   try {
     // Inside the try: a populateProfile() failure must hit the finally-block
     // cleanup, not leak the copied profile in the system temp directory.
-    populateProfile(profileDir);
+    await populateProfile(profileDir);
     console.log(`  profile: ${profileDir}`);
 
     ({browser, processTag} = await launchFirefox({binary: exe, profileDir, headless}));

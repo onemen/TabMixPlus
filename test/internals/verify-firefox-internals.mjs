@@ -359,7 +359,8 @@ const stringsIn = text => [...text.matchAll(/"([^"]+)"/g)].map(m => m[1]);
 /**
  * Parse `const NAME = { ... }` object blocks in a file so call sites that
  * spread them (`...tabContainerProps`) can inherit their parentName. Values may
- * be era-dependent ternaries → every string literal is a candidate.
+ * be era-dependent ternaries → the raw parentName entry is stored and parsed
+ * per site by parseParentCandidates.
  */
 function spreadParentNames(src) {
   const map = new Map();
@@ -367,19 +368,19 @@ function spreadParentNames(src) {
     const block = balancedBlock(src, m.index + m[0].length - 1);
     if (!block) continue;
     const entry = blockEntries(block).find(e => /^\s*parentName\s*:/.test(e));
-    // store the raw entry (it may be a version ternary — parsed per site)
     if (entry) map.set(m[1], entry);
   }
   return map;
 }
 
-/** Split `text` on the given single-char separators at nesting depth 0. */
-function splitTopLevel(text, seps) {
-  const parts = [];
+/**
+ * Index of the first of `chars` at bracket/string depth 0, or -1. String-aware
+ * so `?:` inside literals never matches.
+ */
+function topLevelFind(text, chars, from = 0) {
   let depth = 0;
-  let start = 0;
   let q = null;
-  for (let i = 0; i < text.length; i++) {
+  for (let i = from; i < text.length; i++) {
     const ch = text[i];
     if (q) {
       if (ch === "\\") i++;
@@ -392,40 +393,77 @@ function splitTopLevel(text, seps) {
     }
     if (ch === "(" || ch === "[" || ch === "{") depth++;
     else if (ch === ")" || ch === "]" || ch === "}") depth--;
-    else if (depth === 0 && seps.includes(ch)) {
-      parts.push(text.slice(start, i));
-      start = i + 1;
-    }
+    else if (depth === 0 && chars.includes(ch)) return i;
   }
-  parts.push(text.slice(start));
-  return parts;
+  return -1;
+}
+
+/** Strip balanced outer parentheses: `((x))` → `x`; leaves other text alone. */
+function unparen(text) {
+  let t = text.trim();
+  for (;;) {
+    if (!t.startsWith("(")) return t;
+    let depth = 0;
+    let q = null;
+    let close = -1;
+    for (let i = 0; i < t.length; i++) {
+      const ch = t[i];
+      if (q) {
+        if (ch === "\\") i++;
+        else if (ch === q) q = null;
+        continue;
+      }
+      if (ch === '"' || ch === "'" || ch === "`") {
+        q = ch;
+        continue;
+      }
+      if (ch === "(") depth++;
+      else if (ch === ")") {
+        depth--;
+        if (depth === 0) {
+          close = i;
+          break;
+        }
+      }
+    }
+    if (close === t.length - 1) t = t.slice(1, -1).trim();
+    else return t;
+  }
 }
 
 /**
  * Parse a parentName entry into per-branch candidates: `{name, gate}` where
- * gate is an isVersion condition string (null when unconditional). Handles
- * ternaries — `cond ? "A" : "B"`, chained (`C1 ? A : C2 ? B : C`) and nested —
- * by AND-ing the negated conditions of earlier branches, mirroring
- * composeElseIf. A branch whose condition cannot be negated conservatively
- * counts as unconditional (over-checked, never silently skipped).
+ * gate is an isVersion condition string (null when unconditional). Parses the
+ * first top-level `?` and its matching `:` and recurses into both branches, so
+ * chained (`C1 ? A : C2 ? B : C`) and nested/parenthesized ternaries keep their
+ * distinct gates; earlier-branch conditions are AND-negated into the else gate,
+ * mirroring composeElseIf. A branch whose condition cannot be negated
+ * conservatively keeps only its parent gate (over-checked, never silently
+ * skipped).
  */
 export function parseParentCandidates(entry) {
   const value = entry.replace(/^\s*parentName\s*:/, "").trim();
   const out = [];
   const walk = (text, gate) => {
-    const parts = splitTopLevel(text, ["?", ":"]);
-    if (parts.length === 3) {
-      const [cond, thenBranch, elseBranch] = parts;
-      const condText = cond.trim();
-      walk(thenBranch.trim(), gate ? `(${gate}) && (${condText})` : condText);
+    const t = unparen(text);
+    const q = topLevelFind(t, ["?"]);
+    if (q === -1) {
+      for (const s of stringsIn(t)) out.push({name: s, gate});
+      return;
+    }
+    const condText = unparen(t.slice(0, q));
+    const colon = topLevelFind(t, [":"], q + 1);
+    walk(
+      t.slice(q + 1, colon === -1 ? t.length : colon),
+      gate ? `(${gate}) && (${condText})` : condText
+    );
+    if (colon !== -1) {
       const negated = negateSimple(condText);
-      const elseGate = negated ?? null; // un-negatable → treat as unconditional
-      walk(
-        elseBranch.trim(),
-        gate ? `(${gate}) && (${negated ?? "true"})`.replace(" && (true)", "") : elseGate
-      );
-    } else {
-      for (const s of stringsIn(text)) out.push({name: s, gate});
+      // Un-negatable condition → keep only the parent gate (may over-check).
+      let elseGate = negated;
+      if (gate && negated) elseGate = `(${gate}) && (${negated})`;
+      else if (gate) elseGate = gate;
+      walk(t.slice(colon + 1), elseGate);
     }
   };
   walk(value, null);

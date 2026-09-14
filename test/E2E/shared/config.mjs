@@ -134,7 +134,10 @@ export const BROWSER_NAMES = {
 /**
  * Resolve the browser binary for a channel name. Precedence: explicit
  * `--binary=` argument, then `binary.<channel>` from config.local.mjs, then the
- * FIREFOX_BINARY env var, then the per-channel default.
+ * FIREFOX_BINARY env var, then the built-in path for the selected channel. The
+ * channel itself is the `--browser` option, else `defaultBrowser` from
+ * config.local.mjs, else the built-in DEFAULT_BROWSER — so a local
+ * `{defaultBrowser: "release"}` takes effect without --browser.
  *
  * @param {string} [channel] - nightly | dev | beta | release | esr
  * @param {string} [binaryOverride] - absolute path to a browser binary
@@ -142,15 +145,15 @@ export const BROWSER_NAMES = {
  */
 export async function resolveBrowser(channel, binaryOverride) {
   const overrides = await loadLocalOverrides();
+  const selectedChannel = channel || overrides?.defaultBrowser || DEFAULT_BROWSER;
   const value =
     binaryOverride ||
-    (channel && overrides?.binary?.[channel]) ||
+    overrides?.binary?.[selectedChannel] ||
     overrides?.binary?.default ||
     process.env.FIREFOX_BINARY ||
-    FIREFOX_BINARIES[channel || DEFAULT_BROWSER] ||
-    FIREFOX_BINARIES[overrides?.defaultBrowser ?? ""];
+    FIREFOX_BINARIES[selectedChannel];
   if (!value) {
-    throw new Error(`No browser binary for channel "${channel || DEFAULT_BROWSER}"`);
+    throw new Error(`No browser binary for channel "${selectedChannel}"`);
   }
   const exe = value.replace(/\//g, path.sep === "\\" ? "/" : path.sep);
   if (!fs.existsSync(exe)) {

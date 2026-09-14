@@ -16,7 +16,13 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
-import {ADDON_DIR, ARTIFACTS_DIR, PROFILE_PREFS, UCJS_PREFS} from "./config.mjs";
+import {
+  ADDON_DIR,
+  ARTIFACTS_DIR,
+  PROFILE_PREFS,
+  UCJS_PREFS,
+  loadLocalOverrides,
+} from "./config.mjs";
 
 /** The privileged test bridge script (copied into profile chrome/). */
 const BRIDGE_SRC = fileURLToPath(new URL("../bridge/tabmix-e2e.uc.js", import.meta.url));
@@ -26,12 +32,10 @@ const CLIENT_PAGE_SRC = fileURLToPath(new URL("../bridge/client.xhtml", import.m
 const EXTENSION_ID = "{dc572301-7619-498c-a57d-39143191b318}";
 
 /**
- * The reference profile that ships a working userChromeJS utils/ loader.
- * Overridable via TMP_E2E_UTILS_DIR — the reference lives in a per-machine
- * Firefox profile, so another machine must point the factory at its own copy.
+ * Fallback when neither config.local.mjs (`utilsDir`) nor TMP_E2E_UTILS_DIR
+ * provides one.
  */
-const REFERENCE_UTILS_DIR =
-  process.env.TMP_E2E_UTILS_DIR ||
+const DEFAULT_REFERENCE_UTILS_DIR =
   "C:/Users/Hadar/AppData/Roaming/Mozilla/Firefox/Profiles/oxc75ep9.firefox-changes-log/chrome/utils";
 
 /** Files copied from the reference utils dir (loader core only). */
@@ -96,22 +100,30 @@ export function createProfileDir(tag = "tmp") {
 /**
  * Populate a profile dir: utils loader + bridge script + addon copy + user.js.
  *
+ * The userChromeJS loader is copied from a reference profile's chrome/utils
+ * directory — per-machine, so it is resolved as: `utilsDir` from
+ * config.local.mjs, then TMP_E2E_UTILS_DIR, then the built-in default.
+ *
  * @param {string} profileDir - existing (empty) profile dir
  */
-export function populateProfile(profileDir) {
+export async function populateProfile(profileDir) {
+  const overrides = await loadLocalOverrides();
+  const referenceUtilsDir =
+    overrides?.utilsDir || process.env.TMP_E2E_UTILS_DIR || DEFAULT_REFERENCE_UTILS_DIR;
   const chromeDir = path.join(profileDir, "chrome");
   const utilsDir = path.join(chromeDir, "utils");
 
   // 1. userChromeJS loader (from the reference profile).
-  if (!fs.existsSync(REFERENCE_UTILS_DIR)) {
+  if (!fs.existsSync(referenceUtilsDir)) {
     throw new Error(
-      `utils loader dir not found: ${REFERENCE_UTILS_DIR} — set TMP_E2E_UTILS_DIR ` +
-        `to a profile chrome/utils directory (see test/E2E/README.md)`
+      `utils loader dir not found: ${referenceUtilsDir} — set utilsDir in ` +
+        `test/E2E/shared/config.local.mjs (or TMP_E2E_UTILS_DIR) to a profile ` +
+        `chrome/utils directory (see test/E2E/README.md)`
     );
   }
   fs.mkdirSync(utilsDir, {recursive: true});
   for (const name of UTILS_FILES) {
-    const src = path.join(REFERENCE_UTILS_DIR, name);
+    const src = path.join(referenceUtilsDir, name);
     if (!fs.existsSync(src)) {
       throw new Error(`utils loader file missing: ${src}`);
     }
