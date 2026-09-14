@@ -1,4 +1,4 @@
-/// <reference types="./numberinput.d.ts" />
+/// <reference types="./numberInput.d.ts" />
 
 declare var gNumberInput: typeof NumberInput;
 declare function AdjustPopupWidth(event: ReloadWindowEvent): void;

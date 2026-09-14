@@ -1,4 +1,4 @@
-/// <reference types="../../../../@types/numberinput.d.ts" />
+/// <reference types="../../../../@types/numberInput.d.ts" />
 
 /* exported gNumberInput */
 "use strict";

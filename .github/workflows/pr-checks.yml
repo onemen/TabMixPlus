@@ -1,0 +1,64 @@
+name: pr-checks
+
+# PR gate (review §7 "No PR CI at all") + a guard on main itself, where the
+# dev-build workflow publishes an XPI on every push with no checks of its own.
+#
+# Steps are resilient to branch state while the test-suite PR (#579) is open:
+# - `typecheck:clean` is used instead of `typecheck` so errors go to the log
+#   instead of a tsc.local.txt artifact;
+# - the unit-test step runs only when a test:unit script exists (added by #579).
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static-and-unit:
+    name: lint + typecheck + unit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Install pnpm (version from package.json packageManager)
+        uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa # v4
+
+      - name: Setup node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # lint:clean = eslint without --fix and without --cache (nothing to fix
+      # or cache on an ephemeral runner)
+      - name: ESLint
+        run: pnpm lint:clean
+
+      # Plain `tsc --build`: prints errors to the log and exits non-zero
+      # (the local `typecheck` script redirects them into tsc.local.txt)
+      - name: Typecheck
+        run: pnpm typecheck:clean
+
+      # Pure Node — no browsers, no local Firefox unpacks needed. Skipped until
+      # #579 (wip/test-suite) adds the test:unit script.
+      - name: Check for unit runner
+        id: unit
+        run:
+          echo "available=$(node -p "Boolean(require('./package.json').scripts['test:unit'])")" >>
+          "$GITHUB_OUTPUT"
+
+      - name: Unit tests
+        if: steps.unit.outputs.available == 'true'
+        run: pnpm test:unit
