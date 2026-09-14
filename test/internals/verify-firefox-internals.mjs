@@ -199,12 +199,16 @@ function channels(filter) {
 
   const cfgPath = path.join(ROOT, "config", ".firefox-link.local.json");
   let configuredKeys = [];
+  const unreadable = [];
   if (fs.existsSync(cfgPath)) {
     const cfg = JSON.parse(fs.readFileSync(cfgPath, "utf8"));
     configuredKeys = Object.keys(cfg.channels ?? {});
     for (const [key, p] of Object.entries(cfg.channels ?? {})) {
       const root = unpackRoot(p);
-      if (!root) continue;
+      if (!root) {
+        unreadable.push(key);
+        continue;
+      }
       // Same unpack already reachable under another key (usually via the
       // active link): keep the alias on the first entry instead of dropping
       // it, so `--channel <key>` still selects it.
@@ -233,6 +237,16 @@ function channels(filter) {
       process.exit(1);
     }
     return list.filter(c => c.key === filter || c.alias.includes(filter));
+  }
+  // Unfiltered (all-channels) run: a configured channel whose unpack cannot
+  // be read must fail the run instead of silently shrinking the matrix — a
+  // skipped channel must never yield PASS.
+  if (unreadable.length) {
+    console.error(
+      `no readable unpack for configured channel(s): ${unreadable.join(", ")} — ` +
+        `restore it or remove the entry from config/.firefox-link.local.json`
+    );
+    process.exit(1);
   }
   return list;
 }
