@@ -1,7 +1,7 @@
 /**
  * E2E smoke suite — the permanent "is Tabmix alive on Firefox X?" gate: run
  * after every Firefox update and before every merge (P0 tier in
- * docs/test-plan.md).
+ * docs/plan/TEST-PLAN.local.md).
  *
  * 1. A fresh profile is built (utils loader + unpacked addon copy + user.js).
  * 2. Firefox (Nightly by default) launches under puppeteer-core / BiDi.

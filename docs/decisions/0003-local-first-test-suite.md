@@ -11,10 +11,10 @@ that every code change is covered by a test — unit tests for pure logic, E2E t
 WebDriver BiDi) driving real Firefox instances with the legacy loader installed, and an automated
 `verify-firefox-internals` audit against pinned omni unpacks.
 
-The full plan, its priorities, and the per-branch coverage map live in
-[docs/test-plan.md](../test-plan.md) (the living document, committed from the maintainer's
-TEST-PLAN.local.md). The first deliverable — the E2E engine and smoke suite — exists on
-`wip/test-suite` (see `test/E2E/README.md`).
+The full plan, its priorities, and the per-branch coverage map live in the maintainer's local
+`docs/plan/TEST-PLAN.local.md` — deliberately untracked (every `*.local.*` file stays out of the
+repo). The first deliverable — the E2E engine and smoke suite — exists on `wip/test-suite` (see
+`test/E2E/README.md`).
 
 ## Decision
 
@@ -31,7 +31,8 @@ TEST-PLAN.local.md). The first deliverable — the E2E engine and smoke suite �
    verification status — the phase-1 smoke suite was maintainer-verified on Nightly (11/11,
    2026-09-13) before landing.
 4. **No merge without coverage**: once the suite lands on main, every change merged to main carries
-   a test matching its priority tier in docs/test-plan.md (P0 smoke + verify-internals at minimum).
+   a test matching its priority tier in the maintainer's `docs/plan/TEST-PLAN.local.md` (P0 smoke +
+   verify-internals at minimum).
 
 ## Consequences
 

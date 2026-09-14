@@ -1,6 +1,7 @@
 /**
  * E2E internals suite — asserts Tabmix's Firefox-internals integration in the
- * running browser (P0/P1 tier in docs/test-plan.md):
+ * running browser (P0/P1 tier in the maintainer's
+ * docs/plan/TEST-PLAN.local.md):
  *
  * 1. privateMethodTransformState invariant: every `planned` private-method entry
  *    (code that expects a reconstructed `Parent._method`) is present in

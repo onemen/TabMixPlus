@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * verify-firefox-internals — static early-warning that Firefox updates did not
- * break Tabmix's copied/injected code (P0 tier in docs/test-plan.md).
+ * break Tabmix's copied/injected code (P0 tier in
+ * docs/plan/TEST-PLAN.local.md).
  *
  * Validates, against every Firefox channel unpack listed in
  * config/.firefox-link.local.json (plus the active firefox_code.local link):

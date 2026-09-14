@@ -1,9 +1,9 @@
 # Tab Mix Plus — E2E engine (phase 1: local runs)
 
 Runs real Firefox instances against a freshly built Tab Mix Plus profile using `puppeteer-core` +
-WebDriver BiDi. Phase-1 engine of the test suite — see [docs/test-plan.md](../../docs/test-plan.md)
-for priorities and the planned suites; this README covers only the engine: run commands,
-prerequisites, and platform gotchas.
+WebDriver BiDi. Phase-1 engine of the test suite — priorities and the planned suites live in the
+maintainer's local `docs/plan/TEST-PLAN.local.md` (untracked); this README covers only the engine:
+run commands, prerequisites, and platform gotchas.
 
 **Status: smoke suite 11/11 PASS on Firefox Nightly 156+ and official release; verified by the
 maintainer on Windows 11 (2026-09-13).**
@@ -25,9 +25,10 @@ node test/E2E/run.mjs --list                 # list available suites
 `FIREFOX_BINARY` env var also works. Exit code 0 = all checks passed. With `--suite=all` a single
 failing suite does not stop the rest; the final summary and the exit code reflect every suite.
 
-The same entry points exist as pnpm scripts (see the root README table in docs/test-plan.md):
-`pnpm test:e2e --suite=smoke`, `pnpm test:e2e --suite=all`, `pnpm test:unit` (test/unit runner, same
-all-or-single pattern), and `pnpm test:internals` (the static Firefox-internals checker).
+The same entry points exist as pnpm scripts (`pnpm test:e2e`, `pnpm test:unit`,
+`pnpm test:internals` in package.json): `pnpm test:e2e --suite=smoke`, `pnpm test:e2e --suite=all`,
+`pnpm test:unit` (test/unit runner, same all-or-single pattern), and `pnpm test:internals` (the
+static Firefox-internals checker).
 
 ## Prerequisites
 
@@ -55,7 +56,7 @@ test/E2E/
     bridgeClient.mjs   finds the client tab, evalInMain helpers
     assert.mjs         check()/summary()/waitForValue helpers
   suites/
-    smoke.mjs          the P0 gate: Tabmix alive, console clean (see docs/test-plan.md)
+    smoke.mjs          the P0 gate: Tabmix alive, console clean (see TEST-PLAN.local.md)
     internals.mjs      runtime complement of verify-firefox-internals (private-method + sandbox invariants)
   artifacts/           screenshots + failure logs (gitignored)
 ```
