@@ -8,10 +8,12 @@ prerequisites, and platform gotchas.
 **Status: smoke suite 11/11 PASS on Firefox Nightly 156+ and official release; verified by the
 maintainer on Windows 11 (2026-09-13).**
 
-## Run the smoke test
+## Run the E2E suites
 
 ```bash
-node test/E2E/run.mjs --suite=smoke
+node test/E2E/run.mjs --suite=smoke          # one suite (default: smoke)
+node test/E2E/run.mjs --suite=all            # every suite, sequential, summary at the end
+node test/E2E/run.mjs --list                 # list available suites
 # options:
 #   --browser=nightly|dev|beta|release|esr   (default: nightly)
 #   --binary="C:/path/to/firefox.exe"        (explicit exe; wins over --browser)
@@ -20,7 +22,12 @@ node test/E2E/run.mjs --suite=smoke
 #   --list                                   (list suites)
 ```
 
-`FIREFOX_BINARY` env var also works. Exit code 0 = all checks passed.
+`FIREFOX_BINARY` env var also works. Exit code 0 = all checks passed. With `--suite=all` a single
+failing suite does not stop the rest; the final summary and the exit code reflect every suite.
+
+The same entry points exist as pnpm scripts (see the root README table in docs/test-plan.md):
+`pnpm test:e2e --suite=smoke`, `pnpm test:e2e --suite=all`, `pnpm test:unit` (test/unit runner, same
+all-or-single pattern), and `pnpm test:internals` (the static Firefox-internals checker).
 
 ## Prerequisites
 
@@ -49,6 +56,7 @@ test/E2E/
     assert.mjs         check()/summary()/waitForValue helpers
   suites/
     smoke.mjs          the P0 gate: Tabmix alive, console clean (see docs/test-plan.md)
+    internals.mjs      runtime complement of verify-firefox-internals (private-method + sandbox invariants)
   artifacts/           screenshots + failure logs (gitignored)
 ```
 
@@ -121,7 +129,8 @@ Per run the profile factory:
 ## Adding a suite
 
 Create `suites/<name>.mjs` exporting `name` and `async run(opts) => boolean`, using the shared
-helpers. `run.mjs --suite=<name>` picks it up automatically.
+helpers. `run.mjs --suite=<name>` picks it up automatically, and `--suite=all` includes it in the
+next full run.
 
 ## Artifacts
 

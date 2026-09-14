@@ -74,6 +74,14 @@ suite — lives in [docs/test-plan.md](./docs/test-plan.md); decisions in
 [ADR 0003](./docs/decisions/0003-local-first-test-suite.md). Engine details and run commands:
 [test/E2E/README.md](./test/E2E/README.md).
 
+- All unit tests: `pnpm test:unit` · single file: `pnpm test:unit <name-prefix>`
+- All E2E suites: `pnpm test:e2e --suite=all` · one suite: `pnpm test:e2e --suite=<name>`
+- Static Firefox-internals check (all channels): `pnpm test:internals` · one channel:
+  `node test/internals/verify-firefox-internals.mjs --channel nightly`
+
+Anchors for code copied from Firefox live in the `ANCHORS` table in
+`test/internals/verify-firefox-internals.mjs`, not in addon-source comments.
+
 ## Tab Mix Plus
 
 - modify Firefox-specific DOM APIs and XUL/XHTML elements by injecting and replacing firefox
