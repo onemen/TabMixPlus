@@ -93,8 +93,9 @@ Per run the profile factory:
   guarded loop (`if (!(k in this)) …`) and wraps the script in try/catch reporting its fate to the
   `tabmix.e2e.ucjsLoaded` pref (the autoconfig sandbox swallows errors).
 - **`.uc.js` scripts run in a Cu sandbox**, so top-level `window` is not the real chrome window —
-  the bridge resolves everything through `Services.wm`.- Puppeteer overwrites `user.js` at launch;
-  test prefs must go through `extraPrefsFirefox` (the launcher merges `PROFILE_PREFS` there).
+  the bridge resolves everything through `Services.wm`.
+- Puppeteer overwrites `user.js` at launch; test prefs must go through `extraPrefsFirefox` (the
+  launcher merges `PROFILE_PREFS` there).
 - `ignoreDefaultArgs: ["--disable-extensions"]` is mandatory or the sideloaded legacy extension
   never boots; `-remote-allow-system-access` is required for BiDi script evaluation on privileged
   pages.

@@ -52,12 +52,10 @@ export const name = "smoke";
 export async function run({browser: channel, binary, headless = true, keepProfile = false} = {}) {
   const counter = createCounter();
   const channelKey = channel || DEFAULT_BROWSER;
-  const exe = resolveBrowser(channel, binary);
+  const exe = await resolveBrowser(channel, binary);
   console.log(`Smoke suite — browser: ${exe}`);
 
   const profileDir = createProfileDir("smoke");
-  populateProfile(profileDir);
-  console.log(`  profile: ${profileDir}`);
 
   // Phase timing marks - printed only with --timing (or TMP_E2E_TIMING=1).
   const phases = [];
@@ -82,6 +80,11 @@ export async function run({browser: channel, binary, headless = true, keepProfil
   let bridgePage;
 
   try {
+    // Inside the try: a populateProfile() failure must hit the finally-block
+    // cleanup, not leak the copied profile in the system temp directory.
+    populateProfile(profileDir);
+    console.log(`  profile: ${profileDir}`);
+
     mark("profile setup (before launch)");
     ({browser, processTag} = await launchFirefox({binary: exe, profileDir, headless}));
     mark("firefox launch (puppeteer attach)");
@@ -136,6 +139,9 @@ export async function run({browser: channel, binary, headless = true, keepProfil
     }
 
     // 3. Wait for the addon overlay to finish, then exercise gBrowser.
+    // NOT caught: a rejected promiseOverlayLoaded means the overlay failed to
+    // load — the suite must record a failure even if basic gBrowser calls
+    // would still succeed.
     await evalAsyncInMain(
       bridgePage,
       `
@@ -143,7 +149,7 @@ export async function run({browser: channel, binary, headless = true, keepProfil
         await window.Tabmix.promiseOverlayLoaded;
       }
     `
-    ).catch(() => {});
+    );
 
     const tabTest = await evalAsyncInMain(
       bridgePage,

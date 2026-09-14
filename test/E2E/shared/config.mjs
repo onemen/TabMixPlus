@@ -4,14 +4,16 @@
  * Browser binaries follow
  * C:\code\TabMixPlus-Hub\firefox-updater\src\helpers\paths.js (all installed on
  * this machine). A local override file `test/E2E/shared/config.local.mjs` may
- * export a partial deep patch.
+ * export e.g. `{ binary: { nightly: "C:/path/firefox.exe" }, defaultBrowser:
+ * "nightly" }` — consumed by resolveBrowser(), so another machine can point the
+ * suites at its own installs without touching this file.
  */
 
 import fs from "node:fs";
 import path from "node:path";
 import {fileURLToPath, pathToFileURL} from "node:url";
 
-export const TEST_DIR = fileURLToPath(new URL("../..", import.meta.url)); // test/E2E
+export const TEST_DIR = fileURLToPath(new URL("..", import.meta.url)); // test/E2E (this file sits in test/E2E/shared)
 export const REPO_ROOT = fileURLToPath(new URL("../../../", import.meta.url)); // TabMixPlus/
 export const ADDON_DIR = path.join(REPO_ROOT, "addon");
 
@@ -29,7 +31,11 @@ export const FIREFOX_BINARIES = {
 
 export const DEFAULT_BROWSER = process.env.TMP_E2E_BROWSER || "nightly";
 
-export const ARTIFACTS_DIR = path.join(TEST_DIR, "e2e", "artifacts");
+/**
+ * Where failure artifacts (screenshots, logs) go: test/E2E/artifacts — the
+ * directory whose inner .gitignore ignores its own contents.
+ */
+export const ARTIFACTS_DIR = path.join(TEST_DIR, "artifacts");
 
 /** Default profile prefs for every launched test instance. */
 export const PROFILE_PREFS = {
@@ -126,15 +132,23 @@ export const BROWSER_NAMES = {
 }
 
 /**
- * Resolve the browser binary for a channel name; an explicit path wins.
+ * Resolve the browser binary for a channel name. Precedence: explicit
+ * `--binary=` argument, then `binary.<channel>` from config.local.mjs, then the
+ * FIREFOX_BINARY env var, then the per-channel default.
  *
  * @param {string} [channel] - nightly | dev | beta | release | esr
  * @param {string} [binaryOverride] - absolute path to a browser binary
- * @returns {string} absolute path to the browser executable
+ * @returns {Promise<string>} absolute path to the browser executable
  */
-export function resolveBrowser(channel, binaryOverride) {
+export async function resolveBrowser(channel, binaryOverride) {
+  const overrides = await loadLocalOverrides();
   const value =
-    binaryOverride || process.env.FIREFOX_BINARY || FIREFOX_BINARIES[channel || DEFAULT_BROWSER];
+    binaryOverride ||
+    (channel && overrides?.binary?.[channel]) ||
+    overrides?.binary?.default ||
+    process.env.FIREFOX_BINARY ||
+    FIREFOX_BINARIES[channel || DEFAULT_BROWSER] ||
+    FIREFOX_BINARIES[overrides?.defaultBrowser ?? ""];
   if (!value) {
     throw new Error(`No browser binary for channel "${channel || DEFAULT_BROWSER}"`);
   }

@@ -32,7 +32,7 @@ function parseArgs() {
     list: false,
   };
   for (const arg of process.argv.slice(2)) {
-    const m = arg.match(/^--([a-zA-Z]+)(?:=(.*))?$/);
+    const m = arg.match(/^--([a-zA-Z][a-zA-Z-]*)(?:=(.*))?$/);
     if (!m) continue;
     const [, key, value] = m;
     switch (key) {

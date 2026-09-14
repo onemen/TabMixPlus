@@ -104,9 +104,15 @@
       },
       QueryInterface: ChromeUtils.generateQI(["nsIObserver"]),
     };
-    // Only register once per process: mark the console service itself.
-    if (!w.__tabmixE2EProcessListener) {
-      w.__tabmixE2EProcessListener = true; // window-level, may repeat per window
+    // Only register once per PROCESS (not per window — a second window must
+    // not register a duplicate listener that records every message twice).
+    // The flag stores the owning PID, so it is process-scoped by construction:
+    // a kept profile reused by the next run has a different PID and
+    // re-registers cleanly.
+    const listenerFlag = "tabmix.e2e.consoleListenerPid";
+    const pid = String(Services.appinfo.processID);
+    if (Services.prefs.getStringPref(listenerFlag, "") !== pid) {
+      Services.prefs.setStringPref(listenerFlag, pid);
       ConsoleService.registerListener(listener);
       w.__tabmixE2E.consoleListener = listener;
     }

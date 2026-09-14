@@ -52,6 +52,39 @@ import {addonFiles} from "../../internals/verify-firefox-internals.mjs";
 export const name = "internals";
 
 /**
+ * Match one `Parent._member` planned entry against an addon source while
+ * remembering WHICH parent the definition was found in. A match is valid only
+ * when the addon defines `_member` on the same parent the entry names (e.g.
+ * `ParentA._foo = ...` cannot back `ParentB._foo`) — the transform binds the
+ * reconstructed method to the entry's own parent. Definitions through an alias
+ * also count when the alias provably resolves to the entry's parent (e.g.
+ * `this.tabDnDPrototype` for `gBrowser.tabContainer.tabDragAndDrop`).
+ *
+ * @param {string} entry - planned entry like "gBrowser._dataURLRegEx"
+ * @param {string} src - addon source text
+ * @returns {boolean} the source defines _member on the entry's parent
+ */
+function parentMatches(entry, src) {
+  const dot = entry.lastIndexOf(".");
+  const parent = dot === -1 ? entry : entry.slice(0, dot);
+  const leaf = entry.slice(dot + 1).replace(/^_/, "");
+  if (!leaf) return false;
+  const escapedLeaf = leaf.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  // (this.|tabDnDPrototype.|)*_leaf = — dotted parent, this-assignment, the
+  // minit.js tabDnDPrototype alias (assigned the tab container's
+  // drag-and-drop controller / the scrollbox host), or a bare statement.
+  // Unrelated aliases are not inferred.
+  const patterns = [
+    new RegExp(`${esc(parent)}\\._${escapedLeaf}\\s*=`), // Parent._leaf =
+    new RegExp(`(?:^|[^\\w$.])(?:this\\.)?(?:tabDnDPrototype\\.)?_?${escapedLeaf}\\s*=`),
+    new RegExp(`(?:get|set)\\s+_${escapedLeaf}\\b`), // get _leaf() {...}
+    new RegExp(`["'\`]_${escapedLeaf}["'\`]`), // defineProperty("_leaf", ...)
+  ];
+  return patterns.some(re => re.test(src));
+}
+
+/**
  * planned entries can also be satisfied by Tabmix defining the member itself
  * (`gBrowser._dataURLRegEx = …`, `get _verticalMode()`, defineProperty
  * ("_dragSession", …)). An entry is "addon-backed" when some addon source
@@ -61,16 +94,7 @@ export const name = "internals";
  */
 const addonSources = addonFiles().map(f => fs.readFileSync(f, "utf8"));
 function isAddonBacked(entry) {
-  const leaf = entry.split(".").pop()?.replace(/^_/, "") ?? "";
-  if (!leaf) return false;
-  const escaped = leaf.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const patterns = [
-    new RegExp(`_${escaped}\\s*=`), // Parent._name = ...
-    new RegExp(`_${escaped}\\s*:`), // {_name: ...}
-    new RegExp(`(?:get|set)\\s+_${escaped}\\b`), // get _name() {...}
-    new RegExp(`["'\`]_${escaped}["'\`]`), // defineProperty("_name", ...)
-  ];
-  return addonSources.some(src => patterns.some(re => re.test(src)));
+  return addonSources.some(src => parentMatches(entry, src));
 }
 
 /**
@@ -84,18 +108,21 @@ function isAddonBacked(entry) {
 export async function run({browser: channel, binary, headless = true, keepProfile = false} = {}) {
   const counter = createCounter();
   const channelKey = channel || DEFAULT_BROWSER;
-  const exe = resolveBrowser(channel, binary);
+  const exe = await resolveBrowser(channel, binary);
   console.log(`Internals suite — browser: ${exe}`);
 
   const profileDir = createProfileDir("internals");
-  populateProfile(profileDir);
-  console.log(`  profile: ${profileDir}`);
 
   let browser = null;
   let processTag = null;
   let bridgePage;
 
   try {
+    // Inside the try: a populateProfile() failure must hit the finally-block
+    // cleanup, not leak the copied profile in the system temp directory.
+    populateProfile(profileDir);
+    console.log(`  profile: ${profileDir}`);
+
     ({browser, processTag} = await launchFirefox({binary: exe, profileDir, headless}));
     attachProcessLogging(browser, []);
 
@@ -127,6 +154,9 @@ export async function run({browser: channel, binary, headless = true, keepProfil
     );
     check(counter, Boolean(tabmix), "window.Tabmix exists (addon bootstrap ran)");
 
+    // NOT caught: a rejected promiseOverlayLoaded means the overlay failed to
+    // load — the suite must record a failure even if basic gBrowser calls
+    // would still succeed.
     await evalAsyncInMain(
       bridgePage,
       `
@@ -134,7 +164,7 @@ export async function run({browser: channel, binary, headless = true, keepProfil
         await window.Tabmix.promiseOverlayLoaded;
       }
     `
-    ).catch(() => {});
+    );
 
     const state = await evalAsyncInMain(
       bridgePage,

@@ -25,8 +25,13 @@ const CLIENT_PAGE_SRC = fileURLToPath(new URL("../bridge/client.xhtml", import.m
 
 const EXTENSION_ID = "{dc572301-7619-498c-a57d-39143191b318}";
 
-/** The reference profile that ships a working userChromeJS utils/ loader. */
+/**
+ * The reference profile that ships a working userChromeJS utils/ loader.
+ * Overridable via TMP_E2E_UTILS_DIR — the reference lives in a per-machine
+ * Firefox profile, so another machine must point the factory at its own copy.
+ */
 const REFERENCE_UTILS_DIR =
+  process.env.TMP_E2E_UTILS_DIR ||
   "C:/Users/Hadar/AppData/Roaming/Mozilla/Firefox/Profiles/oxc75ep9.firefox-changes-log/chrome/utils";
 
 /** Files copied from the reference utils dir (loader core only). */
@@ -67,14 +72,15 @@ function patchUserChromeGetters(src, dest) {
   }
   // Wrap the whole script and report its fate to a pref (the autoconfig
   // sandbox swallows errors; prefs are the most reliable channel from there).
-  const flagOk =
-    "\n;try { Services.prefs.setStringPref('tabmix.e2e.ucjsLoaded', 'ok'); } catch (e) {}\n";
+  // The ok flag is written ONLY on the success path — a catch must not be
+  // overwritten by the trailing ok flag.
+  const flagOk = "\n;Services.prefs.setStringPref('tabmix.e2e.ucjsLoaded', 'ok');\n";
   const flagErr =
     "  try {\n" +
     "    Services.prefs.setStringPref('tabmix.e2e.ucjsLoaded',\n" +
     "      'ERR: ' + e.message + ' @ ' + (e.filename || '?') + ':' + (e.lineNumber || '?'));\n" +
     "  } catch (e2) {}\n";
-  fs.writeFileSync(dest, "try {\n" + patched + "\n} catch (e) {\n" + flagErr + "}" + flagOk);
+  fs.writeFileSync(dest, "try {\n" + patched + flagOk + "\n} catch (e) {\n" + flagErr + "}");
 }
 
 /**
@@ -97,6 +103,12 @@ export function populateProfile(profileDir) {
   const utilsDir = path.join(chromeDir, "utils");
 
   // 1. userChromeJS loader (from the reference profile).
+  if (!fs.existsSync(REFERENCE_UTILS_DIR)) {
+    throw new Error(
+      `utils loader dir not found: ${REFERENCE_UTILS_DIR} — set TMP_E2E_UTILS_DIR ` +
+        `to a profile chrome/utils directory (see test/E2E/README.md)`
+    );
+  }
   fs.mkdirSync(utilsDir, {recursive: true});
   for (const name of UTILS_FILES) {
     const src = path.join(REFERENCE_UTILS_DIR, name);
