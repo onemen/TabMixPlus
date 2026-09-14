@@ -34,6 +34,11 @@ node_modules/
 **/sysmjs.txt
 **/usedmjs.json
 
+# typecheck.js artifacts (last_run cache is only *.local.* via the global
+# gitignore; CI and fresh clones need repo-level rules)
+tsc.local.txt
+config/last_run.local.json
+
 #hide test folder
 test/*
 

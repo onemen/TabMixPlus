@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
 
+# Actions are pinned to full SHAs (supply-chain hardening, review §7); the
+# comment names the tag each SHA points at. Dependabot can refresh these if
+# .github/dependabot.yml is ever added.
 env:
   XPI_NAME: tab_mix_plus-dev-build
   PREVIOUS_TAG: ""
@@ -17,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           fetch-depth: 0
           ref: main
@@ -54,7 +57,7 @@ jobs:
 
       - name: Create CHANGELOG
         if: ${{ steps.set_version.outputs.CHANGELOG_EXIST == 'true' }}
-        uses: requarks/changelog-action@v1.10.3
+        uses: requarks/changelog-action@b78a3354a01f4a1affb484b9264b506a815c46b1 # v1.10.3
         with:
           token: ${{ github.token }}
           fromTag: "dev-build"
