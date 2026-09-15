@@ -1,7 +1,7 @@
 /**
  * E2E smoke suite — the permanent "is Tabmix alive on Firefox X?" gate: run
  * after every Firefox update and before every merge (P0 tier in
- * docs/plan/TEST-PLAN.local.md).
+ * docs/test-plan.md).
  *
  * 1. A fresh profile is built (utils loader + unpacked addon copy + user.js).
  * 2. Firefox (Nightly by default) launches under puppeteer-core / BiDi.
@@ -13,6 +13,9 @@
  * 5. Basic tab operations work through gBrowser in the real window.
  * 6. Console is clean of addon errors (captured by the bridge) — catches failed
  *    getPrivateMethod reconstructions and sandbox scope changes at boot.
+ *
+ * Artifacts are failure-only: a failed run saves a window screenshot plus the
+ * process log to test/E2E/artifacts/; a green run leaves nothing behind.
  */
 
 import path from "node:path";
@@ -197,16 +200,6 @@ export async function run({browser: channel, binary, headless = true, keepProfil
       for (const e of realErrors) console.log(`    - ${e.text.slice(0, 200)}`);
     }
     mark("console error check");
-
-    // 5. Screenshot artifact (best effort).
-    const shot = await screenshotMain(bridgePage);
-    if (shot) {
-      const fs = await import("node:fs");
-      const out = path.join(artifactsDir(), `smoke-${Date.now()}.png`);
-      fs.writeFileSync(out, Buffer.from(shot.split(",")[1], "base64"));
-      console.log(`  screenshot: ${path.relative(process.cwd(), out)}`);
-    }
-    mark("screenshot");
   } catch (err) {
     check(counter, false, "smoke suite completed without exception", String(err));
     try {
@@ -220,6 +213,23 @@ export async function run({browser: channel, binary, headless = true, keepProfil
     }
   } finally {
     mark("teardown start");
+    // Failure-only screenshot artifact: no test consumes the image, so a green
+    // run leaves no smoke-*.png in test/E2E/artifacts/. Runs here, before
+    // closeBrowser, so failures from checks AND from the catch block are both
+    // covered (a thrown exception already incremented counter.failed there).
+    if (counter.failed > 0) {
+      try {
+        const shot = await screenshotMain(bridgePage);
+        if (shot) {
+          const fs = await import("node:fs");
+          const out = path.join(artifactsDir(), `smoke-failure-${Date.now()}.png`);
+          fs.writeFileSync(out, Buffer.from(shot.split(",")[1], "base64"));
+          console.log(`  failure screenshot: ${path.relative(process.cwd(), out)}`);
+        }
+      } catch {
+        // best effort — artifact capture must not mask the original failure
+      }
+    }
     await closeBrowser(browser, processTag ? [processTag] : []);
     mark("browser close");
     if (!keepProfile) {

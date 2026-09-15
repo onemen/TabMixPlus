@@ -70,8 +70,8 @@ An unpack must contain `chrome/browser/content/browser/browser.xhtml`; 156+ unpa
 ## Testing
 
 The test plan — priority tiers, the coverage rule for worktree changes, and the local-first E2E
-suite — lives in the maintainer's local `docs/plan/TEST-PLAN.local.md` (deliberately untracked, like
-every `*.local.*` file); decisions in [ADR 0003](./docs/decisions/0003-local-first-test-suite.md).
+suite — is committed at [docs/test-plan.md](./docs/test-plan.md) (single source of truth; edit it,
+never a `*.local.*` copy); decisions in [ADR 0003](./docs/decisions/0003-local-first-test-suite.md).
 Engine details and run commands: [test/E2E/README.md](./test/E2E/README.md).
 
 - All unit tests: `pnpm test:unit` · single file: `pnpm test:unit <name-prefix>`

@@ -1,9 +1,9 @@
 # Tab Mix Plus — E2E engine (phase 1: local runs)
 
 Runs real Firefox instances against a freshly built Tab Mix Plus profile using `puppeteer-core` +
-WebDriver BiDi. Phase-1 engine of the test suite — priorities and the planned suites live in the
-maintainer's local `docs/plan/TEST-PLAN.local.md` (untracked); this README covers only the engine:
-run commands, prerequisites, and platform gotchas.
+WebDriver BiDi. Phase-1 engine of the test suite — priorities and the planned suites live in
+[docs/test-plan.md](../../docs/test-plan.md); this README covers only the engine: run commands,
+prerequisites, and platform gotchas.
 
 **Status: smoke suite 11/11 PASS on Firefox Nightly 156+ and official release; verified by the
 maintainer on Windows 11 (2026-09-13).**
@@ -56,7 +56,7 @@ test/E2E/
     bridgeClient.mjs   finds the client tab, evalInMain helpers
     assert.mjs         check()/summary()/waitForValue helpers
   suites/
-    smoke.mjs          the P0 gate: Tabmix alive, console clean (see TEST-PLAN.local.md)
+    smoke.mjs          the P0 gate: Tabmix alive, console clean (see docs/test-plan.md)
     internals.mjs      runtime complement of verify-firefox-internals (private-method + sandbox invariants)
   artifacts/           screenshots + failure logs (gitignored)
 ```
@@ -136,5 +136,9 @@ next full run.
 
 ## Artifacts
 
-`test/E2E/artifacts/` receives screenshots and, on a crash, the captured Firefox stdout/stderr log.
+`test/E2E/artifacts/` is **failure-only** — a green run leaves nothing behind. A failed run saves:
+
+- `smoke-failure-<ts>.png` — window screenshot (smoke suite, taken at teardown)
+- `smoke-failure-<ts>.log` — captured Firefox stdout/stderr (smoke suite, on exception)
+
 The directory is gitignored.
