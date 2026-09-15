@@ -78,7 +78,15 @@ Per run the profile factory:
    updates off, …). Note puppeteer **overwrites** `user.js` at launch — prefs that must reach
    Firefox go through `extraPrefsFirefox` in `launchFirefox()`, including
    `extensions.tabmix.version` (pre-set to the real addon version from `install.rdf` so the "New
-   Version Installed" update page never opens).
+   Version Installed" update page never opens),
+7. seeds `datareporting/state.json` with Firefox's CANARY identifiers — with telemetry upload
+   disabled, Firefox converges all IDs to canary constants anyway (TelemetryController calls
+   `setCanaryIdentifiers()`), so seeding starts each run at the converged state. The
+   `Toolkit .Telemetry ERROR ClientID::updateClientID - invalid client ID: null` boot errors are a
+   separate mechanism, fixed by pre-setting `datareporting.usage.uploadEnabled: false` in
+   PROFILE_PREFS (see config.mjs): the remote agent forces that pref at runtime, the resulting
+   change event fires UsageReporting's falling edge, and its canary save runs before ClientID's
+   async load — persisting `clientID: null` into the state file it then reads.
 
 ## Hard-won facts about the platform (do not relearn these)
 

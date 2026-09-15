@@ -57,6 +57,13 @@ export const PROFILE_PREFS = {
   "browser.startup.page": 0,
   "datareporting.policy.dataSubmissionEnabled": false,
   "datareporting.healthreport.uploadEnabled": false,
+  // Set here (not just forced by the remote agent at runtime) so the agent's
+  // runtime set is a NO-OP: a true->false change fires UsageReporting's
+  // falling-edge observer, whose canary save runs before ClientID's async load
+  // and persists clientID: null into datareporting/state.json — the load then
+  // logs `ClientID::updateClientID - invalid client ID: null` (+ group twin).
+  // With the pref already false at startup there is no change event at all.
+  "datareporting.usage.uploadEnabled": false,
   "app.shield.optoutstudies.enabled": false,
   "toolkit.telemetry.reportingpolicy.firstRun": false,
   "browser.newtabpage.activity-stream.feeds.telemetry": false,
@@ -73,6 +80,21 @@ export const PROFILE_PREFS = {
   "browser.warnOnQuit": false,
   "browser.startup.homepage": "about:blank",
   "services.settings.server": "data:{[]}",
+  // silence the boot-time "Disabling Shield because app.normandy.api_url is
+  // not set" Browser-Console warning (normandy is never used in tests)
+  "app.normandy.enabled": false,
+
+  // CANARY usage-profile identifiers (ClientID.sys.mjs). With upload disabled,
+  // UsageReporting compares the CACHED usage-profile pref against the canary:
+  // absent pref -> it calls setCanaryUsageProfileIdentifiers(), whose save runs
+  // before ClientID's async load and persists clientID: null into
+  // datareporting/state.json — the next load then logs
+  // `ClientID::updateClientID - invalid client ID: null` (+ profile-group
+  // twin). Pre-seeding the cached prefs pins the converged state so
+  // UsageReporting takes its "no action" branch. Must go through
+  // extraPrefsFirefox (puppeteer overwrites the profile's user.js).
+  "datareporting.dau.cachedUsageProfileID": "beefbeef-beef-beef-beef-beeefbeefbee",
+  "datareporting.dau.cachedUsageProfileGroupID": "b0bacafe-b0ba-cafe-b0ba-cafeb0bacafe",
 };
 
 /** userChromeJS loader prefs (written only when utils/ is installed). */

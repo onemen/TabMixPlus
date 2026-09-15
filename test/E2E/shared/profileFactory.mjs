@@ -6,6 +6,7 @@
  * 3. `extensions/{dc572301-7619-498c-a57d-39143191b318}` (Tab Mix Plus, UNPACKED
  *    COPY)
  * 4. user.js with deterministic prefs
+ * 5. `datareporting/state.json` with valid UUIDs (see seedDataReportingState)
  *
  * NOTE: the addon is _copied_ (never linked) into the profile.
  * Symlinks/junctions from /addon previously caused the working copy to be
@@ -180,6 +181,43 @@ export async function populateProfile(profileDir) {
   };
   const lines = Object.entries(prefs).map(([k, v]) => prefLine(k, v));
   fs.writeFileSync(path.join(profileDir, "user.js"), lines.join("\n") + "\n");
+
+  seedDataReportingState(profileDir);
+}
+
+/**
+ * Pre-seed `<profile>/datareporting/state.json` with the CANARY identifiers.
+ *
+ * Why: telemetry upload is disabled in test profiles (PROFILE_PREFS), and with
+ * upload disabled Firefox CONVERGES every identifier to a known canary constant
+ * (ClientID.sys.mjs): TelemetryController delayed-init calls
+ * setCanaryIdentifiers() when it sees a non-canary client ID. Seeding the
+ * canary values directly starts every run at that converged state — no
+ * regeneration churn, and the values are by-design non-identifying. (The
+ * `invalid client ID: null` boot errors are prevented separately, by
+ * pre-setting `datareporting.usage.uploadEnabled: false` in PROFILE_PREFS — see
+ * config.mjs — so the remote agent's runtime set is a no-op and
+ * UsageReporting's falling-edge canary save never runs mid-boot.)
+ *
+ * Shape mirrors _saveDataReportingState (version 2 + four UUID fields).
+ *
+ * @param {string} profileDir
+ */
+function seedDataReportingState(profileDir) {
+  const state = {
+    version: 2,
+    // CANARY_CLIENT_ID / CANARY_PROFILE_GROUP_ID (ClientID.sys.mjs)
+    clientID: "c0ffeec0-ffee-c0ff-eec0-ffeec0ffeec0",
+    profileGroupID: "decafdec-afde-cafd-ecaf-decafdecafde",
+    // CANARY_USAGE_PROFILE_ID / CANARY_USAGE_PROFILE_GROUP_ID
+    usageProfileID: "beefbeef-beef-beef-beef-beeefbeefbee",
+    usageProfileGroupID: "b0bacafe-b0ba-cafe-b0ba-cafeb0bacafe",
+  };
+  fs.mkdirSync(path.join(profileDir, "datareporting"), {recursive: true});
+  fs.writeFileSync(
+    path.join(profileDir, "datareporting", "state.json"),
+    JSON.stringify(state, null, 2)
+  );
 }
 
 /**
