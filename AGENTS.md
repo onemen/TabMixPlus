@@ -67,6 +67,21 @@ An unpack must contain `chrome/browser/content/browser/browser.xhtml`; 156+ unpa
 - our overrides of firefox types are in `@types/overrideGecko.d.ts`
 - run `tsc --build` to check types; it prints errors to the terminal
 
+## Testing
+
+The test plan — priority tiers, the coverage rule for worktree changes, and the local-first E2E
+suite — is committed at [docs/test-plan.md](./docs/test-plan.md) (single source of truth; edit it,
+never a `*.local.*` copy); decisions in [ADR 0003](./docs/decisions/0003-local-first-test-suite.md).
+Engine details and run commands: [test/E2E/README.md](./test/E2E/README.md).
+
+- All unit tests: `pnpm test:unit` · single file: `pnpm test:unit <name-prefix>`
+- All E2E suites: `pnpm test:e2e --suite=all` · one suite: `pnpm test:e2e --suite=<name>`
+- Static Firefox-internals check (all channels): `pnpm test:internals` · one channel:
+  `node test/internals/verify-firefox-internals.mjs --channel nightly`
+
+Anchors for code copied from Firefox live in the `ANCHORS` table in
+`test/internals/verify-firefox-internals.mjs`, not in addon-source comments.
+
 ## Tab Mix Plus
 
 - modify Firefox-specific DOM APIs and XUL/XHTML elements by injecting and replacing firefox

@@ -13,7 +13,10 @@
     "tsc:clean": "node config/typecheck.js tsc7",
     "typecheck": "node node_modules/typescript7/bin/tsc --build > tsc.local.txt",
     "typecheck:clean": "node node_modules/typescript7/bin/tsc --build",
-    "check:decisions": "node config/check-decisions.mjs"
+    "check:decisions": "node config/check-decisions.mjs",
+    "test:internals": "node test/internals/verify-firefox-internals.mjs",
+    "test:unit": "node test/unit/run.mjs",
+    "test:e2e": "node test/E2E/run.mjs"
   },
   "packageManager": "pnpm@12.4.1",
   "prettier": "./config/prettier.config.js",
@@ -44,6 +47,7 @@
     "husky": "^9.1.7",
     "prettier": "^3.9.6",
     "prettier-plugin-jsdoc": "^1.8.1",
+    "puppeteer-core": "25.10.0",
     "stylelint": "^17.15.0",
     "stylelint-config-standard": "^40.0.0",
     "typescript": "^6.0.3",
