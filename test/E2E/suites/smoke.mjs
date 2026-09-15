@@ -27,12 +27,7 @@ import {
   BROWSER_NAMES,
   readBrowserInfo,
 } from "../shared/config.mjs";
-import {
-  createProfileDir,
-  populateProfile,
-  deleteProfile,
-  artifactsDir,
-} from "../shared/profileFactory.mjs";
+import {createProfileDir, populateProfile, deleteProfile} from "../shared/profileFactory.mjs";
 import {launchFirefox, attachProcessLogging, closeBrowser} from "../shared/launch.mjs";
 import {
   openBridgePage,
@@ -43,6 +38,26 @@ import {
 } from "../shared/bridgeClient.mjs";
 
 export const name = "smoke";
+
+/**
+ * Write the failure process log to test/E2E/artifacts/ (best effort — artifact
+ * capture must never mask the original failure).
+ *
+ * @param {string[]} procLogs - captured process output lines
+ * @returns {string | null} written path or null
+ */
+async function writeFailureLog(procLogs) {
+  try {
+    const fs = await import("node:fs");
+    fs.mkdirSync(ARTIFACTS_DIR, {recursive: true});
+    const logPath = path.join(ARTIFACTS_DIR, `smoke-failure-${Date.now()}.log`);
+    fs.writeFileSync(logPath, procLogs.join("\n"));
+    console.error(`  process log written to: ${logPath}`);
+    return logPath;
+  } catch {
+    return null;
+  }
+}
 
 /**
  * @param {object} opts
@@ -211,27 +226,21 @@ export async function run({
     mark("console error check");
   } catch (err) {
     check(counter, false, "smoke suite completed without exception", String(err));
-    try {
-      const fs = await import("node:fs");
-      fs.mkdirSync(ARTIFACTS_DIR, {recursive: true});
-      const logPath = path.join(ARTIFACTS_DIR, `smoke-failure-${Date.now()}.log`);
-      fs.writeFileSync(logPath, procLogs.join("\n"));
-      console.error(`  process log written to: ${logPath}`);
-    } catch {
-      // ignore
-    }
+    await writeFailureLog(procLogs);
   } finally {
     mark("teardown start");
-    // Failure-only screenshot artifact: no test consumes the image, so a green
-    // run leaves no smoke-*.png in test/E2E/artifacts/. Runs here, before
-    // closeBrowser, so failures from checks AND from the catch block are both
-    // covered (a thrown exception already incremented counter.failed there).
+    // Failure-only artifacts: no test consumes them, so a green run leaves
+    // nothing in test/E2E/artifacts/. Runs here, before closeBrowser, so
+    // failures from checks AND from the catch block are both covered
+    // (check() only counts, it does not throw; a thrown exception already
+    // incremented counter.failed in the catch above).
     if (counter.failed > 0) {
+      await writeFailureLog(procLogs);
       try {
         const shot = await screenshotMain(bridgePage);
         if (shot) {
           const fs = await import("node:fs");
-          const out = path.join(artifactsDir(), `smoke-failure-${Date.now()}.png`);
+          const out = path.join(ARTIFACTS_DIR, `smoke-failure-${Date.now()}.png`);
           fs.writeFileSync(out, Buffer.from(shot.split(",")[1], "base64"));
           console.log(`  failure screenshot: ${path.relative(process.cwd(), out)}`);
         }

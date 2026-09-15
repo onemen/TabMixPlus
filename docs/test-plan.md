@@ -12,10 +12,10 @@ currently in flight. Decisions (repo-local tests, local-first, CI later) are rec
 > (`pnpm test:unit`, seeded with verify-internals unit tests), the static verify-firefox-internals
 > check, and the `pr-checks` workflow (lint + typecheck + unit on PRs and pushes to main) exist —
 > see [test/E2E/README.md](../test/E2E/README.md) for how the engine works and
-> [Local runs](#local-runs) for the commands. The smoke suite passed 11/11 on Firefox Nightly,
-> verified manually on Windows 11 (2026-09-13); `--suite=all` (internals + smoke) passed on
-> 2026-09-14. Remaining before the coverage rule activates: the P1 unit inventories and the P2
-> suites.
+> [Local developer experience](#8-local-developer-experience) for the commands. The smoke suite
+> passed 11/11 on Firefox Nightly, verified manually on Windows 11 (2026-09-13); `--suite=all`
+> (internals + smoke) passed on 2026-09-14. Remaining before the coverage rule activates: the P1
+> unit inventories and the P2 suites.
 
 ## Priority tiers
 
@@ -99,8 +99,8 @@ local) will:
 ```
 test/
   unit/                  # *.test.mjs (zero-dependency runner: test/unit/run.mjs)
-  e2e/
-    shared/              # profileFactory.mjs, launch.mjs, bridge-client.mjs, run.mjs
+  E2E/
+    shared/              # profileFactory.mjs, launch.mjs, bridgeClient.mjs, run.mjs
     suites/              # smoke.mjs (exists), internals.mjs (exists), tabs.mjs, click.mjs,
                          # dragdrop.mjs, links.mjs, prefs.mjs, session.mjs, places.mjs, flst.mjs,
                          # autoreload.mjs, titlebar.mjs, fluent.mjs
@@ -184,7 +184,7 @@ test/
 | **Floorp (latest)**            | —                | ✅            | fork; advisory status                            |
 | **LibreWolf (latest)**         | —                | ✅            | fork; advisory status                            |
 
-Mozilla builds = required checks; the five forks = advisory (failures report issues but don't gate).
+Mozilla builds = required checks; the four forks = advisory (failures report issues but don't gate).
 Browser resolvers follow firefox-updater `get_download_url.js` / firefox-scripts `downloads.mjs`
 patterns (Nightly/Dev/official/ESR via `download.mozilla.org`; forks via their release feeds).
 

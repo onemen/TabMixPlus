@@ -232,6 +232,11 @@ async function waitForManualClose(browser) {
     "  --keep-open: browser left open for inspection; close the window (or Ctrl+C the runner) to continue teardown."
   );
   const proc = browser.process();
+  // Already exited (or signaled) before we got here? Don't install listeners
+  // that may never fire again — resolve immediately.
+  if (proc && (proc.exitCode !== null || proc.signalCode !== null || proc.killed)) {
+    return;
+  }
   await new Promise(resolve => {
     let done = false;
     const finish = () => {

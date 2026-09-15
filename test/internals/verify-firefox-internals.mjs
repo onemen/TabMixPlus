@@ -446,14 +446,46 @@ function unparen(text) {
 }
 
 /**
+ * Find the colon that terminates the ternary whose `?` sits at `qPos` — i.e.
+ * skip over nested ternaries (`C1 ? C2 ? "A" : "B" : "C"` must return the
+ * SECOND colon) while respecting nesting depth and string literals. Returns -1
+ * when the ternary has no matching colon (then-branch to end of text).
+ */
+function matchingColon(text, qPos) {
+  let depth = 0;
+  let q = null;
+  for (let i = qPos + 1; i < text.length; i++) {
+    const ch = text[i];
+    if (q) {
+      if (ch === "\\") i++;
+      else if (ch === q) q = null;
+      continue;
+    }
+    if (ch === '"' || ch === "'" || ch === "`") {
+      q = ch;
+      continue;
+    }
+    if (ch === "(" || ch === "[" || ch === "{") depth++;
+    else if (ch === ")" || ch === "]" || ch === "}") depth--;
+    else if (ch === "?")
+      depth++; // nested ternary opens
+    else if (ch === ":") {
+      if (depth === 0) return i;
+      depth--; // ...and its colon closes it
+    }
+  }
+  return -1;
+}
+
+/**
  * Parse a parentName entry into per-branch candidates: `{name, gate}` where
  * gate is an isVersion condition string (null when unconditional). Parses the
- * first top-level `?` and its matching `:` and recurses into both branches, so
- * chained (`C1 ? A : C2 ? B : C`) and nested/parenthesized ternaries keep their
- * distinct gates; earlier-branch conditions are AND-negated into the else gate,
- * mirroring composeElseIf. A branch whose condition cannot be negated
- * conservatively keeps only its parent gate (over-checked, never silently
- * skipped).
+ * first top-level `?` and its MATCHING `:` (skipping nested ternaries) and
+ * recurses into both branches, so chained (`C1 ? A : C2 ? B : C`), nested (`C1
+ * ? C2 ? A : B : C`), and parenthesized ternaries keep their distinct gates;
+ * earlier-branch conditions are AND-negated into the else gate, mirroring
+ * composeElseIf. A branch whose condition cannot be negated conservatively
+ * keeps only its parent gate (over-checked, never silently skipped).
  */
 export function parseParentCandidates(entry) {
   const value = entry.replace(/^\s*parentName\s*:/, "").trim();
@@ -466,7 +498,7 @@ export function parseParentCandidates(entry) {
       return;
     }
     const condText = unparen(t.slice(0, q));
-    const colon = topLevelFind(t, [":"], q + 1);
+    const colon = matchingColon(t, q);
     walk(
       t.slice(q + 1, colon === -1 ? t.length : colon),
       gate ? `(${gate}) && (${condText})` : condText

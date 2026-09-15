@@ -28,6 +28,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # no authenticated git operation in this job; pnpm runs repo scripts
+          persist-credentials: false
 
       - name: Install pnpm (version from package.json packageManager)
         uses: pnpm/action-setup@d9184bf108216479bc5a137cc391f4d7b14c870b # v6.1.0

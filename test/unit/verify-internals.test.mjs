@@ -136,11 +136,56 @@ export const tests = [
       if (!byName.get("parentA")?.includes("1500")) {
         throw new Error(`parentA gate wrong: ${JSON.stringify(byName)}`);
       }
-      if (!byName.get("parentB")?.includes("1500") || !byName.get("parentB")?.includes("1400")) {
+      // Exact polarity: parentB must be (!1500) && (1400) — a substring check
+      // would accept a lost or flipped negation.
+      const parentB = byName.get("parentB");
+      if (
+        !parentB?.includes("!Tabmix.isVersion(1500)") ||
+        !parentB.includes("(Tabmix.isVersion(1400))")
+      ) {
         throw new Error(`parentB gate must be (!1500) && (1400): ${JSON.stringify(byName)}`);
       }
-      if (!byName.get("parentC")?.includes("1400")) {
+      const parentC = byName.get("parentC");
+      if (
+        !parentC?.includes("!Tabmix.isVersion(1500)") ||
+        !parentC.includes("!Tabmix.isVersion(1400)")
+      ) {
         throw new Error(`parentC gate must carry the last negation: ${JSON.stringify(byName)}`);
+      }
+      return true;
+    },
+  },
+  {
+    name: "parseParentCandidates matches the colon of nested then-branch ternaries",
+    // C1 ? (C2 ? A : B) : C — the colon finder must skip the nested ternary and
+    // pair C1 with the SECOND colon, so B gets gate (C1 && !C2) — not !C1 —
+    // and C stays gated only by !C1.
+    async test() {
+      const {parseParentCandidates} = await import("../internals/verify-firefox-internals.mjs");
+      const entry =
+        'parentName: Tabmix.isVersion(1500) ? Tabmix.isVersion(1400) ? "parentA" : "parentB" : "parentC"';
+      const cands = parseParentCandidates(entry);
+      const byName = new Map(cands.map(c => [c.name, c.gate]));
+      if (cands.length !== 3) {
+        throw new Error(`expected 3 candidates, got ${JSON.stringify(cands)}`);
+      }
+      const parentA = byName.get("parentA");
+      if (
+        !parentA?.includes("(Tabmix.isVersion(1500))") ||
+        !parentA.includes("(Tabmix.isVersion(1400))")
+      ) {
+        throw new Error(`parentA gate must be (1500) && (1400): ${JSON.stringify(byName)}`);
+      }
+      const parentB = byName.get("parentB");
+      if (
+        !parentB?.includes("!Tabmix.isVersion(1400)") ||
+        !parentB.includes("(Tabmix.isVersion(1500))")
+      ) {
+        throw new Error(`parentB gate must be (1500) && (!1400): ${JSON.stringify(byName)}`);
+      }
+      const parentC = byName.get("parentC");
+      if (!parentC?.includes("!Tabmix.isVersion(1500)") || parentC.includes("1400")) {
+        throw new Error(`parentC gate must be !1500 only: ${JSON.stringify(byName)}`);
       }
       return true;
     },
