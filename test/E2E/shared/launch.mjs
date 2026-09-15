@@ -14,7 +14,7 @@ import fs from "node:fs";
 import path from "node:path";
 import {spawn} from "node:child_process";
 import puppeteer from "puppeteer-core";
-import {PROFILE_PREFS} from "./config.mjs";
+import {PROFILE_PREFS, readAddonVersion} from "./config.mjs";
 import {removeProfileCompatibilityIni} from "./profileFactory.mjs";
 
 // the screenshotMain evaluate() callback runs in the browser, not in Node.
@@ -44,7 +44,13 @@ export async function launchFirefox({binary, profileDir, headless = true, extraP
 
   // puppeteer-core syncs extraPrefsFirefox into user.js AFTER we write ours,
   // so pass the full set through it (a hand-written user.js would be replaced).
-  const prefs = {...PROFILE_PREFS, ...extraPrefs};
+  // extensions.tabmix.version must equal the real addon version or tab.js's
+  // version check opens the "New Version Installed" update page every run.
+  const prefs = {
+    ...PROFILE_PREFS,
+    ...extraPrefs,
+    "extensions.tabmix.version": readAddonVersion(),
+  };
 
   removeProfileCompatibilityIni(profileDir);
 
@@ -71,6 +77,22 @@ export async function launchFirefox({binary, profileDir, headless = true, extraP
     extraPrefsFirefox: prefs,
     args,
   });
+
+  // puppeteer-core 25.6+ (BiDi, win32): a headed launch leaves the browser
+  // window fully laid out but WITHOUT a native window handle (MainWindowHandle
+  // = 0, invisible on screen) until the first browsingContext.activate.
+  // puppeteer-core 25.5 realized it at launch; 25.10 does not. bringToFront()
+  // issues that activate and makes --headed runs visible. Raw Firefox spawns
+  // are unaffected — this is a puppeteer/BiDi-connect behavior change, not a
+  // Firefox one.
+  if (!headless) {
+    try {
+      const [page] = await browser.pages();
+      await page?.bringToFront();
+    } catch {
+      // best effort — headed visibility only
+    }
+  }
 
   return {browser, processTag};
 }

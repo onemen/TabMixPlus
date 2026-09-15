@@ -81,6 +81,34 @@ export const UCJS_PREFS = {
   "userChromeJS.utilities.enabled": true,
 };
 
+let cachedAddonVersion = null;
+
+/**
+ * Read the addon's real version from addon/install.rdf
+ * (`<em:version>N</em:version>`), cached per process.
+ *
+ * Test profiles pre-set `extensions.tabmix.version` to this value so tab.js's
+ * version check (oldVersion vs AddonManager's version) matches and the "New
+ * Version Installed" update page never opens. It MUST be the real version — any
+ * other value (e.g. a placeholder) guarantees the update page in every run. It
+ * also MUST reach Firefox through extraPrefsFirefox: puppeteer overwrites the
+ * profile's user.js at launch, so prefs written only to the profile file are
+ * lost.
+ *
+ * @returns {string} the addon version from install.rdf
+ * @throws when install.rdf is missing or has no em:version element
+ */
+export function readAddonVersion() {
+  if (cachedAddonVersion !== null) return cachedAddonVersion;
+  const rdf = fs.readFileSync(path.join(ADDON_DIR, "install.rdf"), "utf8");
+  const m = /<em:version>([^<]+)<\/em:version>/.exec(rdf);
+  if (!m) {
+    throw new Error(`no <em:version> found in ${path.join(ADDON_DIR, "install.rdf")}`);
+  }
+  cachedAddonVersion = m[1].trim();
+  return cachedAddonVersion;
+}
+
 /** Friendly browser names for run banners. */
 export const BROWSER_NAMES = {
   nightly: "Firefox Nightly",

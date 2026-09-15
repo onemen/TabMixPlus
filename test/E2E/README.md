@@ -72,7 +72,10 @@ Per run the profile factory:
 5. **copies** `addon/` content (never a link — links previously caused the real addon to be deleted)
    into `extensions/{dc572301-7619-498c-a57d-39143191b318}`,
 6. writes `user.js` with deterministic prefs (`extensions.autoDisableScopes=0`, telemetry off,
-   updates off, `extensions.tabmix.version` pre-set so the version-update page does not open, …).
+   updates off, …). Note puppeteer **overwrites** `user.js` at launch — prefs that must reach
+   Firefox go through `extraPrefsFirefox` in `launchFirefox()`, including
+   `extensions.tabmix.version` (pre-set to the real addon version from `install.rdf` so the "New
+   Version Installed" update page never opens).
 
 ## Hard-won facts about the platform (do not relearn these)
 
@@ -97,6 +100,11 @@ Per run the profile factory:
   the bridge resolves everything through `Services.wm`.
 - Puppeteer overwrites `user.js` at launch; test prefs must go through `extraPrefsFirefox` (the
   launcher merges `PROFILE_PREFS` there).
+- **Headed runs (`--headed`) on puppeteer-core 25.6+ / Windows**: the browser window stays invisible
+  (fully laid out DOM window, but `MainWindowHandle` = 0) until the first BiDi
+  `browsingContext.activate`; 25.5 realized it at launch. `launchFirefox()` therefore calls
+  `page.bringToFront()` right after a non-headless launch. Confirmed against puppeteer-core 25.5.0
+  vs 25.10.0 with identical spawn args (2026-09-15).
 - `ignoreDefaultArgs: ["--disable-extensions"]` is mandatory or the sideloaded legacy extension
   never boots; `-remote-allow-system-access` is required for BiDi script evaluation on privileged
   pages.

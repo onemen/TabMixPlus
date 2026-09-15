@@ -170,14 +170,13 @@ export async function populateProfile(profileDir) {
     throw new Error("addon copy is missing install.rdf");
   }
 
-  // 4. user.js
+  // 4. user.js — NOTE: puppeteer overwrites user.js at launch (extraPrefsFirefox
+  // wins), so test prefs that must reach Firefox go through launchFirefox(),
+  // not here. The extensions.tabmix.version suppression pref lives there too
+  // (see shared/config.mjs readAddonVersion).
   const prefs = {
     ...PROFILE_PREFS,
     ...UCJS_PREFS,
-    // Pretend Tabmix already showed its version-update page (a fresh profile
-    // would otherwise open chrome://tabmixplus/content/update/update.xhtml at
-    // startup and disturb every suite).
-    "extensions.tabmix.version": "9.9.9-test",
   };
   const lines = Object.entries(prefs).map(([k, v]) => prefLine(k, v));
   fs.writeFileSync(path.join(profileDir, "user.js"), lines.join("\n") + "\n");
