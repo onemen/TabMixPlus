@@ -18,6 +18,9 @@ node test/E2E/run.mjs --list                 # list available suites
 #   --browser=nightly|dev|beta|release|esr   (default: nightly)
 #   --binary="C:/path/to/firefox.exe"        (explicit exe; wins over --browser)
 #   --headed                                 (show the browser window)
+#   --keep-open                              (leave the browser open after the suite;
+#                                             teardown resumes when you close the window —
+#                                             use with --headed and --keep-profile)
 #   --keep-profile                           (keep the temp profile for debugging)
 #   --list                                   (list suites)
 ```
@@ -108,6 +111,14 @@ Per run the profile factory:
 - `ignoreDefaultArgs: ["--disable-extensions"]` is mandatory or the sideloaded legacy extension
   never boots; `-remote-allow-system-access` is required for BiDi script evaluation on privileged
   pages.
+- Do NOT inject custom flags into Firefox's command line (e.g. an orphan-cleanup marker): Firefox
+  logs `Warning: unrecognized command line flag ...` in the Browser Console for every one of them.
+  Orphan cleanup matches the run's unique temp-profile path instead — puppeteer already puts
+  `--profile <dir>` on the command line, and mkdtempSync makes it unique per run.
+- `--wait-for-browser` on the command line comes from puppeteer-core itself (unconditional win32
+  default in FirefoxLauncher defaultArgs); Firefox also warns about it in the Browser Console.
+  Harmless — do not try to filter it out of default args, it is what makes startup deterministic for
+  the automation layer.
 - Benign console noise on a fresh profile (already filtered by the smoke suite's regex — extend it,
   don't clear it): repeated
   `shell_windows::taskbar::shortcut Error matching shortcut: HRESULT(0x80004005)` (headless profile

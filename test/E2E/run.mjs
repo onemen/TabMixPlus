@@ -29,6 +29,7 @@ function parseArgs() {
     binary: null,
     headed: false,
     keepProfile: false,
+    keepOpen: false,
     list: false,
   };
   for (const arg of process.argv.slice(2)) {
@@ -50,6 +51,9 @@ function parseArgs() {
         break;
       case "keep-profile":
         opts.keepProfile = true;
+        break;
+      case "keep-open":
+        opts.keepOpen = true;
         break;
       case "list":
         opts.list = true;
@@ -92,6 +96,7 @@ async function main() {
     binary: opts.binary,
     headless: !opts.headed,
     keepProfile: opts.keepProfile,
+    keepOpen: opts.keepOpen,
   };
 
   // --suite=all: run every suite sequentially; one failure does not stop the rest.

@@ -103,9 +103,18 @@ function isAddonBacked(entry) {
  * @param {string} [opts.binary] - explicit binary path
  * @param {boolean} [opts.headless=true] Default is `true`
  * @param {boolean} [opts.keepProfile=false] Default is `false`
+ * @param {boolean} [opts.keepOpen=false] leave the browser open after the suite
+ *   for manual inspection (--keep-open); teardown resumes on window close.
+ *   Default is `false`
  * @returns {Promise<boolean>} success
  */
-export async function run({browser: channel, binary, headless = true, keepProfile = false} = {}) {
+export async function run({
+  browser: channel,
+  binary,
+  headless = true,
+  keepProfile = false,
+  keepOpen = false,
+} = {}) {
   const counter = createCounter();
   const channelKey = channel || DEFAULT_BROWSER;
   const exe = await resolveBrowser(channel, binary);
@@ -114,7 +123,7 @@ export async function run({browser: channel, binary, headless = true, keepProfil
   const profileDir = createProfileDir("internals");
 
   let browser = null;
-  let processTag = null;
+  let processTags = null;
   let bridgePage;
 
   try {
@@ -123,7 +132,7 @@ export async function run({browser: channel, binary, headless = true, keepProfil
     await populateProfile(profileDir);
     console.log(`  profile: ${profileDir}`);
 
-    ({browser, processTag} = await launchFirefox({binary: exe, profileDir, headless}));
+    ({browser, processTags} = await launchFirefox({binary: exe, profileDir, headless}));
     attachProcessLogging(browser, []);
 
     bridgePage = await openBridgePage(browser);
@@ -248,7 +257,7 @@ export async function run({browser: channel, binary, headless = true, keepProfil
   } catch (err) {
     check(counter, false, "internals suite completed without exception", String(err));
   } finally {
-    await closeBrowser(browser, processTag ? [processTag] : []);
+    await closeBrowser(browser, processTags ?? [], keepOpen);
     if (!keepProfile) {
       deleteProfile(profileDir);
     } else {

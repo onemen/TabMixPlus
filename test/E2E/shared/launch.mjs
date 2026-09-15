@@ -6,7 +6,9 @@
  * - protocol: "webDriverBiDi"
  * - ignoreDefaultArgs: ["--disable-extensions"] (so the sideloaded addon loads)
  * - -new-instance -no-remote
- * - process-tag (`--puppeteer-<tag>`) for orphan cleanup on crash
+ * - orphan cleanup marker: the unique temp-profile path (already on the command
+ *   line via `--profile`) — do NOT inject a custom CLI flag, Firefox logs
+ *   "unrecognized command line flag" for it in the Browser Console
  * - compatibility.ini purge for profile hygiene
  */
 
@@ -20,11 +22,9 @@ import {removeProfileCompatibilityIni} from "./profileFactory.mjs";
 // the screenshotMain evaluate() callback runs in the browser, not in Node.
 /* global window */
 
-/** Every Firefox exe started by this run carries this tag in its command line. */
-function makeProcessTag() {
-  return `--puppeteer-tabmix-e2e-${process.pid}-${Date.now()}`;
-}
-
+// Every Firefox exe started by this run is matched by its command line
+// carrying the run's unique markers (see launchFirefox — the temp profile
+// path).
 /**
  * Launch Firefox with puppeteer-core over WebDriver BiDi.
  *
@@ -36,12 +36,13 @@ function makeProcessTag() {
  *   over PROFILE_PREFS
  * @returns {Promise<{
  *   browser: import("puppeteer-core").Browser;
- *   processTag: string;
+ *   processTags: string[];
  * }>}
  */
 export async function launchFirefox({binary, profileDir, headless = true, extraPrefs = {}}) {
-  const processTag = makeProcessTag();
-
+  // Orphan-cleanup marker: the profile dir is unique per run (mkdtempSync) and
+  // already on the parent's command line via `--profile`, so findPidsByTag can
+  // match it without injecting a custom (unrecognized) CLI flag.
   // puppeteer-core syncs extraPrefsFirefox into user.js AFTER we write ours,
   // so pass the full set through it (a hand-written user.js would be replaced).
   // extensions.tabmix.version must equal the real addon version or tab.js's
@@ -62,7 +63,6 @@ export async function launchFirefox({binary, profileDir, headless = true, extraP
     "-no-remote",
     // BiDi script.evaluate on chrome pages requires system access.
     "-remote-allow-system-access",
-    processTag,
   ];
 
   const browser = await puppeteer.launch({
@@ -94,7 +94,7 @@ export async function launchFirefox({binary, profileDir, headless = true, extraP
     }
   }
 
-  return {browser, processTag};
+  return {browser, processTags: [profileDir]};
 }
 
 /**
@@ -163,8 +163,9 @@ export function attachProcessLogging(browser, sink = null, label = "ff") {
 }
 
 /**
- * Kill any Firefox processes whose command line carries one of the tags. Used
- * on launch failure and as a safety net after browser.close().
+ * Kill any Firefox processes whose command line carries one of the markers (the
+ * run's unique profile paths). Used on launch failure and as a safety net after
+ * browser.close().
  *
  * @param {string[]} tags
  * @returns {Promise<number>} number of killed pids
@@ -220,13 +221,51 @@ function runCapture(cmd, args) {
 }
 
 /**
+ * Wait until the user closes the browser window (or the process exits on its
+ * own). Used by --keep-open: after a suite finishes, the browser stays on
+ * screen for manual inspection and teardown resumes when it is gone.
+ *
+ * @param {import("puppeteer-core").Browser} browser
+ */
+async function waitForManualClose(browser) {
+  console.log(
+    "  --keep-open: browser left open for inspection; close the window (or Ctrl+C the runner) to continue teardown."
+  );
+  const proc = browser.process();
+  await new Promise(resolve => {
+    let done = false;
+    const finish = () => {
+      if (!done) {
+        done = true;
+        resolve();
+      }
+    };
+    // Process exit is authoritative — closing the last window exits Firefox.
+    proc?.once("exit", finish);
+    // BiDi disconnects as soon as the last window closes, but the process can
+    // linger briefly (crashreporter, shutdown); re-check after a delay.
+    browser.on("disconnected", () => {
+      setTimeout(() => {
+        if (proc && proc.exitCode === null && !proc.killed) return; // still running
+        finish();
+      }, 1500);
+    });
+  });
+}
+
+/**
  * Close the browser and clean up stray processes.
  *
  * @param {import("puppeteer-core").Browser | null} browser
- * @param {string[]} tags - process tags from launchFirefox
+ * @param {string[]} tags - process markers from launchFirefox (profile paths)
+ * @param {boolean} [keepOpen=false] wait for the user to close the window
+ *   instead of closing it (--keep-open); teardown resumes automatically.
+ *   Default is `false`
  */
-export async function closeBrowser(browser, tags = []) {
-  if (browser) {
+export async function closeBrowser(browser, tags = [], keepOpen = false) {
+  if (browser && keepOpen) {
+    await waitForManualClose(browser);
+  } else if (browser) {
     try {
       await browser.close();
     } catch {
