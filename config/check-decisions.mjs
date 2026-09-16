@@ -10,8 +10,6 @@
  * Usage: node config/check-decisions.mjs
  */
 
-/* eslint-disable no-console -- standalone Node CLI script; stdout output is its interface */
-
 import fs from "node:fs";
 import path from "node:path";
 import url from "node:url";
