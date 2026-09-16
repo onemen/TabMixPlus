@@ -4,10 +4,13 @@
  *
  * - 51719d24).
  *
- * logger.sys.mjs touches `Services.prefs`, `globalThis.console` and
- * `Components` at import/call time, so each test installs minimal shims and
- * imports the module fresh (a `?case=` query busts the ESM cache) — this also
- * exercises the import-time pref bootstrap branch per test.
+ * logger.sys.mjs touches `globalThis.console` and `Components` at import/call
+ * time, so each test installs minimal shims and imports the module fresh (a
+ * `?case=` query busts the ESM cache).
+ *
+ * The `extensions.tabmix.log.level` default is NOT set by this module — it
+ * lives in defaults/preferences/tabmix.js and is applied by
+ * PreferencesLoader.loadDefaultPreferences() at startup.
  *
  * Covered here: the V8-safe logic. The ConsoleAPI instance itself and live
  * Error().stack introspection are covered by the dev E2E suite
@@ -28,44 +31,9 @@ const LOG_LEVEL_PREF = "extensions.tabmix.log.level";
 /**
  * Install the Firefox globals logger.sys.mjs needs. Returns recorded state;
  * always pair with cleanupShims() (try/finally in the test).
- *
- * @param {{prefExists?: boolean}} [opts] - whether the level pref already
- *   exists
  */
-function installShims({prefExists = false} = {}) {
-  const state = {
-    prefCalls: [],
-    consoleCalls: [],
-    instanceOptions: null,
-    /** pref name written to the default branch, if any */
-    defaultBranchWrites: [],
-  };
-  globalThis.Services = {
-    prefs: {
-      PREF_INVALID: 0,
-      PREF_STRING: 32,
-      getPrefType() {
-        state.prefCalls.push("getPrefType");
-        return prefExists ? 32 : 0;
-      },
-      setStringPref(pref, value) {
-        state.prefCalls.push(`setStringPref(${pref}, ${value})`);
-        prefExists = true;
-      },
-      getStringPref() {
-        return "All";
-      },
-      /** nsIPrefBranch shim — the bootstrap writes its default here */
-      getDefaultBranch(_root) {
-        return {
-          setStringPref(pref, value) {
-            state.defaultBranchWrites.push([pref, value]);
-            state.prefCalls.push(`defaultBranch.setStringPref(${pref}, ${value})`);
-          },
-        };
-      },
-    },
-  };
+function installShims() {
+  const state = {consoleCalls: [], instanceOptions: null};
   globalThis.console.createInstance = options => {
     state.instanceOptions = options;
     return {
@@ -90,7 +58,6 @@ function installShims({prefExists = false} = {}) {
 }
 
 function cleanupShims() {
-  delete globalThis.Services;
   delete globalThis.Components;
   // @ts-expect-error - test-only shim on the Node global
   delete globalThis.console.createInstance;
@@ -104,7 +71,6 @@ function importLogger(cacheBust) {
 
 /** Verify the shims are gone so later test files run in a clean global. */
 function assertShimsRemoved() {
-  assert.equal(typeof globalThis.Services, "undefined", "Services shim removed");
   assert.equal(typeof globalThis.Components, "undefined", "Components shim removed");
 }
 
@@ -112,41 +78,15 @@ export const name = "logger";
 
 export const tests = [
   {
-    name: "bootstrap creates the log.level default on the default branch when missing",
+    name: "instance carries the Tabmix prefix and the level pref without touching prefs",
     async test() {
-      const state = installShims({prefExists: false});
+      const state = installShims();
       try {
-        const {logger} = await importLogger("bootstrap-missing");
-        assert.ok(
-          !state.prefCalls.some(c => c.startsWith("setStringPref(")),
-          `no user-pref write — got: ${JSON.stringify(state.prefCalls)}`
-        );
-        assert.deepEqual(
-          state.defaultBranchWrites,
-          [[LOG_LEVEL_PREF, "All"]],
-          `default branch receives the write — got: ${JSON.stringify(state.defaultBranchWrites)}`
-        );
+        const {logger} = await importLogger("instance-options");
         assert.equal(state.instanceOptions?.prefix, "Tabmix", "ConsoleAPI prefix");
         assert.equal(state.instanceOptions?.maxLogLevelPref, LOG_LEVEL_PREF, "level pref wired");
         assert.equal(state.instanceOptions?.maxLogLevel, "All", "default level");
         assert.equal(typeof logger.info, "function", "logger is the ConsoleAPI instance");
-        return true;
-      } finally {
-        cleanupShims();
-        assertShimsRemoved();
-      }
-    },
-  },
-  {
-    name: "bootstrap leaves an existing log.level pref untouched",
-    async test() {
-      const state = installShims({prefExists: true});
-      try {
-        await importLogger("bootstrap-exists");
-        assert.ok(
-          !state.prefCalls.some(c => c.startsWith("setStringPref")),
-          `no pref write when it exists — got: ${JSON.stringify(state.prefCalls)}`
-        );
         return true;
       } finally {
         cleanupShims();
