@@ -278,7 +278,11 @@ export default [
     // exists at call time; the call sites carry the prefix through other
     // means, so the global no-console rule must be relaxed for them.
     name: "tabmix/console-exceptions",
+    // config tooling (husky runner, typecheck CLI) is Node code whose CLI
+    // output is the interface - console IS the interface there, not a
+    // bypass of the Tabmix logger (which is browser-only).
     files: [
+      "config/**",
       "addon/modules/logger.sys.mjs",
       "addon/modules/Changecode.sys.mjs",
       "addon/modules/DynamicRules.sys.mjs",
