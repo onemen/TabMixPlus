@@ -4,13 +4,15 @@
  *
  * - 51719d24).
  *
- * logger.sys.mjs touches `globalThis.console` and `Components` at import/call
- * time, so each test installs minimal shims and imports the module fresh (a
- * `?case=` query busts the ESM cache).
+ * logger.sys.mjs touches `Services.prefs` (one default-branch registration at
+ * import), `globalThis.console` and `Components` at import/call time, so each
+ * test installs minimal shims and imports the module fresh (a `?case=` query
+ * busts the ESM cache).
  *
- * The `extensions.tabmix.log.level` default is NOT set by this module — it
- * lives in defaults/preferences/tabmix.js and is applied by
- * PreferencesLoader.loadDefaultPreferences() at startup.
+ * The `extensions.tabmix.log.level` default is registered by the module itself
+ * (default branch, at import) — it is not in defaults/preferences/tabmix.js
+ * because logger.sys.mjs must create the pref before its ConsoleInstance wires
+ * maxLogLevelPref.
  *
  * Covered here: the V8-safe logic. The ConsoleAPI instance itself and live
  * Error().stack introspection are covered by the dev E2E suite
@@ -33,7 +35,26 @@ const LOG_LEVEL_PREF = "extensions.tabmix.log.level";
  * always pair with cleanupShims() (try/finally in the test).
  */
 function installShims() {
-  const state = {consoleCalls: [], instanceOptions: null};
+  const state = {
+    consoleCalls: [],
+    instanceOptions: null,
+    /** pref name written to the default branch at import, if any */
+    defaultBranchWrites: [],
+  };
+  globalThis.Services = {
+    prefs: {
+      PREF_INVALID: 0,
+      PREF_STRING: 32,
+      /** nsIPrefBranch shim — the module registers its level default here */
+      getDefaultBranch(_root) {
+        return {
+          setStringPref(pref, value) {
+            state.defaultBranchWrites.push([pref, value]);
+          },
+        };
+      },
+    },
+  };
   globalThis.console.createInstance = options => {
     state.instanceOptions = options;
     return {
@@ -58,6 +79,7 @@ function installShims() {
 }
 
 function cleanupShims() {
+  delete globalThis.Services;
   delete globalThis.Components;
   // @ts-expect-error - test-only shim on the Node global
   delete globalThis.console.createInstance;
@@ -71,6 +93,7 @@ function importLogger(cacheBust) {
 
 /** Verify the shims are gone so later test files run in a clean global. */
 function assertShimsRemoved() {
+  assert.equal(typeof globalThis.Services, "undefined", "Services shim removed");
   assert.equal(typeof globalThis.Components, "undefined", "Components shim removed");
 }
 
@@ -83,6 +106,13 @@ export const tests = [
       const state = installShims();
       try {
         const {logger} = await importLogger("instance-options");
+        assert.deepEqual(
+          state.defaultBranchWrites,
+          [[LOG_LEVEL_PREF, "All"]],
+          `default branch receives the level default — got: ${JSON.stringify(
+            state.defaultBranchWrites
+          )}`
+        );
         assert.equal(state.instanceOptions?.prefix, "Tabmix", "ConsoleAPI prefix");
         assert.equal(state.instanceOptions?.maxLogLevelPref, LOG_LEVEL_PREF, "level pref wired");
         assert.equal(state.instanceOptions?.maxLogLevel, "All", "default level");
