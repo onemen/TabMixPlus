@@ -14,3 +14,5 @@ reviews:
     enabled: false
   path_filters:
     - '!logs/**'
+  # Disable submodules if CodeRabbit cannot access secondary private repos
+  submodules: false
