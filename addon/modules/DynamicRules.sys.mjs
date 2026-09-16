@@ -356,7 +356,7 @@ export const DynamicRules = {
   },
 
   handleError(error, ruleName) {
-    console.error(lazy.console.makeError(error));
+    lazy.console.error(lazy.console.makeError(error));
     lazy.console.log('Error in preference "' + ruleName + '", value was reset to default');
     lazy.Prefs.clearUserPref(ruleName);
   },

@@ -33,7 +33,13 @@ const LOG_LEVEL_PREF = "extensions.tabmix.log.level";
  *   exists
  */
 function installShims({prefExists = false} = {}) {
-  const state = {prefCalls: [], consoleCalls: [], instanceOptions: null};
+  const state = {
+    prefCalls: [],
+    consoleCalls: [],
+    instanceOptions: null,
+    /** pref name written to the default branch, if any */
+    defaultBranchWrites: [],
+  };
   globalThis.Services = {
     prefs: {
       PREF_INVALID: 0,
@@ -48,6 +54,15 @@ function installShims({prefExists = false} = {}) {
       },
       getStringPref() {
         return "All";
+      },
+      /** nsIPrefBranch shim — the bootstrap writes its default here */
+      getDefaultBranch(_root) {
+        return {
+          setStringPref(pref, value) {
+            state.defaultBranchWrites.push([pref, value]);
+            state.prefCalls.push(`defaultBranch.setStringPref(${pref}, ${value})`);
+          },
+        };
       },
     },
   };
@@ -97,14 +112,19 @@ export const name = "logger";
 
 export const tests = [
   {
-    name: "bootstrap creates the log.level pref with default 'All' when missing",
+    name: "bootstrap creates the log.level default on the default branch when missing",
     async test() {
       const state = installShims({prefExists: false});
       try {
         const {logger} = await importLogger("bootstrap-missing");
         assert.ok(
-          state.prefCalls.includes(`setStringPref(${LOG_LEVEL_PREF}, All)`),
-          `pref created on first use — got: ${JSON.stringify(state.prefCalls)}`
+          !state.prefCalls.some(c => c.startsWith("setStringPref(")),
+          `no user-pref write — got: ${JSON.stringify(state.prefCalls)}`
+        );
+        assert.deepEqual(
+          state.defaultBranchWrites,
+          [[LOG_LEVEL_PREF, "All"]],
+          `default branch receives the write — got: ${JSON.stringify(state.defaultBranchWrites)}`
         );
         assert.equal(state.instanceOptions?.prefix, "Tabmix", "ConsoleAPI prefix");
         assert.equal(state.instanceOptions?.maxLogLevelPref, LOG_LEVEL_PREF, "level pref wired");
