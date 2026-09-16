@@ -8,14 +8,16 @@ currently in flight. Decisions (repo-local tests, local-first, CI later) are rec
 > `TEST-PLAN.local.md` (which existed untracked between 2026-09-14 and 2026-09-15). Edit this file;
 > do not fork it back into a `*.local.*` copy.
 
-> **Status:** the E2E engine (phase 1) with the smoke + internals suites, the unit runner
+> **Status:** the E2E engine (phase 1) with the smoke + internals suites, the dev-line suite
+> (dev-v1.48 changes; a logger section is added on `wip/error-handling-logging`), the unit runner
 > (`pnpm test:unit`, seeded with verify-internals unit tests), the static verify-firefox-internals
 > check, and the `pr-checks` workflow (lint + typecheck + unit on PRs and pushes to main) exist —
 > see [test/E2E/README.md](../test/E2E/README.md) for how the engine works and
 > [Local developer experience](#8-local-developer-experience) for the commands. The smoke suite
 > passed 11/11 on Firefox Nightly, verified manually on Windows 11 (2026-09-13); `--suite=all`
-> (internals + smoke) passed on 2026-09-14. Remaining before the coverage rule activates: the P1
-> unit inventories and the P2 suites.
+> (internals + smoke) passed on 2026-09-14; the dev-line suite passed 15/15 on Nightly and 23/23
+> with the logger section on the logger branch (2026-09-16). Remaining before the coverage rule
+> activates: the P1 unit inventories and the P2 suites.
 
 ## Priority tiers
 
@@ -30,17 +32,21 @@ currently in flight. Decisions (repo-local tests, local-first, CI later) are rec
 
 Every change merged from a `wip/*` branch must carry its covering test (ADR 0003):
 
-| Branch change                                                 | Covering test                                                       |
-| ------------------------------------------------------------- | ------------------------------------------------------------------- |
-| error-handling/logging rewrite (`wip/error-handling-logging`) | smoke zero-console-error + log.level pref unit                      |
-| dead-code sweep                                               | typecheck + smoke boot                                              |
-| types-safety, types-safety-1                                  | `pnpm typecheck` **is** the test (behavior-neutral; smoke confirms) |
-| perf regex/style caching (`wip/perf`)                         | unit: cached vs uncached result equivalence                         |
-| arch: ContentClick re-entrancy fix (`wip/arch`)               | click E2E (ctrl+shift range, re-entrant path)                       |
-| arch: `verifyPrivateMethodReplaced` call-site                 | Changecode unit                                                     |
-| fix-b9 firefox-source copies                                  | verify-firefox-internals checks the ANCHORS table                   |
-| fix-b11 getSandbox lifecycle audit                            | sandbox lifecycle unit                                              |
-| E2E engine itself (`wip/test-suite`)                          | its own smoke suite (dogfood)                                       |
+| Branch change | Covering test | | ------------------------------------------------------------- |
+------------------------------------------------------------------- || error-handling/logging
+rewrite (`wip/error-handling-logging`) | unit: `test/unit/logger.test.mjs` (shimmed module logic);
+E2E dev-suite logger section (surface, `log.level` pref at boot, live `[Tabmix:...]` ConsoleAPI
+capture, legacy helpers gone); smoke zero-console-error | | dead-code sweep (dev `e597603d` +
+`a7c481fa`) | E2E dev-suite sweep section: no `.substr(` in swept files, `nonStrictMode` gone,
+DynamicRules dead state gone; typecheck + smoke boot | | autoreload data-command fix (dev
+`f42b4a34`) | E2E dev-suite autoreload section: enable item found by `data-command="toggle"`, full
+enable/disable round-trip, no timer leak | | types-safety, types-safety-1 | `pnpm typecheck` **is**
+the test (behavior-neutral; smoke confirms) | | perf regex/style caching (`wip/perf`) | unit: cached
+vs uncached result equivalence | | arch: ContentClick re-entrancy fix (`wip/arch`) | click E2E
+(ctrl+shift range, re-entrant path) | | arch: `verifyPrivateMethodReplaced` call-site | Changecode
+unit | | fix-b9 firefox-source copies | verify-firefox-internals checks the ANCHORS table | |
+fix-b11 getSandbox lifecycle audit | sandbox lifecycle unit | | E2E engine itself (`wip/test-suite`)
+| its own smoke suite (dogfood) |
 
 ### Decisions
 
@@ -130,6 +136,11 @@ test/
    automated): assert every `getPrivateMethod` anchor and every `changeCode` `_replace` anchor still
    exists in pinned omni unpacks per channel. Fails CI when Firefox moves internals — the
    early-warning system. (Exists; its ANCHORS/scanner helpers are seeded with unit tests.)
+7. **logger.sys.mjs** (exists on `wip/error-handling-logging`) — pure, V8-safe logic under Firefox
+   shims: `log.level` pref bootstrap branch, stack introspection (`_name`,
+   `_getStackExcludingInternal`, `_getNames`), `makeError`, `reportError` filtering. The ConsoleAPI
+   instance itself and live `Error().stack` introspection are covered by the dev-suite E2E logger
+   section. (Exists: `test/unit/logger.test.mjs`.)
 
 ## 5. E2E suite inventory (full list; prioritize later)
 
@@ -137,6 +148,13 @@ test/
   **zero console errors**; version bucket logged.
 - **internals** (exists) — runtime complement of verify-firefox-internals: `planned` ⊆ `replaced`
   private-method invariant, sandbox lifecycle, clean boot console.
+- **dev (exists, `dev-v1.48`) — dev-line regression gate:** autoreload popup enable item found by
+  `data-command="toggle"` with a real dispatched command event (full enable/disable round-trip, no
+  timer leak); dead-code sweep assertions (`.substr(` gone from swept files, `nonStrictMode` gone,
+  DynamicRules dead state gone). On `wip/error-handling-logging` it gains the **logger section**:
+  module surface via `Tabmix.console`, `extensions.tabmix.log.level` present at boot,
+  `callerName`/`callerTrace` on live `Error().stack`, a live `Tabmix.console.log` write captured in
+  ConsoleAPIStorage with the `Tabmix` prefix, and clog/isCallerInList/`TabmixSvc.console` gone.
 - **tabs (tab/ + minit)** — new-tab button (incl. middle-click paste #574); close buttons; pinned
   tabs; **multi-row** (rows, wrap points, scrollbox arrows); tab width modes;
   duplicate/merge/detach; all-tabs button.
