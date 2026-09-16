@@ -149,9 +149,29 @@ export const tests = [
     async test() {
       const registered = new Set(prefNamesFromDefaultsFile());
       const source = addonSourceFiles()
+        .filter(file => file !== DEFAULTS_FILE)
         .map(f => fs.readFileSync(f, "utf8"))
         .join("\n");
-      const orphans = [...registered].filter(prefName => !source.includes(prefName));
+      // Branch-relative reads never spell the full pref name:
+      // Services.prefs.getBranch("extensions.tabmix.[styles.]") + a suffix
+      // (gPref.getCharPref("filetype"), lazy.Prefs.getCharPref(ruleName)
+      // over STYLENAMES, Tabmix.prefs.getBoolPref("syncPrefs"), ...). A
+      // default therefore counts as referenced when the full name OR the
+      // name below the longest matching branch root appears in the
+      // sources. Suffix matching errs toward not flagging — acceptable
+      // for a drift detector, whose target is a default left behind by a
+      // rename: the renamed-away suffix disappears from the sources with
+      // the rename, so it is still caught.
+      const orphans = [...registered].filter(prefName => {
+        if (source.includes(prefName)) {
+          return false;
+        }
+        const relative =
+          prefName.startsWith("extensions.tabmix.styles.") ?
+            prefName.slice("extensions.tabmix.styles.".length)
+          : prefName.slice("extensions.tabmix.".length);
+        return !source.includes(relative);
+      });
       assert.deepEqual(
         orphans,
         [],
