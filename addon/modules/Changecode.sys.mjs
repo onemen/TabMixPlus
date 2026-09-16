@@ -5,7 +5,7 @@ import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 /** @type {{console: LogModule.Console}} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
-  console: "chrome://tabmix-resource/content/log.sys.mjs",
+  console: "chrome://tabmix-resource/content/logger.sys.mjs",
 });
 
 const DEBUGMODE = Services.prefs.getBoolPref("extensions.tabmix.debugMode", false);
@@ -266,10 +266,12 @@ class ChangeCode {
       ].includes(name)
     ) {
       const {changed, needUpdate} = this;
-      console.debug(
-        "Tabmix:",
+      lazy.console.debug(
         `${name} does not have any changes,\ncheck again if it need to be modified`,
-        {changed, needUpdate}
+        {
+          changed,
+          needUpdate,
+        }
       );
     }
 
@@ -286,11 +288,11 @@ class ChangeCode {
       }${errMsgContent}`;
       lazy.console.reportError(ex);
       if (DEBUGMODE) {
-        lazy.console.clog(`${ex.name}\nfunction ${name} = ${this._value}`, ex);
+        lazy.console.log(`${ex.name}\nfunction ${name} = ${this._value}`, false, false, ex);
       }
     } else if (!this.needUpdate && DEBUGMODE) {
       const ex = this.getCallerData(stack?.caller);
-      lazy.console.clog(`${ex.name} no update needed to ${name}`, ex);
+      lazy.console.log(`${ex.name} no update needed to ${name}`, false, false, ex);
     }
     return false;
   }
@@ -298,7 +300,7 @@ class ChangeCode {
   /** @type {ChangeCodeClass["getCallerData"]} */
   getCallerData(stack) {
     const caller = stack.caller || {};
-    const error = lazy.console.error(caller);
+    const error = lazy.console.makeError(caller);
     const name = caller.name ?? caller.caller?.name ?? "unknown";
     Object.assign(error, {name, message: ""});
     return error;
@@ -422,7 +424,7 @@ function verifyPrivateMethodReplaced(code, obj, fullName) {
   if (methodName) {
     privateMethods.delete(methodName.replace(/^_/, ""));
   }
-  const ex = lazy.console.error(Components.stack.caller?.caller);
+  const ex = lazy.console.makeError(Components.stack.caller?.caller);
 
   for (const method of privateMethods) {
     if (obj && typeof obj[`_${method}`] === "undefined") {
@@ -480,7 +482,7 @@ function _makeCode(code, sandbox) {
   try {
     return Cu.evalInSandbox(codeString, sandbox, null, readableFilename, 1);
   } catch (error) {
-    console.log(4, {code: codeString, error});
+    lazy.console.error("evalInSandbox failed for", filename, error);
     throw error;
   }
 }
@@ -505,7 +507,7 @@ const expandTabmix = {
         baseSandbox: this._sandbox,
       });
     } catch (/** @type {any} */ ex) {
-      lazy.console.clog(
+      lazy.console.log(
         `${lazy.console.callerName()} failed to change ${fnName}\nError: ${ex.message}`
       );
       if (DEBUGMODE) {

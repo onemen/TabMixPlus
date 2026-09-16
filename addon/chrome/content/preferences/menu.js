@@ -152,13 +152,13 @@ var gMenuPane = {
     // Get browser window and tab context menu
     const browserWindow = Tabmix.getTopWin();
     if (!browserWindow) {
-      console.error("Tabmix Error: Could not get browser window");
+      Tabmix.console.error("Could not get browser window");
       return;
     }
 
     const tabContextMenu = browserWindow.document.getElementById("tabContextMenu");
     if (!tabContextMenu) {
-      console.error("Tabmix Error: Could not find tabContextMenu");
+      Tabmix.console.error("Could not find tabContextMenu");
       return;
     }
 
@@ -328,7 +328,7 @@ var gMenuPane = {
     // Get the ID (either direct or from selector match)
     let id = menuItem.id || menuItem.getAttribute("data-selector-id");
     if (!id) {
-      console.log("Tabmix Error: Missing id for tab context menu item", menuItem);
+      Tabmix.console.error("Missing id for tab context menu item", String(menuItem));
       return null;
     }
 

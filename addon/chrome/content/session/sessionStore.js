@@ -546,7 +546,7 @@ var TMP_ClosedTabs = {
         item.setAttribute("source-closed-id", closedTab.sourceClosedId);
         item.setAttribute("value", closedTab.closedId);
       } else {
-        console.log("Tabmix Error: unable to set source-closed-id", item, url, targetURI);
+        Tabmix.console.error("unable to set source-closed-id", item, url, targetURI);
       }
     }
 
@@ -569,7 +569,7 @@ var TMP_ClosedTabs = {
       // do not advance closedTabsInfo.index here - it is shared by all menu items
       // in the popup, consuming another entry here would misalign every
       // subsequent item with the wrong closed tab data
-      console.log("Tabmix Error: unable to find closed tab data", item, {
+      Tabmix.console.error("unable to find closed tab data", item, {
         index: closedTabsInfo.index.value,
         closedTabsCount: closedTabsInfo.tabs.length,
       });
@@ -729,7 +729,11 @@ var TMP_ClosedTabs = {
     const menuItem = event.originalTarget;
     const commandData = menuItem.getAttribute("commandData");
     if (!commandData) {
-      throw new Error("missing commandData in contextMenuOnCommand");
+      // a command menuitem without commandData can only be a Tabmix/template
+      // bug - log it and recover instead of throwing inside the popup's
+      // command handler, which would spam the console on every menu use
+      Tabmix.console.error("missing commandData in contextMenuOnCommand", menuItem);
+      return;
     }
     const [command, where = ""] = commandData.split(",");
     const popup = menuItem.parentNode;
@@ -740,7 +744,7 @@ var TMP_ClosedTabs = {
     if (validCommand) {
       this.doCommand(validCommand, where, popup.triggerNode);
     } else {
-      throw new Error(`Unexpected command in contextMenuOnCommand ${command}`);
+      Tabmix.console.error(`Unexpected command in contextMenuOnCommand: ${command}`);
     }
   },
 
@@ -773,7 +777,7 @@ var TMP_ClosedTabs = {
   addBookmarks: function ct_addBookmarks(source, index) {
     const {tabData} = this.getSingleClosedTabData(source, index);
     if (!tabData) {
-      console.log(`Tabmix Error: unable to add bookmark from closed tab at index ${index}`);
+      Tabmix.console.error(`unable to add bookmark from closed tab at index ${index}`);
       return;
     }
     var url = this.getUrl(tabData);
@@ -785,7 +789,7 @@ var TMP_ClosedTabs = {
   copyTabUrl: function ct_copyTabUrl(source, index) {
     const {tabData} = this.getSingleClosedTabData(source, index);
     if (!tabData) {
-      console.log(`Tabmix Error: unable to copy url from closed tab at index ${index}`);
+      Tabmix.console.error(`unable to copy url from closed tab at index ${index}`);
       return;
     }
     var url = this.getUrl(tabData);
@@ -923,7 +927,7 @@ var TMP_ClosedTabs = {
     // get tab data
     const tabData = this.removeClosedTabData(aSource, aIndex);
     if (!tabData) {
-      console.error(`Tabmix Error: unable to restore closed tab from index ${aIndex}`);
+      Tabmix.console.error(`unable to restore closed tab from index ${aIndex}`);
       return null;
     }
     let {state, pos} = tabData;

@@ -3,6 +3,7 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   //
+  console: "chrome://tabmix-resource/content/logger.sys.mjs",
   TabmixSvc: "chrome://tabmix-resource/content/TabmixSvc.sys.mjs",
 });
 
@@ -355,10 +356,8 @@ export const DynamicRules = {
   },
 
   handleError(error, ruleName) {
-    console.error(lazy.TabmixSvc.console.error(error));
-    lazy.TabmixSvc.console.log(
-      'Error in preference "' + ruleName + '", value was reset to default'
-    );
+    lazy.console.error(lazy.console.makeError(error));
+    lazy.console.log('Error in preference "' + ruleName + '", value was reset to default');
     lazy.Prefs.clearUserPref(ruleName);
   },
 
@@ -564,7 +563,7 @@ const buttonColorProcessor = {
   processColor(color, value) {
     const rgba = this.parseRgba(color);
     if (!rgba) {
-      console.error(`Invalid color format: ${color}`);
+      lazy.console.error(`Invalid color format: ${color}`);
       return color;
     }
     return this.hslaToString(this.darkenRgba(rgba, value));

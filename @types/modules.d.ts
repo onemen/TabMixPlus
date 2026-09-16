@@ -187,7 +187,7 @@ interface TabmixKnownModules {
   "chrome://tabmix-resource/content/extensions/CompatibilityCheck.sys.mjs": {CompatibilityCheck: typeof CompatibilityCheckModule.CompatibilityCheck};
   "chrome://tabmix-resource/content/extensions/AddonManager.sys.mjs": {TabmixAddonManager: {init: () => void}};
   "chrome://tabmix-resource/content/HandleOnEvent.sys.mjs": {createHandleOnEvent: HandleOnEventModule.CreateHandleOnEvent};
-  "chrome://tabmix-resource/content/log.sys.mjs": {console: LogModule.Console};
+  "chrome://tabmix-resource/content/logger.sys.mjs": {console: LogModule.Console; logger: ConsoleInstance};
   "chrome://tabmix-resource/content/Places.sys.mjs": {TabmixPlacesUtils: PlacesModule.PlacesUtils};
   "chrome://tabmix-resource/content/TabContextConfig.sys.mjs": {TabContextConfig: TabContextConfigModule.Exports};
   "chrome://tabmix-resource/content/Shortcuts.sys.mjs": {Shortcuts: ShortcutsModule.Shortcuts};
@@ -643,6 +643,8 @@ interface KnownModulesImports {
   // tabmix
   AutoReload: AutoReloadModule.AutoReload;
   ContentSvc: TabmixModules.ContentSvc;
+  /** the console export of logger.sys.mjs */
+  console: LogModule.Console;
   getGlobal: GlobalAccessModule.GetGlobal;
   DocShellCapabilities: DocShellCapabilitiesModule.DocShellCapabilities;
   DynamicRules: DynamicRulesModule.DynamicRules;
@@ -928,7 +930,7 @@ declare namespace ContentClickModule {
     next(tab?: Tab): void;
   }
 
-  type importList = "BrowserUtils" | "ClickHandlerParent" | "E10SUtils" | "getGlobal" | "PlacesUIUtils" | "PrivateBrowsingUtils" | "LinkNodeUtils" | "TabmixSvc";
+  type importList = "BrowserUtils" | "ClickHandlerParent" | "E10SUtils" | "getGlobal" | "PlacesUIUtils" | "PrivateBrowsingUtils" | "LinkNodeUtils" | "console" | "TabmixSvc";
   type Lazy = Pick<KnownModulesImports, importList>;
 
   interface ContentClick {
@@ -1022,7 +1024,7 @@ declare namespace DownloadLastDirModule {
 }
 
 declare namespace DynamicRulesModule {
-  interface Lazy extends Pick<KnownModulesImports, "TabmixSvc"> {
+  interface Lazy extends Pick<KnownModulesImports, "TabmixSvc" | "console"> {
     Prefs: MockedGeckoTypes._nsIPrefBranch;
     SSS: nsIStyleSheetService;
   }
@@ -1201,32 +1203,25 @@ declare namespace LogModule {
 
   interface Console {
     _char: string;
-    _formatStack(stack: string[]): string;
     _getNames(aCount?: number, stack?: string): string[];
     _getStackExcludingInternal(stack?: string): string[];
-    _logMessage(msg: string, flag: string, caller?: Caller | nsIException): void;
     _name(fn: string): string;
-    _pathRegExp: RegExp;
     _timers: Record<number, nsITimer & {clear(): void}>;
 
-    columnNumber?: number;
-    filename?: string;
-    lineNumber?: number;
-
     assert(aError: unknown, aMsg?: string): void;
-    readonly caller: nsIStackFrame;
     callerName(): string | null;
     callerTrace(): {contain(...names: (string | string[])[]): boolean};
     callerTrace(...args: (string | string[])[]): boolean;
-    clog(aMessage: string, caller?: Caller): void;
-    error(error: unknown, msg?: string): Error;
+    debug(...data: any[]): void;
+    error(...data: any[]): void;
     getCallerNameByIndex(aIndex: number): string | null;
     getObject(aWindow: Window | null | undefined, aMethod: string): object | {toString(): string};
     log(aMessage: string, aShowCaller?: boolean, offset?: number | boolean, caller?: Caller): void;
+    makeError(error: unknown, msg?: string): CustomError;
     obj(aObj: Record<string, any>, aMessage?: string, aDisallowLog?: boolean, level?: boolean | string): void;
     reportError(ex: unknown, msg?: string, filter?: string): void;
     show(aMethod: ShowMethod, aDelay?: number, aWindow?: Window): void;
-    trace(aMsg: string, flag?: string, caller?: Caller): void;
+    warn(...data: any[]): void;
     [key: string]: unknown;
   }
 
@@ -1341,7 +1336,7 @@ declare namespace OverlaysModule {
 }
 
 declare namespace PlacesModule {
-  type importList = "BrowserUtils" | "BrowserWindowTracker" | "OpenInTabsUtils" | "PlacesUIUtils" | "PlacesUtils" | "PrivateBrowsingUtils" | "initializeChangeCodeClass";
+  type importList = "BrowserUtils" | "BrowserWindowTracker" | "OpenInTabsUtils" | "PlacesUIUtils" | "PlacesUtils" | "PrivateBrowsingUtils" | "initializeChangeCodeClass" | "console";
   type Lazy = Pick<KnownModulesImports, importList>;
   type FunctionsName = "openTabset" | "openNodeWithEvent" | "_openNodeIn";
   type TabmixFunctionsName = `tabmix_${FunctionsName}` | `__treestyletab__${FunctionsName}` | FunctionsName;
@@ -1457,6 +1452,7 @@ declare namespace ScriptsLoaderModule {
 
 declare namespace ShortcutsModule {
   type Lazy = Pick<KnownModulesImports, "getGlobal"> & {
+    console: LogModule.Console;
     PlatformKeys: nsIStringBundle;
     Keys: nsIStringBundle;
   };
@@ -1557,7 +1553,7 @@ declare namespace SlideshowModule {
 }
 
 declare namespace TabmixSvcModule {
-  type importList = "BrowserUtils" | "FloorpPrefsObserver" | "isVersion" | "SessionStore" | "SyncedTabs" | "TabmixPlacesUtils";
+  type importList = "BrowserUtils" | "FloorpPrefsObserver" | "console" | "isVersion" | "SessionStore" | "SyncedTabs" | "TabmixPlacesUtils";
   interface Lazy extends Pick<KnownModulesImports, importList> {
     Platform: string;
   }
@@ -1573,7 +1569,6 @@ declare namespace TabmixSvcModule {
     readonly isWindows: boolean;
     readonly isZen: boolean;
     readonly _strings: nsIStringBundle;
-    readonly console: LogModule.Console;
     readonly prefs: MockedExports.Preferences;
     readonly prefBranch: nsIPrefBranchXpcom;
 
@@ -1694,9 +1689,12 @@ declare module "chrome://tabmix-resource/content/Changecode.sys.mjs" {
   export {initializeChangeCodeClass};
 }
 
-declare module "chrome://tabmix-resource/content/log.sys.mjs" {
+declare module "chrome://tabmix-resource/content/logger.sys.mjs" {
   const console: LogModule.Console;
   export {console};
+  /** the raw ConsoleAPI instance with the Tabmix prefix */
+  const logger: ConsoleInstance;
+  export {logger};
 }
 
 declare module "chrome://tabmix-resource/content/TabContextConfig.sys.mjs" {

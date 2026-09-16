@@ -20,7 +20,7 @@ var $Pref = id => {
   const preference = document.getElementById(id, "_PREF_CLASS_");
   // only show error message when the element exist bt it is not a preference
   if (preference && preference.nodeName !== "preference") {
-    console.error(`Preference ${id} is not a preference!`);
+    Tabmix.console.error(`Preference ${id} is not a preference!`);
   }
   return preference;
 };
@@ -29,7 +29,7 @@ var $Pref = id => {
 const $Pane = id => {
   const pane = document.getElementById(id, "_PANE_CLASS_");
   if (pane.nodeName !== "prefpane") {
-    console.error(`Pane ${id} is not a prefpane!`);
+    Tabmix.console.error(`Pane ${id} is not a prefpane!`);
   }
   return pane;
 };
@@ -571,7 +571,9 @@ ChromeUtils.defineLazyGetter(this, "gPreferenceList", () => {
       if (fn && fn in prefs) {
         return prefs[fn](pref) !== undefined;
       }
-    } catch {}
+    } catch {
+      // ignore: pref does not exist - reported as "not set"
+    }
     return false;
   });
   return tabmixPrefs;

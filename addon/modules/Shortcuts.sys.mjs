@@ -10,6 +10,7 @@ const lazy = {};
 
 ChromeUtils.defineESModuleGetters(lazy, {
   getGlobal: "chrome://tabmix-resource/content/globalAccess.sys.mjs",
+  console: "chrome://tabmix-resource/content/logger.sys.mjs",
 });
 
 ChromeUtils.defineLazyGetter(lazy, "PlatformKeys", () => {
@@ -301,7 +302,7 @@ export const Shortcuts = {
 
       this.updatingShortcuts = false;
     } catch (ex) {
-      TabmixSvc.console.assert(ex);
+      lazy.console.assert(ex);
     }
   },
 
@@ -328,7 +329,7 @@ export const Shortcuts = {
         win.TabmixTabClickOptions.doCommand(command, win.gBrowser.selectedTab);
       }
     } catch (ex) {
-      TabmixSvc.console.assert(ex);
+      lazy.console.assert(ex);
     }
   },
 
@@ -501,11 +502,11 @@ export const Shortcuts = {
     let updatePreference = false;
     try {
       shortcuts = JSON.parse(getPref("extensions.tabmix.shortcuts"));
-    } catch {}
+    } catch {
+      // ignore: falls through to the "resets to default" message below
+    }
     if (shortcuts === null) {
-      TabmixSvc.console.log(
-        "failed to read shortcuts preference.\nAll shortcuts was resets to default"
-      );
+      lazy.console.log("failed to read shortcuts preference.\nAll shortcuts was resets to default");
       shortcuts = {};
       updatePreference = true;
     }
@@ -752,7 +753,9 @@ KeyConfig = {
     }
     try {
       prefValue = getPref("keyconfig.main." + aPrefName).split("][");
-    } catch {}
+    } catch {
+      // ignore: pref missing - the key keeps its default binding
+    }
     if (!prefValue) {
       newValue = keyData.default;
       // @ts-ignore - test work with string array since it coerced all values to strings

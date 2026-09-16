@@ -1,3 +1,5 @@
+import {logger} from "chrome://tabmix-resource/content/logger.sys.mjs";
+
 /** @type {ContentSvcModule.Lazy} */ // @ts-ignore
 const lazy = {};
 
@@ -16,6 +18,7 @@ export const ContentSvc = {
       return this._strings.GetStringFromName(aStringKey);
     } catch (e) {
       dump("*** Failed to get string " + aStringKey + " in bundle: tabmix.properties\n");
+      logger.warn("Failed to get string " + aStringKey + " in bundle: tabmix.properties");
       throw e;
     }
   },

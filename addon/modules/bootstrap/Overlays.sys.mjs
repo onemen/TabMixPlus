@@ -1,5 +1,6 @@
 /** Load overlays in a similar way as XUL did for legacy XUL add-ons. */
 import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
+import {logger as console} from "chrome://tabmix-resource/content/logger.sys.mjs";
 
 /** @type {OverlaysModule.Lazy} */ // @ts-ignore
 const lazy = {};
@@ -107,7 +108,7 @@ export class Overlays {
         doc = this.fetchOverlay(url);
         console.debug(`Applying ${url} to ${this.location}`);
       } catch (error) {
-        console.error("Tabmix", error);
+        console.error("applyOverlays failed for", url, error);
         // eslint-disable-next-line no-continue
         continue;
       }

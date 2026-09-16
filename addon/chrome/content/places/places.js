@@ -328,7 +328,9 @@ var TMP_Places = {
               loadFlags: Ci.nsIWebNavigation.LOAD_FLAGS_NONE,
               triggeringPrincipal: Services.scriptSecurityManager.getSystemPrincipal(),
             });
-          } catch {}
+          } catch {
+            // ignore: nothing else we can do for this bookmark container
+          }
         }
         this.resetRestoreState(aTab);
         aTab.collapsed = false;
@@ -980,7 +982,7 @@ var TMP_Places = {
         if (isSidebar && mainPopupSet) {
           mainPopupSet[eventListener]("popupshowing", this, false);
         } else {
-          console.log("Tabmix Error: unknown sidebar");
+          Tabmix.console.error("unknown sidebar");
         }
       }
     },
@@ -1175,7 +1177,7 @@ Tabmix.onContentLoaded = {
       )
       ._replace(
         'return shift ? "tabshifted" : "tab";',
-        `let callerTrace = TabmixSvc.console.callerTrace();
+        `let callerTrace = Tabmix.console.callerTrace();
         let list = [
           "openUILink",
           "handleLinkClick",

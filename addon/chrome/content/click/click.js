@@ -525,7 +525,7 @@ var TabmixContext = {
       .map(item => item.id);
 
     if (missingItems.length) {
-      console.warn("Tabmix tabContextConfig is missing these items:", missingItems.join(","));
+      Tabmix.console.warn("tabContextConfig is missing these items:", missingItems.join(","));
     }
 
     tabContextMenu.addEventListener(
@@ -599,7 +599,7 @@ var TabmixContext = {
         node._originalOrder = index + 1;
       });
     } catch (ex) {
-      console.error("Tabmix Error: Failed to save tab context menu original menu order", ex);
+      Tabmix.console.error("Failed to save tab context menu original menu order", ex);
     }
   },
 
@@ -698,8 +698,7 @@ var TabmixContext = {
             where === "insertafter" ? reference.nextSibling : reference
           );
         } catch (error) {
-          console.log(
-            "Tabmix Error: Failed to move tab context menu item",
+          Tabmix.console.warn(
             // @ts-ignore
             error?.message,
             itemId,
@@ -729,7 +728,7 @@ var TabmixContext = {
         tabContextMenu.appendChild(child);
       }
     } catch (ex) {
-      console.error("Tabmix Error: Failed to restore tab context menu to Firefox menu order", ex);
+      Tabmix.console.error("Failed to restore tab context menu to Firefox menu order", ex);
     }
   },
 
@@ -831,7 +830,7 @@ var TabmixContext = {
           if (prefList[relatedId]) {
             name = prefList[relatedId]?.[0] || relatedId;
           } else {
-            console.log("Tabmix Error: unknown menu item", id);
+            Tabmix.console.error("unknown menu item", id);
             return true;
           }
         }
@@ -857,7 +856,7 @@ var TabmixContext = {
       } else if (item) {
         Tabmix.showItem(item, isItemVisible(item.id, key));
       } else {
-        console.error("Tabmix Error: Missing menu item", iteOrId, key ?? "");
+        Tabmix.console.error("Missing menu item", iteOrId, key ?? "");
       }
     }
 

@@ -67,7 +67,7 @@ var Tabmix = {
   setAttributeList(aItemOrId, aAttr, aValue, aAdd) {
     let elem = typeof aItemOrId == "string" ? document.getElementById(aItemOrId) : aItemOrId;
     if (!elem) {
-      console.error(`Tabmix setAttributeList: ${aItemOrId} not found`);
+      this.console.error(`setAttributeList: ${aItemOrId} not found`);
       return;
     }
     let att = elem.getAttribute(aAttr);
@@ -95,7 +95,7 @@ var Tabmix = {
     /** @type {HTMLElement | null | undefined} */
     const element = document.getElementById(elementId);
     if (!element) {
-      console.error(`Tabmix setFTLDataId: ${elementId} not found`);
+      this.console.error(`setFTLDataId: ${elementId} not found`);
       return;
     }
 
@@ -108,7 +108,7 @@ var Tabmix = {
       if (!el) return;
       const dataId = el.getAttribute("data-lazy-l10n-id");
       if (!dataId) {
-        console.error(`Tabmix setFTLDataId: ${elementId} has no data-lazy-l10n-id`);
+        this.console.error(`setFTLDataId: ${elementId} has no data-lazy-l10n-id`);
         return;
       }
       const l10Id = convert(dataId);
@@ -171,8 +171,8 @@ var Tabmix = {
     }
   ) {
     if (!(name in obj)) {
-      console.error(
-        `Tabmix.lazyGetter: "get ${name}" does not exist when calling:\n${Error().stack?.split("\n").slice(1, 2) ?? ""}`
+      this.console.error(
+        `lazyGetter: "get ${name}" does not exist when calling:\n${Error().stack?.split("\n").slice(1, 2) ?? ""}`
       );
     }
     const config = {
@@ -209,7 +209,7 @@ var Tabmix = {
       let index = path.indexOf("/") - 1;
       let extensionName =
         index > -1 ? path.charAt(0).toUpperCase() + path.slice(1, index + 1) + " " : "";
-      this.clog(
+      this.log(
         `${err.message}\n\n${extensionName}extension call ${aOldName} from:
   file: chrome://${path}
   line: ${line}
@@ -217,7 +217,7 @@ var Tabmix = {
   Report about this to Tabmix developer at https://github.com/onemen/TabMixPlus/issues${extensionName ? ` and ${extensionName} developer.` : "."}`
       );
     } else {
-      this.clog(err.message + "\n\n" + stack);
+      this.log(err.message + "\n\n" + stack);
     }
   },
 
@@ -266,20 +266,21 @@ var Tabmix = {
   },
 
   show(aMethod, aDelay, aWindow) {
-    TabmixSvc.console.show(aMethod, aDelay, aWindow || window);
+    this.console.show(aMethod, aDelay, aWindow || window);
   },
 
-  // console._removeInternal use this function name to remove it from
-  // caller list
+  // console._getStackExcludingInternal skips frames whose name starts with
+  // TMP_console_ - the wrapper keeps that name so caller introspection stays
+  // accurate for code outside of utils.js.
   _getMethod: function TMP_console_wrapper(id, args) {
     if (["changeCode", "setNewFunction"].indexOf(id) > -1) {
       this.installChangecode();
       return this[id].apply(this, args);
     }
-    if (typeof TabmixSvc.console[id] == "function") {
-      return TabmixSvc.console[id].apply(TabmixSvc.console, args);
+    if (typeof this.console[id] == "function") {
+      return this.console[id].apply(this.console, args);
     }
-    TabmixSvc.console.trace("unexpected method " + id);
+    this.console.error("unexpected method " + id);
     return null;
   },
 
@@ -305,8 +306,6 @@ var Tabmix = {
       "log",
       "getCallerNameByIndex",
       "callerName",
-      "clog",
-      "isCallerInList",
       "callerTrace",
       "obj",
       "assert",
@@ -334,3 +333,6 @@ var Tabmix = {
 
 Tabmix._init();
 Tabmix.lazy_import(window, "TabmixSvc", "TabmixSvc", "TabmixSvc");
+// All Tabmix.console methods (assert, log, callerName, ...) resolve lazily on
+// first use; content code reaches the logger module only through Tabmix.
+Tabmix.lazy_import(Tabmix, "console", "logger", "console");

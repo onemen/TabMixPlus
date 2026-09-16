@@ -1,5 +1,6 @@
 /** Load Tabmix scripts to navigator:browser window. */
 import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs";
+import {logger as console} from "chrome://tabmix-resource/content/logger.sys.mjs";
 
 /** @type {ScriptsLoaderModule.Lazy} */ // @ts-ignore
 const lazy = {};
@@ -228,7 +229,7 @@ export const ScriptsLoader = {
             try {
               this._prepareTabbarCloseButton(window);
             } catch (/** @type {any} */ error) {
-              console.log(
+              console.warn(
                 "Tabmix was unable to install the tabmix-tabs-closebutton.",
                 error.message
               );

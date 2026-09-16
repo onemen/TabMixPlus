@@ -5,6 +5,7 @@ const {AppConstants} = ChromeUtils.importESModule("resource://gre/modules/AppCon
 ChromeUtils.defineESModuleGetters(this, {
   BrowserUtils: "resource://gre/modules/BrowserUtils.sys.mjs",
   E10SUtils: "resource://gre/modules/E10SUtils.sys.mjs",
+  console: "chrome://tabmix-resource/content/logger.sys.mjs",
   ContentSvc: "chrome://tabmix-resource/content/ContentSvc.sys.mjs",
   LinkNodeUtils: "chrome://tabmix-resource/content/LinkNodeUtils.sys.mjs",
   ContextMenu: "chrome://tabmix-resource/content/ContextMenu.sys.mjs",
@@ -127,6 +128,7 @@ var TabmixContentHandler = {
         return {url, name, type};
       });
     } catch {
+      // ignore: no accessible frame data - skip building this entry
       return;
     }
     let data = {
@@ -377,6 +379,7 @@ var TabmixClickEventHandler = {
         const secMan = Services.scriptSecurityManager;
         secMan.checkLoadURIStrWithPrincipal(principal, href);
       } catch {
+        // ignore: load not permitted for this principal - skip the link
         return;
       }
 

@@ -195,7 +195,9 @@ function existsFrameName(content, targetFrame) {
       if (frame.name == targetFrame || existsFrameName(frame, targetFrame)) {
         return true;
       }
-    } catch {}
+    } catch {
+      // ignore: cross-origin frame access denied
+    }
   }
   return false;
 }

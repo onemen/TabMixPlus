@@ -15,8 +15,15 @@
  *    intentionally also hold on wip/error-handling-logging, which removes a
  *    strict superset (logger rewrite, clog/isCallerInList, TabmixSvc.console
  *    alias, log.sys.mjs rename).
+ * 3. Logger rewrite (60d4f6c2 + pref fixes): logger.sys.mjs is wired as
+ *    Tabmix.console, the `extensions.tabmix.log.level` pref exists at boot
+ *    (registered by the module itself on the default pref branch — see
+ *    logger.sys.mjs), caller introspection works through the real
+ *    Error().stack, and a live logger write reaches ConsoleAPIStorage with the
+ *    Tabmix prefix. log.sys.mjs is gone.
  *
- * Static/VM counterpart: the boot must be error-free before any probe runs.
+ * Static/VM counterpart: test/unit/logger.test.mjs (pure logic); the boot is
+ * also asserted error-free here before any probe writes to the console.
  */
 
 import {createCounter, check, summary} from "../shared/assert.mjs";
@@ -41,7 +48,132 @@ const BENIGN_BOOT_ERRORS =
   /RSLoader|RemoteSettings|PrivateBrowsingUtils|occlusion|onboarding|telemetry|GMP|WebMIDI|autofill/i;
 
 /**
- * Section 1 — autoreload popup: data-command lookup + full toggle round-trip.
+ * Section 1 — logger rewrite: surface, level pref, introspection, live output.
+ *
+ * @param {object} counter - shared counter
+ * @param {object} bridgePage - the privileged client tab
+ */
+async function checkLogger(counter, bridgePage) {
+  const loggerState = await evalAsyncInMain(
+    bridgePage,
+    `
+      const t = window.Tabmix;
+      const result = {};
+      try {
+        // Accessing t.console lazy-imports logger.sys.mjs (the rewrite's
+        // wiring through utils.js lazy_import).
+        const c = t.console;
+        result.consoleWired = Boolean(c);
+        result.surface = {
+          getObject: typeof c.getObject === "function",
+          callerName: typeof c.callerName === "function",
+          callerTrace: typeof c.callerTrace === "function",
+          makeError: typeof c.makeError === "function",
+          reportError: typeof c.reportError === "function",
+          log: typeof c.log === "function",
+        };
+        result.clogGone = typeof c.clog === "undefined";
+        result.isCallerInListGone = typeof c.isCallerInList === "undefined";
+        result.svcConsoleAliasGone = typeof TabmixSvc.console === "undefined";
+        result.levelPrefType = Services.prefs.getPrefType("extensions.tabmix.log.level");
+        result.levelPrefValue = Services.prefs.getStringPref(
+          "extensions.tabmix.log.level", "<missing>"
+        );
+        // caller introspection runs on the live Error().stack
+        result.callerNameType = typeof c.callerName();
+        result.callerTraceType = typeof c.callerTrace("noSuchFrame@nowhere");
+      } catch (e) {
+        result.error = String(e);
+      }
+      return result;
+    `
+  );
+  check(
+    counter,
+    loggerState?.consoleWired === true && !loggerState?.error,
+    "Tabmix.console resolves to the rewritten logger module",
+    loggerState?.error
+  );
+  const surface = loggerState?.surface ?? {};
+  check(
+    counter,
+    Object.values(surface).every(v => v === true) && Object.keys(surface).length === 6,
+    "Tabmix.console exposes the full logger surface (getObject/callerName/callerTrace/makeError/reportError/log)",
+    JSON.stringify(surface)
+  );
+  check(
+    counter,
+    loggerState?.clogGone === true &&
+      loggerState?.isCallerInListGone === true &&
+      loggerState?.svcConsoleAliasGone === true,
+    "legacy clog/isCallerInList helpers and the TabmixSvc.console alias are gone"
+  );
+  // Services.prefs.PREF_STRING is 32 in every supported Firefox.
+  check(
+    counter,
+    loggerState?.levelPrefType === 32,
+    "extensions.tabmix.log.level exists as a string pref at boot (registered by logger.sys.mjs on the default branch)",
+    `pref type: ${loggerState?.levelPrefType}`
+  );
+  check(
+    counter,
+    typeof loggerState?.levelPrefValue === "string" && loggerState.levelPrefValue !== "<missing>",
+    `log.level has a value (${loggerState?.levelPrefValue})`
+  );
+  check(
+    counter,
+    loggerState?.callerNameType === "string",
+    "callerName() introspects the live Error().stack"
+  );
+  check(
+    counter,
+    loggerState?.callerTraceType === "boolean",
+    "callerTrace(names) returns a boolean"
+  );
+
+  // Live output: ConsoleAPI instances do NOT go through nsIConsoleService
+  // listeners — they land in ConsoleAPIStorage (what the Browser Console
+  // itself reads). Poll there for the probe text. Runs AFTER the boot-clean
+  // check, so the probe's own message cannot fail that check.
+  const probeText = `tabmix-e2e-logger-probe-${Date.now()}`;
+  await evalAsyncInMain(
+    bridgePage,
+    `
+    window.Tabmix.console.log("${probeText}", false);
+    return true;
+  `
+  );
+  let captured = null;
+  for (let i = 0; i < 20 && !captured; i++) {
+    await new Promise(resolve => setTimeout(resolve, 250));
+    captured = await evalAsyncInMain(
+      bridgePage,
+      `
+      const storage = Cc["@mozilla.org/consoleAPI-storage;1"]
+        .getService(Ci.nsIConsoleAPIStorage);
+      const ev = [...storage.getEvents(null)]
+        .map(e => e.wrappedJSObject ?? e)
+        .find(e => e.prefix === "Tabmix" &&
+          (e.arguments ?? []).some(a => String(a).includes("${probeText}")));
+      return ev ? {level: ev.level, arg0: String(ev.arguments?.[0]).slice(0, 120)} : null;
+    `
+    );
+  }
+  check(
+    counter,
+    Boolean(captured),
+    "Tabmix.console.log reaches ConsoleAPIStorage with the Tabmix prefix (live ConsoleAPI write)",
+    captured ? null : "probe message not found in consoleAPI-storage"
+  );
+  if (captured) {
+    console.log(
+      `  captured logger output: [${captured.level}] ${String(captured.arg0).slice(0, 100)}`
+    );
+  }
+}
+
+/**
+ * Section 2 — autoreload popup: data-command lookup + full toggle round-trip.
  *
  * @param {object} counter - shared counter
  * @param {object} bridgePage - the privileged client tab
@@ -158,11 +290,10 @@ async function checkAutoReload(counter, bridgePage) {
 }
 
 /**
- * Section 2 — dead-code sweep (e597603d + a7c481fa): the removed code shapes
- * are really gone at runtime. Every assertion here also holds on
- * wip/error-handling-logging, which removes a strict superset (the logger
- * rewrite, clog/isCallerInList, the TabmixSvc.console alias), so the suite
- * keeps passing after the logger rebase.
+ * Section 3 — dead-code sweep (e597603d + a7c481fa): the removed code shapes
+ * are really gone at runtime. The logger rewrite removes a strict superset
+ * (clog/isCallerInList, TabmixSvc.console alias, log.sys.mjs rename) — covered
+ * by Section 1.
  *
  * @param {object} counter - shared counter
  * @param {object} bridgePage - the privileged client tab
@@ -330,10 +461,13 @@ export async function run({
       for (const e of realErrors) console.log(`    - ${e.text.slice(0, 200)}`);
     }
 
-    // ── 1. Autoreload popup: data-command lookup + full toggle round-trip ──
+    // ── 1. Logger rewrite: module surface, pref, introspection, live output ──
+    await checkLogger(counter, bridgePage);
+
+    // ── 2. Autoreload popup: data-command lookup + full toggle round-trip ──
     await checkAutoReload(counter, bridgePage);
 
-    // ── 2. Dead-code sweep: removed paths are gone at runtime ──
+    // ── 3. Dead-code sweep: removed paths are gone at runtime ──
     await checkDeadCodeSweep(counter, bridgePage);
   } catch (err) {
     check(counter, false, "cleanup suite completed without exception", String(err));

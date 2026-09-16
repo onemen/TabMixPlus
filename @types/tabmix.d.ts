@@ -111,13 +111,14 @@ interface TabmixGlobal {
   originalFunctions: (OriginalFunctions & Record<string, (...args: unknown[]) => unknown>) | Record<string, any>;
   destroy(): void;
 
-  // imported from log.sys.mjs
+  // imported from logger.sys.mjs
+  /** lazy - resolves on first use to the logger module's console export */
+  console: LogModule.Console;
   show: LogModule.Console["show"];
   assert: LogModule.Console["assert"];
   callerName: LogModule.Console["callerName"];
   callerTrace: LogModule.Console["callerTrace"];
   log: LogModule.Console["log"];
-  clog: LogModule.Console["clog"];
   obj: LogModule.Console["obj"];
   getObject: LogModule.Console["getObject"];
   reportError: LogModule.Console["reportError"];

@@ -1,4 +1,5 @@
 import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
+import {logger as console} from "chrome://tabmix-resource/content/logger.sys.mjs";
 
 const isLibreWolf = AppConstants.MOZ_APP_NAME.toLowerCase() == "librewolf";
 
@@ -35,7 +36,7 @@ export function isVersion(aVersionNo, updateChannel) {
     updateChannel = aVersionNo.updateChannel || null;
 
     if (!firefox && !waterfox && !floorp && !zen) {
-      console.log("Tabmix: invalid version check " + JSON.stringify(aVersionNo));
+      console.warn("invalid version check", JSON.stringify(aVersionNo));
       return true;
     }
     if ((waterfox && !lazy.isWaterfox) || (floorp && !lazy.isFloorp) || (zen && !lazy.isZen)) {

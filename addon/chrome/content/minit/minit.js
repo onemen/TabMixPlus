@@ -1207,7 +1207,7 @@ var TMP_tabDNDObserver = {
     };
     PageThumbs.captureToCanvas(tab.linkedBrowser, tabbrowserTabs._dndCanvas)
       .then(captureListener)
-      .catch(e => console.error(e));
+      .catch(e => Tabmix.console.error(e));
   },
 
   // we call this function from gBrowser.tabContainer.tabDragAndDrop.handle_dragstart
@@ -1288,7 +1288,9 @@ var TMP_tabDNDObserver = {
             : browserDragAndDrop.dropLinks(event, true);
           const url = links.length && links[0]?.url ? links[0].url : null;
           disAllowDrop = url ? !Tabmix.ContentClick.isUrlForDownload(url) : true;
-        } catch {}
+        } catch {
+          // ignore: drop-link probing is best-effort; default to allowing drop
+        }
 
         if (disAllowDrop) {
           // show Drag & Drop message
@@ -3048,7 +3050,7 @@ Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodN
   /** @type {PrivateMethod<typeof methodName>} */ // @ts-expect-error
   const method = function () {};
   if (!firefoxClass) {
-    console.error(`Tabmix Error: can't find ${name} constructor for element\n${errorMsg}`);
+    Tabmix.console.error(`can't find ${name} constructor for element\n${errorMsg}`);
     return method;
   }
 
@@ -3096,14 +3098,11 @@ Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodN
         Tabmix.makeCode(`_${methodName}${code}`, parent, nonPrivateMethodName, sandbox)
       );
     } catch (error) {
-      console.error(
-        `Tabmix Error: getPrivateMethod failed to evaluate ${nonPrivateMethodName}`,
-        error
-      );
+      Tabmix.console.error(`getPrivateMethod failed to evaluate ${nonPrivateMethodName}`, error);
       return method;
     }
   }
-  console.error(`Tabmix Error: ${errorMsg}`);
+  Tabmix.console.error(errorMsg);
   return method;
 };
 

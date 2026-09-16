@@ -148,7 +148,7 @@ var gAppearancePane = {
         .then(() => {
           position.setAttribute("label", $("tabBarTopAbove").label);
         })
-        .catch(e => console.error("error in _waterfoxPositionControl", e));
+        .catch(e => Tabmix.console.error("error in _waterfoxPositionControl", e));
     }
     position.setAttribute("preference", positionPref);
     position.setAttribute("value", Services.prefs.getCharPref(positionPref, defaultPrefValue));

@@ -129,7 +129,7 @@ class Preferences extends MozXULElement {
       event.initEvent("change", true, true);
       aPreference.dispatchEvent(event);
     } catch (e) {
-      console.error(e);
+      Tabmix.console.error(e);
     }
   }
 }
@@ -408,7 +408,9 @@ class Preference extends MozXULElement {
         default:
           this._reportUnknownType();
       }
-    } catch {}
+    } catch {
+      // ignore: pref missing from the branch - caller handles undefined
+    }
     return null;
   }
 
@@ -511,7 +513,7 @@ class Preference extends MozXULElement {
       try {
         val = handleOnEvent(null, "syncfrompreference", {element: aElement});
       } catch (e) {
-        console.error(e);
+        Tabmix.console.error(e);
       }
     }
     if (val === undefined) {
@@ -565,7 +567,7 @@ class Preference extends MozXULElement {
           return rv;
         }
       } catch (e) {
-        console.error(e);
+        Tabmix.console.error(e);
       }
     }
 
@@ -691,7 +693,7 @@ class PrefPane extends MozXULElement {
           const preference = this.preferenceForElement(element);
           preference.setElementValue(element);
         } catch {
-          dump("*** No preference found for " + element.getAttribute("preference") + "\n");
+          Tabmix.console.warn("No preference found for " + element.getAttribute("preference"));
         }
       }
     });
@@ -1568,7 +1570,9 @@ class PrefWindow extends MozXULElement {
         if (defaultButton) {
           window.notifyDefaultButtonLoaded(defaultButton);
         }
-      } catch {}
+      } catch {
+        // ignore: notifyDefaultButtonLoaded is an optional embedder hook
+      }
     };
 
     // Give focus after onload completes, see bug 103197.
@@ -1718,7 +1722,7 @@ class PrefWindow extends MozXULElement {
     } else {
       this.setAttribute("defaultButton", "none");
       if (aNewDefault != "none") {
-        dump("invalid new default button: " + aNewDefault + ", assuming: none\n");
+        Tabmix.console.warn("invalid new default button: " + aNewDefault + ", assuming: none");
       }
     }
   }
@@ -1727,7 +1731,7 @@ class PrefWindow extends MozXULElement {
   _handleButtonCommand(aEvent) {
     const dlgType = aEvent.target.getAttribute("dlgtype");
     if (dlgType === null) {
-      console.error("Missing 'dlgtype' attribute on event target.");
+      Tabmix.console.error("Missing 'dlgtype' attribute on event target.");
       return false;
     }
     return this._doButtonCommand(/** @type {DialogButtonsType} */ (dlgType));
@@ -1851,7 +1855,7 @@ class PrefWindow extends MozXULElement {
       }
       return !cancel;
     } catch (e) {
-      console.error(e);
+      Tabmix.console.error(e);
     }
     return false;
   }
