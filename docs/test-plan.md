@@ -16,9 +16,9 @@ currently in flight. Decisions (repo-local tests, local-first, CI later) are rec
 > [test/E2E/README.md](../test/E2E/README.md) for how the engine works and
 > [Local developer experience](#8-local-developer-experience) for the commands. The smoke suite
 > passed 11/11 on Firefox Nightly, verified manually on Windows 11 (2026-09-13); `--suite=all`
-> (internals + smoke) passed on 2026-09-14; the cleanup-branch suite passed 15/15 on Nightly and
-> 23/23 with the logger section on the logger branch (2026-09-16). Remaining before the coverage
-> rule activates: the P1 unit inventories and the P2 suites.
+> (internals + smoke) passed on 2026-09-14; the dev-line suite passed 15/15 on Nightly and 23/23
+> with the logger section on the logger branch (2026-09-16). Remaining before the coverage rule
+> activates: the P1 unit inventories and the P2 suites.
 
 ## Priority tiers
 
@@ -33,21 +33,18 @@ currently in flight. Decisions (repo-local tests, local-first, CI later) are rec
 
 Every change merged from a `wip/*` branch must carry its covering test (ADR 0003):
 
-| Branch change | Covering test | | ------------------------------------------------------------- |
-------------------------------------------------------------------- || error-handling/logging
-rewrite (`wip/error-handling-logging`) | unit: `test/unit/logger.test.mjs` (shimmed module logic);
-E2E dev-suite logger section (surface, `log.level` pref at boot, live `[Tabmix:...]` ConsoleAPI
-capture, legacy helpers gone); smoke zero-console-error | | dead-code sweep (dev `e597603d` +
-`a7c481fa`) | E2E dev-suite sweep section: no `.substr(` in swept files, `nonStrictMode` gone,
-DynamicRules dead state gone; typecheck + smoke boot | | autoreload data-command fix (dev
-`f42b4a34`) | E2E dev-suite autoreload section: enable item found by `data-command="toggle"`, full
-enable/disable round-trip, no timer leak | | types-safety, types-safety-1 | `pnpm typecheck` **is**
-the test (behavior-neutral; smoke confirms) | | perf regex/style caching (`wip/perf`) | unit: cached
-vs uncached result equivalence | | arch: ContentClick re-entrancy fix (`wip/arch`) | click E2E
-(ctrl+shift range, re-entrant path) | | arch: `verifyPrivateMethodReplaced` call-site | Changecode
-unit | | fix-b9 firefox-source copies | verify-firefox-internals checks the ANCHORS table | |
-fix-b11 getSandbox lifecycle audit | sandbox lifecycle unit | | E2E engine itself (`wip/test-suite`)
-| its own smoke suite (dogfood) |
+| Branch change                                                 | Covering test                                                                                                                                                                                                     |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| error-handling/logging rewrite (`wip/error-handling-logging`) | unit: `test/unit/logger.test.mjs` (shimmed module logic); E2E dev-suite logger section (surface, `log.level` pref at boot, live `[Tabmix:...]` ConsoleAPI capture, legacy helpers gone); smoke zero-console-error |
+| dead-code sweep (dev `e597603d` + `a7c481fa`)                 | E2E dev-suite sweep section: no `.substr(` in swept files, `nonStrictMode` gone, DynamicRules dead state gone; typecheck + smoke boot                                                                             |
+| autoreload data-command fix (dev `f42b4a34`)                  | E2E dev-suite autoreload section: enable item found by `data-command="toggle"`, full enable/disable round-trip, no timer leak                                                                                     |
+| types-safety, types-safety-1                                  | `pnpm typecheck` **is** the test (behavior-neutral; smoke confirms)                                                                                                                                               |
+| perf regex/style caching (`wip/perf`)                         | unit: cached vs uncached result equivalence                                                                                                                                                                       |
+| arch: ContentClick re-entrancy fix (`wip/arch`)               | click E2E (ctrl+shift range, re-entrant path)                                                                                                                                                                     |
+| arch: `verifyPrivateMethodReplaced` call-site                 | Changecode unit                                                                                                                                                                                                   |
+| fix-b9 firefox-source copies                                  | verify-firefox-internals checks the ANCHORS table                                                                                                                                                                 |
+| fix-b11 getSandbox lifecycle audit                            | sandbox lifecycle unit                                                                                                                                                                                            |
+| E2E engine itself (`wip/test-suite`)                          | its own smoke suite (dogfood)                                                                                                                                                                                     |
 
 ### Decisions
 

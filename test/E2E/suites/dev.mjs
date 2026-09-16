@@ -17,9 +17,10 @@
  *    alias, log.sys.mjs rename).
  * 3. Logger rewrite (60d4f6c2 + pref fixes): logger.sys.mjs is wired as
  *    Tabmix.console, the `extensions.tabmix.log.level` pref exists at boot
- *    (created by the module when missing — 51719d24), caller introspection
- *    works through the real Error().stack, and a live logger write reaches
- *    ConsoleAPIStorage with the Tabmix prefix. log.sys.mjs is gone.
+ *    (registered by the module itself on the default pref branch — see
+ *    logger.sys.mjs), caller introspection works through the real
+ *    Error().stack, and a live logger write reaches ConsoleAPIStorage with the
+ *    Tabmix prefix. log.sys.mjs is gone.
  *
  * Static/VM counterpart: test/unit/logger.test.mjs (pure logic); the boot is
  * also asserted error-free here before any probe writes to the console.
@@ -173,8 +174,6 @@ async function checkLogger(counter, bridgePage) {
 
 /**
  * Section 2 — autoreload popup: data-command lookup + full toggle round-trip.
- * (On wip/cleanup this suite runs without Section 1 — logger.sys.mjs does not
- * exist there.)
  *
  * @param {object} counter - shared counter
  * @param {object} bridgePage - the privileged client tab
@@ -292,9 +291,9 @@ async function checkAutoReload(counter, bridgePage) {
 
 /**
  * Section 3 — dead-code sweep (e597603d + a7c481fa): the removed code shapes
- * are really gone at runtime. On this branch the logger rewrite removes a
- * strict superset (clog/isCallerInList, TabmixSvc.console alias, log.sys.mjs
- * rename) — covered by Section 1.
+ * are really gone at runtime. The logger rewrite removes a strict superset
+ * (clog/isCallerInList, TabmixSvc.console alias, log.sys.mjs rename) — covered
+ * by Section 1.
  *
  * @param {object} counter - shared counter
  * @param {object} bridgePage - the privileged client tab
