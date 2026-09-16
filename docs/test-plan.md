@@ -16,9 +16,9 @@ currently in flight. Decisions (repo-local tests, local-first, CI later) are rec
 > [test/E2E/README.md](../test/E2E/README.md) for how the engine works and
 > [Local developer experience](#8-local-developer-experience) for the commands. The smoke suite
 > passed 11/11 on Firefox Nightly, verified manually on Windows 11 (2026-09-13); `--suite=all`
-> (internals + smoke) passed on 2026-09-14; the dev-line suite passed 15/15 on Nightly and 23/23
-> with the logger section on the logger branch (2026-09-16). Remaining before the coverage rule
-> activates: the P1 unit inventories and the P2 suites.
+> (internals + smoke) passed on 2026-09-14; the cleanup-branch suite passed 15/15 on Nightly and
+> 23/23 with the logger section on the logger branch (2026-09-16). Remaining before the coverage
+> rule activates: the P1 unit inventories and the P2 suites.
 
 ## Priority tiers
 

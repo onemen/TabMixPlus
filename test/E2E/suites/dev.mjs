@@ -173,7 +173,7 @@ async function checkLogger(counter, bridgePage) {
 
 /**
  * Section 2 — autoreload popup: data-command lookup + full toggle round-trip.
- * (On dev-v1.48 this suite runs without Section 1 — logger.sys.mjs does not
+ * (On wip/cleanup this suite runs without Section 1 — logger.sys.mjs does not
  * exist there.)
  *
  * @param {object} counter - shared counter

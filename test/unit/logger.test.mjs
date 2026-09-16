@@ -1,6 +1,8 @@
 /**
  * Unit tests for addon/modules/logger.sys.mjs — the error-handling & logging
- * rewrite from the dev line (commits 05f9a104, 4b3b95ba, f71a877e).
+ * rewrite (the logger-line rename commit and the log.level pref fixes e7c25380
+ *
+ * - 51719d24).
  *
  * logger.sys.mjs touches `Services.prefs`, `globalThis.console` and
  * `Components` at import/call time, so each test installs minimal shims and
