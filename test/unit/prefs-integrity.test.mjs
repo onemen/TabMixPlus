@@ -70,8 +70,7 @@ function addonSourceFiles() {
  * regex and the loader would surface as a false failure here, not as a silent
  * pass.
  *
- * Returns {fileNames, literalIds}: fileNames are the derived pref names;
- * literalIds are the raw quoted keys (used by the reference scan below).
+ * Returns the derived pref names, e.g. "extensions.tabmix.closeTabMenu".
  */
 function tabContextPrefNames() {
   const src = fs.readFileSync(TAB_CONTEXT_FILE, "utf8");
@@ -81,7 +80,6 @@ function tabContextPrefNames() {
   const block = src.slice(prefListStart, prefListEnd);
 
   const names = [];
-  const literalIds = [];
   // Match `"context_x": ["prefName"]` / `"context_x": ["", false]` entries;
   // skip commented-out lines (they carry leading // on the same line).
   for (const m of block.matchAll(/["']([A-Za-z0-9_-]+)["']\s*:\s*\[\s*([^\]]*?)\s*]/g)) {
@@ -92,9 +90,8 @@ function tabContextPrefNames() {
     const name = nameMatch ? nameMatch[1] : id;
     const prefName = name || id.replace(/^context_|^tm-/, "");
     names.push(`extensions.tabmix.${prefName}`);
-    literalIds.push(id);
   }
-  return {names, literalIds};
+  return names;
 }
 
 export const name = "prefs-integrity";
@@ -127,7 +124,7 @@ export const tests = [
   {
     name: "code-registered tab-context defaults derive cleanly from TabContextConfig.prefList",
     async test() {
-      const {names} = tabContextPrefNames();
+      const names = tabContextPrefNames();
       assert.ok(names.length >= 20, `prefList yields defaults (${names.length} found)`);
       const dupes = names.filter((n, i) => names.indexOf(n) !== i);
       assert.deepEqual(dupes, [], "no duplicate tab-context default names");
@@ -140,7 +137,7 @@ export const tests = [
   {
     name: "tab-context defaults do not collide with defaults-file registrations",
     async test() {
-      const {names: ctxNames} = tabContextPrefNames();
+      const ctxNames = tabContextPrefNames();
       const fileSet = new Set(prefNamesFromDefaultsFile());
       const overlap = ctxNames.filter(n => fileSet.has(n));
       assert.deepEqual(overlap, [], "PreferencesLoader would re-register existing defaults");
