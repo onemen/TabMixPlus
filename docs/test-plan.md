@@ -8,11 +8,12 @@ currently in flight. Decisions (repo-local tests, local-first, CI later) are rec
 > `TEST-PLAN.local.md` (which existed untracked between 2026-09-14 and 2026-09-15). Edit this file;
 > do not fork it back into a `*.local.*` copy.
 
-> **Status:** the E2E engine (phase 1) with the smoke + internals suites, the dev-line suite
-> (dev-v1.48 changes; a logger section is added on `wip/error-handling-logging`), the unit runner
-> (`pnpm test:unit`, seeded with verify-internals unit tests), the static verify-firefox-internals
-> check, and the `pr-checks` workflow (lint + typecheck + unit on PRs and pushes to main) exist —
-> see [test/E2E/README.md](../test/E2E/README.md) for how the engine works and
+> **Status:** the E2E engine (phase 1) with the smoke + internals suites, the dev-line suite (the
+> `wip/cleanup` branch changes: dead-code sweep + autoreload fix; a logger section is added on
+> `wip/error-handling-logging`), the unit runner (`pnpm test:unit`, seeded with verify-internals
+> unit tests), the static verify-firefox-internals check, and the `pr-checks` workflow (lint +
+> typecheck + unit on PRs and pushes to main) exist — see
+> [test/E2E/README.md](../test/E2E/README.md) for how the engine works and
 > [Local developer experience](#8-local-developer-experience) for the commands. The smoke suite
 > passed 11/11 on Firefox Nightly, verified manually on Windows 11 (2026-09-13); `--suite=all`
 > (internals + smoke) passed on 2026-09-14; the dev-line suite passed 15/15 on Nightly and 23/23
@@ -148,13 +149,14 @@ test/
   **zero console errors**; version bucket logged.
 - **internals** (exists) — runtime complement of verify-firefox-internals: `planned` ⊆ `replaced`
   private-method invariant, sandbox lifecycle, clean boot console.
-- **dev (exists, `dev-v1.48`) — dev-line regression gate:** autoreload popup enable item found by
-  `data-command="toggle"` with a real dispatched command event (full enable/disable round-trip, no
-  timer leak); dead-code sweep assertions (`.substr(` gone from swept files, `nonStrictMode` gone,
-  DynamicRules dead state gone). On `wip/error-handling-logging` it gains the **logger section**:
-  module surface via `Tabmix.console`, `extensions.tabmix.log.level` present at boot,
-  `callerName`/`callerTrace` on live `Error().stack`, a live `Tabmix.console.log` write captured in
-  ConsoleAPIStorage with the `Tabmix` prefix, and clog/isCallerInList/`TabmixSvc.console` gone.
+- **dev (exists, `wip/cleanup`) — cleanup-branch regression gate:** autoreload popup enable item
+  found by `data-command="toggle"` with a real dispatched command event (full enable/disable
+  round-trip, no timer leak); dead-code sweep assertions (`.substr(` gone from swept files,
+  `nonStrictMode` gone, DynamicRules dead state gone). On `wip/error-handling-logging` it gains the
+  **logger section**: module surface via `Tabmix.console`, `extensions.tabmix.log.level` present at
+  boot, `callerName`/`callerTrace` on live `Error().stack`, a live `Tabmix.console.log` write
+  captured in ConsoleAPIStorage with the `Tabmix` prefix, and
+  clog/isCallerInList/`TabmixSvc.console` gone.
 - **tabs (tab/ + minit)** — new-tab button (incl. middle-click paste #574); close buttons; pinned
   tabs; **multi-row** (rows, wrap points, scrollbox arrows); tab width modes;
   duplicate/merge/detach; all-tabs button.

@@ -1,6 +1,6 @@
 /**
- * E2E dev-line suite — covers the dev-v1.48 changes that unit tests cannot
- * reach, in the real browser (P1 tier in docs/test-plan.md):
+ * E2E cleanup-branch suite — covers the wip/cleanup changes that unit tests
+ * cannot reach, in the real browser (P1 tier in docs/test-plan.md):
  *
  * 1. Autoreload popup keyed by data-command (f42b4a34): onPopupShowing finds the
  *    enable item by `data-command="toggle"` — the same key the command listener
@@ -269,7 +269,7 @@ export async function run({
   const counter = createCounter();
   const channelKey = channel || DEFAULT_BROWSER;
   const exe = await resolveBrowser(channel, binary);
-  console.log(`Dev-line suite — browser: ${exe}`);
+  console.log(`Cleanup-branch suite — browser: ${exe}`);
 
   const profileDir = createProfileDir("dev");
 
@@ -336,7 +336,7 @@ export async function run({
     // ── 2. Dead-code sweep: removed paths are gone at runtime ──
     await checkDeadCodeSweep(counter, bridgePage);
   } catch (err) {
-    check(counter, false, "dev suite completed without exception", String(err));
+    check(counter, false, "cleanup suite completed without exception", String(err));
   } finally {
     await closeBrowser(browser, processTags ?? [], keepOpen);
     if (!keepProfile) {
