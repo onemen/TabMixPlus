@@ -766,7 +766,7 @@ declare namespace ChangecodeModule {
   }
 
   type ChangeCodeScriptParams = ChangeCodeScriptParamsWithObj | ChangeCodeScriptParamsWithWindow;
-  type ExpandTabmix = Pick<TabmixGlobal, "_debugMode" | "changeCode" | "setNewFunction" | "nonStrictMode" | "getSandbox" | "makeCode">;
+  type ExpandTabmix = Pick<TabmixGlobal, "_debugMode" | "changeCode" | "setNewFunction" | "getSandbox" | "makeCode">;
   type SandboxOptions = {shared?: boolean; scope?: Record<string, unknown> | undefined};
 
   function getSandbox(window: Window, params?: {scope?: Record<string, unknown>}): TabmixSandbox;
@@ -1058,8 +1058,6 @@ declare namespace DynamicRulesModule {
     styles: Record<string, StyleRule | null>;
     registered: Record<string, any>;
     _initialized: boolean;
-    orient: string;
-    windows10: boolean;
     tabState: {[key: string]: string};
     init(aWindow: Window): void;
     observe(subject: unknown, topic: string, data: string): void;
@@ -1722,7 +1720,6 @@ interface TabmixGlobal {
   _sandbox: TabmixSandbox;
   _gBrowser_sandbox: TabmixSandbox;
   changeCode(this: TabmixGlobal, parent: Record<string, any>, fnName: string, options?: ChangecodeModule.Options): ChangecodeModule.ChangeCodeClass;
-  nonStrictMode(obj: Record<string, any>, fn: string, arg?: any): void;
   setNewFunction(obj: Record<string, any>, name: string, aCode: FunctionWithAny): void;
   getSandbox(this: TabmixGlobal, obj: object, options?: ChangecodeModule.SandboxOptions): TabmixSandbox;
   makeCode(this: TabmixGlobal, code: string, obj: Record<string, any> | null, fullName: string, sandbox?: TabmixSandbox): FunctionWithAny;

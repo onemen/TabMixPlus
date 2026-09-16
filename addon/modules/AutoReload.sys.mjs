@@ -85,7 +85,6 @@ export const AutoReload = {
   },
 
   onPopupShowing(aPopup, aTab) {
-    var menuItems = aPopup.childNodes;
     // @ts-ignore
     aPopup._tab = null;
 
@@ -102,8 +101,10 @@ export const AutoReload = {
       this.initTab(aPopup._tab);
     }
 
+    // look the item up by its data-command key (the same key the command
+    // listener dispatches on) instead of a DOM-position index
     /** @type {HTMLElement} */ // @ts-ignore
-    var enableItem = menuItems[2];
+    var enableItem = aPopup.getElementsByAttribute("data-command", "toggle")[0];
     if (!this._labelsInitialized) {
       this._labels = {
         minute: enableItem.getAttribute("minute") ?? "",

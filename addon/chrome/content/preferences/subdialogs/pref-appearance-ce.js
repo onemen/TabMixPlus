@@ -339,7 +339,7 @@ const TabpanelsClass = customElements.get("tabpanels");
       // colorpicker use rgb hexadecimal format
       const color = val.replace("#", "");
       this._RGB.slice(0, -1).forEach((element, i) => {
-        const subS = color.substr(i * 2, 2);
+        const subS = color.slice(i * 2, i * 2 + 2);
         element.value = String(parseInt(subS, 16));
       });
     }

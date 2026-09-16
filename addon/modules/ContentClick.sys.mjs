@@ -716,25 +716,15 @@ ContentClickInternal = {
   },
 
   /**
-   * hock the proper Greasemonkey function into Tabmix.isGMEnabled
+   * hook the modern Greasemonkey API into LinkNodeUtils.isGMEnabled
    *
    * @returns {void}
    */
   isGreasemonkeyInstalled: function TMP_isGreasemonkeyInstalled(window) {
-    var GM_function;
-    // Greasemonkey >= 0.9.10
+    // Greasemonkey >= 0.9.10 GM_util API only
     if (typeof window.GM_util == "object" && typeof window.GM_util.getEnabled == "function") {
-      GM_function = window.GM_util.getEnabled;
-      // Greasemonkey < 0.9.10
-    } else if (typeof window.GM_getEnabled == "function") {
-      GM_function = window.GM_getEnabled;
+      lazy.LinkNodeUtils._GM_function.set(window, window.GM_util.getEnabled);
     }
-
-    if (typeof GM_function != "function") {
-      return;
-    }
-
-    lazy.LinkNodeUtils._GM_function.set(window, GM_function);
   },
 
   /**
