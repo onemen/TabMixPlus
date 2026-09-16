@@ -1860,7 +1860,7 @@ Tabmix.tablib = {
 
       if (aTab.hasAttribute("mergeselected")) {
         aTab.removeAttribute("mergeselected");
-        aTab.label = aTab.label.substr(4);
+        aTab.label = aTab.label.slice(4);
       } else {
         aTab.setAttribute("mergeselected", "true");
         aTab.label = "(*) " + aTab.label;

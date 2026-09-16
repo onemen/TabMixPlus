@@ -16,7 +16,8 @@
   max-height: none !important;
 }
 
-#tabbrowser-tabs[tabmix-flowing="multibar"][tabmix-multibar="scrollbar"] .tabbrowser-tab[collapsed="true"] {
+#tabbrowser-tabs[tabmix-flowing="multibar"][tabmix-multibar="scrollbar"]
+  .tabbrowser-tab[collapsed="true"] {
   display: none !important;
 }
 
@@ -25,24 +26,34 @@
   text-align: start !important;
 }
 
-/* fix background for multi-row */
-#tabbrowser-tabs[tabmix-flowing="multibar"][backgroundrepeat] {
-  background-repeat: repeat;
-}
-
 /* For Flowing tabs */
 #tabbrowser-tabs[tabmix-flowing="multibar"] .tabbrowser-tab {
   vertical-align: bottom;
 }
 
 /* for extra icons */
-.tab-icon-stack:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) > .tab-lock-icon {
+.tab-icon-stack:not([pinned], [sharing], [crashed]):is(
+    [soundplaying],
+    [muted],
+    [activemedia-blocked]
+  )
+  > .tab-lock-icon {
   opacity: 1 !important;
   margin-inline-start: -4px;
 }
 
-.tab-icon-stack:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) > .tab-protect-icon,
-.tab-icon-stack:not([pinned], [sharing], [crashed]):is([soundplaying], [muted], [activemedia-blocked]) > .tab-reload-icon {
+.tab-icon-stack:not([pinned], [sharing], [crashed]):is(
+    [soundplaying],
+    [muted],
+    [activemedia-blocked]
+  )
+  > .tab-protect-icon,
+.tab-icon-stack:not([pinned], [sharing], [crashed]):is(
+    [soundplaying],
+    [muted],
+    [activemedia-blocked]
+  )
+  > .tab-reload-icon {
   opacity: 1 !important;
   margin-inline-start: 4px;
 }
@@ -68,8 +79,8 @@
   width: 16px;
 }
 
-#tabbrowser-tabs[tabmix_icons~="autoreload"] .tabbrowser-tab[_reload] .tab-reload-icon ,
-#tabbrowser-tabs[tabmix_icons~="protected"] .tabbrowser-tab[protected] .tab-protect-icon ,
+#tabbrowser-tabs[tabmix_icons~="autoreload"] .tabbrowser-tab[_reload] .tab-reload-icon,
+#tabbrowser-tabs[tabmix_icons~="protected"] .tabbrowser-tab[protected] .tab-protect-icon,
 #tabbrowser-tabs[tabmix_icons~="locked"] .tabbrowser-tab[locked] .tab-lock-icon {
   display: inline-flex;
 }
@@ -81,22 +92,36 @@
 }
 
 /*  :::::: Tabmix toolbar button :::::: */
-#tabmix-closedTabsButton { list-style-image: url("icons/closed-tabs-24x24.png"); }
-#tabmix-closedTabsButton:hover { list-style-image: url("icons/closed-tabs-24x24-hovered.png"); }
-#main-window:not([customizing]) #tabmix-closedTabsButton[disabled="true"] { list-style-image: url("icons/closed-tabs-24x24-disabled.png"); }
+#tabmix-closedTabsButton {
+  list-style-image: url("icons/closed-tabs-24x24.png");
+}
 
-#tabmix-closedTabs-toolbaritem[cui-areatype="toolbar"] #tabmix-closedTabsButton[type="menu-button"] .toolbarbutton-icon {
+#tabmix-closedTabsButton:hover {
+  list-style-image: url("icons/closed-tabs-24x24-hovered.png");
+}
+
+#main-window:not([customizing]) #tabmix-closedTabsButton[disabled="true"] {
+  list-style-image: url("icons/closed-tabs-24x24-disabled.png");
+}
+
+#tabmix-closedTabs-toolbaritem[cui-areatype="toolbar"]
+  #tabmix-closedTabsButton[type="menu-button"]
+  .toolbarbutton-icon {
   border-right: 1px solid rgb(0 0 0 / 16%);
   border-radius: 0;
   padding-inline-end: 3px;
   width: calc(1 * var(--tabmix-toolbarbutton-padding-inner) + 16px + 3px);
 }
 
-#wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabsButton[type="menu-button"] {
+#wrapper-tabmix-closedTabs-toolbaritem[place="palette"]
+  > #tabmix-closedTabs-toolbaritem
+  > #tabmix-closedTabsButton[type="menu-button"] {
   align-items: flex-end;
 }
 
-#wrapper-tabmix-closedTabs-toolbaritem[place="palette"] > #tabmix-closedTabs-toolbaritem > #tabmix-closedTabs-dropmarker[type="menu-button"] {
+#wrapper-tabmix-closedTabs-toolbaritem[place="palette"]
+  > #tabmix-closedTabs-toolbaritem
+  > #tabmix-closedTabs-dropmarker[type="menu-button"] {
   align-items: flex-start;
 }
 
@@ -105,73 +130,43 @@
   display: none;
 }
 
-#tabmix-closedWindowsButton { list-style-image: url("icons/closed-win-24x24.png"); }
-#tabmix-closedWindowsButton:hover { list-style-image: url("icons/closed-win-24x24-hovered.png"); }
-#main-window:not([customizing]) #tabmix-closedWindowsButton[disabled="true"] { list-style-image: url("icons/closed-win-24x24-disabled.png"); }
+#tabmix-closedWindowsButton {
+  list-style-image: url("icons/closed-win-24x24.png");
+}
 
-#tabmix-alltabs-button { list-style-image: url("icons/tab-list-24x24.png")!important; }
-#tabmix-alltabs-button:hover { list-style-image: url("icons/tab-list-24x24-hovered.png") }
-#tabmix-alltabs-button[disabled="true"] { list-style-image: url("icons/tab-list-24x24-disabled.png"); }
+#tabmix-closedWindowsButton:hover {
+  list-style-image: url("icons/closed-win-24x24-hovered.png");
+}
 
-#btn_sessionmanager { list-style-image: url("icons/session-manager-24x24.png"); }
-#btn_sessionmanager:hover { list-style-image: url("icons/session-manager-24x24-hovered.png"); }
-#main-window:not([customizing]) #btn_sessionmanager[disabled="true"] { list-style-image: url("icons/session-manager-24x24-disabled.png"); }
+#main-window:not([customizing]) #tabmix-closedWindowsButton[disabled="true"] {
+  list-style-image: url("icons/closed-win-24x24-disabled.png");
+}
+
+#tabmix-alltabs-button {
+  list-style-image: url("icons/tab-list-24x24.png") !important;
+}
+
+#tabmix-alltabs-button:hover {
+  list-style-image: url("icons/tab-list-24x24-hovered.png");
+}
+
+#tabmix-alltabs-button[disabled="true"] {
+  list-style-image: url("icons/tab-list-24x24-disabled.png");
+}
+
+#btn_sessionmanager {
+  list-style-image: url("icons/session-manager-24x24.png");
+}
+
+#btn_sessionmanager:hover {
+  list-style-image: url("icons/session-manager-24x24-hovered.png");
+}
+
+#main-window:not([customizing]) #btn_sessionmanager[disabled="true"] {
+  list-style-image: url("icons/session-manager-24x24-disabled.png");
+}
 
 /* for hashcoulouredtabs */
 #content[hashedtabs] .tabbrowser-tab:not([busy]) .tab-icon-image:not([src]) {
   list-style-image: none !important;
-}
-
-/*
- *****************************************************************************
- *                                non default theme
-*/
-
-/* Chromifox Extreme */
-#tabbrowser-tabs[tabmix_skin="cfxec"] #tabbrowser-arrowscrollbox .tabbrowser-tab .tab-close-button {
-  display: none !important;
-}
-
-/* Vfox3 */
-#tabbrowser-tabs[tabmix_skin="Vfox3"][tabmix-multibar] #tabbrowser-arrowscrollbox .tabbrowser-tab {
-  height: 24px;
-}
-
-/* Phoenity Aura -  Multi-row tabbar for Phoenity Aura theme */
-#tabbrowser-tabs[tabmix_skin="CrystalFox"][tabmix-multibar] #tabbrowser-arrowscrollbox .tabbrowser-tab,
-#tabbrowser-tabs[tabmix_skin="phoenityaura"][tabmix-multibar] #tabbrowser-arrowscrollbox .tabbrowser-tab {
-  height: 22px;
-  max-height: 22px;
-  margin: 1px 0;
-}
-
-#tabbrowser-tabs[tabmix_skin="CrystalFox"][tabmix-multibar] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([selected="true"]):hover,
-#tabbrowser-tabs[tabmix_skin="phoenityaura"][tabmix-multibar] #tabbrowser-arrowscrollbox .tabbrowser-tab:not([selected="true"]):hover {
-  height: 23px;
-  max-height: 23px;
-  margin: 0 0 1px;
-}
-
-#tabbrowser-tabs[tabmix_skin="CrystalFox"][tabmix-multibar] #tabbrowser-arrowscrollbox .tabbrowser-tab[selected="true"],
-#tabbrowser-tabs[tabmix_skin="phoenityaura"][tabmix-multibar] #tabbrowser-arrowscrollbox .tabbrowser-tab[selected="true"] {
-  height: 24px;
-  max-height: 24px;
-  margin: 0;
-}
-
-/* CrystalFox_Qute-BigRedBrent */
-#tabbrowser-tabs[tabmix_skin="CrystalFox"]:not([tabmix-multibar])[inline="true"] #tabbrowser-arrowscrollbox > toolbarbutton,
-#tabbrowser-tabs[tabmix_skin="CrystalFox"][tabmix-multibar] #tabbrowser-arrowscrollbox > toolbarbutton {
-  vertical-align: top;
-}
-
-/* BlackFox_V1-Blue */
-#tabbrowser-tabs[tabmix_skin="BlackFox"]:not([tabmix-multibar])[inline="true"] #tabbrowser-arrowscrollbox > toolbarbutton,
-#tabbrowser-tabs[tabmix_skin="BlackFox"][tabmix-multibar] #tabbrowser-arrowscrollbox > toolbarbutton {
-  vertical-align: top;
-}
-
-/* Vista-aero */
-#myTabBarRightBox[vista_aero] {
-  align-items: flex-start;
 }

@@ -51,7 +51,7 @@ export const TabmixSvc = {
     const key = this.getString(property + ".accesskey");
     const accessKeyIndex = label.toLowerCase().indexOf(key.toLowerCase());
     if (accessKeyIndex > -1) {
-      label = label.substr(0, accessKeyIndex) + "&" + label.substr(accessKeyIndex);
+      label = label.slice(0, accessKeyIndex) + "&" + label.slice(accessKeyIndex);
     }
 
     return label;

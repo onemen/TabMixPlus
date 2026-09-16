@@ -517,10 +517,6 @@ const expandTabmix = {
 
   setNewFunction: _setNewFunction,
 
-  nonStrictMode(obj, fn, arg = []) {
-    obj[fn](...arg);
-  },
-
   getSandbox(obj, options = {}) {
     const global = Cu.getGlobalForObject(obj);
 

@@ -1751,22 +1751,6 @@ var TabmixAllTabs = {
     mi.tab = tab;
 
     popup.appendChild(mi);
-
-    // for ColorfulTabs 6.0+
-    if (typeof window.colorfulTabs == "object") {
-      let rule = "none";
-      if (window.colorfulTabs.clrAllTabsPopPref) {
-        let tabClr = SessionStore.getCustomTabValue(tab, "tabClr");
-        if (tabClr) {
-          rule =
-            "linear-gradient(rgba(255,255,255,.7),rgba(#1,.5),rgb(#1)),linear-gradient(rgb(#1),rgb(#1))".replace(
-              /#1/g,
-              tabClr
-            );
-        }
-      }
-      mi.style.setProperty("background-image", rule, "important");
-    }
   },
 
   _setMenuitemAttributes(aMenuitem, aTab, value) {

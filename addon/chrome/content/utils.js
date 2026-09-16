@@ -208,7 +208,7 @@ var Tabmix = {
       let [path = "", line = 0] = stackData[1]?.replace("chrome://", "").split(":") ?? [];
       let index = path.indexOf("/") - 1;
       let extensionName =
-        index > -1 ? path.charAt(0).toUpperCase() + path.substr(1, index) + " " : "";
+        index > -1 ? path.charAt(0).toUpperCase() + path.slice(1, index + 1) + " " : "";
       this.clog(
         `${err.message}\n\n${extensionName}extension call ${aOldName} from:
   file: chrome://${path}
@@ -272,7 +272,7 @@ var Tabmix = {
   // console._removeInternal use this function name to remove it from
   // caller list
   _getMethod: function TMP_console_wrapper(id, args) {
-    if (["changeCode", "setNewFunction", "nonStrictMode"].indexOf(id) > -1) {
+    if (["changeCode", "setNewFunction"].indexOf(id) > -1) {
       this.installChangecode();
       return this[id].apply(this, args);
     }
@@ -301,7 +301,6 @@ var Tabmix = {
     var methods = [
       "changeCode",
       "setNewFunction",
-      "nonStrictMode",
       "getObject",
       "log",
       "getCallerNameByIndex",

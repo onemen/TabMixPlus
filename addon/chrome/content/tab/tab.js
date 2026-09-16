@@ -1848,7 +1848,7 @@ window.gTMPprefObserver = {
       case "extensions.tabmix.extraIcons.locked":
       case "extensions.tabmix.extraIcons.notpinned": {
         let addAtt = Services.prefs.getBoolPref(prefName);
-        let name = prefName.substr(prefName.lastIndexOf(".") + 1);
+        let name = prefName.slice(prefName.lastIndexOf(".") + 1);
         Tabmix.setAttributeList(gBrowser.tabContainer, "tabmix_icons", name, addAtt);
         break;
       }
@@ -2462,28 +2462,6 @@ window.gTMPprefObserver = {
       `:root { --tabmix-visiblerows: ` + TabmixTabbar.visibleRows + `;}`,
       "visibleRows"
     );
-
-    // for ColorfulTabs 8.0+
-    // add new rule to adjust selected tab bottom margin
-    // we add the rule after the first tab added
-    if (typeof colorfulTabs == "object") {
-      let padding = Tabmix.getStyle(gBrowser.tabs[0], "paddingBottom");
-      newRule =
-        '#tabbrowser-tabs[tabmix-flowing="multibar"] #tabbrowser-arrowscrollbox .tabbrowser-tab[selected=true]' +
-        " {margin-bottom: -1px !important; padding-bottom: " +
-        (padding + 1) +
-        "px !important;}";
-      let index = this.insertRule(newRule);
-      const cssStyleRule = this.tabStyleSheet.cssRules[index];
-      gBrowser.tabContainer.addEventListener(
-        "TabOpen",
-        function TMP_addStyleRule(/** @type {{target: Tab}} */ aEvent) {
-          padding = Tabmix.getStyle(aEvent.target, "paddingBottom");
-          cssStyleRule?.style.setProperty("padding-bottom", padding + 1 + "px", "important");
-        },
-        {capture: true, once: true}
-      );
-    }
 
     if (Tabmix.isVersion(1310)) {
       if (Tabmix.isVersion(1410)) {

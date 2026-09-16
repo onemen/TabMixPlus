@@ -127,10 +127,6 @@ interface Window {
     initialized: boolean;
     init: () => void;
   };
-  colorfulTabs: {
-    clrAllTabsPopPref: boolean;
-    standout: unknown;
-  };
   IeTab: {
     prototype: Record<string, unknown>;
   };
@@ -210,7 +206,6 @@ declare namespace ExtensionsCompatibilityNS {
 interface TabmixDNDObserver {
   _moveTabOnDragging: boolean;
   draglink: string;
-  LinuxMarginEnd: number;
   DRAG_LINK: number;
   DRAG_TAB_TO_NEW_WINDOW: number;
   DRAG_TAB_IN_SAME_WINDOW: number;
@@ -762,7 +757,6 @@ interface EventTypeMap<T extends HTMLElement> {
 }
 
 /** globals installed by extensions */
-declare var colorfulTabs: Window["colorfulTabs"];
 declare var privateTab: Window["privateTab"];
 declare var TabView: {
   afterUndoCloseTab: () => void;

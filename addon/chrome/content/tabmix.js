@@ -378,13 +378,6 @@ var TMP_eventListener = {
 
     Tabmix.contentAreaClick.init();
 
-    // make sure AVG Security Toolbar initialized
-    // before we change gURLBar.handleCommand to prevent too much recursion from gURLBar.handleCommand
-    if (window.InitializeOverlay_avg && typeof window.InitializeOverlay_avg.Init == "function") {
-      // avg.Init uses arguments.callee, so i can't call it from strict mode
-      Tabmix.nonStrictMode(window.InitializeOverlay_avg, "Init");
-    }
-
     // initialize our gURLBar.handleCommand function early before other extensions change
     // gURLBar.handleCommand or searchbar.handleSearchCommand by replacing the original function
     // url-fixer also prevent the use of eval changes by using closure in the replaced function
@@ -457,58 +450,6 @@ var TMP_eventListener = {
 
     if (TabmixSvc.isMac) {
       tabBar.setAttribute("Mac", "true");
-    }
-
-    var tabsToolbar = document.getElementById("TabsToolbar");
-
-    const skin = Services.prefs.getCharPref("extensions.activeThemeID", "");
-    if (skin == "classic/1.0") {
-      if (TabmixSvc.isMac) {
-        tabBar.setAttribute("classic", "v4Mac");
-      } else if (TabmixSvc.isLinux) {
-        tabBar.setAttribute("classic", "v3Linux");
-        ///XXX test if this is still the case
-        TMP_tabDNDObserver.LinuxMarginEnd = -2;
-        Tabmix.setItem(tabsToolbar, "tabmix_skin", "classic");
-      } else {
-        let version = navigator.oscpu.startsWith("Windows NT 6.1") ? "v40aero" : "v40";
-        tabBar.setAttribute("classic40", version);
-        Tabmix.setItem(tabsToolbar, "classic40", version);
-      }
-    } else {
-      //XXX need to add theme list here
-      var themes = /^(iPoxRemix|Ie8fox|Vfox3)/;
-      if (themes.test(skin)) {
-        // add backgroundrepeat Attribute for theme for use in multi-row
-        tabBar.setAttribute("backgroundrepeat", true);
-      }
-      switch (skin) {
-        case "cfxe": // Chromifox Extreme
-        case "cfxec":
-          tabBar.setAttribute("tabmix_skin", "cfxec");
-          break;
-        case "Vfox3":
-        case "phoenityaura": // Phoenity Aura
-          tabBar.setAttribute("tabmix_skin", skin);
-          break;
-        case "CrystalFox_Qute-BigRedBrent":
-          tabBar.setAttribute("tabmix_skin", "CrystalFox");
-          break;
-        case "Vista-aero": {
-          let rightBox = document.getElementById("myTabBarRightBox");
-          if (rightBox) {
-            rightBox.setAttribute("vista_aero", true);
-          }
-
-          break;
-        }
-        case "classiccompact":
-          tabBar.setAttribute("tabmix_skin", "classiccompact");
-          break;
-        case "BlackFox_V1-Blue":
-          tabBar.setAttribute("tabmix_skin", "BlackFox");
-          break;
-      }
     }
 
     // don't remove maybe some themes use this with Tabmix
@@ -818,7 +759,7 @@ var TMP_eventListener = {
     }
   },
 
-  // TGM extension use it
+  // also called by gBrowser._blurTab / _endRemoveTab close-animation plumbing
   onTabOpen_updateTabBar: function TMP_EL_onTabOpen_updateTabBar(aTab) {
     if (aTab.__newLastTab) {
       delete aTab.__newLastTab;
@@ -892,7 +833,7 @@ var TMP_eventListener = {
     }
   },
 
-  // TGM extension use it
+  // also called from tablib.js _blurTab / _endRemoveTab plumbing
   onTabClose_updateTabBar: function TMP_EL_onTabClose_updateTabBar(aTab) {
     var tabBar = gBrowser.tabContainer;
     function _updateTabstrip() {
@@ -937,25 +878,6 @@ var TMP_eventListener = {
       tab.hasAttribute("pending")
     ) {
       tab.setAttribute("width", Tabmix.getBoundsWithoutFlushing(tab).width);
-    }
-
-    // for ColorfulTabs 6.0+
-    // ColorfulTabs traps TabSelect event after we do
-    // we need to set standout class before we check for getTabRowNumber
-    // and arrowScrollbox.ensureElementIsVisible
-    // this class change tab height (by changing the borders)
-    if (
-      typeof window.colorfulTabs == "object" &&
-      window.colorfulTabs.standout &&
-      !tab.classList.contains("standout")
-    ) {
-      for (const _tab of gBrowser.tabs) {
-        if (_tab.classList.contains("standout")) {
-          _tab.classList.remove("standout");
-          break;
-        }
-      }
-      tab.classList.add("standout");
     }
 
     // update this functions after new tab select

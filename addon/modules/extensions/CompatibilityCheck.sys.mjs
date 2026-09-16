@@ -107,7 +107,7 @@ CompatibilityCheck.prototype = {
 
     let outStr = "";
     for (const {_name, _version} of list) {
-      const name = _name.charAt(0).toUpperCase() + _name.substr(1);
+      const name = _name.charAt(0).toUpperCase() + _name.slice(1);
       outStr += ` - ${name} ${_version}\n`;
     }
 
