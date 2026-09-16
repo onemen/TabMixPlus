@@ -284,9 +284,6 @@ export default [
     files: [
       "config/**",
       "addon/modules/logger.sys.mjs",
-      "addon/modules/Changecode.sys.mjs",
-      "addon/modules/DynamicRules.sys.mjs",
-      "addon/modules/bootstrap/*.sys.mjs",
       "addon/chrome/content/scripts/content.js",
       "addon/chrome/content/broadcaster.js",
       "addon/chrome/content/preferences/overlay/aboutaddons.js",

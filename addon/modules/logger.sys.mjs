@@ -28,8 +28,10 @@ const LOG_LEVEL_PREF = "extensions.tabmix.log.level";
 // installs), and Console warns when maxLogLevelPref points at a pref that
 // does not exist - so create the default here on first use. "All" keeps the
 // old log.sys.mjs always-print behavior until the user quiets it down.
+// Write to the default branch: a user-pref write here would persist to the
+// profile and mask future changes to the packaged default.
 if (Services.prefs.getPrefType(LOG_LEVEL_PREF) === Services.prefs.PREF_INVALID) {
-  Services.prefs.setStringPref(LOG_LEVEL_PREF, "All");
+  Services.prefs.getDefaultBranch("").setStringPref(LOG_LEVEL_PREF, "All");
 }
 
 /**
