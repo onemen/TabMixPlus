@@ -131,7 +131,8 @@ test/
 3. **URL/link logic** — `getValidUrl`, `whereToOpenDrop` cases, `_shortenURLRegEx`, `_dataURLRegEx`,
    `_nonPrintingRegEx`.
 4. **Prefs integrity** — every `extensions.tabmix.*` referenced in code has a default; no orphan
-   defaults (drift detector over the 159 defaults).
+   defaults (drift detector over the defaults file plus code-registered defaults: `log.level` in
+   logger.sys.mjs, tab-context visibility prefs in TabContextConfig).
 5. **Session store data** — closed-tab serialize/deserialize round-trips.
 6. **verify-firefox-internals.mjs** (the audit that caught the recent Firefox-156 breakages,
    automated): assert every `getPrivateMethod` anchor and every `changeCode` `_replace` anchor still
@@ -169,8 +170,9 @@ test/
 - **links (tablib)** — drop 1 link on tab/tabbar/new-tab × `tabmixContentDrop` prefs; **drop 15+
   links → confirm dialog** (OpenInTabsUtils lazy regression); `whereToOpenDrop` matrix;
   linkWithHistory; background loading; loadURI allow/block (setLoadURI wrappers).
-- **prefs (preferences/)** — open all panes + subdialogs; data-driven: for each of the 159 defaults
-  set → persists → behavior flag readable via bridge; shortcuts editor; number-input validation.
+- **prefs (preferences/)** — open all panes + subdialogs; data-driven: for each of the 158 file
+  defaults (plus code-registered defaults) set → persists → behavior flag readable via bridge;
+  shortcuts editor; number-input validation.
 - **session** — closed-tabs restore; closed-windows submenu; save/restore window session; **restart
   persistence** (second launch, same profile); crash-recovery dialog.
 - **places / flst / autoreload / titlebar** — reopen closed tab; `TMP_Places.asyncGetTabTitle` +
@@ -271,7 +273,7 @@ browser/CI quirks). Cumulative ≈ **22–27 days (~5 weeks)**.
 | 11  | **click suite** (full pref matrix, multiselect counts)                                                                | 2 d     | #5                          |
 | 12  | **dragdrop suite** (reorder, multi-row, 156+ binding checks)                                                          | 2 d     | #9 (multi-row)              |
 | 13  | **nightly-watchdog.yml + issue reporting port** (Nightly + Dev Edition daily)                                         | 1–1.5 d | #6, #9–11                   |
-| 14  | **prefs data-driven suite** (8 panes, 159 prefs, subdialogs)                                                          | 3–4 d   | #4                          |
+| 14  | **prefs data-driven suite** (8 panes, ~158 prefs, subdialogs)                                                         | 3–4 d   | #4                          |
 | 15  | **session suite** (restore, restart persistence, crash dialog)                                                        | 2 d     | #5                          |
 | 16  | **places / flst / autoreload / titlebar suites** (incl. 6417f0fc + f6cea03a regressions)                              | 2 d     | #5                          |
 | 17  | **browser-matrix.yml** (full 9-browser weekly matrix)                                                                 | 2–3 d   | #13, fork resolvers from #1 |
