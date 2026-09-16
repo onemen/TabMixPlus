@@ -111,7 +111,7 @@ async function checkLogger(counter, bridgePage) {
   check(
     counter,
     loggerState?.levelPrefType === 32,
-    "extensions.tabmix.log.level exists as a string pref at boot (module bootstrap or defaults)",
+    "extensions.tabmix.log.level exists as a string pref at boot (registered by logger.sys.mjs on the default branch)",
     `pref type: ${loggerState?.levelPrefType}`
   );
   check(

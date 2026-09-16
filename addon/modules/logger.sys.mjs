@@ -24,14 +24,21 @@
 /**
  * Pref name for the logger level, exposed through `maxLogLevelPref` below.
  *
- * The default ("All") lives in defaults/preferences/tabmix.js:272 and is
- * applied to the default pref branch by
- * PreferencesLoader.loadDefaultPreferences() (bootstrap.js) at startup — like
- * every other `extensions.tabmix.*` default.
+ * The default ("All") is registered here, on the default pref branch, at module
+ * import — before the ConsoleInstance below is created with `maxLogLevelPref`,
+ * so the pref exists from the first read. It is NOT in
+ * defaults/preferences/tabmix.js: logger.sys.mjs is imported before
+ * PreferencesLoader.loadDefaultPreferences() runs (PreferencesLoader imports
+ * this module), and the pref must exist when the ConsoleInstance wires
+ * `maxLogLevelPref`.
  *
  * @type {string}
  */
 const LOG_LEVEL_PREF = "extensions.tabmix.log.level";
+
+// Register the default on the default branch (not the user branch — a user
+// value would persist to prefs.js and mask future default changes).
+Services.prefs.getDefaultBranch("").setStringPref(LOG_LEVEL_PREF, "All");
 
 /**
  * The raw ConsoleAPI instance. New code should prefer this over the legacy
