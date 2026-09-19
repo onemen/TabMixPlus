@@ -1,5 +1,6 @@
 import environments from "./environments.js";
 import lazyGetterNameMatch from "./lazy-getter-name-match.js";
+import noGbrowserBrowsers from "./no-gbrowser-browsers.js";
 import xhtmlProcessor from "./xhtml-processor.js";
 
 export default {
@@ -13,5 +14,6 @@ export default {
   },
   rules: {
     "lazy-getter-name-match": lazyGetterNameMatch,
+    "no-gbrowser-browsers": noGbrowserBrowsers,
   },
 };

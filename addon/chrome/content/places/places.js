@@ -662,7 +662,10 @@ var TMP_Places = {
       initial,
       reset,
       titlefrombookmark = false,
-      url = tab.linkedBrowser.currentURI.spec,
+      // use the lazy-tab url when the browser was not restored yet,
+      // reading tab.linkedBrowser.currentURI would materialize the tab
+      url = SessionStore.getLazyTabValue(tab, "url") ||
+        (tab.linkedPanel ? tab.linkedBrowser.currentURI.spec : ""),
     } = options;
 
     const newTitle = await this.asyncGetTabTitle(tab, url, {titlefrombookmark});
@@ -829,7 +832,9 @@ var TMP_Places = {
     };
 
     for (let tab of gBrowser.tabs) {
-      let url = tab.linkedBrowser.currentURI.spec;
+      let url =
+        SessionStore.getLazyTabValue(tab, "url") ||
+        (tab.linkedPanel ? tab.linkedBrowser.currentURI.spec : "");
       if (!this.isUserRenameTab(tab, url)) {
         updateTabs(tab, url);
       }
@@ -851,7 +856,9 @@ var TMP_Places = {
     const attrib = "tabmix_bookmarkUrl";
     const tabs = gBrowser.tabContainer.getElementsByAttribute(attrib, batch ? "*" : aUrl) ?? [];
     Array.from(tabs).forEach(tab => {
-      let url = tab.linkedBrowser.currentURI.spec;
+      let url =
+        SessionStore.getLazyTabValue(tab, "url") ||
+        (tab.linkedPanel ? tab.linkedBrowser.currentURI.spec : "");
       if (urls.includes(url)) {
         tab.removeAttribute(attrib);
         if (!this.isUserRenameTab(tab, url)) {
@@ -871,7 +878,9 @@ var TMP_Places = {
     const promises = [];
     for (let tab of gBrowser.tabs) {
       tab.removeAttribute("tabmix_bookmarkUrl");
-      let url = tab.linkedBrowser.currentURI.spec;
+      let url =
+        SessionStore.getLazyTabValue(tab, "url") ||
+        (tab.linkedPanel ? tab.linkedBrowser.currentURI.spec : "");
       if (!this.isUserRenameTab(tab, url)) {
         promises.push(this.asyncSetTabTitle(tab, {url, initial: false, reset: true}));
       }

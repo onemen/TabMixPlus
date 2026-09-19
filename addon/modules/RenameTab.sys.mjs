@@ -29,12 +29,6 @@ export const RenameTab = {
     var gBrowser = this.window.gBrowser;
 
     this.data.tab = aTab = aTab.localName == "tab" ? aTab : gBrowser.selectedTab;
-    var browser = gBrowser.getBrowserForTab(aTab);
-    let docTitle =
-      aTab.hasAttribute("pending") ?
-        this.window.TMP_SessionStore.getTitleFromTabState(aTab)
-      : browser.contentTitle;
-    this.data.url = browser.currentURI.spec;
 
     /** @param {string} title */
     const prepareDataAndShowPanel = title => {
@@ -55,9 +49,22 @@ export const RenameTab = {
       this.showPanel();
     };
 
-    lazy.TabmixPlacesUtils.asyncGetTitleFromBookmark(this.data.url, docTitle ?? "").then(title =>
-      prepareDataAndShowPanel(title)
-    );
+    if (aTab.hasAttribute("pending")) {
+      const docTitle = this.window.TMP_SessionStore.getTitleFromTabState(aTab);
+      // take the url from the tab state for pending tabs, reading currentURI on
+      // their unbound lazy browser would materialize the tab (see issue #587)
+      this.data.url = this.window.TMP_SessionStore.getUrlFromTabState(aTab);
+      lazy.TabmixPlacesUtils.asyncGetTitleFromBookmark(this.data.url, docTitle ?? "").then(title =>
+        prepareDataAndShowPanel(title)
+      );
+    } else {
+      const browser = gBrowser.getBrowserForTab(aTab);
+      const docTitle = browser.contentTitle;
+      this.data.url = browser.currentURI.spec;
+      lazy.TabmixPlacesUtils.asyncGetTitleFromBookmark(this.data.url, docTitle ?? "").then(title =>
+        prepareDataAndShowPanel(title)
+      );
+    }
   },
 
   showPanel: function TMP_renametab_showPanel() {
@@ -139,7 +146,7 @@ export const RenameTab = {
       }
     }
 
-    var image = this.data.tab.linkedBrowser.mIconURL || "chrome://tabmixplus/skin/tmp.png";
+    const image = this.window.gBrowser.getIcon(this.data.tab) || "chrome://tabmixplus/skin/tmp.png";
     this._element("tabmixRenametab_icon").setAttribute("src", image);
     this._element("tabmixRenametab_titleField").value = this.data.value;
     this._element("tabmixRenametab_defaultField").value = this.data.docTitle;

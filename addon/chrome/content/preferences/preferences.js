@@ -781,10 +781,15 @@ function openHelp(helpTopic) {
   var recentWindow = Tabmix.getTopWin();
   var tabBrowser = recentWindow.gBrowser;
   function selectHelpPage() {
-    return tabBrowser.browsers.some((browser, i) => {
-      if (browser.currentURI.spec.startsWith(helpPage)) {
+    // compare against the lazy-tab url instead of iterating tabBrowser.browsers,
+    // which materializes every lazy tab up to the match
+    return tabBrowser.tabs.some((tab, i) => {
+      const url =
+        recentWindow.SessionStore.getLazyTabValue(tab, "url") ||
+        (tab.linkedPanel ? tab.linkedBrowser.currentURI.spec : "");
+      if (url.startsWith(helpPage)) {
         tabBrowser.tabContainer.selectedIndex = i;
-        browser.tabmix_allowLoad = true;
+        tab.linkedBrowser.tabmix_allowLoad = true;
         return true;
       }
       return false;

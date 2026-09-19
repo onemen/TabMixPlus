@@ -118,6 +118,8 @@ export default [
 
       // -- Custom Tabmix Rules --
       "tabmix/lazy-getter-name-match": "error",
+      // .browsers materializes lazy tabs; use gBrowser.tabs + linkedPanel/getLazyTabValue (#587)
+      "tabmix/no-gbrowser-browsers": "error",
 
       // -- General Rule Overrides & Additions --
       // These are rules that are either not in recommended or are configured differently.

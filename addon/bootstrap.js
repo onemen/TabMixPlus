@@ -97,10 +97,13 @@ function toggleContentListeners(enabled) {
   while (enumerator.hasMoreElements()) {
     const win = enumerator.getNext();
     if (win.gBrowser) {
-      for (const browser of win.gBrowser.browsers) {
-        browser.messageManager.sendAsyncMessage("Tabmix:toggleContentListeners", {
-          enabled,
-        });
+      for (const tab of win.gBrowser.tabs) {
+        // lazy tabs have no browser and no content listeners to toggle
+        if (tab.linkedPanel) {
+          tab.linkedBrowser.messageManager.sendAsyncMessage("Tabmix:toggleContentListeners", {
+            enabled,
+          });
+        }
       }
     }
   }

@@ -757,6 +757,8 @@ interface BrowserWindow extends MockedGeckoTypes.BrowserWindow {
   gCustomizeMode: {enter: () => void};
   gNavigatorBundle: gNavigatorBundle;
   gTMPprefObserver: gTMPprefObserver;
+  // defined on browser windows by browser.js
+  SessionStore: SessionStoreNS.SessionStoreApi;
   Tabmix: TabmixGlobal;
   TabmixContext: TabmixContextTypes;
 }

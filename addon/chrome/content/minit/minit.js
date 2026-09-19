@@ -2799,8 +2799,13 @@ Tabmix.navToolbox = {
     ) {
       // move switched to tab only when it is in the same window
       const resultUrl = result.payload?.url;
-      const inSameWindow = gBrowser.browsers.some(browser => {
-        return browser.currentURI.displaySpec === resultUrl;
+      // compare against the lazy-tab url instead of iterating gBrowser.browsers,
+      // which materializes every lazy tab up to the match
+      const inSameWindow = gBrowser.tabs.some(tab => {
+        return (
+          (SessionStore.getLazyTabValue(tab, "url") ||
+            (tab.linkedPanel ? tab.linkedBrowser.currentURI.displaySpec : "")) === resultUrl
+        );
       });
       if (inSameWindow) {
         const prevTab = gBrowser.selectedTab;
