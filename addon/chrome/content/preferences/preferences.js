@@ -668,20 +668,20 @@ function toggleSyncPreference() {
   Services.prefs.savePrefFile(null);
 }
 
-function exportData() {
+async function exportData() {
   // save all pending changes
   gPrefWindow.onApply();
-  showFilePicker(Ci.nsIFilePicker.modeSave)
-    .then(file => {
-      if (file) {
-        let patterns = gPreferenceList.map(pref => {
-          return "\n" + pref + "=" + getPrefByType(pref);
-        });
-        patterns.unshift("tabmixplus");
-        IOUtils.writeUTF8(file.path, patterns.join(""));
-      }
-    })
-    .catch(Tabmix.reportError);
+  try {
+    const file = await showFilePicker(Ci.nsIFilePicker.modeSave);
+    if (!file) return;
+    let patterns = gPreferenceList.map(pref => {
+      return "\n" + pref + "=" + getPrefByType(pref);
+    });
+    patterns.unshift("tabmixplus");
+    await IOUtils.writeUTF8(file.path, patterns.join(""));
+  } catch (ex) {
+    Tabmix.reportError(ex);
+  }
 }
 
 async function importData() {
@@ -715,7 +715,7 @@ function showFilePicker(mode) {
     fp.init(window.browsingContext, null, mode);
     fp.appendFilters(nsIFilePicker.filterText);
     fp.open(result => {
-      if (result === nsIFilePicker.returnOK) {
+      if (result === nsIFilePicker.returnOK || result === nsIFilePicker.returnReplace) {
         const fileName = fp.file.leafName;
         if (!fileName.endsWith(".txt")) {
           fp.file.leafName = fileName + ".txt";
