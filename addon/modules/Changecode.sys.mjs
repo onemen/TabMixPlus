@@ -263,10 +263,11 @@ class ChangeCode {
       ![
         "gBrowser.tabContainer.arrowScrollbox.on_touchmove",
         "gBrowser.tabContainer.arrowScrollbox.on_touchstart",
+        "gBrowser.setTabLabelForAuthPrompts",
       ].includes(name)
     ) {
       const {changed, needUpdate} = this;
-      console.debug(
+      console.warn(
         "Tabmix:",
         `${name} does not have any changes,\ncheck again if it need to be modified`,
         {changed, needUpdate}

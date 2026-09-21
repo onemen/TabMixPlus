@@ -1394,13 +1394,14 @@ Tabmix._deferredInitialized.promise.then(() => {
   }
 
   if (missing.length || unnecessary.length) {
-    console.debug(
-      [
-        missing.length ? `❌ Missing replacements:\n${missing.join("\n")}` : null,
-        unnecessary.length ? `\n⚠️ Unnecessary replacements:\n${unnecessary.join("\n")}` : null,
-      ]
-        .filter(Boolean)
-        .join("\n")
+    console.warn(
+      "Tabmix:\n" +
+        [
+          missing.length ? `❌ Missing replacements:\n${missing.join("\n")}` : null,
+          unnecessary.length ? `⚠️ Unnecessary replacements:\n${unnecessary.join("\n")}` : null,
+        ]
+          .filter(Boolean)
+          .join("\n")
     );
   }
 

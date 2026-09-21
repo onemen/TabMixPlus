@@ -82,6 +82,7 @@ Tabmix.tablib = {
       nextMethodName: "removeAllDuplicateTabs",
       sandbox: Tabmix._gBrowser_sandbox,
     });
+    Tabmix.privateMethodTransformState.planned.add("gBrowser._removeDuplicateTabs");
   },
 
   _loadURIInitialized: false,

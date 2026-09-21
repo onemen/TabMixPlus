@@ -590,7 +590,9 @@ var TMP_tabDNDObserver = {
         configurable: true,
         enumerable: true,
       });
+    }
 
+    if (Tabmix.isVersion(1550) && !Tabmix.isVersion(1560)) {
       this.tabDnDPrototype._recoverFromStaleDrag = Tabmix.getPrivateMethod({
         ...tabContainerProps,
         methodName: "recoverFromStaleDrag",

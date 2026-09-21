@@ -1153,6 +1153,7 @@ Tabmix.onContentLoaded = {
         nextMethodName: "#notifyPinnedStatus",
         sandbox: Tabmix._gBrowser_sandbox,
       });
+      Tabmix.privateMethodTransformState.planned.add("gBrowser._updateTabBarForPinnedTabs");
     }
     Tabmix.originalFunctions.gBrowser__updateTabBarForPinnedTabs =
       gBrowser._updateTabBarForPinnedTabs;
