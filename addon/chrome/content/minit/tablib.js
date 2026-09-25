@@ -60,7 +60,16 @@ Tabmix.tablib = {
       true
     );
     /* eslint-enable mozilla/valid-lazy */
-    Tabmix._gBrowser_sandbox = Tabmix.getSandbox(gBrowser, {
+
+    // Since Firefox 156 `window.gBrowser = new Tabbrowser(window)` (bug
+    // 1956332) gBrowser is unique per window, while its class lives in a
+    // module global - getSandbox(gBrowser) therefore resolved to a
+    // session-wide _type:"module" sandbox with no `document`/`window`, and
+    // compiled methods silently broke window titles in every window but the
+    // first (issue #589). Compile in THIS window's default sandbox instead;
+    // the scope merges into the shared per-window Tabmix._sandbox, like
+    // other window-context callers (see updateSandboxWithScope).
+    Tabmix._gBrowser_sandbox = Tabmix.getSandbox(window, {
       scope: {lazy, TAB_LABEL_MAX_LENGTH: 256},
     });
 
@@ -454,12 +463,21 @@ Tabmix.tablib = {
         .toCode(false, gBrowser, "asyncGetWindowTitleForBrowser");
     }
 
-    /** @this {MockedGeckoTypes.TabBrowser} */
-    gBrowser.updateTitlebar = function () {
-      this.asyncGetWindowTitleForBrowser(this.selectedBrowser).then(title => {
-        document.title = title;
-      });
-    };
+    if (Tabmix.isVersion(1560)) {
+      /** @this {MockedGeckoTypes.TabBrowser} */
+      gBrowser.updateTitlebar = function () {
+        this.asyncGetWindowTitleForBrowser(this.selectedBrowser).then(title => {
+          this.document.title = title;
+        });
+      };
+    } else {
+      /** @this {MockedGeckoTypes.TabBrowser} */
+      gBrowser.updateTitlebar = function () {
+        this.asyncGetWindowTitleForBrowser(this.selectedBrowser).then(title => {
+          document.title = title;
+        });
+      };
+    }
 
     if ("foxiFrame" in window) {
       Tabmix.changeCode(gBrowser, "gBrowser.updateTitlebar")

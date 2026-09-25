@@ -611,6 +611,8 @@ declare namespace MockedGeckoTypes {
     /** @deprecated - bug 2033243, firefox 152 - replace ownerGlobal with documentGlobal */
     ownerGlobal: WindowProxy;
     documentGlobal: WindowProxy;
+    /** exist since firefox 156, bug 1956332 */
+    readonly document: Document;
     OpenInTabsUtils: MockedExports.OpenInTabsUtils;
     pinTab: (tab: BrowserTab) => void;
     readonly pinnedTabCount: number;
