@@ -6,6 +6,29 @@ Tabmix.backwardCompatibilityGetter(window, "tablib", "Tabmix.tablib");
 Tabmix.tablib = {
   version: "tabmixplus",
   _inited: false,
+
+  /**
+   * Suspend/resume Tabmix's pref observers in ALL browser windows.
+   *
+   * Used around the temporary browser.tabs.insertRelatedAfterCurrent raise in
+   * addTab (Firefox 156+ related-tab chaining for the iac-only configuration):
+   * the gTMPprefObserver.observe mutual-exclusion logic must not react to the
+   * transient value. Mirrors the preventUpdate flag the preferences dialog sets
+   * while it writes prefs (see preferences.js setPref).
+   *
+   * @param {boolean} suspend true to suspend observers, false to resume
+   */
+  setPrefUpdateSuspended(suspend) {
+    const enumerator = Services.wm.getEnumerator("navigator:browser");
+    while (enumerator.hasMoreElements()) {
+      const win = enumerator.getNext();
+      const observer = win.gTMPprefObserver;
+      if (observer) {
+        observer.preventUpdate = suspend;
+      }
+    }
+  },
+
   init: function tabmix_tablib_init() {
     if (this._inited) {
       return;
@@ -280,10 +303,93 @@ Tabmix.tablib = {
 
       if (gBrowser.tabContainer.hasAttribute("tabmix-tabsFitRow") && TabmixTabbar.hasMultiRows) {
         options.skipAnimation = true;
+      } // Firefox 156 (bug 1938769) changed Tabbrowser.#insertTabAtIndex: the
+      // lastRelatedTab chain only applies when
+      // browser.tabs.insertRelatedAfterCurrent (irac) is true, while before
+      // Firefox 156 the chain applied whenever a related tab was positioned
+      // next to its opener at all ((opener && irac) || iac).
+      //
+      // Restore the missing permutations:
+      //
+      //   related tab while iac is on, irac off, openTabNextInverse on
+      //   (Firefox 156+): natively the related-tab chain only works when
+      //   irac is true. Raise irac around the original addTab call so
+      //   Firefox's own #lastRelatedTabMap does the chaining (clicks 1,2,3
+      //   read [1][2][3] next to the opener) - relying on the native map
+      //   keeps all of its reset points (tab selection, tab close, tab
+      //   move, clearRelatedTabs from the tabs progress listener) in sync;
+      //   Tabmix must not track its own copy. Tabmix's pref observers are
+      //   suspended for the call so the iac/irac mutual-exclusion logic in
+      //   gTMPprefObserver.observe does not react to the transient value
+      //   (per-window preventUpdate, the same mechanism the preferences
+      //   dialog uses while it writes prefs).
+      //   unrelated tab while BOTH iac and irac are on: iac pulls every tab
+      //   next to the selected one, but with irac on the user asked for
+      //   related-after-current + unrelated-at-end (the combination the
+      //   native pair cannot express). A numeric tabIndex short-circuits
+      //   all pref logic in #insertTabAtIndex and #lastRelatedTabMap is
+      //   never touched for positioned tabs.
+      //
+      // Everything else native code already gets right (with irac on the
+      // native chain works on all versions; openTabNextInverse=false pairs
+      // with the clearRelatedTabs() call below). Background opens that are
+      // not from a link are treated as related to the selected tab when
+      // openTabNextInverse is on (see the !isRelated branch above) - they
+      // used to collapse to [3][2][1] on all Firefox versions.
+      const openTabNextInverse = Tabmix.prefs.getBoolPref("openTabNextInverse");
+      let iracRaised = false;
+      if (
+        typeof tabIndex !== "number" &&
+        typeof options.elementIndex !== "number" &&
+        !options.bulkOrderedOpen
+      ) {
+        const iac = Services.prefs.getBoolPref("browser.tabs.insertAfterCurrent");
+        const irac = Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent");
+        // mirrors #insertTabAtIndex: relatedToCurrent defaults to whether the
+        // referrerInfo carries an original referrer
+        const {referrerInfo} = /** @type {{referrerInfo?: {originalReferrer?: unknown}}} */ (
+          options
+        );
+        let isRelated = options.relatedToCurrent ?? Boolean(referrerInfo?.originalReferrer);
+        if (!isRelated && iac && !irac && openTabNextInverse) {
+          // A background open that is not from a link (bookmark, manual
+          // load) has NO opener tab: under iac-only Firefox anchors it to
+          // the selected tab and never chains it - the native chain block
+          // fills #lastRelatedTabMap only when an opener exists, so the
+          // inverse order collapses to [3][2][1] on EVERY Firefox version
+          // (also pre-156). Pretend it is a related open so Firefox's own
+          // chain machinery applies: relatedToCurrent gives it the selected
+          // tab as openerTab, and (156+) the irac raise below is what makes
+          // Firefox READ the map again ((irac && lastRelatedTab) gates it).
+          isRelated = true;
+          options.relatedToCurrent = true;
+        }
+        if (isRelated && iac && !irac) {
+          if (openTabNextInverse && Tabmix.isVersion(1560)) {
+            iracRaised = true;
+            Tabmix.tablib.setPrefUpdateSuspended(true);
+            Services.prefs.setBoolPref("browser.tabs.insertRelatedAfterCurrent", true);
+          }
+          // otherwise native code already positions the tab after current
+        } else if (!isRelated && iac && irac) {
+          options.tabIndex = this.tabs.length;
+        }
       }
 
       var t = Tabmix.originalFunctions.gBrowser_addTab.apply(this, [uriString, options, ...rest]);
-      if (!Tabmix.isVersion(1560) && !Tabmix.prefs.getBoolPref("openTabNextInverse")) {
+
+      if (iracRaised) {
+        Services.prefs.setBoolPref("browser.tabs.insertRelatedAfterCurrent", false);
+        Tabmix.tablib.setPrefUpdateSuspended(false);
+      }
+
+      if (!openTabNextInverse) {
+        // Break the related-tab chain so the NEXT related tab is positioned
+        // directly after the opener again instead of behind this one.
+        // Chromium-style "open link after current tab": clicking links 1, 2, 3
+        // from the same page stacks [3][2][1] next to the opener. When the
+        // tab was positioned explicitly (unrelated tabs while iac and irac
+        // are on), #lastRelatedTabMap was never set and this is a no-op.
         this.clearRelatedTabs();
       }
 

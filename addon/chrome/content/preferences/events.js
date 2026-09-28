@@ -47,18 +47,12 @@ var gEventsPane = {
       $("openTabNextInGroup_control").parentNode.hidden = true;
     }
 
-    if (Tabmix.isVersion(1560)) {
-      const inverse = $("openTabNextInverse");
-      const related = $("relatedAfterCurrent");
-      related.label = `Open Related tab next to current one (${inverse.label})`;
-      related.setAttribute("tooltiptext", inverse.getAttribute("tooltiptext") ?? "");
-      related.classList.remove("indent");
-      // insertAfterCurrent and insertRelatedAfterCurrent are independent,
-      // the checkbox state follows its own pref
-      $("openTabNext").checked = $Pref("pref_openTabNext").booleanValue;
-      gPrefWindow.removeItemAndPrefById("pref_openTabNextInverse");
-    }
-
+    // openTabNextInverse (Change opening order) stays on all Firefox versions:
+    // since Firefox 156 the native pref pair cannot express "related tabs next
+    // to their opener, chained" together with "unrelated tabs at the end of the
+    // tab bar", so Tabmix restores the pre-156 behavior with clearRelatedTabs
+    // and keeps the checkbox independent of browser.tabs.insertRelatedAfterCurrent.
+    //
     this.alignTabOpeningBoxes();
 
     this.openTabNext.on_change($Pref("pref_openTabNext"));
@@ -224,12 +218,6 @@ var gEventsPane = {
   openTabNext: {
     isChanging: false,
     on_change(preference) {
-      if (Tabmix.isVersion(1560)) {
-        // insertAfterCurrent and insertRelatedAfterCurrent are independent,
-        // each checkbox follows its own preference
-        $("openTabNext").checked = $Pref("pref_openTabNext").booleanValue;
-        return;
-      }
       if (this.isChanging) {
         return;
       }
@@ -258,7 +246,7 @@ var gEventsPane = {
 
     on_command(checked) {
       $Pref("pref_openTabNext").value = checked;
-      if (!checked && !Tabmix.isVersion(1560)) {
+      if (!checked) {
         $Pref("pref_relatedAfterCurrent").value = false;
       }
     },

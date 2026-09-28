@@ -309,6 +309,8 @@ declare namespace Tablib {
 
   let version: string;
   let _inited: boolean;
+  /** Suspend/resume gTMPprefObserver.preventUpdate in all browser windows. */
+  function setPrefUpdateSuspended(suspend: boolean): void;
   function init(): void;
   let _loadURIInitialized: boolean;
   function convertPrivateMethods(): void;

@@ -2142,26 +2142,19 @@ window.gTMPprefObserver = {
         TabmixContext.updateTabbarContextMenu(Services.prefs.getBoolPref(prefName));
         break;
       case "browser.tabs.insertAfterCurrent":
-        // since Firefox 156 insertAfterCurrent and insertRelatedAfterCurrent are independent
+        // browser.tabs.insertAfterCurrent default is false, in the case both pref
+        // is true turn browser.tabs.insertRelatedAfterCurrent off
         if (
-          !Tabmix.isVersion(1560) &&
           !Services.wm.getMostRecentWindow("mozilla:tabmixopt") &&
           prefValue &&
           Services.prefs.getBoolPref("browser.tabs.insertRelatedAfterCurrent")
         ) {
-          // browser.tabs.insertAfterCurrent default is false, in the case both pref
-          // is true turn browser.tabs.insertRelatedAfterCurrent off
           Services.prefs.setBoolPref("browser.tabs.insertRelatedAfterCurrent", false);
         }
         break;
       case "browser.tabs.insertRelatedAfterCurrent":
-        // since Firefox 156 insertAfterCurrent and insertRelatedAfterCurrent are independent
-        if (
-          !Tabmix.isVersion(1560) &&
-          !Services.wm.getMostRecentWindow("mozilla:tabmixopt") &&
-          prefValue
-        ) {
-          // if user manually turn insertRelatedAfterCurrent on, turn insertAfterCurrent off
+        // if user manually turn insertRelatedAfterCurrent on, turn insertAfterCurrent off
+        if (!Services.wm.getMostRecentWindow("mozilla:tabmixopt") && prefValue) {
           Services.prefs.setBoolPref("browser.tabs.insertAfterCurrent", false);
         }
         break;
@@ -3443,12 +3436,9 @@ window.gTMPprefObserver = {
       }
     }
     // 2026-09-01
-    if (Tabmix.isVersion(1560) && Tabmix.prefs.prefHasUserValue("openTabNextInverse")) {
-      if (Tabmix.prefs.getBoolPref("openTabNextInverse")) {
-        Services.prefs.setBoolPref("browser.tabs.insertRelatedAfterCurrent", true);
-      }
-      Tabmix.prefs.clearUserPref("openTabNextInverse");
-    }
+    // openTabNextInverse is active again on Firefox 156+ (see change_gBrowser in
+    // tablib.js): users upgrading from 1.47.0 get the default (true) back and
+    // users from older versions keep their own value — no migration needed.
 
     /** @type {typeof TabmixprefObserverNS._getVersion} */
     let getVersion = function _getVersion(currentVersion) {
