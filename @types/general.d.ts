@@ -1213,6 +1213,7 @@ declare var E10SUtils: MockedExports.E10SUtils;
 declare var FullScreen: FullScreen;
 declare var FirefoxViewHandler: FirefoxViewHandler;
 declare var gBrowser: MockedGeckoTypes.TabBrowser;
+declare var Tabbrowser: MockedGeckoTypes.TabBrowser;
 declare var gBrowserInit: gBrowserInit;
 declare var gClickAndHoldListenersOnElement: Record<string, unknown>;
 declare var gContextMenu: MockedGeckoTypes.gContextMenu;

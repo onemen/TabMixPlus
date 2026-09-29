@@ -1230,7 +1230,7 @@ var TMP_eventListener = {
       }
       for (const mutation of mutationList) {
         mutation.addedNodes.forEach(node => {
-          if (gBrowser.isTab(node)) {
+          if (Tabmix.isTab(node)) {
             // when tab removed from single tab group it was moved after the group
             const group = node.previousSibling;
             if (Tabmix.isTabGroup(group) && group.tabs.length === 0) {
@@ -1256,7 +1256,7 @@ var TMP_eventListener = {
               });
             }
             this.updateMultiRow();
-          } else if (gBrowser.isSplitViewWrapper(node)) {
+          } else if (Tabmix.isSplitViewWrapper(node)) {
             const tab = node.tabs[0];
             tab?.removeAttribute("tabmix-firstTabInRow");
             this.updateMultiRow();
@@ -1265,7 +1265,7 @@ var TMP_eventListener = {
 
         mutation.removedNodes.forEach(node => {
           if (
-            gBrowser.isTab(node) &&
+            Tabmix.isTab(node) &&
             !node.selected &&
             !node.visible &&
             node.hasAttribute("tabmix-firstTabInRow")

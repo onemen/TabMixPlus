@@ -493,7 +493,7 @@ Tabmix.tabsUtils = {
     if (!Tabmix.isVersion(1440)) {
       Object.defineProperty(this, "getDragAndDropElement", {
         value(/** @type {DragAndDropElement} */ element) {
-          return gBrowser.isTabGroupLabel(element) ? element.parentNode : element;
+          return Tabmix.isTabGroupLabel(element) ? element.parentNode : element;
         },
       });
     }
@@ -1308,7 +1308,7 @@ Tabmix.tabsUtils = {
   },
 
   getDragAndDropElement(element) {
-    return gBrowser.isTabGroupLabel(element) ?
+    return Tabmix.isTabGroupLabel(element) ?
         element.group.labelContainerElement
       : (element?.splitview ?? element);
   },

@@ -44,9 +44,11 @@ Tabmix.tablib = {
   },
 
   convertPrivateMethods() {
+    // starting with Firefox 159 after bug 2075448 some properties are static
+    const parent = Tabmix.isVersion(1590) ? Tabbrowser : gBrowser;
     if (Tabmix.isVersion(1530)) {
-      gBrowser._dataURLRegEx = /^data:[^,]+;base64,/i;
-      gBrowser._nonPrintingRegEx = /^[\p{Z}\p{C}\p{M}\u{115f}\u{1160}\u{2800}\u{3164}\u{ffa0}]*$/u;
+      parent._dataURLRegEx = /^data:[^,]+;base64,/i;
+      parent._nonPrintingRegEx = /^[\p{Z}\p{C}\p{M}\u{115f}\u{1160}\u{2800}\u{3164}\u{ffa0}]*$/u;
     }
 
     // from Firefox 156 gBrowser is a module and we need to use module sandbox
@@ -54,7 +56,7 @@ Tabmix.tablib = {
       return;
     }
 
-    gBrowser._shortenURLRegEx = /^[^:]+:\/\/(?:www\.)?/;
+    parent._shortenURLRegEx = /^[^:]+:\/\/(?:www\.)?/;
 
     const lazy = {};
     ChromeUtils.defineESModuleGetters(lazy, {
@@ -267,6 +269,13 @@ Tabmix.tablib = {
   },
 
   change_gBrowser: function change_gBrowser() {
+    // @ts-expect-error - we use typescript predicate
+    Tabmix.isTab = element => Boolean(element?.tagName == "tab");
+    // @ts-expect-error - we use typescript predicate
+    Tabmix.isTabGroupLabel = element => Boolean(element?.classList?.contains("tab-group-label"));
+    // @ts-expect-error - we use typescript predicate
+    Tabmix.isSplitViewWrapper = element => !!(element?.tagName == "tab-split-view-wrapper");
+
     Tabmix.originalFunctions.gBrowser_addTab = gBrowser.addTab;
 
     /** @type {TabBrowser["addTab"]} */
@@ -1840,11 +1849,16 @@ Tabmix.tablib = {
       return linkURL;
     };
 
-    gBrowser.closingTabsEnum.ALL_BY_TABMIX = 100;
-    gBrowser.closingTabsEnum.GROUP_BY_TABMIX = 101;
+    const closingTabsEnum =
+      Tabmix.isVersion(1590) ? Tabbrowser.closingTabsEnum : gBrowser.closingTabsEnum;
+
+    const closingTabsEnumParentStr = Tabmix.isVersion(1590) ? "Tabbrowser" : "gBrowser";
+
+    closingTabsEnum.ALL_BY_TABMIX = 100;
+    closingTabsEnum.GROUP_BY_TABMIX = 101;
     gBrowser.closeAllTabs = function TMP_closeAllTabs() {
       const tabsToRemove = this.visibleTabs.filter(tab => !tab._isProtected);
-      if (!this.warnAboutClosingTabs(tabsToRemove.length, this.closingTabsEnum.ALL_BY_TABMIX)) {
+      if (!this.warnAboutClosingTabs(tabsToRemove.length, closingTabsEnum.ALL_BY_TABMIX)) {
         return;
       }
 
@@ -1866,7 +1880,7 @@ Tabmix.tablib = {
       const tabsToRemove = this.visibleTabs.filter(
         tab => !tab._isProtected && tab.linkedBrowser.currentURI.spec.includes(aDomain ?? "")
       );
-      if (!this.warnAboutClosingTabs(tabsToRemove.length, this.closingTabsEnum.GROUP_BY_TABMIX)) {
+      if (!this.warnAboutClosingTabs(tabsToRemove.length, closingTabsEnum.GROUP_BY_TABMIX)) {
         return;
       }
 
@@ -2025,7 +2039,7 @@ Tabmix.tablib = {
     };
 
     Tabmix.tablib.warnAboutClosingTabsProps = function (tabsToClose, aCloseTabs) {
-      var closing = this.closingTabsEnum;
+      var closing = closingTabsEnum;
       var onExit = aCloseTabs == closing.ALL;
       var tabs = !onExit ? this.visibleTabs : this.tabs;
       var numTabs = tabs.length;
@@ -2279,7 +2293,7 @@ Tabmix.tablib = {
         `$&
       let {promptType, numProtected, keepLastTab, prefName} =
         Tabmix.tablib.warnAboutClosingTabsProps(tabsToClose, aCloseTabs);
-      if (promptType === 3) aCloseTabs = this.closingTabsEnum.ALL
+      if (promptType === 3) aCloseTabs = ${closingTabsEnumParentStr}.closingTabsEnum.ALL
       tabsToClose -= keepLastTab;
       shouldPrompt = promptType > 0;`
       )
@@ -2299,7 +2313,10 @@ Tabmix.tablib = {
         {check: Tabmix.isVersion({wf: "153.0"})}
       )
       ._replace("aCloseTabs == this.closingTabsEnum.ALL &&", "", {
-        check: !Tabmix.isVersion({wf: "153.0"}),
+        check: !Tabmix.isVersion({wf: "153.0"}) && !Tabmix.isVersion(1590),
+      })
+      ._replace("aCloseTabs == Tabbrowser.closingTabsEnum.ALL &&", "", {
+        check: Tabmix.isVersion(1590),
       })
       ._replace(
         "Services.prefs.setBoolPref(pref, false);",

@@ -157,7 +157,7 @@ var TMP_tabDNDObserver = {
       tabBar._initializeDragAndDrop();
     } else if (!Tabmix.isVersion(1460)) {
       // @ts-expect-error - use typescript element is MozTabSplitViewWrapper
-      gBrowser.isSplitViewWrapper = () => false;
+      Tabmix.isSplitViewWrapper = () => false;
     }
   },
 
@@ -408,7 +408,7 @@ var TMP_tabDNDObserver = {
       }
 
       Tabmix.changeCode(this.tabDnDPrototype, `${tabContainerProps.parentName}._expandGroupOnDrop`)
-        ._replace("isTabGroupLabel(draggedTab)", "gBrowser.isTabGroupLabel(draggedTab)")
+        ._replace("isTabGroupLabel(draggedTab)", "Tabmix.isTabGroupLabel(draggedTab)")
         .toCode();
 
       this.tabDnDPrototype._setMovingTabMode = function (movingTab) {
@@ -431,17 +431,12 @@ var TMP_tabDNDObserver = {
       tabBar._getDragTarget = function (event, options = {}) {
         return this._getDragTargetTab(event, {ignoreTabSides: Boolean(options.ignoreSides)});
       };
-      // @ts-expect-error - override isTabGroupLabel for older versions
-      gBrowser.isTabGroupLabel = element =>
-        Boolean(element?.classList?.contains("tab-group-label"));
-      // @ts-expect-error - override isTab for older versions
-      gBrowser.isTab = element => Boolean(element?.tagName == "tab");
     }
 
     if (Tabmix.isVersion(1410)) {
       this._pinnedTabScroll = Tabmix.prefs.getBoolPref("pinnedTabScroll");
       tabBar.arrowScrollbox._canScrollToElement = element => {
-        if (!this._pinnedTabScroll && gBrowser.isTab(element)) {
+        if (!this._pinnedTabScroll && Tabmix.isTab(element)) {
           return !element.pinned;
         }
         return true;
@@ -1070,12 +1065,12 @@ var TMP_tabDNDObserver = {
         `$&
       let firstUrl = urls[0];
       replace =
-        gBrowser.isTab(targetTab) || Tabmix.ContentClick.isUrlForDownload(firstUrl);
+        Tabmix.isTab(targetTab) || Tabmix.ContentClick.isUrlForDownload(firstUrl);
       if (replace) {
         targetTab =
           event.target.closest("tab.tabbrowser-tab") ||
           Tabmix.tabsUtils.dragAndDropElements[Math.min(newIndex, Tabmix.tabsUtils.dragAndDropElements.length - 1)];
-        if (gBrowser.isTabGroupLabel(targetTab)) {
+        if (Tabmix.isTabGroupLabel(targetTab)) {
           targetTab = targetTab.group.tabs[0];
         }
         // allow to load in locked tab
@@ -1176,7 +1171,7 @@ var TMP_tabDNDObserver = {
         }
       }
     }
-    if (Tabmix.isVersion(1490) && useTabmixDnD && gBrowser.isTab(tab)) {
+    if (Tabmix.isVersion(1490) && useTabmixDnD && Tabmix.isTab(tab)) {
       this.finishMoveTogetherSelectedTabs(tab);
     }
     setReduceMotion(currentReduceMotion);
@@ -1322,7 +1317,7 @@ var TMP_tabDNDObserver = {
         return true;
       }
 
-      const draggedGroup = gBrowser.isTabGroupLabel(draggedElement) ? draggedElement.group : null;
+      const draggedGroup = Tabmix.isTabGroupLabel(draggedElement) ? draggedElement.group : null;
 
       const getElementGroup = () => {
         if (dropElement?.group) return dropElement.group;
@@ -1344,7 +1339,7 @@ var TMP_tabDNDObserver = {
         } else if (dropElement?.pinned) {
           notAllowed.tooltip = "Cannot pin group. Only tabs can be pinned.";
         }
-      } else if (dropElement?.pinned && gBrowser.isSplitViewWrapper(draggedTab)) {
+      } else if (dropElement?.pinned && Tabmix.isSplitViewWrapper(draggedTab)) {
         notAllowed.tooltip = "Cannot pin split-view element. Only tabs can be pinned.";
       }
       if (!notAllowed.flag && !notAllowed.tooltip) {
@@ -1447,7 +1442,7 @@ var TMP_tabDNDObserver = {
         const isVisible = this._pinnedDropIndicator.hasAttribute("visible");
         const isInteractive = this._pinnedDropIndicator.hasAttribute("interactive");
 
-        const isTab = gBrowser.isTab(draggedElement);
+        const isTab = Tabmix.isTab(draggedElement);
         if (
           this._pinnedDropIndicatorTimeout &&
           !inPinnedRange &&
@@ -1534,11 +1529,11 @@ var TMP_tabDNDObserver = {
     }
 
     this.tabDragAndDrop._setDragOverGroupColor(color);
-    if (color !== "transparent" && gBrowser.isTabGroupLabel(dropElement)) {
+    if (color !== "transparent" && Tabmix.isTabGroupLabel(dropElement)) {
       dropElement.toggleAttribute("dragover-groupTarget", true);
     }
     draggedElement._dragData.movingTabs
-      .map(tab => (gBrowser.isSplitViewWrapper(tab) ? tab.tabs : tab))
+      .map(tab => (Tabmix.isSplitViewWrapper(tab) ? tab.tabs : tab))
       .flat()
       .forEach(tab => {
         tab.toggleAttribute("tabmix-movingtab-togroup", true);
@@ -1570,8 +1565,8 @@ var TMP_tabDNDObserver = {
 
     if (
       dropIntoCollapsedTabGroup &&
-      gBrowser.isTabGroupLabel(dropElement) &&
-      gBrowser.isTab(draggedTab)
+      Tabmix.isTabGroupLabel(dropElement) &&
+      Tabmix.isTab(draggedTab)
     ) {
       // If the dragged tab is the active tab in a collapsed tab group
       // and the user dropped it onto the label of its tab group, leave
@@ -1590,7 +1585,7 @@ var TMP_tabDNDObserver = {
         !Tabmix.isVersion(1370) &&
         newIndex === 0 &&
         dropBefore &&
-        gBrowser.isTabGroupLabel(event.target)
+        Tabmix.isTabGroupLabel(event.target)
       ) {
         dropOnStart = true;
       }
@@ -1856,7 +1851,7 @@ var TMP_tabDNDObserver = {
         group &&
         group.tabsAndSplitViews[0] === tab &&
         this.isLastTabInRow(tab, group.labelElement) &&
-        !gBrowser.isTab(this.getEventTarget(event));
+        !Tabmix.isTab(this.getEventTarget(event));
       if (params.dropOnStart || useGroupLabel) {
         const rect = group?.labelElement.getBoundingClientRect();
         if (rect) {
@@ -1890,10 +1885,10 @@ var TMP_tabDNDObserver = {
 
     const tabOrSplitview = (/** @type {DraggedElement} */ elm) => elm?.splitview ?? elm;
     const getIndex = (/** @type {DraggedElement} */ elm) =>
-      gBrowser.isTab(elm) ? elm._tPos : (elm?.elementIndex ?? -1);
+      Tabmix.isTab(elm) ? elm._tPos : (elm?.elementIndex ?? -1);
 
     const draggedElm =
-      gBrowser.isTabGroupLabel(tab) ? tabOrSplitview(tab.group.tabs[0]) : tabOrSplitview(tab);
+      Tabmix.isTabGroupLabel(tab) ? tabOrSplitview(tab.group.tabs[0]) : tabOrSplitview(tab);
     const oldIndex = getIndex(draggedElm);
 
     let newIndex;
@@ -1939,7 +1934,7 @@ var TMP_tabDNDObserver = {
       const pinnedTabCount = gBrowser.pinnedTabCount;
       const isDraggedTabPinned = tab?.pinned ?? false;
       const isDropElementPinned = dropElement?.pinned ?? false;
-      const isTab = gBrowser.isTab(tab);
+      const isTab = Tabmix.isTab(tab);
       if (isDraggedTabPinned !== isDropElementPinned && isTab) {
         if (Tabmix.isVersion(1430)) {
           newIndex = pinnedTabCount - (isDraggedTabPinned ? 0 : 1);
@@ -1954,7 +1949,7 @@ var TMP_tabDNDObserver = {
         /** @type {AriaFocusableItem} */ // @ts-expect-error
         const element = Tabmix.tabsUtils.dragAndDropElements[newIndex];
         dropElement = element;
-      } else if (gBrowser.isTabGroupLabel(dropElement)) {
+      } else if (Tabmix.isTabGroupLabel(dropElement)) {
         const group = dropElement.group;
         newIndex = group.tabs[0]._tPos;
         const before = this.isDropBefore(event, dropElement);
@@ -1967,7 +1962,7 @@ var TMP_tabDNDObserver = {
         if (!dropOnStart) {
           const previousElement = group.previousSibling;
           let focusableItem;
-          if (gBrowser.isTab(previousElement)) {
+          if (Tabmix.isTab(previousElement)) {
             focusableItem = previousElement;
           } else if (Tabmix.isTabGroup(previousElement)) {
             if (previousElement.collapsed) {
@@ -1978,7 +1973,7 @@ var TMP_tabDNDObserver = {
             } else {
               focusableItem = previousElement.tabsAndSplitViews.at(-1);
             }
-          } else if (gBrowser.isSplitViewWrapper(previousElement)) {
+          } else if (Tabmix.isSplitViewWrapper(previousElement)) {
             focusableItem = previousElement.tabs.at(-1);
           }
 
@@ -1992,7 +1987,7 @@ var TMP_tabDNDObserver = {
         isBetweenGroups = before && !dropOnStart && Tabmix.isTabGroup(group.previousSibling);
       } else {
         newIndex =
-          gBrowser.isSplitViewWrapper(dropElement) ? dropElement.elementIndex : dropElement._tPos;
+          Tabmix.isSplitViewWrapper(dropElement) ? dropElement.elementIndex : dropElement._tPos;
         dropBefore = dragOutOfGroup || this.isDropBefore(event, dropElement);
       }
       if (
@@ -2025,7 +2020,7 @@ var TMP_tabDNDObserver = {
     }
 
     const targetTab =
-      isBetweenGroups || gBrowser.isSplitViewWrapper(dropElement) ?
+      isBetweenGroups || Tabmix.isSplitViewWrapper(dropElement) ?
         dropElement
       : gBrowser.tabContainer.allTabs[newIndex];
 
@@ -2236,8 +2231,8 @@ var TMP_tabDNDObserver = {
     if (
       XULElement.isInstance(sourceNode) &&
       (sourceNode.localName == "tab" ||
-        (Tabmix.isVersion(1380) && gBrowser.isTabGroupLabel(sourceNode)) ||
-        (Tabmix.isVersion(1480) && gBrowser.isSplitViewWrapper(sourceNode))) &&
+        (Tabmix.isVersion(1380) && Tabmix.isTabGroupLabel(sourceNode)) ||
+        (Tabmix.isVersion(1480) && Tabmix.isSplitViewWrapper(sourceNode))) &&
       Tabmix.getGlobal(sourceNode)?.isChromeWindow &&
       sourceNode.ownerDocument.documentElement.getAttribute("windowtype") == "navigator:browser" &&
       Tabmix.getGlobal(sourceNode)?.gBrowser.tabContainer == sourceNode.container
@@ -2325,7 +2320,7 @@ var TMP_tabDNDObserver = {
         : pinnedTabRect.right - rect.left + offset;
     }
 
-    const isPinnedTab = gBrowser.isTab(draggedTab) ? draggedTab.pinned : false;
+    const isPinnedTab = Tabmix.isTab(draggedTab) ? draggedTab.pinned : false;
 
     // Multi-row tabbar logic
     if (TabmixTabbar.hasMultiRows) {
@@ -2377,7 +2372,7 @@ var TMP_tabDNDObserver = {
       return 0;
     }
 
-    if (Tabmix.isVersion(1430) && gBrowser.isTabGroupLabel(dropElement)) {
+    if (Tabmix.isVersion(1430) && Tabmix.isTabGroupLabel(dropElement)) {
       const group = dropElement.group;
       if (group.collapsed && gBrowser.selectedTab.group === group) {
         dropElement = gBrowser.selectedTab;
@@ -2398,7 +2393,7 @@ var TMP_tabDNDObserver = {
       }
     }
 
-    if (gBrowser.isSplitViewWrapper(dropElement)) {
+    if (Tabmix.isSplitViewWrapper(dropElement)) {
       newMarginY += 1;
     }
 

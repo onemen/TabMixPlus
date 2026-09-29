@@ -56,6 +56,7 @@ export default {
     getGlobal: false,
     GlobalKey: false,
     PreferencesLoader: false,
+    Tabbrowser: false,
     TabmixWidgets: false,
     ScriptsLoader: false,
     shortcutKeyMapPromise: false,

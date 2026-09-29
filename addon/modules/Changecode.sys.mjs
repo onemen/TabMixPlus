@@ -2,10 +2,11 @@ import {isVersion} from "chrome://tabmix-resource/content/BrowserVersion.sys.mjs
 import {TabmixSvc} from "chrome://tabmix-resource/content/TabmixSvc.sys.mjs";
 import {AppConstants} from "resource://gre/modules/AppConstants.sys.mjs";
 
-/** @type {{console: LogModule.Console}} */ // @ts-ignore
+/** @type {{console: LogModule.Console; Tabbrowser: typeof Tabbrowser}} */ // @ts-ignore
 const lazy = {};
 ChromeUtils.defineESModuleGetters(lazy, {
   console: "chrome://tabmix-resource/content/log.sys.mjs",
+  Tabbrowser: "moz-src:///browser/components/tabbrowser/Tabbrowser.sys.mjs",
 });
 
 const DEBUGMODE = Services.prefs.getBoolPref("extensions.tabmix.debugMode", false);
@@ -409,32 +410,57 @@ function createModuleSandbox(obj, options = {}) {
 /** @type {Set<string>} */
 export const privateMethodsList = new Set();
 
+// Regex matches: optional class/identifier name before .# or 'this.#', followed
+// by the private field/method name.
+// Examples matched: "this.#data", "Tabbrowser.#dataURLRegEx", "MyClass.#privateMethod"
+const privateRegex = /\b([A-Za-z0-9_$]+)?\.#(\w+)/g;
+
 /** @type {typeof ChangecodeModule.verifyPrivateMethodReplaced} */
 function verifyPrivateMethodReplaced(code, obj, fullName) {
-  const matches = code.match(/this\.#(\w+)/g);
-  if (!matches) {
+  const matches = [...code.matchAll(privateRegex)];
+  if (matches.length === 0) {
     return {code, needUpdate: false};
   }
 
-  const privateMethods = new Set(matches.map(match => match.replace("this.#", "")));
   const parts = fullName ? fullName.split(".") : [];
   const methodName = parts.at(-1) || "";
   const parentName = parts.slice(0, -1).join(".");
-  if (methodName) {
-    privateMethods.delete(methodName.replace(/^_/, ""));
-  }
+
   const ex = lazy.console.error(Components.stack.caller?.caller);
 
-  for (const method of privateMethods) {
-    if (obj && typeof obj[`_${method}`] === "undefined") {
-      ex.message = `Implement replacement for private method #${method} in ${parentName} it is used by ${fullName || "makeCode"}${errMsgContent}`;
-      lazy.console.reportError(ex);
+  for (const match of matches) {
+    const [, prefix, method] = match;
+
+    if (!methodName || method !== methodName.replace(/^_/, "")) {
+      /** @type {Record<string, any> | null} */
+      let targetObj = null;
+      let targetName = parentName;
+
+      if (prefix === "this") {
+        targetObj = obj;
+      } else if (prefix === "Tabbrowser") {
+        targetName = "Tabbrowser";
+        targetObj = lazy.Tabbrowser;
+      } else {
+        ex.message = `Unknown private method prefix '${prefix}' for #${method} in ${fullName || "makeCode"}${errMsgContent}`;
+        lazy.console.reportError(ex);
+      }
+
+      if (targetObj && typeof targetObj[`_${method}`] === "undefined") {
+        ex.message = `Implement replacement for private method #${method} in ${targetName} it is used by ${fullName || "makeCode"}${errMsgContent}`;
+        lazy.console.reportError(ex);
+      }
+
+      if (targetName) {
+        privateMethodsList.add(`${targetName}._${method}`);
+      }
     }
-    privateMethodsList.add(`${parentName}._${method}`);
   }
 
   return {
-    code: code.replace(/this\.#(\w+)/g, "this._$1"),
+    code: code.replace(privateRegex, (_match, prefix, propName) => {
+      return prefix ? `${prefix}._${propName}` : `._${propName}`;
+    }),
     needUpdate: true,
   };
 }

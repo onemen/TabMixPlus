@@ -129,6 +129,12 @@ interface TabmixGlobal {
   setTabStyle(aTab: Tab, boldChanged?: {value: boolean}): void;
   updateUrlBarValue(): void;
   urlBarOnBlur(): void;
+
+  // general helper functions gBroser.isTab and other functions become statinc
+  // in Firefox 159 bug 2075448
+  isTab: TabBrowser["isTab"];
+  isTabGroupLabel: TabBrowser["isTabGroupLabel"];
+  isSplitViewWrapper: TabBrowser["isSplitViewWrapper"];
 }
 
 declare namespace AllTabs {
