@@ -2724,10 +2724,12 @@ window.gTMPprefObserver = {
     );
 
     const blockMargin = Tabmix.tabsUtils.protonValues;
-    const cssText = `#tabbrowser-tabs[orient="horizontal"][widthFitTitle] #tabbrowser-arrowscrollbox
-      .tabbrowser-tab:not(:hover, [pinned]) > .tab-stack > .tab-content > .tab-close-button {
-        padding-inline-start: 6px !important;
-        width: 24px !important;
+    const cssText = `@media not -moz-pref("browser.nova.enabled") {
+      #tabbrowser-tabs[orient="horizontal"][widthFitTitle] #tabbrowser-arrowscrollbox
+        .tabbrowser-tab:not(:hover, [pinned]) > .tab-stack > .tab-content > .tab-close-button {
+          padding-inline-start: 6px !important;
+          width: 24px !important;
+        }
       }`;
     if (TabmixSvc.isWaterfox) {
       const styleSheet = Services.io.newURI("data:text/css," + encodeURIComponent(cssText));
