@@ -3512,23 +3512,28 @@ window.gTMPprefObserver = {
     try {
       let remoteInfo;
       try {
-        const gistID = "e02ec904dd82a73cec4c229a7cbb552e";
-        const url = `https://gist.githubusercontent.com/onemen/${gistID}/raw/versionInfo.json`;
-        const response = await fetch(url, {cache: "no-store"});
+        // the publish pipeline's manifest on the firefox-scripts gh-pages branch —
+        // the same file the installer/updater verify downloads against
+        const response = await fetch("https://onemen.github.io/firefox-scripts/hashes.json", {
+          cache: "no-store",
+        });
         if (response.ok) {
           remoteInfo = await response.json();
         }
       } catch (e) {
-        console.error("TabMix: Failed to fetch versionInfo.json", e);
+        console.error("TabMix: Failed to fetch hashes.json", e);
       }
 
       if (!remoteInfo) {
         return result;
       }
 
-      const dates = Object.values(remoteInfo)
-        .map(info => info.date)
-        .sort();
+      const keysToKeep = ["utils", "fx-folder"];
+      const filteredEntries = Object.entries(remoteInfo).filter(([key]) =>
+        keysToKeep.includes(key)
+      );
+
+      const dates = filteredEntries.map(([, info]) => info.date).sort();
       result.latestDate = dates.at(-1);
 
       // new updater already exist
@@ -3537,8 +3542,7 @@ window.gTMPprefObserver = {
         "chrome",
         "utils",
         "updater",
-        "ui",
-        "updater.html"
+        "scriptsUpdater.sys.mjs"
       );
 
       if (await IOUtils.exists(updaterUI)) {
@@ -3561,7 +3565,7 @@ window.gTMPprefObserver = {
       const content = await IOUtils.readUTF8(versionFile);
       const localInfo = JSON.parse(content);
 
-      result.updateNeeded = Object.entries(remoteInfo).some(([key, {date}]) => {
+      result.updateNeeded = filteredEntries.some(([key, {date}]) => {
         const localDate = localInfo[key]?.date;
         return !localDate || localDate < date;
       });

@@ -155,6 +155,12 @@ li {
       box-shadow: 0 1px 0 rgb(0 0 0 / 2%);
     }
 
+    /* display:flex would defeat the hidden attribute set by update.js
+       when the update date is missing or invalid */
+    .date-badge[hidden] {
+      display: none;
+    }
+
     p {
       margin-top: 0;
 
