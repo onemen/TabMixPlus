@@ -12,7 +12,10 @@ ChromeUtils.defineESModuleGetters(lazy, {
 
 if (isVersion(1420)) {
   ChromeUtils.defineESModuleGetters(lazy, {
-    TaskbarTabsUtils: "resource:///modules/taskbartabs/TaskbarTabsUtils.sys.mjs",
+    TaskbarTabsUtils:
+      isVersion(1590) ?
+        "moz-src:///browser/components/taskbartabs/TaskbarTabsUtils.sys.mjs"
+      : "resource:///modules/taskbartabs/TaskbarTabsUtils.sys.mjs",
   });
 }
 
