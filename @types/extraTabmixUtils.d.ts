@@ -395,6 +395,7 @@ declare namespace TabmixClosedTabsNS {
   function removeAllClosedTabs(): void;
   function removeClosedTabData(source: ClosedDataSource, index: number): ClosedTabData | null;
   function restoreToNewWindow(source: ClosedDataSource, index: number): void;
+  const openInTabsUtils: MockedExports.OpenInTabsUtils;
   function restoreAllClosedTabs(): void;
   function _undoCloseTab(aSource: ClosedDataSource, aIndex: number, aWhere: string, aSelectRestoredTab: boolean, aBlankTabToReuse?: Tab | null, multiple?: boolean): Tab | null;
   function fix_bug_1868452(item: Menuitem): boolean;

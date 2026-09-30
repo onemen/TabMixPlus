@@ -883,12 +883,22 @@ var TMP_ClosedTabs = {
     }
   },
 
+  get openInTabsUtils() {
+    if (Tabmix.isVersion(1560)) {
+      // since Firefox 156 OpenInTabsUtils moved to browser/components/tabbrowser
+      // and is no longer exposed as a global or as a gBrowser property
+      return ChromeUtils.importESModule(
+        "moz-src:///browser/components/tabbrowser/OpenInTabsUtils.sys.mjs"
+      ).OpenInTabsUtils;
+    }
+    // since Firefox 151 OpenInTabsUtils is a lazy property of gBrowser,
+    // before that it was a global of the browser window
+    return Tabmix.isVersion(1510) ? gBrowser.OpenInTabsUtils : OpenInTabsUtils;
+  },
+
   restoreAllClosedTabs() {
     const closedTabCount = this.count;
-    const isConfirmed = (
-      Tabmix.isVersion(1510) ?
-        gBrowser.OpenInTabsUtils
-      : OpenInTabsUtils).confirmOpenInTabs(closedTabCount);
+    const isConfirmed = this.openInTabsUtils.confirmOpenInTabs(closedTabCount);
     if (!isConfirmed) {
       return;
     }

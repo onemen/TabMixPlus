@@ -1286,9 +1286,7 @@ declare var nsContextMenu: {
   new (aXulMenu: XULPopupElement, aIsShift: boolean): nsContextMenu;
   isInstance: IsInstance<nsContextMenu>;
 };
-declare var OpenInTabsUtils: {
-  confirmOpenInTabs: (closedTabCount: number, aWindow?: Window) => boolean;
-};
+declare var OpenInTabsUtils: MockedExports.OpenInTabsUtils;
 declare var PageThumbs: {
   captureToCanvas: (aBrowser: MockedGeckoTypes.ChromeBrowser, aCanvas: MockedGeckoTypes.DNDCanvas, aArgs?: unknown, aSkipTelemetry?: boolean) => Promise<MockedGeckoTypes.DNDCanvas>;
 };
