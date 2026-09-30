@@ -781,6 +781,49 @@ interface CollectedData {
     xpath?: Record<string, CollectedFormDataValue>;
 }
 
+interface CollectorLogEdge {
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogEdge_label) --> */
+    label: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogEdge_other) --> */
+    other: CollectorLogNode;
+}
+
+interface CollectorLogNode {
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogNode_flags) --> */
+    flags: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogNode_index) --> */
+    index: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogNode_label) --> */
+    label: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogNode_ptr) --> */
+    ptr: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogNode_referenceCount) --> */
+    referenceCount: number;
+}
+
+interface CollectorLogNodeAdjacents {
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogNodeAdjacents_fromSelf) --> */
+    fromSelf: CollectorLogEdge[];
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogNodeAdjacents_toSelf) --> */
+    toSelf: CollectorLogEdge[];
+}
+
+interface CollectorLogRootPath {
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogRootPath_kind) --> */
+    kind: CollectorLogRootKind;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogRootPath_path) --> */
+    path: CollectorLogEdge[];
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogRootPath_weakMapPaths) --> */
+    weakMapPaths: CollectorLogWeakMapPath[];
+}
+
+interface CollectorLogWeakMapPath {
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogWeakMapPath_key) --> */
+    key: CollectorLogNode;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogWeakMapPath_path) --> */
+    path: CollectorLogEdge[];
+}
+
 interface CommandEventInit extends EventInit {
     /** <!-- binding_to(idl, attribute, WEBIDL_CommandEventInit_command) --> */
     command?: string;
@@ -1360,6 +1403,20 @@ interface ElementCreationOptions {
 interface ElementDefinitionOptions {
     /** <!-- binding_to(idl, attribute, WEBIDL_ElementDefinitionOptions_extends) --> */
     extends?: string;
+}
+
+interface EncapsulatedBits {
+    /** <!-- binding_to(idl, attribute, WEBIDL_EncapsulatedBits_ciphertext) --> */
+    ciphertext: ArrayBuffer;
+    /** <!-- binding_to(idl, attribute, WEBIDL_EncapsulatedBits_sharedKey) --> */
+    sharedKey: ArrayBuffer;
+}
+
+interface EncapsulatedKey {
+    /** <!-- binding_to(idl, attribute, WEBIDL_EncapsulatedKey_ciphertext) --> */
+    ciphertext: ArrayBuffer;
+    /** <!-- binding_to(idl, attribute, WEBIDL_EncapsulatedKey_sharedKey) --> */
+    sharedKey: CryptoKey;
 }
 
 interface EncodedAudioChunkInit {
@@ -3083,8 +3140,6 @@ interface LoadURIOptions {
     triggeringRemoteType?: string | null;
     /** <!-- binding_to(idl, attribute, WEBIDL_LoadURIOptions_triggeringSandboxFlags) --> */
     triggeringSandboxFlags?: number;
-    /** <!-- binding_to(idl, attribute, WEBIDL_LoadURIOptions_triggeringStorageAccess) --> */
-    triggeringStorageAccess?: boolean;
     /** <!-- binding_to(idl, attribute, WEBIDL_LoadURIOptions_triggeringWindowId) --> */
     triggeringWindowId?: number;
 }
@@ -4032,6 +4087,8 @@ interface NetErrorInfo {
 interface NotificationAction {
     /** <!-- binding_to(idl, attribute, WEBIDL_NotificationAction_action) --> */
     action: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_NotificationAction_navigate) --> */
+    navigate?: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_NotificationAction_title) --> */
     title: string;
 }
@@ -4867,6 +4924,15 @@ interface ProcessActorOptions extends JSActorOptions {
     loadInDevToolsLoader?: boolean;
     /** <!-- binding_to(idl, attribute, WEBIDL_ProcessActorOptions_parent) --> */
     parent?: JSActorSidedOptions;
+}
+
+interface ProfilerCounterOptions {
+    /** <!-- binding_to(idl, attribute, WEBIDL_ProfilerCounterOptions_category) --> */
+    category: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_ProfilerCounterOptions_description) --> */
+    description?: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_ProfilerCounterOptions_name) --> */
+    name: string;
 }
 
 interface ProfilerMarkerOptions {
@@ -6424,10 +6490,10 @@ interface SocketOptions {
     useSecureTransport?: boolean;
 }
 
-interface SpeechRecognitionErrorInit extends EventInit {
-    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionErrorInit_error) --> */
-    error?: SpeechRecognitionErrorCode;
-    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionErrorInit_message) --> */
+interface SpeechRecognitionErrorEventInit extends EventInit {
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionErrorEventInit_error) --> */
+    error: SpeechRecognitionErrorCode;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionErrorEventInit_message) --> */
     message?: string;
 }
 
@@ -6439,7 +6505,29 @@ interface SpeechRecognitionEventInit extends EventInit {
     /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionEventInit_resultIndex) --> */
     resultIndex?: number;
     /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionEventInit_results) --> */
-    results?: SpeechRecognitionResultList | null;
+    results: SpeechRecognitionResultList;
+}
+
+interface SpeechRecognitionOptions {
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionOptions_langs) --> */
+    langs: string[];
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionOptions_processLocally) --> */
+    processLocally?: boolean;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionOptions_quality) --> */
+    quality?: SpeechRecognitionQuality;
+}
+
+interface SpeechRecognitionPerfStats {
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionPerfStats_engineReadyDuration) --> */
+    engineReadyDuration?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionPerfStats_fedAudioDuration) --> */
+    fedAudioDuration?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionPerfStats_finalizationDuration) --> */
+    finalizationDuration?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionPerfStats_firstResultDuration) --> */
+    firstResultDuration?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionPerfStats_inferenceDuration) --> */
+    inferenceDuration?: number;
 }
 
 interface SpeechSynthesisErrorEventInit extends SpeechSynthesisEventInit {
@@ -6740,6 +6828,112 @@ interface TextFormatInit {
 interface TextFormatUpdateEventInit extends EventInit {
     /** <!-- binding_to(idl, attribute, WEBIDL_TextFormatUpdateEventInit_textFormats) --> */
     textFormats?: TextFormat[];
+}
+
+interface TextGenerationLogitBias {
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationLogitBias_bias) --> */
+    bias: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationLogitBias_token) --> */
+    token: number;
+}
+
+interface TextGenerationMessage {
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationMessage_content) --> */
+    content: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationMessage_role) --> */
+    role: TextGenerationRole;
+}
+
+interface TextGenerationRequest {
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationRequest_bufferLength) --> */
+    bufferLength?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationRequest_maxTokens) --> */
+    maxTokens?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationRequest_messages) --> */
+    messages: TextGenerationMessage[];
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationRequest_samplers) --> */
+    samplers?: TextGenerationSampler[];
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationRequest_stopOnEndOfGenerationTokens) --> */
+    stopOnEndOfGenerationTokens?: boolean;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationRequest_stopTokens) --> */
+    stopTokens?: number[];
+}
+
+interface TextGenerationResourceSnapshot {
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationResourceSnapshot_cpuTimeMs) --> */
+    cpuTimeMs: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationResourceSnapshot_memoryBytes) --> */
+    memoryBytes: number;
+}
+
+interface TextGenerationResources {
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationResources_after) --> */
+    after: TextGenerationResourceSnapshot;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationResources_before) --> */
+    before: TextGenerationResourceSnapshot;
+}
+
+interface TextGenerationResult {
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationResult_content) --> */
+    content: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationResult_reason) --> */
+    reason: TextGenerationFinishReason;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationResult_resources) --> */
+    resources: TextGenerationResources;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationResult_usage) --> */
+    usage: TextGenerationUsage;
+}
+
+interface TextGenerationSampler {
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationSampler_logitBias) --> */
+    logitBias?: TextGenerationLogitBias[];
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationSampler_seed) --> */
+    seed?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationSampler_temp) --> */
+    temp?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationSampler_topK) --> */
+    topK?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationSampler_topP) --> */
+    topP?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationSampler_type) --> */
+    type: TextGenerationSamplerType;
+}
+
+interface TextGenerationTimings {
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationTimings_decodeMs) --> */
+    decodeMs: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationTimings_prefillMs) --> */
+    prefillMs: number;
+}
+
+interface TextGenerationUsage {
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationUsage_generatedTokens) --> */
+    generatedTokens: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationUsage_promptCharacters) --> */
+    promptCharacters: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationUsage_promptTokens) --> */
+    promptTokens: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerationUsage_timings) --> */
+    timings: TextGenerationTimings;
+}
+
+interface TextGeneratorCreateOptions {
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGeneratorCreateOptions_batchSize) --> */
+    batchSize?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGeneratorCreateOptions_contextSize) --> */
+    contextSize?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGeneratorCreateOptions_featureId) --> */
+    featureId?: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGeneratorCreateOptions_flashAttn) --> */
+    flashAttn?: boolean;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGeneratorCreateOptions_kvCacheDtype) --> */
+    kvCacheDtype?: TextGenerationKVCacheDtype;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGeneratorCreateOptions_numThreads) --> */
+    numThreads?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGeneratorCreateOptions_numThreadsDecoding) --> */
+    numThreadsDecoding?: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGeneratorCreateOptions_ubatchSize) --> */
+    ubatchSize?: number;
 }
 
 interface TextUpdateEventInit extends EventInit {
@@ -10636,6 +10830,10 @@ interface CSSStyleProperties extends CSSStyleDeclaration {
     MozPerspective: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_MozPerspectiveOrigin) --> */
     MozPerspectiveOrigin: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_MozScrollbarInsetBlock) --> */
+    MozScrollbarInsetBlock: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_MozScrollbarInsetInline) --> */
+    MozScrollbarInsetInline: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_MozSubtreeHiddenOnlyVisually) --> */
     MozSubtreeHiddenOnlyVisually: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_CSSStyleProperties_MozTabSize) --> */
@@ -12920,6 +13118,39 @@ declare var CloseWatcher: {
     isInstance: IsInstance<CloseWatcher>;
 };
 
+/** <!-- binding_to(idl, class, WEBIDL_CollectorLogAnalyzer) --> */
+interface CollectorLogAnalyzer {
+    /** <!-- binding_to(idl, method, WEBIDL_CollectorLogAnalyzer_getInitProgress) --> */
+    getInitProgress(): number;
+    /** <!-- binding_to(idl, method, WEBIDL_CollectorLogAnalyzer_getNodeAdjacents) --> */
+    getNodeAdjacents(node: CollectorLogNode): Promise<CollectorLogNodeAdjacents>;
+    /** <!-- binding_to(idl, method, WEBIDL_CollectorLogAnalyzer_getPathToRoot) --> */
+    getPathToRoot(node: CollectorLogNode): Promise<CollectorLogRootPath>;
+    /** <!-- binding_to(idl, method, WEBIDL_CollectorLogAnalyzer_getQueryProgress) --> */
+    getQueryProgress(): number;
+    /** <!-- binding_to(idl, method, WEBIDL_CollectorLogAnalyzer_init) --> */
+    init(): Promise<void>;
+    /** <!-- binding_to(idl, method, WEBIDL_CollectorLogAnalyzer_queryNodes) --> */
+    queryNodes(query: string): Promise<CollectorLogNode[]>;
+    /** <!-- binding_to(idl, method, WEBIDL_CollectorLogAnalyzer_sampleNodes) --> */
+    sampleNodes(): Promise<CollectorLogNode[]>;
+    /** <!-- binding_to(idl, const, WEBIDL_CollectorLogAnalyzer_MAX_QUERY_RESULTS) --> */
+    readonly MAX_QUERY_RESULTS: 500;
+    /** <!-- binding_to(idl, const, WEBIDL_CollectorLogAnalyzer_SAMPLE_COUNT) --> */
+    readonly SAMPLE_COUNT: 20;
+}
+
+declare var CollectorLogAnalyzer: {
+    prototype: CollectorLogAnalyzer;
+    new(ccLogPath: string, gcLogPath: string): CollectorLogAnalyzer;
+    /** <!-- binding_to(idl, const, WEBIDL_CollectorLogAnalyzer_MAX_QUERY_RESULTS) --> */
+    readonly MAX_QUERY_RESULTS: 500;
+    /** <!-- binding_to(idl, const, WEBIDL_CollectorLogAnalyzer_SAMPLE_COUNT) --> */
+    readonly SAMPLE_COUNT: 20;
+    /** <!-- binding_to(idl, attribute, WEBIDL_CollectorLogAnalyzer_isInstance) --> */
+    isInstance: IsInstance<CollectorLogAnalyzer>;
+};
+
 /** <!-- binding_to(idl, class, WEBIDL_CommandEvent) --> */
 interface CommandEvent extends Event {
     /** <!-- binding_to(idl, attribute, WEBIDL_CommandEvent_command) --> */
@@ -14555,6 +14786,7 @@ interface Document extends Node, ARIANotifyMixin, DocumentOrShadowRoot, FontFace
     createEvent(eventInterface: "ScrollAreaEvent"): ScrollAreaEvent;
     createEvent(eventInterface: "SecurityPolicyViolationEvent"): SecurityPolicyViolationEvent;
     createEvent(eventInterface: "SimpleGestureEvent"): SimpleGestureEvent;
+    createEvent(eventInterface: "SpeechRecognitionErrorEvent"): SpeechRecognitionErrorEvent;
     createEvent(eventInterface: "SpeechRecognitionEvent"): SpeechRecognitionEvent;
     createEvent(eventInterface: "SpeechSynthesisErrorEvent"): SpeechSynthesisErrorEvent;
     createEvent(eventInterface: "SpeechSynthesisEvent"): SpeechSynthesisEvent;
@@ -26281,6 +26513,8 @@ interface Notification extends EventTarget {
     readonly icon: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_Notification_lang) --> */
     readonly lang: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_Notification_navigate) --> */
+    readonly navigate: string;
     /** <!-- binding_to(idl, attribute, WEBIDL_Notification_onclick) --> */
     onclick: ((this: Notification, ev: Event) => any) | null;
     /** <!-- binding_to(idl, attribute, WEBIDL_Notification_onclose) --> */
@@ -28181,6 +28415,19 @@ declare var ProcessingInstruction: {
     new(): ProcessingInstruction;
     /** <!-- binding_to(idl, attribute, WEBIDL_ProcessingInstruction_isInstance) --> */
     isInstance: IsInstance<ProcessingInstruction>;
+};
+
+/** <!-- binding_to(idl, class, WEBIDL_ProfilerCounter) --> */
+interface ProfilerCounter {
+    /** <!-- binding_to(idl, method, WEBIDL_ProfilerCounter_add) --> */
+    add(delta: number): void;
+}
+
+declare var ProfilerCounter: {
+    prototype: ProfilerCounter;
+    new(): ProfilerCounter;
+    /** <!-- binding_to(idl, attribute, WEBIDL_ProfilerCounter_isInstance) --> */
+    isInstance: IsInstance<ProfilerCounter>;
 };
 
 /** <!-- binding_to(idl, class, WEBIDL_ProgressEvent) --> */
@@ -32469,7 +32716,7 @@ interface Serial extends EventTarget {
     /** <!-- binding_to(idl, method, WEBIDL_Serial_resetToDefaultMockDevices) --> */
     resetToDefaultMockDevices(): Promise<void>;
     /** <!-- binding_to(idl, method, WEBIDL_Serial_simulateDeviceConnection) --> */
-    simulateDeviceConnection(deviceId: string, devicePath: string, vendorId?: number, productId?: number): Promise<void>;
+    simulateDeviceConnection(deviceId: string, devicePath: string, vendorId?: number, productId?: number, bluetoothServiceClassId?: string): Promise<void>;
     /** <!-- binding_to(idl, method, WEBIDL_Serial_simulateDeviceDisconnection) --> */
     simulateDeviceDisconnection(deviceId: string): Promise<void>;
     addEventListener<K extends keyof SerialEventMap>(type: K, listener: (this: Serial, ev: SerialEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -32907,7 +33154,7 @@ interface SpeechGrammarList {
     /** <!-- binding_to(idl, method, WEBIDL_SpeechGrammarList_addFromURI) --> */
     addFromURI(src: string, weight?: number): void;
     /** <!-- binding_to(idl, method, WEBIDL_SpeechGrammarList_item) --> */
-    item(index: number): SpeechGrammar;
+    item(index: number): SpeechGrammar | null;
     [index: number]: SpeechGrammar;
 }
 
@@ -32932,7 +33179,10 @@ interface SpeechRecognitionEventMap {
     "start": Event;
 }
 
-/** <!-- binding_to(idl, class, WEBIDL_SpeechRecognition) --> */
+/**
+ * <!-- binding_to(idl, class, WEBIDL_SpeechRecognition) -->
+ * Available only in secure contexts.
+ */
 interface SpeechRecognition extends EventTarget {
     /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognition_continuous) --> */
     continuous: boolean;
@@ -32966,12 +33216,19 @@ interface SpeechRecognition extends EventTarget {
     onspeechstart: ((this: SpeechRecognition, ev: Event) => any) | null;
     /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognition_onstart) --> */
     onstart: ((this: SpeechRecognition, ev: Event) => any) | null;
-    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognition_serviceURI) --> */
-    serviceURI: string;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognition_phrases) --> */
+    phrases: SpeechRecognitionPhrase[];
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognition_processLocally) --> */
+    processLocally: boolean;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognition_unspokenPunctuation) --> */
+    unspokenPunctuation: boolean;
     /** <!-- binding_to(idl, method, WEBIDL_SpeechRecognition_abort) --> */
     abort(): void;
+    /** <!-- binding_to(idl, method, WEBIDL_SpeechRecognition_getPerfStats) --> */
+    getPerfStats(): Promise<SpeechRecognitionPerfStats>;
     /** <!-- binding_to(idl, method, WEBIDL_SpeechRecognition_start) --> */
-    start(stream?: MediaStream): void;
+    start(): void;
+    start(audioTrack: MediaStreamTrack): void;
     /** <!-- binding_to(idl, method, WEBIDL_SpeechRecognition_stop) --> */
     stop(): void;
     addEventListener<K extends keyof SpeechRecognitionEventMap>(type: K, listener: (this: SpeechRecognition, ev: SpeechRecognitionEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -32985,9 +33242,16 @@ declare var SpeechRecognition: {
     new(): SpeechRecognition;
     /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognition_isInstance) --> */
     isInstance: IsInstance<SpeechRecognition>;
+    /** <!-- binding_to(idl, method, WEBIDL_SpeechRecognition_available) --> */
+    available(options: SpeechRecognitionOptions): Promise<AvailabilityStatus>;
+    /** <!-- binding_to(idl, method, WEBIDL_SpeechRecognition_install) --> */
+    install(options: SpeechRecognitionOptions): Promise<boolean>;
 };
 
-/** <!-- binding_to(idl, class, WEBIDL_SpeechRecognitionAlternative) --> */
+/**
+ * <!-- binding_to(idl, class, WEBIDL_SpeechRecognitionAlternative) -->
+ * Available only in secure contexts.
+ */
 interface SpeechRecognitionAlternative {
     /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionAlternative_confidence) --> */
     readonly confidence: number;
@@ -33002,22 +33266,28 @@ declare var SpeechRecognitionAlternative: {
     isInstance: IsInstance<SpeechRecognitionAlternative>;
 };
 
-/** <!-- binding_to(idl, class, WEBIDL_SpeechRecognitionError) --> */
-interface SpeechRecognitionError extends Event {
-    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionError_error) --> */
+/**
+ * <!-- binding_to(idl, class, WEBIDL_SpeechRecognitionErrorEvent) -->
+ * Available only in secure contexts.
+ */
+interface SpeechRecognitionErrorEvent extends Event {
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionErrorEvent_error) --> */
     readonly error: SpeechRecognitionErrorCode;
-    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionError_message) --> */
-    readonly message: string | null;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionErrorEvent_message) --> */
+    readonly message: string;
 }
 
-declare var SpeechRecognitionError: {
-    prototype: SpeechRecognitionError;
-    new(type: string, eventInitDict?: SpeechRecognitionErrorInit): SpeechRecognitionError;
-    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionError_isInstance) --> */
-    isInstance: IsInstance<SpeechRecognitionError>;
+declare var SpeechRecognitionErrorEvent: {
+    prototype: SpeechRecognitionErrorEvent;
+    new(type: string, eventInitDict: SpeechRecognitionErrorEventInit): SpeechRecognitionErrorEvent;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionErrorEvent_isInstance) --> */
+    isInstance: IsInstance<SpeechRecognitionErrorEvent>;
 };
 
-/** <!-- binding_to(idl, class, WEBIDL_SpeechRecognitionEvent) --> */
+/**
+ * <!-- binding_to(idl, class, WEBIDL_SpeechRecognitionEvent) -->
+ * Available only in secure contexts.
+ */
 interface SpeechRecognitionEvent extends Event {
     /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionEvent_emma) --> */
     readonly emma: Document | null;
@@ -33031,19 +33301,40 @@ interface SpeechRecognitionEvent extends Event {
 
 declare var SpeechRecognitionEvent: {
     prototype: SpeechRecognitionEvent;
-    new(type: string, eventInitDict?: SpeechRecognitionEventInit): SpeechRecognitionEvent;
+    new(type: string, eventInitDict: SpeechRecognitionEventInit): SpeechRecognitionEvent;
     /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionEvent_isInstance) --> */
     isInstance: IsInstance<SpeechRecognitionEvent>;
 };
 
-/** <!-- binding_to(idl, class, WEBIDL_SpeechRecognitionResult) --> */
+/**
+ * <!-- binding_to(idl, class, WEBIDL_SpeechRecognitionPhrase) -->
+ * Available only in secure contexts.
+ */
+interface SpeechRecognitionPhrase {
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionPhrase_boost) --> */
+    readonly boost: number;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionPhrase_phrase) --> */
+    readonly phrase: string;
+}
+
+declare var SpeechRecognitionPhrase: {
+    prototype: SpeechRecognitionPhrase;
+    new(phrase: string, boost?: number): SpeechRecognitionPhrase;
+    /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionPhrase_isInstance) --> */
+    isInstance: IsInstance<SpeechRecognitionPhrase>;
+};
+
+/**
+ * <!-- binding_to(idl, class, WEBIDL_SpeechRecognitionResult) -->
+ * Available only in secure contexts.
+ */
 interface SpeechRecognitionResult {
     /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionResult_isFinal) --> */
     readonly isFinal: boolean;
     /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionResult_length) --> */
     readonly length: number;
     /** <!-- binding_to(idl, method, WEBIDL_SpeechRecognitionResult_item) --> */
-    item(index: number): SpeechRecognitionAlternative;
+    item(index: number): SpeechRecognitionAlternative | null;
     [index: number]: SpeechRecognitionAlternative;
 }
 
@@ -33054,12 +33345,15 @@ declare var SpeechRecognitionResult: {
     isInstance: IsInstance<SpeechRecognitionResult>;
 };
 
-/** <!-- binding_to(idl, class, WEBIDL_SpeechRecognitionResultList) --> */
+/**
+ * <!-- binding_to(idl, class, WEBIDL_SpeechRecognitionResultList) -->
+ * Available only in secure contexts.
+ */
 interface SpeechRecognitionResultList {
     /** <!-- binding_to(idl, attribute, WEBIDL_SpeechRecognitionResultList_length) --> */
     readonly length: number;
     /** <!-- binding_to(idl, method, WEBIDL_SpeechRecognitionResultList_item) --> */
-    item(index: number): SpeechRecognitionResult;
+    item(index: number): SpeechRecognitionResult | null;
     [index: number]: SpeechRecognitionResult;
 }
 
@@ -33555,6 +33849,10 @@ declare var SubmitEvent: {
  * Available only in secure contexts.
  */
 interface SubtleCrypto {
+    /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_decapsulateBits) --> */
+    decapsulateBits(decapsulationAlgorithm: AlgorithmIdentifier, decapsulationKey: CryptoKey, ciphertext: BufferSource): Promise<ArrayBuffer>;
+    /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_decapsulateKey) --> */
+    decapsulateKey(decapsulationAlgorithm: AlgorithmIdentifier, decapsulationKey: CryptoKey, ciphertext: BufferSource, sharedKeyAlgorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
     /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_decrypt) --> */
     decrypt(algorithm: AlgorithmIdentifier, key: CryptoKey, data: BufferSource): Promise<any>;
     /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_deriveBits) --> */
@@ -33563,6 +33861,10 @@ interface SubtleCrypto {
     deriveKey(algorithm: AlgorithmIdentifier, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier, extractable: boolean, keyUsages: KeyUsage[]): Promise<any>;
     /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_digest) --> */
     digest(algorithm: AlgorithmIdentifier, data: BufferSource): Promise<any>;
+    /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_encapsulateBits) --> */
+    encapsulateBits(encapsulationAlgorithm: AlgorithmIdentifier, encapsulationKey: CryptoKey): Promise<EncapsulatedBits>;
+    /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_encapsulateKey) --> */
+    encapsulateKey(encapsulationAlgorithm: AlgorithmIdentifier, encapsulationKey: CryptoKey, sharedKeyAlgorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: KeyUsage[]): Promise<EncapsulatedKey>;
     /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_encrypt) --> */
     encrypt(algorithm: AlgorithmIdentifier, key: CryptoKey, data: BufferSource): Promise<any>;
     /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_exportKey) --> */
@@ -34453,6 +34755,27 @@ declare var TextFormatUpdateEvent: {
     new(type: string, options?: TextFormatUpdateEventInit): TextFormatUpdateEvent;
     /** <!-- binding_to(idl, attribute, WEBIDL_TextFormatUpdateEvent_isInstance) --> */
     isInstance: IsInstance<TextFormatUpdateEvent>;
+};
+
+/** <!-- binding_to(idl, class, WEBIDL_TextGenerator) --> */
+interface TextGenerator {
+    /** <!-- binding_to(idl, method, WEBIDL_TextGenerator_cancel) --> */
+    cancel(): void;
+    /** <!-- binding_to(idl, method, WEBIDL_TextGenerator_clear) --> */
+    clear(): void;
+    /** <!-- binding_to(idl, method, WEBIDL_TextGenerator_generate) --> */
+    generate(request: TextGenerationRequest, onDelta?: TextGenerationDeltaCallback): Promise<TextGenerationResult>;
+    /** <!-- binding_to(idl, method, WEBIDL_TextGenerator_terminate) --> */
+    terminate(): void;
+}
+
+declare var TextGenerator: {
+    prototype: TextGenerator;
+    new(): TextGenerator;
+    /** <!-- binding_to(idl, attribute, WEBIDL_TextGenerator_isInstance) --> */
+    isInstance: IsInstance<TextGenerator>;
+    /** <!-- binding_to(idl, method, WEBIDL_TextGenerator_create) --> */
+    create(model: Blob, options?: TextGeneratorCreateOptions): Promise<TextGenerator>;
 };
 
 /** <!-- binding_to(idl, class, WEBIDL_TextMetrics) --> */
@@ -42483,6 +42806,8 @@ declare namespace ChromeUtils {
     var recentJSDevError: any;
     /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_CreateOriginAttributesFromOriginSuffix) --> */
     function CreateOriginAttributesFromOriginSuffix(suffix: string): OriginAttributesDictionary;
+    /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_addProfilerCounter) --> */
+    function addProfilerCounter(options: ProfilerCounterOptions): ProfilerCounter;
     /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_addProfilerMarker) --> */
     function addProfilerMarker(name: string, options?: ProfilerMarkerOptions | number, data?: any): void;
     /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_androidMoveTaskToBack) --> */
@@ -42656,6 +42981,10 @@ declare namespace ChromeUtils {
     function vsyncEnabled(): boolean;
     /** <!-- binding_to(idl, method, WEBIDL_ChromeUtils_waiveXrays) --> */
     function waiveXrays(val: any): any;
+}
+
+/** <!-- binding_to(idl, class, WEBIDL_CollectorNodeFlags) --> */
+declare namespace CollectorNodeFlags {
 }
 
 /** <!-- binding_to(idl, class, WEBIDL_FuzzingFunctions) --> */
@@ -43407,6 +43736,11 @@ interface SetDeleteObjectCallback {
 interface TestThrowingCallback {
     /** <!-- binding_to(idl, method, WEBIDL_TestThrowingCallback) --> */
     (): void;
+}
+
+interface TextGenerationDeltaCallback {
+    /** <!-- binding_to(idl, method, WEBIDL_TextGenerationDeltaCallback) --> */
+    (text: string): void;
 }
 
 interface ToolExecuteCallback {
@@ -44569,6 +44903,7 @@ type AudioSessionType = "ambient" | "auto" | "play-and-record" | "playback" | "t
 type AutoKeyword = "auto";
 type AutoplayPolicy = "allowed" | "allowed-muted" | "disallowed";
 type AutoplayPolicyMediaType = "audiocontext" | "mediaelement";
+type AvailabilityStatus = "available" | "downloadable" | "downloading" | "unavailable";
 type AvcBitstreamFormat = "annexb" | "avc";
 type Base64URLDecodePadding = "ignore" | "reject" | "require";
 type BinaryType = "arraybuffer" | "blob";
@@ -44596,6 +44931,7 @@ type ChannelCountMode = "clamped-max" | "explicit" | "max";
 type ChannelInterpretation = "discrete" | "speakers";
 type CheckerboardReason = "recent" | "severe";
 type CodecState = "closed" | "configured" | "unconfigured";
+type CollectorLogRootKind = "hard" | "none" | "soft";
 type ColorGamut = "p3" | "rec2020" | "srgb";
 type ColorSpaceConversion = "default" | "none";
 type CompositeOperation = "accumulate" | "add" | "replace";
@@ -44812,7 +45148,8 @@ type ShadowRootMode = "closed" | "open";
 type SlotAssignmentMode = "manual" | "named";
 type SocketReadyState = "closed" | "closing" | "halfclosed" | "open" | "opening";
 type SourceBufferAppendMode = "segments" | "sequence";
-type SpeechRecognitionErrorCode = "aborted" | "audio-capture" | "bad-grammar" | "language-not-supported" | "network" | "no-speech" | "not-allowed" | "service-not-allowed";
+type SpeechRecognitionErrorCode = "aborted" | "audio-capture" | "bad-grammar" | "language-not-supported" | "network" | "no-speech" | "not-allowed" | "phrases-not-supported" | "service-not-allowed";
+type SpeechRecognitionQuality = "command" | "conversation" | "dictation";
 type SpeechSynthesisErrorCode = "audio-busy" | "audio-hardware" | "canceled" | "interrupted" | "invalid-argument" | "language-unavailable" | "network" | "synthesis-failed" | "synthesis-unavailable" | "text-too-long" | "voice-unavailable";
 type StreamFilterStatus = "closed" | "disconnected" | "failed" | "finishedtransferringdata" | "suspended" | "transferringdata" | "uninitialized";
 type StringType = "inline" | "literal" | "other" | "stringbuffer";
@@ -44821,6 +45158,10 @@ type TCPReadyState = "closed" | "closing" | "connecting" | "open";
 type TCPSocketBinaryType = "arraybuffer" | "string";
 type TaskPriority = "background" | "user-blocking" | "user-visible";
 type TensorDataLocation = "cpu" | "cpu-pinned" | "gpu-buffer" | "ml-tensor" | "none" | "texture";
+type TextGenerationFinishReason = "cancelled" | "eos" | "length" | "stop-token";
+type TextGenerationKVCacheDtype = "f16" | "f32" | "q4_0" | "q4_1" | "q5_0" | "q5_1" | "q8_0";
+type TextGenerationRole = "assistant" | "system" | "user";
+type TextGenerationSamplerType = "dist" | "logit-bias" | "temperature" | "top-k" | "top-p";
 type TextTrackKind = "captions" | "chapters" | "descriptions" | "metadata" | "subtitles";
 type TextTrackMode = "disabled" | "hidden" | "showing";
 type TouchEventsOverride = "disabled" | "enabled" | "none";
@@ -45306,8 +45647,12 @@ interface StyleSheetList {
 }
 
 interface SubtleCrypto {
+    /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_decapsulateKey) --> */
+    decapsulateKey(decapsulationAlgorithm: AlgorithmIdentifier, decapsulationKey: CryptoKey, ciphertext: BufferSource, sharedKeyAlgorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
     /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_deriveKey) --> */
     deriveKey(algorithm: AlgorithmIdentifier, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<any>;
+    /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_encapsulateKey) --> */
+    encapsulateKey(encapsulationAlgorithm: AlgorithmIdentifier, encapsulationKey: CryptoKey, sharedKeyAlgorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<EncapsulatedKey>;
     /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_generateKey) --> */
     generateKey(algorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<any>;
     /** <!-- binding_to(idl, method, WEBIDL_SubtleCrypto_importKey) --> */
