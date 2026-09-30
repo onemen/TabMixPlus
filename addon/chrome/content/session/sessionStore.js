@@ -201,7 +201,9 @@ var TMP_ClosedTabs = {
       return 0;
     }
 
-    if (Tabmix.isVersion(1360) || !Tabmix.isVersion(1350)) {
+    if (Tabmix.isVersion(1590)) {
+      return SessionStore.getClosedTabCount({sourceWindow: window});
+    } else if (Tabmix.isVersion(1360) || !Tabmix.isVersion(1350)) {
       return SessionStore.getClosedTabCount(window);
     }
 

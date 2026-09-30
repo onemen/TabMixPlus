@@ -462,7 +462,7 @@ declare namespace MockedExports {
 declare namespace SessionStoreNS {
   type ClosedDataSource = Window | {sourceWindow?: Window; sourceClosedId?: number; sourceWindowId?: string; closedWindow?: boolean; restoreAll?: boolean; closedGroup?: {id: string} | undefined};
   type Group = {closedAt: number; collapsed: boolean; color: string; id: string; name: string};
-  type WindowSource = Window | {sourceWindow: Window; private: boolean; closedTabsFromAllWindows: boolean; closedTabsFromClosedWindows: boolean};
+  type WindowSource = {sourceWindow: Window; private: boolean; closedTabsFromAllWindows: boolean; closedTabsFromClosedWindows: boolean};
   interface ClosedGroup extends Group {
     tabs: ClosedTabData[];
   }
@@ -531,10 +531,12 @@ declare namespace SessionStoreNS {
     forgetClosedTabById(aClosedId: number, aSourceOptions: ClosedDataSource): void;
     forgetClosedTabGroup(source: ClosedDataSource, tabGroupId: string): void;
     forgetClosedWindow(aIndex: number): void;
-    getClosedTabCount(aOptions?: WindowSource): number;
+    getClosedTabCount(aOptions?: Partial<WindowSource>): number;
+    /** @deprecated since Firefox 159 - see Bug 2075123 */
+    getClosedTabCount(aOptions?: Window | Partial<WindowSource>): number;
     getClosedTabCountForWindow(aWindow: Window): number;
     getClosedTabCountFromClosedWindows(): number;
-    getClosedTabData(aOptions?: WindowSource): ClosedTabData[];
+    getClosedTabData(aOptions?: Partial<WindowSource>): ClosedTabData[];
     getClosedTabDataForWindow(aWindow: Window): ClosedTabData[];
     getClosedTabDataFromClosedWindows(): ClosedTabData[];
     getClosedTabGroups(aOptions?: Partial<WindowSource>): ClosedGroup[];
