@@ -181,7 +181,11 @@ export const RenameTab = {
     TabmixSvc.setCustomTabValue(tab, "label-uri", url);
 
     if (tab.label != label) {
-      delete tab._labelIsInitialTitle;
+      if (TabmixSvc.version(1590)) {
+        win.Tabbrowser._tabsWithInitialTitle.delete(tab);
+      } else {
+        delete tab._labelIsInitialTitle;
+      }
       win.gBrowser.setTabTitle(tab);
     }
 

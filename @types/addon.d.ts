@@ -109,6 +109,8 @@ interface Window {
   ResizeObserver: typeof ResizeObserver;
   Services: typeof Services;
   setTimeout: typeof setTimeout;
+  /** the Tabbrowser class, a window lazy getter since Firefox 156 */
+  Tabbrowser: MockedGeckoTypes.TabBrowser;
   Tabmix: TabmixGlobal;
   TMP_Places: TabmixPlaces;
   XULBrowserWindow: XULBrowserWindow;

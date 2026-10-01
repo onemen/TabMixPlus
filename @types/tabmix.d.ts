@@ -141,6 +141,7 @@ interface OriginalFunctions {
   gURLBar__whereToOpen: gURLBar["_whereToOpen"];
   gURLBar_setURI: gURLBar["setURI"];
   gZenWorkspaces_selectEmptyTab: any;
+  tabContainer_handleNewTab: MockedGeckoTypes.TabContainer["_handleNewTab"];
   tabContainer_updateCloseButtons: MockedGeckoTypes.TabContainer["_updateCloseButtons"];
   isBlankPageURL: Window["isBlankPageURL"];
   OpenBrowserWindow: Window["OpenBrowserWindow"];

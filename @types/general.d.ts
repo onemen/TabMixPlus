@@ -342,6 +342,7 @@ declare namespace MockedGeckoTypes {
     _lastTabClosedByMouse: boolean;
     _lastTabToScrollIntoView?: BrowserTab;
     _notifyBackgroundTab: (aTab: BrowserTab) => void;
+    _handleNewTab: (tab: BrowserTab) => void;
     _pinnedTabsLayoutCache: Record<string, unknown> | null;
     _positionPinnedTabs: () => void;
     _selectNewTab: (aNewTab: BrowserTab, aFallbackDir?: number, aWrap?: boolean) => void;
@@ -713,8 +714,10 @@ declare namespace MockedGeckoTypes {
   interface TabBrowserPrivateMethods {
     _determineContentTitle: (browser: ChromeBrowser) => string;
     _determineTaskbarTabTitle: (profileIdentifier: string) => string;
+    _fullLabels: WeakMap<BrowserTab, string>;
     _getTabMoveState: (tab: BrowserTab) => TabMoveState | undefined;
     _handleTabMove: (tab: BrowserTab, moveActionCallback: () => void) => void;
+    _isFirstOrLastInTabGroup: (tab: BrowserTab) => boolean;
     _isLastTabInWindow: (tab: BrowserTab) => boolean;
     _notifyPinnedStatus: (
       tab: BrowserTab,
@@ -728,6 +731,7 @@ declare namespace MockedGeckoTypes {
     _populateTitleCache: () => void;
     _removeDuplicateTabs: (aConfirmationAnchor: object, tabs: Tab[], aCloseTabs: number, options: Record<string, unknown>) => void;
     _setTabLabel: (tab: BrowserTab, label: string, options?: {beforeTabOpen?: boolean; isContentTitle?: boolean; isURL?: boolean}) => boolean;
+    _tabsWithInitialTitle: WeakSet<BrowserTab>;
     _updateTabBarForPinnedTabs: () => void;
   }
 

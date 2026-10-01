@@ -679,7 +679,11 @@ var TMP_Places = {
     if (newTitle != tab.label) {
       this.setTabTitle(tab, newTitle);
       if (initial) {
-        tab._labelIsInitialTitle = true;
+        if (Tabmix.isVersion(1590)) {
+          Tabbrowser._tabsWithInitialTitle.add(tab);
+        } else {
+          tab._labelIsInitialTitle = true;
+        }
       }
     }
     return true;

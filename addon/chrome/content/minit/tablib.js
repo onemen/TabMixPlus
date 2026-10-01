@@ -7,28 +7,6 @@ Tabmix.tablib = {
   version: "tabmixplus",
   _inited: false,
 
-  /**
-   * Suspend/resume Tabmix's pref observers in ALL browser windows.
-   *
-   * Used around the temporary browser.tabs.insertRelatedAfterCurrent raise in
-   * addTab (Firefox 156+ related-tab chaining for the iac-only configuration):
-   * the gTMPprefObserver.observe mutual-exclusion logic must not react to the
-   * transient value. Mirrors the preventUpdate flag the preferences dialog sets
-   * while it writes prefs (see preferences.js setPref).
-   *
-   * @param {boolean} suspend true to suspend observers, false to resume
-   */
-  setPrefUpdateSuspended(suspend) {
-    const enumerator = Services.wm.getEnumerator("navigator:browser");
-    while (enumerator.hasMoreElements()) {
-      const win = enumerator.getNext();
-      const observer = win.gTMPprefObserver;
-      if (observer) {
-        observer.preventUpdate = suspend;
-      }
-    }
-  },
-
   init: function tabmix_tablib_init() {
     if (this._inited) {
       return;
@@ -56,6 +34,13 @@ Tabmix.tablib = {
       return;
     }
 
+    if (Tabmix.isVersion(1590)) {
+      if (!Tabbrowser._tabsWithInitialTitle) {
+        Tabbrowser._tabsWithInitialTitle = new WeakSet();
+        Tabbrowser._fullLabels = new WeakMap();
+      }
+    }
+
     parent._shortenURLRegEx = /^[^:]+:\/\/(?:www\.)?/;
 
     const lazy = {};
@@ -66,14 +51,17 @@ Tabmix.tablib = {
       // used by the reconstructed #determineTaskbarTabTitle
       ContextualIdentityService:
         "moz-src:///toolkit/components/contextualidentity/ContextualIdentityService.sys.mjs",
-      TaskbarTabs:
-        Tabmix.isVersion(1590) ?
-          "moz-src:///browser/components/taskbartabs/TaskbarTabs.sys.mjs"
-        : "resource:///modules/taskbartabs/TaskbarTabs.sys.mjs",
-      TaskbarTabsUtils:
-        Tabmix.isVersion(1590) ?
-          "moz-src:///browser/components/taskbartabs/TaskbarTabsUtils.sys.mjs"
-        : "resource:///modules/taskbartabs/TaskbarTabsUtils.sys.mjs",
+
+      ...(Tabmix.isVersion(1590) ?
+        {
+          TaskbarTabs: "moz-src:///browser/components/taskbartabs/TaskbarTabs.sys.mjs",
+          TaskbarTabsUtils: "moz-src:///browser/components/taskbartabs/TaskbarTabsUtils.sys.mjs",
+          SponsorProtection: "moz-src:///browser/components/newtab/SponsorProtection.sys.mjs",
+        }
+      : {
+          TaskbarTabs: "resource:///modules/taskbartabs/TaskbarTabs.sys.mjs",
+          TaskbarTabsUtils: "resource:///modules/taskbartabs/TaskbarTabsUtils.sys.mjs",
+        }),
     });
     // #determineContentTitle / #determineTaskbarTabTitle read these lazy
     // pref getters (module-lazy in Tabbrowser.sys.mjs since Firefox 156);
@@ -646,11 +634,15 @@ Tabmix.tablib = {
       : Tabmix.getSandbox(window, {scope: {TAB_LABEL_MAX_LENGTH: 256}});
 
     if (Tabmix.isVersion(1560)) {
+      const isInitialTitle =
+        Tabmix.isVersion(1590) ?
+          "Tabbrowser._tabsWithInitialTitle.has(aTab)"
+        : "aTab._labelIsInitialTitle";
       Tabmix.changeCode(gBrowser, "gBrowser.setInitialTabTitle", {sandbox})
         ._replace(
           ") {",
           `$&
-    if (aTab._labelIsInitialTitle && aTab.hasAttribute("tabmix_changed_label")) {
+    if (${isInitialTitle} && aTab.hasAttribute("tabmix_changed_label")) {
       return;
     }`
         )
@@ -730,6 +722,18 @@ Tabmix.tablib = {
         gBrowser.moveTabTo(item, options.elementIndex ?? options.tabIndex, oldOptions);
       }
     };
+
+    if (Tabmix.isVersion(1590)) {
+      Tabbrowser._isFirstOrLastInTabGroup = Tabmix.getPrivateMethod({
+        parent: gBrowser,
+        parentName: "Tabbrowser",
+        methodName: "isFirstOrLastInTabGroup",
+        nextMethodName: "getTabPids",
+        sandbox: Tabmix._gBrowser_sandbox,
+      });
+      // replace private #fullLabels and #isFirstOrLastInTabGroup
+      Tabmix.changeCode(gBrowser, "gBrowser.getTabTooltip").toCode();
+    }
   },
 
   change_tabContainer: function change_tabContainer() {
@@ -835,13 +839,12 @@ Tabmix.tablib = {
       }
     }
 
-    Tabmix.changeCode(tabBar, "gBrowser.tabContainer._handleNewTab")
-      ._replace(
-        /(})(\)?)$/,
-        `  TMP_eventListener.onTabOpen_delayUpdateTabBar(tab);
-    $1$2`
-      )
-      .toCode();
+    Tabmix.originalFunctions.tabContainer_handleNewTab = tabBar._handleNewTab;
+    tabBar._handleNewTab = function (tab) {
+      let rv = Tabmix.originalFunctions.tabContainer_handleNewTab.apply(this, arguments);
+      TMP_eventListener.onTabOpen_delayUpdateTabBar(tab);
+      return rv;
+    };
 
     Tabmix.changeCode(TabBarVisibility, "TabBarVisibility.update")
       ._replace(
@@ -2491,6 +2494,28 @@ Tabmix.tablib = {
         try {
           tab.linkedBrowser.reload();
         } catch {}
+      }
+    }
+  },
+
+  /**
+   * Suspend/resume Tabmix's pref observers in ALL browser windows.
+   *
+   * Used around the temporary browser.tabs.insertRelatedAfterCurrent raise in
+   * addTab (Firefox 156+ related-tab chaining for the iac-only configuration):
+   * the gTMPprefObserver.observe mutual-exclusion logic must not react to the
+   * transient value. Mirrors the preventUpdate flag the preferences dialog sets
+   * while it writes prefs (see preferences.js setPref).
+   *
+   * @param {boolean} suspend true to suspend observers, false to resume
+   */
+  setPrefUpdateSuspended(suspend) {
+    const enumerator = Services.wm.getEnumerator("navigator:browser");
+    while (enumerator.hasMoreElements()) {
+      const win = enumerator.getNext();
+      const observer = win.gTMPprefObserver;
+      if (observer) {
+        observer.preventUpdate = suspend;
       }
     }
   },

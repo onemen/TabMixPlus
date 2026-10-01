@@ -265,6 +265,7 @@ class ChangeCode {
         "gBrowser.tabContainer.arrowScrollbox.on_touchmove",
         "gBrowser.tabContainer.arrowScrollbox.on_touchstart",
         "gBrowser.setTabLabelForAuthPrompts",
+        "gBrowser.getTabTooltip",
       ].includes(name)
     ) {
       const {changed, needUpdate} = this;
