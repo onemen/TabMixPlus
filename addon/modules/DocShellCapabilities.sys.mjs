@@ -13,6 +13,7 @@ ChromeUtils.defineESModuleGetters(lazy, {
     isVersion(1560) ?
       "moz-src:///browser/components/sessionstore/TabStateCache.sys.mjs"
     : "resource:///modules/sessionstore/TabStateCache.sys.mjs",
+  SessionStore: "moz-src:///browser/components/sessionstore/SessionStore.sys.mjs",
 });
 
 /** @type {DocShellCapabilitiesModule.DocShellCapabilities} */
@@ -30,8 +31,9 @@ export const DocShellCapabilities = {
   },
 
   collect(tab) {
-    let window = lazy.getGlobal(tab);
-    if (window && window.__SSi) {
+    const window = lazy.getGlobal(tab);
+    const windowId = isVersion(1590) ? lazy.SessionStore.getWindowId(window) : window?.__SSi;
+    if (windowId) {
       let tabState = lazy.TabState.collect(tab);
       return tabState.disallow || "";
     }

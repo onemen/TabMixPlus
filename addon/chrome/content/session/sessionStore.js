@@ -71,6 +71,10 @@ var TMP_SessionStore = {
     return data.url;
   },
 
+  getWindowId(window) {
+    return Tabmix.isVersion(1590) ? SessionStore.getWindowId(window) : window?.__SSi;
+  },
+
   // check if pending tab has no history or is about:blank, about:home, about:newtab
   isBlankPendingTab(aTab) {
     if (!aTab.hasAttribute("pending")) {
@@ -197,7 +201,7 @@ var TMP_ClosedTabs = {
 
   /** Get closed tabs count */
   get count() {
-    if (!window.__SSi) {
+    if (!TMP_SessionStore.getWindowId(window)) {
       return 0;
     }
 
@@ -218,7 +222,7 @@ var TMP_ClosedTabs = {
 
   /** Get closed tabs data */
   get getClosedTabData() {
-    if (window.__SSi) {
+    if (TMP_SessionStore.getWindowId(window)) {
       return SessionStore.getClosedTabData();
     }
     return [];
@@ -1016,7 +1020,8 @@ var TMP_ClosedTabs = {
     // restore tab content
     SessionStore.setTabState(newTab, state);
 
-    const fromSameWindow = aSource === window || aSource.sourceWindowId === window.__SSi;
+    const fromSameWindow =
+      aSource === window || aSource.sourceWindowId === TMP_SessionStore.getWindowId(window);
     // don't restore position for tabs from other windows
     const restorePosition = fromSameWindow && Tabmix.prefs.getBoolPref("undoClosePosition");
     // if we're opening multiple tabs move tabs from other windows to the end

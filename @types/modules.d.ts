@@ -555,6 +555,7 @@ declare namespace SessionStoreNS {
     getLazyTabValue(aTab: Tab, aKey: string): string;
     getTabState(aTab: Tab): string;
     getWindowById(aSessionStoreId: string): Window;
+    getWindowId(aWindow: nsIDOMWindow): string | null;
     getWindowState(aWindow: nsIDOMWindow): {windows: WindowStateData[]};
     setCustomTabValue(aTab: Tab, aKey: string, aStringValue: unknown): void;
     setTabState(aTab: Tab, aState: string | TabData): void;
@@ -991,7 +992,7 @@ declare namespace ContextMenuModule {
 }
 
 declare namespace DocShellCapabilitiesModule {
-  type Lazy = Pick<KnownModulesImports, "getGlobal" | "TabState" | "TabStateCache">;
+  type Lazy = Pick<KnownModulesImports, "getGlobal" | "TabState" | "TabStateCache" | "SessionStore">;
 
   interface CapabilitiesData {
     disallow?: string;

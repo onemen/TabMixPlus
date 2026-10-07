@@ -460,6 +460,7 @@ declare namespace TabmixSessionStoreNS {
   function getActiveEntryData(aData: TabData): TabDataEntry;
   function getTitleFromTabState(aTab: Tab): string;
   function getUrlFromTabState(aTab: Tab): string;
+  function getWindowId(window: Window): string | null;
   function isBlankPendingTab(aTab: Tab): boolean;
   let afterSwitchThemes: boolean;
   function setAfterSessionRestored(): void;
