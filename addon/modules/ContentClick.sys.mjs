@@ -1293,6 +1293,26 @@ ContentClickInternal = {
    * @returns {boolean} true when curpage and target are in different domains
    */
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
+    // Google's redirect wrappers (issue #591), scoped to search-results pages:
+    // /url and /goto share the google.com host, so the external check must not
+    // rely on domain comparison alone. The destination payload may be
+    // encrypted (url=CAES…, url=[HASH]) and undecodable - classify such a
+    // wrapper click as external. Visible http(s) destinations (q=https://…)
+    // fall through to getDomain below and keep the exact domain comparison.
+    const onGoogleSearch =
+      typeof curpage == "string" &&
+      /^https?:\/\/(?:[\w-]+\.)*google\.[^/?#]+\/search\?/i.test(curpage);
+    if (
+      onGoogleSearch &&
+      typeof target == "string" &&
+      /^https?:\/\/(?:[\w-]+\.)*google\.[^/?#]+\/(?:goto|url)\?/i.test(target)
+    ) {
+      const destination = target.match(/[?&](?:url|q)=([^&#]+)/)?.[1];
+      if (destination && !destination.includes("%") && !/^https?:\/\//i.test(destination)) {
+        return true;
+      }
+    }
+
     /** @param {string} url */
     const fixupURI = url => {
       try {
@@ -1329,6 +1349,18 @@ ContentClickInternal = {
         const path = maybeFixedURI[pathProp];
         if (path.match(/^\/r\/\?http/)) {
           maybeFixedURI = fixupURI(path.slice("/r/?".length));
+        } else if (
+          onGoogleSearch &&
+          /(?:^|\.)google\./.test(maybeFixedURI.hostPort) &&
+          path.match(/^\/(?:u\d+\/)?(?:goto|url)\?/)
+        ) {
+          // Google's /url and /goto return links (issue #591) - the target
+          // arrives as a url= / q= query param, not the page host. Only
+          // unwrapped when the current page is a search-results page.
+          const redirect = path.match(/[?&](?:url|q)=([^&#]+)/)?.[1];
+          if (redirect && /^https?:\/\//i.test(redirect)) {
+            maybeFixedURI = fixupURI(redirect);
+          }
         } else if (path.match(/^.*\?url=http/)) {
           // redirect in www.reddit.com
           maybeFixedURI = fixupURI(path.replace(/^.*\?url=/, ""));
