@@ -20,7 +20,20 @@ Tabmix.linkHandling_init = function TMP_TBP_init() {
 };
 
 Tabmix.set_BrowserOpenTab = function () {
-  window.BrowserCommands.openTab = TMP_BrowserOpenTab;
+  if (TabmixSvc.isFloorp) {
+    Object.defineProperty(window.BrowserCommands, "openTab", {
+      get() {
+        return TMP_BrowserOpenTab;
+      },
+      set(_val) {
+        // Silently swallow assignments without throwing errors
+      },
+      enumerable: true,
+      configurable: true,
+    });
+  } else {
+    window.BrowserCommands.openTab = TMP_BrowserOpenTab;
+  }
   Tabmix.BrowserOpenTab = TMP_BrowserOpenTab;
 };
 
