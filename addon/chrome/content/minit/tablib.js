@@ -43,25 +43,25 @@ Tabmix.tablib = {
 
     parent._shortenURLRegEx = /^[^:]+:\/\/(?:www\.)?/;
 
+    /* eslint-disable mozilla/valid-lazy -- accessed in sandbox-evaluated code */
     const lazy = {};
     ChromeUtils.defineESModuleGetters(lazy, {
-      /* eslint-disable mozilla/valid-lazy -- accessed in sandbox-evaluated code */
       PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
       AsyncTabSwitcher: "moz-src:///browser/components/tabbrowser/AsyncTabSwitcher.sys.mjs",
       // used by the reconstructed #determineTaskbarTabTitle
       ContextualIdentityService:
         "moz-src:///toolkit/components/contextualidentity/ContextualIdentityService.sys.mjs",
+      SponsorProtection: "moz-src:///browser/components/newtab/SponsorProtection.sys.mjs",
 
-      ...(Tabmix.isVersion(1590) ?
-        {
-          TaskbarTabs: "moz-src:///browser/components/taskbartabs/TaskbarTabs.sys.mjs",
-          TaskbarTabsUtils: "moz-src:///browser/components/taskbartabs/TaskbarTabsUtils.sys.mjs",
-          SponsorProtection: "moz-src:///browser/components/newtab/SponsorProtection.sys.mjs",
-        }
-      : {
-          TaskbarTabs: "resource:///modules/taskbartabs/TaskbarTabs.sys.mjs",
-          TaskbarTabsUtils: "resource:///modules/taskbartabs/TaskbarTabsUtils.sys.mjs",
-        }),
+      TaskbarTabs:
+        Tabmix.isVersion(1590) ?
+          "moz-src:///browser/components/taskbartabs/TaskbarTabs.sys.mjs"
+        : "resource:///modules/taskbartabs/TaskbarTabs.sys.mjs",
+
+      TaskbarTabsUtils:
+        Tabmix.isVersion(1590) ?
+          "moz-src:///browser/components/taskbartabs/TaskbarTabsUtils.sys.mjs"
+        : "resource:///modules/taskbartabs/TaskbarTabsUtils.sys.mjs",
     });
     // #determineContentTitle / #determineTaskbarTabTitle read these lazy
     // pref getters (module-lazy in Tabbrowser.sys.mjs since Firefox 156);
