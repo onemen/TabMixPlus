@@ -47,6 +47,9 @@ input:is([type="text"], [type="number"]) {
   /* override default styles of 32px */
   --input-text-min-height: 24px;
 
+  /* new var name since Firefox 160 - default 32px */
+  --input-min-height: 24px;
+
   appearance: none;
   border: 1px solid var(--tabmix-border-color);
   border-radius: 4px;
