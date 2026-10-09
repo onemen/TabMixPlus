@@ -4,7 +4,7 @@
 /** @type {LinksPane} */
 var gLinksPane = {
   init() {
-    this.singleWindow($("singleWindow").checked);
+    this.singleWindow($("singleWindow").checked, true);
     this.externalLinkValue($("externalLink").checked);
 
     if (!Tabmix.isVersion(1460)) {
@@ -68,7 +68,15 @@ var gLinksPane = {
     }
   },
 
-  singleWindow(enableSingleWindow) {
+  singleWindow(enableSingleWindow, fromInit) {
+    // The init sync (fromInit) and an external update (about:config, import,
+    // sync, another window) must not rewrite the related preferences by
+    // themselves; only a user action does. See prefs-ce.js externalChange and
+    // gEventsPane.openTabNext.on_change.
+    if (fromInit || $Pref("pref_singleWindow").preferences?.externalChange) {
+      return;
+    }
+
     /** @type {typeof LinksPaneNS.updateStatus} */
     function updateStatus(itemId, testVal, test, newVal) {
       var item = $(itemId);

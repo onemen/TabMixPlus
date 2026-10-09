@@ -55,7 +55,7 @@ var gEventsPane = {
     //
     this.alignTabOpeningBoxes();
 
-    this.openTabNext.on_change($Pref("pref_openTabNext"));
+    this.openTabNext.on_change($Pref("pref_openTabNext"), true);
 
     gPrefWindow.initPane("paneEvents");
   },
@@ -217,7 +217,7 @@ var gEventsPane = {
 
   openTabNext: {
     isChanging: false,
-    on_change(preference) {
+    on_change(preference, fromInit) {
       if (this.isChanging) {
         return;
       }
@@ -227,14 +227,24 @@ var gEventsPane = {
       const relatedAfterCurrent = $Pref("pref_relatedAfterCurrent");
       const openTabNextCheckbox = $("openTabNext");
 
-      if (preference === openTabNext) {
-        // browser.tabs.insertAfterCurrent default is false, in the case both pref
-        // is true turn off browser.tabs.insertRelatedAfterCurrent
-        if (openTabNext.value && relatedAfterCurrent.value) {
-          relatedAfterCurrent.value = false;
+      // The init sync (fromInit) and an external update (about:config, import,
+      // sync, another window) both start from the values stored in the
+      // preferences. Neither may enforce the insertAfterCurrent/
+      // insertRelatedAfterCurrent mutual exclusion by writing the sibling
+      // preference: overwriting it would change the stored value (instant apply)
+      // or make the cached value and the UI diverge and register a pending
+      // change that turns on the Apply button (manual apply). Only user actions
+      // enforce the exclusion.
+      if (!fromInit && !preference.preferences?.externalChange) {
+        if (preference === openTabNext) {
+          // browser.tabs.insertAfterCurrent default is false, in the case both pref
+          // is true turn off browser.tabs.insertRelatedAfterCurrent
+          if (openTabNext.value && relatedAfterCurrent.value) {
+            relatedAfterCurrent.value = false;
+          }
+        } else {
+          openTabNext.value = relatedAfterCurrent.value ? false : openTabNextCheckbox.checked;
         }
-      } else {
-        openTabNext.value = relatedAfterCurrent.value ? false : openTabNextCheckbox.checked;
       }
 
       const checked = openTabNext.booleanValue || relatedAfterCurrent.booleanValue;

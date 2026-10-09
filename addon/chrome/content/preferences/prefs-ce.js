@@ -63,6 +63,14 @@ class Preferences extends MozXULElement {
    */
   _constructAfterChildrenCalled = false;
 
+  /*
+   * True only while observe() is refreshing a preference from a change made
+   * outside this window (about:config, import, sync, another window). Handlers
+   * wired through data-evt-change run for those updates too and must not treat
+   * them as user edits - see gEventsPane.openTabNext.on_change.
+   */
+  _externalChange = false;
+
   constructor() {
     super();
 
@@ -96,11 +104,25 @@ class Preferences extends MozXULElement {
           );
   }
 
+  /**
+   * True while `observe` refreshes a preference value from an external change.
+   * `data-evt-change` handlers can read this to distinguish an external update
+   * (the preference already holds its new value) from a user edit.
+   */
+  get externalChange() {
+    return this._externalChange;
+  }
+
   /** @type {PreferencesListClass["observe"]} */
   observe(_aSubject, _aTopic, aData) {
     for (const preference of this._preferenceChildren) {
       if (preference?.name == aData) {
-        preference.value = preference.valueFromPreferences;
+        this._externalChange = true;
+        try {
+          preference.value = preference.valueFromPreferences;
+        } finally {
+          this._externalChange = false;
+        }
       }
     }
   }

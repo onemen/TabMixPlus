@@ -122,6 +122,8 @@ declare interface PreferencesListClass extends MozXULElement {
   _preferenceChildren: HTMLCollectionOf<PreferenceClass>;
   readonly type: string;
   readonly instantApply: boolean;
+  _externalChange: boolean;
+  readonly externalChange: boolean;
   observe(aSubject: nsISupports, aTopic: string, aData: string): void;
   _constructAfterChildren(): void;
   fireChangedEvent(aPreference: PreferenceClass): void;
@@ -451,7 +453,7 @@ declare namespace EventsPaneNS {
   }
   namespace openTabNext {
     let isChanging: boolean;
-    function on_change(preference: PreferenceClass): void;
+    function on_change(preference: PreferenceClass, fromInit?: boolean): void;
     function on_command(checked: boolean): void;
   }
   function openTabNextInGroup(): void;
@@ -461,7 +463,7 @@ declare namespace LinksPaneNS {
   function init(): void;
   function externalLinkValue(checked: boolean): void;
   function updateExternalLinkCheckBox(external: HTMLMenuElement): void;
-  function singleWindow(enableSingleWindow: boolean): void;
+  function singleWindow(enableSingleWindow: boolean, fromInit?: boolean): void;
   function updateStatus(itemId: string, testVal: number, test: boolean, newVal: number): void;
   function openFiletypeEditor(): void;
 }
@@ -530,7 +532,7 @@ declare namespace MousePaneNS {
   function ensureElementIsVisible(aPopup: ArrowScrollbox): void;
   function resetPreference(checkbox: PreferenceElement | MousePaneNS.MenuList): void;
   function setCheckedState(menulist: MenuList): void;
-  function updateDblClickTabbar(pref: PreferenceClass): void;
+  function updateDblClickTabbar(pref: PreferenceClass, fromInit?: boolean): void;
 }
 
 // add type fror preference elemnt, maybe it is the same as the PreferenceClass

@@ -36,7 +36,7 @@ var gMousePane = {
     }
     this.clickTabbar.appendChild(this.clickTab.firstChild.cloneNode(true));
     this.updatePanelPrefs($("tabclick").selectedIndex);
-    this.updateDblClickTabbar($Pref("pref_click_dragwindow"));
+    this.updateDblClickTabbar($Pref("pref_click_dragwindow"), true);
 
     gPrefWindow.initPane("paneMouse");
 
@@ -106,10 +106,15 @@ var gMousePane = {
     menulist.previousSibling.checked = !menulist.disabled;
   },
 
-  updateDblClickTabbar(pref) {
-    let dblClickTabbar = $Pref("pref_dblclick_changesize");
-    if (pref.value && !dblClickTabbar.value) {
-      dblClickTabbar.value = pref.value;
+  updateDblClickTabbar(pref, fromInit) {
+    // The init sync (fromInit) and external updates (about:config, import, sync,
+    // another window) must not rewrite the sibling preference by themselves;
+    // only a user action does. See prefs-ce.js externalChange.
+    if (!fromInit && !pref.preferences?.externalChange) {
+      let dblClickTabbar = $Pref("pref_dblclick_changesize");
+      if (pref.value && !dblClickTabbar.value) {
+        dblClickTabbar.value = pref.value;
+      }
     }
 
     let checkbox = $("dblclick_changesize")._checkbox;
