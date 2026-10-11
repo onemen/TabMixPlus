@@ -105,7 +105,7 @@ export const RenameTab = {
 
     this._element("tabmixRenametab_doneButton").setAttribute(
       "data-l10n-id",
-      "bookmark-panel-save-button"
+      TabmixSvc.version(1600) ? "bookmark-panel-save-button2" : "bookmark-panel-save-button"
     );
     this._element("tabmixRenametab_deleteButton").setAttribute(
       "label",
