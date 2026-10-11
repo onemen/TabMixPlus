@@ -1288,24 +1288,47 @@ ContentClickInternal = {
   /**
    * Check if link refers to external domain.
    *
+   * On Google search-results pages two extra rules apply (issue #591): direct
+   * result links with an absolute http(s) target on a non-google host are
+   * external by definition, and google-hosted redirect wrappers (/url, /goto,
+   * /redirect, /link) are unwrapped to their destination.
+   *
    * @param {string} curpage - The current page url
    * @param {string} target - The target link.
    * @returns {boolean} true when curpage and target are in different domains
    */
   isLinkToExternalDomain: function TMP_isLinkToExternalDomain(curpage, target) {
     // Google's redirect wrappers (issue #591), scoped to search-results pages:
-    // /url and /goto share the google.com host, so the external check must not
-    // rely on domain comparison alone. The destination payload may be
-    // encrypted (url=CAES…, url=[HASH]) and undecodable - classify such a
-    // wrapper click as external. Visible http(s) destinations (q=https://…)
-    // fall through to getDomain below and keep the exact domain comparison.
+    // /url, /goto, /redirect and /link share the google.com host, so the
+    // external check must not rely on domain comparison alone. The destination
+    // payload may be encrypted (url=CAES…, url=[HASH]) and undecodable -
+    // classify such a wrapper click as external. Visible http(s) destinations
+    // (q=https://…, url=https… across locales) fall through to getDomain below
+    // and keep the exact domain comparison.
     const onGoogleSearch =
       typeof curpage == "string" &&
       /^https?:\/\/(?:[\w-]+\.)*google\.[^/?#]+\/search\?/i.test(curpage);
+
+    // Direct result <a href> (no /url? /goto? wrapper): signed-out and
+    // non-EN sessions often get the destination URL served straight on the
+    // anchor (issue #591 report, comment 6066417603). A search-results page
+    // has no internal pages on a foreign host, so any absolute http(s) target
+    // outside the google domain is external by definition - decide before
+    // fixupURI()/getDomain(), whose eTLD or "auth?" edge cases could otherwise
+    // null the comparison and keep the link in the current tab.
     if (
       onGoogleSearch &&
       typeof target == "string" &&
-      /^https?:\/\/(?:[\w-]+\.)*google\.[^/?#]+\/(?:goto|url)\?/i.test(target)
+      /^https?:\/\//i.test(target) &&
+      !/^https?:\/\/(?:[\w-]+\.)*google\./i.test(target)
+    ) {
+      return true;
+    }
+
+    if (
+      onGoogleSearch &&
+      typeof target == "string" &&
+      /^https?:\/\/(?:[\w-]+\.)*google\.[^/?#]+\/(?:goto|url|redirect|link)\?/i.test(target)
     ) {
       const destination = target.match(/[?&](?:url|q)=([^&#]+)/)?.[1];
       if (destination && !destination.includes("%") && !/^https?:\/\//i.test(destination)) {
@@ -1352,14 +1375,26 @@ ContentClickInternal = {
         } else if (
           onGoogleSearch &&
           /(?:^|\.)google\./.test(maybeFixedURI.hostPort) &&
-          path.match(/^\/(?:u\d+\/)?(?:goto|url)\?/)
+          path.match(/^\/(?:u\d+\/)?(?:goto|url|redirect|link)\?/)
         ) {
-          // Google's /url and /goto return links (issue #591) - the target
-          // arrives as a url= / q= query param, not the page host. Only
-          // unwrapped when the current page is a search-results page.
+          // Google's /url, /goto, /redirect and /link return links (issue
+          // #591). The destination arrives as a url= / q= query param, either
+          // percent-encoded (classic url=https%3A%2F%2F… form, which non-EN
+          // sessions often receive) or plain - it must be unwrapped from the
+          // google host before the domains are compared. Only unwrapped when
+          // the current page is a search-results page, so other Google pages
+          // behave as before.
           const redirect = path.match(/[?&](?:url|q)=([^&#]+)/)?.[1];
-          if (redirect && /^https?:\/\//i.test(redirect)) {
-            maybeFixedURI = fixupURI(redirect);
+          let destination = redirect;
+          if (destination && destination.includes("%")) {
+            try {
+              destination = decodeURIComponent(destination);
+            } catch {
+              // malformed escaping - keep the raw value
+            }
+          }
+          if (destination && /^https?:\/\//i.test(destination)) {
+            maybeFixedURI = fixupURI(destination);
           }
         } else if (path.match(/^.*\?url=http/)) {
           // redirect in www.reddit.com
