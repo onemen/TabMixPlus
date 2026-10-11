@@ -10,6 +10,13 @@ ChromeUtils.defineESModuleGetters(lazy, {
   URILoadingHelper: "resource:///modules/URILoadingHelper.sys.mjs",
 });
 
+if (isVersion({fp: "157.0"})) {
+  /* for Floorp 12.20.1 (157.0.1) */
+  ChromeUtils.defineESModuleGetters(lazy, {
+    getWorkspaceUserContextIdForExternalOpen: "resource:///modules/BrowserContentHandler.sys.mjs",
+  });
+}
+
 if (isVersion(1420)) {
   ChromeUtils.defineESModuleGetters(lazy, {
     TaskbarTabsUtils:
