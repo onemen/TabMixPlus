@@ -72,7 +72,7 @@ everyone.
     have to install 3rd party helper scripts.
 
     Full step-by-step instructions, with per-OS paths and screenshots, live in the
-    [installation guide](https://onemen.github.io/tabmixplus-docs/other/installation/)
+    [installation guide](https://onemen.github.io/firefox-scripts/installation/)
 
 1.  **Download XPI**
 
