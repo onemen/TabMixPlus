@@ -428,7 +428,7 @@ declare namespace MockedGeckoTypes {
     _dragTime: number;
     _dragOverGroupingTimer: number | null;
     _dragToPinPromoCard: HTMLElement | null;
-    _dropAnimationEndTime: number;
+    _dropAnimationFrame: number;
     _isMovingTab(): boolean;
     _maxTabsPerRow: number | null;
     _pinnedDropIndicatorTimeout: number | null;
@@ -443,6 +443,8 @@ declare namespace MockedGeckoTypes {
     finishMoveTogetherSelectedTabs: (tab: BrowserTab) => void;
     getDropEffectForTabDrag: (event: DragEvent) => string;
 
+    /** @deprecated replaced with _dropAnimationFrame by bug 1940650 in firefox 160 */
+    _dropAnimationEndTime: number;
     /** @deprecated replaced with finishAnimateTabMove in firefox 138 */
     _finishAnimateTabMove: () => void;
     /** @deprecated replaced with _finishMoveTogetherSelectedTabs in firefox 138 */
@@ -461,13 +463,16 @@ declare namespace MockedGeckoTypes {
 
   /// for use in Tabmix.getPrivateMethod
   interface TabDragAndDropPrivateMethods {
+    _animateDrop: (rectsBeforeDrop: Map<Element, DOMRect>) => void;
     _animateTabMove: (event: MouseEvent) => void;
     _animateExpandedPinnedTabMove: (event: MouseEvent) => void;
     _checkWithinPinnedContainerBounds(params: {firstMovingTabScreen: number; lastMovingTabScreen: number; pinnedTabsStartEdge: number; pinnedTabsEndEdge: number; translate: number; draggedTab: BrowserTab}): void;
     _clearDragOverGroupingTimer: () => void;
     _clearPinnedDropIndicatorTimer: () => void;
     _expandGroupOnDrop(draggedTab: BrowserTab): void;
+    _finishDropAnimation: () => void;
     _getDragTarget(event: DragEvent, options?: {ignoreSides?: boolean; findClosestTarget?: boolean}): BrowserTab | MozTabSplitViewWrapper | null;
+    _getItemRects: () => Map<Element, DOMRect>;
     // we are adding arguments to _getDropIndex see minit.js for details
     _getDropIndex(event: DragEvent): number;
     _getDropIndex(event: DragEvent, options: {dragover?: boolean; getParams: true}): DragEventParams;

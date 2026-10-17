@@ -573,7 +573,11 @@ var TMP_tabDNDObserver = {
     }
 
     if (Tabmix.isVersion(1550)) {
-      this.tabDnDPrototype._dropAnimationEndTime = 0;
+      if (Tabmix.isVersion(1600)) {
+        this.tabDnDPrototype._dropAnimationFrame = 0;
+      } else {
+        this.tabDnDPrototype._dropAnimationEndTime = 0;
+      }
       this.tabDnDPrototype._staleDragCheckTimer = null;
 
       Object.defineProperty(this.tabDnDPrototype, "_dragSession", {
@@ -610,6 +614,29 @@ var TMP_tabDNDObserver = {
         ...tabContainerProps,
         methodName: "stopStaleDragCheck",
         nextMethodName: "#onMouseDown",
+      });
+    }
+
+    if (Tabmix.isVersion(1600)) {
+      this.tabDnDPrototype._getItemRects = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "getItemRects",
+        nextMethodName: "#animateDrop",
+        sandbox: localSandbox,
+      });
+
+      this.tabDnDPrototype._animateDrop = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "animateDrop",
+        nextMethodName: "isAnimatingDrop",
+        sandbox: localSandbox,
+      });
+
+      this.tabDnDPrototype._finishDropAnimation = Tabmix.getPrivateMethod({
+        ...tabContainerProps,
+        methodName: "finishDropAnimation",
+        nextMethodName: "_resetTabsAfterDrop",
+        sandbox: localSandbox,
       });
     }
   },
@@ -1058,7 +1085,8 @@ var TMP_tabDNDObserver = {
       $&`.replace(
           /_newTranslateX/g,
           Tabmix.isVersion(1300) && !Tabmix.isVersion(1320) ? "newTranslate" : "newTranslateX"
-        )
+        ),
+        {check: !Tabmix.isVersion(1600)}
       )
       ._replace(
         /urls = links.map\(\(?link\)? => link.url\);/,
@@ -3054,59 +3082,128 @@ Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodN
     return method;
   }
 
-  /** @param {string} text */
+  /**
+   * The extracted code ends where the next method is declared, which can leave
+   * the comments that belong to that method at the end - including a block
+   * comment that is cut before its closing `*` `/`, e.g. the jsdoc of
+   * `#animateDrop` that mentions `#getItemRects` in its text. Drop everything
+   * after the last code (or string) character.
+   *
+   * @param {string} text
+   */
   function cleanTrailingComments(text) {
-    let changed = true;
+    text = text.trimEnd();
+    let end = 0;
+    let quote = "";
+    let inComment = "";
 
-    while (changed) {
-      changed = false;
-      text = text.trimEnd();
-      const lines = text.split("\n");
+    for (let i = 0; i < text.length; i++) {
+      const char = text.charAt(i);
+      const next = text.charAt(i + 1);
 
-      // 🧹 Remove all trailing single-line comments
-      while (lines.at(-1)?.trim().startsWith("//")) {
-        lines.pop();
-        changed = true;
-      }
-
-      text = lines.join("\n").trimEnd();
-
-      // 🧼 Remove trailing block comment if last line ends with */
-      const lastLine = lines.at(-1)?.trim() ?? "";
-      if (lastLine.endsWith("*/")) {
-        const endIndex = text.lastIndexOf("*/");
-        const startIndex = text.lastIndexOf("/*", endIndex);
-        if (startIndex !== -1) {
-          text = text.slice(0, startIndex) + text.slice(endIndex + 2);
-          changed = true;
+      // 🧹 Skip everything that is inside a comment - only the comments at the
+      // end of the extracted text are dropped, comments followed by code are
+      // kept
+      if (inComment === "line") {
+        if (char === "\n") {
+          inComment = "";
         }
+      } else if (inComment === "block") {
+        if (char === "*" && next === "/") {
+          inComment = "";
+          i++;
+        }
+      } else if (quote) {
+        if (char === "\\") {
+          i++;
+        } else if (char === quote) {
+          quote = "";
+        }
+        end = i + 1;
+      } else if (char === "/" && next === "/") {
+        inComment = "line";
+        i++;
+      } else if (char === "/" && next === "*") {
+        inComment = "block";
+        i++;
+      } else if (char === '"' || char === "'" || char === "`") {
+        quote = char;
+        end = i + 1;
+      } else if (char.trim()) {
+        end = i + 1;
       }
     }
 
-    return text.trimEnd();
+    return text.slice(0, end);
   }
 
-  let code = firefoxClass
-    .toString()
-    .split(` #${methodName}`)[1] // function to extract from source code
-    ?.split(` ${nextMethodName}`)[0] // next function in the source code
-    ?.trim();
-  if (code) {
-    try {
-      code = cleanTrailingComments(code);
-      return /** @type {PrivateMethod<typeof methodName>} */ (
-        Tabmix.makeCode(`_${methodName}${code}`, parent, nonPrivateMethodName, sandbox)
-      );
-    } catch (error) {
-      console.error(
-        `Tabmix Error: getPrivateMethod failed to evaluate ${nonPrivateMethodName}`,
-        error
-      );
-      return method;
+  /**
+   * Find where a method is declared in the class source. A method name is
+   * mentioned many times in the source code, in calls like
+   * `this.#animateDrop(rectsBeforeDrop)` and in comments like the one
+   * `handle_drop` has: `// Scroll the dropped tabs into view before
+   * #animateDrop measures them`, so we can't split on the name. A declaration
+   * starts at a word boundary and is followed by its parameter list or, for a
+   * class field, by `=`. A getter or setter declaration (`get isAnimatingDrop`)
+   * starts at its `get`/`set` keyword, so the keyword is not part of the code
+   * that follows the method we extract.
+   *
+   * @param {string} sourceCode - the class source code
+   * @param {string} propertyName - method name, with `#` for private methods
+   * @param {number} fromIndex - ignore declarations that end before this index
+   * @returns {{start: number; end: number} | null} `start` is the index of the
+   *   first character of the declaration and `end` the index just after the
+   *   method name, or null when no declaration found
+   */
+  function findDeclaration(sourceCode, propertyName, fromIndex) {
+    const escaped = propertyName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(
+      `(?:^|[\\s{};])((?:(?:static|async)\\s+)*(?:(?:get|set)\\s+)?)(${escaped})\\s*[(=]`,
+      "g"
+    );
+    regex.lastIndex = fromIndex;
+    const found = regex.exec(sourceCode);
+    if (!found) {
+      return null;
     }
+    const [, modifier = "", nameText = ""] = found;
+    const nameIndex = found.index + found[0].lastIndexOf(nameText);
+    return {start: nameIndex - modifier.length, end: nameIndex + nameText.length};
   }
-  console.error(`Tabmix Error: ${errorMsg}`);
-  return method;
+
+  const classSource = firefoxClass.toString();
+  const methodRef = findDeclaration(classSource, `#${methodName}`, 0);
+  const nextRef = methodRef && findDeclaration(classSource, nextMethodName, methodRef.end);
+  const code = methodRef && nextRef ? classSource.slice(methodRef.end, nextRef.start).trim() : "";
+
+  if (!methodRef) {
+    console.error(`Tabmix Error: ${errorMsg}`);
+    return method;
+  }
+
+  if (!nextRef) {
+    console.error(
+      `Tabmix Error: can't find ${name}.${nextMethodName} in the source code, it is the method after #${methodName}`
+    );
+    return method;
+  }
+
+  try {
+    return /** @type {PrivateMethod<typeof methodName>} */ (
+      Tabmix.makeCode(
+        `_${methodName}${cleanTrailingComments(code)}`,
+        parent,
+        nonPrivateMethodName,
+        sandbox
+      )
+    );
+  } catch (error) {
+    console.error(
+      `Tabmix Error: getPrivateMethod failed to evaluate ${nonPrivateMethodName}`,
+      error
+    );
+    return method;
+  }
 };
 
 // @ts-expect-error - use typescript element is MozTabbrowserTabGroup
