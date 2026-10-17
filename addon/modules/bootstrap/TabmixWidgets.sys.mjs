@@ -206,17 +206,19 @@ const widgets = {
     id: "tabmix-alltabs-toolbaritem",
     localizeFiles: [],
     get markup() {
+      const l10nId =
+        isVersion(1600) ? "tabs-toolbar-list-all-tabs-2" : "tabs-toolbar-list-all-tabs";
       return `
       <toolbaritem id="${this.id}"
         class="toolbaritem-combined-buttons chromeclass-toolbar-additional"
-        data-l10n-id="tabs-toolbar-list-all-tabs"
+        data-l10n-id="${l10nId}"
         badged="true"
         removable="true"
         widget-id="${this.id}"
         widget-type="button-and-view">
       <toolbarbutton id="tabmix-alltabs-button"
         class="toolbarbutton-1 subviewbutton-nav tabs-alltabs-button"
-        data-l10n-id="tabs-toolbar-list-all-tabs"/>
+        data-l10n-id="${l10nId}"/>
       </toolbaritem>`;
     },
 
