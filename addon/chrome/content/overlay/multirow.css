@@ -233,8 +233,8 @@
 }
 
 #tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper {
-  margin-block: 0;
-  padding: 0;
+  margin-block: var(--tab-margin-block);
+  padding: var(--split-view-padding-block) 0;
 
   /**
    * extend max-width to include width for note and media icons on split view tabs
@@ -272,7 +272,7 @@
   }
 
   .tabbrowser-tab > .tab-stack > .tab-background {
-    margin-block: var(--tab-margin-block, var(--tab-block-margin));
+    margin-block: 0;
   }
 
   .tabbrowser-tab:first-child > .tab-stack > .tab-background {

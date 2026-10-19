@@ -2619,6 +2619,27 @@ window.gTMPprefObserver = {
 
     this.dynamicProtonRules();
     this.toolbarbuttonTopMargin();
+
+    if (Tabmix.isVersion(1580)) {
+      this.insertRule(
+        `#tabbrowser-tabs:is([tabmix_currentStyle~="bg"], [tabmix_unloadedStyle~="bg"], [tabmix_unreadStyle~="bg"], [tabmix_otherStyle~="bg"])
+        tab-split-view-wrapper .tabbrowser-tab > .tab-stack > .tab-background {
+          margin-block: calc(-1 * var(--split-view-padding-block)) !important;
+        }`
+      );
+    } else {
+      // Firefox <=157 split-view rules; multirow.css targets Firefox 158 (issue 594)
+      this.insertRule(
+        `#tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper {
+          margin-block: 0 !important;
+          padding: 0 !important;
+
+          .tabbrowser-tab > .tab-stack > .tab-background {
+            margin-block: var(--tab-margin-block, var(--tab-block-margin)) !important;
+          }
+        }`
+      );
+    }
   },
 
   dynamicProtonRules() {
