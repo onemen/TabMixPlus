@@ -246,19 +246,16 @@ interface GleanImpl {
     clickMilestoneMessage: GleanEventNoExtras;
     clickProtectionspopupCfr: GleanEventWithExtras<{ message?: string, value?: string }>;
     clickSettings: GleanEventNoExtras;
-    clickSmartblockembedsToggle: GleanEventWithExtras<{ isBlock?: string|boolean, openingReason?: string }>;
     clickSocial: GleanEventNoExtras;
     clickSubviewSettings: GleanEventWithExtras<{ value?: string }>;
     clickTrackers: GleanEventNoExtras;
-    closeProtectionsPopup: GleanEventWithExtras<{ openingReason?: string, smartblockToggleClicked?: string|boolean }>;
     openProtectionsPopup: GleanEventWithExtras<{ openingReason?: string, smartblockEmbedTogglesShown?: string|boolean }>;
     openProtectionspopupCfr: GleanEventWithExtras<{ message?: string, value?: string }>;
-    smartblockembedsShown: GleanCounter;
   }
 
   smartWindow: {
     addTabsClick: GleanEventWithExtras<{ chat_id?: string, location?: string, message_seq?: string|number, tabs_available?: string|number, tabs_preselected?: string|number }>;
-    addTabsSelection: GleanEventWithExtras<{ chat_id?: string, location?: string, message_seq?: string|number, tabs_available?: string|number, tabs_preselected?: string|number, tabs_selected?: string|number }>;
+    addTabsSelection: GleanEventWithExtras<{ chat_id?: string, location?: string, mention_type?: string, message_seq?: string|number, tabs_available?: string|number, tabs_preselected?: string|number, tabs_selected?: string|number }>;
     agentActiveActions: Record<"monitor", GleanQuantity>;
     agentCommandRemove: GleanEventWithExtras<{ agent?: string, chat_id?: string, location?: string, message_seq?: string|number, source?: string }>;
     agentCommandSelect: GleanEventWithExtras<{ agent?: string, chat_id?: string, commands_available?: string|number, location?: string, message_seq?: string|number, source?: string }>;
@@ -276,6 +273,10 @@ interface GleanImpl {
     agenticActionNotificationDisplay: GleanEventWithExtras<{ action_id?: string, active_age?: string|number, age?: string|number, agent?: string, check_time?: string, check_weekday?: string|number, enabled?: string|boolean, execution_seq?: string|number, length?: string|number, monitors?: string|number, notification_type?: string, outcome?: string|boolean, prompt_version?: string, schedule_type?: string, urls?: string|number }>;
     agenticActionPause: GleanEventWithExtras<{ action_id?: string, active_age?: string|number, age?: string|number, agent?: string, chat_id?: string, check_time?: string, check_weekday?: string|number, enabled?: string|boolean, length?: string|number, message_seq?: string|number, monitors?: string|number, prompt_version?: string, reason?: string, schedule_type?: string, source?: string, urls?: string|number }>;
     agenticActionResume: GleanEventWithExtras<{ action_id?: string, active_age?: string|number, age?: string|number, agent?: string, chat_id?: string, check_time?: string, check_weekday?: string|number, enabled?: string|boolean, length?: string|number, message_seq?: string|number, monitors?: string|number, prompt_version?: string, schedule_type?: string, source?: string, urls?: string|number }>;
+    aitabCreateComplete: GleanEventWithExtras<{ components_used?: string, error?: string, is_success?: string|boolean, num_chars_out?: string|number, num_chars_read?: string|number, seconds_elapsed?: string|number }>;
+    aitabCreateInitiate: GleanEventWithExtras<{ how_initiated?: string, num_tabs?: string|number, num_tabs_total_attempted?: string|number, raw_content_len?: string|number }>;
+    aitabEditComplete: GleanEventWithExtras<{ components_used?: string, error?: string, is_success?: string|boolean, num_chars_out?: string|number, num_chars_read?: string|number, seconds_elapsed?: string|number }>;
+    aitabEditInitiate: GleanEventWithExtras<{ how_initiated?: string, num_tabs?: string|number, raw_content_len?: string|number }>;
     autoTabGroupAccepted: GleanEventWithExtras<{ grouped_id?: string|number, grouped_tabs?: string|number, source?: string }>;
     autoTabGroupCompleted: GleanEventWithExtras<{ error_type?: string, grouped_id?: string|number, grouped_tabs?: string|number, source?: string, success?: string|boolean }>;
     autoTabGroupMenuOpened: GleanEventWithExtras<{ source?: string, tabs?: string|number }>;
@@ -331,7 +332,7 @@ interface GleanImpl {
     memoryAppliedClick: GleanEventWithExtras<{ chat_id?: string, location?: string, message_seq?: string|number }>;
     memoryRemovedPanel: GleanEventWithExtras<{ in_use?: string|number, memories?: string|number, trigger?: string }>;
     mentionRemove: GleanEventWithExtras<{ chat_id?: string, location?: string, mentions?: string|number, message_seq?: string|number }>;
-    mentionSelect: GleanEventWithExtras<{ chat_id?: string, length?: string|number, location?: string, mentions_available?: string|number, message_seq?: string|number }>;
+    mentionSelect: GleanEventWithExtras<{ chat_id?: string, length?: string|number, location?: string, mention_type?: string, mentions_available?: string|number, message_seq?: string|number }>;
     mentionStart: GleanEventWithExtras<{ chat_id?: string, location?: string, mentions_available?: string|number, message_seq?: string|number }>;
     model: GleanString;
     modelRequest: GleanEventWithExtras<{ chat_id?: string, detected_intent?: string, intent?: string, location?: string, memories?: string|number, message_seq?: string|number, request_id?: string, tokens?: string|number }>;
@@ -599,8 +600,6 @@ interface GleanImpl {
     contextmenuRemove: GleanEventWithExtras<{ provider?: string }>;
     enabled: GleanBoolean;
     keyboardShortcut: GleanEventWithExtras<{ enabled?: string|boolean, sidebar?: string }>;
-    lengthDisclaimer: GleanEventWithExtras<{ length?: string|number, provider?: string, type?: string }>;
-    lengthDisclaimerDismissed: GleanEventWithExtras<{ provider?: string, type?: string }>;
     menu: GleanBoolean;
     onboardingClose: GleanEventWithExtras<{ provider?: string, step?: string|number }>;
     onboardingFinish: GleanEventWithExtras<{ provider?: string, step?: string|number }>;
@@ -609,7 +608,7 @@ interface GleanImpl {
     onboardingProviderSelection: GleanEventWithExtras<{ provider?: string, step?: string|number }>;
     onboardingProviderTerms: GleanEventWithExtras<{ provider?: string, step?: string|number, text?: string }>;
     page: GleanBoolean;
-    promptClick: GleanEventWithExtras<{ content_type?: string, prompt?: string, provider?: string, reader_mode?: string|boolean, selection?: string|number, smart_window?: string|boolean, source?: string }>;
+    promptClick: GleanEventWithExtras<{ content_type?: string, prompt?: string, provider?: string, selection?: string|number, smart_window?: string|boolean, source?: string }>;
     provider: GleanString;
     providerChange: GleanEventWithExtras<{ current?: string, previous?: string, surface?: string }>;
     shortcuts: GleanBoolean;
@@ -624,7 +623,7 @@ interface GleanImpl {
     sidebarMoreMenuDisplay: GleanEventWithExtras<{ provider?: string }>;
     sidebarProviderMenuClick: GleanEventWithExtras<{ action?: string, provider?: string }>;
     sidebarToggle: GleanEventWithExtras<{ opened?: string|boolean, provider?: string, reason?: string, version?: string }>;
-    summarizePage: GleanEventWithExtras<{ provider?: string, reader_mode?: string|boolean, selection?: string|number, source?: string }>;
+    summarizePage: GleanEventWithExtras<{ provider?: string, source?: string }>;
   }
 
   genaiLinkpreview: {
@@ -642,6 +641,11 @@ interface GleanImpl {
     shortcut: GleanString;
     smokeTest: GleanEventWithExtras<{ flow_id?: string, matches_pinned?: string|boolean, model_id?: string, model_revision?: string, output_hash?: string }>;
     start: GleanEventWithExtras<{ cached?: string|boolean, source?: string, tab?: string }>;
+  }
+
+  selectionMenu: {
+    actionClick: GleanEventWithExtras<{ action?: string, selection?: string|number, smart_window?: string|boolean }>;
+    displayed: GleanEventWithExtras<{ delay?: string|number, selection?: string|number, smart_window?: string|boolean }>;
   }
 
   ipprotection: {
@@ -744,7 +748,6 @@ interface GleanImpl {
   }
 
   osEnvironment: {
-    desktopEntryExists: GleanString;
     invokedToHandle: Record<string, GleanCounter>;
     isDefaultHandler: Record<string, GleanBoolean>;
     isKeptInDock: GleanBoolean;
@@ -890,6 +893,7 @@ interface GleanImpl {
     metricRegistered: Record<string, GleanBoolean>;
     newtabCategory: GleanString;
     opened: GleanEventWithExtras<{ newtab_visit_id?: string, source?: string, window_inner_height?: string, window_inner_width?: string }>;
+    openedPageDwellTime: Record<"story_organic"|"story_sponsored"|"topsite_organic"|"topsite_sponsored", GleanTimingDistribution>;
     pageLayoutVariant: GleanString;
     pingRegistered: Record<string, GleanBoolean>;
     promoCardClick: GleanEventWithExtras<{ newtab_visit_id?: string }>;
@@ -950,14 +954,14 @@ interface GleanImpl {
   }
 
   newtabContent: {
-    click: GleanEventWithExtras<{ corpus_item_id?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, layout_name?: string, matches_selected_topic?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section?: string, selected_topics?: string, source_section_id?: string, tile_id?: string|number, topic?: string, variant_id?: string|number }>;
+    click: GleanEventWithExtras<{ corpus_item_id?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, layout_name?: string, matches_selected_topic?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section?: string, section_position?: string, selected_topics?: string, source_section_id?: string, topic?: string, variant_id?: string|number }>;
     coarseOs: GleanString;
     country: GleanString;
-    dismiss: GleanEventWithExtras<{ corpus_item_id?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section?: string, section_position?: string, tile_id?: string|number }>;
+    dismiss: GleanEventWithExtras<{ corpus_item_id?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section?: string, section_position?: string }>;
     experimentBranch: GleanString;
     experimentName: GleanString;
     followedSections: GleanStringList;
-    impression: GleanEventWithExtras<{ corpus_item_id?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, layout_name?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section?: string, selected_topics?: string, source_section_id?: string, tile_id?: string|number, topic?: string, variant_id?: string|number }>;
+    impression: GleanEventWithExtras<{ corpus_item_id?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, layout_name?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section?: string, section_position?: string, selected_topics?: string, source_section_id?: string, topic?: string, variant_id?: string|number }>;
     inferredInterests: GleanObject;
     pingVersion: GleanQuantity;
     reportContentOpen: GleanEventWithExtras<{ corpus_item_id?: string, scheduled_corpus_item_id?: string }>;
@@ -968,20 +972,20 @@ interface GleanImpl {
     sectionsUnblockSection: GleanEventWithExtras<{ event_source?: string, section?: string, section_position?: string }>;
     sectionsUnfollowSection: GleanEventWithExtras<{ event_source?: string, section?: string, section_position?: string }>;
     surfaceId: GleanString;
-    topSitesClick: GleanEventWithExtras<{ advertiser_name?: string, frecency_boosted?: string|boolean, frecency_boosted_has_exposure?: string|boolean, is_sponsored?: string|boolean, position?: string|number, tile_id?: string|number, visible_topsites?: string|number }>;
-    topSitesDismiss: GleanEventWithExtras<{ advertiser_name?: string, is_sponsored?: string|boolean, position?: string|number, tile_id?: string|number }>;
-    topSitesImpression: GleanEventWithExtras<{ advertiser_name?: string, frecency_boosted?: string|boolean, frecency_boosted_has_exposure?: string|boolean, is_sponsored?: string|boolean, position?: string|number, tile_id?: string|number, visible_topsites?: string|number }>;
-    topSitesShowPrivacyClick: GleanEventWithExtras<{ advertiser_name?: string, position?: string|number, tile_id?: string|number }>;
+    topSitesClick: GleanEventWithExtras<{ advertiser_name?: string, frecency_boosted?: string|boolean, frecency_boosted_has_exposure?: string|boolean, is_sponsored?: string|boolean, position?: string|number, visible_topsites?: string|number }>;
+    topSitesDismiss: GleanEventWithExtras<{ advertiser_name?: string, is_sponsored?: string|boolean, position?: string|number }>;
+    topSitesImpression: GleanEventWithExtras<{ advertiser_name?: string, frecency_boosted?: string|boolean, frecency_boosted_has_exposure?: string|boolean, is_sponsored?: string|boolean, position?: string|number, visible_topsites?: string|number }>;
+    topSitesShowPrivacyClick: GleanEventWithExtras<{ advertiser_name?: string, position?: string|number }>;
     utcOffset: GleanQuantity;
   }
 
   pocket: {
-    click: GleanEventWithExtras<{ card_column?: string|number, content_redacted?: string|boolean, corpus_item_id?: string, event_source?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, layout_name?: string, matches_selected_topic?: string, newtab_visit_id?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section_position?: string, tile_id?: string|number }>;
-    dismiss: GleanEventWithExtras<{ content_redacted?: string|boolean, corpus_item_id?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, newtab_visit_id?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section_position?: string, tile_id?: string|number }>;
+    click: GleanEventWithExtras<{ background?: string|boolean, card_column?: string|number, content_redacted?: string|boolean, corpus_item_id?: string, event_source?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, layout_name?: string, matches_selected_topic?: string, newtab_visit_id?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section_position?: string }>;
+    dismiss: GleanEventWithExtras<{ content_redacted?: string|boolean, corpus_item_id?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, newtab_visit_id?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section_position?: string }>;
     enabled: GleanBoolean;
-    impression: GleanEventWithExtras<{ card_column?: string|number, content_redacted?: string|boolean, corpus_item_id?: string, format?: string, is_ad_eligible_position?: string|boolean, is_section_followed?: string|boolean, is_sponsored?: string|boolean, layout_name?: string, newtab_visit_id?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section_position?: string, tile_id?: string|number }>;
+    impression: GleanEventWithExtras<{ card_column?: string|number, content_redacted?: string|boolean, corpus_item_id?: string, format?: string, is_ad_eligible_position?: string|boolean, is_section_followed?: string|boolean, is_sponsored?: string|boolean, layout_name?: string, newtab_visit_id?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section_position?: string }>;
     isSignedIn: GleanBoolean;
-    save: GleanEventWithExtras<{ corpus_item_id?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, matches_selected_topic?: string, newtab_visit_id?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section?: string, section_position?: string, selected_topics?: string, tile_id?: string|number, topic?: string }>;
+    save: GleanEventWithExtras<{ corpus_item_id?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, matches_selected_topic?: string, newtab_visit_id?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section?: string, section_position?: string, selected_topics?: string, topic?: string }>;
     spocPlaceholderDuration: GleanTimingDistribution;
     sponsoredStoriesEnabled: GleanBoolean;
     topicClick: GleanEventWithExtras<{ newtab_visit_id?: string, topic?: string }>;
@@ -990,16 +994,16 @@ interface GleanImpl {
   topsites: {
     add: GleanEventWithExtras<{ newtab_visit_id?: string, position?: string|number }>;
     changeDisplay: GleanEventWithExtras<{ newtab_visit_id?: string, rows?: string|number }>;
-    click: GleanEventWithExtras<{ advertiser_name?: string, is_pinned?: string|boolean, is_sponsored?: string|boolean, newtab_visit_id?: string, position?: string|number, smart_scores?: string, smart_weights?: string, tile_id?: string|number, visible_topsites?: string|number }>;
-    dismiss: GleanEventWithExtras<{ advertiser_name?: string, content_redacted?: string|boolean, is_sponsored?: string|boolean, newtab_visit_id?: string, position?: string|number, tile_id?: string|number }>;
+    click: GleanEventWithExtras<{ advertiser_name?: string, background?: string|boolean, event_source?: string, is_pinned?: string|boolean, is_sponsored?: string|boolean, newtab_visit_id?: string, position?: string|number, smart_scores?: string, smart_weights?: string, visible_topsites?: string|number }>;
+    dismiss: GleanEventWithExtras<{ advertiser_name?: string, content_redacted?: string|boolean, is_sponsored?: string|boolean, newtab_visit_id?: string, position?: string|number }>;
     edit: GleanEventWithExtras<{ has_title_changed?: string|boolean, has_url_changed?: string|boolean, newtab_visit_id?: string, position?: string|number }>;
     enabled: GleanBoolean;
-    impression: GleanEventWithExtras<{ advertiser_name?: string, is_ad_eligible_position?: string|boolean, is_pinned?: string|boolean, is_sponsored?: string|boolean, newtab_visit_id?: string, position?: string|number, smart_scores?: string, smart_weights?: string, tile_id?: string|number, visible_topsites?: string|number }>;
+    impression: GleanEventWithExtras<{ advertiser_name?: string, is_ad_eligible_position?: string|boolean, is_pinned?: string|boolean, is_sponsored?: string|boolean, newtab_visit_id?: string, position?: string|number, smart_scores?: string, smart_weights?: string, visible_topsites?: string|number }>;
     pin: GleanEventWithExtras<{ newtab_visit_id?: string, position?: string|number }>;
     pinnedCount: GleanQuantity;
     prefChanged: GleanEventWithExtras<{ new_value?: string|boolean, pref_name?: string }>;
     rows: GleanQuantity;
-    showPrivacyClick: GleanEventWithExtras<{ advertiser_name?: string, newtab_visit_id?: string, position?: string|number, tile_id?: string|number }>;
+    showPrivacyClick: GleanEventWithExtras<{ advertiser_name?: string, newtab_visit_id?: string, position?: string|number }>;
     sponsoredEnabled: GleanBoolean;
     sponsoredTilesConfigured: GleanQuantity;
     sponsoredTilesReceived: GleanText;
@@ -1073,9 +1077,9 @@ interface GleanImpl {
   }
 
   aboutprivatebrowsing: {
-    clickDismissButton: GleanEventNoExtras;
-    clickInfoLink: GleanEventNoExtras;
-    clickPromoLink: GleanEventNoExtras;
+    basicsModalShown: GleanEventNoExtras;
+    clickPrivateWindowBasicsLink: GleanEventNoExtras;
+    introAnimationPlayed: GleanEventNoExtras;
   }
 
   privateBrowsingResetPbm: {
@@ -1165,14 +1169,6 @@ interface GleanImpl {
     closeProtectionReport: GleanEventWithExtras<{ category?: string, value?: string }>;
     showProtectionReport: GleanEventWithExtras<{ category?: string, value?: string }>;
     showVpnBanner: GleanEventWithExtras<{ category?: string, value?: string }>;
-  }
-
-  protocolhandlerMailto: {
-    handlerPromptShown: Record<"fx_default"|"os_default", GleanCounter>;
-    promptClicked: Record<"dismiss_local_default"|"dismiss_os_default"|"set_local_default"|"set_os_default"|"set_os_default_error"|"set_os_default_impossible", GleanCounter>;
-    error: GleanEventWithExtras<{ reason?: string }>;
-    promptClick: GleanEventWithExtras<{ always_ask?: string|boolean, button?: string, handler?: string }>;
-    visit: GleanEventWithExtras<{ triggered_externally?: string|boolean }>;
   }
 
   referrals: {
@@ -1292,11 +1288,6 @@ interface GleanImpl {
     contextmenuVisual: Record<string, GleanCounter>;
   }
 
-  searchWith: {
-    contextId: GleanUuid;
-    reportingUrl: GleanUrl;
-  }
-
   searchbar: {
     selectedResultMethod: Record<"click"|"enter"|"enterSelection", GleanCounter>;
   }
@@ -1310,7 +1301,7 @@ interface GleanImpl {
     categorizationNoMapFound: GleanCounter;
     engagement: GleanEventWithExtras<{ action?: string, impression_id?: string, target?: string }>;
     experimentInfo: GleanObject;
-    impression: GleanEventWithExtras<{ has_ai_summary?: string|boolean, impression_id?: string, is_private?: string|boolean, is_shopping_page?: string|boolean, is_signed_in?: string|boolean, partner_code?: string, provider?: string, search_mode?: string, shopping_tab_displayed?: string|boolean, source?: string, tagged?: string|boolean }>;
+    impression: GleanEventWithExtras<{ has_ai_summary?: string|boolean, impression_id?: string, is_private?: string|boolean, is_shopping_page?: string|boolean, is_signed_in?: string|boolean, partner_code?: string, prescan?: string, provider?: string, scan?: string, search_mode?: string, shopping_tab_displayed?: string|boolean, source?: string, tagged?: string|boolean }>;
   }
 
   urlbarSearchmode: {
@@ -1348,6 +1339,7 @@ interface GleanImpl {
     numberOfTabsRestored: GleanCustomDistribution;
     numberOfWindowsRestored: GleanCustomDistribution;
     readFile: GleanTimingDistribution;
+    restorePageOutcome: GleanEventWithExtras<{ outcome?: string, show_reason?: string, single_tabs_restored?: string|number, tabs_offered?: string|number, tabs_selected?: string|number, windows_offered?: string|number, windows_selected?: string|number }>;
     restoreWindow: GleanTimingDistribution;
     shutdownFlushAllOutcomes: Record<"abnormal_content_shutdown"|"complete"|"oop_frameloader_crashed"|"timed_out", GleanCounter>;
     shutdownOk: Record<"false"|"true", GleanCounter>;
@@ -1357,9 +1349,13 @@ interface GleanImpl {
     startupOnloadInitialWindow: GleanTimingDistribution;
     startupSessionAutoRestored: GleanEventWithExtras<{ new_tab_action?: string }>;
     startupSessionAvailability: GleanEventWithExtras<{ clean?: string, clean_backup?: string, format?: string, origin?: string, recovery?: string, recovery_backup?: string, restarted_by_os?: string|boolean, resume_from_crash?: string|boolean, resume_session_once?: string|boolean, resuming_after_os_restart?: string|boolean, startup_page_is_resume?: string|boolean, upgrade_backup?: string }>;
+    startupSessionDecision: GleanEventWithExtras<{ action?: string, init_error?: string, interstitial_reason?: string, permanent_private?: string|boolean, previous_session_crashed?: string|boolean, resume_reason?: string, session_type?: string }>;
     startupTimeline: Record<"sessionRestoreInitialized"|"sessionRestoreRestoring", GleanQuantity>;
     windowFeaturesMismatchIgnored: GleanEventWithExtras<{ entry_point?: string, existing_features?: string, requested_features?: string }>;
+    writeAttempts: GleanCounter;
+    writeFailure: GleanEventWithExtras<{ cause?: string, is_final_write?: string|boolean, session_written?: string|boolean, step?: string }>;
     writeFile: GleanTimingDistribution;
+    writeOutcome: Record<"failed"|"session_written_backup_failed"|"success", GleanCounter>;
   }
 
   collectionShare: {
@@ -1539,7 +1535,7 @@ interface GleanImpl {
     addTab: GleanEventWithExtras<{ group_type?: string, layout?: string, source?: string, tabs?: string|number }>;
     createGroup: GleanEventWithExtras<{ id?: string, layout?: string, source?: string, tabs?: string|number }>;
     delete: GleanEventWithExtras<{ id?: string, source?: string }>;
-    groupInteractions: Record<"change_color"|"collapse"|"copy_all_links"|"delete"|"expand"|"hover_preview"|"move_window"|"open_recent"|"open_suggest"|"open_tabmenu"|"rename"|"reopen"|"save"|"ungroup", GleanCounter>;
+    groupInteractions: Record<"change_color"|"collapse"|"copy_all_links"|"delete"|"expand"|"hover_preview"|"move_window"|"open_appmenu_list"|"open_recent"|"open_suggest"|"open_tabmenu"|"rename"|"reopen"|"save"|"ungroup", GleanCounter>;
     reopen: GleanEventWithExtras<{ id?: string, layout?: string, source?: string, type?: string }>;
     save: GleanEventWithExtras<{ id?: string, user_triggered?: string|boolean }>;
     savedGroups: GleanQuantity;
@@ -2345,7 +2341,6 @@ interface GleanImpl {
     cssMaskRepeat: GleanCounter;
     cssMaskSize: GleanCounter;
     cssMaskType: GleanCounter;
-    cssMasonryAutoFlow: GleanCounter;
     cssMathDepth: GleanCounter;
     cssMathShift: GleanCounter;
     cssMathStyle: GleanCounter;
@@ -3084,7 +3079,6 @@ interface GleanImpl {
     cssMaskRepeat: GleanCounter;
     cssMaskSize: GleanCounter;
     cssMaskType: GleanCounter;
-    cssMasonryAutoFlow: GleanCounter;
     cssMathDepth: GleanCounter;
     cssMathShift: GleanCounter;
     cssMathStyle: GleanCounter;
@@ -4772,6 +4766,7 @@ interface GleanImpl {
     networkFailures: Record<"network_ip"|"network_wifi_and_ip", GleanCounter>;
     networkLinkChange: Record<"changed"|"down"|"unknown"|"up", GleanCounter>;
     networkProvider: Record<"beacondb"|"google"|"other"|"unknown", GleanCounter>;
+    requestActivation: Record<"full_activated"|"has_been_activated"|"none", GleanCounter>;
     requestResult: Record<"permission_denied"|"position_unavailable"|"success"|"timeout", GleanCounter>;
     windowsFailure: GleanDualLabeledCounter;
   }
@@ -5036,8 +5031,8 @@ interface GleanImpl {
     dnsFirstByte: Record<string, GleanTimingDistribution>;
     largestContentfulPaint: GleanTimingDistribution;
     largestContentfulPaintFromResponseStart: GleanTimingDistribution;
-    pageLoad: GleanEventWithExtras<{ android_app_link_launch_type?: string|number, android_app_link_to_navigation_start?: string|number, android_isolation_category?: string|number, cache_disposition?: string|number, delazify_time?: string|number, dns_lookup_time?: string|number, document_features?: string|number, fcp_time?: string|number, has_ssd?: string|boolean, http_ver?: string|number, inp_longest?: string|number, inp_p75?: string|number, inp_p98?: string|number, interaction_count?: string|number, is_active_client?: string|boolean, js_exec_time?: string|number, keypress_max_duration?: string|number, lcp_time?: string|number, load_time?: string|number, load_type?: string, mouse_click?: string|number, network_type?: string|number, redirect_count?: string|number, redirect_time?: string|number, response_time?: string|number, same_origin_nav?: string|boolean, script_from_necko_serialized?: string|number, script_from_necko_text?: string|number, script_memory_cache_evicted_dirty?: string|number, script_memory_cache_revived?: string|number, script_memory_cache_use?: string|number, time_to_request_start?: string|number, tls_handshake_time?: string|number, trr_domain?: string, user_features?: string|number, using_webdriver?: string|boolean }>;
-    pageLoadDomain: GleanEventWithExtras<{ app_version_major?: string|number, channel?: string, country?: string, document_features?: string|number, domain?: string, http_ver?: string|number, is_active_client?: string|boolean, is_first_daily_load?: string|boolean, lcp_time?: string|number, load_type?: string, same_origin_nav?: string|boolean }>;
+    pageLoad: GleanEventWithExtras<{ android_app_link_launch_type?: string|number, android_app_link_to_navigation_start?: string|number, android_isolation_category?: string|number, cache_disposition?: string|number, delazify_time?: string|number, dns_lookup_time?: string|number, document_features?: string|number, fcp_time?: string|number, has_ssd?: string|boolean, http_ver?: string|number, inp_longest?: string|number, inp_p75?: string|number, inp_p98?: string|number, interaction_count?: string|number, is_active_client?: string|boolean, js_exec_time?: string|number, keypress_max_duration?: string|number, lcp_time?: string|number, load_time?: string|number, load_type?: string, loaded_in_foreground?: string|boolean, mouse_click?: string|number, network_type?: string|number, redirect_count?: string|number, redirect_time?: string|number, response_time?: string|number, same_origin_nav?: string|boolean, script_from_necko_serialized?: string|number, script_from_necko_text?: string|number, script_memory_cache_evicted_dirty?: string|number, script_memory_cache_revived?: string|number, script_memory_cache_use?: string|number, time_to_request_start?: string|number, tls_handshake_time?: string|number, trr_domain?: string, user_features?: string|number, using_webdriver?: string|boolean }>;
+    pageLoadDomain: GleanEventWithExtras<{ app_version_major?: string|number, channel?: string, country?: string, document_features?: string|number, domain?: string, http_ver?: string|number, is_active_client?: string|boolean, is_first_daily_load?: string|boolean, lcp_time?: string|number, load_type?: string, loaded_in_foreground?: string|boolean, same_origin_nav?: string|boolean }>;
   }
 
   performancePageload: {
@@ -5065,6 +5060,7 @@ interface GleanImpl {
     ignored: GleanEventWithExtras<{ site_category?: string }>;
     insecureContextPermissionRequest: GleanCounter;
     permissionOrigin: Record<"first_party"|"nested_first_party"|"third_party", GleanCounter>;
+    pushSubscribeOrigin: Record<"first_party"|"nested_first_party"|"third_party", GleanCounter>;
     requestPermissionOrigin: Record<"first_party"|"nested_first_party"|"third_party", GleanCounter>;
     showOrigin: Record<"first_party"|"nested_first_party"|"third_party", GleanCounter>;
     shown: GleanEventWithExtras<{ site_category?: string }>;
@@ -7790,6 +7786,11 @@ interface GleanImpl {
     loadAbouttlserror: GleanEventWithExtras<{ channel_status?: string|number, is_frame?: string|boolean, value?: string }>;
   }
 
+  browserUtils: {
+    categoryConsumerResult: GleanDualLabeledCounter;
+    categoryDispatchError: GleanEventWithExtras<{ category?: string, consumer?: string, errorName?: string, module?: string }>;
+  }
+
   mozstorage: {
     sqlitejsmTransactionTimeout: Record<string, GleanCounter>;
   }
@@ -8055,7 +8056,6 @@ interface GleanImpl {
     pointingDevices: Record<"mouse"|"pen"|"touch", GleanBoolean>;
     imeNameOnWindows: Record<string, GleanBoolean>;
     imeNameOnWindowsInsertedCrlf: Record<string, GleanBoolean>;
-    touchEnabledDevice: Record<"false"|"true", GleanCounter>;
   }
 
   gfxFeatures: {
@@ -8190,7 +8190,6 @@ interface GleanPingsImpl {
   newtabContent: GleanPingWithReason<"component_init"|"newtab_session_end">;
   profiles: GleanPingNoReason;
   referrals: GleanPingNoReason;
-  searchWith: GleanPingNoReason;
   serpCategorization: GleanPingWithReason<"inactivity"|"startup"|"threshold_reached">;
   quickSuggest: GleanPingNoReason;
   quickSuggestDeletionRequest: GleanPingNoReason;
@@ -8215,6 +8214,7 @@ interface GleanPingsImpl {
   collectionDisabledPing: GleanPingNoReason;
   disabledPing: GleanPingNoReason;
   onePingOnly: GleanPingNoReason;
+  pingForPingStorageTest: GleanPingNoReason;
   rideAlongPing: GleanPingNoReason;
   testOhttpPing: GleanPingNoReason;
   testPing: GleanPingNoReason;

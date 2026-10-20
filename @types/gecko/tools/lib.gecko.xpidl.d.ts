@@ -11,6 +11,7 @@
  */
 interface nsID<uuid = string> {
   readonly number: uuid;
+  equals(other: nsID): boolean;
 }
 
 /**

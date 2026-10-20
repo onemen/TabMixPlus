@@ -13994,8 +13994,6 @@ interface nsICookieManager extends nsISupports {
   add(aHost: string, aPath: string, aName: string, aValue: string, aIsSecure: boolean, aIsHttpOnly: boolean, aIsSession: boolean, aExpiry: i64, aOriginAttributes: any, aSameSite: i32, aSchemeMap: nsICookie.schemeType, aIsPartitioned?: boolean): nsICookieValidation;
   /** <!-- binding_to(idl, method, XPIDL_nsICookieManager_cookieExists) --> */
   cookieExists(aHost: string, aPath: string, aName: string, aOriginAttributes: any): boolean;
-  /** <!-- binding_to(idl, method, XPIDL_nsICookieManager_countCookiesFromHost) --> */
-  countCookiesFromHost(aHost: string): u32;
   /** <!-- binding_to(idl, method, XPIDL_nsICookieManager_hasCookiesForSite) --> */
   hasCookiesForSite(aHost: string, aPattern: string): boolean;
   /** <!-- binding_to(idl, method, XPIDL_nsICookieManager_getCookiesFromHost) --> */
@@ -25229,8 +25227,6 @@ interface nsICrashReporter extends nsISupports {
   isAnnotationAllowedForReport(value: string): boolean;
   /** <!-- binding_to(idl, method, XPIDL_nsICrashReporter_appendAppNotesToCrashReport) --> */
   appendAppNotesToCrashReport(data: string): void;
-  /** <!-- binding_to(idl, method, XPIDL_nsICrashReporter_registerAppMemory) --> */
-  registerAppMemory(ptr: u64, size: u64): void;
   /** <!-- binding_to(idl, attribute, XPIDL_nsICrashReporter_submitReports) --> */
   submitReports: boolean;
   /** <!-- binding_to(idl, method, XPIDL_nsICrashReporter_UpdateCrashEventsDir) --> */
