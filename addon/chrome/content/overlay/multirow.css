@@ -304,10 +304,8 @@
     }
   }
 
-  tab-group & .tabbrowser-tab > .tab-stack > .tab-background > .tab-group-line,
-  & .tabbrowser-tab[tabmix-movingtab-togroup] > .tab-stack > .tab-background > .tab-group-line {
-    inset-block-end: var(--tab-group-line-toolbar-border-distance);
-  }
+  /* .tab-group-line is positioned by Firefox 158 itself (issue 596); the
+     <=157 offset lives in tab.js dynamicRules */
 
   &:not(:has([dragtarget])) {
     .tabbrowser-tab:first-child > .tab-stack > .tab-background {
@@ -337,7 +335,9 @@
 }
 
 #tabbrowser-tabs[tabmix-multibar][orient="horizontal"] {
-  --tab-group-line-toolbar-border-distance: 0;
+  /* unitless 0 makes Firefox 158's split-view group-line calc() invalid, which
+     drops the line to the top of the tab (issue 596) */
+  --tab-group-line-toolbar-border-distance: 0px;
 }
 
 #tabbrowser-tabs:not([tabmix-multibar])[tabmix-flowing="multibar"][orient="horizontal"] {

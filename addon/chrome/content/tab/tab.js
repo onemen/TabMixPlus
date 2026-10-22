@@ -2639,6 +2639,15 @@ window.gTMPprefObserver = {
           }
         }`
       );
+      // Firefox 158 positions the group line inside a split view itself, using
+      // --tab-margin-block and --split-view-padding-block, so this offset is
+      // only needed up to 157 (issue 596)
+      this.insertRule(
+        `#tabbrowser-tabs[orient="horizontal"] tab-group tab-split-view-wrapper .tabbrowser-tab > .tab-stack > .tab-background > .tab-group-line,
+         #tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper .tabbrowser-tab[tabmix-movingtab-togroup] > .tab-stack > .tab-background > .tab-group-line {
+          inset-block-end: var(--tab-group-line-toolbar-border-distance) !important;
+        }`
+      );
     }
   },
 
