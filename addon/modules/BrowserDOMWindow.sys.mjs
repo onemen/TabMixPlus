@@ -172,9 +172,9 @@ export const TabmixBrowserDOMWindow = {
     tabmixObj
       .changeCode(constructor.prototype, fullMethodName, {sandbox: tabmixObj._sandbox})
       ._replace(
-        `if (aIsExternal && (!aURI || aURI.spec == "about:blank")) {`,
+        `let win, needToFocusWin;`,
         `let currentIsBlank = win.gBrowser.isBlankNotBusyTab(win.gBrowser.selectedTab);
-      $&`
+    $&`
       )
       ._replace(
         "win.BrowserCommands.openTab()",
