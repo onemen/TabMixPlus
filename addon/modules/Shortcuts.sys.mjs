@@ -22,7 +22,7 @@ ChromeUtils.defineLazyGetter(lazy, "Keys", () => {
 
 export const ShortcutsKeys = {
   newTab: {id: "key_newNavigatorTab", default: "T accel"},
-  dupTab: {id: "key_tm_dupTab", useInMenu: true, default: "F #modifiers", command: 3},
+  dupTab: {id: "key_tm_dupTab", useInMenu: true, default: "L #modifiers", command: 3},
   dupTabToWin: {command: 14},
   detachTab: {id: "key_tm_detachTab", useInMenu: true, default: "V #modifiers", command: 27},
   togglePinTab: {command: 31},
@@ -136,7 +136,6 @@ export const Shortcuts = {
       `
       <div hidden="true"
         dupTab="&duplicateTabMenu.label;"
-        dupTab_key="&tab.key; #modifiers"
         dupTabToWin="&clicktab.duplicatetabw;"
         detachTab="&detachTab.label;"
         detachTab_key="&window.key; #modifiers"
