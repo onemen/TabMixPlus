@@ -2628,7 +2628,7 @@ window.gTMPprefObserver = {
         }`
       );
     } else {
-      // Firefox <=157 split-view rules; multirow.css targets Firefox 158 (issue 594)
+      // Firefox <=157 split-view rules; multirow.css targets Firefox 158 (issues 594, 596)
       this.insertRule(
         `#tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper {
           margin-block: 0 !important;
@@ -2636,6 +2636,15 @@ window.gTMPprefObserver = {
 
           .tabbrowser-tab > .tab-stack > .tab-background {
             margin-block: var(--tab-margin-block, var(--tab-block-margin)) !important;
+          }
+
+          /* remove border on tab and move it to .tab-background */
+          &:not([hasactivetab]) .tabbrowser-tab:last-child {
+            border-inline-start: none;
+
+            .tab-background {
+              border-inline-start: 1px solid var(--toolbarbutton-icon-fill);
+            }
           }
         }`
       );

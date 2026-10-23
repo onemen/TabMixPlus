@@ -233,6 +233,9 @@
 }
 
 #tabbrowser-tabs[orient="horizontal"] tab-split-view-wrapper {
+  /* .tab-group-line is positioned by Firefox 158 itself (issue 596); the
+  <=157 offset lives in tab.js dynamicRules */
+
   margin-block: var(--tab-margin-block);
   padding: var(--split-view-padding-block) 0;
 
@@ -290,22 +293,6 @@
   :root:has(#tabbrowser-tabs[tabmix-multibar][tabmix-tabsFitRow]) & {
     flex: 1 1 0%;
   }
-
-  /* remove border on tab and move it to .tab-background */
-  &:not([hasactivetab]) {
-    & .tabbrowser-tab {
-      &:last-child {
-        border-inline-start: none;
-
-        .tab-background {
-          border-inline-start: 1px solid var(--toolbarbutton-icon-fill);
-        }
-      }
-    }
-  }
-
-  /* .tab-group-line is positioned by Firefox 158 itself (issue 596); the
-     <=157 offset lives in tab.js dynamicRules */
 
   &:not(:has([dragtarget])) {
     .tabbrowser-tab:first-child > .tab-stack > .tab-background {
