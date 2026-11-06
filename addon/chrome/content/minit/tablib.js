@@ -510,15 +510,20 @@ Tabmix.tablib = {
 
     if (Tabmix.isVersion(1440)) {
       gBrowser._cachedTitleInfo = null;
-      gBrowser._taskbarTab = null;
-      gBrowser._taskbarTabTitle = null;
-      gBrowser._taskbarTabTitleLastProfile = null;
+
+      if (Tabmix.isVersion(1620)) {
+        gBrowser._taskbarTabTitleInfo = null;
+      } else {
+        gBrowser._taskbarTab = null;
+        gBrowser._taskbarTabTitle = null;
+        gBrowser._taskbarTabTitleLastProfile = null;
+      }
 
       gBrowser._populateTitleCache = Tabmix.getPrivateMethod({
         parent: gBrowser,
         parentName: "gBrowser",
         methodName: "populateTitleCache",
-        nextMethodName: "#taskbarTab",
+        nextMethodName: Tabmix.isVersion(1620) ? "#taskbarTabTitleInfo" : "#taskbarTab",
       });
 
       gBrowser._determineTaskbarTabTitle = Tabmix.getPrivateMethod({

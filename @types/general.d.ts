@@ -571,8 +571,12 @@ declare namespace MockedGeckoTypes {
     // _setTabLabel: (tab: BrowserTab, label: string, options?: {beforeTabOpen?: boolean; isContentTitle?: boolean; isURL?: boolean}) => boolean;
     _shortenURLRegEx: RegExp;
     _tabAttrModified: (tab: BrowserTab, changed: string[]) => void;
+    _taskbarTabTitleInfo: {name: string; userContextId: number} | null;
+    /** @deprecated replaced with private filed #taskbarTabTitleInfo in firefox 162 */
     _taskbarTab: {name: string; userContextId: string} | null;
+    /** @deprecated replaced with private filed #taskbarTabTitleInfo in firefox 162 */
     _taskbarTabTitle: string | null;
+    /** @deprecated replaced with private filed #taskbarTabTitleInfo in firefox 162 */
     _taskbarTabTitleLastProfile: string | null;
     /** @deprecated replaced with private filed #windowIsClosing in firefox 156 */
     _windowIsClosing: boolean;
