@@ -462,6 +462,13 @@ var TabmixContext = {
 
     Tabmix.setFTLDataId("context_reopenInContainer");
 
+    this.$id("context_reloadAllTabs").setAttribute(
+      "data-lazy-l10n-id",
+      Tabmix.isVersion(1620) ?
+        "preferences-etp-reload-tabs-hint-button"
+      : "content-blocking-reload-tabs-button"
+    );
+
     if (Tabmix.isVersion(1540)) {
       /** @param {"classic" | "altstructure"} name */
       function addTabmixItemsToLayouts(name) {
