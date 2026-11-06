@@ -202,6 +202,21 @@ var TMP_tabDNDObserver = {
           // eslint-disable-next-line mozilla/valid-lazy
           TabMetrics: "moz-src:///browser/components/tabbrowser/TabMetrics.sys.mjs",
         });
+        if (Tabmix.isVersion(1620)) {
+          // Firefox 162 loads drag-and-drop.mjs as an ES module (bug 2080403),
+          // so the modules its code reads are module imports now instead of
+          // window globals. The patched functions run in this sandbox.
+          ChromeUtils.defineESModuleGetters(lazy, {
+            // eslint-disable-next-line mozilla/valid-lazy
+            AppConstants: "resource://gre/modules/AppConstants.sys.mjs",
+            // eslint-disable-next-line mozilla/valid-lazy
+            OpenInTabsUtils: "moz-src:///browser/components/tabbrowser/OpenInTabsUtils.sys.mjs",
+            // eslint-disable-next-line mozilla/valid-lazy
+            PageThumbs: "resource://gre/modules/PageThumbs.sys.mjs",
+            // eslint-disable-next-line mozilla/valid-lazy
+            PrivateBrowsingUtils: "resource://gre/modules/PrivateBrowsingUtils.sys.mjs",
+          });
+        }
         scope.lazy = lazy;
       }
 
@@ -247,7 +262,10 @@ var TMP_tabDNDObserver = {
     const tabBar = gBrowser.tabContainer;
     if (Tabmix.isVersion(1460)) {
       this.tabDragAndDrop = tabBar.tabDragAndDrop;
-      this.tabDnDPrototype = window.TabDragAndDrop.prototype;
+      this.tabDnDPrototype =
+        Tabmix.isVersion(1620) ?
+          Object.getPrototypeOf(this.tabDragAndDrop)
+        : window.TabDragAndDrop.prototype;
     } else if (Tabmix.isVersion(1450)) {
       this.tabDragAndDrop = tabBar.tabDragAndDrop;
       this.tabDnDPrototype = tabBar.tabDragAndDrop;

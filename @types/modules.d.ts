@@ -96,6 +96,7 @@ interface Window {
     revampComponentsLoaded: boolean;
     readonly sidebarVerticalTabsEnabled: boolean;
   };
+  /** @deprecated removed as global in Firefox 162 bug 2080403 */
   TabDragAndDrop: MockedGeckoTypes.TabDragAndDropConstructor;
   TabStacking: MockedGeckoTypes.TabDragAndDropConstructor;
   ToolbarDropHandler: {
