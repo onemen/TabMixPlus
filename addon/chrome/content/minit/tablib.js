@@ -2269,7 +2269,10 @@ Tabmix.tablib = {
       ._replace("{ l10nArgs:", "{ protectedCount, l10nArgs:")
       .toCode();
 
-    Tabmix.changeCode(window.ConfirmationHint, "ConfirmationHint.show")
+    Tabmix.changeCode(
+      window.ConfirmationHint,
+      Tabmix.isVersion(1620) ? "ConfirmationHint._show" : "ConfirmationHint.show"
+    )
       ._replace(
         "const DURATION",
         `if (options.protectedCount) {
@@ -2283,7 +2286,7 @@ Tabmix.tablib = {
       )
       ._replace("l10nArgs,", "protectedCount,\n      l10nArgs,", {check: Tabmix.isVersion(1520)})
       ._replace(
-        "const DURATION",
+        Tabmix.isVersion(1620) ? "this._duration" : "const DURATION",
         `if (protectedCount) {
            this._panel.classList.add("with-description");
            this._description.hidden = false;
