@@ -327,6 +327,7 @@ declare namespace TabmixArrowScrollboxNS {
     _distanceToRow: (amountToScroll: number) => number;
     _finishScroll: (this: ASB, event: DragEvent) => void;
     _enterVerticalMode: (this: ASB, blockUnderflow?: boolean) => void;
+    _getScrolledToStartAndEnd: () => void;
     _updateScrollButtonsDisabledState: (aRafCount?: number) => void;
     connectTabmix: (this: ASB) => void;
     disconnectTabmix: () => void;
@@ -748,6 +749,7 @@ declare namespace Tablib {
 interface PrivateMethods {
   // ArrowScrollbox
   updateScrollButtonsDisabledState: TabmixArrowScrollboxNS.ArrowScrollbox["_updateScrollButtonsDisabledState"];
+  getScrolledToStartAndEnd: TabmixArrowScrollboxNS.ArrowScrollbox["_getScrolledToStartAndEnd"];
 }
 
 type ElementTypesExtended = ElementTypes | TabmixAllTabsNS.PopupElement | MockedGeckoTypes.ArrowScrollbox | MockedGeckoTypes.BrowserTab | MockedGeckoTypes.MozTabSplitViewWrapper;

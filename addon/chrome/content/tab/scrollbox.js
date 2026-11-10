@@ -201,6 +201,15 @@ Tabmix.multiRow = {
           ._replace("{", "{\n      if (aEvent.button && aEvent.button === 2) return;")
           .toCode();
 
+        if (Tabmix.isVersion(1620)) {
+          this._getScrolledToStartAndEnd = Tabmix.getPrivateMethod({
+            parent: this,
+            parentName: "gBrowser.tabContainer.arrowScrollbox",
+            methodName: "getScrolledToStartAndEnd",
+            nextMethodName: "disconnectedCallback",
+          });
+        }
+
         if (Tabmix.isVersion(1310)) {
           Tabmix.privateMethodTransformState.planned.add(
             "gBrowser.tabContainer.arrowScrollbox._updateScrollButtonsDisabledState"
@@ -211,12 +220,20 @@ Tabmix.multiRow = {
             parent: this,
             parentName: "gBrowser.tabContainer.arrowScrollbox",
             methodName: "updateScrollButtonsDisabledState",
-            nextMethodName: "disconnectedCallback",
+            nextMethodName:
+              Tabmix.isVersion(1620) ? "#getScrolledToStartAndEnd" : "disconnectedCallback",
           });
         }
-        Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")
-          ._replace("if (this.isRTLScrollbox", "$& && !this.isMultiRow", {flags: "g"})
-          .toCode();
+
+        if (Tabmix.isVersion(1620)) {
+          Tabmix.changeCode(this, "scrollbox._getScrolledToStartAndEnd")
+            ._replace("if (this.isRTLScrollbox", "$& && !this.isMultiRow", {flags: "g"})
+            .toCode();
+        } else {
+          Tabmix.changeCode(this, "scrollbox._updateScrollButtonsDisabledState")
+            ._replace("if (this.isRTLScrollbox", "$& && !this.isMultiRow", {flags: "g"})
+            .toCode();
+        }
 
         const codeToReplace =
           Tabmix.isVersion(1310) ? "this.#verticalMode" : (
