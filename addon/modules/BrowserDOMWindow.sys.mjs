@@ -13,7 +13,10 @@ ChromeUtils.defineESModuleGetters(lazy, {
 if (isVersion({fp: "157.0"})) {
   /* for Floorp 12.20.1 (157.0.1) */
   ChromeUtils.defineESModuleGetters(lazy, {
-    getWorkspaceUserContextIdForExternalOpen: "resource:///modules/BrowserContentHandler.sys.mjs",
+    getWorkspaceUserContextIdForExternalOpen:
+      isVersion({fp: "159.0"}) ?
+        "moz-src:///browser/components/BrowserContentHandler.sys.mjs"
+      : "resource:///modules/BrowserContentHandler.sys.mjs",
   });
 }
 
