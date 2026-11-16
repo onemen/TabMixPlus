@@ -7,23 +7,11 @@
 
 // Globals that browser.xhtml's scripts define on the browser window. A project
 // with modules that run in that window names this file in its tsconfig
-// `include`. browser-window-globals.d.ts declares the types of those that are
-// not system modules.
+// `include`. browser-window-globals.d.ts declares their types. The system
+// modules the window also holds are left out: a module imports those itself.
 
 /// <reference path="./browser-window-globals.d.ts" />
 
-declare var AppConstants: typeof import("resource://gre/modules/AppConstants.sys.mjs").AppConstants;
-declare var BrowserUIUtils: typeof import("resource:///modules/BrowserUIUtils.sys.mjs").BrowserUIUtils;
-declare var BrowserWindowTracker: typeof import("resource:///modules/BrowserWindowTracker.sys.mjs").BrowserWindowTracker;
-declare var ContextualIdentityService: typeof import("moz-src:///toolkit/components/contextualidentity/ContextualIdentityService.sys.mjs").ContextualIdentityService;
-declare var CustomizableUI: typeof import("moz-src:///browser/components/customizableui/CustomizableUI.sys.mjs").CustomizableUI;
-declare var NewTabPagePreloading: typeof import("moz-src:///browser/components/tabbrowser/NewTabPagePreloading.sys.mjs").NewTabPagePreloading;
-declare var PrivateBrowsingUtils: typeof import("resource://gre/modules/PrivateBrowsingUtils.sys.mjs").PrivateBrowsingUtils;
-declare var SessionStore: typeof import("moz-src:///browser/components/sessionstore/SessionStore.sys.mjs").SessionStore;
-declare var XPCOMUtils: typeof import("resource://gre/modules/XPCOMUtils.sys.mjs").XPCOMUtils;
-
-// The class and its instance, as a class declaration would provide them.
-declare var Tabbrowser: typeof import("moz-src:///browser/components/tabbrowser/Tabbrowser.sys.mjs").Tabbrowser;
 type Tabbrowser = BrowserWindow.Tabbrowser;
 
 declare var gBrowser: BrowserWindow["gBrowser"];
@@ -39,6 +27,7 @@ declare var isInitialPage: BrowserWindow["isInitialPage"];
 declare var CreateContainerTabMenu: BrowserWindow["CreateContainerTabMenu"];
 declare var UpdatePopupNotificationsVisibility: BrowserWindow["UpdatePopupNotificationsVisibility"];
 declare var openPreferences: BrowserWindow["openPreferences"];
+declare var openTrustedLinkIn: BrowserWindow["openTrustedLinkIn"];
 
 declare var gBrowserInit: BrowserWindow["gBrowserInit"];
 declare var BrowserCommands: BrowserWindow["BrowserCommands"];
@@ -46,6 +35,11 @@ declare var CustomTitlebar: BrowserWindow["CustomTitlebar"];
 declare var SidebarController: BrowserWindow["SidebarController"];
 declare var gSharedTabWarning: BrowserWindow["gSharedTabWarning"];
 declare var gKeywordURIFixup: BrowserWindow["gKeywordURIFixup"];
+declare var gNavToolbox: BrowserWindow["gNavToolbox"];
 declare const DynamicShortcutTooltip: BrowserWindow["DynamicShortcutTooltip"];
 declare const gClickAndHoldListenersOnElement: BrowserWindow["gClickAndHoldListenersOnElement"];
 declare var FirefoxViewHandler: BrowserWindow["FirefoxViewHandler"];
+declare var XULBrowserWindow: BrowserWindow["XULBrowserWindow"];
+declare var MousePosTracker: BrowserWindow["MousePosTracker"];
+declare var StatusPanel: BrowserWindow["StatusPanel"];
+declare var TabBarVisibility: BrowserWindow["TabBarVisibility"];

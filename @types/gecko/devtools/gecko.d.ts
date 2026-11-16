@@ -386,12 +386,12 @@ declare module "resource://gre/modules/AppConstants.sys.mjs" {
 }
 
 declare module "resource://devtools/client/performance-new/shared/background.sys.mjs" {
-  import * as Background from "devtools/client/performance-new/shared/background.sys.mjs";
+  import * as Background from "shared-background.sys.mjs";
   export = Background;
 }
 
 declare module "resource://devtools/shared/performance-new/symbolication.sys.mjs" {
-  import * as PerfSymbolication from "devtools/shared/performance-new/symbolication.sys.mjs";
+  import * as PerfSymbolication from "shared-symbolication.sys.mjs";
   export = PerfSymbolication;
 }
 

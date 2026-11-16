@@ -26,6 +26,12 @@ declare namespace ChromeUtils {
   ): Modules[T];
 }
 
+// Defined by SystemGlobal, see XPCRuntimeService.cpp.
+declare var locks: LockManager;
+
+// Defined by SystemGlobal, see XPCRuntimeService.cpp.
+declare var storage: StorageManager;
+
 interface ChromeWindow extends Window {
   isChromeWindow: true;
 }

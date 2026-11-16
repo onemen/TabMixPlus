@@ -33,7 +33,6 @@ interface GleanImpl {
     bookmarksToolbarBookmarkAdded: GleanCounter;
     bookmarksToolbarBookmarkOpened: GleanCounter;
     totalTopVisits: Record<"false"|"true", GleanCounter>;
-    windowsStartSearchActivationCount: Record<"new_tab"|"startup", GleanCounter>;
     sessionrestoreInterstitial: Record<string, GleanCounter>;
     tabExplicitUnload: GleanEventWithExtras<{ all_tabs_unloaded?: string|boolean, memory_after?: string|number, memory_before?: string|number, tabs_unloaded?: string|number, time_to_unload_in_ms?: string|number, unload_selected_tab?: string|boolean }>;
     tabReloadCount: GleanCounter;
@@ -89,7 +88,6 @@ interface GleanImpl {
     cookieCountUnpartitioned: GleanCustomDistribution;
     cookieCreationFixupDiff: GleanCustomDistribution;
     cookieDbValidation: Record<"eOK"|"eRejectedAttributeDomainOversize"|"eRejectedAttributeExpiryOversize"|"eRejectedAttributePathOversize"|"eRejectedEmptyNameAndValue"|"eRejectedForNonSameSiteness"|"eRejectedHttpOnlyButFromScript"|"eRejectedInvalidCharName"|"eRejectedInvalidCharValue"|"eRejectedInvalidDomain"|"eRejectedInvalidPath"|"eRejectedInvalidPrefix"|"eRejectedNameValueOversize"|"eRejectedNoneRequiresSecure"|"eRejectedPartitionedRequiresSecure"|"eRejectedSecureButNonHttps", GleanCounter>;
-    cookieFilePresent: GleanBoolean;
     cookiePurgeEntryMax: GleanCustomDistribution;
     cookiePurgeMax: GleanCustomDistribution;
     cookieTimestampFixedCount: Record<"creationTime"|"lastAccessed", GleanCounter>;
@@ -275,8 +273,14 @@ interface GleanImpl {
     agenticActionResume: GleanEventWithExtras<{ action_id?: string, active_age?: string|number, age?: string|number, agent?: string, chat_id?: string, check_time?: string, check_weekday?: string|number, enabled?: string|boolean, length?: string|number, message_seq?: string|number, monitors?: string|number, prompt_version?: string, schedule_type?: string, source?: string, urls?: string|number }>;
     aitabCreateComplete: GleanEventWithExtras<{ components_used?: string, error?: string, is_success?: string|boolean, num_chars_out?: string|number, num_chars_read?: string|number, seconds_elapsed?: string|number }>;
     aitabCreateInitiate: GleanEventWithExtras<{ how_initiated?: string, num_tabs?: string|number, num_tabs_total_attempted?: string|number, raw_content_len?: string|number }>;
+    aitabDelete: GleanEventNoExtras;
     aitabEditComplete: GleanEventWithExtras<{ components_used?: string, error?: string, is_success?: string|boolean, num_chars_out?: string|number, num_chars_read?: string|number, seconds_elapsed?: string|number }>;
     aitabEditInitiate: GleanEventWithExtras<{ how_initiated?: string, num_tabs?: string|number, raw_content_len?: string|number }>;
+    aitabLinkClick: GleanEventWithExtras<{ component_type?: string, result?: string }>;
+    aitabOpen: GleanEventWithExtras<{ card_state?: string, chat_id?: string, open_target?: string }>;
+    aitabView: GleanEventWithExtras<{ font?: string, outcome?: string }>;
+    authImpl: GleanString;
+    authImplSwitched: GleanEventWithExtras<{ from?: string, reason?: string, to?: string }>;
     autoTabGroupAccepted: GleanEventWithExtras<{ grouped_id?: string|number, grouped_tabs?: string|number, source?: string }>;
     autoTabGroupCompleted: GleanEventWithExtras<{ error_type?: string, grouped_id?: string|number, grouped_tabs?: string|number, source?: string, success?: string|boolean }>;
     autoTabGroupMenuOpened: GleanEventWithExtras<{ source?: string, tabs?: string|number }>;
@@ -291,12 +295,13 @@ interface GleanImpl {
     browserActionComplete: GleanEventWithExtras<{ action?: string, chat_id?: string, error?: string, location?: string, message_seq?: string|number, model?: string, prompt_version?: string, result?: string, tabs_affected?: string|number, trigger?: string, undo_available?: string|boolean }>;
     browserActionPrompt: GleanEventWithExtras<{ action?: string, candidates?: string|number, chat_id?: string, location?: string, message_seq?: string|number, preselected?: string|number, prompt_type?: string, reason?: string }>;
     browserActionPromptResponse: GleanEventWithExtras<{ action?: string, chat_id?: string, location?: string, message_seq?: string|number, prompt_type?: string, reason?: string, response?: string, selected?: string|number }>;
+    browserActionPromptToggleAll: GleanEventWithExtras<{ action?: string, candidates?: string|number, chat_id?: string, entrypoint?: string, location?: string, message_seq?: string|number, prompt_type?: string, toggle?: string }>;
     browserActionSubmit: GleanEventWithExtras<{ action?: string, chat_id?: string, location?: string, mentions?: string|number, message_seq?: string|number, model?: string, prompt_version?: string, submit_type?: string, tabs_open?: string|number, trigger?: string }>;
     browserActionUndo: GleanEventWithExtras<{ action?: string, chat_id?: string, error?: string, location?: string, message_seq?: string|number, result?: string, tabs_restored?: string|number, time_delta?: string|number }>;
     chatPreviousSession: GleanEventWithExtras<{ tabs?: string|number }>;
     chatRetrieved: GleanEventWithExtras<{ chat_id?: string, location?: string, message_seq?: string|number, time_delta?: string|number }>;
     chatStorage: GleanQuantity;
-    chatSubmit: GleanEventWithExtras<{ chat_id?: string, chat_version?: string, detected_intent?: string, length?: string|number, location?: string, mentions?: string|number, message_seq?: string|number, model?: string, submit_type?: string, tabs?: string|number, turn_number?: string|number }>;
+    chatSubmit: GleanEventWithExtras<{ auth_provider?: string, chat_id?: string, chat_version?: string, detected_intent?: string, length?: string|number, location?: string, mentions?: string|number, message_seq?: string|number, model?: string, submit_type?: string, tabs?: string|number, turn_number?: string|number }>;
     classicSwitch: GleanEventWithExtras<{ duration_ms?: string|number, opened_tabs?: string|number }>;
     clientError: GleanEventWithExtras<{ chat_id?: string, filename?: string, lineno?: string|number, location?: string, message?: string, message_seq?: string|number, model?: string, name?: string, source?: string }>;
     closeDuplicateTabsCompleted: GleanEventWithExtras<{ duplicate_tabs?: string|number, error_type?: string, success?: string|boolean, tabs?: string|number, time?: string|number }>;
@@ -319,11 +324,15 @@ interface GleanImpl {
     historyClick: GleanEventWithExtras<{ chat_id?: string, location?: string, message_seq?: string|number, position?: string|number, total?: string|number }>;
     historyDisplayed: GleanEventWithExtras<{ chat_id?: string, location?: string, message_seq?: string|number, reason?: string, total?: string|number }>;
     intentChangePreview: GleanEventWithExtras<{ chat_id?: string, current_intent?: string, location?: string, message_seq?: string|number }>;
-    launchCommandInvoked: GleanEventWithExtras<{ fxa?: string|boolean, new_window?: string|boolean, trigger?: string }>;
+    journeysGenerationRun: GleanEventWithExtras<{ error_stage?: string, error_type?: string, generation_batches?: string|number, generation_batches_skipped?: string|number, journey_memory_candidates?: string|number, journeys_eligible_after?: string|number, journeys_generated?: string|number, memories_eligible?: string|number, outcome?: string, save_new?: string|number }>;
+    journeysMaintenanceRun: GleanEventWithExtras<{ error_type?: string, journeys_after?: string|number, journeys_before?: string|number, journeys_eligible_after?: string|number, journeys_removed?: string|number, outcome?: string }>;
+    launchCommandInvoked: GleanEventWithExtras<{ auth_provider?: string, fxa?: string|boolean, new_window?: string|boolean, trigger?: string }>;
     linkClick: GleanEventWithExtras<{ chat_id?: string, location?: string, message_seq?: string|number }>;
-    llmajBasedTelemetry: GleanEventWithExtras<{ attribute_name?: string, attribute_value?: string, chat_id?: string, chat_version?: string, model?: string, record_type?: string, telemetry_name?: string, telemetry_version?: string, trigger_sampled?: string|boolean, trigger_sampling_probability?: string|number, triggers?: string, turn_number?: string|number, uniform_sampled?: string|boolean, uniform_sampling_probability?: string|number }>;
+    llmajBasedTelemetry: GleanEventWithExtras<{ attribute_name?: string, attribute_value?: string, chat_id?: string, chat_version?: string, judge_model?: string, model?: string, record_type?: string, telemetry_name?: string, telemetry_version?: string, trigger_sampled?: string|boolean, trigger_sampling_probability?: string|number, triggers?: string, turn_number?: string|number, uniform_sampled?: string|boolean, uniform_sampling_probability?: string|number }>;
     memoriesCount: Record<"conversation"|"history"|"session", GleanQuantity>;
+    memoriesGenerationRun: GleanEventWithExtras<{ chat_messages_kept?: string|number, chat_messages_pulled?: string|number, error_stage?: string, error_type?: string, filter_dropped?: string|number, generation_batches?: string|number, generation_batches_skipped?: string|number, generation_candidates?: string|number, generation_triggered?: string|boolean, history_rows_kept?: string|number, history_rows_pulled?: string|number, is_first_run?: string|boolean, memories_after?: string|number, memories_before?: string|number, merge_components_removed?: string|number, merge_groups_proposed?: string|number, merge_groups_saved?: string|number, merge_status?: string, outcome?: string, save_new?: string|number, save_updated?: string|number, sessions_built?: string|number, sessions_processed?: string|number, sessions_processed_events?: string|number, sessions_processed_events_max?: string|number, sessions_processed_events_min?: string|number, sessions_skipped?: string|number }>;
     memoriesLastUpdated: GleanDatetime;
+    memoriesMaintenanceRun: GleanEventWithExtras<{ demoted_to_long_term?: string|number, demoted_to_short_term?: string|number, error_type?: string, memories_after?: string|number, memories_aged?: string|number, memories_before?: string|number, memories_decayed?: string|number, memories_skipped?: string|number, outcome?: string, promoted_to_durable?: string|number, promoted_to_long_term?: string|number, soft_deleted_removed?: string|number }>;
     memoriesNuke: GleanEventNoExtras;
     memoriesOptin: Record<"generate_from_conversation"|"generate_from_history", GleanBoolean>;
     memoriesPanelDisplayed: GleanEventWithExtras<{ memories?: string|number, source?: string }>;
@@ -336,7 +345,7 @@ interface GleanImpl {
     mentionStart: GleanEventWithExtras<{ chat_id?: string, location?: string, mentions_available?: string|number, message_seq?: string|number }>;
     model: GleanString;
     modelRequest: GleanEventWithExtras<{ chat_id?: string, detected_intent?: string, intent?: string, location?: string, memories?: string|number, message_seq?: string|number, request_id?: string, tokens?: string|number }>;
-    modelResponse: GleanEventWithExtras<{ chat_id?: string, duration?: string|number, error?: string, http_status?: string|number, intent?: string, is_retry?: string|boolean, latency?: string|number, location?: string, memories?: string|number, message_seq?: string|number, model?: string, request_id?: string, tokens?: string|number }>;
+    modelResponse: GleanEventWithExtras<{ auth_provider?: string, chat_id?: string, duration?: string|number, error?: string, http_status?: string|number, intent?: string, is_retry?: string|boolean, latency?: string|number, location?: string, memories?: string|number, message_seq?: string|number, model?: string, request_id?: string, tokens?: string|number }>;
     navigateSubmit: GleanEventWithExtras<{ chat_id?: string, detected_intent?: string, length?: string|number, location?: string, message_seq?: string|number, model?: string, submit_type?: string }>;
     onboardingBackNavigate: GleanEventWithExtras<{ message_id?: string }>;
     onboardingComplete: GleanEventWithExtras<{ memory_source?: string, model?: string, setdefault_source?: string }>;
@@ -347,11 +356,14 @@ interface GleanImpl {
     onboardingScreenImpression: GleanEventWithExtras<{ message_id?: string }>;
     onboardingSetdefaultNavigate: GleanEventWithExtras<{ source?: string }>;
     onboardingSetdefaultSettings: GleanEventWithExtras<{ source?: string }>;
-    openWindow: GleanEventWithExtras<{ fxa?: string|boolean, onboarding?: string|boolean, opened_tabs?: string|number, trigger?: string }>;
+    openWindow: GleanEventWithExtras<{ auth_provider?: string, fxa?: string|boolean, onboarding?: string|boolean, opened_tabs?: string|number, trigger?: string }>;
     quickPromptClicked: GleanEventWithExtras<{ chat_id?: string, location?: string, message_seq?: string|number, starter?: string|boolean, starter_type?: string }>;
     quickPromptDismissed: GleanEventWithExtras<{ chat_id?: string }>;
     quickPromptDisplayed: GleanEventWithExtras<{ chat_id?: string, location?: string, message_seq?: string|number, prompts?: string|number, resume_prompts?: string|number }>;
     removeTab: GleanEventWithExtras<{ chat_id?: string, location?: string, message_seq?: string|number, tabs_selected?: string|number }>;
+    resumeCardAction: GleanEventWithExtras<{ action?: string, chat_id?: string, location?: string, message_seq?: string|number, position?: string|number }>;
+    resumeCardsDisplayed: GleanEventWithExtras<{ cards?: string|number, chat_id?: string, location?: string, message_seq?: string|number, state?: string, total_cards?: string|number }>;
+    resumeSectionAction: GleanEventWithExtras<{ action?: string, chat_id?: string, location?: string, message_seq?: string|number }>;
     retryNoMemories: GleanEventWithExtras<{ chat_id?: string, location?: string, message_seq?: string|number }>;
     searchHandoff: GleanEventWithExtras<{ chat_id?: string, location?: string, message_seq?: string|number, model?: string, provider?: string }>;
     searchSubmit: GleanEventWithExtras<{ chat_id?: string, detected_intent?: string, length?: string|number, location?: string, message_seq?: string|number, model?: string, provider?: string, submit_type?: string }>;
@@ -361,9 +373,14 @@ interface GleanImpl {
     settingsModel: GleanEventWithExtras<{ new_model?: string, previous_model?: string }>;
     sidebarClose: GleanEventWithExtras<{ chat_id?: string, message_seq?: string|number }>;
     sidebarOpen: GleanEventWithExtras<{ chat_id?: string, message_seq?: string|number }>;
-    signinFlowCompleted: GleanEventWithExtras<{ outcome?: string }>;
-    signinFlowStarted: GleanEventWithExtras<{ reason?: string }>;
+    sidebarOpenByDefault: GleanBoolean;
+    sidebarOpenByDefaultChange: GleanEventWithExtras<{ enabled?: string|boolean }>;
+    signinFlowCompleted: GleanEventWithExtras<{ auth_provider?: string, outcome?: string }>;
+    signinFlowStarted: GleanEventWithExtras<{ auth_provider?: string, reason?: string }>;
     tabsOpened: GleanCounter;
+    timeToFirstActionLog: GleanEventWithExtras<{ chat_id?: string, context_length?: string|number, context_message_count?: string|number, latency?: string|number, location?: string, message_seq?: string|number, model?: string, request_id?: string, turn_index?: string|number }>;
+    timeToFirstCharacter: GleanEventWithExtras<{ chat_id?: string, context_length?: string|number, context_message_count?: string|number, latency?: string|number, location?: string, message_seq?: string|number, model?: string, request_id?: string, turn_index?: string|number }>;
+    timeToTurnComplete: GleanEventWithExtras<{ chat_id?: string, context_length?: string|number, context_message_count?: string|number, duration?: string|number, location?: string, message_seq?: string|number, model?: string, output_tokens?: string|number, request_id?: string, tool_call_count?: string|number, turn_index?: string|number }>;
     toolCall: GleanEventWithExtras<{ chat_id?: string, error?: string, location?: string, message_seq?: string|number, model?: string, prompt_version?: string, tool_name?: string }>;
     topsitesClick: GleanEventWithExtras<{ position?: string|number, visible_topsites?: string|number }>;
     topsitesEnabled: GleanBoolean;
@@ -541,8 +558,31 @@ interface GleanImpl {
     breachAlertDiscoveredMonitor: GleanEventNoExtras;
     breachAlertDismissed: GleanEventWithExtras<{ breach_status?: string }>;
     breachAlertShieldAnimated: GleanEventWithExtras<{ breach_status?: string }>;
-    opened: GleanEventWithExtras<{ breach_status?: string, trackers_blocked?: string|boolean }>;
+    clearCookiesCancelled: GleanEventNoExtras;
+    clearCookiesConfirmed: GleanEventNoExtras;
+    clearCookiesOpened: GleanEventNoExtras;
+    closed: GleanEventWithExtras<{ closing_reason?: string, duration_ms?: string|number, opening_reason?: string }>;
+    opened: GleanEventWithExtras<{ breach_status?: string, opening_reason?: string, smartblock_embed_toggles_shown?: string|boolean, trackers_blocked?: string|boolean }>;
+    securityInfoCertExceptionRemoved: GleanEventNoExtras;
+    securityInfoHttpsOnlyChanged: GleanEventWithExtras<{ setting?: string }>;
+    securityInfoOpened: GleanEventWithExtras<{ connection?: string }>;
+    securityInfoPageInfoOpened: GleanEventNoExtras;
+    smartblockToggled: GleanEventWithExtras<{ is_block?: string|boolean, opening_reason?: string, shim_id?: string }>;
     trackerCountShown: GleanEventWithExtras<{ first_site_load_in_tab?: string|boolean, first_visit?: string|boolean }>;
+    trackerCountToggled: GleanEventWithExtras<{ enabled?: string|boolean }>;
+    trackerListOpened: GleanEventNoExtras;
+  }
+
+  customize: {
+    opened: GleanEventWithExtras<{ entry_point?: string, tab_orientation?: string }>;
+    restoreDefaults: GleanEventNoExtras;
+    undoRestore: GleanEventNoExtras;
+  }
+
+  fireButton: {
+    activated: GleanEventWithExtras<{ flow?: string }>;
+    chooseClicked: GleanEventNoExtras;
+    flowCompleted: GleanEventWithExtras<{ flow?: string, outcome?: string, surface?: string }>;
   }
 
   browserCustomkeys: {
@@ -645,7 +685,15 @@ interface GleanImpl {
 
   selectionMenu: {
     actionClick: GleanEventWithExtras<{ action?: string, selection?: string|number, smart_window?: string|boolean }>;
+    copyEnabled: GleanBoolean;
+    dismissed: GleanEventWithExtras<{ duration?: string|number, interacted?: string|boolean, smart_window?: string|boolean }>;
     displayed: GleanEventWithExtras<{ delay?: string|number, selection?: string|number, smart_window?: string|boolean }>;
+    enabled: GleanBoolean;
+    menuClick: GleanEventWithExtras<{ item?: string }>;
+    menuShown: GleanEventWithExtras<{ ai?: string, copy?: string, search?: string }>;
+    optionToggled: GleanEventWithExtras<{ action?: string, enabled?: string|boolean, source?: string }>;
+    searchEnabled: GleanBoolean;
+    suppressed: GleanEventWithExtras<{ reason?: string }>;
   }
 
   ipprotection: {
@@ -659,6 +707,7 @@ interface GleanImpl {
     locationSelectorButtonClicked: GleanEventNoExtras;
     locationUpgradePromoClicked: GleanEventNoExtras;
     removedFromToolbar: GleanEventNoExtras;
+    rulesPageOpened: GleanEventWithExtras<{ entrypoint?: string }>;
     breakageMessageDismissed: GleanEventNoExtras;
     breakageMessageShown: GleanEventNoExtras;
     error: GleanEventWithExtras<{ reason?: string, source?: string }>;
@@ -743,7 +792,6 @@ interface GleanImpl {
   }
 
   launchOnLogin: {
-    lastProfileDisableStartup: GleanEventNoExtras;
     userToggle: GleanEventWithExtras<{ enabled?: string|boolean }>;
   }
 
@@ -779,6 +827,7 @@ interface GleanImpl {
     httpsOnlyModeUpgradeTime: Record<"sub_f_aborted"|"sub_f_cxnrefused"|"sub_f_other"|"sub_f_redirectloop"|"sub_f_ssl_badcertdm"|"sub_f_ssl_other"|"sub_f_ssl_selfsignd"|"sub_f_ssl_unkwnissr"|"sub_f_timeout"|"sub_successful"|"top_f_aborted"|"top_f_cxnrefused"|"top_f_other"|"top_f_redirectloop"|"top_f_ssl_badcertdm"|"top_f_ssl_other"|"top_f_ssl_selfsignd"|"top_f_ssl_unkwnissr"|"top_f_timeout"|"top_successful", GleanTimingDistribution>;
     httpsOnlyModeUpgradeType: GleanDualLabeledCounter;
     javascriptLoadParentProcess: GleanEventWithExtras<{ fileinfo?: string, value?: string }>;
+    trustedTypesReadiness: Record<"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-0"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-0"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-0"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-0"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-0"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-0"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-0"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-0"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-0"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-string_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-none_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-string_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-sub_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-0"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-0"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-0"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-0"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-0"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-0"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-0"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-0"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-0"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-none_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-string_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-none_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-none_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-string_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-string_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-none_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-string_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-enforce_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-none_strictcsp-report_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-enforce_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-enforce_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-none_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-none_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-none_created-1_used-1_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-report_created-0_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-report_created-0_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-0_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-0_lib-1_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-1_lib-0_js-1"|"doc-top_htmlsink-trusted_writesink-trusted_ttcsp-report_strictcsp-report_created-1_used-1_lib-1_js-1", GleanCounter>;
     unexpectedLoad: GleanEventWithExtras<{ contenttype?: string, filedetails?: string, redirects?: string, remotetype?: string, value?: string }>;
     prefUsageContentProcess: GleanEventWithExtras<{ value?: string }>;
     addonSignatureVerificationStatus: GleanCustomDistribution;
@@ -806,7 +855,7 @@ interface GleanImpl {
   }
 
   taskbar: {
-    pinWinrt: GleanEventWithExtras<{ result?: string }>;
+    pinWinrt: GleanEventWithExtras<{ com_fallback?: string|boolean, hresult?: string, result?: string }>;
   }
 
   upgradeDialog: {
@@ -814,15 +863,20 @@ interface GleanImpl {
   }
 
   browserMigration: {
+    bookmarksImportDuration: Record<string, GleanTimingDistribution>;
     bookmarksQuantity: Record<string, GleanCustomDistribution>;
     browserSelectedWizard: GleanEventWithExtras<{ migrator_key?: string }>;
+    cardsImportDuration: Record<string, GleanTimingDistribution>;
     cardsQuantity: Record<string, GleanCustomDistribution>;
     chromePasswordFileWizard: GleanEventNoExtras;
     entryPointCategorical: Record<"bookmarks_toolbar"|"file_menu"|"firstrun"|"fxrefresh"|"help_menu"|"newtab"|"passwords"|"places"|"preferences"|"unknown", GleanCounter>;
     errors: Record<string, GleanCustomDistribution>;
+    extensionsImportDuration: Record<string, GleanTimingDistribution>;
     extensionsQuantity: Record<string, GleanCustomDistribution>;
+    historyImportDuration: Record<string, GleanTimingDistribution>;
     historyQuantity: Record<string, GleanCustomDistribution>;
     linuxPermsWizard: GleanEventWithExtras<{ migrator_key?: string }>;
+    loginsImportDuration: Record<string, GleanTimingDistribution>;
     loginsQuantity: Record<string, GleanCustomDistribution>;
     matchedExtensions: GleanStringList;
     migrationFinishedWizard: GleanEventWithExtras<{ bookmarks?: string, extensions?: string, formdata?: string, history?: string, migrator_key?: string, other?: string|number, passwords?: string, payment_methods?: string }>;
@@ -830,6 +884,7 @@ interface GleanImpl {
     noBrowsersFoundWizard: GleanEventNoExtras;
     openedWizard: GleanEventNoExtras;
     profileSelectedWizard: GleanEventWithExtras<{ migrator_key?: string }>;
+    resourceMigrated: GleanEventWithExtras<{ available?: string|number, entrypoint?: string, migrated?: string|number, migrator_key?: string, resource_type?: string }>;
     resourcesSelectedWizard: GleanEventWithExtras<{ bookmarks?: string, configured?: string, extensions?: string, formdata?: string, history?: string, migrator_key?: string, other?: string|number, passwords?: string, payment_methods?: string }>;
     safariPasswordFileWizard: GleanEventNoExtras;
     safariPermsWizard: GleanEventNoExtras;
@@ -879,7 +934,7 @@ interface GleanImpl {
     carouselNavigate: GleanEventWithExtras<{ direction?: string, newtab_visit_id?: string, section?: string, section_position?: string, slide_index?: string|number }>;
     carouselToggleAutoplay: GleanEventWithExtras<{ newtab_visit_id?: string, paused?: string|boolean, section?: string, section_position?: string }>;
     closed: GleanEventWithExtras<{ newtab_visit_id?: string }>;
-    customizePanelOpen: GleanEventWithExtras<{ newtab_visit_id?: string }>;
+    customizePanelOpen: GleanEventWithExtras<{ newtab_visit_id?: string, source?: string, subpanel?: string }>;
     customizePanelSubpanelOpen: GleanEventWithExtras<{ newtab_visit_id?: string, panel?: string }>;
     dwellTime: GleanTimingDistribution;
     featureHighlightDismiss: GleanEventWithExtras<{ feature?: string, newtab_visit_id?: string }>;
@@ -934,18 +989,20 @@ interface GleanImpl {
     weatherOpenProviderUrl: GleanEventWithExtras<{ newtab_visit_id?: string }>;
     weatherOptInSelection: GleanEventWithExtras<{ newtab_visit_id?: string, user_selection?: string }>;
     widgetsContainerAction: GleanEventWithExtras<{ action_type?: string, action_value?: string, newtab_visit_id?: string, widget_size?: string }>;
-    widgetsEnabled: GleanEventWithExtras<{ enabled?: string|boolean, newtab_visit_id?: string, widget_name?: string, widget_size?: string, widget_source?: string }>;
+    widgetsEnabled: GleanEventWithExtras<{ enabled?: string|boolean, newtab_visit_id?: string, widget_name?: string, widget_size?: string, widget_source?: string, widget_variant?: string }>;
     widgetsEnabledList: GleanStringList;
-    widgetsError: GleanEventWithExtras<{ error_type?: string, newtab_visit_id?: string, widget_name?: string, widget_size?: string }>;
-    widgetsImpression: GleanEventWithExtras<{ newtab_visit_id?: string, widget_name?: string, widget_size?: string }>;
+    widgetsError: GleanEventWithExtras<{ error_type?: string, newtab_visit_id?: string, widget_name?: string, widget_size?: string, widget_variant?: string }>;
+    widgetsHomeList: GleanStringList;
+    widgetsImpression: GleanEventWithExtras<{ newtab_visit_id?: string, widget_location?: string, widget_name?: string, widget_size?: string, widget_variant?: string }>;
     widgetsListsChangeDisplay: GleanEventWithExtras<{ display_status?: string|boolean, newtab_visit_id?: string }>;
     widgetsListsImpression: GleanEventWithExtras<{ newtab_visit_id?: string }>;
     widgetsListsUserEvent: GleanEventWithExtras<{ newtab_visit_id?: string, user_action?: string }>;
+    widgetsReady: GleanEventWithExtras<{ newtab_visit_id?: string, widget_location?: string, widget_name?: string, widget_size?: string, widget_variant?: string }>;
     widgetsTimerChangeDisplay: GleanEventWithExtras<{ display_status?: string|boolean, newtab_visit_id?: string }>;
     widgetsTimerImpression: GleanEventWithExtras<{ newtab_visit_id?: string }>;
     widgetsTimerToggleNotification: GleanEventWithExtras<{ display_status?: string|boolean, newtab_visit_id?: string }>;
     widgetsTimerUserEvent: GleanEventWithExtras<{ newtab_visit_id?: string, user_action?: string }>;
-    widgetsUserEvent: GleanEventWithExtras<{ action_value?: string, newtab_visit_id?: string, user_action?: string, widget_name?: string, widget_size?: string, widget_source?: string }>;
+    widgetsUserEvent: GleanEventWithExtras<{ action_value?: string, newtab_visit_id?: string, user_action?: string, widget_location?: string, widget_name?: string, widget_size?: string, widget_source?: string, widget_variant?: string }>;
   }
 
   newtabSearch: {
@@ -954,7 +1011,7 @@ interface GleanImpl {
   }
 
   newtabContent: {
-    click: GleanEventWithExtras<{ corpus_item_id?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, layout_name?: string, matches_selected_topic?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section?: string, section_position?: string, selected_topics?: string, source_section_id?: string, topic?: string, variant_id?: string|number }>;
+    click: GleanEventWithExtras<{ corpus_item_id?: string, dwell_time?: string|number, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, layout_name?: string, matches_selected_topic?: string, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section?: string, section_position?: string, selected_topics?: string, source_section_id?: string, topic?: string, variant_id?: string|number }>;
     coarseOs: GleanString;
     country: GleanString;
     dismiss: GleanEventWithExtras<{ corpus_item_id?: string, format?: string, is_section_followed?: string|boolean, is_sponsored?: string|boolean, position?: string|number, received_rank?: string|number, recommended_at?: string|number, scheduled_corpus_item_id?: string, section?: string, section_position?: string }>;
@@ -971,7 +1028,10 @@ interface GleanImpl {
     sectionsImpression: GleanEventWithExtras<{ is_section_followed?: string|boolean, layout_name?: string, section?: string, section_position?: string }>;
     sectionsUnblockSection: GleanEventWithExtras<{ event_source?: string, section?: string, section_position?: string }>;
     sectionsUnfollowSection: GleanEventWithExtras<{ event_source?: string, section?: string, section_position?: string }>;
+    storiesFeedResult: Record<"bad_response"|"endpoint_disallowed"|"http_4xx"|"http_5xx"|"network"|"ohttp_config"|"success"|"timeout", GleanCounter>;
+    storiesFeedState: GleanString;
     surfaceId: GleanString;
+    surfaceIdRejected: GleanEventNoExtras;
     topSitesClick: GleanEventWithExtras<{ advertiser_name?: string, frecency_boosted?: string|boolean, frecency_boosted_has_exposure?: string|boolean, is_sponsored?: string|boolean, position?: string|number, visible_topsites?: string|number }>;
     topSitesDismiss: GleanEventWithExtras<{ advertiser_name?: string, is_sponsored?: string|boolean, position?: string|number }>;
     topSitesImpression: GleanEventWithExtras<{ advertiser_name?: string, frecency_boosted?: string|boolean, frecency_boosted_has_exposure?: string|boolean, is_sponsored?: string|boolean, position?: string|number, visible_topsites?: string|number }>;
@@ -1043,17 +1103,11 @@ interface GleanImpl {
   }
 
   intlUiBrowserLanguage: {
-    acceptDialog: GleanEventWithExtras<{ value?: string }>;
     addDialog: GleanEventWithExtras<{ installId?: string, value?: string }>;
     applyMain: GleanEventNoExtras;
-    cancelDialog: GleanEventWithExtras<{ value?: string }>;
     manageMain: GleanEventWithExtras<{ value?: string }>;
-    removeDialog: GleanEventWithExtras<{ value?: string }>;
-    reorderDialog: GleanEventWithExtras<{ value?: string }>;
     reorderMain: GleanEventNoExtras;
-    searchDialog: GleanEventWithExtras<{ value?: string }>;
     searchMain: GleanEventWithExtras<{ value?: string }>;
-    setFallbackDialog: GleanEventWithExtras<{ value?: string }>;
   }
 
   networkProxySettings: {
@@ -1286,6 +1340,7 @@ interface GleanImpl {
 
   sapImpressionCounts: {
     contextmenuVisual: Record<string, GleanCounter>;
+    textSelection: Record<string, GleanCounter>;
   }
 
   searchbar: {
@@ -1350,6 +1405,7 @@ interface GleanImpl {
     startupSessionAutoRestored: GleanEventWithExtras<{ new_tab_action?: string }>;
     startupSessionAvailability: GleanEventWithExtras<{ clean?: string, clean_backup?: string, format?: string, origin?: string, recovery?: string, recovery_backup?: string, restarted_by_os?: string|boolean, resume_from_crash?: string|boolean, resume_session_once?: string|boolean, resuming_after_os_restart?: string|boolean, startup_page_is_resume?: string|boolean, upgrade_backup?: string }>;
     startupSessionDecision: GleanEventWithExtras<{ action?: string, init_error?: string, interstitial_reason?: string, permanent_private?: string|boolean, previous_session_crashed?: string|boolean, resume_reason?: string, session_type?: string }>;
+    startupSessionOutcome: GleanEventWithExtras<{ outcome?: string }>;
     startupTimeline: Record<"sessionRestoreInitialized"|"sessionRestoreRestoring", GleanQuantity>;
     windowFeaturesMismatchIgnored: GleanEventWithExtras<{ entry_point?: string, existing_features?: string, requested_features?: string }>;
     writeAttempts: GleanCounter;
@@ -1526,7 +1582,7 @@ interface GleanImpl {
   tab: {
     actions: Record<"activate"|"adopt"|"close"|"detach"|"move"|"pin"|"unpin", GleanCounter>;
     interaction: GleanEventWithExtras<{ action?: string, layout?: string, source?: string, tab_count?: string|number }>;
-    staleDragRecovery: Record<"session_ended"|"session_ended_after_drop"|"session_live"|"session_live_after_drop", GleanCounter>;
+    staleDragRecovery: Record<"session_ended"|"session_live", GleanCounter>;
     tabCount: Record<"activate"|"adopt"|"close"|"detach"|"move"|"pin"|"unpin", GleanCounter>;
   }
 
@@ -1609,13 +1665,13 @@ interface GleanImpl {
   }
 
   urlbar: {
-    abandonment: GleanEventWithExtras<{ abandonment_type?: string, actions?: string, available_semantic_sources?: string, chat_id?: string, groups?: string, intent?: string, interaction?: string, location?: string, model?: string, n_chars?: string|number, n_results?: string|number, n_words?: string|number, results?: string, sap?: string, search_engine_default_id?: string, search_mode?: string, window_mode?: string }>;
+    abandonment: GleanEventWithExtras<{ abandonment_type?: string, actions?: string, available_semantic_sources?: string, chat_id?: string, groups?: string, intent?: string, interaction?: string, location?: string, model?: string, n_chars?: string|number, n_results?: string|number, n_words?: string|number, results?: string, sap?: string, search_engine_default_id?: string, search_mode?: string, semantic_distances?: string, window_mode?: string }>;
     autocompleteFirstResultTime: GleanTimingDistribution;
     autocompleteSixthResultTime: GleanTimingDistribution;
     autofillDeletion: GleanCounter;
     bounce: GleanEventWithExtras<{ chat_id?: string, engagement_type?: string, intent?: string, interaction?: string, location?: string, model?: string, n_chars?: string|number, n_results?: string|number, n_words?: string|number, provider?: string, results?: string, sap?: string, search_engine_default_id?: string, search_mode?: string, selected_position?: string|number, selected_result?: string, threshold?: string|number, view_time?: string|number, window_mode?: string }>;
     disable: GleanEventWithExtras<{ chat_id?: string, feature?: string, intent?: string, interaction?: string, location?: string, model?: string, n_chars?: string|number, n_results?: string|number, n_words?: string|number, results?: string, sap?: string, search_engine_default_id?: string, search_mode?: string, selected_result?: string, window_mode?: string }>;
-    engagement: GleanEventWithExtras<{ actions?: string, available_semantic_sources?: string, chat_id?: string, engagement_type?: string, groups?: string, intent?: string, interaction?: string, location?: string, model?: string, modifiers?: string, n_chars?: string|number, n_results?: string|number, n_words?: string|number, provider?: string, results?: string, sap?: string, search_engine_default_id?: string, search_mode?: string, selected_position?: string|number, selected_result?: string, window_mode?: string }>;
+    engagement: GleanEventWithExtras<{ actions?: string, available_semantic_sources?: string, chat_id?: string, engagement_type?: string, groups?: string, intent?: string, interaction?: string, location?: string, model?: string, modifiers?: string, n_chars?: string|number, n_results?: string|number, n_words?: string|number, provider?: string, results?: string, sap?: string, search_engine_default_id?: string, search_mode?: string, selected_position?: string|number, selected_result?: string, semantic_distances?: string, window_mode?: string }>;
     exposure: GleanEventWithExtras<{ results?: string, sap?: string, terminal?: string }>;
     heuristicResultMissing: GleanRate;
     keywordExposure: GleanEventWithExtras<{ keyword?: string, result?: string, sap?: string, terminal?: string|boolean }>;
@@ -1675,6 +1731,8 @@ interface GleanImpl {
   browserSanitizer: {
     cache: GleanTimingDistribution;
     cookies: GleanTimingDistribution;
+    dialogClosed: GleanEventWithExtras<{ entry_point?: string, outcome?: string }>;
+    dialogOpened: GleanEventWithExtras<{ entry_point?: string }>;
     downloads: GleanTimingDistribution;
     formdata: GleanTimingDistribution;
     history: GleanTimingDistribution;
@@ -1738,7 +1796,9 @@ interface GleanImpl {
   }
 
   themePicker: {
+    appearance: GleanString;
     change: GleanEventWithExtras<{ appearance?: string, layout?: string, native_theme?: string|boolean, property?: string, session?: string, source?: string, theme_id?: string }>;
+    nativeTheme: GleanBoolean;
     shown: GleanEventWithExtras<{ layout?: string, session?: string, source?: string }>;
   }
 
@@ -1797,7 +1857,7 @@ interface GleanImpl {
     customTimeActive: GleanTimingDistribution;
     domOpenedCount: GleanCounter;
     domTimeActive: GleanTimingDistribution;
-    entryPoint: Record<"CommandLine"|"ContextMenu"|"HamburgerMenu"|"KeyShortcut"|"SessionRestore"|"SlowScript"|"SystemMenu", GleanCounter>;
+    entryPoint: Record<"CommandLine"|"ContextMenu"|"HamburgerMenu"|"KeyShortcut"|"SessionRestore"|"SystemMenu", GleanCounter>;
     eyedropperOpenedCount: GleanCounter;
     flexboxHighlighterTimeActive: GleanTimingDistribution;
     fontinspectorOpenedCount: GleanCounter;
@@ -2025,7 +2085,7 @@ interface GleanImpl {
   }
 
   bfcache: {
-    combo: Record<"BFCache_Success"|"Beforeunload"|"Other"|"Remote_Subframes"|"Req"|"SPD_Unload_Req_Peer"|"Success_Not_Toplevel"|"Unload"|"Unload_Req"|"Unload_Req_MSE"|"Unload_Req_Peer"|"Unload_Req_Peer_MSE", GleanCounter>;
+    combo: Record<"BFCache_Success"|"Beforeunload"|"Other"|"Page_Loading"|"Remote_Subframes"|"Req"|"SPD_Unload_Req_Peer"|"Success_Not_Toplevel"|"Unload"|"Unload_Req"|"Unload_Req_MSE"|"Unload_Req_Peer"|"Unload_Req_Peer_MSE", GleanCounter>;
     pageRestored: Record<"false"|"true", GleanCounter>;
   }
 
@@ -2142,6 +2202,7 @@ interface GleanImpl {
     cssBorderRightColor: GleanCounter;
     cssBorderRightStyle: GleanCounter;
     cssBorderRightWidth: GleanCounter;
+    cssBorderShape: GleanCounter;
     cssBorderSpacing: GleanCounter;
     cssBorderStartEndRadius: GleanCounter;
     cssBorderStartStartRadius: GleanCounter;
@@ -2225,6 +2286,7 @@ interface GleanImpl {
     cssFillOpacity: GleanCounter;
     cssFillRule: GleanCounter;
     cssFilter: GleanCounter;
+    cssFitTolerance: GleanCounter;
     cssFlex: GleanCounter;
     cssFlexBasis: GleanCounter;
     cssFlexDirection: GleanCounter;
@@ -2235,6 +2297,7 @@ interface GleanImpl {
     cssFloat: GleanCounter;
     cssFloodColor: GleanCounter;
     cssFloodOpacity: GleanCounter;
+    cssFlowTolerance: GleanCounter;
     cssFont: GleanCounter;
     cssFontFamily: GleanCounter;
     cssFontFeatureSettings: GleanCounter;
@@ -2547,6 +2610,7 @@ interface GleanImpl {
     cssTextAlignLast: GleanCounter;
     cssTextAnchor: GleanCounter;
     cssTextAutospace: GleanCounter;
+    cssTextAutospaceSize: GleanCounter;
     cssTextBox: GleanCounter;
     cssTextBoxEdge: GleanCounter;
     cssTextBoxTrim: GleanCounter;
@@ -2880,6 +2944,7 @@ interface GleanImpl {
     cssBorderRightColor: GleanCounter;
     cssBorderRightStyle: GleanCounter;
     cssBorderRightWidth: GleanCounter;
+    cssBorderShape: GleanCounter;
     cssBorderSpacing: GleanCounter;
     cssBorderStartEndRadius: GleanCounter;
     cssBorderStartStartRadius: GleanCounter;
@@ -2963,6 +3028,7 @@ interface GleanImpl {
     cssFillOpacity: GleanCounter;
     cssFillRule: GleanCounter;
     cssFilter: GleanCounter;
+    cssFitTolerance: GleanCounter;
     cssFlex: GleanCounter;
     cssFlexBasis: GleanCounter;
     cssFlexDirection: GleanCounter;
@@ -2973,6 +3039,7 @@ interface GleanImpl {
     cssFloat: GleanCounter;
     cssFloodColor: GleanCounter;
     cssFloodOpacity: GleanCounter;
+    cssFlowTolerance: GleanCounter;
     cssFont: GleanCounter;
     cssFontFamily: GleanCounter;
     cssFontFeatureSettings: GleanCounter;
@@ -3285,6 +3352,7 @@ interface GleanImpl {
     cssTextAlignLast: GleanCounter;
     cssTextAnchor: GleanCounter;
     cssTextAutospace: GleanCounter;
+    cssTextAutospaceSize: GleanCounter;
     cssTextBox: GleanCounter;
     cssTextBoxEdge: GleanCounter;
     cssTextBoxTrim: GleanCounter;
@@ -3538,6 +3606,9 @@ interface GleanImpl {
     externalAddSearchProvider: GleanCounter;
     formSubmissionUntrustedEvent: GleanCounter;
     fullscreenAttribute: GleanCounter;
+    gamepadHand: GleanCounter;
+    gamepadHapticActuators: GleanCounter;
+    gamepadPose: GleanCounter;
     gwtrichTextAreaCompatHack: GleanCounter;
     idbindexMozGetAll: GleanCounter;
     idbindexMozGetAllKeys: GleanCounter;
@@ -3574,6 +3645,7 @@ interface GleanImpl {
     proximityEvent: GleanCounter;
     rtcpeerConnectionGetStreams: GleanCounter;
     svgdeselectAll: GleanCounter;
+    svguseInlineEventHandler: GleanCounter;
     syncXmlhttpRequestDeprecated: GleanCounter;
     useOfCaptureEvents: GleanCounter;
     useOfReleaseEvents: GleanCounter;
@@ -3597,6 +3669,9 @@ interface GleanImpl {
     externalAddSearchProvider: GleanCounter;
     formSubmissionUntrustedEvent: GleanCounter;
     fullscreenAttribute: GleanCounter;
+    gamepadHand: GleanCounter;
+    gamepadHapticActuators: GleanCounter;
+    gamepadPose: GleanCounter;
     gwtrichTextAreaCompatHack: GleanCounter;
     idbindexMozGetAll: GleanCounter;
     idbindexMozGetAllKeys: GleanCounter;
@@ -3633,6 +3708,7 @@ interface GleanImpl {
     proximityEvent: GleanCounter;
     rtcpeerConnectionGetStreams: GleanCounter;
     svgdeselectAll: GleanCounter;
+    svguseInlineEventHandler: GleanCounter;
     syncXmlhttpRequestDeprecated: GleanCounter;
     useOfCaptureEvents: GleanCounter;
     useOfReleaseEvents: GleanCounter;
@@ -3641,6 +3717,9 @@ interface GleanImpl {
   }
 
   useCounterDoc: {
+    akamaiForbidden: GleanCounter;
+    akamaiUsed: GleanCounter;
+    akamaiWafBlocked: GleanCounter;
     componentsShimResolved: GleanCounter;
     consoleAssert: GleanCounter;
     consoleClear: GleanCounter;
@@ -3693,6 +3772,8 @@ interface GleanImpl {
     documentQueryCommandStateOrValueInsertBrOnReturn: GleanCounter;
     documentQueryCommandSupportedOrEnabledContentReadOnly: GleanCounter;
     documentQueryCommandSupportedOrEnabledInsertBrOnReturn: GleanCounter;
+    domparserFastPath: GleanCounter;
+    domparserFastPathRejected: GleanCounter;
     domparserParsefromstring: GleanCounter;
     editContextCanvas: GleanCounter;
     editcontextConstructor: GleanCounter;
@@ -3763,6 +3844,8 @@ interface GleanImpl {
     htmldocumentXmlstandalone: GleanCounter;
     htmldocumentXmlversion: GleanCounter;
     htmlvideoelementRequestpictureinpicture: GleanCounter;
+    innerHtmlFastPath: GleanCounter;
+    innerHtmlFastPathRejected: GleanCounter;
     invalidTextDirectives: GleanCounter;
     jsDateparse: GleanCounter;
     jsDateparseImplDef: GleanCounter;
@@ -3853,6 +3936,8 @@ interface GleanImpl {
     navigationtransitionFromSetter: GleanCounter;
     navigationtransitionNavigationtypeGetter: GleanCounter;
     navigationtransitionNavigationtypeSetter: GleanCounter;
+    navigationtransitionToGetter: GleanCounter;
+    navigationtransitionToSetter: GleanCounter;
     navigatorMozgetusermedia: GleanCounter;
     navigatorRequestmidiaccess: GleanCounter;
     notificationoptionsActions: GleanCounter;
@@ -3909,6 +3994,7 @@ interface GleanImpl {
     speculationRulesEagernessEager: GleanCounter;
     speculationRulesEagernessImmediate: GleanCounter;
     speculationRulesEagernessModerate: GleanCounter;
+    speculationRulesHeader: GleanCounter;
     speculationRulesListSource: GleanCounter;
     speculationRulesPrefetch: GleanCounter;
     speculationRulesScriptTag: GleanCounter;
@@ -4079,6 +4165,9 @@ interface GleanImpl {
   }
 
   useCounterPage: {
+    akamaiForbidden: GleanCounter;
+    akamaiUsed: GleanCounter;
+    akamaiWafBlocked: GleanCounter;
     componentsShimResolved: GleanCounter;
     consoleAssert: GleanCounter;
     consoleClear: GleanCounter;
@@ -4131,6 +4220,8 @@ interface GleanImpl {
     documentQueryCommandStateOrValueInsertBrOnReturn: GleanCounter;
     documentQueryCommandSupportedOrEnabledContentReadOnly: GleanCounter;
     documentQueryCommandSupportedOrEnabledInsertBrOnReturn: GleanCounter;
+    domparserFastPath: GleanCounter;
+    domparserFastPathRejected: GleanCounter;
     domparserParsefromstring: GleanCounter;
     editContextCanvas: GleanCounter;
     editcontextConstructor: GleanCounter;
@@ -4201,6 +4292,8 @@ interface GleanImpl {
     htmldocumentXmlstandalone: GleanCounter;
     htmldocumentXmlversion: GleanCounter;
     htmlvideoelementRequestpictureinpicture: GleanCounter;
+    innerHtmlFastPath: GleanCounter;
+    innerHtmlFastPathRejected: GleanCounter;
     invalidTextDirectives: GleanCounter;
     jsDateparse: GleanCounter;
     jsDateparseImplDef: GleanCounter;
@@ -4291,6 +4384,8 @@ interface GleanImpl {
     navigationtransitionFromSetter: GleanCounter;
     navigationtransitionNavigationtypeGetter: GleanCounter;
     navigationtransitionNavigationtypeSetter: GleanCounter;
+    navigationtransitionToGetter: GleanCounter;
+    navigationtransitionToSetter: GleanCounter;
     navigatorMozgetusermedia: GleanCounter;
     navigatorRequestmidiaccess: GleanCounter;
     notificationoptionsActions: GleanCounter;
@@ -4347,6 +4442,7 @@ interface GleanImpl {
     speculationRulesEagernessEager: GleanCounter;
     speculationRulesEagernessImmediate: GleanCounter;
     speculationRulesEagernessModerate: GleanCounter;
+    speculationRulesHeader: GleanCounter;
     speculationRulesListSource: GleanCounter;
     speculationRulesPrefetch: GleanCounter;
     speculationRulesScriptTag: GleanCounter;
@@ -4766,6 +4862,7 @@ interface GleanImpl {
     networkFailures: Record<"network_ip"|"network_wifi_and_ip", GleanCounter>;
     networkLinkChange: Record<"changed"|"down"|"unknown"|"up", GleanCounter>;
     networkProvider: Record<"beacondb"|"google"|"other"|"unknown", GleanCounter>;
+    persistedCache: Record<"absent"|"adopted"|"rejected"|"superseded", GleanCounter>;
     requestActivation: Record<"full_activated"|"has_been_activated"|"none", GleanCounter>;
     requestResult: Record<"permission_denied"|"position_unavailable"|"success"|"timeout", GleanCounter>;
     windowsFailure: GleanDualLabeledCounter;
@@ -4993,6 +5090,7 @@ interface GleanImpl {
     fullscreenTransitionBlack: GleanTimingDistribution;
     gcInProgress: Record<string, GleanTimingDistribution>;
     gcSliceDuringIdle: GleanCustomDistribution;
+    registerProtocolHandlerCalls: GleanDualLabeledCounter;
     scriptLoadingSource: Record<"AltData"|"Inline"|"Source"|"SourceFallback", GleanCounter>;
     scriptMemoryCacheEverHit: GleanCustomDistribution;
     scriptMemoryCacheRefCount: GleanCustomDistribution;
@@ -5015,6 +5113,13 @@ interface GleanImpl {
     syncLaunch: GleanTimingDistribution;
   }
 
+  domFragmentParsing: {
+    domParser: Record<"fallback_over_100k"|"fallback_under_100k"|"fallback_under_10k"|"fallback_under_1k"|"fast_over_100k"|"fast_under_100k"|"fast_under_10k"|"fast_under_1k"|"full_over_100k"|"full_under_100k"|"full_under_10k"|"full_under_1k", GleanTimingDistribution>;
+    domParserFastPathRejected: Record<"over_100k"|"under_100k"|"under_10k"|"under_1k", GleanTimingDistribution>;
+    innerHtml: Record<"fallback_over_100k"|"fallback_under_100k"|"fallback_under_10k"|"fallback_under_1k"|"fast_over_100k"|"fast_under_100k"|"fast_under_10k"|"fast_under_1k"|"full_over_100k"|"full_under_100k"|"full_under_10k"|"full_under_1k", GleanTimingDistribution>;
+    innerHtmlFastPathRejected: Record<"over_100k"|"under_100k"|"under_10k"|"under_1k", GleanTimingDistribution>;
+  }
+
   domParentprocess: {
     privateWindowUsed: GleanBoolean;
     processLaunchErrors: Record<string, GleanCounter>;
@@ -5031,7 +5136,7 @@ interface GleanImpl {
     dnsFirstByte: Record<string, GleanTimingDistribution>;
     largestContentfulPaint: GleanTimingDistribution;
     largestContentfulPaintFromResponseStart: GleanTimingDistribution;
-    pageLoad: GleanEventWithExtras<{ android_app_link_launch_type?: string|number, android_app_link_to_navigation_start?: string|number, android_isolation_category?: string|number, cache_disposition?: string|number, delazify_time?: string|number, dns_lookup_time?: string|number, document_features?: string|number, fcp_time?: string|number, has_ssd?: string|boolean, http_ver?: string|number, inp_longest?: string|number, inp_p75?: string|number, inp_p98?: string|number, interaction_count?: string|number, is_active_client?: string|boolean, js_exec_time?: string|number, keypress_max_duration?: string|number, lcp_time?: string|number, load_time?: string|number, load_type?: string, loaded_in_foreground?: string|boolean, mouse_click?: string|number, network_type?: string|number, redirect_count?: string|number, redirect_time?: string|number, response_time?: string|number, same_origin_nav?: string|boolean, script_from_necko_serialized?: string|number, script_from_necko_text?: string|number, script_memory_cache_evicted_dirty?: string|number, script_memory_cache_revived?: string|number, script_memory_cache_use?: string|number, time_to_request_start?: string|number, tls_handshake_time?: string|number, trr_domain?: string, user_features?: string|number, using_webdriver?: string|boolean }>;
+    pageLoad: GleanEventWithExtras<{ android_app_link_launch_type?: string|number, android_app_link_to_navigation_start?: string|number, android_isolation_category?: string|number, cache_disposition?: string|number, delazify_time?: string|number, dns_lookup_time?: string|number, document_features?: string|number, fcp_time?: string|number, http_ver?: string|number, inp_longest?: string|number, inp_p75?: string|number, inp_p98?: string|number, interaction_count?: string|number, is_active_client?: string|boolean, js_exec_time?: string|number, keypress_max_duration?: string|number, lcp_time?: string|number, load_time?: string|number, load_type?: string, loaded_in_foreground?: string|boolean, mouse_click?: string|number, network_type?: string|number, proxy_type?: string|number, redirect_count?: string|number, redirect_time?: string|number, response_time?: string|number, same_origin_nav?: string|boolean, script_from_necko_serialized?: string|number, script_from_necko_text?: string|number, script_memory_cache_evicted_dirty?: string|number, script_memory_cache_revived?: string|number, script_memory_cache_use?: string|number, time_to_connect_start?: string|number, time_to_request_start?: string|number, tls_handshake_time?: string|number, trr_domain?: string, user_features?: string|number }>;
     pageLoadDomain: GleanEventWithExtras<{ app_version_major?: string|number, channel?: string, country?: string, document_features?: string|number, domain?: string, http_ver?: string|number, is_active_client?: string|boolean, is_first_daily_load?: string|boolean, lcp_time?: string|number, load_type?: string, loaded_in_foreground?: string|boolean, same_origin_nav?: string|boolean }>;
   }
 
@@ -5050,12 +5155,15 @@ interface GleanImpl {
     loadEventEnd: GleanTimingDistribution;
     loadEventStart: GleanTimingDistribution;
     toDomLoading: GleanTimingDistribution;
-    toFirstContentfulPaint: GleanTimingDistribution;
     responseStart: GleanTimingDistribution;
   }
 
+  speculationRules: {
+    prefetchTransferSize: Record<"incomplete"|"unused"|"used", GleanMemoryDistribution>;
+  }
+
   webNotification: {
-    clicked: GleanEventWithExtras<{ action?: string, site_category?: string }>;
+    clicked: GleanEventWithExtras<{ action?: string, app_state_before_click?: string, site_category?: string }>;
     dismissed: GleanEventWithExtras<{ site_category?: string }>;
     ignored: GleanEventWithExtras<{ site_category?: string }>;
     insecureContextPermissionRequest: GleanCounter;
@@ -5086,8 +5194,11 @@ interface GleanImpl {
   }
 
   quotamanager: {
+    hadTemporaryStorageUsageUnderflow: GleanBoolean;
     restoreOriginDirectoryMetadataCounter: GleanCounter;
-    storageSqliteCorruptionUnrecovered: Record<"persistent_storage"|"storage"|"temporary_storage", GleanCounter>;
+    storageInitCorruptionError: GleanDualLabeledCounter;
+    temporaryStorageUsageUnderflow: GleanEventWithExtras<{ call_site?: string, magnitude?: string|number }>;
+    usageUnderflow: GleanEventWithExtras<{ call_site?: string, client?: string, magnitude?: string|number }>;
   }
 
   quotamanagerInitializeRepository: {
@@ -5431,10 +5542,6 @@ interface GleanImpl {
     zonesCollected: GleanCustomDistribution;
   }
 
-  javascriptIon: {
-    compileTime: GleanTimingDistribution;
-  }
-
   scriptPreloader: {
     mainthreadRecompile: GleanCounter;
     waitTime: GleanTimingDistribution;
@@ -5467,6 +5574,8 @@ interface GleanImpl {
     pageLoadTime: GleanTimingDistribution;
     pageReloadTime: GleanTimingDistribution;
     perDocumentSiteOrigins: GleanCustomDistribution;
+    scrollCaptureOutcome: Record<"canceled"|"complete"|"failed"|"partial", GleanCounter>;
+    scrollCaptureTileResult: Record<"canceled_before"|"canceled_inflight"|"empty_rect"|"invalid_surface"|"no_metrics"|"outside_content"|"paint_error"|"success", GleanCounter>;
   }
 
   zeroByteLoad: {
@@ -5501,6 +5610,10 @@ interface GleanImpl {
     httpCacheEntryAliveTime: GleanTimingDistribution;
     httpCacheEntryReloadTime: GleanTimingDistribution;
     httpCacheEntryReuseCount: GleanCustomDistribution;
+    akamaiDocumentLoads: Record<"forbidden"|"ok"|"waf_blocked", GleanCounter>;
+    akamaiWafBlocked: GleanBoolean;
+    akamaiWafBlockedSubresource: GleanBoolean;
+    appleFastDatapathProbe: Record<"available"|"pref_disabled"|"probe_failed"|"socket_failed"|"symbols_missing", GleanCounter>;
     appleFastDatapathUsed: GleanBoolean;
     backgroundfilesaverThreadCount: GleanCustomDistribution;
     contentDecodingErrorReport: GleanEventWithExtras<{ error_type?: string, top_level_site?: string }>;
@@ -5683,7 +5796,6 @@ interface GleanImpl {
     echOutcome: Record<"GREASE"|"NONE"|"REAL", GleanCustomDistribution>;
     lateAck: Record<"ack"|"pto", GleanCustomDistribution>;
     lateAckRatio: Record<"ack"|"pto", GleanCustomDistribution>;
-    lossRatio: GleanCustomDistribution;
     receivedSentDgrams: Record<"received"|"sent", GleanCustomDistribution>;
     requestPerConn: GleanCustomDistribution;
     savedDgrams: GleanCustomDistribution;
@@ -5698,6 +5810,7 @@ interface GleanImpl {
     happyEyeballsCancelledAttemptCount: GleanCustomDistribution;
     happyEyeballsConnectionAttemptCount: Record<"failed"|"succeeded", GleanCustomDistribution>;
     happyEyeballsDnsAnswerSpread: GleanCustomDistribution;
+    happyEyeballsDnsAnswerSpreadV2: Record<"until_end"|"until_first_attempt", GleanTimingDistribution>;
     happyEyeballsDnsResolutionTime: Record<"a"|"aaaa"|"https", GleanCustomDistribution>;
     happyEyeballsEndToEndTimeFailed: GleanCustomDistribution;
     happyEyeballsEndToEndTimeSucceeded: GleanCustomDistribution;
@@ -5705,6 +5818,7 @@ interface GleanImpl {
     happyEyeballsH3DiscoveryByResolver: GleanDualLabeledCounter;
     happyEyeballsHttpsRrFeatures: Record<"ech"|"h3_alpn"|"ipv4hint"|"ipv6hint"|"total", GleanCounter>;
     happyEyeballsHttpsRrFeaturesByResolver: GleanDualLabeledCounter;
+    happyEyeballsLastAnswerToAttempt: Record<"address_negative"|"address_timeout"|"both_timeout"|"https_negative"|"https_timeout"|"no_wait", GleanCustomDistribution>;
     happyEyeballsTimeToFirstAttempt: GleanCustomDistribution;
     happyEyeballsWinningAttemptIndex: GleanCustomDistribution;
     http30rttState: Record<"conn_closed_by_necko"|"conn_error"|"not_used"|"rejected"|"succeeded", GleanCounter>;
@@ -5869,6 +5983,7 @@ interface GleanImpl {
   verificationUsedCertFrom: {
     builtInRootsModule: GleanNumerator;
     nssCertDb: GleanNumerator;
+    pkcs11Module: GleanNumerator;
     preloadedIntermediates: GleanNumerator;
     thirdPartyCertificates: GleanNumerator;
     tlsHandshake: GleanNumerator;
@@ -5898,6 +6013,9 @@ interface GleanImpl {
   }
 
   syncSettings: {
+    cwtsUpgradeNoticeDismissed: GleanEventNoExtras;
+    cwtsUpgradeNoticeLinkClicked: GleanEventWithExtras<{ surface?: string }>;
+    cwtsUpgradeNoticeShown: GleanEventWithExtras<{ surface?: string }>;
     openChooseWhatToSyncMenu: GleanEventWithExtras<{ why?: string }>;
     save: GleanEventWithExtras<{ disabled_engines?: string, enabled_engines?: string }>;
   }
@@ -6013,8 +6131,15 @@ interface GleanImpl {
   }
 
   sqliteStore: {
+    failedNormalize: GleanCounter;
     open: GleanDualLabeledCounter;
     query: GleanDualLabeledCounter;
+    slowStatements: GleanObject;
+  }
+
+  resourceMonitor: {
+    panelOpened: GleanEventWithExtras<{ open_type?: string, total_cpu_hundredths?: string|number, total_ram_mb?: string|number, total_tab_count?: string|number }>;
+    tabActionTaken: GleanEventWithExtras<{ action_source?: string, action_type?: string, tab_count?: string|number, tab_cpu_hundredths?: string|number, tab_ram_mb?: string|number, total_cpu_hundredths?: string|number, total_ram_mb?: string|number, total_tab_count?: string|number }>;
   }
 
   bounceTrackingProtection: {
@@ -6324,31 +6449,33 @@ interface GleanImpl {
     addManage: GleanEventWithExtras<{ value?: string }>;
     cancelCaptureDoorhanger: GleanEventWithExtras<{ value?: string }>;
     cancelUpdateDoorhanger: GleanEventWithExtras<{ value?: string }>;
-    clearedCcFormV2: GleanEventWithExtras<{ cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, field_name?: string, value?: string }>;
+    clearedCcFormV2: GleanEventWithExtras<{ cc_csc?: string, cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, field_name?: string, value?: string }>;
     deleteManage: GleanEventWithExtras<{ value?: string }>;
-    detectedCcFormV2: GleanEventWithExtras<{ cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, field_name?: string, value?: string }>;
+    detectedCcFormV2: GleanEventWithExtras<{ cc_csc?: string, cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, field_name?: string, value?: string }>;
     detectedCcNumberFieldsCount: Record<"cc_number_fields_1"|"cc_number_fields_2"|"cc_number_fields_3"|"cc_number_fields_4"|"cc_number_fields_other", GleanCounter>;
     disableCaptureDoorhanger: GleanEventWithExtras<{ value?: string }>;
     disableUpdateDoorhanger: GleanEventWithExtras<{ value?: string }>;
     editManage: GleanEventWithExtras<{ value?: string }>;
-    filledCcFormV2: GleanEventWithExtras<{ cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, field_name?: string, value?: string }>;
-    filledModifiedCcFormV2: GleanEventWithExtras<{ cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, field_name?: string, value?: string }>;
-    filledOnFieldsUpdateCcFormV2: GleanEventWithExtras<{ cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, value?: string }>;
+    filledCcFormV2: GleanEventWithExtras<{ cc_csc?: string, cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, field_name?: string, value?: string }>;
+    filledModifiedCcFormV2: GleanEventWithExtras<{ cc_csc?: string, cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, field_name?: string, value?: string }>;
+    filledOnFieldsUpdateCcFormV2: GleanEventWithExtras<{ cc_csc?: string, cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, value?: string }>;
     osKeystoreDecrypt: GleanEventWithExtras<{ errorResult?: string, isDecryptSuccess?: string|boolean, trigger?: string }>;
-    popupShownCcFormV2: GleanEventWithExtras<{ cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, field_name?: string, value?: string }>;
+    popupShownCcFormV2: GleanEventWithExtras<{ cc_csc?: string, cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, field_name?: string, value?: string }>;
     saveCaptureDoorhanger: GleanEventWithExtras<{ value?: string }>;
     saveUpdateDoorhanger: GleanEventWithExtras<{ value?: string }>;
     showCaptureDoorhanger: GleanEventWithExtras<{ value?: string }>;
     showEntryManage: GleanEventWithExtras<{ value?: string }>;
     showManage: GleanEventWithExtras<{ value?: string }>;
     showUpdateDoorhanger: GleanEventWithExtras<{ value?: string }>;
-    submittedCcFormV2: GleanEventWithExtras<{ cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, field_name?: string, value?: string }>;
+    submittedCcFormV2: GleanEventWithExtras<{ cc_csc?: string, cc_exp?: string, cc_exp_month?: string, cc_exp_year?: string, cc_name?: string, cc_number?: string, cc_type?: string, field_name?: string, value?: string }>;
     updateCaptureDoorhanger: GleanEventWithExtras<{ value?: string }>;
     updateUpdateDoorhanger: GleanEventWithExtras<{ value?: string }>;
   }
 
   formautofill: {
     availability: GleanBoolean;
+    dropdownSuppressed: GleanEventWithExtras<{ category?: string, field_name?: string }>;
+    dropdownSuppressedTotal: GleanEventWithExtras<{ count?: string|number }>;
     formSubmissionHeuristic: Record<"form-removal-after-fetch"|"form-submit-event"|"iframe-pagehide"|"page-navigation", GleanCounter>;
     iframeLayoutDetection: GleanEventWithExtras<{ category?: string, cross_origin?: string, flow_id?: string, iframe?: string, iframe_count?: string|number, main_frame?: string, sandboxed?: string }>;
     osAuthEnabled: GleanBoolean;
@@ -6364,8 +6491,17 @@ interface GleanImpl {
 
   formautofillCreditcards: {
     autofillProfilesCount: GleanQuantity;
+    cvvManageAction: GleanEventWithExtras<{ action?: string }>;
+    cvvPromptAction: GleanEventWithExtras<{ action?: string, cvv_saving_enabled?: string|boolean, flow_id?: string, prompt_type?: string }>;
+    cvvPromptShown: GleanEventWithExtras<{ flow_id?: string, prompt_type?: string }>;
+    cvvSavingEnabled: GleanBoolean;
+    cvvSavingToggled: GleanEventWithExtras<{ enabled?: string|boolean, had_saved_cvv?: string|boolean, source?: string }>;
     migrateRecordDivergence: GleanEventWithExtras<{ added?: string, changed?: string, dropped?: string, run_id?: string }>;
     migrateToRust: GleanEventWithExtras<{ attempt?: string|number, direction?: string, diverged?: string|number, duration_ms?: string|number, error_code?: string, error_message?: string, failed?: string|number, failed_deletions?: string|number, migrated?: string|number, result?: string, run_id?: string, source_total?: string|number, target_total?: string|number }>;
+    migrateToRustBlocked: GleanEventWithExtras<{ dry_run?: string|boolean, reason?: string }>;
+    savedCount: GleanQuantity;
+    savedCvvCount: GleanQuantity;
+    storeError: GleanEventWithExtras<{ error_type?: string, has_cvv?: string|boolean, operation?: string }>;
   }
 
   passport: {
@@ -6495,6 +6631,16 @@ interface GleanImpl {
     anEvent: GleanEventWithExtras<{ extra1?: string, extra2?: string }>;
   }
 
+  ipprotectionExclusions: {
+    count: GleanQuantity;
+    ruleApplied: GleanCounter;
+  }
+
+  ipprotectionInclusions: {
+    count: GleanQuantity;
+    ruleApplied: GleanCounter;
+  }
+
   mediaSniffer: {
     mp4BrandPattern: Record<"ftyp_3gp"|"ftyp_3gp4"|"ftyp_M4A"|"ftyp_M4P"|"ftyp_M4V"|"ftyp_avc"|"ftyp_avif"|"ftyp_crx"|"ftyp_iso"|"ftyp_mmp4"|"ftyp_mp4"|"ftyp_qt", GleanCounter>;
   }
@@ -6539,8 +6685,8 @@ interface GleanImpl {
   firefoxAiRuntime: {
     engineCreationFailure: GleanEventWithExtras<{ engineId?: string, error?: string, featureId?: string, flow_id?: string, host_process?: string, modelId?: string, taskName?: string }>;
     engineCreationSuccess: Record<"about-inference"|"autofill-ml"|"default-engine"|"link-preview"|"ml-suggest-intent"|"ml-suggest-ner"|"pdfjs"|"smart-intent"|"smart-openai"|"smart-openai-memories-generation"|"smart-openai-memories-usage"|"smart-tab-embedding-engine"|"smart-tab-topic-engine"|"title-generation-engine"|"webextension", GleanTimingDistribution>;
-    engineCreationSuccessFlow: GleanEventWithExtras<{ duration?: string|number, engineId?: string, flow_id?: string, host_process?: string }>;
-    engineRun: GleanEventWithExtras<{ average_chunk_time?: string|number, backend?: string, backend_source_revision?: string, character_count?: string|number, cores?: string|number, cpu_milliseconds?: string|number, cpu_utilization?: string|number, engine_id?: string, feature_id?: string, flow_id?: string, host_process?: string, memory_bytes?: string|number, model_id?: string, system_memory_mb?: string|number, time_to_first_chunk?: string|number, token_count?: string|number, wall_milliseconds?: string|number }>;
+    engineCreationSuccessFlow: GleanEventWithExtras<{ device_kind?: string, duration?: string|number, engineId?: string, flow_id?: string, host_process?: string }>;
+    engineRun: GleanEventWithExtras<{ average_chunk_time?: string|number, backend?: string, backend_source_revision?: string, character_count?: string|number, cores?: string|number, cpu_milliseconds?: string|number, cpu_utilization?: string|number, device_kind?: string, engine_id?: string, feature_id?: string, flow_id?: string, host_process?: string, memory_bytes?: string|number, model_id?: string, system_memory_mb?: string|number, time_to_first_chunk?: string|number, token_count?: string|number, wall_milliseconds?: string|number }>;
     modelDeletion: GleanEventWithExtras<{ deletedBy?: string, error?: string, modelId?: string, modelRevision?: string }>;
     modelDownload: GleanEventWithExtras<{ duration?: string|number, engineId?: string, error?: string, featureId?: string, modelDownloadId?: string, modelId?: string, modelRevision?: string, step?: string, when?: string|number }>;
     runInferenceFailure: GleanEventWithExtras<{ engineId?: string, error?: string, featureId?: string, flow_id?: string, host_process?: string, modelId?: string }>;
@@ -6581,7 +6727,8 @@ interface GleanImpl {
     isReady: GleanEventNoExtras;
     migration: GleanEventWithExtras<{ duration?: string|number, error_reason?: string, is_first_startup?: string|boolean, migration_id?: string, success?: string|boolean }>;
     remoteSettingsSyncError: GleanEventWithExtras<{ collection?: string, force_sync?: string|boolean, reason?: string, trigger?: string }>;
-    startupDatabaseConsistency: GleanEventWithExtras<{ db_active_count?: string|number, primary?: string, store_active_count?: string|number, total_db_count?: string|number, total_store_count?: string|number, trigger?: string }>;
+    rolloutsOptOut: GleanEventNoExtras;
+    studiesOptOut: GleanEventNoExtras;
     unenrollFailed: GleanEventWithExtras<{ experiment?: string, reason?: string }>;
     unenrollment: GleanEventWithExtras<{ about_config_change?: string, branch?: string, changed_pref?: string, conflicting_slug?: string, experiment?: string, locale?: string, migration?: string, pref_name?: string, pref_type?: string, reason?: string }>;
     updateError: GleanEventWithExtras<{ during_shutdown?: string|boolean, error?: string, trigger?: string }>;
@@ -6591,6 +6738,7 @@ interface GleanImpl {
   nimbusTargetingContext: {
     activeExperiments: GleanObject;
     activeRollouts: GleanObject;
+    activeWebPushSubscriptionCount: GleanQuantity;
     addonsInfo: GleanObject;
     addressesSaved: GleanQuantity;
     allowedNotificationOrigins: GleanQuantity;
@@ -6604,6 +6752,7 @@ interface GleanImpl {
     doesAppNeedPin: GleanBoolean;
     enrollmentsMap: GleanObject;
     firefoxVersion: GleanQuantity;
+    forgetButtonAreaType: GleanString;
     hasActiveEnterprisePolicies: GleanBoolean;
     hasPinnedTabs: GleanBoolean;
     homePageSettings: GleanObject;
@@ -6618,9 +6767,11 @@ interface GleanImpl {
     locale: GleanString;
     memoryMb: GleanQuantity;
     os: GleanObject;
+    previousSessionEnd: GleanQuantity;
     primaryResolution: GleanObject;
     profileAgeCreated: GleanQuantity;
     profileGroupProfileCount: GleanQuantity;
+    profileLastUse: GleanQuantity;
     region: GleanString;
     totalBookmarksCount: GleanQuantity;
     userMonthlyActivity: GleanObject;
@@ -6630,7 +6781,7 @@ interface GleanImpl {
   }
 
   nimbusTargetingEnvironment: {
-    attrEvalErrors: Record<"activeExperiments"|"activeRollouts"|"addonsInfo"|"addressesSaved"|"allowedNotificationOrigins"|"archBits"|"attributionData"|"browserSettings"|"buildId"|"currentDate"|"defaultPDFHandler"|"distributionId"|"doesAppNeedPin"|"enrollmentsMap"|"firefoxVersion"|"hasActiveEnterprisePolicies"|"hasPinnedTabs"|"homePageSettings"|"isDefaultBrowser"|"isDefaultHandler"|"isFirstStartup"|"isFxAEnabled"|"isFxASignedIn"|"isMSIX"|"launchOnLoginAllowedByPolicy"|"launchOnLoginEnabled"|"locale"|"memoryMB"|"os"|"primaryResolution"|"profileAgeCreated"|"profileGroupProfileCount"|"region"|"totalBookmarksCount"|"userMonthlyActivity"|"userPrefersReducedMotion"|"usesFirefoxSync"|"version", GleanCounter>;
+    attrEvalErrors: Record<"activeExperiments"|"activeRollouts"|"activeWebPushSubscriptionCount"|"addonsInfo"|"addressesSaved"|"allowedNotificationOrigins"|"archBits"|"attributionData"|"browserSettings"|"buildId"|"currentDate"|"defaultPDFHandler"|"distributionId"|"doesAppNeedPin"|"enrollmentsMap"|"firefoxVersion"|"forgetButtonAreaType"|"hasActiveEnterprisePolicies"|"hasPinnedTabs"|"homePageSettings"|"isDefaultBrowser"|"isDefaultHandler"|"isFirstStartup"|"isFxAEnabled"|"isFxASignedIn"|"isMSIX"|"launchOnLoginAllowedByPolicy"|"launchOnLoginEnabled"|"locale"|"memoryMB"|"os"|"previousSessionEnd"|"primaryResolution"|"profileAgeCreated"|"profileGroupProfileCount"|"profileLastUse"|"region"|"totalBookmarksCount"|"userMonthlyActivity"|"userPrefersReducedMotion"|"usesFirefoxSync"|"version", GleanCounter>;
     prefTypeErrors: Record<"browser.ai.control.default"|"browser.newtabpage.activity-stream.asrouter.userprefs.cfr.addons"|"browser.newtabpage.activity-stream.asrouter.userprefs.cfr.features"|"browser.newtabpage.activity-stream.feeds.section.highlights"|"browser.newtabpage.activity-stream.feeds.section.topstories"|"browser.newtabpage.activity-stream.feeds.topsites"|"browser.newtabpage.activity-stream.showSearch"|"browser.newtabpage.activity-stream.showSponsoredTopSites"|"browser.newtabpage.enabled"|"browser.profiles.created"|"browser.startup.page"|"browser.tabs.splitview.hasUsed"|"browser.toolbars.bookmarks.visibility"|"browser.urlbar.lastUrlbarSearchSeconds"|"browser.urlbar.showSearchSuggestionsFirst"|"browser.urlbar.suggest.quicksuggest.sponsored"|"media.videocontrols.picture-in-picture.enabled"|"media.videocontrols.picture-in-picture.video-toggle.enabled"|"media.videocontrols.picture-in-picture.video-toggle.has-used"|"messaging-system-action.testday"|"network.trr.mode"|"nimbus.qa.pref-1"|"nimbus.qa.pref-2"|"security.sandbox.content.level"|"termsofuse.acceptedDate"|"termsofuse.acceptedVersion"|"termsofuse.bypassNotification"|"termsofuse.firstAcceptedDate"|"trailhead.firstrun.didSeeAboutWelcome", GleanCounter>;
     prefValues: GleanObject;
     targetingContextValue: GleanText;
@@ -6727,7 +6878,7 @@ interface GleanImpl {
     requireOsReauthToggle: GleanEventWithExtras<{ toggle_state?: string|boolean }>;
     rustInitStatus: GleanEventWithExtras<{ backend?: string, create_rust_store_ms?: string|number, error_kind?: string, init_rust_components_ms?: string|number, result?: string, total_ms?: string|number }>;
     rustMigrationLoginError: GleanEventWithExtras<{ error_message?: string, metric_version?: string, run_id?: string }>;
-    rustMigrationStatus: GleanEventWithExtras<{ attempt?: string|number, duration_ms?: string|number, end_state?: string, error_message?: string, metric_version?: string, number_of_logins_migrated?: string|number, number_of_logins_quarantined?: string|number, number_of_logins_to_migrate?: string|number, number_of_vulnerable_passwords?: string|number, primary_password_set?: string|boolean, run_id?: string }>;
+    rustMigrationStatus: GleanEventWithExtras<{ attempt?: string|number, deferral_reason?: string, duration_ms?: string|number, end_state?: string, error_message?: string, metric_version?: string, number_of_logins_migrated?: string|number, number_of_logins_quarantined?: string|number, number_of_logins_to_migrate?: string|number, number_of_vulnerable_passwords?: string|number, primary_password_deferrals?: string|number, primary_password_set?: string|boolean, run_id?: string }>;
     rustRestoreLoginError: GleanEventWithExtras<{ error_message?: string, metric_version?: string, run_id?: string }>;
     rustRestoreStatus: GleanEventWithExtras<{ attempt?: string|number, duration_ms?: string|number, end_state?: string, error_message?: string, metric_version?: string, number_of_logins_added?: string|number, number_of_logins_failed?: string|number, number_of_logins_skipped?: string|number, number_of_logins_to_delete?: string|number, number_of_logins_to_restore?: string|number, number_of_logins_updated?: string|number, primary_password_set?: string|boolean, restore_version?: string|number, run_id?: string, state?: string }>;
     saveExistingLogin: GleanEventWithExtras<{ breached?: string|boolean, vulnerable?: string|boolean }>;
@@ -7479,6 +7630,13 @@ interface GleanImpl {
     canvasNoiseCalculateTime2: GleanTimingDistribution;
   }
 
+  autocomplete: {
+    dropdownClosed: GleanEventWithExtras<{ close_reason?: string, flow_id?: string, record_type?: string }>;
+    dropdownShown: GleanEventWithExtras<{ flow_id?: string, record_type?: string, reopened_after_removal?: string|boolean }>;
+    recordDialogInteraction: GleanEventWithExtras<{ flow_id?: string, interaction_type?: string, record_type?: string, update_type?: string }>;
+    recordInteraction: GleanEventWithExtras<{ flow_id?: string, interaction_type?: string, record_type?: string }>;
+  }
+
   browserSearchinit: {
     engineInvalidWebextension: Record<string, GleanQuantity>;
     insecureOpensearchEngineCount: GleanQuantity;
@@ -7788,7 +7946,7 @@ interface GleanImpl {
 
   browserUtils: {
     categoryConsumerResult: GleanDualLabeledCounter;
-    categoryDispatchError: GleanEventWithExtras<{ category?: string, consumer?: string, errorName?: string, module?: string }>;
+    categoryDispatchError: GleanEventWithExtras<{ category?: string, consumer?: string, errorName?: string, fileName?: string, lineNumber?: string|number, module?: string }>;
   }
 
   mozstorage: {
@@ -7837,6 +7995,14 @@ interface GleanImpl {
 
   defaultagent: {
     daysSinceLastAppLaunch: GleanQuantity;
+  }
+
+  install: {
+    fromMsi: GleanBoolean;
+    hasWinPackageId: GleanBoolean;
+    installerType: GleanString;
+    silent: GleanBoolean;
+    winPackageFamilyName: GleanString;
   }
 
   notification: {
@@ -8056,6 +8222,7 @@ interface GleanImpl {
     pointingDevices: Record<"mouse"|"pen"|"touch", GleanBoolean>;
     imeNameOnWindows: Record<string, GleanBoolean>;
     imeNameOnWindowsInsertedCrlf: Record<string, GleanBoolean>;
+    jumpListShellCall: Record<"abort_list"|"add_user_tasks"|"append_category"|"append_known_category"|"begin_list"|"clear_recents"|"commit_list"|"delete_list"|"set_app_id"|"setup"|"teardown", GleanTimingDistribution>;
   }
 
   gfxFeatures: {
@@ -8205,6 +8372,7 @@ interface GleanPingsImpl {
   fxAccounts: GleanPingWithReason<"active"|"dirty_startup"|"inactive">;
   fxAccountsClientInfo: GleanPingNoReason;
   sync: GleanPingWithReason<"idchange"|"schedule"|"shutdown">;
+  slowSql: GleanPingWithReason<"startup">;
   bounceTrackingProtection: GleanPingNoReason;
   hangReport: GleanPingNoReason;
   backgroundTasks: GleanPingNoReason;
