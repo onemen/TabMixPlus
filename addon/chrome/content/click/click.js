@@ -454,6 +454,39 @@ var TabmixContext = {
     return document.getElementById(id);
   },
 
+  /**
+   * Zen adds tab context menu and `#moveTabOptionsMenu` items at runtime, after
+   * Firefox's `MENU_SECTIONS` layouts were authored. `MenuSectionLayout`
+   * requires every child of a managed popup to be either declared in the layout
+   * or marked as dynamic, so teach the layout about Zen's runtime items before
+   * either Zen or Tabmix arranges the menu. This also keeps preference changes
+   * that re-arrange the menu (see `updateMenuOrder`) from throwing.
+   */
+  _allowZenDynamicMenuItems() {
+    if (!TabmixSvc.isZen || typeof TabContextMenu === "undefined") {
+      return;
+    }
+
+    const dynamicItemSelectors = TabContextMenu.DYNAMIC_MENU_ITEM_SELECTORS;
+    if (!dynamicItemSelectors) {
+      return;
+    }
+
+    const selectors = [
+      '[id^="context_zen"]',
+      '[id^="context-zen"]',
+      "#tabContextMenu > menuseparator",
+      // Zen inserts its "move tab to workspace" items and their separator
+      // into #moveTabOptionsMenu at runtime; both share this class.
+      ".zen-workspace-context-menu-item",
+    ];
+    for (const selector of selectors) {
+      if (!dynamicItemSelectors.includes(selector)) {
+        dynamicItemSelectors.push(selector);
+      }
+    }
+  },
+
   // Create new items in the tab bar context menu
   buildTabContextMenu: function TMP_buildTabContextMenu() {
     MozXULElement.insertFTLIfNeeded("browser/preferences/preferences.ftl");
@@ -470,6 +503,8 @@ var TabmixContext = {
     );
 
     if (Tabmix.isVersion(1540)) {
+      this._allowZenDynamicMenuItems();
+
       /** @param {"classic" | "altstructure"} name */
       function addTabmixItemsToLayouts(name) {
         const layout = TabContextMenu.MENU_SECTIONS[name];

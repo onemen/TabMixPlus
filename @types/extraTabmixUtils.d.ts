@@ -419,6 +419,7 @@ interface TabmixContextTypes {
   $id: Functions["getById"];
 
   buildTabContextMenu(): void;
+  _allowZenDynamicMenuItems(): void;
   _saveOriginalMenuOrder(): void;
   updateMenuOrder(): void;
   _tabmixMenuOrder: [item: string, reference: string, where?: "insertbefore" | "insertafter"][];

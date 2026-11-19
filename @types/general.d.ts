@@ -935,6 +935,7 @@ declare namespace MockedGeckoTypes {
       classic: MenuSection;
       altstructure: MenuSection;
     };
+    DYNAMIC_MENU_ITEM_SELECTORS?: string[];
     _altTabContextMenu: boolean;
     _tabContextMenuArranged: boolean;
     _ensureMenuArranged(aPopupMenu: ContextMenu): void;
