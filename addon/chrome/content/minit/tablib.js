@@ -63,6 +63,13 @@ Tabmix.tablib = {
           "moz-src:///browser/components/taskbartabs/TaskbarTabsUtils.sys.mjs"
         : "resource:///modules/taskbartabs/TaskbarTabsUtils.sys.mjs",
     });
+
+    if (Tabmix.isVersion(1620)) {
+      ChromeUtils.defineESModuleGetters(lazy, {
+        WindowLock: "moz-src:///browser/modules/WindowLock.sys.mjs",
+      });
+    }
+
     // #determineContentTitle / #determineTaskbarTabTitle read these lazy
     // pref getters (module-lazy in Tabbrowser.sys.mjs since Firefox 156);
     // mirror them so the reconstructed methods see the same values.
