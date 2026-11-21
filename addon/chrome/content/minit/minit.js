@@ -3191,25 +3191,45 @@ Tabmix.getPrivateMethod = function ({parent, parentName, methodName, nextMethodN
 
   const classSource = firefoxClass.toString();
   const methodRef = findDeclaration(classSource, `#${methodName}`, 0);
-  const nextRef = methodRef && findDeclaration(classSource, nextMethodName, methodRef.end);
-  const code = methodRef && nextRef ? classSource.slice(methodRef.end, nextRef.start).trim() : "";
+
+  // When nextMethodName is omitted the private method is the last member of
+  // the class, so the class' closing brace ends the extracted code.
+  const isLastMethod = nextMethodName === undefined || nextMethodName === "";
+  const nextRef =
+    methodRef && nextMethodName ?
+      findDeclaration(classSource, nextMethodName, methodRef.end)
+    : null;
+  const endIndex = isLastMethod ? classSource.lastIndexOf("}") : (nextRef?.start ?? -1);
+  const code =
+    methodRef && endIndex > methodRef.end ? classSource.slice(methodRef.end, endIndex).trim() : "";
 
   if (!methodRef) {
     console.error(`Tabmix Error: ${errorMsg}`);
     return method;
   }
 
-  if (!nextRef) {
+  if (!isLastMethod && !nextRef) {
     console.error(
       `Tabmix Error: can't find ${name}.${nextMethodName} in the source code, it is the method after #${methodName}`
     );
     return method;
   }
 
+  if (endIndex <= methodRef.end) {
+    console.error(`Tabmix Error: can't find the end of ${name}.#${methodName}`);
+    return method;
+  }
+
+  // findDeclaration() records modifiers such as `async` in start, but the
+  // body slice starts after the method name. Restore `async` so private
+  // methods that use await evaluate correctly in _makeCode().
+  const modifiers = classSource.slice(methodRef.start, methodRef.end);
+  const asyncPrefix = /\basync\b/.test(modifiers) && code.startsWith("(") ? "async " : "";
+
   try {
     return /** @type {PrivateMethod<typeof methodName>} */ (
       Tabmix.makeCode(
-        `_${methodName}${cleanTrailingComments(code)}`,
+        `${asyncPrefix}_${methodName}${cleanTrailingComments(code)}`,
         parent,
         nonPrivateMethodName,
         sandbox

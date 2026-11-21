@@ -1181,8 +1181,10 @@ interface newWindowButtonObserver {
 }
 
 interface nsContextMenu {
+  _setFeatureBadge: (menuitem: Element, shouldShow: boolean, type: string) => Promise<void>;
   initOpenItems: () => void;
   openLinkInTab: (event: Event) => void;
+  window: Window;
 }
 
 interface PanelUI {

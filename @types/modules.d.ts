@@ -12,7 +12,8 @@ type PrivateMethodOptions<T> = {
   parent: Record<string, any>;
   parentName: string;
   methodName: T;
-  nextMethodName: string;
+  /** Omit when the private method is the last member of its class. */
+  nextMethodName?: string;
   sandbox?: TabmixSandbox;
 };
 

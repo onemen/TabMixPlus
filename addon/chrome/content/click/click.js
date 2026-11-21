@@ -1219,7 +1219,31 @@ var TabmixContext = {
         ChromeUtils.defineESModuleGetters(lazy, modules);
       }
 
-      sandbox = Tabmix.getSandbox(nsContextMenu, {scope: {lazy}});
+      /** @type {Record<string, unknown>} */
+      const scope = {lazy};
+      if (Tabmix.isVersion(1620)) {
+        // Both the copied #setFeatureBadge() and the generated initOpenItems()
+        // read these module-private bindings in their sandbox.
+        const BADGE_TYPE = {
+          NEW: "new",
+          BETA: "beta",
+        };
+        const badgeL10nCache = new Map();
+        Object.assign(scope, {BADGE_TYPE, badgeL10nCache});
+      }
+      sandbox = Tabmix.getSandbox(nsContextMenu, {scope});
+
+      if (Tabmix.isVersion(1620)) {
+        // #setFeatureBadge is the last Firefox class member, so no
+        // nextMethodName is required. Install it before changeCode() compiles
+        // the rewritten initOpenItems().
+        nsContextMenu.prototype._setFeatureBadge = Tabmix.getPrivateMethod({
+          parent: nsContextMenu.prototype,
+          parentName: "nsContextMenu.prototype",
+          methodName: "setFeatureBadge",
+          sandbox,
+        });
+      }
 
       // hide open link in window in single window mode
       Tabmix.changeCode(nsContextMenu.prototype, "nsContextMenu.prototype.initOpenItems", {

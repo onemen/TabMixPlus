@@ -750,6 +750,9 @@ interface PrivateMethods {
   // ArrowScrollbox
   updateScrollButtonsDisabledState: TabmixArrowScrollboxNS.ArrowScrollbox["_updateScrollButtonsDisabledState"];
   getScrolledToStartAndEnd: TabmixArrowScrollboxNS.ArrowScrollbox["_getScrolledToStartAndEnd"];
+
+  // nsContextMenu
+  setFeatureBadge: nsContextMenu["_setFeatureBadge"];
 }
 
 type ElementTypesExtended = ElementTypes | TabmixAllTabsNS.PopupElement | MockedGeckoTypes.ArrowScrollbox | MockedGeckoTypes.BrowserTab | MockedGeckoTypes.MozTabSplitViewWrapper;
