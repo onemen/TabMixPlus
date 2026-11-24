@@ -64,7 +64,7 @@ Tabmix.tablib = {
         : "resource:///modules/taskbartabs/TaskbarTabsUtils.sys.mjs",
     });
 
-    if (Tabmix.isVersion(1620)) {
+    if (Tabmix.isVersion(1630)) {
       ChromeUtils.defineESModuleGetters(lazy, {
         WindowLock: "moz-src:///browser/modules/WindowLock.sys.mjs",
       });
