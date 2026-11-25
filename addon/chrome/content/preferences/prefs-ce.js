@@ -38,6 +38,17 @@ if (TabClass) {
 
 const PREFS = Services.prefs;
 
+/* Firefox 163 removed chrome://global/locale/dialog.properties and localizes the
+   default dialog buttons with Fluent messages. dialog.ftl has no help button, so
+   the generic Help menu item provides the help label and accesskey. */
+/** @type {Record<string, {ftl: string; id: string}>} */
+const DIALOG_BUTTON_L10N = {
+  accept: {ftl: "toolkit/global/dialog.ftl", id: "dialog-button-accept"},
+  cancel: {ftl: "toolkit/global/dialog.ftl", id: "dialog-button-cancel"},
+  disclosure: {ftl: "toolkit/global/dialog.ftl", id: "dialog-button-disclosure"},
+  help: {ftl: "browser/menubar.ftl", id: "menu-help"},
+};
+
 /** @implements {PreferencesListClass} */
 class Preferences extends MozXULElement {
   service = PREFS;
@@ -1718,6 +1729,20 @@ class PrefWindow extends MozXULElement {
 
   /** @type {PrefWindowClass["setButtonLabel"]} */
   setButtonLabel(dlgtype, button) {
+    if (Tabmix.isVersion(1630)) {
+      const l10n = DIALOG_BUTTON_L10N[dlgtype];
+      if (l10n) {
+        // the button can belong to another window (e.g. a subdialog), insert the
+        // ftl into its document and localize it with its own l10n object
+        const win = button.documentGlobal;
+        const doc = button.ownerDocument;
+        win?.MozXULElement.insertFTLIfNeeded(l10n.ftl);
+        doc?.l10n?.setAttributes(button, l10n.id);
+        doc?.l10n?.translateElements([button]).catch(() => {});
+      }
+      return;
+    }
+
     button.setAttribute("label", this.mStrBundle.GetStringFromName("button-" + dlgtype));
     const accessKey = this.mStrBundle.GetStringFromName("accesskey-" + dlgtype);
     if (accessKey) {

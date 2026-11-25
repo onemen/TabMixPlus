@@ -83,10 +83,12 @@ var gPrefWindow = {
     // init buttons extra1, extra2, accept, cancel
     prefWindow.getButton("extra1").setAttribute("icon", "apply");
     prefWindow.getButton("extra2").setAttribute("popup", "tm-settings");
-    prefWindow.setAttribute(
-      "cancelbuttonlabel",
-      prefWindow.mStrBundle.GetStringFromName("button-cancel")
-    );
+    if (!Tabmix.isVersion(1630)) {
+      prefWindow.setAttribute(
+        "cancelbuttonlabel",
+        prefWindow.mStrBundle.GetStringFromName("button-cancel")
+      );
+    }
     this.setButtons(true);
 
     this.initBroadcasters("main");
